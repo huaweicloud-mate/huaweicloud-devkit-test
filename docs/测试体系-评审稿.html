@@ -285,11 +285,57 @@ footer { text-align: center; color: #98a2b3; font-size: 12px; margin-top: 30px; 
 </section>
 
 <section id="s11"><h2>11. 归档仓库</h2>
-<p>测试资料归档仓库已建：<a href="https://github.com/huaweicloud-mate/huaweicloud-devkit-test">github.com/huaweicloud-mate/huaweicloud-devkit-test</a>（PRIVATE，huaweicloud-mate 组织，shuangheaven 账号）</p>
+<p>测试资料归档仓库已建：<a href="https://github.com/huaweicloud-mate/huaweicloud-devkit-test">github.com/huaweicloud-mate/huaweicloud-devkit-test</a>（PRIVATE，huaweicloud-mate 组织，shuangheaven 账号，main @ commit 9ac5ea0）</p>
+<h3>11.1 目录结构（远程验证版）</h3>
+<pre style="background:#0f1b2d;color:#dce6f5;padding:16px 18px;border-radius:10px;font-size:11.5px;line-height:1.55;overflow-x:auto;font-family:Consolas,'Courier New',monospace">huaweicloud-mate/huaweicloud-devkit-test  (PRIVATE · main)
+├── README.md                     # 导航首页 + 凭据说明（pushm/pullm/fetchm）
+├── .gitignore                    # 凭证零进入（14 项敏感模式锁定）
+├── docs/                         # 静态文档
+│   ├── 01-测试规划.md             # 测试规划 v1.3（10 维度 / 199 用例）
+│   ├── 02-测试规划评审报告.md      # 评审报告（84 → 93 分演进）
+│   ├── 03-执行准备清单.md         # 8 组准备清单
+│   ├── 05-归档仓库目录结构.md     # 本结构规划文档
+│   └── 测试体系-评审稿.html       # 团队评审稿（本文件）
+├── test-cases/                  # 用例体系母版（跨版本演进）
+│   ├── README.md                # 编号规则 + 用例演进三铁律
+│   ├── design/                  # 设计级 92 条
+│   │   ├── 用例矩阵-设计级.csv
+│   │   └── gen_matrix.py        # 可复现生成脚本
+│   └── expanded/                # 展开级 107 条
+│       └── 用例矩阵-展开级.csv
+├── templates/                   # 模板库（执行时复制到 results/）
+│   ├── nightly-report.md        # 每晚回归报告
+│   ├── client-matrix-report.md  # 客户端适配矩阵结果
+│   ├── security-audit.md        # 安全审计清单
+│   ├── gap-report.md            # 缺口表（P/G 分类）
+│   ├── dashboard.md             # 质量仪表盘
+│   └── issue-template.md        # issue 拆分模板（§6.4）
+├── results/                     # 执行结果归档（唯一动态区）
+│   ├── README.md                # ITER-NNN-日期命名规则
+│   ├── LATEST.md                # 最新迭代指针
+│   └── ITER-001-2026-09-05/     # 每轮迭代（baseline / change-impact /
+│                                #   nightly / client-matrix / security /
+│                                #   gaps / issues / evidence / cleanup）
+├── metrics/                     # 跨迭代度量与趋势
+│   ├── README.md                # 指标口径
+│   ├── execution.csv            # 执行率 / 通过率 / 自动化覆盖率
+│   ├── defects.csv              # 缺陷存量趋势
+│   └── dashboard.md             # 质量仪表盘
+├── eval/                        # D10 Agent 行为评测
+│   ├── README.md                # 评测纪律 / 预算 / 失败分级
+│   ├── prompts/                 # 自然语言评测集（eval-set-v1.csv）
+│   ├── harness/                 # 评测 harness + promptfoo
+│   └── results/                 # 每轮评测结果
+├── scripts/                     # 工具脚本（占位，待补 check-prereqs 等）
+│   └── .gitkeep
+└── assets/                      # 可视化素材（占位）
+    └── .gitkeep</pre>
+<h3>11.2 安全与协作约定</h3>
 <ul class="tight">
-<li>docs/（测试规划 v1.3、评审报告、准备清单）、test-cases/（设计级 92 + 展开级 107）、templates/（报告/issue 模板）、results/（ITER-NNN 迭代归档）、metrics/（趋势）、eval/（D10 评测）、scripts/</li>
-<li>.gitignore 锁定凭证零进入（14 项敏感模式 ad-hoc 验证通过）；evidence 只存脱敏内容</li>
-<li>日常推送用 <code>git pushm / pullm / fetchm</code>（gh 凭据别名）</li>
+<li><b>凭证红线</b>：.gitignore 锁定 AK/SK/凭证文件零进入（14 项敏感模式 ad-hoc 验证通过）；evidence 目录只存脱敏内容</li>
+<li><b>唯一真源</b>：归档仓库是测试资产唯一真源——新报告/新用例直接写入仓库路径，工作区不双份维护</li>
+<li><b>日常推送</b>：<code>git pushm / pullm / fetchm</code>（本仓库 gh 凭据别名，绕开 GCM 冲突）</li>
+<li><b>根 .gitkeep</b>：空目录占位保证结构完整性，实际文件后续填充</li>
 </ul>
 </section>
 
