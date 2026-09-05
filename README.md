@@ -31,6 +31,22 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 - `evidence/` 只存**脱敏后**内容，原始凭证/未脱敏日志禁止入库
 - 本仓库只含测试资产，不含插件源码与任何云凭证
 
+## Git 协作（凭据说明）
+
+本机 git 全局凭据管理器（GCM）缓存了非 shuangheaven 的 token，与本仓库冲突会导致 `git push` 报 404（认证成功但无权限）。本仓库已配置 gh 凭据别名，**日常推送请用**：
+
+```bash
+git pushm    # 推送（等同 push，走 gh 凭据）
+git fetchm   # 拉取
+git pullm    # 拉取并合并
+```
+
+注意：
+
+- 别名仅在**本仓库**生效，不影响其他仓库
+- 执行前确认 gh 活跃账号：`gh auth switch --user shuangheaven`
+- 长期方案（可选）：`gh auth setup-git` 让 git 全局走 gh 凭据——需自行评估对本机其他仓库的影响
+
 ## 关键文档
 
 - [测试规划 v1.3](docs/01-测试规划.md)：10 维度 / ~207 用例 / 四级金字塔 / P·G·I 纪律
