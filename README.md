@@ -3,31 +3,42 @@
 HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板 / 执行结果 / 度量 / 评测。
 
 > 被测对象：https://github.com/huaweicloud/huaweicloud-devkit
-> 当前基线：<填写被测插件 commit，首次 T0 时更新>
+> 当前基线：`<被测插件 commit，T0 首轮执行时填写并归档至 results/ITER-001/baseline.md>`
+> 项目状态：**准备阶段**（组 1–8 清单推进中，尚未执行首轮 T0）
 
 ## 目录导航
 
 | 路径 | 内容 |
 |---|---|
-| [docs/](docs/) | 测试规划（v1.3）/ 评审报告 / 执行准备清单 / 纪律 |
-| [test-cases/](test-cases/) | 用例体系母版（设计级 92 + 展开级 107，可复现生成） |
-| [templates/](templates/) | 报告 / issue / 缺口表 / 仪表盘模板 |
-| [results/](results/) | 执行结果归档（`ITER-NNN-日期`，见 results/README.md） |
+| [docs/](docs/) | 测试规划 v1.3 / 评审报告 / 执行准备清单 / 目录结构规划 / 团队评审稿 |
+| [test-cases/](test-cases/) | 用例体系母版：设计级 92 + 展开级 107（可复现生成，含 README 编号规则） |
+| [templates/](templates/) | 6 个模板：每晚报告 / 客户端矩阵 / 安全审计 / 缺口表 / 仪表盘 / issue |
+| [results/](results/) | 执行结果归档（`ITER-NNN-日期`，命名规则见 results/README.md） |
 | [metrics/](metrics/) | 跨迭代执行率 / 通过率 / 缺陷趋势 / 质量仪表盘 |
-| [eval/](eval/) | D10 Agent 行为评测集 / harness / 结果 / 趋势 |
-| [scripts/](scripts/) | 前置检查 / 脱敏断言 / 链接扫描 / 归档脚本 |
-| [assets/](assets/) | 测试金字塔 / 缺口热力图 / 框架总览图 |
+| [eval/](eval/) | D10 Agent 行为评测：评测集 / harness / 结果 / 趋势（纪律见 eval/README.md） |
+| [scripts/](scripts/) | 工具脚本（规划中：前置检查 / 脱敏断言 / 链接扫描 / 归档） |
+| [assets/](assets/) | 可视化素材（规划中：金字塔 / 缺口热力图 / 框架总览图） |
+
+## 文档清单（docs/）
+
+| 文件 | 说明 |
+|---|---|
+| [01-测试规划.md](docs/01-测试规划.md) | **主文档 v1.3**：10 维度 / 199 用例 / 四级金字塔 / P·G·I 纪律 / 执行分层 |
+| [02-测试规划评审报告.md](docs/02-测试规划评审报告.md) | 测试经理评审（84 → 93 分演进） |
+| [03-执行准备清单.md](docs/03-执行准备清单.md) | 8 组可勾选准备清单（是否就绪） |
+| [05-归档仓库目录结构.md](docs/05-归档仓库目录结构.md) | 本仓库目录结构设计原则与命名规则 |
+| [测试体系-评审稿.html](docs/测试体系-评审稿.html) | **团队评审用单文件**（固定导航 / 199 用例全量表 / 6 个评审决策点） |
 
 ## 快速开始（跑一轮测试）
 
 1. 完成 [docs/03-执行准备清单.md](docs/03-执行准备清单.md) —— 8 组全部 ✅
-2. 执行 T0 基线对齐（clone 上游 / 记录 commit / 能力清单核对）→ 写入 `results/ITER-001/baseline.md`
-3. 每轮执行后运行 `scripts/archive-result.ps1` 归档（自动生成 ITER 骨架）
-4. 每迭代末更新 `metrics/dashboard.md`，按 [templates/issue-template.md](templates/issue-template.md) 拆 issue 提交上游
+2. 执行 T0 基线对齐（clone 上游 / 记录 commit / 能力清单核对 / 环境重置）→ 写入 `results/ITER-001/baseline.md`
+3. 每轮执行结束，按 [results/README.md](results/README.md) 的 ITER 结构归档（归档脚本 `scripts/archive-result.ps1` 规划中，暂手动建目录）
+4. 每迭代末更新 [metrics/dashboard.md](metrics/dashboard.md) 质量仪表盘，按 [templates/issue-template.md](templates/issue-template.md) 拆 issue 提交上游
 
 ## 安全红线
 
-- **AK/SK/密钥永不入库**（.gitignore 已锁定；凭证纪律见 docs/01 §2.3）
+- **AK/SK/密钥永不入库**（.gitignore 已锁定 14 项敏感模式并经 ad-hoc 验证；凭证纪律见 01-测试规划 §2.3）
 - `evidence/` 只存**脱敏后**内容，原始凭证/未脱敏日志禁止入库
 - 本仓库只含测试资产，不含插件源码与任何云凭证
 
@@ -47,12 +58,8 @@ git pullm    # 拉取并合并
 - 执行前确认 gh 活跃账号：`gh auth switch --user shuangheaven`
 - 长期方案（可选）：`gh auth setup-git` 让 git 全局走 gh 凭据——需自行评估对本机其他仓库的影响
 
-## 关键文档
-
-- [测试规划 v1.3](docs/01-测试规划.md)：10 维度 / ~207 用例 / 四级金字塔 / P·G·I 纪律
-- [用例体系说明](test-cases/README.md)：编号规则与用例演进三铁律
-
 ## 相关链接
 
 - 上游仓库：https://github.com/huaweicloud/huaweicloud-devkit
 - 用例矩阵生成：`test-cases/design/gen_matrix.py`（修改后重新生成，保证可复现）
+- 评审稿生成：`test-cases/gen_review_html.py`（评审稿 HTML 由脚本 + CSV 数据生成）
