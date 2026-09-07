@@ -51,12 +51,14 @@ try {
     $msg = "auto-sync $Stamp [$count files] $files"
     & git commit -m $msg | Out-Null
 
-    # 5. Push via gh credentials
-    # NOTE: capture output into a variable FIRST, then read $LASTEXITCODE -
-    # piping to Out-Null corrupts the exit code in PowerShell 5.1
-    $pushOut = & git pushm 2>&1
-    $pushExit = $LASTEXITCODE
-    if ($pushExit -ne 0) { throw "push failed (exit=$pushExit): $pushOut" }
+    # 5. Push via gh credentials, then verify BY FACT not by exit code:
+#    (PowerShell 5.1 $LASTEXITCODE is unreliable behind git aliases +
+#     redirection; a successful push must leave local NOT ahead of origin)
+    & git pushm 2>&1 | Out-Null
+    $syncState = & git status -sb | Out-String
+    if ($syncState -match "\[ahead ") {
+        throw "push did not complete: local still ahead of origin ($syncState)"
+    }
 
     Write-Log "SYNC: committed and pushed $count file change(s): $files"
     Write-Log "SYNC: commit message = $msg"
