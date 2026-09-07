@@ -39,6 +39,8 @@
 - **根因**：`FAKE_HCLOUD`（test/fixtures/fake-hcloud.mjs 包装的 shim）经 `HCLOUD_BIN` 注入，spawnSync shell:false 在 Windows 无法执行 → 与 P0-2 同因
 - **处置**：同上（测试平台化 + Linux 复跑确认）；PR#498 新功能逻辑待 Linux 环境实测（R10 runtime 守卫/clear 语义）
 
+> **上报状态（2026-09-07）**：P0-1 + 基建缺口 A/B 合并为 **issue #501**（huaweicloud/huaweicloud-devkit，open）——https://github.com/huaweicloud/huaweicloud-devkit/issues/501 ｜ 草稿：issues/issue-测试基建缺口-合并.md
+
 ## P2
 
 ### T1-1 hermes install skills 数量断言失败（疑似测试漂移）
