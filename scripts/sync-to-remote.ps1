@@ -15,11 +15,20 @@
 #   - Push goes through the repo-local `pushm` alias (gh credentials,
 #     bypassing the machine GCM conflict); failure does not block next run
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 $Repo = "C:\Users\Administrator\devkit-test\huaweicloud-devkit-test"
 $LogDir = "$env:LOCALAPPDATA\Hermes Agent CN Desktop\data\hermes-home\logs"
 $LogFile = Join-Path $LogDir "devkit-test-sync.log"
 $Stamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+
+# NOTE on PowerShell 5.1 quirks handled here:
+#  1. git writes progress to STDERR; with $ErrorActionPreference=Stop those
+#     lines become terminating errors and a SUCCESSFUL push looks like a
+#     failure. Hence "Continue" + explicit throws.
+#  2. Wrap git calls in `cmd /c "git ... 2>&1"` so stderr is merged inside
+#     cmd and PowerShell never sees NativeCommandError.
+#  3. Success is verified BY FACT (local not ahead of origin), never by
+#     $LASTEXITCODE which is unreliable behind git aliases/redirection.
 
 try { New-Item -ItemType Directory -Path $LogDir -Force | Out-Null } catch {}
 
@@ -32,8 +41,8 @@ function Write-Log($msg) {
 Set-Location $Repo
 
 try {
-    # 1. Fetch remote (via gh credentials)
-    & git fetchm --quiet 2>&1 | Out-Null
+    # 1. Fetch remote (stderr merged inside cmd to avoid NativeCommandError)
+    & cmd /c "git fetchm --quiet 2>&1" | Out-Null
 
     # 2. Check for pending changes (tracked + untracked)
     $status = & git status --porcelain
@@ -51,10 +60,8 @@ try {
     $msg = "auto-sync $Stamp [$count files] $files"
     & git commit -m $msg | Out-Null
 
-    # 5. Push via gh credentials, then verify BY FACT not by exit code:
-#    (PowerShell 5.1 $LASTEXITCODE is unreliable behind git aliases +
-#     redirection; a successful push must leave local NOT ahead of origin)
-    & git pushm 2>&1 | Out-Null
+    # 5. Push via gh credentials, then verify BY FACT not by exit code
+    & cmd /c "git pushm 2>&1" | Out-Null
     $syncState = & git status -sb | Out-String
     if ($syncState -match "\[ahead ") {
         throw "push did not complete: local still ahead of origin ($syncState)"
