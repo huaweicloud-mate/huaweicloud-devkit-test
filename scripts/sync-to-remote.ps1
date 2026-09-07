@@ -52,8 +52,11 @@ try {
     & git commit -m $msg | Out-Null
 
     # 5. Push via gh credentials
-    & git pushm 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) { throw "push failed (exit=$LASTEXITCODE)" }
+    # NOTE: capture output into a variable FIRST, then read $LASTEXITCODE -
+    # piping to Out-Null corrupts the exit code in PowerShell 5.1
+    $pushOut = & git pushm 2>&1
+    $pushExit = $LASTEXITCODE
+    if ($pushExit -ne 0) { throw "push failed (exit=$pushExit): $pushOut" }
 
     Write-Log "SYNC: committed and pushed $count file change(s): $files"
     Write-Log "SYNC: commit message = $msg"
