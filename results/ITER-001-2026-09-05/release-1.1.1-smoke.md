@@ -14,6 +14,16 @@
 | status | ✅ MCP Server: Installed ｜ Safety Policy: Installed ｜ **Skills: 29 installed** ｜ MCP config: Configured ｜ Node 22.23.2/linux |
 | 与 next.16 行为一致性 | ✅ 安装/status/技能数一致（同源发布） |
 
+## 本机（Windows）冒烟（2026-09-07 补充）
+
+| 项 | 结果 |
+|---|---|
+| CLI banner（`npx @latest status`，官方 registry） | ✅ **HuaweiCloud DevKit v1.1.1** |
+| 安装 1.1.1 到 openclaw（官方 registry，绕过镜像） | ✅ |
+| `version` 列表 | ✅ **OpenClaw: 1.1.1**（Hermes 保持 next.16 未动） |
+| status --target openclaw | ✅ MCP Server: Installed ｜ Safety Policy: Installed |
+| **镜像验证** | 本机默认镜像 latest 仍 **1.1.0**（滞后确认，必须 `--registry=https://registry.npmjs.org`） |
+
 ## ⚠️ 附带发现：npm 镜像 dist-tag 滞后
 
 - **本机默认 registry（华为云镜像 mirrors.huaweicloud.com）：latest=1.1.0**（14:35 发布后未同步）
