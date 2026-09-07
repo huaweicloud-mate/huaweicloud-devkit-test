@@ -19,13 +19,39 @@
 | 复现环境 | huaweicloud-devkit dev@02fa79b（本地源码直调；Hermes 插件 1.1.1-next.15）；规则文件在 fa04732→02fa79b 间未变更，结论保持 |
 | 修复方向（建议） | `cloud-risk-rules.json` 的 `hwc-destructive-delete-operation` 规则扩充操作名清单：`NovaDeleteServer / NovaDeleteKeypair / NovaDeleteServerGroup / NovaDeleteServerMetadataItem / ResetServerPassword / DeleteServerPassword` 等破坏性操作族；规则引擎增加"操作名前缀族匹配"（Nova* / Reset* / Delete*）；补规则回归用例（D4-10） |
 
+### P0-2 preflight 安全组预检失效（issue-443 B1+B2 修复测试自身失败）
+
+| 字段 | 内容 |
+|---|---|
+| 关联用例 | **D4-19（确认流下预检仍生效）**、D4-9（风险预检） |
+| 来源 | T1 左移：`npm test` 两次运行一致失败 |
+| 失败用例 | `not ok 140 - preflightSecurityGroupCheck catches dangerous SG via --server.security_groups.N.id (B1+B2 fix)` / `not ok 142 - ... --security_group_id (backward compatible)`（test/issue-443-fix.test.mjs:15,121） |
+| 现象 | fake-hcloud 返回危险规则（ingress 0.0.0.0/0:22）→ `planHcloudCommand` **未产生 sg findings**（"B1+B2 fix: should have sg findings"） |
+| 初判 | issue-443 双修复（B1 confirm-not-deny / B2 preflight-b1b2）的 **preflight 部分未达预期**，或 v1.1.1-next.15 引入回归；与 P0-1（hook 规则盲区）同属安全链不完整 |
+| P/G/I | **P**（插件 own 测试揭示安全预检未生效） |
+| 严重度 | **P0 候选**（高危安全组可被放行；需人工复核根因后定级） |
+| 修复方向 | 复核 `hcloud-cli.mjs` preflightSecurityGroupCheck 对 `--server.security_groups.N.id` 与旧格式 `--security_group_id` 的解析；对照 docs/superpowers/plans/2026-09-05-credential-reconcile.md 与 fix/issue-443-preflight-b1b2 分支 |
+
 ## P1
 
-（待发现）
+### T1-2 auth sync 写 OBS + agent 注册目标报告失败（PR#498 新功能测试失败）
+
+- **失败用例**：`not ok 24 - auth sync writes OBS and reports all agent registration targets`（test/auth-credentials.test.mjs:106，`false !== true`）
+- **关联**：D2-3（auth sync 幂等）、D2-1、D5（agent 注册矩阵）
+- **初判**：PR#498 凭证整改的新功能测试失败——sync 写 OBS 或注册目标枚举未达预期；需复核 `src/auth/service.mjs`/`credentials.mjs`（P 类候选）
+
+### T1-3 auth_switch clear 未清空 runtime（PR#498 新功能测试失败）
+
+- **失败用例**：`not ok 64 - 11 auth_switch clear empties runtime and lets syncAuth run again`（test/cred-reconcile-e2e.test.mjs:276，`false !== true`）
+- **关联**：D2（认证切换纪律）、R10 runtime 守卫
+- **初判**：clear 后 runtime 残留或 syncAuth 拒绝再跑——PR#498 R10 逻辑未达预期（P 类候选）
 
 ## P2
 
-（待发现）
+### T1-1 hermes install skills 数量断言失败（疑似测试漂移）
+
+- **失败用例**：`not ok 14 - hermes install creates skills, MCP server, and safety policy`（test/agent-install.test.mjs:263，`countSkills($home/.hermes/skills) >= 6` 断言失败）
+- **初判**：Hermes CN Desktop 使用 `hermes-home` 目录（非 `~/.hermes`）；本机真实 `install --target hermes` 成功——**疑似测试断言目录约定过时（G 类测试侧），待核**（真实 Hermes 安装路径已确认 hermes-home，见本机验证）
 
 ## 说明
 
