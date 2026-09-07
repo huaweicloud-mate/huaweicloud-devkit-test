@@ -2,16 +2,27 @@
 
 > 执行：2026-09-07 ｜ 被测插件：huaweicloud-devkit **1.1.1-next.15**
 
-## 安装进度
+## 安装进度（2026-09-07 全矩阵完成）
 
-| 客户端 | 安装方式 | CLI 版本 | 插件状态 | 配置落点验证 |
-|---|---|---|---|---|
-| **CodeArts Agent** | `--target codearts` | 无需 CLI | ✅ Installed（MCP+Policy+29 Skills） | status 确认 |
-| **CodeArts Work** | `--target codearts-work` | 无需 CLI | ✅ Installed | ✅ `%USERPROFILE%\.codeartswork\`（README 承诺一致） |
-| **WorkBuddy** | `--target workbuddy` | 无需 CLI | ✅ Installed | ✅ `~\.workbuddy\` |
-| **OpenCode** | `npm i -g opencode-ai`（npmmirror） | ✅ 1.18.29 | ✅ Installed（29 Skills） | status 确认 |
-| **Codex** | `npm i -g @openai/codex`（npmmirror） | ✅ 0.153.4 | ✅ **Installed（C1 修复后）** | 干净配置重装成功 |
-| Hermes | 前期就绪 | — | ✅ Installed（+Safety Hooks） | ✅ |
+| 客户端 | CLI 版本 | 插件状态 | 配置落点验证 |
+|---|---|---|---|
+| **CodeArts Agent** | 无需 CLI | ✅ Installed | status 确认 |
+| **CodeArts Work** | 无需 CLI | ✅ Installed | ✅ `%USERPROFILE%\.codeartswork\`（README 一致） |
+| **WorkBuddy** | 无需 CLI | ✅ Installed | ✅ `~\.workbuddy\` |
+| **OpenCode** | ✅ 1.18.29 | ✅ Installed（29 Skills） | ✅ `~\.config\opencode\huaweicloud-plugins` |
+| **Codex** | ✅ 0.153.4 | ✅ **installed, enabled 1.1.1-next.15**（C1 修复后） | ✅ `.codex\plugins\cache\…\1.1.1-next.15` |
+| **DSH** | 无需 CLI | ✅ Installed | ✅ `~\.dsh\huaweicloud-plugins` |
+| **OfficeAce** | 无需 CLI | ✅ Installed | ✅ `%LOCALAPPDATA%\Programs\OfficeAce\.office-claw\…` |
+| **OpenClaw** | 无需 CLI | ✅ Installed | ✅ `~\.agents\huaweicloud-plugins` |
+| **AtomCode** | 无需 CLI | ✅ Installed | ✅ `~\.atomcode\huaweicloud-plugins` |
+| **Hermes** | — | ✅ Installed（+Safety Hooks） | ✅ hermes-home |
+
+## D5-3 工具枚举（Hermes 代表客户端）
+
+- ✅ dev `tools.mjs` = **37 工具**（PR#498 新增 `auth_switch`/`auth_confirm`）与 Hermes MCP 暴露**完全一致（37/37，0 差异）**
+- ✅ 无 description 缺失（schema 粗检）
+- 工具清单：check_cli / plan_cli_command / run_readonly_command / list_operations / run_approved_command / show_profile_redacted / hook_check_{command,artifacts,deploy_plan} / service_catalog / explain_error / search_docs / retrieve_skill / list_regions / get_regional_availability / search_marketplace / get_service_icon / detect_framework / setup_obs_config / auth_{status,sync,init,switch,confirm} / sandbox_* ×11 / voucher_{status,claim}
+- 复现工具：test-cases/tools-enum.py（可重复执行）
 
 ## 关键发现
 
