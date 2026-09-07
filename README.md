@@ -62,7 +62,8 @@ git pullm    # 拉取并合并
 
 - **本地工作区 = 本仓库目录**：所有测试产出**直接写入**本目录（docs / test-cases / templates / results / metrics / eval / scripts），改完即完
 - **`scripts/sync-to-remote.ps1`**：有变更才提交（commit message 含时间戳 + 变更文件摘要），推送走 gh 凭据；无变更零操作（幂等）；失败记录日志、下次自动重试
-- **Windows 计划任务 `devkit-test-auto-sync`**：每小时自动运行（查询：`schtasks /Query /TN devkit-test-auto-sync`；手动触发：`schtasks /Run /TN devkit-test-auto-sync`）
+- **Windows 计划任务 `devkit-test-auto-sync`**：**每天 20:00（北京时间）自动同步**（查询：`schtasks /Query /TN devkit-test-auto-sync`）
+- **临时同步（需即推即达时）**：手动触发 `schtasks /Run /TN devkit-test-auto-sync`，或在仓库目录直接运行 `scripts/sync-to-remote.ps1`
 - **运行日志**：`%LOCALAPPDATA%\Hermes Agent CN Desktop\data\hermes-home\logs\devkit-test-sync.log`
 - **安全**：提交身份为仓库级 shuangheaven；敏感文件由 .gitignore 22 条规则封锁，自动 `git add -A` 不会带入任何凭证
 
