@@ -12,10 +12,10 @@
 | D2-11 | **R3 STS token 拒绝落盘** | P0 | ✅ **MCP 实测**：persist+token → `{status:error, scope:rejected}` |
 | D2-12 | **R10 runtime 非空禁止落盘** | P1 | ✅ **MCP 实测**：runtimeActive 时 sync → `ok:false + auto-sync suppressed (R10)`（与方案逐字一致） |
 | D2-13 | **R9 configuredBySession 优先 env** | P1 | ✅ 隔离实测：标记时 S1 胜出；清除后 env 兜底恢复 |
-| D2-14 | R2 冲突交互仲裁（confirmToken） | P1 | ⏳（需真实冲突场景，MCP needs_confirmation 协议） |
+| D2-14 | **R2 冲突交互仲裁（confirmToken）** | P1 | ✅ **MCP 实测完整闭环**：假 AK 导入触发 `needs_confirmation`+`confirmToken`+双选项 → `auth_confirm(s1)` → outcome=aborted「保持 S1 现有账号，未覆盖」→ S1 真值完好/导入文件擦除/测试污染清零 |
 | D2-15 | auth_switch 行为矩阵抽查 | P1 | ✅ temporary/clear/persist(rejected) 均与矩阵一致 |
-| D2-16 | import 文件读取后擦除 | P1 | ⏳（构造导入文件流程，下一批） |
-| D2-17 | cmdAuthReconcile 非 TTY 守卫 | P1 | ⏳（CLI 子进程验证） |
+| D2-16 | import 文件读取后擦除 | P1 | ✅ **真机：读后无条件擦除**（exists=False） |
+| D2-17 | cmdAuthReconcile 非 TTY 守卫 | P1 | ✅ **真机实测**：非 TTY 跑 `auth reconcile` → "Non-interactive session. Cannot run interactive reconciliation..." + 2.3s 退出不 hang（isTTY 卫卫生效） |
 | D2-18 | **.last_sync mtime 手动改动检测** | P1 | ✅ 隔离实测：mtime>marker→R2（true）；≤→R4（false） |
 | D2-19 | **命名档只审计不自动动（R5）** | P1 | ✅ 隔离：current=deploy 解析正确，写 deploy 档逻辑成立 |
 | D2-20 | HUAWEICLOUD_HOME 重定向（R6） | P2 | ⚠️ **观察记录**：readKooCliProfiles 按 baseHome()/.hcloud 读 S2——**HUAWEICLOUD_HOME 会影响 S2 映射**，与方案 T1 断言「S2 固定 ~/.hcloud 不受影响」存在出入，**需人工/真机核对**（WSL 相关） |
