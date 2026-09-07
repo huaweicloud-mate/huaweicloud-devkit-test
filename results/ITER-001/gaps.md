@@ -72,6 +72,10 @@
 
 ## 环境事件记录
 
+### ENV-2 Codex 桌面版未安装（D1-16b 降级参考）
+
+- Codex 桌面版本（codex-desktop）未安装——`version` 不列出 Codex 属预期行为（version 面向桌面版目录约定），相关观察项（CLI 插件缓存路径未纳入 version）按用户指示**忽略**，待 Codex Desktop 就绪后复验（2026-09-07）
+
 ### ENV-1 Hermes 重启后插件资产目录被清空（关联 D1-9 重启语义观察）
 
 - **时间**：2026-09-07（用户重启 Hermes 后）
