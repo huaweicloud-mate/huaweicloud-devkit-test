@@ -63,6 +63,58 @@ add("D1-9", "D1安装", "重启生效语义", "P1", "各客户端已安装",
     "重启前不可用/重启后可用，跨客户端一致", "P: README 9客户端逐一强调 restart",
     "install+会话重启", "手动", "逐客户端")
 
+# ---------- NR2 新增用例（2026-09-07 dev 分支新功能，T0.5 影响分析驱动） ----------
+add("D1-10", "D1安装", "卸载全局清理(新flag)", "P1", "已安装+含KooCLI/OBS配置环境",
+    "uninstall --clean-global / --clean-kocli / --clean-obs",
+    "①安装并产生KooCLI+OBS配置 ②uninstall --clean-global ③检查hcloud二进制/~/.hcloud/OBS配置 ④只读验证归零",
+    "KooCLI二进制+配置+OBS配置全清，目录归零", "仓: setup-cli.mjs promptGlobalCleanup+新flag; 通: 卸载完整性",
+    "uninstall", "脚本", "全客户端+Windows")
+add("D1-11", "D1安装", "自定义HCLOUD_BIN保留", "P2", "HCLOUD_BIN自定义路径环境",
+    "HCLOUD_BIN=/custom/hcloud",
+    "①设置HCLOUD_BIN指向自定义路径 ②uninstall --clean-global ③检查自定义路径二进制与Windows PATH条目",
+    "用户管理的二进制与PATH条目不被误删", "仓: removeKooCli注释明确承诺(只动默认位置)",
+    "uninstall", "手动")
+add("D1-12", "D1安装", "清理幂等归零", "P1", "已清理环境",
+    "重复执行 uninstall --clean-global",
+    "①首次清理 ②再次执行 ③检查报错/残留",
+    "重复执行无报错、无残留", "通: 幂等性",
+    "uninstall", "脚本")
+add("D1-13", "D1安装", "Windows文件锁下清理", "P1", "Windows含文件锁",
+    "hcloud 进程占用的文件",
+    "①占用hcloud相关文件 ②uninstall+cleanup ③检查锁冲突处理与残留",
+    "锁场景明确失败或提示，不静默损坏config", "仓: README Windows文件锁已知问题; 关联D5-6",
+    "uninstall", "手动", "Windows专项")
+add("D1-14", "D1安装", "copyFileVerified安装完整性", "P1", "可注入损坏场景",
+    "模拟截断/损坏的安装文件",
+    "①破坏安装包(截断) ②install ③检查是否检出损坏",
+    "损坏被检出并明确提示，不静默装坏", "仓: setup-cli.mjs copyFileVerified新增; 通: 安装完整性",
+    "install", "半自动")
+add("D1-15", "D1安装", "checkForUpdate更新提示", "P2", "已安装+网络可用",
+    "旧版本安装",
+    "①安装旧版 ②install/doctor ③检查next/latest tag判断",
+    "正确判断next/latest并提示可用更新", "仓: setup-cli.mjs checkForUpdate新增",
+    "install/doctor", "脚本")
+add("D2-8", "D2认证", "credentials变更后auth回归", "P1", "真云+本地凭证",
+    "credentials.mjs 变更后的 auth init",
+    "①auth init ②验证KooCLI/OBS/沙箱三端 ③脱敏检查",
+    "三端就绪+脱敏正常，无回归", "仓: credentials.mjs +29行变更带来回归风险",
+    "auth_init/auth_status", "半自动")
+add("D4-18", "D4安全", "confirm-not-deny审批语义", "P0", "真云+标准客户端",
+    "写操作触发确认流程",
+    "①发起写操作 ②观察确认对话框 ③分别确认/拒绝",
+    "写操作需显式确认，不被直接拒绝也不被直接放行", "仓: issue-443修复+fix/issue-443-confirm-not-deny分支+test/issue-443-fix.test.mjs",
+    "审批流/plan_cli_command", "半自动", "安全基线")
+add("D4-19", "D4安全", "确认流下预检仍生效", "P0", "真云",
+    "高危操作进入确认流",
+    "①高危写操作 ②确认流程中观察preflight检查 ③验证拦截",
+    "确认流程中风险预检仍生效拦截", "仓: fix/issue-443-preflight-b1b2分支(双修复)",
+    "hook_check_*+审批流", "半自动", "安全基线")
+add("D4-20", "D4安全", "拒绝后零操作", "P1", "真云",
+    "确认流选择拒绝",
+    "①确认流选拒绝 ②检查云资源与命令执行痕迹",
+    "拒绝后无任何资源变更、无命令执行", "通: 负向路径; 仓: confirm杜绝误执行意图",
+    "审批流", "半自动")
+
 # ---------- D2 认证 ----------
 add("D2-1", "D2认证", "auth init三端同步", "P1", "AK/SK+本地凭证文件",
     "auth init",
