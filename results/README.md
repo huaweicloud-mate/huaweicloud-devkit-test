@@ -9,7 +9,7 @@
 | 迭代目录 | `ITER-<NNN>-<YYYYMMDD>` | `ITER-001-2026-09-05` |
 | 每晚报告 | `nightly-<YYYYMMDD>.md` | `nightly-2026-09-05.md` |
 | 客户端矩阵 | `matrix-<被测插件版本>.md` | `matrix-v1.2.0.md` |
-| 缺口表 | `gaps-<ITER>.md` | `gaps-ITER-001.md` |
+| 缺口表 | `gaps-<ITER>.md` | `gaps-ITER-001-2026-09-05.md` |
 
 ## 迭代目录结构（每轮自动/手动生成）
 
