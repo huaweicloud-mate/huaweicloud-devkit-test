@@ -53,6 +53,16 @@
 - **失败用例**：`not ok 14 - hermes install creates skills, MCP server, and safety policy`（test/agent-install.test.mjs:263，`countSkills($home/.hermes/skills) >= 6` 断言失败）
 - **初判**：Hermes CN Desktop 使用 `hermes-home` 目录（非 `~/.hermes`）；本机真实 `install --target hermes` 成功——**疑似测试断言目录约定过时（G 类测试侧），待核**（真实 Hermes 安装路径已确认 hermes-home，见本机验证）
 
+## 环境事件记录
+
+### ENV-1 Hermes 重启后插件资产目录被清空（关联 D1-9 重启语义观察）
+
+- **时间**：2026-09-07（用户重启 Hermes 后）
+- **现象**：`hermes-home/huaweicloud-plugins/`、`plugins/` 目录整体消失 → MCP 工具（huaweicloud_devkit_*）在重启后会话中不可用
+- **处置**：`npx huaweicloud-devkit@next install --target hermes` 重装恢复（版本 1.1.1-next.15，29 技能确认）
+- **观察**：可能为 Hermes 应用启动时清理未注册插件目录，或应用更新所致——**暂记待观测**；每次 Hermes 重启后需自查插件目录存在性（可在 check-prereqs 脚本中加此项）
+- **测试关联**：D1-9（重启生效语义）——"重启后可用"承诺在本环境出现例外，建议 D1-9 用例在全矩阵中关注重启后资产完整性
+
 ## 说明
 
 - 退出标准：P0/P1 清零后本迭代方可关闭；P0-1 已同步 issue 稿（issues/issue-P0-1-hook-novadelete-盲区.md）
