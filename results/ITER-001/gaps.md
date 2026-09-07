@@ -48,13 +48,14 @@
 - **失败用例**：`not ok 14 - hermes install creates skills, MCP server, and safety policy`（test/agent-install.test.mjs:263，`countSkills($home/.hermes/skills) >= 6` 断言失败）
 - **初判**：Hermes CN Desktop 使用 `hermes-home` 目录（非 `~/.hermes`）；本机真实 `install --target hermes` 成功——**疑似测试断言目录约定过时（G 类测试侧），待核**（真实 Hermes 安装路径已确认 hermes-home，见本机验证）
 
-### C1 Codex 插件安装声称完成但未生效（P 类候选）
+### C1 Codex 插件安装未生效（已解决 2026-09-07；拆分为 C1a 环境 / C1b 插件缺陷）
 
-- **现象**：`install --target codex` 输出完成提示，但 `status --target codex` = **Plugin: Not installed**；`~/.codex/config.toml` 无注册、`~/.codex/plugins` 无插件文件
-- **对照**：同批 opencode/codearts/codearts-work/workbuddy 全部 Installed——Codex 适配特异性
-- **影响**：D1-1/D5-1/D5-2 在 Codex 失败；README"mention @huaweicloud-core"承诺不成立
-- **初判**：Codex CLI 0.153.4（Windows）插件注册机制/目录变化，或 install 对既有 config.toml 合并缺陷；待深挖 install 日志
-- **处置**：跟踪 issue #501；必要时单独上报（随 #501 评论补充证据）
+- **C1a（环境问题，已修复）**：本机 `~/.codex/config.toml` 由 **Codex Windows App 生成**（`%userprofile%` 未展开路径 + Windows 专属键），与 **codex-cli 0.153.4（npm CLI）**解析不兼容 → `codex plugin list` 报 "failed to load configuration ... invalid type: sequence, expected a boolean (model_catalog_json)" → 所有 codex plugin 命令失败 → 插件装不上
+  - **修复**：备份冲突配置（`config.toml.bak-hwc-conflict`）→ 干净重装 `install --target codex` → **Plugin: Installed** ✅
+  - **启示**：Windows 上同时存在 Codex App 与 CLI 时配置格式冲突是真实用户场景，README 宜加说明
+- **C1b（插件缺陷，P 类候选）**：`installCodex()`（setup-cli.mjs:651-683）对 `codex plugin marketplace add`/`plugin add` 失败**仅处理 "Access is denied"**，其余失败静默继续 → **无条件打印 "Or mention @huaweicloud-core in Codex" 成功提示**（误导用户；status 复查才发现 Not installed）
+  - **建议**：install 应检查 r1/r2 status 并在失败时输出真实错误 + 指引修复配置（如本文 C1a 的备份/重装步骤）
+  - **处置**：拟补充评论至 issue #501（合并上报）
 
 ## 环境事件记录
 

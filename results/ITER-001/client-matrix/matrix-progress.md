@@ -10,7 +10,7 @@
 | **CodeArts Work** | `--target codearts-work` | 无需 CLI | ✅ Installed | ✅ `%USERPROFILE%\.codeartswork\`（README 承诺一致） |
 | **WorkBuddy** | `--target workbuddy` | 无需 CLI | ✅ Installed | ✅ `~\.workbuddy\` |
 | **OpenCode** | `npm i -g opencode-ai`（npmmirror） | ✅ 1.18.29 | ✅ Installed（29 Skills） | status 确认 |
-| **Codex** | `npm i -g @openai/codex`（npmmirror） | ✅ 0.153.4 | ❌ **Not installed（异常发现）** | config.toml 无注册、~/.codex/plugins 无文件 |
+| **Codex** | `npm i -g @openai/codex`（npmmirror） | ✅ 0.153.4 | ✅ **Installed（C1 修复后）** | 干净配置重装成功 |
 | Hermes | 前期就绪 | — | ✅ Installed（+Safety Hooks） | ✅ |
 
 ## 关键发现
