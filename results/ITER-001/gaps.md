@@ -33,13 +33,12 @@
 
 ## P1
 
-### T1-2/T1-3 auth 测试失败 = **真实产品缺陷（P 类确认，跨平台）**
+### T1-2/T1-3 auth 测试失败 = **测试 mock 敏感性（G 类）——真云功能正常（2026-09-07 实测纠正）**
 
-- **失败用例**：`not ok 24`（auth sync writes OBS and reports all agent registration targets，test/auth-credentials.test.mjs:106）/ `not ok 64`（auth_switch clear empties runtime and lets syncAuth run again，test/cred-reconcile-e2e.test.mjs:276）
-- **跨平台实证（2026-09-07）**：Windows 245/250 ❌ + **Linux ARM64 248/250 ❌（同样 2 个失败）**——FAKE_HCLOUD 在 Linux 可执行，失败为**逻辑断言失败**（非 shim）
-- **纠错**：早前归类为"Windows shim 兼容（G 类）"为**误判**——Linux 复跑证实是 **PR#498 认证整改的真实缺陷（跨平台必复现）**：① auth sync 的 OBS 配置写入/agent 注册目标报告未达预期 ② auth_switch clear 后 runtime 未清空（R10 runtime 守卫失效）
-- **修复建议**：复核 `src/auth/service.mjs`（syncAuth OBS 写入分支）与 credentials.mjs runtime clear 逻辑（R10）；对照 docs/superpowers/plans/2026-09-05-credential-reconcile.md
-- **处置**：已追加评论至 issue #501（纠正分类 + 跨平台证据）
+- **失败用例**：`not ok 24`（auth sync，auth-credentials.test.mjs:106）/ `not ok 64`（auth_switch clear，cred-reconcile-e2e.test.mjs:276）
+- **真云实测（权威证据）**：① `auth_sync` → **ok: true**（OBS 配置写入 + KooCLI 同步 + 11 agent 注册目标完整报告）② `auth_switch clear` → **status: cleared**（runtime 清空 + 回退 env/file/S1 后只读命令正常）——**两个功能在真实云环境全部正常**
+- **重定性**：早期按 Windows shim 归类（误）→ Linux 复跑升级为 P 类（误）→ **真云实测确认为 G 类**：失败源于 FAKE_HCLOUD mock 无法还原真实 sync/switch 的完整行为路径（如 OBS 写结果解析/凭据回退时序），**测试用例需增强 mock，产品功能无缺陷**
+- **处置**：已追加 #501 评论（纠正两轮误判 + 提供真云证据）；测试修复建议：mock 增加真实 hcloud 输出结构/环境变量模拟
 
 > **上报状态（2026-09-07）**：P0-1 + 基建缺口 A/B 合并为 **issue #501**（huaweicloud/huaweicloud-devkit，open）——https://github.com/huaweicloud/huaweicloud-devkit/issues/501 ｜ 草稿：issues/issue-测试基建缺口-合并.md；C1b/C1c/D10 检索缺陷已追加评论
 
