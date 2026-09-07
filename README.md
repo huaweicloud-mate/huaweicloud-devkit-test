@@ -38,7 +38,8 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 
 ## 安全红线
 
-- **AK/SK/密钥永不入库**（.gitignore 已锁定 22 条忽略规则，含凭证/密钥/缓存/证据模式并经 ad-hoc 验证；凭证纪律见 01-测试规划 §2.3）
+- **AK/SK/密钥永不入库**（.gitignore 已锁定 23 条忽略规则，含凭证/密钥/缓存/证据模式并经 ad-hoc 验证；凭证纪律见 01-测试规划 §2.3）
+- **凭证存储方案**：AK/SK 用 `scripts/hdk-secrets.ps1`（DPAPI 加密）存本机 `~\.hdk-secrets\credentials.bin`，运行前 `Get` 注入环境变量 `HW_ACCESS_KEY/HW_SECRET_KEY`；密钥只在本机解密、发往华为云 API（详见 scripts/hdk-secrets.ps1 头注释）
 - `evidence/` 只存**脱敏后**内容，原始凭证/未脱敏日志禁止入库
 - 本仓库只含测试资产，不含插件源码与任何云凭证
 
@@ -65,7 +66,7 @@ git pullm    # 拉取并合并
 - **Windows 计划任务 `devkit-test-auto-sync`**：**每天 20:00（北京时间）自动同步**（查询：`schtasks /Query /TN devkit-test-auto-sync`）
 - **临时同步（需即推即达时）**：手动触发 `schtasks /Run /TN devkit-test-auto-sync`，或在仓库目录直接运行 `scripts/sync-to-remote.ps1`
 - **运行日志**：`%LOCALAPPDATA%\Hermes Agent CN Desktop\data\hermes-home\logs\devkit-test-sync.log`
-- **安全**：提交身份为仓库级 shuangheaven；敏感文件由 .gitignore 22 条规则封锁，自动 `git add -A` 不会带入任何凭证
+- **安全**：提交身份为仓库级 shuangheaven；敏感文件由 .gitignore 23 条规则封锁，自动 `git add -A` 不会带入任何凭证
 
 ## 相关链接
 
