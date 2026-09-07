@@ -35,3 +35,15 @@
 
 - D2-14/16/17 待真实冲突/CLI 场景（下一批）
 - 方案 T1（WSL）/ D2-20 真机核对（zhangshuang Linux 可补）
+
+## 五、真机新发现（2026-09-07 补充）
+
+### AK-FP-1（P 类候选）authEncrypt 环境下 S2 指纹恒假不一致
+
+- **现象**：persist 同步后 `hcloud configure show` 确认 S2 current 档已写入新值（HPU****YXD）；但 `getAuthStatus.reconciled` 的 S2 current 指纹永远 ≠ S1（本机 f4571d59 vs caae65f2），`inconsistent: true` 恒存
+- **根因链**：① 本机 KooCLI `authEncrypt=true`（默认）→ `~/.hcloud/config.json` 为整文件加密结构（crypter/nonce/localDea），AK/SK 均密文 ② `readKooCliProfiles()` 按方案 T2 设计"非 spawn 直读文件"→ 读到**密文** ③ `fingerprint(密文AK, 密文SK)` 与 S1 真实指纹必然不同 → **S2 恒 inconsistent**
+- **影响**：① getAuthStatus 恒告警（误导"当前账号不一致"）② sync 每次触发 R4 重写 S2（写入后指纹仍不匹配 → **无效循环重写**）
+- **与方案关系**：方案自带待测点 T2（"authEncrypt=true 时 configure list 输出 ****"）已覆盖掩码场景，但**未覆盖"文件直读遇到密文"**——readKooCliProfiles 非 spawn 设计与 authEncrypt 冲突
+- **验证证据**：fingerprint(真实)=caae65f2 ✓；fingerprint(掩码)=c6de8701 ≠；直读密文路径一致匹配 f4571d59
+- **建议**：① authEncrypt 环境改用 `hcloud configure list`（解密输出）取 fingerprint ② 或检测 authEncrypt 后跳过 S2 指纹比对（仅比对 current 名与存在性）③ 方案 T2 补充 authEncrypt 不可读文件场景
+- **处置**：追加评论至 #501（证据链归档）
