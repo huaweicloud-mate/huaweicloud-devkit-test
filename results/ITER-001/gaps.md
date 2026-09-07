@@ -10,13 +10,14 @@
 |---|---|
 | 关联用例 | **D4-5（写操作误判检测）/ D4-4（审批门，hook 层）/ D4-16 对照** |
 | 发现方式 | NR4 安全回归（hook_check_command 探测） |
-| 现象 | `hcloud ECS NovaDeleteServer --server_id=x` 与 `NovaDeleteKeypair` 经 **hook_check_command** 判定 **allow（"No Huawei Cloud hook risk rule matched"）** |
-| 对照证据 | `DeleteServers`（批量）→ warn（hwc-destructive-delete-operation）；`CreateServers` → warn（cost）；`bash -c "DeleteServers"` → warn（能识别内层）——**证明是规则覆盖盲区，非包裹绕过** |
+| **dev 复现** | ✅ **在 dev 分支（1.1.1-next.14 / fa04732）规则引擎直调确认复现**——证据脚本 `evidence/p01-repro-dev.mjs`（`evaluateCommandRisk` 直调，与 hook_check_command 同引擎） |
+| 现象 | 以下破坏性操作经规则引擎判定 **allow（NO-RULE）**：`NovaDeleteServer`（删单台 ECS）/ `NovaDeleteKeypair`（删密钥对）/ `NovaDeleteServerGroup`（删服务器组 Nova 系）/ `ResetServerPassword`（重置密码） |
+| 对照证据 | `DeleteServers`（批量）→ warn（hwc-destructive-delete-operation）；`DeleteServerGroup`（非 Nova 系）→ warn；`bash -c "DeleteServers"` → warn（能识别内层）——**规则引擎正常，Nova 前缀族+ResetServerPassword 为规则覆盖盲区** |
 | Node 层对照组 | `plan_cli_command(NovaDeleteServer)` → **deny / risk: write**（Node 策略层正确，审批门兜住） |
-| P/G/I | **P**（插件承诺"执行前风险预检"但 hook 规则集不全） |
-| 严重度 | **P0 候选**（破坏性删除操作在 hook 预检被放行；实际风险等级取决于 hook 是否为唯一防线——Node 层已兜底，建议上报时由维护者裁定 P0/P1） |
-| 复现环境 | huaweicloud-devkit dev@fa04732；MCP hook_check_command；hcloud 7.2.12 |
-| 修复方向（建议） | `cloud-risk-rules.json` 的 `hwc-destructive-delete-operation` 规则扩充操作名清单：`NovaDeleteServer / NovaDeleteKeypair / NovaDeleteServerGroup / NovaDeleteServerMetadataItem / DeleteServerPassword / ResetServerPassword` 等同族破坏性操作；并补规则回归用例（D4-10） |
+| P/G/I | **P**（插件承诺"执行前风险预检"但 rules 覆盖不全） |
+| 严重度 | **P0 候选**（破坏性删除/密码重置在 hook 预检被放行；实际风险等级取决于 hook 是否为唯一防线——Node 层已兜底，建议上报时由维护者裁定 P0/P1） |
+| 复现环境 | huaweicloud-devkit dev@fa04732（本地构建 = 1.1.1-next.14）；MCP hook_check_command；hcloud 7.2.12 |
+| 修复方向（建议） | `cloud-risk-rules.json` 的 `hwc-destructive-delete-operation` 规则扩充操作名清单：`NovaDeleteServer / NovaDeleteKeypair / NovaDeleteServerGroup / NovaDeleteServerMetadataItem / ResetServerPassword / DeleteServerPassword` 等破坏性操作族；规则引擎增加"操作名前缀族匹配"（Nova* / Reset* / Delete*）；补规则回归用例（D4-10） |
 
 ## P1
 

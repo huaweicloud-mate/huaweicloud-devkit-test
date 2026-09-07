@@ -25,12 +25,25 @@
 {"ok": true, "decision": "allow", "findings": []}
 ```
 
+**dev 分支（1.1.1-next.14 / fa04732）规则引擎直调确认复现**（`evidence/p01-repro-dev.mjs`，与 hook_check_command 同引擎）：
+
+```
+--- ALLOW --- | 删除单台ECS(Nova)        hcloud ECS NovaDeleteServer --server_id=x        -> decision=allow rules=[NO-RULE]
+--- ALLOW --- | 删除密钥对(Nova)          hcloud ECS NovaDeleteKeypair --keypair_name=test  -> decision=allow rules=[NO-RULE]
+--- ALLOW --- | 删除云服务器组(Nova)      hcloud ECS NovaDeleteServerGroup --server_group_id=g -> decision=allow rules=[NO-RULE]
+--- ALLOW --- | 重置密码                  hcloud ECS ResetServerPassword --server_id=x ...   -> decision=allow rules=[NO-RULE]
+PASS(拦截)    | 删除云服务器组            hcloud ECS DeleteServerGroup ...                   -> decision=warn rules=[hwc-destructive-delete-operation]
+PASS(拦截)    | 批量删除(对照组)          hcloud ECS DeleteServers --server_ids=test1        -> decision=warn rules=[hwc-destructive-delete-operation]
+PASS          | 只读查询(对照组)          hcloud ECS NovaListServers --limit=1               -> decision=allow（正确不拦截）
+```
+
 ## 期望结果
 
-删除类（破坏性）操作的 hook 预检应命中风险规则并返回 warn/deny。对照组（证明规则存在但未覆盖 Nova 系）：
+删除/密码重置类（破坏性）操作的 hook 预检应命中风险规则并返回 warn/deny。对照组（证明规则存在但未覆盖 Nova 系与 ResetServerPassword）：
 
 ```json
 // hcloud ECS DeleteServers --server_ids=test1  →  warn（hwc-destructive-delete-operation）
+// hcloud ECS DeleteServerGroup ...             →  warn（同规则）
 // hcloud ECS DeleteServers（bash -c 包裹）     →  warn（能识别内层命令）
 // hcloud ECS CreateServers ...                 →  warn（hwc-cost-unbounded-scale）
 ```
