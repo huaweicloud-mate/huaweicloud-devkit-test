@@ -38,6 +38,15 @@
 
 ## 五、真机新发现（2026-09-07 补充）
 
+### AK-FP-2（P2 候选）HUAWEICLOUD_HOME 场景 S2 被漏检（R6）
+
+- **现象与双机实证**：设置 HUAWEICLOUD_HOME 后 `readKooCliProfiles()` → "KooCLI config not found"（真实 `~/.hcloud/config.json` 存在）；Windows/Linux 一致
+- **根因**：readKooCliProfiles 用 `join(baseHome(), '.hcloud')` 定位 S2，但 KooCLI 配置固定在 `$HOME/.hcloud`（与 HUAWEICLOUD_HOME 无关）→ R6 场景 S2 漏检
+- **与方案冲突**：方案 §九 T1 断言 3（"S2 固定 ~/.hcloud 不受 HUAWEICLOUD_HOME 影响"）——实测**实现不符**（S1/S3 迁移 ✓ 正确，S2 映射错误）
+- **影响**：R6 环境（WSL 重定向）下 reconcile 对 S2 的比对/同步全部失效
+- **建议**：readKooCliProfiles 固定用 homedir()/.hcloud，与 baseHome 解耦
+- **处置**：已追加评论 #501
+
 ### AK-FP-1（P 类候选）authEncrypt 环境下 S2 指纹恒假不一致
 
 - **现象**：persist 同步后 `hcloud configure show` 确认 S2 current 档已写入新值（HPU****YXD）；但 `getAuthStatus.reconciled` 的 S2 current 指纹永远 ≠ S1（本机 f4571d59 vs caae65f2），`inconsistent: true` 恒存
