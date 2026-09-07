@@ -48,14 +48,16 @@
 - **失败用例**：`not ok 14 - hermes install creates skills, MCP server, and safety policy`（test/agent-install.test.mjs:263，`countSkills($home/.hermes/skills) >= 6` 断言失败）
 - **初判**：Hermes CN Desktop 使用 `hermes-home` 目录（非 `~/.hermes`）；本机真实 `install --target hermes` 成功——**疑似测试断言目录约定过时（G 类测试侧），待核**（真实 Hermes 安装路径已确认 hermes-home，见本机验证）
 
-### C1 Codex 插件安装未生效（已解决 2026-09-07；拆分为 C1a 环境 / C1b 插件缺陷）
+### C1 Codex 插件安装未生效（已解决 2026-09-07；根因三重确认）
 
-- **C1a（环境问题，已修复）**：本机 `~/.codex/config.toml` 由 **Codex Windows App 生成**（`%userprofile%` 未展开路径 + Windows 专属键），与 **codex-cli 0.153.4（npm CLI）**解析不兼容 → `codex plugin list` 报 "failed to load configuration ... invalid type: sequence, expected a boolean (model_catalog_json)" → 所有 codex plugin 命令失败 → 插件装不上
-  - **修复**：备份冲突配置（`config.toml.bak-hwc-conflict`）→ 干净重装 `install --target codex` → **Plugin: Installed** ✅
-  - **启示**：Windows 上同时存在 Codex App 与 CLI 时配置格式冲突是真实用户场景，README 宜加说明
-- **C1b（插件缺陷，P 类候选）**：`installCodex()`（setup-cli.mjs:651-683）对 `codex plugin marketplace add`/`plugin add` 失败**仅处理 "Access is denied"**，其余失败静默继续 → **无条件打印 "Or mention @huaweicloud-core in Codex" 成功提示**（误导用户；status 复查才发现 Not installed）
-  - **建议**：install 应检查 r1/r2 status 并在失败时输出真实错误 + 指引修复配置（如本文 C1a 的备份/重装步骤）
-  - **处置**：拟补充评论至 issue #501（合并上报）
+- **C1a（环境问题，已修复）**：本机 `~/.codex/config.toml` 由 **Codex Windows App 生成**（`%userprofile%` 未展开路径 + Windows 专属键），与 **codex-cli 0.153.4（npm CLI）**解析不兼容 → codex CLI 无法启动 → 插件命令全失败
+  - **修复**：备份冲突配置 → 干净重装 → 插件可用
+- **C1b（✅ 产品 bug 确认，P 类，跨平台必复现）**：`installCodex()`（setup-cli.mjs:651）硬编码 `pluginName='huaweicloud-core'`，但 marketplace 插件名来自 `.codex-plugin/plugin.json` 的 `"name": "huaweicloud-devkit"` → `codex plugin add "huaweicloud-core@huaweicloud-devkit"` **必然失败**（"plugin not found in marketplace"）且**失败静默**（仅处理 Access denied）→ 无条件打印成功提示
+  - **实证**：手动 `codex plugin add "huaweicloud-devkit@huaweicloud-devkit"` → **installed, enabled 1.1.1-next.15** ✅；同时 `installCodex` 的 marketplace 添加路径正确（包根），仅插件名错配
+  - **修复建议**：installCodex 改用 plugin.json 实际 name（读取 PACKAGE_ROOT/.codex-plugin/plugin.json 的 name 字段）或改为遍历 marketplace 后 add 插件实际名；并对 r1/r2 失败输出真实错误
+- **C1c（产品 bug 小，P 类）**：`codexStatus()`（setup-cli.mjs:709-712）用 `codex plugin list` 输出**包含 'huaweicloud-core' 字符串**判断——而 plugin 安装路径含 `plugins/huaweicloud-core`（插件未 enabled 时路径也在输出中）→ **status 误报 Installed**（装没装都成立）
+  - **修复建议**：解析 `codex plugin list` 的插件名列（如 huaweicloud-devkit@…）且状态为 installed/enabled 再判定
+- **处置**：C1b/C1c 已追加评论至 issue #501（2026-09-07）
 
 ## 环境事件记录
 
