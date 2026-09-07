@@ -39,7 +39,15 @@
 - **根因**：`FAKE_HCLOUD`（test/fixtures/fake-hcloud.mjs 包装的 shim）经 `HCLOUD_BIN` 注入，spawnSync shell:false 在 Windows 无法执行 → 与 P0-2 同因
 - **处置**：同上（测试平台化 + Linux 复跑确认）；PR#498 新功能逻辑待 Linux 环境实测（R10 runtime 守卫/clear 语义）
 
-> **上报状态（2026-09-07）**：P0-1 + 基建缺口 A/B 合并为 **issue #501**（huaweicloud/huaweicloud-devkit，open）——https://github.com/huaweicloud/huaweicloud-devkit/issues/501 ｜ 草稿：issues/issue-测试基建缺口-合并.md
+> **上报状态（2026-09-07）**：P0-1 + 基建缺口 A/B 合并为 **issue #501**（huaweicloud/huaweicloud-devkit，open）——https://github.com/huaweicloud/huaweicloud-devkit/issues/501 ｜ 草稿：issues/issue-测试基建缺口-合并.md；C1b/C1c/D10 检索缺陷已追加评论
+
+### D10-1 search_docs 中文检索召回缺陷（P1，确定性缺陷）
+
+- **现象**：中文评测集（EXP-E01~E15，14 条跑完）经 `huaweicloud_search_docs` 仅 2 条命中（含独立英文词 redis/kubernetes）→ 中文召回率 ≈14%（目标 ≥90%）；E03 错配（OBS 任务命中 dds-dcs）
+- **根因**（tools.mjs:1779-1830）：`q.split(/\s+/)` 空白分词——中文无空格整句成单 token，对英文 skill 描述 includes 必然不匹配
+- **影响**：依赖检索的技能发现链路（非描述注入通道）中文场景实质失效；D10-2 激活率不达标
+- **修复建议**：中文 n-gram/分词；描述 Triggers 扩充中文同义词（云主机→ECS、备份→CBR、费用→Billing）；中英对齐表
+- **处置**：已评论至 issue #501（2026-09-07）；评测结果 eval/d10-eval-results.md
 
 ## P2
 
