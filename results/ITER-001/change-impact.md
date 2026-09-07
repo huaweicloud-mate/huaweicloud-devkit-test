@@ -34,6 +34,20 @@
 | Windows 专项（D1-13、D5-6、D7-3） | 本机（Windows 11） |
 | D10 激活率/路由（SKILL 重写） | 评测集 15 条 × 代表 3 个 agent |
 
+## 基线增量更新（2026-09-07 拉取 dev@02fa79b）
+
+> 新增 PR #498「凭证一致化整改」（fa04732 → 02fa79b，28 文件 +2621/−65）：
+
+| 变更点 | 源码位置 | 影响用例 | 处置 |
+|---|---|---|---|
+| 凭证一致化（reconcile / R7 current档 / R9 会话优先 / R10 runtime 守卫） | `src/auth/reconcile.mjs`(新)、`credentials.mjs`、`service.mjs`、`setup-cli.mjs`(+71)、`hcloud-cli.mjs` | **D2-1 auth init、D2-4 脱敏、D2-6 OBS、D2-8（新增回归）** | 本轮 D2 回归优先级 ↑；R10 runtime 守卫与凭证环境变量注入直接相关 |
+| tools.mjs 再变更（+170） | `src/tools.mjs` | **D5-3 工具枚举（本轮需在 next.15 上重跑）**、D9-1 schema | 纳入 T2 客户端矩阵 |
+| cli-and-auth SKILL 更新 | `skills/huaweicloud-cli-and-auth/SKILL.md` | D3-A1、D8-1、**D10-2 激活率** | D10 评测集补 cli-and-auth 任务 |
+| 新增测试（reconcile.test +158 / cred-reconcile-e2e.test +449 / cross-platform +13） | `test/` | T1 左移：npm test 全量跑 | 与既有 428 行新测试合并执行 |
+| 设计文档 | `docs/superpowers/plans/2026-09-05-credential-reconcile.md` | D8-1 文档一致性（计划 vs 实现） | 评审时对照 |
+
+> ⚠️ 规则文件未变 → P0-1（hook 规则盲区）在本基线仍然成立，缺口等级维持。
+
 ## 已知阻塞/风险
 
 - obsutil 未安装 → D2-6 相关回归延后至 T4（本轮受影响集含 D2-6 但以凭证/配置链路优先，obsutil 部分 BLOCKED 标注）

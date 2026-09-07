@@ -16,7 +16,7 @@
 | Node 层对照组 | `plan_cli_command(NovaDeleteServer)` → **deny / risk: write**（Node 策略层正确，审批门兜住） |
 | P/G/I | **P**（插件承诺"执行前风险预检"但 rules 覆盖不全） |
 | 严重度 | **P0 候选**（破坏性删除/密码重置在 hook 预检被放行；实际风险等级取决于 hook 是否为唯一防线——Node 层已兜底，建议上报时由维护者裁定 P0/P1） |
-| 复现环境 | huaweicloud-devkit dev@fa04732（本地构建 = 1.1.1-next.14）；MCP hook_check_command；hcloud 7.2.12 |
+| 复现环境 | huaweicloud-devkit dev@02fa79b（本地源码直调；Hermes 插件 1.1.1-next.15）；规则文件在 fa04732→02fa79b 间未变更，结论保持 |
 | 修复方向（建议） | `cloud-risk-rules.json` 的 `hwc-destructive-delete-operation` 规则扩充操作名清单：`NovaDeleteServer / NovaDeleteKeypair / NovaDeleteServerGroup / NovaDeleteServerMetadataItem / ResetServerPassword / DeleteServerPassword` 等破坏性操作族；规则引擎增加"操作名前缀族匹配"（Nova* / Reset* / Delete*）；补规则回归用例（D4-10） |
 
 ## P1
