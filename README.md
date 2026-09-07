@@ -34,11 +34,11 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 1. 完成 [docs/03-执行准备清单.md](docs/03-执行准备清单.md) —— 8 组全部 ✅
 2. 执行 T0 基线对齐（clone 上游 / 记录 commit / 能力清单核对 / 环境重置）→ 写入 `results/ITER-001/baseline.md`
 3. 每轮执行结束，按 [results/README.md](results/README.md) 的 ITER 结构归档（归档脚本 `scripts/archive-result.ps1` 规划中，暂手动建目录）
-4. 每迭代末更新 [metrics/dashboard.md](metrics/dashboard.md) 质量仪表盘，按 [templates/issue-template.md](templates/issue-template.md) 拆 issue 提交上游
+4. 每迭代末更新 [templates/dashboard.md](templates/dashboard.md) 质量仪表盘（复制到 metrics/dashboard.md 填写），按 [templates/issue-template.md](templates/issue-template.md) 拆 issue 提交上游
 
 ## 安全红线
 
-- **AK/SK/密钥永不入库**（.gitignore 已锁定 14 项敏感模式并经 ad-hoc 验证；凭证纪律见 01-测试规划 §2.3）
+- **AK/SK/密钥永不入库**（.gitignore 已锁定 22 条忽略规则，含凭证/密钥/缓存/证据模式并经 ad-hoc 验证；凭证纪律见 01-测试规划 §2.3）
 - `evidence/` 只存**脱敏后**内容，原始凭证/未脱敏日志禁止入库
 - 本仓库只含测试资产，不含插件源码与任何云凭证
 
