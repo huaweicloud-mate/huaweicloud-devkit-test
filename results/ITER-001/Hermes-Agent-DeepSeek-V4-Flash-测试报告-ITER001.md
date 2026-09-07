@@ -34,11 +34,12 @@
 
 ## 3. 分维度结果
 
-### 3.1 T1 自动化左移（dev 全部单测）
-- 250 测试 / 245 过 / 5 失败（98%），两次运行一致
-- 5 个失败根因：**4 个为测试 fake-hcloud bash shim 在 Windows spawnSync(shell:false) 无法执行**（跨平台缺陷），1 个为 Hermes 目录约定断言漂移
-- **产品逻辑审查**：preflightSecurityGroupCheck 等实现正确（代码级确认）→ 失败定性 **G 类（测试套件问题）**，非产品缺陷
-- 附带发现：上游 **dev 分支 CI 零运行**（测试从未被环境验证）
+### 3.1 T1 自动化左移（dev 全部单测，双平台复跑）
+- **Windows**：250 测试 / 245 过 / 5 失败（98%）
+- **Linux ARM64（zhangshuang ECS 复跑）**：250 / **248 过 / 2 失败（99.2%）**——确认仅 2 个为真实缺陷
+- **真实缺陷（跨平台必复现）**：`auth sync` OBS 写入/目标报告（auth-credentials.test.mjs:106）、`auth_switch clear` runtime 未清空 R10（cred-reconcile-e2e.test.mjs:276）——**PR#498 认证整改缺陷**
+- **G 类（测试套件 Windows 不兼容）**：preflight×2、hermes install → Linux 通过（bash shim 假设证实）
+- 附带发现：上游 **dev 分支 CI 零运行**（测试从未被环境验证，本迭代双平台代理验证填补）
 
 ### 3.2 P0 安全回归（D4 维度）
 | 用例 | 结果 | 证据 |

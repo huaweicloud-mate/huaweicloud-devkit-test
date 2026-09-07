@@ -33,11 +33,13 @@
 
 ## P1
 
-### T1-2/T1-3 auth 测试失败 = 同因 Windows shim 兼容问题（G 类）
+### T1-2/T1-3 auth 测试失败 = **真实产品缺陷（P 类确认，跨平台）**
 
-- **失败用例**：`not ok 24`（auth sync OBS）/ `not ok 64`（auth_switch clear）
-- **根因**：`FAKE_HCLOUD`（test/fixtures/fake-hcloud.mjs 包装的 shim）经 `HCLOUD_BIN` 注入，spawnSync shell:false 在 Windows 无法执行 → 与 P0-2 同因
-- **处置**：同上（测试平台化 + Linux 复跑确认）；PR#498 新功能逻辑待 Linux 环境实测（R10 runtime 守卫/clear 语义）
+- **失败用例**：`not ok 24`（auth sync writes OBS and reports all agent registration targets，test/auth-credentials.test.mjs:106）/ `not ok 64`（auth_switch clear empties runtime and lets syncAuth run again，test/cred-reconcile-e2e.test.mjs:276）
+- **跨平台实证（2026-09-07）**：Windows 245/250 ❌ + **Linux ARM64 248/250 ❌（同样 2 个失败）**——FAKE_HCLOUD 在 Linux 可执行，失败为**逻辑断言失败**（非 shim）
+- **纠错**：早前归类为"Windows shim 兼容（G 类）"为**误判**——Linux 复跑证实是 **PR#498 认证整改的真实缺陷（跨平台必复现）**：① auth sync 的 OBS 配置写入/agent 注册目标报告未达预期 ② auth_switch clear 后 runtime 未清空（R10 runtime 守卫失效）
+- **修复建议**：复核 `src/auth/service.mjs`（syncAuth OBS 写入分支）与 credentials.mjs runtime clear 逻辑（R10）；对照 docs/superpowers/plans/2026-09-05-credential-reconcile.md
+- **处置**：已追加评论至 issue #501（纠正分类 + 跨平台证据）
 
 > **上报状态（2026-09-07）**：P0-1 + 基建缺口 A/B 合并为 **issue #501**（huaweicloud/huaweicloud-devkit，open）——https://github.com/huaweicloud/huaweicloud-devkit/issues/501 ｜ 草稿：issues/issue-测试基建缺口-合并.md；C1b/C1c/D10 检索缺陷已追加评论
 
