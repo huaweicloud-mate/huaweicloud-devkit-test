@@ -7,14 +7,16 @@
 | 项 | 值 |
 |---|---|
 | 仓库 | https://github.com/huaweicloud/huaweicloud-devkit |
-| **测试目标分支** | `dev` @ `02fa79b`（2026-09-07，Merge PR #499 release-dev-1.1.1-next.15） |
-| 上一基线 | `fa04732`（2026-09-05，PR #497 next.14）——本次拉取增量 |
+| **测试目标分支** | `dev` @ `74b9642`（2026-09-07，Merge PR #506 release-dev-1.1.1-next.16） |
+| 上一基线 | `02fa79b`（2026-09-05，PR #499 next.15）——本次拉取增量 86 commits |
 | 发布基线（对照） | `main` @ `bcefb32`（2026-09-02，Merge PR #466） |
-| 变更规模 | dev vs main：**50+28 文件**（含增量 PR #498 凭证整改 +2621/−65） |
-| 本地工作副本 | `C:\Users\Administrator\devkit-test\hdk`（dev @ 02fa79b） |
-| 本机测试对象 | Hermes 插件 **1.1.1-next.15**（`npx huaweicloud-devkit@next install --target hermes`，2026-09-07） |
+| 变更规模 | dev vs main：**78+40 文件**（增量 PR #500~506：40 文件 +2978/−76） |
+| 本地工作副本 | `C:\Users\Administrator\devkit-test\hdk`（dev @ 74b9642） |
+| 本机测试对象 | Hermes 插件 **1.1.1-next.15**（next.16 已发布未装，装新版需重装） |
 
-> **基线更新记录（2026-09-07）**：拉取到 PR #498/#499 增量——`feat(auth) 凭证一致化整改（reconcile / R7 current档 / R9 会话优先 / R10 runtime守卫）`，28 文件 +2621/−65。规则文件（risk-rule-engine/cloud-risk-rules.json/policy.json）不在变更内 → P0-1 结论不受影响。
+> **基线更新记录（2026-09-07 第二次拉取）**：增量 PR #500/#504/#505/#506——Python hook 缩进修复、web-port 规则误报修复、China mirrors、keypair import 流程、huawei-iac 技能 stage 重构、telemetry 测试、Node bootstrap arch 修复。
+>
+> **已测结论复检（74b9642）**：① P0-1 hook 盲区 **复跑确认仍在**（4 个操作，rules 变更未动 destructive）② D5-3 工具枚举 **37/37 仍一致** ③ rules 15 条无增删（仅内容微调）——**此前上报与结论全部保持有效**。本机插件仍 next.15（增量功能测试待用户决策是否升级）。
 
 ## 执行环境（本机预检 2026-09-05 确认）
 
