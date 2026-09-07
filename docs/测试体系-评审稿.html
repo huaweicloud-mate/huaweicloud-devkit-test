@@ -110,7 +110,7 @@ footer { text-align: center; color: #98a2b3; font-size: 12px; margin-top: 30px; 
 <li><b>1. 引导能力</b>：验证插件能否指导 Agent 完成真实云操作（被测是引导能力，非云平台本身）</li>
 <li><b>2. 安全护栏</b>：验证高风险操作是否被拦截、写操作是否被正确要求审批</li>
 <li><b>3. 能力覆盖</b>：验证承诺的 20+ 云服务、36 个 MCP 工具、~30 个 skills</li>
-<li><b>4. 多客户端一致性</b>：验证 10+ 客户端适配层行为一致且无回归</li>
+<li><b>4. 多客户端一致性</b>：验证 10+ 客户端适配层行为一致且无退化</li>
 <li><b>5. 缺陷闭环</b>：为 issue 提交与插件修复提供结构化、可复现证据（P0/P1/P2 分层）</li>
 </ul>
 <div class="quote">本体系按 <b>Microsoft MCP 三层测试模型</b>（Unit→Protocol→Agent）与 <b>四级测试金字塔</b>（静态门禁→工具单元→场景集成→版本回归）组织，并融合 Azure MCP Server / AWS Agent Toolkit 的行业实证做法。</div>
@@ -232,7 +232,7 @@ footer { text-align: center; color: #98a2b3; font-size: 12px; margin-top: 30px; 
 <tr><td><b>T5</b> 资源释放审计</td><td>全量残留扫描、删除验证</td><td>每阶段末</td></tr>
 <tr><td><b>T6</b> 汇总上报</td><td>P0/P1/P2 汇总 → 插件修复提示词 → 拆 issue</td><td>每迭代末</td></tr>
 </tbody></table>
-<p><b>新增需求测试（NR1→NR6）</b>：需求评估 → 测试设计（≥4 用例：Happy/Error/安全/防回归）→ 更新矩阵（ID 永不复用/OBSOLETE/supersedes 三铁律）→ 与既有用例同轮回归 → 合入门禁（P0/P1 100% 通过）→ 防回归沉淀。新增资源自动触发：新工具→D5-3 枚举 diff 报警；新 SKILL→D3-A1 自动覆盖+补 D10-2；policy 新规则→D4-10 自动回归。</p>
+<p><b>新增需求测试（NR1→NR6）</b>：需求评估 → 测试设计（≥4 用例：Happy/Error/安全/防退化）→ 更新矩阵（ID 永不复用/OBSOLETE/supersedes 三铁律）→ 与既有用例同轮复测 → 合入门禁（P0/P1 100% 通过）→ 防退化沉淀。新增资源自动触发：新工具→D5-3 枚举 diff 报警；新 SKILL→D3-A1 自动覆盖+补 D10-2；policy 新规则→D4-10 自动回归。</p>
 </section>
 
 <section id="s8"><h2>8. 度量、报告与缺陷闭环</h2>
@@ -256,7 +256,7 @@ footer { text-align: center; color: #98a2b3; font-size: 12px; margin-top: 30px; 
 <tr><td><b>P2</b></td><td>文案过时、轻微不一致、性能抖动、优化项</td><td>排期/backlog</td></tr>
 <tr><td><b>I 类</b></td><td>测试者擅自联想/猜测绕过插件</td><td>非缺陷，记违规整改纪律</td></tr>
 </tbody></table>
-<p>闭环：测试执行 → 每晚报告 → 缺口表(P/G) → 插件修复提示词 → 拆 issue（§6.4 八字段模板）→ 提交上游 → 下迭代回归验证。</p>
+<p>闭环：测试执行 → 每晚报告 → 缺口表(P/G) → 插件修复提示词 → 拆 issue（§6.4 八字段模板）→ 提交上游 → 下迭代复测验证。</p>
 </section>
 
 <section id="s9"><h2>9. 自动化提升路线图（~60% → 目标 ~80%）</h2>
