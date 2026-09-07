@@ -52,6 +52,7 @@
 
 - **C1a（环境问题，已修复）**：本机 `~/.codex/config.toml` 由 **Codex Windows App 生成**（`%userprofile%` 未展开路径 + Windows 专属键），与 **codex-cli 0.153.4（npm CLI）**解析不兼容 → codex CLI 无法启动 → 插件命令全失败
   - **修复**：备份冲突配置 → 干净重装 → 插件可用
+  - **善后（2026-09-07）**：将旧配置中 CLI 兼容的有价值字段（model/review_model/network_access/disable_response_storage/model_providers 段）合并回新 config.toml（跳过冲突字段 model_catalog_json/notify），合并后 `codex plugin list` 解析正常；用户自定义 provider 配置已保留（不落文档）。合并脚本：test-cases/merge-codex-config.py
 - **C1b（✅ 产品 bug 确认，P 类，跨平台必复现）**：`installCodex()`（setup-cli.mjs:651）硬编码 `pluginName='huaweicloud-core'`，但 marketplace 插件名来自 `.codex-plugin/plugin.json` 的 `"name": "huaweicloud-devkit"` → `codex plugin add "huaweicloud-core@huaweicloud-devkit"` **必然失败**（"plugin not found in marketplace"）且**失败静默**（仅处理 Access denied）→ 无条件打印成功提示
   - **实证**：手动 `codex plugin add "huaweicloud-devkit@huaweicloud-devkit"` → **installed, enabled 1.1.1-next.15** ✅；同时 `installCodex` 的 marketplace 添加路径正确（包根），仅插件名错配
   - **修复建议**：installCodex 改用 plugin.json 实际 name（读取 PACKAGE_ROOT/.codex-plugin/plugin.json 的 name 字段）或改为遍历 marketplace 后 add 插件实际名；并对 r1/r2 失败输出真实错误

@@ -10,7 +10,7 @@
 | **CodeArts Work** | 无需 CLI | ✅ Installed | ✅ `%USERPROFILE%\.codeartswork\`（README 一致） |
 | **WorkBuddy** | 无需 CLI | ✅ Installed | ✅ `~\.workbuddy\` |
 | **OpenCode** | ✅ 1.18.29 | ✅ Installed（29 Skills） | ✅ `~\.config\opencode\huaweicloud-plugins` |
-| **Codex** | ✅ 0.153.4 | ✅ **installed, enabled 1.1.1-next.15**（C1 修复后） | ✅ `.codex\plugins\cache\…\1.1.1-next.15` |
+| **Codex** | ✅ 0.153.4 | ✅ **installed, enabled 1.1.1-next.15**（C1 修复后） | ✅ `.codex\plugins\cache\…\1.1.1-next.15` + **29 skills 落位** |
 | **DSH** | 无需 CLI | ✅ Installed | ✅ `~\.dsh\huaweicloud-plugins` |
 | **OfficeAce** | 无需 CLI | ✅ Installed | ✅ `%LOCALAPPDATA%\Programs\OfficeAce\.office-claw\…` |
 | **OpenClaw** | 无需 CLI | ✅ Installed | ✅ `~\.agents\huaweicloud-plugins` |
