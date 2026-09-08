@@ -141,6 +141,41 @@ if _sc_files:
             issues.append(f"[README scripts 陈旧] scripts/ 实际 {len(_sc_files)} 个脚本（{','.join(_sc_files)}），README 导航行仍标『规划中』")
             break
 
+# ---------- 5.5 覆盖率口径 2026-09-09 一致性 ----------
+_lat = _read_utf8(os.path.join(REPO, "results", "LATEST.md"))
+_sum = _read_utf8(os.path.join(REPO, "results", "ITER-002-2026-09-08", "收尾总结.md"))
+# a. LATEST 不得残留孤立旧口径（61.8% 仅允许出现在"轨迹"叙述中）
+_m61_lat = re.search(r"61\.8%", _lat)
+if _m61_lat and "口径修正轨迹" not in _lat[: _m61_lat.start()]:
+    issues.append("[口径残留] LATEST.md 出现 61.8% 但不在修正轨迹叙述中")
+# b. 双口径标记（评估完成 + 原子记录）必须存在
+if "评估完成" not in _lat or "原子执行记录" not in _lat:
+    issues.append("[口径缺失] LATEST.md 缺『评估完成 / 原子执行记录』双口径标注")
+if "评估完成" not in _sum or "原子执行记录" not in _sum:
+    issues.append("[口径缺失] 收尾总结.md 缺『评估完成 / 原子执行记录』双口径标注")
+# c. 未执行清单引用一致性：正文提及清单文件名必须真实存在
+_mdir = os.path.join(REPO, "results", "ITER-002-2026-09-08", "manual")
+_list_files = [f for f in os.listdir(_mdir) if f.startswith("未执行用例清单")]
+for _m in re.finditer(r"未执行用例清单[-\w]*\.md", _lat + _sum):
+    if _m.group(0) not in _list_files:
+        issues.append(f"[清单引用失效] 文档引用 {_m.group(0)}，实际存在 {_list_files}")
+# d. metrics 设计级批次计数一致性：execution.csv 设计级相关批次累计与口径说明行吻合
+_exec_rows = list(_csv.reader(open(os.path.join(REPO, "metrics", "execution.csv"), encoding="utf-8-sig")))
+_design_exec = 0
+for _r in _exec_rows[1:]:
+    if len(_r) == 10 and any(k in _r[2] for k in ("D4", "D8-7", "D3-B7", "D9", "P1批", "P2批", "认证方案")):
+        try:
+            _design_exec += int(_r[4])
+        except ValueError:
+            pass
+_cover_row = [r for r in _exec_rows if len(r) == 10 and "覆盖口径说明" in r[2]]
+if not _cover_row:
+    issues.append("[metrics缺失] execution.csv 无『覆盖口径说明』行（122/123 推算链未落记录）")
+else:
+    _m_atomic = re.search(r"原子执行记录=设计级相关 (\d+)", _cover_row[0][2])
+    if _m_atomic and int(_m_atomic.group(1)) != _design_exec:
+        issues.append(f"[metrics漂移] 口径行称原子记录={_m_atomic.group(1)}，实际设计级批次累计={_design_exec}")
+
 # ---------- 输出 ----------
 print("=" * 60)
 print(f"扫描文件数: {len(files)}")
