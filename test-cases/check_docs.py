@@ -137,8 +137,8 @@ _sc_files = [f for f in os.listdir(os.path.join(REPO, "scripts"))
              if os.path.isfile(os.path.join(REPO, "scripts", f)) and f != ".gitkeep"]
 if _sc_files:
     for _line in readme.splitlines():
-        if "scripts/" in _line and "规划中" in _line:
-            issues.append(f"[README scripts 陈旧] scripts/ 实际 {len(_sc_files)} 个脚本（{','.join(_sc_files)}），README 仍标『规划中』")
+        if _line.strip().startswith("| [scripts/]") and "规划中" in _line:
+            issues.append(f"[README scripts 陈旧] scripts/ 实际 {len(_sc_files)} 个脚本（{','.join(_sc_files)}），README 导航行仍标『规划中』")
             break
 
 # ---------- 输出 ----------

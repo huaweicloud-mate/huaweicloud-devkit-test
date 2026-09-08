@@ -16,7 +16,7 @@
 | 测试范围 | dev 全部未发布变更 + 开发方案《AK/SK 架构 v4》+ 开发手测说明《卸载/更新/版本查询》《huawei-iac 手测》 |
 | 客户端矩阵 | 10 客户端：OpenCode/Codex/CodeArts×2/WorkBuddy/DSH/OfficeAce/OpenClaw/AtomCode/Hermes |
 | 测试环境 | Windows 10 / Node 22.23.2 / KooCLI 7.2.12（authEncrypt）+ **Linux ARM64 真机（zhangshuang ECS）** + 真云 cn-north-4 |
-| 设计级用例 | **124 条**（原 112 + AK/SK 方案 v4 的 D2-9~20 共 12 条） |
+| 设计级用例 | **114 条**（CSV 真源；AK/SK 方案 v4 的 D2-9~20 共 12 条已于 2026-09-08 补入矩阵，合计 221） |
 | 执行覆盖 | **~75 条（~60%）**，全部集中在安全/新功能/真云等高价值区 |
 
 ## 2. 执行摘要（度量）

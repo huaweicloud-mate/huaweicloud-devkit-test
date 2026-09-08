@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """生成 huaweicloud-devkit 测试用例矩阵母版（v1.3 落地物）
-设计级 92 条 + 展开级矩阵（D5 客户端 70 + D3-C4 服务 22 + D10 评测集 15）≈ 199 条
+设计级 114 条（92 基础 + D1-10~15/D2-8/D4-18~20/D3-C1 等 22 条新增 + NR2 AK/SK v4 的 D2-9~20 共 12 条）
++ 展开级矩阵（D5 客户端 70 + D3-C4 服务 22 + D10 评测集 15）≈ 221 条
 输出 UTF-8-SIG CSV，Excel 直接打开不乱码。
 """
 import csv
@@ -9,7 +10,7 @@ import os
 OUT_DIR = r"C:\Users\Administrator\devkit-test\test-cases"
 os.makedirs(OUT_DIR, exist_ok=True)
 
-# ============ 设计级用例（92 条） ============
+# ============ 设计级用例（114 条） ============
 # 列: ID, 维度, 标题, 优先级, 前置条件, 测试数据, 操作步骤, 预期结果, 指引来源, 关联工具, 自动化建议, 展开规则
 D = []
 
@@ -99,6 +100,67 @@ add("D2-8", "D2认证", "credentials变更后auth回归", "P1", "真云+本地�
     "①auth init ②验证KooCLI/OBS/沙箱三端 ③脱敏检查",
     "三端就绪+脱敏正常，无回归", "仓: credentials.mjs +29行变更带来回归风险",
     "auth_init/auth_status", "半自动")
+# ---------- NR2 AK/SK 架构方案 v4 用例（2026-09-07，出处=方案章节，ITER-001 实测全部执行） ----------
+add("D2-9", "D2认证", "reconcile幂等(一致态零写)", "P1", "真云+本地凭证已一致",
+    "auth reconcile 重复执行",
+    "①一致态执行 reconcile ②核对 S1/S2/S3 写入次数 ③重复执行观察",
+    "一致态下零副作用，不触发 R4 重写", "方: 《AK/SK 架构方案v4》reconcile 幂等段; NR2-001",
+    "auth reconcile/auth_status", "半自动")
+add("D2-10", "D2认证", "R7 current档跟随", "P1", "KooCLI 多 profile（current=deploy）",
+    "~/.hcloud/config.json current=deploy",
+    "①构造 current=deploy ②readKooCliProfiles 解析 ③切换 current 再解析",
+    "resolveManagedProfile 返回 current 档；runHcloudConfigure 带 --cli-profile=", "方: §五 R7; NR2-002",
+    "auth_status/readKooCliProfiles", "半自动")
+add("D2-11", "D2认证", "R3 STS token拒绝落盘", "P0", "真云 AK/SK + securityToken",
+    "auth_switch persist + securityToken",
+    "①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token",
+    "返回 {status:error, scope:rejected}，token 永不落盘", "方: §五 R3; NR2-003",
+    "auth_switch", "半自动")
+add("D2-12", "D2认证", "R10 runtime非空禁止落盘", "P1", "runtime 凭据激活（auth_init）",
+    "runtimeActive 状态下 auth_sync",
+    "①auth_init 置 runtime ②auth_status 确认 runtimeActive ③auth_sync 观察",
+    "sync 返回 ok:false + auto-sync suppressed (R10)，不写 S1", "方: §五 R10; NR2-004",
+    "auth_init/auth_status/auth_sync", "半自动")
+add("D2-13", "D2认证", "R9 configuredBySession优先env", "P1", "隔离 HOME + S1 + HW_ACCESS_KEY env",
+    "setConfiguredBySession(true) + env 注入",
+    "①写 S1+标记 ②注入 env ③resolveCredentials ④清除标记复查",
+    "标记时 S1 胜出；清除后 env 兜底恢复", "方: §五 R9; NR2-005",
+    "resolveCredentials/auth_status", "脚本")
+add("D2-14", "D2认证", "R2 冲突交互仲裁(confirmToken)", "P1", "真机 S1 存在真值",
+    "假 AK 导入 auth_switch mode=import action=persist",
+    "①备份 S1 ②假 AK 导入触发冲突 ③auth_confirm(s1) ④验证 S1 真值完好/导入文件擦除",
+    "needs_confirmation+confirmToken+双选项；confirm(s1)→outcome=aborted 保持现有账号", "方: §五 R2; NR2-006",
+    "auth_switch/auth_confirm", "半自动")
+add("D2-15", "D2认证", "auth_switch行为矩阵抽查", "P1", "真云+本地凭证",
+    "3 mode × 3 action 抽查",
+    "①temporary→内存级 ②clear→回退 env/S1 ③persist→落盘+configuredBySession 标记",
+    "与行为矩阵一致（temporary 不触 S2/S3、clear 回退可用、persist 落盘）", "方: 《AK/SK 架构方案v4》行为矩阵; NR2-007",
+    "auth_switch/auth_status", "半自动")
+add("D2-16", "D2认证", "import文件读取后擦除", "P1", "creds-import.json 存在",
+    "auth_switch mode=import",
+    "①放置 creds-import.json ②auth_switch mode=import ③检查文件存在性",
+    "读后无条件擦除（exists=False），密钥不留盘", "方: auth_switch import 语义; NR2-008",
+    "auth_switch", "半自动")
+add("D2-17", "D2认证", "cmdAuthReconcile非TTY守卫", "P1", "非 TTY 管道/SSH 非交互",
+    "npx huaweicloud-devkit auth reconcile",
+    "①非 TTY 环境执行 ②观察退出与报错",
+    "快速退出不 hang，stderr 明确告警（Non-interactive session...）", "方: 方案 T3 非 TTY 守卫; NR2-009",
+    "auth reconcile CLI", "半自动")
+add("D2-18", "D2认证", ".last_sync mtime手动改动检测", "P1", "baseHome()/.config/huaweicloud/.last_sync 存在",
+    "数字毫秒 ts；手动改 credentials.json",
+    "①写 marker ②手动改 S1 文件 ③isManualModified ④mtime≤marker 场景",
+    "mtime>marker→R2 仲裁；≤→R4 自动重写", "方: §五 R2/R4; NR2-010",
+    "isManualModified/resolveCredentials", "脚本")
+add("D2-19", "D2认证", "命名档只审计不自动动(R5)", "P1", "多 profile（current:deploy, [default,deploy]）",
+    "构造 .hcloud config 多档",
+    "①构造多档 ②解析 current ③对非 current 档执行 reconcile ④核对写档范围",
+    "解析/写档只动 current 档，命名档隔离", "方: §五 R5; NR2-011",
+    "readKooCliProfiles/resolveManagedProfile", "脚本")
+add("D2-20", "D2认证", "HUAWEICLOUD_HOME重定向(R6)", "P2", "可设置 HUAWEICLOUD_HOME 的 Linux/Windows",
+    "HUAWEICLOUD_HOME 指向重定向目录",
+    "①设置 HUAWEICLOUD_HOME ②readKooCliProfiles ③对比 S1/S3 迁移",
+    "S2 固定 ~/.hcloud 不受影响（方案 T1 断言3）——实测发现 AK-FP-2 不符", "方: §九 T1 断言3; NR2-012",
+    "readKooCliProfiles/globalCredentialsPath/obsConfigPath", "半自动", "关联 AK-FP-2")
 add("D4-18", "D4安全", "confirm-not-deny审批语义", "P0", "真云+标准客户端",
     "写操作触发确认流程",
     "①发起写操作 ②观察确认对话框 ③分别确认/拒绝",

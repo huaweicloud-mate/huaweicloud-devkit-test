@@ -3,36 +3,36 @@
 HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板 / 执行结果 / 度量 / 评测。
 
 > 被测对象：https://github.com/huaweicloud/huaweicloud-devkit
-> 当前基线：`<被测插件 commit，T0 首轮执行时填写并归档至 results/ITER-001-2026-09-05/baseline.md>`
-> 项目状态：**准备阶段**（组 1–8 清单推进中，尚未执行首轮 T0）
+> 当前基线：**1.1.1 正式版**（迭代基线 `dev` @ 74b9642 = 1.1.1-next.16，对照 `main` @ bcefb32；2026-09-07 发布正式版并冒烟 PASS）
+> 项目状态：**ITER-001-2026-09-05 执行完成**（报告终版已归档 · 发现 15 项 · issue #501 上报闭环 · 详见 [results/LATEST.md](results/LATEST.md)）
 
 ## 目录导航
 
 | 路径 | 内容 |
 |---|---|
 | [docs/](docs/) | 测试规划 v1.3 / 评审报告 / 执行准备清单 / 目录结构规划 / 团队评审稿 |
-| [test-cases/](test-cases/) | 用例体系母版：设计级 92 + 展开级 107（可复现生成，含 README 编号规则） |
+| [test-cases/](test-cases/) | 用例体系母版：设计级 114 + 展开级 107 ≈ 221 条（CSV 真源，gen_matrix.py 可复现生成） |
 | [templates/](templates/) | 6 个模板：每晚报告 / 客户端矩阵 / 安全审计 / 缺口表 / 仪表盘 / issue |
 | [results/](results/) | 执行结果归档（`ITER-NNN-日期`，命名规则见 results/README.md） |
 | [metrics/](metrics/) | 跨迭代执行率 / 通过率 / 缺陷趋势 / 质量仪表盘 |
 | [eval/](eval/) | D10 Agent 行为评测：评测集 / harness / 结果 / 趋势（纪律见 eval/README.md） |
-| [scripts/](scripts/) | 工具脚本（规划中：前置检查 / 脱敏断言 / 链接扫描 / 归档） |
+| [scripts/](scripts/) | 工具脚本：hdk-secrets.ps1（DPAPI 凭证加密）/ sync-to-remote.ps1（每日 20:00 自动同步） |
 | [assets/](assets/) | 可视化素材（规划中：金字塔 / 缺口热力图 / 框架总览图） |
 
 ## 文档清单（docs/）
 
 | 文件 | 说明 |
 |---|---|
-| [01-测试规划.md](docs/01-测试规划.md) | **主文档 v1.3**：10 维度 / 199 用例 / 四级金字塔 / P·G·I 纪律 / 执行分层 |
+| [01-测试规划.md](docs/01-测试规划.md) | **主文档 v1.3**：10 维度 / 221 用例（矩阵 CSV 真源）/ 四级金字塔 / P·G·I 纪律 / 执行分层 |
 | [02-测试规划评审报告.md](docs/02-测试规划评审报告.md) | 测试经理评审（84 → 93 分演进） |
 | [03-执行准备清单.md](docs/03-执行准备清单.md) | 8 组可勾选准备清单（是否就绪） |
 | [05-归档仓库目录结构.md](docs/05-归档仓库目录结构.md) | 本仓库目录结构设计原则与命名规则 |
-| [测试体系-评审稿.html](docs/测试体系-评审稿.html) | **团队评审用单文件**（固定导航 / 199 用例全量表 / 6 个评审决策点） |
+| [测试体系-评审稿.html](docs/测试体系-评审稿.html) | **团队评审用单文件**（固定导航 / 221 用例全量表 / 6 个评审决策点） |
 
 ## 快速开始（跑一轮测试）
 
 1. 完成 [docs/03-执行准备清单.md](docs/03-执行准备清单.md) —— 8 组全部 ✅
-2. 执行 T0 基线对齐（clone 上游 / 记录 commit / 能力清单核对 / 环境重置）→ 写入 `results/ITER-001-2026-09-05/baseline.md`
+2. 执行 T0 基线对齐（clone 上游 / 记录 commit / 能力清单核对 / 环境重置）→ 写入 `results/ITER-<NNN>-<YYYYMMDD>/baseline.md`（ITER-001 已完成，见 results/ITER-001-2026-09-05/）
 3. 每轮执行结束，按 [results/README.md](results/README.md) 的 ITER 结构归档（归档脚本 `scripts/archive-result.ps1` 规划中，暂手动建目录）
 4. 每迭代末更新 [templates/dashboard.md](templates/dashboard.md) 质量仪表盘（复制到 metrics/dashboard.md 填写），按 [templates/issue-template.md](templates/issue-template.md) 拆 issue 提交上游
 
