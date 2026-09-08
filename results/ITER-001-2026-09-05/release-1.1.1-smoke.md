@@ -24,6 +24,15 @@
 | status --target openclaw | ✅ MCP Server: Installed ｜ Safety Policy: Installed |
 | **镜像验证** | 本机默认镜像 latest 仍 **1.1.0**（滞后确认，必须 `--registry=https://registry.npmjs.org`） |
 
+## Hermes 正式版升级回归（2026-09-07 晚补）
+
+| 项 | 结果 |
+|---|---|
+| 升级 Hermes 插件 → **1.1.1**（官方 registry） | ✅ package.json 确认 |
+| **MCP 协议 tools/list** | ✅ **37 工具、schema 零缺失**（探针直测 1.1.1 server） |
+| status --target hermes | ✅ MCP Server / Safety Policy / **Safety Hooks** / MCP Python SDK: Ready / **Skills 29** / Config Configured |
+| 会话工具生效 | 重启 Hermes 会话后 MCP 工具即 1.1.1（与 next.16 同源，无行为差异预期） |
+
 ## ⚠️ 附带发现：npm 镜像 dist-tag 滞后
 
 - **本机默认 registry（华为云镜像 mirrors.huaweicloud.com）：latest=1.1.0**（14:35 发布后未同步）
