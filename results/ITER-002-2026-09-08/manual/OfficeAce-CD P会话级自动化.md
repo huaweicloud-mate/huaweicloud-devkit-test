@@ -42,7 +42,34 @@ Q1 提示词含"用 huaweicloud_devkit 创建一个 OBS 桶 test-g3-oa-20260908�
 | G3 审批框 | ❌ **无审批框**（写操作直接执行） | OBS-11 实证 |
 | G5 多轮 | ⚠️ PARTIAL（任务队列，Q2 排队） | "待执行任务(1)" |
 
-## 复现
+## 连接失败根因诊断（2026-09-08 23:55，CLOSE_TIMEOUT 定位）
+
+### 结论：不是插件缺陷——OfficeAce 连接器框架的 probe 清理协议与 MCP server 长驻进程不兼容
+
+**决定性日志**（`data/logs/api/api.2026-09-08.1.log`，三次一致：12:26/12:46/15:42）：
+```json
+{"connectorId":"81f02f61...","operation":"probe","result":"failure","durationMs":1955,
+ "errorCode":"CLOSE_TIMEOUT","toolCount":37,
+ "probeTool":"huaweicloud_list_regions","probeOutcome":"ok","statusMessage":"连接清理失败"}
+```
+
+**证据链**：
+1. **server 功能完全正常**：手动 spawn（系统 node v22.23.2 与 OfficeAce 内置 node v24.14.1 均验证）→ initialize 响应 `serverInfo: huaweicloud-devkit 1.1.1-next.15`；probe 工具 `huaweicloud_list_regions` 调用 ok；**37 个工具全部注册成功**（`mcp_connector_tools` 表虽 0 条——那是连接失败后才清理，probe 时 toolCount=37）
+2. **失败点**：OfficeAce stdio 连接器在 probe 完成后要求子进程**关闭 stdin/stdout 以确认生命周期收敛**，等待 ~2s 超时（`CLOSE_TIMEOUT`）
+3. **机制**：mcp-server.mjs 的 stdin-close 分支——`harness === 'hermes' && win32` 时 keepalive 保活；对 OfficeAce（其他 harness）设计为 `stdin close → exit(0)`。**但 OfficeAce 保持 stdin 管道打开不关闭** → server 不退出 → 框架 CLOSE 超时 → 标记 `connection_failed/连接清理失败` + enabled 归 0
+4. **后果链**：状态 failed → 会话 MCP 注入跳过（`[MCP-INJECT] skipped`）→ 工具不可见 → agent 走技能+CLI 回退链（OBS-11 实测即此）
+
+**排除项**：node 版本（v22/v24 均可加载）、插件依赖（node_modules 仅 undici=deps 声明，完整）、mcp-server.mjs 路径（存在）、HCLOUD_BIN（存在）、凭据（hcloud 可用）
+
+**修复方向（OfficeAce 侧 or 插件适配）**：
+1. OfficeAce 连接器框架：probe 后清理不强制要求子进程退出（长驻 MCP server 是合法形态），或提供"探活成功即认为连接可用"的判定
+2. 插件侧（可选）：对 OfficeAce 的 harness 检测增加"收到 probe 后保持存活且不因 stdin 保持而挂起"的兼容；或与 OfficeAce 约定 stdio 生命周期（如 probe 后由 host 主动 kill）
+
+### 诊断路径记录（可复用）
+- 连接器 DB：`%LOCALAPPDATA%\Programs\OfficeAce\data\mcp-connectors.sqlite`（只读模式查；`enabled/status/status_message/last_checked_at`）
+- 实时日志：`data\logs\api\api.YYYY-MM-DD.1.log`（搜 `connectorId.*probe` 拿 CLOSE_TIMEOUT/probeOutcome/toolCount）
+- 手动探活：node 跑 `mcp-server.mjs` + stdio initialize（thread+readline 方式，勿用阻塞 read/select-on-pipe——Windows 坑）
+- 注意：OfficeAce 数据在**安装目录内** `.office-claw`（非用户 `~\.office-claw`）；`.mcp.json` 仅内置连接器
 
 - test-cases/oa-g35.py / oa-g35b.py / oa-g5-final.py（新建会话→选文件夹→发送→轮询）
 - 启动：本机 `OfficeAce.exe --remote-debugging-port=9224 --remote-allow-origins=*`（先 taskkill 全进程含 ServiceHost）
