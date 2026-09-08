@@ -44,6 +44,8 @@ Q1 提示词含"用 huaweicloud_devkit 创建一个 OBS 桶 test-g3-oa-20260908�
 
 ## 连接失败根因诊断（2026-09-08 23:55，CLOSE_TIMEOUT 定位）
 
+> ✅ 根因定位已提交 issue：#560（https://github.com/huaweicloud/huaweicloud-devkit/issues/560，归属 OfficeAce 框架侧）
+
 ### 结论：不是插件缺陷——OfficeAce 连接器框架的 probe 清理协议与 MCP server 长驻进程不兼容
 
 **决定性日志**（`data/logs/api/api.2026-09-08.1.log`，三次一致：12:26/12:46/15:42）：
