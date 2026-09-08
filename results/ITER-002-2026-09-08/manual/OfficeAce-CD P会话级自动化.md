@@ -42,9 +42,21 @@ Q1 提示词含"用 huaweicloud_devkit 创建一个 OBS 桶 test-g3-oa-20260908�
 | G3 审批框 | ❌ **无审批框**（写操作直接执行） | OBS-11 实证 |
 | G5 多轮 | ⚠️ PARTIAL（任务队列，Q2 排队） | "待执行任务(1)" |
 
-## 连接失败根因诊断（2026-09-08 23:55，CLOSE_TIMEOUT 定位）
+## 连接失败根因诊断（2026-09-08 23:55，CLOSE_TIMEOUT 定位）→ ✅ 已本地修复验证（09-09 00:11）
 
 > ✅ 根因定位已提交 issue：#560（https://github.com/huaweicloud/huaweicloud-devkit/issues/560，归属 OfficeAce 框架侧）
+
+### 🔧 本地 workaround（已验证生效，OfficeAce 连接器 connected + 会话内 MCP 工具真实调用）
+
+**问题机制**：本机 OfficeAce 插件副本的 mcp-server.mjs（精简旧版 185 行）中，`onStdinClose` 采用 **keepalive 保活**（Windows-Hermes workaround）——注释原文 "stdin close → start keepalive timer；stdout close → exit"。但 OfficeAce 的 probe 清理**只关 stdin 不关 stdout**（或等 server 自退）→ server 保活不退出 → 框架 `CLOSE_TIMEOUT` → 连接失败。
+
+**修复**：`onStdinClose` 改为 `process.exit(0)`（stdin EOF 即正常退出）。仅改本机 OfficeAce 插件副本（`Programs\OfficeAce\.office-claw\huaweicloud-plugins\src\mcp-server.mjs`），不影响 hermes-home 副本（Hermes 仍用 keepalive 正确行为）；原文件备份 `mcp-server.mjs.oa-bak-2354`。
+
+**验证证据**：
+1. 手动探活：initialize 返回 serverInfo / tools/list 37 工具 / **stdin close 后 0.3s exit 0** ✓
+2. sqlite 状态：`connection_failed → connected`，`mcp_connector_tools 0 → 37` ✓
+3. UI 连接器面板：`已断开 → 已连接` ✓
+4. **会话内真实调用**：新会话"查询 ECS 列表"→ agent 直接调 MCP 工具（5 工具：schema 获取/check_cli/ListServersDetails read_only）→ 返回 `count:0, servers:[]` 真实数据 ✓（对比修复前 agent 走 huawei-obs 技能回退链）
 
 ### 结论：不是插件缺陷——OfficeAce 连接器框架的 probe 清理协议与 MCP server 长驻进程不兼容
 
