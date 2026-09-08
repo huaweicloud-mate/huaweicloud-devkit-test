@@ -4,7 +4,7 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 
 > 被测对象：https://github.com/huaweicloud/huaweicloud-devkit
 > 当前基线：**1.1.1 正式版**（迭代基线 `dev` @ 74b9642 = 1.1.1-next.16，对照 `main` @ bcefb32；2026-09-07 发布正式版并冒烟 PASS）
-> 项目状态：**ITER-001-2026-09-05 执行完成**（报告终版已归档 · 发现 15 项 · issue #501 上报闭环 · 详见 [results/LATEST.md](results/LATEST.md)）
+> 项目状态：**ITER-002-2026-09-08 执行完成**（跨客户端会话级 7 客户端 · 安全门禁缺陷族 #557/#558/#559 · OfficeAce 连接修复+根因 #560 · RDS 真云 E2E · 详见 [results/LATEST.md](results/LATEST.md) + [收尾总结](results/ITER-002-2026-09-08/收尾总结.md)）
 
 ## 目录导航
 
