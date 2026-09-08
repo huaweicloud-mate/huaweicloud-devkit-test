@@ -2,7 +2,7 @@
 
 ## 结论：**G1 ✅（29 技能注入实锤）｜ G2 ✅ 真实只读查询成功（`{"servers":[]}`）｜ OBS-7 已定位（approval 策略）
 
-> 更新于 2026-09-08 19:30（排障链完整打通）。此前 PARTIAL（G2 被 approval=ask fails-closed 阻塞）→ 实际根因分三层：**① 凭据无效 ② endpoint 指错 ③ 模型 id 不匹配**，与审批策略无关（审批策略在工具调用层，模型调用在前）。
+> 更新于 2026-09-08 19:30（headless CLI 排障链打通）＋ 23:00（**web 会话全链验证：G2 real + G4 中文检索 + G5 多轮**）。此前 PARTIAL（G2 被 approval=ask fails-closed 阻塞）→ 实际根因分三层：**① 凭据无效 ② endpoint 指错 ③ 模型 id 不匹配**，与审批策略无关（审批策略在工具调用层，模型调用在前）。
 
 ## 排障链（三层根因，跨客户端集成差异 OBS-7 的真相）
 
@@ -18,15 +18,37 @@
 - settings 文档 `llm-deepseek:` 段可覆盖 baseURL/models（hot-reload 无需重启）；`llm-pi-ai.providers.<route>` 可注册自定义 OpenAI 兼容网关
 - 网关实测（opengw /models）：仅 `deepseek-v4-flash-0731` / `deepseek-v4-pro-0813` / `glm-5.2` / `glm-5.3-flash` 四模型；`deepseek-v4-flash` 直发 **404 Model not found**（curl 实证）
 
-## G2 会话实测（headless 单任务 CLI，真实结果）
+## G2/G4/G5 会话实测（web 会话，真实结果，2026-09-08 23:00）
 
+**G2+多轮（同一会话两问）**：
 ```
-用户: 用 huaweicloud_devkit 的只读工具查询 ECS 列表（NovaListServers），不要执行任何写操作。
-执行链: check_cli(hcloud 7.2.12 已认证) → ECS --help → NovaListServers --help（GET 只读确认）
-       → hcloud ECS NovaListServers --cli-output=json（read_only）→ configure show（脱敏）
-结果: {"servers": []}   ← 真实 API 返回（cn-north-4，projectId 46c1fd48...7132）
-结论: 全程零写操作，agent 明确按只读通道执行 ✅
+Q1: 用 huaweicloud_devkit 的只读工具查询 ECS 列表，并告诉我这个账号 cn-north-4 有多少台 ECS。
+链: Skill huaweicloud-cli-and-auth → mcp__huaweicloud__huaweicloud_check_cli · {}
+  → mcp__huaweicloud__huaweicloud_run_readonly_command · {args:["ECS","ListServersDetails","--cli-region=cn-north-4","--cli-output=json"]}
+结果: {"count": 0, "servers": []}  → "0 台 ECS"（8 秒完成）
+
+Q2: 刚才查询的 ECS 数量是多少？另外用同样的只读方式帮我查一下这个账号的 VPC 列表数量。
+✅ 上下文延续: agent 引用"上次查询结果：0 台"
+→ mcp__huaweicloud__huaweicloud_run_readonly_command · {args:["VPC","ListVpcs","--cli-region=cn-north-4","--cli-output=json"]}
+结果: {"request_id":"c3e47b...","vpcs":[],"page_info":{"current_count":0}} → "0 个 VPC"
+汇总表: ECS 0 台 + VPC 0 个 ｜ "2 轮 · 5 步" ｜ 全程零写操作 ✅
 ```
+
+**G4 中文检索（headless 会话）**：
+```
+Q: 华为云 OBS 静态网站托管怎么配置？
+✅ 技能路由命中（描述注入通道）→ 返回完整配置方法（REST API PUT /?website / 控制台 / MCP 工具链
+   + Gotchas 表：KooCLI 无 SetBucketWebsite、对象不继承桶 ACL、需 -f/-flat、obs-website.<region> 域名等精确知识点）
+```
+
+## 判定
+
+- **G1 会话机制**：✅（web 轨迹 tab 29 技能注入 + MCP 工具调用行实锤）
+- **G2 只读调用**：✅ 真实 API 返回（check_cli → run_readonly_command 全链，count/request_id 真实）
+- **G3 审批**：✅ 只读放行（机制此前验证：写操作需 answerer，无 answerer fails closed）
+- **G4 中文检索**：✅ 技能路由命中（描述注入通道）
+- **G5 多轮**：✅ 2 轮上下文延续 + 新查询 + 汇总正确（"2 轮 · 5 步"）
+- **DSH 会话级 = 全通（G1-G5）** —— 跨客户端矩阵 DSH 行从 ⏳ 升为 ✅
 
 ## G1 技能注入（web 轨迹页取证）
 
