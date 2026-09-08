@@ -144,10 +144,10 @@ if _sc_files:
 # ---------- 5.5 覆盖率口径 2026-09-09 一致性 ----------
 _lat = _read_utf8(os.path.join(REPO, "results", "LATEST.md"))
 _sum = _read_utf8(os.path.join(REPO, "results", "ITER-002-2026-09-08", "收尾总结.md"))
-# a. LATEST 不得残留孤立旧口径（61.8% 仅允许出现在"轨迹"叙述中）
-_m61_lat = re.search(r"61\.8%", _lat)
-if _m61_lat and "口径修正轨迹" not in _lat[: _m61_lat.start()]:
-    issues.append("[口径残留] LATEST.md 出现 61.8% 但不在修正轨迹叙述中")
+# a. LATEST 不得残留孤立旧口径（61.8% 仅允许出现在"轨迹"叙述中；遍历所有匹配）
+for _m61 in re.finditer(r"61\.8%", _lat):
+    if "口径修正轨迹" not in _lat[: _m61.start()]:
+        issues.append(f"[口径残留] LATEST.md 出现孤立 61.8%（L{_lat.count(chr(10), 0, _m61.start()) + 1} 行附近，不在修正轨迹内）")
 # b. 双口径标记（评估完成 + 原子记录）必须存在
 if "评估完成" not in _lat or "原子执行记录" not in _lat:
     issues.append("[口径缺失] LATEST.md 缺『评估完成 / 原子执行记录』双口径标注")
@@ -172,7 +172,7 @@ _cover_row = [r for r in _exec_rows if len(r) == 10 and "覆盖口径说明" in 
 if not _cover_row:
     issues.append("[metrics缺失] execution.csv 无『覆盖口径说明』行（122/123 推算链未落记录）")
 else:
-    _m_atomic = re.search(r"原子执行记录=设计级相关 (\d+)", _cover_row[0][2])
+    _m_atomic = re.search(r"原子执行记录\s*=\s*设计级相关\s*(\d+)", _cover_row[0][2])
     if _m_atomic and int(_m_atomic.group(1)) != _design_exec:
         issues.append(f"[metrics漂移] 口径行称原子记录={_m_atomic.group(1)}，实际设计级批次累计={_design_exec}")
 
