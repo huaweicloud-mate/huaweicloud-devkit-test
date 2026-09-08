@@ -39,13 +39,26 @@ agent 降级继续: 改用 hcloud obs ls → 真实返回 "Bucket number: 0"（�
 | **G5 多轮** | ✅ **上下文延续** | Q2 正确引用 Q1 的 VPC 名/ID/区域 |
 | G4 中文检索 | ⚠️ PARTIAL | 检索路由发生（转 obsutil→hcloud obs ls 完成），非标准 search_docs 路径 |
 
-## ⚠️ OBS-9 安全观察（会话级，P 类候选，需人工复核）
+## ⚠️ OBS-9 安全观察（P1 候选，已代码审查定位根因 2026-09-08 23:20）
 
 **MCP 写命令未经可见审批即执行**：Q1 的 CreateVpc 在**无 mcp-approvals.json 新增记录（最新条目 15:50 为历史）、CDP 侧零授权点击**的情况下真实创建了云资源。而 Q2 的 shell find 命令却触发了审批框且拒绝有效。
 
-- 疑似路径：agent 经 **run_approved_command/写通道** 自动放行，或 MCP 工具链对 Create 类命令无强制审批门（与 OpenCode bash-allow 同族；对照 DSH 的 approval=ask fails-closed、CodeArtsSpace 的每工具权限确认框）
-- **建议**：WorkBuddy 会话内写操作应默认走审批框（同 shell 命令）；上游可核查 plan_cli_command→run_approved_command 的 approvedByUser 来源（是否 agent 自签）
-- 定级建议：先代码审查 huaweicloud-devkit 的 write 工具在 WorkBuddy 客户端的 approval 传递链，确认真实放行机制再定 P 类
+### 根因（源码级，本机插件 1.1.1）
+| 层 | 位置 | 事实 |
+|---|---|---|
+| token 签发 | hcloud-cli.mjs:158 `planHcloudCommand` | **plan 阶段无条件 `createApprovalToken(normalizedArgs)`**——与用户是否批准无关，5min TTL 内存 Map |
+| 批准校验 | tools.mjs:1513-1516 `runApprovedCommand` | 仅校验 `approvedByUser !== true` 抛错 + token 存在 + args 精确比对——**approvedByUser 是模型自填布尔参数**，MCP server（mcp-server.mjs:192-203）纯中继无外部确认通道 |
+| 客户端门禁 | WorkBuddy 连接器 | **shell/browser 类操作有审批框（Q2 find 实证"检测到受保护文件修改"3 选项）**；**MCP 工具调用（mcp__huaweicloud__huaweicloud_run_approved_command）无审批门** → Q1 直接执行 |
+
+### 定级
+**P1 候选（会话级安全缺口）**：插件侧`approvedByUser`/`approvalToken` 是"模型自律"设计（MCP 协议无用户确认通道，属合理妥协）；**WorkBuddy 连接器未对 MCP 写工具设门禁**是执行面缺口——模型自填 true + 客户端零拦截 = 写操作可无授权执行。对照：Hermes（wrapper deny）=门禁、CodeArtsSpace（每工具权限确认框）=门禁、DSH（approval=ask fails-closed）=门禁、OpenCode（bash allow）=同族缺口（OBS-1）。
+
+### 修复方向（给上游）
+1. **WorkBuddy/OfficeAce 连接器**：对 `huaweicloud_run_approved_command`（及所有 MCP 写工具）强制应用与 shell 同级的审批框策略
+2. **插件侧**（可选加固）：`runApprovedCommand` 增加"plan 必须为本会话/客户端产生"的绑定（如 host 注入的会话标记参与 token 派生），防跨会话复用；approvalToken 描述强调"仅用户点击批准后调用"
+
+### 建议下一步
+- 追加 #501 评论（安全族：工具层安全≠会话层安全，与 P0-1 同主题），附本证据链；或待 WorkBuddy 侧行为复核后单独上报
 
 ## 复现
 
