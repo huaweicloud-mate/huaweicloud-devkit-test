@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
-"""生成 huaweicloud-devkit 测试用例矩阵母版（v1.3 落地物）
-设计级 114 条（92 基础 + D1-10~15/D2-8/D4-18~20/D3-C1 等 22 条新增 + NR2 AK/SK v4 的 D2-9~20 共 12 条）
-+ 展开级矩阵（D5 客户端 70 + D3-C4 服务 22 + D10 评测集 15）≈ 221 条
+"""生成 huaweicloud-devkit 测试用例矩阵母版（v1.4 落地物）
+设计级 123 条（114 基础 + 9 条覆盖缺口补充：D3-B7/B8/C6、D4-21/22/23、D5-8、D8-7/8）
++ 展开级矩阵（D5 客户端 70 + D3-C4 服务 22 + D10 评测集 15）= 107 条
 输出 UTF-8-SIG CSV，Excel 直接打开不乱码。
 """
 import csv
 import os
 
-OUT_DIR = r"C:\Users\Administrator\devkit-test\test-cases"
-os.makedirs(OUT_DIR, exist_ok=True)
+TC_DIR = r"C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases"
+DES_DIR = os.path.join(TC_DIR, "design")
+EXP_DIR = os.path.join(TC_DIR, "expanded")
+os.makedirs(DES_DIR, exist_ok=True)
+os.makedirs(EXP_DIR, exist_ok=True)
 
 # ============ 设计级用例（114 条） ============
 # 列: ID, 维度, 标题, 优先级, 前置条件, 测试数据, 操作步骤, 预期结果, 指引来源, 关联工具, 自动化建议, 展开规则
@@ -288,7 +291,7 @@ add("D3-C2", "D3功能", "OBS静态站部署E2E", "P1", "OBS配置就绪",
 add("D3-C3", "D3功能", "沙箱部署E2E", "P1", "沙箱DevStation配额",
     "connect→upload→deploy→URL可达→close",
     "①sandbox_connect ②upload_project ③deploy_nginx+deploy_check ④URL验证(≤8h) ⑤close",
-    "URL可访问+会话关闭", "P: README ~8h承诺; 沙箱11工具最大域", "11个沙箱工具", "半自动", "时间窗口≤8h")
+    "URL可访问+会话关闭", "P: README ~8h承诺; 沙箱11工具最大域", "sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_close_session/sandbox_upload_file/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_check_user/sandbox_sign_agreement/sandbox_connect/sandbox_credentials", "半自动", "时间窗口≤8h")
 add("D3-C4", "D3功能", "服务创建类回归", "P1", "真云+最小权限AK/SK",
     "22服务只读规划+高危轻量创建释放",
     "①逐服务list_operations+plan只读 ②高危服务轻量创建(最小规格) ③立即释放",
@@ -425,7 +428,7 @@ add("D6-1", "D6性能", "检索响应延迟", "P2", "标准环境",
     "search_docs/retrieve_skill 100次采样",
     "①连续调用采样 ②计算p95",
     "p95<2s", "通: 交互工具响应预算; 标: Azure延迟监控",
-    "两工具", "脚本")
+    "search_docs/retrieve_skill", "脚本")
 add("D6-2", "D6性能", "只读执行端到端", "P2", "真云+标准环境",
     "run_readonly_command 50次采样",
     "①分段计时(子进程+策略检查+脱敏) ②计算p95",
@@ -445,7 +448,7 @@ add("D6-5", "D6性能", "大目录/大上传", "P2", "本地大目录+沙箱",
     "超大目录detect_framework/大工程sandbox_upload_project",
     "①超大目录(10万文件)识别 ②大工程上传 ③监控内存/超时",
     "内存平稳不超时", "通: 边界值+资源占用",
-    "两工具", "脚本")
+    "detect_framework/sandbox_upload_project", "脚本")
 add("D6-6", "D6性能", "弱网重试幂等", "P1", "可注入断网环境",
     "写操作弱网重试",
     "①弱网下执行写操作 ②观察重试 ③核对不重复创建",
