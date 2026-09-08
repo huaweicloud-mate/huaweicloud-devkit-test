@@ -67,8 +67,32 @@ Q: 华为云 OBS 静态网站托管怎么配置？
 - `~/.dsh/profiles/{headless,web}/cordis.patch.yml`：huaweicloud-devkit MCP 插件 + `agent-default-model` 覆盖（opengw/deepseek-v4-flash-0731）
 - headless profile 原 patch 为空 → 补入 devkit 插件（headless CLI 会话可调 MCP 工具）
 
-## 复现
+## OBS-10 追加（2026-09-08 headless 实证）：DSH approval=ask 未拦截 MCP 写通道——写操作无确认即执行
 
-- HCLI 单任务：`dsh --profile headless "提示词"`（免浏览器）
-- Web 会话：`dsh --profile web --port 8090 --no-open` + 浏览器（轨迹 tab 取证）
+> ✅ 已提交独立 issue：https://github.com/huaweicloud/huaweicloud-devkit/issues/558（2026-09-08）
+
+### 现象（真云实测，VPC 已用后立删）
+`dsh --profile headless "用 huaweicloud_devkit 创建一个 VPC test-g3-dsh-20260908 ...请直接执行"`：
+- **headless 无 UI 确认通道**（单任务模式），无 answerer 配置
+- **云上 VPC 真实创建成功**（ID af054a4b-8ff5-485b-8ac1-e78243e5307f，ACTIVE；已 DeleteVpc 复核归零）
+- agent 走链：加载 huawei-vpc skill → 查存量无冲突 → `hcloud VPC CreateVpc` → 复查 ACTIVE
+
+### 根因（配置级）
+- DSH dump-config：`approval policy: ask`（默认 workspace-write 模式），CONTEXT 声明 "without an available answerer, the request fails closed"
+- **但 MCP 客户端（dsh-mcp-client → node huaweicloud-plugins/src/mcp-server.mjs 子进程）的工具调用不受 DSH approval 服务管辖**——fails-closed 只作用于 DSH 原生工具（bash/pwsh/fs）；MCP 写工具（`huaweicloud_run_approved_command`）由插件侧 approvedByUser 模型自填放行（同 OBS-9 根因）
+- headless 与 web 共用同一 cordis.patch.yml MCP 配置 → **web 会话推断同样受影响**
+
+### 与 OBS-9 的区别
+| | OBS-9（WorkBuddy） | OBS-10（DSH） |
+|---|---|---|
+| 客户端是否有审批设计 | ❌ 连接器无 MCP 写工具门禁 | ✅ 有 approval=ask（原生工具） |
+| 缺陷根因 | 客户端连接器未设计 MCP 审批 | **approval 服务未挂接 MCP 通道**（fails-closed 不覆盖 MCP 子进程） |
+| 影响 | 同（会话级写操作无确认可执行） | 同 |
+
+### 修复建议
+1. DSH 侧：MCP 工具调用接入 approval 服务（写工具走 ask→answerer 通道，无 answerer fails closed 应有真实拦截）
+2. 插件侧：同 OBS-9 建议（token 会话绑定/approvedByUser 外部确认）
+
+### 复现
+`dsh --profile headless "用 huaweicloud_devkit 创建 VPC ... 请直接执行"`（headless 单任务；凭据=本机 hcloud 配置）
 - 排障脚本（工作区 test-cases/）：hdk-dsh-keycheck.py（凭据对比/注入准备）、hdk-dsh-gateway-models.py（网关模型清单）、hdk-dsh-test-chat.py（模型 id 直测）、hdk-dsh-cred.py（凭据引用写入）
