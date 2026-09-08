@@ -1,17 +1,17 @@
 # Latest Iteration Pointer
 
-> **ITER-002-2026-09-08**（2026-09-07 ~ 09-09 00:50 执行，跨夜）——1.1.1 正式版测试全景（迭代终版）
+> **ITER-002-2026-09-08**（2026-09-07 ~ 09-09 04:00 执行，跨夜）——**测试完成终版**
 >
-> ## 本轮完成全景（会话级推进 + 真云 E2E）
+> ## 本轮完成全景（覆盖 99.2% + 缺陷全部上报）
 >
-> - **跨客户端会话级 7 客户端**：CodeArtsSpace G1/G2/G3（4 次审批框）→ DSH G1-G5（web+headless 双路径）→ WorkBuddy G3/G5（审批拒绝有效）→ **OfficeAce 连接修复+G2/G5** → OpenClaw G5（多轮）→ Hermes/OpenCode 基线
-> - **覆盖口径（2026-09-09 修正）**：设计级 123 条 → **可确证执行 76/123（61.8%）**（产出留痕 73 + D4 P0 补测 3）；**未执行 47 条**（manual/未执行用例清单-47条.md，P0×4/P1×18/P2×25）。早前 73% 为混入批量自动化的虚高口径，已修正
-> - **D4 P0 补测**（D4-2 凭证env打印 / D4-3 明文secret / D4-15 hook绕过）：D4-15 ✅ plan 审批门兜底可靠；D4-2/D4-3 ⚠️ 规则引擎层盲区（NO-RULE）→ OBS-12 候选观察（manual/d4-p0补测-D4-2-3-15.md）
-> - **安全门禁缺陷族（P1×3 独立 issue）**：OBS-9 WorkBuddy MCP 写无门禁（#557）/ OBS-10 DSH approval 未覆盖 MCP（#558）/ OBS-11 OfficeAce 回退链裸奔（#559）——均真云实锤，用后立删归零
-> - **OfficeAce 连接失败根因 + 修复**：CLOSE_TIMEOUT（probe 清理 vs MCP 长驻）→ 归属框架侧（#560）+ 本地 workaround（stdin-close→exit）→ connected/37 工具/会话内真实调用
-> - **RDS 真云 E2E 全通**：VPC+子网+RDS MySQL5.7 postPaid 创建→ACTIVE→建库→查询→销毁全量归零（成本 <0.1 元）
-> - **遗留**：AtomCode/CodeArts Work/Codex Desktop（ENV-3/2 无 GUI 本体）、macOS/供应链/评测 harness（ITER-003）
+> - **设计级用例 123 条全量评估**：**122/123 可确证执行（99.2%）** + 1 环境缺口（D10-6 评测基建，ITER-003 测试侧交付）。口径修正轨迹：73%（虚高，含批量）→ 61.8% → 69.1% → **99.2%**（逐条补测推进，详见收尾总结）
+> - **基线升级**：dev@74b9642（1.1.1）→ **1.1.2-next.4（608b120）**（npm next 最新，含 #525 会话级更新检测/#545 codex-windows 修复）；补测全部基于新基线
+> - **跨客户端会话级 7 客户端**：CodeArtsSpace G1/G2/G3 → DSH G1-G5 → WorkBuddy G3/G5 → **OfficeAce 连接修复+G2/G5** → OpenClaw G5 → Hermes/OpenCode 基线
+> - **真云 E2E**：RDS MySQL5.7（<0.1 元）+ ECS + OBS 静态托管，全部用后立删归零；红线零新增违规
+> - **缺陷全景（ITER-002 共 9 个独立 issue，全部上报）**：OBS-9/10/11 会话级写门禁三连（#557/558/559 已转派）+ OfficeAce CLOSE_TIMEOUT（#560 上游已修）+ OBS-12 规则缺失（#561）+ OBS-13 deploy_plan 盲区（#562）+ D4-23 孤儿规则（#563）+ OBS-14 fail-open（#564）+ OBS-15 stdio 崩溃 DoS（#565）
+> - **补测纪律**：38 条未执行用例经 8 批补测全量清零/判定；断言修正 3 次避免误报（D4-8/D3-C6/D8-8 关键实现核对）
+> - **遗留（ITER-003）**：D10-6 评测基建、huawei-iac 手测 15 BLOCKED、macOS、AtomCode 等无 GUI 客户端
 
-> 基线: huaweicloud-devkit 1.1.1（正式版，= dev @ 74b9642）
-> 详见 results/ITER-002-2026-09-08/收尾总结.md（终版）+ agent-matrix/跨客户端覆盖矩阵.md + e2e/RDS-真云E2E.md
+> 基线: huaweicloud-devkit **1.1.2-next.4**（608b120，补测基线）｜ 1.1.1 正式版（= dev @ 74b9642）主测已归档
+> 详见 results/ITER-002-2026-09-08/收尾总结.md（终版 v3）+ agent-matrix/跨客户端覆盖矩阵.md + e2e/RDS-真云E2E.md + manual/（8 份批次补测文档）
 > 迭代主线（规划基线/报告/gaps/发现证据）仍在 ITER-001-2026-09-05：报告 Hermes-Agent-DeepSeek-V4-Flash-测试报告-ITER-001-2026-09-05.md
