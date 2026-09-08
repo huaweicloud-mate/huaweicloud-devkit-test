@@ -92,6 +92,55 @@ for label, p in wb_files.items():
     else:
         notes.append(f"WorkBuddy 原始[{label}]: 不存在")
 
+# ---------- 5. README 状态语义断言（防"准备阶段残留/占位符/用例数漂移/scripts规划中"） ----------
+import csv as _csv
+
+def _csv_rows(path):
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        return sum(1 for _ in _csv.reader(f)) - 1
+
+def _read_utf8(p):
+    with open(p, encoding="utf-8-sig") as f:
+        return f.read()
+
+readme = _read_utf8(os.path.join(REPO, "README.md"))
+
+# 5.1 results/ 已有迭代目录 => 项目状态不得仍为"准备阶段"
+_iter_dirs = sorted(d for d in os.listdir(os.path.join(REPO, "results"))
+                    if d.startswith("ITER-") and os.path.isdir(os.path.join(REPO, "results", d)))
+if _iter_dirs and "准备阶段" in readme:
+    issues.append(f"[README 状态陈旧] results/ 已有迭代 {_iter_dirs}，README 项目状态仍为『准备阶段』")
+
+# 5.2 当前基线不得为占位符（含 < 尖括号或"填写"字样）
+_m_base = re.search(r"当前基线[：:]([^\n]*)", readme)
+if _m_base and ("<" in _m_base.group(1) or "填写" in _m_base.group(1)):
+    issues.append(f"[README 基线占位] 当前基线仍为占位符：{_m_base.group(1).strip()[:50]}")
+
+# 5.3 用例数与矩阵 CSV 真源核对（设计级/展开级/总数三处）
+_design_csv = os.path.join(REPO, "test-cases", "design", "用例矩阵-设计级.csv")
+_exp_csv = os.path.join(REPO, "test-cases", "expanded", "用例矩阵-展开级.csv")
+_design_n = _csv_rows(_design_csv)
+_exp_n = _csv_rows(_exp_csv)
+_m_cases = re.search(r"设计级\s*(\d+)\s*\+\s*展开级\s*(\d+)", readme)
+if _m_cases:
+    for _tag, _decl, _real in (("设计级", int(_m_cases.group(1)), _design_n),
+                               ("展开级", int(_m_cases.group(2)), _exp_n)):
+        if _decl != _real:
+            issues.append(f"[用例数漂移] README {_tag}={_decl}，CSV 真源={_real}")
+for _mm in re.finditer(r"(\d{2,4})\s*用例", readme):
+    if int(_mm.group(1)) != _design_n + _exp_n:
+        issues.append(f"[用例数漂移] README 出现总数『{_mm.group(1)} 用例』，CSV 真源合计={_design_n + _exp_n}")
+notes.append(f"矩阵真源（CSV 动态读）：设计级 {_design_n} + 展开级 {_exp_n} = {_design_n + _exp_n}")
+
+# 5.4 scripts/ 实际有脚本 => 不得标"规划中"
+_sc_files = [f for f in os.listdir(os.path.join(REPO, "scripts"))
+             if os.path.isfile(os.path.join(REPO, "scripts", f)) and f != ".gitkeep"]
+if _sc_files:
+    for _line in readme.splitlines():
+        if "scripts/" in _line and "规划中" in _line:
+            issues.append(f"[README scripts 陈旧] scripts/ 实际 {len(_sc_files)} 个脚本（{','.join(_sc_files)}），README 仍标『规划中』")
+            break
+
 # ---------- 输出 ----------
 print("=" * 60)
 print(f"扫描文件数: {len(files)}")
