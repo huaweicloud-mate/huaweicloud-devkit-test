@@ -292,7 +292,7 @@
       <tr><th>项</th><th>结果</th><th>证据</th></tr>
       <tr><td><b>上游 issue 状态同步</b></td><td>36 open 全量拉取；本批 9 issue（#557-565）<b>全部 triage 确认</b>（8 open 转派 + #560 修复闭环）；无一驳回</td><td>Google/GitHub API 快照（ITER-003/问题验证记录.md §1）</td></tr>
       <tr><td><b>#560 CLOSE_TIMEOUT 修复验证</b></td><td>✅ 修复已进发布线：608b120 mcp-server.mjs <code>NEEDS_KEEPALIVE = hermes && win32</code>，其他宿主 stdin close → <code>process.exit(0)</code></td><td>源码实证（§2.3）</td></tr>
-      <tr><td><b>#554 Windows 更新检测</b></td><td>❌ <b>1.1.2-next.4 仍未修复</b>：spawnSync(npm.cmd) 无 shell:true → EINVAL（对照 shell:true status=0 ✅，网络正常 ✅）——Windows 会话级更新检测失效</td><td>evidence/verify-554b.mjs 对照实验（§2.1）</td></tr>
+      <tr><td><b>#554 Windows 更新检测</b></td><td>❌ <b>1.1.2-next.4 仍未修复</b>（证据评论 issuecomment-5594967457 已追加上游）：spawnSync(npm.cmd) 无 shell:true → EINVAL（对照 shell:true status=0 ✅，网络正常 ✅）——Windows 会话级更新检测失效</td><td>evidence/verify-554b.mjs 对照实验（§2.1）</td></tr>
       <tr><td><b>#518 README mirror-lag</b></td><td>✅ dev 已合入 #566 修复（仅 dev 未进 next），我们上报的文档问题上游已响应</td><td>git log 306c633（§2.2）</td></tr>
       <tr><td><b>#555 / #556 uninstall 缺陷</b></td><td>⭕ dev/next 均无修复 commit，open triaged 转派中（破坏性不本机实测）</td><td>git log --all --grep（§2.4）</td></tr>
       <tr><td><b>D10-6 评测基建</b></td><td>✅ <b>建成 v1</b>（测试侧交付完成）：eval/ 目录 + eval-set-v1.csv（15 条，从展开级 EXP-E01~E15 抽取）+ 可重复跑原则文档——覆盖口径从"1 环境缺口"清零</td><td>eval/README.md + prompts/eval-set-v1.csv</td></tr>
@@ -334,7 +334,7 @@
 
   <!-- ============ 发现与上报 ============ -->
   <section id="findings" data-page-node-id="iaFKPq3hgwwNHpGCqYFRPj">
-    <h2 data-page-node-id="WS3pCLgxft64mGi0tpXxn3">五、发现清单与上报闭环 <span class="tag" data-page-node-id="TZg3WGTVCOKTFmGAv2G9Oy">24 项 · #557-565 全部独立提单 · #560 已解决(发布线验证✅) · #557-565 全 triaged · #554 复验未修复❌</span></h2>
+    <h2 data-page-node-id="WS3pCLgxft64mGi0tpXxn3">五、发现清单与上报闭环 <span class="tag" data-page-node-id="TZg3WGTVCOKTFmGAv2G9Oy">24 项 · #557-565 全部独立提单 · #560 已解决(发布线验证✅) · #557-565 全 triaged · #554 复验未修复❌(复验评论已追加)</span></h2>
     <table data-page-node-id="yOP7pNIYbBU8B4mpU3jfw6">
       <tr data-page-node-id="mmwrDlSRSUeqtyngplFFy1"><th data-page-node-id="xjFfKuolUmRW91bYHkTBvE">ID</th><th data-page-node-id="N7qq5Z1n1oC4XDYuuVyyFd">级别</th><th data-page-node-id="qGqyHnSjFP5MorRFTCQkAw">类别</th><th data-page-node-id="RAAMTWcdTlD1u5GHiGsbuJ">描述</th><th data-page-node-id="nxUlZygjOzQxIZbgFXDbrY">状态</th></tr>
       <tr data-page-node-id="VjbVxvOn6b82loNNRArkKJ"><td data-page-node-id="kM82lS1cxcQDXjfcLrFdy7"><b data-page-node-id="GzHNNuAlpzC1J3V6Z0CvdD">P0-1</b></td><td data-page-node-id="LO30NZBfVVFW8KXXYAUOTr"><span class="pill p0" data-page-node-id="8aYS1wbpYyFqhYbjEKDFpt">P0 候选</span></td><td data-page-node-id="o2cfZRLLIpEKcjALbNkwZ0"><span class="pill p" data-page-node-id="BPtOs9HQo9WVAhiQtCHhQ8">P 产品</span></td><td data-page-node-id="F8Yawrzs20SvKCi2yhw6wn">hook 规则盲区：NovaDeleteServer / Keypair / ServerGroup + ResetServerPassword → allow（Node 层兜底有效，规则引擎漏覆盖）</td><td data-page-node-id="FJktvVdX7fvA1dHQYufhw4"><span class="bad" data-page-node-id="cEYOE2mppR5C26mIMFB2Jl">上报 #501</span></td></tr>
