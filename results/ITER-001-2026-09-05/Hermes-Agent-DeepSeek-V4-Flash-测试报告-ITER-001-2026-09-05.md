@@ -73,6 +73,7 @@
 
 ### 3.7 huawei-iac 手测（开发测试说明执行）
 - **37 PASS / 0 FAIL / 2 PARTIAL / 15 BLOCKED**（5B/5C/6B/6C 需人工领券+保证金）
+- **阻塞原因（15 BLOCKED）**：5B/5C（部署成本/账单验证）与 6B/6C（计费核对）4 小节全部因「人工领券 + 保证金」前置阻塞——测试账号现金仅 1 元，被 huawei-iac 成本关卡拦下（技能"余额不足不能续跑"）且无法真实触发计费（EIP 计费码用官网估算替代）；**属账号资金门槛，非插件缺陷**，成本关卡本身工作正常。代金券/保证金就绪后可补（ITER-003）。metrics 口径：execution.csv 记 17 = 15 BLOCKED + 2 PARTIAL 合并口径（详见 manual/huawei-iac-手测报告.md 二·B 节）
 - 真实资源闭环：OBS 桶/对象 + FunctionGraph 函数（FSS.1006 修复一次）创建→验收（HTTP 200）→反序销毁→复核无残留
 - 4A 安全拦截（0.0.0.0/0+22→deny）、4B 余额话术顺序、5A/6A 架构咨询（RDS+Redis 非可选件）全过
 
