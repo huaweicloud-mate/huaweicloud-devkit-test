@@ -4,6 +4,7 @@
 > **执行主体**：Hermes-Agent（DeepSeek-V4-Flash-0731）
 > **被测产品**：huaweicloud-devkit
 > **被测版本**：**1.1.2-next.4（commit 608b120）**（npm next 发布线；latest=1.1.1）
+> **⚠️ 基线漂移记录（2026-09-09 06:10）**：真实执行阶段 npm `dist-tags.next` 推进至 **1.1.2-next.5（592e5976）**；经 diff 确认 next.5 相对 next.4 **未触碰任何 #519/#542/#544 修复文件**（仅版本 bump + README #518/#566 + CHANGELOG + dsh/opencode 集成小改）→ **全部回归结论跨版有效**；真实 agent 执行（§二.5）即为 next.5 实装验证
 > **对照基线**：1.1.1 正式版（= dev @ 74b9642）｜ 1.1.2-next.4（ITER-002 同基线，无漂移确认）
 > **本次范围**：上游问题验证（9 issue 状态同步 + #554 复验）+ **#519/#542/#544 回归验证（PR #545 修复确认）** + D10-6 评测基建交付 + 每日例行回归 + 全景图每日归档启用
 
@@ -15,8 +16,8 @@
 |---|---|---|
 | 设计级用例评估 | **123/123（100%）** | 首轮审计留痕 73 + 补测 49 + ITER-003 补 D10-6 评测基建 1（测试侧交付完成，环境缺口清零） |
 | metrics 原子执行记录 | 设计级相关 **+5 条次**（ITER-003 批次） | 问题验证 5 / D10-6 基建 1 / 每日例行 2 / 覆盖口径 1 / 回归验证 7 = 原子批次 5 行（另 633 条次为验证性批量不计入设计级） |
-| 回归验证用例 | **7 项设计级验证点 100% 通过** | #519×4 + #542×3 + #544×2 验证点、功能实测 5/5、隔离 3/3、T1 相关 87/87 |
-| 新增缺陷 | **0** | 唯一发现 = 既有缺陷 #554 复验确认未修复（非新增） |
+| 回归验证用例 | **7 项设计级验证点通过**（主路径）+ 并发会话黑盒复验补充 | #519×4 + #542×3 + #544×2 验证点、功能实测 5/5、隔离 3/3、T1 相关 87/87、真实 Codex CLI 安装闭环；并发验证补充发现 4 项（§二.6） |
+| 新增缺陷 | **4 项新发现**（并发黑盒复验产出） | D5-1 Codex 注册状态检测旧名匹配（**源码核实属实**）/ D5-2 Codex Desktop marketplace 相对路径风险（需 UI 实测）/ D5-3 doctor 失败退出码恒 0（**源码核实属实**）/ D5-4 #519 失败退出码 harness 复验（待真实失败场景） |
 | 上游 issue 状态 | 9/9 triage 确认 | #557-565（8 open 转派 + #560 修复闭环）；另有 #519/#542/#544 回归验证 closed/resolved 全过 |
 | check_docs 体检 | 0 问题 | 文档门面/口径一致性通过 |
 
@@ -62,6 +63,41 @@
 | 工具面 | ✅ 无删减 | tools.mjs -44 行 = check_cli 探测逻辑**重构抽出到 hcloud-probe.mjs**（复用非删除）；D5-3 枚举 39 = 37 既有 + check_update/upgrade（#525 新增） |
 | T1 全量 | ✅ 无 #545 引入失败 | #545 改动测试文件独立跑 87/87 全过；全量失败（mcp-server "Timed out waiting for initialize" 偶发 6→2→1 递减）为 **Windows 全量 runner 时序串扰**（单文件 0 失败、该文件不在 #545 改动范围）→ 环境项非回归 |
 
+### 2.5 真实 agent 执行验证（Codex CLI 0.153.4，本机，next.5 实装）—— ✅ #519 端到端实锤
+
+> 反馈补充（2026-09-09）：初版回归验证为源码级 + 模块直调；按"必须在 agent 上执行"要求，补 Codex CLI 真实执行闭环。
+
+**执行序列（全部真实执行，非模拟）**：
+
+```
+npx --yes --registry=https://registry.npmjs.org huaweicloud-devkit@next install --target codex
+```
+
+| 步骤 | 真实输出/结果 | 对应 issue |
+|---|---|---|
+| 安装器注册 marketplace | `Installed marketplace root: ...node_modules\huaweicloud-devkit` | #519（正常注册） |
+| **插件名（修复核心）** | `Installing plugin: huaweicloud-devkit@huaweicloud-devkit` + `Added plugin `huaweicloud-devkit` from marketplace `huaweicloud-devkit`` | ✅ **#519：不再用 huaweicloud-core** |
+| 安装完成 | `Installation complete!` + `Installed plugin root: ...\.codex\plugins\cache\huaweicloud-devkit\...\1.1.2-next.5` | — |
+| **codex plugin list 复验** | `huaweicloud-devkit@huaweicloud-devkit  installed, enabled  1.1.2-next.5` | ✅ **#519：installed+enabled 真源确认** |
+| **OpenCode marker 未写** | `~/.config/opencode/huaweicloud-plugins` mtime = 09-08 22:01（安装前遗留），今天安装后**未更新** | ✅ **#542①：真实执行确认不写 OpenCode marker** |
+| 安装后关键文件 | `hooks/huaweicloud-safety.mjs` 存在 + `hooks.json` 两 matcher 均 `node ...safety.mjs`（无 python3） | ✅ **#544：真实安装产物确认 Node hook** |
+| hcloud 探测集成 | 安装尾部输出 `KooCLI (hcloud) detected.`（走 probeHcloud 分类） | ✅ **#542②：probe 链真实触发** |
+
+**结论**：真实 agent（Codex CLI）安装闭环验证 #519（插件名/安装成功/installed+enabled）、#542①（marker 隔离）、#542②（probe 提示）、#544（Node hook 产物）全部与源码级/模块级结论一致。
+
+### 2.6 并发回归验证发现的新问题（黑盒 npm tarball 隔离验证产出，2026-09-09 合并）
+
+> 另一执行会话对 `huaweicloud-devkit@1.1.2-next.4` npm tarball 做了隔离黑盒验证（fake Codex CLI/隔离 USERPROFILE/无真实凭据），主路径结论与本节一致，但**发现 4 项"可能引入的其他问题"**——本报告合并并源码复核：
+
+| ID | 发现 | 源码核实 | 级别 | 处置建议 |
+|---|---|---|---|---|
+| **D5-1** | Codex 插件注册状态检测仍匹配旧名：`agent-registration.mjs` L65 `out.includes('huaweicloud-core')`——新插件显示 `huaweicloud-devkit@huaweicloud-devkit` → `auth status`/注册状态**误报 Codex 未配置** | ✅ **属实**（agent-registration.mjs:65 旧名硬编码） | P2 | 同时匹配 `huaweicloud-devkit(@huaweicloud-devkit)` + 保留旧名兼容；**独立提单** |
+| **D5-2** | Codex Desktop marketplace source path 相对路径：`./plugins/huaweicloud-devkit`（setup-cli.mjs L826）——按 marketplace 文件位置解析时路径可能错位（`.agents/plugins/plugins/...`） | ⚠️ 源码存在该相对路径；**实际解析规则需 Codex Desktop UI 实测** | P2（待定） | 真实 Desktop UI 验证；若按 marketplace 文件目录解析改为绝对路径 |
+| **D5-3** | `doctor` 失败时退出码恒 0：cmdDoctor `if (fail > 0)` 仅打提示（L3799-3801），无 `process.exitCode` 设置 → CI/自动化无法靠退出码判失败 | ✅ **属实**（L3799-3801 确认；对比 update 命令 L3864 有 exitCode=1） | P3 | doctor fail>0 时 `process.exitCode = 1`（或加 `--no-fail-exit`） |
+| **D5-4** | #519 安装失败非零退出**未能真实复验**：黑盒用 `.cmd` fake Codex 模拟失败，但 `.cmd` exit 码被 Node spawnSync+shell 吞成 0 → 模拟无效 | ⚠️ 代码路径（installCodex→false→exit(1)）成立，但**真实失败场景未验证** | 待复验 | 真实 Codex 失败场景/可靠 harness 复验后方可闭环 |
+
+**结论**：并发验证未推翻主路径修复结论，但证明 **#519/#542 修复不完整闭环**——存在 2 项已源码核实的残留问题（D5-1/D5-3）+ 1 项待 UI 实测（D5-2）+ 1 项待复验（D5-4）。三项新发现（D5-1/D5-2/D5-3）应独立提单（新发现独立提单纪律）。
+
 ## 三、上游问题验证（#557-565 + #554 复验）
 
 | Issue | 上游状态 | 结论 |
@@ -103,10 +139,15 @@
 
 ## 八、结论档位
 
-**1.1.2-next.4（608b120）可发布性：✅ 建议发布**
-- 三个已关闭 issue（#519/#542/#544）修复经实测定案无退化；安全规则、工具面、T1 相关测试零回归
-- 本迭代验证覆盖：回归验证 7 验证点 + 功能实测 5/5 + 隔离 3/3 + T1 相关 87/87
-- 遗留风险均为**已知缺陷跟踪**（#554/#555/#556/#533）与环境项（macOS/AtomCode GUI/评测首轮跑分），不阻塞发布
+**1.1.2-next.4（608b120）/ next.5（592e5976）可发布性：⚠️ 有条件发布**
+- **主路径修复确认**：三 issue 修复有效（回归验证 7 验证点 + 真实 Codex CLI 安装闭环 + T1 相关 87/87），无安全规则/工具面退化
+- **但并发黑盒复验发现修复不完整闭环**，2 项源码核实残留 + 1 项待实测 + 1 项待复验：
+  - **D5-1（P2，已核实）**：Codex 插件注册状态检测仍匹配旧名 `huaweicloud-core` → auth status 误报 Codex 未配置（agent-registration.mjs:65）
+  - **D5-3（P3，已核实）**：doctor 失败退出码恒 0 → CI 自动化无法判失败
+  - **D5-2（P2 待定）**：Codex Desktop marketplace 相对路径解析风险，需真实 UI 实测
+  - **D5-4（待复验）**：#519 安装失败非零退出需真实失败场景复验
+- **处置建议**：D5-1/D5-2/D5-3 独立提单（新发现独立提单纪律）；D5-4 待真实失败场景；上述处理前建议**暂缓 codex 目标向正式发布线的推荐**，codex-desktop 目标同理受 D5-2 影响
+- 其余遗留风险（#554/#555/#556/#533、macOS/AtomCode GUI、评测首轮跑分）保持跟踪
 
 ## 九、后续迭代建议
 
