@@ -2,6 +2,7 @@
 """生成评审用 HTML 文档：测试规划 + 用例体系（自包含单文件，内联 CSS）"""
 import csv
 import os
+from datetime import datetime
 from collections import Counter
 
 BASE = r"C:\Users\Administrator\devkit-test"
@@ -478,7 +479,7 @@ BODY = f"""
 </ol>
 </section>
 
-<footer>HuaweiCloud DevKit 测试体系 · 评审稿 · 生成于 2026-09-05 · 数据源：测试规划 v1.3 + 用例矩阵 CSV（199 条）</footer>
+<footer>HuaweiCloud DevKit 测试体系 · 评审稿 · 生成于 {datetime.now().strftime('%Y-%m-%d %H:%M')}（北京时间） · 数据源：测试规划 v1.3 + 用例矩阵 CSV（{len(design)} 设计级 + {len(expanded)} 展开级 = {len(design) + len(expanded)} 条）</footer>
 </div>
 </body>
 </html>
