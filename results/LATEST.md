@@ -1,19 +1,16 @@
 # Latest Iteration Pointer
 
-## 本轮最终报告
+> **ITER-004-2026-09-10**（执行于 2026-09-10 白昼）——**NR3 存量用户版本升级提醒需求测试 + issues 回归验证（含已关闭）**
+>
+> ## 本轮完成全景
+>
+> - **NR3 版本升级提醒（D1-26~40，15 新用例入矩阵）**：设计文档（version-upgrade-design.md 本地存量，与飞书同源）→ 用例生成 → 执行。函数级探针 **45/46 PASS**，MCP 端到端验证；**结论：逻辑层完整，Windows 端到端不可用（D1-39 P0）**——`spawnSync('npm.cmd')` 无 shell:true → **EINVAL 实锤**（error.code 直捕 + shell:true 对照成功 + check_update 工具返回 latestStable=null 静默失败），**存量用户收不到升级提醒 = #554 未修复当前态（P0）**
+> - **文档-实现差异 1 处（D1-29，P3）**：设计文档表「pre 版本不提醒」，实现 determineTarget 对 pre 用户提醒 next 更新（stable 优先）
+> - **issues 回归 9 项**：✅ 已解决 5（#518 镜像滞后 README+防倒退 / #574 domain-id 根因纠正 / #520 README 凭证 / #516 version / #560 闭环）；⚠️ #533 authEncrypt 修复在 next 线（afeeb03 ∈ 1.1.3-next.2）**未进 1.1.2 正式版**（发布节奏）；❌ **#554 仍未修复（P0）**；部分 #530
+> - **基线**：dev `306c633`（+24 commits）/ **latest=1.1.2（今日 09:22 发布，09a59b93）** / next=1.1.3-next.2（c6c0965f）；镜像 mirrors.huaweicloud.com 当前与官方一致
+> - **矩阵**：设计级 **138**（123+15）、评审稿 245 条 ALL PASS，CSV+HTML 已同步入仓
+> - 新提单 0（D1-39 属 #554 同根因，独立上报待用户决策）；证据脚本 2 个入仓 evidence/
 
-- [ITER-004-2026-09-10 问题回归验证报告](ITER-004-2026-09-10/manual/huaweicloud-devkit-1.1.3-next.2-问题回归验证报告.md)
-
-> **ITER-004-2026-09-10**（执行于 2026-09-10 白昼）——**问题与需求测试（今日启动）**
->
-> ## 本轮状态（建目录日）
->
-> - **迭代目录已建**：`results/ITER-004-2026-09-10/`（baseline.md + change-impact.md + issues/evidence/manual/ 骨架）
-> - **被测基线**：dev @ `306c633`（Merge PR #566 fix/518-readme-mirror-lag，24 commits / 19 文件 +728/−32 相较于 1.1.2-next.4 的 608b120）；**npm latest=1.1.2（2026-09-10 01:22Z 正式发布，gitHead 09a59b93）**、next=1.1.3-next.2（c6c0965f）
-> - **增量主题**：① auth project-id 自动解析 + 凭证注入沙箱前校验/自动 set project_id（#259/#262）② telemetry 改造（proxy 路由/客户端分类/userHash 重生成/捕获限界）③ README #518 镜像滞后文档闭环 ④ tools.mjs +80（D5-3 枚举待复跑）
-> - **上游开放问题**：#578（critical，huawei-iac 审批 token 跨调用失效——待与我方 D3-B7 契约验证对账）、#576、#572、#570 等 09-09 新增
-> - **环境事件**：本机 Hermes 插件目录缺失（ENV-1 再现，huaweicloud-plugins 不在 hermes-home）——需 `@next install --target hermes` 重装 + 重启
->
-> 基线: huaweicloud-devkit **dev 306c633** ｜ latest=1.1.2（今日发布）｜ next=1.1.3-next.2
-> 详见 results/ITER-004-2026-09-10/baseline.md（T0）+ change-impact.md（T0.5）
-> 迭代主线（规划基线/报告/gaps/发现证据）仍在 ITER-001-2026-09-05；ITER-002-2026-09-08（跨夜终版）、ITER-003-2026-09-09（问题验证+评测基建 123/123）见各自收尾总结
+> 基线: huaweicloud-devkit **1.1.2（09a59b93）+ dev 306c633 + next 1.1.3-next.2** ｜ ITER-004 报告: Hermes-Agent-DeepSeek-V4-Flash-测试报告-ITER-004-2026-09-10.md
+> **口径标注（双轨）**：评估完成 = 设计级相关 15/15 新用例（NR3 全部执行留痕）+ 回归 9 项；metrics 原子执行记录待本轮 metrics/execution.csv 追加（见收尾总结）。批量/验证性执行（探针 45 断言、协议 2 项）不计入设计级口径。
+> 迭代主线（规划基线/报告/gaps/发现证据）仍在 ITER-001-2026-09-05；ITER-003-2026-09-09（问题验证 123/123）见其收尾总结

@@ -98,6 +98,82 @@ add("D1-15", "D1安装", "checkForUpdate更新提示", "P2", "已安装+网络�
     "①安装旧版 ②install/doctor ③检查next/latest tag判断",
     "正确判断next/latest并提示可用更新", "仓: setup-cli.mjs checkForUpdate新增",
     "install/doctor", "脚本")
+# ---------- NR3 存量用户版本升级提醒（2026-09-10，出处=设计文档 hdk/docs/version-upgrade-design.md + update-check.mjs 实现） ----------
+add("D1-26", "D1安装", "升级提醒工具注册与协议暴露", "P1", "dev/1.1.2 代码",
+    "tools/list 输出工具清单",
+    "①spawn mcp-server.mjs ②initialize ③tools/list ④检查 huaweicloud_check_update / huaweicloud_upgrade",
+    "两工具均注册且 schema 含 description/inputSchema", "设: 设计文档 §MCP Tool 定义; 实: update-check.mjs",
+    "check_update/upgrade", "脚本", "D9 协议探针复用")
+add("D1-27", "D1安装", "检测语义-已是最新", "P1", "current == latest",
+    "current=1.1.2, distTags={latest:1.1.2}",
+    "①直调 judgeUpdate(current, distTags, null) ②检查 result",
+    "result=up_to_date, updateAvailable=false", "设: §版本比对规则; 实: judgeUpdate",
+    "check_update", "脚本")
+add("D1-28", "D1安装", "检测语义-有新版本", "P1", "current < latest",
+    "current=1.1.1, distTags={latest:1.1.2}",
+    "①直调 judgeUpdate ②检查 result/targetVersion",
+    "result=update_available, updateAvailable=true, targetVersion=1.1.2", "设: §检测机制; 实: judgeUpdate",
+    "check_update", "脚本")
+add("D1-29", "D1安装", "pre-release 用户提醒策略(文档vs实现差异)", "P1", "current 带 -next 后缀",
+    "current=1.1.0-next.8, {latest:1.2.0,next:1.1.0-next.9}",
+    "①直调 determineTarget/judgeUpdate ②分别核对 latest 提升与仅 next 提升两场景",
+    "实现: pre 用户候选含 latest+next 取最大(文档表仅 latest 且 pre 不提醒=差异点,以实测行为记录)", "设: §版本比对规则 表; 实: determineTarget",
+    "check_update", "脚本")
+add("D1-30", "D1安装", "semver 比对正确性", "P2", "无",
+    "相等/反向/正式版>pre/乱串",
+    "①直调 semverCompare 多组输入 ②核对大小关系",
+    "1.1.2>1.1.1、1.1.0 > 1.1.0-next.9、相等=0、无效串按字典序", "实: update-check.mjs semverParse/Compare",
+    "check_update", "脚本")
+add("D1-31", "D1安装", "dismiss 冷却期", "P1", "已有旧版本提醒",
+    "dismiss=true + dismissVersion 拒绝",
+    "①check_update(dismiss:true, dismissVersion) ②写 skip 文件 ③冷却期内再查",
+    "冷却期内 result=dismissed, dismissed=true, 3 天后 expireAt 过期重新提醒", "设: §冷却机制; 实: writeSkipState/judgeUpdate",
+    "check_update", "脚本")
+add("D1-32", "D1安装", "新版本>dismissedVersion 无视冷却", "P1", "dismiss 冷却期内有新版本发布",
+    "dismissedVersion=1.1.2, 新 latest=1.2.0",
+    "①构造冷却期 skip 状态 ②judgeUpdate ③target>dismissedVersion",
+    "无视冷却期重新提醒 update_available", "设: §冷却机制; 实: judgeUpdate inCooldown",
+    "check_update", "脚本")
+add("D1-33", "D1安装", "skip 文件持久化与多路径", "P2", "可注入路径",
+    "插件目录无 package.json / HUAWEICLOUD_HOME 设置",
+    "①writeSkipState 正常写 ②resolveSkipFilePath 插件目录/回退路径 ③检查结构与原子性",
+    "文件{ dismissedVersion/dismissedAt/expireAt }, 插件目录无副本时回退共享路径", "实: skipFilePath/fallbackSkipFilePath/resolveSkipFilePath",
+    "check_update", "脚本")
+add("D1-34", "D1安装", "check_failed 不阻塞正常调用", "P1", "registry 不可达/离线",
+    "npm view 失败(超时/断网)",
+    "①模拟查询失败 ②judgeUpdate(distTags=null) ③正常工具调用",
+    "result=check_failed, note 检测失败不影响使用, 不抛错不阻塞", "设: §规避的风险 离线环境; 实: judgeUpdate",
+    "check_update", "脚本")
+add("D1-35", "D1安装", "缓存 TTL 与失败节流", "P2", "连续调用",
+    "TTL_MS=1h / FAIL_THROTTLE_MS=5min",
+    "①getCachedUpdateInfo 第二次调用 ②检查是否复用缓存 ③失败后 5min 内不再查询",
+    "1h 内复用探测结果；失败后 5min 节流", "实: update-check.mjs TTL/FAIL_THROTTLE",
+    "check_update", "脚本")
+add("D1-36", "D1安装", "首调用兜底包装 wrapResult", "P2", "agent 未遵守 SKILL.md",
+    "首个非检查类 tool 调用",
+    "①直调 wrapResult(result, callCount=1) ②callCount>1 ③_skipCheck",
+    "仅首个调用附加 _updateInfo(updateAvailable 且未 dismissed 时), 后续不重复", "设: §检测机制 第二层; 实: wrapResult",
+    "wrapResult", "脚本")
+add("D1-37", "D1安装", "SKILL.md 会话启动指令存在性", "P2", "dev/1.1.2 SKILL.md",
+    "huaweicloud-core/SKILL.md 内容",
+    "①读 SKILL.md ②检查会话启动节含 huaweicloud_check_update 调用指令",
+    "SKILL.md 含首次操作前先 check_update 的指令", "设: §检测机制 第一层",
+    "retrieve_skill", "手动")
+add("D1-38", "D1安装", "huaweicloud_upgrade 语义", "P1", "有新版本+用户同意",
+    "upgrade(version=latest)",
+    "①调用 huaweicloud_upgrade ②核对 npm view→install→setup-cli 链 ③检查返回",
+    "success/previousVersion/installedVersion/requiresRestart=true + 重启提示; 失败提示手动 npx update", "设: §升级流程; 实: upgrade 实现",
+    "upgrade", "半自动")
+add("D1-39", "D1安装", "Windows 升级检测链可用性", "P0", "Windows 10 + 1.1.2",
+    "npm.cmd spawnSync 无 shell:true",
+    "①本机直调 queryDistTagsSync/queryDistTags ②观察 EINVAL/结果 ③对照加 shell:true 版本",
+    "Windows 下检测链真实可用, 不得 EINVAL 静默失败(#554 域)", "实: queryDistTagsSync; 关联 #554",
+    "check_update", "脚本")
+add("D1-40", "D1安装", "镜像 lag 下检测正确性(反向提醒防护)", "P0", "默认 registry=镜像且滞后",
+    "镜像 latest 滞后于官方",
+    "①设置 npm_config_registry=镜像 ②queryDistTags ③判定结果与官方源对照",
+    "不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验", "关联 #518/#566; 实: queryDistTags 默认 registry",
+    "check_update", "脚本")
 add("D2-8", "D2认证", "credentials变更后auth回归", "P1", "真云+本地凭证",
     "credentials.mjs 变更后的 auth init",
     "①auth init ②验证KooCLI/OBS/沙箱三端 ③脱敏检查",
