@@ -9,7 +9,7 @@
 """
 import openpyxl, csv, copy, sys, re
 
-SRC = r'C:\Users\Administrator\WorkBuddy\2026-09-08-09-56-34\huaweicloud-devkit-测试全景图.xlsx'
+SRC = r'C:\Users\Administrator\devkit-test\test manage\huaweicloud-devkit-测试全景图.xlsx'
 CSV = r'C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases\design\用例矩阵-设计级.csv'
 
 wb = openpyxl.load_workbook(SRC)
