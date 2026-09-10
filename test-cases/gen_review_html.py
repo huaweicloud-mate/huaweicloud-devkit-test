@@ -416,10 +416,12 @@ BODY = f"""
 │   ├── gap-report.md            # 缺口表（P/G 分类）
 │   ├── dashboard.md             # 质量仪表盘
 │   └── issue-template.md        # issue 拆分模板（§6.4）
-├── results/                     # 执行结果归档（唯一动态区）
-│   ├── README.md                # ITER-NNN-日期命名规则
+├── reviews/                     # 测试设计评审归档
+│   └── ITER-NNN-时间戳/           # Hermes/Codex 评审轮次与放行结论
+├── results/                     # 执行结果归档
+│   ├── README.md                # ITER-NNN-时间戳命名规则
 │   ├── LATEST.md                # 最新迭代指针
-│   └── ITER-001-2026-09-05/     # 每轮迭代（baseline / change-impact /
+│   └── ITER-001-20260905000000/       # 每轮迭代（baseline / change-impact /
 │                                #   nightly / client-matrix / security /
 │                                #   gaps / issues / evidence / cleanup）
 ├── metrics/                     # 跨迭代度量与趋势

@@ -180,7 +180,7 @@ async function main() {
     run('git', ['-C', HDK, 'worktree', 'prune']);
   } catch {}
 
-  console.log('[5/5] 写 MANIFEST...');
+  console.log('[5/5] 写 MANIFEST 与 source-commit...');
   writeFileSync(join(S, 'MANIFEST.md'), `# NR3 版本升级提醒——隔离测试沙箱来源清单
 > **生成时间**：${ts}（北京时间）
 
@@ -195,6 +195,14 @@ async function main() {
 | fixture 场景 | scenarios/*.json（dist-tags/tarball/错误注入可热切换） |
 | 隔离 | 各 profile 运行期注入 HOME/USERPROFILE/APPDATA/LOCALAPPDATA/HUAWEICLOUD_HOME/npm_config_cache 至 \`home-<profile>\`，不触碰真实用户目录 |
 `, 'utf8');
+  // 结构化源 commit 清单（run-probes 采集 manifest 用，勿依赖外部工作副本）
+  writeFileSync(join(S, 'source-commit.json'), JSON.stringify({
+    old: SHA_112,
+    next: SHA_NEXT2,
+    fixVersion: PKG_FIX,
+    sandboxPath: S,
+    builtAt: ts,
+  }, null, 2), 'utf8');
   console.log(`[done] 沙箱构建完成: ${S}`);
 }
 main().catch((e) => { console.error('BUILD FAILED:', e); process.exit(1); });

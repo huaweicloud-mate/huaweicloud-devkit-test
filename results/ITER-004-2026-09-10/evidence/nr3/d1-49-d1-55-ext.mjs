@@ -12,8 +12,18 @@ const SC = join(S, 'scenarios');
 
 const results = [];
 function check(id, pass, detail) {
-  results.push({ id, pass, detail });
+  results.push({ id, pass, kind: pass ? 'PASS' : 'FAIL', detail });
   console.log(`${pass ? 'PASS' : 'FAIL'}  ${id}  ${detail}`);
+}
+// 规格偏差观测：探针断言通过（观测成功）但行为不符合设计预期——OBSERVED_SPEC_MISMATCH
+function checkSpec(id, pass, detail) {
+  results.push({ id, pass, kind: 'SPEC', detail });
+  console.log(`SPEC  ${id}  ${detail}`);
+}
+// 未执行/阻断项：NOT_RUN / BLOCKED（探针断言计数不计入 PASS）
+function checkBlocked(id, detail) {
+  results.push({ id, pass: true, kind: 'BLOCKED', detail });
+  console.log(`BLOCKED  ${id}  ${detail}`);
 }
 const section = (t) => console.log(`\n===== ${t} =====`);
 
@@ -226,27 +236,43 @@ try {
   await c.close();
   check('D1-49f', (r6.manual || '').includes('--target all'), `target 缺省 => manual=${r6.manual}（默认 all）`);
 
-  // ========== D1-55 同一 server 多会话提示/缓存/dismiss 隔离（remote HTTP 双客户端） ==========
-  section('D1-55 同一 MCP server 多会话隔离（remote transport，单进程双客户端）');
-  const home55 = freshHome('home-55');
-  await setFx(url, { mode: 'ok', 'dist-tags': { latest: '1.1.3', next: '1.1.3-next.2' } });
-  await clearNpmCache(home55);
-  const env55 = buildEnv(home55, url);
-  const rem = await startRemote(env55);
-  const R = rem.url;
+  // ========== D1-55 同一 MCP server 多会话状态边界（remote transport） ==========
+    // 证据级别声明（Codex review-round-03）：mcp-server-remote.mjs 为 HTTP 单请求模型，
+    // 无 session 标识、无 session header 绑定、无独立长连接——dispatch() 直接处理每个请求，
+    // 协议状态（hintConsumed/cachedDistTags/failedAt）均为 mcp-protocol.mjs 模块级单例。
+    // 因此本段证据降级为 PROCESS_SHARED_STATE（同进程双请求序列），不等同于完整 session 生命周期验证。
+    section('D1-55 同进程双请求序列状态共享（PROCESS_SHARED_STATE 证据）');
+    const home55 = freshHome('home-55');
 
-  // 客户端 A：initialize → check_update → 普通工具（应消费 _updateInfo）
-  await rpc(R, 'initialize', { protocolVersion: '2024-11-05' }, 101);
-  const A1 = await rpcTool(R, 'huaweicloud_check_update', {}, 102);
-  const A2 = await rpcTool(R, 'huaweicloud_check_cli', {}, 103); // A 首个普通工具 → 附加
-  check('D1-55a', A1.result === 'update_available' && Boolean(A2._updateInfo),
-    `客户端 A 会话：check_update=${A1.result}，首工具 _updateInfo=${JSON.stringify(A2._updateInfo)}（正常消费）`);
+    // 协议能力探测：initialize 时 remote server 是否回传 session 标识头
+    await setFx(url, { mode: 'ok', 'dist-tags': { latest: '1.1.3', next: '1.1.3-next.2' } });
+    await clearNpmCache(home55);
+    const env55 = buildEnv(home55, url);
+    const rem = await startRemote(env55);
+    const R = rem.url;
+    const probeInit = await fetch(R, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', accept: 'application/json', 'MCP-Protocol-Version': '2024-11-05' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05' } }),
+    });
+    const sessHeader = probeInit.headers.get('mcp-session-id');
+    check('D1-55s1', !sessHeader,
+      `协议能力探测：initialize 响应 MCP-Session-Id=${sessHeader ?? '(无)'}——remote transport 不支持 session 标识（源码确认：mcp-server-remote.mjs 无 session 状态绑定）`);
+    checkBlocked('D1-55-session',
+      `真实 MCP session 隔离验证（独立 session 标识/header/长连接 A/B 会话交错调用）——NOT_RUN：被测 remote transport 无 session 支持（协议探测无 MCP-Session-Id），无法建立真实 session 流程；影响=「会话级隔离」需产品支持 session 后才可验收（当前按进程共享语义记录）；解除条件=产品或 remote transport 增加 session 标识与绑定后复用本探针 A/B 交错序列重测`);
 
-  // 客户端 B：同一 server 进程，initialize 后首个普通工具 → 观察 _updateInfo（进程级 hintConsumed 已由 A 置 true）
-  await rpc(R, 'initialize', { protocolVersion: '2024-11-05' }, 201);
-  const B1 = await rpcTool(R, 'huaweicloud_check_cli', {}, 202); // B 首个普通工具
-  check('D1-55b', !B1._updateInfo,
-    `客户端 B 会话首工具 _updateInfo=${JSON.stringify(B1._updateInfo)}（A 消费后 B 拿不到提示=按进程共享非按会话隔离）→ 与 D1-55 预期「按会话隔离、一个会话消费不影响另一个」不符 = SPEC-MISMATCH（等待开发裁决：mcp-protocol.mjs hintConsumed 为模块级单例）`);
+    // 客户端 A：initialize → check_update → 普通工具（应消费 _updateInfo）
+    await rpc(R, 'initialize', { protocolVersion: '2024-11-05' }, 101);
+    const A1 = await rpcTool(R, 'huaweicloud_check_update', {}, 102);
+    const A2 = await rpcTool(R, 'huaweicloud_check_cli', {}, 103); // A 首个普通工具 → 附加
+    check('D1-55a', A1.result === 'update_available' && Boolean(A2._updateInfo),
+      `客户端 A 请求序列：check_update=${A1.result}，首工具 _updateInfo=${JSON.stringify(A2._updateInfo)}（正常消费）`);
+
+    // 客户端 B：同一 server 进程，initialize 后首个普通工具 → 观察 _updateInfo（进程级 hintConsumed 已由 A 置 true）
+    await rpc(R, 'initialize', { protocolVersion: '2024-11-05' }, 201);
+    const B1 = await rpcTool(R, 'huaweicloud_check_cli', {}, 202); // B 首个普通工具
+    checkSpec('D1-55b', !B1._updateInfo,
+      `客户端 B 请求序列首工具 _updateInfo=${JSON.stringify(B1._updateInfo)}（A 消费后 B 拿不到提示）→ PROCESS_SHARED_STATE：mcp-protocol.mjs hintConsumed 模块级单例，状态按进程共享非按会话隔离；与设计文档「会话中第一个 tool 调用」承诺不符 = OBSERVED_SPEC_MISMATCH（等待开发裁决：按 session 隔离 or 按进程共享为正式语义）`);
 
   // 对照：fresh server 进程。remote 无 updatePrewarm（仅 stdio 有）→ 观察无预热下的 hint 生成条件
   await clearNpmCache(home55);
@@ -282,12 +308,14 @@ try {
     `观察：进程级 cachedDistTags 与外部 dist-tags 变更不同步（TTL 1h/重启才刷新）——「A 刷新缓存影响 B」的语义=缓存按 server 进程共享，属合理设计（避免重复 npm view），记录为部署约束`);
   rem.child.kill();
 
-  // ---------- 汇总 ----------
-  const pass = results.filter((r) => r.pass).length;
-  const fail = results.filter((r) => !r.pass).length;
-  console.log(`\n===== 汇总: ${results.length} 断言, PASS ${pass}, FAIL ${fail} =====`);
-  if (fail > 0) console.log('失败明细:', JSON.stringify(results.filter((r) => !r.pass), null, 2));
-  process.exitCode = fail > 0 ? 1 : 0;
+  // ---------- 汇总（四类分档：PASS / SPEC / BLOCKED / FAIL） ----------
+  const passN = results.filter((r) => r.kind === 'PASS').length;
+  const specN = results.filter((r) => r.kind === 'SPEC').length;
+  const blockedN = results.filter((r) => r.kind === 'BLOCKED').length;
+  const failN = results.filter((r) => r.kind === 'FAIL').length;
+  console.log(`\n===== 汇总: ${results.length} 项 = PASS ${passN} / OBSERVED_SPEC_MISMATCH ${specN} / BLOCKED(NOT_RUN) ${blockedN} / FAIL ${failN} =====`);
+  if (failN > 0) console.log('失败明细:', JSON.stringify(results.filter((r) => r.kind === 'FAIL'), null, 2));
+  process.exitCode = failN > 0 ? 1 : 0;
 } finally {
   if (fxProc) { try { fxProc.kill(); } catch {} }
 }

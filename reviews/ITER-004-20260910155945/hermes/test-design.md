@@ -1,11 +1,11 @@
 # Hermes 测试设计交接版（版本升级提醒 NR3）
 
 > 当前迭代：`ITER-004-20260910155945`
-> 状态：`HERMES_REVISION_READY`（由 Hermes 更新；**不得提前签署 `TEST_DESIGN_READY`**，需 Codex 第三轮复评）
-> 生成时间：2026-09-10T17:25:00+08:00（ISO 8601）
-> 设计文档：`C:\Users\Administrator\devkit-test\hdk\docs\version-upgrade-design.md`（源码注释 Spec 链接指向内部 specs，与飞书 wiki 同源；归档仓库 `docs/` 下无该文件副本）
+> 状态：`HERMES_REVISION_READY`（由 Hermes 更新；**不得提前签署 `TEST_DESIGN_READY`**，需 Codex 第四轮复评）
+> 生成时间：2026-09-10T18:40:00+08:00（ISO 8601）｜更新：2026-09-10T18:40:00+08:00
+> 设计文档：`C:\Users\Administrator\devkit-test\hdk\docs\version-upgrade-design.md`（归档仓库 `docs/` 下无副本）
 > 被测项目：`C:\Users\Administrator\devkit-test\hdk`（huaweicloud/huaweicloud-devkit）
-> Codex 评审：`codex/review-round-01-版本升级提醒.md`、`codex/review-round-02-版本升级提醒.md`
+> Codex 评审：`codex/review-round-01/02/03-版本升级提醒.md`；本轮按 round-03 七项整改闭合
 
 ## 一、设计基线
 
@@ -14,66 +14,68 @@
 | 正式版（旧版载体） | 1.1.2 @ `09a59b937eb3`（npm 发布 2026-09-09T11:03Z） |
 | next 线（未修复副本） | 1.1.3-next.2 @ `c6c0965f0bdf`（npm 发布 2026-09-10T01:22Z） |
 | dev 远端（观测） | `e2f4d2ada058`（2026-09-10T15:29+08:00） |
-| FIX(sim) 修复副本 | next.2 原码 + 3 处补丁（sync→node.exe+npm-cli、async→shell:true、npx→node.exe+npx-cli+npm_execpath），版本号 1.1.3 受控**非官方发布线** |
+| FIX(sim) 修复副本 | next.2 原码 + 3 处补丁，版本号 1.1.3 受控**非官方发布线**（仅证明修复方向） |
 | Node / npm | v22.23.2 / 10.9.8 |
 | OS / 架构 | Windows 10 / win32 x64（本机可执行基线） |
 | Shell / TTY | powershell.exe 5.1 / 非 TTY（spawnSync 管道） |
 | 执行 Agent | Hermes（本机） |
-| 风险 | 升级写操作仅在一次性隔离 HOME 执行（`evidence/nr3/.sandbox`，gitignore）；真实云资源零触碰 |
+| 风险 | 升级写操作仅在一次性隔离 HOME（`evidence/nr3/.sandbox`，gitignore）；真实云资源零触碰 |
 
 ## 二、设计范围与分层
 
-设计级用例 D1-26~D1-55（30 条），按证据性质分五层（Codex 要求 #3 口径）：
+设计级用例 D1-26~D1-55（30 条）＋ NR3 终端展开级 24 条（`EXP-NR3-01~24`，已入唯一真源 `test-cases/expanded/`）。分层与闭环文档第 2 步补充规则一致：
 
-| 分层 | 定义 | 覆盖用例 |
+| 分层 | 定义 | 覆盖 |
 |---|---|---|
 | COMMON | 平台无关核心逻辑（函数级，Windows 探针执行，需 Linux 复跑确认） | D1-27/28/30/31/32/33/34/35/36/44/46/47/50(mock) |
-| CROSS_PROCESS | 跨进程/跨会话状态边界 | D1-42、D1-48、D1-55 |
-| CLIENT_MATRIX | 客户端安装布局与生命周期（Hook/非 Hook） | D1-52（非 Hook=OpenCode 布局）；D1-41/42/45（stdio 协议闭环） |
-| OS_MATRIX | 操作系统差异路径 | D1-39（Windows FAIL / Linux 待验）、D1-52（升级链） |
-| AGENT_E2E | 真实 Agent 宿主会话 | D1-54（BLOCKED） |
+| CLIENT_MATRIX | 客户端安装布局与生命周期（Hook/非 Hook） | D1-52（非 Hook=OpenCode 布局）；D1-41/42/45/49（stdio 协议闭环） |
+| OS_MATRIX | 操作系统差异路径 | D1-39（Windows FAIL/Linux BLOCKED/macOS BLOCKED）、D1-52（升级链） |
+| AGENT_E2E | 真实 Agent 宿主会话 | D1-54（BLOCKED，需测试专用实例） |
+| CROSS_PROCESS | 跨进程/跨会话状态边界 | D1-42、D1-48、D1-55（PROCESS_SHARED_STATE 证据） |
 
-直接 MCP 进程测试（stdio/remote 探针）归类 COMMON/CROSS_PROCESS/协议闭环，**不替代** CLIENT_MATRIX 与 AGENT_E2E 证据。
+## 三、候选用例矩阵（评审确认后同步正式矩阵）
 
-## 三、候选用例矩阵
+- `hermes/candidate-matrix.csv`（候选，38 行 × 16 列）
+- `reviews/ITER-004-20260910155945/terminal-matrix.csv`（**评审确认后的顶层正式矩阵，第 4 轮复评对象**，内容与候选矩阵一致）
+- 矩阵状态分布：PASS 24 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED **9 行**（含 D1-54 与 8 条终端路径：Linux×4、macOS/ARM×1、Hook 客户端×1、TTY×1、D1-55-session NOT_RUN×1）
+- **D1-55 证据分级**：remote transport 无 session 支持（协议探测无 `MCP-Session-Id`，源码确认 mcp-server-remote.mjs 无 session 状态绑定）→ 当前证据级别 = `PROCESS_SHARED_STATE`（同进程双请求序列）；新增 `D1-55-session` 行 = `BLOCKED(NOT_RUN)`，解除条件=产品支持 session 后复用 A/B 交错序列重测。D1-55b 保持 `SPEC-MISMATCH` 不改写为 PASS。
 
-见同目录 `candidate-matrix.csv`（16 列：caseId/terminal/agent/os/arch/node/npm/shell/ttyMode/installLayout/mcpTransport/hookSupport/executionLevel/requiredEvidence/status/blockedReason），逐用例×终端展开，分类分层明确。
-
-## 四、执行证据索引
+## 四、执行证据索引（第三轮修正后）
 
 | 资产 | 路径 |
 |---|---|
-| 原始运行日志（stdout/stderr/退出码 ×4 探针） | `results/ITER-004-2026-09-10/evidence/nr3/run-logs/`（`*.stdout.log`/`*.stderr.log`/`*.exit`） |
-| 环境 manifest（命令/起止时间/Node/npm/OS/arch/shell/TTY/commit/沙箱/退出码/断言汇总） | `run-logs/manifest.json` |
-| 探针源码 | `evidence/nr3/{d1-unit-probe,d1-mcp-loop,d1-upgrade-real,d1-49-d1-55-ext,run-probes,build-sandbox,fixture-server}.mjs` |
-| 沙箱来源清单 | `.sandbox/MANIFEST.md`（构建产物，gitignore，可 `build-sandbox.mjs` 重建） |
-| 执行记录（分档/多终端/裁决清单） | `results/ITER-004-2026-09-10/NR3版本升级提醒-补充执行记录.md` |
+| 原始运行日志（stdout/stderr/退出码 ×4 探针，v2 重跑） | `results/ITER-004-2026-09-10/evidence/nr3/run-logs/` |
+| 环境 manifest（v2：**真北京时间 ISO 8601**、沙箱源 commit 采集、双轨统计） | `run-logs/manifest.json` |
+| 探针源码（含 v2 修正：session 探测/SPEC 分档输出） | `evidence/nr3/{d1-unit-probe,d1-mcp-loop,d1-upgrade-real,d1-49-d1-55-ext,run-probes,build-sandbox,fixture-server}.mjs` |
+| 沙箱来源清单 + 结构化 commit（runner 采集源） | `.sandbox/MANIFEST.md` + `.sandbox/source-commit.json`（构建产物，gitignore，可重建） |
+| 执行记录（v2：分档/多终端/裁决清单） | `results/ITER-004-2026-09-10/NR3版本升级提醒-补充执行记录.md` |
 
-## 五、当前统计（设计级 D1-26~55，30 条）
+## 五、当前统计口径（第三轮修正：探针与设计级分离）
 
-- ✅ PASS：24（D1-26/27/28/30/31/32/33/34/35/36/37/38/40/41/42/44/45/47/48/49/50/51/52/53）
-- ⚠️ SPEC-MISMATCH：4（D1-29 pre 策略差异；D1-43c 失败态伪 up_to_date+current 伪冷却；D1-46g doQuery reject 直抛；**D1-55b 同进程多会话 hintConsumed 按进程共享**——本轮新增实锤）
-- ❌ FAIL：1（D1-39 修复前 Windows P0 EINVAL，双腿端到端实锤）
-- ⛔ BLOCKED：1（D1-54 Hermes 真实会话）
-- UNASSESSED：0
-- 断言级：120/120 PASS（59+31+16+14），可由 `run-logs/*.stdout.log` 逐项追溯。
+- **探针观测**：120/120 checks（119 PASS + 1 `OBSERVED_SPEC_MISMATCH`（D1-55b），另含 1 `BLOCKED(NOT_RUN)`（D1-55-session）），4 探针退出码 0；`checks passed` 仅表示观测到预设行为，**不等于设计级 PASS**。
+- **设计级结果（D1-26~55，30 条，UNASSESSED=0）**：
+  - ✅ PASS 24（D1-26/27/28/30/31/32/33/34/35/36/37/38/40/41/42/44/45/47/48/49/50/51/52/53）
+  - ⚠️ SPEC-MISMATCH 4（D1-29 pre 策略；D1-43c 失败态伪 up_to_date；D1-46g reject 直抛；**D1-55b 进程级共享 hintConsumed**）
+  - ❌ FAIL 1（D1-39 修复前 Windows P0 EINVAL，双腿端到端实锤；FIX(sim) 通过≠产品修复）
+  - ⛔ BLOCKED 1（D1-54 Hermes 真实会话）
+- **矩阵展开路径 BLOCKED**：9 行（与 terminal-matrix.csv 一致，均写原因/影响/解除条件）。
 
-## 六、放行检查（Codex 第二轮门禁对照）
+## 六、放行检查（Codex 第三轮门禁对照）
 
-| # | Codex 要求 | 落实 |
+| # | round-03 要求 | 落实 |
 |---|---|---|
-| 1 | hermes/ 三份交接文件 | ✅ 本版（test-design.md / candidate-matrix.csv / status.md） |
-| 2 | D1-49、D1-55 补齐或显式 BLOCKED | ✅ D1-49 7 断言 PASS；D1-55 remote 双客户端实测（55b SPEC 实锤） |
-| 3 | Windows/Linux + Hook/非 Hook 矩阵 | ✅ 分层矩阵（见记录 v2 §三）；Linux/Hook/macOS/ARM/remote-TTY 未执行路径均显式 BLOCKED 写明原因/影响/解除条件 |
-| 4 | 逐用例 16 列 | ✅ candidate-matrix.csv |
-| 5 | D1-39 P0 FAIL + SPEC 保留，FIX(sim) 不写作产品修复 | ✅ 见执行记录 v2 §三 口径声明 |
-| 6 | 原始 stdout/stderr/exit/env 归档 + 断言可追溯 | ✅ run-logs/ + manifest.json（120/120 逐项可溯） |
-| 7 | 正文 ISO 8601 + 文件名紧凑时间戳 | ✅ 本目录全部文档 |
-| 8 | 状态 HERMES_REVISION_READY（非 TEST_DESIGN_READY） | ✅ status.md |
+| 1 | 顶层 terminal-matrix.csv | ✅ `reviews/ITER-004-20260910155945/terminal-matrix.csv`（38 行，与候选人矩阵一致） |
+| 2 | NR3 展开级矩阵同步 | ✅ `test-cases/expanded/用例矩阵-展开级.csv` 131 行 = D5 历史 70 保留 + NR3 24；gen_matrix.py 可复现（含生成时间）；verify/check_docs 全过 |
+| 3 | D1-55 session 建模 | ✅ 协议探测确认 remote 无 session 支持 → 证据降级 `PROCESS_SHARED_STATE`；新增 `D1-55-session`=NOT_RUN/BLOCKED；D1-55b 保持 SPEC-MISMATCH |
+| 4 | run-probes 时区/commit | ✅ 真北京时间（UTC+8 转换，去毫秒）；commit 从 `.sandbox/source-commit.json` 采集；已重跑生成 v2 日志 + manifest |
+| 5 | 统计口径分离 | ✅ 探针 120/120 checks（含 1 OBSERVED_SPEC）与设计级 24/4/1/1 分开表述；D1-55b 标注 OBSERVED_SPEC_MISMATCH |
+| 6 | 未解决项保留 | ✅ D1-39 FAIL、D1-29/43c/46g/55b SPEC、D1-54 BLOCKED、Linux/Hook/macOS/ARM/TTY BLOCKED 全部保留并写明原因/影响/解除条件 |
+| 7 | 文件边界 | ✅ 仅改 hermes/、terminal-matrix.csv、expanded CSV 与 NR3 证据脚本/日志；codex/ 未动 |
 
-## 七、仍需 Codex 第三轮复核 / 开发裁决
+## 七、仍需 Codex 第四轮复核 / 开发裁决
 
-1. D1-29、D1-43c、D1-46g、D1-55b 四项规格裁决（详见执行记录 v2 §七）——是否接受现状或改实现/文档，裁决后再重生成矩阵。
-2. D1-39 上游 `#554` 固定修复版本回归（FIX(sim) 不作为产品证据）。
-3. D1-54 解除条件满足后的真实 Hermes 会话补验。
-4. Linux/macOS/ARM/Hook 客户端路径的测试机接入计划（BLOCKED 解除条件）。
+1. **规格裁决 4 项**：D1-29（pre 提醒策略）、D1-43c（失败态伪 up_to_date）、D1-46g（reject 防御封装）、D1-55b（hintConsumed 会话级 vs 进程级——含 remote transport 是否补 session 支持）。
+2. **D1-39**：`#554` 上游固定修复版本发布后回归（FIX(sim) 不作产品证据）。
+3. **D1-54 + Hook 客户端**：测试专用 Hermes 实例安装插件后的真实会话 E2E 与 Hook 生命周期证据。
+4. **Linux/macOS/ARM/TTY 接入安排**：接入 zhangshuang/testbot1（Linux）、macOS CI runner、PTY 会话后补齐对应 BLOCKED 行。
+5. **代表终端硬门槛**：当前 Windows（已覆盖）+ 非 Hook OpenCode（已覆盖）已达；Linux 与 Hook 未达——本轮交接继续保留 `HERMES_REVISION_READY`，由 Codex 第四轮确认是否需先接入环境再放行。

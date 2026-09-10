@@ -895,6 +895,49 @@ for pid, prompt, route, assert_ in PROMPTS:
     E.append((pid, "D10评测集", prompt, "D10-3", "P1",
               f"期望路由: {route}", f"断言: {assert_}"))
 
+# ============ NR3 版本升级提醒终端展开（2026-09-10T18:30:00+08:00，Codex review-round-03 要求） ============
+# 展开维度：Windows/Linux/macOS、Hook/非Hook、stdio/remote、TTY/非TTY、CLIENT_MATRIX/OS_MATRIX/AGENT_E2E/CROSS_PROCESS
+# 状态=PASS(已执行)/SPEC(规格偏差观测)/BLOCKED(未执行+原因+解除条件)；BLOCKED 不折算为覆盖
+NR3_TS = "2026-09-10T18:30:00+08:00"
+TBLOCK_LINUX = "无在线 Linux 测试机；影响=跨平台 npm spawn/路径/权限差异未验；解除条件=接入 zhangshuang/testbot1 后跑同套探针"
+TBLOCK_MAC = "无 macOS/ARM 环境（声明支持路径）；解除条件=提供 macOS 测试机或 CI runner"
+
+NR3_EXPANDED = [
+    # 01-04 检测语义与冷却持久化（源 D1-27/28/30/31/33/42/44 代表 D1-42）
+    ("EXP-NR3-01", "NR3终端矩阵", "Windows-stdio-COMMON", "D1-27", "P1", "函数级+stdio MCP 四态契约；dismiss 落盘+重启复查", "PASS：已执行（unit 59/mcp-loop 31 断言）", NR3_TS),
+    ("EXP-NR3-02", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-27", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    ("EXP-NR3-03", "NR3终端矩阵", "Windows-真实安装布局-CROSS_PROCESS", "D1-42", "P1", "真实安装布局 skip 落 <pluginDir>/.update-skip.json（D1-52 Phase5 证据）", "PASS：真实安装路径验证", NR3_TS),
+    ("EXP-NR3-04", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-42", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    # 05-07 失败/节流/缓存（源 D1-34/35/46 代表 D1-46）
+    ("EXP-NR3-05", "NR3终端矩阵", "Windows-stdio-COMMON", "D1-46", "P1", "时钟注入 TTL/节流/inflight/恢复；46g reject 直抛=SPEC", "PASS（46g 为 SPEC-MISMATCH 观测）", NR3_TS),
+    ("EXP-NR3-06", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-46", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    # 08-10 镜像/registry 夹具（源 D1-40/53 代表 D1-53）
+    ("EXP-NR3-07", "NR3终端矩阵", "Windows-stdio-fixture-COMMON", "D1-53", "P1", "受控 fixture /__set 注入 lag/坏JSON/恢复", "PASS：镜像滞后确定性夹具验证", NR3_TS),
+    ("EXP-NR3-08", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-53", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    # 11-13 Windows 检测链（源 D1-39）
+    ("EXP-NR3-09", "NR3终端矩阵", "Windows-stdio+真实存量-OS_MATRIX", "D1-39", "P0", "spawnSync('npm.cmd') EINVAL 直捕；sync/async 双路径静默；MCP 端到端 check_failed；真实 1.1.2 存量复现", "FAIL（P0，修复前证据保留；FIX(sim) 仅证明修复方向）", NR3_TS),
+    ("EXP-NR3-10", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-39", "P0", TBLOCK_LINUX, "BLOCKED（Linux 无 EINVAL，待真机确认）", NR3_TS),
+    ("EXP-NR3-11", "NR3终端矩阵", "macOS/ARM-OS_MATRIX", "D1-39", "P0", TBLOCK_MAC, "BLOCKED", NR3_TS),
+    # 14-15 upgrade handler 语义（源 D1-49/50/51 代表 D1-49）
+    ("EXP-NR3-12", "NR3终端矩阵", "Windows-stdio+CLI-CLIENT_MATRIX", "D1-49", "P1", "handler 7 断言：up_to_date 不执行/非法 version/空串默认/失败不误报/unknown target/默认 all", "PASS：D1-49 全项通过", NR3_TS),
+    ("EXP-NR3-13", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-49", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    # 16-18 真实升级（源 D1-52）
+    ("EXP-NR3-14", "NR3终端矩阵", "Windows-OpenCode(非Hook)-CLIENT_MATRIX", "D1-52", "P1", "真实 1.1.2 安装→真实 npx 升级 1.1.3→重启 serverInfo 1.1.3→配置未丢失", "PASS：非 Hook 客户端生命周期证据", NR3_TS),
+    ("EXP-NR3-15", "NR3终端矩阵", "Windows-Hermes/CodeArtsSpace(Hook)-CLIENT_MATRIX", "D1-52", "P1", "至少一个 Hook 客户端真实安装/升级/重启；需测试专用实例安装插件", "BLOCKED：Hook 客户端环境未就绪；解除=测试实例就绪后补生命周期证据", NR3_TS),
+    ("EXP-NR3-16", "NR3终端矩阵", "Linux-OpenCode-OS_MATRIX", "D1-52", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    # 19 会话级（源 D1-54）
+    ("EXP-NR3-17", "NR3终端矩阵", "Windows-Hermes-AGENT_E2E", "D1-54", "P1", "真实会话：SKILL 先调 check_update/询问/同意/拒绝/重启提示；本机 Hermes 未装插件且隔离纪律禁止污染日常安装", "BLOCKED：需测试专用 Hermes 实例安装插件后 E2E；协议层等价覆盖不得写成会话级 PASS", NR3_TS),
+    # 20-24 多客户端/多进程/多会话（源 D1-48/55 代表 D1-55）
+    ("EXP-NR3-18", "NR3终端矩阵", "Windows-stdio-多进程-CROSS_PROCESS", "D1-48", "P1", "双 HOME 双进程 skip 隔离+重启持久化+新版本无视冷却", "PASS：多 Agent 路径隔离", NR3_TS),
+    ("EXP-NR3-19", "NR3终端矩阵", "Windows-remote-双请求序列-CROSS_PROCESS", "D1-55", "P1", "同进程双请求序列：A 消费后 B 拿不到 _updateInfo（hintConsumed 模块级单例）", "SPEC：OBSERVED_SPEC_MISMATCH（进程级共享，非会话隔离；待开发裁决）", NR3_TS),
+    ("EXP-NR3-20", "NR3终端矩阵", "Windows-remote-真实session-NOT_RUN", "D1-55", "P1", "remote transport 无 session 标识/header/长连接（协议探测无 MCP-Session-Id）；无法建立真实 session 流程", "BLOCKED(NOT_RUN)：产品支持 session 后复用 A/B 交错序列重测；当前证据级别=PROCESS_SHARED_STATE", NR3_TS),
+    ("EXP-NR3-21", "NR3终端矩阵", "Windows-TTY-COMMON", "D1-55", "P1", "TTY 交互（升级确认/菜单/取消路径）需真实 TTY 会话", "BLOCKED：无 TTY 会话环境；解除=PTY 会话执行交互流", NR3_TS),
+    ("EXP-NR3-22", "NR3终端矩阵", "Linux-remote-OS_MATRIX", "D1-55", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    # 25-26 兜底提示序列（源 D1-36/37/45 代表 D1-45）
+    ("EXP-NR3-23", "NR3终端矩阵", "Windows-stdio-预热竞态-CLIENT_MATRIX", "D1-45", "P1", "兜底一次性消费+预热竞态双时序（stdio 有 prewarm）", "PASS：D1-45 全项通过", NR3_TS),
+    ("EXP-NR3-24", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-45", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+]
+
 # ============ 输出 ============
 design_headers = ["ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果", "指引来源", "关联工具", "自动化建议", "展开规则", "生成时间"]
 exp_headers = ["ID", "展开类型", "枚举对象", "源用例", "优先级", "执行要点", "预期结果", "生成时间"]
@@ -910,8 +953,10 @@ with open(os.path.join(EXP_DIR, "用例矩阵-展开级.csv"), "w", newline="", 
     w.writerow(exp_headers)
     for row in E:
         w.writerow(row + (gen_ts(row[3] if len(row) > 3 else row[0]),))  # 展开级以源用例批次为准
+    for row in NR3_EXPANDED:  # NR3 终端展开（Codex review-round-03；显式 ISO 时间戳）
+        w.writerow(row)
 
 print(f"设计级: {len(D)} 条")
-print(f"展开级: {len(E)} 条 (D5矩阵 {len(CLIENTS)*7} + 服务矩阵 {len(SERVICES)} + 评测集 {len(PROMPTS)})")
+print(f"展开级: {len(E) + len(NR3_EXPANDED)} 条 (D5矩阵 {len(CLIENTS)*7} + 服务矩阵 {len(SERVICES)} + 评测集 {len(PROMPTS)} + NR3终端展开 {len(NR3_EXPANDED)})")
 print(f"合计: {len(D) + len(E)} 条")
 print("输出目录:", DES_DIR)

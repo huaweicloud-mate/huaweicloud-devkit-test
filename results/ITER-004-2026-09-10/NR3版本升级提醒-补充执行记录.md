@@ -23,11 +23,11 @@
 | `d1-unit-probe.mjs` | 函数级（隔离 HOME+时钟注入+fixture registry） | 59 | `.stdout.log`/`.stderr.log`/`.exit` |
 | `d1-mcp-loop.mjs` | 真实 MCP stdio 闭环（修复前/修复后双态） | 31 | 同上 |
 | `d1-upgrade-real.mjs` | 真实升级 E2E（一次性 HOME，真实 npm/npx） | 16 | 同上 |
-| `d1-49-d1-55-ext.mjs` | D1-49 handler 逐项 + D1-55 remote 双客户端会话隔离 | 14 | 同上 |
-| **合计** | | **120/120** | `run-logs/manifest.json`（命令/起止时间/Node/npm/OS/arch/shell/TTY/commit/沙箱/退出码） |
+| `d1-49-d1-55-ext.mjs` | D1-49 handler 逐项 + D1-55 同进程双请求序列（PROCESS_SHARED_STATE）+ session 探测 | 14 PASS + 1 SPEC(D1-55b) + 1 BLOCKED(D1-55-session) | 同上 |
+| **合计** | | **120/120 checks（119 PASS + 1 OBSERVED_SPEC_MISMATCH）+ 1 BLOCKED(NOT_RUN)** | `run-logs/manifest.json`（命令/起止时间/Node/npm/OS/arch/shell/TTY/沙箱源 commit/退出码） |
 
-- 每次运行统一由 `run-probes.mjs` 串行执行：stdout/stderr/退出码独立归档，manifest 记录 `node 22.23.2 / npm 10.9.8 / win32 x64 / gitHead c6c0965f0bdf / 非 TTY / 探测命令与起止时间`。
-- 断言统计口径：以各 `*.stdout.log` 中 `^PASS|^FAIL` 行为准（59+31+16+14=120 PASS，0 FAIL），汇总报告不得超出日志可追溯范围。
+- 每次运行统一由 `run-probes.mjs` 串行执行：stdout/stderr/退出码独立归档，manifest 记录 `node 22.23.2 / npm 10.9.8 / win32 x64 / 沙箱源 commit（source-commit.json 采集：09a59b937eb3/c6c0965f0bdf）/ 非 TTY / 真北京时间起止（UTC+8 转换）/ 双轨统计`。
+- 断言统计口径：以各 `*.stdout.log` 中 `^PASS |^SPEC |^BLOCKED |^FAIL ` 行为准；120/120 checks = 119 PASS + 1 `OBSERVED_SPEC_MISMATCH`（D1-55b，成功观测到不符合设计预期的行为），另含 1 `BLOCKED(NOT_RUN)`（D1-55-session）；汇总报告不得超出日志可追溯范围。
 
 ## 三、设计级用例结果分档（D1-26~55 全量 30 条，UNASSESSED=0）
 
@@ -63,7 +63,7 @@
 | D1-29 | 设计文档「pre 不提醒 next」 vs 实现提醒 next.9（latest 低于 current 时） | P3 文档/实现取舍 | 开发确认规则后更新文档或实现并重生成矩阵 |
 | D1-43c | registry 失败 + dismiss=true → 返回 up_to_date（伪"已最新"）且写入 current 伪冷却 | 功能无害（新版本仍可提醒，已实测 1.1.4） | 明确规格是否接受；不接受则修复失败路径并补回归 |
 | D1-46g | 注入 doQuery reject → 异常直接冒泡（未封装 check_failed） | 生产路径不可达（queryDistTags 恒 resolve null），低危 | 明确是否要求防御封装 |
-| **D1-55b（本轮新增实锤）** | 同一 MCP server 双客户端：A 消费首工具 `_updateInfo` 后，B 首工具**拿不到提示**——`hintConsumed` 为 mcp-protocol.mjs **模块级单例**，按进程共享非按会话隔离 | **违反设计文档「会话中第一个 tool 调用附加」承诺**；多客户端共享 server 部署（remote HTTP）时提示只会给第一个客户端 | 开发裁决：hintConsumed 改会话级（按 clientInfo/session 键控）或明确"按进程"为设计语义 |
+| **D1-55b（本轮新增实锤，证据级别=PROCESS_SHARED_STATE）** | 同一 remote 进程内两组请求序列：A 消费首工具 `_updateInfo` 后，B 首工具**拿不到提示**——`hintConsumed` 为 mcp-protocol.mjs **模块级单例**，按进程共享非按会话隔离；remote transport 无 session 支持（协议探测无 `MCP-Session-Id`） | **违反设计文档「会话中第一个 tool 调用附加」承诺**；多客户端共享 server 部署（remote HTTP）时提示只会给第一个客户端 | 开发裁决：hintConsumed 改会话级（按 clientInfo/session 键控）或明确"按进程"为设计语义；产品支持 session 后补真实会话验证 |
 
 ### ❌ FAIL（1）
 
@@ -78,6 +78,7 @@
 | 用例 | 内容 | 阻塞原因 / 影响范围 / 解除条件 |
 |---|---|---|
 | D1-54 | Hermes 真实会话级用户闭环 | **原因**：本机 Hermes 未安装 huaweicloud-plugins（ENV-1），且按隔离纪律不得为测试污染日常安装；需要可交互模型会话才能验证"首次操作先 check_update/询问/同意升级/拒绝 dismiss"完整用户流。**影响**：真实 Hermes 会话的 SKILL 驱动与提示消费未被验收；协议层闭环（D1-41/42/45）与 CLIENT 生命周期（D1-52 OpenCode 布局）为等价覆盖但**不得写成会话级 PASS**。**解除条件**：在测试专用 Hermes 实例安装插件（或上游修复后升级），再进行真实会话 E2E |
+| D1-55-session | 真实 MCP session 隔离验证（独立 session 标识/header/长连接 A/B 会话交错调用） | **原因（NOT_RUN）**：remote transport 无 session 支持——协议探测 initialize 响应无 `MCP-Session-Id`，源码确认 mcp-server-remote.mjs 无 session 状态绑定，无法建立真实 session 流程。**影响**：「会话级隔离」需产品支持 session 后才可验收；当前按 PROCESS_SHARED_STATE 语义记录（D1-55b）。**解除条件**：产品或 remote transport 增加 session 标识与绑定后，复用 d1-49-d1-55-ext.mjs 的 A/B 交错序列重测 |
 
 ### 多终端矩阵（Codex 要求 #3 落实）
 
@@ -98,8 +99,8 @@
 
 ## 四、口径声明
 
-- 当前设计级追踪（Codex round-02 口径延续）：**PASS 24 / SPEC-MISMATCH 4（D1-29、D1-43、D1-46、D1-55）/ FAIL 1（D1-39 修复前）/ BLOCKED 1（D1-54）/ UNASSESSED 0**。
-- 断言级：**120/120 PASS**（59+31+16+14），全部可由 `run-logs/*.stdout.log` 逐项追溯。
+- 当前设计级追踪（Codex round-03 口径延续）：**PASS 24 / SPEC-MISMATCH 4（D1-29、D1-43、D1-46、D1-55）/ FAIL 1（D1-39 修复前）/ BLOCKED 1（D1-54）/ UNASSESSED 0**。
+- 探针观测：**120/120 checks（119 PASS + 1 OBSERVED_SPEC_MISMATCH(D1-55b)）+ 1 BLOCKED(NOT_RUN)(D1-55-session)**，由 `run-logs/*.stdout.log` 逐项追溯；checks 通过≠设计级 PASS。
 - 不再使用「逻辑层完整」「14/15」「106/106」作结论性表述；`FIX(sim)` 通过不写成产品修复。
 
 ## 五、测试装置坑（沉淀，防复踩）
