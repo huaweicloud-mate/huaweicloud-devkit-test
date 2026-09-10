@@ -154,7 +154,7 @@ node run-probes.mjs .sandbox                  # 串行 4 探针 → run-logs/（
 ### 7.3 统计更新
 
 - 设计级：**PASS 25 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED 0 / UNASSESSED 0**
-- 矩阵终端行：**PASS 26 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED 8**（39 行 16 列，terminal-matrix.csv 与 candidate 一致）
+- 矩阵终端行：**PASS 29 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED 5**（39 行 16 列，terminal-matrix.csv 与 candidate 一致；Linux D1-39/49/55 已转 PASS，见 §十）
 - 展开级：132 行（D5 70 + D3-C4 22 + D10 15 + NR3 25）
 - 探针观测维持：120/120 checks（119 PASS + 1 OBSERVED_SPEC）+ 1 BLOCKED(NOT_RUN)
 
@@ -182,7 +182,7 @@ node run-probes.mjs .sandbox                  # 串行 4 探针 → run-logs/（
 | PTY/TTY | 本机仅 PowerShell 非 TTY 管道 | 无 PTY |
 | D1-55-session | remote transport 无 MCP-Session-Id/状态绑定（协议探测+源码） | 产品不支持 |
 
-**结论：本轮无法完成完整终端验收**（Linux 4 行、macOS/ARM、CodeArtsSpace、TTY、D1-55-session 共 8 行 BLOCKED 保持；等待用户提供机器/凭据或授权创建，不接受受控范围豁免）。
+**结论（2026-09-10T20:20 时点）**：当时 8 行 BLOCKED 保持、等待用户提供机器/凭据；**随后（§十，20:34）凭测试机账号表接入 testbot3 实机，Linux 3 行转 PASS**——本节省略为历史侦查记录。
 
 ## 十、Linux 实机补跑（2026-09-10T20:34:00+08:00，Codex 第六轮——成功接入测试机账号表机器）
 
