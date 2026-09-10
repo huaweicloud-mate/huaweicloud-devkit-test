@@ -1,7 +1,7 @@
 # NR3 客户端升级链路问题——定位过程与根因分析（附件）
 
 > 归档：2026-09-10 21:05（北京时间）
-> 关联合并问题单：#NNN（huaweicloud/huaweicloud-devkit）
+> 关联合并问题单：#614（huaweicloud/huaweicloud-devkit）
 > 覆盖：原独立单 #606（D1-55b）、#607（D1-43c）、#608（D1-46g）、#609（D1-29）、#610（remote 部署约束×3）
 > 探测基线：huaweicloud-devkit 1.1.2@09a59b937eb3 / 1.1.3-next.2@c6c0965f0bdf；Node v22.23.2 / npm 10.9.8；Windows 10 x64 + Ubuntu 24.04 aarch64（testbot3）双平台
 > 探针套件：evidence/nr3/{d1-unit-probe,d1-mcp-loop,d1-49-d1-55-ext}.mjs（受控 fixture registry，可复现）
