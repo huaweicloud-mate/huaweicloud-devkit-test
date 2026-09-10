@@ -2,7 +2,7 @@
 
 > 当前迭代：`ITER-004-20260910155945`
 > 状态：`HERMES_REVISION_READY`（由 Hermes 更新；**不得提前签署 `TEST_DESIGN_READY`**，需 Codex 第四轮复评）
-> 生成时间：2026-09-10T18:40:00+08:00（ISO 8601）｜更新：2026-09-10T18:40:00+08:00
+> 生成时间：2026-09-10T19:40:00+08:00（ISO 8601）｜更新：2026-09-10T19:40:00+08:00（Hermes Agent E2E / Hook 客户端真实证据已补齐）
 > 设计文档：`C:\Users\Administrator\devkit-test\hdk\docs\version-upgrade-design.md`（归档仓库 `docs/` 下无副本）
 > 被测项目：`C:\Users\Administrator\devkit-test\hdk`（huaweicloud/huaweicloud-devkit）
 > Codex 评审：`codex/review-round-01/02/03-版本升级提醒.md`；本轮按 round-03 七项整改闭合
@@ -35,9 +35,10 @@
 
 ## 三、候选用例矩阵（评审确认后同步正式矩阵）
 
-- `hermes/candidate-matrix.csv`（候选，38 行 × 16 列）
-- `reviews/ITER-004-20260910155945/terminal-matrix.csv`（**评审确认后的顶层正式矩阵，第 4 轮复评对象**，内容与候选矩阵一致）
-- 矩阵状态分布：PASS 24 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED **9 行**（含 D1-54 与 8 条终端路径：Linux×4、macOS/ARM×1、Hook 客户端×1、TTY×1、D1-55-session NOT_RUN×1）
+- `hermes/candidate-matrix.csv`（候选，**39 行 × 16 列**）
+- `reviews/ITER-004-20260910155945/terminal-matrix.csv`（**评审确认后的顶层正式矩阵，内容与候选一致**）
+- 矩阵状态分布：PASS **26** / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED **8 行**（Linux×4、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session NOT_RUN×1）
+- **D1-54 已转 PASS**：隔离 Hermes 实例（profile nr3-test）5 会话真实 Agent E2E（SKILL→check_update→征询→同意升级→重启生效→拒绝 dismiss→离线不阻塞），48 工具调用全成功，证据 `run-logs/hermes-e2e-s*.out.log` + `hermes-e2e-manifest.json`；同时构成 **Hermes Hook 客户端完整生命周期**证据（真实 npx 安装/升级/重启/dismiss/离线，升级仅落隔离目录）
 - **D1-55 证据分级**：remote transport 无 session 支持（协议探测无 `MCP-Session-Id`，源码确认 mcp-server-remote.mjs 无 session 状态绑定）→ 当前证据级别 = `PROCESS_SHARED_STATE`（同进程双请求序列）；新增 `D1-55-session` 行 = `BLOCKED(NOT_RUN)`，解除条件=产品支持 session 后复用 A/B 交错序列重测。D1-55b 保持 `SPEC-MISMATCH` 不改写为 PASS。
 
 ## 四、执行证据索引（第三轮修正后）
@@ -54,11 +55,11 @@
 
 - **探针观测**：120/120 checks（119 PASS + 1 `OBSERVED_SPEC_MISMATCH`（D1-55b），另含 1 `BLOCKED(NOT_RUN)`（D1-55-session）），4 探针退出码 0；`checks passed` 仅表示观测到预设行为，**不等于设计级 PASS**。
 - **设计级结果（D1-26~55，30 条，UNASSESSED=0）**：
-  - ✅ PASS 24（D1-26/27/28/30/31/32/33/34/35/36/37/38/40/41/42/44/45/47/48/49/50/51/52/53）
+  - ✅ PASS **25**（D1-26/27/28/30/31/32/33/34/35/36/37/38/40/41/42/44/45/47/48/49/50/51/52/53/**54**）
   - ⚠️ SPEC-MISMATCH 4（D1-29 pre 策略；D1-43c 失败态伪 up_to_date；D1-46g reject 直抛；**D1-55b 进程级共享 hintConsumed**）
   - ❌ FAIL 1（D1-39 修复前 Windows P0 EINVAL，双腿端到端实锤；FIX(sim) 通过≠产品修复）
-  - ⛔ BLOCKED 1（D1-54 Hermes 真实会话）
-- **矩阵展开路径 BLOCKED**：9 行（与 terminal-matrix.csv 一致，均写原因/影响/解除条件）。
+  - ⛔ BLOCKED 0（设计级；终端路径 BLOCKED 8 行见矩阵）
+- **矩阵展开路径 BLOCKED**：8 行（与 terminal-matrix.csv 一致，均写原因/影响/解除条件）。
 
 ## 六、放行检查（Codex 第三轮门禁对照）
 

@@ -1,0 +1,75 @@
+{
+  "suite": "HERMES_AGENT_E2E_D1_54_PLUS_HOOK_CLIENT",
+  "generated": "2026-09-10T19:35:00+08:00",
+  "env": {
+    "host": "Windows 10 / win32 x64",
+    "node": "22.23.2",
+    "npm": "10.9.8",
+    "hermes": "v0.19.1 (008f1efe, 2026-07-30)",
+    "mcpSdk": "1.28.1 (uv 对齐 pyproject 声明；修复前 venv 为 2.1.1 → ALL tools/call 报 AttributeError: 'CallToolResult' object has no attribute 'isError'，即 HER-1)",
+    "shell": "powershell.exe / 非 TTY",
+    "profile": "nr3-test（隔离 HERMES_HOME 子目录，克隆自 default）",
+    "mcpCommand": "node <sandbox>/app-fix-s/plugins/huaweicloud-core/src/mcp-server.mjs（S1/S2/S4/S6）→ <isolated>/npm-cache/_npx/2876c8997196d27e/node_modules/huaweicloud-devkit/...(S3 升级后)",
+    "fixtureRegistry": "http://127.0.0.1:45998（受控 dist-tags latest=1.1.3/next=1.1.3-next.2）",
+    "isolatedHome": "results/ITER-004-2026-09-10/evidence/nr3/hermes-profile-runtime/（USERPROFILE/HOME/HUAWEICLOUD_HOME/npm cache 全部重定向，零触碰真实用户目录与 default profile）"
+  },
+  "sessions": [
+    {
+      "id": "20260910_192410_6aadcb",
+      "log": "run-logs/hermes-e2e-s1b.out.log",
+      "scenario": "D1-54a-1 询问（SKILL→check_update→征询；超时未同意不动作）",
+      "toolCalls": 10,
+      "evidence": ["huaweicloud_retrieve_skill ok（v1 规范全文）", "check_update → update_available (1.1.2→1.1.3), dismissed=false", "clarify 征询升级意见 → 用户超时 → 未执行 upgrade、未写 dismiss（未获同意不动作）"],
+      "status": "PASS"
+    },
+    {
+      "id": "20260910_192410_6aadcb(resume)",
+      "log": "run-logs/hermes-e2e-s2.out.log",
+      "scenario": "D1-54a-2 同意升级（真实 npx 升级 1.1.2→1.1.3 到隔离目录）",
+      "toolCalls": 14,
+      "evidence": ["huaweicloud_upgrade previousVersion=1.1.2 installedVersion=1.1.3 requiresRestart=true", "message=升级完成，请重启当前会话使新版本生效", "隔离目录 npm-cache/_npx/*/node_modules/huaweicloud-devkit/package.json → v1.1.3"],
+      "status": "PASS"
+    },
+    {
+      "id": "20260910_192840_c9457b",
+      "log": "run-logs/hermes-e2e-s3.out.log",
+      "scenario": "D1-54a-3 重启生效（新会话 MCP 指向升级安装点 1.1.3）",
+      "toolCalls": 7,
+      "evidence": ["插件版本 1.1.3 = latestStable → check_update up_to_date/updateAvailable=false", "KooCLI 7.2.12 版本匹配，认证就绪，无重复提醒"],
+      "status": "PASS"
+    },
+    {
+      "id": "20260910_192921_ce758d",
+      "log": "run-logs/hermes-e2e-s4.out.log",
+      "scenario": "D1-54a-4 拒绝 dismiss（dismissVersion=target + 落盘 + 冷却复查）",
+      "toolCalls": 9,
+      "evidence": ["dismiss:true → result=dismissed, dismissed=true", "hc-home/.config/huaweicloud/devkit-skip.json {dismissedVersion:1.1.3, dismissedAt:2026-09-10T11:29:33.231Z, expireAt:2026-09-13T11:29:33.231Z}(3天精确)", "复查 check_update → dismissed / updateAvailable=false / 到期 2026-09-13T19:29:33+08:00"],
+      "status": "PASS"
+    },
+    {
+      "id": "20260910_193020_775b4b",
+      "log": "run-logs/hermes-e2e-s6.out.log",
+      "scenario": "D1-54a-5 离线不阻塞（registry 停止）",
+      "toolCalls": 8,
+      "evidence": ["check_update → check_failed（“检测失败，不影响使用”，版本字段 null）", "check_cli → ok（KooCLI 7.2.12 已认证，本地路径无网络依赖）"],
+      "status": "PASS"
+    }
+  ],
+  "findings": [
+    {
+      "id": "HER-1",
+      "severity": "P1(框架侧环境)",
+      "desc": "本机 Hermes venv 的 mcp SDK 被安装为 2.1.1（CallToolResult 字段 is_error），与 hermes v0.19.1 代码（tools/mcp_tool.py L4865 `result.isError`）及 pyproject 声明 mcp==1.28.1 不匹配 → 所有 huaweicloud-devkit MCP 工具调用稳定报 AttributeError: 'CallToolResult' object has no attribute 'isError'",
+      "fix": "uv pip install --python <hermes venv> mcp==1.28.1 starlette==1.3.1（对齐 pyproject），修复后全部工具调用恢复",
+      "impact": "Hermes 官方 MCP 客户端与标准 MCP server 的互操作依赖 SDK 版本与代码匹配；版本漂移会整体静默失败（工具调用报错但 agent 可继续）",
+      "status": "已修复并复测（S1b~S6 全部工具调用成功）"
+    }
+  ],
+  "totals": {
+    "sessions": 5,
+    "toolCalls": 48,
+    "PASS": 5,
+    "FAIL": 0
+  },
+  "note": "Hermes 作为真实 Hook 客户端的关键生命周期（安装→MCP 启动→提示消费→升级→重启提示/生效→拒绝 dismiss→离线降级）已由本套会话证据覆盖；升级写入仅落在隔离 hermes-profile-runtime 目录，未触碰真实用户目录与 default profile；该 profile 保留于 hermes-home/profiles/nr3-test（不入库）"
+}

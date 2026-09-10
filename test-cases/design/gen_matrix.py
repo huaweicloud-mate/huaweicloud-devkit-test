@@ -898,9 +898,10 @@ for pid, prompt, route, assert_ in PROMPTS:
 # ============ NR3 版本升级提醒终端展开（2026-09-10T18:30:00+08:00，Codex review-round-03 要求） ============
 # 展开维度：Windows/Linux/macOS、Hook/非Hook、stdio/remote、TTY/非TTY、CLIENT_MATRIX/OS_MATRIX/AGENT_E2E/CROSS_PROCESS
 # 状态=PASS(已执行)/SPEC(规格偏差观测)/BLOCKED(未执行+原因+解除条件)；BLOCKED 不折算为覆盖
-NR3_TS = "2026-09-10T18:30:00+08:00"
-TBLOCK_LINUX = "无在线 Linux 测试机；影响=跨平台 npm spawn/路径/权限差异未验；解除条件=接入 zhangshuang/testbot1 后跑同套探针"
-TBLOCK_MAC = "无 macOS/ARM 环境（声明支持路径）；解除条件=提供 macOS 测试机或 CI runner"
+NR3_TS = "2026-09-10T19:35:00+08:00"
+TBLOCK_LINUX = "2026-09-10T19:30+08:00 实测无 Linux 测试机可用（120.46.40.202/113.44.143.91 SSH 无凭据不可达,WSL 无发行版,Docker 未装）；影响=跨平台 npm spawn/路径/权限/升级链未验；解除=接入 Linux 测试机（zhangshuang/testbot1）后跑同套探针"
+TBLOCK_MAC = "无 macOS/ARM 环境（声明支持路径）；解除=提供 macOS 测试机或 CI runner"
+TS_HERMES_E2E = "2026-09-10T19:35:00+08:00"
 
 NR3_EXPANDED = [
     # 01-04 检测语义与冷却持久化（源 D1-27/28/30/31/33/42/44 代表 D1-42）
@@ -923,10 +924,11 @@ NR3_EXPANDED = [
     ("EXP-NR3-13", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-49", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
     # 16-18 真实升级（源 D1-52）
     ("EXP-NR3-14", "NR3终端矩阵", "Windows-OpenCode(非Hook)-CLIENT_MATRIX", "D1-52", "P1", "真实 1.1.2 安装→真实 npx 升级 1.1.3→重启 serverInfo 1.1.3→配置未丢失", "PASS：非 Hook 客户端生命周期证据", NR3_TS),
-    ("EXP-NR3-15", "NR3终端矩阵", "Windows-Hermes/CodeArtsSpace(Hook)-CLIENT_MATRIX", "D1-52", "P1", "至少一个 Hook 客户端真实安装/升级/重启；需测试专用实例安装插件", "BLOCKED：Hook 客户端环境未就绪；解除=测试实例就绪后补生命周期证据", NR3_TS),
+    ("EXP-NR3-15", "NR3终端矩阵", "Windows-Hermes(Hook)-CLIENT_MATRIX", "D1-52", "P1", "真实隔离 Hermes 实例(profile nr3-test)：真实 npx 安装 1.1.3→MCP 启动→提示消费→升级 1.1.2→1.1.3→重启提示+重启生效→拒绝 dismiss(3 天冷却)→离线降级（48 工具调用）", "PASS：Hermes Hook 客户端完整生命周期（run-logs/hermes-e2e-s*.out.log + hermes-e2e-manifest.json，升级仅落隔离 hermes-profile-runtime）", TS_HERMES_E2E),
+    ("EXP-NR3-15b", "NR3终端矩阵", "Windows-CodeArtsSpace(Hook)-CLIENT_MATRIX", "D1-52", "P1", "CodeArtsSpace 客户端真实安装/升级/重启未验", "BLOCKED：无 CodeArtsSpace 可用环境（120.46.40.202 SSH 无凭据不可达）；解除=接入客户端后补证据", TS_HERMES_E2E),
     ("EXP-NR3-16", "NR3终端矩阵", "Linux-OpenCode-OS_MATRIX", "D1-52", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
     # 19 会话级（源 D1-54）
-    ("EXP-NR3-17", "NR3终端矩阵", "Windows-Hermes-AGENT_E2E", "D1-54", "P1", "真实会话：SKILL 先调 check_update/询问/同意/拒绝/重启提示；本机 Hermes 未装插件且隔离纪律禁止污染日常安装", "BLOCKED：需测试专用 Hermes 实例安装插件后 E2E；协议层等价覆盖不得写成会话级 PASS", NR3_TS),
+    ("EXP-NR3-17", "NR3终端矩阵", "Windows-Hermes-AGENT_E2E", "D1-54", "P1", "真实会话(隔离 profile nr3-test)：SKILL retrieve→check_update update_available→澄清征询(未同意不动作)→同意→真实 upgrade 1.1.2→1.1.3+重启提示→新会话重启生效 up_to_date→拒绝 dismiss(3 天冷却落盘)→离线 check_failed 不阻塞 check_cli", "PASS：真实 Agent 会话用户流（run-logs/hermes-e2e-s1b/s2/s3/s4/s6.out.log，48 工具调用）；规格裁决项仍由开发裁决", TS_HERMES_E2E),
     # 20-24 多客户端/多进程/多会话（源 D1-48/55 代表 D1-55）
     ("EXP-NR3-18", "NR3终端矩阵", "Windows-stdio-多进程-CROSS_PROCESS", "D1-48", "P1", "双 HOME 双进程 skip 隔离+重启持久化+新版本无视冷却", "PASS：多 Agent 路径隔离", NR3_TS),
     ("EXP-NR3-19", "NR3终端矩阵", "Windows-remote-双请求序列-CROSS_PROCESS", "D1-55", "P1", "同进程双请求序列：A 消费后 B 拿不到 _updateInfo（hintConsumed 模块级单例）", "SPEC：OBSERVED_SPEC_MISMATCH（进程级共享，非会话隔离；待开发裁决）", NR3_TS),

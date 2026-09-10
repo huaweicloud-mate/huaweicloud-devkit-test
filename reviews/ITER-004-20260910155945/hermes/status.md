@@ -5,7 +5,7 @@
 > 被测项目：`C:\Users\Administrator\devkit-test\hdk`（huaweicloud/huaweicloud-devkit）
 > 归档迭代：`ITER-004-20260910155945`
 > 创建时间：2026-09-10T15:59:45+08:00
-> 更新时间：2026-09-10T18:40:00+08:00（ISO 8601）
+> 更新时间：2026-09-10T19:40:00+08:00（ISO 8601；Hermes Agent E2E / Hook 客户端真实证据已补齐）
 
 ## 当前状态
 
@@ -35,13 +35,15 @@
 
 | 分类 | 数量 | 用例 |
 |---|---|---|
-| PASS | 24 | D1-26/27/28/30/31/32/33/34/35/36/37/38/40/41/42/44/45/47/48/49/50/51/52/53 |
+| PASS | 25 | D1-26/27/28/30/31/32/33/34/35/36/37/38/40/41/42/44/45/47/48/49/50/51/52/53/54 |
 | SPEC-MISMATCH | 4 | D1-29、D1-43（43c）、D1-46（46g）、D1-55（55b 进程级共享实锤） |
 | FAIL | 1 | D1-39（修复前 Windows P0 EINVAL；FIX(sim) 通过≠产品修复） |
-| BLOCKED | 1 | D1-54（Hermes 真实会话） |
+| BLOCKED | 0 | — |
 | UNASSESSED | 0 | — |
 
-**矩阵展开路径 BLOCKED**：9 行（terminal-matrix.csv：Linux×4、macOS/ARM×1、Hook 客户端×1、TTY×1、D1-55-session NOT_RUN×1；均含原因/影响/解除条件）。
+> D1-54 于 2026-09-10T19:35+08:00 由**真实 Hermes 会话证据**转 PASS（用户 19:08 决策完整验收后补跑）：隔离 profile `nr3-test` 5 会话（SKILL→check_update→征询→同意升级 1.1.2→1.1.3→重启生效→拒绝 dismiss 3 天冷却→离线不阻塞），48 工具调用全成功；同套证据构成 Hermes **Hook 客户端完整生命周期**（D1-52 Hermes 行 PASS）。前置 HER-1（venv mcp SDK 2.1.1 与 hermes 声明 1.28.1 漂移致全部 MCP 工具调用 isError 错误）已对齐修复并复测。
+
+**矩阵展开路径 BLOCKED**：8 行（terminal-matrix.csv：Linux×4、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session NOT_RUN×1；均含原因/影响/解除条件，2026-09-10 实测无 Linux 测试机/[SSH 无凭据]/WSL 无发行版/Docker 未装）。
 
 ## 证据路径
 

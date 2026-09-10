@@ -1,39 +1,40 @@
-﻿caseId,terminal,agent,os,arch,node,npm,shell,ttyMode,installLayout,mcpTransport,hookSupport,executionLevel,requiredEvidence,status,blockedReason
-D1-26,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a(函数级),mcp-stdio,"tools/list=39 含 check_update/upgrade 且 schema 完整",PASS,
-D1-27,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,mcp-stdio,"up_to_date 四态字段语义一致",PASS,
-D1-28,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,mcp-stdio,"update_available target=1.1.3 正确",PASS,
-D1-29,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a(函数级),function,"pre 用户 latest<current 时提醒 next=1.1.0-next.9（文档表该行为 ❌）",SPEC-MISMATCH,"开发裁决 pre 提醒策略后更新文档或实现并重生成矩阵；当前不计 PASS"
-D1-30,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"semver 6 组（含 pre/稳定边界）比对正确",PASS,
-D1-31,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,"skip 文件 3 天精确 + 冷却内 dismissed",PASS,
-D1-32,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,"新版本 > dismissedVersion 无视冷却",PASS,
-D1-33,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,"回退路径 + 坏 JSON 容错",PASS,
-D1-34,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"check_failed 不阻塞返回结构化结果",PASS,
-D1-35,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"5min 节流/1h TTL/SKIP env（时钟注入）",PASS,
-D1-36,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"applyUpdateHint 一次性语义（check/upgrade 不附加）",PASS,
-D1-37,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"SKILL.md 会话启动节含先调 check_update 指令",PASS,
-D1-38,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"mock 命令链 + manual/officeace 文案 + 失败不崩溃",PASS,"真实升级链见 D1-52"
-D1-39,OS_MATRIX,probe(stdio+真实安装),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback+runtime-dep,stdio,n/a,mcp-stdio+real-install,"spawnSync('npm.cmd') EINVAL 直捕；sync/async 双路径静默 null；MCP 端到端 check_update=check_failed/upgrade=失败；真实 1.1.2 存量用户态复现",FAIL,"Windows P0（#554 当前态）；FIX(sim) 补丁副本通过仅证明修复方向，等待上游固定修复版本回归"
-D1-39,OS_MATRIX,probe(stdio),linux,x64,声明>=22,声明npm,声明bash,non-tty,none,stdio,n/a,function,"Linux spawn 无 EINVAL（npm 非 .cmd），需真机确认 npm view/升级链",BLOCKED,"无在线 Linux 测试机；影响=跨平台 npm spawn 差异未验；解除=接入 zhangshuang/testbot1 后跑同套函数级+真实升级探针"
-D1-39,OS_MATRIX,probe(stdio),darwin,arm64,声明>=22,声明npm,声明zsh,non-tty,none,stdio,n/a,function,"macOS/ARM npm 直启行为未验（声明支持路径）",BLOCKED,"无 macOS 环境；解除=提供 macOS 测试机/CI runner"
-D1-40,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio,"受控夹具 latest=1.1.1/1.1.2<current 不提示倒退",PASS,
-D1-41,CLIENT_MATRIX,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio,"check_update 四态返回契约 isError=false",PASS,"stdio 协议闭环；非 Hook 客户端适配需 D1-52 布局证据"
-D1-42,CROSS_PROCESS,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback+runtime-dep,stdio,n/a,process-lifecycle,"7 步闭环（提示消费→dismiss→落盘→冷却→重启复查）；真实安装路径 skip=<pluginDir>/.update-skip.json",PASS,
-D1-43,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio,"参数边界 a/b/d 通过；43c registry 失败+dismiss=true 返回 up_to_date 且写 current 伪冷却",SPEC-MISMATCH,"43c 待开发裁决是否接受；功能无害（1.1.4 仍可提醒，已实测）"
-D1-44,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,"now==expireAt 边界/坏日期/负时长安全降级",PASS,
-D1-45,CLIENT_MATRIX,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio,"兜底一次性消费 + 预热竞态双时序",PASS,
-D1-46,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"TTL/节流/inflight/恢复 a-d,h 通过；46g 注入 doQuery reject 直抛未封装 check_failed",SPEC-MISMATCH,"46g 生产路径不可达（queryDistTags 恒 resolve null），待开发裁决是否防御封装"
-D1-47,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"共享缓存按 current 重算，dismissed 结论不复用",PASS,
-D1-48,CROSS_PROCESS,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,process-lifecycle,"双 HOME 双进程 skip 隔离 + 重启持久化 + 新版本无视冷却",PASS,
-D1-49,CLIENT_MATRIX,probe(stdio)+cli,win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio+cli,"7 断言：up_to_date 不执行/非法 version 拒绝/空串=默认 latest/check_failed 不误报/unknown target CLI exit=1/target 默认 all",PASS,
-D1-49,OS_MATRIX,probe(stdio),linux,x64,声明>=22,声明npm,声明bash,non-tty,none,stdio,n/a,function,"handler 参数校验平台无关逻辑需 Linux 复跑确认",BLOCKED,"无在线 Linux 测试机；解除=测试机接后跑 d1-49-d1-55-ext.mjs"
-D1-50,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"spawn 记录器：stable→latest/pre→next/target 传递/version 拒绝/handler up_to_date 守卫",PASS,
-D1-51,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,"ENOENT/非零退出/manual 正确/不污染 skip/恢复可重试",PASS,
-D1-52,CLIENT_MATRIX,opencode(非Hook),win32,x64,22.23.2,10.9.8,powershell,non-tty,runtime-dep,stdio,无hook,real-install-upgrade,"真实 1.1.2 安装→真实 npx 升级 1.1.3（tarball 命中 0→1）→文件同步→重启 serverInfo 1.1.3→opencode.json 配置未丢失→undici 依赖安装",PASS,"OpenCode 布局=非 Hook 客户端代表；agent 会话内提示消费未达（止于 MCP 进程级，见 AGENT_E2E）"
-D1-52,OS_MATRIX,opencode(非Hook),linux,x64,声明>=22,声明npm,声明bash,non-tty,runtime-dep,stdio,无hook,real-install-upgrade,"Linux 真实安装/升级/重启链未验",BLOCKED,"无在线 Linux 测试机；解除=接入后跑 d1-upgrade-real.mjs"
-D1-52,CLIENT_MATRIX,hermes|codearts-space(Hook),win32,x64,声明>=22,声明npm,声明powershell,non-tty,runtime-dep,stdio,有hook,real-install-upgrade,"至少一个 Hook 客户端真实安装/升级/重启未验",BLOCKED,"Hook 客户端（Hermes/CodeArtsSpace）需专用测试实例安装；解除=测试实例就绪后补生命周期证据"
-D1-53,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,mcp-stdio,"坏 JSON→check_failed、恢复后可检测（/__set 注入）",PASS,
-D1-54,AGENT_E2E,hermes,win32,x64,22.23.2,10.9.8,powershell,non-tty,runtime-dep,stdio,有hook,agent-session,"真实会话：SKILL 先调 check_update/询问/同意升级/拒绝 dismiss/重启提示/离线不阻塞",BLOCKED,"本机 Hermes 未装 huaweicloud-plugins（ENV-1）且隔离纪律禁止为测试污染日常安装；影响=真实会话用户流未验收（协议层等价覆盖不得写成会话级 PASS）；解除=测试专用 Hermes 实例安装插件（或上游修复后升级）后 E2E"
-D1-55,CROSS_PROCESS,probe(remote 双请求序列),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,http-remote,n/a,process-shared-state,"同进程双请求序列：A 消费 _updateInfo 后 B 拿不到（hintConsumed 模块级单例,按进程共享）；dismiss 按 server 共享；新版本发布+重启后 B 正常提醒 1.1.4——证据级别=PROCESS_SHARED_STATE（remote transport 无 session 支持，非完整会话生命周期验证）",SPEC-MISMATCH,"D1-55b 违反设计文档「会话中第一个 tool 调用附加」承诺（进程级共享 vs 会话级隔离）；开发裁决改会话级 key 或明确按进程语义；待产品支持 session 后补真实会话验证"
-D1-55-session,CROSS_PROCESS,probe(remote 真实会话),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,http-remote,n/a,not-run,"真实 MCP session 隔离（独立 session 标识/header/长连接 A/B 会话交错调用）：协议探测 initialize 响应无 MCP-Session-Id，源码确认 mcp-server-remote.mjs 无 session 状态绑定",BLOCKED,"NOT_RUN：被测 remote transport 无 session 支持，无法建立真实 session 流程；影响=「会话级隔离」需产品支持 session 后才可验收（当前按进程共享语义记录）；解除=产品或 remote transport 增加 session 标识与绑定后复用 A/B 交错序列重测"
-D1-55,OS_MATRIX,probe(remote 双请求序列),linux,x64,声明>=22,声明npm,声明bash,non-tty,fallback,http-remote,n/a,process-shared-state,"remote 多请求序列 Linux 复跑未验",BLOCKED,"无在线 Linux 测试机；解除=接入后跑 d1-49-d1-55-ext.mjs"
-D1-55,COMMON,probe(remote),win32,x64,22.23.2,10.9.8,powershell,tty,fallback,http-remote,n/a,mcp-remote,"TTY 交互（升级确认/提示）未验",BLOCKED,"无 TTY 会话环境；解除=PTY 会话执行 remote 客户端交互流"
+﻿﻿caseId,terminal,agent,os,arch,node,npm,shell,ttyMode,installLayout,mcpTransport,hookSupport,executionLevel,requiredEvidence,status,blockedReason
+D1-26,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a(函数级),mcp-stdio,tools/list=39 含 check_update/upgrade 且 schema 完整,PASS,
+D1-27,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,mcp-stdio,up_to_date 四态字段语义一致,PASS,
+D1-28,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,mcp-stdio,update_available target=1.1.3 正确,PASS,
+D1-29,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a(函数级),function,pre 用户 latest<current 时提醒 next=1.1.0-next.9（文档表该行为 ❌）,SPEC-MISMATCH,开发裁决 pre 提醒策略后更新文档或实现并重生成矩阵；当前不计 PASS
+D1-30,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,semver 6 组（含 pre/稳定边界）比对正确,PASS,
+D1-31,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,skip 文件 3 天精确 + 冷却内 dismissed,PASS,
+D1-32,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,新版本 > dismissedVersion 无视冷却,PASS,
+D1-33,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,回退路径 + 坏 JSON 容错,PASS,
+D1-34,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,check_failed 不阻塞返回结构化结果,PASS,
+D1-35,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,5min 节流/1h TTL/SKIP env（时钟注入）,PASS,
+D1-36,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,applyUpdateHint 一次性语义（check/upgrade 不附加）,PASS,
+D1-37,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,SKILL.md 会话启动节含先调 check_update 指令,PASS,
+D1-38,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,mock 命令链 + manual/officeace 文案 + 失败不崩溃,PASS,真实升级链见 D1-52
+D1-39,OS_MATRIX,probe(stdio+真实安装),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback+runtime-dep,stdio,n/a,mcp-stdio+real-install,spawnSync('npm.cmd') EINVAL 直捕；sync/async 双路径静默 null；MCP 端到端 check_update=check_failed/upgrade=失败；真实 1.1.2 存量用户态复现,FAIL,Windows P0（#554 当前态）；FIX(sim) 补丁副本通过仅证明修复方向，等待上游固定修复版本回归
+D1-39,OS_MATRIX,probe(stdio),linux,x64,声明>=22,声明npm,声明bash,non-tty,none,stdio,n/a,function,Linux spawn 无 EINVAL（npm 非 .cmd），需真机确认 npm view/升级链,BLOCKED,"2026-09-10T19:30+08:00 实测无 Linux 测试机可用（120.46.40.202/113.44.143.91 SSH 无凭据不可达, WSL 无发行版, Docker 未安装）；影响=跨平台 npm spawn/路径/权限/升级链未验；解除=接入 Linux 测试机（zhangshuang/testbot1）后跑同套探针"
+D1-39,OS_MATRIX,probe(stdio),darwin,arm64,声明>=22,声明npm,声明zsh,non-tty,none,stdio,n/a,function,macOS/ARM npm 直启行为未验（声明支持路径）,BLOCKED,无 macOS/ARM 环境（声明支持路径）；解除=提供 macOS 测试机或 CI runner
+D1-40,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio,受控夹具 latest=1.1.1/1.1.2<current 不提示倒退,PASS,
+D1-41,CLIENT_MATRIX,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio,check_update 四态返回契约 isError=false,PASS,stdio 协议闭环；非 Hook 客户端适配需 D1-52 布局证据
+D1-42,CROSS_PROCESS,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback+runtime-dep,stdio,n/a,process-lifecycle,7 步闭环（提示消费→dismiss→落盘→冷却→重启复查）；真实安装路径 skip=<pluginDir>/.update-skip.json,PASS,
+D1-43,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio,参数边界 a/b/d 通过；43c registry 失败+dismiss=true 返回 up_to_date 且写 current 伪冷却,SPEC-MISMATCH,43c 待开发裁决是否接受；功能无害（1.1.4 仍可提醒，已实测）
+D1-44,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,now==expireAt 边界/坏日期/负时长安全降级,PASS,
+D1-45,CLIENT_MATRIX,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio,兜底一次性消费 + 预热竞态双时序,PASS,
+D1-46,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,"TTL/节流/inflight/恢复 a-d,h 通过；46g 注入 doQuery reject 直抛未封装 check_failed",SPEC-MISMATCH,46g 生产路径不可达（queryDistTags 恒 resolve null），待开发裁决是否防御封装
+D1-47,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,共享缓存按 current 重算，dismissed 结论不复用,PASS,
+D1-48,CROSS_PROCESS,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,process-lifecycle,双 HOME 双进程 skip 隔离 + 重启持久化 + 新版本无视冷却,PASS,
+D1-49,CLIENT_MATRIX,probe(stdio)+cli,win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,mcp-stdio+cli,7 断言：up_to_date 不执行/非法 version 拒绝/空串=默认 latest/check_failed 不误报/unknown target CLI exit=1/target 默认 all,PASS,
+D1-49,OS_MATRIX,probe(stdio),linux,x64,声明>=22,声明npm,声明bash,non-tty,none,stdio,n/a,function,handler 参数校验平台无关逻辑需 Linux 复跑确认,BLOCKED,"2026-09-10T19:30+08:00 实测无 Linux 测试机可用（120.46.40.202/113.44.143.91 SSH 无凭据不可达, WSL 无发行版, Docker 未安装）；影响=跨平台 npm spawn/路径/权限/升级链未验；解除=接入 Linux 测试机（zhangshuang/testbot1）后跑同套探针"
+D1-50,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,function,spawn 记录器：stable→latest/pre→next/target 传递/version 拒绝/handler up_to_date 守卫,PASS,
+D1-51,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,stdio,n/a,function,ENOENT/非零退出/manual 正确/不污染 skip/恢复可重试,PASS,
+D1-52,CLIENT_MATRIX,opencode(非Hook),win32,x64,22.23.2,10.9.8,powershell,non-tty,runtime-dep,stdio,无hook,real-install-upgrade,真实 1.1.2 安装→真实 npx 升级 1.1.3（tarball 命中 0→1）→文件同步→重启 serverInfo 1.1.3→opencode.json 配置未丢失→undici 依赖安装,PASS,OpenCode 布局=非 Hook 客户端代表；agent 会话内提示消费未达（止于 MCP 进程级，见 AGENT_E2E）
+D1-52,OS_MATRIX,opencode(非Hook),linux,x64,声明>=22,声明npm,声明bash,non-tty,runtime-dep,stdio,无hook,real-install-upgrade,Linux 真实安装/升级/重启链未验,BLOCKED,"2026-09-10T19:30+08:00 实测无 Linux 测试机可用（120.46.40.202/113.44.143.91 SSH 无凭据不可达, WSL 无发行版, Docker 未安装）；影响=跨平台 npm spawn/路径/权限/升级链未验；解除=接入 Linux 测试机（zhangshuang/testbot1）后跑同套探针"
+D1-52,CLIENT_MATRIX,hermes(Hook),win32,x64,22.23.2,10.9.8,powershell,non-tty,runtime-dep,stdio,有hook,agent-session+real-install-upgrade,真实隔离 Hermes 实例（profile nr3-test）：真实 npx 安装 1.1.3→MCP 启动→提示消费→升级 1.1.2→1.1.3→重启提示+重启生效→拒绝 dismiss(3 天冷却)→离线降级；48 工具调用全成功,PASS,证据：run-logs/hermes-e2e-s*.out.log + hermes-e2e-manifest.json；升级仅落隔离 hermes-profile-runtime，未触真实用户目录
+D1-52,CLIENT_MATRIX,codearts-space(Hook),win32,x64,声明>=22,声明npm,声明powershell,non-tty,runtime-dep,stdio,有hook,real-install-upgrade,CodeArtsSpace 客户端真实安装/升级/重启未验,BLOCKED,无 CodeArtsSpace 可用环境（120.46.40.202 SSH 无凭据不可达）；影响=该客户端 Hook 生命周期未验收；解除=接入 CodeArtsSpace 客户端后补证据
+D1-53,COMMON,probe(stdio),win32,x64,22.23.2,10.9.8,powershell,non-tty,none,stdio,n/a,mcp-stdio,坏 JSON→check_failed、恢复后可检测（/__set 注入）,PASS,
+D1-54,AGENT_E2E,hermes,win32,x64,22.23.2,10.9.8,powershell,non-tty,runtime-dep,stdio,有hook,agent-session,真实会话（隔离 profile nr3-test）：SKILL retrieve→check_update update_available→澄清征询（未同意不动作）→同意→真实 upgrade 1.1.2→1.1.3+重启提示→新会话重启生效 up_to_date→拒绝 dismiss(3 天冷却落盘)→离线 check_failed 不阻塞 check_cli,PASS,证据：run-logs/hermes-e2e-s1b/s2/s3/s4/s6.out.log + hermes-e2e-manifest.json（48 工具调用）；D1-54b 规格裁决项（hintConsumed 会话级）仍由开发裁决，会话级 PASS 仅指真实 Agent 用户流
+D1-55,CROSS_PROCESS,probe(remote 双请求序列),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,http-remote,n/a,process-shared-state,"同进程双请求序列：A 消费 _updateInfo 后 B 拿不到（hintConsumed 模块级单例,按进程共享）；dismiss 按 server 共享；新版本发布+重启后 B 正常提醒 1.1.4——证据级别=PROCESS_SHARED_STATE（remote transport 无 session 支持，非完整会话生命周期验证）",SPEC-MISMATCH,D1-55b 违反设计文档「会话中第一个 tool 调用附加」承诺（进程级共享 vs 会话级隔离）；开发裁决改会话级 key 或明确按进程语义；待产品支持 session 后补真实会话验证
+D1-55-session,CROSS_PROCESS,probe(remote 真实会话),win32,x64,22.23.2,10.9.8,powershell,non-tty,fallback,http-remote,n/a,not-run,真实 MCP session 隔离（独立 session 标识/header/长连接 A/B 会话交错调用）：协议探测 initialize 响应无 MCP-Session-Id，源码确认 mcp-server-remote.mjs 无 session 状态绑定,BLOCKED,NOT_RUN：被测 remote transport 无 session 支持，无法建立真实 session 流程；影响=「会话级隔离」需产品支持 session 后才可验收（当前按进程共享语义记录）；解除=产品或 remote transport 增加 session 标识与绑定后复用 A/B 交错序列重测
+D1-55,OS_MATRIX,probe(remote 双请求序列),linux,x64,声明>=22,声明npm,声明bash,non-tty,fallback,http-remote,n/a,process-shared-state,remote 多请求序列 Linux 复跑未验,BLOCKED,"2026-09-10T19:30+08:00 实测无 Linux 测试机可用（120.46.40.202/113.44.143.91 SSH 无凭据不可达, WSL 无发行版, Docker 未安装）；影响=跨平台 npm spawn/路径/权限/升级链未验；解除=接入 Linux 测试机（zhangshuang/testbot1）后跑同套探针"
+D1-55,COMMON,probe(remote),win32,x64,22.23.2,10.9.8,powershell,tty,fallback,http-remote,n/a,mcp-remote,TTY 交互（升级确认/提示）未验,BLOCKED,无 TTY 会话环境（powerShell 管道非 TTY）；解除=PTY 会话执行交互流
