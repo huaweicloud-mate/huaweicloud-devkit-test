@@ -103,8 +103,9 @@ Agent/调用方收到裸异常；建议与 #607 一并裁决：统一封装为 `
 
 ---
 
-## 附件引用
-- 探针原始日志（Windows）：`results/ITER-004-2026-09-10/evidence/nr3/run-logs/`
-- Linux 补跑日志：`results/ITER-004-2026-09-10/evidence/nr3/linux-logs/`
-- 执行记录（裁决清单 §八、观察 §三）：`results/ITER-004-2026-09-10/NR3版本升级提醒-补充执行记录.md`
-- 测试报告：`results/ITER-004-2026-09-10/Hermes-Agent-DeepSeek-V4-Flash-测试报告-20260910205303.md`
+## 附件引用（GitHub 链接）
+- 附件本体（定位与根因报告）：https://github.com/huaweicloud-mate/huaweicloud-devkit-test/blob/main/results/ITER-004-2026-09-10/%E9%99%84%E4%BB%B6-NR3%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E4%B8%8E%E6%A0%B9%E5%9B%A0.md
+- 探针原始日志（Windows）：https://github.com/huaweicloud-mate/huaweicloud-devkit-test/tree/main/results/ITER-004-2026-09-10/evidence/nr3/run-logs/
+- Linux 补跑日志：https://github.com/huaweicloud-mate/huaweicloud-devkit-test/tree/main/results/ITER-004-2026-09-10/evidence/nr3/linux-logs/
+- 执行记录（裁决清单 §八、观察 §三）：https://github.com/huaweicloud-mate/huaweicloud-devkit-test/blob/main/results/ITER-004-2026-09-10/NR3%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7%E6%8F%90%E9%86%92-%E8%A1%A5%E5%85%85%E6%89%A7%E8%A1%8C%E8%AE%B0%E5%BD%95.md
+- 测试报告：https://github.com/huaweicloud-mate/huaweicloud-devkit-test/blob/main/results/ITER-004-2026-09-10/Hermes-Agent-DeepSeek-V4-Flash-%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A-20260910205303.md
