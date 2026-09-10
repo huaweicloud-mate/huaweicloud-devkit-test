@@ -96,4 +96,4 @@ Claude Code `~/.claude.json` 与 Cursor `~/.cursor/mcp.json` 白名单探测；�
 - 执行记录：`results/ITER-005-2026-09-10/测试执行记录.md`
 - 基线：`results/ITER-005-2026-09-10/baseline.md`
 - Linux 单测结果：`results/ITER-005-2026-09-10/evidence/linux-agent-install-44pass.txt`
-- 隔离验证脚本：`devkit-test/scripts/_n113_isolated.mjs`（本机隔离）/ `_linux_run_install.py`、`_linux_p24.py`（Linux 真机）
+- 探针/驱动脚本（已入 evidence）：`results/ITER-005-2026-09-10/evidence/`（`n113-isolated-windows.mjs` 本机隔离 / `linux-run-install.py`、`linux-p24-badjson.py` Linux 真机）
