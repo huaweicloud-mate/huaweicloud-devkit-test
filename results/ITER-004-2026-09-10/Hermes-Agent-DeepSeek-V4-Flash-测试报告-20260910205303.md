@@ -27,16 +27,16 @@
 
 | ID | 严重度 | 问题 | 实锤证据 | 状态 |
 |---|---|---|---|---|
-| **D1-39** | **P0** | **Windows 下插件 spawnSync 直启 `npm.cmd` 无 `shell:true` 触发 EINVAL**，check_update 静默失败（npm view 返回 null→check_failed），**存量用户收不到升级提醒**；升级腿同时不可用 | 函数级探针（EINVAL 稳定复现）+ 真实 MCP/升级端到端 + 真实存量用户态（双机） | 已报上游 **#554**；FIX(sim) 副本验证修复方向有效（shell:true/统一弃 .cmd）；**正式产品修复版本未发布**，回归待 #554 发布后执行 |
+| **D1-39** | **P0** | **Windows 下插件 spawnSync 直启 `npm.cmd` 无 `shell:true` 触发 EINVAL**，check_update 静默失败（npm view 返回 null→check_failed），**存量用户收不到升级提醒**；升级腿同时不可用 | 函数级探针（EINVAL 稳定复现）+ 真实 MCP/升级端到端 + 真实存量用户态（双机） | 已报上游 **#554**（OPEN/critical）；FIX(sim) 副本验证修复方向有效（shell:true/统一弃 .cmd）；**正式产品修复版本未发布**，回归待 #554 发布后执行 |
 
 ### 2.2 设计—实现规格差异（4 项 SPEC-MISMATCH，待开发裁决）
 
 | ID | 用例 | 设计承诺 | 实现实测 | 影响 |
 |---|---|---|---|---|
-| **D1-29** | pre 用户提醒策略 | 文档未明确 pre 线提醒行为 | 实现按用户当前线（pre 用户仅提醒 next 线） | 需裁决文档口径 |
-| **D1-43c** | 失败态 dismiss | 失败不应伪造结果 | registry 失败 + dismiss:true 返回 `up_to_date`（伪结果）+ current 伪冷却落盘 | 需裁决是否接受或防御性封装 |
-| **D1-46g** | doQuery 异常 | 应封装为 check_failed | reject 直接上抛（框架层日志） | 需裁决是否防御性封装 |
-| **D1-55b** | 会话级提示隔离 | 「会话中第一个 tool 调用附加」承诺 | `hintConsumed` 为模块级**单例按进程共享**——remote 双客户端/同进程多请求 A 消费后 B 拿不到提示；**Windows 与 Linux 双平台复现** | 需裁决改会话级 key 或明确按进程语义 |
+| **D1-29** | pre 用户提醒策略 | 文档未明确 pre 线提醒行为 | 实现按用户当前线（pre 用户仅提醒 next 线） | 独立提单 **#609**（OPEN）；需裁决文档口径 |
+| **D1-43c** | 失败态 dismiss | 失败不应伪造结果 | registry 失败 + dismiss:true 返回 `up_to_date`（伪结果）+ current 伪冷却落盘 | 独立提单 **#607**（OPEN）；需裁决是否接受或防御性封装 |
+| **D1-46g** | doQuery 异常 | 应封装为 check_failed | reject 直接上抛（框架层日志） | 独立提单 **#608**（OPEN）；需裁决是否防御性封装 |
+| **D1-55b** | 会话级提示隔离 | 「会话中第一个 tool 调用附加」承诺 | `hintConsumed` 为模块级**单例按进程共享**——remote 双客户端/同进程多请求 A 消费后 B 拿不到提示；**Windows 与 Linux 双平台复现** | 独立提单 **#606**（OPEN）；需裁决改会话级 key 或明确按进程语义 |
 
 ### 2.3 部署/产物约束观察（3 项，如实记录，非 PASS 项）
 
@@ -45,6 +45,8 @@
 | **D1-55c2** | remote transport 无 `updatePrewarm`（仅 stdio 有） | 仅调普通工具时 hint 永不生成——远程部署第二层兜底不可达（须先调 check_update） |
 | **D1-55d** | skip 文件按 server 进程共享 | 单进程单 HOME 部署下 dismiss 为部署级，多用户隔离需独立 HOME/进程 |
 | **D1-55e2** | cachedDistTags 与外部 dist-tags 变更不同步 | TTL 1h/重启才刷新（缓存按进程共享=合理设计，记录为部署约束） |
+
+> 以上 3 项部署约束已打包独立提单 **#610**（OPEN，P3）。
 
 ### 2.4 测试环境/基建问题（2 项）
 
