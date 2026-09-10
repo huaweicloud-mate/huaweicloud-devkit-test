@@ -1,4 +1,4 @@
-# Hermes-Agent-DeepSeek-V4-Pro-测试报告-ITER-005-2026-09-10
+# Hermes-Agent-DeepSeek-V4-Pro-测试报告-ITER-005-20260910160332
 
 ## 1. 概述
 
@@ -12,7 +12,7 @@
 | 测试依据 | 开发侧《2026-09-09 全量问题集 总设计/总计划文档》 |
 | 测试范围 | D1–D8 / C1–C5 / P1–P7 / R1–R2 / O1–O2 / P9，共 25 项 |
 | 报告模型 | Hermes Agent + DeepSeek V4 Pro（deepseek-v4-pro-0813） |
-| 执行日期 | 2026-09-10（北京） |
+| 执行日期 | 2026-09-10 16:03:32（北京） |
 | 环境 | Windows 本机（Node v22.23.2）+ Linux 真机 zhangshuang（Ubuntu 24.04 aarch64, Node v22.23.2） |
 
 ## 2. 执行摘要
@@ -112,8 +112,8 @@ Claude Code `~/.claude.json` 与 Cursor `~/.cursor/mcp.json` 白名单探测；�
 
 ## 8. 数据留痕
 
-- 测试用例：`results/ITER-005-2026-09-10/测试用例与验证计划-1.1.3-next.2.md`
-- 执行记录：`results/ITER-005-2026-09-10/测试执行记录.md`
-- 基线：`results/ITER-005-2026-09-10/baseline.md`
-- Linux 单测结果：`results/ITER-005-2026-09-10/evidence/linux-agent-install-44pass.txt`
-- 探针/驱动脚本（已入 evidence）：`results/ITER-005-2026-09-10/evidence/`（`n113-isolated-windows.mjs` 本机隔离 / `linux-run-install.py`、`linux-p24-badjson.py` Linux 真机）
+- 测试用例：`results/ITER-005-20260910160332/测试用例与验证计划-1.1.3-next.2.md`
+- 执行记录：`results/ITER-005-20260910160332/测试执行记录.md`
+- 基线：`results/ITER-005-20260910160332/baseline.md`
+- Linux 单测结果：`results/ITER-005-20260910160332/evidence/linux-agent-install-44pass.txt`
+- 探针/驱动脚本（已入 evidence）：`results/ITER-005-20260910160332/evidence/`（`n113-isolated-windows.mjs` 本机隔离 / `linux-run-install.py`、`linux-p24-badjson.py` Linux 真机）

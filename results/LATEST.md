@@ -1,6 +1,6 @@
 # Latest Iteration Pointer
 
-> **ITER-005-2026-09-10**（执行于 2026-09-10 北京）——**开发《2026-09-09 全量问题集》设计/计划文档验证（PR #592，huaweicloud-devkit@1.1.3-next.2）**
+> **ITER-005-20260910160332**（执行于 2026-09-10 16:03:32 北京）——**开发《2026-09-09 全量问题集》设计/计划文档验证（PR #592，huaweicloud-devkit@1.1.3-next.2）**
 
 > ## 本轮完成全景
 >
@@ -11,7 +11,7 @@
 > - **工程卫生**：O1 删 WIP 草稿、O2 .gitignore 5 组规则、P9 cmdUpdate 死代码移除，全部落地。
 > - **测试方法教训**：Windows 上 officeace 经注册表定位不受 USERPROFILE 隔离，隔离 HOME 测试会意外直装真实 OfficeAce（已 uninstall 清理复原）；0/1 检测/TTY 菜单/MCP 类用例转 Linux（与上游 `skip: win32` 策略一致）。
 
-> 基线：huaweicloud-devkit **1.1.3-next.2（c6c0965f）** ｜ ITER-005 报告：`Hermes-Agent-DeepSeek-V4-Pro-测试报告-ITER-005-2026-09-10.md`
+> 基线：huaweicloud-devkit **1.1.3-next.2（c6c0965f）** ｜ ITER-005 报告：`Hermes-Agent-DeepSeek-V4-Pro-测试报告-ITER-005-20260910160332.md`
 > **口径标注**：本轮为"设计文档落地验证"（PR #592 的 25 项编程任务），不覆盖历史 GitHub issue 回归（已由 ITER-004 覆盖）。
 > **评估完成**：25/25 设计项已完成验证；**原子执行记录**：本轮执行证据与报告已归档于 ITER-005 目录。
 > 迭代主线（规划/基线/报告/gaps/发现证据）仍在 ITER-001-2026-09-05；ITER-003（问题验证 123/123）、ITER-004（NR3 + issues 回归）见各自收尾总结。
