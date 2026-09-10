@@ -1,6 +1,6 @@
 # NR3 版本升级提醒——补充执行记录（评审落实轮 v2）
 
-> **生成时间**：2026-09-10T18:02:09+08:00（ISO 8601，与 v2 manifest 实际执行时间一致）｜更新：2026-09-10T18:03:52+08:00
+> **生成时间**：2026-09-10T18:02:09+08:00（ISO 8601，与 v2 manifest 实际执行时间一致）｜更新：2026-09-10T20:10:00+08:00（第五轮整改：统一口径清理）
 > **runner 重跑时间**：2026-09-10T18:02:09+08:00 ~ 2026-09-10T18:03:52+08:00（对应 `run-logs/manifest.json` 的 started/finished，4 探针各退出码 0）
 > **执行环境**：Windows 10（win32 x64）/ Node v22.23.2（hermes 内置）/ npm 10.9.8 / PowerShell 5.1（非 TTY，spawnSync 管道）
 > **前置评审**：`reviews/ITER-004-20260910155945/codex/review-round-01-版本升级提醒.md`（首轮）→ `review-round-02-版本升级提醒.md`（第二轮，REVIEW_CHANGES_REQUESTED）
@@ -92,8 +92,8 @@
 |---|---|---|---|
 | COMMON（平台无关函数逻辑） | ✅ D1-27/28/30/31/32/33/34/35/36/44/46/47/50(mock) 已执行 | ⛔ BLOCKED：逻辑平台无关但需 Linux 复跑确认（无在线 Linux 测试机，解除条件=接入 zhangshuang/testbot1 后跑同套函数级探针） | 直接 MCP 探针归 COMMON/CROSS_PROCESS，**不**自动满足 CLIENT_MATRIX/AGENT_E2E |
 | CROSS_PROCESS | ✅ D1-42（重启持久化）、D1-48（多进程隔离）、D1-55（同进程多会话——SPEC 实锤） | ⛔ BLOCKED（同上） | 进程/会话边界的验证 |
-| CLIENT_MATRIX | ✅ 非 Hook 客户端代表=OpenCode 布局（D1-52：真实 install→MCP 进程→upgrade→重启，配置保留）｜⛔ Hook 客户端（CodeArtsSpace/WorkBuddy/Hermes）BLOCKED：需客户端会话环境，解除=专用测试实例安装后补会话级 | ⛔ BLOCKED | 至少 1 Hook + 1 非 Hook 已满足非 Hook 侧；Hook 侧未满足 |
-| AGENT_E2E | ⛔ BLOCKED：D1-54 Hermes 会话（见上）；OpenCode agent 会话内提示消费同样止于 MCP 进程级 | ⛔ BLOCKED | 直接 MCP 进程测试**不能替代**真实 Agent/宿主生命周期证据 |
+| CLIENT_MATRIX | ✅ 非 Hook 客户端代表=OpenCode 布局（D1-52：真实 install→MCP 进程→upgrade→重启，配置保留）｜✅ **Hook 客户端代表=Hermes**（D1-52 Hermes 行：真实隔离实例 nr3-test 完整生命周期 PASS，2026-09-10T19:35+08:00）｜⛔ CodeArtsSpace/WorkBuddy BLOCKED（无可用客户端环境，120.46.40.202 SSH 无凭据不可达） | Hook/非 Hook 门槛均已满足（Hermes Hook + OpenCode 非 Hook） |
+| AGENT_E2E | ✅ **D1-54 Hermes 真实会话 PASS**（5 会话：SKILL→check_update→征询→同意升级→重启生效→拒绝 dismiss→离线降级，48 工具调用；run-logs/hermes-e2e-s1b/s2/s3/s4/s6.out.log + manifest）｜OpenCode agent 会话内提示消费止于 MCP 进程级（记录为已知边界，不影响本行结论） | ⛔ BLOCKED | 直接 MCP 进程测试**不能替代**真实 Agent/宿主生命周期证据——已由真实 Hermes 会话满足 |
 | OS_MATRIX | ✅ Windows 10 x64 | ⛔ BLOCKED：Linux/macOS/ARM 为声明支持的路径，无执行环境；影响=跨平台 npm spawn 行为与升级链未验；解除=测试机接入 | — |
 | remote / TTY | ✅ remote：D1-55 HTTP 双客户端实测（含 remote 无 prewarm 观察）｜⛔ TTY：交互式确认/升级提示需真实 TTY 会话，未执行 | ⛔ BLOCKED | — |
 
