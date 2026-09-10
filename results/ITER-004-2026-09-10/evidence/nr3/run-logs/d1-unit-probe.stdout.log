@@ -1,0 +1,87 @@
+
+===== D1-30 semver 版本比对 =====
+PASS  D1-30  6 组比对全部符合（1.1.2~1.1.3 / 1.1.3-next.1~1.1.3-next.2 / 1.1.3-next.2~1.1.3 / 1.1.10~1.1.9 / 1.1.3-next.10~1.1.3-next.9 / 1.1.3~1.1.3）
+PASS  D1-30b  非法版本 semverParse => null（null）
+
+===== D1-29 pre 提醒策略（SPEC-MISMATCH 证据） =====
+PASS  D1-29  pre 用户 current=1.1.0-next.8, latest=1.0.2(低), next=1.1.0-next.9 → target=1.1.0-next.9（实现会提醒 next 更新；设计文档表该行为标 ❌ 不提醒）→ SPEC-MISMATCH 待开发确认
+PASS  D1-29c  latest 与 pre 同底版本时 target=1.1.0（稳定版大于 pre，无 next 提醒，符合文档语义）
+PASS  D1-29b  latest 提升场景 pre 用户 target=1.2.0（稳定版优先，与文档✅一致）
+
+===== D1-31/32 冷却与跳过 =====
+PASS  D1-31  skip 文件字段完整且 expireAt-dismissedAt=259200000ms=3天
+PASS  D1-31b  同版本冷却内 => dismissed（dismissExpiresAt=2026-09-13T10:02:09.442Z）
+PASS  D1-32  新版本 1.1.4 > dismissedVersion 1.1.3 无视冷却 => update_available（target=1.1.4）
+
+===== D1-33 skip 路径与容错 =====
+PASS  D1-33a  隔离 HOME 回退路径=<S>\home-unit-fix\.config\huaweicloud\devkit-skip.json
+PASS  D1-33b  不存在文件 => null
+PASS  D1-33c  损坏 JSON => null（安全降级）
+
+===== D1-34/35 失败降级与节流 =====
+PASS  D1-34  registry 失败 => check_failed（不阻塞，返回结构化结果）
+PASS  D1-35  5min 内节流不重查：doQuery 次数=1（1），结果仍 check_failed（note=检测失败，不影响使用）
+PASS  D1-35b  节流过期后重查恢复 => update_available（doQuery=1）
+PASS  D1-35c  SKIP_UPDATE=1 => up_to_date 且不发起查询（doQuery=1）
+
+===== D1-46 缓存 TTL/节流/inflight =====
+PASS  D1-46a  首次查询 => update_available（target=1.1.3）
+PASS  D1-46b  TTL 内复用缓存：doQuery=1（1），结果 update_available
+PASS  D1-46c  超过 1h TTL 重查：doQuery=2（2）
+PASS  D1-46d  并发合并：两个并发调用共享一次查询（doQuery=1），结果一致
+PASS  D1-46g  注入 doQuery reject => getCachedUpdateInfo 直接抛出（boom）而非 check_failed → 与预期「reject 不产生未处理异常且返回 check_failed」不符 = SPEC-MISMATCH（防御缺口；生产 queryDistTags 恒 resolve(null) 不可达）
+PASS  D1-46h  reject 后下次调用恢复 => update_available（doQuery=1，无节流污染）
+
+===== D1-47 缓存与当前版本解耦 =====
+PASS  D1-47  共享缓存（doQuery=1）但按 current 重算：stable 1.1.2→target 1.1.3；pre 1.1.3-next.5→target 1.1.4-next.1
+PASS  D1-47b  同缓存下 dismissed 结论不复用：current 1.1.2→dismissed；current 1.1.3-next.5→update_available（target 1.1.4-next.1 无视冷却）
+
+===== D1-44 冷却边界 =====
+PASS  D1-44a  now<expireAt => dismissed
+PASS  D1-44b  now==expireAt（边界）=> 重新提醒 update_available（仅严格早于才算冷却）
+PASS  D1-44c  now>expireAt => update_available
+PASS  D1-44d  target==dismissedVersion 冷却仍生效
+PASS  D1-44e  坏日期 expireAt => update_available（安全降级不吞更新）
+PASS  D1-44f  负时长（days=-1）=> expireAt 已过 => update_available
+PASS  D1-44g  缺字段 skip（readSkipState 视为无效）=> update_available
+
+===== D1-36 兜底 _updateInfo =====
+PASS  D1-36a  普通工具附加 _updateInfo（latestVersion=1.1.3）
+PASS  D1-36b  check_update/upgrade 不附加
+PASS  D1-36c  无 hint 原样返回
+PASS  D1-36d  updateAvailable=false 不附加
+
+===== D1-50 upgrade 命令语义（mock spawn） =====
+PASS  D1-50a  stable 用户升级成功返回（previous=1.1.2, installed=1.1.3, requiresRestart=true, message=升级完成，请重启当前会话使新版本生效。)
+PASS  D1-50b  命令=npx.cmd --yes huaweicloud-devkit@latest update --target opencode（tag=latest 正确）
+PASS  D1-50c  pre 用户选择 next tag：命令=--yes huaweicloud-devkit@next update --target codearts（installed=1.1.3-next.5）
+PASS  D1-50d  target 缺省 => --target all（命令=--yes huaweicloud-devkit@latest update --target all)
+PASS  D1-50e  version=1.4.0 非法 => 拒绝且不执行命令（version 参数仅支持 latest。目标版本由插件自动判定。）
+PASS  D1-50f  upgradePackage 直调等版本（latest==current）会执行升级命令（targetVersion 非空）→ “已最新”守卫位于 MCP handler 层 handleUpgrade，由 D1-50f-mcp 在 MCP 探针验证（此处记录分层语义）
+
+===== D1-51 upgrade 失败恢复 =====
+PASS  D1-51a  spawn 抛错 => {"success":false,"error":"simulated ENOENT","manual":"npx --yes huaweicloud-devkit@latest update --target workbuddy"}（manual 含正确 tag/target）
+PASS  D1-51b  npx 非零退出 => "line1 npm error boom line"
+PASS  D1-51c  doQuery null => 无法确认最新版本（registry 查询失败）。
+PASS  D1-51d  失败不污染 skip 状态（文件内容一致）
+PASS  D1-51e  升级成功后缓存失效，重新查询（doQuery=2，target=1.1.5）
+
+===== D1-39 Windows npm.cmd EINVAL（P0 证据链） =====
+PASS  D1-39a  原始 spawnSync('npm.cmd') 无 shell:true => error.code=EINVAL（Windows 直启 .cmd 必 EINVAL，与网络无关）
+PASS  D1-39a2  spawnSync + shell:true（外部 registry）=> status=0 输出含 1.1.3 → shell:true 修复方向有效（先前“死锁”为同进程 fixture 装置假象）
+PASS  D1-39b  插件 queryDistTagsSync（未修复）=> null（静默 null=check_failed 来源）
+PASS  D1-39c  插件 queryDistTags async（未修复）=> null（同样 null）
+PASS  D1-39d  修复副本 sync（node.exe 直跑 npm-cli，外部 registry）=> {"latest":"1.1.3","next":"1.1.3-next.2"}（fixture latest=1.1.3）
+PASS  D1-39e  修复副本 async（shell:true）=> {"latest":"1.1.3","next":"1.1.3-next.2"}（成功）
+PASS  D1-39f  修复后函数级全链（真实 npm view 到 fixture）=> update_available target=1.1.3
+PASS  D1-39g  修复方向确认：EINVAL=缺 shell:true（真实 P0）；shell:true 后 sync/async 均可用（外部 registry status=0）；node.exe+npm-cli 亦可；#554 原修复建议成立。测试装置陷阱：fixture 与被测 spawnSync 同进程会假象超时（本次排查已排除）
+
+===== D1-53-fn 坏响应解析 =====
+PASS  D1-53fn-a  合法输出 => {"latest":"1.1.2","next":"1.1.3-next.2"}
+PASS  D1-53fn-b  空输出 => null
+PASS  D1-53fn-c  坏 JSON => null
+PASS  D1-53fn-d  数组/数值 => null
+PASS  D1-53fn-e  fixture 注入坏 JSON => npm view FETCH_ERROR/坏输出 => null（check_failed 态）
+PASS  D1-53fn-f  恢复 ok 模式（清缓存后）=> {"latest":"1.1.3","next":"1.1.3-next.2"}（恢复后可检测）
+
+===== 汇总: 59 断言, PASS 59, FAIL 0 =====

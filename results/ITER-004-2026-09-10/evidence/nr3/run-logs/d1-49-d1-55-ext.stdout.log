@@ -1,0 +1,26 @@
+
+===== D1-49 upgrade handler 无更新与参数校验（6 项） =====
+PASS  D1-49a  up_to_date => {"success":false,"requiresRestart":false,"message":"已是最新版本，无需升级。","currentVersion":"1.1.2","targetVersion":"1.1.2"}（handler 层拦截，不执行升级命令）
+PASS  D1-49b  version='1.4.0' => {"success":false,"error":"version 参数仅支持 latest。目标版本由插件自动判定。"}（明确拒绝，不误报成功）
+PASS  D1-49c  version='' + check_failed => {"success":false,"error":"无法确认最新版本（registry 查询失败）。","manual":"npx --yes huaweicloud-devkit@latest update --target all"}（空串解析为默认 latest）
+PASS  D1-49d  check_failed => {"success":false,"error":"无法确认最新版本（registry 查询失败）。","manual":"npx --yes huaweicloud-devkit@latest update --target all"}（不误报成功，manual 含正确命令）
+PASS  D1-49e  target='unknown-client' => manual=npx --yes huaweicloud-devkit@latest update --target unknown-client（target 原样传递；未知 target 的真实 CLI 拒绝依赖 D1-49e2 观测）
+PASS  D1-49e2  CLI update --target unknown-client => exit=1（Unknown target 拒绝，失败不静默成功）
+PASS  D1-49f  target 缺省 => manual=npx --yes huaweicloud-devkit@latest update --target all（默认 all）
+
+===== D1-55 同进程双请求序列状态共享（PROCESS_SHARED_STATE 证据） =====
+PASS  D1-55s1  协议能力探测：initialize 响应 MCP-Session-Id=(无)——remote transport 不支持 session 标识（源码确认：mcp-server-remote.mjs 无 session 状态绑定）
+BLOCKED  D1-55-session  真实 MCP session 隔离验证（独立 session 标识/header/长连接 A/B 会话交错调用）——NOT_RUN：被测 remote transport 无 session 支持（协议探测无 MCP-Session-Id），无法建立真实 session 流程；影响=「会话级隔离」需产品支持 session 后才可验收（当前按进程共享语义记录）；解除条件=产品或 remote transport 增加 session 标识与绑定后复用本探针 A/B 交错序列重测
+PASS  D1-55a  客户端 A 请求序列：check_update=update_available，首工具 _updateInfo={"currentVersion":"1.1.2","latestVersion":"1.1.3"}（正常消费）
+SPEC  D1-55b  客户端 B 请求序列首工具 _updateInfo=undefined（A 消费后 B 拿不到提示）→ PROCESS_SHARED_STATE：mcp-protocol.mjs hintConsumed 模块级单例，状态按进程共享非按会话隔离；与设计文档「会话中第一个 tool 调用」承诺不符 = OBSERVED_SPEC_MISMATCH（等待开发裁决：按 session 隔离 or 按进程共享为正式语义）
+PASS  D1-55c  对照（fresh server）：裸普通工具 _updateInfo=undefined（无预热不附加）→ 显式 check_update=update_available 后首工具 _updateInfo={"currentVersion":"1.1.2","latestVersion":"1.1.3"}（提示按进程状态生成）
+PASS  D1-55c2  观察：remote transport 无 updatePrewarm，仅调普通工具时 hint 永不生成 → 远程部署下「第二层兜底」不可达（stdio 有 prewarm；记录为 P3 观察，remote 会话需先调 check_update 才有提示）
+PASS  D1-55d  A dismiss 后 B 查询 => B=dismissed（同一 remote server 单进程单 HOME → skip 文件共享，dismiss 按 server/部署级共享；多用户部署需每用户独立 HOME/进程，记录为设计约束）skip={
+  "dismissedVersion": "1.1.3",
+  "dismissedAt": "2026-09-10T10:03:37.304Z",
+  "expireAt": "2026-09-13T10:03:37.304Z"
+}
+PASS  D1-55e  新版本 1.1.4 发布 + server 重启（进程缓存失效） => B=update_available（target=1.1.4，A 的 dismiss 不阻断 B 对新版本提醒）
+PASS  D1-55e2  观察：进程级 cachedDistTags 与外部 dist-tags 变更不同步（TTL 1h/重启才刷新）——「A 刷新缓存影响 B」的语义=缓存按 server 进程共享，属合理设计（避免重复 npm view），记录为部署约束
+
+===== 汇总: 16 项 = PASS 14 / OBSERVED_SPEC_MISMATCH 1 / BLOCKED(NOT_RUN) 1 / FAIL 0 =====
