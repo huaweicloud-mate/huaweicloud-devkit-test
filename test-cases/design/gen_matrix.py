@@ -37,17 +37,23 @@ def _d2_range(lo, hi):
     return p
 
 BATCH_TS = [
+    (_in_range(1, 15), "2026-09-05"),      # v1.5 初始规划批（D1-1~15）
     (_in_range(26, 40), "2026-09-10"),      # NR3 存量用户版本升级提醒批（D1-26~40）
     (_in_range(41, 55), "2026-09-10"),      # NR3 用例评审补充批（D1-41~55）
-    (_d2_range(9, 20), "2026-09-07"),       # NR2 AK/SK 架构方案 v4 批（D2-9~20）
-    (lambda i: True, "2026-09-05"),         # 兜底：v1.5 初始规划批（ITER-001 基线日）
+    (_d2_range(1, 7), "2026-09-05"),        # v1.5 D2 既有（D2-1~7）
+    (_d2_range(8, 20), "2026-09-07"),       # NR2 批（D2-8 credentials 回归 + D2-9~20 AK/SK v4）
 ]
+
+# 存量 v1.5 其余维度（D3~D10 全区间）——先于未知 ID 判定
+LEGACY_PREFIXES = ("D3-", "D4-", "D5-", "D6-", "D7-", "D8-", "D9-", "D10-")
 
 def gen_ts(rid):
     for pred, ts in BATCH_TS:
         if pred(rid):
             return ts
-    return NOW_STR  # 新增用例：生成时刻
+    if rid.startswith(LEGACY_PREFIXES):
+        return "2026-09-05"   # 存量 v1.5 维度
+    return NOW_STR            # 新增用例：生成时刻
 
 # ============ 设计级用例（153 条） ============
 # 列: ID, 维度, 标题, 优先级, 前置条件, 测试数据, 操作步骤, 预期结果, 指引来源, 关联工具, 自动化建议, 展开规则
