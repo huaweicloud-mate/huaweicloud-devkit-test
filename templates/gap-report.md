@@ -1,6 +1,6 @@
 # 缺口表 — gaps-<ITER>.md
 
-> 迭代：ITER-NNN ｜ 目标 commit：`` ｜ 更新：YYYY-MM-DD
+> 迭代：ITER-NNN ｜ 目标 commit：`` ｜ 更新时间：`YYYY-MM-DDTHH:mm:ss+08:00`
 
 ## P0（安全/中断级 —— 立即停测，当日上报）
 

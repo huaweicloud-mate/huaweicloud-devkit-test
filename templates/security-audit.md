@@ -1,6 +1,6 @@
 # 安全审计清单 — security-audit.md
 
-> 被测 commit：`` ｜ 执行日期：YYYY-MM-DD ｜ 结论：PASS / FAIL（P0 存在即 FAIL）
+> 被测 commit：`` ｜ 执行时间：`YYYY-MM-DDTHH:mm:ss+08:00` ｜ 结论：PASS / FAIL（P0 存在即 FAIL）
 
 ## 1. 凭证安全（D2 / D4-1~3 / D4-6）
 

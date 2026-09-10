@@ -19,7 +19,7 @@ $ErrorActionPreference = "Continue"
 $Repo = "C:\Users\Administrator\devkit-test\huaweicloud-devkit-test"
 $LogDir = "$env:LOCALAPPDATA\Hermes Agent CN Desktop\data\hermes-home\logs"
 $LogFile = Join-Path $LogDir "devkit-test-sync.log"
-$Stamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+$Stamp = Get-Date -Format "yyyy-MM-ddTHH:mm:sszzz"
 
 # NOTE on PowerShell 5.1 quirks handled here:
 #  1. git writes progress to STDERR; with $ErrorActionPreference=Stop those

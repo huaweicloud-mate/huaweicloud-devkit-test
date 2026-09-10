@@ -55,9 +55,12 @@ with open(os.path.join(REPO, ".gitignore"), encoding="utf-8") as f:
         line = line.strip()
         if line and not line.startswith("#"):
             git_n += 1
-tmpl_n = len([x for x in os.listdir(os.path.join(REPO, "templates")) if x.endswith(".md")])
+tmpl_n = len([
+    x for x in os.listdir(os.path.join(REPO, "templates"))
+    if os.path.isfile(os.path.join(REPO, "templates", x)) and x != ".gitkeep"
+])
 notes.append(f".gitignore 实际模式数 = {git_n} 条（README 已表述为 23 条忽略规则，一致 ✓）")
-notes.append(f"templates 实际模板数 = {tmpl_n}（README 声称 6）")
+notes.append(f"templates 实际模板数 = {tmpl_n}（README 导航应与实际数量一致）")
 
 # ---------- 3. 评审稿内 commit 号 vs 实际 ----------
 html = open(os.path.join(REPO, "docs", "测试体系-评审稿.html"), encoding="utf-8").read()

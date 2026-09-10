@@ -1,6 +1,6 @@
 # 客户端适配矩阵结果 — matrix-<被测插件版本>.md
 
-> 被测插件版本：`vX.Y.Z`（commit `xxxx`） ｜ 执行日期：YYYY-MM-DD
+> 被测插件版本：`vX.Y.Z`（commit `xxxx`） ｜ 执行时间：`YYYY-MM-DDTHH:mm:ss+08:00`
 
 ## 适配冒烟结果（D5-1~7 × 客户端）
 

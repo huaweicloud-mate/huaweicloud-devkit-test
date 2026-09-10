@@ -1,4 +1,4 @@
-# 每晚回归报告 — nightly-<YYYYMMDD>.md
+# 每晚回归报告 — nightly-<YYYYMMDDHHmmss>.md
 
 > 目标 commit：`<git rev-parse HEAD>` ｜ 环境基线：`<OS/Node/客户端版本>` ｜ 结果：PASS / PARTIAL / FAIL
 

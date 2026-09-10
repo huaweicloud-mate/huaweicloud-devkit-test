@@ -1,6 +1,6 @@
 # 质量仪表盘 — dashboard.md
 
-> 迭代：ITER-NNN ｜ 更新：YYYY-MM-DD ｜ 数据源：metrics/execution.csv + defects.csv + eval/trends.md
+> 迭代：ITER-NNN ｜ 更新时间：`YYYY-MM-DDTHH:mm:ss+08:00` ｜ 数据源：metrics/execution.csv + defects.csv + eval/trends.md
 
 ## 总体状态
 

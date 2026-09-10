@@ -7,12 +7,14 @@
 
 ## 文件命名
 
+文档正文和表格中的时间统一使用 ISO 8601 时间戳 `YYYY-MM-DDTHH:mm:ss+08:00`；Windows 文件名使用紧凑时间戳 `YYYYMMDDHHmmss`。
+
 ```
-huaweicloud-devkit-测试全景图-ITER-<NNN>-<YYYYMMDD>.html
-huaweicloud-devkit-测试全景图-ITER-<NNN>-<YYYYMMDD>.xlsx
+huaweicloud-devkit-测试全景图-ITER-<NNN>-<YYYYMMDDHHmmss>.html
+huaweicloud-devkit-测试全景图-ITER-<NNN>-<YYYYMMDDHHmmss>.xlsx
 ```
 
-> `<NNN>-<YYYYMMDD>` 用 **Get-Date 真实执行日**（与 results/ITER-* 同规则）；当天多次更新则覆盖当日文件（git 保留历史）。
+> `<NNN>-<YYYYMMDDHHmmss>` 用 **Get-Date 真实执行时间**（时区在文档正文中记录）；每次生成保留独立快照，不覆盖同一时间戳文件。
 
 ## 每日更新流程（收口时必做，参考技能 §四.4 全景图回流）
 

@@ -12,7 +12,7 @@
 | 测试依据 | 开发侧《2026-09-09 全量问题集 总设计/总计划文档》 |
 | 测试范围 | D1–D8 / C1–C5 / P1–P7 / R1–R2 / O1–O2 / P9，共 25 项 |
 | 报告模型 | Hermes Agent + DeepSeek V4 Pro（deepseek-v4-pro-0813） |
-| 执行日期 | 2026-09-10 16:03:32（北京） |
+| 执行时间 | `2026-09-10T16:03:32+08:00` |
 | 环境 | Windows 本机（Node v22.23.2）+ Linux 真机 zhangshuang（Ubuntu 24.04 aarch64, Node v22.23.2） |
 
 ## 2. 执行摘要

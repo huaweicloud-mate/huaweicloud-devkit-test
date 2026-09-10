@@ -52,7 +52,10 @@ checks = {
     "导航14项链接": html.count('<li><a href="#s') + (1 if 'href="#review"' in html else 0) == 14,
     "打印隐藏导航+去留白": "nav.toc { display: none; }" in html and "body { background: #fff; padding-top: 0; }" in html,
     "归档目录树渲染": 'huaweicloud-mate/huaweicloud-devkit-test  (PRIVATE · main)' in html and '├── docs/' in html,
-    "目录树关键节点": all(x in html for x in ['01-测试规划.md', 'gen_matrix.py', 'nightly-report.md', 'ITER-001-2026-09-05', 'eval-set-v1.csv', '─ 用例矩阵-设计级.csv']),
+    "目录树关键节点": (
+        all(x in html for x in ['01-测试规划.md', 'gen_matrix.py', 'nightly-report.md', 'eval-set-v1.csv', '─ 用例矩阵-设计级.csv'])
+        and ('ITER-001-20260905000000' in html or 'ITER-001-2026-09-05' in html)
+    ),
     "11.1目录结构小节": "11.1 目录结构（远程验证版）" in html,
 }
 ok = True
