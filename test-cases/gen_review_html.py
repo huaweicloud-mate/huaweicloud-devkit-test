@@ -180,11 +180,11 @@ BODY = f"""
 
 <header class="hero">
   <h1>HuaweiCloud DevKit 插件测试体系 · 团队评审稿</h1>
-  <div class="sub">测试规划（v1.3）+ 测试用例体系（199 条）+ 执行准备 + 度量与闭环 —— 供团队成员评审</div>
+  <div class="sub">测试规划（v1.3）+ 测试用例体系（{len(design) + len(expanded)} 条）+ 执行准备 + 度量与闭环 —— 供团队成员评审</div>
   <div class="meta">
     <span>被测对象：huaweicloud/huaweicloud-devkit</span>
     <span>规划版本：v1.3（2026-09-05 快照）</span>
-    <span>用例规模：199 条（设计级 92 + 展开级 107）</span>
+    <span>用例规模：{len(design) + len(expanded)} 条（设计级 {len(design)} + 展开级 {len(expanded)}）</span>
     <span>用例分布：P0={p0} / P1={p1} / P2={p2}</span>
     <span>评审状态：待评审</span>
   </div>
@@ -283,7 +283,7 @@ BODY = f"""
 <p class="small">用例数=设计级；优先级分布为该维度内 P0/P1/P2 计数；自动化按"脚本/半自动"建议估算。</p>
 </section>
 
-<section id="s5"><h2>5. 测试用例体系（199 条）</h2>
+<section id="s5"><h2>5. 测试用例体系（{len(design) + len(expanded)} 条）</h2>
 <div class="cards">
 <div class="card"><div class="num">{total}</div><div class="lbl">总用例（设计+展开）</div></div>
 <div class="card"><div class="num">{len(design)}</div><div class="lbl">设计级（D1–D10）</div></div>
@@ -470,7 +470,7 @@ BODY = f"""
 
 <section id="review" style="border:2px solid #c7000b"><h2 style="border-color:#c7000b">本次评审请关注（6 个决策点）</h2>
 <ol>
-<li><b>用例规模</b>：199 条 + 剪枝策略（禁止剪枝集 D4 全量/D1-1/3/5/D9 全量/D10 核心）是否合理？</li>
+<li><b>用例规模</b>：{len(design) + len(expanded)} 条 + 剪枝策略（禁止剪枝集 D4 全量/D1-1/3/5/D9 全量/D10 核心）是否合理？</li>
 <li><b>执行分层</b>：代表客户端全量 + 10 客户端适配矩阵 + 3~4 agent 评测（~360 次/轮）——是否认同"工具层测一遍、Agent 层才多 agent"的切分？</li>
 <li><b>优先级分配</b>：P0 共 {p0} 条（安全/凭证/绕过类）——轻重是否恰当？</li>
 <li><b>退出标准</b>：通过率 ≥95%、P0 清零、覆盖双口径（定义 100%/执行分层）——是否可接受？</li>
