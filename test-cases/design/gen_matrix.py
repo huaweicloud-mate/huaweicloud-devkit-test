@@ -6,12 +6,48 @@
 """
 import csv
 import os
+from datetime import datetime
 
 TC_DIR = r"C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases"
 DES_DIR = os.path.join(TC_DIR, "design")
 EXP_DIR = os.path.join(TC_DIR, "expanded")
 os.makedirs(DES_DIR, exist_ok=True)
 os.makedirs(EXP_DIR, exist_ok=True)
+
+# ============ 用例生成时间（2026-09-10 用户要求：所有用例必须带生成时间戳） ============
+# 新增用例（ID 不在下方批次映射内）自动取「本次运行时刻 YYYY-MM-DD HH:mm 北京时间」；
+# 存量用例按源文档/评审记录批次回填（日期级，可在溯源文档核对批次出处）。
+NOW_STR = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+def _in_range(lo, hi):
+    def p(i):
+        if not i.startswith("D1-"):
+            return False
+        try:
+            return lo <= int(i.split("-")[1]) <= hi
+        except ValueError:
+            return False
+    return p
+
+def _d2_range(lo, hi):
+    def p(i):
+        if not i.startswith("D2-") or not i[3:].isdigit():
+            return False
+        return lo <= int(i[3:]) <= hi
+    return p
+
+BATCH_TS = [
+    (_in_range(26, 40), "2026-09-10"),      # NR3 存量用户版本升级提醒批（D1-26~40）
+    (_in_range(41, 55), "2026-09-10"),      # NR3 用例评审补充批（D1-41~55）
+    (_d2_range(9, 20), "2026-09-07"),       # NR2 AK/SK 架构方案 v4 批（D2-9~20）
+    (lambda i: True, "2026-09-05"),         # 兜底：v1.5 初始规划批（ITER-001 基线日）
+]
+
+def gen_ts(rid):
+    for pred, ts in BATCH_TS:
+        if pred(rid):
+            return ts
+    return NOW_STR  # 新增用例：生成时刻
 
 # ============ 设计级用例（153 条） ============
 # 列: ID, 维度, 标题, 优先级, 前置条件, 测试数据, 操作步骤, 预期结果, 指引来源, 关联工具, 自动化建议, 展开规则
@@ -854,18 +890,20 @@ for pid, prompt, route, assert_ in PROMPTS:
               f"期望路由: {route}", f"断言: {assert_}"))
 
 # ============ 输出 ============
-design_headers = ["ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果", "指引来源", "关联工具", "自动化建议", "展开规则"]
-exp_headers = ["ID", "展开类型", "枚举对象", "源用例", "优先级", "执行要点", "预期结果"]
+design_headers = ["ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果", "指引来源", "关联工具", "自动化建议", "展开规则", "生成时间"]
+exp_headers = ["ID", "展开类型", "枚举对象", "源用例", "优先级", "执行要点", "预期结果", "生成时间"]
 
 with open(os.path.join(DES_DIR, "用例矩阵-设计级.csv"), "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f)
     w.writerow(design_headers)
-    w.writerows(D)
+    for row in D:
+        w.writerow(row + (gen_ts(row[0]),))
 
 with open(os.path.join(EXP_DIR, "用例矩阵-展开级.csv"), "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f)
     w.writerow(exp_headers)
-    w.writerows(E)
+    for row in E:
+        w.writerow(row + (gen_ts(row[3] if len(row) > 3 else row[0]),))  # 展开级以源用例批次为准
 
 print(f"设计级: {len(D)} 条")
 print(f"展开级: {len(E)} 条 (D5矩阵 {len(CLIENTS)*7} + 服务矩阵 {len(SERVICES)} + 评测集 {len(PROMPTS)})")
