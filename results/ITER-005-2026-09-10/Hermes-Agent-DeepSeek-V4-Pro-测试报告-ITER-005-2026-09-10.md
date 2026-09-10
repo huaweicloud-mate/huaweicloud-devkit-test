@@ -32,7 +32,7 @@
 | 代号 | 机器 | 系统/架构 | Node | 执行终端/命令通道 | 承担真机用例 |
 |---|---|---|---|---|---|
 | **W** | Windows 本机（Administrator 工作机） | Windows 10 / PS 5.1 | v22.23.2 | Hermes 终端 → **PowerShell 5.1**：真实 `npx --yes --registry=npmjs.org huaweicloud-devkit@next version` / `node bin/setup.cjs <cmd>`（隔离 USERPROFILE）| D4 version、P1-2 未知 target、P1-7 多检测非TTY、R1-2 reinstall 非TTY |
-| **L** | zhangshuang ECS 113.44.143.91 | Ubuntu 24.04.4 aarch64 | v22.23.2（/opt/node22）| 本机 PS + **paramiko SSH** → 远程 bash：`/opt/node22/bin/node --test test/agent-install.test.mjs` / `script -qec ".../setup.cjs install" /dev/null` | P1-4 0检测、P1-5 1检测、P1-3 0检测菜单、D8-2 多检测多选、P2-2/3/4/5 MCP 接入 |
+| **L** | zhangshuang ECS 113.44.143.91 | Ubuntu 24.04.4 aarch64 | v22.23.2（/opt/node22）| 本机 PowerShell 5.1 跑 paramiko SSH 脚本 → zhangshuang **非交互 bash（`exec_command` 通道，无 TTY）**，node 用绝对路径 `/opt/node22/bin/node --test test/agent-install.test.mjs`；TTY 菜单用例再套 Linux `script -qec ".../setup.cjs install" /dev/null` 伪造 pty | P1-4 0检测、P1-5 1检测、P1-3 0检测菜单、D8-2 多检测多选、P2-2/3/4/5 MCP 接入 |
 
 > 0/1 检测、TTY 菜单/多选、MCP 接入类用例在本机 Windows 被 officeace（LOCALAPPDATA 域、经注册表定位、不随 USERPROFILE 隔离）污染，且上游单测对这些用例 `skip: win32`，故统一转 Linux zhangshuang 真机执行；非 TTY 决策树路径 + version/reinstall 在本机 Windows 真机验证。
 
