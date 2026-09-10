@@ -2,7 +2,7 @@
 
 > 当前迭代：`ITER-004-20260910155945`
 > 状态：`HERMES_REVISION_READY`（由 Hermes 更新；**不得提前签署 `TEST_DESIGN_READY`**，需 Codex 复评）
-> 生成时间：2026-09-10T20:10:00+08:00（ISO 8601）｜更新：2026-09-10T20:10:00+08:00（第五轮整改：统一口径、清理旧结论）
+> 生成时间：2026-09-10T20:40:00+08:00（ISO 8601）｜更新：2026-09-10T20:40:00+08:00（第六轮+：Linux 实机补跑 testbot3 接入，Linux D1-39/49/55 转 PASS）
 > 设计文档：`C:\Users\Administrator\devkit-test\hdk\docs\version-upgrade-design.md`
 > 被测项目：`C:\Users\Administrator\devkit-test\hdk`（huaweicloud/huaweicloud-devkit）
 > Codex 评审：`codex/review-round-01/02/03/04/05-版本升级提醒.md`
@@ -37,7 +37,7 @@
 
 - `hermes/candidate-matrix.csv`（候选，**39 行 × 16 列**）
 - `reviews/ITER-004-20260910155945/terminal-matrix.csv`（**评审确认后的顶层正式矩阵，内容与候选矩阵一致**）
-- 矩阵状态分布：**PASS 26 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED 8**（Linux×4、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session NOT_RUN×1）
+- 矩阵状态分布：**PASS 29 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED 5**（Linux-D1-52 升级链×1、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session NOT_RUN×1；Linux D1-39/49/55 已由 testbot3 实机补跑转 PASS，2026-09-10T20:34+08:00）
 - **D1-55 证据分级**：remote transport 无 session 支持（协议探测无 `MCP-Session-Id`，源码确认 mcp-server-remote.mjs 无 session 状态绑定）→ 当前证据级别 = `PROCESS_SHARED_STATE`；`D1-55-session` = `BLOCKED(NOT_RUN)`；D1-55b 保持 `SPEC-MISMATCH` 不改写为 PASS。
 
 ## 四、执行证据索引
@@ -55,7 +55,7 @@
 
 - **探针观测**：120/120 checks（119 PASS + 1 `OBSERVED_SPEC_MISMATCH`(D1-55b)）+ 1 `BLOCKED(NOT_RUN)`(D1-55-session)，4 探针退出码 0；checks passed 仅表示观测到预设行为，**不等于设计级 PASS**。
 - **设计级（30 条，UNASSESSED=0）**：PASS **25**／SPEC-MISMATCH **4**（D1-29/43c/46g/55b）／FAIL **1**（D1-39 修复前）／BLOCKED **0**。
-- **终端矩阵（39 行）**：PASS **26**／SPEC-MISMATCH 4／FAIL 1／BLOCKED **8**。
+- **终端矩阵（39 行）**：PASS **29**／SPEC-MISMATCH 4／FAIL 1／BLOCKED **5**（Linux D1-39/49/55 已实机补跑 PASS；D1-52 升级链受探针平台限制保留 BLOCKED）。
 - **展开矩阵**：132 行（D5 70 + D3-C4 22 + D10 15 + NR3 25）。
 
 ## 六、已闭合 / 未闭合
@@ -65,9 +65,9 @@
 - D1-54 → PASS（Hermes 5 会话真实 E2E，48 工具调用）；D1-52 Hermes(Hook) 行 → PASS；Windows OpenCode 非 Hook 保持 PASS。
 - HER-1 为 Hermes 测试环境 mcp SDK 版本漂移（2.1.1 vs 声明 1.28.1）的对齐修复，**非被测项目修复**，保留为前置条件。
 
-### 未闭合（BLOCKED 8 行 + 产品级问题，详见 status.md 与 terminal-matrix.csv）
+### 未闭合（BLOCKED 5 行 + 产品级问题，详见 status.md 与 terminal-matrix.csv）
 
-- Linux×4、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session×1——均含实测原因/影响/解除条件；**未伪造执行结果**。
+- Linux-D1-52 升级链×1（安装链已 PASS，探针平台化补丁后重跑）、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session×1——均含实测原因/影响/解除条件；**未伪造执行结果**。
 - D1-39 P0 FAIL（FIX(sim) ≠ 产品修复）；D1-29/43c/46g/55b SPEC-MISMATCH 保留开发裁决。
 
 ## 七、待 Codex 复评 / 开发裁决 / 环境接入

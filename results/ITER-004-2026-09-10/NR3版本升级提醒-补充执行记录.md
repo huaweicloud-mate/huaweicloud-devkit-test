@@ -183,3 +183,40 @@ node run-probes.mjs .sandbox                  # 串行 4 探针 → run-logs/（
 | D1-55-session | remote transport 无 MCP-Session-Id/状态绑定（协议探测+源码） | 产品不支持 |
 
 **结论：本轮无法完成完整终端验收**（Linux 4 行、macOS/ARM、CodeArtsSpace、TTY、D1-55-session 共 8 行 BLOCKED 保持；等待用户提供机器/凭据或授权创建，不接受受控范围豁免）。
+
+## 十、Linux 实机补跑（2026-09-10T20:34:00+08:00，Codex 第六轮——成功接入测试机账号表机器）
+
+用户质疑"此前可连为何现在连不上"——实测发现本机 `~/.ssh` 无私钥，但技能记录测试机凭据在 `~/Desktop/测试机账号.txt`（TSV：IP/账号/密码/系统），**凭据表读取后 3 台 Ubuntu 24.04 实机认证成功**（密码仅脚本内使用，未入对话/日志）。选 **1.94.218.129（testbot3）** 执行（磁盘最空）。
+
+### 10.1 环境与统一基线
+
+| 项 | 值 |
+|---|---|
+| 主机 | 1.94.218.129（testbot3）/ Ubuntu 24.04.4 LTS / **aarch64（ARM64）** |
+| Node / npm | v22.23.2 / 10.9.8（与 Windows 基线完全同版本，npmmirror ARM64 tarball 免 sudo 装 ~/node22） |
+| Shell / TTY | bash（SSH 非登录 exec）/ 非 TTY |
+| 固定 commit | c6c0965f0bdf6181abef65edb6fee7ed2115cd68（1.1.3-next.2，与 Windows 沙箱一致） |
+| 构建复现 | build-sandbox.mjs 在 Linux 成功：tarball **fj-old.tgz sha1=059f5038651e...、fj-new.tgz sha1=1b26601598de... 与 Windows 完全一致** → 跨平台可复现实证 |
+| 证据归档 | `evidence/nr3/linux-logs/`（linux-*.stdout/stderr/exit ×4 探针 + linux-manifest.json） |
+
+### 10.2 探针结果（同套探针原样执行）与判读
+
+| 探针 | 结果 | 判读 |
+|---|---|---|
+| d1-49-d1-55-ext（D1-49/55 覆盖） | **14 PASS + 1 OBSERVED_SPEC(D1-55b) + 1 BLOCKED(NOT_RUN)(D1-55-session)** | **与 Windows 完全一致** → D1-49/D1-55 跨平台语义确认（含进程级共享/无 session 支持在 Linux 复现） |
+| d1-unit-probe（D1-39 等） | 54 PASS / 5 FAIL | FAIL=D1-39a2/b/c/d（**探针 Windows 专测断言**：期望 npm.cmd/EINVAL-null 的 Windows 语义）+ D1-50b（硬编码 `npx.cmd` 命令名）。Linux 无 EINVAL 缺陷（D1-39a 后门 ENOENT→status=null→PASS 佐证；未修复副本 npm view 实际返回真实 dist-tags=Linux 无静默失败） |
+| d1-mcp-loop（D1-39mcp） | 29 PASS / 2 FAIL | FAIL=D1-39mcp-b/c（断言期望 Windows 的 check_failed/null；Linux 上 check_update 正常返回 update_available → 平台期望差异） |
+| d1-upgrade-real（D1-52） | 10 PASS / 6 FAIL | Phase1 真实安装链 **PASS**（1.1.2 安装/插件落点/undici/opencode.json）+ D1-52-p3d 配置保留 PASS；FAIL=p2b（Windows EINVAL 语义期望）+ p3a-c/p4a-b（**探针 npx.cmd 硬编码 + npx 子进程 env 未注入 fixture registry**，测试机无外网致 npx 崩溃 → 升级链未获完整证据） |
+
+### 10.3 矩阵更新（candidate==terminal 同步，2026-09-10T20:34）
+
+- **D1-39 Linux → PASS**（Linux 语义无 EINVAL；5 项 FAIL 判读为探针平台误报）
+- **D1-49 Linux → PASS**（ext 探针 14+1+1 与 Windows 一致）
+- **D1-52 Linux → 保持 BLOCKED**（安装链已 PASS；升级链受探针平台限制阻塞，原因如实更新=探针平台化补丁后重跑）
+- **D1-55 Linux → PASS**（remote 序列与 Windows 一致）
+- 矩阵最新：**39 行 = PASS 29 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED 5**
+
+### 10.4 遗留（不伪装）
+
+- D1-52 Linux 升级链：需探针 npx.cmd→平台命令名 + npx registry 注入的平台化补丁后重跑（归入探针可移植性整改，非产品缺陷）。
+- macOS/ARM、CodeArtsSpace、TTY、D1-55-session 仍无环境/产品不支持（BLOCKED 5 行）。

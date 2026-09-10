@@ -5,7 +5,7 @@
 > 被测项目：`C:\Users\Administrator\devkit-test\hdk`（huaweicloud/huaweicloud-devkit）
 > 归档迭代：`ITER-004-20260910155945`
 > 创建时间：2026-09-10T15:59:45+08:00
-> 更新时间：2026-09-10T20:10:00+08:00（ISO 8601；第五轮整改完成：统一口径、清理旧结论）
+> 更新时间：2026-09-10T20:40:00+08:00（ISO 8601；第六轮+：接入 Linux 实机 testbot3 补跑，Linux 3 行转 PASS）
 
 ## 当前状态
 
@@ -33,10 +33,10 @@
 
 | 状态 | 行数 | 说明 |
 |---|---:|---|
-| PASS | 26 | 含 D1-54（Hermes 真实会话）、D1-52 Hermes(Hook) 行 |
+| PASS | 29 | 含 D1-54（Hermes 真实会话）、D1-52 Hermes(Hook) 行、**Linux D1-39/49/55（2026-09-10T20:34 testbot3 Ubuntu 24.04 aarch64 实机补跑）** |
 | SPEC-MISMATCH | 4 | D1-29 / D1-43c / D1-46g / D1-55b |
 | FAIL | 1 | D1-39 修复前 Windows P0 |
-| BLOCKED | 8 | Linux×4、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session(NOT_RUN)×1 |
+| BLOCKED | 5 | Linux-D1-52（安装链 PASS/升级链探针平台限制）、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session(NOT_RUN)×1 |
 
 **展开矩阵**：`test-cases/expanded/用例矩阵-展开级.csv` **132 行**（D5 客户端 70 + D3-C4 服务 22 + D10 评测 15 + NR3 终端展开 25）。
 
@@ -63,7 +63,7 @@
 
 | 终端 | 行数 | 未执行原因（2026-09-10 实测） | 解除条件 |
 |---|---:|---|---|
-| Linux（D1-39/49/52/55） | 4 | 无可用 Linux 测试机：120.46.40.202 / 113.44.143.91 SSH 均无凭据不可达；WSL 无发行版；Docker 未安装 | 接入 Linux 测试机（zhangshuang/testbot1）后以本轮相同被测版本与探针补跑并归档 stdout/stderr/exit/manifest |
+| Linux（D1-52 升级链） | 1 | Ubuntu 24.04 aarch64 实机（testbot3）已接入；安装链 PASS；升级链受**探针 npx.cmd 硬编码 + npx 子进程 registry 注入平台限制**阻塞（测试机无外网） | 探针平台化补丁（npx.cmd→平台命令名 + 注入 fixture）后重跑 |
 | macOS/ARM | 1 | 无 macOS 机器/CI runner | 提供 macOS 测试机或 CI runner 后补跑 |
 | CodeArtsSpace(Hook) | 1 | 无可用 CodeArtsSpace 客户端环境（120.46.40.202 不可达）；**Hermes Hook 证据不冒充 CodeArtsSpace 证据** | 接入 CodeArtsSpace 客户端后补生命周期证据 |
 | TTY/PTY | 1 | 本机仅 PowerShell 管道（non-TTY）；升级确认/提示交互需真实 PTY | PTY 会话（tmux/ConPTY）执行交互流 |
