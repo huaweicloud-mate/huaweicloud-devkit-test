@@ -166,3 +166,20 @@ node run-probes.mjs .sandbox                  # 串行 4 探针 → run-logs/（
 4. **D1-55b**：hintConsumed 按会话隔离（设计承诺）vs 按进程共享（实现）；remote transport 是否补 session 支持（D1-55-session 解除条件）。
 5. **D1-39**：`#554` 上游固定修复版本发布后，Windows 全链回归（FIX(sim) 非产品证据）。
 6. **环境接入（BLOCKED 项）**：Linux 测试机（zhangshuang/testbot1）、macOS/ARM CI、CodeArtsSpace 客户端、PTY TTY 会话——接入后按矩阵补跑；Hermes profile `nr3-test` 保留为测试实例（hermes-home/profiles/nr3-test，不入库）。
+
+## 九、环境接入侦查（2026-09-10T20:20:00+08:00，Codex 第六轮前实测）
+
+用户要求优先获取真实 Linux 证据；本机穷尽接入路径后的**实测记录**（矩阵状态未变，仍 BLOCKED，但阻塞依据由此从"假设不可用"升级为"逐台实测不可达"）：
+
+| 路径 | 实测（命令/结果） | 结论 |
+|---|---|---|
+| SSH 凭据与密钥 | `~/.ssh` 仅 config（113.44.143.91 无用户/key）+ known_hosts；**无任何 id_rsa/id_ed25519**；无 ssh-agent 转发；config.yaml/环境变量无 ssh backend/凭据 | 无凭据通道 |
+| 历史 ECS 实连（36 次） | `ssh -o BatchMode=yes -o ConnectTimeout=3 {root,zhangshuang,ubuntu,administrator}@{9 台 known_hosts 主机}`：14 台次 Permission denied (publickey,password)、10 台次 Connection timed out、12 台次 Connection closed/警告 → **任何成功连接：False** | 9 台历史 ECS（含 120.46.40.202/113.44.143.91）全部不可达 |
+| WSL | `wsl --status` exit=50（未初始化）；`wsl --version` 返回帮助（旧版 WSL）；DISM：VirtualMachinePlatform/Microsoft-Windows-Subsystem-Linux 未启用（Windows Server 2022 10.0.20348）→ 安装需启用功能+**重启系统**（会中断会话，需用户授权） | 本机 WSL 暂不可用（非零系统变更） |
+| Docker | `docker` 命令不存在 | 无容器运行时 |
+| macOS/ARM | 无机器/CI runner | 无环境 |
+| CodeArtsSpace | 120.46.40.202 不可达（其上无客户端环境） | 无环境 |
+| PTY/TTY | 本机仅 PowerShell 非 TTY 管道 | 无 PTY |
+| D1-55-session | remote transport 无 MCP-Session-Id/状态绑定（协议探测+源码） | 产品不支持 |
+
+**结论：本轮无法完成完整终端验收**（Linux 4 行、macOS/ARM、CodeArtsSpace、TTY、D1-55-session 共 8 行 BLOCKED 保持；等待用户提供机器/凭据或授权创建，不接受受控范围豁免）。
