@@ -36,6 +36,17 @@
 
 > 0/1 检测、TTY 菜单/多选、MCP 接入类用例在本机 Windows 被 officeace（LOCALAPPDATA 域、经注册表定位、不随 USERPROFILE 隔离）污染，且上游单测对这些用例 `skip: win32`，故统一转 Linux zhangshuang 真机执行；非 TTY 决策树路径 + version/reinstall 在本机 Windows 真机验证。
 
+### 2.2 被测插件安装落点（本轮实际 install 到的客户端）
+
+> 本轮为 **CLI 层**验证，被测 `huaweicloud-devkit@1.1.3-next.2` 的 `install` 命令在**隔离/临时 HOME 环境**实际安装到：
+
+| 类型 | 客户端 target | 渠道 |
+|---|---|---|
+| 完整 target 安装（7 个）| **opencode、workbuddy、codex-desktop、openclaw、hermes、atomcode、codex** | Linux `node --test agent-install.test.mjs` 隔离 HOME |
+| 通用 MCP 白名单接入（2 个）| **Claude Code、Cursor** | 0 检测菜单 option 3（仅 merge `mcpServers`，非完整 target）|
+
+> 未做 install 成功验证的 target：codearts、codearts-work、dsh、officeace（仅 help 列表 / 决策树 uninstall 行为中出现）。**本轮是 CLI 层 install 行为验证，非真实客户端「会话级」验证**（会话级见 ITER-001/002 客户端矩阵）；上述 target 是 install 命令写插件文件的落点，非执行测试的 agent。
+
 ## 3. 分维度结论
 
 ### 3.1 README/品牌/文档（D1–D7, P3–P7, C1–C5）—— ✅ 全部落地
