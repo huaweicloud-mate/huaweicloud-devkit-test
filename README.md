@@ -13,7 +13,7 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 | 路径 | 内容 |
 |---|---|
 | [docs/](docs/) | 测试规划 v1.3 / 评审报告 / 执行准备清单 / 目录结构规划 / Hermes-Codex 闭环规范 / 团队评审稿 |
-| [test-cases/](test-cases/) | 用例体系母版：设计级 163 + 展开级 137 = 300 条（CSV 真源，gen_matrix.py 可复现生成；展开级 12 列结构化状态：NR3 25 行 + D1-58 白名单 5 行含 status/blockedReason/requiredEvidence/observedAt；追踪表 tracing/需求-设计-证据追踪表.csv 169 行；门禁 verify_new.py（25 项 exit 码）/scan_gaps.py；R10-R12 补充 10 条设计级 D1-56~58、D2-21、D3-C7~9、D4-24、D6-8、D9-9 + D1-58 专属展开 5 行） |
+| [test-cases/](test-cases/) | 用例体系母版：设计级 163 + 展开级 137 = 300 条（CSV 真源，gen_matrix.py 可复现生成；设计级 14 列含「用例当前状态」（预期结果与当前状态分离，2026-09-11）；展开级 12 列结构化状态：NR3 25 行 + D1-58 白名单 5 行含 status/blockedReason/requiredEvidence/observedAt；追踪表 tracing/需求-设计-证据追踪表.csv 169 行；门禁 verify_new.py（27 项 exit 码）/scan_gaps.py；R10-R12 补充 10 条设计级 D1-56~58、D2-21、D3-C7~9、D4-24、D6-8、D9-9 + D1-58 专属展开 5 行） |
 | [templates/](templates/) | 8 个模板：每晚报告 / 客户端矩阵 / 安全审计 / 缺口表 / 仪表盘 / issue / Hermes-Codex 交接状态 / 多终端矩阵 |
 | [reviews/](reviews/) | 测试设计评审归档（Hermes/Codex 轮次、决策、放行状态和多终端矩阵） |
 | [results/](results/) | 测试执行结果归档（`ITER-NNN-时间戳`，命名规则见 results/README.md） |

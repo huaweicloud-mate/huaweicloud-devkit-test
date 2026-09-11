@@ -200,7 +200,7 @@ add("D1-2", "D1安装", "多Agent探测", "P2", "多客户端共存环境",
 add("D1-3", "D1安装", "doctor健康自检", "P1", "已安装环境(含部分组件异常环境)",
     "doctor 命令",
     "①干净环境跑doctor ②人为制造组件缺失(如删MCP Python SDK)跑doctor",
-    "检测项准确，FAIL场景如实报且给出修复指引", "P: README doctor 命令+自曝FAIL场景(权威契约)",
+    "检测项准确，失败场景如实报告且给出修复指引", "P: README doctor 命令+自曝FAIL场景(权威契约)",
     "doctor", "脚本")
 add("D1-4", "D1安装", "status/update幂等", "P2", "已安装+存在用户自定义config",
     "status、update 命令",
@@ -283,7 +283,7 @@ add("D1-28", "D1安装", "检测语义-有新版本", "P1", "current < latest",
 add("D1-29", "D1安装", "pre-release 用户提醒策略(文档vs实现差异)", "P1", "current 带 -next 后缀",
     "current=1.1.0-next.8, {latest:1.2.0,next:1.1.0-next.9}",
     "①直调 determineTarget/judgeUpdate ②分别核对 latest 提升与仅 next 提升两场景",
-    "实现: pre 用户候选含 latest+next 取最大(文档表仅 latest 且 pre 不提醒=差异点,以实测行为记录)", "设: §版本比对规则 表; 实: determineTarget",
+    "pre 用户候选含 latest+next 取最大；pre 升级提醒语义与文档表差异点以最终裁决为准", "设: §版本比对规则 表; 实: determineTarget",
     "check_update", "脚本")
 add("D1-30", "D1安装", "semver 比对正确性", "P2", "无",
     "相等/反向/正式版>pre/乱串",
@@ -333,7 +333,7 @@ add("D1-38", "D1安装", "huaweicloud_upgrade 语义", "P1", "有新版本+用�
 add("D1-39", "D1安装", "Windows 升级检测链可用性", "P0", "Windows 10 + 1.1.2",
     "npm.cmd spawnSync 无 shell:true",
     "①本机直调 queryDistTagsSync/queryDistTags ②观察 EINVAL/结果 ③对照加 shell:true 版本",
-    "Windows 下检测链真实可用, 不得 EINVAL 静默失败(#554 域)", "实: queryDistTagsSync; 关联 #554",
+    "Windows 下检测链真实可用，不得 EINVAL 静默失败", "实: queryDistTagsSync; 关联 #554",
     "check_update", "脚本")
 add("D1-40", "D1安装", "镜像 lag 下检测正确性(反向提醒防护)", "P0", "默认 registry=镜像且滞后",
     "镜像 latest 滞后于官方",
@@ -497,7 +497,7 @@ add("D2-19", "D2认证", "命名档只审计不自动动(R5)", "P1", "多 profil
 add("D2-20", "D2认证", "HUAWEICLOUD_HOME重定向(R6)", "P2", "可设置 HUAWEICLOUD_HOME 的 Linux/Windows",
     "HUAWEICLOUD_HOME 指向重定向目录",
     "①设置 HUAWEICLOUD_HOME ②readKooCliProfiles ③对比 S1/S3 迁移",
-    "S2 固定 ~/.hcloud 不受影响（方案 T1 断言3）——实测发现 AK-FP-2 不符", "方: §九 T1 断言3; NR2-012",
+    "S2 固定 ~/.hcloud 不受影响（方案 T1 断言3）", "方: §九 T1 断言3; NR2-012",
     "readKooCliProfiles/globalCredentialsPath/obsConfigPath", "半自动", "关联 AK-FP-2")
 # ---------- 2026-09-11 全量设计评审补充（凭证状态维度；R10 按 codex round-09 补强断言契约） ----------
 add("D2-21", "D2认证", "AK/SK 轮换后 auth_status 正确感知（凭证状态维度）", "P1", "真云账号 + 一次性 IAM 用户凭证（可轮换，不影响生产）+ 本地凭证文件",
@@ -882,7 +882,7 @@ add("D7-1", "D7兼容", "OS矩阵", "P2", "Linux(x86/arm)/Windows/macOS",
 add("D7-2", "D7兼容", "Node版本矩阵", "P2", "Node 22/24环境",
     "安装+冒烟",
     "①Node22安装冒烟 ②Node24安装冒烟",
-    ">=22均可用(实测22/24)", "P: engines契约+CI双版本",
+    "Node >=22 均可用（engines 合同覆盖的版本区间）", "P: engines契约+CI双版本",
     "install", "脚本")
 add("D7-3", "D7兼容", "Windows better-sqlite3缺口", "P1", "Windows环境",
     "npm test 在Windows",
@@ -897,7 +897,7 @@ add("D7-4", "D7兼容", "国内镜像源安装", "P2", "国内网络+华为云np
 add("D7-5", "D7兼容", "与既有配置共存", "P1", "已有profile/已有MCP server环境",
     "升级/重装不破坏既有",
     "①备份既有profile与MCP配置 ②更新插件 ③核对未被覆盖/破坏",
-    "不覆盖不破坏(实测而非全新环境)", "通: 升级类工具标准要求; 仓: D1-4承诺延伸",
+    "升级不覆盖/不破坏用户自定义内容", "通: 升级类工具标准要求; 仓: D1-4承诺延伸",
     "update", "手动")
 add("D7-6", "D7兼容", "升级兼容", "P2", "旧版→新版",
     "release-please多版本",
@@ -1229,7 +1229,29 @@ D158_EXPANDED = [
 ]
 
 # ============ 输出 ============
-design_headers = ["ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果", "指引来源", "关联工具", "自动化建议", "展开规则", "生成时间"]
+# 设计级「用例当前状态」（2026-09-11 用户要求：预期结果与当前状态分离；与 gen_tracing.py 状态推导完全一致）
+def design_status(rid):
+    """设计级用例当前状态（枚举：PASS/FAIL/SPEC-MISMATCH/PARTIAL/UNASSESSED）
+    来源：ITER-004 NR3 已执行 + EX-3/EX-4 真机验证回填（2026-09-11），其余未执行为 UNASSESSED。"""
+    if rid.startswith("D1-") and rid[3:].isdigit() and 26 <= int(rid[3:]) <= 55:
+        if rid == "D1-39":
+            return "FAIL"  # #554 未修复（Windows EINVAL 静默）
+        if rid == "D1-52":
+            return "PARTIAL(BLOCKED×2)"  # Windows PASS + CodeArtsSpace/Linux升级链 BLOCKED
+        if rid == "D1-46":
+            return "PARTIAL(SPEC:46g)"  # 主行为 PASS + 46g reject 防御 SPEC 未裁决
+        if rid == "D1-55":
+            return "PARTIAL(SPEC+NOT_RUN+BLOCKED)"  # stdio PASS + remote SPEC/NOT_RUN + TTY BLOCKED
+        if rid in {"D1-29", "D1-43"}:
+            return "SPEC-MISMATCH"  # 文档 vs 实现差异，待裁决
+        return "PASS"  # ITER-004 已执行（unit/mcp-loop/upgrade-real/ext 探针覆盖）
+    if rid == "D1-58":
+        return "PASS"  # EX-4 五断言真机验证全 PASS（testbot3 c6c0965）
+    if rid == "D2-20":
+        return "SPEC-MISMATCH"  # ITER-002 aksk-v4 实测发现 AK-FP-2 不符（方案 T1 断言3），待真机复核
+    return "UNASSESSED"  # 未执行（含 D1-1~25、D2、D3、D4、D5~D10 设计基线）
+
+design_headers = ["ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果", "指引来源", "关联工具", "自动化建议", "展开规则", "用例当前状态", "生成时间"]
 # R10: 展开级结构化状态列（与闭环规范 candidate/terminal-matrix 16 列对齐的核心状态字段）
 exp_headers = ["ID", "展开类型", "枚举对象", "源用例", "优先级", "执行要点", "预期结果", "生成时间", "status", "blockedReason", "requiredEvidence", "observedAt"]
 
@@ -1240,7 +1262,8 @@ with open(os.path.join(DES_DIR, "用例矩阵-设计级.csv"), "w", newline="", 
         # 展开规则空值按维度默认推导 + R11 四段规范化（行内显式规则映射/合并/兜底）
         row = list(row)
         row[11] = expand_rule(row[0], row[1], row[11])
-        w.writerow(tuple(row) + (gen_ts(row[0]),))
+        # 2026-09-11: 「用例当前状态」列（预期结果与当前状态分离）
+        w.writerow(tuple(row) + (design_status(row[0]), gen_ts(row[0])))
 
 with open(os.path.join(EXP_DIR, "用例矩阵-展开级.csv"), "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f)

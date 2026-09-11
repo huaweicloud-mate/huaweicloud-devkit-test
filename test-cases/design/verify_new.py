@@ -48,6 +48,17 @@ def check(name, cond, detail=""):
 with open(P_DES, encoding="utf-8-sig") as f:
     rows = list(csv.DictReader(f))
 check("设计级行数 == 163", len(rows) == 163, str(len(rows)))
+# 2026-09-11 用户要求：预期结果与当前状态分离——设计级新增「用例当前状态」列
+check("设计级 14 列（含用例当前状态）", len(rows[0]) == 14, str(list(rows[0].keys())))
+des_st = [r.get("用例当前状态") or "" for r in rows]
+VOLID_DES_ST = {"PASS", "FAIL", "SPEC-MISMATCH", "UNASSESSED"}
+bad_des_st = [r["ID"] for r in rows
+              if not (r.get("用例当前状态") in VOLID_DES_ST or (r.get("用例当前状态") or "").startswith("PARTIAL"))]
+check("用例当前状态统一枚举", not bad_des_st, str(bad_des_st[:5]))
+# 预期结果列清洗：不得含执行观测/状态结论词（实测/当前状态/已验证等）
+MIX_WORDS = ["实测发现", "以实测行为", "(实测", "（实测", "当前状态", "已执行", "已验证"]
+mix_hits = [r["ID"] for r in rows if any(w in (r.get("预期结果") or "") for w in MIX_WORDS)]
+check("预期结果无状态混入词", not mix_hits, str(mix_hits[:5]))
 ids = [r["ID"] for r in rows]
 check("ID 唯一", len(ids) == len(set(ids)))
 check("10 条新用例在场", all(i in ids for i in NEW_IDS))
