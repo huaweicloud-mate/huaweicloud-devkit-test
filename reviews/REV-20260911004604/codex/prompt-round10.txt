@@ -1,0 +1,28 @@
+你是 huaweicloud-devkit 测试设计评审者（Codex role）。请对 Hermes 提交的 Round-10 整改做第 10 轮评审。
+
+【评审输入】
+- Round-10 整改通知（Hermes status.md）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\hermes\status.md
+- 上一轮你的评审（round-09）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-09-全量测试设计整改.md
+- 设计级矩阵真源（162 行）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases\design\用例矩阵-设计级.csv
+- 展开级矩阵真源（132 行 × 12 列结构化）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases\expanded\用例矩阵-展开级.csv
+- 新增追踪表（168 行）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases\tracing\需求-设计-证据追踪表.csv
+- 生成脚本：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases\design\gen_matrix.py（R10 修改）
+- 门禁脚本：verify_new.py / scan_gaps.py（同目录）
+- 闭环规范：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\docs\06-Hermes-Codex测试设计评审闭环.md
+
+【Round-10 整改内容（针对你 round-09 的 7 项 P1）】
+1. 追踪表已建：tracing/需求-设计-证据追踪表.csv，168 行（162 设计级 + 6 专项），12 列含 sourceAsset/requirementOrRisk/designCaseId/expandedCaseId/testLayer/clientOrOSScope/requiredEvidence/status/owner/gap
+2. 9 条新用例断言契约补强：阈值/错误码/副作用/清理/等待窗口/回滚/夹具（见 status.md §二）
+3. 展开规则结构化：类型|代表终端|证据要求|阻塞前提（124/162 行含结构化分隔符；存量显式规则保留）
+4. 展开级状态模型：12 列（status/blockedReason/requiredEvidence/observedAt 独立）；NR3 25 行 PASS13/BLOCKED9/FAIL1/SPEC1/NOT_RUN1；Linux 漂移已修正（D1-39/49/55 按 ITER-004 事实转 PASS）
+5. 审计脚本门禁化：verify_new.py 16 项检查非零退出码；scan_gaps 移除旧文案+门禁
+6. 真云/凭证隔离已入用例字段（一次性凭证/tctest- 标签/清理 owner/SIM 冻结）
+7. 环境类阻断项（D1-39 FAIL、Linux 补跑、macOS/CodeArtsSpace/PTY、4 项规格裁决）属外部依赖，本轮未闭合
+
+【评审要求】
+- 按闭环规范九类检查与放行门槛逐项核对。重点验证：追踪表是否机器可核对、9 条契约是否满足"禁止模糊断言"、展开级状态列是否消除漂移、门禁脚本是否真能阻断、结构化展开规则是否可审计。
+- 逐项回应 round-09 的 7 项 P1 是否闭合；未闭合的标明剩余工作。
+- 输出评审结论到文件：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-10-全量测试设计整改.md
+- 结论只能是 TEST_DESIGN_READY 或 REVIEW_CHANGES_REQUESTED 二选一；环境类 BLOCKED/规格 SPEC/FAIL 未闭合时不得给 TEST_DESIGN_READY。
+- 不修改 hermes/ 目录与 CSV 真源；你只写 codex/ 目录下 review-round-10 文件。
+- 完成后回复【评审完成】四个字。

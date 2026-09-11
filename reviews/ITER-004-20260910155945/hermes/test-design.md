@@ -2,7 +2,7 @@
 
 > 当前迭代：`ITER-004-20260910155945`
 > 状态：`HERMES_REVISION_READY`（由 Hermes 更新；**不得提前签署 `TEST_DESIGN_READY`**，需 Codex 复评）
-> 生成时间：2026-09-10T20:40:00+08:00（ISO 8601）｜更新：2026-09-10T20:40:00+08:00（第六轮+：Linux 实机补跑 testbot3 接入，Linux D1-39/49/55 转 PASS）
+> 生成时间：2026-09-10 20:40:00 ｜更新：2026-09-10 20:40:00（第六轮+：Linux 实机补跑 testbot3 接入，Linux D1-39/49/55 转 PASS）
 > 设计文档：`C:\Users\Administrator\devkit-test\hdk\docs\version-upgrade-design.md`
 > 被测项目：`C:\Users\Administrator\devkit-test\hdk`（huaweicloud/huaweicloud-devkit）
 > Codex 评审：`codex/review-round-01/02/03/04/05-版本升级提醒.md`
@@ -11,9 +11,9 @@
 
 | 项 | 值 |
 |---|---|
-| 正式版（旧版载体） | 1.1.2 @ `09a59b937eb3`（npm 发布 2026-09-09T11:03Z） |
-| next 线（未修复副本） | 1.1.3-next.2 @ `c6c0965f0bdf`（npm 发布 2026-09-10T01:22Z） |
-| dev 远端（观测） | `e2f4d2ada058`（2026-09-10T15:29+08:00） |
+| 正式版（旧版载体） | 1.1.2 @ `09a59b937eb3`（npm 发布 2026-09-09 11:03Z） |
+| next 线（未修复副本） | 1.1.3-next.2 @ `c6c0965f0bdf`（npm 发布 2026-09-10 01:22Z） |
+| dev 远端（观测） | `e2f4d2ada058`（2026-09-10 15:29） |
 | FIX(sim) 修复副本 | next.2 原码 + 3 处补丁，版本号 1.1.3 受控**非官方发布线**（仅证明修复方向） |
 | Node / npm | v22.23.2 / 10.9.8（本机已执行基线） |
 | OS / 架构 | Windows 10 / win32 x64（已执行）；Linux/macOS/ARM 为 BLOCKED 未执行路径 |
@@ -37,7 +37,7 @@
 
 - `hermes/candidate-matrix.csv`（候选，**39 行 × 16 列**）
 - `reviews/ITER-004-20260910155945/terminal-matrix.csv`（**评审确认后的顶层正式矩阵，内容与候选矩阵一致**）
-- 矩阵状态分布：**PASS 29 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED 5**（Linux-D1-52 升级链×1、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session NOT_RUN×1；Linux D1-39/49/55 已由 testbot3 实机补跑转 PASS，2026-09-10T20:34+08:00）
+- 矩阵状态分布：**PASS 29 / SPEC-MISMATCH 4 / FAIL 1 / BLOCKED 5**（Linux-D1-52 升级链×1、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session NOT_RUN×1；Linux D1-39/49/55 已由 testbot3 实机补跑转 PASS，2026-09-10 20:34）
 - **D1-55 证据分级**：remote transport 无 session 支持（协议探测无 `MCP-Session-Id`，源码确认 mcp-server-remote.mjs 无 session 状态绑定）→ 当前证据级别 = `PROCESS_SHARED_STATE`；`D1-55-session` = `BLOCKED(NOT_RUN)`；D1-55b 保持 `SPEC-MISMATCH` 不改写为 PASS。
 
 ## 四、执行证据索引

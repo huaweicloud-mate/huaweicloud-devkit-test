@@ -1,0 +1,313 @@
+import {
+  chmodSync,
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readlinkSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
+import { dirname, join } from 'node:path';
+import { homedir } from 'node:os';
+
+// Verify a credential file ended up with 0600. On Windows-mounted drives inside WSL
+// (drvfs/9p) chmod is silently ignored, so the file can be world-readable (0777).
+// Native Windows has no POSIX modes (statSync always reports 0666), so skip the check there.
+function ensurePrivateMode(path) {
+  if (process.platform === 'win32') return;
+  try {
+    chmodSync(path, 0o600);
+  } catch {}
+  try {
+    const mode = statSync(path).mode & 0o777;
+    if (mode !== 0o600) {
+      console.warn(
+        `\x1b[33m[WARN]\x1b[0m Could not set 0600 on ${path} (current mode ${mode.toString(8)}). Credentials may be readable by other users.`,
+      );
+      console.warn(`\x1b[33m       If running under WSL, move the credential home to the Linux filesystem:\x1b[0m`);
+      console.warn(`\x1b[33m         export HUAWEICLOUD_HOME=$HOME  (then re-run auth init)\x1b[0m`);
+      console.warn(
+        `\x1b[33m       Or skip file storage entirely with HW_ACCESS_KEY/HW_SECRET_KEY environment variables.\x1b[0m`,
+      );
+    }
+  } catch {}
+}
+
+function baseHome() {
+  return process.env.HUAWEICLOUD_HOME || homedir();
+}
+
+export function globalCredentialsPath() {
+  return join(baseHome(), '.config', 'huaweicloud', 'credentials.json');
+}
+
+export function obsConfigPath() {
+  // obsutil reads its config from a fixed location (~/.obsutilconfig), independent
+  // of HUAWEICLOUD_HOME. HCLOUD_OBS_CONFIG_PATH exists solely for hermetic test injection.
+  return process.env.HCLOUD_OBS_CONFIG_PATH || join(homedir(), '.obsutilconfig');
+}
+
+export function readGlobalCredentials() {
+  const path = globalCredentialsPath();
+  if (!existsSync(path)) return null;
+  try {
+    return JSON.parse(readFileSync(path, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+export function writeGlobalCredentials(credentials = {}) {
+  const path = globalCredentialsPath();
+  mkdirSync(dirname(path), { recursive: true });
+  const payload = {
+    ak: String(credentials.ak || ''),
+    sk: String(credentials.sk || ''),
+    securityToken: String(credentials.securityToken || ''),
+    region: String(credentials.region || ''),
+    ...(credentials.configuredBySession === undefined
+      ? {}
+      : { configuredBySession: Boolean(credentials.configuredBySession) }),
+  };
+  writeFileSync(path, JSON.stringify(payload, null, 2), { encoding: 'utf8', mode: 0o600 });
+  ensurePrivateMode(path);
+  return path;
+}
+
+export function setConfiguredBySession(flag) {
+  const stored = readGlobalCredentials();
+  const next = { ...(stored || {}), configuredBySession: Boolean(flag) };
+  writeGlobalCredentials(next);
+}
+
+export function writeObsConfig(credentials = {}) {
+  const region = String(credentials.region || '');
+  const ak = String(credentials.ak || '');
+  const sk = String(credentials.sk || '');
+  const securityToken = String(credentials.securityToken || '');
+  if (!region || !ak || !sk) {
+    throw new Error('region, ak, and sk are required to write OBS config');
+  }
+  const path = obsConfigPath();
+  const endpoint = credentials.endpoint || `https://obs.${region}.myhuaweicloud.com`;
+  // Flat key=value format (no [default] section) as written by KooCLI 7.x `hcloud OBS config`.
+  const content = `endpoint=${endpoint}\nak=${ak}\nsk=${sk}${securityToken ? `\ntoken=${securityToken}` : ''}\n`;
+  writeFileSync(path, content, { encoding: 'utf8', mode: 0o600 });
+  ensurePrivateMode(path);
+  return { path, endpoint };
+}
+
+export function resolveCredentials(options = {}) {
+  let ak = process.env.HW_ACCESS_KEY;
+  let sk = process.env.HW_SECRET_KEY;
+  let securityToken = process.env.HW_SECURITY_TOKEN;
+  let region = process.env.HW_REGION || process.env.HUAWEICLOUD_REGION || '';
+
+  const codeartsCreds = isCodeArtsContext() ? readCodeArtsCredentials() : null;
+  if (codeartsCreds) {
+    if (!ak && codeartsCreds.ak) ak = codeartsCreds.ak;
+    if (!sk && codeartsCreds.sk) sk = codeartsCreds.sk;
+    if (!region && codeartsCreds.region) region = codeartsCreds.region;
+  }
+
+  const stored = readGlobalCredentials();
+  if (stored) {
+    if (!ak && stored.ak) ak = stored.ak;
+    if (!sk && stored.sk) sk = stored.sk;
+    if (!securityToken && stored.securityToken) securityToken = stored.securityToken;
+    if (!region && stored.region) region = stored.region;
+  }
+
+  // R9: S1 written by `auth_switch persist` (configuredBySession) is the session's
+  // source of truth and wins over env-injected defaults. Plain S1 (`auth init`)
+  // still yields to env so devspace-style env injection keeps working.
+  if (stored && stored.configuredBySession === true && stored.ak && stored.sk) {
+    ak = stored.ak;
+    sk = stored.sk;
+    if (!securityToken) securityToken = stored.securityToken || '';
+    if (!region) region = stored.region || '';
+  }
+
+  // Sandbox/platform-injected temporary STS credentials (env vars carrying a
+  // security token) must not shadow the user's explicit permanent credentials
+  // from `auth init`. Prefer the stored file when both exist.
+  if (
+    process.env.HW_ACCESS_KEY &&
+    process.env.HW_SECRET_KEY &&
+    process.env.HW_SECURITY_TOKEN &&
+    stored &&
+    stored.ak &&
+    stored.sk
+  ) {
+    ak = stored.ak;
+    sk = stored.sk;
+    securityToken = stored.securityToken || '';
+    region = stored.region || region;
+  }
+
+  if (!ak || !sk) {
+    if (options.allowMissing) return null;
+    throw new Error(
+      'Huawei Cloud credentials are not configured. Run "npx huaweicloud-devkit auth init" or set HW_ACCESS_KEY/HW_SECRET_KEY.',
+    );
+  }
+
+  return { ak, sk, securityToken, region };
+}
+
+let _parentCwd = undefined;
+
+export function getParentCwd() {
+  if (_parentCwd !== undefined) return _parentCwd;
+  try {
+    _parentCwd = readlinkSync(`/proc/${process.ppid}/cwd`);
+    return _parentCwd;
+  } catch {
+    _parentCwd = null;
+    return null;
+  }
+}
+
+function isCodeArtsContext() {
+  return (
+    existsSync(join(process.cwd(), '.codeartsdoer')) ||
+    existsSync(join(homedir(), '.codeartsdoer')) ||
+    existsSync(join(homedir(), '.codeartswork'))
+  );
+}
+
+export function readCodeArtsCredentials() {
+  const parentCwd = getParentCwd();
+  const searchDirs = [process.env.CODEARTS_PROJECT_DIR, parentCwd, process.cwd(), homedir()];
+
+  for (const dir of searchDirs) {
+    if (!dir) continue;
+    const path = join(dir, '.codeartsdoer', 'mcp', 'mcp_settings.json');
+    try {
+      if (!existsSync(path)) continue;
+      const config = JSON.parse(readFileSync(path, 'utf8'));
+      const server = config?.mcpServers?.['huaweicloud-devkit'];
+      if (!server?.env) continue;
+
+      const ak = server.env.HW_ACCESS_KEY;
+      const sk = server.env.HW_SECRET_KEY;
+      if (ak && sk) {
+        return {
+          ak,
+          sk,
+          securityToken: server.env.HW_SECURITY_TOKEN || '',
+          region: server.env.HW_REGION || server.env.HUAWEICLOUD_REGION || '',
+        };
+      }
+    } catch {
+      // mcp_settings.json missing or invalid — skip
+    }
+  }
+
+  // CodeArts Work — user-level only
+  {
+    const path = join(homedir(), '.codeartswork', 'mcp', 'mcp_settings.json');
+    try {
+      if (existsSync(path)) {
+        const config = JSON.parse(readFileSync(path, 'utf8'));
+        const server = config?.mcp?.['huaweicloud-devkit'];
+        if (server?.environment) {
+          const ak = server.environment.HW_ACCESS_KEY;
+          const sk = server.environment.HW_SECRET_KEY;
+          if (ak && sk) {
+            return {
+              ak,
+              sk,
+              securityToken: server.environment.HW_SECURITY_TOKEN || '',
+              region: server.environment.HW_REGION || server.environment.HUAWEICLOUD_REGION || '',
+            };
+          }
+        }
+      }
+    } catch {
+      // mcp_settings.json missing or invalid — skip
+    }
+  }
+
+  return null;
+}
+
+let runtimeCredentials = null;
+
+export function setRuntimeCredentials(ak, sk, securityToken, region) {
+  runtimeCredentials = { ak, sk, securityToken: securityToken || '', region: region || '' };
+}
+
+export function clearRuntimeCredentials() {
+  runtimeCredentials = null;
+}
+
+export function hasRuntimeCredentials() {
+  return runtimeCredentials !== null;
+}
+
+export function resolveCredentialsWithRuntime(options = {}) {
+  if (runtimeCredentials) {
+    return {
+      ak: runtimeCredentials.ak,
+      sk: runtimeCredentials.sk,
+      securityToken: runtimeCredentials.securityToken,
+      region: runtimeCredentials.region,
+    };
+  }
+
+  return resolveCredentials(options);
+}
+
+export function lastSyncPath() {
+  return join(baseHome(), '.config', 'huaweicloud', '.last_sync');
+}
+
+export function readLastSync() {
+  const path = lastSyncPath();
+  if (!existsSync(path)) return null;
+  try {
+    return JSON.parse(readFileSync(path, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+export function writeLastSync(metadata = {}) {
+  const path = lastSyncPath();
+  mkdirSync(dirname(path), { recursive: true });
+  const payload = {
+    ts: Date.now(),
+    ...(metadata.kooCliProfile ? { kooCliProfile: String(metadata.kooCliProfile) } : {}),
+    ...(metadata.s1Fingerprint ? { s1Fingerprint: String(metadata.s1Fingerprint) } : {}),
+  };
+  writeFileSync(path, JSON.stringify(payload), { encoding: 'utf8', mode: 0o600 });
+  ensurePrivateMode(path);
+}
+
+export function backupGlobalCredentials() {
+  const path = globalCredentialsPath();
+  if (!existsSync(path)) return null;
+  const bakPath = `${path}.bak`;
+  try {
+    copyFileSync(path, bakPath);
+    ensurePrivateMode(bakPath);
+    return bakPath;
+  } catch {
+    return null;
+  }
+}
+
+export function restoreGlobalCredentialsBackup() {
+  const path = globalCredentialsPath();
+  const bakPath = `${path}.bak`;
+  if (!existsSync(bakPath)) return false;
+  try {
+    copyFileSync(bakPath, path);
+    ensurePrivateMode(path);
+    return true;
+  } catch {
+    return false;
+  }
+}

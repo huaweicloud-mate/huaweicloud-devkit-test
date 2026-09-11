@@ -4,7 +4,7 @@
 > 默认项目目录：`C:\Users\Administrator\devkit-test`  
 > 协作角色：Hermes 负责测试设计，Codex 负责编排与评审，用户只处理需要产品决策或外部授权的事项。
 >
-> 时间格式：文档正文使用 ISO 8601 时间戳 `YYYY-MM-DDTHH:mm:ss+08:00`；Windows 文件名和目录使用紧凑时间戳 `YYYYMMDDHHmmss`。历史归档若只有日期，保留原始事实，不补造时分秒。
+> 时间格式：文档正文使用北京时间时间戳 `YYYY-MM-DD HH:mm:ss`；Windows 文件名和目录使用紧凑时间戳 `YYYYMMDDHHmmss`。历史归档若只有日期，保留原始事实，不补造时分秒。
 
 ## 1. 目标
 

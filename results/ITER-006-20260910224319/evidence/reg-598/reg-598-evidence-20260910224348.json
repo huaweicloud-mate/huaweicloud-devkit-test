@@ -1,0 +1,491 @@
+{
+  "summary": {
+    "issue": "huaweicloud/huaweicloud-devkit#598",
+    "env": "http://devkit.topxtopx.com/rest/developer/server/hdkitservice/",
+    "run_at": "2026-09-10 22:44:05",
+    "total": 20,
+    "passed": 20,
+    "failed": 0,
+    "failed_items": []
+  },
+  "checks": [
+    {
+      "label": "DEF-01 首请求带升级字段",
+      "ok": true
+    },
+    {
+      "label": "DEF-01 第2~5次被抑制",
+      "ok": true
+    },
+    {
+      "label": "DEF-02 cv=1.1.2 200且无升级字段",
+      "ok": true
+    },
+    {
+      "label": "DEF-02 cv=1.1.3 200且无升级字段",
+      "ok": true
+    },
+    {
+      "label": "DEF-02 cv=1.2.0 200且无升级字段",
+      "ok": true
+    },
+    {
+      "label": "DEF-03 无头 /dashboard 非409",
+      "ok": true
+    },
+    {
+      "label": "DEF-03 带头cv=1.9.9 /dashboard 非409",
+      "ok": true
+    },
+    {
+      "label": "DEF-03 无头 /dashboard/api-keys 非409",
+      "ok": true
+    },
+    {
+      "label": "T04 无头->409 HDKIT_VERSION_TOO_OLD",
+      "ok": true
+    },
+    {
+      "label": "T04 cv=0.9.9(<min)->409",
+      "ok": true
+    },
+    {
+      "label": "T04 cv=1.0.0(=min) 放行",
+      "ok": true
+    },
+    {
+      "label": "T04 cv=1.0.1(>min) 放行",
+      "ok": true
+    },
+    {
+      "label": "T05 非法头cv=1.0->409",
+      "ok": true
+    },
+    {
+      "label": "T05 非法头cv=abc->409",
+      "ok": true
+    },
+    {
+      "label": "T05 非法头cv=null->409",
+      "ok": true
+    },
+    {
+      "label": "T06 无头 /login 非409",
+      "ok": true
+    },
+    {
+      "label": "T06 无头 POST /telemetry/events 非409",
+      "ok": true
+    },
+    {
+      "label": "T07 409含clientVersion/minVersion/升级命令",
+      "ok": true
+    },
+    {
+      "label": "T08 200含4字段且updateAvailable=true",
+      "ok": true
+    },
+    {
+      "label": "T09 无头3连均409",
+      "ok": true
+    }
+  ],
+  "requests": [
+    {
+      "label": "DEF01-1",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.0.5",
+      "ak": "bb-rl-851144c6",
+      "status": 200,
+      "ms": 160,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id",
+        "latestStable": "1.1.2",
+        "latestNext": "1.1.3-next.0",
+        "updateAvailable": true,
+        "upgradeHint": "检测到 huaweicloud-devkit 新版本 1.1.2，建议升级"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\",\"latestStable\":\"1.1.2\",\"latestNext\":\"1.1.3-next.0\",\"updateAvailable\":true,\"upgradeHint\":\"检测到 huaweicloud-devkit 新版本 1.1.2，建议升级\"}"
+    },
+    {
+      "label": "DEF01-2",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.0.5",
+      "ak": "bb-rl-851144c6",
+      "status": 200,
+      "ms": 102,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\"}"
+    },
+    {
+      "label": "DEF01-3",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.0.5",
+      "ak": "bb-rl-851144c6",
+      "status": 200,
+      "ms": 104,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\"}"
+    },
+    {
+      "label": "DEF01-4",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.0.5",
+      "ak": "bb-rl-851144c6",
+      "status": 200,
+      "ms": 91,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\"}"
+    },
+    {
+      "label": "DEF01-5",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.0.5",
+      "ak": "bb-rl-851144c6",
+      "status": 200,
+      "ms": 128,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\"}"
+    },
+    {
+      "label": "DEF02-cv1.1.2",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.1.2",
+      "ak": "bb-adv-851144c6-112",
+      "status": 200,
+      "ms": 115,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\"}"
+    },
+    {
+      "label": "DEF02-cv1.1.3",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.1.3",
+      "ak": "bb-adv-851144c6-113",
+      "status": 200,
+      "ms": 117,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\"}"
+    },
+    {
+      "label": "DEF02-cv1.2.0",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.2.0",
+      "ak": "bb-adv-851144c6-120",
+      "status": 200,
+      "ms": 92,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\"}"
+    },
+    {
+      "label": "DEF03-nohdr",
+      "path": "dashboard",
+      "method": "GET",
+      "cv": null,
+      "ak": null,
+      "status": 401,
+      "ms": 95,
+      "json": {
+        "error": "未登录"
+      },
+      "raw": "{\"error\":\"未登录\"}"
+    },
+    {
+      "label": "DEF03-hdr",
+      "path": "dashboard",
+      "method": "GET",
+      "cv": "1.9.9",
+      "ak": "bb-adv-851144c6",
+      "status": 401,
+      "ms": 108,
+      "json": {
+        "error": "未登录"
+      },
+      "raw": "{\"error\":\"未登录\"}"
+    },
+    {
+      "label": "DEF03-apikeys",
+      "path": "dashboard/api-keys",
+      "method": "GET",
+      "cv": null,
+      "ak": null,
+      "status": 401,
+      "ms": 91,
+      "json": {
+        "error": "未登录"
+      },
+      "raw": "{\"error\":\"未登录\"}"
+    },
+    {
+      "label": "T04-nohdr",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": null,
+      "ak": null,
+      "status": 409,
+      "ms": 96,
+      "json": {
+        "code": "HDKIT_VERSION_TOO_OLD",
+        "message": "插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话",
+        "traceId": null,
+        "clientVersion": "<1.1.1",
+        "minVersion": "1.0.0"
+      },
+      "raw": "{\"code\":\"HDKIT_VERSION_TOO_OLD\",\"message\":\"插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话\",\"traceId\":null,\"clientVersion\":\"<1.1.1\",\"minVersion\":\"1.0.0\"}"
+    },
+    {
+      "label": "T04-099",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "0.9.9",
+      "ak": "bb-soft-851144c6",
+      "status": 409,
+      "ms": 87,
+      "json": {
+        "code": "HDKIT_VERSION_TOO_OLD",
+        "message": "插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话",
+        "traceId": null,
+        "clientVersion": "0.9.9",
+        "minVersion": "1.0.0"
+      },
+      "raw": "{\"code\":\"HDKIT_VERSION_TOO_OLD\",\"message\":\"插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话\",\"traceId\":null,\"clientVersion\":\"0.9.9\",\"minVersion\":\"1.0.0\"}"
+    },
+    {
+      "label": "T04-100",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.0.0",
+      "ak": "bb-soft-851144c6",
+      "status": 200,
+      "ms": 132,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id",
+        "latestStable": "1.1.2",
+        "latestNext": "1.1.3-next.0",
+        "updateAvailable": true,
+        "upgradeHint": "检测到 huaweicloud-devkit 新版本 1.1.2，建议升级"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\",\"latestStable\":\"1.1.2\",\"latestNext\":\"1.1.3-next.0\",\"updateAvailable\":true,\"upgradeHint\":\"检测到 huaweicloud-devkit 新版本 1.1.2，建议升级\"}"
+    },
+    {
+      "label": "T04-101",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.0.1",
+      "ak": "bb-soft-851144c6",
+      "status": 200,
+      "ms": 95,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id",
+        "latestStable": "1.1.2",
+        "latestNext": "1.1.3-next.0",
+        "updateAvailable": true,
+        "upgradeHint": "检测到 huaweicloud-devkit 新版本 1.1.2，建议升级"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\",\"latestStable\":\"1.1.2\",\"latestNext\":\"1.1.3-next.0\",\"updateAvailable\":true,\"upgradeHint\":\"检测到 huaweicloud-devkit 新版本 1.1.2，建议升级\"}"
+    },
+    {
+      "label": "T05-1.0",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.0",
+      "ak": "bb-soft-851144c6",
+      "status": 409,
+      "ms": 101,
+      "json": {
+        "code": "HDKIT_VERSION_TOO_OLD",
+        "message": "插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话",
+        "traceId": null,
+        "clientVersion": "<1.1.1",
+        "minVersion": "1.0.0"
+      },
+      "raw": "{\"code\":\"HDKIT_VERSION_TOO_OLD\",\"message\":\"插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话\",\"traceId\":null,\"clientVersion\":\"<1.1.1\",\"minVersion\":\"1.0.0\"}"
+    },
+    {
+      "label": "T05-abc",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "abc",
+      "ak": "bb-soft-851144c6",
+      "status": 409,
+      "ms": 103,
+      "json": {
+        "code": "HDKIT_VERSION_TOO_OLD",
+        "message": "插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话",
+        "traceId": null,
+        "clientVersion": "<1.1.1",
+        "minVersion": "1.0.0"
+      },
+      "raw": "{\"code\":\"HDKIT_VERSION_TOO_OLD\",\"message\":\"插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话\",\"traceId\":null,\"clientVersion\":\"<1.1.1\",\"minVersion\":\"1.0.0\"}"
+    },
+    {
+      "label": "T05-null",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "null",
+      "ak": "bb-soft-851144c6",
+      "status": 409,
+      "ms": 91,
+      "json": {
+        "code": "HDKIT_VERSION_TOO_OLD",
+        "message": "插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话",
+        "traceId": null,
+        "clientVersion": "<1.1.1",
+        "minVersion": "1.0.0"
+      },
+      "raw": "{\"code\":\"HDKIT_VERSION_TOO_OLD\",\"message\":\"插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话\",\"traceId\":null,\"clientVersion\":\"<1.1.1\",\"minVersion\":\"1.0.0\"}"
+    },
+    {
+      "label": "T06-login",
+      "path": "login",
+      "method": "GET",
+      "cv": null,
+      "ak": null,
+      "status": 500,
+      "ms": 109,
+      "json": {
+        "code": "HDKIT_INTERNAL",
+        "message": "服务内部错误",
+        "traceId": "d479dc54b7d240c8a931dd1bb8dbb425",
+        "clientVersion": null,
+        "minVersion": null
+      },
+      "raw": "{\"code\":\"HDKIT_INTERNAL\",\"message\":\"服务内部错误\",\"traceId\":\"d479dc54b7d240c8a931dd1bb8dbb425\",\"clientVersion\":null,\"minVersion\":null}"
+    },
+    {
+      "label": "T06-telemetry",
+      "path": "telemetry/events",
+      "method": "POST",
+      "cv": null,
+      "ak": null,
+      "status": 500,
+      "ms": 110,
+      "json": {
+        "code": "HDKIT_INTERNAL",
+        "message": "服务内部错误",
+        "traceId": "e268644c3bc147db9c8f31aa10e9ec25",
+        "clientVersion": null,
+        "minVersion": null
+      },
+      "raw": "{\"code\":\"HDKIT_INTERNAL\",\"message\":\"服务内部错误\",\"traceId\":\"e268644c3bc147db9c8f31aa10e9ec25\",\"clientVersion\":null,\"minVersion\":null}"
+    },
+    {
+      "label": "T07",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": null,
+      "ak": null,
+      "status": 409,
+      "ms": 92,
+      "json": {
+        "code": "HDKIT_VERSION_TOO_OLD",
+        "message": "插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话",
+        "traceId": null,
+        "clientVersion": "<1.1.1",
+        "minVersion": "1.0.0"
+      },
+      "raw": "{\"code\":\"HDKIT_VERSION_TOO_OLD\",\"message\":\"插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话\",\"traceId\":null,\"clientVersion\":\"<1.1.1\",\"minVersion\":\"1.0.0\"}"
+    },
+    {
+      "label": "T08",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": "1.0.5",
+      "ak": "bb-soft-851144c6",
+      "status": 200,
+      "ms": 86,
+      "json": {
+        "claimed": false,
+        "message": "测试环境需提供 domain_id",
+        "latestStable": "1.1.2",
+        "latestNext": "1.1.3-next.0",
+        "updateAvailable": true,
+        "upgradeHint": "检测到 huaweicloud-devkit 新版本 1.1.2，建议升级"
+      },
+      "raw": "{\"claimed\":false,\"message\":\"测试环境需提供 domain_id\",\"latestStable\":\"1.1.2\",\"latestNext\":\"1.1.3-next.0\",\"updateAvailable\":true,\"upgradeHint\":\"检测到 huaweicloud-devkit 新版本 1.1.2，建议升级\"}"
+    },
+    {
+      "label": "T09-1",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": null,
+      "ak": "bb-iso-851144c6",
+      "status": 409,
+      "ms": 88,
+      "json": {
+        "code": "HDKIT_VERSION_TOO_OLD",
+        "message": "插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话",
+        "traceId": null,
+        "clientVersion": "<1.1.1",
+        "minVersion": "1.0.0"
+      },
+      "raw": "{\"code\":\"HDKIT_VERSION_TOO_OLD\",\"message\":\"插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话\",\"traceId\":null,\"clientVersion\":\"<1.1.1\",\"minVersion\":\"1.0.0\"}"
+    },
+    {
+      "label": "T09-2",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": null,
+      "ak": "bb-iso-851144c6",
+      "status": 409,
+      "ms": 90,
+      "json": {
+        "code": "HDKIT_VERSION_TOO_OLD",
+        "message": "插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话",
+        "traceId": null,
+        "clientVersion": "<1.1.1",
+        "minVersion": "1.0.0"
+      },
+      "raw": "{\"code\":\"HDKIT_VERSION_TOO_OLD\",\"message\":\"插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话\",\"traceId\":null,\"clientVersion\":\"<1.1.1\",\"minVersion\":\"1.0.0\"}"
+    },
+    {
+      "label": "T09-3",
+      "path": "voucher/status",
+      "method": "GET",
+      "cv": null,
+      "ak": "bb-iso-851144c6",
+      "status": 409,
+      "ms": 106,
+      "json": {
+        "code": "HDKIT_VERSION_TOO_OLD",
+        "message": "插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话",
+        "traceId": null,
+        "clientVersion": "<1.1.1",
+        "minVersion": "1.0.0"
+      },
+      "raw": "{\"code\":\"HDKIT_VERSION_TOO_OLD\",\"message\":\"插件版本过旧，请升级至 1.0.0 及以上。请升级插件：npx --yes huaweicloud-devkit@latest update --target <agent> 后重启会话\",\"traceId\":null,\"clientVersion\":\"<1.1.1\",\"minVersion\":\"1.0.0\"}"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+你是 huaweicloud-devkit 测试设计评审者（Codex role）。请对 Hermes 提交的 Round-12 整改做第 12 轮评审。
+
+【评审输入】
+- Round-12 整改通知：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\hermes\status.md
+- 上一轮你的评审（round-11）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-11-全量测试设计整改.md
+- 设计级矩阵（163 行）：test-cases\design\用例矩阵-设计级.csv
+- 展开级矩阵（132×12）：test-cases\expanded\用例矩阵-展开级.csv
+- 追踪表（169×10）：test-cases\tracing\需求-设计-证据追踪表.csv
+- 门禁/生成脚本：test-cases\design\verify_new.py（25 项）/ scan_gaps.py / gen_tracing.py / gen_matrix.py
+- 闭环规范：docs\06-Hermes-Codex测试设计评审闭环.md
+
+【Round-12 整改内容（逐项回应 round-11 剩余项）】
+1. 契约唯一断言收敛：D1-57 EREPO_BAD_TARBALL（删"或自定义同码"）；D3-C7 Ecs.0021/Ecs.0200（删"或 message 含/二选一"）；D3-C8 Ecs.0038（删"或 message"）；D3-C9 APIGW.0101/EVS.5400（删"或 message 含 not exist"）；D9-9 -32000 唯一（取消分支按 capabilities 实测）。新用例 0 开放断言词。
+2. D1-58 新增：通用 MCP 白名单接入（回填 ITER-005 P2-1~6，正式 ID 替代"待回填"gap），5 断言（.bak/坏JSON零写入/同key跳过/未命中片段）。
+3. 追踪门禁增强（verify_new 25 项）：expandedCaseId 外键校验、"由EXP-矩阵覆盖"载体标注豁免、设计→展开映射无缺口（空值才阻断）、已执行行 evidence 非空、追踪表/展开级状态一致性（追踪表 PASS 但展开级含 FAIL/SPEC 则阻断）。
+4. 追踪表 169 行：48 行"由EXP-D5/D7矩阵覆盖"载体标注（安装/OS 类设计级用例的执行载体=既有 EXP 矩阵，机器可核对）。
+
+【评审要求】
+- 按闭环规范九类检查与放行门槛逐项核对。重点验证：①5 条契约是否真正收敛唯一断言（执行 grep 检查"或/同码/二选一"是否残留）②D1-58 回填是否完整（追踪表与外键）③追踪门禁是否真能阻断（跑 verify_new 应 exit 0）④设计→展开映射标注是否合理不破坏外键。
+- 逐项回应 round-11 的 7 项剩余项；标明哪些闭合、哪些仍依赖外部。
+- 执行门禁脚本实际验证。
+- 输出评审结论到：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-12-全量测试设计整改.md
+- 结论只能 TEST_DESIGN_READY 或 REVIEW_CHANGES_REQUESTED 二选一；环境类 BLOCKED/FAIL/SPEC 未闭合时不得给 TEST_DESIGN_READY。
+- 不修改 hermes/ 与 CSV 真源；只写 codex/ 下 review-round-12 文件。
+- 完成后回复【评审完成】四个字。

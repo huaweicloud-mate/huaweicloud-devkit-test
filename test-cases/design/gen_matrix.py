@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
-"""生成 huaweicloud-devkit 测试用例矩阵母版（v1.5 落地物）
-设计级 153 条（138 既有 + 15 条版本升级评审补充：D1-41~55）
-+ 展开级矩阵（D5 客户端 70 + D3-C4 服务 22 + D10 评测集 15）= 107 条
+"""生成 huaweicloud-devkit 测试用例矩阵母版（v1.5 落地物 + 2026-09-11 全量评审补充）
+设计级 162 条（138 既有 + 15 条版本升级评审补充 D1-41~55 + 9 条全量评审补充 D1-56/57 D2-21 D3-C7~9 D4-24 D6-8 D9-9）
++ 展开级矩阵（D5 客户端 70 + D3-C4 服务 22 + D10 评测集 15 + NR3 终端展开 25）= 132 条
 输出 UTF-8-SIG CSV，Excel 直接打开不乱码。
+2026-09-11 评审补齐内容：
+  - D1-56/57: 安装中断恢复 + 升级坏版本回滚（异常/恢复场景缺口）
+  - D2-21: 凭证轮换后 auth_status 一致性（凭证状态维度缺口）
+  - D3-C7~9: 跨区域/区域不可用引导 + 企业项目参数 + 资源不存在/冻结状态（区域/项目/资源状态维度缺口）
+  - D4-24: 确认流令牌过期与重复确认（审批流边界缺口）
+  - D6-8: MCP 工具调用超时（超时场景缺口：原有仅 D6-6 弱网）
+  - D9-9: tools/call 超时协议语义（协议层超时缺口）
+  - 展开规则默认值推导：115 条空展开规则按维度填默认（COMMON/CLIENT_MATRIX/OS_MATRIX 等）
 """
 import csv
 import os
@@ -40,20 +48,136 @@ BATCH_TS = [
     (_in_range(1, 15), "2026-09-05"),      # v1.5 初始规划批（D1-1~15）
     (_in_range(26, 40), "2026-09-10"),      # NR3 存量用户版本升级提醒批（D1-26~40）
     (_in_range(41, 55), "2026-09-10"),      # NR3 用例评审补充批（D1-41~55）
+    (_in_range(56, 57), "2026-09-11"),      # 2026-09-11 全量评审补充批（D1-56/57 安装中断/升级回滚）
+    (_in_range(58, 58), "2026-09-11"),      # R12-3: D1-58 通用 MCP 白名单回填（ITER-005 P2）
     (_d2_range(1, 7), "2026-09-05"),        # v1.5 D2 既有（D2-1~7）
     (_d2_range(8, 20), "2026-09-07"),       # NR2 批（D2-8 credentials 回归 + D2-9~20 AK/SK v4）
+    (_d2_range(21, 21), "2026-09-11"),      # 2026-09-11 全量评审补充批（D2-21 AK/SK 轮换感知）
 ]
+
+# 2026-09-11 全量评审补充：明确不在 LEGACY 前缀默认时间戳内的新 ID（返回生成时刻）
+NEW_REVIEW_IDS_20260911 = {
+    "D1-56", "D1-57", "D1-58", "D2-21", "D3-C7", "D3-C8", "D3-C9", "D4-24", "D6-8", "D9-9",
+}
 
 # 存量 v1.5 其余维度（D3~D10 全区间）——先于未知 ID 判定
 LEGACY_PREFIXES = ("D3-", "D4-", "D5-", "D6-", "D7-", "D8-", "D9-", "D10-")
 
 def gen_ts(rid):
+    if rid in NEW_REVIEW_IDS_20260911:
+        return "2026-09-11"            # 2026-09-11 全量评审补充：固定日期（可溯源 REV-20260911004604）
     for pred, ts in BATCH_TS:
         if pred(rid):
             return ts
     if rid.startswith(LEGACY_PREFIXES):
         return "2026-09-05"   # 存量 v1.5 维度
     return NOW_STR            # 新增用例：生成时刻
+
+# ============ 展开规则默认推导（2026-09-11 评审补齐；R10 2026-09-11 结构化） ============
+# 结构化格式：`<类型>|<代表终端>|<证据要求>|<阻塞/前提>`
+# 类型 ∈ COMMON / CLIENT_MATRIX / OS_MATRIX / AGENT_E2E / CROSS_PROCESS（闭环规范分类）；
+# 代表终端与证据要求按 §2.6 执行分层（客户端相关性）推导；已有显式规则保留原值。
+# 注意：默认规则只是**生成输入**，逐用例的最终代表终端/证据/阻塞须在执行计划或追踪表中确认（Codex round-09 要求）。
+EXPAND_DEFAULT = {
+    "D1安装": "OS_MATRIX|<代表: Windows/Linux>|<证据: 安装落点+重启生效+卸载残留>|<阻塞: 无>",
+    "D2认证": "COMMON|<代表: Hermes 或 OpenCode>|<证据: 三端指纹/状态字段>|<阻塞: 需真云凭证>",
+    "D3功能": "COMMON|<代表: Hermes>|<证据: 工具返回+归零验证>|<阻塞: 按用例需真云>",
+    "D4安全": "COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: hook拦截结果>|<阻塞: 需hook-capable客户端>",
+    "D5客户端": "CLIENT_MATRIX|<代表: 逐客户端 10+>|<证据: 安装/加载/重启>|<阻塞: 长尾客户端环境>",
+    "D6性能": "COMMON|<代表: Windows x64 + Node22>|<证据: 采样统计 p95>|<阻塞: 需标准环境>",
+    "D7兼容": "OS_MATRIX|<代表: Windows/Linux/macOS × Node22/24>|<证据: 安装冒烟>|<阻塞: macOS 缺环境>",
+    "D8质量": "COMMON|<代表: 静态评审人 测试经理>|<证据: 评审记录+链接>|<阻塞: 无>",
+    "D9协议": "COMMON|<代表: MCP Inspector + Hermes>|<证据: 协议报文>|<阻塞: 无>",
+    "D10评测": "CLIENT_MATRIX|<代表: Hermes/Codex/OpenCode>|<证据: 评测集结果+模型参数>|<阻塞: 评测预算>",
+}
+
+# ============ R11 展开规则规范化（Codex round-10 要求：162 行统一四段结构） ============
+# 四段格式：`<枚举类型>|<代表终端/范围>|<证据要求>|<阻塞/前提>`
+# 类型限定五枚举（COMMON/CLIENT_MATRIX/OS_MATRIX/AGENT_E2E/CROSS_PROCESS），真云类归入 COMMON 并用代表终端标注。
+# 存量旧式单段规则（38 条）的显式映射；"真云+代表客户端1|COMMON|..." 双首段（23 条）自动合并。
+# R11: 第 2 段统一 `<代表: ...>` 前缀（Codex 要求代表终端字段可解析）
+OVERRIDE_EXPAND = {
+    # D1 安装/生命周期：OS_MATRIX 或 CLIENT_MATRIX
+    "D1-1": "CLIENT_MATRIX|<代表: 逐客户端 10+>|<证据: 各客户端安装/重启/工具可用>|<阻塞: 需各客户端环境>",
+    "D1-5": "OS_MATRIX|<代表: Windows 重点>|<证据: 卸载残留扫描(config/plugins/npx)>|<阻塞: Windows 文件锁场景>",
+    "D1-9": "CLIENT_MATRIX|<代表: 逐客户端 10+>|<证据: 重启前后行为对比>|<阻塞: 需各客户端环境>",
+    "D1-10": "CLIENT_MATRIX|<代表: 全客户端+Windows>|<证据: 清理归零验证>|<阻塞: Windows 专属验证>",
+    "D1-13": "OS_MATRIX|<代表: Windows 专项>|<证据: 文件锁冲突处理>|<阻塞: 需构造文件锁>",
+    "D1-26": "COMMON|<代表: MCP Inspector+进程>|<证据: tools/list 两工具注册+schema>|<阻塞: 无>",
+    "D1-41": "COMMON|<代表: 隔离进程>|<证据: MCP 四态返回契约>|<阻塞: 隔离 HOME>",
+    "D1-42": "COMMON|<代表: 隔离 HOME+CROSS_PROCESS>|<证据: skip 文件字段+重启复查>|<阻塞: 隔离 HOME>",
+    "D1-43": "COMMON|<代表: 隔离 HOME>|<证据: dismiss 边界+失败语义>|<阻塞: 可控 registry>",
+    "D1-44": "COMMON|<代表: 时间注入>|<证据: 冷却边界矩阵>|<阻塞: 可注入时钟>",
+    "D1-45": "COMMON|<代表: 隔离进程+预热竞态>|<证据: 兜底一次性消费时序>|<阻塞: 双时序注入>",
+    "D1-46": "COMMON|<代表: 时间与函数注入>|<证据: TTL/节流/inflight/恢复>|<阻塞: 可注入时钟>",
+    "D1-47": "COMMON|<代表: 隔离进程>|<证据: 缓存与当前版本解耦>|<阻塞: 可控 dist-tags>",
+    "D1-48": "CROSS_PROCESS|<代表: 双 HOME 双进程>|<证据: skip 状态隔离+持久化>|<阻塞: 隔离 HOME>",
+    "D1-49": "COMMON|<代表: 隔离进程>|<证据: upgrade handler 参数校验>|<阻塞: 可控 registry>",
+    "D1-50": "COMMON|<代表: 命令 mock>|<证据: upgrade 命令语义>|<阻塞: spawn 记录器>",
+    "D1-51": "COMMON|<代表: 隔离 HOME>|<证据: 失败恢复+副作用>|<阻塞: 注入失败环境>",
+    "D1-52": "CLIENT_MATRIX|<代表: 一次性环境 OpenCode+Hermes>|<证据: 真实升级+重启生效>|<阻塞: 一次性临时环境>",
+    "D1-53": "COMMON|<代表: registry 夹具>|<证据: 镜像滞后夹具矩阵>|<阻塞: 受控 fixture>",
+    "D1-54": "AGENT_E2E|<代表: 真实客户端 Hermes>|<证据: 会话级用户流>|<阻塞: 需可交互模型会话>",
+    "D1-55": "CROSS_PROCESS|<代表: 并行进程>|<证据: 会话隔离/进程级观测>|<阻塞: remote session 未支持>",
+    # D2
+    "D2-20": "COMMON|<代表: Win/Linux 真机>|<证据: HUAWEICLOUD_HOME S2 映射>|<阻塞: 需 WSL/目录重定向>",
+    # D3
+    "D3-C1": "COMMON|<代表: 真云 ECS 贵资源>|<证据: 生命周期 E2E+归零>|<阻塞: 需参考 ECS+预算>",
+    "D3-C3": "COMMON|<代表: 沙箱 DevStation>|<证据: 部署 URL+会话关闭>|<阻塞: 时间窗口≤8h>",
+    "D3-C4": "CLIENT_MATRIX|<代表: 22 服务矩阵>|<证据: 逐服务只读规划>|<阻塞: 高危服务轻量创建>",
+    # D4
+    "D4-11": "COMMON|<代表: 4 注入点>|<证据: 注入 payload 拒绝>|<阻塞: 构造注入响应>",
+    "D4-13": "COMMON|<代表: 只读凭证全量>|<证据: 最小权限通过率>|<阻塞: 需只读 IAM AK/SK>",
+    "D4-18": "CLIENT_MATRIX|<代表: 安全基线 Hermes+OpenCode>|<证据: 确认/拒绝路径>|<阻塞: 真云写操作>",
+    "D4-19": "CLIENT_MATRIX|<代表: 安全基线 Hermes+OpenCode>|<证据: 确认流预检拦截>|<阻塞: 高危操作构造>",
+    "D4-23": "CLIENT_MATRIX|<代表: 逐客户端 11 目标>|<证据: agent-rules 注入生效>|<阻塞: 逐个安装目标>",
+    # D5
+    "D5-1": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 清单发现加载>|<阻塞: 需各客户端>",
+    "D5-2": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 安装落点与 README 对照>|<阻塞: 需各客户端>",
+    "D5-3": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: tools/list 36 工具枚举>|<阻塞: 需各客户端>",
+    "D5-4": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: hook/非hook 降级路径>|<阻塞: 需各客户端>",
+    "D5-5": "CLIENT_MATRIX|<代表: CodeArts 重点>|<证据: 沙箱模式 KooCLI 阻断+恢复>|<阻塞: 需 CodeArts 客户端>",
+    "D5-6": "OS_MATRIX|<代表: Windows 专项>|<证据: config 完整性/文件锁/SDK>|<阻塞: Windows 客户端>",
+    "D5-7": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 重启生效一致性>|<阻塞: 需各客户端>",
+    # D7
+    "D7-3": "OS_MATRIX|<代表: Windows 专项>|<证据: npm test 失败面+人工补测>|<阻塞: Windows better-sqlite3>",
+}
+
+ENUM_TYPES = ("COMMON", "CLIENT_MATRIX", "OS_MATRIX", "AGENT_E2E", "CROSS_PROCESS")
+
+def normalize_expand(rid, rule, dim):
+    """将任意展开规则规范化为四段结构（Codex round-10 要求）。
+    处理优先级：OVERRIDE 精确映射 > 已合规四段(保留) > 双首段合并 > 旧式单段按维度兜底。
+    """
+    rule = (rule or "").strip()
+    dim_default = EXPAND_DEFAULT.get(dim, "COMMON")
+    # 1) OVERRIDE 精确映射（38 条旧式单段）
+    if rid in OVERRIDE_EXPAND:
+        return OVERRIDE_EXPAND[rid]
+    # 2) 空值 → 维度默认（已是四段）
+    if not rule:
+        return dim_default
+    segs = [s.strip() for s in rule.split("|") if s.strip()]
+    # 3) 已合规：首段为枚举且恰 4 段 → 原样保留
+    if len(segs) == 4 and any(segs[0] == e or segs[0].startswith(e + "(") or segs[0].startswith(e + "<") for e in ENUM_TYPES):
+        return rule
+    # 4) 双首段合并：`真云+代表客户端1|COMMON|<代表...>|<证据...>|<阻塞...>`（5 段，首段非枚举）
+    if len(segs) >= 4 and any(segs[1].startswith(e) for e in ENUM_TYPES) and any(
+            s.startswith("<代表") or s.startswith("代表") for s in segs[1:]):
+        # 合并为 COMMON|<真云代表客户端>|<证据>|<阻塞>
+        rep = segs[0].replace("真云+", "").strip() or "真云代表"
+        ev = next((s for s in segs if s.startswith("<证据")), "<证据: 见用例字段>")
+        bl = next((s for s in segs if s.startswith("<阻塞")), "<阻塞: 需真云凭证>")
+        return f"COMMON|<真云代表: {rep}>|{ev}|{bl}"
+    # 5) 旧式单段（无 | 或结构不识别）→ 按维度兜底四段
+    return dim_default
+
+def expand_rule(rid, dim, cur):
+    """输出层统一入口：先补空值（维度默认），再规范化四段。"""
+    cur = (cur or "").strip()
+    if not cur:
+        cur = EXPAND_DEFAULT.get(dim, "COMMON")
+    return normalize_expand(rid, cur, dim)
 
 # ============ 设计级用例（153 条） ============
 # 列: ID, 维度, 标题, 优先级, 前置条件, 测试数据, 操作步骤, 预期结果, 指引来源, 关联工具, 自动化建议, 展开规则
@@ -292,11 +416,28 @@ add("D1-55", "D1安装", "多会话提示隔离", "P2", "同一 server 可承载
     "①A/B 几乎同时 initialize ②分别执行 check_update/普通工具 ③比较 _updateInfo 消费状态 ④结束 A 后复查 B",
     "一次性兜底按会话隔离而非全局只消费一次；一个会话的 dismiss、hintConsumed、失败状态不影响另一个会话",
     "设: §会话级检测; 实: mcp-protocol 模块状态/remote server", "mcp-server/多客户端", "脚本", "并行进程")
+# ---------- 2026-09-11 全量设计评审补充（异常/恢复场景缺口；全量评审报告 REV-20260911004604；R10 按 codex round-09 补强断言契约） ----------
+add("D1-56", "D1安装", "安装中断恢复（网络/进程中断后半装补全）", "P1", "可控网络环境（HTTP 代理可随时断开）+ 一次性临时 HOME（隔离 USERPROFILE/HOME）",
+    "install --target opencode 执行中注入断网 / kill 安装进程；损坏判定清单：①package.json 存在但 bin/ 缺 oc-entry ②pluginDir 存在但 .update-skip.json 缺失 ③残留 *.lock 文件",
+    "①install 中途断网或 kill ②断言半装态（按损坏判定清单 ①②③ 逐项核对并记录文件路径） ③恢复网络重跑 install ④断言全量文件（tools/list 返回 36 工具、config 落点齐全、无 *.lock 残留） ⑤再次运行 install 断言幂等（文件 mtime/size 与上轮一致）",
+    "半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 36 工具（数量=36 且无重复）；无 *.lock 残留；二次运行后关键文件（bin/oc-entry、config.json）mtime/size 字节级一致",
+    "通: 生命周期中断恢复; 关联 D1-5/D1-13 残留族; R11 补强: 判定清单固定3项+36工具枚举断言+幂等mtime/size", "install/doctor/tools_list", "半自动", "OS_MATRIX|<代表: Windows/Linux>|<证据: 安装落点+中断现场文件>|<阻塞: 无>")
+add("D1-57", "D1安装", "升级坏版本回滚（装坏可退）", "P1", "有旧版本正常安装（1.1.2 基线）+ 可控 npm registry 注入坏包（tarball 截断致 sha1 不匹配）",
+    "registry 返回损坏 tarball；断言契约：①回滚目标=升级前版本（previousVersion=1.1.2）②坏包不得进入可用缓存（.npm/_cacache 无对应 content-hash）③降级命令=upgrade(version=1.1.2) 返回 requiresRestart=true",
+    "①确认 serverInfo.version=1.1.2 ②registry 注入坏包后执行 upgrade(version=latest) ③断言返回对象：success=false + error.code=EREPO_BAD_TARBALL（唯一错误码断言，不允许替代码）+ error.manual 含 'npx huaweicloud-devkit upgrade --version 1.1.2' ④断言旧版仍可启动（重启进程 serverInfo.version=1.1.2，tools/list 可调） ⑤断言 .npm/_cacache 无坏包 digest ⑥执行 error.manual 命令后断言版本恢复 1.1.2",
+    "失败返回结构化错误（success=false, error.code 精确枚举, error.manual 含版本限定命令）；旧版本二进制+config 完好可启动（serverInfo.version=1.1.2）；坏包不进缓存（cacache digest 无命中）；按 manual 执行后版本=1.1.2 且工具可用",
+    "通: 升级失败回滚标准实践; 关联 D1-51; R11 补强: 错误码EREPO_BAD_TARBALL+回滚锚点+缓存digest断言", "upgrade/check_update", "半自动", "CLIENT_MATRIX|<代表2: Hermes(隔离profile)+OpenCode>|<证据: 回滚后版本+缓存digest+manual命令>|<阻塞: 可控registry夹具>")
+# ---------- R12-3: ITER-005 P2 通用 MCP 白名单回填（Codex round-11：正式 ID 替代"待回填"gap） ----------
+add("D1-58", "D1安装", "通用 MCP 白名单接入（Claude/Cursor merge 语义）", "P1", "隔离 HOME（Linux L 或 Windows，避免 officeace 注册表污染）+ 构造 fake ~/.claude.json / ~/.cursor/mcp.json",
+    "白名单接入 5 断言（回填 ITER-005 P2-1~6）：①探测~/.claude.json、~/.cursor/mcp.json ②命中→生成 .bak 备份+merge mcpServers.huaweicloud-devkit ③同 key 已存在→跳过不备份 ④坏 JSON→不写原文件 ⑤未命中→打印可粘贴片段",
+    "①空 HOME 跑 install 菜单 option3 ②断言探测两文件 ③命中断言：.bak 存在+merge 后 mcpServers 含 huaweicloud-devkit 且唯一 ④同 key 重跑断言 skipping 且无新 .bak ⑤坏 JSON 断言报 'not valid JSON' 且原文件字节不变 ⑥未命中断言输出 stdio snippet（含 'mcpServers' 与 remote 提示）",
+    "白名单合并幂等（重复不重复备份）；坏 JSON 零写入（原文件 hash 不变）；未命中输出可粘贴片段（含 mcpServers 键）；merge 后原配置其余键完好",
+    "ITER-005 P2 系列回填; 关联 D1-8 通用MCP通道; 标: 非目录agent白名单接入", "install/setup.cjs", "半自动", "CLIENT_MATRIX|<代表: Linux L 真机>|<证据: .bak+merge JSON+坏JSON零写入>|<阻塞: 需隔离HOME>")
 add("D2-8", "D2认证", "credentials变更后auth回归", "P1", "真云+本地凭证",
     "credentials.mjs 变更后的 auth init",
     "①auth init ②验证KooCLI/OBS/沙箱三端 ③脱敏检查",
     "三端就绪+脱敏正常，无回归", "仓: credentials.mjs +29行变更带来回归风险",
-    "auth_init/auth_status", "半自动")
+    "huaweicloud_auth_init/auth_status", "半自动")
 # ---------- NR2 AK/SK 架构方案 v4 用例（2026-09-07，出处=方案章节，ITER-001 实测全部执行） ----------
 add("D2-9", "D2认证", "reconcile幂等(一致态零写)", "P1", "真云+本地凭证已一致",
     "auth reconcile 重复执行",
@@ -317,7 +458,7 @@ add("D2-12", "D2认证", "R10 runtime非空禁止落盘", "P1", "runtime 凭据�
     "runtimeActive 状态下 auth_sync",
     "①auth_init 置 runtime ②auth_status 确认 runtimeActive ③auth_sync 观察",
     "sync 返回 ok:false + auto-sync suppressed (R10)，不写 S1", "方: §五 R10; NR2-004",
-    "auth_init/auth_status/auth_sync", "半自动")
+    "huaweicloud_auth_init/auth_status/auth_sync", "半自动")
 add("D2-13", "D2认证", "R9 configuredBySession优先env", "P1", "隔离 HOME + S1 + HW_ACCESS_KEY env",
     "setConfiguredBySession(true) + env 注入",
     "①写 S1+标记 ②注入 env ③resolveCredentials ④清除标记复查",
@@ -358,6 +499,12 @@ add("D2-20", "D2认证", "HUAWEICLOUD_HOME重定向(R6)", "P2", "可设置 HUAWE
     "①设置 HUAWEICLOUD_HOME ②readKooCliProfiles ③对比 S1/S3 迁移",
     "S2 固定 ~/.hcloud 不受影响（方案 T1 断言3）——实测发现 AK-FP-2 不符", "方: §九 T1 断言3; NR2-012",
     "readKooCliProfiles/globalCredentialsPath/obsConfigPath", "半自动", "关联 AK-FP-2")
+# ---------- 2026-09-11 全量设计评审补充（凭证状态维度；R10 按 codex round-09 补强断言契约） ----------
+add("D2-21", "D2认证", "AK/SK 轮换后 auth_status 正确感知（凭证状态维度）", "P1", "真云账号 + 一次性 IAM 用户凭证（可轮换，不影响生产）+ 本地凭证文件",
+    "轮换后的新 AK/SK（旧凭证已失效）；断言契约：指纹算法=sha256(ak:sk) hex 前 8 位；指纹位置=S1 credentials.json.ak/sk、S2 ~/.hcloud/config.json current 档、S3 obs config；等待窗口=轮换后 30s 内轮询完成；auth_status 响应字段=reconciled.s1.ready/reconciled.s2.ready/reconciled.s3.ready 均 true",
+    "①auth init 同步旧 AK/SK ②计算旧指纹 F1=sha256(ak:sk)[:8] 核验三端= F1 ③替换为轮换后新 AK/SK，计算新指纹 F2 ④auth_status 检查（记录 reconciled 三字段） ⑤auth_sync 增量同步 ⑥30s 内每 5s 轮询三端指纹 ⑦断言三端最终=F2 且 auth_status.reconciled.* 全 true",
+    "30s 内三端指纹全部=F2（逐端断言，旧指纹 F1 零残留）；auth_status.reconciled.s1/s2/s3.ready 全 true；S2 写入次数≤1（无 R4 无效循环重写）；执行一次只读 API 调用返回 200",
+    "方: §五 R2/R4; 关联 AK-FP-1; R11 补强: sha256指纹算法+30s轮询+三字段断言", "huaweicloud_auth_init/auth_status/auth_sync", "半自动", "COMMON|<真云代表: Hermes>|<证据: 三端指纹快照+轮换序列+状态字段>|<阻塞: 一次性IAM凭证>")
 add("D4-18", "D4安全", "confirm-not-deny审批语义", "P0", "真云+标准客户端",
     "写操作触发确认流程",
     "①发起写操作 ②观察确认对话框 ③分别确认/拒绝",
@@ -379,7 +526,7 @@ add("D2-1", "D2认证", "auth init三端同步", "P1", "AK/SK+本地凭证文件
     "auth init",
     "①配置AK/SK ②执行auth init ③分别验证KooCLI/OBS/沙箱API三端可用",
     "三端全部落位，任一端失败即缺陷", "P: README 'Synchronizes AK/SK to KooCLI, OBS, and sandbox APIs in one step'",
-    "auth_init", "半自动")
+    "huaweicloud_auth_init", "半自动")
 add("D2-2", "D2认证", "auth status判定准确性", "P2", "三端就绪状态可组合环境",
     "auth status",
     "①构造三端×就绪/未就绪8种组合 ②逐一核对status判定",
@@ -399,7 +546,7 @@ add("D2-5", "D2认证", "凭证缺失报错指引", "P1", "无凭证/错误凭�
     "缺失/错误/过期凭证调用",
     "①无凭证调用 ②错误AK ③过期AK ④记录报错与指引",
     "明确报错+可执行指引(非裸堆栈)", "通: 负向路径; nightly铁律2 缺口即记录",
-    "auth_init/status", "半自动")
+    "huaweicloud_auth_init/auth_status", "半自动")
 add("D2-6", "D2认证", "OBS独立配置引导", "P1", "无obsutil配置环境",
     "setup_obs_config",
     "①setup_obs_config ②检查~/.obsutilconfig写入 ③obsutil ls验证",
@@ -512,6 +659,22 @@ add("D3-C6", "D3功能", "沙箱 7 隐式工具具名冒烟（check_user/credent
     "逐工具最小调用：check_user→credentials→sign_agreement→upload_file→exec_one_shot→deploy_check→close_session",
     "7 工具均返回规范结果，无静默失败", "沙箱 11 工具最大域（补自 G1）",
     "sandbox_check_user/sandbox_credentials/sandbox_sign_agreement/sandbox_upload_file/sandbox_exec_one_shot/sandbox_deploy_check/sandbox_close_session", "半自动", "")
+# ---------- 2026-09-11 全量设计评审补充（区域/项目/资源状态维度；R10 按 codex round-09 补强断言契约） ----------
+add("D3-C7", "D3功能", "跨区域资源操作引导（区域维度）", "P1", "真云账号（cn-north-4），测试资源带 `tctest-` 前缀标签，owner=测试负责人，清理=用例结束立即释放并只读验证归零",
+    "非默认 region（ap-southeast-3）查询/创建；断言契约（唯一）：①命令必须含 `--cli-region=ap-southeast-3` ②区域不可用→错误 code=Ecs.0021（唯一断言，不采用 message 替代） ③资源不存在→错误 code=Ecs.0200（唯一断言）",
+    "①请求查香港区资源 ②断言 plan 命令含 --cli-region ③get_regional_availability 预查 ④执行只读查询 ⑤若资源不存在→断言 code=Ecs.0200（非裸 404） ⑥创建弹性 IP（最小规格）→断言命令带 region→立即释放→只读验证归零（tctest- 清单空）",
+    "命令含目标 --cli-region（参数级断言）；不可用→code=Ecs.0021 精确命中；不存在→code=Ecs.0200 精确命中（均为唯一断言）；创建资源 100% 释放（tctest- 前缀清单归零，ListEips 返回空）",
+    "标: Azure 按 region 分域; 关联 D3-A5; R11 补强: 错误码精确枚举Ecs.0021/0200+清理归零", "plan_cli_command/list_regions/get_regional_availability", "半自动", "COMMON|<真云代表: Hermes>|<证据: 命令参数+错误码+释放归零>|<阻塞: 真云多region权限>")
+add("D3-C8", "D3功能", "企业项目（enterprise_project_id）参数支持（项目维度）", "P1", "账号存在≥2 企业项目（含 default）+ 测试资源带 `tctest-` 前缀标签，owner=测试负责人",
+    "含 enterprise_project_id 的创建请求；断言契约（唯一）：①plan 命令必须含 `--enterprise_project_id=<ep_id>`（精确值） ②执行后查询返回字段 enterprise_project_id==<ep_id> ③无该参数→错误 code=Ecs.0038（唯一断言，不采用 message 替代）",
+    "①hcloud EPS ListEnterpriseProject 确认列表≥2 ②在指定非 default 企业项目 plan 创建 EVS（最小规格） ③断言命令含 enterprise_project_id=<ep_id> ④审批执行 ⑤ShowVolume 断言 enterprise_project_id==<ep_id> ⑥释放→归零验证",
+    "命令含精确 enterprise_project_id（参数级断言）；ShowVolume 返回字段 enterprise_project_id==目标值（字段级断言）；不落到 default；释放后 ListVolumes 无 tctest- 残留",
+    "标: Azure resource group 分域; 通: 项目级隔离参数必测; R11 补强: 命令+查询双字段精确断言", "plan_cli_command/list_operations", "半自动", "COMMON|<真云代表: Hermes>|<证据: 命令参数+EP归属字段+归零>|<阻塞: 账号需≥2企业项目>")
+add("D3-C9", "D3功能", "资源不存在/已删除/冻结状态操作引导（资源状态维度）", "P1", "真云账号 + 无真实资源构造（冻结态用 fixture 模拟，注明证据级别=SIM）；owner=测试负责人",
+    "三类输入与固定错误码（唯一断言）：①不存在 ID `nonexistent-<ts>` → code=APIGW.0101 ②刚删除资源查询 → code=APIGW.0101（唯一断言，不采用 message 替代） ③冻结 fixture → code=EVS.5400（fixture 按此 schema 返回）",
+    "①查询不存在 ID→断言 code=APIGW.0101 ②创建 EVS→删除→立即查询→断言竞态（code=APIGW.0101 唯一断言） ③fixture 注入冻结响应（schema={error:{code:'EVS.5400',message:'volume status is frozen'}}）→断言 code=EVS.5400+指引 ④对照组：正常 EVS 查询 code=200",
+    "错误码精确命中（APIGW.0101 / EVS.5400 唯一断言），message 字段=固定 schema 文本；explain_error 对 EVS.5400 返回解除冻结指引文本（固定含 'unfreeze'）；对照组 200 正常；错误码不含 403/权限字样",
+    "通: 资源状态矩阵(found/deleted/frozen)负向路径; 关联 D3-B4; R11 补强: 错误码固定APIGW.0101/EVS.5400+fixture schema", "explain_error/run_readonly_command", "半自动", "COMMON|<真云代表: Hermes>|<证据: 错误码+fixture冻结注入+对照组>|<阻塞: 冻结态=SIM级别>")
 
 # ---------- D4 安全 ----------
 add("D4-1", "D4安全", "凭证文件读取拦截", "P0", "含.hcloud/.huaweicloud目录环境",
@@ -614,6 +777,12 @@ add("D4-23", "D4安全", "全局规则 huawei-agent-rules.md 注入生效性（1
     "逐目标安装后：①核对 rules 注入系统提示/规则 ②构造禁直连 csms/kms 场景 ③核对 MUST 约束生效",
     "全部目标注入且约束可执行，无孤儿文件", "agent-rules 注入契约（补自 G6，关联 P1-2）",
     "install --target/hook", "自动", "逐客户端执行")
+# ---------- 2026-09-11 全量设计评审补充（审批流边界；R10 按 codex round-09 补强断言契约） ----------
+add("D4-24", "D4安全", "确认令牌过期与重复确认边界（审批流健壮性）", "P1", "真云+标准客户端+可注入时钟（令牌 TTL=60s，注入 5s 加速）",
+    "断言契约（响应 JSON 字段精确）：①过期提交→{status:'rejected', code:'CONFIRM_TOKEN_EXPIRED'} ②同 token 重复→第二次 {status:'ok', outcome:'already_processed'} ③资源计数=ListServers(tctest- 前缀).count",
+    "①写操作（创建最小规格 ECS）进入确认流，记录 confirmToken ②注入时钟推进 >60s 后提交确认→断言 {code:'CONFIRM_TOKEN_EXPIRED', status:'rejected'} 且资源计数=0 ③重新发起写操作（新 confirmToken）连续提交两次→断言第二次 {outcome:'already_processed'} ④查询资源断言计数=1 ⑤释放→归零",
+    "过期令牌返回精确 {code:'CONFIRM_TOKEN_EXPIRED'}（无资源创建，计数=0）；重复确认第二次返回 {outcome:'already_processed'}（计数不+1，仍=1）；错误/结果 JSON 字段可机器断言；释放后 tctest- 计数=0",
+    "通: 令牌过期/重放防护; 关联 D2-14; R11 补强: 精确响应JSON字段CONFIRM_TOKEN_EXPIRED/already_processed", "审批流/auth_confirm/plan_cli_command", "半自动", "CLIENT_MATRIX|<代表2: Hermes+OpenCode>|<证据: 响应JSON+计数+归零>|<阻塞: 可注入时钟>")
 
 # ---------- D5 客户端矩阵 ----------
 add("D5-1", "D5客户端", "清单发现加载", "P1", "各客户端环境",
@@ -693,6 +862,17 @@ add("D6-7", "D6性能", "长会话稳定性", "P2", "沙箱长会话",
     "①长会话持续调用 ②监控内存 ③观察hook是否失效",
     "无内存泄漏无失效", "P: 长会话设计; 标: AWS AgentCore长时runtime监控",
     "sandbox_exec_with_session", "半自动")
+# ---------- 2026-09-11 全量设计评审补充（超时场景；R10 按 codex round-09 补强断言契约） ----------
+add("D6-8", "D6性能", "MCP 工具调用超时（网络/后端挂起）", "P1", "可注入后端延迟环境（HTTP 代理/夹具可挂起响应 ≥30s）",
+    "断言契约：超时阈值=30s（可配置 env TOOL_TIMEOUT_MS）；超时错误=isError=true 且 content[0].text 含 'timeout'（精确子串）+ error.code='ETIMEDOUT'；内存基线=调用前后 process.memoryUsage().heapUsed 增量 <50MB",
+    "①记录基线内存 ②注入 60s 挂起发起 run_readonly_command ③记录实际耗时 T ④断言 25s≤T≤35s（≈30s 阈值） ⑤断言 isError=true + content 含 'timeout' + code=ETIMEDOUT ⑥立即再发起正常调用（无挂起）→断言成功（isError=false）⑦断言内存增量 <50MB",
+    "超时在 25~35s 内返回（不无限挂起/不提前误报）；isError=true 且 error.code=ETIMEDOUT + content 含 'timeout'；后续调用恢复成功（无 ECONNRESET 残留）；heapUsed 增量 <50MB",
+    "通: 超时与恢复标准实践; 关联 D6-6、D9-9; R11 补强: 30s阈值+ETIMEDOUT码+50MB内存上限", "mcp-server/run_readonly_command/plan_cli_command", "脚本", "COMMON|<代表: MCP进程+夹具>|<证据: 耗时窗口+isError+内存增量>|<阻塞: 可注入延迟夹具>")
+add("D9-9", "D9协议", "tools/call 超时协议语义与取消", "P1", "可注入延迟的 MCP 客户端/夹具（支持读取 initialize 返回的 capabilities）",
+    "断言契约：①能力探测=读 initialize.result.capabilities.notifications/cancellation 是否存在——不存在→标记 SPEC-MISMATCH 不假定支持 ②超时错误=JSON-RPC error 对象 {code:-32000, message:含 'timeout'}（精确值）③取消通知=notifications/cancelled 请求（含 requestId）",
+    "①initialize→记录 capabilities.cancellation 是否存在 ②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）",
+    "超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MISMATCH 标注而非假定）；取消通知后服务端 2s 内中止（in-flight 清零）；重建连接后 initialize/tools/list 正常响应；无悬挂请求（pending map 空）",
+    "规: JSON-RPC 2.0 错误语义; 标: MCP 客户端超时实践; R11 补强: 精确-32000+capabilities探测+2s取消窗口", "inspector/自建超时夹具", "脚本", "COMMON|<代表: Inspector+夹具>|<证据: JSON-RPC错误对象+capabilities+取消时序>|<阻塞: 取消能力=SPEC待裁决>")
 
 # ---------- D7 兼容 ----------
 add("D7-1", "D7兼容", "OS矩阵", "P2", "Linux(x86/arm)/Windows/macOS",
@@ -895,70 +1075,185 @@ for pid, prompt, route, assert_ in PROMPTS:
     E.append((pid, "D10评测集", prompt, "D10-3", "P1",
               f"期望路由: {route}", f"断言: {assert_}"))
 
-# ============ NR3 版本升级提醒终端展开（2026-09-10T18:30:00+08:00，Codex review-round-03 要求） ============
+# ============ NR3 版本升级提醒终端展开（2026-09-10 18:30:00，Codex review-round-03 要求；R10 结构化状态列） ============
 # 展开维度：Windows/Linux/macOS、Hook/非Hook、stdio/remote、TTY/非TTY、CLIENT_MATRIX/OS_MATRIX/AGENT_E2E/CROSS_PROCESS
-# 状态=PASS(已执行)/SPEC(规格偏差观测)/BLOCKED(未执行+原因+解除条件)；BLOCKED 不折算为覆盖
-NR3_TS = "2026-09-10T19:35:00+08:00"
-TBLOCK_LINUX = "2026-09-10T19:30+08:00 实测无 Linux 测试机可用（120.46.40.202/113.44.143.91 SSH 无凭据不可达,WSL 无发行版,Docker 未装）；影响=跨平台 npm spawn/路径/权限/升级链未验；解除=接入 Linux 测试机（zhangshuang/testbot1）后跑同套探针"
-TBLOCK_MAC = "无 macOS/ARM 环境（声明支持路径）；解除=提供 macOS 测试机或 CI runner"
-TS_HERMES_E2E = "2026-09-10T19:35:00+08:00"
+# R10（2026-09-11）：状态独立成列 status/blockedReason/requiredEvidence/observedAt，消除文本内嵌状态与旧环境漂移；
+#   Linux 行按 ITER-004 status.md/FINAL_STATUS 已确认事实同步（D1-39/49/55 由 testbot3 2026-09-10 20:34 补跑转 PASS；
+#   其余 Linux 行仍 BLOCKED 并注明最新事实 2026-09-10 起 testbot3 已接入，解除=补跑对应探针）。
+# 12 列：ID, 展开类型, 枚举对象, 源用例, 优先级, 执行要点, 预期结果, 生成时间, status, blockedReason, requiredEvidence, observedAt
+NR3_TS = "2026-09-10 19:35:00"
+TBLOCK_LINUX_OLD = "2026-09-10 19:30 旧文案：无 Linux 测试机。"
+# 最新事实（2026-09-11 同步）：testbot3 (1.94.218.129, aarch64) 已接入；Linux D1-39/49/55 已 PASS；D1-52 升级链受探针平台限制。
+TBLOCK_LINUX = "BLOCKED：testbot3 已接入（2026-09-10 20:34 起），但该用例 Linux 探针未规划/未补跑；影响=跨平台行为未验；解除=在 testbot3 跑同套探针并归档 run-logs"
+# R11: BLOCKED/NOT_RUN 行 requiredEvidence（待补证据路径）
+EV_LINUX = "待补: testbot3 run-logs/<probe>.stdout/stderr/exit + manifest"
+EV_MAC = "待补: macOS/ARM 机器或 CI runner 运行日志"
+EV_CODEARTS = "待补: CodeArtsSpace 客户端安装/升级/重启证据"
+EV_TTY = "待补: PTY 会话交互流录屏/日志"
+EV_SESSION = "待补: 产品支持 session 后的 A/B 交错序列证据（当前=PROCESS_SHARED_STATE 观测）"
+TBLOCK_LINUX_UPGRADE = "BLOCKED：Linux-D1-52 安装链 PASS；升级链受探针平台限制（npx.cmd 硬编码 + npx 子进程 registry 注入在测试机无外网下不可行）；影响=真实升级跨平台未验；解除=探针平台化补丁后重跑"
+TBLOCK_MAC = "BLOCKED：无 macOS/ARM 机器或 CI runner；影响=声明支持的 macOS 路径无证据；解除=提供 macOS 测试机或 CI，或撤销该支持承诺"
+TBLOCK_CODEARTS = "BLOCKED：无 CodeArtsSpace 可用环境（120.46.40.202 不可达）；影响=第二个 Hook 客户端路径未验；解除=接入 CodeArtsSpace 客户端后补生命周期证据"
+TBLOCK_TTY = "BLOCKED：无真实 TTY/PTY 会话环境；影响=升级确认/菜单/取消交互路径未验；解除=PTY 会话执行交互流"
+TS_HERMES_E2E = "2026-09-10 19:35:00"
+TS_LINUX_PASS = "2026-09-10 20:34:00"
+
+# 辅助：PASS 行构造（status 独立，ev=证据路径）
+def _nr3(id_, terminal, src, pri, points, expect, ts, status, reason="", ev="", observed=""):
+    return (id_, "NR3终端矩阵", terminal, src, pri, points, expect, ts, status, reason, ev, observed)
 
 NR3_EXPANDED = [
     # 01-04 检测语义与冷却持久化（源 D1-27/28/30/31/33/42/44 代表 D1-42）
-    ("EXP-NR3-01", "NR3终端矩阵", "Windows-stdio-COMMON", "D1-27", "P1", "函数级+stdio MCP 四态契约；dismiss 落盘+重启复查", "PASS：已执行（unit 59/mcp-loop 31 断言）", NR3_TS),
-    ("EXP-NR3-02", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-27", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
-    ("EXP-NR3-03", "NR3终端矩阵", "Windows-真实安装布局-CROSS_PROCESS", "D1-42", "P1", "真实安装布局 skip 落 <pluginDir>/.update-skip.json（D1-52 Phase5 证据）", "PASS：真实安装路径验证", NR3_TS),
-    ("EXP-NR3-04", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-42", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    _nr3("EXP-NR3-01", "Windows-stdio-COMMON", "D1-27", "P1",
+         "函数级+stdio MCP 四态契约；dismiss 落盘+重启复查", "PASS", NR3_TS, "PASS",
+         ev="run-logs/d1-unit-probe.* + d1-mcp-loop.*（unit 59/mcp-loop 31 断言）", observed=NR3_TS),
+    _nr3("EXP-NR3-02", "Linux-OS_MATRIX", "D1-27", "P1",
+         "D1-27 检测语义 up_to_date：mcp-loop D1-41a/init/tools + unit D1-30/35c（testbot3 aarch64）", "PASS", TS_LINUX_PASS, "PASS",
+         ev="linux-logs/d1-mcp-loop.stdout.log D1-41a/init/tools + d1-unit-probe D1-30/35c（四态契约 Linux 一致）", observed=TS_LINUX_PASS),  # noqa
+    _nr3("EXP-NR3-03", "Windows-真实安装布局-CROSS_PROCESS", "D1-42", "P1",
+         "真实安装布局 skip 落 <pluginDir>/.update-skip.json（D1-52 Phase5 证据）", "PASS", NR3_TS, "PASS",
+         ev="D1-52 Phase5：真实安装路径 .update-skip.json 内容断言", observed=NR3_TS),
+    _nr3("EXP-NR3-04", "Linux-OS_MATRIX", "D1-42", "P1",
+         "D1-42 dismiss 跨进程持久化：mcp-loop D1-42a~e + upgrade-real D1-42-real-a/b/c（testbot3 aarch64）", "PASS", TS_LINUX_PASS, "PASS",
+         ev="linux-logs/d1-mcp-loop.stdout.log D1-42a~e + d1-upgrade-real.stdout.log Phase5 D1-42-real-a/b/c（真实插件目录 .update-skip.json）", observed=TS_LINUX_PASS),  # noqa
     # 05-07 失败/节流/缓存（源 D1-34/35/46 代表 D1-46）
-    ("EXP-NR3-05", "NR3终端矩阵", "Windows-stdio-COMMON", "D1-46", "P1", "时钟注入 TTL/节流/inflight/恢复；46g reject 直抛=SPEC", "PASS（46g 为 SPEC-MISMATCH 观测）", NR3_TS),
-    ("EXP-NR3-06", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-46", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    _nr3("EXP-NR3-05", "Windows-stdio-COMMON", "D1-46", "P1",
+         "时钟注入 TTL/节流/inflight/恢复；46g reject 直抛=SPEC", "PASS（46g 为 SPEC-MISMATCH 观测）", NR3_TS, "PASS",
+         ev="d1-unit-probe 时钟注入断言；46g 观测=SPEC 子项不并入 PASS 计数", observed=NR3_TS),
+    _nr3("EXP-NR3-06", "Linux-OS_MATRIX", "D1-46", "P1",
+         "D1-46 缓存 TTL/节流/inflight：unit D1-46a~h 全 PASS（46g SPEC 与 Windows 一致）（testbot3 aarch64）", "PASS（46g 为 SPEC-MISMATCH 观测）", TS_LINUX_PASS, "PASS",
+         ev="linux-logs/d1-unit-probe.stdout.log D1-46a~h（TTL/节流/inflight/恢复；46g=SPEC 子项不并入 PASS 计数）", observed=TS_LINUX_PASS),  # noqa
     # 08-10 镜像/registry 夹具（源 D1-40/53 代表 D1-53）
-    ("EXP-NR3-07", "NR3终端矩阵", "Windows-stdio-fixture-COMMON", "D1-53", "P1", "受控 fixture /__set 注入 lag/坏JSON/恢复", "PASS：镜像滞后确定性夹具验证", NR3_TS),
-    ("EXP-NR3-08", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-53", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    _nr3("EXP-NR3-07", "Windows-stdio-fixture-COMMON", "D1-53", "P1",
+         "受控 fixture /__set 注入 lag/坏JSON/恢复", "PASS", NR3_TS, "PASS",
+         ev="fixture-server 注入 lag/坏JSON/恢复断言（镜像滞后确定性夹具）", observed=NR3_TS),
+    _nr3("EXP-NR3-08", "Linux-OS_MATRIX", "D1-53", "P1",
+         "D1-53 镜像滞后夹具：unit D1-53fn-a~f 全 PASS（坏输出/坏JSON/恢复）（testbot3 aarch64）", "PASS", TS_LINUX_PASS, "PASS",
+         ev="linux-logs/d1-unit-probe.stdout.log D1-53fn-a~f（fixture 注入 lag/坏JSON/恢复确定性夹具）", observed=TS_LINUX_PASS),  # noqa
     # 11-13 Windows 检测链（源 D1-39）
-    ("EXP-NR3-09", "NR3终端矩阵", "Windows-stdio+真实存量-OS_MATRIX", "D1-39", "P0", "spawnSync('npm.cmd') EINVAL 直捕；sync/async 双路径静默；MCP 端到端 check_failed；真实 1.1.2 存量复现", "FAIL（P0，修复前证据保留；FIX(sim) 仅证明修复方向）", NR3_TS),
-    ("EXP-NR3-10", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-39", "P0", TBLOCK_LINUX, "BLOCKED（Linux 无 EINVAL，待真机确认）", NR3_TS),
-    ("EXP-NR3-11", "NR3终端矩阵", "macOS/ARM-OS_MATRIX", "D1-39", "P0", TBLOCK_MAC, "BLOCKED", NR3_TS),
+    _nr3("EXP-NR3-09", "Windows-stdio+真实存量-OS_MATRIX", "D1-39", "P0",
+         "spawnSync('npm.cmd') EINVAL 直捕；sync/async 双路径静默；MCP 端到端 check_failed；真实 1.1.2 存量复现",
+         "FAIL（P0，修复前证据保留；FIX(sim) 仅证明修复方向）", NR3_TS, "FAIL",
+         reason="Windows spawnSync('npm.cmd') 无 shell:true → EINVAL 静默失败（产品缺陷 #554，P0）；FIX(sim) 非官方发布线不可作产品修复证据",
+         ev="EXP-NR3-09 探针 stdout/stderr/exit + 真实 1.1.2 存量复现", observed=NR3_TS),
+    _nr3("EXP-NR3-10", "Linux-OS_MATRIX", "D1-39", "P0",
+         "Linux 无 .cmd/EINVAL 语义；54 条通用断言通过（探针 Windows 专测断言平台判读：Linux 侧无该缺陷）",
+         "PASS", NR3_TS, "PASS",
+         ev="testbot3 (1.94.218.129, aarch64) d1-unit-probe 补跑（ITER-004 status.md 2026-09-10 20:34）", observed=TS_LINUX_PASS),
+    _nr3("EXP-NR3-11", "macOS/ARM-OS_MATRIX", "D1-39", "P0", TBLOCK_MAC, "BLOCKED", NR3_TS, "BLOCKED",
+         reason=TBLOCK_MAC, ev=EV_MAC),  # noqa
     # 14-15 upgrade handler 语义（源 D1-49/50/51 代表 D1-49）
-    ("EXP-NR3-12", "NR3终端矩阵", "Windows-stdio+CLI-CLIENT_MATRIX", "D1-49", "P1", "handler 7 断言：up_to_date 不执行/非法 version/空串默认/失败不误报/unknown target/默认 all", "PASS：D1-49 全项通过", NR3_TS),
-    ("EXP-NR3-13", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-49", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    _nr3("EXP-NR3-12", "Windows-stdio+CLI-CLIENT_MATRIX", "D1-49", "P1",
+         "handler 7 断言：up_to_date 不执行/非法 version/空串默认/失败不误报/unknown target/默认 all", "PASS", NR3_TS, "PASS",
+         ev="d1-49-d1-55-ext.mjs 7 断言全部通过", observed=NR3_TS),
+    _nr3("EXP-NR3-13", "Linux-OS_MATRIX", "D1-49", "P1",
+         "D1-49 扩展探针 Linux 补跑", "PASS", NR3_TS, "PASS",
+         ev="testbot3 d1-49-d1-55-ext 退出码 0（ITER-004 FINAL_STATUS：进程共享语义证据已补齐）", observed=TS_LINUX_PASS),
     # 16-18 真实升级（源 D1-52）
-    ("EXP-NR3-14", "NR3终端矩阵", "Windows-OpenCode(非Hook)-CLIENT_MATRIX", "D1-52", "P1", "真实 1.1.2 安装→真实 npx 升级 1.1.3→重启 serverInfo 1.1.3→配置未丢失", "PASS：非 Hook 客户端生命周期证据", NR3_TS),
-    ("EXP-NR3-15", "NR3终端矩阵", "Windows-Hermes(Hook)-CLIENT_MATRIX", "D1-52", "P1", "真实隔离 Hermes 实例(profile nr3-test)：真实 npx 安装 1.1.3→MCP 启动→提示消费→升级 1.1.2→1.1.3→重启提示+重启生效→拒绝 dismiss(3 天冷却)→离线降级（48 工具调用）", "PASS：Hermes Hook 客户端完整生命周期（run-logs/hermes-e2e-s*.out.log + hermes-e2e-manifest.json，升级仅落隔离 hermes-profile-runtime）", TS_HERMES_E2E),
-    ("EXP-NR3-15b", "NR3终端矩阵", "Windows-CodeArtsSpace(Hook)-CLIENT_MATRIX", "D1-52", "P1", "CodeArtsSpace 客户端真实安装/升级/重启未验", "BLOCKED：无 CodeArtsSpace 可用环境（120.46.40.202 SSH 无凭据不可达）；解除=接入客户端后补证据", TS_HERMES_E2E),
-    ("EXP-NR3-16", "NR3终端矩阵", "Linux-OpenCode-OS_MATRIX", "D1-52", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    _nr3("EXP-NR3-14", "Windows-OpenCode(非Hook)-CLIENT_MATRIX", "D1-52", "P1",
+         "真实 1.1.2 安装→真实 npx 升级 1.1.3→重启 serverInfo 1.1.3→配置未丢失", "PASS", NR3_TS, "PASS",
+         ev="OpenCode 非 Hook 客户端生命周期证据（升级仅落隔离目录）", observed=NR3_TS),
+    _nr3("EXP-NR3-15", "Windows-Hermes(Hook)-CLIENT_MATRIX", "D1-52", "P1",
+         "真实隔离 Hermes 实例(profile nr3-test)：真实 npx 安装 1.1.3→MCP 启动→提示消费→升级 1.1.2→1.1.3→重启提示+重启生效→拒绝 dismiss(3 天冷却)→离线降级（48 工具调用）",
+         "PASS", TS_HERMES_E2E, "PASS",
+         ev="run-logs/hermes-e2e-s*.out.log + hermes-e2e-manifest.json（升级仅落隔离 hermes-profile-runtime）", observed=TS_HERMES_E2E),
+    _nr3("EXP-NR3-15b", "Windows-CodeArtsSpace(Hook)-CLIENT_MATRIX", "D1-52", "P1",
+         "CodeArtsSpace 客户端真实安装/升级/重启未验", "BLOCKED", TS_HERMES_E2E, "BLOCKED",
+         reason=TBLOCK_CODEARTS, ev=EV_CODEARTS),  # noqa
+    _nr3("EXP-NR3-16", "Linux-OpenCode-OS_MATRIX", "D1-52", "P1", TBLOCK_LINUX_UPGRADE, "BLOCKED", NR3_TS, "BLOCKED",
+         reason=TBLOCK_LINUX_UPGRADE, ev=EV_LINUX),  # noqa
     # 19 会话级（源 D1-54）
-    ("EXP-NR3-17", "NR3终端矩阵", "Windows-Hermes-AGENT_E2E", "D1-54", "P1", "真实会话(隔离 profile nr3-test)：SKILL retrieve→check_update update_available→澄清征询(未同意不动作)→同意→真实 upgrade 1.1.2→1.1.3+重启提示→新会话重启生效 up_to_date→拒绝 dismiss(3 天冷却落盘)→离线 check_failed 不阻塞 check_cli", "PASS：真实 Agent 会话用户流（run-logs/hermes-e2e-s1b/s2/s3/s4/s6.out.log，48 工具调用）；规格裁决项仍由开发裁决", TS_HERMES_E2E),
+    _nr3("EXP-NR3-17", "Windows-Hermes-AGENT_E2E", "D1-54", "P1",
+         "真实会话(隔离 profile nr3-test)：SKILL retrieve→check_update update_available→澄清征询(未同意不动作)→同意→真实 upgrade 1.1.2→1.1.3+重启提示→新会话重启生效 up_to_date→拒绝 dismiss(3 天冷却落盘)→离线 check_failed 不阻塞 check_cli",
+         "PASS", TS_HERMES_E2E, "PASS",
+         ev="run-logs/hermes-e2e-s1b/s2/s3/s4/s6.out.log（48 工具调用）", observed=TS_HERMES_E2E),
     # 20-24 多客户端/多进程/多会话（源 D1-48/55 代表 D1-55）
-    ("EXP-NR3-18", "NR3终端矩阵", "Windows-stdio-多进程-CROSS_PROCESS", "D1-48", "P1", "双 HOME 双进程 skip 隔离+重启持久化+新版本无视冷却", "PASS：多 Agent 路径隔离", NR3_TS),
-    ("EXP-NR3-19", "NR3终端矩阵", "Windows-remote-双请求序列-CROSS_PROCESS", "D1-55", "P1", "同进程双请求序列：A 消费后 B 拿不到 _updateInfo（hintConsumed 模块级单例）", "SPEC：OBSERVED_SPEC_MISMATCH（进程级共享，非会话隔离；待开发裁决）", NR3_TS),
-    ("EXP-NR3-20", "NR3终端矩阵", "Windows-remote-真实session-NOT_RUN", "D1-55", "P1", "remote transport 无 session 标识/header/长连接（协议探测无 MCP-Session-Id）；无法建立真实 session 流程", "BLOCKED(NOT_RUN)：产品支持 session 后复用 A/B 交错序列重测；当前证据级别=PROCESS_SHARED_STATE", NR3_TS),
-    ("EXP-NR3-21", "NR3终端矩阵", "Windows-TTY-COMMON", "D1-55", "P1", "TTY 交互（升级确认/菜单/取消路径）需真实 TTY 会话", "BLOCKED：无 TTY 会话环境；解除=PTY 会话执行交互流", NR3_TS),
-    ("EXP-NR3-22", "NR3终端矩阵", "Linux-remote-OS_MATRIX", "D1-55", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    _nr3("EXP-NR3-18", "Windows-stdio-多进程-CROSS_PROCESS", "D1-48", "P1",
+         "双 HOME 双进程 skip 隔离+重启持久化+新版本无视冷却", "PASS", NR3_TS, "PASS",
+         ev="d1-48 双 HOME 双进程探针断言", observed=NR3_TS),
+    _nr3("EXP-NR3-19", "Windows-remote-双请求序列-CROSS_PROCESS", "D1-55", "P1",
+         "同进程双请求序列：A 消费后 B 拿不到 _updateInfo（hintConsumed 模块级单例）",
+         "SPEC-MISMATCH", NR3_TS, "SPEC-MISMATCH",
+         reason="OBSERVED_SPEC_MISMATCH：hintConsumed 进程级共享（非会话隔离）；待开发/产品裁决（进程共享还是会话隔离，补实现或更新规格）",
+         ev="remote 双请求序列探针观测", observed=NR3_TS),
+    _nr3("EXP-NR3-20", "Windows-remote-真实session-NOT_RUN", "D1-55", "P1",
+         "remote transport 无 session 标识/header/长连接（协议探测无 MCP-Session-Id）；无法建立真实 session 流程",
+         "BLOCKED(NOT_RUN)", NR3_TS, "NOT_RUN",
+         reason="产品/remote transport 当前不支持 session（协议探测无 MCP-Session-Id + 源码确认无 session 状态绑定）；解除=产品支持 session 后复用 A/B 交错序列重测，或正式声明不支持并从承诺范围移除；当前证据级别=PROCESS_SHARED_STATE",
+         ev=EV_SESSION, observed=NR3_TS),
+    _nr3("EXP-NR3-21", "Windows-TTY-COMMON", "D1-55", "P1",
+         "TTY 交互（升级确认/菜单/取消路径）需真实 TTY 会话", "BLOCKED", NR3_TS, "BLOCKED",
+         reason=TBLOCK_TTY, ev=EV_TTY),  # noqa
+    _nr3("EXP-NR3-22", "Linux-remote-OS_MATRIX", "D1-55", "P1",
+         "D1-55 Linux 扩展探针补跑（进程共享语义）", "PASS", NR3_TS, "PASS",
+         ev="testbot3 d1-49-d1-55-ext 退出码 0（ITER-004 FINAL_STATUS）", observed=TS_LINUX_PASS),
     # 25-26 兜底提示序列（源 D1-36/37/45 代表 D1-45）
-    ("EXP-NR3-23", "NR3终端矩阵", "Windows-stdio-预热竞态-CLIENT_MATRIX", "D1-45", "P1", "兜底一次性消费+预热竞态双时序（stdio 有 prewarm）", "PASS：D1-45 全项通过", NR3_TS),
-    ("EXP-NR3-24", "NR3终端矩阵", "Linux-OS_MATRIX", "D1-45", "P1", TBLOCK_LINUX, "BLOCKED", NR3_TS),
+    _nr3("EXP-NR3-23", "Windows-stdio-预热竞态-CLIENT_MATRIX", "D1-45", "P1",
+         "兜底一次性消费+预热竞态双时序（stdio 有 prewarm）", "PASS", NR3_TS, "PASS",
+         ev="d1-45 兜底序列+预热竞态探针断言", observed=NR3_TS),
+    _nr3("EXP-NR3-24", "Linux-OS_MATRIX", "D1-45", "P1",
+         "D1-45 兜底序列+预热竞态：mcp-loop D1-45a~f 全 PASS（testbot3 aarch64）", "PASS", TS_LINUX_PASS, "PASS",
+         ev="linux-logs/d1-mcp-loop.stdout.log D1-45a~f（兜底一次性消费+预热竞态双时序）", observed=TS_LINUX_PASS),  # noqa
+]
+
+# ============ R12-4 + EX-5: D1-58 专属展开行（Codex round-12 整改项#5；EX-4 真机五断言验证回填） ============
+# 源用例 D1-58 通用 MCP 白名单接入，5 断言逐条展开；EX-4 已于 testbot3(c6c0965) 真机验证全部 PASS。
+# 12 列：ID, 展开类型, 枚举对象, 源用例, 优先级, 执行要点, 预期结果, 生成时间, status, blockedReason, requiredEvidence, observedAt
+D158_TS = "2026-09-11"
+D158_EVID = r"results/ITER-008-20260911072254/evidence/d158"
+D158_OBS = "2026-09-11 07:45:00"
+def _d158(id_, obj, points, expect, ev, status="PASS"):
+    return (id_, "D1-58白名单矩阵", obj, "D1-58", "P1", points, expect, D158_TS, status, "", ev, D158_OBS)
+
+D158_EXPANDED = [
+    _d158("EXP-D1-58-01", "Linux L(隔离HOME)",
+          "白名单探测：空 HOME 跑 install 菜单 option3，断言探测 ~/.claude.json 与 ~/.cursor/mcp.json（存在性感知）",
+          "探测逻辑执行且两文件路径被读取（留痕日志）",
+          f"EX-4 S1b 真机: [Claude Code] configured + [Cursor] configured 双命中（{D158_EVID}/s1b.stdout.log）"),
+    _d158("EXP-D1-58-02", "Linux L(隔离HOME)",
+          "命中 merge：构造 fake ~/.claude.json，断言生成 .bak 备份 + mcpServers.huaweicloud-devkit 合并且唯一",
+          ".bak 存在 + merge 后 JSON 含 huaweicloud-devkit 键且唯一 + 原配置其余键完好",
+          f"EX-4 S2b 真机: .claude.json.bak 生成 + merge 后唯一 npx 条目 + project.owner 保留（{D158_EVID}/s2b.stdout.log）"),
+    _d158("EXP-D1-58-03", "Linux L(隔离HOME)",
+          "同 key 跳过：已含 huaweicloud-devkit 的配置重跑，断言 skipping 且无新 .bak",
+          "输出含 'skip' 字样 + .bak 数量不增（唯一性）",
+          f"EX-4 S3b 真机: 两次运行 'already configured; skipping' + .bak 计数 0 + 原配置字节不变（{D158_EVID}/s3b.stdout.log）"),
+    _d158("EXP-D1-58-04", "Linux L(隔离HOME)",
+          "坏 JSON 零写入：构造损坏 JSON 配置跑菜单，断言报 'not valid JSON' 且原文件字节不变",
+          "报错含 'not valid JSON' + 原文件 sha256 前后一致",
+          f"EX-4 S4 真机: before.sha==after.sha（824cdd…零写入）+ 'not valid JSON' 路径（{D158_EVID}/s4.stdout.log）"),
+    _d158("EXP-D1-58-05", "Linux L(隔离HOME)",
+          "未命中 snippet：无 Claude/Cursor 配置跑菜单，断言输出可粘贴 stdio 片段（含 mcpServers 与 remote 提示）",
+          "输出含 'mcpServers' 键文本 + remote 提示（可粘贴）；两层文本语义：菜单层='No supported agent detected'（promptZeroDetect 引导）+ configureGenericMCP 层='No known MCP agent detected; here is a config snippet you can paste'（断言⑤判定目标）",
+          f"EX-4 S3/S5 真机: configureGenericMCP 层 'No known MCP agent detected' + stdio snippet（mcpServers/npx → huaweicloud-devkit-mcp）+ remote 提示；菜单层 'No supported agent detected'（引导文本）（{D158_EVID}/s5.stdout.log）"),
 ]
 
 # ============ 输出 ============
 design_headers = ["ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果", "指引来源", "关联工具", "自动化建议", "展开规则", "生成时间"]
-exp_headers = ["ID", "展开类型", "枚举对象", "源用例", "优先级", "执行要点", "预期结果", "生成时间"]
+# R10: 展开级结构化状态列（与闭环规范 candidate/terminal-matrix 16 列对齐的核心状态字段）
+exp_headers = ["ID", "展开类型", "枚举对象", "源用例", "优先级", "执行要点", "预期结果", "生成时间", "status", "blockedReason", "requiredEvidence", "observedAt"]
 
 with open(os.path.join(DES_DIR, "用例矩阵-设计级.csv"), "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f)
     w.writerow(design_headers)
     for row in D:
-        w.writerow(row + (gen_ts(row[0]),))
+        # 展开规则空值按维度默认推导 + R11 四段规范化（行内显式规则映射/合并/兜底）
+        row = list(row)
+        row[11] = expand_rule(row[0], row[1], row[11])
+        w.writerow(tuple(row) + (gen_ts(row[0]),))
 
 with open(os.path.join(EXP_DIR, "用例矩阵-展开级.csv"), "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f)
     w.writerow(exp_headers)
     for row in E:
-        w.writerow(row + (gen_ts(row[3] if len(row) > 3 else row[0]),))  # 展开级以源用例批次为准
-    for row in NR3_EXPANDED:  # NR3 终端展开（Codex review-round-03；显式 ISO 时间戳）
+        # 设计基线展开行（D5/服务/评测）：状态列留空=设计基线（UNASSESSED），blockedReason/evidence/observedAt 空
+        w.writerow(list(row) + [gen_ts(row[3] if len(row) > 3 else row[0]), "", "", "", ""])
+    for row in NR3_EXPANDED:  # NR3 终端展开（12 列：含结构化 status/blockedReason/requiredEvidence/observedAt）
+        w.writerow(row)
+    for row in D158_EXPANDED:  # R12-4: D1-58 白名单五断言专属展开行（12 列，设计基线 UNASSESSED）
         w.writerow(row)
 
 print(f"设计级: {len(D)} 条")
-print(f"展开级: {len(E) + len(NR3_EXPANDED)} 条 (D5矩阵 {len(CLIENTS)*7} + 服务矩阵 {len(SERVICES)} + 评测集 {len(PROMPTS)} + NR3终端展开 {len(NR3_EXPANDED)})")
+print(f"展开级: {len(E) + len(NR3_EXPANDED) + len(D158_EXPANDED)} 条 (D5矩阵 {len(CLIENTS)*7} + 服务矩阵 {len(SERVICES)} + 评测集 {len(PROMPTS)} + NR3终端展开 {len(NR3_EXPANDED)} + D1-58白名单 {len(D158_EXPANDED)})")
 print(f"合计: {len(D) + len(E)} 条")
 print("输出目录:", DES_DIR)

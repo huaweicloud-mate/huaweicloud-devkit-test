@@ -1,0 +1,22 @@
+你是 huaweicloud-devkit 测试设计评审者（Codex role）。请对 Hermes 提交的全量测试设计评审整改轮做第 09 轮评审。
+
+【评审输入】
+- 整改通知（Hermes status.md）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\hermes\status.md
+- 全量评审报告：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\hermes\全量测试设计评审报告-20260911004604.md
+- 设计级矩阵真源（重生成后 162 行）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases\design\用例矩阵-设计级.csv
+- 展开级矩阵真源（132 行）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases\expanded\用例矩阵-展开级.csv
+- 生成脚本：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases\design\gen_matrix.py（本轮修改，可复现）
+- 上一轮你的评审（round-08）与闭环规范：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\ITER-004-20260910155945\codex\review-round-08-全量测试设计.md 和 C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\docs\06-Hermes-Codex测试设计评审闭环.md
+
+【本轮 Hermes 整改内容】
+1. 新增 9 条设计级用例（全 P1）：D1-56 安装中断恢复、D1-57 升级坏版本回滚、D2-21 AK/SK轮换感知、D3-C7 跨区域引导、D3-C8 企业项目参数、D3-C9 资源状态负向、D4-24 确认令牌过期/重放、D6-8 工具调用超时、D9-9 协议层超时取消。
+2. 展开规则补齐：153 条存量中 115 条空值 → 0 空（按维度默认推导 EXPAND_DEFAULT，脚本可审查）。
+3. 文档数量同步：docs/03、README、test-cases/README（162+132=294）。
+4. 全量评审报告 + 整改通知落盘 reviews/REV-20260911004604/hermes/。
+
+【评审要求】
+- 按 closed-loop 规范九类检查与放行门槛逐项核对，重点验证：新增 9 条用例的场景价值是否成立、是否与既有用例重复、断言是否可判定、展开规则默认值是否合理、gen_matrix.py 修改是否可复现、CSV 162 行与脚本是否一致。
+- 输出评审结论到文件：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-09-全量测试设计整改.md（含：逐项通过/不通过、必须整改项清单按优先级、未闭合项清单、是否可进入 TEST_DESIGN_READY 的判定）。
+- 结论只能是 TEST_DESIGN_READY 或 REVIEW_CHANGES_REQUESTED 二选一；所有 BLOCKED/SPEC-MISMATCH/FAIL 未闭合时不得给 TEST_DESIGN_READY。
+- 不修改 hermes/ 目录与 CSV 真源；你只写 codex/ 目录下 review-round-09 文件与 FINAL_STATUS.md（如需）。
+- 请使用写文件工具创建 review-round-09 文件，完成后回复【评审完成】四个字。

@@ -1,0 +1,21 @@
+你是 huaweicloud-devkit 测试设计评审者（Codex role）。请对 Hermes 提交的 Round-16 整改做第 16 轮评审【聚焦单整改项：S5 文本口径】。
+
+【评审输入】
+- Round-16 整改通知：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\hermes\status.md
+- 上一轮你的评审（round-15）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-15-全量测试设计整改.md
+- S5 真机证据：results\ITER-008-20260911072254\evidence\d158\s5.stdout.log
+- S5 manifest：results\ITER-008-20260911072254\evidence\d158\manifest.json
+- 展开级矩阵：test-cases\expanded\用例矩阵-展开级.csv（EXP-D1-58-05 行）
+
+【本轮整改内容（round-15 唯一整改项）】
+S5 'No supported' vs 'No known' 文本口径：
+- 真相：s5.stdout.log 两层文本均存在——L8 菜单层 'No supported agent detected.'（promptZeroDetect 引导）+ L18 configureGenericMCP 层 'No known MCP agent detected; here is a config snippet you can paste:'（断言⑤判定目标）。
+- 整改：EXP-D1-58-05 预期结果明确写入两层语义+判定目标；requiredEvidence 指向 s5.stdout.log；manifest 新增 S5_text_semantics 章节（menu_layer/assert_layer/conclusion）。
+
+【评审要求】
+- 聚焦核验：①S5 断言⑤判定目标文本（L18 'No known MCP agent detected' + snippet + remote 提示）是否真实在场 ②两层语义说明是否消除歧义（不再把菜单层文本误当断言目标）③EXP-D1-58-05 措辞与 manifest 是否一致（跑 verify_new 应 exit 0）。
+- 其余未闭合项（D1-39 FAIL/macOS/CodeArts/PTY/升级链/remote/规格裁决/132 UNASSESSED）仅确认状态未变，不需新证据。
+- 输出评审结论到：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-16-全量测试设计整改.md
+- 结论只能 TEST_DESIGN_READY 或 REVIEW_CHANGES_REQUESTED 二选一；P0 FAIL/环境 BLOCKED/规格 SPEC 未闭合时不得给 TEST_DESIGN_READY。
+- 不修改 hermes/ 与 CSV 真源；只写 codex/ 下 review-round-16。
+- 完成后回复【评审完成】四个字。

@@ -4,8 +4,8 @@
 > 设计文档：`C:\Users\Administrator\devkit-test\hdk\docs\version-upgrade-design.md`
 > 被测项目：`C:\Users\Administrator\devkit-test\hdk`（huaweicloud/huaweicloud-devkit）
 > 归档迭代：`ITER-004-20260910155945`
-> 创建时间：2026-09-10T15:59:45+08:00
-> 更新时间：2026-09-10T20:40:00+08:00（ISO 8601；第六轮+：接入 Linux 实机 testbot3 补跑，Linux 3 行转 PASS）
+> 创建时间：2026-09-10 15:59:45
+> 更新时间：2026-09-10 20:40:00（第六轮+：接入 Linux 实机 testbot3 补跑，Linux 3 行转 PASS）
 
 ## 当前状态
 
@@ -13,7 +13,7 @@
 
 可选状态：`HERMES_DRAFT_READY` / `CODEX_REVIEWING` / `REVIEW_CHANGES_REQUESTED` / `HERMES_REVISION_READY` / `USER_DECISION_REQUIRED` / `BLOCKED` / `TEST_DESIGN_READY`
 
-> 说明：按 Codex 第五轮评审（`codex/review-round-05-版本升级提醒.md`，BLOCKED）完成交接材料口径统一。`FINAL_STATUS.md` 由 Codex 维护为 `BLOCKED`；`TEST_DESIGN_READY` 需 Codex 复评通过后由流程签署，Hermes 不自行填写。用户已确认 **完整终端验收** 口径（2026-09-10T19:08:11+08:00），不接受受限范围豁免；环境类 BLOCKED 不得改写为 PASS。
+> 说明：按 Codex 第五轮评审（`codex/review-round-05-版本升级提醒.md`，BLOCKED）完成交接材料口径统一。`FINAL_STATUS.md` 由 Codex 维护为 `BLOCKED`；`TEST_DESIGN_READY` 需 Codex 复评通过后由流程签署，Hermes 不自行填写。用户已确认 **完整终端验收** 口径（2026-09-10 19:08:11），不接受受限范围豁免；环境类 BLOCKED 不得改写为 PASS。
 
 ## 基线
 
@@ -24,16 +24,16 @@
 | Node / npm | v22.23.2 / 10.9.8 |
 | OS / 架构（已执行） | Windows 10 / win32 x64 |
 | Agent/宿主（已执行） | Hermes（隔离 profile nr3-test，Hook）；OpenCode（非 Hook 代表） |
-| 执行时间（已执行轮） | 2026-09-10T15:29:00+08:00 ~ 2026-09-10T19:35:00+08:00（北京时间 ISO 8601） |
+| 执行时间（已执行轮） | 2026-09-10 15:29:00 ~ 2026-09-10 19:35:00（北京时间） |
 | 真实操作风险 | upgrade 写操作仅落隔离目录（evidence/nr3/.sandbox 临时构建 + hermes-profile-runtime，均不入库）；真实云资源零触碰 |
 
-## 当前统计（以 terminal-matrix.csv 与 hermes-e2e-manifest.json 为准，2026-09-10T20:10 统一）
+## 当前统计（以 terminal-matrix.csv 与 hermes-e2e-manifest.json 为准，2026-09-10 20:10 统一）
 
 **终端矩阵**（`terminal-matrix.csv` 与 `hermes/candidate-matrix.csv` 内容一致，**39 行 × 16 列**）：
 
 | 状态 | 行数 | 说明 |
 |---|---:|---|
-| PASS | 29 | 含 D1-54（Hermes 真实会话）、D1-52 Hermes(Hook) 行、**Linux D1-39/49/55（2026-09-10T20:34 testbot3 Ubuntu 24.04 aarch64 实机补跑）** |
+| PASS | 29 | 含 D1-54（Hermes 真实会话）、D1-52 Hermes(Hook) 行、**Linux D1-39/49/55（2026-09-10 20:34 testbot3 Ubuntu 24.04 aarch64 实机补跑）** |
 | SPEC-MISMATCH | 4 | D1-29 / D1-43c / D1-46g / D1-55b |
 | FAIL | 1 | D1-39 修复前 Windows P0 |
 | BLOCKED | 5 | Linux-D1-52（安装链 PASS/升级链探针平台限制）、macOS/ARM×1、CodeArtsSpace(Hook)×1、TTY×1、D1-55-session(NOT_RUN)×1 |

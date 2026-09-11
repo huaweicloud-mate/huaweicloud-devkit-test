@@ -1,0 +1,22 @@
+你是 huaweicloud-devkit 测试设计评审者（Codex role）。请对 Hermes 提交的 Round-12b 整改做第 13 轮评审【聚焦评审，范围窄】。
+
+【评审输入】
+- Round-12b 整改通知：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\hermes\status.md
+- 上一轮你的评审（round-12）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-12-全量测试设计整改.md
+- 展开级矩阵（137 行）：test-cases\expanded\用例矩阵-展开级.csv
+- 设计级矩阵（163 行）：test-cases\design\用例矩阵-设计级.csv
+- 追踪表（169×10）：test-cases\tracing\需求-设计-证据追踪表.csv
+- 门禁脚本：test-cases\design\verify_new.py / scan_gaps.py / gen_matrix.py / gen_tracing.py
+
+【本轮整改内容（仅针对 round-12 整改项#5：D1-58 专属展开行/五断言证据闭环）】
+1. 新增 EXP-D1-58-01~05 五条专属展开行（展开类型=D1-58白名单矩阵，源用例=D1-58），五断言逐条展开：探测两文件/命中 merge(.bak+唯一)/同 key 跳过/坏 JSON 零写入(sha256)/未命中 snippet。
+2. 追踪表 D1-58 设计行 expandedCaseId = EXP-D1-58-01~05（原"由EXP-D5矩阵覆盖"占位已替换为专属行）。
+3. 展开级 132→137 行；verify_new 同步更新。
+
+【评审要求】
+- 聚焦验证：①5 行 EXP-D1-58 是否逐断言绑定五类证据（requiredEvidence 非空）②追踪表映射是否指向专属行而非占位 ③外键/门禁是否仍全过（跑 verify_new 应 exit 0）④D1-58 设计级与展开级闭环是否成立。
+- 不必重新全面九类检查；对本轮之外未闭合项（环境 BLOCKED/规格 SPEC/FAIL）只需确认状态未变。
+- 输出评审结论到：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-13-全量测试设计整改.md
+- 结论只能 TEST_DESIGN_READY 或 REVIEW_CHANGES_REQUESTED 二选一；环境类 BLOCKED/FAIL/SPEC 未闭合时不得给 TEST_DESIGN_READY。
+- 不修改 hermes/ 与 CSV 真源；只写 codex/ 下 review-round-13。
+- 完成后回复【评审完成】四个字。

@@ -1,0 +1,23 @@
+你是 huaweicloud-devkit 测试设计评审者（Codex role）。请对 Hermes 提交的 Round-15 整改做第 15 轮评审【聚焦 round-14 四项整改核验】。
+
+【评审输入】
+- Round-15 整改通知：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\hermes\status.md
+- 上一轮你的评审（round-14）：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-14-全量测试设计整改.md
+- 追踪表（169×10）：test-cases\tracing\需求-设计-证据追踪表.csv
+- 展开级矩阵（137 行）：test-cases\expanded\用例矩阵-展开级.csv
+- 门禁脚本：test-cases\design\verify_new.py / gen_tracing.py / gen_matrix.py
+- D1-58 证据 manifest：results\ITER-008-20260911072254\evidence\d158\manifest.json
+
+【Round-15 整改内容（回应 round-14 的 4 项整改）】
+1. manifest 时间戳：`07:4X:XX` 占位 → 真实 `2026-09-11T07:35:00+08:00`。
+2. S5 EXIT=1 语义：新增 `exit_code_semantics` 章节——S3/S5 EXIT=1 为设计预期（configureGenericMCP 未命中返回 false → exit 1；snippet 为交付物，断言⑤判 PASS 依据=文本在场非退出码）。
+3. 聚合状态收紧：D1-52 → PARTIAL(BLOCKED×2)（展开级含 CodeArtsSpace/Linux升级链 BLOCKED）；D1-46 → PARTIAL(SPEC:46g)（46g reject 防御显式保留）；D1-55 → PARTIAL(SPEC+NOT_RUN+BLOCKED)。
+4. 门禁增强：状态一致性规则扩展——展开级含 BLOCKED/NOT_RUN/SPEC/FAIL 时父级追踪表不得纯 PASS；VALID_STATUS 支持 PARTIAL 前缀。
+
+【评审要求】
+- 聚焦核验：①manifest 时间戳真实且无占位符 ②EXIT 语义解释是否合理（S5 snippet 判 PASS 依据）③PARTIAL 聚合是否仍存在"夸大 PASS"（跑 verify_new 应 exit 0 且一致性检查无 [FAIL]）④门禁增强是否真拦截 BLOCKED 聚合。
+- 逐项回应 round-14 的 7 项外部依赖（D1-39/macOS/CodeArtsSpace/TTY/升级链/remote/规格裁决——无需新证据，确认状态未变即可）。
+- 输出评审结论到：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-15-全量测试设计整改.md
+- 结论只能 TEST_DESIGN_READY 或 REVIEW_CHANGES_REQUESTED 二选一；P0 FAIL/环境 BLOCKED/规格 SPEC 未闭合时不得给 TEST_DESIGN_READY。
+- 不修改 hermes/ 与 CSV 真源；只写 codex/ 下 review-round-15。
+- 完成后回复【评审完成】四个字。

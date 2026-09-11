@@ -1,6 +1,6 @@
 # huaweicloud-devkit-test
 
-> 时间格式约定：文档正文和表格使用 ISO 8601 时间戳 `YYYY-MM-DDTHH:mm:ss+08:00`；Windows 文件名和目录使用紧凑时间戳 `YYYYMMDDHHmmss`。历史归档保留原始命名和事实日期，不凭空补造缺失的时分秒。
+> 时间格式约定：文档正文和表格使用北京时间时间戳 `YYYY-MM-DD HH:mm:ss`（如 `2026-09-10 19:35:00`）；Windows 文件名和目录使用紧凑时间戳 `YYYYMMDDHHmmss`。不使用 ISO 8601（`T`/`+08:00`）形式。历史归档保留原始命名和事实日期，不凭空补造缺失的时分秒。
 
 HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板 / 执行结果 / 度量 / 评测。
 
@@ -13,7 +13,7 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 | 路径 | 内容 |
 |---|---|
 | [docs/](docs/) | 测试规划 v1.3 / 评审报告 / 执行准备清单 / 目录结构规划 / Hermes-Codex 闭环规范 / 团队评审稿 |
-| [test-cases/](test-cases/) | 用例体系母版：设计级 153 + 展开级 132 = 285 条（CSV 真源，gen_matrix.py 可复现生成；展开级含 D5 客户端 70 / D3-C4 服务 22 / D10 评测 15 / NR3 终端展开 25） |
+| [test-cases/](test-cases/) | 用例体系母版：设计级 163 + 展开级 137 = 300 条（CSV 真源，gen_matrix.py 可复现生成；展开级 12 列结构化状态：NR3 25 行 + D1-58 白名单 5 行含 status/blockedReason/requiredEvidence/observedAt；追踪表 tracing/需求-设计-证据追踪表.csv 169 行；门禁 verify_new.py（25 项 exit 码）/scan_gaps.py；R10-R12 补充 10 条设计级 D1-56~58、D2-21、D3-C7~9、D4-24、D6-8、D9-9 + D1-58 专属展开 5 行） |
 | [templates/](templates/) | 8 个模板：每晚报告 / 客户端矩阵 / 安全审计 / 缺口表 / 仪表盘 / issue / Hermes-Codex 交接状态 / 多终端矩阵 |
 | [reviews/](reviews/) | 测试设计评审归档（Hermes/Codex 轮次、决策、放行状态和多终端矩阵） |
 | [results/](results/) | 测试执行结果归档（`ITER-NNN-时间戳`，命名规则见 results/README.md） |

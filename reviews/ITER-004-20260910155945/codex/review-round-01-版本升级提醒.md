@@ -2,7 +2,7 @@
 
 > 评审对象：`hdk/docs/version-upgrade-design.md` 对应的 Hermes 用例 D1-26~D1-40  
 > 评审范围：`C:\Users\Administrator\devkit-test` 全量测试资产、ITER-004 执行证据，以及当前 `hdk` 实现与单测  
-> 评审时间：`2026-09-10T15:59:45+08:00`  
+> 评审时间：`2026-09-10 15:59:45`  
 > 评审结论：**可以继续让 Hermes 完善用例并执行，但必须按下述口径修正结果。**
 
 ## 一、总体判断

@@ -1,6 +1,6 @@
 # 版本升级提醒测试设计第五轮评审
 
-> 评审时间：2026-09-10T19:51:53+08:00
+> 评审时间：2026-09-10 19:51:53
 > 评审对象：`reviews/ITER-004-20260910155945/hermes/`
 > 设计文档：`C:\Users\Administrator\devkit-test\hdk\docs\version-upgrade-design.md`
 > 被测项目：`C:\Users\Administrator\devkit-test\hdk`

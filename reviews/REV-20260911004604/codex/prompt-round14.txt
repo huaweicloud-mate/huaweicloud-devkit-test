@@ -1,0 +1,30 @@
+你是 huaweicloud-devkit 测试设计评审者（Codex role）。请对 Hermes 提交的 EX 执行轮整改做第 14 轮评审【聚焦执行证据核验】。
+
+【评审输入】
+- EX 轮整改通知：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\hermes\status.md
+- 展开级矩阵（137 行）：test-cases\expanded\用例矩阵-展开级.csv
+- 设计级矩阵（163 行）：test-cases\design\用例矩阵-设计级.csv
+- 追踪表（169×10）：test-cases\tracing\需求-设计-证据追踪表.csv
+- Linux 探针证据（ITER-004 testbot3 已有）：results\ITER-004-2026-09-10\evidence\nr3\linux-logs\{linux-d1-unit-probe,linux-d1-mcp-loop,linux-d1-upgrade-real,linux-d1-49-d1-55-ext}.stdout.log + linux-manifest.json
+- D1-58 五断言真机证据（ITER-008 新执行）：results\ITER-008-20260911072254\evidence\d158\{s1b,s2b,s3b,s4,s5}.stdout.log + manifest.json
+- 门禁脚本：test-cases\design\verify_new.py / scan_gaps.py
+
+【EX 轮内容】
+1. Linux 5 条 BLOCKED 闭合（判读已有 testbot3 证据，非重跑）：
+   - EXP-NR3-02 (D1-27)：mcp-loop D1-41a/init/tools + unit D1-30/35c → PASS
+   - EXP-NR3-04 (D1-42)：mcp-loop D1-42a~e + upgrade-real Phase5 D1-42-real-* → PASS
+   - EXP-NR3-06 (D1-46)：unit D1-46a~h（46g SPEC 与 Windows 一致）→ PASS
+   - EXP-NR3-08 (D1-53)：unit D1-53fn-a~f → PASS
+   - EXP-NR3-24 (D1-45)：mcp-loop D1-45a~f → PASS
+   - 平台误报判读：unit-probe 5 FAIL + mcp-loop 2 FAIL 均为 D1-39 Windows EINVAL 专测断言（Linux 无此缺陷）
+2. D1-58 五断言真机验证（本次新执行，testbot3 隔离 HOME + script PTY，commit c6c0965）：
+   - S1b 探测双命中 / S2b merge+.bak 唯一 / S3b 同 key 跳过幂等 / S4 坏 JSON 零写入(sha 一致) / S5 未命中 snippet → 全部 PASS
+
+【评审要求】
+- 聚焦核验：①5 条 Linux 判读是否合规（探针断言与证据一致？46g SPEC 与 Windows 是否一致？）②D1-58 五断言证据是否真实有效（stdout 关键文本：configured/skipping/sha 对照/No known MCP agent）③判读未越权（不许把 Windows 专测 FAIL 记为产品缺陷）④矩阵/追踪表状态回填是否与外键/门禁一致（跑 verify_new 应 exit 0）
+- 逐项回应 EX 轮 7 项；标明哪些闭合、哪些仍依赖外部。
+- 对剩余未闭合（D1-39 FAIL/macOS/CodeArtsSpace/TTY/升级链/规格裁决/132 UNASSESSED）确认状态。
+- 输出评审结论到：C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\reviews\REV-20260911004604\codex\review-round-14-全量测试设计整改.md
+- 结论只能 TEST_DESIGN_READY 或 REVIEW_CHANGES_REQUESTED 二选一；P0 FAIL/环境 BLOCKED/规格 SPEC 未闭合时不得给 TEST_DESIGN_READY。
+- 不修改 hermes/ 与 CSV 真源；只写 codex/ 下 review-round-14。
+- 完成后回复【评审完成】四个字。

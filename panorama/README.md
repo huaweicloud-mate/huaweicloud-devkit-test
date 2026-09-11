@@ -7,7 +7,7 @@
 
 ## 文件命名
 
-文档正文和表格中的时间统一使用 ISO 8601 时间戳 `YYYY-MM-DDTHH:mm:ss+08:00`；Windows 文件名使用紧凑时间戳 `YYYYMMDDHHmmss`。
+文档正文和表格中的时间统一使用北京时间时间戳 `YYYY-MM-DD HH:mm:ss`（如 `2026-09-10 19:35:00`）；Windows 文件名使用紧凑时间戳 `YYYYMMDDHHmmss`。
 
 ```
 huaweicloud-devkit-测试全景图-ITER-<NNN>-<YYYYMMDDHHmmss>.html

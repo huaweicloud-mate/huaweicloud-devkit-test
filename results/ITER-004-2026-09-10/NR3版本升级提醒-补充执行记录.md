@@ -1,7 +1,7 @@
 # NR3 版本升级提醒——补充执行记录（评审落实轮 v2）
 
-> **生成时间**：2026-09-10T18:02:09+08:00（ISO 8601，与 v2 manifest 实际执行时间一致）｜更新：2026-09-10T20:10:00+08:00（第五轮整改：统一口径清理）
-> **runner 重跑时间**：2026-09-10T18:02:09+08:00 ~ 2026-09-10T18:03:52+08:00（对应 `run-logs/manifest.json` 的 started/finished，4 探针各退出码 0）
+> **生成时间**：2026-09-10 18:02:09（与 v2 manifest 实际执行时间一致）｜更新：2026-09-10 20:10:00（第五轮整改：统一口径清理）
+> **runner 重跑时间**：2026-09-10 18:02:09 ~ 2026-09-10 18:03:52（对应 `run-logs/manifest.json` 的 started/finished，4 探针各退出码 0）
 > **执行环境**：Windows 10（win32 x64）/ Node v22.23.2（hermes 内置）/ npm 10.9.8 / PowerShell 5.1（非 TTY，spawnSync 管道）
 > **前置评审**：`reviews/ITER-004-20260910155945/codex/review-round-01-版本升级提醒.md`（首轮）→ `review-round-02-版本升级提醒.md`（第二轮，REVIEW_CHANGES_REQUESTED）
 > **本轮目标**：闭合 Codex 第二轮 8 项门禁 → 交付 `HERMES_REVISION_READY`
@@ -10,9 +10,9 @@
 
 | 发布线 | 版本 | gitHead / Commit | npm 发布时间 | 用途 |
 |---|---|---|---|---|
-| 正式版 | 1.1.2 | `09a59b937eb3` | 2026-09-09T11:03Z | 真实安装/升级 E2E 的旧版（fj-old=原码 npm pack） |
-| next 线 | 1.1.3-next.2 | `c6c0965f0bdf` | 2026-09-10T01:22Z | 未修复副本（D1-39 修复前态）、修复副本底座 |
-| dev 远端 | — | `e2f4d2ada058`（2026-09-10T15:29+08:00 观测） | — | 漂移记录（本地 origin/dev 停在 306c633） |
+| 正式版 | 1.1.2 | `09a59b937eb3` | 2026-09-09 11:03Z | 真实安装/升级 E2E 的旧版（fj-old=原码 npm pack） |
+| next 线 | 1.1.3-next.2 | `c6c0965f0bdf` | 2026-09-10 01:22Z | 未修复副本（D1-39 修复前态）、修复副本底座 |
+| dev 远端 | — | `e2f4d2ada058`（2026-09-10 15:29 观测） | — | 漂移记录（本地 origin/dev 停在 306c633） |
 | 修复后模拟副本 | 1.1.3（受控，非官方发布线） | next.2 原码 + 3 处 FIX(sim) 补丁 | 测试夹具 | 仅证明修复方向（**不等于产品已修复**） |
 
 固定方式：沙箱内 `git worktree` 检出固定 commit；受控 tarball 由固定 commit 原码 `npm pack` 生成。
@@ -61,7 +61,7 @@
 | D1-51 | upgrade 失败恢复 | ENOENT/非零退出/manual/不污染 skip |
 | D1-52 | 真实升级安装与重启生效 | 真实 1.1.2 安装→真实 npx 升级 1.1.3（tarball 命中 0→1）→重启 serverInfo 1.1.3→配置未丢失 |
 | D1-53 | 镜像滞后夹具 | 坏 JSON→check_failed、恢复可检测 |
-| D1-54 | Hermes 真实会话级用户闭环 | **2026-09-10T19:35+08:00 已补齐**：隔离 Hermes 实例 5 会话真实 E2E（SKILL→check_update→征询→同意升级→重启生效→拒绝 dismiss→离线不阻塞），48 工具调用全成功（见补充执行章节） |
+| D1-54 | Hermes 真实会话级用户闭环 | **2026-09-10 19:35 已补齐**：隔离 Hermes 实例 5 会话真实 E2E（SKILL→check_update→征询→同意升级→重启生效→拒绝 dismiss→离线不阻塞），48 工具调用全成功（见补充执行章节） |
 
 ### ⚠️ SPEC-MISMATCH（4，**不计入 PASS**）
 
@@ -92,7 +92,7 @@
 |---|---|---|---|
 | COMMON（平台无关函数逻辑） | ✅ D1-27/28/30/31/32/33/34/35/36/44/46/47/50(mock) 已执行 | ⛔ BLOCKED：逻辑平台无关但需 Linux 复跑确认（无在线 Linux 测试机，解除条件=接入 zhangshuang/testbot1 后跑同套函数级探针） | 直接 MCP 探针归 COMMON/CROSS_PROCESS，**不**自动满足 CLIENT_MATRIX/AGENT_E2E |
 | CROSS_PROCESS | ✅ D1-42（重启持久化）、D1-48（多进程隔离）、D1-55（同进程多会话——SPEC 实锤） | ⛔ BLOCKED（同上） | 进程/会话边界的验证 |
-| CLIENT_MATRIX | ✅ 非 Hook 客户端代表=OpenCode 布局（D1-52：真实 install→MCP 进程→upgrade→重启，配置保留）｜✅ **Hook 客户端代表=Hermes**（D1-52 Hermes 行：真实隔离实例 nr3-test 完整生命周期 PASS，2026-09-10T19:35+08:00）｜⛔ CodeArtsSpace/WorkBuddy BLOCKED（无可用客户端环境，120.46.40.202 SSH 无凭据不可达） | Hook/非 Hook 门槛均已满足（Hermes Hook + OpenCode 非 Hook） |
+| CLIENT_MATRIX | ✅ 非 Hook 客户端代表=OpenCode 布局（D1-52：真实 install→MCP 进程→upgrade→重启，配置保留）｜✅ **Hook 客户端代表=Hermes**（D1-52 Hermes 行：真实隔离实例 nr3-test 完整生命周期 PASS，2026-09-10 19:35）｜⛔ CodeArtsSpace/WorkBuddy BLOCKED（无可用客户端环境，120.46.40.202 SSH 无凭据不可达） | Hook/非 Hook 门槛均已满足（Hermes Hook + OpenCode 非 Hook） |
 | AGENT_E2E | ✅ **D1-54 Hermes 真实会话 PASS**（5 会话：SKILL→check_update→征询→同意升级→重启生效→拒绝 dismiss→离线降级，48 工具调用；run-logs/hermes-e2e-s1b/s2/s3/s4/s6.out.log + manifest）｜OpenCode agent 会话内提示消费止于 MCP 进程级（记录为已知边界，不影响本行结论） | ⛔ BLOCKED | 直接 MCP 进程测试**不能替代**真实 Agent/宿主生命周期证据——已由真实 Hermes 会话满足 |
 | OS_MATRIX | ✅ Windows 10 x64 | ⛔ BLOCKED：Linux/macOS/ARM 为声明支持的路径，无执行环境；影响=跨平台 npm spawn 行为与升级链未验；解除=测试机接入 | — |
 | remote / TTY | ✅ remote：D1-55 HTTP 双客户端实测（含 remote 无 prewarm 观察）｜⛔ TTY：交互式确认/升级提示需真实 TTY 会话，未执行 | ⛔ BLOCKED | — |
@@ -128,9 +128,9 @@ node build-sandbox.mjs <hdk仓库根> .sandbox   # 构建隔离沙箱（约 2 �
 node run-probes.mjs .sandbox                  # 串行 4 探针 → run-logs/（stdout/stderr/exit/manifest.json）
 ```
 
-## 七、Hermes Agent E2E 与 Hook 客户端真实证据（2026-09-10T19:35:00+08:00，用户决策=完整验收后补跑）
+## 七、Hermes Agent E2E 与 Hook 客户端真实证据（2026-09-10 19:35:00，用户决策=完整验收后补跑）
 
-用户 2026-09-10T19:08:11+08:00 决策「完整验收，不接受受限范围豁免」；本机真实环境盘点：Linux 远程（120.46.40.202/113.44.143.91）SSH 无凭据不可达、WSL 无发行版、Docker 未安装 → Linux/macOS 保持 BLOCKED；**唯一可建真实路径 = 测试专用 Hermes 实例**（profile `nr3-test`，克隆自 default，隔离 HERMES_HOME 子目录 + MCP 子进程 USERPROFILE/HOME 重定向 `hermes-profile-runtime/`，零触碰真实用户目录）。
+用户 2026-09-10 19:08:11 决策「完整验收，不接受受限范围豁免」；本机真实环境盘点：Linux 远程（120.46.40.202/113.44.143.91）SSH 无凭据不可达、WSL 无发行版、Docker 未安装 → Linux/macOS 保持 BLOCKED；**唯一可建真实路径 = 测试专用 Hermes 实例**（profile `nr3-test`，克隆自 default，隔离 HERMES_HOME 子目录 + MCP 子进程 USERPROFILE/HOME 重定向 `hermes-profile-runtime/`，零触碰真实用户目录）。
 
 ### 7.1 前置环境修复：HER-1（Hermes MCP 客户端 SDK 版本漂移）
 
@@ -146,7 +146,7 @@ node run-probes.mjs .sandbox                  # 串行 4 探针 → run-logs/（
 | S1 询问（SKILL 驱动） | 20260910_192410_6aadcb | retrieve_skill ok → check_update `update_available 1.1.2→1.1.3, dismissed=false` → clarify 征询；**用户超时未同意 → 不执行 upgrade、不写 dismiss（未获同意不动作）** | PASS |
 | S2 同意升级 | 同会话 resume | `huaweicloud_upgrade → previousVersion=1.1.2, installedVersion=1.1.3, requiresRestart=true`；隔离目录 `npm-cache/_npx/*/node_modules/huaweicloud-devkit/package.json=v1.1.3` | PASS |
 | S3 重启生效 | 20260910_192840_c9457b | 新会话 MCP 指向升级安装点 → 插件 1.1.3=latestStable → `check_update up_to_date/updateAvailable=false`；KooCLI 7.2.12 匹配；无重复提醒 | PASS |
-| S4 拒绝 dismiss | 20260910_192921_ce758d | dismiss:true → dismissed；`hc-home/.config/huaweicloud/devkit-skip.json {dismissedVersion:1.1.3, expireAt:2026-09-13T11:29:33Z}`（3 天精确）；复查 dismissed、到期 2026-09-13T19:29:33+08:00 | PASS |
+| S4 拒绝 dismiss | 20260910_192921_ce758d | dismiss:true → dismissed；`hc-home/.config/huaweicloud/devkit-skip.json {dismissedVersion:1.1.3, expireAt:2026-09-13T11:29:33Z}`（3 天精确）；复查 dismissed、到期 2026-09-13 19:29:33 | PASS |
 | S6 离线不阻塞 | 20260910_193020_775b4b | registry 停止 → check_update `check_failed（"检测失败，不影响使用"）`；check_cli ok（KooCLI 7.2.12 已认证，无网络依赖） | PASS |
 
 取消/重复调用路径：S1 超时兜底=取消语义；S4 复查调用=重复调用语义（设计文档「同意、拒绝、取消、重复调用」覆盖）。
@@ -167,7 +167,7 @@ node run-probes.mjs .sandbox                  # 串行 4 探针 → run-logs/（
 5. **D1-39**：`#554` 上游固定修复版本发布后，Windows 全链回归（FIX(sim) 非产品证据）。
 6. **环境接入（BLOCKED 项）**：Linux 测试机（zhangshuang/testbot1）、macOS/ARM CI、CodeArtsSpace 客户端、PTY TTY 会话——接入后按矩阵补跑；Hermes profile `nr3-test` 保留为测试实例（hermes-home/profiles/nr3-test，不入库）。
 
-## 九、环境接入侦查（2026-09-10T20:20:00+08:00，Codex 第六轮前实测）
+## 九、环境接入侦查（2026-09-10 20:20:00，Codex 第六轮前实测）
 
 用户要求优先获取真实 Linux 证据；本机穷尽接入路径后的**实测记录**（矩阵状态未变，仍 BLOCKED，但阻塞依据由此从"假设不可用"升级为"逐台实测不可达"）：
 
@@ -182,9 +182,9 @@ node run-probes.mjs .sandbox                  # 串行 4 探针 → run-logs/（
 | PTY/TTY | 本机仅 PowerShell 非 TTY 管道 | 无 PTY |
 | D1-55-session | remote transport 无 MCP-Session-Id/状态绑定（协议探测+源码） | 产品不支持 |
 
-**结论（2026-09-10T20:20 时点）**：当时 8 行 BLOCKED 保持、等待用户提供机器/凭据；**随后（§十，20:34）凭测试机账号表接入 testbot3 实机，Linux 3 行转 PASS**——本节省略为历史侦查记录。
+**结论（2026-09-10 20:20 时点）**：当时 8 行 BLOCKED 保持、等待用户提供机器/凭据；**随后（§十，20:34）凭测试机账号表接入 testbot3 实机，Linux 3 行转 PASS**——本节省略为历史侦查记录。
 
-## 十、Linux 实机补跑（2026-09-10T20:34:00+08:00，Codex 第六轮——成功接入测试机账号表机器）
+## 十、Linux 实机补跑（2026-09-10 20:34:00，Codex 第六轮——成功接入测试机账号表机器）
 
 用户质疑"此前可连为何现在连不上"——实测发现本机 `~/.ssh` 无私钥，但技能记录测试机凭据在 `~/Desktop/测试机账号.txt`（TSV：IP/账号/密码/系统），**凭据表读取后 3 台 Ubuntu 24.04 实机认证成功**（密码仅脚本内使用，未入对话/日志）。选 **1.94.218.129（testbot3）** 执行（磁盘最空）。
 
@@ -208,7 +208,7 @@ node run-probes.mjs .sandbox                  # 串行 4 探针 → run-logs/（
 | d1-mcp-loop（D1-39mcp） | 29 PASS / 2 FAIL | FAIL=D1-39mcp-b/c（断言期望 Windows 的 check_failed/null；Linux 上 check_update 正常返回 update_available → 平台期望差异） |
 | d1-upgrade-real（D1-52） | 10 PASS / 6 FAIL | Phase1 真实安装链 **PASS**（1.1.2 安装/插件落点/undici/opencode.json）+ D1-52-p3d 配置保留 PASS；FAIL=p2b（Windows EINVAL 语义期望）+ p3a-c/p4a-b（**探针 npx.cmd 硬编码 + npx 子进程 env 未注入 fixture registry**，测试机无外网致 npx 崩溃 → 升级链未获完整证据） |
 
-### 10.3 矩阵更新（candidate==terminal 同步，2026-09-10T20:34）
+### 10.3 矩阵更新（candidate==terminal 同步，2026-09-10 20:34）
 
 - **D1-39 Linux → PASS**（Linux 语义无 EINVAL；5 项 FAIL 判读为探针平台误报）
 - **D1-49 Linux → PASS**（ext 探针 14+1+1 与 Windows 一致）
