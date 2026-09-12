@@ -4,9 +4,8 @@
 
 ## 0. 自我识别 + 前置准备
 
-> **推送凭证（分散部署必读）**：各 agent 机器 push 到本仓库需凭证，二选一——
-> ① 环境变量 token（推荐）：Windows `$env:HDK_GH_TOKEN="<token>"`，Linux `export HDK_GH_TOKEN="<token>"`；
-> ② 本机 gh 登录有 huaweicloud-mate write 权限的账号。
+> **推送凭证 + 初始化（分散部署必读）**：每台 agent 机器**首次**先跑 `python scripts/init_agent.py`（交互输入 fine-grained token，自动 clone 仓库 + 装 next 包 + 验证环境）。
+> 之后每次 push 凭证二选一：① 环境变量 `HDK_GH_TOKEN`；② 本机 gh 登录有 huaweicloud-mate write 权限的账号。
 > 脚本优先读 `HDK_GH_TOKEN`，否则尝试本机 gh shuangheaven token。
 
 1. **自我识别身份**（无需人工告知）：
