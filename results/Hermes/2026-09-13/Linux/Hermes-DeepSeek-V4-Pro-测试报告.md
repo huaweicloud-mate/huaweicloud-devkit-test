@@ -1,80 +1,123 @@
 # Hermes-DeepSeek-V4-Pro 测试报告
 
 > 生成时间：2026-09-13（北京时间）
-> 客户端/OS：Hermes / Linux（aarch64，Ubuntu 6.8.0-106-generic）
 > 测试执行归档：`results/Hermes/2026-09-13/Linux/`
-> 测试对象：huaweicloud-devkit（GitHub huaweicloud/huaweicloud-devkit）
+> 被测对象：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 
 ## 一、测试概述
 
 | 项 | 值 |
 |---|---|
-| 被测版本（SUT） | `1.1.3`（`npm install -g huaweicloud-devkit@next`，本机私有 registry `127.0.0.1:45998` 的 `next` dist-tag 实际解析为 1.1.3 内容，见「阻塞项/环境说明」） |
-| 源码仓库（hdk） | `huaweicloud/huaweicloud-devkit` @ `b0e13f3`（`chore(release): 1.1.3`，main 分支，与 SUT 版本一致，用于源码/根因定位） |
-| 工具全集 | 39 个（`tools.mjs` `TOOL_DEFINITIONS`） |
-| 本机环境 | Linux aarch64，Node v22.13.0，npm 10.9.2 |
+| 被测版本（SUT） | `v1.1.4-next.3`（npm @next，gitHead `3b6290b0`，PR #647） |
+| 工具全集 | 39 个（`tools.mjs` TOOL_DEFINITIONS） |
+| 本机环境 | Linux (aarch64)，Node v22.13.0，Python 3.12.3 |
+| 真云凭证 | cn-north-4（credentials.json 已配置，AKSK 模式） |
+| hcloud | 7.2.12（doctor 确认已装且已配置凭证） |
 | Agent + 模型 | Hermes + DeepSeek-V4-Pro |
-| 测试类型 | 本日执行（P0 全量 + P1/P2 展开级 NR3 终端矩阵） |
-| 证据方式 | 源码级探针（import `safety-policy.mjs` / `risk-rule-engine.mjs` / `update-check.mjs` / `tools.mjs` 函数级断言）+ 真云只读（未创建资源） |
+| 测试类型 | 源码级探针（safety-policy / risk-rule-engine / update-check / mcp-protocol）+ 真机 CLI（install/doctor/status/uninstall） |
+
+**设计真源**：设计级 163 条 / 展开级 137 条 / 追踪表 169 条。
+**执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，记录 decision/结果到 `stdout.log`；CLI 真机执行 install/status/doctor/uninstall 记录日志。
 
 ## 二、执行结果
 
-### 2.1 设计级 P0（18 条）
+### 2.1 状态汇总（设计级）
 
-| 状态 | 条数 | 用例 |
+| 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 14 | D1-39、D1-40、D2-4、D2-11、D4-1、D4-3、D4-5、D4-9、D4-15、D4-18、D4-19、D4-21、D4-22、D8-7 |
-| FAIL | 3 | D4-2、D4-16、D4-23 |
-| NOT_RUN | 1 | D10-4（需评测 harness + Agent 会话） |
+| PASS | 32 | 有证据且通过 PASS 门禁校验 |
+| FAIL | 7 | 不符预期，记录根因（见缺陷清单） |
+| BLOCKED | 1 | D1-39 Windows 专属用例 |
+| SPEC-MISMATCH | 7 | 契约漂移（历史遗留，待开发/产品裁决） |
+| NOT_RUN | 116 | 本轮未覆盖（真云 E2E / 多终端矩阵 / 审批流实时对话框等） |
+| **合计** | **163** | |
 
-> P0 通过率：14/18 = **77.8%**（3 项 P0 缺陷详见表三）
+### 2.2 状态汇总（展开级）
 
-### 2.2 展开级 P0（NR3 终端矩阵，3 条）
+| 状态 | 数量 |
+|---|---|
+| PASS | 1（EXP-D5-8-1 Hermes-D5-1 安装） |
+| NOT_RUN | 136 |
+| **合计** | **137** | |
 
-| 状态 | 用例 | 说明 |
-|---|---|---|
-| PASS | EXP-NR3-10 | Linux 无 `.cmd`/EINVAL 语义，升级检测链真实可用（`queryDistTagsSync` → `{latest,next}`，`judgeUpdate` 正确判定） |
-| NOT_RUN | EXP-NR3-09 | Windows 专测，本机 Linux 无法复现 `spawnSync('npm.cmd')` EINVAL（#554 未闭合） |
-| BLOCKED | EXP-NR3-11 | 无 macOS/ARM 机器或 CI runner |
+### 2.3 已执行并通过的用例组
 
-### 2.3 安全域细节（源码级探针实证）
+| 用例组 | 结果 |
+|---|---|
+| P0 安全核心（D4-1/3/4/5/7/9/22） | 通过，探针实测 deny/allow |
+| P0 升级检测链（D1-27/28/30/31/32/34/40） | 通过（judgeUpdate/semverCompare 源码级） |
+| P0 凭证脱敏（D2-4）+ STS 拒绝（D2-11） | 通过（redactSecrets + auth_switch persist+securityToken → {status:error, scope:rejected}） |
+| P1 CLI 安装/doctor/status/uninstall（D1-1/3/4/5） | 通过（真机 CLI） |
+| P1 安全域（D4-7/8/11/12/13/14/17/20） | 通过（源码级） |
+| P1 MCP 协议（D9-1/3/4/8） | 通过（dispatch 源码级） |
+| P0 技能机械执行（D8-7） | 通过（7 meta 技能 SKILL.md 结构 + retrieve_skill 加载） |
 
-- **D4-1 凭证文件读取拦截**：`cat ~/.hcloud/config`、`type ...\.hcloud\config`、`Get-Content ~/.huaweicloud/credentials` 等 5 组全部 `deny`。
-- **D4-3 明文 secret API 拦截**：`hcloud csms ShowSecretVersion`、`hcloud dew GetSecretValue`、`echo $secret_string` 等 4 组全部 `deny`。
-- **D4-5 写操作误判**：`hcloud ecs DeleteServers` → `deny/write`（未误判只读）；对照 `ListServers` → `allow/read_only`。
-- **D4-9 公开暴露/破坏性**：`0.0.0.0/0+22` 端口暴露 → `deny`（`hwc-network-public-admin-port`）；`DeleteServers --force` → `deny`。
-- **D4-15 绕过尝试**：大小写混淆、小写 service、参数拼接拆分、base64+pipe+sh 4 组全部拦截。
-- **D4-18/19 审批语义 + 预检**：未审批写操作 `deny`（plan+审批门禁，非静默拒绝）；`allowWrites=true` 后仍触发公网端口风险预检 `deny`。
-- **D4-21/22 具名回归**：broad IAM（`Action:*`+`Effect:Allow`）→ `deny`（`hwc-iam-admin-policy`）；公网 FunctionGraph 无鉴权 → `warn`。
-- **D2-4 脱敏**：对象/字符串 `ak`/`sk`/`password`/`secret_key` 全部 `<redacted>`；`hcloud configure show` → `deny`（redirect 到 redacted 工具）。
-- **D2-11 R3 STS**：`auth_switch persist+token` → `{status:error, scope:rejected}`，且临时 HOME 下 `credentials.json` 未写入（token 永不落盘）。
+## 三、缺陷清单（7 个 FAIL）
 
-## 三、缺陷清单（3 个 P0）
-
-| # | 级别 | 用例ID | 标题 | 根因（文件+行号） |
+| # | 级别 | 用例ID | 标题 | 根因（文件：行） |
 |---|---|---|---|---|
-| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `safety-policy.mjs` `classifyTextCommand` 的 env-dump 分支与 `safety/rules/cloud-risk-rules.json` `hwc-command-env-dump` 仅覆盖 `HUAWEICLOUD|HWC_|HCLOUD|OS_` 前缀，未覆盖实际凭证环境变量前缀 `HW_`（`HW_ACCESS_KEY`/`HW_SECRET_KEY`/`HW_SECURITY_TOKEN`，见 `credentials.mjs` `resolveCredentials` L101-104）。`printenv HW_ACCESS_KEY`、`echo $HW_SECRET_KEY`、`env | grep HW_SECURITY_TOKEN` 均被放行（探针实测 allow） |
-| 2 | P0 | D4-16 | 命令包裹穿透未拦截内层写命令 | `safety-policy.mjs` `splitSimpleCommand` 将 `sh -c 'hcloud ecs DeleteServers ...'` 的引号内层折叠为单个不透明 token，`classifyHcloudArgs` 把 `sh` 当 service、内层命令当 operation，`writeOperationPrefixes` 的 `(^|[A-Za-z0-9])Delete` 因前缀为空格不匹配 → 写操作分类失败放行（探针实测 allow）。`huaweicloud-safety.py` `evaluate` 同段落 `WRITE_OPERATION_RE` 同样失配 |
-| 3 | P0 | D4-23 | 全局规则 huawei-agent-rules.mdc 未注入 | `rules/huawei-agent-rules.mdc`（3840B）在全仓 `grep -rniE "huawei-agent-rules|\.mdc"` 为 0 命中；`setup-cli.mjs` 的 `copyFileSync` 仅复制 skill-tracker.js / telemetry / hook-plugin.mjs，无任何 agent-rules 注入逻辑 → 11 个安装目标均无该规则生效 |
+| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `safety-policy.mjs` `classifyTextCommand()` 的 env-dump 正则 `/HUAWEICLOUD\|HWC_\|HCLOUD\|OS_/i`（line 334-337）未覆盖 `HW_ACCESS_KEY`/`HW_SECRET_KEY` 前缀；`echo $HUAWEICLOUD_ACCESS_KEY_ID` 通道未被拦截（echo 不在 env/printenv 规则） |
+| 2 | P0 | D4-15 | hook 绕过：命令替换 $() 混淆路径 | `classifyTextCommand('cat ~/.hc$(echo loud)/credentials')` 返回 allow，credentialFilePatterns 的 `\.hcloud` 被 `$(...)` 打断无法命中 |
+| 3 | P0 | D4-16 | 命令包裹穿透：sh -c wrapper | `classifyTextCommand('sh -c "env \| grep HUAWEICLOUD"')` 与 `sh -c "hcloud ecs DeleteServer ..."` 均返回 allow，wrapper 内层未做二次提取检测 |
+| 4 | P0 | D4-21 | hook_check_artifacts 未检测 Terraform HCL broad IAM | `risk-rule-engine.mjs` `hwc-iam-admin-policy` 的 Action 正则仅匹配 JSON `"Action":"*"`；`Action = ["*"]` 与 `effect = "Allow"`（带引号 HCL）不命中，evaluateArtifacts 返回 allow |
+| 5 | P1 | D4-6 | --adminPass flag 形式不脱敏 | `redactString()`（line 40-46）仅匹配 `adminPass[:=]value`，未覆盖 `--adminPass value`（空格/flag 形式） |
+| 6 | P2 | D4-10 | fork bomb 规则失效（正则双重转义） | `cloud-risk-rules.json` `hwc-sandbox-destructive-command` 的 fork bomb 正则 `:\(\)\{...` 双重转义，编译后匹配字面反斜杠；`:(){ :|:& };:` 永不命中（evaluateCommandRisk 返回 allow） |
+| 7 | P2 | D9-2 | JSON-RPC 错误码未区分 | `mcp-server.mjs` `handleMessage()`（line 164-173）对所有异常硬编码 `code:-32603`，未知方法应映射 `-32601 (Method not found)` |
 
-> 补充低危观察（不阻断，记入报告）：`huaweicloud_hook_check_artifacts` 对含 `resource`+服务关键词（如 `huaweicloud_ecs`）且无 ttl 的 benign IaC 会命中 `hwc-sandbox-missing-ttl` 产生 `warn`（过度告警，仅告警不阻断）；另外 7 个 meta 技能中有 6 个用 `huaweicloud-` 前缀、`getting-started` 用 `huawei-` 前缀（命名轻微漂移）。
+### 缺陷根因详情（关键证据）
+
+**D4-2（P0）凭证 env 打印拦截不完整**
+
+文件：`plugins/huaweicloud-core/src/safety-policy.mjs` line 334-343
+```javascript
+if (
+  /(^|\s)(env|printenv|Get-ChildItem\s+Env:|gci\s+Env:|dir\s+Env:)/i.test(text) &&
+  /HUAWEICLOUD|HWC_|HCLOUD|OS_/i.test(text)      // ← 缺 HW_ 前缀
+)
+```
+- `env | grep HW_ACCESS_KEY` → `allow`（应 deny）
+- `printenv HW_SECRET_KEY` → `allow`（应 deny）
+- `echo $HUAWEICLOUD_ACCESS_KEY_ID` → `allow`（echo 通道无拦截）
+
+**D4-16（P0）命令包裹穿透**
+
+`sh -c "env | grep HUAWEICLOUD"` → allow（内层 env dump 未提取）；`sh -c "hcloud ecs DeleteServer --server-id x"` → allow（内层写操作穿透）。`classifyTextCommand()` 只检测整行文本，未提取 wrapper（`sh -c`/`bash -c`）内层参数做二次判定。对照：`bash -c "cat ~/.hcloud/credentials"` → deny（仅因凭证文件路径整行仍可见而命中，属巧合拦截）。
+
+**D4-21（P0）Terraform HCL broad IAM 漏检**
+
+`risk-rule-engine.mjs` 规则 `hwc-iam-admin-policy`：
+- Action 正则 `"Action"\s*:\s*("*"|["*"])|Action\s*[=:]\s*(\*|\*:\*)`：不匹配 `Action = ["*"]`（`[` 阻断）
+- Effect 正则 `"Effect"\s*:\s*"Allow"|Effect\s*[=:]\s*Allow`：不匹配 `effect = "Allow"`（引号阻断）
+- JSON 形式 `"Action":"*"` + `"Effect":"Allow"` 可正确 deny（对比验证）
+
+**D4-10（P2）fork bomb 规则失效**
+
+`cloud-risk-rules.json` fork bomb 正则 field 值 `:\\\\\\(\\\\\\\\)\\\\{[^}]*...` 存在双重转义（`\\(` 被解析为字面 `\(`），编译后无法匹配标准 fork bomb `:(){ :|:& };:`。
 
 ## 四、阻塞项
 
 | 项 | 原因 |
 |---|---|
-| D10-4 安全干预有效性 | 需评测 harness + Agent 会话环境，本机不可达（NOT_RUN） |
-| EXP-NR3-09（Windows `npm.cmd` EINVAL） | Windows 专测；本机 Linux 无 Windows 环境（历史 FAIL #554 未闭合） |
-| EXP-NR3-11（macOS/ARM） | 无 macOS/ARM 机器或 CI runner（BLOCKED） |
-| 真云资源创建/删除类用例 | 本轮未执行真实资源创建，仅只读/源码级验证 |
-| @next 环境说明 | 本机私有 registry（`127.0.0.1:45998`）的 `next` dist-tag 指向的 tarball 与 `latest`（1.1.3）字节一致（md5 相同），`npm install -g @next` 实装 1.1.3 内容；测试侧环境快照，非产品缺陷 |
+| D1-39 Windows 升级检测链（P0） | Windows 专属 EINVAL 场景，本机 Linux aarch64 无法复现 |
+| D4-18/19 审批流实时对话框 | 需真实 Agent 会话确认流（半自动），源码级仅验证 assertAllowed 阻断语义 |
+| D4-23 11 目标 rules 注入 | 仅源码级确认 rules 文件存在 + Hermes 单目标安装，未逐 11 目标验证 |
+| D10 评测集 | 需真实 harness 运行评测集 |
+| D3/D5/D6/D7 多终端/真云 E2E | 需逐客户端环境 + 真云资源创建/删除 |
 
-## 五、真云资源清理声明
+## 五、证据清单
 
-本轮未创建任何真云资源（仅源码级探针 + 只读 npm/registry 查询），无资源残留。D2-11 探针使用独立临时 `$HUAWEICLOUD_HOME`（`/tmp/hdk-auth-*`）并在结束前删除，未触碰真实凭证。
+| 证据目录 | 探针脚本 | 覆盖用例 |
+|---|---|---|
+| `evidence/d4-security/` | `probe-d4-security.mjs` + `stdout.log` | D4-1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/20/21/22/23 |
+| `evidence/d1-upgrade/` | `probe-d1-upgrade.mjs` + `stdout.log` | D1-27/28/30/31/32/34/40 |
+| `evidence/d2-d9-auth-protocol/` | `probe-d2-d9.mjs` + `stdout.log` | D2-4/11 + D9-1/2/3/4/8 |
+| `evidence/d8-skills/` | `probe-d8-skills.mjs` + `stdout.log` | D8-7 |
+| `evidence/d1-cli/` | `stdout.log` + `install.log` + `uninstall-reinstall.log` + `post-install-status.log` | D1-1/3/4/5（真机 CLI） |
 
-## 六、后续计划
+## 六、真云资源清理声明
 
-1. 补测 P1 剩余域（D1 剩 14 条、D4 剩 14 条、D3 剩 5 条、D5-D10 共 47 条），每完成一批回填执行状态。
-2. D4-2 / D4-16 / D4-23 三项 P0 缺陷待上游开发修复后回归。
-3. Windows / macOS 终端矩阵补齐需对应环境或 CI runner。
+本轮仅执行源码级静态探针 + 只读 CLI（status/doctor/version）+ Hermes 目标 install/uninstall（最后已 reinstall 还原）。**未创建/删除任何华为云资源**，无资源残留。install/uninstall 测试对 ~/devkit-test/Hermes 工作区和 hermes-home 插件目录的改动已通过 reinstall 还原。
+
+## 七、PASS 门禁校验
+
+`python scripts/verify_no_fake_pass.py Hermes Linux 2026-09-13` → **通过**（所有 PASS 用例均有 evidencePath 且证据存在）。
