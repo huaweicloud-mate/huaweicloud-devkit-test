@@ -45,7 +45,7 @@
 - **关联用例**：D4-24（D4 安全域审批流健壮性）。D3-B7 审批链本身（deny/approve/single-use/tamper）**实测 6/6 PASS**，仅 D4-24 的 TTL/响应/幂等契约不符。
 - **证据**：`evidence/d3-b7-approval/probe.stdout.log` + 源码 `hcloud-cli.mjs` L14/L84-95。
 
-## #4【P2】D3-C9 资源不存在错误码断言与实际不符（SPEC-MISMATCH）
+## #4【P2·非产品缺陷】D3-C9 资源不存在错误码断言与实际不符（SPEC-MISMATCH）
 
 - **现象**：D3-C9 断言「不存在 ID → `code=APIGW.0101`」，实测：
   - ECS `ShowServer`（不存在的 UUID）→ `Ecs.0114`（`Instance[...] could not be found`）；
