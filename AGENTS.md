@@ -10,14 +10,27 @@
 | 源码仓库 | `https://github.com/huaweicloud/huaweicloud-devkit.git` | 源码检查/根因定位/写探针（clone 到 `hdk`） |
 | 被测包 | `huaweicloud-devkit@next`（npm） | 真实场景黑盒测试 |
 
-clone 命令（本地尚无仓库时）：
+## 专属目录（预置条件，必须）
+
+每个智能体须新建**与自己同名的专属目录** `~/devkit-test/<智能体>/`，用于保存两个仓库：
+
+```
+~/devkit-test/<智能体>/
+├── huaweicloud-devkit-test/     # 测试仓库 clone
+└── hdk/                          # 源码仓库 clone
+```
+
+例：`~/devkit-test/OpenCode/`、`~/devkit-test/Codex/`。**切勿共用同一目录**，否则多 agent 互相覆盖冲突。
+
+clone 命令（在 `~/devkit-test/<智能体>/` 目录内执行）：
 ```bash
+mkdir -p ~/devkit-test/OpenCode && cd ~/devkit-test/OpenCode   # 换成你的智能体名
 git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git
 git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
 npm install -g huaweicloud-devkit@next
 ```
 
-> ⚠️ **专属目录隔离**：本机多 agent 时，每个 agent 必须用自己独立的 clone（如 `~/devkit-test/OpenCode/`、`~/devkit-test/Codex/`），**切勿共用同一目录**，否则互相覆盖冲突。首次可用 `python scripts/init_agent.py <客户端>` 自动建专属目录（含测试仓库 + 源码仓库）。
+首次可用 `python scripts/init_agent.py <客户端>` 自动建该目录结构（含测试仓库 + 源码仓库）。
 
 ## 0. 自我识别 + 前置准备
 
