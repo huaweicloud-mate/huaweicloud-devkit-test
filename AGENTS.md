@@ -34,6 +34,8 @@ npm install -g huaweicloud-devkit@next
    - 源码仓库 `hdk` checkout 到 npm `@next` 对应 commit（源码检查用）
    - `npm install -g huaweicloud-devkit@next` 安装最新被测包（黑盒测试用）
 
+> **环境 PATH**：node/npm/gh 若装在用户目录（`~/nodejs/bin`、`~/bin`），非交互 shell 不自动加载。执行前先 `export PATH=$HOME/nodejs/bin:$HOME/bin:$PATH`（脚本 `prepare_env.py` 会自动加入 PATH，无需手动）。
+
 ## 1. 建当日执行包
 
 ```bash

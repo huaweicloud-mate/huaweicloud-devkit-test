@@ -30,6 +30,12 @@ def set_gh_token():
     if tok and tok.strip():
         os.environ["GH_TOKEN"] = tok.strip()
         return True
+    p = os.path.expanduser("~/.hdk_token")
+    if os.path.isfile(p):
+        tok = open(p).read().strip()
+        if tok:
+            os.environ["GH_TOKEN"] = tok
+            return True
     rc, tok, _ = run("gh auth token --user shuangheaven")
     if rc == 0 and tok.strip():
         os.environ["GH_TOKEN"] = tok.strip()
@@ -136,9 +142,20 @@ def check_credentials():
     return False
 
 
+def ensure_node_path():
+    # 非交互 SSH 不加载 ~/.profile，手动把用户目录工具（node/gh）加入 PATH
+    nb = os.path.expanduser("~/nodejs/bin")
+    if os.path.isdir(nb):
+        os.environ["PATH"] = nb + os.pathsep + os.environ.get("PATH", "")
+    b = os.path.expanduser("~/bin")
+    if os.path.isdir(b):
+        os.environ["PATH"] = b + os.pathsep + os.environ.get("PATH", "")
+
+
 def main():
     setup = "--setup" in sys.argv
     update = "--update" in sys.argv
+    ensure_node_path()
     tools_ok = check_tools()
     print("=== 仓库 ===")
     repo_ok = check_repo(REPO, TEST_REPO_URL, "测试仓库", setup)
