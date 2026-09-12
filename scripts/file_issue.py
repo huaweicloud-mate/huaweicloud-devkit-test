@@ -13,6 +13,7 @@
 import os, sys, re, subprocess
 
 REPO_UPSTREAM = "huaweicloud/huaweicloud-devkit"
+REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def parse_findings(path):
@@ -66,7 +67,7 @@ def main():
     if not path:
         # 默认找最近一次执行归档的 FINDINGS.md
         import glob
-        cands = sorted(glob.glob(os.path.join("results", "ITER-*", "FINDINGS.md")), reverse=True)
+        cands = sorted(glob.glob(os.path.join(REPO, "results", "ITER-*", "FINDINGS.md")), reverse=True)
         if not cands:
             print("未找到 FINDINGS.md，请显式传路径: python file_issue.py <缺陷.md> <版本>")
             sys.exit(2)
