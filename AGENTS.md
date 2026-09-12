@@ -55,20 +55,20 @@ python scripts/init_day.py <客户端> <OS>
 
 `results/<客户端>/<日期>/<OS>/<客户端>-<模型>-测试报告.md`，含：概述、执行结果、缺陷清单（根因+证据）、阻塞项、资源清理声明。
 
-## 5. 汇总 + 每小时提报
+## 5. 每小时提报（只提交自己目录）
 
 ```bash
-python scripts/gen_summary.py                          # 首次生成当天 Summary 总矩阵
-python scripts/update_summary.py <客户端> <OS>          # 填自己那一列
-# 长时执行时，每小时跑一次防丢失：
+# 长时执行时，每小时跑一次防丢失（脚本只 git add 自己 results/<客户端>/，不碰 Summary）：
 python scripts/hourly_sync.py <客户端> <OS>
 ```
+
+> **你不生成 Summary**。Summary 由维护者统一跑 `python scripts/build_summary.py` 汇总生成，你只负责自己的 `results/<客户端>/` 目录，别碰 Summary/其他客户端（避免共享文件冲突）。
 
 ## 6. 统一提单 + 提交（全量测完后）
 
 ```bash
 python scripts/file_issue.py <缺陷汇总.md> <版本>       # 统一提交 1 个合并单
-git add -A && git commit -m "test: <客户端> <OS> 执行回填"
+git add results/<客户端> && git commit -m "test: <客户端> <OS> 执行回填"
 git -c credential.helper="!gh auth git-credential" push origin main
 ```
 
@@ -78,7 +78,7 @@ git -c credential.helper="!gh auth git-credential" push origin main
 2. **缺陷**：先记根因（文件+行号），全量测完统一提单，勿拆单/勿未测完就提。
 3. **PASS 门禁（禁虚报）**：一个用例标 PASS 必须同时满足——① 已实际执行（探针/命令真实运行）② 有结果证据落到 `evidence/<case-id>/`（probe 脚本 + stdout.log）③ `evidencePath` 列回填该证据路径。**未执行(NOT_RUN)/无结果/无证据的用例，一律不得标 PASS**，只能标 NOT_RUN 或如实标 FAIL/BLOCKED。回填后跑 `python scripts/verify_no_fake_pass.py <客户端> <OS>` 机械校验，虚报视为作废重来。
 4. **环境阻塞**：标 BLOCKED + 写 blockedReason，不得假装 PASS。
-5. **目录权限**：只改 `results/<你的客户端>/` 和 Summary 中自己那一列，禁改他人目录、test-cases 真源。
+5. **目录权限（只提交自己）**：只改/提交 `results/<你的客户端>/` 目录，**完全不碰 Summary**（维护者统一生成）、其他客户端目录、test-cases 真源。
 
 ## 状态口径
 
@@ -92,4 +92,6 @@ git -c credential.helper="!gh auth git-credential" push origin main
 
 ## 脚本清单（本仓库 scripts/）
 
-`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `gen_summary.py` 生成矩阵 · `update_summary.py` 汇总 · `verify_no_fake_pass.py` PASS 门禁 · `hourly_sync.py` 每小时提报 · `file_issue.py` 统一提单
+**agent 用**：`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `verify_no_fake_pass.py` PASS 门禁 · `hourly_sync.py` 每小时提报 · `file_issue.py` 统一提单
+
+**维护者用**：`build_summary.py` 汇总生成 Summary（agent 不跑，统一由维护者汇总，避免共享冲突）

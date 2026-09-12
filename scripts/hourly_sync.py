@@ -6,7 +6,7 @@
     python hourly_sync.py <客户端> <OS> --interval 3600  # 循环模式：每 3600 秒提报一次
 
 凭证：优先环境变量 HDK_GH_TOKEN（其次 GH_TOKEN），否则本机 gh shuangheaven token。
-推送用通用 git 命令（credential.helper=gh auth git-credential），不依赖本机 pushm alias。
+推送用通用 git 命令，且只提交自己客户端目录（不碰 Summary/其他客户端，避免共享文件冲突）。
 """
 import os, sys, subprocess, datetime, time
 
@@ -37,10 +37,10 @@ def sync_once(client, os_name):
     def git(args):
         return run(f"git {args}")
 
-    # git add
-    rc, out, err = git("add -A")
+    # git add：只提交自己客户端的目录（不碰 Summary/其他客户端，避免共享文件冲突）
+    rc, out, err = git("add results/{}".format(client))
     if rc != 0:
-        print(f"[{ts}] git add 失败: {err[:200]}")
+        print(f"[{ts}] git add results/{client} 失败: {err[:200]}")
         return False
     # git commit（无改动则跳过）
     rc, out, err = git('commit -m "test: {}-{} 增量提报 {}"'.format(client, os_name, ts))
