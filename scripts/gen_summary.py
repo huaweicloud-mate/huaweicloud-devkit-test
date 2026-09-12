@@ -16,7 +16,7 @@ CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
 OSES = ["Windows", "Linux"]
 COLS = [f"{c}-{o}" for c in CLIENTS for o in OSES]
 
-REPO = os.environ.get("HDK_TEST_REPO") or r"C:\Users\Administrator\devkit-test\huaweicloud-devkit-test"
+REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def gen(kind, src_rel, id_key, name_keys, status_key, date):

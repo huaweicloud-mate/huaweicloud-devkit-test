@@ -13,7 +13,7 @@ CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 OSES = ["Windows", "Linux"]
 
-REPO = os.environ.get("HDK_TEST_REPO") or r"C:\Users\Administrator\devkit-test\huaweicloud-devkit-test"
+REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def check_prereq():

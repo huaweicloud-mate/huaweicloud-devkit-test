@@ -12,7 +12,7 @@
 """
 import os, sys, subprocess, json, re
 
-REPO = os.environ.get("HDK_TEST_REPO") or r"C:\Users\Administrator\devkit-test\huaweicloud-devkit-test"
+REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORK = os.path.dirname(REPO)
 SRC = os.path.join(WORK, "hdk")
 TEST_REPO_URL = "https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git"

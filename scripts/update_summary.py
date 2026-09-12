@@ -15,7 +15,7 @@ OSES = ["Windows", "Linux"]
 COLS = [f"{c}-{o}" for c in CLIENTS for o in OSES]   # 20 列
 RANK = {"FAIL": 5, "BLOCKED": 4, "SPEC-MISMATCH": 3, "NOT_RUN": 2, "PASS": 1, "": 0}
 
-REPO = os.environ.get("HDK_TEST_REPO") or r"C:\Users\Administrator\devkit-test\huaweicloud-devkit-test"
+REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def worst(*states):
