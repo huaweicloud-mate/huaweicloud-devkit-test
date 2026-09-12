@@ -1,24 +1,55 @@
 # -*- coding: utf-8 -*-
 """R11-5: 生成全仓需求→设计级→展开级→证据追踪表（Codex round-10 P1-2 增强版）
-真源：test-cases/design/用例矩阵-设计级.csv (162) + expanded (132)
+真源：test-cases/design/用例矩阵-设计级.csv (163) + expanded (137)
 增强（R11）：①ID 外键校验（designCaseId 必须在设计级存在；expandedCaseId 必须在展开级存在）
   ②状态统一枚举（UNASSESSED/PASS/FAIL/SPEC-MISMATCH/BLOCKED/NOT_RUN）
   ③专项 gap 处理结论显式化
-输出：test-cases/tracing/需求-设计-证据追踪表.csv（10 列，与 Codex round-08 规范字段一致）
+输出：test-cases/tracing/需求-设计-证据追踪表.csv（12 列；保留历史 status，并分离 design_status/execution_status）
 """
 import csv, os, sys
 from datetime import datetime
 
-TC = r"C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases"
+# 输入/输出目录可被 env 覆盖（只读复现校验时重定向到临时目录）；默认取本仓库 test-cases（基于 __file__，可移植）
+TC = os.environ.get("HUAWEICLOUD_TESTCASES_DIR",
+                    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DES = os.path.join(TC, "design", "用例矩阵-设计级.csv")
 EXP = os.path.join(TC, "expanded", "用例矩阵-展开级.csv")
 OUT_DIR = os.path.join(TC, "tracing")
 os.makedirs(OUT_DIR, exist_ok=True)
 OUT = os.path.join(OUT_DIR, "需求-设计-证据追踪表.csv")
 
-# Codex round-08 规范的 10 列字段（R11 修正：此前 status.md 误称 12 列）
+# 保留原 10 列并追加设计/执行状态，避免 UNASSESSED 被误读为执行通过。
 HEADERS = ["sourceAsset", "requirementOrRisk", "designCaseId", "expandedCaseId",
-           "testLayer", "clientOrOSScope", "requiredEvidence", "status", "owner", "gap"]
+           "testLayer", "clientOrOSScope", "requiredEvidence", "status",
+           "design_status", "execution_status", "owner", "gap", "evidencePath"]
+
+# ITER-006 执行证据链映射（用例 ID → 证据目录，相对执行归档根；多个用 ; 分隔）
+EVIDENCE = {
+    "D1-3": "evidence/d1-cli-readonly", "D1-4": "evidence/d1-cli-readonly", "D1-6": "evidence/d1-cli-readonly",
+    "D1-26": "evidence/d9-protocol;evidence/d1-upgrade",
+    "D2-2": "evidence/d2-auth-core", "D2-4": "evidence/d2-auth-core", "D2-5": "evidence/d2-auth-core",
+    "D2-6": "evidence/d2-auth-core", "D2-7": "evidence/d2-auth-reconcile",
+    "D2-10": "evidence/d2-auth-reconcile", "D2-11": "evidence/d2-auth-switch", "D2-12": "evidence/d2-auth-core",
+    "D2-13": "evidence/d2-auth-core", "D2-14": "evidence/d2-auth-core", "D2-15": "evidence/d2-auth-switch",
+    "D2-16": "evidence/d2-auth-switch", "D2-18": "evidence/d2-auth-reconcile", "D2-19": "evidence/d2-auth-reconcile",
+    "D3-A1": "evidence/d3-a1-skills", "D3-A4": "evidence/d3-misc", "D3-A5": "evidence/d2-d3-readonly;evidence/d3-misc",
+    "D3-B1": "evidence/d3-b-readonly;evidence/d3-misc", "D3-B2": "evidence/d3-b-readonly", "D3-B3": "evidence/d3-b-readonly",
+    "D3-B4": "evidence/d3-misc", "D3-B5": "evidence/d9-d3-function", "D3-B6": "evidence/d3-misc",
+    "D3-B7": "evidence/d3-b7-approval", "D3-B8": "evidence/d3-b8-voucher",
+    "D3-C2": "evidence/d3-c2-obs", "D3-C5": "evidence/d3-c5-smoke", "D3-C7": "evidence/d3-c7-eip;evidence/d3-misc",
+    "D3-C8": "evidence/d3-c8-evs", "D3-C9": "evidence/d3-c9-notfound",
+    "D4-1": "evidence/d4-security-core", "D4-2": "evidence/d4-security-core", "D4-15": "evidence/d4-security-core",
+    "D4-16": "evidence/d4-security-core", "D4-21": "evidence/d4-security-core", "D4-22": "evidence/d4-security-core",
+    "D4-24": "evidence/d3-b7-approval",
+    "D5-1": "evidence/d5-static", "D5-3": "evidence/d5-static", "D5-8": "evidence/d5-static",
+    "D6-1": "evidence/d6-perf", "D6-3": "evidence/d6-perf", "D6-4": "evidence/d6-perf",
+    "D7-4": "evidence/d8-doc",
+    "D8-1": "evidence/d8-doc", "D8-4": "evidence/d8-doc", "D8-6": "evidence/d8-doc", "D8-7": "evidence/d8-doc",
+    "D9-1": "evidence/d9-protocol;evidence/d9-robust", "D9-2": "evidence/d9-d3-function",
+    "D9-3": "evidence/d9-protocol", "D9-4": "evidence/d9-protocol",
+    "D9-5": "evidence/d9-robust;evidence/d9-d3-function", "D9-7": "evidence/d9-robust",
+    "D9-8": "evidence/d9-robust", "D9-9": "evidence/d9-9-cancel",
+}
 
 with open(DES, encoding="utf-8-sig") as f:
     drows = list(csv.DictReader(f))
@@ -98,6 +129,29 @@ for d in drows:
     # R15-2（Codex round-14）: 聚合状态从展开级动态推导——展开级存在 BLOCKED/NOT_RUN/SPEC 时
     # 父级不得标 PASS；部分覆盖用 PARTIAL 语义；FAIL 优先。
     st = "UNASSESSED"
+    # ITER-006 全量执行回填（2026-09-12）——与 gen_matrix.design_status 保持一致
+    _ITER006 = {
+        "D1-3": "PASS", "D1-4": "PASS", "D1-6": "PASS",
+        "D2-2": "PASS", "D2-4": "PASS", "D2-5": "PASS", "D2-6": "PASS", "D2-7": "PASS",
+        "D2-10": "PASS", "D2-11": "PASS", "D2-12": "PASS", "D2-13": "PASS", "D2-14": "PASS",
+        "D2-15": "PASS", "D2-16": "PASS", "D2-18": "PASS", "D2-19": "PASS",
+        "D3-A1": "PASS", "D3-A4": "PASS", "D3-A5": "PASS",
+        "D3-B1": "PASS", "D3-B2": "PASS", "D3-B3": "PASS", "D3-B4": "PASS", "D3-B5": "PASS",
+        "D3-B6": "PASS", "D3-B7": "PASS", "D3-B8": "PASS",
+        "D3-C2": "PASS", "D3-C5": "PASS", "D3-C7": "PASS",
+        "D4-1": "PASS", "D4-21": "PASS", "D4-22": "PASS",
+        "D5-1": "PASS", "D5-3": "PASS", "D5-8": "PASS",
+        "D6-1": "PASS", "D6-3": "PASS", "D6-4": "PASS",
+        "D8-1": "PASS", "D8-4": "PASS", "D8-6": "PASS", "D8-7": "PASS",
+        "D7-4": "PASS",
+        "D9-1": "PASS", "D9-3": "PASS", "D9-4": "PASS", "D9-8": "PASS",
+        "D3-C9": "FAIL", "D4-2": "FAIL", "D4-15": "FAIL", "D4-16": "FAIL",
+        "D9-2": "FAIL", "D9-5": "FAIL",
+        "D4-24": "SPEC-MISMATCH", "D9-9": "SPEC-MISMATCH",
+        "D3-C1": "PARTIAL(BLOCKED)", "D3-C3": "PARTIAL(BLOCKED)", "D3-C6": "PARTIAL(BLOCKED)", "D3-C8": "PARTIAL(BLOCKED)",
+    }
+    if rid in _ITER006:
+        st = _ITER006[rid]
     if rid.startswith("D1-") and rid[3:].isdigit() and 26 <= int(rid[3:]) <= 55:
         if rid == "D1-39":
             st = "FAIL"
@@ -117,6 +171,9 @@ for d in drows:
     if rid == "D1-58":
         # EX-4 2026-09-11: 五断言真机全 PASS（testbot3 c6c0965）——展开级 5 行全 PASS 无 BLOCKED/SPEC
         st = "PASS"
+    if rid == "D2-20":
+        # 与 gen_matrix design_status 一致：ITER-002 aksk-v4 实测发现 AK-FP-2 规格差异（方案 T1 断言3），待真机复核
+        st = "SPEC-MISMATCH"
     scope = d["展开规则"].split("|")[1] if "|" in d["展开规则"] else d["展开规则"]
     gap = ""
     if st in ("FAIL", "SPEC-MISMATCH"):
@@ -127,22 +184,25 @@ for d in drows:
         gap = "聚合：主行为 PASS + 46g reject 防御 SPEC（待开发裁决）"
     elif st == "PARTIAL(SPEC+NOT_RUN+BLOCKED)":
         gap = "聚合：stdio PASS + remote SPEC/NOT_RUN + TTY BLOCKED（待裁决/环境）"
-    rows.append([src, d["标题"], rid, exps, tl, scope, d["预期结果"][:60], st, "测试负责人", gap])
+    design_st = d.get("设计状态") or "DESIGN_COVERED"
+    execution_st = d.get("执行状态") or norm_status(st)
+    rows.append([src, d["标题"], rid, exps, tl, scope, d["预期结果"][:60], st,
+                 design_st, execution_st, "测试负责人", gap, EVIDENCE.get(rid, "")])
 
 # 专项资产行（gap 处理结论显式化）
 specials = [
     ["ITER-005(PR#592)", "README 徽章动态化 D1-1~4", "-", "-", "静态核对+CLI", "Windows W",
-     "next-stable.mjs 运行输出", "PASS", "测试负责人", "复用既有 ID，无独立设计级（结论：接受）"],
+     "next-stable.mjs 运行输出", "PASS", "REFERENCE_ONLY", "PASS", "测试负责人", "复用既有 ID，无独立设计级（结论：接受）", ""],
     ["ITER-005(PR#592)", "P1 install 目标解析四态", "D1-2/D1-7/D1-9", "-", "CLI+PTY/非TTY", "Windows W + Linux L",
-     "setup.cjs 决策树 44/44", "PASS", "测试负责人", "复用既有 ID（结论：接受）"],
+     "setup.cjs 决策树 44/44", "PASS", "REFERENCE_ONLY", "PASS", "测试负责人", "复用既有 ID（结论：接受）", ""],
     ["ITER-005(PR#592)", "P2 通用 MCP 白名单接入", "D1-58", "-", "CLI", "Linux L",
-     "Claude/Cursor merge 场景", "PASS", "测试负责人", "已回填 D1-58（R12-3 完成，不再留待回填）"],
+     "Claude/Cursor merge 场景", "PASS", "REFERENCE_ONLY", "PASS", "测试负责人", "已回填 D1-58（R12-3 完成，不再留待回填）", ""],
     ["ITER-002 hand", "D4-21/22/23 hook 回归", "D4-21/D4-22/D4-23", "-", "hook 函数直调", "Hermes/Windows",
-     "d4-p0-supplement2.mjs", "FAIL", "测试负责人", "D4-22/23 缺陷已提单 #562/#563（结论：跟踪上游修复）"],
+     "d4-p0-supplement2.mjs", "FAIL", "REFERENCE_ONLY", "FAIL", "测试负责人", "D4-22/23 缺陷已提单 #562/#563（结论：跟踪上游修复）", ""],
     ["ITER-002 hand", "各客户端 CDP 会话级自动化", "D5-1~7", "EXP-D5-1-1;EXP-D5-2-1;EXP-D5-3-1;EXP-D5-4-1;EXP-D5-5-1;EXP-D5-6-1;EXP-D5-7-1", "客户端会话", "7 客户端",
-     "各 manual/会话级自动化.md", "PASS", "测试负责人", "执行记录性质（结论：接受，不另立 ID；展开引用取每客户端 D5-1 代表行）"],
+     "各 manual/会话级自动化.md", "PASS", "REFERENCE_ONLY", "PASS", "测试负责人", "执行记录性质（结论：接受，不另立 ID；展开引用取每客户端 D5-1 代表行）", ""],
     ["ITER-002 aksk-v4", "AK-FP-1/2 发现", "D2-20", "-", "真机", "Win+Linux",
-     "NR2-设计与执行.md", "SPEC-MISMATCH", "测试负责人", "待人工核对（结论：挂起，需真机复核）"],
+     "NR2-设计与执行.md", "SPEC-MISMATCH", "REFERENCE_ONLY", "SPEC-MISMATCH", "测试负责人", "待人工核对（结论：挂起，需真机复核）", ""],
 ]
 rows += specials
 
@@ -174,7 +234,7 @@ with open(OUT, "w", newline="", encoding="utf-8-sig") as f:
 from collections import Counter
 st_cnt = Counter(norm_status(r[7]) for r in rows)
 print(f"追踪表生成: {OUT} 共 {len(rows)} 行（设计级映射 {len(drows)} + 专项 {len(specials)}）")
-print(f"列数: {len(HEADERS)}（Codex round-08 规范 10 列）")
+print(f"列数: {len(HEADERS)}（保留原追踪字段并追加 design_status/execution_status）")
 print(f"状态分布(统一枚举): {dict(st_cnt)}")
 print(f"外键校验错误: {len(fk_errors)}", fk_errors[:5] if fk_errors else "")
 if fk_errors:

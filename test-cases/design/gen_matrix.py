@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """生成 huaweicloud-devkit 测试用例矩阵母版（v1.5 落地物 + 2026-09-11 全量评审补充）
-设计级 162 条（138 既有 + 15 条版本升级评审补充 D1-41~55 + 9 条全量评审补充 D1-56/57 D2-21 D3-C7~9 D4-24 D6-8 D9-9）
-+ 展开级矩阵（D5 客户端 70 + D3-C4 服务 22 + D10 评测集 15 + NR3 终端展开 25）= 132 条
+设计级 163 条（138 既有 + 15 条版本升级评审补充 D1-41~55 + 9 条全量评审补充 D1-56/57 D2-21 D3-C7~9 D4-24 D6-8 D9-9 + 1 条 R12 回填 D1-58）
++ 展开级矩阵（D5 客户端 70 + D3-C4 服务 22 + D10 评测集 15 + NR3 终端展开 25 + D1-58 白名单 5）= 137 条
 输出 UTF-8-SIG CSV，Excel 直接打开不乱码。
 2026-09-11 评审补齐内容：
   - D1-56/57: 安装中断恢复 + 升级坏版本回滚（异常/恢复场景缺口）
@@ -11,12 +11,15 @@
   - D6-8: MCP 工具调用超时（超时场景缺口：原有仅 D6-6 弱网）
   - D9-9: tools/call 超时协议语义（协议层超时缺口）
   - 展开规则默认值推导：115 条空展开规则按维度填默认（COMMON/CLIENT_MATRIX/OS_MATRIX 等）
+  - 工具全集数量 = tools.mjs 注册源数量（2026-09-12 快照 39；verify_new.py 单源解析推导；新增工具后同步此处设计文本）
 """
 import csv
 import os
 from datetime import datetime
 
-TC_DIR = r"C:\Users\Administrator\devkit-test\huaweicloud-devkit-test\test-cases"
+# 输出目录可被 env 覆盖（verify_new.py 只读复现校验时重定向到临时目录）；默认取本仓库 test-cases（基于 __file__，可移植）
+TC_DIR = os.environ.get("HUAWEICLOUD_TESTCASES_DIR",
+                        os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DES_DIR = os.path.join(TC_DIR, "design")
 EXP_DIR = os.path.join(TC_DIR, "expanded")
 os.makedirs(DES_DIR, exist_ok=True)
@@ -134,7 +137,7 @@ OVERRIDE_EXPAND = {
     # D5
     "D5-1": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 清单发现加载>|<阻塞: 需各客户端>",
     "D5-2": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 安装落点与 README 对照>|<阻塞: 需各客户端>",
-    "D5-3": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: tools/list 36 工具枚举>|<阻塞: 需各客户端>",
+    "D5-3": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: tools/list 39 工具枚举>|<阻塞: 需各客户端>",
     "D5-4": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: hook/非hook 降级路径>|<阻塞: 需各客户端>",
     "D5-5": "CLIENT_MATRIX|<代表: CodeArts 重点>|<证据: 沙箱模式 KooCLI 阻断+恢复>|<阻塞: 需 CodeArts 客户端>",
     "D5-6": "OS_MATRIX|<代表: Windows 专项>|<证据: config 完整性/文件锁/SDK>|<阻塞: Windows 客户端>",
@@ -179,7 +182,7 @@ def expand_rule(rid, dim, cur):
         cur = EXPAND_DEFAULT.get(dim, "COMMON")
     return normalize_expand(rid, cur, dim)
 
-# ============ 设计级用例（153 条） ============
+# ============ 设计级用例（163 条） ============
 # 列: ID, 维度, 标题, 优先级, 前置条件, 测试数据, 操作步骤, 预期结果, 指引来源, 关联工具, 自动化建议, 展开规则
 D = []
 
@@ -419,9 +422,9 @@ add("D1-55", "D1安装", "多会话提示隔离", "P2", "同一 server 可承载
 # ---------- 2026-09-11 全量设计评审补充（异常/恢复场景缺口；全量评审报告 REV-20260911004604；R10 按 codex round-09 补强断言契约） ----------
 add("D1-56", "D1安装", "安装中断恢复（网络/进程中断后半装补全）", "P1", "可控网络环境（HTTP 代理可随时断开）+ 一次性临时 HOME（隔离 USERPROFILE/HOME）",
     "install --target opencode 执行中注入断网 / kill 安装进程；损坏判定清单：①package.json 存在但 bin/ 缺 oc-entry ②pluginDir 存在但 .update-skip.json 缺失 ③残留 *.lock 文件",
-    "①install 中途断网或 kill ②断言半装态（按损坏判定清单 ①②③ 逐项核对并记录文件路径） ③恢复网络重跑 install ④断言全量文件（tools/list 返回 36 工具、config 落点齐全、无 *.lock 残留） ⑤再次运行 install 断言幂等（文件 mtime/size 与上轮一致）",
-    "半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 36 工具（数量=36 且无重复）；无 *.lock 残留；二次运行后关键文件（bin/oc-entry、config.json）mtime/size 字节级一致",
-    "通: 生命周期中断恢复; 关联 D1-5/D1-13 残留族; R11 补强: 判定清单固定3项+36工具枚举断言+幂等mtime/size", "install/doctor/tools_list", "半自动", "OS_MATRIX|<代表: Windows/Linux>|<证据: 安装落点+中断现场文件>|<阻塞: 无>")
+    "①install 中途断网或 kill ②断言半装态（按损坏判定清单 ①②③ 逐项核对并记录文件路径） ③恢复网络重跑 install ④断言全量文件（tools/list 返回 39 工具、config 落点齐全、无 *.lock 残留） ⑤再次运行 install 断言幂等（文件 mtime/size 与上轮一致）",
+    "半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 39 工具（数量=39 且无重复）；无 *.lock 残留；二次运行后关键文件（bin/oc-entry、config.json）mtime/size 字节级一致",
+    "通: 生命周期中断恢复; 关联 D1-5/D1-13 残留族; R11 补强: 判定清单固定3项+39工具枚举断言+幂等mtime/size", "install/doctor/tools_list", "半自动", "OS_MATRIX|<代表: Windows/Linux>|<证据: 安装落点+中断现场文件>|<阻塞: 无>")
 add("D1-57", "D1安装", "升级坏版本回滚（装坏可退）", "P1", "有旧版本正常安装（1.1.2 基线）+ 可控 npm registry 注入坏包（tarball 截断致 sha1 不匹配）",
     "registry 返回损坏 tarball；断言契约：①回滚目标=升级前版本（previousVersion=1.1.2）②坏包不得进入可用缓存（.npm/_cacache 无对应 content-hash）③降级命令=upgrade(version=1.1.2) 返回 requiresRestart=true",
     "①确认 serverInfo.version=1.1.2 ②registry 注入坏包后执行 upgrade(version=latest) ③断言返回对象：success=false + error.code=EREPO_BAD_TARBALL（唯一错误码断言，不允许替代码）+ error.manual 含 'npx huaweicloud-devkit upgrade --version 1.1.2' ④断言旧版仍可启动（重启进程 serverInfo.version=1.1.2，tools/list 可调） ⑤断言 .npm/_cacache 无坏包 digest ⑥执行 error.manual 命令后断言版本恢复 1.1.2",
@@ -643,7 +646,7 @@ add("D3-C5", "D3功能", "工具冒烟", "P1", "环境就绪",
     "冒烟快速全通", "P: nightly场景C原样复用",
     "check_cli/list_operations/plan_cli_command/explain_error", "脚本")
 
-# ---- 覆盖缺口补充（G1：工具闭包 37/37 补齐；具名化后回落为常规用例）----
+# ---- 覆盖缺口补充（G1：工具闭包 39/39 补齐；具名化后回落为常规用例）----
 add("D3-B7", "D3功能", "run_approved_command 审批后执行闭环", "P1", "真云+最小权限",
     "plan 产出命令",
     "①plan_cli_command 产出 ②run_approved_command 执行 ③核对输出与残留",
@@ -739,7 +742,7 @@ add("D4-12", "D4安全", "供应链安装期安全", "P2", "源码包",
 add("D4-13", "D4安全", "最小权限凭证通过率", "P1", "只读IAM AK/SK",
     "全量D3只读用例",
     "①只读凭证下跑D3只读用例 ②写用例观察权限识别",
-    "只读100%可用，写被正确识别权限不足", "标: AWS condition key; 仓: 非目标声明实测", "全部 37 个 MCP 工具（最小权限回归）", "半自动", "展开只读用例全量")
+    "只读100%可用，写被正确识别权限不足", "标: AWS condition key; 仓: 非目标声明实测", "全部 39 个 MCP 工具（最小权限回归）", "半自动", "展开只读用例全量")
 add("D4-14", "D4安全", "操作可审计性", "P2", "真云",
     "执行命令后查CTS/日志",
     "①执行若干命令 ②查CTS/运行日志 ③核对可追溯+可区分agent/人工",
@@ -797,8 +800,8 @@ add("D5-2", "D5客户端", "install落点正确", "P2", "各客户端环境",
     "install", "手动", "10客户端矩阵")
 add("D5-3", "D5客户端", "工具全量枚举", "P1", "各客户端环境",
     "tools/list枚举",
-    "①枚举36工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺",
-    "36工具全量可达,schema完整", "标: Azure全MCP协议测试; 仓: tools.mjs基线", "tools/list", "脚本", "10客户端矩阵")
+    "①枚举39工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺",
+    "39 工具全量可达(=tools.mjs 注册源数量),schema完整", "标: Azure全MCP协议测试; 仓: tools.mjs基线", "tools/list", "脚本", "10客户端矩阵")
 add("D5-4", "D5客户端", "hook支持差异", "P2", "hook-capable与非hook客户端",
     "hook拦截vs Node策略",
     "①hook客户端验证拦截 ②非hook客户端验证Node策略兜底",
@@ -952,7 +955,7 @@ add("D8-8", "D8质量", "遥测策略端到端（trackTool/trackSandbox/hook 事
 add("D9-1", "D9协议", "tools/list合规", "P1", "MCP Inspector/客户端",
     "tools/list返回",
     "①tools/list ②逐工具schema校验合法JSON Schema ③核对无残留/重复工具",
-    "36工具schema均合法", "规: MCP规范inputSchema; 标: Azure全协议测试",
+    "39 工具 schema 均合法(=tools.mjs 注册源数量)", "规: MCP规范inputSchema; 标: Azure全协议测试",
     "inspector", "脚本")
 add("D9-2", "D9协议", "JSON-RPC错误码", "P1", "MCP客户端",
     "协议级错误注入",
@@ -992,7 +995,7 @@ add("D9-8", "D9协议", "inputSchema版本合规", "P2", "tools/list返回",
 
 # ---------- D10 Agent评测 ----------
 add("D10-1", "D10评测", "工具描述可选择性", "P1", "评测harness",
-    "36工具description+schema评审",
+    "39工具description+schema评审",
     "①逐工具评审描述清晰度 ②建立自然语言评测集 ③LLM选择正确率打分",
     "描述可度量,低分项入缺口", "标: Azure ToolDescriptionEvaluator",
     "promptfoo/harness", "脚本")
@@ -1228,11 +1231,39 @@ D158_EXPANDED = [
           f"EX-4 S3/S5 真机: configureGenericMCP 层 'No known MCP agent detected' + stdio snippet（mcpServers/npx → huaweicloud-devkit-mcp）+ remote 提示；菜单层 'No supported agent detected'（引导文本）（{D158_EVID}/s5.stdout.log）"),
 ]
 
-# ============ 输出 ============
-# 设计级「用例当前状态」（2026-09-11 用户要求：预期结果与当前状态分离；与 gen_tracing.py 状态推导完全一致）
+# ============ 设计/执行状态与多终端元数据 ============
+# 设计状态和执行状态必须分离：
+# - DESIGN_COVERED 只表示设计字段完整，不表示行为已经通过。
+# - NOT_RUN 只表示当前没有执行证据；历史 UNASSESSED 不得转成 PASS。
+# - 用例当前状态保留历史聚合口径，供旧报告追溯。
 def design_status(rid):
     """设计级用例当前状态（枚举：PASS/FAIL/SPEC-MISMATCH/PARTIAL/UNASSESSED）
     来源：ITER-004 NR3 已执行 + EX-3/EX-4 真机验证回填（2026-09-11），其余未执行为 UNASSESSED。"""
+    _ITER006 = {
+        "D1-3": "PASS", "D1-4": "PASS", "D1-6": "PASS",
+        "D2-2": "PASS", "D2-4": "PASS", "D2-5": "PASS", "D2-6": "PASS", "D2-7": "PASS",
+        "D2-10": "PASS", "D2-11": "PASS", "D2-12": "PASS", "D2-13": "PASS", "D2-14": "PASS",
+        "D2-15": "PASS", "D2-16": "PASS", "D2-18": "PASS", "D2-19": "PASS",
+        "D3-A1": "PASS", "D3-A4": "PASS", "D3-A5": "PASS",
+        "D3-B1": "PASS", "D3-B2": "PASS", "D3-B3": "PASS", "D3-B4": "PASS", "D3-B5": "PASS",
+        "D3-B6": "PASS", "D3-B7": "PASS", "D3-B8": "PASS",
+        "D3-C2": "PASS", "D3-C5": "PASS", "D3-C7": "PASS",
+        "D4-1": "PASS", "D4-21": "PASS", "D4-22": "PASS",
+        "D5-1": "PASS", "D5-3": "PASS", "D5-8": "PASS",
+        "D6-1": "PASS", "D6-3": "PASS", "D6-4": "PASS",
+        "D8-7": "PASS",
+        "D9-1": "PASS", "D9-3": "PASS", "D9-4": "PASS", "D9-8": "PASS",
+        "D8-1": "PASS", "D8-4": "PASS", "D8-6": "PASS",
+        "D7-4": "PASS",
+        "D9-9": "SPEC-MISMATCH",
+        "D3-C9": "FAIL", "D4-2": "FAIL", "D4-15": "FAIL", "D4-16": "FAIL",
+        "D9-2": "FAIL", "D9-5": "FAIL",
+        "D4-24": "SPEC-MISMATCH",
+        "D3-C1": "PARTIAL(BLOCKED: ECS购买需保证金)", "D3-C3": "PARTIAL(BLOCKED: 沙箱需DevStation配额)",
+        "D3-C6": "PARTIAL(BLOCKED: 沙箱需DevStation配额)", "D3-C8": "PARTIAL(BLOCKED: EPS无企业项目权限)",
+    }
+    if rid in _ITER006:
+        return _ITER006[rid]
     if rid.startswith("D1-") and rid[3:].isdigit() and 26 <= int(rid[3:]) <= 55:
         if rid == "D1-39":
             return "FAIL"  # #554 未修复（Windows EINVAL 静默）
@@ -1251,9 +1282,131 @@ def design_status(rid):
         return "SPEC-MISMATCH"  # ITER-002 aksk-v4 实测发现 AK-FP-2 不符（方案 T1 断言3），待真机复核
     return "UNASSESSED"  # 未执行（含 D1-1~25、D2、D3、D4、D5~D10 设计基线）
 
-design_headers = ["ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果", "指引来源", "关联工具", "自动化建议", "展开规则", "用例当前状态", "生成时间"]
-# R10: 展开级结构化状态列（与闭环规范 candidate/terminal-matrix 16 列对齐的核心状态字段）
-exp_headers = ["ID", "展开类型", "枚举对象", "源用例", "优先级", "执行要点", "预期结果", "生成时间", "status", "blockedReason", "requiredEvidence", "observedAt"]
+def execution_status(legacy):
+    """将历史聚合状态映射为独立执行状态，不改变 legacy 字段。"""
+    legacy = (legacy or "").strip()
+    if not legacy or legacy == "UNASSESSED":
+        return "NOT_RUN"
+    if legacy.startswith("PARTIAL(BLOCKED"):
+        return "BLOCKED"
+    if legacy.startswith("PARTIAL(SPEC"):
+        return "SPEC-MISMATCH"
+    if legacy in {"PASS", "FAIL", "BLOCKED", "SPEC-MISMATCH", "NOT_RUN", "PARTIAL"}:
+        return legacy
+    return "NOT_RUN"
+
+def _rule_parts(rule):
+    parts = [p.strip() for p in (rule or "").split("|")]
+    parts += [""] * (4 - len(parts))
+    return parts[:4]
+
+def _terminal_metadata(rid, dim, rule):
+    """为设计级行提供可审计的代表终端元数据；不声称已执行。"""
+    rule_type, representative, evidence, blocked = _rule_parts(rule)
+    if dim == "D7兼容":
+        os_scope = "Windows/Linux/macOS（声明支持范围）"
+    elif dim in {"D1安装", "D4安全", "D5客户端"}:
+        os_scope = "Windows/Linux；macOS 若声明支持则单独举证"
+    else:
+        os_scope = "Windows/Linux 代表环境；macOS 若声明支持则单独举证"
+    if dim == "D4安全":
+        agent = "Hermes（Hook）; OpenCode（非 Hook）"
+        hook = "Hermes=Hook; OpenCode=非Hook"
+    elif dim == "D5客户端":
+        agent = "Hermes; OpenCode; 声明支持的客户端矩阵"
+        hook = "按客户端记录"
+    elif dim == "D10评测":
+        agent = "Hermes; Codex; OpenCode"
+        hook = "按客户端记录"
+    elif dim == "D9协议":
+        agent = "Hermes; MCP Inspector/标准协议客户端"
+        hook = "n/a（协议层）"
+    else:
+        agent = "Hermes 代表终端; fake/fixture"
+        hook = "按用例需要；未涉及则 n/a"
+    tty = "TTY + non-TTY" if dim in {"D1安装", "D5客户端", "D10评测"} else "non-TTY；需要交互时必须提供 PTY"
+    transport = "stdio + remote" if dim in {"D9协议"} or rid in {"D1-55", "D1-58"} else "stdio（适用时）；函数/fixture 层否则"
+    install = "隔离 HOME + plugin 目录 + npm cache + HUAWEICLOUD_HOME fixture"
+    node_npm = "Node >=22；npm/npx 按 OS 记录"
+    shell = "PowerShell（Windows）/bash（Linux）/zsh（macOS）"
+    required = f"强断言：{evidence or '预期结果字段、返回状态、参数、调用次数和副作用'}；保留脱敏日志、manifest、前后快照"
+    return {
+        "terminal_type": rule_type or "COMMON",
+        "terminal": representative or "代表终端待确认",
+        "agent": agent,
+        "os": os_scope,
+        "node_npm": node_npm,
+        "shell": shell,
+        "tty": tty,
+        "install_layout": install,
+        "mcp_transport": transport,
+        "hook_support": hook,
+        "required_evidence": required,
+        "blocked_reason": blocked.replace("<阻塞:", "").replace(">", "").strip() if blocked and "无" not in blocked else "",
+        "owner": "测试负责人；环境/规格阻塞责任见 blockedReason",
+        "dependencies": "需求来源与前置条件；独立 manifest；finally 清理；状态/证据回填",
+    }
+
+def _status_reason(rid, legacy, rule_reason=""):
+    if rid == "D1-39":
+        return "P0 FAIL：Windows npm.cmd/spawnSync EINVAL 产品缺陷 #554 未由正式修复版本闭合；责任=上游开发；证据=正式修复版本 Windows 全链回归"
+    if rid in {"D1-29", "D1-43", "D1-46", "D1-55", "D2-20"}:
+        return f"SPEC-MISMATCH：{rid} 仍需开发/产品规格裁决；责任=产品与开发；证据=裁决记录、更新后的规范和对应复核"
+    if legacy.startswith("PARTIAL(BLOCKED"):
+        return "BLOCKED：聚合路径仍缺终端/环境证据；责任=执行环境提供方；证据=对应客户端/OS 运行日志与 manifest"
+    if legacy.startswith("PARTIAL(SPEC"):
+        return "SPEC-MISMATCH：聚合路径含未裁决规格子项；责任=产品与开发；证据=规格裁决和复核"
+    if legacy.startswith("PARTIAL(SPEC+"):
+        return "SPEC-MISMATCH/BLOCKED：同时存在规格和环境未闭合子项；责任=产品/开发与执行环境提供方；证据=裁决及终端日志"
+    if legacy == "UNASSESSED":
+        return "NOT_RUN：当前无执行证据；责任=测试负责人；证据=后续执行 manifest、日志、前后快照和清理记录"
+    return rule_reason or "无当前历史阻塞；执行阶段仍需满足对应环境前置条件并提供证据"
+
+# 执行证据链映射（用例 ID → 证据目录，相对执行归档根；多个用 ; 分隔；与 gen_tracing.py 保持一致）
+EVIDENCE = {
+    "D1-3": "evidence/d1-cli-readonly", "D1-4": "evidence/d1-cli-readonly", "D1-6": "evidence/d1-cli-readonly",
+    "D1-26": "evidence/d9-protocol;evidence/d1-upgrade",
+    "D2-2": "evidence/d2-auth-core", "D2-4": "evidence/d2-auth-core", "D2-5": "evidence/d2-auth-core",
+    "D2-6": "evidence/d2-auth-core", "D2-7": "evidence/d2-auth-reconcile",
+    "D2-10": "evidence/d2-auth-reconcile", "D2-11": "evidence/d2-auth-switch", "D2-12": "evidence/d2-auth-core",
+    "D2-13": "evidence/d2-auth-core", "D2-14": "evidence/d2-auth-core", "D2-15": "evidence/d2-auth-switch",
+    "D2-16": "evidence/d2-auth-switch", "D2-18": "evidence/d2-auth-reconcile", "D2-19": "evidence/d2-auth-reconcile",
+    "D3-A1": "evidence/d3-a1-skills", "D3-A4": "evidence/d3-misc", "D3-A5": "evidence/d2-d3-readonly;evidence/d3-misc",
+    "D3-B1": "evidence/d3-b-readonly;evidence/d3-misc", "D3-B2": "evidence/d3-b-readonly", "D3-B3": "evidence/d3-b-readonly",
+    "D3-B4": "evidence/d3-misc", "D3-B5": "evidence/d9-d3-function", "D3-B6": "evidence/d3-misc",
+    "D3-B7": "evidence/d3-b7-approval", "D3-B8": "evidence/d3-b8-voucher",
+    "D3-C2": "evidence/d3-c2-obs", "D3-C5": "evidence/d3-c5-smoke", "D3-C7": "evidence/d3-c7-eip;evidence/d3-misc",
+    "D3-C8": "evidence/d3-c8-evs", "D3-C9": "evidence/d3-c9-notfound",
+    "D4-1": "evidence/d4-security-core", "D4-2": "evidence/d4-security-core", "D4-15": "evidence/d4-security-core",
+    "D4-16": "evidence/d4-security-core", "D4-21": "evidence/d4-security-core", "D4-22": "evidence/d4-security-core",
+    "D4-24": "evidence/d3-b7-approval",
+    "D5-1": "evidence/d5-static", "D5-3": "evidence/d5-static", "D5-8": "evidence/d5-static",
+    "D6-1": "evidence/d6-perf", "D6-3": "evidence/d6-perf", "D6-4": "evidence/d6-perf",
+    "D7-4": "evidence/d8-doc",
+    "D8-1": "evidence/d8-doc", "D8-4": "evidence/d8-doc", "D8-6": "evidence/d8-doc", "D8-7": "evidence/d8-doc",
+    "D9-1": "evidence/d9-protocol;evidence/d9-robust", "D9-2": "evidence/d9-d3-function",
+    "D9-3": "evidence/d9-protocol", "D9-4": "evidence/d9-protocol",
+    "D9-5": "evidence/d9-robust;evidence/d9-d3-function", "D9-7": "evidence/d9-robust",
+    "D9-8": "evidence/d9-robust", "D9-9": "evidence/d9-9-cancel",
+}
+
+design_headers = [
+    "ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果",
+    "指引来源", "关联工具", "自动化建议", "展开规则", "用例当前状态", "生成时间",
+    "设计状态", "执行状态", "终端覆盖类型", "terminal", "agent", "OS", "Node/npm",
+    "shell", "TTY", "installLayout", "mcpTransport", "hookSupport", "requiredEvidence",
+    "blockedReason", "owner", "依赖", "evidencePath",
+]
+# 保留旧 12 列，同时追加规范化外键、设计/执行状态和终端字段。
+exp_headers = [
+    "ID", "展开类型", "枚举对象", "源用例", "优先级", "执行要点", "预期结果", "生成时间",
+    "status", "blockedReason", "requiredEvidence", "observedAt",
+    "designCaseId", "expandedCaseId", "design_status", "execution_status", "terminalType",
+    "terminal", "agent", "OS", "Node/npm", "shell", "TTY", "installLayout",
+    "mcpTransport", "hookSupport", "owner", "依赖", "evidencePath",
+]
+
+design_by_id = {row[0]: row for row in D}
 
 with open(os.path.join(DES_DIR, "用例矩阵-设计级.csv"), "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f)
@@ -1262,21 +1415,93 @@ with open(os.path.join(DES_DIR, "用例矩阵-设计级.csv"), "w", newline="", 
         # 展开规则空值按维度默认推导 + R11 四段规范化（行内显式规则映射/合并/兜底）
         row = list(row)
         row[11] = expand_rule(row[0], row[1], row[11])
-        # 2026-09-11: 「用例当前状态」列（预期结果与当前状态分离）
-        w.writerow(tuple(row) + (design_status(row[0]), gen_ts(row[0])))
+        legacy = design_status(row[0])
+        meta = _terminal_metadata(row[0], row[1], row[11])
+        w.writerow(tuple(row) + (
+            legacy,
+            gen_ts(row[0]),
+            "DESIGN_COVERED",
+            execution_status(legacy),
+            meta["terminal_type"],
+            meta["terminal"],
+            meta["agent"],
+            meta["os"],
+            meta["node_npm"],
+            meta["shell"],
+            meta["tty"],
+            meta["install_layout"],
+            meta["mcp_transport"],
+            meta["hook_support"],
+            meta["required_evidence"],
+            _status_reason(row[0], legacy, meta["blocked_reason"]),
+            meta["owner"],
+            meta["dependencies"],
+            EVIDENCE.get(row[0], ""),
+        ))
 
 with open(os.path.join(EXP_DIR, "用例矩阵-展开级.csv"), "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f)
     w.writerow(exp_headers)
     for row in E:
         # 设计基线展开行（D5/服务/评测）：状态列留空=设计基线（UNASSESSED），blockedReason/evidence/observedAt 空
-        w.writerow(list(row) + [gen_ts(row[3] if len(row) > 3 else row[0]), "", "", "", ""])
+        src_id = row[3] if len(row) > 3 else ""
+        drow = design_by_id.get(src_id)
+        dmeta = _terminal_metadata(src_id, drow[1], drow[11]) if drow else _terminal_metadata(src_id, "D8质量", "")
+        legacy = (row[8] or "").strip() if len(row) > 8 else ""
+        exec_st = execution_status(legacy)
+        # ITER-006：展开级执行状态继承源设计级 design_status（父级已回填时展开行同步）
+        if drow:
+            src_exec = execution_status(design_status(src_id))
+            if src_exec not in ("", "NOT_RUN"):
+                exec_st = src_exec
+        base_reason = (row[9] or "").strip() if len(row) > 9 else ""
+        if not base_reason and exec_st == "NOT_RUN":
+            base_reason = "NOT_RUN：设计基线展开行尚无执行证据；责任=测试负责人"
+        if not base_reason:
+            base_reason = "无当前阻塞；本轮仅保留设计/历史状态，执行阶段按终端矩阵提供证据"
+        required = (row[10] or "").strip() if len(row) > 10 else ""
+        if not required:
+            required = "强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录"
+        w.writerow(list(row) + [
+            gen_ts(src_id), "UNASSESSED", base_reason, required, "",
+            src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY", exec_st,
+            dmeta["terminal_type"], dmeta["terminal"], dmeta["agent"], dmeta["os"], dmeta["node_npm"],
+            dmeta["shell"], dmeta["tty"], dmeta["install_layout"], dmeta["mcp_transport"],
+            dmeta["hook_support"], "测试负责人", "源设计用例；独立 manifest；finally 清理",
+            EVIDENCE.get(src_id, ""),
+        ])
     for row in NR3_EXPANDED:  # NR3 终端展开（12 列：含结构化 status/blockedReason/requiredEvidence/observedAt）
-        w.writerow(row)
+        src_id = row[3]
+        drow = design_by_id.get(src_id)
+        dmeta = _terminal_metadata(src_id, drow[1], drow[11]) if drow else _terminal_metadata(src_id, "D8质量", "")
+        legacy = row[8] or ""
+        reason = row[9] or "无当前阻塞；本轮仅保留历史状态，执行阶段按终端矩阵提供证据"
+        row = list(row)
+        row[9] = reason
+        w.writerow(row + [
+            src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY", execution_status(legacy),
+            dmeta["terminal_type"], dmeta["terminal"], dmeta["agent"], dmeta["os"], dmeta["node_npm"],
+            dmeta["shell"], dmeta["tty"], dmeta["install_layout"], dmeta["mcp_transport"],
+            dmeta["hook_support"], "测试负责人", "源设计用例；逐终端证据；finally 清理",
+            EVIDENCE.get(src_id, ""),
+        ])
     for row in D158_EXPANDED:  # R12-4: D1-58 白名单五断言专属展开行（12 列，设计基线 UNASSESSED）
-        w.writerow(row)
+        src_id = row[3]
+        drow = design_by_id.get(src_id)
+        dmeta = _terminal_metadata(src_id, drow[1], drow[11]) if drow else _terminal_metadata(src_id, "D8质量", "")
+        legacy = row[8] or ""
+        reason = row[9] or "无当前阻塞；本轮仅保留历史状态，执行阶段按终端矩阵提供证据"
+        row = list(row)
+        row[9] = reason
+        w.writerow(row + [
+            src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY", execution_status(legacy),
+            dmeta["terminal_type"], dmeta["terminal"], dmeta["agent"], dmeta["os"], dmeta["node_npm"],
+            dmeta["shell"], dmeta["tty"], dmeta["install_layout"], dmeta["mcp_transport"],
+            dmeta["hook_support"], "测试负责人", "D1-58 专属断言；逐条证据；finally 清理",
+            EVIDENCE.get(src_id, ""),
+        ])
 
 print(f"设计级: {len(D)} 条")
 print(f"展开级: {len(E) + len(NR3_EXPANDED) + len(D158_EXPANDED)} 条 (D5矩阵 {len(CLIENTS)*7} + 服务矩阵 {len(SERVICES)} + 评测集 {len(PROMPTS)} + NR3终端展开 {len(NR3_EXPANDED)} + D1-58白名单 {len(D158_EXPANDED)})")
-print(f"合计: {len(D) + len(E)} 条")
+print(f"合计: {len(D) + len(E) + len(NR3_EXPANDED) + len(D158_EXPANDED)} 条")
 print("输出目录:", DES_DIR)

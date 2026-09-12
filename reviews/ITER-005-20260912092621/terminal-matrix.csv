@@ -1,0 +1,11 @@
+﻿caseId,terminal,agent,os,arch,node,npm,shell,ttyMode,installLayout,mcpTransport,hookSupport,executionLevel,requiredEvidence,status,blockedReason
+D1-1,Hermes-Windows,Hermes,win32,x64,>=22,paired,PowerShell,non-TTY,isolated HOME/plugin/npm cache,stdio,yes,design-only,install落点、重启生效、tools/list、清理快照,BLOCKED,本轮不执行；未来需隔离 Hermes 环境
+D1-1,Hermes-Linux,Hermes,linux,x64/arm64,>=22,paired,bash,non-TTY,isolated HOME/plugin/npm cache,stdio,yes,design-only,安装落点、重启生效、tools/list、清理快照,BLOCKED,本轮不执行；未来需 Linux 实机
+D5-3,Hook-client,Hermes,Windows/Linux,declared,>=22,paired,platform shell,TTY/non-TTY,client-specific isolated profile,stdio,yes,design-only,39 tools逐个schema、Hook行为、重启生效,BLOCKED,需要真实 Hook 客户端环境
+D5-3,Non-Hook-client,OpenCode,Windows/Linux,declared,>=22,paired,platform shell,non-TTY,client-specific isolated profile,stdio,no,design-only,39 tools逐个schema、MCP fallback、配置快照,BLOCKED,需要真实非 Hook 客户端环境
+D9-1,MCP-stdio,Hermes/MCP Inspector,Windows/Linux,declared,>=22,paired,PowerShell/bash,non-TTY,isolated HOME,stdio,n/a,design-only,initialize、tools/list、JSON Schema、协议 framing,BLOCKED,本轮不启动真实 MCP
+D1-55,MCP-remote,Hermes/MCP Inspector,Windows/Linux,declared,>=22,paired,PowerShell/bash,non-TTY,isolated HOME,remote,n/a,design-only,session header、A/B隔离、重启和取消语义,BLOCKED,remote session 能力/环境未提供；不得用进程级观测替代
+D1-55,TTY,Hermes,Windows,x64,>=22,paired,ConPTY/PTY,TTY,isolated profile,stdio/remote,yes,design-only,同意、拒绝、取消、重复调用交互日志,BLOCKED,当前无真实 PTY；未来需 ConPTY/PTY
+D7-1,macOS-arm64,代表客户端待定,darwin,arm64,>=22,paired,zsh,non-TTY,isolated HOME,stdio,按客户端,design-only,安装、路径、Node/npm、MCP 互通,BLOCKED,无 macOS/ARM 环境；未来需机器或 CI runner
+D5-5,CodeArtsSpace-Hook,CodeArtsSpace,Windows/Linux,declared,>=22,paired,platform shell,non-TTY,isolated client profile,stdio,yes,design-only,Sandbox/KooCLI限制、Hook、重启和恢复,BLOCKED,无可用 CodeArtsSpace 环境
+D4-4,安全代表,Hermes/OpenCode,Windows/Linux,declared,>=22,paired,platform shell,TTY/non-TTY,isolated HOME,stdio,Hook/no-Hook,design-only,deny、token审批、execution、无spawn、脱敏和清理,BLOCKED,本轮不执行；未来需本地 fake 与代表客户端

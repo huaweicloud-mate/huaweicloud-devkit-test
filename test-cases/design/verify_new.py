@@ -2,39 +2,97 @@
 """R11-6: 设计矩阵门禁审计脚本（Codex round-10 P1-5 增强版）
 作为测试设计门禁使用：任一检查失败 → 非零退出码（CI/闭环可阻断）。
 检查项：
-  1. 设计级行数 == 162、ID 唯一
+  1. 设计级行数 == 163、ID 唯一
   2. 必填字段（前置/测试数据/步骤/预期/指引/关联工具）0 空
   3. 展开规则 0 空 + 全部四段结构化（枚举类型|代表|证据|阻塞）
-  4. 展开级 12 列结构、每行列数一致
+  4. 展开级保留旧 12 列并追加规范化状态/终端字段、每行列数一致
   5. NR3 状态枚举合法（PASS/FAIL/BLOCKED/SPEC-MISMATCH/NOT_RUN/UNASSESSED），无状态混用
   6. BLOCKED/NOT_RUN 必须有 blockedReason + requiredEvidence；PASS/FAIL/SPEC 必须有 requiredEvidence
-  7. 36 工具覆盖审计（全名匹配，无简称兜底）
+  7. 工具全集覆盖审计（由 tools.mjs 机器推导，全名匹配，无简称兜底）
   8. NR3 旧漂移文案检测
-  9. 追踪表 10 列 + ID 外键校验 + 状态一致性（设计基线 status 空 <-> 追踪表 UNASSESSED）
+  9. 追踪表保留原字段并追加 design_status/execution_status + ID 外键校验 + 状态一致性
 运行：python verify_new.py   # 全部通过退出 0，任一失败退出 1
 """
 import csv
 import collections
+import hashlib
+import os
+import re
+import subprocess
 import sys
+import tempfile
 
-P_DES = 'test-cases/design/用例矩阵-设计级.csv'
-P_EXP = 'test-cases/expanded/用例矩阵-展开级.csv'
-P_TRACE = 'test-cases/tracing/需求-设计-证据追踪表.csv'
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+P_DES = os.path.join(REPO_ROOT, 'test-cases', 'design', '用例矩阵-设计级.csv')
+P_EXP = os.path.join(REPO_ROOT, 'test-cases', 'expanded', '用例矩阵-展开级.csv')
+P_TRACE = os.path.join(REPO_ROOT, 'test-cases', 'tracing', '需求-设计-证据追踪表.csv')
 REQUIRED_FIELDS = ["前置条件", "测试数据", "操作步骤", "预期结果", "指引来源", "关联工具"]
 NEW_IDS = ["D1-56", "D1-57", "D1-58", "D2-21", "D3-C7", "D3-C8", "D3-C9", "D4-24", "D6-8", "D9-9"]
 VALID_STATUS = {"PASS", "FAIL", "BLOCKED", "SPEC-MISMATCH", "NOT_RUN", "UNASSESSED", "PARTIAL"}
 ENUM_TYPES = ("COMMON", "CLIENT_MATRIX", "OS_MATRIX", "AGENT_E2E", "CROSS_PROCESS")
 STALE_PATTERNS = ["无 Linux 测试机可用", "SSH 无凭据不可达", "WSL 无发行版"]
-TOOLS = ["huaweicloud_auth_init", "auth_status", "auth_sync", "check_cli", "detect_framework",
-         "setup_obs_config", "plan_cli_command", "run_readonly_command", "run_approved_command",
-         "list_operations", "list_regions", "get_regional_availability", "service_catalog",
-         "search_marketplace", "search_docs", "retrieve_skill", "get_service_icon",
-         "hook_check_command", "hook_check_artifacts", "hook_check_deploy_plan", "explain_error",
-         "show_profile_redacted", "sandbox_check_user", "sandbox_connect", "sandbox_credentials",
-         "sandbox_sign_agreement", "sandbox_exec_one_shot", "sandbox_exec_with_session",
-         "sandbox_close_session", "sandbox_upload_file", "sandbox_upload_project",
-         "sandbox_deploy_check", "sandbox_deploy_nginx", "voucher_status", "voucher_claim",
-         "check_update", "upgrade"]
+
+def _resolve_tools_mjs():
+    """解析被测项目 tools.mjs 注册源（P1 可移植门禁）：
+    优先 env HUAWEICLOUD_DEVKIT_HOME，其次与测试仓相邻的 ../hdk（仓库约定）。
+    返回 (绝对路径, 来源标签)；解析不到返回 (None, "")，由调用方明确 BLOCKED。"""
+    hdk = os.environ.get("HUAWEICLOUD_DEVKIT_HOME")
+    cands = []
+    if hdk:
+        cands.append(("env HUAWEICLOUD_DEVKIT_HOME",
+                      os.path.join(hdk, "plugins", "huaweicloud-core", "src", "tools.mjs")))
+    cands.append(("sibling ../hdk",
+                  os.path.normpath(os.path.join(REPO_ROOT, "..", "hdk", "plugins", "huaweicloud-core", "src", "tools.mjs"))))
+    for tag, p in cands:
+        if os.path.isfile(p):
+            return p, tag
+    return None, ""
+
+TOOLS_MJS, TOOLS_MJS_SRC = _resolve_tools_mjs()
+if not TOOLS_MJS:
+    print("[BLOCKED] ENV_MISSING：无法定位被测项目 tools.mjs（优先设 HUAWEICLOUD_DEVKIT_HOME，或把 hdk 放在测试仓相邻目录 ../hdk）")
+    sys.exit(2)
+print(f"[INFO] 工具注册源({TOOLS_MJS_SRC}) = {TOOLS_MJS}")
+
+def _canonical_tools():
+    """从被测项目 tools.mjs 的 TOOL_DEFINITIONS 正式注册数组推导唯一工具全集。
+    限制匹配范围在注册数组内，且只接受 huaweicloud_ 前缀的 name（拒绝 schema/辅助配置同名字符串误计）；去重保序。
+    数量由注册源计算，39 仅为当前快照。"""
+    names = []
+    with open(TOOLS_MJS, encoding="utf-8") as f:
+        text = f.read()
+    m = re.search(r"\bTOOL_DEFINITIONS\s*=\s*\[", text)
+    if not m:
+        return names
+    # 括号深度扫描确定数组闭合位置（含嵌套对象/字符串），避免正则越界
+    i = m.end() - 1
+    depth = 0
+    quote = None
+    while i < len(text):
+        c = text[i]
+        if quote:
+            if c == quote and text[i - 1] != '\\':
+                quote = None
+        elif c in "'\"`":
+            quote = c
+        elif c == '[':
+            depth += 1
+        elif c == ']':
+            depth -= 1
+            if depth == 0:
+                break
+        i += 1
+    body = text[m.end():i]
+    for n in re.findall(r"\bname:\s*['\"]([a-z_0-9]+)['\"]", body):
+        if not n.startswith("huaweicloud_"):
+            continue
+        sn = n[len("huaweicloud_"):]
+        if sn and sn not in names:
+            names.append(sn)
+    return names
+
+TOOLS = _canonical_tools()
+print(f"[INFO] 工具全集 = {len(TOOLS)} 个")
 
 fails = []
 
@@ -49,7 +107,17 @@ with open(P_DES, encoding="utf-8-sig") as f:
     rows = list(csv.DictReader(f))
 check("设计级行数 == 163", len(rows) == 163, str(len(rows)))
 # 2026-09-11 用户要求：预期结果与当前状态分离——设计级新增「用例当前状态」列
-check("设计级 14 列（含用例当前状态）", len(rows[0]) == 14, str(list(rows[0].keys())))
+check("设计级含设计/执行状态与终端字段", len(rows[0]) == 31, str(list(rows[0].keys())))
+DESIGN_META_FIELDS = ["设计状态", "执行状态", "终端覆盖类型", "terminal", "agent", "OS", "Node/npm",
+                      "shell", "TTY", "installLayout", "mcpTransport", "hookSupport",
+                      "requiredEvidence", "blockedReason", "owner", "依赖"]
+for fld in DESIGN_META_FIELDS:
+    empty = [r["ID"] for r in rows if not (r.get(fld) or "").strip()
+             and fld not in {"blockedReason"}]
+    check(f"设计字段[{fld}] 0 空", not empty, str(empty[:5]))
+check("设计状态均为 DESIGN_COVERED", all(r.get("设计状态") == "DESIGN_COVERED" for r in rows))
+check("UNASSESSED 与执行 NOT_RUN 分离",
+      all((r.get("用例当前状态") != "UNASSESSED") or (r.get("执行状态") == "NOT_RUN") for r in rows))
 des_st = [r.get("用例当前状态") or "" for r in rows]
 VOLID_DES_ST = {"PASS", "FAIL", "SPEC-MISMATCH", "UNASSESSED"}
 bad_des_st = [r["ID"] for r in rows
@@ -88,9 +156,9 @@ check("展开规则全部四段结构化(枚举|代表|证据|阻塞)", not bad_
 with open(P_EXP, encoding="utf-8-sig") as f:
     erows = list(csv.DictReader(f))
 check("展开级行数 == 137", len(erows) == 137, str(len(erows)))
-check("展开级 12 列", len(erows[0]) == 12, str(len(erows[0])))
-bad_cols = [r["ID"] for r in erows if len(r) != 12]
-check("展开级每行 12 列", not bad_cols, str(bad_cols[:5]))
+check("展开级含规范化状态/终端字段", len(erows[0]) == 29, str(len(erows[0])))
+bad_cols = [r["ID"] for r in erows if len(r) != 29]
+check("展开级每行 29 列", not bad_cols, str(bad_cols[:5]))
 nr3 = [r for r in erows if r["ID"].startswith("EXP-NR3")]
 bad_st = [r["ID"] for r in nr3 if r["status"] not in VALID_STATUS]
 check("NR3 状态枚举合法", not bad_st, str(bad_st))
@@ -113,20 +181,30 @@ for pat in STALE_PATTERNS:
         stale.append(pat)
 check("NR3 无旧漂移文案", not stale, str(stale))
 
-# 7) 工具覆盖（R11：全名匹配，无简称兜底；36 工具必须全部命中）
-tool_hits = {}
-for t in TOOLS:
-    hit = [r["ID"] for r in rows if t in (r.get("关联工具") or "")]
-    tool_hits[t] = hit
-missing_tools = {t: h for t, h in tool_hits.items() if not h}
-check("36 工具逐个覆盖(全名匹配,无兜底)", not missing_tools, str(list(missing_tools.keys())[:10]))
+# 7) 工具覆盖（36/37 口径收敛：由 tools.mjs 唯一全集推导，全名 token 匹配，无简称兜底）
+check("工具全集(tools.mjs)解析非空", len(TOOLS) > 0, f"{len(TOOLS)} 个")
+def _covered_short_names(assoc):
+    toks = set()
+    for t in re.split(r"[,;/\s]+", assoc or ""):
+        t = t.strip()
+        if t:
+            toks.add(t.replace("huaweicloud_", "", 1))
+    return toks
+covered = set()
+for r in rows:
+    covered |= _covered_short_names(r.get("关联工具") or "")
+missing_tools = [t for t in TOOLS if t not in covered]
+check(f"{len(TOOLS)} 工具逐个覆盖(全名匹配,由 tools.mjs 推导)", not missing_tools, str(missing_tools))
 
 # 9) 追踪表校验（R11）→ R12 增强：expandedCaseId 外键 + 设计→展开映射 + 状态一致性 + 证据完整性
 trace = []
 if __import__("os").path.exists(P_TRACE):
     with open(P_TRACE, encoding="utf-8-sig") as f:
         trace = list(csv.DictReader(f))
-check("追踪表存在且 10 列", len(trace) > 160 and len(trace[0]) == 10, f"{len(trace)}行/{len(trace[0]) if trace else 0}列")
+check("追踪表存在且含状态分离字段",
+      len(trace) > 160 and len(trace[0]) == 13 and
+      "design_status" in trace[0] and "execution_status" in trace[0] and "evidencePath" in trace[0],
+      f"{len(trace)}行/{len(trace[0]) if trace else 0}列")
 # 外键 a：追踪表 designCaseId 都可在设计级找到（波浪线范围如 "D5-1~7" 跳过）
 fk_trace = []
 des_id_set = set(ids)
@@ -191,6 +269,34 @@ bad_trace_st = [r["sourceAsset"] for r in trace
 check("追踪表 status 统一枚举", not bad_trace_st, str(bad_trace_st[:5]))
 
 print("\nNR3 status 分布:", dict(collections.Counter(r["status"] for r in nr3)))
+
+# 10) 生成脚本可复现（只读校验：在临时目录生成候选 CSV 后与正式真源字节对比，不覆盖正式真源）
+def _sha256(p):
+    h = hashlib.sha256()
+    with open(p, "rb") as f:
+        h.update(f.read())
+    return h.hexdigest()
+
+with tempfile.TemporaryDirectory(prefix="hdverify-") as _tmp:
+    _gen_env = dict(os.environ)
+    _gen_env["HUAWEICLOUD_TESTCASES_DIR"] = os.path.join(_tmp, "test-cases")
+    _r1 = subprocess.run([sys.executable, os.path.join(REPO_ROOT, "test-cases", "design", "gen_matrix.py")],
+                         cwd=REPO_ROOT, capture_output=True, text=True, env=_gen_env)
+    _r2 = subprocess.run([sys.executable, os.path.join(REPO_ROOT, "test-cases", "design", "gen_tracing.py")],
+                         cwd=REPO_ROOT, capture_output=True, text=True, env=_gen_env)
+    _formal = {"设计级": P_DES, "展开级": P_EXP, "追踪表": P_TRACE}
+    _cand = {
+        "设计级": os.path.join(_tmp, "test-cases", "design", "用例矩阵-设计级.csv"),
+        "展开级": os.path.join(_tmp, "test-cases", "expanded", "用例矩阵-展开级.csv"),
+        "追踪表": os.path.join(_tmp, "test-cases", "tracing", "需求-设计-证据追踪表.csv"),
+    }
+    if _r1.returncode != 0 or _r2.returncode != 0:
+        check("生成脚本可复现(临时目录只读比较)", False,
+              f"GENERATION_CHECK_FAILED: gen_matrix exit {_r1.returncode}; gen_tracing exit {_r2.returncode}")
+    else:
+        _drift = [k for k in ("设计级", "展开级", "追踪表")
+                  if not os.path.isfile(_cand[k]) or _sha256(_cand[k]) != _sha256(_formal[k])]
+        check("生成脚本可复现(临时目录只读比较，不覆盖正式真源)", not _drift, str(_drift))
 
 print()
 if fails:

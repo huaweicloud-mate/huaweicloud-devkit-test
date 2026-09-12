@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "exitCode": 0,
+  "signal": null,
+  "stdout": "{\n  \"error\": {\n    \"message\": \"itemNotFound: Volume 00000000-0000-0000-0000-000000000000 could not be found.\",\n    \"code\": \"EVS.5404\"\n  }\n}\n获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度\n请求诊断请参考以下内容:\n+---+--------+--------+------------------------------+------------------------------+------------------------------+\n|No.|产品名称| 错误码 |           错误信息           |             描述             |           处理措施           |\n+---+--------+--------+------------------------------+------------------------------+------------------------------+\n| 1 |  EVS   |EVS.5404|Resource(Volume, Snapshot, Bac|磁盘、快照和备份等资源未找到。|磁盘、快照、备份等资源未找到，|\n|   |        |        |kup .etc) cound not be found. |                              |     请检查资源是否可用。     |\n+---+--------+--------+------------------------------+------------------------------+------------------------------+\n",
+  "stderr": "",
+  "plan": {
+    "executable": "hcloud",
+    "args": [
+      "EVS",
+      "ShowVolume",
+      "--volume_id=00000000-0000-0000-0000-000000000000",
+      "--cli-region=cn-north-4"
+    ],
+    "command": "hcloud EVS ShowVolume --volume_id=00000000-0000-0000-0000-000000000000 --cli-region=cn-north-4",
+    "executableBlock": "hcloud EVS ShowVolume --volume_id=00000000-0000-0000-0000-000000000000 --cli-region=cn-north-4",
+    "warnings": [],
+    "classification": {
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "service": "EVS",
+      "operation": "ShowVolume",
+      "args": [
+        "EVS",
+        "ShowVolume",
+        "--volume_id=00000000-0000-0000-0000-000000000000",
+        "--cli-region=cn-north-4"
+      ]
+    },
+    "sgFindings": [],
+    "approvalToken": "5b4dbf7d-ba7e-4ea3-b079-6e8b58ae0ae0",
+    "safeToRun": true,
+    "rawArgs": [
+      "EVS",
+      "ShowVolume",
+      "--volume_id=00000000-0000-0000-0000-000000000000",
+      "--cli-region=cn-north-4"
+    ]
+  },
+  "retries": 0,
+  "attempts": 1
+}
