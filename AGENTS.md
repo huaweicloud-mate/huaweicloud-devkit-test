@@ -17,6 +17,8 @@ git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
 npm install -g huaweicloud-devkit@next
 ```
 
+> ⚠️ **专属目录隔离**：本机多 agent 时，每个 agent 必须用自己独立的 clone（如 `~/devkit-test/OpenCode/`、`~/devkit-test/Codex/`），**切勿共用同一目录**，否则互相覆盖冲突。首次可用 `python scripts/init_agent.py <客户端>` 自动建专属目录（含测试仓库 + 源码仓库）。
+
 ## 0. 自我识别 + 前置准备
 
 > **推送凭证 + 初始化（分散部署必读）**：每台 agent 机器**首次**先跑 `python scripts/init_agent.py`（交互输入 fine-grained token，自动 clone 仓库 + 装 next 包 + 验证环境）。
