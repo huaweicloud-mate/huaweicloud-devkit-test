@@ -47,7 +47,8 @@ python scripts/hourly_sync.py <客户端> <OS>
 
 ```bash
 python scripts/file_issue.py <缺陷汇总.md> <版本>       # 统一提交 1 个合并单
-git add -A && git commit && git pushm origin main
+git add -A && git commit -m "test: <客户端> <OS> 执行回填"
+git -c credential.helper="!gh auth git-credential" push origin main
 ```
 
 ## 红线（违反即作废重来）

@@ -5,7 +5,8 @@
     python hourly_sync.py <客户端> <OS>                 # 单次提报
     python hourly_sync.py <客户端> <OS> --interval 3600  # 循环模式：每 3600 秒提报一次
 
-用途：agent 长时执行测试时，每小时把已回填结果推到远端（防中断/崩溃丢失）。
+凭证：优先环境变量 HDK_GH_TOKEN（其次 GH_TOKEN），否则本机 gh shuangheaven token。
+推送用通用 git 命令（credential.helper=gh auth git-credential），不依赖本机 pushm alias。
 """
 import os, sys, subprocess, datetime, time
 
@@ -23,9 +24,16 @@ def run(cmd):
 
 def sync_once(client, os_name):
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    # 用 shuangheaven token push（huaweicloud-mate 仓库由该账号管理）
-    token = run("gh auth token --user shuangheaven")[1].strip()
-    os.environ["GH_TOKEN"] = token  # 让后续 git pushm 通过 gh auth git-credential 读取
+    # 凭证：优先环境变量，否则本机 gh shuangheaven token
+    token = os.environ.get("HDK_GH_TOKEN") or os.environ.get("GH_TOKEN")
+    if not token:
+        rc, t, _ = run("gh auth token --user shuangheaven")
+        token = t if rc == 0 and t else ""
+    if not token:
+        print(f"[{ts}] 无推送凭证（请设 HDK_GH_TOKEN 环境变量，或本机 gh 登录 shuangheaven）")
+        return False
+    os.environ["GH_TOKEN"] = token
+
     def git(args):
         return run(f"git {args}")
 
@@ -35,16 +43,15 @@ def sync_once(client, os_name):
         print(f"[{ts}] git add 失败: {err[:200]}")
         return False
     # git commit（无改动则跳过）
-    rc, out, err = git(f'commit -m "test: {client}-{os_name} 增量提报 {ts}"')
+    rc, out, err = git('commit -m "test: {}-{} 增量提报 {}"'.format(client, os_name, ts))
     if rc != 0:
-        # nothing to commit 或其它
         if "nothing to commit" in (out + err).lower() or "no changes" in (out + err).lower():
             print(f"[{ts}] 无改动，跳过")
             return True
-        print(f"[{ts}] git commit 失败: {(out+err)[:200]}")
+        print(f"[{ts}] git commit 失败: {(out + err)[:200]}")
         return False
-    # push（用 pushm 别名走 gh auth git-credential + GH_TOKEN）
-    rc, out, err = run("git pushm origin main")
+    # push（通用命令，不依赖 pushm alias）
+    rc, out, err = run('git -c credential.helper="!gh auth git-credential" push origin main')
     if rc == 0:
         print(f"[{ts}] 已提报 commit -> {out.splitlines()[-1] if out else 'ok'}")
         return True

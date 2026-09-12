@@ -26,6 +26,10 @@ def run(cmd, cwd=None):
 
 
 def set_gh_token():
+    tok = os.environ.get("HDK_GH_TOKEN") or os.environ.get("GH_TOKEN")
+    if tok and tok.strip():
+        os.environ["GH_TOKEN"] = tok.strip()
+        return True
     rc, tok, _ = run("gh auth token --user shuangheaven")
     if rc == 0 and tok.strip():
         os.environ["GH_TOKEN"] = tok.strip()
@@ -111,7 +115,7 @@ def pull_test_repo():
     if not os.path.isdir(os.path.join(REPO, ".git")):
         return True
     set_gh_token()
-    rc, out, err = run("git pullm --no-rebase origin main", cwd=REPO)
+    rc, out, err = run('git -c credential.helper="!gh auth git-credential" pull --no-rebase origin main', cwd=REPO)
     print(f"  [{'OK' if rc == 0 else '失败'}] 测试仓库 pull main: {(out or err)[:120]}")
     return rc == 0
 
