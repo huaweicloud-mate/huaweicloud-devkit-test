@@ -2,6 +2,21 @@
 
 > 每个客户端 agent（OpenCode/Codex/CodeArtsAgent/CodeArtsWork/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode）读本文件即开始执行当天测试。**不要处理任何 GitHub issue，本任务只做测试执行。**
 
+## 仓库地址
+
+| 仓库 | URL | 用途 |
+|---|---|---|
+| 测试仓库 | `https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git` | 结果记录 + 测试用例 + 脚本 |
+| 源码仓库 | `https://github.com/huaweicloud/huaweicloud-devkit.git` | 源码检查/根因定位/写探针（clone 到 `hdk`） |
+| 被测包 | `huaweicloud-devkit@next`（npm） | 真实场景黑盒测试 |
+
+clone 命令（本地尚无仓库时）：
+```bash
+git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git
+git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
+npm install -g huaweicloud-devkit@next
+```
+
 ## 0. 自我识别 + 前置准备
 
 > **推送凭证 + 初始化（分散部署必读）**：每台 agent 机器**首次**先跑 `python scripts/init_agent.py`（交互输入 fine-grained token，自动 clone 仓库 + 装 next 包 + 验证环境）。
