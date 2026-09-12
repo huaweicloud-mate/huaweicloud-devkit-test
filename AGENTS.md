@@ -4,7 +4,10 @@
 
 ## 0. 自我识别 + 前置准备
 
-1. 确定你的身份：**客户端名**（10 选一）+ **OS**（Windows/Linux）。
+1. **自我识别身份**（无需人工告知）：
+   - **客户端名**：从你的运行环境/系统提示/进程名判断你是 10 个客户端中的哪一个——OpenCode、Codex、CodeArtsAgent、CodeArtsWork、WorkBuddy、DSH、OfficeAce、Hermes、OpenClaw、AtomCode。
+   - **OS**：用 `platform.system()` 或运行环境判断 Windows / Linux。
+   - 识别不出才询问用户。
 2. 前置（`python scripts/prepare_env.py --update` 一键完成）：
    - 测试仓库 pull main 最新
    - 源码仓库 `hdk` checkout 到 npm `@next` 对应 commit（源码检查用）
