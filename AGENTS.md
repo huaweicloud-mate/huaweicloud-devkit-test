@@ -4,6 +4,11 @@
 
 ## 0. 自我识别 + 前置准备
 
+> **推送凭证（分散部署必读）**：各 agent 机器 push 到本仓库需凭证，二选一——
+> ① 环境变量 token（推荐）：Windows `$env:HDK_GH_TOKEN="<token>"`，Linux `export HDK_GH_TOKEN="<token>"`；
+> ② 本机 gh 登录有 huaweicloud-mate write 权限的账号。
+> 脚本优先读 `HDK_GH_TOKEN`，否则尝试本机 gh shuangheaven token。
+
 1. **自我识别身份**（无需人工告知）：
    - **客户端名**：从你的运行环境/系统提示/进程名判断你是 10 个客户端中的哪一个——OpenCode、Codex、CodeArtsAgent、CodeArtsWork、WorkBuddy、DSH、OfficeAce、Hermes、OpenClaw、AtomCode。
    - **OS**：用 `platform.system()` 或运行环境判断 Windows / Linux。
