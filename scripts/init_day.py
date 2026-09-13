@@ -7,8 +7,11 @@
 
 机器标识（IP）来源：环境变量 HDK_MACHINE_IP > ~/.hdk_ip 文件 > socket 自动检测。
 多台机器跑相同客户端时，靠 <日期>-<IP> 区分，避免 push 到同一仓库冲突。
+
+母版（test-cases/）为纯设计定义（无执行态）；复制到 results 副本时，为设计级/展开级
+追加「执行状态」+「evidencePath」空列，供 agent 执行后回填；追踪表为纯设计追踪直接复制。
 """
-import os, sys, shutil, datetime, socket
+import os, sys, shutil, datetime, socket, csv
 
 CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
@@ -66,17 +69,32 @@ def main():
     os.makedirs(dst, exist_ok=True)
 
     copies = [
-        ("test-cases", "design", "用例矩阵-设计级.csv"),
-        ("test-cases", "expanded", "用例矩阵-展开级.csv"),
-        ("test-cases", "tracing", "需求-设计-证据追踪表.csv"),
+        ("test-cases", "design", "用例矩阵-设计级.csv", "执行状态"),
+        ("test-cases", "expanded", "用例矩阵-展开级.csv", "execution_status"),
+        ("test-cases", "tracing", "需求-设计-证据追踪表.csv", None),
     ]
     for parts in copies:
-        src = os.path.join(REPO, *parts)
+        src = os.path.join(REPO, *parts[:3])
         if not os.path.isfile(src):
             print(f"【错误】测试用例缺失: {src}")
             sys.exit(3)
-        shutil.copy2(src, os.path.join(dst, parts[-1]))
-        print("复制:", parts[-1])
+        dst_path = os.path.join(dst, parts[2])
+        if parts[3] is None:
+            # 追踪表为纯设计追踪（无执行态），直接复制
+            shutil.copy2(src, dst_path)
+        else:
+            # 母版为纯设计定义（无执行态）；复制后追加「执行状态」+「evidencePath」空列供 agent 回填
+            with open(src, encoding="utf-8-sig") as f:
+                drows = list(csv.DictReader(f))
+            fields = list(drows[0].keys()) + [parts[3], "evidencePath"]
+            with open(dst_path, "w", encoding="utf-8-sig", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=fields)
+                w.writeheader()
+                for r in drows:
+                    r[parts[3]] = ""
+                    r["evidencePath"] = ""
+                    w.writerow(r)
+        print("复制:", parts[2])
 
     print("执行包:", dst)
     print("下一步: 逐条执行 -> 回填「执行状态」列 -> 出测试报告(<Agent>-<模型>-测试报告.md)")

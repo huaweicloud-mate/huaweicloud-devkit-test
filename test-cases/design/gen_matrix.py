@@ -1434,70 +1434,7 @@ D158_EXPANDED = [
           f"EX-4 S3/S5 真机: configureGenericMCP 层 'No known MCP agent detected' + stdio snippet（mcpServers/npx → huaweicloud-devkit-mcp）+ remote 提示；菜单层 'No supported agent detected'（引导文本）（{D158_EVID}/s5.stdout.log）"),
 ]
 
-# ============ 设计/执行状态与多终端元数据 ============
-# 设计状态和执行状态必须分离：
-# - DESIGN_COVERED 只表示设计字段完整，不表示行为已经通过。
-# - NOT_RUN 只表示当前没有执行证据；历史 UNASSESSED 不得转成 PASS。
-# - 用例当前状态保留历史聚合口径，供旧报告追溯。
-def design_status(rid):
-    """设计级用例当前状态（枚举：PASS/FAIL/SPEC-MISMATCH/PARTIAL/UNASSESSED）
-    来源：ITER-004 NR3 已执行 + EX-3/EX-4 真机验证回填（2026-09-11），其余未执行为 UNASSESSED。"""
-    _ITER006 = {
-        "D1-3": "PASS", "D1-4": "PASS", "D1-6": "PASS",
-        "D2-2": "PASS", "D2-4": "PASS", "D2-5": "PASS", "D2-6": "PASS", "D2-7": "PASS",
-        "D2-10": "PASS", "D2-11": "PASS", "D2-12": "PASS", "D2-13": "PASS", "D2-14": "PASS",
-        "D2-15": "PASS", "D2-16": "PASS", "D2-18": "PASS", "D2-19": "PASS",
-        "D3-A1": "PASS", "D3-A4": "PASS", "D3-A5": "PASS",
-        "D3-B1": "PASS", "D3-B2": "PASS", "D3-B3": "PASS", "D3-B4": "PASS", "D3-B5": "PASS",
-        "D3-B6": "PASS", "D3-B7": "PASS", "D3-B8": "PASS",
-        "D3-C2": "PASS", "D3-C5": "PASS", "D3-C7": "PASS",
-        "D4-1": "PASS", "D4-21": "PASS", "D4-22": "PASS",
-        "D5-1": "PASS", "D5-3": "PASS", "D5-8": "PASS",
-        "D6-1": "PASS", "D6-3": "PASS", "D6-4": "PASS",
-        "D8-7": "PASS",
-        "D9-1": "PASS", "D9-3": "PASS", "D9-4": "PASS", "D9-8": "PASS",
-        "D8-1": "PASS", "D8-4": "PASS", "D8-6": "PASS",
-        "D7-4": "PASS",
-        "D9-9": "SPEC-MISMATCH",
-        "D3-C9": "FAIL", "D4-2": "FAIL", "D4-15": "FAIL", "D4-16": "FAIL",
-        "D9-2": "FAIL", "D9-5": "FAIL",
-        "D4-24": "SPEC-MISMATCH",
-        "D3-C1": "PARTIAL(BLOCKED: ECS购买需保证金)", "D3-C3": "PARTIAL(BLOCKED: 沙箱需DevStation配额)",
-        "D3-C6": "PARTIAL(BLOCKED: 沙箱需DevStation配额)", "D3-C8": "PARTIAL(BLOCKED: EPS无企业项目权限)",
-    }
-    if rid in _ITER006:
-        return _ITER006[rid]
-    if rid.startswith("D1-") and rid[3:].isdigit() and 26 <= int(rid[3:]) <= 55:
-        if rid == "D1-39":
-            return "FAIL"  # #554 未修复（Windows EINVAL 静默）
-        if rid == "D1-52":
-            return "PARTIAL(BLOCKED×2)"  # Windows PASS + CodeArtsSpace/Linux升级链 BLOCKED
-        if rid == "D1-46":
-            return "PARTIAL(SPEC:46g)"  # 主行为 PASS + 46g reject 防御 SPEC 未裁决
-        if rid == "D1-55":
-            return "PARTIAL(SPEC+NOT_RUN+BLOCKED)"  # stdio PASS + remote SPEC/NOT_RUN + TTY BLOCKED
-        if rid in {"D1-29", "D1-43"}:
-            return "SPEC-MISMATCH"  # 文档 vs 实现差异，待裁决
-        return "PASS"  # ITER-004 已执行（unit/mcp-loop/upgrade-real/ext 探针覆盖）
-    if rid == "D1-58":
-        return "PASS"  # EX-4 五断言真机验证全 PASS（testbot3 c6c0965）
-    if rid == "D2-20":
-        return "SPEC-MISMATCH"  # ITER-002 aksk-v4 实测发现 AK-FP-2 不符（方案 T1 断言3），待真机复核
-    return "UNASSESSED"  # 未执行（含 D1-1~25、D2、D3、D4、D5~D10 设计基线）
-
-def execution_status(legacy):
-    """将历史聚合状态映射为独立执行状态，不改变 legacy 字段。"""
-    legacy = (legacy or "").strip()
-    if not legacy or legacy == "UNASSESSED":
-        return "NOT_RUN"
-    if legacy.startswith("PARTIAL(BLOCKED"):
-        return "BLOCKED"
-    if legacy.startswith("PARTIAL(SPEC"):
-        return "SPEC-MISMATCH"
-    if legacy in {"PASS", "FAIL", "BLOCKED", "SPEC-MISMATCH", "NOT_RUN", "PARTIAL"}:
-        return legacy
-    return "NOT_RUN"
-
+# ============ 多终端元数据 ============
 def _rule_parts(rule):
     parts = [p.strip() for p in (rule or "").split("|")]
     parts += [""] * (4 - len(parts))
@@ -1546,73 +1483,23 @@ def _terminal_metadata(rid, dim, rule):
         "hook_support": hook,
         "required_evidence": required,
         "blocked_reason": blocked.replace("<阻塞:", "").replace(">", "").strip() if blocked and "无" not in blocked else "",
-        "owner": "测试负责人；环境/规格阻塞责任见 blockedReason",
-        "dependencies": "需求来源与前置条件；独立 manifest；finally 清理；状态/证据回填",
+        "owner": "测试负责人",
+        "dependencies": "需求来源与前置条件；独立 manifest；finally 清理",
     }
-
-def _status_reason(rid, legacy, rule_reason=""):
-    """blockedReason 列语义（test-design-methodology §三列映射）：
-    仅「阻塞/失败/规格」原因；PASS/NOT_RUN 无阻塞→空；
-    阻塞前提（环境依赖如"需真云凭证"）归「展开规则<阻塞>」段，不进本列。"""
-    # 失败（FAIL）→ 失败根因
-    if legacy == "FAIL":
-        if rid == "D1-39":
-            return "P0 FAIL：Windows npm.cmd/spawnSync EINVAL 产品缺陷 #554 未由正式修复版本闭合；责任=上游开发；证据=正式修复版本 Windows 全链回归"
-        return "FAIL：执行断言不符预期；根因见 FINDINGS/执行证据"
-    # 混合（SPEC+BLOCKED）须先于纯 SPEC，否则被 startswith("PARTIAL(SPEC") 拦截
-    if legacy.startswith("PARTIAL(SPEC+"):
-        return "SPEC-MISMATCH/BLOCKED：同时存在规格和环境未闭合子项；责任=产品/开发与执行环境提供方；证据=裁决及终端日志"
-    if legacy == "SPEC-MISMATCH" or legacy.startswith("PARTIAL(SPEC"):
-        if rid in {"D1-29", "D1-43", "D1-46", "D1-55", "D2-20"}:
-            return f"SPEC-MISMATCH：{rid} 仍需开发/产品规格裁决；责任=产品与开发；证据=裁决记录、更新规范和对应复核"
-        return "SPEC-MISMATCH：聚合路径含未裁决规格子项；责任=产品与开发；证据=规格裁决和复核"
-    if legacy.startswith("PARTIAL(BLOCKED"):
-        return "BLOCKED：聚合路径仍缺终端/环境证据；责任=执行环境提供方；证据=对应客户端/OS 运行日志与 manifest"
-    # PASS / UNASSESSED(NOT_RUN) → 空（无阻塞原因，阻塞前提在展开规则<阻塞>段）
-    return ""
-
-# 执行证据链映射（用例 ID → 证据目录，相对执行归档根；多个用 ; 分隔；与 gen_tracing.py 保持一致）
-EVIDENCE = {
-    "D1-3": "evidence/d1-cli-readonly", "D1-4": "evidence/d1-cli-readonly", "D1-6": "evidence/d1-cli-readonly",
-    "D1-26": "evidence/d9-protocol;evidence/d1-upgrade",
-    "D2-2": "evidence/d2-auth-core", "D2-4": "evidence/d2-auth-core", "D2-5": "evidence/d2-auth-core",
-    "D2-6": "evidence/d2-auth-core", "D2-7": "evidence/d2-auth-reconcile",
-    "D2-10": "evidence/d2-auth-reconcile", "D2-11": "evidence/d2-auth-switch", "D2-12": "evidence/d2-auth-core",
-    "D2-13": "evidence/d2-auth-core", "D2-14": "evidence/d2-auth-core", "D2-15": "evidence/d2-auth-switch",
-    "D2-16": "evidence/d2-auth-switch", "D2-18": "evidence/d2-auth-reconcile", "D2-19": "evidence/d2-auth-reconcile",
-    "D3-A1": "evidence/d3-a1-skills", "D3-A4": "evidence/d3-misc", "D3-A5": "evidence/d2-d3-readonly;evidence/d3-misc",
-    "D3-B1": "evidence/d3-b-readonly;evidence/d3-misc", "D3-B2": "evidence/d3-b-readonly", "D3-B3": "evidence/d3-b-readonly",
-    "D3-B4": "evidence/d3-misc", "D3-B5": "evidence/d9-d3-function", "D3-B6": "evidence/d3-misc",
-    "D3-B7": "evidence/d3-b7-approval", "D3-B8": "evidence/d3-b8-voucher",
-    "D3-C2": "evidence/d3-c2-obs", "D3-C5": "evidence/d3-c5-smoke", "D3-C7": "evidence/d3-c7-eip;evidence/d3-misc",
-    "D3-C8": "evidence/d3-c8-evs", "D3-C9": "evidence/d3-c9-notfound",
-    "D4-1": "evidence/d4-security-core", "D4-2": "evidence/d4-security-core", "D4-15": "evidence/d4-security-core",
-    "D4-16": "evidence/d4-security-core", "D4-21": "evidence/d4-security-core", "D4-22": "evidence/d4-security-core",
-    "D4-24": "evidence/d3-b7-approval",
-    "D5-1": "evidence/d5-static", "D5-3": "evidence/d5-static", "D5-8": "evidence/d5-static",
-    "D6-1": "evidence/d6-perf", "D6-3": "evidence/d6-perf", "D6-4": "evidence/d6-perf",
-    "D7-4": "evidence/d8-doc",
-    "D8-1": "evidence/d8-doc", "D8-4": "evidence/d8-doc", "D8-6": "evidence/d8-doc", "D8-7": "evidence/d8-doc",
-    "D9-1": "evidence/d9-protocol;evidence/d9-robust", "D9-2": "evidence/d9-d3-function",
-    "D9-3": "evidence/d9-protocol", "D9-4": "evidence/d9-protocol",
-    "D9-5": "evidence/d9-robust;evidence/d9-d3-function", "D9-7": "evidence/d9-robust",
-    "D9-8": "evidence/d9-robust", "D9-9": "evidence/d9-9-cancel",
-}
 
 design_headers = [
     "ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果",
-    "指引来源", "关联工具", "自动化建议", "展开规则", "用例当前状态", "生成时间",
-    "设计状态", "执行状态", "终端覆盖类型", "terminal", "agent", "OS", "Node/npm",
+    "指引来源", "关联工具", "自动化建议", "展开规则", "生成时间",
+    "设计状态", "终端覆盖类型", "terminal", "agent", "OS", "Node/npm",
     "shell", "TTY", "installLayout", "mcpTransport", "hookSupport", "requiredEvidence",
-    "blockedReason", "owner", "依赖", "evidencePath",
+    "owner", "依赖",
 ]
-# 保留旧 12 列，同时追加规范化外键、设计/执行状态和终端字段。
+# 展开级：纯设计定义（ID/展开类型/枚举对象/源用例/优先级/执行要点/预期结果/生成时间 + requiredEvidence + 外键 + 设计状态 + 终端元数据 + owner/依赖）
 exp_headers = [
     "ID", "展开类型", "枚举对象", "源用例", "优先级", "执行要点", "预期结果", "生成时间",
-    "status", "blockedReason", "requiredEvidence", "observedAt",
-    "designCaseId", "expandedCaseId", "design_status", "execution_status", "terminalType",
+    "requiredEvidence", "designCaseId", "expandedCaseId", "design_status", "terminalType",
     "terminal", "agent", "OS", "Node/npm", "shell", "TTY", "installLayout",
-    "mcpTransport", "hookSupport", "owner", "依赖", "evidencePath",
+    "mcpTransport", "hookSupport", "owner", "依赖",
 ]
 
 design_by_id = {row[0]: row for row in D}
@@ -1624,13 +1511,10 @@ with open(os.path.join(DES_DIR, "用例矩阵-设计级.csv"), "w", newline="", 
         # 展开规则空值按维度默认推导 + R11 四段规范化（行内显式规则映射/合并/兜底）
         row = list(row)
         row[11] = expand_rule(row[0], row[1], row[11])
-        legacy = design_status(row[0])
         meta = _terminal_metadata(row[0], row[1], row[11])
         w.writerow(tuple(row) + (
-            legacy,
             gen_ts(row[0]),
             "DESIGN_COVERED",
-            execution_status(legacy),
             meta["terminal_type"],
             meta["terminal"],
             meta["agent"],
@@ -1642,72 +1526,47 @@ with open(os.path.join(DES_DIR, "用例矩阵-设计级.csv"), "w", newline="", 
             meta["mcp_transport"],
             meta["hook_support"],
             meta["required_evidence"],
-            _status_reason(row[0], legacy, meta["blocked_reason"]),
             meta["owner"],
             meta["dependencies"],
-            EVIDENCE.get(row[0], ""),
         ))
 
 with open(os.path.join(EXP_DIR, "用例矩阵-展开级.csv"), "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f)
     w.writerow(exp_headers)
     for row in E:
-        # 设计基线展开行（D5/服务/评测）：状态列留空=设计基线（UNASSESSED），blockedReason/evidence/observedAt 空
+        # 设计基线展开行（D5/服务/评测）：纯设计定义，无执行态
         src_id = row[3] if len(row) > 3 else ""
         drow = design_by_id.get(src_id)
         dmeta = _terminal_metadata(src_id, drow[1], drow[11]) if drow else _terminal_metadata(src_id, "D8质量", "")
-        legacy = (row[8] or "").strip() if len(row) > 8 else ""
-        exec_st = execution_status(legacy)
-        # ITER-006：展开级执行状态继承源设计级 design_status（父级已回填时展开行同步）
-        if drow:
-            src_exec = execution_status(design_status(src_id))
-            if src_exec not in ("", "NOT_RUN"):
-                exec_st = src_exec
-        base_reason = (row[9] or "").strip() if len(row) > 9 else ""
-        if not base_reason and exec_st == "NOT_RUN":
-            base_reason = "NOT_RUN：设计基线展开行尚无执行证据；责任=测试负责人"
-        if not base_reason:
-            base_reason = "无当前阻塞；本轮仅保留设计/历史状态，执行阶段按终端矩阵提供证据"
-        required = (row[10] or "").strip() if len(row) > 10 else ""
-        if not required:
-            required = "强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录"
+        required = "强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录"
         w.writerow(list(row) + [
-            gen_ts(src_id), "UNASSESSED", base_reason, required, "",
-            src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY", exec_st,
+            gen_ts(src_id), required,
+            src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY",
             dmeta["terminal_type"], dmeta["terminal"], dmeta["agent"], dmeta["os"], dmeta["node_npm"],
             dmeta["shell"], dmeta["tty"], dmeta["install_layout"], dmeta["mcp_transport"],
-            dmeta["hook_support"], "测试负责人", "源设计用例；独立 manifest；finally 清理",
-            EVIDENCE.get(src_id, ""),
+            dmeta["hook_support"], dmeta["owner"], "源设计用例；独立 manifest；finally 清理",
         ])
-    for row in NR3_EXPANDED:  # NR3 终端展开（12 列：含结构化 status/blockedReason/requiredEvidence/observedAt）
+    for row in NR3_EXPANDED:  # NR3 终端展开：取前 8 列设计字段 + requiredEvidence，去 status/reason/observed
         src_id = row[3]
         drow = design_by_id.get(src_id)
         dmeta = _terminal_metadata(src_id, drow[1], drow[11]) if drow else _terminal_metadata(src_id, "D8质量", "")
-        legacy = row[8] or ""
-        reason = row[9] or "无当前阻塞；本轮仅保留历史状态，执行阶段按终端矩阵提供证据"
-        row = list(row)
-        row[9] = reason
-        w.writerow(row + [
-            src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY", execution_status(legacy),
+        required = row[10] or "强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录"
+        w.writerow(list(row[:8]) + [required] + [
+            src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY",
             dmeta["terminal_type"], dmeta["terminal"], dmeta["agent"], dmeta["os"], dmeta["node_npm"],
             dmeta["shell"], dmeta["tty"], dmeta["install_layout"], dmeta["mcp_transport"],
-            dmeta["hook_support"], "测试负责人", "源设计用例；逐终端证据；finally 清理",
-            EVIDENCE.get(src_id, ""),
+            dmeta["hook_support"], dmeta["owner"], "源设计用例；逐终端证据；finally 清理",
         ])
-    for row in D158_EXPANDED:  # R12-4: D1-58 白名单五断言专属展开行（12 列，设计基线 UNASSESSED）
+    for row in D158_EXPANDED:  # D1-58 白名单五断言：同上，去执行态
         src_id = row[3]
         drow = design_by_id.get(src_id)
         dmeta = _terminal_metadata(src_id, drow[1], drow[11]) if drow else _terminal_metadata(src_id, "D8质量", "")
-        legacy = row[8] or ""
-        reason = row[9] or "无当前阻塞；本轮仅保留历史状态，执行阶段按终端矩阵提供证据"
-        row = list(row)
-        row[9] = reason
-        w.writerow(row + [
-            src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY", execution_status(legacy),
+        required = row[10] or "强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录"
+        w.writerow(list(row[:8]) + [required] + [
+            src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY",
             dmeta["terminal_type"], dmeta["terminal"], dmeta["agent"], dmeta["os"], dmeta["node_npm"],
             dmeta["shell"], dmeta["tty"], dmeta["install_layout"], dmeta["mcp_transport"],
-            dmeta["hook_support"], "测试负责人", "D1-58 专属断言；逐条证据；finally 清理",
-            EVIDENCE.get(src_id, ""),
+            dmeta["hook_support"], dmeta["owner"], "D1-58 专属断言；逐条证据；finally 清理",
         ])
 
 print(f"设计级: {len(D)} 条")

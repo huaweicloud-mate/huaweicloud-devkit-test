@@ -6,7 +6,7 @@
 
 | 路径 | 内容 |
 |---|---|
-| `design/用例矩阵-设计级.csv` | 设计级用例 163 条（D1–D10；完整设计字段 + 独立设计/执行状态 + 多终端元数据；2026-09-11 全量评审补充 9 条：D1-56/57、D2-21、D3-C7~9、D4-24、D6-8、D9-9） |
+| `design/用例矩阵-设计级.csv` | 设计级用例 179 条（D1–D10；纯设计字段 + 设计状态 + 多终端元数据 + requiredEvidence，**无执行状态/结果/证据路径**；2026-09-13 补 16 覆盖缺口用例 D1-59~64/D2-22~25/D3-C10~12/D4-25/26/D9-10） |
 | `design/gen_matrix.py` | 矩阵生成脚本（修改后重跑保证可复现） |
 | `expanded/用例矩阵-展开级.csv` | 展开级用例 137 条（D5 客户端矩阵 70 / D3-C4 服务矩阵 22 / D10 评测集 15 / NR3 终端展开 25 / D1-58 白名单 5） |
 | `daily/用例矩阵-设计级.csv` + `daily/用例矩阵-展开级.csv` | 每日基础用例（81 设计级 + 71 展开级，母版设计字段列，不带执行状态/结果） |
@@ -40,6 +40,11 @@ test-cases/
 2. **废弃用 OBSOLETE 标记**（保留历史结果），不物理删除
 3. **修改 = 新 ID + 关联旧 ID**（注明 supersedes），保证跨版本结果可对比
 
-## 状态追踪
+## 状态追踪（执行态与用例定义分离）
 
-执行时复制到 `results/ITER-NNN-<YYYYMMDDHHmmss>/` 或执行追踪母版（Excel/腾讯文档）。设计级和展开级均分离 `设计状态` 与 `执行状态`：设计字段完整不等于执行通过；未执行统一为 `NOT_RUN`，历史 `UNASSESSED` 仅保留为历史状态。执行状态可为 PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN；BLOCKED 不计入通过率分母（§5.1 度量口径）。
+用例矩阵（design/expanded/tracing/daily）是**纯设计定义**，不含「执行状态/结果/证据路径」——执行结果统一落 `results/Summary/`。
+
+- **母版列**：设计字段 + `设计状态`（`DESIGN_COVERED`=设计完整，非执行通过）+ 终端元数据 + `requiredEvidence` + `owner`/`依赖`。
+- **每日执行**：`scripts/init_day.py` 复制母版到 `results/<客户端>/<日期>-<IP>/<OS>/` 时，追加「执行状态」（设计级）/「execution_status」（展开级）+「evidencePath」空列供回填。
+- **结果聚合**：`scripts/build_summary.py` 汇总到 `results/Summary/用例矩阵-*-总执行结果-<日期>.csv`。
+- 执行状态枚举：PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN；BLOCKED 不计入通过率分母（§5.1 度量口径）。
