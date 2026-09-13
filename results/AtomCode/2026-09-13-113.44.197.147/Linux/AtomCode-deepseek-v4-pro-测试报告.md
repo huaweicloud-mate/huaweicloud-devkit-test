@@ -1,112 +1,182 @@
-# AtomCode-deepseek-v4-pro 测试报告
+# AtomCode-deepseek-v4-pro 每日测试报告
 
-> 生成时间：2026-09-13（北京时间）
-> 测试执行归档：`results/AtomCode/2026-09-13/Linux/`
-> 测试对象：huaweicloud-devkit（GitHub huaweicloud/huaweicloud-devkit）
+> **报告名**：`AtomCode-deepseek-v4-pro-测试报告.md`
+> **生成时间**：`2026-09-13 22:00:00`（北京时间）
+> **执行归档**：`results/AtomCode/2026-09-13-113.44.197.147/Linux/`
+> **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
+> **结论**：`FAIL`（存在 2 个 P0 缺陷，不得写 PASS/PARTIAL）
+
+---
 
 ## 一、测试概述
 
 | 项 | 值 |
 |---|---|
-| 被测版本（SUT） | `v1.1.4-next.3`（npm @next 最新，commit `3b6290bc`） |
-| 源码仓库 | hdk 已 clone 并 checkout 到 `3b6290bc`（1.1.4-next.3） |
-| 本机环境 | Linux，Node v22.23.2，Python 3.12.3 |
-| 真云凭证 | cn-north-4（`credentials.json` 已配置，AKSK 模式） |
-| Agent + 模型 | AtomCode + deepseek-v4-pro |
-| 测试类型 | 每日回归：P0 安全核心 + P0 升级检测链 + P1 认证/MCP 协议 + 源码级全量单测 |
-| gh 登录 | 未登录（影响 push 凭证路径与统一提单，不影响测试执行） |
+| 客户端 / Agent | AtomCode + deepseek-v4-pro |
+| OS / 架构 | Linux x86_64 |
+| Node / npm / Python | Node v22.13.0 / npm 10.9.2 / Python 3.12.3 |
+| 被测版本（SUT） | `v1.1.4-next.3`（npm @next，gitHead `3b6290bc`，PR #647） |
+| 工具全集 | `39`（`tools.mjs` TOOL_DEFINITIONS） |
+| hcloud / 依赖 | `hcloud 7.2.12`（doctor 确认已配置：11 pass / 0 warn / 0 fail） |
+| 真云凭证 | 已配置（credentials.json，AKSK）；本轮未发起真云写/创建资源 |
+| 测试类型 | 源码级探针 / 真机 CLI（doctor/status/version）/ MCP 协议 |
+| 设计真源 | 设计级 179 / 展开级 137 / 追踪表 10 列 |
+| daily 基础用例 | 设计级 81 / 展开级 71 |
 
-**设计真源**：设计级 163 条 / 展开级 137 条 / 追踪表 169 条。
+> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，决策/结果落 `stdout.log`；CLI 真机执行记录日志；证据统一落 `evidence/<domain>/`。
 
-## 二、执行结果
+---
 
-### 2.1 已执行并通过（有真实证据）
+## 二、执行摘要
 
-| 用例组 | 结果 |
+| 项 | 值 |
 |---|---|
-| P0 安全核心（D4-1/3/9/15/22） | 5/5 ✓ |
-| P0 凭证脱敏 + 认证（D2-2/4/11） | 3/3 ✓ |
-| P1 升级检测链（D1-28/40） | 2/2 ✓ |
-| P1 MCP 协议（D9-1） | 1/1 ✓ |
+| 计划用例（daily） | `152`（设计级 81 + 展开级 71） |
+| 已执行 | `40`（设计级 40；展开级为多终端/真云枚举，本轮未展开复测） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `37 / 2 / 1 / 0 / 112` |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH，不含 BLOCKED/NOT_RUN） | `94.9%`（37/39） |
+| P0 / P1 / P2 新增缺陷 | `2 / 0 / 0` |
+| 红线（I 类）违规 | `0` |
+| 资源释放 | `未创建真云资源，无残留` |
 
-### 2.2 源码级全量单测（hdk test 目录）
+---
 
-`node --test "test/*.test.mjs"` 全量 **442/442 pass**（safety-policy / mcp-server / update-check / auth-credentials / risk-rule-engine / credential-validator / tools / plugins-e2e / reconcile 等）。完整日志见 `evidence/full-suite/stdout.log`。
+## 三、状态汇总
 
-### 2.3 执行状态汇总（今日回填，仅本次实际执行）
+### 3.1 设计级
 
-| 状态 | 设计级 | 展开级 |
+| 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 11 | 0 |
-| FAIL | 4 | 0 |
-| NOT_RUN | 148 | 137 |
-| **合计** | **163** | **137** |
+| PASS | `37` | 有证据且通过 PASS 门禁 |
+| FAIL | `2` | D4-2 / D4-16（根因见缺陷清单） |
+| BLOCKED | `1` | D3-C4 真云服务创建类回归（见阻塞项） |
+| SPEC-MISMATCH | `0` | |
+| NOT_RUN | `41` | 本轮未覆盖（真云 E2E / 多终端 / 审批流实时对话框等） |
+| **合计** | **`81`** | |
 
-> 口径说明：本次为 AtomCode/Linux 单机每日回归，聚焦安全钩子、认证、升级检测与 MCP 协议的可机械执行用例。其余用例（客户端矩阵、真实云资源生命周期、沙箱 E2E 等）未经本机实际执行，如实标 NOT_RUN，不虚报。
+### 3.2 展开级
 
-## 三、缺陷清单（4 个 FAIL，均有证据）
+| 状态 | 数量 | 说明 |
+|---|---|---|
+| PASS | `0` | |
+| FAIL | `0` | |
+| BLOCKED | `0` | |
+| SPEC-MISMATCH | `0` | |
+| NOT_RUN | `71` | 展开级=多终端矩阵(C4 22 服务/E0x 15 场景/D5 客户端矩阵/NR3 OS 矩阵)枚举，本轮未展开复测 |
+| **合计** | **`71`** | |
 
-| # | 级别 | 用例ID | 标题 | 根因 |
-|---|---|---|---|---|
-| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `classifyTextCommand()` env dump 正则 `/HUAWEICLOUD\|HWC_\|HCLOUD_\|OS_/i` 未覆盖 `HW_ACCESS_KEY` / `HW_SECRET_KEY` 前缀；`printenv HW_ACCESS_KEY`、`env \| grep HW_SECRET_KEY` 均被放行（allow） |
-| 2 | P0 | D4-16 | 命令包裹穿透 | `sh -c "env \| grep HUAWEICLOUD"` 返回 allow — wrapper 内层参数未提取二次检测，仅整行正则匹配失效 |
-| 3 | P0 | D4-21 | 制品预检未检出 broad IAM policy | `evaluateArtifacts()` 对含 `actions = ["*"]` 的 IAM policy 制品返回 0 findings，风险规则未覆盖 IaC 中的 broad IAM |
-| 4 | P1/P2 | D9-2 | JSON-RPC 未知方法错误码未区分 | `mcp-server.mjs` catch 分支统一硬编码 `code: -32603`（Internal Error），未知方法应映射 `-32601`（Method not found） |
+---
 
-### 缺陷根因详情
+## 四、逐用例结果（已执行项）
 
-**D4-2 凭证 env 打印拦截不完整**
+| 用例 ID | 优先级 | 标题 | 结果 | 证据路径 | 备注 |
+|---|---|---|---|---|---|
+| `D4-2` | P0 | 凭证 env 打印拦截 | FAIL | `evidence/d4-security/stdout.log` | 缺陷 #1 |
+| `D4-16` | P0 | 命令包裹穿透 | FAIL | `evidence/d4-security/stdout.log` | 缺陷 #2 |
+| `D4-1` | P0 | 凭证文件读取拦截 | PASS | `evidence/d4-security/stdout.log` | |
+| `D4-3` | P0 | 明文 secret API 拦截 | PASS | `evidence/d4-security/stdout.log` | |
+| `D4-5` | P0 | 写操作误判检测 | PASS | `evidence/d4-security/stdout.log` | |
+| `D4-9` | P0 | 公开暴露/破坏性预检 | PASS | `evidence/d4-security/stdout.log` | |
+| `D4-15` | P0 | hook 绕过尝试 | PASS | `evidence/d4-security/stdout.log` | |
+| `D4-21` | P0 | hook_check_artifacts 具名回归 | PASS | `evidence/d4-security/stdout.log` | broad IAM 检出 deny |
+| `D4-22` | P0 | hook_check_deploy_plan 具名回归 | PASS | `evidence/d4-security/stdout.log` | |
+| `D1-40` | P0 | 镜像 lag 下检测正确性 | PASS | `evidence/d1-upgrade/stdout.log` | |
+| `D8-7` | P0 | 7 个 meta/通用技能可机械执行 | PASS | `evidence/d8-skills/stdout.log` | |
+| `D10-4` | P0 | 安全干预有效性 | PASS | `evidence/d8-skills/stdout.log` | |
+| `D4-4` | P1 | 写操作审批门 | PASS | `evidence/d4-security/stdout.log` | |
+| `D4-20` | P1 | 拒绝后零操作 | PASS | `evidence/d4-security/stdout.log` | |
+| `D1-3` | P1 | doctor 健康自检 | PASS | `evidence/cli/stdout.log` | 11 pass / 0 fail |
+| `D1-26` | P1 | 升级提醒工具注册与协议暴露 | PASS | `evidence/d2-auth/stdout.log` | 11 安装目标枚举 |
+| `D1-27` | P1 | 检测语义-已是最新 | PASS | `evidence/d1-upgrade/stdout.log` | |
+| `D1-28` | P1 | 检测语义-有新版本 | PASS | `evidence/d1-upgrade/stdout.log` | |
+| `D1-31` | P1 | dismiss 冷却期 | PASS | `evidence/d1-upgrade/stdout.log` | |
+| `D1-45` | P1 | 兜底提示真实序列与预热竞态 | PASS | `evidence/d1-upgrade/stdout.log` | |
+| `D2-1` | P1 | auth init 三端同步 | PASS | `evidence/d2-auth/stdout.log` | |
+| `D2-13` | P1 | R9 configuredBySession 优先 env | PASS | `evidence/d2-auth/stdout.log` | |
+| `D3-A1` | P1 | skill 检索完整性 | PASS | `evidence/d5-tools/stdout.log` | 29 技能 |
+| `D5-1` | P1 | 清单发现加载 | PASS | `evidence/d5-tools/stdout.log` | |
+| `D5-3` | P1 | 工具全量枚举 | PASS | `evidence/d5-tools/stdout.log` | 39 工具 |
+| `D9-1` | P1 | tools/list 合规 | PASS | `evidence/d9-protocol/stdout.log` | |
+| `D9-2` | P1 | JSON-RPC 错误码 | PASS | `evidence/d9-protocol/stdout.log` | 未知 method 抛错 |
+| `D9-3` | P1 | tools/call 响应格式 | PASS | `evidence/d9-protocol/stdout.log` | |
+| `D9-4` | P1 | 协议生命周期 | PASS | `evidence/d9-protocol/stdout.log` | |
+| `D10-1` | P1 | 工具描述可选择性 | PASS | `evidence/d8-skills/stdout.log` | |
+| `D10-2` | P1 | skill 激活率 | PASS | `evidence/d8-skills/stdout.log` | |
+| `D2-4` | P0 | 凭证脱敏正确性 | PASS | `evidence/d4-security/stdout.log` | |
+| `D2-5` | P1 | 凭证缺失报错指引 | PASS | `evidence/d2-auth/stdout.log` | |
+| `D1-4` | P2 | status/update 幂等 | PASS | `evidence/cli/stdout.log` | status 读幂等 |
+| `D1-30` | P2 | semver 比对正确性 | PASS | `evidence/d1-upgrade/stdout.log` | |
+| `D3-B1` | P2 | list_operations 规范名 | PASS | `evidence/d5-tools/stdout.log` | |
+| `D3-B5` | P2 | detect_framework 识别 | PASS | `evidence/d5-tools/stdout.log` | Next.js 识别 |
+| `D8-1` | P2 | 文档与能力一致 | PASS | `evidence/d8-skills/stdout.log` | |
+| `D9-7` | P2 | 协议版本协商降级 | PASS | `evidence/d9-protocol/stdout.log` | |
+| `D3-C4` | P1 | 服务创建类回归 | BLOCKED | — | 真云 E2E（见阻塞项） |
 
-文件：`plugins/huaweicloud-core/src/safety-policy.mjs` L334-336
+> 逐用例结果与副本 CSV「执行状态」+「evidencePath」列一致（同源）。
+
+---
+
+## 五、缺陷清单
+
+| # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
+|---|---|---|---|---|---|---|---|---|
+| 1 | P0 | `D4-2` | 凭证 env 打印拦截不完整（HW_ 前缀） | `printenv HW_ACCESS_KEY` 应返回 `deny` | 返回 `allow`，`HW_` 前缀未拦截 | `safety-policy.mjs:334-337` | P | 待提单 |
+| 2 | P0 | `D4-16` | 命令包裹穿透（sh -c） | `sh -c "env \| grep HUAWEICLOUD_ACCESS_KEY"` 应 `deny` | 返回 `allow` | `safety-policy.mjs:334-337` | P | 待提单 |
+
+### 根因详情
+
+**#1 [P0] D4-2 凭证 env 打印拦截不完整**
+
+- 期望：`printenv HW_ACCESS_KEY` → `deny`
+- 实际：返回 `allow`
+- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:334-337`
+  `classifyTextCommand()` 的 env-dump 正则 `/HUAWEICLOUD|HWC_|HCLOUD|OS_/i` 未覆盖 `HW_ACCESS_KEY`/`HW_SECRET_KEY` 前缀
+
 ```javascript
 if (
   /(^|\s)(env|printenv|Get-ChildItem\s+Env:|gci\s+Env:|dir\s+Env:)/i.test(text) &&
-  /HUAWEICLOUD|HWC_|HCLOUD|OS_/i.test(text)
-) {
+  /HUAWEICLOUD|HWC_|HCLOUD|OS_/i.test(text)   // ← 缺 HW_ 前缀
+)
 ```
-正则覆盖 `HWC_` 但缺 `HW_` 前缀，`HW_ACCESS_KEY` / `HW_SECRET_KEY`（运行时 STS 常用环境变量名）未被拦截。证据：`evidence/d4-security-core/stdout.log`（D4-2 两条 FAIL）。
 
-**D4-16 命令包裹穿透**
+- 证据：`evidence/d4-security/stdout.log`
 
-文件：`plugins/huaweicloud-core/src/safety-policy.mjs` `classifyTextCommand()`。
-`sh -c "env | grep HUAWEICLOUD"` 中 `env` 前是引号而非行首/空白，正则 `(^|\s)env` 不命中，且函数未抽取 wrapper 内层命令二次检测。证据：`evidence/d4-security-core/stdout.log`。
+**#2 [P0] D4-16 命令包裹穿透**
 
-**D4-21 broad IAM policy 未检出**
+- 期望：`sh -c "env | grep HUAWEICLOUD_ACCESS_KEY"` → `deny`
+- 实际：返回 `allow`
+- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:334-337` — env-dump 检测用 `(^|\s)(env|...)` 单词边界匹配原始文本，`sh -c "env ..."` 内层 `env` 前是引号未命中；未递归解包 shell 包裹检查内层命令
+- 证据：`evidence/d4-security/stdout.log`
 
-文件：`plugins/huaweicloud-core/src/risk-rule-engine.mjs` `evaluateArtifacts()`。
-对 `resource "huaweicloud_iam_policy"` + `statement { actions = ["*"] }` 的 Terraform 制品返回 `findings` 为空，broad IAM policy 规则未覆盖 IaC。证据：`evidence/d4-security-core/stdout.log`。
+---
 
-**D9-2 JSON-RPC 错误码**
+## 六、阻塞项
 
-文件：`plugins/huaweicloud-core/src/mcp-server.mjs` L164-173
-```javascript
-} catch (error) {
-  writeMessage({
-    error: { code: -32603, message: error.message },
-  });
-}
-```
-`mcp-protocol.mjs` `dispatch()` L95 对未知方法抛 `Unsupported method`，应映射 `-32601`，但被统一捕获为 `-32603`。证据：`evidence/d9-protocol/stdout.log`。
+| 用例 ID | 阻塞原因 | 环境依赖 | 解除条件 |
+|---|---|---|---|
+| `D3-C4` | 真云服务创建类回归需按红线「最低配置创建→测后删除→归零验证」 | 需可销毁真实云配额 + 逐个服务 min 配置 | 配额/白名单到位后复测 |
 
-## 四、阻塞项
+---
 
-| 项 | 原因 |
-|---|---|
-| 客户端矩阵（D5 系列 10 客户端） | 本机仅 AtomCode 单客户端，未覆盖其它 9 客户端适配（EXP 展开级全 NOT_RUN） |
-| 真云资源生命周期 E2E（D3-C1/C3/C6 等） | 不执行真实资源创建/删除（成本/时间约束），按红线归 NOT_RUN |
-| `sh -c`/TTY 交互安装（部分 D1/D8） | 非交互 shell 无 PTY 菜单，未执行 |
-| gh 未登录 | 影响统一提单与 push 凭证路径（详见资源清理/提交说明） |
+## 七、安全与红线合规
 
-## 五、资源清理声明
+- [x] 凭证泄漏事件：`0`（探针全程无明文 AK/SK 输出，脱敏验证 D2-4 PASS）
+- [x] 写操作误判 read-only：`0`
+- [x] 红线（I 类）违规：`无`
+- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志
 
-本次执行**未创建任何华为云资源**，无资源需清理。测试过程中使用 `HUAWEICLOUD_HOME` 指向临时目录的凭证落盘验证，探针已自清理（finally 删除临时目录）。
+---
 
-## 六、证据索引
+## 八、资源释放
 
-| 证据目录 | 内容 |
-|---|---|
-| `evidence/d4-security-core/` | P0 安全核心探针（probe-p0-security.mjs + stdout.log） |
-| `evidence/d2-auth/` | 认证域探针（凭证脱敏 / 文件读取拦截 / R3 STS 不落盘） |
-| `evidence/d1-upgrade/` | 升级检测链探针（semver / target / 镜像 lag） |
-| `evidence/d9-protocol/` | MCP 协议探针（dispatch / 错误码 / tools list） |
-| `evidence/full-suite/` | 源码级全量单测 442/442 pass 日志 |
+| 资源 | 创建 | 销毁 | 归零验证 |
+|---|---|---|---|
+| ECS/沙箱/OBS 等真云资源 | 否 | 不适用 | 本轮未发起真云写/创建，无残留 |
+
+---
+
+## 九、遗留与建议
+
+- 待裁决 SPEC：`无`
+- 本轮未覆盖（说明范围）：真云 E2E（D3-C4 / 展开级 EXP-C4-01~22 / EXP-E01~15）、多终端矩阵（EXP-D5 客户端矩阵 / EXP-NR3 OS 矩阵）、审批流实时对话框（D4-18/19/23/24）、install/uninstall 生命周期（D1-1/5）
+- 建议：`D4-2` 的 env-dump 正则建议补 `HW_ACCESS_KEY|HW_SECRET_KEY|HW_(ACCESS|SECRET)_KEY` 前缀；`D4-16` 建议对 shell 包裹（`sh -c`/`bash -c`/`eval`）先解包内层命令再分类，或对包裹整串做凭证/写操作二次扫描。
