@@ -72,6 +72,8 @@ python scripts/init_day.py <客户端> <OS>
 
 按**统一模板** `templates/daily-agent-report.md` 输出 `results/<客户端>/<日期>-<IP>/<OS>/<客户端>-<模型>-测试报告.md`，九节固定：① 测试概述 ② 执行摘要 ③ 状态汇总（设计级+展开级） ④ 逐用例结果 ⑤ 缺陷清单（级别+描述+精确断言+根因文件行号+证据） ⑥ 阻塞项 ⑦ 安全/红线 ⑧ 资源释放 ⑨ 遗留建议。**所有 agent 用同一模板、字段完整**，逐用例结果必须与副本 CSV「执行状态」+「evidencePath」列一致。
 
+**同时记录缺陷清单**：每个 FAIL/SPEC 缺陷按 `templates/findings.md` 写 `results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md`（标题 `## #N【级别】标题` + `- **根因**：文件:行号`），这是统一提单脚本 `file_issue.py` 的解析输入，**格式必须严格**，否则自动提单失败。
+
 ## 5. 每小时提报（只提交自己目录）
 
 ```bash
@@ -84,7 +86,7 @@ python scripts/hourly_sync.py <客户端> <OS>
 ## 6. 统一提单 + 提交（全量测完后）
 
 ```bash
-python scripts/file_issue.py <缺陷汇总.md> <版本>       # 统一提交 1 个合并单
+python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md <版本>   # 统一提交 1 个合并单（读 FINDINGS.md，按 templates/findings.md 格式）
 git add results/<客户端> && git commit -m "test: <客户端> <OS> 执行回填"
 git -c credential.helper="!gh auth git-credential" push origin main
 ```
