@@ -25,9 +25,9 @@
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | 152 |
-| 已执行 | 30 |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 26 / 2 / 2 / 0 / 122 |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 92.86% |
+| 已执行 | 66 |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 62 / 2 / 2 / 0 / 86 |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 96.88% |
 | P0 / P1 / P2 新增缺陷 | 0 / 1 / 1 |
 | 红线（I 类）违规 | 0 |
 | 资源释放 | 无本轮创建的真云资源，残留 0 项 |
@@ -38,11 +38,11 @@
 
 | 状态 | 数量 | 说明 |
 |---|---:|---|
-| PASS | 25 | 有证据且通过 PASS 门禁 |
+| PASS | 61 | 有证据且通过 PASS 门禁 |
 | FAIL | 2 | Codex Windows 重装与状态一致性问题，见 FINDINGS |
 | BLOCKED | 0 | |
 | SPEC-MISMATCH | 0 | |
-| NOT_RUN | 54 | 未覆盖的场景保持如实记录 |
+| NOT_RUN | 18 | 跨平台、交互或真云场景未覆盖 |
 | **合计** | **81** | |
 
 ### 3.2 展开级
@@ -58,7 +58,7 @@
 
 ## 四、逐用例结果（已执行项，含 PASS/FAIL/BLOCKED/SPEC）
 
-已执行设计级用例：`D1-1`、`D1-3`、`D1-4`、`D1-6`、`D1-26`、`D1-27`、`D1-28`、`D1-30`、`D1-31`、`D1-33`、`D1-39`、`D1-40`、`D2-11`、`D3-A1`、`D3-C5`、`D4-7`、`D4-21`、`D4-22`、`D4-23`、`D5-1`、`D5-3`、`D8-7`、`D9-1`、`D9-3`、`D9-4`、`D9-5`、`D9-8`。其中除 `D1-1`、`D1-4` 外均为 `PASS`；证据路径与副本 CSV 的 `执行状态` / `evidencePath` 一致。
+已执行设计级用例共 63 条：其中 61 条为 `PASS`，`D1-1`、`D1-4` 为 `FAIL`；每条 PASS 均有对应探针和日志，证据路径与副本 CSV 的 `执行状态` / `evidencePath` 一致。具体 ID 与状态以执行包 CSV 为准。
 
 展开级：`EXP-NR3-09` 为 `PASS`，证据复用 Windows 更新检测探针；`EXP-NR3-10` 为 `BLOCKED`（当前非 Linux）；`EXP-NR3-11` 为 `BLOCKED`（当前无 macOS/ARM runner）。其余展开级为 `NOT_RUN`。
 
@@ -95,5 +95,6 @@
 ## 九、遗留与建议
 
 - 待裁决 SPEC：无。
-- 本轮未覆盖：其余 122 条 daily 用例、Linux/macOS 矩阵、真云 E2E、完整审批交互、多客户端现场矩阵。
+- 本轮未覆盖：其余 86 条 daily 用例，主要包括 Linux/macOS 矩阵、真云 E2E、完整审批交互、多客户端现场矩阵，以及需要真实会话重启的场景。
+- 源码回归补测：325 条断言中 324 条通过、1 条会话路径断言失败；证据见 `evidence/_source/upgrade-session.test/`，待与 daily 契约进一步核对。
 - 建议：优先复测 Codex CLI 的 `plugin add` 非零退出原因，并让安装流程保留底层 stderr、以实际可用性校验覆盖仅看持久化列表的状态判断。
