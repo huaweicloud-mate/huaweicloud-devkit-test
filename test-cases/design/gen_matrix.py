@@ -296,7 +296,7 @@ add("D1-1", "D1安装", "全新环境引导安装", "P1", "全新未安装环境
     "各客户端 install --target <client> 命令",
     "①环境重置为未安装态 ②install --target <client> ③重启会话 ④验证工具可用",
     "未安装→指引→装好闭环，插件引导完成全流程", "P: README Quick Start+nightly阶段0/1; 通: 生命周期必测全新安装",
-    "npx huaweicloud-devkit install", "脚本60%", "逐客户端执行(10+)")
+    "install", "脚本60%", "逐客户端执行(10+)")
 add("D1-2", "D1安装", "多Agent探测", "P2", "多客户端共存环境",
     "install 省略 --target",
     "①省略--target执行install ②检查auto-detect结果 ③验证多客户端全部装载",
@@ -326,17 +326,17 @@ add("D1-7", "D1安装", "OpenClaw插件流", "P2", "OpenClaw环境",
     "plugins install/uninstall/update + --acknowledge-clawhub-risk",
     "①clawhub通道安装 ②npx通道安装 ③更新/卸载",
     "双通道均可用，风险确认参数生效", "P: README双安装通道+特殊确认参数",
-    "plugins命令", "手动")
+    "plugins", "手动")
 add("D1-8", "D1安装", "通用MCP通道", "P1", "Node>=22环境",
     "标准 mcpServers JSON + HW_ACCESS_KEY/SECRET_KEY env",
     "①按README配置mcpServers ②env注入凭证 ③任意MCP客户端连接",
     "标准npx MCP配置直接可用", "P: README Other Agents节; 标: Azure NPX包测试",
-    "npx mcp-server.mjs", "脚本")
+    "mcp-server", "脚本")
 add("D1-9", "D1安装", "重启生效语义", "P1", "各客户端已安装",
     "安装后立即调用 vs 重启后调用",
     "①安装后立即调用工具 ②重启会话 ③再调用 ④对比各客户端行为",
     "重启前不可用/重启后可用，跨客户端一致", "P: README 9客户端逐一强调 restart",
-    "install+会话重启", "手动", "逐客户端")
+    "install", "手动", "逐客户端")
 
 # ---------- NR2 新增用例（2026-09-07 dev 分支新功能，T0.5 影响分析驱动） ----------
 add("D1-10", "D1安装", "卸载全局清理(新flag)", "P1", "已安装+含KooCLI/OBS配置环境",
@@ -424,7 +424,7 @@ add("D1-36", "D1安装", "首调用兜底提示（会话首个工具附加更新
     "首个非检查类 tool 调用",
     "①直调 decorateResult(name, result)（hintConsumed=false 初态） ②核对 applyUpdateHint 附加 _updateInfo ③再次调用核对 hintConsumed 置 true 后不再附加",
     "仅会话首个非 check/upgrade 工具经 decorateResult 附加 _updateInfo（updateAvailable 且 targetVersion 时）；hintConsumed 置 true 后不再附加，检查/升级工具不附加", "设: §检测机制 第二层; 实: mcp-protocol.decorateResult/update-check.applyUpdateHint",
-    "decorateResult/applyUpdateHint", "脚本")
+    "check_update", "脚本")
 add("D1-37", "D1安装", "SKILL.md 会话启动指令存在性", "P2", "dev/1.1.2 SKILL.md",
     "huaweicloud-core/SKILL.md 内容",
     "①读 SKILL.md ②检查会话启动节含 huaweicloud_check_update 调用指令",
@@ -450,7 +450,7 @@ add("D1-41", "D1安装", "check_update 真实 MCP 返回契约", "P1", "隔离 H
     "up_to_date/update_available/dismissed/check_failed 四种响应",
     "①启动真实 mcp-server ②initialize→tools/call(check_update) ③分别注入四种结果 ④解析 content JSON",
     "tools/call isError=false；四态、currentVersion/latestStable/updateAvailable/dismissed/dismissExpiresAt/result 字段语义一致；失败不抛协议错误",
-    "设: §MCP Tool 定义; 实: mcp-protocol/tools.mjs", "mcp-server/check_update", "脚本", "隔离进程")
+    "设: §MCP Tool 定义; 实: mcp-protocol/tools.mjs", "check_update", "脚本", "隔离进程")
 add("D1-42", "D1安装", "dismiss 真实闭环与跨调用持久化", "P1", "隔离 HOME + 有可用更新",
     "check_update(dismiss=true,dismissVersion=target)",
     "①首次 check_update 确认 update_available ②调用 dismiss ③检查实际 skip 文件 ④再次 check_update ⑤重启新 MCP 进程复查",
@@ -470,7 +470,7 @@ add("D1-45", "D1安装", "兜底提示真实序列与预热竞态", "P1", "隔�
     "initialize→check_update→首个非检查工具→第二个非检查工具；预热已完成/未完成",
     "①启动两种时序 ②检查 check_update 与 upgrade 不附加 ③检查首个非检查工具是否附加 ④再次调用确认不重复",
     "仅会话首个非检查工具携带 _updateInfo；检查/升级工具不携带；预热未完成时不阻塞正常工具，结果就绪后仍按既定一次性规则处理",
-    "设: §检测机制第二层; 实: mcp-protocol.decorateResult/mcp-server.updatePrewarm", "mcp-server/任意非检查工具", "脚本", "隔离进程")
+    "设: §检测机制第二层; 实: mcp-protocol.decorateResult/mcp-server.updatePrewarm", "check_update", "脚本", "隔离进程")
 add("D1-46", "D1安装", "缓存 TTL 边界与查询异常恢复", "P1", "可注入时钟和 doQuery",
     "刚好 TTL 前/等于/超过 1h；失败节流 5min 前/等于/超过；doQuery resolve null/reject/超时",
     "①注入时间推进 ②统计查询次数 ③让 doQuery 抛异常 ④再次调用并观察结果",
@@ -485,7 +485,7 @@ add("D1-48", "D1安装", "多 Agent 路径与多进程隔离", "P1", "两个隔�
     "agent A/B 分别拒绝不同版本",
     "①分别写入 dismiss ②检查各自文件路径 ③交叉启动进程读取 ④删除一侧状态复查另一侧",
     "每个 agent 只读取自己的 skip 状态；进程/agent 之间不串用 dismissedVersion、expireAt 或 lastHint",
-    "设: §风险-多 agent 路径; 实: resolveSkipFilePath/cache/protocol state", "check_update/mcp-server", "脚本", "隔离 HOME")
+    "设: §风险-多 agent 路径; 实: resolveSkipFilePath/cache/protocol state", "check_update", "脚本", "隔离 HOME")
 add("D1-49", "D1安装", "upgrade handler 无更新与参数校验", "P1", "隔离进程 + 可控 registry",
     "up_to_date、check_failed、version 缺省/空串/非 latest、target 缺省/未知",
     "①逐组调用 huaweicloud_upgrade ②记录 spawn 次数/参数 ③检查返回和协议层",
@@ -505,7 +505,7 @@ add("D1-52", "D1安装", "真实升级安装与重启生效", "P1", "一次性�
     "旧 stable/pre → latest；至少一个 agent target",
     "①安装旧版本 ②确认旧 MCP serverInfo.version ③执行升级 ④检查插件/缓存文件 ⑤重启新进程复查版本和工具",
     "真实 npm/install/setup 或整合命令完成；文件同步正确；旧进程明确要求重启；新进程加载目标新版本且配置未丢失；失败可恢复",
-    "设: §升级流程/重启语义; 实: upgradePackage/setup-cli", "upgrade/mcp-server", "半自动", "一次性环境")
+    "设: §升级流程/重启语义; 实: upgradePackage/setup-cli", "upgrade", "半自动", "一次性环境")
 add("D1-53", "D1安装", "镜像滞后确定性夹具", "P1", "可注入 registry/dist-tags 响应",
     "镜像 latest<current、镜像 next 滞后、官方 latest>current、镜像返回坏 JSON",
     "①固定四组 dist-tags 夹具 ②分别执行 check_update ③对照官方结果 ④检查是否出现倒退提醒或静默失败",
@@ -515,18 +515,18 @@ add("D1-54", "D1安装", "Hermes 会话级用户闭环", "P1", "Hermes + 真实�
     "首次会话：有更新/无更新；用户同意/拒绝；检查失败",
     "①新会话观察是否先调用 check_update ②有更新时确认询问 ③同意走 upgrade ④拒绝写 dismiss ⑤检查重启提示和下一会话",
     "Agent 遵守 SKILL；未获同意不升级；拒绝后 3 天不重复打扰；升级后明确重启；离线不阻塞原任务",
-    "设: §第一层 Skills 驱动; 实: SKILL.md + MCP tools", "Hermes/check_update/upgrade", "手动", "真实客户端")
+    "设: §第一层 Skills 驱动; 实: SKILL.md + MCP tools", "check_update/upgrade", "手动", "真实客户端")
 add("D1-55", "D1安装", "多会话提示隔离", "P2", "同一 server 可承载的两个独立会话或并行 MCP 客户端",
     "会话 A/B 各自首次非检查工具调用",
     "①A/B 几乎同时 initialize ②分别执行 check_update/普通工具 ③比较 _updateInfo 消费状态 ④结束 A 后复查 B",
     "一次性兜底按会话隔离而非全局只消费一次；一个会话的 dismiss、hintConsumed、失败状态不影响另一个会话",
-    "设: §会话级检测; 实: mcp-protocol 模块状态/remote server", "mcp-server/多客户端", "脚本", "并行进程")
+    "设: §会话级检测; 实: mcp-protocol 模块状态/remote server", "check_update", "脚本", "并行进程")
 # ---------- 2026-09-11 全量设计评审补充（异常/恢复场景缺口；全量评审报告 REV-20260911004604；R10 按 codex round-09 补强断言契约） ----------
 add("D1-56", "D1安装", "安装中断恢复（网络/进程中断后半装补全）", "P1", "可控网络环境（HTTP 代理可随时断开）+ 一次性临时 HOME（隔离 USERPROFILE/HOME）",
     "install --target opencode 执行中注入断网 / kill 安装进程；损坏判定清单：①package.json 存在但 bin/ 缺 oc-entry ②pluginDir 存在但 .update-skip.json 缺失 ③残留 *.lock 文件",
     "①install 中途断网或 kill ②断言半装态（按损坏判定清单 ①②③ 逐项核对并记录文件路径） ③恢复网络重跑 install ④断言全量文件（tools/list 返回 39 工具、config 落点齐全、无 *.lock 残留） ⑤再次运行 install 断言幂等（文件 mtime/size 与上轮一致）",
     "半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 39 工具（数量=39 且无重复）；无 *.lock 残留；二次运行后关键文件（bin/oc-entry、config.json）mtime/size 字节级一致",
-    "通: 生命周期中断恢复; 关联 D1-5/D1-13 残留族; R11 补强: 判定清单固定3项+39工具枚举断言+幂等mtime/size", "install/doctor/tools_list", "半自动", "OS_MATRIX|<代表: Windows/Linux>|<证据: 安装落点+中断现场文件>|<阻塞: 无>")
+    "通: 生命周期中断恢复; 关联 D1-5/D1-13 残留族; R11 补强: 判定清单固定3项+39工具枚举断言+幂等mtime/size", "install/doctor", "半自动", "OS_MATRIX|<代表: Windows/Linux>|<证据: 安装落点+中断现场文件>|<阻塞: 无>")
 add("D1-57", "D1安装", "升级坏版本回滚（装坏可退）", "P1", "有旧版本正常安装（1.1.2 基线）+ 可控 npm registry 注入坏包（tarball 截断致 sha1 不匹配）",
     "registry 返回损坏 tarball；断言契约：①回滚目标=升级前版本（previousVersion=1.1.2）②坏包不得进入可用缓存（.npm/_cacache 无对应 content-hash）③降级命令=upgrade(version=1.1.2) 返回 requiresRestart=true",
     "①确认 serverInfo.version=1.1.2 ②registry 注入坏包后执行 upgrade(version=latest) ③断言返回对象：success=false + error.code=EREPO_BAD_TARBALL（唯一错误码断言，不允许替代码）+ error.manual 含 'npx huaweicloud-devkit upgrade --version 1.1.2' ④断言旧版仍可启动（重启进程 serverInfo.version=1.1.2，tools/list 可调） ⑤断言 .npm/_cacache 无坏包 digest ⑥执行 error.manual 命令后断言版本恢复 1.1.2",
@@ -537,7 +537,7 @@ add("D1-58", "D1安装", "通用 MCP 白名单接入（Claude/Cursor merge 语�
     "白名单接入 5 断言（回填 ITER-005 P2-1~6）：①探测~/.claude.json、~/.cursor/mcp.json ②命中→生成 .bak 备份+merge mcpServers.huaweicloud-devkit ③同 key 已存在→跳过不备份 ④坏 JSON→不写原文件 ⑤未命中→打印可粘贴片段",
     "①空 HOME 跑 install 菜单 option3 ②断言探测两文件 ③命中断言：.bak 存在+merge 后 mcpServers 含 huaweicloud-devkit 且唯一 ④同 key 重跑断言 skipping 且无新 .bak ⑤坏 JSON 断言报 'not valid JSON' 且原文件字节不变 ⑥未命中断言输出 stdio snippet（含 'mcpServers' 与 remote 提示）",
     "白名单合并幂等（重复不重复备份）；坏 JSON 零写入（原文件 hash 不变）；未命中输出可粘贴片段（含 mcpServers 键）；merge 后原配置其余键完好",
-    "ITER-005 P2 系列回填; 关联 D1-8 通用MCP通道; 标: 非目录agent白名单接入", "install/setup.cjs", "半自动", "CLIENT_MATRIX|<代表: Linux L 真机>|<证据: .bak+merge JSON+坏JSON零写入>|<阻塞: 需隔离HOME>")
+    "ITER-005 P2 系列回填; 关联 D1-8 通用MCP通道; 标: 非目录agent白名单接入", "install", "半自动", "CLIENT_MATRIX|<代表: Linux L 真机>|<证据: .bak+merge JSON+坏JSON零写入>|<阻塞: 需隔离HOME>")
 add("D2-8", "D2认证", "credentials变更后auth回归", "P1", "真云+本地凭证",
     "credentials.mjs 变更后的 auth init",
     "①auth init ②验证KooCLI/OBS/沙箱三端 ③脱敏检查",
@@ -548,12 +548,12 @@ add("D2-9", "D2认证", "reconcile幂等(一致态零写)", "P1", "真云+本地
     "auth reconcile 重复执行",
     "①一致态执行 reconcile ②核对 S1/S2/S3 写入次数 ③重复执行观察",
     "一致态下零副作用，不触发 R4 重写", "方: 《AK/SK 架构方案v4》reconcile 幂等段; NR2-001",
-    "auth reconcile/auth_status", "半自动")
+    "auth_status", "半自动")
 add("D2-10", "D2认证", "R7 current档跟随", "P1", "KooCLI 多 profile（current=deploy）",
     "~/.hcloud/config.json current=deploy",
     "①构造 current=deploy ②readKooCliProfiles 解析 ③切换 current 再解析",
     "resolveManagedProfile 返回 current 档；runHcloudConfigure 带 --cli-profile=", "方: §五 R7; NR2-002",
-    "auth_status/readKooCliProfiles", "半自动")
+    "auth_status", "半自动")
 add("D2-11", "D2认证", "R3 STS token拒绝落盘", "P0", "真云 AK/SK + securityToken",
     "auth_switch persist + securityToken",
     "①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token",
@@ -568,7 +568,7 @@ add("D2-13", "D2认证", "R9 configuredBySession优先env", "P1", "隔离 HOME +
     "setConfiguredBySession(true) + env 注入",
     "①写 S1+标记 ②注入 env ③resolveCredentials ④清除标记复查",
     "标记时 S1 胜出；清除后 env 兜底恢复", "方: §五 R9; NR2-005",
-    "resolveCredentials/auth_status", "脚本")
+    "auth_status", "脚本")
 add("D2-14", "D2认证", "R2 冲突交互仲裁(confirmToken)", "P1", "真机 S1 存在真值",
     "假 AK 导入 auth_switch mode=import action=persist",
     "①备份 S1 ②假 AK 导入触发冲突 ③auth_confirm(s1) ④验证 S1 真值完好/导入文件擦除",
@@ -588,22 +588,22 @@ add("D2-17", "D2认证", "cmdAuthReconcile非TTY守卫", "P1", "非 TTY 管道/S
     "npx huaweicloud-devkit auth reconcile",
     "①非 TTY 环境执行 ②观察退出与报错",
     "快速退出不 hang，stderr 明确告警（Non-interactive session...）", "方: 方案 T3 非 TTY 守卫; NR2-009",
-    "auth reconcile CLI", "半自动")
+    "auth reconcile", "半自动")
 add("D2-18", "D2认证", ".last_sync mtime手动改动检测", "P1", "baseHome()/.config/huaweicloud/.last_sync 存在",
     "数字毫秒 ts；手动改 credentials.json",
     "①写 marker ②手动改 S1 文件 ③isManualModified ④mtime≤marker 场景",
     "mtime>marker→R2 仲裁；≤→R4 自动重写", "方: §五 R2/R4; NR2-010",
-    "isManualModified/resolveCredentials", "脚本")
+    "auth_status", "脚本")
 add("D2-19", "D2认证", "命名档只审计不自动动(R5)", "P1", "多 profile（current:deploy, [default,deploy]）",
     "构造 .hcloud config 多档",
     "①构造多档 ②解析 current ③对非 current 档执行 reconcile ④核对写档范围",
     "解析/写档只动 current 档，命名档隔离", "方: §五 R5; NR2-011",
-    "readKooCliProfiles/resolveManagedProfile", "脚本")
+    "auth_status", "脚本")
 add("D2-20", "D2认证", "HUAWEICLOUD_HOME重定向(R6)", "P2", "可设置 HUAWEICLOUD_HOME 的 Linux/Windows",
     "HUAWEICLOUD_HOME 指向重定向目录",
     "①设置 HUAWEICLOUD_HOME ②readKooCliProfiles ③对比 S1/S3 迁移",
     "S2 固定 ~/.hcloud 不受影响（方案 T1 断言3）", "方: §九 T1 断言3; NR2-012",
-    "readKooCliProfiles/globalCredentialsPath/obsConfigPath", "半自动", "关联 AK-FP-2")
+    "auth_status", "半自动", "关联 AK-FP-2")
 # ---------- 2026-09-11 全量设计评审补充（凭证状态维度；R10 按 codex round-09 补强断言契约） ----------
 add("D2-21", "D2认证", "AK/SK 轮换后 auth_status 正确感知（凭证状态维度）", "P1", "真云账号 + 一次性 IAM 用户凭证（可轮换，不影响生产）+ 本地凭证文件",
     "轮换后的新 AK/SK（旧凭证已失效）；断言契约：指纹算法=sha256(ak:sk) hex 前 8 位；指纹位置=S1 credentials.json.ak/sk、S2 ~/.hcloud/config.json current 档、S3 obs config；等待窗口=轮换后 30s 内轮询完成；auth_status 响应字段=reconciled.s1.ready/reconciled.s2.ready/reconciled.s3.ready 均 true",
@@ -614,17 +614,17 @@ add("D4-18", "D4安全", "confirm-not-deny审批语义", "P0", "真云+标准客
     "写操作触发确认流程",
     "①发起写操作 ②观察确认对话框 ③分别确认/拒绝",
     "写操作需显式确认，不被直接拒绝也不被直接放行", "仓: issue-443修复+fix/issue-443-confirm-not-deny分支+test/issue-443-fix.test.mjs",
-    "审批流/plan_cli_command", "半自动", "安全基线")
+    "plan_cli_command", "半自动", "安全基线")
 add("D4-19", "D4安全", "确认流下预检仍生效", "P0", "真云",
     "高危操作进入确认流",
     "①高危写操作 ②确认流程中观察preflight检查 ③验证拦截",
     "确认流程中风险预检仍生效拦截", "仓: fix/issue-443-preflight-b1b2分支(双修复)",
-    "hook_check_*+审批流", "半自动", "安全基线")
+    "hook_check_command/hook_check_artifacts/hook_check_deploy_plan", "半自动", "安全基线")
 add("D4-20", "D4安全", "拒绝后零操作", "P1", "真云",
     "确认流选择拒绝",
     "①确认流选拒绝 ②检查云资源与命令执行痕迹",
     "拒绝后无任何资源变更、无命令执行", "通: 负向路径; 仓: confirm杜绝误执行意图",
-    "审批流", "半自动")
+    "run_approved_command", "半自动")
 
 # ---------- D2 认证 ----------
 add("D2-1", "D2认证", "auth init三端同步", "P1", "AK/SK+本地凭证文件",
@@ -661,7 +661,7 @@ add("D2-7", "D2认证", "无凭证降级", "P2", "未配置AK/SK环境",
     "search_docs/service_catalog/list_regions/retrieve_skill",
     "①无凭证调用免凭证类工具 ②观察行为",
     "优雅降级或明确提示，不报裸错误", "标: AWS无凭证docs检索承诺",
-    "search_docs等", "脚本")
+    "search_docs/service_catalog/list_regions/retrieve_skill", "脚本")
 
 # ---------- D3 功能 ----------
 add("D3-A1", "D3功能", "skill检索完整性", "P1", "本地~30个SKILL.md",
@@ -673,12 +673,12 @@ add("D3-A2", "D3功能", "触发词路由准确", "P1", "标准客户端",
     "20+场景化自然语言需求",
     "①输入场景需求 ②观察激活skill ③与期望路由对照",
     "正确映射目标skill", "标: Microsoft 描述即选择依据; 仓: description/triggers",
-    "skill路由", "半自动")
+    "retrieve_skill", "半自动")
 add("D3-A3", "D3功能", "沙箱vs生产路由", "P1", "真云+沙箱可用",
     "demo/preview意图 vs 生产意图prompt",
     "①'免费/快速/预览'意图 ②生产部署意图 ③对比路由",
     "demo→sandbox，生产→ECS/FG/CCE", "P: capability-discovery Scenario Routing表",
-    "service_catalog等", "半自动")
+    "service_catalog", "半自动")
 add("D3-A4", "D3功能", "区域意图提取", "P2", "标准客户端",
     "中文地名→region映射",
     "①中文地名(如'北京四'/'贵阳') ②核对region映射 ③确认不盲扫",
@@ -728,12 +728,12 @@ add("D3-C1", "D3功能", "ECS生命周期E2E", "P1", "真云+参考ECS实例",
     "购买→ACTIVE→删除含磁盘→验证归零",
     "①购买(参考实例) ②ShowJob/ListServersDetails验证ACTIVE ③删除含磁盘 ④只读验证归零",
     "插件引导全程完成，无残留", "P: nightly场景A原样复用",
-    "plan/run_approved/hook", "半自动", "真云贵资源")
+    "plan_cli_command/run_approved_command", "半自动", "真云贵资源")
 add("D3-C2", "D3功能", "OBS静态站部署E2E", "P1", "OBS配置就绪",
     "build→上传→public-read→curl200→清理",
     "①构建静态站 ②obsutil上传(核对目录语义/-dryRun键名) ③public-read ④curl200 ⑤清理归零",
     "部署成功+资源归零", "P: nightly场景B原样复用(含踩坑点)",
-    "setup_obs_config+obsutil", "半自动")
+    "setup_obs_config", "半自动")
 add("D3-C3", "D3功能", "沙箱部署E2E", "P1", "沙箱DevStation配额",
     "connect→upload→deploy→URL可达→close",
     "①sandbox_connect ②upload_project ③deploy_nginx+deploy_check ④URL验证(≤8h) ⑤close",
@@ -741,7 +741,7 @@ add("D3-C3", "D3功能", "沙箱部署E2E", "P1", "沙箱DevStation配额",
 add("D3-C4", "D3功能", "服务创建类回归", "P1", "真云+最小权限AK/SK",
     "22服务只读规划+高危轻量创建释放",
     "①逐服务list_operations+plan只读 ②高危服务轻量创建(最小规格) ③立即释放",
-    "全部服务有规范路由且可执行", "P: 20+服务承诺; 标: Azure按service分域", "plan/run_approved", "半自动", "展开22服务矩阵")
+    "全部服务有规范路由且可执行", "P: 20+服务承诺; 标: Azure按service分域", "plan_cli_command/run_approved_command", "半自动", "展开22服务矩阵")
 add("D3-C5", "D3功能", "工具冒烟", "P1", "环境就绪",
     "check_cli/list_operations/plan/explain_error",
     "①四工具快速调用 ②全部通过",
@@ -801,7 +801,7 @@ add("D4-4", "D4安全", "写操作审批门", "P1", "真云+标准客户端",
     "12类写动词逐一(create/delete/update/resize/start/stop/authorize/revoke/attach/detach/enable/disable)",
     "①逐一触发写语义操作 ②观察是否强制审批",
     "无审批不可执行", "P: safety-model写动词清单(测试oracle)",
-    "plan_cli_command审批流", "半自动")
+    "plan_cli_command", "半自动")
 add("D4-5", "D4安全", "写操作误判检测", "P0", "真云",
     "DeleteServer等写命令",
     "①plan删除类命令 ②记录插件判定 ③若判read-only/allow→记P0",
@@ -811,7 +811,7 @@ add("D4-6", "D4安全", "adminPass回显警告", "P1", "真云",
     "创建ECS回显adminPass场景",
     "①创建ECS含password ②检查回显/报告处理",
     "警告且不裸回显密码", "P: safety-model#5",
-    "hook/回显链路", "手动")
+    "hook_check_command", "手动")
 add("D4-7", "D4安全", "hook三工具有效性", "P1", "hook-capable客户端",
     "高危输入→hook_check_command/artifacts/deploy_plan",
     "①构造三类高危输入 ②逐一调用hook工具 ③核对拦截",
@@ -821,7 +821,7 @@ add("D4-8", "D4安全", "Python/Node策略一致", "P1", "双路径可达环境"
     "同一高危命令双路径",
     "①Python hook路径判定 ②Node MCP路径判定 ③对比",
     "判定一致", "P: architecture L5 aligned承诺",
-    "safety-policy.mjs/policy.json", "脚本")
+    "hook_check_command/hook_check_artifacts/hook_check_deploy_plan", "脚本")
 add("D4-9", "D4安全", "公开暴露/破坏性预检", "P0", "真云",
     "建公网安全组/删库等",
     "①规划公网暴露操作 ②规划破坏性操作 ③验证执行前拦截",
@@ -831,7 +831,7 @@ add("D4-10", "D4安全", "规则库新增回归", "P2", "本地环境",
     "扩policy.json后跑既有基线",
     "①新增规则入库 ②重跑D4基线用例 ③核对无误杀",
     "新规则不误杀既有正常操作", "通: 规则引擎回归标准实践",
-    "policy.json", "脚本")
+    "hook_check_command/hook_check_artifacts/hook_check_deploy_plan", "脚本")
 add("D4-11", "D4安全", "提示注入防护", "P1", "标准客户端",
     "4注入点payload(见注入点矩阵)",
     "①分别在search_docs/retrieve_skill/search_marketplace/get_service_icon返回内容植入指令 ②观察Agent行为",
@@ -840,16 +840,16 @@ add("D4-12", "D4安全", "供应链安装期安全", "P2", "源码包",
     "postinstall脚本审计/依赖锁定/SBOM/pack一致性",
     "①审计postinstall行为 ②核对依赖锁定 ③验证pack与源码一致 ④尝试产出SBOM",
     "无恶意行为+pack一致+SBOM可产", "P: package.json有postinstall; 标: Azure质量门",
-    "npm/pack", "脚本")
+    "npm", "脚本")
 add("D4-13", "D4安全", "最小权限凭证通过率", "P1", "只读IAM AK/SK",
     "全量D3只读用例",
     "①只读凭证下跑D3只读用例 ②写用例观察权限识别",
-    "只读100%可用，写被正确识别权限不足", "标: AWS condition key; 仓: 非目标声明实测", "全部 39 个 MCP 工具（最小权限回归）", "半自动", "展开只读用例全量")
+    "只读100%可用，写被正确识别权限不足", "标: AWS condition key; 仓: 非目标声明实测", "run_readonly_command", "半自动", "展开只读用例全量")
 add("D4-14", "D4安全", "操作可审计性", "P2", "真云",
     "执行命令后查CTS/日志",
     "①执行若干命令 ②查CTS/运行日志 ③核对可追溯+可区分agent/人工",
     "每次命令可追溯", "标: AWS CloudTrail审计区分",
-    "CTS", "手动")
+    "run_readonly_command", "手动")
 add("D4-15", "D4安全", "hook绕过尝试", "P0", "hook环境",
     "大小写/编码/拼接变体",
     "①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截",
@@ -881,13 +881,13 @@ add("D4-23", "D4安全", "全局规则 huawei-agent-rules.md 注入生效性（1
     "agent-rules.md 全文",
     "逐目标安装后：①核对 rules 注入系统提示/规则 ②构造禁直连 csms/kms 场景 ③核对 MUST 约束生效",
     "全部目标注入且约束可执行，无孤儿文件", "agent-rules 注入契约（补自 G6，关联 P1-2）",
-    "install --target/hook", "自动", "逐客户端执行")
+    "install", "自动", "逐客户端执行")
 # ---------- 2026-09-11 全量设计评审补充（审批流边界；R10 按 codex round-09 补强断言契约） ----------
 add("D4-24", "D4安全", "确认令牌过期与重复确认边界（审批流健壮性）", "P1", "真云+标准客户端+可注入时钟（令牌 TTL=60s，注入 5s 加速）",
     "断言契约（响应 JSON 字段精确）：①过期提交→{status:'rejected', code:'CONFIRM_TOKEN_EXPIRED'} ②同 token 重复→第二次 {status:'ok', outcome:'already_processed'} ③资源计数=ListServers(tctest- 前缀).count",
     "①写操作（创建最小规格 ECS）进入确认流，记录 confirmToken ②注入时钟推进 >60s 后提交确认→断言 {code:'CONFIRM_TOKEN_EXPIRED', status:'rejected'} 且资源计数=0 ③重新发起写操作（新 confirmToken）连续提交两次→断言第二次 {outcome:'already_processed'} ④查询资源断言计数=1 ⑤释放→归零",
     "过期令牌返回精确 {code:'CONFIRM_TOKEN_EXPIRED'}（无资源创建，计数=0）；重复确认第二次返回 {outcome:'already_processed'}（计数不+1，仍=1）；错误/结果 JSON 字段可机器断言；释放后 tctest- 计数=0",
-    "通: 令牌过期/重放防护; 关联 D2-14; R11 补强: 精确响应JSON字段CONFIRM_TOKEN_EXPIRED/already_processed", "审批流/auth_confirm/plan_cli_command", "半自动", "CLIENT_MATRIX|<代表2: Hermes+OpenCode>|<证据: 响应JSON+计数+归零>|<阻塞: 可注入时钟>")
+    "通: 令牌过期/重放防护; 关联 D2-14; R11 补强: 精确响应JSON字段CONFIRM_TOKEN_EXPIRED/already_processed", "auth_confirm/plan_cli_command", "半自动", "CLIENT_MATRIX|<代表2: Hermes+OpenCode>|<证据: 响应JSON+计数+归零>|<阻塞: 可注入时钟>")
 
 # ---------- D5 客户端矩阵 ----------
 add("D5-1", "D5客户端", "清单发现加载", "P1", "各客户端环境",
@@ -903,17 +903,17 @@ add("D5-2", "D5客户端", "install落点正确", "P2", "各客户端环境",
 add("D5-3", "D5客户端", "工具全量枚举", "P1", "各客户端环境",
     "tools/list枚举",
     "①枚举39工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺",
-    "39 工具全量可达(=tools.mjs 注册源数量),schema完整", "标: Azure全MCP协议测试; 仓: tools.mjs基线", "tools/list", "脚本", "10客户端矩阵")
+    "39 工具全量可达(=tools.mjs 注册源数量),schema完整", "标: Azure全MCP协议测试; 仓: tools.mjs基线", "mcp-server", "脚本", "10客户端矩阵")
 add("D5-4", "D5客户端", "hook支持差异", "P2", "hook-capable与非hook客户端",
     "hook拦截vs Node策略",
     "①hook客户端验证拦截 ②非hook客户端验证Node策略兜底",
     "两条降级路径均有效", "P: architecture L4 'on platforms that support them'",
-    "hook/策略", "手动", "10客户端矩阵")
+    "hook_check_command", "手动", "10客户端矩阵")
 add("D5-5", "D5客户端", "沙箱/终端模式差异", "P2", "CodeArts等受限客户端",
     "CodeArts sandbox mode禁KooCLI场景",
     "①CodeArts沙箱模式执行KooCLI ②验证阻塞 ③按README两条解决路径恢复",
     "环境约束与README一致且恢复可用", "P: README CodeArts提示",
-    "KooCLI", "手动", "重点CodeArts")
+    "check_cli", "手动", "重点CodeArts")
 add("D5-6", "D5客户端", "Windows特有问题", "P1", "Windows客户端",
     "Hermes config.yaml损坏/文件锁/MCP Python SDK",
     "①Windows安装Hermes ②升级/卸载验证config完整性 ③文件锁场景 ④doctor查Python SDK",
@@ -946,12 +946,12 @@ add("D6-3", "D6性能", "MCP冷启时间", "P2", "标准环境",
     "MCP server冷启动",
     "①冷启MCP server ②计时到可服务",
     "冷启<5s", "标: Agent会话冷启劣化体验",
-    "mcp-server.mjs", "脚本")
+    "mcp-server", "脚本")
 add("D6-4", "D6性能", "并发调度正确性", "P1", "标准环境",
     "并发工具调用压力",
     "①并发30请求 ②观察消息错序/死锁 ③核对session-manager",
     "无死锁无消息错乱", "P: hwlink-fair-queue/multiplexer源码事实; session-manager.test.mjs基线",
-    "并发模块", "脚本")
+    "mcp-server", "脚本")
 add("D6-5", "D6性能", "大目录/大上传", "P2", "本地大目录+沙箱",
     "超大目录detect_framework/大工程sandbox_upload_project",
     "①超大目录(10万文件)识别 ②大工程上传 ③监控内存/超时",
@@ -961,7 +961,7 @@ add("D6-6", "D6性能", "弱网重试幂等", "P1", "可注入断网环境",
     "写操作弱网重试",
     "①弱网下执行写操作 ②观察重试 ③核对不重复创建",
     "重试幂等不重复创建资源", "通: 网络恢复; 仓: 与资源释放纪律冲突=成本风险",
-    "写链路", "半自动")
+    "plan_cli_command/run_approved_command", "半自动")
 add("D6-7", "D6性能", "长会话稳定性", "P2", "沙箱长会话",
     "sandbox_exec_with_session 长时间运行",
     "①长会话持续调用 ②监控内存 ③观察hook是否失效",
@@ -972,12 +972,12 @@ add("D6-8", "D6性能", "MCP 工具调用超时（网络/后端挂起）", "P1",
     "断言契约：超时阈值=30s（可配置 env TOOL_TIMEOUT_MS）；超时错误=isError=true 且 content[0].text 含 'timeout'（精确子串）+ error.code='ETIMEDOUT'；内存基线=调用前后 process.memoryUsage().heapUsed 增量 <50MB",
     "①记录基线内存 ②注入 60s 挂起发起 run_readonly_command ③记录实际耗时 T ④断言 25s≤T≤35s（≈30s 阈值） ⑤断言 isError=true + content 含 'timeout' + code=ETIMEDOUT ⑥立即再发起正常调用（无挂起）→断言成功（isError=false）⑦断言内存增量 <50MB",
     "超时在 25~35s 内返回（不无限挂起/不提前误报）；isError=true 且 error.code=ETIMEDOUT + content 含 'timeout'；后续调用恢复成功（无 ECONNRESET 残留）；heapUsed 增量 <50MB",
-    "通: 超时与恢复标准实践; 关联 D6-6、D9-9; R11 补强: 30s阈值+ETIMEDOUT码+50MB内存上限", "mcp-server/run_readonly_command/plan_cli_command", "脚本", "COMMON|<代表: MCP进程+夹具>|<证据: 耗时窗口+isError+内存增量>|<阻塞: 可注入延迟夹具>")
+    "通: 超时与恢复标准实践; 关联 D6-6、D9-9; R11 补强: 30s阈值+ETIMEDOUT码+50MB内存上限", "run_readonly_command/plan_cli_command", "脚本", "COMMON|<代表: MCP进程+夹具>|<证据: 耗时窗口+isError+内存增量>|<阻塞: 可注入延迟夹具>")
 add("D9-9", "D9协议", "tools/call 超时协议语义与取消", "P1", "可注入延迟的 MCP 客户端/夹具（支持读取 initialize 返回的 capabilities）",
     "断言契约：①能力探测=读 initialize.result.capabilities.notifications/cancellation 是否存在——不存在→标记 SPEC-MISMATCH 不假定支持 ②超时错误=JSON-RPC error 对象 {code:-32000, message:含 'timeout'}（精确值）③取消通知=notifications/cancelled 请求（含 requestId）",
     "①initialize→记录 capabilities.cancellation 是否存在 ②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）",
     "超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MISMATCH 标注而非假定）；取消通知后服务端 2s 内中止（in-flight 清零）；重建连接后 initialize/tools/list 正常响应；无悬挂请求（pending map 空）",
-    "规: JSON-RPC 2.0 错误语义; 标: MCP 客户端超时实践; R11 补强: 精确-32000+capabilities探测+2s取消窗口", "inspector/自建超时夹具", "脚本", "COMMON|<代表: Inspector+夹具>|<证据: JSON-RPC错误对象+capabilities+取消时序>|<阻塞: 取消能力=SPEC待裁决>")
+    "规: JSON-RPC 2.0 错误语义; 标: MCP 客户端超时实践; R11 补强: 精确-32000+capabilities探测+2s取消窗口", "inspector", "脚本", "COMMON|<代表: Inspector+夹具>|<证据: JSON-RPC错误对象+capabilities+取消时序>|<阻塞: 取消能力=SPEC待裁决>")
 
 # ---------- D7 兼容 ----------
 add("D7-1", "D7兼容", "OS矩阵", "P2", "Linux(x86/arm)/Windows/macOS",
@@ -993,7 +993,7 @@ add("D7-3", "D7兼容", "Windows better-sqlite3缺口", "P1", "Windows环境",
     "npm test 在Windows",
     "①Windows跑npm test ②记录失败面 ③人工补测单测覆盖",
     "缺口面明确并人工补齐", "P: ci.yml注释官方自认空洞(最高优先兼容风险)",
-    "npm test", "手动", "Windows专项")
+    "npm", "手动", "Windows专项")
 add("D7-4", "D7兼容", "国内镜像源安装", "P2", "国内网络+华为云npm镜像",
     "华为云npm mirror安装",
     "①配置镜像源 ②安装 ③核对下载源 ④恢复默认源",
@@ -1015,12 +1015,12 @@ add("D8-1", "D8质量", "文档与能力一致", "P2", "仓库文档快照",
     "SKILL.md/README全量链接",
     "①链接有效性扫描 ②命令与实际对比 ③CHANGELOG与行为对比",
     "无失效链接无过时命令", "标: AWS文档漂移失效; 仓: 高频演进漂移风险",
-    "链接扫描", "半自动")
+    "search_docs", "半自动")
 add("D8-2", "D8质量", "错误信息可执行", "P2", "错误场景收集",
     "10个典型错误响应",
     "①收集错误响应 ②评审是否含恢复路径",
     "均含下一步指引", "标: Microsoft 'recovery info to agent'",
-    "错误链路", "手动")
+    "explain_error", "手动")
 add("D8-3", "D8质量", "脱敏误报平衡", "P1", "真云环境",
     "含project_id/region的正常命令输出",
     "①执行正常只读命令 ②检查输出 ③核对是否过度脱敏",
@@ -1030,17 +1030,17 @@ add("D8-4", "D8质量", "引导步骤可机械执行", "P1", "各SKILL.md",
     "SKILL.md步骤评审",
     "①逐skill评审步骤 ②标记含糊/矛盾/歧义步骤",
     "无含糊步骤(Agent可机械执行)", "仓: I类违规定义源头; nightly铁律2",
-    "SKILL.md评审", "手动")
+    "retrieve_skill", "手动")
 add("D8-5", "D8质量", "运行时日志安全", "P2", "运行环境",
     "运行时日志采集",
     "①执行操作 ②采集日志 ③扫描敏感信息 ④核对分级",
     "日志分级正确无敏感信息", "通: 日志安全; 仓: 与D9-5联动(日志入协议=双重故障)",
-    "日志链路", "脚本")
+    "mcp-server", "脚本")
 add("D8-6", "D8质量", "中英文文档一致", "P2", "README.zh-CN",
     "双语文档对比",
     "①逐节对比README↔README.zh-CN ②核对命令/路径/承诺一致",
     "双源无漂移", "仓: 双README结构性风险; 中文区主要受众",
-    "文档评审", "手动")
+    "search_docs", "手动")
 # ---- 覆盖缺口补充（G4：meta 技能指引可执行性；G5：遥测端到端）----
 add("D8-7", "D8质量", "7 个 meta/通用技能指引可机械执行验证", "P0", "标准环境",
     "core/safety/api-and-sdk/capability-discovery/cli-and-auth/troubleshooting/getting-started 各 SKILL.md",
@@ -1051,7 +1051,7 @@ add("D8-8", "D8质量", "遥测策略端到端（trackTool/trackSandbox/hook 事
     "hook 事件日志 + MCP 调用",
     "①触发 read/write 命令 ②触发 sandbox 连接 ③核对遥测记录 ④核对脱敏",
     "事件完整上报且不含明文凭证", "遥测策略契约（补自 G5）",
-    "telemetry hook/mcp-server", "脚本", "")
+    "mcp-server", "脚本", "")
 
 # ---------- D9 协议 ----------
 add("D9-1", "D9协议", "tools/list合规", "P1", "MCP Inspector/客户端",
@@ -1063,7 +1063,7 @@ add("D9-2", "D9协议", "JSON-RPC错误码", "P1", "MCP客户端",
     "协议级错误注入",
     "①构造-32700/-32600/-32601/-32602/-32603错误 ②核对错误码与结构",
     "错误码规范,客户端可处理", "规: JSON-RPC 2.0标准",
-    "inspector/自建", "脚本")
+    "inspector", "脚本")
 add("D9-3", "D9协议", "tools/call响应格式", "P1", "MCP客户端",
     "成功/失败调用",
     "①成功调用核对content结构 ②失败调用核对isError语义",
@@ -1078,7 +1078,7 @@ add("D9-5", "D9协议", "stdio传输健壮", "P1", "stdio通道",
     "大payload/超长/并发/断连",
     "①大payload ②超长输出 ③并发 ④断连恢复 ⑤核对stdout纯协议无日志污染",
     "通传输不崩不污染协议通道", "规: stdio stdout纯协议; 仓: console误入stdout高发",
-    "自建脚本", "脚本")
+    "mcp-server", "脚本")
 add("D9-6", "D9协议", "跨客户端互通", "P1", "Inspector+≥3真实客户端",
     "协议互通冒烟",
     "①Inspector全通过 ②3客户端互通冒烟",
@@ -1088,7 +1088,7 @@ add("D9-7", "D9协议", "协议版本协商降级", "P2", "老版本客户端模
     "capabilities缺失/低版本",
     "①模拟老客户端initialize ②核对协商或明确报错",
     "不挂死且正确降级", "规: protocolVersion协商",
-    "自建模拟", "脚本")
+    "mcp-server", "脚本")
 add("D9-8", "D9协议", "inputSchema版本合规", "P2", "tools/list返回",
     "schema版本标注",
     "①逐schema核对JSON Schema版本 ②核对无混用(draft-07/2020-12)",
@@ -1100,7 +1100,7 @@ add("D10-1", "D10评测", "工具描述可选择性", "P1", "评测harness",
     "39工具description+schema评审",
     "①逐工具评审描述清晰度 ②建立自然语言评测集 ③LLM选择正确率打分",
     "描述可度量,低分项入缺口", "标: Azure ToolDescriptionEvaluator",
-    "promptfoo/harness", "脚本")
+    "harness", "脚本")
 add("D10-2", "D10评测", "skill激活率", "P1", "真实Agent+插件",
     "评测集任务",
     "①20+任务让Agent执行 ②统计主动加载skill比例",
@@ -1462,19 +1462,25 @@ def _terminal_metadata(rid, dim, rule):
     }
 
 def _status_reason(rid, legacy, rule_reason=""):
-    if rid == "D1-39":
-        return "P0 FAIL：Windows npm.cmd/spawnSync EINVAL 产品缺陷 #554 未由正式修复版本闭合；责任=上游开发；证据=正式修复版本 Windows 全链回归"
-    if rid in {"D1-29", "D1-43", "D1-46", "D1-55", "D2-20"}:
-        return f"SPEC-MISMATCH：{rid} 仍需开发/产品规格裁决；责任=产品与开发；证据=裁决记录、更新后的规范和对应复核"
-    if legacy.startswith("PARTIAL(BLOCKED"):
-        return "BLOCKED：聚合路径仍缺终端/环境证据；责任=执行环境提供方；证据=对应客户端/OS 运行日志与 manifest"
-    if legacy.startswith("PARTIAL(SPEC"):
-        return "SPEC-MISMATCH：聚合路径含未裁决规格子项；责任=产品与开发；证据=规格裁决和复核"
+    """blockedReason 列语义（test-design-methodology §三列映射）：
+    仅「阻塞/失败/规格」原因；PASS/NOT_RUN 无阻塞→空；
+    阻塞前提（环境依赖如"需真云凭证"）归「展开规则<阻塞>」段，不进本列。"""
+    # 失败（FAIL）→ 失败根因
+    if legacy == "FAIL":
+        if rid == "D1-39":
+            return "P0 FAIL：Windows npm.cmd/spawnSync EINVAL 产品缺陷 #554 未由正式修复版本闭合；责任=上游开发；证据=正式修复版本 Windows 全链回归"
+        return "FAIL：执行断言不符预期；根因见 FINDINGS/执行证据"
+    # 混合（SPEC+BLOCKED）须先于纯 SPEC，否则被 startswith("PARTIAL(SPEC") 拦截
     if legacy.startswith("PARTIAL(SPEC+"):
         return "SPEC-MISMATCH/BLOCKED：同时存在规格和环境未闭合子项；责任=产品/开发与执行环境提供方；证据=裁决及终端日志"
-    if legacy == "UNASSESSED":
-        return "NOT_RUN：当前无执行证据；责任=测试负责人；证据=后续执行 manifest、日志、前后快照和清理记录"
-    return rule_reason or "无当前历史阻塞；执行阶段仍需满足对应环境前置条件并提供证据"
+    if legacy == "SPEC-MISMATCH" or legacy.startswith("PARTIAL(SPEC"):
+        if rid in {"D1-29", "D1-43", "D1-46", "D1-55", "D2-20"}:
+            return f"SPEC-MISMATCH：{rid} 仍需开发/产品规格裁决；责任=产品与开发；证据=裁决记录、更新规范和对应复核"
+        return "SPEC-MISMATCH：聚合路径含未裁决规格子项；责任=产品与开发；证据=规格裁决和复核"
+    if legacy.startswith("PARTIAL(BLOCKED"):
+        return "BLOCKED：聚合路径仍缺终端/环境证据；责任=执行环境提供方；证据=对应客户端/OS 运行日志与 manifest"
+    # PASS / UNASSESSED(NOT_RUN) → 空（无阻塞原因，阻塞前提在展开规则<阻塞>段）
+    return ""
 
 # 执行证据链映射（用例 ID → 证据目录，相对执行归档根；多个用 ; 分隔；与 gen_tracing.py 保持一致）
 EVIDENCE = {
