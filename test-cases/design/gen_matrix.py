@@ -1142,21 +1142,33 @@ E = []
 # E1: D5 客户端矩阵 10 客户端 × D5-1~7
 CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
+D5_EXPECT = {
+    1: "客户端可发现并加载插件清单",
+    2: "install 落点与 README 契约一致，无错位",
+    3: "tools/list 枚举 39 工具全量可达，schema 完整",
+    4: "hook 与非 hook 两条降级路径均有效",
+    5: "沙箱/终端模式环境约束与 README 一致，恢复可用",
+    6: "Windows 已知问题（config 完整性/文件锁/SDK）在文档范围内可控",
+    7: "重启生效语义跨客户端一致",
+}
 for c in CLIENTS:
     for n in range(1, 8):
         E.append((f"EXP-D5-{CLIENTS.index(c)+1}-{n}", "D5客户端矩阵", c,
                   f"D5-{n}", "P1" if n in (1, 3, 6) else "P2",
                   f"在 {c} 上执行 D5-{n} 用例",
-                  "执行要点见设计级 D5-{n} 的前置/步骤/预期"))
+                  f"{c}：{D5_EXPECT[n]}"))
 
 # E2: D3-C4 服务矩阵 22 服务
 SERVICES = ["ECS", "VPC", "OBS", "RDS", "GaussDB", "CCE", "FunctionGraph", "IAM",
             "CTS", "CES", "DDS", "DCS", "SMN", "DMS", "WAF", "CDN", "ModelArts",
             "DEW", "CBR", "EVS", "EIP", "ELB"]
+HIGH_RISK = {"ECS", "RDS", "CCE", "WAF"}
 for i, svc in enumerate(SERVICES):
+    _exp = (f"{svc} 只读规划冒烟命令语法/参数正确"
+            + ("；轻量创建→立即释放→归零验证" if svc in HIGH_RISK else "，规范路由可执行"))
     E.append((f"EXP-C4-{i+1:02d}", "D3-C4服务矩阵", svc, "D3-C4", "P1",
               f"{svc} 只读规划冒烟: list_operations + plan 只读命令",
-              "高危服务(ECS/RDS/CCE/WAF)另加轻量创建→立即释放, 验证归零"))
+              _exp))
 
 # E3: D10 评测集 15 自然语言任务
 PROMPTS = [
