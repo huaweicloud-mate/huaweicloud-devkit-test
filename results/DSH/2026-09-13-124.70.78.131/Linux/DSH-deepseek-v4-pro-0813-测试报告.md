@@ -137,13 +137,14 @@
 ## 五、缺陷清单
 
 > 缺陷均为真实执行后填写（探针已重跑复现）。根因详情与证据见 FINDINGS.md。
+> 已按 AGENTS.md 第 6 步统一提单：合并 issue `huaweicloud/huaweicloud-devkit#650`（4 项缺陷）。
 
 | # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应 `deny` | `allow`（risk=not_huaweicloud） | safety-policy.mjs:335-336 | P | 待提单 |
-| 2 | P0 | D4-16 | shell 包裹 hcloud 写命令穿透 | `bash -c "hcloud ecs DeleteServers ..."` 应 `deny` | `allow`（仅 warn） | safety-policy.mjs:67-77 | P | 待提单 |
-| 3 | P0 | D4-23 | 全局规则未注入安装目标 | install 后 ~/.dsh 应有 huawei-agent-rules.* | 0 文件 | package.json files 无 rules + setup-cli.mjs 无注入 | P | 待提单 |
-| 4 | P1 | D9-2 | JSON-RPC 错误码不规范 | 未知方法应返回 `-32601` | 抛普通 Error('Unsupported method') | mcp-protocol.mjs:95 | G | 待提单 |
+| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应 `deny` | `allow`（risk=not_huaweicloud） | safety-policy.mjs:335-336 | P | 已提单 #650 |
+| 2 | P0 | D4-16 | shell 包裹 hcloud 写命令穿透 | `bash -c "hcloud ecs DeleteServers ..."` 应 `deny` | `allow`（仅 warn） | safety-policy.mjs:67-77 | P | 已提单 #650 |
+| 3 | P0 | D4-23 | 全局规则未注入安装目标 | install 后 ~/.dsh 应有 huawei-agent-rules.* | 0 文件 | package.json files 无 rules + setup-cli.mjs 无注入 | P | 已提单 #650 |
+| 4 | P1 | D9-2 | JSON-RPC 错误码不规范 | 未知方法应返回 `-32601` | 抛普通 Error('Unsupported method') | mcp-protocol.mjs:95 | G | 已提单 #650 |
 
 ---
 

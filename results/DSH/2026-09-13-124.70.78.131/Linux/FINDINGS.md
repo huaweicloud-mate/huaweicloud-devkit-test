@@ -11,7 +11,7 @@
 - **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:335-336` 的 env-dump 拦截规则环境变量名 pattern 仅为 `/HUAWEICLOUD|HWC_|HCLOUD|OS_/i`，未覆盖 `HW_` 前缀；且 `echo $VAR` 形式不在命令白名单内。
 - **影响**：Agent 可打印 `HW_ACCESS_KEY/HW_SECRET_KEY` 明文，凭证泄露风险（P0）。
 - **证据**：`evidence/d4-security/stdout.log`（FAIL 断言 3 条：printenv HW_ACCESS_KEY / echo $HW_ACCESS_KEY / echo $HW_SECRET_KEY）。
-- **状态**：待提单
+- **状态**：已提单 #650
 
 ## #2【P0】命令包裹穿透：shell 包裹的 hcloud 写命令未 hard-deny（D4-16）
 
@@ -19,7 +19,7 @@
 - **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:67-77`（`stripExecutable`/`commandOperation`）只剥离**行首**的 `hcloud` 可执行名；shell 包裹形式（`bash -c`/`sh -c`）的 service 被识别为 `bash`/`sh`，写语义分类丢失，仅命中 warn 级破坏性命令风险规则而非 `decision=deny`。
 - **影响**：高危写操作可借 shell 包裹绕过审批门（P0）。
 - **证据**：`evidence/d4-security/stdout.log`（FAIL 断言 2 条）。
-- **状态**：待提单
+- **状态**：已提单 #650
 
 ## #3【P0】全局规则 huawei-agent-rules 未注入安装目标（D4-23）
 
@@ -27,7 +27,7 @@
 - **根因**：规则文件 `rules/huawei-agent-rules.mdc` 仅存在于源码仓库，但 (1) 未列入 npm 发布白名单 `package.json` `files` 数组（无 `rules`）；(2) `plugins/huaweicloud-core/src/setup-cli.mjs` 无任何规则注入逻辑。故安装包不含、安装流程也不注入该规则文件。
 - **影响**：已装 Agent 无全局安全规则约束（csms/kms 直连红线场景无法由规则层拦截）（P0）。
 - **证据**：`evidence/dsh-install/stdout.log`（install 完成 + `huawei-agent-rules found under ~/.dsh: 0`）。
-- **状态**：待提单
+- **状态**：已提单 #650
 
 ## #4【P1】JSON-RPC 错误码不规范（D9-2）
 
@@ -35,4 +35,4 @@
 - **根因**：`plugins/huaweicloud-core/src/mcp-protocol.mjs:95` 对 unknown method 直接 `throw new Error(...)`，未封装成 MCP JSON-RPC `{code, message, data}` 结构。
 - **影响**：MCP 客户端无法按规范错误码处理，与 JSON-RPC 2.0 契约漂移（P1）。
 - **证据**：`evidence/d9-protocol/stdout.log`（FAIL 断言：`errMsg.includes('-32601')` 为 false）。
-- **状态**：待提单
+- **状态**：已提单 #650
