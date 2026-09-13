@@ -55,11 +55,11 @@ npm install -g huaweicloud-devkit@next
 python scripts/init_day.py <客户端> <OS>
 # 例：python scripts/init_day.py OpenCode Windows
 ```
-生成 `results/<客户端>/<日期>/<OS>/`，复制 3 份用例 CSV。
+生成 `results/<客户端>-<IP>/<日期>/<OS>/`，复制 3 份用例 CSV。**机器 IP 自动检测**（环境变量 HDK_MACHINE_IP → ~/.hdk_ip 文件 → socket 自动），多机同客户端靠 `<客户端>-<IP>` 区分，互不冲突。
 
 ## 2. 执行
 
-按 **P0 → P1 → P2** 逐条执行副本 CSV 用例，证据（probe 脚本 + stdout.log）落盘 `results/<客户端>/<日期>/<OS>/evidence/<case-id>/`。
+按 **P0 → P1 → P2** 逐条执行副本 CSV 用例，证据（probe 脚本 + stdout.log）落盘 `results/<客户端>-<IP>/<日期>/<OS>/evidence/<case-id>/`。
 
 ## 3. 回填执行状态
 

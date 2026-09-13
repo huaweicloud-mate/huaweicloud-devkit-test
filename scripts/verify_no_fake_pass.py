@@ -7,12 +7,27 @@
 规则：PASS 用例必须满足 evidencePath 非空 + 该证据路径在当日执行包内存在。
     未执行(NOT_RUN)/无结果/无证据却标 PASS → 报虚报，exit 1。
 """
-import os, sys, csv, datetime
+import os, sys, csv, datetime, socket
 
 REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 OSES = ["Windows", "Linux"]
+
+
+def get_machine_ip():
+    ip = os.environ.get("HDK_MACHINE_IP")
+    if ip:
+        return ip.strip()
+    p = os.path.expanduser("~/.hdk_ip")
+    if os.path.isfile(p):
+        ip = open(p).read().strip()
+        if ip:
+            return ip
+    try:
+        return socket.gethostbyname(socket.gethostname())
+    except Exception:
+        return "unknown"
 
 
 def check(kind, status_key, ev_key, pack_dir):
@@ -42,7 +57,7 @@ def main():
     if os_name not in OSES:
         print(f"未知 OS '{os_name}'，可选: {', '.join(OSES)}"); sys.exit(2)
     date = sys.argv[3] if len(sys.argv) > 3 else datetime.datetime.now().strftime("%Y-%m-%d")
-    pack_dir = os.path.join(REPO, "results", client, date, os_name)
+    pack_dir = os.path.join(REPO, "results", f"{client}-{get_machine_ip()}", date, os_name)
 
     fakes = check("设计级", "执行状态", "evidencePath", pack_dir) + \
             check("展开级", "execution_status", "evidencePath", pack_dir)
