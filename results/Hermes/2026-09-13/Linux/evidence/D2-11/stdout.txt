@@ -1,0 +1,8 @@
+auth_switch persist 返回: {"status":"error","error":"Temporary STS credentials cannot be persisted (R3). Use action=temporary.","scope":"rejected"}
+PASS  D2-11a  status=error（实际 error）
+PASS  D2-11b  scope=rejected（实际 rejected）
+PASS  D2-11c  error 含 R3 说明（实际 Temporary STS credentials cannot be persisted (R3). Use action=temporary.）
+PASS  D2-11d  token 未落盘（credentials.json 不存在: /tmp/multica-task-4147623858/hdk-auth-FGgQFl/.config/huaweicloud/credentials.json）
+PASS  D2-11e  S1 未写入（存在=false）
+
+===== D2-11 汇总: 5 断言 / PASS 5 / FAIL 0 =====
