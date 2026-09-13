@@ -1,0 +1,17 @@
+===== D1-39 升级检测链 (Linux scope) =====
+  queryDistTagsSync => {"latest":"1.1.3","next":"1.1.4-next.3"}
+PASS  D1-39  queryDistTagsSync 不抛 EINVAL/可返回 dist-tags (Linux)  => true
+PASS  D1-39  queryDistTagsSync 返回 latest+next 两字段  => true
+  readInstalledVersion => 1.1.4-next.3
+PASS  D1-39  readInstalledVersion 可读  => true
+===== D1-40 镜像 lag 反向提醒防护 =====
+PASS  D1-40  本地 1.1.4 / 镜像 latest=1.1.3 => up_to_date (不倒退)  => "up_to_date"
+PASS  D1-40  本地 1.1.4 / 镜像 latest=1.1.4 => up_to_date  => "up_to_date"
+PASS  D1-40  本地 1.1.4 / 镜像 latest=1.1.5 => update_available  => "update_available"
+===== EXP-D5-8-1 Hermes 清单发现/注册状态 =====
+  hermes registration => {"target":"hermes","agents":{"hermes":{"configured":true}}}
+PASS  EXP-D5-8-1  getAgentRegistrationStatuses("hermes") 可查询 (不抛)  => true
+===== EXP-D5-8-3 Hermes 39 工具全量枚举 =====
+PASS  EXP-D5-8-3  39 工具可达  => 39
+
+===== 汇总: 8 PASS / 0 FAIL =====

@@ -1,0 +1,40 @@
+===== D1-26 升级提醒工具注册 =====
+PASS  D1-26  huaweicloud_check_update 注册  => true
+PASS  D1-26  huaweicloud_upgrade 注册  => true
+PASS  D1-26  check_update 含 description+inputSchema  => true
+PASS  D1-26  upgrade 含 description+inputSchema  => true
+===== D5-3 工具全量枚举 (39) =====
+PASS  D5-3  TOOL_DEFINITIONS 数量 = 39  => 39
+PASS  D5-3  无重复工具名  => true
+PASS  D5-3  每个工具含 name + inputSchema  => true
+===== D1-33 skip 文件持久化 =====
+PASS  D1-33  writeSkipState 落盘  => true
+PASS  D1-33  含 dismissedVersion 字段  => true
+PASS  D1-33  含 dismissedAt 字段  => true
+PASS  D1-33  含 expireAt 字段 (冷却 3 天)  => true
+PASS  D1-33  resolveSkipFilePath 返回路径  => true
+===== D2-10 R7 current 档跟随 =====
+PASS  D2-10  readKooCliProfiles 返回 current 字段  => true
+PASS  D2-10  resolveManagedProfile 等于 current  => "default"
+===== D2-13 R9 configuredBySession 优先 env =====
+PASS  D2-13  env 注入时 resolveCredentials 读到 env AK  => true
+PASS  D2-13  setConfiguredBySession 无异常  => true
+===== D2-16 import 文件读取后擦除 (exportStateForStatus 语义检查) =====
+PASS  D2-16  creds-import.json 约定路径可定位  => true
+  creds-import.json 存在: false
+===== D3-A1 skill 检索完整性 =====
+PASS  D3-A1  listSkillDirs 发现 29 个 skill 目录  => 29
+PASS  D3-A1  每个 skill 目录含 SKILL.md  => true
+===== D3-B1 list_operations 规范名 (源码级校验) =====
+PASS  D3-B1  SERVICE_EXAMPLES 定义存在  => true
+PASS  D3-B1  含 ECS 服务示例  => true
+PASS  D3-B1  含 VPC 服务示例  => true
+PASS  D3-B1  含 OBS 服务示例  => true
+===== D3-B5 detect_framework 识别 =====
+  vue => "Create React App" | react => "Create React App" | next => "Next.js"
+PASS  D3-B5  Vue/React spa 工程可识别 (type=spa)  => true
+PASS  D3-B5  Next 工程可识别 (framework=Next.js)  => true
+PASS  D3-B5  detectFramework 返回含 buildCmd  => true
+PASS  D3-B5  detectFramework 返回含 outputDir  => true
+
+===== 补充汇总: 27 PASS / 0 FAIL =====

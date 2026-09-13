@@ -1,0 +1,45 @@
+===== D2-4 凭证脱敏正确性 =====
+PASS  D2-4  ak 字段脱敏  => "<redacted>"
+PASS  D2-4  sk 字段脱敏  => "<redacted>"
+PASS  D2-4  securityToken 字段脱敏  => "<redacted>"
+PASS  D2-4  password 字段脱敏  => "<redacted>"
+PASS  D2-4  字符串 access_key=value 脱敏  => "access_key=<redacted>"
+PASS  D2-4  字符串 SK=value 脱敏  => "SK=<redacted>"
+PASS  D2-4  嵌套对象脱敏  => "<redacted>"
+PASS  D2-4  credentials 键整体脱敏  => "<redacted>"
+PASS  D2-4  数组脱敏  => "<redacted>"
+
+===== D2-11 R3 STS token 拒绝落盘 =====
+auth_switch persist + securityToken => {"status":"error","error":"Temporary STS credentials cannot be persisted (R3). Use action=temporary.","scope":"rejected"}
+PASS  D2-11  status=error  => "error"
+PASS  D2-11  scope=rejected  => "rejected"
+PASS  D2-11  错误信息含 R3 说明  => true
+
+===== D9-1 tools/list 合规 =====
+PASS  D9-1  tools/list 返回 tools 数组  => true
+PASS  D9-1  工具数量 = 39  => 39
+PASS  D9-1  每个工具含 name+inputSchema  => true
+
+===== D9-8 inputSchema 版本合规 =====
+PASS  D9-8  inputSchema.type=object (或省略)  => true
+PASS  D9-8  properties 类型合法  => true
+
+===== D9-3 tools/call 响应格式 =====
+PASS  D9-3  返回 content 数组  => true
+PASS  D9-3  content[0].type=text  => "text"
+PASS  D9-3  isError=false  => false
+PASS  D9-3  text 为 JSON 字符串  => true
+
+===== D9-4 协议生命周期 =====
+PASS  D9-4  initialize 返回 protocolVersion  => "2024-11-05"
+PASS  D9-4  initialize 返回 capabilities  => true
+PASS  D9-4  serverInfo.name  => "huaweicloud-devkit"
+PASS  D9-4  resources/list 返回空  => 0
+
+===== D9-2 JSON-RPC 错误码 (源码级) =====
+PASS  D9-2  未知方法抛错 Unsupported method  => true
+mcp-server.mjs 含 -32603: true | 含 -32601: false
+FAIL  D9-2  错误码区分 -32601 (Method not found) 与 -32603  => false  (expected true)
+
+===== D2/D9 汇总: 26 PASS / 1 FAIL =====
+  - D9-2 错误码区分 -32601 (Method not found) 与 -32603: actual=false expected=true
