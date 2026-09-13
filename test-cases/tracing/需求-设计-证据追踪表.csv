@@ -24,7 +24,7 @@ NR3版本升级提醒,新版本>dismissedVersion 无视冷却,D1-32,由EXP-D7 OS
 NR3版本升级提醒,skip 文件持久化与多路径,D1-33,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"文件{ dismissedVersion/dismissedAt/expireAt }, 插件目录无副本时回退共享路径",PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,check_failed 不阻塞正常调用,D1-34,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"result=check_failed, note 检测失败不影响使用, 不抛错不阻塞",PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,缓存 TTL 与失败节流,D1-35,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,1h 内复用探测结果；失败后 5min 节流,PASS,DESIGN_COVERED,PASS,测试负责人,,
-NR3版本升级提醒,首调用兜底包装 wrapResult,D1-36,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"仅首个调用附加 _updateInfo(updateAvailable 且未 dismissed 时), 后续不重复",PASS,DESIGN_COVERED,PASS,测试负责人,,
+NR3版本升级提醒,首调用兜底提示（会话首个工具附加更新信息）,D1-36,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,仅会话首个非 check/upgrade 工具经 decorateResult 附加 _updateInfo（updat,PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,SKILL.md 会话启动指令存在性,D1-37,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,SKILL.md 含首次操作前先 check_update 的指令,PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,huaweicloud_upgrade 语义,D1-38,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,success/previousVersion/installedVersion/requiresRestart=tru,PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,Windows 升级检测链可用性,D1-39,EXP-NR3-09;EXP-NR3-10;EXP-NR3-11,安装/生命周期,<代表: Windows/Linux>,Windows 下检测链真实可用，不得 EINVAL 静默失败,FAIL,DESIGN_COVERED,FAIL,测试负责人,需 #554 回归,
