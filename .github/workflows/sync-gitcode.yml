@@ -1,0 +1,27 @@
+name: Sync to GitCode
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync-to-gitcode:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Push to GitCode mirror
+        env:
+          GITCODE_TOKEN: ${{ secrets.GITCODE_TOKEN }}
+        run: |
+          git remote add gitcode "https://oauth2:${GITCODE_TOKEN}@gitcode.com/hd-vector/huaweicloud-devkit-test.git"
+          git push gitcode main --force
+          git push gitcode --tags --force
