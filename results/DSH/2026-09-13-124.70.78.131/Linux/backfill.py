@@ -1,32 +1,39 @@
 # -*- coding: utf-8 -*-
-"""DSH/Linux 2026-09-13 执行回填。只改 results/DSH 本目录副本，不碰真源。"""
-import csv, os
+"""DSH/Linux 2026-09-13 daily 执行回填（重跑）。
+
+只改 results/DSH/2026-09-13-124.70.78.131/Linux/ 本目录副本，不碰 test-cases 真源。
+回填两列：执行状态 + 执行时间(+evidencePath)。追踪表回填「执行时间」。
+"""
+import csv, os, datetime
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DESIGN = os.path.join(BASE, "用例矩阵-设计级.csv")
 EXPAND = os.path.join(BASE, "用例矩阵-展开级.csv")
+TRACING = os.path.join(BASE, "需求-设计-证据追踪表.csv")
 
-# ---------------- 设计级映射 ----------------
+TS = datetime.datetime.now().strftime("%Y%m%d%H%M%S")  # 北京时间当前时刻
+
+# ---------------- 设计级（daily 81） ----------------
 PASS = {
     # cli-readonly
     "D1-3": "evidence/cli-readonly", "D1-4": "evidence/cli-readonly", "D1-6": "evidence/cli-readonly",
     # d1-upgrade
     "D1-26": "evidence/d1-upgrade", "D1-27": "evidence/d1-upgrade", "D1-28": "evidence/d1-upgrade",
-    "D1-30": "evidence/d1-upgrade", "D1-31": "evidence/d1-upgrade", "D1-32": "evidence/d1-upgrade",
-    "D1-33": "evidence/d1-upgrade", "D1-34": "evidence/d1-upgrade", "D1-35": "evidence/d1-upgrade",
-    "D1-37": "evidence/d1-upgrade", "D1-40": "evidence/d1-upgrade", "D1-44": "evidence/d1-upgrade",
-    "D1-46": "evidence/d1-upgrade", "D1-47": "evidence/d1-upgrade", "D1-53": "evidence/d1-upgrade",
-    # d4-security
-    "D2-4": "evidence/d4-security", "D4-1": "evidence/d4-security", "D4-3": "evidence/d4-security",
-    "D4-4": "evidence/d4-security", "D4-5": "evidence/d4-security", "D4-6": "evidence/d4-security",
+    "D1-30": "evidence/d1-upgrade", "D1-31": "evidence/d1-upgrade", "D1-33": "evidence/d1-upgrade",
+    "D1-40": "evidence/d1-upgrade",
+    # supplement
+    "D1-41": "evidence/supplement",
+    "D2-4": "evidence/d4-security", "D2-5": "evidence/supplement", "D2-12": "evidence/supplement",
+    "D2-13": "evidence/supplement", "D2-16": "evidence/supplement",
+    "D3-A1": "evidence/supplement", "D3-B1": "evidence/supplement", "D3-B5": "evidence/supplement",
+    "D4-1": "evidence/d4-security", "D4-3": "evidence/d4-security", "D4-5": "evidence/d4-security",
     "D4-7": "evidence/d4-security", "D4-9": "evidence/d4-security", "D4-15": "evidence/d4-security",
     "D4-17": "evidence/d4-security", "D4-21": "evidence/d4-security", "D4-22": "evidence/d4-security",
-    # d9-protocol
-    "D5-3": "evidence/d9-protocol", "D9-1": "evidence/d9-protocol", "D9-3": "evidence/d9-protocol",
-    "D9-4": "evidence/d9-protocol", "D9-8": "evidence/d9-protocol",
-    # dsh-install
-    "D1-1": "evidence/dsh-install", "D5-1": "evidence/dsh-install", "D5-2": "evidence/dsh-install",
+    "D5-1": "evidence/dsh-install", "D5-3": "evidence/d9-protocol",
     "D8-7": "evidence/dsh-install",
+    "D9-1": "evidence/d9-protocol", "D9-3": "evidence/d9-protocol", "D9-4": "evidence/d9-protocol",
+    "D9-8": "evidence/d9-protocol",
+    "D1-1": "evidence/dsh-install",
 }
 FAIL = {
     "D4-2": "evidence/d4-security",
@@ -35,65 +42,89 @@ FAIL = {
     "D9-2": "evidence/d9-protocol",
 }
 BLOCKED = {
-    "D1-39": "Windows 专属断言（EINVAL），本机为 Linux；Linux 检测链已验证可用（readInstalledVersion/queryDistTagsSync/judgeUpdate 均正常）",
-    "D1-52": "需真实升级安装+重启会话验证，会替换当前版本，不在本机执行",
-    "D5-6": "Windows 专属（Hermes/文件锁/Python SDK）",
-    "D7-3": "Windows better-sqlite3 专属缺口",
-    "D2-1": "需真云 AK/SK 三端同步写入",
-    "D2-8": "需真云 credentials 变更回归",
-    "D2-11": "需真云 STS securityToken",
-    "D2-21": "需真云 AK/SK 轮换",
-    "D3-C1": "需真云 ECS 生命周期 E2E（创建→删除→归零）",
-    "D3-C2": "需真云 OBS 静态站部署",
-    "D3-C3": "需沙箱环境",
-    "D3-C4": "需真云多服务轻量创建",
-    "D3-C5": "需真云 ECS 冒烟",
-    "D3-C6": "需沙箱 7 工具",
-    "D3-C7": "需跨区域真云资源",
-    "D3-C8": "需企业项目真云（EPS）",
-    "D3-C9": "需真云资源状态/冻结场景",
-    "D4-18": "需互动确认流+真云写操作",
-    "D4-19": "需真云高危写确认流",
-    "D4-20": "需确认流+云资源验证",
-    "D4-24": "需真云 ECS 确认令牌过期场景",
-    "D10-4": "需真实 Agent 互动安全干预评测",
+    "D1-39": "Windows 专属升级检测链（EINVAL/文件锁），本机 Linux；Linux 检测链语义已在 evidence/d1-upgrade 覆盖",
+    "D1-5": "uninstall 破坏性操作（删除本机 ~/.dsh 插件/skills），执行后需重装+重启，本轮不做",
+    "D2-11": "需真云 STS securityToken 临时凭证轮换场景（R3 落盘拒绝需真实 Token 链路验证）",
+    "D2-10": "需真云 KooCLI current profile 多账号切换（R7 跟随语义）",
+    "D2-1": "需真云 AK/SK 三端同步写入（S1/S2/S3）",
+    "D4-18": "需互动确认流 + 真云写操作（confirm-not-deny 审批语义）",
+    "D4-19": "需互动确认流 + 真云高危写（确认流下预检仍生效）",
+    "D4-20": "需互动拒绝确认流 + 云资源验证（拒绝后零操作）",
+    "D3-B3": "需真云只读命令执行 + 输出脱敏回归（避免真实账号数据落入 evidence）",
+    "D3-C4": "需真云多服务创建→删除→归零 E2E（红线：只删本次创建资源）",
+    "D3-C5": "需真云工具冒烟 E2E",
+    "D10-4": "需真实 Agent 互动驱动 plan→审批 的安全干预评测",
+}
+
+# ---------------- 展开级（daily 71） ----------------
+# 展开级列名与设计级不同：执行状态/执行时间/evidencePath（init_day 已追加）
+EXP_PASS = {
+    "EXP-D5-6-1": "evidence/dsh-install",   # DSH 终端 D5-1 清单发现
+    "EXP-D5-6-3": "evidence/d9-protocol",   # DSH 终端 D5-3 工具枚举
+    "EXP-NR3-02": "evidence/d1-upgrade",    # Linux OS_MATRIX D1-27 已是最新
+}
+EXP_BLOCKED_REASON = {
+    "true_cloud": "需真云资源创建→删除→归零 E2E（红线：只删本次创建资源）",
+    "d1_39": "D1-39 本义 Windows 专属；本机 Linux，该 OS 行不适用",
+    "eval": "需真实 Agent 评测集（自然语言任务路由）",
 }
 
 # ---------------- 设计级回填 ----------------
 with open(DESIGN, encoding="utf-8-sig", newline="") as f:
-    rows = list(csv.DictReader(f))
-fieldnames = rows[0].keys()
-stat_col = "执行状态"
-ev_col = "evidencePath"
-br_col = "blockedReason"
-
-n_pass = n_fail = n_blocked = n_notrun = 0
-for r in rows:
+    drows = list(csv.DictReader(f))
+dfn = list(drows[0].keys())
+for r in drows:
     cid = (r.get("ID") or "").strip()
     if cid in PASS:
-        r[stat_col] = "PASS"; r[ev_col] = PASS[cid]; r[br_col] = ""; n_pass += 1
+        r["执行状态"] = "PASS"; r["evidencePath"] = PASS[cid]; r["执行时间"] = TS
     elif cid in FAIL:
-        r[stat_col] = "FAIL"; r[ev_col] = FAIL[cid]; r[br_col] = ""; n_fail += 1
+        r["执行状态"] = "FAIL"; r["evidencePath"] = FAIL[cid]; r["执行时间"] = TS
     elif cid in BLOCKED:
-        r[stat_col] = "BLOCKED"; r[ev_col] = ""; r[br_col] = BLOCKED[cid]; n_blocked += 1
+        r["执行状态"] = "BLOCKED"; r["evidencePath"] = ""; r["执行时间"] = ""
     else:
-        r[stat_col] = "NOT_RUN"; r[ev_col] = ""; r[br_col] = ""; n_notrun += 1
-
+        r["执行状态"] = "NOT_RUN"; r["evidencePath"] = ""; r["执行时间"] = ""
 with open(DESIGN, "w", encoding="utf-8-sig", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=fieldnames)
-    w.writeheader(); w.writerows(rows)
-print(f"[设计级] 共{len(rows)} | PASS {n_pass} | FAIL {n_fail} | BLOCKED {n_blocked} | NOT_RUN {n_notrun}")
+    w = csv.DictWriter(f, fieldnames=dfn); w.writeheader(); w.writerows(drows)
 
-# ---------------- 展开级回填（本次未逐条展开执行 → NOT_RUN，避免虚报）----------------
+from collections import Counter
+dc = Counter(r["执行状态"] for r in drows)
+print(f"[设计级] 共{len(drows)} | " + " ".join(f"{k}={v}" for k, v in sorted(dc.items())))
+
+# ---------------- 展开级回填 ----------------
 with open(EXPAND, encoding="utf-8-sig", newline="") as f:
     erows = list(csv.DictReader(f))
-efn = erows[0].keys()
+efn = list(erows[0].keys())
 for r in erows:
-    r["execution_status"] = "NOT_RUN"
-    r["evidencePath"] = ""
-    # 设计级判定的端子/agent/OS 附加信息不影响门禁，保留原样
+    cid = (r.get("ID") or "").strip()
+    if cid in EXP_PASS:
+        r["执行状态"] = "PASS"; r["evidencePath"] = EXP_PASS[cid]; r["执行时间"] = TS
+    elif cid.startswith("EXP-C4"):
+        r["执行状态"] = "BLOCKED"; r["evidencePath"] = ""; r["执行时间"] = ""
+    elif cid in ("EXP-NR3-09", "EXP-NR3-10", "EXP-NR3-11"):
+        r["执行状态"] = "BLOCKED"; r["evidencePath"] = ""; r["执行时间"] = ""
+    elif cid.startswith("EXP-E"):
+        r["执行状态"] = "NOT_RUN"; r["evidencePath"] = ""; r["执行时间"] = ""
+    else:
+        r["执行状态"] = "NOT_RUN"; r["evidencePath"] = ""; r["执行时间"] = ""
 with open(EXPAND, "w", encoding="utf-8-sig", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=efn)
-    w.writeheader(); w.writerows(erows)
-print(f"[展开级] 共{len(erows)} 行 → execution_status 全部置 NOT_RUN（本次未逐条展开执行）")
-print("回填完成。")
+    w = csv.DictWriter(f, fieldnames=efn); w.writeheader(); w.writerows(erows)
+ec = Counter(r["执行状态"] for r in erows)
+print(f"[展开级] 共{len(erows)} | " + " ".join(f"{k}={v}" for k, v in sorted(ec.items())))
+
+# ---------------- 追踪表回填（执行时间） ----------------
+executed = set(list(PASS.keys()) + list(FAIL.keys()))
+with open(TRACING, encoding="utf-8-sig", newline="") as f:
+    trows = list(csv.DictReader(f))
+tfn = list(trows[0].keys())
+filled = 0
+for r in trows:
+    dc = (r.get("designCaseId") or "").strip()
+    if dc in executed:
+        r["执行时间"] = TS; filled += 1
+    else:
+        r["执行时间"] = ""
+with open(TRACING, "w", encoding="utf-8-sig", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=tfn); w.writeheader(); w.writerows(trows)
+print(f"[追踪表] 共{len(trows)} 行 | 已执行(回填执行时间)={filled}")
+
+print("回填完成。执行时间 =", TS)
