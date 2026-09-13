@@ -28,13 +28,13 @@ def gen(kind, src_rel, id_key, name_keys, status_key, date):
         rows = list(csv.DictReader(f))
     out = os.path.join(REPO, "results", "Summary", f"用例矩阵-{kind}-总执行结果-{date}.csv")
     os.makedirs(os.path.dirname(out), exist_ok=True)
-    headers = ["层级", "ID"] + name_keys + ["优先级"] + COLS + ["当日总执行状态"]
+    headers = ["层级", "ID"] + name_keys + ["优先级"] + COLS + ["当日总执行状态", "当日总执行时间"]
     with open(out, "w", encoding="utf-8-sig", newline="") as f:
         w = csv.writer(f)
         w.writerow(headers)
         for r in rows:
             base = ["设计级" if kind == "设计级" else "展开级", r[id_key]] + [r.get(k, "") for k in name_keys] + [r.get("优先级", "")]
-            w.writerow(base + [""] * len(COLS) + [r.get(status_key, "")])
+            w.writerow(base + [""] * len(COLS) + [r.get(status_key, ""), ""])
     print(f"[{kind}] {os.path.basename(out)} {len(rows)} 行 × {len(COLS)} 列")
 
 

@@ -60,6 +60,7 @@ def build(kind, src_rel, id_key, name_keys, status_key, date, machine_dirs, cols
         for c in cols:
             row[c] = ""
         row["当日总执行状态"] = r.get(status_key, "")
+        row["当日总执行时间"] = ""
         summary.append(row)
 
     for client, sub in machine_dirs:
@@ -69,12 +70,18 @@ def build(kind, src_rel, id_key, name_keys, status_key, date, machine_dirs, cols
             if not os.path.isfile(pack_csv):
                 continue
             with open(pack_csv, encoding="utf-8-sig") as f:
-                cmap = {r.get(id_key): (r.get(status_key) or "").strip() for r in csv.DictReader(f)}
+                rows = list(csv.DictReader(f))
+            cmap = {r.get(id_key): (r.get(status_key) or "").strip() for r in rows}
+            tmap = {r.get(id_key): (r.get("执行时间") or "").strip() for r in rows}
             col = f"{client}-{ip}-{os_name}"
             for row in summary:
                 st = cmap.get(row["ID"], "")
                 if st:
                     row[col] = st
+                t = tmap.get(row["ID"], "")
+                if t:
+                    prev = row["当日总执行时间"]
+                    row["当日总执行时间"] = t if not prev else (t if t > prev else prev)
 
     for row in summary:
         vals = [row[c] for c in cols if row.get(c)]
@@ -83,7 +90,7 @@ def build(kind, src_rel, id_key, name_keys, status_key, date, machine_dirs, cols
 
     out = os.path.join(REPO, "results", "Summary", f"用例矩阵-{kind}-总执行结果-{date}.csv")
     os.makedirs(os.path.dirname(out), exist_ok=True)
-    fields = ["层级", "ID"] + name_keys + ["优先级"] + cols + ["当日总执行状态"]
+    fields = ["层级", "ID"] + name_keys + ["优先级"] + cols + ["当日总执行状态", "当日总执行时间"]
     with open(out, "w", encoding="utf-8-sig", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields)
         w.writeheader()
