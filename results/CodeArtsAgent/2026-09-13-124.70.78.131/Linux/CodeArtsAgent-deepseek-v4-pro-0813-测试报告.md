@@ -1,60 +1,152 @@
-# CodeArtsAgent 每日测试执行报告
+# CodeArtsAgent-deepseek-v4-pro-0813 每日测试报告
 
-- 客户端：CodeArtsAgent（codearts CLI）
-- 操作系统：Linux
-- 模型：deepseek-v4-pro-0813
-- 被测版本：huaweicloud-devkit@1.1.4-next.3（源码 commit 3b6290b）
-- 执行日期：2026-09-13
+> **报告名**：`CodeArtsAgent-deepseek-v4-pro-0813-测试报告.md`
+> **生成时间**：2026-09-13 17:12:04（北京时间）
+> **执行归档**：`results/CodeArtsAgent/2026-09-13-124.70.78.131/Linux/`
+> **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
+> **结论**：`PARTIAL`（有 P0 缺陷 + P0 缺口，不标 PASS）
 
-## 一、概述
+---
 
-本日按「每日测试执行指南」0→6 步完成环境准备与核心用例执行。聚焦 P0（安全/凭证/升级链）与高价值 P1（认证/功能）用例的真实黑盒验证；对依赖 Windows/真机/harness/真云资源的用例如实标记 BLOCKED，对未展开执行的矩阵用例标记 NOT_RUN。共发现 2 项产品缺陷/契约漂移（均为 P0 安全用例）。
+## 一、测试概述
 
-## 二、执行结果
+| 项 | 值 |
+|---|---|
+| 客户端 / Agent | CodeArtsAgent（codearts CLI）+ deepseek-v4-pro-0813 |
+| OS / 架构 | Linux aarch64 |
+| Node / npm / Python | Node v22.13.0 / npm 10.9.2 / Python 3.12.3 |
+| 被测版本（SUT） | v1.1.4-next.3（npm @next，gitHead 3b6290b） |
+| 工具全集 | 39（tools.mjs TOOL_DEFINITIONS） |
+| hcloud / 依赖 | hcloud 7.2.12 |
+| 真云凭证 | 未使用（本轮无真云 E2E） |
+| 测试类型 | MCP 黑盒直调（hook/auth/plan）+ 源码级检查 |
+| daily 基础用例 | 设计级 81 / 展开级 71 |
 
-| 用例集 | 总数 | PASS | FAIL | SPEC-MISMATCH | BLOCKED | NOT_RUN |
-|---|---|---|---|---|---|---|
-| 设计级 | 163 | 28 | 1 | 1 | 30 | 103 |
-| 展开级 | 137 | 2 | 0 | 0 | 32 | 103 |
-| 追踪表 | 169 | 28 | 1 | 1 | 30 | 109 |
+> **执行方法**：通过 MCP 工具（huaweicloud_*）黑盒直调被测对象，结果落 `stdout.log`；安全 hook/认证/规划类高危用例 + 关键 P0 逐一真实执行；源码级检查用于根因定位与孤儿文件核验。
 
-设计级 P0 用例执行情况：18 条 P0 中，10 条在本环境真实执行（7 PASS / 1 FAIL / 2 其余），
-8 条因环境（Windows / harness / 真云审批流）阻塞标记 BLOCKED。
+---
 
-主要 PASS 范围：
-- D4 安全 hook 三工具（command/artifacts/deploy_plan）对凭证文件读取、凭证 env 打印、明文 secret、公开端口、破坏性强删、宽泛 IAM 策略、公网无鉴权 FunctionGraph 等均正确拦截。
-- D2 认证：auth_status 判定、show_profile_redacted 脱敏、auth_switch R2 冲突仲裁闭环。
-- D3 功能：list_operations（ECS 117 规范操作名）、detect_framework（React/Next/Vue/VitePress 识别）、search_docs、get_service_icon（中英文名）、get_regional_availability、service_catalog 路由。
-- D1 升级链：check_update 真实 MCP 四态契约、upgrade 无更新语义（均已注册到 tools/list）。
-- D5/D9 协议：tools/list 39 工具全部含 inputSchema，工具全量枚举。
+## 二、执行摘要
 
-## 三、缺陷清单
+| 项 | 值 |
+|---|---|
+| 计划用例（daily） | 152（设计级 81 + 展开级 71） |
+| 已执行 | 28（设计级 27 + 展开级 1） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 24 / 2 / 53 / 2 / 71 |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH，不含 BLOCKED/NOT_RUN） | 85.7%（24/28） |
+| P0 / P1 新增缺陷 | 2（D4-15、D4-23）/ 2（D4-6、D4-17） |
+| 红线（I 类）违规 | 0 |
+| 资源释放 | 全部归零（本轮未创建真云资源） |
 
-### #1【FAIL】hook 命令绕过 — 破坏性操作经 shell 命令替换 + ANSI-C quoting 被放行
-- 用例：D4-15（P0）hook 绕过尝试（预期「无绕过成功」）
-- 现象：`hcloud $(echo $'E\x43S DeleteServer') --id x` 被 `huaweicloud_hook_check_command` 判为 `decision=allow`（findings 空），而该命令实际在 shell 展开后等价于 `hcloud ECS DeleteServer --id x`（破坏性删除）。
-- 根因：`plugins/huaweicloud-core/src/risk-rule-engine.mjs:50-53` `conditionMatches()` 使用纯正则 `new RegExp(condition.regex,'ims').test(...)` 做文本匹配，不做 shell 语法解析/命令替换展开；`safety/rules/cloud-risk-rules.json` 中 `hwc-destructive-delete-operation` 规则正则为 `hcloud\s+\w+\s+(\w*Delete\w*)\b`（严格三段式），`$()` 命令替换与 `$'\x43'`（=C）编码破坏了 `hcloud <service> <op>` 匹配，导致 allow。
-- 同类敞口：`hwc-command-encode-shell-exec` 覆盖 base64 编码，但不覆盖 `$()` 命令替换、`$(echo ...)` 拼接、ANSI-C quoting 等混淆手段。
-- 证据：`evidence/D4-15/stdout.log`
+---
 
-### #2【SPEC-MISMATCH】hook 畸形输入 fail-open（非 fail-closed）
-- 用例：D4-17（P1）hook 模糊 fail-closed（预期「异常输入默认拒绝」）
-- 现象：畸形 JSON artifact（`{not-valid-json!!!`）与畸形 deploy_plan（嵌套 `{{{{`）分别被 `hook_check_artifacts` / `hook_check_deploy_plan` 判为 `decision=allow`，未按 fail-closed 语义拒绝。
-- 根因：`plugins/huaweicloud-core/src/risk-rule-engine.mjs:79-108` `evaluate()` 对无法匹配任何规则的输入直接返回 `decision:'allow'`，缺省放行，无 fail-closed 兜底。
-- 证据：`evidence/D4-17/stdout.log`
+## 三、状态汇总
 
-## 四、阻塞项
+### 3.1 设计级（81）
 
-- Windows 专属用例（D1-13 文件锁、D1-39 升级检测链 EINVAL、D5-6、D7-3 better-sqlite3、回调相关）：Linux 环境无法复现，共 30 余条。
-- 真云 E2E（D3-C1 起 ECS/OBS/沙箱/服务创建/跨区域/企业项目/资源状态）：需最小配置创建→测后删除归零，单次 run 无人工审批无法安全闭环。
-- D10 评测集（EXP-E01~15）：promptfoo 评测 harness 基建未就绪。
-- 非 TTY 审批流（D4-18/19/20/24 confirm-not-deny 语义）：无交互 PTY，审批闭环无法完整执行。
-- voucher_status（D3-B8）：测试环境缺 domain_id，返回 claimed=false 但无法完成真实领取状态查询。
-- 其余客户端矩阵（OpenCode/Codex/CodeArtsWork/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode）：非本代理职责，由各自客户端执行。
+| 状态 | 数量 | 说明 |
+|---|---|---|
+| PASS | 23 | 有证据且通过 PASS 门禁 |
+| FAIL | 2 | D4-15 hook 绕过、D4-6 adminPass 无警告 |
+| BLOCKED | 31 | 环境阻塞（Windows/真云/TTY/harness/inspector） |
+| SPEC-MISMATCH | 2 | D4-17 fail-open、D4-23 规则孤儿文件 |
+| NOT_RUN | 23 | 本轮未覆盖（源码/CLI 安装卸载/文档/性能类） |
+| **合计** | **81** | |
 
-## 五、资源清理声明
+### 3.2 展开级（71）
 
-- 本日未创建任何真云资源（ECS/OBS/沙箱等均未落地），无资源残留。
-- 凭证文件在 D2-14 冲突仲裁测试前已备份（/tmp/cred-backup），测试后通过 `auth_confirm(decision=s1)` 恢复 S1 现有账号，未覆盖真实凭证。
-- detect_framework 仅在 /tmp 下用轻量 package.json/配置文件 fixture，未改动源码仓库。
-- 仅新增/修改 `results/CodeArtsAgent/` 目录下本次执行包，未触碰 Summary、其他客户端目录、test-cases 真源。
+| 状态 | 数量 | 说明 |
+|---|---|---|
+| PASS | 1 | EXP-D5-3-3（CodeArtsAgent D5-3 工具全量枚举，复用 D5-3 证据） |
+| FAIL | 0 | |
+| BLOCKED | 22 | EXP-E 评测集、EXP-D1-58 install 菜单、NR3 Windows/macOS |
+| SPEC-MISMATCH | 0 | |
+| NOT_RUN | 48 | 其余客户端 D5 枚举、EXP-C4 服务只读冒烟同质枚举未逐一执行 |
+| **合计** | **71** | |
+
+---
+
+## 四、逐用例结果（已执行项）
+
+| 用例 ID | 优先级 | 标题 | 结果 | 证据路径 | 备注 |
+|---|---|---|---|---|---|
+| D2-11 | P0 | R3 STS token 拒绝落盘 | PASS | `evidence/D2-11/stdout.log` | persist+token→R2仲裁→newImported 返回 scope:rejected，S1 未污染 |
+| D4-1 | P0 | 凭证文件读取拦截 | PASS | `evidence/D4-1/stdout.log` | deny |
+| D4-2 | P0 | 凭证 env 打印拦截 | PASS | `evidence/D4-2/stdout.log` | deny |
+| D4-3 | P0 | 明文 secret API 拦截 | PASS | `evidence/D4-3/stdout.log` | deny |
+| D4-5 | P0 | 写操作误判检测 | PASS | `evidence/D4-5/stdout.log` | deny write |
+| D4-9 | P0 | 公开暴露/破坏性预检 | PASS | `evidence/D4-9/stdout.log` | deny |
+| D4-16 | P0 | 命令包裹穿透 | PASS | `evidence/D4-16/stdout.log` | warn 拦截 |
+| D4-21 | P0 | hook_check_artifacts 具名回归 | PASS | `evidence/D4-21/stdout.log` | deny IAM admin |
+| D4-22 | P0 | hook_check_deploy_plan 具名回归 | PASS | `evidence/D4-22/stdout.log` | warn FunctionGraph 公网 |
+| D8-7 | P0 | 7 个 meta/通用技能指引可机械执行 | PASS | `evidence/D8-7/stdout.log` | retrieve_skill ok |
+| D2-4 | P0 | 凭证脱敏正确性 | PASS | `evidence/D2-4/stdout.log` | redacted |
+| D4-15 | P0 | hook 绕过尝试 | FAIL | `evidence/D4-15/stdout.log` | 根因见缺陷 #1 |
+| D4-23 | P0 | 全局规则注入生效性 | SPEC-MISMATCH | `evidence/D4-23/stdout.log` | 孤儿文件，见缺陷 #2 |
+| D4-4 | P1 | 写操作审批门 | PASS | `evidence/D4-4/stdout.log` | 写 deny/只读 allow |
+| D4-7 | P1 | hook 三工具有效性 | PASS | `evidence/D4-7/stdout.log` | 三工具均拦截 |
+| D4-17 | P1 | hook 模糊 fail-closed | SPEC-MISMATCH | `evidence/D4-17/stdout.log` | fail-open，见缺陷 #4 |
+| D4-6 | P1 | adminPass 回显警告 | FAIL | `evidence/D4-6/stdout.log` | 无警告，见缺陷 #3 |
+| D1-26 | P1 | 升级提醒工具注册与协议暴露 | PASS | `evidence/D1-26/stdout.log` | schema-ok |
+| D1-27 | P1 | 检测语义-已是最新 | PASS | `evidence/D1-27/stdout.log` | 四态契约 |
+| D1-41 | P1 | check_update 真实 MCP 返回契约 | PASS | `evidence/D1-41/stdout.log` | currentVersion/latestNext |
+| D3-A1 | P1 | skill 检索完整性 | PASS | `evidence/D3-A1/stdout.log` | retrieve_skill + search_docs |
+| D3-C5 | P1 | 工具冒烟 | PASS | `evidence/D3-C5/stdout.log` | check_cli/list_regions/service_catalog |
+| D5-3 | P1 | 工具全量枚举 | PASS | `evidence/D5-3/stdout.log` | 39 工具含 inputSchema |
+| D9-1 | P1 | tools/list 合规 | PASS | `evidence/D9-1/stdout.log` | 39 schema-ok |
+| D2-2 | P2 | auth status 判定准确性 | PASS | `evidence/D2-2/stdout.log` | configured 判定 |
+| D3-B1 | P2 | list_operations 规范名 | PASS | `evidence/D3-B1/stdout.log` | ECS 117 操作 |
+| D3-B5 | P2 | detect_framework 识别 | PASS | `evidence/D3-B5/stdout.log` | React/Next/Vue/VitePress |
+| EXP-D5-3-3 | P1 | CodeArtsAgent D5-3 工具全量枚举 | PASS | `evidence/D5-3/stdout.log` | 复用 D5-3 |
+
+---
+
+## 五、缺陷清单（详见 FINDINGS.md）
+
+| # | 级别 | 用例ID | 缺陷描述 | 根因（文件:行号） | 状态 |
+|---|---|---|---|---|---|
+| 1 | P0 | D4-15 | hook 命令绕过（$() 命令替换+ANSI-C quoting 放行破坏性删除） | `risk-rule-engine.mjs:50-54` + `cloud-risk-rules.json` 三段式正则 | 待提单 |
+| 2 | P0 | D4-23 | 全局规则 huawei-agent-rules 未注入（孤儿文件） | `rules/huawei-agent-rules.mdc` 零引用 | 待提单 |
+| 3 | P1 | D4-6 | hook 层缺失 adminPass 明文回显警告 | `cloud-risk-rules.json` 无 adminPass 规则 | 待提单 |
+| 4 | P1 | D4-17 | hook 畸形输入 fail-open（非 fail-closed） | `risk-rule-engine.mjs:79-108` evaluate 缺 fail-closed | 待提单 |
+
+---
+
+## 六、阻塞项
+
+| 阻塞原因 | 涉及用例 |
+|---|---|
+| Windows 专属（EINVAL/文件锁/registry 镜像 lag） | D1-39、D1-40 |
+| 真云 AK/SK 或资源创建（需最小配置创建→测后归零，单 run 无人工审批闭环） | D2-1、D2-10、D2-12、D2-13、D2-16、D3-B3、D3-C4、D4-13 |
+| 非 TTY 审批流（confirm-not-deny/确认流/令牌过期） | D4-18、D4-19、D4-20、D4-24 |
+| MCP inspector/mcp-server 协议客户端 + 可注入延迟 | D6-4、D9-2、D9-3、D9-4、D9-5、D9-6、D9-7、D9-8、D9-9 |
+| promptfoo 评测 harness 基建未就绪 | D10-1、D10-2、D10-3、D10-4、D10-5 |
+| install 菜单交互（空 HOME/多客户端共存/镜像源） | D1-2、D1-58、D7-4 |
+| 展开级：评测集 / install 菜单 / Windows·macOS 探针 | EXP-E01~15、EXP-D1-58-01~05、EXP-NR3-09、EXP-NR3-11 |
+
+---
+
+## 七、安全与红线合规
+
+- [x] 凭证泄漏事件：0
+- [x] 写操作误判 read-only：0
+- [x] 红线（I 类）违规：无
+- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（D2-11 使用假 AK/SK/token，R3 拒绝后 S1 未污染；auth_status 指纹复核 caae65f2 未变）
+
+---
+
+## 八、资源释放
+
+| 资源 | 创建 | 销毁 | 归零验证 |
+|---|---|---|---|
+| ECS/OBS/沙箱等真云资源 | 否 | — | 本轮未创建，残留 0 |
+
+> 本轮仅做只读/黑盒 hook/规划检查，无真云资源落地；D2-11 冲突仲裁后选 s1 恢复 + R3 拒绝，无凭证写入。
+
+---
+
+## 九、遗留与建议
+
+- 待裁决 SPEC：D4-17（fail-closed 语义）、D4-23（规则注入契约）
+- 本轮未覆盖：真云 E2E、多终端矩阵（其他 9 客户端）、审批流实时对话框、MCP 协议 inspector 深测、CLI 安装/卸载、源码直调类（semverCompare/judgeUpdate/dismiss 冷却）、文档一致性、性能延迟采样
+- 建议：优先修复 P0 #1（hook 命令替换绕过，需引入 shell 解析或覆盖 `$()`/ANSI-C quoting）；#2 规则文件接入 install 注入或删除孤儿文件
