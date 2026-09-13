@@ -22,13 +22,13 @@ EVID = {
 
 # ---- 缺陷根因 (文件:行号) ----
 ROOTCAUSE = {
-    "D4-2": "safety-policy.mjs:335-336 classifyTextCommand() env-dump 正则 /HUAWEICLOUD|HWC_|HCLOUD|OS_/i 未覆盖 HW_ACCESS_KEY/HW_SECRET_KEY 前缀；echo $VAR 通道未被拦截（echo 不在 env/printenv 规则）。证据 evidence/d4-security/stdout.log",
-    "D4-6": "safety-policy.mjs:42 redactString() 正则仅匹配 adminPass[:=]value，未覆盖 '--adminPass value'（空格/flag 形式），hcloud 实际 --admin-pass 亦不匹配。证据 evidence/d4-security/stdout.log",
-    "D4-10": "safety/rules/cloud-risk-rules.json:359 hwc-sandbox-destructive-command fork bomb 正则 ':\\\\(\\\\)...' 双重转义，编译后匹配字面反斜杠，:(){ :|:& };: 永不命中（evaluateCommandRisk 返回 allow）。证据 evidence/d4-security/stdout.log",
-    "D4-15": "safety-policy.mjs:325 classifyTextCommand() 用 matchesAny(text, credentialFilePatterns) 整行匹配，cat ~/.hc$(echo loud)/credentials 的 $(...) 打断 .hcloud 模式无法命中 → allow。证据 evidence/d4-security/stdout.log",
-    "D4-16": "safety-policy.mjs:321-368 classifyTextCommand() 未提取 sh -c/bash -c wrapper 内层命令做二次判定：sh -c \"env | grep HUAWEICLOUD\" 与 sh -c \"hcloud ecs DeleteServer\" 均返回 allow（内层 env dump/写操作穿透）。证据 evidence/d4-security/stdout.log",
-    "D4-21": "safety/rules/cloud-risk-rules.json:192 hwc-iam-admin-policy Action 正则仅匹配 JSON \"Action\":\"*\"，Terraform HCL 形式 Action = [\"*\"]/effect = \"Allow\"（[ 阻断 + 引号）不命中，evaluateArtifacts 返回 allow。证据 evidence/d4-security/stdout.log",
-    "D9-2": "mcp-server.mjs:156-169 handleMessage() catch 对所有异常硬编码 code:-32603，未知方法未映射 -32601 (Method not found)。证据 evidence/d2-d9-auth-protocol/stdout.log",
+    "D4-2": "safety-policy.mjs:335-336 classifyTextCommand() env-dump 正则 /HUAWEICLOUD|HWC_|HCLOUD|OS_/i 未覆盖 HW_ACCESS_KEY/HW_SECRET_KEY 前缀；echo $VAR 通道未被拦截（echo 不在 env/printenv 规则）。证据 evidence/d4-security/stdout.txt",
+    "D4-6": "safety-policy.mjs:42 redactString() 正则仅匹配 adminPass[:=]value，未覆盖 '--adminPass value'（空格/flag 形式），hcloud 实际 --admin-pass 亦不匹配。证据 evidence/d4-security/stdout.txt",
+    "D4-10": "safety/rules/cloud-risk-rules.json:359 hwc-sandbox-destructive-command fork bomb 正则 ':\\\\(\\\\)...' 双重转义，编译后匹配字面反斜杠，:(){ :|:& };: 永不命中（evaluateCommandRisk 返回 allow）。证据 evidence/d4-security/stdout.txt",
+    "D4-15": "safety-policy.mjs:325 classifyTextCommand() 用 matchesAny(text, credentialFilePatterns) 整行匹配，cat ~/.hc$(echo loud)/credentials 的 $(...) 打断 .hcloud 模式无法命中 → allow。证据 evidence/d4-security/stdout.txt",
+    "D4-16": "safety-policy.mjs:321-368 classifyTextCommand() 未提取 sh -c/bash -c wrapper 内层命令做二次判定：sh -c \"env | grep HUAWEICLOUD\" 与 sh -c \"hcloud ecs DeleteServer\" 均返回 allow（内层 env dump/写操作穿透）。证据 evidence/d4-security/stdout.txt",
+    "D4-21": "safety/rules/cloud-risk-rules.json:192 hwc-iam-admin-policy Action 正则仅匹配 JSON \"Action\":\"*\"，Terraform HCL 形式 Action = [\"*\"]/effect = \"Allow\"（[ 阻断 + 引号）不命中，evaluateArtifacts 返回 allow。证据 evidence/d4-security/stdout.txt",
+    "D9-2": "mcp-server.mjs:156-169 handleMessage() catch 对所有异常硬编码 code:-32603，未知方法未映射 -32601 (Method not found)。证据 evidence/d2-d9-auth-protocol/stdout.txt",
 }
 BLOCKED = {
     "D1-39": "Windows 专属用例（EINVAL 场景），本机 Linux aarch64 无法复现；Linux 侧已由展开级 EXP-NR3-10 覆盖并通过。",

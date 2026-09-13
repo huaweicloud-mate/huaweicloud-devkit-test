@@ -23,7 +23,7 @@
 | 设计真源 | 设计级 179 / 展开级 137 / 追踪表 10 列 |
 | daily 基础用例 | 设计级 81 / 展开级 71 |
 
-> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，决策/结果落 `stdout.log`；CLI 真机执行记录日志；证据统一落 `evidence/<case-id>/`。本轮 5 组探针全部实跑（d4-security / d1-upgrade / d2-d9-auth-protocol / d8-skills / supplemental / d1-linux-matrix / d6-perf）。
+> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，决策/结果落 `stdout.txt`；CLI 真机执行记录日志；证据统一落 `evidence/<case-id>/`。本轮 5 组探针全部实跑（d4-security / d1-upgrade / d2-d9-auth-protocol / d8-skills / supplemental / d1-linux-matrix / d6-perf）。
 
 ---
 
@@ -165,7 +165,7 @@
 - 期望：`env | grep HW_ACCESS_KEY` → `deny`
 - 实际：返回 `allow`
 - 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:334-343`，`classifyTextCommand()` env-dump 正则 `/HUAWEICLOUD|HWC_|HCLOUD|OS_/i` 未覆盖 `HW_` 前缀；`echo $VAR` 通道亦无拦截。
-- 证据：`evidence/d4-security/stdout.log`
+- 证据：`evidence/d4-security/stdout.txt`
 
 **#3【P0】D4-16 sh -c 命令包裹穿透**：`classifyTextCommand()` 只检测整行文本，未提取 wrapper 内层参数做二次判定，`sh -c "env | grep HUAWEICLOUD"` 与 `sh -c "hcloud ecs DeleteServer"` 均 `allow`。
 
