@@ -1,0 +1,5 @@
+D4-23 全局规则 huawei-agent-rules.md 注入生效性 — 源级静态证据
+规则文件: rules/huawei-agent-rules.mdc 存在（3840 bytes）
+全仓引用扫描: grep -rniE "huawei-agent-rules|\.mdc" (排除 node_modules) => 0 命中
+setup-cli.mjs copyFileSync 调用仅复制 skill-tracker.js / telemetry / hook-plugin.mjs，无任何 agent-rules.mdc 注入逻辑
+结论: 规则文件孤立存在，未注入任何 11 个安装目标；11 安装目标均无规则生效 => P0 缺陷

@@ -1,0 +1,2 @@
+PASS  D4-2a  已覆盖 env dump 前缀 (HWC_/HUAWEICLOUD/HCLOUD/OS_)：blocked=[printenv HWC_ACCESS_KEY, env | grep HUAWEICLOUD, printenv HCLOUD_SECRET_KEY, Get-ChildItem Env: | grep OS_PASSWORD]
+FAIL  D4-2b  HW_* 真实凭证 env dump 全拦截？实际: [["printenv HW_ACCESS_KEY","allow"],["echo $HW_SECRET_KEY","allow"],["env | grep HW_SECURITY_TOKEN","allow"]]（预期全部 deny — 若 FAIL 则为产品缺陷：env-dump 规则未覆盖 HW_* 前缀）
