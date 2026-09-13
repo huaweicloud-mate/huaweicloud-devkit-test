@@ -5,10 +5,10 @@ import os
 from datetime import datetime
 from collections import Counter
 
-BASE = r"C:\Users\Administrator\devkit-test"
-DESIGN_CSV = os.path.join(BASE, "test-cases", "huaweicloud-devkit-用例矩阵-设计级.csv")
-EXPANDED_CSV = os.path.join(BASE, "test-cases", "huaweicloud-devkit-用例矩阵-展开级.csv")
-OUT = os.path.join(BASE, "huaweicloud-devkit-测试体系-评审稿.html")
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DESIGN_CSV = os.path.join(BASE, "test-cases", "design", "用例矩阵-设计级.csv")
+EXPANDED_CSV = os.path.join(BASE, "test-cases", "expanded", "用例矩阵-展开级.csv")
+OUT = os.path.join(BASE, "docs", "测试体系-评审稿.html")
 
 def load(path):
     with open(path, encoding="utf-8-sig") as f:
