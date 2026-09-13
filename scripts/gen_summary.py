@@ -41,7 +41,7 @@ def gen(kind, src_rel, id_key, name_keys, status_key, date):
 def main():
     date = sys.argv[1] if len(sys.argv) > 1 else datetime.datetime.now().strftime("%Y-%m-%d")
     gen("设计级", ("test-cases", "daily", "用例矩阵-设计级.csv"), "ID", ["维度", "标题"], "执行状态", date)
-    gen("展开级", ("test-cases", "daily", "用例矩阵-展开级.csv"), "ID", ["展开类型", "枚举对象", "源用例"], "execution_status", date)
+    gen("展开级", ("test-cases", "daily", "用例矩阵-展开级.csv"), "ID", ["展开类型", "枚举对象", "源用例"], "执行状态", date)
     print("完成。后续用 update_summary.py 把各客户端+OS 执行状态填进对应列。")
 
 

@@ -9,9 +9,9 @@
 多台机器跑相同客户端时，靠 <日期>-<IP> 区分，避免 push 到同一仓库冲突。
 
 daily（test-cases/daily/）为每日精选子集（纯设计定义、无执行态）；复制到 results 副本时，
-为设计级/展开级追加「执行状态」+「evidencePath」空列，供 agent 执行后回填；追踪表为纯设计追踪直接复制。
+为设计级/展开级追加「执行状态」+「执行时间」+「evidencePath」空列，供 agent 执行后回填；追踪表追加「执行时间」列。
 """
-import os, sys, shutil, datetime, socket, csv
+import os, sys, datetime, socket, csv
 
 CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
@@ -69,9 +69,9 @@ def main():
     os.makedirs(dst, exist_ok=True)
 
     copies = [
-        ("test-cases", "daily", "用例矩阵-设计级.csv", "执行状态"),
-        ("test-cases", "daily", "用例矩阵-展开级.csv", "execution_status"),
-        ("test-cases", "tracing", "需求-设计-证据追踪表.csv", None),
+        ("test-cases", "daily", "用例矩阵-设计级.csv", ["执行状态", "执行时间", "evidencePath"]),
+        ("test-cases", "daily", "用例矩阵-展开级.csv", ["执行状态", "执行时间", "evidencePath"]),
+        ("test-cases", "tracing", "需求-设计-证据追踪表.csv", ["执行时间"]),
     ]
     for parts in copies:
         src = os.path.join(REPO, *parts[:3])
@@ -79,25 +79,22 @@ def main():
             print(f"【错误】测试用例缺失: {src}")
             sys.exit(3)
         dst_path = os.path.join(dst, parts[2])
-        if parts[3] is None:
-            # 追踪表为纯设计追踪（无执行态），直接复制
-            shutil.copy2(src, dst_path)
-        else:
-            # daily 精选为纯设计定义（无执行态）；复制后追加「执行状态」+「evidencePath」空列供 agent 回填
-            with open(src, encoding="utf-8-sig") as f:
-                drows = list(csv.DictReader(f))
-            fields = list(drows[0].keys()) + [parts[3], "evidencePath"]
-            with open(dst_path, "w", encoding="utf-8-sig", newline="") as f:
-                w = csv.DictWriter(f, fieldnames=fields)
-                w.writeheader()
-                for r in drows:
-                    r[parts[3]] = ""
-                    r["evidencePath"] = ""
-                    w.writerow(r)
-        print("复制:", parts[2])
+        extra_cols = parts[3]
+        # 复制后追加执行态空列供 agent 回填（执行状态/执行时间/证据路径）
+        with open(src, encoding="utf-8-sig") as f:
+            drows = list(csv.DictReader(f))
+        fields = list(drows[0].keys()) + extra_cols
+        with open(dst_path, "w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=fields)
+            w.writeheader()
+            for r in drows:
+                for c in extra_cols:
+                    r[c] = ""
+                w.writerow(r)
+        print("复制:", parts[2], "追加列:", extra_cols)
 
     print("执行包:", dst)
-    print("下一步: 逐条执行 -> 回填「执行状态」列 -> 出测试报告(<Agent>-<模型>-测试报告.md)")
+    print("下一步: 逐条执行 -> 回填「执行状态」+「执行时间」列 -> 出测试报告(<Agent>-<模型>-测试报告.md)")
 
 
 if __name__ == "__main__":

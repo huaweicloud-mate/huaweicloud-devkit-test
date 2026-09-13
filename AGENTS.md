@@ -69,8 +69,9 @@ python scripts/init_day.py <客户端> <OS>
 
 ## 3. 回填执行状态
 
-结果直接回填副本 CSV 的「执行状态」列，枚举：
-`PASS`（有证据）/ `FAIL`（不符预期，记根因）/ `BLOCKED`（环境阻塞，记 blockedReason）/ `SPEC-MISMATCH`（契约漂移）/ `NOT_RUN`。
+结果回填副本 CSV 两列：
+- **「执行状态」列**，枚举：`PASS`（有证据）/ `FAIL`（不符预期，记根因）/ `BLOCKED`（环境阻塞，记 blockedReason）/ `SPEC-MISMATCH`（契约漂移）/ `NOT_RUN`。
+- **「执行时间」列**：执行该用例时的北京时间，紧凑 14 位 `YYYYMMDDHHmmss`（如 `20260913185030`）；追踪表同样回填「执行时间」。
 
 ## 4. 出测试报告
 

@@ -98,7 +98,7 @@ def main():
     cols = [f"{c}-{s.split('-', 1)[1] if '-' in s else s}-{o}" for c, s in machine_dirs for o in OSES]
     print(f"发现的机器目录: {machine_dirs}")
     build("设计级", ("test-cases", "daily", "用例矩阵-设计级.csv"), "ID", ["维度", "标题"], "执行状态", date, machine_dirs, cols)
-    build("展开级", ("test-cases", "daily", "用例矩阵-展开级.csv"), "ID", ["展开类型", "枚举对象", "源用例"], "execution_status", date, machine_dirs, cols)
+    build("展开级", ("test-cases", "daily", "用例矩阵-展开级.csv"), "ID", ["展开类型", "枚举对象", "源用例"], "执行状态", date, machine_dirs, cols)
     print("汇总完成。总报告(.md)请维护者按需生成。")
 
 

@@ -60,7 +60,7 @@ def main():
     pack_dir = os.path.join(REPO, "results", client, f"{date}-{get_machine_ip()}", os_name)
 
     fakes = check("设计级", "执行状态", "evidencePath", pack_dir) + \
-            check("展开级", "execution_status", "evidencePath", pack_dir)
+            check("展开级", "执行状态", "evidencePath", pack_dir)
     if fakes:
         print(f"【虚报 PASS 门禁】发现 {len(fakes)} 条疑似虚报（标 PASS 但无证据）:")
         for cid, reason in fakes:
