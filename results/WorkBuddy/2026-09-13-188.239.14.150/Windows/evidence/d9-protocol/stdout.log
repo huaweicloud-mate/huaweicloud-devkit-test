@@ -1,0 +1,20 @@
+[FAIL] D9-4 :: tools/list before initialize returned a result WITHOUT an error — lifecycle ordering is NOT enforced (deviation from MCP spec which requires initialize first).
+[SPEC] D9-4 :: observed tools/list(pre-init) -> result with 39 tools
+[PASS] D9-4 :: initialize succeeded (protocolVersion=2024-11-05, server=huaweicloud-devkit, caps={"tools":{}}).
+[PASS] D9-1 :: tools/list returned 39 tools (expected 39).
+[PASS] D9-1 :: all 39 tools expose a string name + description.
+[PASS] D9-1 :: all 39 tools expose a valid inputSchema {type:"object", properties:{}}.
+[PASS] D9-3 :: huaweicloud_check_update: tools/call returned content[] (1 item(s)) with isError=false.
+[SPEC] D9-3 :: huaweicloud_check_update: isError is a boolean (false) — tool-level error semantics are present alongside JSON-RPC level.
+[SPEC] D9-8 :: all 39 inputSchemas declare type:"object" as the root (JSON Schema object document).
+[PASS] D9-8 :: all inputSchemas are structurally valid JSON Schema (draft-07/2020-12 compatible) with no illegal keywords.
+[PASS] D9-8 :: all inputSchemas use a consistent JSON Schema dialect (uniform root type, no conflicting $schema).
+[SPEC] D9-8 :: schema notes: huaweicloud_hook_check_deploy_plan: property "plan" has no explicit type (permissive schema — valid JSON Schema, accepts any value).
+[PASS] D9-5 :: all 4 captured stdout line(s) are valid JSON-RPC 2.0 (no console.log / stderr pollution on stdout).
+[SPEC] D9-5 :: stderr bytes captured during run: 0 (diagnostics correctly routed off stdout).
+
+================ D9 PROTOCOL PROBE SUMMARY ================
+PASS=8   FAIL=1   SPEC=5   TOTAL=14
+---- FAILURES ----
+  D9-4: tools/list before initialize returned a result WITHOUT an error — lifecycle ordering is NOT enforced (deviation from MCP spec which requires initialize first).
+===========================================================

@@ -1,0 +1,23 @@
+[SPEC] D9-2 :: JSON-RPC standard error codes: -32700 parse error, -32600 invalid request, -32601 method not found, -32602 invalid params, -32603 internal error.
+[PASS] D9-2 :: stdio mcp-server.mjs implements -32603 (internal error) in the handleMessage catch block.
+[FAIL] D9-2 :: -32700 (parse error) is NOT implemented in the stdio server. Locations across plugin: C:\Users\Administrator\.workbuddy\binaries\node\versions\22.22.2-2\node_modules\huaweicloud-devkit\plugins\huaweicloud-core\src\mcp-server-remote.mjs — only the remote transport (mcp-server-remote.mjs) defines it.
+[FAIL] D9-2 :: -32600 (invalid request) is NOT implemented in the stdio server.
+[FAIL] D9-2 :: -32601 (method not found) is NOT implemented in the stdio server.
+[FAIL] D9-2 :: -32602 (invalid params) is NOT implemented in the stdio server.
+[FAIL] D9-2 :: Unknown/unsupported methods return -32603 (internal error), NOT -32601 (method not found). dispatch() throws "Unsupported method" and handleMessage collapses every throw into -32603 — deviation from JSON-RPC spec (method-not-found should be -32601). [dispatchThrowsUnsupported=true, catchReturns32603=true]
+[SPEC] D9-2 :: Error-code coverage in stdio server: -32603 only. Directory scan: -32700 in [C:\Users\Administrator\.workbuddy\binaries\node\versions\22.22.2-2\node_modules\huaweicloud-devkit\plugins\huaweicloud-core\src\mcp-server-remote.mjs], -32603 also in [C:\Users\Administrator\.workbuddy\binaries\node\versions\22.22.2-2\node_modules\huaweicloud-devkit\plugins\huaweicloud-core\src\mcp-server-remote.mjs, C:\Users\Administrator\.workbuddy\binaries\node\versions\22.22.2-2\node_modules\huaweicloud-devkit\plugins\huaweicloud-core\src\mcp-server.mjs].
+[SPEC] D9-7 :: MCP initialize must negotiate protocolVersion: server should select the highest version it supports that is also <= the client's, never echoing an unsupported/newer version.
+[PASS] D9-7 :: initialize handler reads and returns protocolVersion (echoes params.protocolVersion, default '2024-11-05').
+[FAIL] D9-7 :: No protocol version negotiation/downgrade logic: server returns the client's protocolVersion verbatim (or default 2024-11-05) without validating it against a supported set or downgrading. A client claiming a newer/unknown protocolVersion is echoed back unmodified — potential deviation from strict negotiation.
+[SPEC] D9-7 :: protocolVersion source line: protocolVersion: params.protocolVersion || '2024-11-05'
+
+============= D9 SOURCE PROBE SUMMARY =============
+PASS=2   FAIL=6   SPEC=4   TOTAL=12
+---- FAILURES / DEVIATIONS ----
+  D9-2: -32700 (parse error) is NOT implemented in the stdio server. Locations across plugin: C:\Users\Administrator\.workbuddy\binaries\node\versions\22.22.2-2\node_modules\huaweicloud-devkit\plugins\huaweicloud-core\src\mcp-server-remote.mjs — only the remote transport (mcp-server-remote.mjs) defines it.
+  D9-2: -32600 (invalid request) is NOT implemented in the stdio server.
+  D9-2: -32601 (method not found) is NOT implemented in the stdio server.
+  D9-2: -32602 (invalid params) is NOT implemented in the stdio server.
+  D9-2: Unknown/unsupported methods return -32603 (internal error), NOT -32601 (method not found). dispatch() throws "Unsupported method" and handleMessage collapses every throw into -32603 — deviation from JSON-RPC spec (method-not-found should be -32601). [dispatchThrowsUnsupported=true, catchReturns32603=true]
+  D9-7: No protocol version negotiation/downgrade logic: server returns the client's protocolVersion verbatim (or default 2024-11-05) without validating it against a supported set or downgrading. A client claiming a newer/unknown protocolVersion is echoed back unmodified — potential deviation from strict negotiation.
+==================================================
