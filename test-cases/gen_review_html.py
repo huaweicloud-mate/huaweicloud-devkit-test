@@ -414,8 +414,7 @@ BODY = f"""
 │   ├── client-matrix-report.md  # 客户端适配矩阵结果
 │   ├── security-audit.md        # 安全审计清单
 │   ├── gap-report.md            # 缺口表（P/G 分类）
-│   ├── dashboard.md             # 质量仪表盘
-│   └── issue-template.md        # issue 拆分模板（§6.4）
+│   └── dashboard.md             # 质量仪表盘
 ├── reviews/                     # 测试设计评审归档
 │   └── ITER-NNN-时间戳/           # Hermes/Codex 评审轮次与放行结论
 ├── results/                     # 执行结果归档
