@@ -95,9 +95,9 @@ python scripts/hourly_sync.py <客户端> <OS> --interval 600
 ```bash
 # ① 提单（读 FINDINGS.md → 源码仓库 1 个合并 issue，附测试报告）
 python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md <版本>
-# ②③ 提交 push results
+# ②③ 提交 push results（token 来自 HDK_GH_TOKEN 或 ~/.hdk_token，不依赖 gh CLI）
 git add results/<客户端> && git commit -m "test: <客户端> <OS> 执行回填"
-git -c credential.helper="!gh auth git-credential" push origin main
+T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.helper= push "https://x-access-token:$T@github.com/huaweicloud-mate/huaweicloud-devkit-test.git" main
 ```
 
 ## 红线（违反即作废重来）

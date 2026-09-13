@@ -76,8 +76,9 @@ def sync_once(client, os_name):
             return True
         print(f"[{ts}] git commit 失败: {(out + err)[:200]}")
         return False
-    # push（通用命令，不依赖 pushm alias）
-    rc, out, err = run('git -c credential.helper="!gh auth git-credential" push origin main')
+    # push（用 token URL，不依赖 gh CLI；兼容无 gh 的机器）
+    push_url = f"https://x-access-token:{token}@github.com/huaweicloud-mate/huaweicloud-devkit-test.git"
+    rc, out, err = run(f"git -c credential.helper= push \"{push_url}\" main")
     if rc == 0:
         print(f"[{ts}] 已提报 commit -> {out.splitlines()[-1] if out else 'ok'}")
         return True
