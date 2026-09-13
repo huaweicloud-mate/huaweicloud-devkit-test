@@ -538,6 +538,37 @@ add("D1-58", "D1安装", "通用 MCP 白名单接入（Claude/Cursor merge 语�
     "①空 HOME 跑 install 菜单 option3 ②断言探测两文件 ③命中断言：.bak 存在+merge 后 mcpServers 含 huaweicloud-devkit 且唯一 ④同 key 重跑断言 skipping 且无新 .bak ⑤坏 JSON 断言报 'not valid JSON' 且原文件字节不变 ⑥未命中断言输出 stdio snippet（含 'mcpServers' 与 remote 提示）",
     "白名单合并幂等（重复不重复备份）；坏 JSON 零写入（原文件 hash 不变）；未命中输出可粘贴片段（含 mcpServers 键）；merge 后原配置其余键完好",
     "ITER-005 P2 系列回填; 关联 D1-8 通用MCP通道; 标: 非目录agent白名单接入", "install", "半自动", "CLIENT_MATRIX|<代表: Linux L 真机>|<证据: .bak+merge JSON+坏JSON零写入>|<阻塞: 需隔离HOME>")
+# ---------- 2026-09-13 覆盖缺口落用例（coverage-gaps.md G1~G6/G16） ----------
+add("D1-59", "D1安装", "SKIP_UPDATE 环境变量跳过升级检测", "P2", "可注入 env 的隔离进程",
+    "HUAWEICLOUD_DEVKIT_SKIP_UPDATE=1",
+    "①设 env=1 调 check_update ②核对返回并确认未发起 registry 查询 ③unset 后重调对照",
+    "env=1 时 result=up_to_date 且不发起 registry 查询（跳过检测）；unset 后恢复真实检测", "实: update-check.judgeUpdate(111)/getCachedUpdateInfo(297)",
+    "check_update", "脚本", "COMMON|<代表: 隔离进程>|<证据: 查询次数+返回态>|<阻塞: 无>")
+add("D1-60", "D1安装", "HTTP 查询路径与自定义 registry（fetch 版）", "P2", "可注入 registry/proxy 的隔离环境",
+    "HUAWEICLOUD_NPM_REGISTRY=自定义; proxy 故障/慢响应",
+    "①设 HUAWEICLOUD_NPM_REGISTRY ②queryDistTagsFetch ③核对 URL 走自定义 registry(去尾斜杠) ④注入 proxy 故障 ⑤核对 15s 超时 abort 返回 null",
+    "fetch 路径 registry 取 HUAWEICLOUD_NPM_REGISTRY 且去尾斜杠；超时 15s abort 返回 null 不抛错；与 spawn 路径(npm view)分离", "实: update-check.queryDistTagsFetch(198)/proxy-agent.fetchWithProxy",
+    "check_update", "脚本", "COMMON|<代表: 隔离进程>|<证据: URL+超时返回>|<阻塞: 需可控proxy>")
+add("D1-61", "D1安装", "升级重启文案 officeace 分支", "P2", "officeace + 其他 agent 目标",
+    "upgrade target=officeace vs target=其他",
+    "①upgrade target=officeace ②核对 message ③对照其他 target ④核对 requiresRestart",
+    "officeace→'打开连接器→我的连接器→huaweicloud-devkit→重新连接'；其他→'请重启当前会话'；均 requiresRestart=true", "实: update-check.restartMessage(353)/upgradePackage",
+    "upgrade", "脚本", "COMMON|<代表: officeace+Hermes>|<证据: message 文案>|<阻塞: 需真实升级目标>")
+add("D1-62", "D1安装", "未覆盖 CLI 子命令 reinstall/proxy/version", "P2", "已安装环境",
+    "reinstall / proxy / version 命令",
+    "①reinstall ②proxy 配置 ③version ④核对各自行为与帮助",
+    "三命令均有实现而非 TODO：reinstall 重装、proxy 配置代理、version 输出版本；无静默失败", "仓: setup-cli.mjs case reinstall(4966)/proxy(4983)/version(4986)",
+    "install", "手动", "CLIENT_MATRIX|<代表: 逐客户端>|<证据: 三命令行为>|<阻塞: 需已安装环境>")
+add("D1-63", "D1安装", "安装版本读取双回退", "P2", "可控制 package.json 存在性的隔离目录",
+    "pluginRoot package.json / packageRoot package.json / 都无",
+    "①仅 pluginRoot 有 package.json ②仅 packageRoot 有 ③都无 ④逐一 readInstalledVersion",
+    "先 pluginRoot 后 packageRoot 读取；两处都无返回 null", "实: update-check.readInstalledVersion(134)",
+    "check_update", "脚本", "COMMON|<代表: 隔离目录>|<证据: 三场景返回值>|<阻塞: 无>")
+add("D1-64", "D1安装", "agent 自动检测匹配与版本", "P2", "多 agent clientInfo 样本",
+    "各 clientInfo(name/version) 样本",
+    "①detectAgent(clientInfo) ②核对 harness/version ③detectVersion(versionConfig) ④对照 AGENTS 注册表",
+    "clientInfo 正确映射 AGENTS 注册表；detectVersion 按 versionConfig 返回；未知 agent 合理兜底", "实: agent-registry.matchAgent(168)/detectVersion(328)/AGENTS(23); agent-detect.detectAgent(15)",
+    "mcp-server", "脚本", "COMMON|<代表: 多 agent clientInfo>|<证据: 匹配表+版本>|<阻塞: 需多 agent 样本>")
 add("D2-8", "D2认证", "credentials变更后auth回归", "P1", "真云+本地凭证",
     "credentials.mjs 变更后的 auth init",
     "①auth init ②验证KooCLI/OBS/沙箱三端 ③脱敏检查",
@@ -663,6 +694,28 @@ add("D2-7", "D2认证", "无凭证降级", "P2", "未配置AK/SK环境",
     "优雅降级或明确提示，不报裸错误", "标: AWS无凭证docs检索承诺",
     "search_docs/service_catalog/list_regions/retrieve_skill", "脚本")
 
+# ---------- 2026-09-13 覆盖缺口落用例（coverage-gaps.md G7~G9/G17） ----------
+add("D2-22", "D2认证", "CodeArts 上下文凭证读取", "P2", "CodeArts 上下文环境(可构造)",
+    "CodeArts 凭证文件",
+    "①构造 CodeArts 上下文 ②resolveCredentials ③核对 readCodeArtsCredentials 分支 ④非 CodeArts 对照",
+    "CodeArts 上下文走 readCodeArtsCredentials 分支；非 CodeArts 走 S1/env", "实: credentials.readCodeArtsCredentials(182)/resolveCredentials(107)",
+    "auth_status", "脚本", "COMMON|<代表: 隔离进程>|<证据: 凭证来源分支>|<阻塞: 需 CodeArts 样本>")
+add("D2-23", "D2认证", "agent 注册状态", "P2", "已安装环境(部分 agent target)",
+    "getAgentRegistrationStatuses(target='all')",
+    "①查询 agent 注册状态 ②核对 SUPPORTED_AGENT_TARGETS 全列 ③对照实际安装",
+    "返回 11 安装目标各自的注册状态；未安装目标如实标记", "实: agent-registration.getAgentRegistrationStatuses(223)/SUPPORTED_AGENT_TARGETS(7)",
+    "auth_status", "脚本", "COMMON|<代表: 单机多 target>|<证据: 注册状态表>|<阻塞: 需部分安装>")
+add("D2-24", "D2认证", "auth 同步 projectId 自动解析", "P2", "真云+账号含企业项目",
+    "auth_sync 触发 resolveAndApplyProjectId",
+    "①auth_sync ②核对 syncAuth 返回 projectId 字段 ③对照 project-id 解析逻辑",
+    "region/profile 可解析时 syncAuth 返回 projectId；不可解析时不误报", "实: project-id.resolveAndApplyProjectId(33); service.syncAuth(105)",
+    "auth_sync", "半自动", "COMMON|<真云代表: Hermes>|<证据: projectId 字段>|<阻塞: 需企业项目>")
+add("D2-25", "D2认证", "KooCLI 探测状态分类", "P2", "hcloud 各状态环境(可模拟)",
+    "findHcloudBin/classifyHcloudProbe 各状态",
+    "①findHcloudBin ②classifyHcloudProbe(sandbox_home_failure/privacy_pending/正常) ③核对分类与 nextStep",
+    "探测状态正确分类并给出对应 nextStep；未安装/沙箱/隐私待确认三态区分", "实: hcloud-probe.classifyHcloudProbe(55)/findHcloudBin(11)/hcloudProbeNextStep(138)",
+    "auth_status", "脚本", "COMMON|<代表: 隔离进程>|<证据: 状态分类+nextStep>|<阻塞: 需 hcloud 样本>")
+
 # ---------- D3 功能 ----------
 add("D3-A1", "D3功能", "skill检索完整性", "P1", "本地~30个SKILL.md",
     "各skill名称关键词",
@@ -781,6 +834,23 @@ add("D3-C9", "D3功能", "资源不存在/已删除/冻结状态操作引导（�
     "错误码精确命中（APIGW.0101 / EVS.5400 唯一断言），message 字段=固定 schema 文本；explain_error 对 EVS.5400 返回解除冻结指引文本（固定含 'unfreeze'）；对照组 200 正常；错误码不含 403/权限字样",
     "通: 资源状态矩阵(found/deleted/frozen)负向路径; 关联 D3-B4; R11 补强: 错误码固定APIGW.0101/EVS.5400+fixture schema", "explain_error/run_readonly_command", "半自动", "COMMON|<真云代表: Hermes>|<证据: 错误码+fixture冻结注入+对照组>|<阻塞: 冻结态=SIM级别>")
 
+# ---------- 2026-09-13 覆盖缺口落用例（coverage-gaps.md G10/G11/G15） ----------
+add("D3-C10", "D3功能", "市场分类列表", "P2", "标准环境",
+    "getMarketplaceCategories()",
+    "①getMarketplaceCategories ②核对分类覆盖 ③searchMarketplace 按分类过滤对照",
+    "分类列表完整且与 searchMarketplace(category) 过滤一致", "实: search-market.getMarketplaceCategories(206)/searchMarketplace(155)",
+    "search_marketplace", "脚本", "COMMON|<代表: Hermes>|<证据: 分类列表>|<阻塞: 无>")
+add("D3-C11", "D3功能", "沙箱凭证注入前 IAM 验证", "P2", "沙箱 + 有效/无效 AK/SK",
+    "validateIamCredentials 有效/无效凭证",
+    "①sandbox_connect 注入前验证 ②无效凭证 ③核对拒绝不注入 ④有效凭证注入",
+    "无效凭证返回 valid=false 且不注入沙箱；有效凭证注入；skipped 时放行", "实: credential-validator.validateIamCredentials(90); tools sandbox 注入(1400)",
+    "sandbox_connect", "半自动", "COMMON|<代表: Hermes>|<证据: valid 判定+注入结果>|<阻塞: 需沙箱配额>")
+add("D3-C12", "D3功能", "沙箱批量关闭与分块上传参数", "P2", "沙箱会话(可模拟)",
+    "closeAllSessions + 大文件分块上传",
+    "①多会话 closeAllSessions ②核对全关 ③大文件上传 ④核对 UPLOAD_CHUNK_SIZE/BATCH_SIZE/MAX_RETRIES 参数",
+    "closeAllSessions 批量关闭所有会话；分块上传按 chunk=30000/batch=2/retries=3 且幂等", "实: session-manager.closeAllSessions(1054)/splitBase64Chunks(175)/UPLOAD_CHUNK_SIZE(169)",
+    "sandbox_close_session/sandbox_upload_project", "半自动", "COMMON|<代表: Hermes>|<证据: 会话数+分块参数>|<阻塞: 需沙箱>")
+
 # ---------- D4 安全 ----------
 add("D4-1", "D4安全", "凭证文件读取拦截", "P0", "含.hcloud/.huaweicloud目录环境",
     "读取凭证文件命令",
@@ -888,6 +958,18 @@ add("D4-24", "D4安全", "确认令牌过期与重复确认边界（审批流健
     "①写操作（创建最小规格 ECS）进入确认流，记录 confirmToken ②注入时钟推进 >60s 后提交确认→断言 {code:'CONFIRM_TOKEN_EXPIRED', status:'rejected'} 且资源计数=0 ③重新发起写操作（新 confirmToken）连续提交两次→断言第二次 {outcome:'already_processed'} ④查询资源断言计数=1 ⑤释放→归零",
     "过期令牌返回精确 {code:'CONFIRM_TOKEN_EXPIRED'}（无资源创建，计数=0）；重复确认第二次返回 {outcome:'already_processed'}（计数不+1，仍=1）；错误/结果 JSON 字段可机器断言；释放后 tctest- 计数=0",
     "通: 令牌过期/重放防护; 关联 D2-14; R11 补强: 精确响应JSON字段CONFIRM_TOKEN_EXPIRED/already_processed", "auth_confirm/plan_cli_command", "半自动", "CLIENT_MATRIX|<代表2: Hermes+OpenCode>|<证据: 响应JSON+计数+归零>|<阻塞: 可注入时钟>")
+
+# ---------- 2026-09-13 覆盖缺口落用例（coverage-gaps.md G12/G13） ----------
+add("D4-25", "D4安全", "Python hook 事件遥测分类", "P2", "hook-capable 客户端 + 遥测开关",
+    "cli:read/write/invoke 三类命令",
+    "①执行只读 hcloud 命令 ②执行写命令 ③执行非 hcloud 命令 ④核对 hook-events.jsonl 三键分类",
+    "只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capability", "实: huaweicloud-safety.py record_cli_event(85)/HOOK_EVENTS_PATH",
+    "hook_check_command", "脚本", "COMMON|<代表: hook客户端>|<证据: hook-events.jsonl>|<阻塞: 需hook客户端>")
+add("D4-26", "D4安全", "findings 证据脱敏", "P2", "hook 环境 + 含凭证的触发命令",
+    "含 AK/SK/token/password 的规则触发",
+    "①触发含凭证的命令规则 ②核对 findings.evidence 已脱敏 ③对照原命令",
+    "findings.evidence 中 AK/SK/token/password 均被 <redacted> 替换，不泄露明文", "实: risk-rule-engine.redactEvidence(19)",
+    "hook_check_command", "脚本", "COMMON|<代表: hook客户端>|<证据: findings.evidence 脱敏前后>|<阻塞: 需hook客户端>")
 
 # ---------- D5 客户端矩阵 ----------
 add("D5-1", "D5客户端", "清单发现加载", "P1", "各客户端环境",
@@ -1094,6 +1176,13 @@ add("D9-8", "D9协议", "inputSchema版本合规", "P2", "tools/list返回",
     "①逐schema核对JSON Schema版本 ②核对无混用(draft-07/2020-12)",
     "版本统一且明确", "规: MCP限定合法JSON Schema",
     "inspector", "脚本")
+
+# ---------- 2026-09-13 覆盖缺口落用例（coverage-gaps.md G14） ----------
+add("D9-10", "D9协议", "MCP remote transport（HTTP/WS 远程服务）", "P1", "remote transport 启动环境",
+    "startRemoteServer({port:9528, host:127.0.0.1})",
+    "①--transport remote 启动 ②核对 port=9528/host=127.0.0.1 ③initialize/tools/list ④对照 stdio 路径",
+    "remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 port/host 用默认值", "实: mcp-server-remote.startRemoteServer(11)/DEFAULT_PORT(8); mcp-server.mjs transport 分支(56)",
+    "mcp-server", "脚本", "COMMON|<代表: remote 客户端>|<证据: 端口监听+协议响应>|<阻塞: 需 remote 客户端>")
 
 # ---------- D10 Agent评测 ----------
 add("D10-1", "D10评测", "工具描述可选择性", "P1", "评测harness",

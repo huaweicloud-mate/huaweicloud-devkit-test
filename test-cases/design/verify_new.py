@@ -2,7 +2,7 @@
 """R11-6: 设计矩阵门禁审计脚本（Codex round-10 P1-5 增强版）
 作为测试设计门禁使用：任一检查失败 → 非零退出码（CI/闭环可阻断）。
 检查项：
-  1. 设计级行数 == 163、ID 唯一
+  1. 设计级行数 == 179、ID 唯一
   2. 必填字段（前置/测试数据/步骤/预期/指引/关联工具）0 空
   3. 展开规则 0 空 + 全部四段结构化（枚举类型|代表|证据|阻塞）
   4. 展开级保留旧 12 列并追加规范化状态/终端字段、每行列数一致
@@ -105,7 +105,7 @@ def check(name, cond, detail=""):
 # 1) 设计级
 with open(P_DES, encoding="utf-8-sig") as f:
     rows = list(csv.DictReader(f))
-check("设计级行数 == 163", len(rows) == 163, str(len(rows)))
+check("设计级行数 == 179", len(rows) == 179, str(len(rows)))
 # 2026-09-11 用户要求：预期结果与当前状态分离——设计级新增「用例当前状态」列
 check("设计级含设计/执行状态与终端字段", len(rows[0]) == 31, str(list(rows[0].keys())))
 DESIGN_META_FIELDS = ["设计状态", "执行状态", "终端覆盖类型", "terminal", "agent", "OS", "Node/npm",
