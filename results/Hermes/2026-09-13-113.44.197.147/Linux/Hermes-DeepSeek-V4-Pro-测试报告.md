@@ -108,7 +108,7 @@
 | D4-22 | P0 | hook_check_deploy_plan 具名回归 | PASS | `evidence/d4-security/` |
 | D5-1 | P1 | 清单发现加载 | PASS | `evidence/d1-linux-matrix/` |
 | D5-3 | P1 | 工具全量枚举 | PASS | `evidence/supplemental/` |
-| D6-3 | P2 | MCP冷启时间 | PASS | `evidence/d6-perf/`（649ms < 5s） |
+| D6-3 | P2 | MCP冷启时间 | PASS | `evidence/d6-perf/`（445ms < 5s，重跑实测） |
 | D8-7 | P0 | 7 个 meta/通用技能机械执行 | PASS | `evidence/d8-skills/` |
 | D9-1 | P1 | tools/list合规 | PASS | `evidence/d2-d9-auth-protocol/` |
 | D9-3 | P1 | tools/call响应格式 | PASS | `evidence/d2-d9-auth-protocol/` |
