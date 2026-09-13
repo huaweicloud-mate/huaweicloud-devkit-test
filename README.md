@@ -14,7 +14,7 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 |---|---|
 | [docs/](docs/) | 测试规划 v1.3 / 评审报告 / 执行准备清单 / 目录结构规划 / Hermes-Codex 闭环规范 / 团队评审稿 |
 | [test-cases/](test-cases/) | 用例体系母版：设计级 179 + 展开级 137 = 316 条（CSV 真源，gen_matrix.py 可复现生成；设计级 27 列 / 展开级 24 列，**纯设计定义、无执行态**，执行状态/结果落 `results/Summary/`；追踪表 tracing/需求-设计-证据追踪表.csv 10 列纯设计追踪；门禁 verify_new.py（exit 码）；2026-09-13 覆盖缺口落 16 用例 D1-59~64/D2-22~25/D3-C10~12/D4-25/26/D9-10） |
-| [templates/](templates/) | 8 个模板：每晚报告 / 客户端矩阵 / 安全审计 / 缺口表 / 仪表盘 / issue / Hermes-Codex 交接状态 / 多终端矩阵 |
+| [templates/](templates/) | 9 个模板：每日 agent 报告 / 每晚报告 / 客户端矩阵 / 安全审计 / 缺口表 / 仪表盘 / issue / Hermes-Codex 交接状态 / 多终端矩阵 |
 | [reviews/](reviews/) | 测试设计评审归档（Hermes/Codex 轮次、决策、放行状态和多终端矩阵） |
 | [results/](results/) | 测试执行结果归档：`<客户端>/<日期>-<IP>/<OS>/`（每日执行包，含执行态回填 + 证据链）+ `Summary/`（每日聚合）+ `Regression/`（按日回归）+ `version/`（按版本归档）+ `history/`（历史迭代 ITER-001~009） |
 | [metrics/](metrics/) | 跨迭代执行率 / 通过率 / 缺陷趋势 / 质量仪表盘 |
