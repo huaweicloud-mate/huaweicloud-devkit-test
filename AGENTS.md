@@ -57,7 +57,7 @@ npm install -g huaweicloud-devkit@next
 python scripts/init_day.py <客户端> <OS>
 # 例：python scripts/init_day.py OpenCode Windows
 ```
-生成 `results/<客户端>/<日期>-<IP>/<OS>/`，复制 3 份用例 CSV。**机器 IP 自动检测**（环境变量 HDK_MACHINE_IP → ~/.hdk_ip 文件 → socket 自动），多机同客户端靠 `<日期>-<IP>` 区分，互不冲突。
+生成 `results/<客户端>/<日期>-<IP>/<OS>/`：复制母版 3 份用例 CSV（设计级/展开级/追踪表），并为设计级/展开级**追加「执行状态」+「evidencePath」空列**供回填（母版本身是纯设计定义、无执行态）。**机器 IP 自动检测**（环境变量 HDK_MACHINE_IP → ~/.hdk_ip 文件 → socket 自动），多机同客户端靠 `<日期>-<IP>` 区分，互不冲突。
 
 ## 2. 执行
 
@@ -96,6 +96,22 @@ git -c credential.helper="!gh auth git-credential" push origin main
 3. **PASS 门禁（禁虚报）**：一个用例标 PASS 必须同时满足——① 已实际执行（探针/命令真实运行）② 有结果证据落到 `evidence/<case-id>/`（probe 脚本 + stdout.log）③ `evidencePath` 列回填该证据路径。**未执行(NOT_RUN)/无结果/无证据的用例，一律不得标 PASS**，只能标 NOT_RUN 或如实标 FAIL/BLOCKED。回填后跑 `python scripts/verify_no_fake_pass.py <客户端> <OS>` 机械校验，虚报视为作废重来。
 4. **环境阻塞**：标 BLOCKED + 写 blockedReason，不得假装 PASS。
 5. **目录权限（只提交自己）**：只改/提交 `results/<你的客户端>/` 目录，**完全不碰 Summary**（维护者统一生成）、其他客户端目录、test-cases 真源。
+
+## 用例与执行结果分离（架构铁律）
+
+- `test-cases/`（design/expanded/tracing/daily）是**纯用例定义**（设计级 27 列 / 展开级 24 列 / 追踪表 10 列），不含执行状态/结果/证据路径。
+- 执行结果只落 `results/`：你的执行包回填「执行状态」+「evidencePath」，维护者聚合到 `results/Summary/`。
+- **严禁**回改 `test-cases/` 母版（真源，改动走 gen_matrix.py 重新生成 + verify_new.py 门禁）。
+
+## 关联工具白名单（回填「关联工具」列只能填这些）
+
+- 39 个 MCP 工具（`huaweicloud_*` 全名/简称）+ CLI 命令（install/uninstall/doctor/status/update/install-hcloud/plugins/npx/npm/auth/reconcile）+ 框架组件（mcp-server/inspector/harness）。
+- 函数名/组件/脚本/概念（如 decorateResult/safety-model/风险规则）归入「指引来源 实:xxx」，**不得填关联工具列**。
+
+## 唯一断言与根因（FAIL/SPEC 纪律）
+
+- 预期结果写成**唯一可判定断言**（精确错误码/字段/返回值），避免「正常/合理/符合预期」等模糊词。
+- 标 FAIL 或 SPEC-MISMATCH 时，必须落「根因 = 文件 + 行号」（源码层定位，方法见技能 huaweicloud-devkit-source-coverage：源码文件地图 + 核对四步）。
 
 ## 状态口径
 

@@ -126,14 +126,14 @@ reviews/ITER-NNN-YYYYMMDDHHmmss/
 - Codex 评审记录：`reviews/ITER-NNN-YYYYMMDDHHmmss/codex/`
 - 评审确认后的正式用例：`test-cases/design/`、`test-cases/expanded/`
 - 设计评审：`reviews/ITER-NNN-YYYYMMDDHHmmss/`
-- 测试执行结果：`results/ITER-NNN-YYYYMMDDHHmmss/`
+- 测试执行结果：`results/<客户端>/<日期>-<IP>/<OS>/`
 - 共享设计交接：`work/<topic>/`
 - 多终端矩阵模板：`templates/multi-terminal-matrix.csv`
 - 多终端矩阵实例：`reviews/ITER-NNN-YYYYMMDDHHmmss/terminal-matrix.csv`
 
 Hermes 和 Codex 不得同时改同一个文件。Hermes 修改本轮 `hermes/` 目录和候选矩阵；Codex 修改 `codex/`、`FINAL_STATUS.md` 及必要的归档说明。只有 Codex 确认 `TEST_DESIGN_READY` 后，候选矩阵才能同步为 `test-cases/` 下的正式真源。
 
-评审记录和执行结果必须分离：评审阶段不得把 `review-round-*.md`、`decision-log.md` 或 `FINAL_STATUS.md` 写入 `results/`；只有进入执行阶段后，才在 `results/ITER-NNN-YYYYMMDDHHmmss/` 保存基线、日志、证据和执行报告。
+评审记录和执行结果必须分离：评审阶段不得把 `review-round-*.md`、`decision-log.md` 或 `FINAL_STATUS.md` 写入 `results/`；只有进入执行阶段后，才在 `results/<客户端>/<日期>-<IP>/<OS>/` 保存基线、日志、证据和执行报告。
 
 ## 5. 每轮评审步骤
 
@@ -177,7 +177,8 @@ Codex 至少检查以下九类内容：
 6. **环境隔离**：HOME、npm cache、plugin 目录、registry、临时文件和真实资源隔离；
 7. **可复现性**：版本、commit、时间、命令、输入和证据可追溯；
 8. **多终端覆盖**：客户端、宿主 OS、Node/npm、TTY、shell、安装布局、MCP stdio/remote、Hook 能力差异均已分类并有验证策略；
-9. **统计口径**：`PASS`、`FAIL`、`BLOCKED`、`SPEC-MISMATCH`、`PARTIAL` 不混用，分母明确。
+9. **统计口径**：`PASS`、`FAIL`、`BLOCKED`、`SPEC-MISMATCH`、`PARTIAL` 不混用，分母明确；
+10. **源码能力核对**（正确性 + 覆盖缺口）：对照被测源码 `src/*.mjs` 的导出函数 / CLI 子命令 / env 变量，核对用例「指引来源 `实:函数(行号)`」与「预期结果」是否与源码一致（函数名 / 返回字段 / 错误码 / 常量），并识别未覆盖的源码能力缺口（硬缺口 / 弱缺口）——参照技能 `huaweicloud-devkit-source-coverage` 的核对四步（提取能力清单 → 提取覆盖点 → 正确性核对 → 覆盖率核对）。
 
 评审意见必须包含：问题、优先级、证据、修改动作和完成判定。
 

@@ -6,17 +6,17 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 
 > 被测对象：https://github.com/huaweicloud/huaweicloud-devkit
 > 当前基线：**1.1.1 正式版**（迭代基线 `dev` @ 74b9642 = 1.1.1-next.16，对照 `main` @ bcefb32；2026-09-07 发布正式版并冒烟 PASS）
-> 项目状态：**ITER-002-2026-09-08 执行完成**（跨客户端会话级 7 客户端 · 安全门禁缺陷族 #557/#558/#559 · OfficeAce 连接修复+根因 #560 · RDS 真云 E2E · 详见 [results/LATEST.md](results/LATEST.md) + [收尾总结](results/ITER-002-2026-09-08/收尾总结.md)）
+> 项目状态：见 [results/LATEST.md](results/LATEST.md)（最新迭代指针）+ [results/README.md](results/README.md)（归档规则）；历史迭代归档统一在 [results/history/](results/history/)
 
 ## 目录导航
 
 | 路径 | 内容 |
 |---|---|
 | [docs/](docs/) | 测试规划 v1.3 / 评审报告 / 执行准备清单 / 目录结构规划 / Hermes-Codex 闭环规范 / 团队评审稿 |
-| [test-cases/](test-cases/) | 用例体系母版：设计级 163 + 展开级 137 = 300 条（CSV 真源，gen_matrix.py 可复现生成；设计级 14 列含「用例当前状态」（预期结果与当前状态分离，2026-09-11）；展开级 12 列结构化状态：NR3 25 行 + D1-58 白名单 5 行含 status/blockedReason/requiredEvidence/observedAt；追踪表 tracing/需求-设计-证据追踪表.csv 169 行；门禁 verify_new.py（27 项 exit 码）/scan_gaps.py；R10-R12 补充 10 条设计级 D1-56~58、D2-21、D3-C7~9、D4-24、D6-8、D9-9 + D1-58 专属展开 5 行） |
+| [test-cases/](test-cases/) | 用例体系母版：设计级 179 + 展开级 137 = 316 条（CSV 真源，gen_matrix.py 可复现生成；设计级 27 列 / 展开级 24 列，**纯设计定义、无执行态**，执行状态/结果落 `results/Summary/`；追踪表 tracing/需求-设计-证据追踪表.csv 10 列纯设计追踪；门禁 verify_new.py（exit 码）；2026-09-13 覆盖缺口落 16 用例 D1-59~64/D2-22~25/D3-C10~12/D4-25/26/D9-10） |
 | [templates/](templates/) | 8 个模板：每晚报告 / 客户端矩阵 / 安全审计 / 缺口表 / 仪表盘 / issue / Hermes-Codex 交接状态 / 多终端矩阵 |
 | [reviews/](reviews/) | 测试设计评审归档（Hermes/Codex 轮次、决策、放行状态和多终端矩阵） |
-| [results/](results/) | 测试执行结果归档（`ITER-NNN-时间戳`，命名规则见 results/README.md） |
+| [results/](results/) | 测试执行结果归档：`<客户端>/<日期>-<IP>/<OS>/`（每日执行包，含执行态回填 + 证据链）+ `Summary/`（每日聚合）+ `Regression/`（按日回归）+ `version/`（按版本归档）+ `history/`（历史迭代 ITER-001~009） |
 | [metrics/](metrics/) | 跨迭代执行率 / 通过率 / 缺陷趋势 / 质量仪表盘 |
 | [eval/](eval/) | D10 Agent 行为评测：评测集 / harness / 结果 / 趋势（纪律见 eval/README.md） |
 | [scripts/](scripts/) | 工具脚本：hdk-secrets.ps1（DPAPI 凭证加密）/ sync-to-remote.ps1（每日 20:00 自动同步） |
@@ -26,19 +26,19 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 
 | 文件 | 说明 |
 |---|---|
-| [01-测试规划.md](docs/01-测试规划.md) | **主文档 v1.3**：10 维度 / 285 用例（矩阵 CSV 真源）/ 四级金字塔 / P·G·I 纪律 / 执行分层 |
+| [01-测试规划.md](docs/01-测试规划.md) | **主文档 v1.3**：10 维度 / 316 用例（设计级 179 + 展开级 137，矩阵 CSV 真源）/ 四级金字塔 / P·G·I 纪律 / 执行分层 |
 | [02-测试规划评审报告.md](docs/02-测试规划评审报告.md) | 测试经理评审（84 → 93 分演进） |
 | [03-执行准备清单.md](docs/03-执行准备清单.md) | 8 组可勾选准备清单（是否就绪） |
 | [05-归档仓库目录结构.md](docs/05-归档仓库目录结构.md) | 本仓库目录结构设计原则与命名规则 |
 | [06-Hermes-Codex测试设计评审闭环.md](docs/06-Hermes-Codex测试设计评审闭环.md) | Hermes 生成、Codex 评审、反复修订直到 `TEST_DESIGN_READY` 的固定流程 |
-| [测试体系-评审稿.html](docs/测试体系-评审稿.html) | **团队评审用单文件**（固定导航 / 285 用例全量表 / 6 个评审决策点） |
+| [测试体系-评审稿.html](docs/测试体系-评审稿.html) | **团队评审用单文件**（固定导航 / 316 用例全量表 / 6 个评审决策点） |
 
 ## 快速开始（跑一轮测试）
 
 1. 完成 [docs/03-执行准备清单.md](docs/03-执行准备清单.md) —— 8 组全部 ✅
 2. 新需求先按 [Hermes-Codex 测试设计评审闭环](docs/06-Hermes-Codex测试设计评审闭环.md) 往复评审，评审产物归档到 `reviews/ITER-<NNN>-<YYYYMMDDHHmmss>/`
-3. 只有出现 `TEST_DESIGN_READY` 后才执行测试；T0 基线和执行证据写入 `results/ITER-<NNN>-<YYYYMMDDHHmmss>/`
-4. 每轮执行结束，按 [results/README.md](results/README.md) 的 ITER 结构归档（归档脚本 `scripts/archive-result.ps1` 规划中，暂手动建目录）
+3. 只有出现 `TEST_DESIGN_READY` 后才执行测试；执行包用 `scripts/init_day.py <客户端> <OS>` 生成到 `results/<客户端>/<日期>-<IP>/<OS>/`，执行态回填 + 证据链落同目录
+4. 每轮执行结束，按 [results/README.md](results/README.md) 的结构归档（`Summary/` 由维护者 `build_summary.py` 聚合；版本归档进 `version/`；历史迭代进 `history/`）
 5. 每迭代末更新 [templates/dashboard.md](templates/dashboard.md) 质量仪表盘（复制到 metrics/dashboard.md 填写），按 [templates/issue-template.md](templates/issue-template.md) 拆 issue 提交上游
 
 ## 安全红线
