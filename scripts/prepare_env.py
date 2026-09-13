@@ -9,6 +9,8 @@
 被测对象两件套：
   - 源码仓库 hdk（clone 自 huaweicloud/huaweicloud-devkit）→ 源码检查/根因定位/写探针
   - npm 全局包 huaweicloud-devkit@next → 真实场景黑盒测试
+
+镜像 fallback：GitHub clone/pull 失败时，自动 fallback 到 GitCode 镜像（国内拉取更快）。
 """
 import os, sys, subprocess, json, re
 
@@ -18,11 +20,27 @@ SRC = os.path.join(WORK, "hdk")
 TEST_REPO_URL = "https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git"
 SRC_URL = "https://github.com/huaweicloud/huaweicloud-devkit.git"
 PKG = "huaweicloud-devkit@next"
+# GitHub clone/pull 失败时 fallback 到 GitCode 镜像（国内拉取）
+GITCODE_MIRROR = {
+    TEST_REPO_URL: "https://gitcode.com/hd-vector/huaweicloud-devkit-test.git",
+}
 
 
 def run(cmd, cwd=None):
     r = subprocess.run(cmd, capture_output=True, text=True, shell=True, cwd=cwd)
     return r.returncode, (r.stdout or "").strip(), (r.stderr or "").strip()
+
+
+def gitcode_token():
+    t = os.environ.get("GITCODE_TOKEN")
+    if t:
+        return t.strip()
+    p = os.path.expanduser("~/.gitcode_token")
+    if os.path.isfile(p):
+        t = open(p).read().strip()
+        if t:
+            return t
+    return ""
 
 
 def set_gh_token():
@@ -71,9 +89,21 @@ def check_repo(path, url, name, setup):
         set_gh_token()
         rc, out, _ = run(f"git clone {url} {path}")
         if rc == 0:
-            print("  [OK] clone 成功")
+            print("  [OK] clone 成功 (GitHub)")
             return True
-        print(f"  [失败] {out[:200]}")
+        # fallback 到 GitCode 镜像
+        mirror = GITCODE_MIRROR.get(url)
+        gc = gitcode_token()
+        if mirror and gc:
+            auth_mirror = mirror.replace("https://", f"https://oauth2:{gc}@")
+            rc2, out2, _ = run(f"git clone {auth_mirror} {path}")
+            if rc2 == 0:
+                run(f"git remote set-url origin {url}", cwd=path)  # 后续仍走 GitHub
+                print("  [OK] clone 成功 (GitCode 镜像 fallback)")
+                return True
+            print(f"  [失败] GitHub+镜像都失败: {(out2 or out)[:200]}")
+            return False
+        print(f"  [失败] GitHub 失败且无镜像/token: {out[:200]}")
         return False
     print(f"  [缺] {name} 未 clone → `git clone {url} {path}`（或 --setup）")
     return False
@@ -122,8 +152,20 @@ def pull_test_repo():
         return True
     set_gh_token()
     rc, out, err = run('git -c credential.helper="!gh auth git-credential" pull --no-rebase origin main', cwd=REPO)
-    print(f"  [{'OK' if rc == 0 else '失败'}] 测试仓库 pull main: {(out or err)[:120]}")
-    return rc == 0
+    if rc == 0:
+        print("  [OK] 测试仓库 pull main (GitHub)")
+        return True
+    # fallback 到 GitCode 镜像
+    mirror = GITCODE_MIRROR.get(TEST_REPO_URL)
+    gc = gitcode_token()
+    if mirror and gc:
+        auth_mirror = mirror.replace("https://", f"https://oauth2:{gc}@")
+        rc2, out2, err2 = run(f"git pull --no-rebase {auth_mirror} main", cwd=REPO)
+        if rc2 == 0:
+            print("  [OK] 测试仓库 pull main (GitCode 镜像 fallback)")
+            return True
+    print(f"  [失败] 测试仓库 pull main: {(out or err)[:120]}")
+    return False
 
 
 def check_credentials():

@@ -8,6 +8,9 @@
 
 每个客户端一个专属工作目录 ~/devkit-test/<客户端>/（含测试仓库 + 源码仓库），
 避免本机多个 agent 共用同一仓库出现冲突。可用 HDK_WORKDIR 覆盖根目录。
+
+镜像 fallback：GitHub clone 失败时，自动 fallback 到 GitCode 镜像（国内拉取更快）；
+clone 成功后 origin 仍是 GitHub，push 结果仍回官方仓。
 """
 import os, sys, subprocess, getpass
 
@@ -15,11 +18,48 @@ CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 TEST_REPO_URL = "https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git"
 SRC_URL = "https://github.com/huaweicloud/huaweicloud-devkit.git"
+# GitHub clone 失败时 fallback 到 GitCode 镜像（源码仓库已有独立同步工作流，不在此 fallback）
+GITCODE_MIRROR = {
+    TEST_REPO_URL: "https://gitcode.com/hd-vector/huaweicloud-devkit-test.git",
+}
 
 
 def run(cmd, cwd=None):
     r = subprocess.run(cmd, capture_output=True, text=True, shell=True, cwd=cwd)
     return r.returncode, (r.stdout or "").strip(), (r.stderr or "").strip()
+
+
+def gitcode_token():
+    t = os.environ.get("GITCODE_TOKEN")
+    if t:
+        return t.strip()
+    p = os.path.expanduser("~/.gitcode_token")
+    if os.path.isfile(p):
+        t = open(p).read().strip()
+        if t:
+            return t
+    return ""
+
+
+def clone_with_fallback(url, dest, name, clone_cmd):
+    """先 GitHub clone，失败 fallback 到 GitCode 镜像；成功后 origin 统一指回 GitHub。"""
+    rc, out, err = run(f'{clone_cmd} {url} {dest}')
+    if rc == 0:
+        print(f"[clone {name}] OK (GitHub)")
+        return True
+    mirror = GITCODE_MIRROR.get(url)
+    gc = gitcode_token()
+    if mirror and gc:
+        auth_mirror = mirror.replace("https://", f"https://oauth2:{gc}@")
+        rc2, out2, err2 = run(f'git clone {auth_mirror} {dest}')
+        if rc2 == 0:
+            run(f'git remote set-url origin {url}', cwd=dest)  # 后续 pull/push 仍走 GitHub
+            print(f"[clone {name}] OK (GitCode 镜像 fallback)")
+            return True
+        print(f"[clone {name}] GitHub+镜像都失败: {(out2 or err2)[:150]}")
+        return False
+    print(f"[clone {name}] GitHub 失败（无镜像或无 GITCODE_TOKEN）: {(out or err)[:150]}")
+    return False
 
 
 def main():
@@ -53,13 +93,12 @@ def main():
 
     print(f"工作目录: {WORK}")
 
-    # 4. clone 测试仓库 + 源码仓库
+    # 4. clone 测试仓库 + 源码仓库（带 GitCode 镜像 fallback）
     os.makedirs(WORK, exist_ok=True)
     if os.path.isdir(os.path.join(REPO, ".git")):
         print("[已存在] 测试仓库:", REPO)
     else:
-        rc, out, err = run(f'{clone_cmd} {TEST_REPO_URL} {REPO}')
-        print("[clone 测试仓库]", "OK" if rc == 0 else f"失败 {(out or err)[:200]}")
+        clone_with_fallback(TEST_REPO_URL, REPO, "测试仓库", clone_cmd)
 
     if os.path.isdir(os.path.join(SRC, ".git")):
         print("[已存在] 源码仓库:", SRC)
