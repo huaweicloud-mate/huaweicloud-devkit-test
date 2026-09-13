@@ -41,9 +41,17 @@ def gitcode_token():
     return ""
 
 
+def auth_url(url):
+    """把 GitHub URL 转成带 token 的认证 URL（不依赖 gh CLI）。"""
+    t = os.environ.get("HDK_GH_TOKEN") or os.environ.get("GH_TOKEN")
+    if t and url.startswith("https://github.com/"):
+        return url.replace("https://github.com/", f"https://x-access-token:{t}@github.com/")
+    return url
+
+
 def clone_with_fallback(url, dest, name, clone_cmd):
     """先 GitHub clone，失败 fallback 到 GitCode 镜像；成功后 origin 统一指回 GitHub。"""
-    rc, out, err = run(f'{clone_cmd} {url} {dest}')
+    rc, out, err = run(f'{clone_cmd} {auth_url(url)} {dest}')
     if rc == 0:
         print(f"[clone {name}] OK (GitHub)")
         return True
@@ -89,7 +97,7 @@ def main():
     WORK = os.path.join(root, client)
     REPO = os.path.join(WORK, "huaweicloud-devkit-test")
     SRC = os.path.join(WORK, "hdk")
-    clone_cmd = 'git -c credential.helper="!gh auth git-credential" clone'
+    clone_cmd = 'git clone'
 
     print(f"工作目录: {WORK}")
 
@@ -103,7 +111,7 @@ def main():
     if os.path.isdir(os.path.join(SRC, ".git")):
         print("[已存在] 源码仓库:", SRC)
     else:
-        rc, out, err = run(f'{clone_cmd} {SRC_URL} {SRC}')
+        rc, out, err = run(f'{clone_cmd} {auth_url(SRC_URL)} {SRC}')
         print("[clone 源码]", "OK" if rc == 0 else f"失败 {(out or err)[:200]}")
 
     # 5. 安装被测 next 包（全局，与目录无关）

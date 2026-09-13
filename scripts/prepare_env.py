@@ -43,6 +43,14 @@ def gitcode_token():
     return ""
 
 
+def auth_url(url):
+    """把 GitHub URL 转成带 token 的认证 URL（不依赖 gh CLI）。"""
+    t = os.environ.get("GH_TOKEN") or os.environ.get("HDK_GH_TOKEN")
+    if t and url.startswith("https://github.com/"):
+        return url.replace("https://github.com/", f"https://x-access-token:{t}@github.com/")
+    return url
+
+
 def set_gh_token():
     tok = os.environ.get("HDK_GH_TOKEN") or os.environ.get("GH_TOKEN")
     if tok and tok.strip():
@@ -87,7 +95,7 @@ def check_repo(path, url, name, setup):
         print(f"  [准备] clone {name}: {url} -> {path}")
         os.makedirs(os.path.dirname(path), exist_ok=True)
         set_gh_token()
-        rc, out, _ = run(f"git clone {url} {path}")
+        rc, out, _ = run(f"git clone {auth_url(url)} {path}")
         if rc == 0:
             print("  [OK] clone 成功 (GitHub)")
             return True
@@ -151,7 +159,7 @@ def pull_test_repo():
     if not os.path.isdir(os.path.join(REPO, ".git")):
         return True
     set_gh_token()
-    rc, out, err = run('git -c credential.helper="!gh auth git-credential" pull --no-rebase origin main', cwd=REPO)
+    rc, out, err = run(f"git -c credential.helper= pull --no-rebase {auth_url(TEST_REPO_URL)} main", cwd=REPO)
     if rc == 0:
         print("  [OK] 测试仓库 pull main (GitHub)")
         return True
