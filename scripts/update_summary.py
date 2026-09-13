@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-"""汇总更新：把某客户端某 OS 的执行状态，填进 Summary 总矩阵对应「客户端-OS」列。
+"""【已废弃】请改用 build_summary.py——它一键扫描所有 results/<client>/<date>-<ip>/<os> 生成汇总。
 
-用法:
-    python update_summary.py OpenCode Windows              # 当天
-    python update_summary.py OpenCode Linux 2026-09-12     # 指定日期
-
-矩阵列 = 客户端 × OS（如 OpenCode-Windows、OpenCode-Linux，共 20 列），避免双系统结果互相覆盖。
+本脚本为早期实现：固定 20 列（客户端×OS）、路径不含 IP（results/<client>/<date>/<os>），
+与当前带 IP 的多机结构已脱节，且无任何调用者。保留仅作历史参考。
 """
 import os, sys, csv, datetime
 

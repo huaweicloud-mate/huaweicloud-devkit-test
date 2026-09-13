@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-"""生成当天 Summary 总执行结果矩阵（设计级 + 展开级，20 列=客户端×OS）。
+"""【已废弃】请改用 build_summary.py——它动态生成列（只列实际执行的 <客户端>-<IP>-<OS>），支持多机。
 
-用法:
-    python gen_summary.py                  # 当天
-    python gen_summary.py 2026-09-12       # 指定日期
-
-生成（幂等，可重复跑）:
-    results/Summary/用例矩阵-设计级-总执行结果-<日期>.csv   # daily 精选 81 行
-    results/Summary/用例矩阵-展开级-总执行结果-<日期>.csv   # daily 精选 71 行
+本脚本为早期实现：固定 20 列（客户端×OS 全量）、路径不含 IP（results/<client>/<date>/<os>），
+与当前带 IP 的多机结构已脱节，且无任何调用者。保留仅作历史参考。
 """
 import os, sys, csv, datetime
 
