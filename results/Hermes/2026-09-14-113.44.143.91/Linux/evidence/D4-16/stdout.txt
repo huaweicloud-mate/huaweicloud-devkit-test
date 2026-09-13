@@ -1,0 +1,4 @@
+=== CASE D4-16 ===  FAIL  (4ms)
+  expected: 命令包裹/命令替换不绕过 hcloud 写操作拦截（全部 deny）
+  actual:   bash -c 'hcloud ECS DeleteServers --id x' => allow | sh -c 'hcloud ecs DeleteServers' => allow | echo ok && hcloud ECS DeleteServers => allow | $(hcloud ECS DeleteServers) => allow | `hcloud ECS DeleteServers` => allow
+  detail:   HCLOUD 正则仅匹配行首/空白后 hcloud，引号包裹/子 shell/命令替换可绕过（safety-policy.mjs classifyTextCommand）

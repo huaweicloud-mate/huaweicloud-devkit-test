@@ -1,0 +1,4 @@
+=== CASE D4-12 ===  PASS  供应链安装期安全（postinstall 审计）
+  expected: 无恶意 postinstall + 依赖锁定 + pack 与源码一致
+  actual:   顶层唯一 postinstall = `node ./bin/dsh-postinstall.cjs`（无 preinstall）。运行时依赖仅 undici 一项(devDependencies 均为 lint 工具)。package-lock.json 存在。
+  detail:   bin/dsh-postinstall.cjs 逐行审计: 仅 readFile/writeFile/copyFile 操作包内文件 + 重写 cordis.patch.yml 相对路径为绝对路径 + 复制 skills; 无 eval/exec/spawn/child_process/curl/wget/npm install 等危险调用。

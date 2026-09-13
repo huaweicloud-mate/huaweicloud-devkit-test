@@ -1,0 +1,4 @@
+=== CASE D4-2 ===  FAIL  (1ms)
+  expected: env/printenv 打印 HW_* 等凭证环境变量 → deny
+  actual:   env | grep HW_ACCESS_KEY => allow(want deny) | env | grep HW_SECRET_KEY => allow(want deny)
+  detail:   env-dump 正则未覆盖 HW_ 前缀凭证名
