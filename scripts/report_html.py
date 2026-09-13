@@ -65,20 +65,34 @@ def collect_findings(date):
 
 
 def render(rows, findings, date, version):
-    st = Counter(r.get("当日总执行状态", "") or "NOT_RUN" for r in rows)
+    meta = {"层级", "ID", "维度", "标题", "优先级", "展开类型", "枚举对象", "源用例", "当日总执行状态", "当日总执行时间"}
+    client_cols = [c for c in rows[0].keys() if c not in meta] if rows else []
+
+    # 执行摘要：全 agent 合计（从各 agent 列统计，而非「当日总执行状态」统计字符串）
+    st = Counter()
+    for col in client_cols:
+        for r in rows:
+            v = (r.get(col) or "").strip() or "NOT_RUN"
+            st[v] += 1
     total = len(rows)
     denom = st["PASS"] + st["FAIL"] + st["SPEC-MISMATCH"]
     rate = f"{round(st['PASS'] / denom * 100)}%" if denom else "—"
 
-    # 缺陷/阻塞清单（按严重度排序）
-    problem = [r for r in rows if (r.get("当日总执行状态") or "") in ("FAIL", "BLOCKED", "SPEC-MISMATCH")]
-    problem.sort(key=lambda r: STATUS_RANK.get(r.get("当日总执行状态"), 9))
+    # 缺陷/阻塞清单：当日总执行状态含 FAIL/BLOCKED/SPEC 的用例
+    def worst(s):
+        s = s or ""
+        for k in ("FAIL", "BLOCKED", "SPEC-MISMATCH"):
+            if k in s:
+                return k
+        return (s or "NOT_RUN")
+
+    problem = [r for r in rows if worst(r.get("当日总执行状态") or "") in ("FAIL", "BLOCKED", "SPEC-MISMATCH")]
+    problem.sort(key=lambda r: STATUS_RANK.get(worst(r.get("当日总执行状态") or ""), 9))
 
     def badge(s):
         return f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;color:#fff;background:{STATUS_COLOR.get(s,"#95a5a6")}">{s or "NOT_RUN"}</span>'
 
     # 客户端覆盖概览
-    client_cols = [c for c in rows[0].keys() if c not in ("层级", "ID", "维度", "标题", "优先级", "当日总执行状态")] if rows else []
     client_summary = []
     for col in client_cols:
         cnt = Counter((r.get(col) or "").strip() or "NOT_RUN" for r in rows)
@@ -87,7 +101,7 @@ def render(rows, findings, date, version):
 
     problem_rows = "".join(
         f'<tr><td>{r.get("层级","")}</td><td><b>{r.get("ID","")}</b></td><td>{r.get("优先级","")}</td>'
-        f'<td>{r.get("标题","")}</td><td>{badge(r.get("当日总执行状态",""))}</td></tr>'
+        f'<td>{r.get("标题","")}</td><td>{badge(worst(r.get("当日总执行状态","")))}</td></tr>'
         for r in problem
     ) or '<tr><td colspan="5" style="color:#95a5a6">无 FAIL/BLOCKED/SPEC 项</td></tr>'
 
