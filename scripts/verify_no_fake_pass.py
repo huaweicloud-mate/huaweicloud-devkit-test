@@ -38,7 +38,7 @@ def check(kind, status_key, ev_key, pack_dir):
     fake = []
     with open(src, encoding="utf-8-sig") as f:
         for r in csv.DictReader(f):
-            if (r.get(status_key) or "").strip().upper() == "PASS":
+            if (r.get(status_key) or r.get("execution_status") or "").strip().upper() == "PASS":
                 ev = (r.get(ev_key) or "").strip()
                 if not ev:
                     fake.append((r.get("ID", "?"), "标 PASS 但 evidencePath 为空"))

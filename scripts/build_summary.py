@@ -23,7 +23,7 @@ def worst(statuses):
 
 
 def find_machine_dirs(date):
-    """遍历 results/<client>/<date>-<ip>/<os>，返回 [(client, subdir)]，subdir=日期-IP。"""
+    """遍历 results/<client>/<date>-<ip>/<os>，返回 [(client, ip, os)]，只含实际有设计级 CSV 的 OS。"""
     results_dir = os.path.join(REPO, "results")
     found = []
     if not os.path.isdir(results_dir):
@@ -40,9 +40,10 @@ def find_machine_dirs(date):
             sdir = os.path.join(cdir, sub)
             if not os.path.isdir(sdir):
                 continue
-            has = any(os.path.isfile(os.path.join(sdir, o, "用例矩阵-设计级.csv")) for o in OSES)
-            if has:
-                found.append((client, sub))
+            ip = sub[len(date) + 1:] if sub.startswith(date + "-") else sub
+            for os_name in OSES:
+                if os.path.isfile(os.path.join(sdir, os_name, "用例矩阵-设计级.csv")):
+                    found.append((client, ip, os_name))
     return found
 
 
@@ -63,25 +64,23 @@ def build(kind, src_rel, id_key, name_keys, status_key, date, machine_dirs, cols
         row["当日总执行时间"] = ""
         summary.append(row)
 
-    for client, sub in machine_dirs:
-        ip = sub.split("-", 1)[1] if "-" in sub else sub
-        for os_name in OSES:
-            pack_csv = os.path.join(REPO, "results", client, sub, os_name, f"用例矩阵-{kind}.csv")
-            if not os.path.isfile(pack_csv):
-                continue
-            with open(pack_csv, encoding="utf-8-sig") as f:
-                rows = list(csv.DictReader(f))
-            cmap = {r.get(id_key): (r.get(status_key) or "").strip() for r in rows}
-            tmap = {r.get(id_key): (r.get("执行时间") or "").strip() for r in rows}
-            col = f"{client}-{ip}-{os_name}"
-            for row in summary:
-                st = cmap.get(row["ID"], "")
-                if st:
-                    row[col] = st
-                t = tmap.get(row["ID"], "")
-                if t:
-                    prev = row["当日总执行时间"]
-                    row["当日总执行时间"] = t if not prev else (t if t > prev else prev)
+    for client, ip, os_name in machine_dirs:
+        pack_csv = os.path.join(REPO, "results", client, f"{date}-{ip}", os_name, f"用例矩阵-{kind}.csv")
+        if not os.path.isfile(pack_csv):
+            continue
+        with open(pack_csv, encoding="utf-8-sig") as f:
+            rows = list(csv.DictReader(f))
+        cmap = {r.get(id_key): (r.get(status_key) or r.get("execution_status") or "").strip() for r in rows}
+        tmap = {r.get(id_key): (r.get("执行时间") or "").strip() for r in rows}
+        col = f"{client}-{ip}-{os_name}"
+        for row in summary:
+            st = cmap.get(row["ID"], "")
+            if st:
+                row[col] = st
+            t = tmap.get(row["ID"], "")
+            if t:
+                prev = row["当日总执行时间"]
+                row["当日总执行时间"] = t if not prev else (t if t > prev else prev)
 
     for row in summary:
         vals = [row[c] for c in cols if row.get(c)]
@@ -102,7 +101,7 @@ def build(kind, src_rel, id_key, name_keys, status_key, date, machine_dirs, cols
 def main():
     date = sys.argv[1] if len(sys.argv) > 1 else datetime.datetime.now().strftime("%Y-%m-%d")
     machine_dirs = find_machine_dirs(date)
-    cols = [f"{c}-{s.split('-', 1)[1] if '-' in s else s}-{o}" for c, s in machine_dirs for o in OSES]
+    cols = [f"{c}-{ip}-{o}" for c, ip, o in machine_dirs]
     print(f"发现的机器目录: {machine_dirs}")
     build("设计级", ("test-cases", "daily", "用例矩阵-设计级.csv"), "ID", ["维度", "标题"], "执行状态", date, machine_dirs, cols)
     build("展开级", ("test-cases", "daily", "用例矩阵-展开级.csv"), "ID", ["展开类型", "枚举对象", "源用例"], "执行状态", date, machine_dirs, cols)
