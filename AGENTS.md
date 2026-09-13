@@ -88,10 +88,14 @@ python scripts/hourly_sync.py <客户端> <OS>
 
 > **你不生成 Summary**。Summary 由维护者统一跑 `python scripts/build_summary.py` 汇总生成，你只负责自己的 `results/<客户端>/` 目录，别碰 Summary/其他客户端（避免共享文件冲突）。
 
-## 6. 统一提单 + 提交（全量测完后）
+## 6. 统一提单 + 提交（全量测完后，必做）
+
+> **提单是必须动作，不是可选**：凡测试有 FAIL/SPEC-MISMATCH 缺陷（FINDINGS.md 非空），全量测完后**必须**先①提单（向源码仓库 `huaweicloud/huaweicloud-devkit` 提 1 个合并 issue），再②③提交 push results。**只 push results 不提单 = 本次任务未完成**。
 
 ```bash
-python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md <版本>   # 统一提交 1 个合并单（读 FINDINGS.md，按 templates/findings.md 格式）
+# ① 提单（读 FINDINGS.md → 源码仓库 1 个合并 issue，附测试报告）
+python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md <版本>
+# ②③ 提交 push results
 git add results/<客户端> && git commit -m "test: <客户端> <OS> 执行回填"
 git -c credential.helper="!gh auth git-credential" push origin main
 ```
@@ -99,11 +103,11 @@ git -c credential.helper="!gh auth git-credential" push origin main
 ## 红线（违反即作废重来）
 
 1. **真云**：最低配置创建 → 测后删除并归零验证 → 只删本次创建资源。
-2. **缺陷**：先记根因（文件+行号），全量测完统一提单，勿拆单/勿未测完就提。
+2. **缺陷**：先记根因（文件+行号），全量测完**必须统一提单**（FINDINGS.md 非空 → 源码仓库 `huaweicloud/huaweicloud-devkit` 1 个合并单），勿拆单/勿未测完就提/勿只 push 不提单。
 3. **PASS 门禁（禁虚报）**：一个用例标 PASS 必须同时满足——① 已实际执行（探针/命令真实运行）② 有结果证据落到 `evidence/<case-id>/`（probe 脚本 + stdout.log）③ `evidencePath` 列回填该证据路径。**未执行(NOT_RUN)/无结果/无证据的用例，一律不得标 PASS**，只能标 NOT_RUN 或如实标 FAIL/BLOCKED。回填后跑 `python scripts/verify_no_fake_pass.py <客户端> <OS>` 机械校验，虚报视为作废重来。
 4. **环境阻塞**：标 BLOCKED + 写 blockedReason，不得假装 PASS。
 5. **目录权限（只提交自己）**：只改/提交 `results/<你的客户端>/` 目录，**完全不碰 Summary**（维护者统一生成）、其他客户端目录、test-cases 真源。
-6. **完成门禁（禁空跑）**：任务完成的唯一判定 = `results/<你的客户端>/<日期>-<IP>/<OS>/` 已落 ①测试报告.md ②3 份 CSV（执行状态列已回填）③ PASS 用例证据 ④已 push。**只读文档 / 只建目录 / 中途退出 = 未完成**；即使环境阻塞也必须按第 4 条回填 BLOCKED + 出一份最小报告 + push，**不得零产出**。
+6. **完成门禁（禁空跑）**：任务完成的唯一判定 = `results/<你的客户端>/<日期>-<IP>/<OS>/` 已落 ①测试报告.md ②3 份 CSV（执行状态列已回填）③ PASS 用例证据 ④已 push ⑤有 FAIL/SPEC 缺陷时已向源码仓库提单。**只读文档 / 只建目录 / 中途退出 / 只 push 不提单 = 未完成**；即使环境阻塞也必须按第 4 条回填 BLOCKED + 出一份最小报告 + push，**不得零产出**。
 
 ## 用例与执行结果分离（架构铁律）
 
