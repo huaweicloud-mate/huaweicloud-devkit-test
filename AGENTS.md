@@ -53,6 +53,8 @@ npm install -g huaweicloud-devkit@next
 
 > **镜像 fallback**：GitHub clone/pull 失败时，脚本自动 fallback 到 GitCode 镜像 `gitcode.com/hd-vector/huaweicloud-devkit-test.git`（国内快）。需本机配 `GITCODE_TOKEN` 环境变量或 `~/.gitcode_token` 文件。
 
+> **真云凭证（AK/SK）**：真云 E2E 用例（建删资源、审计等）需华为云 AK/SK，固定位置 `~/.config/huaweicloud/credentials.json`（格式 `{ak, sk, region}`，统一账号 hw018619646，已预置于每台测试机）。执行前可用 `python scripts/prepare_env.py` 自检。**读不到 AK/SK 时，真云类用例标 `BLOCKED`（blockedReason=`无 AK/SK`），禁止 mock 假跑、禁止标 PASS**。
+
 ## 1. 建当日执行包
 
 ```bash
