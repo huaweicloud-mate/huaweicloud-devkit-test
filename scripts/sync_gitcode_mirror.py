@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """把测试仓库从 GitHub 同步到 GitCode 镜像（国内拉取用）。
 
-用法（在有 GitHub 仓库最新 clone + 能访问 GitCode 的机器上运行）:
+用法:
     python scripts/sync_gitcode_mirror.py
 
-原理：在已 clone 的测试仓库里，git fetch github + git push gitcode main，
+原理：git fetch github（GH_TOKEN 认证） + git push gitcode main（GITCODE_TOKEN 认证），
     把 GitHub 的 main 同步到 GitCode 镜像，供测试机从国内镜像拉取。
 
-认证：GitCode 用 GITCODE_TOKEN 环境变量 或 ~/.gitcode_token 文件（oauth2:TOKEN 格式）。
+凭证：
+    GitHub  —— HDK_GH_TOKEN/GH_TOKEN 环境变量 → gh auth token --user shuangheaven
+    GitCode —— GITCODE_TOKEN 环境变量 → ~/.gitcode_token 文件（oauth2:TOKEN 格式）
 """
 import os, sys, subprocess
 
@@ -15,7 +17,20 @@ GITHUB = "https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git"
 GITCODE = "https://gitcode.com/hd-vector/huaweicloud-devkit-test.git"
 
 
-def load_token():
+def run(cmd):
+    r = subprocess.run(cmd, capture_output=True, text=True, shell=True)
+    return r.returncode, (r.stdout or "").strip(), (r.stderr or "").strip()
+
+
+def gh_token():
+    t = os.environ.get("HDK_GH_TOKEN") or os.environ.get("GH_TOKEN")
+    if t:
+        return t.strip()
+    rc, t, _ = run("gh auth token --user shuangheaven")
+    return t if rc == 0 and t else ""
+
+
+def gitcode_token():
     t = os.environ.get("GITCODE_TOKEN")
     if t:
         return t.strip()
@@ -27,26 +42,24 @@ def load_token():
     return ""
 
 
-def run(cmd):
-    r = subprocess.run(cmd, capture_output=True, text=True, shell=True)
-    return r.returncode, (r.stdout or "").strip(), (r.stderr or "").strip()
-
-
 def main():
-    t = load_token()
-    if not t:
+    gh = gh_token()
+    gc = gitcode_token()
+    if not gh:
+        print("无 GitHub 凭证")
+        sys.exit(2)
+    if not gc:
         print("无 GITCODE_TOKEN（请设环境变量或写 ~/.gitcode_token）")
         sys.exit(2)
 
-    # 拉 GitHub 最新（本地已有的 origin 即 GitHub）
-    rc, out, err = run(f"git fetch {GITHUB} main")
+    gh_auth = GITHUB.replace("https://", f"https://x-access-token:{gh}@")
+    rc, out, err = run(f"git fetch {gh_auth} main 2>&1")
     if rc != 0:
-        print(f"fetch github 失败: {(out + err)[:200]}")
+        print(f"fetch github 失败: {(out + err)[:250]}")
         sys.exit(1)
 
-    # push 到 GitCode 镜像（oauth2 格式认证）
-    auth_remote = GITCODE.replace("https://", f"https://oauth2:{t}@")
-    rc, out, err = run(f"git push {auth_remote} FETCH_HEAD:refs/heads/main 2>&1")
+    gc_auth = GITCODE.replace("https://", f"https://oauth2:{gc}@")
+    rc, out, err = run(f"git push {gc_auth} FETCH_HEAD:refs/heads/main 2>&1")
     if rc == 0:
         print(f"镜像同步成功: {(out.splitlines()[-1] if out else 'ok')}")
     else:
