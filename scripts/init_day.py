@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-"""每日执行包初始化：results/<客户端>-<IP>/<日期>/<OS>/ 建目录 + 复制 3 份测试用例 CSV。
+"""每日执行包初始化：results/<客户端>/<日期>-<IP>/<OS>/ 建目录 + 复制 3 份测试用例 CSV。
 
 用法:
     python init_day.py OpenCode Windows             # 当天，Windows
     python init_day.py OpenCode Linux 2026-09-12    # 指定日期，Linux
 
 机器标识（IP）来源：环境变量 HDK_MACHINE_IP > ~/.hdk_ip 文件 > socket 自动检测。
-多台机器跑相同客户端时，靠 <客户端>-<IP> 区分，避免 push 到同一仓库冲突。
+多台机器跑相同客户端时，靠 <日期>-<IP> 区分，避免 push 到同一仓库冲突。
 """
 import os, sys, shutil, datetime, socket
 
@@ -62,7 +62,7 @@ def main():
     date = sys.argv[3] if len(sys.argv) > 3 else datetime.datetime.now().strftime("%Y-%m-%d")
     ip = get_machine_ip()
 
-    dst = os.path.join(REPO, "results", f"{client}-{ip}", date, os_name)
+    dst = os.path.join(REPO, "results", client, f"{date}-{ip}", os_name)
     os.makedirs(dst, exist_ok=True)
 
     copies = [

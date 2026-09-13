@@ -6,7 +6,7 @@
     python hourly_sync.py <客户端> <OS> --interval 3600  # 循环模式：每 3600 秒提报一次
 
 凭证（三级 fallback）：环境变量 HDK_GH_TOKEN/GH_TOKEN → ~/.hdk_token 文件 → 本机 gh shuangheaven token。
-推送用通用 git 命令，只提交自己「客户端-IP」目录（多机同客户端靠 IP 区分，避免冲突）。
+推送用通用 git 命令，只提交自己「客户端/日期-IP/OS」目录（多机同客户端靠 IP 区分，避免冲突）。
 """
 import os, sys, subprocess, datetime, time, socket
 
@@ -58,14 +58,15 @@ def sync_once(client, os_name):
         return False
     os.environ["GH_TOKEN"] = token
     ip = get_machine_ip()
+    date = datetime.datetime.now().strftime("%Y-%m-%d")
 
     def git(args):
         return run(f"git {args}")
 
-    # git add：只提交自己「客户端-IP」的目录（不碰 Summary/其他客户端/其他机器）
-    rc, out, err = git("add results/{}-{}".format(client, ip))
+    # git add：只提交自己「客户端/日期-IP/OS」的目录（不碰 Summary/其他客户端/其他机器）
+    rc, out, err = git("add results/{}/{}-{}/{}".format(client, date, ip, os_name))
     if rc != 0:
-        print(f"[{ts}] git add results/{client}-{ip} 失败: {err[:200]}")
+        print(f"[{ts}] git add results/{client}/{date}-{ip}/{os_name} 失败: {err[:200]}")
         return False
     # git commit（无改动则跳过）
     rc, out, err = git('commit -m "test: {}-{} 增量提报 {}"'.format(client, ip, ts))

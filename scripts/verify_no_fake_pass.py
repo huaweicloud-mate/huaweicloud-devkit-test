@@ -57,7 +57,7 @@ def main():
     if os_name not in OSES:
         print(f"未知 OS '{os_name}'，可选: {', '.join(OSES)}"); sys.exit(2)
     date = sys.argv[3] if len(sys.argv) > 3 else datetime.datetime.now().strftime("%Y-%m-%d")
-    pack_dir = os.path.join(REPO, "results", f"{client}-{get_machine_ip()}", date, os_name)
+    pack_dir = os.path.join(REPO, "results", client, f"{date}-{get_machine_ip()}", os_name)
 
     fakes = check("设计级", "执行状态", "evidencePath", pack_dir) + \
             check("展开级", "execution_status", "evidencePath", pack_dir)
