@@ -69,15 +69,17 @@
 
 ## 四、缺陷清单（详尽，7 个 FAIL，均有证据 + 根因）
 
+> **提单状态**：本轮缺陷与 2026-09-13 已开出的合并单 `huaweicloud/huaweicloud-devkit#651`（v1.1.4-next.3，12 项/8 agent）及 `#650`（4 项）逐条对应，属**已提单**缺陷（同一 SUT，非新增），故不重复拆单。D4-6 为同族补充细化，见 FINDINGS.md 补充说明。
+
 | # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | `D4-2` | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应返回 `deny` | 返回 `allow`，`HW_*` 前缀未拦截 | `safety-policy.mjs:336` | P | 待提单 |
-| 2 | P0 | `D4-16` | 命令包裹穿透 | `sh -c "env \| grep HUAWEICLOUD"` 应返回 `deny` | 返回 `allow`，wrapper 内层命令未二次检测 | `safety-policy.mjs:335` | P | 待提单 |
-| 3 | P0 | `D4-21` | 制品预检未检出 broad IAM policy | `actions = ["*"]` 应检出 findings>0 | findings=[]，Terraform HCL 未覆盖 | `safety/rules/cloud-risk-rules.json:192` | P | 待提单 |
-| 4 | P0 | `D4-23` | 全局规则 huawei-agent-rules.mdc 注入失效 | `package.json files` 应含 `rules/` | files 白名单不含 `rules/`，npm 包缺失规则；setup-cli 0 处引用 | `package.json:8` + `setup-cli.mjs` | P | 待提单 |
-| 5 | P1 | `D4-6` | adminPass 空格形式回显未脱敏 | `--adminPass xxx`（空格）应脱敏不返回明文 | 返回 `true`（明文 `Secret123` 出现在 args） | `safety-policy.mjs:42` | P | 待提单 |
-| 6 | P1 | `D4-7` | hook 三工具之一（artifacts）失效 | `hook_check_artifacts` 对 broad IAM 应 `deny` | 返回 `allow` | `safety/rules/cloud-risk-rules.json:192` | P | 待提单 |
-| 7 | P1 | `D9-2` | JSON-RPC 未知方法错误码未区分 | 未知方法应返回 `-32601`（Method not found） | 统一返回 `-32603`（Internal Error） | `mcp-server.mjs:169` + `mcp-protocol.mjs:95` | P | 待提单 |
+| 1 | P0 | `D4-2` | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应返回 `deny` | 返回 `allow`，`HW_*` 前缀未拦截 | `safety-policy.mjs:336` | P | 已提单 #651/#650 |
+| 2 | P0 | `D4-16` | 命令包裹穿透 | `sh -c "env \| grep HUAWEICLOUD"` 应返回 `deny` | 返回 `allow`，wrapper 内层命令未二次检测 | `safety-policy.mjs:335` | P | 已提单 #651/#650 |
+| 3 | P0 | `D4-21` | 制品预检未检出 broad IAM policy | `actions = ["*"]` 应检出 findings>0 | findings=[]，Terraform HCL 未覆盖 | `safety/rules/cloud-risk-rules.json:192` | P | 已提单 #651 |
+| 4 | P0 | `D4-23` | 全局规则 huawei-agent-rules.mdc 注入失效 | `package.json files` 应含 `rules/` | files 白名单不含 `rules/`，npm 包缺失规则；setup-cli 0 处引用 | `package.json:8` + `setup-cli.mjs` | P | 已提单 #651/#650 |
+| 5 | P1 | `D4-6` | adminPass 空格形式回显未脱敏 | `--adminPass xxx`（空格）应脱敏不返回明文 | 返回 `true`（明文 `Secret123` 出现在 args） | `safety-policy.mjs:42` | P | 已提单（详见 FINDINGS 补充） |
+| 6 | P1 | `D4-7` | hook 三工具之一（artifacts）失效 | `hook_check_artifacts` 对 broad IAM 应 `deny` | 返回 `allow` | `safety/rules/cloud-risk-rules.json:192` | P | 已提单 #651 |
+| 7 | P1 | `D9-2` | JSON-RPC 未知方法错误码未区分 | 未知方法应返回 `-32601`（Method not found） | 统一返回 `-32603`（Internal Error） | `mcp-server.mjs:169` + `mcp-protocol.mjs:95` | P | 已提单 #651/#650 |
 
 ### 根因详情（每个 P0/P1 缺陷附代码片段 + 复现证据）
 
@@ -183,4 +185,4 @@ if (
 
 - 待裁决 SPEC：`D9-9`（tools/call 超时协议语义与取消，需可注入延迟夹具 + capabilities.cancellation 实测，本轮仅做结构探测）
 - 本轮未覆盖（说明范围）：真云 E2E / 多终端矩阵 / 审批流实时对话框 / Windows 场景 / D10 评测集
-- 建议：P0 安全缺陷（D4-2/16/21/23）已被上一轮（2026-09-13）提单 #648，#4 D4-23 与 #3 D4-21 保持根因未修复，建议优先修复 `HW_*` env-dump 正则 + HCL broad IAM 检出。
+- 建议：P0 安全缺陷（D4-2/16/21/23）均已在上一轮（2026-09-13）併入合并单 #651/#650 追踪，SUT 未变更（仍 `3b6290b`），本轮复测确认为延续未修复；建议修复方优先处理 `HW_*` env-dump 正则缺失、HCL `actions=["*"]` broad IAM 检出缺口、`rules/` 发布白名单缺失三处，见 #651。
