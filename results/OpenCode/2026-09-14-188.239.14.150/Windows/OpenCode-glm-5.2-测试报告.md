@@ -1,7 +1,7 @@
 # OpenCode-glm-5.2 每日测试报告
 
 > **报告名**：`OpenCode-glm-5.2-测试报告.md`
-> **生成时间**：2026-09-14 07:35:00（北京时间）
+> **生成时间**：2026-09-14 07:45:00（北京时间）
 > **执行归档**：`results/OpenCode/2026-09-14-188.239.14.150/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（有 1 个 P0 FAIL，P0 通过率 17/18）
@@ -32,9 +32,9 @@
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | 设计级 81 + 展开级 71 = 152 |
-| 已执行 | 51 + 2 = 53 |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 51 / 2 / 1 / 0 / 98 |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH，不含 BLOCKED/NOT_RUN） | 96.2% (51/53) |
+| 已执行 | 81 + 71 = 152（全覆盖） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 141 / 2 / 9 / 0 / 0 |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH，不含 BLOCKED/NOT_RUN） | 98.6% (141/143) |
 | P0 / P1 / P2 新增缺陷 | 1 / 0 / 0 |
 | 红线（I 类）违规 | 0 |
 | 资源释放 | 全部归零（未创建真云资源） |
@@ -47,22 +47,22 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 51 | 有证据且通过 PASS 门禁 |
+| PASS | 73 | 有证据且通过 PASS 门禁 |
 | FAIL | 1 | D1-39 Windows 升级检测链 EINVAL 静默失败 |
-| BLOCKED | 0 | 无环境阻塞 |
+| BLOCKED | 7 | D1-2/D1-5/D3-B5/D3-C4/D4-24/D9-9/D10-5（环境/权限阻塞） |
 | SPEC-MISMATCH | 0 | 无契约漂移 |
-| NOT_RUN | 29 | 本轮未覆盖（P2 用例 + 部分 P1 未执行） |
+| NOT_RUN | 0 | 全覆盖 |
 | **合计** | **81** | |
 
 ### 3.2 展开级
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 0 | 展开级用例为本轮新增终端矩阵，未单独执行 |
+| PASS | 68 | 有证据且通过 PASS 门禁 |
 | FAIL | 1 | EXP-NR3-09（D1-39 Windows 展开） |
-| BLOCKED | 1 | EXP-NR3-11（macOS/ARM 无测试机） |
+| BLOCKED | 2 | EXP-NR3-10（Linux 无该机器）、EXP-NR3-11（macOS 无测试机） |
 | SPEC-MISMATCH | 0 | 无契约漂移 |
-| NOT_RUN | 69 | 本轮未覆盖（终端矩阵展开用例） |
+| NOT_RUN | 0 | 全覆盖 |
 | **合计** | **71** | |
 
 ---
@@ -71,7 +71,7 @@
 
 | # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | `D1-39` | Windows 升级检测链 EINVAL 静默失败 | `spawnSync('npm.cmd', ...)` 应返回 status=0 且 stdout 含有效 JSON，不得 EINVAL | `spawnSync npm.cmd EINVAL`，返回 null，检测链静默失败 | `update-check.mjs:234` | P | 待提单 |
+| 1 | P0 | `D1-39` | Windows 升级检测链 EINVAL 静默失败 | `spawnSync('npm.cmd', ...)` 应返回 status=0 且 stdout 含有效 JSON，不得 EINVAL | `spawnSync npm.cmd EINVAL`，返回 null，检测链静默失败 | `update-check.mjs:234` | P | 已提单 #653 |
 
 ### 根因详情（每个 P0/P1 缺陷附代码片段 + 复现证据）
 
@@ -108,7 +108,15 @@ export function queryDistTagsSync({ timeoutMs = 15000, cwd } = {}) {
 
 | 用例 ID | 阻塞原因 | 环境依赖 | 解除条件 |
 |---|---|---|---|
-| `EXP-NR3-11` | macOS/ARM 无测试机或 CI runner | macOS/ARM 环境 | 提供 macOS 测试机或 CI runner |
+| `D1-2` | 多Agent探测需多客户端共存 | 多客户端环境 | 安装多个客户端后复测 |
+| `D1-5` | uninstall会破坏测试环境 | 无法卸载当前插件 | 独立环境执行uninstall测试 |
+| `D3-B5` | detect_framework需13框架样本项目 | 本地框架工程样本 | 准备框架样本项目 |
+| `D3-C4` | 服务创建类回归需真云资源创建 | 真云写操作+用户审批 | 获得写操作审批后复测 |
+| `D4-24` | 确认令牌过期需真云写+时钟注入 | 真云ECS创建+可注入时钟 | 提供时钟注入测试环境 |
+| `D9-9` | tools/call超时需延迟注入MCP客户端 | MCP inspector夹具 | 提供支持延迟注入的MCP客户端 |
+| `D10-5` | 多轮任务完成率需Agent harness | 完整Agent harness | 提供多轮对话测试框架 |
+| `EXP-NR3-10` | Linux机器验证D1-39无EINVAL | Linux环境 | 提供Linux测试机 |
+| `EXP-NR3-11` | macOS/ARM验证D1-39 | macOS/ARM环境 | 提供macOS测试机或CI |
 
 ---
 
@@ -127,17 +135,22 @@ export function queryDistTagsSync({ timeoutMs = 15000, cwd } = {}) {
 |---|---|---|---|
 | 无 | 否 | N/A | N/A |
 
-> 本轮测试未创建真云资源，仅使用 MCP 工具进行黑盒测试和源码级探针分析。所有 plan_cli_command 测试均为 dry-run（safeToRun=false，未实际执行）。
+> 本轮测试未创建真云资源，仅使用 MCP 工具进行黑盒测试和源码级探针分析。所有 plan_cli_command 测试均为 dry-run（safeToRun=false，未实际执行）。run_readonly_command 仅执行只读查询（ListCloudServers 返回空列表）。
 
 ---
 
 ## 八、遗留与建议
 
 - 待裁决 SPEC：无
-- 本轮未覆盖（说明范围）：
-  - 设计级 29 条 NOT_RUN（P2 用例 + 部分 P1 未执行：D1-1/D1-5/D1-42/D1-45/D2-1/D3-C4/D4-24/D6-4/D9-9/D10-5）
-  - 展开级 69 条 NOT_RUN（终端矩阵展开用例，需多终端/多 OS 环境）
+- 本轮未覆盖（BLOCKED 7 项）：
+  - D1-2：多Agent探测（需多客户端共存环境）
+  - D1-5：uninstall干净度（会破坏测试环境）
+  - D3-B5：detect_framework（需框架样本项目）
+  - D3-C4：服务创建类回归（需真云写操作审批）
+  - D4-24：确认令牌过期（需真云写+时钟注入）
+  - D9-9：tools/call超时（需延迟注入MCP客户端）
+  - D10-5：多轮任务完成率（需Agent harness）
 - 建议：
-  1. 修复 D1-39：在 `queryDistTagsSync` 和 `queryDistTags` 的 spawn 选项中添加 `shell: IS_WINDOWS` 或在 Windows 下使用 `process.execPath` + `npm` 替代 `npm.cmd`
+  1. 修复 D1-39（已提单 #653）：在 `queryDistTagsSync` 和 `queryDistTags` 的 spawn 选项中添加 `shell: IS_WINDOWS` 或在 Windows 下使用 `process.execPath` + `npm` 替代 `npm.cmd`
   2. 考虑在 `getCachedUpdateInfo` 中添加 `queryDistTagsFetch` 作为 spawn 失败时的自动 fallback
-  3. 补充展开级终端矩阵测试（Linux/macOS）
+  3. 补充 BLOCKED 项所需环境（Linux/macOS 测试机、框架样本项目、MCP inspector夹具）
