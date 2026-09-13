@@ -1,379 +1,483 @@
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, writeFileSync, symlinkSync, rmSync } from 'node:fs';
+import { spawn, spawnSync } from 'node:child_process';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
-import {
-  callTool,
-  runVersionCheck,
-  TOOL_DEFINITIONS,
-  findSkillsRoot,
-  listSkillDirs,
-} from '../plugins/huaweicloud-core/src/tools.mjs';
-import {
-  clearRuntimeCredentials,
-  resolveCredentialsWithRuntime,
-  setRuntimeCredentials,
-} from '../plugins/huaweicloud-core/src/auth/credentials.mjs';
-import { getKooCliVersion } from '../plugins/huaweicloud-core/src/koocli-version.mjs';
+const root = fileURLToPath(new URL('..', import.meta.url));
+const setupCli = join(root, 'bin', 'setup.cjs');
 
-test('runVersionCheck uses hcloud version instead of --version', async () => {
-  const dir = mkdtempSync(join(tmpdir(), 'huaweicloud-toolkit-version-'));
-  const script = join(dir, 'fake-hcloud.mjs');
-  writeFileSync(script, 'console.log(JSON.stringify({ version: "7.0.0", args: process.argv.slice(2) }));', 'utf8');
-
-  const result = await runVersionCheck({
-    executable: process.execPath,
-    executableArgs: [script],
-  });
-
-  assert.equal(result.installed, true);
-  assert.match(result.output, /"version":\s*"7\.0\.0"/);
-  assert.doesNotMatch(result.output, /--version/);
-});
-
-test('runVersionCheck returns installed:false and errorCode on ENOENT', async () => {
-  const result = await runVersionCheck({
-    executable: 'nonexistent-hcloud-xyz',
-    maxRetries: 0,
-  });
-  assert.equal(result.installed, false);
-  assert.equal(result.errorCode, 'HCLOUD_NOT_FOUND');
-  assert.match(result.nextStep, /HCLOUD_BIN/);
-});
-
-test('runVersionCheck reports versionMismatch when installed version differs from kooCliVersion', async () => {
-  const dir = mkdtempSync(join(tmpdir(), 'huaweicloud-toolkit-version-'));
-  const script = join(dir, 'fake-hcloud.mjs');
-  writeFileSync(script, 'console.log(JSON.stringify({ version: "7.0.0", args: process.argv.slice(2) }));', 'utf8');
-
-  const result = await runVersionCheck({
-    executable: process.execPath,
-    executableArgs: [script],
-  });
-
-  assert.equal(result.installed, true);
-  assert.equal(result.installedVersion, '7.0.0');
-  assert.equal(result.kooCliVersion, getKooCliVersion());
-  assert.equal(result.versionMismatch, true);
-  assert.match(result.nextStep, /version mismatch/i);
-});
-
-test('runVersionCheck reports no versionMismatch when installed version matches kooCliVersion', async () => {
-  const dir = mkdtempSync(join(tmpdir(), 'huaweicloud-toolkit-version-'));
-  const script = join(dir, 'fake-hcloud.mjs');
-  writeFileSync(script, `console.log("当前KooCLI版本:${getKooCliVersion()}");`, 'utf8');
-
-  const result = await runVersionCheck({
-    executable: process.execPath,
-    executableArgs: [script],
-  });
-
-  assert.equal(result.installed, true);
-  assert.equal(result.installedVersion, getKooCliVersion());
-  assert.equal(result.versionMismatch, false);
-});
-
-test('TOOL_DEFINITIONS includes all required tools including sandbox', () => {
-  const names = TOOL_DEFINITIONS.map((t) => t.name);
-  const required = [
-    'huaweicloud_check_cli',
-    'huaweicloud_plan_cli_command',
-    'huaweicloud_run_readonly_command',
-    'huaweicloud_list_operations',
-    'huaweicloud_run_approved_command',
-    'huaweicloud_show_profile_redacted',
-    'huaweicloud_service_catalog',
-    'huaweicloud_explain_error',
-    'huaweicloud_search_docs',
-    'huaweicloud_retrieve_skill',
-    'huaweicloud_list_regions',
-    'huaweicloud_get_regional_availability',
-    'huaweicloud_search_marketplace',
-    'huaweicloud_setup_obs_config',
-    'huaweicloud_auth_status',
-    'huaweicloud_auth_sync',
-    'huaweicloud_sandbox_exec_with_session',
-    'huaweicloud_sandbox_upload_file',
-    'huaweicloud_sandbox_close_session',
-    'huaweicloud_sandbox_check_user',
-    'huaweicloud_sandbox_sign_agreement',
-    'huaweicloud_sandbox_connect',
-    'huaweicloud_sandbox_credentials',
-    'huaweicloud_voucher_status',
-    'huaweicloud_voucher_claim',
-  ];
-  for (const name of required) {
-    assert.ok(names.includes(name), `Missing tool: ${name}`);
-  }
-  assert.ok(names.length >= 25);
-  assert.ok(names.includes('huaweicloud_search_marketplace'), 'Should have marketplace search tool');
-});
-
-test('TOOL_DEFINITIONS expose cwd parameter on run tools', () => {
-  const readonlyTool = TOOL_DEFINITIONS.find((t) => t.name === 'huaweicloud_run_readonly_command');
-  assert.ok(Object.hasOwn(readonlyTool.inputSchema.properties, 'cwd'), 'run_readonly_command should have cwd param');
-
-  const approvedTool = TOOL_DEFINITIONS.find((t) => t.name === 'huaweicloud_run_approved_command');
-  assert.ok(Object.hasOwn(approvedTool.inputSchema.properties, 'cwd'), 'run_approved_command should have cwd param');
-});
-
-test('TOOL_DEFINITIONS includes proactive hook check tools', () => {
-  const names = new Set(TOOL_DEFINITIONS.map((tool) => tool.name));
-  assert.ok(names.has('huaweicloud_hook_check_command'));
-  assert.ok(names.has('huaweicloud_hook_check_artifacts'));
-  assert.ok(names.has('huaweicloud_hook_check_deploy_plan'));
-});
-
-test('huaweicloud_hook_check_command returns deny finding', async () => {
-  const result = await callTool('huaweicloud_hook_check_command', {
-    command:
-      'hcloud VPC CreateSecurityGroupRule --security_group_rule.port_range_min=22 --security_group_rule.remote_ip_prefix=0.0.0.0/0',
-  });
-  assert.equal(result.decision, 'deny');
-  assert.equal(result.ok, false);
-  assert.equal(result.findings[0].ruleId, 'hwc-network-public-admin-port');
-});
-
-test('huaweicloud_explain_error maps APIGW.0301 to credential/project_id guidance', async () => {
-  const result = await callTool('huaweicloud_explain_error', {
-    service: 'unknown',
-    errorCode: 'APIGW.0301',
-    message: 'Incorrect IAM authentication information',
-  });
-  const text = JSON.stringify(result);
-  assert.match(text, /Incorrect IAM authentication information/);
-  assert.match(text, /auth init/);
-  assert.match(text, /project_id/);
-});
-
-test('callTool rejects invalid numeric timeoutMs instead of silently ignoring it', async () => {
-  await assert.rejects(
-    () =>
-      callTool('huaweicloud_run_readonly_command', { args: ['ECS', 'ListServersDetails'], timeoutMs: 'not-a-number' }),
-    /positive number/,
-  );
-});
-
-test('callTool accepts maxRetries 0 and integer timeoutMs (no false rejection)', async () => {
-  // maxRetries: 0 is legitimate ("no retries") and must pass normalization (#530)
-  await assert.doesNotReject(() =>
-    callTool('huaweicloud_plan_cli_command', { args: ['ECS', 'ListServersDetails'], maxRetries: 0, timeoutMs: 30000 }),
-  );
-});
-
-test('huaweicloud_hook_check_artifacts detects broad IAM policy', async () => {
-  const result = await callTool('huaweicloud_hook_check_artifacts', {
-    artifacts: [
-      {
-        path: 'policy.json',
-        content: '{"Statement":[{"Effect":"Allow","Action":"*","Resource":"*"}]}',
-      },
-    ],
-  });
-  assert.equal(result.decision, 'deny');
-  assert.equal(result.findings[0].ruleId, 'hwc-iam-admin-policy');
-});
-
-test('huaweicloud_hook_check_deploy_plan warns on sandbox without ttl', async () => {
-  const result = await callTool('huaweicloud_hook_check_deploy_plan', {
-    plan: {
-      environment: 'preview',
-      resources: [{ service: 'FunctionGraph', action: 'CreateFunction' }],
-    },
-  });
-  assert.equal(result.decision, 'warn');
-  assert.equal(result.ok, true);
-  assert.equal(result.findings[0].ruleId, 'hwc-sandbox-missing-ttl');
-});
-
-test('service_catalog recommends sandbox first for static website deployment intent', async () => {
-  const en = await callTool('huaweicloud_service_catalog', { intent: 'deploy a static website' });
-  assert.equal(en.recommendedSkills[0], 'huawei-sandbox');
-  assert.ok(en.recommendedSkills.includes('huawei-obs'));
-
-  const zh = await callTool('huaweicloud_service_catalog', { intent: '部署静态网站到华为云' });
-  assert.equal(zh.recommendedSkills[0], 'huawei-sandbox');
-
-  const webApp = await callTool('huaweicloud_service_catalog', { intent: 'host a web app for preview' });
-  assert.equal(webApp.recommendedSkills[0], 'huawei-sandbox');
-});
-
-test('service_catalog keeps storage routing for pure storage intent', async () => {
-  const result = await callTool('huaweicloud_service_catalog', { intent: 'store files in an obs bucket' });
-  assert.ok(result.recommendedSkills.includes('huawei-obs'));
-  assert.notEqual(result.recommendedSkills[0], 'huawei-sandbox');
-});
-
-test('findSkillsRoot skips stale dirs without SKILL.md and picks the first real skills root', () => {
-  const base = mkdtempSync(join(tmpdir(), 'huaweicloud-skills-root-'));
-  try {
-    const empty = join(base, 'empty');
-    const stale = join(base, 'stale');
-    const real = join(base, 'real');
-    mkdirSync(empty);
-    mkdirSync(stale);
-    mkdirSync(join(stale, 'leftover'), { recursive: true });
-    mkdirSync(join(real, 'huawei-ecs'), { recursive: true });
-    writeFileSync(join(real, 'huawei-ecs', 'SKILL.md'), '---\nname: huawei-ecs\n---\n', 'utf8');
-
-    assert.equal(findSkillsRoot([empty, stale, real]), real);
-    assert.equal(findSkillsRoot([empty, stale]), null);
-    assert.equal(findSkillsRoot([]), null);
-  } finally {
-    rmSync(base, { recursive: true, force: true });
-  }
-});
-
-test('listSkillDirs ignores files, subdirs without SKILL.md, and counts symlinked skill dirs', () => {
-  const base = mkdtempSync(join(tmpdir(), 'huaweicloud-list-skills-'));
-  try {
-    const root = join(base, 'root');
-    const external = join(base, 'external');
-    mkdirSync(root, { recursive: true });
-    mkdirSync(join(external, 'huawei-vpc'), { recursive: true });
-    writeFileSync(join(external, 'huawei-vpc', 'SKILL.md'), '---\nname: huawei-vpc\n---\n', 'utf8');
-    symlinkSync(join(external, 'huawei-vpc'), join(root, 'huawei-vpc'));
-    mkdirSync(join(root, 'no-skill'));
-    writeFileSync(join(root, 'stray.md'), 'x');
-
-    assert.deepEqual(
-      listSkillDirs(root).sort((a, b) => a.localeCompare(b)),
-      ['huawei-vpc'],
-    );
-    assert.deepEqual(listSkillDirs(join(base, 'missing')), []);
-  } finally {
-    rmSync(base, { recursive: true, force: true });
-  }
-});
-
-test('auth_switch temporary sets runtime credentials for api path', async () => {
-  const prev = {
-    AK: process.env.HW_ACCESS_KEY,
-    SK: process.env.HW_SECRET_KEY,
+function makeEnv(home, _cwd) {
+  return {
+    ...process.env,
+    USERPROFILE: home,
+    HOME: home,
+    HOMEDRIVE: home.slice(0, 2),
+    HOMEPATH: home.slice(2),
   };
-  delete process.env.HW_ACCESS_KEY;
-  delete process.env.HW_SECRET_KEY;
-  try {
-    const out = await callTool('huaweicloud_auth_switch', {
-      mode: 'memory',
-      action: 'temporary',
-      ak: 'RUNTIME_AK',
-      sk: 'RUNTIME_SK',
-      region: 'cn-north-4',
+}
+
+function runCli(home, cwd, args) {
+  return spawnSync(process.execPath, [setupCli, ...args], {
+    cwd,
+    env: makeEnv(home, cwd),
+    encoding: 'utf8',
+    timeout: 60000,
+  });
+}
+
+function countSkills(dir) {
+  if (!existsSync(dir)) return 0;
+  return readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory() && d.name.startsWith('huawei')).length;
+}
+
+function invokeMcpTools(mcpServerPath, env, timeout = 15000) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [mcpServerPath], {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env,
+      timeout,
     });
-    assert.equal(out.scope, 'temporary');
-    const resolved = resolveCredentialsWithRuntime({});
-    assert.equal(resolved.ak, 'RUNTIME_AK');
-  } finally {
-    clearRuntimeCredentials();
-    if (prev.AK === undefined) delete process.env.HW_ACCESS_KEY;
-    else process.env.HW_ACCESS_KEY = prev.AK;
-    if (prev.SK === undefined) delete process.env.HW_SECRET_KEY;
-    else process.env.HW_SECRET_KEY = prev.SK;
-  }
-});
+    let buffer = '';
+    const responses = [];
+    let seq = 0;
+    const timer = setTimeout(() => {
+      child.kill();
+      reject(new Error('MCP timeout'));
+    }, timeout);
 
-test('auth_switch clear resets runtime', async () => {
-  const isolatedHome = mkdtempSync(join(tmpdir(), 'huaweicloud-auth-clear-'));
-  const prevHome = process.env.HUAWEICLOUD_HOME;
-  process.env.HUAWEICLOUD_HOME = isolatedHome;
-  try {
-    setRuntimeCredentials('A', 'B', undefined, 'cn-north-4');
-    const out = await callTool('huaweicloud_auth_switch', { action: 'clear' });
-    assert.equal(out.status, 'cleared');
-    let threw = false;
+    child.stdout.on('data', (chunk) => {
+      buffer += chunk.toString();
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (line.trim()) {
+          try {
+            const msg = JSON.parse(line);
+            if (msg.id !== undefined && msg.id !== null) {
+              responses.push(msg);
+              if (responses.length === 1) {
+                child.stdin.write(
+                  JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'tools/list',
+                    params: {},
+                    id: ++seq,
+                  }) + '\n',
+                );
+              } else if (responses.length === 2) {
+                clearTimeout(timer);
+                child.kill();
+                resolve(responses);
+              }
+            }
+          } catch {}
+        }
+      }
+    });
+
+    child.stderr.on('data', () => {});
+    child.on('error', (e) => {
+      clearTimeout(timer);
+      reject(e);
+    });
+
+    child.stdin.write(
+      JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'initialize',
+        params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'e2e-test', version: '1.0' } },
+        id: ++seq,
+      }) + '\n',
+    );
+  });
+}
+
+function invokeMcpToolCall(mcpServerPath, env, toolName, toolArgs, timeout = 15000) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [mcpServerPath], {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env,
+      timeout,
+    });
+    let buffer = '';
+    const responses = [];
+    let seq = 0;
+    const timer = setTimeout(() => {
+      child.kill();
+      reject(new Error('MCP timeout'));
+    }, timeout);
+
+    child.stdout.on('data', (chunk) => {
+      buffer += chunk.toString();
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (line.trim()) {
+          try {
+            const msg = JSON.parse(line);
+            if (msg.id !== undefined && msg.id !== null) {
+              responses.push(msg);
+              if (responses.length === 1) {
+                child.stdin.write(
+                  JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: { name: toolName, arguments: toolArgs },
+                    id: ++seq,
+                  }) + '\n',
+                );
+              } else if (responses.length === 2) {
+                clearTimeout(timer);
+                child.kill();
+                resolve(responses);
+              }
+            }
+          } catch {}
+        }
+      }
+    });
+
+    child.stderr.on('data', () => {});
+    child.on('error', (e) => {
+      clearTimeout(timer);
+      reject(e);
+    });
+
+    child.stdin.write(
+      JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'initialize',
+        params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'e2e-test', version: '1.0' } },
+        id: ++seq,
+      }) + '\n',
+    );
+  });
+}
+
+// Core tools that must always be present. Keep in sync with tools.mjs TOOL_DEFINITIONS.
+// When a new tool is added to tools.mjs, add it here too.
+const REQUIRED_TOOLS = [
+  'huaweicloud_check_cli',
+  'huaweicloud_plan_cli_command',
+  'huaweicloud_run_readonly_command',
+  'huaweicloud_list_operations',
+  'huaweicloud_run_approved_command',
+  'huaweicloud_show_profile_redacted',
+  'huaweicloud_service_catalog',
+  'huaweicloud_explain_error',
+  'huaweicloud_search_docs',
+  'huaweicloud_retrieve_skill',
+  'huaweicloud_list_regions',
+  'huaweicloud_get_regional_availability',
+  'huaweicloud_search_marketplace',
+  'huaweicloud_setup_obs_config',
+  'huaweicloud_auth_status',
+  'huaweicloud_auth_sync',
+  'huaweicloud_sandbox_exec_with_session',
+  'huaweicloud_sandbox_upload_file',
+  'huaweicloud_sandbox_close_session',
+  'huaweicloud_sandbox_check_user',
+  'huaweicloud_sandbox_sign_agreement',
+  'huaweicloud_sandbox_connect',
+  'huaweicloud_sandbox_credentials',
+  'huaweicloud_voucher_status',
+  'huaweicloud_voucher_claim',
+];
+
+const targets = [
+  {
+    name: 'opencode',
+    banner: /\[OpenCode\]/,
+    pluginsDir: (h) => join(h, '.config', 'opencode', 'huaweicloud-plugins'),
+    skillsDir: (h) => join(h, '.config', 'opencode', 'skills'),
+    configPath: (h) => join(h, '.config', 'opencode', 'opencode.json'),
+    hasServer: (p) => {
+      if (!existsSync(p)) return false;
+      try {
+        return Boolean(JSON.parse(readFileSync(p, 'utf8')).mcp?.['huaweicloud-devkit']);
+      } catch {
+        return false;
+      }
+    },
+  },
+  {
+    name: 'codex-desktop',
+    banner: /\[Codex Desktop\]/,
+    pluginsDir: (h) => join(h, 'plugins', 'huaweicloud-devkit'),
+    skillsDir: (h) => join(h, 'plugins', 'huaweicloud-devkit', 'skills'),
+    configPath: (h) => join(h, '.agents', 'plugins', 'marketplace.json'),
+    hasServer: (p) => {
+      if (!existsSync(p)) return false;
+      try {
+        const mp = JSON.parse(readFileSync(p, 'utf8'));
+        return mp.plugins && mp.plugins.some((e) => e.name === 'huaweicloud-devkit');
+      } catch {
+        return false;
+      }
+    },
+  },
+  {
+    name: 'workbuddy',
+    banner: /\[WorkBuddy\]/,
+    pluginsDir: (h) => join(h, '.workbuddy', 'huaweicloud-plugins'),
+    skillsDir: (h) => join(h, '.workbuddy', 'skills'),
+    configPath: (h) => join(h, '.workbuddy', 'mcp.json'),
+    hasServer: (p) => {
+      if (!existsSync(p)) return false;
+      try {
+        return Boolean(JSON.parse(readFileSync(p, 'utf8')).mcpServers?.['huaweicloud-devkit']);
+      } catch {
+        return false;
+      }
+    },
+  },
+];
+
+for (const target of targets) {
+  test(`${target.name}: install copies skills, MCP server, and safety policy`, () => {
+    const home = mkdtempSync(join(tmpdir(), `${target.name}-home-`));
+    const cwd = mkdtempSync(join(tmpdir(), `${target.name}-proj-`));
     try {
-      resolveCredentialsWithRuntime({});
-    } catch {
-      threw = true;
+      const res = runCli(home, cwd, ['install', '--target', target.name]);
+      assert.equal(res.status, 0, res.stderr);
+      assert.match(res.stdout, target.banner);
+      assert.match(res.stdout, /Installation complete!/);
+
+      const pluginDir = target.pluginsDir(home);
+      assert.ok(existsSync(join(pluginDir, 'src', 'mcp-server.mjs')), `${target.name}: mcp-server.mjs installed`);
+      assert.ok(existsSync(join(pluginDir, 'safety', 'policy.json')), `${target.name}: safety policy installed`);
+      assert.ok(existsSync(join(pluginDir, '.installed')), `${target.name}: .installed marker present`);
+      assert.ok(countSkills(target.skillsDir(home)) >= 6, `${target.name}: expected >= 6 skills`);
+      assert.ok(target.hasServer(target.configPath(home)), `${target.name}: MCP server registered`);
+    } finally {
+      rmSync(home, { recursive: true, force: true });
+      rmSync(cwd, { recursive: true, force: true });
     }
-    assert.equal(threw, true);
-  } finally {
-    if (prevHome === undefined) delete process.env.HUAWEICLOUD_HOME;
-    else process.env.HUAWEICLOUD_HOME = prevHome;
-    rmSync(isolatedHome, { recursive: true, force: true });
-  }
-});
+  });
 
-test('auth_switch persist(mode=import) rejects missing region and keeps import file (#502)', async () => {
-  const home = mkdtempSync(join(tmpdir(), 'auth-import-region-'));
-  const prevHome = process.env.HUAWEICLOUD_HOME;
-  process.env.HUAWEICLOUD_HOME = home;
+  test(`${target.name}: uninstall removes skills, plugins, and MCP config`, () => {
+    const home = mkdtempSync(join(tmpdir(), `${target.name}-home-`));
+    const cwd = mkdtempSync(join(tmpdir(), `${target.name}-proj-`));
+    try {
+      const install = runCli(home, cwd, ['install', '--target', target.name]);
+      assert.equal(install.status, 0, install.stderr);
+
+      const res = runCli(home, cwd, ['uninstall', '--target', target.name]);
+      assert.equal(res.status, 0, res.stderr);
+      assert.match(res.stdout, /Uninstall complete\./);
+
+      assert.equal(countSkills(target.skillsDir(home)), 0, `${target.name}: skills removed`);
+      assert.ok(!existsSync(target.pluginsDir(home)), `${target.name}: plugins dir removed`);
+      assert.ok(!target.hasServer(target.configPath(home)), `${target.name}: MCP config cleaned`);
+    } finally {
+      rmSync(home, { recursive: true, force: true });
+      rmSync(cwd, { recursive: true, force: true });
+    }
+  });
+
+  test(`${target.name}: MCP server responds to initialize and tools/list`, async () => {
+    const home = mkdtempSync(join(tmpdir(), `${target.name}-mcp-`));
+    const cwd = mkdtempSync(join(tmpdir(), `${target.name}-mcp-proj-`));
+    try {
+      const install = runCli(home, cwd, ['install', '--target', target.name]);
+      assert.equal(install.status, 0, install.stderr);
+
+      const mcpServerPath = join(target.pluginsDir(home), 'src', 'mcp-server.mjs');
+      assert.ok(existsSync(mcpServerPath), `${target.name}: MCP server file exists`);
+
+      const responses = await invokeMcpTools(mcpServerPath, makeEnv(home, cwd));
+
+      assert.ok(responses[0].result, `${target.name}: initialize returned result`);
+      assert.equal(responses[0].result.serverInfo.name, 'huaweicloud-devkit', `${target.name}: server name correct`);
+
+      assert.ok(responses[1].result, `${target.name}: tools/list returned result`);
+      const tools = responses[1].result.tools;
+      assert.ok(tools.length > 0, `${target.name}: tools array not empty`);
+      assert.ok(
+        tools.every((t) => t.name.startsWith('huaweicloud_')),
+        `${target.name}: all tools have huaweicloud_ prefix`,
+      );
+    } finally {
+      rmSync(home, { recursive: true, force: true });
+      rmSync(cwd, { recursive: true, force: true });
+    }
+  });
+}
+
+test('MCP tools/list includes all required core tools with valid schemas', async () => {
+  const home = mkdtempSync(join(tmpdir(), 'mcp-tools-schema-'));
+  const cwd = mkdtempSync(join(tmpdir(), 'mcp-tools-schema-proj-'));
   try {
-    const cfgDir = join(home, '.config', 'huaweicloud');
-    mkdirSync(cfgDir, { recursive: true });
-    const importFile = join(cfgDir, 'creds-import.json');
-    writeFileSync(importFile, JSON.stringify({ ak: 'IMPORT_AK', sk: 'IMPORT_SK' }), 'utf8');
+    const install = runCli(home, cwd, ['install', '--target', 'opencode']);
+    assert.equal(install.status, 0, install.stderr);
 
-    const out = await callTool('huaweicloud_auth_switch', { mode: 'import', action: 'persist' });
+    const mcpServerPath = join(home, '.config', 'opencode', 'huaweicloud-plugins', 'src', 'mcp-server.mjs');
+    const responses = await invokeMcpTools(mcpServerPath, makeEnv(home, cwd));
+    const tools = responses[1].result.tools;
+    const toolNames = tools.map((t) => t.name);
 
-    assert.equal(out.status, 'error');
-    assert.equal(out.scope, 'invalid_region');
-    assert.match(out.error, /region/);
-    // S1 must not be written on a rejected persist.
-    assert.equal(existsSync(join(cfgDir, 'credentials.json')), false);
-    // Import file must survive for replay.
-    assert.equal(existsSync(importFile), true);
+    // Verify all required tools are present (aligned with tools.test.mjs)
+    for (const required of REQUIRED_TOOLS) {
+      assert.ok(toolNames.includes(required), `Missing tool: ${required}`);
+    }
+    assert.ok(toolNames.length >= 25, `Expected >= 25 tools, got ${toolNames.length}`);
+
+    // Verify every tool has valid schema fields
+    for (const tool of tools) {
+      assert.ok(tool.name, `tool must have name`);
+      assert.ok(tool.description, `${tool.name} must have description`);
+      assert.ok(tool.inputSchema, `${tool.name} must have inputSchema`);
+      assert.equal(tool.inputSchema.type, 'object', `${tool.name} inputSchema.type must be object`);
+    }
+
+    // Verify run tools expose cwd parameter (aligned with tools.test.mjs)
+    const readonlyTool = tools.find((t) => t.name === 'huaweicloud_run_readonly_command');
+    assert.ok(Object.hasOwn(readonlyTool.inputSchema.properties, 'cwd'), 'run_readonly_command should have cwd param');
+
+    const approvedTool = tools.find((t) => t.name === 'huaweicloud_run_approved_command');
+    assert.ok(Object.hasOwn(approvedTool.inputSchema.properties, 'cwd'), 'run_approved_command should have cwd param');
+
+    // Verify proactive hook check tools are present (aligned with tools.test.mjs)
+    const nameSet = new Set(toolNames);
+    assert.ok(nameSet.has('huaweicloud_hook_check_command'));
+    assert.ok(nameSet.has('huaweicloud_hook_check_artifacts'));
+    assert.ok(nameSet.has('huaweicloud_hook_check_deploy_plan'));
   } finally {
-    if (prevHome === undefined) delete process.env.HUAWEICLOUD_HOME;
-    else process.env.HUAWEICLOUD_HOME = prevHome;
-    clearRuntimeCredentials();
     rmSync(home, { recursive: true, force: true });
+    rmSync(cwd, { recursive: true, force: true });
   }
 });
 
-test('auth_switch temporary(mode=import) clears import file on success', async () => {
-  const home = mkdtempSync(join(tmpdir(), 'auth-import-temp-'));
-  const prevHome = process.env.HUAWEICLOUD_HOME;
-  process.env.HUAWEICLOUD_HOME = home;
+test('huaweicloud_search_docs returns relevant skill results', async () => {
+  const home = mkdtempSync(join(tmpdir(), 'mcp-search-'));
+  const cwd = mkdtempSync(join(tmpdir(), 'mcp-search-proj-'));
   try {
-    const cfgDir = join(home, '.config', 'huaweicloud');
-    mkdirSync(cfgDir, { recursive: true });
-    const importFile = join(cfgDir, 'creds-import.json');
-    writeFileSync(importFile, JSON.stringify({ ak: 'TMP_AK', sk: 'TMP_SK' }), 'utf8');
+    const install = runCli(home, cwd, ['install', '--target', 'opencode']);
+    assert.equal(install.status, 0, install.stderr);
 
-    const out = await callTool('huaweicloud_auth_switch', { mode: 'import', action: 'temporary' });
+    const mcpServerPath = join(home, '.config', 'opencode', 'huaweicloud-plugins', 'src', 'mcp-server.mjs');
 
-    assert.equal(out.scope, 'temporary');
-    assert.equal(existsSync(importFile), false, 'import file should be cleared after successful temporary set');
-    assert.equal(resolveCredentialsWithRuntime({}).ak, 'TMP_AK');
+    // Search for ECS skills — should return results containing ECS-related content
+    const responses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_search_docs', {
+      query: 'ECS',
+    });
+
+    assert.ok(responses[0].result, 'initialize returned result');
+    assert.ok(responses[1].result, 'tools/call returned result');
+    assert.ok(!responses[1].error, `tools/call should not error: ${JSON.stringify(responses[1].error)}`);
+
+    const content = responses[1].result.content;
+    assert.ok(Array.isArray(content), 'content should be an array');
+    assert.ok(content.length > 0, 'content array should not be empty');
+
+    const text = content.map((c) => c.text || '').join('');
+    assert.ok(text.length > 0, 'search results text should not be empty');
+
+    // Verify response is valid JSON with results (relaxed: check structure, not specific skill text)
+    const parsed = JSON.parse(text);
+    assert.ok(parsed, 'search response should be valid JSON');
+    // Query echo: the response should reflect what was searched
+    if (parsed.query !== undefined) {
+      assert.match(String(parsed.query), /ECS/i, 'response should echo the query');
+    }
+    // Results count: should have at least one result
+    const resultCount = parsed.results?.length ?? parsed.length ?? (Array.isArray(parsed) ? parsed.length : 0);
+    assert.ok(resultCount > 0, `search for ECS should return > 0 results, got ${resultCount}`);
+
+    // Search for OBS — verify different query also returns results
+    const obsResponses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_search_docs', {
+      query: 'OBS',
+    });
+    assert.ok(!obsResponses[1].error, `OBS search should not error: ${JSON.stringify(obsResponses[1].error)}`);
+    const obsText = obsResponses[1].result.content.map((c) => c.text || '').join('');
+    const obsParsed = JSON.parse(obsText);
+    const obsCount = obsParsed.results?.length ?? obsParsed.length ?? (Array.isArray(obsParsed) ? obsParsed.length : 0);
+    assert.ok(obsCount > 0, `search for OBS should return > 0 results, got ${obsCount}`);
   } finally {
-    if (prevHome === undefined) delete process.env.HUAWEICLOUD_HOME;
-    else process.env.HUAWEICLOUD_HOME = prevHome;
-    clearRuntimeCredentials();
     rmSync(home, { recursive: true, force: true });
+    rmSync(cwd, { recursive: true, force: true });
   }
 });
 
-test('auth_switch persist(mode=import) with STS token is rejected and clears import file', async () => {
-  const home = mkdtempSync(join(tmpdir(), 'auth-import-sts-'));
-  const prevHome = process.env.HUAWEICLOUD_HOME;
-  process.env.HUAWEICLOUD_HOME = home;
+test('huaweicloud_service_catalog returns capability recommendations', async () => {
+  const home = mkdtempSync(join(tmpdir(), 'mcp-catalog-'));
+  const cwd = mkdtempSync(join(tmpdir(), 'mcp-catalog-proj-'));
   try {
-    const cfgDir = join(home, '.config', 'huaweicloud');
-    mkdirSync(cfgDir, { recursive: true });
-    const importFile = join(cfgDir, 'creds-import.json');
-    writeFileSync(
-      importFile,
-      JSON.stringify({ ak: 'STS_AK', sk: 'STS_SK', securityToken: 'STS_TOK', region: 'cn-north-4' }),
-      'utf8',
+    const install = runCli(home, cwd, ['install', '--target', 'opencode']);
+    assert.equal(install.status, 0, install.stderr);
+
+    const mcpServerPath = join(home, '.config', 'opencode', 'huaweicloud-plugins', 'src', 'mcp-server.mjs');
+
+    // Verify English intent: deploy a static website recommends sandbox first
+    const enResponses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_service_catalog', {
+      intent: 'deploy a static website',
+    });
+    assert.ok(!enResponses[1].error, `English intent should not error: ${JSON.stringify(enResponses[1].error)}`);
+    const enText = enResponses[1].result.content.map((c) => c.text || '').join('');
+    const enResult = JSON.parse(enText);
+    assert.ok(enResult.recommendedSkills, 'result should have recommendedSkills');
+    assert.ok(
+      enResult.recommendedSkills.includes('huawei-sandbox'),
+      'static website deployment should recommend sandbox',
+    );
+    assert.ok(
+      enResult.recommendedSkills.includes('huawei-obs'),
+      'static website deployment should include OBS as an option',
     );
 
-    const out = await callTool('huaweicloud_auth_switch', { mode: 'import', action: 'persist' });
+    // Verify Chinese intent: 部署静态网站到华为云
+    const zhResponses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_service_catalog', {
+      intent: '部署静态网站到华为云',
+    });
+    assert.ok(!zhResponses[1].error, `Chinese intent should not error: ${JSON.stringify(zhResponses[1].error)}`);
+    const zhText = zhResponses[1].result.content.map((c) => c.text || '').join('');
+    const zhResult = JSON.parse(zhText);
+    assert.ok(
+      zhResult.recommendedSkills.includes('huawei-sandbox'),
+      'Chinese static website intent should also recommend sandbox',
+    );
 
-    assert.equal(out.status, 'error');
-    assert.equal(out.scope, 'rejected');
-    assert.equal(
-      existsSync(importFile),
-      false,
-      'unfixable STS import must be cleared — no replay value, and no plaintext token residual',
+    // Verify storage routing for pure storage intent (aligned with tools.test.mjs)
+    const storageResponses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_service_catalog', {
+      intent: 'store files in an obs bucket',
+    });
+    assert.ok(
+      !storageResponses[1].error,
+      `Storage intent should not error: ${JSON.stringify(storageResponses[1].error)}`,
+    );
+    const storageText = storageResponses[1].result.content.map((c) => c.text || '').join('');
+    const storageResult = JSON.parse(storageText);
+    assert.ok(storageResult.recommendedSkills.includes('huawei-obs'), 'storage intent should include OBS');
+    assert.notEqual(
+      storageResult.recommendedSkills[0],
+      'huawei-sandbox',
+      'storage intent should not recommend sandbox first',
     );
   } finally {
-    if (prevHome === undefined) delete process.env.HUAWEICLOUD_HOME;
-    else process.env.HUAWEICLOUD_HOME = prevHome;
-    clearRuntimeCredentials();
     rmSync(home, { recursive: true, force: true });
+    rmSync(cwd, { recursive: true, force: true });
+  }
+});
+
+test('MCP tools/call with unknown tool name returns error', async () => {
+  const home = mkdtempSync(join(tmpdir(), 'mcp-error-'));
+  const cwd = mkdtempSync(join(tmpdir(), 'mcp-error-proj-'));
+  try {
+    const install = runCli(home, cwd, ['install', '--target', 'opencode']);
+    assert.equal(install.status, 0, install.stderr);
+
+    const mcpServerPath = join(home, '.config', 'opencode', 'huaweicloud-plugins', 'src', 'mcp-server.mjs');
+    const responses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_nonexistent_tool', {});
+
+    assert.ok(responses[0].result, 'initialize returned result');
+    // Unknown tool should return JSON-RPC error (code -32603), not crash the server
+    assert.ok(responses[1].error, 'unknown tool name should return JSON-RPC error');
+    assert.match(responses[1].error.message, /Unknown tool/i, 'error message should mention "Unknown tool"');
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+    rmSync(cwd, { recursive: true, force: true });
   }
 });

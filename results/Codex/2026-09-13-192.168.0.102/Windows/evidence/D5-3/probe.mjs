@@ -1,671 +1,483 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { spawn, spawnSync } from 'node:child_process';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const pluginRoot = join(root, 'plugins', 'huaweicloud-core');
+const setupCli = join(root, 'bin', 'setup.cjs');
 
-function readJson(path) {
-  return JSON.parse(readFileSync(path, 'utf8'));
+function makeEnv(home, _cwd) {
+  return {
+    ...process.env,
+    USERPROFILE: home,
+    HOME: home,
+    HOMEDRIVE: home.slice(0, 2),
+    HOMEPATH: home.slice(2),
+  };
 }
 
-test('Codex plugin manifest and marketplace are installable', () => {
-  const manifest = readJson(join(pluginRoot, '.codex-plugin', 'plugin.json'));
-  assert.equal(manifest.name, 'huaweicloud-devkit');
-  assert.equal(manifest.skills, './skills/');
-  assert.equal(manifest.mcpServers, './.mcp.json');
-  assert.ok(!Object.hasOwn(manifest, 'hooks'), 'Codex manifest keeps hooks out');
+function runCli(home, cwd, args) {
+  return spawnSync(process.execPath, [setupCli, ...args], {
+    cwd,
+    env: makeEnv(home, cwd),
+    encoding: 'utf8',
+    timeout: 60000,
+  });
+}
 
-  const marketplace = readJson(join(root, '.agents', 'plugins', 'marketplace.json'));
-  assert.equal(marketplace.name, 'huaweicloud-devkit');
-  assert.equal(marketplace.plugins[0].name, 'huaweicloud-devkit');
-  assert.equal(marketplace.plugins[0].source.path, './plugins/huaweicloud-core');
-});
+function countSkills(dir) {
+  if (!existsSync(dir)) return 0;
+  return readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory() && d.name.startsWith('huawei')).length;
+}
 
-test('OpenClaw plugin manifest matches other agent manifests', () => {
-  const openclaw = readJson(join(pluginRoot, 'openclaw.plugin.json'));
-  assert.equal(openclaw.name, 'huaweicloud-devkit');
-  assert.equal(openclaw.family, 'bundle-plugin');
-  assert.equal(openclaw.bundleFormat, 'codex');
-  assert.ok(existsSync(join(pluginRoot, 'openclaw.plugin.json')));
+function invokeMcpTools(mcpServerPath, env, timeout = 15000) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [mcpServerPath], {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env,
+      timeout,
+    });
+    let buffer = '';
+    const responses = [];
+    let seq = 0;
+    const timer = setTimeout(() => {
+      child.kill();
+      reject(new Error('MCP timeout'));
+    }, timeout);
 
-  // All plugin.json names must be consistent
-  const manifests = [
-    join(pluginRoot, '.codex-plugin', 'plugin.json'),
-    join(pluginRoot, '.claude-plugin', 'plugin.json'),
-    join(pluginRoot, '.cursor-plugin', 'plugin.json'),
-    join(pluginRoot, '.workbuddy-plugin', 'plugin.json'),
-    join(pluginRoot, '.hermes-plugin', 'plugin.json'),
-    join(pluginRoot, 'openclaw.plugin.json'),
-  ];
-  const names = new Set(manifests.map((p) => readJson(p).name));
-  assert.equal(names.size, 1, 'All plugin.json name fields must be identical');
-});
+    child.stdout.on('data', (chunk) => {
+      buffer += chunk.toString();
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (line.trim()) {
+          try {
+            const msg = JSON.parse(line);
+            if (msg.id !== undefined && msg.id !== null) {
+              responses.push(msg);
+              if (responses.length === 1) {
+                child.stdin.write(
+                  JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'tools/list',
+                    params: {},
+                    id: ++seq,
+                  }) + '\n',
+                );
+              } else if (responses.length === 2) {
+                clearTimeout(timer);
+                child.kill();
+                resolve(responses);
+              }
+            }
+          } catch {}
+        }
+      }
+    });
 
-test('OpenCode integration exposes skills, commands, and MCP config', () => {
-  assert.ok(existsSync(join(root, 'integrations', 'opencode', 'opencode.json')));
-  assert.ok(existsSync(join(root, 'integrations', 'opencode', 'commands', 'huaweicloud-doctor.md')));
-  assert.ok(existsSync(join(root, 'integrations', 'opencode', 'skills', 'huaweicloud-core', 'SKILL.md')));
-});
+    child.stderr.on('data', () => {});
+    child.on('error', (e) => {
+      clearTimeout(timer);
+      reject(e);
+    });
 
-test('Hermes MCP Catalog manifest is present and valid', () => {
-  const manifestPath = join(root, 'integrations', 'hermes', 'manifest.yaml');
-  assert.ok(existsSync(manifestPath), 'Missing integrations/hermes/manifest.yaml');
+    child.stdin.write(
+      JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'initialize',
+        params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'e2e-test', version: '1.0' } },
+        id: ++seq,
+      }) + '\n',
+    );
+  });
+}
 
-  const yaml = readFileSync(manifestPath, 'utf8');
+function invokeMcpToolCall(mcpServerPath, env, toolName, toolArgs, timeout = 15000) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [mcpServerPath], {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env,
+      timeout,
+    });
+    let buffer = '';
+    const responses = [];
+    let seq = 0;
+    const timer = setTimeout(() => {
+      child.kill();
+      reject(new Error('MCP timeout'));
+    }, timeout);
 
-  assert.match(yaml, /manifest_version:\s*1/);
-  assert.match(yaml, /name:\s*huaweicloud-devkit/);
-  assert.match(yaml, /transport:/);
-  assert.match(yaml, /type:\s*stdio/);
-  assert.match(yaml, /command:\s*['"]node['"]/);
-  assert.match(yaml, /mcp-server\.mjs/);
-  assert.match(yaml, /install:/);
-  assert.match(yaml, /type:\s*git/);
-  assert.match(yaml, /huaweicloud\/huaweicloud-devkit/);
-  assert.match(yaml, /--target hermes --skip-mcp-server/);
-  assert.match(yaml, /post_install:/);
-});
+    child.stdout.on('data', (chunk) => {
+      buffer += chunk.toString();
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (line.trim()) {
+          try {
+            const msg = JSON.parse(line);
+            if (msg.id !== undefined && msg.id !== null) {
+              responses.push(msg);
+              if (responses.length === 1) {
+                child.stdin.write(
+                  JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: { name: toolName, arguments: toolArgs },
+                    id: ++seq,
+                  }) + '\n',
+                );
+              } else if (responses.length === 2) {
+                clearTimeout(timer);
+                child.kill();
+                resolve(responses);
+              }
+            }
+          } catch {}
+        }
+      }
+    });
 
-test('plugin skills are compact meta-skills instead of service encyclopedia entries', () => {
-  const skillsDir = join(pluginRoot, 'skills');
-  const skillNames = readdirSync(skillsDir).filter((name) => existsSync(join(skillsDir, name, 'SKILL.md')));
-  const requiredMetaSkills = [
-    'huaweicloud-api-and-sdk',
-    'huaweicloud-capability-discovery',
-    'huaweicloud-cli-and-auth',
-    'huaweicloud-core',
-    'huaweicloud-safety',
-    'huaweicloud-troubleshooting',
-  ];
-  for (const name of requiredMetaSkills) {
-    assert.ok(skillNames.includes(name), `Missing meta-skill: ${name}`);
-  }
-  assert.ok(skillNames.length >= 6, 'Should have at least 6 skills');
+    child.stderr.on('data', () => {});
+    child.on('error', (e) => {
+      clearTimeout(timer);
+      reject(e);
+    });
 
-  for (const name of skillNames) {
-    const body = readFileSync(join(skillsDir, name, 'SKILL.md'), 'utf8');
-    assert.match(body, /^---\r?\nname: /);
-    assert.doesNotMatch(body, /TODO|\[TODO/i);
-  }
-});
+    child.stdin.write(
+      JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'initialize',
+        params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'e2e-test', version: '1.0' } },
+        id: ++seq,
+      }) + '\n',
+    );
+  });
+}
 
-test('skills document KooCLI installation, operation discovery, region intent, and password safety', () => {
-  const cliSkill = readFileSync(join(pluginRoot, 'skills', 'huaweicloud-cli-and-auth', 'SKILL.md'), 'utf8');
-  assert.match(cliSkill, /support\.huaweicloud\.com\/qs-hcli\/hcli_02_003\.html/);
-  assert.match(cliSkill, /HCLOUD_BIN/);
-  assert.match(cliSkill, /--server\.nics\.1\.subnet_id/);
-  assert.match(cliSkill, /--param=value/);
+// Core tools that must always be present. Keep in sync with tools.mjs TOOL_DEFINITIONS.
+// When a new tool is added to tools.mjs, add it here too.
+const REQUIRED_TOOLS = [
+  'huaweicloud_check_cli',
+  'huaweicloud_plan_cli_command',
+  'huaweicloud_run_readonly_command',
+  'huaweicloud_list_operations',
+  'huaweicloud_run_approved_command',
+  'huaweicloud_show_profile_redacted',
+  'huaweicloud_service_catalog',
+  'huaweicloud_explain_error',
+  'huaweicloud_search_docs',
+  'huaweicloud_retrieve_skill',
+  'huaweicloud_list_regions',
+  'huaweicloud_get_regional_availability',
+  'huaweicloud_search_marketplace',
+  'huaweicloud_setup_obs_config',
+  'huaweicloud_auth_status',
+  'huaweicloud_auth_sync',
+  'huaweicloud_sandbox_exec_with_session',
+  'huaweicloud_sandbox_upload_file',
+  'huaweicloud_sandbox_close_session',
+  'huaweicloud_sandbox_check_user',
+  'huaweicloud_sandbox_sign_agreement',
+  'huaweicloud_sandbox_connect',
+  'huaweicloud_sandbox_credentials',
+  'huaweicloud_voucher_status',
+  'huaweicloud_voucher_claim',
+];
 
-  const discoverySkill = readFileSync(
-    join(pluginRoot, 'skills', 'huaweicloud-capability-discovery', 'SKILL.md'),
-    'utf8',
-  );
-  assert.match(discoverySkill, /hcloud <Service> --help/);
-  assert.match(discoverySkill, /Singapore.*ap-southeast-3/s);
-  assert.match(discoverySkill, /No blind all-region scans/);
+const targets = [
+  {
+    name: 'opencode',
+    banner: /\[OpenCode\]/,
+    pluginsDir: (h) => join(h, '.config', 'opencode', 'huaweicloud-plugins'),
+    skillsDir: (h) => join(h, '.config', 'opencode', 'skills'),
+    configPath: (h) => join(h, '.config', 'opencode', 'opencode.json'),
+    hasServer: (p) => {
+      if (!existsSync(p)) return false;
+      try {
+        return Boolean(JSON.parse(readFileSync(p, 'utf8')).mcp?.['huaweicloud-devkit']);
+      } catch {
+        return false;
+      }
+    },
+  },
+  {
+    name: 'codex-desktop',
+    banner: /\[Codex Desktop\]/,
+    pluginsDir: (h) => join(h, 'plugins', 'huaweicloud-devkit'),
+    skillsDir: (h) => join(h, 'plugins', 'huaweicloud-devkit', 'skills'),
+    configPath: (h) => join(h, '.agents', 'plugins', 'marketplace.json'),
+    hasServer: (p) => {
+      if (!existsSync(p)) return false;
+      try {
+        const mp = JSON.parse(readFileSync(p, 'utf8'));
+        return mp.plugins && mp.plugins.some((e) => e.name === 'huaweicloud-devkit');
+      } catch {
+        return false;
+      }
+    },
+  },
+  {
+    name: 'workbuddy',
+    banner: /\[WorkBuddy\]/,
+    pluginsDir: (h) => join(h, '.workbuddy', 'huaweicloud-plugins'),
+    skillsDir: (h) => join(h, '.workbuddy', 'skills'),
+    configPath: (h) => join(h, '.workbuddy', 'mcp.json'),
+    hasServer: (p) => {
+      if (!existsSync(p)) return false;
+      try {
+        return Boolean(JSON.parse(readFileSync(p, 'utf8')).mcpServers?.['huaweicloud-devkit']);
+      } catch {
+        return false;
+      }
+    },
+  },
+];
 
-  const safetySkill = readFileSync(join(pluginRoot, 'skills', 'huaweicloud-safety', 'SKILL.md'), 'utf8');
-  assert.match(safetySkill, /shell history/i);
-  assert.match(safetySkill, /huaweicloud_run_approved_command/);
+for (const target of targets) {
+  test(`${target.name}: install copies skills, MCP server, and safety policy`, () => {
+    const home = mkdtempSync(join(tmpdir(), `${target.name}-home-`));
+    const cwd = mkdtempSync(join(tmpdir(), `${target.name}-proj-`));
+    try {
+      const res = runCli(home, cwd, ['install', '--target', target.name]);
+      assert.equal(res.status, 0, res.stderr);
+      assert.match(res.stdout, target.banner);
+      assert.match(res.stdout, /Installation complete!/);
 
-  // Verify KooCLI install URLs match official download URLs
-  assert.ok(cliSkill.includes('huaweicloud-cli-windows-amd64.zip'), 'Windows download URL');
-  assert.ok(cliSkill.includes('huaweicloud-cli-linux-amd64.tar.gz'), 'Linux download URL');
-  assert.ok(cliSkill.includes('huaweicloud-cli-mac-arm64.tar.gz'), 'macOS download URL');
-
-  // Verify KooCLI version pairing: fixed downloads pin cli/<kooCliVersion>, no stale endpoint
-  const pkg = readJson(join(root, 'package.json'));
-  const kooCliVersion = pkg.kooCliVersion;
-  assert.match(kooCliVersion ?? '', /^\d+\.\d+\.\d+$/, 'package.json declares kooCliVersion');
-  assert.ok(cliSkill.includes(`cli/${kooCliVersion}`), `cli-and-auth skill pins cli/${kooCliVersion} download URLs`);
-  assert.ok(!cliSkill.includes('hwcloudcli.obs.cn-north-1'), 'no stale hwcloudcli endpoint in cli-and-auth');
-});
-
-test('skill SKILL.md files meet minimum content quality bar', () => {
-  const skillsDir = join(pluginRoot, 'skills');
-  const skillNames = readdirSync(skillsDir).filter((name) => existsSync(join(skillsDir, name, 'SKILL.md')));
-
-  const exceptions = new Set([
-    'huaweicloud-api-and-sdk',
-    'huaweicloud-safety',
-    'huaweicloud-troubleshooting',
-    'huawei-deployment',
-    'huawei-getting-started',
-    'huawei-apig',
-    'huawei-gaussdb',
-  ]);
-
-  for (const name of skillNames) {
-    const body = readFileSync(join(skillsDir, name, 'SKILL.md'), 'utf8');
-    const lines = body.split('\n').length;
-    if (exceptions.has(name)) continue;
-    assert.ok(lines >= 40, `${name}/SKILL.md has ${lines} lines (min 40)`);
-  }
-});
-
-test('skills with references have non-empty reference files', () => {
-  const skillsDir = join(pluginRoot, 'skills');
-  const skillNames = readdirSync(skillsDir).filter((name) => existsSync(join(skillsDir, name, 'SKILL.md')));
-
-  for (const name of skillNames) {
-    const refDir = join(skillsDir, name, 'references');
-    if (!existsSync(refDir)) continue;
-    const refFiles = readdirSync(refDir).filter((f) => f.endsWith('.md'));
-    for (const ref of refFiles) {
-      const body = readFileSync(join(refDir, ref), 'utf8');
-      const lines = body.split('\n').length;
-      assert.ok(lines >= 10, `${name}/references/${ref} has ${lines} lines (min 10)`);
+      const pluginDir = target.pluginsDir(home);
+      assert.ok(existsSync(join(pluginDir, 'src', 'mcp-server.mjs')), `${target.name}: mcp-server.mjs installed`);
+      assert.ok(existsSync(join(pluginDir, 'safety', 'policy.json')), `${target.name}: safety policy installed`);
+      assert.ok(existsSync(join(pluginDir, '.installed')), `${target.name}: .installed marker present`);
+      assert.ok(countSkills(target.skillsDir(home)) >= 6, `${target.name}: expected >= 6 skills`);
+      assert.ok(target.hasServer(target.configPath(home)), `${target.name}: MCP server registered`);
+    } finally {
+      rmSync(home, { recursive: true, force: true });
+      rmSync(cwd, { recursive: true, force: true });
     }
-  }
-});
+  });
 
-test('web/static-site deployment intent offers target options with sandbox first, not OBS default', () => {
-  const core = readFileSync(join(pluginRoot, 'skills', 'huaweicloud-core', 'SKILL.md'), 'utf8');
-  assert.match(core, /Deployment Target Options/);
-  assert.match(core, /Sandbox \(DevStation\) — recommended/);
-  assert.match(core, /NEVER default to a single service such as OBS/);
+  test(`${target.name}: uninstall removes skills, plugins, and MCP config`, () => {
+    const home = mkdtempSync(join(tmpdir(), `${target.name}-home-`));
+    const cwd = mkdtempSync(join(tmpdir(), `${target.name}-proj-`));
+    try {
+      const install = runCli(home, cwd, ['install', '--target', target.name]);
+      assert.equal(install.status, 0, install.stderr);
 
-  const obs = readFileSync(join(pluginRoot, 'skills', 'huawei-obs', 'SKILL.md'), 'utf8');
-  assert.match(obs, /Routing Guard: Deploy vs Store/);
-  assert.match(obs, /do NOT default to OBS/);
-  assert.match(obs, /① huawei-sandbox \(recommended\)/);
+      const res = runCli(home, cwd, ['uninstall', '--target', target.name]);
+      assert.equal(res.status, 0, res.stderr);
+      assert.match(res.stdout, /Uninstall complete\./);
 
-  const sandbox = readFileSync(join(pluginRoot, 'skills', 'huawei-sandbox', 'SKILL.md'), 'utf8');
-  assert.match(sandbox, /present options, sandbox first/i);
-  assert.match(sandbox, /建议优先部署到沙箱/);
-
-  const discovery = readFileSync(join(pluginRoot, 'skills', 'huaweicloud-capability-discovery', 'SKILL.md'), 'utf8');
-  assert.match(discovery, /Deployment Target Options/);
-  assert.match(discovery, /do NOT default to OBS/);
-});
-
-test('devbridge uses the valid `list` command, not the non-existent `ls`', () => {
-  const sandbox = readFileSync(join(pluginRoot, 'skills', 'huawei-sandbox', 'SKILL.md'), 'utf8');
-  const sessionManager = readFileSync(join(pluginRoot, 'src', 'sandbox', 'session-manager.mjs'), 'utf8');
-
-  assert.doesNotMatch(sandbox, /devbridge ls\b/);
-  assert.match(sandbox, /devbridge list -j/);
-
-  assert.doesNotMatch(sessionManager, /devbridge ls\b/);
-  assert.match(sessionManager, /devbridge list -j/);
-});
-
-test('all plugin manifests are valid JSON', () => {
-  const manifests = [
-    join(pluginRoot, '.codex-plugin', 'plugin.json'),
-    join(pluginRoot, '.claude-plugin', 'plugin.json'),
-    join(pluginRoot, '.cursor-plugin', 'plugin.json'),
-    join(pluginRoot, '.workbuddy-plugin', 'plugin.json'),
-    join(pluginRoot, '.hermes-plugin', 'plugin.json'),
-  ];
-  for (const path of manifests) {
-    const data = readJson(path);
-    assert.ok(data.name, `Manifest ${path} missing name`);
-    assert.ok(data.skills || data.interface, `Manifest ${path} missing skills/interface`);
-  }
-});
-
-test('safety policy.json is valid and has required fields', () => {
-  const policy = readJson(join(pluginRoot, 'safety', 'policy.json'));
-  assert.ok(Array.isArray(policy.secretKeyNamePatterns));
-  assert.ok(policy.secretKeyNamePatterns.length >= 5);
-  assert.ok(Array.isArray(policy.writeOperationPrefixes));
-  assert.ok(policy.writeOperationPrefixes.length >= 10);
-  assert.ok(Array.isArray(policy.blockedSecretOperations));
-  assert.ok(Array.isArray(policy.credentialFilePatterns));
-});
-
-test('cloud risk rules are present and public-safe', () => {
-  const rulesPath = join(pluginRoot, 'safety', 'rules', 'cloud-risk-rules.json');
-  assert.ok(existsSync(rulesPath), 'Missing cloud-risk-rules.json');
-
-  const catalog = readJson(rulesPath);
-  assert.equal(catalog.version, '0.1.0');
-  assert.ok(Array.isArray(catalog.rules), 'rules must be an array');
-  assert.ok(catalog.rules.length >= 9, 'Expected baseline cloud risk rules');
-
-  const ids = new Set();
-  const allowedSeverities = new Set(['deny', 'warn', 'info']);
-  const allowedStages = new Set(['command', 'artifact', 'deploy_plan']);
-  for (const rule of catalog.rules) {
-    assert.match(rule.id, /^hwc-[a-z0-9-]+$/, `Invalid rule id: ${rule.id}`);
-    assert.ok(!ids.has(rule.id), `Duplicate rule id: ${rule.id}`);
-    ids.add(rule.id);
-    assert.ok(allowedSeverities.has(rule.severity), `${rule.id} has invalid severity`);
-    assert.ok(Array.isArray(rule.stages) && rule.stages.length > 0, `${rule.id} missing stages`);
-    for (const stage of rule.stages) {
-      assert.ok(allowedStages.has(stage), `${rule.id} has invalid stage: ${stage}`);
+      assert.equal(countSkills(target.skillsDir(home)), 0, `${target.name}: skills removed`);
+      assert.ok(!existsSync(target.pluginsDir(home)), `${target.name}: plugins dir removed`);
+      assert.ok(!target.hasServer(target.configPath(home)), `${target.name}: MCP config cleaned`);
+    } finally {
+      rmSync(home, { recursive: true, force: true });
+      rmSync(cwd, { recursive: true, force: true });
     }
-    assert.ok(rule.match && (rule.match.any || rule.match.all), `${rule.id} needs match conditions`);
-    assert.ok(rule.message && rule.remediation, `${rule.id} needs message and remediation`);
-    assert.doesNotMatch(JSON.stringify(rule), /\baccountId\b|\bticketId\b|\brawText\b|\binternalSource\b/i);
+  });
+
+  test(`${target.name}: MCP server responds to initialize and tools/list`, async () => {
+    const home = mkdtempSync(join(tmpdir(), `${target.name}-mcp-`));
+    const cwd = mkdtempSync(join(tmpdir(), `${target.name}-mcp-proj-`));
+    try {
+      const install = runCli(home, cwd, ['install', '--target', target.name]);
+      assert.equal(install.status, 0, install.stderr);
+
+      const mcpServerPath = join(target.pluginsDir(home), 'src', 'mcp-server.mjs');
+      assert.ok(existsSync(mcpServerPath), `${target.name}: MCP server file exists`);
+
+      const responses = await invokeMcpTools(mcpServerPath, makeEnv(home, cwd));
+
+      assert.ok(responses[0].result, `${target.name}: initialize returned result`);
+      assert.equal(responses[0].result.serverInfo.name, 'huaweicloud-devkit', `${target.name}: server name correct`);
+
+      assert.ok(responses[1].result, `${target.name}: tools/list returned result`);
+      const tools = responses[1].result.tools;
+      assert.ok(tools.length > 0, `${target.name}: tools array not empty`);
+      assert.ok(
+        tools.every((t) => t.name.startsWith('huaweicloud_')),
+        `${target.name}: all tools have huaweicloud_ prefix`,
+      );
+    } finally {
+      rmSync(home, { recursive: true, force: true });
+      rmSync(cwd, { recursive: true, force: true });
+    }
+  });
+}
+
+test('MCP tools/list includes all required core tools with valid schemas', async () => {
+  const home = mkdtempSync(join(tmpdir(), 'mcp-tools-schema-'));
+  const cwd = mkdtempSync(join(tmpdir(), 'mcp-tools-schema-proj-'));
+  try {
+    const install = runCli(home, cwd, ['install', '--target', 'opencode']);
+    assert.equal(install.status, 0, install.stderr);
+
+    const mcpServerPath = join(home, '.config', 'opencode', 'huaweicloud-plugins', 'src', 'mcp-server.mjs');
+    const responses = await invokeMcpTools(mcpServerPath, makeEnv(home, cwd));
+    const tools = responses[1].result.tools;
+    const toolNames = tools.map((t) => t.name);
+
+    // Verify all required tools are present (aligned with tools.test.mjs)
+    for (const required of REQUIRED_TOOLS) {
+      assert.ok(toolNames.includes(required), `Missing tool: ${required}`);
+    }
+    assert.ok(toolNames.length >= 25, `Expected >= 25 tools, got ${toolNames.length}`);
+
+    // Verify every tool has valid schema fields
+    for (const tool of tools) {
+      assert.ok(tool.name, `tool must have name`);
+      assert.ok(tool.description, `${tool.name} must have description`);
+      assert.ok(tool.inputSchema, `${tool.name} must have inputSchema`);
+      assert.equal(tool.inputSchema.type, 'object', `${tool.name} inputSchema.type must be object`);
+    }
+
+    // Verify run tools expose cwd parameter (aligned with tools.test.mjs)
+    const readonlyTool = tools.find((t) => t.name === 'huaweicloud_run_readonly_command');
+    assert.ok(Object.hasOwn(readonlyTool.inputSchema.properties, 'cwd'), 'run_readonly_command should have cwd param');
+
+    const approvedTool = tools.find((t) => t.name === 'huaweicloud_run_approved_command');
+    assert.ok(Object.hasOwn(approvedTool.inputSchema.properties, 'cwd'), 'run_approved_command should have cwd param');
+
+    // Verify proactive hook check tools are present (aligned with tools.test.mjs)
+    const nameSet = new Set(toolNames);
+    assert.ok(nameSet.has('huaweicloud_hook_check_command'));
+    assert.ok(nameSet.has('huaweicloud_hook_check_artifacts'));
+    assert.ok(nameSet.has('huaweicloud_hook_check_deploy_plan'));
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+    rmSync(cwd, { recursive: true, force: true });
   }
 });
 
-test('hooks.json uses Node hook and keeps Python hook for Hermes compatibility', () => {
-  const hooksDir = join(pluginRoot, 'hooks');
-  const hooksJsonPath = join(hooksDir, 'hooks.json');
-  assert.ok(existsSync(hooksJsonPath));
-  assert.ok(existsSync(join(hooksDir, 'huaweicloud-safety.mjs')));
-  assert.ok(existsSync(join(hooksDir, 'huaweicloud-safety.py')));
+test('huaweicloud_search_docs returns relevant skill results', async () => {
+  const home = mkdtempSync(join(tmpdir(), 'mcp-search-'));
+  const cwd = mkdtempSync(join(tmpdir(), 'mcp-search-proj-'));
+  try {
+    const install = runCli(home, cwd, ['install', '--target', 'opencode']);
+    assert.equal(install.status, 0, install.stderr);
 
-  const hooksJson = readFileSync(hooksJsonPath, 'utf8');
-  assert.match(hooksJson, /\bnode\b/);
-  assert.match(hooksJson, /huaweicloud-safety\.mjs/);
-  assert.doesNotMatch(hooksJson, /\bpython3?\b/);
-});
+    const mcpServerPath = join(home, '.config', 'opencode', 'huaweicloud-plugins', 'src', 'mcp-server.mjs');
 
-test('hook rule model documentation exists', () => {
-  const doc = join(root, 'docs', 'hook-rule-model.md');
-  assert.ok(existsSync(doc), 'Missing docs/hook-rule-model.md');
-  const body = readFileSync(doc, 'utf8');
-  assert.match(body, /Hook 规则模型/);
-  assert.match(body, /隐私边界/);
-  assert.match(body, /huaweicloud_hook_check_command/);
-});
+    // Search for ECS skills — should return results containing ECS-related content
+    const responses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_search_docs', {
+      query: 'ECS',
+    });
 
-test('safety skill teaches proactive hook checks', () => {
-  const safetySkill = readFileSync(join(pluginRoot, 'skills', 'huaweicloud-safety', 'SKILL.md'), 'utf8');
-  assert.match(safetySkill, /huaweicloud_hook_check_command/);
-  assert.match(safetySkill, /huaweicloud_hook_check_artifacts/);
-  assert.match(safetySkill, /huaweicloud_hook_check_deploy_plan/);
-});
+    assert.ok(responses[0].result, 'initialize returned result');
+    assert.ok(responses[1].result, 'tools/call returned result');
+    assert.ok(!responses[1].error, `tools/call should not error: ${JSON.stringify(responses[1].error)}`);
 
-test('.mcp.json is valid and references existing server script', () => {
-  const mcpConfig = readJson(join(pluginRoot, '.mcp.json'));
-  assert.ok(mcpConfig.mcpServers || mcpConfig.mcp);
-});
+    const content = responses[1].result.content;
+    assert.ok(Array.isArray(content), 'content should be an array');
+    assert.ok(content.length > 0, 'content array should not be empty');
 
-test('setup-cli.mjs supports the codearts target end to end', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  // parseTarget accepts codearts
-  assert.match(setup, /'codearts'/);
-  // install / uninstall / status functions exist
-  assert.match(setup, /async function installCodeArts\(\)/);
-  assert.match(setup, /function uninstallCodeArts\(\)/);
-  assert.match(setup, /function codeartsStatus\(\)/);
-  // path helpers for user-level and project-level codearts dirs
-  assert.match(setup, /function codeartsSkillsDir\(\)/);
-  assert.match(setup, /function codeartsMcpSettingsFile\(\)/);
-  assert.match(setup, /function codeartsProjectSkillsDir\(\)/);
-  assert.match(setup, /function codeartsProjectMcpSettingsFile\(\)/);
-  assert.match(setup, /function codeartsPluginsDir\(\)/);
-  // install copies to user + project skills and registers both MCP configs
-  assert.match(setup, /copyDir\(skillsSrc, codeartsSkillsDir\(\)\)/);
-  assert.match(setup, /copyDir\(skillsSrc, codeartsProjectSkillsDir\(\)\)/);
-  assert.match(setup, /registerCodeartsMcp\(codeartsMcpSettingsFile\(\)\)/);
-  assert.match(setup, /registerCodeartsMcp\(codeartsProjectMcpSettingsFile\(\)\)/);
-  // MCP registration writes an enabled server with local mode env
-  assert.match(setup, /config\.mcpServers\['huaweicloud-devkit'\] = \{/);
-  assert.match(setup, /HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local'/);
-  assert.match(setup, /enabled: true,/);
-  // command dispatch covers codearts for install / uninstall / status
-  const branches = setup.match(/target === 'codearts' \|\| target === 'all'/g);
-  const installDispatch = setup.match(/shouldInstall\('codearts'\)/g);
-  assert.ok(
-    (branches?.length ?? 0) + (installDispatch?.length ?? 0) >= 3,
-    `codearts dispatch branches: ${(branches?.length ?? 0) + (installDispatch?.length ?? 0)}`,
-  );
-  // .installed marker goes to the codearts plugins dir
-  assert.match(setup, /function installMarkerDirForTarget\(target\)/);
-  assert.match(setup, /if \(target === 'codex'\) return null;/);
-  assert.match(setup, /if \(target === 'codearts'\) return codeartsPluginsDir\(\);/);
-  assert.match(setup, /function writeInstallMarker\(target\)/);
-  // doctor checks the codearts skills dir alongside opencode
-  assert.match(
-    setup,
-    /const skillsOptions = \[[\s\S]*?opencodeSkillsDir\(\)[\s\S]*?codexDesktopSkillsDir\(\)[\s\S]*?codeartsSkillsDir\(\)[\s\S]*?codeartsWorkSkillsDir\(\)[\s\S]*?workbuddySkillsDir\(\)[\s\S]*?dshSkillsDir\(\)[\s\S]*?\];/,
-  );
-  // help text documents the target
-  assert.match(
-    setup,
-    /--target <opencode\|codex\|codearts\|codearts-work\|workbuddy\|dsh\|officeace\|hermes\|openclaw\|atomcode\|all>/,
-  );
-  assert.match(setup, /install --target codearts/);
-});
+    const text = content.map((c) => c.text || '').join('');
+    assert.ok(text.length > 0, 'search results text should not be empty');
 
-test('tools.mjs resolves skills from the codearts directory', () => {
-  const tools = readFileSync(join(pluginRoot, 'src', 'tools.mjs'), 'utf8');
-  assert.match(tools, /function codeartsSkillsDir\(\)/);
-  assert.match(tools, /return join\(home, '\.codeartsdoer', 'skills'\);/);
-  // candidates only count when they contain at least one skill with SKILL.md
-  assert.match(tools, /export function findSkillsRoot/);
-  assert.match(tools, /export function listSkillDirs/);
-  assert.match(tools, /existsSync\(join\(root, d\.name, 'SKILL\.md'\)\)/);
-  assert.match(
-    tools,
-    /findSkillsRoot\(\[[\s\S]*?SKILLS_ROOT_DEV[\s\S]*?dshSkillsDir\(\)[\s\S]*?codeartsSkillsDir\(\)[\s\S]*?opencodeSkillsDir\(\)[\s\S]*?workbuddySkillsDir\(\)[\s\S]*?officeaceSkillsRoot\(\)[\s\S]*?\]\)/,
-  );
-});
+    // Verify response is valid JSON with results (relaxed: check structure, not specific skill text)
+    const parsed = JSON.parse(text);
+    assert.ok(parsed, 'search response should be valid JSON');
+    // Query echo: the response should reflect what was searched
+    if (parsed.query !== undefined) {
+      assert.match(String(parsed.query), /ECS/i, 'response should echo the query');
+    }
+    // Results count: should have at least one result
+    const resultCount = parsed.results?.length ?? parsed.length ?? (Array.isArray(parsed) ? parsed.length : 0);
+    assert.ok(resultCount > 0, `search for ECS should return > 0 results, got ${resultCount}`);
 
-test('setup-cli.mjs handles KooCLI sandbox blockers and privacy agreement', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  const hcloudProbe = readFileSync(join(pluginRoot, 'src', 'hcloud-probe.mjs'), 'utf8');
-  // sandbox detection reads the CodeArts permission config
-  assert.match(setup, /function detectCodeartsSandbox\(\)/);
-  assert.match(setup, /codearts-data', 'storage', 'permission', 'config\.json'/);
-  assert.match(setup, /config\.bash_mode/);
-  // hcloud lookup covers HCLOUD_BIN and ~/hcloud on Windows
-  assert.match(setup, /from '\.\/hcloud-probe\.mjs'/);
-  assert.match(hcloudProbe, /function findHcloudBin\(\)/);
-  assert.match(hcloudProbe, /process\.env\.HCLOUD_BIN/);
-  assert.match(hcloudProbe, /homedir\(\), 'hcloud', 'hcloud\.exe'/);
-  assert.match(hcloudProbe, /sandbox_home_failure/);
-  // sandbox warning prompts user to install externally or disable sandbox
-  assert.match(setup, /function printSandboxWarning\(/);
-  assert.match(setup, /检测到码道沙箱模式/);
-  assert.match(setup, /在码道外的终端安装并使用 KooCLI/);
-  assert.match(setup, /关闭沙箱模式后重试/);
-  // install-hcloud surfaces sandbox guidance on failure and after install
-  assert.match(setup, /沙箱模式拦截了 KooCLI 自动安装/);
-  // MCP env injects HCLOUD_BIN when an hcloud binary is found
-  assert.match(setup, /if \(hcloudBin\) env\.HCLOUD_BIN = hcloudBin\.replace/);
-  // doctor warns about sandbox mode with the accurate settings path (#261)
-  assert.match(setup, /KooCLI 可能无法写入 ~/);
-  assert.match(setup, /设置 → 对话流 → 智能体 终端命令运行模式 → 自动运行/);
-});
-
-test('setup-cli.mjs covers hermes restart hints, unix auto-install, and grouped status (#280)', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  // Hermes .installed marker is read for restart hints (#280-4)
-  assert.match(setup, /hermesPluginsDir\(\), '\.installed'/);
-  // Unix install-hcloud executes for real: download → extract → install → verify (#280-3)
-  assert.match(setup, /Auto-installing to \$\{binDir\}/);
-  assert.match(setup, /spawnSync\('curl', \['-fL', url, '-o', tmpTar\]/);
-  assert.match(setup, /spawnSync\('tar', \['-xzf', tmpTar, '-C', tmpdir\(\)\]/);
-  // status groups sections by install state, installed first (#280-9)
-  assert.match(setup, /stateOrder = \{ installed: 0, partial: 1, unknown: 2, not: 3 \}/);
-  assert.match(setup, /已安装: /);
-});
-
-test('setup-cli.mjs supports the dsh target end to end', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  // SUPPORTED_AGENT_TARGETS includes dsh and parseTarget uses it
-  assert.match(setup, /'dsh'/);
-  // DSH path helpers and managed patch constants exist
-  assert.match(setup, /function dshRoot\(\)/);
-  assert.match(setup, /function dshSkillsDir\(\)/);
-  assert.match(setup, /function dshProfileDir\(\)/);
-  assert.match(setup, /function dshPatchFile\(\)/);
-  assert.match(setup, /function dshPluginsDir\(\)/);
-  assert.match(setup, /const DSH_MCP_PATCH_START = '# HuaweiCloud DevKit DSH integration start';/);
-  assert.match(setup, /const DSH_MCP_PATCH_END = '# HuaweiCloud DevKit DSH integration end';/);
-  // install / update / uninstall / status functions exist
-  assert.match(setup, /async function installDsh\(\)/);
-  assert.match(setup, /async function updateDsh\(\)/);
-  assert.match(setup, /function uninstallDsh\(\)/);
-  assert.match(setup, /function dshStatus\(\)/);
-  // install copies skills/server/safety and registers MCP through cordis.patch.yml
-  assert.match(setup, /copyDir\(skillsSrc, dshSkillsDir\(\)\)/);
-  assert.match(setup, /copyDir\(srcDir, join\(pluginDest, 'src'\)\)/);
-  assert.match(setup, /copyDir\(safetyDir, join\(pluginDest, 'safety'\)\)/);
-  assert.match(setup, /ensureDshMcpPatch\(\)/);
-  assert.match(setup, /tryInstallDshMcpClient\(\)/);
-  // DSH MCP patch uses dsh-mcp-client with stdio local server mode
-  assert.match(setup, /name: '@deepseek-ai\/dsh-mcp-client'/);
-  assert.match(setup, /serverName: huaweicloud/);
-  assert.match(setup, /transport: stdio/);
-  assert.match(setup, /failOnStartupError: false/);
-  assert.match(setup, /HUAWEICLOUD_AGENT_TOOLKIT_MODE: local/);
-  // uninstall removes only the managed patch block
-  assert.match(setup, /removeDshMcpPatch\(\)/);
-  // command dispatch covers dsh for install / uninstall / status / update
-  const branches = setup.match(/target === 'dsh' \|\| target === 'all'/g);
-  const installDispatch = setup.match(/shouldInstall\('dsh'\)/g);
-  assert.ok(
-    (branches?.length ?? 0) + (installDispatch?.length ?? 0) >= 4,
-    `dsh dispatch branches: ${(branches?.length ?? 0) + (installDispatch?.length ?? 0)}`,
-  );
-  // .installed marker goes to the dsh plugins dir
-  assert.match(setup, /if \(target === 'dsh'\) return dshPluginsDir\(\);/);
-  // doctor checks DSH plugin dir, patch, and skills dir
-  assert.match(setup, /const dshPluginDir = dshPluginsDir\(\);/);
-  assert.match(setup, /dshPatchConfigured\(\)/);
-  assert.match(setup, /dshSkillsDir\(\)/);
-  // help text documents the target
-  assert.match(
-    setup,
-    /--target <opencode\|codex\|codearts\|codearts-work\|workbuddy\|dsh\|officeace\|hermes\|openclaw\|atomcode\|all>/,
-  );
-  assert.match(setup, /install --target dsh/);
-});
-
-test('tools.mjs resolves skills from the dsh directory', () => {
-  const tools = readFileSync(join(pluginRoot, 'src', 'tools.mjs'), 'utf8');
-  assert.match(tools, /function dshSkillsDir\(\)/);
-  assert.match(tools, /process\.env\.DSH_HOME \|\| join\(homedir\(\), '\.dsh'\)/);
-  assert.match(tools, /return join\(home, 'skills'\);/);
-  // stale or empty dirs must not short-circuit the fallback chain
-  assert.match(tools, /resolveSkillsRoot[\s\S]*?findSkillsRoot\(\[/);
-  assert.match(tools, /\|\|\s*SKILLS_ROOT_DEV/);
-  assert.match(
-    tools,
-    /opencode, codex, codex-desktop, codearts, codearts-work, workbuddy, dsh, officeace, hermes, openclaw, atomcode, or all/,
-  );
-});
-
-test('tools.mjs resolves skills from the officeace directory', () => {
-  const tools = readFileSync(join(pluginRoot, 'src', 'tools.mjs'), 'utf8');
-  assert.match(tools, /function officeaceSkillsRoot\(\)/);
-  assert.match(tools, /function readOfficeaceRegistryInstallDir\(\)/);
-  assert.match(tools, /office-claw/);
-  assert.match(tools, /capabilities\.json/);
-});
-
-test('setup-cli.mjs supports the officeace target end to end', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  assert.match(setup, /'officeace'/);
-  assert.match(setup, /async function installOfficeAce\(\)/);
-  assert.match(setup, /function uninstallOfficeAce\(\)/);
-  assert.match(setup, /function officeaceStatus\(\)/);
-  assert.match(setup, /async function updateOfficeAce\(\)/);
-  assert.match(setup, /function officeaceCapabilitiesDir\(\)/);
-  assert.match(setup, /function officeaceCapabilitiesFile\(\)/);
-  assert.match(setup, /function officeaceSkillsDir\(\)/);
-  assert.match(setup, /function officeacePluginsDir\(\)/);
-  assert.match(setup, /function readOfficeaceRegistryInstallDir\(\)/);
-  assert.match(setup, /function ensureOfficeaceMcpInSqlite\(\)/);
-  assert.match(setup, /function removeOfficeaceMcpFromSqlite\(\)/);
-  assert.match(setup, /function registerOfficeaceSkillEntries\(\)/);
-  assert.match(setup, /copyDir\(skillsSrc, officeaceSkillsDir\(\)\)/);
-  assert.match(setup, /ensureOfficeaceMcpInSqlite\(\)/);
-  assert.match(setup, /registerOfficeaceSkillEntries\(\)/);
-  assert.match(setup, /type.*skill.*source.*custom/s);
-  assert.match(setup, /mcpServer.*command.*node/s);
-  assert.match(setup, /capabilities\.json/);
-  const branches = setup.match(/target === 'officeace' \|\| target === 'all'/g);
-  const installDispatch = setup.match(/shouldInstall\('officeace'\)/g);
-  assert.ok(
-    (branches?.length ?? 0) + (installDispatch?.length ?? 0) >= 3,
-    `officeace dispatch branches: ${(branches?.length ?? 0) + (installDispatch?.length ?? 0)}`,
-  );
-  assert.match(setup, /install --target officeace/);
-});
-
-test('setup-cli.mjs supports the hermes target end to end', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  assert.match(setup, /'hermes'/);
-  assert.match(setup, /async function installHermes\(\)/);
-  assert.match(setup, /function uninstallHermes\(\)/);
-  assert.match(setup, /function hermesStatus\(\)/);
-  assert.match(setup, /async function updateHermes\(\)/);
-  assert.match(setup, /function hermesHomeDir\(\)/);
-  assert.match(setup, /function hermesSkillsDir\(\)/);
-  assert.match(setup, /function hermesPluginsDir\(\)/);
-  assert.match(setup, /function hermesConfigFile\(\)/);
-  assert.match(setup, /function ensureHermesMcpConfig\(\)/);
-  assert.match(setup, /function removeHermesMcpConfigBlock\(\)/);
-  assert.match(setup, /function ensureHermesHooksConfig\(\)/);
-  assert.match(setup, /function removeHermesHooksConfigBlock\(\)/);
-  assert.match(setup, /function ensureHermesHookAllowlist\(\)/);
-  assert.match(setup, /function hermesHookCommand\(\)/);
-  assert.match(setup, /function hermesPythonPluginsDir\(\)/);
-  assert.match(setup, /function hermesSafetyPluginDir\(\)/);
-  assert.match(setup, /function ensureHermesHookPlugin\(\)/);
-  assert.match(setup, /function removeHermesHookPlugin\(\)/);
-  assert.match(setup, /copyDir\(skillsSrc, hermesSkillsDir\(\)\)/);
-  assert.match(setup, /copyDir\(hooksDir, join\(pluginDest, 'hooks'\)\)/);
-  assert.match(setup, /ensureHermesMcpConfig\(\)/);
-  assert.match(setup, /ensureHermesHooksConfig\(\)/);
-  assert.match(setup, /ensureHermesHookAllowlist\(\)/);
-  assert.match(setup, /ensureHermesHookPlugin\(\)/);
-  assert.match(setup, /mcp_servers:/);
-  assert.match(setup, /huaweicloud-devkit:/);
-  assert.match(setup, /HUAWEICLOUD_AGENT_TOOLKIT_MODE: "local"/);
-  assert.match(setup, /hooks:/);
-  assert.match(setup, /pre_tool_call:/);
-  assert.match(setup, /matcher: "terminal"/);
-  assert.match(setup, /fail_closed: true/);
-  assert.match(setup, /shell-hooks-allowlist\.json/);
-  assert.match(setup, /name: huaweicloud-safety/);
-  assert.match(setup, /register_hook\("pre_tool_call"/);
-  assert.match(setup, /evaluate\(tool_name, args\)/);
-  assert.match(setup, /huaweicloud-safety\.py/);
-  const branches = setup.match(/target === 'hermes' \|\| target === 'all'/g);
-  const installDispatch = setup.match(/shouldInstall\('hermes'\)/g);
-  assert.ok(
-    (branches?.length ?? 0) + (installDispatch?.length ?? 0) >= 3,
-    `hermes dispatch branches: ${(branches?.length ?? 0) + (installDispatch?.length ?? 0)}`,
-  );
-  assert.match(setup, /install --target hermes/);
-  assert.match(setup, /HERMES_HOME/);
-  assert.match(setup, /LOCALAPPDATA/);
-  assert.match(setup, /--skip-mcp-server/);
-  assert.match(setup, /function ensureHermesMcpSdk\(\)/);
-  assert.match(setup, /function hermesMcpSdkOk\(\)/);
-});
-
-test('setup-cli.mjs supports the version command', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  assert.match(setup, /function cmdVersion\(\)/);
-  assert.match(setup, /function readInstalledVersion\(/);
-  assert.match(setup, /case '--version'/);
-  assert.match(setup, /case 'version'/);
-});
-
-test('setup-cli.mjs wires the auth reconcile subcommand', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  assert.match(setup, /function cmdAuthReconcile\(\)/);
-  assert.match(setup, /sub === 'reconcile'/);
-  assert.match(setup, /return cmdAuthReconcile\(\)/);
-});
-
-test('setup-cli.mjs resolves the active KooCLI profile for configureHcloud', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  assert.match(setup, /function configuredProfileName\(\)/);
-  assert.match(setup, /resolveManagedProfile\(\)/);
-  assert.match(setup, /return name \|\| 'default'/);
-  assert.match(setup, /--cli-profile=\$\{configuredProfileName\(\)\}/);
-  assert.doesNotMatch(setup, /hcloud configure init/);
-});
-
-test('setup-cli.mjs checks for updates on install/update via shared query', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  assert.match(setup, /async function checkForUpdate\(\)/);
-  assert.match(setup, /queryDistTagsFetch\(/);
-  assert.match(setup, /semverCompare\(/);
-  const calls = setup.match(/^\s+await checkForUpdate\(\);$/gm);
-  assert.ok(calls && calls.length >= 2, 'checkForUpdate should be awaited in both cmdInstall and cmdUpdate');
-});
-
-test('tools.mjs resolves skills from the hermes directory', () => {
-  const tools = readFileSync(join(pluginRoot, 'src', 'tools.mjs'), 'utf8');
-  assert.match(tools, /function hermesSkillsDir\(\)/);
-  assert.match(tools, /process\.env\.HERMES_HOME/);
-  assert.match(tools, /LOCALAPPDATA/);
-  assert.match(tools, /return join\(home, '\.hermes', 'skills'\)/);
-  assert.match(tools, /hermesSkillsDir\(\)/);
-});
-
-test('tools.mjs resolves skills from the atomcode directory', () => {
-  const tools = readFileSync(join(pluginRoot, 'src', 'tools.mjs'), 'utf8');
-  assert.match(tools, /function atomcodeSkillsDir\(\)/);
-  assert.match(tools, /process\.env\.ATOMCODE_HOME/);
-  assert.match(tools, /return join\(home, '\.atomcode', 'skills'\)/);
-  assert.match(tools, /atomcodeSkillsDir\(\)/);
-});
-
-test('agent-registration reports openclaw registration status', () => {
-  const registration = readFileSync(join(pluginRoot, 'src', 'auth', 'agent-registration.mjs'), 'utf8');
-  assert.match(registration, /function openclawRegistered\(\)/);
-  assert.match(registration, /agent === 'openclaw'/);
-  assert.match(registration, /'\.agents', 'huaweicloud-plugins', '\.mcp\.json'/);
-});
-
-test('official Huawei Cloud Icons library is integrated', () => {
-  const tools = readFileSync(join(pluginRoot, 'src', 'tools.mjs'), 'utf8');
-  assert.match(tools, /name: 'huaweicloud_get_service_icon'/);
-  assert.match(tools, /getServiceIcon\(args\.service/);
-
-  const snapshotPath = join(pluginRoot, 'src', 'data', 'icons-manifest.v1.json');
-  assert.ok(existsSync(snapshotPath), 'Missing icons-manifest.v1.json snapshot');
-  const manifest = readJson(snapshotPath);
-  assert.ok(Array.isArray(manifest.icons), 'icons must be an array');
-  assert.ok(manifest.icons.length >= 100, `Expected at least 100 icons, got ${manifest.icons.length}`);
-
-  const byId = new Map(manifest.icons.map((i) => [i.id, i]));
-  for (const id of ['ecs', 'obs', 'vpc', 'modelarts']) {
-    const icon = byId.get(id);
-    assert.ok(icon, `Missing icon: ${id}`);
-    assert.match(icon.logo.source_url, /^https:\/\//, `${id} logo source_url must be https`);
-    assert.equal(typeof icon.name, 'string');
+    // Search for OBS — verify different query also returns results
+    const obsResponses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_search_docs', {
+      query: 'OBS',
+    });
+    assert.ok(!obsResponses[1].error, `OBS search should not error: ${JSON.stringify(obsResponses[1].error)}`);
+    const obsText = obsResponses[1].result.content.map((c) => c.text || '').join('');
+    const obsParsed = JSON.parse(obsText);
+    const obsCount = obsParsed.results?.length ?? obsParsed.length ?? (Array.isArray(obsParsed) ? obsParsed.length : 0);
+    assert.ok(obsCount > 0, `search for OBS should return > 0 results, got ${obsCount}`);
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+    rmSync(cwd, { recursive: true, force: true });
   }
-
-  const discovery = readFileSync(join(pluginRoot, 'skills', 'huaweicloud-capability-discovery', 'SKILL.md'), 'utf8');
-  assert.match(discovery, /huaweicloud_get_service_icon/);
-  assert.match(discovery, /open\.huaweicloud\.com\/openplatform\/icons\.html/);
 });
 
-test('tools.mjs registers version-update tools', () => {
-  const tools = readFileSync(join(pluginRoot, 'src', 'tools.mjs'), 'utf8');
-  for (const name of ['huaweicloud_check_update', 'huaweicloud_upgrade']) {
-    assert.match(tools, new RegExp(`name: '${name}'`));
-    assert.match(tools, new RegExp(`case '${name}':`));
+test('huaweicloud_service_catalog returns capability recommendations', async () => {
+  const home = mkdtempSync(join(tmpdir(), 'mcp-catalog-'));
+  const cwd = mkdtempSync(join(tmpdir(), 'mcp-catalog-proj-'));
+  try {
+    const install = runCli(home, cwd, ['install', '--target', 'opencode']);
+    assert.equal(install.status, 0, install.stderr);
+
+    const mcpServerPath = join(home, '.config', 'opencode', 'huaweicloud-plugins', 'src', 'mcp-server.mjs');
+
+    // Verify English intent: deploy a static website recommends sandbox first
+    const enResponses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_service_catalog', {
+      intent: 'deploy a static website',
+    });
+    assert.ok(!enResponses[1].error, `English intent should not error: ${JSON.stringify(enResponses[1].error)}`);
+    const enText = enResponses[1].result.content.map((c) => c.text || '').join('');
+    const enResult = JSON.parse(enText);
+    assert.ok(enResult.recommendedSkills, 'result should have recommendedSkills');
+    assert.ok(
+      enResult.recommendedSkills.includes('huawei-sandbox'),
+      'static website deployment should recommend sandbox',
+    );
+    assert.ok(
+      enResult.recommendedSkills.includes('huawei-obs'),
+      'static website deployment should include OBS as an option',
+    );
+
+    // Verify Chinese intent: 部署静态网站到华为云
+    const zhResponses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_service_catalog', {
+      intent: '部署静态网站到华为云',
+    });
+    assert.ok(!zhResponses[1].error, `Chinese intent should not error: ${JSON.stringify(zhResponses[1].error)}`);
+    const zhText = zhResponses[1].result.content.map((c) => c.text || '').join('');
+    const zhResult = JSON.parse(zhText);
+    assert.ok(
+      zhResult.recommendedSkills.includes('huawei-sandbox'),
+      'Chinese static website intent should also recommend sandbox',
+    );
+
+    // Verify storage routing for pure storage intent (aligned with tools.test.mjs)
+    const storageResponses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_service_catalog', {
+      intent: 'store files in an obs bucket',
+    });
+    assert.ok(
+      !storageResponses[1].error,
+      `Storage intent should not error: ${JSON.stringify(storageResponses[1].error)}`,
+    );
+    const storageText = storageResponses[1].result.content.map((c) => c.text || '').join('');
+    const storageResult = JSON.parse(storageText);
+    assert.ok(storageResult.recommendedSkills.includes('huawei-obs'), 'storage intent should include OBS');
+    assert.notEqual(
+      storageResult.recommendedSkills[0],
+      'huawei-sandbox',
+      'storage intent should not recommend sandbox first',
+    );
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+    rmSync(cwd, { recursive: true, force: true });
   }
-  assert.match(tools, /from '\.\/update-check\.mjs'/);
 });
 
-test('stdio server warms update cache; shared protocol decorates first tool call', () => {
-  const server = readFileSync(join(pluginRoot, 'src', 'mcp-server.mjs'), 'utf8');
-  assert.match(server, /getCachedUpdateInfo\(readInstalledVersion\(\)/);
-  const protocol = readFileSync(join(pluginRoot, 'src', 'mcp-protocol.mjs'), 'utf8');
-  assert.match(protocol, /applyUpdateHint\(/);
-  assert.match(protocol, /peekCachedUpdateInfo\(\)/);
-});
+test('MCP tools/call with unknown tool name returns error', async () => {
+  const home = mkdtempSync(join(tmpdir(), 'mcp-error-'));
+  const cwd = mkdtempSync(join(tmpdir(), 'mcp-error-proj-'));
+  try {
+    const install = runCli(home, cwd, ['install', '--target', 'opencode']);
+    assert.equal(install.status, 0, install.stderr);
 
-test('hdkitservice-api sends X-HW-Client-Version; SKILL session-start wording', () => {
-  const api = readFileSync(join(pluginRoot, 'src', 'sandbox', 'hdkitservice-api.mjs'), 'utf8');
-  assert.match(api, /X-HW-Client-Version/);
-  assert.match(api, /readInstalledVersion\(\)/);
-  const skill = readFileSync(join(pluginRoot, 'skills', 'huaweicloud-core', 'SKILL.md'), 'utf8');
-  assert.match(skill, /先调用 `huaweicloud_check_update` 检查插件版本/);
-  assert.match(skill, /若未先行检查，插件会在使用中收到服务端升级提示/);
-});
+    const mcpServerPath = join(home, '.config', 'opencode', 'huaweicloud-plugins', 'src', 'mcp-server.mjs');
+    const responses = await invokeMcpToolCall(mcpServerPath, makeEnv(home, cwd), 'huaweicloud_nonexistent_tool', {});
 
-test('READMEs recommend @latest for updates', () => {
-  const en = readFileSync(join(root, 'README.md'), 'utf8');
-  assert.match(en, /huaweicloud-devkit@latest update --target all/);
-  const zh = readFileSync(join(root, 'README.zh-CN.md'), 'utf8');
-  assert.match(zh, /huaweicloud-devkit@latest update --target all/);
-});
-
-test('cmdUpdate has no trailing unreachable reinstall; cmdReinstall keeps it', () => {
-  const setup = readFileSync(join(pluginRoot, 'src', 'setup-cli.mjs'), 'utf8');
-  // cmdUpdate（'update'/'upgrade' 入口）本身不得做"卸载+重装"；各 target 分支均 return。
-  const cmdUpdateBody = setup.slice(
-    setup.indexOf('async function cmdUpdate()'),
-    setup.indexOf('async function cmdReinstall()'),
-  );
-  assert.doesNotMatch(cmdUpdateBody, /await cmdUninstall\(\)/);
-  assert.doesNotMatch(cmdUpdateBody, /await cmdInstall\(\)/);
-  // cmdReinstall 是专职重装：卸载+重装逻辑必须保留。
-  const cmdReinstallBody = setup.slice(
-    setup.indexOf('async function cmdReinstall()'),
-    setup.indexOf('async function cmdInstallHcloud()'),
-  );
-  assert.match(cmdReinstallBody, /await cmdUninstall\(\)/);
-  assert.match(cmdReinstallBody, /await cmdInstall\(\)/);
+    assert.ok(responses[0].result, 'initialize returned result');
+    // Unknown tool should return JSON-RPC error (code -32603), not crash the server
+    assert.ok(responses[1].error, 'unknown tool name should return JSON-RPC error');
+    assert.match(responses[1].error.message, /Unknown tool/i, 'error message should mention "Unknown tool"');
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+    rmSync(cwd, { recursive: true, force: true });
+  }
 });
