@@ -1,6 +1,8 @@
 # AGENTS — huaweicloud-devkit 每日测试执行指南
 
 > 每个客户端 agent（OpenCode/Codex/CodeArtsAgent/CodeArtsWork/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode）读本文件即开始执行当天测试。**不要处理任何 GitHub issue，本任务只做测试执行。**
+>
+> **完成标准** = 本机 `results/<你的客户端>/<日期>-<IP>/<OS>/` 已含「测试报告.md + 3 份 CSV」且已 push 远端；只读文档 / 只建目录 / 中途退出都不算完成。
 
 ## 仓库地址
 
@@ -41,7 +43,7 @@ npm install -g huaweicloud-devkit@next
 1. **自我识别身份**（无需人工告知）：
    - **客户端名**：从你的运行环境/系统提示/进程名判断你是 10 个客户端中的哪一个——OpenCode、Codex、CodeArtsAgent、CodeArtsWork、WorkBuddy、DSH、OfficeAce、Hermes、OpenClaw、AtomCode。
    - **OS**：用 `platform.system()` 或运行环境判断 Windows / Linux。
-   - 识别不出才询问用户。
+   - 识别不出：**显式输出失败原因后退出**（禁止静默退出、禁止瞎猜冒充其他客户端、禁止假装完成）。无人值守环境没有「询问用户」通道，卡住会被调度器判 idle 杀掉。
 2. 前置（`python scripts/prepare_env.py --update` 一键完成）：
    - 测试仓库 pull main 最新
    - 源码仓库 `hdk` checkout 到 npm `@next` 对应 commit（源码检查用）
@@ -62,6 +64,8 @@ python scripts/init_day.py <客户端> <OS>
 ## 2. 执行
 
 按 **P0 → P1 → P2** 逐条执行副本 CSV 用例，证据（probe 脚本 + stdout.log）落盘 `results/<客户端>/<日期>-<IP>/<OS>/evidence/<case-id>/`。
+
+**执行中每步持续输出进度**（当前用例 / 已跑数 / 耗时），长用例中途也输出中间状态——长时间无输出会被调度器判 idle 杀掉，前功尽弃。
 
 ## 3. 回填执行状态
 
@@ -98,6 +102,7 @@ git -c credential.helper="!gh auth git-credential" push origin main
 3. **PASS 门禁（禁虚报）**：一个用例标 PASS 必须同时满足——① 已实际执行（探针/命令真实运行）② 有结果证据落到 `evidence/<case-id>/`（probe 脚本 + stdout.log）③ `evidencePath` 列回填该证据路径。**未执行(NOT_RUN)/无结果/无证据的用例，一律不得标 PASS**，只能标 NOT_RUN 或如实标 FAIL/BLOCKED。回填后跑 `python scripts/verify_no_fake_pass.py <客户端> <OS>` 机械校验，虚报视为作废重来。
 4. **环境阻塞**：标 BLOCKED + 写 blockedReason，不得假装 PASS。
 5. **目录权限（只提交自己）**：只改/提交 `results/<你的客户端>/` 目录，**完全不碰 Summary**（维护者统一生成）、其他客户端目录、test-cases 真源。
+6. **完成门禁（禁空跑）**：任务完成的唯一判定 = `results/<你的客户端>/<日期>-<IP>/<OS>/` 已落 ①测试报告.md ②3 份 CSV（执行状态列已回填）③ PASS 用例证据 ④已 push。**只读文档 / 只建目录 / 中途退出 = 未完成**；即使环境阻塞也必须按第 4 条回填 BLOCKED + 出一份最小报告 + push，**不得零产出**。
 
 ## 用例与执行结果分离（架构铁律）
 
