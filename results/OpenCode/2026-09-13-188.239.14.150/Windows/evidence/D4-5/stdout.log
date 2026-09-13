@@ -1,0 +1,28 @@
+# D4-5 写操作误判检测
+# Tool: plan_cli_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+DeleteServer (write operation) must NOT be misjudged as read-only; must be classified as write/deny
+
+## Input
+args: ["ECS", "DeleteServers", "--server_ids=test-nonexist-12345"]
+
+## Response
+{
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "safeToRun": false
+}
+
+## Verification
+- decision: "deny" ✓ (not allowed without approval)
+- risk: "write" ✓ (correctly classified as write, not read-only)
+- safeToRun: false ✓ (not auto-executable)
+- Write operation NOT misjudged as read-only ✓
+
+## Result: PASS

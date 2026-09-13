@@ -1,0 +1,38 @@
+# D2-11 R3 STS token拒绝落盘
+# Tool: Source code analysis (persistCredentials in tools.mjs)
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+auth_switch persist with securityToken should return {status:error, scope:rejected}, token never written to disk
+
+## Source Code Evidence
+File: plugins/huaweicloud-core/src/tools.mjs:984-990
+
+```javascript
+function persistCredentials(ak, sk, securityToken, region) {
+  if (String(securityToken || '')) {
+    return {
+      status: 'error',
+      error: 'Temporary STS credentials cannot be persisted (R3). Use action=temporary.',
+      scope: 'rejected',
+    };
+  }
+  // ... write operations only reached if no securityToken
+```
+
+## Flow Analysis
+1. auth_switch action=persist → calls persistCredentials(ak, sk, securityToken, region) (line 1209)
+2. persistCredentials checks `if (String(securityToken || ''))` at the TOP (line 985)
+3. If securityToken is present → returns {status:'error', scope:'rejected'} immediately
+4. NO write operations executed (writeGlobalCredentials, writeObsConfig, runHcloudConfigure all skipped)
+5. STS token NEVER reaches disk
+
+## Verification
+- R3 rule enforced: STS tokens rejected from persistence ✓
+- Return value: {status:'error', scope:'rejected'} ✓
+- Error message: 'Temporary STS credentials cannot be persisted (R3). Use action=temporary.' ✓
+- No disk writes before rejection ✓
+- Token does not reach S1 (credentials.json), S2 (OBS config), or S3 (KooCLI profile) ✓
+
+## Result: PASS

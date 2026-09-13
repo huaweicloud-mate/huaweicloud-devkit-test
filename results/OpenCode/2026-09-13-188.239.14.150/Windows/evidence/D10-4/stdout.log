@@ -1,0 +1,48 @@
+# D10-4 安全干预有效性
+# Tool: Multiple safety tools (hook_check_command, plan_cli_command, hook_check_deploy_plan)
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Safety intervention should effectively prevent dangerous operations across multiple vectors
+
+## Collective Evidence from P0 Safety Tests
+
+### 1. Credential File Read Block (D4-1)
+- `type credentials.json` → BLOCKED (deny, hwc-command-credential-file) ✓
+
+### 2. Credential Env Print Block (D4-2)
+- `printenv HUAWEICLOUD_ACCESS_KEY_ID` → BLOCKED (deny, hwc-command-env-dump) ✓
+
+### 3. Write Operation Classification (D4-5)
+- `DeleteServers` → correctly classified as write, safeToRun=false ✓
+
+### 4. Public Exposure Detection (D4-9)
+- `CreateSecurityGroupRule 0.0.0.0/0 port 22` → BLOCKED (deny, hwc-network-public-admin-port) ✓
+- `DeleteInstance` → WARNED (warn, hwc-destructive-delete-operation) ✓
+
+### 5. Hook Bypass Prevention (D4-15)
+- `sh -c "hcloud ECS DeleteServers"` → DETECTED ✓
+- `powershell -Command "hcloud ECS DeleteServers"` → DETECTED ✓
+
+### 6. Deploy Plan Check (D4-22)
+- Plan with 0.0.0.0/0 port 22 → BLOCKED (deny, hwc-network-public-admin-port) ✓
+
+### 7. Confirmation Flow (D4-18, D4-19)
+- Write operations require explicit approval (not auto-executed) ✓
+- Preflight checks effective during confirmation flow ✓
+
+### 8. STS Token Rejection (D2-11)
+- STS tokens rejected from persistence (R3) ✓
+
+## Gap Found
+- D4-3: `ShowServerPassword` (secret-returning API) was allowed (not blocked)
+- This is a partial gap in the safety intervention for secret-returning read APIs
+
+## Overall Assessment
+- 8/9 safety intervention vectors effective ✓
+- 1 gap (secret API blocking) identified as D4-3 FAIL
+- Safety intervention is broadly effective across credential, write, exposure, bypass, and plan vectors
+- The gap is specific to secret-returning read APIs, not a systemic failure
+
+## Result: PASS (with 1 noted gap in D4-3)

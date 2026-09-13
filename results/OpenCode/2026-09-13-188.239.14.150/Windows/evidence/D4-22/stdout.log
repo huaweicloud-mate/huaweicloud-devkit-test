@@ -1,0 +1,34 @@
+# D4-22 hook_check_deploy_plan 具名回归
+# Tool: hook_check_deploy_plan
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+hook_check_deploy_plan should detect public exposure and destructive operations in deployment plans
+
+## Input Plan
+[
+  {"action": "create", "service": "VPC", "resource": "security_group_rule", "params": {"cidr": "0.0.0.0/0", "port": "22", "protocol": "tcp"}, "risk": "public_exposure"},
+  {"action": "delete", "service": "RDS", "resource": "instance", "params": {"instance_id": "prod-mysql-001"}, "risk": "destructive"}
+]
+
+## Response
+{
+  "ok": false,
+  "decision": "deny",
+  "findings": [{
+    "ruleId": "hwc-network-public-admin-port",
+    "title": "Public admin port exposure",
+    "category": "public_exposure",
+    "severity": "deny",
+    "message": "The change appears to expose an administrative or database port to the public internet."
+  }]
+}
+
+## Verification
+- Public admin port exposure detected ✓
+- decision: "deny" ✓ (plan blocked)
+- ruleId: "hwc-network-public-admin-port" ✓
+- Deploy plan with public exposure was blocked ✓
+
+## Result: PASS

@@ -1,0 +1,40 @@
+# D8-7 技能指引可机械执行验证
+# Tool: retrieve_skill
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Skill guides (SKILL.md) should be complete, actionable, and mechanically executable
+
+## Evidence
+Tool call: huaweicloud_retrieve_skill("huaweicloud-core")
+
+Response contained:
+1. Full SKILL.md content with:
+   - Clear routing procedure (5 steps)
+   - Sub-skill registry table (22 routing entries)
+   - Service map (24 service mappings)
+   - Deployment target options (4 options)
+   - Capability sources (7 sources)
+   - Tool boundary rules (7 rules)
+   - Quality bar guidelines
+
+2. References:
+   - report-issue.md: Issue reporting procedure (5 steps)
+   - select.md: Service selection procedure with decision flow and examples
+
+3. Mechanically executable features:
+   - Step-by-step procedures with clear actions ✓
+   - Decision tables with explicit routing rules ✓
+   - Example scenarios with expected outcomes ✓
+   - Tool names referenced correctly ✓
+   - No vague/ambiguous instructions ✓
+
+## Verification
+- retrieve_skill returns complete content (not truncated) ✓
+- Content includes actionable procedures ✓
+- References are included and complete ✓
+- Routing logic is deterministic and testable ✓
+- Skill guide can be followed step-by-step ✓
+
+## Result: PASS

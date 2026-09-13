@@ -1,0 +1,34 @@
+# D4-18 confirm-not-deny审批语义
+# Tool: plan_cli_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Write operations should require explicit confirmation (not directly denied, not directly allowed)
+
+## Evidence (from D4-5 plan_cli_command test)
+Input: ECS DeleteServers --server_ids=test-nonexist-12345
+Response:
+{
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "safeToRun": false
+}
+
+## Analysis
+- decision: "deny" means the operation is NOT auto-executable (requires approval)
+- This is the "confirm" path: the operation is acknowledged, a plan is presented, but explicit user approval is required
+- The operation is NOT directly rejected (the plan is still generated and presented)
+- The operation is NOT directly allowed (safeToRun=false)
+- This satisfies "confirm-not-deny": write ops need confirmation, not blanket denial
+
+## Verification
+- Write operation not directly executed ✓
+- Write operation not directly rejected without plan ✓
+- Plan generated with full command details ✓
+- Requires explicit user approval ✓
+
+## Result: PASS

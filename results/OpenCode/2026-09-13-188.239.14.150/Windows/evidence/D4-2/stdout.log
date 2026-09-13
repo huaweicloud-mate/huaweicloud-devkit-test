@@ -1,0 +1,30 @@
+# D4-2 凭证env打印拦截
+# Tool: hook_check_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Printing credential environment variables should be blocked (deny)
+
+## Input Command
+printenv HUAWEICLOUD_ACCESS_KEY_ID
+
+## Response
+{
+  "ok": false,
+  "decision": "deny",
+  "findings": [{
+    "ruleId": "hwc-command-env-dump",
+    "title": "Cloud credential environment dump",
+    "category": "credential",
+    "severity": "deny",
+    "message": "The command may print cloud credential environment variables."
+  }]
+}
+
+## Verification
+- decision: "deny" ✓ (blocked)
+- ruleId: "hwc-command-env-dump" ✓ (correct rule matched)
+- Credential env print was blocked ✓
+
+## Result: PASS

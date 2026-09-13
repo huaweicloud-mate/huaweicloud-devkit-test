@@ -1,0 +1,31 @@
+# D4-1 凭证文件读取拦截
+# Tool: hook_check_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Reading credential files via `type` command should be blocked (deny)
+
+## Input Command
+type C:\Users\Administrator\.config\huaweicloud\credentials.json
+
+## Response
+{
+  "ok": false,
+  "decision": "deny",
+  "findings": [{
+    "ruleId": "hwc-command-credential-file",
+    "title": "Credential file read",
+    "category": "credential",
+    "severity": "deny",
+    "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+    "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files."
+  }]
+}
+
+## Verification
+- decision: "deny" ✓ (blocked)
+- ruleId: "hwc-command-credential-file" ✓ (correct rule matched)
+- Credential file read was blocked ✓
+
+## Result: PASS

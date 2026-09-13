@@ -1,0 +1,22 @@
+# D4-9 公开暴露/破坏性预检
+# Tool: hook_check_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Public exposure (0.0.0.0/0 admin port) and destructive operations should be detected and blocked/warned
+
+## Test 1: Public admin port exposure
+Command: hcloud VPC CreateSecurityGroupRule --direction=ingress --protocol=tcp --port_range_min=22 --port_range_max=22 --cidr=0.0.0.0/0 --security_group_id=sg-test
+Response: decision=deny, ruleId=hwc-network-public-admin-port ✓
+
+## Test 2: Destructive delete operation
+Command: hcloud RDS DeleteInstance --instance_id=prod-mysql-001
+Response: decision=warn, ruleId=hwc-destructive-delete-operation ✓
+
+## Verification
+- Public admin port (SSH 22 from 0.0.0.0/0) blocked ✓
+- Destructive operation warned ✓
+- Both risk categories detected before execution ✓
+
+## Result: PASS

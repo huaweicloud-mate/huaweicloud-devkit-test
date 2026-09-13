@@ -1,0 +1,32 @@
+# D4-15 hook绕过尝试
+# Tool: hook_check_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Hook bypass attempts (shell wrapping, PowerShell wrapping) should still be detected
+
+## Test 1: sh -c wrapping (from D4-16)
+Command: sh -c "hcloud ECS DeleteServers --server_ids=prod-001"
+Result: warn, hwc-destructive-delete-operation detected ✓
+
+## Test 2: PowerShell wrapping
+Command: powershell -Command "hcloud ECS DeleteServers --server_ids=prod-001"
+Result: warn, hwc-destructive-delete-operation detected ✓
+Response:
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [{
+    "ruleId": "hwc-destructive-delete-operation",
+    "title": "Destructive cloud resource operation",
+    "severity": "warn"
+  }]
+}
+
+## Verification
+- sh -c wrapping: detected ✓
+- powershell -Command wrapping: detected ✓
+- Hook bypass attempts failed - operations still detected ✓
+
+## Result: PASS
