@@ -79,11 +79,11 @@ python scripts/init_day.py <客户端> <OS>
 
 **同时记录缺陷清单**：每个 FAIL/SPEC 缺陷按 `templates/findings.md` 写 `results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md`（标题 `## #N【级别】标题` + `- **根因**：文件:行号`），这是统一提单脚本 `file_issue.py` 的解析输入，**格式必须严格**，否则自动提单失败。
 
-## 5. 每小时提报（只提交自己目录）
+## 5. 每 10 分钟提报（只提交自己目录）
 
 ```bash
-# 长时执行时，每小时跑一次防丢失（脚本只 git add 自己 results/<客户端>/，不碰 Summary）：
-python scripts/hourly_sync.py <客户端> <OS>
+# 长时执行时，每 10 分钟跑一次防丢失（脚本只 git add 自己 results/<客户端>/，不碰 Summary）：
+python scripts/hourly_sync.py <客户端> <OS> --interval 600
 ```
 
 > **你不生成 Summary**。Summary 由维护者统一跑 `python scripts/build_summary.py` 汇总生成，你只负责自己的 `results/<客户端>/` 目录，别碰 Summary/其他客户端（避免共享文件冲突）。
@@ -137,6 +137,6 @@ git -c credential.helper="!gh auth git-credential" push origin main
 
 ## 脚本清单（本仓库 scripts/）
 
-**agent 用**：`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `verify_no_fake_pass.py` PASS 门禁 · `hourly_sync.py` 每小时提报 · `file_issue.py` 统一提单
+**agent 用**：`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `verify_no_fake_pass.py` PASS 门禁 · `hourly_sync.py` 每 10 分钟提报 · `file_issue.py` 统一提单
 
 **维护者用**：`build_summary.py` 汇总生成 Summary（agent 不跑，统一由维护者汇总，避免共享冲突）· `report_html.py` 生成 HTML 汇总报告 · `send_email.py` SMTP 邮件发送 · `run_daily_report.py` 每日汇总流水线（收集→HTML→邮件，配合 Windows 计划任务定时跑）
