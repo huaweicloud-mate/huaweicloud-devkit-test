@@ -57,7 +57,7 @@ npm install -g huaweicloud-devkit@next
 python scripts/init_day.py <客户端> <OS>
 # 例：python scripts/init_day.py OpenCode Windows
 ```
-生成 `results/<客户端>/<日期>-<IP>/<OS>/`：复制母版 3 份用例 CSV（设计级/展开级/追踪表），并为设计级/展开级**追加「执行状态」+「evidencePath」空列**供回填（母版本身是纯设计定义、无执行态）。**机器 IP 自动检测**（环境变量 HDK_MACHINE_IP → ~/.hdk_ip 文件 → socket 自动），多机同客户端靠 `<日期>-<IP>` 区分，互不冲突。
+生成 `results/<客户端>/<日期>-<IP>/<OS>/`：复制 **daily 精选**用例 CSV（设计级 81 + 展开级 71 + 追踪表），并为设计级/展开级**追加「执行状态」+「evidencePath」空列**供回填（daily 纯设计定义、无执行态）。**机器 IP 自动检测**（环境变量 HDK_MACHINE_IP → ~/.hdk_ip 文件 → socket 自动），多机同客户端靠 `<日期>-<IP>` 区分，互不冲突。**用例来源是 daily 精选（非母版全量 179），daily 由 `test-cases/gen_daily.py` 生成**。
 
 ## 2. 执行
 

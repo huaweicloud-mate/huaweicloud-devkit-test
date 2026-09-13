@@ -24,6 +24,6 @@
 
 ## 每日执行口径
 
-1. 执行入口仍是 `AGENTS.md` + `scripts/init_day.py`；本目录作为「当天跑哪些」的**用例来源**。
+1. `scripts/init_day.py` **已改为复制本目录精选**（设计级 81 + 展开级 71，不再是母版全量 179），本目录是每日执行的**唯一用例来源**；`build_summary.py`/`gen_summary.py` 汇总也读本目录精选。
 2. **P0/禁止剪枝项 FAIL 即阻断**，不得虚报 PASS（`scripts/verify_no_fake_pass.py` 把关）。
 3. 执行结果回填 `results/<客户端>/<日期>-<IP>/<OS>/`，与母版追踪表对齐。

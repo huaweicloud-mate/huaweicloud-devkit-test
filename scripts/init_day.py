@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""每日执行包初始化：results/<客户端>/<日期>-<IP>/<OS>/ 建目录 + 复制 3 份测试用例 CSV。
+"""每日执行包初始化：results/<客户端>/<日期>-<IP>/<OS>/ 建目录 + 复制 daily 精选用例 CSV + 追踪表。
 
 用法:
     python init_day.py OpenCode Windows             # 当天，Windows
@@ -8,8 +8,8 @@
 机器标识（IP）来源：环境变量 HDK_MACHINE_IP > ~/.hdk_ip 文件 > socket 自动检测。
 多台机器跑相同客户端时，靠 <日期>-<IP> 区分，避免 push 到同一仓库冲突。
 
-母版（test-cases/）为纯设计定义（无执行态）；复制到 results 副本时，为设计级/展开级
-追加「执行状态」+「evidencePath」空列，供 agent 执行后回填；追踪表为纯设计追踪直接复制。
+daily（test-cases/daily/）为每日精选子集（纯设计定义、无执行态）；复制到 results 副本时，
+为设计级/展开级追加「执行状态」+「evidencePath」空列，供 agent 执行后回填；追踪表为纯设计追踪直接复制。
 """
 import os, sys, shutil, datetime, socket, csv
 
@@ -69,8 +69,8 @@ def main():
     os.makedirs(dst, exist_ok=True)
 
     copies = [
-        ("test-cases", "design", "用例矩阵-设计级.csv", "执行状态"),
-        ("test-cases", "expanded", "用例矩阵-展开级.csv", "execution_status"),
+        ("test-cases", "daily", "用例矩阵-设计级.csv", "执行状态"),
+        ("test-cases", "daily", "用例矩阵-展开级.csv", "execution_status"),
         ("test-cases", "tracing", "需求-设计-证据追踪表.csv", None),
     ]
     for parts in copies:
@@ -83,7 +83,7 @@ def main():
             # 追踪表为纯设计追踪（无执行态），直接复制
             shutil.copy2(src, dst_path)
         else:
-            # 母版为纯设计定义（无执行态）；复制后追加「执行状态」+「evidencePath」空列供 agent 回填
+            # daily 精选为纯设计定义（无执行态）；复制后追加「执行状态」+「evidencePath」空列供 agent 回填
             with open(src, encoding="utf-8-sig") as f:
                 drows = list(csv.DictReader(f))
             fields = list(drows[0].keys()) + [parts[3], "evidencePath"]
