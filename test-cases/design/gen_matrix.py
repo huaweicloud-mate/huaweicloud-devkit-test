@@ -423,7 +423,7 @@ add("D1-35", "D1安装", "缓存 TTL 与失败节流", "P2", "连续调用",
 add("D1-36", "D1安装", "首调用兜底提示（会话首个工具附加更新信息）", "P2", "agent 未遵守 SKILL.md",
     "首个非检查类 tool 调用",
     "①直调 decorateResult(name, result)（hintConsumed=false 初态） ②核对 applyUpdateHint 附加 _updateInfo ③再次调用核对 hintConsumed 置 true 后不再附加",
-    "仅会话首个非 check/upgrade 工具经 decorateResult 附加 _updateInfo（updateAvailable 且 targetVersion 时）；hintConsumed 置 true 后不再附加，检查/升级工具不附加", "设: §检测机制 第二层; 实: mcp-protocol.decorateResult/update-check.applyUpdateHint",
+    "仅会话首个非 check/upgrade 工具经 dispatch 内部 decorateResult 附加 _updateInfo（updateAvailable 且 targetVersion 时）；hintConsumed 置 true 后不再附加，检查/升级工具不附加", "设: §检测机制 第二层; 实: mcp-protocol.dispatch(内部decorateResult)/update-check.applyUpdateHint",
     "check_update", "脚本")
 add("D1-37", "D1安装", "SKILL.md 会话启动指令存在性", "P2", "dev/1.1.2 SKILL.md",
     "huaweicloud-core/SKILL.md 内容",
@@ -470,7 +470,7 @@ add("D1-45", "D1安装", "兜底提示真实序列与预热竞态", "P1", "隔�
     "initialize→check_update→首个非检查工具→第二个非检查工具；预热已完成/未完成",
     "①启动两种时序 ②检查 check_update 与 upgrade 不附加 ③检查首个非检查工具是否附加 ④再次调用确认不重复",
     "仅会话首个非检查工具携带 _updateInfo；检查/升级工具不携带；预热未完成时不阻塞正常工具，结果就绪后仍按既定一次性规则处理",
-    "设: §检测机制第二层; 实: mcp-protocol.decorateResult/mcp-server.updatePrewarm", "check_update", "脚本", "隔离进程")
+    "设: §检测机制第二层; 实: mcp-protocol.dispatch(内部decorateResult)/mcp-server(内部updatePrewarm)", "check_update", "脚本", "隔离进程")
 add("D1-46", "D1安装", "缓存 TTL 边界与查询异常恢复", "P1", "可注入时钟和 doQuery",
     "刚好 TTL 前/等于/超过 1h；失败节流 5min 前/等于/超过；doQuery resolve null/reject/超时",
     "①注入时间推进 ②统计查询次数 ③让 doQuery 抛异常 ④再次调用并观察结果",
@@ -606,10 +606,10 @@ add("D2-20", "D2认证", "HUAWEICLOUD_HOME重定向(R6)", "P2", "可设置 HUAWE
     "auth_status", "半自动", "关联 AK-FP-2")
 # ---------- 2026-09-11 全量设计评审补充（凭证状态维度；R10 按 codex round-09 补强断言契约） ----------
 add("D2-21", "D2认证", "AK/SK 轮换后 auth_status 正确感知（凭证状态维度）", "P1", "真云账号 + 一次性 IAM 用户凭证（可轮换，不影响生产）+ 本地凭证文件",
-    "轮换后的新 AK/SK（旧凭证已失效）；断言契约：指纹算法=sha256(ak:sk) hex 前 8 位；指纹位置=S1 credentials.json.ak/sk、S2 ~/.hcloud/config.json current 档、S3 obs config；等待窗口=轮换后 30s 内轮询完成；auth_status 响应字段=reconciled.s1.ready/reconciled.s2.ready/reconciled.s3.ready 均 true",
-    "①auth init 同步旧 AK/SK ②计算旧指纹 F1=sha256(ak:sk)[:8] 核验三端= F1 ③替换为轮换后新 AK/SK，计算新指纹 F2 ④auth_status 检查（记录 reconciled 三字段） ⑤auth_sync 增量同步 ⑥30s 内每 5s 轮询三端指纹 ⑦断言三端最终=F2 且 auth_status.reconciled.* 全 true",
-    "30s 内三端指纹全部=F2（逐端断言，旧指纹 F1 零残留）；auth_status.reconciled.s1/s2/s3.ready 全 true；S2 写入次数≤1（无 R4 无效循环重写）；执行一次只读 API 调用返回 200",
-    "方: §五 R2/R4; 关联 AK-FP-1; R11 补强: sha256指纹算法+30s轮询+三字段断言", "huaweicloud_auth_init/auth_status/auth_sync", "半自动", "COMMON|<真云代表: Hermes>|<证据: 三端指纹快照+轮换序列+状态字段>|<阻塞: 一次性IAM凭证>")
+    "轮换后的新 AK/SK（旧凭证已失效）；断言契约：指纹算法=sha256(ak+sk) hex 前 8 位；指纹位置=S1 credentials.json.ak/sk、S2 ~/.hcloud/config.json current 档、S3 obs config；等待窗口=轮换后 30s 内轮询完成；auth_status 响应字段=reconciled.stores {s1Fingerprint/currentFingerprint/s3Fingerprint} 与 S1 一致且 inconsistencies 空",
+    "①auth init 同步旧 AK/SK ②计算旧指纹 F1=sha256(ak+sk)[:8] 核验三端= F1 ③替换为轮换后新 AK/SK，计算新指纹 F2 ④auth_status 检查（记录 reconciled.stores 三指纹） ⑤auth_sync 增量同步 ⑥30s 内每 5s 轮询三端指纹 ⑦断言三端最终=F2 且 auth_status.reconciled.stores 指纹=F2、inconsistencies 空",
+    "30s 内三端指纹全部=F2（逐端断言，旧指纹 F1 零残留）；auth_status.reconciled.stores 三指纹=F2、inconsistencies 空；S2 写入次数≤1（无 R4 无效循环重写）；执行一次只读 API 调用返回 200",
+    "方: §五 R2/R4; 关联 AK-FP-1; R11 补强: sha256指纹算法+30s轮询+三指纹断言", "huaweicloud_auth_init/auth_status/auth_sync", "半自动", "COMMON|<真云代表: Hermes>|<证据: 三端指纹快照+轮换序列+状态字段>|<阻塞: 一次性IAM凭证>")
 add("D4-18", "D4安全", "confirm-not-deny审批语义", "P0", "真云+标准客户端",
     "写操作触发确认流程",
     "①发起写操作 ②观察确认对话框 ③分别确认/拒绝",
@@ -715,9 +715,9 @@ add("D3-B4", "D3功能", "explain_error可执行", "P2", "任一云错误场景"
     "给出可执行下一步而非干话", "标: Microsoft 恢复路径要求; 仓: nightly场景C冒烟项",
     "explain_error", "半自动")
 add("D3-B5", "D3功能", "detect_framework识别", "P2", "本地项目样本",
-    "11种框架样例工程",
-    "①准备11框架工程 ②detect_framework ③核对框架/构建/端口",
-    "识别准确且给出构建产物/端口", "P: 工具描述枚举+既有单测契约",
+    "13 种框架样例工程(+monorepo)",
+    "①准备 13 框架工程(+monorepo) ②detect_framework ③核对框架/构建/端口",
+    "识别准确且给出构建产物/端口", "P: 工具描述枚举; 注:工具描述列11框架,源码FRAMEWORKS实为13框架+monorepo(漏Static Site) + 既有单测契约",
     "detect_framework", "脚本")
 add("D3-B6", "D3功能", "search_docs命中率", "P2", "标准环境",
     "API参数/配额/限制类查询",

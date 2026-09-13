@@ -24,7 +24,7 @@ NR3版本升级提醒,新版本>dismissedVersion 无视冷却,D1-32,由EXP-D7 OS
 NR3版本升级提醒,skip 文件持久化与多路径,D1-33,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"文件{ dismissedVersion/dismissedAt/expireAt }, 插件目录无副本时回退共享路径",PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,check_failed 不阻塞正常调用,D1-34,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"result=check_failed, note 检测失败不影响使用, 不抛错不阻塞",PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,缓存 TTL 与失败节流,D1-35,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,1h 内复用探测结果；失败后 5min 节流,PASS,DESIGN_COVERED,PASS,测试负责人,,
-NR3版本升级提醒,首调用兜底提示（会话首个工具附加更新信息）,D1-36,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,仅会话首个非 check/upgrade 工具经 decorateResult 附加 _updateInfo（updat,PASS,DESIGN_COVERED,PASS,测试负责人,,
+NR3版本升级提醒,首调用兜底提示（会话首个工具附加更新信息）,D1-36,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,仅会话首个非 check/upgrade 工具经 dispatch 内部 decorateResult 附加 _upda,PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,SKILL.md 会话启动指令存在性,D1-37,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,SKILL.md 含首次操作前先 check_update 的指令,PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,huaweicloud_upgrade 语义,D1-38,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,success/previousVersion/installedVersion/requiresRestart=tru,PASS,DESIGN_COVERED,PASS,测试负责人,,
 NR3版本升级提醒,Windows 升级检测链可用性,D1-39,EXP-NR3-09;EXP-NR3-10;EXP-NR3-11,安装/生命周期,<代表: Windows/Linux>,Windows 下检测链真实可用，不得 EINVAL 静默失败,FAIL,DESIGN_COVERED,FAIL,测试负责人,需 #554 回归,
@@ -60,7 +60,7 @@ NR2 AK/SK架构v4,cmdAuthReconcile非TTY守卫,D2-17,无(不展开/代表执行)
 NR2 AK/SK架构v4,.last_sync mtime手动改动检测,D2-18,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,mtime>marker→R2 仲裁；≤→R4 自动重写,PASS,DESIGN_COVERED,PASS,测试负责人,,evidence/d2-auth-reconcile
 NR2 AK/SK架构v4,命名档只审计不自动动(R5),D2-19,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,解析/写档只动 current 档，命名档隔离,PASS,DESIGN_COVERED,PASS,测试负责人,,evidence/d2-auth-reconcile
 NR2 AK/SK架构v4,HUAWEICLOUD_HOME重定向(R6),D2-20,无(不展开/代表执行),认证/凭证,<代表: Win/Linux 真机>,S2 固定 ~/.hcloud 不受影响（方案 T1 断言3）,SPEC-MISMATCH,DESIGN_COVERED,SPEC-MISMATCH,测试负责人,需开发/产品裁决,
-全量评审补齐REV-20260911004604,AK/SK 轮换后 auth_status 正确感知（凭证状态维度）,D2-21,无(不展开/代表执行),认证/凭证,<真云代表: Hermes>,30s 内三端指纹全部=F2（逐端断言，旧指纹 F1 零残留）；auth_status.reconciled.s1/s2,UNASSESSED,DESIGN_COVERED,NOT_RUN,测试负责人,,
+全量评审补齐REV-20260911004604,AK/SK 轮换后 auth_status 正确感知（凭证状态维度）,D2-21,无(不展开/代表执行),认证/凭证,<真云代表: Hermes>,30s 内三端指纹全部=F2（逐端断言，旧指纹 F1 零残留）；auth_status.reconciled.store,UNASSESSED,DESIGN_COVERED,NOT_RUN,测试负责人,,
 v1.5规划(v1.3基线),confirm-not-deny审批语义,D4-18,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表: 安全基线 Hermes+OpenCode>,写操作需显式确认，不被直接拒绝也不被直接放行,UNASSESSED,DESIGN_COVERED,NOT_RUN,测试负责人,,
 v1.5规划(v1.3基线),确认流下预检仍生效,D4-19,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表: 安全基线 Hermes+OpenCode>,确认流程中风险预检仍生效拦截,UNASSESSED,DESIGN_COVERED,NOT_RUN,测试负责人,,
 v1.5规划(v1.3基线),拒绝后零操作,D4-20,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,拒绝后无任何资源变更、无命令执行,UNASSESSED,DESIGN_COVERED,NOT_RUN,测试负责人,,
