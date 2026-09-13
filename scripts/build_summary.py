@@ -11,15 +11,27 @@ import os, sys, csv, datetime
 
 REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OSES = ["Windows", "Linux"]
-RANK = {"FAIL": 5, "BLOCKED": 4, "SPEC-MISMATCH": 3, "PARTIAL": 3, "SKIP": 2, "NOT_RUN": 2, "PASS": 1, "": 0}
 SKIP_DIRS = {"Summary", "Regression", "version", "history"}
 
 
-def worst(statuses):
-    vals = [s for s in statuses if s]
-    if not vals:
-        return "NOT_RUN"
-    return max(vals, key=lambda x: RANK.get(x, 0))
+def summarize(statuses):
+    """统计各状态数量，如 'PASS:4 FAIL:1 NOT_RUN:6 未回填:1'（空列单列「未回填」，与显式 NOT_RUN 区分）。"""
+    order = ["PASS", "FAIL", "BLOCKED", "SPEC-MISMATCH", "NOT_RUN"]
+    cnt = {}
+    unfilled = 0
+    for s in statuses:
+        s = (s or "").strip()
+        if not s:
+            unfilled += 1
+        else:
+            cnt[s] = cnt.get(s, 0) + 1
+    parts = [f"{s}:{cnt[s]}" for s in order if cnt.get(s)]
+    for s in sorted(cnt):
+        if s not in order:
+            parts.append(f"{s}:{cnt[s]}")
+    if unfilled:
+        parts.append(f"未回填:{unfilled}")
+    return " ".join(parts) if parts else f"未回填:{len(statuses)}"
 
 
 def find_machine_dirs(date):
@@ -83,9 +95,8 @@ def build(kind, src_rel, id_key, name_keys, status_key, date, machine_dirs, cols
                 row["当日总执行时间"] = t if not prev else (t if t > prev else prev)
 
     for row in summary:
-        vals = [row[c] for c in cols if row.get(c)]
-        if vals:
-            row["当日总执行状态"] = worst(vals)
+        vals = [row[c] for c in cols]
+        row["当日总执行状态"] = summarize(vals)
 
     out = os.path.join(REPO, "results", "Summary", f"用例矩阵-{kind}-总执行结果-{date}.csv")
     os.makedirs(os.path.dirname(out), exist_ok=True)
