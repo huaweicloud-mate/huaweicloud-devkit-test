@@ -12,7 +12,7 @@ import os, sys, csv, datetime
 REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OSES = ["Windows", "Linux"]
 RANK = {"FAIL": 5, "BLOCKED": 4, "SPEC-MISMATCH": 3, "PARTIAL": 3, "SKIP": 2, "NOT_RUN": 2, "PASS": 1, "": 0}
-SKIP_DIRS = {"Summary", "Regression", "Iteration", "history"}
+SKIP_DIRS = {"Summary", "Regression", "version", "history"}
 
 
 def worst(statuses):

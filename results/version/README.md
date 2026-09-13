@@ -1,4 +1,4 @@
-# Iteration 迭代目录
+# version 版本目录
 
 本目录按**版本**建子目录，管理各版本的迭代测试。
 
@@ -9,6 +9,7 @@
 
 ## 关联
 
-- 每客户端执行：`results/<客户端>/<日期>/`
+- 每客户端执行：`results/<客户端>/<日期>-<IP>/<OS>/`
 - 每日汇总：`results/Summary/`
 - 问题回归：`results/Regression/`
+- 历史迭代归档：`results/history/`
