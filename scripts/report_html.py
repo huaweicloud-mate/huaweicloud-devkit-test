@@ -20,6 +20,9 @@ SKIP_DIRS = {"Summary", "Regression", "version", "history"}
 STATUS_COLOR = {"PASS": "#2ecc71", "FAIL": "#e74c3c", "BLOCKED": "#f39c12",
                 "SPEC-MISMATCH": "#e67e22", "NOT_RUN": "#95a5a6", "": "#95a5a6"}
 STATUS_RANK = {"FAIL": 0, "SPEC-MISMATCH": 1, "BLOCKED": 2, "NOT_RUN": 3, "PASS": 4, "": 5}
+# 10 个智能体（客户端）权威枚举，与 scripts/hourly_sync.py 的 CLIENTS 一致
+ALL_CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+               "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 
 
 def load_summary(date):
@@ -99,6 +102,82 @@ def render(rows, findings, date, version):
         executed = total - cnt["NOT_RUN"] - cnt[""]
         client_summary.append((col, executed, cnt["PASS"], cnt["FAIL"], cnt["BLOCKED"], cnt["SPEC-MISMATCH"]))
 
+    # —— 智能体执行概览（10 客户端枚举，聚合多机器/多 OS 列）——
+    def agent_of(col):
+        return col.split("-")[0]
+    cols_by_agent = {}
+    for col in client_cols:
+        cols_by_agent.setdefault(agent_of(col), []).append(col)
+
+    def badge_text(text, color):
+        return (f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;'
+                f'color:#fff;background:{color}">{text}</span>')
+
+    agent_rows_html = ""
+    executed_agents = 0
+    pkg_only_agents = 0
+    notrun_agents = 0
+    for cl in ALL_CLIENTS:
+        cols = cols_by_agent.get(cl, [])
+        if not cols:
+            notrun_agents += 1
+            agent_rows_html += (f'<tr><td><b>{cl}</b></td>'
+                                f'<td>{badge_text("未执行", "#95a5a6")}</td>'
+                                f'<td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>')
+            continue
+        cnt = Counter()
+        unfilled = 0
+        for col in cols:
+            for r in rows:
+                v = (r.get(col) or "").strip()
+                if v:
+                    cnt[v] += 1
+                else:
+                    unfilled += 1
+        ex = cnt["PASS"] + cnt["FAIL"] + cnt["BLOCKED"] + cnt["SPEC-MISMATCH"]
+        if ex:
+            executed_agents += 1
+            clean = (cnt["FAIL"] + cnt["BLOCKED"] + cnt["SPEC-MISMATCH"]) == 0
+            st_text, st_color = ("已执行", "#2ecc71") if clean else ("存在缺陷", "#e74c3c")
+        else:
+            pkg_only_agents += 1
+            st_text, st_color = ("已建包未回填", "#f39c12")
+        agent_rows_html += (f'<tr><td><b>{cl}</b></td>'
+                            f'<td>{badge_text(st_text, st_color)}</td>'
+                            f'<td>{ex}</td>'
+                            f'<td>{cnt["PASS"]}</td><td>{cnt["FAIL"]}</td>'
+                            f'<td>{cnt["BLOCKED"]}</td><td>{cnt["SPEC-MISMATCH"]}</td>'
+                            f'<td>{cnt["NOT_RUN"]}</td><td>{unfilled}</td></tr>')
+    agent_overview_line = (f'共 <b>{len(ALL_CLIENTS)}</b> 个智能体：'
+        f'<span style="color:#2ecc71">已执行 <b>{executed_agents}</b></span>，'
+        f'<span style="color:#f39c12">已建包未回填 <b>{pkg_only_agents}</b></span>，'
+        f'<span style="color:#95a5a6">未执行 <b>{notrun_agents}</b></span>。')
+
+    # —— 各维度用例统计（设计级按维度+优先级，展开级按展开类型）——
+    design_rows = [r for r in rows if r.get("层级") == "设计级"]
+    expand_rows = [r for r in rows if r.get("层级") == "展开级"]
+    dim_count = Counter((r.get("维度") or "(空)") for r in design_rows)
+    dim_prio = {}
+    for r in design_rows:
+        d = r.get("维度") or "(空)"
+        p = (r.get("优先级") or "").strip() or "(空)"
+        dim_prio.setdefault(d, Counter())[p] += 1
+    prio_values = sorted({(r.get("优先级") or "").strip() or "(空)" for r in design_rows},
+                         key=lambda x: ({"P0": 0, "P1": 1, "P2": 2}.get(x, 9), x))
+    dim_head = "".join(f'<th style="padding:6px;border:1px solid #ddd;">{p}</th>' for p in prio_values)
+    DIM_ORDER = ["D1安装", "D2认证", "D3功能", "D4安全", "D5客户端", "D6性能", "D7兼容", "D8质量", "D9协议", "D10评测"]
+    dim_rows_html = "".join(
+        f'<tr><td><b>{d}</b></td><td>{dim_count[d]}</td>'
+        + "".join(f'<td>{dim_prio[d].get(p, 0)}</td>' for p in prio_values)
+        + '</tr>'
+        for d in sorted(dim_count, key=lambda x: DIM_ORDER.index(x) if x in DIM_ORDER else 999)
+    )
+    expand_type_count = Counter((r.get("展开类型") or "(空)") for r in expand_rows)
+    expand_rows_html = "".join(
+        f'<tr><td><b>{t}</b></td><td>{expand_type_count[t]}</td></tr>'
+        for t in sorted(expand_type_count)
+    )
+
     problem_rows = "".join(
         f'<tr><td>{r.get("层级","")}</td><td><b>{r.get("ID","")}</b></td><td>{r.get("优先级","")}</td>'
         f'<td>{r.get("标题","")}</td><td>{badge(worst(r.get("当日总执行状态","")))}</td></tr>'
@@ -136,6 +215,23 @@ def render(rows, findings, date, version):
 </tr>
 </table>
 <p style="color:#7f8c8d;font-size:12px;">通过率分母 = PASS+FAIL+SPEC（不含 BLOCKED/NOT_RUN）</p>
+
+<h2>智能体执行概览</h2>
+<p style="color:#7f8c8d;">{agent_overview_line}</p>
+<table style="border-collapse:collapse;width:100%;font-size:13px;">
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;">智能体</th><th style="padding:6px;border:1px solid #ddd;">执行状态</th><th style="padding:6px;border:1px solid #ddd;">已执行</th><th style="padding:6px;border:1px solid #ddd;">PASS</th><th style="padding:6px;border:1px solid #ddd;">FAIL</th><th style="padding:6px;border:1px solid #ddd;">BLOCKED</th><th style="padding:6px;border:1px solid #ddd;">SPEC</th><th style="padding:6px;border:1px solid #ddd;">NOT_RUN</th><th style="padding:6px;border:1px solid #ddd;">未回填</th></tr></thead>
+<tbody>{agent_rows_html}</tbody></table>
+<p style="color:#95a5a6;font-size:11px;">已执行 = PASS+FAIL+BLOCKED+SPEC 计数和；「存在缺陷」= 该智能体有 FAIL/BLOCKED/SPEC 回填；未回填 = 该智能体各单元为空（未回填执行态）。</p>
+
+<h2>各维度用例统计</h2>
+<p style="color:#7f8c8d;font-size:12px;">设计级 daily 精选用例（共 {len(design_rows)} 条）按维度分布，优先级 P0/P1/P2：</p>
+<table style="border-collapse:collapse;width:100%;font-size:13px;">
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;text-align:left;">维度</th><th style="padding:6px;border:1px solid #ddd;">用例数</th>{dim_head}</tr></thead>
+<tbody>{dim_rows_html}</tbody></table>
+<p style="color:#7f8c8d;font-size:12px;">展开级用例（共 {len(expand_rows)} 条）按展开类型分布：</p>
+<table style="border-collapse:collapse;width:100%;font-size:13px;">
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;text-align:left;">展开类型</th><th style="padding:6px;border:1px solid #ddd;">用例数</th></tr></thead>
+<tbody>{expand_rows_html}</tbody></table>
 
 <h2>缺陷清单（FAIL / BLOCKED / SPEC-MISMATCH）</h2>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
