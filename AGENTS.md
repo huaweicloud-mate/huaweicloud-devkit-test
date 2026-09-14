@@ -139,7 +139,7 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 - 证据落 `results/<客户端>/<日期>-<IP>/<OS>/evidence/<case-id>/`（探针 + stdout.log）。
 - 结论三选一：**已修复** / **仍存在** / **BLOCKED**（环境未齐写 blockedReason）。
 - 结论报告落 `results/<客户端>/<日期>-<IP>/<OS>/问题回归-<编号>.md`（复现/已修复/仍存在 + 证据链接）。
-- 已修复关单 / 仍存在更新 issue 由维护者汇总各机结论后统一操作。
+- 已修复关单 / 仍存在更新 issue 由维护者汇总各机结论后统一操作（维护者回归完成即直接评论 + push，不另问）。
 
 ### 问题回归的权限例外与并发纪律
 - **回归场景解除「test-cases 只读」**：执行回归的 agent 可写 `test-cases/issues/<编号>-<slug>/` 与生成器（gen_matrix / gen_tracing / gen_daily）。这是对「每日执行」只读约束的明确例外；**仍禁手改 CSV**（只改生成器再重生成）。

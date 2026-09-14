@@ -110,8 +110,12 @@ git log --oneline -S "关键函数名" -5                 # 确认修复实现�
 ### Step 3 用例输出
 与流水线 A Step 3 相同：生成器 + verify_new（exit 0）+ scan_gaps（GATE-PASS）+ 冻结/README 同步。
 
-### Step 4 测试验证
-针对该缺陷定向复测（不是全量矩阵）：init_day 建包 → 执行回归用例 → 回填 → 结论落 `results/Regression/<日期>/问题回归-<日期>.md` → 已修复则关单、仍存在则更新 issue。
+### Step 4 测试验证 + 收尾（评论 + push 为默认动作，不另问用户）
+针对该缺陷定向复测（不是全量矩阵）：init_day 建包 → 执行回归用例 → 回填 → 结论落 `results/Regression/<日期>/问题回归-<编号>.md` 与 `test-cases/issues/<编号>-<slug>/回归用例.md` 结论段。
+
+**收尾（回归完成即执行，勿逐条打断问用户）**：
+1. **归档并 push**：更新 `test-cases/issues/README.md` 清单行 → `git add` 三个产物 → `git fetch origin main && git rebase origin/main`（防并发）→ push token URL（`git -c credential.helper= push "https://x-access-token:$T@github.com/huaweicloud-mate/huaweicloud-devkit-test.git" main`）。⚠️ 并发 push（其他 agent `hourly_sync` / GitHub Actions 自动汇总）会把 main 推进——push 前必 rebase，事后用「commit 是否入 main 历史」核验，勿用 `main==<sha>` 硬断言。
+2. **评论上游 issue**：复验结论写 `_issue<编号>_comment.md`（UTF-8）→ `gh issue comment <编号> --repo huaweicloud/huaweicloud-devkit --body-file <文件>`（body-file 由 gh 自读 UTF-8，中文不乱；勿走命令行传 title，会 GBK 乱码）。结论「已修复」→ `gh issue close <编号>`；「仍存在/部分修复」→ 保持 open + 只追加复验评论。
 
 **验证分层（证据强度递增，可只做 1+2 或补 3）**：
 1. **函数级探针**（快、可复现）：临时 `.mjs` 直接 import 被测模块跑断言，跑完删；隔离 `HUAWEICLOUD_HOME` 临时目录避免污染真实凭证；脱敏 SK 只出前 3 位 + len。
@@ -130,7 +134,7 @@ git log --oneline -S "关键函数名" -5                 # 确认修复实现�
 
 > 回归 #<编号>：先读测试仓库 github.com/huaweicloud-mate/huaweicloud-devkit-test.git 根目录 AGENTS.md，按「问题单号回归」节完整执行流水线 B 的 Step 0-4（含自己写回归用例 + 跑生成器 + 门禁），自我识别客户端+OS，结论落 results/<你的客户端>/<日期>-<IP>/<OS>/问题回归-<编号>.md。只动自己负责的 issue 目录与生成器（禁手改 CSV），不 close/reopen/评论 issue。
 
-- 分工：Step 2 回归用例设计 + Step 3 用例输出由**领走该 issue 的 agent** 写；多机并发改母版时先 pull 最新、push 前 fetch+rebase。Step 4 末尾的关单/更新 issue 仍由维护者汇总各机结论后统一操作（唯一保留的维护者侧动作）。
+- 分工：Step 2 回归用例设计 + Step 3 用例输出由**领走该 issue 的 agent** 写；多机并发改母版时先 pull 最新、push 前 fetch+rebase。Step 4 末尾的**评论 + push（含关单/更新 issue）由维护者汇总各机结论后统一执行**——回归完成即做，不另问用户（详见 Step 4「收尾」）。
 
 ## 五、全程停点（这几类必须停下问用户，红线不因「全链路」豁免）
 
