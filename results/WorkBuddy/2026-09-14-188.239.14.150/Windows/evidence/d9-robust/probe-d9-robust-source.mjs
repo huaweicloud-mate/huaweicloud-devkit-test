@@ -6,7 +6,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const PKG_ROOT = 'C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit';
+const PKG_ROOT = 'C:/Users/Administrator/WorkBuddy/devkit-test/hdk';
 const SRC = join(PKG_ROOT, 'plugins/huaweicloud-core/src');
 const results = [];
 

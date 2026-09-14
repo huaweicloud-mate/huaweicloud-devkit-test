@@ -11,7 +11,7 @@
  * D5-1: 清单发现加载
  * D5-8: 服务矩阵双向对齐
  */
-import { semverCompare, hasPrerelease, determineTarget, judgeUpdate, parseDistTagsOutput, readInstalledVersion } from 'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/update-check.mjs';
+import { semverCompare, hasPrerelease, determineTarget, judgeUpdate, parseDistTagsOutput, readInstalledVersion } from 'file:///C:/Users/Administrator/WorkBuddy/devkit-test/hdk/plugins/huaweicloud-core/src/update-check.mjs';
 
 const results = [];
 

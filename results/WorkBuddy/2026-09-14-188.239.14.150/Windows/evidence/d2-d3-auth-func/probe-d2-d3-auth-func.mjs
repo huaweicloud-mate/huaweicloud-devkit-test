@@ -5,13 +5,13 @@
  *           D1-3, D1-4, D1-6 (CLI)
  * 验证 huaweicloud-devkit 认证/功能域的源码级正确性
  */
-import { classifyTextCommand, classifyHcloudArgs, redactSecrets } from 'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { classifyTextCommand, classifyHcloudArgs, redactSecrets } from 'file:///C:/Users/Administrator/WorkBuddy/devkit-test/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const PLUGIN_SRC = 'C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src';
-const PKG_ROOT = 'C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit';
+const PLUGIN_SRC = 'C:/Users/Administrator/WorkBuddy/devkit-test/hdk/plugins/huaweicloud-core/src';
+const PKG_ROOT = 'C:/Users/Administrator/WorkBuddy/devkit-test/hdk';
 const results = [];
 
 function test(name, pass, actual, expected, passMsg, failMsg) {

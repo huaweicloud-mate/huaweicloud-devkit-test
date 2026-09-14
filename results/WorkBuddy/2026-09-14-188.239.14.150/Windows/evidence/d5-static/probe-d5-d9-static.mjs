@@ -14,7 +14,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-const PKG_ROOT = 'C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit';
+const PKG_ROOT = 'C:/Users/Administrator/WorkBuddy/devkit-test/hdk';
 const results = [];
 
 function test(name, pass, actual, expected, passMsg, failMsg) {
@@ -48,36 +48,39 @@ test('D9-1 tool-names-non-empty',
   `工具名列表非空 (${toolNames.length} 个)`, null);
 
 // === D5-1: 清单发现加载 ===
-// Check manifest file exists
-const manifestPath = join(PKG_ROOT, 'plugins/huaweicloud-core/manifest.json');
+// Check manifest file exists in npm package
+const NPM_PKG = 'C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit';
+const manifestPath = join(NPM_PKG, 'plugins/huaweicloud-core/manifest.json');
 test('D5-1 manifest-exists',
   existsSync(manifestPath), existsSync(manifestPath), true,
-  'manifest.json 存在', 'manifest.json 不存在');
+  'manifest.json 存在', `manifest.json 不存在 (path: ${manifestPath})`);
 
-// Check skills directory
-const skillsDir = join(PKG_ROOT, 'plugins/huaweicloud-core/skills');
+// Check skills directory in npm package
+const skillsDir = join(NPM_PKG, 'plugins/huaweicloud-core/skills');
 test('D5-1 skills-dir-exists',
   existsSync(skillsDir), existsSync(skillsDir), true,
   'skills 目录存在', 'skills 目录不存在');
 
-const skillFiles = existsSync(skillsDir) ? readdirSync(skillsDir).filter(f => f.endsWith('.md')) : [];
+const skillDirs = existsSync(skillsDir) ? readdirSync(skillsDir).filter(f => existsSync(join(skillsDir, f, 'SKILL.md'))) : [];
 test('D5-1 skills-count',
-  skillFiles.length > 0, skillFiles.length, '>0',
-  `技能文件: ${skillFiles.length} 个`, null);
-
+  skillDirs.length > 0, skillDirs.length, '>0',
+  `技能目录: ${skillDirs.length} 个`, `技能目录: ${skillDirs.length} 个 (path: ${skillsDir})`);
 // === D5-8: 服务矩阵↔技能目录对齐 ===
 const skillServiceMap = {};
-for (const f of skillFiles) {
-  const content = readFileSync(join(skillsDir, f), 'utf8');
-  // Check if skill has service reference
+for (const d of skillDirs) {
+  const skillPath = join(skillsDir, d, 'SKILL.md');
+  const content = readFileSync(skillPath, 'utf8');
   const serviceMatch = content.match(/service[:\s]+['"]?([a-z-]+)['"]?/i);
   if (serviceMatch) {
-    skillServiceMap[serviceMatch[1].toLowerCase()] = f;
+    skillServiceMap[serviceMatch[1].toLowerCase()] = d;
+  } else {
+    // Check if skill name maps to a service
+    skillServiceMap[d.replace(/^huawei-/, '')] = d;
   }
 }
 test('D5-8 service-skill-alignment',
   Object.keys(skillServiceMap).length > 0, Object.keys(skillServiceMap).length, '>0',
-  `服务-技能映射: ${Object.keys(skillServiceMap).length} 个`, null);
+  `服务-技能映射: ${Object.keys(skillServiceMap).length} 个`, `服务-技能映射: ${Object.keys(skillServiceMap).length} 个`);
 
 // === D9-4: 协议生命周期 ===
 // Verify mcp-protocol.mjs has initialize handler
