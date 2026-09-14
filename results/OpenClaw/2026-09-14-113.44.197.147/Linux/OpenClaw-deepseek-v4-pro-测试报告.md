@@ -1,10 +1,10 @@
 # OpenClaw-deepseek-v4-pro 每日测试报告
 
 > **报告名**：`OpenClaw-deepseek-v4-pro-测试报告.md`
-> **生成时间**：2026-09-14 07:12:00（北京时间）
+> **生成时间**：2026-09-14 23:58（北京时间）
 > **执行归档**：`results/OpenClaw/2026-09-14-113.44.197.147/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`FAIL`（存在 6 处高危缺陷，其中 P0 未修复，不得标 PASS）
+> **结论**：`FAIL`（存在 7 处缺陷，其中 4 处 P0，均与既有问题单去重跟踪，非新增）
 
 ---
 
@@ -12,18 +12,18 @@
 
 | 项 | 值 |
 |---|---|
-| 客户端 / Agent | OpenClaw + deepseek-v4-pro |
-| OS / 架构 | Linux aarch64（`ecs-hd-ai-work-00-0003`，`6.8.0-106-generic`） |
+| 客户端 / Agent | OpenClaw + deepseek-v4-pro-0813 |
+| OS / 架构 | Linux aarch64（`ecs-hd-ai-work-00-0003`，`6.8.0-106-generic`，Ubuntu 24.04.4） |
 | Node / npm / Python | Node v22.13.0 / npm 10.9.2 / Python 3.12.3 |
-| 被测版本（SUT） | `v1.1.4-next.3`（npm @next，gitHead `3b6290bc`，PR #647） |
-| 工具全集 | `39`（`tools.mjs` TOOL_DEFINITIONS） |
-| hcloud / 依赖 | KooCLI 7.2.12（credentials.json 已配置，AKSK 模式，cn-north-4） |
-| 真云凭证 | `cn-north-4`（AKSK，仅只读验证；本轮未创建/销毁真云资源） |
+| 被测版本（SUT） | `v1.1.4-next.6`（npm @next，gitHead `69ac7279`，PR #663） |
+| 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS，next.6 新增 `huaweicloud_obs_set_website_config` #347） |
+| hcloud / 依赖 | KooCLI 7.2.12（`~/.config/huaweicloud/credentials.json` 已配置，cn-north-4，AK/SK） |
+| 真云凭证 | `cn-north-4`（AK/SK，仅只读验证；本轮未创建/销毁真云资源） |
 | 测试类型 | 源码级探针 / 真机 CLI（readonly）/ MCP 协议 / 安全规则引擎 |
 | 设计真源 | 设计级 179 / 展开级 137 / 追踪表 10 列 |
 | daily 基础用例 | 设计级 81 / 展开级 71 |
 
-> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，决策/结果落 `stdout.log`/`*.log`；证据统一落 `evidence/<case-id>/`。
+> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数与 `tools.mjs` `callTool()`，决策/结果落 `stdout.log`/`*.log`；证据统一落 `evidence/<case-id>/`。本报告为 **next.6 二轮重跑**（上午 07:12 的首轮报告基于 next.3，本次 SUT 已更新至 next.6）。
 
 ---
 
@@ -32,12 +32,14 @@
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | 152（设计级 81 + 展开级 71） |
-| 已执行 | 49（设计级 54 标 PASS/FAIL，展开级 2 标 PASS） |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 49 / 7 / 0 / 0 / 96 |
-| 通过率（分母 = PASS+FAIL，不含 BLOCKED/NOT_RUN） | 87.5% |
-| P0 / P1 / P2 新增缺陷 | 4 / 3 / 0 |
+| 已执行（PASS+FAIL） | 59（设计级 56 + 展开级 3） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 52 / 7 / 93 / 0 / 0 |
+| 通过率（分母 = PASS+FAIL） | 88.1% |
+| P0 / P1 / P2 新增缺陷 | 4 / 3 / 0（均为已提单缺陷去重跟踪，无新增拆单） |
 | 红线（I 类）违规 | 0 |
 | 资源释放 | 全部归零（本轮无真云资源创建） |
+
+> BLOCKED 93 条目均为**环境阻塞**（无真机 install/PTY 生命周期、无真云、无 Windows/macOS、无多客户端、无评测 harness），每条已回填 `blockedReason`。可机械验证的用例（源码探针/CLI read-only/MCP 协议）已全部实测。
 
 ---
 
@@ -47,118 +49,87 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 47 | 有证据且通过 PASS 门禁 |
+| PASS | 49 | 有证据且通过 PASS 门禁 |
 | FAIL | 7 | 不符预期，根因见缺陷清单 |
-| BLOCKED | 0 | — |
+| BLOCKED | 25 | 环境阻塞，见阻塞项 |
 | SPEC-MISMATCH | 0 | — |
-| NOT_RUN | 27 | 本轮未覆盖（PTY 安装引导 / Windows / 跨进程注入 / 真云 E2E / D10 评测等） |
+| NOT_RUN | 0 | P0 无 NOT_RUN；环境不满足均按 BLOCKED 处理 |
 | **合计** | **81** | |
 
 ### 3.2 展开级
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 2 | OpenClaw 客户端矩阵展开（EXP-D5-9-1/3） |
+| PASS | 3 | 本客户端可机械验证（EXP-D5-9-1/9-3 OpenClaw 客户端枚举 + EXP-NR3-10 Linux 侧负向断言） |
 | FAIL | 0 | — |
-| BLOCKED | 0 | — |
+| BLOCKED | 68 | 环境阻塞（其他客户端专属枚举 / 真云 / Window/macOS 变体 / 评测集） |
 | SPEC-MISMATCH | 0 | — |
-| NOT_RUN | 69 | 本轮未覆盖（其余多终端矩阵 / 真云 EXP-C4 / ADV-E / NR3 等） |
+| NOT_RUN | 0 | — |
 | **合计** | **71** | |
 
 ---
 
-## 四、缺陷清单（详尽，7 个 FAIL，均有证据 + 根因）
-
-> **提单状态**：本轮缺陷与 2026-09-13 已开出的合并单 `huaweicloud/huaweicloud-devkit#651`（v1.1.4-next.3，12 项/8 agent）及 `#650`（4 项）逐条对应，属**已提单**缺陷（同一 SUT，非新增），故不重复拆单。D4-6 为同族补充细化，见 FINDINGS.md 补充说明。
+## 四、缺陷清单（详尽，每个缺陷一栏）
 
 | # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | `D4-2` | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应返回 `deny` | 返回 `allow`，`HW_*` 前缀未拦截 | `safety-policy.mjs:336` | P | 已提单 #651/#650 |
-| 2 | P0 | `D4-16` | 命令包裹穿透 | `sh -c "env \| grep HUAWEICLOUD"` 应返回 `deny` | 返回 `allow`，wrapper 内层命令未二次检测 | `safety-policy.mjs:335` | P | 已提单 #651/#650 |
-| 3 | P0 | `D4-21` | 制品预检未检出 broad IAM policy | `actions = ["*"]` 应检出 findings>0 | findings=[]，Terraform HCL 未覆盖 | `safety/rules/cloud-risk-rules.json:192` | P | 已提单 #651 |
-| 4 | P0 | `D4-23` | 全局规则 huawei-agent-rules.mdc 注入失效 | `package.json files` 应含 `rules/` | files 白名单不含 `rules/`，npm 包缺失规则；setup-cli 0 处引用 | `package.json:8` + `setup-cli.mjs` | P | 已提单 #651/#650 |
-| 5 | P1 | `D4-6` | adminPass 空格形式回显未脱敏 | `--adminPass xxx`（空格）应脱敏不返回明文 | 返回 `true`（明文 `Secret123` 出现在 args） | `safety-policy.mjs:42` | P | 已提单（详见 FINDINGS 补充） |
-| 6 | P1 | `D4-7` | hook 三工具之一（artifacts）失效 | `hook_check_artifacts` 对 broad IAM 应 `deny` | 返回 `allow` | `safety/rules/cloud-risk-rules.json:192` | P | 已提单 #651 |
-| 7 | P1 | `D9-2` | JSON-RPC 未知方法错误码未区分 | 未知方法应返回 `-32601`（Method not found） | 统一返回 `-32603`（Internal Error） | `mcp-server.mjs:169` + `mcp-protocol.mjs:95` | P | 已提单 #651/#650 |
+| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整（`HW_` 前缀未覆盖） | `printenv HW_ACCESS_KEY` 应 `deny` | 返回 `allow` | `safety-policy.mjs:336` | P | 已提单 #651/#652/#673/#674/#676 |
+| 2 | P0 | D4-16 | 命令包裹穿透（`sh -c` 内层 env dump 未二次检测） | `sh -c "env \| grep HUAWEICLOUD"` 应 `deny` | 返回 `allow` | `safety-policy.mjs:334-337` | P | 已提单 #651/#652/#674 |
+| 3 | P0 | D4-21 | hook_check_artifacts 未检出 broad IAM（HCL `actions = ["*"]`） | HCL broad IAM 制品应 `deny` | `findings=[]`/`allow` | `cloud-risk-rules.json:188-196` | P | 已提单 #651/#673/#674 |
+| 4 | P0 | D4-23 | 全局规则 huawei-agent-rules 未注入（孤儿文件） | `files` 白名单应含 `rules` 且安装目标注入 | 白名单缺 `rules`，0 处引用注入 | `package.json:8-18` + `setup-cli.mjs` | P | 已提单 #651/#673/#674/#676 |
+| 5 | P1 | D4-6 | adminPass 空格形式回显未脱敏 | `--adminPass Secret123` 不应含明文 | args 含明文 `Secret123` | `safety-policy.mjs:42` | P | 已提单（同族 #651 项2 / #673 项4） |
+| 6 | P1 | D4-7 | hook_check_artifacts broad IAM 失效（与 #3 同根因） | HCL broad IAM 应 `deny` | `allow` | `cloud-risk-rules.json:192` | P | 已提单 #651/#673/#674 |
+| 7 | P1 | D9-2 | JSON-RPC 未知方法错误码未区分（-32601 缺失） | 未知方法应 `-32601` | 统一 `-32603` | `mcp-server.mjs:169` + `mcp-protocol.mjs:95` | P | 已提单 #651/#652/#676 |
 
-### 根因详情（每个 P0/P1 缺陷附代码片段 + 复现证据）
+### 根因详情（P0/P1 缺陷代码片段 + 复现证据）
 
 **#1 [P0] D4-2 凭证 env 打印拦截不完整**
 
-- 期望：`env | grep HW_ACCESS_KEY` → `deny`
-- 实际：`printenv HW_ACCESS_KEY`、`env | grep HW_SECRET_KEY` 均返回 `allow`
-- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:335-336`
-  `classifyTextCommand()` 的 env-dump 正则 `/HUAWEICLOUD|HWC_|HCLOUD|OS_/i` 未覆盖 `HW_ACCESS_KEY`/`HW_SECRET_KEY`（STS 临时凭证环境变量前缀）
+- 期望：`printenv HW_ACCESS_KEY` → `deny`
+- 实际：`allow`（`HW_` 前缀漏防；`HUAWEICLOUD_ACCESS_KEY_ID` 前缀可正常拦截）
+- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:334-337`
 
 ```javascript
 if (
   /(^|\s)(env|printenv|Get-ChildItem\s+Env:|gci\s+Env:|dir\s+Env:)/i.test(text) &&
   /HUAWEICLOUD|HWC_|HCLOUD|OS_/i.test(text)   // ← 缺 HW_ 前缀
-) {
+) { ... deny ... }
 ```
 
-- 证据：`evidence/d4-security-core/probe-p0-security.log`（D4-2 两条 FAIL）
+- 证据：`evidence/d4-security-core/probe-p0-security.log`（`FAIL printenv HW_ACCESS_KEY => allow`）
 
-**#2 [P0] D4-16 命令包裹穿透**
+**#3 [P0] D4-21 hook_check_artifacts broad IAM 漏检**
 
-- 期望：`sh -c "env | grep HUAWEICLOUD"` → `deny`
-- 实际：返回 `allow`
-- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:335` `classifyTextCommand()` 的 `(^|\s)env` 不命中 wrapper 引号内的 `env`；未抽取 wrapper 内层命令二次检测
-- 证据：`evidence/d4-security-core/probe-p0-security.log`
-
-**#3 [P0] D4-21 / 制品预检未检出 broad IAM policy**
-
-- 期望：`evaluateArtifacts([{path:'iam.tf', content:'resource "huaweicloud_iam_policy" ... statement { actions = ["*"] }'}])` 应 findings>0
-- 实际：findings=[]（未检出）
-- 根因：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:192` `hwc-iam-admin-policy` 的 Action 正则仅匹配 JSON 形式（`"Action" : "*"` / `Action = *`），不匹配 Terraform HCL `actions = ["*"]`
-- 证据：`evidence/d4-security-core/probe-p0-security.log`（D4-21 第二条）
+- 根因：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:188-196` `hwc-iam-admin-policy` 的 Action 正则仅匹配 JSON `"Action":"*"` / `Action=*`，不匹配 Terraform HCL `actions = ["*"]` 块语法。
+- 证据：`evidence/d4-security-core/probe-p0-security.log`（`FAIL broad IAM policy (actions=["*"]) 检出 => false`）、`probe-d4-7-hooks.log`（`FAIL hook_check_artifacts broad IAM 拦截 => allow`）
 
 **#4 [P0] D4-23 全局规则注入失效**
 
-- 期望：`package.json files` 白名单含 `rules/`，全局安装后含 `huawei-agent-rules.mdc`
-- 实际：`files` 白名单不含 `rules/`（`package.json:8`），`setup-cli.mjs` 0 处引用 `rules/`/`.mdc`/`agent-rules`，安装目标无规则文件
-- 根因：`package.json:8-18` + `plugins/huaweicloud-core/src/setup-cli.mjs`（无引用）
-- 证据：`evidence/d4-security-core/probe-d4-23-rules.log`（3 条 FAIL）
+- 根因：`package.json:8-18` `files` 白名单缺 `rules`；`setup-cli.mjs` 0 处引用 `rules/`/`.mdc`/`agent-rules`。
+- 证据：`evidence/d4-security-core/probe-d4-23-rules.log`（3 FAIL：files 白名单 / setup-cli 引用 / 安装目标注入）
 
-**#5 [P1] D4-6 adminPass 空格形式脱敏缺失**
+**#5 [P1] D4-6 adminPass 空格形式回显未脱敏**
 
-- 期望：`--adminPass Secret123`（空格）脱敏后不返回明文值
-- 实际：明文 `Secret123` 出现在 plan 返回的 args
-- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:42` `redactString()` 正则只覆盖 `\s*[:=]\s*`（等号/冒号分隔），KooCLI 空格形式 `--adminPass xxx` 不命中
-- 证据：`evidence/d4-security-core/probe-d4-6-adminpass.log`
-
-**#6 [P1] D4-7 hook 三工具之一（artifacts）失效**
-
-- 期望：`hook_check_artifacts` 对 `actions = ["*"]` 返回 `deny`
-- 实际：返回 `allow`
-- 根因：同 #3，`cloud-risk-rules.json:192` 未覆盖 HCL 形式
-- 证据：`evidence/d4-security-core/probe-d4-7-hooks.log`
+- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:42` `redactString()` 正则 `((?:...|adminPass)...)\s*[:=]\s*(...)` 只覆盖 `=`/`:` 分隔，KooCLI 空格形式 `--adminPass Secret123` 不命中。
+- 证据：`evidence/d4-security-core/probe-d4-6-adminpass.log`（`FAIL 空格形式 adminPass 值脱敏 => true`）
 
 **#7 [P1] D9-2 JSON-RPC 错误码未区分**
 
-- 期望：未知方法应映射 `-32601`（Method not found）
-- 实际：`mcp-server.mjs:169` 统一硬编码 `code: -32603`
-- 根因：`plugins/huaweicloud-core/src/mcp-server.mjs:164-173` catch 统一 `-32603`；`mcp-protocol.mjs:95` `dispatch()` 抛 `Unsupported method` 但未映射 `-32601`
-- 证据：`evidence/d9-protocol/probe-d9-mcp-protocol.log`
+- 根因：`plugins/huaweicloud-core/src/mcp-server.mjs:169` catch 统一硬编码 `code: -32603`；`mcp-protocol.mjs:95` 对 unknown method 直接 `throw`，未映射 `-32601`。
+- 证据：`evidence/d9-protocol/probe-d9-mcp-protocol.log`（`FAIL 服务端区分 -32601 => false`）
 
 ---
 
-## 五、阻塞项（NOT_RUN 说明，共 96 条）
+## 五、阻塞项
 
-| 用例维度 | 阻塞原因 | 环境依赖 | 解除条件 |
+| 类别 | 用例 ID | 阻塞原因 | 解除条件 |
 |---|---|---|---|
-| D1-1/2/3/4/5/6 安装引导（PTY 菜单） | 非交互 shell 无 TTY 菜单 | 交互式终端 | 提供 TTY 后可复测 |
-| D1-39 Windows EINVAL | Linux 单机无法复现 Windows 场景 | Windows 环境 | Windows 机器执行 |
-| D1-41/42/45 跨进程注入 | 需可控 registry 响应 + MCP 进程重启时序夹具 | 注入夹具 | 夹具到位后复测 |
-| D1-58 通用 MCP 白名单接入 | 需 Claude/Cursor merge 语义现场 | 多客户端环境 | 对应客户端复测 |
-| D2-1 auth init 三端同步 | 需真实终端逐步收集三端落位证据 | 交互式终端 | 手动执行逐步验证 |
-| D3-C4 + EXP-C4-* 服务创建类 | 红线：真云最低配置创建→删除归零，未执行真实资源创建 | 真云 + 配额 | 白名单 + 归零验证后执行 |
-| D4-10/12/13/14 供应链/审计 | 需 pack 对比、SBOM 产出、CTS 审计现场证据 | SBOM/CTS | 工具链就绪后复测 |
-| D4-24 确认令牌边界 | 需真云 + 可注入时钟（TTL 加速）确认流 | 可注入时钟 | 夹具到位后复测 |
-| D5-6/7/8 其它客户端矩阵展开 | 本机单客户端（OpenClaw） | 多客户端环境 | 对应客户端复测 |
-| D9-4/6/7 协议生命周期/跨客户端 | 需多客户端 + 可控协议时序 | 多客户端 | 环境就绪后复测 |
-| D9-9 超时/取消 | 需可注入延迟夹具 + capabilities.cancellation | 延迟注入夹具 | 夹具到位后复测 |
-| D10-1~5 评测类 | 需 E2E 评测集 + 人工标注 | 评测集 | 评测集就绪后复测 |
+| 真机 install 生命周期 | D1-1~D1-6, D1-41, D1-42, D1-45, D1-58 | 需真机 OpenClaw install/doctor/update/uninstall + PTY 交互 + 隔离 HOME | 提供真机客户端终端/PTY 环境后复测 |
+| 真云资源 | D3-C4, D2-1, D4-13, D4-14, EXP-C4-* | 需华为云最小权限 AK/SK（建删资源红线） | 真云权限到位后按红线复测 |
+| 多客户端/评测 | D9-6, D1-2, EXP-D5-*（其他客户端） | 需多客户端同机 + D10 评测 harness | 提供多客户端/评测环境后复测 |
+| OS 变体 | EXP-NR3-09（Windows）、EXP-NR3-11（macOS） | 本机 Linux 无 Windows/macOS 环境 | 提供对应 OS 机器 |
+
+> 全部 BLOCKED 用例均已回填 `blockedReason`，无「无原因 BLOCKED」。
 
 ---
 
@@ -167,7 +138,7 @@ if (
 - [x] 凭证泄漏事件：`0`
 - [x] 写操作误判 read-only：`0`
 - [x] 红线（I 类）违规：`无`
-- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（所有只读命令输出已脱敏）
+- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（探针仅源码级断言，真云只读验证）
 
 ---
 
@@ -175,14 +146,12 @@ if (
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| ECS / 沙箱 / OBS | 否 | 未创建 | 无残留 |
-
-> 本轮未执行真云资源创建（D3-C4/EXP-C4 红线用例未跑），无资源残留。
+| 真云资源（ECS/沙箱/OBS 等） | 否 | — | 本轮未创建任何真云资源，无需释放 |
 
 ---
 
 ## 八、遗留与建议
 
-- 待裁决 SPEC：`D9-9`（tools/call 超时协议语义与取消，需可注入延迟夹具 + capabilities.cancellation 实测，本轮仅做结构探测）
-- 本轮未覆盖（说明范围）：真云 E2E / 多终端矩阵 / 审批流实时对话框 / Windows 场景 / D10 评测集
-- 建议：P0 安全缺陷（D4-2/16/21/23）均已在上一轮（2026-09-13）併入合并单 #651/#650 追踪，SUT 未变更（仍 `3b6290b`），本轮复测确认为延续未修复；建议修复方优先处理 `HW_*` env-dump 正则缺失、HCL `actions=["*"]` broad IAM 检出缺口、`rules/` 发布白名单缺失三处，见 #651。
+- **缺陷去重结论**：本轮 7 处 FAIL（4 P0 + 3 P1）与已开出的 next.3 合并单 `#650/#651/#652` 及 next.6 合并单 `#673/#674/#676/#675` 逐条对应，均属**已提单**缺陷（同一 SUT 缺陷族，next.6 未修复），故不重复拆单。
+- **范围外（BLOCKED）说明**：真机 install/uninstall 生命周期、真云资源 E2E、多客户端互通、D10 评测集、Windows/macOS 变体，需对应环境。
+- **建议**：① `safety-policy.mjs:336` env-dump 正则补 `HW_` 前缀；② `cloud-risk-rules.json` broad IAM 规则补 HCL `actions = ["*"]`；③ `mcp-server.mjs` 区分 `-32601/-32602/-32603`；④ `package.json` `files` 补 `rules` 并在 `setup-cli` 注入全局规则；⑤ `redactString` 补空格形式 `--adminPass xxx` 脱敏。

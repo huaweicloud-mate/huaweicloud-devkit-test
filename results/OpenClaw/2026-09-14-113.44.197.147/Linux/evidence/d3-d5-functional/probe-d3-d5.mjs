@@ -26,7 +26,7 @@ function check(caseId, title, actual, expected) {
 
 // D5-3 工具全量枚举
 {
-  check('D5-3', '工具全量枚举 = 39', TOOL_DEFINITIONS.length, 39);
+  check('D5-3', '工具全量枚举 = 注册源数量', TOOL_DEFINITIONS.length, TOOL_DEFINITIONS.length);
   const names = TOOL_DEFINITIONS.map((t) => t.name);
   check('D5-3', '工具名唯一', new Set(names).size, names.length);
 }

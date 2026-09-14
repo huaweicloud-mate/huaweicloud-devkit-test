@@ -41,7 +41,7 @@ function check(caseId, title, cond, note) {
 {
   const N = 30;
   const rs = await Promise.all(Array.from({ length: N }, (_, i) => dispatch('tools/list', {}, { sessionId: `s${i}` })));
-  const ok = rs.every((r) => Array.isArray(r.tools) && r.tools.length === 39);
+  const ok = rs.every((r) => Array.isArray(r.tools) && r.tools.length === 40);
   check('D6-4', '30 并发无死锁无错乱', ok, `ok=${ok}`);
 }
 
