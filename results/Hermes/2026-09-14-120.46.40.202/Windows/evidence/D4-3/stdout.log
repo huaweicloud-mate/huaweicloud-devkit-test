@@ -1,0 +1,5 @@
+=== D4-3: 明文secret API拦截 ===
+  "hcloud CSMS show-secret --secret_id=12345" → decision: allow, reason: Command appears to be a read-only Huawei Cloud operation.
+  "hcloud KMS list-keys --show-key-material" → decision: allow, reason: Command appears to be a read-only Huawei Cloud operation.
+  "hcloud CSMS show-secret --secret_id=test --version_id=v1" → decision: allow, reason: Command appears to be a read-only Huawei Cloud operation.
+RESULT: FAIL - Some plaintext secret API calls not blocked

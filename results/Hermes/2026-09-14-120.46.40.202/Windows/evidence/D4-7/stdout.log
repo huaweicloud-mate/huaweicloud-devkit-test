@@ -1,0 +1,42 @@
+hook_check_command (cat creds) isError: false
+hook1 output (first 300): {
+  "ok": false,
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-command-credential-file",
+      "title": "Credential file read",
+      "category": "credential",
+      "severity": "deny",
+      "message": "The command may read local Huawei Cloud credential or profile files into the 
+hook_check_command (printenv) isError: false
+hook2 output (first 300): {
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+hook_check_artifacts (broad IAM) isError: false
+hook3 output (first 300): {
+  "ok": false,
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-iam-admin-policy",
+      "title": "Broad IAM administrator grant",
+      "category": "iam",
+      "severity": "deny",
+      "message": "The change appears to grant broad administrator permissions.",
+      "remediation"
+hook_check_deploy_plan isError: false
+hook4 output (first 300): {
+  "ok": true,
+  "decision": "warn",
+  "findings": [
+    {
+      "ruleId": "hwc-functiongraph-public-no-auth",
+      "title": "Public FunctionGraph trigger without auth",
+      "category": "public_exposure",
+      "severity": "warn",
+      "message": "The generated FunctionGraph or API Gateway path
+RESULT: HOOK_TOOLS_TESTED

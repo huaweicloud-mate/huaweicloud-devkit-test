@@ -1,0 +1,17 @@
+Platform: win32
+Node: v22.23.1
+Without shell:true:
+  status: null
+  error: spawnSync npm.cmd EINVAL
+  error code: EINVAL
+With shell:true:
+  status: 0
+  stdout: {
+  "latest": "1.1.4",
+  "next": "1.1.4-next.6"
+}
+queryDistTagsSync(): null
+
+CONCLUSION: spawnSync npm.cmd EINVAL on Windows without shell:true
+Root cause: update-check.mjs:238 missing shell:true option
+RESULT: FAIL

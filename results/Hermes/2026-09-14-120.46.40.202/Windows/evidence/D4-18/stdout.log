@@ -1,0 +1,6 @@
+=== D4-18: confirm-not-deny审批语义 ===
+  "hcloud ECS create-servers --name=test" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud ECS delete-server --server_id=12345" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud IAM create-user --name=test" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud OBS put-object --bucket=test --key=file" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+RESULT: PASS - Write operations require explicit confirmation (denied until approved)

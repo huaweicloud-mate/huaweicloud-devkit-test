@@ -1,0 +1,26 @@
+=== D4-23: 全局规则 huawei-agent-rules.md 注入生效性 ===
+rules/ contents: [ 'huawei-agent-rules.mdc' ]
+
+huawei-agent-rules.mdc (3858 bytes):
+# HuaweiCloud DevKit — Agent Rules
+
+> Agent 加载插件时自动读取，定义全局行为约束。
+
+---
+
+## Core Principles
+
+- **Always use the Huawei MCP server first** (sandboxed, observable, auditable). Fall back to `hcloud` CLI only when MCP is unavailable.
+- **Before any task, check for available skills.** Use `huaweicloud_search_docs` or `huaweicloud_retrieve_skill` via MCP. Follow skill procedures over general knowledge.
+- **When uncertain** about API parameters, quotas, limits, or error codes — search documentat
+
+--- Rule content analysis ---
+Has MUST directives: true
+References CSMS/secrets: true
+References KMS: true
+References direct connect prohibition: false
+
+Integrations: [ 'atomcode', 'dsh', 'hermes', 'opencode', 'workbuddy' ]
+
+Injected references found: 0
+RESULT: PASS - Rules file exists with MUST constraints (injection via setup.cjs)

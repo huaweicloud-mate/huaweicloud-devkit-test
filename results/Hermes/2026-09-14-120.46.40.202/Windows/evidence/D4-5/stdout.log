@@ -1,0 +1,10 @@
+=== D4-5: 写操作误判检测 ===
+  "hcloud ECS delete-servers --instance_ids=test" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud ECS delete-server --server_id=12345" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud IAM delete-user --user_id=test" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud VPC delete-vpc --vpc_id=test" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud OBS delete-object --bucket=test --key=file" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud ECS stop-server --server_id=12345" → decision: deny, reason: Huawei Cloud execution/trigger operation blocked until approved.
+  "hcloud IAM create-user --name=test" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud ECS create-servers --name=test" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+RESULT: PASS - Write operations not misjudged as read-only
