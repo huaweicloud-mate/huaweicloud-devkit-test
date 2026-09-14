@@ -95,6 +95,18 @@ def render(rows, findings, date, version):
     def badge(s):
         return f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;color:#fff;background:{STATUS_COLOR.get(s,"#95a5a6")}">{s or "NOT_RUN"}</span>'
 
+    # 缺陷清单「标题」列：设计级用「标题」；展开级无「标题」字段，用 枚举对象·源用例 拼接
+    def case_title(r):
+        if r.get("层级") == "展开级":
+            obj = (r.get("枚举对象") or "").strip()
+            src = (r.get("源用例") or "").strip()
+            if obj and src:
+                return f"{obj} · {src}"
+            if obj:
+                return obj
+            return (r.get("展开类型") or "").strip() or "-"
+        return (r.get("标题") or "").strip() or "-"
+
     # —— 客户端执行概览（智能体级聚合 + 机器/OS 明细，层级展示）——
     def agent_of(col):
         return col.split("-")[0]
@@ -187,7 +199,7 @@ def render(rows, findings, date, version):
 
     problem_rows = "".join(
         f'<tr><td>{r.get("层级","")}</td><td><b>{r.get("ID","")}</b></td><td>{r.get("优先级","")}</td>'
-        f'<td>{r.get("标题","")}</td><td>{badge(worst(r.get("当日总执行状态","")))}</td></tr>'
+        f'<td>{case_title(r)}</td><td>{badge(worst(r.get("当日总执行状态","")))}</td></tr>'
         for r in problem
     ) or '<tr><td colspan="5" style="color:#95a5a6">无 FAIL/BLOCKED/SPEC 项</td></tr>'
 
