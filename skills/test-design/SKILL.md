@@ -25,7 +25,7 @@ tags: [testing, test-design, huaweicloud, devkit, coverage]
    git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git   # 测试仓库
    git clone https://github.com/huaweicloud/huaweicloud-devkit.git ../hdk      # 源码仓库
    ```
-2. 环境自检 + 拉最新：`python scripts/prepare_env.py --update`（pull 测试仓 main + `../hdk` checkout 到 npm `@next` 对应 commit）。
+2. 环境自检 + 拉最新：`python scripts/prepare_env.py --update`（pull 测试仓 main + `../hdk` checkout 到 npm 最新包 latest 正式版对应 commit）。
 3. 工具链：`node -v` / `python --version` / `gh auth status`。
 4. 推送凭证：环境变量 `HDK_GH_TOKEN` 或本机 gh 已登录（push 用 token URL，不依赖 gh CLI，见 §五）。
 

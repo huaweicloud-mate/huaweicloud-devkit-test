@@ -24,7 +24,7 @@
 |---|---|---|
 | 测试仓库 | `https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git` | 结果记录 + 测试用例 + 脚本 |
 | 源码仓库 | `https://github.com/huaweicloud/huaweicloud-devkit.git` | 源码检查/根因定位/写探针（clone 到 `hdk`） |
-| 被测包 | `huaweicloud-devkit@next`（npm） | 真实场景黑盒测试 |
+| 被测包 | `huaweicloud-devkit`（npm，latest 正式版） | 真实场景黑盒测试 |
 
 ## 专属目录（预置条件，必须）
 
@@ -43,14 +43,14 @@ clone 命令（在 `~/devkit-test/<智能体>/` 目录内执行）：
 mkdir -p ~/devkit-test/OpenCode && cd ~/devkit-test/OpenCode   # 换成你的智能体名
 git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git
 git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
-npm install -g huaweicloud-devkit@next
+npm install -g huaweicloud-devkit
 ```
 
 首次可用 `python scripts/init_agent.py <客户端>` 自动建该目录结构（含测试仓库 + 源码仓库）。
 
 ## 0. 自我识别 + 前置准备
 
-> **推送凭证 + 初始化（分散部署必读）**：每台 agent 机器**首次**先跑 `python scripts/init_agent.py`（交互输入 fine-grained token，自动 clone 仓库 + 装 next 包 + 验证环境）。
+> **推送凭证 + 初始化（分散部署必读）**：每台 agent 机器**首次**先跑 `python scripts/init_agent.py`（交互输入 fine-grained token，自动 clone 仓库 + 装最新包 + 验证环境）。
 > 之后每次 push 凭证二选一：① 环境变量 `HDK_GH_TOKEN`；② 本机 gh 登录有 huaweicloud-mate write 权限的账号。
 > 脚本优先读 `HDK_GH_TOKEN`，否则尝试本机 gh shuangheaven token。
 
@@ -60,8 +60,8 @@ npm install -g huaweicloud-devkit@next
    - 识别不出：**显式输出失败原因后退出**（禁止静默退出、禁止瞎猜冒充其他客户端、禁止假装完成）。无人值守环境没有「询问用户」通道，卡住会被调度器判 idle 杀掉。
 2. 拉最新（**每次执行测试前必跑**，一天可能跑多次，每次都要重新取最新，勿因「今天跑过」跳过）——`python scripts/prepare_env.py --update` 一键完成三件事：
    - 测试仓库 pull main 最新（含其他 agent 的最新改动与脚本）
-   - 源码仓库 `hdk` fetch + checkout 到 npm `@next` 最新对应 commit（源码检查/根因定位用，跟随最新代码）
-   - `npm install -g huaweicloud-devkit@next` 安装最新被测包（黑盒测试用，跟随最新 next 发布）
+   - 源码仓库 `hdk` fetch + checkout 到 npm 最新包（默认 `latest` 正式版，`--next` 则预发布）对应 commit（源码检查/根因定位用）
+   - `npm install -g huaweicloud-devkit` 安装最新正式包（latest；测 NR 预发布新功能时才用 `--next`）
 
 > **环境 PATH**：node/npm/gh 若装在用户目录（`~/nodejs/bin`、`~/bin`），非交互 shell 不自动加载。执行前先 `export PATH=$HOME/nodejs/bin:$HOME/bin:$PATH`（脚本 `prepare_env.py` 会自动加入 PATH，无需手动）。
 

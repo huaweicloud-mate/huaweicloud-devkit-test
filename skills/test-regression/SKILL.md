@@ -23,7 +23,7 @@ tags: [testing, huaweicloud, devkit, regression, defect]
 
 clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真云 AK/SK，统一见仓库根 `AGENTS.md` 的「专属目录」「0. 自我识别 + 前置准备」节，此处不重复展开。
 
-**每次回归前必先跑 `python scripts/prepare_env.py --update` 拉最新**（源码仓库 checkout 到 next 最新 commit、测试仓库 pull 最新、装最新 next 包；勿因「今天跑过」跳过）。
+**每次回归前必先跑 `python scripts/prepare_env.py --update` 拉最新**（源码仓库 checkout 到 latest 正式版对应 commit、测试仓库 pull 最新、装最新正式包；勿因「今天跑过」跳过）。
 
 ## Step 0 定位 + 确认修复是否真合入
 
@@ -33,7 +33,7 @@ clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真�
 2. **开发称「已修复」先确认代码真落地（勿信自报）**：
    ```bash
    git -C ../hdk log --all -S "<关键函数名>" --oneline -5   # 全历史空 = 未实现（方案冻结 ≠ 已实现）
-   npm view huaweicloud-devkit@next version gitHead        # 拿当前 next commit sha
+   npm view huaweicloud-devkit version gitHead        # 拿当前 latest 正式版 commit sha
    git -C ../hdk fetch origin <sha> && git -C ../hdk checkout <sha>   # npm 发布常领先 GitHub 推送
    ```
 3. `git -C ../hdk show <sha> --stat` 锁定改动文件/函数 = 回归靶心。
@@ -99,7 +99,7 @@ clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真�
 |---|---|
 | 上游 issue 全文 | `gh issue view <编号> --repo huaweicloud/huaweicloud-devkit` |
 | 确认修复真落地 | `git -C ../hdk log --all -S "<函数名>" --oneline -5` |
-| 拿 next commit | `npm view huaweicloud-devkit@next version gitHead` |
+| 拿最新包 commit | `npm view huaweicloud-devkit version gitHead` |
 | 既有单测 | `cd ../hdk && node --test test/<相关>.test.mjs` |
 | 生成器+门禁 | `cd test-cases/design && python gen_matrix.py && python gen_tracing.py && python verify_new.py && python scan_gaps.py` |
 | 建回归包 | `python scripts/init_day.py <客户端> <OS>` |
