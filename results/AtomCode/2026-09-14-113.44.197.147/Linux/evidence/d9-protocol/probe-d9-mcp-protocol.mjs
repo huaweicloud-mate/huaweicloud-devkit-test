@@ -1,5 +1,5 @@
 // D9 MCP 协议域探针 — JSON-RPC 错误码 / dispatch 协议语义
-import { dispatch } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/mcp-protocol.mjs';
+import { dispatch } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/mcp-protocol.mjs';
 import { readFileSync } from 'node:fs';
 
 let pass = 0, fail = 0;
@@ -20,7 +20,7 @@ function check(caseId, title, actual, expected) {
   }
   check('D9-2', '未知方法 dispatch 抛异常', err ? err.message : null, 'Unsupported method: nonexistent/method');
 
-  const serverSrc = readFileSync('/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/mcp-server.mjs', 'utf8');
+  const serverSrc = readFileSync('/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/mcp-server.mjs', 'utf8');
   const catchBlock = serverSrc.slice(serverSrc.indexOf('} catch (error)'), serverSrc.indexOf('} catch (error)') + 220);
   const has32601 = catchBlock.includes('-32601') || serverSrc.includes('-32601');
   const uses32603 = serverSrc.includes('-32603');

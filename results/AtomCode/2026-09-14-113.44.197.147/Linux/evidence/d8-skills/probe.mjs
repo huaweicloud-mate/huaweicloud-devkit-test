@@ -1,9 +1,9 @@
 // 技能 + 安全干预探针：D8 技能清单、D10 安全干预
-import { listSkillDirs, callTool } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/tools.mjs';
-import { loadPolicy } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
-import { classifyTextCommand } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { listSkillDirs, callTool } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { loadPolicy } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { classifyTextCommand } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
 
-const SKILLS = '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/skills';
+const SKILLS = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/skills';
 
 let pass = 0, fail = 0;
 function eq(id, desc, actual, expected) {
@@ -33,7 +33,7 @@ eq('D10-4', '凭证文件读取干预', classifyTextCommand('cat ~/.hcloud/confi
 eq('D10-4', '明文 secret 读取干预', classifyTextCommand('hcloud csms GetSecretValue').decision, 'deny');
 // D10-1 工具描述可选择性
 {
-  const { TOOL_DEFINITIONS } = await import('/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/tools.mjs');
+  const { TOOL_DEFINITIONS } = await import('/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/tools.mjs');
   bool('D10-1', '39 工具均含非空 description', TOOL_DEFINITIONS.every((t) => typeof t.description === 'string' && t.description.length > 0));
 }
 // D10-2 skill 检索/激活：callTool retrieve_skill

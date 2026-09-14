@@ -1,7 +1,7 @@
 // P0 安全核心探针 — 直接 import hdk 源码，检查安全钩子行为（黑盒断言）
 // SUT: huaweicloud-devkit@1.1.4-next.3 (commit 3b6290bc)
-import { classifyTextCommand, classifyHcloudArgs, redactSecrets } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
-import { evaluateCommandRisk, evaluateArtifacts, evaluateDeployPlan } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/risk-rule-engine.mjs';
+import { classifyTextCommand, classifyHcloudArgs, redactSecrets } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { evaluateCommandRisk, evaluateArtifacts, evaluateDeployPlan } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/risk-rule-engine.mjs';
 
 let pass = 0, fail = 0;
 const results = [];

@@ -6,7 +6,7 @@ import {
   determineTarget,
   judgeUpdate,
   parseDistTagsOutput,
-} from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/update-check.mjs';
+} from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/update-check.mjs';
 
 let pass = 0, fail = 0;
 function eq(id, desc, actual, expected) {
