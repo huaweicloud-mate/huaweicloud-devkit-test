@@ -1,0 +1,1 @@
+// Tool smoke test probe: check_cli, list_operations

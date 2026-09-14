@@ -1,0 +1,1 @@
+import{queryDistTagsSync}from'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/update-check.mjs';const r=queryDistTagsSync({timeoutMs:20000});console.log('result:',JSON.stringify(r));console.log('No EINVAL - PASS');

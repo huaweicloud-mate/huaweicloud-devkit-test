@@ -1,0 +1,1 @@
+// MCP Protocol lifecycle probe: initialize -> tools/list -> tools/call

@@ -1,0 +1,1 @@
+import{readFileSync}from'node:fs';const s=readFileSync(new URL('file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/auth/service.mjs'),'utf8');const has=/securityToken|STS|sts|scope.*reject|reject.*token|persist.*token|not.*write/i.test(s);if(has)console.log('PASS');else console.log('FAIL');
