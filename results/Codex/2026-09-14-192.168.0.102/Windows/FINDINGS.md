@@ -1,6 +1,7 @@
 # FINDINGS - 缺陷发现清单（Codex-GPT-5）
 
-> 本轮执行时间：2026-09-14（北京时间）
+> 本轮执行时间：2026-09-15（北京时间，真云只读补测）
+> 真云补测：`cn-north-4` 只读查询 ECS、VPC、RDS 成功；未执行创建、绑定、公网暴露或删除操作。
 > 说明：以下两类问题与既有 [#654](https://github.com/huaweicloud/huaweicloud-devkit/issues/654) 重复，本轮按统一流程合并提单至 [#670](https://github.com/huaweicloud/huaweicloud-devkit/issues/670)。
 
 ## #1【P1】安装自动探测结果与测试契约不一致（重复 #654）
