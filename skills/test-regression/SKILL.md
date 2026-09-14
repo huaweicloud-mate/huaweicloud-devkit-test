@@ -21,7 +21,9 @@ tags: [testing, huaweicloud, devkit, regression, defect]
 
 ## 前置（统一见根 AGENTS.md §0）
 
-clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真云 AK/SK、`prepare_env.py --update` 拉最新，统一见仓库根 `AGENTS.md` 的「专属目录」「0. 自我识别 + 前置准备」节，此处不重复展开。
+clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真云 AK/SK，统一见仓库根 `AGENTS.md` 的「专属目录」「0. 自我识别 + 前置准备」节，此处不重复展开。
+
+**每次回归前必先跑 `python scripts/prepare_env.py --update` 拉最新**（源码仓库 checkout 到 next 最新 commit、测试仓库 pull 最新、装最新 next 包；勿因「今天跑过」跳过）。
 
 ## Step 0 定位 + 确认修复是否真合入
 

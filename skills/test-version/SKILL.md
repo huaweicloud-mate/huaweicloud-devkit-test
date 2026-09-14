@@ -28,7 +28,9 @@ tags: [testing, huaweicloud, devkit, version, full-test]
 
 ## 前置（统一见根 AGENTS.md §0）
 
-clone 两仓库、自我识别客户端/OS、凭证、`prepare_env.py --update` 拉最新，见仓库根 `AGENTS.md`「专属目录」「0. 自我识别 + 前置准备」节，此处不重复展开。
+clone 两仓库、自我识别客户端/OS、凭证，见仓库根 `AGENTS.md`「专属目录」「0. 自我识别 + 前置准备」节，此处不重复展开。
+
+**每次执行前必先跑 `python scripts/prepare_env.py --update` 拉最新**——一天可能跑多次，每次都要重新取最新测试仓库 + 源码仓库（checkout 到 next 最新 commit）+ 最新 next 包。
 
 ## 流程
 

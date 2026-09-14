@@ -58,10 +58,10 @@ npm install -g huaweicloud-devkit@next
    - **客户端名**：从你的运行环境/系统提示/进程名判断你是 10 个客户端中的哪一个——OpenCode、Codex、CodeArtsAgent、CodeArtsWork、WorkBuddy、DSH、OfficeAce、Hermes、OpenClaw、AtomCode。
    - **OS**：用 `platform.system()` 或运行环境判断 Windows / Linux。
    - 识别不出：**显式输出失败原因后退出**（禁止静默退出、禁止瞎猜冒充其他客户端、禁止假装完成）。无人值守环境没有「询问用户」通道，卡住会被调度器判 idle 杀掉。
-2. 前置（`python scripts/prepare_env.py --update` 一键完成）：
-   - 测试仓库 pull main 最新
-   - 源码仓库 `hdk` checkout 到 npm `@next` 对应 commit（源码检查用）
-   - `npm install -g huaweicloud-devkit@next` 安装最新被测包（黑盒测试用）
+2. 拉最新（**每次执行测试前必跑**，一天可能跑多次，每次都要重新取最新，勿因「今天跑过」跳过）——`python scripts/prepare_env.py --update` 一键完成三件事：
+   - 测试仓库 pull main 最新（含其他 agent 的最新改动与脚本）
+   - 源码仓库 `hdk` fetch + checkout 到 npm `@next` 最新对应 commit（源码检查/根因定位用，跟随最新代码）
+   - `npm install -g huaweicloud-devkit@next` 安装最新被测包（黑盒测试用，跟随最新 next 发布）
 
 > **环境 PATH**：node/npm/gh 若装在用户目录（`~/nodejs/bin`、`~/bin`），非交互 shell 不自动加载。执行前先 `export PATH=$HOME/nodejs/bin:$HOME/bin:$PATH`（脚本 `prepare_env.py` 会自动加入 PATH，无需手动）。
 

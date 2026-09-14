@@ -19,7 +19,12 @@ tags: [testing, huaweicloud, devkit, daily, execution]
 
 ## 前置（统一见根 AGENTS.md §0）
 
-clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真云 AK/SK（`~/.config/huaweicloud/credentials.json`）、`prepare_env.py --update` 拉最新，统一见仓库根 `AGENTS.md` 的「专属目录」「0. 自我识别 + 前置准备」节，此处不重复展开。
+clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真云 AK/SK（`~/.config/huaweicloud/credentials.json`），统一见仓库根 `AGENTS.md` 的「专属目录」「0. 自我识别 + 前置准备」节，此处不重复展开。
+
+**每次执行测试前，必先跑 `python scripts/prepare_env.py --update` 拉最新**——一天可能不止执行一次，每次都要重新取最新，勿因「今天跑过」跳过：
+- 测试仓库 pull main 最新（含其他 agent 最新改动/脚本）
+- 源码仓库 hdk checkout 到 npm `@next` 最新 commit
+- `npm install -g huaweicloud-devkit@next` 装最新被测包
 
 ## 六步执行流程
 
