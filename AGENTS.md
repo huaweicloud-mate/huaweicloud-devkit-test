@@ -12,6 +12,7 @@
 |---|---|---|
 | `测试设计 <版本/需求>` | 测试设计：范围固定 → 候选设计（HERMES_DRAFT_READY）→ 评审放行由维护者统一执行 | [skills/test-design/SKILL.md](skills/test-design/SKILL.md) |
 | `每日测试` | 每日测试执行：建包 → 执行 → 回填 → 报告 → 提单 | [skills/test-execution/SKILL.md](skills/test-execution/SKILL.md) |
+| `版本全量测试 <版本>` | 版本全量测试：母版全量 316（或版本快照）→ 全量执行 → 回填 → 报告 → 归档 results/version | [skills/test-version/SKILL.md](skills/test-version/SKILL.md) |
 | `回归 #<编号>` / `全链路测 #<编号>` | 缺陷回归：定位 → 复现 → 根因 → 用例 → 复测 → 结论 | [skills/test-regression/SKILL.md](skills/test-regression/SKILL.md) |
 | `覆盖核对` | 源码能力 ↔ 用例覆盖核对（函数/字段/错误码核对 + 缺口落用例） | [skills/source-coverage/SKILL.md](skills/source-coverage/SKILL.md) |
 

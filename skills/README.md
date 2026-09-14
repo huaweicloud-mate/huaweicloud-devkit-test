@@ -19,6 +19,7 @@
 | 2 | 测试执行（每日） | `skills/test-execution/SKILL.md` | `每日测试` | 执行 agent | ✅ 已落地 |
 | 3 | 缺陷回归 | `skills/test-regression/SKILL.md` | `回归 #<编号>` / `全链路测 #<编号>` | 执行 agent | ✅ 已落地 |
 | 4 | 源码覆盖核对 | `skills/source-coverage/SKILL.md` | `覆盖核对` | 设计者 agent | ✅ 已落地 |
+| 5 | 版本全量测试 | `skills/test-version/SKILL.md` | `版本全量测试 <版本>` | 执行 agent | ✅ 已落地 |
 
 > 维护者专属（HTML 汇总 / GitHub Actions 自动汇总 / 邮件派发 / 资产治理与结构门禁联动）不纳入本库，保留在 Hermes 本机技能；本库只收录**需要跨 agent 分发**的能力（设计者 + 执行者 agent 都能干的活）。
 

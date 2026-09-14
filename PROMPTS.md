@@ -21,7 +21,7 @@
 
 ## 二、能力完整提示语（复制即用，已内含通用前置）
 
-下面四条整段复制发给 agent 即可。本地 agent、远程测试机 agent、新加入的 agent 均适用。
+下面五条整段复制发给 agent 即可。本地 agent、远程测试机 agent、新加入的 agent 均适用。
 
 ### 1. 测试设计
 
@@ -79,6 +79,20 @@ init_day 建包 → P0→P1→P2 执行 + 证据落盘 → 回填执行状态/�
 提取源码能力清单 → 对照用例覆盖点 → 正确性核对（函数/字段/错误码）→ 覆盖率核对（硬/弱缺口），缺口落用例（新 ID + 优先级 + 门禁更新）。
 ```
 
+### 5. 版本全量测试
+
+```
+【huaweicloud-devkit 测试】前置准备：
+1. 第一次在 ~/devkit-test/<你的客户端名>/ 目录下 clone 两个仓库：
+   - 测试仓库：git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git
+   - 源码仓库：git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
+2. 读测试仓库根目录 AGENTS.md（能力索引 + 公共前置 + 红线），自我识别客户端名与 OS。
+
+任务：版本全量测试 <版本>。对某版本跑全量用例集（区别于每日精选），按 skills/test-version/SKILL.md 执行：
+init_day --version <版本>（或 --full 母版全量）建全量包 → P0→P1→P2 全量执行 + 证据落盘 → 回填 + 门禁 → 出报告（标题含版本号）→ 维护者归档 results/version/<版本>/。
+只提交自己 results/<你的客户端>/ 目录，真云 / 缺陷合并单 / PASS 门禁纪律同每日测试。
+```
+
 ## 三、简短版对照（仅本地已初始化 agent 可用）
 
 本地 agent 已 clone 两仓库、已读过 AGENTS.md 时，可只用短提示语；**新人 / 新 agent 一律用第二节完整版**。
@@ -89,6 +103,7 @@ init_day 建包 → P0→P1→P2 执行 + 证据落盘 → 回填执行状态/�
 | 测试执行 | 第二节 · 2 | `每日测试` |
 | 缺陷回归 | 第二节 · 3 | `回归 #<编号>` |
 | 覆盖核对 | 第二节 · 4 | `覆盖核对 [<维度>]` |
+| 版本全量测试 | 第二节 · 5 | `版本全量测试 <版本>` |
 
 ## 四、维护者专属（Hermes 本机，不跨 agent 分发）
 
