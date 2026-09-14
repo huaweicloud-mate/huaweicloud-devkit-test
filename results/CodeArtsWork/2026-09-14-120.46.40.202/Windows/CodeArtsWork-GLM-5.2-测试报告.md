@@ -89,9 +89,9 @@
 
 | # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | `D4-3` | 明文 secret API 未被 hook 拦截 | `hcloud DEW CSMS ShowSecret --plaintext=true` 应返回 `deny` 或 `warn` | 返回 `allow`，findings 为空 | `safety-policy.mjs` classifyTextCommand 未覆盖 DEW CSMS ShowSecret --plaintext 模式 | P | 待提单 |
-| 2 | P1 | `D4-6` | adminPass 明文密码未触发回显警告 | `hcloud ECS CreateServers --adminPass=xxx` 应返回 `warn`（plaintext in shell history） | 返回 `allow`，findings 为空 | `safety-policy.mjs` classifyTextCommand 未检测 --adminPass= 参数模式 | P | 待提单 |
-| 3 | P1 | `EXP-E01~E15` | search_docs 路由准确率仅 13.3%（2/15） | 15 个中文自然语言查询应路由到正确服务 skill | 仅 2 个正确（E06 Redis→DCS, E09 K8s→CCE），13 个返回 0 结果或 top-1 错误 | `search_docs` 对中文语义匹配能力不足 | P | 待提单 |
+| 1 | P0 | `D4-3` | 明文 secret API 未被 hook 拦截 | `hcloud DEW CSMS ShowSecret --plaintext=true` 应返回 `deny` 或 `warn` | 返回 `allow`，findings 为空 | `safety-policy.mjs` classifyTextCommand 未覆盖 DEW CSMS ShowSecret --plaintext 模式 | P | 已提单 #678 |
+| 2 | P1 | `D4-6` | adminPass 明文密码未触发回显警告 | `hcloud ECS CreateServers --adminPass=xxx` 应返回 `warn`（plaintext in shell history） | 返回 `allow`，findings 为空 | `safety-policy.mjs` classifyTextCommand 未检测 --adminPass= 参数模式 | P | 已提单 #678 |
+| 3 | P1 | `EXP-E01~E15` | search_docs 路由准确率仅 13.3%（2/15） | 15 个中文自然语言查询应路由到正确服务 skill | 仅 2 个正确（E06 Redis→DCS, E09 K8s→CCE），13 个返回 0 结果或 top-1 错误 | `search_docs` 对中文语义匹配能力不足 | P | 已提单 #680 |
 
 ### 根因详情
 
