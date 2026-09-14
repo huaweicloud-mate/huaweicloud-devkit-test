@@ -1,9 +1,8 @@
 # Codex-GPT-5 每日测试报告
 
-> **报告名**：`Codex-GPT-5-测试报告.md`
 > **生成时间**：2026-09-14（北京时间）
 > **执行归档**：`results/Codex/2026-09-14-192.168.0.102/Windows/`
-> **被测对象**：huaweicloud-devkit `1.1.4-next.3`，commit `3b6290b`
+> **被测对象**：huaweicloud-devkit `1.1.4-next.6`，commit `69ac7279`
 > **结论**：`PARTIAL`
 
 ## 一、测试概述
@@ -13,22 +12,21 @@
 | 客户端 / Agent | Codex + GPT-5 |
 | OS / 架构 | Windows / x64 |
 | Node / npm / Python | Node v22.23.2 / npm 10.9.8 / Python 3.11.15 |
-| 被测版本（SUT） | `1.1.4-next.3`，gitHead `3b6290b` |
-| 工具全集 | 39（`tools.mjs` TOOL_DEFINITIONS） |
-| hcloud / 依赖 | `huaweicloud-devkit@next` 已安装；真云调用未执行 |
-| 真云凭证 | `cn-north-4` 已检测到，未创建资源 |
-| 测试类型 | 源码 Node 测试、工具枚举探针、隔离清理探针 |
-| 设计真源 | 设计级 179 / 展开级 137 / 追踪表 10 列 |
+| 被测版本（SUT） | `1.1.4-next.6`，gitHead `69ac7279` |
+| 工具全集 | 39（`tools.mjs`） |
+| hcloud / 依赖 | `huaweicloud-devkit@next` 已安装；未执行真云资源操作 |
+| 真云凭证 | 已检测到，未使用 |
+| 测试类型 | 源码 Node 测试、工具枚举、隔离 fixture |
 | daily 基础用例 | 设计级 81 / 展开级 71 |
 
-> **执行方法**：真实运行源码 `npm test`（442 tests）和 `tools-enum.py`（39 工具检查）；stdout 与探针落盘到 `evidence/<case-id>/`。无法在当前 Codex 会话中提供真实 Hook/PTY/真云资源生命周期的用例标记为 `BLOCKED`。
+> **执行方法**：先运行默认 `npm test`，因 Windows 并发资源压力出现 OOM；随后使用同一测试集 `node --test --test-concurrency=1 test/*.test.mjs` 单并发重跑，最终结果以单并发为准。所有 PASS 证据均落在 `evidence/<case-id>/`。
 
 ## 二、执行摘要
 
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | 152 |
-| 已执行 | 17 |
+| 已执行的 daily 映射用例 | 17 |
 | PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 15 / 2 / 135 / 0 / 0 |
 | 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 88.2% |
 | P0 / P1 / P2 新增缺陷 | 0 / 2 / 0 |
@@ -41,9 +39,9 @@
 
 | 状态 | 数量 | 说明 |
 |---|---:|---|
-| PASS | 15 | 有真实源码/枚举证据 |
-| FAIL | 2 | 详见 FINDINGS.md |
-| BLOCKED | 64 | 缺真实 Hook/PTY/客户端或真云执行条件 |
+| PASS | 15 | 有真实单并发源码测试或工具枚举证据 |
+| FAIL | 2 | 均为既有 #654 的重复问题 |
+| BLOCKED | 64 | 缺真实 Hook/PTY/真云或未被本机探针直接覆盖 |
 | SPEC-MISMATCH | 0 | |
 | NOT_RUN | 0 | |
 | **合计** | **81** | |
@@ -52,42 +50,43 @@
 
 | 状态 | 数量 | 说明 |
 |---|---:|---|
-| PASS | 0 | 当前会话未声称完成客户端/服务展开验证 |
+| PASS | 0 | 未声称完成跨客户端/服务展开验证 |
 | FAIL | 0 | |
 | BLOCKED | 71 | 缺对应客户端、Hook/PTY 或真云生命周期环境 |
 | SPEC-MISMATCH | 0 | |
 | NOT_RUN | 0 | |
 | **合计** | **71** | |
 
-## 四、缺陷清单（详尽，每个缺陷一栏）
+## 四、缺陷清单
 
-详见同目录 `FINDINGS.md`。本轮两项 P1 缺陷均有真实源码测试失败输出、唯一断言、源码文件行号和证据路径。
+详见同目录 `FINDINGS.md`。两项 FAIL 均已确认与既有 #654 重复，已按统一流程合并提单 #670。
 
 ## 五、阻塞项
 
-| 用例范围 | 阻塞原因 | 环境依赖 | 解除条件 |
-|---|---|---|---|
-| Hook 相关 D4、D10-4 | Codex 当前会话未提供被测客户端 Hook 生命周期 | Hook-capable 客户端 | 在对应 Hook 客户端执行并保存事件证据 |
-| MCP 协议 D9 真实交互 | 未启动独立 inspector/stdio 会话 | MCP inspector 或 PTY | 建立真实 stdio 会话后补跑 |
-| 真云 D2/D3/D4/D5 展开 | 本轮未执行资源创建/审批/删除 | AK/SK + 最小规格资源 | 按白名单创建、立即删除并归零验证 |
-| 多客户端矩阵 D5 | 当前仅为 Codex 客户端 | OpenCode 等其他客户端 | 在各客户端专属环境补跑 |
+| 用例范围 | 阻塞原因 | 解除条件 |
+|---|---|---|
+| D4、D10-4 Hook 流程 | 当前 Codex 会话没有被测客户端 Hook 生命周期 | 在 Hook-capable 客户端补跑 |
+| D9 真实交互 | 未建立独立 inspector/PTY 会话 | 补跑真实 stdio/PTY MCP 会话 |
+| D2/D3/D4/D5 真云 E2E | 未执行资源创建、审批、删除闭环 | 按白名单创建并归零验证 |
+| 展开级客户端矩阵 | 当前仅有 Codex 环境 | 在各客户端专属环境补跑 |
 
 ## 六、安全与红线合规
 
 - [x] 凭证泄漏事件：0
 - [x] 写操作误判 read-only：0
 - [x] 红线（I 类）违规：无
-- [x] 脱敏复核：证据目录未写入原始 AK/SK
+- [x] 证据目录未写入原始 AK/SK
+- [x] 未处理、修改或关闭现有 GitHub issue
 
 ## 七、资源释放
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
 | 华为云 ECS/OBS/其他资源 | 否 | 不适用 | 无本轮资源残留 |
-| 临时 HOME / 清理探针资产 | 是（临时） | 已由探针 finally 清理 | 清理测试通过 |
+| 测试临时 HOME / fixture | 是 | 已由测试清理 | 单并发测试完成 |
 
 ## 八、遗留与建议
 
-- 待提单：`FINDINGS.md` 中两项 P1 缺陷。
-- 本轮未覆盖：真实 Codex MCP tools/call 生命周期、Hook 审批流、真云资源 E2E、其他客户端矩阵。
-- 建议：先修复安装自动探测集合与 session ID 安全后缀过滤，再重跑 Windows 安装/升级回归。
+- 已知重复问题：#654 的安装自动探测和 Windows session 后缀过滤仍在本轮复现。
+- 默认并发测试受本机资源限制，单并发测试成功排除 OOM 连带失败；建议 CI 采用受控并发。
+- 真实 Hook、PTY、跨客户端矩阵和真云资源生命周期仍需专门环境补测。
