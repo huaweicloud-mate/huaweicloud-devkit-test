@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-# CodeArtsAgent Linux 探针 D5-1 (黑盒MCP直调) 见 stdout.log
+# CodeArtsAgent Linux 探针 D5-1 (黑盒MCP直调/源码检查) 见 stdout.log
