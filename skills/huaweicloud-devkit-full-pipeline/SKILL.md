@@ -122,6 +122,16 @@ git log --oneline -S "关键函数名" -5                 # 确认修复实现�
 
 **码道（codearts）真机验证（不碰真实配置）**：码道机器 testbot2=`124.70.78.131`（有 `~/.codeartsdoer`）。构造占位符/假值场景用 `CODEARTS_PROJECT_DIR` 伪造——`readCodeArtsCredentials` 的 `searchDirs[0]=process.env.CODEARTS_PROJECT_DIR`，设 `CODEARTS_PROJECT_DIR=<临时目录>`、在该目录放 `.codeartsdoer/mcp/mcp_settings.json` 即可喂假场景；`isCodeArtsContext()` 仍因 homedir 真目录存在而命中码道分支，真机上下文成立且不动真实 mcp_settings。
 
+### 分布式回归（远程 agent 也可完整走流水线 B）
+
+流水线 B 的**五步（含 Step 2 写回归用例、Step 3 跑生成器）由执行回归的 agent 自己完成，不依赖维护者先做设计**。远程测试机的 agent（含远程 Hermes）拿到「全链路 #<编号>」/「回归 #<编号>」触发语时，走测试仓库 `AGENTS.md` 的「问题单号回归」节（与本流水线 B 一一对应，随 git pull 自动分发），**同样自己写用例、跑生成器**。
+
+分发触发语（经 multica / zhangshuang Hermes gateway）：
+
+> 回归 #<编号>：先读测试仓库 github.com/huaweicloud-mate/huaweicloud-devkit-test.git 根目录 AGENTS.md，按「问题单号回归」节完整执行流水线 B 的 Step 0-4（含自己写回归用例 + 跑生成器 + 门禁），自我识别客户端+OS，结论落 results/<你的客户端>/<日期>-<IP>/<OS>/问题回归-<编号>.md。只动自己负责的 issue 目录与生成器（禁手改 CSV），不 close/reopen/评论 issue。
+
+- 分工：Step 2 回归用例设计 + Step 3 用例输出由**领走该 issue 的 agent** 写；多机并发改母版时先 pull 最新、push 前 fetch+rebase。Step 4 末尾的关单/更新 issue 仍由维护者汇总各机结论后统一操作（唯一保留的维护者侧动作）。
+
 ## 五、全程停点（这几类必须停下问用户，红线不因「全链路」豁免）
 
 1. **真实升级会污染用户安装/npm cache**（真实升级污染环境）。

@@ -1,6 +1,6 @@
 # AGENTS — huaweicloud-devkit 每日测试执行指南
 
-> 每个客户端 agent（OpenCode/Codex/CodeArtsAgent/CodeArtsWork/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode）读本文件即开始执行当天测试。**不要处理任何 GitHub issue，本任务只做测试执行。**
+> 每个客户端 agent（OpenCode/Codex/CodeArtsAgent/CodeArtsWork/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode）读本文件即开始执行当天测试。**不自行 close/reopen/评论任何 GitHub issue（由维护者统一操作）**；收到带 issue 编号的「全链路/回归」指令时，按下方「问题单号回归」节执行（走回归路线，而非每日全量）。
 >
 > **完成标准** = 本机 `results/<你的客户端>/<日期>-<IP>/<OS>/` 已含「测试报告.md + 3 份 CSV」且已 push 远端；只读文档 / 只建目录 / 中途退出都不算完成。
 
@@ -106,6 +106,41 @@ python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md 
 git add results/<客户端> && git commit -m "test: <客户端> <OS> 执行回填"
 T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.helper= push "https://x-access-token:$T@github.com/huaweicloud-mate/huaweicloud-devkit-test.git" main
 ```
+
+## 问题单号回归 = 全链路流水线 B（收到「全链路 #<编号>」/「回归 #<编号>」时）
+
+当触发语带 issue 编号（「全链路测 #562」「回归 #570」）时，走**全链路流水线 B（问题/缺陷回归）**，不做每日全量。下面五步与维护者技能 `huaweicloud-devkit-full-pipeline` 的「流水线 B」一一对应，**由执行回归的 agent 完整走完（含自己写用例、跑生成器），不依赖维护者先做设计**。
+
+### Step 0 定位 + 确认修复是否真合入
+1. 定位上游 issue 与本地归档缺陷：`test-cases/issues/<编号>-<slug>/回归用例.md`（复现步骤 + 断言契约 + 关联设计用例 ID + 严重级）。
+2. 开发称「已修复」的先确认代码真落地（勿信自报）：
+   - `git -C hdk log --all -S "<关键函数名>" --oneline -5`（全历史空 = 未实现；方案冻结 ≠ 已实现）
+   - `npm view huaweicloud-devkit@next version gitHead` → `git -C hdk fetch origin <sha> && git -C hdk checkout <sha>`（npm 发布常领先 GitHub dev 推送）
+3. `git -C hdk show <sha> --stat` 锁定改动文件/函数 = 回归靶心。
+
+### Step 1 复现 + 根因定位
+按回归用例复现，根因定位到 `文件:行号`，记 `FINDINGS.md`（断言字段必填）。
+
+### Step 2 回归用例设计（agent 自己写）
+- 产出 `test-cases/issues/<编号>-<slug>/回归用例.md`：复现步骤 + 精确断言 + 结论模板（复现/已修复/仍存在）。
+- P0 缺陷同步进 daily 盯防：改 `test-cases/gen_daily.py` 纳入该用例 → `cd test-cases && python gen_daily.py` + 门禁。
+
+### Step 3 用例输出（agent 自己跑生成器 + 门禁，禁手改 CSV）
+- 新增/修改用例落到生成器（改 `gen_matrix.py`/`gen_tracing.py`，**禁手改 CSV**）：`add()` 定义 + `BATCH_TS` + `NEW_REVIEW_IDS_*` 三处联动，`verify_new` 行数列断言同步。
+- `cd test-cases/design && python gen_matrix.py && python gen_tracing.py` → `python verify_new.py`（exit 0）+ `python scan_gaps.py`（GATE-PASS）。
+- 版本冻结快照 + 补「迭代测试设计.md」；同步 README 数量 + check_docs（保证「文档提及=原子记录」）。
+
+### Step 4 测试验证（定向复测）
+- init_day 建包 → 只跑该 issue 关联回归用例（P0→P1→P2）→ 回填「执行状态」+「执行时间」。
+- 证据落 `results/<客户端>/<日期>-<IP>/<OS>/evidence/<case-id>/`（探针 + stdout.log）。
+- 结论三选一：**已修复** / **仍存在** / **BLOCKED**（环境未齐写 blockedReason）。
+- 结论报告落 `results/<客户端>/<日期>-<IP>/<OS>/问题回归-<编号>.md`（复现/已修复/仍存在 + 证据链接）。
+- 已修复关单 / 仍存在更新 issue 由维护者汇总各机结论后统一操作。
+
+### 问题回归的权限例外与并发纪律
+- **回归场景解除「test-cases 只读」**：执行回归的 agent 可写 `test-cases/issues/<编号>-<slug>/` 与生成器（gen_matrix / gen_tracing / gen_daily）。这是对「每日执行」只读约束的明确例外；**仍禁手改 CSV**（只改生成器再重生成）。
+- **写前先拉最新**（git pull / `prepare_env.py --update`）；**push 前 fetch + rebase**，避免多机改母版冲突。
+- **不 close/reopen/评论 issue**（维护者统一操作）；结果仍只落自己 `results/<客户端>/`，`results/Regression/` 由维护者汇总。
 
 ## 红线（违反即作废重来）
 
