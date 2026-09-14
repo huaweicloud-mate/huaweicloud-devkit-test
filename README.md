@@ -20,7 +20,8 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 | [metrics/](metrics/) | 跨迭代执行率 / 通过率 / 缺陷趋势 / 质量仪表盘 |
 | [eval/](eval/) | D10 Agent 行为评测：评测集 / harness / 结果 / 趋势（纪律见 eval/README.md） |
 | [scripts/](scripts/) | 工具脚本：hdk-secrets.ps1（DPAPI 凭证加密）/ sync-to-remote.ps1（每日 20:00 自动同步） |
-| [skills/](skills/) | Hermes 生成的自定义测试技能归档（git 副本，运行时真源在 hermes-home/skills/） |
+| [PROMPTS.md](PROMPTS.md) | 测试能力提示语速查手册（开发/测试人员用：复制提示语触发能力） |
+| [skills/](skills/) | 跨 agent 通用测试能力库（prompt-as-skill）：测试设计 / 执行 / 回归 / 覆盖核对 |
 | [assets/](assets/) | 可视化素材（规划中：金字塔 / 缺口热力图 / 框架总览图） |
 
 ## 文档清单（docs/）
