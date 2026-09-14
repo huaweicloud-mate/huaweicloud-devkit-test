@@ -1,0 +1,1 @@
+import{redactSecrets}from'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/safety-policy.mjs';const r=redactSecrets({adminPass:'Secret123',name:'test'});if(JSON.stringify(r).includes('<redacted>')&&!JSON.stringify(r).includes('Secret123'))console.log('PASS');else console.log('FAIL');

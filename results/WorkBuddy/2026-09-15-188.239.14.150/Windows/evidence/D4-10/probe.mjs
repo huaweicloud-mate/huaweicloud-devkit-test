@@ -1,0 +1,1 @@
+import{readFileSync}from'node:fs';const r=JSON.parse(readFileSync(new URL('file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json'),'utf8'));if(r.rules.length>=10)console.log('PASS');else console.log('FAIL');

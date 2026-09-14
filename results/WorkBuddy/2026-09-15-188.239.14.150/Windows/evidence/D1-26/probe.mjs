@@ -1,0 +1,1 @@
+import{readFileSync}from'node:fs';import{join}from'node:path';import{homedir}from'node:os';const P=join(homedir(),'.workbuddy','binaries','node','versions','22.22.2-2','node_modules','huaweicloud-devkit');const s=readFileSync(join(P,'plugins','huaweicloud-core','src','tools.mjs'),'utf8');if(/check_update|upgrade/i.test(s))console.log('PASS');else console.log('FAIL');
