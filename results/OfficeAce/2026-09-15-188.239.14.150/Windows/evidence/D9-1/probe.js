@@ -1,0 +1,1 @@
+// tools/list compliance probe - check 39 tools and schema validity

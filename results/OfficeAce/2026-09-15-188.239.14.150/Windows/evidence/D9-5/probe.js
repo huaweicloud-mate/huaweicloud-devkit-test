@@ -1,0 +1,1 @@
+// stdio transport robustness probe - verify clean JSON output

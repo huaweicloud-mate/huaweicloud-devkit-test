@@ -1,0 +1,1 @@
+// JSON-RPC error code probe - invalid method
