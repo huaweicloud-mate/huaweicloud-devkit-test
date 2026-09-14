@@ -124,7 +124,9 @@ def render(rows, findings, date, version):
                 cnt["NOT_RUN"], unfilled, st_text, st_color)
 
     def stat_cells(ex, p, f, b, s, nr, uf):
-        return f'<td>{ex}</td><td>{p}</td><td>{f}</td><td>{b}</td><td>{s}</td><td>{nr}</td><td>{uf}</td>'
+        td = 'style="padding:6px 8px;border:1px solid #ddd;text-align:center;"'
+        return (f'<td {td}>{ex}</td><td {td}>{p}</td><td {td}>{f}</td>'
+                f'<td {td}>{b}</td><td {td}>{s}</td><td {td}>{nr}</td><td {td}>{uf}</td>')
 
     client_rows_html = ""
     executed_agents = 0
@@ -140,15 +142,18 @@ def render(rows, findings, date, version):
             executed_agents += 1
         else:
             pkg_only_agents += 1
-        # 父行：智能体聚合
-        client_rows_html += (f'<tr><td><b>{cl}</b></td><td>{badge_text(st_text, st_color)}</td>'
+        # 父行：智能体聚合（浅蓝底 + 左侧强调条 + 加粗）
+        client_rows_html += (f'<tr style="background:#f0f5fb;">'
+                             f'<td style="padding:6px 8px;border:1px solid #ddd;border-left:4px solid #3498db;font-weight:700;color:#2c3e50;">{cl}</td>'
+                             f'<td style="padding:6px 8px;border:1px solid #ddd;">{badge_text(st_text, st_color)}</td>'
                              + stat_cells(ex, p, f, b, s, nr, uf) + '</tr>')
-        # 子行：各机器/OS 明细
+        # 子行：各机器/OS 明细（灰字缩进）
         for col in cols:
             m_ex, m_p, m_f, m_b, m_s, m_nr, m_uf, m_st, m_col = col_stats([col])
             ip_os = col[len(cl) + 1:]
-            client_rows_html += (f'<tr><td style="padding-left:22px;color:#7f8c8d;">└ {ip_os}</td>'
-                                 f'<td>{badge_text(m_st, m_col)}</td>'
+            client_rows_html += (f'<tr>'
+                                 f'<td style="padding:6px 8px 6px 26px;border:1px solid #ddd;border-left:4px solid transparent;color:#7f8c8d;font-size:12px;">└ {ip_os}</td>'
+                                 f'<td style="padding:6px 8px;border:1px solid #ddd;">{badge_text(m_st, m_col)}</td>'
                                  + stat_cells(m_ex, m_p, m_f, m_b, m_s, m_nr, m_uf) + '</tr>')
     client_overview_line = (f'共 <b>{len(ALL_CLIENTS)}</b> 个智能体：'
         f'<span style="color:#2ecc71">已执行 <b>{executed_agents}</b></span>，'
@@ -216,18 +221,18 @@ def render(rows, findings, date, version):
 <h2>客户端执行概览</h2>
 <p style="color:#7f8c8d;">{client_overview_line}</p>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;">智能体 / 机器</th><th style="padding:6px;border:1px solid #ddd;">执行状态</th><th style="padding:6px;border:1px solid #ddd;">已执行</th><th style="padding:6px;border:1px solid #ddd;">PASS</th><th style="padding:6px;border:1px solid #ddd;">FAIL</th><th style="padding:6px;border:1px solid #ddd;">BLOCKED</th><th style="padding:6px;border:1px solid #ddd;">SPEC</th><th style="padding:6px;border:1px solid #ddd;">NOT_RUN</th><th style="padding:6px;border:1px solid #ddd;">未回填</th></tr></thead>
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">智能体 / 机器</th><th style="padding:6px 8px;border:1px solid #ddd;">执行状态</th><th style="padding:6px 8px;border:1px solid #ddd;">已执行</th><th style="padding:6px 8px;border:1px solid #ddd;">PASS</th><th style="padding:6px 8px;border:1px solid #ddd;">FAIL</th><th style="padding:6px 8px;border:1px solid #ddd;">BLOCKED</th><th style="padding:6px 8px;border:1px solid #ddd;">SPEC</th><th style="padding:6px 8px;border:1px solid #ddd;">NOT_RUN</th><th style="padding:6px 8px;border:1px solid #ddd;">未回填</th></tr></thead>
 <tbody>{client_rows_html}</tbody></table>
 <p style="color:#95a5a6;font-size:11px;">加粗行 = 智能体聚合（多机/多 OS 求并）；缩进「└ IP-OS」行 = 该智能体各机器明细。已执行 = PASS+FAIL+BLOCKED+SPEC；「存在缺陷」= 有 FAIL/BLOCKED/SPEC；「未回填」= 单元格为空。</p>
 
 <h2>各维度用例统计</h2>
 <p style="color:#7f8c8d;font-size:12px;">设计级 daily 精选用例（共 {len(design_rows)} 条）按维度分布，优先级 P0/P1/P2：</p>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;text-align:left;">维度</th><th style="padding:6px;border:1px solid #ddd;">用例数</th>{dim_head}</tr></thead>
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">维度</th><th style="padding:6px 8px;border:1px solid #ddd;">用例数</th>{dim_head}</tr></thead>
 <tbody>{dim_rows_html}</tbody></table>
 <p style="color:#7f8c8d;font-size:12px;">展开级用例（共 {len(expand_rows)} 条）按展开类型分布：</p>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;text-align:left;">展开类型</th><th style="padding:6px;border:1px solid #ddd;">用例数</th></tr></thead>
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">展开类型</th><th style="padding:6px 8px;border:1px solid #ddd;">用例数</th></tr></thead>
 <tbody>{expand_rows_html}</tbody></table>
 
 <h2>缺陷清单（FAIL / BLOCKED / SPEC-MISMATCH）</h2>
