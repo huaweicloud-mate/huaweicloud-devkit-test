@@ -95,36 +95,16 @@ def render(rows, findings, date, version):
     def badge(s):
         return f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;color:#fff;background:{STATUS_COLOR.get(s,"#95a5a6")}">{s or "NOT_RUN"}</span>'
 
-    # 客户端覆盖概览
-    client_summary = []
-    for col in client_cols:
-        cnt = Counter((r.get(col) or "").strip() or "NOT_RUN" for r in rows)
-        executed = total - cnt["NOT_RUN"] - cnt[""]
-        client_summary.append((col, executed, cnt["PASS"], cnt["FAIL"], cnt["BLOCKED"], cnt["SPEC-MISMATCH"]))
-
-    # —— 智能体执行概览（10 客户端枚举，聚合多机器/多 OS 列）——
+    # —— 客户端执行概览（智能体级聚合 + 机器/OS 明细，层级展示）——
     def agent_of(col):
         return col.split("-")[0]
-    cols_by_agent = {}
-    for col in client_cols:
-        cols_by_agent.setdefault(agent_of(col), []).append(col)
 
     def badge_text(text, color):
         return (f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;'
                 f'color:#fff;background:{color}">{text}</span>')
 
-    agent_rows_html = ""
-    executed_agents = 0
-    pkg_only_agents = 0
-    notrun_agents = 0
-    for cl in ALL_CLIENTS:
-        cols = cols_by_agent.get(cl, [])
-        if not cols:
-            notrun_agents += 1
-            agent_rows_html += (f'<tr><td><b>{cl}</b></td>'
-                                f'<td>{badge_text("未执行", "#95a5a6")}</td>'
-                                f'<td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>')
-            continue
+    def col_stats(cols):
+        """统计一组 client 列的状态分布，返回 (ex, pass, fail, block, spec, notrun, unfilled, st_text, st_color)。"""
         cnt = Counter()
         unfilled = 0
         for col in cols:
@@ -136,19 +116,41 @@ def render(rows, findings, date, version):
                     unfilled += 1
         ex = cnt["PASS"] + cnt["FAIL"] + cnt["BLOCKED"] + cnt["SPEC-MISMATCH"]
         if ex:
-            executed_agents += 1
             clean = (cnt["FAIL"] + cnt["BLOCKED"] + cnt["SPEC-MISMATCH"]) == 0
             st_text, st_color = ("已执行", "#2ecc71") if clean else ("存在缺陷", "#e74c3c")
         else:
-            pkg_only_agents += 1
             st_text, st_color = ("已建包未回填", "#f39c12")
-        agent_rows_html += (f'<tr><td><b>{cl}</b></td>'
-                            f'<td>{badge_text(st_text, st_color)}</td>'
-                            f'<td>{ex}</td>'
-                            f'<td>{cnt["PASS"]}</td><td>{cnt["FAIL"]}</td>'
-                            f'<td>{cnt["BLOCKED"]}</td><td>{cnt["SPEC-MISMATCH"]}</td>'
-                            f'<td>{cnt["NOT_RUN"]}</td><td>{unfilled}</td></tr>')
-    agent_overview_line = (f'共 <b>{len(ALL_CLIENTS)}</b> 个智能体：'
+        return (ex, cnt["PASS"], cnt["FAIL"], cnt["BLOCKED"], cnt["SPEC-MISMATCH"],
+                cnt["NOT_RUN"], unfilled, st_text, st_color)
+
+    def stat_cells(ex, p, f, b, s, nr, uf):
+        return f'<td>{ex}</td><td>{p}</td><td>{f}</td><td>{b}</td><td>{s}</td><td>{nr}</td><td>{uf}</td>'
+
+    client_rows_html = ""
+    executed_agents = 0
+    pkg_only_agents = 0
+    notrun_agents = 0
+    for cl in ALL_CLIENTS:
+        cols = [c for c in client_cols if agent_of(c) == cl]
+        ex, p, f, b, s, nr, uf, st_text, st_color = col_stats(cols)
+        if not cols:
+            notrun_agents += 1
+            st_text, st_color = "未执行", "#95a5a6"
+        elif ex:
+            executed_agents += 1
+        else:
+            pkg_only_agents += 1
+        # 父行：智能体聚合
+        client_rows_html += (f'<tr><td><b>{cl}</b></td><td>{badge_text(st_text, st_color)}</td>'
+                             + stat_cells(ex, p, f, b, s, nr, uf) + '</tr>')
+        # 子行：各机器/OS 明细
+        for col in cols:
+            m_ex, m_p, m_f, m_b, m_s, m_nr, m_uf, m_st, m_col = col_stats([col])
+            ip_os = col[len(cl) + 1:]
+            client_rows_html += (f'<tr><td style="padding-left:22px;color:#7f8c8d;">└ {ip_os}</td>'
+                                 f'<td>{badge_text(m_st, m_col)}</td>'
+                                 + stat_cells(m_ex, m_p, m_f, m_b, m_s, m_nr, m_uf) + '</tr>')
+    client_overview_line = (f'共 <b>{len(ALL_CLIENTS)}</b> 个智能体：'
         f'<span style="color:#2ecc71">已执行 <b>{executed_agents}</b></span>，'
         f'<span style="color:#f39c12">已建包未回填 <b>{pkg_only_agents}</b></span>，'
         f'<span style="color:#95a5a6">未执行 <b>{notrun_agents}</b></span>。')
@@ -189,11 +191,6 @@ def render(rows, findings, date, version):
         for c, sev, title, root in findings
     ) or '<tr><td colspan="4" style="color:#95a5a6">无缺陷记录</td></tr>'
 
-    client_rows = "".join(
-        f'<tr><td>{col}</td><td>{ex}</td><td>{p}</td><td>{f}</td><td>{b}</td><td>{s}</td></tr>'
-        for col, ex, p, f, b, s in client_summary
-    )
-
     return f"""<!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -216,12 +213,12 @@ def render(rows, findings, date, version):
 </table>
 <p style="color:#7f8c8d;font-size:12px;">通过率分母 = PASS+FAIL+SPEC（不含 BLOCKED/NOT_RUN）</p>
 
-<h2>智能体执行概览</h2>
-<p style="color:#7f8c8d;">{agent_overview_line}</p>
+<h2>客户端执行概览</h2>
+<p style="color:#7f8c8d;">{client_overview_line}</p>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;">智能体</th><th style="padding:6px;border:1px solid #ddd;">执行状态</th><th style="padding:6px;border:1px solid #ddd;">已执行</th><th style="padding:6px;border:1px solid #ddd;">PASS</th><th style="padding:6px;border:1px solid #ddd;">FAIL</th><th style="padding:6px;border:1px solid #ddd;">BLOCKED</th><th style="padding:6px;border:1px solid #ddd;">SPEC</th><th style="padding:6px;border:1px solid #ddd;">NOT_RUN</th><th style="padding:6px;border:1px solid #ddd;">未回填</th></tr></thead>
-<tbody>{agent_rows_html}</tbody></table>
-<p style="color:#95a5a6;font-size:11px;">已执行 = PASS+FAIL+BLOCKED+SPEC 计数和；「存在缺陷」= 该智能体有 FAIL/BLOCKED/SPEC 回填；未回填 = 该智能体各单元为空（未回填执行态）。</p>
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;">智能体 / 机器</th><th style="padding:6px;border:1px solid #ddd;">执行状态</th><th style="padding:6px;border:1px solid #ddd;">已执行</th><th style="padding:6px;border:1px solid #ddd;">PASS</th><th style="padding:6px;border:1px solid #ddd;">FAIL</th><th style="padding:6px;border:1px solid #ddd;">BLOCKED</th><th style="padding:6px;border:1px solid #ddd;">SPEC</th><th style="padding:6px;border:1px solid #ddd;">NOT_RUN</th><th style="padding:6px;border:1px solid #ddd;">未回填</th></tr></thead>
+<tbody>{client_rows_html}</tbody></table>
+<p style="color:#95a5a6;font-size:11px;">加粗行 = 智能体聚合（多机/多 OS 求并）；缩进「└ IP-OS」行 = 该智能体各机器明细。已执行 = PASS+FAIL+BLOCKED+SPEC；「存在缺陷」= 有 FAIL/BLOCKED/SPEC；「未回填」= 单元格为空。</p>
 
 <h2>各维度用例统计</h2>
 <p style="color:#7f8c8d;font-size:12px;">设计级 daily 精选用例（共 {len(design_rows)} 条）按维度分布，优先级 P0/P1/P2：</p>
@@ -242,11 +239,6 @@ def render(rows, findings, date, version):
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;">客户端</th><th style="padding:6px;border:1px solid #ddd;">级别</th><th style="padding:6px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:6px;border:1px solid #ddd;text-align:left;">根因</th></tr></thead>
 <tbody>{findings_rows}</tbody></table>
-
-<h2>各客户端执行概览（<span style="font-weight:normal;font-size:12px;color:#7f8c8d;">已执行=PASS+FAIL+BLOCKED+SPEC</span>）</h2>
-<table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;">客户端-OS</th><th style="padding:6px;border:1px solid #ddd;">已执行</th><th style="padding:6px;border:1px solid #ddd;">PASS</th><th style="padding:6px;border:1px solid #ddd;">FAIL</th><th style="padding:6px;border:1px solid #ddd;">BLOCKED</th><th style="padding:6px;border:1px solid #ddd;">SPEC</th></tr></thead>
-<tbody>{client_rows}</tbody></table>
 
 <p style="color:#95a5a6;font-size:11px;margin-top:24px;">本报告由 scripts/report_html.py 自动生成，数据源 results/Summary/ 每日总执行结果。执行态与母版用例定义分离，真实结果以本报告为准。</p>
 </body></html>"""
