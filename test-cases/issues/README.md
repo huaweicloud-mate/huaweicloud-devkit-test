@@ -31,4 +31,4 @@
 | `560-officeace-close-timeout` | #560 OfficeAce CLOSE_TIMEOUT | INT-1 | P1 | 已修(已关闭) |
 | `643-iter006-findings` | #643 本轮 11 项发现 | v1.1.3 全量 | — | 跟踪中 |
 | `570-cred-placeholder-r11` | #570 码道占位符遮蔽真实凭证 | D2 认证新负向 | P0 | 已修复（1.1.4-next.4，28/28 实测 PASS） |
-| `614-upgrade-chain` | #614 升级提醒链路 5 项合并单 | D1-55b/43c/46g/29 | P1 | 部分修复（3/5：①②③已修、④pre线文档未修、⑤1/3） |
+| `614-upgrade-chain` | #614 升级提醒链路 5 项合并单 | D1-55b/43c/46g/29 | P1 | 已关闭（五项闭环：①②③代码修、④⑤决策/声明定稿） |
