@@ -107,9 +107,11 @@ git add results/<客户端> && git commit -m "test: <客户端> <OS> 执行回�
 T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.helper= push "https://x-access-token:$T@github.com/huaweicloud-mate/huaweicloud-devkit-test.git" main
 ```
 
-## 问题单号回归 = 全链路流水线 B（收到「全链路 #<编号>」/「回归 #<编号>」时）
+## 问题单号回归 = 全链路流水线 B
 
-当触发语带 issue 编号（「全链路测 #562」「回归 #570」）时，走**全链路流水线 B（问题/缺陷回归）**，不做每日全量。下面五步与维护者技能 `huaweicloud-devkit-full-pipeline` 的「流水线 B」一一对应，**由执行回归的 agent 完整走完（含自己写用例、跑生成器），不依赖维护者先做设计**。
+**一句话触发**：只要收到带 issue 编号的指令——「回归 #614 用版本 1.1.4-next.5」「全链路测 #562」「回归 #570」——就进入本路线，别当成每日全量执行。带版本号的，该版本即**回归基线**（checkout 到它对应 commit，见 Step 0）。
+
+收到编号即**自主走完下面五步（含自己写用例、跑生成器、定向复测、回填结论），不依赖维护者先做设计**。五步与维护者技能 `huaweicloud-devkit-full-pipeline` 的「流水线 B」一一对应；客户端无关，任意 agent（OpenCode/Codex/Hermes/...）都按此执行。
 
 ### Step 0 定位 + 确认修复是否真合入
 0. **先拿缺陷上下文（从编号 → 明确缺陷，别裸跑）**：
@@ -134,12 +136,21 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 - `cd test-cases/design && python gen_matrix.py && python gen_tracing.py` → `python verify_new.py`（exit 0）+ `python scan_gaps.py`（GATE-PASS）。
 - 版本冻结快照 + 补「迭代测试设计.md」；同步 README 数量 + check_docs（保证「文档提及=原子记录」）。
 
-### Step 4 测试验证（定向复测）
+### Step 4 测试验证（定向复测，验证分层递增）
 - init_day 建包 → 只跑该 issue 关联回归用例（P0→P1→P2）→ 回填「执行状态」+「执行时间」。
+
+**验证分层（证据强度递增，优先 1+2，必要时 3）**：
+1. **函数级探针**（快、可复现）：临时 `.mjs` 直接 import 被测模块跑断言，跑完删；隔离 `HUAWEICLOUD_HOME` 临时目录避免污染真实凭证；脱敏 SK 只出前 3 位 + len。
+2. **既有单测**：`cd hdk && node --test test/<相关>.test.mjs` 确认修复没破坏既有逻辑（exit 0 = pass 全绿）。
+3. **真机**（需独立环境时）：SSH 到测试机跑（凭据读「测试机账号.txt」，不打印）。
+
 - 证据落 `results/<客户端>/<日期>-<IP>/<OS>/evidence/<case-id>/`（探针 + stdout.log）。
 - 结论三选一：**已修复** / **仍存在** / **BLOCKED**（环境未齐写 blockedReason）。
 - 结论报告落 `results/<客户端>/<日期>-<IP>/<OS>/问题回归-<编号>.md`（复现/已修复/仍存在 + 证据链接）。
-- 已修复关单 / 仍存在更新 issue 由维护者汇总各机结论后统一操作（维护者回归完成即直接评论 + push，不另问）。
+
+**维护者收尾（汇总各机结论后直接做，不另问）**：
+1. 归档 + push：更新 `test-cases/issues/README.md` 清单行 → commit 回归产物 → `git fetch origin main && git rebase origin/main` → `git -c credential.helper= push "https://x-access-token:$T@github.com/huaweicloud-mate/huaweicloud-devkit-test.git" main`。
+2. 评论上游 issue：结论写 `_issue<编号>_comment.md`（UTF-8）→ `gh issue comment <编号> --repo huaweicloud/huaweicloud-devkit --body-file <文件>`（body-file 自读 UTF-8，中文不乱）。结论「已修复」→ `gh issue close <编号>`；「仍存在/部分修复」→ 保持 open + 追加复验评论。⚠️ 并发 push 会把 main 推进——push 前必 rebase，核验用「commit 是否入 main 历史」，勿用 `main==<sha>` 硬断言。
 
 ### 问题回归的权限例外与并发纪律
 - **回归场景解除「test-cases 只读」**：执行回归的 agent 可写 `test-cases/issues/<编号>-<slug>/` 与生成器（gen_matrix / gen_tracing / gen_daily）。这是对「每日执行」只读约束的明确例外；**仍禁手改 CSV**（只改生成器再重生成）。
