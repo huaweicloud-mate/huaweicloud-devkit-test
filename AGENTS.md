@@ -144,9 +144,9 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 2. **既有单测**：`cd hdk && node --test test/<相关>.test.mjs` 确认修复没破坏既有逻辑（exit 0 = pass 全绿）。
 3. **真机**（需独立环境时）：SSH 到测试机跑（凭据读「测试机账号.txt」，不打印）。
 
-- 证据落 `results/<客户端>/<日期>-<IP>/<OS>/evidence/<case-id>/`（探针 + stdout.log）。
+- 证据落 `results/Regression/<日期>/evidence/<编号>-<slug>/`（探针 + stdout.log，问题回归证据按 issue 归档，不散在客户端目录）。
 - 结论三选一：**已修复** / **仍存在** / **BLOCKED**（环境未齐写 blockedReason）。
-- 结论报告落 `results/<客户端>/<日期>-<IP>/<OS>/问题回归-<编号>.md`（复现/已修复/仍存在 + 证据链接）。
+- 结论报告落 `results/Regression/<日期>/问题回归-<编号>.md`（复现/已修复/仍存在 + 证据链接），并同步回填 `test-cases/issues/<编号>-<slug>/回归用例.md` 的「回归结论」段。
 
 **维护者收尾（汇总各机结论后直接做，不另问）**：
 1. 归档 + push：更新 `test-cases/issues/README.md` 清单行 → commit 回归产物 → `git fetch origin main && git rebase origin/main` → `git -c credential.helper= push "https://x-access-token:$T@github.com/huaweicloud-mate/huaweicloud-devkit-test.git" main`。
@@ -154,8 +154,9 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 
 ### 问题回归的权限例外与并发纪律
 - **回归场景解除「test-cases 只读」**：执行回归的 agent 可写 `test-cases/issues/<编号>-<slug>/` 与生成器（gen_matrix / gen_tracing / gen_daily）。这是对「每日执行」只读约束的明确例外；**仍禁手改 CSV**（只改生成器再重生成）。
+- **回归场景可写 `results/Regression/`**：领走该 issue 的 agent 可写 `results/Regression/<日期>/问题回归-<编号>.md` + `results/Regression/<日期>/evidence/<编号>-<slug>/`（回归结论与证据统一归档 Regression，**勿落 `results/<客户端>/` 每日执行目录**）。这是对「每日执行不碰 Regression」的例外。
 - **写前先拉最新**（git pull / `prepare_env.py --update`）；**push 前 fetch + rebase**，避免多机改母版冲突。
-- **不 close/reopen/评论 issue**（维护者统一操作）；结果仍只落自己 `results/<客户端>/`，`results/Regression/` 由维护者汇总。
+- **一个 issue 由「一个 agent 领走」回归**，避免多机并发写同一 issue 的 Regression 结论/证据；**不 close/reopen/评论 issue**（维护者统一操作）。
 
 ## 红线（违反即作废重来）
 
