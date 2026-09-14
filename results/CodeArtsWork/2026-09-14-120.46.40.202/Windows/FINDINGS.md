@@ -12,7 +12,7 @@
 - **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs` 的 `classifyTextCommand()` 未覆盖 `DEW CSMS ShowSecret --plaintext=true` 模式，未识别为 secret 类操作
 - **影响**：Agent 可能通过 hook_check_command 放行明文 secret 读取命令，导致 secret 值进入对话上下文
 - **证据**：`evidence/D4-3/stdout.log`
-- **状态**：待提单
+- **状态**：已提单 #678
 
 ## #2【P1】adminPass 明文密码未触发回显警告
 
@@ -20,4 +20,4 @@
 - **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs` 的 `classifyTextCommand()` 未检测 `--adminPass=` 参数模式，未发出 plaintext password 警告
 - **影响**：明文密码可能留在 shell history 中，存在凭证泄漏风险
 - **证据**：`evidence/D4-6/stdout.log`
-- **状态**：待提单
+- **状态**：已提单 #678
