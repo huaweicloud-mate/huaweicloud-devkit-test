@@ -111,7 +111,7 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 
 **一句话触发**：只要收到带 issue 编号的指令——「回归 #614 用版本 1.1.4-next.5」「全链路测 #562」「回归 #570」——就进入本路线，别当成每日全量执行。带版本号的，该版本即**回归基线**（checkout 到它对应 commit，见 Step 0）。
 
-收到编号即**自主走完下面五步（含自己写用例、跑生成器、定向复测、回填结论），不依赖维护者先做设计**。五步与维护者技能 `huaweicloud-devkit-full-pipeline` 的「流水线 B」一一对应；客户端无关，任意 agent（OpenCode/Codex/Hermes/...）都按此执行。
+收到编号即**自主走完下面五步（含自己写用例、跑生成器、定向复测、回填结论），不依赖维护者先做设计**。五步与维护者技能 `huaweicloud-devkit-full-pipeline` 的「流水线 B」一一对应；客户端无关，任意 agent（OpenCode/Codex/Hermes/...）都按此执行。**两个仓库地址见本文件上方「仓库地址」章节**——测试仓库 `huaweicloud-mate/huaweicloud-devkit-test`（结果/用例/脚本），源码仓库 `huaweicloud/huaweicloud-devkit`（clone 到 `hdk`，源码检查/根因定位/写探针）；首次先 `git clone <源码仓库URL> hdk` 再走流程。
 
 ### Step 0 定位 + 确认修复是否真合入
 0. **先拿缺陷上下文（从编号 → 明确缺陷，别裸跑）**：
