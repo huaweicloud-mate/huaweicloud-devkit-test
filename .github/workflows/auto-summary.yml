@@ -3,6 +3,7 @@ name: auto-summary
 # agent 上报 results/<客户端>/ 结果即自动重新汇总 Summary；
 # 每天 20:10 北京时间（UTC 12:10）无 push 也兜底出一版。
 on:
+  workflow_dispatch:             # 维护者可手动触发一次做验证/手动兜底
   push:
     branches: [main]
     paths:
