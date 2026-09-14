@@ -2,6 +2,7 @@
 
 > **落盘路径**：`results/Hermes/2026-09-14-1.94.218.129/Linux/FINDINGS.md`
 > **生成时间**：2026-09-14 07:16（北京时间）
+> **提单记录**：2026-09-14 全量测毕，新增 2 项（#4 Change* 写操作漏拦、#5 提示注入绕过）已统一提单 → https://github.com/huaweicloud/huaweicloud-devkit/issues/671 ；其余 4 项与既有问题单 #650/#651/#652 重复，同 SUT 去重未拆单。
 > **本清单是统一提单脚本的解析输入**：`scripts/file_issue.py` 硬编码解析标题与「根因」字段，格式严格遵循。
 
 ## #1【P0】凭证 env 打印拦截不完整（HW_* 前缀放行）
@@ -10,7 +11,7 @@
 - **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:336` 的 env-dump 分支只匹配 `/HUAWEICLOUD|HWC_|HCLOUD|OS_/i` 四种前缀，而真实凭证环境变量前缀是 `HW_`（`HW_ACCESS_KEY`/`HW_SECRET_KEY`/`HW_SECURITY_TOKEN`，见 `auth/credentials.mjs` `resolveCredentials`）。
 - **影响**：凭证 env dump 安全红线被绕过，AK/SK/STS 可被提取。
 - **证据**：`evidence/D4-2/stdout.log`
-- **状态**：待提单
+- **状态**：已跟踪 → huaweicloud/huaweicloud-devkit #650 / #651 / #652（同 SUT 去重，未拆单）
 
 ## #2【P0】命令包裹穿透：`sh -c 'hcloud ...'` 内层写命令未拦截
 
@@ -18,7 +19,7 @@
 - **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:345` 的 hcloud 检测正则 `/(^|\s)hcloud(\.exe)?\s+/i` 要求 `hcloud` 出现在行首或空白后；`sh -c '...'` 包裹使 `hcloud` 落在引号内（前导字符为单引号），正则不命中，整个命令落为 `not_huaweicloud` 放行，内层 `DeleteServers` 从未被解析。
 - **影响**：任意写操作可通过 shell 包裹绕过审批门禁。
 - **证据**：`evidence/D4-16/stdout.log`
-- **状态**：待提单
+- **状态**：已跟踪 → #650（D4-16）/ #651（同 SUT 去重，未拆单）
 
 ## #3【P0】全局规则 huawei-agent-rules.mdc 未注入
 
@@ -26,7 +27,7 @@
 - **根因**：`package.json:8` `files` 数组（`['cordis.patch.yml','bin','.agents','plugins/huaweicloud-core','integrations/*']`）未包含 `rules`。
 - **影响**：全局安全规则未生效，禁直连 csms/kms 等 MUST 约束无从执行。
 - **证据**：`evidence/D4-23/stdout.log`
-- **状态**：待提单
+- **状态**：已跟踪 → #650 / #651（同 SUT 去重，未拆单）
 
 ## #4【P1】写操作审批门漏词：Change* 系列写动词未拦截
 
@@ -34,7 +35,7 @@
 - **根因**：`plugins/huaweicloud-core/safety/policy.json:27` `writeOperationPrefixes` 缺少 `Change` 前缀（含 `Create/BatchCreate/Delete/.../Deploy` 共 32 项但无 `Change`）；`safety-policy.mjs:93` `hasWritePrefix` 依赖该前缀表。
 - **影响**：重建服务器/变更计费模式/变更 VPC 等破坏性操作可未经审批执行。
 - **证据**：`evidence/D4-4/stdout.log`
-- **状态**：待提单
+- **状态**：已提单 → https://github.com/huaweicloud/huaweicloud-devkit/issues/671
 
 ## #5【P1】提示注入防护：自然语言夹带 hcloud 写命令未拦截
 
@@ -42,7 +43,7 @@
 - **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:345` 的 `\shcloud` 分支虽能命中夹带文本，但 `safe-policy.mjs:76-87` `commandOperation()` 按「首两个非 flag 非可执行 token」位置提取 `service`/`operation`，自然语言前缀使 `DeleteServers` 落为 `service="Ignore"/operation="previous"`，写语义丢失。
 - **影响**：提示注入 payload 可绕过写操作审批，高危指令依赖标签碰巧命中风险规则才被拦截。
 - **证据**：`evidence/D4-11/stdout.log`
-- **状态**：待提单
+- **状态**：已提单 → https://github.com/huaweicloud/huaweicloud-devkit/issues/671
 
 ## #6【P2】JSON-RPC 错误码不规范（-32603 vs -32601）
 
@@ -50,7 +51,7 @@
 - **根因**：`plugins/huaweicloud-core/src/mcp-server.mjs:169` 对所有 `dispatch` 抛出的异常硬编码 `code: -32603`（Internal error），未按方法区分 `-32601`(Method not found)/`-32602`(Invalid params)。
 - **影响**：MCP 客户端无法据此正确区分「未知方法」与「内部错误」，降级/重试策略失真。
 - **证据**：`evidence/D9-2/stdout.log`
-- **状态**：待提单
+- **状态**：已跟踪 → #652 / #651（同 SUT 去重，未拆单）
 
 ## 非产品缺陷（环境/测试侧，不计入提单）
 

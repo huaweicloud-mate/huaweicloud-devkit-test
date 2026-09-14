@@ -4,7 +4,7 @@
 > **生成时间**：2026-09-14 07:16（北京时间）
 > **执行归档**：`results/Hermes/2026-09-14-1.94.218.129/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（3 项 P0 缺陷 + 2 项 P1 缺陷 + 1 项 P2 规范漂移，与 2026-09-13 基线一致）
+> **结论**：`PARTIAL`（3 项 P0 缺陷 + 2 项 P1 缺陷 + 1 项 P2 规范漂移，与 2026-09-13 基线一致；新增 2 项 P1 已于 2026-09-14 统一提单 #671，其余 4 项同 SUT 已在 #650/#651/#652 跟踪）
 
 ---
 
@@ -149,12 +149,12 @@
 
 | # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应返回 `deny` | 返回 `allow`，`HW_*` 前缀未拦截 | `safety-policy.mjs:336`（env-dump 正则缺 `HW_`） | P | 待提单 |
-| 2 | P0 | D4-16 | 命令包裹穿透未拦截内层写命令 | `sh -c 'hcloud ecs DeleteServers...'` 应 `deny` | 返回 `allow/not_huaweicloud` | `safety-policy.mjs:345`（hcloud 行首/空白检测被引号包裹绕过） | P | 待提单 |
-| 3 | P0 | D4-23 | 全局规则 huawei-agent-rules.mdc 未注入 | 全部目标注入且约束可执行 | 安装后无 rules 目录 | `package.json:8` files 缺 `rules` | P | 待提单 |
-| 4 | P1 | D4-4 | 写操作审批门漏词 Change* | `ChangeServerOs*` 应 `deny` | `allow/unknown_read` | `safety/policy.json:27` writeOperationPrefixes 缺 `Change` | P | 待提单 |
-| 5 | P1 | D4-11 | 提示注入防护：自然语言夹带写命令 | 注入 payload 应被拒绝 | `allow/unknown_read`（仅 warn） | `safety-policy.mjs:345` + `:76-87` commandOperation 位置提取 | P | 待提单 |
-| 6 | P2 | D9-2 | JSON-RPC 错误码不符规范 | 未知方法应 `-32601` | `-32603` | `mcp-server.mjs:169` 硬编码 -32603 | G | 待提单 |
+| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应返回 `deny` | 返回 `allow`，`HW_*` 前缀未拦截 | `safety-policy.mjs:336`（env-dump 正则缺 `HW_`） | P | 已跟踪 #650/#651/#652 |
+| 2 | P0 | D4-16 | 命令包裹穿透未拦截内层写命令 | `sh -c 'hcloud ecs DeleteServers...'` 应 `deny` | 返回 `allow/not_huaweicloud` | `safety-policy.mjs:345`（hcloud 行首/空白检测被引号包裹绕过） | P | 已跟踪 #650/#651 |
+| 3 | P0 | D4-23 | 全局规则 huawei-agent-rules.mdc 未注入 | 全部目标注入且约束可执行 | 安装后无 rules 目录 | `package.json:8` files 缺 `rules` | P | 已跟踪 #650/#651 |
+| 4 | P1 | D4-4 | 写操作审批门漏词 Change* | `ChangeServerOs*` 应 `deny` | `allow/unknown_read` | `safety/policy.json:27` writeOperationPrefixes 缺 `Change` | P | 已提单 #671 |
+| 5 | P1 | D4-11 | 提示注入防护：自然语言夹带写命令 | 注入 payload 应被拒绝 | `allow/unknown_read`（仅 warn） | `safety-policy.mjs:345` + `:76-87` commandOperation 位置提取 | P | 已提单 #671 |
+| 6 | P2 | D9-2 | JSON-RPC 错误码不符规范 | 未知方法应 `-32601` | `-32603` | `mcp-server.mjs:169` 硬编码 -32603 | G | 已跟踪 #652/#651 |
 
 ### 根因详情
 
