@@ -1,79 +1,96 @@
 # 测试能力提示语速查手册
 
-> huaweicloud-devkit 测试体系的**提示语集中清单**，面向**开发与测试人员**：想触发哪个测试能力，复制下方对应提示语发给 agent 即可。
+> huaweicloud-devkit 测试体系的提示语清单，面向开发与测试人员。
 >
-> 本文件只回答「**怎么下指令**」；agent 收到后按 `skills/<能力>/SKILL.md` 执行，公共前置与全局红线见仓库根 `AGENTS.md`。
+> **核心原则：每个提示语都自带前置条件（测试仓库 + 源码仓库）**。新加入的人或 agent 拿到任意一条即可开工，无需额外背景——没有前置的短提示语（如单纯一句「每日测试」）会因缺乏上下文而无法执行、瞎猜或拒绝执行。
 
-## 一、能力提示语一览
+## 一、通用前置（所有完整提示语的固定开头）
 
-| 能力 | 提示语（复制即用） | 用途 | 完整说明 |
-|---|---|---|---|
-| 测试设计 | `测试设计 <版本/需求>` | 为新版本/新功能设计测试用例（产出候选设计 + 用例矩阵） | [skills/test-design](skills/test-design/SKILL.md) |
-| 测试执行 | `每日测试` | 执行当天全量测试（建包→执行→回填→报告→提单） | [skills/test-execution](skills/test-execution/SKILL.md) |
-| 缺陷回归 | `回归 #<编号>` 或 `全链路测 #<编号>` | 对已提单缺陷定向复测 | [skills/test-regression](skills/test-regression/SKILL.md) |
-| 覆盖核对 | `覆盖核对 [<维度>]` | 源码能力 ↔ 用例覆盖核对 | [skills/source-coverage](skills/source-coverage/SKILL.md) |
-
-## 二、完整触发示例（复制即用）
-
-### 测试设计
+新 agent 或新人不了解测试环境。任何提示语都必须先交代下面两件事再下指令，否则 agent 拿不到上下文：
 
 ```
-测试设计 v1.1.4
-测试设计 docs/upstream-designs/570-cred-placeholder-r11/方案.md
+【huaweicloud-devkit 测试】前置准备：
+1. 第一次在 ~/devkit-test/<你的客户端名>/ 目录下 clone 两个仓库：
+   - 测试仓库：git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git   （结果/用例/脚本）
+   - 源码仓库：git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk        （源码检查/根因定位/写探针）
+2. 读测试仓库根目录 AGENTS.md（能力索引 + 公共前置 + 全局红线）。
+3. 自我识别：客户端名（OpenCode / Codex / CodeArtsAgent / CodeArtsWork / WorkBuddy / DSH / OfficeAce / Hermes / OpenClaw / AtomCode 之一）、OS（Windows / Linux）。
 ```
 
-- 触发条件：出现「测试设计」+「版本号 / 需求名 / 设计文档路径」。
-- 只设计新版本/新功能的用例；`回归 #<编号>` 走缺陷回归，不是本能力。
+> 两个仓库都要有：测试仓库管「测什么、结果记哪」，源码仓库（hdk）管「源码长啥样、bug 定位到哪一行」。
 
-### 测试执行
+## 二、能力完整提示语（复制即用，已内含通用前置）
 
-```
-每日测试
-```
+下面四条整段复制发给 agent 即可。本地 agent、远程测试机 agent、新加入的 agent 均适用。
 
-- 触发条件：出现「每日测试」或「执行今天的测试任务」。
-- 走当天全量执行；agent 自我识别客户端 + OS，无需你指定。
-
-### 缺陷回归
+### 1. 测试设计
 
 ```
-回归 #614
-全链路测 #562
-回归 #570 用版本 1.1.4-next.5     # 带版本号 = 指定回归基线
+【huaweicloud-devkit 测试】前置准备：
+1. 第一次在 ~/devkit-test/<你的客户端名>/ 目录下 clone 两个仓库：
+   - 测试仓库：git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git
+   - 源码仓库：git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
+2. 读测试仓库根目录 AGENTS.md（能力索引 + 公共前置 + 红线），自我识别客户端名与 OS。
+
+任务：测试设计 <版本/需求>。为 huaweicloud-devkit 新版本/新功能设计测试用例。
+- 读设计文档 docs/upstream-designs/<版本>/（或指定路径），固定范围（版本 commit / 代码变更 / 多终端基线）。
+- 按 skills/test-design/SKILL.md 产出候选测试设计：test-design.md + candidate-matrix.csv + status.md（写 HERMES_DRAFT_READY，禁止自写 TEST_DESIGN_READY）。
+- 评审放行（TEST_DESIGN_READY）由维护者统一执行。
 ```
 
-- 触发条件：出现「回归」/「全链路」+「#编号」。
-- 只复测该 issue 关联用例，结论落 `results/Regression/`，不 close/reopen/评论 issue。
-
-### 覆盖核对
+### 2. 测试执行（每日）
 
 ```
-覆盖核对              # 全量核对所有维度
-覆盖核对 D2           # 只核对认证维度（D2）
+【huaweicloud-devkit 测试】前置准备：
+1. 第一次在 ~/devkit-test/<你的客户端名>/ 目录下 clone 两个仓库：
+   - 测试仓库：git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git
+   - 源码仓库：git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
+2. 读测试仓库根目录 AGENTS.md（能力索引 + 公共前置 + 红线），自我识别客户端名与 OS。
+
+任务：每日测试。按 skills/test-execution/SKILL.md 完整执行当天测试：
+init_day 建包 → P0→P1→P2 执行 + 证据落盘 → 回填执行状态/时间 → 出测试报告 + FINDINGS → 每 10 分钟提报 → 全量测完统一提单 + push。
+只提交自己 results/<你的客户端>/ 目录，不碰 Summary、不碰其他客户端、不改 test-cases 母版。
 ```
 
-- 触发条件：出现「覆盖核对」。
-- 维度可选 D1 安装升级 / D2 认证 / D3 功能 / D4 安全 / D9 协议 等。
-
-## 三、分发到远程测试机（multica / gateway）
-
-> 本地 agent 直接发上面第二节的短提示语即可。**分发给远程测试机的 agent** 时，提示语必须自带完整上下文——项目名 + 两个仓库地址 + 读 `AGENTS.md` + 自我识别客户端/OS——否则无上下文的 agent 不会执行。
-
-### 每日测试（分发版）
+### 3. 缺陷回归
 
 ```
-【huaweicloud-devkit 测试】每日测试：首次建 ~/devkit-test/<你的客户端>/ 目录，clone 测试仓库(github.com/huaweicloud-mate/huaweicloud-devkit-test.git) + 源码仓库(github.com/huaweicloud/huaweicloud-devkit.git → hdk)。先读测试仓库根 AGENTS.md，自我识别客户端+OS，按「每日测试」能力(skills/test-execution/SKILL.md)完整执行当天测试（建包→执行→回填→报告→统一提单→push）。
+【huaweicloud-devkit 测试】前置准备：
+1. 第一次在 ~/devkit-test/<你的客户端名>/ 目录下 clone 两个仓库：
+   - 测试仓库：git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git
+   - 源码仓库：git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
+2. 读测试仓库根目录 AGENTS.md（能力索引 + 公共前置 + 红线），自我识别客户端名与 OS。
+
+任务：回归 #<编号>。对已提单缺陷定向复测，按 skills/test-regression/SKILL.md 完整执行 Step 0-4：
+拿 issue 上下文 → 确认修复真合入（git log -S 核实代码真落地）→ 复现 + 根因定位 → 写回归用例 → 跑生成器 + 门禁 → 定向复测 → 结论落 results/Regression/<日期>/问题回归-<编号>.md。
+只动自己负责的 issue 目录与生成器，禁手改 CSV，不 close/reopen/评论 issue。
 ```
 
-### 缺陷回归（分发版）
+### 4. 源码覆盖核对
 
 ```
-【huaweicloud-devkit 测试】回归 #<编号>：首次建 ~/devkit-test/<你的客户端>/ 目录，clone 测试仓库(github.com/huaweicloud-mate/huaweicloud-devkit-test.git) + 源码仓库(github.com/huaweicloud/huaweicloud-devkit.git → hdk)。先读测试仓库根 AGENTS.md，自我识别客户端+OS，按「回归」能力(skills/test-regression/SKILL.md)完整执行 Step 0-4（含自己写回归用例 + 跑生成器 + 门禁），结论落 results/Regression/<日期>/问题回归-<编号>.md。只动自己负责的 issue 目录与生成器，禁手改 CSV，不 close/reopen/评论 issue。
+【huaweicloud-devkit 测试】前置准备：
+1. 第一次在 ~/devkit-test/<你的客户端名>/ 目录下 clone 两个仓库：
+   - 测试仓库：git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git
+   - 源码仓库：git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
+2. 读测试仓库根目录 AGENTS.md（能力索引 + 公共前置 + 红线），自我识别客户端名与 OS。
+
+任务：覆盖核对 [<维度>]。按 skills/source-coverage/SKILL.md 核对用例是否覆盖源码能力：
+提取源码能力清单 → 对照用例覆盖点 → 正确性核对（函数/字段/错误码）→ 覆盖率核对（硬/弱缺口），缺口落用例（新 ID + 优先级 + 门禁更新）。
 ```
+
+## 三、简短版对照（仅本地已初始化 agent 可用）
+
+本地 agent 已 clone 两仓库、已读过 AGENTS.md 时，可只用短提示语；**新人 / 新 agent 一律用第二节完整版**。
+
+| 能力 | 完整版（新人 / 新 agent） | 简短版（仅本地老 agent） |
+|---|---|---|
+| 测试设计 | 第二节 · 1 | `测试设计 <版本/需求>` |
+| 测试执行 | 第二节 · 2 | `每日测试` |
+| 缺陷回归 | 第二节 · 3 | `回归 #<编号>` |
+| 覆盖核对 | 第二节 · 4 | `覆盖核对 [<维度>]` |
 
 ## 四、维护者专属（Hermes 本机，不跨 agent 分发）
-
-维护者（Hermes）另有一套「全链路编排」能力——把测试设计 → Codex 评审闭环 → 用例输出 → 测试验证串成一条流水线，真源在 Hermes 本机技能，**不随本仓库分发**（跨 agent 用的是上面第一节的原子能力）：
 
 | 提示语 | 用途 |
 |---|---|
@@ -85,6 +102,6 @@
 
 | 文件 | 谁读 | 内容 |
 |---|---|---|
-| 本文件 `PROMPTS.md` | 开发 / 测试人员 | 提示语清单 + 复制示例 + 分发模板 |
+| 本文件 `PROMPTS.md` | 开发 / 测试人员 | 提示语清单（自带前置） + 复制示例 |
 | `AGENTS.md` | 任意 agent | 能力索引 + 公共前置 + 全局红线 |
 | `skills/<能力>/SKILL.md` | 任意 agent | 单个能力的完整执行流程 |
