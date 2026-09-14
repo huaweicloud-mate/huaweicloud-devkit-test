@@ -1,0 +1,1 @@
+# D4-22: Blocked - OpenClaw is non-hook client

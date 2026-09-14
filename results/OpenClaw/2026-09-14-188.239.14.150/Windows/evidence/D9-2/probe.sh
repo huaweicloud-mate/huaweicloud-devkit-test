@@ -1,0 +1,1 @@
+# D9-2: JSON-RPC error codes compliance

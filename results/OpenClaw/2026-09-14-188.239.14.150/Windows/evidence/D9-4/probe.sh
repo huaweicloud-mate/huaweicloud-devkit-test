@@ -1,0 +1,1 @@
+# D9-4: Protocol lifecycle (initialize->tools/list->tools/call)
