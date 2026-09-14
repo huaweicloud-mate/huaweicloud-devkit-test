@@ -1,3 +1,6 @@
-=== CASE D8-1 ===  PASS  文档与能力一致（全量核对）
-  expected: 文档宣称工具/技能数与实现一致
-  actual:   tools.mjs TOOL_DEFINITIONS = 39（与 README/AGENTS.md 宣称一致）；meta 技能 6（huaweicloud-core/cli-and-auth/api-and-sdk/capability-discovery/safety/troubleshooting）；service 技能 23（huawei-*）。合计 skills 29 = doctor 报 "Skills installed (29)"。完全一致。
+=== CASE D8-1 ===  FAIL  文档与能力一致（全量核对）
+  expected: 文档宣称工具/技能数与实现一致（source repo AGENTS.md/README 应同步实现）
+  actual:   tools.mjs TOOL_DEFINITIONS = 40 工具（next.6 新增 huaweicloud_obs_set_website_config #347），
+            但源码仓库 AGENTS.md:27 仍写 "39 tools in tools.mjs"、AGENTS.md:45 仍写 "39 MCP tool definitions"，文档落后于实现。
+  detail:   工具数 39→40 漂移；新增 obs_set_website_config 未同步文档工具数。
+  evidence: 实测 node -e "TOOL_DEFINITIONS.length" = 40；grep AGENTS.md "39 tools" 命中 2 处。

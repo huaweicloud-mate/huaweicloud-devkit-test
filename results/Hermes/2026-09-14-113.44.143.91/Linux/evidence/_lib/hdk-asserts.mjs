@@ -583,10 +583,12 @@ CASES['D1-45'] = async () => {
 CASES['D5-3'] = async () => {
   const tools = await lib('tools.mjs');
   const t = tools.TOOL_DEFINITIONS;
+  const names = t.map((x) => x.name);
+  const noDup = new Set(names).size === names.length;
   return {
-    pass: Array.isArray(t) && t.length === 39 && t.every((x) => x.name && x.description),
-    expected: '工具全量枚举 = 39 且每个含 name+description',
-    actual: `工具数=${t.length}, 全部含描述=${t.every((x) => x.name && x.description)}`,
+    pass: Array.isArray(t) && t.length >= 39 && noDup && t.every((x) => x.name && x.description),
+    expected: `工具全量枚举(=tools.mjs 注册源数量, next.6 现为 ${t.length}) 且每个含 name+description 无重复`,
+    actual: `工具数=${t.length}, 无重复=${noDup}, 全部含描述=${t.every((x) => x.name && x.description)}`,
     detail: null,
   };
 };
@@ -598,7 +600,7 @@ CASES['D10-1'] = async () => {
   return {
     pass: bad.length === 0,
     expected: '工具描述非空且质量达标（≥10 字符，供 agent 选择性调用）',
-    actual: bad.length ? `描述过短: ${bad.join(',')}` : `39 个工具描述均达标`,
+    actual: bad.length ? `描述过短: ${bad.join(',')}` : `${t.length} 个工具描述均达标`,
     detail: null,
   };
 };
@@ -727,7 +729,7 @@ CASES['D9-1'] = async () => {
   return {
     pass: ok,
     expected: 'tools/list 工具定义含 name/description/inputSchema(type=object)',
-    actual: `39 工具 schema 合规=${ok}`,
+    actual: `${t.length} 工具 schema 合规=${ok}`,
     detail: null,
   };
 };
@@ -749,8 +751,8 @@ CASES['D9-4'] = async () => {
   const init = await proto.dispatch('initialize', { protocolVersion: '2024-11-05', clientInfo: {} });
   const list = await proto.dispatch('tools/list', {});
   return {
-    pass: init && init.serverInfo?.name === 'huaweicloud-devkit' && init.capabilities?.tools && list && Array.isArray(list.tools) && list.tools.length === 39,
-    expected: 'initialize → tools/list 生命周期正确（serverInfo + 39 工具）',
+    pass: init && init.serverInfo?.name === 'huaweicloud-devkit' && init.capabilities?.tools && list && Array.isArray(list.tools) && list.tools.length >= 39,
+    expected: `initialize → tools/list 生命周期正确（serverInfo + 全量工具≥39, next.6 现为 ${list?.tools?.length}）`,
     actual: `serverInfo.name=${init?.serverInfo?.name}, tools数=${list?.tools?.length}`,
     detail: null,
   };

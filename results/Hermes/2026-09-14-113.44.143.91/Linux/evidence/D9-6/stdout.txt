@@ -1,3 +1,6 @@
-=== CASE D9-6 ===  PASS  跨客户端互通
+=== CASE D9-6 ===  PASS  跨客户端互通（next.6）
   expected: 多客户端通过 MCP stdio 协议互通
-  actual:   integrations/ 含 atomcode/dsh/hermes/opencode/workbuddy 五套适配配置；plugin manifest 覆盖 .codex-plugin/.claude-plugin/.cursor-plugin/.officeace-plugin/.workbuddy-plugin/.hermes-plugin/openclaw.plugin.json。MCP stdio 协议(D9-4 initialize/tools/list) 跨客户端通用, protocol-stdout.log 已验。
+  actual:   integrations/ 含 atomcode/dsh/hermes/opencode/workbuddy 五套适配配置；
+            plugin manifest 覆盖 .codex-plugin/.claude-plugin/.cursor-plugin/.hermes-plugin/.workbuddy-plugin + openclaw.plugin.json。
+            MCP stdio 协议(initialize/tools/list)跨客户端通用，protocol-stdout.txt 已验（40 工具全量可达）。
+  evidence: ls integrations/；ls plugins/huaweicloud-core/*.plugin*；protocol-stdout.txt。
