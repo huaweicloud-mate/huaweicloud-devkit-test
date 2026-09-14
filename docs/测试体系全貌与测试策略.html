@@ -38,8 +38,6 @@ tbody tr:hover{background:var(--accent-soft)}
 ul,ol{padding-left:24px;margin:10px 0}
 li{margin:5px 0}
 strong{color:#111827}
-.toc{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:0 0 24px}
-.toc>ul{margin:0}
 hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 </style>
 </head>
@@ -405,6 +403,7 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 <th>维度</th>
 <th>测什么</th>
 <th>依据类型</th>
+<th>用例数（设计级/展开级）</th>
 <th>覆盖状态</th>
 </tr>
 </thead>
@@ -413,64 +412,77 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 <td>D1 安装生命周期</td>
 <td>install/doctor/status/update/uninstall/install-hcloud 闭环 + 重启生效</td>
 <td>仓库事实 / 通用测试实践</td>
+<td>54 / 30</td>
 <td>全（含 Windows 专项）</td>
 </tr>
 <tr>
 <td>D2 认证凭证</td>
 <td>AK/SK 三端同步、脱敏、失效降级、无凭证降级</td>
 <td>仓库事实 / 行业对标 / 通用测试实践</td>
+<td>25 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D3 功能覆盖</td>
 <td>39 工具 + skills + 命令规划执行 + 真云 E2E 场景 A/B/C</td>
 <td>仓库事实 / 行业对标</td>
+<td>26 / 22</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D4 安全护栏</td>
 <td>审批门/拦截/脱敏/注入/对抗性（绕过/包裹/模糊）</td>
 <td>仓库事实（最高权重）</td>
-<td>全（17 条）</td>
+<td>26 / —</td>
+<td>全</td>
 </tr>
 <tr>
 <td>D5 客户端矩阵</td>
 <td>10 客户端安装/加载/差异点</td>
 <td>仓库事实 / 行业对标</td>
+<td>8 / 70</td>
 <td>全（业界多仅 4-5 个）</td>
 </tr>
 <tr>
 <td>D6 性能可靠性</td>
 <td>延迟/冷启/并发/弱网/长会话</td>
 <td>通用测试实践 / 行业对标</td>
+<td>8 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D7 兼容跨平台</td>
 <td>OS×Node 矩阵、Windows 缺口、镜像源、共存升级</td>
 <td>仓库事实</td>
+<td>6 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D8 可观测文档</td>
 <td>文档一致性、错误可执行性、中英文对齐</td>
 <td>行业对标 / 仓库事实</td>
+<td>8 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D9 MCP 协议合规</td>
 <td>tools/list schema、JSON-RPC 错误码、协议握手/降级/传输</td>
 <td>规范要求 / 行业对标</td>
-<td>全（8 条，v1.1 补足）</td>
+<td>10 / —</td>
+<td>全</td>
 </tr>
 <tr>
 <td>D10 Agent 行为评测</td>
 <td>skill 激活率、路由准确率、安全干预</td>
 <td>行业对标</td>
-<td>基建建成（v1.1 补足）</td>
+<td>8 / 15</td>
+<td>基建建成</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>用例数口径</strong>：设计级 179 条按 D1~D10 分维；展开级 137 条只展开 4 个维度——D5 客户端矩阵 70、D1 安装终端 30（NR3 升级提醒 25 + 白名单 5）、D3 服务矩阵 22、D10 评测集 15（D2/D4/D6/D7/D8/D9 无展开级用例）。合计 316 条。</p>
+</blockquote>
 <p><strong>双口径消除了"抽查=可操作"的矛盾</strong>：
 - <strong>定义覆盖率 100%</strong>——39 工具、30 skill、20+ 服务均有对应用例（可静态评审确认）；
 - <strong>执行覆盖率分层</strong>——核心工具/高危服务 100% 执行，长尾服务按风险抽测 ≥ 60%。</p>
