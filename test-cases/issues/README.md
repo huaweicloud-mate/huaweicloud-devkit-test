@@ -30,4 +30,4 @@
 | `518-566-mirror-lag` | #518/#566 镜像滞后 | D1-40 | P1 | 已修(dev)，待进 next |
 | `560-officeace-close-timeout` | #560 OfficeAce CLOSE_TIMEOUT | INT-1 | P1 | 已修(已关闭) |
 | `643-iter006-findings` | #643 本轮 11 项发现 | v1.1.3 全量 | — | 跟踪中 |
-| `570-cred-placeholder-r11` | #570 码道占位符遮蔽真实凭证 | D2 认证新负向 | P0 | 未修复（方案 v5 冻结，代码未合入） |
+| `570-cred-placeholder-r11` | #570 码道占位符遮蔽真实凭证 | D2 认证新负向 | P0 | 已修复（1.1.4-next.4，28/28 实测 PASS） |
