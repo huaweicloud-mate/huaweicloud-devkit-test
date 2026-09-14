@@ -112,6 +112,10 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 当触发语带 issue 编号（「全链路测 #562」「回归 #570」）时，走**全链路流水线 B（问题/缺陷回归）**，不做每日全量。下面五步与维护者技能 `huaweicloud-devkit-full-pipeline` 的「流水线 B」一一对应，**由执行回归的 agent 完整走完（含自己写用例、跑生成器），不依赖维护者先做设计**。
 
 ### Step 0 定位 + 确认修复是否真合入
+0. **先拿缺陷上下文（从编号 → 明确缺陷，别裸跑）**：
+   - 读上游 issue 全文补上下文：`gh issue view <编号> --repo huaweicloud/huaweicloud-devkit`（缺陷现象 / 根因 / 修复方案）。无 gh 时 `curl -s https://api.github.com/repos/huaweicloud/huaweicloud-devkit/issues/<编号>`（issue 公开可读，无需 token）。
+   - 定位本地归档回归用例：`ls test-cases/issues/<编号>-*/`（编号 → slug 目录），读 `回归用例.md` 的「根因 + 复现步骤 + 断言契约 + 修复实现 commit」。
+   - 二者对齐后，明确「本次回归验证哪个修复、断言是什么」再往下走；归档无该 issue 目录时，以 issue 全文为准、准备自建（走 Step 2）。
 1. 定位上游 issue 与本地归档缺陷：`test-cases/issues/<编号>-<slug>/回归用例.md`（复现步骤 + 断言契约 + 关联设计用例 ID + 严重级）。
 2. 开发称「已修复」的先确认代码真落地（勿信自报）：
    - `git -C hdk log --all -S "<关键函数名>" --oneline -5`（全历史空 = 未实现；方案冻结 ≠ 已实现）
