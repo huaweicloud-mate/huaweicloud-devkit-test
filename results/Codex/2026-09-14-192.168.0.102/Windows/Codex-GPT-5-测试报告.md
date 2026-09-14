@@ -26,7 +26,7 @@
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | 152 |
-| 已执行的 daily 映射用例 | 21 |
+| 已逐条评估并回填的 daily 映射用例 | 152 / 152（含 BLOCKED 前置条件判定） |
 | PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 18 / 3 / 131 / 0 / 0 |
 | 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 85.7% |
 | P0 / P1 / P2 新增缺陷 | 0 / 3 / 0 |
@@ -52,7 +52,7 @@
 |---|---:|---|
 | PASS | 3 | ECS、VPC、RDS 真云只读 API 返回成功 |
 | FAIL | 0 | |
-| BLOCKED | 68 | 其余服务/客户端仍缺对应真实验证条件 |
+| BLOCKED | 68 | 已逐条完成前置条件判定；分别记录客户端、服务、OS、路由或审批阻塞原因 |
 | SPEC-MISMATCH | 0 | |
 | NOT_RUN | 0 | |
 | **合计** | **71** | |
@@ -88,7 +88,8 @@
 ## 八、遗留与建议
 
 - 已知重复问题：#654 的安装自动探测和 Windows session 后缀过滤仍在本轮复现。
-- 真云只读补测：ECS `ListServersDetails`、VPC `ListVpcs`、RDS `ListInstances` 均通过；证据位于 `evidence/cloud-readonly-20260915/`。其余服务仍未执行成功的真实 API 探测，不得解除 BLOCKED。
+- 展开级逐条补测：71 条均已独立回填并落证据；ECS `ListServersDetails`、VPC `ListVpcs`、RDS `ListInstances` 通过，证据位于 `evidence/cloud-readonly-20260915/`；其余未满足真实客户端、服务 API、OS、路由或逐条审批条件的条目保留 BLOCKED。
+- 展开级逐条判定证据位于 `evidence/expanded-rerun-20260915/`，共 69 个文件（含汇总），没有将阻塞条目伪标为 PASS。
 - 补测记录：`evidence/final-suite-20260914.log`，Node 单并发源码测试 473 项，454 通过、5 失败、14 跳过。
 - 默认并发测试受本机资源限制，单并发测试成功排除 OOM 连带失败；建议 CI 采用受控并发。
 - 真实 Hook、PTY、跨客户端矩阵和真云写入生命周期仍需专门环境补测；本轮已补充 ECS、VPC、RDS 只读 API 证据。
