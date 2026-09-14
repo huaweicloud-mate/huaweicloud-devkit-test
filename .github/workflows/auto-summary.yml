@@ -1,0 +1,53 @@
+name: auto-summary
+
+# agent 上报 results/<客户端>/ 结果即自动重新汇总 Summary；
+# 每天 20:10 北京时间（UTC 12:10）无 push 也兜底出一版。
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'results/**'
+      - '!results/Summary/**'      # 汇总自身写回不触发（防循环）
+  schedule:
+    - cron: '10 12 * * *'          # UTC 12:10 = 北京时间 20:10
+
+concurrency:
+  group: auto-summary              # 单例串行：20 个客户端×OS 流水每 10 分钟 push，高频不爆
+  cancel-in-progress: false
+
+permissions:
+  contents: write                  # GITHUB_TOKEN 写回 Summary 所需
+
+jobs:
+  build-summary:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai            # runner 是 UTC；build_summary 用 datetime.now()，日期必须按北京
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0           # 完整历史，避免 shallow 导致 push 被拒
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build summary matrix
+        run: python scripts/build_summary.py
+
+      - name: Render HTML report
+        run: python scripts/report_html.py
+
+      - name: Commit & push Summary
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/Summary/
+          if git diff --cached --quiet; then
+            echo "Summary 无变动，跳过提交"
+          else
+            git commit -m "chore: 自动汇总 $(date +%Y-%m-%d)"
+            git push origin HEAD:main
+          fi
