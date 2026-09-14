@@ -4,7 +4,7 @@
 > **生成时间**：2026-09-14 23:50:00（北京时间）
 > **执行归档**：`results/CodeArtsWork/2026-09-14-120.46.40.202/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（有 2 个 FAIL 缺陷，P0 有 1 个 FAIL）
+> **结论**：`PARTIAL`（设计级 2 个 FAIL + 展开级 14 个 FAIL，P0 有 1 个 FAIL）
 
 ---
 
@@ -31,11 +31,13 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | `81`（设计级） |
-| 已执行 | `81` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `65 / 2 / 14 / 0 / 0` |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH = 67） | `97.0%` |
-| P0 / P1 / P2 新增缺陷 | `1 / 1 / 0` |
+| 计划用例（daily） | `81`（设计级）+ `71`（展开级）= `152` |
+| 已执行 | `81`（设计级）+ `43`（展开级实际执行，排除 NOT_RUN） |
+| 设计级 PASS / FAIL / BLOCKED / NOT_RUN | `65 / 2 / 14 / 0` |
+| 展开级 PASS / FAIL / BLOCKED / NOT_RUN | `27 / 14 / 2 / 28` |
+| 通过率（设计级分母 = 67） | `97.0%` |
+| 通过率（展开级分母 = 41） | `65.9%` |
+| P0 / P1 / P2 新增缺陷 | `1 / 2 / 0` |
 | 红线（I 类）违规 | `0` |
 | 资源释放 | `全部归零（无真云资源创建）` |
 
@@ -58,11 +60,11 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `67` | 有证据且通过 PASS 门禁 |
-| FAIL | `0` | 展开级无独立 FAIL（继承设计级） |
-| BLOCKED | `4` | 环境阻塞 |
+| PASS | `27` | 逐条实际执行通过（C4 服务矩阵 21 + D5 本客户端 2 + NR3 Windows 2 + E 评测集 2） |
+| FAIL | `14` | C4 DEW USE_ERROR 1 + E 评测集路由失败 13 |
+| BLOCKED | `2` | NR3 Windows 需特定安装布局（EXP-NR3-03/23） |
 | SPEC-MISMATCH | `0` | 无契约漂移 |
-| NOT_RUN | `0` | 无未覆盖 |
+| NOT_RUN | `28` | 非本客户端（D5 18）+ 非 Windows OS（NR3 5）+ Linux only（D1-58 5） |
 | **合计** | **`71`** | |
 
 ---
@@ -89,6 +91,7 @@
 |---|---|---|---|---|---|---|---|---|
 | 1 | P0 | `D4-3` | 明文 secret API 未被 hook 拦截 | `hcloud DEW CSMS ShowSecret --plaintext=true` 应返回 `deny` 或 `warn` | 返回 `allow`，findings 为空 | `safety-policy.mjs` classifyTextCommand 未覆盖 DEW CSMS ShowSecret --plaintext 模式 | P | 待提单 |
 | 2 | P1 | `D4-6` | adminPass 明文密码未触发回显警告 | `hcloud ECS CreateServers --adminPass=xxx` 应返回 `warn`（plaintext in shell history） | 返回 `allow`，findings 为空 | `safety-policy.mjs` classifyTextCommand 未检测 --adminPass= 参数模式 | P | 待提单 |
+| 3 | P1 | `EXP-E01~E15` | search_docs 路由准确率仅 13.3%（2/15） | 15 个中文自然语言查询应路由到正确服务 skill | 仅 2 个正确（E06 Redis→DCS, E09 K8s→CCE），13 个返回 0 结果或 top-1 错误 | `search_docs` 对中文语义匹配能力不足 | P | 待提单 |
 
 ### 根因详情
 
@@ -105,6 +108,13 @@
 - 实际：返回 `{"ok":true,"decision":"allow","findings":[]}`
 - 根因：`plugins/huaweicloud-core/src/safety-policy.mjs` 的 `classifyTextCommand()` 未检测 `--adminPass=` 参数模式，未发出 shell history 警告
 - 证据：`evidence/D4-6/stdout.log`，复现命令 `hcloud ECS CreateServers --adminPass=MyPassword123!` 实测 `allow`
+
+**#3 [P1] EXP-E01~E15 search_docs 路由准确率仅 13.3%**
+
+- 期望：15 个中文自然语言查询通过 `search_docs` 检索，应返回正确服务 skill 作为 top-1
+- 实际：仅 2 个正确（EXP-E06 Redis→huawei-dds-dcs, EXP-E09 K8s→huawei-cce），13 个返回 0 结果或 top-1 路由错误
+- 根因：`search_docs` 对中文自然语言查询的语义匹配能力不足，大量含中文服务描述的查询返回 0 结果
+- 证据：`evidence/EXP-E01/stdout.log` ~ `evidence/EXP-E15/stdout.log`
 
 ---
 
@@ -150,6 +160,6 @@
 
 ## 九、遗留与建议
 
-- 待提单缺陷：`D4-3`（P0，明文 secret API 未拦截）、`D4-6`（P1，adminPass 未警告）
-- 本轮未覆盖：真云 E2E、多终端矩阵、审批流实时对话框、并发调度、超时协议
-- 建议：在 `safety-policy.mjs` 中增加对 `DEW CSMS ShowSecret --plaintext=true` 和 `--adminPass=` 参数的 hook 规则，分别归类为 secret 类操作和 shell history 警告
+- 待提单缺陷：`D4-3`（P0，明文 secret API 未拦截）、`D4-6`（P1，adminPass 未警告）、`EXP-E01~E15`（P1，search_docs 路由准确率 13.3%）
+- 本轮未覆盖：真云 E2E、多终端矩阵（Linux/macOS）、审批流实时对话框、并发调度、超时协议
+- 建议：在 `safety-policy.mjs` 中增加对 `DEW CSMS ShowSecret --plaintext=true` 和 `--adminPass=` 参数的 hook 规则；改进 `search_docs` 中文语义匹配能力

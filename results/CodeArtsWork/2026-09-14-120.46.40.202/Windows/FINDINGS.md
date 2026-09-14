@@ -14,6 +14,14 @@
 - **证据**：`evidence/D4-3/stdout.log`
 - **状态**：已提单 #678
 
+## #3【P1】search_docs 路由准确率仅 13.3%（2/15）
+
+- **现象**：展开级 E 评测集 15 个自然语言查询通过 `search_docs` 检索，仅 2 个（EXP-E06 Redis→DCS、EXP-E09 K8s→CCE）返回正确路由结果，其余 13 个返回 0 结果或 top-1 路由错误
+- **根因**：`search_docs` 对中文自然语言查询的语义匹配能力不足，大量含中文服务描述的查询（如"查云主机""绑定EIP""MySQL状态"）返回 0 结果，部分查询（如"创建云服务器"）返回错误 top-1（huawei-functiongraph 而非 huawei-ecs）
+- **影响**：Agent 在接收中文自然语言请求时，无法通过 search_docs 正确路由到目标服务 skill，可能导致错误的服务选择或无法找到相关 skill
+- **证据**：`evidence/EXP-E01/stdout.log` ~ `evidence/EXP-E15/stdout.log`
+- **状态**：待提单
+
 ## #2【P1】adminPass 明文密码未触发回显警告
 
 - **现象**：`hcloud ECS CreateServers --adminPass=MyPassword123!` 返回 `{"ok":true,"decision":"allow","findings":[]}`，明文密码参数未触发 shell history 警告
