@@ -5,48 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>huaweicloud-devkit 插件测试体系全貌与测试策略</title>
 <style>
-:root{--bg:#f7f8fa;--card:#ffffff;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;
---accent:#2563eb;--accent-soft:#eff6ff;--code-bg:#f3f4f6;--warn:#fef3c7;--ok:#ecfdf5;--bad:#fef2f2}
+:root{--bg:#f2f5fa;--ink:#1b2430;--muted:#667085;--line:#e4e9f2;--blue:#2563eb;--ink2:#0f172a}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
-line-height:1.75;font-size:15px}
-.wrap{max-width:960px;margin:0 auto;padding:32px 24px 80px}
-header.top{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;padding:40px 24px;margin-bottom:28px}
-header.top h1{margin:0;font-size:26px;font-weight:700}
-header.top p{margin:8px 0 0;opacity:.85;font-size:14px}
-h1{font-size:24px;border-bottom:2px solid var(--line);padding-bottom:10px;margin:40px 0 18px}
-h2{font-size:20px;margin:32px 0 14px;color:#111827}
-h3{font-size:17px;margin:24px 0 10px;color:#111827}
-h4{font-size:15px;margin:18px 0 8px}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:#222c3a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;line-height:1.8;font-size:15px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px 96px}
+.hero{background:linear-gradient(120deg,#0f2557 0%,#1e3a8a 45%,#2563eb 100%);color:#fff;padding:56px 24px 48px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%}
+.hero::before{content:"";position:absolute;left:-80px;bottom:-160px;width:320px;height:320px;background:radial-gradient(circle,rgba(255,255,255,.08),transparent 70%);border-radius:50%}
+.hero-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1}
+.hero .kicker{font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin:0 0 12px}
+.hero h1{margin:0 0 14px;font-size:30px;font-weight:800;line-height:1.3}
+.hero .sub{font-size:15px;opacity:.86;margin:0 0 26px;max-width:640px}
+.metrics{display:flex;gap:12px;flex-wrap:wrap}
+.metric{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:12px 20px;backdrop-filter:blur(4px)}
+.metric .num{font-size:24px;font-weight:800;line-height:1.1}
+.metric .lbl{font-size:12px;opacity:.78;margin-top:2px}
+.toc{position:sticky;top:12px;z-index:5;margin:20px 0 8px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;box-shadow:0 2px 10px rgba(30,64,175,.06);display:flex;flex-wrap:wrap;gap:6px}
+.toc-title{font-size:12px;color:var(--muted);margin-right:8px;align-self:center;font-weight:600}
+.toc-item{font-size:13px;color:#334155;text-decoration:none;padding:5px 11px;border-radius:999px;background:#f4f7fb;border:1px solid #e6ecf5;transition:.15s}
+.toc-item:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+h2{font-size:21px;font-weight:800;color:var(--ink2);margin:34px 0 6px;padding-left:14px;border-left:4px solid var(--blue);line-height:1.4}
+h2[id]{scroll-margin-top:70px}
+h3{font-size:16px;font-weight:700;color:#1e293b;margin:26px 0 10px}
+h4{font-size:15px;font-weight:700;margin:18px 0 8px}
 p{margin:10px 0}
-a{color:var(--accent);text-decoration:none}
+a{color:var(--blue);text-decoration:none}
 a:hover{text-decoration:underline}
-code{background:var(--code-bg);padding:2px 6px;border-radius:4px;
-font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-size:13px;color:#c0341d}
-pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:8px;overflow-x:auto;margin:14px 0}
-pre code{background:transparent;color:inherit;padding:0;font-size:13px;line-height:1.6}
-blockquote{background:var(--accent-soft);border-left:4px solid var(--accent);
-margin:14px 0;padding:10px 16px;border-radius:0 6px 6px 0;color:#1e40af}
-table{border-collapse:collapse;width:100%;margin:14px 0;background:var(--card);
-border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:14px;
-box-shadow:0 1px 2px rgba(0,0,0,.03)}
-th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
-th{background:#f1f5f9;font-weight:600;color:#111827;white-space:nowrap}
-tbody tr:nth-child(even){background:#fafbfc}
-tbody tr:hover{background:var(--accent-soft)}
-ul,ol{padding-left:24px;margin:10px 0}
-li{margin:5px 0}
-strong{color:#111827}
-hr{border:none;border-top:1px solid var(--line);margin:32px 0}
+hr{border:none;border-top:1px solid var(--line);margin:30px 0}
+code{background:#eef2f8;padding:2px 7px;border-radius:5px;font-family:"SFMono-Regular",Consolas,Menlo,monospace;font-size:13px;color:#b91c47}
+pre{background:#0f172a;color:#dbe4f3;padding:18px 20px;border-radius:12px;overflow-x:auto;margin:14px 0;line-height:1.5}
+pre code{background:transparent;color:inherit;padding:0;font-size:13px}
+blockquote{background:#eef4ff;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;margin:16px 0;padding:12px 18px;color:#1e40af}
+blockquote p{margin:4px 0}
+table{border-collapse:separate;border-spacing:0;width:100%;margin:16px 0;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+thead th{background:linear-gradient(180deg,#f0f4fb,#e8eef8);color:#1e293b;font-weight:700;border-bottom:2px solid #d7e0ee;white-space:nowrap;text-align:left}
+th,td{padding:11px 14px;border-bottom:1px solid #eef1f7;vertical-align:top;text-align:left}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:#f8fafd}
+tbody tr:hover{background:#eef4ff}
+td strong{color:#0f172a}
+.badge{display:inline-block;font-size:12px;font-weight:600;line-height:1;padding:4px 9px;border-radius:999px;border:1px solid transparent;white-space:nowrap;margin:1px 2px}
+.b-p{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
+.b-repo{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.b-bench{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
+.b-spec{background:#ecfdf5;color:#047857;border-color:#a7f3d0}
+.b-gen{background:#f8fafc;color:#475569;border-color:#e2e8f0}
+.b-design{background:#ecfeff;color:#0e7490;border-color:#a5f3fc}
+.b-plan{background:#fdf2f8;color:#be185d;border-color:#fbcfe8}
+.b-src{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+ul,ol{padding-left:26px;margin:10px 0}
+li{margin:6px 0}
+li::marker{color:var(--blue)}
+@media(max-width:640px){.hero h1{font-size:24px}.metrics{gap:8px}}
 </style>
 </head>
 <body>
-<header class="top">
-  <h1>huaweicloud-devkit 插件测试体系全貌与测试策略</h1>
-  <p>测试仓库 huaweicloud-mate/huaweicloud-devkit-test 体系梳理 · 依据类型全称图例 · 覆盖 10 维度 316 用例</p>
+<header class="hero">
+  <div class="hero-inner">
+    <p class="kicker">HuaweiCloud DevKit · Test System</p>
+    <h1>huaweicloud-devkit 插件测试体系全貌与测试策略</h1>
+    <p class="sub">面向 AI 编码 Agent 的「引导 + 安全包」的完整测试工程：体系架构、仓库全景、策略依据与全面性评估。</p>
+    <div class="metrics">
+      <div class="metric"><div class="num">316</div><div class="lbl">测试用例</div></div>
+      <div class="metric"><div class="num">10</div><div class="lbl">测试维度</div></div>
+      <div class="metric"><div class="num">10+</div><div class="lbl">客户端矩阵</div></div>
+      <div class="metric"><div class="num">93</div><div class="lbl">规划评分</div></div>
+      <div class="metric"><div class="num">39</div><div class="lbl">MCP 工具</div></div>
+    </div>
+  </div>
 </header>
 <div class="wrap">
+  <nav class="toc"><span class="toc-title">目录</span><a class="toc-item" href="#_1">依据类型图例（全称）</a><a class="toc-item" href="#sut">一、被测对象（SUT 基线）</a><a class="toc-item" href="#_2">二、测试体系与仓库全景</a><a class="toc-item" href="#_3">三、测试策略（细节、依据与全面性）</a><a class="toc-item" href="#_4">四、全面性自评估</a></nav>
+  <main>
 <h1 id="huaweicloud-devkit">huaweicloud-devkit 插件测试体系全貌与测试策略</h1>
 <h2 id="_1">依据类型图例（全称）</h2>
 <table>
@@ -59,42 +90,42 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 </thead>
 <tbody>
 <tr>
-<td><strong>产品承诺</strong></td>
+<td><span class="badge b-p">产品承诺</span></td>
 <td>P</td>
 <td>插件产品对外承诺的能力（README/文档明文承诺）</td>
 </tr>
 <tr>
-<td><strong>仓库事实</strong></td>
+<td><span class="badge b-repo">仓库事实</span></td>
 <td>仓</td>
 <td>被测仓库 README / docs / 源码 / 既有测试的明文承诺或已知风险</td>
 </tr>
 <tr>
-<td><strong>行业对标</strong></td>
+<td><span class="badge b-bench">行业对标</span></td>
 <td>标</td>
 <td>Azure MCP Server、Microsoft《MCP 测试最佳实践》、AWS Agent Toolkit 的实证做法或公开失效案例</td>
 </tr>
 <tr>
-<td><strong>规范要求</strong></td>
+<td><span class="badge b-spec">规范要求</span></td>
 <td>规</td>
 <td>MCP 官方规范、JSON-RPC 2.0 标准</td>
 </tr>
 <tr>
-<td><strong>通用测试实践</strong></td>
+<td><span class="badge b-gen">通用测试实践</span></td>
 <td>通</td>
 <td>生命周期 / 负向 / 幂等 / 性能等经典测试设计准则</td>
 </tr>
 <tr>
-<td><strong>设计文档</strong></td>
+<td><span class="badge b-design">设计文档</span></td>
 <td>设</td>
 <td>测试设计 / 架构设计文档的明文约定</td>
 </tr>
 <tr>
-<td><strong>开发方案</strong></td>
+<td><span class="badge b-plan">开发方案</span></td>
 <td>方</td>
 <td>开发侧提供的方案文档（如 <code>docs/upstream-designs/</code>）</td>
 </tr>
 <tr>
-<td><strong>源码函数</strong></td>
+<td><span class="badge b-src">源码函数</span></td>
 <td>实</td>
 <td>源码 export 函数、返回字段、错误码、常量</td>
 </tr>
@@ -350,7 +381,64 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 </tbody>
 </table>
 <p><strong>templates/ —— 12 个统一模板</strong></p>
-<p><code>daily-agent-report</code>（每日八节报告）、<code>findings</code>（缺陷清单）、<code>cloud-e2e</code>（真云 E2E）、<code>regression-report</code>、<code>version-report</code>、<code>nightly-report</code>、<code>client-matrix-report</code>、<code>security-audit</code>、<code>gap-report</code>、<code>dashboard</code>、<code>hermes-codex-test-design-status</code>、<code>multi-terminal-matrix.csv</code>。</p>
+<table>
+<thead>
+<tr>
+<th>模板</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>daily-agent-report</code></td>
+<td>每日 agent 报告（八节固定骨架）</td>
+</tr>
+<tr>
+<td><code>findings</code></td>
+<td>缺陷清单（级别 + 断言 + 根因 + 证据）</td>
+</tr>
+<tr>
+<td><code>cloud-e2e</code></td>
+<td>真云端到端场景</td>
+</tr>
+<tr>
+<td><code>regression-report</code></td>
+<td>问题回归报告</td>
+</tr>
+<tr>
+<td><code>version-report</code></td>
+<td>版本测试报告</td>
+</tr>
+<tr>
+<td><code>nightly-report</code></td>
+<td>每晚回归报告</td>
+</tr>
+<tr>
+<td><code>client-matrix-report</code></td>
+<td>客户端适配矩阵</td>
+</tr>
+<tr>
+<td><code>security-audit</code></td>
+<td>安全审计清单</td>
+</tr>
+<tr>
+<td><code>gap-report</code></td>
+<td>缺口报告</td>
+</tr>
+<tr>
+<td><code>dashboard</code></td>
+<td>质量仪表盘</td>
+</tr>
+<tr>
+<td><code>hermes-codex-test-design-status</code></td>
+<td>Hermes-Codex 评审状态</td>
+</tr>
+<tr>
+<td><code>multi-terminal-matrix.csv</code></td>
+<td>多终端矩阵</td>
+</tr>
+</tbody>
+</table>
 <p><strong>scripts/ —— 工具脚本（15 个）</strong></p>
 <table>
 <thead>
@@ -362,15 +450,15 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 <tbody>
 <tr>
 <td>agent 端</td>
-<td><code>init_agent.py</code>（一次性初始化）/ <code>prepare_env.py</code>（环境准备）/ <code>init_day.py</code>（建执行包）/ <code>verify_no_fake_pass.py</code>（PASS 门禁）/ <code>verify_coverage.py</code>（覆盖率门禁）/ <code>hourly_sync.py</code>（提报防丢失）/ <code>file_issue.py</code>（统一提单）</td>
+<td><code>init_agent.py</code>（一次性初始化）<br><code>prepare_env.py</code>（环境准备）<br><code>init_day.py</code>（建执行包）<br><code>verify_no_fake_pass.py</code>（PASS 门禁）<br><code>verify_coverage.py</code>（覆盖率门禁）<br><code>hourly_sync.py</code>（提报防丢失）<br><code>file_issue.py</code>（统一提单）</td>
 </tr>
 <tr>
 <td>维护者端</td>
-<td><code>build_summary.py</code>（聚合 Summary）/ <code>report_html.py</code>（HTML 汇总）/ <code>send_email.py</code> / <code>run_daily_report.py</code>（每日邮件）/ <code>gen_summary.py</code> + <code>update_summary.py</code>（早期汇总路径，已标废弃）</td>
+<td><code>build_summary.py</code>（聚合 Summary）<br><code>report_html.py</code>（HTML 汇总）<br><code>send_email.py</code>（SMTP 邮件）<br><code>run_daily_report.py</code>（每日邮件）<br><code>gen_summary.py</code> + <code>update_summary.py</code>（早期汇总，已标废弃）</td>
 </tr>
 <tr>
 <td>安全/同步</td>
-<td><code>hdk-secrets.ps1</code>（DPAPI 凭证加密）/ <code>sync-to-remote.ps1</code>（每日 20:00 自动同步）</td>
+<td><code>hdk-secrets.ps1</code>（DPAPI 凭证加密）<br><code>sync-to-remote.ps1</code>（每日 20:00 自动同步）</td>
 </tr>
 </tbody>
 </table>
@@ -386,17 +474,19 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
   ┌─┴── 单元/静态/安全扫描 ────┴─┐  ← test/*.mjs + npm audit + gitleaks
 </code></pre>
 <ul>
-<li><strong>策略要点</strong>：下层自动化左移、上层人工/半自动验证。依据：<strong>通用测试实践</strong>。</li>
+<li><strong>策略要点</strong>：下层自动化左移、上层人工/半自动验证。依据：<span class="badge b-gen">通用测试实践</span>。</li>
 </ul>
-<p><strong>测试纪律（铁律）</strong>：
-1. <strong>P/G/I 来源纪律</strong>——每步标 <code>P</code>=插件提供 / <code>G</code>=插件缺失自行解决 / <code>I</code>=Agent 擅自联想（记红线）。贴合"引导型"产品本质，防止测试者凭云知识绕行。依据：<strong>设计文档</strong>。
-2. <strong>不擅自联想</strong>——不猜服务名/操作名/参数，缺能力记缺口。依据：<strong>仓库事实</strong>。
-3. <strong>凭证纪律</strong>——AK/SK 永不进对话/报告，只从本地凭证文件读，输出脱敏。依据：<strong>仓库事实</strong>。
-4. <strong>写操作纪律</strong>——写操作统一走 <code>plan_cli_command → run_approved_command</code>，被误判 read-only 即记安全缺口（高危）。依据：<strong>仓库事实</strong>。
-5. <strong>资源释放纪律</strong>——本轮创建当轮删除 + 只读验证归零，残留即 FAIL。依据：<strong>通用测试实践</strong>。
-6. <strong>数据隐私纪律</strong>——测试数据用无害假数据（<code>demo-&lt;timestamp&gt;</code>），真实业务数据不进环境。依据：<strong>通用测试实践</strong>。</p>
+<p><strong>测试纪律（铁律）</strong>：</p>
+<ol>
+<li><strong>P/G/I 来源纪律</strong>——每步标 <code>P</code>=插件提供 / <code>G</code>=插件缺失自行解决 / <code>I</code>=Agent 擅自联想（记红线）。贴合"引导型"产品本质，防止测试者凭云知识绕行。依据：<span class="badge b-design">设计文档</span>。</li>
+<li><strong>不擅自联想</strong>——不猜服务名/操作名/参数，缺能力记缺口。依据：<span class="badge b-repo">仓库事实</span>。</li>
+<li><strong>凭证纪律</strong>——AK/SK 永不进对话/报告，只从本地凭证文件读，输出脱敏。依据：<span class="badge b-repo">仓库事实</span>。</li>
+<li><strong>写操作纪律</strong>——写操作统一走 <code>plan_cli_command → run_approved_command</code>，被误判 read-only 即记安全缺口（高危）。依据：<span class="badge b-repo">仓库事实</span>。</li>
+<li><strong>资源释放纪律</strong>——本轮创建当轮删除 + 只读验证归零，残留即 FAIL。依据：<span class="badge b-gen">通用测试实践</span>。</li>
+<li><strong>数据隐私纪律</strong>——测试数据用无害假数据（<code>demo-&lt;timestamp&gt;</code>），真实业务数据不进环境。依据：<span class="badge b-gen">通用测试实践</span>。</li>
+</ol>
 <h3 id="32-10">3.2 覆盖策略：10 维度 + 双口径</h3>
-<p><strong>全面性的核心证据</strong>：规划从 8 维扩展到 10 维，是<strong>行业对标</strong>的结果——对照 Azure MCP Server、Microsoft《MCP 测试最佳实践》三层模型（Unit→Protocol→Agent）、AWS Agent Toolkit，补齐了两个行业必备层：</p>
+<p><strong>全面性的核心证据</strong>：规划从 8 维扩展到 10 维，是<span class="badge b-bench">行业对标</span>的结果——对照 Azure MCP Server、Microsoft《MCP 测试最佳实践》三层模型（Unit→Protocol→Agent）、AWS Agent Toolkit，补齐了两个行业必备层：</p>
 <table>
 <thead>
 <tr>
@@ -411,70 +501,70 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 <tr>
 <td>D1 安装生命周期</td>
 <td>install/doctor/status/update/uninstall/install-hcloud 闭环 + 重启生效</td>
-<td>仓库事实 / 通用测试实践</td>
+<td><span class="badge b-repo">仓库事实</span> / <span class="badge b-gen">通用测试实践</span></td>
 <td>54 / 30</td>
 <td>全（含 Windows 专项）</td>
 </tr>
 <tr>
 <td>D2 认证凭证</td>
 <td>AK/SK 三端同步、脱敏、失效降级、无凭证降级</td>
-<td>仓库事实 / 行业对标 / 通用测试实践</td>
+<td><span class="badge b-repo">仓库事实</span> / <span class="badge b-bench">行业对标</span> / <span class="badge b-gen">通用测试实践</span></td>
 <td>25 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D3 功能覆盖</td>
 <td>39 工具 + skills + 命令规划执行 + 真云 E2E 场景 A/B/C</td>
-<td>仓库事实 / 行业对标</td>
+<td><span class="badge b-repo">仓库事实</span> / <span class="badge b-bench">行业对标</span></td>
 <td>26 / 22</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D4 安全护栏</td>
 <td>审批门/拦截/脱敏/注入/对抗性（绕过/包裹/模糊）</td>
-<td>仓库事实（最高权重）</td>
+<td><span class="badge b-repo">仓库事实</span>（最高权重）</td>
 <td>26 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D5 客户端矩阵</td>
 <td>10 客户端安装/加载/差异点</td>
-<td>仓库事实 / 行业对标</td>
+<td><span class="badge b-repo">仓库事实</span> / <span class="badge b-bench">行业对标</span></td>
 <td>8 / 70</td>
 <td>全（业界多仅 4-5 个）</td>
 </tr>
 <tr>
 <td>D6 性能可靠性</td>
 <td>延迟/冷启/并发/弱网/长会话</td>
-<td>通用测试实践 / 行业对标</td>
+<td><span class="badge b-gen">通用测试实践</span> / <span class="badge b-bench">行业对标</span></td>
 <td>8 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D7 兼容跨平台</td>
 <td>OS×Node 矩阵、Windows 缺口、镜像源、共存升级</td>
-<td>仓库事实</td>
+<td><span class="badge b-repo">仓库事实</span></td>
 <td>6 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D8 可观测文档</td>
 <td>文档一致性、错误可执行性、中英文对齐</td>
-<td>行业对标 / 仓库事实</td>
+<td><span class="badge b-bench">行业对标</span> / <span class="badge b-repo">仓库事实</span></td>
 <td>8 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D9 MCP 协议合规</td>
 <td>tools/list schema、JSON-RPC 错误码、协议握手/降级/传输</td>
-<td>规范要求 / 行业对标</td>
+<td><span class="badge b-spec">规范要求</span> / <span class="badge b-bench">行业对标</span></td>
 <td>10 / —</td>
 <td>全</td>
 </tr>
 <tr>
 <td>D10 Agent 行为评测</td>
 <td>skill 激活率、路由准确率、安全干预</td>
-<td>行业对标</td>
+<td><span class="badge b-bench">行业对标</span></td>
 <td>8 / 15</td>
 <td>基建建成</td>
 </tr>
@@ -488,21 +578,30 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 - <strong>执行覆盖率分层</strong>——核心工具/高危服务 100% 执行，长尾服务按风险抽测 ≥ 60%。</p>
 <p><strong>禁止剪枝集</strong>（任何回归范围裁剪不得触碰）：D4 全量、D1-1/3/5、D9 全量、D10 核心评测集。</p>
 <h3 id="33">3.3 设计策略：六要素 + 列语义 + 源码反推 + 评审闭环</h3>
-<p><strong>用例质量六要素</strong>（每条用例必须同时满足）：单一验证点 + 唯一 ID / 前置条件明确复现 / 测试数据具体 / 操作步骤机械执行 / 预期结果可判定（<strong>唯一断言</strong>，禁"合理/正确/类"等模糊词）/ 关联工具填真实 MCP 工具全名。依据：<strong>规范要求</strong> + <strong>通用测试实践</strong>。</p>
-<p><strong>列语义映射</strong>：矩阵每列有唯一语义，内容不得串列（如"关联工具"只填 39 工具/CLI/框架组件，函数名归"指引来源 源码函数:xxx"）。</p>
-<p><strong>源码能力反推覆盖</strong>（全面性的第二重证据）：不是"想到什么测什么"，而是从 <code>src/*.mjs</code> 反向提取 export 函数/CLI 子命令/环境变量/返回字段，与用例逐一比对。结果：<strong>全维度核对出 17 个源码缺口（如 <code>HUAWEICLOUD_DEVKIT_SKIP_UPDATE</code> 环境变量、远程 transport、沙箱分块上传参数、CodeArts 上下文凭证等），已全部落成 16 个新用例</strong>（D1-59~64、D2-22~25、D3-C10~12、D4-25/26、D9-10），并同步修正 3 处"设计 vs 实现"漂移（指纹算法 <code>sha256(ak+sk)</code> 无冒号、<code>detect_framework</code> 13 框架非 11 等）。依据：<strong>源码函数</strong>。</p>
+<p><strong>用例质量六要素</strong>（每条用例必须同时满足）：</p>
+<ol>
+<li><strong>单一验证点 + 唯一 ID</strong>——一个用例只测一件事，ID 一经分配永不复用；</li>
+<li><strong>前置条件明确可复现</strong>——写环境/凭证/版本/隔离态，禁用"合适的环境"；</li>
+<li><strong>测试数据具体</strong>——写精确输入值/断言契约，不用"若干数据"；</li>
+<li><strong>操作步骤机械执行</strong>——编号化，Agent 可直接执行，无"酌情/大概"；</li>
+<li><strong>预期结果可判定 + 唯一断言</strong>——用精确错误码/字段/阈值，禁"合理/正确/类"等模糊词；</li>
+<li><strong>关联工具填真实 MCP 工具全名</strong>——函数名归"指引来源 <span class="badge b-src">源码函数</span>:xxx"。</li>
+</ol>
+<p>依据：<span class="badge b-spec">规范要求</span> + <span class="badge b-gen">通用测试实践</span>。</p>
+<p><strong>列语义映射</strong>：矩阵每列有唯一语义，内容不得串列（如"关联工具"只填 39 工具/CLI/框架组件，函数名归"指引来源 <span class="badge b-src">源码函数</span>:xxx"）。</p>
+<p><strong>源码能力反推覆盖</strong>（全面性的第二重证据）：不是"想到什么测什么"，而是从 <code>src/*.mjs</code> 反向提取 export 函数/CLI 子命令/环境变量/返回字段，与用例逐一比对。结果：<strong>全维度核对出 17 个源码缺口（如 <code>HUAWEICLOUD_DEVKIT_SKIP_UPDATE</code> 环境变量、远程 transport、沙箱分块上传参数、CodeArts 上下文凭证等），已全部落成 16 个新用例</strong>（D1-59~64、D2-22~25、D3-C10~12、D4-25/26、D9-10），并同步修正 3 处"设计 vs 实现"漂移（指纹算法 <code>sha256(ak+sk)</code> 无冒号、<code>detect_framework</code> 13 框架非 11 等）。依据：<span class="badge b-src">源码函数</span>。</p>
 <p><strong>Hermes-Codex 评审闭环</strong>：设计稿不"自签合格"——Hermes 产出初版 → Codex 多轮复评（机器可闭合项整改、外部依赖项如实列 status）→ 只有 <code>TEST_DESIGN_READY</code> 才进入执行。归档显示真实走过多轮：ITER-004 评审 8 轮、全量整改 16 轮 prompt。</p>
 <h3 id="34">3.4 执行策略：变更驱动 + 分层 + 双门禁</h3>
 <p><strong>变更驱动（控制回归成本的核心杠杆）</strong>——T0.5 变更影响分析，而非每次全量：</p>
 <pre><code>git diff → 受影响用例集映射 → 本轮只跑&quot;受影响集 + 固定安全基线 + 冒烟&quot;
 全量回归仅 Release 前
 </code></pre>
-<p><strong>执行分层（防矩阵爆炸）</strong>：39 个工具是<strong>同一个 Node 进程</strong>，不同 Agent 只是不同 MCP 客户端壳，因此按"客户端相关性"分层——工具/协议/性能/兼容/文档层单代表客户端全量；安装+适配层 10 客户端全跑；Agent 行为层代表 3~4 个跨厂商模型。执行量级从 1990 压到 ~360。依据：<strong>仓库事实</strong> + <strong>行业对标</strong>。</p>
+<p><strong>执行分层（防矩阵爆炸）</strong>：39 个工具是<strong>同一个 Node 进程</strong>，不同 Agent 只是不同 MCP 客户端壳，因此按"客户端相关性"分层——工具/协议/性能/兼容/文档层单代表客户端全量；安装+适配层 10 客户端全跑；Agent 行为层代表 3~4 个跨厂商模型。执行量级从 1990 压到 ~360。依据：<span class="badge b-repo">仓库事实</span> + <span class="badge b-bench">行业对标</span>。</p>
 <p><strong>每日流水线 6 步</strong>（每个客户端 agent 按 AGENTS.md 自主完成）：</p>
 <pre><code>自识别身份 → init_day 建包 → P0→P1→P2 执行+证据落盘
 → 回填状态+时间 → 出八节报告 → 每10分钟提报 → 全量测完统一提单
 </code></pre>
-<p><strong>双门禁防虚报</strong>：<code>verify_no_fake_pass.py</code>（标 PASS 必须①实测②证据落盘③evidencePath 回填，否则作废）、<code>verify_coverage.py</code>（P0 必测、NOT_RUN+空 ≤ 15%）。依据：<strong>通用测试实践</strong>。</p>
+<p><strong>双门禁防虚报</strong>：<code>verify_no_fake_pass.py</code>（标 PASS 必须①实测②证据落盘③evidencePath 回填，否则作废）、<code>verify_coverage.py</code>（P0 必测、NOT_RUN+空 ≤ 15%）。依据：<span class="badge b-gen">通用测试实践</span>。</p>
 <p><strong>自动化闭环</strong>：<code>auto-summary</code> workflow 监听 results push 实时刷新 Summary（20:10 北京兜底，防循环 + 单例串行）；<code>sync-to-remote.ps1</code> 每日 20:00 自动同步。</p>
 <h3 id="35-b">3.5 回归策略：流水线 B + 验证分层 + 防退化</h3>
 <p>问题单号回归走<strong>全链路流水线 B</strong>（任意 agent 可自主完成 5 步，不依赖维护者先设计）：</p>
@@ -511,13 +610,13 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 </code></pre>
 <ul>
 <li><strong>验证分层</strong>（证据强度递增）：函数级探针 → 既有单测 <code>node --test</code> → 真机 SSH。</li>
-<li><strong>SPEC-MISMATCH 发现法</strong>：读方案设计意图对照代码实现找语义冲突（#570 C12 实证：方案"env 三件套真值" vs 代码残留"防 STS 遮蔽"）。依据：<strong>开发方案</strong> + <strong>源码函数</strong>。</li>
-<li><strong>防退化沉淀</strong>：P0 回归用例同步进 daily 盯防；核心基线随新需求迭代（NR6）。依据：<strong>通用测试实践</strong>。</li>
-<li><strong>提单纪律</strong>：全量测完<strong>合并 1 单</strong>（不拆单/不逐日/未测完不提）+ 附正式测试报告；复验结论回评上游 issue（已修复则 close）。依据：<strong>通用测试实践</strong>。</li>
+<li><strong>SPEC-MISMATCH 发现法</strong>：读方案设计意图对照代码实现找语义冲突（#570 C12 实证：方案"env 三件套真值" vs 代码残留"防 STS 遮蔽"）。依据：<span class="badge b-plan">开发方案</span> + <span class="badge b-src">源码函数</span>。</li>
+<li><strong>防退化沉淀</strong>：P0 回归用例同步进 daily 盯防；核心基线随新需求迭代（NR6）。依据：<span class="badge b-gen">通用测试实践</span>。</li>
+<li><strong>提单纪律</strong>：全量测完<strong>合并 1 单</strong>（不拆单/不逐日/未测完不提）+ 附正式测试报告；复验结论回评上游 issue（已修复则 close）。依据：<span class="badge b-gen">通用测试实践</span>。</li>
 </ul>
 <h3 id="36">3.6 度量与闭环策略：过程度量 + 退出标准 + 缺陷闭环</h3>
-<p><strong>过程度量</strong>（<code>metrics/execution.csv</code> 原子记录）：用例执行率 / 通过率 / 缺陷密度 / 缺陷趋势 / 自动化覆盖率 / D10 激活率与路由准确率。<strong>口径</strong>：BLOCKED 不计通过率分母；空列 ≠ NOT_RUN（空 = 未回填的覆盖缺口信号）。依据：<strong>通用测试实践</strong>。</p>
-<p><strong>退出标准</strong>：功能用例通过率 ≥ 95%（P0/P1 清零，P2 遗留 ≤ 3 有排期）；安全维度 0 个 P0；自动化率目标 ~80%（三档路线图：快赢 68% / 主力 78% / 深水 85%，瓶颈天花板 85~90%）。依据：<strong>设计文档</strong>。</p>
+<p><strong>过程度量</strong>（<code>metrics/execution.csv</code> 原子记录）：用例执行率 / 通过率 / 缺陷密度 / 缺陷趋势 / 自动化覆盖率 / D10 激活率与路由准确率。<strong>口径</strong>：BLOCKED 不计通过率分母；空列 ≠ NOT_RUN（空 = 未回填的覆盖缺口信号）。依据：<span class="badge b-gen">通用测试实践</span>。</p>
+<p><strong>退出标准</strong>：功能用例通过率 ≥ 95%（P0/P1 清零，P2 遗留 ≤ 3 有排期）；安全维度 0 个 P0；自动化率目标 ~80%（三档路线图：快赢 68% / 主力 78% / 深水 85%，瓶颈天花板 85~90%）。依据：<span class="badge b-design">设计文档</span>。</p>
 <p><strong>缺陷闭环</strong>：分级 P0/P1/P2（+I 类红线）→ 根因定位到 <code>文件:行号</code> → 全量测完合并提单 → 下迭代复测验证。</p>
 <h2 id="_4">四、全面性自评估</h2>
 <p><strong>已全面覆盖（有据可查）</strong>：
@@ -525,12 +624,17 @@ hr{border:none;border-top:1px solid var(--line);margin:32px 0}
 2. <strong>源码能力覆盖</strong>——从源码逐函数反推，17 缺口全闭合（设计级 163→179 条）。
 3. <strong>多客户端覆盖</strong>——10 客户端矩阵，领先同级产品。
 4. <strong>方法覆盖</strong>——等价类/边界值/决策表/状态转换/场景法/错误推测六技术交叉检查 + 对抗性安全（绕过/包裹/模糊）+ 提示注入矩阵。
-5. <strong>依据完整</strong>——每条用例带来源标注（产品承诺 / 仓库事实 / 行业对标 / 规范要求 / 通用测试实践 / 设计文档 / 开发方案 / 源码函数），可追溯、可引用。</p>
-<p><strong>尚未兑现的缺口（如实标注）</strong>：
-1. <strong>D10 评测只"建成未跑分"</strong>——<code>eval/results/</code> 为空，harness 未完善，激活率/路由准确率暂无基线数字。
-2. <strong>度量台账部分滞后</strong>——<code>metrics/defects.csv</code> 与 <code>dashboard.md</code> 已定义未建；<code>execution.csv</code> 记录至 ITER-004，后续 5 个迭代未回填。
-3. <strong>可视化滞后</strong>——<code>panorama/</code> 全景图停在 ITER-004，<code>assets/</code> 可视化素材未落地。
-4. 少数客户端执行覆盖不足（CodeArtsWork 无执行包）。</p>
+5. <strong>依据完整</strong>——每条用例带来源标注（<span class="badge b-p">产品承诺</span> / <span class="badge b-repo">仓库事实</span> / <span class="badge b-bench">行业对标</span> / <span class="badge b-spec">规范要求</span> / <span class="badge b-gen">通用测试实践</span> / <span class="badge b-design">设计文档</span> / <span class="badge b-plan">开发方案</span> / <span class="badge b-src">源码函数</span>），可追溯、可引用。</p>
+<p><strong>尚未兑现的缺口（如实标注）</strong>：</p>
+<ol>
+<li><strong>D10 Agent 评测只"建成未跑分"</strong>——<code>eval/results/</code> 为空、<code>eval/harness/run-eval.mjs</code> 未完善，skill 激活率 / 路由准确率 / 安全干预率三项核心指标尚无基线数字（体系最大的"定义完整、兑现缺失"项）。</li>
+<li><strong>度量台账不完整</strong>——<code>metrics/defects.csv</code>（缺陷趋势）、<code>metrics/dashboard.md</code>（质量仪表盘）已在 README 定义但文件未创建；<code>metrics/execution.csv</code> 原子执行记录停在 ITER-004，ITER-005~009 共 5 轮未回填执行率/通过率。</li>
+<li><strong>可视化滞后</strong>——<code>panorama/</code> 全景图（HTML + xlsx）仅生成至 ITER-003/004，未覆盖 ITER-005 及之后；<code>assets/</code> 可视化素材（金字塔图 / 缺口热力图 / 框架总览图）规划未落地。</li>
+<li><strong>客户端矩阵执行覆盖不均衡</strong>——<code>results/</code> 下 CodeArtsWork 无执行包（0 个），其余客户端执行包数量不均（Hermes 6 / OpenCode 3 / OfficeAce 3 / 其余 2），部分客户端仅部分覆盖而非全量。</li>
+<li><strong>最新迭代指针滞后</strong>——<code>results/LATEST.md</code> 仍指向 ITER-005，而 <code>history/</code> 已归档至 ITER-009，指针与实际进度脱节。</li>
+<li><strong>版本归档滞后</strong>——<code>results/version/</code> 仅含 v1.1.3，1.1.4-next.x 回归（#614 升级提醒、#570 凭证占位等）尚未按版本归档。</li>
+</ol>
+  </main>
 </div>
 </body>
 </html>
