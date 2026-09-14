@@ -1,7 +1,7 @@
 ---
 name: huaweicloud-devkit-full-pipeline
 description: "一句话触发 huaweicloud-devkit 全链路测试：按【版本需求/问题】类型自动分流 → 测试设计(评审闭环) → 用例输出(生成器+门禁) → 测试验证(执行回填+报告+提单)。支持 --light 跳过 Codex 评审快速过。Use when: 收到含版本号/需求名或 issue 编号的测试指令，要求自动走完「测试设计→用例输出→测试验证」全程，尽量少打断用户。"
-version: 1.1.0
+version: 1.2.0
 platforms: [windows]
 tags: [testing, qa, huaweicloud, devkit, orchestration, end-to-end]
 ---
@@ -90,8 +90,16 @@ python scan_gaps.py                                   # GATE-PASS
 
 ## 四、流水线 B——问题（缺陷回归）
 
-### Step 0 定位
+### Step 0 定位 + 确认修复是否真合入
 拿到 issue 编号 + 现象，定位上游 issue 与本地已归档缺陷（`test-cases/issues/<编号>-<slug>/`、`results/Regression/`）。
+开发说「已修复在 <版本>」时，先**确认代码真已落地**（勿信自报）：
+```powershell
+npm view huaweicloud-devkit@next version gitHead   # 拿当前 next 版本的 commit sha
+cd hdk; git fetch origin <sha>; git checkout <sha>   # npm 发布常常领先 GitHub dev 推送，必须按 sha fetch
+git log --oneline -S "关键函数名" -5                 # 确认修复实现是否真落地（如 isPlaceholder）
+```
+- `git log -S "关键词"` 全历史空 = 尚未实现（方案可能只是「冻结设计」，代码没动）。
+- 若实现已在，读该 commit 的 diff（`git show <sha> --stat`）锁定改动文件与函数，作为回归靶心。
 
 ### Step 1 复现 + 根因定位
 复现缺陷，根因定位到 `文件:行号`，记 `FINDINGS.md`（断言字段必填）。
@@ -104,6 +112,15 @@ python scan_gaps.py                                   # GATE-PASS
 
 ### Step 4 测试验证
 针对该缺陷定向复测（不是全量矩阵）：init_day 建包 → 执行回归用例 → 回填 → 结论落 `results/Regression/<日期>/问题回归-<日期>.md` → 已修复则关单、仍存在则更新 issue。
+
+**验证分层（证据强度递增，可只做 1+2 或补 3）**：
+1. **函数级探针**（快、可复现）：临时 `.mjs` 直接 import 被测模块跑断言，跑完删；隔离 `HUAWEICLOUD_HOME` 临时目录避免污染真实凭证；脱敏 SK 只出前 3 位 + len。
+2. **既有单测**：`cd hdk; node --test test/<相关>.test.mjs` 确认修复没破坏既有逻辑（exit 0 = pass 数全绿）。
+3. **真机**（需独立环境时）：paramiko/SSH 到测试机跑（凭据在桌面 `测试机账号.txt`，脚本内读取不打印）。
+
+**SPEC-MISMATCH 发现法（回归必查，2026-09-14 #570 C12 实证）**：读方案的**设计意图**，对照**代码实现**找语义冲突——尤其「方案新语义 vs 代码旧遗留逻辑」。典型：方案 §12.1 强调「env 三件套真值 = 平台注入 → env 兜底」，代码却残留旧「防 STS 遮蔽 → S1 优先」（`credentials.mjs:165-172`），导致 `auth init` 在 devspace 改号不符合方案预期。发现后：①记录回归用例标 SPEC-MISMATCH + 落点 ②反馈开发（独立于本缺陷，可另开 issue）。
+
+**码道（codearts）真机验证（不碰真实配置）**：码道机器 testbot2=`124.70.78.131`（有 `~/.codeartsdoer`）。构造占位符/假值场景用 `CODEARTS_PROJECT_DIR` 伪造——`readCodeArtsCredentials` 的 `searchDirs[0]=process.env.CODEARTS_PROJECT_DIR`，设 `CODEARTS_PROJECT_DIR=<临时目录>`、在该目录放 `.codeartsdoer/mcp/mcp_settings.json` 即可喂假场景；`isCodeArtsContext()` 仍因 homedir 真目录存在而命中码道分支，真机上下文成立且不动真实 mcp_settings。
 
 ## 五、全程停点（这几类必须停下问用户，红线不因「全链路」豁免）
 

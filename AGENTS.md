@@ -75,6 +75,11 @@ python scripts/init_day.py <客户端> <OS>
 - **「执行状态」列**，枚举：`PASS`（有证据）/ `FAIL`（不符预期，记根因）/ `BLOCKED`（环境阻塞，记 blockedReason）/ `SPEC-MISMATCH`（契约漂移）/ `NOT_RUN`。
 - **「执行时间」列**：执行该用例时的北京时间，紧凑 14 位 `YYYYMMDDHHmmss`（如 `20260913185030`），**与「执行状态」同一动作回填**（每条用例执行完即落时间戳，追踪表同样）。
 
+**NOT_RUN 纪律（覆盖率红线，违反即不达标）**：
+- **P0 用例一律不得 NOT_RUN 或留空**——P0 必测，要么 PASS/FAIL，要么 BLOCKED（写 blockedReason）。
+- NOT_RUN 仅限「明确不适用本客户端/本 OS」的用例，且每条必须写原因；「环境不满足」应标 **BLOCKED** 而非 NOT_RUN。
+- 回填后**必须**跑 `python scripts/verify_coverage.py <客户端> <OS>`：P0 出现 NOT_RUN/空、或 NOT_RUN+空 总占比 > 15% → 判定执行不达标，补齐被跳过用例后重跑才算完成。
+
 ## 4. 出测试报告
 
 按**统一模板** `templates/daily-agent-report.md` 输出 `results/<客户端>/<日期>-<IP>/<OS>/<客户端>-<模型>-测试报告.md`，八节固定：① 测试概述 ② 执行摘要 ③ 状态汇总（设计级+展开级） ④ 缺陷清单（级别+描述+精确断言+根因文件行号+证据） ⑤ 阻塞项 ⑥ 安全/红线 ⑦ 资源释放 ⑧ 遗留建议。**所有 agent 用同一模板、字段完整**；逐用例执行态已回填副本 CSV「执行状态」+「evidencePath」列，报告不再重复逐用例结果。
@@ -129,16 +134,16 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 
 ## 状态口径
 
-| 状态 | 含义 |
-|---|---|
-| PASS | 通过，有证据 |
-| FAIL | 不符预期 |
-| BLOCKED | 环境/权限阻塞 |
-| SPEC-MISMATCH | 实现与设计契约漂移 |
-| NOT_RUN | 未执行 |
+| 状态 | 含义 | 使用约束 |
+|---|---|---|
+| PASS | 通过，有证据 | 必须①实测②证据落盘③evidencePath 回填 |
+| FAIL | 不符预期 | 记根因(文件:行号) |
+| BLOCKED | 环境/权限阻塞 | 必须写 blockedReason；「环境不满足」用 BLOCKED 而非 NOT_RUN |
+| SPEC-MISMATCH | 实现与设计契约漂移 | 记漂移点 |
+| NOT_RUN | 未执行 | **仅限明确不适用本客户端/OS；P0 一律不得 NOT_RUN**；每条必须写原因 |
 
 ## 脚本清单（本仓库 scripts/）
 
-**agent 用**：`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `verify_no_fake_pass.py` PASS 门禁 · `hourly_sync.py` 每 10 分钟提报 · `file_issue.py` 统一提单
+**agent 用**：`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `verify_no_fake_pass.py` PASS 门禁 · `verify_coverage.py` 覆盖率门禁 · `hourly_sync.py` 每 10 分钟提报 · `file_issue.py` 统一提单
 
 **维护者用**：`build_summary.py` 汇总生成 Summary（agent 不跑，统一由维护者汇总，避免共享冲突）· `report_html.py` 生成 HTML 汇总报告 · `send_email.py` SMTP 邮件发送 · `run_daily_report.py` 每日汇总流水线（收集→HTML→邮件，配合 Windows 计划任务定时跑）
