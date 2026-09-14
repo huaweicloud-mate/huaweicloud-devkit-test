@@ -619,12 +619,14 @@ li::marker{color:var(--blue)}
 <p><strong>退出标准</strong>：功能用例通过率 ≥ 95%（P0/P1 清零，P2 遗留 ≤ 3 有排期）；安全维度 0 个 P0；自动化率目标 ~80%（三档路线图：快赢 68% / 主力 78% / 深水 85%，瓶颈天花板 85~90%）。依据：<span class="badge b-design">设计文档</span>。</p>
 <p><strong>缺陷闭环</strong>：分级 P0/P1/P2（+I 类红线）→ 根因定位到 <code>文件:行号</code> → 全量测完合并提单 → 下迭代复测验证。</p>
 <h2 id="_4">四、全面性自评估</h2>
-<p><strong>已全面覆盖（有据可查）</strong>：
-1. <strong>维度覆盖</strong>——10 维度对齐 Microsoft 三层模型 + Azure/AWS 对标，无结构性缺口。
-2. <strong>源码能力覆盖</strong>——从源码逐函数反推，17 缺口全闭合（设计级 163→179 条）。
-3. <strong>多客户端覆盖</strong>——10 客户端矩阵，领先同级产品。
-4. <strong>方法覆盖</strong>——等价类/边界值/决策表/状态转换/场景法/错误推测六技术交叉检查 + 对抗性安全（绕过/包裹/模糊）+ 提示注入矩阵。
-5. <strong>依据完整</strong>——每条用例带来源标注（<span class="badge b-p">产品承诺</span> / <span class="badge b-repo">仓库事实</span> / <span class="badge b-bench">行业对标</span> / <span class="badge b-spec">规范要求</span> / <span class="badge b-gen">通用测试实践</span> / <span class="badge b-design">设计文档</span> / <span class="badge b-plan">开发方案</span> / <span class="badge b-src">源码函数</span>），可追溯、可引用。</p>
+<p><strong>已全面覆盖（有据可查）</strong>：</p>
+<ol>
+<li><strong>维度覆盖</strong>——10 维度对齐 Microsoft 三层模型 + Azure/AWS 对标，无结构性缺口。</li>
+<li><strong>源码能力覆盖</strong>——从源码逐函数反推，17 缺口全闭合（设计级 163→179 条）。</li>
+<li><strong>多客户端覆盖</strong>——10 客户端矩阵，领先同级产品。</li>
+<li><strong>方法覆盖</strong>——等价类/边界值/决策表/状态转换/场景法/错误推测六技术交叉检查 + 对抗性安全（绕过/包裹/模糊）+ 提示注入矩阵。</li>
+<li><strong>依据完整</strong>——每条用例带来源标注（<span class="badge b-p">产品承诺</span> / <span class="badge b-repo">仓库事实</span> / <span class="badge b-bench">行业对标</span> / <span class="badge b-spec">规范要求</span> / <span class="badge b-gen">通用测试实践</span> / <span class="badge b-design">设计文档</span> / <span class="badge b-plan">开发方案</span> / <span class="badge b-src">源码函数</span>），可追溯、可引用。</li>
+</ol>
 <p><strong>尚未兑现的缺口（如实标注）</strong>：</p>
 <ol>
 <li><strong>D10 Agent 评测只"建成未跑分"</strong>——<code>eval/results/</code> 为空、<code>eval/harness/run-eval.mjs</code> 未完善，skill 激活率 / 路由准确率 / 安全干预率三项核心指标尚无基线数字（体系最大的"定义完整、兑现缺失"项）。</li>
