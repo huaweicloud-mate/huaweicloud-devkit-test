@@ -1,0 +1,7 @@
+=== D4-1: 凭证文件读取拦截 ===
+  "cat ~/.hcloud/credentials.json" → decision: deny, reason: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
+  "type %USERPROFILE%\.hcloud\credentials.json" → decision: deny, reason: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
+  "cat ~/.huaweicloud/credentials.json" → decision: deny, reason: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
+  "cat /root/.hcloud/default.json" → decision: deny, reason: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
+  "type C:\Users\Administrator\.hcloud\credentials.json" → decision: deny, reason: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
+RESULT: PASS - All credential file read attempts blocked

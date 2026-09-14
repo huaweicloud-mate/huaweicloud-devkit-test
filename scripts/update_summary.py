@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-"""汇总更新：把某客户端某 OS 的执行状态，填进 Summary 总矩阵对应「客户端-OS」列。
+"""【已废弃】请改用 build_summary.py——它一键扫描所有 results/<client>/<date>-<ip>/<os> 生成汇总。
 
-用法:
-    python update_summary.py OpenCode Windows              # 当天
-    python update_summary.py OpenCode Linux 2026-09-12     # 指定日期
-
-矩阵列 = 客户端 × OS（如 OpenCode-Windows、OpenCode-Linux，共 20 列），避免双系统结果互相覆盖。
+本脚本为早期实现：固定 20 列（客户端×OS）、路径不含 IP（results/<client>/<date>/<os>），
+与当前带 IP 的多机结构已脱节，且无任何调用者。保留仅作历史参考。
 """
 import os, sys, csv, datetime
 
@@ -30,7 +27,9 @@ def update_one(kind, client, os_name, date):
         print(f"[跳过] 缺少 {kind}：客户端副本={os.path.isfile(csrc)} 总矩阵={os.path.isfile(ssrc)}")
         return
     with open(csrc, encoding="utf-8-sig") as f:
-        cmap = {r["ID"]: (r.get("执行状态") or r.get("execution_status") or "") for r in csv.DictReader(f)}
+        _rows = list(csv.DictReader(f))
+    cmap = {r["ID"]: (r.get("执行状态") or r.get("execution_status") or "") for r in _rows}
+    tmap = {r["ID"]: (r.get("执行时间") or "") for r in _rows}
     with open(ssrc, encoding="utf-8-sig") as f:
         srows = list(csv.DictReader(f))
 
@@ -42,6 +41,10 @@ def update_one(kind, client, os_name, date):
         st = cmap.get(r["ID"], "")
         if st:
             r[col] = st
+        t = tmap.get(r["ID"], "")
+        if t:
+            prev = r.get("当日总执行时间", "")
+            r["当日总执行时间"] = t if not prev else (t if t > prev else prev)
         col_vals = [r[c] for c in COLS if r.get(c)]
         r["当日总执行状态"] = worst(*col_vals) if col_vals else r.get("当日总执行状态", "NOT_RUN")
     with open(ssrc, "w", encoding="utf-8-sig", newline="") as f:

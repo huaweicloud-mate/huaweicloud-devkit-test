@@ -1,0 +1,23 @@
+=== D1-40: 镜像 lag 下检测正确性 ===
+Official dist-tags: {"latest":"1.1.4","next":"1.1.4-next.6"}
+
+Lag scenario (local=1.1.4-next.6, remote next=1.1.4-next.5):
+  result: update_available
+  updateAvailable: true
+  targetVersion: 1.1.4
+  RESULT: FAIL - Prompted update when remote < local
+
+Update scenario (local=1.1.4-next.6, remote next=1.1.5-next.1):
+  result: update_available
+  updateAvailable: true
+  targetVersion: 1.1.5
+  RESULT: PASS - Correctly prompts update when remote > local
+
+Null distTags (actual Windows behavior due to EINVAL):
+  result: check_failed
+  updateAvailable: false
+  RESULT: PASS - Null distTags does not prompt false update
+
+NOTE: On Windows, queryDistTagsSync returns null due to EINVAL (D1-39 bug).
+This means judgeUpdate always gets null distTags, so update detection never works.
+However, it does NOT produce false version-downgrade prompts, which is the D1-40 assertion.

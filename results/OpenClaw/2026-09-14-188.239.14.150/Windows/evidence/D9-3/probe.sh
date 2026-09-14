@@ -1,0 +1,1 @@
+# D9-3: tools/call response format (content array + isError)

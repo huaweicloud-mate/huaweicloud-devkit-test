@@ -1,0 +1,43 @@
+=== 环境/版本 ===
+readInstalledVersion: 1.1.4-next.3
+
+===== D1-30 semver 比对正确性 =====
+PASS  D1-30  1.2.0 < 1.10.0 (数值非字典序)  => -1
+PASS  D1-30  1.1.4-next.3 < 1.1.4 (pre<stable)  => -1
+PASS  D1-30  1.1.4 == 1.1.4  => 0
+PASS  D1-30  2.0.0 > 1.9.9  => 1
+
+===== D1-27 检测语义-已是最新 =====
+PASS  D1-27  current==latest 不提示升级  => "up_to_date"
+PASS  D1-27  current==latest updateAvailable=false  => false
+
+===== D1-28 检测语义-有新版本 =====
+PASS  D1-28  有新版本 update_available  => "update_available"
+PASS  D1-28  target=1.1.4  => "1.1.4"
+
+===== D1-40 镜像 lag 下检测正确性 (反向提醒防护) =====
+PASS  D1-40  远端低于本地不提示 (无版本倒退)  => "up_to_date"
+PASS  D1-40  远端等于本地不提示  => "up_to_date"
+PASS  D1-40  远端高于本地正常提示  => "update_available"
+
+===== D1-31 dismiss 冷却期 =====
+PASS  D1-31  冷却期内 dismissed  => "dismissed"
+
+===== D1-32 新版本 > dismissedVersion 无视冷却 =====
+PASS  D1-32  1.1.5 > dismissed 1.1.4 仍提示  => "update_available"
+
+===== D1-34 check_failed 不阻塞 =====
+PASS  D1-34  distTags=null → check_failed 不抛异常  => "check_failed"
+
+===== D1-40（补充） distTags 解析健壮 =====
+PASS  D1-40  parseDistTagsOutput 异常输出返回 null  => null
+PASS  D1-40  parseDistTagsOutput 正常 JSON  => "1.1.4"
+
+===== D1-35 缓存 (peek 初始状态) =====
+PASS  D1-35  peekCachedUpdateInfo 无崩溃且可选 null  => true
+
+===== determineTarget 目标选择 =====
+PASS  D1-28  stable 选 latest  => "1.1.4"
+PASS  D1-28  pre 版有更新 stable 时选 stable  => "1.1.4"
+
+===== D1 汇总: 19 PASS / 0 FAIL =====

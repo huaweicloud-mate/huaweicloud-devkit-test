@@ -1,0 +1,29 @@
+# D4-16 命令包裹穿透
+# Tool: hook_check_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Commands wrapped in shell (sh -c, bash -c) should still be detected by hook
+
+## Input Command
+sh -c "hcloud ECS DeleteServers --server_ids=prod-001"
+
+## Response
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [{
+    "ruleId": "hwc-destructive-delete-operation",
+    "title": "Destructive cloud resource operation",
+    "severity": "warn",
+    "message": "This hcloud command will delete, detach, or remove cloud resources."
+  }]
+}
+
+## Verification
+- The hook detected the destructive operation inside `sh -c` wrapper ✓
+- ruleId: "hwc-destructive-delete-operation" ✓
+- Command wrapping did NOT bypass the hook ✓
+
+## Result: PASS

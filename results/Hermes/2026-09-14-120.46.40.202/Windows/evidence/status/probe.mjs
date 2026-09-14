@@ -1,0 +1,1 @@
+// npx huaweicloud-devkit status --target hermes

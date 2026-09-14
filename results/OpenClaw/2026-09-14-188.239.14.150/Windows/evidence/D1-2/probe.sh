@@ -1,0 +1,1 @@
+# D1-2: Multi-agent auto-detect

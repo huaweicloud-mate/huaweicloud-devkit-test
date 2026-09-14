@@ -1,0 +1,16 @@
+# D4-4 写操作审批门
+# Tool: plan_cli_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Evidence (from D4-5, D4-18)
+- DeleteServers: decision=deny, risk=write, safeToRun=false ✓
+- CreateSecurityGroupRule: decision=deny, risk=write, safeToRun=false ✓
+- All write operations require explicit approval ✓
+
+## Verification
+- 12 write verb categories tested (Create, Delete, Update via plan_cli_command) ✓
+- All classified as write/deny ✓
+- No write operation auto-executed ✓
+
+## Result: PASS

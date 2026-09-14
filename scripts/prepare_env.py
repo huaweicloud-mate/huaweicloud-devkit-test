@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-"""环境准备：自检工具链 + 测试仓库 + 源码仓库(hdk) + 安装 next 包 + 凭证。
+"""环境准备：自检工具链 + 测试仓库 + 源码仓库(hdk) + 安装最新包 + 凭证。
 
 用法:
     python prepare_env.py               # 仅检查 + 报告
-    python prepare_env.py --setup       # clone 缺失仓库 + npm 安装最新 next 包
-    python prepare_env.py --update      # pull 测试仓库/源码 + npm 更新最新 next 包
+    python prepare_env.py --setup       # clone 缺失仓库 + npm 安装最新包
+    python prepare_env.py --update      # pull 测试仓库/源码 + npm 更新最新包
+    python prepare_env.py --update --next   # 同上，但用 @next 预发布包（NR 新需求测试）
 
-被测对象两件套：
-  - 源码仓库 hdk（clone 自 huaweicloud/huaweicloud-devkit）→ 源码检查/根因定位/写探针
-  - npm 全局包 huaweicloud-devkit@next → 真实场景黑盒测试
+被测对象（默认 = 最新正式包 latest；--next = 预发布 dev 包）：
+  - 源码仓库 hdk（clone 自 huaweicloud/huaweicloud-devkit）→ checkout 到被测包对应 commit 做源码检查/根因定位
+  - npm 全局包 huaweicloud-devkit → “最新包”=latest 正式发布（--next 则 @next 预发布），做真实场景黑盒测试
 
 镜像 fallback：GitHub clone/pull 失败时，自动 fallback 到 GitCode 镜像（国内拉取更快）。
 """
@@ -19,11 +20,16 @@ WORK = os.path.dirname(REPO)
 SRC = os.path.join(WORK, "hdk")
 TEST_REPO_URL = "https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git"
 SRC_URL = "https://github.com/huaweicloud/huaweicloud-devkit.git"
-PKG = "huaweicloud-devkit@next"
+PKG = "huaweicloud-devkit"               # 默认 latest（最新正式发布包）
+PKG_NEXT = "huaweicloud-devkit@next"     # 可选：--next 切预发布（NR 新需求测试）
 # GitHub clone/pull 失败时 fallback 到 GitCode 镜像（国内拉取）
 GITCODE_MIRROR = {
     TEST_REPO_URL: "https://gitcode.com/hd-vector/huaweicloud-devkit-test.git",
 }
+
+
+def is_next():
+    return "--next" in sys.argv
 
 
 def run(cmd, cwd=None):
@@ -41,6 +47,14 @@ def gitcode_token():
         if t:
             return t
     return ""
+
+
+def auth_url(url):
+    """把 GitHub URL 转成带 token 的认证 URL（不依赖 gh CLI）。"""
+    t = os.environ.get("GH_TOKEN") or os.environ.get("HDK_GH_TOKEN")
+    if t and url.startswith("https://github.com/"):
+        return url.replace("https://github.com/", f"https://x-access-token:{t}@github.com/")
+    return url
 
 
 def set_gh_token():
@@ -87,7 +101,7 @@ def check_repo(path, url, name, setup):
         print(f"  [准备] clone {name}: {url} -> {path}")
         os.makedirs(os.path.dirname(path), exist_ok=True)
         set_gh_token()
-        rc, out, _ = run(f"git clone {url} {path}")
+        rc, out, _ = run(f"git clone {auth_url(url)} {path}")
         if rc == 0:
             print("  [OK] clone 成功 (GitHub)")
             return True
@@ -109,49 +123,55 @@ def check_repo(path, url, name, setup):
     return False
 
 
-def check_next_pkg():
-    print("=== 被测包（next 版） ===")
+def check_pkg():
+    print("=== 被测包 ===")
     rc, out, _ = run("npm ls -g huaweicloud-devkit --depth=0")
     if rc == 0 and "huaweicloud-devkit" in out:
         line = [l for l in (out or "").splitlines() if "huaweicloud-devkit" in l]
         print(f"  [OK] 已安装: {(line[-1] if line else out).strip()[:90]}")
         return True
-    print("  [缺] 未安装 huaweicloud-devkit 全局包 → 用 --setup 安装 @next")
+    print("  [缺] 未安装 huaweicloud-devkit 全局包 → 用 --setup 安装")
     return False
 
 
-def install_next():
-    print("=== 安装最新 next 包 ===")
-    rc, out, err = run(f"npm install -g {PKG}")
+def install_pkg():
+    """安装/更新被测包：默认最新正式包（latest），--next 则预发布。"""
+    pkg = PKG_NEXT if is_next() else PKG
+    label = "next 预发布" if is_next() else "latest 正式版"
+    print(f"=== 安装最新包（{label}） ===")
+    rc, out, err = run(f"npm install -g {pkg}")
     if rc == 0:
-        print(f"  [OK] 已安装/更新 {PKG}")
+        print(f"  [OK] 已安装/更新 {pkg}")
         return True
-    print(f"  [失败] npm install -g {PKG}: {(out or err)[:300]}")
+    print(f"  [失败] npm install -g {pkg}: {(out or err)[:300]}")
     return False
 
 
-def update_src_to_next():
-    """源码 hdk 拉取并 checkout 到 npm @next 对应 commit（与安装的包保持一致，用于源码检查）。"""
+def update_src_to_pkg():
+    """源码 hdk fetch 并 checkout 到被测包（默认 latest，--next 则预发布）对应 commit，保证源码检查与黑盒测的是同一版。"""
     if not os.path.isdir(os.path.join(SRC, ".git")):
         return
-    print("=== 源码 checkout 到 next 对应 commit ===")
+    is_n = is_next()
+    tag = "@next" if is_n else ""
+    fallback_branch = "dev" if is_n else "main"
+    print(f"=== 源码 checkout 到 {'next 预发布' if is_n else 'latest 正式版'} 对应 commit ===")
     run("git fetch origin --tags", cwd=SRC)
-    rc, out, _ = run("npm view huaweicloud-devkit@next version gitHead")
+    rc, out, _ = run(f"npm view huaweicloud-devkit{tag} version gitHead")
     m_head = re.search(r"gitHead\s*=\s*'?([0-9a-fA-F]+)'?", out or "")
     if m_head:
         head = m_head.group(1)
         rc2, o2, e2 = run(f"git checkout {head}", cwd=SRC)
         print(f"  [{'OK' if rc2 == 0 else '失败'}] checkout {head[:8]}: {(o2 or e2)[:80]}")
     else:
-        rc2, o2, e2 = run("git checkout dev", cwd=SRC)
-        print(f"  [{'OK' if rc2 == 0 else '失败'}] checkout dev（@next 查询失败回退）")
+        rc2, o2, e2 = run(f"git checkout {fallback_branch}", cwd=SRC)
+        print(f"  [{'OK' if rc2 == 0 else '失败'}] checkout {fallback_branch}（gitHead 查询失败回退）")
 
 
 def pull_test_repo():
     if not os.path.isdir(os.path.join(REPO, ".git")):
         return True
     set_gh_token()
-    rc, out, err = run('git -c credential.helper="!gh auth git-credential" pull --no-rebase origin main', cwd=REPO)
+    rc, out, err = run(f"git -c credential.helper= pull --no-rebase {auth_url(TEST_REPO_URL)} main", cwd=REPO)
     if rc == 0:
         print("  [OK] 测试仓库 pull main (GitHub)")
         return True
@@ -202,19 +222,19 @@ def main():
     print("=== 仓库 ===")
     repo_ok = check_repo(REPO, TEST_REPO_URL, "测试仓库", setup)
     src_ok = check_repo(SRC, SRC_URL, "源码仓库(hdk)", setup)
-    pkg_ok = check_next_pkg()
+    pkg_ok = check_pkg()
     cred_ok = check_credentials()
     if setup and not pkg_ok:
-        pkg_ok = install_next()
+        pkg_ok = install_pkg()
     if update:
         pull_test_repo()
-        update_src_to_next()
-        install_next()
+        update_src_to_pkg()
+        install_pkg()
     print("=== 汇总 ===")
     if tools_ok and repo_ok and src_ok and pkg_ok and cred_ok:
-        print("环境就绪，可开始每日测试执行。")
+        print("环境就绪，可开始测试执行。")
         sys.exit(0)
-    print("环境不完整：--setup 自动 clone/安装，--update 拉取+更新 next。")
+    print("环境不完整：--setup 自动 clone/安装，--update 拉取+更新最新包。")
     sys.exit(1)
 
 

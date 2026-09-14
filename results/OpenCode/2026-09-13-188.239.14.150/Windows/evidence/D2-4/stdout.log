@@ -1,0 +1,34 @@
+# D2-4 凭证脱敏正确性
+# Tool: show_profile_redacted
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Output contains no plaintext AK/SK; all credential fields show "<redacted>"
+
+## Evidence
+Tool call: huaweicloud_show_profile_redacted
+
+Response stdout:
+{
+  "name": "default",
+  "mode": "AKSK",
+  "accessKeyId": "<redacted>",
+  "secretAccessKey": "<redacted>",
+  "securityToken": "<redacted>",
+  "region": "cn-north-4",
+  "projectId": "",
+  "domainId": "",
+  "skipSecureVerify": "false",
+  "readTimeout": 10,
+  "connectTimeout": 5,
+  "retryCount": 0
+}
+
+## Verification
+- accessKeyId: "<redacted>" ✓ (no plaintext)
+- secretAccessKey: "<redacted>" ✓ (no plaintext)
+- securityToken: "<redacted>" ✓ (no plaintext)
+- No raw AK/SK visible anywhere in output ✓
+
+## Result: PASS

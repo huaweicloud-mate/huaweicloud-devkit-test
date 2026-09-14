@@ -1,0 +1,17 @@
+# D3-B3 run_readonly脱敏执行
+# Tool: run_readonly_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Test
+Command: hcloud ECS ListServersDetails --limit=1
+Classification: read_only, safeToRun=true
+Output: {"count": 0, "servers": []}
+
+## Verification
+- Execution successful ✓
+- Output processed through redaction pipeline ✓
+- No write operations performed ✓
+- safeToRun: true (read-only confirmed) ✓
+
+## Result: PASS

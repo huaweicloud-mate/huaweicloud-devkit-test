@@ -1,0 +1,102 @@
+---------- D1-58-05 未命中 snippet(空HOME) ----------
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4-next.6          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  No known MCP agent detected; here is a config snippet you can paste:
+  Add this to your agent MCP config (stdio):
+    {
+      "mcpServers": {
+        "huaweicloud-devkit": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "-p",
+            "huaweicloud-devkit",
+            "huaweicloud-devkit-mcp"
+          ]
+        }
+      }
+    }
+  Or run the remote server and use a remote (Streamable HTTP) config:
+    npx --yes huaweicloud-devkit-mcp --transport remote   # listens on 127.0.0.1:9528
+  See README → "Other Agents" for details.
+--- 产物 .claude.json / .cursor/mcp.json ---
+---------- D1-58-02 命中 merge(fake .claude.json) ----------
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4-next.6          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  [Claude Code] MCP server configured in /tmp/hdk-d158.W0eoRA/claude/.claude.json. Restart the session to apply.
+--- 产物 .claude.json / .cursor/mcp.json ---
+[.claude.json EXISTS]
+{
+  "mcpServers": {
+    "other-server": {
+      "command": "x"
+    },
+    "huaweicloud-devkit": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "huaweicloud-devkit",
+        "huaweicloud-devkit-mcp"
+      ]
+    }
+  }
+}---------- D1-58-03 同 key 跳过(已配置) ----------
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4-next.6          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  [Claude Code] mcpServers.huaweicloud-devkit already configured; skipping.
+--- 产物 .claude.json / .cursor/mcp.json ---
+[.claude.json EXISTS]
+{"mcpServers":{"huaweicloud-devkit":{"command":"npx"}}}---------- D1-58-04 坏 JSON 零写入 ----------
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4-next.6          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  [Claude Code] /tmp/hdk-d158.W0eoRA/bad/.claude.json is not valid JSON; leaving it untouched.
+  Nothing to configure for the detected MCP agents.
+--- 产物 .claude.json / .cursor/mcp.json ---
+[.claude.json EXISTS]
+{invalid json坏JSON文件内容(应保持原样):
+{invalid json

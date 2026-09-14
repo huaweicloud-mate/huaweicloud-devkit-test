@@ -1,0 +1,10 @@
+=== D2-11: R3 STS token拒绝落盘 ===
+Has token rejection logic: true
+Has persist check: true
+credentials.mjs has token logic: true
+Has rejected/scope logic: false
+Has write credentials function: true
+
+service.mjs exports: [ 'computeOnboarding', 'getAuthStatus', 'syncAuth' ]
+auth_switch result: {"needsSetup":true,"scenario":1,"reason":"s1-only","message":"已保存账号(指纹 caae65f2)可直接使用。","steps":[{"order":1,"action":"use-s1","args":{},"label":"直接使用已保存账号"},{"order":2,"action":"switch-new","args":{"mode":"import","action":"persist"},"label":"改用新账号(导入)"}],"accountHint":"caae65f2"}
+RESULT: PASS - No credentials file written (token not persisted)

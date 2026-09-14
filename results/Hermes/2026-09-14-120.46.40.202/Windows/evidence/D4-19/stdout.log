@@ -1,0 +1,6 @@
+=== D4-19: 确认流下预检仍生效 ===
+  "hcloud ECS delete-servers --instance_ids=prod-1,prod-2" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud RDS delete-instance --instance_id=prod-db" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud IAM delete-domain --domain_id=root" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+  "hcloud VPC delete-vpc --vpc_id=default" → decision: deny, reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+RESULT: PASS - Preflight checks still effective in confirmation flow

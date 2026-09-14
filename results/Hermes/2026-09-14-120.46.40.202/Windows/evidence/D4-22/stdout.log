@@ -1,0 +1,27 @@
+=== D4-22: hook_check_deploy_plan 具名回归 ===
+evaluateDeployPlan result: {
+  "decision": "warn",
+  "findings": [
+    {
+      "ruleId": "hwc-functiongraph-public-no-auth",
+      "title": "Public FunctionGraph trigger without auth",
+      "category": "public_exposure",
+      "severity": "warn",
+      "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+      "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+      "source": "deploy_plan",
+      "evidence": "{ \"service\": \"FunctionGraph\", \"action\": \"create-function\", \"public_exposure\": true, \"internet_access\": true, \"config\": { \"handler\": \"index.handler\", \"code_type\": \"inline\", \"code\": \"...\" } }"
+    },
+    {
+      "ruleId": "hwc-sandbox-missing-ttl",
+      "title": "Sandbox deployment missing cleanup metadata",
+      "category": "sandbox",
+      "severity": "warn",
+      "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+      "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+      "source": "deploy_plan",
+      "evidence": "{ \"service\": \"FunctionGraph\", \"action\": \"create-function\", \"public_exposure\": true, \"internet_access\": true, \"config\": { \"handler\": \"index.handler\", \"code_type\": \"inline\", \"code\": \"...\" } }"
+    }
+  ]
+}
+RESULT: PASS - Public exposure deploy plan blocked/warned

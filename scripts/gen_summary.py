@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-"""生成当天 Summary 总执行结果矩阵（设计级 + 展开级，20 列=客户端×OS）。
+"""【已废弃】请改用 build_summary.py——它动态生成列（只列实际执行的 <客户端>-<IP>-<OS>），支持多机。
 
-用法:
-    python gen_summary.py                  # 当天
-    python gen_summary.py 2026-09-12       # 指定日期
-
-生成（幂等，可重复跑）:
-    results/Summary/用例矩阵-设计级-总执行结果-<日期>.csv   # daily 精选 81 行
-    results/Summary/用例矩阵-展开级-总执行结果-<日期>.csv   # daily 精选 71 行
+本脚本为早期实现：固定 20 列（客户端×OS 全量）、路径不含 IP（results/<client>/<date>/<os>），
+与当前带 IP 的多机结构已脱节，且无任何调用者。保留仅作历史参考。
 """
 import os, sys, csv, datetime
 
@@ -28,20 +23,20 @@ def gen(kind, src_rel, id_key, name_keys, status_key, date):
         rows = list(csv.DictReader(f))
     out = os.path.join(REPO, "results", "Summary", f"用例矩阵-{kind}-总执行结果-{date}.csv")
     os.makedirs(os.path.dirname(out), exist_ok=True)
-    headers = ["层级", "ID"] + name_keys + ["优先级"] + COLS + ["当日总执行状态"]
+    headers = ["层级", "ID"] + name_keys + ["优先级"] + COLS + ["当日总执行状态", "当日总执行时间"]
     with open(out, "w", encoding="utf-8-sig", newline="") as f:
         w = csv.writer(f)
         w.writerow(headers)
         for r in rows:
             base = ["设计级" if kind == "设计级" else "展开级", r[id_key]] + [r.get(k, "") for k in name_keys] + [r.get("优先级", "")]
-            w.writerow(base + [""] * len(COLS) + [r.get(status_key, "")])
+            w.writerow(base + [""] * len(COLS) + [r.get(status_key, ""), ""])
     print(f"[{kind}] {os.path.basename(out)} {len(rows)} 行 × {len(COLS)} 列")
 
 
 def main():
     date = sys.argv[1] if len(sys.argv) > 1 else datetime.datetime.now().strftime("%Y-%m-%d")
     gen("设计级", ("test-cases", "daily", "用例矩阵-设计级.csv"), "ID", ["维度", "标题"], "执行状态", date)
-    gen("展开级", ("test-cases", "daily", "用例矩阵-展开级.csv"), "ID", ["展开类型", "枚举对象", "源用例"], "execution_status", date)
+    gen("展开级", ("test-cases", "daily", "用例矩阵-展开级.csv"), "ID", ["展开类型", "枚举对象", "源用例"], "执行状态", date)
     print("完成。后续用 update_summary.py 把各客户端+OS 执行状态填进对应列。")
 
 

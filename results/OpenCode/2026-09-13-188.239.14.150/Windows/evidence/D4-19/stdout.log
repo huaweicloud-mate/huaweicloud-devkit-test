@@ -1,0 +1,31 @@
+# D4-19 确认流下预检仍生效
+# Tool: plan_cli_command
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+During confirmation flow (plan → approve), preflight risk checks must still detect and block high-risk operations
+
+## Input
+args: ["VPC", "CreateSecurityGroupRule", "--direction=ingress", "--protocol=tcp", "--port_range_min=22", "--port_range_max=22", "--cidr=0.0.0.0/0", "--security_group_id=sg-test"]
+
+## Response
+{
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "warnings": ["Missing required parameters: security_group_rule.security_group_id, security_group_rule.direction, security_group_rule.protocol"],
+  "safeToRun": false
+}
+
+## Verification
+- Write operation identified in plan phase ✓
+- decision: "deny" (not auto-executable) ✓
+- risk: "write" (correctly classified) ✓
+- safeToRun: false (requires approval) ✓
+- Parameter validation warnings also generated ✓
+- Preflight checks effective during confirmation flow ✓
+
+## Result: PASS

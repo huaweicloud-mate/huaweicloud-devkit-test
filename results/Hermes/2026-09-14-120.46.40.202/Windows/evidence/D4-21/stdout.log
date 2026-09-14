@@ -1,0 +1,17 @@
+=== D4-21: hook_check_artifacts 具名回归 ===
+evaluateArtifacts result: {
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-iam-admin-policy",
+      "title": "Broad IAM administrator grant",
+      "category": "iam",
+      "severity": "deny",
+      "message": "The change appears to grant broad administrator permissions.",
+      "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+      "source": "artifact",
+      "evidence": "{\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"*\"],\"Resource\":[\"*\"]}]}"
+    }
+  ]
+}
+RESULT: PASS - Broad IAM policy artifact blocked/warned

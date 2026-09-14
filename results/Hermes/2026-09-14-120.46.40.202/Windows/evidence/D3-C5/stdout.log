@@ -1,0 +1,39 @@
+check_cli isError: false
+check_cli content: {
+  "installed": true,
+  "authenticated": true,
+  "status": "ok",
+  "output": "\u001b[1;92m当前KooCLI版本:7.2.12\u001b[0m",
+  "kooCliVersion": "7.2.12",
+  "installedVersion": "7.2.12",
+  "versionMismatch"
+list_operations ECS isError: false
+ECS ops (first 300): {
+  "service": "ECS",
+  "command": "hcloud ECS --help",
+  "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+  "examples": {
+    "list": "ECS ListServersDetails",
+    "create": "ECS CreateServers",
+    "show": "IMS GlanceShowImage"
+ 
+plan_cli_command isError: false
+plan content (first 200): {
+  "executable": "hcloud",
+  "args": [
+    "ECS",
+    "NovaListServers"
+  ],
+  "command": "hcloud ECS NovaListServers",
+  "executableBlock": "hcloud ECS NovaListServers",
+  "warnings": [],
+  "classif
+explain_error isError: false
+explain content (first 200): {
+  "service": "unknown",
+  "errorCode": "Ecs.0001",
+  "requestId": "",
+  "suggestions": [
+    "Collect service name, operation, region, project_id, request_id, and the full redacted error message."
+ 
+RESULT: ALL_TOOLS_OK

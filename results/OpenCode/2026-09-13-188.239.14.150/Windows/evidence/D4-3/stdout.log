@@ -1,0 +1,30 @@
+# D4-3 明文secret API拦截
+# Tool: hook_check_command
+# Date: 2026-09-13
+# Result: FAIL
+
+## Assertion
+API calls returning plaintext secrets (e.g., ShowServerPassword) should be blocked (deny)
+
+## Input Command
+hcloud ECS ShowServerPassword --server_id=test-12345
+
+## Response
+{
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+
+## Verification
+- decision: "allow" ✗ (should be deny for secret-returning API)
+- findings: [] ✗ (no rule matched)
+- ShowServerPassword returns plaintext ECS password but was NOT blocked ✗
+
+## Root Cause
+- File: plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json
+- The rule library lacks a pattern for `ShowServerPassword` and similar secret-returning read APIs
+- The safety model claims "Blocked#3: 明文secret API" but no rule enforces it for this command
+
+## Result: FAIL

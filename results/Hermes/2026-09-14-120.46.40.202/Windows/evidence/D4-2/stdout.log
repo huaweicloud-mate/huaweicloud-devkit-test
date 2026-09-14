@@ -1,0 +1,9 @@
+=== D4-2: 凭证env打印拦截 ===
+  "printenv HUAWEICLOUD_SDK_AK" → decision: deny, reason: Dumping cloud credential environment variables is blocked.
+  "echo $HUAWEICLOUD_SDK_SK" → decision: allow, reason: No Huawei Cloud safety rule matched.
+  "echo %HUAWEICLOUD_SDK_AK%" → decision: allow, reason: No Huawei Cloud safety rule matched.
+  "printenv HW_SDK_AK" → decision: allow, reason: No Huawei Cloud safety rule matched.
+  "env | grep AK" → decision: allow, reason: No Huawei Cloud safety rule matched.
+  "set | grep SK" → decision: allow, reason: No Huawei Cloud safety rule matched.
+  "echo $HCLOUD_AK" → decision: allow, reason: No Huawei Cloud safety rule matched.
+RESULT: FAIL - Some credential env prints not blocked

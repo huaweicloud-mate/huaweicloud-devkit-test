@@ -1,0 +1,36 @@
+# D4-21 hook_check_artifacts 具名回归
+# Tool: hook_check_artifacts
+# Date: 2026-09-13
+# Result: FAIL
+
+## Assertion
+hook_check_artifacts should detect: 1) plaintext admin_pass in IaC 2) 0.0.0.0/0 full port exposure
+
+## Input Artifacts
+[{
+  "path": "terraform/main.tf",
+  "content": "resource \"huaweicloud_compute_instance\" \"test\" {\n  name = \"test\"\n  admin_pass = \"Huawei@123456\"\n  image_id = \"img-123\"\n}\nresource \"huaweicloud_vpc_security_group_rule\" \"open\" {\n  direction = \"ingress\"\n  port_range_min = 0\n  port_range_max = 65535\n  cidr = \"0.0.0.0/0\"\n  protocol = \"tcp\"\n}"
+}]
+
+## Response
+{
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+
+## Verification
+- admin_pass = "Huawei@123456" in Terraform: NOT detected ✗
+- 0.0.0.0/0 with ports 0-65535: NOT detected ✗
+- decision: "allow" ✗ (should be deny/warn)
+- findings: [] ✗ (should have at least 2 findings)
+
+## Root Cause
+- File: plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json
+- The artifact checking rules do not scan IaC content for:
+  1. Hardcoded passwords (admin_pass field)
+  2. Public exposure (0.0.0.0/0 CIDR in security group rules)
+- The hook_check_artifacts tool only checks artifact paths/metadata, not content patterns
+
+## Result: FAIL

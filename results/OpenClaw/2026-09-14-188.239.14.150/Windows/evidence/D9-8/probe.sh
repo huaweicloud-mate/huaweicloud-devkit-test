@@ -1,0 +1,1 @@
+# D9-8: inputSchema version compliance

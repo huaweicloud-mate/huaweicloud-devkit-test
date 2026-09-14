@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""每小时增量提报：把已完成的执行结果 commit + push 到远端，避免测试中途丢失。
+"""每 10 分钟增量提报：把已完成的执行结果 commit + push 到远端，避免测试中途丢失。
 
 用法:
     python hourly_sync.py <客户端> <OS>                 # 单次提报
-    python hourly_sync.py <客户端> <OS> --interval 3600  # 循环模式：每 3600 秒提报一次
+    python hourly_sync.py <客户端> <OS> --interval 600   # 循环模式：每 600 秒(10 分钟)提报一次
 
 凭证（三级 fallback）：环境变量 HDK_GH_TOKEN/GH_TOKEN → ~/.hdk_token 文件 → 本机 gh shuangheaven token。
 推送用通用 git 命令，只提交自己「客户端/日期-IP/OS」目录（多机同客户端靠 IP 区分，避免冲突）。
@@ -76,8 +76,9 @@ def sync_once(client, os_name):
             return True
         print(f"[{ts}] git commit 失败: {(out + err)[:200]}")
         return False
-    # push（通用命令，不依赖 pushm alias）
-    rc, out, err = run('git -c credential.helper="!gh auth git-credential" push origin main')
+    # push（用 token URL，不依赖 gh CLI；兼容无 gh 的机器）
+    push_url = f"https://x-access-token:{token}@github.com/huaweicloud-mate/huaweicloud-devkit-test.git"
+    rc, out, err = run(f"git -c credential.helper= push \"{push_url}\" main")
     if rc == 0:
         print(f"[{ts}] 已提报 commit -> {out.splitlines()[-1] if out else 'ok'}")
         return True
@@ -100,7 +101,7 @@ def main():
     interval = None
     if "--interval" in sys.argv:
         i = sys.argv.index("--interval")
-        interval = int(sys.argv[i + 1]) if i + 1 < len(sys.argv) else 3600
+        interval = int(sys.argv[i + 1]) if i + 1 < len(sys.argv) else 600
     if interval:
         print(f"循环提报模式：每 {interval} 秒一次（Ctrl+C 退出）")
         try:

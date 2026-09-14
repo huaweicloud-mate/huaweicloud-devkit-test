@@ -1,0 +1,61 @@
+# D1-39 Windows 升级检测链可用性
+# Tool: probe.mjs (spawnSync + spawn + fetch tests)
+# Date: 2026-09-13
+# Result: FAIL
+
+## Assertion
+Windows 下检测链真实可用，不得 EINVAL 静默失败
+
+## Probe Results
+
+### Test 1: spawnSync('npm.cmd', ...) without shell:true
+Result: EINVAL thrown
+```
+Error: spawnSync EINVAL
+  errno: -4071
+  code: 'EINVAL'
+```
+The spawnSync path in `queryDistTagsSync` (update-check.mjs:234) fails silently.
+The catch block (line 245-248) returns `null` without throwing.
+
+### Test 2: spawn('npm.cmd', ...) async without shell:true
+Result: EINVAL thrown synchronously
+```
+Error: spawn EINVAL
+    at ChildProcess.spawn (node:internal/child_process:420:11)
+```
+The async spawn path in `queryDistTags` (update-check.mjs:255) also fails.
+The catch block (line 259-262) catches the error, resolves to `null`.
+
+### Test 3: queryDistTagsFetch (fetch-based)
+Result: PASS - latest=1.1.3
+The fetch-based approach works correctly.
+
+### Test 4: spawnSync with shell:true
+Result: PASS - status=0, latest=1.1.3
+Adding `shell: true` fixes the EINVAL issue.
+
+## Root Cause Analysis
+- File: plugins/huaweicloud-core/src/update-check.mjs
+- Line 12: `const NPM_BIN = IS_WINDOWS ? 'npm.cmd' : 'npm';`
+- Line 234: `spawnSync(NPM_BIN, [...], { encoding, timeout, windowsHide: true, cwd })` - no `shell: true`
+- Line 255: `spawn(NPM_BIN, [...], { windowsHide: true, cwd })` - no `shell: true`
+- On Windows, `npm.cmd` is a batch file that requires `shell: true` to execute via spawn/spawnSync
+- Node.js v22.22.2 still throws EINVAL for batch files without `shell: true`
+
+## MCP check_update Flow Impact
+- `getCachedUpdateInfo` (line 310) defaults to `doQuery = queryDistTags` (spawn-based)
+- `tools.mjs:1471`: `return getCachedUpdateInfo(current, { sessionId });` - no doQuery override
+- On Windows: spawn fails → null → judgeUpdate returns check_failed
+- `queryDistTagsFetch` (fetch-based) is available but NOT used as fallback in check_update flow
+- Only `setup-cli.mjs:3275` uses `queryDistTagsFetch` (in upgrade flow, not check flow)
+
+## Verification
+- spawnSync EINVAL: confirmed ✗ (静默失败)
+- spawn EINVAL: confirmed ✗ (静默失败)
+- fetch works: confirmed ✓ (but not used in check_update flow)
+- shell:true fixes: confirmed ✓ (but not applied in code)
+
+## Result: FAIL
+The Windows detection chain has EINVAL silent failure in both sync and async spawn paths.
+The fetch-based alternative exists but is not used as a fallback in the check_update MCP flow.

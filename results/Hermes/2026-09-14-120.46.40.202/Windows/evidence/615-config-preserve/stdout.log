@@ -1,0 +1,66 @@
+# #615 回归探针 evidence
+
+## 执行环境
+- 日期: 2026-09-14 17:10 (北京时间)
+- 基线: 1.1.4-next.6 @69ac727
+- 客户端: Hermes on Windows 10
+- Node.js: v22.23.1
+
+## 1. 单元测试
+
+命令: `node --test test/mcp-config-merge.test.mjs test/mcp-config-backup.test.mjs test/mcp-config-cli.test.mjs test/hdkitservice-api.test.mjs test/update-check.test.mjs`
+
+结果: 61 tests / 61 pass / 0 fail / 0 skip / duration 3018ms
+
+## 2. 函数级探针
+
+命令: `node probe-615.mjs` (临时文件，跑完已删)
+
+结果: 24 PASS / 0 FAIL
+
+### 断言清单:
+
+```
+PASS Bug2: merge keeps --hdkitservice-endpoint arg
+PASS Bug2: merge corrects mcp path
+PASS Bug2: merge reports changed (path drifted)
+PASS Bug2: identical entry unchanged=false
+PASS Bug2: mergeArgsStyle keeps --hdkitservice-endpoint
+PASS Bug2: mergeArgsStyle keeps user env FOO
+PASS Bug2: mergeArgsStyle adds required env
+PASS Bug2: mergeMcpServersFile keeps other-server
+PASS Bug2: mergeMcpServersFile keeps --hdkitservice-endpoint
+PASS Bug5: extractUserDelta captures extra args
+PASS Bug5: extractUserDelta captures custom timeout
+PASS Bug5: applyUserDelta restores extra args
+PASS Bug5: applyUserDelta restores custom timeout
+PASS Bug5: backup file created
+PASS Bug5: readAgentDelta returns delta
+PASS Bug5: takeAgentDelta returns delta
+PASS Bug5: takeAgentDelta consumes (second read null)
+PASS Bug5: purgeBackup removes file
+PASS Bug5: purgeBackup - file gone
+PASS Bug5: opencode delta isolated from codex
+PASS Bug5: codex delta isolated from opencode
+PASS Bug5: consuming opencode does not affect codex
+PASS Bug1: readInstalledVersion returns version
+PASS Bug4: current version has package.json
+```
+
+## 3. 源码审查
+
+修复 commit: d5f4659
+```
+fix(setup): preserve user MCP config fields across install/update/uninstall (#615) (#661)
+
+files changed:
+  plugins/huaweicloud-core/src/mcp-config-backup.mjs  |  70 +++
+  plugins/huaweicloud-core/src/mcp-config-merge.mjs   | 132 +++
+  plugins/huaweicloud-core/src/setup-cli.mjs          | 374 +++++--
+  test/mcp-config-backup.test.mjs                     |  86 +++
+  test/mcp-config-cli.test.mjs                        | 124 +++
+  test/mcp-config-merge.test.mjs                      | 194 +++
+  6 files changed, 828 insertions(+), 152 deletions(-)
+```
+
+覆盖 agent: opencode, codearts, codearts-work, workbuddy, atomcode, hermes, officeace, openclaw, codex-desktop

@@ -1,0 +1,1 @@
+// npx huaweicloud-devkit doctor --target hermes

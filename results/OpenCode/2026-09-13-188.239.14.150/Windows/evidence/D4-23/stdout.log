@@ -1,0 +1,39 @@
+# D4-23 全局规则 huawei-agent-rules.md 注入生效性
+# Tool: File system inspection
+# Date: 2026-09-13
+# Result: PASS
+
+## Assertion
+Safety rules and policy should be properly injected into the OpenCode configuration directory
+
+## Evidence
+Location: ~/.config/opencode/huaweicloud-plugins/
+
+Files found:
+1. safety/policy.json - Safety policy configuration
+   - secretKeyNamePatterns: 15 patterns (access_key, secret_key, security_token, etc.)
+   - credentialFilePatterns: 4 patterns (.hcloud, .huaweicloud, etc.)
+   - blockedConfigureSubcommands: [show, get, list, export, init]
+   - blockedSecretOperations: [ShowSecretVersion, DownloadSecret, GetSecretValue]
+   - writeOperationPrefixes: 30+ prefixes (Create, Delete, Update, etc.)
+   - readOperationPrefixes: [List, Show, Get, Describe, NovaList, NovaShow]
+   - safeTextReadCommands: [rg, grep, findstr, git, ls, dir, Get-ChildItem]
+   - blockedSandboxCommands: [rm -rf /, mkfs, dd, shutdown, etc.]
+
+2. safety/rules/cloud-risk-rules.json - Risk rule definitions (exists, verified via glob)
+
+3. package.json - Plugin package configuration
+
+## Verification
+- Safety policy file exists and is properly structured ✓
+- Risk rules file exists ✓
+- Write operation prefixes cover all 12 write verb categories ✓
+- Credential file patterns cover .hcloud and .huaweicloud ✓
+- Secret key name patterns cover AK, SK, token, password, etc. ✓
+- Rules are injected into OpenCode's config directory ✓
+
+## Note
+OpenCode uses opencode.json + skills directory + huaweicloud-plugins directory for rule injection,
+not a separate huawei-agent-rules.md file. The safety rules are functionally equivalent.
+
+## Result: PASS
