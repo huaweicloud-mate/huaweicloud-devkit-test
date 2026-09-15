@@ -50,10 +50,11 @@ python scripts/init_day.py <客户端> <OS>
 - 「执行状态」枚举：`PASS`（有证据）/ `FAIL`（不符预期，记根因）/ `BLOCKED`（环境阻塞，记 blockedReason）/ `SPEC-MISMATCH`（契约漂移）/ `NOT_RUN`。
 - 「执行时间」：北京时间紧凑 14 位 `YYYYMMDDHHmmss`，**与「执行状态」同一动作回填**（执行完即落）。
 - **NOT_RUN 纪律**：P0 一律不得 NOT_RUN/留空（P0 必测，要么 PASS/FAIL 要么 BLOCKED）；NOT_RUN 仅限「明确不适用本客户端/OS」且写原因；「环境不满足」标 BLOCKED 而非 NOT_RUN。
+- **未执行原因反馈（给维护 agent 改用例）**：所有 NOT_RUN / BLOCKED 用例，原因须「详细到可判断是否需改用例」，并标注分类——【改用例】用例设计不合理（前置/步骤/预期不可判定、粒度、归属、需真云/真机未标注）→ 维护 agent 改 `test-cases/` 母版；【补环境】环境/凭证/配额缺失；【调归属】归属列（agent/OS/终端覆盖类型）写错。报告 §五**逐条**列出（ID+层级+优先级+状态+分类+详细原因+改用例建议），不得笼统写「无阻塞项」敷衍。
 - 回填后跑 `python scripts/verify_coverage.py <客户端> <OS>`：P0 出现 NOT_RUN/空、或 NOT_RUN+空总占比 > 15% → 不达标，补齐重跑。
 
 ### 4. 出报告 + 缺陷清单
-- 按 `templates/daily-agent-report.md` 输出 `<客户端>-<模型>-测试报告.md`，八节：①测试概述 ②执行摘要 ③状态汇总 ④缺陷清单 ⑤阻塞项 ⑥安全/红线 ⑦资源释放 ⑧遗留建议。
+- 按 `templates/daily-agent-report.md` 输出 `<客户端>-<模型>-测试报告.md`，八节：①测试概述 ②执行摘要 ③状态汇总 ④缺陷清单 ⑤未执行用例与原因 ⑥安全/红线 ⑦资源释放 ⑧遗留建议。
 - 每个 FAIL/SPEC 按 `templates/findings.md` 写 `FINDINGS.md`：**级别 + 描述(现象) + 断言(唯一可判定) + 根因(文件:行号) + 证据**，这是 `file_issue.py` 的解析输入，格式必须严格。
 
 ### 5. 每 10 分钟提报（只提交自己目录）
