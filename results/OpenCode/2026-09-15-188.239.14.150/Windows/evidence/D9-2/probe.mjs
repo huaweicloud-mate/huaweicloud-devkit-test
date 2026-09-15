@@ -1,2 +1,1 @@
-// D9-2: JSON-RPC error codes
-// BLOCKED: requires MCP Inspector
+// D9-2: tested via d9-protocol-probe.mjs

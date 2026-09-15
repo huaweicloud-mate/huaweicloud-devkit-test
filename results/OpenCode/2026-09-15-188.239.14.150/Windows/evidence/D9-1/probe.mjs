@@ -1,2 +1,1 @@
-// D9-1: tools/list compliance
-// BLOCKED: requires MCP Inspector for protocol-level testing
+// D9-1: tested via d9-protocol-probe.mjs

@@ -1,2 +1,1 @@
-// D9-3: tools/call response format
-// BLOCKED: requires MCP Inspector
+// D9-3: tested via d9-protocol-probe.mjs

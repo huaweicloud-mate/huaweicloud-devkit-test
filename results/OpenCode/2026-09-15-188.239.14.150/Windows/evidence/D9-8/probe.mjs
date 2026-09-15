@@ -1,2 +1,1 @@
-// D9-8: inputSchema version compliance
-// BLOCKED: requires MCP Inspector
+// D9-8: tested via d9-protocol-probe.mjs

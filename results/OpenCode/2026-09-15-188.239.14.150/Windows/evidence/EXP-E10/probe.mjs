@@ -1,3 +1,3 @@
-// EXP-E10: Route: FunctionGraph -> plan - verified via D10-3 routing
-// Source: D10-3 design-level test
-// Evidence: see evidence/D10-3/ for full test output
+// EXP-E10: D10 eval harness routing test
+// Probe: eval/harness/run-eval.mjs
+# Full results: eval/results/

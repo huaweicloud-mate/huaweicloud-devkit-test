@@ -1,2 +1,1 @@
-// D9-5: stdio transport robustness
-// BLOCKED: requires MCP Inspector
+// D9-5: tested via d9-protocol-probe.mjs

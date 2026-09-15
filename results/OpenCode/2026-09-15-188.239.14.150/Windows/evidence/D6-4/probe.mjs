@@ -1,2 +1,2 @@
-// D6-4: concurrent scheduling
-// BLOCKED: requires special concurrent test harness
+// D6-4: concurrent scheduling (15 parallel tools/list)
+// Full probe: evidence/_probes/supplement-probe.mjs
