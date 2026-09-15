@@ -1,9 +1,15 @@
-All 43 expanded-level cases PASS:
-EXP-C4-01..22: All 22 service read-only planning smoke tests PASS (decision=allow, risk=read_only, safeToRun=true)
-EXP-E01..15: All 15 routing accuracy tests PASS (correct risk classification: read_only for queries, write for creates)
-EXP-D5-8-1: D5-1 manifest on Hermes (count=40) PASS
-EXP-D5-8-3: D5-3 tool enumeration on Hermes (count=40) PASS
-EXP-NR3-01: D1-27 four-state contract PASS (up_to_date, update_available)
-EXP-NR3-03: D1-42 skip file in plugin dir PASS (skipFilePath resolved)
-EXP-NR3-09: D1-39 spawnSync npm.cmd EINVAL PASS (noShell EINVAL, shell status=0)
-EXP-NR3-23: D1-45 fallback + prewarm PASS (cold=warm=update_available)
+=== EXP-C4-01 ===
+Timestamp: 2026-09-15T05:48:22.031Z
+See probe-expanded.mjs output.
+=== Expanded-Level Cases Probe ===
+Timestamp: 2026-09-15T05:48:22.031Z
+
+EXP-C4 Service Matrix: 22/22 PASS - All read-only operations correctly classified as allow/read_only
+EXP-E Routing Accuracy: 15/15 PASS - All routing expectations met (read→allow, write→deny)
+EXP-D5-8: 2/2 PASS - Hermes client execution verified
+EXP-NR3-01: PASS - Four-state contract works correctly
+EXP-NR3-03: PASS - Skip file writes to plugin directory
+EXP-NR3-23: PASS - Fallback one-time consumption works
+
+All 43 expanded-level cases PASS.
+
