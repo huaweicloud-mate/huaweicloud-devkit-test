@@ -1,8 +1,8 @@
 # FINDINGS — 缺陷发现清单（WorkBuddy-glm-5.2）
 
 > **落盘路径**：`results/WorkBuddy/2026-09-15-188.239.14.150/Windows/FINDINGS.md`
-> **生成时间**：2026-09-15 20:45:00（北京时间）
-> **被测版本**：huaweicloud-devkit@1.1.4（gitHead 9b67256e）
+> **生成时间**：2026-09-15 21:50:00（北京时间）— 补测更新
+> **被测版本**：huaweicloud-devkit@1.1.5（gitHead e7ed6f6）
 > **本清单是统一提单脚本的解析输入**：`scripts/file_issue.py` 硬编码解析标题与「根因」字段，格式必须严格遵循。
 
 ---
@@ -42,3 +42,21 @@
 - **影响**：ECS 创建命令中 `--adminPass` 以空格分隔传值时，密码会以明文出现在日志/输出中。
 - **证据**：`evidence/D4-6/stdout.log`
 - **状态**：待提单
+
+## #5【P1】EXP-E01~E14 serviceCatalog 中文意图路由命中率仅 21.4%（11/14 MISS）
+
+- **现象**：D10 评测集 `eval/harness/run-eval.mjs` 对 15 条中文意图逐条调 `huaweicloud_service_catalog`，仅 3 条命中期望路由（EXP-E06 DCS、EXP-E09 CCE、EXP-E15 Incentive Voucher），11 条 MISS 返回 `"Run hcloud --help to list available services."` 后备响应。准确率 21.4%（3/14，分母=HIT+MISS）。
+- **断言**：中文意图（如"帮我查一下我账号在华北北京四有哪些云主机"→ECS、"创建一台 2C4G 的 Ubuntu 云服务器"→ECS、"看一下我的云数据库MySQL实例的状态"→RDS）应被 `serviceCatalog` 正确路由到对应服务。
+- **根因**：`plugins/huaweicloud-core/src/tools.mjs:1886-1908` — `serviceCatalog` 的 `routeMap` 关键词以英文为主（`ecs`/`obs`/`rds`/`eip`/`cbr`/`ces`/`elb`/`iam`/`bss`/`functiongraph`），缺少中文关键词（如"云主机"/"云服务器"/"弹性公网IP"/"云数据库"/"备份"/"监控"/"证书"/"权限审计"/"费用"）。匹配逻辑 `route.keywords.some(kw => it.includes(kw))` 无法匹配不含英文关键词的纯中文意图。
+- **影响**：中文用户使用 `huaweicloud_service_catalog` 工具时，78.6% 的意图无法被正确路由，降低中文场景的 Agent 路由准确率。
+- **证据**：`evidence/EXP-E01/stdout.log`（含 15 条评测集完整结果），`eval/results/eval-run-20260915134457.csv`
+- **状态**：待提单
+
+## #6【SPEC-MISMATCH】D9-9 initialize 未声明 notifications/cancellation 能力
+
+- **现象**：`mcp-protocol.mjs` 的 `dispatch('initialize')` 返回 `capabilities: { tools: {} }`，不包含 `notifications/cancellation` 能力声明。MCP 协议规范建议服务端在 initialize 响应中声明取消能力，使客户端知道可以发送 `notifications/cancelled` 请求。
+- **断言**：`initialize.result.capabilities` 应包含 `notifications/cancellation` 字段（或明确声明不支持）。
+- **根因**：`plugins/huaweicloud-core/src/mcp-protocol.mjs:62-68` — `dispatch` 的 initialize 分支返回 `capabilities: { tools: {} }`，未包含 `notifications` 或 `cancellation` 字段。
+- **影响**：MCP 客户端无法确定服务端是否支持取消通知，可能导致超时后客户端行为不确定。
+- **证据**：`evidence/D9-9/stdout.log`
+- **状态**：SPEC-MISMATCH（已记录漂移点，超时/取消行为测试需 MCP Inspector + 延迟注入，保留 BLOCKED 部分）
