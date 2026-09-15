@@ -1,0 +1,29 @@
+{
+  "testCase": "D2-1",
+  "title": "auth init三端同步",
+  "timestamp": "2026-09-16T00:25:00Z",
+  "tool": "huaweicloud_auth_switch (action=persist, mode=import) + huaweicloud_auth_status + huaweicloud_show_profile_redacted",
+  "stores": {
+    "S1": { "name": "credentials.json", "configured": true, "fingerprint": "caae65f2" },
+    "S2": { "name": "KooCLI (default profile)", "configured": true, "mode": "AKSK", "region": "cn-north-4", "redacted": true },
+    "S3": { "name": "OBS (obsutilconfig)", "configured": true, "fingerprint": "caae65f2" }
+  },
+  "syncResult": {
+    "status": "ok",
+    "scope": "persist",
+    "backedUp": true,
+    "note": "S1 written with configuredBySession (R9), S2(current profile) and S3 synced"
+  },
+  "postSyncStatus": {
+    "inconsistent": false,
+    "inconsistencies": [],
+    "s1Fingerprint": "caae65f2",
+    "s3Fingerprint": "caae65f2",
+    "allMatch": true
+  },
+  "functionalVerify": {
+    "hcloud": "ECS ListServersDetails → count=0 (S2 KooCLI works)",
+    "auth_status": "credentialsConfigured=true, kooCliStatus=ok, obsConfigured=true"
+  },
+  "conclusion": "PASS — 三端(S1/S2/S3)全部落位且指纹一致，hcloud命令可用，auth_switch persist同步成功"
+}

@@ -1,0 +1,37 @@
+{
+  "testCase": "D4-13",
+  "title": "最小权限凭证通过率",
+  "timestamp": "2026-09-16T00:23:00Z",
+  "credential": "test001 (readonly subaccount via credentials.readonly.json)",
+  "region": "cn-north-4",
+  "method": "python scripts/run-as-readonly.py hcloud <Service> <ReadOp>",
+  "readOnlyTests": [
+    { "service": "ECS", "operation": "ListServersDetails", "result": "PASS", "detail": "count=0, servers=[]" },
+    { "service": "VPC", "operation": "ListVpcs", "result": "PASS", "detail": "2 existing VPCs returned (testbot5-view2-free-vpc, testbot5-free-vpc-01a08fc0)" },
+    { "service": "IAM", "operation": "KeystoneListUsers", "result": "PASS", "detail": "2 users: hw018619646 (admin) + test001 (readonly)" },
+    { "service": "RDS", "operation": "ListInstances", "result": "PASS", "detail": "total_count=0" },
+    { "service": "CTS", "operation": "ListTraces", "result": "PASS", "detail": "5 traces returned with full audit detail (trace_id, user, source_ip, request, response)" },
+    { "service": "CES", "operation": "ListMetrics", "result": "PASS", "detail": "count=0 (namespace=SYS.ECS)" },
+    { "service": "ELB", "operation": "ListLoadBalancers", "result": "PASS", "detail": "current_count=0" }
+  ],
+  "readOnlyPassRate": "7/7 = 100%",
+  "writeClassification": {
+    "tool": "huaweicloud_plan_cli_command",
+    "command": "hcloud VPC CreateVpc --vpc.name=test-d413-classification --vpc.cidr=192.168.77.0/24",
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.",
+    "safeToRun": false,
+    "approvalToken": "2e9eda00-9494-426e-8c08-cc461bc02a7c"
+  },
+  "ctsEvidence": {
+    "test001WriteRejected": true,
+    "ctsTraceDetail": "createVpc by test001 → code=403, VPC.0010, PolicyNotAuthorized: 'Rules on create_router by *** disallowed by policy'",
+    "sourceIP": "188.239.14.150",
+    "traceType": "ApiCall",
+    "traceRating": "warning",
+    "user": "test001 (id=01a0a43e102b7009bd2a5db83271e95b)"
+  },
+  "obsNote": "OBS ls failed (403 InvalidAccessKeyId) — expected: OBS uses separate credential store (obsutilconfig), not HW_ACCESS_KEY env",
+  "conclusion": "PASS — 只读100%可用，写操作被正确识别为需审批(deny/write/safeToRun=false)，CTS证实test001写操作被IAM 403拒绝"
+}

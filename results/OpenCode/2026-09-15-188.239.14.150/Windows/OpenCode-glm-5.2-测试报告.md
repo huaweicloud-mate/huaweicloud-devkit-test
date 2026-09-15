@@ -5,6 +5,7 @@
 > **执行归档**：`results/OpenCode/2026-09-15-188.239.14.150/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（消解 40 个假阻塞 BLOCKED；新发现 3 个缺陷：D9-4 协议时序 + D10-3 中文路由 + D9-9 取消能力；2 个真外部依赖 BLOCKED 保留）
+> **补测 2026-09-16**：真云凭证补测通过 — D4-13/D3-C4/D4-14/D2-1/D2-11/D2-16/D4-18/D4-19/D4-20 共 9 项真云用例 + 22 项 EXP-C4 服务矩阵展开级全部真机实测通过，VPC 最小规格创建→删除→归零验证完成，CTS 审计可追溯
 
 ---
 
@@ -146,7 +147,8 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| 真云 ECS/OBS/RDS 等 | 否 | N/A | N/A（本轮未创建真云资源） |
+| 真云 VPC（D3-C4/D4-14 补测） | VPC 1d4c6660 (test-readonly-blocked-d413) | DeleteVpc via run_approved_command | ShowVpc → VPC.9904 not found，归零验证通过 |
+| 真云 ECS/OBS/RDS 等 | 否（仅 VPC 最小规格创建/删除） | N/A | N/A |
 | OpenCode 插件（D1-5 测试） | uninstall 后 reinstall | uninstall 移除 29 skills + 1 command + plugin，reinstall 恢复 | 重装后 29 skills 恢复验证 |
 | 测试临时 HOME（D1-58/D5 探针） | mkdtempSync | 系统临时目录自动清理 | 不影响远端仓库 |
 | 评测集结果 CSV | eval/results/ | 保留作为证据 | 只提交 results/OpenCode/ |
@@ -166,3 +168,31 @@
   1. 在 `tools.mjs:1778-1882` 的 routeMap 中为每个服务添加中文同义词关键词
   2. 在 `mcp-server.mjs:156` 的 `handleMessage` 添加 `initialized` 状态检查
   3. 考虑实现 MCP cancellation 支持或更新设计用例 D9-9 的期望
+
+---
+
+## 九、真云补测（2026-09-16）
+
+> 凭证已重新下发（credentials.json 管理员 + credentials.readonly.json 只读子账号 test001），对 2026-09-15 因凭证缺失标 BLOCKED/虚报 PASS 的真云用例重跑。
+
+### 补测范围与结果
+
+| 用例 | 标题 | 补测方法 | 结果 | 证据 |
+|---|---|---|---|---|
+| D4-13 | 最小权限凭证通过率 | run-as-readonly.py 切 test001 只读子账号实测 7 项只读命令 + plan_cli_command 写操作分类 | PASS | evidence/D4-13/ |
+| D3-C4 | 服务创建类回归 | 22 服务 list_operations + VPC 最小规格创建→删除→归零 | PASS | evidence/D3-C4/ + evidence/c4-service-matrix/ |
+| D4-14 | 操作可审计性 | CTS ListTraces 查审计记录，验证 trace_id/user/source_ip/request/response | PASS | evidence/D4-14/ |
+| D2-1 | auth init 三端同步 | auth_switch persist + auth_status 验证 S1/S2/S3 指纹一致 | PASS | evidence/D2-1/ |
+| D2-11 | STS token 拒绝落盘 | auth_switch import+securityToken → {status:error, scope:rejected} | PASS | evidence/D2-11/ |
+| D2-16 | import 文件读取后擦除 | auth_switch import → creds-import.json 擦除(exists=False) | PASS | evidence/D2-16/ |
+| D4-18 | confirm-not-deny 审批语义 | plan_cli_command 写操作 → deny+approvalToken+safeToRun=false | PASS | evidence/D4-18/ |
+| D4-19 | 确认流下预检仍生效 | hook_check_command 高危写操作 → warn(destructive) | PASS | evidence/D4-19/ |
+| D4-20 | 拒绝后零操作 | run_approved_command(approvedByUser=false) → MCP error, 无执行 | PASS | evidence/D4-20/ |
+
+### 真云红线合规
+
+- [x] 最低配置创建：VPC 192.168.99.0/24（最小 CIDR）
+- [x] 测后删除并归零验证：DeleteVpc → ShowVpc 返回 VPC.9904 not found
+- [x] 只删本次创建资源：VPC ID 1d4c6660-6485-467b-a6cb-d81c503fcd93（本次创建，非既有资源）
+- [x] CTS 审计可追溯：createVpc/deleteVpc 操作均有 CTS trace 记录
+- [x] 凭证泄漏事件：0（SK 未出现在任何证据文件中）

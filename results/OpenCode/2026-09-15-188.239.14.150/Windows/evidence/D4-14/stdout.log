@@ -1,0 +1,48 @@
+{
+  "testCase": "D4-14",
+  "title": "操作可审计性",
+  "timestamp": "2026-09-16T00:24:00Z",
+  "region": "cn-north-4",
+  "ctsQuery": "hcloud CTS ListTraces --tracker_name=system --trace_type=system --from=1726358400000 --limit=20",
+  "ctsResult": "PASS — 20 traces returned with full audit detail",
+  "auditFields": [
+    "trace_id (unique identifier)",
+    "time (Unix ms timestamp)",
+    "user.name + user.id (distinguishable: hw018619646 vs test001)",
+    "source_ip (originating IP)",
+    "request (full request body)",
+    "response (full response body including error details)",
+    "code (HTTP status: 200/403)",
+    "service_type (VPC, ECS, IAM, etc.)",
+    "resource_type (vpc, routers, etc.)",
+    "trace_rating (normal/warning)",
+    "trace_type (ApiCall/ConsoleAction)",
+    "user_agent (HCloud-CLI/7.2.12)"
+  ],
+  "resourceLifecycle": {
+    "create": "VPC 1d4c6660-6485-467b-a6cb-d81c503fcd93 (test-readonly-blocked-d413) created at 2026-09-15T16:20:41",
+    "delete": "VPC deleted via run_approved_command (approvalToken=47adff86-167a-4cd3-832e-b9dd93ed9593)",
+    "verifyZero": "ShowVpc → VPC.9904 'Vpc 1d4c6660-6485-467b-a6cb-d81c503fcd93 could not be found' — 归零验证通过"
+  },
+  "ctsTraceExamples": [
+    {
+      "trace_id": "c17b33d5-b121-11f1-b6a2-19067b626d1e",
+      "operation": "createVpc",
+      "user": "test001 (id=01a0a43e102b7009bd2a5db83271e95b)",
+      "code": "403",
+      "response": "VPC.0010 PolicyNotAuthorized: Rules on create_router by *** disallowed by policy",
+      "source_ip": "188.239.14.150",
+      "time": 1789489396328
+    },
+    {
+      "trace_id": "bf724485-b121-11f1-8c91-a70ba67d2914",
+      "operation": "createVpc",
+      "user": "test001 (id=01a0a43e102b7009bd2a5db83271e95b)",
+      "code": "403",
+      "resource_name": "hdk-d413-test",
+      "source_ip": "100.84.66.9",
+      "time": 1789489392912
+    }
+  ],
+  "conclusion": "PASS — 每次命令可追溯(trace_id+time+user+source_ip+request+response)，可区分agent(test001)/人工(hw018619646)，资源创建→删除→归零验证通过"
+}
