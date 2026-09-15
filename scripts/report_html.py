@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""生成每日测试汇总 HTML 报告（自包含单文件，内联 CSS，适合邮件发送）。
+"""生成每日测试汇总报告（HTML 自包含单文件 + Markdown 版）。
 
 用法:
     python report_html.py [日期] [被测版本]
@@ -9,6 +9,7 @@
     results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md                     （缺陷根因，可选）
 输出:
     results/Summary/每日测试汇总-<日期>.html
+    results/Summary/每日测试汇总-<日期>.md    （同口径 markdown 版）
 
 通过率口径（与 daily-agent-report 一致）：分母 = PASS + FAIL + SPEC-MISMATCH（不含 BLOCKED/NOT_RUN）。
 """
@@ -23,6 +24,10 @@ STATUS_RANK = {"FAIL": 0, "SPEC-MISMATCH": 1, "BLOCKED": 2, "NOT_RUN": 3, "PASS"
 # 10 个智能体（客户端）权威枚举，与 scripts/hourly_sync.py 的 CLIENTS 一致
 ALL_CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
                "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
+
+META = {"层级", "ID", "维度", "标题", "优先级", "展开类型", "枚举对象", "源用例",
+        "当日总执行状态", "当日总执行时间"}
+DIM_ORDER = ["D1安装", "D2认证", "D3功能", "D4安全", "D5客户端", "D6性能", "D7兼容", "D8质量", "D9协议", "D10评测"]
 
 
 def load_summary(date):
@@ -54,7 +59,6 @@ def collect_findings(date):
                 if not os.path.isfile(fp):
                     continue
                 text = open(fp, encoding="utf-8").read()
-                # 复用 file_issue.py 的解析格式：## #N【级别】标题 + **根因**
                 for m in re.finditer(r"^## #\d+【([^】]+)】(.+)$", text, re.M):
                     sev, title = m.group(1), m.group(2).strip()
                     if re.search(r"非产品缺陷|测试侧|不予提单", sev):
@@ -67,56 +71,44 @@ def collect_findings(date):
     return findings
 
 
-def render(rows, findings, date, version):
-    meta = {"层级", "ID", "维度", "标题", "优先级", "展开类型", "枚举对象", "源用例", "当日总执行状态", "当日总执行时间"}
-    client_cols = [c for c in rows[0].keys() if c not in meta] if rows else []
+def _worst(s):
+    s = s or ""
+    for k in ("FAIL", "BLOCKED", "SPEC-MISMATCH"):
+        if k in s:
+            return k
+    return (s or "NOT_RUN").strip() or "NOT_RUN"
 
-    # 执行摘要：全 agent 合计（从各 agent 列统计，而非「当日总执行状态」统计字符串）
+
+def _case_title(r):
+    if r.get("层级") == "展开级":
+        obj = (r.get("枚举对象") or "").strip()
+        src = (r.get("源用例") or "").strip()
+        if obj and src:
+            return f"{obj} · {src}"
+        if obj:
+            return obj
+        return (r.get("展开类型") or "").strip() or "-"
+    return (r.get("标题") or "").strip() or "-"
+
+
+def _agent_of(col):
+    return col.split("-")[0]
+
+
+def _compute(rows, findings, date, version):
+    """准备渲染所需的全部统计数据（HTML/MD 共用）。返回结构化 dict。"""
+    client_cols = [c for c in rows[0].keys() if c not in META] if rows else []
+
     st = Counter()
     for col in client_cols:
         for r in rows:
-            v = (r.get(col) or "").strip() or "NOT_RUN"
-            st[v] += 1
+            v = (r.get(col) or "").strip()
+            st[v if v else "NOT_RUN"] += 1
     total = len(rows)
     denom = st["PASS"] + st["FAIL"] + st["SPEC-MISMATCH"]
     rate = f"{round(st['PASS'] / denom * 100)}%" if denom else "—"
 
-    # 缺陷/阻塞清单：当日总执行状态含 FAIL/BLOCKED/SPEC 的用例
-    def worst(s):
-        s = s or ""
-        for k in ("FAIL", "BLOCKED", "SPEC-MISMATCH"):
-            if k in s:
-                return k
-        return (s or "NOT_RUN")
-
-    problem = [r for r in rows if worst(r.get("当日总执行状态") or "") in ("FAIL", "BLOCKED", "SPEC-MISMATCH")]
-    problem.sort(key=lambda r: STATUS_RANK.get(worst(r.get("当日总执行状态") or ""), 9))
-
-    def badge(s):
-        return f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;color:#fff;background:{STATUS_COLOR.get(s,"#95a5a6")}">{s or "NOT_RUN"}</span>'
-
-    # 缺陷清单「标题」列：设计级用「标题」；展开级无「标题」字段，用 枚举对象·源用例 拼接
-    def case_title(r):
-        if r.get("层级") == "展开级":
-            obj = (r.get("枚举对象") or "").strip()
-            src = (r.get("源用例") or "").strip()
-            if obj and src:
-                return f"{obj} · {src}"
-            if obj:
-                return obj
-            return (r.get("展开类型") or "").strip() or "-"
-        return (r.get("标题") or "").strip() or "-"
-
-    # —— 客户端执行概览（智能体级聚合 + 机器/OS 明细，层级展示）——
-    def agent_of(col):
-        return col.split("-")[0]
-
-    def badge_text(text, color):
-        return (f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;'
-                f'color:#fff;background:{color}">{text}</span>')
-
     def col_stats(cols):
-        """统计一组 client 列的状态分布，返回 (ex, pass, fail, block, spec, notrun, unfilled, st_text, st_color)。"""
         cnt = Counter()
         unfilled = 0
         for col in cols:
@@ -128,51 +120,33 @@ def render(rows, findings, date, version):
                     unfilled += 1
         ex = cnt["PASS"] + cnt["FAIL"] + cnt["BLOCKED"] + cnt["SPEC-MISMATCH"]
         if ex:
-            clean = (cnt["FAIL"] + cnt["BLOCKED"] + cnt["SPEC-MISMATCH"]) == 0
-            st_text, st_color = ("已执行", "#2ecc71") if clean else ("存在缺陷", "#e74c3c")
+            st_text = "已执行" if (cnt["FAIL"] + cnt["BLOCKED"] + cnt["SPEC-MISMATCH"]) == 0 else "存在缺陷"
         else:
-            st_text, st_color = ("已建包未回填", "#f39c12")
-        return (ex, cnt["PASS"], cnt["FAIL"], cnt["BLOCKED"], cnt["SPEC-MISMATCH"],
-                cnt["NOT_RUN"], unfilled, st_text, st_color)
+            st_text = "已建包未回填"
+        return ex, cnt["PASS"], cnt["FAIL"], cnt["BLOCKED"], cnt["SPEC-MISMATCH"], cnt["NOT_RUN"], unfilled, st_text
 
-    def stat_cells(ex, p, f, b, s, nr, uf):
-        td = 'style="padding:6px 8px;border:1px solid #ddd;text-align:center;"'
-        return (f'<td {td}>{ex}</td><td {td}>{p}</td><td {td}>{f}</td>'
-                f'<td {td}>{b}</td><td {td}>{s}</td><td {td}>{nr}</td><td {td}>{uf}</td>')
-
-    client_rows_html = ""
-    executed_agents = 0
-    pkg_only_agents = 0
-    notrun_agents = 0
+    # 客户端概览
+    clients = []
+    executed = pkg_only = notrun = 0
     for cl in ALL_CLIENTS:
-        cols = [c for c in client_cols if agent_of(c) == cl]
-        ex, p, f, b, s, nr, uf, st_text, st_color = col_stats(cols)
+        cols = [c for c in client_cols if _agent_of(c) == cl]
         if not cols:
-            notrun_agents += 1
-            st_text, st_color = "未执行", "#95a5a6"
-        elif ex:
-            executed_agents += 1
+            notrun += 1
+            clients.append({"client": cl, "cols": [], "st_text": "未执行", "row": (0, 0, 0, 0, 0, 0, 0), "machines": []})
+            continue
+        ex, p, f, b, s, nr, uf, st_text = col_stats(cols)
+        if ex:
+            executed += 1
         else:
-            pkg_only_agents += 1
-        # 父行：智能体聚合（浅蓝底 + 左侧强调条 + 加粗）
-        client_rows_html += (f'<tr style="background:#f0f5fb;">'
-                             f'<td style="padding:6px 8px;border:1px solid #ddd;border-left:4px solid #3498db;font-weight:700;color:#2c3e50;">{cl}</td>'
-                             f'<td style="padding:6px 8px;border:1px solid #ddd;">{badge_text(st_text, st_color)}</td>'
-                             + stat_cells(ex, p, f, b, s, nr, uf) + '</tr>')
-        # 子行：各机器/OS 明细（灰字缩进）
+            pkg_only += 1
+        machines = []
         for col in cols:
-            m_ex, m_p, m_f, m_b, m_s, m_nr, m_uf, m_st, m_col = col_stats([col])
+            me = col_stats([col])
             ip_os = col[len(cl) + 1:]
-            client_rows_html += (f'<tr>'
-                                 f'<td style="padding:6px 8px 6px 26px;border:1px solid #ddd;border-left:4px solid transparent;color:#7f8c8d;font-size:12px;">└ {ip_os}</td>'
-                                 f'<td style="padding:6px 8px;border:1px solid #ddd;">{badge_text(m_st, m_col)}</td>'
-                                 + stat_cells(m_ex, m_p, m_f, m_b, m_s, m_nr, m_uf) + '</tr>')
-    client_overview_line = (f'共 <b>{len(ALL_CLIENTS)}</b> 个智能体：'
-        f'<span style="color:#2ecc71">已执行 <b>{executed_agents}</b></span>，'
-        f'<span style="color:#f39c12">已建包未回填 <b>{pkg_only_agents}</b></span>，'
-        f'<span style="color:#95a5a6">未执行 <b>{notrun_agents}</b></span>。')
+            machines.append({"ip_os": ip_os, "st_text": me[7], "row": me[:7]})
+        clients.append({"client": cl, "cols": cols, "st_text": st_text, "row": (ex, p, f, b, s, nr, uf), "machines": machines})
 
-    # —— 各维度用例统计（设计级按维度+优先级，展开级按展开类型）——
+    # 维度统计
     design_rows = [r for r in rows if r.get("层级") == "设计级"]
     expand_rows = [r for r in rows if r.get("层级") == "展开级"]
     dim_count = Counter((r.get("维度") or "(空)") for r in design_rows)
@@ -183,23 +157,78 @@ def render(rows, findings, date, version):
         dim_prio.setdefault(d, Counter())[p] += 1
     prio_values = sorted({(r.get("优先级") or "").strip() or "(空)" for r in design_rows},
                          key=lambda x: ({"P0": 0, "P1": 1, "P2": 2}.get(x, 9), x))
-    dim_head = "".join(f'<th style="padding:6px;border:1px solid #ddd;">{p}</th>' for p in prio_values)
-    DIM_ORDER = ["D1安装", "D2认证", "D3功能", "D4安全", "D5客户端", "D6性能", "D7兼容", "D8质量", "D9协议", "D10评测"]
-    dim_rows_html = "".join(
-        f'<tr><td><b>{d}</b></td><td>{dim_count[d]}</td>'
-        + "".join(f'<td>{dim_prio[d].get(p, 0)}</td>' for p in prio_values)
-        + '</tr>'
-        for d in sorted(dim_count, key=lambda x: DIM_ORDER.index(x) if x in DIM_ORDER else 999)
-    )
+    dim_order = []
+    for d in sorted(dim_count, key=lambda x: DIM_ORDER.index(x) if x in DIM_ORDER else 999):
+        dim_order.append({"dim": d, "count": dim_count[d],
+                          "prio": [dim_prio[d].get(p, 0) for p in prio_values]})
     expand_type_count = Counter((r.get("展开类型") or "(空)") for r in expand_rows)
+    expand_order = [{"type": t, "count": expand_type_count[t]} for t in sorted(expand_type_count)]
+
+    # 问题清单
+    problem = [r for r in rows if _worst(r.get("当日总执行状态")) in ("FAIL", "BLOCKED", "SPEC-MISMATCH")]
+    problem.sort(key=lambda r: STATUS_RANK.get(_worst(r.get("当日总执行状态")), 9))
+
+    return {
+        "rows": rows, "findings": findings, "date": date, "version": version,
+        "client_cols": client_cols, "st": st, "total": total, "rate": rate,
+        "clients": clients, "executed": executed, "pkg_only": pkg_only, "notrun": notrun,
+        "design_rows": design_rows, "expand_rows": expand_rows,
+        "dim_order": dim_order, "prio_values": prio_values, "expand_order": expand_order,
+        "problem": problem,
+    }
+
+
+def render(rows, findings, date, version):
+    d = _compute(rows, findings, date, version)
+    st, total, rate = d["st"], d["total"], d["rate"]
+    clients, executed, pkg_only, notrun = d["clients"], d["executed"], d["pkg_only"], d["notrun"]
+    prio_values, dim_order, expand_order = d["prio_values"], d["dim_order"], d["expand_order"]
+    design_rows, expand_rows, problem = d["design_rows"], d["expand_rows"], d["problem"]
+
+    def badge(s):
+        return f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;color:#fff;background:{STATUS_COLOR.get(s,"#95a5a6")}">{s or "NOT_RUN"}</span>'
+
+    def badge_text(text, color):
+        return f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;color:#fff;background:{color}">{text}</span>'
+
+    COLOR = {"已执行": "#2ecc71", "存在缺陷": "#e74c3c", "已建包未回填": "#f39c12", "未执行": "#95a5a6"}
+
+    def stat_cells(ex, p, f, b, s, nr, uf):
+        td = 'style="padding:6px 8px;border:1px solid #ddd;text-align:center;"'
+        return (f'<td {td}>{ex}</td><td {td}>{p}</td><td {td}>{f}</td>'
+                f'<td {td}>{b}</td><td {td}>{s}</td><td {td}>{nr}</td><td {td}>{uf}</td>')
+
+    client_rows_html = ""
+    for cl in clients:
+        ex, p, f, b, s, nr, uf = cl["row"]
+        client_rows_html += (f'<tr style="background:#f0f5fb;">'
+                             f'<td style="padding:6px 8px;border:1px solid #ddd;border-left:4px solid #3498db;font-weight:700;color:#2c3e50;">{cl["client"]}</td>'
+                             f'<td style="padding:6px 8px;border:1px solid #ddd;">{badge_text(cl["st_text"], COLOR.get(cl["st_text"], "#95a5a6"))}</td>'
+                             + stat_cells(ex, p, f, b, s, nr, uf) + '</tr>')
+        for m in cl["machines"]:
+            me = m["row"]
+            client_rows_html += (f'<tr>'
+                                 f'<td style="padding:6px 8px 6px 26px;border:1px solid #ddd;border-left:4px solid transparent;color:#7f8c8d;font-size:12px;">└ {m["ip_os"]}</td>'
+                                 f'<td style="padding:6px 8px;border:1px solid #ddd;">{badge_text(m["st_text"], COLOR.get(m["st_text"], "#95a5a6"))}</td>'
+                                 + stat_cells(*me) + '</tr>')
+    client_overview_line = (f'共 <b>{len(ALL_CLIENTS)}</b> 个智能体：'
+        f'<span style="color:#2ecc71">已执行 <b>{executed}</b></span>，'
+        f'<span style="color:#f39c12">已建包未回填 <b>{pkg_only}</b></span>，'
+        f'<span style="color:#95a5a6">未执行 <b>{notrun}</b></span>。')
+
+    dim_head = "".join(f'<th style="padding:6px;border:1px solid #ddd;">{p}</th>' for p in prio_values)
+    dim_rows_html = "".join(
+        f'<tr><td><b>{x["dim"]}</b></td><td>{x["count"]}</td>'
+        + "".join(f'<td>{v}</td>' for v in x["prio"]) + '</tr>'
+        for x in dim_order
+    )
     expand_rows_html = "".join(
-        f'<tr><td><b>{t}</b></td><td>{expand_type_count[t]}</td></tr>'
-        for t in sorted(expand_type_count)
+        f'<tr><td><b>{x["type"]}</b></td><td>{x["count"]}</td></tr>' for x in expand_order
     )
 
     problem_rows = "".join(
         f'<tr><td>{r.get("层级","")}</td><td><b>{r.get("ID","")}</b></td><td>{r.get("优先级","")}</td>'
-        f'<td>{case_title(r)}</td><td>{badge(worst(r.get("当日总执行状态","")))}</td></tr>'
+        f'<td>{_case_title(r)}</td><td>{badge(_worst(r.get("当日总执行状态","")))}</td></tr>'
         for r in problem
     ) or '<tr><td colspan="5" style="color:#95a5a6">无 FAIL/BLOCKED/SPEC 项</td></tr>'
 
@@ -261,6 +290,89 @@ def render(rows, findings, date, version):
 </body></html>"""
 
 
+def render_md(rows, findings, date, version):
+    """渲染 markdown 版每日测试汇总报告（与 HTML 同数据源、同口径）。"""
+    d = _compute(rows, findings, date, version)
+    st, total, rate = d["st"], d["total"], d["rate"]
+    clients, executed, pkg_only, notrun = d["clients"], d["executed"], d["pkg_only"], d["notrun"]
+    prio_values, dim_order, expand_order = d["prio_values"], d["dim_order"], d["expand_order"]
+    design_rows, expand_rows, problem = d["design_rows"], d["expand_rows"], d["problem"]
+
+    client_lines = []
+    for cl in clients:
+        ex, p, f, b, s, nr, uf = cl["row"]
+        client_lines.append(f"| **{cl['client']}** | {cl['st_text']} | {ex} | {p} | {f} | {b} | {s} | {nr} | {uf} |")
+        for m in cl["machines"]:
+            e2, p2, f2, b2, s2, nr2, uf2 = m["row"]
+            client_lines.append(f"| └ {m['ip_os']} | {m['st_text']} | {e2} | {p2} | {f2} | {b2} | {s2} | {nr2} | {uf2} |")
+    overview = (f"共 **{len(ALL_CLIENTS)}** 个智能体：**已执行 {executed}**、"
+                f"**已建包未回填 {pkg_only}**、**未执行 {notrun}**。")
+
+    dim_lines = [f"| {x['dim']} | {x['count']} | " + " | ".join(str(v) for v in x["prio"]) + " |" for x in dim_order]
+    expand_lines = [f"| {x['type']} | {x['count']} |" for x in expand_order]
+
+    problem_lines = [
+        f"| {r.get('层级','')} | {r.get('ID','')} | {r.get('优先级','')} | {_case_title(r)} | {_worst(r.get('当日总执行状态'))} |"
+        for r in problem
+    ] or ["| — | — | — | 无 FAIL/BLOCKED/SPEC 项 | — |"]
+
+    findings_lines = [
+        f"| {c} | {sev} | {title} | {root} |" for c, sev, title, root in findings
+    ] or ["| — | — | 无缺陷记录 | — |"]
+
+    prio_head = " | ".join(prio_values) if prio_values else "优先级"
+    prio_sep = " | ".join(["---"] * (1 + len(prio_values)))
+
+    return f"""# huaweicloud-devkit 每日测试汇总报告
+
+日期：**{date}** ｜ 被测版本：**{version}** ｜ 生成时间：**{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}**（北京时间）
+
+## 执行摘要
+
+| 总用例 | PASS | FAIL | BLOCKED | SPEC-MISMATCH | NOT_RUN | 通过率 |
+| --- | --- | --- | --- | --- | --- | --- |
+| {total} | {st['PASS']} | {st['FAIL']} | {st['BLOCKED']} | {st['SPEC-MISMATCH']} | {st['NOT_RUN']} | {rate} |
+
+> 通过率分母 = PASS+FAIL+SPEC（不含 BLOCKED/NOT_RUN）
+
+## 客户端执行概览
+
+{overview}
+
+| 智能体 | 执行状态 | 已执行 | PASS | FAIL | BLOCKED | SPEC | NOT_RUN | 未回填 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+{chr(10).join(client_lines)}
+
+## 各维度用例统计
+
+### 设计级（共 {len(design_rows)} 条）
+
+| 维度 | 用例数 | {prio_head} |
+| --- | --- | {prio_sep} |
+{chr(10).join(dim_lines)}
+
+### 展开级（共 {len(expand_rows)} 条）
+
+| 展开类型 | 用例数 |
+| --- | --- |
+{chr(10).join(expand_lines)}
+
+## 缺陷清单（FAIL / BLOCKED / SPEC-MISMATCH）
+
+| 层级 | ID | 优先级 | 标题 | 状态 |
+| --- | --- | --- | --- | --- |
+{chr(10).join(problem_lines)}
+
+## 缺陷根因明细（来自各 agent FINDINGS.md）
+
+| 客户端 | 级别 | 标题 | 根因 |
+| --- | --- | --- | --- |
+{chr(10).join(findings_lines)}
+
+> 本报告由 scripts/report_html.py 自动生成，数据源 results/Summary/ 每日总执行结果。执行态与母版用例定义分离，真实结果以本报告为准。
+"""
+
+
 def main():
     date = sys.argv[1] if len(sys.argv) > 1 else datetime.datetime.now().strftime("%Y-%m-%d")
     version = sys.argv[2] if len(sys.argv) > 2 else "（未指定）"
@@ -269,11 +381,19 @@ def main():
         print(f"[错误] 未找到 Summary 数据：请先跑 build_summary.py {date}")
         sys.exit(2)
     findings = collect_findings(date)
+
     html = render(rows, findings, date, version)
-    out = os.path.join(REPO, "results", "Summary", f"每日测试汇总-{date}.html")
-    with open(out, "w", encoding="utf-8") as f:
+    html_out = os.path.join(REPO, "results", "Summary", f"每日测试汇总-{date}.html")
+    with open(html_out, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"HTML 报告生成: {out}")
+
+    md = render_md(rows, findings, date, version)
+    md_out = os.path.join(REPO, "results", "Summary", f"每日测试汇总-{date}.md")
+    with open(md_out, "w", encoding="utf-8") as f:
+        f.write(md)
+
+    print(f"HTML 报告生成: {html_out}")
+    print(f"Markdown 报告生成: {md_out}")
     print(f"总用例 {len(rows)} 条，缺陷根因 {len(findings)} 条")
 
 
