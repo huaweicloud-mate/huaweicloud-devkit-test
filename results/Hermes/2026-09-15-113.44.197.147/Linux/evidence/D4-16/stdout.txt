@@ -1,2 +1,4 @@
 === CASE D4-16 ===  FAIL
-  detail: 命令包裹/命令替换绕过 hcloud 写拦截(bash -c/sh -c/eval/$() 全 allow)，见 findings #2
+  expected: sh/bash/eval/$() 包裹内 hcloud 写操作 => deny
+  actual:   0/4 拦截（命令包裹穿透）
+  root:     safety-policy.mjs:345 正则仅匹配行首/空白后 hcloud，引号包裹/子 shell/命令替换绕过

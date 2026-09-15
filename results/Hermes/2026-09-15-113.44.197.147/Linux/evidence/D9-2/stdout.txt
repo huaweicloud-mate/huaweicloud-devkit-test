@@ -1,2 +1,4 @@
 === CASE D9-2 ===  SPEC-MISMATCH
-  detail: JSON-RPC 未知方法返回 -32603(Internal error)，规范应为 -32601(Method not found)，见 findings #7
+  expected: 未知方法错误码应为 -32601(Method not found)
+  actual:   实际 -32603(Internal error)
+  root:     mcp-server.mjs:169 统一硬编码 code:-32603 未映射 -32601
