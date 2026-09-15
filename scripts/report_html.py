@@ -39,6 +39,25 @@ def load_summary(date):
     return rows
 
 
+_CREATE_RE = re.compile(r"创建时间：(?:\*\*|<b>)(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})")
+
+
+def _extract_create_time(date):
+    """复用当天已生成报告的「创建时间」；首次生成（无记录）返回 None，由调用方用当前时间兜底。"""
+    for name in (f"每日测试汇总-{date}.md", f"每日测试汇总-{date}.html"):
+        p = os.path.join(REPO, "results", "Summary", name)
+        if not os.path.isfile(p):
+            continue
+        try:
+            txt = open(p, encoding="utf-8").read()
+        except Exception:
+            continue
+        m = _CREATE_RE.search(txt)
+        if m:
+            return m.group(1)
+    return None
+
+
 def collect_findings(date):
     """遍历各 agent 目录读 FINDINGS.md，提取 (级别, 标题, 根因) 列表。"""
     findings = []
@@ -211,7 +230,7 @@ def _compute(rows, findings, date, version):
     }
 
 
-def render(rows, findings, date, version):
+def render(rows, findings, date, version, create_time, update_time):
     d = _compute(rows, findings, date, version)
     st, total, rate = d["st"], d["total"], d["rate"]
     clients, executed, pkg_only, notrun = d["clients"], d["executed"], d["pkg_only"], d["notrun"]
@@ -276,7 +295,7 @@ def render(rows, findings, date, version):
 <title>每日测试汇总 - {date}</title></head>
 <body style="font-family:'Segoe UI',Arial,'Microsoft YaHei',sans-serif;color:#2c3e50;max-width:960px;margin:20px auto;padding:0 16px;">
 <h1 style="border-bottom:3px solid #2c3e50;padding-bottom:8px;">huaweicloud-devkit 每日测试汇总报告</h1>
-<p style="color:#7f8c8d;">日期：<b>{date}</b> ｜ 被测版本：<b>{version}</b> ｜ 最后更新时间：<b>{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</b>（北京时间）</p>
+<p style="color:#7f8c8d;">日期：<b>{date}</b> ｜ 被测版本：<b>{version}</b> ｜ 创建时间：<b>{create_time}</b> ｜ 最后更新时间：<b>{update_time}</b>（北京时间）</p>
 
 <h2>执行摘要</h2>
 <table style="border-collapse:collapse;width:100%;">
@@ -323,7 +342,7 @@ def render(rows, findings, date, version):
 </body></html>"""
 
 
-def render_md(rows, findings, date, version):
+def render_md(rows, findings, date, version, create_time, update_time):
     """渲染 markdown 版每日测试汇总报告（与 HTML 同数据源、同口径）。"""
     d = _compute(rows, findings, date, version)
     st, total, rate = d["st"], d["total"], d["rate"]
@@ -358,7 +377,7 @@ def render_md(rows, findings, date, version):
 
     return f"""# huaweicloud-devkit 每日测试汇总报告
 
-日期：**{date}** ｜ 被测版本：**{version}** ｜ 最后更新时间：**{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}**（北京时间）
+日期：**{date}** ｜ 被测版本：**{version}** ｜ 创建时间：**{create_time}** ｜ 最后更新时间：**{update_time}**（北京时间）
 
 ## 执行摘要
 
@@ -415,12 +434,15 @@ def main():
         sys.exit(2)
     findings = collect_findings(date)
 
-    html = render(rows, findings, date, version)
+    now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    create_time = _extract_create_time(date) or now_str
+
+    html = render(rows, findings, date, version, create_time, now_str)
     html_out = os.path.join(REPO, "results", "Summary", f"每日测试汇总-{date}.html")
     with open(html_out, "w", encoding="utf-8") as f:
         f.write(html)
 
-    md = render_md(rows, findings, date, version)
+    md = render_md(rows, findings, date, version, create_time, now_str)
     md_out = os.path.join(REPO, "results", "Summary", f"每日测试汇总-{date}.md")
     with open(md_out, "w", encoding="utf-8") as f:
         f.write(md)
