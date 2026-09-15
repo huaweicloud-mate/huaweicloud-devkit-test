@@ -131,6 +131,12 @@ def main():
     print('  Linux:    echo \'export HDK_GH_TOKEN="%s"\' >> ~/.bashrc && source ~/.bashrc' % token)
     print(f"\n初始化完成。专属目录: {WORK}。之后每天在 {REPO} 里执行「读 AGENTS.md 执行测试」。")
 
+    # 8. 只读 IAM 子账号凭证提示（D4-13 最小权限用例专用，可选）
+    print("\n=== 只读 IAM 子账号凭证（D4-13 最小权限用例专用，可选） ===")
+    print("  真云 E2E 用管理员凭证 credentials.json；D4-13 最小权限需只读子账号，")
+    print("  独立手配到 ~/.config/huaweicloud/credentials.readonly.json（格式 {ak, sk, region}），")
+    print("  执行时用 scripts/run-as-readonly.py 动态切（只用只读子账号，不替换管理员凭证）。")
+
 
 if __name__ == "__main__":
     main()
