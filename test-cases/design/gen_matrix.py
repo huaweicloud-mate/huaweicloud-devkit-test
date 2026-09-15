@@ -1281,7 +1281,8 @@ PROMPTS = [
 ]
 for pid, prompt, route, assert_ in PROMPTS:
     E.append((pid, "D10评测集", prompt, "D10-3", "P1",
-              f"期望路由: {route}", f"断言: {assert_}"))
+              f"①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: {route})，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 {route}",
+              f"源码级断言: serviceCatalog 中文意图命中 {route} 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: {assert_}"))
 
 # ============ NR3 版本升级提醒终端展开（2026-09-10 18:30:00，Codex review-round-03 要求；R10 结构化状态列） ============
 # 展开维度：Windows/Linux/macOS、Hook/非Hook、stdio/remote、TTY/非TTY、CLIENT_MATRIX/OS_MATRIX/AGENT_E2E/CROSS_PROCESS

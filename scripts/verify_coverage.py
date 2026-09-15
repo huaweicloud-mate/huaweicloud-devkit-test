@@ -4,12 +4,12 @@
 用法:
     python verify_coverage.py <客户端> <OS> [日期]
 
-规则（违反 1/2 即 exit 1，3/4 仅警告）：
+规则（违反 1/2/3 即 exit 1，4 仅警告）：
 1. P0 铁律：P0 用例标 NOT_RUN 或留空 → FAIL（P0 必测，P0 不得 NOT_RUN/空）。
 2. 覆盖率门禁：NOT_RUN + 空列 总占比 > 15% → FAIL（执行覆盖率不达标，需补齐重跑）。
-3. BLOCKED 无原因：标 BLOCKED 但 blockedReason 为空 → WARN（疑似变相跳过）。
+3. BLOCKED 无原因：标 BLOCKED 但 blockedReason 为空 → FAIL（BLOCKED 必写原因，空即变相跳过）。
 4. BLOCKED 高占比：BLOCKED 占比 > 50% → WARN（需人工核查是否环境确否）。
-exit 0 = 通过 / 1 = 违反规则 1 或 2。
+exit 0 = 通过 / 1 = 违反规则 1/2/3。
 """
 import os, sys, csv, datetime, socket
 from collections import Counter
@@ -106,9 +106,10 @@ def main():
         if r["ratio"] > NOTRUN_EMPTY_LIMIT:
             fail = True
             print(f"  [FAIL] NOT_RUN+空 占比 {r['ratio']:.1%} 超过 {NOTRUN_EMPTY_LIMIT:.0%}（执行覆盖率不达标）")
-        # 规则3：BLOCKED 无原因
+        # 规则3：BLOCKED 无原因 → FAIL（红线：BLOCKED 必写 blockedReason 四要素，空即变相跳过）
         if r["blocked_no_reason"]:
-            warn.append(f"{r['kind']} 有 {r['blocked_no_reason']} 条 BLOCKED 未写 blockedReason（疑似变相跳过）")
+            fail = True
+            print(f"  [FAIL] {r['kind']} 有 {r['blocked_no_reason']} 条 BLOCKED 未写 blockedReason（BLOCKED 必写原因，不得留空）")
         # 规则4：BLOCKED 高占比
         if r["blocked_ratio"] > BLOCKED_WARN_RATIO:
             warn.append(f"{r['kind']} BLOCKED 占比 {r['blocked_ratio']:.0%} 过高（需人工核查是否环境确否）")
