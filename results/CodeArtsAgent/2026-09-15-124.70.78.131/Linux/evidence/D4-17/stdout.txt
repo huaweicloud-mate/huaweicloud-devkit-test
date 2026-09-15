@@ -1,0 +1,6 @@
+用例: D4-17 hook模糊fail-closed (P1) 工具:hook_check_command
+执行时间: 2026-09-15 18:10 (北京时间)
+探针: hook_check_command ''（空串）→ {ok:true, decision:'allow'} fail-open
+断言: 畸形输入默认拒绝
+结果: FAIL — 空输入 allow fail-open
+根因: risk-rule-engine.mjs:106 无 finding 即 allow，缺 fail-closed（复现 #673）

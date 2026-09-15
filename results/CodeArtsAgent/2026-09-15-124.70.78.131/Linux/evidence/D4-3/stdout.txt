@@ -1,0 +1,5 @@
+用例: D4-3 明文secret API拦截 (P0) 工具:hook_check_command
+执行时间: 2026-09-15 18:10 (北京时间)
+探针: hook_check_command 'hcloud csms ShowSecretVersion --secret_name prod-db --version_id v1' → {ok:false, decision:'deny', ruleId:'hwc-command-secret-value-read'}
+断言: 明文 secret API 被阻断
+结果: PASS

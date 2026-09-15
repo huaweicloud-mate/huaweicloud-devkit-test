@@ -1,0 +1,6 @@
+用例: D2-11 R3 STS token拒绝落盘 (P0) 工具:源码 persistCredentials + auth_status
+执行时间: 2026-09-15 18:10 (北京时间)
+探针: tools.mjs:1012-1019 persistCredentials → if(securityToken) return {status:'error', scope:'rejected'}
+探针2: auth_status() → hasRuntime=false, s1Fingerprint=caae65f2
+断言: 带 securityToken 的 persist 返回 rejected，永不落盘
+结果: PASS — R3 逻辑 tools.mjs:1013-1018

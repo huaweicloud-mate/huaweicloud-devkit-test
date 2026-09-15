@@ -1,0 +1,6 @@
+用例: D1-26 升级提醒工具注册与协议暴露 (P1) 工具:源码 tools.mjs + tool_search
+执行时间: 2026-09-15 18:10 (北京时间)
+探针: tools.mjs 定义 40 工具(含 check_update:822/upgrade:837/obs_set_website_config:852)；tool_search 实际 37（缺 3）
+断言: check_update/upgrade 均注册
+结果: FAIL — 3 工具未框架暴露 40 vs 37
+根因: TOOL_DEFINITIONS 与框架暴露集漂移（复现 #673）

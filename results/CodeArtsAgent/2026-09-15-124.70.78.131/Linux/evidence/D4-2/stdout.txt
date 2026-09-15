@@ -1,0 +1,6 @@
+用例: D4-2 凭证env打印拦截 (P0) 工具:hook_check_command
+执行时间: 2026-09-15 18:10 (北京时间)
+探针: hook_check_command 'printenv HW_ACCESS_KEY' → {ok:true, decision:'allow', findings:[]} 未拦截
+断言: printenv 凭证 env 应被阻断
+结果: FAIL — HW_* 前缀未被 env-dump 规则拦截
+根因: 框架 cloud-risk-rules.json env-dump 正则缺 HW_ 前缀（复现 #673）

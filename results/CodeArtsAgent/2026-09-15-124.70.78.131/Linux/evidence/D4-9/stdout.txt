@@ -1,0 +1,6 @@
+用例: D4-9 公开暴露/破坏性预检 (P0) 工具:plan_cli_command + hook_check_deploy_plan
+执行时间: 2026-09-15 18:10 (北京时间)
+探针1: OBS DeleteBucket → deny/write；探针2: ECS DeleteServers → deny/write
+探针3: hook_check_deploy_plan {FG expose:public auth:NONE} → warn hwc-functiongraph-public-no-auth
+断言: 破坏性/公开暴露执行前拦截
+结果: PASS
