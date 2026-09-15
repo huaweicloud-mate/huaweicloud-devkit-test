@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""2026-09-15 每日测试回填（v1.1.4 复测）：拆分探针输出 → evidence/<case-id>/stdout.log → 回填 3 份 CSV。
+"""2026-09-15 每日测试回填（v1.1.4）：拆分探针输出 → evidence/<case-id>/stdout.log → 回填 3 份 CSV。
 
-SUT = huaweicloud-devkit v1.1.4（官方 npm `latest` 正式版，gitHead 9b67256；本机私有 registry 127.0.0.1:45998 的 latest 滞后 1.1.3，已按官方 registry 校正）。
-门禁口径：P0 不得 NOT_RUN/空；环境不满足/不适用本机 → BLOCKED + blockedReason；PASS/FAIL/SPEC 才有 evidencePath。
-本脚本状态映射全部来自当日实际探针/CLI 实测结果（probe-daily/probe-supplement/probe-exp/probe-d9-2 + doc/status/install-hcloud CLI），
-非复制历史回填。
+SUT = huaweicloud-devkit v1.1.4（官方 npm `latest` 正式版，gitHead 9b67256）。
+daily 精选集：设计级 77 + 展开级 49（init_day 预筛后本 Hermes/Linux 26）。
+门禁口径：P0 不得 NOT_RUN/空；环境/凭证/依赖缺失 → BLOCKED + blockedReason；PASS/FAIL/SPEC 才落 evidencePath。
+状态映射全部来自当日实际探针/CLI 实测（probe-daily / probe-supplement / probe-exp / probe-perf-route / probe-d9-2 + doctor/status/install-hcloud CLI），非复制历史。
 """
 import csv, os, re, subprocess
 from datetime import datetime, timezone, timedelta
@@ -31,20 +31,18 @@ def split_log(logname):
     print(f'{logname}: 拆分 {len(blocks)} 个 case')
     return len(blocks)
 
-n1 = split_log('stdout-daily.log')
-n2 = split_log('stdout-supplement.log')
-n3 = split_log('stdout-exp.log')
-print(f'探针拆分合计: {n1+n2+n3}')
+for log in ['stdout-daily.log', 'stdout-supplement.log', 'stdout-exp.log', 'stdout-perf-route.log']:
+    split_log(log)
 
-# D9-2 用 stdio server 层真机探针（probe-d9-2.mjs）覆盖，协议层 INFO 不做定论
+# D9-2 用 stdio server 层探针（probe-d9-2.mjs）覆盖，协议层 INFO 不做定论
 r = subprocess.run(['node', os.path.join(D, 'probe-d9-2.mjs')], capture_output=True, text=True)
 os.makedirs(os.path.join(EVID, 'D9-2'), exist_ok=True)
 with open(os.path.join(EVID, 'D9-2', 'stdout.log'), 'w', encoding='utf-8') as f:
     f.write(r.stdout)
 
-# ============ 状态映射（SUT v1.1.3，全部来自当日实测） ============
+# ============ 设计级状态映射（77） ============
 design_pass = [
-    # D1 安装/升级
+    # D1 安装/升级（CLI 实测 + 升级检测链探针）
     'D1-3', 'D1-4', 'D1-6', 'D1-26', 'D1-27', 'D1-28', 'D1-30', 'D1-31', 'D1-33',
     'D1-39', 'D1-40', 'D1-41', 'D1-42', 'D1-58',
     # D2 认证
@@ -53,9 +51,11 @@ design_pass = [
     'D3-A1', 'D3-B1', 'D3-B3', 'D3-B5', 'D3-C5',
     # D4 安全
     'D4-1', 'D4-3', 'D4-5', 'D4-6', 'D4-7', 'D4-8', 'D4-9', 'D4-10',
-    'D4-13', 'D4-15', 'D4-17', 'D4-18', 'D4-19', 'D4-20', 'D4-21', 'D4-22', 'D4-24',
+    'D4-15', 'D4-17', 'D4-18', 'D4-19', 'D4-20', 'D4-21', 'D4-22', 'D4-24',
     # D5 客户端
     'D5-1', 'D5-3',
+    # D6 性能（本地压测探针实测）
+    'D6-1', 'D6-3', 'D6-4',
     # D8 质量
     'D8-4', 'D8-6', 'D8-7',
     # D9 协议
@@ -65,50 +65,44 @@ design_pass = [
 ]
 
 design_fail = {
-    'D4-2': '凭证 env 打印拦截不完整（HW_ 前缀放行，FINDINGS #1）',
-    'D4-4': '写操作审批门漏词 Change*（FINDINGS #4）',
-    'D4-11': '提示注入防护：自然语言夹带 hcloud 写命令未拦截（FINDINGS #5）',
-    'D4-16': '命令包裹穿透：sh -c 内层写命令未拦截（FINDINGS #2）',
-    'D4-23': '全局规则 huawei-agent-rules.mdc 未注入（FINDINGS #3）',
-}
-design_spec = {
-    'D9-2': 'JSON-RPC 错误码 -32603 vs 规范 -32601（FINDINGS #6）',
-}
-design_blocked = {
-    'D3-C4': '服务创建类回归需真云 22 服务建删资源（红线：最低配置+归零）',
-    'D4-14': '操作可审计性需真云 CTS 审计日志',
-    'D9-6': '跨客户端互通需多 MCP 客户端终端环境',
-    'D1-1': '全新环境引导安装需空 HOME+PTY 交互（破坏性），本机日常环境禁用',
-    'D1-2': '多 Agent 探测需多客户端并存环境',
-    'D1-5': 'uninstall 干净度属破坏性（卸载全局包），本机日常环境禁用',
-    'D1-45': '兜底提示预热竞态需冷启时序观测；Linux 兜底路径已由 EXP-NR3-24 覆盖',
-    'D4-12': '供应链安装期安全审计需发布流水线上下文',
-    'D6-1': '检索响应延迟采样需专用性能 harness + 统计环境',
-    'D6-3': 'MCP 冷启时间采样需专用性能 harness',
-    'D6-4': '并发调度正确性采样需专用性能 harness',
-    'D9-9': 'tools/call 超时取消语义需注入长耗时服务',
-    'D7-4': '国内镜像源安装需镜像网络可达（本机走官方源）',
-    'D8-1': '文档与能力一致性需全文人工核对；本轮仅抽查 D8-4/D8-6',
-    'D10-1': '工具描述可选择性评测需评测 harness + 标注模型',
-    'D10-2': 'skill 激活率评测需评测 harness + 模型预算',
-    'D10-3': '路由准确率+混淆矩阵评测需评测 harness',
-    'D10-5': '多轮任务完成率评测需评测 harness',
+    'D4-2':  '凭证 env 打印拦截不完整（HW_ 前缀放行，FINDINGS #1）',
+    'D4-4':  '写操作审批门漏词 Change* 系列（FINDINGS #2）',
+    'D4-11': '提示注入防护：自然语言夹带 hcloud 写命令未拦截（FINDINGS #3）',
+    'D4-16': '命令包裹穿透：sh -c 内层写命令未拦截（FINDINGS #4）',
+    'D4-23': '全局规则 huawei-agent-rules.mdc 未注入（FINDINGS #5）',
+    'D10-3': 'serviceCatalog 路由中文意图未命中（云服务器/存储桶/云硬盘，FINDINGS #6）',
 }
 
-# 展开级 48 条（init_day 预筛后仅 Hermes/Linux 适用行）：PASS 6 / BLOCKED 42
+design_spec = {
+    'D9-2': 'JSON-RPC 错误码 -32603 vs 规范 -32601（FINDINGS #7）',
+    'D9-9': 'initialize.capabilities 未声明 notifications/cancellation（FINDINGS #8，SPEC-MISMATCH 标注而非假定）',
+}
+
+design_blocked = {
+    'D1-1':  '补环境：全新环境引导安装需空 HOME + PTY 交互（破坏性），本机日常环境禁用',
+    'D1-2':  '补环境：多 Agent 探测需多客户端并存环境，本机仅 Hermes',
+    'D1-5':  '补环境：uninstall 干净度属破坏性（卸载全局包），本机日常环境禁用',
+    'D1-45': '补环境：兜底提示预热竞态需冷启时序注入观测；Linux 兜底路径已由 EXP-NR3-24 覆盖',
+    'D4-12': '补环境：供应链安装期安全审计需发布流水线上下文',
+    'D4-13': '补环境：只读 IAM 子账号凭证 ~/.config/huaweicloud/credentials.readonly.json 未配置，无法注入只读子账号做真实 IAM 权限验证',
+    'D4-14': '补环境：操作可审计性需真云 CTS 审计日志核对，本轮无真云命令执行场景',
+    'D7-4':  '补环境：国内镜像源安装需镜像网络可达（本机走官方源）',
+    'D8-1':  '补环境：文档与能力一致性需全文人工核对；本轮抽查 D8-4/D8-6/D8-7',
+    'D9-6':  '补环境：跨客户端互通需 ≥3 真实客户端 + Inspector 标准校验，本机仅 Hermes/Linux',
+}
+
+# ============ 展开级状态映射（26） ============
 expanded_pass = ['EXP-D5-8-1', 'EXP-D5-8-3', 'EXP-NR3-02', 'EXP-NR3-04', 'EXP-NR3-10', 'EXP-NR3-24']
 expanded_blocked = {}
-for i in range(1, 23):
-    expanded_blocked[f'EXP-C4-{i:02d}'] = '需真云 22 服务只读/创建回归（红线：最低配置+归零）'
 for i in range(1, 16):
-    expanded_blocked[f'EXP-E{i:02d}'] = '评测集需评测 harness + 模型预算'
+    expanded_blocked[f'EXP-E{i:02d}'] = '补环境：评测集需 LLM 模型预算 + 评测 harness（源 D10-3 评测级路由准确率）'
 for i in range(1, 6):
-    expanded_blocked[f'EXP-D1-58-{i:02d}'] = '隔离 HOME 矩阵需专机（破坏性隔离环境）'
+    expanded_blocked[f'EXP-D1-58-{i:02d}'] = '补环境：隔离 HOME 白名单矩阵需 PTY 交互驱动 install 菜单 option3，本机无交互终端'
 
 def design_status(cid):
     if cid in design_pass: return 'PASS', ''
-    if cid in design_fail: return 'FAIL', ''
-    if cid in design_spec: return 'SPEC-MISMATCH', ''
+    if cid in design_fail: return 'FAIL', design_fail[cid]
+    if cid in design_spec: return 'SPEC-MISMATCH', design_spec[cid]
     if cid in design_blocked: return 'BLOCKED', design_blocked[cid]
     return 'BLOCKED', '未在本轮设计映射中登记（默认阻塞）'
 
@@ -175,5 +169,5 @@ ec = Counter((r['执行状态'] or '空') for r in expanded_rows)
 print('\n=== 设计级 ===', dict(dc), '合计', sum(dc.values()))
 print('=== 展开级 ===', dict(ec), '合计', sum(ec.values()))
 print('=== 总计 ===', dict(dc + ec), '总合计', sum((dc + ec).values()))
-print('证据目录数:', len([d for d in os.listdir(EVID) if os.path.isdir(os.path.join(EVID, d))]))
+print('证据目录数:', len([d_ for d_ in os.listdir(EVID) if os.path.isdir(os.path.join(EVID, d_))]))
 print('时间戳(北京时间):', TS)

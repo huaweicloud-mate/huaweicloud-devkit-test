@@ -1,10 +1,10 @@
 # Hermes-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`Hermes-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-09-15 13:22（北京时间）
+> **生成时间**：2026-09-15 18:22（北京时间）
 > **执行归档**：`results/Hermes/2026-09-15-1.94.218.129/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（5 FAIL + 1 SPEC-MISMATCH，均为已知缺陷，与历史单同源）
+> **结论**：`PARTIAL`（6 FAIL + 2 SPEC-MISMATCH，均为已知缺陷，与历史单同源）
 
 ---
 
@@ -16,13 +16,13 @@
 | OS / 架构 | Linux aarch64 |
 | Node / npm / Python | Node v22.13.0 / npm 10.9.2 / Python 3.12.3 |
 | 被测版本（SUT） | `v1.1.4`（官方 npm `latest` 正式版，gitHead `9b67256`） |
-| 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS，含新增 `huaweicloud_obs_set_website_config`） |
+| 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS，含 `huaweicloud_obs_set_website_config`） |
 | hcloud / 依赖 | `hcloud 7.2.12`（doctor 确认已配置） |
-| 真云凭证 | `cn-north-4`（AK/SK 已配置，本轮未使用真云资源） |
+| 真云凭证 | `cn-north-4`（管理员 AK/SK 已配置；只读子账号凭证缺失，见 §五） |
 | 测试类型 | 源码级探针 / 真机 CLI（install/doctor/status/install-hcloud）/ MCP 协议 |
-| 设计真源 | 设计级 81 / 展开级 71（预筛后 48）/ 追踪表 183 行 |
+| 设计真源 | daily 精选：设计级 77 / 展开级 49（预筛后本机 26）/ 追踪表 183 行 |
 
-> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数（hdk checkout `9b67256`=release 1.1.4），决策/结果落 `stdout-daily.log`/`stdout-supplement.log`/`stdout-exp.log`；CLI 真机执行记录日志；证据统一落 `evidence/<case-id>/`。
+> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数（hdk checkout `9b67256`=release 1.1.4），决策/结果落 `stdout-*.log`；CLI 真机执行记录日志；D9-2 用 stdio server 层真机探针；证据统一落 `evidence/<case-id>/`。
 
 ---
 
@@ -30,11 +30,11 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | 设计级 81 + 展开级 48（本机预筛后）= **129** |
-| 已执行 | 129（无 NOT_RUN / 空列） |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 63 / 5 / 60 / 1 / 0 |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH，不含 BLOCKED/NOT_RUN） | 63 / 69 = **91.3%** |
-| P0 / P1 / P2 缺陷 | 3 / 3 / 0 |
+| 计划用例（daily） | 设计级 77 + 展开级 26（本机预筛后）= **103** |
+| 已执行 | 103（无 NOT_RUN / 空列） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 65 / 6 / 30 / 2 / 0 |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH，不含 BLOCKED/NOT_RUN） | 65 / 73 = **89.0%** |
+| P0 / P1 / P2 缺陷 | 3 / 5 / 0 |
 | 红线（I 类）违规 | 0 |
 | 资源释放 | 全部归零（本轮未创建真云资源） |
 
@@ -42,27 +42,27 @@
 
 ## 三、状态汇总
 
-### 3.1 设计级（81）
+### 3.1 设计级（77）
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 57 | 有证据且通过 PASS 门禁 |
-| FAIL | 5 | D4-2 / D4-4 / D4-11 / D4-16 / D4-23，根因见缺陷清单 |
-| BLOCKED | 18 | 环境阻塞（真云/评测 harness/破坏性/跨客户端），见 §五 |
-| SPEC-MISMATCH | 1 | D9-2（JSON-RPC 错误码漂移） |
+| PASS | 59 | 有证据且通过 PASS 门禁 |
+| FAIL | 6 | D4-2 / D4-4 / D4-11 / D4-16 / D4-23 / D10-3，根因见缺陷清单 |
+| BLOCKED | 10 | 环境/凭证阻塞（破坏性/多客户端/真云/镜像源），见 §五 |
+| SPEC-MISMATCH | 2 | D9-2（JSON-RPC 错误码漂移）、D9-9（cancellation 未声明） |
 | NOT_RUN | 0 | — |
-| **合计** | **81** | |
+| **合计** | **77** | |
 
-### 3.2 展开级（48）
+### 3.2 展开级（26）
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
 | PASS | 6 | EXP-D5-8-1 / D5-8-3 / NR3-02 / NR3-04 / NR3-10 / NR3-24 |
 | FAIL | 0 | — |
-| BLOCKED | 42 | 真云 22 服务 / 15 评测集 / 5 隔离 HOME 矩阵 |
+| BLOCKED | 20 | 评测集 15（LLM 预算）+ 白名单矩阵 5（PTY 交互），见 §五 |
 | SPEC-MISMATCH | 0 | — |
 | NOT_RUN | 0 | — |
-| **合计** | **48** | |
+| **合计** | **26** | |
 
 ---
 
@@ -72,59 +72,37 @@
 
 | # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应返回 `deny` | 返回 `allow`，`HW_` 前缀未拦截 | `safety-policy.mjs:335-336` | P | 待提单 |
-| 2 | P0 | D4-16 | 命令包裹穿透 | `sh -c 'hcloud ecs DeleteServers ...'` 应返回 `deny` | 返回 `allow`，内层写命令未拦截 | `safety-policy.mjs:345` | P | 待提单 |
-| 3 | P0 | D4-23 | 全局规则未注入 | 安装后 `rules/huawei-agent-rules.mdc` 应存在 | `package.json` files 不含 `rules`，安装后缺失 | `package.json:8` | P | 待提单 |
-| 4 | P1 | D4-4 | 写操作审批门漏词 | `ChangeServerOsWithoutCloudInit` 应返回 `deny` | 返回 `allow`，`Change*` 前缀未覆盖 | `safety/policy.json:27` | P | 待提单 |
-| 5 | P1 | D4-11 | 提示注入防护绕过 | 自然语言夹带 hcloud 写命令应 `deny` | 返回 `allow`，写语义丢失 | `safety-policy.mjs:76` | I | 待提单 |
-| 6 | P1 | D9-2 | JSON-RPC 错误码不规范 | 未知方法错误码应为 `-32601` | 返回 `-32603` | `mcp-server.mjs:169` | P | 待提单 |
+| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应 `deny` | 返回 `allow`，`HW_` 前缀未拦截 | `safety-policy.mjs:335-336` | P | 已跟踪 |
+| 2 | P0 | D4-16 | 命令包裹穿透 | `sh -c 'hcloud ... DeleteServers'` 应 `deny` | 返回 `allow`，内层写命令未拦截 | `safety-policy.mjs:345` | P | 已跟踪 |
+| 3 | P0 | D4-23 | 全局规则未注入 | 安装后 `rules/huawei-agent-rules.mdc` 应存在 | `package.json` files 不含 `rules`，安装后缺失 | `package.json:8` | P | 已跟踪 |
+| 4 | P1 | D4-4 | 写操作审批门漏词 | `ChangeServerOsWithoutCloudInit` 应 `deny` | 返回 `allow`，`Change` 前缀未覆盖 | `safety/policy.json:27` | P | 已跟踪 |
+| 5 | P1 | D4-11 | 提示注入防护绕过 | 自然语言夹带 hcloud 写命令应 `deny` | 返回 `allow`，写语义丢失 | `safety-policy.mjs:76` | I | 已跟踪 |
+| 6 | P1 | D10-3 | serviceCatalog 中文意图路由未命中 | `service_catalog('查询云服务器')` 应含 `ECS` | 返回 `Run hcloud --help`，3 条中文 miss | `tools.mjs:1776-1907` | P | 已跟踪 |
+| 7 | P1 | D9-2 | JSON-RPC 错误码不规范 | 未知方法错误码应 `-32601` | 返回 `-32603` | `mcp-server.mjs:169` | P | 已跟踪 |
+| 8 | P1 | D9-9 | cancellation 能力未声明 | capabilities 应含 `notifications.cancellation` | `capabilities={"tools":{}}` 未声明 | `mcp-protocol.mjs:63` | P | 已跟踪 |
 
-### 根因详情（每个 P0/P1 缺陷附代码片段 + 复现证据）
-
-**#1 [P0] D4-2 凭证 env 打印拦截不完整**
-
-- 期望：`printenv HW_ACCESS_KEY` → `deny`
-- 实际：返回 `allow`
-- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:335-336`
-  `classifyTextCommand()` 的 env-dump 正则 `/HUAWEICLOUD|HWC_|HCLOUD|OS_/i` 未覆盖 `HW_ACCESS_KEY`/`HW_SECRET_KEY` 真实凭证前缀
-
-```javascript
-/(^|\s)(env|printenv|Get-ChildItem\s+Env:|gci\s+Env:|dir\s+Env:)/i.test(text) &&
-/HUAWEICLOUD|HWC_|HCLOUD|OS_/i.test(text)   // ← 缺 HW_ 前缀
-```
-
-- 证据：`evidence/D4-2/stdout.log`，实测 `printenv HW_ACCESS_KEY` → `allow`
-
-**#4 [P1] D4-4 写操作审批门漏词**
-
-- 期望：`ChangeServerOsWithoutCloudInit` → `deny`
-- 实际：返回 `allow`
-- 根因：`plugins/huaweicloud-core/safety/policy.json:27` `writeOperationPrefixes` 32 项缺 `Change` 前缀
-- 证据：`evidence/D4-4/stdout.log`（`missed=["Change"]`，`leak=[ChangeServerOsWithoutCloudInit, ChangeServerChargeMode, ChangeVpc]`）
-
-> **去重结论**：上述 6 项与 1.1.4-next/1.1.4 阶段历史缺陷同源（上游单号由 `file_issue.py` 查重确定，预计命中 #671/#679/#681/#682/#651/#652），本轮不重复拆单。
+> **去重结论**：上述 8 项均与 1.1.4-next/1.1.4 阶段历史缺陷同源，`file_issue.py` 历史查重全部命中已跟踪 open issue（#683/#682/#681/#679/#677/#671/#643/#651/#652/#672/#676/#674/#689/#561），本轮不重复拆单。详见 `HISTORY_LINKS.md`。
 
 ---
 
 ## 五、未执行用例与原因（供维护 agent 修改用例）
 
-> 本轮 **NOT_RUN=0**。以下为 BLOCKED 用例（建包已剔除不适用客户端/OS 的展开级），全部已回填 blockedReason。
+> 本轮 **NOT_RUN=0**。以下为 BLOCKED 用例（建包已剔除不适用客户端/OS 的展开级），全部已回填 blockedReason，均为「补环境」类（环境/凭证/依赖缺失），**无需改用例**。
 
 | 用例ID | 层级 | 优先级 | 状态 | 分类 | 详细原因 |
 |---|---|---|---|---|---|
-| D3-C4 / EXP-C4-01~22 | 设计/展开 | P1 | BLOCKED | 补环境 | 需真云 22 服务建删资源（红线最低配置+归零） |
-| D4-14 | 设计 | P2 | BLOCKED | 补环境 | 操作可审计性需真云 CTS 审计日志 |
-| EXP-E01~15 / D10-1/2/3/5 | 设计/展开 | P1 | BLOCKED | 补环境 | 评测集需评测 harness + 模型预算 |
-| D6-1/3/4 | 设计 | P1/P2 | BLOCKED | 补环境 | 性能采样需专用 harness |
-| D9-6 | 设计 | P1 | BLOCKED | 补环境 | 跨客户端互通需多 MCP 客户端终端 |
-| D1-1 / D1-2 / D1-5 / EXP-D1-58-01~05 | 设计/展开 | P1/P2 | BLOCKED | 补环境 | 破坏性/隔离（卸载/全新安装/隔离 HOME 需专机） |
-| D1-45 | 设计 | P1 | BLOCKED | 补环境 | 预热竞态需冷启时序观测（Linux 兜底已由 EXP-NR3-24 覆盖） |
-| D4-12 | 设计 | P2 | BLOCKED | 补环境 | 供应链安装期审计需发布流水线上下文 |
-| D7-4 | 设计 | P2 | BLOCKED | 补环境 | 国内镜像源安装需镜像网络可达 |
-| D8-1 | 设计 | P2 | BLOCKED | 补环境 | 文档全文一致性人工核对（本轮抽查 D8-4/D8-6） |
-| D9-9 | 设计 | P1 | BLOCKED | 补环境 | 超时取消语义需注入长耗时服务 |
-
-> 均为「补环境」类（环境/凭证/配额/依赖缺失），**无需改用例**。
+| D1-1 | 设计级 | P1 | BLOCKED | 补环境 | 全新环境引导安装需空 HOME + PTY 交互（破坏性） |
+| D1-2 | 设计级 | P2 | BLOCKED | 补环境 | 多 Agent 探测需多客户端并存环境 |
+| D1-5 | 设计级 | P1 | BLOCKED | 补环境 | uninstall 干净度属破坏性（卸载全局包） |
+| D1-45 | 设计级 | P1 | BLOCKED | 补环境 | 兜底提示预热竞态需冷启时序注入；Linux 兜底已由 EXP-NR3-24 覆盖 |
+| D4-12 | 设计级 | P2 | BLOCKED | 补环境 | 供应链安装期审计需发布流水线上下文 |
+| D4-13 | 设计级 | P1 | BLOCKED | 补环境 | 只读 IAM 子账号凭证 `credentials.readonly.json` 未配置 |
+| D4-14 | 设计级 | P2 | BLOCKED | 补环境 | 操作可审计性需真云 CTS 审计日志核对 |
+| D7-4 | 设计级 | P2 | BLOCKED | 补环境 | 国内镜像源安装需镜像网络可达 |
+| D8-1 | 设计级 | P2 | BLOCKED | 补环境 | 文档与能力一致性需全文人工核对 |
+| D9-6 | 设计级 | P1 | BLOCKED | 补环境 | 跨客户端互通需 ≥3 真实客户端 + Inspector |
+| EXP-E01~15 | 展开级 | P1 | BLOCKED | 补环境 | 评测集需 LLM 模型预算 + 评测 harness |
+| EXP-D1-58-01~05 | 展开级 | P1 | BLOCKED | 补环境 | 隔离 HOME 白名单矩阵需 PTY 交互驱动 install 菜单 |
 
 ---
 
@@ -143,14 +121,14 @@
 |---|---|---|---|
 | 真云资源（ECS/OBS/沙箱等） | 否（本轮未创建） | — | 无残留 |
 
-> 真云只删本次创建资源；本轮未创建任何真云资源，下载安装的 hcloud 为客户端工具非云资源。
+> 本轮未创建任何真云资源；下载安装的 hcloud 为客户端工具非云资源。
 
 ---
 
 ## 八、遗留与建议
 
-- 待裁决 SPEC：`D9-2`（JSON-RPC 错误码 -32603 vs -32601）
-- 本轮未覆盖（说明范围）：`真云 E2E（D3-C4/EXP-C4-*/D4-14）、多终端/跨客户端矩阵（D9-6）、评测集（EXP-E*/D10-*）、性能采样（D6-*）`
+- 待裁决 SPEC：`D9-2`（JSON-RPC 错误码 -32603 vs -32601）、`D9-9`（cancellation 能力未声明）
+- 本轮未覆盖（说明范围）：`真云 E2E（D4-13/D4-14/D-CTS）、跨客户端矩阵（D9-6）、评测集 LLM 路由（EXP-E01~15）、白名单矩阵执行层（EXP-D1-58-*）`
 - 建议：
-  1. `test-cases 母版 D5-3/D9-1/EXP-D5-8-3 计数「39」需更新为「40」`（1.1.4 新增 `huaweicloud_obs_set_website_config`，非产品缺陷）；
-  2. `本机私有 npm registry（127.0.0.1:45998）latest 版本滞后，建议 prepare_env --update 增加 --registry https://registry.npmjs.org 兜底`。
+  1. `D4-13 需在测试机补配 ~/.config/huaweicloud/credentials.readonly.json（只读 IAM 子账号 test001），以解除真云最小权限验证阻塞`；
+  2. `本机私有 npm registry（127.0.0.1:45998）latest 版本滞后 1.1.3，建议 prepare_env --update 增加 --registry https://registry.npmjs.org 兜底`。
