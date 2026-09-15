@@ -44,7 +44,7 @@ def baseline_version(dates):
         if os.path.isfile(md):
             text = open(md, encoding="utf-8").read()
             m = re.search(r"被测版本：\*\*(.+?)\*\*", text)
-            if m:
+            if m and m.group(1).strip() and m.group(1).strip() != "（未指定）":
                 return m.group(1), d
     return "—", dates[-1] if dates else "—"
 
