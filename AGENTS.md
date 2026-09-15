@@ -69,6 +69,8 @@ npm install -g huaweicloud-devkit
 
 > **真云凭证（AK/SK）**：真云 E2E 用例（建删资源、审计等）需华为云 AK/SK，固定位置 `~/.config/huaweicloud/credentials.json`（格式 `{ak, sk, region}`，统一账号 hw018619646，已预置于每台测试机）。执行前可用 `python scripts/prepare_env.py` 自检。**读不到 AK/SK 时，真云类用例标 `BLOCKED`（blockedReason=`无 AK/SK`），禁止 mock 假跑、禁止标 PASS**。
 
+> **只读子账号动态切换**：D4-13「最小权限凭证通过率」需只读 IAM 子账号（test001），**不要替换 credentials.json 里的管理员凭证**——用 `python scripts/run-as-readonly.py <命令>` 临时注入 `HW_ACCESS_KEY`/`HW_SECRET_KEY` env（不带 token）覆盖即可，命令结束自动还原（env 生命周期内生效，不落盘）。只读子账号凭证独立存 `~/.config/huaweicloud/credentials.readonly.json`（不提交仓库），跨机同步时一并下发该文件。
+
 ## 1–6. 每日执行流程 → 详见 skills/test-execution/SKILL.md
 
 六步（建包 → 执行 → 回填 → 报告 → 每 10 分钟提报 → 统一提单 + push）的完整说明见 [skills/test-execution/SKILL.md](skills/test-execution/SKILL.md)。关键纪律同见该文档「门禁」「红线」节：NOT_RUN 覆盖率红线（P0 不得 NOT_RUN）、PASS 门禁（禁虚报，标 PASS 必①实测②证据落盘③evidencePath 回填）、提单必做（只 push 不提单 = 未完成）。

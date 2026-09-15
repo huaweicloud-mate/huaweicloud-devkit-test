@@ -913,10 +913,10 @@ add("D4-12", "D4安全", "供应链安装期安全", "P2", "源码包",
     "①审计postinstall行为 ②核对依赖锁定 ③验证pack与源码一致 ④尝试产出SBOM",
     "无恶意行为+pack一致+SBOM可产", "P: package.json有postinstall; 标: Azure质量门",
     "npm", "脚本")
-add("D4-13", "D4安全", "最小权限凭证通过率", "P1", "只读IAM AK/SK",
+add("D4-13", "D4安全", "最小权限凭证通过率", "P1", "只读IAM子账号(test001, credentials.readonly.json)",
     "全量D3只读用例",
-    "①只读凭证下跑D3只读用例 ②写用例观察权限识别",
-    "只读100%可用，写被正确识别权限不足", "标: AWS condition key; 仓: 非目标声明实测", "run_readonly_command", "半自动", "展开只读用例全量")
+    "①用 scripts/run-as-readonly.py 注入只读子账号(HW_ACCESS_KEY/HW_SECRET_KEY env,不带token) ②只读凭证下跑D3只读用例 ③写用例观察权限识别",
+    "只读100%可用，写被正确识别权限不足(权限不足=IAM拒绝)", "标: AWS condition key; 仓: 非目标声明实测", "run_readonly_command", "半自动", "展开只读用例全量")
 add("D4-14", "D4安全", "操作可审计性", "P2", "真云",
     "执行命令后查CTS/日志",
     "①执行若干命令 ②查CTS/运行日志 ③核对可追溯+可区分agent/人工",
