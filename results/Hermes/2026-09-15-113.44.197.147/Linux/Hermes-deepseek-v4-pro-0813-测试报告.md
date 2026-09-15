@@ -1,7 +1,7 @@
 # Hermes-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`Hermes-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-09-15 19:33（北京时间）
+> **生成时间**：2026-09-15 19:33（北京时间）· 2026-09-15 21:51 补测 BLOCKED 消解修订
 > **执行归档**：`results/Hermes/2026-09-15-113.44.197.147/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：**PARTIAL**（12 项 FAIL + 1 项 SPEC-MISMATCH，全部为历史复现，见 `HISTORY_LINKS.md`）
@@ -32,8 +32,8 @@
 |---|---|
 | 计划用例（daily） | 设计级 77 + 展开级 26 = 103 |
 | 已执行 | 103（执行状态列全部回填，无空/无 NOT_RUN） |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 69 / 24 / 9 / 1 / 0 |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 69 / 94 = 73.4% |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 75 / 24 / 3 / 1 / 0 |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 75 / 100 = 75.0% |
 | P0 / P1 / P2 新增缺陷（本轮不重复提单） | 0 / 0 / 0（13 项缺陷全部历史复现，见 `HISTORY_LINKS.md`） |
 | 红线（I 类）违规 | 0 |
 | 资源释放 | 真云仅只读（无建删），无残留 |
@@ -46,9 +46,9 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 60 | 有证据且通过 PASS 门禁 |
+| PASS | 61 | 有证据且通过 PASS 门禁（本轮补测消解 D1-58：通用 MCP merge 五子断言全 PASS） |
 | FAIL | 12 | D4-2/D4-16/D4-5/D2-4/D4-23/D4-4/D4-8/D4-17/D4-11/D10-3/D2-11/D8-1，根因见缺陷清单 |
-| BLOCKED | 4 | D1-39/D1-58/D4-13/D4-14，见 §五 |
+| BLOCKED | 3 | D1-39/D4-13/D4-14，见 §五 |
 | SPEC-MISMATCH | 1 | D9-2 错误码契约漂移 |
 | NOT_RUN | 0 | — |
 | **合计** | **77** | |
@@ -57,9 +57,9 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 9 | EXP-D5-8-1/-3 / EXP-E06/E09/E15 / EXP-NR3-02/04/10/24 |
+| PASS | 14 | EXP-D5-8-1/-3 / EXP-E06/E09/E15 / EXP-NR3-02/04/10/24 / EXP-D1-58-01~05（本轮补测消解） |
 | FAIL | 12 | EXP-E01/E02/E03/E04/E05/E07/E08/E10/E11/E12/E13/E14（中文意图路由 miss，同 D10-3） |
-| BLOCKED | 5 | EXP-D1-58-01~05，见 §五 |
+| BLOCKED | 0 | — |
 | SPEC-MISMATCH | 0 | — |
 | NOT_RUN | 0 | — |
 | **合计** | **26** | |
@@ -90,15 +90,13 @@
 
 ## 五、未执行用例与原因（供维护 agent 修改用例）
 
-| 用例ID | 层级 | 优先级 | 状态 | 分类 | 详细原因 | 改用例建议 |
+| 用例ID | 层级 | 优先级 | 状态 | 分类 | 详细原因（四要素） | 改用例建议 |
 |---|---|---|---|---|---|---|
-| D1-39 | 设计级 | P0 | BLOCKED | 调归属 | Windows 专属升级检测链（.cmd / spawnSync `npm.cmd` EINVAL 语义），本机 Linux aarch64 无 Windows 环境 | OS 列应标 Windows-only（Linux 侧由展开级 EXP-NR3-10 通用断言平台判读覆盖，已 PASS） |
-| D1-58 | 设计级 | P1 | BLOCKED | 改用例 | 通用 MCP(Claude/Cursor) merge 需交互 `option3`，本机非交互环境 auto-detect 走 hermes，未触发 merge | 断言改为源码级直调 `mcp-config-merge.mjs`（幂等备份/坏 JSON 零写入/未命中 snippet），无需交互 |
-| D4-13 | 设计级 | P1 | BLOCKED | 补环境 | 最小权限通过率需只读 IAM 子账号凭证矩阵，本机缺 `~/.config/huaweicloud/credentials.readonly.json` | 补只读子账号凭证后复测（`run-as-readonly.py` 动态切换） |
-| D4-14 | 设计级 | P2 | BLOCKED | 补环境 | 操作可审计性需真云建删 + CTS 审计日志，本轮仅做真云只读实证 | 补真云计费资源 + CTS 后复测 |
-| EXP-D1-58-01~05 | 展开级 | P1 | BLOCKED | 改用例 | 同 D1-58，Claude/Cursor 白名单 merge 需交互 option3 | 同 D1-58，改造为源码级断言 |
+| D1-39 | 设计级 | P0 | BLOCKED | OS 归属 | 实测 2026-09-15·缺 Windows 运行环境（.cmd/EINVAL 升级检测链为 Windows 专属）；影响=该平台专属缺陷无法在本机 Linux 复现；解除=Windows 测试机执行（Linux 侧由 EXP-NR3-10 通用断言已 PASS） | OS 列应标 Windows-only |
+| D4-13 | 设计级 | P1 | BLOCKED | 补环境 | 实测 2026-09-15·缺 `~/.config/huaweicloud/credentials.readonly.json` 只读子账号(test001)凭证；影响=无法构建最小权限通过率矩阵；解除=下发只读凭证文件后经 `run-as-readonly.py` 动态切换复测 | 补只读子账号凭证 |
+| D4-14 | 设计级 | P2 | BLOCKED | 补环境 | 实测 2026-09-15·缺真云 CTS 审计链路（需真云建删资源后查 CloudTrace 审计日志）；影响=操作可审计性断言无法验证；解除=基于有效 AK/SK 执行一次真云建删+归零验证后查 CTS | 补真云计费资源 + CTS |
 
-> 其余 3 项「非产品缺陷」详情见 `FINDINGS.md` #14/#15/#16（真云受限 / 交互 option3 / Windows 专属）。
+> 真云受限（D4-13/D4-14）与 Windows 专属（D1-39）三项「非产品缺陷」详情见 `FINDINGS.md` #14/#16；通用 MCP merge（D1-58）已在本轮补测消解为 PASS（见 `FINDINGS.md` #15）。
 
 ---
 
@@ -122,5 +120,5 @@
 ## 八、遗留与建议
 
 - 待裁决 SPEC：`D9-2`（JSON-RPC 错误码 -32603 vs -32601，已提单 #689 未改）。
-- 本轮未覆盖（说明范围）：Windows 专属（D1-39）、通用 MCP 交互 merge（D1-58/EXP-D1-58-*）、真云建删 E2E（D4-13/D4-14，已从 daily EXCLUDE 的 D3-C4 真云建删亦不在本轮）。
+- 本轮未覆盖（说明范围）：Windows 专属（D1-39）、真云建删 E2E（D4-13/D4-14，已从 daily EXCLUDE 的 D3-C4 真云建删亦不在本轮）。通用 MCP 交互 merge（D1-58/EXP-D1-58-*）已在本轮补测经 PTY+环境隔离实测全 PASS（见 `FINDINGS.md` #15）。
 - 建议：13 项缺陷均为 v1.1.4 稳定版的历史复现，建议维护者优先关闭 #683/#679/#689 三个 v1.1.4 合并单并统一排期修复；中文意图路由（D10-3）与 Change* 写动词（D4-4/D4-5）影响面最大，建议下一版本优先修复。

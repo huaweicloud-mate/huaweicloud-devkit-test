@@ -130,10 +130,13 @@
 - **现象**：本机 AK/SK **有效**（`run_readonly_command` → `hcloud ecs ListServersDetails` exitCode=0、servers=[]，真云只读成功 → D3-B3 PASS）。D4-13（最小权限通过率，需只读 IAM 子账号凭证矩阵 `~/.config/huaweicloud/credentials.readonly.json`，本机缺该文件）、D4-14（CTS 审计，需真云建删+审计日志）本轮标 BLOCKED。
 - **说明**：非产品缺陷；① 单机仅单一管理员凭证，无法构建「最小权限通过率」矩阵；② CTS 审计需真云建删资源，本轮仅做只读实证。
 
-## #15【非产品缺陷】通用 MCP(Claude/Cursor) merge 需交互 option3，本机非交互环境未实测
+## #15【已消解·原判假阻塞】通用 MCP(Claude/Cursor) merge 交互 option3
 
-- **现象**：`install` 在本机 auto-detect 走 hermes 路径，未触发 option3 通用 MCP 接入；`.claude.json`/`.cursor/mcp.json` 未发生 merge。
-- **说明**：非交互多 agent 环境无法驱动交互式 option3，非产品缺陷。影响 D1-58、EXP-D1-58-01~05（BLOCKED）。
+- **原判**：`install` 在本机 auto-detect 走 hermes 路径，未触发 option3 通用 MCP 接入 → 误判 D1-58、EXP-D1-58-01~05 为 BLOCKED。
+- **根因**：`detectAgents()`（setup-cli.mjs:3093）中 `hermesHomeDir()`（:2476）读 `process.env.HERMES_HOME`，本机该环境变量已指向 workspace hermes-home，故 `install` 永远命中 hermes、跳过 promptZeroDetect 菜单，而非「非交互不可测」。
+- **消解方法**：PTY（`script -qec`）驱动真实 `huaweicloud-devkit install`，隔离 `HOME` 并将 `HERMES_HOME` 指到不存在目录 → `detectAgents()` 返回空 → 菜单 option3 → `configureGenericMCP()`（:3284）。
+- **实测结论**：EXP-D1-58-01~05 五子断言**全部 PASS**（双命中 merge/幂等跳过/坏 JSON sha256 零写入/未命中 snippet），无缺陷。
+- **证据**：`evidence/probe-d158.sh`、`evidence/EXP-D1-58-0{1..5}/stdout.txt`、`evidence/D1-58/stdout.txt`。
 
 ## #16【非产品缺陷】Windows 专属用例本机无 Windows 环境
 
