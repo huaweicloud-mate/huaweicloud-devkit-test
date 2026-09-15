@@ -29,11 +29,16 @@ REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.pat
 
 # 用例语义 -> 兜底关键词（用例号在历史单标题中未命中时，用语义关键词做强关联兜底）
 CASE_KEYWORD_MAP = {
-    "D4-2":  ["echo", "env-dump", "env dump", "printenv", "凭证打印", "凭证 env", "环境变量打印", "凭证环境变量"],
+    "D4-2":  ["echo", "env-dump", "env dump", "printenv", "凭证打印", "凭证 env", "环境变量打印", "凭证环境变量", "HW_ 前缀", "前缀漏网", "前缀未覆盖"],
     "D4-15": ["url 编码", "%20", "url编码", "引号包裹", "hcloud%20"],
-    "D4-16": ["sh -c", "bash -c", "包裹", "wrapper", "穿透", "cmd /c", "shell 包裹", "引号内命令"],
-    "D2-4":  ["脱敏", "小写", "redact", "不脱敏", "sk 明文"],
-    "D4-3":  ["adminpass", "password=", "明文 secret", "show-secret", "secret 参数"],
+    "D4-16": ["sh -c", "bash -c", "包裹", "wrapper", "穿透", "cmd /c", "shell 包裹", "引号内命令", "命令替换", "命令包裹"],
+    "D2-4":  ["脱敏", "小写", "redact", "不脱敏", "sk 明文", "ak/sk", "ak=", "obsutilconfig"],
+    "D4-3":  ["adminpass", "password=", "明文 secret", "show-secret", "secret 参数", "DecryptData", "Decrypt"],
+    "D4-8":  ["python/node", "python 钩子", "node 钩子", "钩子策略", "策略不一致", "钩子实现不一致"],
+    "D4-17": ["fail-open", "fail open", "fail-closed", "畸形输入", "异常输入"],
+    "D4-21": ["broad IAM", "broad iam", "Terraform", "HCL", "制品预检", "hook_check_artifacts"],
+    "D4-23": ["huawei-agent-rules", "全局规则", "注入失效", "安装未注入", "安装目标"],
+    "D9-2":  ["json-rpc", "json rpc", "-32601", "-32603", "错误码"],
 }
 
 # 测试类型 -> issue 标题后缀（file_issue.py 被每日/版本全量/回归三种能力共用，标题据此动态生成）
@@ -135,17 +140,43 @@ def _ids_in_defect_context(issue, ids):
     return False
 
 
+def _kw_in_text(kws, text):
+    """任一关键词命中文本（大小写不敏感）。"""
+    tl = text.lower()
+    return any(k and k.lower() in tl for k in kws)
+
+
+def _kw_near_defect(iss, kws):
+    """关键词在 issue 正文中出现的位置附近是否有缺陷语义信号（FAIL/未拦截/绕过…）。"""
+    body = (iss.get("body") or "").lower()
+    for kw in kws:
+        if not kw:
+            continue
+        for m in re.finditer(re.escape(kw.lower()), body):
+            s = max(0, m.start() - 120)
+            e = min(len(body), m.end() + 120)
+            if any(h in body[s:e] for h in DEFECT_HINT):
+                return True
+    return False
+
+
 def match_history(item, issues):
     """判断单个缺陷是否命中历史 issue。返回 (strong, weak)。
 
-    strong = 明确历史缺陷（标题含用例号/关键词，或正文含用例号且附近有缺陷语义）
-    weak   = 用例号仅出现在正文、且无缺陷语义（可能是「通过」记录，不据此判历史缺陷）
+    strong = 明确历史缺陷（标题/正文含用例号或根因关键词；正文命中且附近有缺陷语义）
+    weak   = 仅在正文出现、且无缺陷语义（不据此判历史缺陷）
     """
     hay = " ".join(filter(None, [item.get("现象", ""), item.get("根因", ""), item.get("证据", ""), item.get("title", "")]))
     ids = extract_case_ids(hay)
+    # 关键词：① 用例号映射 ② hay 直接命中（不依赖用例号，FINDINGS 未写 D4-x 时仍能匹配）
     kws = set()
     for cid in ids:
         kws.update(CASE_KEYWORD_MAP.get(cid, []))
+    hay_lower = hay.lower()
+    for words in CASE_KEYWORD_MAP.values():
+        for w in words:
+            if w and w.lower() in hay_lower:
+                kws.add(w)
 
     strong, weak = [], []
     for iss in issues:
@@ -153,19 +184,15 @@ def match_history(item, issues):
         body = (iss.get("body") or "")
         title_ids = extract_case_ids(title)
         body_ids = extract_case_ids(body)
-        tl = title.lower()
-        # 强关联1：标题直接含用例号
-        if ids & title_ids:
+        # 强关联1：标题含用例号 或 关键词
+        if (ids & title_ids) or _kw_in_text(kws, title):
             strong.append(iss)
-        # 强关联2：标题含语义关键词
-        elif any(k and k.lower() in tl for k in kws):
-            strong.append(iss)
-        # 强关联3：正文含用例号 + 缺陷语义（合并单里的缺陷项）
-        elif ids & body_ids and _ids_in_defect_context(iss, ids):
-            strong.append(iss)
-        # 弱关联：正文含用例号但无缺陷语义
-        elif ids & body_ids:
-            weak.append(iss)
+        # 强关联2：正文含用例号 或 关键词，且附近有缺陷语义
+        elif (ids & body_ids) or _kw_in_text(kws, body):
+            if _ids_in_defect_context(iss, ids) or _kw_near_defect(iss, kws):
+                strong.append(iss)
+            else:
+                weak.append(iss)
     return _dedup(strong), _dedup(weak)
 
 
