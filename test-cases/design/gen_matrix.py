@@ -56,6 +56,8 @@ BATCH_TS = [
     (_d2_range(1, 7), "2026-09-05"),        # v1.5 D2 既有（D2-1~7）
     (_d2_range(8, 20), "2026-09-07"),       # NR2 批（D2-8 credentials 回归 + D2-9~20 AK/SK v4）
     (_d2_range(21, 21), "2026-09-11"),      # 2026-09-11 全量评审补充批（D2-21 AK/SK 轮换感知）
+    (_in_range(59, 64), "2026-09-13"),      # 覆盖缺口批（D1-59~64，源码覆盖核对补充；固定日期避免 NOW_STR 漂移致可复现门禁 FAIL）
+    (_d2_range(22, 25), "2026-09-13"),      # 覆盖缺口批（D2-22~25，同上）
 ]
 
 # 2026-09-11 全量评审补充：明确不在 LEGACY 前缀默认时间戳内的新 ID（返回生成时刻）
@@ -786,7 +788,7 @@ add("D3-C2", "D3功能", "OBS静态站部署E2E", "P1", "OBS配置就绪",
     "build→上传→public-read→curl200→清理",
     "①构建静态站 ②obsutil上传(核对目录语义/-dryRun键名) ③public-read ④curl200 ⑤清理归零",
     "部署成功+资源归零", "P: nightly场景B原样复用(含踩坑点)",
-    "setup_obs_config", "半自动")
+    "obs_set_website_config/setup_obs_config", "半自动")
 add("D3-C3", "D3功能", "沙箱部署E2E", "P1", "沙箱DevStation配额",
     "connect→upload→deploy→URL可达→close",
     "①sandbox_connect ②upload_project ③deploy_nginx+deploy_check ④URL验证(≤8h) ⑤close",
@@ -1487,6 +1489,50 @@ def _terminal_metadata(rid, dim, rule):
         "dependencies": "需求来源与前置条件；独立 manifest；finally 清理",
     }
 
+
+def _expanded_exec_target(etype, obj):
+    """展开级「代表终端 / 执行客户端 / 执行系统」精确判定值（替代设计级描述性占位符）。
+
+    设计级 terminal/agent/OS 是「声明支持范围」描述（如 <代表: 10 客户端> / Windows/Linux），
+    展开级必须钉死到「哪条由哪个客户端在哪个 OS 执行」——agent 才能据此 self-identify、
+    准确标 NOT_RUN(不适用本客户端/OS)，而非大面积 BLOCKED 或误跑别家客户端用例。
+    返回 (terminal, agent, os) 三元组，按列序对应展开级 terminal/agent/OS 三列。
+    """
+    etype = etype or ""
+    obj = (obj or "").strip()
+    if etype == "D5客户端矩阵":
+        # 枚举对象 = 10 客户端之一（OpenCode/Codex/.../AtomCode）；每条钉死到该客户端，双 OS 均需执行
+        return (obj, obj, "Windows/Linux")
+    if etype == "D3-C4服务矩阵":
+        return ("Hermes 代表终端", "Hermes", "Windows/Linux")
+    if etype == "D10评测集":
+        return ("Hermes/Codex/OpenCode", "Hermes/Codex/OpenCode", "Windows/Linux")
+    if etype == "D1-58白名单矩阵":
+        return ("Linux L 真机", "Hermes", "Linux")
+    if etype == "NR3终端矩阵":
+        low = obj.lower()
+        if low.startswith("macos"):
+            os_ = "macOS"
+        elif low.startswith("linux"):
+            os_ = "Linux"
+        elif low.startswith("windows"):
+            os_ = "Windows"
+        else:
+            os_ = "Windows/Linux"
+        if "codeartsspace" in low:
+            cli, term = "CodeArtsSpace", "CodeArtsSpace(代表终端)"
+        elif "opencode" in low:
+            cli, term = "OpenCode", "OpenCode(代表终端)"
+        elif "hermes" in low:
+            cli, term = "Hermes", "Hermes(代表终端)"
+        else:
+            # stdio/remote/TTY/fixture 等函数级/协议级由代表终端执行
+            cli, term = "Hermes", "Hermes 代表终端"
+        return (term, cli, os_)
+    # 兜底（不应发生）：沿用设计级描述语义
+    return ("代表终端", "Hermes 代表终端", "Windows/Linux")
+
+
 design_headers = [
     "ID", "维度", "标题", "优先级", "前置条件", "测试数据", "操作步骤", "预期结果",
     "指引来源", "关联工具", "自动化建议", "展开规则", "生成时间",
@@ -1542,7 +1588,7 @@ with open(os.path.join(EXP_DIR, "用例矩阵-展开级.csv"), "w", newline="", 
         w.writerow(list(row) + [
             gen_ts(src_id), required,
             src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY",
-            dmeta["terminal_type"], dmeta["terminal"], dmeta["agent"], dmeta["os"], dmeta["node_npm"],
+            dmeta["terminal_type"], *_expanded_exec_target(row[1], row[2]), dmeta["node_npm"],
             dmeta["shell"], dmeta["tty"], dmeta["install_layout"], dmeta["mcp_transport"],
             dmeta["hook_support"], dmeta["owner"], "源设计用例；独立 manifest；finally 清理",
         ])
@@ -1553,7 +1599,7 @@ with open(os.path.join(EXP_DIR, "用例矩阵-展开级.csv"), "w", newline="", 
         required = row[10] or "强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录"
         w.writerow(list(row[:8]) + [required] + [
             src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY",
-            dmeta["terminal_type"], dmeta["terminal"], dmeta["agent"], dmeta["os"], dmeta["node_npm"],
+            dmeta["terminal_type"], *_expanded_exec_target(row[1], row[2]), dmeta["node_npm"],
             dmeta["shell"], dmeta["tty"], dmeta["install_layout"], dmeta["mcp_transport"],
             dmeta["hook_support"], dmeta["owner"], "源设计用例；逐终端证据；finally 清理",
         ])
@@ -1564,7 +1610,7 @@ with open(os.path.join(EXP_DIR, "用例矩阵-展开级.csv"), "w", newline="", 
         required = row[10] or "强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录"
         w.writerow(list(row[:8]) + [required] + [
             src_id, row[0], "DESIGN_COVERED" if drow else "DESIGN_REFERENCE_ONLY",
-            dmeta["terminal_type"], dmeta["terminal"], dmeta["agent"], dmeta["os"], dmeta["node_npm"],
+            dmeta["terminal_type"], *_expanded_exec_target(row[1], row[2]), dmeta["node_npm"],
             dmeta["shell"], dmeta["tty"], dmeta["install_layout"], dmeta["mcp_transport"],
             dmeta["hook_support"], dmeta["owner"], "D1-58 专属断言；逐条证据；finally 清理",
         ])

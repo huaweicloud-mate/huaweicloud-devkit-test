@@ -13,19 +13,25 @@
     version <版本>     : test-cases/versions/<版本>/ 冻结快照（文件名带版本后缀）
     追踪表三种模式统一用 test-cases/tracing/（版本快照不含追踪表，用母版追踪表）。
 
+展开级预筛（2026-09-15 起）: 复制展开级时按「本客户端 + 本 OS」过滤，只下发归本 agent 执行的行，
+    不涉及本客户端的展开级不再下发（不再靠 agent 自己标 NOT_RUN）。设计级/追踪表保持全量下发。
+
 机器标识（IP）来源：环境变量 HDK_MACHINE_IP > ~/.hdk_ip 文件 > socket 自动检测。
 多台机器跑相同客户端时，靠 <日期>-<IP> 区分，避免 push 到同一仓库冲突。
 
 复制到 results 副本时，为设计级/展开级追加「执行状态」+「执行时间」+「evidencePath」空列，
 供 agent 执行后回填；追踪表追加「执行时间」列。
 """
-import os, sys, datetime, socket, csv
+import os, sys, datetime, socket, csv, re
 
 CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 OSES = ["Windows", "Linux"]
 
 REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 展开级「通用能力类」：所有客户端都跑（代表客户端 = 全体，服务/评测能力属通用验证）
+GENERAL_TYPES = ("D3-C4服务矩阵", "D10评测集")
 
 
 def get_machine_ip():
@@ -41,6 +47,24 @@ def get_machine_ip():
         return socket.gethostbyname(socket.gethostname())
     except Exception:
         return "unknown"
+
+
+def _mine(client, os_name, row):
+    """展开级预筛：该行是否归本客户端 + 本 OS 执行。
+
+    判定规则（设计级/追踪表不走此筛选，保持全量下发）：
+      1. OS 匹配：OS 列（Windows/Linux/macOS 或组合）需含本机 OS；不匹配则剔除。
+      2. 通用能力类（D3-C4 服务矩阵 / D10 评测集）：所有客户端都跑，直接保留。
+      3. 精确归属类（D5 客户端矩阵 / NR3 终端矩阵 / D1-58 白名单）：agent 列按 / ; , 分词后精确匹配本客户端。
+    """
+    os_ = (row.get("OS") or "").strip()
+    if os_name not in os_:
+        return False
+    if (row.get("展开类型") or "").strip() in GENERAL_TYPES:
+        return True
+    agent = (row.get("agent") or "").strip()
+    toks = {t.strip() for t in re.split(r"[/;,]", agent) if t.strip()}
+    return client in toks
 
 
 def check_prereq():
@@ -132,14 +156,20 @@ def main():
         existing = set(drows[0].keys())
         new_cols = [c for c in extra_cols if c not in existing]
         fields = list(drows[0].keys()) + new_cols
+        filtered = 0
         with open(dst_path, "w", encoding="utf-8-sig", newline="") as f:
             w = csv.DictWriter(f, fieldnames=fields)
             w.writeheader()
             for r in drows:
+                # 展开级预筛：只保留归本客户端+本 OS 的执行行（设计级/追踪表全量下发）
+                if "展开级" in dst_name and not _mine(client, os_name, r):
+                    filtered += 1
+                    continue
                 for c in extra_cols:
                     r[c] = ""
                 w.writerow(r)
-        print("复制:", dst_name, "（源:", f"{dir1}/{dir2}/{src_name}", "）追加列:", extra_cols)
+        note = f"，预筛剔除 {filtered} 条非本客户端/OS" if (filtered and "展开级" in dst_name) else ""
+        print("复制:", dst_name, "（源:", f"{dir1}/{dir2}/{src_name}", "）追加列:", extra_cols, note)
 
     print("执行包:", dst)
     print(f"模式: {mode}" + (f"（版本 {version}）" if version else ""))

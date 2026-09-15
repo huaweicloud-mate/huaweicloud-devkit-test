@@ -112,6 +112,8 @@ npm install -g huaweicloud-devkit
 | SPEC-MISMATCH | 实现与设计契约漂移 | 记漂移点 |
 | NOT_RUN | 未执行 | **仅限明确不适用本客户端/OS；P0 一律不得 NOT_RUN**；每条必须写原因 |
 
+> **展开级已按客户端+OS 预筛（2026-09-15 起）**：`init_day.py` 复制展开级时已按 `agent`（执行客户端）+ `OS`（执行系统）两列预筛，只下发「归你执行 + 匹配你 OS」的展开级；「别的客户端 / 别的 OS」的展开级不再下发，无需再判 NOT_RUN 归属。`NOT_RUN` 只保留「归你但你明确没跑」；`BLOCKED` 只用于「归你但被环境/权限/凭证阻塞」。详见 [skills/test-execution/SKILL.md §2.5](skills/test-execution/SKILL.md)。
+
 ## 脚本清单（本仓库 scripts/）
 
 **agent 用**：`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `verify_no_fake_pass.py` PASS 门禁 · `verify_coverage.py` 覆盖率门禁 · `hourly_sync.py` 每 10 分钟提报 · `file_issue.py` 统一提单
