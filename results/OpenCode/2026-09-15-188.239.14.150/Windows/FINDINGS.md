@@ -1,44 +1,19 @@
-# FINDINGS — 缺陷发现清单（OpenCode-glm-5.2）1.1.4 正式版
+# FINDINGS — 缺陷发现清单（OpenCode-glm-5.2）
 
 > **落盘路径**：`results/OpenCode/2026-09-15-188.239.14.150/Windows/FINDINGS.md`
-> **生成时间**：2026-09-15 19:46:14（北京时间）
-> **被测版本**：huaweicloud-devkit@1.1.4（npm latest，gitHead `9b67256`）
-> **本清单是统一提单脚本的解析输入**。
+> **生成时间**：2026-09-15 20:27:40（北京时间）
+> **本清单是统一提单脚本的解析输入**：`scripts/file_issue.py` 硬编码解析标题与「根因」字段，**格式必须严格遵循**。
 
 ---
 
-## #1【P0】凭证 env 打印拦截不完整 — echo $HW_ACCESS_KEY 未被拦截
+## #1【P0】凭证 env 打印拦截规则未覆盖实际 HW_ACCESS_KEY/HW_SECRET_ACCESS_KEY 变量名
 
-- **现象**：`classifyTextCommand('echo $HW_ACCESS_KEY')` 返回 `decision='allow'`，凭证环境变量可通过 echo 命令打印输出
-- **断言**：`classifyTextCommand('echo $HW_ACCESS_KEY').decision === 'deny'`
-- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:335` — env-dump 检测正则 `(^|\s)(env|printenv|Get-ChildItem\s+Env:|gci\s+Env:|dir\s+Env:)` 未包含 `echo` 命令；且第 336 行凭证前缀检测 `HUAWEICLOUD|HWC_|HCLOUD|OS_` 未覆盖 `HW_ACCESS_KEY`/`HW_SECRET_KEY` 前缀
-- **影响**：攻击者可通过 `echo $HW_ACCESS_KEY` 或 `echo $HW_SECRET_KEY` 绕过安全策略泄露凭证
-- **证据**：`evidence/d4-security/stdout.log`（D4-2 echo-hw 测试项，actual=allow）
-- **状态**：待提单
-
-## #2【P0】命令包裹穿透 — sh -c "printenv HUAWEICLOUD_ACCESS_KEY_ID" 未被拦截
-
-- **现象**：`classifyTextCommand('sh -c "printenv HUAWEICLOUD_ACCESS_KEY_ID"')` 返回 `decision='allow'`
-- **断言**：`classifyTextCommand('sh -c "printenv HUAWEICLOUD_ACCESS_KEY_ID"').decision === 'deny'`
-- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:335` — env-dump 正则 `(^|\s)(env|printenv|...)` 中 `(^|\s)` 仅匹配行首或空白字符，当 `printenv` 出现在引号内时前导字符为 `"` 不匹配
-- **影响**：通过 `sh -c`、`bash -c` 等包装可绕过凭证 env 打印拦截
-- **证据**：`evidence/d4-security/stdout.log`（D4-16 wrap-sh 测试项，actual=allow）
-- **状态**：待提单
-
-## #3【P0】redactSecrets 不脱敏 JSON 中小写 ak/sk 字段
-
-- **现象**：`redactSecrets('{"ak": "AKIDTEST", "sk": "SKTEST"}')` 返回原始字符串，`sk` 明文未被替换
-- **断言**：`String(redactSecrets('{"ak":"...","sk":"..."}')).includes('SK...') === false`
-- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:45` — `redactString()` 正则 `/(AK|SK)\s*[:=]\s*.../g` 无 `i` 标志，不匹配小写 `ak`/`sk`；`isSecretKeyName()` (line 20-32) 模式不匹配短键名
-- **影响**：工具输出中 JSON 格式凭证的 `sk` 明文不会被脱敏
-- **证据**：`evidence/d2-auth/stdout.log`（D2-4 redact-json 测试项）
-- **状态**：待提单
-
-## #4【P1】INSTALL.md 未包含在 npm 发布包中
-
-- **现象**：`huaweicloud-devkit@1.1.4` npm 包中不存在 `INSTALL.md` 文件
-- **断言**：`existsSync('huaweicloud-devkit/INSTALL.md') === true`
-- **根因**：`package.json` 的 `files` 字段未列出 `INSTALL.md`，npm publish 时排除
-- **影响**：npm 安装用户无法访问安装引导文档
-- **证据**：`evidence/d2-auth/stdout.log`（D8-4 install-doc 测试项，actual=false）
+- **现象**：`hook_check_command("printenv HW_ACCESS_KEY HW_SECRET_ACCESS_KEY")` 返回 `{"ok": true, "decision": "allow"}`，未被拦截。同样 `echo %HUAWEICLOUD_ACCESS_KEY%` 也未被拦截（echo 命令不在检测模式中）。而 `printenv HUAWEICLOUD_ACCESS_KEY`（含 HUAWEICLOUD 关键字）则正确返回 `deny`。
+- **断言**：`hook_check_command` 对包含 `HW_ACCESS_KEY`、`HW_SECRET_ACCESS_KEY`、`HW_SECURITY_TOKEN` 的 `printenv`/`env` 命令应返回 `decision=deny`（与 `HUAWEICLOUD_ACCESS_KEY` 一致）
+- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:335-336` + `plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:39`
+  - safety-policy.mjs 第 336 行关键字正则 `/HUAWEICLOUD|HWC_|HCLOUD|OS_/i` 未包含 `HW_ACCESS_KEY` / `HW_SECRET_ACCESS_KEY` / `HW_SECURITY_TOKEN` 前缀
+  - 实际华为云凭证环境变量名（credentials.mjs:130-132 使用 `process.env.HW_ACCESS_KEY` / `process.env.HW_SECRET_ACCESS_KEY` / `process.env.HW_SECURITY_TOKEN`）不匹配上述正则
+  - 另外，`echo` 命令不在第 335 行的命令检测模式 `/(^|\s)(env|printenv|Get-ChildItem\s+Env:|gci\s+Env:|dir\s+Env:)/i` 中，`echo %HW_ACCESS_KEY%` 也能绕过
+- **影响**：Agent 可通过 `printenv HW_ACCESS_KEY` 或 `echo %HW_ACCESS_KEY%` 将真实华为云 AK/SK 环境变量打印到上下文中，绕过安全策略的凭证泄露防护
+- **证据**：`evidence/D4-2/stdout.log`
 - **状态**：待提单
