@@ -1,7 +1,7 @@
 // D4-6 / D4-7 / D4-10 / D4-11 / D4-17 / D4-20 / D4-24 扩展安全探针
-import { classifyTextCommand, classifyHcloudArgs, redactSecrets, loadPolicy } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
-import { evaluateCommandRisk, evaluateDeployPlan } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/risk-rule-engine.mjs';
-import { callTool } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { classifyTextCommand, classifyHcloudArgs, redactSecrets, loadPolicy } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { evaluateCommandRisk, evaluateDeployPlan } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/risk-rule-engine.mjs';
+import { callTool } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/tools.mjs';
 
 let pass = 0, fail = 0;
 function check(id, desc, actual, expected) {

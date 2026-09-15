@@ -1,6 +1,6 @@
 // 展开级探针：EXP-NR3-09/10（Linux 无 .cmd/EINVAL + 同步/异步检测链）+ EXP-C4-01~22（22 服务只读规划冒烟）
-import { queryDistTagsSync, queryDistTags } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/update-check.mjs';
-import { callTool } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { queryDistTagsSync, queryDistTags } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/update-check.mjs';
+import { callTool } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/tools.mjs';
 
 let pass = 0, fail = 0;
 function check(id, desc, actual, expected) {

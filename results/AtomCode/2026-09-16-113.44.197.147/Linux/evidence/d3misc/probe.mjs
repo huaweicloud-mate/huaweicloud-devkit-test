@@ -1,6 +1,6 @@
 // D3-C5 / D5-3 / D6-1 / D6-3 / D6-4 / D8-1 / D8-4 / D8-6 / D9-9 综合探针
-import { TOOL_DEFINITIONS, callTool, listSkillDirs } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/tools.mjs';
-import { dispatch } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/mcp-protocol.mjs';
+import { TOOL_DEFINITIONS, callTool, listSkillDirs } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { dispatch } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/mcp-protocol.mjs';
 import { readFileSync, existsSync } from 'node:fs';
 import { performance } from 'node:perf_hooks';
 
@@ -26,7 +26,7 @@ bool('D5-3', '工具全集均为含 name/description/inputSchema 的合法定义
 
 // D6-1 检索响应延迟（p95）
 {
-  const SKILLS = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/skills';
+  const SKILLS = '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/skills';
   const t0 = performance.now();
   const dirs = listSkillDirs(SKILLS);
   const ms = performance.now() - t0;
@@ -55,7 +55,7 @@ bool('D5-3', '工具全集均为含 name/description/inputSchema 的合法定义
 
 // D8-1 文档与能力一致（链接有效性扫描：技能目录无缺失）
 {
-  const SKILLS = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/skills';
+  const SKILLS = '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/skills';
   const dirs = listSkillDirs(SKILLS);
   const missing = dirs.filter((d) => !existsSync(`${SKILLS}/${d}/SKILL.md`));
   console.log(`INFO   D8-1  技能中缺 SKILL.md 的数量 => ${missing.length}`);
@@ -72,7 +72,7 @@ bool('D5-3', '工具全集均为含 name/description/inputSchema 的合法定义
 
 // D8-6 中英文文档一致（README 双源存在）
 {
-  const root = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk';
+  const root = '/home/testbot1/devkit-test/AtomCode/hdk';
   const en = existsSync(`${root}/README.md`);
   const zh = existsSync(`${root}/README.zh-CN.md`) || existsSync(`${root}/README_zh-CN.md`);
   console.log(`INFO   D8-6  README.md=${en} README.zh-CN=${zh}`);

@@ -1,13 +1,13 @@
 // D2-10 / D2-12 / D2-16 扩展探针
-import { readKooCliProfiles, resolveManagedProfile } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/auth/reconcile.mjs';
-import { getAuthStatus, syncAuth } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/auth/service.mjs';
+import { readKooCliProfiles, resolveManagedProfile } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/auth/reconcile.mjs';
+import { getAuthStatus, syncAuth } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/auth/service.mjs';
 import {
   setRuntimeCredentials,
   clearRuntimeCredentials,
   hasRuntimeCredentials,
   writeGlobalCredentials,
   readGlobalCredentials,
-} from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
+} from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
 import { existsSync, writeFileSync, rmSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
@@ -48,7 +48,7 @@ function bool(id, desc, cond) { check(id, desc, Boolean(cond), true); }
   const dir = mkdtempSync(join(tmpdir(), 'hdk-import-'));
   // 源码语义验证：import 处理对 creds-import.json 的「读取后擦除」由 clearImportFile/readImportFile 的 rmSync 实现
   const fs = await import('node:fs');
-  const toolsSrc = fs.readFileSync('/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/tools.mjs', 'utf8');
+  const toolsSrc = fs.readFileSync('/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/tools.mjs', 'utf8');
   const hasClear = /function\s+clearImportFile/.test(toolsSrc);
   const usesRmSync = /rmSync\s*\(\s*path\s*,\s*\{\s*force:\s*true\s*\}\)/.test(toolsSrc);
   console.log(`INFO   D2-16  clearImportFile 定义=${hasClear} rmSync(force) 擦除=${usesRmSync}`);

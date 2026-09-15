@@ -1,10 +1,10 @@
-# AtomCode-deepseek-v4-pro 测试报告（真云补测）
+# AtomCode-deepseek-v4-pro 测试报告（v1.1.5 全量复测）
 
 > **报告名**：`AtomCode-deepseek-v4-pro-测试报告.md`
-> **生成时间**：`2026-09-16`（北京时间）
+> **生成时间**：`2026-09-16 07:20:00`（北京时间）
 > **执行归档**：`results/AtomCode/2026-09-16-113.44.197.147/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`FAIL`（历史 5 项缺陷 latest v1.1.4 复测仍复现；本次真云补测新增 1 项「测试侧」发现：只读子账号 test001 只读面过窄）
+> **结论**：`FAIL`（v1.1.5 修复 3 项历史缺陷（D4-2 printenv 形态 / D4-16 部分 / D9-2 -32601 / D4-13 只读面），但 4 项 P0 安全缺陷仍复现 + 新增 3 项 P1 缺陷）
 
 ---
 
@@ -13,15 +13,16 @@
 | 项 | 值 |
 |---|---|
 | 客户端 / Agent | AtomCode + deepseek-v4-pro |
-| OS / 架构 | Linux x86_64 |
-| Node / npm | Node v24.19.0 / npm 11.17.0 |
-| 被测版本（SUT） | `v1.1.4`（npm latest，gitHead `9b67256e`） |
+| OS / 架构 | Linux aarch64 |
+| Node / npm / Python | Node v22.13.0 / npm 10.9.2 / Python 3.12.3 |
+| 被测版本（SUT） | `v1.1.5`（npm latest，gitHead `e7ed6f66`） |
+| 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS） |
 | hcloud / 依赖 | hcloud 7.2.12 已配置，真实凭证可调云 API |
 | 真云凭证 | 管理员 `~/.config/huaweicloud/credentials.json`（cn-north-4）+ 只读子账号 `credentials.readonly.json`（test001） |
-| 测试类型 | 源码级探针 / 真机 CLI / 真云 E2E / MCP 协议 |
-| daily 执行包 | 设计级 77 / 展开级 17（建包按 agent/OS 预筛） |
+| 测试类型 | 源码级探针 / 真机 CLI（install/doctor/status）/ MCP 协议 / 真云 E2E |
+| daily 基础用例 | 设计级 78（含 D3-C4，OS 专属豁免 1）/ 展开级 39（预筛后） |
 
-> **本轮为「真云补测」**：凭证已于 2026-09-16 重新下发（管理员 + 只读子账号），对 2026-09-15 因「无 AK/SK / 凭证无效 APIGW.0301 / 只读子账号缺失」标 BLOCKED 的真云用例逐条重跑。红线遵守：最低配置创建 → 测后删除并归零 → 只删本次创建资源。
+> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，决策/结果落 `stdout*.log`；CLI 真机执行记录日志；D10 评测跑 `eval/harness/run-eval.mjs`，D9 协议跑 `eval/harness/protocol-probe.mjs`；证据统一落 `evidence/<case-id>/`。**本轮为 v1.1.5（latest）发布后全量复测**：重跑全部探针 + 追深挖 BLOCKED（D10 评测、D9-6 客户端矩阵、真云 D4-13）。
 
 ---
 
@@ -29,50 +30,96 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | `94`（设计级 77 + 展开级 17） |
-| PASS / FAIL / BLOCKED | `61 / 6 / 27` |
-| 通过率（分母 = PASS+FAIL，不含 BLOCKED） | `91.0%`（61/67） |
-| 本轮真云补测用例 | D3-B3、D3-C4(服务矩阵)、D4-13、D4-14、D2-1/D2-11/D2-16、D4-18/D4-19/D4-20 |
-| 新增缺陷 | `0` 产品缺陷 / `1` 测试侧（D4-13 只读子账号只读面过窄） |
+| 计划用例（daily） | `117`（设计级 78 + 展开级 39） |
+| 已执行 | `117` |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `88 / 18 / 9 / 1 / 1` |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | `82.2%`（88/107） |
+| P0 / P1 / P2 新增缺陷 | `0 / 3 / 0` |
+| 历史 P0 缺陷（v1.1.5 仍复现） | `4`（D4-2 / D4-16 / D4-21 / D4-23） |
 | 红线（I 类）违规 | `0` |
-| 资源释放 | 本轮真云创建 2 个最小规格 VPC，均测后删除并归零（list 计数=0） |
+| 资源释放 | 真云创建 1 个最小规格 VPC，测后删除归零（list 计数=0） |
 
 ---
 
-## 三、真云补测结果（重跑 BLOCKED → 实际状态）
+## 三、状态汇总
 
-| 用例 | 2026-09-15 | 2026-09-16 | 结论 |
+### 3.1 设计级（78，OS 专属豁免 1）
+
+| 状态 | 数量 | 说明 |
+|---|---|---|
+| PASS | `61` | 有证据且通过 PASS 门禁 |
+| FAIL | `6` | D3-C4 / D4-2 / D4-16 / D4-21 / D4-23 / D10-3 |
+| BLOCKED | `9` | D1-1/2/5/6/58、D4-8/12、D7-4、D9-5 |
+| SPEC-MISMATCH | `1` | D9-9 capabilities.cancellation 未声明 |
+| NOT_RUN | `1` | D1-39 Windows 专属（Linux 由 EXP-NR3-09/10 覆盖） |
+
+### 3.2 展开级（39）
+
+| 状态 | 数量 | 说明 |
+|---|---|---|
+| PASS | `27` | D5-10×2 + EXP-C4×22 + EXP-E HIT×3 |
+| FAIL | `12` | EXP-E01~E15 中 11 MISS + E08 诊断未识别 |
+| BLOCKED | `0` | 全部追深挖后消解（D10 评测跑 harness、D9-6 跑 protocol-probe） |
+| SPEC-MISMATCH | `0` | — |
+| NOT_RUN | `0` | — |
+
+---
+
+## 四、缺陷清单
+
+| # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
+|---|---|---|---|---|---|---|---|---|
+| 1 | P0 | `D4-2` | 凭证 env 打印拦截不完整（`env\|grep HW_*` 形态） | `env \| grep HW_SECRET_KEY` → `deny` | `allow` | `safety-policy.mjs:398-399` | P | #650 部分修复，仍复现 |
+| 2 | P0 | `D4-16` | 命令包裹穿透（sh -c 包 env dump） | `sh -c "env \| grep HUAWEICLOUD_ACCESS_KEY"` → `deny` | `allow` | `safety-policy.mjs:398` | P | #650 部分修复，仍复现 |
+| 3 | P0 | `D4-21` | IaC 制品 broad IAM（HCL `actions=["*"]`） | HCL `actions=["*"]` 应拦截 | findings 空 | `cloud-risk-rules.json:192` | P | #651 仍复现 |
+| 4 | P0 | `D4-23` | kms Decrypt 直连未识别为 secret | `hcloud kms Decrypt` → `deny`/secret | `allow`/unknown_read | `policy.json:26` + `safety-policy.mjs:432` | P | #650/#651 仍复现 |
+| 5 | P1 | `D9-2` | invalid params 未返回 -32602 | 非法 params → `-32602` | 无 error 对象 | `mcp-protocol.mjs:73` | G | 待提单（新增） |
+| 6 | P1 | `D10-3` | 中文意图路由准确率 21.4% | 路由准确率 ≥90% | 21.4%（11/14 MISS） | `tools.mjs:1776` | G | 待提单（新增，BLOCKED→FAIL） |
+| 7 | P1 | `D9-9` | capabilities.notifications.cancellation 未声明 | 应声明 cancellation 通知能力 | 未声明 | `mcp-protocol.mjs:63` | G | 待裁决（SPEC） |
+| 8 | 测试侧 | `D3-C4` | hcloud CLI OBS/DMS/DEW 不可执行 | 22 服务可执行 | 19/22 | hcloud CLI 7.2.12 | E | 非产品缺陷 |
+
+> **v1.1.5 相对 v1.1.4 的修复确认**：D4-2 `printenv HW_*` 形态已修（`deny`）；D9-2 `-32601` 已修（未知 method 端到端返回 `-32601`）；D4-13 只读子账号只读面已补挂权限（5/5 只读 API 可用）；D9-6 客户端矩阵实测 10/10 互通（消解 BLOCKED）。
+
+---
+
+## 五、未执行用例与原因（供维护 agent 修改用例）
+
+| 用例ID | 层级 | 优先级 | 状态 | 分类 | 详细原因 | 改用例建议 |
+|---|---|---|---|---|---|---|
+| `D1-1` | 设计级 | P1 | BLOCKED | 改用例 | 破坏性全局安装/卸载/改源/多客户端覆盖，run-only 每日测试不应破坏共享环境 | 用例标注「破坏性」，run-only 环境豁免或下沉到独立隔离机 |
+| `D1-2` | 设计级 | P2 | BLOCKED | 改用例 | 破坏性全局安装/卸载/改源 | 同上 |
+| `D1-5` | 设计级 | P1 | BLOCKED | 改用例 | 破坏性全局改源（切换 npm 源） | 同上 |
+| `D1-6` | 设计级 | P2 | BLOCKED | 改用例 | install-hcloud 为破坏性命令引导 | 同上 |
+| `D1-58` | 设计级 | P1 | BLOCKED | 补环境 | 需交互式 install 菜单 option3 白名单探测（PTY），run-only 无 PTY | 提供 PTY/非交互等价探测 |
+| `D4-8` | 设计级 | P1 | BLOCKED | 补环境 | Python hook 路径本机未携带 | 补装 Python hook 后复测 |
+| `D4-12` | 设计级 | P2 | BLOCKED | 补环境 | 供应链/SBOM 审计需独立 CI + npm audit 全量核对 | 补 CI 环境 |
+| `D7-4` | 设计级 | P2 | BLOCKED | 改用例 | 国内镜像源安装需切换全局 npm 源（破坏性） | run-only 豁免 |
+| `D9-5` | 设计级 | P1 | BLOCKED | 补环境 | stdio 大 payload/断连恢复需真实 MCP 传输子进程压测，现有 protocol-probe 不覆盖 | 补可注入大 payload/断连的 MCP 夹具 |
+| `D1-39` | 设计级 | P0 | NOT_RUN | 调归属 | Windows 专属（升级检测链 EINVAL）；Linux 已由展开级 EXP-NR3-09/10 代表覆盖 | 无（归属正确） |
+
+---
+
+## 六、安全与红线合规
+
+- [x] 凭证泄漏事件：`0`
+- [x] 写操作误判 read-only：`0`
+- [x] 红线（I 类）违规：`无`
+- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（D2-4/D3-B3 脱敏断言通过）
+
+---
+
+## 七、资源释放
+
+| 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| D3-B3 run_readonly 脱敏执行 | BLOCKED（缺真云/只读子账号） | PASS | 只读命令执行成功 + 输出脱敏 + 无写入 |
-| D3-C4 服务矩阵 | 未覆盖 | PASS | 22 服务 list_operations 全部有规范路由；高危服务轻量创建→立即释放 |
-| D4-13 最小权限凭证通过率 | BLOCKED（缺只读凭证） | FAIL | 写被 IAM 拒（✓）；只读 100% 可用不达标（1/5 服务可读） |
-| D4-14 操作可审计性 | BLOCKED（需 CTS） | PASS | 建 VPC → CTS 查到 createVpc trace → 删除归零 |
-| D2-1 auth init 三端同步 | PASS | PASS（重验） | S1/S2/S3 三端落位 + 真云只读 API 可用 |
-| D2-11 STS token 拒绝落盘 | PASS | PASS（重验） | persist+token → {status:error, scope:rejected}，token 不落盘 |
-| D2-16 import 读取后擦除 | PASS | PASS（重验） | mode=import 读后无条件擦除（exists=False） |
-| D4-18 confirm-not-deny | PASS | PASS（重验） | 写未审批拦截 + 可产出 approvalToken |
-| D4-19 确认流下预检仍生效 | PASS | PASS（重验） | 高危写操作确认流中预检仍 deny |
-| D4-20 拒绝后零操作 | PASS | PASS（重验） | assertAllowed(deny) 抛错 + runHcloud 阻断无执行 |
+| VPC（最小规格） | 是（`ac-cc-*`） | 已删 | list 计数=0 |
 
-### D4-13 详述（新增「测试侧」发现）
-
-- **只读子账号 test001**（`iam::842591186fa245929e1b5c186a4cf784:user:test001`）真实凭证有效（可认证），但 IAM 策略**只读面过窄**：实测 `ECS ListServersDetails`、`VPC ListVpcs`、`IMS ListImages`、`RDS ListInstances` 均被 IAM 拒绝（`Pdp.0001` / `SYS.0403`），仅 `EVS ListVolumes` 可读（1/5）。
-- **写操作门**：`VPC CreateVpc` 被 IAM 拒绝（`create_router disallowed by policy`），符合「写被拒」预期。
-- 结论：`D4-13` 判 **FAIL**，根因不在产品代码，而在**只读子账号 IAM 策略配置**（需补挂 ECS/VPC/IMS/RDS 只读权限，方可满足「只读 100% 可用」）。此为【测试侧】发现，不向产品仓提单。
+> 真云只删本次创建资源；未触碰既有/他人资源（机器上 `testbot5-*`、`tctest-*` 等为其他 agent 资源）。
 
 ---
 
-## 四、历史缺陷（latest v1.1.4 复测仍复现，去重）
+## 八、遗留与建议
 
-| # | 级别 | 用例 | 根因（文件:行号） | 状态 |
-|---|---|---|---|---|
-| 1 | P0 | D4-2 | safety-policy.mjs:336 | 已提单 #650 |
-| 2 | P0 | D4-16 | safety-policy.mjs:335 | 已提单 #650 |
-| 3 | P0 | D4-21 | cloud-risk-rules.json:192 | 已提单 #651 |
-| 4 | P0 | D4-23 | policy.json:26 / safety-policy.mjs:177 | 已提单 #650/#651 |
-| 5 | P1 | D9-2 | mcp-server.mjs:169 | 已提单 #650/#652 |
-
-## 五、红线与资源回收
-
-- 本机真云仅创建 2 个最小规格 VPC（`ac-*`），均测后删除并归零验证（`VPC ListVpcs` 计数=0）。
-- 未触碰既有/他人资源（机器上存在的 `testbot5-*`、`tctest-*` 等为其他 agent 资源，未删除）。
+- 待裁决 SPEC：`D9-9`（capabilities.notifications.cancellation 未声明；超时 -32000 / 取消 2s 中止子断言仍需可注入延迟/取消夹具）。
+- 本轮未覆盖（说明范围）：`D9-5`（stdio 大 payload/断连恢复）、`D1-58`（交互式 PTY install 菜单）、`D4-8`（Python hook）、`D4-12`（SBOM 独立 CI）——均保留 BLOCKED 并写明解除条件。
+- 建议：优先修复 4 项 P0 安全残留（D4-2 env|grep 形态、D4-16 env-dump 包裹、D4-21 HCL broad IAM、D4-23 kms Decrypt），并补齐 D9-2b（-32602）与 D10-3 中文意图路由。
