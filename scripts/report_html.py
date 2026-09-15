@@ -120,21 +120,35 @@ def _compute(rows, findings, date, version):
     rate = f"{round(st['PASS'] / denom * 100)}%" if denom else "—"
 
     def col_stats(cols):
+        """用例去重口径：该客户端(cols)涉及的用例取最差状态（跳过 NA=不涉及）。"""
         cnt = Counter()
         unfilled = 0
-        for col in cols:
-            for r in rows:
-                v = (r.get(col) or "").strip()
-                if v:
-                    cnt[v] += 1
-                else:
-                    unfilled += 1
+        for r in rows:
+            vals = {(r.get(c) or "").strip() for c in cols} - {"NA", ""}
+            if not vals:
+                if all((r.get(c) or "").strip() == "NA" for c in cols):
+                    continue  # 全 NA = 不涉及，跳过
+                unfilled += 1  # 涉及但全空 = 未回填
+            else:
+                st_ = next((k for k in ("FAIL", "SPEC-MISMATCH", "BLOCKED", "NOT_RUN", "PASS") if k in vals), "NOT_RUN")
+                cnt[st_] += 1
         ex = cnt["PASS"] + cnt["FAIL"] + cnt["BLOCKED"] + cnt["SPEC-MISMATCH"]
         if ex:
             st_text = "已执行" if (cnt["FAIL"] + cnt["BLOCKED"] + cnt["SPEC-MISMATCH"]) == 0 else "存在缺陷"
         else:
             st_text = "已建包未回填"
         return ex, cnt["PASS"], cnt["FAIL"], cnt["BLOCKED"], cnt["SPEC-MISMATCH"], cnt["NOT_RUN"], unfilled, st_text
+
+    def client_should(cols):
+        """该客户端「应执行」的用例数 = 设计级全部 + 展开级中非 NA（涉及本客户端）的用例数。"""
+        design = expand = 0
+        for r in rows:
+            involves = any((r.get(c) or "").strip() != "NA" for c in cols)
+            if r.get("层级") == "设计级" and involves:
+                design += 1
+            elif r.get("层级") == "展开级" and involves:
+                expand += 1
+        return design + expand
 
     # 客户端概览
     clients = []
@@ -143,9 +157,10 @@ def _compute(rows, findings, date, version):
         cols = [c for c in client_cols if _agent_of(c) == cl]
         if not cols:
             notrun += 1
-            clients.append({"client": cl, "cols": [], "st_text": "未执行", "row": (0, 0, 0, 0, 0, 0, 0), "machines": []})
+            clients.append({"client": cl, "cols": [], "st_text": "未执行", "row": (0, 0, 0, 0, 0, 0, 0), "should": 0, "machines": []})
             continue
         ex, p, f, b, s, nr, uf, st_text = col_stats(cols)
+        should = client_should(cols)
         if ex:
             executed += 1
         else:
@@ -154,8 +169,8 @@ def _compute(rows, findings, date, version):
         for col in cols:
             me = col_stats([col])
             ip_os = col[len(cl) + 1:]
-            machines.append({"ip_os": ip_os, "st_text": me[7], "row": me[:7]})
-        clients.append({"client": cl, "cols": cols, "st_text": st_text, "row": (ex, p, f, b, s, nr, uf), "machines": machines})
+            machines.append({"ip_os": ip_os, "st_text": me[7], "row": me[:7], "should": client_should([col])})
+        clients.append({"client": cl, "cols": cols, "st_text": st_text, "row": (ex, p, f, b, s, nr, uf), "should": should, "machines": machines})
 
     # 维度统计
     design_rows = [r for r in rows if r.get("层级") == "设计级"]
@@ -204,9 +219,9 @@ def render(rows, findings, date, version):
 
     COLOR = {"已执行": "#2ecc71", "存在缺陷": "#e74c3c", "已建包未回填": "#f39c12", "未执行": "#95a5a6"}
 
-    def stat_cells(ex, p, f, b, s, nr, uf):
+    def stat_cells(should, ex, p, f, b, s, nr, uf):
         td = 'style="padding:6px 8px;border:1px solid #ddd;text-align:center;"'
-        return (f'<td {td}>{ex}</td><td {td}>{p}</td><td {td}>{f}</td>'
+        return (f'<td {td}>{should}</td><td {td}>{ex}</td><td {td}>{p}</td><td {td}>{f}</td>'
                 f'<td {td}>{b}</td><td {td}>{s}</td><td {td}>{nr}</td><td {td}>{uf}</td>')
 
     client_rows_html = ""
@@ -215,13 +230,13 @@ def render(rows, findings, date, version):
         client_rows_html += (f'<tr style="background:#f0f5fb;">'
                              f'<td style="padding:6px 8px;border:1px solid #ddd;border-left:4px solid #3498db;font-weight:700;color:#2c3e50;">{cl["client"]}</td>'
                              f'<td style="padding:6px 8px;border:1px solid #ddd;">{badge_text(cl["st_text"], COLOR.get(cl["st_text"], "#95a5a6"))}</td>'
-                             + stat_cells(ex, p, f, b, s, nr, uf) + '</tr>')
+                             + stat_cells(cl["should"], ex, p, f, b, s, nr, uf) + '</tr>')
         for m in cl["machines"]:
             me = m["row"]
             client_rows_html += (f'<tr>'
                                  f'<td style="padding:6px 8px 6px 26px;border:1px solid #ddd;border-left:4px solid transparent;color:#7f8c8d;font-size:12px;">└ {m["ip_os"]}</td>'
                                  f'<td style="padding:6px 8px;border:1px solid #ddd;">{badge_text(m["st_text"], COLOR.get(m["st_text"], "#95a5a6"))}</td>'
-                                 + stat_cells(*me) + '</tr>')
+                                 + stat_cells(m["should"], *me) + '</tr>')
     client_overview_line = (f'共 <b>{len(ALL_CLIENTS)}</b> 个智能体：'
         f'<span style="color:#2ecc71">已执行 <b>{executed}</b></span>，'
         f'<span style="color:#f39c12">已建包未回填 <b>{pkg_only}</b></span>，'
@@ -273,7 +288,7 @@ def render(rows, findings, date, version):
 <h2>客户端执行概览</h2>
 <p style="color:#7f8c8d;">{client_overview_line}</p>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">智能体 / 机器</th><th style="padding:6px 8px;border:1px solid #ddd;">执行状态</th><th style="padding:6px 8px;border:1px solid #ddd;">已执行</th><th style="padding:6px 8px;border:1px solid #ddd;">PASS</th><th style="padding:6px 8px;border:1px solid #ddd;">FAIL</th><th style="padding:6px 8px;border:1px solid #ddd;">BLOCKED</th><th style="padding:6px 8px;border:1px solid #ddd;">SPEC</th><th style="padding:6px 8px;border:1px solid #ddd;">NOT_RUN</th><th style="padding:6px 8px;border:1px solid #ddd;">未回填</th></tr></thead>
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">智能体 / 机器</th><th style="padding:6px 8px;border:1px solid #ddd;">执行状态</th><th style="padding:6px 8px;border:1px solid #ddd;">应执行</th><th style="padding:6px 8px;border:1px solid #ddd;">已执行</th><th style="padding:6px 8px;border:1px solid #ddd;">PASS</th><th style="padding:6px 8px;border:1px solid #ddd;">FAIL</th><th style="padding:6px 8px;border:1px solid #ddd;">BLOCKED</th><th style="padding:6px 8px;border:1px solid #ddd;">SPEC</th><th style="padding:6px 8px;border:1px solid #ddd;">NOT_RUN</th><th style="padding:6px 8px;border:1px solid #ddd;">未回填</th></tr></thead>
 <tbody>{client_rows_html}</tbody></table>
 <p style="color:#95a5a6;font-size:11px;">加粗行 = 智能体聚合（多机/多 OS 求并）；缩进「└ IP-OS」行 = 该智能体各机器明细。已执行 = PASS+FAIL+BLOCKED+SPEC；「存在缺陷」= 有 FAIL/BLOCKED/SPEC；「未回填」= 单元格为空。</p>
 
@@ -312,10 +327,10 @@ def render_md(rows, findings, date, version):
     client_lines = []
     for cl in clients:
         ex, p, f, b, s, nr, uf = cl["row"]
-        client_lines.append(f"| **{cl['client']}** | {cl['st_text']} | {ex} | {p} | {f} | {b} | {s} | {nr} | {uf} |")
+        client_lines.append(f"| **{cl['client']}** | {cl['st_text']} | {cl['should']} | {ex} | {p} | {f} | {b} | {s} | {nr} | {uf} |")
         for m in cl["machines"]:
             e2, p2, f2, b2, s2, nr2, uf2 = m["row"]
-            client_lines.append(f"| └ {m['ip_os']} | {m['st_text']} | {e2} | {p2} | {f2} | {b2} | {s2} | {nr2} | {uf2} |")
+            client_lines.append(f"| └ {m['ip_os']} | {m['st_text']} | {m['should']} | {e2} | {p2} | {f2} | {b2} | {s2} | {nr2} | {uf2} |")
     overview = (f"共 **{len(ALL_CLIENTS)}** 个智能体：**已执行 {executed}**、"
                 f"**已建包未回填 {pkg_only}**、**未执行 {notrun}**。")
 
@@ -350,8 +365,8 @@ def render_md(rows, findings, date, version):
 
 {overview}
 
-| 智能体 | 执行状态 | 已执行 | PASS | FAIL | BLOCKED | SPEC | NOT_RUN | 未回填 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 智能体 | 执行状态 | 应执行 | 已执行 | PASS | FAIL | BLOCKED | SPEC | NOT_RUN | 未回填 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 {chr(10).join(client_lines)}
 
 ## 各维度用例统计
