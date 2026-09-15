@@ -87,3 +87,30 @@
 - **影响**：工具枚举契约漂移，集成客户端无法发现全量能力。
 - **证据**：`evidence/D5-3/stdout.log`、`evidence/D9-1/stdout.log`、`evidence/EXP-D5-3-3/stdout.log`
 - **状态**：复现（历史 #673，与 D1-26 同源不单独开单）
+
+## #10【P1】D9-2 JSON-RPC 错误码不规范（-32603 而非标准 -32601/-32602）
+
+- **现象**：spawn 源码 mcp-server 后，`__no_such_method__` 与未知 tool（`tools/call __no_such_tool__`）均返回 `{"code":-32603,"message":...}`，未区分 -32601（Method not found）与 -32602（Invalid params/Unknown tool）。
+- **断言**：未知 method 应返回 `-32601`；未知 tool 应返回 `-32602`；错误码与结构符合 JSON-RPC 2.0 规范，客户端可区分处理。
+- **根因**：`plugins/huaweicloud-core/src/mcp-server.mjs:156-174` `handleMessage` 的 `dispatch` 抛错被 catch 后硬编码返回 `code:-32603`；`mcp-protocol.mjs:95` 对 unsupported method 抛 `Unsupported method` 同样被上层包装为 -32603，未按规范区分 -32601/-32602。
+- **影响**：标准 MCP 客户端无法通过错误码区分「方法不存在」与「工具不存在」，异常处理/重试语义失真。
+- **证据**：`evidence/D9-2/stdout.log`
+- **状态**：新发现（本轮源码 spawn 补充测试）
+
+## #11【P1】D10-3 serviceCatalog 中文意图路由大面积 MISS（准确率 21.4%）
+
+- **现象**：`node eval/harness/run-eval.mjs` 跑 15 条中文评测集（EXP-E01~15），HIT=3 MISS=11 N/A=1，路由准确率 21.4%（<90%）。中文意图（创建云服务器/对象存储桶/MySQL 实例状态/绑定 EIP/备份策略/函数/费用/告警/证书/IAM 审计）均返回 `Run hcloud --help`，未命中对应服务。
+- **断言**：serviceCatalog 中文意图命中对应服务（ECS/OBS/RDS/EIP/CBR/FunctionGraph/BSS/CES/ELB/IAM），路由准确率 ≥90%。
+- **根因**：`plugins/huaweicloud-core/src/tools.mjs:1784` routeMap 仅 sandbox（含「网站/网页/静态」）与 voucher（含「领券/代金券」）两条含 CJK 关键词，其余 20 个服务仅英文关键词；`tools.mjs:1884` 的 token 分词 `it.split(/[\s,./-]+/)` 对中文（中英混杂不切分）无法切出有效关键词 → 中文意图全部落空。
+- **影响**：真实中文 Agent 会话的云任务路由失效，仅英文关键词或 sandbox/voucher 兜底命中，核心云服务中文意图不可达。
+- **证据**：`evidence/D10-3/stdout.log`、`eval/results/eval-run-20260915134337.csv`、`evidence/EXP-E01~15/eval-run-result.csv`
+- **状态**：新发现
+
+## #12【P2】D9-9 capabilities.cancellation 未暴露（SPEC-MISMATCH）
+
+- **现象**：initialize 返回 `capabilities={"tools":{}}`，无 `cancellation` 能力；tools/call 无超时/取消语义实现。
+- **断言**：协议应声明取消/超时能力（或明确不支持），超时应返回 `{code:-32000, message 含 timeout}`。
+- **根因**：`plugins/huaweicloud-core/src/mcp-protocol.mjs:62-65` initialize 返回 capabilities 仅 `{tools:{}}`，未声明 cancellation/futures 等能力；无超时 -32000 语义实现（与用例预期「超时返回 -32000」契约漂移）。
+- **影响**：标准客户端无法感知取消能力，长耗时工具无法被客户端取消/超时。
+- **证据**：`evidence/D9-9/stdout.log`
+- **状态**：SPEC-MISMATCH（实现与设计契约漂移）
