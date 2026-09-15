@@ -39,7 +39,7 @@ tags: [testing, huaweicloud, devkit, coverage, source-audit, test-design]
    ```bash
    grep -rE '^export (function|const|async function)' ../hdk/plugins/huaweicloud-core/src/   # Windows 无 grep 时用 Select-String 或 Git Bash 的 grep
    ```
-2. **提取用例覆盖点**：设计级 CSV「关联工具」列（39 工具 + CLI 命令）+「指引来源」的 `实:xxx`（源码函数引用）。
+2. **提取用例覆盖点**：设计级 CSV「关联工具」列（40 工具 + CLI 命令）+「指引来源」的 `实:xxx`（源码函数引用）。
 3. **正确性核对**：用例引用的函数名是否真实存在；返回字段名/错误码/常量值是否与源码一致。
 4. **覆盖率核对**：源码能力 − 用例覆盖 = 缺口；分级——**硬缺口**（完全未覆盖的独立能力）/ **弱缺口**（仅间接覆盖、无直接断言）。
 
@@ -59,7 +59,7 @@ tags: [testing, huaweicloud, devkit, coverage, source-audit, test-design]
 
 - **ID**：按维度顺延（D1-59、D2-22、D3-C10、D4-25、D9-10...），一个硬缺口一用例、相关缺口可合并（如 env+路径）。
 - **优先级**：硬缺口多 P2（边缘能力），核心协议/安全能力 P1。
-- **字段**：指引来源必写 `实: 文件.函数(行号)`；预期结果基于源码精确行为（错误码/阈值/字段名）；关联工具用 39 工具简称或 CLI 命令。
+- **字段**：指引来源必写 `实: 文件.函数(行号)`；预期结果基于源码精确行为（错误码/阈值/字段名）；关联工具用 40 工具简称或 CLI 命令。
 - **门禁联动**：新增用例后 `verify_new.py` 的「设计级行数 == N」必须同步更新（落用例时 163→179）。
 - **缺口清单**：`test-cases/coverage-gaps.md` 记录缺口 + 落用例映射，随核对累计。
 

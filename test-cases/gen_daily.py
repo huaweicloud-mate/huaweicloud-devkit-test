@@ -41,6 +41,18 @@ P1_SMOKE = {
     "D10-5",
 }
 
+# 每日精选排除集（2026-09-15 起）：纯环境依赖、每日流水线无法自动化、注定 BLOCKED 的用例移出 daily，
+# 转按需/按周执行，避免每日通过率被环境噪音污染。展开级按「源用例 ∈ selected」连带剔除（如 D3-C4→EXP-C4 22 服务）。
+DAILY_EXCLUDE = {
+    "D2-1",      # auth init 三端真云同步
+    "D3-C4",     # 服务创建回归 → 连带 EXP-C4 22 服务
+    "D4-13",     # 最小权限凭证通过率（需真云最小权限 IAM）
+    "D4-14",     # 操作可审计性（需真云 CTS 审计日志）
+    "D6-1", "D6-3", "D6-4",   # 性能/压测基准长期缺失
+    "D9-6",      # 跨客户端互通（需多客户端并存）
+    "D10-1", "D10-2", "D10-5",  # LLM 评测 harness（工具描述可选/skill激活率/多轮完成率；D10-3 路由源码级可测保留、D10-4 P0 安全保留）
+}
+
 
 def _in_ranges(rid):
     for pfx, lo, hi in _PRUNE_RANGES:
@@ -62,7 +74,7 @@ for r in des:
     if _in_ranges(r["ID"]):
         prune_set.add(r["ID"])
 p0_all = {r["ID"] for r in des if r["优先级"] == "P0"}
-selected = set(prune_set) | set(p0_all) | set(P1_SMOKE)
+selected = (set(prune_set) | set(p0_all) | set(P1_SMOKE)) - DAILY_EXCLUDE
 
 # 设计级：精选 + 母版完整列（一个 ID 一条，去重）
 des_keep = []

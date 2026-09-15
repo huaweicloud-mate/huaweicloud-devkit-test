@@ -94,7 +94,7 @@ npm install -g huaweicloud-devkit
 
 ## 关联工具白名单（回填「关联工具」列只能填这些）
 
-- 39 个 MCP 工具（`huaweicloud_*` 全名/简称）+ CLI 命令（install/uninstall/doctor/status/update/install-hcloud/plugins/npx/npm/auth/reconcile）+ 框架组件（mcp-server/inspector/harness）。
+- 40 个 MCP 工具（`huaweicloud_*` 全名/简称）+ CLI 命令（install/uninstall/doctor/status/update/install-hcloud/plugins/npx/npm/auth/reconcile）+ 框架组件（mcp-server/inspector/harness）。
 - 函数名/组件/脚本/概念（如 decorateResult/safety-model/风险规则）归入「指引来源 实:xxx」，**不得填关联工具列**。
 
 ## 唯一断言与根因（FAIL/SPEC 纪律）
