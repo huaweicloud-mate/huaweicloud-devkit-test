@@ -1,0 +1,491 @@
+{
+  "source": "aligned local huaweicloud-devkit source",
+  "hdkRoot": "C:\\Users\\Administrator\\devkit-test\\Codex\\hdk",
+  "evidenceDir": "C:\\Users\\Administrator\\devkit-test\\Codex\\huaweicloud-devkit-test\\results\\Codex\\2026-09-15-192.168.0.102\\Windows\\evidence\\realcloud-probe",
+  "generatedAt": "2026-09-15T15:13:41.318Z",
+  "results": [
+    {
+      "name": "auth_status_before_sync",
+      "ok": true,
+      "elapsedMs": 1907,
+      "result": {
+        "target": "codex",
+        "credentialsConfigured": true,
+        "credentialsPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+        "obsConfigured": true,
+        "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig",
+        "kooCliInstalled": true,
+        "kooCliStatus": "ok",
+        "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+        "reconciled": {
+          "stores": {
+            "s1Fingerprint": "caae65f2",
+            "envFingerprint": "",
+            "currentFingerprint": "",
+            "s3Fingerprint": "c8dd90d2",
+            "runtimeFingerprint": null
+          },
+          "kooCliCurrent": "default",
+          "envIsPlaceholder": false,
+          "s2Encrypted": true,
+          "inconsistencies": [
+            {
+              "store": "S3",
+              "source": "obsutilconfig",
+              "fingerprint": "c8dd90d2",
+              "manualModified": true
+            }
+          ],
+          "hasRuntime": false,
+          "runtimeFingerprint": null,
+          "inconsistent": true,
+          "runtimeActive": false
+        },
+        "onboarding": {
+          "needsSetup": true,
+          "scenario": 1,
+          "reason": "s1-only",
+          "message": "已保存账号(指纹 caae65f2)可直接使用。",
+          "steps": [
+            {
+              "order": 1,
+              "action": "use-s1",
+              "args": {},
+              "label": "直接使用已保存账号"
+            },
+            {
+              "order": 2,
+              "action": "switch-new",
+              "args": {
+                "mode": "import",
+                "action": "persist"
+              },
+              "label": "改用新账号(导入)"
+            }
+          ],
+          "accountHint": "caae65f2"
+        },
+        "agents": {
+          "codex": {
+            "configured": false
+          }
+        }
+      }
+    },
+    {
+      "name": "auth_sync_codex",
+      "ok": true,
+      "elapsedMs": 1990,
+      "result": {
+        "ok": true,
+        "profile": "default",
+        "obs": {
+          "configured": true,
+          "path": "C:\\Users\\Administrator\\.obsutilconfig",
+          "endpoint": "https://obs.cn-north-4.myhuaweicloud.com"
+        },
+        "hcloud": {
+          "ok": true,
+          "message": "KooCLI config synced to profile=default"
+        },
+        "credentialsConfigured": true,
+        "agents": {
+          "codex": {
+            "configured": false
+          }
+        },
+        "note": "OBS credentials were synced from the global credential vault. Agent MCP registration is managed by \"npx huaweicloud-devkit install --target <agent>\".",
+        "projectId": "46c1fd48bd1248c7b75afc3780de7132"
+      }
+    },
+    {
+      "name": "setup_obs_default",
+      "ok": true,
+      "elapsedMs": 1,
+      "result": {
+        "ok": true,
+        "existed": false,
+        "created": true,
+        "path": "C:\\Users\\Administrator\\.obsutilconfig",
+        "region": "cn-north-4",
+        "endpoint": "https://obs.cn-north-4.myhuaweicloud.com",
+        "source": "global-credentials",
+        "note": "OBS credentials synced from the global credential vault. OBS commands (hcloud OBS ls, mb, cp, etc.) should now work."
+      }
+    },
+    {
+      "name": "sandbox_check_user",
+      "ok": true,
+      "elapsedMs": 927,
+      "result": {
+        "realnameVerified": true,
+        "agreementSigned": true
+      }
+    },
+    {
+      "name": "check_cli",
+      "ok": true,
+      "elapsedMs": 61,
+      "result": {
+        "installed": true,
+        "authenticated": true,
+        "status": "ok",
+        "output": "当前KooCLI版本:7.2.12",
+        "kooCliVersion": "7.2.12",
+        "installedVersion": "7.2.12",
+        "versionMismatch": false,
+        "nextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+        "authHint": "If hcloud is installed but commands fail with \"配置文件中不存在配置项\", run `npx huaweicloud-devkit auth init` outside agent chat to configure credentials."
+      }
+    },
+    {
+      "name": "list_operations_ecs",
+      "ok": true,
+      "elapsedMs": 70,
+      "result": {
+        "service": "ECS",
+        "command": "hcloud ECS --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "ECS ListServersDetails",
+          "create": "ECS CreateServers",
+          "show": "IMS GlanceShowImage"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud ECS <operation> --param1=value1 --param2=value2 ...\n\nService:\n  ECS\n\nAvailable Operations:\n  AcceptScheduledEvent\n  AddServerGroupMember\n  AssociateServerVirtualIp\n  AttachServerVolume\n  BatchAddServerGroupMember\n  BatchAddServerNics\n  BatchAttachSharableVolumes\n  BatchCreateServerTags\n  BatchDeleteServerGroupMember\n  BatchDeleteServerNics\n  BatchDeleteServerTags\n  BatchDetachVolumes\n  BatchRebootServers\n  BatchResetServersPassword\n  BatchResizeServers\n  BatchStartServers\n  BatchStopServers\n  BatchUpdateServersName\n  ChangeServerChargeMode\n  ChangeServerNetworkInterface\n  ChangeServerOsWithCloudInit\n  ChangeServerOsWithoutCloudInit\n  ChangeVpc\n  CreateLaunchTemplate\n  CreatePostPaidServers\n  CreateServerGroup\n  CreateServers\n  DeleteLaunchTemplates\n  DeleteRecycleBinServer\n  DeleteServerGroup\n  DeleteServerGroupMember\n  DeleteServerMetadata\n  DeleteServerPassword\n  DeleteServers\n  DetachServerVolume\n  DisassociateServerVirtualIp\n  ExecuteServerDump\n  ExecuteServerRedeploy\n  ListCloudServers\n  ListFlavorSellPolicies\n  ListFlavors\n  ListLaunchTemplateVersions\n  ListRecycleBinServers\n  ListResizeFlavors\n  ListScheduledEvents\n  ListServerAzInfo\n  ListServerBlockDevices\n  ListServerGroups\n  ListServerInterfaces\n  ListServerTags\n  ListServerVolumeAttachments\n  ListServersDetails\n  ListTemplates\n  MigrateServer\n  NovaAssociateSecurityGroup\n  NovaAttachInterface\n  NovaAttachVolume\n  NovaCreateKeypair\n  NovaCreateServerGroup\n  NovaCreateServerMetadata\n  NovaCreateServers\n  NovaDeleteKeypair\n  NovaDeleteServer\n  NovaDeleteServerGroup\n  NovaDeleteServerMetadataItem\n  NovaDetachInterface\n  NovaDetachVolume\n  NovaDisassociateSecurityGroup\n  NovaListAvailabilityZones\n  NovaListFlavors\n  NovaListFlavorsDetails\n  NovaListKeypairs\n  NovaListServerActions\n  NovaListServerGroups\n  NovaListServerInterfaces\n  NovaListServerSecurityGroups\n  NovaListServerVolumes\n  NovaListServers\n  NovaListServersDetails\n  NovaListVersions\n  NovaLockServer\n  NovaRebootServer\n  NovaShowFlavor\n  NovaShowFlavorExtraSpecs\n  NovaShowKeypair\n  NovaShowServer\n  NovaShowServerAction\n  NovaShowServerGroup\n  NovaShowServerInterface\n  NovaShowServerMetadata\n  NovaShowServerMetadataItem\n  NovaShowServerVolume\n  NovaShowVersion\n  NovaStartServer\n  NovaStopServer\n  NovaUnlockServer\n  NovaUpdateServer\n  NovaUpdateServerMetadata\n  NovaUpdateServerMetadataItem\n  RegisterServerMonitor\n  ReinstallServerWithCloudInit\n  ReinstallServerWithoutCloudInit\n  ResetServerPassword\n  ResizePostPaidServer\n  ResizeServer\n  RevertRecycleBinServer\n  ShowAppendableVolumeQuota\n  ShowFlavorCapacity\n  ShowJob\n  ShowMetadataOptions\n  ShowRecycleBin\n  ShowResetPasswordFlag\n  ShowSerialConsoleActions\n  ShowServer\n  ShowServerAttachableNicNum\n  ShowServerBlockDevice\n  ShowServerGroup\n  ShowServerLimits\n  ShowServerPassword\n  ShowServerRemoteConsole\n  ShowServerTags\n  UpdateMetadataOptions\n  UpdateRecycleBin\n  UpdateRecycleBinPolicy\n  UpdateScheduledEvent\n  UpdateSerialConsoleOptions\n  UpdateServer\n  UpdateServerAutoTerminateTime\n  UpdateServerBlockDevice\n  UpdateServerInterface\n  UpdateServerMetadata\n\n运行`hcloud ECS <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "ECS",
+              "--help"
+            ],
+            "command": "hcloud ECS --help",
+            "executableBlock": "hcloud ECS --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "ECS",
+              "operation": "ECS",
+              "args": [
+                "ECS",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "905d73a9-f8e4-4561-9f01-76359317ffae",
+            "safeToRun": true,
+            "rawArgs": [
+              "ECS",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "name": "list_operations_obs",
+      "ok": true,
+      "elapsedMs": 164,
+      "result": {
+        "service": "OBS",
+        "command": "hcloud obs help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "OBS ls",
+          "create": "OBS mb obs://<bucket>",
+          "show": "OBS stat obs://<bucket>/<key>"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "Usage: obsutil [command] [args...] [options...]\nYou can use \"obsutil help command\" to view the specific help of each command\n\nBasic commands:\n  abort         cloud_url [options...]        \n                abort multipart uploads       \n\n  bucketpolicy  cloud_url [options...]        \n                                              \n\n  cat           cloud_url                     \n                view the content of a text object in a bucket\n\n  chattri       cloud_url [options...]        \n                set bucket or object properties\n\n  cp            file_url cloud_url [options...]\n                cloud_url file_url [options...]\n                cloud_url cloud_url [options...]\n                upload, download or copy objects\n\n  create-share  cloud_url [options...]        \n                create authorization code for sharing\n\n  download      resource_url file_url [options...]\n                download an object directly using the specified resource url\n\n  lifecycle     cloud_url [options...]        \n                                              \n\n  ls            [cloud_url] [options...]      \n                list buckets or objects/multipart uploads in a bucket\n\n  mb            cloud_url [options...]        \n                create a bucket with the specified parameters\n\n  mkdir         cloud_url|folder_url          \n                create folder(s) in a specified bucket or in the local file system\n\n  mv            cloud_url cloud_url [options...]\n                move objects                  \n\n  restore       cloud_url [options...]        \n                restore objects in a bucket to be readable\n\n  rm            cloud_url [options...]        \n                delete a bucket or objects in a bucket\n\n  share-cp      authorization_code file_url [options...]\n                download objects using authorization code and access code\n\n  share-ls      authorization_code [options...]\n                list objects using authorization code and access code\n\n  sign          cloud_url [options...]        \n                generate the download url(s) for the objects in a specified bucket\n\n  stat          cloud_url                     \n                show the properties of a bucket or an object\n\n  sync          file_url cloud_url [options...]\n                cloud_url file_url [options...]\n                cloud_url cloud_url [options...]\n                synchronize objects from the source to the destination\n\n  update        cloud_url [options...]        \n                update obsutil                \n\n\nOther commands:\n  archive       [archive_url]                 \n                archive log files to local file system or OBS\n\n  clear         [checkpoint_dir] [options...] \n                delete part records           \n\n  config        [options...]                  \n                update the configuration file \n\n  hash          file_url [options...]         \n                caculate the md5 or crc64 hash code of a local file\n\n  help          [command]                     \n                view command help information \n\n  version                                     \n                show version                  \n\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "obs",
+              "help"
+            ],
+            "command": "hcloud obs help",
+            "executableBlock": "hcloud obs help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "obs",
+              "operation": "help",
+              "args": [
+                "obs",
+                "help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "7390bf13-2933-487d-8b34-be453be178c6",
+            "safeToRun": true,
+            "rawArgs": [
+              "obs",
+              "help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "name": "admin_run_readonly_ecs_list",
+      "ok": true,
+      "elapsedMs": 615,
+      "result": {
+        "ok": true,
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "{\n  \"servers\": []\n}",
+        "stderr": "",
+        "plan": {
+          "executable": "hcloud",
+          "args": [
+            "ECS",
+            "NovaListServers",
+            "--cli-region=cn-north-4",
+            "--cli-output=json"
+          ],
+          "command": "hcloud ECS NovaListServers --cli-region=cn-north-4 --cli-output=json",
+          "executableBlock": "hcloud ECS NovaListServers --cli-region=cn-north-4 --cli-output=json",
+          "warnings": [],
+          "classification": {
+            "decision": "allow",
+            "risk": "read_only",
+            "reason": "Command appears to be a read-only Huawei Cloud operation.",
+            "service": "ECS",
+            "operation": "NovaListServers",
+            "args": [
+              "ECS",
+              "NovaListServers",
+              "--cli-region=cn-north-4",
+              "--cli-output=json"
+            ]
+          },
+          "sgFindings": [],
+          "approvalToken": "54b19d93-2bfc-49a9-948e-686b034fc428",
+          "safeToRun": true,
+          "rawArgs": [
+            "ECS",
+            "NovaListServers",
+            "--cli-region=cn-north-4",
+            "--cli-output=json"
+          ]
+        },
+        "retries": 0,
+        "attempts": 1
+      }
+    },
+    {
+      "name": "admin_run_readonly_obs_list",
+      "ok": true,
+      "elapsedMs": 441,
+      "result": {
+        "ok": true,
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "Start at 2026-09-15 15:13:39.7742699 +0000 UTC\n\nBucket                   CreationDate             Location       BucketType     \nobs://huaweicloud-open-capability-home\n                         2026-09-09T23:02:05Z     cn-north-4     OBJECT         \n\nBucket number: 1\n",
+        "stderr": "",
+        "plan": {
+          "executable": "hcloud",
+          "args": [
+            "OBS",
+            "ls"
+          ],
+          "command": "hcloud OBS ls",
+          "executableBlock": "hcloud OBS ls",
+          "warnings": [],
+          "classification": {
+            "decision": "allow",
+            "risk": "read_only",
+            "reason": "OBS read-only operation.",
+            "service": "OBS",
+            "operation": "ls",
+            "args": [
+              "OBS",
+              "ls"
+            ]
+          },
+          "sgFindings": [],
+          "approvalToken": "be06b74b-49a0-4ee0-9ee4-123c02bf9f29",
+          "safeToRun": true,
+          "rawArgs": [
+            "OBS",
+            "ls"
+          ]
+        },
+        "retries": 0,
+        "attempts": 1
+      }
+    },
+    {
+      "name": "readonly_account_ecs_list",
+      "ok": true,
+      "elapsedMs": 551,
+      "result": {
+        "ok": true,
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "{\n  \"servers\": []\n}",
+        "stderr": "",
+        "plan": {
+          "executable": "hcloud",
+          "args": [
+            "ECS",
+            "NovaListServers",
+            "--cli-region=cn-north-4",
+            "--cli-output=json"
+          ],
+          "command": "hcloud ECS NovaListServers --cli-region=cn-north-4 --cli-output=json",
+          "executableBlock": "hcloud ECS NovaListServers --cli-region=cn-north-4 --cli-output=json",
+          "warnings": [],
+          "classification": {
+            "decision": "allow",
+            "risk": "read_only",
+            "reason": "Command appears to be a read-only Huawei Cloud operation.",
+            "service": "ECS",
+            "operation": "NovaListServers",
+            "args": [
+              "ECS",
+              "NovaListServers",
+              "--cli-region=cn-north-4",
+              "--cli-output=json"
+            ]
+          },
+          "sgFindings": [],
+          "approvalToken": "cfd6e9a7-d7bd-4d1a-8f5e-d0953bcebf3c",
+          "safeToRun": true,
+          "rawArgs": [
+            "ECS",
+            "NovaListServers",
+            "--cli-region=cn-north-4",
+            "--cli-output=json"
+          ]
+        },
+        "retries": 0,
+        "attempts": 1
+      }
+    },
+    {
+      "name": "list_operations_cts",
+      "ok": true,
+      "elapsedMs": 56,
+      "result": {
+        "service": "CTS",
+        "command": "hcloud CTS --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for CTS. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud CTS <operation> --param1=value1 --param2=value2 ...\n\nService:\n  CTS\n\nAvailable Operations:\n  BatchCreateResourceTags\n  BatchDeleteResourceTags\n  CheckObsBuckets\n  CreateNotification\n  CreateTracker\n  DeleteNotification\n  DeleteTracker\n  ListNotifications\n  ListOperations\n  ListQuotas\n  ListTraceResources\n  ListTraces\n  ListTrackers\n  ListUserResources\n  UpdateNotification\n  UpdateTracker\n\n运行`hcloud CTS <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "CTS",
+              "--help"
+            ],
+            "command": "hcloud CTS --help",
+            "executableBlock": "hcloud CTS --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "CTS",
+              "operation": "CTS",
+              "args": [
+                "CTS",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "af2c3300-f567-453c-994c-d4c388a2e0dd",
+            "safeToRun": true,
+            "rawArgs": [
+              "CTS",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "name": "cts_list_traces_after_ecs_read",
+      "ok": true,
+      "elapsedMs": 603,
+      "result": {
+        "ok": true,
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "{\n  \"traces\": [],\n  \"meta_data\": \"<redacted>\"\n}",
+        "stderr": "",
+        "plan": {
+          "executable": "hcloud",
+          "args": [
+            "CTS",
+            "ListTraces",
+            "--cli-region=cn-north-4",
+            "--trace_type=system",
+            "--service_type=ECS",
+            "--limit=10",
+            "--cli-output=json"
+          ],
+          "command": "hcloud CTS ListTraces --cli-region=cn-north-4 --trace_type=system --service_type=ECS --limit=10 --cli-output=json",
+          "executableBlock": "hcloud CTS ListTraces --cli-region=cn-north-4 --trace_type=system --service_type=ECS --limit=10 --cli-output=json",
+          "warnings": [],
+          "classification": {
+            "decision": "allow",
+            "risk": "read_only",
+            "reason": "Command appears to be a read-only Huawei Cloud operation.",
+            "service": "CTS",
+            "operation": "ListTraces",
+            "args": [
+              "CTS",
+              "ListTraces",
+              "--cli-region=cn-north-4",
+              "--trace_type=system",
+              "--service_type=ECS",
+              "--limit=10",
+              "--cli-output=json"
+            ]
+          },
+          "sgFindings": [],
+          "approvalToken": "8502ddd4-3f35-4ee8-9614-93cf8d6a67ec",
+          "safeToRun": true,
+          "rawArgs": [
+            "CTS",
+            "ListTraces",
+            "--cli-region=cn-north-4",
+            "--trace_type=system",
+            "--service_type=ECS",
+            "--limit=10",
+            "--cli-output=json"
+          ]
+        },
+        "retries": 0,
+        "attempts": 1
+      }
+    }
+  ]
+}
