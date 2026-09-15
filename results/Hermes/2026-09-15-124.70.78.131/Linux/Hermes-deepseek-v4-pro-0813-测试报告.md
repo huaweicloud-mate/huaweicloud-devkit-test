@@ -4,7 +4,7 @@
 > **生成时间**：`2026-09-15 13:14`（北京时间）
 > **执行归档**：`results/Hermes/2026-09-15-124.70.78.131/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`FAIL`（复现 3 个 P0 + 2 个 P1 缺陷；其中 4 项为已知缺陷 #652，1 项新发现 D4-17 fail-open）
+> **结论**：`FAIL`（复现 3 个 P0 + 2 个 P1 缺陷；全部经历史查重命中上游 open issue，不重复提单，关联清单见 HISTORY_LINKS.md）
 
 ---
 
@@ -73,7 +73,7 @@
 | 2 | P0 | `D4-16` | env-dump 规则被 shell 包裹穿透 | `sh -c "env \| grep HUAWEICLOUD_ACCESS_KEY"` 应 `deny` | 返回 `allow` | `safety-policy.mjs:335` / `cloud-risk-rules.json:35` | G | 已跟踪 #652-2 |
 | 3 | P0 | `D4-21` | Terraform HCL 形态 broad IAM 未拦截 | HCL `actions = ["*"]` 应 `deny` | `decision=allow`、findings 空（JSON 形态正确 deny） | `cloud-risk-rules.json:179` | G | 已跟踪 #652-3 |
 | 4 | P1 | `D9-2` | JSON-RPC 错误码未区分 | 未知 method → `-32601`；未知 tool → `-32602` | 两者均 `-32603` | `mcp-server.mjs:169` / `mcp-protocol.mjs:95` / `tools.mjs:1485` | P | 已跟踪 #652-4 / #638 |
-| 5 | P1 | `D4-17` | hook_check_artifacts 对畸形输入 fail-open | 畸形/超长/深嵌套 JSON 应默认 `deny`（fail-closed） | 均返回 `decision=allow`、findings 空 | `risk-rule-engine.mjs:106` | G | **待提单**（本轮新发现） |
+| 5 | P1 | `D4-17` | hook_check_artifacts 对畸形输入 fail-open | 畸形/超长/深嵌套 JSON 应默认 `deny`（fail-closed） | 均返回 `decision=allow`、findings 空 | `risk-rule-engine.mjs:106` | G | 已跟踪 #679/#674/#673（历史查重命中） |
 
 ### 根因详情（每个 P0/P1 缺陷附代码片段 + 复现证据）
 

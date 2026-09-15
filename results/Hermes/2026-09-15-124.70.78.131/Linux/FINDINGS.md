@@ -51,4 +51,4 @@
 - **根因**：`plugins/huaweicloud-core/src/risk-rule-engine.mjs:106` —— `evaluate()` 汇总 `decision: hasDeny ? 'deny' : hasWarn ? 'warn' : 'allow'`，无任何规则命中（含无法解析的畸形输入）时**默认返回 `allow`**，缺少 fail-closed 兜底（应默认 `deny` 或返回解析错误）。
 - **影响**：无法解析/规则未命中的制品在预检阶段被放行（fail-open），与 #3（规则未覆盖形态）叠加放大绕过面。
 - **证据**：`evidence/D4-17/stdout.log`
-- **状态**：待提单
+- **状态**：历史查重命中 #679 / #674 / #673，不重复提单
