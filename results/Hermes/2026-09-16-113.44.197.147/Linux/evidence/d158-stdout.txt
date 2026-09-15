@@ -1,0 +1,204 @@
+# D1-58 通用 MCP merge —— 探针实况（probe-d158.sh 修正版，隔离 HOME+HERMES_HOME 后 PTY 直驱 option3）
+=============== EXP-D1-58-01 双命中(Claude+Cursor) ===============
+[fixture HOME] /tmp/hdk-d158.xSxXEE/c01
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  [Claude Code] MCP server configured in /tmp/hdk-d158.xSxXEE/c01/.claude.json. Restart the session to apply.
+  [Cursor] MCP server configured in /tmp/hdk-d158.xSxXEE/c01/.cursor/mcp.json. Restart the session to apply.
+
+-------- 产物/文件状态 --------
+[.claude.json 内容]
+{
+  "mcpServers": {
+    "other-claude": {
+      "command": "x"
+    },
+    "huaweicloud-devkit": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "huaweicloud-devkit",
+        "huaweicloud-devkit-mcp"
+      ]
+    }
+  }
+}
+[.claude.json.bak 内容]
+{"mcpServers":{"other-claude":{"command":"x"}}}
+[.cursor/mcp.json 内容]
+{
+  "mcpServers": {
+    "other-cursor": {
+      "command": "y"
+    },
+    "huaweicloud-devkit": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "huaweicloud-devkit",
+        "huaweicloud-devkit-mcp"
+      ]
+    }
+  }
+}
+[.cursor/mcp.json.bak 内容]
+{"mcpServers":{"other-cursor":{"command":"y"}}}
+[文件清单]
+/tmp/hdk-d158.xSxXEE/c01/.claude.json
+/tmp/hdk-d158.xSxXEE/c01/.claude.json.bak
+/tmp/hdk-d158.xSxXEE/c01/.cursor/mcp.json
+/tmp/hdk-d158.xSxXEE/c01/.cursor/mcp.json.bak
+
+
+=============== EXP-D1-58-02 命中 merge(fake .claude.json) ===============
+[fixture HOME] /tmp/hdk-d158.xSxXEE/c02
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  [Claude Code] MCP server configured in /tmp/hdk-d158.xSxXEE/c02/.claude.json. Restart the session to apply.
+
+-------- 产物/文件状态 --------
+[.claude.json 内容]
+{
+  "mcpServers": {
+    "other-server": {
+      "command": "x"
+    },
+    "huaweicloud-devkit": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "huaweicloud-devkit",
+        "huaweicloud-devkit-mcp"
+      ]
+    }
+  },
+  "project": {
+    "owner": "alice"
+  }
+}
+[.claude.json.bak 内容]
+{"mcpServers":{"other-server":{"command":"x"}},"project":{"owner":"alice"}}
+[文件清单]
+/tmp/hdk-d158.xSxXEE/c02/.claude.json
+/tmp/hdk-d158.xSxXEE/c02/.claude.json.bak
+
+
+=============== EXP-D1-58-03 同 key 跳过(已配置) ===============
+[fixture HOME] /tmp/hdk-d158.xSxXEE/c03
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  [Claude Code] mcpServers.huaweicloud-devkit already configured; skipping.
+
+-------- 产物/文件状态 --------
+[.claude.json 内容]
+{"mcpServers":{"huaweicloud-devkit":{"command":"npx"}}}
+[文件清单]
+/tmp/hdk-d158.xSxXEE/c03/.claude.json
+
+
+=============== EXP-D1-58-04 坏 JSON 零写入 ===============
+[fixture HOME] /tmp/hdk-d158.xSxXEE/c04
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  [Claude Code] /tmp/hdk-d158.xSxXEE/c04/.claude.json is not valid JSON; leaving it untouched.
+  Nothing to configure for the detected MCP agents.
+
+-------- 产物/文件状态 --------
+[.claude.json 内容]
+{invalid json
+[文件清单]
+/tmp/hdk-d158.xSxXEE/c04/.claude.json
+[sha256 before] 1bde13a215e156fc5595ea1047823eb14132bc054b87cac3a3f3e92b475fcd69
+[sha256 after ] 1bde13a215e156fc5595ea1047823eb14132bc054b87cac3a3f3e92b475fcd69
+[字节一致性] 一致(零写入)
+
+
+=============== EXP-D1-58-05 未命中 snippet(无配置) ===============
+[fixture HOME] /tmp/hdk-d158.xSxXEE/c05
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  No known MCP agent detected; here is a config snippet you can paste:
+  Add this to your agent MCP config (stdio):
+    {
+      "mcpServers": {
+        "huaweicloud-devkit": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "-p",
+            "huaweicloud-devkit",
+            "huaweicloud-devkit-mcp"
+          ]
+        }
+      }
+    }
+  Or run the remote server and use a remote (Streamable HTTP) config:
+    npx --yes huaweicloud-devkit-mcp --transport remote   # listens on 127.0.0.1:9528
+  See README → "Other Agents" for details.
+
+-------- 产物/文件状态 --------
+[文件清单]
+

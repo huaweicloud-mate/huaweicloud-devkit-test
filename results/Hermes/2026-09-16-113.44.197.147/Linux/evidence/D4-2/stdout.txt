@@ -1,0 +1,12 @@
+=== D4-2 凭证 env 打印拦截 (fresh v1.1.5 @ e7ed6f6) ===
+预期: 全部 env 泄露路径 deny
+实测: 6/6 deny
+  printenv HUAWEICLOUD_ACCESS_KEY -> deny ok
+  env | grep HUAWEICLOUD         -> deny ok
+  printenv HW_ACCESS_KEY         -> deny ok
+  echo $HW_ACCESS_KEY            -> deny ok
+  echo $HW_SECRET_KEY            -> deny ok
+  printenv HW_SECRET_KEY         -> deny ok
+RESULT: PASS  (v1.1.5 修复 #650: 新增 credential-variable-reference 规则, HW_ 前缀已覆盖)
+残余(非阻断): `env | grep HW_ACCESS_KEY`(grep-filter 形式, 无 $/printenv) 仍 allow —
+  新规则 safety-policy.mjs:418-419 只匹配 $VAR/printenv VAR, env-dump 门 :398-399 仍只覆盖 HUAWEICLOUD/HWC_/HCLOUD/OS_
