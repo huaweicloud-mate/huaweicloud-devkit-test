@@ -61,11 +61,11 @@
 
 ## #7【P1】中文意图路由未命中（serviceCatalog 英文关键词）
 
-- **现象**：15 条中文自然语言评测意图仅 3 条命中期望服务（EXP-E06 DCS、E09 CCE、E15 voucher），12 条 miss（ECS/EIP/OBS/RDS/CBR/FunctionGraph/CES/ELB/IAM 等）。
-- **断言**：中文意图路由到的服务（recommendedServices）应包含期望服务。
-- **根因**：`plugins/huaweicloud-core/src/tools.mjs:1776-1892` — `serviceCatalog()` 关键词表仅英文，无中文关键词→服务映射。
+- **现象**：`node eval/harness/run-eval.mjs hdk/plugins/huaweicloud-core/src/mcp-server.mjs` 确定性复测 15 条中文评测意图：仅 3 条命中期望服务（EXP-E06 DCS、E09 CCE、E15 voucher），11 条 MISS（ECS/EIP/OBS/RDS/CBR/FunctionGraph/BSS/CES/ELB/IAM 等），1 条 N/A（EXP-E08 诊断类，应走 explain_error 工具）。路由准确率 21.4%（分母 HIT+MISS=14）。
+- **断言**：中文意图路由到的服务（recommendedServices）应包含期望服务；未命中（MISS）即判 FAIL。
+- **根因**：`plugins/huaweicloud-core/src/tools.mjs:1778-1882` — `serviceCatalog()` routeMap 关键词表几乎全英文（仅 网站/网页/静态/领券/代金券 等少量中文词），`:1906-1908` 空结果回退 `Run hcloud --help to list available services.`。
 - **影响**：中文用户意图无法正确路由到服务能力，评测集激活率/准确率不达标。
-- **证据**：`evidence/D10-3/stdout.log`、`evidence/EXP-E01~E15/stdout.log`
+- **证据**：`evidence/D10-3/run-eval-stdout.txt`、`evidence/EXP-E01~E15/stdout.txt`
 
 ## #8【P2】R2 冲突门先于 R3 STS 检查
 
@@ -98,7 +98,7 @@
 | 级别 | 数量 | 用例 |
 |---|---|---|
 | P0 | 4 | D4-2 / D4-16 / D2-4 / D4-23 |
-| P1 | 3 | D4-8 / D4-17 / D10-3(+EXP-E×12) |
+| P1 | 3 | D4-8 / D4-17 / D10-3(+EXP-E×11 MISS + EXP-E08 N/A) |
 | P2 | 2 | D2-11 / D8-1 |
 | SPEC-MISMATCH | 1 | D9-2 |
 

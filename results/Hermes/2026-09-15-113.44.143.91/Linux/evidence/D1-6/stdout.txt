@@ -1,0 +1,24 @@
+=== CASE D1-6 install-hcloud 复测 ===  PASS
+执行环境: Linux aarch64, SUT huaweicloud-devkit v1.1.5
+复测方式: 干净 TMPDIR($HOME/devkit-test-tmp) 规避 /tmp/huaweicloud-cli-linux-arm64.tar.gz 被 zhangranran:664 遗留文件污染(此前 curl 因 Permission denied 失败=假阻塞)
+
+$ huaweicloud-devkit install-hcloud
+HuaweiCloud DevKit v1.1.5
+Installing KooCLI (hcloud)...
+[Linux] Auto-installing to /home/zhangshuang/.local/bin...
+  Downloading https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12/huaweicloud-cli-linux-arm64.tar.gz...
+  100 11.9M  100 11.9M    0     0  47.2M      0 --:--:-- ... 47.3M
+  Extracting...
+  Installing...
+Install complete.
+  Verify: /home/zhangshuang/.local/bin/hcloud version
+After install, set HCLOUD_BIN if hcloud is not on PATH.
+
+=== Configure credentials SAFELY ===
+  Unified credentials (recommended): npx huaweicloud-devkit auth init
+  NEVER: hcloud configure set --cli-access-key=xxx  (AK/SK in shell history!)
+Then run: npx huaweicloud-devkit doctor
+
+判定: PASS
+  ①安装引导成功(KooCLI 7.2.12) ②国内镜像 URL 正确(cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com)
+  ③凭证安全提示(禁止 shell 历史写入 AK/SK) ④沙箱提示仅在 CodeArts 沙箱模式触发，本机非沙箱属正确行为

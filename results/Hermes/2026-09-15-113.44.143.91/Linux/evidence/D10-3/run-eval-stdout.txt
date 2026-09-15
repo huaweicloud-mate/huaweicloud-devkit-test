@@ -1,0 +1,27 @@
+=== run-eval.mjs 确定性路由结论（D10-3 / EXP-E01~15 源码级）===
+node eval/harness/run-eval.mjs ../hdk/plugins/huaweicloud-core/src/mcp-server.mjs
+
+EXP-E01 | MISS  | 期望=ECS | 实际=Run hcloud --help to list available services.
+EXP-E02 | MISS  | 期望=ECS | 实际=Run hcloud --help to list available services.
+EXP-E03 | MISS  | 期望=OBS | 实际=Sandbox+DevStation
+EXP-E04 | MISS  | 期望=EIP | 实际=Run hcloud --help to list available services.
+EXP-E05 | MISS  | 期望=RDS | 实际=Run hcloud --help to list available services.
+EXP-E06 | HIT   | 期望=DCS | 实际=DDS+DCS
+EXP-E07 | MISS  | 期望=CBR | 实际=Run hcloud --help to list available services.
+EXP-E08 | N/A   | 期望=(诊断) | 实际=Run hcloud --help to list available services.
+EXP-E09 | HIT   | 期望=CCE | 实际=CCE+SWR
+EXP-E10 | MISS  | 期望=FunctionGraph | 实际=Run hcloud --help to list available services.
+EXP-E11 | MISS  | 期望=BSS | 实际=Run hcloud --help to list available services.
+EXP-E12 | MISS  | 期望=CES | 实际=Run hcloud --help to list available services.
+EXP-E13 | MISS  | 期望=ELB | 实际=Run hcloud --help to list available services.
+EXP-E14 | MISS  | 期望=IAM | 实际=Run hcloud --help to list available services.
+EXP-E15 | HIT   | 期望=Incentive Voucher | 实际=Incentive Voucher
+
+=== 路由准确率基线 ===
+HIT=3 MISS=11 N/A=1 | 准确率=21.4% (分母=HIT+MISS=14)
+结果落盘: eval/results/eval-run-20260915134409.csv
+
+根因: hdk/plugins/huaweicloud-core/src/tools.mjs:1778-1882 routeMap 关键词表几乎全英文(仅 网站/网页/静态/领券/代金券 等少量中文词)，
+     :1886-1889 匹配(英文 token 需 tokens.has(kw)，中文意图整串不含英文关键词)→matched 空
+     :1906-1908 空结果回退 'Run hcloud --help to list available services.'
+     → 纯中文意图(云主机/云服务器/云数据库/弹性公网IP/备份/函数/费用/监控告警/证书/权限审计等)全部未命中(11/14)。
