@@ -298,7 +298,7 @@ def main():
     if not new_items:
         print("\n无新问题（全部为历史问题），跳过提单。")
         return
-    title = f"[测试报告] huaweicloud-devkit {version} 全量测试缺陷合并单（{len(new_items)} 项）"
+    title = f"[测试报告] huaweicloud-devkit {version} 每日测试缺陷合并单（{len(new_items)} 项）"
     report_url = find_report_url(path)
     if report_url:
         print("测试报告链接:", report_url)
