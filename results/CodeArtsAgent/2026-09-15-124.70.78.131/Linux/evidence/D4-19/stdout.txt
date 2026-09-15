@@ -1,0 +1,14 @@
+D4-19 确认流下预检仍生效 实测记录
+======================================
+时间: 2026-09-16 (真云补测)
+工具: huaweicloud_hook_check_command 高危写命令预检
+
+实测1: hcloud ECS DeleteServers --server-id test-id
+  -> decision=warn, findings=[hwc-destructive-delete-operation] (破坏性操作预检生效)
+
+实测2: hcloud VPC CreateSecurityGroupRule --port 22 --remote-ip 0.0.0.0/0
+  -> decision=deny, findings=[hwc-network-public-admin-port] (公网暴露 admin 端口拦截)
+
+断言: 确认流程中风险预检仍生效拦截 (risk-rule-engine 命中 deny/warn)
+
+结论: PASS

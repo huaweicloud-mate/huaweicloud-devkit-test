@@ -1,4 +1,14 @@
-用例: D4-14 操作可审计性 (P2) 工具:run_readonly_command
-执行时间: 2026-09-15 18:10 (北京时间)
-探针: run_readonly 返回 plan{classification, approvalToken} 可追溯
-结果: PASS
+D4-14 操作可审计性 实测记录
+================================
+时间: 2026-09-16 (真云补测)
+
+实测:
+1. 执行真实命令 (run_readonly VPC ListVpcs / obs mb / obs rm 等), 每条含 request_id + plan{classification, approvalToken}
+2. 查 CTS ListTraces (trace_type=system), 返回可追溯审计记录:
+   - createBucket: resource=..., read_only=False, user=hw018619646, time=1789490258950
+   - DeleteSecurityGroup/DeleteSecurityGroupRule (其他 agent 真云操作)
+   每条含: trace_name/operation_id/resource_id/resource_name/service_type/source_ip/user(access_key_id,user_name,principal_urn)/time/request_id/user_agent(HCloud-CLI/7.2.12)
+
+断言: 每次命令可追溯, 可区分 agent/人工 (user_agent + user 身份 + 时间戳 + request_id)
+
+结论: PASS — 操作可审计, 真机建 OBS bucket→查 CTS→删除归零

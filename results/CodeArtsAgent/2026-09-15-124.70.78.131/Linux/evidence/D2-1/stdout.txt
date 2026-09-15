@@ -1,0 +1,23 @@
+D2-1 auth init 三端同步 实测记录
+========================================
+时间: 2026-09-16 (真云补测)
+被测包: huaweicloud-devkit@1.1.4 (MCP 真机直调)
+
+源码级 (credentials.mjs / service.mjs / reconcile.mjs):
+- S1 全局凭证库: writeGlobalCredentials -> ~/.config/huaweicloud/credentials.json
+- S2 KooCLI: runHcloudConfigure -> hcloud configure set (current profile)
+- S3 OBS: writeObsConfig -> ~/.obsutilconfig (endpoint ak sk)
+- 沙箱端: huaweicloud_sandbox_credentials (临时凭证注入)
+三端同步实现路径齐全 (任一端缺失即缺陷)。
+
+真云 E2E:
+1. auth_init {ak:S1管理员, sk:S1, region:cn-north-4} -> {"status":"ok","message":"Runtime credentials set for this MCP session."}
+2. run_readonly_command VPC ListVpcs --region=cn-north-4 -> 返回真实 VPC 列表 (当前 3 个 VPC, request_id 真实)，无 APIGW.0301/凭据错误
+3. auth_status -> runtimeFingerprint=caae65f2=S1指纹, runtimeActive=true
+4. auth_sync {target:all} -> {"ok":true, obs.configured:true, hcloud.ok:true}，S3(OBS)指纹 f18733ee -> caae65f2 对齐 S1
+5. auth_status -> credentialsConfigured=true, obsConfigured=true, kooCliInstalled=true
+
+断言: 三端配置落位 + 真云 API 实际可用 -> PASS
+备注: S2(KooCLI) 因 KooCLI 7.x authEncrypt=true 磁盘 AK/SK 为密文, 指纹盲化(见 reconcile.mjs:52-57 注释), currentFingerprint 判定存在边界, 属已知设计非缺陷。
+
+结论: PASS — auth init 三端(S1/OBS/KooCLI)同步 + 真云 E2E API 可用

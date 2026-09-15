@@ -1,0 +1,14 @@
+D4-18 confirm-not-deny 审批语义 实测记录
+============================================
+时间: 2026-09-16 (真云补测)
+工具: huaweicloud_plan_cli_command (写操作 allowWrites=false)
+
+实测: plan_cli_command VPC CreateVpc --name=probe-test-vpc --cidr=10.99.0.0/16
+返回:
+  classification: {"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}
+  approvalToken: 1183116c-...(已签发, 可显式确认放行)
+  safeToRun: false
+
+断言: 写操作需显式确认 — 不被直接拒绝(有 approvalToken 可放行), 也不被直接放行(safeToRun=false) => confirm-not-deny 成立
+
+结论: PASS

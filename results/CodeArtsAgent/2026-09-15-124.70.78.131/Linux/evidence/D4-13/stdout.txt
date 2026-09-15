@@ -1,0 +1,26 @@
+D4-13 最小权限凭证通过率 实测记录 (FAIL)
+====================================================
+时间: 2026-09-16 (真云补测)
+只读子账号: test001 (AK=HPUA3XUK... / credentials.readonly.json)
+
+实测步骤 (scripts/run-as-readonly.py 注入 test001 + 真云 hcloud 调用):
+
+1. 只读业务 API (预期可用, 实测被拒):
+   - VPC ListVpcs -> SYS.0403 "Policy does not allow get_router to be performed."
+   - ECS ListServersDetails -> Pdp.0001 "user:...:test001 is not authorized to perform: ecs:cloudServers:listServersDetails ... no identity-based policy allows"
+   - CTS ListTraces -> CTS.0013 "No permissions for any one of the roles: [te_admin, op_service, cts_adm, readonly]"
+
+2. 基础只读 (可用):
+   - IAM KeystoneListRegions -> 成功返回 26 个 region (公开全局数据)
+
+3. 写操作 (预期被拒, 实测被拒):
+   - 业务写 API 均被 IAM 拒绝 (权限不足=IAM 拒绝, 识别正确)
+
+根因定位 (管理员凭证查 IAM):
+   - ListAttachedUserPoliciesV5(user_id=01a0a43e102b7009bd2a5db83271e95b) -> attached_policies=[] (空)
+   - KeystoneListGroupsForUser -> groups=[] (空)
+   - 结论: test001 未绑定任何 IAM 策略/角色, 非合格只读子账号
+
+判定: FAIL — 预期"只读业务API 100%可用"不成立, 实测业务只读通过率 0% (test001 无 readonly 策略绑定)。
+根因: 测试账号 test001 IAM 授权未配齐(attached_policies=[]), 属环境/账号配置问题, 非 huaweicloud-devkit 代码缺陷。
+解除条件: 维护者给 test001 绑定只读角色(Tenant Guest/ReadOnlyAccess)后重测。
