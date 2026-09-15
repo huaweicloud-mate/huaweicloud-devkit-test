@@ -1059,7 +1059,7 @@ add("D6-8", "D6性能", "MCP 工具调用超时（网络/后端挂起）", "P1",
     "通: 超时与恢复标准实践; 关联 D6-6、D9-9; R11 补强: 30s阈值+ETIMEDOUT码+50MB内存上限", "run_readonly_command/plan_cli_command", "脚本", "COMMON|<代表: MCP进程+夹具>|<证据: 耗时窗口+isError+内存增量>|<阻塞: 可注入延迟夹具>")
 add("D9-9", "D9协议", "tools/call 超时协议语义与取消", "P1", "可注入延迟的 MCP 客户端/夹具（支持读取 initialize 返回的 capabilities）",
     "断言契约：①能力探测=读 initialize.result.capabilities.notifications/cancellation 是否存在——不存在→标记 SPEC-MISMATCH 不假定支持 ②超时错误=JSON-RPC error 对象 {code:-32000, message:含 'timeout'}（精确值）③取消通知=notifications/cancelled 请求（含 requestId）",
-    "①initialize→记录 capabilities.cancellation 是否存在 ②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）",
+    "①源码级: node eval/harness/protocol-probe.mjs 探测 initialize 返回的 capabilities.cancellation（实测当前未声明→SPEC-MISMATCH）②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）",
     "超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MISMATCH 标注而非假定）；取消通知后服务端 2s 内中止（in-flight 清零）；重建连接后 initialize/tools/list 正常响应；无悬挂请求（pending map 空）",
     "规: JSON-RPC 2.0 错误语义; 标: MCP 客户端超时实践; R11 补强: 精确-32000+capabilities探测+2s取消窗口", "inspector", "脚本", "COMMON|<代表: Inspector+夹具>|<证据: JSON-RPC错误对象+capabilities+取消时序>|<阻塞: 取消能力=SPEC待裁决>")
 
@@ -1145,7 +1145,7 @@ add("D9-1", "D9协议", "tools/list合规", "P1", "MCP Inspector/客户端",
     "inspector", "脚本")
 add("D9-2", "D9协议", "JSON-RPC错误码", "P1", "MCP客户端",
     "协议级错误注入",
-    "①构造-32700/-32600/-32601/-32602/-32603错误 ②核对错误码与结构",
+    "①源码级: node eval/harness/protocol-probe.mjs 自动发未知方法/非法参数核对错误码 ②构造 -32700/-32600/-32601/-32602/-32603 各类错误 ③核对错误码与 error 对象结构（code/message）",
     "错误码规范,客户端可处理", "规: JSON-RPC 2.0标准",
     "inspector", "脚本")
 add("D9-3", "D9协议", "tools/call响应格式", "P1", "MCP客户端",
