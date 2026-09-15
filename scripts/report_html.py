@@ -95,15 +95,26 @@ def _agent_of(col):
     return col.split("-")[0]
 
 
+def _case_status(client_cols, r):
+    """用例级去重：返回该用例在所有客户端列中的「最差」状态，跳过 NA（不涉及）。"""
+    has = set()
+    for col in client_cols:
+        v = (r.get(col) or "").strip()
+        if v and v != "NA":
+            has.add(v)
+    for k in ("FAIL", "SPEC-MISMATCH", "BLOCKED", "NOT_RUN", "PASS"):
+        if k in has:
+            return k
+    return "NOT_RUN"
+
+
 def _compute(rows, findings, date, version):
     """准备渲染所需的全部统计数据（HTML/MD 共用）。返回结构化 dict。"""
     client_cols = [c for c in rows[0].keys() if c not in META] if rows else []
 
     st = Counter()
-    for col in client_cols:
-        for r in rows:
-            v = (r.get(col) or "").strip()
-            st[v if v else "NOT_RUN"] += 1
+    for r in rows:
+        st[_case_status(client_cols, r)] += 1
     total = len(rows)
     denom = st["PASS"] + st["FAIL"] + st["SPEC-MISMATCH"]
     rate = f"{round(st['PASS'] / denom * 100)}%" if denom else "—"
