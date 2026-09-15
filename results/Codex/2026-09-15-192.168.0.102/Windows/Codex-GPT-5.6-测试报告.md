@@ -25,13 +25,13 @@
 |---|---|
 | 计划用例（daily） | 94 |
 | 已执行或明确阻塞 | 94 / 94 |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 43 / 1 / 49 / 1 / 0 |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 95.6% |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 53 / 1 / 39 / 1 / 0 |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 98.2% |
 | P0 / P1 / P2 新增缺陷 | 0 / 0 / 1 |
 | 红线（I 类）违规 | 0 |
 | 资源释放 | 未创建真云资源，无残留 |
 
-补充实测：源码单并发套件 487 项，467 PASS、6 FAIL、14 SKIP；更新检测 31/31、安全与 Hook 69/69、凭证相关 45/45 通过；安装相关套件 91 PASS、4 FAIL、13 SKIP。MCP stdio 独立探针通过。
+补充实测：当前 1.1.5 源码套件中的工具/CLI 组 66/67、配置/安装组 70/70、MCP 协议组 28/28（另有单独 installed-layout 夹具超时）通过；`npm run pack:verify` 通过（142 files，install OK）。补充探针验证 search_docs/retrieve_skill、四工具冒烟、并发 8 路请求和协议生命周期；冷启动 5 次均在 5 秒内超时，因此 D6-3 仍为 BLOCKED。
 
 ## 三、状态汇总
 
@@ -39,9 +39,9 @@
 
 | 状态 | 数量 |
 |---|---:|
-| PASS | 42 |
+| PASS | 52 |
 | FAIL | 1 |
-| BLOCKED | 34 |
+| BLOCKED | 24 |
 | SPEC-MISMATCH | 0 |
 | NOT_RUN | 0 |
 | **合计** | **77** |
@@ -63,7 +63,7 @@
 
 ## 五、未执行用例与原因
 
-所有 BLOCKED 均已在 CSV 的 `blockedReason` 逐条回填，分类均为 `补环境`，没有用 BLOCKED 代替 NOT_RUN。具体原因如下：
+所有 BLOCKED 均已在 CSV 的 `blockedReason` 逐条回填，分类均为 `补环境`，没有用 BLOCKED 代替 NOT_RUN。补测已解除 `D3-B1`、`D3-C5`、`D4-12`、`D6-1`、`D6-4`、`D9-2`、`D9-3`、`D9-4`、`D9-5`、`D9-7`。`D6-3` 已实际尝试 5 次冷启动，但每次 initialize 均在 5 秒内超时，因此继续 BLOCKED。具体原因如下：
 
 | 用例 | 逐条原因 |
 |---|---|
