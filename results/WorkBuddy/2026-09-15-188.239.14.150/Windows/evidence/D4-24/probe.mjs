@@ -1,1 +1,1 @@
-// D4-24: BLOCKED - Requires MCP server with confirm token lifecycle
+console.log('BLOCKED: Requires real approval flow with clock manipulation');

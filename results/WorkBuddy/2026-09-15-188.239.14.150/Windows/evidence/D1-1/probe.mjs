@@ -1,1 +1,1 @@
-// D1-1: BLOCKED - Cannot reset to fresh-uninstalled state in active WorkBuddy session
+console.log('BLOCKED: Cannot reset environment for install test without disrupting current session');

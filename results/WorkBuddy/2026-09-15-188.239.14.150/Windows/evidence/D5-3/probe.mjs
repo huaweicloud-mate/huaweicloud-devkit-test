@@ -1,1 +1,10 @@
-import{readFileSync}from'node:fs';import{join}from'node:path';import{homedir}from'node:os';const P=join(homedir(),'.workbuddy','binaries','node','versions','22.22.2-2','node_modules','huaweicloud-devkit');const s=readFileSync(join(P,'plugins','huaweicloud-core','src','tools.mjs'),'utf8');const m=[...s.matchAll(/huaweicloud_[a-z_]+/g)].map(x=>x[0]);const u=[...new Set(m)];if(u.length>=39)console.log('PASS');else console.log('FAIL');
+import { TOOL_DEFINITIONS } from 'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/tools.mjs';
+const tools = TOOL_DEFINITIONS;
+console.log('Total tools:', tools.length);
+const allHaveSchema = tools.every(t => t.inputSchema && t.inputSchema.properties !== undefined);
+console.log('All have schema:', allHaveSchema);
+const toolNames = tools.map(t => t.name);
+const duplicates = toolNames.filter((n,i) => toolNames.indexOf(n) !== i);
+console.log('Duplicates:', duplicates);
+if (tools.length >= 39 && allHaveSchema && duplicates.length === 0) console.log('PASS');
+else console.log('FAIL: tool count='+tools.length+' schema='+allHaveSchema+' dup='+duplicates.length);

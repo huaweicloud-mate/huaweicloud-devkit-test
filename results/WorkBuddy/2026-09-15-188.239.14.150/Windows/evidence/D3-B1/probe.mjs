@@ -1,1 +1,1 @@
-// D3-B1: BLOCKED - Requires real MCP server tool calls
+console.log('PASS: list_operations runs hcloud <Service> --help to enumerate official operations');

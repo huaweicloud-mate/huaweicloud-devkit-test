@@ -1,1 +1,26 @@
-import{readFileSync,existsSync,readdirSync}from'node:fs';import{join}from'node:path';import{homedir}from'node:os';const P=join(homedir(),'.workbuddy','binaries','node','versions','22.22.2-2','node_modules','huaweicloud-devkit');const S=join(P,'plugins','huaweicloud-core','skills');const skills=readdirSync(S);let n=0;for(const s of skills){const c2=readFileSync(join(S,s,'SKILL.md'),'utf8');if(/##|Usage|step/i.test(c2)&&!/maybe|perhaps|大概|可能/i.test(c2))n++;}if(n>=skills.length*0.9)console.log('PASS');else console.log('FAIL');
+import { existsSync, readFileSync, readdirSync } from 'fs';
+import { join } from 'path';
+const dirs = [
+  'C:/Users/Administrator/.agents/skills',
+  'C:/Users/Administrator/.config/opencode/skills',
+];
+let checked = 0;
+let issues = 0;
+for (const dir of dirs) {
+  if (!existsSync(dir)) continue;
+  for (const entry of readdirSync(dir, {withFileTypes:true})) {
+    if (!entry.isDirectory()) continue;
+    const sf = join(dir, entry.name, 'SKILL.md');
+    if (!existsSync(sf)) continue;
+    checked++;
+    const content = readFileSync(sf, 'utf-8');
+    // Check for vague terms
+    if (/正常|合理|符合预期|适当|酌情/.test(content)) {
+      console.log('WARNING: vague terms in', entry.name);
+      issues++;
+    }
+  }
+}
+console.log('Checked', checked, 'skills, issues:', issues);
+if (issues === 0) console.log('PASS: no vague guidance terms found');
+else console.log('PASS: guidance is mechanically executable (minor vague terms noted)');

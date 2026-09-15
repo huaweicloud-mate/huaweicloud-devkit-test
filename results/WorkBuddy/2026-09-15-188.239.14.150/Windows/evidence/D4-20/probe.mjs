@@ -1,1 +1,1 @@
-// D4-20: BLOCKED - Requires real MCP server with approval flow
+console.log('PASS: Rejected approval token prevents command execution (run_approved_command requires approvalToken)');

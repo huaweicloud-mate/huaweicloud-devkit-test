@@ -1,1 +1,1 @@
-// D6-4: BLOCKED - Requires MCP server concurrent test harness
+console.log('BLOCKED: Requires MCP concurrent load test harness');

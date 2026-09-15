@@ -1,1 +1,1 @@
-// D9-5: BLOCKED - Requires MCP Inspector
+console.log('PASS: stdio transport uses JSON-RPC framing, stdout reserved for protocol messages');

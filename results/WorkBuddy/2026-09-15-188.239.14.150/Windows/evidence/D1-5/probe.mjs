@@ -1,1 +1,1 @@
-// D1-5: BLOCKED - Cannot run uninstall in active testing session
+console.log('BLOCKED: Cannot uninstall devkit without disrupting current session');

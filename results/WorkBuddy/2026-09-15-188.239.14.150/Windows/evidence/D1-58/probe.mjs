@@ -1,1 +1,1 @@
-// D1-58: BLOCKED - Requires isolated HOME + fresh install
+console.log('BLOCKED: Requires clean HOME install test');

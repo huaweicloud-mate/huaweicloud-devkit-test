@@ -1,1 +1,11 @@
-import{readFileSync}from'node:fs';const s=readFileSync(new URL('file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/auth/credentials.mjs'),'utf8');if(/configuredBySession|session.*priority|resolveCredentials/i.test(s))console.log('PASS');else console.log('FAIL');
+import { readGlobalCredentials, writeGlobalCredentials, setConfiguredBySession, backupGlobalCredentials, restoreGlobalCredentialsBackup } from 'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/auth/credentials.mjs';
+const backup = backupGlobalCredentials();
+writeGlobalCredentials({ak:'AK_S1', sk:'SK_S1', region:'cn-north-4', configuredBySession: true});
+const creds = readGlobalCredentials();
+console.log('S1 credentials:', creds.ak, 'configuredBySession:', creds.configuredBySession);
+setConfiguredBySession(false);
+const creds2 = readGlobalCredentials();
+console.log('After clear flag:', creds2.configuredBySession);
+restoreGlobalCredentialsBackup(backup);
+if (creds.configuredBySession === true && creds2.configuredBySession === false) console.log('PASS');
+else console.log('FAIL');

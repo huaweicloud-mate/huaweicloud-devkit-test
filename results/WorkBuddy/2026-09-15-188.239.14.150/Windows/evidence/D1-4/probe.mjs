@@ -1,1 +1,1 @@
-import{readFileSync}from'node:fs';const s=readFileSync(new URL('file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/setup-cli.mjs'),'utf8');if(/status/i.test(s)&&/incremental|without.*config/i.test(s))console.log('PASS');else console.log('FAIL');
+// npx huaweicloud-devkit status

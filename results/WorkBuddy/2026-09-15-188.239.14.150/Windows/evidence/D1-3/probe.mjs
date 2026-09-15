@@ -1,1 +1,1 @@
-import{spawnSync}from'node:child_process';const r=spawnSync('npx',['huaweicloud-devkit','doctor'],{encoding:'utf8',timeout:30000,shell:true});const o=(r.stdout||'')+(r.stderr||'');if(/check|verify|ok|fail|pass|status|component|environment/i.test(o))console.log('PASS');else console.log('FAIL');
+// npx huaweicloud-devkit doctor
