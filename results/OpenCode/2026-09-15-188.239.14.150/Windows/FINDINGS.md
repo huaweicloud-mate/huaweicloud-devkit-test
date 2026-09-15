@@ -16,4 +16,4 @@
   - 另外，`echo` 命令不在第 335 行的命令检测模式 `/(^|\s)(env|printenv|Get-ChildItem\s+Env:|gci\s+Env:|dir\s+Env:)/i` 中，`echo %HW_ACCESS_KEY%` 也能绕过
 - **影响**：Agent 可通过 `printenv HW_ACCESS_KEY` 或 `echo %HW_ACCESS_KEY%` 将真实华为云 AK/SK 环境变量打印到上下文中，绕过安全策略的凭证泄露防护
 - **证据**：`evidence/D4-2/stdout.log`
-- **状态**：待提单
+- **状态**：已知历史缺陷，关联 #561 #672 #674 #679 #681 #694（不重复提单，本轮为复核确认缺陷仍存在）
