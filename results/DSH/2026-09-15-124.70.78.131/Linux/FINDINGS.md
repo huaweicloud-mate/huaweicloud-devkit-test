@@ -1,9 +1,9 @@
 # FINDINGS — 缺陷发现清单（DSH-deepseek-v4-pro-0813）
 
 > **落盘路径**：`results/DSH/2026-09-15-124.70.78.131/Linux/FINDINGS.md`
-> **生成时间**：2026-09-15 18:16（北京时间）
+> **生成时间**：2026-09-15 18:16（北京时间），补测回填 22:00 增补 #11/#12
 > **被测版本**：`huaweicloud-devkit@1.1.4`（npm latest 正式版，gitHead `9b67256e`）
-> **说明**：本轮 10 项缺陷为 v1.1.4 正式版（stable）复现/确认，与本客户端今日早先执行（#683）同 SUT 同根因，按查重去重、不重复提单。
+> **说明**：本轮 10 项缺陷为 v1.1.4 正式版（stable）复现/确认，与本客户端今日早先执行（#683）同 SUT 同根因，按查重去重、不重复提单。补测消解假阻塞后增补 D1-39（FAIL，已知 #554）与 D9-9（SPEC-MISMATCH，协议契约漂移）。
 
 ## #1【P0】D2-4 凭证脱敏漏小写 ak=/sk=（obsutilconfig 格式）
 
@@ -84,3 +84,19 @@
 - **根因**：`hdk/AGENTS.md:27,45` 未随工具新增同步；`plugins/huaweicloud-core/src/tools.mjs` 已 40 项。
 - **影响**：文档与能力漂移，误导 agent/开发者对工具全集的认知。
 - **证据**：`evidence/doc/stdout.log`（`N=40 doc39=true`）
+
+## #11【P0·已知#554】D1-39 Windows 更新检测链 EINVAL 仍未被修复
+
+- **现象**：源码级复核 `queryDistTagsSync/queryDistTags`（`update-check.mjs:238/259`）在 Windows 下 `NPM_BIN='npm.cmd'`，`spawnSync/spawn` 未加 `shell:true`；Windows 下会抛 `EINVAL` 且被 `catch` 静默吞掉 → `check_update` 返回 `latestStable=null`。
+- **断言**：Windows 检测链 `status=0` 且 `latestStable != null`，不得 EINVAL 静默失败。
+- **根因**：`plugins/huaweicloud-core/src/update-check.mjs:238`（queryDistTagsSync）与 `:259`（queryDistTags）spawn npm 未加 `shell:true`；`NPM_BIN = IS_WINDOWS ? 'npm.cmd' : 'npm'`（`:12`）。
+- **影响**：Windows 存量用户收不到升级提醒（P0）；v1.1.4 / v1.1.5 源码均未修复。
+- **证据**：`evidence/update/stdout-blocked.log`（Linux 直调 queryDistTagsSync 得 `{latest:1.1.5,next:1.1.4-next.6}` 正常，源码 `shell:true` 命中 0 → Windows 路径仍 EINVAL）。**历史关联 #554，不重复提单。**
+
+## #12【P1·SPEC-MISMATCH】D9-9 tools/call 取消/超时协议契约漂移
+
+- **现象**：`initialize` 返回 `capabilities = { tools: {} }`，未声明 `notifications.cancellation`；服务端 tools/call 无超时机制，所有错误硬编码 `code:-32603`（无 `-32000 timeout` 语义，未知方法也非 `-32601`）。
+- **断言**（按用例契约）：① cancel 能力按 capabilities 实测——不存在则标 SPEC-MISMATCH（非假定）；② 超时错误精确 `{code:-32000, message 含 timeout}`。
+- **根因**：`plugins/huaweicloud-core/src/mcp-protocol.mjs:63-65`（initialize capabilities 仅 `{tools:{}}`，无 `notifications.cancellation`）；`mcp-server.mjs:165-172`（error 硬编码 `-32603`，无 `-32000 timeout` 分支）。
+- **影响**：MCP 客户端无法据 capabilities 判定取消能力，超时语义不可机器断言；与 D9-2（-32603 硬编码）同源协议契约漂移。
+- **证据**：`evidence/protocol/stdout-blocked.log`（`capabilities={tools:{}}`、未知方法 `code=-32603`）。**与 D9-2 同源（已历史关联 #692/#689/#683），不重复提单。**

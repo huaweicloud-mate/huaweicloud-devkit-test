@@ -242,3 +242,15 @@
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#674](https://github.com/huaweicloud/huaweicloud-devkit/issues/674)（open）**[测试报告] huaweicloud-devkit v1.1.4-next.6 全量测试缺陷合并单（10 项）**
     - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.6 - 缺陷：10 项 ## 缺陷清单 ### 1. [P0] 凭证环境变量打印拦截不完整（HW_ 前缀漏网） - **描述**：`env | grep HW_ACCESS_KEY`、`printenv HW_ACCESS_KEY`、`echo $HW_SECRET_KEY` 均返回 `allow`，预期 `deny`。Node 钩子与 Pyt
+
+## D1-39 Windows 更新检测链 EINVAL（升级检测链无 shell:true）
+- 今日证据：`evidence/update/stdout-blocked.log`（Linux 直调 queryDistTagsSync 得 dist-tags 正常；源码 `queryDistTagsSync`/`queryDistTags` spawn npm 未加 `shell:true` → Windows EINVAL 根因仍在）
+- **关联历史单（已作为缺陷提过，本次为复核）**：
+  - [#554](https://github.com/huaweicloud/huaweicloud-devkit/issues/554)（open）**[Bug] 更新检测在 Windows 上完全失效：spawnSync('npm.cmd') 缺少 shell:true 抛 EINVAL 被静默吞掉**
+    - 历史单内容：更新检测功能在 Windows 上完全失效，检测失败被静默吞掉；本单为其每日复现复核。
+
+## D9-9 tools/call 取消/超时协议契约漂移（capabilities.cancellation 缺失 + 无 -32000 timeout）
+- 今日证据：`evidence/protocol/stdout-blocked.log`（`initialize.capabilities={tools:{}}`，未声明 notifications.cancellation；未知方法 `code=-32603`，无 -32000 timeout）
+- **关联历史单（与 D9-2 同源 -32603 硬编码，已作为缺陷提过）**：
+  - [#692](https://github.com/huaweicloud/huaweicloud-devkit/issues/692)（open）、[#689](https://github.com/huaweicloud/huaweicloud-devkit/issues/689)（open）、[#683](https://github.com/huaweicloud/huaweicloud-devkit/issues/683)（open）——均覆盖 MCP 协议错误码契约（-32603 硬编码/错误码漂移）。
+  - 本单新增的「capabilities.cancellation 未声明」「无 -32000 timeout」为该协议契约漂移的补充维度，不重复开单。
