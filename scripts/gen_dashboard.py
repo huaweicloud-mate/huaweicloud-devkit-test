@@ -236,7 +236,7 @@ def render(days, metrics, version, vdate, gen_ts):
 <title>huaweicloud-devkit 测试执行总览看板</title></head>
 <body style="font-family:'Segoe UI',Arial,'Microsoft YaHei',sans-serif;color:#2c3e50;max-width:1040px;margin:20px auto;padding:0 16px;">
 <h1 style="border-bottom:3px solid #2c3e50;padding-bottom:8px;">huaweicloud-devkit 测试执行总览看板</h1>
-<p style="color:#7f8c8d;">基线版本：<b>{version}</b> ｜ 最新数据日：<b>{vdate}</b> ｜ 生成时间：<b>{gen_ts}</b>（北京时间）</p>
+<p style="color:#7f8c8d;">基线版本：<b>{version}</b> ｜ 数据截至：<b>{vdate}</b> ｜ 最后更新：<b>{gen_ts}</b>（北京时间，每小时刷新）</p>
 
 <h2>总体执行（{vdate}）</h2>
 <div style="display:flex;flex-wrap:wrap;margin:-4px;">{kpis}</div>

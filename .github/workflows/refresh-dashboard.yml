@@ -1,0 +1,45 @@
+name: refresh-dashboard
+
+# 每小时重生成测试执行总览看板（dashboard.html）并推送，Pages 自动重部署。
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 * * * *'          # 每小时第 15 分钟（UTC）
+
+concurrency:
+  group: refresh-dashboard        # 单例，避免并发 push 冲突
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Render dashboard
+        run: python scripts/gen_dashboard.py
+
+      - name: Commit & push dashboard
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html
+          if git diff --cached --quiet; then
+            echo "dashboard 无变动，跳过提交"
+          else
+            git commit -m "chore: 自动刷新看板 $(date +%Y-%m-%d_%H:%M)"
+            git push origin HEAD:main
+          fi
