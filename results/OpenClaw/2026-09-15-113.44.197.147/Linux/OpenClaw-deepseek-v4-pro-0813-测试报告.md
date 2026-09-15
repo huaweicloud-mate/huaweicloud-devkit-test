@@ -1,7 +1,7 @@
 # OpenClaw-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`OpenClaw-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：`2026-09-15 22:10`（北京时间，补测 BLOCKED 深挖后更新）
+> **生成时间**：`2026-09-16 01:08`（北京时间，真云补测回填后更新）
 > **执行归档**：`results/OpenClaw/2026-09-15-113.44.197.147/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（8 项 FAIL 均已有同根因历史单；4 项 P0 未修复，不得写 PASS）
@@ -18,8 +18,8 @@
 | 被测版本（SUT） | `v1.1.4`（npm latest 正式版，gitHead `9b67256`，PR #669） |
 | 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS） |
 | hcloud / 依赖 | hcloud 7.2.12（doctor 确认已配置） |
-| 真云凭证 | `cn-north-4`（管理员 AKSK 已配置；只读子账号 `credentials.readonly.json` 未配置） |
-| 测试类型 | 源码级探针 / MCP 协议 / 部分真机 CLI；真云 E2E 与多终端矩阵受环境限制 |
+| 真云凭证 | `cn-north-4`（管理员 AKSK + 只读子账号 `test001` `credentials.readonly.json` 均已下调并实测有效） |
+| 测试类型 | 源码级探针 / MCP 协议 / 真机 CLI；真云 E2E（最小资源建删归零 + CTS 审计 + 审批流 + 最小权限）本轮已实测 |
 | daily 基础用例 | 设计级 77 / 展开级 17（本客户端 OpenClaw+Linux 预筛后） |
 
 > **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数 / 走真实 mcp-server JSON-RPC，决策与结果落 `stdout.log`；证据统一落 `evidence/<case-id>/`。
@@ -32,11 +32,11 @@
 |---|---|
 | 计划用例（daily，预筛后） | `94`（77 设计级 + 17 展开级） |
 | 已执行 | `94` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `58 / 19 / 17 / 0 / 0` |
-| 通过率（分母 = PASS+FAIL+SPEC，去 BLOCKED/NOT_RUN） | `75.3%`（58/77） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `61 / 19 / 14 / 0 / 0` |
+| 通过率（分母 = PASS+FAIL+SPEC，去 BLOCKED/NOT_RUN） | `76.3%`（61/80） |
 | P0 / P1 / P2 新增缺陷 | `0 / 0 / 0`（8 项 FAIL 均历史同源或已提单，无新增） |
 | 红线（I 类）违规 | `4`（D4-2/D4-16/D4-21/D4-23 均为凭证/越权安全红线，历史未修复） |
-| 资源释放 | `全部归零 / 本轮未创建真云资源` |
+| 资源释放 | `全部归零 / 本轮真机新建 VPC 安全组(tctest-d3c4-*) 测后删除归零` |
 
 ---
 
@@ -46,9 +46,9 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 53 | 有证据且通过 PASS 门禁（补测 D1-41/D1-42/D1-45 源码级直调转 PASS） |
+| PASS | 56 | 有证据且通过 PASS 门禁（补测 D1-41/42/45 源码级直调 + D2-1/D4-13/D4-14 真云实测转 PASS） |
 | FAIL | 8 | D4-2/D4-16/D4-21/D4-23/D4-6/D4-7/D9-2/D10-3，根因见缺陷清单 |
-| BLOCKED | 16 | 真机生命周期/真云 E2E/夹具缺失，均写四要素 blockedReason |
+| BLOCKED | 13 | 真机生命周期/高风险计费/夹具缺失，均写四要素 blockedReason |
 | SPEC-MISMATCH | 0 | — |
 | NOT_RUN | 0 | — |
 | **合计** | **77** | |
@@ -87,9 +87,9 @@
 
 ## 五、未执行用例与原因（供维护 agent 修改用例）
 
-> 本轮 NOT_RUN = 0。BLOCKED 共 17 条（设计级 16 + 展开级 1），均写四要素 blockedReason（实测时间 + 缺资源 + 影响 + 解除条件）。补测已将 3 类假阻塞转 PASS/FAIL：D1-41/42/45 源码级直调转 PASS（3 条）、EXP-E03/E13 确定性路由 MISS 转 FAIL（2 条），仅 EXP-E08（真实 Agent 诊断意图）保留 BLOCKED。
+> 本轮 NOT_RUN = 0。BLOCKED 共 14 条（设计级 13 + 展开级 1），均写四要素 blockedReason（实测时间 + 缺资源 + 影响 + 解除条件）。补测已将 5 条真云/源码级假阻塞转 PASS/FAIL：D1-41/42/45 源码级直调转 PASS（3 条）、D2-1/D4-13/D4-14 真云实测转 PASS（3 条，新证真：真机建删安全组归零 + CTS 审计 + 只读子账号最小权限）、EXP-E03/E13 确定性路由 MISS 转 FAIL（2 条），仅 EXP-E08（真实 Agent 诊断意图）保留 BLOCKED。
 
-### 设计级（16，均「真·外部依赖」，四要素见 CSV blockedReason 列）
+### 设计级（13，均「真·外部依赖」，四要素见 CSV blockedReason 列）
 
 | 用例ID | 优先级 | 缺什么资源 | 解除条件 |
 |---|---|---|---|
@@ -99,11 +99,8 @@
 | D1-4 | P2 | 真机 status/update CLI + config 保护 | 供真机 CLI 或 config 快照夹具 |
 | D1-5 | P1 | 真机 uninstall + 残留扫描 | 供真机安装态或卸载夹具 |
 | D1-6 | P2 | 无 KooCLI 环境（本机已装 7.2.12） | 供无 KooCLI 机器 |
-| D2-1 | P1 | 沙箱连接 + 真云三端 API 可用性 | 供沙箱连接凭据与真云环境（源码级三端落位已 PASS） |
 | D4-10 | P2 | 规则库版本快照 + 注入夹具 | 供规则库快照 |
 | D4-12 | P2 | npm 供应链攻击仿真夹具 | 供恶意依赖仿真环境 |
-| D4-13 | P1 | 只读子账号 credentials.readonly.json 缺失 | 下发只读子账号凭证 |
-| D4-14 | P2 | 真云 CTS 审计日志 | 供真云账号最小写操作 |
 | D4-24 | P1 | 真云确认流 + 可注入时钟 | 供真云确认流或时钟夹具 |
 | D9-4 | P1 | 长连接断连/重连/关闭时序夹具 | 供长连接时序夹具 |
 | D9-6 | P1 | 多客户端同机环境（本机仅 OpenClaw） | 供多客户端环境 |
@@ -133,10 +130,10 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| 真云 ECS/RDS/CCE/WAF/OBS 等 | 否 | — | 本轮未创建任何真云资源 |
+| 真云 VPC 安全组 `tctest-d3c4-*` | 是（2 个，本次最小规格、免费） | 已删 | `ListSecurityGroups` 中 `tctest-d3c4-` 计数=0 |
 | 临时 HOME / 隔离目录 | 是（探针内 `/tmp/hdk-*`） | 已删（finally rm） | 无残留 |
 
-> 本轮全部为源码级探针与只读规划，未触发真云写操作，无资源残留风险。
+> 本轮真云部分仅创建免费 VPC 安全组（最低配置）并测后删除归零；未创建任何计费资源（ECS/RDS/CCE/WAF/OBS 等）。
 
 ---
 
@@ -144,5 +141,6 @@
 
 - **历史缺陷未修复**：D4-2/D4-16/D4-21/D4-23 四项 P0 安全红线在 v1.1.4 正式版仍未修复（均已有上游 open issue + 部分含修复 PR #688），建议维护者跟进合入，本客户端持续复测。
 - **中文路由是重灾区**：D10-3 中文意图准确率仅 21.4%（15 条中 3 条命中），根因 `tools.mjs` routeMap 全部英文关键词，中文用户主场景（ECS/RDS/OBS/费用/监控等）无法路由——这是真实可用性缺口，建议列为高优先级修复。#689 已提单。
-- **本轮未覆盖范围**：真云 E2E（建删资源归零）、多终端矩阵、审批流实时对话框、真机 install/doctor/uninstall 生命周期。补齐只读子账号 `credentials.readonly.json` 后 D4-13 可执行。
+- **本轮未覆盖范围**：ECS/RDS/CCE/WAF 等计费/高风险服务的轻量创建释放（成本红线）、多终端矩阵、审批流实时对话框、真机 install/doctor/uninstall 生命周期。这些受成本/环境约束标 BLOCKED（四要素）。
+- **本次真云补测新增证据**：`evidence/realcloud/probe-realcloud.mjs`（22 断言全 PASS）实测 D2-1 三端同步、D4-13 最小权限、D4-14 CTS 审计、D3-C4 服务矩阵真机建删归零、D4-18/19/20 审批流。
 - **建议**：`serviceCatalog` 增加 CJK（中文）关键词→服务映射；`D2-1` 用例措辞与现行 S1/S2/S3 三端语义对齐。
