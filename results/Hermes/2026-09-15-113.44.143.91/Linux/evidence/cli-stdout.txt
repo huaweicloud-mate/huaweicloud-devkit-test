@@ -16,17 +16,19 @@ Installing HuaweiCloud DevKit for hermes...
   Node.js v22.13.0 [32mOK[0m
 
 [Hermes Agent]
-  Skills -> /tmp/hdk-cli.jL5S9q/skills
-  MCP Server -> /tmp/hdk-cli.jL5S9q/huaweicloud-plugins/src
-  Safety Policy -> /tmp/hdk-cli.jL5S9q/huaweicloud-plugins/safety
-  Safety Hooks -> /tmp/hdk-cli.jL5S9q/huaweicloud-plugins/hooks
-  MCP config updated: /tmp/hdk-cli.jL5S9q/config.yaml
+  Skills -> /tmp/hdk-cli.fnxD3G/skills
+  MCP Server -> /tmp/hdk-cli.fnxD3G/huaweicloud-plugins/src
+  Safety Policy -> /tmp/hdk-cli.fnxD3G/huaweicloud-plugins/safety
+  Safety Hooks -> /tmp/hdk-cli.fnxD3G/huaweicloud-plugins/hooks
+  MCP config updated: /tmp/hdk-cli.fnxD3G/config.yaml
   Hooks config cleaned
-  Hooks config updated: /tmp/hdk-cli.jL5S9q/config.yaml
-  Hook allowlist updated: /tmp/hdk-cli.jL5S9q/shell-hooks-allowlist.json
-  Hook plugin installed: /tmp/hdk-cli.jL5S9q/plugins/huaweicloud-safety
-  Runtime deps installed -> /tmp/hdk-cli.jL5S9q/huaweicloud-plugins/node_modules
-  MCP Python SDK: [32mAlready installed[0m
+  Hooks config updated: /tmp/hdk-cli.fnxD3G/config.yaml
+  Hook allowlist updated: /tmp/hdk-cli.fnxD3G/shell-hooks-allowlist.json
+  Hook plugin installed: /tmp/hdk-cli.fnxD3G/plugins/huaweicloud-safety
+  Runtime deps installed -> /tmp/hdk-cli.fnxD3G/huaweicloud-plugins/node_modules
+  Installing Hermes MCP Python SDK...
+  MCP Python SDK: [33mInstall failed[0m
+  [33m  Run manually: python3 -m pip install mcp[0m
 
 [32mInstallation complete![0m
 [1m[36m  首次使用插件可领取一张华为云代金券（一人一次），可直接对您的agent说：帮我领取一张华为云代金券[0m
@@ -43,8 +45,6 @@ KooCLI (hcloud) detected.
 [1m下一步：[0m
   1. 配置统一凭据：npx huaweicloud-devkit auth init
   2. 配置代理（企业内网）：npx huaweicloud-devkit proxy init
-  3. 重启 Hermes Agent 会话（MCP 工具重启后生效）
-  4. 运行自检：npx huaweicloud-devkit doctor
 
 ===== D1-1/D5-1 安装产物（manifest / plugin / rules） =====
 <HOME>/config.yaml
@@ -109,14 +109,14 @@ KooCLI (hcloud) detected.
   [32m[PASS][0m Safety policy installed
   [32m[PASS][0m Safety hook runtime (Node)
   [32m[PASS][0m MCP configured
-  [32m[PASS][0m Hermes MCP Python SDK
+  [31m[FAIL][0m Hermes MCP Python SDK — Run: pip3 install mcp
   [32m[PASS][0m hcloud CLI installed
     Version: 7.2.12
   [32m[PASS][0m hcloud credentials configured
   [32m[PASS][0m Skills installed (29)
-Results: 11 pass, 0 warn, 0 fail
-[32mAll checks passed.[0m Restart your session, then describe your Huawei Cloud task
-(node:2681728) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+Results: 10 pass, 0 warn, 1 fail
+[33mFix failures above, then restart your session.[0m
+(node:2709920) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 
 ===== D1-2 多Agent探测（省略 --target） =====
@@ -136,7 +136,7 @@ Multiple agents detected (opencode, hermes). Cannot prompt in a non-interactive 
   Safety Hooks: [32mInstalled[0m
   Telemetry Hook: [32mInstalled[0m
   Hook plugin: [32mInstalled[0m
-  MCP Python SDK: [32mReady[0m
+  MCP Python SDK: [31mMissing[0m
   Skills: [32m29 installed[0m
   MCP config: [32mConfigured[0m
 --- update（应报已是最新或提示） ---
@@ -148,13 +148,13 @@ Multiple agents detected (opencode, hermes). Cannot prompt in a non-interactive 
 
 
 [Hermes Agent]
-  Skills updated -> /tmp/hdk-cli.jL5S9q/skills
-  MCP Server updated -> /tmp/hdk-cli.jL5S9q/huaweicloud-plugins/src
-  Safety Policy updated -> /tmp/hdk-cli.jL5S9q/huaweicloud-plugins/safety
-  Safety Hooks updated -> /tmp/hdk-cli.jL5S9q/huaweicloud-plugins/hooks
-  MCP config unchanged: /tmp/hdk-cli.jL5S9q/config.yaml
-  Hooks config unchanged: /tmp/hdk-cli.jL5S9q/config.yaml
-  Hook allowlist unchanged: /tmp/hdk-cli.jL5S9q/shell-hooks-allowlist.json
+  Skills updated -> /tmp/hdk-cli.fnxD3G/skills
+  MCP Server updated -> /tmp/hdk-cli.fnxD3G/huaweicloud-plugins/src
+  Safety Policy updated -> /tmp/hdk-cli.fnxD3G/huaweicloud-plugins/safety
+  Safety Hooks updated -> /tmp/hdk-cli.fnxD3G/huaweicloud-plugins/hooks
+  MCP config unchanged: /tmp/hdk-cli.fnxD3G/config.yaml
+  Hooks config unchanged: /tmp/hdk-cli.fnxD3G/config.yaml
+  Hook allowlist unchanged: /tmp/hdk-cli.fnxD3G/shell-hooks-allowlist.json
 
 ===== D1-6 install-hcloud 幂等 =====
 
@@ -182,12 +182,12 @@ Uninstalling HuaweiCloud DevKit from hermes...
 [Hermes Agent]
   Hooks config cleaned
   Hooks config removed
-  Removed hook plugin: /tmp/hdk-cli.jL5S9q/plugins/huaweicloud-safety
+  Removed hook plugin: /tmp/hdk-cli.fnxD3G/plugins/huaweicloud-safety
   Removed 1 hook approvals from allowlist
   MCP config cleaned
   MCP config removed
   Removed 29 skills
-  Removed empty skills directory: /tmp/hdk-cli.jL5S9q/skills
+  Removed empty skills directory: /tmp/hdk-cli.fnxD3G/skills
   Removed MCP server, safety policy and hooks
 
 [32mUninstall complete.[0m
