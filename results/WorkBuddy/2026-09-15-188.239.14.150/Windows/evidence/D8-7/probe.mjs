@@ -1,1 +1,47 @@
-import{readFileSync,existsSync}from'node:fs';import{join}from'node:path';import{homedir}from'node:os';const P=join(homedir(),'.workbuddy','binaries','node','versions','22.22.2-2','node_modules','huaweicloud-devkit');const S=join(P,'plugins','huaweicloud-core','skills');const exp=['huaweicloud-core','huaweicloud-safety','huaweicloud-api-and-sdk','huaweicloud-capability-discovery','huaweicloud-cli-and-auth','huaweicloud-troubleshooting','huawei-getting-started'];let n=0;for(const s of exp){if(existsSync(join(S,s,'SKILL.md')))n++;}if(n===exp.length)console.log('PASS');else console.log('FAIL');
+import { existsSync, readFileSync, readdirSync } from 'fs';
+import { join } from 'path';
+
+const skillsDir = 'C:/Users/Administrator/.agents/skills';
+const expectedSkills = [
+  'huaweicloud-core',
+  'huaweicloud-safety',
+  'huaweicloud-api-and-sdk',
+  'huaweicloud-capability-discovery',
+  'huaweicloud-cli-and-auth',
+  'huaweicloud-troubleshooting',
+  'huawei-getting-started'
+];
+
+let ok = true;
+for (const skill of expectedSkills) {
+  const skillPath = join(skillsDir, skill, 'SKILL.md');
+  let found = existsSync(skillPath);
+  if (!found) {
+    // Try alternate location
+    const altPath = join('C:/Users/Administrator/.config/opencode/skills', skill, 'SKILL.md');
+    found = existsSync(altPath);
+    if (found) {
+      console.log(skill + ': found at alt path');
+      const content = readFileSync(altPath, 'utf-8');
+      if (content.length < 100) {
+        console.log('  WARNING: content too short');
+        ok = false;
+      }
+      continue;
+    }
+  }
+  if (found) {
+    const content = readFileSync(skillPath, 'utf-8');
+    console.log(skill + ': OK (' + content.length + ' bytes)');
+    if (content.length < 100) {
+      console.log('  WARNING: content too short');
+      ok = false;
+    }
+  } else {
+    console.log(skill + ': MISSING');
+    ok = false;
+  }
+}
+
+if (ok) console.log('PASS');
+else console.log('FAIL');

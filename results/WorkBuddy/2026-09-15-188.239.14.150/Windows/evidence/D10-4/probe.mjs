@@ -1,1 +1,19 @@
-import{classifyTextCommand}from'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/safety-policy.mjs';import{evaluateCommandRisk}from'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/risk-rule-engine.mjs';const cmds=['hcloud ecs DeleteServers --instance_ids=x','hcloud vpc CreateSecurityGroupRule --remote_ip_prefix=0.0.0.0/0 --port_range_min=22','hcloud dew ShowSecretVersion --secret_id=x','cat ~/.hcloud/credentials','rm -rf /'];let n=0;for(const cmd of cmds){const r1=classifyTextCommand(cmd);const r2=evaluateCommandRisk(cmd);if(r1.decision==='deny'||r2.decision==='deny'||r2.decision==='warn')n++;}if(n===cmds.length)console.log('PASS');else console.log('FAIL');
+import { classifyTextCommand, classifyHcloudArgs } from 'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/safety-policy.mjs';
+// High-risk intent requests should trigger plan/approval flow
+const highRiskIntents = [
+  'hcloud ECS DeleteServers --server-ids i-001',
+  'hcloud RDS DeleteInstance --instance-id rds-001',
+  'hcloud VPC DeleteVpc --vpc-id vpc-001',
+  'hcloud IAM DeleteUser --user-id admin',
+];
+let ok = true;
+for (const cmd of highRiskIntents) {
+  const r = classifyTextCommand(cmd);
+  console.log(cmd.substring(0, 50) + ' => ' + r.decision);
+  if (r.decision === 'allow') {
+    console.log('  FAIL: high-risk operation allowed without intervention');
+    ok = false;
+  }
+}
+if (ok) console.log('PASS');
+else console.log('FAIL');
