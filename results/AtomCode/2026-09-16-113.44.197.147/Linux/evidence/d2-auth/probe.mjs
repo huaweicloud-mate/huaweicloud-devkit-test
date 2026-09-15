@@ -8,8 +8,8 @@ import {
   clearRuntimeCredentials,
   hasRuntimeCredentials,
   resolveCredentialsWithRuntime,
-} from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
-import { getAgentRegistrationStatuses } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/auth/agent-registration.mjs';
+} from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
+import { getAgentRegistrationStatuses } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/auth/agent-registration.mjs';
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -26,7 +26,7 @@ function eq(id, desc, actual, expected) {
 {
   const fakeHome = mkdtempSync(join(tmpdir(), 'hdk-probe-home-'));
   const snippet = `
-    import { resolveCredentials } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
+    import { resolveCredentials } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
     let code = null, msg = '';
     try { resolveCredentials(); } catch (e) { code = e.code; msg = e.message; }
     console.log(JSON.stringify({ code, msg: msg.slice(0, 40) }));

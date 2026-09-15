@@ -1,8 +1,8 @@
 // 工具/能力/技能探针：TOOL_DEFINITIONS 枚举 + callTool 调用 + detectFramework + listSkillDirs
-import { TOOL_DEFINITIONS, callTool, listSkillDirs } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/tools.mjs';
-import { detectFramework } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/detect-framework.mjs';
+import { TOOL_DEFINITIONS, callTool, listSkillDirs } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { detectFramework } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/detect-framework.mjs';
 
-const SKILLS = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/skills';
+const SKILLS = '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/skills';
 
 let pass = 0, fail = 0;
 function eq(id, desc, actual, expected) {

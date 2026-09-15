@@ -1,6 +1,6 @@
 // MCP 协议探针：直调 mcp-protocol.mjs dispatch
-import { dispatch } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/mcp-protocol.mjs';
-import { TOOL_DEFINITIONS } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { dispatch } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/mcp-protocol.mjs';
+import { TOOL_DEFINITIONS } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/tools.mjs';
 
 let pass = 0, fail = 0;
 function eq(id, desc, actual, expected) {
@@ -31,11 +31,12 @@ function bool(id, desc, cond) { eq(id, desc, Boolean(cond), true); }
   eq('D9-3', 'content[0].type', r.content[0]?.type, 'text');
   eq('D9-3', 'isError=false', r.isError, false);
 }
-// D9-2 JSON-RPC 错误码：未知 method 抛错
+// D9-2 JSON-RPC 错误码：未知 method 抛错（v1.1.5 已修复：带 -32601 code）
 {
-  let msg = null;
-  try { await dispatch('unknown/method', {}); } catch (e) { msg = e.message; }
-  bool('D9-2', '未知 method 抛 Unsupported method', /Unsupported method/.test(msg || ''));
+  let msg = null, code = null;
+  try { await dispatch('unknown/method', {}); } catch (e) { msg = e.message; code = e.code; }
+  bool('D9-2', '未知 method 抛 Method not found', /Method not found/.test(msg || ''));
+  eq('D9-2', 'dispatch 异常携带 code=-32601', code, -32601);
 }
 // D9-7 协议版本协商降级：resources/list
 {

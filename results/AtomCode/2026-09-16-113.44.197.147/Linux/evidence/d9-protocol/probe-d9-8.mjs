@@ -1,5 +1,5 @@
 // D9-8 inputSchema 版本合规探针：逐工具核对 JSON Schema 版本是否统一且明确
-import { TOOL_DEFINITIONS } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { TOOL_DEFINITIONS } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/tools.mjs';
 
 const tools = Array.isArray(TOOL_DEFINITIONS) ? TOOL_DEFINITIONS : [];
 const schemas = [];

@@ -1,6 +1,6 @@
 // D2 认证域探针 — 凭证脱敏 / 凭证文件读取拦截 / R3 STS 临时凭证不落盘
-import { classifyTextCommand, redactSecrets } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
-import { setRuntimeCredentials, hasRuntimeCredentials, clearRuntimeCredentials, readGlobalCredentials, writeGlobalCredentials, globalCredentialsPath } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
+import { classifyTextCommand, redactSecrets } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { setRuntimeCredentials, hasRuntimeCredentials, clearRuntimeCredentials, readGlobalCredentials, writeGlobalCredentials, globalCredentialsPath } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
 import { existsSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';

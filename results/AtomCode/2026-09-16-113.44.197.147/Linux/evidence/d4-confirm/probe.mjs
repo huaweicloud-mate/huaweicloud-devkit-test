@@ -1,6 +1,6 @@
 // D4-18 / D4-19 审批语义 + 确认流下预检探针
 // 语义：写操作不得被「直接放行」也不得被「直接拒绝」，必须显式确认；确认流中风险预检仍生效。
-import { classifyTextCommand, classifyHcloudArgs } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { classifyTextCommand, classifyHcloudArgs } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
 
 let pass = 0, fail = 0;
 function check(id, desc, actual, expected) {

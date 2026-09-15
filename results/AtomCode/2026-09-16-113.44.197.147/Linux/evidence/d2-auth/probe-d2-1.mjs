@@ -11,8 +11,8 @@ process.env.HCLOUD_OBS_CONFIG_PATH = join(iso, '.obsutilconfig');
 
 const {
   writeGlobalCredentials, writeObsConfig,
-} = await import('/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs');
-const { resolveManagedProfile } = await import('/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/auth/reconcile.mjs');
+} = await import('/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs');
+const { resolveManagedProfile } = await import('/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/auth/reconcile.mjs');
 
 let pass = 0, fail = 0;
 function bool(id, desc, cond) {

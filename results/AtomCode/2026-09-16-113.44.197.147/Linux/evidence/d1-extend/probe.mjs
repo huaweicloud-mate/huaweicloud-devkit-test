@@ -3,8 +3,8 @@ import {
   writeSkipState,
   readSkipState,
   resolveSkipFilePath,
-} from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/update-check.mjs';
-import { dispatch } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/mcp-protocol.mjs';
+} from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/update-check.mjs';
+import { dispatch } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/mcp-protocol.mjs';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';

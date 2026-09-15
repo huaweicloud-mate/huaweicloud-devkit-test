@@ -1,9 +1,9 @@
 // D4-23 全局规则 huawei-agent-rules.mdc 注入生效性探针
 // ① 规则源文件存在 ② 含「禁直连 csms/kms」MUST 约束 ③ 约束在安全策略中实际生效（直接读 secret 被 deny）
 import { readFileSync, existsSync } from 'node:fs';
-import { classifyTextCommand } from '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { classifyTextCommand } from '/home/testbot1/devkit-test/AtomCode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
 
-const RULES = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/rules/huawei-agent-rules.mdc';
+const RULES = '/home/testbot1/devkit-test/AtomCode/hdk/rules/huawei-agent-rules.mdc';
 
 let pass = 0, fail = 0;
 function check(id, desc, actual, expected) {
