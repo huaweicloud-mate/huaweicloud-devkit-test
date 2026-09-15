@@ -1,11 +1,9 @@
 # FINDINGS — 缺陷发现清单（Hermes-deepseek-v4-pro-0813）
 
 > **落盘路径**：`results/Hermes/2026-09-15-113.44.143.91/Linux/FINDINGS.md`
-> **生成时间**：2026-09-15 13:04:25（北京时间）
+> **生成时间**：2026-09-15 18:11（北京时间）
 > **被测版本**：`v1.1.4`（npm latest，gitHead `9b67256`，release-1.1.4）
-> **结论**：`FAIL`（复现确认 10 项缺陷；其中 5 项命中上游已提单不重复开单，5 项新提单 #689）
->
-> 说明：`file_issue.py` 查重结果——#1(D4-2)/#2(D4-16)/#3(D2-4)/#4(D4-23)/#9(D8-1) 命中历史上游 issue（#674/#675/#677/#679/#681/#682 等），不重复提单；#5(D4-8)/#6(D4-17)/#7(D10-3)/#8(D2-11)/#10(D9-2) 5 项历史单未明确覆盖，统一提单 **#689**。详见同目录 `HISTORY_LINKS.md`。
+> **结论**：`FAIL`（复现确认 10 项缺陷；全部命中上游已有 open issue，本轮不重复提单）
 
 ## 格式铁律（给 agent）
 
@@ -15,7 +13,7 @@
 
 ## #1【P0】凭证 env 打印拦截不完整（HW_ 前缀未覆盖）
 
-- **现象**：`printenv HW_ACCESS_KEY` / `echo $HW_ACCESS_KEY` / `echo $HW_SECRET_KEY` / `printenv HW_SECRET_KEY` 均返回 `allow`，仅 `HUAWEICLOUD_`/`HWC_`/`HCLOUD_`/`OS_` 前缀命中 `deny`（2/6 拦截）。
+- **现象**：`printenv HW_ACCESS_KEY` / `echo $HW_ACCESS_KEY` / `echo $HW_SECRET_KEY` / `printenv HW_SECRET_KEY` 均返回 `allow`，仅 `HUAWEICLOUD_`/`HWC_`/`HCLOUD_`/`OS_` 前缀命中 `deny`（2/6 拦截）。hook 层 `env | grep HW_ACCESS_KEY` 同样放行。
 - **断言**：`env/printenv/echo` 打印 `HW_*` 等凭证环境变量 → `deny`。
 - **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:336` — env-dump 判定正则 `/HUAWEICLOUD|HWC_|HCLOUD|OS_/i` 未覆盖 `HW_ACCESS_KEY`/`HW_SECRET_KEY` 的 `HW_` 前缀。
 - **影响**：凭证环境变量可被任意 Bash 命令读取回显，安全红线（凭证泄漏）失守。
@@ -23,7 +21,7 @@
 
 ## #2【P0】命令包裹/命令替换穿透 hcloud 写操作拦截
 
-- **现象**：`bash -c 'hcloud ECS DeleteServers'`、`sh -c 'hcloud ecs DeleteServers'`、`eval "hcloud ecs DeleteServer"`、`$(hcloud ecs DeleteServer)`、`` `hcloud ecs DeleteServer` `` 全部返回 `allow`（0/4 拦截）。
+- **现象**：`bash -c 'hcloud ECS DeleteServers --id x'`、`sh -c 'hcloud ecs DeleteServers'`、`eval "hcloud ecs DeleteServer"`、`$(hcloud ecs DeleteServer)` 全部返回 `allow`（0/4 拦截）。
 - **断言**：命令包裹/sh -c/bash -c/eval/$()/反引号 不应绕过 hcloud 写操作拦截 → `deny`。
 - **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:345` — `/^|\s)hcloud(\.exe)?\s+/i` 仅匹配行首/空白后 `hcloud`，引号包裹/子 shell/命令替换内层命令未被递归解析。
 - **影响**：写操作可通过命令包裹完全绕过审批门，破坏写操作强制审批的红线。
@@ -50,7 +48,7 @@
 - **现象**：同一高危输入（`hcloud configure show`、`hcloud ECS DeleteServers`），Node hook 返回 `deny`，Python hook 返回空（放行）。
 - **断言**：Python 与 Node 双路径对写操作/凭证检查应一致 `deny`。
 - **根因**：`plugins/huaweicloud-core/hooks/huaweicloud-safety.py` — Python hook 未实现与 Node hook（`huaweicloud-safety.mjs`）对等的拦截逻辑，直接放行。
-- **影响**：使用 Python hook 的客户端（如 OpenCode 非 Hook 路径）安全拦截失效。
+- **影响**：使用 Python hook 的客户端安全拦截失效。
 - **证据**：`evidence/hook-stdout.txt`
 
 ## #6【P1】hook 畸形输入 fail-open（应 fail-closed）
@@ -73,13 +71,13 @@
 
 - **现象**：带 `securityToken` 的 persist（STS 临时凭证）在存在既有凭证时返回 `needs_confirmation`（R2），而非 `status:error/scope:rejected`（R3），STS token 拒绝落盘检查被 R2 冲突门拦截在前。
 - **断言**：`auth_switch persist + securityToken` → `{status:error, scope:rejected}`，token 永不落盘。
-- **根因**：`plugins/huaweicloud-core/src/tools.mjs:1214` — persist 分支 `conflict = prev?.ak && prev.ak !== ak` 返回 `needs_confirmation`，先于内部 `persistCredentials`（R3 检查，tools.mjs:1013）执行。
+- **根因**：`plugins/huaweicloud-core/src/tools.mjs:1214` — persist 分支 `conflict = prev?.ak && prev.ak !== ak` 返回 `needs_confirmation`，先于内部 `persistCredentials`（R3 检查）执行。
 - **影响**：STS 凭证路径下 R3 拒绝语义被前置冲突门遮蔽，返回契约与设计(R3)漂移。
 - **证据**：`evidence/D2-11/stdout.log`（actual: status=needs_confirmation）
 
 ## #9【P2】文档宣称 39 工具 vs 实现 40
 
-- **现象**：实现 `tools.mjs TOOL_DEFINITIONS = 40`（含 `huaweicloud_obs_set_website_config` #347），但 `AGENTS.md:27`、`AGENTS.md:45` 仍写「39 tools / 39 MCP tool definitions」。
+- **现象**：实现 `tools.mjs TOOL_DEFINITIONS = 40`（含 `huaweicloud_obs_set_website_config`），但 `AGENTS.md` 仍写「39 tools」。
 - **断言**：文档工具数应与实现一致（40）。
 - **根因**：`AGENTS.md:27,45` — 新增工具未同步文档（文档漂移）。
 - **影响**：文档能力声明与实现不符，误导测试/审计。
@@ -104,4 +102,4 @@
 | P2 | 2 | D2-11 / D8-1 |
 | SPEC-MISMATCH | 1 | D9-2 |
 
-> 全部 10 项均在 v1.1.4 稳定版（gitHead 9b67256）复现。其中 5 项（D4-2/D4-16/D2-4/D4-23/D8-1）命中上游已有 open issue（#674/#675/#677/#679/#681/#682），本轮不重复提单；5 项（D4-8/D4-17/D10-3/D2-11/D9-2）历史单未明确覆盖，本轮统一提单 **#689**。
+> 全部 10 项均在 v1.1.4 稳定版（gitHead 9b67256）复现。经 `file_issue.py` 查重，10 项均命中上游已有 open issue（#674/#675/#677/#679/#681/#682/#689），本轮**不重复提单**，关联清单见同目录 `HISTORY_LINKS.md`。
