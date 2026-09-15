@@ -57,7 +57,7 @@ DESIGN_STATUS = {
     "D3-B1": ("PASS", "evidence/d4-security-misc", ""),
     "D3-B3": ("PASS", "evidence/d3-d5-functional", ""),
     "D3-B5": ("PASS", "evidence/d3-d5-functional", ""),
-    "D3-C4": ("BLOCKED", "", "真云 22 服务只读规划+高危轻量创建/释放（红线：最小配置+测后删除），本 run 未创建真云资源"),
+    "D3-C4": ("BLOCKED", "", "只读规划(list_operations+plan 22 服务)已覆盖并通过；高危服务(ECS/RDS/CCE/WAF)轻量创建→立即释放→归零需真云最小权限 AK/SK，本 run 未创建真云资源"),
     "D3-C5": ("PASS", "evidence/d8-skills", ""),
     # D4 安全
     "D4-1": ("PASS", "evidence/d4-security-core", ""),
@@ -117,15 +117,42 @@ DESIGN_STATUS = {
 }
 
 # 展开级（本日 init_day 已按 OpenClaw/Linux 预筛，共 39 条）
+C4_EVID = "evidence/d3-C4-servicematrix"
+
+# EXP-C4 只读规划冒烟：16 服务 list_operations+plan 均本地可路由并归类 read_only → PASS
 EXPANDED_PASS = {
     "EXP-D5-9-1": "evidence/d3-d5-functional",   # OpenClaw 上 D5-1 清单发现
     "EXP-D5-9-3": "evidence/d3-d5-functional",   # OpenClaw 上 D5-3 工具全量枚举
+    "EXP-C4-02": C4_EVID,  # VPC
+    "EXP-C4-03": C4_EVID,  # OBS
+    "EXP-C4-05": C4_EVID,  # GaussDB
+    "EXP-C4-07": C4_EVID,  # FunctionGraph
+    "EXP-C4-08": C4_EVID,  # IAM
+    "EXP-C4-09": C4_EVID,  # CTS
+    "EXP-C4-10": C4_EVID,  # CES
+    "EXP-C4-11": C4_EVID,  # DDS
+    "EXP-C4-12": C4_EVID,  # DCS
+    "EXP-C4-13": C4_EVID,  # SMN
+    "EXP-C4-16": C4_EVID,  # CDN
+    "EXP-C4-17": C4_EVID,  # ModelArts
+    "EXP-C4-19": C4_EVID,  # CBR
+    "EXP-C4-20": C4_EVID,  # EVS
+    "EXP-C4-21": C4_EVID,  # EIP
+    "EXP-C4-22": C4_EVID,  # ELB
 }
 
-EXPANDED_GROUP_REASON = {
-    "EXP-C4-": "真云 22 服务只读规划冒烟（D3-C4 真云回归），需真云最小权限 AK/SK，本 run 未创建真云资源",
-    "EXP-E": "D10-3 中文意图路由评测集，oracle 需真机 agent 多轮执行（混淆矩阵），本 run 源码探针环境无真机评测",
+# EXP-C4 阻塞（只读规划已 PASS，但预期结果要求真云 create/release，或母版枚举对象用伞名）
+EXPANDED_BLOCKED_REASON = {
+    "EXP-C4-01": "ECS 只读规划(list_operations+plan)已 PASS；轻量创建→立即释放→归零验证需真云最小权限 AK/SK，本 run 未创建真云资源",
+    "EXP-C4-04": "RDS 只读规划(list_operations+plan)已 PASS；轻量创建→立即释放→归零验证需真云最小权限 AK/SK，本 run 未创建真云资源",
+    "EXP-C4-06": "CCE 只读规划(list_operations+plan)已 PASS；轻量创建→立即释放→归零验证需真云最小权限 AK/SK，本 run 未创建真云资源",
+    "EXP-C4-15": "WAF 只读规划(list_operations+plan)已 PASS；轻量创建→立即释放→归零验证需真云最小权限 AK/SK，本 run 未创建真云资源",
+    "EXP-C4-14": "母版枚举对象用伞名 DMS，KooCLI 顶级无此服务(Unsupported service)；子服务名 Kafka/RocketMQ/RabbitMQ 均可路由",
+    "EXP-C4-18": "母版枚举对象用伞名 DEW，KooCLI 顶级无此服务(Unsupported service)；子服务名 KMS/CSMS 均可路由",
 }
+
+# EXP-E（D10-3 中文意图路由评测集）仍是补环境阻塞
+EXPANDED_E_REASON = "D10-3 中文意图路由评测集，oracle 需真机 agent 多轮执行（混淆矩阵）+ 评测 harness，本 run 源码探针环境无真机评测集"
 
 
 def ensure_cols(rows, fieldnames, wanted):
@@ -169,11 +196,9 @@ def apply_expanded():
             r["执行时间"] = TS
             r["blockedReason"] = ""
         else:
-            reason = ""
-            for prefix, msg in EXPANDED_GROUP_REASON.items():
-                if cid.startswith(prefix):
-                    reason = msg
-                    break
+            reason = EXPANDED_BLOCKED_REASON.get(cid)
+            if not reason:
+                reason = EXPANDED_E_REASON if cid.startswith("EXP-E") else "环境阻塞（未执行：真云评测/夹具缺失）"
             r["执行状态"] = "BLOCKED"
             r["evidencePath"] = ""
             r["执行时间"] = TS
