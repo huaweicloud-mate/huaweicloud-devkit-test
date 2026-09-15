@@ -10,7 +10,7 @@
 - **根因**：`plugins/huaweicloud-core/src/setup-cli.mjs:3107` 的 `detectAgents()` 将 `officeaceCapabilitiesDir()` 存在作为无条件探测信号，导致隔离 HOME 下仍把 OfficeAce 纳入 detected 集合。
 - **影响**：Windows 自动安装可能将未请求的客户端纳入探测范围，且非交互安装/无 Agent 退出语义不符合契约。
 - **证据**：`evidence/D1-2/stdout.log`；`evidence/final-suite/stdout.log`
-- **状态**：待提单
+- **状态**：历史问题，关联上游 #654
 
 ## #2【SPEC-MISMATCH】EXP-D5-2-3 MCP 工具数契约仍写 39，正式包实际暴露 40
 
@@ -19,7 +19,7 @@
 - **根因**：`plugins/huaweicloud-core/src/tools.mjs:852` 已包含新增 `huaweicloud_obs_set_website_config`，而展开级测试口径仍保留 39 工具基线。
 - **影响**：工具全量枚举用例无法同时满足旧数量断言与正式包实际集合，需维护者裁决版本契约。
 - **证据**：`evidence/EXP-D5-2-3/stdout.log`；`evidence/mcp-tools/response.json`
-- **状态**：待裁决
+- **状态**：已提单上游 #693
 
 ## #3【测试侧】源码 MCP 初始化测试在 Windows 夹具中超时
 
