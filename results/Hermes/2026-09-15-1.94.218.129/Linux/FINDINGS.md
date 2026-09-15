@@ -53,11 +53,11 @@
 
 ## #6【P1】serviceCatalog 路由中文意图未命中（关键词英文-only）
 
-- **现象**：中文意图 `查询云服务器列表`→ECS、`创建存储桶`→OBS、`创建云硬盘`→ECS 均 miss，返回 `Run hcloud --help to list available services.`（探针实测 12/15 命中，3 条中文 miss）。
-- **断言**：`service_catalog(intent='查询云服务器列表')` 的 `recommendedServices` 应包含 `ECS`。
-- **根因**：`plugins/huaweicloud-core/src/tools.mjs:1776-1907` `serviceCatalog()` 的 `routeMap` 关键词均为英文（`ecs/server/vm/...`），`String(intent).toLowerCase()` 未做中文意图映射（仅 voucher/sandbox 有零星中文关键词）。
-- **影响**：中文用户（主要目标群体）意图无法正确路由到服务能力，D10-3 路由准确率不达标。
-- **证据**：`evidence/D10-3/stdout.log`
+- **现象**：D10 评测集（eval-set-v1.csv 15 条中文意图）跑确定性 harness `eval/harness/run-eval.mjs` + 源码直调 `huaweicloud_service_catalog`，实测 **HIT=3 MISS=11 N/A=1（诊断类），路由准确率 21.4%**（与基线一致）。MISS 明细：EXP-E01 云主机→ECS、E02 云服务器→ECS、E03 静态网站→OBS（实返 Sandbox+DevStation）、E04 弹性公网IP→EIP、E05 云数据库MySQL→RDS、E07 备份策略→CBR、E10 函数→FunctionGraph、E11 费用→BSS、E12 云监控告警→CES、E13 HTTPS证书→ELB、E14 IAM审计→IAM，均返回 `Run hcloud --help to list available services.`（E03 误命中 sandbox）。
+- **断言**：`service_catalog(intent='帮我查一下我账号在华北北京四有哪些云主机')` 的 `recommendedServices` 应包含 `ECS`（唯一可判定）。
+- **根因**：`plugins/huaweicloud-core/src/tools.mjs:1778-1882` `serviceCatalog()` 的 `routeMap` 关键词均为英文（`ecs/server/vm/...`、`eip`、`rds/mysql`、`cbr/backup`、`functiongraph/function`、`billing/bss`、`ces/monitor/alarm`、`iam/permission`），`String(intent).toLowerCase()` 未做中文意图映射（仅 voucher「领券/代金券」、sandbox「网站/网页/静态」有中文关键词），纯中文意图 split 后 token 不含英文关键词 → 全部落默认 `Run hcloud --help`（E03 则因「静态/网站」命中 sandbox 反向误路由）。
+- **影响**：中文用户（主要目标群体）意图无法正确路由到服务能力，D10-3 路由准确率仅 21.4%，未命中判 FAIL。
+- **证据**：`evidence/D10-3/stdout.log`（EXP-E01~E15 逐条证据见 `evidence/EXP-E*/stdout.log`）
 - **状态**：已跟踪 #689 / #683 / #676 / #674（历史单 serviceCatalog 中文路由 miss，不重复提单）
 
 ## #7【P1】JSON-RPC 错误码不规范（-32603 vs -32601）
