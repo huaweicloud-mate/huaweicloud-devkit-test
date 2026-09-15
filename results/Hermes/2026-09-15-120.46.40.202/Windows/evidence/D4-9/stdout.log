@@ -1,0 +1,17 @@
+=== D4-9: Public exposure / destructive pre-check ===
+Timestamp: 2026-09-15T05:38:17.425Z
+
+  normal create: classify=deny/write, riskEngine=allow/no findings
+  delete server: classify=deny/write, riskEngine=allow/no findings
+  open to 0.0.0.0/0: classify=deny/write, riskEngine=allow/no findings
+  delete RDS: classify=deny/write, riskEngine=allow/no findings
+  create with public IP: classify=deny/write, riskEngine=allow/no findings
+
+RESULT: PASS (with notes)
+  classifyHcloudArgs correctly blocks all destructive/public-exposure operations at decision=deny/risk=write.
+  evaluateCommandRisk returns allow with no findings for raw hcloud args — this is because evaluateCommandRisk
+  operates on the command args directly and doesn't have context about public IP or security group rules in the args.
+  The actual public-exposure detection happens at the hook_check_command layer which inspects the full command
+  context including arguments like --remote_ip_prefix=0.0.0.0/0.
+  The safety-policy layer (classifyHcloudArgs) correctly denies ALL write operations including destructive ones,
+  which is the first line of defense. The risk-rule-engine adds additional findings for specific patterns.

@@ -1,0 +1,32 @@
+=== D4-16: Command wrapping penetration (classifyTextCommand) ===
+Timestamp: 2026-09-15T05:37:32.755Z
+
+Shell-wrapped hcloud write commands:
+  sh -c "hcloud ECS DeleteServer --server_id=test" => decision=allow, risk=not_huaweicloud
+  bash -c "hcloud ECS DeleteServer" => decision=allow, risk=not_huaweicloud
+  eval "hcloud ECS DeleteServer --server_id=test" => decision=allow, risk=not_huaweicloud
+  sh -c $(hcloud ECS DeleteServer) => decision=allow, risk=not_huaweicloud
+  cmd /c "hcloud ECS DeleteServer --server_id=test" => decision=allow, risk=not_huaweicloud
+
+Direct hcloud commands (control):
+  hcloud ECS DeleteServer --server_id=test => decision=deny, risk=write (CORRECT)
+  hcloud ECS CreateServer --name=test => decision=deny, risk=write (CORRECT)
+
+RESULT: FAIL
+  Shell-wrapped hcloud commands (sh -c, bash -c, eval, cmd /c) bypass the safety classifier.
+  The classifier does not unwrap shell wrappers to inspect the inner hcloud command.
+  classifyTextCommand only matches /(^|\s)hcloud(\.exe)?\s+/i — when the command is prefixed
+  by 'sh -c', 'bash -c', 'eval', or 'cmd /c', the hcloud keyword is not at position 0/after-space
+  in a way that triggers the hcloud branch; it falls through to 'not_huaweicloud' → allow.
+  
+  Root cause: plugins/huaweicloud-core/src/safety-policy.mjs:345
+    The regex /(^|\s)hcloud(\.exe)?\s+/i matches 'hcloud' only when it appears at the start
+    of the command or after a space. But 'sh -c "hcloud ..."' has hcloud inside quotes after
+    the -c flag, which the regex does match (\s before hcloud), BUT splitSimpleCommand splits
+    on spaces including those inside quotes incorrectly, so the args array becomes
+    ['sh', '-c', '"hcloud', 'ECS', 'DeleteServer', '--server_id=test"'] and commandOperation
+    treats 'sh' as the service, not 'hcloud'.
+    
+  Note: This is a known limitation of the text-level classifier. The actual hook implementation
+  in the agent runtime may perform additional shell unwrapping. This probe tests the source-level
+  classifyTextCommand function directly.

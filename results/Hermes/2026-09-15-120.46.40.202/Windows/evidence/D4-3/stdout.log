@@ -1,0 +1,23 @@
+=== D4-3: Plaintext secret API interception ===
+Timestamp: 2026-09-15T05:41:15.805Z
+
+classifyHcloudArgs results:
+  DEW ShowSecretVersion --secret_id=test => decision=deny, risk=secret (BLOCKED)
+  DEW GetSecretValue --secret_id=test => decision=deny, risk=secret (BLOCKED)
+  DEW secret_string --secret_id=test => decision=deny, risk=secret (BLOCKED)
+  DEW secret_binary --secret_id=test => decision=deny, risk=secret (BLOCKED)
+  DEW ListSecrets --secret_id=test => decision=allow, risk=read_only (CORRECT - list is read-only)
+  CSMS ShowSecretVersion --secret_id=test => decision=deny, risk=secret (BLOCKED)
+
+classifyTextCommand results:
+  hcloud DEW ShowSecretVersion => deny/secret (BLOCKED)
+  hcloud DEW GetSecretValue => deny/secret (BLOCKED)
+  hcloud DEW secret_string => deny/secret (BLOCKED)
+  ShowSecretVersion => deny/secret (BLOCKED)
+  secret_string => deny/secret (BLOCKED)
+
+RESULT: PASS
+  All plaintext secret retrieval APIs are correctly blocked (decision=deny, risk=secret).
+  Both hcloud-prefixed and bare command forms are blocked.
+  ListSecrets (read-only listing) is correctly allowed.
+  Source: safety-policy.mjs L169-183 (blockedSecretOperations + regex match)

@@ -1,0 +1,33 @@
+=== D4-23: Agent rules injection ===
+Timestamp: 2026-09-15T05:41:15.805Z
+
+Agent rules file found at: rules/huawei-agent-rules.mdc
+File size: 3780 bytes
+Contains MUST constraints: true
+Contains csms/kms direct-connect prohibition: true
+
+The rules file defines:
+  - Core Principles (MCP-first, skill check, documentation search)
+  - MUST constraints (direct-connect csms/kms prohibition)
+  - Agent behavior constraints
+
+Install targets found in setup-cli.mjs:
+  - Hermes (L2468+: hermesHomeDir, hermesSkillsDir, hermesPluginsDir, installHermes)
+  - OpenCode (L796+: installOpenCode)
+  - Codex (L709+: installCodex, installCodexDesktop)
+  - CodeArts (L1265+: installCodeArts)
+  - CodeArtsWork (L1449+: installCodeArtsWork)
+  - WorkBuddy (L1730+: installWorkBuddy)
+  - DSH (L2232+: installDsh)
+  - OfficeAce (L2352+: installOfficeAce)
+  - OpenClaw (L978+: installOpenClaw)
+  - AtomCode (L1923+: installAtomCode)
+  - Generic MCP (Claude Code, Cursor) (L3259+: configureMCPAgent)
+
+RESULT: PASS
+  Agent rules file exists and contains MUST constraints including csms/kms prohibition.
+  11 install targets are defined in setup-cli.mjs (10 named agents + generic MCP).
+  Hermes has dedicated install path (installHermes at L2870) with skills/plugins/hooks configuration.
+  
+  Note: Full verification of rules injection at each target requires actual install execution.
+  Source-level verification confirms the rules file and install paths exist.

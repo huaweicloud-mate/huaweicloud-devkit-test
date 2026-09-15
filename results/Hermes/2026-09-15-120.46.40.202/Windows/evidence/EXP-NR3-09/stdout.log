@@ -1,0 +1,26 @@
+=== EXP-NR3-09: spawnSync('npm.cmd') EINVAL direct capture ===
+Timestamp: 2026-09-15T05:40:22.059Z
+
+  Platform: win32 | Node: v22.23.1
+  
+  spawnSync('npm.cmd', ['--version'], {shell: false}):
+    status: null
+    stdout: none
+    error: EINVAL
+    RESULT: FAIL - EINVAL reproduced!
+    
+  spawnSync('npm.cmd', ['--version'], {shell: true}):
+    status: 0
+    stdout: 10.9.8
+    error: none
+    RESULT: Works with shell:true
+
+CONFIRMED DEFECT (P0):
+  spawnSync('npm.cmd') without shell:true produces EINVAL on Windows.
+  This is the exact bug described in EXP-NR3-09.
+  The fix is to use shell:true when spawning npm.cmd on Windows.
+  
+  Root cause: Node.js spawnSync on Windows cannot execute .cmd/.bat files without shell:true.
+  The update-check.mjs module calls spawnSync with npm.cmd but may not set shell:true.
+  
+  Evidence: probe-update-final.mjs in hdk/ directory, stdout.log in this evidence folder.
