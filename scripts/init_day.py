@@ -19,8 +19,8 @@
 机器标识（IP）来源：环境变量 HDK_MACHINE_IP > ~/.hdk_ip 文件 > socket 自动检测。
 多台机器跑相同客户端时，靠 <日期>-<IP> 区分，避免 push 到同一仓库冲突。
 
-复制到 results 副本时，为设计级/展开级追加「执行状态」+「执行时间」+「evidencePath」空列，
-供 agent 执行后回填；追踪表追加「执行时间」列。
+复制到 results 副本时，为设计级/展开级追加「执行状态」+「执行时间」+「evidencePath」+「blockedReason」空列，
+供 agent 执行后回填；追踪表追加「执行时间」列。blockedReason 承载 NOT_RUN/BLOCKED 的未执行原因（详情分类见报告 §五「未执行用例与原因」）。
 """
 import os, sys, datetime, socket, csv, re
 
@@ -106,7 +106,7 @@ def parse_args(argv):
 
 def build_copies(mode, version):
     """按模式返回 [(目录1, 目录2, 源文件名, 目标文件名, 追加空列), ...]，目标文件名统一（验证脚本依赖标准名）。"""
-    extra = ["执行状态", "执行时间", "evidencePath"]
+    extra = ["执行状态", "执行时间", "evidencePath", "blockedReason"]
     trace_extra = ["执行时间"]
     if mode == "full":
         design = ("test-cases", "design", "用例矩阵-设计级.csv", "用例矩阵-设计级.csv", extra)

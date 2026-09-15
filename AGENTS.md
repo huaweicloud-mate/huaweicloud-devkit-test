@@ -80,7 +80,7 @@ npm install -g huaweicloud-devkit
 ## 红线（违反即作废重来）
 
 1. **真云**：最低配置创建 → 测后删除并归零验证 → 只删本次创建资源。
-2. **缺陷**：先记根因（文件+行号），全量测完**必须统一提单**（FINDINGS.md 非空 → 源码仓库 `huaweicloud/huaweicloud-devkit` 1 个合并单），勿拆单/勿未测完就提/勿只 push 不提单。
+2. **缺陷**：先记根因（文件+行号），全量测完**必须统一提单**（FINDINGS.md 非空 → 源码仓库 `huaweicloud/huaweicloud-devkit` 1 个合并单），勿拆单/勿未测完就提/勿只 push 不提单。**提单前必须历史查重**：`file_issue.py` 已内置（自动拉上游 open issues，按用例号+缺陷语义匹配），命中即「历史问题」→ **不重复开单**、生成 `HISTORY_LINKS.md` 关联清单（历史单号+内容），仅在既有单上补复核评论；见 [skills/test-execution/SKILL.md](skills/test-execution/SKILL.md)「提单」节。
 3. **PASS 门禁（禁虚报）**：一个用例标 PASS 必须同时满足——① 已实际执行（探针/命令真实运行）② 有结果证据落到 `evidence/<case-id>/`（probe 脚本 + stdout.log）③ `evidencePath` 列回填该证据路径。**未执行(NOT_RUN)/无结果/无证据的用例，一律不得标 PASS**，只能标 NOT_RUN 或如实标 FAIL/BLOCKED。回填后跑 `python scripts/verify_no_fake_pass.py <客户端> <OS>` 机械校验，虚报视为作废重来。
 4. **环境阻塞**：标 BLOCKED + 写 blockedReason，不得假装 PASS。
 5. **目录权限（只提交自己）**：只改/提交 `results/<你的客户端>/` 目录，**完全不碰 Summary**（维护者统一生成）、其他客户端目录、test-cases 真源。

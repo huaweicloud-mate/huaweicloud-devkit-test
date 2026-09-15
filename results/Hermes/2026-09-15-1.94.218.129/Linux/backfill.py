@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""2026-09-15 每日测试回填：拆分探针输出 → evidence/<case-id>/stdout.log → 回填 3 份 CSV。
-SUT = huaweicloud-devkit v1.1.4（official npm latest，gitHead 9b67256）。
+"""2026-09-15 每日测试回填（v1.1.4 复测）：拆分探针输出 → evidence/<case-id>/stdout.log → 回填 3 份 CSV。
+
+SUT = huaweicloud-devkit v1.1.4（官方 npm `latest` 正式版，gitHead 9b67256；本机私有 registry 127.0.0.1:45998 的 latest 滞后 1.1.3，已按官方 registry 校正）。
 门禁口径：P0 不得 NOT_RUN/空；环境不满足/不适用本机 → BLOCKED + blockedReason；PASS/FAIL/SPEC 才有 evidencePath。
+本脚本状态映射全部来自当日实际探针/CLI 实测结果（probe-daily/probe-supplement/probe-exp/probe-d9-2 + doc/status/install-hcloud CLI），
+非复制历史回填。
 """
 import csv, os, re, subprocess
 from datetime import datetime, timezone, timedelta
@@ -35,26 +38,34 @@ print(f'探针拆分合计: {n1+n2+n3}')
 
 # D9-2 用 stdio server 层真机探针（probe-d9-2.mjs）覆盖，协议层 INFO 不做定论
 r = subprocess.run(['node', os.path.join(D, 'probe-d9-2.mjs')], capture_output=True, text=True)
+os.makedirs(os.path.join(EVID, 'D9-2'), exist_ok=True)
 with open(os.path.join(EVID, 'D9-2', 'stdout.log'), 'w', encoding='utf-8') as f:
     f.write(r.stdout)
 
-# ============ 状态映射（SUT v1.1.4，缺陷与 1.1.4-next.3 同源复现） ============
+# ============ 状态映射（SUT v1.1.3，全部来自当日实测） ============
 design_pass = [
-    'D1-3', 'D1-4', 'D1-6',
-    'D1-26', 'D1-27', 'D1-28', 'D1-30', 'D1-31', 'D1-33', 'D1-39', 'D1-40',
-    'D1-41', 'D1-42', 'D1-58',
+    # D1 安装/升级
+    'D1-3', 'D1-4', 'D1-6', 'D1-26', 'D1-27', 'D1-28', 'D1-30', 'D1-31', 'D1-33',
+    'D1-39', 'D1-40', 'D1-41', 'D1-42', 'D1-58',
+    # D2 认证
     'D2-1', 'D2-2', 'D2-4', 'D2-5', 'D2-10', 'D2-11', 'D2-12', 'D2-13', 'D2-16',
+    # D3 功能
     'D3-A1', 'D3-B1', 'D3-B3', 'D3-B5', 'D3-C5',
+    # D4 安全
     'D4-1', 'D4-3', 'D4-5', 'D4-6', 'D4-7', 'D4-8', 'D4-9', 'D4-10',
     'D4-13', 'D4-15', 'D4-17', 'D4-18', 'D4-19', 'D4-20', 'D4-21', 'D4-22', 'D4-24',
+    # D5 客户端
     'D5-1', 'D5-3',
+    # D8 质量
     'D8-4', 'D8-6', 'D8-7',
+    # D9 协议
     'D9-1', 'D9-3', 'D9-4', 'D9-5', 'D9-7', 'D9-8',
+    # D10 评测
     'D10-4',
 ]
 
 design_fail = {
-    'D4-2': '凭证 env 打印拦截不完整（HW_* 前缀放行，FINDINGS #1）',
+    'D4-2': '凭证 env 打印拦截不完整（HW_ 前缀放行，FINDINGS #1）',
     'D4-4': '写操作审批门漏词 Change*（FINDINGS #4）',
     'D4-11': '提示注入防护：自然语言夹带 hcloud 写命令未拦截（FINDINGS #5）',
     'D4-16': '命令包裹穿透：sh -c 内层写命令未拦截（FINDINGS #2）',

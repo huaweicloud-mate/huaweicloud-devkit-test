@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""DSH/Linux 2026-09-15 daily 执行回填 (v1.1.4 stable). 只改本目录副本。"""
+"""DSH/Linux 2026-09-15 daily 执行回填 (v1.1.4 stable @9b67256e). 只改本目录副本。"""
 import csv, os
 from datetime import datetime, timezone, timedelta
 from collections import Counter
@@ -26,7 +26,7 @@ DESIGN_FAIL = {
 }
 DESIGN_BLOCKED = {
  "D1-5":"uninstall 为破坏性操作（删除本机插件需重装+重启），headless 不做",
- "D1-39":"Windows 专属升级检测链（EINVAL/文件锁），本机 Linux",
+ "D1-39":"Windows 专属升级检测链（EINVAL/文件锁）；Linux 侧 queryDistTags 亦因本机 npm cache 权限返回 null",
  "D1-41":"需完整 MCP 四态注入协议序列（冷启动 mcp-server + 四态 content JSON 解析）",
  "D1-42":"需 dismiss 跨进程重启复查闭环",
  "D1-45":"需真实会话预热竞态时序",
@@ -64,7 +64,6 @@ def backfill_design():
     with open(path, encoding="utf-8-sig", newline="") as f:
         rows = list(csv.DictReader(f))
     fn = list(rows[0].keys())
-    if "blockedReason" not in fn: fn = fn + ["blockedReason"]
     for r in rows:
         cid = (r.get("ID") or "").strip()
         r["blockedReason"] = ""
@@ -95,7 +94,6 @@ def backfill_expanded():
     with open(path, encoding="utf-8-sig", newline="") as f:
         rows = list(csv.DictReader(f))
     fn = list(rows[0].keys())
-    if "blockedReason" not in fn: fn = fn + ["blockedReason"]
     for r in rows:
         cid = (r.get("ID") or "").strip()
         enum = (r.get("枚举对象") or "").strip()
@@ -120,7 +118,7 @@ def backfill_expanded():
 backfill_expanded()
 
 # 追踪表执行时间
-executed = set(list(DESIGN_PASS.keys()) + list(DESIGN_FAIL.keys()) + list(EXP_PASS.keys()) + list(EXP_FAIL_ROUTING) + [f"EXP-C4-0{i}" for i in range(1,10)] + [f"EXP-C4-{i}" for i in range(10,23)])
+executed = set(list(DESIGN_PASS.keys()) + list(DESIGN_FAIL.keys()) + list(EXP_PASS.keys()) + list(EXP_FAIL_ROUTING) + [f"EXP-C4-{i:02d}" for i in range(1,23)])
 path = os.path.join(BASE, "需求-设计-证据追踪表.csv")
 with open(path, encoding="utf-8-sig", newline="") as f:
     rows = list(csv.DictReader(f))
