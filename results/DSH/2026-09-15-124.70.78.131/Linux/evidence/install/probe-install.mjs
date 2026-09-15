@@ -1,5 +1,5 @@
 // DSH/Linux daily probe — install/manifest/rules (v1.1.4 stable)
-import { readFileSync, existsSync, readdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, mkdtempSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir, homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -38,7 +38,21 @@ function scan(dir, depth) {
 scan(tmpHome, 4);
 check('D4-23','install --target dsh injects huawei-agent-rules', rulesFound > 0, `found=${rulesFound} exit=${res.status}`);
 check('D4-23','src hdk rules/huawei-agent-rules.mdc exists (orphan)', srcHasRules, srcHasRules);
+
+// ---- D1-1 全新环境引导安装 (hermetic: 全新 HOME + install --target dsh) ----
+check('D1-1','install --target dsh completes (exit 0)', res.status===0, `exit=${res.status}`);
+check('D1-1','install 输出含引导(下一步/重启)', /下一步|重启|DSH/.test(res.stdout||''), String(res.stdout||'').slice(-600));
+// ---- D1-2 多 Agent 探测 (无 --target 自动探测) ----
+const tmpHome2 = mkdtempSync(join(tmpdir(), 'hdk-install-autod-'));
+mkdirSync(join(tmpHome2, '.dsh'), { recursive: true });   // 预置 DSH 客户端标记，供 auto-detect 识别
+const res2 = spawnSync(process.execPath, [join(PKG,'bin','setup.cjs'), 'install'], {
+  env: { ...process.env, HOME: tmpHome2, HUAWEICLOUD_HOME: tmpHome2 },
+  encoding: 'utf8', timeout: 60000,
+});
+const autoOut = (res2.stdout||'') + (res2.stderr||'');
+check('D1-2','无 --target install 自动探测到 DSH 并执行', res2.status===0 && /DSH|dsh/i.test(autoOut), `exit=${res2.status} len=${autoOut.length}`);
 rmSync(tmpHome, {recursive:true, force:true});
+rmSync(tmpHome2, {recursive:true, force:true});
 
 // ---- D1-58 MCP 白名单 merge 语义 ----
 const { mergeMcpServersFile } = await import(CORE + '/mcp-config-merge.mjs');
