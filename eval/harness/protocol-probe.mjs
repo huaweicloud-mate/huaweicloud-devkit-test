@@ -80,6 +80,22 @@ const badParam = await srv.send({ jsonrpc: '2.0', id: 4, method: 'tools/list', p
 rec('D9-2b-invalid-params', '-32602 (Invalid params)', String(badParam?.error?.code ?? '无 error 对象'),
     badParam?.error?.code === -32602 ? 'PASS' : 'FAIL', 'error.code');
 
+// ===== D9-6 跨客户端互通：10 客户端 clientInfo 独立连接 initialize+tools/list，验证协议不依赖特定客户端 =====
+const CLIENTS = ['OpenCode', 'Codex', 'CodeArtsAgent', 'CodeArtsWork', 'WorkBuddy',
+    'DSH', 'OfficeAce', 'Hermes', 'OpenClaw', 'AtomCode'];
+let ok6 = 0;
+for (const cn of CLIENTS) {
+  const s = makeServer(serverPath);
+  try {
+    const i = await s.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: cn, version: '1' } } });
+    const t = await s.send({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} });
+    if (i?.result && Array.isArray(t?.result?.tools) && t.result.tools.length > 0) ok6++;
+  } catch {}
+  s.kill();
+}
+rec('D9-6-clientinfo-matrix', '10 客户端 clientInfo 均可互通', `${ok6}/10`,
+    ok6 === 10 ? 'PASS' : 'FAIL', '任意 clientInfo 均 initialize+tools/list 正常');
+
 // ===== 汇总 + 落盘 =====
 const hit = results.filter(r => r.verdict === 'PASS').length;
 console.log(`\n=== D9 协议探针汇总 ===`);

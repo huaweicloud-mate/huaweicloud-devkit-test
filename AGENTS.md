@@ -113,7 +113,7 @@ npm install -g huaweicloud-devkit
 | FAIL | 不符预期 | 记根因(文件:行号) |
 | BLOCKED | 环境/权限阻塞 | 必须写 blockedReason；「环境不满足」用 BLOCKED 而非 NOT_RUN |
 | SPEC-MISMATCH | 实现与设计契约漂移 | 记漂移点 |
-| NOT_RUN | 未执行 | **仅限明确不适用本客户端/OS；P0 一律不得 NOT_RUN**；每条必须写原因 |
+| NOT_RUN | 未执行 | **仅限明确不适用本客户端/OS（含 OS 专属用例在非对应 OS，如 D1-39 Windows 专属在 Linux）；P0 一律不得 NOT_RUN，唯一例外=OS 专属 P0 用例在非对应 OS（OS 列标注「专属」）**；每条必须写原因 |
 
 > **展开级已按客户端+OS 预筛（2026-09-15 起）**：`init_day.py` 复制展开级时已按 `agent`（执行客户端）+ `OS`（执行系统）两列预筛，只下发「归你执行 + 匹配你 OS」的展开级；「别的客户端 / 别的 OS」的展开级不再下发，无需再判 NOT_RUN 归属。`NOT_RUN` 只保留「归你但你明确没跑」；`BLOCKED` 只用于「归你但被环境/权限/凭证阻塞」。详见 [skills/test-execution/SKILL.md §2.5](skills/test-execution/SKILL.md)。
 

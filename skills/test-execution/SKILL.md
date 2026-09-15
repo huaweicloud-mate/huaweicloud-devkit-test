@@ -49,7 +49,7 @@ python scripts/init_day.py <客户端> <OS>
 ### 3. 回填执行状态 + 执行时间
 - 「执行状态」枚举：`PASS`（有证据）/ `FAIL`（不符预期，记根因）/ `BLOCKED`（环境阻塞，记 blockedReason）/ `SPEC-MISMATCH`（契约漂移）/ `NOT_RUN`。
 - 「执行时间」：北京时间紧凑 14 位 `YYYYMMDDHHmmss`，**与「执行状态」同一动作回填**（执行完即落）。
-- **NOT_RUN 纪律**：P0 一律不得 NOT_RUN/留空（P0 必测，要么 PASS/FAIL 要么 BLOCKED）；NOT_RUN 仅限「明确不适用本客户端/OS」且写原因；「环境不满足」标 BLOCKED 而非 NOT_RUN。
+- **NOT_RUN 纪律**：P0 一律不得 NOT_RUN/留空（P0 必测，要么 PASS/FAIL 要么 BLOCKED），**唯一例外 = OS 专属 P0 用例在非对应 OS**（OS 列标注「专属」，如 D1-39 Windows 专属在 Linux 标 NOT_RUN 并写原因，Linux 侧由展开级 EXP-NR3-10 代表覆盖）；NOT_RUN 仅限「明确不适用本客户端/OS」且写原因；「环境不满足」标 BLOCKED 而非 NOT_RUN。
 - **未执行原因反馈（给维护 agent 改用例）**：所有 NOT_RUN / BLOCKED 用例，原因须「详细到可判断是否需改用例」，并标注分类——【改用例】用例设计不合理（前置/步骤/预期不可判定、粒度、归属、需真云/真机未标注）→ 维护 agent 改 `test-cases/` 母版；【补环境】环境/凭证/配额缺失；【调归属】归属列（agent/OS/终端覆盖类型）写错。报告 §五**逐条**列出（ID+层级+优先级+状态+分类+详细原因+改用例建议），不得笼统写「无阻塞项」敷衍。
 - 回填后跑 `python scripts/verify_coverage.py <客户端> <OS>`：P0 出现 NOT_RUN/空、或 NOT_RUN+空总占比 > 15% → 不达标，补齐重跑。
 
