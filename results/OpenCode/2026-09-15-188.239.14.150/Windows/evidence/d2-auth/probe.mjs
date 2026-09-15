@@ -129,8 +129,9 @@ test('D9-2', 'mcp-compliant', TOOL_DEFINITIONS.every(t=>t.name&&t.description&&t
 // D9-6: cross-client
 test('D9-6', 'stdio', TOOL_DEFINITIONS.length>0, TOOL_DEFINITIONS.length, '>0', 'tools via stdio available', 'tools not available');
 
-// D9-9: timeout/cancel
-test('D9-9', 'calltool-opts', callTool.length>=2, callTool.length, '>=2', `callTool params: ${callTool.length}`, 'callTool params insufficient');
+// D9-9: timeout/cancel — callTool has opts param (default values make .length=1, but signature is (name, rawArgs={}, opts={}))
+const callToolSig = callTool.toString();
+test('D9-9', 'calltool-opts', /opts/.test(callToolSig) || callTool.length>=2, `sig has opts: ${/opts/.test(callToolSig)}, length: ${callTool.length}`, 'opts param', `callTool accepts opts: ${/opts\s*=/.test(callToolSig)}`, 'callTool missing opts param');
 
 // D1-1: setup-cli
 const setupCli = join(pkgRoot,'plugins','huaweicloud-core','src','setup-cli.mjs');

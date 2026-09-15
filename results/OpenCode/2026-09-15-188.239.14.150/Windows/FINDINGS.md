@@ -1,7 +1,7 @@
 # FINDINGS — 缺陷发现清单（OpenCode-glm-5.2）1.1.4 正式版
 
 > **落盘路径**：`results/OpenCode/2026-09-15-188.239.14.150/Windows/FINDINGS.md`
-> **生成时间**：2026-09-15 00:42:00（北京时间）
+> **生成时间**：2026-09-15 19:46:14（北京时间）
 > **被测版本**：huaweicloud-devkit@1.1.4（npm latest，gitHead `9b67256`）
 > **本清单是统一提单脚本的解析输入**。
 

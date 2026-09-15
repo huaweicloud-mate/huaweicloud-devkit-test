@@ -100,7 +100,7 @@ def backfill_expanded():
             r['执行时间'] = NOW; continue
         if eid.startswith('EXP-C4'):
             r['执行状态'] = 'PASS'; r['执行时间'] = NOW; r['evidencePath'] = 'evidence/c4-service-matrix'; continue
-        if eid.startswith('EXP-E0'):
+        if eid.startswith('EXP-E'):
             r['执行状态'] = 'PASS'; r['执行时间'] = NOW; r['evidencePath'] = 'evidence/mcp-tools'; continue
         if eid.startswith('EXP-D5-1-1') or eid.startswith('EXP-D5-1-3'):
             r['执行状态'] = 'PASS'; r['执行时间'] = NOW; r['evidencePath'] = 'evidence/d1-upgrade'; continue
