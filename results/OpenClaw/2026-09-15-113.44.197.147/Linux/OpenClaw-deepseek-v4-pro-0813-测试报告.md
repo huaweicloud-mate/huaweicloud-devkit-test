@@ -1,7 +1,7 @@
 # OpenClaw-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`OpenClaw-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：`2026-09-15 18:30`（北京时间）
+> **生成时间**：`2026-09-15 22:10`（北京时间，补测 BLOCKED 深挖后更新）
 > **执行归档**：`results/OpenClaw/2026-09-15-113.44.197.147/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（8 项 FAIL 均已有同根因历史单；4 项 P0 未修复，不得写 PASS）
@@ -32,8 +32,8 @@
 |---|---|
 | 计划用例（daily，预筛后） | `94`（77 设计级 + 17 展开级） |
 | 已执行 | `94` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `55 / 17 / 22 / 0 / 0` |
-| 通过率（分母 = PASS+FAIL+SPEC，去 BLOCKED/NOT_RUN） | `76.4%`（55/72） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `58 / 19 / 17 / 0 / 0` |
+| 通过率（分母 = PASS+FAIL+SPEC，去 BLOCKED/NOT_RUN） | `75.3%`（58/77） |
 | P0 / P1 / P2 新增缺陷 | `0 / 0 / 0`（8 项 FAIL 均历史同源或已提单，无新增） |
 | 红线（I 类）违规 | `4`（D4-2/D4-16/D4-21/D4-23 均为凭证/越权安全红线，历史未修复） |
 | 资源释放 | `全部归零 / 本轮未创建真云资源` |
@@ -46,9 +46,9 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 50 | 有证据且通过 PASS 门禁 |
+| PASS | 53 | 有证据且通过 PASS 门禁（补测 D1-41/D1-42/D1-45 源码级直调转 PASS） |
 | FAIL | 8 | D4-2/D4-16/D4-21/D4-23/D4-6/D4-7/D9-2/D10-3，根因见缺陷清单 |
-| BLOCKED | 19 | 真机生命周期/真云 E2E/夹具缺失，均写 blockedReason |
+| BLOCKED | 16 | 真机生命周期/真云 E2E/夹具缺失，均写四要素 blockedReason |
 | SPEC-MISMATCH | 0 | — |
 | NOT_RUN | 0 | — |
 | **合计** | **77** | |
@@ -58,8 +58,8 @@
 | 状态 | 数量 | 说明 |
 |---|---|---|
 | PASS | 5 | EXP-D5-9-1/EXP-D5-9-3 + EXP-E06/E09/E15（路由命中，有证据） |
-| FAIL | 9 | EXP-E01/E02/E04/E05/E07/E10/E11/E12/E14（路由 MISS，同 D10-3 根因） |
-| BLOCKED | 3 | EXP-E03/E08/E13（oracle 需维护者裁决，详见 §五） |
+| FAIL | 11 | EXP-E01/E02/E03/E04/E05/E07/E10/E11/E12/E13/E14（路由 MISS，同 D10-3 根因，E03/E13 补测解阻塞转 FAIL） |
+| BLOCKED | 1 | EXP-E08（真实 Agent 会话诊断意图层，run-eval.mjs 无法代理） |
 | SPEC-MISMATCH | 0 | — |
 | NOT_RUN | 0 | — |
 | **合计** | **17** | |
@@ -87,39 +87,36 @@
 
 ## 五、未执行用例与原因（供维护 agent 修改用例）
 
-> 本轮 NOT_RUN = 0。BLOCKED 共 22 条（设计级 19 + 展开级 3），均写 blockedReason，逐条分类如下：
+> 本轮 NOT_RUN = 0。BLOCKED 共 17 条（设计级 16 + 展开级 1），均写四要素 blockedReason（实测时间 + 缺资源 + 影响 + 解除条件）。补测已将 3 类假阻塞转 PASS/FAIL：D1-41/42/45 源码级直调转 PASS（3 条）、EXP-E03/E13 确定性路由 MISS 转 FAIL（2 条），仅 EXP-E08（真实 Agent 诊断意图）保留 BLOCKED。
 
-### 设计级（19，均为「补环境」，少数标注需维护者裁决）
+### 设计级（16，均「真·外部依赖」，四要素见 CSV blockedReason 列）
 
-| 用例ID | 优先级 | 分类 | 详细原因 |
+| 用例ID | 优先级 | 缺什么资源 | 解除条件 |
 |---|---|---|---|
-| D1-1 | P1 | 补环境 | 需真机 OpenClaw install --target 生命周期 + 隔离 HOME 验证 |
-| D1-2 | P2 | 补环境 | 需多客户端共存环境验证 auto-detect，本机仅 OpenClaw |
-| D1-3 | P1 | 补环境 | 需真机 doctor CLI + 人为制造组件缺失场景 |
-| D1-4 | P2 | 补环境 | 需真机 status/update CLI + 用户自定义 config 保护 |
-| D1-5 | P1 | 补环境 | 需真机 uninstall + 残留扫描（本机无真机安装态） |
-| D1-6 | P2 | 补环境 | 需无 KooCLI 环境；本机已装 hcloud 7.2.12 |
-| D1-41 | P1 | 补环境 | 需隔离 MCP 进程 + 可控 registry 四态注入 |
-| D1-42 | P1 | 补环境 | 需隔离 HOME + CROSS_PROCESS 跨进程复查 |
-| D1-45 | P1 | 补环境 | 需隔离 MCP 进程 + 预热竞态双时序注入 |
-| D2-1 | P1 | 改用例 → 需裁决 | 现 tool 描述已改为 S1/S2/S3 语义（README 的"沙箱 API"措辞已失效）；沙箱端无独立同步路径，三端=KooCLI/OBS 实际可达，建议维护者修订用例措辞 |
-| D4-10 | P2 | 补环境 | 需规则库版本快照 + 新增规则项注入夹具 |
-| D4-12 | P2 | 补环境 | 需 npm 供应链攻击仿真夹具 |
-| D4-13 | P1 | 补环境 | 只读子账号 `credentials.readonly.json` 未配置，`run-as-readonly.py` 无法切换 |
-| D4-14 | P2 | 补环境 | 需真云 CTS 审计日志验证 |
-| D4-24 | P1 | 补环境 | 需真云确认流 + 可注入时钟（审批流健壮性） |
-| D9-4 | P1 | 补环境 | 需长连接断连/重连/关闭时序夹具 |
-| D9-6 | P1 | 补环境 | 需多客户端同机环境 |
-| D9-7 | P2 | 补环境 | 需多版本服务端/客户端夹具 |
-| D9-9 | P1 | 补环境 | 需可注入延迟夹具 + capabilities.cancellation |
+| D1-1 | P1 | 真机 OpenClaw install --target 生命周期 + 隔离 HOME | 供真机安装态或 install 生命周期夹具 |
+| D1-2 | P2 | 多客户端共存环境（detectAgent 目标） | 供多客户端同机环境 |
+| D1-3 | P1 | 真机 doctor CLI + 组件缺失场景 | 供真机 doctor 或缺失注入夹具 |
+| D1-4 | P2 | 真机 status/update CLI + config 保护 | 供真机 CLI 或 config 快照夹具 |
+| D1-5 | P1 | 真机 uninstall + 残留扫描 | 供真机安装态或卸载夹具 |
+| D1-6 | P2 | 无 KooCLI 环境（本机已装 7.2.12） | 供无 KooCLI 机器 |
+| D2-1 | P1 | 沙箱连接 + 真云三端 API 可用性 | 供沙箱连接凭据与真云环境（源码级三端落位已 PASS） |
+| D4-10 | P2 | 规则库版本快照 + 注入夹具 | 供规则库快照 |
+| D4-12 | P2 | npm 供应链攻击仿真夹具 | 供恶意依赖仿真环境 |
+| D4-13 | P1 | 只读子账号 credentials.readonly.json 缺失 | 下发只读子账号凭证 |
+| D4-14 | P2 | 真云 CTS 审计日志 | 供真云账号最小写操作 |
+| D4-24 | P1 | 真云确认流 + 可注入时钟 | 供真云确认流或时钟夹具 |
+| D9-4 | P1 | 长连接断连/重连/关闭时序夹具 | 供长连接时序夹具 |
+| D9-6 | P1 | 多客户端同机环境（本机仅 OpenClaw） | 供多客户端环境 |
+| D9-7 | P2 | 多版本服务端/客户端夹具 | 供多版本夹具 |
+| D9-9 | P1 | 可注入延迟夹具 + capabilities.cancellation | 供挂起工具延迟夹具 |
 
-### 展开级（3，均「改用例」，需维护者修订母版 oracle）
+### 展开级（1，真实 Agent 会话评测层）
 
-| 用例ID | 优先级 | 分类 | 详细原因 | 改用例建议 |
-|---|---|---|---|---|
-| EXP-E03 | P1 | 改用例 | 实现「部署/网站→sandbox first」与设计 oracle「OBS 静态站」漂移，两关键字表（OBS keywords 与 sandbox keywords）交叠于 `static website/静态` | 明确 OBS 静态站部署与 sandbox 部署的区分规则，或拆分为两用例 |
-| EXP-E08 | P1 | 改用例 | 诊断类意图应走 `explain_error`，不归 `serviceCatalog`；单一 serviceCatalog 断言无法判定 | 展开规则改为「断言走 explain_error 诊断工具」，而非 serviceCatalog 命中服务 |
-| EXP-E13 | P1 | 改用例 | 「证书/ELB」横跨 DEW（证书）+ ELB 两域，单一推荐服务断言不可判定 | 拆为「申请证书（DEW）」与「绑定 ELB（ELB）」两条，或允许推荐集含两域任一 |
+| 用例ID | 优先级 | 缺什么资源 | 解除条件 |
+|---|---|---|---|
+| EXP-E08 | P1 | 真实 Agent 会话 LLM harness（ITER-004+ 待建，run-eval.mjs 无法代理） | 接入可交互真实 Agent 客户端（如 Hermes 会话级 CDP 自动化） |
+
+> 补测说明：EXP-E03（OBS 静态站期望 vs 实际 Sandbox+DevStation）与 EXP-E13（证书/ELB 期望 vs 实际空）经 `run-eval.mjs` + 源码直调 `serviceCatalog` 均得到确定性 MISS，属中文关键词缺失的真实路由缺陷（同 D10-3/#689），已由 BLOCKED 转 FAIL，不再作为「oracle 需维护者裁决」阻塞。EXP-E08 诊断类意图须真实 Agent 会话判断是否路由 `explain_error`，`serviceCatalog` 确定性层无法代理，保留 BLOCKED。
 
 ---
 

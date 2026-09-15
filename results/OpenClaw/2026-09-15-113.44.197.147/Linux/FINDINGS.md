@@ -1,7 +1,7 @@
 # FINDINGS — 缺陷发现清单（OpenClaw-deepseek-v4-pro-0813）
 
 > **落盘路径**：`results/OpenClaw/2026-09-15-113.44.197.147/Linux/FINDINGS.md`
-> **生成时间**：2026-09-15 18:30（北京时间）
+> **生成时间**：2026-09-15 22:10（北京时间，补测 BLOCKED 深挖后更新）
 > **被测版本**：`v1.1.4`（npm latest 正式版，gitHead `9b67256`，PR #669 release-1.1.4）
 > **工具全集**：40（`tools.mjs` TOOL_DEFINITIONS）
 > **本清单是统一提单脚本的解析输入**：`scripts/file_issue.py` 硬编码解析标题与「根因」字段，格式严格。
@@ -93,5 +93,7 @@
 展开级 `EXP-E01`~`EXP-E15` 是 D10-3 中文意图评测集（`eval/prompts/eval-set-v1.csv` 同源），执行结果全部按 D10-3 源码级路由断言回填：
 
 - `EXP-E06`/`EXP-E09`/`EXP-E15` → **PASS**（命中路由）
-- `EXP-E01`/`EXP-E02`/`EXP-E04`/`EXP-E05`/`EXP-E07`/`EXP-E10`/`EXP-E11`/`EXP-E12`/`EXP-E14` → **FAIL**（路由 MISS，同 #8 根因）
-- `EXP-E03`/`EXP-E08`/`EXP-E13` → **BLOCKED**（oracle 需维护者裁决：E03 OBS 静态站 vs sandbox-first 漂移 / E08 诊断类非 serviceCatalog / E13 跨 DEW+ELB 双服务），详见报告 §五。
+- `EXP-E01`/`EXP-E02`/`EXP-E03`/`EXP-E04`/`EXP-E05`/`EXP-E07`/`EXP-E10`/`EXP-E11`/`EXP-E12`/`EXP-E13`/`EXP-E14` → **FAIL**（路由 MISS，同 #8 根因）
+- `EXP-E08` → **BLOCKED**（真实 Agent 会话诊断意图层，run-eval.mjs 无法代理，见报告 §五）
+
+> 补测修正：EXP-E03「OBS 静态站期望 vs 实际 Sandbox+DevStation」与 EXP-E13「证书/ELB 期望 vs 实际空」原本标 BLOCKED（oracle 需维护者裁决），经 `run-eval.mjs` 与源码直调 `serviceCatalog` 确认均为确定性 MISS（中文关键词缺失的真实路由缺陷，同 #689），已转 FAIL，不再阻塞。
