@@ -1,9 +1,9 @@
 # CodeArtsAgent-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`CodeArtsAgent-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-09-15 09:40:00（北京时间）
+> **生成时间**：2026-09-15 13:05:00（北京时间）
 > **执行归档**：`results/CodeArtsAgent/2026-09-15-124.70.78.131/Linux/`
-> **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
+> **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`，npm latest v1.1.4，gitHead 9b67256）
 > **结论**：`PARTIAL`（有 P0 缺陷，不得标 PASS）
 
 ---
@@ -14,15 +14,15 @@
 |---|---|
 | 客户端 / Agent | CodeArtsAgent（codearts CLI）+ deepseek-v4-pro-0813 |
 | OS / 架构 | Linux aarch64 |
-| Node / npm / Python | Node v22.13 / npm 10 / Python 3.12 |
+| Node / npm / Python | Node v22.x / npm 11 / Python 3.12 |
 | 被测版本（SUT） | v1.1.4（npm latest 正式版，gitHead 9b67256） |
 | 工具全集 | 40（tools.mjs TOOL_DEFINITIONS；CodeArts 框架 MCP 实际暴露 37） |
 | hcloud / 依赖 | hcloud 7.2.12（check_cli installed+authenticated） |
 | 真云凭证 | cn-north-4（AKSK，仅 show_profile_redacted/auth_status 脱敏核对；本轮无真实资源创建） |
-| 测试类型 | MCP 黑盒直调 + CLI（doctor/status）+ 源码级检查 + node 函数级探针 |
+| 测试类型 | MCP 黑盒直调（huaweicloud_* 工具）+ CLI（doctor/status）+ 源码级检查 + node 函数级探针 |
 | 设计真源 | 设计级 81 / 展开级 39（daily 精选，展开级已按客户端+OS 预筛） |
 
-> **执行方法**：通过 MCP 工具（huaweicloud_*）黑盒直调被测对象；node 直调 `hdk` 导出函数（semverCompare/judgeUpdate）做函数级证据；安全 hook/auth/plan 类 P0 + 关键 P1/P2 逐一真实执行；源码级检查（hdk@9b67256）用于根因定位。
+> **执行方法**：通过 MCP 工具（huaweicloud_*）黑盒直调被测对象，决策/结果落 `stdout.log`；源码级检查（hdk@9b67256）用于根因定位（文件:行号）。
 
 ---
 
@@ -31,7 +31,7 @@
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | 120（设计级 81 + 展开级 39） |
-| 已执行（有证据） | 54（设计级 30 + 展开级 24） |
+| 已执行（非 BLOCKED） | 62（设计级 38 + 展开级 24） |
 | PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 51 / 9 / 58 / 2 / 0 |
 | 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 82.3%（51/62） |
 | P0 / P1 / P2 新增缺陷 | 新增 1（P0 D4-5）；复现上轮 #673 共 8 项 |
@@ -47,7 +47,7 @@
 | 状态 | 数量 | 说明 |
 |---|---|---|
 | PASS | 28 | 有证据且通过 PASS 门禁 |
-| FAIL | 8 | D4-2、D4-5、D4-15、D4-23、D8-7、D1-26、D4-6、D4-17（根因见缺陷清单） |
+| FAIL | 8 | D4-2、D4-5、D4-6、D4-15、D4-17、D4-23、D1-26、D8-7（根因见缺陷清单） |
 | BLOCKED | 43 | 真云/Windows/审批流/harness/协议 Inspector/install 布局/check_update 未暴露（见阻塞项） |
 | SPEC-MISMATCH | 2 | D5-3、D9-1（工具枚举 40 vs 37，与 D1-26 同源） |
 | NOT_RUN | 0 | 无 |
@@ -91,18 +91,27 @@
 
 ---
 
-## 五、阻塞项
+## 五、未执行用例与原因（供维护 agent 修改用例）
 
-| 用例 ID | 阻塞原因 | 环境依赖 | 解除条件 |
-|---|---|---|---|
-| D1-39 | Windows 升级检测链（EINVAL/文件锁） | Windows 环境 | Windows 机器复测 |
-| D1-27/28/31/41/42/45 | check_update 语义/冷却期/dismiss | check_update 框架层未暴露 | 框架暴露后复测 |
-| D1-1/2/5/6/58 | 安装/卸载/白名单 merge | 隔离 HOME install 布局 | 干净安装环境 |
-| D4-18/19/20、D2-1/10/12/13/16、D4-13/24 | 真云审批流/多账号/凭证切换 | 真云 AK/SK + PTY | 真云审批流环境 |
-| D3-C4 | 真云服务创建矩阵（设计级） | 真云最小配置创建+销毁 | 真云 E2E 环境 |
-| D10-1~5 / EXP-E01~15 | 评测 harness（promptfoo） | 评测基建 | harness 就绪 |
-| D9-2~9、D6-1/3/4 | 协议/并发/冷启注入压测 | MCP Inspector | 协议测试客户端 |
-| D4-10/12、D7-4 | 规则库变更/供应链安装/mirror | 干净安装+改造 | 隔离安装环境 |
+| 分类 | 含义 | 维护 agent 动作 |
+|---|---|---|
+| `改用例` | 用例设计不合理 | 修改 `test-cases/` 母版 |
+| `补环境` | 环境/凭证/配额/依赖缺失 | 补环境后复测 |
+| `调归属` | 归属列需改 | 调整 agent/OS 列 |
+
+| 用例ID | 层级 | 优先级 | 状态 | 分类 | 详细原因 |
+|---|---|---|---|---|---|
+| D1-39 | 设计级 | P0 | BLOCKED | 调归属 | Windows 升级检测链，Windows 专属用例，本机 Linux |
+| D4-18/19/20 | 设计级 | P0/P1 | BLOCKED | 补环境 | 真云 PTY 审批流实时对话框，本环境无 PTY |
+| D2-1/5/10/12/13/16、D4-13 | 设计级 | P1 | BLOCKED | 补环境 | 真云多账号/审批流/runtime 切换，本环境单账号只读 |
+| D3-C4 | 设计级 | P1 | BLOCKED | 补环境 | 服务创建类需真云最小配置创建+销毁，本环境不可创建 |
+| D1-27/28/31/33/41/42/45 | 设计级 | P1/P2 | BLOCKED | 补环境 | check_update 语义/冷却期/dismiss，check_update 框架层未暴露（D1-26 同源） |
+| D1-1/2/5/6/58、D4-10/12、D7-4 | 设计级 | P1/P2 | BLOCKED | 补环境 | 需隔离 HOME + 交互 install/uninstall 干净布局，本环境已预装 |
+| D9-2~9、D6-1/3/4 | 设计级 | P1/P2 | BLOCKED | 补环境 | 需 MCP Inspector 协议测试客户端/压测 |
+| D10-1~5 | 设计级 | P0/P1 | BLOCKED | 补环境 | 需评测 harness（promptfoo），本环境无评测基建 |
+| EXP-E01~15 | 展开级 | P1 | BLOCKED | 补环境 | 评测集路由需 harness（promptfoo）底座 |
+
+> 本轮无 NOT_RUN；BLOCKED 均写 blockedReason（已回填 CSV）。真云类用例因无 AK/SK 真实建删资源而 BLOCKED，未 mock 假跑、未虚标 PASS。
 
 ---
 
@@ -111,7 +120,7 @@
 - [x] 凭证泄漏事件：0
 - [x] 写操作误判 read-only：本轮发现 framework 层 1 处（D4-5 Apply*），已记缺陷
 - [x] 红线（I 类）违规：无
-- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（D2-11 用假 AK/SK/token，R3 返回 scope:rejected 且 S1 指纹未变；show_profile_redacted/auth_status 均经 redaction 管道）
+- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（show_profile_redacted 返回 accessKeyId/secretAccessKey/securityToken 均 `<redacted>`）
 
 ---
 
