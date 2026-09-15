@@ -1,0 +1,8 @@
+@@CASE D10-3@@
+INFO D10-3  serviceCatalog 路由评测（harness eval/harness/run-eval.mjs + 源码直调 huaweicloud_service_catalog，eval-set-v1.csv 15 条中文意图）
+FAIL D10-3  中文意图路由未命中：HIT=3 MISS=11 N/A=1（诊断类），准确率=21.4%（HIT+MISS=14）
+INFO D10-3  MISS 明细：E01→ECS(实返 help), E02→ECS(help), E03→OBS(实返 Sandbox+DevStation), E04→EIP(help), E05→RDS(help), E07→CBR(help), E10→FunctionGraph(help), E11→BSS(help), E12→CES(help), E13→ELB(help), E14→IAM(help)
+INFO D10-3  HIT 明细：E06→DCS(DDS+DCS), E09→CCE(CCE+SWR), E15→Incentive Voucher
+INFO D10-3  N/A 明细：E08(诊断类, explain_error，不查服务目录)
+INFO D10-3  根因：tools.mjs:1778 routeMap 关键词英文-only（仅 voucher/sandbox 有中文关键词），String(intent).toLowerCase() 未做中文意图映射
+@@END@@
