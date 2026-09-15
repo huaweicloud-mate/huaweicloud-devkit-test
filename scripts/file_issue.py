@@ -52,6 +52,7 @@ TEST_TYPE_LABELS = {
 DEFECT_HINT = [
     "fail", "allow", "未拦截", "未覆盖", "绕过", "穿透", "不脱敏", "缺陷", "根因",
     "零覆盖", "无规则", "误判", "遗漏", "actual", "no-rule", "deny",
+    "miss", "未命中", "失效", "漂移", "准确率低", "准确率仅", "降级",
 ]
 
 
@@ -140,10 +141,20 @@ def _ids_in_defect_context(issue, ids):
     return False
 
 
+def _kw_hit(text_lower, kw):
+    """关键词命中（大小写不敏感）：含 ASCII 用词边界（避免 HCL 误匹配 hcloud），纯中文用子串。"""
+    kl = (kw or "").lower()
+    if not kl:
+        return False
+    if re.search(r"[a-z0-9]", kl):
+        return bool(re.search(r"(?<![a-z0-9])" + re.escape(kl) + r"(?![a-z0-9])", text_lower))
+    return kl in text_lower
+
+
 def _kw_in_text(kws, text):
-    """任一关键词命中文本（大小写不敏感）。"""
+    """任一关键词命中文本（词边界，大小写不敏感）。"""
     tl = text.lower()
-    return any(k and k.lower() in tl for k in kws)
+    return any(_kw_hit(tl, k) for k in kws)
 
 
 def _kw_near_defect(iss, kws):
@@ -175,7 +186,7 @@ def match_history(item, issues):
     hay_lower = hay.lower()
     for words in CASE_KEYWORD_MAP.values():
         for w in words:
-            if w and w.lower() in hay_lower:
+            if _kw_hit(hay_lower, w):
                 kws.add(w)
 
     strong, weak = [], []
@@ -310,11 +321,12 @@ def main():
             if weak:
                 print(f"      ↳ （正文另有提及 #: {', '.join('#'+str(h['number']) for h in weak)}）")
         print("=" * 66)
-        hist_md = render_history_report(hist_items)
-        out_md = os.path.join(os.path.dirname(path), "HISTORY_LINKS.md")
-        with open(out_md, "w", encoding="utf-8") as f:
-            f.write(hist_md)
-        print(f"关联清单已写: {out_md}")
+        if not dry_run:
+            hist_md = render_history_report(hist_items)
+            out_md = os.path.join(os.path.dirname(path), "HISTORY_LINKS.md")
+            with open(out_md, "w", encoding="utf-8") as f:
+                f.write(hist_md)
+            print(f"关联清单已写: {out_md}")
 
         if comment_dup:
             for it in hist_items:
