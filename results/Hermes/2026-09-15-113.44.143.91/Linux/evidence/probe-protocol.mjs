@@ -48,7 +48,7 @@ cond(init?.result?.protocolVersion === '2024-11-05', 'D9-7 协商版本回显', 
 
 // D9-1/D5-3 tools/list → 39
 const list = await rpc('tools/list', {});
-cond(Array.isArray(list?.result?.tools) && list?.result?.tools.length === 39, 'D9-1/D5-3 tools/list=39', `count=${list?.result?.tools?.length}`);
+cond(Array.isArray(list?.result?.tools) && list?.result?.tools?.length === 40, 'D9-1/D5-3 tools/list=40', `count=${list?.result?.tools?.length}`);
 
 // D9-3 tools/call 响应格式
 const call = await rpc('tools/call', { name: 'huaweicloud_list_regions', arguments: {} });

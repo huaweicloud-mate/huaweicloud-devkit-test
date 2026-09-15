@@ -1,4 +1,4 @@
-// 华为云 DevKit 源码级断言库 — Hermes / Linux / 1.1.4 (9b67256)
+// 华为云 DevKit 源码级断言库 — Hermes / Linux / 1.1.4-next.3 (3b6290b)
 // 每个用例一个 async 断言函数，返回 { pass, expected, actual, detail }。
 // 用法: CASE_ID=D4-2 node probe-runner.mjs  (见各 evidence/<case>/probe.mjs 薄包装)
 const HDK = process.env.HDK_PLUGIN_SRC ||

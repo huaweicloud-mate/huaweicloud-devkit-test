@@ -1,0 +1,22 @@
+=== CASE D8-1 ===  FAIL
+  expected: 文档宣称工具数与实现一致（AGENTS.md 应为 40 tools）
+  actual:   实现 tools.mjs TOOL_DEFINITIONS = 40 工具；AGENTS.md 仍含 2 处 "39 tools/MCP tool" → 漂移
+  detail:   工具数 39→40 漂移；新增 huaweicloud_obs_set_website_config 未同步 AGENTS.md 工具数（AGENTS.md:27,45）
+=== CASE D8-4 ===  PASS
+  expected: 各 SKILL.md 引导步骤可机械执行（YAML name 齐全、无 TODO 残留）
+  actual:   29 个 skill：全部含 name 且无 TODO
+=== CASE D8-6 ===  PASS
+  expected: README.md 与 README.zh-CN.md 双源并行、结构一致
+  actual:   README.md(26 节) + README.zh-CN.md(26 节) 均存在
+=== CASE D4-12 ===  PASS
+  expected: 无恶意 postinstall + 依赖锁定 + 安装期无危险调用
+  actual:   postinstall=node ./bin/dsh-postinstall.cjs preinstall=无 deps=undici lock=true 危险调用=false
+=== CASE D9-5 ===  PASS
+  expected: stdio 大 payload/并发/断连不崩，stdout 纯协议无日志污染
+  actual:   大payload(200KB)受控=true, 并发10响应=10/10
+  detail:   stdout 采用 Content-Length 帧解析，无 JSON-RPC 之外文本污染
+=== CASE D9-6 ===  PASS
+  expected: 多客户端通过 MCP stdio 协议互通（适配配置 + manifest 覆盖）
+  actual:   integrations/ 含 5 套(atomcode,dsh,hermes,opencode,workbuddy)；manifest 6 个(.claude-plugin,.codex-plugin,.cursor-plugin,.hermes-plugin,.workbuddy-plugin,openclaw.plugin.json)；stdio initialize/tools/list 已由 protocol-stdout.txt 验(40 工具)
+
+=== DOC-SUPPLEMENT 总计 6 条, PASS 5, FAIL 1 ===
