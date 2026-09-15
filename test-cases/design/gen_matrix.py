@@ -662,8 +662,8 @@ add("D4-20", "D4安全", "拒绝后零操作", "P1", "真云",
 # ---------- D2 认证 ----------
 add("D2-1", "D2认证", "auth init三端同步", "P1", "AK/SK+本地凭证文件",
     "auth init",
-    "①配置AK/SK ②执行auth init ③分别验证KooCLI/OBS/沙箱API三端可用",
-    "三端全部落位，任一端失败即缺陷", "P: README 'Synchronizes AK/SK to KooCLI, OBS, and sandbox APIs in one step'",
+    "①源码级: 隔离HOME+假凭证执行auth init ②核对KooCLI/OBS/沙箱三端配置文件落位(路径+格式) ③真云E2E: 真实凭证下核对三端API实际可用",
+    "源码级断言: 三端配置文件均落位(路径+格式,任一端缺失即缺陷); 真云E2E断言: 三端API实际可用", "P: README 'Synchronizes AK/SK to KooCLI, OBS, and sandbox APIs in one step'",
     "huaweicloud_auth_init", "半自动")
 add("D2-2", "D2认证", "auth status判定准确性", "P2", "三端就绪状态可组合环境",
     "auth status",

@@ -46,7 +46,6 @@ P1_SMOKE = {
 # 【撤回标准】凡①探针/脚本已存在可本地跑(如 D6 压测 supplement-probe.mjs)②有历史结论可复用(如 D9-6 clientInfo 互通)
 # ③可静态/源码级直调(如 D10-1 描述评审/D10-3 路由 serviceCatalog)——一律保留 daily，不得以「需环境」借口移出。
 DAILY_EXCLUDE = {
-    "D2-1",      # auth init 三端真云同步（待真云拆分方案）
     "D3-C4",     # 服务创建回归 → 连带 EXP-C4 22 服务（待三档拆分：免费/低频 postPaid/高危计费）
     "D4-13",     # 最小权限凭证通过率（待只读 IAM 子账号）
     "D4-14",     # 操作可审计性（待 CTS 审计日志验证）
