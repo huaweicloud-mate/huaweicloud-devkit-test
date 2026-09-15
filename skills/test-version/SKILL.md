@@ -69,7 +69,7 @@ python scripts/init_day.py <客户端> <OS> --version <版本>   # 版本冻结�
 | PASS 门禁 | `python scripts/verify_no_fake_pass.py <客户端> <OS>` |
 | 覆盖率门禁 | `python scripts/verify_coverage.py <客户端> <OS>` |
 | 每 10 分钟提报 | `python scripts/hourly_sync.py <客户端> <OS> --interval 600` |
-| 统一提单 | `python scripts/file_issue.py <FINDINGS.md> <版本>` |
+| 统一提单 | `python scripts/file_issue.py <FINDINGS.md> <版本> --type=version` |
 
 ## 陷阱
 

@@ -65,7 +65,7 @@ python scripts/hourly_sync.py <客户端> <OS> --interval 600
 ### 6. 统一提单 + 提交（全量测完后必做）
 ```bash
 # ① 提单（FINDINGS.md 非空 → 源码仓库 huaweicloud/huaweicloud-devkit 1 个合并 issue，附报告）
-python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md <版本>
+python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md <版本> --type=daily
 # ②③ 提交 push（token 来自 HDK_GH_TOKEN 或 ~/.hdk_token，不依赖 gh CLI）
 git add results/<客户端> && git commit -m "test: <客户端> <OS> 执行回填"
 T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.helper= push "https://x-access-token:$T@github.com/huaweicloud-mate/huaweicloud-devkit-test.git" main
@@ -106,7 +106,7 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 | PASS 门禁 | `python scripts/verify_no_fake_pass.py <客户端> <OS>` |
 | 覆盖率门禁 | `python scripts/verify_coverage.py <客户端> <OS>` |
 | 每 10 分钟提报 | `python scripts/hourly_sync.py <客户端> <OS> --interval 600` |
-| 统一提单 | `python scripts/file_issue.py <FINDINGS.md> <版本>` |
+| 统一提单 | `python scripts/file_issue.py <FINDINGS.md> <版本> --type=daily` |
 
 ## 陷阱
 

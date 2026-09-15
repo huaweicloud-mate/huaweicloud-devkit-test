@@ -6,6 +6,7 @@
     python file_issue.py <缺陷.md> <版本号>         # 指定缺陷文件 + 版本号
     python file_issue.py <缺陷.md> <版本号> --dry-run        # 只查重/预览，不真正提单
     python file_issue.py <缺陷.md> <版本号> --comment-duplicates  # 对命中的历史单追加复核评论
+    python file_issue.py <缺陷.md> <版本号> --type=daily|version|regression  # 测试类型（默认 daily，决定标题后缀）
 
 约定（用户红线）:
   - 全量测完才统一提单，勿逐日/逐客户端拆多单
@@ -33,6 +34,13 @@ CASE_KEYWORD_MAP = {
     "D4-16": ["sh -c", "bash -c", "包裹", "wrapper", "穿透", "cmd /c", "shell 包裹", "引号内命令"],
     "D2-4":  ["脱敏", "小写", "redact", "不脱敏", "sk 明文"],
     "D4-3":  ["adminpass", "password=", "明文 secret", "show-secret", "secret 参数"],
+}
+
+# 测试类型 -> issue 标题后缀（file_issue.py 被每日/版本全量/回归三种能力共用，标题据此动态生成）
+TEST_TYPE_LABELS = {
+    "daily": "每日测试",       # skills/test-execution
+    "version": "版本全量测试",  # skills/test-version
+    "regression": "回归测试",   # skills/test-regression
 }
 
 # 正文中判断「用例号是作为缺陷提出的」的信号词
@@ -226,6 +234,11 @@ def render_history_report(hist_items):
 def main():
     dry_run = "--dry-run" in sys.argv
     comment_dup = "--comment-duplicates" in sys.argv
+    test_type = "daily"
+    for a in sys.argv[1:]:
+        if a.startswith("--type="):
+            test_type = a.split("=", 1)[1].strip()
+    type_label = TEST_TYPE_LABELS.get(test_type, TEST_TYPE_LABELS["daily"])
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
 
     version = args[1] if len(args) > 1 else "v1.1.4-next.2"
@@ -283,7 +296,7 @@ def main():
                     continue
                 top = strong[0]
                 comment = (
-                    f"每日测试复核（{version}）：本问题仍复现。\n"
+                    f"{type_label}复核（{version}）：本问题仍复现。\n"
                     f"- 今日发现：{it['title']}\n"
                     f"- 证据：{it.get('证据', '')}\n"
                     f"- 根因：{it.get('根因', '')}\n"
@@ -298,7 +311,7 @@ def main():
     if not new_items:
         print("\n无新问题（全部为历史问题），跳过提单。")
         return
-    title = f"[测试报告] huaweicloud-devkit {version} 每日测试缺陷合并单（{len(new_items)} 项）"
+    title = f"[测试报告] huaweicloud-devkit {version} {type_label}缺陷合并单（{len(new_items)} 项）"
     report_url = find_report_url(path)
     if report_url:
         print("测试报告链接:", report_url)
