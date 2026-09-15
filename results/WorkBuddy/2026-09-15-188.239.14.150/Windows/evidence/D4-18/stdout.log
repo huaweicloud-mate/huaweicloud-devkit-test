@@ -1,0 +1,13 @@
+=== D4-18: confirm-not-deny Approval Flow (Real Cloud) ===
+Timestamp: 2026-09-15T16:41:51.122Z
+[PASS] Plan without approval → decision=deny: classification.decision=deny, reason="Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+[PASS] Plan with approval → decision=allow, token issued: approvalToken=25b246b1-b7a9-4e65-8664-2dff0c14b44d, safeToRun=true
+[PASS] Execute with approval → VPC created: VPC id=79911220-7429-47f5-a6c9-b7810183272c, name=tctest-wb-d418-realcloud, status=CREATING→ACTIVE
+[PASS] VPC verified as ACTIVE: ListVpcs confirmed: name=tctest-wb-d418-realcloud, status=ACTIVE
+[PASS] Write op not directly denied — confirmation flow used: deny→allow transition via approvalToken: write op blocked until approved, then executed
+[PASS] VPC deleted via approval flow: DeleteVpc via plan+approve+execute, exit code=0
+[PASS] Zero tctest-wb-* VPCs after cleanup: ListVpcs confirmed: no tctest-wb-* VPCs remain
+
+=== Summary ===
+PASS: 7, FAIL: 0
+VERDICT: PASS — write operations require explicit confirmation, not directly denied or auto-allowed

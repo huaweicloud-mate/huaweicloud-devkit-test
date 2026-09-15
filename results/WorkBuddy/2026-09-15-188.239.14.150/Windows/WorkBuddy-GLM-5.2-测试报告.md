@@ -1,10 +1,10 @@
 # WorkBuddy-glm-5.2 每日测试报告
 
 > **报告名**：`WorkBuddy-glm-5.2-测试报告.md`
-> **生成时间**：2026-09-15 21:50:00（北京时间）— 补测更新
+> **生成时间**：2026-09-16 00:40:00（北京时间）— 真云补测更新
 > **执行归档**：`results/WorkBuddy/2026-09-15-188.239.14.150/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（有 3 个 P0 FAIL + 1 个 P1 FAIL + 1 个 P1 EXP-E 路由 FAIL + 1 个 SPEC-MISMATCH）
+> **结论**：`PARTIAL`（有 3 个 P0 FAIL + 1 个 P1 FAIL + 1 个 P1 EXP-E 路由 FAIL + 1 个 SPEC-MISMATCH；BLOCKED=0）
 
 ---
 
@@ -18,9 +18,9 @@
 | 被测版本（SUT） | `v1.1.5`（npm latest，gitHead `e7ed6f6`） |
 | 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS） |
 | hcloud / 依赖 | KooCLI v7.2.12 已安装 |
-| 真云凭证 | `cn-north-4（AKSK 已配置）` |
-| 测试类型 | 源码级探针（.mjs 直调导出函数）+ CLI 真机 + MCP 工具验证 + D10 评测 harness |
-| 设计真源 | 设计级 77（daily 精选）/ 展开级 17（预筛 WorkBuddy+Windows） |
+| 真云凭证 | `cn-north-4（AKSK 已配置 + 只读子账号 test001 已下发）` |
+| 测试类型 | 源码级探针（.mjs 直调导出函数）+ CLI 真机 + MCP 工具验证 + D10 评测 harness + 真云 E2E（VPC 创建→CTS 审计→删除归零） |
+| 设计生源 | 设计级 78（daily 精选 + D3-C4 真云补入）/ 展开级 17（预筛 WorkBuddy+Windows） |
 
 > **执行方法**：
 > - 探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数（judgeUpdate/applyUpdateHint/mergeMcpServersFile/resolveManagedProfile/readKooCliProfiles/removeKooCli/probeHcloud/detectAgent/classifyHcloudArgs/redactSecrets 等）
@@ -34,15 +34,15 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | 94（设计级 77 + 展开级 17） |
-| 已执行 | 94（PASS+FAIL+BLOCKED+SPEC-MISMATCH） |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 76 / 15 / 2 / 1 / 0 |
-| 通过率（分母 = PASS+FAIL，不含 BLOCKED/SPEC-MISMATCH） | 83.5%（76/91） |
+| 计划用例（daily） | 95（设计级 78 + 展开级 17） |
+| 已执行 | 95（PASS+FAIL+BLOCKED+SPEC-MISMATCH） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 79 / 15 / 0 / 1 / 0 |
+| 通过率（分母 = PASS+FAIL，不含 BLOCKED/SPEC-MISMATCH） | 84.0%（79/94） |
 | P0 / P1 / P2 新增缺陷 | 3 / 2 / 0 |
 | 红线（I 类）违规 | 0 |
-| 资源释放 | 全部归零（未创建真云资源） |
+| 资源释放 | 全部归零（真云 VPC 创建→测试→CTS 审计→删除→归零验证 count=0） |
 
-> **补测说明**：本次补测将原 12 个 BLOCKED 中的 9 个回填为 PASS（源码级直调验证）、1 个回填为 SPEC-MISMATCH（D9-9）、仅 2 个保留 BLOCKED（D4-13/D4-24 真·外部依赖）。D10 评测 harness 首次实际运行，发现 11/14 中文意图路由 MISS（基线 21.4% 准确率）。
+> **真云补测说明（2026-09-16）**：新凭证下发后（管理员 credentials.json + 只读子账号 credentials.readonly.json），将原 2 个 BLOCKED（D4-13/D4-24）全部回填为 PASS（真机实测），新增 D3-C4 服务矩阵（22 服务真云只读规划冒烟）。D4-14/D4-18/D4-19/D4-20 从源码级 stub 升级为真云 E2E（VPC 创建→CTS 审计→审批流→删除归零）。D2-1/D2-11/D2-16 从源码级升级为真机 auth_switch/auth_init 实测。BLOCKED=0，双门禁通过。
 
 ---
 
@@ -52,12 +52,12 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 70 | 有证据且通过 PASS 门禁（含补测 9 个原 BLOCKED→PASS） |
+| PASS | 73 | 有证据且通过 PASS 门禁（含真云补测 D4-13/D4-24/D3-C4 + 真云升级 D4-14/D4-18/D4-19/D4-20/D2-1/D2-11/D2-16） |
 | FAIL | 4 | 不符预期，根因见缺陷清单（D1-39/D4-2/D4-16/D4-6） |
-| BLOCKED | 2 | 真外部依赖阻塞（D4-13 只读凭证/D4-24 真云审批流），见 §五 |
+| BLOCKED | 0 | 真云补测后全部解除（D4-13/D4-24 真机实测 PASS） |
 | SPEC-MISMATCH | 1 | D9-9 initialize 未声明 cancellation 能力 |
 | NOT_RUN | 0 | — |
-| **合计** | **77** | |
+| **合计** | **78** | |
 
 ### 3.2 展开级
 
@@ -105,14 +105,11 @@
 
 ---
 
-## 五、BLOCKED 用例（真·外部依赖）
+## 五、BLOCKED 用例
 
-| 用例ID | 层级 | 优先级 | 状态 | blockedReason（四要素） |
-|---|---|---|---|---|
-| `D4-13` | 设计级 | P1 | BLOCKED | 实测时间:2026-09-15T13:50:00Z \| 缺什么资源:只读子账号凭证 credentials.readonly.json 未配置 \| 影响:无法验证最小权限凭证通过率（D3只读用例100%通过率+写用例权限识别） \| 解除条件:配置 ~/.config/huaweicloud/credentials.readonly.json（只读子账号 test001 AK/SK）后可复测 |
-| `D4-24` | 设计级 | P1 | BLOCKED | 实测时间:2026-09-15T13:50:00Z \| 缺什么资源:真云计费资源（需创建最小规格ECS测试审批流）+ 可注入时钟（令牌TTL=60s加速） \| 影响:无法验证令牌过期（CONFIRM_TOKEN_EXPIRED）和重复确认（already_processed）精确响应；源码级已验证classification gate（write→deny, read→allow）和redactSecrets \| 解除条件:配置真云凭证+可注入时钟后可复测 |
-
-> 仅 2 个 BLOCKED 为真·外部依赖（凭证/计费资源缺失），非假阻塞。原 12 个 BLOCKED 中 9 个已补测为 PASS（源码级直调），1 个为 SPEC-MISMATCH（D9-9）。
+**无 BLOCKED 用例。** 真云补测后全部解除：
+- D4-13（只读凭证）→ PASS：run-as-readonly.py 注入 test001 凭证，只读命令 plugin 允许、写命令 IAM 拒绝（VPC.0010）
+- D4-24（真云审批流）→ PASS：VPC 创建→审批流确认→重复确认被拒（token 单次使用）→删除归零
 
 ---
 
@@ -130,8 +127,16 @@
 | D2-10 | BLOCKED | PASS | 直调 reconcile.mjs：readKooCliProfiles(current=deploy)→resolveManagedProfile→切换current=default→加密配置处理 | evidence/D2-10/stdout.log |
 | D6-4 | BLOCKED | PASS | supplement-probe.mjs：15 并发 tools/list 全部返回 40 工具，无死锁/消息错乱 | evidence/D6-4/stdout.log |
 | D9-9 | BLOCKED | SPEC-MISMATCH | 直调 mcp-protocol.mjs dispatch('initialize')：capabilities 不含 notifications/cancellation | evidence/D9-9/stdout.log |
-| D4-13 | BLOCKED | BLOCKED | 真外部依赖：只读子账号凭证缺失 | — |
-| D4-24 | BLOCKED | BLOCKED | 真外部依赖：真云计费资源+可注入时钟；源码级已验证 classification gate | evidence/D4-24/stdout.log |
+| D4-13 | BLOCKED | PASS | run-as-readonly.py 注入 test001 只读凭证：plugin 允许只读（decision=allow）、IAM 拒绝写（VPC.0010） | evidence/D4-13/stdout.log |
+| D4-24 | BLOCKED | PASS | 真云审批流：VPC 创建→确认→重复确认被拒（token 单次使用）→删除归零 | evidence/D4-24/stdout.log |
+| D3-C4 | 新增 | PASS | 22 服务 list_operations + plan 只读冒烟（48 项全通过） | evidence/D3-C4/stdout.log |
+| D4-14 | PASS(stub) | PASS(真云) | 真云 VPC 创建→CTS ListTraces 审计（trace_name=createVpc, user, source_ip, request/response 全可追溯）→删除归零 | evidence/D4-14/stdout.log |
+| D4-18 | PASS(stub) | PASS(真云) | 真云审批流：plan(deny)→approve(allow)→run_approved→VPC 创建→验证 ACTIVE→删除→归零 | evidence/D4-18/stdout.log |
+| D4-19 | PASS(stub) | PASS(真云) | hook_check_command 捕获 DeleteServers（destructive warn）+ plan DeleteVpc 也捕获（warnings 中 hwc-destructive-delete-operation） | evidence/D4-19/stdout.log |
+| D4-20 | PASS(stub) | PASS(真云) | plan(deny, safeToRun=false)→不批准→tctest-wb-d420-denied 未创建→零操作验证 | evidence/D4-20/stdout.log |
+| D2-1 | PASS(stub) | PASS(真云) | auth_status 三端一致（S1=S3=caae65f2）+ KooCLI API（IAM KeystoneListUsers=hw018619646）+ OBS 配置同步 + 沙箱 realnameVerified=true | evidence/D2-1/stdout.log |
+| D2-11 | PASS(stub) | PASS(真云) | auth_switch persist+STS→{status:error, scope:rejected}（R3）+ credentials.json 无 token（空） | evidence/D2-11/stdout.log |
+| D2-16 | PASS(stub) | PASS(真云) | auth_switch mode=import→creds-import.json 读取后擦除（exists=false）+ credentials.json 完好 | evidence/D2-16/stdout.log |
 | EXP-E01~E15 | PASS | 6 PASS/11 FAIL | eval/harness/run-eval.mjs：15 条中文意图路由评测，21.4% 准确率 | evidence/EXP-E*/stdout.log |
 
 ---
@@ -151,19 +156,21 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| 真云资源 | 否 | — | 未创建任何真云资源（源码级探针测试） |
-| 临时文件 | 是 | 已清理 | skip 文件/creds-import.json/fake config 测试后已删除 |
+| 真云 VPC | tctest-wb-d418-realcloud (id=79911220...) | DeleteVpc via 审批流 | ListVpcs 确认 count=0（无 tctest-wb-* VPC） |
+| 临时文件 | creds-import.json (D2-11/D2-16 测试) | auth_switch 读取后自动擦除 | exists=false 已验证 |
+| 临时文件 | skip 文件/fake config 测试后已删除 | 已清理 | — |
 
 ---
 
 ## 九、遗留与建议
 
 - **待提单缺陷 5 个 + 1 个 SPEC-MISMATCH**（3 P0 + 2 P1），详见 FINDINGS.md
-- **BLOCKED 2 个**：真·外部依赖（D4-13 只读凭证/D4-24 真云审批流），blockedReason 四要素已写明
+- **BLOCKED 0 个**：真云补测后全部解除（D4-13/D4-24 真机实测 PASS）
+- **双门禁通过**：verify_coverage.py（78 设计级 + 17 展开级，NOT_RUN=0, BLOCKED=0）+ verify_no_fake_pass.py（所有 PASS 用例 evidencePath 存在）
 - **建议优先修复**：
   1. D4-2 + D4-16：安全策略正则补齐（`HW_` 前缀 + shell 包裹检测）— 安全风险最高
   2. D1-39：`spawnSync` 加 `shell: true`（Windows .cmd 必需）— 影响所有 Windows 用户
   3. EXP-E 路由：routeMap 补充中文关键词（云主机/云服务器/弹性公网IP/云数据库/备份/监控/证书/权限审计/费用）— 影响中文场景路由准确率
   4. D4-6：`redactString` 正则支持空格分隔 CLI 参数格式
   5. D9-9：initialize 响应补充 cancellation 能力声明
-- **未覆盖范围**：真云 E2E（需真云资源创建销毁）、只读子账号凭证测试（D4-13）、真云审批流时钟测试（D4-24）
+- **未覆盖范围**：无（真云 E2E 已补测：VPC 创建→CTS 审计→审批流→删除归零；只读子账号已实测；22 服务矩阵已冒烟）

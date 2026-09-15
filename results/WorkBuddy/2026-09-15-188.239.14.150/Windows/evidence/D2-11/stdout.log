@@ -1,0 +1,10 @@
+=== D2-11: R3 STS Token Refuses to Persist (Real Cloud) ===
+Timestamp: 2026-09-15T16:33:42.603Z
+[PASS] auth_switch persist+STS returns {status:error, scope:rejected}: Response: status=error, scope=rejected, error="Temporary STS credentials cannot be persisted (R3)"
+[PASS] credentials.json has NO persisted STS token: securityToken value: "" (empty=correct)
+[PASS] credentials.json AK/SK still intact: ak present: true, sk present: true
+[PASS] R3 enforcement at auth_switch layer (not writeGlobalCredentials): auth_switch checks securityToken before calling writeGlobalCredentials — R3 rejection at switch layer
+
+=== Summary ===
+PASS: 4, FAIL: 0
+VERDICT: PASS — STS token refused persistence (R3), token never written to S1
