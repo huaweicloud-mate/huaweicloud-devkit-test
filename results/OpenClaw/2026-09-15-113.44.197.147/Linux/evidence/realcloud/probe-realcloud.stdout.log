@@ -1,0 +1,26 @@
+
+=== OpenClaw Linux 真云补测探针结果 (2026-09-16) ===
+PASS  D4-13  只读子账号 IAM 读(KeystoneListProjects) 成功  => true (expected true)
+PASS  D4-13  只读子账号 写操作被 IAM 拒绝(SYS.0403)  => true (expected true)
+PASS  D4-13  只读子账号 未授权读命令均被 IAM 拒绝  => 7 (expected 7)
+PASS  D4-13  只读子账号 已授权读(EVS ListVolumes)可用  => true (expected true)
+PASS  D3-C4  真机最小资源(安全组)创建成功  => true (expected true)
+PASS  D3-C4  创建后计数 +1  => 2 (expected 2)
+PASS  D4-14  CTS 审计可追溯(建SG含 user/ak/source_ip/record_time)  => true (expected true)
+PASS  D3-C4  测后删除归零(tctest-d3c4- 剩余=0)  => 0 (expected 0)
+PASS  D4-18  高危写(DeleteSecurityGroup)分类=deny(非allow非error)  => "deny" (expected "deny")
+PASS  D4-18  高危写提供 approvalToken(确认流可提交)  => true (expected true)
+PASS  D4-19  确认流下预检仍生效(safeToRun=false)  => false (expected false)
+PASS  D4-19  破坏性命令(--force)预检拦截=deny  => "deny" (expected "deny")
+PASS  D4-20  伪造/过期 token 提交被拒(零操作)  => true (expected true)
+PASS  D2-16  import 前 creds-import.json 存在(预置)  => true (expected true)
+PASS  D2-16  auth_switch import 读后擦除(exists=false)  => false (expected false)
+PASS  D2-16  temporary 仅内存不落盘(status=ok/scope=temporary)  => "temporary" (expected "temporary")
+PASS  D2-11  真实凭证库 S1 不含明文明文 STS token  => false (expected false)
+PASS  D2-1  三端就绪: S1 凭证库  => true (expected true)
+PASS  D2-1  三端就绪: KooCLI  => true (expected true)
+PASS  D2-1  三端就绪: OBS  => true (expected true)
+PASS  D2-1  真云 API 实际可用(KooCLI 施力 ECS 读)  => true (expected true)
+PASS  D2-1  真云 OBS 端可用(obs ls 列出桶)  => true (expected true)
+
+TOTAL pass=22 fail=0
