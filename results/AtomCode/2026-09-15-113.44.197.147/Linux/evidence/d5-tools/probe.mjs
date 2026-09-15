@@ -13,7 +13,7 @@ function eq(id, desc, actual, expected) {
 function bool(id, desc, cond) { eq(id, desc, Boolean(cond), true); }
 
 // D5-3 工具全量枚举
-eq('D5-3', '工具全集数量 = 39', TOOL_DEFINITIONS.length, 39);
+eq('D5-3', '工具全集数量 = 40', TOOL_DEFINITIONS.length, 40);
 bool('D5-3', '含 huaweicloud_hook_check_command', TOOL_DEFINITIONS.some((t) => t.name === 'huaweicloud_hook_check_command'));
 bool('D5-3', '含 huaweicloud_auth_status', TOOL_DEFINITIONS.some((t) => t.name === 'huaweicloud_auth_status'));
 bool('D5-3', '含 huaweicloud_list_operations', TOOL_DEFINITIONS.some((t) => t.name === 'huaweicloud_list_operations'));
