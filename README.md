@@ -5,7 +5,7 @@
 HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板 / 执行结果 / 度量 / 评测。
 
 > 被测对象：https://github.com/huaweicloud/huaweicloud-devkit
-> 当前基线：**1.1.1 正式版**（迭代基线 `dev` @ 74b9642 = 1.1.1-next.16，对照 `main` @ bcefb32；2026-09-07 发布正式版并冒烟 PASS）
+> 当前基线：**1.1.4 正式版**（2026-09-15 每日测试基线；被测对象 gitHead 由 prepare_env.py 运行时 checkout 对齐）
 > 项目状态：见 [results/LATEST.md](results/LATEST.md)（最新迭代指针）+ [results/README.md](results/README.md)（归档规则）；历史迭代归档统一在 [results/history/](results/history/)
 
 ## 目录导航
@@ -19,7 +19,7 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 | [results/](results/) | 测试执行结果归档：`<客户端>/<日期>-<IP>/<OS>/`（每日执行包，含执行态回填 + 证据链）+ `Summary/`（每日聚合）+ `Regression/`（按日回归）+ `version/`（按版本归档）+ `history/`（历史迭代 ITER-001~009） |
 | [metrics/](metrics/) | 跨迭代执行率 / 通过率 / 缺陷趋势 / 质量仪表盘 |
 | [eval/](eval/) | D10 Agent 行为评测：评测集 / harness / 结果 / 趋势（纪律见 eval/README.md） |
-| [scripts/](scripts/) | 工具脚本：hdk-secrets.ps1（DPAPI 凭证加密）/ sync-to-remote.ps1（每日 20:00 自动同步） |
+| [scripts/](scripts/) | 工具脚本：init_agent.py（初始化）/ prepare_env.py（环境准备+凭证自检）/ init_day.py（建执行包）/ build_summary.py（聚合汇总）/ file_issue.py（统一提单）/ run-as-readonly.py（只读子账号动态切换）/ verify_no_fake_pass.py（PASS 门禁）/ sync-to-remote.ps1（每日 20:00 自动同步） |
 | [PROMPTS.md](PROMPTS.md) | 测试能力提示语速查手册（开发/测试人员用：复制提示语触发能力） |
 | [skills/](skills/) | 跨 agent 通用测试能力库（prompt-as-skill）：测试设计 / 执行 / 回归 / 覆盖核对 |
 | [assets/](assets/) | 可视化素材（规划中：金字塔 / 缺口热力图 / 框架总览图） |
@@ -46,7 +46,7 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 ## 安全红线
 
 - **AK/SK/密钥永不入库**（.gitignore 已锁定 23 条忽略规则，含凭证/密钥/缓存/证据模式并经 ad-hoc 验证；凭证纪律见 01-测试规划 §2.3）
-- **凭证存储方案**：AK/SK 用 `scripts/hdk-secrets.ps1`（DPAPI 加密）存本机 `~\.hdk-secrets\credentials.bin`，运行前 `Get` 注入环境变量 `HW_ACCESS_KEY/HW_SECRET_KEY`；密钥只在本机解密、发往华为云 API（详见 scripts/hdk-secrets.ps1 头注释）
+- **凭证存储方案**：真云 AK/SK 存本机 `~/.config/huaweicloud/credentials.json`（管理员）；只读 IAM 子账号独立存 `~/.config/huaweicloud/credentials.readonly.json`，D4-13 最小权限用例用 `scripts/run-as-readonly.py` 注入 env 动态切换（不替换管理员凭证）。凭证文件均被 .gitignore 锁定、永不入库
 - `evidence/` 只存**脱敏后**内容，原始凭证/未脱敏日志禁止入库
 - 本仓库只含测试资产，不含插件源码与任何云凭证
 
