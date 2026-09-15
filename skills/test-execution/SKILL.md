@@ -26,7 +26,7 @@ clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真�
 - 源码仓库 hdk checkout 到 npm 最新包（默认 latest 正式版）对应 commit
 - `npm install -g huaweicloud-devkit` 装最新正式包（latest）
 
-## 六步执行流程
+## 七步执行流程
 
 ### 1. 建当日执行包
 ```bash
@@ -73,6 +73,15 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 ```
 **只 push results 不提单 = 未完成**；有 FAIL/SPEC 缺陷必须提单。
 
+### 7. BLOCKED 补测收尾（全部 BLOCKED 用例必须追一轮，能解必解）
+第 6 步 push 前，对所有标 `BLOCKED` 的用例逐条深挖是否「假阻塞」，不得以「需环境」搪塞：
+- **D10 评测集（EXP-E01~E15）**：跑 `node eval/harness/run-eval.mjs hdk/plugins/huaweicloud-core/src/mcp-server.mjs`（harness 已建成，eval/prompts 含 15 条评测集，基线 21.4% MISS），得确定性路由结论，未命中判 FAIL。
+- **已有探针的用例**（如 D6 压测 `supplement-probe.mjs`）：必须跑完探针回填。
+- **可源码级直调的用例**（`serviceCatalog`/`redactString`/`judgeUpdate` 等）：必须直调回填结果。
+- **真云用例**：真云已具备执行条件（AK/SK + 只读子账号 + 保证金已就绪），必须真机执行（最低配置创建 → 测后删除归零 → 只删本次创建），不得以「无 AK/SK / 需保证金」标 BLOCKED、禁止 mock 假跑。
+只有真·外部依赖（真实 Agent 会话行为评测需 LLM harness，`run-eval.mjs` 的 serviceCatalog 路由层无法代理）才保留 BLOCKED，且 blockedReason 必须写四要素（实测时间 + 缺什么 + 影响 + 解除条件）。
+补测回填后重跑 `verify_coverage.py` + `verify_no_fake_pass.py` 双门禁，通过再 push。
+
 ## 门禁（机械校验，虚报作废重跑）
 
 - `python scripts/verify_no_fake_pass.py <客户端> <OS>`：标 PASS 必有 evidencePath 证据。
@@ -80,7 +89,7 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 
 ## 红线
 
-1. **真云**：最低配置创建 → 测后删除并归零验证 → 只删本次创建资源。
+1. **真云（已具备条件，必须执行）**：最低配置创建 → 测后删除并归零验证 → 只删本次创建资源；不得以「无 AK/SK / 需保证金」标 BLOCKED，禁止 mock 假跑。
 2. **缺陷**：先记根因（文件+行号），全量测完统一提单（合并 1 单），勿拆单/勿未测完就提/勿只 push 不提单。
 3. **PASS 门禁**：标 PASS 必须①实测②证据落盘③evidencePath 回填，未执行禁标 PASS。
 4. **环境阻塞**：标 BLOCKED + blockedReason，不得假装 PASS。
