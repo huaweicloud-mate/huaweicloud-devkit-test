@@ -1,10 +1,10 @@
 # OpenClaw-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`OpenClaw-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-09-15 13:32（北京时间）
+> **生成时间**：`2026-09-15 18:30`（北京时间）
 > **执行归档**：`results/OpenClaw/2026-09-15-113.44.197.147/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`FAIL`（存在 7 处缺陷，其中 4 处 P0，均与既有 open issue 去重跟踪，无新增拆单）
+> **结论**：`PARTIAL`（8 项 FAIL 均已有同根因历史单；4 项 P0 未修复，不得写 PASS）
 
 ---
 
@@ -13,17 +13,16 @@
 | 项 | 值 |
 |---|---|
 | 客户端 / Agent | OpenClaw + deepseek-v4-pro-0813 |
-| OS / 架构 | Linux aarch64（`ecs-hd-ai-work-00-0003`，`6.8.0-106-generic`，Ubuntu 24.04.4） |
+| OS / 架构 | Linux aarch64（Ubuntu 6.8.0-106-generic） |
 | Node / npm / Python | Node v22.13.0 / npm 10.9.2 / Python 3.12.3 |
-| 被测版本（SUT） | `v1.1.4`（npm latest 正式版，gitHead `9b67256`，PR #669 release-1.1.4） |
-| 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS，含 `huaweicloud_obs_set_website_config`） |
-| hcloud / 依赖 | KooCLI 7.2.12（`~/.config/huaweicloud/credentials.json` 已配置，cn-north-4） |
-| 真云凭证 | `cn-north-4`（AK/SK 已配置；本轮仅只读规划验证，未创建/销毁真云资源） |
-| 测试类型 | 源码级探针 / 真机 CLI（readonly）/ MCP 协议 / 安全规则引擎 / 22 服务只读规划冒烟 |
-| 设计真源 | 设计级 81 / 展开级 39（本日 init_day 按 OpenClaw/Linux 预筛） |
-| daily 基础用例 | 设计级 81 / 展开级 39 |
+| 被测版本（SUT） | `v1.1.4`（npm latest 正式版，gitHead `9b67256`，PR #669） |
+| 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS） |
+| hcloud / 依赖 | hcloud 7.2.12（doctor 确认已配置） |
+| 真云凭证 | `cn-north-4`（管理员 AKSK 已配置；只读子账号 `credentials.readonly.json` 未配置） |
+| 测试类型 | 源码级探针 / MCP 协议 / 部分真机 CLI；真云 E2E 与多终端矩阵受环境限制 |
+| daily 基础用例 | 设计级 77 / 展开级 17（本客户端 OpenClaw+Linux 预筛后） |
 
-> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数与 `tools.mjs` `callTool()`，决策/结果落 `*.stdout.log`；证据统一落 `evidence/<case-id>/`。本报告为 **1.1.4 stable 正式版本轮执行**（昨日本机为 next.3/next.6 预发布轮）。
+> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数 / 走真实 mcp-server JSON-RPC，决策与结果落 `stdout.log`；证据统一落 `evidence/<case-id>/`。
 
 ---
 
@@ -31,151 +30,96 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | 120（设计级 81 + 展开级 39） |
-| 已执行（PASS+FAIL） | 75（设计级 57 + 展开级 18） |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 68 / 7 / 45 / 0 / 0 |
-| 通过率（分母 = PASS+FAIL） | 90.7% |
-| P0 / P1 / P2 新增缺陷 | 4 / 3 / 0（均为已提单缺陷去重跟踪，无新增拆单） |
-| 红线（I 类）违规 | 0 |
-| 资源释放 | 全部归零（本轮无真云资源创建） |
-
-> BLOCKED 45 条目均为**环境/凭证阻塞或改用例**（真机 install/PTY 生命周期、真云高危创建、评测 harness、KooCLI 伞名），每条已回填 `blockedReason` 并分类。可机械验证的用例（源码探针 / CLI read-only / MCP 协议 / 22 服务只读规划）已全部实测。
+| 计划用例（daily，预筛后） | `94`（77 设计级 + 17 展开级） |
+| 已执行 | `94` |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `55 / 17 / 22 / 0 / 0` |
+| 通过率（分母 = PASS+FAIL+SPEC，去 BLOCKED/NOT_RUN） | `76.4%`（55/72） |
+| P0 / P1 / P2 新增缺陷 | `0 / 0 / 0`（8 项 FAIL 均历史同源或已提单，无新增） |
+| 红线（I 类）违规 | `4`（D4-2/D4-16/D4-21/D4-23 均为凭证/越权安全红线，历史未修复） |
+| 资源释放 | `全部归零 / 本轮未创建真云资源` |
 
 ---
 
 ## 三、状态汇总
 
-### 3.1 设计级
+### 3.1 设计级（77）
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
 | PASS | 50 | 有证据且通过 PASS 门禁 |
-| FAIL | 7 | 不符预期，根因见缺陷清单 |
-| BLOCKED | 24 | 环境/凭证阻塞，见 §五 |
+| FAIL | 8 | D4-2/D4-16/D4-21/D4-23/D4-6/D4-7/D9-2/D10-3，根因见缺陷清单 |
+| BLOCKED | 19 | 真机生命周期/真云 E2E/夹具缺失，均写 blockedReason |
 | SPEC-MISMATCH | 0 | — |
-| NOT_RUN | 0 | P0 无 NOT_RUN；环境不满足均按 BLOCKED 处理 |
-| **合计** | **81** | |
+| NOT_RUN | 0 | — |
+| **合计** | **77** | |
 
-### 3.2 展开级
+### 3.2 展开级（17）
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 18 | 客户端枚举 + 22 服务只读规划冒烟（16 服务 PASS + 2 客户端枚举 PASS） |
-| FAIL | 0 | — |
-| BLOCKED | 21 | 真云高危创建(4) + KooCLI 伞名改用例(2) + 评测集补环境(15) |
+| PASS | 5 | EXP-D5-9-1/EXP-D5-9-3 + EXP-E06/E09/E15（路由命中，有证据） |
+| FAIL | 9 | EXP-E01/E02/E04/E05/E07/E10/E11/E12/E14（路由 MISS，同 D10-3 根因） |
+| BLOCKED | 3 | EXP-E03/E08/E13（oracle 需维护者裁决，详见 §五） |
 | SPEC-MISMATCH | 0 | — |
 | NOT_RUN | 0 | — |
-| **合计** | **39** | |
+| **合计** | **17** | |
 
 ---
 
-## 四、缺陷清单（详尽，每个缺陷一栏）
+## 四、缺陷清单
 
-| # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
-|---|---|---|---|---|---|---|---|---|
-| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整（`HW_` 前缀未覆盖） | `printenv HW_ACCESS_KEY` 应 `deny` | 返回 `allow` | `safety-policy.mjs:336` | P | 已提单 #651/#652/#673/#674/#676/#679/#681 |
-| 2 | P0 | D4-16 | 命令包裹穿透（`sh -c` 内层 env dump 未二次检测） | `sh -c "env \| grep HUAWEICLOUD"` 应 `deny` | 返回 `allow` | `safety-policy.mjs:335` | P | 已提单 #651/#652/#674/#676/#681/#682 |
-| 3 | P0 | D4-21 | hook_check_artifacts 未检出 broad IAM（HCL `actions = ["*"]`） | HCL broad IAM 制品应 `deny` | `findings=[]`/`allow` | `cloud-risk-rules.json:188-196` | P | 已提单 #651/#652 |
-| 4 | P0 | D4-23 | 全局规则 huawei-agent-rules 未注入（孤儿文件） | `files` 白名单应含 `rules` 且安装目标注入 | 白名单缺 `rules`，0 处引用注入 | `package.json:8-18` + `setup-cli.mjs` | P | 已提单 #651/#673/#674/#676/#679 |
-| 5 | P1 | D4-6 | adminPass 空格形式回显未脱敏 | `--adminPass Secret123` 不应含明文 | args 含明文 `Secret123` | `safety-policy.mjs:42` | P | 已提单 #651/#673/#679 |
-| 6 | P1 | D4-7 | hook_check_artifacts broad IAM 失效（与 #3 同根因） | HCL broad IAM 应 `deny` | `allow` | `cloud-risk-rules.json:188-196` | P | 已提单 #651/#652 |
-| 7 | P1 | D9-2 | JSON-RPC 未知方法错误码未区分（-32601 缺失） | 未知方法应 `-32601` | 统一 `-32603` | `mcp-server.mjs:169` + `mcp-protocol.mjs:95` | P | 已提单 #651/#652/#674/#676 |
+> 本轮 8 项 FAIL（设计级）+ 9 项展开级 FAIL（映射 D10-3）均有明确根因（`文件:行号`）+ 复现证据。经 `file_issue.py` 查重口径逐条核对上游 open issue，**全部命中历史同源单或已提单**，按红线「勿重复拆单」本轮不新开单。
 
-### 根因详情（P0/P1 缺陷代码片段 + 复现证据）
+| # | 级别 | 用例ID | 缺陷描述 | 根因（文件:行号） | 状态 |
+|---|---|---|---|---|---|
+| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整（HW_ 前缀） | `safety-policy.mjs:336` | 历史 #651/#652/#673/#674/#676/#679/#681 |
+| 2 | P0 | D4-16 | 命令包裹穿透（sh -c wrapper） | `safety-policy.mjs:335` | 历史 #651/#652/#674/#676/#681/#682 |
+| 3 | P0 | D4-21 | 制品预检未检出 HCL broad IAM | `cloud-risk-rules.json:188-196` | 历史 #651/#652 |
+| 4 | P0 | D4-23 | 全局规则 huawei-agent-rules 注入失效 | `package.json:8-18` + `setup-cli.mjs` | 历史 #651/#673/#674/#676/#679 |
+| 5 | P1 | D4-6 | adminPass 空格形式回显未脱敏 | `safety-policy.mjs:42` | 历史 #651/#673/#679 |
+| 6 | P1 | D4-7 | hook_check_artifacts broad IAM 失效 | `cloud-risk-rules.json:188-196` | 历史 #651/#652 |
+| 7 | P1 | D9-2 | JSON-RPC 未知方法 -32601 缺失 | `mcp-server.mjs:169` | 历史 #651/#652/#674/#676/#689 |
+| 8 | P1 | D10-3 | 中文意图路由未命中（serviceCatalog 仅英文关键词） | `tools.mjs:1776-1910` | 已提单 #689（Hermes 开出） |
 
-**#1 [P0] D4-2 凭证 env 打印拦截不完整**
-
-- 期望：`printenv HW_ACCESS_KEY` → `deny`
-- 实际：`allow`（`HW_` 前缀漏防；`HUAWEICLOUD_ACCESS_KEY_ID` 前缀可正常拦截）
-- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:334-337`
-
-```javascript
-if (
-  /(^|\s)(env|printenv|Get-ChildItem\s+Env:|gci\s+Env:|dir\s+Env:)/i.test(text) &&
-  /HUAWEICLOUD|HWC_|HCLOUD|OS_/i.test(text)   // ← 缺 HW_ 前缀
-) { ... deny ... }
-```
-
-- 证据：`evidence/d4-security-core/probe-p0-security.mjs.stdout.log`（`FAIL printenv HW_ACCESS_KEY => allow`）
-
-**#2 [P0] D4-16 命令包裹穿透**
-
-- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:335` env-dump 正则 `(^|\s)` 不命中 `sh -c "..."` 引号内的 `env`，且未抽取内层命令二次检测。
-- 证据：`evidence/d4-security-core/probe-p0-security.mjs.stdout.log`（`FAIL sh -c "env | grep HUAWEICLOUD" => allow`）
-
-**#3 [P0] D4-21 hook_check_artifacts broad IAM 漏检**
-
-- 根因：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:188-196` `hwc-iam-admin-policy` 的 Action 正则仅匹配 JSON `"Action":"*"` / `Action=*`，不匹配 Terraform HCL `actions = ["*"]` 块语法。
-- 证据：`evidence/d4-security-core/probe-p0-security.mjs.stdout.log`（`FAIL broad IAM policy (actions=["*"]) 检出 => false`）、`probe-d4-7-hooks.mjs.stdout.log`（`FAIL hook_check_artifacts broad IAM 拦截 => allow`）
-
-**#4 [P0] D4-23 全局规则注入失效**
-
-- 根因：`package.json:8-18` `files` 白名单缺 `rules`；`setup-cli.mjs` 0 处引用 `rules/`/`.mdc`/`agent-rules`。
-- 证据：`evidence/d4-security-core/probe-d4-23-rules.mjs.stdout.log`（3 FAIL：files 白名单 / setup-cli 引用 / 安装目标注入）
-
-**#5 [P1] D4-6 adminPass 空格形式回显未脱敏**
-
-- 根因：`plugins/huaweicloud-core/src/safety-policy.mjs:42` `redactString()` 正则 `((?:...|adminPass)...)\s*[:=]\s*(...)` 只覆盖 `=`/`:` 分隔，KooCLI 空格形式 `--adminPass xxx` 不命中。
-- 证据：`evidence/d4-security-core/probe-d4-6-adminpass.mjs.stdout.log`（`FAIL 空格形式 adminPass 值脱敏 => true`）
-
-**#7 [P1] D9-2 JSON-RPC 错误码未区分**
-
-- 根因：`plugins/huaweicloud-core/src/mcp-server.mjs:169` catch 统一硬编码 `code: -32603`；`mcp-protocol.mjs:95` 对 unknown method 直接 `throw`，未映射 `-32601`。
-- 证据：`evidence/d9-protocol/probe-d9-mcp-protocol.mjs.stdout.log`（`FAIL 服务端区分 -32601 => false`）
+每个缺陷的「现象 + 精确断言 + 证据路径」见同目录 `FINDINGS.md`（严格遵循 file_issue.py 解析格式）。
 
 ---
 
 ## 五、未执行用例与原因（供维护 agent 修改用例）
 
-> 逐条列出本轮 **BLOCKED** 用例（展开级「不涉及本客户端/OS」的建包时已剔除，不在此列）。
-> 原因详细到可判断「是否需修改用例」，并按分类标注：
+> 本轮 NOT_RUN = 0。BLOCKED 共 22 条（设计级 19 + 展开级 3），均写 blockedReason，逐条分类如下：
 
-| 分类 | 含义 | 维护 agent 动作 |
-|---|---|---|
-| `改用例` | 用例自身设计不合理：前置/步骤/预期不可判定、粒度错误、需真云/真机/时长计费资源但未标注、代理/OS 归属写错 | 修改 `test-cases/` 母版对应用例 |
-| `补环境` | 环境 / 凭证 / 配额 / 依赖缺失 | 补环境后复测，无需改用例 |
-| `调归属` | 该用例本不应由本客户端/OS 执行 | 调整 `agent`/`OS`/`终端覆盖类型` 列 |
+### 设计级（19，均为「补环境」，少数标注需维护者裁决）
 
-### 设计级（24）
+| 用例ID | 优先级 | 分类 | 详细原因 |
+|---|---|---|---|
+| D1-1 | P1 | 补环境 | 需真机 OpenClaw install --target 生命周期 + 隔离 HOME 验证 |
+| D1-2 | P2 | 补环境 | 需多客户端共存环境验证 auto-detect，本机仅 OpenClaw |
+| D1-3 | P1 | 补环境 | 需真机 doctor CLI + 人为制造组件缺失场景 |
+| D1-4 | P2 | 补环境 | 需真机 status/update CLI + 用户自定义 config 保护 |
+| D1-5 | P1 | 补环境 | 需真机 uninstall + 残留扫描（本机无真机安装态） |
+| D1-6 | P2 | 补环境 | 需无 KooCLI 环境；本机已装 hcloud 7.2.12 |
+| D1-41 | P1 | 补环境 | 需隔离 MCP 进程 + 可控 registry 四态注入 |
+| D1-42 | P1 | 补环境 | 需隔离 HOME + CROSS_PROCESS 跨进程复查 |
+| D1-45 | P1 | 补环境 | 需隔离 MCP 进程 + 预热竞态双时序注入 |
+| D2-1 | P1 | 改用例 → 需裁决 | 现 tool 描述已改为 S1/S2/S3 语义（README 的"沙箱 API"措辞已失效）；沙箱端无独立同步路径，三端=KooCLI/OBS 实际可达，建议维护者修订用例措辞 |
+| D4-10 | P2 | 补环境 | 需规则库版本快照 + 新增规则项注入夹具 |
+| D4-12 | P2 | 补环境 | 需 npm 供应链攻击仿真夹具 |
+| D4-13 | P1 | 补环境 | 只读子账号 `credentials.readonly.json` 未配置，`run-as-readonly.py` 无法切换 |
+| D4-14 | P2 | 补环境 | 需真云 CTS 审计日志验证 |
+| D4-24 | P1 | 补环境 | 需真云确认流 + 可注入时钟（审批流健壮性） |
+| D9-4 | P1 | 补环境 | 需长连接断连/重连/关闭时序夹具 |
+| D9-6 | P1 | 补环境 | 需多客户端同机环境 |
+| D9-7 | P2 | 补环境 | 需多版本服务端/客户端夹具 |
+| D9-9 | P1 | 补环境 | 需可注入延迟夹具 + capabilities.cancellation |
 
-| 用例ID | 优先级 | 状态 | 分类 | 详细原因 | 改用例建议 |
-|---|---|---|---|---|---|
-| `D1-1` | P1 | BLOCKED | 补环境 | 需真机 OpenClaw install --target 生命周期 + 隔离 HOME 验证，本 run 源码探针环境无真机安装态 | — |
-| `D1-2` | P2 | BLOCKED | 补环境 | 需多客户端共存环境验证 auto-detect，本机仅 OpenClaw 单客户端 | — |
-| `D1-3` | P1 | BLOCKED | 补环境 | 需真机 doctor CLI + 人为制造组件缺失场景验证 | — |
-| `D1-4` | P2 | BLOCKED | 补环境 | 需真机 status/update CLI + 用户自定义 config 保护验证 | — |
-| `D1-5` | P1 | BLOCKED | 补环境 | 需真机 uninstall + 残留扫描，本机无真机安装态 | — |
-| `D1-6` | P2 | BLOCKED | 补环境 | 需无 KooCLI 环境重装引导验证；本机 KooCLI 已装(hcloud 7.2.12) | — |
-| `D1-41` | P1 | BLOCKED | 补环境 | 需隔离 MCP 进程 + 可控 registry 四态响应注入 | — |
-| `D1-42` | P1 | BLOCKED | 补环境 | 需隔离 HOME + CROSS_PROCESS 跨进程重启复查 | — |
-| `D1-45` | P1 | BLOCKED | 补环境 | 需隔离 MCP 进程 + 预热竞态双时序注入 | — |
-| `D2-1` | P1 | BLOCKED | 补环境 | auth init 三端同步需真云 AK/SK + KooCLI/OBS/沙箱三端真实落位 | — |
-| `D3-C4` | P1 | BLOCKED | 补环境 | 22 服务只读规划已实测通过；高危服务(ECS/RDS/CCE/WAF)轻量创建→立即释放→归零需真云最小权限 + 账单/配额风险评估 | 前置「真云+最小权限AK/SK」已标注，非改用例 |
-| `D4-10` | P2 | BLOCKED | 补环境 | 需规则库版本快照 + 新增规则项注入夹具 | — |
-| `D4-12` | P2 | BLOCKED | 补环境 | 需 npm 安装供应链攻击仿真夹具（恶意依赖注入） | — |
-| `D4-13` | P1 | BLOCKED | 补环境 | 需真云最小权限凭证 + 逐服务权限校验 | — |
-| `D4-14` | P2 | BLOCKED | 补环境 | 需真云 CTS 审计日志验证 | — |
-| `D4-24` | P1 | BLOCKED | 补环境 | 确认令牌过期/重复确认边界需真云确认流 + 可注入时钟 | — |
-| `D9-4` | P1 | BLOCKED | 补环境 | 协议生命周期需长连接断连/重连/关闭时序夹具 | — |
-| `D9-6` | P1 | BLOCKED | 补环境 | 跨客户端互通需多客户端同机环境，本机仅 OpenClaw 单客户端 | — |
-| `D9-7` | P2 | BLOCKED | 补环境 | 协议版本协商降级需多版本服务端/客户端夹具 | — |
-| `D9-9` | P1 | BLOCKED | 补环境 | tools/call 超时协议需可注入延迟夹具 + capabilities.cancellation | — |
-| `D10-1` | P1 | BLOCKED | 补环境 | 工具描述可选择性需真机评测集 + LLM 选择行为采样 | — |
-| `D10-2` | P1 | BLOCKED | 补环境 | skill 激活率需真机评测集 + LLM 激活采样 | — |
-| `D10-3` | P1 | BLOCKED | 补环境 | 路由准确率+混淆矩阵需真机 15 条意图评测集 + 真机 agent 执行 | — |
-| `D10-5` | P1 | BLOCKED | 补环境 | 多轮任务完成率需真机多轮任务评测集 | — |
+### 展开级（3，均「改用例」，需维护者修订母版 oracle）
 
-### 展开级（21）
-
-| 用例ID | 优先级 | 状态 | 分类 | 详细原因 | 改用例建议 |
-|---|---|---|---|---|---|
-| `EXP-C4-01` | P1 | BLOCKED | 补环境 | ECS 只读规划(list_operations+plan)已 PASS；轻量创建→立即释放→归零需真云最小权限 + 账单/配额风险评估 | 前置「真云+最小权限AK/SK」已标注，非改用例 |
-| `EXP-C4-04` | P1 | BLOCKED | 补环境 | RDS 只读规划已 PASS；轻量创建→归零需真云最小权限 | 同上 |
-| `EXP-C4-06` | P1 | BLOCKED | 补环境 | CCE 只读规划已 PASS；轻量创建→归零需真云最小权限 | 同上 |
-| `EXP-C4-14` | P1 | BLOCKED | 改用例 | 母版枚举对象用伞名 `DMS`，KooCLI 顶级无此服务(`Unsupported service`)；子服务名 Kafka/RocketMQ/RabbitMQ 均可路由 | 母版 `枚举对象` 列 `DMS` → 改为 `Kafka/RocketMQ/RabbitMQ`（或 3 条子服务展开） |
-| `EXP-C4-15` | P1 | BLOCKED | 补环境 | WAF 只读规划已 PASS；轻量创建→归零需真云最小权限 | 前置「真云」已标注，非改用例 |
-| `EXP-C4-18` | P1 | BLOCKED | 改用例 | 母版枚举对象用伞名 `DEW`，KooCLI 顶级无此服务(`Unsupported service`)；子服务名 KMS/CSMS 均可路由 | 母版 `枚举对象` 列 `DEW` → 改为 `KMS/CSMS`（或 2 条子服务展开） |
-| `EXP-E01`~`EXP-E15` | P1 | BLOCKED | 补环境 | D10-3 中文意图路由评测集，oracle 需真机 agent 多轮执行（混淆矩阵）+ 评测 harness | — |
+| 用例ID | 优先级 | 分类 | 详细原因 | 改用例建议 |
+|---|---|---|---|---|
+| EXP-E03 | P1 | 改用例 | 实现「部署/网站→sandbox first」与设计 oracle「OBS 静态站」漂移，两关键字表（OBS keywords 与 sandbox keywords）交叠于 `static website/静态` | 明确 OBS 静态站部署与 sandbox 部署的区分规则，或拆分为两用例 |
+| EXP-E08 | P1 | 改用例 | 诊断类意图应走 `explain_error`，不归 `serviceCatalog`；单一 serviceCatalog 断言无法判定 | 展开规则改为「断言走 explain_error 诊断工具」，而非 serviceCatalog 命中服务 |
+| EXP-E13 | P1 | 改用例 | 「证书/ELB」横跨 DEW（证书）+ ELB 两域，单一推荐服务断言不可判定 | 拆为「申请证书（DEW）」与「绑定 ELB（ELB）」两条，或允许推荐集含两域任一 |
 
 ---
 
@@ -183,8 +127,8 @@ if (
 
 - [x] 凭证泄漏事件：`0`
 - [x] 写操作误判 read-only：`0`
-- [x] 红线（I 类）违规：`无`
-- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（探针仅源码级断言，22 服务只读规划不触真云 API）
+- [x] 红线（I 类）违规：`4`（D4-2/D4-16/D4-21/D4-23，均为凭证 dump / 命令包裹 / broad IAM / 规则注入失效，历史未修复，已跟踪既有 issue）
+- [x] 脱敏复核：证据目录无原始凭证 / 未脱敏日志（探针全部使用假凭证 `AK*`/`SK*` 占位）
 
 ---
 
@@ -192,13 +136,16 @@ if (
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| 真云资源（ECS/沙箱/OBS 等） | 否 | — | 本轮未创建任何真云资源，无需释放 |
+| 真云 ECS/RDS/CCE/WAF/OBS 等 | 否 | — | 本轮未创建任何真云资源 |
+| 临时 HOME / 隔离目录 | 是（探针内 `/tmp/hdk-*`） | 已删（finally rm） | 无残留 |
+
+> 本轮全部为源码级探针与只读规划，未触发真云写操作，无资源残留风险。
 
 ---
 
 ## 八、遗留与建议
 
-- **缺陷去重结论**：本轮 7 处 FAIL（4 P0 + 3 P1）与已开出的 open issue（#651/#652/#673/#674/#676/#679/#681/#682）逐条对应，均属**已提单**缺陷（同一 SUT 缺陷族，v1.1.4 正式版未修复），故依据「勿重复拆单」红线不重复提单。
-- **本轮较 09:35 初版的改进**：展开级 22 服务只读规划冒烟（`list_operations` + `plan_cli_command`）由全部 BLOCKED 改为实测——16 服务 PASS（只读路由+归类 read_only 证据落盘），2 服务（DMS/DEW）发现母版「伞名」改用例问题，4 服务（ECS/RDS/CCE/WAF）只读规划已 PASS、真云高危创建项按补环境 BLOCKED。展开级 PASS 由 2 提升到 18。
-- **范围外（BLOCKED）说明**：真机 install/uninstall 生命周期、真云高危资源 E2E、多客户端互通、D10 评测集、Windows/macOS 变体、协议超时/协商降级，需对应环境。
-- **建议**：① `safety-policy.mjs:336` env-dump 正则补 `HW_` 前缀与 `echo $VAR` 路径；② `cloud-risk-rules.json` broad IAM 规则补 HCL `actions = ["*"]`；③ `mcp-server.mjs` 区分 `-32601/-32602/-32603`；④ `package.json` `files` 补 `rules` 并在 `setup-cli` 注入全局规则；⑤ `redactString` 补空格形式 `--adminPass xxx` 脱敏；⑥ 母版 `EXP-C4-[14|18]` 枚举对象由伞名 `DMS`/`DEW` 改为可路由子服务名。
+- **历史缺陷未修复**：D4-2/D4-16/D4-21/D4-23 四项 P0 安全红线在 v1.1.4 正式版仍未修复（均已有上游 open issue + 部分含修复 PR #688），建议维护者跟进合入，本客户端持续复测。
+- **中文路由是重灾区**：D10-3 中文意图准确率仅 21.4%（15 条中 3 条命中），根因 `tools.mjs` routeMap 全部英文关键词，中文用户主场景（ECS/RDS/OBS/费用/监控等）无法路由——这是真实可用性缺口，建议列为高优先级修复。#689 已提单。
+- **本轮未覆盖范围**：真云 E2E（建删资源归零）、多终端矩阵、审批流实时对话框、真机 install/doctor/uninstall 生命周期。补齐只读子账号 `credentials.readonly.json` 后 D4-13 可执行。
+- **建议**：`serviceCatalog` 增加 CJK（中文）关键词→服务映射；`D2-1` 用例措辞与现行 S1/S2/S3 三端语义对齐。
