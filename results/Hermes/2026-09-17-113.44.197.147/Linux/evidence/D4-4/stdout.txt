@@ -1,0 +1,9 @@
+=== D4-4 写操作审批门(Change*) (fresh v1.1.5 (gitHead e7ed6f6) @ e7ed6f6) ===
+=== supplement2 D4-4 ===
+  hcloud ecs ChangeServerOsWithoutCloudInit -> allow (exp deny) <<< 漏拦截
+  hcloud vpc ChangeVpc -> allow (exp deny) <<< 漏拦截
+  hcloud rds ChangeInstanceConfiguration -> allow (exp deny) <<< 漏拦截
+  hcloud ecs CreateServer -> deny (exp deny)
+  实测 1/4 拦截。
+根因: safety/policy.json:27-31 writeOperationPrefixes 缺 Change 前缀。
+RESULT: FAIL

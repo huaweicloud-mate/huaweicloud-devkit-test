@@ -1,4 +1,5 @@
-=== CASE D2-4 ===  FAIL
-  expected: 凭证字段与字符串(含小写 ak=/sk=)均脱敏 <redacted>
-  actual:   对象脱敏=true, lowercase字符串=ak=AK123456 sk=SKsecret(未脱敏=缺陷), uppercase=AK=<redacted> SK=<redacted>
-  detail:   safety-policy.mjs:45 .replace(/(AK|SK).../g) 大小写敏感无 /i → lowercase ak=/sk= 漏网(findings #3)
+=== CASE D2-4 ===  (凭证脱敏正确性)
+  对象脱敏: OK  {"accessKeyId":"<redacted>","secretAccessKey":"<redacted>","securityToken":"<redacted>","region":"cn-north-4","projectId":"p1"}
+  小写字符串 ak=/sk=: "ak=AK123456 sk=SKsecret"  -> 未脱敏 <<< 缺陷
+  大写字符串 AK=/SK=: "AK=<redacted> SK=<redacted>"  -> 脱敏
+  RESULT: FAIL  (root:safety-policy.mjs:45 大小写敏感 缺 /i)

@@ -1,0 +1,26 @@
+=== D4-8 Python/Node策略一致 (fresh v1.1.5 (gitHead e7ed6f6) @ e7ed6f6) ===
+----- D4-8 configure show -----
+payload: {"tool_name":"Bash","tool_input":{"command":"hcloud configure show"}}
+  node: {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Direct hcloud configure inspection may expose profile credentials. Use the redacted toolkit tools instead."}}
+  py:   <空=放行>
+----- D4-8 write delete -----
+payload: {"tool_name":"Bash","tool_input":{"command":"hcloud ECS DeleteServers --id i"}}
+  node: {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}}
+  py:   <空=放行>
+----- D4-2 env HW key -----
+payload: {"tool_name":"Bash","tool_input":{"command":"env | grep HW_ACCESS_KEY"}}
+  node: <空=放行>
+  py:   <空=放行>
+----- D4-17 malformed -----
+payload: not-json-at-all
+  node: <空=放行>
+  py:   <空=放行>
+----- D4-17 empty tool_input -----
+payload: {"tool_name":"Bash","tool_input":{}}
+  node: <空=放行>
+  py:   <空=放行>
+
+===== D4-8 一致性结论(由判定结果比对) =====
+
+根因: hooks/huaweicloud-safety.py:46 WRITE_OPERATION_RE 前导要求，Node deny / Python 放行。
+RESULT: FAIL
