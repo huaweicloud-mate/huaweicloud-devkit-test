@@ -22,28 +22,28 @@
 | 项 | 值 |
 |---|---|
 | 计划用例 | 117 |
-| 已执行 | 11 |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 10 / 1 / 106 / 0 / 0 |
-| 通过率 | 90.9%（不含 BLOCKED） |
-| P0 缺陷 | 1 |
+| 已执行 | 64 |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 47 / 16 / 53 / 1 / 0 |
+| 通过率 | 73.4%（不含 BLOCKED） |
+| P0 缺陷 | 3 |
 | 资源释放 | 未创建真云资源；临时探针目录已清理 |
 
 ## 三、状态汇总
 
 | 层级 | PASS | FAIL | BLOCKED | SPEC-MISMATCH | NOT_RUN | 合计 |
 |---|---:|---:|---:|---:|---:|---:|
-| 设计级 | 10 | 1 | 67 | 0 | 0 | 78 |
-| 展开级 | 0 | 0 | 39 | 0 | 0 | 39 |
+| 设计级 | 22 | 5 | 50 | 1 | 0 | 78 |
+| 展开级 | 25 | 11 | 3 | 0 | 0 | 39 |
 
 已执行证据包括 D1 版本语义/冷却/原子写探针、MCP `initialize`/`tools/list`、doctor/status 和源码单并发测试，分别位于 `evidence/D1-27/`、`evidence/D9-1/`、`evidence/D1-3/`、`evidence/source-suite/`。
 
 ## 四、缺陷清单
 
-详见同目录 `FINDINGS.md`。本轮发现 1 个 P0：Windows `queryDistTagsSync()` 真实调用返回 `null`，未得到 dist-tags，检测链不可判定为可用。
+详见同目录 `FINDINGS.md`。本轮补测发现 Windows 升级检测、危险公网部署拦截、shell 包裹穿透、JSON-RPC 参数校验和中文路由等问题。
 
 ## 五、未执行用例与原因
 
-其余 BLOCKED 用例均已在对应 CSV 的 `blockedReason` 逐条标注。主要分类为【补环境】：当前会话缺少 hook-capable 客户端、真实 Agent harness、审批交互、跨客户端矩阵或可安全执行的真云写入闭环。展开级 D5/C4/E 用例还需要对应客户端或评测环境，不能用源码 MCP 进程替代。
+剩余 BLOCKED 用例均已在对应 CSV 的 `blockedReason` 逐条标注。主要分类为【补环境】：真实 Codex 重启、审批交互、真云写入和真实 Agent 行为评测仍需外部环境；C4 只读规划和源码级 E 评测已补测。
 
 ## 六、安全与红线合规
 

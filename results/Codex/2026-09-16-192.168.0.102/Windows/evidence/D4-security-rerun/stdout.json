@@ -1,0 +1,1183 @@
+{
+  "generatedAt": "2026-09-16T03:10:26.585Z",
+  "security": [
+    {
+      "name": "D4-1 credential file",
+      "actual": "deny",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "name": "D4-2 env secret",
+      "actual": "deny",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "name": "D4-2 printenv secret",
+      "actual": "deny",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "name": "D4-3 secret API",
+      "actual": "deny",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "name": "D4-15 encoded delete",
+      "actual": "deny",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "name": "D4-16 shell wrapper",
+      "actual": "allow",
+      "expected": "deny",
+      "pass": false
+    },
+    {
+      "name": "D4-9 public deploy",
+      "actual": "warn",
+      "expected": "deny",
+      "pass": false
+    },
+    {
+      "name": "D4-21 broad IAM",
+      "actual": "deny",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "name": "redact AK",
+      "actual": "AK=<redacted> SK=<redacted>",
+      "expected": "AK=<redacted> SK=<redacted>",
+      "pass": true
+    }
+  ],
+  "planning": [
+    {
+      "service": "ECS",
+      "ok": true,
+      "command": "hcloud ECS --help",
+      "result": {
+        "service": "ECS",
+        "command": "hcloud ECS --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "ECS ListServersDetails",
+          "create": "ECS CreateServers",
+          "show": "IMS GlanceShowImage"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud ECS <operation> --param1=value1 --param2=value2 ...\n\nService:\n  ECS\n\nAvailable Operations:\n  AcceptScheduledEvent\n  AddServerGroupMember\n  AssociateServerVirtualIp\n  AttachServerVolume\n  BatchAddServerGroupMember\n  BatchAddServerNics\n  BatchAttachSharableVolumes\n  BatchCreateServerTags\n  BatchDeleteServerGroupMember\n  BatchDeleteServerNics\n  BatchDeleteServerTags\n  BatchDetachVolumes\n  BatchRebootServers\n  BatchResetServersPassword\n  BatchResizeServers\n  BatchStartServers\n  BatchStopServers\n  BatchUpdateServersName\n  ChangeServerChargeMode\n  ChangeServerNetworkInterface\n  ChangeServerOsWithCloudInit\n  ChangeServerOsWithoutCloudInit\n  ChangeVpc\n  CreateLaunchTemplate\n  CreatePostPaidServers\n  CreateServerGroup\n  CreateServers\n  DeleteLaunchTemplates\n  DeleteRecycleBinServer\n  DeleteServerGroup\n  DeleteServerGroupMember\n  DeleteServerMetadata\n  DeleteServerPassword\n  DeleteServers\n  DetachServerVolume\n  DisassociateServerVirtualIp\n  ExecuteServerDump\n  ExecuteServerRedeploy\n  ListCloudServers\n  ListFlavorSellPolicies\n  ListFlavors\n  ListLaunchTemplateVersions\n  ListRecycleBinServers\n  ListResizeFlavors\n  ListScheduledEvents\n  ListServerAzInfo\n  ListServerBlockDevices\n  ListServerGroups\n  ListServerInterfaces\n  ListServerTags\n  ListServerVolumeAttachments\n  ListServersDetails\n  ListTemplates\n  MigrateServer\n  NovaAssociateSecurityGroup\n  NovaAttachInterface\n  NovaAttachVolume\n  NovaCreateKeypair\n  NovaCreateServerGroup\n  NovaCreateServerMetadata\n  NovaCreateServers\n  NovaDeleteKeypair\n  NovaDeleteServer\n  NovaDeleteServerGroup\n  NovaDeleteServerMetadataItem\n  NovaDetachInterface\n  NovaDetachVolume\n  NovaDisassociateSecurityGroup\n  NovaListAvailabilityZones\n  NovaListFlavors\n  NovaListFlavorsDetails\n  NovaListKeypairs\n  NovaListServerActions\n  NovaListServerGroups\n  NovaListServerInterfaces\n  NovaListServerSecurityGroups\n  NovaListServerVolumes\n  NovaListServers\n  NovaListServersDetails\n  NovaListVersions\n  NovaLockServer\n  NovaRebootServer\n  NovaShowFlavor\n  NovaShowFlavorExtraSpecs\n  NovaShowKeypair\n  NovaShowServer\n  NovaShowServerAction\n  NovaShowServerGroup\n  NovaShowServerInterface\n  NovaShowServerMetadata\n  NovaShowServerMetadataItem\n  NovaShowServerVolume\n  NovaShowVersion\n  NovaStartServer\n  NovaStopServer\n  NovaUnlockServer\n  NovaUpdateServer\n  NovaUpdateServerMetadata\n  NovaUpdateServerMetadataItem\n  RegisterServerMonitor\n  ReinstallServerWithCloudInit\n  ReinstallServerWithoutCloudInit\n  ResetServerPassword\n  ResizePostPaidServer\n  ResizeServer\n  RevertRecycleBinServer\n  ShowAppendableVolumeQuota\n  ShowFlavorCapacity\n  ShowJob\n  ShowMetadataOptions\n  ShowRecycleBin\n  ShowResetPasswordFlag\n  ShowSerialConsoleActions\n  ShowServer\n  ShowServerAttachableNicNum\n  ShowServerBlockDevice\n  ShowServerGroup\n  ShowServerLimits\n  ShowServerPassword\n  ShowServerRemoteConsole\n  ShowServerTags\n  UpdateMetadataOptions\n  UpdateRecycleBin\n  UpdateRecycleBinPolicy\n  UpdateScheduledEvent\n  UpdateSerialConsoleOptions\n  UpdateServer\n  UpdateServerAutoTerminateTime\n  UpdateServerBlockDevice\n  UpdateServerInterface\n  UpdateServerMetadata\n\n运行`hcloud ECS <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "ECS",
+              "--help"
+            ],
+            "command": "hcloud ECS --help",
+            "executableBlock": "hcloud ECS --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "ECS",
+              "operation": "ECS",
+              "args": [
+                "ECS",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "1a40252d-7b1f-40c7-9fab-22efba432452",
+            "safeToRun": true,
+            "rawArgs": [
+              "ECS",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "VPC",
+      "ok": true,
+      "command": "hcloud VPC --help",
+      "result": {
+        "service": "VPC",
+        "command": "hcloud VPC --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "VPC ListVpcs",
+          "create": "VPC CreateVpc",
+          "show": "VPC ShowVpc"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud VPC <operation> --param1=value1 --param2=value2 ...\n\nService:\n  VPC\n\nAvailable Operations:\n  AcceptVpcPeering\n  AddFirewallRules\n  AddSecurityGroups\n  AddSourcesToTrafficMirrorSession\n  AddVpcExtendCidr\n  AssociateRouteTable\n  AssociateSubnetFirewall\n  BatchCreateFirewallTags\n  BatchCreatePortTags\n  BatchCreateSecurityGroupRules\n  BatchCreateSecurityGroupTags\n  BatchCreateSubNetworkInterface\n  BatchCreateSubnetTags\n  BatchCreateVpcTags\n  BatchDeleteFirewallTags\n  BatchDeletePortTags\n  BatchDeleteSecurityGroupTags\n  BatchDeleteSubnetTags\n  BatchDeleteVpcTags\n  CountFirewallsByTags\n  CountPortsByTags\n  CreateAddressGroup\n  CreateFirewall\n  CreateFirewallTag\n  CreateFlowLog\n  CreatePort\n  CreatePortTag\n  CreatePrivateip\n  CreateRouteTable\n  CreateSecurityGroup/v2\n  CreateSecurityGroup/v3\n  CreateSecurityGroupRule/v2\n  CreateSecurityGroupRule/v3\n  CreateSecurityGroupTag\n  CreateSubNetworkInterface\n  CreateSubnet\n  CreateSubnetTag\n  CreateTrafficMirrorFilter\n  CreateTrafficMirrorFilterRule\n  CreateTrafficMirrorSession\n  CreateVirsubnetCidrReservation\n  CreateVpc\n  CreateVpcPeering\n  CreateVpcResourceTag\n  CreateVpcRoute\n  DeleteAddressGroup\n  DeleteFirewall\n  DeleteFirewallTag\n  DeleteFlowLog\n  DeleteIpAddressGroupForce\n  DeletePort\n  DeletePortTag\n  DeletePrivateip\n  DeleteRouteTable\n  DeleteSecurityGroup/v2\n  DeleteSecurityGroup/v3\n  DeleteSecurityGroupRule/v2\n  DeleteSecurityGroupRule/v3\n  DeleteSecurityGroupTag\n  DeleteSubNetworkInterface\n  DeleteSubnet\n  DeleteSubnetTag\n  DeleteTrafficMirrorFilter\n  DeleteTrafficMirrorFilterRule\n  DeleteTrafficMirrorSession\n  DeleteVirsubnetCidrReservation\n  DeleteVpc\n  DeleteVpcPeering\n  DeleteVpcRoute\n  DeleteVpcTag\n  DisassociateRouteTable\n  DisassociateSubnetFirewall\n  ListAddressGroup\n  ListAddressGroupsDependency\n  ListApiVersion\n  ListFirewall\n  ListFirewallTags\n  ListFirewallsByTags\n  ListFlowLogs\n  ListPortTags\n  ListPorts/v2\n  ListPorts/v3\n  ListPortsByTags\n  ListPrivateips\n  ListRouteTables\n  ListSecurityGroupRules/v2\n  ListSecurityGroupRules/v3\n  ListSecurityGroupTags\n  ListSecurityGroups/v2\n  ListSecurityGroups/v3\n  ListSecurityGroupsByTags\n  ListSubNetworkInterfaces\n  ListSubnetTags\n  ListSubnets\n  ListSubnetsByTags\n  ListTrafficMirrorFilterRules\n  ListTrafficMirrorFilters\n  ListTrafficMirrorSessions\n  ListVirsubnetCidrReservations\n  ListVirsubnets\n  ListVpcPeerings\n  ListVpcRoutes\n  ListVpcTags\n  ListVpcs/v2\n  ListVpcs/v3\n  ListVpcsByTags\n  NeutronAddFirewallRule\n  NeutronAddRouterInterface\n  NeutronCreateFirewallGroup\n  NeutronCreateFirewallPolicy\n  NeutronCreateFirewallRule\n  NeutronCreateNetwork\n  NeutronCreatePort\n  NeutronCreateRouter\n  NeutronCreateSecurityGroup\n  NeutronCreateSecurityGroupRule\n  NeutronCreateSubnet\n  NeutronDeleteFirewallGroup\n  NeutronDeleteFirewallPolicy\n  NeutronDeleteFirewallRule\n  NeutronDeleteNetwork\n  NeutronDeletePort\n  NeutronDeleteRouter\n  NeutronDeleteSecurityGroup\n  NeutronDeleteSecurityGroupRule\n  NeutronDeleteSubnet\n  NeutronListFirewallGroups\n  NeutronListFirewallPolicies\n  NeutronListFirewallRules\n  NeutronListNetworks\n  NeutronListPorts\n  NeutronListRouters\n  NeutronListSecurityGroupRules\n  NeutronListSecurityGroups\n  NeutronListSubnets\n  NeutronRemoveFirewallRule\n  NeutronRemoveRouterInterface\n  NeutronShowFirewallGroup\n  NeutronShowFirewallPolicy\n  NeutronShowFirewallRule\n  NeutronShowNetwork\n  NeutronShowPort\n  NeutronShowRouter\n  NeutronShowSecurityGroup\n  NeutronShowSecurityGroupRule\n  NeutronShowSubnet\n  NeutronUpdateFirewallGroup\n  NeutronUpdateFirewallPolicy\n  NeutronUpdateFirewallRule\n  NeutronUpdateNetwork\n  NeutronUpdatePort\n  NeutronUpdateRouter\n  NeutronUpdateSecurityGroup\n  NeutronUpdateSubnet\n  RejectVpcPeering\n  RemoveFirewallRules\n  RemoveSecurityGroups\n  RemoveSourcesFromTrafficMirrorSession\n  RemoveVpcExtendCidr\n  ShowAddressGroup\n  ShowFirewall\n  ShowFirewallTags\n  ShowFlowLog\n  ShowNetworkIpAvailabilities\n  ShowPort/v2\n  ShowPort/v3\n  ShowPortTags\n  ShowPrivateip\n  ShowQuota/v2\n  ShowQuota/v3\n  ShowRouteTable\n  ShowSecurityGroup/v2\n  ShowSecurityGroup/v3\n  ShowSecurityGroupRule/v2\n  ShowSecurityGroupRule/v3\n  ShowSecurityGroupTags\n  ShowSubNetworkInterface\n  ShowSubNetworkInterfacesQuantity\n  ShowSubnet\n  ShowSubnetTags\n  ShowTrafficMirrorFilter\n  ShowTrafficMirrorFilterRule\n  ShowTrafficMirrorSession\n  ShowVirsubnet\n  ShowVirsubnetCidrReservation\n  ShowVpc/v2\n  ShowVpc/v3\n  ShowVpcPeering\n  ShowVpcRoute\n  ShowVpcTags\n  UpdateAddressGroup\n  UpdateFirewall\n  UpdateFirewallRules\n  UpdateFlowLog\n  UpdatePort\n  UpdateRouteTable\n  UpdateSecurityGroup\n  UpdateSubNetworkInterface\n  UpdateSubnet\n  UpdateTrafficMirrorFilter\n  UpdateTrafficMirrorFilterRule\n  UpdateTrafficMirrorSession\n  UpdateVirsubnetCidrReservation\n  UpdateVpc\n  UpdateVpcPeering\n\n运行`hcloud VPC <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "VPC",
+              "--help"
+            ],
+            "command": "hcloud VPC --help",
+            "executableBlock": "hcloud VPC --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "VPC",
+              "operation": "VPC",
+              "args": [
+                "VPC",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "53b01992-30d9-4de1-a8fe-b6fb4b9a62d3",
+            "safeToRun": true,
+            "rawArgs": [
+              "VPC",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "OBS",
+      "ok": true,
+      "command": "hcloud obs help",
+      "result": {
+        "service": "OBS",
+        "command": "hcloud obs help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "OBS ls",
+          "create": "OBS mb obs://<bucket>",
+          "show": "OBS stat obs://<bucket>/<key>"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "Usage: obsutil [command] [args...] [options...]\nYou can use \"obsutil help command\" to view the specific help of each command\n\nBasic commands:\n  abort         cloud_url [options...]        \n                abort multipart uploads       \n\n  bucketpolicy  cloud_url [options...]        \n                                              \n\n  cat           cloud_url                     \n                view the content of a text object in a bucket\n\n  chattri       cloud_url [options...]        \n                set bucket or object properties\n\n  cp            file_url cloud_url [options...]\n                cloud_url file_url [options...]\n                cloud_url cloud_url [options...]\n                upload, download or copy objects\n\n  create-share  cloud_url [options...]        \n                create authorization code for sharing\n\n  download      resource_url file_url [options...]\n                download an object directly using the specified resource url\n\n  lifecycle     cloud_url [options...]        \n                                              \n\n  ls            [cloud_url] [options...]      \n                list buckets or objects/multipart uploads in a bucket\n\n  mb            cloud_url [options...]        \n                create a bucket with the specified parameters\n\n  mkdir         cloud_url|folder_url          \n                create folder(s) in a specified bucket or in the local file system\n\n  mv            cloud_url cloud_url [options...]\n                move objects                  \n\n  restore       cloud_url [options...]        \n                restore objects in a bucket to be readable\n\n  rm            cloud_url [options...]        \n                delete a bucket or objects in a bucket\n\n  share-cp      authorization_code file_url [options...]\n                download objects using authorization code and access code\n\n  share-ls      authorization_code [options...]\n                list objects using authorization code and access code\n\n  sign          cloud_url [options...]        \n                generate the download url(s) for the objects in a specified bucket\n\n  stat          cloud_url                     \n                show the properties of a bucket or an object\n\n  sync          file_url cloud_url [options...]\n                cloud_url file_url [options...]\n                cloud_url cloud_url [options...]\n                synchronize objects from the source to the destination\n\n  update        cloud_url [options...]        \n                update obsutil                \n\n\nOther commands:\n  archive       [archive_url]                 \n                archive log files to local file system or OBS\n\n  clear         [checkpoint_dir] [options...] \n                delete part records           \n\n  config        [options...]                  \n                update the configuration file \n\n  hash          file_url [options...]         \n                caculate the md5 or crc64 hash code of a local file\n\n  help          [command]                     \n                view command help information \n\n  version                                     \n                show version                  \n\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "obs",
+              "help"
+            ],
+            "command": "hcloud obs help",
+            "executableBlock": "hcloud obs help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "obs",
+              "operation": "help",
+              "args": [
+                "obs",
+                "help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "0788e51b-47f8-44ec-bbd4-895aeada9d51",
+            "safeToRun": true,
+            "rawArgs": [
+              "obs",
+              "help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "RDS",
+      "ok": true,
+      "command": "hcloud RDS --help",
+      "result": {
+        "service": "RDS",
+        "command": "hcloud RDS --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "RDS ListInstances",
+          "create": "RDS CreateInstance",
+          "show": "RDS ShowInstance"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud RDS <operation> --param1=value1 --param2=value2 ...\n\nService:\n  RDS\n\nAvailable Operations:\n  AddPostgresqlHbaConf\n  AllowDbPrivilege\n  AllowDbUserPrivilege\n  AllowSqlserverDbUserPrivilege\n  ApplyConfigurationAsync\n  AttachEip\n  BatchAddMsdtcs\n  BatchDeleteInstance\n  BatchDeleteManualBackup\n  BatchExecuteEvents\n  BatchModifyPublication\n  BatchModifySubscription\n  BatchResizeFlavor\n  BatchRestoreDatabase\n  BatchRestorePostgreSqlTables\n  BatchStopInstance\n  BatchTagAddAction\n  BatchTagDelAction\n  ChangeBackupConfig\n  ChangeFailoverMode\n  ChangeFailoverStrategy\n  ChangeOpsWindow\n  ChangeProxyScale\n  ChangeTheDelayThreshold\n  CheckInstanceForUpgrade\n  CheckWeakpwd\n  CollectPublicationMonitor\n  CollectSubscriptionMonitor\n  CompareConfiguration\n  CopyConfiguration\n  CopyDatabase\n  CreateConfiguration\n  CreateDatabase\n  CreateDbUser\n  CreateDistribution\n  CreateDnsName\n  CreateDrsJobTask\n  CreateInstance\n  CreateInstanceIam5\n  CreateIntelligentKillSession\n  CreateJobSchedule\n  CreateManualBackup\n  CreatePostgresqlDatabase\n  CreatePostgresqlDatabaseSchema\n  CreatePostgresqlDbUser\n  CreatePostgresqlExtension\n  CreatePublication\n  CreateRdSforMySqlProxy\n  CreateRebuildSlave\n  CreateRestoreInstance\n  CreateSqlLimit\n  CreateSqlserverDatabase\n  CreateSqlserverDbUser\n  CreateSubscription\n  CreateXelLogDownload\n  DeleteBackupSelection\n  DeleteConfiguration\n  DeleteDatabase\n  DeleteDbUser\n  DeleteDisasterRecovery\n  DeleteDistribution\n  DeleteInstance\n  DeleteJob\n  DeleteJobSchedule\n  DeleteLogLtsConfigs\n  DeleteManualBackup\n  DeleteMsdtcLocalHost\n  DeletePostgresqlDatabase\n  DeletePostgresqlDbUser\n  DeletePostgresqlExtension\n  DeletePostgresqlHbaConf\n  DeletePublication\n  DeleteRdSforMySqlProxy\n  DeleteSqlLimit\n  DeleteSqlserverDatabase\n  DeleteSqlserverDatabaseEx\n  DeleteSqlserverDbUser\n  DeleteSubscription\n  DownloadErrorlog\n  DownloadSlowlog\n  EnableConfiguration\n  ExecutePrivilegeDatabaseUserRole\n  ExecuteRevokeDatabaseUserRole\n  GetInstancesNoIndexTables\n  ListApiVersion\n  ListApiVersionNew\n  ListAuditlogs\n  ListAuthorizedDatabases\n  ListAuthorizedDbUsers\n  ListAuthorizedSqlserverDbUsers\n  ListAutoScalingPolicy\n  ListBackupTransfers\n  ListBackups\n  ListBusinessPartners\n  ListCollations\n  ListConfigurationApplyHistories\n  ListConfigurations\n  ListDatabaseUserRole\n  ListDatabases\n  ListDatastores\n  ListDbAgentJobHistorySteps\n  ListDbAgentJobHistorys\n  ListDbAgentJobs\n  ListDbUsers\n  ListDistribution\n  ListDistributorInstances\n  ListDrInfos\n  ListDrRelations\n  ListEngineFlavors\n  ListErrorLogs\n  ListErrorLogsNew\n  ListErrorlogForLts\n  ListFlavors\n  ListFlavorsResize\n  ListHistoryDatabase\n  ListHistorySessions\n  ListHistoryTopSqls\n  ListHistoryWaitEvents\n  ListInspectionHistories\n  ListInstanceBackupSummary\n  ListInstanceDiagnosis\n  ListInstanceParamHistories\n  ListInstanceTags\n  ListInstances\n  ListInstancesConfigurations\n  ListInstancesInfoDiagnosis\n  ListInstancesSupportFastRestore\n  ListJobInfo\n  ListJobInfoDetail\n  ListJobSchedules\n  ListLogLtsConfigs\n  ListMajorVersionFeature\n  ListMarketplaceEngineProducts\n  ListMsdtcHosts\n  ListOffSiteBackups\n  ListOffSiteInstances\n  ListOffSiteRestoreTimes\n  ListPackLogInfos\n  ListPostgresqlDatabaseSchemas\n  ListPostgresqlDatabases\n  ListPostgresqlDbUserPaginated\n  ListPostgresqlExtension\n  ListPostgresqlHbaInfo\n  ListPostgresqlHbaInfoHistory\n  ListPostgresqlListHistoryTables\n  ListPredefinedTag\n  ListProjectTags\n  ListPublications\n  ListPublications4Subscription\n  ListRdSforMySqlProxy\n  ListRdSforMysqlProxyFlavors\n  ListReadOnlyReplayDatabase\n  ListRecycleInstances\n  ListRemoteDb\n  ListReplicationErrors\n  ListReplicationProfiles\n  ListRestoreTimes\n  ListScheduleEvents\n  ListScheduleTasks\n  ListShareBackups\n  ListSimplifiedInstances\n  ListSlowLogFile\n  ListSlowLogStatisticsForLts\n  ListSlowLogs\n  ListSlowLogsNew\n  ListSlowlogForLts\n  ListSlowlogStatistics\n  ListSmallVersion\n  ListSparseBackupPolicy\n  ListSqlLimit\n  ListSqlStatistics\n  ListSqlserverDatabases\n  ListSqlserverDbUsers\n  ListSslCertDownloadLink\n  ListStorageTypes\n  ListSubscriberInstances\n  ListSubscriptions\n  ListTasks\n  ListTopSqls\n  ListUpdateBackupEnhancePolicy\n  ListUpgradeHistories\n  ListVolumeInfo\n  ListXellogFiles\n  MigrateFollower\n  ModifyCollation\n  ModifyDbAgentJob\n  ModifyJobSchedule\n  ModifyPostgresqlHbaConf\n  ModifyPublication\n  ModifyRdSforMySqlProxyRouteMode\n  NotifyReplaceNode\n  RefreshPublicationSnapshot\n  RefreshSubscription\n  ResetConfiguration\n  ResetPwd\n  ResetViewSqlStatistics\n  RestartDbAgentJob\n  RestoreExistInstance\n  RestoreLogReplayDatabase\n  RestoreTables\n  RestoreTablesNew\n  RestoreToExistingInstance\n  Revoke\n  RevokePostgresqlDbPrivilege\n  RevokeSqlserverDbUserPrivilege\n  RotateAuditLog\n  SearchQueryScaleComputeFlavors\n  SearchQueryScaleFlavors\n  SetAuditlogPolicy\n  SetAutoEnlargePolicy\n  SetAutoUpgradePolicy\n  SetBackupPolicy\n  SetBinlogClearPolicy\n  SetDatabaseUserPrivilege\n  SetDbUserPwd\n  SetInstancesDbShrink\n  SetInstancesNewDbShrink\n  SetInstancesProxyRestart\n  SetLogLtsConfigs\n  SetOffSiteBackupPolicy\n  SetPostgresqlDbUserPwd\n  SetReadOnlySwitch\n  SetSecondLevelMonitor\n  SetSecurityGroup\n  SetSensitiveSlowLog\n  SetTransferPolicy\n  ShowApiVersion\n  ShowAuditlogDownloadLink\n  ShowAuditlogPolicy\n  ShowAutoCesAlarm\n  ShowAutoEnlargePolicy\n  ShowAutoUpgradePolicy\n  ShowAvailableBuildDrInstance\n  ShowAvailableVersion\n  ShowBackupConfig\n  ShowBackupDownloadLink\n  ShowBackupPolicy\n  ShowBackupUsage\n  ShowBinlogClearPolicy\n  ShowConfiguration\n  ShowDatabaseLevelDatabase\n  ShowDnsName\n  ShowDomainName\n  ShowDrReplicaStatus\n  ShowDrsJobName\n  ShowHistorySessionAnalyseDownloadInfo\n  ShowHotClodSeparationStatus\n  ShowIncreBackupPolicy1\n  ShowInformationAboutDatabaseProxy\n  ShowInstanceConfiguration\n  ShowIntelligentKillSessionHistory\n  ShowIntelligentKillSessionStatistic\n  ShowMsdtcLocalHost\n  ShowOffSiteBackupPolicy\n  ShowPostgresqlParamValue\n  ShowPrecheckResult\n  ShowQuotas\n  ShowRebuildSlaveStatus\n  ShowRecoveryTimeWindow\n  ShowRecyclePolicy\n  ShowReplayDelayStatus\n  ShowReplicationStatus\n  ShowRestartPolicy\n  ShowSecondLevelMonitoring\n  ShowStorageUsedSpace\n  ShowTaskDetail\n  ShowTdeStatus\n  ShowTopObjects\n  ShowTransferPolicy\n  ShowUpgradeDbMajorVersionStatus\n  StartDatabaseProxy\n  StartFailover\n  StartInstanceDrToMasterAction\n  StartInstanceEnlargeVolumeAction\n  StartInstanceMasterDrAction\n  StartInstanceReduceVolumeAction\n  StartInstanceRestartAction\n  StartInstanceSingleToHaAction\n  StartInstanceSlaveDrAction\n  StartRecyclePolicy\n  StartResizeFlavorAction\n  StartupInstance\n  StopBackup\n  StopDatabaseProxy\n  StopInstance\n  SwitchDbAgentJob\n  SwitchLogReplay\n  SwitchSqlLimit\n  SwitchSsl\n  SyncReplicationMetadata\n  TransferBackup\n  UnlockNodeReadonlyStatus\n  UpdateConfiguration\n  UpdateDataIp\n  UpdateDatabase\n  UpdateDatabaseOwner\n  UpdateDbUserComment\n  UpdateDbUserPrivilege\n  UpdateDnsName\n  UpdateHostPrivilege\n  UpdateIncreBackupPolicy1\n  UpdateInstanceAlias\n  UpdateInstanceConfiguration\n  UpdateInstanceConfigurationAsync\n  UpdateInstanceName\n  UpdatePort\n  UpdatePostgresqlDatabase\n  UpdatePostgresqlDbUserComment\n  UpdatePostgresqlExtension\n  UpdatePostgresqlParameterValue\n  UpdateReadWeight\n  UpdateSparseBackupPolicy\n  UpdateSqlLimit\n  UpdateStatistics\n  UpdateTdeStatus\n  UpdateTimeZone\n  UpdateToPeriod\n  UpgradeDbMajorVersion\n  UpgradeDbMajorVersionPreCheck\n  UpgradeDbVersion\n  UpgradeDbVersionNew\n  UpgradeLargeVersion\n  UploadHistorySessionAnalyase\n  ValidateInstanceConnection\n\n运行`hcloud RDS <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "RDS",
+              "--help"
+            ],
+            "command": "hcloud RDS --help",
+            "executableBlock": "hcloud RDS --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "RDS",
+              "operation": "RDS",
+              "args": [
+                "RDS",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "0e5e7b42-30c4-4c29-b2ff-902a2d85e9c0",
+            "safeToRun": true,
+            "rawArgs": [
+              "RDS",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "GaussDB",
+      "ok": true,
+      "command": "hcloud GaussDB --help",
+      "result": {
+        "service": "GaussDB",
+        "command": "hcloud GaussDB --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "GaussDB ListInstances",
+          "create": "GaussDB CreateInstance",
+          "show": "GaussDB ShowInstance"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud GaussDB <operation> --param1=value1 --param2=value2 ...\n\nService:\n  GaussDB\n\nAvailable Operations:\n  AddDatabasePermission\n  BatchChangeInstanceSpecification\n  BatchDeleteBackup\n  BatchTagAction\n  BatchUpdateBackupPolicy\n  BatchUpgradeDatabases\n  CancelGaussMySqlInstanceEip\n  CancelScheduleTask\n  ChangeGaussMySqlInstanceSpecification\n  ChangeGaussMySqlProxySpecification\n  CheckDataBaseConfig\n  CheckKernelUpgrade\n  CheckResource\n  CheckScheduleTaskExist\n  CheckStarRocksResource\n  CheckStarrocksParams\n  CheckTableConfig\n  ClearOnlineDdlTaskTempTable\n  CollectRealtimeSession\n  CopyConfigurations\n  CopyInstanceConfigurations\n  CreateAccessControl\n  CreateBackupResourcePackage\n  CreateGaussMySqlBackup\n  CreateGaussMySqlConfiguration\n  CreateGaussMySqlDatabase\n  CreateGaussMySqlDatabaseUser\n  CreateGaussMySqlInstance\n  CreateGaussMySqlProxy\n  CreateGaussMySqlReadonlyNode\n  CreateGaussMysqlDns\n  CreateLtsConfigs\n  CreateProxyDnsName\n  CreateRestoreTables\n  CreateStarRocksDataReplication\n  CreateStarRocksDatabaseUser\n  CreateStarrocksInstance\n  DeleteAutoSqlLimiting\n  DeleteDatabasePermission\n  DeleteDynamicServerlessPolicy\n  DeleteGaussMySqlBackup\n  DeleteGaussMySqlConfiguration\n  DeleteGaussMySqlDatabase\n  DeleteGaussMySqlDatabaseUser\n  DeleteGaussMySqlInstance\n  DeleteGaussMySqlProxy\n  DeleteGaussMySqlReadonlyNode\n  DeleteHtapProcessList\n  DeleteLtsConfigs\n  DeleteOnlineDdlTaskRecord\n  DeleteProxyPrivateDnsName\n  DeleteScheduleTasK\n  DeleteSqlFilterRule\n  DeleteStarRockLtsConfig\n  DeleteStarRocksDataReplication\n  DeleteStarRocksDatabaseUser\n  DeleteStarrocksInstance\n  DeleteTaskRecord\n  DeleteTaurusDbNodeProcesses\n  DescribeBackupEncryptStatus\n  DownloadDdlLogs\n  DownloadImportExcelTemplate\n  DownloadOnlineDdlTaskLog\n  DownloadRealtimeSession\n  DownloadSlowLogFile\n  ExecuteIntelligentKillSession\n  ExpandGaussMySqlInstanceVolume\n  ExpandGaussMySqlProxy\n  InvokeGaussMySqlInstanceSwitchOver\n  ListAuditLogDownloadLink\n  ListAuditLogs\n  ListColdTableMetas\n  ListConfigurationsDifferences\n  ListConfigurationsInstances\n  ListDdlLogs\n  ListEnterpriseProjects\n  ListGaussMySqlConfigurations\n  ListGaussMySqlDatabase\n  ListGaussMySqlDatabaseCharsets\n  ListGaussMySqlDatabaseUser\n  ListGaussMySqlDedicatedResources\n  ListGaussMySqlInstanceDetailInfo\n  ListGaussMySqlInstanceDetailInfoUnifyStatus\n  ListGaussMySqlInstances\n  ListGaussMySqlInstancesUnifyStatus\n  ListHtapDataStore\n  ListHtapFlavor\n  ListHtapInstanceInfo\n  ListHtapStorageType\n  ListImmediateJobs\n  ListInstanceConfigurations\n  ListInstanceNode\n  ListInstanceTags\n  ListIntelligentKillSessionHistory\n  ListLtsErrorLogDetails\n  ListLtsSlowlogDetails\n  ListModifyHistory\n  ListOnlineDdlTaskRecords\n  ListParamsTemplateApplyHistory\n  ListProjectTags\n  ListRecycleInstances\n  ListScheduleJobs\n  ListStarRocksDataBases\n  ListStarRocksDataReplicationConfig\n  ListStarRocksDataReplicationConfigByDataBase\n  ListStarRocksDataReplications\n  ListStarRocksDbParameters\n  ListStarrocksInstanceInfo\n  ListTaurusDbNodeProcesses\n  ModifyAutoExpandPolicy\n  ModifyBackupEncryptStatus\n  ModifyBackupVaultLock\n  ModifyDataSync\n  ModifyGaussMySqlProxyRouteMode\n  ModifyGaussMysqlDns\n  ModifyNodePriority\n  ModifyStarRocksSecurityGroup\n  PauseStarRocksDataReplication\n  RenameInstanceNode\n  ResetGaussMySqlDatabasePassword\n  ResetGaussMySqlPassword\n  ResizeStarRocksFlavor\n  RestartGaussMySqlInstance\n  RestartGaussMySqlNode\n  RestartProxyInstance\n  RestartStarrocksInstance\n  RestartStarrocksNode\n  RestoreOldInstance\n  ResumeStarRocksDataReplication\n  SetAuditLogPolicy\n  SetAutoSqlLimiting\n  SetDdlLogPolicy\n  SetGaussMySqlProxyWeight\n  SetGaussMySqlQuotas\n  SetHtapQueryQueuesRule\n  SetInstanceReadonlyStatus\n  SetInstanceScheduleEvents\n  SetRecyclePolicy\n  SetSqlFilterRule\n  ShowAuditLog\n  ShowAuditLogDownloadLink\n  ShowAuditLogPolicy\n  ShowAutoExpandPolicy\n  ShowAutoScalingHistory\n  ShowAutoScalingPolicy\n  ShowAutoSqlLimitingLog\n  ShowBackupResourcePackageFlavors\n  ShowBackupRestoreTime\n  ShowBackupVaultLock\n  ShowDedicatedResourceInfo\n  ShowDynamicServerlessPolicy\n  ShowErrorLogDownloadLink\n  ShowGaussMySqlBackupList\n  ShowGaussMySqlBackupPolicy\n  ShowGaussMySqlConfiguration\n  ShowGaussMySqlEngineVersion\n  ShowGaussMySqlFlavors\n  ShowGaussMySqlIncrementalBackupList\n  ShowGaussMySqlInstanceInfo\n  ShowGaussMySqlInstanceInfoUnifyStatus\n  ShowGaussMySqlJobInfo\n  ShowGaussMySqlProjectQuotas\n  ShowGaussMySqlProxyFlavors\n  ShowGaussMySqlProxyList\n  ShowGaussMySqlQuotas\n  ShowHistoricalSqlFilterRule\n  ShowHtapErrorLogDetail\n  ShowHtapLtsConfig\n  ShowHtapProcessList\n  ShowHtapQueryQueuesRule\n  ShowInstanceBackups\n  ShowInstanceDatabaseVersion\n  ShowInstanceDatabasesForHtap\n  ShowInstanceEip\n  ShowInstanceMonitorExtend\n  ShowInstanceScheduleEvents\n  ShowInstanceTablesForHtap\n  ShowIntelligentDiagnosisAbnormalCountOfInstances\n  ShowIntelligentDiagnosisInstanceInfosPerMetric\n  ShowIntelligentKillSessionStatistic\n  ShowKernelUpgradeCheckResult\n  ShowLockWaitSession\n  ShowLtsConfigs\n  ShowMultiTenant\n  ShowProxyConfigurations\n  ShowProxyFlavorsByAzCode\n  ShowProxyIpgroup\n  ShowProxyVersion\n  ShowRealtimeSessionTaskStatus\n  ShowRecyclePolicy\n  ShowRestoreAvailableTables\n  ShowRestoreTables\n  ShowServerlessComputeAbilityPolicy\n  ShowServerlessScalingPolicy\n  ShowSlowLogDetail\n  ShowSlowLogStatistics\n  ShowSlowlogSensitiveStatus\n  ShowSqlAutoSqlLimiting\n  ShowSqlFilterControl\n  ShowSqlFilterRule\n  ShowStarRocksDatabaseUser\n  ShowStarRocksSlowlogSensitiveStatus\n  ShowStarrocksParams\n  ShowTableMetaInfo\n  ShowTaskDetails\n  ShowTaurusDbAdvancedBackupPolicy\n  ShowTaurusDbTxnProgress\n  ShrinkGaussMySqlProxy\n  StartOnlineDdlTask\n  StopOnlineDdlTask\n  SwitchAccessControl\n  SwitchGaussMySqlConfiguration\n  SwitchGaussMySqlInstanceSsl\n  SwitchGaussMySqlProxyAlt\n  SwitchGaussMySqlProxyEip\n  SwitchGaussMySqlProxySsl\n  SyncStarRocksUsers\n  UpdateAuditLog\n  UpdateAutoScalingPolicy\n  UpdateBackupOffsitePolicy\n  UpdateDynamicServerlessPolicy\n  UpdateGaussMySqlBackupPolicy\n  UpdateGaussMySqlConfiguration\n  UpdateGaussMySqlDatabaseComment\n  UpdateGaussMySqlDatabaseUserComment\n  UpdateGaussMySqlInstanceAlias\n  UpdateGaussMySqlInstanceEip\n  UpdateGaussMySqlInstanceInternalIp\n  UpdateGaussMySqlInstanceName\n  UpdateGaussMySqlInstanceOpsWindow\n  UpdateGaussMySqlInstancePort\n  UpdateGaussMySqlInstanceSecurityGroup\n  UpdateGaussMySqlQuotas\n  UpdateHtapQueryQueuesControl\n  UpdateInstanceConfigurations\n  UpdateInstanceMonitor\n  UpdateMultiTenant\n  UpdateNewNodeAutoAddSwitch\n  UpdateProxyConnectionPoolType\n  UpdateProxyName\n  UpdateProxyNewConfigurations\n  UpdateProxyPort\n  UpdateProxyPrivateDnsName\n  UpdateProxySessionConsistence\n  UpdateServerlessComputeAbilityPolicy\n  UpdateServerlessPolicy\n  UpdateServerlessScalingPolicy\n  UpdateSlowlogSensitiveStatus\n  UpdateSlowlogSensitiveSwitch\n  UpdateSqlFilterControl\n  UpdateStarRockLtsConfig\n  UpdateStarRocksDatabaseUserPassword\n  UpdateStarRocksDatabaseUserPermission\n  UpdateStarrocksParams\n  UpdateTaurusDbAdvancedBackupPolicy\n  UpdateTransactionSplitStatus\n  UpgradeConfiguration\n  UpgradeGaussMySqlInstanceDatabase\n  UpgradeProxyVersion\n  UpgradeSrKernelVersion\n  UploadImportExcelTemplate\n\n运行`hcloud GaussDB <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "GaussDB",
+              "--help"
+            ],
+            "command": "hcloud GaussDB --help",
+            "executableBlock": "hcloud GaussDB --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "GaussDB",
+              "operation": "GaussDB",
+              "args": [
+                "GaussDB",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "100e3873-32f4-486c-bc9a-00160af740f2",
+            "safeToRun": true,
+            "rawArgs": [
+              "GaussDB",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "CCE",
+      "ok": true,
+      "command": "hcloud CCE --help",
+      "result": {
+        "service": "CCE",
+        "command": "hcloud CCE --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for CCE. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud CCE <operation> --param1=value1 --param2=value2 ...\n\nService:\n  CCE\n\nAvailable Operations:\n  AddNode\n  AddNodesToNodePool\n  AssumeAgencyForPodIdentity\n  AwakeCluster\n  BatchChangeNodeToPeriod\n  BatchCreateAddonPrecheck\n  BatchCreateAutopilotClusterTags\n  BatchCreateClusterTags\n  BatchDeleteAutopilotClusterTags\n  BatchDeleteClusterTags\n  BatchSyncNodes\n  ContinueUpgradeClusterTask\n  CreateAccessPolicy\n  CreateAddonInstance\n  CreateAutopilotAddonInstance\n  CreateAutopilotCluster\n  CreateAutopilotClusterMasterSnapshot\n  CreateAutopilotKubernetesClusterCert\n  CreateAutopilotMaintenanceWindow\n  CreateAutopilotPostCheck\n  CreateAutopilotPreCheck\n  CreateAutopilotRelease\n  CreateAutopilotUpgradeWorkFlow\n  CreateCloudPersistentVolumeClaims\n  CreateCluster\n  CreateClusterMasterSnapshot\n  CreateImageCache\n  CreateKubernetesClusterCert\n  CreateNode\n  CreateNodePool\n  CreatePartition\n  CreatePodIdentityAssociation\n  CreatePostCheck\n  CreatePreCheck\n  CreateRelease\n  CreateUpgradeWorkFlow\n  DeleteAccessPolicy\n  DeleteAddonInstance\n  DeleteAutopilotAddonInstance\n  DeleteAutopilotChart\n  DeleteAutopilotCluster\n  DeleteAutopilotJob\n  DeleteAutopilotMaintenanceWindow\n  DeleteAutopilotRelease\n  DeleteChart\n  DeleteCloudPersistentVolumeClaims\n  DeleteCluster\n  DeleteImageCache\n  DeleteNode\n  DeleteNodePool\n  DeletePodIdentityAssociation\n  DeleteRelease\n  DownloadAutopilotChart\n  DownloadChart\n  GetAccessPolicy\n  GetAutopilotOneJob\n  GetAvaliableZone\n  GetClusterFlavorSpecs\n  GetClusterLongAkskConfig\n  GetClusterQuota\n  GetCustomizeTags\n  GetLabels\n  GetLongAkskConfig\n  GetResourceTags\n  HibernateCluster\n  ListAccessPolicy\n  ListAddonInstances\n  ListAddonPrecheckTasks\n  ListAddonTemplates\n  ListAutopilotAddonInstances\n  ListAutopilotAddonTemplates\n  ListAutopilotCharts\n  ListAutopilotClusterMasterSnapshotTasks\n  ListAutopilotClusterUpgradeFeatureGates\n  ListAutopilotClusterUpgradePaths\n  ListAutopilotClusters\n  ListAutopilotJobs\n  ListAutopilotPreCheckTasks\n  ListAutopilotReleases\n  ListAutopilotUpgradeClusterTasks\n  ListAutopilotUpgradePlans\n  ListAutopilotUpgradeWorkFlows\n  ListCharts\n  ListClusterMasterSnapshotTasks\n  ListClusterUpgradeFeatureGates\n  ListClusterUpgradePaths\n  ListClusters\n  ListHyperNodes\n  ListImageCaches\n  ListNodePools\n  ListNodes\n  ListPackageProducts\n  ListPartitions\n  ListPodIdentityAssociations\n  ListPreCheckTasks\n  ListReleases\n  ListUpgradeClusterTasks\n  ListUpgradeWorkFlows\n  LockNodepoolNodeScaleDown\n  MigrateNode\n  MigrateToNodePool\n  PauseUpgradeClusterTask\n  RemoveNode\n  ResetNode\n  ResizeCluster\n  RetryAutopilotUpgradeClusterTask\n  RetryUpgradeClusterTask\n  RevokeKubernetesClusterCert\n  RollbackAddonInstance\n  RollbackAutopilotAddonInstance\n  RotateClusterCredentials\n  RotateNodeCert\n  ScaleNodePool\n  ShowAddonInstance\n  ShowAutopilotAddonInstance\n  ShowAutopilotChart\n  ShowAutopilotChartValues\n  ShowAutopilotCluster\n  ShowAutopilotClusterConfig\n  ShowAutopilotClusterEndpoints\n  ShowAutopilotClusterUpgradeInfo\n  ShowAutopilotFeatureGates\n  ShowAutopilotJob\n  ShowAutopilotMaintenanceWindow\n  ShowAutopilotPreCheck\n  ShowAutopilotQuotas\n  ShowAutopilotRelease\n  ShowAutopilotReleaseHistory\n  ShowAutopilotUpgradeClusterTask\n  ShowAutopilotUpgradeWorkFlow\n  ShowAutopilotUserChartsQuotas\n  ShowChart\n  ShowChartValues\n  ShowCluster\n  ShowClusterConfig\n  ShowClusterConfigurationDetails\n  ShowClusterEndpoints\n  ShowClusterSupportConfiguration\n  ShowClusterUpgradeInfo\n  ShowFeatureGates\n  ShowImageCache\n  ShowJob\n  ShowNode\n  ShowNodePool\n  ShowNodePoolConfigurationDetails\n  ShowNodePoolConfigurations\n  ShowPartition\n  ShowPodIdentityAssociation\n  ShowPreCheck\n  ShowQuotas\n  ShowRelease\n  ShowReleaseHistory\n  ShowUpgradeClusterTask\n  ShowUpgradeWorkFlow\n  ShowUserChartsQuotas\n  ShowVersion\n  SubscribePackageProducts\n  SyncNode\n  UnlockNodepoolNodeScaleDown\n  UpdateAccessPolicy\n  UpdateAddonInstance\n  UpdateAutopilotAddonInstance\n  UpdateAutopilotChart\n  UpdateAutopilotCluster\n  UpdateAutopilotClusterEip\n  UpdateAutopilotMaintenanceWindow\n  UpdateAutopilotRelease\n  UpdateAutopilotUpgradePlan\n  UpdateChart\n  UpdateCluster\n  UpdateClusterEip\n  UpdateClusterLogConfig\n  UpdateClusterLongAkskConfig\n  UpdateLongAkskConfig\n  UpdateNode\n  UpdateNodePool\n  UpdateNodePoolConfiguration\n  UpdatePartition\n  UpdatePodIdentityAssociation\n  UpdateRelease\n  UpgradeAutopilotCluster\n  UpgradeAutopilotWorkFlowUpdate\n  UpgradeCluster\n  UpgradeNodePool\n  UpgradeWorkFlowUpdate\n  UploadAutopilotChart\n  UploadChart\n  token\n  update-kubeconfig\n  list-cluster\n\n运行`hcloud CCE <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "CCE",
+              "--help"
+            ],
+            "command": "hcloud CCE --help",
+            "executableBlock": "hcloud CCE --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "CCE",
+              "operation": "CCE",
+              "args": [
+                "CCE",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "7e4a0e7b-9864-45ba-91ea-954dcb49ac59",
+            "safeToRun": true,
+            "rawArgs": [
+              "CCE",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "FunctionGraph",
+      "ok": true,
+      "command": "hcloud FunctionGraph --help",
+      "result": {
+        "service": "FunctionGraph",
+        "command": "hcloud FunctionGraph --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "FunctionGraph ListFunctions",
+          "create": "FunctionGraph CreateFunction",
+          "show": "FunctionGraph ShowFunctionConfig"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud FunctionGraph <operation> --param1=value1 --param2=value2 ...\n\nService:\n  FunctionGraph\n\nAvailable Operations:\n  AsyncInvokeFunction\n  BatchDeleteFunctionTriggers\n  BatchDeleteWorkflows\n  CancelAsyncInvocation\n  CreateCallbackWorkflow\n  CreateDependencyVersion\n  CreateEvent\n  CreateFunction\n  CreateFunctionApp\n  CreateFunctionTrigger\n  CreateFunctionVersion\n  CreateTags\n  CreateVersionAlias\n  CreateVpcEndpoint\n  CreateWorkflow\n  DeleteDependencyVersion\n  DeleteEvent\n  DeleteFunction\n  DeleteFunctionApp\n  DeleteFunctionAsyncInvokeConfig\n  DeleteFunctionTrigger\n  DeleteTags\n  DeleteVersionAlias\n  DeleteVpcEndpoint\n  EnableAsyncStatusLog\n  EnableLtsLogs\n  ExportFunction\n  ImportFunction\n  InvokeFunction\n  ListActiveAsyncInvocations\n  ListAppTemplates\n  ListAsyncInvocations\n  ListBridgeFunctions\n  ListBridgeVersions\n  ListDependencies\n  ListDependencyVersion\n  ListEvents\n  ListFunctionApplications\n  ListFunctionAsMetric\n  ListFunctionAsyncInvokeConfig\n  ListFunctionReservedInstances\n  ListFunctionStatistics\n  ListFunctionTags\n  ListFunctionTemplate\n  ListFunctionTriggers\n  ListFunctionVersions\n  ListFunctions\n  ListQuotas\n  ListReservedInstanceConfigs\n  ListStatistics\n  ListVersionAliases\n  ListWorkflow\n  ListWorkflowExecutions\n  RetryWorkFlow\n  ShowAppTemplate\n  ShowDependencyVersion\n  ShowEvent\n  ShowFuncReservedInstanceMetrics\n  ShowFuncSnapshotState\n  ShowFunctionApp\n  ShowFunctionAsyncInvokeConfig\n  ShowFunctionCode\n  ShowFunctionConfig\n  ShowFunctionMetrics\n  ShowFunctionTemplate\n  ShowFunctionTrigger\n  ShowLtsLogDetails\n  ShowProjectAsyncStatusLogInfo\n  ShowProjectTagsList\n  ShowResInstanceInfo\n  ShowTenantMetric\n  ShowTracing\n  ShowVersionAlias\n  ShowWorkFlow\n  ShowWorkFlowMetric\n  ShowWorkflowExecution\n  ShowWorkflowExecutionForPage\n  StartSyncWorkflowExecution\n  StartWorkflowExecution\n  StopWorkFlow\n  UpdateEvent\n  UpdateFuncSnapshot\n  UpdateFunctionAsyncInvokeConfig\n  UpdateFunctionCode\n  UpdateFunctionCollectState\n  UpdateFunctionConfig\n  UpdateFunctionMaxInstanceConfig\n  UpdateFunctionReservedInstancesCount\n  UpdateTracing\n  UpdateTrigger\n  UpdateVersionAlias\n  UpdateWorkFlow\n\n运行`hcloud FunctionGraph <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "FunctionGraph",
+              "--help"
+            ],
+            "command": "hcloud FunctionGraph --help",
+            "executableBlock": "hcloud FunctionGraph --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "FunctionGraph",
+              "operation": "FunctionGraph",
+              "args": [
+                "FunctionGraph",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "e1427f6c-17cc-4f33-88bf-1f91a7938846",
+            "safeToRun": true,
+            "rawArgs": [
+              "FunctionGraph",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "IAM",
+      "ok": true,
+      "command": "hcloud IAM --help",
+      "result": {
+        "service": "IAM",
+        "command": "hcloud IAM --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for IAM. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud IAM <operation> --param1=value1 --param2=value2 ...\n\nService:\n  IAM\n\nAvailable Operations:\n  AddClientIDToOIDCProviderV5\n  AddUserToGroupV5\n  AssociateAgencyWithAllProjectsPermission\n  AssociateAgencyWithDomainPermission\n  AssociateAgencyWithProjectPermission\n  AssociateRoleToAgencyOnEnterpriseProject\n  AssociateRoleToGroupOnEnterpriseProject\n  AssociateRoleToUserOnEnterpriseProject\n  AttachAgencyPolicyV5\n  AttachGroupPolicyV5\n  AttachUserPolicyV5\n  ChangePasswordV5\n  CheckAllProjectsPermissionForAgency\n  CheckDomainPermissionForAgency\n  CheckProjectPermissionForAgency\n  CreateAccessKeyV5\n  CreateAgency\n  CreateAgencyCustomPolicy\n  CreateAgencyV5\n  CreateBindingDevice\n  CreateCloudServiceCustomPolicy\n  CreateGroupV5\n  CreateLoginProfileV5\n  CreateLoginToken\n  CreateMetadata\n  CreateMfaDevice\n  CreateOIDCProviderV5\n  CreateOpenIdConnectConfig\n  CreatePermanentAccessKey\n  CreatePolicyV5\n  CreatePolicyVersionV5\n  CreateSAMLProviderV5\n  CreateServiceLinkedAgencyV5\n  CreateTemporaryAccessKeyByAgency\n  CreateTemporaryAccessKeyByToken\n  CreateTokenWithIdToken\n  CreateUnscopeTokenByIdpInitiated\n  CreateUnscopedTokenWithIdToken\n  CreateUser\n  CreateUserV5\n  CreateVirtualMfaDeviceV5\n  DeleteAccessKeyV5\n  DeleteAgency\n  DeleteAgencyV5\n  DeleteBindingDevice\n  DeleteCustomPolicy\n  DeleteDomainGroupInheritedRole\n  DeleteGroupV5\n  DeleteLoginProfileV5\n  DeleteMfaDevice\n  DeleteOIDCProviderV5\n  DeletePermanentAccessKey\n  DeletePolicyV5\n  DeletePolicyVersionV5\n  DeleteResourceTagsV5\n  DeleteSAMLProviderV5\n  DeleteServiceLinkedAgencyV5\n  DeleteUserV5\n  DeleteVirtualMfaDeviceV5\n  DetachAgencyPolicyV5\n  DetachGroupPolicyV5\n  DetachUserPolicyV5\n  DisableMfaDeviceV5\n  EnableMfaDeviceV5\n  GetAccountSummaryV5\n  GetAgencyV5\n  GetAsymmetricSignatureSwitchV5\n  GetAuthorizationSchemaV5\n  GetFeatureStatusV5\n  GetPolicyV5\n  GetPolicyVersionV5\n  GetServiceLinkedAgencyDeletionStatusV5\n  KeystoneAddUserToGroup\n  KeystoneAssociateGroupWithDomainPermission\n  KeystoneAssociateGroupWithProjectPermission\n  KeystoneCheckDomainPermissionForGroup\n  KeystoneCheckProjectPermissionForGroup\n  KeystoneCheckUserInGroup\n  KeystoneCheckroleForGroup\n  KeystoneCreateAgencyToken\n  KeystoneCreateGroup\n  KeystoneCreateIdentityProvider\n  KeystoneCreateMapping\n  KeystoneCreateProject\n  KeystoneCreateProtocol\n  KeystoneCreateScopedToken\n  KeystoneCreateUser\n  KeystoneCreateUserTokenByPassword\n  KeystoneCreateUserTokenByPasswordAndMfa\n  KeystoneDeleteGroup\n  KeystoneDeleteIdentityProvider\n  KeystoneDeleteMapping\n  KeystoneDeleteProtocol\n  KeystoneDeleteUser\n  KeystoneListAllProjectPermissionsForGroup\n  KeystoneListAuthDomains\n  KeystoneListAuthProjects\n  KeystoneListDomainPermissionsForGroup\n  KeystoneListEndpoints\n  KeystoneListFederationDomains\n  KeystoneListFederationProjects\n  KeystoneListGroups\n  KeystoneListGroupsForUser\n  KeystoneListIdentityProviders\n  KeystoneListMappings\n  KeystoneListPermissions\n  KeystoneListProjectPermissionsForGroup\n  KeystoneListProjects\n  KeystoneListProjectsForUser\n  KeystoneListProtocols\n  KeystoneListRegions\n  KeystoneListServices\n  KeystoneListUsers\n  KeystoneListUsersForGroupByAdmin\n  KeystoneListVersions\n  KeystoneRemoveDomainPermissionFromGroup\n  KeystoneRemoveProjectPermissionFromGroup\n  KeystoneRemoveUserFromGroup\n  KeystoneShowCatalog\n  KeystoneShowEndpoint\n  KeystoneShowGroup\n  KeystoneShowIdentityProvider\n  KeystoneShowMapping\n  KeystoneShowPermission\n  KeystoneShowProject\n  KeystoneShowProtocol\n  KeystoneShowRegion\n  KeystoneShowSecurityCompliance\n  KeystoneShowSecurityComplianceByOption\n  KeystoneShowService\n  KeystoneShowUser\n  KeystoneShowVersion\n  KeystoneUpdateGroup\n  KeystoneUpdateIdentityProvider\n  KeystoneUpdateMapping\n  KeystoneUpdateProject\n  KeystoneUpdateProtocol\n  KeystoneUpdateUserByAdmin\n  KeystoneUpdateUserPassword\n  KeystoneValidateToken\n  ListAccessKeysV5\n  ListAgencies\n  ListAgenciesV5\n  ListAllProjectsPermissionsForAgency\n  ListAttachedAgencyPoliciesV5\n  ListAttachedGroupPoliciesV5\n  ListAttachedUserPoliciesV5\n  ListCustomPolicies\n  ListDomainPermissionsForAgency\n  ListEnterpriseProjectsForGroup\n  ListEnterpriseProjectsForUser\n  ListEntitiesForPolicyV5\n  ListGroupsForEnterpriseProject\n  ListGroupsV5\n  ListMfaDevicesV5\n  ListOIDCProvidersV5\n  ListPermanentAccessKeys\n  ListPoliciesV5\n  ListPolicyVersionsV5\n  ListProjectPermissionsForAgency\n  ListRegisteredServicesForAuthSchemaV5\n  ListResourceTagsV5\n  ListRolesForGroupOnEnterpriseProject\n  ListRolesForUserOnEnterpriseProject\n  ListSAMLProvidersV5\n  ListServicePrincipalsV5\n  ListUserLoginProtects\n  ListUserMfaDevices\n  ListUsersForEnterpriseProject\n  ListUsersV5\n  RemoveAllProjectsPermissionFromAgency\n  RemoveClientIDFromOIDCProviderV5\n  RemoveDomainPermissionFromAgency\n  RemoveProjectPermissionFromAgency\n  RemoveUserFromGroupV5\n  RevokeRoleFromAgencyOnEnterpriseProject\n  RevokeRoleFromGroupOnEnterpriseProject\n  RevokeRoleFromUserOnEnterpriseProject\n  SetAsymmetricSignatureSwitchV5\n  SetDefaultPolicyVersionV5\n  ShowAccessKeyLastUsedV5\n  ShowAgency\n  ShowCustomPolicy\n  ShowDomainApiAclPolicy\n  ShowDomainConsoleAclPolicy\n  ShowDomainLoginPolicy\n  ShowDomainPasswordPolicy\n  ShowDomainProtectPolicy\n  ShowDomainQuota\n  ShowDomainRoleAssignments\n  ShowGroupSummary\n  ShowGroupV5\n  ShowKeystoneMetadataFile\n  ShowLoginPolicyV5\n  ShowLoginProfileV5\n  ShowMetadata\n  ShowOIDCProviderV5\n  ShowOpenIdConnectConfig\n  ShowPasswordPolicyV5\n  ShowPermanentAccessKey\n  ShowProjectDetailsAndStatus\n  ShowProjectQuota\n  ShowSAMLProviderV5\n  ShowUser\n  ShowUserLastLoginV5\n  ShowUserLoginProtect\n  ShowUserMfaDevice\n  ShowUserV5\n  TagResourceV5\n  UpdateAccessKeyV5\n  UpdateAgency\n  UpdateAgencyCustomPolicy\n  UpdateAgencyV5\n  UpdateCloudServiceCustomPolicy\n  UpdateDomainApiAclPolicy\n  UpdateDomainConsoleAclPolicy\n  UpdateDomainGroupInheritRole\n  UpdateDomainLoginPolicy\n  UpdateDomainPasswordPolicy\n  UpdateDomainProtectPolicy\n  UpdateGroupV5\n  UpdateLoginPolicyV5\n  UpdateLoginProfileV5\n  UpdateLoginProtect\n  UpdateOIDCProviderThumbprintV5\n  UpdateOIDCProviderV5\n  UpdateOpenIdConnectConfig\n  UpdatePasswordPolicyV5\n  UpdatePermanentAccessKey\n  UpdateProjectStatus\n  UpdateSAMLProviderV5\n  UpdateTrustPolicyV5\n  UpdateUser\n  UpdateUserInformation\n  UpdateUserV5\n\n运行`hcloud IAM <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "IAM",
+              "--help"
+            ],
+            "command": "hcloud IAM --help",
+            "executableBlock": "hcloud IAM --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "IAM",
+              "operation": "IAM",
+              "args": [
+                "IAM",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "a9ba9581-0bdf-4c42-8c08-9ac37e9f1e1a",
+            "safeToRun": true,
+            "rawArgs": [
+              "IAM",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "CTS",
+      "ok": true,
+      "command": "hcloud CTS --help",
+      "result": {
+        "service": "CTS",
+        "command": "hcloud CTS --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for CTS. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud CTS <operation> --param1=value1 --param2=value2 ...\n\nService:\n  CTS\n\nAvailable Operations:\n  BatchCreateResourceTags\n  BatchDeleteResourceTags\n  CheckObsBuckets\n  CreateNotification\n  CreateTracker\n  DeleteNotification\n  DeleteTracker\n  ListNotifications\n  ListOperations\n  ListQuotas\n  ListTraceResources\n  ListTraces\n  ListTrackers\n  ListUserResources\n  UpdateNotification\n  UpdateTracker\n\n运行`hcloud CTS <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "CTS",
+              "--help"
+            ],
+            "command": "hcloud CTS --help",
+            "executableBlock": "hcloud CTS --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "CTS",
+              "operation": "CTS",
+              "args": [
+                "CTS",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "3d0f6c90-5de5-4646-8f0a-55bd3d6a1e8e",
+            "safeToRun": true,
+            "rawArgs": [
+              "CTS",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "CES",
+      "ok": true,
+      "command": "hcloud CES --help",
+      "result": {
+        "service": "CES",
+        "command": "hcloud CES --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "CES ListAlarms",
+          "create": "CES CreateAlarm",
+          "show": "CES ListMetrics"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud CES <operation> --param1=value1 --param2=value2 ...\n\nService:\n  CES\n\nAvailable Operations:\n  AddAlarmRuleResources\n  BatchCreateAgentInvocations\n  BatchCreateResources\n  BatchDeleteAlarmRules\n  BatchDeleteAlarmTemplates\n  BatchDeleteNotificationMasks\n  BatchDeleteOneClickAlarms\n  BatchDeleteResourceGroups\n  BatchDeleteResources\n  BatchEnableAlarmRules\n  BatchListMetricData\n  BatchListSpecifiedMetricData\n  BatchUpdateNotificationMaskTime\n  BatchUpdateNotificationMasks\n  BatchUpdateOneClickAlarmPoliciesEnabledState\n  BatchUpdateOneClickAlarmsEnabledState\n  BatchUpdateWidgets\n  CreateAlarm\n  CreateAlarmRules\n  CreateAlarmTemplate/v1\n  CreateAlarmTemplate/v2\n  CreateDashboardWidgets\n  CreateEvents\n  CreateMetricData\n  CreateOneClickAlarm\n  CreateOneDashboard\n  CreateResourceGroup/v1\n  CreateResourceGroup/v2\n  DeleteAlarm\n  DeleteAlarmRuleResources\n  DeleteAlarmTemplate\n  DeleteDashboards\n  DeleteOneWidget\n  DeleteResourceGroup\n  ListAgentDimensionInfo\n  ListAgentInvocations\n  ListAgentStatus\n  ListAlarmHistories/v1\n  ListAlarmHistories/v2\n  ListAlarmRulePolicies\n  ListAlarmRuleResources\n  ListAlarmRules\n  ListAlarmTemplateAssociationAlarms\n  ListAlarmTemplates/v1\n  ListAlarmTemplates/v2\n  ListAlarms\n  ListCesTargetProjectTags\n  ListDashboardInfos\n  ListDashboardWidgets\n  ListEventDetail\n  ListEvents\n  ListMetrics\n  ListNotificationMaskResources\n  ListNotificationMasks\n  ListOneClickAlarmRules\n  ListOneClickAlarms\n  ListResourceGroup\n  ListResourceGroups\n  ListResourceGroupsServicesResources\n  ShowAlarm\n  ShowAlarmTemplate\n  ShowEventData\n  ShowMetricData\n  ShowQuotas\n  ShowResourceGroup/v1\n  ShowResourceGroup/v2\n  ShowWidget\n  UpdateAlarm\n  UpdateAlarmAction\n  UpdateAlarmNotifications\n  UpdateAlarmRulePolicies\n  UpdateAlarmTemplate/v1\n  UpdateAlarmTemplate/v2\n  UpdateDashboard\n  UpdateNotificationMask\n  UpdateOneClickAlarmNotifications\n  UpdateResourceGroup/v1\n  UpdateResourceGroup/v2\n  UpdateResourceGroupAssociationAlarmTemplate\n\n运行`hcloud CES <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "CES",
+              "--help"
+            ],
+            "command": "hcloud CES --help",
+            "executableBlock": "hcloud CES --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "CES",
+              "operation": "CES",
+              "args": [
+                "CES",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "bd52ea1a-e592-4d9c-a312-b6fbe8aceacb",
+            "safeToRun": true,
+            "rawArgs": [
+              "CES",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "DDS",
+      "ok": true,
+      "command": "hcloud DDS --help",
+      "result": {
+        "service": "DDS",
+        "command": "hcloud DDS --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "DDS ListInstances",
+          "create": "DDS CreateInstance",
+          "show": "DDS ShowInstance"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud DDS <operation> --param1=value1 --param2=value2 ...\n\nService:\n  DDS\n\nAvailable Operations:\n  AddReadonlyNode\n  AddShardingNode\n  AttachEip\n  AttachInternalIp\n  BatchDeleteBackup\n  BatchDeleteShards\n  BatchTagAction\n  BatchUpgradeDatabaseVersion\n  BindPublicGateway\n  CancelEip\n  CancelScheduledTask\n  ChangeOpsWindow\n  CheckPassword\n  CheckWeakPassword\n  CompareConfiguration\n  CopyConfiguration\n  CreateConfiguration\n  CreateDatabaseRole\n  CreateDatabaseUser\n  CreateInstance\n  CreateIp\n  CreateKillOpRule\n  CreateManualBackup\n  DeleteAuditLog\n  DeleteConfiguration\n  DeleteDatabaseRole\n  DeleteDatabaseUser\n  DeleteInstance\n  DeleteIp\n  DeleteKillOpRuleList\n  DeleteLtsConfig\n  DeleteManualBackup\n  DeleteMongosNode\n  DeleteReadonlyNode\n  DeleteSession\n  DownloadErrorlog\n  DownloadSlowlog\n  ExpandReplicasetNode\n  ListApiVersion\n  ListAppliedInstances\n  ListAuditlogLinks\n  ListAuditlogs\n  ListAz2Migrate\n  ListBackupDownloadPolicy\n  ListBackups\n  ListConfigurations\n  ListDatabaseRoles\n  ListDatabaseUsers\n  ListDatabases\n  ListDatastoreVersions\n  ListErrorLogs\n  ListFlavorInfos\n  ListFlavors\n  ListInstanceTags\n  ListInstances\n  ListInstancesByTags\n  ListLtsConfigs\n  ListLtsErrorLogs\n  ListLtsSlowLogs\n  ListProjectTags\n  ListRecycleInstances\n  ListRestoreCollections\n  ListRestoreDatabases\n  ListRestoreTimes\n  ListScheduledTasks\n  ListSessions\n  ListSlowLogs\n  ListSslCertDownloadAddress\n  ListStorageType\n  ListTasks\n  MigrateAz\n  ResetConfiguration\n  ResetPassword\n  ResizeInstance\n  ResizeInstanceVolume\n  RestartInstance\n  RestoreInstance\n  RestoreInstanceFromCollection\n  RestoreNewInstance\n  SaveBackupDownloadPolicy\n  SetAuditlogPolicy\n  SetAutoEnlargePolicies\n  SetBackupPolicy\n  SetBalancerSwitch\n  SetBalancerWindow\n  SetRecyclePolicy\n  ShowApiVersion\n  ShowAuditlogPolicy\n  ShowAutoEnlargePolicy\n  ShowBackupDownloadLink\n  ShowBackupPolicy\n  ShowClientNetwork\n  ShowConfigurationAppliedHistory\n  ShowConfigurationModifyHistory\n  ShowConfigurationParameter\n  ShowConnectionStatistics\n  ShowDiskUsage\n  ShowEntityConfiguration\n  ShowInstanceConfigurationModifyHistory\n  ShowJobDetail\n  ShowKillOpRuleRuleList\n  ShowQuotas\n  ShowRecyclePolicy\n  ShowReplSetName\n  ShowSecondLevelMonitoringStatus\n  ShowShardingBalancer\n  ShowSlowlogDesensitizationSwitch\n  ShowUpgradeDuration\n  ShrinkInstanceNodes\n  StopBackup\n  SwitchConfiguration\n  SwitchInstancePrimary\n  SwitchSecondLevelMonitoring\n  SwitchSlowlogDesensitization\n  SwitchSsl\n  SwitchoverReplicaSet\n  UnbindPublicGateway\n  UpdateBackupDownloadPolicy\n  UpdateClientNetwork\n  UpdateConfigurationParameter\n  UpdateEntityConfiguration\n  UpdateInstanceName\n  UpdateInstancePort\n  UpdateInstanceRemark\n  UpdateKillOpRule\n  UpdateLtsConfig\n  UpdateReplSetName\n  UpdateSecurityGroup\n  UpgradeDatabaseVersion\n  ValidateConfigurationName\n\n运行`hcloud DDS <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "DDS",
+              "--help"
+            ],
+            "command": "hcloud DDS --help",
+            "executableBlock": "hcloud DDS --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "DDS",
+              "operation": "DDS",
+              "args": [
+                "DDS",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "53243ef4-ac31-4154-85bb-d6d9d06217d2",
+            "safeToRun": true,
+            "rawArgs": [
+              "DDS",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "DCS",
+      "ok": true,
+      "command": "hcloud DCS --help",
+      "result": {
+        "service": "DCS",
+        "command": "hcloud DCS --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "list": "DCS ListInstances",
+          "create": "DCS CreateInstance",
+          "show": "DCS ShowInstance"
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud DCS <operation> --param1=value1 --param2=value2 ...\n\nService:\n  DCS\n\nAvailable Operations:\n  BatchCreateOrDeleteTags\n  BatchDeleteInstances\n  BatchRestartOnlineMigrationTasks\n  BatchShowNodesInformation\n  BatchStopMigrationTasks\n  ChangeMasterStandby\n  ChangeMasterStandbyAsync\n  ChangeNodesStartStopStatus\n  CopyInstance\n  CreateAclAccount\n  CreateAutoExpireScanTask\n  CreateBigkeyScanTask\n  CreateCustomTemplate\n  CreateDiagnosisTask\n  CreateHotkeyScanTask\n  CreateInstance\n  CreateMigrationTask\n  CreateOfflineKeyAnalysis\n  CreateOnlineMigrationTask\n  CreateRedislog\n  CreateRedislogDownloadLink\n  CreateResizeOrder\n  DeleteAclAccount\n  DeleteBackgroundTask\n  DeleteBackupFile\n  DeleteBigkeyScanTask\n  DeleteCenterTask\n  DeleteConfigTemplate\n  DeleteDiagnosisTask\n  DeleteHotkeyScanTask\n  DeleteInstanceBandwidthAutoScalingPolicy\n  DeleteIpFromDomainName\n  DeleteMigrationTask\n  DeleteOfflineKeyAnalysisTask\n  DeletePublicIp\n  DeleteSingleInstance\n  DownloadHotKey\n  DownloadSslCert\n  ExchangeInstanceIp\n  ExecuteClusterSwitchover\n  ExecuteCommandMobilization\n  ExportExcelJob\n  ExportInstancesTask\n  HangUpClients\n  HangUpKillAllClients\n  ListAclAccounts\n  ListAvailableZones\n  ListBackgroundTask\n  ListBackupFileLinks\n  ListBackupRecords\n  ListBigkeyScanTasks\n  ListCenterTask\n  ListClients\n  ListConfigHistories\n  ListConfigTemplates\n  ListConfigurations\n  ListDiagnosisTasks\n  ListFlavors\n  ListGroupReplicationInfo\n  ListHotKeyScanTasks\n  ListInstanceOperations\n  ListInstances\n  ListMaintenanceWindows\n  ListMigrationTask\n  ListMigrationTaskLogs\n  ListMonitoredObjects\n  ListMonitoredObjectsOfInstance\n  ListNumberOfInstancesInDifferentStatus\n  ListOfflineKeyAnalysisTask\n  ListRedislog\n  ListRestoreRecords\n  ListSlowlog\n  ListStatisticsOfRunningInstances\n  ListTagsOfTenant\n  LoginWebCli\n  LogoffWebCli\n  MigrateAz\n  ResetAclAccountPassWord\n  ResetPassword\n  ResizeInstance\n  RestartOrFlushInstances\n  RestoreInstance\n  RollbackExchangeInstanceIp\n  ScanClients\n  ScanExpireKey\n  SetOnlineMigrationTask\n  ShowBackgroundTaskProgress\n  ShowBandwidths\n  ShowBigkeyAutoscanConfig\n  ShowBigkeyScanTaskDetails\n  ShowConfigHistoryDetail\n  ShowConfigTemplate\n  ShowDiagnosisTaskDetails\n  ShowExpireAutoScanConfig\n  ShowExpireKeyScanInfo\n  ShowHotkeyAutoscanConfig\n  ShowHotkeyTaskDetails\n  ShowInstance\n  ShowInstanceBandwidthAutoScalingPolicy\n  ShowInstanceSslDetail\n  ShowInstanceTopology\n  ShowInstanceVersion\n  ShowIpWhitelist\n  ShowJobInfo\n  ShowMigrationTask\n  ShowMigrationTaskStats\n  ShowNodesInformation\n  ShowOfflineKeyAnalysisTask\n  ShowQuotaOfTenant\n  ShowReplicationStates\n  ShowTags\n  StartInstanceResizeCheckJob\n  StopMigrationTask\n  StopMigrationTaskSync\n  UpdateAclAccount\n  UpdateAclAccountPassWord\n  UpdateAclAccountRemark\n  UpdateBandwidth\n  UpdateBigkeyAutoscanConfig\n  UpdateClientIpTransparentTransmission\n  UpdateConfigTemplate\n  UpdateConfigurations\n  UpdateExpireAutoScanConfig\n  UpdateHotkeyAutoScanConfig\n  UpdateInstance\n  UpdateInstanceBandwidth\n  UpdateInstanceBandwidthAutoScalingPolicy\n  UpdateInstanceConfig\n  UpdateIpWhitelist\n  UpdateIpWhitelistAsync\n  UpdateMigrationTask\n  UpdatePassword\n  UpdatePublicIp\n  UpdateSlavePriority\n  UpdateSslSwitch\n  UpgradeInstanceMinorVersion\n  ValidateDeletableReplica\n\n运行`hcloud DCS <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "DCS",
+              "--help"
+            ],
+            "command": "hcloud DCS --help",
+            "executableBlock": "hcloud DCS --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "DCS",
+              "operation": "DCS",
+              "args": [
+                "DCS",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "787e7330-c49f-4b06-a2b6-3cb33dbcb88d",
+            "safeToRun": true,
+            "rawArgs": [
+              "DCS",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "SMN",
+      "ok": true,
+      "command": "hcloud SMN --help",
+      "result": {
+        "service": "SMN",
+        "command": "hcloud SMN --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for SMN. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud SMN <operation> --param1=value1 --param2=value2 ...\n\nService:\n  SMN\n\nAvailable Operations:\n  AddSubscription\n  AddSubscriptionFromSubscriptionUser\n  BatchCreateOrDeleteResourceTags\n  BatchCreateSubscriptionsFilterPolices\n  BatchDeleteSubscriptions\n  BatchDeleteSubscriptionsByTopic\n  BatchDeleteSubscriptionsFilterPolices\n  BatchUpdateSubscriptionsFilterPolices\n  CancelSubscription\n  ConfirmSubscription\n  CreateApplication\n  CreateApplicationEndpoint\n  CreateKmsKey\n  CreateLogtank\n  CreateMessageTemplate\n  CreateNotifyPolicy\n  CreateResourceTag\n  CreateTopic\n  DeleteApplication\n  DeleteApplicationEndpoint\n  DeleteKmsKey\n  DeleteLogtank\n  DeleteMessageTemplate\n  DeleteNotifyPolicy\n  DeleteResourceTag\n  DeleteSubscriptionsByTopic\n  DeleteTopic\n  DeleteTopicAttributeByName\n  DeleteTopicAttributes\n  DownloadHttpCert\n  DownloadHttpSignCert\n  ListApplicationAttributes\n  ListApplicationEndpointAttributes\n  ListApplicationEndpoints\n  ListApplications\n  ListCloudService\n  ListCloudServices\n  ListLogtank\n  ListMessageTemplateDetails\n  ListMessageTemplates\n  ListProjectTags\n  ListProtocols\n  ListResourceInstances\n  ListResourceTags\n  ListSubscriptions\n  ListSubscriptionsByTopic\n  ListTopicAttributes\n  ListTopicDetails\n  ListTopicMessageStatistics\n  ListTopics\n  ListTopicsWithAssociatedResources\n  ListVersion\n  ListVersions\n  PublishAppMessage\n  PublishHttpDetect\n  PublishMessage\n  ShowHttpDetectResult\n  ShowKmsKey\n  ShowNotifyPolicy\n  SubscribeTopic\n  UnsubscribeSubscription\n  UnsubscribeTopic\n  UpdateApplication\n  UpdateApplicationEndpoint\n  UpdateKmsKey\n  UpdateLogtank\n  UpdateMessageTemplate\n  UpdateNotifyPolicy\n  UpdateSubscription\n  UpdateTopic\n  UpdateTopicAttribute\n\n运行`hcloud SMN <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "SMN",
+              "--help"
+            ],
+            "command": "hcloud SMN --help",
+            "executableBlock": "hcloud SMN --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "SMN",
+              "operation": "SMN",
+              "args": [
+                "SMN",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "a02345db-03ef-4de3-9960-254642123ce0",
+            "safeToRun": true,
+            "rawArgs": [
+              "SMN",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "DMS",
+      "ok": true,
+      "command": "hcloud DMS --help",
+      "result": {
+        "service": "DMS",
+        "command": "hcloud DMS --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for DMS. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "[USE_ERROR]不支持的服务名称:DMS\n\n运行`hcloud --help`获取更多的关于KooCLI的使用帮助;运行`hcloud --interactive`交互式提示,更方便地构建命令\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "DMS",
+              "--help"
+            ],
+            "command": "hcloud DMS --help",
+            "executableBlock": "hcloud DMS --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "DMS",
+              "operation": "DMS",
+              "args": [
+                "DMS",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "dfd032a4-e31d-43d1-97af-d4cbfbaad221",
+            "safeToRun": true,
+            "rawArgs": [
+              "DMS",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "WAF",
+      "ok": true,
+      "command": "hcloud WAF --help",
+      "result": {
+        "service": "WAF",
+        "command": "hcloud WAF --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for WAF. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud WAF <operation> --param1=value1 --param2=value2 ...\n\nService:\n  WAF\n\nAvailable Operations:\n  ApplyCertificateToHost\n  BatchCreateAntiTamperRule\n  BatchCreateAntileakageRule\n  BatchCreateCcRule\n  BatchCreateCustomRule\n  BatchCreateGeoIpRule\n  BatchCreateIgnoreRule\n  BatchCreateIpReputationRule\n  BatchCreatePrivacyRule\n  BatchCreateWhiteblackipRule\n  BatchDeleteAlertNoticeConfig\n  BatchDeleteCompositeHosts\n  BatchDeletePolicies\n  BatchDeleteRules\n  BatchUpdateAntileakageRules\n  BatchUpdateAntitamperRules\n  BatchUpdateCcRules\n  BatchUpdateCustomRules\n  BatchUpdateGeoipRules\n  BatchUpdateIgnoreRules\n  BatchUpdateIpReputationRules\n  BatchUpdatePrivacyRules\n  BatchUpdateWhiteblackipRules\n  ChangePrepaidCloudWaf\n  CheckAgency\n  ConfirmApplicationTypes\n  ConfirmAsyncJob\n  ConfirmDnsDomain\n  ConfirmIpReputationRule\n  ConfirmPolicyAntileakageMap\n  ConfirmPolicyIpReputationMap\n  ConfirmProtectionTypes\n  ConfirmThreatMap\n  ConfirmTmsResourceInstances\n  ConfirmUserBundle\n  CopyPolicyById\n  CreateAgency\n  CreateAlertNoticeConfig\n  CreateAntiTamperRule\n  CreateAnticrawlerRule\n  CreateAntileakageRule\n  CreateCcRule\n  CreateCertificate\n  CreateCloudWafPostPaidResource\n  CreateCustomRule\n  CreateEventExportJob\n  CreateGeoipRule\n  CreateHost\n  CreateIgnoreRule\n  CreateInstance\n  CreateIpGroup\n  CreateIpReputationRule\n  CreatePolicy\n  CreatePremiumHost\n  CreatePrepaidCloudWaf\n  CreatePrivacyRule\n  CreatePunishmentRule\n  CreateQuickAccessDomain\n  CreateSecurityReportSubscription\n  CreateValueList\n  CreateWhiteblackipRule\n  DeleteAgency\n  DeleteAlertNoticeConfig\n  DeleteAnticrawlerRule\n  DeleteAntileakageRule\n  DeleteAntitamperRule\n  DeleteCcRule\n  DeleteCertificate\n  DeleteCloudWafPostPaidResource\n  DeleteCustomRule\n  DeleteGeoipRule\n  DeleteHost\n  DeleteIgnoreRule\n  DeleteInstance\n  DeleteIpGroup\n  DeleteIpReputationRule\n  DeletePolicy\n  DeletePremiumHost\n  DeletePrivacyRule\n  DeletePunishmentRule\n  DeleteSecurityReportSubscription\n  DeleteValueList\n  DeleteWhiteBlackIpRule\n  ListAntiTamperPolicyRules\n  ListAnticrawlerRules\n  ListAntileakagePolicyRules\n  ListAntileakageRules\n  ListAntitamperRule\n  ListAttackActionTypes\n  ListBandwidthTimeline\n  ListCcPolicyRules\n  ListCcRules\n  ListCertificates\n  ListCompositeHosts\n  ListCustomPolicyRules\n  ListCustomRules\n  ListEvent\n  ListEventLog\n  ListGeoIpPolicyRules\n  ListGeoipRule\n  ListHost\n  ListHostRoute\n  ListIgnorePolicyRules\n  ListIgnoreRule\n  ListInstance\n  ListInstancePools\n  ListInstanceStatus\n  ListInstanceTags\n  ListIpGroup\n  ListIpReputationPolicyRules\n  ListIpReputationRules\n  ListNoticeConfigs\n  ListOverviewsClassification\n  ListOverviewsHostDomains\n  ListPolicy\n  ListPolicyProtectRules\n  ListPremiumHost\n  ListPrivacyPolicyRules\n  ListPrivacyRule\n  ListProtectableResources\n  ListPunishmentRules\n  ListQpsTimeline\n  ListRequestTimeline\n  ListResponseCodeTimeline\n  ListSecurityReportHistoryPeriods\n  ListSecurityReportSendingRecords\n  ListSecurityReportSubscriptions\n  ListSourceIpTop5\n  ListStatistics\n  ListThreats\n  ListTopAbnormal\n  ListTopDomains\n  ListTopIp\n  ListTopUrl\n  ListUrl\n  ListValueList\n  ListVulnRules\n  ListWebBasicProtectionRules\n  ListWhiteblackipPolicyRules\n  ListWhiteblackipRule\n  MigrateCompositeHosts\n  RenameInstance\n  ShowAnticrawlerRule\n  ShowAntileakageRule\n  ShowAntitamperRule\n  ShowCcRule\n  ShowCertificate\n  ShowCompositeHost\n  ShowConsoleConfig\n  ShowCustomRule\n  ShowEvent\n  ShowGeoipRule\n  ShowHost\n  ShowHostStatus\n  ShowIgnoreRule\n  ShowInstance\n  ShowIpGroup\n  ShowLtsInfoConfig\n  ShowPolicy\n  ShowPolicyGeoipMap\n  ShowPremiumHost\n  ShowPrivacyRule\n  ShowPunishmentRule\n  ShowSecurityReportContent\n  ShowSecurityReportSubscription\n  ShowSourceIp\n  ShowSubscriptionInfo\n  ShowValueList\n  ShowWebProtectionRule\n  ShowWhiteBlackIpRule\n  UpdateAccessProgress\n  UpdateAlertNoticeConfig\n  UpdateAntiTamperRuleRefresh\n  UpdateAnticrawlerRule\n  UpdateAnticrawlerRuleType\n  UpdateAntileakageRule\n  UpdateCcRule\n  UpdateCertificate\n  UpdateCustomRule\n  UpdateGeoipRule\n  UpdateHost\n  UpdateHostAccessStatusOfUnderline\n  UpdateHostProtectStatus\n  UpdateIgnoreRule\n  UpdateIgnoreRuleHitNum\n  UpdateInstanceRoute\n  UpdateIpGroup\n  UpdateIpReputationRule\n  UpdateLtsInfoConfig\n  UpdatePolicy\n  UpdatePolicyProtectHost\n  UpdatePolicyRuleStatus\n  UpdatePremiumHost\n  UpdatePremiumHostAccessStatus\n  UpdatePremiumHostProtectStatus\n  UpdatePremiumInstance\n  UpdatePremiumInstanceProgress\n  UpdatePrivacyRule\n  UpdatePunishmentRule\n  UpdateSecurityReportSubscription\n  UpdateValueList\n  UpdateWhiteblackipRule\n\n运行`hcloud WAF <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "WAF",
+              "--help"
+            ],
+            "command": "hcloud WAF --help",
+            "executableBlock": "hcloud WAF --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "WAF",
+              "operation": "WAF",
+              "args": [
+                "WAF",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "24ee2c54-7742-496e-8ec0-c7eaa1ae5485",
+            "safeToRun": true,
+            "rawArgs": [
+              "WAF",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "CDN",
+      "ok": true,
+      "command": "hcloud CDN --help",
+      "result": {
+        "service": "CDN",
+        "command": "hcloud CDN --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for CDN. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud CDN <operation> --param1=value1 --param2=value2 ...\n\nService:\n  CDN\n\nAvailable Operations:\n  ApplyDomainTemplate\n  BatchCopyDomain\n  BatchDeleteTags/v1\n  BatchDeleteTags/v2\n  BatchUpdateRuleStatus\n  CreateAccessControlTask\n  CreateDomain/v1\n  CreateDomain/v2\n  CreateDomainByDuplicate\n  CreateDomainTemplate\n  CreateExportTask\n  CreatePreheatingTasks/v1\n  CreatePreheatingTasks/v2\n  CreateRefreshTasks/v1\n  CreateRefreshTasks/v2\n  CreateRuleNew\n  CreateShareCacheGroups\n  CreateSubscriptionTask\n  CreateTags/v1\n  CreateTags/v2\n  DeleteDomain/v1\n  DeleteDomain/v2\n  DeleteDomainTemplate\n  DeleteRuleNew\n  DeleteShareCacheGroups\n  DeleteSubscriptionTask\n  DisableDomain/v1\n  DisableDomain/v2\n  DownloadRegionCarrierExcel\n  DownloadStatisticsExcel\n  EnableDomain/v1\n  EnableDomain/v2\n  ExportStatsOpen\n  ListAccessControlTask\n  ListBanUrl\n  ListCdnDomainTopIps\n  ListCdnDomainTopOriginUrl\n  ListCdnDomainTopPath\n  ListCdnDomainTopRefers\n  ListCdnDomainTopUas\n  ListDomainClientStats\n  ListDomainConfigs\n  ListDomains/v1\n  ListDomains/v2\n  ListExportTasks\n  ListRuleDetails\n  ListShareCacheGroups\n  ListSpecialConfiguration\n  ListSubscriptionTasks\n  ModifyAccountInfo\n  SetChargeModes\n  SetStatsConfig\n  ShowAppliedTemplateRecord\n  ShowBandwidthCalc\n  ShowBlackWhiteList\n  ShowCacheRules\n  ShowCertificatesHttpsInfo/v1\n  ShowCertificatesHttpsInfo/v2\n  ShowChargeModes\n  ShowDomainCountryStat\n  ShowDomainDetail\n  ShowDomainDetailByName\n  ShowDomainFullConfig/v1\n  ShowDomainFullConfig/v2\n  ShowDomainLocationStats/v1\n  ShowDomainLocationStats/v2\n  ShowDomainStats/v1\n  ShowDomainStats/v2\n  ShowDomainTemplate\n  ShowHistoryTaskDetails/v1\n  ShowHistoryTaskDetails/v2\n  ShowHistoryTasks/v1\n  ShowHistoryTasks/v2\n  ShowHttpInfo\n  ShowIpInfo/v1\n  ShowIpInfo/v2\n  ShowLogs/v1\n  ShowLogs/v2\n  ShowOriginHost\n  ShowQuota/v1\n  ShowQuota/v2\n  ShowRefer\n  ShowResponseHeader\n  ShowSpecialUser\n  ShowStatsConfigs\n  ShowTags/v1\n  ShowTags/v2\n  ShowTopDomainNames\n  ShowTopUrl/v1\n  ShowTopUrl/v2\n  ShowUrlTaskInfo/v1\n  ShowUrlTaskInfo/v2\n  ShowVerifyDomainOwnerInfo\n  UpdateBlackWhiteList\n  UpdateCacheRules\n  UpdateDomainFullConfig/v1\n  UpdateDomainFullConfig/v2\n  UpdateDomainMultiCertificates/v1\n  UpdateDomainMultiCertificates/v2\n  UpdateDomainOrigin\n  UpdateDomainTemplate\n  UpdateFollow302Switch\n  UpdateFullRule\n  UpdateHttpsInfo\n  UpdateOriginHost\n  UpdatePrivateBucketAccess/v1\n  UpdatePrivateBucketAccess/v2\n  UpdateRangeSwitch\n  UpdateRefer\n  UpdateResponseHeader\n  UpdateRuleNew\n  UpdateShareCacheGroups\n  UpdateSubscriptionTask\n  VerifyDomainOwner\n\n运行`hcloud CDN <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "CDN",
+              "--help"
+            ],
+            "command": "hcloud CDN --help",
+            "executableBlock": "hcloud CDN --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "CDN",
+              "operation": "CDN",
+              "args": [
+                "CDN",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "1dfca3af-318c-4998-9949-e428ae5e4793",
+            "safeToRun": true,
+            "rawArgs": [
+              "CDN",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "ModelArts",
+      "ok": true,
+      "command": "hcloud ModelArts --help",
+      "result": {
+        "service": "ModelArts",
+        "command": "hcloud ModelArts --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for ModelArts. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud ModelArts <operation> --param1=value1 --param2=value2 ...\n\nService:\n  ModelArts\n\nAvailable Operations:\n  AcceptScheduledEvent\n  ApigAppExists\n  AttachDevServerPort\n  AttachDevServerVolume\n  AttachDynamicStorage\n  AuthorizeApiToApigApps\n  BatchBindInferApiKeys\n  BatchBindPoolNodes\n  BatchCreatePoolTags\n  BatchCreateServiceTags\n  BatchDeleteInferIntranetConnections\n  BatchDeleteInferServices\n  BatchDeletePoolNodes\n  BatchDeletePoolTags\n  BatchDeleteServiceTags\n  BatchDeleteTrainingJob\n  BatchDevServersAction\n  BatchDrainPoolNodes\n  BatchLockPoolNodes\n  BatchMigratePoolNodes\n  BatchRebootPoolNodes\n  BatchResetPoolNodes\n  BatchResizePoolNodes\n  BatchUnbindInferApiKeys\n  BatchUnlockPoolNodes\n  BatchUpdatePoolNodes\n  BindDevServerPublicIP\n  BindInferApiKey\n  CancelInferDeployment\n  ChangeAlgorithm\n  ChangeDevServerOS\n  ChangeHyperinstanceOS\n  ChangeTrainingExperiment\n  ChangeTrainingJobDescription\n  CheckTrainingExperiment\n  CountInferServicesByTags\n  CountTrainingJobsByTags\n  CreateAlgorithm\n  CreateAlgorithmVersionToGallery\n  CreateAndAuthAppAuthApi\n  CreateApigApp\n  CreateApigAppCode\n  CreateAppAuthApi\n  CreateAuthorization\n  CreateDevServer\n  CreateDevServerJob\n  CreateHyperCluster\n  CreateHyperinstanceTags\n  CreateImage\n  CreateInferApiKey\n  CreateInferDeployment\n  CreateInferDeploymentHpa\n  CreateInferHra\n  CreateInferIntranetConnection\n  CreateInferService\n  CreateInferServiceTag\n  CreateInferTempApiKey\n  CreateModel\n  CreateModelArtsAgency\n  CreateNetwork\n  CreateNodePool\n  CreateNotebook\n  CreateNotebookTags\n  CreateOrderId\n  CreatePool\n  CreatePoolPlugin\n  CreateRoceNetwork\n  CreateSaveImageJob\n  CreateService\n  CreateTrainJobTags\n  CreateTrainingExperiment\n  CreateTrainingJob\n  CreateWorkflow\n  CreateWorkflowExecution\n  CreateWorkflowExecutionsActions\n  CreateWorkflowPurchasePool\n  CreateWorkflowSchedule\n  CreateWorkflowServiceAuth\n  CreateWorkflowStepExecutionsActions\n  CreateWorkflowSubscriptions\n  CreateWorkspace\n  DeleteAlgorithm\n  DeleteApiAppAuth\n  DeleteApigApp\n  DeleteApigAppCode\n  DeleteAppAuthApi\n  DeleteAuthorizations\n  DeleteDevServer\n  DeleteDevServerJobs\n  DeleteHyperCluster\n  DeleteHyperinstance\n  DeleteHyperinstanceTags\n  DeleteImage\n  DeleteImageGroup\n  DeleteInferApiKey\n  DeleteInferDeployment\n  DeleteInferDeploymentHpa\n  DeleteInferDeploymentInstance\n  DeleteInferDeploymentPod\n  DeleteInferDeploymentVersion\n  DeleteInferServiceTag\n  DeleteModel\n  DeleteNetwork\n  DeleteNodePool\n  DeleteNotebook\n  DeleteNotebookTags\n  DeletePool\n  DeleteService\n  DeleteTrainJobTags\n  DeleteTrainingExperiment\n  DeleteTrainingJob\n  DeleteWorkflow\n  DeleteWorkflowExecution\n  DeleteWorkflowScheduleId\n  DeleteWorkflowSubscription\n  DeleteWorkspace\n  DetachDevServerPort\n  DetachDevServerVolume\n  DetachDynamicStorage\n  GetAppAuthApiInfo\n  GetAppAuthApisInfo\n  GetAuthorizations\n  GetDevServerImage\n  GetDevServerJob\n  GetDevServerJobService\n  GetDevServerJobTemplate\n  GetDevServerOperation\n  GetHyperCluster\n  GetHyperinstance\n  GetHyperinstanceOperation\n  GetScaleEvaluationsDevServer\n  GetServiceAppAuthApiAuthInfo\n  GetTopologies\n  ListAlgorithms\n  ListAllDevServers\n  ListAllHyperinstances\n  ListAllNotebooks\n  ListApigApps\n  ListAuthoringClusters\n  ListClusters\n  ListDevServerFlavors\n  ListDevServerImages\n  ListDevServerJobTemplates\n  ListDevServerJobs\n  ListDevServerPublicIP\n  ListDevServers\n  ListDynamicStorages\n  ListEventCategories\n  ListEvents\n  ListExecutionLabels\n  ListFeatures\n  ListFlavors\n  ListFtArtifacts\n  ListHyperCluster\n  ListHyperinstanceClustersCapacity\n  ListHyperinstances\n  ListImage\n  ListImageGroup\n  ListInferApiKeys\n  ListInferClusterFlavors\n  ListInferDeploymentHpaEvents\n  ListInferDeploymentInstances\n  ListInferDeploymentPodEvents\n  ListInferDeploymentPods\n  ListInferDeploymentVersions\n  ListInferDeployments\n  ListInferIntranetConnectionApplications\n  ListInferIntranetConnectionReviews\n  ListInferServiceEvents\n  ListInferServiceTags\n  ListInferServices\n  ListInferServicesByTags\n  ListJobs\n  ListModels\n  ListNetworks\n  ListNodePoolNodes\n  ListNodePools\n  ListNotebooks\n  ListPluginTemplates\n  ListPoolNodes\n  ListPoolPlugins\n  ListPoolTags\n  ListPools\n  ListResourceFlavors\n  ListScheduledEvents\n  ListServiceTags\n  ListServices\n  ListTrainingExperiments\n  ListTrainingJobEvents\n  ListTrainingJobStages\n  ListTrainingJobTags\n  ListTrainingJobTasks\n  ListTrainingJobs\n  ListTrainingJobsByTags\n  ListUsers\n  ListWorkflowExecutions\n  ListWorkflowStepExecution\n  ListWorkflows\n  ListWorkloads\n  ListWorkspace\n  ModifyInferIntranetConnections\n  ModifyTrainingQuotas\n  NotifyTrainingJobInformation\n  PatchNetwork\n  PatchNodePool\n  PatchPool\n  PatchServiceV2\n  PublishFtArtifacts\n  QueryHyperinstanceTags\n  RebootDevServer\n  RegisterImage\n  ReinstallDevServerOS\n  RenewLease\n  ResetApigAppCode\n  ResetApigAppSecret\n  ScaleDownHyperinstance\n  ScaleUpHyperinstance\n  ShowAlgorithmByUuid\n  ShowApiAuthInfos\n  ShowApigApp\n  ShowApisBindToApp\n  ShowAuthmodeDetail\n  ShowAutoSearchParamAnalysisResultPath\n  ShowAutoSearchParamsAnalysis\n  ShowAutoSearchPerTrial\n  ShowAutoSearchTrialEarlyStop\n  ShowAutoSearchTrials\n  ShowAutoSearchYamlTemplateContent\n  ShowAutoSearchYamlTemplatesInfo\n  ShowCluster\n  ShowDevServer\n  ShowDynamicStorage\n  ShowFtDetail\n  ShowFtMetrics\n  ShowImage\n  ShowInferDeployment\n  ShowInferDeploymentHpa\n  ShowInferDeploymentVersion\n  ShowInferHra\n  ShowInferService\n  ShowInferServiceCluster\n  ShowInferServiceTags\n  ShowInternalChannelVpcepApi\n  ShowLease\n  ShowModel\n  ShowModelEngineAndRuntime\n  ShowNetwork\n  ShowNetworkAvailableIp\n  ShowNodeConfigTemplate\n  ShowNodePool\n  ShowNotebook\n  ShowNotebookTags\n  ShowObsUrlOfTrainingJobLogs\n  ShowOrder\n  ShowOsConfig\n  ShowOsQuota\n  ShowPluginTemplate\n  ShowPool\n  ShowPoolMonitor\n  ShowPoolNode\n  ShowPoolNodeConfig\n  ShowPoolNodeConfigTemplate\n  ShowPoolRuntimeMetrics\n  ShowPoolStatistics\n  ShowPoolTags\n  ShowSaveImageJob\n  ShowSearchAlgorithms\n  ShowService\n  ShowServiceEvents\n  ShowServiceMonitorInfo\n  ShowServiceSpecifications\n  ShowServiceUpdateLogs\n  ShowSwitchableFlavors\n  ShowTrainJobTags\n  ShowTrainingExperimentDetails\n  ShowTrainingFlavorMaxAvailableResource\n  ShowTrainingJobDetails\n  ShowTrainingJobEngines\n  ShowTrainingJobFlavors\n  ShowTrainingJobLogsFromAom\n  ShowTrainingJobLogsPreview\n  ShowTrainingJobMetrics\n  ShowTrainingJobRoutePlan\n  ShowTrainingQuotas\n  ShowWorkflow\n  ShowWorkflowExecution\n  ShowWorkflowLabels\n  ShowWorkflowSchedule\n  ShowWorkflowScheduleList\n  ShowWorkflowStepExecutionMetrics\n  ShowWorkflowSubscription\n  ShowWorkflowsOverview\n  ShowWorkflowsTodolist\n  ShowWorkloadStatistics\n  ShowWorkspace\n  ShowWorkspaceQuotas\n  StartDevServer\n  StartHyperinstance\n  StartInferDeployment\n  StartInferService\n  StartNotebook\n  StopDevServer\n  StopHyperinstance\n  StopInferDeployment\n  StopInferService\n  StopNotebook\n  StopTrainingJob\n  SwitchInferDeploymentVersion\n  SyncDevServers\n  SyncImage\n  UnbindInferApiKey\n  UpdateAuthApiToApigApps\n  UpdateAuthMode\n  UpdateDevServer\n  UpdateEdgeNodeStatus\n  UpdateImageGroup\n  UpdateInferDeployment\n  UpdateInferDeploymentHpa\n  UpdateInferDeploymentScale\n  UpdateInferHra\n  UpdateInferIntranetConnection\n  UpdateInferService\n  UpdateNotebook\n  UpdateService\n  UpdateServiceByProperty\n  UpdateWorkflow\n  UpdateWorkflowExecution\n  UpdateWorkflowSchedule\n  UpdateWorkflowSubscription\n  UpdateWorkspace\n  UpdateWorkspaceQuotas\n  ValidateAuthorization\n  ValidateTrainingJobName\n\n运行`hcloud ModelArts <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "ModelArts",
+              "--help"
+            ],
+            "command": "hcloud ModelArts --help",
+            "executableBlock": "hcloud ModelArts --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "ModelArts",
+              "operation": "ModelArts",
+              "args": [
+                "ModelArts",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "f54402bd-74c8-45ab-9dd7-a0a45a9fe3f9",
+            "safeToRun": true,
+            "rawArgs": [
+              "ModelArts",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "DEW",
+      "ok": true,
+      "command": "hcloud DEW --help",
+      "result": {
+        "service": "DEW",
+        "command": "hcloud DEW --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for DEW. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "[USE_ERROR]不支持的服务名称:DEW\n\n运行`hcloud --help`获取更多的关于KooCLI的使用帮助;运行`hcloud --interactive`交互式提示,更方便地构建命令\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "DEW",
+              "--help"
+            ],
+            "command": "hcloud DEW --help",
+            "executableBlock": "hcloud DEW --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "DEW",
+              "operation": "DEW",
+              "args": [
+                "DEW",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "6aff5cb6-fc05-4851-a12e-b0df8a0fb18a",
+            "safeToRun": true,
+            "rawArgs": [
+              "DEW",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "CBR",
+      "ok": true,
+      "command": "hcloud CBR --help",
+      "result": {
+        "service": "CBR",
+        "command": "hcloud CBR --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for CBR. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud CBR <operation> --param1=value1 --param2=value2 ...\n\nService:\n  CBR\n\nAvailable Operations:\n  AddAgentPath\n  AddMember\n  AddVaultResource\n  AssociateVaultPolicy\n  BatchCreateAndDeleteVaultTags\n  BatchUpdateVault\n  ChangeOrder\n  ChangeVaultChargeMode\n  CheckAgent\n  CopyBackup\n  CopyCheckpoint\n  CreateCheckpoint\n  CreateOrganizationPolicy\n  CreatePolicy\n  CreatePostPaidVault\n  CreateVault\n  CreateVaultTags\n  DeleteBackup\n  DeleteMember\n  DeleteOrganizationPolicy\n  DeletePolicy\n  DeleteVault\n  DeleteVaultTag\n  DisassociateVaultPolicy\n  ImportBackup\n  ImportCheckpoint\n  ListAgent\n  ListBackups\n  ListDomainProjects\n  ListExternalVault\n  ListFeatures\n  ListOpLogs\n  ListOrganizationPolicies\n  ListOrganizationPolicyDetail\n  ListPolicies\n  ListProjects\n  ListProtectable\n  ListVault\n  MigrateDomain\n  MigrateVaultResource\n  RegisterAgent\n  RemoveAgentPath\n  RemoveVaultResource\n  RestoreBackup\n  SetVaultResource\n  ShowAgent\n  ShowBackup\n  ShowCheckpoint\n  ShowDomain\n  ShowFeature\n  ShowMemberDetail\n  ShowMembersDetail\n  ShowMetadata\n  ShowMigrateStatus\n  ShowOpLog\n  ShowOrganizationPolicy\n  ShowPolicy\n  ShowProtectable\n  ShowReplicationCapabilities\n  ShowStorageUsage\n  ShowSummary\n  ShowVault\n  ShowVaultProjectTag\n  ShowVaultResourceInstances\n  ShowVaultTag\n  UnregisterAgent\n  UpdateAgent\n  UpdateBackup\n  UpdateMemberStatus\n  UpdateOrder\n  UpdateOrganizationPolicy\n  UpdatePolicy\n  UpdateVault\n\n运行`hcloud CBR <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "CBR",
+              "--help"
+            ],
+            "command": "hcloud CBR --help",
+            "executableBlock": "hcloud CBR --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "CBR",
+              "operation": "CBR",
+              "args": [
+                "CBR",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "5310c779-d3b8-4896-8062-5112c078f211",
+            "safeToRun": true,
+            "rawArgs": [
+              "CBR",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "EVS",
+      "ok": true,
+      "command": "hcloud EVS --help",
+      "result": {
+        "service": "EVS",
+        "command": "hcloud EVS --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for EVS. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud EVS <operation> --param1=value1 --param2=value2 ...\n\nService:\n  EVS\n\nAvailable Operations:\n  BatchCreateVolumeTags\n  BatchDeleteVolumeTags\n  BatchResizeVolumes\n  CinderAcceptVolumeTransfer\n  CinderCreateVolumeTransfer\n  CinderDeleteVolumeTransfer\n  CinderListAvailabilityZones\n  CinderListQuotas\n  CinderListVolumeTransfers\n  CinderListVolumeTypes\n  CinderShowVolumeTransfer\n  CreateSnapshot\n  CreateVolume\n  DeleteSnapshot\n  DeleteVolume\n  DeleteVolumeInRecycle\n  ListSnapshots\n  ListVersions\n  ListVolumeTags\n  ListVolumes\n  ListVolumesByTags\n  ListVolumesInRecycle\n  ModifyVolumeQoS\n  ResizeVolume\n  RetypeVolume\n  RevertVolumeInRecycle\n  RollbackSnapshot\n  ShowJob\n  ShowRecyclePolicy\n  ShowSnapshot\n  ShowVersion\n  ShowVolume\n  ShowVolumeInRecycle\n  ShowVolumeTags\n  UnsubscribePostpaidVolume\n  UpdateRecyclePolicy\n  UpdateSnapshot\n  UpdateVolume\n\n运行`hcloud EVS <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "EVS",
+              "--help"
+            ],
+            "command": "hcloud EVS --help",
+            "executableBlock": "hcloud EVS --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "EVS",
+              "operation": "EVS",
+              "args": [
+                "EVS",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "78e6f3d7-9281-4ce2-bf66-ddfbc2e56c28",
+            "safeToRun": true,
+            "rawArgs": [
+              "EVS",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "EIP",
+      "ok": true,
+      "command": "hcloud EIP --help",
+      "result": {
+        "service": "EIP",
+        "command": "hcloud EIP --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for EIP. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud EIP <operation> --param1=value1 --param2=value2 ...\n\nService:\n  EIP\n\nAvailable Operations:\n  AddPublicipsIntoSharedBandwidth\n  AssociatePublicips\n  AttachBatchPublicIp\n  AttachShareBandwidth\n  BatchCreatePublicipTags\n  BatchCreatePublicips\n  BatchCreateSharedBandwidths\n  BatchDeletePublicIp\n  BatchDeletePublicipTags\n  BatchDisassociatePublicips\n  BatchModifyBandwidth\n  ChangeBandwidthToPeriod\n  ChangePublicipToPeriod\n  CountEipAvailableResources\n  CountPublicIp\n  CountPublicIpInstance\n  CreateBandwidthRuleV3\n  CreatePrePaidPublicip\n  CreatePublicip\n  CreatePublicipTag\n  CreateSharedBandwidth\n  CreateTenantVpcIgw\n  DeleteBandwidthRuleV3\n  DeletePublicip\n  DeletePublicipTag\n  DeleteSharedBandwidth\n  DeleteTenantVpcIgw\n  DetachBatchPublicIp\n  DetachShareBandwidth\n  DisableNat64\n  DisassociatePublicips\n  EnableNat64\n  ListBandwidth\n  ListBandwidthPkg\n  ListBandwidthRuleV3\n  ListBandwidths\n  ListBandwidthsLimit\n  ListCommonPools\n  ListEipBandwidths\n  ListProjectGeipBindings\n  ListPublicipPool\n  ListPublicipTags\n  ListPublicips/v2\n  ListPublicips/v3\n  ListPublicipsByTags\n  ListQuotas\n  ListShareBandwidthTypes\n  ListTenantVpcIgws\n  NeutronCreateFloatingIp\n  NeutronDeleteFloatingIp\n  NeutronListFloatingIps\n  NeutronShowFloatingIp\n  NeutronUpdateFloatingIp\n  RemovePublicipsFromSharedBandwidth\n  ShowBandwidth\n  ShowBandwidthRuleV3\n  ShowInternalVpcIgw\n  ShowPublicIpType\n  ShowPublicip/v2\n  ShowPublicip/v3\n  ShowPublicipPool\n  ShowPublicipPoolTypes\n  ShowPublicipTags\n  ShowResourcesJobDetail\n  UpdateBandwidth\n  UpdateBandwidthRuleV3\n  UpdatePrePaidBandwidth\n  UpdatePublicip/v2\n  UpdatePublicip/v3\n  UpdatePublicipPool\n  UpdateTenantVpcIgw\n\n运行`hcloud EIP <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "EIP",
+              "--help"
+            ],
+            "command": "hcloud EIP --help",
+            "executableBlock": "hcloud EIP --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "EIP",
+              "operation": "EIP",
+              "args": [
+                "EIP",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "08ec1ab5-ca4e-4426-943a-ee1d1247f4a4",
+            "safeToRun": true,
+            "rawArgs": [
+              "EIP",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    },
+    {
+      "service": "ELB",
+      "ok": true,
+      "command": "hcloud ELB --help",
+      "result": {
+        "service": "ELB",
+        "command": "hcloud ELB --help",
+        "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+        "examples": {
+          "note": "No cached examples for ELB. Use the help text above to discover available operations."
+        },
+        "result": {
+          "ok": true,
+          "exitCode": 0,
+          "signal": null,
+          "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud ELB <operation> --param1=value1 --param2=value2 ...\n\nService:\n  ELB\n\nAvailable Operations:\n  BatchAddAvailableZones\n  BatchCreateListenerTags\n  BatchCreateLoadBalancers\n  BatchCreateLoadbalancerTags\n  BatchCreateMembers\n  BatchDeleteCertificates\n  BatchDeleteIpList\n  BatchDeleteListenerTags\n  BatchDeleteListeners\n  BatchDeleteLoadbalancerTags\n  BatchDeleteLoadbalancers\n  BatchDeleteMembers\n  BatchDeletePools\n  BatchDisableDomainIPs\n  BatchEnableDomainIPs\n  BatchRemoveAvailableZones\n  BatchUpdateMembers\n  BatchUpdatePoliciesPriority\n  ChangeListenerTags\n  ChangeLoadbalancerChargeMode\n  ChangeLoadbalancerTags\n  CloneListener\n  CloneLoadbalancer\n  CountPreoccupyIpNum\n  CreateCertificate/v2\n  CreateCertificate/v3\n  CreateCertificatePrivateKeyEcho\n  CreateHealthMonitor/v2\n  CreateHealthMonitor/v3\n  CreateIpGroup\n  CreateL7Policy/v2\n  CreateL7Policy/v3\n  CreateL7Rule/v2\n  CreateL7Rule/v3\n  CreateListener/v2\n  CreateListener/v3\n  CreateListenerTags\n  CreateLoadBalancer/v2\n  CreateLoadBalancer/v3\n  CreateLoadbalancerTags\n  CreateLogtank\n  CreateMasterSlavePool\n  CreateMember/v2\n  CreateMember/v3\n  CreateMemberHealthCheckJob\n  CreatePool/v2\n  CreatePool/v3\n  CreateSecurityPolicy\n  CreateWhitelist\n  DeleteCertificate/v2\n  DeleteCertificate/v3\n  DeleteHealthMonitor/v2\n  DeleteHealthMonitor/v3\n  DeleteIpGroup\n  DeleteL7Policy/v2\n  DeleteL7Policy/v3\n  DeleteL7Rule/v2\n  DeleteL7Rule/v3\n  DeleteListener/v2\n  DeleteListener/v3\n  DeleteListenerForce\n  DeleteListenerTags\n  DeleteLoadBalancer/v2\n  DeleteLoadBalancer/v3\n  DeleteLoadBalancerCascade\n  DeleteLoadBalancerForce\n  DeleteLoadbalancerTags\n  DeleteLogtank\n  DeleteMasterSlavePool\n  DeleteMember/v2\n  DeleteMember/v3\n  DeletePool/v2\n  DeletePool/v3\n  DeletePoolCascade\n  DeleteRecycleLoadBalancer\n  DeleteSecurityPolicy\n  DeleteWhitelist\n  ListAllL7Rules\n  ListAllMembers\n  ListApiVersions\n  ListAvailabilityZones\n  ListCertificates/v2\n  ListCertificates/v3\n  ListDomainIPs\n  ListFeatureConfigs\n  ListFlavors\n  ListHealthMonitors/v2\n  ListHealthMonitors/v3\n  ListIpGroups\n  ListJobs\n  ListL7Policies/v2\n  ListL7Policies/v3\n  ListL7Rules/v2\n  ListL7Rules/v3\n  ListListenerTags/v2\n  ListListenerTags/v3\n  ListListeners/v2\n  ListListeners/v3\n  ListListenersByTags\n  ListLoadBalancers/v2\n  ListLoadBalancers/v3\n  ListLoadbalancerFeature\n  ListLoadbalancerTags/v2\n  ListLoadbalancerTags/v3\n  ListLoadbalancersByTags\n  ListLogtanks\n  ListMasterSlavePools\n  ListMembers/v2\n  ListMembers/v3\n  ListPools/v2\n  ListPools/v3\n  ListQuotaDetails\n  ListRecycleBinLoadBalancers\n  ListSecurityPolicies\n  ListSystemSecurityPolicies\n  ListWhitelists\n  RestoreLoadbalancer\n  ShowCertificate/v2\n  ShowCertificate/v3\n  ShowCertificatePrivateKeyEcho\n  ShowFlavor\n  ShowHealthMonitor\n  ShowHealthmonitors\n  ShowIpGroup\n  ShowIpGroupRelatedListeners\n  ShowJob\n  ShowL7Policy/v2\n  ShowL7Policy/v3\n  ShowL7Rule/v2\n  ShowL7Rule/v3\n  ShowListener/v2\n  ShowListener/v3\n  ShowListenerTags/v2\n  ShowListenerTags/v3\n  ShowLoadBalancer/v2\n  ShowLoadBalancer/v3\n  ShowLoadBalancerPorts\n  ShowLoadBalancerStatus\n  ShowLoadBalancerTopology\n  ShowLoadbalancerTags/v2\n  ShowLoadbalancerTags/v3\n  ShowLoadbalancersStatus\n  ShowLogtank\n  ShowMasterSlavePool\n  ShowMember/v2\n  ShowMember/v3\n  ShowMemberHealthCheckJob\n  ShowPool/v2\n  ShowPool/v3\n  ShowQuota\n  ShowRecycleBin\n  ShowSecurityPolicy\n  ShowWhitelist\n  UpdateCertificate/v2\n  UpdateCertificate/v3\n  UpdateHealthMonitor/v2\n  UpdateHealthMonitor/v3\n  UpdateIpGroup\n  UpdateIpList\n  UpdateL7Policy\n  UpdateL7Rule/v2\n  UpdateL7Rule/v3\n  UpdateL7policies\n  UpdateListener/v2\n  UpdateListener/v3\n  UpdateLoadBalancer/v2\n  UpdateLoadBalancer/v3\n  UpdateLogtank\n  UpdateMember/v2\n  UpdateMember/v3\n  UpdatePool/v2\n  UpdatePool/v3\n  UpdateRecycleBinEnable\n  UpdateRecycleBinPolicy\n  UpdateSecurityPolicy\n  UpdateSystemDefaultDomainConfig\n  UpdateUserDefinedDomainConfig\n  UpdateWhitelist\n  UpgradeLoadbalancer\n\n运行`hcloud ELB <operation> --help`获取更多的关于operation的使用帮助\n",
+          "stderr": "",
+          "plan": {
+            "executable": "hcloud",
+            "args": [
+              "ELB",
+              "--help"
+            ],
+            "command": "hcloud ELB --help",
+            "executableBlock": "hcloud ELB --help",
+            "warnings": [],
+            "classification": {
+              "decision": "allow",
+              "risk": "local_metadata",
+              "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+              "service": "ELB",
+              "operation": "ELB",
+              "args": [
+                "ELB",
+                "--help"
+              ]
+            },
+            "sgFindings": [],
+            "approvalToken": "e85f6905-f56d-4f78-ba2d-e3d6d155b894",
+            "safeToRun": true,
+            "rawArgs": [
+              "ELB",
+              "--help"
+            ]
+          },
+          "retries": 0,
+          "attempts": 1
+        }
+      }
+    }
+  ],
+  "framework": {
+    "ok": false,
+    "error": "No recognized web framework found in: C:\\Users\\Administrator\\Documents\\Codex\\2026-09-16\\huaweicloud-devkit-1-devkit-test-clone\\work\\hdk"
+  }
+}
