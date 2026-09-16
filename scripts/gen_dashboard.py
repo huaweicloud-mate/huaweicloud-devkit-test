@@ -702,31 +702,39 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
                     + ''.join('<button class="casebtn" data-vk="' + vkey + '" data-st="' + bv + '" onclick="filterVCase(\'' + vkey + '\',\'' + bv + '\')">' + bl + '</button>'
                               for bv, bl in [("FAIL", "FAIL"), ("SPEC-MISMATCH", "SPEC"), ("NOT_RUN", "NOT_RUN"), ("PASS", "PASS")]))
             case_block = (
-                '<h4 style="margin:12px 0 4px;">用例执行明细（共 <b>' + str(len(v["cases"])) + '</b> 条：设计级 ' + str(d_cnt) + ' + 展开级 ' + str(e_cnt) + '）</h4>'
-                '<div style="margin:0 0 6px;">' + btns + '</div>'
+                '<details style="margin-top:10px;">'
+                '<summary style="cursor:pointer;color:#2980b9;font-size:13px;">用例执行明细（共 ' + str(len(v["cases"])) + ' 条：设计级 ' + str(d_cnt) + ' + 展开级 ' + str(e_cnt) + '）</summary>'
+                '<div style="margin:6px 0;">' + btns + '</div>'
                 '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
                 '<thead><tr style="background:#f7f7f7;"><th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">层级</th>'
                 '<th style="padding:4px 8px;border:1px solid #ddd;">ID</th>'
                 '<th style="padding:4px 8px;border:1px solid #ddd;">P</th>'
                 '<th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">标题</th>'
                 '<th style="padding:4px 8px;border:1px solid #ddd;">状态</th></tr></thead>'
-                '<tbody>' + vcase_rows + '</tbody></table>')
+                '<tbody>' + vcase_rows + '</tbody></table></details>')
         meta_parts = [f'工具全集 {v["tool"]}'] if v["tool"] else []
         if v["env"]:
             meta_parts.append(v["env"])
         meta = " ｜ ".join(meta_parts)
         meta_html = '<p style="color:#7f8c8d;font-size:12px;margin:8px 0 6px;">' + meta + '</p>' if meta else ''
         pr = '<br>通过率：<b>' + v["pass_rate"] + '</b>' if v["pass_rate"] else ''
+        total_v = sum(v["kpi"].values()) if v["kpi"] else (len(v["cases"]) or "—")
         version_detail += (
-            '<div style="border:1px solid #ddd;border-radius:6px;padding:12px 14px;margin:14px 0;">'
-            '<h3 style="margin:0 0 8px;">' + v["ver"] + ' <span style="color:#7f8c8d;font-size:13px;font-weight:400;">（' + v["obj"] + '）</span></h3>'
+            '<details class="verdetail" style="border:1px solid #ddd;border-radius:6px;margin:14px 0;">'
+            '<summary style="cursor:pointer;padding:12px 14px;font-size:15px;font-weight:700;">'
+            + v["ver"]
+            + ' <span style="color:#7f8c8d;font-weight:400;font-size:13px;">（' + v["obj"] + '）</span>'
+            + ' <span style="color:#95a5a6;font-weight:400;font-size:12px;">· ' + str(total_v) + ' 用例 · 通过率 ' + (v["pass_rate"] or "—") + '</span>'
+            + '</summary>'
+            + '<div style="padding:0 14px 14px;">'
             + '<div style="display:flex;flex-wrap:wrap;margin:-4px;">' + kpi_h + '</div>'
             + meta_html
             + '<div style="font-size:13px;">设计级：' + v["design"] + '<br>展开级：' + v["expand"] + pr + '</div>'
             + exec_h
             + '<h4 style="margin:12px 0 4px;">缺陷清单</h4>'
             + defect_block
-            + case_block + '</div>')
+            + case_block
+            + '</div></details>')
 
     html = f"""<!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8">
