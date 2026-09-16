@@ -132,6 +132,65 @@ def build_metrics():
     return out
 
 
+def _parse_counts(status_line, level):
+    m = re.search(level + r"\s*[\d\s条]*[（(]([^）)]*)[）)]", status_line or "")
+    if not m:
+        return {}
+    counts = {}
+    for k, v in re.findall(r"(PASS|FAIL|SPEC-MISMATCH|BLOCKED|NOT_RUN)\s+(\d+)", m.group(1)):
+        counts[k] = int(v)
+    return counts
+
+
+def _fmt_counts(c):
+    if not c:
+        return "—"
+    order = ["PASS", "FAIL", "SPEC-MISMATCH", "BLOCKED", "NOT_RUN"]
+    return " · ".join(f"{k} {c[k]}" for k in order if k in c) or "—"
+
+
+def load_versions():
+    """从 results/version/<版本>/README.md 解析版本全量测试收口记录。"""
+    versions = []
+    vdir = os.path.join(REPO, "results", "version")
+    if not os.path.isdir(vdir):
+        return versions
+    for name in sorted(os.listdir(vdir), reverse=True):
+        rd = os.path.join(vdir, name, "README.md")
+        if not os.path.isfile(rd):
+            continue
+        text = open(rd, encoding="utf-8").read()
+        obj = ""
+        mc = re.search(r"实际测试对象：[^\n]*?commit\s+`([0-9a-fA-F]+)`", text)
+        commit = mc.group(1)[:7] if mc else ""
+        mb = re.search(r"commit\s+`[0-9a-fA-F]+`[（(]([^\s，,）)]+)", text)
+        branch = mb.group(1).strip() if mb else ""
+        obj = f"{branch} @ {commit}" if branch or commit else ""
+        m = re.search(r"执行状态[：:]\s*(.+)", text)
+        status_line = m.group(1) if m else ""
+        pass_rate = ""
+        m = re.search(r"通过率[^：:]*[：:]\s*([\d.]+%?)", text)
+        if m:
+            pass_rate = m.group(1)
+        defect = ""
+        m = re.search(r"缺陷清单[：:]\s*(.+)", text)
+        if m:
+            defect = m.group(1).strip()
+        nums = re.findall(r"#(\d+)", defect or "")
+        if nums:
+            defect_short = "#" + ", #".join(nums)
+        elif re.search(r"历史|不重复提单", defect or ""):
+            defect_short = "历史复现"
+        else:
+            defect_short = "—"
+        versions.append({
+            "ver": name, "obj": obj, "design": _fmt_counts(_parse_counts(status_line, "设计级")),
+            "expand": _fmt_counts(_parse_counts(status_line, "展开级")),
+            "pass_rate": pass_rate, "defect": defect_short,
+        })
+    return versions
+
+
 def extract_case_ids(text):
     ids = set()
     for m in re.findall(r"[Dd]\s*\d{1,2}\s*[-–—]\s*[A-Za-z0-9][A-Za-z0-9-]*", text or ""):
@@ -225,7 +284,7 @@ def load_defect_notes(dates):
     return {k: sorted(v) for k, v in notes.items()}
 
 
-def render(days, metrics, version, vdate, gen_ts, links, notes):
+def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
     latest_date = days[-1]["date"]
     latest_sum = days[-1]["summary"]
 
@@ -386,14 +445,35 @@ def render(days, metrics, version, vdate, gen_ts, links, notes):
         f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{m["pass_rate"]}%</b></td></tr>'
         for m in metrics) or '<tr><td colspan="8" style="color:#95a5a6;padding:6px;">无度量数据</td></tr>'
 
+    # ---- 版本全量测试 ----
+    version_rows = "".join(
+        f'<tr><td style="padding:6px 8px;border:1px solid #ddd;"><b>{v["ver"]}</b></td>'
+        f'<td style="padding:6px 8px;border:1px solid #ddd;" title="{v["obj"]}">{v["obj"][:24] if v["obj"] else "—"}</td>'
+        f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["design"]}</td>'
+        f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["expand"]}</td>'
+        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{v["pass_rate"] or "—"}</b></td>'
+        f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["defect"]}</td></tr>'
+        for v in versions) or '<tr><td colspan="6" style="color:#95a5a6;padding:6px;">暂无版本全量测试记录</td></tr>'
+
     html = f"""<!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>huaweicloud-devkit 测试执行总览看板</title></head>
+<title>huaweicloud-devkit 测试执行总览看板</title>
+<style>
+.tabs{{display:flex;gap:4px;margin:16px 0 8px;border-bottom:3px solid #2c3e50;}}
+.tab-btn{{padding:8px 20px;cursor:pointer;border:1px solid #ddd;border-bottom:none;background:#f7f7f7;color:#2c3e50;font-size:14px;border-radius:6px 6px 0 0;}}
+.tab-btn.active{{background:#2c3e50;color:#fff;border-color:#2c3e50;font-weight:700;}}
+</style></head>
 <body style="font-family:'Segoe UI',Arial,'Microsoft YaHei',sans-serif;color:#2c3e50;max-width:1040px;margin:20px auto;padding:0 16px;">
 <h1 style="border-bottom:3px solid #2c3e50;padding-bottom:8px;">huaweicloud-devkit 测试执行总览看板</h1>
 <p style="color:#7f8c8d;">基线版本：<b>{version}</b> ｜ 数据截至：<b>{vdate}</b> ｜ 最后更新：<b>{gen_ts}</b>（北京时间，每小时刷新）</p>
 
+<div class="tabs">
+<button class="tab-btn active" id="btn-daily" onclick="showTab('daily')">每日执行</button>
+<button class="tab-btn" id="btn-version" onclick="showTab('version')">版本执行</button>
+</div>
+
+<div id="tab-daily">
 <h2>总体执行（{vdate}）</h2>
 <div style="display:flex;flex-wrap:wrap;margin:-4px;">{kpis}</div>
 <p style="color:#7f8c8d;font-size:12px;">通过率分母 = PASS+FAIL+SPEC（不含 BLOCKED/NOT_RUN）；数据直接取自《每日测试汇总》报告执行摘要。</p>
@@ -427,8 +507,20 @@ def render(days, metrics, version, vdate, gen_ts, links, notes):
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">迭代</th><th style="padding:6px 8px;border:1px solid #ddd;">计划</th><th style="padding:6px 8px;border:1px solid #ddd;">已执行</th><th style="padding:6px 8px;border:1px solid #ddd;">通过</th><th style="padding:6px 8px;border:1px solid #ddd;">失败</th><th style="padding:6px 8px;border:1px solid #ddd;">阻塞</th><th style="padding:6px 8px;border:1px solid #ddd;">执行率</th><th style="padding:6px 8px;border:1px solid #ddd;">通过率</th></tr></thead>
 <tbody>{metrics_rows}</tbody></table>
+</div>
+
+<div id="tab-version" style="display:none;">
+<h2>版本全量测试</h2>
+<p style="color:#7f8c8d;font-size:12px;">数据源 results/version/*/README.md；设计级/展开级为各版本收口全量结果。</p>
+<table style="border-collapse:collapse;width:100%;font-size:13px;">
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">版本</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">被测对象</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">设计级</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">展开级</th><th style="padding:6px 8px;border:1px solid #ddd;">通过率</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">缺陷</th></tr></thead>
+<tbody>{version_rows}</tbody></table>
+</div>
 
 <p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；执行摘要取自每日《每日测试汇总》报告，跨迭代取自 metrics/execution.csv。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准。</p>
+<script>
+function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');}}
+</script>
 </body></html>"""
     return html
 
@@ -446,8 +538,9 @@ def main():
     metrics = build_metrics()
     links = load_issue_links(dates)
     notes = load_defect_notes(dates)
+    versions = load_versions()
     gen_ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    html = render(days, metrics, version, vdate, gen_ts, links, notes)
+    html = render(days, metrics, version, vdate, gen_ts, links, notes, versions)
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"总览看板生成: {OUT}")
