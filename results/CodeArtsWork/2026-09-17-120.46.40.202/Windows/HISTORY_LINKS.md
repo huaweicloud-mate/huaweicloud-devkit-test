@@ -1,26 +1,35 @@
-# HISTORY_LINKS — 历史问题关联清单
+# HISTORY LINKS
 
-> 生成时间：2026-09-17 00:40:00
-> 客户端：CodeArtsWork (GLM-5.2)
-> 被测版本：v1.1.5
+> 生成时间: 2026-09-17
+> 仓库: huaweicloud/huaweicloud-devkit
 
-本次测试发现 5 项缺陷，查重后 4 项为历史问题（已在既有 issue 报告），1 项为新缺陷（已开新单 #712）。
+## D4-2 凭证env打印拦截缺失 HW_ 前缀
 
-## 历史问题（不重复开单，已在既有单上补复核评论）
+- 关联: #694 [open]
+- 标题: [测试报告] huaweicloud-devkit 1.1.4 每日测试缺陷合并单（4 项，OpenCode-glm-5.2 Windows）
+- URL: https://github.com/huaweicloud/huaweicloud-devkit/issues/694
 
-| FINDING | 用例 | 级别 | 历史单号 | 历史单标题 | 状态 |
-|---|---|---|---|---|---|
-| #1 | D4-2 | P0 | #677 | [test] Hermes Windows P0 缺陷汇总: D1-39/D4-2/D4-3/D4-15/D4-16 | open |
-| #2 | D4-3 | P0 | #677 | [test] Hermes Windows P0 缺陷汇总: D1-39/D4-2/D4-3/D4-15/D4-16 | open |
-| #3 | D1-39 | P0 | #677 | [test] Hermes Windows P0 缺陷汇总: D1-39/D4-2/D4-3/D4-15/D4-16 | open |
-| #5 | EXP-E01~E14 | P1 | #705, #706 | [serviceCatalog] 中文意图路由准确率仅 21.4% / 1.1.5 每日测试缺陷合并单 | open |
+## D4-3 明文secret API拦截缺失 ShowSecret 模式
 
-## 新缺陷（已开新单）
+- 关联: #677 [open]
+- 标题: [test] Hermes Windows P0 缺陷汇总 (v1.1.4-next.6, 2026-09-14): D1-39/D4-2/D4-3/D4-15/D4-16
+- URL: https://github.com/huaweicloud/huaweicloud-devkit/issues/677
 
-| FINDING | 用例 | 级别 | 新单号 | 新单标题 |
-|---|---|---|---|---|
-| #4 | D4-6 | P1 | #712 | [P1] D4-6 adminPass 参数回显无安全警告 |
+## D1-39 Windows 升级检测链失败
 
-## 复核评论
+- 关联: #690 [open]
+- 标题: [test] Hermes Windows 每日测试 2026-09-15: D4-22 deploy plan 公网暴露规则误报 (1 新缺陷 + 3 已知复现)
+- URL: https://github.com/huaweicloud/huaweicloud-devkit/issues/690
 
-- 已在 #677 上补复核评论，确认 D1-39/D4-2/D4-3 在 v1.1.5 仍复现，并补充了更精确的根因定位（risk-rule-engine JSON 规则缺失）
+## D4-6 adminPass 参数回显无警告
+
+- 关联: #712 [open]
+- 标题: [P1] D4-6 adminPass ?????????(CodeArtsWork v1.1.5 ????)
+- URL: https://github.com/huaweicloud/huaweicloud-devkit/issues/712
+
+## D10-3 / EXP-E01~E14 serviceCatalog 中文意图路由 MISS（11/15 未命中）
+
+- 关联: #706 [open]
+- 标题: [测试报告] huaweicloud-devkit 1.1.5 每日测试缺陷合并单（3 项）
+- URL: https://github.com/huaweicloud/huaweicloud-devkit/issues/706
+
