@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """生成测试执行总览看板（自包含单文件 HTML）。
 
-数据源：
-    results/Summary/用例矩阵-{设计级|展开级}-总执行结果-<日期>.csv  （跨日趋势，口径复用 report_html._case_status）
-    results/Summary/每日测试汇总-<日期>.md                            （被测版本基线）
-    metrics/execution.csv                                             （跨迭代执行/通过趋势）
+数据源（以「每日测试汇总报告」为准，不再自行重算）：
+    results/Summary/每日测试汇总-<日期>.md / .html   （每日执行摘要 = 跨日趋势）
+    results/Summary/用例矩阵-*-总执行结果-<日期>.csv   （仅用于最新日「客户端/维度/缺陷」明细）
+    metrics/execution.csv                             （跨迭代执行/通过趋势）
 
 用法:
     python gen_dashboard.py
@@ -26,16 +26,73 @@ OUT = os.path.join(REPO, "dashboard.html")
 STATUS_COLOR = {"PASS": "#2ecc71", "FAIL": "#e74c3c", "BLOCKED": "#f39c12",
                 "SPEC-MISMATCH": "#e67e22", "NOT_RUN": "#95a5a6"}
 STATUS_ORDER = ["PASS", "FAIL", "BLOCKED", "SPEC-MISMATCH", "NOT_RUN"]
-STATUS_CN = {"PASS": "通过", "FAIL": "失败", "BLOCKED": "阻塞", "SPEC-MISMATCH": "规格不符", "NOT_RUN": "未执行"}
 
 
 def available_dates():
+    """从「每日测试汇总」报告文件扫描有报告的日期。"""
     dates = set()
     for f in os.listdir(SUMMARY_DIR):
-        m = re.search(r"(\d{4}-\d{2}-\d{2})\.csv$", f)
+        m = re.search(r"每日测试汇总-(\d{4}-\d{2}-\d{2})\.(?:md|html)$", f)
         if m:
             dates.add(m.group(1))
     return sorted(dates)
+
+
+def rate_num(s):
+    m = re.search(r"(\d+(?:\.\d+)?)", s or "")
+    return float(m.group(1)) if m else 0.0
+
+
+def parse_md_summary(text):
+    m = re.search(r"## 执行摘要\s*\n\s*\|[^\n]*\|\s*\n\s*\|[\s\-|]*\|\s*\n\s*\|([^\n]+)\|", text)
+    if not m:
+        return None
+    cells = [c.strip() for c in m.group(1).strip().strip("|").split("|")]
+    if len(cells) < 7:
+        return None
+    try:
+        return {"total": int(cells[0]), "pass": int(cells[1]), "fail": int(cells[2]),
+                "blocked": int(cells[3]), "spec": int(cells[4]), "not_run": int(cells[5]),
+                "rate": cells[6].strip()}
+    except (ValueError, IndexError):
+        return None
+
+
+def parse_html_summary(text):
+    cards = re.findall(r'font-size:24px;font-weight:bold;">([^<]+)</div><div>([^<]+)</div>', text)
+    d = {}
+    for val, label in cards:
+        d[label.strip()] = val.strip()
+    try:
+        return {"total": int(d.get("总用例", 0)), "pass": int(d.get("PASS", 0)),
+                "fail": int(d.get("FAIL", 0)), "blocked": int(d.get("BLOCKED", 0)),
+                "spec": int(d.get("SPEC", d.get("SPEC-MISMATCH", 0))),
+                "not_run": int(d.get("NOT_RUN", 0)), "rate": d.get("通过率", "—").strip()}
+    except (ValueError, KeyError):
+        return None
+
+
+def load_report_summary(date):
+    md = os.path.join(SUMMARY_DIR, f"每日测试汇总-{date}.md")
+    if os.path.isfile(md):
+        s = parse_md_summary(open(md, encoding="utf-8").read())
+        if s:
+            return s
+    html = os.path.join(SUMMARY_DIR, f"每日测试汇总-{date}.html")
+    if os.path.isfile(html):
+        s = parse_html_summary(open(html, encoding="utf-8").read())
+        if s:
+            return s
+    return None
+
+
+def build_daily(dates):
+    daily = []
+    for d in dates:
+        s = load_report_summary(d)
+        if s:
+            daily.append({"date": d, "summary": s})
+    return daily
 
 
 def baseline_version(dates):
@@ -49,17 +106,6 @@ def baseline_version(dates):
     return "—", dates[-1] if dates else "—"
 
 
-def build_daily(dates):
-    daily = []
-    for d in dates:
-        rows = R.load_summary(d)
-        if not rows:
-            continue
-        cmp = R._compute(rows, [], d, "?")
-        daily.append({"date": d, "cmp": cmp})
-    return daily
-
-
 def build_metrics():
     p = os.path.join(REPO, "metrics", "execution.csv")
     if not os.path.isfile(p):
@@ -70,7 +116,7 @@ def build_metrics():
     for r in rows:
         it = r["iteration"]
         if it not in by_iter:
-            by_iter[it] = {"planned": 0, "executed": 0, "passed": 0, "failed": 0, "blocked": 0, "date": r["date"]}
+            by_iter[it] = {"planned": 0, "executed": 0, "passed": 0, "failed": 0, "blocked": 0}
             order.append(it)
         for k in ("planned", "executed", "passed", "failed", "blocked"):
             try:
@@ -82,49 +128,49 @@ def build_metrics():
         m = by_iter[it]
         ex_rate = round(m["executed"] / m["planned"] * 100, 1) if m["planned"] else 0
         pass_rate = round(m["passed"] / m["executed"] * 100, 1) if m["executed"] else 0
-        out.append({"iter": it, "date": m["date"], "exec_rate": ex_rate, "pass_rate": pass_rate, **m})
+        out.append({"iter": it, "exec_rate": ex_rate, "pass_rate": pass_rate, **m})
     return out
 
 
 def render(days, metrics, version, vdate, gen_ts):
-    latest = days[-1]["cmp"]
-    st = latest["st"]
-    total = latest["total"]
-    denom = st["PASS"] + st["FAIL"] + st["SPEC-MISMATCH"]
-    rate = f"{round(st['PASS'] / denom * 100)}%" if denom else "—"
+    latest_date = days[-1]["date"]
+    latest_sum = days[-1]["summary"]
 
-    # ---- KPI 卡片 ----
+    # 最新日明细（客户端/维度/缺陷）用 CSV 复用 report_html 口径
+    latest_rows = R.load_summary(latest_date)
+    latest_cmp = R._compute(latest_rows, [], latest_date, "?")
+
+    # ---- KPI 卡片（直接取最新报告执行摘要） ----
     def kpi(value, label, color):
         return (f'<div style="flex:1;min-width:120px;background:{color};color:#fff;border-radius:8px;'
                 f'padding:16px 12px;text-align:center;margin:4px;">'
                 f'<div style="font-size:28px;font-weight:700;">{value}</div>'
                 f'<div style="font-size:13px;opacity:.9;">{label}</div></div>')
 
-    kpis = (kpi(total, "总用例", "#34495e")
-            + kpi(st["PASS"], "PASS", STATUS_COLOR["PASS"])
-            + kpi(st["FAIL"], "FAIL", STATUS_COLOR["FAIL"])
-            + kpi(st["BLOCKED"], "BLOCKED", STATUS_COLOR["BLOCKED"])
-            + kpi(rate, "通过率", "#3498db"))
+    kpis = (kpi(latest_sum["total"], "总用例", "#34495e")
+            + kpi(latest_sum["pass"], "PASS", STATUS_COLOR["PASS"])
+            + kpi(latest_sum["fail"], "FAIL", STATUS_COLOR["FAIL"])
+            + kpi(latest_sum["blocked"], "BLOCKED", STATUS_COLOR["BLOCKED"])
+            + kpi(latest_sum["rate"], "通过率", "#3498db"))
 
-    # ---- 每日执行趋势表 ----
+    # ---- 每日执行趋势表（每天报告的执行摘要） ----
     daily_head = '<tr style="background:#f2f2f2;">' + ''.join(
         f'<th style="padding:6px 8px;border:1px solid #ddd;">{h}</th>'
         for h in ["日期", "总用例"] + STATUS_ORDER + ["通过率", ""]) + '</tr>'
+    summary_fields = {"PASS": "pass", "FAIL": "fail", "BLOCKED": "blocked",
+                      "SPEC-MISMATCH": "spec", "NOT_RUN": "not_run"}
     daily_rows = ""
     for d in days:
-        c = d["cmp"]
-        s = c["st"]
-        dn = s["PASS"] + s["FAIL"] + s["SPEC-MISMATCH"]
-        r = f"{round(s['PASS'] / dn * 100)}%" if dn else "—"
-        pct = round(s['PASS'] / dn * 100) if dn else 0
+        s = d["summary"]
+        pct = rate_num(s["rate"])
         bar = (f'<div style="height:8px;background:#eee;border-radius:4px;width:120px;margin-left:auto;">'
                f'<div style="height:8px;width:{pct}%;background:#3498db;border-radius:4px;"></div></div>')
         daily_rows += ('<tr><td style="padding:6px 8px;border:1px solid #ddd;white-space:nowrap;"><b>'
                        + d["date"][5:] + '</b></td><td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">'
-                       + str(c["total"]) + '</td>'
+                       + str(s["total"]) + '</td>'
                        + ''.join(f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;color:{STATUS_COLOR[k]}">'
-                                 f'{s[k]}</td>' for k in STATUS_ORDER)
-                       + f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{r}</b></td>'
+                                 f'{s[summary_fields[k]]}</td>' for k in STATUS_ORDER)
+                       + f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{s["rate"]}</b></td>'
                        + f'<td style="padding:6px 8px;border:1px solid #ddd;">{bar}</td></tr>')
 
     # ---- 通过率折线 SVG ----
@@ -148,11 +194,7 @@ def render(days, metrics, version, vdate, gen_ts):
                 f'<polyline points="{line}" fill="none" stroke="{color}" stroke-width="2"/>'
                 f'{dots}</svg>')
 
-    rate_vals = []
-    for d in days:
-        s = d["cmp"]["st"]
-        dn = s["PASS"] + s["FAIL"] + s["SPEC-MISMATCH"]
-        rate_vals.append(round(s["PASS"] / dn * 100) if dn else 0)
+    rate_vals = [rate_num(d["summary"]["rate"]) for d in days]
 
     # ---- 客户端概览（最新日，仅智能体聚合行） ----
     client_head = ('<tr style="background:#f2f2f2;">'
@@ -168,36 +210,30 @@ def render(days, metrics, version, vdate, gen_ts):
                    '<th style="padding:6px 8px;border:1px solid #ddd;">SPEC</th></tr>')
     COLOR = {"已执行": "#2ecc71", "存在缺陷": "#e74c3c", "已建包未回填": "#f39c12", "未执行": "#95a5a6"}
     client_rows = ""
-    for cl in latest["clients"]:
+    for cl in latest_cmp["clients"]:
         ex, p, f, b, s, nr, uf = cl["row"]
         badge = f'<span style="display:inline-block;padding:2px 8px;border-radius:3px;color:#fff;background:{COLOR.get(cl["st_text"],"#95a5a6")}">{cl["st_text"]}</span>'
         client_rows += ('<tr>' + f'<td style="padding:6px 8px;border:1px solid #ddd;"><b>{cl["client"]}</b></td>'
                         + f'<td style="padding:6px 8px;border:1px solid #ddd;">{badge}</td>'
                         + ''.join(f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{v}</td>'
                                   for v in (cl["should"], ex, cl["exec_rate"], cl["pass_rate"], p, f, b, s)) + '</tr>')
-    client_overview = (f'共 <b>{len(R.ALL_CLIENTS)}</b> 个智能体：已执行 <b>{latest["executed"]}</b>，'
-                       f'已建包未回填 <b>{latest["pkg_only"]}</b>，未执行 <b>{latest["notrun"]}</b>。')
+    client_overview = (f'共 <b>{len(R.ALL_CLIENTS)}</b> 个智能体：已执行 <b>{latest_cmp["executed"]}</b>，'
+                       f'已建包未回填 <b>{latest_cmp["pkg_only"]}</b>，未执行 <b>{latest_cmp["notrun"]}</b>。')
 
     # ---- 缺陷存量（最新日，按优先级对 FAIL 用例计数） ----
     def case_status(rows):
         cols = [c for c in rows[0].keys() if c not in R.META] if rows else []
-        res = {}
-        for r in rows:
-            res[r.get("ID")] = R._case_status(cols, r)
-        return res
+        return {r.get("ID"): R._case_status(cols, r) for r in rows}
 
-    latest_rows = R.load_summary(days[-1]["date"])
     st_map = case_status(latest_rows)
     prio_fail = Counter()
     fail_list = []
     for r in latest_rows:
-        s = st_map.get(r.get("ID"))
-        if s != "FAIL":
+        if st_map.get(r.get("ID")) != "FAIL":
             continue
         prio = (r.get("优先级") or "(空)").strip()
         prio_fail[prio] += 1
-        title = R._case_title(r)
-        fail_list.append((prio, r.get("ID", ""), title))
+        fail_list.append((prio, r.get("ID", ""), R._case_title(r)))
     fail_list.sort(key=lambda x: ({"P0": 0, "P1": 1, "P2": 2}.get(x[0], 9), x[1]))
 
     prio_order = ["P0", "P1", "P2"]
@@ -216,7 +252,7 @@ def render(days, metrics, version, vdate, gen_ts):
         f'<tr><td style="padding:6px 8px;border:1px solid #ddd;"><b>{x["dim"]}</b></td>'
         f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{x["count"]}</td>'
         + ''.join(f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{v}</td>' for v in x["prio"])
-        + '</tr>' for x in latest["dim_order"])
+        + '</tr>' for x in latest_cmp["dim_order"])
 
     # ---- 跨迭代 metrics 表 ----
     metrics_rows = "".join(
@@ -240,14 +276,14 @@ def render(days, metrics, version, vdate, gen_ts):
 
 <h2>总体执行（{vdate}）</h2>
 <div style="display:flex;flex-wrap:wrap;margin:-4px;">{kpis}</div>
-<p style="color:#7f8c8d;font-size:12px;">通过率分母 = PASS+FAIL+SPEC（不含 BLOCKED/NOT_RUN）；与每日汇总口径一致。</p>
+<p style="color:#7f8c8d;font-size:12px;">通过率分母 = PASS+FAIL+SPEC（不含 BLOCKED/NOT_RUN）；数据直接取自《每日测试汇总》报告执行摘要。</p>
 
 <h2>每日执行趋势</h2>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
 <thead>{daily_head}</thead><tbody>{daily_rows}</tbody></table>
-<div style="margin:12px 0;"><div style="color:#7f8c8d;font-size:12px;margin-bottom:4px;">用例级通过率趋势（%）</div>
+<div style="margin:12px 0;"><div style="color:#7f8c8d;font-size:12px;margin-bottom:4px;">通过率趋势（%）</div>
 {sparkline(rate_vals)}</div>
-<p style="color:#95a5a6;font-size:11px;">趋势口径 = 用例级最差去重（与 09-15 每日汇总一致，任一机器 FAIL/BLOCKED 即判该用例未通过）。09-12 为旧版全量口径（300 用例）；09-13/14 当日旧版报告使用「机器×用例」累加口径（通过率分别 92%/91%），本看板已按现行去重口径统一重算，历史数据仅供趋势参考。</p>
+<p style="color:#95a5a6;font-size:11px;">趋势数据 = 每日《每日测试汇总》报告的执行摘要。09-13/14 当日报告使用「机器×用例」累加口径，09-15 起为「用例级去重」口径，跨口径仅作趋势参考。</p>
 
 <h2>客户端执行概览（{vdate}）</h2>
 <p style="color:#7f8c8d;">{client_overview}</p>
@@ -260,10 +296,10 @@ def render(days, metrics, version, vdate, gen_ts):
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;">优先级</th><th style="padding:6px 8px;border:1px solid #ddd;">ID</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">标题</th></tr></thead>
 <tbody>{fail_rows}</tbody></table>
 
-<h2>各维度用例统计（{vdate}，设计级共 {len(latest["design_rows"])} 条）</h2>
+<h2>各维度用例统计（{vdate}，设计级共 {len(latest_cmp["design_rows"])} 条）</h2>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">维度</th><th style="padding:6px 8px;border:1px solid #ddd;">用例数</th>
-{''.join(f'<th style="padding:6px 8px;border:1px solid #ddd;">{p}</th>' for p in latest["prio_values"])}</tr></thead>
+{''.join(f'<th style="padding:6px 8px;border:1px solid #ddd;">{p}</th>' for p in latest_cmp["prio_values"])}</tr></thead>
 <tbody>{dim_rows}</tbody></table>
 
 <h2>跨迭代执行率 / 通过率</h2>
@@ -271,7 +307,7 @@ def render(days, metrics, version, vdate, gen_ts):
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">迭代</th><th style="padding:6px 8px;border:1px solid #ddd;">计划</th><th style="padding:6px 8px;border:1px solid #ddd;">已执行</th><th style="padding:6px 8px;border:1px solid #ddd;">通过</th><th style="padding:6px 8px;border:1px solid #ddd;">失败</th><th style="padding:6px 8px;border:1px solid #ddd;">阻塞</th><th style="padding:6px 8px;border:1px solid #ddd;">执行率</th><th style="padding:6px 8px;border:1px solid #ddd;">通过率</th></tr></thead>
 <tbody>{metrics_rows}</tbody></table>
 
-<p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；数据源 results/Summary/（每日总执行结果）与 metrics/execution.csv（跨迭代度量）。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准。</p>
+<p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；执行摘要取自每日《每日测试汇总》报告，跨迭代取自 metrics/execution.csv。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准。</p>
 </body></html>"""
     return html
 
@@ -279,17 +315,20 @@ def render(days, metrics, version, vdate, gen_ts):
 def main():
     dates = available_dates()
     if not dates:
-        print("[错误] 未找到 Summary CSV，请先跑 build_summary.py")
+        print("[错误] 未找到「每日测试汇总」报告")
         sys.exit(2)
     version, vdate = baseline_version(dates)
     days = build_daily(dates)
+    if not days:
+        print("[错误] 报告执行摘要解析失败")
+        sys.exit(2)
     metrics = build_metrics()
     gen_ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     html = render(days, metrics, version, vdate, gen_ts)
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"总览看板生成: {OUT}")
-    print(f"覆盖 {len(days)} 天趋势（{days[0]['date']} ~ {days[-1]['date']}），{len(metrics)} 个迭代度量")
+    print(f"覆盖 {len(days)} 天报告（{days[0]['date']} ~ {days[-1]['date']}），{len(metrics)} 个迭代度量")
 
 
 if __name__ == "__main__":
