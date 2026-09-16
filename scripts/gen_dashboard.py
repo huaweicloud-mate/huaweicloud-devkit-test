@@ -463,6 +463,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
         dim = (r.get("维度") or "").strip() if level == "设计级" else (r.get("展开类型") or "").strip()
         prio = (r.get("优先级") or "").strip()
         title = R._case_title(r)
+        src = (r.get("源用例") or cid or "").strip() or cid
         agent_st = {}
         for a in R.ALL_CLIENTS:
             a_cols = [c for c in case_client_cols if c.split("-")[0] == a]
@@ -470,13 +471,14 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
             if vals:
                 agent_st[a] = next((k for k in ("FAIL", "SPEC-MISMATCH", "BLOCKED", "NOT_RUN", "PASS") if k in vals), "NOT_RUN")
         overall = next((k for k in ("FAIL", "SPEC-MISMATCH", "BLOCKED", "NOT_RUN", "PASS") if k in agent_st.values()), "NOT_RUN")
-        case_detail_rows.append((overall, cid, dim, prio, title, agent_st))
+        case_detail_rows.append((overall, cid, dim, prio, title, src, agent_st))
     case_detail_rows.sort(key=lambda x: (S_RANK.get(x[0], 9), x[1]))
     case_rows = ""
-    for overall, cid, dim, prio, title, agent_st in case_detail_rows:
+    for overall, cid, dim, prio, title, src, agent_st in case_detail_rows:
         dots = "".join(
             f'<span title="{a}: {agent_st.get(a, "—")}" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:{S_DOT.get(agent_st.get(a, ""), "#dfe3e8")};margin:0 1px;"></span>'
             for a in R.ALL_CLIENTS)
+        iss = issue_cell(cid, src) if overall in ("FAIL", "SPEC-MISMATCH", "BLOCKED") else ""
         case_rows += (
             f'<tr class="caserow" data-st="{overall}">'
             f'<td style="padding:4px 8px;border:1px solid #eee;"><span style="display:inline-block;padding:1px 8px;border-radius:3px;color:#fff;background:{STATUS_COLOR.get(overall, "#95a5a6")};">{overall}</span></td>'
@@ -484,7 +486,8 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
             f'<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;color:#7f8c8d;">{dim}</td>'
             f'<td style="padding:4px 8px;border:1px solid #eee;text-align:center;">{prio}</td>'
             f'<td style="padding:4px 8px;border:1px solid #eee;text-align:left;">{title}</td>'
-            f'<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;">{dots}</td></tr>')
+            f'<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;">{dots}</td>'
+            f'<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;">{iss}</td></tr>')
 
     # ---- 跨迭代 metrics 表 ----
     metrics_rows = "".join(
@@ -600,7 +603,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 <button class="casebtn" onclick="filterCase('PASS')">PASS</button>
 </div>
 <table style="border-collapse:collapse;width:100%;font-size:12px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:5px 8px;border:1px solid #ddd;">状态</th><th style="padding:5px 8px;border:1px solid #ddd;">ID</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">维度</th><th style="padding:5px 8px;border:1px solid #ddd;">P</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">客户端（10 智能体）</th></tr></thead>
+<thead><tr style="background:#f2f2f2;"><th style="padding:5px 8px;border:1px solid #ddd;">状态</th><th style="padding:5px 8px;border:1px solid #ddd;">ID</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">维度</th><th style="padding:5px 8px;border:1px solid #ddd;">P</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">客户端（10 智能体）</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">历史单号</th></tr></thead>
 <tbody>{case_rows}</tbody></table>
 
 <h2>跨迭代执行率 / 通过率</h2>
