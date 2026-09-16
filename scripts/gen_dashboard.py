@@ -166,6 +166,14 @@ def load_versions():
         mb = re.search(r"commit\s+`[0-9a-fA-F]+`[（(]([^\s，,）)]+)", text)
         branch = mb.group(1).strip() if mb else ""
         obj = f"{branch} @ {commit}" if branch or commit else ""
+        tool = ""
+        m = re.search(r"工具全集[：:]\s*(\d+)", text)
+        if m:
+            tool = m.group(1)
+        env = ""
+        m = re.search(r"Node\s*/\s*npm\s*/\s*Python[：:]\s*(.+)", text) or re.search(r"Node\s*/\s*npm[：:]\s*(.+)", text)
+        if m:
+            env = m.group(1).strip()
         m = re.search(r"执行状态[：:]\s*(.+)", text)
         status_line = m.group(1) if m else ""
         pass_rate = ""
@@ -183,10 +191,21 @@ def load_versions():
             defect_short = "历史复现"
         else:
             defect_short = "—"
+        defect_rows = []
+        m = re.search(r"## 缺陷.*?\n(\|.*\|(?:\s*\n\|.*\|)+)", text, re.S)
+        if m:
+            for line in m.group(1).split("\n"):
+                line = line.strip()
+                if not line.startswith("|"):
+                    continue
+                cells = [c.strip() for c in line.strip("|").split("|")]
+                if len(cells) >= 4 and cells[0] not in ("用例",) and not re.match(r"^[-:\s]+$", cells[0]):
+                    defect_rows.append(tuple(cells[:4]))
         versions.append({
             "ver": name, "obj": obj, "design": _fmt_counts(_parse_counts(status_line, "设计级")),
             "expand": _fmt_counts(_parse_counts(status_line, "展开级")),
             "pass_rate": pass_rate, "defect": defect_short,
+            "tool": tool, "env": env, "defect_rows": defect_rows,
         })
     return versions
 
@@ -455,6 +474,37 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
         f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["defect"]}</td></tr>'
         for v in versions) or '<tr><td colspan="6" style="color:#95a5a6;padding:6px;">暂无版本全量测试记录</td></tr>'
 
+    version_detail = ""
+    for v in versions:
+        if v["defect_rows"]:
+            d_rows = "".join(
+                f'<tr><td style="padding:5px 8px;border:1px solid #eee;">{c}</td>'
+                f'<td style="padding:5px 8px;border:1px solid #eee;"><b style="color:{ {"P0":"#c0392b","P1":"#e67e22","P2":"#2980b9"}.get(lv,"#333") }">{lv}</b></td>'
+                f'<td style="padding:5px 8px;border:1px solid #eee;text-align:left;">{t}</td>'
+                f'<td style="padding:5px 8px;border:1px solid #eee;color:#7f8c8d;">{st}</td></tr>'
+                for c, lv, t, st in v["defect_rows"])
+            defect_block = ('<table style="border-collapse:collapse;width:100%;font-size:13px;margin-top:6px;">'
+                            '<thead><tr style="background:#f7f7f7;"><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">用例</th>'
+                            '<th style="padding:5px 8px;border:1px solid #ddd;">级别</th>'
+                            '<th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">缺陷</th>'
+                            '<th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">状态</th></tr></thead>'
+                            f'<tbody>{d_rows}</tbody></table>')
+        else:
+            defect_block = f'<p style="color:#95a5a6;font-size:12px;margin:6px 0 0;">缺陷：{v["defect"]}</p>'
+        meta_parts = [f'工具全集 {v["tool"]}'] if v["tool"] else []
+        if v["env"]:
+            meta_parts.append(v["env"])
+        meta = " ｜ ".join(meta_parts)
+        meta_html = '<p style="color:#7f8c8d;font-size:12px;margin:0 0 6px;">' + meta + '</p>' if meta else ''
+        pr = '<br>通过率：<b>' + v["pass_rate"] + '</b>' if v["pass_rate"] else ''
+        version_detail += (
+            '<div style="border:1px solid #ddd;border-radius:6px;padding:12px 14px;margin:14px 0;">'
+            '<h3 style="margin:0 0 4px;">' + v["ver"] + ' <span style="color:#7f8c8d;font-size:13px;font-weight:400;">（' + v["obj"] + '）</span></h3>'
+            + meta_html
+            + '<div style="font-size:13px;">设计级：' + v["design"] + '<br>展开级：' + v["expand"] + pr + '</div>'
+            + '<h4 style="margin:12px 0 4px;">缺陷清单</h4>'
+            + defect_block + '</div>')
+
     html = f"""<!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -511,10 +561,11 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 
 <div id="tab-version" style="display:none;">
 <h2>版本全量测试</h2>
-<p style="color:#7f8c8d;font-size:12px;">数据源 results/version/*/README.md；设计级/展开级为各版本收口全量结果。</p>
+<p style="color:#7f8c8d;font-size:12px;">数据源 results/version/*/README.md；设计级/展开级/通过率为各版本收口全量结果。</p>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">版本</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">被测对象</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">设计级</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">展开级</th><th style="padding:6px 8px;border:1px solid #ddd;">通过率</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">缺陷</th></tr></thead>
 <tbody>{version_rows}</tbody></table>
+{version_detail}
 </div>
 
 <p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；执行摘要取自每日《每日测试汇总》报告，跨迭代取自 metrics/execution.csv。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准。</p>
