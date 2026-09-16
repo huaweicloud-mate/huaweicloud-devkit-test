@@ -176,7 +176,7 @@ def _compute(rows, findings, date, version):
         cols = [c for c in client_cols if _agent_of(c) == cl]
         if not cols:
             notrun += 1
-            clients.append({"client": cl, "cols": [], "st_text": "未执行", "row": (0, 0, 0, 0, 0, 0, 0), "should": 0, "machines": []})
+            clients.append({"client": cl, "cols": [], "st_text": "未执行", "row": (0, 0, 0, 0, 0, 0, 0), "should": 0, "exec_rate": "—", "pass_rate": "—", "machines": []})
             continue
         ex, p, f, b, s, nr, uf, st_text = col_stats(cols)
         should = client_should(cols)
