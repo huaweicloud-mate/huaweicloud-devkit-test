@@ -13,7 +13,7 @@
 - **根因**：`plugins/huaweicloud-core/src/mcp-server.mjs` dispatch/handleRequest 对未知 method 走通用 catch 路径，返回 -32603 而非 MCP 规范要求的 -32601
 - **影响**：MCP 客户端无法区分"方法不存在"与"内部错误"，影响错误处理逻辑
 - **证据**：`evidence/D9-1/evidence.md`
-- **状态**：待提单
+- **状态**：已提单 #703
 
 ## #2【P1】D9-2 缺少 required 参数校验
 
@@ -22,7 +22,7 @@
 - **根因**：`plugins/huaweicloud-core/src/mcp-server.mjs` tools/call 入口未在调用前校验 inputSchema.required 字段
 - **影响**：客户端传入不完整参数时得到误导性错误，无法快速定位参数缺失
 - **证据**：`evidence/D9-2/evidence.md`
-- **状态**：待提单
+- **状态**：已提单 #704
 
 ## #3【P1】EXP-E01 serviceCatalog 中文意图"查云主机"未命中 ECS 路由
 
@@ -31,7 +31,7 @@
 - **根因**：`serviceCatalog` 工具中文关键词覆盖不足，缺少"云主机"等常见中文服务别名
 - **影响**：中文用户自然语言请求无法正确路由到 ECS 服务
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E01 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #4【P1】EXP-E02 serviceCatalog "创建云服务器"未命中 ECS 路由
 
@@ -39,7 +39,7 @@
 - **断言**：包含"创建"+"云服务器"关键词的中文意图应命中 ECS 创建路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E02 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #5【P1】EXP-E03 serviceCatalog "部署静态网站"未命中 OBS 路由
 
