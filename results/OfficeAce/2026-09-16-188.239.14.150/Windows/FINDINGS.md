@@ -47,7 +47,7 @@
 - **断言**：包含"部署静态网站"关键词的中文意图应命中 OBS 静态网站托管路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E03 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #6【P1】EXP-E04 serviceCatalog "绑定弹性公网IP"未命中 EIP 路由
 
@@ -55,7 +55,7 @@
 - **断言**：包含"弹性公网IP"关键词的中文意图应命中 EIP 路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E04 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #7【P1】EXP-E05 serviceCatalog "查MySQL状态"未命中 RDS 路由
 
@@ -63,7 +63,7 @@
 - **断言**：包含"云数据库MySQL"关键词的中文意图应命中 RDS 路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E05 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #8【P1】EXP-E07 serviceCatalog "配置备份策略"未命中 CBR 路由
 
@@ -71,7 +71,7 @@
 - **断言**：包含"备份策略"关键词的中文意图应命中 CBR 路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E07 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #9【P1】EXP-E10 serviceCatalog "部署函数"未命中 FunctionGraph 路由
 
@@ -79,7 +79,7 @@
 - **断言**：包含"部署函数"关键词的中文意图应命中 FunctionGraph 路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E10 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #10【P1】EXP-E11 serviceCatalog "查费用"未命中 Billing 路由
 
@@ -87,7 +87,7 @@
 - **断言**：包含"费用"关键词的中文意图应命中 Billing 路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E11 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #11【P1】EXP-E12 serviceCatalog "云监控告警"未命中 CES 路由
 
@@ -95,7 +95,7 @@
 - **断言**：包含"云监控告警"关键词的中文意图应命中 CES 路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E12 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #12【P1】EXP-E13 serviceCatalog "HTTPS证书"未命中 ELB/DEW 路由
 
@@ -103,7 +103,7 @@
 - **断言**：包含"HTTPS证书"关键词的中文意图应命中 ELB 或 DEW 路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E13 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #13【P1】EXP-E14 serviceCatalog "IAM审计"未命中 IAM 路由
 
@@ -111,7 +111,7 @@
 - **断言**：包含"权限"+"审计"关键词的中文意图应命中 IAM 路由
 - **根因**：`serviceCatalog` 中文关键词覆盖不足
 - **证据**：`eval/results/eval-run-20260916011644.csv`（EXP-E14 行）
-- **状态**：待提单
+- **状态**：已提单 #705
 
 ## #14【非产品缺陷】OfficeAce 非 Hook 客户端导致 D4 安全用例全量 BLOCKED
 
