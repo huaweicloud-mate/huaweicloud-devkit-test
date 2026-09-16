@@ -158,6 +158,8 @@ def _load_archive_full(rel):
     cases = []
     kpi = Counter()
     dims = {}
+    dim_exec = {}
+    expand_exec = {}
     base = os.path.join(REPO, rel.strip().strip("`").rstrip("/\\"))
     for level, fn, tkey in [("设计级", "用例矩阵-设计级.csv", "标题"), ("展开级", "用例矩阵-展开级.csv", "枚举对象")]:
         fp = os.path.join(base, fn)
@@ -179,11 +181,15 @@ def _load_archive_full(rel):
                 d_info = dims.setdefault(d, {"count": 0, "prio": Counter()})
                 d_info["count"] += 1
                 d_info["prio"][(r.get("优先级") or "").strip()] += 1
+                dim_exec.setdefault(d, Counter())[status] += 1
+            else:
+                et = (r.get("展开类型") or "(空)").strip()
+                expand_exec.setdefault(et, Counter())[status] += 1
     links = {}
     fp = os.path.join(base, "HISTORY_LINKS.md")
     if os.path.isfile(fp):
         links = _parse_history_links(open(fp, encoding="utf-8").read())
-    return {"cases": cases, "kpi": dict(kpi), "dims": dims, "links": links}
+    return {"cases": cases, "kpi": dict(kpi), "dims": dims, "dim_exec": dim_exec, "expand_exec": expand_exec, "links": links}
 
 
 def load_versions():
@@ -226,7 +232,7 @@ def load_versions():
         for a in re.findall(r"`(results/version/[^`]+)`", text):
             if a not in archives:
                 archives.append(a)
-        cases, kpi, dims, links = [], Counter(), {}, {}
+        cases, kpi, dims, dim_exec, expand_exec, links = [], Counter(), {}, {}, {}, {}
         for a in archives:
             af = _load_archive_full(a)
             cases += af["cases"]
@@ -236,6 +242,10 @@ def load_versions():
                 d0 = dims.setdefault(dd, {"count": 0, "prio": Counter()})
                 d0["count"] += info["count"]
                 d0["prio"].update(info["prio"])
+            for dd, cc in af["dim_exec"].items():
+                dim_exec.setdefault(dd, Counter()).update(cc)
+            for et, cc in af["expand_exec"].items():
+                expand_exec.setdefault(et, Counter()).update(cc)
             for cid, m2 in af["links"].items():
                 links.setdefault(cid, {}).update(m2)
         design = _fmt_counts(_stat_level(cases, "设计级"))
@@ -257,7 +267,8 @@ def load_versions():
             "ver": name, "obj": obj, "design": design, "expand": expand,
             "pass_rate": pass_rate, "defect": defect_short,
             "tool": tool, "env": env, "defect_rows": defect_rows,
-            "cases": cases, "kpi": dict(kpi), "dims": dims, "links": links,
+            "cases": cases, "kpi": dict(kpi), "dims": dims,
+            "dim_exec": dict(dim_exec), "expand_exec": dict(expand_exec), "links": links,
         })
     return versions
 
@@ -615,21 +626,35 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
         kpi_h = (kpi(total, "总用例", "#34495e") + kpi(k.get("PASS", 0), "PASS", "#2ecc71")
                  + kpi(k.get("FAIL", 0), "FAIL", "#e74c3c") + kpi(k.get("BLOCKED", 0), "BLOCKED", "#f39c12")
                  + kpi(k.get("SPEC-MISMATCH", 0), "SPEC", "#e67e22") + kpi(kpr, "通过率", "#3498db"))
-        dims_h = ""
-        if v["dims"]:
-            dim_rows_v = ""
-            for d in sorted(v["dims"], key=lambda x: V_DIM_ORDER.index(x) if x in V_DIM_ORDER else 99):
-                info = v["dims"][d]
-                dim_rows_v += ('<tr><td style="padding:4px 8px;border:1px solid #eee;"><b>' + d + '</b></td>'
-                               '<td style="padding:4px 8px;border:1px solid #eee;text-align:center;">' + str(info["count"]) + '</td>'
-                               + ''.join('<td style="padding:4px 8px;border:1px solid #eee;text-align:center;">' + str(info["prio"].get(p, 0)) + '</td>' for p in ["P0", "P1", "P2"])
-                               + '</tr>')
-            dims_h = ('<h4 style="margin:12px 0 4px;">维度分布（设计级）</h4>'
-                      '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
-                      '<thead><tr style="background:#f7f7f7;"><th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">维度</th>'
-                      '<th style="padding:4px 8px;border:1px solid #ddd;">用例数</th><th style="padding:4px 8px;border:1px solid #ddd;">P0</th>'
-                      '<th style="padding:4px 8px;border:1px solid #ddd;">P1</th><th style="padding:4px 8px;border:1px solid #ddd;">P2</th></tr></thead>'
-                      '<tbody>' + dim_rows_v + '</tbody></table>')
+        exec_h = ""
+        if v["dim_exec"] or v["expand_exec"]:
+            st_cols = [("PASS", "PASS"), ("FAIL", "FAIL"), ("BLOCKED", "BLOCKED"), ("SPEC-MISMATCH", "SPEC"), ("NOT_RUN", "NOT_RUN")]
+            st_head = ''.join('<th style="padding:4px 8px;border:1px solid #ddd;">' + lb + '</th>' for _, lb in st_cols)
+
+            def _tbl(rows_html, first_label):
+                return ('<table style="border-collapse:collapse;width:100%;font-size:12px;">'
+                        '<thead><tr style="background:#f7f7f7;"><th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">' + first_label + '</th>'
+                        '<th style="padding:4px 8px;border:1px solid #ddd;">用例数</th>' + st_head + '</tr></thead>'
+                        '<tbody>' + rows_html + '</tbody></table>')
+
+            def _exec_rows(mapping):
+                out = ""
+                for name in sorted(mapping):
+                    cc = mapping[name]
+                    out += ('<tr><td style="padding:4px 8px;border:1px solid #eee;"><b>' + name + '</b></td>'
+                            '<td style="padding:4px 8px;border:1px solid #eee;text-align:center;">' + str(sum(cc.values())) + '</td>'
+                            + ''.join('<td style="padding:4px 8px;border:1px solid #eee;text-align:center;color:' + (STATUS_COLOR.get(k, "#333") if cc.get(k) else "#bdc3c7") + ';">' + (str(cc.get(k)) if cc.get(k) else "—") + '</td>' for k, _ in st_cols)
+                            + '</tr>')
+                return out
+
+            parts = []
+            if v["dim_exec"]:
+                parts.append('<h4 style="margin:12px 0 4px;">设计级执行情况（按维度）</h4>'
+                             + _tbl(_exec_rows(v["dim_exec"]), "维度"))
+            if v["expand_exec"]:
+                parts.append('<h4 style="margin:12px 0 4px;">展开级执行情况（按类型）</h4>'
+                             + _tbl(_exec_rows(v["expand_exec"]), "展开类型"))
+            exec_h = ''.join(parts)
         case_block = ""
         if v["cases"]:
             v_rank = {"FAIL": 0, "SPEC-MISMATCH": 1, "NOT_RUN": 2, "PASS": 3}
@@ -674,7 +699,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
             + '<div style="display:flex;flex-wrap:wrap;margin:-4px;">' + kpi_h + '</div>'
             + meta_html
             + '<div style="font-size:13px;">设计级：' + v["design"] + '<br>展开级：' + v["expand"] + pr + '</div>'
-            + dims_h
+            + exec_h
             + '<h4 style="margin:12px 0 4px;">缺陷清单</h4>'
             + defect_block
             + case_block + '</div>')
