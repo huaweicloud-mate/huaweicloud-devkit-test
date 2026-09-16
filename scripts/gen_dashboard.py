@@ -171,9 +171,10 @@ def _load_archive_full(rel):
                 title = (r.get("展开类型") or "").strip()
             status = (r.get("执行状态") or "").strip() or "NOT_RUN"
             kpi[status] += 1
+            grp = (r.get("维度") or r.get("展开类型") or "(空)").strip()
             cases.append({
                 "level": level, "id": r.get("ID", ""), "prio": (r.get("优先级") or "").strip(),
-                "title": title, "status": status,
+                "title": title, "status": status, "group": grp,
                 "blocked": (r.get("blockedReason") or "").strip(),
             })
             if level == "设计级":
@@ -232,22 +233,35 @@ def load_versions():
         for a in re.findall(r"`(results/version/[^`]+)`", text):
             if a not in archives:
                 archives.append(a)
-        cases, kpi, dims, dim_exec, expand_exec, links = [], Counter(), {}, {}, {}, {}
+        all_cases, links = [], {}
         for a in archives:
             af = _load_archive_full(a)
-            cases += af["cases"]
-            for kk, vv in af["kpi"].items():
-                kpi[kk] += vv
-            for dd, info in af["dims"].items():
-                d0 = dims.setdefault(dd, {"count": 0, "prio": Counter()})
-                d0["count"] += info["count"]
-                d0["prio"].update(info["prio"])
-            for dd, cc in af["dim_exec"].items():
-                dim_exec.setdefault(dd, Counter()).update(cc)
-            for et, cc in af["expand_exec"].items():
-                expand_exec.setdefault(et, Counter()).update(cc)
+            all_cases += af["cases"]
             for cid, m2 in af["links"].items():
                 links.setdefault(cid, {}).update(m2)
+        # 双 OS 归档去重：同一用例 (层级, ID) 取最差状态
+        s_rank = {"FAIL": 0, "SPEC-MISMATCH": 1, "BLOCKED": 2, "NOT_RUN": 3, "PASS": 4, "": 5}
+        seen = {}
+        for c in all_cases:
+            key = (c["level"], c["id"])
+            if key not in seen or s_rank.get(c["status"], 5) < s_rank.get(seen[key]["status"], 5):
+                seen[key] = c
+        cases = list(seen.values())
+        kpi = Counter()
+        dims = {}
+        dim_exec = {}
+        expand_exec = {}
+        for c in cases:
+            kpi[c["status"]] += 1
+            if c["level"] == "设计级":
+                d = c["group"]
+                d_info = dims.setdefault(d, {"count": 0, "prio": Counter()})
+                d_info["count"] += 1
+                d_info["prio"][c["prio"]] += 1
+                dim_exec.setdefault(d, Counter())[c["status"]] += 1
+            else:
+                et = c["group"]
+                expand_exec.setdefault(et, Counter())[c["status"]] += 1
         design = _fmt_counts(_stat_level(cases, "设计级"))
         expand = _fmt_counts(_stat_level(cases, "展开级"))
         pass_rate = ""
@@ -709,7 +723,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>huaweicloud-devkit 测试执行总览看板</title>
 <style>
-.tabs{{display:flex;gap:4px;margin:16px 0 8px;border-bottom:3px solid #2c3e50;}}
+.tabs{{display:flex;gap:4px;margin:0 0 12px;border-bottom:3px solid #2c3e50;position:sticky;top:0;background:#fff;padding:10px 0 6px;z-index:100;}}
 .tab-btn{{padding:8px 20px;cursor:pointer;border:1px solid #ddd;border-bottom:none;background:#f7f7f7;color:#2c3e50;font-size:14px;border-radius:6px 6px 0 0;}}
 .tab-btn.active{{background:#2c3e50;color:#fff;border-color:#2c3e50;font-weight:700;}}
 .casebtn{{padding:3px 12px;margin-right:4px;cursor:pointer;border:1px solid #ddd;background:#fff;color:#2c3e50;font-size:12px;border-radius:4px;}}
