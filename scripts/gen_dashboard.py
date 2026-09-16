@@ -134,8 +134,10 @@ def build_metrics():
 
 def extract_case_ids(text):
     ids = set()
-    for m in re.findall(r"[Dd]\s*\d+\s*[-–—]\s*\d+", text or ""):
-        ids.add(re.sub(r"\s*[-–—]\s*", "-", m).upper())
+    for m in re.findall(r"[Dd]\s*\d{1,2}\s*[-–—]\s*[A-Za-z0-9][A-Za-z0-9-]*", text or ""):
+        ids.add(re.sub(r"\s+", "", m).upper())
+    for m in re.findall(r"EXP-[A-Z0-9-]+", (text or "").upper()):
+        ids.add(m.rstrip("-"))
     return ids
 
 
@@ -174,7 +176,55 @@ def load_issue_links(dates):
     return {k: sorted(v, reverse=True) for k, v in links.items()}
 
 
-def render(days, metrics, version, vdate, gen_ts, links):
+def load_defect_notes(dates):
+    """从 FINDINGS.md 解析 用例ID -> 不提单原因（测试侧/非产品缺陷/暂不提单）。"""
+    notes = {}
+    date_scope = set(dates[-3:])
+    results_dir = os.path.join(REPO, "results")
+    if not os.path.isdir(results_dir):
+        return notes
+    for client in sorted(os.listdir(results_dir)):
+        if client in ("Summary", "Regression", "version", "history"):
+            continue
+        cdir = os.path.join(results_dir, client)
+        if not os.path.isdir(cdir):
+            continue
+        for sub in sorted(os.listdir(cdir)):
+            if not any(sub.startswith(d + "-") or sub == d for d in date_scope):
+                continue
+            for os_name in ("Windows", "Linux"):
+                fp = os.path.join(cdir, sub, os_name, "FINDINGS.md")
+                if not os.path.isfile(fp):
+                    continue
+                text = open(fp, encoding="utf-8").read()
+                for m in re.finditer(r"^## #\d+【([^】]+)】(.+)$", text, re.M):
+                    sev = m.group(1).strip()
+                    title = m.group(2).strip()
+                    ids = extract_case_ids(title)
+                    if not ids:
+                        continue
+                    reason = None
+                    if "测试侧" in sev:
+                        reason = "测试侧"
+                    elif re.search(r"非产品缺陷|不予提单", sev):
+                        reason = "非产品缺陷"
+                    else:
+                        seg = text[m.end():]
+                        nxt = re.search(r"^## ", seg, re.M)
+                        seg = seg[:nxt.start()] if nxt else seg
+                        ms = re.search(r"[-*]\s*\*\*状态[^*]*\*\*[：:]\s*(.+)", seg)
+                        status = ms.group(1).strip() if ms else ""
+                        if re.search(r"暂不提单|暂缓|搁置", status):
+                            reason = "暂不提单"
+                        elif re.search(r"待提单|待提|未提单|本轮新增", status):
+                            reason = "待提单"
+                    if reason:
+                        for cid in ids:
+                            notes.setdefault(cid, set()).add(reason)
+    return {k: sorted(v) for k, v in notes.items()}
+
+
+def render(days, metrics, version, vdate, gen_ts, links, notes):
     latest_date = days[-1]["date"]
     latest_sum = days[-1]["summary"]
 
@@ -283,6 +333,10 @@ def render(days, metrics, version, vdate, gen_ts, links):
     def issue_cell(cid, src):
         nums = links.get(cid) or links.get(src) or []
         if not nums:
+            reasons = sorted(set(notes.get(cid) or []) | set(notes.get(src) or []))
+            if reasons:
+                label = " / ".join(reasons)
+                return f'<span style="color:#95a5a6;font-size:11px;">{label}</span>'
             return '<span style="color:#bdc3c7;">—</span>'
         shown = nums[:3]
         text = " ".join(
@@ -381,8 +435,9 @@ def main():
         sys.exit(2)
     metrics = build_metrics()
     links = load_issue_links(dates)
+    notes = load_defect_notes(dates)
     gen_ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    html = render(days, metrics, version, vdate, gen_ts, links)
+    html = render(days, metrics, version, vdate, gen_ts, links, notes)
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"总览看板生成: {OUT}")
