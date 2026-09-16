@@ -1,0 +1,14 @@
+=== AUTH PROBE RESULTS (v1.1.4 stable) ===
+total=12 pass=12 fail=0
+PASS  D2-11  persist+token -> {error,scope:rejected}  => {"status":"error","error":"Temporary STS credentials cannot be persisted (R3). Use action=temporary.","scope":"rejected"}
+PASS  D2-11  token not persisted to S1 (no file)  => null
+PASS  D2-13  configuredBySession S1 wins over env  => S1AK000000000000001
+PASS  D2-13  cleared flag -> env recover  => ENVAK00000000000001
+PASS  D2-12  runtime active -> sync ok:false suppressed  => {"ok":false,"error":"Runtime credentials are active; auto-sync suppressed (R10).","nextStep":"Run huaweicloud_auth_switch action=clear or action=persist first."}
+PASS  D2-12  no S3/OBS written during suppressed sync  => false
+PASS  D2-16  import file wiped after read  => /tmp/multica-task-127811927/hdk-auth-1JNXpv/.config/huaweicloud/creds-import.json
+PASS  D2-10  readKooCliProfiles current=deploy  => deploy/2
+PASS  D2-10  resolveManagedProfile -> deploy  => deploy
+PASS  D2-10  switch current -> prod  => prod
+PASS  D2-5  missing creds -> guided error (code+steps)  => code=HDKIT_CRED_MISSING steps=2
+PASS  D2-5  no bare stacktrace (has message)  => Huawei Cloud credentials are not configured. Run "npx huawei

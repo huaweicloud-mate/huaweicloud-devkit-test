@@ -1,0 +1,16 @@
+=== DOC DRIFT PROBE RESULTS (v1.1.4 stable) ===
+TOOL_DEFINITIONS.length = 40
+AGENTS.md "39 tool" claims = 2
+  :27  src/              ← Node.js MCP server (stdio/remote JSON-RPC, 39 tools in tools.mjs)
+  :45  - `src/tools.mjs` — 39 MCP tool definitions (hcloud CLI, hooks, catalog, auth, sandbox, voucher, update). `src/mcp-serve
+PASS  D8-1  AGENTS.md claims "39" tools (drift source)  => claims=2
+PASS  D8-1  impl tool count 40 (TOOL_DEFINITIONS.length)  => N=40
+FAIL  D8-1  doc(39) vs impl(40) 一致  => N=40
+PASS  D8-6  README.md 存在  => true
+PASS  D8-6  README.zh-CN.md 存在  => true
+PASS  D8-6  关键命令/标识 "huaweicloud-devkit" 双语一致  => en=true zh=true
+PASS  D8-6  关键命令/标识 "npm install -g" 双语一致  => en=false zh=false
+PASS  D8-6  关键命令/标识 "auth init" 双语一致  => en=true zh=true
+PASS  D8-6  关键命令/标识 "doctor" 双语一致  => en=true zh=true
+PASS  D8-6  关键命令/标识无单边缺失  => none
+D8-1 => FAIL (doc 39 vs impl 40)

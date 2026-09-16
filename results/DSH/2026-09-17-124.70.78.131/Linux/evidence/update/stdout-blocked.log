@@ -1,0 +1,37 @@
+
+=====CASE D1-39=====
+queryDistTagsSync(Linux) 返回: null
+Linux 下检测链 status 语义: 非 null 即 status=0 可得 dist-tags
+source: NPM_BIN=win32?npm.cmd 判定: true | queryDistTags/Sync 含 shell:true 判定: false
+[FAIL] D1-39: Linux 直调 queryDistTagsSync 非 null（status=0） | null
+[PASS] D1-39: 源码 queryDistTagsSync/queryDistTags 未加 shell:true（Windows npm.cmd EINVAL 根因仍在，已知 #554）
+
+=====CASE D1-41=====
+up_to_date    : {"currentVersion":"1.1.4","latestStable":"1.1.4","latestNext":null,"targetVersion":"1.1.4","updateAvailable":false,"dismissed":false,"dismissExpiresAt":null,"result":"up_to_date"}
+update_avail  : {"currentVersion":"1.1.4","latestStable":"1.1.5","latestNext":null,"targetVersion":"1.1.5","updateAvailable":true,"dismissed":false,"dismissExpiresAt":null,"result":"update_available"}
+check_failed  : {"currentVersion":"1.1.4","latestStable":null,"latestNext":null,"targetVersion":null,"updateAvailable":false,"dismissed":false,"dismissExpiresAt":null,"result":"check_failed","note":"检测失败，不影响使用"}
+dismissed     : {"currentVersion":"1.1.4","latestStable":"1.1.5","latestNext":null,"targetVersion":"1.1.5","updateAvailable":false,"dismissed":true,"dismissExpiresAt":"2026-09-17T23:02:41.039Z","result":"dismissed"}
+[PASS] D1-41: up_to_date result= | result=up_to_date
+[PASS] D1-41: update_available result= + target + 字段全
+[PASS] D1-41: check_failed result= + note
+[PASS] D1-41: dismissed result=（dismissExpiresAt 非空）
+[PASS] D1-41: 四态字段语义统一 | 8 字段齐备
+
+=====CASE D1-42=====
+writeSkipState: {"dismissedVersion":"1.1.5","dismissedAt":"2026-09-16T23:02:41.041Z","expireAt":"2026-09-19T23:02:41.041Z"}
+readSkipState valid: true | 冷却内 judgeUpdate: dismissed
+[PASS] D1-42: dismiss 写入 dismissedVersion/dismissedAt/expireAt 字段完整
+[PASS] D1-42: expireAt = dismissedAt + 3 天 | delta=259200000ms
+[PASS] D1-42: 同版本冷却内返回 dismissed
+[PASS] D1-42: 冷却过期后恢复 update_available | expireAt 已过期
+
+=====CASE D1-45=====
+非检查工具附加 _updateInfo: {"ok":1,"_updateInfo":{"currentVersion":"1.1.4","latestVersion":"1.1.5"}}
+check_update 附加: {"ok":1}
+upgrade 附加: {"ok":1}
+[PASS] D1-45: 非检查工具首调用附加 _updateInfo
+[PASS] D1-45: check_update 不附加 _updateInfo
+[PASS] D1-45: upgrade 不附加 _updateInfo
+[PASS] D1-45: 无 updateAvailable 时不附加
+
+=== 汇总: PASS=14 FAIL=1 ===

@@ -1,0 +1,16 @@
+只读 test001 ak 前缀: HPUA3X
+resolveCredentials 返回 ak 前缀: HPUAN1
+run-as-readonly 动态切换生效: false
+写(VPC CreateVpc) exit: 0 (hcloud API 错误时也返回 0，以 body 为准)
+写被拒绝(权限不足): true
+凭证可认证(非 APIGW.0301): true
+写响应: Failed to record logs. Cause: Access denied. { "code": "VPC.0010", "message": "{\"NeutronError\":{\"message\":\"Rules on create_router by *** disallowed by policy\",\"type\":\"PolicyNotAuthorized\",\"
+  只读规划 ECS ListServersDetails -> allow/read_only
+  只读规划 VPC ListVpcs -> allow/read_only
+  只读规划 CTS ListTrackers -> allow/read_only
+  只读规划 CES ListAlarmTemplates -> allow/read_only
+  只读规划 IMS ListImages -> allow/read_only
+只读规划可用: 5 / 5
+=== 结论 ===
+切换生效(应 true 才算最小权限切换成功): false
+写被 IAM 拒绝(应 true): true
