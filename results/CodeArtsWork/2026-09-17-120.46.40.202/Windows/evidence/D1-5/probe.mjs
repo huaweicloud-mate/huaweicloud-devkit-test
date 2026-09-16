@@ -1,3 +1,4 @@
 // Probe: D1-5
-// Status: NOT_RUN
-// Time: 20260917002714
+// Status: PASS
+// Time: 20260917065422
+// Detail: uninstall干净度: npm uninstall 清理完整

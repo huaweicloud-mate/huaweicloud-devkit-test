@@ -1,3 +1,4 @@
 // Probe: D9-9
-// Status: NOT_RUN
-// Time: 20260917002714
+// Status: PASS
+// Time: 20260917065422
+// Detail: tools/call超时语义: 超时处理正确

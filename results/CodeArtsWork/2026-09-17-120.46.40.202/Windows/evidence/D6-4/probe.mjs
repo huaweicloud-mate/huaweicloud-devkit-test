@@ -1,3 +1,4 @@
 // Probe: D6-4
-// Status: NOT_RUN
-// Time: 20260917002714
+// Status: PASS
+// Time: 20260917065422
+// Detail: 并发调度正确性: 并发工具调用正确

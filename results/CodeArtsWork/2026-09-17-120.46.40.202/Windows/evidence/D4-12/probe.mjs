@@ -1,3 +1,4 @@
 // Probe: D4-12
-// Status: NOT_RUN
-// Time: 20260917002714
+// Status: PASS
+// Time: 20260917065422
+// Detail: 供应链安装期安全: npm install安全
