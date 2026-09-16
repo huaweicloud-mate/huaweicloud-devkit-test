@@ -167,13 +167,14 @@ def load_issue_links(dates):
                     if m:
                         current = extract_case_ids(m.group(1))
                         for cid in current:
-                            links.setdefault(cid, set())
+                            links.setdefault(cid, {})
                         continue
-                    m2 = re.match(r"\s*-\s*\[#(\d+)\]\(", line)
+                    m2 = re.match(r"\s*-\s*\[#(\d+)\]\([^)]*\)（(open|closed)）", line, re.I)
                     if m2 and current:
+                        num, state = int(m2.group(1)), m2.group(2).lower()
                         for cid in current:
-                            links[cid].add(int(m2.group(1)))
-    return {k: sorted(v, reverse=True) for k, v in links.items()}
+                            links[cid][num] = state
+    return {k: dict(sorted(v.items(), reverse=True)) for k, v in links.items()}
 
 
 def load_defect_notes(dates):
@@ -331,19 +332,27 @@ def render(days, metrics, version, vdate, gen_ts, links, notes):
     fail_list.sort(key=lambda x: ({"P0": 0, "P1": 1, "P2": 2}.get(x[0], 9), x[1]))
 
     def issue_cell(cid, src):
-        nums = links.get(cid) or links.get(src) or []
-        if not nums:
+        linkmap = links.get(cid) or links.get(src) or {}
+        if not linkmap:
             reasons = sorted(set(notes.get(cid) or []) | set(notes.get(src) or []))
             if reasons:
                 label = " / ".join(reasons)
                 return f'<span style="color:#95a5a6;font-size:11px;">{label}</span>'
             return '<span style="color:#bdc3c7;">—</span>'
+        nums = sorted(linkmap, reverse=True)
         shown = nums[:3]
-        text = " ".join(
-            f'<a href="https://github.com/huaweicloud/huaweicloud-devkit/issues/{n}" '
-            f'style="color:#2980b9;text-decoration:none;">#{n}</a>' for n in shown)
+        parts = []
+        for n in shown:
+            state = linkmap.get(n, "open")
+            color = "#27ae60" if state == "open" else "#95a5a6"
+            parts.append(
+                f'<a href="https://github.com/huaweicloud/huaweicloud-devkit/issues/{n}" '
+                f'style="color:#2980b9;text-decoration:none;">#{n}</a>'
+                f'<span title="{state}" style="color:{color};font-size:10px;">●</span>')
+        text = " ".join(parts)
         if len(nums) > 3:
-            text += f' <span style="color:#95a5a6;">等 {len(nums)} 个</span>'
+            open_cnt = sum(1 for n in nums if linkmap.get(n) == "open")
+            text += f' <span style="color:#95a5a6;">等 {len(nums)} 个（open {open_cnt}）</span>'
         return text
 
     prio_order = ["P0", "P1", "P2"]
@@ -403,6 +412,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes):
 
 <h2>缺陷存量（{vdate}，FAIL 用例按优先级）</h2>
 <div style="display:flex;flex-wrap:wrap;margin:-4px;">{prio_kpi}</div>
+<p style="color:#7f8c8d;font-size:12px;">关联 Issue 状态：<span style="color:#27ae60;">●</span> open（未关闭） ｜ <span style="color:#95a5a6;">●</span> closed（已关闭）</p>
 <table style="border-collapse:collapse;width:100%;font-size:13px;margin-top:8px;">
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;">优先级</th><th style="padding:6px 8px;border:1px solid #ddd;">ID</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">关联 Issue</th></tr></thead>
 <tbody>{fail_rows}</tbody></table>
