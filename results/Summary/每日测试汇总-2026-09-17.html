@@ -4,7 +4,7 @@
 <title>每日测试汇总 - 2026-09-17</title></head>
 <body style="font-family:'Segoe UI',Arial,'Microsoft YaHei',sans-serif;color:#2c3e50;max-width:960px;margin:20px auto;padding:0 16px;">
 <h1 style="border-bottom:3px solid #2c3e50;padding-bottom:8px;">huaweicloud-devkit 每日测试汇总报告</h1>
-<p style="color:#7f8c8d;">日期：<b>2026-09-17</b> ｜ 被测版本：<b>（未指定）</b> ｜ 创建时间：<b>2026-09-17 00:31:19</b> ｜ 最后更新时间：<b>2026-09-17 00:31:19</b>（北京时间）</p>
+<p style="color:#7f8c8d;">日期：<b>2026-09-17</b> ｜ 被测版本：<b>（未指定）</b> ｜ 创建时间：<b>2026-09-17 00:31:19</b> ｜ 最后更新时间：<b>2026-09-17 00:41:32</b>（北京时间）</p>
 
 <h2>执行摘要</h2>
 <table style="border-collapse:collapse;width:100%;">
@@ -45,7 +45,7 @@
 <h2>缺陷根因明细（来自各 agent FINDINGS.md）</h2>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;">客户端</th><th style="padding:6px;border:1px solid #ddd;">级别</th><th style="padding:6px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:6px;border:1px solid #ddd;text-align:left;">根因</th></tr></thead>
-<tbody><tr><td colspan="4" style="color:#95a5a6">无缺陷记录</td></tr></tbody></table>
+<tbody><tr><td>CodeArtsWork</td><td><b>P0</b></td><td>D4-2 凭证env打印拦截缺失 HW_ 前缀</td><td>`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json` 规则 `hwc-command-env-dump` regex `(HUAWEICLOUD|HWC_|HCLOUD|OS_)` 缺少 `HW_` 前缀。`safety-policy.mjs:418` 有正确 regex `(?:HUAWEICLOUD|HWC|HW|OS)_` 但 `hook_check_command` 用 `risk-rule-engine.mjs` 而非 `safety-policy.mjs`</td></tr><tr><td>CodeArtsWork</td><td><b>P0</b></td><td>D4-3 明文secret API拦截缺失 ShowSecret 模式</td><td>`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json` 规则 `hwc-command-secret-value-read` regex `(ShowSecretVersion|DownloadSecret|GetSecretValue)` 缺少 `ShowSecret`。`safety-policy.mjs:432` 也只有 `ShowSecretVersion` 不含 `ShowSecret`</td></tr><tr><td>CodeArtsWork</td><td><b>P0</b></td><td>D1-39 Windows 升级检测链失败</td><td>`plugins/huaweicloud-core/src/update-check.mjs` `queryDistTagsSync`/`queryDistTagsFetch` 在 Windows 上无法获取 dist tags（spawn `npm view` 失败或 fetch 网络问题）</td></tr><tr><td>CodeArtsWork</td><td><b>P1</b></td><td>D4-6 adminPass 参数回显无警告</td><td>`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json` 无 adminPass 参数检测规则</td></tr><tr><td>CodeArtsWork</td><td><b>P1</b></td><td>EXP-E01~E14 serviceCatalog 中文意图路由 MISS（11/15 未命中）</td><td>`plugins/huaweicloud-core/src/tools.mjs` `serviceCatalog` 函数中文关键词匹配覆盖不足，11 条中文意图未命中任何服务路由规则</td></tr></tbody></table>
 
 <p style="color:#95a5a6;font-size:11px;margin-top:24px;">本报告由 scripts/report_html.py 自动生成，数据源 results/Summary/ 每日总执行结果。执行态与母版用例定义分离，真实结果以本报告为准。</p>
 </body></html>
