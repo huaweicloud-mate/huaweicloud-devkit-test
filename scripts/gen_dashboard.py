@@ -264,6 +264,8 @@ def load_versions():
                 expand_exec.setdefault(et, Counter())[c["status"]] += 1
         design = _fmt_counts(_stat_level(cases, "设计级"))
         expand = _fmt_counts(_stat_level(cases, "展开级"))
+        design_stat = _stat_level(cases, "设计级")
+        expand_stat = _stat_level(cases, "展开级")
         pass_rate = ""
         denom = kpi.get("PASS", 0) + kpi.get("FAIL", 0) + kpi.get("SPEC-MISMATCH", 0)
         if denom:
@@ -279,6 +281,7 @@ def load_versions():
             defect_short = "—"
         versions.append({
             "ver": name, "obj": obj, "design": design, "expand": expand,
+            "design_stat": design_stat, "expand_stat": expand_stat,
             "pass_rate": pass_rate, "defect": defect_short,
             "tool": tool, "env": env, "defect_rows": defect_rows,
             "cases": cases, "kpi": dict(kpi), "dims": dims,
@@ -587,15 +590,22 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
         for m in metrics) or '<tr><td colspan="8" style="color:#95a5a6;padding:6px;">无度量数据</td></tr>'
 
     # ---- 版本全量测试 ----
+    V_ST = [("PASS", "PASS"), ("FAIL", "FAIL"), ("BLOCKED", "BLOCKED"), ("SPEC-MISMATCH", "SPEC"), ("NOT_RUN", "NOT_RUN")]
+
+    def _stat_cells(stat):
+        return ''.join(
+            ('<td style="padding:6px 4px;border:1px solid #ddd;text-align:center;color:' + (STATUS_COLOR.get(k, "#333") if stat.get(k) else "#bdc3c7") + ';">' + (str(stat.get(k)) if stat.get(k) else "—") + '</td>')
+            for k, _ in V_ST)
+
     version_rows = "".join(
         f'<tr><td style="padding:6px 8px;border:1px solid #ddd;"><b>{v["ver"]}</b></td>'
         f'<td style="padding:6px 8px;border:1px solid #ddd;" title="{v["obj"]}">{v["obj"][:24] if v["obj"] else "—"}</td>'
         f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b style="font-size:15px;">{sum(v["kpi"].values()) if v["kpi"] else (len(v["cases"]) or "—")}</b></td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["design"]}</td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["expand"]}</td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{v["pass_rate"] or "—"}</b></td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["defect"]}</td></tr>'
-        for v in versions) or '<tr><td colspan="7" style="color:#95a5a6;padding:6px;">暂无版本全量测试记录</td></tr>'
+        + _stat_cells(v["design_stat"])
+        + _stat_cells(v["expand_stat"])
+        + f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{v["pass_rate"] or "—"}</b></td>'
+        + f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["defect"]}</td></tr>'
+        for v in versions) or '<tr><td colspan="13" style="color:#95a5a6;padding:6px;">暂无版本全量测试记录</td></tr>'
 
     version_detail = ""
     V_DIM_ORDER = ["D1安装", "D2认证", "D3功能", "D4安全", "D5客户端", "D6性能", "D7兼容", "D8质量", "D9协议", "D10评测"]
@@ -792,7 +802,10 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 <h2>版本全量测试</h2>
 <p style="color:#7f8c8d;font-size:12px;">数据源 results/version/*/README.md；设计级/展开级/通过率为各版本收口全量结果。</p>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">版本</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">被测对象</th><th style="padding:6px 8px;border:1px solid #ddd;">用例数</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">设计级</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">展开级</th><th style="padding:6px 8px;border:1px solid #ddd;">通过率</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">缺陷</th></tr></thead>
+<thead>
+<tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">版本</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">被测对象</th><th style="padding:6px 8px;border:1px solid #ddd;" rowspan="2">用例数</th><th style="padding:6px 8px;border:1px solid #ddd;" colspan="5">设计级</th><th style="padding:6px 8px;border:1px solid #ddd;" colspan="5">展开级</th><th style="padding:6px 8px;border:1px solid #ddd;" rowspan="2">通过率</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">缺陷</th></tr>
+<tr style="background:#f2f2f2;"><th style="padding:4px 6px;border:1px solid #ddd;">PASS</th><th style="padding:4px 6px;border:1px solid #ddd;">FAIL</th><th style="padding:4px 6px;border:1px solid #ddd;">BLOCKED</th><th style="padding:4px 6px;border:1px solid #ddd;">SPEC</th><th style="padding:4px 6px;border:1px solid #ddd;">NOT_RUN</th><th style="padding:4px 6px;border:1px solid #ddd;">PASS</th><th style="padding:4px 6px;border:1px solid #ddd;">FAIL</th><th style="padding:4px 6px;border:1px solid #ddd;">BLOCKED</th><th style="padding:4px 6px;border:1px solid #ddd;">SPEC</th><th style="padding:4px 6px;border:1px solid #ddd;">NOT_RUN</th></tr>
+</thead>
 <tbody>{version_rows}</tbody></table>
 {version_detail}
 </div>
