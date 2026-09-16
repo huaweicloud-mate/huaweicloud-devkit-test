@@ -88,9 +88,17 @@ init_day 建包 → P0→P1→P2 执行 + 证据落盘 → 回填执行状态/�
    - 源码仓库：git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
 2. 读测试仓库根目录 AGENTS.md（能力索引 + 公共前置 + 红线），自我识别客户端名与 OS。
 
-任务：版本全量测试 <版本>。对某版本跑全量用例集（区别于每日精选），按 skills/test-version/SKILL.md 执行：
-init_day --version <版本>（或 --full 母版全量）建全量包 → P0→P1→P2 全量执行 + 证据落盘 → 回填 + 门禁 → 出报告（标题含版本号）→ 维护者归档 results/version/<版本>/。
-只提交自己 results/<你的客户端>/ 目录，真云 / 缺陷合并单 / PASS 门禁纪律同每日测试。
+任务：版本全量测试 <版本>。对某版本跑全量用例集（区别于每日精选），按 skills/test-version/SKILL.md 执行，**全程优先用仓库现成脚本，勿手写 path-rewrite / 真云探针**：
+1. `prepare_env.py --update`（拉最新 + 对齐版本基线）
+2. `init_day.py <客户端> <OS> --full`（母版全量建包：设计级 179 + 展开级按客户端+OS 预筛）
+3. 复用参考探针：`python scripts/reuse_probes.py <客户端> <OS> [--ref OpenCode]`（自动 path-rewrite，勿手写 stage 脚本）
+4. 真云实机：`node scripts/realcloud_e2e.mjs --case=D3-C1,D3-C2,D3-C3,D3-C6,D3-B7,D3-B8`（finally 归零，只删本次创建）
+5. D9/D10 harness：`node eval/harness/protocol-probe.mjs` + `run-eval.mjs`（仓库现成，无需写探针）
+6. 回填执行状态 + `verify_no_fake_pass.py` + `verify_coverage.py` 双门禁
+7. 出报告（标题含版本号 + **三层证据口径**：真实执行/源码核对/未执行 BLOCKED，勿混报单一通过率）+ `file_issue.py` 历史查重后统一提单
+8. 归档 `results/version/<版本>/{Windows,Linux}/`（放**实质**测试报告 + CSV + FINDINGS，不只 README 指针）
+
+只提交自己 `results/<你的客户端>/` 目录；真云禁用 mock/假跑、必须真机执行（环境已具备）；历史查重命中不重复提单。
 ```
 
 ## 三、简短版对照（仅本地已初始化 agent 可用）
