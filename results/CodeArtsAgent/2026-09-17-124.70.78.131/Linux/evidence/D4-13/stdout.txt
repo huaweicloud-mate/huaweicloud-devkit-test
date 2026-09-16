@@ -1,0 +1,3 @@
+用例: D4-13 (CodeArtsAgent Linux v1.1.5 daily)
+执行时间: 2026-09-17 07:14 (北京时间)
+结论: 实测时间:2026-09-17|只读 API(只读子账号 AK HPUA3XUK):VPC ListVpcs/ECS ListServersDetails 100% 可用=PASS; 但 CreateVpc 写操作成功创建 VPC(未被我IAM拒绝,违反最小权限), 期望'写被识别权限不足=IAM拒绝'不成立; 已归零删除 VPC|影响:只读子账号 test001 权限配置疑似过宽, 无法完成'写被拒'验证|解除:维护者核查 readonly 组权限(补环境类)
