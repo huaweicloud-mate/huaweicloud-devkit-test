@@ -132,7 +132,49 @@ def build_metrics():
     return out
 
 
-def render(days, metrics, version, vdate, gen_ts):
+def extract_case_ids(text):
+    ids = set()
+    for m in re.findall(r"[Dd]\s*\d+\s*[-–—]\s*\d+", text or ""):
+        ids.add(re.sub(r"\s*[-–—]\s*", "-", m).upper())
+    return ids
+
+
+def load_issue_links(dates):
+    """从各客户端 HISTORY_LINKS.md 解析 用例ID -> [issue号] 映射（最近日期，issue 号降序）。"""
+    links = {}
+    date_scope = set(dates[-3:])
+    results_dir = os.path.join(REPO, "results")
+    if not os.path.isdir(results_dir):
+        return links
+    for client in sorted(os.listdir(results_dir)):
+        if client in ("Summary", "Regression", "version", "history"):
+            continue
+        cdir = os.path.join(results_dir, client)
+        if not os.path.isdir(cdir):
+            continue
+        for sub in sorted(os.listdir(cdir)):
+            if not any(sub.startswith(d + "-") or sub == d for d in date_scope):
+                continue
+            for os_name in ("Windows", "Linux"):
+                fp = os.path.join(cdir, sub, os_name, "HISTORY_LINKS.md")
+                if not os.path.isfile(fp):
+                    continue
+                current = None
+                for line in open(fp, encoding="utf-8").read().split("\n"):
+                    m = re.match(r"^## (.+)$", line)
+                    if m:
+                        current = extract_case_ids(m.group(1))
+                        for cid in current:
+                            links.setdefault(cid, set())
+                        continue
+                    m2 = re.match(r"\s*-\s*\[#(\d+)\]\(", line)
+                    if m2 and current:
+                        for cid in current:
+                            links[cid].add(int(m2.group(1)))
+    return {k: sorted(v, reverse=True) for k, v in links.items()}
+
+
+def render(days, metrics, version, vdate, gen_ts, links):
     latest_date = days[-1]["date"]
     latest_sum = days[-1]["summary"]
 
@@ -233,8 +275,22 @@ def render(days, metrics, version, vdate, gen_ts):
             continue
         prio = (r.get("优先级") or "(空)").strip()
         prio_fail[prio] += 1
-        fail_list.append((prio, r.get("ID", ""), R._case_title(r)))
+        cid = r.get("ID", "")
+        src = (r.get("源用例") or cid or "").strip() or cid
+        fail_list.append((prio, cid, R._case_title(r), src))
     fail_list.sort(key=lambda x: ({"P0": 0, "P1": 1, "P2": 2}.get(x[0], 9), x[1]))
+
+    def issue_cell(cid, src):
+        nums = links.get(cid) or links.get(src) or []
+        if not nums:
+            return '<span style="color:#bdc3c7;">—</span>'
+        shown = nums[:3]
+        text = " ".join(
+            f'<a href="https://github.com/huaweicloud/huaweicloud-devkit/issues/{n}" '
+            f'style="color:#2980b9;text-decoration:none;">#{n}</a>' for n in shown)
+        if len(nums) > 3:
+            text += f' <span style="color:#95a5a6;">等 {len(nums)} 个</span>'
+        return text
 
     prio_order = ["P0", "P1", "P2"]
     prio_kpi = "".join(
@@ -244,8 +300,9 @@ def render(days, metrics, version, vdate, gen_ts):
     fail_rows = "".join(
         f'<tr><td style="padding:6px 8px;border:1px solid #ddd;"><b style="color:{ {"P0":"#c0392b","P1":"#e67e22","P2":"#2980b9"}.get(pr,"#333") }">{pr}</b></td>'
         f'<td style="padding:6px 8px;border:1px solid #ddd;">{cid}</td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:left;">{t}</td></tr>'
-        for pr, cid, t in fail_list) or '<tr><td colspan="3" style="color:#95a5a6;padding:6px;">无 FAIL 用例</td></tr>'
+        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:left;">{t}</td>'
+        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:left;font-size:12px;">{issue_cell(cid, src)}</td></tr>'
+        for pr, cid, t, src in fail_list) or '<tr><td colspan="4" style="color:#95a5a6;padding:6px;">无 FAIL 用例</td></tr>'
 
     # ---- 维度分布（最新日） ----
     dim_rows = "".join(
@@ -293,7 +350,7 @@ def render(days, metrics, version, vdate, gen_ts):
 <h2>缺陷存量（{vdate}，FAIL 用例按优先级）</h2>
 <div style="display:flex;flex-wrap:wrap;margin:-4px;">{prio_kpi}</div>
 <table style="border-collapse:collapse;width:100%;font-size:13px;margin-top:8px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;">优先级</th><th style="padding:6px 8px;border:1px solid #ddd;">ID</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">标题</th></tr></thead>
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;">优先级</th><th style="padding:6px 8px;border:1px solid #ddd;">ID</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">关联 Issue</th></tr></thead>
 <tbody>{fail_rows}</tbody></table>
 
 <h2>各维度用例统计（{vdate}，设计级共 {len(latest_cmp["design_rows"])} 条）</h2>
@@ -323,8 +380,9 @@ def main():
         print("[错误] 报告执行摘要解析失败")
         sys.exit(2)
     metrics = build_metrics()
+    links = load_issue_links(dates)
     gen_ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    html = render(days, metrics, version, vdate, gen_ts)
+    html = render(days, metrics, version, vdate, gen_ts, links)
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"总览看板生成: {OUT}")
