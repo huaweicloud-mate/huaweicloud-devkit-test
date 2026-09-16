@@ -38,7 +38,7 @@ CASE_KEYWORD_MAP = {
     "D4-17": ["fail-open", "fail open", "fail-closed", "畸形输入", "异常输入"],
     "D4-21": ["broad IAM", "broad iam", "Terraform", "HCL", "制品预检", "hook_check_artifacts"],
     "D4-23": ["huawei-agent-rules", "全局规则", "注入失效", "安装未注入", "安装目标"],
-    "D9-2":  ["json-rpc", "json rpc", "-32601", "-32603", "错误码"],
+    "D9-2":  ["json-rpc", "json rpc", "-32601", "-32602", "-32603", "invalid params"],
 }
 
 # 测试类型 -> issue 标题后缀（file_issue.py 被每日/版本全量/回归三种能力共用，标题据此动态生成）
