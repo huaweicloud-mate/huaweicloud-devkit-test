@@ -565,11 +565,12 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
     version_rows = "".join(
         f'<tr><td style="padding:6px 8px;border:1px solid #ddd;"><b>{v["ver"]}</b></td>'
         f'<td style="padding:6px 8px;border:1px solid #ddd;" title="{v["obj"]}">{v["obj"][:24] if v["obj"] else "—"}</td>'
+        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b style="font-size:15px;">{sum(v["kpi"].values()) if v["kpi"] else (len(v["cases"]) or "—")}</b></td>'
         f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["design"]}</td>'
         f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["expand"]}</td>'
         f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{v["pass_rate"] or "—"}</b></td>'
         f'<td style="padding:6px 8px;border:1px solid #ddd;">{v["defect"]}</td></tr>'
-        for v in versions) or '<tr><td colspan="6" style="color:#95a5a6;padding:6px;">暂无版本全量测试记录</td></tr>'
+        for v in versions) or '<tr><td colspan="7" style="color:#95a5a6;padding:6px;">暂无版本全量测试记录</td></tr>'
 
     version_detail = ""
     V_DIM_ORDER = ["D1安装", "D2认证", "D3功能", "D4安全", "D5客户端", "D6性能", "D7兼容", "D8质量", "D9协议", "D10评测"]
@@ -633,26 +634,34 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
         if v["cases"]:
             v_rank = {"FAIL": 0, "SPEC-MISMATCH": 1, "NOT_RUN": 2, "PASS": 3}
             vcases = sorted(v["cases"], key=lambda x: (v_rank.get(x["status"], 9), x["id"]))
+            vkey = v["ver"].replace(".", "").replace("-", "")
+            d_cnt = sum(1 for x in v["cases"] if x["level"] == "设计级")
+            e_cnt = sum(1 for x in v["cases"] if x["level"] == "展开级")
             vcase_rows = ""
             for c in vcases:
                 st = c["status"] or "空"
                 color = STATUS_COLOR.get(st, "#95a5a6")
                 blk = ('<br><span style="color:#95a5a6;font-size:11px;">阻塞原因：' + c["blocked"] + '</span>') if c["blocked"] else ""
                 vcase_rows += (
-                    '<tr><td style="padding:4px 8px;border:1px solid #eee;color:#7f8c8d;">' + c["level"] + '</td>'
+                    '<tr class="vcaserow" data-vk="' + vkey + '" data-vst="' + st + '">'
+                    '<td style="padding:4px 8px;border:1px solid #eee;color:#7f8c8d;">' + c["level"] + '</td>'
                     '<td style="padding:4px 8px;border:1px solid #eee;"><b>' + c["id"] + '</b></td>'
                     '<td style="padding:4px 8px;border:1px solid #eee;text-align:center;">' + c["prio"] + '</td>'
                     '<td style="padding:4px 8px;border:1px solid #eee;text-align:left;">' + c["title"] + blk + '</td>'
                     '<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;"><span style="display:inline-block;padding:1px 8px;border-radius:3px;color:#fff;background:' + color + ';">' + st + '</span></td></tr>')
+            btns = ('<button class="casebtn active" data-vk="' + vkey + '" data-st="ALL" onclick="filterVCase(\'' + vkey + '\',\'ALL\')">全部</button>'
+                    + ''.join('<button class="casebtn" data-vk="' + vkey + '" data-st="' + bv + '" onclick="filterVCase(\'' + vkey + '\',\'' + bv + '\')">' + bl + '</button>'
+                              for bv, bl in [("FAIL", "FAIL"), ("SPEC-MISMATCH", "SPEC"), ("NOT_RUN", "NOT_RUN"), ("PASS", "PASS")]))
             case_block = (
-                '<details style="margin-top:10px;"><summary style="cursor:pointer;color:#2980b9;font-size:13px;">用例执行明细（' + str(len(v["cases"])) + ' 条）</summary>'
-                '<table style="border-collapse:collapse;width:100%;font-size:12px;margin-top:6px;">'
+                '<h4 style="margin:12px 0 4px;">用例执行明细（共 <b>' + str(len(v["cases"])) + '</b> 条：设计级 ' + str(d_cnt) + ' + 展开级 ' + str(e_cnt) + '）</h4>'
+                '<div style="margin:0 0 6px;">' + btns + '</div>'
+                '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
                 '<thead><tr style="background:#f7f7f7;"><th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">层级</th>'
                 '<th style="padding:4px 8px;border:1px solid #ddd;">ID</th>'
                 '<th style="padding:4px 8px;border:1px solid #ddd;">P</th>'
                 '<th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">标题</th>'
                 '<th style="padding:4px 8px;border:1px solid #ddd;">状态</th></tr></thead>'
-                '<tbody>' + vcase_rows + '</tbody></table></details>')
+                '<tbody>' + vcase_rows + '</tbody></table>')
         meta_parts = [f'工具全集 {v["tool"]}'] if v["tool"] else []
         if v["env"]:
             meta_parts.append(v["env"])
@@ -744,7 +753,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 <h2>版本全量测试</h2>
 <p style="color:#7f8c8d;font-size:12px;">数据源 results/version/*/README.md；设计级/展开级/通过率为各版本收口全量结果。</p>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">版本</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">被测对象</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">设计级</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">展开级</th><th style="padding:6px 8px;border:1px solid #ddd;">通过率</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">缺陷</th></tr></thead>
+<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">版本</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">被测对象</th><th style="padding:6px 8px;border:1px solid #ddd;">用例数</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">设计级</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">展开级</th><th style="padding:6px 8px;border:1px solid #ddd;">通过率</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">缺陷</th></tr></thead>
 <tbody>{version_rows}</tbody></table>
 {version_detail}
 </div>
@@ -753,6 +762,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 <script>
 function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');}}
 function filterCase(st){{var btns=document.querySelectorAll('.casebtn');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('onclick').indexOf(st)!==-1?' active':'');}}var rows=document.querySelectorAll('.caserow');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-st');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
+function filterVCase(vk,st){{var btns=document.querySelectorAll('.casebtn[data-vk="'+vk+'"]');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('data-st')===st?' active':'');}}var rows=document.querySelectorAll('.vcaserow[data-vk="'+vk+'"]');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-vst');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 </script>
 </body></html>"""
     return html
