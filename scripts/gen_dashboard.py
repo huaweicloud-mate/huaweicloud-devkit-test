@@ -149,6 +149,26 @@ def _fmt_counts(c):
     return " · ".join(f"{k} {c[k]}" for k in order if k in c) or "—"
 
 
+def _load_archive_cases(rel):
+    """读取版本全量执行包的母版 CSV，返回用例明细列表。"""
+    cases = []
+    base = os.path.join(REPO, rel.strip().strip("`").rstrip("/\\"))
+    for level, fn, tkey in [("设计级", "用例矩阵-设计级.csv", "标题"), ("展开级", "用例矩阵-展开级.csv", "枚举对象")]:
+        fp = os.path.join(base, fn)
+        if not os.path.isfile(fp):
+            continue
+        for r in csv.DictReader(open(fp, encoding="utf-8-sig")):
+            title = (r.get(tkey) or "").strip()
+            if level == "展开级" and not title:
+                title = (r.get("展开类型") or "").strip()
+            cases.append({
+                "level": level, "id": r.get("ID", ""), "prio": (r.get("优先级") or "").strip(),
+                "title": title, "status": (r.get("执行状态") or "").strip(),
+                "blocked": (r.get("blockedReason") or "").strip(),
+            })
+    return cases
+
+
 def load_versions():
     """从 results/version/<版本>/README.md 解析版本全量测试收口记录。"""
     versions = []
@@ -201,11 +221,16 @@ def load_versions():
                 cells = [c.strip() for c in line.strip("|").split("|")]
                 if len(cells) >= 4 and cells[0] not in ("用例",) and not re.match(r"^[-:\s]+$", cells[0]):
                     defect_rows.append(tuple(cells[:4]))
+        archive = ""
+        m = re.search(r"执行归档[：:]\s*`([^`]+)`", text)
+        if m:
+            archive = m.group(1).strip()
+        cases = _load_archive_cases(archive) if archive else []
         versions.append({
             "ver": name, "obj": obj, "design": _fmt_counts(_parse_counts(status_line, "设计级")),
             "expand": _fmt_counts(_parse_counts(status_line, "展开级")),
             "pass_rate": pass_rate, "defect": defect_short,
-            "tool": tool, "env": env, "defect_rows": defect_rows,
+            "tool": tool, "env": env, "defect_rows": defect_rows, "cases": cases,
         })
     return versions
 
@@ -528,6 +553,30 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
                             f'<tbody>{d_rows}</tbody></table>')
         else:
             defect_block = f'<p style="color:#95a5a6;font-size:12px;margin:6px 0 0;">缺陷：{v["defect"]}</p>'
+        case_block = ""
+        if v["cases"]:
+            v_rank = {"FAIL": 0, "SPEC-MISMATCH": 1, "NOT_RUN": 2, "PASS": 3}
+            vcases = sorted(v["cases"], key=lambda x: (v_rank.get(x["status"], 9), x["id"]))
+            vcase_rows = ""
+            for c in vcases:
+                st = c["status"] or "空"
+                color = STATUS_COLOR.get(st, "#95a5a6")
+                blk = ('<br><span style="color:#95a5a6;font-size:11px;">阻塞原因：' + c["blocked"] + '</span>') if c["blocked"] else ""
+                vcase_rows += (
+                    '<tr><td style="padding:4px 8px;border:1px solid #eee;color:#7f8c8d;">' + c["level"] + '</td>'
+                    '<td style="padding:4px 8px;border:1px solid #eee;"><b>' + c["id"] + '</b></td>'
+                    '<td style="padding:4px 8px;border:1px solid #eee;text-align:center;">' + c["prio"] + '</td>'
+                    '<td style="padding:4px 8px;border:1px solid #eee;text-align:left;">' + c["title"] + blk + '</td>'
+                    '<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;"><span style="display:inline-block;padding:1px 8px;border-radius:3px;color:#fff;background:' + color + ';">' + st + '</span></td></tr>')
+            case_block = (
+                '<details style="margin-top:10px;"><summary style="cursor:pointer;color:#2980b9;font-size:13px;">用例执行明细（' + str(len(v["cases"])) + ' 条）</summary>'
+                '<table style="border-collapse:collapse;width:100%;font-size:12px;margin-top:6px;">'
+                '<thead><tr style="background:#f7f7f7;"><th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">层级</th>'
+                '<th style="padding:4px 8px;border:1px solid #ddd;">ID</th>'
+                '<th style="padding:4px 8px;border:1px solid #ddd;">P</th>'
+                '<th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">标题</th>'
+                '<th style="padding:4px 8px;border:1px solid #ddd;">状态</th></tr></thead>'
+                '<tbody>' + vcase_rows + '</tbody></table></details>')
         meta_parts = [f'工具全集 {v["tool"]}'] if v["tool"] else []
         if v["env"]:
             meta_parts.append(v["env"])
@@ -540,7 +589,8 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
             + meta_html
             + '<div style="font-size:13px;">设计级：' + v["design"] + '<br>展开级：' + v["expand"] + pr + '</div>'
             + '<h4 style="margin:12px 0 4px;">缺陷清单</h4>'
-            + defect_block + '</div>')
+            + defect_block
+            + case_block + '</div>')
 
     html = f"""<!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8">
