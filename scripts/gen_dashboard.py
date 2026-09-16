@@ -452,6 +452,40 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
         + ''.join(f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{v}</td>' for v in x["prio"])
         + '</tr>' for x in latest_cmp["dim_order"])
 
+    # ---- 用例执行明细（最新日） ----
+    case_client_cols = [c for c in latest_rows[0].keys() if c not in R.META] if latest_rows else []
+    S_RANK = {"FAIL": 0, "SPEC-MISMATCH": 1, "BLOCKED": 2, "NOT_RUN": 3, "PASS": 4}
+    S_DOT = {"PASS": "#2ecc71", "FAIL": "#e74c3c", "BLOCKED": "#f39c12", "SPEC-MISMATCH": "#e67e22", "NOT_RUN": "#bdc3c7"}
+    case_detail_rows = []
+    for r in latest_rows:
+        cid = r.get("ID", "")
+        level = r.get("层级", "")
+        dim = (r.get("维度") or "").strip() if level == "设计级" else (r.get("展开类型") or "").strip()
+        prio = (r.get("优先级") or "").strip()
+        title = R._case_title(r)
+        agent_st = {}
+        for a in R.ALL_CLIENTS:
+            a_cols = [c for c in case_client_cols if c.split("-")[0] == a]
+            vals = {(r.get(c) or "").strip() for c in a_cols} - {"NA", ""}
+            if vals:
+                agent_st[a] = next((k for k in ("FAIL", "SPEC-MISMATCH", "BLOCKED", "NOT_RUN", "PASS") if k in vals), "NOT_RUN")
+        overall = next((k for k in ("FAIL", "SPEC-MISMATCH", "BLOCKED", "NOT_RUN", "PASS") if k in agent_st.values()), "NOT_RUN")
+        case_detail_rows.append((overall, cid, dim, prio, title, agent_st))
+    case_detail_rows.sort(key=lambda x: (S_RANK.get(x[0], 9), x[1]))
+    case_rows = ""
+    for overall, cid, dim, prio, title, agent_st in case_detail_rows:
+        dots = "".join(
+            f'<span title="{a}: {agent_st.get(a, "—")}" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:{S_DOT.get(agent_st.get(a, ""), "#dfe3e8")};margin:0 1px;"></span>'
+            for a in R.ALL_CLIENTS)
+        case_rows += (
+            f'<tr class="caserow" data-st="{overall}">'
+            f'<td style="padding:4px 8px;border:1px solid #eee;"><span style="display:inline-block;padding:1px 8px;border-radius:3px;color:#fff;background:{STATUS_COLOR.get(overall, "#95a5a6")};">{overall}</span></td>'
+            f'<td style="padding:4px 8px;border:1px solid #eee;"><b>{cid}</b></td>'
+            f'<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;color:#7f8c8d;">{dim}</td>'
+            f'<td style="padding:4px 8px;border:1px solid #eee;text-align:center;">{prio}</td>'
+            f'<td style="padding:4px 8px;border:1px solid #eee;text-align:left;">{title}</td>'
+            f'<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;">{dots}</td></tr>')
+
     # ---- 跨迭代 metrics 表 ----
     metrics_rows = "".join(
         f'<tr><td style="padding:6px 8px;border:1px solid #ddd;"><b>{m["iter"]}</b></td>'
@@ -513,6 +547,8 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 .tabs{{display:flex;gap:4px;margin:16px 0 8px;border-bottom:3px solid #2c3e50;}}
 .tab-btn{{padding:8px 20px;cursor:pointer;border:1px solid #ddd;border-bottom:none;background:#f7f7f7;color:#2c3e50;font-size:14px;border-radius:6px 6px 0 0;}}
 .tab-btn.active{{background:#2c3e50;color:#fff;border-color:#2c3e50;font-weight:700;}}
+.casebtn{{padding:3px 12px;margin-right:4px;cursor:pointer;border:1px solid #ddd;background:#fff;color:#2c3e50;font-size:12px;border-radius:4px;}}
+.casebtn.active{{background:#2c3e50;color:#fff;border-color:#2c3e50;}}
 </style></head>
 <body style="font-family:'Segoe UI',Arial,'Microsoft YaHei',sans-serif;color:#2c3e50;max-width:1040px;margin:20px auto;padding:0 16px;">
 <h1 style="border-bottom:3px solid #2c3e50;padding-bottom:8px;">huaweicloud-devkit 测试执行总览看板</h1>
@@ -553,6 +589,20 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 {''.join(f'<th style="padding:6px 8px;border:1px solid #ddd;">{p}</th>' for p in latest_cmp["prio_values"])}</tr></thead>
 <tbody>{dim_rows}</tbody></table>
 
+<h2>用例执行明细（{vdate}）</h2>
+<p style="color:#7f8c8d;font-size:12px;margin:0 0 8px;">末列圆点 = 10 个智能体在该用例的最差状态（悬停可见），颜色同执行摘要；默认按缺陷严重度排序。</p>
+<div style="margin:0 0 8px;">
+<button class="casebtn active" onclick="filterCase('ALL')">全部</button>
+<button class="casebtn" onclick="filterCase('FAIL')">FAIL</button>
+<button class="casebtn" onclick="filterCase('BLOCKED')">BLOCKED</button>
+<button class="casebtn" onclick="filterCase('SPEC-MISMATCH')">SPEC</button>
+<button class="casebtn" onclick="filterCase('NOT_RUN')">NOT_RUN</button>
+<button class="casebtn" onclick="filterCase('PASS')">PASS</button>
+</div>
+<table style="border-collapse:collapse;width:100%;font-size:12px;">
+<thead><tr style="background:#f2f2f2;"><th style="padding:5px 8px;border:1px solid #ddd;">状态</th><th style="padding:5px 8px;border:1px solid #ddd;">ID</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">维度</th><th style="padding:5px 8px;border:1px solid #ddd;">P</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">客户端（10 智能体）</th></tr></thead>
+<tbody>{case_rows}</tbody></table>
+
 <h2>跨迭代执行率 / 通过率</h2>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">迭代</th><th style="padding:6px 8px;border:1px solid #ddd;">计划</th><th style="padding:6px 8px;border:1px solid #ddd;">已执行</th><th style="padding:6px 8px;border:1px solid #ddd;">通过</th><th style="padding:6px 8px;border:1px solid #ddd;">失败</th><th style="padding:6px 8px;border:1px solid #ddd;">阻塞</th><th style="padding:6px 8px;border:1px solid #ddd;">执行率</th><th style="padding:6px 8px;border:1px solid #ddd;">通过率</th></tr></thead>
@@ -571,6 +621,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 <p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；执行摘要取自每日《每日测试汇总》报告，跨迭代取自 metrics/execution.csv。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准。</p>
 <script>
 function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');}}
+function filterCase(st){{var btns=document.querySelectorAll('.casebtn');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('onclick').indexOf(st)!==-1?' active':'');}}var rows=document.querySelectorAll('.caserow');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-st');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 </script>
 </body></html>"""
     return html
