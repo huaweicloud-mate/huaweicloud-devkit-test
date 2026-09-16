@@ -149,9 +149,15 @@ def _fmt_counts(c):
     return " · ".join(f"{k} {c[k]}" for k in order if k in c) or "—"
 
 
-def _load_archive_cases(rel):
-    """读取版本全量执行包的母版 CSV，返回用例明细列表。"""
+def _stat_level(cases, level):
+    return dict(Counter(x["status"] for x in cases if x["level"] == level))
+
+
+def _load_archive_full(rel):
+    """读取版本全量执行包：用例明细 + 状态统计 + 设计级维度分布 + issue 关联。"""
     cases = []
+    kpi = Counter()
+    dims = {}
     base = os.path.join(REPO, rel.strip().strip("`").rstrip("/\\"))
     for level, fn, tkey in [("设计级", "用例矩阵-设计级.csv", "标题"), ("展开级", "用例矩阵-展开级.csv", "枚举对象")]:
         fp = os.path.join(base, fn)
@@ -161,12 +167,23 @@ def _load_archive_cases(rel):
             title = (r.get(tkey) or "").strip()
             if level == "展开级" and not title:
                 title = (r.get("展开类型") or "").strip()
+            status = (r.get("执行状态") or "").strip() or "NOT_RUN"
+            kpi[status] += 1
             cases.append({
                 "level": level, "id": r.get("ID", ""), "prio": (r.get("优先级") or "").strip(),
-                "title": title, "status": (r.get("执行状态") or "").strip(),
+                "title": title, "status": status,
                 "blocked": (r.get("blockedReason") or "").strip(),
             })
-    return cases
+            if level == "设计级":
+                d = (r.get("维度") or "(空)").strip()
+                d_info = dims.setdefault(d, {"count": 0, "prio": Counter()})
+                d_info["count"] += 1
+                d_info["prio"][(r.get("优先级") or "").strip()] += 1
+    links = {}
+    fp = os.path.join(base, "HISTORY_LINKS.md")
+    if os.path.isfile(fp):
+        links = _parse_history_links(open(fp, encoding="utf-8").read())
+    return {"cases": cases, "kpi": dict(kpi), "dims": dims, "links": links}
 
 
 def load_versions():
@@ -194,23 +211,6 @@ def load_versions():
         m = re.search(r"Node\s*/\s*npm\s*/\s*Python[：:]\s*(.+)", text) or re.search(r"Node\s*/\s*npm[：:]\s*(.+)", text)
         if m:
             env = m.group(1).strip()
-        m = re.search(r"执行状态[：:]\s*(.+)", text)
-        status_line = m.group(1) if m else ""
-        pass_rate = ""
-        m = re.search(r"通过率[^：:]*[：:]\s*([\d.]+%?)", text)
-        if m:
-            pass_rate = m.group(1)
-        defect = ""
-        m = re.search(r"缺陷清单[：:]\s*(.+)", text)
-        if m:
-            defect = m.group(1).strip()
-        nums = re.findall(r"#(\d+)", defect or "")
-        if nums:
-            defect_short = "#" + ", #".join(nums)
-        elif re.search(r"历史|不重复提单", defect or ""):
-            defect_short = "历史复现"
-        else:
-            defect_short = "—"
         defect_rows = []
         m = re.search(r"## 缺陷.*?\n(\|.*\|(?:\s*\n\|.*\|)+)", text, re.S)
         if m:
@@ -219,18 +219,45 @@ def load_versions():
                 if not line.startswith("|"):
                     continue
                 cells = [c.strip() for c in line.strip("|").split("|")]
-                if len(cells) >= 4 and cells[0] not in ("用例",) and not re.match(r"^[-:\s]+$", cells[0]):
-                    defect_rows.append(tuple(cells[:4]))
-        archive = ""
-        m = re.search(r"执行归档[：:]\s*`([^`]+)`", text)
-        if m:
-            archive = m.group(1).strip()
-        cases = _load_archive_cases(archive) if archive else []
+                if len(cells) >= 3 and cells[0] not in ("用例",) and not re.match(r"^[-:\s]+$", cells[0]):
+                    defect_rows.append(tuple(cells[:3]))
+        # 归档目录（README 表格中 results/version/.../ 路径，可取多个 OS）
+        archives = []
+        for a in re.findall(r"`(results/version/[^`]+)`", text):
+            if a not in archives:
+                archives.append(a)
+        cases, kpi, dims, links = [], Counter(), {}, {}
+        for a in archives:
+            af = _load_archive_full(a)
+            cases += af["cases"]
+            for kk, vv in af["kpi"].items():
+                kpi[kk] += vv
+            for dd, info in af["dims"].items():
+                d0 = dims.setdefault(dd, {"count": 0, "prio": Counter()})
+                d0["count"] += info["count"]
+                d0["prio"].update(info["prio"])
+            for cid, m2 in af["links"].items():
+                links.setdefault(cid, {}).update(m2)
+        design = _fmt_counts(_stat_level(cases, "设计级"))
+        expand = _fmt_counts(_stat_level(cases, "展开级"))
+        pass_rate = ""
+        denom = kpi.get("PASS", 0) + kpi.get("FAIL", 0) + kpi.get("SPEC-MISMATCH", 0)
+        if denom:
+            pass_rate = f"{round(kpi.get('PASS', 0) / denom * 100, 1)}%"
+        nums = set()
+        for row in defect_rows:
+            nums |= set(re.findall(r"#(\d+)", " ".join(row)))
+        if nums:
+            defect_short = "#" + ", #".join(sorted(nums, key=int, reverse=True))
+        elif defect_rows:
+            defect_short = "见详情"
+        else:
+            defect_short = "—"
         versions.append({
-            "ver": name, "obj": obj, "design": _fmt_counts(_parse_counts(status_line, "设计级")),
-            "expand": _fmt_counts(_parse_counts(status_line, "展开级")),
+            "ver": name, "obj": obj, "design": design, "expand": expand,
             "pass_rate": pass_rate, "defect": defect_short,
-            "tool": tool, "env": env, "defect_rows": defect_rows, "cases": cases,
+            "tool": tool, "env": env, "defect_rows": defect_rows,
+            "cases": cases, "kpi": dict(kpi), "dims": dims, "links": links,
         })
     return versions
 
@@ -244,8 +271,27 @@ def extract_case_ids(text):
     return ids
 
 
+def _parse_history_links(text):
+    """解析单份 HISTORY_LINKS.md -> {用例ID: {issue号: state}}。"""
+    links = {}
+    current = None
+    for line in text.split("\n"):
+        m = re.match(r"^## (.+)$", line)
+        if m:
+            current = extract_case_ids(m.group(1))
+            for cid in current:
+                links.setdefault(cid, {})
+            continue
+        m2 = re.match(r"\s*-\s*\[#(\d+)\]\([^)]*\)（(open|closed)）", line, re.I)
+        if m2 and current:
+            num, state = int(m2.group(1)), m2.group(2).lower()
+            for cid in current:
+                links[cid][num] = state
+    return {k: dict(sorted(v.items(), reverse=True)) for k, v in links.items()}
+
+
 def load_issue_links(dates):
-    """从各客户端 HISTORY_LINKS.md 解析 用例ID -> [issue号] 映射（最近日期，issue 号降序）。"""
+    """从各客户端 HISTORY_LINKS.md 解析 用例ID -> {issue号: state} 映射（最近日期）。"""
     links = {}
     date_scope = set(dates[-3:])
     results_dir = os.path.join(REPO, "results")
@@ -264,20 +310,9 @@ def load_issue_links(dates):
                 fp = os.path.join(cdir, sub, os_name, "HISTORY_LINKS.md")
                 if not os.path.isfile(fp):
                     continue
-                current = None
-                for line in open(fp, encoding="utf-8").read().split("\n"):
-                    m = re.match(r"^## (.+)$", line)
-                    if m:
-                        current = extract_case_ids(m.group(1))
-                        for cid in current:
-                            links.setdefault(cid, {})
-                        continue
-                    m2 = re.match(r"\s*-\s*\[#(\d+)\]\([^)]*\)（(open|closed)）", line, re.I)
-                    if m2 and current:
-                        num, state = int(m2.group(1)), m2.group(2).lower()
-                        for cid in current:
-                            links[cid][num] = state
-    return {k: dict(sorted(v.items(), reverse=True)) for k, v in links.items()}
+                for cid, m2 in _parse_history_links(open(fp, encoding="utf-8").read()).items():
+                    links.setdefault(cid, {}).update(m2)
+    return links
 
 
 def load_defect_notes(dates):
@@ -537,22 +572,63 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
         for v in versions) or '<tr><td colspan="6" style="color:#95a5a6;padding:6px;">暂无版本全量测试记录</td></tr>'
 
     version_detail = ""
+    V_DIM_ORDER = ["D1安装", "D2认证", "D3功能", "D4安全", "D5客户端", "D6性能", "D7兼容", "D8质量", "D9协议", "D10评测"]
     for v in versions:
+        def v_issue(case_text):
+            smap = {}
+            for cid in extract_case_ids(case_text):
+                smap.update(v["links"].get(cid, {}))
+            if not smap:
+                return '<span style="color:#bdc3c7;">—</span>'
+            shown = sorted(smap, reverse=True)[:3]
+            parts = []
+            for n in shown:
+                col = "#27ae60" if smap[n] == "open" else "#95a5a6"
+                parts.append('<a href="https://github.com/huaweicloud/huaweicloud-devkit/issues/' + str(n)
+                             + '" style="color:#2980b9;text-decoration:none;">#' + str(n) + '</a>'
+                             + '<span title="' + smap[n] + '" style="color:' + col + ';font-size:10px;">●</span>')
+            t = " ".join(parts)
+            if len(smap) > 3:
+                t += ' <span style="color:#95a5a6;">等 ' + str(len(smap)) + ' 个</span>'
+            return t
+
         if v["defect_rows"]:
             d_rows = "".join(
-                f'<tr><td style="padding:5px 8px;border:1px solid #eee;">{c}</td>'
-                f'<td style="padding:5px 8px;border:1px solid #eee;"><b style="color:{ {"P0":"#c0392b","P1":"#e67e22","P2":"#2980b9"}.get(lv,"#333") }">{lv}</b></td>'
-                f'<td style="padding:5px 8px;border:1px solid #eee;text-align:left;">{t}</td>'
-                f'<td style="padding:5px 8px;border:1px solid #eee;color:#7f8c8d;">{st}</td></tr>'
-                for c, lv, t, st in v["defect_rows"])
+                '<tr><td style="padding:5px 8px;border:1px solid #eee;">' + c + '</td>'
+                '<td style="padding:5px 8px;border:1px solid #eee;"><b style="color:' + {"P0": "#c0392b", "P1": "#e67e22", "P2": "#2980b9"}.get(lv, "#333") + ';">' + lv + '</b></td>'
+                '<td style="padding:5px 8px;border:1px solid #eee;text-align:left;">' + t + '</td>'
+                '<td style="padding:5px 8px;border:1px solid #eee;white-space:nowrap;">' + v_issue(c) + '</td></tr>'
+                for c, lv, t in v["defect_rows"])
             defect_block = ('<table style="border-collapse:collapse;width:100%;font-size:13px;margin-top:6px;">'
                             '<thead><tr style="background:#f7f7f7;"><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">用例</th>'
                             '<th style="padding:5px 8px;border:1px solid #ddd;">级别</th>'
                             '<th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">缺陷</th>'
-                            '<th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">状态</th></tr></thead>'
-                            f'<tbody>{d_rows}</tbody></table>')
+                            '<th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">关联 Issue</th></tr></thead>'
+                            '<tbody>' + d_rows + '</tbody></table>')
         else:
-            defect_block = f'<p style="color:#95a5a6;font-size:12px;margin:6px 0 0;">缺陷：{v["defect"]}</p>'
+            defect_block = '<p style="color:#95a5a6;font-size:12px;margin:6px 0 0;">缺陷：' + v["defect"] + '</p>'
+        k = v["kpi"]
+        total = sum(k.values())
+        denom = k.get("PASS", 0) + k.get("FAIL", 0) + k.get("SPEC-MISMATCH", 0)
+        kpr = f"{round(k.get('PASS', 0) / denom * 100)}%" if denom else "—"
+        kpi_h = (kpi(total, "总用例", "#34495e") + kpi(k.get("PASS", 0), "PASS", "#2ecc71")
+                 + kpi(k.get("FAIL", 0), "FAIL", "#e74c3c") + kpi(k.get("BLOCKED", 0), "BLOCKED", "#f39c12")
+                 + kpi(k.get("SPEC-MISMATCH", 0), "SPEC", "#e67e22") + kpi(kpr, "通过率", "#3498db"))
+        dims_h = ""
+        if v["dims"]:
+            dim_rows_v = ""
+            for d in sorted(v["dims"], key=lambda x: V_DIM_ORDER.index(x) if x in V_DIM_ORDER else 99):
+                info = v["dims"][d]
+                dim_rows_v += ('<tr><td style="padding:4px 8px;border:1px solid #eee;"><b>' + d + '</b></td>'
+                               '<td style="padding:4px 8px;border:1px solid #eee;text-align:center;">' + str(info["count"]) + '</td>'
+                               + ''.join('<td style="padding:4px 8px;border:1px solid #eee;text-align:center;">' + str(info["prio"].get(p, 0)) + '</td>' for p in ["P0", "P1", "P2"])
+                               + '</tr>')
+            dims_h = ('<h4 style="margin:12px 0 4px;">维度分布（设计级）</h4>'
+                      '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
+                      '<thead><tr style="background:#f7f7f7;"><th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">维度</th>'
+                      '<th style="padding:4px 8px;border:1px solid #ddd;">用例数</th><th style="padding:4px 8px;border:1px solid #ddd;">P0</th>'
+                      '<th style="padding:4px 8px;border:1px solid #ddd;">P1</th><th style="padding:4px 8px;border:1px solid #ddd;">P2</th></tr></thead>'
+                      '<tbody>' + dim_rows_v + '</tbody></table>')
         case_block = ""
         if v["cases"]:
             v_rank = {"FAIL": 0, "SPEC-MISMATCH": 1, "NOT_RUN": 2, "PASS": 3}
@@ -581,13 +657,15 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
         if v["env"]:
             meta_parts.append(v["env"])
         meta = " ｜ ".join(meta_parts)
-        meta_html = '<p style="color:#7f8c8d;font-size:12px;margin:0 0 6px;">' + meta + '</p>' if meta else ''
+        meta_html = '<p style="color:#7f8c8d;font-size:12px;margin:8px 0 6px;">' + meta + '</p>' if meta else ''
         pr = '<br>通过率：<b>' + v["pass_rate"] + '</b>' if v["pass_rate"] else ''
         version_detail += (
             '<div style="border:1px solid #ddd;border-radius:6px;padding:12px 14px;margin:14px 0;">'
-            '<h3 style="margin:0 0 4px;">' + v["ver"] + ' <span style="color:#7f8c8d;font-size:13px;font-weight:400;">（' + v["obj"] + '）</span></h3>'
+            '<h3 style="margin:0 0 8px;">' + v["ver"] + ' <span style="color:#7f8c8d;font-size:13px;font-weight:400;">（' + v["obj"] + '）</span></h3>'
+            + '<div style="display:flex;flex-wrap:wrap;margin:-4px;">' + kpi_h + '</div>'
             + meta_html
             + '<div style="font-size:13px;">设计级：' + v["design"] + '<br>展开级：' + v["expand"] + pr + '</div>'
+            + dims_h
             + '<h4 style="margin:12px 0 4px;">缺陷清单</h4>'
             + defect_block
             + case_block + '</div>')
