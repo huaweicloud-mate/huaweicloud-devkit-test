@@ -1,0 +1,49 @@
+name: test-completeness-check
+
+# 测试仓「全面性门禁」：扫描源码能力（工具 / CLI 子命令 / 环境变量）↔ 用例矩阵覆盖缺口。
+# 源码仓 checkout 到子目录 hdk/，脚本通过 HUAWEICLOUD_DEVKIT_HOME 环境变量定位 plugins/huaweicloud-core/src。
+#
+# 触发：
+#   1. push / PR 改到 test-cases/** 或门禁脚本时（硬门禁，FAIL 阻断）
+#   2. 每天 20:30 北京时间兜底扫描（源码仓更新而用例未跟进时也能发现）
+#   3. 手动 workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'test-cases/**'
+      - 'scripts/verify_test_completeness.py'
+  pull_request:
+    paths:
+      - 'test-cases/**'
+      - 'scripts/verify_test_completeness.py'
+  schedule:
+    - cron: '30 12 * * *'    # UTC 12:30 = 北京时间 20:30
+
+permissions:
+  contents: read             # 门禁只读测试仓 + 公开源码仓，不写回，无凭证
+
+jobs:
+  completeness-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 运行测试全面性门禁
+        env:
+          HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
+        run: python scripts/verify_test_completeness.py
