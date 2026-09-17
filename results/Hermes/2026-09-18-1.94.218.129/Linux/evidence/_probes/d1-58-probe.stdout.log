@@ -1,0 +1,59 @@
+=====CASE EXP-D1-58-01=====
+空HOME .claude.json 存在: false
+空HOME .cursor/mcp.json 存在: false
+  No known MCP agent detected; here is a config snippet you can paste:
+  Add this to your agent MCP config (stdio):
+    {
+      "mcpServers": {
+        "huaweicloud-devkit": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "-p",
+            "huaweicloud-devkit",
+            "huaweicloud-devkit-mcp"
+          ]
+        }
+      }
+    }
+  Or run the remote server and use a remote (Streamable HTTP) config:
+探测逻辑执行且两文件路径被读取（留痕日志）: PASS
+=====END EXP-D1-58-01=====
+=====CASE EXP-D1-58-02=====
+  [Claude Code] MCP server configured in /tmp/multica-task-3977370657/d158-s2-SIxGir/.claude.json. Restart the session to apply.
+.bak 存在: true
+merge后含 huaweicloud-devkit 键: true
+huaweicloud-devkit 唯一(不重复): true
+原配置 existing-tool 保留: true
+原配置 project.owner 保留: true
+PASS(命中merge+唯一+原键完好): true
+=====END EXP-D1-58-02=====
+=====CASE EXP-D1-58-03=====
+  [Claude Code] mcpServers.huaweicloud-devkit already configured; skipping.
+输出含 skip: true
+.bak 数量不增(无新.bak): true
+原配置字节不变: true
+PASS(幂等skip+无新bak+字节不变): true
+=====END EXP-D1-58-03=====
+=====CASE EXP-D1-58-04=====
+  [Claude Code] /tmp/multica-task-3977370657/d158-s4-9BoQ8y/.claude.json is not valid JSON; leaving it untouched.
+  Nothing to configure for the detected MCP agents.
+报错含 not valid JSON: PASS
+原文件 sha256 前后一致: true (8ca147a0b10e==8ca147a0b10e)
+零写入(PASS): true
+=====END EXP-D1-58-04=====
+=====CASE EXP-D1-58-05=====
+输出含 mcpServers 键文本: true
+输出含 No known MCP agent detected: true
+输出含 remote 提示: true
+输出含 npx 条目: false
+PASS(未命中snippet+mcpServers+remote): true
+=====END EXP-D1-58-05=====
+=====CASE D1-58=====
+白名单合并幂等(重复不重复备份): EXP-D1-58-03 验证 PASS
+坏JSON零写入(原文件hash不变): EXP-D1-58-04 验证 PASS
+未命中输出可粘贴片段(含mcpServers键): EXP-D1-58-05 验证 PASS
+merge后原配置其余键完好: EXP-D1-58-02 验证 PASS
+D1-58 设计级: PASS (所有5个子场景通过)
+=====END D1-58=====
+=== DONE ===

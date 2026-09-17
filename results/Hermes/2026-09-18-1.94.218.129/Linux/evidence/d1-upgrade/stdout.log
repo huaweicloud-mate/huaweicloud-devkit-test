@@ -1,0 +1,354 @@
+{
+  "total": 39,
+  "passed": 39,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D1-30",
+      "name": "semver-1.1.2-gt-1.1.1",
+      "pass": true,
+      "actual": "1",
+      "expected": ">0",
+      "passMsg": "1.1.2>1.1.1",
+      "failMsg": "semver error"
+    },
+    {
+      "id": "D1-30",
+      "name": "semver-stable-gt-pre",
+      "pass": true,
+      "actual": "1",
+      "expected": ">0",
+      "passMsg": "stable>prerelease",
+      "failMsg": "semver error"
+    },
+    {
+      "id": "D1-30",
+      "name": "semver-equal",
+      "pass": true,
+      "actual": "0",
+      "expected": "0",
+      "passMsg": "equal=0",
+      "failMsg": "semver equal error"
+    },
+    {
+      "id": "D1-30",
+      "name": "semver-reverse",
+      "pass": true,
+      "actual": "-1",
+      "expected": "<0",
+      "passMsg": "1.1.1<1.1.2",
+      "failMsg": "semver reverse error"
+    },
+    {
+      "id": "D1-39",
+      "name": "installed-version-readable",
+      "pass": true,
+      "actual": "1.1.5",
+      "expected": "string",
+      "passMsg": "version: 1.1.5",
+      "failMsg": "cannot read version"
+    },
+    {
+      "id": "D1-39",
+      "name": "update-available-result",
+      "pass": true,
+      "actual": "update_available",
+      "expected": "update_available",
+      "passMsg": "update detection failed"
+    },
+    {
+      "id": "D1-39",
+      "name": "update-current-version",
+      "pass": true,
+      "actual": "1.1.0",
+      "expected": "1.1.0",
+      "passMsg": "currentVersion error"
+    },
+    {
+      "id": "D1-39",
+      "name": "update-latest-stable",
+      "pass": true,
+      "actual": "1.1.4",
+      "expected": "1.1.4",
+      "passMsg": "latestStable error"
+    },
+    {
+      "id": "D1-39",
+      "name": "queryDistTagsSync-no-EINVAL",
+      "pass": true,
+      "actual": "completed",
+      "expected": "no EINVAL",
+      "passMsg": null
+    },
+    {
+      "id": "D1-40",
+      "name": "no-downgrade",
+      "pass": true,
+      "actual": "up_to_date",
+      "expected": "up_to_date",
+      "passMsg": "no downgrade reminder",
+      "failMsg": "wrong downgrade reminder"
+    },
+    {
+      "id": "D1-27",
+      "name": "up-to-date",
+      "pass": true,
+      "actual": "up_to_date",
+      "expected": "up_to_date",
+      "passMsg": "current==latest",
+      "failMsg": "up_to_date error"
+    },
+    {
+      "id": "D1-28",
+      "name": "update-available",
+      "pass": true,
+      "actual": "update_available/1.1.4",
+      "expected": "update_available/1.1.4",
+      "passMsg": "update semantics correct",
+      "failMsg": "update semantics error"
+    },
+    {
+      "id": "D1-31",
+      "name": "dismiss-active",
+      "pass": true,
+      "actual": "1.1.4",
+      "expected": "1.1.4",
+      "passMsg": "skip file written",
+      "failMsg": "skip file error"
+    },
+    {
+      "id": "D1-31",
+      "name": "dismiss-expireAt",
+      "pass": true,
+      "actual": "2026-09-20T21:06:55.871Z",
+      "expected": "ISO",
+      "passMsg": "expireAt: 2026-09-20T21:06:55.871Z",
+      "failMsg": "expireAt missing"
+    },
+    {
+      "id": "D1-31",
+      "name": "dismiss-within-cooldown",
+      "pass": true,
+      "actual": "dismissed/true",
+      "expected": "dismissed/true",
+      "passMsg": "cooldown returns dismissed",
+      "failMsg": "cooldown not dismissed"
+    },
+    {
+      "id": "D1-31",
+      "name": "dismiss-after-expiry",
+      "pass": true,
+      "actual": "update_available",
+      "expected": "update_available",
+      "passMsg": "expired re-reminds",
+      "failMsg": "expired not re-reminding"
+    },
+    {
+      "id": "D1-33",
+      "name": "skipFilePath",
+      "pass": true,
+      "actual": "/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/.update-skip.json",
+      "expected": "string",
+      "passMsg": "skipFilePath: /home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/.update-skip.json",
+      "failMsg": "skipFilePath empty"
+    },
+    {
+      "id": "D1-33",
+      "name": "fallbackSkipFilePath",
+      "pass": true,
+      "actual": "/home/testbot3/.config/huaweicloud/devkit-skip.json",
+      "expected": "string",
+      "passMsg": "fallback: /home/testbot3/.config/huaweicloud/devkit-skip.json",
+      "failMsg": "fallback empty"
+    },
+    {
+      "id": "D1-33",
+      "name": "resolveSkipFilePath",
+      "pass": true,
+      "actual": "/home/testbot3/.config/huaweicloud/devkit-skip.json.test",
+      "expected": "string",
+      "passMsg": "resolveSkipFilePath returns path",
+      "failMsg": "resolveSkipFilePath error"
+    },
+    {
+      "id": "D1-33",
+      "name": "skip-fields",
+      "pass": true,
+      "actual": "dismissedVersion,dismissedAt,expireAt",
+      "expected": "all fields",
+      "passMsg": "skip file fields complete",
+      "failMsg": "skip file fields missing"
+    },
+    {
+      "id": "D1-26",
+      "name": "check_update-registered",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "check_update registered",
+      "failMsg": "check_update not registered"
+    },
+    {
+      "id": "D1-26",
+      "name": "upgrade-registered",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "upgrade registered",
+      "failMsg": "upgrade not registered"
+    },
+    {
+      "id": "D1-26",
+      "name": "check_update-desc",
+      "pass": true,
+      "actual": "179",
+      "expected": ">0",
+      "passMsg": "check_update has desc",
+      "failMsg": "check_update missing desc"
+    },
+    {
+      "id": "D1-26",
+      "name": "check_update-schema",
+      "pass": true,
+      "actual": "present",
+      "expected": "present",
+      "passMsg": "check_update has schema",
+      "failMsg": "check_update missing schema"
+    },
+    {
+      "id": "D1-26",
+      "name": "upgrade-desc",
+      "pass": true,
+      "actual": "73",
+      "expected": ">0",
+      "passMsg": "upgrade has desc",
+      "failMsg": "upgrade missing desc"
+    },
+    {
+      "id": "D1-26",
+      "name": "upgrade-schema",
+      "pass": true,
+      "actual": "present",
+      "expected": "present",
+      "passMsg": "upgrade has schema",
+      "failMsg": "upgrade missing schema"
+    },
+    {
+      "id": "D5-3",
+      "name": "tool-count",
+      "pass": true,
+      "actual": "40",
+      "expected": ">=39",
+      "passMsg": "tools: 40",
+      "failMsg": "tools insufficient: 40"
+    },
+    {
+      "id": "D5-1",
+      "name": "core-tools",
+      "pass": true,
+      "actual": "all present",
+      "expected": "all present",
+      "passMsg": "core tools present (18)",
+      "failMsg": "missing: "
+    },
+    {
+      "id": "D1-41",
+      "name": "hint-up-to-date",
+      "pass": true,
+      "actual": "\"none\"",
+      "expected": "up_to_date/none",
+      "passMsg": "up_to_date hint correct",
+      "failMsg": "up_to_date hint error"
+    },
+    {
+      "id": "D1-41",
+      "name": "hint-update-available",
+      "pass": true,
+      "actual": "{\"latestVersion\":\"1.1.5\"}",
+      "expected": "present",
+      "passMsg": "update_available attaches hint",
+      "failMsg": "update_available no hint"
+    },
+    {
+      "id": "D9-1",
+      "name": "tools-have-name",
+      "pass": true,
+      "actual": "all",
+      "expected": "true",
+      "passMsg": "all tools have name",
+      "failMsg": "some tools missing name"
+    },
+    {
+      "id": "D9-1",
+      "name": "tools-have-desc",
+      "pass": true,
+      "actual": "all",
+      "expected": "true",
+      "passMsg": "all tools have desc",
+      "failMsg": "some tools missing desc"
+    },
+    {
+      "id": "D9-1",
+      "name": "tools-have-schema",
+      "pass": true,
+      "actual": "all",
+      "expected": "true",
+      "passMsg": "all tools have schema",
+      "failMsg": "some tools missing schema"
+    },
+    {
+      "id": "D9-3",
+      "name": "callTool-fn",
+      "pass": true,
+      "actual": "function",
+      "expected": "function",
+      "passMsg": "callTool is function",
+      "failMsg": "callTool not function"
+    },
+    {
+      "id": "D9-7",
+      "name": "schema-compatible",
+      "pass": true,
+      "actual": "all valid",
+      "expected": "true",
+      "passMsg": "inputSchema type ok",
+      "failMsg": "inputSchema type error"
+    },
+    {
+      "id": "D9-8",
+      "name": "schema-properties",
+      "pass": true,
+      "actual": "all have properties",
+      "expected": "true",
+      "passMsg": "object schemas have properties",
+      "failMsg": "some schemas missing properties"
+    },
+    {
+      "id": "D1-42",
+      "name": "cross-call-persist",
+      "pass": true,
+      "actual": "1.1.4",
+      "expected": "1.1.4",
+      "passMsg": "cross-call skip persisted",
+      "failMsg": "cross-call skip lost"
+    },
+    {
+      "id": "D1-45",
+      "name": "check_update-no-hint",
+      "pass": true,
+      "actual": "\"none\"",
+      "expected": "none/preserved",
+      "passMsg": "check_update no hint",
+      "failMsg": "check_update wrong hint"
+    },
+    {
+      "id": "D6-3",
+      "name": "cold-start",
+      "pass": true,
+      "actual": "0ms",
+      "expected": "<100ms",
+      "passMsg": "cold start 0ms",
+      "failMsg": "cold start too slow 0ms"
+    }
+  ]
+}
