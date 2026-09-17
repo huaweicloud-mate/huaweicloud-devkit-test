@@ -1,10 +1,16 @@
 name: refresh-dashboard
 
-# 每小时重生成测试执行总览看板（dashboard.html）并推送，Pages 自动重部署。
+# 触发时机：
+#   1. auto-summary 成功生成汇总报告后自动触发（workflow_run，汇总更新即刷）
+#   2. 每小时第 15 分钟（schedule，兜底）
+#   3. 手动 workflow_dispatch
 on:
   workflow_dispatch:
   schedule:
     - cron: '15 * * * *'          # 每小时第 15 分钟（UTC）
+  workflow_run:
+    workflows: [auto-summary]     # 汇总报告更新后触发
+    types: [completed]
 
 concurrency:
   group: refresh-dashboard        # 单例，避免并发 push 冲突
@@ -15,6 +21,8 @@ permissions:
 
 jobs:
   refresh:
+    # 仅当 auto-summary 成功完成才刷新；schedule/dispatch 触发时 workflow_run 事件为空，同样放行。
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     env:
       TZ: Asia/Shanghai
