@@ -16,7 +16,7 @@
 | G6 | `readInstalledVersion` 双回退独立语义（pluginRoot→packageRoot） | `update-check.mjs:134` | ✅ 已覆盖（D1-63） |
 | **G18** | `HUAWEICLOUD_DEVKIT_DEBUG` 调试模式 env | `update-check.mjs / mcp-server.mjs` | ✅ 已覆盖（D1-65，2026-09-17 新增） |
 | **G19** | `HUAWEICLOUD_DEVKIT_TELEMETRY` / `TELEMETRY_ENDPOINT` 遥测开关+端点 env | `telemetry/telemetry.mjs:82/180` | ✅ 已覆盖（D1-66，2026-09-17 新增） |
-| **G20** | `HUAWEICLOUD_AGENT_TOOLKIT_MODE` / `SKIP_DSH_PLUGIN_INSTALL` env | `setup-cli.mjs` | ✅ 已覆盖（D1-67，2026-09-17 新增） |
+| **G20** | `HUAWEICLOUD_AGENT_TOOLKIT_MODE` / `HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL` env | `setup-cli.mjs` | ✅ 已覆盖（D1-67，2026-09-17 新增） |
 | **G21** | `HUAWEICLOUD_ICONS_OFFLINE` / `HUAWEICLOUD_REGION` env | `icon-library.mjs / setup-cli.mjs` | ✅ 已覆盖（D1-68，2026-09-17 新增） |
 | **G22** | CLI `help` 子命令 | `setup-cli.mjs case "help"` | ✅ 已覆盖（D1-69，2026-09-17 新增） |
 
@@ -70,7 +70,7 @@
 
 全维度核对完成。2026-09-13 首轮识别 **17 个缺口**（G1-G17），已落 **16 个新用例**（设计级 163 → 179 条）。
 
-2026-09-17 复核（Issue #2 全面性检查）识别 **11 个新增缺口**（G18-G28），已落 **10 个新用例**（设计级 179 → 189 条）：
+2026-09-17 复核（Issue #2 全面性检查）识别 **10 个新增缺口**（G18-G27），已落 **10 个新用例**（设计级 179 → 189 条）：
 
 | 缺口 | 新用例 | 维度 | 发现批次 |
 |---|---|---|---|
@@ -101,4 +101,4 @@
 | **G26** | **D8-10** | D8 | **2026-09-17** |
 | **G27** | **D6-9** | D6 | **2026-09-17** |
 
-> **2026-09-17 复核结论**：原 G1-G17 全部有效且已覆盖；新增 G18-G27 共 11 个缺口（7 个环境变量类 + 2 个遥测/配置类 + 1 个脱敏类 + 1 个缓存清理类）均已落新用例。当前 **0 个未覆盖缺口**。
+> **2026-09-17 复核结论**：原 G1-G17 全部有效且已覆盖；新增 G18-G27 共 10 个缺口（7 个环境变量类 + 2 个遥测/配置类 + 1 个脱敏类 + 1 个缓存清理类）均已落新用例。当前 **0 个未覆盖缺口**。
