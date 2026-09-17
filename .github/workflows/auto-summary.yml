@@ -41,6 +41,9 @@ jobs:
       - name: Render HTML report
         run: python scripts/report_html.py
 
+      - name: Render special analysis report
+        run: python scripts/gen_special_report.py
+
       - name: Commit & push Summary
         run: |
           git config user.name  "github-actions[bot]"
