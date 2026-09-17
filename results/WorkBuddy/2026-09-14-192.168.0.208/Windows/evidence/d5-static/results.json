@@ -1,0 +1,232 @@
+{
+  "suite": "d5-static",
+  "pass": 25,
+  "fail": 1,
+  "info": 2,
+  "results": [
+    {
+      "case": "D5-1",
+      "name": "真实 WorkBuddy mcp.json 注册 huaweicloud-devkit",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "note": "command=node"
+    },
+    {
+      "case": "D5-1",
+      "name": "真实 WorkBuddy skills 目录注入（huawei*）",
+      "pass": true,
+      "actual": "count=29",
+      "expected": ">=29",
+      "note": ""
+    },
+    {
+      "case": "D5-1",
+      "name": "真实 WorkBuddy 插件目录功能完整（server/safety/hooks）",
+      "pass": true,
+      "actual": "server=true policy=true hooks=hooks.json,huaweicloud-safety.py",
+      "expected": "all true",
+      "note": ""
+    },
+    {
+      "case": "D5-1",
+      "name": "真实 WorkBuddy .installed marker",
+      "pass": null,
+      "actual": "marker=false",
+      "expected": "环境观察，不计 PASS/FAIL",
+      "note": "真实机插件目录无 .installed marker（隔离安装会写入，见 d1-install 证据 marker=true）。真实部署疑由平台预置或早于当前版本完成，不影响 mcp.json 注册/skills/server/hooks 功能面；status 检测走配置注册而非 marker"
+    },
+    {
+      "case": "D5-1",
+      "name": "WorkBuddy settings.json PostToolUse hook 挂载（→ telemetry tracker）",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "note": "hook 命令为 WorkBuddy 托管 python + telemetry-tracker.py，不含 \"huawei\" 字样（首轮断言按字串匹配系探针误设）"
+    },
+    {
+      "case": "D5-1",
+      "name": "真实 OpenCode 注册 + 插件目录（本机第二客户端）",
+      "pass": true,
+      "actual": "mcp=true server=true",
+      "expected": "both",
+      "note": "客户端矩阵：WorkBuddy+OpenCode 真机在装；其余 8 目标发现/加载由 d1-install 隔离证据覆盖（隔离安装+MCP注册+marker 落位）"
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-core] retrieve_skill 可加载且内容充实",
+      "pass": true,
+      "actual": "ok=true len=16956",
+      "expected": "ok=true+充实",
+      "note": ""
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-core] 指引可机械执行（引用工具/技能全存在 + 有步骤 + 无占位符）",
+      "pass": true,
+      "actual": "badTools=0 badSkills=0 steps=true ambiguous=false",
+      "expected": "全存在 + 有步骤 + 无占位",
+      "note": "refTools=9 refSkills=28"
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-safety] retrieve_skill 可加载且内容充实",
+      "pass": true,
+      "actual": "ok=true len=3573",
+      "expected": "ok=true+充实",
+      "note": ""
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-safety] 指引可机械执行（引用工具/技能全存在 + 有步骤 + 无占位符）",
+      "pass": true,
+      "actual": "badTools=0 badSkills=0 steps=true ambiguous=false",
+      "expected": "全存在 + 有步骤 + 无占位",
+      "note": "refTools=6 refSkills=1"
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-api-and-sdk] retrieve_skill 可加载且内容充实",
+      "pass": true,
+      "actual": "ok=true len=3767",
+      "expected": "ok=true+充实",
+      "note": ""
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-api-and-sdk] 指引可机械执行（引用工具/技能全存在 + 有步骤 + 无占位符）",
+      "pass": true,
+      "actual": "badTools=0 badSkills=0 steps=true ambiguous=false",
+      "expected": "全存在 + 有步骤 + 无占位",
+      "note": "refTools=0 refSkills=3"
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-capability-discovery] retrieve_skill 可加载且内容充实",
+      "pass": true,
+      "actual": "ok=true len=5722",
+      "expected": "ok=true+充实",
+      "note": ""
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-capability-discovery] 指引可机械执行（引用工具/技能全存在 + 有步骤 + 无占位符）",
+      "pass": true,
+      "actual": "badTools=0 badSkills=0 steps=true ambiguous=false",
+      "expected": "全存在 + 有步骤 + 无占位",
+      "note": "refTools=2 refSkills=7"
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-cli-and-auth] retrieve_skill 可加载且内容充实",
+      "pass": true,
+      "actual": "ok=true len=11234",
+      "expected": "ok=true+充实",
+      "note": ""
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-cli-and-auth] 指引可机械执行（引用工具/技能全存在 + 有步骤 + 无占位符）",
+      "pass": true,
+      "actual": "badTools=0 badSkills=0 steps=true ambiguous=false",
+      "expected": "全存在 + 有步骤 + 无占位",
+      "note": "refTools=9 refSkills=7"
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-troubleshooting] retrieve_skill 可加载且内容充实",
+      "pass": true,
+      "actual": "ok=true len=9968",
+      "expected": "ok=true+充实",
+      "note": ""
+    },
+    {
+      "case": "D8-7",
+      "name": "[huaweicloud-troubleshooting] 指引可机械执行（引用工具/技能全存在 + 有步骤 + 无占位符）",
+      "pass": true,
+      "actual": "badTools=0 badSkills=0 steps=true ambiguous=false",
+      "expected": "全存在 + 有步骤 + 无占位",
+      "note": "refTools=0 refSkills=6"
+    },
+    {
+      "case": "D8-7",
+      "name": "[huawei-getting-started] retrieve_skill 可加载且内容充实",
+      "pass": true,
+      "actual": "ok=true len=4808",
+      "expected": "ok=true+充实",
+      "note": ""
+    },
+    {
+      "case": "D8-7",
+      "name": "[huawei-getting-started] 指引可机械执行（引用工具/技能全存在 + 有步骤 + 无占位符）",
+      "pass": true,
+      "actual": "badTools=0 badSkills=0 steps=true ambiguous=false",
+      "expected": "全存在 + 有步骤 + 无占位",
+      "note": "refTools=0 refSkills=17"
+    },
+    {
+      "case": "D8-4",
+      "name": "29 技能 SKILL.md 可机械执行（结构/引用/无歧义标记）",
+      "pass": false,
+      "actual": "ok=28/29 issues=1",
+      "expected": "0 issues（29/29）",
+      "note": "huawei-dew: tools=huaweicloud_safety skills= ambiguous=false steps=true sections=true"
+    },
+    {
+      "case": "D8-1",
+      "name": "README 链接有效性（14 个去重 URL，排除 localhost 示例）",
+      "pass": true,
+      "actual": "checked=14 broken=0",
+      "expected": "0 失效",
+      "note": ""
+    },
+    {
+      "case": "D8-1",
+      "name": "README 命令与 CLI 实际子命令一致",
+      "pass": true,
+      "actual": "cmds=install,version,uninstall,doctor,status,update,auth,install-hcloud",
+      "expected": "全匹配",
+      "note": ""
+    },
+    {
+      "case": "D8-6",
+      "name": "中英 README 结构一致（标题/代码块数量）",
+      "pass": true,
+      "actual": "en: h=26 f=30 | zh: h=26 f=30",
+      "expected": "一致",
+      "note": ""
+    },
+    {
+      "case": "D8-6",
+      "name": "中英 README 命令集一致",
+      "pass": true,
+      "actual": "en=auth,doctor,install,install-hcloud,status,uninstall,update,version | zh=auth,doctor,install,install-hcloud,status,uninstall,update,version",
+      "expected": "一致",
+      "note": ""
+    },
+    {
+      "case": "D8-6",
+      "name": "中英 README 版本号与工具引用一致",
+      "pass": true,
+      "actual": "ver en=0.0.0,127.0.0 zh=0.0.0,127.0.0 tools en=8 zh=8",
+      "expected": "一致",
+      "note": ""
+    },
+    {
+      "case": "D10-1",
+      "name": "工具描述静态评审（40 工具：描述+schema 完整）",
+      "pass": true,
+      "actual": "ok=40/40",
+      "expected": "全通过",
+      "note": ""
+    },
+    {
+      "case": "D10-1",
+      "name": "自然语言评测集 LLM 打分",
+      "pass": null,
+      "actual": "评测预算受限（无 LLM 评测 harness/预算）",
+      "expected": "BLOCKED",
+      "note": "静态部分已覆盖：全部工具 description+inputSchema 完整性；LLM 选择正确率打分需评测预算，按用例矩阵 EXP 阻塞口径记 BLOCKED"
+    }
+  ]
+}

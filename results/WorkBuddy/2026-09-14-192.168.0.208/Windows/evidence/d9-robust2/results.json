@@ -1,0 +1,168 @@
+{
+  "suite": "d9-robust2",
+  "pass": 16,
+  "fail": 4,
+  "info": 0,
+  "results": [
+    {
+      "case": "D1-45",
+      "name": "根因佐证: Node≥22 对 npm.cmd/npx.cmd 无 shell spawn 抛 EINVAL（CVE-2024-27980 缓解）",
+      "pass": true,
+      "actual": "npm.cmd=EINVAL npx.cmd=EINVAL",
+      "expected": "EINVAL=EINVAL",
+      "note": "update-check.mjs:12-13 NPM_BIN/NPX_BIN 为 .cmd 且 :238/:259/:415 均无 shell:true → Windows 下更新检查/升级执行结构化失败"
+    },
+    {
+      "case": "D9-9",
+      "name": "initialize 响应 capabilities 含 cancellation 声明（用例要求）",
+      "pass": false,
+      "actual": "{\"tools\":{}}",
+      "expected": "含 cancellation",
+      "note": "SPEC-MISMATCH: capabilities 仅 {tools:{}}（mcp-protocol.mjs:63），无 cancellation 声明，亦无 -32000 超时语义"
+    },
+    {
+      "case": "D9-9",
+      "name": "挂起命令实际执行（假 hcloud 子进程启动且未在 3s 内完成）",
+      "pass": true,
+      "actual": "started=true finished=false settled=false",
+      "expected": "started 且未完成",
+      "note": ""
+    },
+    {
+      "case": "D9-9",
+      "name": "取消通知后 2s 内子进程被中止",
+      "pass": false,
+      "actual": "alive=1",
+      "expected": "0（中止）",
+      "note": "SPEC-MISMATCH 佐证: 服务端无 notifications/cancelled 处理，取消对执行中的异步 spawn 子进程无效"
+    },
+    {
+      "case": "D9-9",
+      "name": "挂起期间并发 tools/list 正常响应（异步 spawn 不阻塞事件循环）",
+      "pass": true,
+      "actual": "resolvedAt=2ms tools=40",
+      "expected": "<5000ms 响应",
+      "note": ""
+    },
+    {
+      "case": "D9-9",
+      "name": "挂起的 tools/call 最终完成（≈15s，未被取消中断）",
+      "pass": true,
+      "actual": "elapsed=15079ms isError=false",
+      "expected": "≈15000ms 完成",
+      "note": "resp={   \"ok\": true,   \"exitCode\": 0,   \"signal\": null,   \"stdout\": \"NovaListServers fake done\\n\",   \"stderr\": \"\",   \"plan\": {     \"executable\": \"hcloud\", "
+    },
+    {
+      "case": "D9-9",
+      "name": "挂起调用结束后服务端恢复响应（无崩溃）",
+      "pass": true,
+      "actual": "tools=40 died=false",
+      "expected": "正常响应",
+      "note": ""
+    },
+    {
+      "case": "D9-9",
+      "name": "取消异常后重建连接 initialize/tools/list 正常",
+      "pass": true,
+      "actual": "init=true tools=40",
+      "expected": "正常",
+      "note": ""
+    },
+    {
+      "case": "D1-45",
+      "name": "initialize 后立即调用工具不被更新预热阻塞（<10s）",
+      "pass": true,
+      "actual": "4ms isError=false",
+      "expected": "<10000ms",
+      "note": "_updateInfo=absent（预热未完成不附加，只消费已缓存提示）"
+    },
+    {
+      "case": "D1-45",
+      "name": "check_update 响应不附加 _updateInfo（豁免）",
+      "pass": true,
+      "actual": "_updateInfo=undefined",
+      "expected": "undefined",
+      "note": ""
+    },
+    {
+      "case": "D1-45",
+      "name": "registry 查询成功且可判定更新（真实会话）",
+      "pass": false,
+      "actual": "result=check_failed cur=1.1.4-next.6 latest=null",
+      "expected": "updateAvailable=true",
+      "note": "产品缺陷(Windows): update-check.mjs:12 NPM_BIN=npm.cmd + :259 spawn 无 shell → Node≥22 EINVAL → queryDistTags 恒 null → check_failed，_updateInfo 机制在 Windows 端到端失效"
+    },
+    {
+      "case": "D1-45",
+      "name": "首个非检查工具附加 _updateInfo（真实会话）",
+      "pass": false,
+      "actual": "_updateInfo=undefined",
+      "expected": "含 currentVersion/latestVersion",
+      "note": "因 registry 查询恒失败 lastHint 永不写入，Windows 真实会话无法触发（根因同上，机制正确性见函数级验证）"
+    },
+    {
+      "case": "D1-45",
+      "name": "applyUpdateHint 豁免 huaweicloud_upgrade（函数级）",
+      "pass": true,
+      "actual": "_updateInfo=undefined",
+      "expected": "undefined（豁免）",
+      "note": ""
+    },
+    {
+      "case": "D1-45",
+      "name": "applyUpdateHint 豁免 huaweicloud_check_update（函数级）",
+      "pass": true,
+      "actual": "_updateInfo=undefined",
+      "expected": "undefined（豁免）",
+      "note": ""
+    },
+    {
+      "case": "D1-45",
+      "name": "applyUpdateHint 对普通工具附加 _updateInfo（函数级）",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.4-next.6\",\"latestVersion\":\"1.1.4\"}",
+      "expected": "含 currentVersion/latestVersion",
+      "note": ""
+    },
+    {
+      "case": "D1-45",
+      "name": "updateAvailable=false 时不附加（函数级）",
+      "pass": true,
+      "actual": "_updateInfo=undefined",
+      "expected": "undefined",
+      "note": ""
+    },
+    {
+      "case": "D1-45",
+      "name": "注入 dist-tags 后 getCachedUpdateInfo 判定 update_available",
+      "pass": true,
+      "actual": "result=update_available target=1.1.4",
+      "expected": "update_available target=1.1.4",
+      "note": ""
+    },
+    {
+      "case": "D1-45",
+      "name": "会话内首个非检查工具附加 _updateInfo（函数级）",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.4-next.6\",\"latestVersion\":\"1.1.4\"}",
+      "expected": "含 currentVersion/latestVersion",
+      "note": ""
+    },
+    {
+      "case": "D1-45",
+      "name": "同会话再次调用不再附加（一次性，函数级）",
+      "pass": true,
+      "actual": "_updateInfo=undefined",
+      "expected": "undefined",
+      "note": ""
+    },
+    {
+      "case": "D1-45",
+      "name": "check_update 豁免不影响其他会话首次（跨会话独立，函数级）",
+      "pass": true,
+      "actual": "check_update=undefined next-tool={\"currentVersion\":\"1.1.4-next.6\",\"latestVersion\":\"1.1.4\"}",
+      "expected": "豁免+独立",
+      "note": ""
+    }
+  ]
+}

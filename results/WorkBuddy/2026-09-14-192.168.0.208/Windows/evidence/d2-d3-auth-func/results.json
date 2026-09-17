@@ -1,0 +1,97 @@
+[
+  {
+    "name": "D2-11 STS token 拒绝落盘（memory 通道）",
+    "pass": true,
+    "detail": "status=error scope=rejected S1存在=false error=Temporary STS credentials cannot be persisted (R3). Use action=temporary."
+  },
+  {
+    "name": "D2-11 STS token 拒绝落盘（import 通道 + 文件擦除）",
+    "pass": true,
+    "detail": "status=error scope=rejected import文件已擦除=true"
+  },
+  {
+    "name": "D2-5 凭证缺失报错指引（函数级）",
+    "pass": true,
+    "detail": "HDKIT_CRED_MISSING=true(code=HDKIT_CRED_MISSING) auth_init指引=true"
+  },
+  {
+    "name": "D2-10 current 档解析与切换跟随",
+    "pass": true,
+    "detail": "current解析: deploy→deploy, default→default, profiles=default,deploy"
+  },
+  {
+    "name": "D2-1 persist 三端同步（S1/S3 落位 + S2 --cli-profile 传递）",
+    "pass": true,
+    "detail": "status=ok S1={\"ak\":\"AKIDPERSISTprobe0001\",\"token\":\"\",\"flag\":true} S3含endpoint=true S2参数=[\"configure\",\"set\",\"--cli-profile\",\"--cli-access-key\",\"--cli-secret-key\",\"--cli-region\"]"
+  },
+  {
+    "name": "D2-12 R10 runtime 激活时 sync 抑制且 S1 不变",
+    "pass": true,
+    "detail": "auth_init=ok runtimeActive=true sync.ok=false sync.error=Runtime credentials are active; auto-sync suppressed (R10). S1不变=true"
+  },
+  {
+    "name": "D2-13 R9 S1(configuredBySession) 优先 env，清除后 env 兜底",
+    "pass": true,
+    "detail": "S1标记=true 标记时S1胜出=true(ak=AKIDPERSISTprobe0001) 清除后env兜底=true(ak=AKIDENVINJECT0003)"
+  },
+  {
+    "name": "D2-16 import 文件读取后无条件擦除（有效文件）",
+    "pass": true,
+    "detail": "status=ok scope=temporary 文件已擦除=true"
+  },
+  {
+    "name": "D2-16 import 畸形文件同样擦除",
+    "pass": true,
+    "detail": "报错=ak and sk are required (or provide creds-import.js 畸形文件已擦除=true"
+  },
+  {
+    "name": "D2-4 show_profile_redacted 输出无明文 AK/SK",
+    "pass": true,
+    "detail": "ok=true 真实KooCLI(7.2.12自脱敏)输出无长明文=true"
+  },
+  {
+    "name": "D2-4 防御纵深: redactString 对 hcloud camelCase 凭证字段(secretAccessKey/accessKeyId)不遮蔽",
+    "pass": null,
+    "detail": "明文经 redactSecrets 字符串管道后仍可见=true（对象键级遮蔽正常；KooCLI 7.2.12 show 自身脱敏，故主断言不受影响）→ FINDINGS 候选"
+  },
+  {
+    "name": "D2-2 auth status 三端就绪组合判定",
+    "pass": true,
+    "detail": "无S1无S3: cred=false,obs=false | 仅S1: cred=true,obs=false | S1+S3: cred=true,obs=true | runtimeActive: 置位=true, 清除=false | kooCliInstalled=true(ok)"
+  },
+  {
+    "name": "D3-A1 全量 skill 可检索且内容完整",
+    "pass": true,
+    "detail": "skill数=29 失败=无 平均内容长度=9838"
+  },
+  {
+    "name": "D3-B1 list_operations 返回规范操作名（ECS/VPC/OBS）",
+    "pass": true,
+    "detail": "ECS.ok=true VPC.ok=true OBS.ok=true command=hcloud ECS --help"
+  },
+  {
+    "name": "D3-B5 detect_framework 识别准确",
+    "pass": true,
+    "detail": "13样本误判: 无 | monorepo=识别=pnpm Workspace,子应用=Next.js"
+  },
+  {
+    "name": "D3-C5 四工具冒烟（check_cli/list_operations/plan/explain_error）",
+    "pass": true,
+    "detail": "check_cli=true(ok) list=true plan=true explain=true"
+  },
+  {
+    "name": "D3-B3 run_readonly 真云脱敏执行",
+    "pass": null,
+    "detail": "需真云 AK/SK 执行只读命令并核对输出脱敏；本机无真云凭证 → BLOCKED（见 CSV blockedReason）"
+  },
+  {
+    "name": "D3-C4 22 服务只读规划回归",
+    "pass": null,
+    "detail": "需真云最小权限 AK/SK 逐服务 plan/轻量创建释放；本机无真云凭证 → BLOCKED（见 CSV blockedReason）"
+  },
+  {
+    "name": "D2-1 真云端到端三端可用性",
+    "pass": null,
+    "detail": "S1/S3 落位与 S2 参数传递已用假 hcloud 验证；KooCLI/OBS 对真云 API 的可用性需真云凭证 → 端到端部分 BLOCKED"
+  }
+]

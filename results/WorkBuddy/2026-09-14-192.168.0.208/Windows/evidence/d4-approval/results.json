@@ -1,0 +1,47 @@
+[
+  {
+    "name": "D4-18 写操作 plan：需确认而非直接拒绝/直接放行",
+    "pass": true,
+    "detail": "未确认: decision=deny safeToRun=false reason=\"Huawei Cloud write operation blocked until the agent present\" token=有 | 确认后: decision=allow risk=write"
+  },
+  {
+    "name": "D4-18 未确认（approvedByUser!=true）不放行",
+    "pass": true,
+    "detail": "拦截=true msg=approvedByUser must be true after explicit user approval for this exact command."
+  },
+  {
+    "name": "D4-18 无效令牌不放行",
+    "pass": true,
+    "detail": "拦截=true msg=Invalid or expired approval token. Please re-plan the command."
+  },
+  {
+    "name": "D4-18 确认后放行执行（spawn 已尝试）且令牌一次性",
+    "pass": true,
+    "detail": "approved=true spawn已尝试=true 复用令牌被拒=true"
+  },
+  {
+    "name": "D4-19 高危命令（csms ShowSecretVersion）plan 即 deny",
+    "pass": true,
+    "detail": "decision=deny risk=secret reason=Direct secret value reads are blocked so plaintext secrets do not enter the agen"
+  },
+  {
+    "name": "D4-19 高危命令即便持有效令牌+用户确认仍被预检拦截",
+    "pass": true,
+    "detail": "拦截=true msg=Direct secret value reads are blocked so plaintext secrets do not enter the agent context."
+  },
+  {
+    "name": "D4-19 令牌绑定的 args 被篡改后拒绝执行",
+    "pass": true,
+    "detail": "拦截=true msg=Provided args do not match the approved plan. Use the exact args from the plan. If the plan shows <r"
+  },
+  {
+    "name": "D4-24 过期令牌被拒（TTL 实际 300s，改写 createdAt 模拟）",
+    "pass": true,
+    "detail": "过期令牌被拒=true；注: 产品 APPROVAL_TTL_MS=300s，用例假设 60s（SPEC 观察）；真云资源计数部分 → BLOCKED"
+  },
+  {
+    "name": "D4-24 真云资源计数/already_processed 云侧断言",
+    "pass": null,
+    "detail": "需真云创建最小规格资源并查询计数（tctest- 前缀）；本机无真云凭证 → 真云部分 BLOCKED（函数级过期+一次性已验证）"
+  }
+]

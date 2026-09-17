@@ -1,0 +1,112 @@
+{
+  "suite": "d1-install-fix",
+  "pass": 10,
+  "fail": 0,
+  "info": 3,
+  "results": [
+    {
+      "case": "D4-12",
+      "name": "SBOM 可产（npm sbom cyclonedx，规范 package.json 复跑）",
+      "pass": true,
+      "actual": "exit=0 components=2 hasPkg=true",
+      "expected": "含 huaweicloud-devkit",
+      "note": "首轮两次失败均系探针环境构造问题（cwd 目录不存在→ENOENT；自动生成 package.json 无 version→EINVALIDPURLTYPE）。规范依赖目录下 npm sbom 正常产出，components 含 huaweicloud-devkit@1.1.4-next.6"
+    },
+    {
+      "case": "D4-12",
+      "name": "安装包与 hdk 源码 pack 一致（行尾规范化后）",
+      "pass": true,
+      "actual": "total=119 normSame=119 normDiff=0 rawEqual=0/119",
+      "expected": "规范化后全一致",
+      "note": "原始字节仅 0 文件相同（SUT=LF，hdk git 检出=CRLF，git autocrlf 所致）；规范化后 119/119 一致"
+    },
+    {
+      "case": "D7-4",
+      "name": "华为云镜像 registry 安装成功（latest 与 SUT 精确版本双验）",
+      "pass": true,
+      "actual": "latest: v=1.1.4 bin=true mirrorResolved=true；exact: v=1.1.4-next.6 bin=true",
+      "expected": "v=latest(1.1.4) + v=1.1.4-next.6 + bin",
+      "note": "dist-tags（华为云镜像与 npmjs 一致）: latest=1.1.4, next=1.1.4-next.6；SUT=1.1.4-next.6。镜像默认装 latest=1.1.4；sbom-probe 目录以精确版本 1.1.4-next.6 依赖安装亦成功，锁文件解析源均为华为云镜像。安装冒烟通过"
+    },
+    {
+      "case": "D4-23",
+      "name": "[workbuddy 真实安装] safety hooks 落位（hooks.json + huaweicloud-safety.py）",
+      "pass": true,
+      "actual": "hooks=hooks.json,huaweicloud-safety.py",
+      "expected": "hooks.json + huaweicloud-safety.py",
+      "note": ""
+    },
+    {
+      "case": "D4-23",
+      "name": "[workbuddy 真实安装] hooks.json 指向 safety hook",
+      "pass": true,
+      "actual": "{\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Bash\",\"hooks\":[{\"type\":\"command\",\"command\":\"python3 \\\"${CLAUDE_PLUGIN_ROOT}/hooks/hu",
+      "expected": "含 huaweicloud-safety.py",
+      "note": ""
+    },
+    {
+      "case": "D4-23",
+      "name": "[workbuddy 真实安装] settings.json PostToolUse 注入 + tracker 落位",
+      "pass": true,
+      "actual": "postToolUse=true tracker=true",
+      "expected": "both",
+      "note": ""
+    },
+    {
+      "case": "D4-23",
+      "name": "[workbuddy 隔离环境] 无托管 Python 时 hooks 部署跳过（产品行为记录）",
+      "pass": null,
+      "actual": "WARN: No WorkBuddy managed Python found; PostToolUse telemetry hook not installed → deployWorkBuddyHooks 早退",
+      "expected": "行为观察，不计 PASS/FAIL",
+      "note": "根因: resolveWorkBuddyPython()（setup-cli.mjs:1609）找不到 ~/.workbuddy/binaries/python/versions/* 时返回 null，deployWorkBuddyHooks 整体跳过（含 plugin safety hooks 与 settings.json 注入）。safety hook 是 Python 脚本，gating 有其运行时合理性，但 safety 部署与遥测 Python 绑定且仅 WARN 提示，FINDINGS 候选（低）"
+    },
+    {
+      "case": "D4-23",
+      "name": "[officeace 真机] install→uninstall 端到端闭环（事故变证据）",
+      "pass": true,
+      "actual": "install: 29 skills + capabilities 29 条 + mcp-connectors.sqlite 注册（2026-09-14 23:17）；uninstall: huawei条目残留=0 pluginsGone=true skillsGone=true sqlite 已清理，status 恢复\"未安装\"",
+      "expected": "装满→卸净",
+      "note": "真实 InstallDir 上的完整装/卸验证（installOfficeAce/cmdUninstall officeace 分支）；原始状态已恢复。详见 D1-58 事故记录条目"
+    },
+    {
+      "case": "D1-58",
+      "name": "[opencode 路径] 坏 JSON 零写入 + 已配置 merge 语义（首轮数据复核改判）",
+      "pass": true,
+      "actual": "badJSON: shaSame=true（WARN \"Could not parse...Skipping MCP config write\"）；already: entries=1 owner=user（\"config merged (user fields preserved)\"）",
+      "expected": "零写入/唯一/用户字段保留",
+      "note": "首轮 FAIL 系探针断言文案钉死 Claude/Cursor 路径（not valid JSON / skipping）；opencode 路径设计语义为 merge 保留用户字段（updateOpenCodeConfig, setup-cli.mjs:1101-1135），不变量全部成立，改判 PASS"
+    },
+    {
+      "case": "D1-58",
+      "name": "non-TTY 零检测安全中止路径：本机不可达（产品行为观察，不计 FAIL）",
+      "pass": null,
+      "actual": "本机注册表恒检测到 OfficeAce → bare install 单目标直装真实 InstallDir（绕过 HOME 隔离），零检测分支无法构造",
+      "expected": "N/A（本机环境限制）",
+      "note": "⚠️ 测试事故记录（已回滚）: 首次补验裸跑 `install` 触发 officeace 注册表检测（agent 检测不受 USERPROFILE 隔离），自动安装到真实 .office-claw/（29 skills + capabilities.json 29 条 + mcp-connectors.sqlite 注册）。已 `uninstall --target officeace` 完整回滚（0 残留、status 恢复\"未安装\"、目录删净）。事故顺带构成 officeace 端到端装/卸真机证据。Claude/Cursor 白名单语义（configureMCPAgent, setup-cli.mjs:3261-3284: 坏 JSON→\"not valid JSON; leaving it untouched\"零写入 / 同 key→skipping 无新 .bak / 命中→.bak+merge 唯一）为源码静态核验 + Linux EX-4 真机证据（EXP-D1-58-01~05）覆盖"
+    },
+    {
+      "case": "D1-3",
+      "name": "doctor 失败场景如实报告 + 修复指引（首轮数据复核）",
+      "pass": true,
+      "actual": "FAILs=5 guide=true（隔离空环境）；真实环境 PASSs=10",
+      "expected": "如实报告+指引",
+      "note": "设计预期（检测项准确+失败场景如实报告+修复指引）满足，改判 PASS"
+    },
+    {
+      "case": "D1-3",
+      "name": "doctor exit code 不反映检测失败（产品行为记录）",
+      "pass": null,
+      "actual": "隔离空环境 5×[FAIL] 仍 exit=0（cmdDoctor 无 process.exitCode 赋值，setup-cli.mjs:3809-4180）",
+      "expected": "行业惯例 fail>0 → exit!=0",
+      "note": "FINDINGS 候选（低，可脚本化性）：`npx huaweicloud-devkit doctor && deploy` 类脚本会误判健康；对照 npm doctor 惯例"
+    },
+    {
+      "case": "D4-12",
+      "name": "postinstall 钩子存在且审计为良性（非 DSH 场景仅打印；DSH 内路径重写+skills 拷贝）",
+      "pass": true,
+      "actual": "postinstall=node ./bin/dsh-postinstall.cjs benign=true",
+      "expected": "存在+良性",
+      "note": "设计指引已注明 \"package.json有postinstall\"；审计: cwd 不在 DSH profile → 仅打印安装提示 exit 0；在 DSH profile → 将 cordis.patch.yml 的相对 MCP 路径重写为绝对包路径（幂等）+ 拷贝 skills 到 ~/.dsh/skills/。无网络/无子进程/无任意代码执行面"
+    }
+  ]
+}
