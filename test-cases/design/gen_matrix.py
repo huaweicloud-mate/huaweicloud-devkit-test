@@ -93,7 +93,7 @@ EXPAND_DEFAULT = {
     "D7兼容": "OS_MATRIX|<代表: Windows/Linux/macOS × Node22/24>|<证据: 安装冒烟>|<阻塞: macOS 缺环境>",
     "D8质量": "COMMON|<代表: 静态评审人 测试经理>|<证据: 评审记录+链接>|<阻塞: 无>",
     "D9协议": "COMMON|<代表: MCP Inspector + Hermes>|<证据: 协议报文>|<阻塞: 无>",
-    "D10评测": "CLIENT_MATRIX|<代表: Hermes/Codex/OpenCode>|<证据: 评测集结果+模型参数>|<阻塞: 评测预算>",
+    "D10评测": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 评测集结果+模型参数>|<阻塞: 评测预算>",
 }
 
 # ============ R11 展开规则规范化（Codex round-10 要求：162 行统一四段结构） ============
@@ -244,10 +244,10 @@ OVERRIDE_EXPAND = {
     "D8-5": "COMMON|<代表: 静态评审人 测试经理>|<证据: 日志分级正确无敏感信息>|<阻塞: 无>",
     "D8-8": "COMMON|<代表: 静态评审人 测试经理>|<证据: 事件完整上报不含明文凭证>|<阻塞: 无>",
     # D10 评测
-    "D10-4": "CLIENT_MATRIX|<代表: Hermes/Codex/OpenCode>|<证据: 高危请求自动走审批>|<阻塞: 评测预算>",
-    "D10-6": "CLIENT_MATRIX|<代表: Hermes/Codex/OpenCode>|<证据: 评测集版本化+结果可重复>|<阻塞: 评测预算>",
-    "D10-7": "CLIENT_MATRIX|<代表: Hermes/Codex/OpenCode>|<证据: 失败分级驱动修复优先级>|<阻塞: 评测预算>",
-    "D10-8": "CLIENT_MATRIX|<代表: Hermes/Codex/OpenCode>|<证据: ≤135次/轮预算+超预算停>|<阻塞: 评测预算>",
+    "D10-4": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 高危请求自动走审批>|<阻塞: 评测预算>",
+    "D10-6": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 评测集版本化+结果可重复>|<阻塞: 评测预算>",
+    "D10-7": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 失败分级驱动修复优先级>|<阻塞: 评测预算>",
+    "D10-8": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: ≤450次/轮预算+超预算停>|<阻塞: 评测预算>",
 }
 
 ENUM_TYPES = ("COMMON", "CLIENT_MATRIX", "OS_MATRIX", "AGENT_E2E", "CROSS_PROCESS")
@@ -1224,7 +1224,7 @@ add("D10-7", "D10评测", "评测失败分级", "P2", "评测结果集",
     "harness", "脚本")
 add("D10-8", "D10评测", "评测成本预算", "P2", "评测环境",
     "调用量与时长",
-    "①预算监控(≤135次/轮) ②超预算自动停",
+    "①预算监控(≤450次/轮) ②超预算自动停",
     "成本可控可持续", "通: LLM评测成本管理",
     "harness", "脚本")
 
@@ -1462,8 +1462,8 @@ def _terminal_metadata(rid, dim, rule):
         agent = "Hermes; OpenCode; 声明支持的客户端矩阵"
         hook = "按客户端记录"
     elif dim == "D10评测":
-        agent = "Hermes; Codex; OpenCode"
-        hook = "按客户端记录"
+            agent = "OpenCode; Codex; CodeArtsAgent; CodeArtsWork; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode"
+            hook = "按客户端记录"
     elif dim == "D9协议":
         agent = "Hermes; MCP Inspector/标准协议客户端"
         hook = "n/a（协议层）"
@@ -1510,7 +1510,7 @@ def _expanded_exec_target(etype, obj):
     if etype == "D3-C4服务矩阵":
         return ("Hermes 代表终端", "Hermes", "Windows/Linux")
     if etype == "D10评测集":
-        return ("Hermes/Codex/OpenCode", "Hermes/Codex/OpenCode", "Windows/Linux")
+            return ("全部客户端", "OpenCode/Codex/CodeArtsAgent/CodeArtsWork/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode", "Windows/Linux")
     if etype == "D1-58白名单矩阵":
         return ("Linux L 真机", "Hermes", "Linux")
     if etype == "NR3终端矩阵":
