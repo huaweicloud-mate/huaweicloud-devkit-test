@@ -1,4 +1,4 @@
 // Probe: D4-12
 // Status: PASS
-// Time: 20260917065422
-// Detail: 供应链安装期安全: npm install安全
+// Time: 20260918075727
+// Detail: 供应链安装期安全: install安全检查

@@ -1,4 +1,4 @@
 // Probe: EXP-D5-4-1
 // Status: PASS
-// Time: 20260917065422
-// Detail: D5-1在CodeArtsWork执行: MCP工具清单完整加载
+// Time: 20260918075727
+// Detail: CodeArtsWork客户端可发现并加载插件清单

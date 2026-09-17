@@ -1,4 +1,4 @@
 // Probe: EXP-E03
 // Status: FAIL
-// Time: 20260917065422
-// Detail: 路由MISS: 期望OBS, 实际Sandbox+DevStation
+// Time: 20260918075727
+// Detail: 路由FAIL: 期望=OBS, 实际=实际=Sandbox+DevStation

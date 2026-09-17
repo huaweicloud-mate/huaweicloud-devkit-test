@@ -1,4 +1,4 @@
 // Probe: EXP-E10
 // Status: FAIL
-// Time: 20260917065422
-// Detail: 路由MISS: 期望FunctionGraph, 实际Run hcloud --help
+// Time: 20260918075727
+// Detail: 路由FAIL: 期望=FunctionGraph, 实际=实际=Run hcloud --help to list available services.

@@ -1,4 +1,4 @@
 // Probe: EXP-E09
 // Status: PASS
-// Time: 20260917065422
-// Detail: 路由HIT: 期望CCE, 实际CCE+SWR
+// Time: 20260918075727
+// Detail: 路由PASS: 期望=CCE, 实际=实际=CCE+SWR
