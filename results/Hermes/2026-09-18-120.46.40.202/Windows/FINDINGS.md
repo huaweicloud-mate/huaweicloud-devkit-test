@@ -11,7 +11,7 @@
 - **根因**：plugins/huaweicloud-core/src/safety-policy.mjs:398-399 — env-dump 正则 /HUAWEICLOUD|HWC_|HCLOUD|OS_/i 未覆盖 HW_ 前缀（HW_ACCESS_KEY 不含 HWC_）；第417-419行的 HW_ 直接引用正则要求后缀为 ACCESS_KEY|SECRET_KEY|SECURITY_TOKEN，但 HUAWEICLOUD_AK 的后缀是 AK 不匹配。
 - **影响**：攻击者可通过 env | grep HW_ACCESS_KEY 或 echo $HUAWEICLOUD_AK 获取凭证环境变量值，绕过安全策略。
 - **证据**：evidence/D4-2/stdout.log（probe-p0-safety.mjs 实测 allow）
-- **状态**：待提单
+- **状态**：已提单 #730
 
 ## #2【P0】D4-16 命令包裹穿透
 
@@ -20,7 +20,7 @@
 - **根因**：plugins/huaweicloud-core/src/safety-policy.mjs classifyTextCommand() 函数未解析 shell wrapper（sh/bash/powershell/cmd）内的 hcloud 命令，正则 /(^|\s)hcloud(\.exe)?\s+/i 匹配的是裸 hcloud 命令，不检查被包裹的情况。
 - **影响**：攻击者可通过 sh -c "hcloud ECS DeleteServer ..." 绕过 hook 拦截，执行未审批的写操作。
 - **证据**：evidence/D4-16/stdout.log（probe-p0-safety.mjs 实测 allow）
-- **状态**：待提单
+- **状态**：已提单 #730
 
 ## #3【P1】D9-2 JSON-RPC invalid params 未返回 -32602 错误码
 
@@ -29,7 +29,7 @@
 - **根因**：plugins/huaweicloud-core/src/mcp-protocol.mjs dispatch() 函数未对 null/undefined params 做前置校验，直接访问 params.name 导致 TypeError。
 - **影响**：客户端无法按 JSON-RPC 2.0 标准处理无效参数错误，可能导致客户端崩溃。
 - **证据**：evidence/D9-2/stdout.log（protocol-probe.mjs 实测 error.code 缺失）
-- **状态**：待提单
+- **状态**：已提单 #730
 
 ## #4【P1】EXP-E01~E14 serviceCatalog 中文意图路由准确率低（21.4% MISS）
 
@@ -38,7 +38,7 @@
 - **根因**：plugins/huaweicloud-core/src/tools.mjs huaweicloud_service_catalog 工具的意图匹配逻辑对中文自然语言支持不足，大部分意图无法匹配到服务关键词。
 - **影响**：Agent 无法正确理解中文用户意图，无法路由到正确的华为云服务操作。
 - **证据**：evidence/EXP-E01/stdout.log 等（eval/harness/run-eval.mjs 实测 HIT=3 MISS=11 N/A=1）
-- **状态**：待提单
+- **状态**：已提单 #730
 
 ## #5【非产品缺陷】D4-23 huawei-agent-rules.md 文件不存在（SPEC-MISMATCH）
 
