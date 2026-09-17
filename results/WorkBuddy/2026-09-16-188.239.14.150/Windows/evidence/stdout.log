@@ -1,0 +1,17 @@
+[D1-26] check_update/upgrade registered: PASS | check_update=true, upgrade=true, schema=true, total=40
+[D1-27] judgeUpdate up_to_date: PASS | result=up_to_date, updateAvailable=false
+[D1-28] judgeUpdate update_available: PASS | result=update_available, updateAvailable=true, targetVersion=1.1.5
+[D1-30] semverCompare: PASS | 1.1.2 vs 1.1.1 = 1(expect 1) OK; 1.1.0 vs 1.1.0-next.9 = 1(expect 1) OK; 1.1.5 vs 1.1.5 = 0(expect 0) OK; 1.1.1 vs 1.1.2 = -1(expect -1) OK
+[D1-31] dismiss cooldown: PASS | cooldown=true(result=dismissed,dismissed=true), expire=true(result=update_available), expireAt=2026-09-18T23:01:54.013Z
+[D1-33] skip file persistence: PASS | skipFilePath=C:\Users\Administrator\devkit-test\WorkBuddy\hdk\plugins\huaweicloud-core\.update-skip.json, fallback=C:\Users\Administrator\.config\huaweicloud\devkit-skip.json, resolve=C:\Users\Administrator\.config\huaweicloud\devkit-skip.json.test-session, fields={"dismissedVersion":"1.1.5","dismissedAt":"2026-09-15T23:01:54.022Z","expireAt":"2026-09-18T23:01:54.022Z"}
+[D1-39] Windows queryDistTagsSync: FAIL | latest=undefined, next=undefined, hasResult=false, noEINVAL=true
+[D1-40] mirror lag detection: PASS | result=check_failed, remoteLatest=undefined, current=1.1.5, noDowngrade=true
+[D1-45] applyUpdateHint decoration: FAIL | _updateInfo present=false, result keys=content
+[D4-6] adminPass redaction: PASS | input="adminPass=MySecret123", output="adminPass=<redacted>", noLeak=true, hasRedacted=true
+[D4-6b] classifyTextCommand adminPass: PASS | action=undefined, risk=write, details={"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}
+[D4-8] risk-rule-engine consistency: PASS | rulesLoaded=true, cmdRisk={"decision":"warn","findings":[{"ruleId":"hwc-destructive-delete-operation","title":"Destructive clo, artifactsRisk={"decision":"deny","findings":[{"ruleId":"hwc-iam-admin-policy","title":"Broad IAM administrator gra, deployRisk={"decision":"warn","findings":[{"ruleId":"hwc-sandbox-missing-ttl","title":"Sandbox deployment missi
+[D6-1] search latency p95: PASS | p95=0ms, samples=0,0,0,0,0
+[D6-3] MCP cold start: FAIL | coldStart=99999ms, samples=
+[D6-4] concurrent dispatch: PASS | allSettled=true, count=10
+[D4-10] rule regression: FAIL | normalCmd action=undefined, writeCmd action=undefined, requiresApproval=undefined
+[D4-12] supply chain: FAIL | Cannot find module 'C:\Users\Administrator\devkit-test\WorkBuddy\hdk\plugins\package.json' imported from C:\Users\Administrator\devkit-test\WorkBuddy\huaweicloud-devkit-test\evidence\d1-d4-d6-probe.mjs

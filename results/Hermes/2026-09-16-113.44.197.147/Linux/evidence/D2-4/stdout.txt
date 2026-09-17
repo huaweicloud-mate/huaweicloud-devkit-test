@@ -1,0 +1,5 @@
+=== CASE D2-4 ===  (凭证脱敏正确性)
+  对象脱敏: OK  {"accessKeyId":"<redacted>","secretAccessKey":"<redacted>","securityToken":"<redacted>","region":"cn-north-4","projectId":"p1"}
+  小写字符串 ak=/sk=: "ak=AK123456 sk=SKsecret"  -> 未脱敏 <<< 缺陷
+  大写字符串 AK=/SK=: "AK=<redacted> SK=<redacted>"  -> 脱敏
+  RESULT: FAIL  (root:safety-policy.mjs:45 大小写敏感 缺 /i)

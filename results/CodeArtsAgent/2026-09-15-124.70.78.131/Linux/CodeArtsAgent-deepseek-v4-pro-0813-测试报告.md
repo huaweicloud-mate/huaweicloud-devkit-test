@@ -1,10 +1,10 @@
 # CodeArtsAgent-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`CodeArtsAgent-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-09-15 09:40:00（北京时间）
+> **生成时间**：2026-09-15 18:15:00（初版）→ 2026-09-15 22:03:00（补测 BLOCKED 回填版）→ 2026-09-16 00:45:00（真云补测版）
 > **执行归档**：`results/CodeArtsAgent/2026-09-15-124.70.78.131/Linux/`
-> **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（有 P0 缺陷，不得标 PASS）
+> **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`，npm latest v1.1.4，gitHead 9b67256）
+> **结论**：`PARTIAL`（有 P0/P1 缺陷，不得标 PASS）
 
 ---
 
@@ -12,17 +12,18 @@
 
 | 项 | 值 |
 |---|---|
-| 客户端 / Agent | CodeArtsAgent（codearts CLI）+ deepseek-v4-pro-0813 |
-| OS / 架构 | Linux aarch64 |
-| Node / npm / Python | Node v22.13 / npm 10 / Python 3.12 |
+| 客户端 / Agent | CodeArtsAgent（CodeArts CLI）+ deepseek-v4-pro-0813 |
+| OS / 架构 | Linux (aarch64) |
+| Node / npm / Python | Node v22.13.0 / npm 11 / Python 3.12 |
 | 被测版本（SUT） | v1.1.4（npm latest 正式版，gitHead 9b67256） |
-| 工具全集 | 40（tools.mjs TOOL_DEFINITIONS；CodeArts 框架 MCP 实际暴露 37） |
+| 工具全集 | 40（tools.mjs TOOL_DEFINITIONS）；源码 spawn 实测 40；CodeArts 框架 MCP 实际暴露 37 |
 | hcloud / 依赖 | hcloud 7.2.12（check_cli installed+authenticated） |
-| 真云凭证 | cn-north-4（AKSK，仅 show_profile_redacted/auth_status 脱敏核对；本轮无真实资源创建） |
-| 测试类型 | MCP 黑盒直调 + CLI（doctor/status）+ 源码级检查 + node 函数级探针 |
-| 设计真源 | 设计级 81 / 展开级 39（daily 精选，展开级已按客户端+OS 预筛） |
+| 测试类型 | MCP 黑盒直调（huaweicloud_* 工具）+ CLI（install/status/doctor/uninstall）+ 源码级 node 函数直调 + 评测 harness |
+| 设计真源 | 设计级 78（daily 精选全量下发 + D3-C4 真云补测）/ 展开级 17（预筛后） |
 
-> **执行方法**：通过 MCP 工具（huaweicloud_*）黑盒直调被测对象；node 直调 `hdk` 导出函数（semverCompare/judgeUpdate）做函数级证据；安全 hook/auth/plan 类 P0 + 关键 P1/P2 逐一真实执行；源码级检查（hdk@9b67256）用于根因定位。
+> **补测说明**：本轮（22:00）针对 18:15 初版标 BLOCKED 的 50 条用例逐条深挖，将「假阻塞」实际执行回填——D10 评测集走 `eval/harness/run-eval.mjs`、D6 压测走 `supplement-probe.mjs`、check_update 语义直调 `judgeUpdate`、协议域走 `protocol-probe.mjs`、install/uninstall 隔离 HOME 实测。最终 BLOCKED 从 50 降为 13（设计级 12 + 展开级 1，均为真·外部依赖）。
+>
+> **真云补测说明**：2026-09-16 凭证重新下发（管理员 credentials.json + 只读子账号 credentials.readonly.json）后，对因凭证问题标 BLOCKED 的真云用例重跑：D2-1 auth init 三端同步、D2-11 STS token 拒绝落盘、D2-16 import 读取后擦除、D4-13 最小权限、D4-18/19/20 审批流、D3-C4 服务矩阵、D4-14 操作可审计。8 项转 PASS，D4-13 转 FAIL（test001 无 readonly 策略绑定，见下）。
 
 ---
 
@@ -30,103 +31,106 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | 120（设计级 81 + 展开级 39） |
-| 已执行（有证据） | 54（设计级 30 + 展开级 24） |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 51 / 9 / 58 / 2 / 0 |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 82.3%（51/62） |
-| P0 / P1 / P2 新增缺陷 | 新增 1（P0 D4-5）；复现上轮 #673 共 8 项 |
+| 计划用例（daily） | 95（设计级 78 + 展开级 17） |
+| 已执行（非 BLOCKED） | 87（设计级 71 + 展开级 16） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 61 / 23 / 8 / 3 / 0 |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH） | 70.1%（61/87） |
+| P0 / P1 / P2 新增缺陷 | 0 / 2 / 1（#10 D9-2、#11 D10-3、#12 D9-9；其余为历史复现 #673/#685） |
 | 红线（I 类）违规 | 0 |
-| 资源释放 | 全部归零（本轮未创建真云资源） |
+| 资源释放 | 全部归零（真机建 OBS bucket probe-ca-linux-20260916 → CTS 审计 → 删除归零 404 NoSuchBucket） |
 
 ---
 
 ## 三、状态汇总
 
-### 3.1 设计级（81）
+### 3.1 设计级（78）
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 28 | 有证据且通过 PASS 门禁 |
-| FAIL | 8 | D4-2、D4-5、D4-15、D4-23、D8-7、D1-26、D4-6、D4-17（根因见缺陷清单） |
-| BLOCKED | 43 | 真云/Windows/审批流/harness/协议 Inspector/install 布局/check_update 未暴露（见阻塞项） |
-| SPEC-MISMATCH | 2 | D5-3、D9-1（工具枚举 40 vs 37，与 D1-26 同源） |
+| PASS | 57 | 有证据且通过 PASS 门禁（含真云补测 D2-1/D4-18/19/20/D3-C4） |
+| FAIL | 11 | 原 10 + 真云 D4-13（test001 无 readonly 策略绑定，账号授权问题非代码缺陷） |
+| BLOCKED | 7 | 真·外部依赖（Windows 专属/多客户端/镜像网络/LLM harness），均写四要素 blockedReason |
+| SPEC-MISMATCH | 3 | D5-3、D9-1（与 D1-26 同源）+ 新 D9-9（cancellation 缺失） |
 | NOT_RUN | 0 | 无 |
-| **合计** | **81** | |
+| **合计** | **78** | |
 
-### 3.2 展开级（39）
+### 3.2 展开级（17）
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 23 | EXP-D5-3-1 + EXP-C4-01~22（服务矩阵只读规划冒烟） |
-| FAIL | 1 | EXP-D5-3-3（tools/list 37 vs 40，与 D5-3/D9-1/D1-26 同源） |
-| BLOCKED | 15 | EXP-E01~15（评测集路由需 harness） |
+| PASS | 4 | EXP-D5-3-1 + EXP-E06/E09/E15（serviceCatalog 路由 HIT） |
+| FAIL | 12 | EXP-D5-3-3 + EXP-E01/02/03/04/05/07/10/11/12/13/14（serviceCatalog 中文意图 MISS） |
+| BLOCKED | 1 | EXP-E08（explain_error 诊断路由需 LLM harness） |
 | SPEC-MISMATCH | 0 | 无 |
 | NOT_RUN | 0 | 无 |
-| **合计** | **39** | |
+| **合计** | **17** | |
 
 ---
 
-## 四、缺陷清单（详尽，每个缺陷一栏）
+## 四、缺陷清单（详尽）
 
-| # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | 新增/复现 | 状态 |
-|---|---|---|---|---|---|---|---|---|
-| 1 | P0 | D4-5 | framework Apply* 写误判（版本漂移） | `EIP ApplyEip` 应 `deny/write` | `allow/unknown_read` | `~/.codeartsdoer/huaweicloud-plugins/safety/policy.json`（缺 Apply，源码 policy.json:39 已含） | 新增 | 待提单 |
-| 2 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `printenv HW_ACCESS_KEY` 应 `deny` | `allow`，HW_* 前缀未拦截 | `cloud-risk-rules.json:39`（env-dump 正则缺 HW_） | 复现 #673 | 已提单 |
-| 3 | P0 | D4-15 | hook 命令替换+ANSI-C 绕过 | `$(echo $'E\x43S DeleteServer')` 应 `deny` | `allow` | `risk-rule-engine.mjs:50-54`（纯正文本匹配） | 复现 #673 | 已提单 |
-| 4 | P0 | D4-23 | 全局规则未注入（孤儿文件） | 11 目标注入且无孤儿 | `.mdc` 存在但零代码引用 | `rules/huawei-agent-rules.mdc` | 复现 #673 | 已提单 |
-| 5 | P0 | D8-7 | 7 meta 技能指引断链 | 指引均可机械执行 | 指引引用未暴露的 check_update/upgrade | huaweicloud-core SKILL.md 会话启动节 → 与 D1-26 同源 | 复现 #673 | 已提单 |
-| 6 | P1 | D1-26 | 工具协议暴露漂移 40 vs 37 | check_update/upgrade 应可调 | 3 工具未暴露 | `tools.mjs`（框架未暴露 check_update/upgrade/obs_set_website_config） | 复现 #673 | 已提单 |
-| 7 | P1 | D4-6 | adminPass 明文回显警告缺失 | 含 adminPass 应告警 | `allow` 无警告 | `cloud-risk-rules.json`（无明文密码规则） | 复现 #673 | 已提单 |
-| 8 | P1 | D4-17 | hook 畸形输入 fail-open | 异常输入应 fail-closed | 空/畸形输入 `allow` | `risk-rule-engine.mjs:106` | 复现 #673 | 已提单 |
+### 4.1 历史复现（#1~#9，均为 #673/#685 二次复核，详见 FINDINGS.md）
 
-> D5-3/D9-1/EXP-D5-3-3（工具枚举 40 vs 37 漂移）与 #6（D1-26）同源，不单列。
+| # | 级别 | 用例ID | 缺陷 | 状态 |
+|---|---|---|---|---|
+| 1 | P0 | D4-5 | framework Apply* 写误判（版本漂移） | 复现 #685 |
+| 2 | P0 | D4-2 | 凭证 env 打印拦截不完整（HW_ 前缀） | 复现 #673 |
+| 3 | P0 | D4-15 | hook ANSI-C 编码绕过 | 复现 #673 |
+| 4 | P0 | D4-23 | 全局规则未注入（孤儿文件） | 复现 #673 |
+| 5 | P0 | D8-7 | meta 技能指引断链 | 复现 #673 |
+| 6 | P1 | D1-26 | 工具暴露漂移 40 vs 37 | 复现 #673 |
+| 7 | P1 | D4-6 | adminPass 明文回显无警告 | 复现 #673 |
+| 8 | P1 | D4-17 | hook 畸形输入 fail-open | 复现 #673 |
+| 9 | P1 | D5-3/D9-1/EXP-D5-3-3 | 工具枚举漂移（与 #6 同源） | 复现 #673 |
 
-### 根因详情（关键 P0）
+### 4.2 本轮新增（#10~#12，源码 spawn + harness 实测发现）
 
-**#1 [P0] D4-5 framework Apply* 写误判（版本漂移，本轮新增）**
-- 黑盒：`plan_cli_command args=["EIP","ApplyEip"]` → `{decision:allow, risk:unknown_read}`
-- 交叉验证：源码 `hdk/plugins/huaweicloud-core/safety/policy.json:39` 与 npm 1.1.4 包 `writeOperationPrefixes` 均含 `Apply`（33 项，#644 已落地）
-- 实际运行：CodeArts 框架加载的 `~/.codeartsdoer/huaweicloud-plugins/safety/policy.json` 仅 32 项、缺 `Apply`
-- 结论：框架运行时安全策略版本滞后于源码，#644 修复未在框架层生效 → 版本漂移
+| # | 级别 | 用例ID | 缺陷 | 根因 |
+|---|---|---|---|---|
+| 10 | P1 | D9-2 | JSON-RPC 错误码 -32603 未区分 -32601/-32602 | `mcp-server.mjs:169` + `mcp-protocol.mjs:95` |
+| 11 | P1 | D10-3 + EXP-E01~15 | serviceCatalog 中文意图路由 MISS（准确率 21.4%） | `tools.mjs:1784` routeMap 缺 CJK 关键词 + `tools.mjs:1884` 中文分词失效 |
+| 12 | P2 | D9-9 | capabilities.cancellation 未暴露（SPEC-MISMATCH） | `mcp-protocol.mjs:62-65` |
+
+> 各缺陷的「现象/断言/根因/影响/证据」详见 `FINDINGS.md`。
 
 ---
 
-## 五、阻塞项
+## 五、BLOCKED 用例与原因（真·外部依赖，四要素）
 
-| 用例 ID | 阻塞原因 | 环境依赖 | 解除条件 |
+| 用例ID | 优先级 | 缺什么资源 | 影响 |
 |---|---|---|---|
-| D1-39 | Windows 升级检测链（EINVAL/文件锁） | Windows 环境 | Windows 机器复测 |
-| D1-27/28/31/41/42/45 | check_update 语义/冷却期/dismiss | check_update 框架层未暴露 | 框架暴露后复测 |
-| D1-1/2/5/6/58 | 安装/卸载/白名单 merge | 隔离 HOME install 布局 | 干净安装环境 |
-| D4-18/19/20、D2-1/10/12/13/16、D4-13/24 | 真云审批流/多账号/凭证切换 | 真云 AK/SK + PTY | 真云审批流环境 |
-| D3-C4 | 真云服务创建矩阵（设计级） | 真云最小配置创建+销毁 | 真云 E2E 环境 |
-| D10-1~5 / EXP-E01~15 | 评测 harness（promptfoo） | 评测基建 | harness 就绪 |
-| D9-2~9、D6-1/3/4 | 协议/并发/冷启注入压测 | MCP Inspector | 协议测试客户端 |
-| D4-10/12、D7-4 | 规则库变更/供应链安装/mirror | 干净安装+改造 | 隔离安装环境 |
+| D1-2 | P2 | 多客户端共存安装环境 | 无法验证 auto-detect 覆盖多客户端 |
+| D1-6 | P2 | KooCLI 下载源/国内镜像网络 | 无法验证 install-hcloud 引导闭环 |
+| D1-39 | P0 | Windows 环境（EINVAL 专属） | 本机 Linux 无法验证 Windows 升级检测链 |
+| D4-12 | P2 | npm 安装期抓包/SBOM 审计基建 | 无法审计供应链安装期安全 |
+| D7-4 | P2 | GitCode/国内镜像网络 + GITCODE_TOKEN | 无法验证镜像源安装 |
+| D9-6 | P1 | 多客户端并存环境 | 无法验证跨客户端协议互通 |
+| D10-4 | P0 | LLM 评测 harness | 无法验证高危意图自动走审批 |
+| EXP-E08 | P1 | LLM 评测 harness | serviceCatalog 层无法代理 explain_error 诊断路由 |
+
+> 上述 BLOCKED 均已在 CSV 的 blockedReason 列写明「实测时间 + 缺什么资源 + 影响 + 解除条件」四要素。
 
 ---
 
 ## 六、安全与红线合规
 
 - [x] 凭证泄漏事件：0
-- [x] 写操作误判 read-only：本轮发现 framework 层 1 处（D4-5 Apply*），已记缺陷
+- [x] 写操作误判 read-only：本轮发现 framework 层 1 处（D4-5 Apply*，复现 #685）
 - [x] 红线（I 类）违规：无
-- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（D2-11 用假 AK/SK/token，R3 返回 scope:rejected 且 S1 指纹未变；show_profile_redacted/auth_status 均经 redaction 管道）
-
----
+- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志
+- [x] 隔离探针清理：install/uninstall 隔离 HOME、skip 文件隔离 HOME 均已删除，无环境残留
 
 ## 七、资源释放
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| ECS/OBS/沙箱等真云资源 | 否 | — | 本轮未创建，残留 0 |
-
-> 本轮仅只读/黑盒 hook/规范化校验，无真云资源落地；`run_readonly ECS ListServersDetails` 返回 `{"count":0,"servers":[]}` 零资源。
+| OBS bucket probe-ca-linux-20260916 | 是（真机最小规格） | 已 obs rm -f | 归零验证 404 NoSuchBucket |
+| 隔离 HOME 临时目录 | 是（探针用） | 已 rm -rf | 无残留 |
 
 ---
 
 ## 八、遗留与建议
 
-- 待裁决：D5-3/D9-1（工具枚举 37 vs 40，需维护者判定框架层过滤是否为设计意图）；D4-23（规则注入契约 .md vs .mdc）
-- 本轮未覆盖：真云 E2E、多终端矩阵（其他 9 客户端）、审批流实时对话框（非 PTY）、MCP 协议 inspector 深测、install/uninstall 干净布局、评测 harness、Windows 升级检测
+- 待裁决：D5-3/D9-1/EXP-D5-3-3（框架层 37 vs 源码 40 过滤是否为设计意图）；D4-23（规则注入契约 .md vs .mdc）；D9-9（cancellation 取消能力声明）
+- 本轮修复关注（新增 #10~#12）：① JSON-RPC 错误码按规范区分 -32601/-32602；② serviceCatalog routeMap 补中文关键词 + 中英分词，消除中文意图大面积 MISS；③ initialize capabilities 声明取消能力
 - 建议：优先升级 CodeArts 框架集成插件版本使 #644 修复生效（D4-5 Apply*）；补 env-dump 正则 `HW_ACCESS_KEY|HW_SECRET_KEY|HW_SECURITY_TOKEN` 前缀（D4-2）

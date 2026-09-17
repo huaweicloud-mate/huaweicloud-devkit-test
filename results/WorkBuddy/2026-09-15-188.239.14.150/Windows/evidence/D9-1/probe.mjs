@@ -1,1 +1,13 @@
-import{spawnSync}from'node:child_process';import{join}from'node:path';import{homedir}from'node:os';const P=join(homedir(),'.workbuddy','binaries','node','versions','22.22.2-2','node_modules','huaweicloud-devkit');const mcp=join(P,'plugins','huaweicloud-core','src','mcp-server.mjs');const init=JSON.stringify({jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2024-11-05',capabilities:{},clientInfo:{name:'test',version:'1.0'}}})+'\n';const list=JSON.stringify({jsonrpc:'2.0',id:2,method:'tools/list',params:{}})+'\n';const r=spawnSync(process.execPath,[mcp],{input:init+list,encoding:'utf8',timeout:15000});const o=r.stdout||'';if(/tools/.test(o)&&/huaweicloud_/.test(o))console.log('PASS');else console.log('FAIL');
+import { TOOL_DEFINITIONS } from 'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/tools.mjs';
+const tools = TOOL_DEFINITIONS;
+console.log('Tool count:', tools.length);
+let validSchemas = 0;
+for (const t of tools) {
+  if (t.inputSchema && typeof t.inputSchema === 'object') validSchemas++;
+}
+console.log('Valid schemas:', validSchemas + '/' + tools.length);
+const names = tools.map(t => t.name);
+const dupes = names.filter((n,i) => names.indexOf(n) !== i);
+console.log('Duplicates:', dupes);
+if (tools.length >= 39 && validSchemas === tools.length && dupes.length === 0) console.log('PASS');
+else console.log('FAIL');

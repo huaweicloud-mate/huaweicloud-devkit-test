@@ -1,0 +1,13 @@
+=== D4-21: hook_check_artifacts (broad IAM policy) ===
+Timestamp: 2026-09-15T05:38:17.425Z
+
+  Broad IAM policy (Action:*, Resource:*):
+    decision=deny, findings=[{ruleId:hwc-iam-admin-policy, severity:deny, title:"Broad IAM administrator grant"}]
+    
+  Narrow IAM policy (ecs:servers:list on specific resource):
+    decision=warn, findings=[{ruleId:hwc-sandbox-missing-ttl, severity:warn, title:"Sandbox deployment missing cleanup metadata"}]
+
+RESULT: PASS
+  Broad IAM policy with Action:* and Resource:* is correctly denied (severity=deny).
+  The hwc-iam-admin-policy rule fires and blocks the artifact.
+  Narrow policy only gets a warn about missing TTL metadata (sandbox cleanup), which is expected.

@@ -1,0 +1,11 @@
+=== D4-20: Deny → Zero Operations (Real Cloud) ===
+Timestamp: 2026-09-15T16:41:51.231Z
+[PASS] Plan without approval → decision=deny: decision=deny, safeToRun=false, reason="Huawei Cloud write operation blocked"
+[PASS] No approval given → command not executed: run_approved_command was NOT called (user denied)
+[PASS] tctest-wb-d420-denied VPC NOT created: ListVpcs confirmed: only tctest-wb-d418-realcloud exists, tctest-wb-d420-denied absent
+[PASS] Zero resource changes from denied operation: No VPC, no command execution, no cloud resource modification
+[PASS] classifyHcloudArgs(CreateVpc) → deny (requires approval): decision=deny
+
+=== Summary ===
+PASS: 5, FAIL: 0
+VERDICT: PASS — denied operations produce zero resource changes, no command execution

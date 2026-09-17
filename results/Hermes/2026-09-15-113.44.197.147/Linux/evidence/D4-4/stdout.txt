@@ -1,0 +1,4 @@
+=== CASE D4-4 ===  FAIL
+  expected: Change* 写操作未经审批 => deny
+  actual:   1/4：ChangeServerOsWithoutCloudInit/ChangeVpc/ChangeInstanceConfiguration allow（仅 CreateServer deny）
+  root:     safety/policy.json writeOperationPrefixes 缺 Change → 审批门漏拦截

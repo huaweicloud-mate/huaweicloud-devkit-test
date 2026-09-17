@@ -1,0 +1,6 @@
+=== CASE D4-4 ===  (写操作审批门，含 Change*)
+  hcloud ecs ChangeServerOsWithoutCloudInit -> allow (exp deny) <<< 漏拦截
+  hcloud vpc ChangeVpc -> allow (exp deny) <<< 漏拦截
+  hcloud rds ChangeInstanceConfiguration -> allow (exp deny) <<< 漏拦截
+  hcloud ecs CreateServer -> deny (exp deny) 
+  RESULT: FAIL  1/4 拦截

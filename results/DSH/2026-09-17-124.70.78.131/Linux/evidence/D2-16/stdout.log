@@ -1,0 +1,6 @@
+BEFORE import file exists: true
+RESULT {"status":"ok","scope":"persist","backedUp":false,"obs":{"configured":true},"hcloud":{"ok":true,"error":""},"note":"S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority."}
+AFTER import file exists: false
+S1.ak == import ak: true
+ASSERT 读后擦除(exists=False): true
+VERDICT PASS

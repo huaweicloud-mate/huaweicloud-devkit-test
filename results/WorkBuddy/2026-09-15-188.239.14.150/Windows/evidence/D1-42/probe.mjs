@@ -1,1 +1,1 @@
-// D1-42: BLOCKED - Requires MCP server lifecycle management
+console.log('BLOCKED: Requires MCP server lifecycle test');

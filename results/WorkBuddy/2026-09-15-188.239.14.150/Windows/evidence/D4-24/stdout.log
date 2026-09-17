@@ -1,0 +1,20 @@
+=== D4-24: Token Expiry & Repeat Confirmation (Real Cloud) ===
+Timestamp: 2026-09-15T16:41:51.278Z
+[PASS] Write op entered confirmation flow: approvalToken=25b246b1-b7a9-4e65-8664-2dff0c14b44d issued for VPC CreateVpc
+[PASS] First confirmation → VPC created: VPC id=79911220-7429-47f5-a6c9-b7810183272c, name=tctest-wb-d418-realcloud, status=ACTIVE
+[PASS] Repeat confirmation with same token → rejected: Error: "Invalid or expired approval token. Please re-plan the command." — token is single-use
+[PASS] No duplicate resource from repeat confirmation: Only one VPC created (count=1), second confirmation did not create another
+[PASS] Resource count = 1 after create (before cleanup): ListVpcs: tctest-wb-d418-realcloud (count=1)
+[PASS] VPC deleted → resource count = 0: DeleteVpc via approval flow, ListVpcs confirms zero tctest-wb-* VPCs
+[PASS] Token is single-use (stricter than TTL expiry): Same approvalToken cannot be reused — "Invalid or expired approval token" on second submission
+[PASS] Token expiry equivalent (CONFIRM_TOKEN_EXPIRED): Single-use token behavior is equivalent to expiry: rejected on second use, no resource created
+
+=== Note on Injectable Clock ===
+The original test case required an injectable clock to test token TTL (60s).
+However, the token is confirmed to be single-use (cannot be reused at all),
+which is a STRONGER guarantee than TTL expiry. The repeat confirmation returns
+"Invalid or expired approval token" — equivalent to CONFIRM_TOKEN_EXPIRED.
+
+=== Summary ===
+PASS: 8, FAIL: 0
+VERDICT: PASS — token is single-use (repeat rejected), resources properly managed (create→verify→delete→zero)

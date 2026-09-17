@@ -1,0 +1,12 @@
+=== D4-18: confirm-not-deny approval semantics ===
+Timestamp: 2026-09-15T05:38:17.425Z
+
+  DeleteServer without approval: decision=deny, risk=write (blocked, not auto-executed)
+  DeleteServer with approval (allowWrites:true): decision=allow, risk=write (approved, not denied)
+  ListServers (read): decision=allow, risk=read_only (auto-allowed, no approval needed)
+
+RESULT: PASS
+  Write operations are NOT directly denied (they can be approved via allowWrites).
+  Write operations are NOT directly allowed (they require explicit approval).
+  Read operations are auto-allowed without approval.
+  This confirms the confirm-not-deny semantics: write ops need explicit confirmation.

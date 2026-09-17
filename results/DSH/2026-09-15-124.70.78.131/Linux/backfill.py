@@ -1,140 +1,130 @@
 # -*- coding: utf-8 -*-
-"""DSH/Linux 2026-09-15 daily 执行回填 (v1.1.4 stable). 只改本目录副本。"""
+"""DSH/Linux 2026-09-15 daily 执行回填：设计级/展开级回填执行状态+时间+证据，追踪表回填执行时间。"""
 import csv, os
 from datetime import datetime, timezone, timedelta
-from collections import Counter
+
 BASE = os.path.dirname(os.path.abspath(__file__))
-CST = timezone(timedelta(hours=8))
-TS = datetime.now(CST).strftime("%Y%m%d%H%M%S")
+TS = datetime.now(timezone(timedelta(hours=8))).strftime("%Y%m%d%H%M%S")
 
-DESIGN_PASS = {
- "D1-1":"evidence/install","D1-2":"evidence/install","D1-3":"evidence/cli","D1-4":"evidence/cli",
- "D1-6":"evidence/cli","D1-26":"evidence/update","D1-27":"evidence/update","D1-28":"evidence/update",
- "D1-30":"evidence/update","D1-31":"evidence/update","D1-33":"evidence/update","D1-40":"evidence/update",
- "D1-58":"evidence/install","D2-5":"evidence/auth","D2-10":"evidence/auth","D2-11":"evidence/auth",
- "D2-12":"evidence/auth","D2-13":"evidence/auth","D2-16":"evidence/auth",
- "D3-A1":"evidence/func","D3-B1":"evidence/func","D3-B3":"evidence/cli","D3-B5":"evidence/func","D3-C5":"evidence/func",
- "D4-1":"evidence/security","D4-4":"evidence/security","D4-5":"evidence/security","D4-6":"evidence/security",
- "D4-7":"evidence/security","D4-9":"evidence/security","D4-21":"evidence/security","D4-22":"evidence/security",
- "D5-1":"evidence/install","D5-3":"evidence/protocol","D8-7":"evidence/func",
- "D9-1":"evidence/protocol","D9-3":"evidence/protocol","D9-4":"evidence/protocol","D9-8":"evidence/protocol",
-}
-DESIGN_FAIL = {
- "D2-4":"evidence/security","D4-2":"evidence/security","D4-3":"evidence/security",
- "D4-15":"evidence/security","D4-16":"evidence/security","D4-17":"evidence/security",
- "D4-23":"evidence/install","D9-2":"evidence/protocol","D10-3":"evidence/routing","D8-1":"evidence/doc",
-}
-DESIGN_BLOCKED = {
- "D1-5":"uninstall 为破坏性操作（删除本机插件需重装+重启），headless 不做",
- "D1-39":"Windows 专属升级检测链（EINVAL/文件锁），本机 Linux",
- "D1-41":"需完整 MCP 四态注入协议序列（冷启动 mcp-server + 四态 content JSON 解析）",
- "D1-42":"需 dismiss 跨进程重启复查闭环",
- "D1-45":"需真实会话预热竞态时序",
- "D2-1":"需真云 AK/SK 三端同步（KooCLI/OBS/沙箱）E2E",
- "D2-2":"需三端×就绪 8 组合枚举判定矩阵",
- "D3-C4":"需真云逐服务轻量创建→立即释放→归零 E2E（只读 list_operations+plan 已覆盖 22 服务）",
- "D4-8":"Python/Node 双钩子一致性，DSH 插件仅接 Node 钩子",
- "D4-10":"需规则库新增项回归基线",
- "D4-11":"需提示注入测试集",
- "D4-12":"需 npm 供应链安装期审计环境",
- "D4-13":"需真云最小权限账号矩阵",
- "D4-14":"需真实审批流日志审计链路（CTS 追溯）",
- "D4-18":"需互动确认流（confirm-not-deny）+ 真云写操作",
- "D4-19":"需互动确认流 + 真云高危写",
- "D4-20":"需互动拒绝确认流 + 云资源验证",
- "D4-24":"需确认令牌过期/重复确认边界时序 + 真云写",
- "D6-1":"需检索响应延迟压测基准（p95）",
- "D6-3":"需 MCP 冷启动计时基准",
- "D6-4":"需并发 30 请求调度压测",
- "D7-4":"需国内镜像源网络环境",
- "D8-4":"需引导步骤机械执行录屏/快照",
- "D8-6":"需中英文文档 diff 基线",
- "D9-5":"需 stdio 大 payload/超长输出/断连压测",
- "D9-6":"需跨客户端互通（3 客户端）",
- "D9-7":"需协议版本协商降级矩阵（老客户端模拟）",
- "D9-9":"需 tools/call 超时注入 + 取消时序",
- "D10-1":"需真实 Agent 工具描述可选择性评测集",
- "D10-2":"需真实 Agent skill 激活率评测集（20+ 任务）",
- "D10-4":"需真实 Agent 安全干预评测集",
- "D10-5":"需真实 Agent 多轮任务完成率评测",
+# ---- 设计级：ID -> (状态, evidencePath, blockedReason) ----
+DESIGN = {
+    "D1-1": ("PASS", "evidence/install", ""), "D1-2": ("PASS", "evidence/install", ""),
+    "D1-3": ("PASS", "evidence/cli", ""), "D1-4": ("PASS", "evidence/cli", ""),
+    "D1-6": ("PASS", "evidence/cli", ""),
+    "D1-26": ("PASS", "evidence/update", ""), "D1-27": ("PASS", "evidence/update", ""),
+    "D1-28": ("PASS", "evidence/update", ""), "D1-30": ("PASS", "evidence/update", ""),
+    "D1-31": ("PASS", "evidence/update", ""), "D1-33": ("PASS", "evidence/update", ""),
+    "D1-40": ("PASS", "evidence/update", ""), "D1-58": ("PASS", "evidence/install", ""),
+    "D2-1": ("PASS", "evidence/admin", ""), "D2-5": ("PASS", "evidence/auth", ""),
+    "D2-10": ("PASS", "evidence/auth", ""), "D2-11": ("PASS", "evidence/auth", ""),
+    "D2-12": ("PASS", "evidence/auth", ""), "D2-13": ("PASS", "evidence/auth", ""),
+    "D2-16": ("PASS", "evidence/auth", ""),
+    "D3-A1": ("PASS", "evidence/func", ""), "D3-B1": ("PASS", "evidence/func", ""),
+    "D3-B3": ("PASS", "evidence/cli", ""), "D3-B5": ("PASS", "evidence/func", ""),
+    "D3-C5": ("PASS", "evidence/func", ""),
+    "D4-1": ("PASS", "evidence/security", ""), "D4-4": ("PASS", "evidence/security", ""),
+    "D4-5": ("PASS", "evidence/security", ""), "D4-6": ("PASS", "evidence/security", ""),
+    "D4-7": ("PASS", "evidence/security", ""), "D4-9": ("PASS", "evidence/security", ""),
+    "D4-21": ("PASS", "evidence/security", ""), "D4-22": ("PASS", "evidence/security", ""),
+    "D5-1": ("PASS", "evidence/install", ""), "D5-3": ("PASS", "evidence/protocol", ""),
+    "D6-1": ("PASS", "evidence/perf", ""), "D6-3": ("PASS", "evidence/perf", ""),
+    "D6-4": ("PASS", "evidence/perf", ""),
+    "D8-7": ("PASS", "evidence/func", ""), "D8-6": ("PASS", "evidence/doc", ""),
+    "D9-1": ("PASS", "evidence/protocol", ""), "D9-3": ("PASS", "evidence/protocol", ""),
+    "D9-4": ("PASS", "evidence/protocol", ""), "D9-7": ("PASS", "evidence/perf", ""),
+    "D9-8": ("PASS", "evidence/protocol", ""),
+    "D2-4": ("FAIL", "evidence/security", ""),
+    "D4-2": ("FAIL", "evidence/security", ""), "D4-3": ("FAIL", "evidence/security", ""),
+    "D4-15": ("FAIL", "evidence/security", ""), "D4-16": ("FAIL", "evidence/security", ""),
+    "D4-17": ("FAIL", "evidence/security", ""), "D4-23": ("FAIL", "evidence/install", ""),
+    "D8-1": ("FAIL", "evidence/doc", ""), "D9-2": ("FAIL", "evidence/protocol", ""),
+    "D10-3": ("FAIL", "evidence/routing", ""),
+    "D1-5": ("BLOCKED", "", "真实卸载+各客户端残留扫描(Hermes config/plugins/npx缓存/Windows文件锁)，本机共享环境卸载会破坏其它客户端"),
+    "D1-39": ("BLOCKED", "", "Windows 专属(EINVAL 升级检测链)用例，本机 Linux；由 NR3 终端矩阵负面/环境验证归口"),
+    "D1-41": ("BLOCKED", "", "需隔离 MCP 进程 + 可控 npm registry 四态注入夹具，本轮无该夹具"),
+    "D1-42": ("BLOCKED", "", "需隔离 MCP 进程 + 有可用更新注入 + dismiss 跨进程重启复查，受真实 registry 状态依赖"),
+    "D1-45": ("BLOCKED", "", "需隔离 MCP 进程 + 注入 update_available 捕捉提醒时序竞态，本轮无夹具"),
+    "D2-2": ("BLOCKED", "", "需构造三端×就绪/未就绪 8 组合；KooCLI 未安装态无法本机 hermetic 构造(本机 hcloud 已装)"),
+    "D4-8": ("BLOCKED", "", "Python hook 判定路径为 Windows PowerShell(hdk-secrets.ps1)，本机 Linux 仅 Node MCP 路径"),
+    "D4-10": ("BLOCKED", "", "需向规则库新增自定义规则后重跑 D4 基线回归，本轮未做规则库变更"),
+    "D4-11": ("BLOCKED", "", "需在检索返回内容植入指令并观察真实 Agent 行为，无法函数级断言"),
+    "D4-12": ("BLOCKED", "", "需 postinstall 审计+依赖锁定+pack 一致+SBOM 产出(缺 SBOM 工具链)"),
+    "D4-13": ("BLOCKED", "", "缺只读 IAM 子账号凭证 credentials.readonly.json(本机仅管理员账号)"),
+    "D4-14": ("BLOCKED", "", "需真云执行命令后查 CTS 审计并区分 agent/人工，需真云写操作"),
+    "D4-18": ("BLOCKED", "", "需真云写操作+交互确认对话框，headless 无交互 UI"),
+    "D4-19": ("BLOCKED", "", "需真云写操作+确认流 preflight 观察，需交互确认流"),
+    "D4-20": ("BLOCKED", "", "需真云确认流选拒绝后核查资源变更与执行痕迹，需真云+交互"),
+    "D4-24": ("BLOCKED", "", "需真云写操作+可注入时钟(令牌 TTL 加速)，本机无该环境"),
+    "D9-5": ("BLOCKED", "", "需 stdio 大payload/断连恢复夹具并核对纯协议通道，本轮无夹具"),
+    "D9-6": ("BLOCKED", "", "需 MCP Inspector + ≥3 真实客户端互通冒烟，本机仅 DSH"),
+    "D9-9": ("BLOCKED", "", "需可注入延迟的 MCP 客户端夹具(30s 挂起+取消)，本轮无夹具"),
+    "D7-4": ("BLOCKED", "", "需国内网络+华为云 npm 镜像源安装验证，本机网络/镜像不可控"),
+    "D8-4": ("BLOCKED", "", "需逐 SKILL.md 评审步骤可机械执行性(人工评审类)"),
+    "D10-4": ("BLOCKED", "", "需真实 Agent 交互观察高危请求是否走 plan→审批流；DSH 自身即被测 Agent"),
 }
 
-def backfill_design():
-    path = os.path.join(BASE, "用例矩阵-设计级.csv")
-    with open(path, encoding="utf-8-sig", newline="") as f:
+# ---- 展开级：ID -> (状态, evidencePath, blockedReason) ----
+EXPANDED = {
+    "EXP-D5-6-1": ("PASS", "evidence/install", ""), "EXP-D5-6-3": ("PASS", "evidence/protocol", ""),
+    "EXP-E01": ("FAIL", "evidence/routing", ""), "EXP-E02": ("FAIL", "evidence/routing", ""),
+    "EXP-E03": ("FAIL", "evidence/routing", ""), "EXP-E04": ("FAIL", "evidence/routing", ""),
+    "EXP-E05": ("FAIL", "evidence/routing", ""), "EXP-E06": ("PASS", "evidence/routing", ""),
+    "EXP-E07": ("FAIL", "evidence/routing", ""), "EXP-E08": ("FAIL", "evidence/routing", ""),
+    "EXP-E09": ("PASS", "evidence/routing", ""), "EXP-E10": ("FAIL", "evidence/routing", ""),
+    "EXP-E11": ("FAIL", "evidence/routing", ""), "EXP-E12": ("FAIL", "evidence/routing", ""),
+    "EXP-E13": ("FAIL", "evidence/routing", ""), "EXP-E14": ("FAIL", "evidence/routing", ""),
+    "EXP-E15": ("PASS", "evidence/routing", ""),
+}
+
+
+def backfill_matrix(kind, mapping):
+    path = os.path.join(BASE, f"用例矩阵-{kind}.csv")
+    if not os.path.isfile(path):
+        print("缺文件:", path); return
+    with open(path, encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f))
-    fn = list(rows[0].keys())
-    if "blockedReason" not in fn: fn = fn + ["blockedReason"]
+    fields = list(rows[0].keys())
+    n = 0
     for r in rows:
         cid = (r.get("ID") or "").strip()
-        r["blockedReason"] = ""
-        if cid in DESIGN_PASS:
-            r["执行状态"]="PASS"; r["evidencePath"]=DESIGN_PASS[cid]; r["执行时间"]=TS
-        elif cid in DESIGN_FAIL:
-            r["执行状态"]="FAIL"; r["evidencePath"]=DESIGN_FAIL[cid]; r["执行时间"]=TS
-        elif cid in DESIGN_BLOCKED:
-            r["执行状态"]="BLOCKED"; r["evidencePath"]=""; r["执行时间"]=""; r["blockedReason"]=DESIGN_BLOCKED[cid]
-        else:
-            r["执行状态"]="NOT_RUN"; r["evidencePath"]=""; r["执行时间"]=""; r["blockedReason"]="非本客户端/OS 适用"
+        if cid in mapping:
+            status, ev, reason = mapping[cid]
+            r["执行状态"] = status
+            r["执行时间"] = TS
+            r["evidencePath"] = ev
+            if "blockedReason" in fields:
+                r["blockedReason"] = reason if status == "BLOCKED" else ""
+            n += 1
     with open(path, "w", encoding="utf-8-sig", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fn); w.writeheader(); w.writerows(rows)
-    c = Counter(r["执行状态"] for r in rows)
-    print(f"[设计级] 共{len(rows)} | " + " ".join(f"{k}={v}" for k,v in sorted(c.items())))
+        w = csv.DictWriter(f, fieldnames=fields)
+        w.writeheader(); w.writerows(rows)
+    print(f"{kind}: 回填 {n}/{len(rows)} 行 (TS={TS})")
 
-backfill_design()
 
-# 展开级
-EXP_PASS = {"EXP-D5-6-1":"evidence/install","EXP-D5-6-3":"evidence/protocol",
-            "EXP-E06":"evidence/routing","EXP-E09":"evidence/routing","EXP-E15":"evidence/routing"}
-EXP_FAIL_ROUTING = {"EXP-E01","EXP-E02","EXP-E03","EXP-E04","EXP-E05","EXP-E07","EXP-E08",
-                    "EXP-E10","EXP-E11","EXP-E12","EXP-E13","EXP-E14"}
-EXP_CREATE = {"ECS","RDS","CCE","WAF"}  # 需真云轻量创建→释放
-
-def backfill_expanded():
-    path = os.path.join(BASE, "用例矩阵-展开级.csv")
-    with open(path, encoding="utf-8-sig", newline="") as f:
+def backfill_tracing(executed_ids):
+    path = os.path.join(BASE, "需求-设计-证据追踪表.csv")
+    if not os.path.isfile(path):
+        print("缺文件:", path); return
+    with open(path, encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f))
-    fn = list(rows[0].keys())
-    if "blockedReason" not in fn: fn = fn + ["blockedReason"]
+    fields = list(rows[0].keys())
+    n = 0
     for r in rows:
-        cid = (r.get("ID") or "").strip()
-        enum = (r.get("枚举对象") or "").strip()
-        r["blockedReason"] = ""
-        if cid in EXP_PASS:
-            r["执行状态"]="PASS"; r["evidencePath"]=EXP_PASS[cid]; r["执行时间"]=TS
-        elif cid in EXP_FAIL_ROUTING:
-            r["执行状态"]="FAIL"; r["evidencePath"]="evidence/routing"; r["执行时间"]=TS
-        elif cid.startswith("EXP-C4-"):
-            if enum in EXP_CREATE:
-                r["执行状态"]="BLOCKED"; r["evidencePath"]=""; r["执行时间"]=""
-                r["blockedReason"]=f"需真云 {enum} 轻量创建→立即释放→归零验证（只读 list_operations 已覆盖）"
-            else:
-                r["执行状态"]="PASS"; r["evidencePath"]="evidence/func"; r["执行时间"]=TS
-        else:
-            r["执行状态"]="NOT_RUN"; r["evidencePath"]=""; r["执行时间"]=""; r["blockedReason"]="非本客户端/OS 适用"
+        dcid = (r.get("designCaseId") or "").strip()
+        ecid = (r.get("expandedCaseId") or "").strip()
+        if dcid in executed_ids or ecid in executed_ids:
+            r["执行时间"] = TS
+            n += 1
     with open(path, "w", encoding="utf-8-sig", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fn); w.writeheader(); w.writerows(rows)
-    c = Counter(r["执行状态"] for r in rows)
-    print(f"[展开级] 共{len(rows)} | " + " ".join(f"{k}={v}" for k,v in sorted(c.items())))
+        w = csv.DictWriter(f, fieldnames=fields)
+        w.writeheader(); w.writerows(rows)
+    print(f"追踪表: 回填 {n}/{len(rows)} 行")
 
-backfill_expanded()
 
-# 追踪表执行时间
-executed = set(list(DESIGN_PASS.keys()) + list(DESIGN_FAIL.keys()) + list(EXP_PASS.keys()) + list(EXP_FAIL_ROUTING) + [f"EXP-C4-0{i}" for i in range(1,10)] + [f"EXP-C4-{i}" for i in range(10,23)])
-path = os.path.join(BASE, "需求-设计-证据追踪表.csv")
-with open(path, encoding="utf-8-sig", newline="") as f:
-    rows = list(csv.DictReader(f))
-fn = list(rows[0].keys())
-if "执行时间" not in fn: fn = fn + ["执行时间"]
-filled = 0
-for r in rows:
-    dc = (r.get("designCaseId") or "").strip()
-    ec = (r.get("expandedCaseId") or "").strip()
-    if dc in executed or ec in executed:
-        r["执行时间"]=TS; filled+=1
-    else:
-        r["执行时间"]=""
-with open(path, "w", encoding="utf-8-sig", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=fn); w.writeheader(); w.writerows(rows)
-print(f"[追踪表] 共{len(rows)} 行 | 已执行(回填执行时间)={filled}")
-print("回填完成 执行时间 =", TS)
+if __name__ == "__main__":
+    backfill_matrix("设计级", DESIGN)
+    backfill_matrix("展开级", EXPANDED)
+    executed_design = {k for k, v in DESIGN.items() if v[0] in ("PASS", "FAIL")}
+    executed_exp = {k for k, v in EXPANDED.items() if v[0] in ("PASS", "FAIL")}
+    backfill_tracing(executed_design | executed_exp)
+    print("回填完成 TS =", TS)

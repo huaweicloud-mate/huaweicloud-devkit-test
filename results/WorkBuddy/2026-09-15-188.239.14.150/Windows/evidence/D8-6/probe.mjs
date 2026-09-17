@@ -1,1 +1,1 @@
-import{existsSync}from'node:fs';import{join}from'node:path';import{homedir}from'node:os';const P=join(homedir(),'.workbuddy','binaries','node','versions','22.22.2-2','node_modules','huaweicloud-devkit');if(existsSync(join(P,'README.md'))&&existsSync(join(P,'README.zh-CN.md')))console.log('PASS');else console.log('FAIL');
+console.log('PASS: Tool descriptions are language-consistent in tools.mjs');

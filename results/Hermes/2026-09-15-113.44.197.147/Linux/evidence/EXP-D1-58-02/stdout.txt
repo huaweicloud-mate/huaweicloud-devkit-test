@@ -1,0 +1,50 @@
+=== CASE EXP-D1-58-02 ===  PASS
+  expected: 命中 merge：构造 fake ~/.claude.json，断言生成 .bak 备份 + mcpServers.huaweicloud-devkit 合并且唯一 + 原配置其余键完好
+  actual:   见下方探针实况（命中对应断言行）
+  probe:    probe-d158.sh（PTY 直驱 huaweicloud-devkit v1.1.4 install，隔离 HOME+HERMES_HOME → 菜单 option3 → configureGenericMCP）
+  root:     hdk/plugins/huaweicloud-core/src/setup-cli.mjs:3259-3308
+--- 探针实况输出 ---
+=============== EXP-D1-58-02 命中 merge(fake .claude.json) ===============
+[fixture HOME] /tmp/hdk-d158.xSxXEE/c02
+3
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.4                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+[1G[0JNo supported agent detected.
+What would you like to do?
+  1) Install to a specific agent (e.g. codex)
+  2) Install to all supported agents (--target all)
+  3) Wire up a generic MCP agent (Claude Code / Cursor / custom MCP client)
+  0) Exit
+3
+
+Configuring a generic MCP agent (MCP tools only; skills/hooks are not installed)...
+  [Claude Code] MCP server configured in /tmp/hdk-d158.xSxXEE/c02/.claude.json. Restart the session to apply.
+
+-------- 产物/文件状态 --------
+[.claude.json 内容]
+{
+  "mcpServers": {
+    "other-server": {
+      "command": "x"
+    },
+    "huaweicloud-devkit": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "huaweicloud-devkit",
+        "huaweicloud-devkit-mcp"
+      ]
+    }
+  },
+  "project": {
+    "owner": "alice"
+  }
+}
+[.claude.json.bak 内容]
+{"mcpServers":{"other-server":{"command":"x"}},"project":{"owner":"alice"}}
+[文件清单]
+/tmp/hdk-d158.xSxXEE/c02/.claude.json
+/tmp/hdk-d158.xSxXEE/c02/.claude.json.bak

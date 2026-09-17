@@ -1,1 +1,1 @@
-// D9-9: BLOCKED - Requires MCP Inspector
+console.log('BLOCKED: Requires MCP Inspector with timeout injection');

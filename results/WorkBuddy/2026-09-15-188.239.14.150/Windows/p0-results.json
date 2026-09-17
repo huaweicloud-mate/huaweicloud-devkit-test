@@ -1,0 +1,164 @@
+[
+  {
+    "caseId": "D1-39",
+    "level": "design",
+    "status": "FAIL",
+    "evidencePath": "",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": "Windows upgrade detection chain failed: queryDistTagsSync result: null\nFAIL: no result and no error"
+  },
+  {
+    "caseId": "D1-40",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D1-40",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": ""
+  },
+  {
+    "caseId": "D2-11",
+    "level": "design",
+    "status": "FAIL",
+    "evidencePath": "",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": "Original credentials keys: [ 'ak', 'sk', 'securityToken', 'region', 'configuredBySession' ]\nWritten credential keys: [ 'ak', 'sk', 'securityToken', 'region' ]\nFAIL: securityToken was persisted to disk\nCredentials restored"
+  },
+  {
+    "caseId": "D2-4",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D2-4",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": ""
+  },
+  {
+    "caseId": "D4-1",
+    "level": "design",
+    "status": "FAIL",
+    "evidencePath": "",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": "cat ~/.hcloud/credentials.json => deny\ncat ~/.huaweicloud/credentials => deny\ntype %USERPROFILE%.hcloudcredentials.json => deny\nGet-Content ~/.hcloud/config.json => deny\ntype C:UsersAdministrator.confighuaweicloudcredentials.json => allow\nFAIL"
+  },
+  {
+    "caseId": "D4-2",
+    "level": "design",
+    "status": "FAIL",
+    "evidencePath": "",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": "printenv HW_ACCESS_KEY => allow\nprintenv HW_SECRET_KEY => allow\necho $HW_ACCESS_KEY => allow\necho %HW_ACCESS_KEY% => allow\nenv | grep HUAWEICLOUD => deny\nprintenv HUAWEICLOUD_AK => deny\nset HW_SECRET_KEY => allow\nFAIL"
+  },
+  {
+    "caseId": "D4-3",
+    "level": "design",
+    "status": "FAIL",
+    "evidencePath": "",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": "hcloud KMS ListSecrets => allow\n  WARNING: allowed potentially sensitive command\nhcloud CSMS ListSecrets => allow\n  WARNING: allowed potentially sensitive command\nhcloud DEW ListSecrets => allow\n  WARNING: allowed potentially sensitive command\nhcloud KMS ShowSecret --secret-id abc => allow\n  WARNING: allowed potentially sensitive command\ncat /etc/shadow => allow\n  WARNING: allowed potentially sensitive command\nFAIL"
+  },
+  {
+    "caseId": "D4-5",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D4-5",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": ""
+  },
+  {
+    "caseId": "D4-9",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D4-9",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": ""
+  },
+  {
+    "caseId": "D4-15",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D4-15",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": ""
+  },
+  {
+    "caseId": "D4-16",
+    "level": "design",
+    "status": "FAIL",
+    "evidencePath": "",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": "sh -c \"hcloud ECS DeleteServer\" => allow\nbash -c \"hcloud ECS DeleteServer\" => allow\neval \"hcloud ECS DeleteServer\" => allow\n$(hcloud ECS DeleteServer) => allow\npowershell -c \"hcloud ECS DeleteServer\" => allow\ncmd /c \"hcloud ECS DeleteServer\" => allow\nBlocked 0/6 wrapped commands\nFAIL"
+  },
+  {
+    "caseId": "D4-18",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D4-18",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": ""
+  },
+  {
+    "caseId": "D4-19",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D4-19",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": ""
+  },
+  {
+    "caseId": "D4-21",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D4-21",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": ""
+  },
+  {
+    "caseId": "D4-22",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D4-22",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": ""
+  },
+  {
+    "caseId": "D4-23",
+    "level": "design",
+    "status": "FAIL",
+    "evidencePath": "",
+    "blockedReason": "",
+    "execTime": "20260916042311",
+    "details": "FAIL: agent-rules.md not found"
+  },
+  {
+    "caseId": "D8-7",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D8-7",
+    "blockedReason": "",
+    "execTime": "20260916042312",
+    "details": ""
+  },
+  {
+    "caseId": "D10-4",
+    "level": "design",
+    "status": "PASS",
+    "evidencePath": "evidence/D10-4",
+    "blockedReason": "",
+    "execTime": "20260916042312",
+    "details": ""
+  }
+]

@@ -1,0 +1,23 @@
+=== UPDATE PROBE RESULTS (v1.1.4 stable) ===
+total=19 pass=18 fail=1
+PASS  D1-26  huaweicloud_check_update registered  => true
+PASS  D1-26  huaweicloud_upgrade registered  => true
+PASS  D1-26  check_update has description+inputSchema  => 检查 huaweicloud-devkit 插件是否有新版本。结果含 curre
+PASS  D1-30  1.1.2 > 1.1.1  => 1
+PASS  D1-30  stable > pre  => 1
+PASS  D1-30  equal = 0  => 0
+PASS  D1-30  pre increment  => -1
+PASS  D1-30  hasPrerelease  => true,false
+PASS  D1-27  up_to_date && !updateAvailable  => {"currentVersion":"1.1.4","latestStable":"1.1.4","latestNext":null,"targetVersion":"1.1.4","updateAvailable":false,"dismissed":false,"dismissExpiresAt":null,"result":"up_to_date"}
+PASS  D1-28  update_available target=1.1.4  => {"currentVersion":"1.1.2","latestStable":"1.1.4","latestNext":"1.1.4-next.6","targetVersion":"1.1.4","updateAvailable":true,"dismissed":false,"dismissExpiresAt":null,"result":"update_available"}
+PASS  D1-40  remote<=local up_to_date  => {"currentVersion":"1.1.4","latestStable":"1.1.3","latestNext":null,"targetVersion":"1.1.3","updateAvailable":false,"dismissed":false,"dismissExpiresAt":null,"result":"up_to_date"}
+PASS  D1-40  pre remote<=local no downgrade  => {"currentVersion":"1.1.4-next.6","latestStable":"1.1.3","latestNext":"1.1.3-next.9","targetVersion":"1.1.3","updateAvailable":false,"dismissed":false,"dismissExpiresAt":null,"result":"up_to_date"}
+PASS  D1-31  skip fields  => {"dismissedVersion":"1.1.4","dismissedAt":"1970-01-01T00:00:01.000Z","expireAt":"1970-01-04T00:00:01.000Z"}
+PASS  D1-31  cooldown -> dismissed  => {"currentVersion":"1.1.2","latestStable":"1.1.4","latestNext":null,"targetVersion":"1.1.4","updateAvailable":false,"dismissed":true,"dismissExpiresAt":"1970-01-04T00:00:01.000Z","result":"dismissed"}
+PASS  D1-31  expire = dismissed + 3 days  => 259200000
+PASS  D1-33  skip JSON structure  => {"dismissedVersion":"1.1.4","dismissedAt":"2026-09-16T23:02:38.277Z","expireAt":"2026-09-19T23:02:38.277Z"}
+PASS  D1-33  resolveSkipFilePath returns path  => /home/testbot2/.config/huaweicloud/devkit-skip.json
+PASS  D1-39  readInstalledVersion returns version  => 1.1.5
+FAIL  D1-39  queryDistTags returns dist-tags  => null
+--- FAILED ---
+  D1-39 queryDistTags returns dist-tags

@@ -1,0 +1,13 @@
+=== D4-19: Precheck in Confirmation Flow (Real Cloud) ===
+Timestamp: 2026-09-15T16:41:51.185Z
+[PASS] hook_check_command catches DeleteServers (destructive): decision=warn, ruleId=hwc-destructive-delete-operation, severity=warn, category=destructive
+[PASS] Precheck message: "This hcloud command will delete, detach, or remove cloud resources": message="This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible."
+[PASS] Precheck remediation provided: remediation="List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation."
+[PASS] plan_cli_command DeleteVpc shows destructive warning even with allowWrites: warnings[0].ruleId=hwc-destructive-delete-operation, severity=warn
+[PASS] Precheck is warning (not blocking) — operation can proceed with approval: decision=allow (with allowWrites), but warning is surfaced for user review
+[PASS] classifyHcloudArgs(DeleteServers) → deny: decision=deny, reason=Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+[PASS] classifyHcloudArgs(DeleteInstance) → deny: decision=deny
+
+=== Summary ===
+PASS: 7, FAIL: 0
+VERDICT: PASS — precheck (hook_check_command) catches high-risk operations even in confirmation flow

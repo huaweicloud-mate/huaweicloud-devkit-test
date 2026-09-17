@@ -1,0 +1,6 @@
+用例: D4-15 hook绕过尝试 (P0) 工具:hook_check_command
+执行时间: 2026-09-15 18:10 (北京时间)
+探针: hook_check_command echo ANSI-C 变体 E\x43S DeleteServers → {ok:true, decision:'allow'} 绕过成功
+断言: 变体无绕过成功
+结果: FAIL — ANSI-C 编码变体绕过
+根因: risk-rule-engine.mjs 纯正则文本匹配，未解 ANSI-C（复现 #673）

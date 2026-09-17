@@ -67,11 +67,13 @@ npm install -g huaweicloud-devkit
 
 > **镜像 fallback**：GitHub clone/pull 失败时，脚本自动 fallback 到 GitCode 镜像 `gitcode.com/hd-vector/huaweicloud-devkit-test.git`（国内快）。需本机配 `GITCODE_TOKEN` 环境变量或 `~/.gitcode_token` 文件。
 
-> **真云凭证（AK/SK）**：真云 E2E 用例（建删资源、审计等）需华为云 AK/SK，固定位置 `~/.config/huaweicloud/credentials.json`（格式 `{ak, sk, region}`，统一账号 hw018619646，已预置于每台测试机）。执行前可用 `python scripts/prepare_env.py` 自检。**读不到 AK/SK 时，真云类用例标 `BLOCKED`（blockedReason=`无 AK/SK`），禁止 mock 假跑、禁止标 PASS**。
+> **真云凭证（AK/SK，已具备执行条件）**：真云 E2E 用例（建删资源、审计等）需华为云 AK/SK，固定位置 `~/.config/huaweicloud/credentials.json`（格式 `{ak, sk, region}`，统一账号 hw018619646，已预置于每台测试机）。执行前可用 `python scripts/prepare_env.py` 自检。**真云用例必须真机执行（最低配置创建 → 测后删除归零 → 只删本次创建），不得以「无 AK/SK / 需保证金」标 `BLOCKED`，禁止 mock 假跑、禁止标 PASS**。
 
-## 1–6. 每日执行流程 → 详见 skills/test-execution/SKILL.md
+> **只读子账号动态切换（test001 已下发）**：D4-13「最小权限凭证通过率」需只读 IAM 子账号（test001），**不要替换 credentials.json 里的管理员凭证**——用 `python scripts/run-as-readonly.py <命令>` 临时注入 `HW_ACCESS_KEY`/`HW_SECRET_KEY` env（不带 token）覆盖即可，命令结束自动还原（env 生命周期内生效，不落盘）。只读子账号凭证独立存 `~/.config/huaweicloud/credentials.readonly.json`（不提交仓库，已下发各机）。**凭证就绪，D4-13 必须实测最小权限通过率，不得标 BLOCKED**。
 
-六步（建包 → 执行 → 回填 → 报告 → 每 10 分钟提报 → 统一提单 + push）的完整说明见 [skills/test-execution/SKILL.md](skills/test-execution/SKILL.md)。关键纪律同见该文档「门禁」「红线」节：NOT_RUN 覆盖率红线（P0 不得 NOT_RUN）、PASS 门禁（禁虚报，标 PASS 必①实测②证据落盘③evidencePath 回填）、提单必做（只 push 不提单 = 未完成）。
+## 1–7. 每日执行流程 → 详见 skills/test-execution/SKILL.md
+
+七步（建包 → 执行 → 回填 → 报告 → 每 10 分钟提报 → 统一提单 + push → BLOCKED 补测收尾）的完整说明见 [skills/test-execution/SKILL.md](skills/test-execution/SKILL.md)。关键纪律同见该文档「门禁」「红线」节：NOT_RUN 覆盖率红线（P0 不得 NOT_RUN）、PASS 门禁（禁虚报，标 PASS 必①实测②证据落盘③evidencePath 回填）、提单必做（只 push 不提单 = 未完成）、BLOCKED 补测收尾（全部 BLOCKED 必追一轮，假阻塞能解必解）。
 
 ## 问题单号回归 → 详见 skills/test-regression/SKILL.md
 
@@ -79,10 +81,11 @@ npm install -g huaweicloud-devkit
 
 ## 红线（违反即作废重来）
 
-1. **真云**：最低配置创建 → 测后删除并归零验证 → 只删本次创建资源。
-2. **缺陷**：先记根因（文件+行号），全量测完**必须统一提单**（FINDINGS.md 非空 → 源码仓库 `huaweicloud/huaweicloud-devkit` 1 个合并单），勿拆单/勿未测完就提/勿只 push 不提单。
+1. **真云（已具备执行条件，必须执行）**：最低配置创建 → 测后删除并归零验证 → 只删本次创建资源；不得以「无 AK/SK / 需保证金」标 BLOCKED，禁止 mock 假跑。
+2. **缺陷**：先记根因（文件+行号），全量测完**必须统一提单**（FINDINGS.md 非空 → 源码仓库 `huaweicloud/huaweicloud-devkit` 1 个合并单），勿拆单/勿未测完就提/勿只 push 不提单。**提单前必须历史查重**：`file_issue.py` 已内置（自动拉上游 open issues，按用例号+缺陷语义匹配），命中即「历史问题」→ **不重复开单**、生成 `HISTORY_LINKS.md` 关联清单（历史单号+内容），仅在既有单上补复核评论；见 [skills/test-execution/SKILL.md](skills/test-execution/SKILL.md)「提单」节。
 3. **PASS 门禁（禁虚报）**：一个用例标 PASS 必须同时满足——① 已实际执行（探针/命令真实运行）② 有结果证据落到 `evidence/<case-id>/`（probe 脚本 + stdout.log）③ `evidencePath` 列回填该证据路径。**未执行(NOT_RUN)/无结果/无证据的用例，一律不得标 PASS**，只能标 NOT_RUN 或如实标 FAIL/BLOCKED。回填后跑 `python scripts/verify_no_fake_pass.py <客户端> <OS>` 机械校验，虚报视为作废重来。
-4. **环境阻塞**：标 BLOCKED + 写 blockedReason，不得假装 PASS。
+4. **环境阻塞（从严）**：标 BLOCKED + 写 blockedReason，不得假装 PASS。**凡探针/脚本已存在（如 D6 压测 `supplement-probe.mjs`、D10 评测 `eval/harness/run-eval.mjs`、D9 协议 `eval/harness/protocol-probe.mjs`）、或有历史结论可复用、或可源码级直调函数（如 `judgeUpdate`/`redactString`/`serviceCatalog`）的用例，不得以「需环境/需基准/缺 harness/需 Inspector」为由标 BLOCKED——必须跑完探针/直调/harness 并回填结果**。BLOCKED 仅用于真·外部依赖（真实 Agent 会话行为评测需 LLM harness 且 `run-eval.mjs` 的 serviceCatalog 路由层无法代理），且 blockedReason 必须写明缺的具体资源 + 解除条件。
+   - **D10 评测集执行路径（EXP-E01~E15 / D10-3 路由层）**：`eval/harness/run-eval.mjs` 已建成并跑出基线（`node eval/harness/run-eval.mjs <hdk>/plugins/huaweicloud-core/src/mcp-server.mjs`，读 `eval/prompts/eval-set-v1.csv` 15 条中文意图逐条调 `huaweicloud_service_catalog`）。**serviceCatalog 路由层是确定性调用、无需真实 LLM Agent**，故「缺评测 harness」是假阻塞——必须跑 harness 得真实路由结论（基线 21.4% MISS → 未命中判 FAIL），不得标 BLOCKED。只有「真实 Agent 会话理解中文意图并路由」这一层才需 LLM harness（ITER-004+ 待建），标 BLOCKED 时写明该层缺什么。
 5. **目录权限（只提交自己）**：只改/提交 `results/<你的客户端>/` 目录，**完全不碰 Summary**（维护者统一生成）、其他客户端目录、test-cases 真源。
 6. **完成门禁（禁空跑）**：任务完成的唯一判定 = `results/<你的客户端>/<日期>-<IP>/<OS>/` 已落 ①测试报告.md ②3 份 CSV（执行状态列已回填）③ PASS 用例证据 ④已 push ⑤有 FAIL/SPEC 缺陷时已向源码仓库提单。**只读文档 / 只建目录 / 中途退出 / 只 push 不提单 = 未完成**；即使环境阻塞也必须按第 4 条回填 BLOCKED + 出一份最小报告 + push，**不得零产出**。
 
@@ -94,7 +97,7 @@ npm install -g huaweicloud-devkit
 
 ## 关联工具白名单（回填「关联工具」列只能填这些）
 
-- 39 个 MCP 工具（`huaweicloud_*` 全名/简称）+ CLI 命令（install/uninstall/doctor/status/update/install-hcloud/plugins/npx/npm/auth/reconcile）+ 框架组件（mcp-server/inspector/harness）。
+- 40 个 MCP 工具（`huaweicloud_*` 全名/简称）+ CLI 命令（install/uninstall/doctor/status/update/install-hcloud/plugins/npx/npm/auth/reconcile）+ 框架组件（mcp-server/inspector/harness）。
 - 函数名/组件/脚本/概念（如 decorateResult/safety-model/风险规则）归入「指引来源 实:xxx」，**不得填关联工具列**。
 
 ## 唯一断言与根因（FAIL/SPEC 纪律）
@@ -110,7 +113,7 @@ npm install -g huaweicloud-devkit
 | FAIL | 不符预期 | 记根因(文件:行号) |
 | BLOCKED | 环境/权限阻塞 | 必须写 blockedReason；「环境不满足」用 BLOCKED 而非 NOT_RUN |
 | SPEC-MISMATCH | 实现与设计契约漂移 | 记漂移点 |
-| NOT_RUN | 未执行 | **仅限明确不适用本客户端/OS；P0 一律不得 NOT_RUN**；每条必须写原因 |
+| NOT_RUN | 未执行 | **仅限明确不适用本客户端/OS（含 OS 专属用例在非对应 OS，如 D1-39 Windows 专属在 Linux）；P0 一律不得 NOT_RUN，唯一例外=OS 专属 P0 用例在非对应 OS（OS 列标注「专属」）**；每条必须写原因 |
 
 > **展开级已按客户端+OS 预筛（2026-09-15 起）**：`init_day.py` 复制展开级时已按 `agent`（执行客户端）+ `OS`（执行系统）两列预筛，只下发「归你执行 + 匹配你 OS」的展开级；「别的客户端 / 别的 OS」的展开级不再下发，无需再判 NOT_RUN 归属。`NOT_RUN` 只保留「归你但你明确没跑」；`BLOCKED` 只用于「归你但被环境/权限/凭证阻塞」。详见 [skills/test-execution/SKILL.md §2.5](skills/test-execution/SKILL.md)。
 

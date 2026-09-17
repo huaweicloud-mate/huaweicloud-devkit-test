@@ -1,0 +1,110 @@
+=== D4-14 操作可审计性 (真云 VPC 最小规格) ===
+资源名: hdk-audit-513659009
+
+[1] 创建最小规格 VPC: hdk-audit-513659009 (cidr 192.168.200.0/24)
+exitCode= 0 | {
+  "vpc": {
+    "id": "22de0a6f-dbc7-4dbe-a837-0c857b0a88fe",
+    "name": "hdk-audit-513659009",
+    "description": "",
+    "cidr": "192.168.200.0/24",
+    "status": "CREATING",
+    "routes": [],
+    "enterprise_project_id": "0",
+    "enable_network_address_usage_metrics": false,
+    "tenant_id": "
+vpc_id = 22de0a6f-dbc7-4dbe-a837-0c857b0a88fe
+
+[2] 确认创建 (ListVpcs): 包含 hdk-audit-513659009
+
+[3] 查 CTS 审计 (创建事件, service_type=VPC):
+{
+  "traces": [
+    {
+      "api_version": "2.0",
+      "code": "200",
+      "domain_id": "842591186fa245929e1b5c186a4cf784",
+      "event_type": "system",
+      "operation_id": "CreateVpc",
+      "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "read_only": false,
+      "resource_account_id": "842591186fa245929e1b5c186a4cf784",
+      "resource_id": "22de0a6f-dbc7-4dbe-a837-0c857b0a88fe",
+      "resource_name": "hdk-audit-513659009",
+      "resource_type": "vpc",
+      "service_type": "VPC",
+      "source_ip": "100.84.152.136",
+      "trace_id": "3f915cfc-b15a-11f1-abe3-7fec10b67ee5",
+      "trace_name": "createVpc",
+      "trace_rating": "normal",
+      "trace_type": "ApiCall",
+      "tracker_name": "system",
+      "user_agent": "HCloud-CLI/7.2.12",
+      "user": {
+        "access_key_id": "<ADMIN_AK>",
+        "account_id": "842591186fa245929e1b5c186a4cf784",
+        "domain": {
+          "id": "842591186fa245929e1b5c186a4cf784",
+          "name": "hw018619646"
+        },
+        "id": "8dfee1afe76244c1b128a02cbb59b058",
+        "name": "hw018619646",
+        "principal_id": "8dfee1afe76244c1b128a02cbb59b058",
+        "principal_is_root_user": "true",
+        "pr
+
+[4] 删除 VPC (归零):
+exitCode= 0 | 
+
+[5] 归零验证: ListVpcs 含 hdk-audit-513659009? NO(已归零)
+    本次创建 VPC  已删除并归零.
+
+[6] 查 CTS 审计 (删除事件):
+{
+  "traces": [
+    {
+      "api_version": "v2.0",
+      "code": "204",
+      "domain_id": "842591186fa245929e1b5c186a4cf784",
+      "event_type": "system",
+      "message": "",
+      "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "read_only": false,
+      "request_id": "74160bf0-bf40-4246-99a7-3bd2a707cf5a",
+      "resource_account_id": "842591186fa245929e1b5c186a4cf784",
+      "resource_id": "22de0a6f-dbc7-4dbe-a837-0c857b0a88fe",
+      "resource_name": "hdk-audit-513659009$$192.168.200.0/24",
+      "resource_type": "routers",
+      "service_type": "VPC",
+      "source_ip": "100.84.152.136",
+      "trace_id": "4211c5ca-b15a-11f1-b2ac-dd940ce2b2bb",
+      "trace_name": "deleteRouter",
+      "trace_rating": "normal",
+      "trace_type": "ApiCall",
+      "tracker_name": "system",
+      "user": {
+        "name": "hw018619646",
+        "id": "8dfee1afe76244c1b128a02cbb59b058",
+        "domain": {
+          "name": "hw018619646",
+          "id": "842591186fa245929e1b5c186a4cf784"
+        }
+      },
+      "request": "",
+      "response": "",
+      "time": 1789513663863,
+      "record_time": 1789513663863
+    },
+    {
+      "api_version": "2.0",
+      "code": "204",
+      "domai
+
+=== D4-14 审计可追溯性核对 ===
+CTS 记录创建事件(CreateVpc): YES
+CTS trace 含 user_agent(HCloud-CLI): YES
+CTS trace 含 access_key_id(区分账号): YES
+CTS trace 含 resource_name/operation_id: YES
+
+结论: 真云建最小规格资源 → 执行 → 查 CTS 审计 → 删除 → 归零验证 全链路完成; 审计可追溯(service_type/resource_name/operation_id/user_agent/access_key_id 可区分 agent/人工).
+本次创建资源: hdk-audit-513659009 | vpc_id: 22de0a6f-dbc7-4dbe-a837-0c857b0a88fe | 已删除: True

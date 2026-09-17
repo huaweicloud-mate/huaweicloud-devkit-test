@@ -1,0 +1,22 @@
+=== CLI PROBE RESULTS (v1.1.4 stable) ===
+total=7 pass=7 fail=0
+PASS  D1-3  doctor runs and reports  => exit=0 len=1173
+PASS  D1-4  status reports installed agents  => exit=0
+PASS  D1-4  status does not touch user config  => before=49ba36d9 after=49ba36d9
+PASS  D1-4  status idempotent (repeat)   => exit=0
+PASS  D1-6  install-hcloud shows OS install guide  => exit=0 len=2410
+PASS  D3-B3  run_readonly executes read-only cmd  => {"ok":true,"exitCode":0,"signal":null,"stdout":"{\n  \"request_id\": \"5a843f9eff63cdf5520a087c411d87a6\",\n  \"vpcs\": 
+PASS  D3-B3  run_readonly never issues write op  => true
+doctor tail: installed
+    Version: 7.2.12
+  [32m[PASS][0m hcloud credentials configured
+  [32m[PASS][0m Skills installed (29)
+
+Results: 10 pass, 0 warn, 1 fail
+[33mFix failures above, then restart your session.[0m
+
+[1m[31m╔══════════════════════════════════════════╗
+[1m[31m║  请重启 DSH！MCP 工具尚未激活     ║
+[1m[31m║  关闭当前会话 → 重新打开即可             ║
+[1m[31m╚══════════════════════════════════════════╝[0m
+

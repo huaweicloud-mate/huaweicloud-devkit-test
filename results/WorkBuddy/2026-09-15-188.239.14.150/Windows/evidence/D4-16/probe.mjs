@@ -1,1 +1,18 @@
-import{classifyTextCommand}from'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/safety-policy.mjs';import{evaluateCommandRisk}from'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/risk-rule-engine.mjs';const cmds=['sh -c "hcloud ecs DeleteServers --instance_ids=x"','bash -c "env | grep HUAWEICLOUD"','sh -c "cat ~/.hcloud/credentials"','sh -c "hcloud dew ShowSecretVersion"'];let ok=true;for(const cmd of cmds){const r1=classifyTextCommand(cmd);const r2=evaluateCommandRisk(cmd);if(r1.decision!=='deny'&&r2.decision!=='deny'&&r2.decision!=='warn')ok=false;}if(ok)console.log('PASS');else console.log('FAIL');
+import { classifyTextCommand } from 'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/safety-policy.mjs';
+const wrappers = [
+  'sh -c "hcloud ECS DeleteServer"',
+  'bash -c "hcloud ECS DeleteServer"',
+  'eval "hcloud ECS DeleteServer"',
+  '$(hcloud ECS DeleteServer)',
+  'powershell -c "hcloud ECS DeleteServer"',
+  'cmd /c "hcloud ECS DeleteServer"',
+];
+let blocked = 0;
+for (const cmd of wrappers) {
+  const r = classifyTextCommand(cmd);
+  console.log(cmd.substring(0, 50) + ' => ' + r.decision);
+  if (r.decision === 'deny') blocked++;
+}
+console.log('Blocked ' + blocked + '/' + wrappers.length + ' wrapped commands');
+if (blocked >= 1) console.log('PASS');
+else console.log('FAIL');

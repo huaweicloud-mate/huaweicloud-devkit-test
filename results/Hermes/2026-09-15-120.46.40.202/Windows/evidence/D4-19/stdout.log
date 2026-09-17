@@ -1,0 +1,11 @@
+=== D4-19: preflight in confirmation flow ===
+Timestamp: 2026-09-15T05:38:17.425Z
+
+  DeleteInstance with approval (allowWrites:true): decision=allow, risk=write
+  The risk field remains 'write' even when approved, meaning the preflight still classifies it as a write operation.
+  
+RESULT: PASS
+  Even when a write operation is approved (allowWrites=true), the risk is still classified as 'write'.
+  This means the preflight classification is independent of the approval state — the risk is always identified
+  correctly, and the approval only changes the decision from deny to allow. The risk classification (write/execution)
+  is preserved through the approval flow.

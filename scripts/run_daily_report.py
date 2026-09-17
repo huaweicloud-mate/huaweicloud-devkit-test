@@ -7,7 +7,7 @@
 
 步骤:
     1. build_summary.py [日期]       # 收集各 agent 执行状态 → Summary CSV
-    2. report_html.py [日期] [版本]   # Summary → HTML 报告
+    2. report_html.py [日期] [版本]   # Summary → HTML + Markdown 报告（同口径）
     3. send_email.py <html> [主题]    # 邮件发送（需 SMTP 环境变量，未配则跳过）
 
 定时（Windows 计划任务，每天 20:10 北京时间跑一次，参考已有 devkit-test-auto-sync）:
@@ -43,11 +43,12 @@ def main():
         print("[中止] build_summary 失败")
         sys.exit(1)
 
-    # 2. 生成 HTML 报告
+    # 2. 生成 HTML + Markdown 报告
     html = os.path.join(REPO, "results", "Summary", f"每日测试汇总-{date}.html")
+    md = os.path.join(REPO, "results", "Summary", f"每日测试汇总-{date}.md")
     args = [py, os.path.join(SCRIPTS, "report_html.py"), date] + ([version] if version else [])
     rc = run(args)
-    if rc != 0 or not os.path.isfile(html):
+    if rc != 0 or not os.path.isfile(html) or not os.path.isfile(md):
         print("[中止] report_html 失败")
         sys.exit(1)
 

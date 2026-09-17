@@ -1,0 +1,9 @@
+用例: D4-5 写操作误判检测 (P0) 工具:plan_cli_command
+执行时间: 2026-09-15 18:10 (北京时间)
+探针1: EIP ApplyEip → {decision:'allow', risk:'unknown_read'} safeToRun=true（误判只读）
+探针2: ECS DeleteServers → deny/write（正确）
+探针3: OBS DeleteBucket → deny/write（正确）
+探针4: ECS ListServersDetails → allow/read_only（正确）
+断言: ApplyEip 应 deny/write
+结果: FAIL — Apply* 写操作误判 unknown_read 放行
+根因: 框架 policy.json writeOperationPrefixes 32 项缺 Apply；源码 safety/policy.json:39 已含 Apply(33项,#644) → 框架层版本漂移

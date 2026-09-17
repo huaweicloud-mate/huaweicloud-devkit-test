@@ -1,0 +1,15 @@
+D2-16 import文件读取后擦除 实测记录
+==========================================
+时间: 2026-09-16 (真云补测)
+工具: huaweicloud_auth_switch (mode=import action=temporary)
+
+实测步骤:
+1. 写入 ~/.config/huaweicloud/creds-import.json (假凭证 FAKEAK/FAKESK + region=cn-north-4)
+2. 调用 auth_switch {mode:import, action:temporary} (不传 ak/sk, 让它读 import 文件)
+   返回: {"status":"ok","scope":"temporary","note":"Runtime credentials active...use action=persist to align files."}
+3. 检查 existsSync(creds-import.json)
+   结果: false (文件已擦除)
+
+断言: 读后无条件擦除(exists=False), 密钥不留盘 -> PASS
+
+结论: PASS — import 读后擦除逻辑正确 (tools.mjs:1003 clearImportFile rmSync force:true)

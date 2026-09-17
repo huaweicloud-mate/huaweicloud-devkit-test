@@ -1,0 +1,6 @@
+用例: D4-6 adminPass回显警告 (P1) 工具:hook_check_command
+执行时间: 2026-09-15 18:10 (北京时间)
+探针: hook_check_command 'hcloud ECS CreateServers --adminPass mypassword123' → {ok:true, decision:'allow'} 无警告
+断言: adminPass 应脱敏/告警
+结果: FAIL — 明文 adminPass 未告警
+根因: cloud-risk-rules.json 无明文密码规则（复现 #673）

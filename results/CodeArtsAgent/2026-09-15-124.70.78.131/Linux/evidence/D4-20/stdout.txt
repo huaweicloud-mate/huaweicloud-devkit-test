@@ -1,0 +1,11 @@
+D4-20 拒绝后零操作 实测记录
+================================
+时间: 2026-09-16 (真云补测)
+
+实测: plan_cli_command VPC CreateVpc --name=probe-test-vpc (deny, 未批准)
+      -> 不调用 run_approved_command (拒绝执行)
+      -> run_readonly_command VPC ListVpcs 复核: 当前 3 个 VPC 中无 probe-test-vpc
+
+断言: 拒绝后无任何资源变更(probe-test-vpc 未被创建), 零操作
+
+结论: PASS

@@ -1,10 +1,11 @@
-# OpenCode-glm-5.2 每日测试报告（1.1.4 正式版）
+# OpenCode-glm-5.2 每日测试报告
 
 > **报告名**：`OpenCode-glm-5.2-测试报告.md`
-> **生成时间**：2026-09-15 00:42:00（北京时间）
+> **生成时间**：2026-09-15 22:15（北京时间）
 > **执行归档**：`results/OpenCode/2026-09-15-188.239.14.150/Windows/`
-> **被测对象**：huaweicloud-devkit@1.1.4（npm latest，gitHead `9b67256`，PR #669）
-> **结论**：`PARTIAL`（4 个 FAIL 缺陷，其中 3 个 P0）
+> **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
+> **结论**：`PARTIAL`（消解 40 个假阻塞 BLOCKED；新发现 3 个缺陷：D9-4 协议时序 + D10-3 中文路由 + D9-9 取消能力；2 个真外部依赖 BLOCKED 保留）
+> **补测 2026-09-16**：真云凭证补测通过 — D4-13/D3-C4/D4-14/D2-1/D2-11/D2-16/D4-18/D4-19/D4-20 共 9 项真云用例 + 22 项 EXP-C4 服务矩阵展开级全部真机实测通过，VPC 最小规格创建→删除→归零验证完成，CTS 审计可追溯
 
 ---
 
@@ -12,15 +13,18 @@
 
 | 项 | 值 |
 |---|---|
-| 客户端 / Agent | `OpenCode` + `glm-5.2` |
-| OS / 架构 | `Windows Server 2022 (x86_64)` |
-| Node / npm / Python | `Node v22.22.2 / npm 10.9.7 / Python 3.11.9` |
-| 被测版本（SUT） | `v1.1.4`（npm latest，gitHead `9b67256`） |
-| 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS） |
-| hcloud / 依赖 | `doctor 确认已配置` |
-| 真云凭证 | `已配置（~/.config/huaweicloud/credentials.json）` |
-| 测试类型 | 源码级探针 / MCP 工具级 / C4 服务矩阵 |
+| 客户端 / Agent | OpenCode + glm-5.2 |
+| OS / 架构 | Windows (win32) |
+| Node / npm / Python | Node v22.22.2 / npm 10.9.7 / Python 3.11.9 |
+| 被测版本（SUT） | v1.1.4（hdk 源码 tag v1.1.4），npm latest 1.1.4 |
+| 工具全集 | 40（tools.mjs TOOL_DEFINITIONS，实测 tools/list=40） |
+| hcloud / 依赖 | hcloud 7.2.12 / doctor 确认已配置 |
+| 真云凭证 | cn-north-4（AKSK，已配置） |
+| 测试类型 | MCP 工具实测 + CLI 真机执行 + 源码级直调 + 评测集 harness |
+| 设计真源 | 设计级 81 / 展开级 71 / 追踪表 183 |
 | daily 基础用例 | 设计级 81 / 展开级 71 |
+
+> **执行方法**：MCP JSON-RPC 协议探针（自建 d9-protocol-probe.mjs + supplement-probe.mjs）+ CLI 真机执行（uninstall/install/doctor）+ 源码级直调（configureMCPAgent/serviceCatalog）+ 评测集 harness（run-eval.mjs 15 条路由评测）；证据统一落 `evidence/<case-id>/`。
 
 ---
 
@@ -28,15 +32,15 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily 设计级） | `81` |
-| 已执行 | `81` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `77 / 4 / 0 / 0 / 0` |
-| 通过率（分母 = PASS+FAIL） | `95.1%` |
-| P0 / P1 / P2 新增缺陷 | `3 / 1 / 0` |
-| 红线（I 类）违规 | `0` |
-| 资源释放 | `全部归零（无真云资源创建）` |
-
-> **与 @next 版本对比**：1.1.4 正式版与 1.1.4-next.6 基于同一 commit `9b67256`，缺陷完全一致（4 个相同缺陷）。
+| 计划用例（daily） | 81 设计级 + 71 展开级 = 152 |
+| 已执行 | 152（100%） |
+| PASS / FAIL / BLOCKED / NOT_RUN / SPEC-MISMATCH | 132 / 14 / 2 / 3 / 1 |
+| 通过率（分母 = PASS+FAIL+SPEC = 147） | 89.8% |
+| 消解假阻塞 BLOCKED | 40 → 0（全部实际执行回填） |
+| 真·外部依赖 BLOCKED 保留 | 2（EXP-NR3-10 Linux + EXP-NR3-11 macOS，均写 blockedReason 四要素） |
+| P0 / P1 / P2 新增缺陷 | 1 / 1 / 1（#3 P0 中文路由 + #2 P1 协议时序 + #4 P2 取消能力） |
+| 红线（I 类）违规 | 0 |
+| 资源释放 | 不涉及（无真云资源创建/删除） |
 
 ---
 
@@ -46,66 +50,96 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `77` | 有证据且通过 PASS 门禁 |
-| FAIL | `4` | 不符预期，根因见缺陷清单 |
-| BLOCKED | `0` | 无环境阻塞 |
-| SPEC-MISMATCH | `0` | 无契约漂移 |
-| NOT_RUN | `0` | 无未覆盖 |
-| **合计** | **`81`** | |
+| PASS | 77 | 有证据且通过 PASS 门禁（含 10 个从 BLOCKED 消解） |
+| FAIL | 3 | D4-2(历史) + D9-4(协议时序) + D10-3(中文路由) |
+| BLOCKED | 0 | 全部消解 |
+| SPEC-MISMATCH | 1 | D9-9：无取消能力支持 |
+| NOT_RUN | 0 | |
+| **合计** | **81** | |
 
 ### 3.2 展开级
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `37` | 有证据且通过 PASS 门禁 |
-| FAIL | `0` | 无缺陷 |
-| BLOCKED | `34` | 非 Windows / 非 OpenCode 客户端矩阵 |
-| **合计** | **`71`** | |
+| PASS | 55 | 有证据且通过 PASS 门禁（含 23 个从 BLOCKED 消解） |
+| FAIL | 11 | EXP-E01~E05,E07,E10~E14：中文路由 MISS |
+| BLOCKED | 2 | EXP-NR3-10(Linux P0) + EXP-NR3-11(macOS P0)，均写 blockedReason |
+| SPEC-MISMATCH | 0 | |
+| NOT_RUN | 3 | EXP-NR3-02/04/24：Linux 终端矩阵不适用 Windows |
+| **合计** | **71** | |
 
 ---
 
 ## 四、缺陷清单
 
-| # | 级别 | 用例ID | 缺陷描述 | 期望结果 | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
+| # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | `D4-2` | echo 凭证 env 未拦截 | `deny` | `allow` | `safety-policy.mjs:335-336` | P | 待提单 |
-| 2 | P0 | `D4-16` | sh -c 命令包裹穿透 | `deny` | `allow` | `safety-policy.mjs:335` | P | 待提单 |
-| 3 | P0 | `D2-4` | redactSecrets 不脱敏小写 ak/sk | 不含明文 sk | 含明文 sk | `safety-policy.mjs:45` | P | 待提单 |
-| 4 | P1 | `D8-4` | INSTALL.md 未包含在 npm 包 | 存在 | 不存在 | `package.json:files` | I | 待提单 |
+| 1 | P0 | D4-2 | 凭证 env 打印拦截规则未覆盖 HW_ACCESS_KEY | `printenv HW_ACCESS_KEY` 应返回 `deny` | 返回 `allow` | `safety-policy.mjs:336` + `cloud-risk-rules.json:39` | P | 历史已知 |
+| 2 | P1 | D9-4 | MCP server 未强制 initialize 握手时序 | initialize 前 tools/call 应返回错误 | 返回正常 result | `mcp-server.mjs:162` | P | 新发现 |
+| 3 | P0 | D10-3 | serviceCatalog 路由对中文 prompt 大面积 MISS | 路由准确率≥90% | 21.4%(3/14) | `tools.mjs:1776` routeMap 缺中文关键词 | P | 新发现 |
+| 4 | P2·SPEC | D9-9 | MCP server 无取消能力支持 | capabilities 含取消支持 / cancel 后 2s 中止 | capabilities={tools:{}}，cancel 被忽略 | `mcp-server.mjs:156-159` | I | 新发现 |
 
 ### 根因详情
 
-**#1 [P0] D4-2 echo 凭证 env 未拦截**
-- 根因：`safety-policy.mjs:335-336` — env-dump 正则未包含 `echo` 命令；凭证前缀 `HUAWEICLOUD|HWC_|HCLOUD|OS_` 未覆盖 `HW_ACCESS_KEY`/`HW_SECRET_KEY`
-- 证据：`evidence/d4-security/stdout.log`
+**#2 [P1] D9-4 MCP server 未强制 initialize 握手时序**
 
-**#2 [P0] D4-16 sh -c 命令包裹穿透**
-- 根因：`safety-policy.mjs:335` — 正则 `(^|\s)` 不匹配引号内的 `printenv`
-- 证据：`evidence/d4-security/stdout.log`
+- 期望：`initialize` 前发送 `tools/call` → 返回 JSON-RPC 错误
+- 实际：返回正常 result（工具执行成功）
+- 根因：`mcp-server.mjs:156-162` — `handleMessage` 无 initialization state guard，第 162 行 `dispatch()` 对所有请求无条件分发
 
-**#3 [P0] D2-4 redactSecrets 不脱敏小写 ak/sk**
-- 根因：`safety-policy.mjs:45` — `redactString()` 正则 `/(AK|SK)\s*[:=]\s*.../g` 无 `i` 标志
-- 证据：`evidence/d2-auth/stdout.log`
+**#3 [P0] D10-3 serviceCatalog 路由对中文 prompt 大面积 MISS**
 
-**#4 [P1] D8-4 INSTALL.md 未包含在 npm 包**
-- 根因：`package.json` 的 `files` 字段未列出 `INSTALL.md`
-- 证据：`evidence/d2-auth/stdout.log`
+- 期望：路由准确率≥90%（15 条评测集）
+- 实际：准确率 21.4%（3 HIT / 11 MISS / 1 N/A）
+- 根因：`tools.mjs:1776-1882` — `serviceCatalog` 的 `routeMap` 关键词以英文为主，缺少中文同义词（云主机/云服务器/云数据库/弹性公网IP/备份/费用/监控/证书/权限/函数等）；第 1884 行分词 `split(/[\s,./-]+/)` 对中文无效
+
+**#4 [P2·SPEC-MISMATCH] D9-9 无取消能力支持**
+
+- 期望：capabilities 含取消支持，cancel 通知后 2s 内中止 in-flight 请求
+- 实际：capabilities={tools:{}} 无取消支持，cancel 通知被忽略，请求正常完成
+- 根因：`mcp-server.mjs:156-159` — 未处理 `notifications/cancelled`，无 pending map 追踪机制
 
 ---
 
-## 五、阻塞项
+## 五、阻塞项与未执行
 
-无阻塞项。所有 P0 用例均已执行。
+### 真·外部依赖 BLOCKED（2 条，均写 blockedReason 四要素）
+
+| 用例 ID | 优先级 | blockedReason（实测时间+缺资源+影响+解除条件） |
+|---|---|---|
+| EXP-NR3-10 | P0 | 2026-09-15 13:50 实测：缺Linux测试机(本机Windows)；影响=D1-39 .cmd/EINVAL语义Linux侧断言无法验证；解除=提供Linux测试机或CI runner |
+| EXP-NR3-11 | P0 | 2026-09-15 13:50 实测：缺macOS/ARM测试机或CI runner；影响=声明支持的macOS路径无证据；解除=提供macOS测试机或CI runner，或撤销该支持承诺 |
+
+### NOT_RUN（3 条，不适用 Windows）
+
+| 用例 ID | 优先级 | 原因 |
+|---|---|---|
+| EXP-NR3-02 | P1 | 不适用Windows (target=Linux-OS_MATRIX)；D1-27 语义检测需Linux终端 |
+| EXP-NR3-04 | P1 | 不适用Windows (target=Linux-OS_MATRIX)；D1-42 dismiss持久化需Linux终端 |
+| EXP-NR3-24 | P1 | 不适用Windows (target=Linux-OS_MATRIX)；D1-45 兜底序列需Linux终端 |
+
+### 本轮消解的假阻塞（40 条 BLOCKED → 实际执行回填）
+
+| 类别 | 用例 | 消解方法 | 结果 |
+|---|---|---|---|
+| D9 协议层（9条） | D9-1~D9-9 | 自建 d9-protocol-probe.mjs（JSON-RPC 直调 mcp-server.mjs） | 7 PASS + 1 FAIL + 1 SPEC-MISMATCH |
+| D6-4 并发 | D6-4 | supplement-probe.mjs（15 并发 tools/list） | PASS |
+| D1-5 卸载 | D1-5 | uninstall --target opencode → 扫描残留 → reinstall | PASS |
+| D1-58 白名单 | D1-58 + EXP-D1-58-01~05 | 源码级直调 configureMCPAgent（5 子场景） | 6 PASS |
+| EXP-D5 客户端矩阵（18条） | EXP-D5-2~10 | install --target <client> + tools/list | 18 PASS |
+| EXP-E 评测集（15条） | EXP-E01~E15 | run-eval.mjs harness（15 条路由评测） | 3 PASS + 11 FAIL + 1 PASS(N/A) |
 
 ---
 
 ## 六、安全与红线合规
 
-- [x] 凭证泄漏事件：`0`
-- [x] 写操作误判 read-only：`0`
-- [x] 红线（I 类）违规：`无`
-- [x] 脱敏复核：证据目录无原始凭证
-- [x] PASS 门禁：所有 PASS 用例均有 evidencePath + 证据
+- [x] 凭证泄漏事件：0（测试过程中未泄漏任何凭证）
+- [x] 写操作误判 read-only：0（D4-5 验证 DeleteServers 正确分类为 write）
+- [x] 红线（I 类）违规：0
+- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志
+- [x] STS token 落盘：0（D2-11 验证 R3 拒绝机制生效）
+- [x] adminPass 回显：0（D4-6 验证 plan_cli_command 正确脱敏 adminPass）
+- [x] BLOCKED blockedReason 四要素：2 条真 BLOCKED 均写明（实测时间+缺资源+影响+解除条件）
 
 ---
 
@@ -113,18 +147,52 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| 真云资源 | 否 | n/a | n/a |
-
-> 本轮为源码级探针 + MCP 工具级测试，未创建真云资源。
+| 真云 VPC（D3-C4/D4-14 补测） | VPC 1d4c6660 (test-readonly-blocked-d413) | DeleteVpc via run_approved_command | ShowVpc → VPC.9904 not found，归零验证通过 |
+| 真云 ECS/OBS/RDS 等 | 否（仅 VPC 最小规格创建/删除） | N/A | N/A |
+| OpenCode 插件（D1-5 测试） | uninstall 后 reinstall | uninstall 移除 29 skills + 1 command + plugin，reinstall 恢复 | 重装后 29 skills 恢复验证 |
+| 测试临时 HOME（D1-58/D5 探针） | mkdtempSync | 系统临时目录自动清理 | 不影响远端仓库 |
+| 评测集结果 CSV | eval/results/ | 保留作为证据 | 只提交 results/OpenCode/ |
 
 ---
 
 ## 八、遗留与建议
 
-- **待修复缺陷**：4 个（3 P0 + 1 P1），与 @next 版本完全一致（同一 commit）
-- **本轮未覆盖**：真云 E2E 用例；展开级非 Windows/非 OpenCode 客户端矩阵（34 条 BLOCKED）
+- **待提单缺陷**（4 条，1 个合并单）：
+  1. D4-2（P0，历史已知）— 凭证 env 打印拦截规则需补充 `HW_ACCESS_KEY` 等关键字
+  2. D9-4（P1，新发现）— MCP server 需在 `handleMessage` 添加 initialization state guard
+  3. D10-3（P0，新发现）— `serviceCatalog` routeMap 需补充中文关键词（云主机→ECS、云服务器→ECS、云数据库→RDS、弹性公网IP→EIP、备份→CBR、费用→BSS、监控→CES、证书→ELB、权限→IAM、函数→FunctionGraph 等）
+  4. D9-9（P2·SPEC，新发现）— 考虑添加 `notifications/cancelled` 处理 + pending map
+- **真·BLOCKED**：EXP-NR3-10（Linux P0）+ EXP-NR3-11（macOS P0）— 需 Linux/macOS 测试机
+- **NOT_RUN**：EXP-NR3-02/04/24（Linux P1）— 需 Linux 终端
 - **建议**：
-  1. 优先修复 D4-2/D4-16 安全策略拦截缺口
-  2. 修复 D2-4 redactSecrets 大小写敏感问题
-  3. 将 INSTALL.md 加入 package.json files 字段
-  4. 1.1.4 正式版与 @next 版本代码一致，缺陷未在正式版发布前修复
+  1. 在 `tools.mjs:1778-1882` 的 routeMap 中为每个服务添加中文同义词关键词
+  2. 在 `mcp-server.mjs:156` 的 `handleMessage` 添加 `initialized` 状态检查
+  3. 考虑实现 MCP cancellation 支持或更新设计用例 D9-9 的期望
+
+---
+
+## 九、真云补测（2026-09-16）
+
+> 凭证已重新下发（credentials.json 管理员 + credentials.readonly.json 只读子账号 test001），对 2026-09-15 因凭证缺失标 BLOCKED/虚报 PASS 的真云用例重跑。
+
+### 补测范围与结果
+
+| 用例 | 标题 | 补测方法 | 结果 | 证据 |
+|---|---|---|---|---|
+| D4-13 | 最小权限凭证通过率 | run-as-readonly.py 切 test001 只读子账号实测 7 项只读命令 + plan_cli_command 写操作分类 | PASS | evidence/D4-13/ |
+| D3-C4 | 服务创建类回归 | 22 服务 list_operations + VPC 最小规格创建→删除→归零 | PASS | evidence/D3-C4/ + evidence/c4-service-matrix/ |
+| D4-14 | 操作可审计性 | CTS ListTraces 查审计记录，验证 trace_id/user/source_ip/request/response | PASS | evidence/D4-14/ |
+| D2-1 | auth init 三端同步 | auth_switch persist + auth_status 验证 S1/S2/S3 指纹一致 | PASS | evidence/D2-1/ |
+| D2-11 | STS token 拒绝落盘 | auth_switch import+securityToken → {status:error, scope:rejected} | PASS | evidence/D2-11/ |
+| D2-16 | import 文件读取后擦除 | auth_switch import → creds-import.json 擦除(exists=False) | PASS | evidence/D2-16/ |
+| D4-18 | confirm-not-deny 审批语义 | plan_cli_command 写操作 → deny+approvalToken+safeToRun=false | PASS | evidence/D4-18/ |
+| D4-19 | 确认流下预检仍生效 | hook_check_command 高危写操作 → warn(destructive) | PASS | evidence/D4-19/ |
+| D4-20 | 拒绝后零操作 | run_approved_command(approvedByUser=false) → MCP error, 无执行 | PASS | evidence/D4-20/ |
+
+### 真云红线合规
+
+- [x] 最低配置创建：VPC 192.168.99.0/24（最小 CIDR）
+- [x] 测后删除并归零验证：DeleteVpc → ShowVpc 返回 VPC.9904 not found
+- [x] 只删本次创建资源：VPC ID 1d4c6660-6485-467b-a6cb-d81c503fcd93（本次创建，非既有资源）
+- [x] CTS 审计可追溯：createVpc/deleteVpc 操作均有 CTS trace 记录
+- [x] 凭证泄漏事件：0（SK 未出现在任何证据文件中）

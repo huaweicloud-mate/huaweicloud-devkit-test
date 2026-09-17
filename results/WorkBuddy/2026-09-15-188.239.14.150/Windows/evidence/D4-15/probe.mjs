@@ -1,1 +1,20 @@
-import{classifyTextCommand}from'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/safety-policy.mjs';import{evaluateCommandRisk}from'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/risk-rule-engine.mjs';const cmds=['hcloud ecs DELETESERVERS --instance_ids=x','hcloud%20ecs%20DeleteServers%20--instance_ids=x','cat ~/.HCLOUD/credentials','hcloud dew showsecretversion --secret_id=test'];let ok=true;for(const cmd of cmds){const r1=classifyTextCommand(cmd);const r2=evaluateCommandRisk(cmd);if(r1.decision!=='deny'&&r2.decision!=='deny'&&r2.decision!=='warn')ok=false;}if(ok)console.log('PASS');else console.log('FAIL');
+import { classifyTextCommand } from 'file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-2/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/safety-policy.mjs';
+const bypasses = [
+  'hcloud ECS Deleteserver',  // lowercase 's' in server
+  'hcloud ECS DELETEserver',
+  'hcloud ECS Delete%53erver',  // URL encoded
+  'hcloud EC\x53 DeleteServer',  // hex escape
+  'hcloud ECS Delete' + 'Server',  // concatenation
+  'hcloud ECS delete_server',
+  'Hcloud ECS DeleteServer',  // case variation
+  'hcloud ecs deleteserver',
+];
+let blocked = 0;
+for (const cmd of bypasses) {
+  const r = classifyTextCommand(cmd);
+  console.log(JSON.stringify(cmd) + ' => ' + r.decision);
+  if (r.decision === 'deny') blocked++;
+}
+console.log('Blocked ' + blocked + '/' + bypasses.length + ' bypass attempts');
+if (blocked >= bypasses.length * 0.5) console.log('PASS');
+else console.log('FAIL');

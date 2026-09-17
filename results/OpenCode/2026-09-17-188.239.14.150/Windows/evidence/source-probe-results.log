@@ -1,0 +1,23 @@
+[D1-27] judgeUpdate up_to_date: PASS - result=up_to_date, updateAvailable=false
+[D1-28] judgeUpdate update_available: PASS - result=update_available, updateAvailable=true, targetVersion=1.1.2
+[D1-30] semverCompare: PASS - 1.1.2 vs 1.1.1=1(exp 1); 1.1.0 vs 1.1.0-next.9=1(exp 1); 1.1.0 vs 1.1.0=0(exp 0); 1.1.1 vs 1.1.2=-1(exp -1); abc vs def=-1(exp -1)
+[D1-31] judgeUpdate dismiss cooldown: PASS - result=dismissed, dismissed=true, expireAt=2026-09-19T22:49:36.069Z
+[D1-31] judgeUpdate cooldown expired: PASS - result=update_available, updateAvailable=true
+[D1-33] skip file paths: PASS - plugin=ugins\huaweicloud-core\.update-skip.json, fallback=tor\.config\huaweicloud\devkit-skip.json, session=uaweicloud\devkit-skip.json.test-session
+[D1-39] queryDistTagsSync no EINVAL: PASS - result=null
+[D1-40] mirror lag no downgrade: PASS - current=1.1.5, mirrorLatest=1.1.4, result=up_to_date, updateAvailable=false
+[D1-41] parseDistTagsOutput valid: PASS - {"latest":"1.1.5","next":"1.1.6-next.1"}
+[D1-41] parseDistTagsOutput empty: PASS - result=null
+[D1-41] parseDistTagsOutput invalid: PASS - result=null
+[D2-4] redactSecrets object: PASS - {"accessKeyId":"<redacted>","secretAccessKey":"<redacted>","securityToken":"<redacted>","region":"cn-north-4","projectId":"abc123"}
+[D2-4] redactSecrets string: PASS - access_key=<redacted> secret_key=<redacted>
+[D4-6] redactSecrets adminPass/password: PASS - adminPass=<redacted> password=<redacted>
+[D4-1] classifyTextCommand credential file: PASS - decision=deny, risk=credential, findings=[]
+[D4-2] classifyTextCommand printenv HW_ACCESS_KEY: PASS - decision=deny, risk=credential
+[D4-2] classifyTextCommand echo HW_SECRET_KEY: FAIL - decision=allow, risk=not_huaweicloud
+[D4-5] classifyHcloudArgs DeleteServers: FAIL - risk=undefined, decision=undefined
+[D4-5] classifyHcloudArgs CreateServers: FAIL - risk=undefined, decision=undefined
+[D4-7] evaluateCommandRisk credential file: PASS - findings=1
+[D4-7] evaluateArtifacts adminPass: FAIL - findings=0
+[D4-7] evaluateDeployPlan 0.0.0.0/0: FAIL - findings=0
+[D4-9] evaluateDeployPlan destructive: FAIL - findings=0

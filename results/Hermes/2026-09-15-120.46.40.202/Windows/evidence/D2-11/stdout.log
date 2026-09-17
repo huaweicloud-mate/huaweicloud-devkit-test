@@ -1,0 +1,25 @@
+=== D2-11: STS token rejection (persistCredentials) ===
+Timestamp: 2026-09-15T05:41:15.805Z
+
+Source: plugins/huaweicloud-core/src/tools.mjs L1012-1018
+
+persistCredentials(ak, sk, securityToken, region):
+  L1013: if (String(securityToken || '')) {
+  L1014:   return {
+  L1015:     status: 'error',
+  L1016:     error: 'Temporary STS credentials cannot be persisted (R3). Use action=temporary.',
+  L1017:     scope: 'rejected',
+  L1018:   };
+  L1019: }
+
+When securityToken is non-empty, persistCredentials returns:
+  { status: 'error', scope: 'rejected', error: 'Temporary STS credentials cannot be persisted (R3)...' }
+
+When securityToken is empty, credentials are written to S1 (writeGlobalCredentials) with securityToken: '' (L1021):
+  writeGlobalCredentials({ ak, sk: String(sk), securityToken: '', region, configuredBySession: true });
+
+RESULT: PASS
+  STS tokens are rejected from persistence (scope='rejected', status='error').
+  When persisted without STS, the securityToken field is explicitly set to '' (empty string).
+  Token never lands on disk in S1 or OBS config.
+  R3 rule is correctly enforced at the source level.

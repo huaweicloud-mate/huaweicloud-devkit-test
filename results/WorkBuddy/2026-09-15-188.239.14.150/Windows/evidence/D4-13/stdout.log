@@ -1,0 +1,24 @@
+=== D4-13: Minimal Permission Credential Pass Rate ===
+Timestamp: 2026-09-15T16:26:16.095Z
+credentials.readonly.json exists: true
+Readonly AK: HPUA3XUK...(redacted)
+Readonly region: cn-north-4
+Has securityToken: false
+[PASS] Plugin classifies readonly command as allow: decision=allow risk=read_only
+[PASS] Plugin classifies write command as deny: decision=deny reason=Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+[PASS] Readonly command executed (plugin allowed): output: json结果将会被原样输出:对其执行JMESPath查询失败:待打印数据为空
+{
+  "forbidden": {
+    "message": "User: iam::842591186fa2459
+[PASS] Write command rejected by IAM (VPC.0010/403): IAM rejection in output: {
+  "code": "VPC.0010",
+  "message": "{\"NeutronError\":{\"message\":\"Rules on create_router by *** disallowed by polic
+[PASS] run-as-readonly.py injects readonly creds: executed: json结果将会被原样输出:对其执行JMESPath查询失败:待打印数据为空
+{
+  "servers": []
+}
+
+=== Summary ===
+PASS: 5, FAIL: 0
+Minimal permission pass rate: 5/5
+VERDICT: PASS — readonly commands allowed by plugin, write commands rejected by IAM

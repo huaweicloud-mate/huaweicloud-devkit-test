@@ -41,6 +41,14 @@ P1_SMOKE = {
     "D10-5",
 }
 
+# 每日精选排除集：仅「真·外部依赖」——LLM 行为评测(需真 Agent harness)，每日无法自动化、源码级无法兜底的用例移出 daily，转按需执行。
+#   （真云创建-销毁 D3-C4/EXP-C4 22 服务已于真云条件具备后撤回排除，重新纳入 daily 真机执行。）
+# 【撤回标准】凡①探针/脚本已存在可本地跑(如 D6 压测 supplement-probe.mjs)②有历史结论可复用(如 D9-6 clientInfo 互通)
+# ③可静态/源码级直调(如 D10-1 描述评审/D10-3 路由 serviceCatalog)——一律保留 daily，不得以「需环境」借口移出。
+DAILY_EXCLUDE = {
+    "D10-1", "D10-2", "D10-5",  # LLM 评测 harness（工具描述可选/skill激活率/多轮完成率；D10-3 路由源码级可测、D10-4 P0 安全保留）
+}
+
 
 def _in_ranges(rid):
     for pfx, lo, hi in _PRUNE_RANGES:
@@ -62,7 +70,7 @@ for r in des:
     if _in_ranges(r["ID"]):
         prune_set.add(r["ID"])
 p0_all = {r["ID"] for r in des if r["优先级"] == "P0"}
-selected = set(prune_set) | set(p0_all) | set(P1_SMOKE)
+selected = (set(prune_set) | set(p0_all) | set(P1_SMOKE)) - DAILY_EXCLUDE
 
 # 设计级：精选 + 母版完整列（一个 ID 一条，去重）
 des_keep = []

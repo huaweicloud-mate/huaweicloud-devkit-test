@@ -1,49 +1,50 @@
 # -*- coding: utf-8 -*-
 """OpenClaw/Linux 2026-09-15 每日测试执行状态回填（SUT v1.1.4 stable，gitHead 9b67256）。
-
-只动自己目录 results/OpenClaw/<日期>-<IP>/<OS>/ 的 CSV 副本。
-状态口径：PASS(有证据) / FAIL(有根因) / BLOCKED(环境阻塞，写 blockedReason) / NOT_RUN(仅明确不适用)。
-P0 铁律：P0 用例不得 NOT_RUN/留空 —— 本客户端可验证的 P0 全部实测；Windows/macOS 专属变体按 BLOCKED 写理由。
+补测 BLOCKED 深挖：源码级直调/确定性 harness 可跑的假阻塞一律转 PASS/FAIL，仅真·外部依赖保留 BLOCKED。
 """
 import csv
 import os
 from collections import Counter
 from datetime import datetime
 
-REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-PACK = os.path.join(REPO, "results", "OpenClaw", "2026-09-15-113.44.197.147", "Linux")
+PACK = os.getcwd()
+DESIGN = "用例矩阵-设计级.csv"
+EXPANDED = "用例矩阵-展开级.csv"
+TRACING = "需求-设计-证据追踪表.csv"
 
-DESIGN = os.path.join(PACK, "用例矩阵-设计级.csv")
-EXPANDED = os.path.join(PACK, "用例矩阵-展开级.csv")
-TRACING = os.path.join(PACK, "需求-设计-证据追踪表.csv")
+TS = "20260915221000"
+TS_ISO = "2026-09-15 22:10 (CST)"
 
-TS = datetime.now().strftime("%Y%m%d%H%M%S")
-TS_ISO = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+def four(what_missing, impact, unblock):
+    return f"实测{TS_ISO}；缺资源={what_missing}；影响={impact}；解除条件={unblock}"
 
-# (状态, evidencePath, blockedReason or "")
+RT_EVID = "evidence/d10-routing"
+
+# 设计级 77 条（OpenClaw/Linux 预筛后）
 DESIGN_STATUS = {
-    # D1 安装/升级检测链 —— 源码级函数断言 PASS
+    # ---- D1 更新检测链：源码级直调 judgeUpdate/writeSkipState/applyUpdateHint + _decorateResult ---- 
+    "D1-41": ("PASS", "evidence/d1-update-check", ""),
+    "D1-42": ("PASS", "evidence/d1-update-check", ""),
+    "D1-45": ("PASS", "evidence/d1-update-check", ""),
+    # ---- D1 其它已测/历史 ----
     "D1-26": ("PASS", "evidence/d4-security-misc", ""),
     "D1-27": ("PASS", "evidence/d1-upgrade", ""),
     "D1-28": ("PASS", "evidence/d1-upgrade", ""),
     "D1-30": ("PASS", "evidence/d1-upgrade", ""),
     "D1-31": ("PASS", "evidence/d1-upgrade", ""),
     "D1-33": ("PASS", "evidence/d1-upgrade", ""),
-    "D1-39": ("PASS", "evidence/d1-upgrade", ""),   # Linux 侧负向断言（queryDistTagsSync 非 null，无 .cmd/EINVAL 语义）
+    "D1-39": ("PASS", "evidence/d1-upgrade", ""),
     "D1-40": ("PASS", "evidence/d1-upgrade", ""),
-    "D1-58": ("PASS", "evidence/d1-upgrade", ""),   # MCP 配置保留 merge/extract/apply 源码级验证
-    # D1 真机生命周期 —— 环境阻塞
-    "D1-1": ("BLOCKED", "", "需真机 OpenClaw install --target 生命周期 + 隔离 HOME 验证，本 run 源码探针环境无真机安装态"),
-    "D1-2": ("BLOCKED", "", "需多客户端共存环境验证 auto-detect，本机仅 OpenClaw 单客户端"),
-    "D1-3": ("BLOCKED", "", "需真机 doctor CLI + 人为制造组件缺失场景验证"),
-    "D1-4": ("BLOCKED", "", "需真机 status/update CLI + 用户自定义 config 保护验证"),
-    "D1-5": ("BLOCKED", "", "需真机 uninstall + 残留扫描（Windows 文件锁场景优先），本机无真机安装态"),
-    "D1-6": ("BLOCKED", "", "需无 KooCLI 环境重装引导验证；本机 KooCLI 已装(hcloud 7.2.12)"),
-    "D1-41": ("BLOCKED", "", "需隔离 MCP 进程 + 可控 registry 四态响应注入"),
-    "D1-42": ("BLOCKED", "", "需隔离 HOME + CROSS_PROCESS 跨进程重启复查"),
-    "D1-45": ("BLOCKED", "", "需隔离 MCP 进程 + 预热竞态双时序注入"),
-    # D2 认证 —— 源码/半自动探针 PASS
-    "D2-1": ("BLOCKED", "", "auth init 三端同步需真云 AK/SK + KooCLI/OBS/沙箱三端真实落位"),
+    "D1-58": ("PASS", "evidence/d1-upgrade", ""),
+    # ---- D1 真机生命周期：真·外部依赖（需真机安装态/多客户端/无 KooCLI 环境）----
+    "D1-1": ("BLOCKED", "", four("真机 OpenClaw install --target 生命周期 + 隔离 HOME", "无法验证安装目标路径与隔离态残留", "供真机 OpenClaw CLI 安装态或注入 install 生命周期夹具")),
+    "D1-2": ("BLOCKED", "", four("多客户端共存环境(claude/codex 等 detectAgent 目标)", "auto-detect 无法在单 OpenClaw 机验证", "供多客户端同机环境或 agent-detect 夹具")),
+    "D1-3": ("BLOCKED", "", four("真机 doctor CLI + 人为制造组件缺失场景", "无法验证 doctor 各组件缺失分支", "供真机 doctor 或组件缺失注入夹具")),
+    "D1-4": ("BLOCKED", "", four("真机 status/update CLI + 用户自定义 config 保护", "无法验证 status/update 幂等与 config 保留", "供真机 CLI 或 config 快照夹具")),
+    "D1-5": ("BLOCKED", "", four("真机 uninstall + 残留扫描(Windows 文件锁优先)", "无法验证 uninstall 干净度", "供真机安装态或 uninstall 生命周期夹具")),
+    "D1-6": ("BLOCKED", "", four("无 KooCLI 环境(本机 hcloud 7.2.12 已装)", "无法验证重装引导分支", "供无 KooCLI 机器或卸载 KooCLI 夹具")),
+    # ---- D2 认证 ----
+    "D2-1": ("PASS", "evidence/realcloud", ""),
     "D2-2": ("PASS", "evidence/d2-auth", ""),
     "D2-4": ("PASS", "evidence/d2-auth", ""),
     "D2-5": ("PASS", "evidence/d4-security-misc", ""),
@@ -52,14 +53,13 @@ DESIGN_STATUS = {
     "D2-12": ("PASS", "evidence/d2-auth", ""),
     "D2-13": ("PASS", "evidence/d2-auth", ""),
     "D2-16": ("PASS", "evidence/d2-auth", ""),
-    # D3 功能
+    # ---- D3 功能 ----
     "D3-A1": ("PASS", "evidence/d3-d5-functional", ""),
     "D3-B1": ("PASS", "evidence/d4-security-misc", ""),
     "D3-B3": ("PASS", "evidence/d3-d5-functional", ""),
     "D3-B5": ("PASS", "evidence/d3-d5-functional", ""),
-    "D3-C4": ("BLOCKED", "", "真云 22 服务只读规划+高危轻量创建/释放（红线：最小配置+测后删除），本 run 未创建真云资源"),
     "D3-C5": ("PASS", "evidence/d8-skills", ""),
-    # D4 安全
+    # ---- D4 安全 ----
     "D4-1": ("PASS", "evidence/d4-security-core", ""),
     "D4-2": ("FAIL", "evidence/d4-security-core", ""),
     "D4-3": ("PASS", "evidence/d4-security-core", ""),
@@ -69,11 +69,11 @@ DESIGN_STATUS = {
     "D4-7": ("FAIL", "evidence/d4-security-core", ""),
     "D4-8": ("PASS", "evidence/d4-security-misc", ""),
     "D4-9": ("PASS", "evidence/d4-security-core", ""),
-    "D4-10": ("BLOCKED", "", "需规则库版本快照 + 新增规则项注入夹具"),
+    "D4-10": ("BLOCKED", "", four("规则库版本快照 + 新增规则项注入夹具", "无法验证规则库新增回归", "供规则库快照或注入夹具")),
     "D4-11": ("PASS", "evidence/d4-security-core", ""),
-    "D4-12": ("BLOCKED", "", "需 npm 安装供应链攻击仿真夹具（恶意依赖注入）"),
-    "D4-13": ("BLOCKED", "", "需真云最小权限凭证 + 逐服务权限校验"),
-    "D4-14": ("BLOCKED", "", "需真云 CTS 审计日志验证"),
+    "D4-12": ("BLOCKED", "", four("npm 安装供应链攻击仿真夹具(恶意依赖注入)", "无法验证供应链安装期安全防护", "供恶意依赖注入仿真环境")),
+    "D4-13": ("PASS", "evidence/realcloud", ""),
+    "D4-14": ("PASS", "evidence/realcloud", ""),
     "D4-15": ("PASS", "evidence/d4-security-core", ""),
     "D4-16": ("FAIL", "evidence/d4-security-core", ""),
     "D4-17": ("PASS", "evidence/d4-security-misc", ""),
@@ -83,48 +83,57 @@ DESIGN_STATUS = {
     "D4-21": ("FAIL", "evidence/d4-security-core", ""),
     "D4-22": ("PASS", "evidence/d4-security-core", ""),
     "D4-23": ("FAIL", "evidence/d4-security-core", ""),
-    "D4-24": ("BLOCKED", "", "确认令牌过期/重复确认边界需真云确认流 + 可注入时钟"),
-    # D5 客户端
+    "D4-24": ("BLOCKED", "", four("真云确认流 + 可注入时钟(审批流健壮性)", "无法验证确认令牌过期/重复确认边界", "供真云确认流或时钟注入夹具")),
+    # ---- D5 ----
     "D5-1": ("PASS", "evidence/d3-d5-functional", ""),
     "D5-3": ("PASS", "evidence/d3-d5-functional", ""),
-    # D6 性能
+    # ---- D6 ----
     "D6-1": ("PASS", "evidence/d6-performance", ""),
     "D6-3": ("PASS", "evidence/d6-performance", ""),
     "D6-4": ("PASS", "evidence/d6-performance", ""),
-    # D7 兼容
+    # ---- D7 ----
     "D7-4": ("PASS", "evidence/d8-docs", ""),
-    # D8 质量
+    # ---- D8 ----
     "D8-1": ("PASS", "evidence/d8-docs", ""),
     "D8-4": ("PASS", "evidence/d8-docs", ""),
     "D8-6": ("PASS", "evidence/d8-docs", ""),
     "D8-7": ("PASS", "evidence/d8-skills", ""),
-    # D9 协议
+    # ---- D9 ----
     "D9-1": ("PASS", "evidence/d9-protocol", ""),
     "D9-2": ("FAIL", "evidence/d9-protocol", ""),
     "D9-3": ("PASS", "evidence/d9-protocol", ""),
-    "D9-4": ("BLOCKED", "", "协议生命周期需长连接断连/重连/关闭时序夹具"),
+    "D9-4": ("BLOCKED", "", four("长连接断连/重连/关闭时序夹具", "无法验证协议生命周期时序", "供长连接时序注入夹具")),
     "D9-5": ("PASS", "evidence/d9-protocol", ""),
-    "D9-6": ("BLOCKED", "", "跨客户端互通需多客户端同机环境，本机仅 OpenClaw 单客户端"),
-    "D9-7": ("BLOCKED", "", "协议版本协商降级需多版本服务端/客户端夹具"),
+    "D9-6": ("BLOCKED", "", four("多客户端同机环境(本机仅 OpenClaw)", "无法验证跨客户端协议互通", "供多客户端同机环境或 clientInfo 变异夹具")),
+    "D9-7": ("BLOCKED", "", four("多版本服务端/客户端夹具", "无法验证协议版本协商降级", "供多版本协议夹具")),
     "D9-8": ("PASS", "evidence/d4-security-misc", ""),
-    "D9-9": ("BLOCKED", "", "tools/call 超时协议需可注入延迟夹具 + capabilities.cancellation"),
-    # D10 评测
-    "D10-1": ("BLOCKED", "", "工具描述可选择性需真机评测集 + LLM 选择行为采样"),
-    "D10-2": ("BLOCKED", "", "skill 激活率需真机评测集 + LLM 激活采样"),
-    "D10-3": ("BLOCKED", "", "路由准确率+混淆矩阵需真机 15 条意图评测集 + 真机 agent 执行"),
-    "D10-4": ("PASS", "evidence/d4-security-misc", ""),   # 源码可验证部分（写操作非直通 + hook 破坏删除非直通）
-    "D10-5": ("BLOCKED", "", "多轮任务完成率需真机多轮任务评测集"),
+    "D9-9": ("BLOCKED", "", four("可注入延迟夹具 + capabilities.cancellation", "无法验证 tools/call 超时语义(-32000)与取消", "供挂起工具延迟注入夹具")),
+    # ---- D10 ----
+    "D10-3": ("FAIL", "evidence/d10-routing", ""),  # 中文意图路由 21.4% < 90%，同 #689
+    "D10-4": ("PASS", "evidence/d4-security-misc", ""),
 }
 
-# 展开级（本日 init_day 已按 OpenClaw/Linux 预筛，共 39 条）
-EXPANDED_PASS = {
-    "EXP-D5-9-1": "evidence/d3-d5-functional",   # OpenClaw 上 D5-1 清单发现
-    "EXP-D5-9-3": "evidence/d3-d5-functional",   # OpenClaw 上 D5-3 工具全量枚举
-}
-
-EXPANDED_GROUP_REASON = {
-    "EXP-C4-": "真云 22 服务只读规划冒烟（D3-C4 真云回归），需真云最小权限 AK/SK，本 run 未创建真云资源",
-    "EXP-E": "D10-3 中文意图路由评测集，oracle 需真机 agent 多轮执行（混淆矩阵），本 run 源码探针环境无真机评测",
+# 展开级 17 条（2 EXP-D5 + 15 EXP-E）
+EXPANDED_STATUS = {
+    "EXP-D5-9-1": ("PASS", "evidence/d3-d5-functional", ""),
+    "EXP-D5-9-3": ("PASS", "evidence/d3-d5-functional", ""),
+    # EXP-E：确定性 serviceCatalog 路由断言（eval/harness + 源码直调），未命中即 FAIL
+    "EXP-E01": ("FAIL", RT_EVID, ""),
+    "EXP-E02": ("FAIL", RT_EVID, ""),
+    "EXP-E03": ("FAIL", RT_EVID, ""),  # OBS 期望 vs Sandbox+DevStation 实际 → 确定性 MISS
+    "EXP-E04": ("FAIL", RT_EVID, ""),
+    "EXP-E05": ("FAIL", RT_EVID, ""),
+    "EXP-E06": ("PASS", RT_EVID, ""),
+    "EXP-E07": ("FAIL", RT_EVID, ""),
+    "EXP-E09": ("PASS", RT_EVID, ""),
+    "EXP-E10": ("FAIL", RT_EVID, ""),
+    "EXP-E11": ("FAIL", RT_EVID, ""),
+    "EXP-E12": ("FAIL", RT_EVID, ""),
+    "EXP-E13": ("FAIL", RT_EVID, ""),  # ELB 期望 vs 空 → 确定性 MISS
+    "EXP-E14": ("FAIL", RT_EVID, ""),
+    "EXP-E15": ("PASS", RT_EVID, ""),
+    # E08 诊断类：真实 Agent 会话理解中文意图后才走 explain_error，run-eval.mjs 无法代理
+    "EXP-E08": ("BLOCKED", "", four("真实 Agent 会话 LLM harness(ITER-004+ 待建，run-eval.mjs 无法代理诊断意图层)", "诊断类中文意图是否路由 explain_error 无法由 serviceCatalog 确定性层判定", "接入可交互真实 Agent 客户端(如 Hermes 会话级 CDP 自动化)")),
 }
 
 
@@ -145,7 +154,7 @@ def apply_design():
     fields = ensure_cols(rows, fields, ["执行状态", "执行时间", "evidencePath", "blockedReason"])
     for r in rows:
         cid = r.get("ID", "").strip()
-        st, ev, br = DESIGN_STATUS.get(cid, ("BLOCKED", "", "未在回填映射中（环境阻塞，未执行）"))
+        st, ev, br = DESIGN_STATUS.get(cid, ("BLOCKED", "", four("未在回填映射", "未执行", "补充映射后重跑")))
         r["执行状态"] = st
         r["evidencePath"] = ev
         r["执行时间"] = TS if st in ("PASS", "FAIL", "BLOCKED") else ""
@@ -163,21 +172,11 @@ def apply_expanded():
     fields = ensure_cols(rows, fields, ["执行状态", "执行时间", "evidencePath", "blockedReason"])
     for r in rows:
         cid = r.get("ID", "").strip()
-        if cid in EXPANDED_PASS:
-            r["执行状态"] = "PASS"
-            r["evidencePath"] = EXPANDED_PASS[cid]
-            r["执行时间"] = TS
-            r["blockedReason"] = ""
-        else:
-            reason = ""
-            for prefix, msg in EXPANDED_GROUP_REASON.items():
-                if cid.startswith(prefix):
-                    reason = msg
-                    break
-            r["执行状态"] = "BLOCKED"
-            r["evidencePath"] = ""
-            r["执行时间"] = TS
-            r["blockedReason"] = reason or "环境阻塞（未执行）"
+        st, ev, br = EXPANDED_STATUS.get(cid, ("BLOCKED", "", four("环境阻塞未执行", "未执行", "补充映射后重跑")))
+        r["执行状态"] = st
+        r["evidencePath"] = ev
+        r["执行时间"] = TS if st in ("PASS", "FAIL", "BLOCKED") else ""
+        r["blockedReason"] = br if st == "BLOCKED" else ""
     with open(EXPANDED, "w", encoding="utf-8-sig", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields)
         w.writeheader()

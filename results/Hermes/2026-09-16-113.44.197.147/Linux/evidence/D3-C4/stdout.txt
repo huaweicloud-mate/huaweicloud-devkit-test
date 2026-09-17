@@ -1,0 +1,28 @@
+=== D3-C4 服务矩阵汇总 (22 服务 list_operations + plan 只读命令) ===
+EXP-C4-01 ECS          PASS  (ListCloudServers)
+EXP-C4-02 VPC          PASS  (ListAddressGroup)
+EXP-C4-03 OBS          PASS  (obs ls)
+EXP-C4-04 RDS          PASS  (GetInstancesNoIndexTables)
+EXP-C4-05 GaussDB      PASS  (DescribeBackupEncryptStatus)
+EXP-C4-06 CCE          PASS  (GetAccessPolicy)
+EXP-C4-07 FunctionGraph PASS (ListActiveAsyncInvocations)
+EXP-C4-08 IAM          PASS  (GetAccountSummaryV5)
+EXP-C4-09 CTS          PASS  (ListNotifications)
+EXP-C4-10 CES          PASS  (ListAgentDimensionInfo)
+EXP-C4-11 DDS          PASS  (ListApiVersion)
+EXP-C4-12 DCS          PASS  (ListAclAccounts)
+EXP-C4-13 SMN          PASS  (ListApplicationAttributes)
+EXP-C4-14 DMS          PASS  (映射 Kafka/RabbitMQ/RocketMQ)
+EXP-C4-15 WAF          PASS  (ListAntiTamperPolicyRules)
+EXP-C4-16 CDN          PASS  (ListAccessControlTask)
+EXP-C4-17 ModelArts    PASS  (GetAppAuthApiInfo)
+EXP-C4-18 DEW          PASS  (映射 KMS/CSMS)
+EXP-C4-19 CBR          PASS  (ListAgent)
+EXP-C4-20 EVS          PASS  (ListSnapshots)
+EXP-C4-21 EIP          PASS  (ListBandwidth)
+EXP-C4-22 ELB          PASS  (ListAllL7Rules)
+
+总: 22/22 服务可路由。其中 20 服务直接用矩阵名命中 KooCLI；2 服务(DMS/DEW)为营销/聚合名,
+    需映射到 KooCLI 服务名(DMS→Kafka/RabbitMQ/RocketMQ, DEW→KMS/CSMS)后 100% 可路由。
+
+真云「轻量创建→立即释放→归零」由 D4-14 覆盖: 建最小规格 OBS 桶→执行→查 CTS→删除→归零验证。

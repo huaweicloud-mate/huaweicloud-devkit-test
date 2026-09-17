@@ -1,0 +1,45 @@
+=== SECURITY PROBE RESULTS (v1.1.4 stable) ===
+total=37 pass=32 fail=5
+PASS  D2-4  obj access_key redacted  => <redacted>
+PASS  D2-4  obj secret_key redacted  => <redacted>
+PASS  D2-4  obj security_token redacted  => <redacted>
+PASS  D2-4  obj AK/SK redacted  => {"AK":"<redacted>","SK":"<redacted>"}
+PASS  D2-4  kv access_key/secret_key/AK no plaintext  => access_key=<redacted> secret_key=<redacted> AK=<redacted>
+FAIL  D2-4  lowercase ak=/sk= redacted (obsutilconfig)  => ak=AK123456 sk=SKsecret
+PASS  D2-4  access_key=/secret_key= redacted  => access_key=<redacted> secret_key=<redacted>
+PASS  D4-1  cat .hcloud credentials deny  => deny|credential|Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
+PASS  D4-1  Get-Content credentials deny  => deny|credential|Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
+PASS  D4-1  type credentials.json deny  => deny|credential|Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
+PASS  D4-2  printenv HUAWEICLOUD_SK deny  => deny|credential|Dumping cloud credential environment variables is blocked.
+PASS  D4-2  env|grep HWC_ deny  => deny|credential|Dumping cloud credential environment variables is blocked.
+PASS  D4-2  printenv HW_ACCESS_KEY deny  => deny|credential|Printing cloud credential environment variables is blocked.
+PASS  D4-2  echo $HW_ACCESS_KEY deny  => deny|credential|Printing cloud credential environment variables is blocked.
+PASS  D4-2  echo $HW_SECRET_KEY deny  => deny|credential|Printing cloud credential environment variables is blocked.
+PASS  D4-3  ShowSecretVersion deny  => deny|secret|Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+FAIL  D4-3  kms DecryptData deny  => allow|unknown_read|Command does not match a known write or secret operation; treat output as untrusted and redact it.
+PASS  D4-5  DeleteServers write(deny)  => deny/write
+PASS  D4-5  CreateServers write(deny)  => deny/write
+PASS  D4-5  ListServersDetails read_only(allow)  => allow/read_only
+PASS  D4-4  >=10 write verbs require approval(deny)  => 15/16
+PASS  D4-6  adminPass plaintext triggers deny/warn (not allow)  => deny/write
+PASS  D4-7  command hook deny  => deny
+PASS  D4-7  artifact hook deny  => deny
+PASS  D4-7  deploy_plan hook deny  => deny
+PASS  D4-9  public 0.0.0.0/0:22 deny  => deny
+PASS  D4-9  destructive --force deny  => deny
+PASS  D4-15  lowercase deleteservers write  => deny/write
+PASS  D4-15  mixed-case write  => deny/write
+PASS  D4-15  url-encoded write  => deny/write
+FAIL  D4-15  command-substitution deny  => allow/unknown_read
+FAIL  D4-16  bash -c hcloud DeleteServers deny  => allow/not_huaweicloud
+PASS  D4-16  sh && hcloud CreateInstance deny  => deny/write
+PASS  D4-17  empty hcloud args deny  => deny/invalid
+FAIL  D4-17  malformed artifact fail-closed(deny)  => allow
+PASS  D4-21  broad IAM "*:*" deny  => deny
+PASS  D4-22  public FG no-auth flagged(not allow)  => warn
+--- FAILED ---
+  D2-4 lowercase ak=/sk= redacted (obsutilconfig) => ak=AK123456 sk=SKsecret
+  D4-3 kms DecryptData deny => allow|unknown_read|Command does not match a known write or secret operation; treat output as untrusted and redact it.
+  D4-15 command-substitution deny => allow/unknown_read
+  D4-16 bash -c hcloud DeleteServers deny => allow/not_huaweicloud
+  D4-17 malformed artifact fail-closed(deny) => allow

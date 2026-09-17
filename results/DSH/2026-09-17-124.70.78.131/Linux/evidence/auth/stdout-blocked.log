@@ -1,0 +1,57 @@
+=====CASE D2-2=====
+readGlobalCredentials 是否含 AK/SK: true
+getAuthStatus(all): {
+  "target": "all",
+  "credentialsConfigured": true,
+  "credentialsPath": "/home/testbot2/.config/huaweicloud/credentials.json",
+  "obsConfigured": true,
+  "obsConfigPath": "/home/testbot2/.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "caae65f2",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "0938ad0e",
+      "runtimeFingerprint": null
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [
+      {
+        "store": "S3",
+        "source": "obsutilconfig",
+        "fingerprint": "0938ad0e",
+        "manualModified": true
+      }
+    ],
+    "hasRuntime": false,
+    "runtimeFingerprint": null,
+    "inconsistent": true,
+    "runtimeActive": false
+  },
+  "onboarding": {
+    "needsSetup": true,
+    "scenario": 1,
+    "reason": "s1-only",
+    "message": "已保存账号(指纹 caae65f2)可直接使用。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "use-s1",
+        "args": {},
+        "label": "直接使用已保存账号"
+      },
+[PASS] D2-2: 返回含 credentialsConfigured 字段
+[PASS] D2-2: 返回含 kooCliInstalled 或等价字段
+[PASS] D2-2: 本机管理员凭证预置 → credentialsConfigured=true | credentialsConfigured=true
+computeOnboarding(未配置): {"needsSetup":true,"scenario":3,"reason":"s1-missing","message":"未配置华为云凭证,需要完成登录后才能使用云能力。","steps":[{"order":1,"action":"obtain-aksk","target":"console","label":"获取 AK/SK(华为云控制台)"},{"order":2,"action":"write-import","target":"/home/testbot2/.config/huaweicloud/creds-import.json","label":"把 AK/SK 写入 creds-import.json"},{"order":3,"action":"auth_switch","args":{"mode":"import","action":"persist"},"label":"执行导入完成配置"}],"accountHint":null}
+computeOnboarding(已配置): {"needsSetup":true,"scenario":3,"reason":"s1-missing","message":"未配置华为云凭证,需要完成登录后才能使用云能力。","steps":[{"order":1,"action":"obtain-aksk","target":"console","label":"获取 AK/SK(华为云控制台)"},{"order":2,"action":"write-import","target":"/home/testbot2/.config/huaweicloud/creds-import.json","label":"把 AK/SK 写入 creds-import.json"},{"order":3,"action":"auth_switch","args":{"mode":"import","action":"persist"},"label":"执行导入完成配置"}],"accountHint":null}
+[PASS] D2-2: 未配置态 onboarding 给出 setup 引导
+[FAIL] D2-2: 已配置态 onboarding 无 setup 引导
+D2-2 说明: 三端×就绪/未就绪 8 组合的「KooCLI 未安装态」本机无法 hermetic 构造（本机 hcloud 已装且管理员凭证预置）；已实测本机真实态 + computeOnboarding 纯函数两极组合。
+
+=== 汇总: PASS=4 FAIL=1 ===

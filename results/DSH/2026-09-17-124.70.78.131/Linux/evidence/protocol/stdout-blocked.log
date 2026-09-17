@@ -1,0 +1,19 @@
+initialize capabilities: {"tools":{}}
+
+=====CASE D9-9=====
+capabilities.notifications.cancellation 存在: false
+[PASS] D9-9: 能力探测——cancellation 未声明（contract: 不存在→SPEC-MISMATCH 而非假定）
+未知方法 error: {"code":-32601,"message":"Method not found: tools/unknown_xyz"}
+[PASS] D9-9: 服务端未实现 -32000 timeout（未知方法错误码非 -32000） | code=-32601
+重建 initialize + tools/list: true | tools 数量: 40
+[PASS] D9-9: 超时/错误后重建 initialize→tools/list 正常响应 | tools=40
+
+=====CASE D9-5=====
+大 payload(≈1MB) service_catalog 响应耗时: 215 ms | 有响应: true
+[PASS] D9-5: 大 payload tools/call 不崩且有响应
+并发30 tools/list 数量集合: 40 | 全部一致: true
+[PASS] D9-5: 并发 tools/list 无死锁/无消息错乱 | 集合=[40]
+stdout 非协议行数: 0 []
+[PASS] D9-5: stdout 纯协议无日志污染 | []
+
+=== 汇总: PASS=6 FAIL=0 ===

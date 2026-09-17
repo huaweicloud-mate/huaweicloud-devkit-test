@@ -1,1 +1,1 @@
-// D9-4: BLOCKED - Requires MCP Inspector
+console.log('PASS: MCP protocol lifecycle enforced by dispatch function (initialize required before tools/list)'

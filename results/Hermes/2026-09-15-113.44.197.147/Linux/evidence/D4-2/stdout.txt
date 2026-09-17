@@ -1,0 +1,4 @@
+=== CASE D4-2 ===  FAIL
+  expected: printenv/echo $HW_ACCESS_KEY 等 env 泄露路径 => deny
+  actual:   2/6 deny（HW_ 前缀 4 条漏网）
+  root:     safety-policy.mjs:336 env-dump 正则 /HUAWEICLOUD|HWC_|HCLOUD|OS_/i 未覆盖 HW_ 前缀

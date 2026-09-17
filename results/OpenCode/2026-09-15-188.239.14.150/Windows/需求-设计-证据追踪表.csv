@@ -1,184 +1,184 @@
 ﻿sourceAsset,requirementOrRisk,designCaseId,expandedCaseId,testLayer,clientOrOSScope,requiredEvidence,design_status,owner,gap,执行时间
-v1.5规划(v1.3基线),全新环境引导安装,D1-1,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表: 逐客户端 10+>,未安装→指引→装好闭环，插件引导完成全流程,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),多Agent探测,D1-2,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,auto-detect 覆盖全部共存客户端,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),doctor健康自检,D1-3,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,检测项准确，失败场景如实报告且给出修复指引,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),status/update幂等,D1-4,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,增量刷新，不碰用户config,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),uninstall干净度,D1-5,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows 重点>,卸载后无功能残留,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),install-hcloud,D1-6,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,KooCLI安装引导成功，含镜像/沙箱提示,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),OpenClaw插件流,D1-7,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,双通道均可用，风险确认参数生效,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),通用MCP通道,D1-8,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,标准npx MCP配置直接可用,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),重启生效语义,D1-9,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表: 逐客户端 10+>,重启前不可用/重启后可用，跨客户端一致,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),卸载全局清理(新flag),D1-10,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表: 全客户端+Windows>,KooCLI二进制+配置+OBS配置全清，目录归零,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),自定义HCLOUD_BIN保留,D1-11,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,用户管理的二进制与PATH条目不被误删,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),清理幂等归零,D1-12,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,重复执行无报错、无残留,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),Windows文件锁下清理,D1-13,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows 专项>,锁场景明确失败或提示，不静默损坏config,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),copyFileVerified安装完整性,D1-14,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,损坏被检出并明确提示，不静默装坏,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),checkForUpdate更新提示,D1-15,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,正确判断next/latest并提示可用更新,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,升级提醒工具注册与协议暴露,D1-26,无(不展开/代表执行),安装/生命周期,<代表: MCP Inspector+进程>,两工具均注册且 schema 含 description/inputSchema,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,检测语义-已是最新,D1-27,EXP-NR3-01;EXP-NR3-02,安装/生命周期,<代表: Windows/Linux>,"result=up_to_date, updateAvailable=false",DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,检测语义-有新版本,D1-28,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"result=update_available, updateAvailable=true, targetVersion",DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,pre-release 用户提醒策略(文档vs实现差异),D1-29,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,pre 用户候选含 latest+next 取最大；pre 升级提醒语义与文档表差异点以最终裁决为准,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,semver 比对正确性,D1-30,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,1.1.2>1.1.1、1.1.0 > 1.1.0-next.9、相等=0、无效串按字典序,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,dismiss 冷却期,D1-31,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"冷却期内 result=dismissed, dismissed=true, 3 天后 expireAt 过期重新提醒",DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,新版本>dismissedVersion 无视冷却,D1-32,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,无视冷却期重新提醒 update_available,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,skip 文件持久化与多路径,D1-33,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"文件{ dismissedVersion/dismissedAt/expireAt }, 插件目录无副本时回退共享路径",DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,check_failed 不阻塞正常调用,D1-34,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"result=check_failed, note 检测失败不影响使用, 不抛错不阻塞",DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,缓存 TTL 与失败节流,D1-35,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,1h 内复用探测结果；失败后 5min 节流,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,首调用兜底提示（会话首个工具附加更新信息）,D1-36,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,仅会话首个非 check/upgrade 工具经 dispatch 内部 decorateResult 附加 _upda,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,SKILL.md 会话启动指令存在性,D1-37,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,SKILL.md 含首次操作前先 check_update 的指令,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,huaweicloud_upgrade 语义,D1-38,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,success/previousVersion/installedVersion/requiresRestart=tru,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,Windows 升级检测链可用性,D1-39,EXP-NR3-09;EXP-NR3-10;EXP-NR3-11,安装/生命周期,<代表: Windows/Linux>,Windows 下检测链真实可用，不得 EINVAL 静默失败,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,镜像 lag 下检测正确性(反向提醒防护),D1-40,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,check_update 真实 MCP 返回契约,D1-41,无(不展开/代表执行),安装/生命周期,<代表: 隔离进程>,tools/call isError=false；四态、currentVersion/latestStable/upda,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,dismiss 真实闭环与跨调用持久化,D1-42,EXP-NR3-03;EXP-NR3-04,安装/生命周期,<代表: 隔离 HOME+CROSS_PROCESS>,拒绝调用写入正确 agent/plugin 路径；文件字段完整且 expireAt= dismissedAt+3天；同版,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,dismiss 参数边界与失败语义,D1-43,无(不展开/代表执行),安装/生命周期,<代表: 隔离 HOME>,无 target 或 registry 失败时不应伪造 dismissed/up_to_date，不写入 undefin,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,冷却边界与异常 skip 状态,D1-44,无(不展开/代表执行),安装/生命周期,<代表: 时间注入>,仅严格早于 expireAt 才算冷却；边界时刻重新提醒；新版本无视冷却；坏状态安全降级且不静默吞掉更新,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,兜底提示真实序列与预热竞态,D1-45,EXP-NR3-23;EXP-NR3-24,安装/生命周期,<代表: 隔离进程+预热竞态>,仅会话首个非检查工具携带 _updateInfo；检查/升级工具不携带；预热未完成时不阻塞正常工具，结果就绪后仍按既定一,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,缓存 TTL 边界与查询异常恢复,D1-46,EXP-NR3-05;EXP-NR3-06,安装/生命周期,<代表: 时间与函数注入>,TTL 边界符合约定；失败在 5min 内节流、过期可重试；reject 不产生未处理异常且返回 check_faile,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,缓存与当前版本解耦,D1-47,无(不展开/代表执行),安装/生命周期,<代表: 隔离进程>,共享 registry 结果可复用，但每次按当前版本重新计算 target/result；不得复用上一个 current,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,多 Agent 路径与多进程隔离,D1-48,EXP-NR3-18,安装/生命周期,<代表: 双 HOME 双进程>,每个 agent 只读取自己的 skip 状态；进程/agent 之间不串用 dismissedVersion、expi,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,upgrade handler 无更新与参数校验,D1-49,EXP-NR3-12;EXP-NR3-13,安装/生命周期,<代表: 隔离进程>,up_to_date 不执行升级命令；非法 version 被明确拒绝；失败态不误报成功；target 默认 all 且,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,upgrade 命令语义与目标选择,D1-50,无(不展开/代表执行),安装/生命周期,<代表: 命令 mock>,stable/pre 用户选择正确 tag；目标 agent 传递正确；命令顺序和文档要求一致，成功必返回 requir,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,upgrade 失败恢复与副作用,D1-51,无(不展开/代表执行),安装/生命周期,<代表: 隔离 HOME>,失败不崩溃、不返回 success、不污染 skip 状态或缓存；manual 命令含正确 tag/target；恢复后,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,真实升级安装与重启生效,D1-52,EXP-NR3-14;EXP-NR3-15;EXP-NR3-15b;EXP-NR3-16,安装/生命周期,<代表: 一次性环境 OpenCode+Hermes>,真实 npm/install/setup 或整合命令完成；文件同步正确；旧进程明确要求重启；新进程加载目标新版本且配置未,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,镜像滞后确定性夹具,D1-53,EXP-NR3-07;EXP-NR3-08,安装/生命周期,<代表: registry 夹具>,远端版本不高于 current 时不提示倒退；官方有新版本时策略符合设计；坏响应为 check_failed；regis,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,Hermes 会话级用户闭环,D1-54,EXP-NR3-17,安装/生命周期,<代表: 真实客户端 Hermes>,Agent 遵守 SKILL；未获同意不升级；拒绝后 3 天不重复打扰；升级后明确重启；离线不阻塞原任务,DESIGN_COVERED,测试负责人,,20260915004224
-NR3版本升级提醒,多会话提示隔离,D1-55,EXP-NR3-19;EXP-NR3-20;EXP-NR3-21;EXP-NR3-22,安装/生命周期,<代表: 并行进程>,一次性兜底按会话隔离而非全局只消费一次；一个会话的 dismiss、hintConsumed、失败状态不影响另一个会话,DESIGN_COVERED,测试负责人,,20260915004224
-全量评审补齐REV-20260911004604,安装中断恢复（网络/进程中断后半装补全）,D1-56,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 39 工具（数量=39 ,DESIGN_COVERED,测试负责人,,20260915004224
-全量评审补齐REV-20260911004604,升级坏版本回滚（装坏可退）,D1-57,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表2: Hermes(隔离profile)+OpenCode>,"失败返回结构化错误（success=false, error.code 精确枚举, error.manual 含版本限定",DESIGN_COVERED,测试负责人,,20260915004224
-R12回填ITER-005-P2,通用 MCP 白名单接入（Claude/Cursor merge 语义）,D1-58,EXP-D1-58-01;EXP-D1-58-02;EXP-D1-58-03;EXP-D1-58-04;EXP-D1-58-05,安装/生命周期,<代表: Linux L 真机>,白名单合并幂等（重复不重复备份）；坏 JSON 零写入（原文件 hash 不变）；未命中输出可粘贴片段（含 mcpSer,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),SKIP_UPDATE 环境变量跳过升级检测,D1-59,无(不展开/代表执行),安装/生命周期,<代表: 隔离进程>,env=1 时 result=up_to_date 且不发起 registry 查询（跳过检测）；unset 后恢复真实,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),HTTP 查询路径与自定义 registry（fetch 版）,D1-60,无(不展开/代表执行),安装/生命周期,<代表: 隔离进程>,fetch 路径 registry 取 HUAWEICLOUD_NPM_REGISTRY 且去尾斜杠；超时 15s ab,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),升级重启文案 officeace 分支,D1-61,无(不展开/代表执行),安装/生命周期,<代表: officeace+Hermes>,officeace→'打开连接器→我的连接器→huaweicloud-devkit→重新连接'；其他→'请重启当前会话',DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),未覆盖 CLI 子命令 reinstall/proxy/version,D1-62,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表: 逐客户端>,三命令均有实现而非 TODO：reinstall 重装、proxy 配置代理、version 输出版本；无静默失败,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),安装版本读取双回退,D1-63,无(不展开/代表执行),安装/生命周期,<代表: 隔离目录>,先 pluginRoot 后 packageRoot 读取；两处都无返回 null,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),agent 自动检测匹配与版本,D1-64,无(不展开/代表执行),安装/生命周期,<代表: 多 agent clientInfo>,clientInfo 正确映射 AGENTS 注册表；detectVersion 按 versionConfig 返回；,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,credentials变更后auth回归,D2-8,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,三端就绪+脱敏正常，无回归,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,reconcile幂等(一致态零写),D2-9,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,一致态下零副作用，不触发 R4 重写,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,R7 current档跟随,D2-10,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,resolveManagedProfile 返回 current 档；runHcloudConfigure 带 --cl,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,R3 STS token拒绝落盘,D2-11,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,"返回 {status:error, scope:rejected}，token 永不落盘",DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,R10 runtime非空禁止落盘,D2-12,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,sync 返回 ok:false + auto-sync suppressed (R10)，不写 S1,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,R9 configuredBySession优先env,D2-13,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,标记时 S1 胜出；清除后 env 兜底恢复,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,R2 冲突交互仲裁(confirmToken),D2-14,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,needs_confirmation+confirmToken+双选项；confirm(s1)→outcome=abor,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,auth_switch行为矩阵抽查,D2-15,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,与行为矩阵一致（temporary 不触 S2/S3、clear 回退可用、persist 落盘）,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,import文件读取后擦除,D2-16,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,读后无条件擦除（exists=False），密钥不留盘,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,cmdAuthReconcile非TTY守卫,D2-17,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,快速退出不 hang，stderr 明确告警（Non-interactive session...）,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,.last_sync mtime手动改动检测,D2-18,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,mtime>marker→R2 仲裁；≤→R4 自动重写,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,命名档只审计不自动动(R5),D2-19,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,解析/写档只动 current 档，命名档隔离,DESIGN_COVERED,测试负责人,,20260915004224
-NR2 AK/SK架构v4,HUAWEICLOUD_HOME重定向(R6),D2-20,无(不展开/代表执行),认证/凭证,<代表: Win/Linux 真机>,S2 固定 ~/.hcloud 不受影响（方案 T1 断言3）,DESIGN_COVERED,测试负责人,,20260915004224
-全量评审补齐REV-20260911004604,AK/SK 轮换后 auth_status 正确感知（凭证状态维度）,D2-21,无(不展开/代表执行),认证/凭证,<真云代表: Hermes>,30s 内三端指纹全部=F2（逐端断言，旧指纹 F1 零残留）；auth_status.reconciled.store,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),confirm-not-deny审批语义,D4-18,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表: 安全基线 Hermes+OpenCode>,写操作需显式确认，不被直接拒绝也不被直接放行,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),确认流下预检仍生效,D4-19,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表: 安全基线 Hermes+OpenCode>,确认流程中风险预检仍生效拦截,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),拒绝后零操作,D4-20,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,拒绝后无任何资源变更、无命令执行,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),auth init三端同步,D2-1,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,三端全部落位，任一端失败即缺陷,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),auth status判定准确性,D2-2,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,组合枚举判定准确，部分就绪场景明确标识,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),auth sync幂等,D2-3,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,重复执行无副作用,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),凭证脱敏正确性,D2-4,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,输出无明文凭证字段,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),凭证缺失报错指引,D2-5,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,明确报错+可执行指引(非裸堆栈),DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),OBS独立配置引导,D2-6,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,OBS配置落盘成功且可无人值守,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),无凭证降级,D2-7,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,优雅降级或明确提示，不报裸错误,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),CodeArts 上下文凭证读取,D2-22,无(不展开/代表执行),认证/凭证,<代表: 隔离进程>,CodeArts 上下文走 readCodeArtsCredentials 分支；非 CodeArts 走 S1/env,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),agent 注册状态,D2-23,无(不展开/代表执行),认证/凭证,<代表: 单机多 target>,返回 11 安装目标各自的注册状态；未安装目标如实标记,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),auth 同步 projectId 自动解析,D2-24,无(不展开/代表执行),认证/凭证,<真云代表: Hermes>,region/profile 可解析时 syncAuth 返回 projectId；不可解析时不误报,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),KooCLI 探测状态分类,D2-25,无(不展开/代表执行),认证/凭证,<代表: 隔离进程>,探测状态正确分类并给出对应 nextStep；未安装/沙箱/隐私待确认三态区分,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),skill检索完整性,D3-A1,无(不展开/代表执行),功能/配置,<代表: Hermes>,全部可检索且完整拉取，索引无缺口,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),触发词路由准确,D3-A2,无(不展开/代表执行),功能/配置,<代表: Hermes>,正确映射目标skill,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),沙箱vs生产路由,D3-A3,无(不展开/代表执行),功能/配置,<代表: Hermes>,demo→sandbox，生产→ECS/FG/CCE,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),区域意图提取,D3-A4,无(不展开/代表执行),功能/配置,<代表: Hermes>,正确映射且不盲扫无关区域,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),元数据正确性,D3-A5,无(不展开/代表执行),功能/配置,<代表: Hermes>,region/endpoint/可用性数据正确,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),市场/图标检索质量,D3-A6,无(不展开/代表执行),功能/配置,<代表: Hermes>,排序合理+官方图标可用,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),list_operations规范名,D3-B1,无(不展开/代表执行),功能/配置,<代表: Hermes>,返回规范操作名，不依赖猜测,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),plan命令质量,D3-B2,无(不展开/代表执行),功能/配置,<代表: Hermes>,命令语法正确参数完整，审批可执行,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),run_readonly脱敏执行,D3-B3,无(不展开/代表执行),功能/配置,<代表: Hermes>,执行成功+输出脱敏,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),explain_error可执行,D3-B4,无(不展开/代表执行),功能/配置,<代表: Hermes>,给出可执行下一步而非干话,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),detect_framework识别,D3-B5,无(不展开/代表执行),功能/配置,<代表: Hermes>,识别准确且给出构建产物/端口,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),search_docs命中率,D3-B6,无(不展开/代表执行),功能/配置,<代表: Hermes>,命中率≥80%且内容准确,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),ECS生命周期E2E,D3-C1,无(不展开/代表执行),功能/配置,<代表: 真云 ECS 贵资源>,插件引导全程完成，无残留,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),OBS静态站部署E2E,D3-C2,无(不展开/代表执行),功能/配置,<代表: Hermes>,部署成功+资源归零,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),沙箱部署E2E,D3-C3,无(不展开/代表执行),功能/配置,<代表: 沙箱 DevStation>,URL可访问+会话关闭,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),服务创建类回归,D3-C4,EXP-C4-01;EXP-C4-02;EXP-C4-03;EXP-C4-04;EXP-C4-05;EXP-C4-06;EXP-C4-07;EXP-C4-08;EXP-C4-09;EXP-C4-10;EXP-C4-11;EXP-C4-12;EXP-C4-13;EXP-C4-14;EXP-C4-15;EXP-C4-16;EXP-C4-17;EXP-C4-18;EXP-C4-19;EXP-C4-20;EXP-C4-21;EXP-C4-22,功能/配置,<代表: 22 服务矩阵>,全部服务有规范路由且可执行,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),工具冒烟,D3-C5,无(不展开/代表执行),功能/配置,<代表: Hermes>,冒烟快速全通,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),run_approved_command 审批后执行闭环,D3-B7,无(不展开/代表执行),功能/配置,<代表: Hermes>,审批通过后正确执行；未审批命令拒绝,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),voucher_status 状态查询（领券状态读取）,D3-B8,无(不展开/代表执行),功能/配置,<代表: Hermes>,status 与 claim 状态一致，未领取准确反馈,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/upload_file/close_session/deploy_check）,D3-C6,无(不展开/代表执行),功能/配置,<代表: Hermes>,7 工具均返回规范结果，无静默失败,DESIGN_COVERED,测试负责人,,20260915004224
-全量评审补齐REV-20260911004604,跨区域资源操作引导（区域维度）,D3-C7,无(不展开/代表执行),功能/配置,<真云代表: Hermes>,命令含目标 --cli-region（参数级断言）；不可用→code=Ecs.0021 精确命中；不存在→code=Ec,DESIGN_COVERED,测试负责人,,20260915004224
-全量评审补齐REV-20260911004604,企业项目（enterprise_project_id）参数支持（项目维度）,D3-C8,无(不展开/代表执行),功能/配置,<真云代表: Hermes>,命令含精确 enterprise_project_id（参数级断言）；ShowVolume 返回字段 enterpris,DESIGN_COVERED,测试负责人,,20260915004224
-全量评审补齐REV-20260911004604,资源不存在/已删除/冻结状态操作引导（资源状态维度）,D3-C9,无(不展开/代表执行),功能/配置,<真云代表: Hermes>,错误码精确命中（APIGW.0101 / EVS.5400 唯一断言），message 字段=固定 schema 文本；,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),市场分类列表,D3-C10,无(不展开/代表执行),功能/配置,<代表: Hermes>,分类列表完整且与 searchMarketplace(category) 过滤一致,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),沙箱凭证注入前 IAM 验证,D3-C11,无(不展开/代表执行),功能/配置,<代表: Hermes>,无效凭证返回 valid=false 且不注入沙箱；有效凭证注入；skipped 时放行,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),沙箱批量关闭与分块上传参数,D3-C12,无(不展开/代表执行),功能/配置,<代表: Hermes>,closeAllSessions 批量关闭所有会话；分块上传按 chunk=30000/batch=2/retries=,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),凭证文件读取拦截,D4-1,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,被阻断,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),凭证env打印拦截,D4-2,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,被阻断,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),明文secret API拦截,D4-3,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,被阻断,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),写操作审批门,D4-4,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,无审批不可执行,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),写操作误判检测,D4-5,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,写操作不被误判为只读,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),adminPass回显警告,D4-6,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,警告且不裸回显密码,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),hook三工具有效性,D4-7,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,高危输入均被拦截,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),Python/Node策略一致,D4-8,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,判定一致,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),公开暴露/破坏性预检,D4-9,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,执行前被拦,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),规则库新增回归,D4-10,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,新规则不误杀既有正常操作,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),提示注入防护,D4-11,无(不展开/代表执行),安全/审批,<代表: 4 注入点>,不执行注入指令,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),供应链安装期安全,D4-12,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,无恶意行为+pack一致+SBOM可产,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),最小权限凭证通过率,D4-13,无(不展开/代表执行),安全/审批,<代表: 只读凭证全量>,只读100%可用，写被正确识别权限不足,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),操作可审计性,D4-14,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,每次命令可追溯,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),hook绕过尝试,D4-15,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,无绕过成功,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),命令包裹穿透,D4-16,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,发现内层命令并拦截,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),hook模糊fail-closed,D4-17,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,异常输入默认拒绝,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),hook_check_artifacts 具名回归（代码/IaC/策略制品预检）,D4-21,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,broad IAM 制品被拦截,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),hook_check_deploy_plan 具名回归（部署计划预检）,D4-22,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,公网暴露 FunctionGraph 等被拦截/告警,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）,D4-23,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表: 逐客户端 11 目标>,全部目标注入且约束可执行，无孤儿文件,DESIGN_COVERED,测试负责人,,20260915004224
-全量评审补齐REV-20260911004604,确认令牌过期与重复确认边界（审批流健壮性）,D4-24,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表2: Hermes+OpenCode>,过期令牌返回精确 {code:'CONFIRM_TOKEN_EXPIRED'}（无资源创建，计数=0）；重复确认第二次返,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),Python hook 事件遥测分类,D4-25,无(不展开/代表执行),安全/审批,<代表: hook客户端>,只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capabili,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),findings 证据脱敏,D4-26,无(不展开/代表执行),安全/审批,<代表: hook客户端>,findings.evidence 中 AK/SK/token/password 均被 <redacted> 替换，不泄,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),清单发现加载,D5-1,EXP-D5-1-1;EXP-D5-2-1;EXP-D5-3-1;EXP-D5-4-1;EXP-D5-5-1;EXP-D5-6-1;EXP-D5-7-1;EXP-D5-8-1;EXP-D5-9-1;EXP-D5-10-1,客户端适配,<代表: 10 客户端>,全部客户端可发现,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),install落点正确,D5-2,EXP-D5-1-2;EXP-D5-2-2;EXP-D5-3-2;EXP-D5-4-2;EXP-D5-5-2;EXP-D5-6-2;EXP-D5-7-2;EXP-D5-8-2;EXP-D5-9-2;EXP-D5-10-2,客户端适配,<代表: 10 客户端>,"落点与文档一致,无错位",DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),工具全量枚举,D5-3,EXP-D5-1-3;EXP-D5-2-3;EXP-D5-3-3;EXP-D5-4-3;EXP-D5-5-3;EXP-D5-6-3;EXP-D5-7-3;EXP-D5-8-3;EXP-D5-9-3;EXP-D5-10-3,客户端适配,<代表: 10 客户端>,"39 工具全量可达(=tools.mjs 注册源数量),schema完整",DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),hook支持差异,D5-4,EXP-D5-1-4;EXP-D5-2-4;EXP-D5-3-4;EXP-D5-4-4;EXP-D5-5-4;EXP-D5-6-4;EXP-D5-7-4;EXP-D5-8-4;EXP-D5-9-4;EXP-D5-10-4,客户端适配,<代表: 10 客户端>,两条降级路径均有效,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),沙箱/终端模式差异,D5-5,EXP-D5-1-5;EXP-D5-2-5;EXP-D5-3-5;EXP-D5-4-5;EXP-D5-5-5;EXP-D5-6-5;EXP-D5-7-5;EXP-D5-8-5;EXP-D5-9-5;EXP-D5-10-5,客户端适配,<代表: CodeArts 重点>,环境约束与README一致且恢复可用,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),Windows特有问题,D5-6,EXP-D5-1-6;EXP-D5-2-6;EXP-D5-3-6;EXP-D5-4-6;EXP-D5-5-6;EXP-D5-6-6;EXP-D5-7-6;EXP-D5-8-6;EXP-D5-9-6;EXP-D5-10-6,客户端适配,<代表: Windows 专项>,官方已知问题在文档范围内可控,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),重启生效一致性,D5-7,EXP-D5-1-7;EXP-D5-2-7;EXP-D5-3-7;EXP-D5-4-7;EXP-D5-5-7;EXP-D5-6-7;EXP-D5-7-7;EXP-D5-8-7;EXP-D5-9-7;EXP-D5-10-7,客户端适配,<代表: 10 客户端>,重启生效语义跨客户端一致,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),服务矩阵↔技能目录双向对齐 + codex-desktop 补全,D5-8,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),客户端适配,<代表: 逐客户端 10+>,双向映射无遗漏/无多余，无 skill 服务有明确降级提示,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),检索响应延迟,D6-1,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,p95<2s,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),只读执行端到端,D6-2,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,p95<3s,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),MCP冷启时间,D6-3,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,冷启<5s,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),并发调度正确性,D6-4,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,无死锁无消息错乱,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),大目录/大上传,D6-5,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,内存平稳不超时,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),弱网重试幂等,D6-6,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,重试幂等不重复创建资源,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),长会话稳定性,D6-7,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,无内存泄漏无失效,DESIGN_COVERED,测试负责人,,20260915004224
-全量评审补齐REV-20260911004604,MCP 工具调用超时（网络/后端挂起）,D6-8,无(不展开/代表执行),性能/可靠性,<代表: MCP进程+夹具>,超时在 25~35s 内返回（不无限挂起/不提前误报）；isError=true 且 error.code=ETIMED,DESIGN_COVERED,测试负责人,,20260915004224
-全量评审补齐REV-20260911004604,tools/call 超时协议语义与取消,D9-9,无(不展开/代表执行),MCP协议,<代表: Inspector+夹具>,"超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabili",DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),OS矩阵,D7-1,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,全OS可用,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),Node版本矩阵,D7-2,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,Node >=22 均可用（engines 合同覆盖的版本区间）,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),Windows better-sqlite3缺口,D7-3,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows 专项>,缺口面明确并人工补齐,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),国内镜像源安装,D7-4,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,镜像路径安装正常,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),与既有配置共存,D7-5,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,升级不覆盖/不破坏用户自定义内容,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),升级兼容,D7-6,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,升级通道可用且行为一致,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),文档与能力一致,D8-1,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,无失效链接无过时命令,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),错误信息可执行,D8-2,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,均含下一步指引,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),脱敏误报平衡,D8-3,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,secret脱敏但project_id/region不被打码,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),引导步骤可机械执行,D8-4,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,无含糊步骤(Agent可机械执行),DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),运行时日志安全,D8-5,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,日志分级正确无敏感信息,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),中英文文档一致,D8-6,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,双源无漂移,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),7 个 meta/通用技能指引可机械执行验证,D8-7,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,7 技能指引均可机械执行，无断链/幻觉步骤,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),遥测策略端到端（trackTool/trackSandbox/hook 事件/上报脱敏）,D8-8,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,事件完整上报且不含明文凭证,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),tools/list合规,D9-1,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,39 工具 schema 均合法(=tools.mjs 注册源数量),DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),JSON-RPC错误码,D9-2,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,"错误码规范,客户端可处理",DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),tools/call响应格式,D9-3,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,content数组+isError语义正确,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),协议生命周期,D9-4,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,强制时序被遵守,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),stdio传输健壮,D9-5,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,通传输不崩不污染协议通道,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),跨客户端互通,D9-6,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,全客户端协议互通,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),协议版本协商降级,D9-7,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,不挂死且正确降级,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),inputSchema版本合规,D9-8,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,版本统一且明确,DESIGN_COVERED,测试负责人,,20260915004224
-覆盖缺口落用例20260913(coverage-gaps.md),MCP remote transport（HTTP/WS 远程服务）,D9-10,无(不展开/代表执行),MCP协议,<代表: remote 客户端>,remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 ,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),工具描述可选择性,D10-1,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,"描述可度量,低分项入缺口",DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),skill激活率,D10-2,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,激活率≥90%,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),路由准确率+混淆矩阵,D10-3,EXP-E01;EXP-E02;EXP-E03;EXP-E04;EXP-E05;EXP-E06;EXP-E07;EXP-E08;EXP-E09;EXP-E10;EXP-E11;EXP-E12;EXP-E13;EXP-E14;EXP-E15,Agent评测,<代表: Hermes/Codex/OpenCode>,"路由准确率≥90%,错路由可定位",DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),安全干预有效性,D10-4,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,高危请求自动走审批,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),多轮任务完成率,D10-5,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,"自主完成率高,干预少",DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),评测基建,D10-6,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,结果可重复可比,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),评测失败分级,D10-7,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,分级驱动修复优先级,DESIGN_COVERED,测试负责人,,20260915004224
-v1.5规划(v1.3基线),评测成本预算,D10-8,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,成本可控可持续,DESIGN_COVERED,测试负责人,,20260915004224
-ITER-005(PR#592),README 徽章动态化 D1-1~4,-,-,静态核对+CLI,Windows W,next-stable.mjs 运行输出,REFERENCE_ONLY,测试负责人,复用既有 ID，无独立设计级（结论：接受）,20260915004224
-ITER-005(PR#592),P1 install 目标解析四态,D1-2/D1-7/D1-9,-,CLI+PTY/非TTY,Windows W + Linux L,setup.cjs 决策树 44/44,REFERENCE_ONLY,测试负责人,复用既有 ID（结论：接受）,20260915004224
-ITER-005(PR#592),P2 通用 MCP 白名单接入,D1-58,-,CLI,Linux L,Claude/Cursor merge 场景,REFERENCE_ONLY,测试负责人,已回填 D1-58（R12-3 完成，不再留待回填）,20260915004224
-ITER-002 hand,各客户端 CDP 会话级自动化,D5-1~7,EXP-D5-1-1;EXP-D5-5-1,客户端会话,7 客户端,各 manual/会话级自动化.md,REFERENCE_ONLY,测试负责人,执行记录性质（结论：接受，不另立 ID）,20260915004224
+v1.5规划(v1.3基线),全新环境引导安装,D1-1,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表: 逐客户端 10+>,未安装→指引→装好闭环，插件引导完成全流程,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),多Agent探测,D1-2,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,auto-detect 覆盖全部共存客户端,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),doctor健康自检,D1-3,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,检测项准确，失败场景如实报告且给出修复指引,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),status/update幂等,D1-4,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,增量刷新，不碰用户config,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),uninstall干净度,D1-5,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows 重点>,卸载后无功能残留,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),install-hcloud,D1-6,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,KooCLI安装引导成功，含镜像/沙箱提示,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),OpenClaw插件流,D1-7,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,双通道均可用，风险确认参数生效,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),通用MCP通道,D1-8,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,标准npx MCP配置直接可用,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),重启生效语义,D1-9,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表: 逐客户端 10+>,重启前不可用/重启后可用，跨客户端一致,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),卸载全局清理(新flag),D1-10,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表: 全客户端+Windows>,KooCLI二进制+配置+OBS配置全清，目录归零,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),自定义HCLOUD_BIN保留,D1-11,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,用户管理的二进制与PATH条目不被误删,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),清理幂等归零,D1-12,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,重复执行无报错、无残留,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),Windows文件锁下清理,D1-13,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows 专项>,锁场景明确失败或提示，不静默损坏config,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),copyFileVerified安装完整性,D1-14,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,损坏被检出并明确提示，不静默装坏,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),checkForUpdate更新提示,D1-15,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,正确判断next/latest并提示可用更新,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,升级提醒工具注册与协议暴露,D1-26,无(不展开/代表执行),安装/生命周期,<代表: MCP Inspector+进程>,两工具均注册且 schema 含 description/inputSchema,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,检测语义-已是最新,D1-27,EXP-NR3-01;EXP-NR3-02,安装/生命周期,<代表: Windows/Linux>,"result=up_to_date, updateAvailable=false",DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,检测语义-有新版本,D1-28,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"result=update_available, updateAvailable=true, targetVersion",DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,pre-release 用户提醒策略(文档vs实现差异),D1-29,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,pre 用户候选含 latest+next 取最大；pre 升级提醒语义与文档表差异点以最终裁决为准,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,semver 比对正确性,D1-30,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,1.1.2>1.1.1、1.1.0 > 1.1.0-next.9、相等=0、无效串按字典序,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,dismiss 冷却期,D1-31,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"冷却期内 result=dismissed, dismissed=true, 3 天后 expireAt 过期重新提醒",DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,新版本>dismissedVersion 无视冷却,D1-32,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,无视冷却期重新提醒 update_available,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,skip 文件持久化与多路径,D1-33,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"文件{ dismissedVersion/dismissedAt/expireAt }, 插件目录无副本时回退共享路径",DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,check_failed 不阻塞正常调用,D1-34,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,"result=check_failed, note 检测失败不影响使用, 不抛错不阻塞",DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,缓存 TTL 与失败节流,D1-35,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,1h 内复用探测结果；失败后 5min 节流,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,首调用兜底提示（会话首个工具附加更新信息）,D1-36,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,仅会话首个非 check/upgrade 工具经 dispatch 内部 decorateResult 附加 _upda,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,SKILL.md 会话启动指令存在性,D1-37,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,SKILL.md 含首次操作前先 check_update 的指令,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,huaweicloud_upgrade 语义,D1-38,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,success/previousVersion/installedVersion/requiresRestart=tru,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,Windows 升级检测链可用性,D1-39,EXP-NR3-09;EXP-NR3-10;EXP-NR3-11,安装/生命周期,<代表: Windows/Linux>,Windows 下检测链真实可用，不得 EINVAL 静默失败,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,镜像 lag 下检测正确性(反向提醒防护),D1-40,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,check_update 真实 MCP 返回契约,D1-41,无(不展开/代表执行),安装/生命周期,<代表: 隔离进程>,tools/call isError=false；四态、currentVersion/latestStable/upda,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,dismiss 真实闭环与跨调用持久化,D1-42,EXP-NR3-03;EXP-NR3-04,安装/生命周期,<代表: 隔离 HOME+CROSS_PROCESS>,拒绝调用写入正确 agent/plugin 路径；文件字段完整且 expireAt= dismissedAt+3天；同版,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,dismiss 参数边界与失败语义,D1-43,无(不展开/代表执行),安装/生命周期,<代表: 隔离 HOME>,无 target 或 registry 失败时不应伪造 dismissed/up_to_date，不写入 undefin,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,冷却边界与异常 skip 状态,D1-44,无(不展开/代表执行),安装/生命周期,<代表: 时间注入>,仅严格早于 expireAt 才算冷却；边界时刻重新提醒；新版本无视冷却；坏状态安全降级且不静默吞掉更新,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,兜底提示真实序列与预热竞态,D1-45,EXP-NR3-23;EXP-NR3-24,安装/生命周期,<代表: 隔离进程+预热竞态>,仅会话首个非检查工具携带 _updateInfo；检查/升级工具不携带；预热未完成时不阻塞正常工具，结果就绪后仍按既定一,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,缓存 TTL 边界与查询异常恢复,D1-46,EXP-NR3-05;EXP-NR3-06,安装/生命周期,<代表: 时间与函数注入>,TTL 边界符合约定；失败在 5min 内节流、过期可重试；reject 不产生未处理异常且返回 check_faile,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,缓存与当前版本解耦,D1-47,无(不展开/代表执行),安装/生命周期,<代表: 隔离进程>,共享 registry 结果可复用，但每次按当前版本重新计算 target/result；不得复用上一个 current,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,多 Agent 路径与多进程隔离,D1-48,EXP-NR3-18,安装/生命周期,<代表: 双 HOME 双进程>,每个 agent 只读取自己的 skip 状态；进程/agent 之间不串用 dismissedVersion、expi,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,upgrade handler 无更新与参数校验,D1-49,EXP-NR3-12;EXP-NR3-13,安装/生命周期,<代表: 隔离进程>,up_to_date 不执行升级命令；非法 version 被明确拒绝；失败态不误报成功；target 默认 all 且,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,upgrade 命令语义与目标选择,D1-50,无(不展开/代表执行),安装/生命周期,<代表: 命令 mock>,stable/pre 用户选择正确 tag；目标 agent 传递正确；命令顺序和文档要求一致，成功必返回 requir,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,upgrade 失败恢复与副作用,D1-51,无(不展开/代表执行),安装/生命周期,<代表: 隔离 HOME>,失败不崩溃、不返回 success、不污染 skip 状态或缓存；manual 命令含正确 tag/target；恢复后,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,真实升级安装与重启生效,D1-52,EXP-NR3-14;EXP-NR3-15;EXP-NR3-15b;EXP-NR3-16,安装/生命周期,<代表: 一次性环境 OpenCode+Hermes>,真实 npm/install/setup 或整合命令完成；文件同步正确；旧进程明确要求重启；新进程加载目标新版本且配置未,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,镜像滞后确定性夹具,D1-53,EXP-NR3-07;EXP-NR3-08,安装/生命周期,<代表: registry 夹具>,远端版本不高于 current 时不提示倒退；官方有新版本时策略符合设计；坏响应为 check_failed；regis,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,Hermes 会话级用户闭环,D1-54,EXP-NR3-17,安装/生命周期,<代表: 真实客户端 Hermes>,Agent 遵守 SKILL；未获同意不升级；拒绝后 3 天不重复打扰；升级后明确重启；离线不阻塞原任务,DESIGN_COVERED,测试负责人,,20260915202307
+NR3版本升级提醒,多会话提示隔离,D1-55,EXP-NR3-19;EXP-NR3-20;EXP-NR3-21;EXP-NR3-22,安装/生命周期,<代表: 并行进程>,一次性兜底按会话隔离而非全局只消费一次；一个会话的 dismiss、hintConsumed、失败状态不影响另一个会话,DESIGN_COVERED,测试负责人,,20260915202307
+全量评审补齐REV-20260911004604,安装中断恢复（网络/进程中断后半装补全）,D1-56,由EXP-D7 OS矩阵覆盖(OS×Node),安装/生命周期,<代表: Windows/Linux>,半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 39 工具（数量=39 ,DESIGN_COVERED,测试负责人,,20260915202307
+全量评审补齐REV-20260911004604,升级坏版本回滚（装坏可退）,D1-57,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表2: Hermes(隔离profile)+OpenCode>,"失败返回结构化错误（success=false, error.code 精确枚举, error.manual 含版本限定",DESIGN_COVERED,测试负责人,,20260915202307
+R12回填ITER-005-P2,通用 MCP 白名单接入（Claude/Cursor merge 语义）,D1-58,EXP-D1-58-01;EXP-D1-58-02;EXP-D1-58-03;EXP-D1-58-04;EXP-D1-58-05,安装/生命周期,<代表: Linux L 真机>,白名单合并幂等（重复不重复备份）；坏 JSON 零写入（原文件 hash 不变）；未命中输出可粘贴片段（含 mcpSer,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),SKIP_UPDATE 环境变量跳过升级检测,D1-59,无(不展开/代表执行),安装/生命周期,<代表: 隔离进程>,env=1 时 result=up_to_date 且不发起 registry 查询（跳过检测）；unset 后恢复真实,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),HTTP 查询路径与自定义 registry（fetch 版）,D1-60,无(不展开/代表执行),安装/生命周期,<代表: 隔离进程>,fetch 路径 registry 取 HUAWEICLOUD_NPM_REGISTRY 且去尾斜杠；超时 15s ab,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),升级重启文案 officeace 分支,D1-61,无(不展开/代表执行),安装/生命周期,<代表: officeace+Hermes>,officeace→'打开连接器→我的连接器→huaweicloud-devkit→重新连接'；其他→'请重启当前会话',DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),未覆盖 CLI 子命令 reinstall/proxy/version,D1-62,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安装/生命周期,<代表: 逐客户端>,三命令均有实现而非 TODO：reinstall 重装、proxy 配置代理、version 输出版本；无静默失败,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),安装版本读取双回退,D1-63,无(不展开/代表执行),安装/生命周期,<代表: 隔离目录>,先 pluginRoot 后 packageRoot 读取；两处都无返回 null,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),agent 自动检测匹配与版本,D1-64,无(不展开/代表执行),安装/生命周期,<代表: 多 agent clientInfo>,clientInfo 正确映射 AGENTS 注册表；detectVersion 按 versionConfig 返回；,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,credentials变更后auth回归,D2-8,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,三端就绪+脱敏正常，无回归,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,reconcile幂等(一致态零写),D2-9,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,一致态下零副作用，不触发 R4 重写,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,R7 current档跟随,D2-10,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,resolveManagedProfile 返回 current 档；runHcloudConfigure 带 --cl,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,R3 STS token拒绝落盘,D2-11,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,"返回 {status:error, scope:rejected}，token 永不落盘",DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,R10 runtime非空禁止落盘,D2-12,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,sync 返回 ok:false + auto-sync suppressed (R10)，不写 S1,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,R9 configuredBySession优先env,D2-13,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,标记时 S1 胜出；清除后 env 兜底恢复,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,R2 冲突交互仲裁(confirmToken),D2-14,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,needs_confirmation+confirmToken+双选项；confirm(s1)→outcome=abor,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,auth_switch行为矩阵抽查,D2-15,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,与行为矩阵一致（temporary 不触 S2/S3、clear 回退可用、persist 落盘）,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,import文件读取后擦除,D2-16,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,读后无条件擦除（exists=False），密钥不留盘,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,cmdAuthReconcile非TTY守卫,D2-17,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,快速退出不 hang，stderr 明确告警（Non-interactive session...）,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,.last_sync mtime手动改动检测,D2-18,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,mtime>marker→R2 仲裁；≤→R4 自动重写,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,命名档只审计不自动动(R5),D2-19,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,解析/写档只动 current 档，命名档隔离,DESIGN_COVERED,测试负责人,,20260915202307
+NR2 AK/SK架构v4,HUAWEICLOUD_HOME重定向(R6),D2-20,无(不展开/代表执行),认证/凭证,<代表: Win/Linux 真机>,S2 固定 ~/.hcloud 不受影响（方案 T1 断言3）,DESIGN_COVERED,测试负责人,,20260915202307
+全量评审补齐REV-20260911004604,AK/SK 轮换后 auth_status 正确感知（凭证状态维度）,D2-21,无(不展开/代表执行),认证/凭证,<真云代表: Hermes>,30s 内三端指纹全部=F2（逐端断言，旧指纹 F1 零残留）；auth_status.reconciled.store,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),confirm-not-deny审批语义,D4-18,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表: 安全基线 Hermes+OpenCode>,写操作需显式确认，不被直接拒绝也不被直接放行,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),确认流下预检仍生效,D4-19,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表: 安全基线 Hermes+OpenCode>,确认流程中风险预检仍生效拦截,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),拒绝后零操作,D4-20,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,拒绝后无任何资源变更、无命令执行,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),auth init三端同步,D2-1,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,三端全部落位，任一端失败即缺陷,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),auth status判定准确性,D2-2,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,组合枚举判定准确，部分就绪场景明确标识,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),auth sync幂等,D2-3,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,重复执行无副作用,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),凭证脱敏正确性,D2-4,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,输出无明文凭证字段,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),凭证缺失报错指引,D2-5,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,明确报错+可执行指引(非裸堆栈),DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),OBS独立配置引导,D2-6,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,OBS配置落盘成功且可无人值守,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),无凭证降级,D2-7,无(不展开/代表执行),认证/凭证,<代表: Hermes 或 OpenCode>,优雅降级或明确提示，不报裸错误,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),CodeArts 上下文凭证读取,D2-22,无(不展开/代表执行),认证/凭证,<代表: 隔离进程>,CodeArts 上下文走 readCodeArtsCredentials 分支；非 CodeArts 走 S1/env,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),agent 注册状态,D2-23,无(不展开/代表执行),认证/凭证,<代表: 单机多 target>,返回 11 安装目标各自的注册状态；未安装目标如实标记,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),auth 同步 projectId 自动解析,D2-24,无(不展开/代表执行),认证/凭证,<真云代表: Hermes>,region/profile 可解析时 syncAuth 返回 projectId；不可解析时不误报,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),KooCLI 探测状态分类,D2-25,无(不展开/代表执行),认证/凭证,<代表: 隔离进程>,探测状态正确分类并给出对应 nextStep；未安装/沙箱/隐私待确认三态区分,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),skill检索完整性,D3-A1,无(不展开/代表执行),功能/配置,<代表: Hermes>,全部可检索且完整拉取，索引无缺口,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),触发词路由准确,D3-A2,无(不展开/代表执行),功能/配置,<代表: Hermes>,正确映射目标skill,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),沙箱vs生产路由,D3-A3,无(不展开/代表执行),功能/配置,<代表: Hermes>,demo→sandbox，生产→ECS/FG/CCE,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),区域意图提取,D3-A4,无(不展开/代表执行),功能/配置,<代表: Hermes>,正确映射且不盲扫无关区域,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),元数据正确性,D3-A5,无(不展开/代表执行),功能/配置,<代表: Hermes>,region/endpoint/可用性数据正确,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),市场/图标检索质量,D3-A6,无(不展开/代表执行),功能/配置,<代表: Hermes>,排序合理+官方图标可用,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),list_operations规范名,D3-B1,无(不展开/代表执行),功能/配置,<代表: Hermes>,返回规范操作名，不依赖猜测,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),plan命令质量,D3-B2,无(不展开/代表执行),功能/配置,<代表: Hermes>,命令语法正确参数完整，审批可执行,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),run_readonly脱敏执行,D3-B3,无(不展开/代表执行),功能/配置,<代表: Hermes>,执行成功+输出脱敏,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),explain_error可执行,D3-B4,无(不展开/代表执行),功能/配置,<代表: Hermes>,给出可执行下一步而非干话,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),detect_framework识别,D3-B5,无(不展开/代表执行),功能/配置,<代表: Hermes>,识别准确且给出构建产物/端口,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),search_docs命中率,D3-B6,无(不展开/代表执行),功能/配置,<代表: Hermes>,命中率≥80%且内容准确,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),ECS生命周期E2E,D3-C1,无(不展开/代表执行),功能/配置,<代表: 真云 ECS 贵资源>,插件引导全程完成，无残留,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),OBS静态站部署E2E,D3-C2,无(不展开/代表执行),功能/配置,<代表: Hermes>,部署成功+资源归零,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),沙箱部署E2E,D3-C3,无(不展开/代表执行),功能/配置,<代表: 沙箱 DevStation>,URL可访问+会话关闭,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),服务创建类回归,D3-C4,EXP-C4-01;EXP-C4-02;EXP-C4-03;EXP-C4-04;EXP-C4-05;EXP-C4-06;EXP-C4-07;EXP-C4-08;EXP-C4-09;EXP-C4-10;EXP-C4-11;EXP-C4-12;EXP-C4-13;EXP-C4-14;EXP-C4-15;EXP-C4-16;EXP-C4-17;EXP-C4-18;EXP-C4-19;EXP-C4-20;EXP-C4-21;EXP-C4-22,功能/配置,<代表: 22 服务矩阵>,全部服务有规范路由且可执行,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),工具冒烟,D3-C5,无(不展开/代表执行),功能/配置,<代表: Hermes>,冒烟快速全通,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),run_approved_command 审批后执行闭环,D3-B7,无(不展开/代表执行),功能/配置,<代表: Hermes>,审批通过后正确执行；未审批命令拒绝,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),voucher_status 状态查询（领券状态读取）,D3-B8,无(不展开/代表执行),功能/配置,<代表: Hermes>,status 与 claim 状态一致，未领取准确反馈,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/upload_file/close_session/deploy_check）,D3-C6,无(不展开/代表执行),功能/配置,<代表: Hermes>,7 工具均返回规范结果，无静默失败,DESIGN_COVERED,测试负责人,,20260915202307
+全量评审补齐REV-20260911004604,跨区域资源操作引导（区域维度）,D3-C7,无(不展开/代表执行),功能/配置,<真云代表: Hermes>,命令含目标 --cli-region（参数级断言）；不可用→code=Ecs.0021 精确命中；不存在→code=Ec,DESIGN_COVERED,测试负责人,,20260915202307
+全量评审补齐REV-20260911004604,企业项目（enterprise_project_id）参数支持（项目维度）,D3-C8,无(不展开/代表执行),功能/配置,<真云代表: Hermes>,命令含精确 enterprise_project_id（参数级断言）；ShowVolume 返回字段 enterpris,DESIGN_COVERED,测试负责人,,20260915202307
+全量评审补齐REV-20260911004604,资源不存在/已删除/冻结状态操作引导（资源状态维度）,D3-C9,无(不展开/代表执行),功能/配置,<真云代表: Hermes>,错误码精确命中（APIGW.0101 / EVS.5400 唯一断言），message 字段=固定 schema 文本；,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),市场分类列表,D3-C10,无(不展开/代表执行),功能/配置,<代表: Hermes>,分类列表完整且与 searchMarketplace(category) 过滤一致,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),沙箱凭证注入前 IAM 验证,D3-C11,无(不展开/代表执行),功能/配置,<代表: Hermes>,无效凭证返回 valid=false 且不注入沙箱；有效凭证注入；skipped 时放行,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),沙箱批量关闭与分块上传参数,D3-C12,无(不展开/代表执行),功能/配置,<代表: Hermes>,closeAllSessions 批量关闭所有会话；分块上传按 chunk=30000/batch=2/retries=,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),凭证文件读取拦截,D4-1,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,被阻断,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),凭证env打印拦截,D4-2,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,被阻断,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),明文secret API拦截,D4-3,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,被阻断,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),写操作审批门,D4-4,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,无审批不可执行,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),写操作误判检测,D4-5,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,写操作不被误判为只读,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),adminPass回显警告,D4-6,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,警告且不裸回显密码,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),hook三工具有效性,D4-7,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,高危输入均被拦截,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),Python/Node策略一致,D4-8,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,判定一致,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),公开暴露/破坏性预检,D4-9,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,执行前被拦,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),规则库新增回归,D4-10,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,新规则不误杀既有正常操作,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),提示注入防护,D4-11,无(不展开/代表执行),安全/审批,<代表: 4 注入点>,不执行注入指令,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),供应链安装期安全,D4-12,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,无恶意行为+pack一致+SBOM可产,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),最小权限凭证通过率,D4-13,无(不展开/代表执行),安全/审批,<代表: 只读凭证全量>,只读100%可用，写被正确识别权限不足,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),操作可审计性,D4-14,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,每次命令可追溯,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),hook绕过尝试,D4-15,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,无绕过成功,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),命令包裹穿透,D4-16,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,发现内层命令并拦截,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),hook模糊fail-closed,D4-17,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,异常输入默认拒绝,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),hook_check_artifacts 具名回归（代码/IaC/策略制品预检）,D4-21,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,broad IAM 制品被拦截,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),hook_check_deploy_plan 具名回归（部署计划预检）,D4-22,无(不展开/代表执行),安全/审批,<代表: hook=Hermes 非hook=OpenCode>,公网暴露 FunctionGraph 等被拦截/告警,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）,D4-23,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表: 逐客户端 11 目标>,全部目标注入且约束可执行，无孤儿文件,DESIGN_COVERED,测试负责人,,20260915202307
+全量评审补齐REV-20260911004604,确认令牌过期与重复确认边界（审批流健壮性）,D4-24,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),安全/审批,<代表2: Hermes+OpenCode>,过期令牌返回精确 {code:'CONFIRM_TOKEN_EXPIRED'}（无资源创建，计数=0）；重复确认第二次返,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),Python hook 事件遥测分类,D4-25,无(不展开/代表执行),安全/审批,<代表: hook客户端>,只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capabili,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),findings 证据脱敏,D4-26,无(不展开/代表执行),安全/审批,<代表: hook客户端>,findings.evidence 中 AK/SK/token/password 均被 <redacted> 替换，不泄,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),清单发现加载,D5-1,EXP-D5-1-1;EXP-D5-2-1;EXP-D5-3-1;EXP-D5-4-1;EXP-D5-5-1;EXP-D5-6-1;EXP-D5-7-1;EXP-D5-8-1;EXP-D5-9-1;EXP-D5-10-1,客户端适配,<代表: 10 客户端>,全部客户端可发现,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),install落点正确,D5-2,EXP-D5-1-2;EXP-D5-2-2;EXP-D5-3-2;EXP-D5-4-2;EXP-D5-5-2;EXP-D5-6-2;EXP-D5-7-2;EXP-D5-8-2;EXP-D5-9-2;EXP-D5-10-2,客户端适配,<代表: 10 客户端>,"落点与文档一致,无错位",DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),工具全量枚举,D5-3,EXP-D5-1-3;EXP-D5-2-3;EXP-D5-3-3;EXP-D5-4-3;EXP-D5-5-3;EXP-D5-6-3;EXP-D5-7-3;EXP-D5-8-3;EXP-D5-9-3;EXP-D5-10-3,客户端适配,<代表: 10 客户端>,"39 工具全量可达(=tools.mjs 注册源数量),schema完整",DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),hook支持差异,D5-4,EXP-D5-1-4;EXP-D5-2-4;EXP-D5-3-4;EXP-D5-4-4;EXP-D5-5-4;EXP-D5-6-4;EXP-D5-7-4;EXP-D5-8-4;EXP-D5-9-4;EXP-D5-10-4,客户端适配,<代表: 10 客户端>,两条降级路径均有效,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),沙箱/终端模式差异,D5-5,EXP-D5-1-5;EXP-D5-2-5;EXP-D5-3-5;EXP-D5-4-5;EXP-D5-5-5;EXP-D5-6-5;EXP-D5-7-5;EXP-D5-8-5;EXP-D5-9-5;EXP-D5-10-5,客户端适配,<代表: CodeArts 重点>,环境约束与README一致且恢复可用,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),Windows特有问题,D5-6,EXP-D5-1-6;EXP-D5-2-6;EXP-D5-3-6;EXP-D5-4-6;EXP-D5-5-6;EXP-D5-6-6;EXP-D5-7-6;EXP-D5-8-6;EXP-D5-9-6;EXP-D5-10-6,客户端适配,<代表: Windows 专项>,官方已知问题在文档范围内可控,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),重启生效一致性,D5-7,EXP-D5-1-7;EXP-D5-2-7;EXP-D5-3-7;EXP-D5-4-7;EXP-D5-5-7;EXP-D5-6-7;EXP-D5-7-7;EXP-D5-8-7;EXP-D5-9-7;EXP-D5-10-7,客户端适配,<代表: 10 客户端>,重启生效语义跨客户端一致,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),服务矩阵↔技能目录双向对齐 + codex-desktop 补全,D5-8,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),客户端适配,<代表: 逐客户端 10+>,双向映射无遗漏/无多余，无 skill 服务有明确降级提示,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),检索响应延迟,D6-1,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,p95<2s,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),只读执行端到端,D6-2,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,p95<3s,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),MCP冷启时间,D6-3,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,冷启<5s,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),并发调度正确性,D6-4,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,无死锁无消息错乱,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),大目录/大上传,D6-5,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,内存平稳不超时,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),弱网重试幂等,D6-6,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,重试幂等不重复创建资源,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),长会话稳定性,D6-7,无(不展开/代表执行),性能/可靠性,<代表: Windows x64 + Node22>,无内存泄漏无失效,DESIGN_COVERED,测试负责人,,20260915202307
+全量评审补齐REV-20260911004604,MCP 工具调用超时（网络/后端挂起）,D6-8,无(不展开/代表执行),性能/可靠性,<代表: MCP进程+夹具>,超时在 25~35s 内返回（不无限挂起/不提前误报）；isError=true 且 error.code=ETIMED,DESIGN_COVERED,测试负责人,,20260915202307
+全量评审补齐REV-20260911004604,tools/call 超时协议语义与取消,D9-9,无(不展开/代表执行),MCP协议,<代表: Inspector+夹具>,"超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabili",DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),OS矩阵,D7-1,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,全OS可用,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),Node版本矩阵,D7-2,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,Node >=22 均可用（engines 合同覆盖的版本区间）,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),Windows better-sqlite3缺口,D7-3,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows 专项>,缺口面明确并人工补齐,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),国内镜像源安装,D7-4,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,镜像路径安装正常,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),与既有配置共存,D7-5,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,升级不覆盖/不破坏用户自定义内容,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),升级兼容,D7-6,由EXP-D7 OS矩阵覆盖(OS×Node),兼容性,<代表: Windows/Linux/macOS × Node22/24>,升级通道可用且行为一致,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),文档与能力一致,D8-1,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,无失效链接无过时命令,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),错误信息可执行,D8-2,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,均含下一步指引,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),脱敏误报平衡,D8-3,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,secret脱敏但project_id/region不被打码,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),引导步骤可机械执行,D8-4,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,无含糊步骤(Agent可机械执行),DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),运行时日志安全,D8-5,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,日志分级正确无敏感信息,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),中英文文档一致,D8-6,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,双源无漂移,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),7 个 meta/通用技能指引可机械执行验证,D8-7,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,7 技能指引均可机械执行，无断链/幻觉步骤,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),遥测策略端到端（trackTool/trackSandbox/hook 事件/上报脱敏）,D8-8,无(不展开/代表执行),文档/质量,<代表: 静态评审人 测试经理>,事件完整上报且不含明文凭证,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),tools/list合规,D9-1,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,39 工具 schema 均合法(=tools.mjs 注册源数量),DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),JSON-RPC错误码,D9-2,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,"错误码规范,客户端可处理",DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),tools/call响应格式,D9-3,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,content数组+isError语义正确,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),协议生命周期,D9-4,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,强制时序被遵守,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),stdio传输健壮,D9-5,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,通传输不崩不污染协议通道,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),跨客户端互通,D9-6,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,全客户端协议互通,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),协议版本协商降级,D9-7,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,不挂死且正确降级,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),inputSchema版本合规,D9-8,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,版本统一且明确,DESIGN_COVERED,测试负责人,,20260915202307
+覆盖缺口落用例20260913(coverage-gaps.md),MCP remote transport（HTTP/WS 远程服务）,D9-10,无(不展开/代表执行),MCP协议,<代表: remote 客户端>,remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 ,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),工具描述可选择性,D10-1,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,"描述可度量,低分项入缺口",DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),skill激活率,D10-2,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,激活率≥90%,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),路由准确率+混淆矩阵,D10-3,EXP-E01;EXP-E02;EXP-E03;EXP-E04;EXP-E05;EXP-E06;EXP-E07;EXP-E08;EXP-E09;EXP-E10;EXP-E11;EXP-E12;EXP-E13;EXP-E14;EXP-E15,Agent评测,<代表: Hermes/Codex/OpenCode>,"路由准确率≥90%,错路由可定位",DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),安全干预有效性,D10-4,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,高危请求自动走审批,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),多轮任务完成率,D10-5,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,"自主完成率高,干预少",DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),评测基建,D10-6,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,结果可重复可比,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),评测失败分级,D10-7,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,分级驱动修复优先级,DESIGN_COVERED,测试负责人,,20260915202307
+v1.5规划(v1.3基线),评测成本预算,D10-8,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,成本可控可持续,DESIGN_COVERED,测试负责人,,20260915202307
+ITER-005(PR#592),README 徽章动态化 D1-1~4,-,-,静态核对+CLI,Windows W,next-stable.mjs 运行输出,REFERENCE_ONLY,测试负责人,复用既有 ID，无独立设计级（结论：接受）,20260915202307
+ITER-005(PR#592),P1 install 目标解析四态,D1-2/D1-7/D1-9,-,CLI+PTY/非TTY,Windows W + Linux L,setup.cjs 决策树 44/44,REFERENCE_ONLY,测试负责人,复用既有 ID（结论：接受）,20260915202307
+ITER-005(PR#592),P2 通用 MCP 白名单接入,D1-58,-,CLI,Linux L,Claude/Cursor merge 场景,REFERENCE_ONLY,测试负责人,已回填 D1-58（R12-3 完成，不再留待回填）,20260915202307
+ITER-002 hand,各客户端 CDP 会话级自动化,D5-1~7,EXP-D5-1-1;EXP-D5-5-1,客户端会话,7 客户端,各 manual/会话级自动化.md,REFERENCE_ONLY,测试负责人,执行记录性质（结论：接受，不另立 ID）,20260915202307

@@ -1,0 +1,15 @@
+=== D4-4: write operation approval gate ===
+Timestamp: 2026-09-15T05:38:17.425Z
+
+  ECS DeleteServer: without=deny/write, with=allow/write
+  ECS CreateServer: without=deny/write, with=allow/write
+  VPC DeleteVpc: without=deny/write, with=allow/write
+  IAM CreateUser: without=deny/write, with=allow/write
+  RDS DeleteInstance: without=deny/write, with=allow/write
+
+RESULT: PASS
+  All write operations (Delete, Create, Update) are correctly gated:
+  - Without approval: decision=deny (blocked)
+  - With approval: decision=allow (approved)
+  - Risk is always 'write' regardless of approval state
+  The approval gate works correctly for all tested write operations.

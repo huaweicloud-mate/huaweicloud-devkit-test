@@ -26,7 +26,7 @@ clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真�
 - 源码仓库 hdk checkout 到 npm 最新包（默认 latest 正式版）对应 commit
 - `npm install -g huaweicloud-devkit` 装最新正式包（latest）
 
-## 六步执行流程
+## 七步执行流程
 
 ### 1. 建当日执行包
 ```bash
@@ -49,11 +49,12 @@ python scripts/init_day.py <客户端> <OS>
 ### 3. 回填执行状态 + 执行时间
 - 「执行状态」枚举：`PASS`（有证据）/ `FAIL`（不符预期，记根因）/ `BLOCKED`（环境阻塞，记 blockedReason）/ `SPEC-MISMATCH`（契约漂移）/ `NOT_RUN`。
 - 「执行时间」：北京时间紧凑 14 位 `YYYYMMDDHHmmss`，**与「执行状态」同一动作回填**（执行完即落）。
-- **NOT_RUN 纪律**：P0 一律不得 NOT_RUN/留空（P0 必测，要么 PASS/FAIL 要么 BLOCKED）；NOT_RUN 仅限「明确不适用本客户端/OS」且写原因；「环境不满足」标 BLOCKED 而非 NOT_RUN。
+- **NOT_RUN 纪律**：P0 一律不得 NOT_RUN/留空（P0 必测，要么 PASS/FAIL 要么 BLOCKED），**唯一例外 = OS 专属 P0 用例在非对应 OS**（OS 列标注「专属」，如 D1-39 Windows 专属在 Linux 标 NOT_RUN 并写原因，Linux 侧由展开级 EXP-NR3-10 代表覆盖）；NOT_RUN 仅限「明确不适用本客户端/OS」且写原因；「环境不满足」标 BLOCKED 而非 NOT_RUN。
+- **未执行原因反馈（给维护 agent 改用例）**：所有 NOT_RUN / BLOCKED 用例，原因须「详细到可判断是否需改用例」，并标注分类——【改用例】用例设计不合理（前置/步骤/预期不可判定、粒度、归属、需真云/真机未标注）→ 维护 agent 改 `test-cases/` 母版；【补环境】环境/凭证/配额缺失；【调归属】归属列（agent/OS/终端覆盖类型）写错。报告 §五**逐条**列出（ID+层级+优先级+状态+分类+详细原因+改用例建议），不得笼统写「无阻塞项」敷衍。
 - 回填后跑 `python scripts/verify_coverage.py <客户端> <OS>`：P0 出现 NOT_RUN/空、或 NOT_RUN+空总占比 > 15% → 不达标，补齐重跑。
 
 ### 4. 出报告 + 缺陷清单
-- 按 `templates/daily-agent-report.md` 输出 `<客户端>-<模型>-测试报告.md`，八节：①测试概述 ②执行摘要 ③状态汇总 ④缺陷清单 ⑤阻塞项 ⑥安全/红线 ⑦资源释放 ⑧遗留建议。
+- 按 `templates/daily-agent-report.md` 输出 `<客户端>-<模型>-测试报告.md`，八节：①测试概述 ②执行摘要 ③状态汇总 ④缺陷清单 ⑤未执行用例与原因 ⑥安全/红线 ⑦资源释放 ⑧遗留建议。
 - 每个 FAIL/SPEC 按 `templates/findings.md` 写 `FINDINGS.md`：**级别 + 描述(现象) + 断言(唯一可判定) + 根因(文件:行号) + 证据**，这是 `file_issue.py` 的解析输入，格式必须严格。
 
 ### 5. 每 10 分钟提报（只提交自己目录）
@@ -65,12 +66,21 @@ python scripts/hourly_sync.py <客户端> <OS> --interval 600
 ### 6. 统一提单 + 提交（全量测完后必做）
 ```bash
 # ① 提单（FINDINGS.md 非空 → 源码仓库 huaweicloud/huaweicloud-devkit 1 个合并 issue，附报告）
-python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md <版本>
+python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md <版本> --type=daily
 # ②③ 提交 push（token 来自 HDK_GH_TOKEN 或 ~/.hdk_token，不依赖 gh CLI）
 git add results/<客户端> && git commit -m "test: <客户端> <OS> 执行回填"
 T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.helper= push "https://x-access-token:$T@github.com/huaweicloud-mate/huaweicloud-devkit-test.git" main
 ```
 **只 push results 不提单 = 未完成**；有 FAIL/SPEC 缺陷必须提单。
+
+### 7. BLOCKED 补测收尾（全部 BLOCKED 用例必须追一轮，能解必解）
+第 6 步 push 前，对所有标 `BLOCKED` 的用例逐条深挖是否「假阻塞」，不得以「需环境」搪塞：
+- **D10 评测集（EXP-E01~E15）**：跑 `node eval/harness/run-eval.mjs hdk/plugins/huaweicloud-core/src/mcp-server.mjs`（harness 已建成，eval/prompts 含 15 条评测集，基线 21.4% MISS），得确定性路由结论，未命中判 FAIL。
+- **已有探针的用例**（如 D6 压测 `supplement-probe.mjs`）：必须跑完探针回填。
+- **可源码级直调的用例**（`serviceCatalog`/`redactString`/`judgeUpdate` 等）：必须直调回填结果。
+- **真云用例**：真云已具备执行条件（AK/SK + 只读子账号 + 保证金已就绪），必须真机执行（最低配置创建 → 测后删除归零 → 只删本次创建），不得以「无 AK/SK / 需保证金」标 BLOCKED、禁止 mock 假跑。
+只有真·外部依赖（真实 Agent 会话行为评测需 LLM harness，`run-eval.mjs` 的 serviceCatalog 路由层无法代理）才保留 BLOCKED，且 blockedReason 必须写四要素（实测时间 + 缺什么 + 影响 + 解除条件）。
+补测回填后重跑 `verify_coverage.py` + `verify_no_fake_pass.py` 双门禁，通过再 push。
 
 ## 门禁（机械校验，虚报作废重跑）
 
@@ -79,7 +89,7 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 
 ## 红线
 
-1. **真云**：最低配置创建 → 测后删除并归零验证 → 只删本次创建资源。
+1. **真云（已具备条件，必须执行）**：最低配置创建 → 测后删除并归零验证 → 只删本次创建资源；不得以「无 AK/SK / 需保证金」标 BLOCKED，禁止 mock 假跑。
 2. **缺陷**：先记根因（文件+行号），全量测完统一提单（合并 1 单），勿拆单/勿未测完就提/勿只 push 不提单。
 3. **PASS 门禁**：标 PASS 必须①实测②证据落盘③evidencePath 回填，未执行禁标 PASS。
 4. **环境阻塞**：标 BLOCKED + blockedReason，不得假装 PASS。
@@ -106,7 +116,7 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 | PASS 门禁 | `python scripts/verify_no_fake_pass.py <客户端> <OS>` |
 | 覆盖率门禁 | `python scripts/verify_coverage.py <客户端> <OS>` |
 | 每 10 分钟提报 | `python scripts/hourly_sync.py <客户端> <OS> --interval 600` |
-| 统一提单 | `python scripts/file_issue.py <FINDINGS.md> <版本>` |
+| 统一提单 | `python scripts/file_issue.py <FINDINGS.md> <版本> --type=daily` |
 
 ## 陷阱
 

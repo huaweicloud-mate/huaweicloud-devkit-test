@@ -1,0 +1,12 @@
+D2-11 R3 STS token拒绝落盘 实测记录
+========================================
+时间: 2026-09-16 (真云补测)
+工具: huaweicloud_auth_switch (mode=memory action=persist + securityToken)
+
+实测调用: auth_switch {mode:memory, action:persist, ak:<S1同ak>, sk:FAKE, securityToken:FAKETOKEN}
+返回: {"status":"error","error":"Temporary STS credentials cannot be persisted (R3). Use action=temporary.","scope":"rejected"}
+
+断言1: scope=rejected -> PASS
+断言2: S1(credentials.json).securityToken 保持空串(未落盘) -> PASS
+
+结论: PASS — R3 逻辑正确,token 永不落盘

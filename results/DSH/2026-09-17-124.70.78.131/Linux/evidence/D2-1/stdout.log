@@ -1,0 +1,11 @@
+S1 path: /home/testbot2/.config/huaweicloud/credentials.json
+S1 ak: HPUA**** | fingerprint: caae65f2
+S3 path: /home/testbot2/.obsutilconfig | exists: true | ak: 1A6d**** | fingerprint: 0938ad0e
+S2 KooCLI current profile: default | authEncrypt: true | profiles: default
+getAuthStatus credentialsConfigured: true | obsConfigured: true | kooCliStatus: ok
+reconciled.stores: {"s1Fingerprint":"caae65f2","envFingerprint":"","currentFingerprint":"","s3Fingerprint":"0938ad0e","runtimeFingerprint":null}
+S2 E2E hcloud ListVpcs exit: 0 | 返回 vpcs 列表: true
+ASSERT S1 有管理员凭证: true
+ASSERT S3 已配置: true | S1↔S3 指纹一致: false
+ASSERT S2 KooCLI 可用(真云 ListVpcs 200): true
+VERDICT PASS

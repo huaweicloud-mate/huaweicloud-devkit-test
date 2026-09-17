@@ -190,6 +190,7 @@ def pull_test_repo():
 
 def check_credentials():
     print("=== 凭证 ===")
+    ok = False
     for p in [os.path.expanduser("~/.config/huaweicloud/credentials.json"),
               os.path.expanduser("~/credentials.json")]:
         if os.path.isfile(p):
@@ -197,11 +198,25 @@ def check_credentials():
                 d = json.load(open(p, encoding="utf-8"))
                 if d.get("ak") and d.get("sk"):
                     print(f"  [OK] 真云凭证已配置: {p}")
-                    return True
+                    ok = True
             except Exception:
                 pass
-    print("  [缺] 真云凭证未配置 → `huaweicloud-devkit auth init`")
-    return False
+    if not ok:
+        print("  [缺] 真云凭证未配置 → `huaweicloud-devkit auth init`")
+    # 只读 IAM 子账号（D4-13 最小权限动态切换用）——缺失不阻塞整体就绪，仅提示
+    ro = os.path.expanduser("~/.config/huaweicloud/credentials.readonly.json")
+    if os.path.isfile(ro):
+        try:
+            d = json.load(open(ro, encoding="utf-8"))
+            if d.get("ak") and d.get("sk"):
+                print(f"  [OK] 只读子账号凭证已配置（D4-13 用 run-as-readonly.py 切）: {ro}")
+            else:
+                print(f"  [提示] 只读子账号凭证文件存在但 ak/sk 缺失，D4-13 会 BLOCKED: {ro}")
+        except Exception:
+            print(f"  [提示] 只读子账号凭证无法解析，D4-13 会 BLOCKED: {ro}")
+    else:
+        print(f"  [提示] 只读子账号凭证未配置，D4-13 最小权限用例会 BLOCKED: {ro}（手配 {{ak,sk,region}} 或从维护者拷贝）")
+    return ok
 
 
 def ensure_node_path():

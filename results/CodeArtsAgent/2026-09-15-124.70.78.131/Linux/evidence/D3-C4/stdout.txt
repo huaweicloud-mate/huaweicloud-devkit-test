@@ -1,0 +1,19 @@
+D3-C4 服务创建类回归 实测记录
+==================================
+时间: 2026-09-16 (真云补测)
+
+1. 逐服务 list_operations + 只读规划 (规范路由):
+   - ECS: hcloud ECS --help -> 100+ 操作 (ListServersDetails/CreateServers/...)
+   - VPC: hcloud VPC --help -> 200+ 操作 (ListVpcs/CreateVpc/...)
+   - OBS: hcloud obs help -> mb/ls/rm/stat/...
+   - RDS: hcloud RDS --help -> 300+ 操作 (ListInstances/CreateInstance/...)
+   全部服务有规范路由且可执行。
+
+2. 高危服务轻量创建(最小规格) -> 立即释放 (OBS bucket):
+   - 创建: hcloud obs mb obs://probe-ca-linux-20260916 -location=cn-north-4 -> successfully
+   - 释放: hcloud obs rm obs://probe-ca-linux-20260916 -f -> Delete bucket successfully!
+   - 归零验证: obs ls -> Status=404 NoSuchBucket (bucket 不存在)
+
+断言: 全部服务有规范路由且可执行 + 创建→释放→归零闭环
+
+结论: PASS

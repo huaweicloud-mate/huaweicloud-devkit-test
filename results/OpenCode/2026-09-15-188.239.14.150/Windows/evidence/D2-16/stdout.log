@@ -1,0 +1,24 @@
+{
+  "testCase": "D2-16",
+  "title": "import文件读取后擦除",
+  "timestamp": "2026-09-16T00:27:00Z",
+  "tool": "huaweicloud_auth_switch (action=persist, mode=import)",
+  "preCondition": "creds-import.json 存在 (含 AK/SK，无 securityToken)",
+  "step1_create": "creds-import.json created (copied from credentials.json, no STS)",
+  "step2_import": {
+    "status": "ok",
+    "scope": "persist",
+    "backedUp": true,
+    "obs": { "configured": true },
+    "hcloud": { "ok": true, "error": "" },
+    "note": "S1 written with configuredBySession (R9), S2 and S3 synced"
+  },
+  "step3_check": {
+    "credsImportExists": false,
+    "result": "读后无条件擦除 (exists=False)"
+  },
+  "supplementary": {
+    "d2_11_test": "即使 import 被 STS 拒绝(R3)，creds-import.json 也被擦除 → 确认无条件擦除语义"
+  },
+  "conclusion": "PASS — creds-import.json 读后无条件擦除(exists=False)，密钥不留盘，auth_switch persist同步成功"
+}

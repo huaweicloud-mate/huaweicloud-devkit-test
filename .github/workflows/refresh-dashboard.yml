@@ -1,0 +1,53 @@
+name: refresh-dashboard
+
+# 触发时机：
+#   1. auto-summary 成功生成汇总报告后自动触发（workflow_run，汇总更新即刷）
+#   2. 每小时第 15 分钟（schedule，兜底）
+#   3. 手动 workflow_dispatch
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 * * * *'          # 每小时第 15 分钟（UTC）
+  workflow_run:
+    workflows: [auto-summary]     # 汇总报告更新后触发
+    types: [completed]
+
+concurrency:
+  group: refresh-dashboard        # 单例，避免并发 push 冲突
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    # 仅当 auto-summary 成功完成才刷新；schedule/dispatch 触发时 workflow_run 事件为空，同样放行。
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Render dashboard
+        run: python scripts/gen_dashboard.py
+
+      - name: Commit & push dashboard
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html
+          if git diff --cached --quiet; then
+            echo "dashboard 无变动，跳过提交"
+          else
+            git commit -m "chore: 自动刷新看板 $(date +%Y-%m-%d_%H:%M)"
+            git push origin HEAD:main
+          fi

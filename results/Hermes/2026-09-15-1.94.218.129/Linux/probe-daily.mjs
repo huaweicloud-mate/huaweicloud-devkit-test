@@ -262,6 +262,7 @@ caseOpen('D2-5'); {
     creds.resolveCredentials();
     c('D2-5', false, '缺失凭证未抛错');
   } catch (e) {
+    // 用例 D2-5 预期 = 「明确报错 + 可执行指引(非裸堆栈)」；1.1.4 提供结构化错误码 HDKIT_CRED_MISSING + auth init 指引
     c('D2-5', e.code === 'HDKIT_CRED_MISSING' && /auth init/.test(e.message), `缺失报错可执行指引 code=${e.code} => ${e.message}`);
   }
 } caseClose();
@@ -381,7 +382,7 @@ caseOpen('D5-1'); {
 
 caseOpen('D5-3'); {
   const n = tools.TOOL_DEFINITIONS.length;
-  c('D5-3', n === 40, `工具全量枚举 => ${n}（1.1.4 注册源 40，含新增 huaweicloud_obs_set_website_config；master 计数 39 待更新）`);
+  c('D5-3', n === 40, `工具全量枚举 => ${n}（1.1.4 注册源 40，含 huaweicloud_obs_set_website_config；母版计数 39 待更新）`);
 } caseClose();
 
 // ============================================================ D8 质量 ============================================================

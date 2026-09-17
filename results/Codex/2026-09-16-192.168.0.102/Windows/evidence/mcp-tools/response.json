@@ -1,0 +1,942 @@
+{
+  "initialize": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "protocolVersion": "2025-06-18",
+      "capabilities": {
+        "tools": {}
+      },
+      "serverInfo": {
+        "name": "huaweicloud-devkit",
+        "version": "0.0.0"
+      }
+    }
+  },
+  "tools": {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+      "tools": [
+        {
+          "name": "huaweicloud_check_cli",
+          "description": "Check whether Huawei Cloud KooCLI hcloud is installed and whether its version matches the plugin paired version. Returns redacted output.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        {
+          "name": "huaweicloud_plan_cli_command",
+          "description": "Classify and plan a Huawei Cloud hcloud command without executing it.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "args"
+            ],
+            "properties": {
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "hcloud arguments, excluding the hcloud executable."
+              },
+              "allowWrites": {
+                "type": "boolean",
+                "description": "Only true after explicit user approval for this exact operation."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_run_readonly_command",
+          "description": "Run a read-only hcloud command through the toolkit safety policy and redact output.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "args"
+            ],
+            "properties": {
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "timeoutMs": {
+                "type": "number",
+                "description": "Optional timeout in milliseconds. Defaults to 60000."
+              },
+              "maxRetries": {
+                "type": "number",
+                "description": "Optional retry count for transient network errors. Defaults to 1."
+              },
+              "cwd": {
+                "type": "string",
+                "description": "Optional working directory for the hcloud process."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_list_operations",
+          "description": "List KooCLI operations for a Huawei Cloud service by running local/read-only hcloud <Service> --help.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "service"
+            ],
+            "properties": {
+              "service": {
+                "type": "string",
+                "description": "KooCLI service name, such as ECS, VPC, IMS, OBS, RDS, or CDN."
+              },
+              "timeoutMs": {
+                "type": "number",
+                "description": "Optional timeout in milliseconds. Defaults to 60000."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_run_approved_command",
+          "description": "Run a write-capable hcloud command only after the exact command has been shown and explicitly approved by the user.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "args",
+              "approvalToken",
+              "approvedByUser"
+            ],
+            "properties": {
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "hcloud arguments, excluding the hcloud executable."
+              },
+              "approvalToken": {
+                "type": "string",
+                "description": "The approvalToken returned by huaweicloud_plan_cli_command."
+              },
+              "approvedByUser": {
+                "type": "boolean",
+                "description": "Must be true only after the user explicitly approves this exact command."
+              },
+              "timeoutMs": {
+                "type": "number",
+                "description": "Optional timeout in milliseconds. Defaults to 60000."
+              },
+              "maxRetries": {
+                "type": "number",
+                "description": "Optional retry count for transient network errors. Defaults to 1."
+              },
+              "cwd": {
+                "type": "string",
+                "description": "Optional working directory for the hcloud process."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_show_profile_redacted",
+          "description": "Inspect a KooCLI profile through hcloud configure show and return only redacted output.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "profile": {
+                "type": "string",
+                "description": "Optional KooCLI profile name."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_hook_check_command",
+          "description": "Check a planned shell or hcloud command against Huawei Cloud hook risk rules without executing it.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "command"
+            ],
+            "properties": {
+              "command": {
+                "type": "string",
+                "description": "The exact command text to inspect."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_hook_check_artifacts",
+          "description": "Check generated code, IaC, policy, or config artifacts against Huawei Cloud hook risk rules.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "artifacts"
+            ],
+            "properties": {
+              "artifacts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "path",
+                    "content"
+                  ],
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "content": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_hook_check_deploy_plan",
+          "description": "Check a structured or textual deployment plan for Huawei Cloud sandbox, exposure, IAM, and cost risks.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "plan"
+            ],
+            "properties": {
+              "plan": {
+                "description": "Deployment plan as an object, array, or string."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_service_catalog",
+          "description": "Return the recommended capability sources for Huawei Cloud agent tasks.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "intent": {
+                "type": "string",
+                "description": "Developer intent to route, such as deploy app, use API, debug error, or inspect resources."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_explain_error",
+          "description": "Explain a Huawei Cloud CLI, API, SDK, or agent workflow error and suggest next diagnostic steps.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "service": {
+                "type": "string"
+              },
+              "errorCode": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "requestId": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_search_docs",
+          "description": "Search across Huawei Cloud SKILL.md files and local documentation. Returns top 10 relevant results with source, name, snippet, and relevance score. Use when the agent needs to discover which skill covers a topic, or when uncertain about API parameters, quotas, or limitations.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "query"
+            ],
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "Search query across skill descriptions and documentation."
+              },
+              "topic": {
+                "type": "string",
+                "description": "Optional filter: all | ecs | obs | vpc | iam | rds | cce | modelarts | dew. Defaults to all."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_retrieve_skill",
+          "description": "Retrieve a full SKILL.md by skill name. Returns the complete skill content plus list of reference files. Use when the agent has identified which skill to load and needs the full procedure.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Skill name, e.g., huaweicloud-core, huawei-ecs, huawei-obs."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_list_regions",
+          "description": "List available Huawei Cloud regions. Returns region IDs, display names, and endpoints. Use when the agent needs to discover available regions before creating resources.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        {
+          "name": "huaweicloud_get_regional_availability",
+          "description": "Check if a specific Huawei Cloud service is available in a target region. Use before creating resources to prevent failures from regional unavailability.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "service",
+              "region"
+            ],
+            "properties": {
+              "service": {
+                "type": "string",
+                "description": "Service name: ecs, obs, rds, gaussdb, cce, modelarts, functiongraph, etc."
+              },
+              "region": {
+                "type": "string",
+                "description": "Region ID: cn-south-1, cn-north-4, ap-southeast-3, etc."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_search_marketplace",
+          "description": "Search the Huawei Cloud agent skill marketplace for available skills. Returns scored results with names, categories, and descriptions. Use when built-in skills are insufficient or the user asks what skills exist.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "Search query across skill name, description, triggers, and service."
+              },
+              "category": {
+                "type": "string",
+                "description": "Optional category filter: computing, storage, network, security, devtools, monitoring, etc."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_get_service_icon",
+          "description": "Find the official Huawei Cloud service logo from the Huawei Cloud Icons library (open.huaweicloud.com/openplatform/icons.html). Returns top 5 matches with CDN logo URLs, local paths, category, aliases, and product page links. Provide service (e.g. ecs, obs, modelarts, 对象存储) or category (e.g. 计算, 存储, 人工智能) to browse. Use when generating PPT, architecture diagrams (draw.io), or frontend pages that need official Huawei Cloud service logos.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "service": {
+                "type": "string",
+                "description": "Service name, alias, or Chinese name, e.g. ecs, obs, modelarts, 对象存储, 虚拟私有云. Omit to browse by category only."
+              },
+              "category": {
+                "type": "string",
+                "description": "Optional category filter, e.g. 计算, 存储, 网络, 人工智能, 数据库, 安全, 企业应用."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_detect_framework",
+          "description": "Scan a local project directory to identify the web framework (React/Vue/Angular/Next.js/Nuxt/VitePress/Docusaurus/Hugo/Hexo/Taro/uni-app), package manager, and monorepo tool. Returns framework type, build commands, output directory, and port. Use before deploying a web application to determine the correct build pipeline.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "projectPath"
+            ],
+            "properties": {
+              "projectPath": {
+                "type": "string",
+                "description": "Absolute path to the local project directory to scan."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_setup_obs_config",
+          "description": "Synchronize KooCLI credentials to OBS config (~/.obsutilconfig). KooCLI and OBS use separate credential stores — hcloud commands work fine but OBS commands fail with \"Please set ak, sk\" unless this sync is done. Run this once to enable OBS operations; re-run after changing hcloud credentials.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "profile": {
+                "type": "string",
+                "description": "Optional KooCLI profile name. Uses the active profile by default."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_auth_status",
+          "description": "Check unified Huawei Cloud authentication status across the global credential vault, OBS, KooCLI, and all supported agent MCP registrations. Returns only redacted/status information, never credentials.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "target": {
+                "type": "string",
+                "description": "Agent target to check: opencode, codex, codex-desktop, codearts, codearts-work, workbuddy, dsh, officeace, hermes, openclaw, atomcode, or all (default)."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_auth_sync",
+          "description": "Synchronize credentials from the global Huawei Cloud credential vault to OBS and report agent registration status. Does not write secrets into any agent config.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "target": {
+                "type": "string",
+                "description": "Agent target to report after sync: opencode, codex, codex-desktop, codearts, codearts-work, workbuddy, dsh, officeace, hermes, or all (default)."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_auth_init",
+          "description": "Set or clear runtime Huawei Cloud credentials (AK/SK) for this MCP session. Runtime credentials take highest priority over environment variables and config files for all subsequent API calls. Use when switching accounts within the same Agent session — call with AK/SK to switch, or with clear=true to fall back to env/file credentials.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "ak": {
+                "type": "string",
+                "description": "Huawei Cloud Access Key (required unless clear=true)"
+              },
+              "sk": {
+                "type": "string",
+                "description": "Huawei Cloud Secret Key (required unless clear=true)"
+              },
+              "region": {
+                "type": "string",
+                "description": "Default region (optional)"
+              },
+              "clear": {
+                "type": "boolean",
+                "description": "Set to true to clear runtime credentials and revert to env/file"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_auth_switch",
+          "description": "Switch Huawei Cloud credentials within the current session. action=temporary keeps AK/SK in memory only (restart loses them; hcloud commands are unaffected and an A+C warning will be raised). action=persist writes S1 (single source of truth) with configuredBySession flag and propagates to S2 (KooCLI current profile) and S3 (OBS). action=clear resets runtime credentials. mode=import reads AK/SK from ~/.config/huaweicloud/creds-import.json then wipes it (SK never enters conversation). mode=memory passes AK/SK as tool arguments (SK is visible to model - prefer import). mode=mcp-config reads the injected mcp_settings environment.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "import",
+                  "memory",
+                  "mcp-config"
+                ],
+                "description": "Credential source channel"
+              },
+              "action": {
+                "type": "string",
+                "enum": [
+                  "persist",
+                  "temporary",
+                  "clear"
+                ],
+                "description": "Apply scope"
+              },
+              "ak": {
+                "type": "string"
+              },
+              "sk": {
+                "type": "string"
+              },
+              "securityToken": {
+                "type": "string"
+              },
+              "region": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_auth_confirm",
+          "description": "Confirm a pending credential reconciliation choice returned by auth_switch persist when S1 already holds a different account (R2). decision=s1 keeps S1 as source of truth and propagates it; decision=newImported propagates the newly imported account into S1 and mirrors.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "confirmation token from the needs_confirmation response"
+              },
+              "decision": {
+                "type": "string",
+                "enum": [
+                  "s1",
+                  "newImported"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_exec_with_session",
+          "description": "Execute a command on a workspace terminal with session reuse (state persists across calls). Shell state (cd, env vars, aliases) carries over between calls. Use for interactive work and command sequences that need shared state. NOT for long-running commands (>30s) — prefer exec_one_shot for those.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "command"
+            ],
+            "properties": {
+              "command": {
+                "type": "string",
+                "description": "The shell command to execute on the remote workspace"
+              },
+              "workspace_id": {
+                "type": "string",
+                "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set."
+              },
+              "username": {
+                "type": "string",
+                "description": "Login username for the remote terminal (default: root)"
+              },
+              "timeout_ms": {
+                "type": "number",
+                "description": "Execution timeout in milliseconds (default: 120000)"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_exec_one_shot",
+          "description": "Execute a command on a workspace terminal with a fresh connection per call (no session state carries over). Each invocation opens a new WebSocket connection, executes one command, then disconnects. Use for long-running build/deploy/install commands (>30s) that do not need shell state persistence between calls. More stable than session-based execution for heavy workloads.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "command"
+            ],
+            "properties": {
+              "command": {
+                "type": "string",
+                "description": "The shell command to execute on the remote workspace"
+              },
+              "workspace_id": {
+                "type": "string",
+                "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set."
+              },
+              "username": {
+                "type": "string",
+                "description": "Login username for the remote terminal (default: root)"
+              },
+              "timeout_ms": {
+                "type": "number",
+                "description": "Execution timeout in milliseconds (default: 120000)"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_close_session",
+          "description": "Close the persistent terminal session for a workspace.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "workspace_id": {
+                "type": "string",
+                "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set."
+              },
+              "username": {
+                "type": "string",
+                "description": "Login username (default: root)"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_upload_file",
+          "description": "Upload a local file into the sandbox workspace. Base64-encodes the file, writes it in small chunks through the terminal session (the exec channel is fragile for large single commands), then decodes and verifies the md5 checksum. Use this instead of embedding large file content directly in a command.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "local_path",
+              "remote_path"
+            ],
+            "properties": {
+              "local_path": {
+                "type": "string",
+                "description": "Absolute path to the local file to upload."
+              },
+              "remote_path": {
+                "type": "string",
+                "description": "Target path in the sandbox, e.g. /workspace/<repo>/index.html."
+              },
+              "workspace_id": {
+                "type": "string",
+                "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set."
+              },
+              "username": {
+                "type": "string",
+                "description": "Login username (default: root)"
+              },
+              "timeout_ms": {
+                "type": "number",
+                "description": "Execution timeout in milliseconds (default: 60000)"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_upload_project",
+          "description": "Package a local project directory and upload it to a sandbox workspace via HTTP tunnel. Falls back to base64 chunking if tunnel fails. Creates a tar.gz archive, uploads it, and extracts it on the sandbox by default.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "local_dir"
+            ],
+            "properties": {
+              "local_dir": {
+                "type": "string",
+                "description": "Local project directory to upload."
+              },
+              "remote_dir": {
+                "type": "string",
+                "description": "Remote parent directory where project will be extracted (default: /workspace). Final layout: <remote_dir>/<dirname>/"
+              },
+              "workspace_id": {
+                "type": "string",
+                "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set."
+              },
+              "username": {
+                "type": "string",
+                "description": "Login username (default: root)"
+              },
+              "exclude": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Patterns to exclude from archive (default: .git, node_modules, __pycache__, .venv)"
+              },
+              "extract": {
+                "type": "boolean",
+                "description": "Extract tar.gz on sandbox after upload (default: true)"
+              },
+              "timeout_ms": {
+                "type": "number",
+                "description": "Execution timeout in milliseconds (default: 300000)"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_deploy_nginx",
+          "description": "Deploy an nginx configuration on the sandbox and reload. Takes nginxType, port, project, outputDir from framework detection and writes the correct template (SPA try_files, SSR reverse proxy, or static). Also fixes directory traverse permissions on the project path. Use this instead of manually constructing nginx config — it handles permissions, template selection, and reload in one call.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "nginx_type",
+              "port",
+              "project",
+              "output_dir"
+            ],
+            "properties": {
+              "nginx_type": {
+                "type": "string",
+                "description": "Nginx config type from framework detection: spa (try_files fallback for SPA/SSG/cross-platform), proxy (reverse proxy for SSR), or static (plain root for Hugo/Hexo).",
+                "enum": [
+                  "spa",
+                  "proxy",
+                  "static"
+                ]
+              },
+              "port": {
+                "type": "number",
+                "description": "Listen port (from framework detection)."
+              },
+              "project": {
+                "type": "string",
+                "description": "Project directory name under /workspace, e.g. movie-ticket."
+              },
+              "output_dir": {
+                "type": "string",
+                "description": "Build output directory relative to /workspace/<project>, e.g. dist/build/h5."
+              },
+              "node_port": {
+                "type": "number",
+                "description": "Node.js app port for SSR (required when nginx_type=proxy)."
+              },
+              "public_port": {
+                "type": "number",
+                "description": "Public listen port for SSR proxy (optional, defaults to port)."
+              },
+              "config_name": {
+                "type": "string",
+                "description": "Config file name (without .conf suffix). Defaults to the project name, ensuring each project gets its own config. Override with distinct names (e.g. admin, docs) for sub-app deployments."
+              },
+              "workspace_id": {
+                "type": "string",
+                "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set."
+              },
+              "username": {
+                "type": "string",
+                "description": "Login username (default: root)"
+              },
+              "timeout_ms": {
+                "type": "number",
+                "description": "Execution timeout in milliseconds (default: 30000)"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_deploy_check",
+          "description": "Run a deployment completeness check on the sandbox. Verifies nginx is serving, output directory exists, DevBridge tunnel is active and accessible, and QR code exists (cross-platform). Returns a score and nextStep to fix any missing items. Call this at the end of a deployment workflow to confirm everything is working before reporting success.",
+          "inputSchema": {
+            "type": "object",
+            "required": [
+              "port",
+              "project",
+              "output_dir"
+            ],
+            "properties": {
+              "port": {
+                "type": "number",
+                "description": "App listen port (from framework detection)."
+              },
+              "project": {
+                "type": "string",
+                "description": "Project directory name under /workspace."
+              },
+              "output_dir": {
+                "type": "string",
+                "description": "Build output directory relative to /workspace/<project>, e.g. dist/build/h5."
+              },
+              "framework_type": {
+                "type": "string",
+                "description": "Framework type from detect_framework. Set to cross-platform for QR code check.",
+                "enum": [
+                  "spa",
+                  "ssr",
+                  "ssg",
+                  "cross-platform",
+                  "monorepo",
+                  "static"
+                ]
+              },
+              "workspace_id": {
+                "type": "string",
+                "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set."
+              },
+              "username": {
+                "type": "string",
+                "description": "Login username (default: root)"
+              },
+              "timeout_ms": {
+                "type": "number",
+                "description": "Execution timeout in milliseconds (default: 30000)"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_check_user",
+          "description": "Check if the current user has completed real-name verification and signed the required agreements. Returns 200 {realnameVerified, agreementSigned} when all good; throws 403 HDKIT_NOT_REALNAME / HDKIT_NOT_AGREEMENT / HDKIT_NOT_REALNAME_AND_AGREEMENT to indicate what is missing. Never signs anything itself.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_sign_agreement",
+          "description": "Sign all unsigned or outdated agreements for the current user. Required before huaweicloud_sandbox_connect if check-user returns agreementSigned=false. CRITICAL: only call after the user explicitly consents to signing — never sign agreements on the user's behalf without their explicit request.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_connect",
+          "description": "Connect to a sandbox via hdkitservice. One user one instance - reuses existing sandbox if available, otherwise creates a new one. Returns session_id, dev_stage_id, connection_id, connection_address, and expiresAt (STS credential expiry).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "description": "Source identifier (default: WEB). Options: VSCODE, CLI, WEB, WEBVNC, WEBPTY, WEBIDE, CURSOR, etc."
+              },
+              "template_id": {
+                "type": "string",
+                "description": "Template ID; overrides server default (only for new sandbox)"
+              },
+              "flavor_id": {
+                "type": "string",
+                "description": "Flavor ID; overrides server default (only for new sandbox)"
+              },
+              "env": {
+                "type": "object",
+                "description": "Environment variables to set in the sandbox (only for new sandbox)"
+              },
+              "git": {
+                "type": "object",
+                "description": "Git repo config (only for new sandbox)",
+                "properties": {
+                  "repo_url": {
+                    "type": "string",
+                    "description": "Git repository URL"
+                  },
+                  "repo_branch": {
+                    "type": "string",
+                    "description": "Git branch"
+                  },
+                  "repo_name": {
+                    "type": "string",
+                    "description": "Repository name"
+                  },
+                  "target_path": {
+                    "type": "string",
+                    "description": "Clone target path in sandbox"
+                  },
+                  "open_type": {
+                    "type": "string",
+                    "description": "Open type"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_sandbox_credentials",
+          "description": "Configure temporary AK/SK for a sandbox via hdkitservice. Validates the current AK/SK against IAM before injecting (invalid SK is rejected here instead of failing later with APIGW.0301 during exec), then injects temporary credentials into the sandbox. The sandbox must be in RUNNING state.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "description": "Session ID from huaweicloud_sandbox_connect"
+              },
+              "dev_stage_id": {
+                "type": "string",
+                "description": "DevStation environment ID (alternative to session_id)"
+              },
+              "enable_sts": {
+                "type": "boolean",
+                "description": "Whether to enable STS temporary AK/SK (default: true)"
+              },
+              "region": {
+                "type": "string",
+                "description": "Region used for IAM credential validation and project_id resolution (defaults to the configured region)"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_voucher_status",
+          "description": "查询代金券领取状态。用户首次使用、开始会话或询问插件能力时，应主动调用本工具检查：未领取（claimed=false）则主动提示可领取一张代金券；已领取（claimed=true）则不提示、不打扰。",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "domain_id": {
+                "type": "string",
+                "description": "Optional. Leave empty in production — account is resolved from IAM automatically."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_voucher_claim",
+          "description": "领取代金券（一人一次）。重复领取会返回已领取。",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "domain_id": {
+                "type": "string",
+                "description": "Optional. Leave empty in production — account is resolved from IAM automatically."
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_check_update",
+          "description": "检查 huaweicloud-devkit 插件是否有新版本。结果含 currentVersion / latestStable / latestNext / targetVersion / updateAvailable / dismissExpiresAt / result。支持 dismiss:true 记录用户拒绝（3 天冷却，新版本会重新提醒）。",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "dismiss": {
+                "type": "boolean",
+                "description": "用户拒绝升级时传 true，记录冷却状态。"
+              },
+              "dismissVersion": {
+                "type": "string",
+                "description": "与 dismiss:true 搭配，用户拒绝的版本号。缺省时用当前检测到的 targetVersion。"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_upgrade",
+          "description": "升级 huaweicloud-devkit 到最新版本。执行前必须先征得用户同意。version 仅支持 \"latest\"。完成后需重启会话生效。",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string",
+                "description": "仅支持 \"latest\"（默认）。"
+              },
+              "target": {
+                "type": "string",
+                "description": "agent 目标（opencode/codex/codearts/.../all）。缺省时用 all（仅更新已安装的）。"
+              }
+            }
+          }
+        },
+        {
+          "name": "huaweicloud_obs_set_website_config",
+          "description": "配置 OBS 桶的静态网站托管。KooCLI OBS 不支持 SetBucketWebsite API，此工具内部实现 AWS4 签名调用 OBS REST API，屏蔽签名细节。支持 set（配置）、get（查询）、delete（删除）三种操作。操作前需确保桶已创建且已设置 public-read ACL。",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": [
+                  "set",
+                  "get",
+                  "delete"
+                ],
+                "description": "操作类型：set=配置静态网站托管，get=查询当前配置，delete=删除配置"
+              },
+              "bucket": {
+                "type": "string",
+                "description": "OBS 桶名称"
+              },
+              "region": {
+                "type": "string",
+                "description": "OBS 桶所在区域，如 cn-north-4"
+              },
+              "indexDocument": {
+                "type": "string",
+                "description": "首页文件名（action=set 时必填），如 index.html"
+              },
+              "errorDocument": {
+                "type": "string",
+                "description": "错误页面文件名（action=set 时可选），如 404.html 或 error.html"
+              }
+            },
+            "required": [
+              "action",
+              "bucket",
+              "region"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

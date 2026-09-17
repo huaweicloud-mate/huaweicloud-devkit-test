@@ -1,0 +1,6 @@
+用例: D4-23 全局规则注入生效性 (P0) 工具:源码检查 rules/huawei-agent-rules.mdc
+执行时间: 2026-09-15 18:10 (北京时间)
+探针: grep 'huawei-agent-rules' 源码 → 0 处引用；文件存在(3840B)但孤儿
+断言: 11 目标均注入且无孤儿
+结果: FAIL — 全局规则孤儿文件未注入
+根因: rules/huawei-agent-rules.mdc 无加载代码引用（复现 #673）

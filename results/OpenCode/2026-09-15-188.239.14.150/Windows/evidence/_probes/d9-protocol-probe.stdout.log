@@ -1,0 +1,57 @@
+=====CASE D9-1=====
+工具总数: 40
+无inputSchema: 0 | type非object: 0 | 无name: 0 | 无description: 0
+全部schema合法(type=object): true
+前5工具: huaweicloud_check_cli, huaweicloud_plan_cli_command, huaweicloud_run_readonly_command, huaweicloud_list_operations, huaweicloud_run_approved_command
+=====END D9-1=====
+=====CASE D9-2=====
+不存在工具 code: -32603 | message: Unknown tool: __nonexistent_tool__
+缺参数 code: undefined | message: undefined
+非法method code: -32603 | message: Unsupported method: invalid/method
+错误码均为JSON-RPC标准(-32601/-32602): true
+=====END D9-2=====
+=====CASE D9-3=====
+result.content是数组: true
+content[0].type: text
+content[0].text非空: true
+isError是布尔: true
+content+isError语义正确: true
+=====END D9-3=====
+=====CASE D9-4=====
+initialize前tools/call结果: {"jsonrpc":"2.0","id":1,"result":{"content":[{"type":"text","text":"{\n  \"installed\": true,\n  \"a
+initialize响应含protocolVersion: true
+initialize响应含serverInfo: true
+initialize响应含capabilities: true
+initialize后tools/call成功: true
+时序被遵守(先init后call): false
+=====END D9-4=====
+=====CASE D9-5=====
+stdout总行数: 13 | 疑似污染行: 0
+stderr长度: 0 | stderr样例(前100): 
+stdout纯净(无协议污染): true
+=====END D9-5=====
+=====CASE D9-6=====
+3客户端工具数: 40,40,40
+全客户端协议互通: true
+=====END D9-6=====
+=====CASE D9-7=====
+老版本protocolVersion响应: 2024-10-07
+不挂死且正确降级: true
+降级后tools/call可用: true
+老版本不挂死: true
+=====END D9-7=====
+=====CASE D9-8=====
+serverInfo: {"name":"huaweicloud-devkit","version":"1.1.4"}
+serverInfo.name非空: true
+serverInfo.version非空: true
+工具数: 40 | 全部有schema: true
+版本统一且明确: true
+=====END D9-8=====
+=====CASE D9-9=====
+server capabilities: {"tools":{}}
+取消后结果: 超时无响应
+重建连接后initialize正常: true
+重建连接后tools/list正常: true
+超时取消+重建连接正常: true
+=====END D9-9=====
+=== DONE ===

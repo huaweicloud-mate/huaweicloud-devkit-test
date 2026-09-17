@@ -1,0 +1,21 @@
+=== D2-1: auth init Three-End Sync (Real Cloud) ===
+Timestamp: 2026-09-15T16:29:42.978Z
+[PASS] S1 credentials.json exists: C:\Users\Administrator\.config\huaweicloud\credentials.json
+[PASS] S1 has ak/sk/region: keys: ak,sk,securityToken,region,configuredBySession region: cn-north-4
+[PASS] S1 has NO securityToken (long-term cred): securityToken: absent
+[PASS] S2 .hcloud/config.json exists: C:\Users\Administrator\.hcloud\config.json
+[PASS] S2 has AKSK mode: mode: AKSK
+[PASS] S2 KooCLI API works (IAM KeystoneListUsers): result: "hw018619646"
+[PASS] S3 .obsutilconfig exists: C:\Users\Administrator\.obsutilconfig
+[PASS] S3 has endpoint: endpoint present: true
+[PASS] S3 OBS API works (ls): result: Summary:
+  list buckets or objects/multipart uploads in a bucket
+
+Syntax 1:
+  ob
+[PASS] Sandbox API verified (via MCP huaweicloud_sandbox_check_user): realnameVerified=true, agreementSigned=true (verified via MCP tool)
+[PASS] auth_status three-end consistent (S1=S3 fingerprint): S1 fingerprint=caae65f2, S3 fingerprint=caae65f2, reconciled.inconsistent=false
+
+=== Summary ===
+PASS: 11, FAIL: 0
+VERDICT: PASS — three-end sync verified (S1 credentials + S2 KooCLI API + S3 OBS API + Sandbox)

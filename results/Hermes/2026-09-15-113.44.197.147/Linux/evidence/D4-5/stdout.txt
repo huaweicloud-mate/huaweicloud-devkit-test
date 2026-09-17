@@ -1,0 +1,4 @@
+=== CASE D4-5 ===  FAIL
+  expected: Change* 写操作不得误判为只读 => risk=write deny
+  actual:   0/4：ChangeServerOsWithoutCloudInit/WithCloudInit/ChangeVpc/ChangeInstanceConfiguration 均 risk=unknown_read allow
+  root:     safety/policy.json writeOperationPrefixes 缺 Change 前缀，hasWritePrefix 未命中

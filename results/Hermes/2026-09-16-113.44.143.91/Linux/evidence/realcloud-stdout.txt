@@ -1,0 +1,36 @@
+[D3-B3] PASS  ok=true, exitCode=0, stdout首行={
+  "count": 0,
+  "servers": []
+}, 明文泄露=false
+[EXP-C4-01] PASS  ECS: 路由OK(ops=124) plan=allow/read_only
+[EXP-C4-02] PASS  VPC: 路由OK(ops=205) plan=allow/read_only
+[EXP-C4-03] PASS  OBS: 路由OK(ops=0) plan=allow/read_only
+[EXP-C4-04] PASS  RDS: 路由OK(ops=295) plan=allow/read_only
+[EXP-C4-05] PASS  GaussDB: 路由OK(ops=261) plan=allow/read_only
+[EXP-C4-06] PASS  CCE: 路由OK(ops=190) plan=allow/read_only
+[EXP-C4-07] PASS  FunctionGraph: 路由OK(ops=92) plan=allow/read_only
+[EXP-C4-08] PASS  IAM: 路由OK(ops=235) plan=allow/unknown_read
+[EXP-C4-09] PASS  CTS: 路由OK(ops=16) plan=allow/read_only
+[EXP-C4-10] PASS  CES: 路由OK(ops=79) plan=allow/read_only
+[EXP-C4-11] PASS  DDS: 路由OK(ops=130) plan=allow/read_only
+[EXP-C4-12] PASS  DCS: 路由OK(ops=67) plan=allow/read_only
+[EXP-C4-13] PASS  SMN: 路由OK(ops=71) plan=allow/read_only
+[EXP-C4-14] PASS  DMS: 路由OK(ops=0) plan=allow/read_only
+[EXP-C4-15] PASS  WAF: 路由OK(ops=202) plan=allow/read_only
+[EXP-C4-16] PASS  CDN: 路由OK(ops=114) plan=allow/read_only
+[EXP-C4-17] PASS  ModelArts: 路由OK(ops=277) plan=allow/read_only
+[EXP-C4-18] PASS  DEW: 路由OK(ops=0) plan=allow/read_only
+[EXP-C4-19] PASS  CBR: 路由OK(ops=73) plan=allow/read_only
+[EXP-C4-20] PASS  EVS: 路由OK(ops=38) plan=allow/read_only
+[EXP-C4-21] PASS  EIP: 路由OK(ops=71) plan=allow/read_only
+[EXP-C4-22] PASS  ELB: 路由OK(ops=179) plan=allow/read_only
+[D3-C4] PASS  服务矩阵 22/22 通过；未通过: 无
+[D4-14] PASS  create=true, list存在=true, CTS含CreateVpc=true, delete=true, 归零=true, CTS含DeleteVpc=true
+[D2-1] PASS  S1=true, S2(kooCli)=true, S3(obs)=true, STS可用=true, ECS可用=true
+[D4-18] PASS  plan.safeToRun=false, hasApprovalToken=true | run_approved 拒绝: approvedByUser must be true after explicit user approval 
+[D4-19] PASS  预检warnings=2条, classification=deny, wil会=["Missing required parameters: server.flavorRef, server.imageRef","Find valid v
+[D4-20] PASS  拒绝: Invalid or expired approval token. Please re-plan the comman | ECS归零=true
+
+=== 真云 E2E 汇总 ===
+总计 29 条, PASS 29, FAIL 0
+FAIL: 无

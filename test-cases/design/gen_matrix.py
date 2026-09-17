@@ -11,7 +11,7 @@
   - D6-8: MCP 工具调用超时（超时场景缺口：原有仅 D6-6 弱网）
   - D9-9: tools/call 超时协议语义（协议层超时缺口）
   - 展开规则默认值推导：115 条空展开规则按维度填默认（COMMON/CLIENT_MATRIX/OS_MATRIX 等）
-  - 工具全集数量 = tools.mjs 注册源数量（2026-09-12 快照 39；verify_new.py 单源解析推导；新增工具后同步此处设计文本）
+  - 工具全集数量 = tools.mjs 注册源数量（2026-09-12 快照 40；verify_new.py 单源解析推导；新增工具后同步此处设计文本）
 """
 import csv
 import os
@@ -139,7 +139,7 @@ OVERRIDE_EXPAND = {
     # D5
     "D5-1": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 清单发现加载>|<阻塞: 需各客户端>",
     "D5-2": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: 安装落点与 README 对照>|<阻塞: 需各客户端>",
-    "D5-3": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: tools/list 39 工具枚举>|<阻塞: 需各客户端>",
+    "D5-3": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: tools/list 40 工具枚举>|<阻塞: 需各客户端>",
     "D5-4": "CLIENT_MATRIX|<代表: 10 客户端>|<证据: hook/非hook 降级路径>|<阻塞: 需各客户端>",
     "D5-5": "CLIENT_MATRIX|<代表: CodeArts 重点>|<证据: 沙箱模式 KooCLI 阻断+恢复>|<阻塞: 需 CodeArts 客户端>",
     "D5-6": "OS_MATRIX|<代表: Windows 专项>|<证据: config 完整性/文件锁/SDK>|<阻塞: Windows 客户端>",
@@ -526,9 +526,9 @@ add("D1-55", "D1安装", "多会话提示隔离", "P2", "同一 server 可承载
 # ---------- 2026-09-11 全量设计评审补充（异常/恢复场景缺口；全量评审报告 REV-20260911004604；R10 按 codex round-09 补强断言契约） ----------
 add("D1-56", "D1安装", "安装中断恢复（网络/进程中断后半装补全）", "P1", "可控网络环境（HTTP 代理可随时断开）+ 一次性临时 HOME（隔离 USERPROFILE/HOME）",
     "install --target opencode 执行中注入断网 / kill 安装进程；损坏判定清单：①package.json 存在但 bin/ 缺 oc-entry ②pluginDir 存在但 .update-skip.json 缺失 ③残留 *.lock 文件",
-    "①install 中途断网或 kill ②断言半装态（按损坏判定清单 ①②③ 逐项核对并记录文件路径） ③恢复网络重跑 install ④断言全量文件（tools/list 返回 39 工具、config 落点齐全、无 *.lock 残留） ⑤再次运行 install 断言幂等（文件 mtime/size 与上轮一致）",
-    "半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 39 工具（数量=39 且无重复）；无 *.lock 残留；二次运行后关键文件（bin/oc-entry、config.json）mtime/size 字节级一致",
-    "通: 生命周期中断恢复; 关联 D1-5/D1-13 残留族; R11 补强: 判定清单固定3项+39工具枚举断言+幂等mtime/size", "install/doctor", "半自动", "OS_MATRIX|<代表: Windows/Linux>|<证据: 安装落点+中断现场文件>|<阻塞: 无>")
+    "①install 中途断网或 kill ②断言半装态（按损坏判定清单 ①②③ 逐项核对并记录文件路径） ③恢复网络重跑 install ④断言全量文件（tools/list 返回 40 工具、config 落点齐全、无 *.lock 残留） ⑤再次运行 install 断言幂等（文件 mtime/size 与上轮一致）",
+    "半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 40 工具（数量=40 且无重复）；无 *.lock 残留；二次运行后关键文件（bin/oc-entry、config.json）mtime/size 字节级一致",
+    "通: 生命周期中断恢复; 关联 D1-5/D1-13 残留族; R11 补强: 判定清单固定3项+40工具枚举断言+幂等mtime/size", "install/doctor", "半自动", "OS_MATRIX|<代表: Windows/Linux>|<证据: 安装落点+中断现场文件>|<阻塞: 无>")
 add("D1-57", "D1安装", "升级坏版本回滚（装坏可退）", "P1", "有旧版本正常安装（1.1.2 基线）+ 可控 npm registry 注入坏包（tarball 截断致 sha1 不匹配）",
     "registry 返回损坏 tarball；断言契约：①回滚目标=升级前版本（previousVersion=1.1.2）②坏包不得进入可用缓存（.npm/_cacache 无对应 content-hash）③降级命令=upgrade(version=1.1.2) 返回 requiresRestart=true",
     "①确认 serverInfo.version=1.1.2 ②registry 注入坏包后执行 upgrade(version=latest) ③断言返回对象：success=false + error.code=EREPO_BAD_TARBALL（唯一错误码断言，不允许替代码）+ error.manual 含 'npx huaweicloud-devkit upgrade --version 1.1.2' ④断言旧版仍可启动（重启进程 serverInfo.version=1.1.2，tools/list 可调） ⑤断言 .npm/_cacache 无坏包 digest ⑥执行 error.manual 命令后断言版本恢复 1.1.2",
@@ -662,8 +662,8 @@ add("D4-20", "D4安全", "拒绝后零操作", "P1", "真云",
 # ---------- D2 认证 ----------
 add("D2-1", "D2认证", "auth init三端同步", "P1", "AK/SK+本地凭证文件",
     "auth init",
-    "①配置AK/SK ②执行auth init ③分别验证KooCLI/OBS/沙箱API三端可用",
-    "三端全部落位，任一端失败即缺陷", "P: README 'Synchronizes AK/SK to KooCLI, OBS, and sandbox APIs in one step'",
+    "①源码级: 隔离HOME+假凭证执行auth init ②核对KooCLI/OBS/沙箱三端配置文件落位(路径+格式) ③真云E2E: 真实凭证下核对三端API实际可用",
+    "源码级断言: 三端配置文件均落位(路径+格式,任一端缺失即缺陷); 真云E2E断言: 三端API实际可用", "P: README 'Synchronizes AK/SK to KooCLI, OBS, and sandbox APIs in one step'",
     "huaweicloud_auth_init", "半自动")
 add("D2-2", "D2认证", "auth status判定准确性", "P2", "三端就绪状态可组合环境",
     "auth status",
@@ -803,7 +803,7 @@ add("D3-C5", "D3功能", "工具冒烟", "P1", "环境就绪",
     "冒烟快速全通", "P: nightly场景C原样复用",
     "check_cli/list_operations/plan_cli_command/explain_error", "脚本")
 
-# ---- 覆盖缺口补充（G1：工具闭包 39/39 补齐；具名化后回落为常规用例）----
+# ---- 覆盖缺口补充（G1：工具闭包 40/40 补齐；具名化后回落为常规用例）----
 add("D3-B7", "D3功能", "run_approved_command 审批后执行闭环", "P1", "真云+最小权限",
     "plan 产出命令",
     "①plan_cli_command 产出 ②run_approved_command 执行 ③核对输出与残留",
@@ -880,9 +880,9 @@ add("D4-5", "D4安全", "写操作误判检测", "P0", "真云",
     "写操作不被误判为只读", "P: nightly铁律4; 标: AWS IAM condition防线穿透",
     "plan_cli_command", "半自动")
 add("D4-6", "D4安全", "adminPass回显警告", "P1", "真云",
-    "创建ECS回显adminPass场景",
-    "①创建ECS含password ②检查回显/报告处理",
-    "警告且不裸回显密码", "P: safety-model#5",
+    "创建ECS回显adminPass场景(真云E2E) + adminPass=xxx脱敏输入(源码级)",
+    "①源码级: 直调 redactString()/classifyTextCommand() 对 adminPass=xxx 核对脱敏为 <redacted> ②真云E2E: 创建ECS含adminPass 检查回显/报告处理",
+    "源码级脱敏断言: adminPass=xxx→<redacted> 可函数级直调核验(无需真云); 真云E2E断言: 回显含警告且不裸回显密码(需真云写场景)", "P: safety-model#5",
     "hook_check_command", "手动")
 add("D4-7", "D4安全", "hook三工具有效性", "P1", "hook-capable客户端",
     "高危输入→hook_check_command/artifacts/deploy_plan",
@@ -913,10 +913,10 @@ add("D4-12", "D4安全", "供应链安装期安全", "P2", "源码包",
     "①审计postinstall行为 ②核对依赖锁定 ③验证pack与源码一致 ④尝试产出SBOM",
     "无恶意行为+pack一致+SBOM可产", "P: package.json有postinstall; 标: Azure质量门",
     "npm", "脚本")
-add("D4-13", "D4安全", "最小权限凭证通过率", "P1", "只读IAM AK/SK",
+add("D4-13", "D4安全", "最小权限凭证通过率", "P1", "只读IAM子账号(test001, credentials.readonly.json)",
     "全量D3只读用例",
-    "①只读凭证下跑D3只读用例 ②写用例观察权限识别",
-    "只读100%可用，写被正确识别权限不足", "标: AWS condition key; 仓: 非目标声明实测", "run_readonly_command", "半自动", "展开只读用例全量")
+    "①用 scripts/run-as-readonly.py 注入只读子账号(HW_ACCESS_KEY/HW_SECRET_KEY env,不带token) ②只读凭证下跑D3只读用例 ③写用例观察权限识别",
+    "只读100%可用，写被正确识别权限不足(权限不足=IAM拒绝)", "标: AWS condition key; 仓: 非目标声明实测", "run_readonly_command", "半自动", "展开只读用例全量")
 add("D4-14", "D4安全", "操作可审计性", "P2", "真云",
     "执行命令后查CTS/日志",
     "①执行若干命令 ②查CTS/运行日志 ③核对可追溯+可区分agent/人工",
@@ -986,8 +986,8 @@ add("D5-2", "D5客户端", "install落点正确", "P2", "各客户端环境",
     "install", "手动", "10客户端矩阵")
 add("D5-3", "D5客户端", "工具全量枚举", "P1", "各客户端环境",
     "tools/list枚举",
-    "①枚举39工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺",
-    "39 工具全量可达(=tools.mjs 注册源数量),schema完整", "标: Azure全MCP协议测试; 仓: tools.mjs基线", "mcp-server", "脚本", "10客户端矩阵")
+    "①枚举40工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺",
+    "40 工具全量可达(=tools.mjs 注册源数量),schema完整", "标: Azure全MCP协议测试; 仓: tools.mjs基线", "mcp-server", "脚本", "10客户端矩阵")
 add("D5-4", "D5客户端", "hook支持差异", "P2", "hook-capable与非hook客户端",
     "hook拦截vs Node策略",
     "①hook客户端验证拦截 ②非hook客户端验证Node策略兜底",
@@ -1059,7 +1059,7 @@ add("D6-8", "D6性能", "MCP 工具调用超时（网络/后端挂起）", "P1",
     "通: 超时与恢复标准实践; 关联 D6-6、D9-9; R11 补强: 30s阈值+ETIMEDOUT码+50MB内存上限", "run_readonly_command/plan_cli_command", "脚本", "COMMON|<代表: MCP进程+夹具>|<证据: 耗时窗口+isError+内存增量>|<阻塞: 可注入延迟夹具>")
 add("D9-9", "D9协议", "tools/call 超时协议语义与取消", "P1", "可注入延迟的 MCP 客户端/夹具（支持读取 initialize 返回的 capabilities）",
     "断言契约：①能力探测=读 initialize.result.capabilities.notifications/cancellation 是否存在——不存在→标记 SPEC-MISMATCH 不假定支持 ②超时错误=JSON-RPC error 对象 {code:-32000, message:含 'timeout'}（精确值）③取消通知=notifications/cancelled 请求（含 requestId）",
-    "①initialize→记录 capabilities.cancellation 是否存在 ②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）",
+    "①源码级: node eval/harness/protocol-probe.mjs 探测 initialize 返回的 capabilities.cancellation（实测当前未声明→SPEC-MISMATCH）②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）",
     "超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MISMATCH 标注而非假定）；取消通知后服务端 2s 内中止（in-flight 清零）；重建连接后 initialize/tools/list 正常响应；无悬挂请求（pending map 空）",
     "规: JSON-RPC 2.0 错误语义; 标: MCP 客户端超时实践; R11 补强: 精确-32000+capabilities探测+2s取消窗口", "inspector", "脚本", "COMMON|<代表: Inspector+夹具>|<证据: JSON-RPC错误对象+capabilities+取消时序>|<阻塞: 取消能力=SPEC待裁决>")
 
@@ -1141,11 +1141,11 @@ add("D8-8", "D8质量", "遥测策略端到端（trackTool/trackSandbox/hook 事
 add("D9-1", "D9协议", "tools/list合规", "P1", "MCP Inspector/客户端",
     "tools/list返回",
     "①tools/list ②逐工具schema校验合法JSON Schema ③核对无残留/重复工具",
-    "39 工具 schema 均合法(=tools.mjs 注册源数量)", "规: MCP规范inputSchema; 标: Azure全协议测试",
+    "40 工具 schema 均合法(=tools.mjs 注册源数量)", "规: MCP规范inputSchema; 标: Azure全协议测试",
     "inspector", "脚本")
 add("D9-2", "D9协议", "JSON-RPC错误码", "P1", "MCP客户端",
     "协议级错误注入",
-    "①构造-32700/-32600/-32601/-32602/-32603错误 ②核对错误码与结构",
+    "①源码级: node eval/harness/protocol-probe.mjs 自动发未知方法/非法参数核对错误码 ②构造 -32700/-32600/-32601/-32602/-32603 各类错误 ③核对错误码与 error 对象结构（code/message）",
     "错误码规范,客户端可处理", "规: JSON-RPC 2.0标准",
     "inspector", "脚本")
 add("D9-3", "D9协议", "tools/call响应格式", "P1", "MCP客户端",
@@ -1188,7 +1188,7 @@ add("D9-10", "D9协议", "MCP remote transport（HTTP/WS 远程服务）", "P1",
 
 # ---------- D10 Agent评测 ----------
 add("D10-1", "D10评测", "工具描述可选择性", "P1", "评测harness",
-    "39工具description+schema评审",
+    "40工具description+schema评审",
     "①逐工具评审描述清晰度 ②建立自然语言评测集 ③LLM选择正确率打分",
     "描述可度量,低分项入缺口", "标: Azure ToolDescriptionEvaluator",
     "harness", "脚本")
@@ -1199,8 +1199,8 @@ add("D10-2", "D10评测", "skill激活率", "P1", "真实Agent+插件",
     "harness", "脚本")
 add("D10-3", "D10评测", "路由准确率+混淆矩阵", "P1", "真实Agent+插件",
     "20+服务自然语言任务",
-    "①逐任务记录路由 ②生成混淆矩阵 ③定位错路由去向",
-    "路由准确率≥90%,错路由可定位", "标: Azure e2eTestPrompts; 混淆矩阵方法论",
+    "①源码级: 直调 serviceCatalog(intent) 核对中/英文意图→服务路由映射(无需LLM) ②评测集: 逐任务记录路由 ③生成混淆矩阵 ④定位错路由去向",
+    "源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位", "标: Azure e2eTestPrompts; 混淆矩阵方法论",
     "harness", "脚本")
 add("D10-4", "D10评测", "安全干预有效性", "P0", "真实Agent+插件",
     "高危意图请求",
@@ -1236,7 +1236,7 @@ CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
 D5_EXPECT = {
     1: "客户端可发现并加载插件清单",
     2: "install 落点与 README 契约一致，无错位",
-    3: "tools/list 枚举 39 工具全量可达，schema 完整",
+    3: "tools/list 枚举 40 工具全量可达，schema 完整",
     4: "hook 与非 hook 两条降级路径均有效",
     5: "沙箱/终端模式环境约束与 README 一致，恢复可用",
     6: "Windows 已知问题（config 完整性/文件锁/SDK）在文档范围内可控",
@@ -1281,7 +1281,8 @@ PROMPTS = [
 ]
 for pid, prompt, route, assert_ in PROMPTS:
     E.append((pid, "D10评测集", prompt, "D10-3", "P1",
-              f"期望路由: {route}", f"断言: {assert_}"))
+              f"①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: {route})，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 {route}",
+              f"源码级断言: serviceCatalog 中文意图命中 {route} 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: {assert_}"))
 
 # ============ NR3 版本升级提醒终端展开（2026-09-10 18:30:00，Codex review-round-03 要求；R10 结构化状态列） ============
 # 展开维度：Windows/Linux/macOS、Hook/非Hook、stdio/remote、TTY/非TTY、CLIENT_MATRIX/OS_MATRIX/AGENT_E2E/CROSS_PROCESS
@@ -1445,7 +1446,10 @@ def _rule_parts(rule):
 def _terminal_metadata(rid, dim, rule):
     """为设计级行提供可审计的代表终端元数据；不声称已执行。"""
     rule_type, representative, evidence, blocked = _rule_parts(rule)
-    if dim == "D7兼容":
+    _OS_SCOPE_OVERRIDE = {"D1-39": "Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证）"}
+    if rid in _OS_SCOPE_OVERRIDE:
+        os_scope = _OS_SCOPE_OVERRIDE[rid]
+    elif dim == "D7兼容":
         os_scope = "Windows/Linux/macOS（声明支持范围）"
     elif dim in {"D1安装", "D4安全", "D5客户端"}:
         os_scope = "Windows/Linux；macOS 若声明支持则单独举证"

@@ -34,7 +34,7 @@ console.log('@@CASE EXP-D5-8-3@@');
 {
   // Hermes 客户端工具全量枚举（源 D5-3）
   const n = tools.TOOL_DEFINITIONS.length;
-  log('EXP-D5-8-3', n === 40, `40 工具枚举（1.1.4 注册源 40，实际 ${n}；master 计数 39 待更新）`);
+  log('EXP-D5-8-3', n === 40, `40 工具枚举（1.1.4 注册源 40，实际 ${n}；母版计数 39 待更新）`);
 }
 console.log('@@END@@');
 

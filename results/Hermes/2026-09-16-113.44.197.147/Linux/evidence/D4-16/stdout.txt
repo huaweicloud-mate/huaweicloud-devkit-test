@@ -1,0 +1,11 @@
+=== D4-16 命令包裹穿透 (fresh v1.1.5 @ e7ed6f6) ===
+预期: sh/bash/eval/$() 包裹内层 hcloud 写操作应 deny
+实测: 0/4 拦截
+  sh -c "hcloud ecs DeleteServer"   -> allow <<<
+  bash -c 'hcloud ecs DeleteServer' -> allow <<<
+  eval "hcloud ecs DeleteServer"    -> allow <<<
+  $(hcloud ecs DeleteServer)        -> allow <<<
+RESULT: FAIL
+root: safety-policy.mjs:428 `if (/(^|\s)hcloud(\.exe)?\s+/i.test(text))` 才路由到 classifyHcloudArgs；
+      v1.1.5 的 shell-wrap 解包(bash/sh -c/sudo)只加在 classifyHcloudArgs/stripExecutable,
+      classifyTextCommand 对 `sh -c "…"` 文本不满足 `(^|\s)hcloud` → 直接落到 applyRawCommandRiskRules → allow。

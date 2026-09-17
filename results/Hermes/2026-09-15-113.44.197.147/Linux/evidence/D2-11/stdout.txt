@@ -1,0 +1,4 @@
+=== CASE D2-11 ===  FAIL
+  expected: 带 securityToken 的 persist 应立即 {status:error,scope:rejected}
+  actual:   R3 拒绝逻辑存在=true，但 R2 冲突门(needs_confirmation@tools.mjs:1228)先于 persistCredentials R3 检查(@1237)
+  root:     tools.mjs:1214-1237 冲突判定先于 R3 STS 检查；token 仍不落盘但给误导性切换确认

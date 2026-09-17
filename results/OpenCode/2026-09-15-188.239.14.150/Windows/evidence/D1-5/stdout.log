@@ -1,0 +1,54 @@
+===== D1-5 卸载残留扫描 =====
+[卸载前] 状态: {"skillsDir":{"exists":true,"huaweiCount":29,"entries":["huawei-apig","huawei-billing","huawei-cbr","huawei-cce","huawei-cloud-eye","huawei-cts","huawei-dds-dcs","huawei-deployment","huawei-dew","huawei-ecs","huawei-functiongraph","huawei-gaussdb","huawei-getting-started","huawei-iac","huawei-iam","huawei-modelarts","huawei-obs","huawei-rds","huawei-sandbox","huawei-smn-dms","huawei-voucher","huawei-vpc","huawei-waf-aad","huaweicloud-api-and-sdk","huaweicloud-capability-discovery","huaweicloud-cli-and-auth","huaweicloud-core","huaweicloud-safety","huaweicloud-troubleshooting"]},"commandsDir":{"exists":true,"huaweiCount":1,"entries":["huaweicloud-doctor.md"]},"pluginsDir":{"exists":true,"huaweiCount":0,"entries":[]},"pluginFile":{"exists":true}}
+
+--- 执行 uninstall --target opencode ---
+uninstall stdout: 
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.5                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+Uninstalling HuaweiCloud DevKit...
+
+[OpenCode]
+  Removed 29 skills
+  Removed 1 commands
+  Removed plugin
+  Removed MCP server and safety policy
+  OpenCode MCP config cleaned: C:\Users\Administrator\.config\opencode\opencode.jsonc
+
+[32mUninstall complete.[0m
+
+[33m💡 本次仅卸载了 opencode 的插件。如需清理全局配置（凭据库/OBS/Koo
+uninstall stderr: (node:8764) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+uninstall exitCode: 0
+[卸载后] 状态: {"skillsDir":{"exists":true,"huaweiCount":0,"entries":[]},"commandsDir":{"exists":true,"huaweiCount":0,"entries":[]},"pluginsDir":{"exists":true,"huaweiCount":0,"entries":[]},"pluginFile":{"exists":false}}
+
+卸载后无功能残留: true
+
+--- 执行 install --target opencode ---
+install stdout: 
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.5                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+Installing HuaweiCloud DevKit for opencode...
+
+  Node.js v22.22.2 [32mOK[0m
+[OpenCode]
+  Skills -> C:\Users\Administrator\.config\opencode\skills
+  Commands -> C:\Users\Administrator\.config\opencode\commands
+  MCP Server -> C:\Users\Administrator\.config\opencode\huaweicloud-plugins\src
+  Safety Policy ->
+install exitCode: 0
+[重装后] 状态: {"skillsDir":{"exists":true,"huaweiCount":29,"entries":["huawei-apig","huawei-billing","huawei-cbr","huawei-cce","huawei-cloud-eye","huawei-cts","huawei-dds-dcs","huawei-deployment","huawei-dew","huawei-ecs","huawei-functiongraph","huawei-gaussdb","huawei-getting-started","huawei-iac","huawei-iam","huawei-modelarts","huawei-obs","huawei-rds","huawei-sandbox","huawei-smn-dms","huawei-voucher","huawei-vpc","huawei-waf-aad","huaweicloud-api-and-sdk","huaweicloud-capability-discovery","huaweicloud-cli-and-auth","huaweicloud-core","huaweicloud-safety","huaweicloud-troubleshooting"]},"commandsDir":{"exists":true,"huaweiCount":1,"entries":["huaweicloud-doctor.md"]},"pluginsDir":{"exists":true,"huaweiCount":0,"entries":[]},"pluginFile":{"exists":true}}
+重装验证: skills 恢复 29 个
+
+===== D1-5 结论 =====
+卸载后无功能残留: true
+重装成功: true
+D1-5: PASS
+===== END D1-5 =====

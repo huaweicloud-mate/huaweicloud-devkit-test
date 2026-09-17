@@ -1,0 +1,15 @@
+=== D4-14: Operation Auditable (Real Cloud CTS) ===
+Timestamp: 2026-09-15T16:41:51.075Z
+[PASS] VPC created via approval flow (real cloud): VPC id=79911220-7429-47f5-a6c9-b7810183272c, name=tctest-wb-d418-realcloud, status=ACTIVE
+[PASS] CTS trace found for CreateVpc operation: trace_name=createVpc, operation_id=CreateVpc, code=200
+[PASS] CTS trace has user identity: user.name=hw018619646, user.type=User, principal_is_root_user=true
+[PASS] CTS trace has source IP: source_ip=188.239.14.150 (matches test machine)
+[PASS] CTS trace has request/response: request: {"vpc":{"cidr":"192.168.0.0/16","name":"tctest-wb-d418-realcloud"}}, response: full VPC object
+[PASS] CTS trace has timestamp: time=1789490253520, record_time=1789490253520
+[PASS] CTS trace has resource info: resource_id=79911220-7429-47f5-a6c9-b7810183272c, resource_type=vpc, service_type=VPC
+[PASS] CTS trace has user agent: user_agent=HCloud-CLI/7.2.12 (distinguishes agent vs manual)
+[PASS] VPC deleted after test: VPC deleted via approval flow, ListVpcs confirms zero tctest-wb-* VPCs
+
+=== Summary ===
+PASS: 9, FAIL: 0
+VERDICT: PASS — operations are fully auditable via CTS (user, source IP, request/response, timestamp, resource info)
