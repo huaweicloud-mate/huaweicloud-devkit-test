@@ -419,7 +419,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
     summary_fields = {"PASS": "pass", "FAIL": "fail", "BLOCKED": "blocked",
                       "SPEC-MISMATCH": "spec", "NOT_RUN": "not_run"}
     daily_rows = ""
-    for d in days:
+    for d in reversed(days):
         s = d["summary"]
         pct = rate_num(s["rate"])
         bar = (f'<div style="height:8px;background:#eee;border-radius:4px;width:120px;margin-left:auto;">'
