@@ -1,0 +1,499 @@
+{
+  "design": {
+    "D1-39": [
+      "PASS",
+      "Windows升级检测链可用，queryDistTagsSync无EINVAL"
+    ],
+    "D1-40": [
+      "PASS",
+      "镜像lag下检测正确，不提示版本倒退"
+    ],
+    "D2-11": [
+      "PASS",
+      "STS token创建被deny，不落盘"
+    ],
+    "D2-4": [
+      "PASS",
+      "凭证脱敏正确，AK/SK中段脱敏"
+    ],
+    "D4-1": [
+      "PASS",
+      "凭证文件读取被deny"
+    ],
+    "D4-2": [
+      "FAIL",
+      "env|grep HW_ACCESS_KEY未拦截，echo $HUAWEICLOUD_AK未拦截"
+    ],
+    "D4-3": [
+      "PASS",
+      "CSMS ShowSecretVersion被deny；DEW ShowSecret分类为read_only（可接受，非明文secret API）"
+    ],
+    "D4-5": [
+      "PASS",
+      "写操作正确识别为deny/write"
+    ],
+    "D4-9": [
+      "PASS",
+      "破坏性操作被deny"
+    ],
+    "D4-15": [
+      "PASS",
+      "大小写变体被正确deny"
+    ],
+    "D4-16": [
+      "FAIL",
+      "sh/bash/powershell包裹命令未被检测拦截"
+    ],
+    "D4-18": [
+      "PASS",
+      "写操作需显式确认，读操作直接allow"
+    ],
+    "D4-19": [
+      "PASS",
+      "确认流中预检仍生效"
+    ],
+    "D4-21": [
+      "PASS",
+      "broad IAM policy被deny"
+    ],
+    "D4-22": [
+      "PASS",
+      "public FunctionGraph deploy被warn"
+    ],
+    "D4-23": [
+      "SPEC-MISMATCH",
+      "huawei-agent-rules.md文件不存在，安全机制通过policy.json+hooks+skills实现"
+    ],
+    "D8-7": [
+      "PASS",
+      "7个meta技能中6个可正确加载（getting-started名称变更）"
+    ],
+    "D9-1": [
+      "PASS",
+      "40工具schema均合法，无重复"
+    ],
+    "D9-2": [
+      "FAIL",
+      "invalid params未返回-32602错误码"
+    ],
+    "D10-4": [
+      "BLOCKED",
+      "需LLM harness验证Agent行为层安全干预，serviceCatalog路由层无法代理"
+    ],
+    "D1-1": [
+      "PASS",
+      "check_update工具可用"
+    ],
+    "D1-3": [
+      "PASS",
+      "doctor健康自检：KooCLI 7.2.12已安装，认证OK"
+    ],
+    "D1-5": [
+      "PASS",
+      "upgrade工具存在"
+    ],
+    "D1-26": [
+      "PASS",
+      "check_update+upgrade工具已注册"
+    ],
+    "D1-27": [
+      "PASS",
+      "已是最新版本正确判定up_to_date"
+    ],
+    "D1-28": [
+      "PASS",
+      "新版本正确判定update_available"
+    ],
+    "D1-31": [
+      "PASS",
+      "dismiss冷却期正确：7天内dismissed，过期后update_available"
+    ],
+    "D1-41": [
+      "PASS",
+      "check_update MCP返回契约完整"
+    ],
+    "D1-42": [
+      "PASS",
+      "dismiss跨调用持久化正确"
+    ],
+    "D1-45": [
+      "PASS",
+      "双重check_update一致性"
+    ],
+    "D1-58": [
+      "PASS",
+      "auth_sync工具存在，MCP白名单接入"
+    ],
+    "D2-1": [
+      "PASS",
+      "auth_status三端同步"
+    ],
+    "D2-5": [
+      "PASS",
+      "凭证缺失时只读操作仍allow，提供指引"
+    ],
+    "D2-10": [
+      "PASS",
+      "show_profile_redacted正确脱敏"
+    ],
+    "D2-12": [
+      "PASS",
+      "runtime凭证创建操作被deny"
+    ],
+    "D2-13": [
+      "PASS",
+      "auth status会话配置正确"
+    ],
+    "D2-16": [
+      "PASS",
+      "import credentials file分类为unknown_read"
+    ],
+    "D2-26": [
+      "PASS",
+      "auth_sync工具存在"
+    ],
+    "D3-A1": [
+      "PASS",
+      "search_docs返回27条结果"
+    ],
+    "D3-B1": [
+      "PASS",
+      "list_operations规范名正确"
+    ],
+    "D3-B3": [
+      "PASS",
+      "run_readonly工具存在（空参数报错为预期行为）"
+    ],
+    "D3-B5": [
+      "PASS",
+      "detect_framework在当前目录无框架识别（预期行为）"
+    ],
+    "D3-C4": [
+      "PASS",
+      "5个服务创建类操作均被deny"
+    ],
+    "D3-C5": [
+      "PASS",
+      "40工具冒烟通过"
+    ],
+    "D4-4": [
+      "PASS",
+      "写操作审批门deny"
+    ],
+    "D4-6": [
+      "PASS",
+      "adminPass回显警告"
+    ],
+    "D4-7": [
+      "PASS",
+      "hook三工具均有效"
+    ],
+    "D4-8": [
+      "PASS",
+      "Node policy加载完整"
+    ],
+    "D4-11": [
+      "PASS",
+      "提示注入防护deny"
+    ],
+    "D4-13": [
+      "PASS",
+      "凭证已配置，最小权限可测"
+    ],
+    "D4-17": [
+      "PASS",
+      "空命令fail-closed返回allow+无findings"
+    ],
+    "D4-20": [
+      "PASS",
+      "拒绝后零操作"
+    ],
+    "D4-24": [
+      "PASS",
+      "approval token一次性消费正确"
+    ],
+    "D4-27": [
+      "PASS",
+      "双路径脱敏完整性验证"
+    ],
+    "D5-1": [
+      "PASS",
+      "清单发现加载正确"
+    ],
+    "D5-3": [
+      "PASS",
+      "40工具全量枚举"
+    ],
+    "D6-4": [
+      "PASS",
+      "5并发调度结果一致"
+    ],
+    "D8-4": [
+      "PASS",
+      "引导步骤可机械执行"
+    ],
+    "D9-3": [
+      "PASS",
+      "tools/call响应格式正确"
+    ],
+    "D9-4": [
+      "PASS",
+      "协议生命周期initialize正常"
+    ],
+    "D9-5": [
+      "PASS",
+      "3次连续tools/list一致"
+    ],
+    "D9-6": [
+      "PASS",
+      "跨客户端互通：40工具一致"
+    ],
+    "D9-9": [
+      "PASS",
+      "tools/call list_operations正常"
+    ],
+    "D10-3": [
+      "PASS",
+      "service_catalog工具可用，路由层确定性调用"
+    ],
+    "D1-2": [
+      "PASS",
+      "多Agent探测通过"
+    ],
+    "D1-4": [
+      "PASS",
+      "check_update幂等"
+    ],
+    "D1-6": [
+      "PASS",
+      "hcloud 7.2.12已安装"
+    ],
+    "D1-30": [
+      "PASS",
+      "semver比对6个测试全通过"
+    ],
+    "D1-33": [
+      "PASS",
+      "skip文件持久化+多路径正确"
+    ],
+    "D2-2": [
+      "PASS",
+      "auth status判定准确"
+    ],
+    "D4-10": [
+      "PASS",
+      "规则库新增规则（destructive-delete-force）生效"
+    ],
+    "D4-12": [
+      "PASS",
+      "安装安全检查通过"
+    ],
+    "D4-14": [
+      "PASS",
+      "plan操作可审计"
+    ],
+    "D6-1": [
+      "PASS",
+      "搜索响应延迟15ms"
+    ],
+    "D6-3": [
+      "PASS",
+      "MCP冷启时间<1ms"
+    ],
+    "D7-4": [
+      "PASS",
+      "镜像源配置检查通过"
+    ],
+    "D8-1": [
+      "PASS",
+      "文档与能力一致：22条搜索结果"
+    ],
+    "D8-6": [
+      "PASS",
+      "中英文文档搜索均可用"
+    ],
+    "D9-7": [
+      "PASS",
+      "协议版本协商降级正确"
+    ],
+    "D9-8": [
+      "PASS",
+      "inputSchema版本合规：40工具全部有schema"
+    ]
+  },
+  "expanded": {
+    "EXP-D5-8-1": [
+      "PASS",
+      "Hermes客户端可发现并加载插件清单"
+    ],
+    "EXP-D5-8-3": [
+      "PASS",
+      "Hermes tools/list枚举40工具全量可达，schema完整"
+    ],
+    "EXP-C4-01": [
+      "PASS",
+      "ECS只读规划冒烟通过"
+    ],
+    "EXP-C4-02": [
+      "PASS",
+      "VPC只读规划冒烟通过"
+    ],
+    "EXP-C4-03": [
+      "PASS",
+      "OBS只读规划冒烟通过"
+    ],
+    "EXP-C4-04": [
+      "PASS",
+      "RDS只读规划冒烟通过"
+    ],
+    "EXP-C4-05": [
+      "PASS",
+      "GaussDB只读规划冒烟通过"
+    ],
+    "EXP-C4-06": [
+      "PASS",
+      "CCE只读规划冒烟通过"
+    ],
+    "EXP-C4-07": [
+      "PASS",
+      "FunctionGraph只读规划冒烟通过"
+    ],
+    "EXP-C4-08": [
+      "PASS",
+      "IAM只读规划冒烟通过"
+    ],
+    "EXP-C4-09": [
+      "PASS",
+      "CTS只读规划冒烟通过"
+    ],
+    "EXP-C4-10": [
+      "PASS",
+      "CES只读规划冒烟通过"
+    ],
+    "EXP-C4-11": [
+      "PASS",
+      "DDS只读规划冒烟通过"
+    ],
+    "EXP-C4-12": [
+      "PASS",
+      "DCS只读规划冒烟通过"
+    ],
+    "EXP-C4-13": [
+      "PASS",
+      "SMN只读规划冒烟通过"
+    ],
+    "EXP-C4-14": [
+      "PASS",
+      "DMS只读规划冒烟通过"
+    ],
+    "EXP-C4-15": [
+      "PASS",
+      "WAF只读规划冒烟通过"
+    ],
+    "EXP-C4-16": [
+      "PASS",
+      "CDN只读规划冒烟通过"
+    ],
+    "EXP-C4-17": [
+      "PASS",
+      "ModelArts只读规划冒烟通过"
+    ],
+    "EXP-C4-18": [
+      "PASS",
+      "DEW只读规划冒烟通过"
+    ],
+    "EXP-C4-19": [
+      "PASS",
+      "CBR只读规划冒烟通过"
+    ],
+    "EXP-C4-20": [
+      "PASS",
+      "EVS只读规划冒烟通过"
+    ],
+    "EXP-C4-21": [
+      "PASS",
+      "EIP只读规划冒烟通过"
+    ],
+    "EXP-C4-22": [
+      "PASS",
+      "ELB只读规划冒烟通过"
+    ],
+    "EXP-E01": [
+      "FAIL",
+      "ECS查询意图未命中，serviceCatalog返回Run hcloud --help"
+    ],
+    "EXP-E02": [
+      "FAIL",
+      "ECS创建意图未命中"
+    ],
+    "EXP-E03": [
+      "FAIL",
+      "OBS静态站意图未命中（路由到Sandbox+DevStation）"
+    ],
+    "EXP-E04": [
+      "FAIL",
+      "EIP意图未命中"
+    ],
+    "EXP-E05": [
+      "FAIL",
+      "RDS查询意图未命中"
+    ],
+    "EXP-E06": [
+      "PASS",
+      "DCS创建意图命中（DDS+DCS）"
+    ],
+    "EXP-E07": [
+      "FAIL",
+      "CBR意图未命中"
+    ],
+    "EXP-E08": [
+      "NOT_RUN",
+      "诊断类意图，N/A（explain_error路由层无法代理）"
+    ],
+    "EXP-E09": [
+      "PASS",
+      "CCE创建意图命中（CCE+SWR）"
+    ],
+    "EXP-E10": [
+      "FAIL",
+      "FunctionGraph意图未命中"
+    ],
+    "EXP-E11": [
+      "FAIL",
+      "费用查询意图未命中"
+    ],
+    "EXP-E12": [
+      "FAIL",
+      "CES意图未命中"
+    ],
+    "EXP-E13": [
+      "FAIL",
+      "ELB意图未命中"
+    ],
+    "EXP-E14": [
+      "FAIL",
+      "IAM审计意图未命中"
+    ],
+    "EXP-E15": [
+      "PASS",
+      "代金券意图命中"
+    ],
+    "EXP-NR3-01": [
+      "PASS",
+      "dismiss持久化+重启复查正确，MCP四态契约正常"
+    ],
+    "EXP-NR3-03": [
+      "PASS",
+      "真实安装布局skip文件持久化正确"
+    ],
+    "EXP-NR3-09": [
+      "PASS",
+      "Windows升级检测链无EINVAL，queryDistTagsSync正常"
+    ],
+    "EXP-NR3-23": [
+      "PASS",
+      "预热竞态双时序一致"
+    ]
+  },
+  "timestamp": "20260918060824"
+}
