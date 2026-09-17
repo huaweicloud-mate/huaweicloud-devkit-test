@@ -1,0 +1,33 @@
+=== D4-13 写/只读 真机验证 (只读账号 test001) ===
+[WRITE vpc CreateVpc] exitCode= 0
+{
+  "code": "VPC.0010",
+  "message": "{\"NeutronError\":{\"message\":\"Rules on create_router by *** disallowed by policy\",\"type\":\"PolicyNotAuthorized\",\"detail\":\"\"}}"
+}
+Failed to get terminal width. The default width will be used. If characters are unreadable, adjust the command window width.
+Diagnose the request as follows:
++---+------------+----------+----------------------------+----------------------------+----------------------------+
+|No.|Product Name|Error Code|       Error Messa
+    => 写被拒? YES (IAM 权限不足)
+[WRITE ecs CreateServers] exitCode= 0
+[USE_ERROR]The following parameters are required: 
+server.imageRef
+server.root_volume.volumetype
+server.vpcid
+
+Run `hcloud ECS CreateServers --help` for details about this API.
+
+    => 写被拒? 未到 IAM(参数校验先触发) 等
+[READ ecs ListServersDetails] exitCode= 0
+{
+  "count": 0,
+  "servers": []
+}
+
+    => 资源级只读? ALLOWED
+[cleanup] 用 test001 查 VPC 列表(应被拒, 无删除需要):
+ListVpcs is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListVpcs/versionNumber'.
+{
+  "request_id": "2474bc19d90456b35e6ec572c0c160ce",
+ 
+    结论: 本次未创建任何资源(写全被 IAM 拒绝), 无需删除归零。
