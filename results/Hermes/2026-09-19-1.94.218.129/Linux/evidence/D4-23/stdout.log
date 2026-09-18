@@ -1,0 +1,42 @@
+{
+  "total": 5,
+  "passed": 3,
+  "failed": 2,
+  "results": [
+    {
+      "id": "D4-23",
+      "name": "rules-file-in-src",
+      "pass": true,
+      "actual": "rules/huawei-agent-rules.mdc 存在",
+      "expected": "存在"
+    },
+    {
+      "id": "D4-23",
+      "name": "rules-in-pkg-files",
+      "pass": false,
+      "actual": "cordis.patch.yml,bin,.agents,plugins/huaweicloud-core,integrations/hermes,integrations/opencode,integrations/dsh,integra",
+      "expected": "含 rules/"
+    },
+    {
+      "id": "D4-23",
+      "name": "rules-in-installed-pkg",
+      "pass": false,
+      "actual": "安装包 rules 存在?",
+      "expected": "存在"
+    },
+    {
+      "id": "D4-23",
+      "name": "no-mdc-anywhere",
+      "pass": true,
+      "actual": "包内无 .mdc",
+      "expected": "无 .mdc"
+    },
+    {
+      "id": "D4-23",
+      "name": "injection-code-missing",
+      "pass": true,
+      "actual": "setup-cli 无 rules 注入代码（grep 无命中）",
+      "expected": "应存在注入代码(当前缺失)"
+    }
+  ]
+}
