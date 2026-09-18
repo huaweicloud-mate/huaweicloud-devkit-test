@@ -1,0 +1,5 @@
+decision: "deny"
+warnings: ["This command appears to contain a password or secret field. Do not leave plaintext secrets in shell history; prefer local-only input or a runtime injection pattern.","Missing required parameters: server.imageRef, server.nics.1.subnet_id","Find valid values: Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs"]
+args contains Secret123: true
+args has redacted: false
+args: ["ECS","CreateServers","--adminPass","Secret123","--server.flavorRef=f"]

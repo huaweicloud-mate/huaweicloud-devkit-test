@@ -1,0 +1,26 @@
+
+=== D1 安装/升级检测链探针结果 ===
+PASS  D1-30  1.1.2 > 1.1.1  => true (expected true)
+PASS  D1-30  1.1.0 > 1.1.0-next.9  => true (expected true)
+PASS  D1-30  1.1.1 == 1.1.1  => 0 (expected 0)
+PASS  D1-30  1.1.1 < 1.1.2  => true (expected true)
+PASS  D1  1.1.4-next.3 是预发布  => true (expected true)
+PASS  D1  1.1.3 非预发布  => false (expected false)
+PASS  D1-27  result=up_to_date  => "up_to_date" (expected "up_to_date")
+PASS  D1-27  updateAvailable=false  => false (expected false)
+PASS  D1-28  result=update_available  => "update_available" (expected "update_available")
+PASS  D1-28  updateAvailable=true  => true (expected true)
+PASS  D1-28  targetVersion=1.1.2  => "1.1.2" (expected "1.1.2")
+PASS  D1-40  最新 next 不提示降级到 latest (up_to_date)  => "up_to_date" (expected "up_to_date")
+PASS  D1-40  updateAvailable=false  => false (expected false)
+PASS  D1-40  远端滞后不提示版本倒退  => false (expected false)
+PASS  D1-31  skip 文件已写  => true (expected true)
+PASS  D1-33  writeSkipState 返回 state 对象  => "object" (expected "object")
+PASS  D1-33  dismissedVersion 正确  => "1.1.2" (expected "1.1.2")
+PASS  D1-33  dismissedAt 存在(ISO)  => "string" (expected "string")
+PASS  D1-33  expireAt 存在(ISO)  => "string" (expected "string")
+PASS  D1-33  expireAt = dismissedAt + 3天(±5min)  => true (expected true)
+PASS  D1-31  冷却期内 result=dismissed  => "dismissed" (expected "dismissed")
+PASS  D1-31  dismissed=true  => true (expected true)
+
+TOTAL pass=22 fail=0

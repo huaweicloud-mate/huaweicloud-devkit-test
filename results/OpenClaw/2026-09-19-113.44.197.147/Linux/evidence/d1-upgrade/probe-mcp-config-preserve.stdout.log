@@ -1,0 +1,20 @@
+
+=== D1-58 MCP 配置保留探针结果 ===
+PASS  D1-58/615  command 保留 userArgs (--user-flag)  => "--user-flag" (expected "--user-flag")
+PASS  D1-58/615  command[0]=node 修正为新 mcpPath  => "/new/mcp-server.mjs" (expected "/new/mcp-server.mjs")
+PASS  D1-58/615  user env 保留  => "v1" (expected "v1")
+PASS  D1-58/615  user timeout 保留  => 120000 (expected 120000)
+PASS  D1-58/615  enabled=false 保留  => false (expected false)
+PASS  D1-58/615  args 保留 userArgs (--extra)  => "--extra" (expected "--extra")
+PASS  D1-58/615  args[0] 修正为新 mcpPath  => "/new/mcp-server.mjs" (expected "/new/mcp-server.mjs")
+PASS  D1-58/615  user env 保留 (mergeArgsStyle)  => "yes" (expected "yes")
+PASS  D1-58/615  required env 仅缺省时注入  => "/b" (expected "/b")
+PASS  D1-58/615  extractUserDelta 捕获 commandExtra  => "--flag" (expected "--flag")
+PASS  D1-58/615  extractUserDelta 捕获自定义 env  => "keep-me" (expected "keep-me")
+PASS  D1-58/615  extractUserDelta 捕获 timeout  => 240000 (expected 240000)
+PASS  D1-58/615  applyUserDelta 还原 userArgs  => "--flag" (expected "--flag")
+PASS  D1-58/615  applyUserDelta 还原自定义 env  => "keep-me" (expected "keep-me")
+PASS  D1-58/615  saveAgentDelta 写入可读  => 420000 (expected 420000)
+PASS  D1-58/615  takeAgentDelta 取走后读空  => null (expected null)
+
+TOTAL pass=16 fail=0

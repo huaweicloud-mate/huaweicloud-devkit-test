@@ -1,0 +1,12 @@
+
+=== D1 安装/更新/卸载生命周期探针结果(隔离 HOME) ===
+PASS  D1-1  隔离 HOME install --target openclaw 成功  => exit=0   3. 重启 OpenClaw 会话（MCP 工具重启后生效）   4. 运行自检：npx huaweicloud-devkit doctor Or describe your Huawei Cloud task in OpenClaw 
+PASS  D1-1  install 后生成 ~/.agents/skills  => exists=true
+PASS  D1-1  install 后生成 ~/.agents/huaweicloud-plugins  => exists=true
+PASS  D1-1  install 后 status 显示已安装  =>  ╔══════════════════════════════════════════════╗ ║     Huaw
+PASS  D1-4  status 多次调用一致(幂等)  => identical=true
+PASS  D1-4  update 已最新不报错(幂等)  => exit=0 ════════════════════════╝  [33mNot installed. Use "install" command first.[0m 
+PASS  D1-5  uninstall --target openclaw 执行成功  => exit=0
+PASS  D1-5  卸载后 status 不再显示已安装(无功能残留)  =>  ╔══════════════════════════════════════════════╗ ║     HuaweiCloud DevKit v1.1.
+
+TOTAL pass=8 fail=0

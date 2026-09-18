@@ -1,0 +1,19 @@
+PASS  D1-41 up_to_date: result=up_to_date & updateAvailable=false & currentVersion=1.1.4
+PASS  D1-41 update_available: updateAvailable=true & targetVersion=1.2.0
+PASS  D1-41 check_failed: result=check_failed & note 非空 & updateAvailable=false
+PASS  D1-41 dismissed: result=dismissed & dismissed=true & dismissExpiresAt 非空
+PASS  D1-42 落盘字段完整 (dismissedVersion=dismissedAt=expireAt 齐全)
+PASS  D1-42 expireAt = dismissedAt + 3 天
+PASS  D1-42 重读文件(模拟重启复查) 仍生效
+PASS  D1-42 同版本冷却窗口内 => dismissed
+PASS  D1-42 冷却过期后 => update_available
+PASS  D1-45 check_update 不附加 _updateInfo
+PASS  D1-45 upgrade 不附加 _updateInfo
+PASS  D1-45 其它工具附加 _updateInfo(latestVersion=1.2.0)
+PASS  D1-45 首调非 check/upgrade 工具附加 _updateInfo
+PASS  D1-45 首调后该会话已消费
+PASS  D1-45 同会话第二次调用不附加
+PASS  D1-45 check_update 自身不附加不消费
+PASS  D1-45 会话隔离：sessC/sessD 各自首调独立附加
+
+TOTAL pass=17 fail=0
