@@ -461,10 +461,10 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
                        + f'<td style="padding:6px 8px;border:1px solid #ddd;">{bar}</td></tr>')
 
     # ---- 通过率折线 SVG ----
-    def sparkline(values, color="#3498db", height=120, width=560, pct=True):
+    def sparkline(values, color="#3498db", height=140, width=560, pct=True):
         if len(values) < 2:
             return ""
-        w_pad, h_pad = 8, 8
+        w_pad, h_pad = 12, 18
         iw, ih = width - w_pad * 2, height - h_pad * 2
         mx, mn = max(values), min(values)
         span = (mx - mn) or 1
@@ -476,11 +476,18 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
             pts.append((round(x, 1), round(y, 1)))
         line = " ".join(f"{x},{y}" for x, y in pts)
         suffix = "%" if pct else ""
-        dots = "".join(f'<circle cx="{x}" cy="{y}" r="3" fill="{color}"><title>{values[i]}{suffix}</title></circle>'
+
+        def fv(v):
+            f = float(v)
+            return str(int(f)) if f == int(f) else str(v)
+
+        dots = "".join(f'<circle cx="{x}" cy="{y}" r="3" fill="{color}"><title>{fv(values[i])}{suffix}</title></circle>'
                        for i, (x, y) in enumerate(pts))
+        labels = "".join(f'<text x="{x}" y="{y-6}" font-size="11" font-weight="bold" text-anchor="middle" fill="#34495e">{fv(values[i])}{suffix}</text>'
+                         for i, (x, y) in enumerate(pts))
         return (f'<svg viewBox="0 0 {width} {height}" style="width:100%;max-width:{width}px;height:auto;">'
                 f'<polyline points="{line}" fill="none" stroke="{color}" stroke-width="2"/>'
-                f'{dots}</svg>')
+                f'{dots}{labels}</svg>')
 
     rate_vals = [rate_num(d["summary"]["rate"]) for d in days]
 
