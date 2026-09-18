@@ -49,12 +49,20 @@ const artifactBlocked = artifactResult.decision === 'deny';
 console.log(`  [ARTIFACT] terraform with 0.0.0.0/0:22 => decision=${artifactResult.decision}`);
 if (!artifactBlocked) d4_9_pass = false;
 
-// Test deploy plan check for IAM admin policy
+// Test deploy plan check for IAM admin policy (JSON format matching regex)
 const deployResult = evaluateDeployPlan({
-  plan: 'Create IAM policy with Action="*" and Effect="Allow" for all resources'
+  plan: '{"IAM": {"policy": {"Statement": [{"Action": "*", "Effect": "Allow"}]}}}'
 });
 const deployBlocked = deployResult.decision === 'deny';
-console.log(`  [DEPLOY-PLAN] IAM admin policy => decision=${deployResult.decision}`);
+console.log(`  [DEPLOY-PLAN] IAM admin policy (JSON) => decision=${deployResult.decision}`);
 if (!deployBlocked) d4_9_pass = false;
+
+// Test deploy plan with AdministratorAccess
+const deployResult2 = evaluateDeployPlan({
+  plan: 'Create IAM role with AdministratorAccess policy'
+});
+const deployBlocked2 = deployResult2.decision === 'deny';
+console.log(`  [DEPLOY-PLAN] AdministratorAccess => decision=${deployResult2.decision}`);
+if (!deployBlocked2) d4_9_pass = false;
 
 console.log('\nD4-9 RESULT:', d4_9_pass ? 'PASS' : 'FAIL');
