@@ -73,6 +73,8 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 ```
 **只 push results 不提单 = 未完成**；有 FAIL/SPEC 缺陷必须提单。
 
+> **中文编码红线（Windows 必读）**：提单标题/正文**禁止** `gh issue create/edit --title "中文" --body "中文"` 内联中文——Windows 控制台代码页会把中文吞成 `?`（如 #732 乱码）。必须走 `python scripts/file_issue.py`（自带 UTF-8 安全）或 `gh ... --body-file <UTF-8 文件>` / `--title-file`；开完单务必读回核对标题与正文中文无 `?`。
+
 ### 7. BLOCKED 补测收尾（全部 BLOCKED 用例必须追一轮，能解必解）
 第 6 步 push 前，对所有标 `BLOCKED` 的用例逐条深挖是否「假阻塞」，不得以「需环境」搪塞：
 - **D10 评测集（EXP-E01~E15）**：跑 `node eval/harness/run-eval.mjs hdk/plugins/huaweicloud-core/src/mcp-server.mjs`（harness 已建成，eval/prompts 含 15 条评测集，基线 21.4% MISS），得确定性路由结论，未命中判 FAIL。
