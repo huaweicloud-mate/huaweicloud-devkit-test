@@ -13,4 +13,4 @@
 - **根因**：`plugins/huaweicloud-core/src/setup-cli.mjs:5037` + proxy 命令已实现但未在文档中记录
 - **影响**：用户无法从文档了解 proxy 命令的存在和用法
 - **证据**：`evidence/D8-1/stdout.log`
-- **状态**：待提单
+- **状态**：已提单 #742（https://github.com/huaweicloud/huaweicloud-devkit/issues/742）
