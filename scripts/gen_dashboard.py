@@ -299,6 +299,34 @@ def extract_case_ids(text):
     return ids
 
 
+def load_issue_trend(dates):
+    """按日期统计各客户端 HISTORY_LINKS 中 open/closed 去重 issue 数量。"""
+    trend = []
+    results_dir = os.path.join(REPO, "results")
+    if not os.path.isdir(results_dir):
+        return trend
+    for date in dates:
+        open_set, closed_set = set(), set()
+        for client in sorted(os.listdir(results_dir)):
+            if client in ("Summary", "Regression", "version", "history"):
+                continue
+            cdir = os.path.join(results_dir, client)
+            if not os.path.isdir(cdir):
+                continue
+            for sub in sorted(os.listdir(cdir)):
+                if not sub.startswith(date + "-"):
+                    continue
+                for osn in ("Windows", "Linux"):
+                    fp = os.path.join(cdir, sub, osn, "HISTORY_LINKS.md")
+                    if not os.path.isfile(fp):
+                        continue
+                    for smap in _parse_history_links(open(fp, encoding="utf-8").read()).values():
+                        for num, st in smap.items():
+                            (open_set if st == "open" else closed_set).add(num)
+        trend.append({"date": date, "open": len(open_set), "closed": len(closed_set)})
+    return trend
+
+
 def _parse_history_links(text):
     """解析单份 HISTORY_LINKS.md -> {用例ID: {issue号: state}}。"""
     links = {}
@@ -433,7 +461,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
                        + f'<td style="padding:6px 8px;border:1px solid #ddd;">{bar}</td></tr>')
 
     # ---- 通过率折线 SVG ----
-    def sparkline(values, color="#3498db", height=120, width=560):
+    def sparkline(values, color="#3498db", height=120, width=560, pct=True):
         if len(values) < 2:
             return ""
         w_pad, h_pad = 8, 8
@@ -447,13 +475,19 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
             y = h_pad + ih - (ih * (v - mn) / span)
             pts.append((round(x, 1), round(y, 1)))
         line = " ".join(f"{x},{y}" for x, y in pts)
-        dots = "".join(f'<circle cx="{x}" cy="{y}" r="3" fill="{color}"><title>{values[i]}%</title></circle>'
+        suffix = "%" if pct else ""
+        dots = "".join(f'<circle cx="{x}" cy="{y}" r="3" fill="{color}"><title>{values[i]}{suffix}</title></circle>'
                        for i, (x, y) in enumerate(pts))
         return (f'<svg viewBox="0 0 {width} {height}" style="width:100%;max-width:{width}px;height:auto;">'
                 f'<polyline points="{line}" fill="none" stroke="{color}" stroke-width="2"/>'
                 f'{dots}</svg>')
 
     rate_vals = [rate_num(d["summary"]["rate"]) for d in days]
+
+    # ---- 每日 open issue 趋势 ----
+    issue_trend = load_issue_trend([d["date"] for d in days])
+    it_vals = [x["open"] for x in issue_trend]
+    it_label = " · ".join(f'{x["date"][5:]}: {x["open"]}' for x in issue_trend if x["open"] or x["closed"])
 
     # ---- 客户端概览（最新日，仅智能体聚合行） ----
     client_head = ('<tr style="background:#f2f2f2;">'
@@ -767,6 +801,11 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 <div style="margin:12px 0;"><div style="color:#7f8c8d;font-size:12px;margin-bottom:4px;">通过率趋势（%）</div>
 {sparkline(rate_vals)}</div>
 <p style="color:#95a5a6;font-size:11px;">趋势数据 = 每日《每日测试汇总》报告的执行摘要。09-13/14 当日报告使用「机器×用例」累加口径，09-15 起为「用例级去重」口径，跨口径仅作趋势参考。</p>
+
+<h2>每日 open issue 趋势</h2>
+<div style="color:#7f8c8d;font-size:12px;margin-bottom:4px;">关联历史单中 open 状态数量（每日快照、issue 号去重）</div>
+{sparkline(it_vals, color="#27ae60", pct=False)}
+<p style="color:#95a5a6;font-size:11px;">{it_label}</p>
 
 <h2>客户端执行概览（{vdate}）</h2>
 <p style="color:#7f8c8d;">{client_overview}</p>
