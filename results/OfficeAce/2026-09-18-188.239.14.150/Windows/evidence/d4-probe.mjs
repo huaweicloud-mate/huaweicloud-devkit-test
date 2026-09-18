@@ -275,11 +275,17 @@ function testD4_24() {
   
   const hcloudSrc = readFileSync(join(SRC, 'hcloud-cli.mjs'), 'utf8');
   
-  // 1. Check APPROVAL_TTL_MS is defined
-  const ttlMatch = hcloudSrc.match(/APPROVAL_TTL_MS\s*=\s*(\d+)/);
-  const ttlMs = ttlMatch ? parseInt(ttlMatch[1]) : 0;
+  // 1. Check APPROVAL_TTL_MS is defined (may be expression like 5 * 60_000)
+  const ttlExprMatch = hcloudSrc.match(/APPROVAL_TTL_MS\s*=\s*(\d+)\s*\*\s*(\d[\d_]*)/);
+  let ttlMs = 0;
+  if (ttlExprMatch) {
+    ttlMs = parseInt(ttlExprMatch[1]) * parseInt(ttlExprMatch[2].replace(/_/g, ''));
+  } else {
+    const ttlDirect = hcloudSrc.match(/APPROVAL_TTL_MS\s*=\s*(\d{6,})/);
+    ttlMs = ttlDirect ? parseInt(ttlDirect[1]) : 0;
+  }
   results.push(`[D4-24] APPROVAL_TTL_MS = ${ttlMs} (${(ttlMs / 60000).toFixed(0)} minutes)`);
-  
+
   // 2. Check TTL is reasonable (5 minutes = 300000ms)
   const ttlReasonable = ttlMs === 300000;
   results.push(`[D4-24] TTL is 5 minutes: ${ttlReasonable}`);
