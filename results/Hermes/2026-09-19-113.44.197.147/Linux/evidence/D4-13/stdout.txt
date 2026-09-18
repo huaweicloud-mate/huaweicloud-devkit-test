@@ -1,0 +1,10 @@
+=== D4-13 ===
+[1] run-as-readonly env 注入生效: resolveCredentials 命中的账号指纹 = bdbfd3d9
+    只读账号(test001)指纹 = bdbfd3d9 | 管理员指纹 = caae65f2
+    resolved==readonly ? YES (env 覆盖文件, 动态切换成功)
+    resolved!=admin ? YES (未误用管理员)
+[2] 只读账号 validateIamCredentials (IAM KeystoneListProjects 只读):
+    valid = true | projectId = 46c1fd48... | warning = null | error = 
+    结论: 凭证有效(可签名, 非 APIGW.0301 / 非 401)
+[3] 只读规划类操作(list_operations)为本地 KooCLI --help, 不依赖云端 API 凭证, 预期可用
+    (见 D3-C4/EXP-C4 证据: 22 服务 list_operations 全可路由)
