@@ -1,0 +1,35 @@
+# EXP-C4-20 Evidence
+
+## Test: D3-C4 Service Matrix - EVS read-only planning smoke
+## Method: huaweicloud_list_operations + huaweicloud_plan_cli_command
+
+### Result: PASS
+- Service: EVS
+- list_operations: OK
+- plan_cli_command: OK
+
+### list_operations output (first 200 chars):
+{
+  "service": "EVS",
+  "command": "hcloud EVS --help",
+  "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+  "examples": {
+    "not
+
+### plan_cli_command output (first 200 chars):
+{
+  "executable": "hcloud",
+  "args": [
+    "EVS",
+    "--help"
+  ],
+  "command": "hcloud EVS --help",
+  "executableBlock": "hcloud EVS --help",
+  "warnings": [],
+  "classification": {
+    "decision":
+
+### Evidence
+- Probe script: probe.mjs
+- Both list_operations and plan_cli_command returned valid JSON responses
+- Service routing verified: EVS -> hcloud EVS --help

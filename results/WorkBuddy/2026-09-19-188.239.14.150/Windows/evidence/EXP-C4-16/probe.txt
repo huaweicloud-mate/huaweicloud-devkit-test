@@ -1,0 +1,35 @@
+# EXP-C4-16 Evidence
+
+## Test: D3-C4 Service Matrix - CDN read-only planning smoke
+## Method: huaweicloud_list_operations + huaweicloud_plan_cli_command
+
+### Result: PASS
+- Service: CDN
+- list_operations: OK
+- plan_cli_command: OK
+
+### list_operations output (first 200 chars):
+{
+  "service": "CDN",
+  "command": "hcloud CDN --help",
+  "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+  "examples": {
+    "not
+
+### plan_cli_command output (first 200 chars):
+{
+  "executable": "hcloud",
+  "args": [
+    "CDN",
+    "--help"
+  ],
+  "command": "hcloud CDN --help",
+  "executableBlock": "hcloud CDN --help",
+  "warnings": [],
+  "classification": {
+    "decision":
+
+### Evidence
+- Probe script: probe.mjs
+- Both list_operations and plan_cli_command returned valid JSON responses
+- Service routing verified: CDN -> hcloud CDN --help

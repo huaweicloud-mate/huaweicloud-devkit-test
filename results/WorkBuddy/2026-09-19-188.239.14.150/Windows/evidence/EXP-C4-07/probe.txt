@@ -1,0 +1,33 @@
+# EXP-C4-07 Evidence
+
+## Test: D3-C4 Service Matrix - FunctionGraph read-only planning smoke
+## Method: huaweicloud_list_operations + huaweicloud_plan_cli_command
+
+### Result: PASS
+- Service: FunctionGraph
+- list_operations: OK
+- plan_cli_command: OK
+
+### list_operations output (first 200 chars):
+{
+  "service": "FunctionGraph",
+  "command": "hcloud FunctionGraph --help",
+  "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+  "e
+
+### plan_cli_command output (first 200 chars):
+{
+  "executable": "hcloud",
+  "args": [
+    "FunctionGraph",
+    "--help"
+  ],
+  "command": "hcloud FunctionGraph --help",
+  "executableBlock": "hcloud FunctionGraph --help",
+  "warnings": [],
+  "clas
+
+### Evidence
+- Probe script: probe.mjs
+- Both list_operations and plan_cli_command returned valid JSON responses
+- Service routing verified: FunctionGraph -> hcloud FunctionGraph --help

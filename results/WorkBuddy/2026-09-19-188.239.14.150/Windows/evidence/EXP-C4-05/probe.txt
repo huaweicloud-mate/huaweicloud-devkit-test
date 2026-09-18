@@ -1,0 +1,35 @@
+# EXP-C4-05 Evidence
+
+## Test: D3-C4 Service Matrix - GaussDB read-only planning smoke
+## Method: huaweicloud_list_operations + huaweicloud_plan_cli_command
+
+### Result: PASS
+- Service: GaussDB
+- list_operations: OK
+- plan_cli_command: OK
+
+### list_operations output (first 200 chars):
+{
+  "service": "GaussDB",
+  "command": "hcloud GaussDB --help",
+  "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+  "examples": {
+
+
+### plan_cli_command output (first 200 chars):
+{
+  "executable": "hcloud",
+  "args": [
+    "GaussDB",
+    "--help"
+  ],
+  "command": "hcloud GaussDB --help",
+  "executableBlock": "hcloud GaussDB --help",
+  "warnings": [],
+  "classification": {
+   
+
+### Evidence
+- Probe script: probe.mjs
+- Both list_operations and plan_cli_command returned valid JSON responses
+- Service routing verified: GaussDB -> hcloud GaussDB --help

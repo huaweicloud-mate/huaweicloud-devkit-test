@@ -1,0 +1,35 @@
+# EXP-C4-04 Evidence
+
+## Test: D3-C4 Service Matrix - RDS read-only planning smoke
+## Method: huaweicloud_list_operations + huaweicloud_plan_cli_command
+
+### Result: PASS
+- Service: RDS
+- list_operations: OK
+- plan_cli_command: OK
+
+### list_operations output (first 200 chars):
+{
+  "service": "RDS",
+  "command": "hcloud RDS --help",
+  "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command.",
+  "examples": {
+    "lis
+
+### plan_cli_command output (first 200 chars):
+{
+  "executable": "hcloud",
+  "args": [
+    "RDS",
+    "--help"
+  ],
+  "command": "hcloud RDS --help",
+  "executableBlock": "hcloud RDS --help",
+  "warnings": [],
+  "classification": {
+    "decision":
+
+### Evidence
+- Probe script: probe.mjs
+- Both list_operations and plan_cli_command returned valid JSON responses
+- Service routing verified: RDS -> hcloud RDS --help
