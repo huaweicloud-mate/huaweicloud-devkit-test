@@ -72,6 +72,7 @@ NEW_IDS_20260918 = {"D10-9"}
 NEW_IDS_20260919 = {
     "D1-65", "D1-66", "D1-67", "D1-68", "D1-69", "D1-70",
     "D2-26", "D2-27",
+    "D3-S1", "D3-S2", "D3-S3", "D3-S4", "D3-S5", "D3-S6",
 }
 
 # 存量 v1.5 其余维度（D3~D10 全区间）——先于未知 ID 判定
@@ -916,6 +917,41 @@ add("D3-C14", "D3功能", "沙箱 HDKit 服务参数与 hwlink 凭证", "P2", "�
     "①hdkitConnect 带 source/env ②hdkitCredentials 缺 sessionId+devStageId 报错 ③hwlink getCredentials ④createConnection",
     "hdkitConnect 透传可选参数到 body；hdkitCredentials 缺 sessionId 且缺 devStageId 时报错；hwlink getCredentials 返回 {ak,sk,securitytoken}；createConnection 用 securitytoken 走 x-security-token 签名头", "实: hdkitservice-api.hdkitConnect(90)/hdkitCredentials(101); hwlink-api.getCredentials(80)/createConnection(122)",
     "sandbox_connect/sandbox_credentials", "半自动", "COMMON|<代表: Hermes 沙箱>|<证据: 参数透传+凭证结构>|<阻塞: 需沙箱配额>")
+
+
+# ---------- D3-S 场景级回归（2026-09-19 起，补推广提示语级端到端链路） ----------
+# 场景级用例测的是「提示语→意图路由→多步编排→用户可见结果」完整链路，与 D3-A/B/C 能力级用例(单工具/单函数正确)互补。
+# 路由层锚定 serviceCatalog(intent) 确定性映射(tools.mjs:1776)，工具层走源码级直调或真云 E2E，不依赖 LLM。
+add("D3-S1", "D3功能", "场景-只读查ECS(带不改约束)", "P1", "真云凭证 + 至少1台ECS",
+    "提示语「列出cn-north-4的ECS，只读不改」",
+    "①serviceCatalog(意图) 路由→huawei-ecs/ECS ②run_readonly_command 执行 ListServersDetails ③核对输出含实例清单 ④断言全程无任何写工具(create/delete/plan_cli)调用",
+    "路由命中 ecs；只读命令返回实例清单；会话期间零写操作，用户「不要修改」约束被忠实遵守", "实: tools.serviceCatalog(1776) routeMap ecs; run_readonly_command",
+    "service_catalog/run_readonly_command", "脚本", "COMMON|<代表: Hermes>|<证据: 路由+只读清单+零写调用>|<阻塞: 需真云只读凭证>")
+add("D3-S2", "D3功能", "场景-删VPC先确认", "P1", "真云测试VPC",
+    "提示语「删除测试VPC，先列命令确认」",
+    "①serviceCatalog 路由→huawei-vpc/VPC ②plan_cli_command 生成 DeleteVpc 命令块 ③hook_check_command 预检 ④未确认前断言零执行 ⑤确认后 run_approved_command 执行 ⑥核对 VPC 已删且资源归零",
+    "先出命令块等待确认，未确认时零执行；确认后删除成功且归零", "实: plan_cli_command/hook_check_command/run_approved_command; serviceCatalog vpc 路由",
+    "plan_cli_command/hook_check_command/run_approved_command", "半自动", "COMMON|<代表: Hermes>|<证据: 命令块+确认前后执行态>|<阻塞: 需真云写凭证>")
+add("D3-S3", "D3功能", "场景-沙箱预览出URL", "P1", "沙箱配额 + 前端项目",
+    "提示语「部署当前项目到沙箱给我预览链接」",
+    "①serviceCatalog 路由→sandbox ②check_user→sign_agreement→connect ③upload_project ④deploy_nginx+deploy_check ⑤核对返回公网URL可访问(HTTP 200) ⑥close_session",
+    "终点必返回可访问公网URL；会话可正常关闭；无计费资源残留", "实: sandbox 工具链; capability-discovery Scenario Routing 沙箱优先",
+    "sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_close_session", "半自动", "COMMON|<代表: Hermes>|<证据: 预览URL可访问>|<阻塞: 需沙箱配额>")
+add("D3-S4", "D3功能", "场景-领券闭环", "P1", "未领取代金券的IAM账号",
+    "提示语「查能否领券，能领就领」",
+    "①voucher_status 查状态=claimed=false ②voucher_claim 领取 ③再 voucher_status 核对 claimed=true",
+    "status→claim→status 闭环连贯，领取后状态翻转为 claimed=true", "实: tools hdkitVoucherStatus/hdkitVoucherClaim",
+    "voucher_status/voucher_claim", "半自动", "COMMON|<代表: Hermes>|<证据: 状态翻转闭环>|<阻塞: 需未领券账号>")
+add("D3-S5", "D3功能", "场景-复合意图分层路由", "P2", "无(纯路由)",
+    "复合意图「物联网+时序数据+前端托管」",
+    "①serviceCatalog(复合中文意图) ②核对命中多个 service(存储 DDS/GaussDB + 托管 OBS/ECS) ③核对分层推荐(预览→沙箱/生产→ECS)",
+    "复合意图正确拆分并命中多个对应 service；分层推荐按预览/生产分流，不盲选单一服务", "实: serviceCatalog routeMap + capability-discovery Scenario Routing",
+    "service_catalog", "脚本", "COMMON|<代表: Hermes>|<证据: 多路命中+分层推荐>|<阻塞: 无>")
+add("D3-S6", "D3功能", "场景-FunctionGraph定时任务", "P2", "真云 FunctionGraph 配额",
+    "提示语「部署Python函数，每天定时执行」",
+    "①serviceCatalog 路由→huawei-functiongraph/FunctionGraph ②hcloud FunctionGraph CreateFunction ③配置定时触发器 ④核对返回函数URN/触发器绑定",
+    "函数创建成功+定时触发器绑定，返回可调用标识", "实: serviceCatalog functiongraph 路由; hcloud-cli FunctionGraph CreateFunction",
+    "plan_cli_command/run_approved_command", "半自动", "COMMON|<代表: Hermes>|<证据: 函数URN+触发器>|<阻塞: 需真云FG配额>")
 
 # ---------- D4 安全 ----------
 add("D4-1", "D4安全", "凭证文件读取拦截", "P0", "含.hcloud/.huaweicloud目录环境",
