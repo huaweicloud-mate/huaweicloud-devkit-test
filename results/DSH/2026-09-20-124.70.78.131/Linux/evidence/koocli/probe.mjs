@@ -1,0 +1,16 @@
+const SRC = '/home/testbot2/devkit-test/DSH/hdk/plugins/huaweicloud-core/src';
+const kv = await import(SRC+'/koocli-version.mjs');
+let PASS=0,FAIL=0;const A=(id,l,c,d='')=>{const ok=!!c;ok?PASS++:FAIL++;console.log(`[${ok?'PASS':'FAIL'}] ${id} ${l}${d?' | '+d:''}`);};
+const v = kv.getKooCliVersion();
+console.log('getKooCliVersion() =>', v);
+A('D2-27','getKooCliVersion 返回 x.y.z', /^\d+\.\d+\.\d+/.test(String(v)), String(v));
+const parsed = kv.parseHcloudVersion('hcloud 7.2.12 on linux arm64');
+console.log('parseHcloudVersion =>', parsed);
+A('D2-27','parseHcloudVersion 提取首个 x.y.z', parsed==='7.2.12', String(parsed));
+A('D2-27','compareVersion(7.2.12,7.2.9)>0', kv.compareVersion('7.2.12','7.2.9')>0);
+A('D2-27','compareVersion 相等=0', kv.compareVersion('7.2.9','7.2.9')===0);
+const base = kv.kooCliDownloadBase();
+console.log('kooCliDownloadBase =>', base);
+A('D2-27','downloadBase 含 KOO_CLI_BASE + version|latest', String(base).includes(kv.KOO_CLI_BASE) && /(7\.|latest)/.test(String(base)), String(base));
+console.log(`\n=== 汇总: PASS=${PASS} FAIL=${FAIL} ===`);
+process.exit(FAIL?1:0);

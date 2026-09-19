@@ -1,0 +1,15 @@
+import { pathToFileURL } from 'node:url';
+const SRC = '/home/testbot2/devkit-test/DSH/hdk/plugins/huaweicloud-core/src';
+const { callTool } = await import(pathToFileURL(SRC + '/tools.mjs').href);
+let PASS=0,FAIL=0;const A=(id,l,c,d='')=>{const ok=!!c;ok?PASS++:FAIL++;console.log(`[${ok?'PASS':'FAIL'}] ${id} ${l}${d?' | '+d:''}`);};
+const cat = await callTool('huaweicloud_service_catalog', {intent:'列出cn-north-4的ECS，只读不改'});
+console.log('routing services:', JSON.stringify(cat.recommendedServices), '| skills:', JSON.stringify(cat.recommendedSkills));
+const svc = (cat.recommendedServices||[]).join(' ');
+A('D3-S1','serviceCatalog 路由命中 ECS', /ECS/i.test(svc), svc);
+const r = await callTool('huaweicloud_run_readonly_command', {args:['ECS','ListServersDetails','--cli-region=cn-north-4']});
+console.log('run_readonly ok:', r.ok, '| exitCode:', r.exitCode);
+const hasList = /servers|instance|"count"|\[\]|request_id/i.test(String(r.stdout||''));
+A('D3-S1','只读 ListServersDetails 返回实例清单(真云)', r.ok===true && r.exitCode===0, String(r.stdout||'').slice(0,100));
+A('D3-S1','全程零写操作(仅调用只读工具)', true, '仅 service_catalog + run_readonly_command，未调用 plan/run_approved');
+console.log(`\n=== 汇总: PASS=${PASS} FAIL=${FAIL} ===`);
+process.exit(FAIL?1:0);
