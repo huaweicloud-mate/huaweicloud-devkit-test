@@ -78,7 +78,7 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 ### 7. BLOCKED 补测收尾（全部 BLOCKED 用例必须追一轮，能解必解）
 第 6 步 push 前，对所有标 `BLOCKED` 的用例逐条深挖是否「假阻塞」，不得以「需环境」搪塞：
 - **D10 评测集（EXP-E01~E15）确定性路由层**：跑 `node eval/harness/run-eval.mjs <hdk>/plugins/huaweicloud-core/src/mcp-server.mjs`（harness 已建成，eval/prompts 含 15 条评测集，基线 21.4% MISS），得 serviceCatalog 路由结论，未命中判 FAIL。所有客户端可用（不依赖 dsh）。
-- **D10 真实 Agent 会话评测（D10-1/2/5/9 执行器）**：`node eval/harness/run-agent-eval.mjs [--only read|诊断|执行|plan] [--limit N]`，驱动 `dsh --profile headless`（真实 LLM + 已接 devkit MCP 插件）逐条喂评测集、从 stdout 抽 hcloud 命令取证动作类型与安全期望。**仅 DSH 客户端/装了 dsh 的机器可用**；非 DSH 客户端走 CDP 会话自动化（见 gui-cdp-automation 技能，ITER-005 扩展）。详见 `eval/README.md`。
+- **D10 真实 Agent 会话评测（D10-1/2/5/9 执行器）**：`node eval/harness/run-agent-eval.mjs [--only read|诊断|执行|plan] [--limit N]`，驱动 `dsh --profile headless`（真实 LLM + 已接 devkit MCP 插件）逐条喂评测集、从 stdout 抽 hcloud 命令取证动作类型与安全期望。**仅 DSH 客户端/装了 dsh 的机器可用**；非 DSH 客户端走 CDP 会话自动化（见 gui-cdp-automation 技能，ITER-005 扩展）。**⚠️ `--only plan`/`deploy` 类会让真实 LLM 把资源真建到云端（ECS/VPC/子网/安全组/系统盘，按需计费）——跑完必须逐一核查云端归零（ECS count=0、VPC/安全组无本次创建的、EIP total_count=0），只清本地密钥文件 = 假清理**。详见 `eval/README.md`。
 - **已有探针的用例**（如 D6 压测 `supplement-probe.mjs`）：必须跑完探针回填。
 - **可源码级直调的用例**（`serviceCatalog`/`redactString`/`judgeUpdate` 等）：必须直调回填结果。
 - **真云用例**：真云已具备执行条件（AK/SK + 只读子账号 + 保证金已就绪），必须真机执行（最低配置创建 → 测后删除归零 → 只删本次创建），不得以「无 AK/SK / 需保证金」标 BLOCKED、禁止 mock 假跑。
