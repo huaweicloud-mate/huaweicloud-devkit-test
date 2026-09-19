@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """生成全仓需求→设计级→展开级→证据追踪表（纯设计追踪，无执行态）。
 
-真源：test-cases/design/用例矩阵-设计级.csv (179) + expanded (137)
+真源：test-cases/design/用例矩阵-设计级.csv (180) + expanded (137)
 执行状态/结果已移入 results/Summary（build_summary.py 聚合），追踪表只保留
 「需求→设计→展开→证据要求」的覆盖关系 + 设计状态 + 缺口结论。
 输出：test-cases/tracing/需求-设计-证据追踪表.csv（10 列）

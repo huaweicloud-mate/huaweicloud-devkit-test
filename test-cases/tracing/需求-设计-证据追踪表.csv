@@ -170,14 +170,15 @@ v1.5规划(v1.3基线),跨客户端互通,D9-6,无(不展开/代表执行),MCP�
 v1.5规划(v1.3基线),协议版本协商降级,D9-7,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,不挂死且正确降级,DESIGN_COVERED,测试负责人,
 v1.5规划(v1.3基线),inputSchema版本合规,D9-8,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,版本统一且明确,DESIGN_COVERED,测试负责人,
 覆盖缺口落用例20260913(coverage-gaps.md),MCP remote transport（HTTP/WS 远程服务）,D9-10,无(不展开/代表执行),MCP协议,<代表: remote 客户端>,remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 ,DESIGN_COVERED,测试负责人,
-v1.5规划(v1.3基线),工具描述可选择性,D10-1,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,"描述可度量,低分项入缺口",DESIGN_COVERED,测试负责人,
-v1.5规划(v1.3基线),skill激活率,D10-2,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,激活率≥90%,DESIGN_COVERED,测试负责人,
-v1.5规划(v1.3基线),路由准确率+混淆矩阵,D10-3,EXP-E01;EXP-E02;EXP-E03;EXP-E04;EXP-E05;EXP-E06;EXP-E07;EXP-E08;EXP-E09;EXP-E10;EXP-E11;EXP-E12;EXP-E13;EXP-E14;EXP-E15,Agent评测,<代表: Hermes/Codex/OpenCode>,"源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位",DESIGN_COVERED,测试负责人,
-v1.5规划(v1.3基线),安全干预有效性,D10-4,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,高危请求自动走审批,DESIGN_COVERED,测试负责人,
-v1.5规划(v1.3基线),多轮任务完成率,D10-5,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,"自主完成率高,干预少",DESIGN_COVERED,测试负责人,
-v1.5规划(v1.3基线),评测基建,D10-6,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,结果可重复可比,DESIGN_COVERED,测试负责人,
-v1.5规划(v1.3基线),评测失败分级,D10-7,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,分级驱动修复优先级,DESIGN_COVERED,测试负责人,
-v1.5规划(v1.3基线),评测成本预算,D10-8,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: Hermes/Codex/OpenCode>,成本可控可持续,DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),工具描述可选择性,D10-1,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: 10 客户端>,"描述可度量,低分项入缺口",DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),skill激活率,D10-2,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: 10 客户端>,激活率≥90%,DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),路由准确率+混淆矩阵,D10-3,EXP-E01;EXP-E02;EXP-E03;EXP-E04;EXP-E05;EXP-E06;EXP-E07;EXP-E08;EXP-E09;EXP-E10;EXP-E11;EXP-E12;EXP-E13;EXP-E14;EXP-E15,Agent评测,<代表: 10 客户端>,"源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位",DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),安全干预-静态规则层,D10-4,无(不展开/代表执行),Agent评测,<代表: 源码直调 risk-rule-engine>,"规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token",DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),安全干预-LLM会话层,D10-9,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: 10 客户端>,高危请求自动走审批,DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),多轮任务完成率,D10-5,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: 10 客户端>,"自主完成率高,干预少",DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),评测基建,D10-6,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: 10 客户端>,结果可重复可比,DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),评测失败分级,D10-7,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: 10 客户端>,分级驱动修复优先级,DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),评测成本预算,D10-8,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: 10 客户端>,成本可控可持续,DESIGN_COVERED,测试负责人,
 ITER-005(PR#592),README 徽章动态化 D1-1~4,-,-,静态核对+CLI,Windows W,next-stable.mjs 运行输出,REFERENCE_ONLY,测试负责人,复用既有 ID，无独立设计级（结论：接受）
 ITER-005(PR#592),P1 install 目标解析四态,D1-2/D1-7/D1-9,-,CLI+PTY/非TTY,Windows W + Linux L,setup.cjs 决策树 44/44,REFERENCE_ONLY,测试负责人,复用既有 ID（结论：接受）
 ITER-005(PR#592),P2 通用 MCP 白名单接入,D1-58,-,CLI,Linux L,Claude/Cursor merge 场景,REFERENCE_ONLY,测试负责人,已回填 D1-58（R12-3 完成，不再留待回填）

@@ -9,7 +9,7 @@
 只按精选规则筛行，不再裁剪列 —— 列数、列名、列序与母版逐一对齐，母版演进时自动跟随。
 
 精选规则（与 daily/README.md 保持一致）：
-  设计级 = 禁止剪枝(D4 全量 + D1-1/3/5 + D9 全量 + D10-1~4) + P0 全量 + P1 冒烟(含 D3-C4/D1-58)
+  设计级 = 禁止剪枝(D4 全量 + D1-3 + D9 全量 + D10-1~4) + P0 全量 + P1 冒烟(含 D3-C4) − DAILY_EXCLUDE − DESTRUCTIVE_EXCLUDE
   展开级 = 源用例 ∈ 设计级精选集
 运行：python test-cases/gen_daily.py
 """
@@ -26,18 +26,17 @@ os.makedirs(OUT_DIR, exist_ok=True)
 
 # 禁止剪枝集（范围 + 精确）
 _PRUNE_RANGES = [("D4-", 1, 24), ("D9-", 1, 9)]
-_PRUNE_EXACT = {"D1-1", "D1-3", "D1-5", "D10-1", "D10-2", "D10-3", "D10-4"}
+_PRUNE_EXACT = {"D1-3", "D10-1", "D10-2", "D10-3", "D10-4"}
 
-# P1 核心冒烟子集（每维度日常可自动化代表；含 D3-C4 服务矩阵、D1-58 白名单）
+# P1 核心冒烟子集（每维度日常可自动化代表；含 D3-C4 服务矩阵，不含破坏性操作类）
 P1_SMOKE = {
-    "D1-2", "D1-4", "D1-6", "D1-26", "D1-27", "D1-28", "D1-30", "D1-31", "D1-33",
-    "D1-41", "D1-42", "D1-45", "D1-58",
+    "D1-4", "D1-26", "D1-27", "D1-28", "D1-30", "D1-31", "D1-33",
+    "D1-41", "D1-42", "D1-45",
     "D2-1", "D2-2", "D2-5", "D2-10", "D2-12", "D2-13", "D2-16", "D2-26",
         "D3-A1", "D3-B1", "D3-B3", "D3-B5", "D3-C4", "D3-C5",
         "D4-27",
         "D5-1", "D5-3",
     "D6-1", "D6-3", "D6-4",
-    "D7-4",
     "D8-1", "D8-4", "D8-6",
     "D10-5",
 }
@@ -47,7 +46,19 @@ P1_SMOKE = {
 # 【撤回标准】凡①探针/脚本已存在可本地跑(如 D6 压测 supplement-probe.mjs)②有历史结论可复用(如 D9-6 clientInfo 互通)
 # ③可静态/源码级直调(如 D10-1 描述评审/D10-3 路由 serviceCatalog)——一律保留 daily，不得以「需环境」借口移出。
 DAILY_EXCLUDE = {
-    "D10-1", "D10-2", "D10-5",  # LLM 评测 harness（工具描述可选/skill激活率/多轮完成率；D10-3 路由源码级可测、D10-4 P0 安全保留）
+    "D10-1", "D10-2", "D10-5",  # LLM 评测 harness（工具描述可选/skill激活率/多轮完成率；D10-3 路由源码级可测、D10-4 P0 安全静态层保留）
+}
+
+# 破坏性操作专项（2026-09-18 起，调归属）：这类用例断言正确，但操作步骤含破坏性全局动作
+# （install 全局安装/uninstall+改源/切换全局 npm 源/多客户端覆盖/交互式 install 菜单需 PTY），
+# 在每日 run-only 环境里注定空转 BLOCKED——移出 daily，转「破坏性专项」在隔离环境/一次性环境按需执行。
+DESTRUCTIVE_EXCLUDE = {
+    "D1-1",   # 全新环境引导安装（破坏性：重置环境为未安装态 + 全局 install）
+    "D1-5",   # uninstall 干净度（破坏性：全局卸载/切换 npm 源）
+    "D1-58",  # 通用 MCP 白名单接入（破坏性：交互式 install 菜单 option3 白名单探测需 PTY）
+    "D1-2",   # 多 Agent 探测（破坏性：省略 --target 触发 auto-detect 覆盖多客户端）
+    "D1-6",   # install-hcloud（破坏性：全局安装 KooCLI）
+    "D7-4",   # 国内镜像源安装（破坏性：切换全局 npm 源）
 }
 
 
@@ -71,7 +82,7 @@ for r in des:
     if _in_ranges(r["ID"]):
         prune_set.add(r["ID"])
 p0_all = {r["ID"] for r in des if r["优先级"] == "P0"}
-selected = (set(prune_set) | set(p0_all) | set(P1_SMOKE)) - DAILY_EXCLUDE
+selected = (set(prune_set) | set(p0_all) | set(P1_SMOKE)) - DAILY_EXCLUDE - DESTRUCTIVE_EXCLUDE
 
 # 设计级：精选 + 母版完整列（一个 ID 一条，去重）
 des_keep = []

@@ -103,7 +103,7 @@ def check(name, cond, detail=""):
 # 1) 设计级
 with open(P_DES, encoding="utf-8-sig") as f:
     rows = list(csv.DictReader(f))
-check("设计级行数 == 179", len(rows) == 179, str(len(rows)))
+check("设计级行数 == 180", len(rows) == 180, str(len(rows)))
 ids = [r["ID"] for r in rows]
 check("ID 唯一", len(ids) == len(set(ids)))
 check("16 覆盖缺口用例在场", all(i in ids for i in GAP_IDS), str([i for i in GAP_IDS if i not in ids]))
