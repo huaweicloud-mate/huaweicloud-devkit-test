@@ -1,0 +1,1 @@
+// D1-41: check_update MCP return contract - tested via probe-mcp-protocol.mjs
