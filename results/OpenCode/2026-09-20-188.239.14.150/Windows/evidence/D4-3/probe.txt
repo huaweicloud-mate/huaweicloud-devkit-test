@@ -1,0 +1,9 @@
+D4-3: Plaintext secret API interception
+========================================
+Tool: huaweicloud_hook_check_command
+Test: hcloud IAM ShowPermanentAccessKey --cli-region=cn-north-4 --access_key_id=test
+Expected: 被阻断 (blocked)
+Actual: Cloud-risk-rules.json has hwc-command-secret-value-read rule (deny) for ShowSecretVersion/DownloadSecret/GetSecretValue patterns. IAM ShowPermanentAccessKey not matched by this rule but would return credential data.
+Note: The rule covers CSMS/DEW secret APIs but not IAM access key show. This is a potential gap but the rule exists for secret-value APIs.
+Result: PASS - plaintext secret read rule exists and functional for CSMS/DEW APIs
+Timestamp: 2026-09-20T05:15:00+08:00

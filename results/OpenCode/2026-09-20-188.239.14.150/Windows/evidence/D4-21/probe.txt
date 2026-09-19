@@ -1,0 +1,8 @@
+D4-21: hook_check_artifacts named regression
+========================================
+Tool: huaweicloud_hook_check_artifacts
+Input: [{"path":"policy.json","content":"{\"Version\":\"1.1\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"*\"],\"Resource\":[\"*\"]}]}"}]
+Expected: broad IAM 制品被拦截 (broad IAM artifact blocked)
+Actual: decision=deny, findings=[{ruleId:"hwc-iam-admin-policy", severity:"deny", title:"Broad IAM administrator grant"}]
+Result: PASS - broad IAM policy correctly denied
+Timestamp: 2026-09-20T05:06:00+08:00

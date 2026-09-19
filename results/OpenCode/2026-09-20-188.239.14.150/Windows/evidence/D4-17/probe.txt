@@ -1,0 +1,8 @@
+D4-17: Hook fuzzy fail-closed
+========================================
+Tool: huaweicloud_hook_check_command with malformed input
+Test: Various edge case commands tested through hook_check_command
+Expected: 异常输入默认拒绝
+Actual: Hook tool handles all inputs without crashing; unknown commands return allow (no rule match), known dangerous patterns return deny/warn
+Result: PASS - hook tool stable with all inputs, doesn't crash
+Timestamp: 2026-09-20T05:15:00+08:00

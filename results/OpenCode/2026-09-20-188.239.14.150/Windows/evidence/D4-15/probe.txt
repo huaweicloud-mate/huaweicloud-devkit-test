@@ -1,0 +1,10 @@
+D4-15: Hook bypass attempt
+========================================
+Tool: huaweicloud_hook_check_command
+Tests:
+1. Case variation: "hcloud ECS DeleteServers ... DELETESERVERS deleteserver" → warn (detected)
+2. Shell wrapper: 'cmd /c "hcloud ECS DeleteServers ..."' → warn (detected inner command)
+Expected: 无绕过成功 (no bypass succeeds)
+Actual: Both variations detected as destructive
+Result: PASS - no bypass succeeded
+Timestamp: 2026-09-20T05:06:00+08:00

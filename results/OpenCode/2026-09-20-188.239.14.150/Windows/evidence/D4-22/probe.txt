@@ -1,0 +1,8 @@
+D4-22: hook_check_deploy_plan named regression
+========================================
+Tool: huaweicloud_hook_check_deploy_plan
+Input: {"service":"FunctionGraph","action":"create","exposure":"public","internet_access":true,...}
+Expected: 公网暴露 FunctionGraph 等被拦截/告警
+Actual: decision=warn, findings=[{ruleId:"hwc-functiongraph-public-no-auth", severity:"warn"}, {ruleId:"hwc-sandbox-missing-ttl", severity:"warn"}]
+Result: PASS - public FunctionGraph exposure correctly warned
+Timestamp: 2026-09-20T05:06:00+08:00

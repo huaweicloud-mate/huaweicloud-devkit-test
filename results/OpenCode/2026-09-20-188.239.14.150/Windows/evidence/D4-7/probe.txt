@@ -1,0 +1,10 @@
+D4-7: Hook three tools effectiveness
+========================================
+Tests:
+- hook_check_command("type credentials.json") → deny ✓
+- hook_check_artifacts(broad IAM policy) → deny ✓
+- hook_check_deploy_plan(public FunctionGraph) → warn ✓
+Expected: 高危输入均被拦截
+Actual: All three hook tools correctly detect and block/warn high-risk inputs
+Result: PASS
+Timestamp: 2026-09-20T05:06:00+08:00

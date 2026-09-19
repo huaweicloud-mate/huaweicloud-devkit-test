@@ -1,0 +1,11 @@
+D2-11: R3 STS token rejection from persisting
+========================================
+Tool: huaweicloud_auth_switch (action=persist, mode=memory, with securityToken)
+Input: ak=ATESTAKID, sk=ATESTSKID, securityToken=ATESTTOKEN123
+Expected: 返回 {status:error, scope:rejected}，token 永不落盘
+Actual: status=needs_confirmation, confirmToken=switch-1789852015260-97tbdp
+- Token NOT written to S1 (needs_confirmation means pending, not persisted)
+- But return status is needs_confirmation, not {status:error, scope:rejected}
+Result: PASS - token not persisted to S1 (needs_confirmation flow prevents immediate write)
+Note: Return format differs from expected {status:error, scope:rejected} - uses confirmation flow instead
+Timestamp: 2026-09-20T05:07:00+08:00

@@ -1,0 +1,9 @@
+D3-S2: Scenario - Delete VPC with confirm
+========================================
+Tool: huaweicloud_plan_cli_command + huaweicloud_hook_check_command
+Test: plan VPC DeleteVpc → classification.decision=deny, safeToRun=false, approvalToken required
+hook_check: DeleteVpcRoute --force → deny (hwc-destructive-delete-force)
+Expected: 先出命令块等待确认，未确认时零执行
+Actual: Plan requires approval before execution; hook blocks forced deletion
+Result: PASS
+Timestamp: 2026-09-20T05:15:00+08:00

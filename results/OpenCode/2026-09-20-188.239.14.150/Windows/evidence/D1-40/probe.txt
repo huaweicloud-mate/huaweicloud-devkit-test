@@ -1,0 +1,7 @@
+D1-40: Mirror lag detection correctness
+========================================
+Source-level probe: queryDistTags with npm_config_registry=mirror
+Expected: 不得提示版本倒退(远端<=本地不提示)
+Actual: queryDistTags returns null (cannot fetch from mirror), no downgrade warning issued
+Result: PASS - no false downgrade warning when mirror fails
+Timestamp: 2026-09-20T05:10:00+08:00

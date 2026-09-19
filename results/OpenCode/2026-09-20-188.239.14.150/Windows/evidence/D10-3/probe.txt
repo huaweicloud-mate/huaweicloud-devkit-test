@@ -1,0 +1,24 @@
+D10-3: Routing accuracy + confusion matrix
+========================================
+Tool: node eval/harness/run-eval.mjs
+Expected: 路由准确率≥90%
+Actual: HIT=3 MISS=11 N/A=1, accuracy=21.4% (baseline)
+Details:
+- EXP-E01: MISS (expected ECS, got hcloud help)
+- EXP-E02: MISS (expected ECS, got hcloud help)
+- EXP-E03: MISS (expected OBS, got Sandbox+DevStation)
+- EXP-E04: MISS (expected EIP, got hcloud help)
+- EXP-E05: MISS (expected RDS, got hcloud help)
+- EXP-E06: HIT (expected DCS, got DDS+DCS)
+- EXP-E07: MISS (expected CBR, got hcloud help)
+- EXP-E08: N/A (diagnostic)
+- EXP-E09: HIT (expected CCE, got CCE+SWR)
+- EXP-E10: MISS (expected FunctionGraph)
+- EXP-E11: MISS (expected BSS)
+- EXP-E12: MISS (expected CES)
+- EXP-E13: MISS (expected ELB)
+- EXP-E14: MISS (expected IAM)
+- EXP-E15: HIT (expected Voucher)
+Result: FAIL - accuracy 21.4% < 90% target
+Root cause: serviceCatalog returns "Run hcloud --help" for most Chinese intents instead of routing to correct service
+Timestamp: 2026-09-20T05:08:00+08:00

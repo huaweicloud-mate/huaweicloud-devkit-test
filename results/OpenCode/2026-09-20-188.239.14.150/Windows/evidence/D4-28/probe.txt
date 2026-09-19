@@ -1,0 +1,22 @@
+D4-28: Node version safety hook chain
+========================================
+Source-level probe: classifyTextCommand + evaluateCommandRisk
+Tests:
+1. echo AK=AKIDtest SK=SKtest123 token=token123 password=Pass123
+   - classifyTextCommand: decision=allow, risk=not_huaweicloud (NOT blocked)
+   - evaluateCommandRisk: decision=allow (NOT blocked)
+   Expected: 高危命令决策 deny
+   Result: FAIL - credential echo NOT blocked by either path
+
+2. type credentials.json
+   - classifyTextCommand: decision=deny, risk=credential ✓
+   - evaluateCommandRisk: decision=deny ✓
+
+3. printenv HW_SECRET_KEY HW_ACCESS_KEY
+   - classifyTextCommand: decision=deny, risk=credential ✓ (safety-policy.mjs catches HW_)
+   - evaluateCommandRisk: decision=allow ✗ (risk-rule-engine misses HW_ prefix)
+
+Root cause (echo): No rule in cloud-risk-rules.json catches credential echo commands. redactEvidence() redacts evidence but no rule flags the command.
+Source: hdk/plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json (no echo/credential-leak rule)
+Result: FAIL - echo with credentials not denied
+Timestamp: 2026-09-20T05:10:00+08:00

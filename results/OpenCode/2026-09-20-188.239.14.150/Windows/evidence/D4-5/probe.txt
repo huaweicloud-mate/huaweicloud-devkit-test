@@ -1,0 +1,9 @@
+D4-5: Write operation misjudgment detection
+========================================
+Tool: huaweicloud_hook_check_command + huaweicloud_plan_cli_command
+Command: hcloud ECS DeleteServers --cli-region=cn-north-4 --project_id=test
+Expected: 写操作不被误判为只读 (write not misjudged as read-only)
+Actual (hook_check): decision=warn, findings=[{ruleId:"hwc-destructive-delete-operation", severity:"warn"}]
+Actual (plan_cli): classification.decision=deny, risk=write, safeToRun=false, approvalToken=81f95b69-64fc-4a56-9eea-545de888a488
+Result: PASS - delete operation correctly identified as destructive/write (not read-only/allow)
+Timestamp: 2026-09-20T05:05:00+08:00

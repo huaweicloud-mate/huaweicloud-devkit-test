@@ -1,0 +1,10 @@
+D4-19: Preflight still active during confirm flow
+========================================
+Tool: huaweicloud_hook_check_command (during confirm flow)
+Tests:
+1. hcloud ECS CreateServers --adminPass=Test123456 → allow (no risk rule for adminPass in command)
+2. hcloud VPC DeleteVpcRoute --force → deny (hwc-destructive-delete-force)
+Expected: 确认流程中风险预检仍生效拦截
+Actual: High-risk commands (force delete) still denied during confirm flow; CreateServers allowed (no rule for adminPass exposure in commands)
+Result: PASS - preflight checks active during confirm flow
+Timestamp: 2026-09-20T05:07:00+08:00

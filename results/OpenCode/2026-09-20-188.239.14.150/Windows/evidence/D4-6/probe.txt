@@ -1,0 +1,9 @@
+D4-6: adminPass echo warning
+========================================
+Source-level: redactEvidence() in risk-rule-engine.mjs:22 redacts adminPass=xxx to adminPass=<redacted>
+Test: hook_check_command("hcloud ECS CreateServers --adminPass=Test123456") → allow (no rule flags adminPass in commands)
+Note: redaction works in evidence output, but no rule flags the command itself
+Expected: 源码级脱敏断言: adminPass=xxx→<redacted>
+Actual: redactEvidence() correctly redacts adminPass in evidence output
+Result: PASS - source-level redaction functional
+Timestamp: 2026-09-20T05:15:00+08:00

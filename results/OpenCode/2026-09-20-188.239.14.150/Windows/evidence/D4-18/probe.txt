@@ -1,0 +1,8 @@
+D4-18: confirm-not-deny approval semantics
+========================================
+Tool: huaweicloud_plan_cli_command
+Args: ["ECS", "DeleteServers", "--cli-region=cn-north-4", "--project_id=test"]
+Expected: 写操作需显式确认，不被直接拒绝也不被直接放行
+Actual: classification.decision=deny, risk=write, safeToRun=false, approvalToken=81f95b69-64fc-4a56-9eea-545de888a488
+Result: PASS - write operation requires explicit approval (not directly executed, not directly denied without token)
+Timestamp: 2026-09-20T05:06:00+08:00

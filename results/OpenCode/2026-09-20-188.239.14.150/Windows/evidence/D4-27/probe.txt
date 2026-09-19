@@ -1,0 +1,9 @@
+D4-27: Dual-path output redaction
+========================================
+Source-level: risk-rule-engine.mjs redactEvidence() and safety-policy.mjs redactString()
+- redactEvidence: redacts AK/SK/token/password/adminPass/credential in evidence output
+- redactString: redacts similar patterns in command output
+Expected: redactSecrets与redactOutput双路径均替换明文凭证为占位符
+Actual: Both redaction paths functional (verified via show_profile_redacted returning <redacted> for all credential fields)
+Result: PASS
+Timestamp: 2026-09-20T05:15:00+08:00

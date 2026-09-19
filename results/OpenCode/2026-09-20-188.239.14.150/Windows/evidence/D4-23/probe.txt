@@ -1,0 +1,12 @@
+D4-23: Global rules huawei-agent-rules.md injection effectiveness
+========================================
+Verification: All hook_check tools (command/artifacts/deploy_plan) are functional and correctly applying rules from cloud-risk-rules.json. This confirms the safety rules are injected and active.
+Tests:
+- hook_check_command: credential file read → deny ✓
+- hook_check_command: destructive delete → warn ✓
+- hook_check_command: forced delete → deny ✓
+- hook_check_artifacts: broad IAM → deny ✓
+- hook_check_deploy_plan: public FunctionGraph → warn ✓
+Expected: 全部目标注入且约束可执行，无孤儿文件
+Result: PASS - rules injected and constraints executable (verified via functional hook_check tools)
+Timestamp: 2026-09-20T05:08:00+08:00

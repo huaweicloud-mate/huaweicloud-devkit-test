@@ -1,0 +1,12 @@
+D1-39: Windows upgrade detection chain availability
+========================================
+Tool: huaweicloud_check_update + source-level queryDistTagsSync/queryDistTags/judgeUpdate
+Expected: Windows 下检测链真实可用，不得 EINVAL 静默失败
+Actual:
+- check_update MCP tool: result=check_failed, latestStable=null, note="检测失败，不影响使用" (failure reported, not silent)
+- queryDistTagsSync: null (failed to fetch, but no EINVAL)
+- queryDistTags: null (failed to fetch, but no EINVAL)
+- judgeUpdate("1.1.5", {latest:"1.1.6"}, null): result=update_available, updateAvailable=true ✓ (works correctly when given data)
+Result: PASS - no EINVAL silent failure; check_update reports failure; judgeUpdate works correctly
+Note: queryDistTags fails to fetch from npm registry (likely network/proxy issue), but failure is reported not silent
+Timestamp: 2026-09-20T05:05:00+08:00

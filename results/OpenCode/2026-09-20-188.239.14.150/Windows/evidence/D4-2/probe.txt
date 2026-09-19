@@ -1,0 +1,11 @@
+D4-2: Credential env print interception
+========================================
+Tool: huaweicloud_hook_check_command
+Command: printenv HW_SECRET_KEY HW_ACCESS_KEY
+Expected: 被阻断 (blocked - deny)
+Actual: decision=allow, findings=[]
+Root cause: cloud-risk-rules.json hwc-command-env-dump rule regex checks for (HUAWEICLOUD|HWC_|HCLOUD|OS_) but HW_SECRET_KEY/HW_ACCESS_KEY use "HW_" prefix not "HWC_". Rule does not match.
+Source: hdk/plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:39 regex "(HUAWEICLOUD|HWC_|HCLOUD|OS_)"
+Result: FAIL - credential env print was NOT blocked
+Note: safety-policy.mjs classifyTextCommand DOES deny this (different rule set), but MCP tool uses risk-rule-engine path which has the gap
+Timestamp: 2026-09-20T05:05:00+08:00

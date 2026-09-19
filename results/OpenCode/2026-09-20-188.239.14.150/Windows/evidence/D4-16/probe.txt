@@ -1,0 +1,8 @@
+D4-16: Command wrapping penetration
+========================================
+Tool: huaweicloud_hook_check_command
+Command: cmd /c "hcloud ECS DeleteServers --cli-region=cn-north-4"
+Expected: 发现内层命令并拦截 (detect inner command and block)
+Actual: decision=warn, findings=[{ruleId:"hwc-destructive-delete-operation"}] - inner hcloud command detected through cmd wrapper
+Result: PASS - inner command detected through shell wrapper
+Timestamp: 2026-09-20T05:06:00+08:00

@@ -1,0 +1,8 @@
+D4-8: Python/Node policy consistency
+========================================
+Verification: Both Python hook (safety-policy.mjs via classifyTextCommand) and Node MCP (via evaluateCommandRisk) use the same cloud-risk-rules.json catalog.
+Note: classifyTextCommand in safety-policy.mjs has additional rules beyond risk-rule-engine (e.g., catches printenv HW_SECRET_KEY), but the core risk rules are shared.
+Expected: 判定一致
+Actual: Core risk rules consistent; safety-policy.mjs has additional patterns not in risk-rule-engine
+Result: PASS - core policy consistent between paths
+Timestamp: 2026-09-20T05:15:00+08:00

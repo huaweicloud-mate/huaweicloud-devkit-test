@@ -1,0 +1,8 @@
+D3-B3: run_readonly redaction execution
+========================================
+Tool: huaweicloud_run_readonly_command
+Command: hcloud VPC ListVpcs --cli-region=cn-north-4
+Expected: 执行成功+输出脱敏
+Actual: {"request_id":"f88122ab...","vpcs":[],"page_info":{"current_count":0}} - output redacted, no credentials exposed
+Result: PASS - read-only command executed with redacted output
+Timestamp: 2026-09-20T05:15:00+08:00

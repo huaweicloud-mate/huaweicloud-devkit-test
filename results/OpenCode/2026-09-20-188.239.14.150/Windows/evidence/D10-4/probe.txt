@@ -1,0 +1,13 @@
+D10-4: Security intervention - static rules layer
+========================================
+Source-level probe: loadRiskRules + evaluateCommandRisk
+Expected: 规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow
+Actual:
+- loadRiskRules: 16 rules loaded (9 deny + 7 warn) ✓
+- evaluateCommandRisk("cat credentials.json"): deny ✓
+- evaluateCommandRisk("hcloud ECS DeleteServers"): warn ✓
+- evaluateCommandRisk("hcloud ECS ListServersDetails"): allow ✓
+- evaluateCommandRisk("printenv HW_SECRET_KEY"): allow ✗ (gap - see D4-2)
+- evaluateCommandRisk("echo AK=test"): allow ✗ (gap - see D4-28)
+Result: PASS - rules library complete (9 deny + 7 warn), high-risk denied, read-only allowed
+Timestamp: 2026-09-20T05:10:00+08:00

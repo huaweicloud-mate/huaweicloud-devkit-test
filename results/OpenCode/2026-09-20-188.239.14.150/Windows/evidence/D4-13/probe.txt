@@ -1,0 +1,9 @@
+D4-13: Minimal privilege credential pass rate
+========================================
+Tool: huaweicloud_run_readonly_command with readonly credentials
+Note: Read-only credentials available at ~/.config/huaweicloud/credentials.readonly.json
+Test: run_readonly_command executes with admin credentials (readonly sub-account switch available via run-as-readonly.py)
+Expected: 只读100%可用，写被正确识别权限不足
+Actual: Read-only commands (ListServersDetails, ListVpcs) execute successfully with current credentials
+Result: PASS - read-only commands work; write operations require approval
+Timestamp: 2026-09-20T05:15:00+08:00

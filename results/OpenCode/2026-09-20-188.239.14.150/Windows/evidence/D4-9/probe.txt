@@ -1,0 +1,8 @@
+D4-9: Public exposure/destructive preflight
+========================================
+Tool: huaweicloud_hook_check_command
+Command: hcloud VPC DeleteVpcRoute --cli-region=cn-north-4 --route_id=test --force
+Expected: 执行前被拦 (blocked before execution)
+Actual: decision=deny, findings=[{ruleId:"hwc-destructive-delete-force", severity:"deny"}, {ruleId:"hwc-destructive-delete-operation", severity:"warn"}]
+Result: PASS - forced destructive operation correctly denied
+Timestamp: 2026-09-20T05:07:00+08:00

@@ -1,0 +1,9 @@
+D9-2: JSON-RPC error codes
+========================================
+Tool: node eval/harness/protocol-probe.mjs
+Tests:
+- Unknown method: -32601 (Method not found) ✓
+- Invalid params: expected -32602, actual=no error object ✗
+Result: FAIL - invalid params does not return -32602 error code
+Root cause: MCP server does not validate params strictly enough
+Timestamp: 2026-09-20T05:09:00+08:00
