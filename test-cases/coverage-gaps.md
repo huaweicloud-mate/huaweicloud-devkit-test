@@ -130,4 +130,6 @@
 | D3-S5 | 复合意图分层路由 | 路由质量 | P2 |
 | D3-S6 | FunctionGraph 定时任务 | C 编排链路变体 | P2 |
 
-> 设计原则：路由层锚定 `serviceCatalog(intent)` 确定性映射（tools.mjs:1776），工具层走源码级直调或真云 E2E，**不依赖 LLM**，可进 daily 实跑。设计级 197 → **203 条**，daily 设计级 92 → **98 条**。
+> 2026-09-19 二补复杂场景：D3-S7 跨服务交付（Web+RDS 编排+归零）、D3-S8 操作失败后排障指引（explain_error 确定性错误码分类），均为确定性链路、不依赖 LLM。
+
+> 设计原则：路由层锚定 `serviceCatalog(intent)` 确定性映射（tools.mjs:1776），工具层走源码级直调或真云 E2E，**不依赖 LLM**，可进 daily 实跑。设计级 197 → **205 条**，daily 设计级 92 → **100 条**。

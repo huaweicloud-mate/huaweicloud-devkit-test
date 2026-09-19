@@ -73,6 +73,7 @@ NEW_IDS_20260919 = {
     "D1-65", "D1-66", "D1-67", "D1-68", "D1-69", "D1-70",
     "D2-26", "D2-27",
     "D3-S1", "D3-S2", "D3-S3", "D3-S4", "D3-S5", "D3-S6",
+    "D3-S7", "D3-S8",
 }
 
 # 存量 v1.5 其余维度（D3~D10 全区间）——先于未知 ID 判定
@@ -952,6 +953,17 @@ add("D3-S6", "D3功能", "场景-FunctionGraph定时任务", "P2", "真云 Funct
     "①serviceCatalog 路由→huawei-functiongraph/FunctionGraph ②hcloud FunctionGraph CreateFunction ③配置定时触发器 ④核对返回函数URN/触发器绑定",
     "函数创建成功+定时触发器绑定，返回可调用标识", "实: serviceCatalog functiongraph 路由; hcloud-cli FunctionGraph CreateFunction",
     "plan_cli_command/run_approved_command", "半自动", "COMMON|<代表: Hermes>|<证据: 函数URN+触发器>|<阻塞: 需真云FG配额>")
+
+add("D3-S7", "D3功能", "场景-跨服务交付(Web应用+RDS)并归零", "P1", "真云凭证 + 沙箱/RDS 配额",
+    "提示语「部署一个带 MySQL 数据库的 Web 应用」",
+    "①serviceCatalog 复合意图→命中 RDS + 部署目标(sandbox/ECS) ②建 RDS 实例 ③建沙箱/部署 Web ④配连接串(数据库地址注入应用) ⑤验证应用可访问且读写库正常 ⑥测后 close_session + 删除本次创建的 RDS/资源",
+    "多服务编排顺序正确(先建库后部署)；连接串正确注入；应用可访问且读写库正常；测后仅本次创建的 RDS/沙箱被清理归零，零残留", "实: serviceCatalog 多路命中 + capability-discovery Scenario Routing; RDS/sandbox 工具链",
+    "sandbox_connect/sandbox_deploy_nginx/plan_cli_command/run_approved_command", "半自动", "COMMON|<代表: Hermes>|<证据: 编排顺序+连接串注入+归零>|<阻塞: 需真云RDS/sandbox配额>")
+add("D3-S8", "D3功能", "场景-操作失败后排障指引", "P1", "真云凭证(可注入失效/过期凭证)",
+    "注入权限不足错误(如 APIGW.0301/APIGW.0802 或 PolicyNotAuthorized)",
+    "①注入凭证过期/权限不足场景 ②触发一次失败命令 ③核对 AI 走 troubleshooting 分类(权限 vs 区域 vs 配额) ④断言给出可执行下一步(如「用 IAM KeystoneListProjects 查project_id」而非裸报错堆栈)",
+    "失败被正确分类(权限/区域/配额)；给出可执行的下一步检查命令，非裸报错或空堆栈", "实: tools.explain_error(363)/extractApiError(559); huaweicloud-troubleshooting workflow",
+    "explain_error/run_readonly_command", "脚本", "COMMON|<代表: Hermes>|<证据: 失败分类+可执行下一步>|<阻塞: 可注入失效凭证>")
 
 # ---------- D4 安全 ----------
 add("D4-1", "D4安全", "凭证文件读取拦截", "P0", "含.hcloud/.huaweicloud目录环境",
