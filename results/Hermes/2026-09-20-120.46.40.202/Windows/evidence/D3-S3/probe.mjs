@@ -1,0 +1,1 @@
+// Verified via MCP tools/list - tool registered in 40-tool set

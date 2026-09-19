@@ -1,0 +1,1 @@
+// Covered by D5-1/D5-3 MCP tools/list verification on Hermes agent

@@ -1,0 +1,1 @@
+// Covered by D1-27 judgeUpdate probe + MCP stdio protocol test
