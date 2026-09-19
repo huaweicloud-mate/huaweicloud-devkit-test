@@ -68,12 +68,20 @@ NEW_REVIEW_IDS_20260911 = {
 # 2026-09-18 D10-4 拆条：新增 D10-9（安全干预 LLM 会话层），固定日期可溯源
 NEW_IDS_20260918 = {"D10-9"}
 
+# 2026-09-19 覆盖核对补缺口：G18-G27 历史未落地 + N1-N7 新缺口，固定日期可溯源
+NEW_IDS_20260919 = {
+    "D1-65", "D1-66", "D1-67", "D1-68", "D1-69", "D1-70",
+    "D2-26", "D2-27",
+}
+
 # 存量 v1.5 其余维度（D3~D10 全区间）——先于未知 ID 判定
 LEGACY_PREFIXES = ("D3-", "D4-", "D5-", "D6-", "D7-", "D8-", "D9-", "D10-")
 
 def gen_ts(rid):
     if rid in NEW_IDS_20260918:
         return "2026-09-18"          # 2026-09-18 D10-4 拆条新增
+    if rid in NEW_IDS_20260919:
+        return "2026-09-19"          # 2026-09-19 覆盖核对补缺口新增
     if rid in NEW_REVIEW_IDS_20260911:
         return "2026-09-11"          # 2026-09-11 全量评审补充：固定日期（可溯源 REV-20260911004604）
     for pred, ts in BATCH_TS:
@@ -577,6 +585,36 @@ add("D1-64", "D1安装", "agent 自动检测匹配与版本", "P2", "多 agent c
     "①detectAgent(clientInfo) ②核对 harness/version ③detectVersion(versionConfig) ④对照 AGENTS 注册表",
     "clientInfo 正确映射 AGENTS 注册表；detectVersion 按 versionConfig 返回；未知 agent 合理兜底", "实: agent-registry.matchAgent(168)/detectVersion(328)/AGENTS(23); agent-detect.detectAgent(15)",
     "mcp-server", "脚本", "COMMON|<代表: 多 agent clientInfo>|<证据: 匹配表+版本>|<阻塞: 需多 agent 样本>")
+add("D1-65", "D1安装", "调试模式环境变量", "P2", "可设 env 的进程环境",
+    "HUAWEICLOUD_DEVKIT_DEBUG=1/true/off",
+    "①设 HUAWEICLOUD_DEVKIT_DEBUG=1 跑 queryDistTags ②核对 DEBUG 分支生效(打印调试日志) ③off 则无调试输出",
+    "DEBUG===1/true 时开启调试日志；未设/其他值不开启；不影响正常返回", "实: update-check.mjs(211)/telemetry.mjs(81) DEBUG 判断",
+    "check_update", "脚本", "COMMON|<代表: 隔离进程>|<证据: 调试日志开关>|<阻塞: 无>")
+add("D1-66", "D1安装", "遥测开关与端点环境变量", "P2", "可设 env 的进程环境",
+    "HUAWEICLOUD_DEVKIT_TELEMETRY=off + HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT",
+    "①设 TELEMETRY=off ②核对 isTelemetryEnabled()=false ③设自定义 ENDPOINT ④核对 endpoint 取值",
+    "TELEMETRY!=off 时开遥测、=off 关闭；ENDPOINT 未设回退 DEFAULT_ENDPOINT、设了取自定义", "实: telemetry.isTelemetryEnabled(175)/endpoint(180)/mcp-server(32)",
+    "mcp-server", "脚本", "COMMON|<代表: 隔离进程>|<证据: 开关+端点取值>|<阻塞: 无>")
+add("D1-67", "D1安装", "Agent toolkit 模式与 DSH 跳过安装环境变量", "P2", "可设 env 的进程环境",
+    "HUAWEICLOUD_AGENT_TOOLKIT_MODE=local + HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL=1",
+    "①设 AGENT_TOOLKIT_MODE=local 装 DSH ②核对 env 注入 ③设 SKIP_DSH=1 重装 ④核对跳过 DSH 插件安装",
+    "AGENT_TOOLKIT_MODE 注入 agent env(REQUIRED_ENV_KEYS 含 HCLOUD_BIN)；SKIP_DSH=1 时跳过 DSH 插件安装", "实: setup-cli.mjs(249/2193)/mcp-config-merge.mjs(95)",
+    "install", "手动", "COMMON|<代表: DSH 客户端>|<证据: env 注入+跳过安装>|<阻塞: 需 DSH 环境>")
+add("D1-68", "D1安装", "图标离线与区域环境变量", "P2", "可设 env 的进程环境",
+    "HUAWEICLOUD_ICONS_OFFLINE=1 + HUAWEICLOUD_REGION/HW_REGION",
+    "①设 ICONS_OFFLINE=1 ②核对 getServiceIcon 离线分支(读本地而非网络) ③设 HUAWEICLOUD_REGION ④核对凭据 region 取值",
+    "ICONS_OFFLINE=1 时图标走本地 manifest 不联网；HUAWEICLOUD_REGION 优先于 HW_REGION 作为默认 region", "实: icon-library.mjs(52)/credentials.mjs(133/261/284)",
+    "get_service_icon/auth_init", "脚本", "COMMON|<代表: 隔离进程>|<证据: 离线图标+region取值>|<阻塞: 无>")
+add("D1-69", "D1安装", "CLI help 子命令", "P2", "已安装环境",
+    "hcloud-cli help 命令",
+    "①执行 help 子命令 ②核对输出帮助文本(命令列表/用法)",
+    "help 子命令输出帮助且有退出码 0，非 TODO/空输出", "实: setup-cli.mjs case 'help'(5062)",
+    "install", "脚本", "COMMON|<代表: CLI>|<证据: help 输出>|<阻塞: 无>")
+add("D1-70", "D1安装", "代理配置与 WebSocket 代理", "P1", "可设 proxy env/配置的进程环境",
+    "HTTP_PROXY/HTTPS_PROXY/NO_PROXY + proxy.json",
+    "①writeProxyConfig ②readProxyConfig 核对 ③getProxySettings(targetUrl) ④no_proxy 绕过 ⑤createProxyWebSocket 走代理",
+    "proxy.json 读写/clear 正确；getProxySettings 拼 env+file 且 no_proxy 命中返回 null；有代理时 WebSocket 走 undici ProxyAgent、无代理回退 globalThis.WebSocket", "实: proxy-config.getProxySettings(60)/writeProxyConfig(23)/clearProxyConfig(35); proxy-agent.createProxyWebSocket(52)/getWebSocketImpl(73)/getProxyDispatcher(26)",
+    "install", "脚本", "COMMON|<代表: 隔离进程+proxy夹具>|<证据: 配置读写+WS代理选择>|<阻塞: 需可控proxy>")
 add("D2-8", "D2认证", "credentials变更后auth回归", "P1", "真云+本地凭证",
     "credentials.mjs 变更后的 auth init",
     "①auth init ②验证KooCLI/OBS/沙箱三端 ③脱敏检查",
@@ -723,6 +761,16 @@ add("D2-25", "D2认证", "KooCLI 探测状态分类", "P2", "hcloud 各状态环
     "①findHcloudBin ②classifyHcloudProbe(sandbox_home_failure/privacy_pending/正常) ③核对分类与 nextStep",
     "探测状态正确分类并给出对应 nextStep；未安装/沙箱/隐私待确认三态区分", "实: hcloud-probe.classifyHcloudProbe(55)/findHcloudBin(11)/hcloudProbeNextStep(138)",
     "auth_status", "脚本", "COMMON|<代表: 隔离进程>|<证据: 状态分类+nextStep>|<阻塞: 需 hcloud 样本>")
+add("D2-26", "D2认证", "凭证备份与恢复", "P1", "已同步凭证的隔离 HOME",
+    "backupGlobalCredentials/restoreGlobalCredentialsBackup",
+    "①backupGlobalCredentials ②核对备份文件写入 ③破坏主凭证 ④restoreGlobalCredentialsBackup ⑤核对还原",
+    "备份/恢复闭环：备份写入独立文件、恢复后凭证与备份一致、恢复幂等不报错", "实: credentials.backupGlobalCredentials(350)/restoreGlobalCredentialsBackup(363)",
+    "huaweicloud_auth_sync", "脚本", "COMMON|<代表: 隔离 HOME>|<证据: 备份文件+恢复比对>|<阻塞: 需真云凭证>")
+add("D2-27", "D2认证", "KooCLI 版本管理", "P2", "package.json 含 kooCliVersion",
+    "7.2.12/7.2.9 等版本串",
+    "①getKooCliVersion ②parseHcloudVersion('hcloud 7.2.12 ...') ③compareVersion(7.2.12,7.2.9) ④kooCliDownloadBase",
+    "getKooCliVersion 读 kooCliVersion；parseHcloudVersion 正则提取首个 x.y.z；compareVersion 正确比较；downloadBase=KOO_CLI_BASE/<version或latest>", "实: koocli-version.getKooCliVersion(12)/parseHcloudVersion(21)/compareVersion(27)/kooCliDownloadBase(45)/KOO_CLI_BASE(8)",
+    "auth_status", "脚本", "COMMON|<代表: 隔离进程>|<证据: 版本解析/比较/下载基址>|<阻塞: 无>")
 
 # ---------- D3 功能 ----------
 add("D3-A1", "D3功能", "skill检索完整性", "P1", "本地~30个SKILL.md",
@@ -858,6 +906,16 @@ add("D3-C12", "D3功能", "沙箱批量关闭与分块上传参数", "P2", "沙�
     "①多会话 closeAllSessions ②核对全关 ③大文件上传 ④核对 UPLOAD_CHUNK_SIZE/BATCH_SIZE/MAX_RETRIES 参数",
     "closeAllSessions 批量关闭所有会话；分块上传按 chunk=30000/batch=2/retries=3 且幂等", "实: session-manager.closeAllSessions(1054)/splitBase64Chunks(175)/UPLOAD_CHUNK_SIZE(169)",
     "sandbox_close_session/sandbox_upload_project", "半自动", "COMMON|<代表: Hermes>|<证据: 会话数+分块参数>|<阻塞: 需沙箱>")
+add("D3-C13", "D3功能", "OBS 静态网站托管配置", "P1", "真云 OBS bucket + AK/SK",
+    "obs_set_website_config get/set/delete",
+    "①get 未配置 bucket ②set indexDocument ③get 核对 ④delete ⑤无 indexDocument set 报错",
+    "get/set/delete 走 AWS4 签名 REST；set 必须 indexDocument(缺失报错)；errorDocument 可选；返回 status 与 XML 一致", "实: tools.handleObsWebsiteConfig(2303)/obsSignedRequest",
+    "huaweicloud_obs_set_website_config", "脚本", "COMMON|<代表: 真云 OBS>|<证据: 配置 XML+状态码>|<阻塞: 需真云 bucket>")
+add("D3-C14", "D3功能", "沙箱 HDKit 服务参数与 hwlink 凭证", "P2", "沙箱 DevStation 配额",
+    "hdkitConnect(source/env/git/template_id/flavor_id) + hwlink createConnection",
+    "①hdkitConnect 带 source/env ②hdkitCredentials 缺 sessionId+devStageId 报错 ③hwlink getCredentials ④createConnection",
+    "hdkitConnect 透传可选参数到 body；hdkitCredentials 缺 sessionId 且缺 devStageId 时报错；hwlink getCredentials 返回 {ak,sk,securitytoken}；createConnection 用 securitytoken 走 x-security-token 签名头", "实: hdkitservice-api.hdkitConnect(90)/hdkitCredentials(101); hwlink-api.getCredentials(80)/createConnection(122)",
+    "sandbox_connect/sandbox_credentials", "半自动", "COMMON|<代表: Hermes 沙箱>|<证据: 参数透传+凭证结构>|<阻塞: 需沙箱配额>")
 
 # ---------- D4 安全 ----------
 add("D4-1", "D4安全", "凭证文件读取拦截", "P0", "含.hcloud/.huaweicloud目录环境",
@@ -978,6 +1036,21 @@ add("D4-26", "D4安全", "findings 证据脱敏", "P2", "hook 环境 + 含凭证
     "①触发含凭证的命令规则 ②核对 findings.evidence 已脱敏 ③对照原命令",
     "findings.evidence 中 AK/SK/token/password 均被 <redacted> 替换，不泄露明文", "实: risk-rule-engine.redactEvidence(19)",
     "hook_check_command", "脚本", "COMMON|<代表: hook客户端>|<证据: findings.evidence 脱敏前后>|<阻塞: 需hook客户端>")
+add("D4-27", "D4安全", "双路径输出脱敏", "P1", "含凭证的输出文本",
+    "包含 AK/SK/securityToken/password 的多行输出",
+    "①redactSecrets(text) ②redactOutput(text) ③核对两路径均脱敏 ④对照未脱敏点",
+    "redactSecrets(策略正则)与 redactOutput(CLI输出)双路径均替换明文凭证为占位符；不对非敏感字段误伤", "实: safety-policy.redactSecrets(49)/hcloud-cli.redactOutput(587)",
+    "run_readonly_command", "脚本", "COMMON|<代表: 隔离进程>|<证据: 脱敏前后对照>|<阻塞: 无>")
+add("D4-28", "D4安全", "Node 版安全 hook 链路", "P0", "hook-capable 客户端 + hooks.json 注册",
+    "高危命令经 PreToolUse hook",
+    "①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs ③核对 commandText 提取 ④classifyTextCommand=deny 时输出 permissionDecision:deny",
+    "hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出", "实: hooks/huaweicloud-safety.mjs commandText/deny; safety-policy.classifyTextCommand(384)",
+    "hook_check_command", "脚本", "COMMON|<代表: hook客户端>|<证据: deny 决策+reason>|<阻塞: 需hook客户端>")
+add("D4-29", "D4安全", "分类断言与原始命令分类入口", "P2", "含各类命令样本",
+    "只读/写/危险命令集合",
+    "①classifyRawCommand(cmd) ②对照 classifyTextCommand ③assertAllowed(result) allow/deny 分支",
+    "classifyRawCommand=classifyTextCommand 包装；DENY 决策 assertAllowed 抛拒绝、allow 通过；分类结果含 decision/reason", "实: safety-policy.classifyRawCommand(=classifyTextCommand 384)/assertAllowed(451)",
+    "hook_check_command", "脚本", "COMMON|<代表: 隔离进程>|<证据: 分类+断言分支>|<阻塞: 无>")
 
 # ---------- D5 客户端矩阵 ----------
 add("D5-1", "D5客户端", "清单发现加载", "P1", "各客户端环境",
@@ -1063,6 +1136,11 @@ add("D6-8", "D6性能", "MCP 工具调用超时（网络/后端挂起）", "P1",
     "①记录基线内存 ②注入 60s 挂起发起 run_readonly_command ③记录实际耗时 T ④断言 25s≤T≤35s（≈30s 阈值） ⑤断言 isError=true + content 含 'timeout' + code=ETIMEDOUT ⑥立即再发起正常调用（无挂起）→断言成功（isError=false）⑦断言内存增量 <50MB",
     "超时在 25~35s 内返回（不无限挂起/不提前误报）；isError=true 且 error.code=ETIMEDOUT + content 含 'timeout'；后续调用恢复成功（无 ECONNRESET 残留）；heapUsed 增量 <50MB",
     "通: 超时与恢复标准实践; 关联 D6-6、D9-9; R11 补强: 30s阈值+ETIMEDOUT码+50MB内存上限", "run_readonly_command/plan_cli_command", "脚本", "COMMON|<代表: MCP进程+夹具>|<证据: 耗时窗口+isError+内存增量>|<阻塞: 可注入延迟夹具>")
+add("D6-9", "D6性能", "缓存清理三入口", "P2", "已产生缓存的进程环境",
+    "invalidateUpdateCache/clearIconCache/clearMarketCache",
+    "①预热更新/图标/市场缓存 ②分别调三个清理函数 ③核对缓存文件/内存态清空 ④重复清理幂等",
+    "三缓存清理入口各自清空对应缓存且幂等；清理后再查询触发重新拉取", "实: update-check.invalidateUpdateCache(302)/icon-library.clearIconCache(16)/search-market.clearMarketCache(82)",
+    "check_update/get_service_icon/search_marketplace", "脚本", "COMMON|<代表: 隔离进程>|<证据: 缓存清空+幂等>|<阻塞: 无>")
 add("D9-9", "D9协议", "tools/call 超时协议语义与取消", "P1", "可注入延迟的 MCP 客户端/夹具（支持读取 initialize 返回的 capabilities）",
     "断言契约：①能力探测=读 initialize.result.capabilities.notifications/cancellation 是否存在——不存在→标记 SPEC-MISMATCH 不假定支持 ②超时错误=JSON-RPC error 对象 {code:-32000, message:含 'timeout'}（精确值）③取消通知=notifications/cancelled 请求（含 requestId）",
     "①源码级: node eval/harness/protocol-probe.mjs 探测 initialize 返回的 capabilities.cancellation（实测当前未声明→SPEC-MISMATCH）②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）",
@@ -1142,6 +1220,16 @@ add("D8-8", "D8质量", "遥测策略端到端（trackTool/trackSandbox/hook 事
     "①触发 read/write 命令 ②触发 sandbox 连接 ③核对遥测记录 ④核对脱敏",
     "事件完整上报且不含明文凭证", "遥测策略契约（补自 G5）",
     "mcp-server", "脚本", "")
+add("D8-9", "D8质量", "安装 ID 与遥测值脱敏", "P2", "无遥测 ID 的环境",
+    "generateOrRecoverInstallId + sanitizeValue",
+    "①generateOrRecoverInstallId ②核对 ID 落盘且二次调用稳定 ③sanitizeValue 输入凭证/非法字符 ④核对脱敏",
+    "installId 生成/恢复稳定持久；sanitizeValue 移除 AK/SK/token 等敏感值与非法字符，不改变合法值", "实: telemetry.generateOrRecoverInstallId(150)/sanitizeValue(189)",
+    "mcp-server", "脚本", "COMMON|<代表: 隔离进程>|<证据: ID稳定+脱敏>|<阻塞: 无>")
+add("D8-10", "D8质量", "MCP 配置备份与合并", "P2", "带 MCP 配置的隔离 HOME",
+    "mcp-config-backup/merge 全链路",
+    "①mergeCommandStyle ②mergeArgsStyle ③mergeMcpServersFile ④extractUserDelta/applyUserDelta ⑤takeAgentDelta/saveAgentDelta/purgeBackup",
+    "命令/参数/文件三风格合并正确；用户 delta 提取再应用幂等；agent delta 持久化与 purgeBackup 清空", "实: mcp-config-merge.mergeCommandStyle(36)/mergeArgsStyle(58)/mergeMcpServersFile(85)/extractUserDelta(98)/applyUserDelta(118); mcp-config-backup.takeAgentDelta(47)/saveAgentDelta(33)/purgeBackup(62)",
+    "install", "脚本", "COMMON|<代表: 隔离 HOME>|<证据: 合并结果+delta回放>|<阻塞: 无>")
 
 # ---------- D9 协议 ----------
 add("D9-1", "D9协议", "tools/list合规", "P1", "MCP Inspector/客户端",
@@ -1191,6 +1279,11 @@ add("D9-10", "D9协议", "MCP remote transport（HTTP/WS 远程服务）", "P1",
     "①--transport remote 启动 ②核对 port=9528/host=127.0.0.1 ③initialize/tools/list ④对照 stdio 路径",
     "remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 port/host 用默认值", "实: mcp-server-remote.startRemoteServer(11)/DEFAULT_PORT(8); mcp-server.mjs transport 分支(56)",
     "mcp-server", "脚本", "COMMON|<代表: remote 客户端>|<证据: 端口监听+协议响应>|<阻塞: 需 remote 客户端>")
+add("D9-11", "D9协议", "WebSocket 隧道通道生命周期", "P1", "hwlink mux 环境",
+    "HwlinkTunnelChannel({remotePort,...})",
+    "①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localServer/readyPromise/subConnections 清理",
+    "通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 localServer 关闭、subConnections 清空、onClose 回调触发", "实: ws-exec/hwlink-tunnel-channel.HwlinkTunnelChannel",
+    "mcp-server", "脚本", "COMMON|<代表: 隧道 mux 夹具>|<证据: ready/close 生命周期>|<阻塞: 需 hwlink mux>")
 
 # ---------- D10 Agent评测 ----------
 add("D10-1", "D10评测", "工具描述可选择性", "P1", "评测harness",

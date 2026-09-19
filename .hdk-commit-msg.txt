@@ -1,0 +1,22 @@
+test: 补17个源码能力覆盖缺口(G18-G27真实落地 + N1-N7新缺口)
+
+历史勘误：coverage-gaps.md 曾记录「2026-09-17 G18-G27 已落10用例、0缺口」，
+经逐项核对不实——D1-65~69/D2-26/D4-27/D8-9/10/D6-9 从未写入 gen_matrix.py 真源。
+本次全部真实落地 + 补核出 7 个新缺口，共 17 个：
+
+D1-65 调试模式env / D1-66 遥测开关端点env / D1-67 toolkit模式+跳过DSH env
+D1-68 图标离线+区域env / D1-69 CLI help / D1-70 代理配置+WS代理(N1)
+D2-26 凭证备份恢复 / D2-27 KooCLI版本管理(N3)
+D3-C13 OBS静态网站托管(N5) / D3-C14 HDKit参数+hwlink凭证(N4+N6)
+D4-27 双路径输出脱敏 / D4-28 Node版安全hook链路(hooks.json注册.mjs) / D4-29 分类断言(N7)
+D6-9 缓存清理三入口 / D8-9 安装ID+遥测脱敏 / D8-10 MCP配置备份合并
+D9-11 WebSocket隧道通道生命周期(N2)
+
+关键修正：D4-25 指向 .py 实为 Hermes 双轨之一，hooks.json 现注册 .mjs(Node)，
+故补 D4-28 Node hook 链路(而非改 .py 指向)。
+
+变更：设计级母版 180→197，daily 72→92；禁止剪枝范围扩展 D4(1-29)+D9(1-11)；
+gen_ts 新增 NEW_IDS_20260919 固定时间戳避免可复现门禁漂移；
+verify_new.py 断言同步(197)，gen_tracing/gen_daily P1_SMOKE 幽灵引用 D2-26/D4-27 已转正。
+
+门禁 verify_new.py 全绿(exit 0，含生成脚本可复现校验)。
