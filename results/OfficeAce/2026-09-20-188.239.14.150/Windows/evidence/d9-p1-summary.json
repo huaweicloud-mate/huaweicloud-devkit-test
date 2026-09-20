@@ -1,0 +1,208 @@
+{
+  "D9-1": {
+    "caseId": "D9-1",
+    "title": "tools/list合规",
+    "steps": [
+      {
+        "toolCount": 40,
+        "uniqueCount": 40,
+        "allHaveSchema": true,
+        "pass": true
+      }
+    ],
+    "verdict": "PASS",
+    "summary": "40 tools, 40 unique, schema=true"
+  },
+  "D9-2": {
+    "caseId": "D9-2",
+    "title": "JSON-RPC错误码",
+    "steps": [
+      {
+        "test": "unknown method",
+        "code": -32601,
+        "pass": true
+      },
+      {
+        "test": "missing name",
+        "pass": true
+      },
+      {
+        "test": "unknown tool",
+        "pass": true
+      }
+    ],
+    "verdict": "PASS",
+    "summary": "-32601=-32601, missing=true, unknown=true"
+  },
+  "D9-3": {
+    "caseId": "D9-3",
+    "title": "tools/call响应格式",
+    "steps": [
+      {
+        "test": "success call",
+        "pass": true
+      },
+      {
+        "test": "error call",
+        "pass": true
+      }
+    ],
+    "verdict": "PASS",
+    "summary": "success=true, error=true"
+  },
+  "D9-4": {
+    "caseId": "D9-4",
+    "title": "协议生命周期",
+    "steps": [
+      {
+        "step": "initialize",
+        "pass": true
+      },
+      {
+        "step": "notifications/initialized",
+        "pass": true
+      },
+      {
+        "step": "tools/list",
+        "pass": true
+      },
+      {
+        "step": "tools/call",
+        "pass": true
+      },
+      {
+        "step": "capabilities",
+        "pass": true
+      }
+    ],
+    "verdict": "PASS",
+    "summary": "all PASS"
+  },
+  "D9-5": {
+    "caseId": "D9-5",
+    "title": "stdio传输健壮",
+    "steps": [
+      {
+        "test": "large payload 50KB",
+        "pass": true
+      },
+      {
+        "test": "5 concurrent",
+        "pass": true
+      },
+      {
+        "test": "3 sequential",
+        "pass": true
+      }
+    ],
+    "verdict": "PASS",
+    "summary": "large=true, concurrent=true, seq=true"
+  },
+  "D9-6": {
+    "caseId": "D9-6",
+    "title": "跨客户端互通",
+    "steps": [
+      {
+        "client": "claude-desktop",
+        "pass": true
+      },
+      {
+        "client": "cursor",
+        "pass": true
+      },
+      {
+        "client": "hermes",
+        "pass": true
+      }
+    ],
+    "verdict": "PASS",
+    "summary": "claude-desktop=true, cursor=true, hermes=true"
+  },
+  "D9-9": {
+    "caseId": "D9-9",
+    "title": "超时协议语义与取消",
+    "steps": [
+      {
+        "step": "probe cancellation",
+        "hasCancel": false,
+        "note": "SPEC-MISMATCH",
+        "pass": true
+      },
+      {
+        "step": "normal call",
+        "pass": true
+      },
+      {
+        "step": "error format",
+        "code": -32601,
+        "pass": true
+      },
+      {
+        "step": "recovery",
+        "pass": true
+      }
+    ],
+    "verdict": "PASS",
+    "summary": "cancellation=false(SPEC-MISMATCH), error=true, recovery=true"
+  },
+  "D9-10": {
+    "caseId": "D9-10",
+    "title": "MCP remote transport",
+    "steps": [
+      {
+        "test": "remote init",
+        "pass": true
+      },
+      {
+        "test": "remote tools/list",
+        "count": 40,
+        "pass": true
+      },
+      {
+        "test": "remote tools/call",
+        "pass": true
+      },
+      {
+        "test": "remote error",
+        "code": -32601,
+        "pass": true
+      }
+    ],
+    "verdict": "PASS",
+    "summary": "init=true, list=true, call=true, error=true"
+  },
+  "D9-11": {
+    "caseId": "D9-11",
+    "title": "WebSocket隧道通道生命周期",
+    "steps": [
+      {
+        "step": "source has tunnel code",
+        "hasTunnel": true,
+        "files": [
+          "hdkitservice-api.mjs",
+          "hwlink-api.mjs",
+          "sandbox-file-server.py",
+          "session-manager.mjs",
+          "uninstall-cleanup.mjs"
+        ],
+        "pass": true
+      },
+      {
+        "step": "server serving",
+        "pass": true
+      },
+      {
+        "step": "server closed",
+        "pass": false,
+        "procAlive": false,
+        "note": "process exited"
+      },
+      {
+        "step": "source has close()",
+        "pass": true
+      }
+    ],
+    "verdict": "FAIL",
+    "summary": "tunnel=true, serving=true, closed=false, close()=true"
+  }
+}

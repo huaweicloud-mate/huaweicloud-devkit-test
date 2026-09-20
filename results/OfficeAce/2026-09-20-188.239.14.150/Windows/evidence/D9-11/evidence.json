@@ -1,0 +1,34 @@
+{
+  "caseId": "D9-11",
+  "title": "WebSocket隧道通道生命周期",
+  "steps": [
+    {
+      "step": "source has tunnel code",
+      "hasTunnel": true,
+      "files": [
+        "hdkitservice-api.mjs",
+        "hwlink-api.mjs",
+        "sandbox-file-server.py",
+        "session-manager.mjs",
+        "uninstall-cleanup.mjs"
+      ],
+      "pass": true
+    },
+    {
+      "step": "server serving",
+      "pass": true
+    },
+    {
+      "step": "server closed",
+      "pass": false,
+      "procAlive": false,
+      "note": "process exited"
+    },
+    {
+      "step": "source has close()",
+      "pass": true
+    }
+  ],
+  "verdict": "FAIL",
+  "summary": "tunnel=true, serving=true, closed=false, close()=true"
+}

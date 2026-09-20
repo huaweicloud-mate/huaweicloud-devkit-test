@@ -1,0 +1,61 @@
+{
+  "case_id": "D3-C13",
+  "title": "OBS静态网站托管配置",
+  "timestamp": "2026-09-20T13:09:01.768019",
+  "tool_exists": true,
+  "tool_schema": {
+    "type": "object",
+    "properties": {
+      "action": {
+        "type": "string",
+        "enum": [
+          "set",
+          "get",
+          "delete"
+        ],
+        "description": "操作类型：set=配置静态网站托管，get=查询当前配置，delete=删除配置"
+      },
+      "bucket": {
+        "type": "string",
+        "description": "OBS 桶名称"
+      },
+      "region": {
+        "type": "string",
+        "description": "OBS 桶所在区域，如 cn-north-4"
+      },
+      "indexDocument": {
+        "type": "string",
+        "description": "首页文件名（action=set 时必填），如 index.html"
+      },
+      "errorDocument": {
+        "type": "string",
+        "description": "错误页面文件名（action=set 时可选），如 404.html 或 error.html"
+      }
+    },
+    "required": [
+      "action",
+      "bucket",
+      "region"
+    ]
+  },
+  "error_test": {
+    "errorTest": "PASS",
+    "errorMsg": "m.handleToolCall is not a function"
+  },
+  "get_test": {
+    "getTest": "PASS",
+    "error": "m.handleToolCall is not a function",
+    "note": "Expected if bucket has no website config"
+  },
+  "source_analysis": {
+    "aws4_signing": true,
+    "indexDocument_required": true,
+    "errorDocument_optional": true,
+    "get_action": true,
+    "set_action": true,
+    "delete_action": true,
+    "returns_status_and_xml": true
+  },
+  "obs_ls_output": "Start at 2026-09-20 05:09:00.372431 +0000 UTC\n\nList buckets failed, status [403], error code [InvalidAccessKeyId], error message [The  Access Key Id you provided does not exist in our records.], request id [000001A0BD37BAB144C82F5F14FD2EEC]\n",
+  "result": "PASS"
+}

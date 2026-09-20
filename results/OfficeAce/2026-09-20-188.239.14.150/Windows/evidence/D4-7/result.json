@@ -1,0 +1,62 @@
+{
+  "rules_loaded": true,
+  "rules_count": 16,
+  "command_checks": [
+    {
+      "cmd": "hcloud ECS DeleteServers --cli-region=cn-north-4",
+      "decision": "warn",
+      "evaluated": true
+    },
+    {
+      "cmd": "hcloud IAM CreateUser --cli-region=cn-north-4",
+      "decision": "allow",
+      "evaluated": true
+    },
+    {
+      "cmd": "hcloud ECS BatchDeleteServers --cli-region=cn-nort",
+      "decision": "warn",
+      "evaluated": true
+    },
+    {
+      "cmd": "cat /etc/shadow",
+      "decision": "allow",
+      "evaluated": true
+    },
+    {
+      "cmd": "env | grep -i HUAWEICLOUD",
+      "decision": "deny",
+      "evaluated": true
+    },
+    {
+      "cmd": "echo $HW_SECRET_ACCESS_KEY",
+      "decision": "allow",
+      "evaluated": true
+    }
+  ],
+  "artifact_checks": [
+    {
+      "type": "iam-policy",
+      "evaluated": true,
+      "decision": "allow"
+    },
+    {
+      "type": "terraform",
+      "evaluated": true,
+      "decision": "deny"
+    }
+  ],
+  "deploy_plan_checks": [
+    {
+      "evaluated": true,
+      "decision": "warn"
+    },
+    {
+      "evaluated": true,
+      "decision": "deny"
+    }
+  ],
+  "all_commands_evaluated": true,
+  "all_artifacts_evaluated": true,
+  "all_plans_evaluated": true,
+  "verdict": "PASS"
+}

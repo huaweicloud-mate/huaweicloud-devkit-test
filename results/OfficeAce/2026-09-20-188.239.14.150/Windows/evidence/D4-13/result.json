@@ -1,0 +1,55 @@
+{
+  "creds_path": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.readonly.json",
+  "ro_creds_ak": "HPUA3XUK...",
+  "ro_creds_region": "cn-north-4",
+  "ro_creds_configuredBySession": false,
+  "read_ops": [
+    {
+      "service": "ECS",
+      "action": "ListServers",
+      "safetyAllowed": true,
+      "cloudResult": "success",
+      "cloudError": null,
+      "passed": true
+    },
+    {
+      "service": "VPC",
+      "action": "ListVpcs",
+      "safetyAllowed": true,
+      "cloudResult": "success",
+      "cloudError": null,
+      "passed": true
+    },
+    {
+      "service": "IAM",
+      "action": "ListProjects",
+      "safetyAllowed": true,
+      "cloudResult": "success",
+      "cloudError": null,
+      "passed": true
+    }
+  ],
+  "write_ops": [
+    {
+      "service": "ECS",
+      "action": "CreateServers",
+      "decision": "deny",
+      "blocked": true
+    },
+    {
+      "service": "ECS",
+      "action": "DeleteServers",
+      "decision": "deny",
+      "blocked": true
+    },
+    {
+      "service": "IAM",
+      "action": "CreateUser",
+      "decision": "deny",
+      "blocked": true
+    }
+  ],
+  "read_pass_rate": "3/3",
+  "write_block_rate": "3/3",
+  "verdict": "PASS"
+}

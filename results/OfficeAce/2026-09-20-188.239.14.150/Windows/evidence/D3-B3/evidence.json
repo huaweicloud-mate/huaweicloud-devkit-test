@@ -1,0 +1,37 @@
+{
+  "case_id": "D3-B3",
+  "title": "run_readonly脱敏执行",
+  "timestamp": "2026-09-20T13:01:52.857266",
+  "tests": {
+    "readonly_command_executed": true,
+    "output_has_no_ak": true,
+    "output_has_no_sk": true,
+    "redactSecrets_ak_redacted": true,
+    "redactSecrets_sk_redacted": true,
+    "redactSecrets_non_secret_preserved": true,
+    "readonly_classification": {
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "service": "ECS",
+      "operation": "NovaListServers",
+      "args": [
+        "ECS",
+        "NovaListServers",
+        "--cli-region=cn-north-4"
+      ]
+    },
+    "write_classification": {
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    "redacted_object": {
+      "ak": "<redacted>",
+      "sk": "<redacted>",
+      "serverName": "test-server",
+      "flavorRef": "s6.small.1"
+    }
+  },
+  "result": "PASS"
+}

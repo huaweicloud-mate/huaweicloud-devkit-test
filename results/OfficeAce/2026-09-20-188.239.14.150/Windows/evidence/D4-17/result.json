@@ -1,0 +1,101 @@
+{
+  "abnormal_results": [
+    {
+      "desc": "empty string",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    },
+    {
+      "desc": "whitespace only",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    },
+    {
+      "desc": "binary garbage",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    },
+    {
+      "desc": "bare hcloud",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    },
+    {
+      "desc": "hcloud with only flags",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    },
+    {
+      "desc": "very long string",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    },
+    {
+      "desc": "JSON object string",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    },
+    {
+      "desc": "JSON array string",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    },
+    {
+      "desc": "newlines only",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    },
+    {
+      "desc": "hcloud with binary + delete",
+      "riskDecision": "allow",
+      "safetyDecision": "allow",
+      "combinedBlocks": false,
+      "handled": true
+    }
+  ],
+  "null_handled": true,
+  "undefined_handled": true,
+  "null_args_handled": true,
+  "empty_args_denied": true,
+  "malformed_results": [
+    {
+      "cmd": "hcloud?ECS?DeleteServers",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "blocks": false
+    },
+    {
+      "cmd": "hcloud\nECS\nDeleteServers",
+      "safetyDecision": "deny",
+      "riskDecision": "warn",
+      "blocks": true
+    },
+    {
+      "cmd": "hcloud\tECS\tDeleteServers",
+      "safetyDecision": "deny",
+      "riskDecision": "warn",
+      "blocks": true
+    }
+  ],
+  "all_handled": true,
+  "dangerous_abnormal_blocked": false,
+  "verdict": "PASS"
+}

@@ -1,0 +1,49 @@
+{
+  "testCase": "D1-39",
+  "title": "Windows 升级检测链可用性",
+  "verdict": "FAIL",
+  "verdictReason": "queryDistTagsSync/queryDistTags 在 Windows + Node v24 下均 EINVAL 静默失败，返回 null。检测链默认使用 queryDistTags(spawn)，不可用。queryDistTagsFetch(HTTP直连)可用但非默认路径。shell:true 对照组正常工作，证明修复方案为添加 shell:true 或改用 queryDistTagsFetch。",
+  "issue": "#554",
+  "results": {
+    "spawnSync_noShell": {
+      "status": null,
+      "error": "spawnSync npm.cmd EINVAL",
+      "errorCode": "EINVAL",
+      "hasOutput": false
+    },
+    "spawnSync_withShell": {
+      "status": 0,
+      "error": null,
+      "errorCode": null,
+      "hasOutput": true
+    },
+    "spawn_noShell": {
+      "thrown": "spawn EINVAL",
+      "code": "EINVAL"
+    },
+    "spawn_withShell": {
+      "exitCode": 0,
+      "stdout": "{\n  \"next\": \"1.1.6-next.0\",\n  \"latest\": \"1.1.5\"\n}\n",
+      "hasOutput": true
+    },
+    "queryDistTagsSync": {
+      "result": null,
+      "isNull": true
+    },
+    "queryDistTags": {
+      "result": null,
+      "isNull": true
+    },
+    "queryDistTagsFetch": {
+      "result": {
+        "next": "1.1.6-next.0",
+        "latest": "1.1.5"
+      },
+      "isNull": false
+    }
+  },
+  "syncHasEINVAL": true,
+  "asyncHasEINVAL": true,
+  "fetchWorks": true,
+  "timestamp": "2026-09-20T02:38:58.201Z"
+}

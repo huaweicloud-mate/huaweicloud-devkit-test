@@ -1,0 +1,30 @@
+{
+  "testCase": "D4-5",
+  "testName": "写操作误判检测",
+  "timestamp": "2026-09-20T15:30:00+08:00",
+  "verdict": "PASS",
+  "checks": [
+    {
+      "name": "create_servers flagged as write",
+      "passed": true,
+      "detail": "ECS CreateServers classified as write operation"
+    },
+    {
+      "name": "delete operations flagged as destructive",
+      "passed": true,
+      "detail": "Delete operations classified with deny/warn"
+    },
+    {
+      "name": "read operations not flagged as write",
+      "passed": true,
+      "detail": "List/Get/Show operations not classified as write"
+    },
+    {
+      "name": "update operations flagged as write",
+      "passed": true,
+      "detail": "Update/Modify operations classified as write"
+    }
+  ],
+  "source": "huaweicloud-core/src/risk-rule-engine.mjs",
+  "summary": "写操作误判检测通过：create/delete/update操作被正确标记为写操作，read操作未被误判。"
+}

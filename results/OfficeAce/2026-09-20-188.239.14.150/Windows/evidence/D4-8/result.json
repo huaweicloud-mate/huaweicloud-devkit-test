@@ -1,0 +1,47 @@
+{
+  "consistency": [
+    {
+      "cmd": "hcloud ECS ListServers --cli-region=cn-n",
+      "textDecision": "allow",
+      "argsDecision": "allow",
+      "consistent": true
+    },
+    {
+      "cmd": "hcloud ECS DeleteServers --cli-region=cn",
+      "textDecision": "deny",
+      "argsDecision": "deny",
+      "consistent": true
+    },
+    {
+      "cmd": "hcloud IAM CreateUser --cli-region=cn-no",
+      "textDecision": "deny",
+      "argsDecision": "deny",
+      "consistent": true
+    },
+    {
+      "cmd": "hcloud VPC ListSubnets --cli-region=cn-n",
+      "textDecision": "allow",
+      "argsDecision": "allow",
+      "consistent": true
+    },
+    {
+      "cmd": "hcloud ECS CreateServers --cli-region=cn",
+      "textDecision": "deny",
+      "argsDecision": "deny",
+      "consistent": true
+    },
+    {
+      "cmd": "hcloud RDS CreateInstance --cli-region=c",
+      "textDecision": "deny",
+      "argsDecision": "deny",
+      "consistent": true
+    }
+  ],
+  "policy_has_write_prefixes": true,
+  "policy_has_read_prefixes": true,
+  "policy_has_secret_patterns": true,
+  "policy_write_count": 33,
+  "policy_read_count": 6,
+  "all_consistent": true,
+  "verdict": "PASS"
+}

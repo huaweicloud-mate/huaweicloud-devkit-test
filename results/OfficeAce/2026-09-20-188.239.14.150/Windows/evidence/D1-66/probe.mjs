@@ -1,0 +1,6 @@
+// AI生成
+// D1-66: 遥测开关与端点环境变量
+// 验证 HUAWEICLOUD_DEVKIT_TELEMETRY 控制遥测开关
+// 验证 HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT 控制遥测端点
+// isTelemetryEnabled: process.env.HUAWEICLOUD_DEVKIT_TELEMETRY !== 'off'
+// getEndpoint: process.env.HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT || DEFAULT_ENDPOINT

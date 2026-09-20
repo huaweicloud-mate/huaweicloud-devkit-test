@@ -1,0 +1,41 @@
+{
+  "evidence_checks": [
+    {
+      "cmd": "hcloud ECS CreateServers --ak=HPUAN1ROQ4PQXQVBSYXD",
+      "findingsCount": 0,
+      "evidenceClean": true,
+      "evidenceSnippets": []
+    },
+    {
+      "cmd": "hcloud IAM CreateUser --ak=ABCDEFGH1234567890 --sk",
+      "findingsCount": 0,
+      "evidenceClean": true,
+      "evidenceSnippets": []
+    },
+    {
+      "cmd": "hcloud ECS DeleteServers --cli-region=cn-north-4 -",
+      "findingsCount": 1,
+      "evidenceClean": false,
+      "evidenceSnippets": [
+        "hcloud ECS DeleteServers --cli-region=cn-north-4 --token=ststoken123456789"
+      ]
+    },
+    {
+      "cmd": "cat ~/.huaweicloud/credentials.json --ak=HPUAN1ROQ",
+      "findingsCount": 1,
+      "evidenceClean": false,
+      "evidenceSnippets": [
+        "cat ~/.huaweicloud/credentials.json --ak=HPUAN1ROQ4PQXQVBSYXD"
+      ]
+    }
+  ],
+  "redactSecrets_no_plaintext_ak": true,
+  "redactSecrets_no_plaintext_sk": true,
+  "redactSecrets_no_plaintext_pass": true,
+  "redactSecrets_has_redacted": true,
+  "findings_have_evidence": true,
+  "findings_count": 1,
+  "evidence_truncated": true,
+  "all_evidence_redacted": false,
+  "verdict": "FAIL"
+}

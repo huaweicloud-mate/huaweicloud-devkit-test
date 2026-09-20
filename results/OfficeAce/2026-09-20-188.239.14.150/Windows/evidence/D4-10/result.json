@@ -1,0 +1,81 @@
+{
+  "normal_ops": [
+    {
+      "desc": "ECS ListServers",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "noFalsePositive": true
+    },
+    {
+      "desc": "VPC ListVpcs",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "noFalsePositive": true
+    },
+    {
+      "desc": "IAM ListUsers",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "noFalsePositive": true
+    },
+    {
+      "desc": "RDS ListInstances",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "noFalsePositive": true
+    },
+    {
+      "desc": "CCE ListClusters",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "noFalsePositive": true
+    },
+    {
+      "desc": "ELB List",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "noFalsePositive": true
+    },
+    {
+      "desc": "DNS List",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "noFalsePositive": true
+    },
+    {
+      "desc": "OBS ls",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "noFalsePositive": true
+    },
+    {
+      "desc": "OBS stat",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "noFalsePositive": true
+    }
+  ],
+  "dangerous_ops": [
+    {
+      "cmd": "hcloud ECS DeleteServers --cli-region=cn",
+      "safetyDecision": "deny",
+      "riskDecision": "warn",
+      "caught": true
+    },
+    {
+      "cmd": "hcloud IAM CreateUser --cli-region=cn-no",
+      "safetyDecision": "deny",
+      "riskDecision": "allow",
+      "caught": true
+    },
+    {
+      "cmd": "cat ~/.huaweicloud/credentials.json",
+      "safetyDecision": "deny",
+      "riskDecision": "deny",
+      "caught": true
+    }
+  ],
+  "no_false_positives": true,
+  "all_dangerous_caught": true,
+  "verdict": "PASS"
+}

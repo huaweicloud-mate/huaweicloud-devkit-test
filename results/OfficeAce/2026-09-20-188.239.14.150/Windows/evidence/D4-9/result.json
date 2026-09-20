@@ -1,0 +1,30 @@
+{
+  "testCase": "D4-9",
+  "testName": "公开暴露/破坏性预检",
+  "timestamp": "2026-09-20T15:30:00+08:00",
+  "verdict": "PASS",
+  "checks": [
+    {
+      "name": "public IP exposure pre-check",
+      "passed": true,
+      "detail": "EIP creation triggers exposure warning"
+    },
+    {
+      "name": "security group open ports pre-check",
+      "passed": true,
+      "detail": "SG with 0.0.0.0/0 triggers warning"
+    },
+    {
+      "name": "destructive operation pre-check",
+      "passed": true,
+      "detail": "Delete/terminate operations trigger pre-check"
+    },
+    {
+      "name": "force delete pre-check",
+      "passed": true,
+      "detail": "Force delete flags trigger additional warning"
+    }
+  ],
+  "source": "huaweicloud-core/src/risk-rule-engine.mjs + safety-policy.mjs",
+  "summary": "公开暴露/破坏性预检通过：EIP暴露、安全组开放端口、删除操作均被预检拦截。"
+}

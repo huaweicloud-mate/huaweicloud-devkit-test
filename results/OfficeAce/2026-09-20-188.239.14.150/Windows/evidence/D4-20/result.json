@@ -1,0 +1,33 @@
+{
+  "deny_decision": "deny",
+  "assert_error": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user appr",
+  "assert_throws_on_deny": true,
+  "no_execution_without_approval": true,
+  "read_allowed": true,
+  "assert_passes_on_allow": true,
+  "no_execution_result": true,
+  "deny_scenarios": [
+    {
+      "desc": "IAM CreateUser",
+      "decision": "deny",
+      "noExec": true
+    },
+    {
+      "desc": "ECS BatchDelete",
+      "decision": "deny",
+      "noExec": true
+    },
+    {
+      "desc": "RDS DeleteInstance",
+      "decision": "deny",
+      "noExec": true
+    },
+    {
+      "desc": "VPC DeleteSubnet",
+      "decision": "deny",
+      "noExec": true
+    }
+  ],
+  "all_deny_no_exec": true,
+  "verdict": "PASS"
+}

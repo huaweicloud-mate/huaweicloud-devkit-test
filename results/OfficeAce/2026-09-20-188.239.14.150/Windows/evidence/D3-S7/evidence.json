@@ -1,0 +1,63 @@
+{
+  "case_id": "D3-S7",
+  "title": "场景-跨服务交付(Web应用+RDS)并归零",
+  "timestamp": "2026-09-20T13:19:24.464770",
+  "tools": {
+    "required": [
+      "huaweicloud_sandbox_connect",
+      "huaweicloud_sandbox_deploy_nginx",
+      "huaweicloud_plan_cli_command",
+      "huaweicloud_run_approved_command",
+      "huaweicloud_service_catalog"
+    ],
+    "found": [
+      "huaweicloud_sandbox_connect",
+      "huaweicloud_sandbox_deploy_nginx",
+      "huaweicloud_plan_cli_command",
+      "huaweicloud_run_approved_command",
+      "huaweicloud_service_catalog"
+    ],
+    "allFound": true
+  },
+  "catalog": {
+    "success": true,
+    "result": {
+      "intent": "部署Web应用并连接RDS数据库",
+      "recommendedSkills": [
+        "Use huaweicloud-core to route intent."
+      ],
+      "recommendedServices": [
+        "Run hcloud --help to list available services."
+      ],
+      "capabilityOrder": [
+        "Huawei Cloud Skills for task-specific workflows and examples",
+        "KooCLI hcloud for local authenticated operations and quick inspection",
+        "Huawei Cloud API documentation for exact request and response contracts",
+        "Huawei Cloud SDKs for application code integration",
+        "Huawei Cloud MCP when an official or approved server is available",
+        "Terraform Provider only when IaC reviewability and repeatability are important"
+      ],
+      "ruleOfThumb": {
+        "skills": "Start here when the user describes a scenario or wants a guided workflow.",
+        "cli": "Use for local diagnostics, read-only inspection, and commands the user can review.",
+        "api": "Use for exact service contract, region endpoint, project_id, pagination, and error codes.",
+        "sdk": "Use when writing application code that calls Huawei Cloud services.",
+        "mcp": "Prefer approved MCP tools when available because tools can carry structured schemas.",
+        "terraform": "Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis."
+      }
+    }
+  },
+  "rds_plan": {
+    "command": "hcloud RDS CreateInstance --cli-region=cn-north-4 --name=test-rds-d3s7 --flavor_ref=rds.pg.n1.large.2 --ha_mode=Single --datastore_type=PostgreSQL --datastore_version=12 --volume_type=ULTRAHIGH --volume_size=40 --vpc_id=test --subnet_id=test --security_group_id=test",
+    "hasToken": true,
+    "decision": "deny",
+    "risk": "write"
+  },
+  "rds_list": {
+    "executed": true,
+    "has_instances": true,
+    "output": "{\n  \"instances\": [],\n  \"total_count\": 0\n}\n"
+  },
+  "orchestration_verified": true,
+  "result": "PASS"
+}

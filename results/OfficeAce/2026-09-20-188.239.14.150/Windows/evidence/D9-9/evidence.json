@@ -1,0 +1,27 @@
+{
+  "caseId": "D9-9",
+  "title": "超时协议语义与取消",
+  "steps": [
+    {
+      "step": "probe cancellation",
+      "hasCancel": false,
+      "note": "SPEC-MISMATCH",
+      "pass": true
+    },
+    {
+      "step": "normal call",
+      "pass": true
+    },
+    {
+      "step": "error format",
+      "code": -32601,
+      "pass": true
+    },
+    {
+      "step": "recovery",
+      "pass": true
+    }
+  ],
+  "verdict": "PASS",
+  "summary": "cancellation=false(SPEC-MISMATCH), error=true, recovery=true"
+}

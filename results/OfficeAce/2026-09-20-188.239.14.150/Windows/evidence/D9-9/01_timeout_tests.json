@@ -1,0 +1,47 @@
+[
+  {
+    "test": "normal call",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 90,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"installed\": true,\n  \"authenticated\": true,\n  \"status\": \"ok\",\n  \"output\": \"当前KooCLI版本:7.2.12\",\n  \"kooCliVersion\": \"7.2.12\",\n  \"installedVersion\": \"7.2.12\",\n  \"versionMismatch\": false,\n  \"nextStep\": \"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\n  \"authHint\": \"If hcloud is installed but commands fail with \\\"配置文件中不存在配置项\\\", run `npx huaweicloud-devkit auth init` outside agent chat to configure credentials.\"\n}"
+          }
+        ],
+        "isError": false
+      }
+    },
+    "pass": true
+  },
+  {
+    "test": "call with timeoutMs",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 91,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"installed\": true,\n  \"authenticated\": true,\n  \"status\": \"ok\",\n  \"output\": \"当前KooCLI版本:7.2.12\",\n  \"kooCliVersion\": \"7.2.12\",\n  \"installedVersion\": \"7.2.12\",\n  \"versionMismatch\": false,\n  \"nextStep\": \"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\n  \"authHint\": \"If hcloud is installed but commands fail with \\\"配置文件中不存在配置项\\\", run `npx huaweicloud-devkit auth init` outside agent chat to configure credentials.\"\n}"
+          }
+        ],
+        "isError": false
+      }
+    },
+    "pass": true
+  },
+  {
+    "test": "short timeout call",
+    "pass": true,
+    "note": "completed within 3s"
+  },
+  {
+    "test": "parallel requests (cancel simulation)",
+    "pass": true,
+    "id1": 93,
+    "id2": 94
+  }
+]

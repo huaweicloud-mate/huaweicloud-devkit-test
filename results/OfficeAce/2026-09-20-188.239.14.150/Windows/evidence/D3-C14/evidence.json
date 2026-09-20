@@ -1,0 +1,42 @@
+{
+  "case_id": "D3-C14",
+  "title": "沙箱HDKit服务参数与hwlink凭证",
+  "timestamp": "2026-09-20T13:33:27.990600",
+  "tool_schema": {
+    "connect": {
+      "exists": true,
+      "hasSource": true,
+      "hasEnv": true
+    },
+    "credentials": {
+      "exists": true
+    }
+  },
+  "connect_with_source": {
+    "success": true,
+    "result": {
+      "sessionId": "8d898bc423254635bbe12bb34d7f68c1",
+      "devStageId": "8d898bc423254635bbe12bb34d7f68c1",
+      "connectionId": "526117",
+      "connectionAddress": "wss://fd0-cn-north-4.developer.myhuaweicloud.com:443/v1/forward/openapi/to/8d898bc423254635bbe12bb34d7f68c1?connect_code=C629E0A72486C186742CA3712C5D0C7EF0CFD33A8C2B6D36C3D580021670DF43&ws_type=1&source=-1995602017",
+      "status": "connected",
+      "expiresAt": "2026-09-21T05:33:21.826000Z"
+    }
+  },
+  "credentials_without_session": {
+    "success": true,
+    "result": {
+      "ok": false,
+      "error": "Credential validation failed before injection: IAM rejected the credentials (HTTP 401: {\"error_msg\":\"Incorrect IAM authentication information: Unauthorized\",\"error_code\":\"APIGW.0301\",\"request_id\":\"c9e4da44a63dc96ab4c12a3d57025ab4\"}\n). The AK/SK is invalid - check the SK for typos or expired security tokens.",
+      "hint": "Credentials were NOT injected into the sandbox. Fix AK/SK first: run \"npx huaweicloud-devkit auth init\" or correct HW_ACCESS_KEY/HW_SECRET_KEY, then retry."
+    }
+  },
+  "hwlink_api": {
+    "hasGetCredentials": true
+  },
+  "hdkit_api": {
+    "hasConnect": true,
+    "hasCredentials": true
+  },
+  "result": "PASS"
+}

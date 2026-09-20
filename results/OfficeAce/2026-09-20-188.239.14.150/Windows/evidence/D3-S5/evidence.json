@@ -1,0 +1,77 @@
+{
+  "case_id": "D3-S5",
+  "title": "场景-复合意图分层路由",
+  "timestamp": "2026-09-20T13:38:22.594264",
+  "pure_chinese_intent": "物联网设备数据采集时序存储前端托管展示",
+  "mixed_intent": "物联网 DDS GaussDB 时序数据 OBS ECS 前端托管 hosting storage",
+  "pure_chinese_result": {
+    "recommendedServices": [
+      "Run hcloud --help to list available services."
+    ],
+    "recommendedSkills": [
+      "Use huaweicloud-core to route intent."
+    ]
+  },
+  "mixed_result": {
+    "recommendedServices": [
+      "ECS",
+      "OBS",
+      "GaussDB",
+      "Sandbox",
+      "DevStation"
+    ],
+    "recommendedSkills": [
+      "huawei-sandbox",
+      "huawei-ecs",
+      "huawei-obs",
+      "huawei-gaussdb",
+      "huawei-dds-dcs"
+    ],
+    "multi_service_hit": true,
+    "sandbox_first": true
+  },
+  "individual_routing": {
+    "storage_obs": {
+      "services": [
+        "OBS",
+        "Sandbox",
+        "DevStation"
+      ],
+      "skills": [
+        "huawei-sandbox",
+        "huawei-obs"
+      ]
+    },
+    "dds_gaussdb": {
+      "services": [
+        "GaussDB",
+        "DDS",
+        "DCS"
+      ],
+      "skills": [
+        "huawei-gaussdb",
+        "huawei-dds-dcs"
+      ]
+    },
+    "ecs_compute": {
+      "services": [
+        "ECS"
+      ],
+      "skills": [
+        "huawei-ecs"
+      ]
+    },
+    "sandbox_deploy": {
+      "services": [
+        "Sandbox",
+        "DevStation"
+      ],
+      "skills": [
+        "huawei-sandbox"
+      ]
+    }
+  },
+  "individual_routing_ok": true,
+  "pure_cn_response_valid": true,
+  "result": "PASS"
+}

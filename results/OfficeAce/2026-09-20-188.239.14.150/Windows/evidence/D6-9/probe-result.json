@@ -1,0 +1,68 @@
+{
+  "testCase": "D6-9",
+  "testName": "缓存清理三入口",
+  "timestamp": "2026-09-20T06:58:44.668Z",
+  "entryPoints": [
+    {
+      "name": "invalidateUpdateCache",
+      "description": "清除更新检测缓存 (cachedDistTags, cachedAt, failedAt, inflightQuery, lastHint)",
+      "beforeInvalidate": {
+        "hasCachedHint": true,
+        "hint": {
+          "currentVersion": "1.0.0",
+          "latestStable": "2.0.0",
+          "latestNext": null,
+          "targetVersion": "2.0.0",
+          "updateAvailable": true,
+          "dismissed": false,
+          "dismissExpiresAt": null,
+          "result": "update_available"
+        }
+      },
+      "afterInvalidate": {
+        "hasCachedHint": false,
+        "hint": null
+      },
+      "pass": true,
+      "sourceLocation": "update-check.mjs:302",
+      "calledFrom": [
+        "tools.mjs:1503 (handleCheckUpdate dismiss=true)",
+        "update-check.mjs:424 (upgradePackage success)"
+      ]
+    },
+    {
+      "name": "clearRuntimeCredentials",
+      "description": "清除运行时凭证覆盖 (内存中的AK/SK/region)",
+      "beforeClear": {
+        "hasRuntimeCredentials": true
+      },
+      "afterClear": {
+        "hasRuntimeCredentials": false
+      },
+      "pass": true,
+      "sourceLocation": "auth/credentials.mjs",
+      "calledFrom": [
+        "tools.mjs:1146 (huaweicloud_auth_init clear=true)",
+        "tools.mjs:1159 (huaweicloud_auth_switch action=clear)"
+      ]
+    },
+    {
+      "name": "clearUserHash",
+      "description": "清除遥测用户哈希 (内存 + user-hash 文件)",
+      "beforeClear": {
+        "fileExists": true,
+        "content": "test-hash-12345"
+      },
+      "afterClear": {
+        "fileExists": false
+      },
+      "pass": true,
+      "sourceLocation": "telemetry/telemetry.mjs:320",
+      "calledFrom": [
+        "tools.mjs:1051 (refreshUserHashAfterAuthChange)",
+        "Called after: auth_sync, auth_init, auth_switch"
+      ]
+    }
+  ],
+  "pass": true
+}

@@ -1,0 +1,50 @@
+{
+  "classification": [
+    {
+      "cmd": "hcloud ECS ListServers --cli-region=cn-n",
+      "decision": "allow",
+      "reason": "Command appears to be a read-only Huawei Cloud ope",
+      "blocked": false,
+      "expectedBlock": false,
+      "correct": true
+    },
+    {
+      "cmd": "hcloud ECS DeleteServers --cli-region=cn",
+      "decision": "deny",
+      "reason": "Huawei Cloud write operation blocked until the age",
+      "blocked": true,
+      "expectedBlock": true,
+      "correct": true
+    },
+    {
+      "cmd": "hcloud IAM CreateUser --cli-region=cn-no",
+      "decision": "deny",
+      "reason": "Huawei Cloud write operation blocked until the age",
+      "blocked": true,
+      "expectedBlock": true,
+      "correct": true
+    },
+    {
+      "cmd": "cat ~/.huaweicloud/credentials.json",
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files i",
+      "blocked": true,
+      "expectedBlock": true,
+      "correct": true
+    },
+    {
+      "cmd": "hcloud VPC ListSubnets --cli-region=cn-n",
+      "decision": "allow",
+      "reason": "Command appears to be a read-only Huawei Cloud ope",
+      "blocked": false,
+      "expectedBlock": false,
+      "correct": true
+    }
+  ],
+  "assertAllowed_throws_on_deny": true,
+  "assertAllowed_passes_on_allow": true,
+  "has_decision": true,
+  "has_reason": true,
+  "all_correct": true,
+  "verdict": "PASS"
+}

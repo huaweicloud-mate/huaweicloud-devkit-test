@@ -1,0 +1,58 @@
+{
+  "testCase": "D6-4",
+  "testName": "并发调度正确性",
+  "timestamp": "2026-09-20T06:56:53.533Z",
+  "tests": {
+    "concurrentToolsList": {
+      "count": 10,
+      "allOk": true,
+      "consistentToolCount": true,
+      "toolCount": 40,
+      "durationMs": "4.60"
+    },
+    "concurrentMixedCalls": {
+      "count": 5,
+      "allOk": true,
+      "durationMs": "7053.77",
+      "results": [
+        {
+          "tool": "huaweicloud_list_regions",
+          "ok": true,
+          "hasContent": true
+        },
+        {
+          "tool": "huaweicloud_check_cli",
+          "ok": true,
+          "hasContent": true
+        },
+        {
+          "tool": "huaweicloud_service_catalog",
+          "ok": true,
+          "hasContent": true
+        },
+        {
+          "tool": "huaweicloud_list_regions",
+          "ok": true,
+          "hasContent": true
+        },
+        {
+          "tool": "huaweicloud_check_cli",
+          "ok": true,
+          "hasContent": true
+        }
+      ]
+    },
+    "sequentialConcurrentInterleave": {
+      "sequentialCount": 3,
+      "concurrentCount": 5,
+      "allOk": true,
+      "durationMs": "3.04"
+    },
+    "responseIdIntegrity": {
+      "count": 8,
+      "idsMatch": true,
+      "durationMs": "2.51"
+    }
+  },
+  "pass": true
+}

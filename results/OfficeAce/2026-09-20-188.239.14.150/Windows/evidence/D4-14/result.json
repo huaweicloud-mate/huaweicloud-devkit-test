@@ -1,0 +1,69 @@
+{
+  "audit_trail": [
+    {
+      "cmd": "hcloud ECS ListServers --cli-region=cn-n",
+      "safetyDecision": "allow",
+      "safetyReason": "Command appears to be a read-only Huawei Cloud ope",
+      "riskDecision": "allow",
+      "riskFindingsCount": 0,
+      "traceable": true
+    },
+    {
+      "cmd": "hcloud ECS CreateServers --cli-region=cn",
+      "safetyDecision": "deny",
+      "safetyReason": "Huawei Cloud write operation blocked until the age",
+      "riskDecision": "allow",
+      "riskFindingsCount": 0,
+      "traceable": true
+    },
+    {
+      "cmd": "hcloud ECS DeleteServers --cli-region=cn",
+      "safetyDecision": "deny",
+      "safetyReason": "Huawei Cloud write operation blocked until the age",
+      "riskDecision": "warn",
+      "riskFindingsCount": 1,
+      "traceable": true
+    },
+    {
+      "cmd": "hcloud IAM ListUsers --cli-region=cn-nor",
+      "safetyDecision": "allow",
+      "safetyReason": "Command appears to be a read-only Huawei Cloud ope",
+      "riskDecision": "allow",
+      "riskFindingsCount": 0,
+      "traceable": true
+    },
+    {
+      "cmd": "hcloud IAM CreateUser --cli-region=cn-no",
+      "safetyDecision": "deny",
+      "safetyReason": "Huawei Cloud write operation blocked until the age",
+      "riskDecision": "allow",
+      "riskFindingsCount": 0,
+      "traceable": true
+    },
+    {
+      "cmd": "cat ~/.huaweicloud/credentials.json",
+      "safetyDecision": "deny",
+      "safetyReason": "Reading Huawei Cloud credential or profile files i",
+      "riskDecision": "deny",
+      "riskFindingsCount": 1,
+      "traceable": true
+    },
+    {
+      "cmd": "hcloud VPC ListSubnets --cli-region=cn-n",
+      "safetyDecision": "allow",
+      "safetyReason": "Command appears to be a read-only Huawei Cloud ope",
+      "riskDecision": "allow",
+      "riskFindingsCount": 0,
+      "traceable": true
+    }
+  ],
+  "finding_has_ruleId": true,
+  "finding_has_title": true,
+  "finding_has_category": true,
+  "finding_has_severity": true,
+  "finding_has_message": true,
+  "finding_has_remediation": true,
+  "finding_has_evidence": true,
+  "all_traceable": true,
+  "verdict": "PASS"
+}

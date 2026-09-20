@@ -1,0 +1,54 @@
+[
+  {
+    "test": "unknown method -> -32601",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 10,
+      "error": {
+        "code": -32601,
+        "message": "Method not found: nonexistent/method"
+      }
+    },
+    "expectedCode": -32601,
+    "actualCode": -32601,
+    "pass": true
+  },
+  {
+    "test": "tools/call missing name -> error",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 11,
+      "error": {
+        "code": -32603,
+        "message": "Unknown tool: undefined"
+      }
+    },
+    "pass": true
+  },
+  {
+    "test": "foo/bar -> -32601",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 12,
+      "error": {
+        "code": -32601,
+        "message": "Method not found: foo/bar"
+      }
+    },
+    "expectedCode": -32601,
+    "actualCode": -32601,
+    "pass": true
+  },
+  {
+    "test": "nonexistent tool -> error",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 13,
+      "error": {
+        "code": -32603,
+        "message": "Unknown tool: nonexistent_tool"
+      }
+    },
+    "pass": true
+  }
+]

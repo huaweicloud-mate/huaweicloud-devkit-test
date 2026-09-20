@@ -1,0 +1,65 @@
+{
+  "telemetry": [
+    {
+      "cmd": "ECS ListServers",
+      "decision": "allow",
+      "risk": "read_only",
+      "telemetryCategory": "read",
+      "expectedCategory": "read",
+      "correct": true
+    },
+    {
+      "cmd": "ECS ShowServer",
+      "decision": "allow",
+      "risk": "read_only",
+      "telemetryCategory": "read",
+      "expectedCategory": "read",
+      "correct": true
+    },
+    {
+      "cmd": "VPC ListVpcs",
+      "decision": "allow",
+      "risk": "read_only",
+      "telemetryCategory": "read",
+      "expectedCategory": "read",
+      "correct": true
+    },
+    {
+      "cmd": "ECS CreateServers",
+      "decision": "deny",
+      "risk": "write",
+      "telemetryCategory": "write",
+      "expectedCategory": "write",
+      "correct": true
+    },
+    {
+      "cmd": "ECS DeleteServers",
+      "decision": "deny",
+      "risk": "write",
+      "telemetryCategory": "write",
+      "expectedCategory": "write",
+      "correct": true
+    },
+    {
+      "cmd": "IAM CreateUser",
+      "decision": "deny",
+      "risk": "write",
+      "telemetryCategory": "write",
+      "expectedCategory": "write",
+      "correct": true
+    },
+    {
+      "cmd": "FunctionGraph InvokeFunction",
+      "decision": "deny",
+      "risk": "execution",
+      "telemetryCategory": "invoke",
+      "expectedCategory": "invoke",
+      "correct": true
+    }
+  ],
+  "event_has_decision": true,
+  "event_has_risk": true,
+  "event_has_reason": true,
+  "all_classified": true,
+  "verdict": "PASS"
+}

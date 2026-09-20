@@ -1,0 +1,189 @@
+================================================================================
+ID: D1-39
+Title: Windows 升级检测链可用性
+Pre: Windows 10 + 1.1.2
+Steps: ①本机直调 queryDistTagsSync/queryDistTags ②观察 EINVAL/结果 ③对照加 shell:true 版本
+Expected: Windows 下检测链真实可用，不得 EINVAL 静默失败
+Guide: 实: queryDistTagsSync; 关联 #554
+Agent: Hermes 代表终端; fake/fixture | OS: Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证） | Terminal: <代表: Windows/Linux>
+Evidence: 强断言：<证据: Windows 检测链无 EINVAL 静默失败>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D1-40
+Title: 镜像 lag 下检测正确性(反向提醒防护)
+Pre: 默认 registry=镜像且滞后
+Steps: ①设置 npm_config_registry=镜像 ②queryDistTags ③判定结果与官方源对照
+Expected: 不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验
+Guide: 关联 #518/#566; 实: queryDistTags 默认 registry
+Agent: Hermes 代表终端; fake/fixture | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: Windows/Linux>
+Evidence: 强断言：<证据: 镜像 lag 不提示版本倒退>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D2-11
+Title: R3 STS token拒绝落盘
+Pre: 真云 AK/SK + securityToken
+Steps: ①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token
+Expected: 返回 {status:error, scope:rejected}，token 永不落盘
+Guide: 方: §五 R3; NR2-003
+Agent: Hermes 代表终端; fake/fixture | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Terminal: <代表: Hermes 或 OpenCode>
+Evidence: 强断言：<证据: scope=rejected+token 不落盘>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-18
+Title: confirm-not-deny审批语义
+Pre: 真云+标准客户端
+Steps: ①发起写操作 ②观察确认对话框 ③分别确认/拒绝
+Expected: 写操作需显式确认，不被直接拒绝也不被直接放行
+Guide: 仓: issue-443修复+fix/issue-443-confirm-not-deny分支+test/issue-443-fix.test.mjs
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: 安全基线 Hermes+OpenCode>
+Evidence: 强断言：<证据: 确认/拒绝路径>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-19
+Title: 确认流下预检仍生效
+Pre: 真云
+Steps: ①高危写操作 ②确认流程中观察preflight检查 ③验证拦截
+Expected: 确认流程中风险预检仍生效拦截
+Guide: 仓: fix/issue-443-preflight-b1b2分支(双修复)
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: 安全基线 Hermes+OpenCode>
+Evidence: 强断言：<证据: 确认流预检拦截>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D2-4
+Title: 凭证脱敏正确性
+Pre: 真云凭证
+Steps: ①执行脱敏展示 ②检查输出: AK中段、SK永不完整
+Expected: 输出无明文凭证字段
+Guide: P: safety-model自动脱敏; nightly铁律3
+Agent: Hermes 代表终端; fake/fixture | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Terminal: <代表: Hermes 或 OpenCode>
+Evidence: 强断言：<证据: 输出无明文 AK/SK>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-1
+Title: 凭证文件读取拦截
+Pre: 含.hcloud/.huaweicloud目录环境
+Steps: ①尝试cat/type凭证文件 ②观察拦截
+Expected: 被阻断
+Guide: P: safety-model Blocked#1
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook=Hermes 非hook=OpenCode>
+Evidence: 强断言：<证据: cat/type 凭证文件被阻断>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-2
+Title: 凭证env打印拦截
+Pre: 凭证env变量已设置
+Steps: ①printenv/echo凭证env ②观察拦截
+Expected: 被阻断
+Guide: P: safety-model Blocked#2
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook=Hermes 非hook=OpenCode>
+Evidence: 强断言：<证据: printenv/echo 凭证被阻断>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-3
+Title: 明文secret API拦截
+Pre: 真云账号
+Steps: ①调用返回明文/二进制secret的API ②观察拦截
+Expected: 被阻断
+Guide: P: safety-model Blocked#3
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook=Hermes 非hook=OpenCode>
+Evidence: 强断言：<证据: 明文 secret API 被阻断>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-5
+Title: 写操作误判检测
+Pre: 真云
+Steps: ①plan删除类命令 ②记录插件判定 ③若判read-only/allow→记P0
+Expected: 写操作不被误判为只读
+Guide: P: nightly铁律4; 标: AWS IAM condition防线穿透
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook=Hermes 非hook=OpenCode>
+Evidence: 强断言：<证据: 写命令不被误判只读>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-9
+Title: 公开暴露/破坏性预检
+Pre: 真云
+Steps: ①规划公网暴露操作 ②规划破坏性操作 ③验证执行前拦截
+Expected: 执行前被拦
+Guide: P: safety-model pre-execution checks
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook=Hermes 非hook=OpenCode>
+Evidence: 强断言：<证据: 公开暴露/破坏性执行前拦截>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-15
+Title: hook绕过尝试
+Pre: hook环境
+Steps: ①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截
+Expected: 无绕过成功
+Guide: 通: 对抗性测试; 仓: risk-rule-engine规则盲区
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook=Hermes 非hook=OpenCode>
+Evidence: 强断言：<证据: 变体无绕过成功>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-16
+Title: 命令包裹穿透
+Pre: hook环境
+Steps: ①构造shell包裹 ②执行 ③核对hook是否检查内层
+Expected: 发现内层命令并拦截
+Guide: 标: AWS/Azure命令包装绕过用例
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook=Hermes 非hook=OpenCode>
+Evidence: 强断言：<证据: 发现内层命令并拦截>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-21
+Title: hook_check_artifacts 具名回归（代码/IaC/策略制品预检）
+Pre: hook-capable 客户端
+Steps: ①构造宽泛 IAM policy JSON ②hook_check_artifacts ③核对 deny
+Expected: broad IAM 制品被拦截
+Guide: hook 三工具盲区补齐（补自 G1）
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook=Hermes 非hook=OpenCode>
+Evidence: 强断言：<证据: broad IAM 制品拦截>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-22
+Title: hook_check_deploy_plan 具名回归（部署计划预检）
+Pre: hook-capable 客户端
+Steps: ①构造高危 deploy plan ②hook_check_deploy_plan ③核对 warn/deny
+Expected: 公网暴露 FunctionGraph 等被拦截/告警
+Guide: hook 三工具盲区补齐（补自 G1）
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook=Hermes 非hook=OpenCode>
+Evidence: 强断言：<证据: 公网暴露 deploy 计划拦截/告警>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-23
+Title: 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）
+Pre: 11 个 Agent 安装目标
+Steps: 逐目标安装后：①核对 rules 注入系统提示/规则 ②构造禁直连 csms/kms 场景 ③核对 MUST 约束生效
+Expected: 全部目标注入且约束可执行，无孤儿文件
+Guide: agent-rules 注入契约（补自 G6，关联 P1-2）
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: 逐客户端 11 目标>
+Evidence: 强断言：<证据: agent-rules 注入生效>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D4-28
+Title: Node 版安全 hook 链路
+Pre: hook-capable 客户端 + hooks.json 注册
+Steps: ①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs ③核对 commandText 提取 ④classifyTextCommand=deny 时输出 permissionDecision:deny
+Expected: hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出
+Guide: 实: hooks/huaweicloud-safety.mjs commandText/deny; safety-policy.classifyTextCommand(384)
+Agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证 | Terminal: <代表: hook客户端>
+Evidence: 强断言：<证据: deny 决策+reason>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D8-7
+Title: 7 个 meta/通用技能指引可机械执行验证
+Pre: 标准环境
+Steps: 逐技能：retrieve_skill 加载→按指引执行最小路径→核对无外部猜测
+Expected: 7 技能指引均可机械执行，无断链/幻觉步骤
+Guide: meta 技能指引可执行性（补自 G4）
+Agent: Hermes 代表终端; fake/fixture | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Terminal: <代表: 静态评审人 测试经理>
+Evidence: 强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+
+================================================================================
+ID: D10-4
+Title: 安全干预-静态规则层
+Pre: 源码+已安装插件
+Steps: ①直调 loadRiskRules 核对规则数与 severity 分布 ②evaluateCommandRisk 输入高危命令(cat凭证/env-dump/删资源)与只读命令 ③核对 decision 三态(deny/warn/allow)
+Expected: 规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token
+Guide: 实: risk-rule-engine.mjs; 仓: safety/rules/cloud-risk-rules.json
+Agent: OpenCode; Codex; CodeArtsAgent; CodeArtsWork; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Terminal: <代表: 源码直调 risk-rule-engine>
+Evidence: 强断言：<证据: 规则库加载+三态判定>；保留脱敏日志、manifest、前后快照

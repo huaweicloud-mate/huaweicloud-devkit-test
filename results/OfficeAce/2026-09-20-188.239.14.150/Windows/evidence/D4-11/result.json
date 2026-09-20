@@ -1,0 +1,71 @@
+{
+  "injection_results": [
+    {
+      "desc": "semicolon injection",
+      "safetyDecision": "deny",
+      "riskDecision": "warn",
+      "blocked": true,
+      "isKnownGap": false
+    },
+    {
+      "desc": "AND injection",
+      "safetyDecision": "deny",
+      "riskDecision": "allow",
+      "blocked": true,
+      "isKnownGap": false
+    },
+    {
+      "desc": "pipe injection",
+      "safetyDecision": "deny",
+      "riskDecision": "warn",
+      "blocked": true,
+      "isKnownGap": false
+    },
+    {
+      "desc": "comment injection",
+      "safetyDecision": "deny",
+      "riskDecision": "warn",
+      "blocked": true,
+      "isKnownGap": false
+    },
+    {
+      "desc": "password+rm injection",
+      "safetyDecision": "deny",
+      "riskDecision": "deny",
+      "blocked": true,
+      "isKnownGap": false
+    },
+    {
+      "desc": "credential file read",
+      "safetyDecision": "deny",
+      "riskDecision": "deny",
+      "blocked": true,
+      "isKnownGap": false
+    },
+    {
+      "desc": "Windows credential read",
+      "safetyDecision": "deny",
+      "riskDecision": "deny",
+      "blocked": true,
+      "isKnownGap": false
+    },
+    {
+      "desc": "env grep HW",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "blocked": false,
+      "isKnownGap": true
+    },
+    {
+      "desc": "echo HW_SECRET",
+      "safetyDecision": "allow",
+      "riskDecision": "allow",
+      "blocked": false,
+      "isKnownGap": true
+    }
+  ],
+  "core_injection_blocked": true,
+  "known_gaps": 2,
+  "known_gap_note": "Env variable dump cases are tracked by D4-2 (FAIL in CSV)",
+  "verdict": "PASS"
+}

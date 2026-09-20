@@ -1,0 +1,31 @@
+{
+  "case_id": "D3-S1",
+  "title": "场景-只读查ECS(带不改约束)",
+  "timestamp": "2026-09-20T13:11:33.637377",
+  "catalog_routing": {
+    "mentions_ecs": false,
+    "data": {
+      "error": "m.handleToolCall is not a function"
+    }
+  },
+  "readonly_command": {
+    "executed": true,
+    "has_servers_field": true,
+    "server_count": 0,
+    "output": "{\n  \"count\": 0,\n  \"servers\": []\n}"
+  },
+  "safety_classification": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation.",
+    "service": "ECS",
+    "operation": "ListServersDetails",
+    "args": [
+      "ECS",
+      "ListServersDetails",
+      "--cli-region=cn-north-4"
+    ]
+  },
+  "zero_write_operations": true,
+  "result": "PASS"
+}

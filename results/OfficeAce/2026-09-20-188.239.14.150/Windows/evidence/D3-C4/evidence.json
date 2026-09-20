@@ -1,0 +1,71 @@
+{
+  "case_id": "D3-C4",
+  "title": "服务创建类回归",
+  "timestamp": "2026-09-20T13:05:34.319355",
+  "service_operation_counts": {
+    "ECS": 131,
+    "VPC": 215,
+    "OBS": 26,
+    "RDS": 352,
+    "IAM": 239
+  },
+  "obs_commands": [
+    "abort",
+    "bucketpolicy",
+    "cat",
+    "chattri",
+    "cp",
+    "create-share",
+    "download",
+    "lifecycle",
+    "ls",
+    "mb",
+    "mkdir",
+    "mv",
+    "restore",
+    "rm",
+    "share-cp",
+    "share-ls",
+    "sign",
+    "stat",
+    "sync",
+    "update",
+    "archive",
+    "clear",
+    "config",
+    "hash",
+    "help",
+    "version"
+  ],
+  "all_services_have_ops": true,
+  "writes_denied": true,
+  "reads_allowed": true,
+  "classification": [
+    {
+      "cmd": "ECS CreateServers",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "VPC CreateVpc",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "RDS CreateInstance",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "ECS DeleteServers",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "ECS ListServers",
+      "decision": "allow",
+      "risk": "read_only"
+    }
+  ],
+  "result": "PASS"
+}
