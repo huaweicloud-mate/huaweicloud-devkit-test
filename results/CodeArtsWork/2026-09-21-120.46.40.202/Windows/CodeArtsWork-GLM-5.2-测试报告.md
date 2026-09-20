@@ -1,116 +1,92 @@
-# CodeArtsWork-GLM-5.2 每日测试报告
-
-> **测试日期**: 2026-09-21  
-> **客户端**: CodeArtsWork  
-> **模型**: GLM-5.2  
-> **OS**: Windows (PowerShell)  
-> **被测版本**: huaweicloud-devkit@1.1.5  
-> **Node**: v22.13.0  
-> **机器IP**: 120.46.40.202  
-> **执行时间**: 2026-09-21 05:10-05:15 (UTC+8)  
-
----
+# CodeArtsWork-GLM-5.2 测试报告
 
 ## 一、测试概述
 
-本次测试为 huaweicloud-devkit 每日测试任务，按 AGENTS.md「每日测试执行指南」完整执行当天测试。测试覆盖设计级 100 条用例（P0:19, P1:51, P2:30）+ 展开级 39 条用例，共 139 条。
-
-测试环境：
-- 客户端: CodeArtsWork (GLM-5.2)
-- OS: Windows Server (PowerShell 5.1)
-- 被测包: huaweicloud-devkit@1.1.5 (npm latest)
-- Node.js: v22.13.0
-- 真云凭证: 已配置 (~/.config/huaweicloud/credentials.json)
-- 只读子账号: 已配置 (credentials.readonly.json)
+| 项目 | 值 |
+|---|---|
+| 客户端 | CodeArtsWork |
+| 模型 | GLM-5.2 |
+| OS | Windows |
+| 日期 | 2026-09-21 |
+| IP | 120.46.40.202 |
+| 包版本 | huaweicloud-devkit@1.1.5 |
+| 测试模式 | daily |
+| 执行时间 | 2026-09-21 05:00 ~ 05:30 (UTC+8) |
 
 ## 二、执行摘要
 
-| 维度 | 设计级 | 展开级 | 合计 |
-|------|--------|--------|------|
-| 总用例数 | 100 | 39 | 139 |
-| PASS | 98 | 39 | 137 |
-| FAIL | 2 | 0 | 2 |
-| BLOCKED | 0 | 0 | 0 |
-| NOT_RUN | 0 | 0 | 0 |
-| SPEC-MISMATCH | 0 | 0 | 0 |
+本次每日测试按 P0→P1→P2 顺序执行全部 100 条设计级用例 + 39 条展开级用例（共 139 条），证据落盘 `evidence/<case-id>/`。
 
-**通过率**: 98.6% (137/139)
+| 指标 | 值 |
+|---|---|
+| 总用例数 | 139 |
+| PASS | 121 |
+| FAIL | 16 |
+| BLOCKED | 2 |
+| NOT_RUN | 0 |
+| 通过率 | 87.1% |
 
 ## 三、状态汇总
 
 ### 按优先级
 
-| 优先级 | 总数 | PASS | FAIL | BLOCKED | NOT_RUN |
-|--------|------|------|------|---------|---------|
-| P0 | 19 | 17 | 2 | 0 | 0 |
-| P1 | 51 | 51 | 0 | 0 | 0 |
-| P2 | 30 | 30 | 0 | 0 | 0 |
-| 展开级 | 39 | 39 | 0 | 0 | 0 |
+| 优先级 | 总数 | PASS | FAIL | BLOCKED |
+|---|---|---|---|---|
+| P0 | 19 | 16 | 3 | 0 |
+| P1 | 51 | 48 | 1 | 2 |
+| P2 | 30 | 30 | 0 | 0 |
+| 展开级 | 39 | 27 | 12 | 0 |
 
 ### 按维度
 
-| 维度 | 总数 | PASS | FAIL |
-|------|------|------|------|
-| D1 升级检测 | 15 | 15 | 0 |
-| D2 认证同步 | 12 | 12 | 0 |
-| D3 工具能力 | 20 | 20 | 0 |
-| D4 安全预检 | 22 | 20 | 2 |
-| D5 客户端矩阵 | 2 | 2 | 0 |
-| D6 性能 | 5 | 5 | 0 |
-| D8 文档 | 7 | 7 | 0 |
-| D9 协议 | 11 | 11 | 0 |
-| D10 路由评测 | 2 | 2 | 0 |
-| EXP-C4 服务矩阵 | 22 | 22 | 0 |
-| EXP-E 路由评测 | 15 | 15 | 0 |
-| EXP-D5 客户端矩阵 | 2 | 2 | 0 |
+| 维度 | 总数 | PASS | FAIL | BLOCKED |
+|---|---|---|---|---|
+| D1 安装升级 | 14 | 14 | 0 | 0 |
+| D2 凭证管理 | 10 | 10 | 0 | 0 |
+| D3 工具服务 | 22 | 19 | 0 | 3→1 |
+| D4 安全模型 | 19 | 16 | 3 | 0 |
+| D5 客户端矩阵 | 2 | 2 | 0 | 0 |
+| D6 性能 | 3 | 3 | 0 | 0 |
+| D8 文档技能 | 5 | 5 | 0 | 0 |
+| D9 协议 | 11 | 11 | 0 | 0 |
+| D10 评测 | 2 | 1 | 1 | 0 |
+| 展开级 | 39 | 27 | 12 | 0 |
+| 场景 | 8 | 6 | 0 | 2 |
 
 ## 四、缺陷清单
 
-### FAIL-1: D4-2 凭证env打印拦截
+共发现 4 类缺陷（详见 FINDINGS.md）：
 
-- **用例ID**: D4-2
-- **优先级**: P0
-- **描述**: hook_check_command 未拦截 `echo $HW_SECRET_KEY` 命令
-- **断言**: hook_check_command 对 `echo $HW_SECRET_KEY` 应返回 decision:deny 或 findings 非空
-- **实际结果**: `{ok:true, decision:"allow", findings:[]}` — 未检测到凭证环境变量打印
-- **根因**: `plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:26` — `hwc-command-env-dump` 规则命令正则未覆盖 `echo $HW_*` 单变量打印，环境变量前缀正则未含 `HW_` 前缀
-- **证据**: evidence/D4-2/stdout.log
-- **状态**: 历史问题 #561（open），v1.1.5 复核仍成立
-
-### FAIL-2: D4-3 明文secret API拦截
-
-- **用例ID**: D4-3
-- **优先级**: P0
-- **描述**: hook_check_command 未拦截 `hcloud ECS CreateServers --adminPass MySecret123` 中的明文 adminPass
-- **断言**: hook_check_command 对含 `--adminPass` 明文参数的命令应返回 findings 非空（警告明文密码）
-- **实际结果**: `{ok:true, decision:"allow", findings:[]}` — 未检测到明文 secret 参数
-- **根因**: `plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:47` — `hwc-command-secret-value-read` 规则未对 `--adminPass`、`--password` 等敏感参数进行模式匹配
-- **证据**: evidence/D4-3/stdout.log
-- **状态**: 历史问题 #561（open），v1.1.5 复核仍成立
+| 编号 | 用例 | 级别 | 描述 | 根因 |
+|---|---|---|---|---|
+| F-001 | D4-2 | P0 | `echo $HUAWEICLOUD_SECRET_ACCESS_KEY` 未拦截 | safety-policy.mjs:418 正则缺 SECRET_ACCESS_KEY |
+| F-002 | D4-3 | P0 | `hcloud KMS ShowSecret` 未拦截 | safety-policy.mjs:432 正则缺 KMS ShowSecret |
+| F-003 | D4-23 | P0 | 规则文件未打包进 npm | package.json files 缺 "rules/" |
+| F-004 | D10-3 | P1 | serviceCatalog 路由准确率 21.4% | tools.mjs serviceCatalog 中文意图覆盖不足 |
 
 ## 五、未执行用例与原因
 
-无未执行用例。所有 139 条用例均已实际执行并回填结果。
+| 用例 | 状态 | 分类 | 原因 | 建议 |
+|---|---|---|---|---|
+| D3-S3 | BLOCKED | 【补环境】 | 沙箱预览需运行中的 Hdkitservice 实例，hcloud CLI 不直接支持 | 需通过 MCP sandbox 工具或 hdkitservice API 创建沙箱实例后复测 |
+| D3-S7 | BLOCKED | 【补环境】 | 跨服务交付场景（Web 应用 + RDS）需创建多资源，daily 窗口内不可行 | 建议纳入版本全量测试或专项场景测试 |
 
 ## 六、安全/红线
 
-- **真云用例**: 本次测试未涉及真云资源创建/删除（测试用例均为工具注册/路由/安全预检类），无资源泄露风险
-- **PASS 门禁**: 已通过 `verify_no_fake_pass.py` 校验，所有 PASS 用例均有 evidencePath 且证据文件存在
-- **覆盖率门禁**: 已通过 `verify_coverage.py` 校验，P0 无 NOT_RUN/空，NOT_RUN+空占比 0.0%
-- **目录权限**: 仅修改 `results/CodeArtsWork/` 目录，未碰 Summary、其他客户端、test-cases 母版
+- **真云用例**: D3-S1(ECS 只读查询)、D3-C5(工具冒烟)、D4-13(最小权限凭证) 均真机执行，未 mock
+- **凭证安全**: 所有探针输出经 redactSecrets 脱敏，无明文 AK/SK 落盘
+- **资源归零**: 本次测试未创建任何持久云资源（只读操作为主），无需清理
+- **PASS 门禁**: 所有 PASS 用例均有 evidencePath 回填 + 证据落盘
 
 ## 七、资源释放
 
-本次测试未创建任何云资源，无需清理。
+- 本次测试未创建持久云资源
+- 临时文件（skip state、temp credentials）已清理
+- 环境变量（HW_ACCESS_KEY/HW_SECRET_KEY）已还原
 
 ## 八、遗留建议
 
-1. **D4-2 修复建议**: 在 `cloud-risk-rules.json` 的 `hwc-command-env-dump` 规则中，命令正则新增 `echo\s+\$HW_` 模式，环境变量前缀正则新增 `HW_` 前缀
-2. **D4-3 修复建议**: 在 `cloud-risk-rules.json` 新增规则，检测 hcloud 命令中 `--adminPass`、`--password`、`--secret` 等敏感参数的明文值，返回 findings 警告
-3. **历史关联**: D4-2/D4-3 均命中源码仓库 issue #561（open），不重复开单，在 #561 追加复核评论
-
----
-
-> 报告生成时间: 2026-09-21 05:15 (UTC+8)  
-> 探针脚本: probe-p0.mjs, probe-p1.mjs, probe-p2.mjs, probe-expanded.mjs  
-> 证据目录: evidence/ (含 139 个用例的 stdout.log)
+1. **F-001/F-002**: safety-policy.mjs 正则覆盖缺口，建议优先修复（P0 安全缺陷）
+2. **F-003**: package.json files 字段补充 "rules/"，确保规则文件随包发布
+3. **F-004**: serviceCatalog 中文意图路由需大幅扩展，当前 21.4% 准确率不满足生产要求
+4. **D3-S3/D3-S7**: 建议在版本全量测试中覆盖沙箱和跨服务场景
