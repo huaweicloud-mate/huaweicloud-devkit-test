@@ -1,0 +1,9 @@
+D9-9a-capabilities.cancellation | SPEC-MISMATCH | 期望=声明 notifications.cancellation | 实际=未声明 | initialize.result.capabilities.notifications = "(缺失)"
+D9-4-lifecycle-tools/list | PASS   | 期望=tools/list 正常返回(数组非空) | 实际=40 工具
+D9-2a-unknown-method | PASS   | 期望=-32601 (Method not found) | 实际=-32601 | error.code
+D9-2b-invalid-params | FAIL   | 期望=-32602 (Invalid params) | 实际=无 error 对象 | error.code
+D9-6-clientinfo-matrix | PASS   | 期望=10 客户端 clientInfo 均可互通 | 实际=10/10 | 任意 clientInfo 均 initialize+tools/list 正常
+
+=== D9 协议探针汇总 ===
+PASS=3/5（SPEC-MISMATCH 记作契约漂移、FAIL 记作缺陷）
+结果落盘: C:\Users\Administrator\Documents\Codex\2026-09-20\huaweicloud-devkit-1-devkit-test-clone\work\devkit-test\codex\test\eval\results\protocol-probe-20260920030616.json
