@@ -1,0 +1,19 @@
+{
+  "caseId": "D3-C13",
+  "region": "cn-north-4",
+  "createdResources": [
+    {
+      "type": "OBS bucket",
+      "name": "tctest-codex-20260920-obs-static",
+      "cleanup": "deleted"
+    }
+  ],
+  "assertions": {
+    "getBeforeSet": "404 NoSuchWebsiteConfiguration",
+    "set": "200",
+    "getAfterSet": "index.html and error.html present",
+    "delete": "204",
+    "postCleanup": "bucket absent from OBS ls"
+  },
+  "secretsRedacted": true
+}

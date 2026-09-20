@@ -1,0 +1,14 @@
+2026-09-20T15:16:00+08:00
+auth_status: credentialsConfigured=true, kooCliStatus=ok, region=cn-north-4
+OBS setup: created regional obsutil config from global credentials
+CREATE: tctest-codex-20260920-obs-static, location=cn-north-4, initial_acl=private
+ACL: private -> public-read, exitCode=0
+GET before set: status=404, Code=NoSuchWebsiteConfiguration
+SET: indexDocument=index.html, errorDocument=error.html, status=200
+GET after set: status=200, IndexDocument/Suffix=index.html, ErrorDocument/Key=error.html
+DELETE website config: status=204
+DELETE bucket: success
+VERIFY OBS ls: tctest-codex-20260920-obs-static absent; pre-existing bucket count=1
+NEGATIVE SET: action=set without indexDocument rejected locally with "indexDocument is required for action=set"
+NEGATIVE SET cleanup: temporary bucket tctest-codex-20260920-obs-static-missing deleted
+No credentials, tokens, or secret values recorded.
