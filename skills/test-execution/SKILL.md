@@ -37,6 +37,8 @@ python scripts/init_day.py <客户端> <OS>
 ### 2. 执行
 按 **P0 → P1 → P2** 逐条执行副本 CSV 用例，证据（probe 脚本 + stdout.log）落盘 `evidence/<case-id>/`。**执行中持续输出进度**（当前用例/已跑数/耗时），长用例也输出中间状态——长时间无输出会被调度器判 idle 杀掉。
 
+> **结果必须机器可读落盘（防「执行完来不及回填」被工具调用上限截断，2026-09-20 起）**：每个用例执行完，除了探测脚本，**必须把结论写进 `evidence/<case-id>/stdout.log`**（JSON，至少含 `status` 字段：`PASS`/`FAIL`/`BLOCKED`/`SPEC-MISMATCH`/`NOT_RUN`；可选 `why` 根因、`executedAt` 14 位时间）。**探针脚本末尾直接 `writeFileSync` 把 `results[caseId]` 落盘**，不要只留在对话上下文——这样即使会话因工具调用上限中断，已执行的结果也已在盘，回填可单独续跑、不丢数据。真云用例（建删资源）更要边执行边落盘，避免中断后重复建删。
+
 ### 2.5 展开级已按客户端+OS 预筛（init_day 建包即过滤，不再下发非本客户端用例）
 
 `init_day.py` 复制展开级时已按「`agent` 列（执行客户端）+ `OS` 列（执行系统）」预筛，**你拿到的展开级用例都是归你执行、且匹配你 OS 的**，不会再有「别的客户端 / 别的 OS」的展开级。
@@ -49,6 +51,12 @@ python scripts/init_day.py <客户端> <OS>
 ### 3. 回填执行状态 + 执行时间
 - 「执行状态」枚举：`PASS`（有证据）/ `FAIL`（不符预期，记根因）/ `BLOCKED`（环境阻塞，记 blockedReason）/ `SPEC-MISMATCH`（契约漂移）/ `NOT_RUN`。
 - 「执行时间」：北京时间紧凑 14 位 `YYYYMMDDHHmmss`，**与「执行状态」同一动作回填**（执行完即落）。
+
+> **批量回填优先（防工具调用上限，2026-09-20 起）**：执行完别逐条 read+write CSV（上百次工具调用会挤爆 `max_turns`）。若第 2 步已把结论落盘成 `evidence/<case-id>/stdout.log`，**跑一次脚本批量回填**即可：
+> ```bash
+> python scripts/backfill_daily.py <客户端> <OS> --write
+> ```
+> 该脚本读全部 `stdout.log` → 一次性写回设计级/展开级/追踪表三份 CSV（执行状态 + 执行时间 + evidencePath）；无 `stdout.log` 的用例保留原值、绝不造 PASS，真云建删资源等副作用探针**不会**被它触发（它只读日志、不执行探针）。跑完先 `--date <日期>` 不加 `--write` 看 dry-run 数量，再 `--write` 落盘。**无 `stdout.log` 的少数用例（如真云逐条判断的）仍按原方式逐条回填**。
 - **NOT_RUN 纪律**：P0 一律不得 NOT_RUN/留空（P0 必测，要么 PASS/FAIL 要么 BLOCKED），**唯一例外 = OS 专属 P0 用例在非对应 OS**（OS 列标注「专属」，如 D1-39 Windows 专属在 Linux 标 NOT_RUN 并写原因，Linux 侧由展开级 EXP-NR3-10 代表覆盖）；NOT_RUN 仅限「明确不适用本客户端/OS」且写原因；「环境不满足」标 BLOCKED 而非 NOT_RUN。
 - **未执行原因反馈（给维护 agent 改用例）**：所有 NOT_RUN / BLOCKED 用例，原因须「详细到可判断是否需改用例」，并标注分类——【改用例】用例设计不合理（前置/步骤/预期不可判定、粒度、归属、需真云/真机未标注）→ 维护 agent 改 `test-cases/` 母版；【补环境】环境/凭证/配额缺失；【调归属】归属列（agent/OS/终端覆盖类型）写错。报告 §五**逐条**列出（ID+层级+优先级+状态+分类+详细原因+改用例建议），不得笼统写「无阻塞项」敷衍。
 - 回填后跑 `python scripts/verify_coverage.py <客户端> <OS>`：P0 出现 NOT_RUN/空、或 NOT_RUN+空总占比 > 15% → 不达标，补齐重跑。
