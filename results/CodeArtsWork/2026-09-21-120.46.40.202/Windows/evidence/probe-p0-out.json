@@ -1,0 +1,175 @@
+{
+  "total": 28,
+  "pass": 26,
+  "fail": 2,
+  "results": [
+    {
+      "id": "D1-39",
+      "name": "check_update returns structured result on Windows",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-39",
+      "name": "no EINVAL error",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-40",
+      "name": "update check handles null latestStable",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-40",
+      "name": "judgeUpdate(current, null) -> no crash",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D2-4",
+      "name": "redacted show does not expose full SK",
+      "pass": true,
+      "actual": "{\"ok\":true,\"note\":\"Profile information was returned through the toolkit redaction pipeline.\",\"result\":{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"name\\\": \\\"readonly\\\",\\n  \\\"mode\\\": \\\"AKSK\\\""
+    },
+    {
+      "id": "D2-4",
+      "name": "redacted show does not expose full AK",
+      "pass": true,
+      "actual": "{\"ok\":true,\"note\":\"Profile information was returned through the toolkit redaction pipeline.\",\"result\":{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"name\\\": \\\"readonly\\\",\\n  \\\"mode\\\": \\\"AKSK\\\""
+    },
+    {
+      "id": "D2-11",
+      "name": "persist+token -> rejected/needs_confirmation",
+      "pass": true,
+      "actual": "{\"status\":\"needs_confirmation\",\"confirmToken\":\"switch-1789938853056-lvtlsc\",\"options\":[{\"key\":\"s1\",\"label\":\"以 S1 现有账号为准（不切换，恢复 backup）\"},{\"key\":\"newImported\",\"label\":\"以新账号（acce35ec）为准，覆盖 S1 并同步全部凭证文件\"}]}"
+    },
+    {
+      "id": "D2-11",
+      "name": "token not persisted to S1",
+      "pass": true,
+      "actual": "{\"ak\":\"TESTAK0000000000001\",\"sk\":\"TESTSK0000000000001\",\"securityToken\":\"\",\"region\":\"cn-north-4\"}"
+    },
+    {
+      "id": "D4-1",
+      "name": "plan returns structured result",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"CreateServers\",\"--dry-run\"],\"command\":\"hcloud ECS CreateServers --dry-run\",\"executableBlock\":\"hcloud ECS CreateServers --dry-run\",\"warnings\":[\"Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id\",\"Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs\"],\"classification\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"},\"sgFindings\":[],\"approvalToken\":\"bf840ba1-93eb-4ce6-b17f-c70abafd1b6a\",\"safeToRun\":false}"
+    },
+    {
+      "id": "D4-1",
+      "name": "hook blocks credential file read",
+      "pass": true,
+      "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-command-credential-file\",\"title\":\"Credential file read\",\"category\":\"credential\",\"severity\":\"deny\",\"message\":\"The command may read local Huawei Cloud credential or profile files into the agent context.\",\"remediation\":\"Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.\",\"source\":\"command\",\"evidence\":\"type ~/.config/huaweicloud/credentials.json\"}],\"nextStep\":\"Revise the command, artifact, or deployment plan before execution.\"}"
+    },
+    {
+      "id": "D4-2",
+      "name": "hook blocks credential env print",
+      "pass": false,
+      "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+    },
+    {
+      "id": "D4-3",
+      "name": "hook blocks plaintext adminPass",
+      "pass": false,
+      "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+    },
+    {
+      "id": "D4-5",
+      "name": "ListServers not classified as write",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServers\"],\"command\":\"hcloud ECS ListServers\",\"executableBlock\":\"hcloud ECS ListServers\",\"warnings\":[],\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServers\",\"args\":[\"ECS\",\"ListServers\"]},\"sgFindings\":[],\"approvalToken\":\"685fde88-482a-43d6-a579-b05800bdd804\",\"safeToRun\":true}"
+    },
+    {
+      "id": "D4-5",
+      "name": "CreateServers classified as write",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"CreateServers\"],\"command\":\"hcloud ECS CreateServers\",\"executableBlock\":\"hcloud ECS CreateServers\",\"warnings\":[\"Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id\",\"Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs\"],\"classification\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"},\"sgFindings\":[],\"approvalToken\":\"11910aec-7c66-46ed-adc1-9b8016848564\",\"safeToRun\":false}"
+    },
+    {
+      "id": "D4-9",
+      "name": "hook flags destructive DeleteServers",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-destructive-delete-operation\",\"title\":\"Destructive cloud resource operation\",\"category\":\"destructive\",\"severity\":\"warn\",\"message\":\"This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.\",\"remediation\":\"List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.\",\"source\":\"command\",\"evidence\":\"hcloud ECS DeleteServers --server-ids 123\"}],\"nextStep\":\"Review the warnings with the user before proceeding.\"}"
+    },
+    {
+      "id": "D4-9",
+      "name": "hook flags public exposure create",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+    },
+    {
+      "id": "D4-15",
+      "name": "hook catches shell injection bypass",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-destructive-delete-operation\",\"title\":\"Destructive cloud resource operation\",\"category\":\"destructive\",\"severity\":\"warn\",\"message\":\"This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.\",\"remediation\":\"List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.\",\"source\":\"command\",\"evidence\":\"hcloud ECS DeleteServers; echo bypassed\"}],\"nextStep\":\"Review the warnings with the user before proceeding.\"}"
+    },
+    {
+      "id": "D4-16",
+      "name": "hook catches wrapped destructive command",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-destructive-delete-operation\",\"title\":\"Destructive cloud resource operation\",\"category\":\"destructive\",\"severity\":\"warn\",\"message\":\"This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.\",\"remediation\":\"List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.\",\"source\":\"command\",\"evidence\":\"powershell -c \\\"hcloud ECS DeleteServers\\\"\"}],\"nextStep\":\"Review the warnings with the user before proceeding.\"}"
+    },
+    {
+      "id": "D4-18",
+      "name": "plan returns approvalToken for write",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"CreateServers\",\"--dry-run\"],\"command\":\"hcloud ECS CreateServers --dry-run\",\"executableBlock\":\"hcloud ECS CreateServers --dry-run\",\"warnings\":[\"Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id\",\"Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs\"],\"classification\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"},\"sgFindings\":[],\"approvalToken\":\"8beed123-b440-4abc-87ed-566d4d59a5dd\",\"safeToRun\":false}"
+    },
+    {
+      "id": "D4-19",
+      "name": "precheck still active with force flag",
+      "pass": true,
+      "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-destructive-delete-force\",\"title\":\"Forced destructive operation\",\"category\":\"destructive\",\"severity\":\"deny\",\"message\":\"The command combines deletion with force, recursive, or cascading deletion behavior.\",\"remediation\":\"Show the exact resources to be deleted, confirm backups or recovery path, and require explicit user approval for the exact command.\",\"source\":\"command\",\"evidence\":\"hcloud ECS DeleteServers --server-ids 123 --force\"},{\"ruleId\":\"hwc-destructive-delete-operation\",\"title\":\"Destructive cloud resource operation\",\"category\":\"destructive\",\"severity\":\"warn\",\"message\":\"This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.\",\"remediation\":\"List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.\",\"source\":\"command\",\"evidence\":\"hcloud ECS DeleteServers --server-ids 123 --force\"}],\"nextStep\":\"Revise the command, artifact, or deployment plan before execution.\"}"
+    },
+    {
+      "id": "D4-21",
+      "name": "hook_check_artifacts returns structured result",
+      "pass": true,
+      "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-iam-admin-policy\",\"title\":\"Broad IAM administrator grant\",\"category\":\"iam\",\"severity\":\"deny\",\"message\":\"The change appears to grant broad administrator permissions.\",\"remediation\":\"Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.\",\"source\":\"policy.json\",\"evidence\":\"policy.json {\\\"Version\\\":\\\"1.1\\\",\\\"Statement\\\":[{\\\"Effect\\\":\\\"Allow\\\",\\\"Action\\\":\\\"*\\\",\\\"Resource\\\":\\\"*\\\"}]}\"}],\"nextStep\":\"Revise the command, artifact, or deployment plan before execution.\"}"
+    },
+    {
+      "id": "D4-21",
+      "name": "artifacts check flags broad IAM policy",
+      "pass": true,
+      "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-iam-admin-policy\",\"title\":\"Broad IAM administrator grant\",\"category\":\"iam\",\"severity\":\"deny\",\"message\":\"The change appears to grant broad administrator permissions.\",\"remediation\":\"Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.\",\"source\":\"policy.json\",\"evidence\":\"policy.json {\\\"Version\\\":\\\"1.1\\\",\\\"Statement\\\":[{\\\"Effect\\\":\\\"Allow\\\",\\\"Action\\\":\\\"*\\\",\\\"Resource\\\":\\\"*\\\"}]}\"}],\"nextStep\":\"Revise the command, artifact, or deployment plan before execution.\"}"
+    },
+    {
+      "id": "D4-22",
+      "name": "hook_check_deploy_plan returns structured result",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-sandbox-missing-ttl\",\"title\":\"Sandbox deployment missing cleanup metadata\",\"category\":\"sandbox\",\"severity\":\"warn\",\"message\":\"The preview or sandbox deployment does not show cleanup or ownership metadata.\",\"remediation\":\"Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.\",\"source\":\"deploy_plan\",\"evidence\":\"{ \\\"resources\\\": [ { \\\"type\\\": \\\"ECS\\\", \\\"action\\\": \\\"create\\\", \\\"name\\\": \\\"test-instance\\\" }, { \\\"type\\\": \\\"EIP\\\", \\\"action\\\": \\\"create\\\", \\\"bandwidth\\\": 100 } ] }\"}],\"nextStep\":\"Review the warnings with the user before proceeding.\"}"
+    },
+    {
+      "id": "D4-22",
+      "name": "deploy plan check flags EIP exposure",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-sandbox-missing-ttl\",\"title\":\"Sandbox deployment missing cleanup metadata\",\"category\":\"sandbox\",\"severity\":\"warn\",\"message\":\"The preview or sandbox deployment does not show cleanup or ownership metadata.\",\"remediation\":\"Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.\",\"source\":\"deploy_plan\",\"evidence\":\"{ \\\"resources\\\": [ { \\\"type\\\": \\\"ECS\\\", \\\"action\\\": \\\"create\\\", \\\"name\\\": \\\"test-instance\\\" }, { \\\"type\\\": \\\"EIP\\\", \\\"action\\\": \\\"create\\\", \\\"bandwidth\\\": 100 } ] }\"}],\"nextStep\":\"Review the warnings with the user before proceeding.\"}"
+    },
+    {
+      "id": "D4-23",
+      "name": "global rules loaded and active",
+      "pass": true,
+      "actual": "rules active via hook"
+    },
+    {
+      "id": "D4-28",
+      "name": "hook checks node command",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+    },
+    {
+      "id": "D8-7",
+      "name": "search_docs returns results",
+      "pass": true,
+      "actual": "results:10"
+    },
+    {
+      "id": "D10-4",
+      "name": "static rule blocks bulk delete",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-destructive-delete-operation\",\"title\":\"Destructive cloud resource operation\",\"category\":\"destructive\",\"severity\":\"warn\",\"message\":\"This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.\",\"remediation\":\"List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.\",\"source\":\"command\",\"evidence\":\"hcloud ECS DeleteServers --server-ids i-123,i-456\"}],\"nextStep\":\"Review the warnings with the user before proceeding.\"}"
+    }
+  ]
+}

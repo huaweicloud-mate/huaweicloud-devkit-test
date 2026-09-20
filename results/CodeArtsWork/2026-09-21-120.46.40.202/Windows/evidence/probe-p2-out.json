@@ -1,0 +1,187 @@
+{
+  "total": 30,
+  "pass": 30,
+  "fail": 0,
+  "results": [
+    {
+      "id": "D1-4",
+      "name": "check_cli idempotent (same result twice)",
+      "pass": true,
+      "actual": "both ok"
+    },
+    {
+      "id": "D1-30",
+      "name": "check_update returns version fields for semver compare",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-33",
+      "name": "dismiss persists across calls",
+      "pass": true,
+      "actual": "{\"uc1\":{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"},\"uc2\":{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}}"
+    },
+    {
+      "id": "D1-65",
+      "name": "debug mode via DEBUG/HDK_DEBUG env var",
+      "pass": true,
+      "actual": "env var supported"
+    },
+    {
+      "id": "D1-66",
+      "name": "telemetry via HDK_TELEMETRY env var",
+      "pass": true,
+      "actual": "env var supported"
+    },
+    {
+      "id": "D1-67",
+      "name": "agent toolkit mode via HDK_TOOLKIT_MODE env var",
+      "pass": true,
+      "actual": "env var supported"
+    },
+    {
+      "id": "D1-68",
+      "name": "get_service_icon returns result",
+      "pass": true,
+      "actual": "{\"ok\":true,\"query\":\"ecs\",\"source\":\"live\",\"manifestGeneratedAt\":\"2026-07-31T17:23:51.479Z\",\"count\":2,\"iconsPageUrl\":\"https://open.huaweicloud.com/openplatform/icons.html\",\"note\":\"Live manifest from open.huaweicloud.com.\",\"results\":[{\"id\":\"ecs\",\"name\":\"弹性云服务器 ECS\",\"category\":\"计算\",\"description\":\"可随时自动获取、弹性伸缩的云服务器\",\"aliases\":[\"ecs\"],\"product_url\":\"https://www.huaweicloud.com/product/ecs.html\",\"logo\":{\"source_url\":\"https://res-static.hc-cdn.cn/cloudbu-site/public/new-product-icon/Compute/ECS.png\",\"local_path\":\"icons/assets/logo/ecs.png\"},\"architecture\":{\"status\":\"planned\",\"local_path\":\"icons/assets/architecture/ecs.svg\"},\"score\":10,\"matched\":[\"ecs\"]},{\"id\":\"sdrs\",\"name\":\"业务恢复服务 BRS\",\"category\":\"存储\",\"description\":\"为ECS提供跨可用区RPO=0的容灾保护\",\"aliases\":[\"brs\",\"sdrs\"],\"product_url\":\"https://www.huaweicloud.com/product/sdrs.html\",\"logo\":{\"source_url\":\"https://res-static.hc-cdn.cn/cloudbu-site/public/new-product-icon/Storage/SDRS.png\",\"local_path\":\"icons/assets/logo/sdrs.png\"},\"architecture\":{\"status\":\"planned\",\"local_path\":\"icons/assets/architecture/sdrs.svg\"},\"score\":2,\"matched\":[\"ecs\"]}]}"
+    },
+    {
+      "id": "D1-69",
+      "name": "CLI help subcommands (install/uninstall/doctor/status/update)",
+      "pass": true,
+      "actual": "CLI subcommands registered"
+    },
+    {
+      "id": "D2-2",
+      "name": "auth_status returns credentialsConfigured field",
+      "pass": true,
+      "actual": "{\"target\":\"all\",\"credentialsConfigured\":false,\"credentialsPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\hdk-p2-aRkrAc\\\\.config\\\\huaweicloud\\\\credentials.json\",\"obsConfigured\":false,\"obsConfigPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\hdk-p2-aRkrAc\\\\obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"reconciled\":{\"stores\":{\"s1Fingerprint\":\"\",\"envFingerprint\":\"\",\"currentFingerprint\":null,\"s3Fingerprint\":null,\"runtimeFingerprint\":null},\"kooCliCurrent\":null,\"envIsPlaceholder\":false,\"s2Encrypted\":false,\"inconsistencies\":[],\"hasRuntime\":false,\"runtimeFingerprint\":null,\"inconsistent\":false,\"runtimeActive\":false},\"onboarding\":{\"needsSetup\":true,\"scenario\":3,\"reason\":\"s1-missing\",\"message\":\"未配置华为云凭证,需要完成登录后才能使用云能力。\",\"steps\":[{\"order\":1,\"action\":\"obtain-aksk\",\"target\":\"console\",\"label\":\"获取 AK/SK(华为云控制台)\"},{\"order\":2,\"action\":\"write-import\",\"target\":\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\creds-import.json\",\"label\":\"把 AK/SK 写入 creds-import.json\"},{\"order\":3,\"action\":\"auth_switch\",\"args\":{\"mode\":\"import\",\"action\":\"persist\"},\"label\":\"执行导入完成配置\"}],\"accountHint\":null},\"agents\":{\"opencode\":{\"configured\":false},\"codex\":{\"configured\":false},\"codex-desktop\":{\"configured\":false},\"codearts\":{\"configured\":false},\"codearts-work\":{\"configured\":false},\"workbuddy\":{\"configured\":false},\"dsh\":{\"configured\":false},\"officeace\":{\"configured\":false},\"hermes\":{\"configured\":false},\"openclaw\":{\"configured\":false},\"atomcode\":{\"configured\":false}}}"
+    },
+    {
+      "id": "D2-27",
+      "name": "check_cli returns kooCliVersion",
+      "pass": true,
+      "actual": "{\"installed\":true,\"authenticated\":true,\"status\":\"ok\",\"output\":\"当前KooCLI版本:7.2.12\",\"kooCliVersion\":\"7.2.12\",\"installedVersion\":\"7.2.12\",\"versionMismatch\":false,\"nextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"authHint\":\"If hcloud is installed but commands fail with \\\"配置文件中不存在配置项\\\", run `npx huaweicloud-devkit auth init` outside agent chat to configure credentials.\"}"
+    },
+    {
+      "id": "D3-B1",
+      "name": "list_operations returns result for ECS",
+      "pass": true,
+      "actual": "{\"service\":\"ECS\",\"command\":\"hcloud ECS --help\",\"selectionRule\":\"Use this help text to select the exact KooCLI operation name before planning any service command.\",\"examples\":{\"list\":\"ECS ListServersDetails\",\"create\":\"ECS CreateServers\",\"show\":\"IMS GlanceShowImage\"},\"result\":{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"\\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\\n\\nUsage:\\n  hcloud ECS <operation> --param1=value1 --param2=value2 ...\\n\\nService:\\n  ECS\\n\\nAvailable Operations:\\n  AcceptScheduledEvent\\n  AddServerGroupMember\\n  AssociateServerVirtualIp\\n  AttachServerVolume\\n  BatchAddServerGroupMember\\n  BatchAddServerNics\\n  BatchAttachSharableVolumes\\n  BatchCreateServerTags\\n  BatchDeleteServerGroupMember\\n  BatchDeleteServerNics\\n  BatchDeleteServerTags\\n  BatchDetachVolumes\\n  BatchRebootServers\\n  BatchResetServersPassword\\n  BatchResizeServers\\n  BatchStartServers\\n  BatchStopServers\\n  BatchUpdateServersName\\n  ChangeServerChargeMode\\n  ChangeServerNetworkInterface\\n  ChangeServerOsWithCloudInit\\n  ChangeServerOsWithoutCloudInit\\n  ChangeVpc\\n  CreateLaunchTemplate\\n  CreatePostPaidServers\\n  CreateServerGroup\\n  CreateServers\\n  DeleteLaunchTemplates\\n  DeleteRecycleBinServer\\n  DeleteServerGroup\\n  DeleteServerGroupMember\\n  DeleteServerMetadata\\n  DeleteServerPassword\\n  DeleteServers\\n  DetachServerVolume\\n  DisassociateServerVirtualIp\\n  ExecuteServerDump\\n  ExecuteServerRedeploy\\n  ListCloudServers\\n  ListFlavorSellPolicies\\n  ListFlavors\\n  ListLaunchTemplateVersions\\n  ListRecycleBinServers\\n  ListResizeFlavors\\n  ListScheduledEvents\\n  ListServerAzInfo\\n  ListServerBlockDevices\\n  ListServerGroups\\n  ListServerInterfaces\\n  ListServerTags\\n  ListServerVolumeAttachments\\n  ListServersDetails\\n  ListTemplates\\n  MigrateServer\\n  NovaAssociateSecurityGroup\\n  NovaAttachInterface\\n  NovaAttachVolume\\n  NovaCreateKeypair\\n  NovaCreateServerGroup\\n  NovaCreateServerMetadata\\n  NovaCreateServers\\n  NovaDeleteKeypair\\n  NovaDeleteServer\\n  NovaDeleteServerGroup\\n  NovaDeleteServerMetadataItem\\n  NovaDetachInterface\\n  NovaDetachVolume\\n  NovaDisassociateSecurityGroup\\n  NovaListAvailabilityZones\\n  NovaListFlavors\\n  NovaListFlavorsDetails\\n  NovaListKeypairs\\n  NovaListServerActions\\n  NovaListServerGroups\\n  NovaListServerInterfaces\\n  NovaListServerSecurityGroups\\n  NovaListServerVolumes\\n  NovaListServers\\n  NovaListServersDetails\\n  NovaListVersions\\n  NovaLockServer\\n  NovaRebootServer\\n  NovaShowFlavor\\n  NovaShowFlavorExtraSpecs\\n  NovaShowKeypair\\n  NovaShowServer\\n  NovaShowServerAction\\n  NovaShowServerGroup\\n  NovaShowServerInterface\\n  NovaShowServerMetadata\\n  NovaShowServerMetadataItem\\n  NovaShowServerVolume\\n  NovaShowVersion\\n  NovaStartServer\\n  NovaStopServer\\n  NovaUnlockServer\\n  NovaUpdateServer\\n  NovaUpdateServerMetadata\\n  NovaUpdateServerMetadataItem\\n  RegisterServerMonitor\\n  ReinstallServerWithCloudInit\\n  ReinstallServerWithoutCloudInit\\n  ResetServerPassword\\n  ResizePostPaidServer\\n  ResizeServer\\n  RevertRecycleBinServer\\n  ShowAppendableVolumeQuota\\n  ShowFlavorCapacity\\n  ShowJob\\n  ShowMetadataOptions\\n  ShowRecycleBin\\n  ShowResetPasswordFlag\\n  ShowSerialConsoleActions\\n  ShowServer\\n  ShowServerAttachableNicNum\\n  ShowServerBlockDevice\\n  ShowServerGroup\\n  ShowServerLimits\\n  ShowServerPassword\\n  ShowServerRemoteConsole\\n  ShowServerTags\\n  UpdateMetadataOptions\\n  UpdateRecycleBin\\n  UpdateRecycleBinPolicy\\n  UpdateScheduledEvent\\n  UpdateSerialConsoleOptions\\n  UpdateServer\\n  UpdateServerAutoTerminateTime\\n  UpdateServerBlockDevice\\n  UpdateServerInterface\\n  UpdateServerMetadata\\n\\n运行`hcloud ECS <operation> --help`获取更多的关于operation的使用帮助\\n\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"--help\"],\"command\":\"hcloud ECS --help\",\"executableBlock\":\"hcloud ECS --help\",\"warnings\":[],\"classification\":{\"decision\":\"allow\",\"risk\":\"local_metadata\",\"reason\":\"KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.\",\"service\":\"ECS\",\"operation\":\"ECS\",\"args\":[\"ECS\",\"--help\"]},\"sgFindings\":[],\"approvalToken\":\"ead4efb2-cfcd-445e-9e14-67ee898baf0d\",\"safeToRun\":true,\"rawArgs\":[\"ECS\",\"--help\"]},\"retries\":0,\"attempts\":1}}"
+    },
+    {
+      "id": "D3-B5",
+      "name": "detect_framework tool available",
+      "pass": true,
+      "actual": "tool registered"
+    },
+    {
+      "id": "D3-C14",
+      "name": "sandbox HDKit service params (check_user/sign_agreement)",
+      "pass": true,
+      "actual": "tools registered"
+    },
+    {
+      "id": "D3-S5",
+      "name": "service_catalog handles compound intent",
+      "pass": true,
+      "actual": "{\"intent\":\"部署Web应用到华为云并配置RDS数据库\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list available services.\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an official or approved server is available\",\"Terraform Provider only when IaC reviewability and repeatability are important\"],\"ruleOfThumb\":{\"skills\":\"Start here when the user describes a scenario or wants a guided workflow.\",\"cli\":\"Use for local diagnostics, read-only inspection, and commands the user can review.\",\"api\":\"Use for exact service contract, region endpoint, project_id, pagination, and error codes.\",\"sdk\":\"Use when writing application code that calls Huawei Cloud services.\",\"mcp\":\"Prefer approved MCP tools when available because tools can carry structured schemas.\",\"terraform\":\"Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis.\"}}"
+    },
+    {
+      "id": "D3-S6",
+      "name": "service_catalog routes FunctionGraph timer intent",
+      "pass": true,
+      "actual": "{\"intent\":\"创建FunctionGraph定时函数\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list available services.\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an official or approved server is available\",\"Terraform Provider only when IaC reviewability and repeatability are important\"],\"ruleOfThumb\":{\"skills\":\"Start here when the user describes a scenario or wants a guided workflow.\",\"cli\":\"Use for local diagnostics, read-only inspection, and commands the user can review.\",\"api\":\"Use for exact service contract, region endpoint, project_id, pagination, and error codes.\",\"sdk\":\"Use when writing application code that calls Huawei Cloud services.\",\"mcp\":\"Prefer approved MCP tools when available because tools can carry structured schemas.\",\"terraform\":\"Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis.\"}}"
+    },
+    {
+      "id": "D4-10",
+      "name": "hook rules library returns structured result",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+    },
+    {
+      "id": "D4-12",
+      "name": "supply chain install-time security (npm install hooks)",
+      "pass": true,
+      "actual": "install hooks in safety-policy"
+    },
+    {
+      "id": "D4-14",
+      "name": "operation auditability (CTS integration)",
+      "pass": true,
+      "actual": "CTS skill available for audit"
+    },
+    {
+      "id": "D4-25",
+      "name": "Python hook event telemetry classification",
+      "pass": true,
+      "actual": "hook events classified in risk-engine"
+    },
+    {
+      "id": "D4-26",
+      "name": "findings evidence redacted (no full secrets)",
+      "pass": true,
+      "actual": "redacted"
+    },
+    {
+      "id": "D4-29",
+      "name": "plan returns classification field",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServers\"],\"command\":\"hcloud ECS ListServers\",\"executableBlock\":\"hcloud ECS ListServers\",\"warnings\":[],\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServers\",\"args\":[\"ECS\",\"ListServers\"]},\"sgFindings\":[],\"approvalToken\":\"70798c3b-0dfa-4fda-a767-46b864e01f57\",\"safeToRun\":true}"
+    },
+    {
+      "id": "D6-1",
+      "name": "search_docs latency < 5000ms",
+      "pass": true,
+      "actual": "16ms"
+    },
+    {
+      "id": "D6-3",
+      "name": "MCP cold start < 10000ms",
+      "pass": true,
+      "actual": "55ms"
+    },
+    {
+      "id": "D6-9",
+      "name": "cache cleanup 3 entries (npm/hcloud/obs)",
+      "pass": true,
+      "actual": "cache cleanup supported"
+    },
+    {
+      "id": "D8-1",
+      "name": "docs consistent with capabilities (obs searchable)",
+      "pass": true,
+      "actual": "{\"ok\":true,\"query\":\"obs bucket\",\"topic\":\"all\",\"count\":17,\"results\":[{\"source\":\"skills/huawei-obs/SKILL.md\",\"name\":\"huawei-obs\",\"snippet\":\"'Use when creating, configuring, or managing OBS buckets and objects on Huawei Cloud. Covers bucket creation, lifecycle policies, versioning, static website hosting, CORS, access control (IAM/bucket p\",\"relevance\":10},{\"source\":\"skills/huawei-functiongraph/SKILL.md\",\"name\":\"huawei-functiongraph\",\"snippet\":\"'Use when creating, deploying, or managing serverless functions on FunctionGraph. Covers triggers (APIG/OBS/timer/SMN), cold start, reserved concurrency. Triggers: FunctionGraph, serverless, function,\",\"relevance\":5},{\"source\":\"skills/huawei-iac/SKILL.md\",\"name\":\"huawei-iac\",\"snippet\":\"'Use whenever the user wants to DEPLOY, host, or purchase anything on Huawei Cloud that creates billable resources: application deployments (部署应用到华为云, deploy my app, 上线, 搭建), architecture proposals, c\",\"relevance\":5},{\"source\":\"skills/huawei-modelarts/SKILL.md\",\"name\":\"huawei-modelarts\",\"snippet\":\"'Use when training, deploying, or managing AI/ML models on Huawei Cloud ModelArts. Covers training jobs, model registry, online services, notebook instances. Triggers: ModelArts, model training, AI, m\",\"relevance\":5},{\"source\":\"skills/huawei-cbr/SKILL.md\",\"name\":\"huawei-cbr\",\"snippet\":\"'Use when creating or managing Cloud Backup and Recovery (CBR) vaults, backups, and restore operations on Huawei Cloud. Triggers: CBR, backup, restore, vault, snapshot, disaster recovery. NOT for: OBS\",\"relevance\":4},{\"source\":\"skills/huawei-getting-started/SKILL.md\",\"name\":\"huawei-getting-started\",\"snippet\":\"'Use when starting fresh with Huawei Cloud or KooCLI, installing prerequisites, setting up authentication, or exploring what is possible. Triggers: getting started, first time, setup, install, explore\",\"relevance\":4},{\"source\":\"skills/huawei-cts/SKILL.md\",\"name\":\"huawei-cts\",\"snippet\":\"'Use when managing Cloud Trace Service (CTS) audit logs, trackers, and traces on Huawei Cloud. Triggers: CTS, Cloud Trace, audit log, tracker, trace, operation record. NOT for: CES monitoring alarms (\",\"relevance\":2},{\"source\":\"skills/huawei-deployment/SKILL.md\",\"name\":\"huawei-deployment\",\"snippet\":\"'Use when creating, managing, or running deployment tasks and pipelines on Huawei Cloud CloudDeploy. Triggers: CloudDeploy, deployment, CI/CD, pipeline, release, artifact deployment, deploy task. NOT \",\"relevance\":2},{\"source\":\"skills/huawei-iam/SKILL.md\",\"name\":\"huawei-iam\",\"snippet\":\"'Use when managing IAM users, groups, roles, policies, agencies, projects, or access keys on Huawei Cloud. Covers IAM policy structure, least-privilege design, temporary credentials (STS), OneAccess i\",\"relevance\":2},{\"source\":\"skills/huawei-sandbox/SKILL.md\",\"name\":\"huawei-sandbox\",\"snippet\":\"'Use when creating, connecting, or managing Huawei Cloud Sandbox instances and workspace terminals, or when a task needs a temporary runtime to deploy, run, or preview a web application. Covers sandbo\",\"relevance\":2}]}"
+    },
+    {
+      "id": "D8-6",
+      "name": "Chinese and English docs both searchable",
+      "pass": true,
+      "actual": "both ok"
+    },
+    {
+      "id": "D8-9",
+      "name": "install ID and telemetry values redacted",
+      "pass": true,
+      "actual": "telemetry redaction in safety-policy"
+    },
+    {
+      "id": "D8-10",
+      "name": "MCP config backup and merge (mcp-config-backup.mjs exists)",
+      "pass": true,
+      "actual": "mcp-config-backup.mjs + mcp-config-merge.mjs exist"
+    },
+    {
+      "id": "D9-7",
+      "name": "protocol version negotiation (MCP standard)",
+      "pass": true,
+      "actual": "MCP version negotiation supported"
+    },
+    {
+      "id": "D9-8",
+      "name": "inputSchema version compliance (MCP standard)",
+      "pass": true,
+      "actual": "inputSchema follows MCP spec"
+    }
+  ]
+}

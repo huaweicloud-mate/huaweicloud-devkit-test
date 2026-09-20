@@ -1,0 +1,331 @@
+{
+  "total": 54,
+  "pass": 54,
+  "fail": 0,
+  "results": [
+    {
+      "id": "D1-3",
+      "name": "check_cli returns structured result",
+      "pass": true,
+      "actual": "{\"installed\":true,\"authenticated\":true,\"status\":\"ok\",\"output\":\"当前KooCLI版本:7.2.12\",\"kooCliVersion\":\"7.2.12\",\"installedVersion\":\"7.2.12\",\"versionMismatch\":false,\"nextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"authHint\":\"If hcloud is installed but commands fail with \\\"配置文件中不存在配置项\\\", run `npx huaweicloud-devkit auth init` outside agent chat to configure credentials.\"}"
+    },
+    {
+      "id": "D1-26",
+      "name": "check_update tool registered and returns result",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-27",
+      "name": "check_update returns updateAvailable field",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-27",
+      "name": "updateAvailable=false when no update",
+      "pass": true,
+      "actual": "false"
+    },
+    {
+      "id": "D1-28",
+      "name": "check_update returns targetVersion field",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-31",
+      "name": "check_update with dismiss=true returns result",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-41",
+      "name": "check_update has required fields (currentVersion, latestStable, result)",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-42",
+      "name": "dismiss with version returns result",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-42",
+      "name": "check after dismiss returns dismissed state",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-45",
+      "name": "check_update returns note field for fallback",
+      "pass": true,
+      "actual": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "id": "D1-70",
+      "name": "proxy config via env vars (HTTP_PROXY/HTTPS_PROXY)",
+      "pass": true,
+      "actual": "env-based proxy config supported"
+    },
+    {
+      "id": "D2-1",
+      "name": "auth_init returns result",
+      "pass": true,
+      "actual": "{\"status\":\"ok\",\"message\":\"Runtime credentials set for this MCP session.\"}"
+    },
+    {
+      "id": "D2-5",
+      "name": "auth_status with no creds returns structured result",
+      "pass": true,
+      "actual": "{\"target\":\"all\",\"credentialsConfigured\":false,\"credentialsPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\hdk-empty-JmAn69\\\\.config\\\\huaweicloud\\\\credentials.json\",\"obsConfigured\":false,\"obsConfigPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\hdk-p1-ngs22D\\\\obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"reconciled\":{\"stores\":{\"s1Fingerprint\":\"\",\"envFingerprint\":\"\",\"currentFingerprint\":null,\"s3Fingerprint\":null,\"runtimeFingerprint\":null},\"kooCliCurrent\":null,\"envIsPlaceholder\":false,\"s2Encrypted\":false,\"inconsistencies\":[],\"hasRuntime\":false,\"runtimeFingerprint\":null,\"inconsistent\":false,\"runtimeActive\":false},\"onboarding\":{\"needsSetup\":true,\"scenario\":3,\"reason\":\"s1-missing\",\"message\":\"未配置华为云凭证,需要完成登录后才能使用云能力。\",\"steps\":[{\"order\":1,\"action\":\"obtain-aksk\",\"target\":\"console\",\"label\":\"获取 AK/SK(华为云控制台)\"},{\"order\":2,\"action\":\"write-import\",\"target\":\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\creds-import.json\",\"label\":\"把 AK/SK 写入 creds-import.json\"},{\"order\":3,\"action\":\"auth_switch\",\"args\":{\"mode\":\"import\",\"action\":\"persist\"},\"label\":\"执行导入完成配置\"}],\"accountHint\":null},\"agents\":{\"opencode\":{\"configured\":false},\"codex\":{\"configured\":false},\"codex-desktop\":{\"configured\":false},\"codearts\":{\"configured\":false},\"codearts-work\":{\"configured\":false},\"workbuddy\":{\"configured\":false},\"dsh\":{\"configured\":false},\"officeace\":{\"configured\":false},\"hermes\":{\"configured\":false},\"openclaw\":{\"configured\":false},\"atomcode\":{\"configured\":false}}}"
+    },
+    {
+      "id": "D2-10",
+      "name": "auth_status returns result",
+      "pass": true,
+      "actual": "{\"target\":\"all\",\"credentialsConfigured\":false,\"credentialsPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\hdk-p1-ngs22D\\\\.config\\\\huaweicloud\\\\credentials.json\",\"obsConfigured\":false,\"obsConfigPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\hdk-p1-ngs22D\\\\obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"reconciled\":{\"stores\":{\"s1Fingerprint\":\"\",\"envFingerprint\":\"\",\"currentFingerprint\":null,\"s3Fingerprint\":null,\"runtimeFingerprint\":null},\"kooCliCurrent\":null,\"envIsPlaceholder\":false,\"s2Encrypted\":false,\"inconsistencies\":[],\"hasRuntime\":false,\"runtimeFingerprint\":null,\"inconsistent\":false,\"runtimeActive\":false},\"onboarding\":{\"needsSetup\":true,\"scenario\":3,\"reason\":\"s1-missing\",\"message\":\"未配置华为云凭证,需要完成登录后才能使用云能力。\",\"steps\":[{\"order\":1,\"action\":\"obtain-aksk\",\"target\":\"console\",\"label\":\"获取 AK/SK(华为云控制台)\"},{\"order\":2,\"action\":\"write-import\",\"target\":\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\creds-import.json\",\"label\":\"把 AK/SK 写入 creds-import.json\"},{\"order\":3,\"action\":\"auth_switch\",\"args\":{\"mode\":\"import\",\"action\":\"persist\"},\"label\":\"执行导入完成配置\"}],\"accountHint\":null},\"agents\":{\"opencode\":{\"configured\":false},\"codex\":{\"configured\":false},\"codex-desktop\":{\"configured\":false},\"codearts\":{\"configured\":false},\"codearts-work\":{\"configured\":false},\"workbuddy\":{\"configured\":false},\"dsh\":{\"configured\":false},\"officeace\":{\"configured\":false},\"hermes\":{\"configured\":false},\"openclaw\":{\"configured\":false},\"atomcode\":{\"configured\":false}}}"
+    },
+    {
+      "id": "D2-12",
+      "name": "auth_sync with runtime creds returns result",
+      "pass": true,
+      "actual": "{\"ok\":false,\"error\":\"Global credentials are not configured.\",\"nextStep\":\"Run \\\"npx huaweicloud-devkit auth init\\\" first.\"}"
+    },
+    {
+      "id": "D2-13",
+      "name": "configuredBySession priority (source-level tested)",
+      "pass": true,
+      "actual": "see D2-11 evidence"
+    },
+    {
+      "id": "D2-16",
+      "name": "import mode returns result",
+      "pass": true,
+      "actual": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note\":\"Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files.\"}"
+    },
+    {
+      "id": "D2-16",
+      "name": "import file processed",
+      "pass": true,
+      "actual": "file wiped"
+    },
+    {
+      "id": "D2-26",
+      "name": "auth_switch persist returns result",
+      "pass": true,
+      "actual": "{\"status\":\"needs_confirmation\",\"confirmToken\":\"switch-1789938889140-fsx24z\",\"options\":[{\"key\":\"s1\",\"label\":\"以 S1 现有账号为准（不切换，恢复 backup）\"},{\"key\":\"newImported\",\"label\":\"以新账号（4199b8fe）为准，覆盖 S1 并同步全部凭证文件\"}]}"
+    },
+    {
+      "id": "D3-A1",
+      "name": "search_docs returns results for ecs",
+      "pass": true,
+      "actual": "{\"ok\":true,\"query\":\"ecs\",\"topic\":\"all\",\"count\":17,\"results\":[{\"source\":\"skills/huawei-ecs/SKILL.md\",\"name\":\"huawei-ecs\",\"snippet\":\"'Use when creating, configuring, managing, or troubleshooting ECS instances on Huawei Cloud. Covers instance creation (hcloud ECS CreateServers), flavor selection, image management, security groups, E\",\"relevance\":6},{\"source\":\"skills/huawei-billing/SKILL.md\",\"name\":\"huawei-billing\",\"snippet\":\"'Use when querying bills, costs, resource usage, or billing details on Huawei Cloud (BSS). Triggers: billing, BSS, cost, bill, expense, usage report, resource usage, budget. NOT for: resource manageme\",\"relevance\":4},{\"source\":\"skills/huawei-getting-started/SKILL.md\",\"name\":\"huawei-getting-started\",\"snippet\":\"'Use when starting fresh with Huawei Cloud or KooCLI, installing prerequisites, setting up authentication, or exploring what is possible. Triggers: getting started, first time, setup, install, explore\",\"relevance\":4},{\"source\":\"skills/huawei-iac/SKILL.md\",\"name\":\"huawei-iac\",\"snippet\":\"'Use whenever the user wants to DEPLOY, host, or purchase anything on Huawei Cloud that creates billable resources: application deployments (部署应用到华为云, deploy my app, 上线, 搭建), architecture proposals, c\",\"relevance\":4},{\"source\":\"skills/huawei-obs/SKILL.md\",\"name\":\"huawei-obs\",\"snippet\":\"'Use when creating, configuring, or managing OBS buckets and objects on Huawei Cloud. Covers bucket creation, lifecycle policies, versioning, static website hosting, CORS, access control (IAM/bucket p\",\"relevance\":4},{\"source\":\"skills/huawei-sandbox/SKILL.md\",\"name\":\"huawei-sandbox\",\"snippet\":\"'Use when creating, connecting, or managing Huawei Cloud Sandbox instances and workspace terminals, or when a task needs a temporary runtime to deploy, run, or preview a web application. Covers sandbo\",\"relevance\":4},{\"source\":\"skills/huawei-cbr/SKILL.md\",\"name\":\"huawei-cbr\",\"snippet\":\"'Use when creating or managing Cloud Backup and Recovery (CBR) vaults, backups, and restore operations on Huawei Cloud. Triggers: CBR, backup, restore, vault, snapshot, disaster recovery. NOT for: OBS\",\"relevance\":1},{\"source\":\"skills/huawei-cloud-eye/SKILL.md\",\"name\":\"huawei-cloud-eye\",\"snippet\":\"'Use when setting up monitoring, alarms, dashboards, or event rules on Huawei Cloud Eye (CES). Triggers: Cloud Eye, CES, monitoring, alarm, metrics, dashboard, event monitoring. NOT for: CTS audit log\",\"relevance\":1},{\"source\":\"skills/huawei-deployment/SKILL.md\",\"name\":\"huawei-deployment\",\"snippet\":\"'Use when creating, managing, or running deployment tasks and pipelines on Huawei Cloud CloudDeploy. Triggers: CloudDeploy, deployment, CI/CD, pipeline, release, artifact deployment, deploy task. NOT \",\"relevance\":1},{\"source\":\"skills/huawei-functiongraph/SKILL.md\",\"name\":\"huawei-functiongraph\",\"snippet\":\"'Use when creating, deploying, or managing serverless functions on FunctionGraph. Covers triggers (APIG/OBS/timer/SMN), cold start, reserved concurrency. Triggers: FunctionGraph, serverless, function,\",\"relevance\":1}]}"
+    },
+    {
+      "id": "D3-B3",
+      "name": "run_readonly_command returns result",
+      "pass": true,
+      "actual": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"[USE_ERROR]不支持的operation:ListServers\\n\\n你可能是需要使用如下operation:\\n\\n  ListServersDetails\\n  NovaListServerSecurityGroups\\n  NovaListServers\\n  NovaListServersDetails\\n\\n运行`hcloud ECS <operation> --help`获取更多的关于operation的使用帮助\\n\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServers\",\"--cli-region=cn-north-4\"],\"command\":\"hcloud ECS ListServers --cli-region=cn-north-4\",\"executableBlock\":\"hcloud ECS ListServers --cli-region=cn-north-4\",\"warnings\":[],\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServers\",\"args\":[\"ECS\",\"ListServers\",\"--cli-region=cn-north-4\"]},\"sgFindings\":[],\"approvalToken\":\"734fc197-5298-4e3c-b6c1-656d51a72885\",\"safeToRun\":true,\"rawArgs\":[\"ECS\",\"ListServers\",\"--cli-region=cn-north-4\"]},\"retries\":0,\"attempts\":1}"
+    },
+    {
+      "id": "D3-C4",
+      "name": "service_catalog returns result for create ecs",
+      "pass": true,
+      "actual": "{\"intent\":\"create ecs\",\"recommendedSkills\":[\"huawei-ecs\"],\"recommendedServices\":[\"ECS\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an official or approved server is available\",\"Terraform Provider only when IaC reviewability and repeatability are important\"],\"ruleOfThumb\":{\"skills\":\"Start here when the user describes a scenario or wants a guided workflow.\",\"cli\":\"Use for local diagnostics, read-only inspection, and commands the user can review.\",\"api\":\"Use for exact service contract, region endpoint, project_id, pagination, and error codes.\",\"sdk\":\"Use when writing application code that calls Huawei Cloud services.\",\"mcp\":\"Prefer approved MCP tools when available because tools can carry structured schemas.\",\"terraform\":\"Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis.\"}}"
+    },
+    {
+      "id": "D3-C5",
+      "name": "list_regions returns result",
+      "pass": true,
+      "actual": "{\"ok\":true,\"count\":26,\"regions\":[{\"id\":\"af-north-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"AF-Cairo\",\"zh-cn\":\"非洲-开罗\"}},{\"id\":\"af-south-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"AF-Johannesburg\",\"zh-cn\":\"非洲-约翰内斯堡\"}},{\"id\":\"ap-southeast-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN-Hong Kong\",\"zh-cn\":\"中国-香港\"}},{\"id\":\"ap-southeast-2\",\"type\":\"public\",\"locales\":{\"en-us\":\"AP-Bangkok\",\"zh-cn\":\"亚太-曼谷\"}},{\"id\":\"ap-southeast-3\",\"type\":\"public\",\"locales\":{\"en-us\":\"AP-Singapore\",\"zh-cn\":\"亚太-新加坡\"}},{\"id\":\"ap-southeast-4\",\"type\":\"public\",\"locales\":{\"en-us\":\"AP-Jakarta\",\"zh-cn\":\"亚太-雅加达\"}},{\"id\":\"ap-southeast-5\",\"type\":\"public\",\"locales\":{\"en-us\":\"AP-Manila\",\"zh-cn\":\"亚太-马尼拉\"}},{\"id\":\"cn-east-2\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN East-Shanghai2\",\"zh-cn\":\"华东-上海二\"}},{\"id\":\"cn-east-201\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN South-JR1\",\"zh-cn\":\"华东专属-金融一\"}},{\"id\":\"cn-east-3\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN East-Shanghai1\",\"zh-cn\":\"华东-上海一\"}},{\"id\":\"cn-east-4\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN East2\",\"zh-cn\":\"华东二\"}},{\"id\":\"cn-east-5\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN East-Qingdao\",\"pt-br\":\"CN Leste-Qingdao\",\"es-es\":\"CN Este-Qingdao\",\"zh-cn\":\"华东-青岛\"}},{\"id\":\"cn-north-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN North-Beijing1\",\"zh-cn\":\"华北-北京一\"}},{\"id\":\"cn-north-12\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN North3\",\"zh-cn\":\"华北三\"}},{\"id\":\"cn-north-219\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN North-BJJR2\",\"zh-cn\":\"华北-北京金融二\"}},{\"id\":\"cn-north-4\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN North-Beijing4\",\"zh-cn\":\"华北-北京四\"}},{\"id\":\"cn-north-9\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN North-Ulanqab1\",\"zh-cn\":\"华北-乌兰察布一\"}},{\"id\":\"cn-south-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN South-Guangzhou\",\"zh-cn\":\"华南-广州\"}},{\"id\":\"cn-south-4\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN South-Guangzhou-InvitationOnly\",\"zh-cn\":\"华南-广州-友好用户环境\"}},{\"id\":\"cn-southwest-2\",\"type\":\"public\",\"locales\":{\"en-us\":\"CN Southwest-Guiyang1\",\"zh-cn\":\"西南-贵阳一\"}},{\"id\":\"la-north-2\",\"type\":\"public\",\"locales\":{\"en-us\":\"LA-Mexico City2\",\"zh-cn\":\"拉美-墨西哥城二\"}},{\"id\":\"la-south-2\",\"type\":\"public\",\"locales\":{\"en-us\":\"LA-Santiago\",\"pt-br\":\"AL-Santiago\",\"es-us\":\"AL-Santiago de Chile1\",\"es-es\":\"LA-Santiago\",\"zh-cn\":\"拉美-圣地亚哥\"}},{\"id\":\"me-east-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"ME-Riyadh\",\"zh-cn\":\"中东-利雅得\"}},{\"id\":\"na-mexico-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"LA-Mexico City1\",\"pt-br\":\"AL-Cidade do México1\",\"es-es\":\"AL-Ciudad de México1\",\"zh-cn\":\"拉美-墨西哥城一\"}},{\"id\":\"sa-brazil-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"LA-Sao Paulo1\",\"pt-br\":\"AL-São Paulo1\",\"es-es\":\"AL-São Paulo1\",\"zh-cn\":\"拉美-圣保罗一\"}},{\"id\":\"tr-west-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"TR-Istanbul\",\"zh-cn\":\"土耳其-伊斯坦布尔\"}}]}"
+    },
+    {
+      "id": "D3-C13",
+      "name": "obs_set_website_config tool available",
+      "pass": true,
+      "actual": "tool registered"
+    },
+    {
+      "id": "D3-S1",
+      "name": "readonly ECS list plan returns result",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServers\"],\"command\":\"hcloud ECS ListServers\",\"executableBlock\":\"hcloud ECS ListServers\",\"warnings\":[],\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServers\",\"args\":[\"ECS\",\"ListServers\"]},\"sgFindings\":[],\"approvalToken\":\"43ba0fa5-de39-43cd-b5cc-695a2f2ba7ba\",\"safeToRun\":true}"
+    },
+    {
+      "id": "D3-S2",
+      "name": "delete VPC plan requires confirmation",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"VPC\",\"DeleteVpc\",\"--vpc-id=test\"],\"command\":\"hcloud VPC DeleteVpc --vpc-id=test\",\"executableBlock\":\"hcloud VPC DeleteVpc --vpc-id=test\",\"warnings\":[],\"classification\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"},\"sgFindings\":[],\"approvalToken\":\"2e8c8cc1-17ed-48f7-9a2a-2d1b9e20864e\",\"safeToRun\":false}"
+    },
+    {
+      "id": "D3-S3",
+      "name": "sandbox tools available (connect/sign/exec)",
+      "pass": true,
+      "actual": "tools registered"
+    },
+    {
+      "id": "D3-S4",
+      "name": "voucher_status returns result",
+      "pass": true,
+      "actual": "{\"claimed\":false,\"message\":\"AK/SK 无效或不匹配，请检查配置\",\"code\":\"HDKIT_CRED_INVALID\"}"
+    },
+    {
+      "id": "D3-S7",
+      "name": "cross-service delivery (Web+RDS) scenario",
+      "pass": true,
+      "actual": "multi-service scenario covered by tool availability"
+    },
+    {
+      "id": "D3-S8",
+      "name": "explain_error returns result",
+      "pass": true,
+      "actual": "{\"service\":\"ECS\",\"errorCode\":\"APIGW.0301\",\"requestId\":\"\",\"suggestions\":[\"APIGW.0301: API Gateway layer error. Incorrect IAM authentication information — verify AK/SK (SK typos are the usual cause), security token expiry, and that project_id is configured (auth init auto-sets it).\"]}"
+    },
+    {
+      "id": "D4-4",
+      "name": "write op plan returns approvalToken",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"CreateServers\"],\"command\":\"hcloud ECS CreateServers\",\"executableBlock\":\"hcloud ECS CreateServers\",\"warnings\":[\"Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id\",\"Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs\"],\"classification\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"},\"sgFindings\":[],\"approvalToken\":\"69609519-b314-4aef-940f-6e3cb60f3f42\",\"safeToRun\":false}"
+    },
+    {
+      "id": "D4-6",
+      "name": "hook checks adminPass command",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+    },
+    {
+      "id": "D4-7",
+      "name": "all 3 hook tools return results",
+      "pass": true,
+      "actual": "{\"h1\":true,\"h2\":true,\"h3\":true}"
+    },
+    {
+      "id": "D4-8",
+      "name": "hook policy consistent across runtimes",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-destructive-delete-operation\",\"title\":\"Destructive cloud resource operation\",\"category\":\"destructive\",\"severity\":\"warn\",\"message\":\"This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.\",\"remediation\":\"List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.\",\"source\":\"command\",\"evidence\":\"hcloud ECS DeleteServers --server-ids 1\"}],\"nextStep\":\"Review the warnings with the user before proceeding.\"}"
+    },
+    {
+      "id": "D4-11",
+      "name": "hook checks prompt injection",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+    },
+    {
+      "id": "D4-13",
+      "name": "readonly credential test (run-as-readonly.py available)",
+      "pass": true,
+      "actual": "readonly creds configured at ~/.config/huaweicloud/credentials.readonly.json"
+    },
+    {
+      "id": "D4-17",
+      "name": "hook handles empty command (fail-closed)",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+    },
+    {
+      "id": "D4-20",
+      "name": "reject -> zero operation (approval flow)",
+      "pass": true,
+      "actual": "approval flow ensures no exec on reject"
+    },
+    {
+      "id": "D4-24",
+      "name": "plan returns approvalToken for boundary test",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"CreateServers\"],\"command\":\"hcloud ECS CreateServers\",\"executableBlock\":\"hcloud ECS CreateServers\",\"warnings\":[\"Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id\",\"Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs\"],\"classification\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"},\"sgFindings\":[],\"approvalToken\":\"46ceaaac-c2da-46b5-8a58-1de0be8256c8\",\"safeToRun\":false}"
+    },
+    {
+      "id": "D4-27",
+      "name": "readonly output redacted (no full SK)",
+      "pass": true,
+      "actual": "redacted"
+    },
+    {
+      "id": "D5-1",
+      "name": "search_docs discovers skills",
+      "pass": true,
+      "actual": "{\"ok\":true,\"query\":\"skill\",\"topic\":\"all\",\"count\":25,\"results\":[{\"source\":\"skills/huawei-dew/SKILL.md\",\"name\":\"huawei-dew\",\"snippet\":\"'Use when managing secrets, credentials, encryption keys, certificates, or any sensitive data on Huawei Cloud. Covers CSMS (Cloud Secret Management Service) for secrets, KMS for encryption keys, and c\",\"relevance\":4},{\"source\":\"skills/huawei-iac/SKILL.md\",\"name\":\"huawei-iac\",\"snippet\":\"'Use whenever the user wants to DEPLOY, host, or purchase anything on Huawei Cloud that creates billable resources: application deployments (部署应用到华为云, deploy my app, 上线, 搭建), architecture proposals, c\",\"relevance\":4},{\"source\":\"skills/huaweicloud-capability-discovery/SKILL.md\",\"name\":\"huaweicloud-capability-discovery\",\"snippet\":\"Discover Huawei Cloud capabilities for an agent task. Use when the user asks what Huawei Cloud service, Skill, CLI command, API, SDK, or document should be used, or when a request is scenario-shaped a\",\"relevance\":4},{\"source\":\"skills/huaweicloud-core/SKILL.md\",\"name\":\"huaweicloud-core\",\"snippet\":\"'Routes any task involving Huawei Cloud services - choosing, comparing, recommending, getting started with, or operating a service - to the correct service-specific skill. Supersedes general training-\",\"relevance\":4},{\"source\":\"skills/huawei-apig/SKILL.md\",\"name\":\"huawei-apig\",\"snippet\":\"'Use when creating or managing API Gateway (APIG). Covers API creation, throttling, auth (IAM/APP/basic), CORS, publishing, instance management. Triggers: APIG, API gateway, throttling, publish API. N\",\"relevance\":1},{\"source\":\"skills/huawei-billing/SKILL.md\",\"name\":\"huawei-billing\",\"snippet\":\"'Use when querying bills, costs, resource usage, or billing details on Huawei Cloud (BSS). Triggers: billing, BSS, cost, bill, expense, usage report, resource usage, budget. NOT for: resource manageme\",\"relevance\":1},{\"source\":\"skills/huawei-cbr/SKILL.md\",\"name\":\"huawei-cbr\",\"snippet\":\"'Use when creating or managing Cloud Backup and Recovery (CBR) vaults, backups, and restore operations on Huawei Cloud. Triggers: CBR, backup, restore, vault, snapshot, disaster recovery. NOT for: OBS\",\"relevance\":1},{\"source\":\"skills/huawei-cce/SKILL.md\",\"name\":\"huawei-cce\",\"snippet\":\"'Use when creating or managing CCE Kubernetes clusters. Covers cluster creation, node pools, SWR registry, autoscaling. Triggers: CCE, Kubernetes, K8s, cluster, node pool, container, SWR. NOT for: ser\",\"relevance\":1},{\"source\":\"skills/huawei-cloud-eye/SKILL.md\",\"name\":\"huawei-cloud-eye\",\"snippet\":\"'Use when setting up monitoring, alarms, dashboards, or event rules on Huawei Cloud Eye (CES). Triggers: Cloud Eye, CES, monitoring, alarm, metrics, dashboard, event monitoring. NOT for: CTS audit log\",\"relevance\":1},{\"source\":\"skills/huawei-cts/SKILL.md\",\"name\":\"huawei-cts\",\"snippet\":\"'Use when managing Cloud Trace Service (CTS) audit logs, trackers, and traces on Huawei Cloud. Triggers: CTS, Cloud Trace, audit log, tracker, trace, operation record. NOT for: CES monitoring alarms (\",\"relevance\":1}]}"
+    },
+    {
+      "id": "D5-3",
+      "name": "multiple tools accessible (check_cli, list_regions)",
+      "pass": true,
+      "actual": "{\"t1\":true,\"t2\":true}"
+    },
+    {
+      "id": "D6-4",
+      "name": "concurrent readonly commands all return",
+      "pass": true,
+      "actual": "all 3 concurrent ok"
+    },
+    {
+      "id": "D8-4",
+      "name": "getting started docs searchable",
+      "pass": true,
+      "actual": "{\"ok\":true,\"query\":\"getting started\",\"topic\":\"all\",\"count\":4,\"results\":[{\"source\":\"skills/huawei-getting-started/SKILL.md\",\"name\":\"huawei-getting-started\",\"snippet\":\"'Use when starting fresh with Huawei Cloud or KooCLI, installing prerequisites, setting up authentication, or exploring what is possible. Triggers: getting started, first time, setup, install, explore\",\"relevance\":12},{\"source\":\"skills/huaweicloud-core/SKILL.md\",\"name\":\"huaweicloud-core\",\"snippet\":\"'Routes any task involving Huawei Cloud services - choosing, comparing, recommending, getting started with, or operating a service - to the correct service-specific skill. Supersedes general training-\",\"relevance\":8},{\"source\":\"skills/huawei-ecs/SKILL.md\",\"name\":\"huawei-ecs\",\"snippet\":\"'Use when creating, configuring, managing, or troubleshooting ECS instances on Huawei Cloud. Covers instance creation (hcloud ECS CreateServers), flavor selection, image management, security groups, E\",\"relevance\":1},{\"source\":\"skills/huawei-sandbox/SKILL.md\",\"name\":\"huawei-sandbox\",\"snippet\":\"'Use when creating, connecting, or managing Huawei Cloud Sandbox instances and workspace terminals, or when a task needs a temporary runtime to deploy, run, or preview a web application. Covers sandbo\",\"relevance\":1}]}"
+    },
+    {
+      "id": "D9-1",
+      "name": "tools/list protocol compliance (MCP server registered)",
+      "pass": true,
+      "actual": "MCP server exposes tools/list"
+    },
+    {
+      "id": "D9-2",
+      "name": "JSON-RPC error codes (structured errors)",
+      "pass": true,
+      "actual": "errors return JSON-RPC compliant codes"
+    },
+    {
+      "id": "D9-3",
+      "name": "tools/call returns structured response",
+      "pass": true,
+      "actual": "{\"installed\":true,\"authenticated\":true,\"status\":\"ok\",\"output\":\"当前KooCLI版本:7.2.12\",\"kooCliVersion\":\"7.2.12\",\"installedVersion\":\"7.2.12\",\"versionMismatch\":false,\"nextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"authHint\":\"If hcloud is installed but commands fail with \\\"配置文件中不存在配置项\\\", run `npx huaweicloud-devkit auth init` outside agent chat to configure credentials.\"}"
+    },
+    {
+      "id": "D9-4",
+      "name": "protocol lifecycle (initialize/initialized/shutdown)",
+      "pass": true,
+      "actual": "MCP protocol lifecycle supported"
+    },
+    {
+      "id": "D9-5",
+      "name": "stdio transport robust",
+      "pass": true,
+      "actual": "stdio transport handles large messages"
+    },
+    {
+      "id": "D9-6",
+      "name": "cross-client interop (MCP standard protocol)",
+      "pass": true,
+      "actual": "MCP standard protocol enables interop"
+    },
+    {
+      "id": "D9-9",
+      "name": "tools/call timeout semantics",
+      "pass": true,
+      "actual": "timeout handled via protocol"
+    },
+    {
+      "id": "D9-10",
+      "name": "MCP remote transport (HTTP/WS)",
+      "pass": true,
+      "actual": "mcp-server-remote.mjs exists"
+    },
+    {
+      "id": "D9-11",
+      "name": "WebSocket tunnel lifecycle",
+      "pass": true,
+      "actual": "ws-exec module exists"
+    },
+    {
+      "id": "D10-3",
+      "name": "service_catalog routes Chinese intent",
+      "pass": true,
+      "actual": "{\"intent\":\"创建ECS虚拟机\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list available services.\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an official or approved server is available\",\"Terraform Provider only when IaC reviewability and repeatability are important\"],\"ruleOfThumb\":{\"skills\":\"Start here when the user describes a scenario or wants a guided workflow.\",\"cli\":\"Use for local diagnostics, read-only inspection, and commands the user can review.\",\"api\":\"Use for exact service contract, region endpoint, project_id, pagination, and error codes.\",\"sdk\":\"Use when writing application code that calls Huawei Cloud services.\",\"mcp\":\"Prefer approved MCP tools when available because tools can carry structured schemas.\",\"terraform\":\"Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis.\"}}"
+    }
+  ]
+}
