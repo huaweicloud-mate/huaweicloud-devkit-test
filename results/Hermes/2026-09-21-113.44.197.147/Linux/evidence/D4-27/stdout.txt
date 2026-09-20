@@ -1,0 +1,33 @@
+=== D4-27 双路径脱敏完整性 ===
+
+[路径1] redactSecrets 字符串:
+  输入: AK=AKUPPER1234567890123 SK=SKUPPER9876543210987 ak=AKLOWER1234567890123 sk=SKLOWER9876543210987 token=TokenValueABCDEF123456 password=MyS3cretP@ssw0rd adminPass=AdminP@ssw0rd123! accessKey=AKUPPER1234567890123 secretKey=SKUPPER9876543210987 securityToken=TokenValueABCDEF123456
+  输出: AK=<redacted> SK=<redacted> ak=AKLOWER1234567890123 sk=SKLOWER9876543210987 token=TokenValueABCDEF123456 password=<redacted> adminPass=<redacted> accessKey=<redacted> secretKey=<redacted> securityToken=<redacted>
+  脱敏结果: 仍有明文 AKLOWER1234567890123, SKLOWER9876543210987, TokenValueABCDEF123456
+
+[路径1b] redactSecrets 对象: {"accessKeyId":"<redacted>","secretAccessKey":"<redacted>","securityToken":"<redacted>","password":"<redacted>","adminPass":"<redacted>","normal":"not-secret","nested":{"secretKey":"<redacted>"}}
+  脱敏结果: 全部脱敏
+
+[路径2a] redactOutput JSON: {
+  "server": {
+    "name": "t",
+    "adminPass": "<redacted>"
+  },
+  "access_key_id": "<redacted>",
+  "secret_access_key": "<redacted>"
+}
+  脱敏结果: 全部脱敏
+
+[路径2b] redactOutput 文本: hcloud create ok adminPass=<redacted> password=<redacted> ak=AKLOWER1234567890123
+  脱敏结果: 仍有明文 AKLOWER1234567890123
+
+=== D4-27 断言汇总 ===
+PASS  R1  大写 AK=/SK= 脱敏
+FAIL  R2  小写 ak=/sk= 脱敏
+FAIL  R3  token/password/adminPass 脱敏
+PASS  R4  对象形式敏感键脱敏
+PASS  R5  redactOutput JSON 脱敏
+FAIL  R6  redactOutput 文本脱敏
+
+总计 6 条, PASS 3, FAIL 3
+结论: FAIL (存在脱敏缺口)

@@ -1,0 +1,10 @@
+=== CASE D8-1 === 文档与能力一致
+预期: 无失效链接无过时命令；CHANGELOG 与行为一致
+实测: 通过（v1.1.5 @ e7ed6f6）
+详情:
+① 链接有效性：README.md 内 7 条相对 .md 链接全部解析成功（docs/architecture.md、docs/CHANGELOG.md、docs/dsh-integration.md、docs/hermes-windows.md、docs/hook-rule-model.md、docs/safety-model.md、README.zh-CN.md 均存在）；外部链接均为 GitHub/npm/华为云官方域名，无 404 迹象。
+② 命令与实际对比：README 文档化命令 doctor/install/install-hcloud/status/uninstall/update/version 与 CLI 实际支持集一致（--help 实测另有 auth/reconcile 亦在文档覆盖范围）。
+③ CHANGELOG 与行为对比：docs/CHANGELOG.md 顶部 1.1.5 (2026-09-15) 与 package.json version=1.1.5、npm 已装 1.1.5、gitHead e7ed6f6 一致；含 fix(safety+mcp) close env-dump/shell-wrap/#650/#688、feat(sandbox) target-selection gate #691 等条目与源码行为一致。
+
+结论: PASS（无失效链接、无过时命令、CHANGELOG 与版本/行为一致）
+RESULT: PASS

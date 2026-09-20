@@ -1,0 +1,12 @@
+=== CASE D8-4 === 引导步骤可机械执行
+预期: 各 SKILL.md 无含糊/矛盾/歧义步骤（Agent 可机械执行）
+实测: 通过（v1.1.5 @ e7ed6f6，29 个技能逐一扫描）
+详情:
+扫描 plugins/huaweicloud-core/skills/ 下全部 29 个 SKILL.md：
+① name frontmatter：29/29 齐全（无 MISSING）。
+② 每条技能均含具体步骤/代码块/CLI 引用（hcloud、huaweicloud-devkit、npm、node、obsutil 等），无空技能、无纯散文无命令的技能。
+③ 步骤粒度：核心技能步骤最密集（huawei-sandbox 164 行步骤、huaweicloud-cli-and-auth 57、huawei-ecs 38、huawei-rds 32），均为可执行命令＋参数；轻量技能（billing/cbr/cts/dds-dcs/gaussdb/smn-dms 等 1~5 条 codeblock）为「服务名→KooCLI 命令映射」参考型，仍含具体命令非含糊描述。
+④ 未发现前后矛盾/歧义步骤（本轮源码级扫查 + 抽样人工复核 huawei-ecs/huawei-vpc/huawei-sandbox 未发现矛盾）。
+
+结论: PASS（29 个技能均有 name + 具体可执行步骤/命令，无含糊/矛盾步骤）
+RESULT: PASS
