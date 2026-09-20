@@ -1,0 +1,9 @@
+D4-3 测试证据
+执行时间: 2026-09-20 11:41
+客户端: CodeArtsWork
+OS: Windows
+工具: probe-p0.mjs (source-level + MCP tool calls)
+结果: FAIL
+断言: hook_check_command did NOT block `hcloud ECS CreateServers --adminPass MySecret123` (decision:allow). Plaintext adminPass not caught.
+结论: FAIL - hook_check_command did NOT block `hcloud ECS CreateServers --adminPass MySecret123` (decision:allow). Plaintext adminPass not caught.
+根因: risk-rule-engine.mjs: plaintext secret detection rule missing for --adminPass parameter

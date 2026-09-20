@@ -1,0 +1,9 @@
+D4-2 测试证据
+执行时间: 2026-09-20 11:41
+客户端: CodeArtsWork
+OS: Windows
+工具: probe-p0.mjs (source-level + MCP tool calls)
+结果: FAIL
+断言: hook_check_command did NOT block `echo $HW_SECRET_KEY` (decision:allow, no findings). Credential env var print not caught by hook.
+结论: FAIL - hook_check_command did NOT block `echo $HW_SECRET_KEY` (decision:allow, no findings). Credential env var print not caught by hook.
+根因: risk-rule-engine.mjs: credential env var detection rule missing for shell echo commands
