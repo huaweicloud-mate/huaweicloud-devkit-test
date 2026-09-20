@@ -1,0 +1,12 @@
+=== D8-10 MCP 配置备份与合并 ===
+预期: 命令/参数/文件三风格合并正确; delta 提取应用幂等; purge/take 清空
+实测: 符合
+详情:
+mergeCommandStyle(保留 --flag/timeout/enabled=false): {"type":"local","command":["node","/opt/hdk/mcp-server.mjs","--flag"],"timeout":10000,"enabled":false}
+mergeCommandStyle(null) 全新: {"type":"local","command":["node","/opt/hdk/mcp-server.mjs"],"enabled":true,"timeout":300000} changed=true
+mergeArgsStyle(保留 --foo + CUSTOM env): {"command":"node","args":["/opt/hdk/mcp-server.mjs","--foo"],"env":{"CUSTOM":"1","HCLOUD_BIN":"/x"},"timeout":300000}
+mergeMcpServersFile: {"mcpServers":{"other":{"x":1},"huaweicloud-devkit":{"command":"node","args":["/opt/hdk/mcp-server.mjs"],"env":{}}}} changed=true
+extractUserDelta(args) = {"argsExtra":["--extra"],"env":{"CUSTOM_ENV":"v"},"timeout":60000,"enabled":false}
+applyUserDelta = {"command":"node","args":["/new/mcp-server.mjs","--extra"],"env":{"HCLOUD_BIN":"/h","CUSTOM_ENV":"v"},"timeout":60000,"enabled":false}
+saveAgentDelta/readAgentDelta→{"CUSTOM_ENV":"v"}; takeAgentDelta→{"CUSTOM_ENV":"v"}; take 后 read→null
+RESULT: PASS

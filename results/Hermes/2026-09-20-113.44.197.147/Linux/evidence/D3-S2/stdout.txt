@@ -1,0 +1,9 @@
+=== D3-S2 场景-删VPC先确认 (复核) ===
+[2] 创建 VPC hdk1-s2-9852934539 -> 6f9b2f12-93a4-45c2-bd37-8dd78b7c9e03
+[3] plan(DeleteVpc) -> decision=deny risk=write
+[4] hook_check -> decision=warn findings=1
+[5] 未确认前(plan 返回 deny 未自执行)全量 ListVpcs 含 VPC id=true
+[6] run_approved(DeleteVpc) -> exitCode=0 ok=true
+[7] 确认后全量 ListVpcs 不再含 VPC id=true (归零)
+RESULT: PASS
+关键: 未确认前 plan 返回 deny(零执行), VPC 仍在; 确认后删除归零
