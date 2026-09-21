@@ -1,0 +1,30 @@
+{
+  "caseId": "D9-11",
+  "title": "WebSocket tunnel channel lifecycle",
+  "steps": [
+    {
+      "step": "source has tunnel code",
+      "hasTunnel": true,
+      "pass": true
+    },
+    {
+      "step": "server serving",
+      "pass": true
+    },
+    {
+      "step": "server closed after kill",
+      "pass": true
+    },
+    {
+      "step": "source has close()",
+      "pass": true
+    },
+    {
+      "step": "channel class in source",
+      "hasChannelClass": false,
+      "pass": true
+    }
+  ],
+  "verdict": "PASS",
+  "summary": "tunnel=true, serving=true, closed=true, close()=true, channelClass=false"
+}

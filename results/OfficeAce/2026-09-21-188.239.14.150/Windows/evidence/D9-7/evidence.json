@@ -1,0 +1,31 @@
+{
+  "caseId": "D9-7",
+  "title": "协议版本协商降级",
+  "steps": [
+    {
+      "test": "current version 2024-11-05",
+      "serverVersion": "2024-11-05",
+      "pass": true
+    },
+    {
+      "test": "older version 2024-10-01",
+      "serverVersion": "2024-10-01",
+      "pass": true
+    },
+    {
+      "test": "future version 2025-01-01",
+      "serverVersion": "2025-01-01",
+      "pass": true
+    },
+    {
+      "test": "invalid version",
+      "pass": true
+    },
+    {
+      "test": "missing version",
+      "pass": true
+    }
+  ],
+  "verdict": "PASS",
+  "summary": "current version 2024-11-05=true, older version 2024-10-01=true, future version 2025-01-01=true, invalid version=true, missing version=true"
+}

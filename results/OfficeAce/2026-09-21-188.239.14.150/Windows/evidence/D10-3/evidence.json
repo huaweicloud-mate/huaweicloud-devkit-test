@@ -1,0 +1,371 @@
+{
+  "caseId": "D10-3",
+  "title": "路由准确率+混淆矩阵",
+  "steps": [
+    {
+      "check": "routing accuracy",
+      "correct": 12,
+      "total": 18,
+      "accuracy": "0.6667",
+      "pass": false
+    },
+    {
+      "check": "confusion matrix generated",
+      "services": 12,
+      "pass": true
+    },
+    {
+      "check": "English routing",
+      "correct": 10,
+      "total": 10,
+      "pass": true
+    },
+    {
+      "check": "Chinese routing",
+      "correct": 2,
+      "total": 8,
+      "pass": false
+    }
+  ],
+  "verdict": "FAIL",
+  "summary": "accuracy=12/18=66.7%, en=10/10, zh=2/8",
+  "confusionMatrix": {
+    "ECS": {
+      "ECS": 1,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "VPC": {
+      "ECS": 0,
+      "VPC": 1,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "OBS": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 1,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "FunctionGraph": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 1,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "CCE": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 1,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "RDS": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 1,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "IAM": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 1,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "KMS": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 1,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "ModelArts": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 1,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "BSS": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 1,
+      "Incentive Voucher": 0,
+      "Sandbox": 0
+    },
+    "Incentive Voucher": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 1,
+      "Sandbox": 0
+    },
+    "Sandbox": {
+      "ECS": 0,
+      "VPC": 0,
+      "OBS": 0,
+      "FunctionGraph": 0,
+      "CCE": 0,
+      "RDS": 0,
+      "IAM": 0,
+      "KMS": 0,
+      "ModelArts": 0,
+      "BSS": 0,
+      "Incentive Voucher": 0,
+      "Sandbox": 1
+    }
+  },
+  "routingResults": [
+    {
+      "intent": "deploy ecs server",
+      "lang": "en",
+      "expected": "ECS",
+      "routed": [
+        "ECS",
+        "CloudDeploy"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "create vpc and subnet",
+      "lang": "en",
+      "expected": "VPC",
+      "routed": [
+        "VPC",
+        "EIP"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "upload file to obs bucket",
+      "lang": "en",
+      "expected": "OBS",
+      "routed": [
+        "OBS"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "create functiongraph function",
+      "lang": "en",
+      "expected": "FunctionGraph",
+      "routed": [
+        "FunctionGraph"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "create cce kubernetes cluster",
+      "lang": "en",
+      "expected": "CCE",
+      "routed": [
+        "CCE",
+        "SWR"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "create rds mysql database",
+      "lang": "en",
+      "expected": "RDS",
+      "routed": [
+        "RDS"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "manage iam user permissions",
+      "lang": "en",
+      "expected": "IAM",
+      "routed": [
+        "IAM"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "encrypt data with kms",
+      "lang": "en",
+      "expected": "KMS",
+      "routed": [
+        "CSMS",
+        "KMS"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "train model on modelarts",
+      "lang": "en",
+      "expected": "ModelArts",
+      "routed": [
+        "ModelArts"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "check billing cost",
+      "lang": "en",
+      "expected": "BSS",
+      "routed": [
+        "BSS"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "创建ECS云服务器",
+      "lang": "zh",
+      "expected": "ECS",
+      "routed": [
+        "Run hcloud --help to list available services."
+      ],
+      "correct": false
+    },
+    {
+      "intent": "配置VPC和子网",
+      "lang": "zh",
+      "expected": "VPC",
+      "routed": [
+        "Run hcloud --help to list available services."
+      ],
+      "correct": false
+    },
+    {
+      "intent": "上传文件到OBS桶",
+      "lang": "zh",
+      "expected": "OBS",
+      "routed": [
+        "Run hcloud --help to list available services."
+      ],
+      "correct": false
+    },
+    {
+      "intent": "创建RDS MySQL数据库",
+      "lang": "zh",
+      "expected": "RDS",
+      "routed": [
+        "Run hcloud --help to list available services."
+      ],
+      "correct": false
+    },
+    {
+      "intent": "管理IAM用户权限",
+      "lang": "zh",
+      "expected": "IAM",
+      "routed": [
+        "Run hcloud --help to list available services."
+      ],
+      "correct": false
+    },
+    {
+      "intent": "查看账单费用",
+      "lang": "zh",
+      "expected": "BSS",
+      "routed": [
+        "Run hcloud --help to list available services."
+      ],
+      "correct": false
+    },
+    {
+      "intent": "领代金券",
+      "lang": "zh",
+      "expected": "Incentive Voucher",
+      "routed": [
+        "Incentive Voucher"
+      ],
+      "correct": true
+    },
+    {
+      "intent": "部署网站",
+      "lang": "zh",
+      "expected": "Sandbox",
+      "routed": [
+        "Sandbox",
+        "DevStation"
+      ],
+      "correct": true
+    }
+  ]
+}

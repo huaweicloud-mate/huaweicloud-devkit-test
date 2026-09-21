@@ -1,0 +1,87 @@
+{
+  "caseId": "D8-6",
+  "title": "中英文文档一致",
+  "steps": [
+    {
+      "check": "README.md exists",
+      "pass": true
+    },
+    {
+      "check": "README.zh-CN.md exists",
+      "pass": true
+    },
+    {
+      "check": "section count similar",
+      "enCount": 27,
+      "zhCount": 27,
+      "pass": true
+    },
+    {
+      "check": "commands consistent",
+      "enCmds": [
+        "npx --yes",
+        "huaweicloud-devkit install",
+        "`npx --yes",
+        "huaweicloud-devkit version",
+        "huaweicloud-devkit uninstall",
+        "huaweicloud-devkit doctor",
+        "huaweicloud-devkit status",
+        "huaweicloud-devkit update",
+        "huaweicloud-devkit is",
+        "huaweicloud-devkit\r\nopenclaw",
+        "npx\r\nnpx",
+        "`npx huaweicloud-devkit",
+        "huaweicloud-devkit install-hcloud",
+        "huaweicloud-devkit auth"
+      ],
+      "zhCmds": [
+        "npx --yes",
+        "huaweicloud-devkit install",
+        "`npx --yes",
+        "huaweicloud-devkit version",
+        "huaweicloud-devkit uninstall",
+        "huaweicloud-devkit doctor",
+        "huaweicloud-devkit status",
+        "huaweicloud-devkit update",
+        "huaweicloud-devkit\r\nopenclaw",
+        "npx\r\nnpx",
+        "`npx huaweicloud-devkit",
+        "huaweicloud-devkit install-hcloud",
+        "huaweicloud-devkit auth"
+      ],
+      "diff": [
+        "huaweicloud-devkit is"
+      ],
+      "pass": true
+    },
+    {
+      "check": "version numbers consistent",
+      "enVers": [
+        "1.1.5",
+        "127.0.0",
+        "0.0.0"
+      ],
+      "zhVers": [
+        "1.1.5",
+        "127.0.0",
+        "0.0.0"
+      ],
+      "diff": [],
+      "pass": true
+    },
+    {
+      "check": "key promises in both",
+      "enMissing": [],
+      "zhMissing": [],
+      "pass": true
+    },
+    {
+      "check": "code blocks count similar",
+      "en": 64,
+      "zh": 64,
+      "pass": true
+    }
+  ],
+  "verdict": "PASS",
+  "summary": "7/7 checks passed"
+}

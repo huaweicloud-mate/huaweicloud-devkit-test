@@ -1,0 +1,31 @@
+{
+  "caseId": "D9-10",
+  "title": "MCP remote transport (HTTP/SSE)",
+  "steps": [
+    {
+      "test": "remote init",
+      "status": 200,
+      "pass": true
+    },
+    {
+      "test": "remote tools/list",
+      "count": 40,
+      "pass": true
+    },
+    {
+      "test": "remote tools/call",
+      "pass": true
+    },
+    {
+      "test": "remote error",
+      "code": -32601,
+      "pass": true
+    },
+    {
+      "test": "SSE format",
+      "pass": true
+    }
+  ],
+  "verdict": "PASS",
+  "summary": "init=true, list=true, call=true, error=true, sse=true"
+}
