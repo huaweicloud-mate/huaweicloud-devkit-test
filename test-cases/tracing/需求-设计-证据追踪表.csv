@@ -195,6 +195,8 @@ v1.5规划(v1.3基线),协议版本协商降级,D9-7,无(不展开/代表执行)
 v1.5规划(v1.3基线),inputSchema版本合规,D9-8,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,版本统一且明确,DESIGN_COVERED,测试负责人,
 覆盖缺口落用例20260913(coverage-gaps.md),MCP remote transport（HTTP/WS 远程服务）,D9-10,无(不展开/代表执行),MCP协议,<代表: remote 客户端>,remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 ,DESIGN_COVERED,测试负责人,
 v1.5规划(v1.3基线),WebSocket 隧道通道生命周期,D9-11,无(不展开/代表执行),MCP协议,<代表: 隧道 mux 夹具>,通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 loc,DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),initialize 握手协议安全基线,D9-12,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + Hermes>,initialize 返回 protocolVersion + capabilities + serverInfo；ca,DESIGN_COVERED,测试负责人,
+v1.5规划(v1.3基线),tools/call 凭证不泄露与权限校验,D9-13,无(不展开/代表执行),MCP协议,<代表: MCP Inspector + 源码探针>,tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令,DESIGN_COVERED,测试负责人,
 v1.5规划(v1.3基线),工具描述可选择性,D10-1,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: 10 客户端>,"描述可度量,低分项入缺口",DESIGN_COVERED,测试负责人,
 v1.5规划(v1.3基线),skill激活率,D10-2,由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端),Agent评测,<代表: 10 客户端>,激活率≥90%,DESIGN_COVERED,测试负责人,
 v1.5规划(v1.3基线),路由准确率+混淆矩阵,D10-3,EXP-E01;EXP-E02;EXP-E03;EXP-E04;EXP-E05;EXP-E06;EXP-E07;EXP-E08;EXP-E09;EXP-E10;EXP-E11;EXP-E12;EXP-E13;EXP-E14;EXP-E15,Agent评测,<代表: 10 客户端>,"源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位",DESIGN_COVERED,测试负责人,
