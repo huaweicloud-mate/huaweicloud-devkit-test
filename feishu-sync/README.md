@@ -3,7 +3,7 @@
 > **归档说明（2026-09-21）**：本目录是 `feishu-sync` 工具链的版本化归档（随 huaweicloud-devkit-test 仓库 main 分支管理）。
 > ① **凭证不入库**：`.credentials.json`（App Secret）、`.user_token.json`（OAuth user token）、`config.json`（app_token）经 DPAPI 加密、只存本机，已被 .gitignore 排除，仓库中绝无明文。
 > ② **资源标识经环境变量注入**：`FEISHU_SS_TOKEN`（线上电子表格 token）、`FEISHU_OWNER_OPEN_ID`（表格 owner open_id）、`FEISHU_WIKI_TOKEN`（wiki 页面 token）由本机环境变量提供，脚本不硬编码，公开仓库无泄漏。
-> ③ 本机运行版真值在 `devkit-test\feishu-sync\`，本归档版为脱敏快照。
+> ③ 本机运行版「同一套代码」：资源标识同样经环境变量注入，真值在本机 `devkit-test\feishu-sync\.env.feishu`（已被 .gitignore 排除）；本归档版与运行版零漂移。
 
 把本地测试全景图 xlsx（权威源）同步为**飞书多维表格**（协作视图），供团队在飞书
 中查看/筛选/评论测试任务。按主键（用例 ID / 缺陷 ID）做增量 upsert，本地不变更不

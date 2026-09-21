@@ -5,6 +5,18 @@ try {
     $OutputEncoding = New-Object System.Text.UTF8Encoding $false
     [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding $false
 } catch { }
+
+# Inject Feishu resource IDs from local-only .env.feishu (absent in public repo; falls back to system env)
+$envFile = Join-Path $PSScriptRoot '.env.feishu'
+if (Test-Path $envFile) {
+    Get-Content $envFile | ForEach-Object {
+        $line = $_.Trim()
+        if ($line -and -not $line.StartsWith('#') -and $line -match '^([A-Za-z_][A-Za-z0-9_]*)=(.*)$') {
+            [Environment]::SetEnvironmentVariable($matches[1], $matches[2].Trim(), 'Process')
+        }
+    }
+}
+
 $py    = 'C:\Users\Administrator\devkit-test\.venv-feishu\Scripts\python.exe'
 $tool  = 'C:\Users\Administrator\devkit-test\feishu-sync\sync_sheet.py'
 $log   = 'C:\Users\Administrator\devkit-test\feishu-sync\logs\daily-sync.log'
