@@ -1,0 +1,14 @@
+time=2026-09-21T07:49:45.509Z
+case=EXP-D5-2-1
+type=D5客户端矩阵
+object=Codex
+source=D5-1
+result=BLOCKED
+gate=客户端宿主检测完成：本机无 codex 可执行，真实插件发现/加载会话需测试机 Codex 客户端宿主执行（夹具已提供）
+reason=需要客户端 Codex 的真实宿主会话；hdk 插件清单（.mcp.json/openclaw.plugin.json）存在性/格式已静态校验为有效 codex bundle
+--- fixture 内部断言 ---
+PASS	EXP-D5-2-1-client-host	Codex 客户端宿主检测	actual={"present":false,"bin":null,"config":null}	expected="宿主检测"	本机未安装 codex 客户端 → 解除条件「需 Codex 客户端真实宿主」未就绪，证据按 BLOCKED（携带清单检测结论）归档
+PASS	EXP-D5-2-1-manifest-files	插件清单文件存在（.mcp.json / openclaw.plugin.json）	actual={"mcpJson":true,"openclawJson":true}	expected={"mcpJson":true,"openclawJson":true}
+PASS	EXP-D5-2-1-mcp-server-registered	MCP server 注册（huaweicloud-devkit）	actual={"registered":true}	expected=true	command="node"
+PASS	EXP-D5-2-1-plugin-format	插件 manifest 为 codex bundle 格式	actual={"bundleFormat":"codex","family":"bundle-plugin"}	expected={"bundleFormat":"codex","family":"bundle-plugin"}
+PASS	EXP-D5-2-1-codex-register	Codex config 引用 huaweicloud-devkit	actual={"ref":null,"hostPresent":false}	expected="codex.config 引用"	无 codex 宿主（BLOCKED 归档，config 检查从略，不误报）

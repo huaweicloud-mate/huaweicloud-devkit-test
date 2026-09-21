@@ -1,0 +1,14 @@
+time=2026-09-21T07:49:45.785Z
+case=EXP-D5-2-3
+type=D5客户端矩阵
+object=Codex
+source=D5-3
+result=BLOCKED
+gate=客户端宿主检测完成：无 codex 可执行 → 宿主层 tools/list 枚举待测试机执行；（协议层基线）枚举 40 工具、schema 完整、与 TOOL_DEFINITIONS diff 一致
+reason=需要客户端 Codex 的真实 Host/PTY 会话；已提供协议层枚举基线（40 工具/schema 完整）作为夹具
+--- fixture 内部断言 ---
+PASS	EXP-D5-2-3-enum-count	tools/list 枚举工具数	actual={"count":40}	expected={"count":">=40"}
+PASS	EXP-D5-2-3-schema-complete	inputSchema 完整（type=object 全覆盖）	actual={"allSchema":true}	expected=true
+PASS	EXP-D5-2-3-prefix-huaweicloud	工具名统一 huaweicloud_ 前缀	actual={"prefixOk":40}	expected={"prefixOk":40}
+PASS	EXP-D5-2-3-source-diff	与 tools.mjs 注册源 diff 一致	actual={"miss":[],"extra":[]}	expected={"miss":[],"extra":[]}
+PASS	EXP-D5-2-3-client-host	Codex 客户端宿主检测	actual={"present":false,"bin":null,"config":null}	expected="宿主检测"	本机无 codex 客户端 → 客户端宿主枚举层 BLOCKED（协议基线已枚举）

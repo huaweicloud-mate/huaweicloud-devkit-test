@@ -15,10 +15,13 @@ eval/
 ├── harness/                 # 评测执行 harness（可重复跑）
 │   ├── run-eval.mjs         # D10-3 路由评测（确定性：直调 serviceCatalog，无需 LLM）
 │   ├── protocol-probe.mjs   # D9 协议层探针
-│   └── run-agent-eval.mjs   # ★ 真实 Agent 会话评测（驱动 dsh headless 真实 LLM）
+│   ├── run-agent-eval.mjs   # ★ 真实 Agent 会话评测（驱动 dsh headless 真实 LLM）
+│   └── fixtures/            # Issue #7 批次② 夹具/harness（D2-10/13、D9-6/9/10/11、EXP-D5-2-1/2-3）
 └── results/                 # 每轮评测结果（模型/温度/激活skill/是否成功）
     └── README.md            # 结果记录格式与趋势说明
 ```
+
+> **fixtures/ 用法**：`node eval/harness/fixtures/<script>.mjs <hdk src> [--evid <dir>]`，或 `run-all.mjs` 批量执行全部 8 项（详见 `eval/harness/fixtures/README.md`）。
 
 ## 两个 harness 的区别（关键）
 
