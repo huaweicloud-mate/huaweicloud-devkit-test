@@ -1,0 +1,63 @@
+name: daily-issue-triage
+
+# 每日测试结果 → issue 分诊（测试侧完善 / 产品侧需求）的「分析 + 落盘」自动化。
+#
+# 只做确定性分析与待提单落盘（DRY-RUN），不开 issue；真正提单由维护者本地 `--live` 复核后执行
+# （理由：① 产品仓提单前需人判断「KooCLI 服务覆盖/沙箱基建」等误标项；② CI 的 HDK_GH_TOKEN 权限
+#  仅验证过 push，未验证 issues:write；③ 尊重「全量测完统一合并一张单 + 先落盘根因」红线）。
+#
+# 触发：
+#   1. 每天 20:45 北京时间（schedule，兜底；在 auto-summary 20:10 与 test-completeness-check 20:30 之后）
+#   2. 手动 workflow_dispatch（可即时出一版）
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '45 12 * * *'    # UTC 12:45 = 北京时间 20:45
+
+permissions:
+  contents: write            # 写回 results/Summary/待提单-<日期>.md 需要
+
+concurrency:
+  group: daily-issue-triage
+  cancel-in-progress: false
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai      # 脚本用 datetime.now() 取日期，必须按北京时间
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false   # push 回用 PAT（main 分支保护下 GITHUB_TOKEN 会被拒 GH006）
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 运行 issue 分诊（DRY-RUN 落盘待提单）
+        env:
+          HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
+        run: python scripts/daily_issue_triage.py --dry-run
+
+      - name: Commit & push 待提单
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/Summary/待提单-*.md
+          if git diff --cached --quiet; then
+            echo "待提单无变动，跳过提交"
+          else
+            git commit -m "chore: 每日 issue 分诊待提单 $(date +%Y-%m-%d)"
+            git push https://shuangheaven:${{ secrets.HDK_GH_TOKEN }}@github.com/huaweicloud-mate/huaweicloud-devkit-test.git HEAD:main
+          fi
