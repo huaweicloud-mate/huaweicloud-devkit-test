@@ -76,6 +76,11 @@ NEW_IDS_20260919 = {
     "D3-S7", "D3-S8",
 }
 
+# 2026-09-21 Issue #7 批次①：D9 协议 P0 用例（安全维度+协议维度），固定日期可溯源
+NEW_IDS_20260921 = {
+    "D9-12", "D9-13",
+}
+
 # 存量 v1.5 其余维度（D3~D10 全区间）——先于未知 ID 判定
 LEGACY_PREFIXES = ("D3-", "D4-", "D5-", "D6-", "D7-", "D8-", "D9-", "D10-")
 
@@ -84,6 +89,8 @@ def gen_ts(rid):
         return "2026-09-18"          # 2026-09-18 D10-4 拆条新增
     if rid in NEW_IDS_20260919:
         return "2026-09-19"          # 2026-09-19 覆盖核对补缺口新增
+    if rid in NEW_IDS_20260921:
+        return "2026-09-21"          # 2026-09-21 Issue #7 D9 P0 用例新增
     if rid in NEW_REVIEW_IDS_20260911:
         return "2026-09-11"          # 2026-09-11 全量评审补充：固定日期（可溯源 REV-20260911004604）
     for pred, ts in BATCH_TS:
@@ -1332,6 +1339,20 @@ add("D9-11", "D9协议", "WebSocket 隧道通道生命周期", "P1", "hwlink mux
     "①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localServer/readyPromise/subConnections 清理",
     "通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 localServer 关闭、subConnections 清空、onClose 回调触发", "实: ws-exec/hwlink-tunnel-channel.HwlinkTunnelChannel",
     "mcp-server", "脚本", "COMMON|<代表: 隧道 mux 夹具>|<证据: ready/close 生命周期>|<阻塞: 需 hwlink mux>")
+
+# ---------- 2026-09-21 Issue #7 批次①：D9 协议 P0 用例（安全维度+协议维度） ----------
+add("D9-12", "D9协议", "initialize 握手协议安全基线", "P0", "MCP Inspector + 源码级 protocol-probe.mjs",
+    "initialize 请求/响应报文 + capabilities 协商",
+    "①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/capabilities/serverInfo ②核对 callTool 路由到 tools.mjs callTool 函数 ③核对 runVersionCheck 在 initialize 阶段触发版本检查 ④核对 _decorateResult 包装响应（_resetHintConsumption/_isHintConsumed 消费提示标记） ⑤核对 listSkillDirs/findSkillsRoot 返回有效技能目录 ⑥非法时序（未 initialize 先 tools/list）被拒返回 -32600",
+    "initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorateResult 包装无副作用；listSkillDirs/findSkillsRoot 返回有效目录；非法时序返回 JSON-RPC -32600 错误",
+    "规: MCP initialize 握手规范; 实: mcp-protocol._decorateResult/_resetHintConsumption/_isHintConsumed; tools.mjs.callTool/runVersionCheck/listSkillDirs/findSkillsRoot",
+    "inspector", "脚本", "COMMON|<代表: MCP Inspector + Hermes>|<证据: 协议报文+源码探针>|<阻塞: 无>")
+add("D9-13", "D9协议", "tools/call 凭证不泄露与权限校验", "P0", "MCP 客户端 + 隔离 HOME + 源码级探针",
+    "含 AK/SK 的凭证 + 高危/只读命令",
+    "①setRuntimeCredentials 注入运行时凭证，hasRuntimeCredentials 校验存在 ②resolveCredentialsWithRuntime 解析运行时凭证 ③loadPolicy 加载安全策略，classifyHcloudArgs 分类命令参数 ④evaluateArtifacts/evaluateDeployPlan 评估风险，mergeRiskDecision 合并决策 ⑤hashArgs 生成参数哈希，createApprovalToken/consumeApprovalToken 审批令牌生命周期 ⑥readServiceCatalogs/classifyUnsupported/planHcloudCommand 命令分类 ⑦tools/call 返回核对无 AK/SK/token 明文 ⑧clearRuntimeCredentials 清理运行时凭证 ⑨readGlobalCredentials/writeGlobalCredentials 持久化核对，isPlaceholder 校验占位 ⑩globalCredentialsPath/obsConfigPath/writeObsConfig 路径与配置核对",
+    "tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprovalToken 后失效）；运行时凭证 clearRuntimeCredentials 清理后不留盘；readGlobalCredentials/writeGlobalCredentials 持久化一致；isPlaceholder 正确识别占位凭证",
+    "规: MCP 安全基线（凭证不泄露）; 实: auth/credentials.setRuntimeCredentials/clearRuntimeCredentials/hasRuntimeCredentials/resolveCredentialsWithRuntime/readGlobalCredentials/writeGlobalCredentials/isPlaceholder/globalCredentialsPath/obsConfigPath/writeObsConfig; safety-policy.loadPolicy/classifyHcloudArgs; risk-rule-engine.evaluateArtifacts/evaluateDeployPlan/mergeRiskDecision; hcloud-cli.hashArgs/createApprovalToken/consumeApprovalToken/readServiceCatalogs/classifyUnsupported/planHcloudCommand",
+    "inspector", "脚本", "COMMON|<代表: MCP Inspector + 源码探针>|<证据: 凭证脱敏+权限决策+审批令牌>|<阻塞: 无>")
 
 # ---------- D10 Agent评测 ----------
 add("D10-1", "D10评测", "工具描述可选择性", "P1", "评测harness",
