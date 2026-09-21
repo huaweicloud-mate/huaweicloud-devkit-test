@@ -5,11 +5,13 @@
     python prepare_env.py               # 仅检查 + 报告
     python prepare_env.py --setup       # clone 缺失仓库 + npm 安装最新包
     python prepare_env.py --update      # pull 测试仓库/源码 + npm 更新最新包
-    python prepare_env.py --update --next   # 同上，但用 @next 预发布包（NR 新需求测试）
+    python prepare_env.py --update --next    # 强制 @next 预发布包
+    python prepare_env.py --update --latest  # 强制 latest 正式包（回退用）
 
-被测对象（默认 = 最新正式包 latest；--next = 预发布 dev 包）：
+被测对象（默认 = 自动取 latest/next 中版本号更高者，即「每天追最新 tag」）:
   - 源码仓库 hdk（clone 自 huaweicloud/huaweicloud-devkit）→ checkout 到被测包对应 commit 做源码检查/根因定位
-  - npm 全局包 huaweicloud-devkit → “最新包”=latest 正式发布（--next 则 @next 预发布），做真实场景黑盒测试
+  - npm 全局包 huaweicloud-devkit → 默认自动取 latest/next 最高（预发布 > 正式版时切 @next），
+    --next 强制预发布（NR 新需求测试），--latest 强制正式版（回退稳定态）
 
 镜像 fallback：GitHub clone/pull 失败时，自动 fallback 到 GitCode 镜像（国内拉取更快）。
 """
@@ -30,6 +32,33 @@ GITCODE_MIRROR = {
 
 def is_next():
     return "--next" in sys.argv
+
+
+def _version_key(v):
+    """把版本号转成可比较 tuple：(major, minor, patch, 是否正式版)。
+    正式版 > 同 base 的预发布版（1.1.6 > 1.1.6-next.0），预发布版按 base 比（1.1.6-next.0 > 1.1.5）。"""
+    v = (v or "").strip().lstrip("v")
+    base, sep, _ = v.partition("-")
+    parts = [int(x) for x in base.split(".") if x.isdigit()]
+    while len(parts) < 3:
+        parts.append(0)
+    return (parts[0], parts[1], parts[2], 0 if sep else 1)
+
+
+def resolve_target():
+    """决定被测包：--next 强制预发布 > --latest 强制正式 > 默认自动取 latest/next 中版本号更高者。
+    返回 (npm_spec, label, is_prerelease)。"""
+    if "--next" in sys.argv:
+        return PKG_NEXT, "next 预发布(显式 --next)", True
+    if "--latest" in sys.argv:
+        return PKG, "latest 正式版(显式 --latest)", False
+    rc, latest_v, _ = run("npm view huaweicloud-devkit version --registry https://registry.npmjs.org")
+    rc2, next_v, _ = run("npm view huaweicloud-devkit@next version --registry https://registry.npmjs.org")
+    latest_v = latest_v.strip()
+    next_v = next_v.strip()
+    if next_v and rc2 == 0 and _version_key(next_v) > _version_key(latest_v):
+        return PKG_NEXT, f"自动取最高(next={next_v} > latest={latest_v})", True
+    return PKG, f"自动取最高(latest={latest_v} >= next={next_v})", False
 
 
 def run(cmd, cwd=None):
@@ -135,11 +164,10 @@ def check_pkg():
 
 
 def install_pkg():
-    """安装/更新被测包：默认最新正式包（latest），--next 则预发布。"""
-    pkg = PKG_NEXT if is_next() else PKG
-    label = "next 预发布" if is_next() else "latest 正式版"
+    """安装/更新被测包：默认自动取 latest/next 中版本号更高者（追最新 tag）；--next 强制预发布；--latest 强制正式版。"""
+    pkg, label, _ = resolve_target()
     print(f"=== 安装最新包（{label}） ===")
-    rc, out, err = run(f"npm install -g {pkg}")
+    rc, out, err = run(f"npm install -g {pkg} --registry https://registry.npmjs.org")
     if rc == 0:
         print(f"  [OK] 已安装/更新 {pkg}")
         return True
@@ -148,15 +176,16 @@ def install_pkg():
 
 
 def update_src_to_pkg():
-    """源码 hdk fetch 并 checkout 到被测包（默认 latest，--next 则预发布）对应 commit，保证源码检查与黑盒测的是同一版。"""
+    """源码 hdk fetch 并 checkout 到被测包对应 commit，保证源码检查与黑盒测的是同一版。
+    跟随 resolve_target()：默认自动取 latest/next 最高，--next 强制预发布，--latest 强制正式。"""
     if not os.path.isdir(os.path.join(SRC, ".git")):
         return
-    is_n = is_next()
-    tag = "@next" if is_n else ""
-    fallback_branch = "dev" if is_n else "main"
-    print(f"=== 源码 checkout 到 {'next 预发布' if is_n else 'latest 正式版'} 对应 commit ===")
+    _pkg, label, is_pre = resolve_target()
+    tag = "@next" if is_pre else ""
+    fallback_branch = "dev" if is_pre else "main"
+    print(f"=== 源码 checkout 到 {label} 对应 commit ===")
     run("git fetch origin --tags", cwd=SRC)
-    rc, out, _ = run(f"npm view huaweicloud-devkit{tag} version gitHead")
+    rc, out, _ = run(f"npm view huaweicloud-devkit{tag} version gitHead --registry https://registry.npmjs.org")
     m_head = re.search(r"gitHead\s*=\s*'?([0-9a-fA-F]+)'?", out or "")
     if m_head:
         head = m_head.group(1)
