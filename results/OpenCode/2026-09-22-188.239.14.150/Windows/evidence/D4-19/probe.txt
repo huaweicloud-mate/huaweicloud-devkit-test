@@ -1,0 +1,5 @@
+hook_check_command + hook_check_artifacts + hook_check_deploy_plan in confirmation flow:
+- hook_check_command: DeleteServers -> warn (destructive) ✓
+- hook_check_artifacts: broad IAM policy -> deny ✓
+- hook_check_deploy_plan: public FunctionGraph -> warn ✓
+Expected: preflight checks effective during confirmation flow

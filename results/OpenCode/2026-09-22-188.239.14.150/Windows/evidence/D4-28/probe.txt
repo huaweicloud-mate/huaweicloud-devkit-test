@@ -1,0 +1,3 @@
+hook_check_command: echo HW_SECRET_KEY=abc123 && hcloud ECS CreateServers
+Expected: hooks.json registers .mjs (Node impl); commandText extracted; deny for高危; no deny for non-hazardous
+Actual: allow (0 findings) - echo credential env NOT caught

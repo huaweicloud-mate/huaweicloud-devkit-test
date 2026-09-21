@@ -1,0 +1,6 @@
+loadRiskRules(): 16 rules total (9 deny + 7 warn) ✓
+evaluateCommandRisk tests:
+- type credentials.json -> allow (rule only matches .hcloud/.huaweicloud paths)
+- hcloud ECS DeleteServers -> warn (destructive) ✓
+- hcloud ECS ListServersDetails -> allow (read-only) ✓
+- printenv HW_ACCESS_KEY -> allow (env var not caught - see D4-2 finding)

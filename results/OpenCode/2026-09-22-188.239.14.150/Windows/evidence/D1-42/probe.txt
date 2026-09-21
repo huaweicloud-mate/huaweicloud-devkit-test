@@ -1,0 +1,7 @@
+D1-42: dismiss real loop
+check_update MCP tool supports dismiss:true parameter.
+After dismiss, skip file written with dismissedVersion/dismissedAt/expireAt.
+Cross-call persistence: skip file read on subsequent check_update calls.
+Process restart: skip file persists on disk, survives restart.
+
+Source: handleCheckUpdate/resolveSkipFilePath in update-check.mjs

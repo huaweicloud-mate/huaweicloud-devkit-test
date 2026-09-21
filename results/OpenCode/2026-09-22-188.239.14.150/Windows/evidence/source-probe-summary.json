@@ -1,0 +1,284 @@
+{
+  "D10-4": {
+    "status": "FAIL",
+    "rulesLoaded": true,
+    "denyCount": 0,
+    "warnCount": 0,
+    "allowCount": 0,
+    "ruleCount": 2,
+    "ruleDetails": [],
+    "evalResults": [
+      {
+        "command": "type C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+        "result": {
+          "decision": "deny",
+          "findings": [
+            {
+              "ruleId": "hwc-command-credential-file",
+              "title": "Credential file read",
+              "category": "credential",
+              "severity": "deny",
+              "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+              "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.",
+              "source": "command",
+              "evidence": "type C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json"
+            }
+          ]
+        }
+      },
+      {
+        "command": "hcloud ECS DeleteServers --cli-region=cn-north-4",
+        "result": {
+          "decision": "warn",
+          "findings": [
+            {
+              "ruleId": "hwc-destructive-delete-operation",
+              "title": "Destructive cloud resource operation",
+              "category": "destructive",
+              "severity": "warn",
+              "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+              "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+              "source": "command",
+              "evidence": "hcloud ECS DeleteServers --cli-region=cn-north-4"
+            }
+          ]
+        }
+      },
+      {
+        "command": "hcloud ECS ListServersDetails --cli-region=cn-north-4",
+        "result": {
+          "decision": "allow",
+          "findings": []
+        }
+      },
+      {
+        "command": "printenv HW_ACCESS_KEY",
+        "result": {
+          "decision": "allow",
+          "findings": []
+        }
+      }
+    ],
+    "why": "Expected 9 deny + 7 warn, got 0 deny + 0 warn",
+    "executedAt": "20260921210622"
+  },
+  "D1-39": {
+    "status": "FAIL",
+    "methodUsed": "queryDistTagsSync",
+    "tagsResult": null,
+    "why": "Detection failed: null",
+    "executedAt": "20260921210622"
+  },
+  "D1-40": {
+    "status": "FAIL",
+    "officialTags": null,
+    "mirrorTags": null,
+    "downgradeCheck": null,
+    "why": "Downgrade check failed: null",
+    "executedAt": "20260921210622"
+  },
+  "D1-27": {
+    "status": "PASS",
+    "result": {
+      "currentVersion": "1.1.5",
+      "latestStable": "1.1.5",
+      "latestNext": null,
+      "targetVersion": "1.1.5",
+      "updateAvailable": false,
+      "dismissed": false,
+      "dismissExpiresAt": null,
+      "result": "up_to_date"
+    },
+    "why": "result=up_to_date, updateAvailable=false when current==latest",
+    "executedAt": "20260921210622"
+  },
+  "D1-28": {
+    "status": "PASS",
+    "result": {
+      "currentVersion": "1.1.4",
+      "latestStable": "1.1.5",
+      "latestNext": "1.1.6-next.0",
+      "targetVersion": "1.1.5",
+      "updateAvailable": true,
+      "dismissed": false,
+      "dismissExpiresAt": null,
+      "result": "update_available"
+    },
+    "why": "result=update_available, updateAvailable=true when current < latest",
+    "executedAt": "20260921210622"
+  },
+  "D1-30": {
+    "status": "PASS",
+    "details": [
+      {
+        "a": "1.1.2",
+        "b": "1.1.1",
+        "expect": 1,
+        "actual": 1,
+        "pass": true
+      },
+      {
+        "a": "1.1.0",
+        "b": "1.1.0-next.9",
+        "expect": 1,
+        "actual": 1,
+        "pass": true
+      },
+      {
+        "a": "1.1.5",
+        "b": "1.1.5",
+        "expect": 0,
+        "actual": 0,
+        "pass": true
+      }
+    ],
+    "why": "All semver comparisons correct",
+    "executedAt": "20260921210622"
+  },
+  "D4-27": {
+    "status": "FAIL",
+    "original": "AK=ABCDE12345FGHIJ SK=Zyxwv1234admin@password token=ak7sk8token9",
+    "redactSecretsResult": "AK=<redacted> SK=<redacted> token=ak7sk8token9",
+    "redactOutputResult": null,
+    "why": "redactSecrets: true, redactOutput: null",
+    "executedAt": "20260921210622"
+  },
+  "D4-29": {
+    "status": "PASS",
+    "details": [
+      {
+        "cmd": "hcloud ECS ListServersDetails --cli-region=cn-north-4",
+        "classify": {
+          "decision": "allow",
+          "risk": "read_only",
+          "reason": "Command appears to be a read-only Huawei Cloud operation.",
+          "service": "ECS",
+          "operation": "ListServersDetails",
+          "args": [
+            "ECS",
+            "ListServersDetails",
+            "--cli-region=cn-north-4"
+          ]
+        },
+        "assert": "passed"
+      },
+      {
+        "cmd": "hcloud ECS DeleteServers --cli-region=cn-north-4",
+        "classify": {
+          "decision": "deny",
+          "risk": "write",
+          "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+        },
+        "assert": "rejected: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      {
+        "cmd": "type credentials.json",
+        "classify": {
+          "decision": "allow",
+          "risk": "not_huaweicloud",
+          "reason": "No Huawei Cloud safety rule matched."
+        },
+        "assert": "passed"
+      }
+    ],
+    "why": "classifyRawCommand returns decision/reason, assertAllowed allows/denies correctly",
+    "executedAt": "20260921210622"
+  },
+  "D5-3": {
+    "status": "PASS",
+    "toolCount": 40,
+    "toolNames": [
+      "huaweicloud_check_cli",
+      "huaweicloud_plan_cli_command",
+      "huaweicloud_run_readonly_command",
+      "huaweicloud_list_operations",
+      "huaweicloud_run_approved_command",
+      "huaweicloud_show_profile_redacted",
+      "huaweicloud_hook_check_command",
+      "huaweicloud_hook_check_artifacts",
+      "huaweicloud_hook_check_deploy_plan",
+      "huaweicloud_service_catalog",
+      "huaweicloud_explain_error",
+      "huaweicloud_search_docs",
+      "huaweicloud_retrieve_skill",
+      "huaweicloud_list_regions",
+      "huaweicloud_get_regional_availability",
+      "huaweicloud_search_marketplace",
+      "huaweicloud_get_service_icon",
+      "huaweicloud_detect_framework",
+      "huaweicloud_setup_obs_config",
+      "huaweicloud_auth_status",
+      "huaweicloud_auth_sync",
+      "huaweicloud_auth_init",
+      "huaweicloud_auth_switch",
+      "huaweicloud_auth_confirm",
+      "huaweicloud_sandbox_exec_with_session",
+      "huaweicloud_sandbox_exec_one_shot",
+      "huaweicloud_sandbox_close_session",
+      "huaweicloud_sandbox_upload_file",
+      "huaweicloud_sandbox_upload_project",
+      "huaweicloud_sandbox_deploy_nginx",
+      "huaweicloud_sandbox_deploy_check",
+      "huaweicloud_sandbox_check_user",
+      "huaweicloud_sandbox_sign_agreement",
+      "huaweicloud_sandbox_connect",
+      "huaweicloud_sandbox_credentials",
+      "huaweicloud_voucher_status",
+      "huaweicloud_voucher_claim",
+      "huaweicloud_check_update",
+      "huaweicloud_upgrade",
+      "huaweicloud_obs_set_website_config"
+    ],
+    "why": "40 tools registered",
+    "executedAt": "20260921210622"
+  },
+  "D9-1": {
+    "status": "FAIL",
+    "parsed": {
+      "raw": ""
+    },
+    "why": "Schema validation issue: {\"raw\":\"\"}",
+    "executedAt": "20260921210622"
+  },
+  "D3-S5": {
+    "status": "FAIL",
+    "routeResult": null,
+    "why": "Routing failed: null",
+    "executedAt": "20260921210622"
+  },
+  "D6-3": {
+    "status": "PASS",
+    "coldStartMs": 63,
+    "why": "Cold start 63ms < 5000ms",
+    "executedAt": "20260921210622"
+  },
+  "D6-9": {
+    "status": "PASS",
+    "details": {
+      "invalidateUpdateCache": "called ok",
+      "clearIconCache": "called ok",
+      "clearMarketCache": "called ok"
+    },
+    "why": "All three cache cleanup entry points exist and are callable",
+    "executedAt": "20260921210622"
+  },
+  "D8-9": {
+    "status": "FAIL",
+    "id1": "15e0147c29d4215ab8d1ed1a0baf51097d85bea006eb6aaee7de87b28b05052f",
+    "id2": "15e0147c29d4215ab8d1ed1a0baf51097d85bea006eb6aaee7de87b28b05052f",
+    "idStable": true,
+    "sanitizeResult": "AK=ABC123&token=xyz789&valid=data",
+    "why": "idStable=true, sanitized=false",
+    "executedAt": "20260921210622"
+  },
+  "D2-27": {
+    "status": "PASS",
+    "details": {
+      "version": "7.2.12",
+      "parsed": "7.2.12",
+      "cmp": 1
+    },
+    "why": "getKooCliVersion/parseHcloudVersion/compareVersion all correct",
+    "executedAt": "20260921210622"
+  }
+}

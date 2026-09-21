@@ -1,0 +1,6 @@
+D2-11: R3 STS token rejection (source level)
+auth_switch with persist + securityToken should return {status:error, scope:rejected}
+Token should never be persisted to S1 (credentials.json)
+
+Source: credentials.mjs auth_switch handler rejects securityToken persist
+The R3 rule states: STS token (securityToken) must never be persisted to disk

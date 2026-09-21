@@ -1,0 +1,5 @@
+hook_check_command bypass attempts:
+1. "hcloud ECS deleteservers" (lowercase) -> warn ✓ (detected)
+2. "hcloud ECS DELETE-SERVERS" (uppercase) -> warn ✓ (detected)
+3. "Deleteserver --region" (non-hcloud) -> allow (not a hcloud command, expected)
+Expected: no bypass successful
