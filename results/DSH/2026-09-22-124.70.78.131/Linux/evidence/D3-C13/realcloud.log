@@ -1,0 +1,50 @@
+{
+  "case": "D3-C13",
+  "total": 7,
+  "passed": 7,
+  "failed": 0,
+  "results": [
+    {
+      "cid": "D3-C13",
+      "name": "创建 OBS 桶",
+      "pass": true,
+      "detail": "Error: open /home/testbot2/.obsutil_log/obssdk-v3.log: permission denied\nError: open /home/testbot2/.obsutil_log/obsutil"
+    },
+    {
+      "cid": "D3-C13",
+      "name": "get 未配置 → 404",
+      "pass": true,
+      "detail": "status=404"
+    },
+    {
+      "cid": "D3-C13",
+      "name": "set indexDocument 成功(200)",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://tctest-dsh-web-0026339287.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website h"
+    },
+    {
+      "cid": "D3-C13",
+      "name": "get 核对 indexDocument",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwcl"
+    },
+    {
+      "cid": "D3-C13",
+      "name": "set 缺 indexDocument 报错",
+      "pass": true,
+      "detail": "{\"__error\":\"Error: indexDocument is required for action=set\"}"
+    },
+    {
+      "cid": "D3-C13",
+      "name": "delete 网站配置(204)",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":204}"
+    },
+    {
+      "cid": "D3-C13",
+      "name": "删桶归零(桶不存在)",
+      "pass": true,
+      "detail": "残留=false"
+    }
+  ]
+}
