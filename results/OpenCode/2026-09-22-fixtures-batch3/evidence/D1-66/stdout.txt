@@ -1,7 +1,7 @@
 PASS	D1-66-default-on	默认遥测开启	actual=true	expected=true
 PASS	D1-66-telemetry-off	TELEMETRY=off 遥测关闭	actual=false	expected=false
 PASS	D1-66-telemetry-on	TELEMETRY=on 仍开启（非 off 均开）	actual=true	expected=true
-PASS	D1-66-endpoint-override	自定义端点注入不崩溃	actual=false	expected=false	endpoint=https://test.example.com/telemetry (遥测关闭，不实际 flush)
+PASS	D1-66-endpoint-override	自定义端点覆盖默认端点（mock fetch 拦截 URL）	actual="https://test.example.com/telemetry"	expected="https://test.example.com/telemetry"	拦截 URL=https://test.example.com/telemetry
 PASS	D1-66-enqueue-skipped	遥测关闭时 enqueueEvent 跳入队（eventQueue 不增长）	actual={"telemetryEnabled":false,"fetchCalled":false}	expected={"telemetryEnabled":false,"fetchCalled":false}	eventQueue 私有未 export，通过 fetch 未被调用间接验证队列未增长
 PASS	D1-66-sanitize-truncate	sanitizeValue 截断超长值（>255）	actual=255	expected=255	尾部=...
 PASS	D1-66-sanitize-newlines	sanitizeValue 清除换行/制表	actual="hello world tab"	expected="hello world tab"
