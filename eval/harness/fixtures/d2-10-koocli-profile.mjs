@@ -57,16 +57,25 @@ try {
       { current: res.current, profile: resolveManagedProfile() }, { current: 'daily', profile: 'daily' });
 
   // ③ runHcloudConfigure 构造 --cli-profile= 参数：用假 hcloud 记录 spawn 实参
+  //    跨平台：使用 Node.js ESM 脚本 + HCLOUD_BIN_ARGS_JSON（SUT 原生支持）
+  //    Windows 下 spawnSync(shell:false) 无法执行 .sh 文件，改用 node 二进制 + .mjs 脚本
   const argsLog = join(tmp, 'args.log');
-  const fake = join(tmp, 'fake-hcloud.sh');
-  writeFileSync(fake, `#!/bin/sh\nprintf '%s\\n' "$@" > "${argsLog}"\nexit 0\n`, { mode: 0o755 });
-  const hcloudBackup = process.env.HCLOUD_BIN;
-  process.env.HCLOUD_BIN = fake;
+  const fake = join(tmp, 'fake-hcloud.mjs');
+  writeFileSync(
+    fake,
+    `import { writeFileSync } from 'node:fs';\n` +
+      `writeFileSync(${JSON.stringify(argsLog)}, process.argv.slice(2).join('\\n') + '\\n');\n`,
+  );
+  const hcloudBinBackup = process.env.HCLOUD_BIN;
+  const hcloudArgsBackup = process.env.HCLOUD_BIN_ARGS_JSON;
+  process.env.HCLOUD_BIN = process.execPath;
+  process.env.HCLOUD_BIN_ARGS_JSON = JSON.stringify([fake]);
   const r = runHcloudConfigure('deploy', 'AKDEPLOY', 'SKDEPLOY', 'cn-north-4');
   const captured = readFileSync(argsLog, 'utf8');
   rec('D2-10-cli-profile-arg', 'runHcloudConfigure 携带 --cli-profile=deploy', captured.includes('--cli-profile=deploy'), captured.trim(), ['--cli-profile=deploy', '...'], `spawn 成功=${r.ok}`);
   rec('D2-10-cli-ak-region', 'runHcloudConfigure 携带 --cli-access-key/--cli-region', captured.includes('--cli-access-key=AKDEPLOY') && captured.includes('--cli-region=cn-north-4'), captured.trim(), ['--cli-access-key', '--cli-region']);
-  if (hcloudBackup === undefined) delete process.env.HCLOUD_BIN; else process.env.HCLOUD_BIN = hcloudBackup;
+  if (hcloudBinBackup === undefined) delete process.env.HCLOUD_BIN; else process.env.HCLOUD_BIN = hcloudBinBackup;
+  if (hcloudArgsBackup === undefined) delete process.env.HCLOUD_BIN_ARGS_JSON; else process.env.HCLOUD_BIN_ARGS_JSON = hcloudArgsBackup;
 
   // ④ 非法/缺失 config → error 语义
   rmSync(configPath, { force: true });
