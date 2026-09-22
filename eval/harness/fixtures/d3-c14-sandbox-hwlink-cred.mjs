@@ -3,8 +3,9 @@
 // hwlink-api: getCredentials / signRequest securitytoken header
 // auth/credentials: setRuntimeCredentials / resolveCredentialsWithRuntime / clearRuntimeCredentials
 // 用法: node d3-c14-sandbox-hwlink-cred.mjs <hdk src> [--evid <dir>]
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 
 const hdkSrc = process.argv[2];
 const evidIdx = process.argv.indexOf('--evid');
@@ -24,6 +25,27 @@ function rec(id, title, ok, actual, expected, detail = '') {
 
 // --- auth/credentials.mjs: setRuntimeCredentials / resolveCredentialsWithRuntime ---
 const credMod = await import(new URL(`file://${hdkSrc}/auth/credentials.mjs`));
+
+// --- 隔离 HOME + 屏蔽凭证文件来源（确保测试可复现，不依赖本机凭证） ---
+const _origEnv = {
+  HOME: process.env.HOME,
+  HUAWEICLOUD_HOME: process.env.HUAWEICLOUD_HOME,
+  HW_ACCESS_KEY: process.env.HW_ACCESS_KEY,
+  HW_SECRET_KEY: process.env.HW_SECRET_KEY,
+  HW_SECURITY_TOKEN: process.env.HW_SECURITY_TOKEN,
+  HW_REGION: process.env.HW_REGION,
+  HUAWEICLOUD_REGION: process.env.HUAWEICLOUD_REGION,
+  CODEARTS_PROJECT_DIR: process.env.CODEARTS_PROJECT_DIR,
+};
+const _tmpHome = mkdtempSync(join(tmpdir(), 'd3c14-'));
+process.env.HOME = _tmpHome;
+process.env.HUAWEICLOUD_HOME = _tmpHome;
+delete process.env.HW_ACCESS_KEY;
+delete process.env.HW_SECRET_KEY;
+delete process.env.HW_SECURITY_TOKEN;
+delete process.env.HW_REGION;
+delete process.env.HUAWEICLOUD_REGION;
+delete process.env.CODEARTS_PROJECT_DIR;
 
 // ① setRuntimeCredentials → resolveCredentialsWithRuntime 返回注入值
 {
@@ -45,7 +67,7 @@ rec('D3-C14-has-rt', 'hasRuntimeCredentials true（set 后）',
   rec('D3-C14-clear-rt', 'clearRuntimeCredentials 后 hasRuntimeCredentials false',
       credMod.hasRuntimeCredentials() === false, credMod.hasRuntimeCredentials(), false);
   // resolveCredentialsWithRuntime 应回退到 resolveCredentials（env / file）
-  // 无凭证时 resolveCredentials 可能抛错（HDKIT_CRED_MISSING）或返回空 — 两种均合法
+  // HOME 已隔离 + env 已清空 → 无凭证时必须抛 HDKIT_CRED_MISSING
   let r = null;
   let threw = false;
   try {
@@ -54,11 +76,11 @@ rec('D3-C14-has-rt', 'hasRuntimeCredentials true（set 后）',
     threw = true;
     r = e;
   }
-  // 合法行为：抛 HDKIT_CRED_MISSING 错误 或 返回空凭证对象
-  const okResult = threw ? r?.code === 'HDKIT_CRED_MISSING' : (r !== null && typeof r.ak !== 'undefined');
-  rec('D3-C14-fallback-empty', '清空后回退 resolveCredentials（抛错或空凭证均合法）',
-      okResult, threw ? 'throws HDKIT_CRED_MISSING' : typeof r.ak, 'throws-or-empty',
-      threw ? `err code=${r?.code}` : `ak=${r.ak ? 'set' : 'empty'}`);
+  rec('D3-C14-fallback-empty', '清空后无凭证时 resolveCredentials 抛 HDKIT_CRED_MISSING',
+      threw && r?.code === 'HDKIT_CRED_MISSING',
+      threw ? 'throws HDKIT_CRED_MISSING' : `returned ak=${r?.ak}`,
+      'throws HDKIT_CRED_MISSING',
+      threw ? `err code=${r?.code}` : '未抛错（凭证泄漏）');
 }
 
 // ④ securitytoken 优先级：runtime > env (HW_SECURITY_TOKEN) > file
@@ -184,5 +206,12 @@ if (EVID) {
   lines.push(`RESULT: ${fail === 0 ? 'PASS' : 'FAIL'}`);
   writeFileSync(join(outDir, 'stdout.txt'), lines.join('\n'), 'utf8');
 }
+
+// --- 恢复原始环境 + 清理临时目录 ---
+for (const [k, v] of Object.entries(_origEnv)) {
+  if (v !== undefined) process.env[k] = v;
+  else delete process.env[k];
+}
+rmSync(_tmpHome, { recursive: true, force: true });
 
 process.exit(fail > 0 ? 1 : 0);
