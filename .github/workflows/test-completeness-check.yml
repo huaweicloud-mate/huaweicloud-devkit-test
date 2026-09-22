@@ -5,7 +5,7 @@ name: test-completeness-check
 #
 # 触发：
 #   1. push / PR 改到 test-cases/** 或门禁脚本时（硬门禁，FAIL 阻断）
-#   2. 每天 20:30 北京时间兜底扫描（源码仓更新而用例未跟进时也能发现）
+#   2. 每天 19:30 北京时间兜底扫描（源码仓更新而用例未跟进时也能发现）
 #   3. 手动 workflow_dispatch
 on:
   workflow_dispatch:
@@ -19,7 +19,7 @@ on:
       - 'test-cases/**'
       - 'scripts/verify_test_completeness.py'
   schedule:
-    - cron: '30 12 * * *'    # UTC 12:30 = 北京时间 20:30
+    - cron: '30 11 * * *'    # UTC 11:30 = 北京时间 19:30
 
 permissions:
   contents: read             # 门禁只读测试仓 + 公开源码仓，不写回，无凭证

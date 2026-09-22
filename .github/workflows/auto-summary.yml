@@ -1,7 +1,7 @@
 name: auto-summary
 
 # agent 上报 results/<客户端>/ 结果即自动重新汇总 Summary；
-# 每天 20:10 北京时间（UTC 12:10）无 push 也兜底出一版。
+# 每天 19:10 北京时间（UTC 11:10）无 push 也兜底出一版。
 on:
   workflow_dispatch:             # 维护者可手动触发一次做验证/手动兜底
   push:
@@ -10,7 +10,7 @@ on:
       - 'results/**'
       - '!results/Summary/**'      # 汇总自身写回不触发（防循环）
   schedule:
-    - cron: '10 12 * * *'          # UTC 12:10 = 北京时间 20:10
+    - cron: '10 11 * * *'          # UTC 11:10 = 北京时间 19:10
 
 concurrency:
   group: auto-summary              # 单例串行：20 个客户端×OS 流水每 10 分钟 push，高频不爆
