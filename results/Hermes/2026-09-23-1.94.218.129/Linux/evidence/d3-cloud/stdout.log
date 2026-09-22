@@ -1,0 +1,98 @@
+{
+  "total": 13,
+  "passed": 12,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D3-S1",
+      "name": "route-to-ecs",
+      "pass": false,
+      "actual": "hit=[]",
+      "expected": "serviceCatalog 路由命中 ecs"
+    },
+    {
+      "id": "D3-S1",
+      "name": "readonly-returns-list",
+      "pass": true,
+      "actual": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"count\\\": 0,\\n  \\\"servers\\\": []\\n}\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServersDe",
+      "expected": "只读命令返回实例清单（可能空列表）"
+    },
+    {
+      "id": "D3-S2",
+      "name": "setup-vpc-created",
+      "pass": true,
+      "actual": "{\n  \"vpc\": {\n    \"id\": \"c6e7631c-1fa0-4c94-b6e9-b1891f3e0ee3\",\n    \"name\": \"hdk-s2-probe\",\n    \"desc",
+      "expected": "创建测试 VPC"
+    },
+    {
+      "id": "D3-S2",
+      "name": "delete-need-confirm",
+      "pass": true,
+      "actual": "deny",
+      "expected": "DeleteVpc write → confirm/deny（未确认不执行）"
+    },
+    {
+      "id": "D3-S2",
+      "name": "delete-zero",
+      "pass": true,
+      "actual": "delete=true remain=0",
+      "expected": "确认删除后 ListVpcs 无此 id"
+    },
+    {
+      "id": "D3-C13",
+      "name": "obs-mb",
+      "pass": true,
+      "actual": "Start at 2026-09-22 21:17:53.296243844 +0000 UTC\n\nCreate bucket [testbot3-hermes-c13-11873196] successfully, request id ",
+      "expected": "建 OBS 桶"
+    },
+    {
+      "id": "D3-C13",
+      "name": "website-get-unconfigured",
+      "pass": true,
+      "actual": "{\"ok\":false,\"status\":404,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>NoSuchWebsiteConfiguration</Code>",
+      "expected": "get 未配置返回状态"
+    },
+    {
+      "id": "D3-C13",
+      "name": "website-set",
+      "pass": true,
+      "actual": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-c13-11873196.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured",
+      "expected": "set 配置 indexDocument 成功"
+    },
+    {
+      "id": "D3-C13",
+      "name": "website-set-no-index-errors",
+      "pass": true,
+      "actual": "indexDocument is required for action=set",
+      "expected": "缺 indexDocument 报错"
+    },
+    {
+      "id": "D3-C13",
+      "name": "website-delete",
+      "pass": true,
+      "actual": "{\"ok\":true,\"status\":204}",
+      "expected": "delete 返回状态"
+    },
+    {
+      "id": "D3-C13",
+      "name": "obs-rm-zero",
+      "pass": true,
+      "actual": "Start at 2026-09-22 21:17:54.054141137 +0000 UTC\n\nDelete bucket [testbot3-hermes-c13-11873196] successfully!\n",
+      "expected": "删桶归零"
+    },
+    {
+      "id": "D3-C14",
+      "name": "hdkitCredentials-missing-errors",
+      "pass": true,
+      "actual": "session_id or dev_stage_id is required",
+      "expected": "缺 sessionId+devStageId 报错"
+    },
+    {
+      "id": "D3-C14",
+      "name": "hwlink-getCredentials-struct",
+      "pass": true,
+      "actual": "{\"ak\":\"HPUAN1ROQ4PQXQVBSYXD\",\"sk\":\"ExzAgLDfOfbaLm8pgyVCJKmtF4Nb5lLX6LnUFrfN\",\"securitytoken\":\"\"}",
+      "expected": "getCredentials 返回凭证对象"
+    }
+  ]
+}
