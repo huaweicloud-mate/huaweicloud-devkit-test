@@ -26,6 +26,7 @@ function rec(id, title, ok, actual, expected, detail = '') {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ===== 安装 mock =====
+const origEndpoint = process.env.HDKITSERVICE_ENDPOINT;
 const mock = new SandboxCredMock();
 mock.install();
 rec('D3-C14-MOCK-install', 'mock 安装后 isInstalled=true',
@@ -145,13 +146,13 @@ rec('D3-C14-MOCK-uninstall', 'mock 卸载后 isInstalled=false',
     { installed: mock.isInstalled },
     { installed: false });
 
-// ⑪ 卸载后 HDKITSERVICE_ENDPOINT 恢复（原始值或清除）
+// ⑪ 卸载后 HDKITSERVICE_ENDPOINT 恢复原始值
 const endpointAfter = process.env.HDKITSERVICE_ENDPOINT;
-rec('D3-C14-MOCK-env-restore', 'mock 卸载后 HDKITSERVICE_ENDPOINT 恢复',
-    endpointAfter === undefined, // 原始没有设这个 env
-    { endpoint: endpointAfter },
-    { endpoint: undefined },
-    endpointAfter === undefined ? '已恢复（env 清除）' : `残留: ${endpointAfter}`);
+rec('D3-C14-MOCK-env-restore', 'uninstall 后 HDKITSERVICE_ENDPOINT 恢复原始值',
+    endpointAfter === origEndpoint,
+    { endpointAfter },
+    { endpointAfter: origEndpoint },
+    endpointAfter === origEndpoint ? '已恢复原始值' : `期望 ${origEndpoint} 实际 ${endpointAfter}`);
 
 // ⑫ mock 独立启停：重新 install/uninstall 不报错
 const mock2 = new SandboxCredMock({ ak: 'AK2', sk: 'SK2' });
