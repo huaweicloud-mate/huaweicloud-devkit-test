@@ -120,23 +120,38 @@ rec('D3-C14-has-rt', 'hasRuntimeCredentials true（set 后）',
       { threw: true, msg: 'credentials not configured' });
 }
 
-// --- HDKITSERVICE_ENDPOINT 环境变量覆盖 ---
+// --- HDKITSERVICE_ENDPOINT 环境变量覆盖（mock fetch 拦截 URL，不依赖 DNS/网络） ---
 {
-  process.env.HDKITSERVICE_ENDPOINT = 'https://custom-hdkit.example.com/api/';
-  // hdkitRequest 内部使用 getHdkitBaseUrl()，我们通过 hdkitConnect 请求验证 endpoint 被覆盖
-  // 设凭证后请求会走到 custom endpoint（DNS 解析失败 → 网络错误，证明端点已覆盖）
+  const customEndpoint = 'https://custom-hdkit.example.com/api/';
+  process.env.HDKITSERVICE_ENDPOINT = customEndpoint;
   credMod.setRuntimeCredentials('AKEP', 'SKEP', '', 'cn-north-4');
   const hdkit = await import(new URL(`file://${hdkSrc}/sandbox/hdkitservice-api.mjs`));
-  let endpointUsed = false;
+  // mock globalThis.fetch 拦截请求，捕获 URL 直接验证端点覆盖
+  const origFetch = globalThis.fetch;
+  let capturedUrl = '';
+  globalThis.fetch = (url) => {
+    capturedUrl = url;
+    return Promise.resolve({
+      ok: true,
+      status: 200,
+      text: () => Promise.resolve(JSON.stringify({ userHash: 'mock-hash' })),
+    });
+  };
+  let endpointOverridden = false;
+  let detailInfo = '';
   try {
     await hdkit.hdkitCheckUser();
+    endpointOverridden = capturedUrl.startsWith(customEndpoint);
+    detailInfo = `拦截 URL=${capturedUrl}`;
   } catch (e) {
-    // 网络错误或自定义域名错误 → 端点已被覆盖
-    endpointUsed = !/credentials are not configured/i.test(e.message || '');
+    // proxy 环境下可能走 undiciFetch 而非 globalThis.fetch → fallback 到错误消息判定
+    endpointOverridden = !/credentials are not configured/i.test(e.message || '');
+    detailInfo = `未拦截到 fetch（可能走 proxy），fallback 错误判定: ${(e.message || '').slice(0, 80)}`;
   }
-  rec('D3-C14-endpoint-override', 'HDKITSERVICE_ENDPOINT 覆盖默认端点',
-      endpointUsed, endpointUsed, true,
-      '自定义端点注入后请求不再走默认地址（非凭证错误 → 端点已覆盖）');
+  globalThis.fetch = origFetch;
+  rec('D3-C14-endpoint-override', 'HDKITSERVICE_ENDPOINT 覆盖默认端点（mock fetch 拦截 URL）',
+      endpointOverridden, capturedUrl || '(fallback)', customEndpoint + 'check-user',
+      detailInfo);
   credMod.clearRuntimeCredentials();
   delete process.env.HDKITSERVICE_ENDPOINT;
 }

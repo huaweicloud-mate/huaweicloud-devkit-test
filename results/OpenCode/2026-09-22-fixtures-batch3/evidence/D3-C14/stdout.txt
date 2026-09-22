@@ -6,7 +6,7 @@ PASS	D3-C14-env-cred	env HW_ACCESS_KEY/HW_SECRET_KEY/HW_SECURITY_TOKEN 注入	ac
 PASS	D3-C14-rt-overrides-env	runtime 凭证覆盖 env	actual={"ak":"AKRT","st":"STRT"}	expected={"ak":"AKRT","st":"STRT"}
 PASS	D3-C14-hwlink-getcred	hwlink getCredentials 返回 runtime 凭证	actual={"ak":"AKHW","sk":"SKHW","st":"STHW"}	expected={"ak":"AKHW","sk":"SKHW","st":"STHW"}
 PASS	D3-C14-hdkit-no-cred-throws	无凭证时 hdkitCheckUser 抛错	actual={"threw":true,"msg":"Huawei Cloud credentials are not configured. Run \"npx huaweicloud-devkit auth in"}	expected={"threw":true,"msg":"credentials not configured"}
-PASS	D3-C14-endpoint-override	HDKITSERVICE_ENDPOINT 覆盖默认端点	actual=true	expected=true	自定义端点注入后请求不再走默认地址（非凭证错误 → 端点已覆盖）
+PASS	D3-C14-endpoint-override	HDKITSERVICE_ENDPOINT 覆盖默认端点（mock fetch 拦截 URL）	actual="https://custom-hdkit.example.com/api/check-user"	expected="https://custom-hdkit.example.com/api/check-user"	拦截 URL=https://custom-hdkit.example.com/api/check-user
 PASS	D3-C14-hdkit-cred-param-required	hdkitCredentials 无参时抛错	actual=true	expected=true	session_id or dev_stage_id is required
 
 === D3-C14 沙箱 HDKit 服务参数与 hwlink 凭证夹具 ===  pass=10 fail=0
