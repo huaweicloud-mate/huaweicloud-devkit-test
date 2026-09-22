@@ -35,7 +35,9 @@ import { tmpdir } from 'node:os';
 const REGION = process.env.HDK_REGION || 'cn-north-4';
 const REPO_URL = process.env.SANDBOX_REPO_URL || 'https://gitcode.com/sunzy1940/test';
 const TS = new Date().toISOString().replace(/[:.]/g, '').slice(0, 14); // 14 位 YYYYMMDDHHmmss
-const EVIDENCE = process.env.HDK_EVIDENCE || null;
+// 结果落盘目录：优先 --evidence 参数，次用 HDK_EVIDENCE 环境变量，缺省不落盘（只 stdout）
+const _evIdx = process.argv.indexOf('--evidence');
+const EVIDENCE = (_evIdx >= 0 && process.argv[_evIdx + 1]) || process.env.HDK_EVIDENCE || null;
 
 const hdkSrc = process.env.HDK_SRC || join(process.cwd(), '..', 'hdk', 'plugins', 'huaweicloud-core', 'src');
 const { callTool } = await import(pathToFileURL(join(hdkSrc, 'tools.mjs')).href);
