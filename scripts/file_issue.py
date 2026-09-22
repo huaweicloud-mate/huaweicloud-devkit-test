@@ -87,12 +87,26 @@ def parse_findings(path):
 
 
 def extract_case_ids(text):
-    """从文本提取用例号 D4-16 / D2-4 / D1-39 等，统一大写、去空格。"""
+    """从文本提取用例号，统一大写、去空格、连字符归一。
+
+    覆盖形态（设计级 + 展开级）：
+      D4-16 / D2-4 / D1-39 / D3-C4 / D3-S8 / D3-C14 / D5-1 / D6-9
+      EXP-C4-14 / EXP-C4-18 / EXP-D5-2-1 / EXP-E01
+    排除：版本号 v1.1.6、日期 2026-09-22、行号 :1784（均不以用例维度字母开头/无 EXP 前缀）。
+    """
     if not text:
         return set()
+
+    def _norm(tok):
+        return re.sub(r"\s+", "", tok).replace("–", "-").replace("—", "-").upper()
+
     ids = set()
-    for m in re.findall(r"[Dd]\s*\d+\s*[-–—]\s*\d+", text):
-        ids.add(re.sub(r"\s*[-–—]\s*", "-", m).upper())
+    # 设计级（D 开头，可含字母后缀段）：D4-2 / D3-C4 / D3-S8 / D3-C14
+    for m in re.finditer(r"(?<![-–—A-Za-z0-9])[Dd]\s*\d+(?:\s*[-–—]\s*[A-Za-z]?\d+)+", text):
+        ids.add(_norm(m.group(0)))
+    # 展开级（EXP 前缀，多段）：EXP-C4-14 / EXP-D5-2-1 / EXP-E01
+    for m in re.finditer(r"\bEXP\s*[-–—]\s*[A-Za-z]\s*\d+(?:\s*[-–—]\s*[A-Za-z]?\d+)*", text):
+        ids.add(_norm(m.group(0)))
     return ids
 
 
