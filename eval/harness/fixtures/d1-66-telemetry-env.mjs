@@ -2,9 +2,8 @@
 // 隔离进程注入 HUAWEICLOUD_DEVKIT_TELEMETRY / HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT
 // 观测 isTelemetryEnabled() 开关行为 + getEndpoint() 端点覆盖 + enqueueEvent/trackInstall 旁路
 // 用法: node d1-66-telemetry-env.mjs <hdk src> [--evid <dir>]
-import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 
 const hdkSrc = process.argv[2];
 const evidIdx = process.argv.indexOf('--evid');
@@ -69,14 +68,25 @@ const telemetryUrl = new URL(`file://${hdkSrc}/telemetry/telemetry.mjs`);
 }
 
 // --- ⑤ enqueueEvent 在遥测关闭时跳入队（no-op） ---
+// eventQueue 为模块私有变量（未 export），通过 mock fetch 间接验证：
+// 遥测关闭时 enqueueEvent 直接 return，不入队 → 无 flush → fetch 不被调用
 {
   process.env.HUAWEICLOUD_DEVKIT_TELEMETRY = 'off';
   const mod = await import(telemetryUrl + '?t=eq' + Date.now());
+  const telemetryOff = mod.isTelemetryEnabled() === false;
+  // mock fetch 检测是否有 flush 触发
+  const origFetch = globalThis.fetch;
+  let fetchCalled = false;
+  globalThis.fetch = () => { fetchCalled = true; return Promise.resolve({ ok: true, status: 200, text: () => Promise.resolve('{}') }); };
   mod.enqueueEvent({ key: 'test:event', value: 'd1-66' });
-  // 关闭时 eventQueue 保持空（enqueueEvent 内 isTelemetryEnabled() false → return）
-  rec('D1-66-enqueue-skipped', '遥测关闭时 enqueueEvent 跳入队',
-      true, 'no-op (isTelemetryEnabled=false)', 'skipped',
-      'enqueueEvent 在 isTelemetryEnabled()=false 时直接 return');
+  // 等待 setImmediate 回调（enqueueEvent 内可能 setImmediate flush）
+  await new Promise((r) => setImmediate(r));
+  globalThis.fetch = origFetch;
+  rec('D1-66-enqueue-skipped', '遥测关闭时 enqueueEvent 跳入队（eventQueue 不增长）',
+      telemetryOff && !fetchCalled,
+      { telemetryEnabled: !telemetryOff, fetchCalled },
+      { telemetryEnabled: false, fetchCalled: false },
+      'eventQueue 私有未 export，通过 fetch 未被调用间接验证队列未增长');
   delete process.env.HUAWEICLOUD_DEVKIT_TELEMETRY;
 }
 
