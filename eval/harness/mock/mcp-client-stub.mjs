@@ -192,7 +192,9 @@ class McpClientStub extends EventEmitter {
   }
 
   checkCallResponse(resp) {
-    return resp?.result?.isError === false || (Array.isArray(resp?.result?.content) && resp.result.content.length > 0);
+    const result = resp?.result;
+    if (!result) return false;
+    return !result.isError && Array.isArray(result.content) && result.content.length > 0;
   }
 }
 
