@@ -131,12 +131,17 @@ if (workspaceId) {
     const pu = r.publicUrl || '';
     if (/cn-north-4-bridge\.myhuaweicloud\.com/.test(pu)) w1 = 'legacy-domain:' + pu;
   }
-  // 沙箱内 curl 实测（最终裁决，不依赖 deploy_check 的解析）
+  // 沙箱内 curl 实测（独立交叉验证；先剥终端 OSC/CSI 转义序列再取 http code，
+  // 否则 \x1b]133;C\x07 里的数字会污染结果，误判 curlOk=false）
   const cv = await call('huaweicloud_sandbox_exec_one_shot', {
     workspace_id: workspaceId,
     command: `curl -s -o /dev/null -w "%{http_code}" --max-time 10 http://localhost:${deployedPort || 8080}/ 2>/dev/null || echo 000`,
   });
-  const httpCode = (cv.r && String(cv.r.stdout || '').replace(/[^0-9]/g, '')) || '000';
+  const rawStdout = (cv.r && String(cv.r.stdout || '')) || '';
+  const stripped = rawStdout
+    .replace(/\x1b\][^\x07]*(?:\x07|\x1b\\)/g, '')   // OSC 序列 \x1b]...\x07
+    .replace(/\x1b\[[0-9;]*[A-Za-z]/g, '');           // CSI 序列 \x1b[...X
+  const httpCode = (stripped.match(/\d{3}/) || ['000'])[0];
   const curlOk = httpCode.startsWith('2') || httpCode.startsWith('3');
   log('D4.nginx_serving', nginxServing && curlOk, `deploy_check=${nginxServing ? 'PASS' : 'FAIL'} curl_http=${httpCode}`);
   if (w1) log('W1.publicUrl_domain', false, w1);
