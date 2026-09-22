@@ -1,0 +1,7 @@
+Credential env print block (actual hook_check_command):
+Command: printenv HW_SECRET_ACCESS_KEY
+Result: decision=allow (NOT blocked)
+Command: echo AK=HWP7XXXXXXXXXXXXXXXXXX SK=xxxx
+Result: decision=allow (NOT blocked)
+FINDING: hook_check_command does not block printing credential env vars or echo with AK/SK values.
+The risk rules only match file paths, not env var names or credential values in echo commands.

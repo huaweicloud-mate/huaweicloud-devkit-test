@@ -1,0 +1,8 @@
+Preflight in confirm flow:
+plan_cli_command performs preflight classification (deny for write operations).
+hook_check_command performs risk rule evaluation before execution.
+Even in confirmation flow, risk pre-checks are active:
+- hook_check_command blocks credential file reads (deny)
+- hook_check_artifacts blocks broad IAM policies (deny)
+- hook_check_deploy_plan warns on public exposure (warn)
+Preflight checks are not bypassed by the confirmation flow.
