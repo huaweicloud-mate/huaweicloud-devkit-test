@@ -1,5 +1,5 @@
 // d9-11-ws-tunnel-lifecycle.mjs — D9-11 WebSocket 隧道通道生命周期夹具
-// 覆盖：建连→认证→心跳保活→正常断开→异常断开→自动重连（全生命周期）
+// 覆盖：建连→认证→心跳保活→正常断开→异常断开→重新建连（全生命周期）
 // 依赖：eval/harness/mock/hwlink-ws-mock.mjs（纯 Node.js WebSocket mock server）
 // 用法: node d9-11-ws-tunnel-lifecycle.mjs [--evid <dir>]
 // 输出: 控制台断言汇总 + <evid>/D9-11-lifecycle/stdout.txt（若 --evid 给定）
@@ -85,11 +85,12 @@ rec('D9-11-LC-normal-close', '正常断开（客户端主动 close → 服务端
 // ⑥ 异常断开：模拟 socket 异常断开（服务端强制关闭连接）
 let ws2Connected = false;
 let ws2Error = false;
+let ws2Closed = false;
 ws = new WebSocket(srv.url, 'devenv');
 ws.binaryType = 'arraybuffer';
 ws.onopen = () => { ws2Connected = true; };
 ws.onerror = () => { ws2Error = true; };
-ws.onclose = () => {};
+ws.onclose = () => { ws2Closed = true; };
 await sleep(150);
 rec('D9-11-LC-abnormal-setup', '异常断开前建立第二个连接',
     ws2Connected === true && srv.connectionCount === 1,
@@ -102,9 +103,10 @@ const abnormalConnId = connIds[0];
 srv.closeConnection(abnormalConnId);
 await sleep(200);
 rec('D9-11-LC-abnormal-close', '服务端强制断开 → 客户端收到 close 事件',
-    srv.connectionCount === 0,
-    { serverConns: srv.connectionCount }, { serverConns: 0 },
-    '服务端 closeConnection 后连接清零');
+    ws2Closed === true && srv.connectionCount === 0,
+    { ws2Closed, serverConns: srv.connectionCount },
+    { ws2Closed: true, serverConns: 0 },
+    '服务端 closeConnection 后客户端收到 close 且连接清零');
 
 // ⑦ 自动重连：客户端连接断开后自动重新建立连接
 let ws3Connected = false;
@@ -113,17 +115,24 @@ ws.binaryType = 'arraybuffer';
 ws.onopen = () => { ws3Connected = true; };
 ws.onerror = () => {};
 await sleep(150);
-rec('D9-11-LC-reconnect', '断开后可重新建连（模拟自动重连）',
+rec('D9-11-LC-reconnect', '断开后可重新建连',
     ws3Connected === true && srv.connectionCount === 1,
     { reconnected: ws3Connected, serverConns: srv.connectionCount },
     { reconnected: true, serverConns: 1 });
 
 // ⑧ 幂等关闭：服务端重复 close 不报错
-await srv.close();
-await srv.close();
-rec('D9-11-LC-close-idempotent', 'mock server 幂等关闭（重复 close 不报错）',
-    srv._closed === true,
-    { closed: srv._closed }, { closed: true });
+let closeTwiceOk = false;
+try {
+  await srv.close();
+  await srv.close();
+  closeTwiceOk = true;
+} catch (e) {
+  // 第二次 close 抛错则 closeTwiceOk 保持 false
+}
+rec('D9-11-LC-close-idempotent', 'close() 幂等（二次调用不报错）',
+    closeTwiceOk === true,
+    { closeTwiceOk },
+    { closeTwiceOk: true });
 
 // ⑨ 关闭后无法建连：mock server 关闭后新连接应失败
 let ws4Error = false;
