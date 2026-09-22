@@ -29,10 +29,9 @@
 //   观察：W1.publicUrl_domain（legacy 域名告警，不计失败）
 //
 // 退出码：0 = C/D/P 全部通过；1 = 存在 FAIL。
-import { spawn, execSync } from 'node:child_process';
+import { spawn, execSync, execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 
 const REGION = process.env.HDK_REGION || 'cn-north-4';
