@@ -24,10 +24,18 @@ function rec(id, title, ok, actual, expected, detail = '') {
 }
 
 // 直接执行目标源码 CLI（spawn node <hdkSrc>/setup-cli.mjs），测试传入的 hdkSrc 版本
+// Node 22 需要 --experimental-sqlite 才能加载 setup-cli.mjs 依赖的 node:sqlite；
+// 自动探测当前 node 是否支持 node:sqlite（不支持则补 flag），保证夹具自包含、可复现。
+let sqliteFlag = [];
+try {
+  await import('node:sqlite');
+} catch {
+  sqliteFlag = ['--experimental-sqlite'];
+}
 function runCli(args, timeoutMs = 15000) {
   return new Promise((resolve) => {
     const cliEntry = join(hdkSrc, 'setup-cli.mjs');
-    const child = spawn(process.execPath, [cliEntry, ...args], {
+    const child = spawn(process.execPath, [...sqliteFlag, cliEntry, ...args], {
       stdio: ['pipe', 'pipe', 'pipe'],
       timeout: timeoutMs,
       env: { ...process.env, CI: 'true' },

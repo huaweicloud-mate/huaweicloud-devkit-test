@@ -47,4 +47,4 @@ node eval/harness/fixtures/run-all.mjs <hdk src> [--evid <dir>]
 - 不含宿主硬依赖的项（批次② D2-10/D2-13/D9-9/D9-10/D9-11/D9-6 + 批次③全部 7 项）：本地执行即可获得真实 PASS/FAIL。
 - EXP-D5-2-1/2-3 依赖 **Codex 客户端真实宿主**（插件发现/加载会话、宿主层 tools/list 通道枚举）。夹具已提供宿主检测与协议层基线；宿主未安装时按设计然（BLOCKED）归档，测试机（已配 AK/SK + 客户端）就绪后宿主层即转 PASS。
 - 时间断言遵循规范：超时/生命周期窗口用范围断言（≤ 阈值/2s 窗口/幂等计数），不禁毫秒级相等比较。
-- 批次③全部 7 项为纯代码夹具（源码级直调 + mock），无外部环境依赖，本地执行即 PASS。D1-69 通过 `spawn(process.execPath, [hdkSrc/setup-cli.mjs, ...])` 直接执行目标源码 CLI（非 npx），测试传入的 hdkSrc 版本行为。
+- 批次③全部 7 项为纯代码夹具（源码级直调 + mock），无外部环境依赖，本地执行即 PASS。D1-69 通过 `spawn(process.execPath, [hdkSrc/setup-cli.mjs, ...])` 直接执行目标源码 CLI（非 npx），测试传入的 hdkSrc 版本行为；夹具自动探测 `node:sqlite` 支持并补 `--experimental-sqlite` flag（Node 22 需要），自包含、可复现。
