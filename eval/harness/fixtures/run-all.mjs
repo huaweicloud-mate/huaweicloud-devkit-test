@@ -1,4 +1,4 @@
-// run-all.mjs：批量运行 Issue #7 批次② 全部夹具/harness
+// run-all.mjs：批量运行 Issue #7 批次②+③ 全部夹具/harness
 // 用法: node eval/harness/fixtures/run-all.mjs <hdk src> [--evid <dir>]
 import { spawn } from 'node:child_process';
 import { dirname, join } from 'node:path';
@@ -14,6 +14,7 @@ if (!hdkSrc) {
 }
 
 const FIXTURES = [
+  // 批次② P1
   'd2-10-koocli-profile.mjs',
   'd2-13-s1-env.mjs',
   'd9-9-delay-timeout.mjs',
@@ -22,6 +23,14 @@ const FIXTURES = [
   'd9-6-cross-client.mjs',
   'exp-d5-2-1-codex-discovery.mjs',
   'exp-d5-2-3-codex-tools-enum.mjs',
+  // 批次③ P2
+  'd1-66-telemetry-env.mjs',
+  'd1-69-cli-help.mjs',
+  'd2-27-koocli-version.mjs',
+  'd3-c14-sandbox-hwlink-cred.mjs',
+  'd4-12-supply-chain.mjs',
+  'd4-29-classify-assert.mjs',
+  'd8-10-mcp-config-backup-merge.mjs',
 ];
 
 const summary = [];
