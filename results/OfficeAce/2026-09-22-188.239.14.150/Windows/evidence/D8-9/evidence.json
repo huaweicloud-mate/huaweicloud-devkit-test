@@ -1,0 +1,47 @@
+{
+  "caseId": "D8-9",
+  "title": "安装ID与遥测值脱敏",
+  "steps": [
+    {
+      "check": "generateOrRecoverInstallId returns value",
+      "pass": true
+    },
+    {
+      "check": "installId stable on second call",
+      "id1": "15e0147c29d4215ab8d1ed1a0baf51097d85bea006eb6aaee7de87b28b05052f",
+      "id2": "15e0147c29d4215ab8d1ed1a0baf51097d85bea006eb6aaee7de87b28b05052f",
+      "pass": true
+    },
+    {
+      "check": "sanitizeValue function exists",
+      "pass": true
+    },
+    {
+      "check": "sanitize AK-like value",
+      "result": "AKID1234567890ABCDEF",
+      "pass": false
+    },
+    {
+      "check": "sanitize token-like value",
+      "result": "sk-1234567890abcdef1234567890abcdef",
+      "pass": false
+    },
+    {
+      "check": "normal value unchanged",
+      "result": "normal_value",
+      "pass": true
+    },
+    {
+      "check": "empty string handled",
+      "result": "",
+      "pass": true
+    },
+    {
+      "check": "installId persisted to disk",
+      "pass": true,
+      "note": "may use different path"
+    }
+  ],
+  "verdict": "FAIL",
+  "summary": "6/8 checks passed"
+}

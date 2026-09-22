@@ -1,0 +1,34 @@
+﻿=== D2-1: auth init涓夌鍚屾 ===
+auth_switch persist response: {
+  "status": "ok",
+  "scope": "persist",
+  "backedUp": false,
+  "obs": {
+    "configured": true
+  },
+  "hcloud": {
+    "ok": true,
+    "error": ""
+  },
+  "note": "S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority."
+}
+[PASS] auth_switch persist 杩斿洖 ok :: status=ok
+[PASS] S1 credentials.json 钀戒綅 :: path: C:\Users\ADMINI~1\AppData\Local\Temp\2\d2-1-tUxDiS\.config\huaweicloud\credentials.json
+[PASS] S1 鍚?ak :: ak prefix: HPUAN1...
+[PASS] S1 鍚?sk :: sk length: 40
+[PASS] S1 鍚?region :: region: cn-north-4
+[PASS] S1 ak 涓庤緭鍏ヤ竴鑷?:: 鍑瘉姝ｇ‘鍐欏叆
+[PASS] S1 sk 涓庤緭鍏ヤ竴鑷?:: 瀵嗛挜姝ｇ‘鍐欏叆
+[PASS] S2 hcloud config.json 钀戒綅 :: path: C:\Users\Administrator\.hcloud\config.json
+[PASS] S2 hcloud sync 鎶ュ憡 ok :: hcloud.ok=true
+[PASS] S2 鍚?current profile :: current: default
+[PASS] S2 鍚?profiles 鏁扮粍 :: profiles count: 1
+[PASS] S3 obsutil config 钀戒綅 :: path: C:\Users\Administrator\.obsutilconfig
+[PASS] S3 OBS sync 鎶ュ憡 configured :: obs.configured=true
+
+=== 姹囨€?===
+Total: 13, PASS: 13, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-1","title":"auth init涓夌鍚屾","result":"PASS","checks":[{"label":"auth_switch persist 杩斿洖 ok","pass":true,"detail":"status=ok"},{"label":"S1 credentials.json 钀戒綅","pass":true,"detail":"path: C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\d2-1-tUxDiS\\.config\\huaweicloud\\credentials.json"},{"label":"S1 鍚?ak","pass":true,"detail":"ak prefix: HPUAN1..."},{"label":"S1 鍚?sk","pass":true,"detail":"sk length: 40"},{"label":"S1 鍚?region","pass":true,"detail":"region: cn-north-4"},{"label":"S1 ak 涓庤緭鍏ヤ竴鑷?,"pass":true,"detail":"鍑瘉姝ｇ‘鍐欏叆"},{"label":"S1 sk 涓庤緭鍏ヤ竴鑷?,"pass":true,"detail":"瀵嗛挜姝ｇ‘鍐欏叆"},{"label":"S2 hcloud config.json 钀戒綅","pass":true,"detail":"path: C:\\Users\\Administrator\\.hcloud\\config.json"},{"label":"S2 hcloud sync 鎶ュ憡 ok","pass":true,"detail":"hcloud.ok=true"},{"label":"S2 鍚?current profile","pass":true,"detail":"current: default"},{"label":"S2 鍚?profiles 鏁扮粍","pass":true,"detail":"profiles count: 1"},{"label":"S3 obsutil config 钀戒綅","pass":true,"detail":"path: C:\\Users\\Administrator\\.obsutilconfig"},{"label":"S3 OBS sync 鎶ュ憡 configured","pass":true,"detail":"obs.configured=true"}],"timestamp":"2026-09-22T06:50:51.149Z"}

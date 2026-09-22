@@ -1,0 +1,278 @@
+﻿=== D2-2: auth status鍒ゅ畾鍑嗙‘鎬?===
+Real credentials exist: true
+Status with real creds: {
+  "target": "all",
+  "credentialsConfigured": true,
+  "credentialsPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+  "obsConfigured": true,
+  "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "caae65f2",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "9c24938b",
+      "runtimeFingerprint": null
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [
+      {
+        "store": "S3",
+        "source": "obsutilconfig",
+        "fingerprint": "9c24938b",
+        "manualModified": true
+      }
+    ],
+    "hasRuntime": false,
+    "runtimeFingerprint": null,
+    "inconsistent": true,
+    "runtimeActive": false
+  },
+  "onboarding": {
+    "needsSetup": true,
+    "scenario": 1,
+    "reason": "s1-only",
+    "message": "宸蹭繚瀛樿处鍙?鎸囩汗 caae65f2)鍙洿鎺ヤ娇鐢ㄣ€?,
+    "steps": [
+      {
+        "order": 1,
+        "action": "use-s1",
+        "args": {},
+        "label": "鐩存帴浣跨敤宸蹭繚瀛樿处鍙?
+      },
+      {
+        "order": 2,
+        "action": "switch-new",
+        "args": {
+          "mode": "import",
+          "action": "persist"
+        },
+        "label": "鏀圭敤鏂拌处鍙?瀵煎叆)"
+      }
+    ],
+    "accountHint": "caae65f2"
+  },
+  "agents": {
+    "opencode": {
+      "configured": true
+    },
+    "codex": {
+      "configured": false
+    },
+    "codex-desktop": {
+      "configured": false
+    },
+    "codearts": {
+      "configured": true
+    },
+    "codearts-work": {
+      "configured": true
+    },
+    "workbuddy": {
+      "configured": true
+    },
+    "dsh": {
+      "configured": true
+    },
+    "officeace": {
+      "configured": true
+    },
+    "hermes": {
+      "configured": true
+    },
+    "openclaw": {
+      "configured": true
+    },
+    "atomcode": {
+      "configured": true
+    }
+  }
+}
+[PASS] T1.1 auth_status 杩斿洖鏈夋晥缁撴瀯 :: has response object
+[PASS] T1.2 auth_status 鍚?credentialsConfigured 瀛楁 :: keys: target,credentialsConfigured,credentialsPath,obsConfigured,obsConfigPath,kooCliInstalled,kooCliStatus,kooCliNextStep,reconciled,onboarding,agents
+[PASS] T1.3 鏈夊嚟璇佹椂 credentialsConfigured=true :: credentialsConfigured=true
+Status without creds: {
+  "target": "all",
+  "credentialsConfigured": false,
+  "credentialsPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\d2-2-pMEIrd\\.config\\huaweicloud\\credentials.json",
+  "obsConfigured": true,
+  "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "9c24938b",
+      "runtimeFingerprint": null
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [],
+    "hasRuntime": false,
+    "runtimeFingerprint": null,
+    "inconsistent": false,
+    "runtimeActive": false
+  },
+  "onboarding": {
+    "needsSetup": true,
+    "scenario": 3,
+    "reason": "s1-missing",
+    "message": "鏈厤缃崕涓轰簯鍑瘉,闇€瑕佸畬鎴愮櫥褰曞悗鎵嶈兘浣跨敤浜戣兘鍔涖€?,
+    "steps": [
+      {
+        "order": 1,
+        "action": "obtain-aksk",
+        "target": "console",
+        "label": "鑾峰彇 AK/SK(鍗庝负浜戞帶鍒跺彴)"
+      },
+      {
+        "order": 2,
+        "action": "write-import",
+        "target": "C:\\Users\\Administrator\\.config\\huaweicloud\\creds-import.json",
+        "label": "鎶?AK/SK 鍐欏叆 creds-import.json"
+      },
+      {
+        "order": 3,
+        "action": "auth_switch",
+        "args": {
+          "mode": "import",
+          "action": "persist"
+        },
+        "label": "鎵ц瀵煎叆瀹屾垚閰嶇疆"
+      }
+    ],
+    "accountHint": null
+  },
+  "agents": {
+    "opencode": {
+      "configured": false
+    },
+    "codex": {
+      "configured": false
+    },
+    "codex-desktop": {
+      "configured": false
+    },
+    "codearts": {
+      "configured": false
+    },
+    "codearts-work": {
+      "configured": false
+    },
+    "workbuddy": {
+      "configured": false
+    },
+    "dsh": {
+      "configured": false
+    },
+    "officeace": {
+      "configured": true
+    },
+    "hermes": {
+      "configured": false
+    },
+    "openclaw": {
+      "configured": false
+    },
+    "atomcode": {
+      "configured": false
+    }
+  }
+}
+[PASS] T2.1 鏃犲嚟璇佺姸鎬佽繑鍥炴湁鏁堢粨鏋?:: has response object
+[PASS] T2.2 鏃犲嚟璇佺姸鎬佹爣璇嗘湭灏辩华 :: credentialsConfigured=false
+Status with runtime creds: {
+  "target": "all",
+  "credentialsConfigured": true,
+  "credentialsPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+  "obsConfigured": true,
+  "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "caae65f2",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "9c24938b",
+      "runtimeFingerprint": "caae65f2"
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [
+      {
+        "store": "S3",
+        "source": "obsutilconfig",
+        "fingerprint": "9c24938b",
+        "manualModified": true
+      }
+    ],
+    "hasRuntime": true,
+    "runtimeFingerprint": "caae65f2",
+    "inconsistent": true,
+    "runtimeActive": true
+  },
+  "onboarding": {
+    "needsSetup": false,
+    "scenario": 0,
+    "reason": "runtime-active",
+    "message": "Runtime credentials are active; no setup needed.",
+    "steps": [],
+    "accountHint": "caae65f2"
+  },
+  "agents": {
+    "opencode": {
+      "configured": true
+    },
+    "codex": {
+      "configured": false
+    },
+    "codex-desktop": {
+      "configured": false
+    },
+    "codearts": {
+      "configured": true
+    },
+    "codearts-work": {
+      "configured": true
+    },
+    "workbuddy": {
+      "configured": true
+    },
+    "dsh": {
+      "configured": true
+    },
+    "officeace": {
+      "configured": true
+    },
+    "hermes": {
+      "configured": true
+    },
+    "openclaw": {
+      "configured": true
+    },
+    "atomcode": {
+      "configured": true
+    }
+  }
+}
+[PASS] T3.1 runtime鍑瘉鐘舵€佽繑鍥炴湁鏁堢粨鏋?:: has response object
+[PASS] T3.2 runtime鍑瘉鐘舵€佹爣璇嗗氨缁?:: credentialsConfigured=true
+
+=== 姹囨€?===
+Total: 7, PASS: 7, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-2","result":"PASS","checks":[{"label":"T1.1 auth_status 杩斿洖鏈夋晥缁撴瀯","pass":true,"detail":"has response object"},{"label":"T1.2 auth_status 鍚?credentialsConfigured 瀛楁","pass":true,"detail":"keys: target,credentialsConfigured,credentialsPath,obsConfigured,obsConfigPath,kooCliInstalled,kooCliStatus,kooCliNextStep,reconciled,onboarding,agents"},{"label":"T1.3 鏈夊嚟璇佹椂 credentialsConfigured=true","pass":true,"detail":"credentialsConfigured=true"},{"label":"T2.1 鏃犲嚟璇佺姸鎬佽繑鍥炴湁鏁堢粨鏋?,"pass":true,"detail":"has response object"},{"label":"T2.2 鏃犲嚟璇佺姸鎬佹爣璇嗘湭灏辩华","pass":true,"detail":"credentialsConfigured=false"},{"label":"T3.1 runtime鍑瘉鐘舵€佽繑鍥炴湁鏁堢粨鏋?,"pass":true,"detail":"has response object"},{"label":"T3.2 runtime鍑瘉鐘舵€佹爣璇嗗氨缁?,"pass":true,"detail":"credentialsConfigured=true"}],"timestamp":"2026-09-22T06:50:54.684Z"}

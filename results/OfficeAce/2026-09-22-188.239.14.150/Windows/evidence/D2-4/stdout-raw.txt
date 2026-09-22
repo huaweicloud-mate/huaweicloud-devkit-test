@@ -1,0 +1,66 @@
+﻿=== D2-4: 鍑瘉鑴辨晱姝ｇ‘鎬ф祴璇?(v2) ===
+鏃堕棿: 2026-09-22T06:50:54.935Z
+妯℃嫙 AK (涓嶆硠闇茬湡瀹炲嚟璇?: HWAK**** (len=20)
+妯℃嫙 SK (涓嶆硠闇茬湡瀹炲嚟璇?: **** (len=30)
+
+鈹€鈹€ 娴嬭瘯缁?1: 瀛楃涓插唴 AK=/SK= 妯″紡鑴辨晱 (鏍稿績) 鈹€鈹€
+  杈撳叆: config: AK=HWAKMOCKTEST12345678 SK=HWSKMOCKTEST87654321abcdefghij region=cn-north-4
+  杈撳嚭: config: AK=<redacted> SK=<redacted> region=cn-north-4
+[PASS] 1a. AK 鍊艰 <redacted> 鏇挎崲 :: 杈撳嚭鍚?"AK=<redacted>"
+[PASS] 1b. SK 鍊艰 <redacted> 鏇挎崲 :: 杈撳嚭鍚?"SK=<redacted>"
+[PASS] 1c. 鏄庢枃 AK 涓嶅湪杈撳嚭涓?:: 杈撳嚭涓嶅惈 "HWAK..."
+[PASS] 1d. 鏄庢枃 SK 涓嶅湪杈撳嚭涓?:: 杈撳嚭涓嶅惈鏄庢枃 SK
+[PASS] 1e. region 瀛楁淇濈暀 :: 闈炴晱鎰熷瓧娈垫湭琚鑴辨晱
+
+鈹€鈹€ 娴嬭瘯缁?2: 瀵硅薄閿悕鍖归厤 secret pattern (鏍稿績) 鈹€鈹€
+  杈撳叆閿? access_key, secret_key, security_token, region, project_id
+  杈撳嚭: {"access_key":"<redacted>","secret_key":"<redacted>","security_token":"<redacted>","region":"cn-north-4","project_id":"mock-project-123"}
+[PASS] 2a. access_key 鍊兼浛鎹负 <redacted> :: 瀹為檯: "<redacted>"
+[PASS] 2b. secret_key 鍊兼浛鎹负 <redacted> :: 瀹為檯: "<redacted>"
+[PASS] 2c. security_token 鍊兼浛鎹负 <redacted> :: 瀹為檯: "<redacted>"
+[PASS] 2d. 鏄庢枃 AK 涓嶅湪杈撳嚭瀵硅薄涓?:: 瀵硅薄 JSON 涓嶅惈鏄庢枃 AK
+[PASS] 2e. 鏄庢枃 SK 涓嶅湪杈撳嚭瀵硅薄涓?:: 瀵硅薄 JSON 涓嶅惈鏄庢枃 SK
+[PASS] 2f. region 瀛楁淇濈暀 :: 闈炴晱鎰熷瓧娈垫湭琚鑴辨晱
+[PASS] 2g. project_id 瀛楁淇濈暀 :: 闈炴晱鎰熷瓧娈垫湭琚鑴辨晱
+
+鈹€鈹€ 娴嬭瘯缁?3: 澶氭牸寮忓嚟璇侀敭鍊煎 (鏍稿績) 鈹€鈹€
+[PASS] 3. access_key=xxx -> 鍚?<redacted> 涓旀棤鏄庢枃 :: 杈撳嚭: "access_key=<redacted>"
+[PASS] 3. secret_key=xxx -> 鍚?<redacted> 涓旀棤鏄庢枃 :: 杈撳嚭: "secret_key=<redacted>"
+[PASS] 3. access_key:xxx (鍐掑彿) -> 鍚?<redacted> 涓旀棤鏄庢枃 :: 杈撳嚭: "access_key: <redacted>"
+[PASS] 3. secret_key:xxx (鍐掑彿) -> 鍚?<redacted> 涓旀棤鏄庢枃 :: 杈撳嚭: "secret_key: <redacted>"
+[PASS] 3. password=xxx -> 鍚?<redacted> 涓旀棤鏄庢枃 :: 杈撳嚭: "password=<redacted>"
+[PASS] 3. credential=xxx -> 鍚?<redacted> 涓旀棤鏄庢枃 :: 杈撳嚭: "credential=<redacted>"
+[PASS] 3. AK:xxx (鍐掑彿鏍煎紡) -> 鍚?<redacted> 涓旀棤鏄庢枃 :: 杈撳嚭: "AK=<redacted>"
+[PASS] 3. SK:xxx (鍐掑彿鏍煎紡) -> 鍚?<redacted> 涓旀棤鏄庢枃 :: 杈撳嚭: "SK=<redacted>"
+
+鈹€鈹€ 娴嬭瘯缁?4: 宓屽瀵硅薄涓庢暟缁勯€掑綊鑴辨晱 (鏍稿績) 鈹€鈹€
+  杈撳嚭: {"profiles":[{"name":"default","access_key":"<redacted>","secret_key":"<redacted>"},{"name":"prod","access_key":"<redacted>","secret_key":"<redacted>"}],"config":{"region":"cn-north-4","endpoint":"https://ecs.cn-north-4.myhuaweicloud.com"}}
+[PASS] 4a. 宓屽鏁扮粍 access_key 鑴辨晱 :: 鎵€鏈夊眰绾х殑 access_key 鍧囪鑴辨晱
+[PASS] 4b. 宓屽鏁扮粍 secret_key 鑴辨晱 :: 鎵€鏈夊眰绾х殑 secret_key 鍧囪鑴辨晱
+[PASS] 4c. 宓屽闈炴晱鎰熷瓧娈典繚鐣?:: config.region 鍜?profiles[0].name 鏈璇劚鏁?
+鈹€鈹€ 娴嬭瘯缁?5: 杈圭晫鎯呭喌 (鏍稿績) 鈹€鈹€
+[PASS] 5a. 绌哄瓧绗︿覆涓嶅穿婧?:: 绌哄瓧绗︿覆鍘熸牱杩斿洖
+[PASS] 5b. 绌哄璞′笉宕╂簝 :: 绌哄璞″師鏍疯繑鍥?[PASS] 5c. 鏃犲嚟璇佸瓧绗︿覆涓嶈鑴辨晱 :: 鏅€氬懡浠ゅ瓧绗︿覆鍘熸牱杩斿洖
+[PASS] 5d. 鏁板瓧绫诲瀷涓嶅穿婧?:: 鏁板瓧鍘熸牱杩斿洖
+[PASS] 5e. 甯冨皵绫诲瀷涓嶅穿婧?:: 甯冨皵鍘熸牱杩斿洖
+[PASS] 5f. null 涓嶅穿婧?:: null 鍘熸牱杩斿洖
+
+鈹€鈹€ 娴嬭瘯缁?6: SK 姘镐笉瀹屾暣灞曠ず 鈥?鏍稿績鏍煎紡 (鏍稿績) 鈹€鈹€
+[PASS] 6a. SK鏍稿績鏍煎紡1 鏃犳槑鏂囨硠闇?:: 宸茶劚鏁? "SK=<redacted>"
+[PASS] 6b. SK鏍稿績鏍煎紡2 鏃犳槑鏂囨硠闇?:: 宸茶劚鏁? "SK=<redacted>"
+[PASS] 6c. SK鏍稿績鏍煎紡3 鏃犳槑鏂囨硠闇?:: 宸茶劚鏁? "secret_key=<redacted>"
+[PASS] 6d. SK鏍稿績鏍煎紡4 鏃犳槑鏂囨硠闇?:: 宸茶劚鏁? "secret_key: <redacted>"
+
+鈹€鈹€ 娴嬭瘯缁?7: 杈圭晫鏍煎紡鍙戠幇 (edgeFindings, 涓嶅奖鍝嶆牳蹇冨垽瀹? 鈹€鈹€
+  娉? 浠ヤ笅鏍煎紡瓒呭嚭 redactString 璁捐鐨?key=value / key:value 妯″紡鑼冨洿
+[EDGE] 7a. JSON瀛楃涓?{"secret_key":"xxx"} 鑴辨晱 :: 杈圭晫鍙戠幇: redactString 姝ｅ垯涓嶅尮閰?JSON 寮曞彿鏍煎紡锛岄渶鍏堣В鏋愬璞″啀鑴辨晱
+[EDGE] 7b. 鑷劧璇█ "SK is xxx" 鑴辨晱 :: 杈圭晫鍙戠幇: redactString 姝ｅ垯瑕佹眰 AK|SK 鍚庤窡 [:=]锛岃嚜鐒惰瑷€涓嶅尮閰?[OK] 7c. metadata 閿瑙嗕负鏁忔劅 (璁捐琛屼负) :: isSecretKeyName 姝ｅ垯鍚?metadata锛屽€兼浛鎹负 "<redacted>" 鈥?绗﹀悎璁捐(metadata鍙惈寮曞鑴氭湰)
+
+=== 姹囨€?===
+鏍稿績鍒ゅ畾: PASS=33  FAIL=0  TOTAL=33
+杈圭晫鍙戠幇: 2 涓?(涓嶅奖鍝嶆牳蹇冨垽瀹?
+鏈€缁堝垽瀹? PASS
+杈圭晫鍙戠幇璇︽儏:
+  7a: JSON瀛楃涓叉牸寮忛渶鍏?JSON.parse 鍐嶈皟 redactSecrets (璋冪敤鏂硅矗浠?
+  7b: 鑷劧璇█ "SK is xxx" 瓒呭嚭 key=value 璁捐妯″紡
+  7c: metadata 閿璁捐涓烘晱鎰熼敭 (绗﹀悎瀹夊叏绛栫暐)

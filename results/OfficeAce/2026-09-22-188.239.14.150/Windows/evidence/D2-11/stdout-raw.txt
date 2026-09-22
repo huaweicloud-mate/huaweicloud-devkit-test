@@ -1,0 +1,66 @@
+﻿
+=== Test 1: auth_switch persist + securityToken ===
+S1 path: C:\Users\ADMINI~1\AppData\Local\Temp\2\d2-11-JzwQsP\.config\huaweicloud\credentials.json
+S1 exists before: false
+Response: {
+  "status": "error",
+  "error": "Temporary STS credentials cannot be persisted (R3). Use action=temporary.",
+  "scope": "rejected"
+}
+[PASS] T1.1 杩斿洖 status=error
+       actual status=error
+[PASS] T1.2 杩斿洖 scope=rejected
+       actual scope=rejected
+[PASS] T1.3 閿欒娑堟伅鍖呭惈 R3
+       error="Temporary STS credentials cannot be persisted (R3). Use action=temporary."
+
+=== Test 2: S1 鏈啓鍏?token ===
+S1 exists after: false
+[PASS] T2.1 S1 鏂囦欢鏈垱寤?(token 鏈惤鐩?
+       S1 涓嶅瓨鍦?鈫?token 纭疄鏈惤鐩?[PASS] T2.2 S1 securityToken 瀛楁涓虹┖ (鏂囦欢涓嶅瓨鍦?
+       N/A
+
+=== Test 3: 棰勫瓨鍦?S1 (鍚岃处鍙? + token 鈫?浠?rejected ===
+Pre-existing S1 written (same AK=MOCKAKD2ELEVEN0001, no token)
+Response: {
+  "status": "error",
+  "error": "Temporary STS credentials cannot be persisted (R3). Use action=temporary.",
+  "scope": "rejected"
+}
+[PASS] T3.1 棰勫瓨鍦?S1 (鍚岃处鍙? + token 浠嶈繑鍥?rejected
+       status=error, scope=rejected
+S1 after attempt: {"ak":"MOCKAKD2ELEVEN0001","sk":"MOCKSKd2elevenscret0001ForTestOnly","securityToken":"","region":"cn-north-4"}
+[PASS] T3.2 S1 涓粛涓嶅惈妯℃嫙 STS token
+       token 涓嶅簲鍑虹幇鍦?S1 涓?[PASS] T3.3 S1 securityToken 浠嶄负绌?       securityToken=""
+
+=== Test 4: persist 涓嶅甫 token (瀵圭収缁? ===
+Response: {
+  "status": "ok",
+  "scope": "persist",
+  "backedUp": true,
+  "obs": {
+    "configured": true
+  },
+  "hcloud": {
+    "ok": true,
+    "error": ""
+  },
+  "note": "S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority."
+}
+[PASS] T4.1 鏃?token 鏃?persist 涓嶈 rejected
+       status=ok, scope=persist
+[PASS] T4.2 瀵圭収缁?S1 securityToken 涓虹┖瀛楃涓?       securityToken=""
+
+=== Test 5: 婧愮爜闈欐€侀獙璇?===
+[PASS] T5.1 婧愮爜鍚?STS 鎷掔粷閫昏緫 (R3)
+       persistCredentials 涓瓨鍦?R3 鎷掔粷鍒嗘敮
+[PASS] T5.2 婧愮爜鍚?scope: rejected
+       鎷掔粷鍒嗘敮杩斿洖 scope=rejected
+[PASS] T5.3 鎸佷箙鍖栨椂 securityToken 鏄惧紡缃┖
+       writeGlobalCredentials 璋冪敤涓?securityToken 琚涓虹┖瀛楃涓?
+=== 姹囨€?===
+Total: 13, PASS: 13, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-11","title":"R3 STS token鎷掔粷钀界洏","result":"PASS","checks":[{"label":"T1.1 杩斿洖 status=error","pass":true,"detail":"actual status=error"},{"label":"T1.2 杩斿洖 scope=rejected","pass":true,"detail":"actual scope=rejected"},{"label":"T1.3 閿欒娑堟伅鍖呭惈 R3","pass":true,"detail":"error=\"Temporary STS credentials cannot be persisted (R3). Use action=temporary.\""},{"label":"T2.1 S1 鏂囦欢鏈垱寤?(token 鏈惤鐩?","pass":true,"detail":"S1 涓嶅瓨鍦?鈫?token 纭疄鏈惤鐩?},{"label":"T2.2 S1 securityToken 瀛楁涓虹┖ (鏂囦欢涓嶅瓨鍦?","pass":true,"detail":"N/A"},{"label":"T3.1 棰勫瓨鍦?S1 (鍚岃处鍙? + token 浠嶈繑鍥?rejected","pass":true,"detail":"status=error, scope=rejected"},{"label":"T3.2 S1 涓粛涓嶅惈妯℃嫙 STS token","pass":true,"detail":"token 涓嶅簲鍑虹幇鍦?S1 涓?},{"label":"T3.3 S1 securityToken 浠嶄负绌?,"pass":true,"detail":"securityToken=\"\""},{"label":"T4.1 鏃?token 鏃?persist 涓嶈 rejected","pass":true,"detail":"status=ok, scope=persist"},{"label":"T4.2 瀵圭収缁?S1 securityToken 涓虹┖瀛楃涓?,"pass":true,"detail":"securityToken=\"\""},{"label":"T5.1 婧愮爜鍚?STS 鎷掔粷閫昏緫 (R3)","pass":true,"detail":"persistCredentials 涓瓨鍦?R3 鎷掔粷鍒嗘敮"},{"label":"T5.2 婧愮爜鍚?scope: rejected","pass":true,"detail":"鎷掔粷鍒嗘敮杩斿洖 scope=rejected"},{"label":"T5.3 鎸佷箙鍖栨椂 securityToken 鏄惧紡缃┖","pass":true,"detail":"writeGlobalCredentials 璋冪敤涓?securityToken 琚涓虹┖瀛楃涓?}],"timestamp":"2026-09-22T06:50:51.864Z"}

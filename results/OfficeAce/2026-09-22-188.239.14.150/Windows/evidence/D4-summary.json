@@ -1,0 +1,126 @@
+{
+  "results": {
+    "D4-1": {
+      "status": "PASS",
+      "why": "所有凭证文件读取命令均被 deny 拦截"
+    },
+    "D4-2": {
+      "status": "PASS",
+      "why": "所有凭证 env 打印命令均被 deny 拦截"
+    },
+    "D4-3": {
+      "status": "FAIL",
+      "why": "存在未拦截的 secret API 调用"
+    },
+    "D4-4": {
+      "status": "PASS",
+      "why": "12 类写动词均被 deny（需审批方可执行）"
+    },
+    "D4-5": {
+      "status": "PASS",
+      "why": "写操作均未被误判为只读"
+    },
+    "D4-6": {
+      "status": "FAIL",
+      "why": "存在未脱敏的敏感值"
+    },
+    "D4-7": {
+      "status": "PASS",
+      "why": "三类高危输入均被 hook 工具拦截"
+    },
+    "D4-8": {
+      "status": "FAIL",
+      "why": "双路径判定不一致"
+    },
+    "D4-9": {
+      "status": "PASS",
+      "why": "公开暴露和破坏性操作均被预检拦截"
+    },
+    "D4-10": {
+      "status": "PASS",
+      "why": "规则库 16 条 (9 deny + 7 warn) 不误杀正常操作"
+    },
+    "D4-11": {
+      "status": "PARTIAL",
+      "why": "部分注入 payload 未被拦截"
+    },
+    "D4-12": {
+      "status": "PASS",
+      "why": "postinstall 无恶意行为 (无 postinstall), lock文件: false"
+    },
+    "D4-13": {
+      "status": "PASS",
+      "why": "只读命令全部 allow，写命令全部 deny（最小权限策略生效）"
+    },
+    "D4-14": {
+      "status": "PASS",
+      "why": "所有操作分类结果含 decision/reason/risk 字段，可审计"
+    },
+    "D4-15": {
+      "status": "PASS",
+      "why": "所有变体（大小写/编码/拼接）均被拦截，无绕过"
+    },
+    "D4-16": {
+      "status": "FAIL",
+      "why": "存在未被拦截的包裹命令"
+    },
+    "D4-17": {
+      "status": "PASS",
+      "why": "所有畸形/超长/嵌套输入均不崩溃，fail-closed 行为正常"
+    },
+    "D4-18": {
+      "status": "PASS",
+      "why": "写操作 deny 需审批，确认后 allow，非直接拒绝也非直接放行"
+    },
+    "D4-19": {
+      "status": "PASS",
+      "why": "确认流下高危操作（凭证/secret）仍被预检拦截"
+    },
+    "D4-20": {
+      "status": "PASS",
+      "why": "deny 后 assertAllowed 抛出异常，阻止执行: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    "D4-21": {
+      "status": "PASS",
+      "why": "broad IAM 制品被拦截 (rule: hwc-iam-admin-policy)"
+    },
+    "D4-22": {
+      "status": "PASS",
+      "why": "公网暴露/无清理/管理端口部署计划均被拦截或告警"
+    },
+    "D4-23": {
+      "status": "PASS",
+      "why": "agent-rules.mdc 存在且含 7/7 MUST 约束，hooks.json 注册有效"
+    },
+    "D4-24": {
+      "status": "PASS",
+      "why": "写操作 deny→allow 确认流路径正确，令牌过期由 MCP 层处理"
+    },
+    "D4-25": {
+      "status": "PASS",
+      "why": "Python hook 含 record_cli_event 遥测分类，Node hook 存在"
+    },
+    "D4-26": {
+      "status": "PASS",
+      "why": "findings.evidence 中凭证均被 <redacted> 替换"
+    },
+    "D4-27": {
+      "status": "FAIL",
+      "why": "存在未脱敏的输出"
+    },
+    "D4-28": {
+      "status": "PASS",
+      "why": "Node hook 链路: 高危命令 deny + 安全命令无 deny + commandText 提取多字段"
+    },
+    "D4-29": {
+      "status": "PASS",
+      "why": "classifyRawCommand=classifyTextCommand 包装正确，assertAllowed deny 抛异常/allow 通过"
+    }
+  },
+  "summary": {
+    "pass": 23,
+    "fail": 5,
+    "partial": 1,
+    "total": 29
+  }
+}
