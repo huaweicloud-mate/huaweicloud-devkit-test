@@ -1,7 +1,7 @@
 PASS	D3-C14-rt-cred	setRuntimeCredentials 注入→resolve 返回	actual={"ak":"AKTEST","sk":"SKTEST","st":"STTEST","region":"cn-north-4"}	expected={"ak":"AKTEST","sk":"SKTEST","st":"STTEST","region":"cn-north-4"}
 PASS	D3-C14-has-rt	hasRuntimeCredentials true（set 后）	actual=true	expected=true
 PASS	D3-C14-clear-rt	clearRuntimeCredentials 后 hasRuntimeCredentials false	actual=false	expected=false
-PASS	D3-C14-fallback-empty	清空后回退 resolveCredentials（抛错或空凭证均合法）	actual="throws HDKIT_CRED_MISSING"	expected="throws-or-empty"	err code=HDKIT_CRED_MISSING
+PASS	D3-C14-fallback-empty	清空后无凭证时 resolveCredentials 抛 HDKIT_CRED_MISSING	actual="throws HDKIT_CRED_MISSING"	expected="throws HDKIT_CRED_MISSING"	err code=HDKIT_CRED_MISSING
 PASS	D3-C14-env-cred	env HW_ACCESS_KEY/HW_SECRET_KEY/HW_SECURITY_TOKEN 注入	actual={"ak":"AKENV","sk":"SKENV","st":"STENV"}	expected={"ak":"AKENV","sk":"SKENV","st":"STENV"}
 PASS	D3-C14-rt-overrides-env	runtime 凭证覆盖 env	actual={"ak":"AKRT","st":"STRT"}	expected={"ak":"AKRT","st":"STRT"}
 PASS	D3-C14-hwlink-getcred	hwlink getCredentials 返回 runtime 凭证	actual={"ak":"AKHW","sk":"SKHW","st":"STHW"}	expected={"ak":"AKHW","sk":"SKHW","st":"STHW"}

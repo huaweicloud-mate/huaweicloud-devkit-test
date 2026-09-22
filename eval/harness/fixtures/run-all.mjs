@@ -46,8 +46,20 @@ for (const f of FIXTURES) {
 }
 
 console.log('\n===== 汇总 =====');
-let blocked = 0, pass = 0, fail = 0;
+let pass = 0, fail = 0, blocked = 0;
 for (const [f, code] of summary) {
-  console.log(`${code === 0 ? 'OK ' : 'ERR'}  ${f} (exit=${code})`);
+  if (code === 0) {
+    pass++;
+    console.log(`OK   ${f} (exit=0)`);
+  } else if (code === 2) {
+    blocked++;
+    console.log(`BLK  ${f} (exit=${code})`);
+  } else {
+    fail++;
+    console.log(`ERR  ${f} (exit=${code})`);
+  }
 }
-process.exit(0);
+console.log(`\n总计: pass=${pass} fail=${fail} blocked=${blocked}`);
+const exitCode = fail > 0 ? 1 : (blocked > 0 ? 2 : 0);
+console.log(`RESULT: ${exitCode === 0 ? 'PASS' : exitCode === 2 ? 'BLOCKED' : 'FAIL'}`);
+process.exit(exitCode);
