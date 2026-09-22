@@ -1,0 +1,22 @@
+=== D2-26 凭证备份与恢复 (隔离 HOME) ===
+隔离 HUAWEICLOUD_HOME = /tmp/multica-task-345600724/tmp.HxLGrE4bhH
+globalCredentialsPath = /tmp/multica-task-345600724/tmp.HxLGrE4bhH/.config/huaweicloud/credentials.json
+
+[1] 写入原始凭证: {"ak":"ORIG_AK_1234567890","sk":"ORIG_SK_9876543210","region":"cn-north-4"}
+[2] backupGlobalCredentials() 返回: /tmp/multica-task-345600724/tmp.HxLGrE4bhH/.config/huaweicloud/credentials.json.bak
+    .bak 文件存在? YES
+    .bak 内容 == 原始? YES (含原始凭证指纹)
+[3] 篡改凭证文件为: {"ak":"TAMPERED_AK_0000000000","sk":"TAMPERED_SK_1111111111","region":"cn-north-4"}
+    当前凭证内容 == 原始? NO (已篡改)
+[4] restoreGlobalCredentialsBackup() 返回: true
+    恢复后凭证 == 原始? YES (恢复成功)
+
+=== D2-26 断言汇总 ===
+PASS  备份文件生成
+PASS  备份内容含原始凭证
+PASS  恢复函数返回真
+PASS  恢复后等于原始值
+
+总计 4 条, PASS 4, FAIL 0
+结论: PASS (备份+恢复闭环完整)
+已清理隔离目录: /tmp/multica-task-345600724/tmp.HxLGrE4bhH

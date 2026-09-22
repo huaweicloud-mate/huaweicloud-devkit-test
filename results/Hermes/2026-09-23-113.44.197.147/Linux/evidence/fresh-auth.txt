@@ -1,0 +1,24 @@
+===== D2-1 auth init 三端同步 =====
+[S1 vault] /tmp/multica-task-345600724/hdk-d2-1-1790111547649/.config/huaweicloud/credentials.json | exists= true | ak形如FAKEAK*= true | region= cn-north-4
+[S3 OBS]   /tmp/multica-task-345600724/hdk-d2-1-1790111547649/obsutilconfig | exists= true | 含endpoint+ak+sk= true
+[S2 KooCLI] 由 runHcloudConfigure(configure set --cli-profile=...) 写入, 见真云 E2E 部分(hcloud ListServersDetails 实测)
+
+--- D2-1 真云 E2E ---
+[S1 vault 真云] ak 指纹= caae65f2 | region= cn-north-4
+[S2 KooCLI 真云] 见 hcloud ListServersDetails (outsourced 到 hcloud inline) — 前置探针已证 exitCode=0 count=0
+[S3 OBS 真云] ~/.obsutilconfig 已含 endpoint+ak+sk (D4-14 同步)
+[认证] validateIamCredentials: valid=true projectId=46c1fd48...
+
+===== D2-11 STS token 拒绝落盘 (R3) =====
+[R3 persist+token] 返回: {"status":"error","error":"Temporary STS credentials cannot be persisted (R3). Use action=temporary.","scope":"rejected"}
+   预期 {status:error, scope:rejected} => PASS (token 拒绝落盘)
+   S1 未写入? YES(S1 空, token 未落盘)
+[R2 conflict+token] 返回 status: needs_confirmation | confirmToken 签发: true
+   (已知缺陷: R2 冲突门返回 needs_confirmation, 未先走 R3 STS 拒绝 — 见 FINDINGS #12)
+
+===== D2-16 auth_switch import 读取后擦除 =====
+[前置] creds-import.json 存在: true
+[mode=import action=temporary] 返回: {"status":"ok","scope":"temporary","note":"Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files."}
+   读后擦除 exists=False? PASS (无条件擦除, SK 不留盘)
+
+===== D2 认证真云项完成 =====
