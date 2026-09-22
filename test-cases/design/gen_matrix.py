@@ -637,9 +637,9 @@ add("D2-9", "D2认证", "reconcile幂等(一致态零写)", "P1", "真云+本地
     "auth_status", "半自动")
 add("D2-10", "D2认证", "R7 current档跟随", "P1", "KooCLI 多 profile（current=deploy）",
     "~/.hcloud/config.json current=deploy",
-    "①构造 current=deploy ②readKooCliProfiles 解析 ③切换 current 再解析",
+    "①构造 current=deploy ②readKooCliProfiles 解析 ③切换 current 再解析 ④夹具: node eval/harness/fixtures/d2-10-koocli-profile.mjs <hdk src> --evid <dir> ⑤核对 runHcloudConfigure --cli-profile= 实参",
     "resolveManagedProfile 返回 current 档；runHcloudConfigure 带 --cli-profile=", "方: §五 R7; NR2-002",
-    "auth_status", "半自动")
+    "auth_status", "半自动/脚本（eval/harness/fixtures/d2-10-koocli-profile.mjs）")
 add("D2-11", "D2认证", "R3 STS token拒绝落盘", "P0", "真云 AK/SK + securityToken",
     "auth_switch persist + securityToken",
     "①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token",
@@ -651,10 +651,10 @@ add("D2-12", "D2认证", "R10 runtime非空禁止落盘", "P1", "runtime 凭据�
     "sync 返回 ok:false + auto-sync suppressed (R10)，不写 S1", "方: §五 R10; NR2-004",
     "huaweicloud_auth_init/auth_status/auth_sync", "半自动")
 add("D2-13", "D2认证", "R9 configuredBySession优先env", "P1", "隔离 HOME + S1 + HW_ACCESS_KEY env",
-    "setConfiguredBySession(true) + env 注入",
-    "①写 S1+标记 ②注入 env ③resolveCredentials ④清除标记复查",
+    "setConfiguredBySession(true) + env 注入（HW_ACCESS_KEY/HW_SECRET_KEY/HUAWEICLOUD_SECRET_ACCESS_KEY 别名语义）",
+    "①写 S1+标记 ②注入 env ③resolveCredentials ④清除标记复查 ⑤夹具: node eval/harness/fixtures/d2-13-s1-env.mjs <hdk src> --evid <dir>",
     "标记时 S1 胜出；清除后 env 兜底恢复", "方: §五 R9; NR2-005",
-    "auth_status", "脚本")
+    "auth_status", "脚本（eval/harness/fixtures/d2-13-s1-env.mjs）")
 add("D2-14", "D2认证", "R2 冲突交互仲裁(confirmToken)", "P1", "真机 S1 存在真值",
     "假 AK 导入 auth_switch mode=import action=persist",
     "①备份 S1 ②假 AK 导入触发冲突 ③auth_confirm(s1) ④验证 S1 真值完好/导入文件擦除",
@@ -1198,7 +1198,7 @@ add("D6-9", "D6性能", "缓存清理三入口", "P2", "已产生缓存的进程
     "check_update/get_service_icon/search_marketplace", "脚本", "COMMON|<代表: 隔离进程>|<证据: 缓存清空+幂等>|<阻塞: 无>")
 add("D9-9", "D9协议", "tools/call 超时协议语义与取消", "P1", "可注入延迟的 MCP 客户端/夹具（支持读取 initialize 返回的 capabilities）",
     "断言契约：①能力探测=读 initialize.result.capabilities.notifications/cancellation 是否存在——不存在→标记 SPEC-MISMATCH 不假定支持 ②超时错误=JSON-RPC error 对象 {code:-32000, message:含 'timeout'}（精确值）③取消通知=notifications/cancelled 请求（含 requestId）",
-    "①源码级: node eval/harness/protocol-probe.mjs 探测 initialize 返回的 capabilities.cancellation（实测当前未声明→SPEC-MISMATCH）②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）",
+    "①夹具: node eval/harness/fixtures/d9-9-delay-timeout.mjs <hdk src> --evid <dir>（可注入延迟 30s 挂起）②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）",
     "超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MISMATCH 标注而非假定）；取消通知后服务端 2s 内中止（in-flight 清零）；重建连接后 initialize/tools/list 正常响应；无悬挂请求（pending map 空）",
     "规: JSON-RPC 2.0 错误语义; 标: MCP 客户端超时实践; R11 补强: 精确-32000+capabilities探测+2s取消窗口", "inspector", "脚本", "COMMON|<代表: Inspector+夹具>|<证据: JSON-RPC错误对象+capabilities+取消时序>|<阻塞: 取消能力=SPEC待裁决>")
 
@@ -1314,9 +1314,9 @@ add("D9-5", "D9协议", "stdio传输健壮", "P1", "stdio通道",
     "mcp-server", "脚本")
 add("D9-6", "D9协议", "跨客户端互通", "P1", "Inspector+≥3真实客户端",
     "协议互通冒烟",
-    "①Inspector全通过 ②3客户端互通冒烟",
+    "①夹具: node eval/harness/fixtures/d9-6-cross-client.mjs <hdk src> --evid <dir>（≥2 客户端 initialize/tools/list/call + resources 互证）②Inspector全通过 ③多客户端互通冒烟",
     "全客户端协议互通", "标: Azure真实客户端套件; 官方Inspector标准校验",
-    "inspector", "脚本")
+    "inspector", "脚本（eval/harness/fixtures/d9-6-cross-client.mjs）")
 add("D9-7", "D9协议", "协议版本协商降级", "P2", "老版本客户端模拟",
     "capabilities缺失/低版本",
     "①模拟老客户端initialize ②核对协商或明确报错",
@@ -1331,14 +1331,14 @@ add("D9-8", "D9协议", "inputSchema版本合规", "P2", "tools/list返回",
 # ---------- 2026-09-13 覆盖缺口落用例（coverage-gaps.md G14） ----------
 add("D9-10", "D9协议", "MCP remote transport（HTTP/WS 远程服务）", "P1", "remote transport 启动环境",
     "startRemoteServer({port:9528, host:127.0.0.1})",
-    "①--transport remote 启动 ②核对 port=9528/host=127.0.0.1 ③initialize/tools/list ④对照 stdio 路径",
+    "①夹具: node eval/harness/fixtures/d9-10-remote-transport.mjs <hdk src> --evid <dir>（9528 端口启动+initialize/tools/list+stdio 对照）②--transport remote 启动 ③核对 port=9528/host=127.0.0.1 ④initialize/tools/list ⑤对照 stdio 路径",
     "remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 port/host 用默认值", "实: mcp-server-remote.startRemoteServer(11)/DEFAULT_PORT(8); mcp-server.mjs transport 分支(56)",
-    "mcp-server", "脚本", "COMMON|<代表: remote 客户端>|<证据: 端口监听+协议响应>|<阻塞: 需 remote 客户端>")
+    "mcp-server", "脚本（eval/harness/fixtures/d9-10-remote-transport.mjs）", "COMMON|<代表: remote 客户端>|<证据: 端口监听+协议响应>|<阻塞: 需 remote 客户端>")
 add("D9-11", "D9协议", "WebSocket 隧道通道生命周期", "P1", "hwlink mux 环境",
     "HwlinkTunnelChannel({remotePort,...})",
-    "①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localServer/readyPromise/subConnections 清理",
+    "①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localServer/readyPromise/subConnections 清理 ⑥夹具: node eval/harness/fixtures/d9-11-ws-tunnel.mjs <hdk src> --evid <dir>",
     "通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 localServer 关闭、subConnections 清空、onClose 回调触发", "实: ws-exec/hwlink-tunnel-channel.HwlinkTunnelChannel",
-    "mcp-server", "脚本", "COMMON|<代表: 隧道 mux 夹具>|<证据: ready/close 生命周期>|<阻塞: 需 hwlink mux>")
+    "mcp-server", "脚本（eval/harness/fixtures/d9-11-ws-tunnel.mjs）", "COMMON|<代表: 隧道 mux 夹具>|<证据: ready/close 生命周期>|<阻塞: 需 hwlink mux>")
 
 # ---------- 2026-09-21 Issue #7 批次①：D9 协议 P0 用例（安全维度+协议维度） ----------
 add("D9-12", "D9协议", "initialize 握手协议安全基线", "P0", "MCP Inspector + 源码级 protocol-probe.mjs",
@@ -1417,9 +1417,14 @@ D5_EXPECT = {
 }
 for c in CLIENTS:
     for n in range(1, 8):
+        _fixture = ''
+        if c == "Codex" and n == 1:
+            _fixture = "；夹具: node eval/harness/fixtures/exp-d5-2-1-codex-discovery.mjs <hdk src> --evid <dir>（本机无 Codex 宿主时静态校验清单+BLOCKED 归档，测试机宿主就绪即 PASS）"
+        elif c == "Codex" and n == 3:
+            _fixture = "；夹具: node eval/harness/fixtures/exp-d5-2-3-codex-tools-enum.mjs <hdk src> --evid <dir>（协议层 40 工具/schema/diff 基线；宿主层待测试机 Codex 执行）"
         E.append((f"EXP-D5-{CLIENTS.index(c)+1}-{n}", "D5客户端矩阵", c,
                   f"D5-{n}", "P1" if n in (1, 3, 6) else "P2",
-                  f"在 {c} 上执行 D5-{n} 用例",
+                  f"在 {c} 上执行 D5-{n} 用例{_fixture}",
                   f"{c}：{D5_EXPECT[n]}"))
 
 # E2: D3-C4 服务矩阵 22 服务
