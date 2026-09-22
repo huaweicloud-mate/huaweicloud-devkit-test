@@ -7,12 +7,12 @@ name: daily-issue-triage
 #  仅验证过 push，未验证 issues:write；③ 尊重「全量测完统一合并一张单 + 先落盘根因」红线）。
 #
 # 触发：
-#   1. 每天 20:45 北京时间（schedule，兜底；在 auto-summary 20:10 与 test-completeness-check 20:30 之后）
+#   1. 每天 19:45 北京时间（schedule，兜底）
 #   2. 手动 workflow_dispatch（可即时出一版）
 on:
   workflow_dispatch:
   schedule:
-    - cron: '45 12 * * *'    # UTC 12:45 = 北京时间 20:45
+    - cron: '45 11 * * *'    # UTC 11:45 = 北京时间 19:45
 
 permissions:
   contents: write            # 写回 results/Summary/待提单-<日期>.md 需要
