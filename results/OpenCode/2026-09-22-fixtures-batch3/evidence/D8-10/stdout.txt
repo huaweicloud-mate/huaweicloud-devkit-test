@@ -1,0 +1,15 @@
+PASS	D8-10-backup-path	mcpBackupFilePath 路径	actual="/tmp/d8-10-mcp-1790040167650/.config/huaweicloud/devkit-mcp-backup.json"	expected="/tmp/d8-10-mcp-1790040167650/.config/huaweicloud/devkit-mcp-backup.json"
+PASS	D8-10-save-read-delta	saveAgentDelta → readAgentDelta 往返	actual={"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000}	expected={"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000}
+PASS	D8-10-take-once	takeAgentDelta 取走后 readAgentDelta 返回 null	actual={"taken":true,"after":null}	expected={"taken":true,"after":null}
+PASS	D8-10-purge-deletes	purgeBackup 删除文件	actual={"purged":true,"exists":false}	expected={"purged":true,"exists":false}
+PASS	D8-10-purge-no-file	purgeBackup 文件不存在不崩溃	actual=false	expected=false
+PASS	D8-10-merge-command-style	mergeCommandStyle 保留用户参数 + 更新路径	actual={"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-arg"],"timeout":100000,"changed":true}	expected={"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-arg"],"timeout":100000,"changed":true}
+PASS	D8-10-merge-args-style	mergeArgsStyle 保留 env + 注入 required	actual={"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"env":{"MY_VAR":"val","REQUIRED_ENV":"1"},"changed":true}	expected={"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"env":{"MY_VAR":"val","REQUIRED_ENV":"1"},"changed":true}
+PASS	D8-10-merge-file-style	mergeMcpServersFile 合并 mcpServers	actual={"entryArgs":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"configHas":true,"changed":true}	expected={"entryArgs":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"configHas":true,"changed":true}
+PASS	D8-10-extract-apply-command	extractUserDelta→applyUserDelta 往返（command）	actual={"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-flag"],"env":{"MY_VAR":"x"},"timeout":500000}	expected={"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-flag"],"env":{"MY_VAR":"x"},"timeout":500000}
+PASS	D8-10-extract-apply-args	extractUserDelta→applyUserDelta 往返（args）	actual={"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--arg1"],"env":{"K":"v"},"enabled":false}	expected={"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--arg1"],"env":{"K":"v"},"enabled":false}
+PASS	D8-10-merge-env-no-overwrite	mergeEnv 不覆盖用户已设值	actual="user-override"	expected="user-override"
+PASS	D8-10-required-env-excluded	REQUIRED_ENV_KEYS 不被备份	actual=["MY_VAR"]	expected=["MY_VAR"]
+
+=== D8-10 MCP 配置备份与合并夹具 ===  pass=12 fail=0
+RESULT: PASS

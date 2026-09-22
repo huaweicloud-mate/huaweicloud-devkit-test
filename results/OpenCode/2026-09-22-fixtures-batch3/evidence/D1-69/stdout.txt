@@ -1,0 +1,27 @@
+PASS	D1-69-help-exit0	help 子命令退出码 0	actual=0	expected=0	stderr=(node:1871096) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(
+PASS	D1-69-help-banner	help 输出含 BANNER	actual=true	expected=true	stdout len=2039
+PASS	D1-69-help-commands	help 输出含 Commands 列表	actual=true	expected=true
+PASS	D1-69-dash-help-exit0	--help 退出码 0	actual=0	expected=0
+PASS	D1-69-dash-help-content	--help 输出含 Usage	actual=true	expected="len=2039"
+PASS	D1-69-short-h-exit0	-h 退出码 0	actual=0	expected=0
+PASS	D1-69-no-arg-default-help	无参数默认 help 退出码 0	actual=0	expected=0	stdout len=2039
+PASS	D1-69-version-exit0	--version 退出码 0	actual=0	expected=0
+PASS	D1-69-version-output	--version 输出含版本号	actual=true	expected=true	stdout=HuaweiCloud DevKit CLI: 1.1.5
+
+Installed agent plugins:
+OpenCode: 1.1.5
+Codex Desktop: 1.1.5
+OpenClaw: 1.1.5
+CodeArts: 1.1.5
+CodeArts Work: 1.1.5
+WorkBuddy: 1.1.5
+DSH: 1.1.5
+AtomCode: 1.1.5
+
+Run `npx 
+PASS	D1-69-unknown-cmd-no-crash	未知子命令不 crash（落入 help）	actual=0	expected=0	stdout len=2039
+PASS	D1-69-unknown-cmd-help	未知子命令输出 help 内容	actual=true	expected=undefined
+
+=== D1-69 CLI help 子命令夹具 ===  pass=11 fail=0
+RESULT: PASS
