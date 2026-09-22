@@ -2,11 +2,11 @@
  * OpenCode 1.1.5 daily test probe - MCP tool-level tests
  * Covers: D3-C5, D4-1,2,5,9,21,22, D2-4,11, D3-B3, D8-7, D10-2,3, D1-39, D3-B1, D3-C4, D4-13
  */
-import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/Documents/Codex/2026-09-22/huaweicloud-devkit-devkit-test-clone-git-2/work/devkit-test/codex/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/Codex/hdk/plugins/huaweicloud-core/src/tools.mjs';
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const evDir = 'C:/Users/Administrator/Documents/Codex/2026-09-22/huaweicloud-devkit-devkit-test-clone-git-2/work/devkit-test/codex/huaweicloud-devkit-test/results/Codex/2026-09-22-192.168.0.102/Windows/evidence';
+const evDir = 'C:/Users/Administrator/devkit-test/Codex/huaweicloud-devkit-test/results/Codex/2026-09-22-192.168.0.102/Windows/evidence';
 const results = [];
 function test(id, name, pass, actual, expected, passMsg, failMsg) {
   results.push({ id, name, pass, actual: String(actual).substring(0,120), expected: String(expected).substring(0,120), passMsg, failMsg });

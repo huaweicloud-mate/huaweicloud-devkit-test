@@ -1,0 +1,13 @@
+time=2026-09-22T07:36:12.155Z
+case=EXP-D5-2-3
+type=D5客户端矩阵
+object=Codex
+source=D5-3
+result=PASS
+reason=客户端枚举层执行完成
+--- fixture 内部断言 ---
+PASS	EXP-D5-2-3-enum-count	tools/list 枚举工具数	actual={"count":40}	expected={"count":">=40"}
+PASS	EXP-D5-2-3-schema-complete	inputSchema 完整（type=object 全覆盖）	actual={"allSchema":true}	expected=true
+PASS	EXP-D5-2-3-prefix-huaweicloud	工具名统一 huaweicloud_ 前缀	actual={"prefixOk":40}	expected={"prefixOk":40}
+PASS	EXP-D5-2-3-source-diff	与 tools.mjs 注册源 diff 一致	actual={"miss":[],"extra":[]}	expected={"miss":[],"extra":[]}
+PASS	EXP-D5-2-3-client-host	Codex 客户端宿主检测	actual={"present":true,"bin":"/c/Users/Administrator/AppData/Local/hermes/node/codex","config":"C:\\Users\\Administrator\\multica_workspaces\\vector-8988c3df7bc9\\task-b8e621b154e7\\codex-home\\config.toml"}	expected="宿主检测"	codex 可执行存在 → 客户端通道枚举可执行

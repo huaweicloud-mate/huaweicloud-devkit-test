@@ -7,13 +7,13 @@ import {
   parseDistTagsOutput, readInstalledVersion, skipFilePath,
   fallbackSkipFilePath, resolveSkipFilePath, readSkipState,
   writeSkipState, queryDistTagsSync, applyUpdateHint
-} from 'file:///C:/Users/Administrator/Documents/Codex/2026-09-22/huaweicloud-devkit-devkit-test-clone-git-2/work/devkit-test/codex/hdk/plugins/huaweicloud-core/src/update-check.mjs';
-import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/Documents/Codex/2026-09-22/huaweicloud-devkit-devkit-test-clone-git-2/work/devkit-test/codex/hdk/plugins/huaweicloud-core/src/tools.mjs';
+} from 'file:///C:/Users/Administrator/devkit-test/Codex/hdk/plugins/huaweicloud-core/src/update-check.mjs';
+import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/Codex/hdk/plugins/huaweicloud-core/src/tools.mjs';
 import { writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const pkgRoot = 'C:/Users/Administrator/Documents/Codex/2026-09-22/huaweicloud-devkit-devkit-test-clone-git-2/work/devkit-test/codex/hdk';
-const evDir = 'C:/Users/Administrator/Documents/Codex/2026-09-22/huaweicloud-devkit-devkit-test-clone-git-2/work/devkit-test/codex/huaweicloud-devkit-test/results/Codex/2026-09-22-192.168.0.102/Windows/evidence';
+const pkgRoot = 'C:/Users/Administrator/devkit-test/Codex/hdk';
+const evDir = 'C:/Users/Administrator/devkit-test/Codex/huaweicloud-devkit-test/results/Codex/2026-09-22-192.168.0.102/Windows/evidence';
 const results = [];
 function test(id, name, pass, actual, expected, passMsg, failMsg) {
   results.push({ id, name, pass, actual: String(actual).substring(0,120), expected: String(expected).substring(0,120), passMsg, failMsg });

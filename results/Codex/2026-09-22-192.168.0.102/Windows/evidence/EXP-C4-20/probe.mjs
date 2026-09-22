@@ -3,11 +3,11 @@
  * Tests list_operations + plan_cli_command for 22 services
  * Also covers D9-4 (protocol lifecycle), D9-5 (stdio transport)
  */
-import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/Documents/Codex/2026-09-22/huaweicloud-devkit-devkit-test-clone-git-2/work/devkit-test/codex/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/Codex/hdk/plugins/huaweicloud-core/src/tools.mjs';
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const evDir = 'C:/Users/Administrator/Documents/Codex/2026-09-22/huaweicloud-devkit-devkit-test-clone-git-2/work/devkit-test/codex/huaweicloud-devkit-test/results/Codex/2026-09-22-192.168.0.102/Windows/evidence';
+const evDir = 'C:/Users/Administrator/devkit-test/Codex/huaweicloud-devkit-test/results/Codex/2026-09-22-192.168.0.102/Windows/evidence';
 const results = [];
 function test(id, name, pass, actual, expected, passMsg, failMsg) {
   results.push({ id, name, pass, actual: String(actual).substring(0,120), expected: String(expected).substring(0,120), passMsg, failMsg });

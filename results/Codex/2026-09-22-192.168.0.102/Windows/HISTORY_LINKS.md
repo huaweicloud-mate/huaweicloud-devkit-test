@@ -3,7 +3,7 @@
 > 生成说明：以下缺陷经查重命中上游仓已有历史 issue，本次**不新开单**。
 
 ## D4-16 命令包裹穿透
-- 今日证据：`evidence/D4-16/stdout.log`、`evidence/d4-security/stdout.log`、`evidence/mcp-tools/stdout.log`
+- 今日证据：`evidence/D4-16/stdout.log`、`evidence/d4-security/stdout.log`、`evidence/mcp-tools/stdout.log`。
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#774](https://github.com/huaweicloud/huaweicloud-devkit/issues/774)（open）**[每日测试] Hermes Windows 2026-09-21: D9-4 MCP未强制initialize前置 + D9-9 取消能力未声明**
     - 历史单内容：## 每日测试发现 — 2 项新 SPEC-MISMATCH **测试版本**: huaweicloud-devkit v1.1.5 (commit e7ed6f6) **客户端**: Hermes / Windows **日期**: 2026-09-21 --- ### #1【SPEC-MISMATCH】D9-4 协议生命周期 — MCP 服务器未强制 initialize 前置 - **现象*
@@ -52,7 +52,7 @@
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#658
 
 ## D2-4/D4-27 字符串化 JSON 凭证未脱敏
-- 今日证据：`evidence/D2-4/stdout.log`、`evidence/D4-27/stdout.log`、`evidence/d2-auth/stdout.log`
+- 今日证据：`evidence/D2-4/stdout.log`、`evidence/D4-27/stdout.log`、`evidence/d2-auth/stdout.log`。
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#791](https://github.com/huaweicloud/huaweicloud-devkit/issues/791)（open）**refactor: redact 设计重构——统一键名策略与脱敏路径**
     - 历史单内容：## 背景 源自 PR #772 中 @CheneyYin 的设计反馈：「当前的解决方法是就问题解决问题，应该重新审视 redact 的设计或实现缺失」。 PR #772 的补丁式修复（`\b` 单词边界 + `i` 标志 + JSON 格式正则 + token 短键名）可先合并解决 #694 紧急缺陷；本 Issue 跟踪 `redactSecrets`/`redactString` 的结构性重
@@ -98,8 +98,15 @@
   - [#304](https://github.com/huaweicloud/huaweicloud-devkit/issues/304)（open）**建议：支持网页登录/扫码授权或临时凭据，降低 AK/SK 配置成本**
     - 历史单内容：提个小建议：全流程跑下来，在终端里手工配置 AK/SK 还是比较麻烦，尤其对第一次使用华为云插件的开发者不太友好。 期望可以考虑增加一种更 Agent 友好的登录授权方式： 1. 支持跳转到华为云登录网页，由用户扫码或网页登录授权，插件自动完成本地凭据配置。 2. 或支持生成临时 AK/SK / 临时凭据，避免用户长期手工管理 AK/SK。 3. 最好能和现有 KooCLI / MCP / 多 A
 
-## D10-3 服务路由评测命中率不足
-- 今日证据：`evidence/EXP-E01/stdout.log` 至 `evidence/EXP-E15/stdout.log`、`evidence/c4-service-matrix/stdout.log`
+## Codex 插件发现清单不完整
+- 今日证据：`evidence/EXP-D5-2-1/stdout.log` 及 `eval/harness/fixtures/exp-d5-2-1-codex-discovery.mjs` 实测输出。
+- **关联历史单（已作为缺陷提过，本次为复核）**：
+  - [#693](https://github.com/huaweicloud/huaweicloud-devkit/issues/693)（open）**[测试报告] huaweicloud-devkit 1.1.4 每日测试缺陷合并单（1 项）**
+    - 历史单内容：## 测试概览 - 被测版本：1.1.4 - 缺陷：1 项 ## 缺陷清单 ### 2. [SPEC-MISMATCH] EXP-D5-2-3 MCP 工具数契约仍写 39，正式包实际暴露 40 - **描述**：标准 MCP `initialize` 成功后，`tools/list` 实际返回 40 个工具，且每项均有 `name`、`description` 和 `inputSchema`；展
+- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#684
+
+## D10-3 服务路由命中率不足
+- 今日证据：`evidence/EXP-E01/stdout.log` 至 `evidence/EXP-E15/stdout.log`、`eval/results/eval-run-20260922072545.csv`。
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#774](https://github.com/huaweicloud/huaweicloud-devkit/issues/774)（open）**[每日测试] Hermes Windows 2026-09-21: D9-4 MCP未强制initialize前置 + D9-9 取消能力未声明**
     - 历史单内容：## 每日测试发现 — 2 项新 SPEC-MISMATCH **测试版本**: huaweicloud-devkit v1.1.5 (commit e7ed6f6) **客户端**: Hermes / Windows **日期**: 2026-09-21 --- ### #1【SPEC-MISMATCH】D9-4 协议生命周期 — MCP 服务器未强制 initialize 前置 - **现象*
@@ -120,3 +127,30 @@
   - [#674](https://github.com/huaweicloud/huaweicloud-devkit/issues/674)（open）**[测试报告] huaweicloud-devkit v1.1.4-next.6 全量测试缺陷合并单（10 项）**
     - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.6 - 缺陷：10 项 ## 缺陷清单 ### 1. [P0] 凭证环境变量打印拦截不完整（HW_ 前缀漏网） - **描述**：`env | grep HW_ACCESS_KEY`、`printenv HW_ACCESS_KEY`、`echo $HW_SECRET_KEY` 均返回 `allow`，预期 `deny`。Node 钩子与 Pyt
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#783, #766, #758
+
+## D9-2b MCP 无效参数错误契约
+- 今日证据：`eval/results/protocol-probe-20260922072556.json`。
+- **关联历史单（已作为缺陷提过，本次为复核）**：
+  - [#752](https://github.com/huaweicloud/huaweicloud-devkit/issues/752)（open）**[测试报告] huaweicloud-devkit 1.1.5 每日测试缺陷合并单（9 项，AtomCode/Linux）**
+    - 历史单内容：**版本**: v1.1.5 (gitHead e7ed6f6) **客户端**: AtomCode (Linux) **类型**: 每日测试 > 本单为 2026-09-20 AtomCode Linux 每日测试的**新增缺陷**合并单。另有 6 项命中历史 issue 已查重不重复开单（见 HISTORY_LINKS.md：D4-2→#731、D4-16→#731、D4-6→#735/#71
+  - [#730](https://github.com/huaweicloud/huaweicloud-devkit/issues/730)（open）**[测试报告] huaweicloud-devkit v1.1.5 每日测试缺陷合并单（Hermes Windows 2026-09-18，4 项）**
+    - 历史单内容：## 测试概览 - **客户端**: Hermes (GLM-5.2) - **OS**: Windows Server (x86_64) - **被测版本**: v1.1.5 (gitHead e7ed6f66, PR #696) - **测试日期**: 2026-09-18 - **测试结果**: 设计级 80 (PASS 75 / FAIL 3 / BLOCKED 1 / SPEC-MISM
+  - [#699](https://github.com/huaweicloud/huaweicloud-devkit/issues/699)（open）**[测试报告] huaweicloud-devkit 1.1.4 每日测试缺陷合并单（1 项）**
+    - 历史单内容：## 测试概览 - 被测版本：1.1.4 - 缺陷：1 项 ## 缺陷清单 ### 2. [P1] MCP server 未强制 initialize 握手时序，initialize 前可处理 tools/call 请求 - **描述**：新连接未发送 `initialize` 请求时，直接发送 `tools/call` 请求，服务器返回正常结果（非错误）。MCP 规范要求服务器在 `initia
+  - [#689](https://github.com/huaweicloud/huaweicloud-devkit/issues/689)（open）**[测试报告] huaweicloud-devkit v1.1.4 每日测试缺陷合并单（5 项）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.4 - 缺陷：5 项 ## 缺陷清单 ### 5. [P1] Python/Node 安全钩子策略不一致 - **描述**：同一高危输入（`hcloud configure show`、`hcloud ECS DeleteServers`），Node hook 返回 `deny`，Python hook 返回空（放行）。 - **预期（精确断言）**：Pyt
+  - [#683](https://github.com/huaweicloud/huaweicloud-devkit/issues/683)（open）**[测试报告] huaweicloud-devkit v1.1.4 全量测试缺陷合并单（10 项）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.4 - 缺陷：10 项 ## 缺陷清单 ### 1. [P0] 凭证脱敏漏小写 ak=/sk=（obsutilconfig 格式） - **描述**：`redactSecrets('ak=AK123456 sk=SKsecret')` 返回原文未脱敏；而 `access_key=`/`secret_key=` 大写键与对象路径 `{AK,SK}` 均正常脱敏
+  - [#676](https://github.com/huaweicloud/huaweicloud-devkit/issues/676)（open）**[测试报告] huaweicloud-devkit v1.1.4-next.6 全量测试缺陷合并单（9 项）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.6 - 缺陷：9 项 ## 缺陷清单 ### 1. [P0] 凭证脱敏漏小写 ak=/sk=（obsutilconfig 格式） - **描述**：`redactSecrets('ak=AK123456 sk=SKsecret')` 返回原文未脱敏；而对象路径 `{AK:..., SK:...}`、`access_key=`/`secret_k
+  - [#674](https://github.com/huaweicloud/huaweicloud-devkit/issues/674)（open）**[测试报告] huaweicloud-devkit v1.1.4-next.6 全量测试缺陷合并单（10 项）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.6 - 缺陷：10 项 ## 缺陷清单 ### 1. [P0] 凭证环境变量打印拦截不完整（HW_ 前缀漏网） - **描述**：`env | grep HW_ACCESS_KEY`、`printenv HW_ACCESS_KEY`、`echo $HW_SECRET_KEY` 均返回 `allow`，预期 `deny`。Node 钩子与 Pyt
+  - [#672](https://github.com/huaweicloud/huaweicloud-devkit/issues/672)（open）**[测试报告] huaweicloud-devkit v1.1.4-next.3 全量测试缺陷合并单（4 项）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.3 - 缺陷：4 项 ## 缺陷清单 ### 1. [P0] 凭证 env 打印拦截未覆盖 `HW_` 前缀（D4-2，凭证红线 I 类） - **描述**：`env | grep HW_ACCESS_KEY`、`printenv HW_SECRET_KEY` 实测 `classifyTextCommand` 返回 `allow, risk=n
+  - [#671](https://github.com/huaweicloud/huaweicloud-devkit/issues/671)（open）**[测试报告] huaweicloud-devkit v1.1.4-next.3 缺陷补充单（Hermes 2 项新增：Change* 写操作漏拦截 + 提示注入绕过）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.3（npm @next，hdk@dev gitHead 3b6290b，PR #647） - 客户端：Hermes（2026-09-14 每日测试，1.94.218.129 / Linux） - 缺陷：2 项新增（去重后）；另有 4 项与既有问题单重复，未拆单（见文末） ## 缺陷清单 ### 1. [P1] 写操作审批门漏词 — Change
+  - [#652](https://github.com/huaweicloud/huaweicloud-devkit/issues/652)（open）**[测试报告] huaweicloud-devkit v1.1.4-next.3 全量测试缺陷合并单（4 项）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.3 - 缺陷：4 项 ## 缺陷清单 ### 1. [P0] 凭证 env 打印拦截不完整 — HW_ 前缀未覆盖 - **描述**：`printenv HW_ACCESS_KEY` / `env | grep HW_SECRET_KEY` 实测 classifyTextCommand 返回 `allow`（应 `deny`） - **预期（精
+  - [#651](https://github.com/huaweicloud/huaweicloud-devkit/issues/651)（open）**[测试报告] huaweicloud-devkit v1.1.4-next.3 全量测试缺陷合并单（12 项，8 agent）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.3（npm @next，gitHead 3b6290b，PR #647） - 缺陷：12 项（去重后，原始 24 条来自 8 个 agent） - 测试日期：2026-09-13 ## 缺陷清单 ### 1. [P0] hook_check_artifacts 未检测 Terraform HCL 宽泛 IAM 授权 - **描述**：`reso
+- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#565
