@@ -56,8 +56,9 @@ function runCli(args, timeoutMs = 15000) {
 {
   const r = await runCli(['--help']);
   rec('D1-69-dash-help-exit0', '--help 退出码 0', r.code === 0, r.code, 0);
+  const hasUsage = r.stdout.includes('Usage:') || r.stdout.includes('Commands:');
   rec('D1-69-dash-help-content', '--help 输出含 Usage',
-      r.stdout.includes('Usage:') || r.stdout.includes('Commands:'), true, `len=${r.stdout.length}`);
+      hasUsage, hasUsage, true, `len=${r.stdout.length}`);
 }
 
 // ③ -h → exit 0
@@ -87,8 +88,9 @@ function runCli(args, timeoutMs = 15000) {
   const r = await runCli(['nonexistent-cmd-xyz']);
   rec('D1-69-unknown-cmd-no-crash', '未知子命令不 crash（落入 help）', r.code === 0, r.code, 0,
       `stdout len=${r.stdout.length}`);
+  const hasHelp = r.stdout.includes('Commands:') || r.stdout.includes('Usage');
   rec('D1-69-unknown-cmd-help', '未知子命令输出 help 内容',
-      r.stdout.includes('Commands:') || r.stdout.includes('Usage'), true);
+      hasHelp, hasHelp, true);
 }
 
 const pass = results.filter((r) => r.ok).length;
