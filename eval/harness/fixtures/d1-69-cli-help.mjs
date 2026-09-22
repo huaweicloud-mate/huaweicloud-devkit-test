@@ -1,6 +1,10 @@
 // D1-69 CLI help 子命令夹具
 // 独立子进程执行 huaweicloud-devkit help / --help / -h / 未知子命令
 // 采集退出码 + 输出格式（BANNER / Commands / Usage / Options）
+// ⚠️ 本夹具非源码级直调：通过 spawn('npx', ['huaweicloud-devkit', ...]) 起真实 CLI 子进程
+//    需本机 npx 可解析 huaweicloud-devkit（全局安装或 npx 缓存命中）
+//    npm registry 本地代理（如 127.0.0.1:45998）环境下 latest 可能滞后、npx 拉取版本可能漂移
+//    如需固定版本，可将 spawn 参数改为 huaweicloud-devkit@<具体版本号>
 // 用法: node d1-69-cli-help.mjs <hdk src> [--evid <dir>]
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
