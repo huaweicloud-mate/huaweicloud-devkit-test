@@ -1,10 +1,7 @@
 // D1-69 CLI help 子命令夹具
 // 独立子进程执行 huaweicloud-devkit help / --help / -h / 未知子命令
 // 采集退出码 + 输出格式（BANNER / Commands / Usage / Options）
-// ⚠️ 本夹具非源码级直调：通过 spawn('npx', ['huaweicloud-devkit', ...]) 起真实 CLI 子进程
-//    需本机 npx 可解析 huaweicloud-devkit（全局安装或 npx 缓存命中）
-//    npm registry 本地代理（如 127.0.0.1:45998）环境下 latest 可能滞后、npx 拉取版本可能漂移
-//    如需固定版本，可将 spawn 参数改为 huaweicloud-devkit@<具体版本号>
+// 源码级直调：通过 spawn(process.execPath, [hdkSrc/setup-cli.mjs, ...]) 执行目标源码 CLI
 // 用法: node d1-69-cli-help.mjs <hdk src> [--evid <dir>]
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -26,11 +23,19 @@ function rec(id, title, ok, actual, expected, detail = '') {
   if (detail) console.log('    ' + detail);
 }
 
-// Use npx huaweicloud-devkit for help subcommand (independent process)
-// Fallback: node setup-cli.mjs directly (same main() entry)
+// 直接执行目标源码 CLI（spawn node <hdkSrc>/setup-cli.mjs），测试传入的 hdkSrc 版本
+// Node 22 需要 --experimental-sqlite 才能加载 setup-cli.mjs 依赖的 node:sqlite；
+// 自动探测当前 node 是否支持 node:sqlite（不支持则补 flag），保证夹具自包含、可复现。
+let sqliteFlag = [];
+try {
+  await import('node:sqlite');
+} catch {
+  sqliteFlag = ['--experimental-sqlite'];
+}
 function runCli(args, timeoutMs = 15000) {
   return new Promise((resolve) => {
-    const child = spawn('npx', ['huaweicloud-devkit', ...args], {
+    const cliEntry = join(hdkSrc, 'setup-cli.mjs');
+    const child = spawn(process.execPath, [...sqliteFlag, cliEntry, ...args], {
       stdio: ['pipe', 'pipe', 'pipe'],
       timeout: timeoutMs,
       env: { ...process.env, CI: 'true' },
@@ -78,13 +83,16 @@ function runCli(args, timeoutMs = 15000) {
       `stdout len=${r.stdout.length}`);
 }
 
-// ⑤ --version → exit 0 + 版本输出
+// ⑤ --version → exit 0 + 版本输出 + 通道标注（latest/next）
 {
   const r = await runCli(['--version']);
+  const versionMatch = r.stdout.match(/(\d+\.\d+\.\d+(?:-next\.\d+)?)/);
+  const versionStr = versionMatch ? versionMatch[1] : '';
+  const channel = versionStr.includes('-next.') ? 'next' : 'latest';
   const hasVersion = /\d+\.\d+\.\d+/.test(r.stdout);
   rec('D1-69-version-exit0', '--version 退出码 0', r.code === 0, r.code, 0);
   rec('D1-69-version-output', '--version 输出含版本号', hasVersion, hasVersion, true,
-      `stdout=${r.stdout.slice(0, 200)}`);
+      `version=${versionStr} channel=${channel} stdout=${r.stdout.slice(0, 200)}`);
 }
 
 // ⑥ 未知子命令 → 落入 default → help（exit 0，不 crash）
