@@ -35,7 +35,7 @@ node eval/harness/fixtures/run-all.mjs <hdk src> [--evid <dir>]
 | 用例 | 脚本 | 用途 | 本机可跑 | BLOCKED 条件 |
 |---|---|---|---|---|
 | D1-66 | `d1-66-telemetry-env.mjs` | 遥测开关与端点环境变量夹具（isTelemetryEnabled/getEndpoint/sanitizeValue） | ✅ | 无 |
-| D1-69 | `d1-69-cli-help.mjs` | CLI help 子命令夹具（help/--help/-h/--version/未知命令 退出码+输出格式） | ✅ | 无 |
+| D1-69 | `d1-69-cli-help.mjs` | CLI help 子命令夹具（help/--help/-h/--version/未知命令 退出码+输出格式，源码级 spawn node setup-cli.mjs） | ✅ | 无 |
 | D2-27 | `d2-27-koocli-version.mjs` | KooCLI 版本管理夹具（getKooCliVersion/parseHcloudVersion/compareVersion/kooCliDownloadBase） | ✅ | 无 |
 | D3-C14 | `d3-c14-sandbox-hwlink-cred.mjs` | 沙箱 HDKit 服务参数与 hwlink 凭证夹具（setRuntimeCredentials/getCredentials/securitytoken/HDKITSERVICE_ENDPOINT） | ✅ | 无 |
 | D4-12 | `d4-12-supply-chain.mjs` | 供应链安装期安全夹具（postinstall 安全/npm install 参数/依赖审计/SBOM 基线/bin 入口） | ✅ | 无 |
@@ -47,5 +47,4 @@ node eval/harness/fixtures/run-all.mjs <hdk src> [--evid <dir>]
 - 不含宿主硬依赖的项（批次② D2-10/D2-13/D9-9/D9-10/D9-11/D9-6 + 批次③全部 7 项）：本地执行即可获得真实 PASS/FAIL。
 - EXP-D5-2-1/2-3 依赖 **Codex 客户端真实宿主**（插件发现/加载会话、宿主层 tools/list 通道枚举）。夹具已提供宿主检测与协议层基线；宿主未安装时按设计然（BLOCKED）归档，测试机（已配 AK/SK + 客户端）就绪后宿主层即转 PASS。
 - 时间断言遵循规范：超时/生命周期窗口用范围断言（≤ 阈值/2s 窗口/幂等计数），不禁毫秒级相等比较。
-- 批次③中 6 项（D1-66/D2-27/D3-C14/D4-12/D4-29/D8-10）为纯代码夹具（源码级直调 + mock），无外部环境依赖，本地执行即 PASS。
-- **D1-69 例外**：`d1-69-cli-help.mjs` 通过 `spawn('npx', ['huaweicloud-devkit', ...])` 起真实 CLI 子进程采集退出码 + 输出格式，**非源码级直调**，需本机 `npx` 可解析 `huaweicloud-devkit`（全局安装 `npm install -g huaweicloud-devkit` 或 npx 缓存命中）。注意：npm registry 本地代理（如 `127.0.0.1:45998`）环境下 `latest` 标签可能滞后，`npx huaweicloud-devkit` 拉取版本可能与全局安装版本不一致（版本漂移）；如需固定版本，可将 spawn 参数改为 `huaweicloud-devkit@<具体版本号>`。
+- 批次③全部 7 项为纯代码夹具（源码级直调 + mock），无外部环境依赖，本地执行即 PASS。D1-69 通过 `spawn(process.execPath, [hdkSrc/setup-cli.mjs, ...])` 直接执行目标源码 CLI（非 npx），测试传入的 hdkSrc 版本行为。
