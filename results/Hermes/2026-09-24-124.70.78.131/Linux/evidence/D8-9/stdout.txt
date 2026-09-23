@@ -1,0 +1,11 @@
+installId len=64 稳定=true (前8=542a2e4c…)
+[OK] installId 稳定持久
+sanitize(newline/tab)="AK123456  with tab and newline"
+sanitize(长值 5000) len=255
+sanitize(trim)="legal-value"
+sanitize(AK=...)="AK=ABC123DEF456GHI"
+sanitize(access_key/token=...)="access_key=AKIA123 secret_key=SECRET token=T0K3N_SECRET"
+[OK] sanitize 移除控制字符
+[OK] sanitize 超长截断
+[OK] sanitize 保留合法值
+[FAIL] sanitize 移除 AK/SK/token 敏感值(契约)

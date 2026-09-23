@@ -1,0 +1,41 @@
+[FAIL] redactSecrets 字符串 key=value（AK/SK/token/password/adminPass/secret_key）
+[FAIL] redactSecrets 字符串 CLI-flag（--key value）
+[OK] redactSecrets 对象路径（含嵌套 ak/sk/token）
+[OK] redactOutput JSON 字符串（对象路径）
+[FAIL] redactOutput 非 JSON 回退（字符串路径）
+
+=====SUMMARY JSON=====
+{
+  "generatedAt": "2026-09-23T21:07:07.312Z",
+  "total": 5,
+  "passed": 2,
+  "failed": 3,
+  "conclusion": "2/5 项双路径脱敏无明文残留",
+  "results": [
+    {
+      "name": "redactSecrets 字符串 key=value（AK/SK/token/password/adminPass/secret_key）",
+      "ok": false,
+      "detail": "{\"input\":\"access_key=AKIAIOSFODNN7EXAMPLE secret_key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY token=T0K3N_SECRET_VALUE_12345 passw\",\"leaks\":[\"TOKEN\"],\"output\":\"access_key=<redacted> secret_key=<redacted> token=T0K3N_SECRET_VALUE_12345 password=<redacted> adminPass=<redacted> secret_key=<redacted>\"}"
+    },
+    {
+      "name": "redactSecrets 字符串 CLI-flag（--key value）",
+      "ok": false,
+      "detail": "{\"input\":\"--access-key=AKIAIOSFODNN7EXAMPLE --secret-key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY --security-token=T0K3N_SECRET_VA\",\"leaks\":[\"ADMINPASS\"],\"output\":\"--access-key=<redacted> --secret-key=<redacted> --security-token=<redacted> --password=<redacted> --admin-pass=AdminP@ss_S3cret_55555 --secret_key=<redacted>\"}"
+    },
+    {
+      "name": "redactSecrets 对象路径（含嵌套 ak/sk/token）",
+      "ok": true,
+      "detail": "{\"output\":\"[object Object]\"}"
+    },
+    {
+      "name": "redactOutput JSON 字符串（对象路径）",
+      "ok": true,
+      "detail": "{\"output\":\"{\\n  \\\"access_key\\\": \\\"<redacted>\\\",\\n  \\\"secret_key\\\": \\\"<redacted>\\\",\\n  \\\"token\\\": \\\"<redacted>\\\",\\n  \\\"password\\\": \\\"<redacted>\\\",\\n  \\\"ad\"}"
+    },
+    {
+      "name": "redactOutput 非 JSON 回退（字符串路径）",
+      "ok": false,
+      "detail": "{\"input\":\"stdout: access_key=AKIAIOSFODNN7EXAMPLE secret_key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY token=T0K3N_SECRET_VALUE_123\",\"leaks\":[\"TOKEN\"],\"output\":\"stdout: access_key=<redacted> secret_key=<redacted> token=T0K3N_SECRET_VALUE_12345 password=<redacted> adminPass=<redacted>\"}"
+    }
+  ]
+}

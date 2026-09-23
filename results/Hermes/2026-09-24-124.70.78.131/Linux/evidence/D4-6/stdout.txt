@@ -1,0 +1,11 @@
+① adminPass=xxx          = "adminPass=<redacted>"
+③ 对象 adminPass key      = {"adminPass":"<redacted>","hostname":"ecs-01"}
+④ 正对照 name=web01       = "create ecs with name=web01"
+[PASS] ①adminPass=.. 脱敏: 字符串直调 adminPass 值 <redacted>（母版断言）
+[PASS] ③对象 key 脱敏: adminPass key 整体 <redacted>，其余保留
+[PASS] ④不误伤普通值: 非敏感 key 不脱敏
+[FINDING] --admin_pass 空格形态 = "--admin_pass MyPwd123" → 未脱敏
+[FINDING] JSON 带引号 key 形态  = "{\"server\":{\"adminPass\":\"MyPwd123\"}}" → 未脱敏
+
+=== D4-6 源码级脱敏结论: ALL PASS ===
+（注：真云 E2E「创建 ECS 含 adminPass 回显警告」需真云写场景，属外部依赖，另以 BLOCKED 四要素记录；flag/JSON 形态缺口见 FINDINGS #7）

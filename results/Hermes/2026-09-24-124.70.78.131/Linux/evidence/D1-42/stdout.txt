@@ -1,0 +1,19 @@
+resolveSkipFilePath(null)   = /tmp/multica-task-3878866991/dkt-d142-f5Dko2/.config/huaweicloud/devkit-skip.json
+resolveSkipFilePath(sess)    = /tmp/multica-task-3878866991/dkt-d142-f5Dko2/.config/huaweicloud/devkit-skip.json.remote_abc-123
+[PASS] ①路径确定性: fallback 路径落入隔离 HUAWEICLOUD_HOME
+[PASS] ①会话后缀隔离: remote 会话按 sessionId 拆分 skip 文件
+written state = {"dismissedVersion":"1.2.0","dismissedAt":"2026-01-01T00:00:00.000Z","expireAt":"2026-01-04T00:00:00.000Z"}
+[PASS] ②字段完整: dismissedVersion/dismissedAt/expireAt 齐备
+[PASS] ②expireAt=+3天: expireAt - dismissedAt = 3 天
+[PASS] ②读回一致: readSkipState 读回写入状态
+judgeUpdate(in cooldown) = {"currentVersion":"1.1.0","latestStable":"1.2.0","latestNext":null,"targetVersion":"1.2.0","updateAvailable":false,"dismissed":true,"dismissExpiresAt":"2026-01-04T00:00:00.000Z","result":"dismissed"}
+[PASS] ③冷却内 dismissed: 同版本冷却窗口内返回 dismissed
+judgeUpdate(after expire) = {"currentVersion":"1.1.0","latestStable":"1.2.0","latestNext":null,"targetVersion":"1.2.0","updateAvailable":true,"dismissed":false,"dismissExpiresAt":null,"result":"update_available"}
+[PASS] ④冷却过期恢复: 超过3天冷却后重新提示 update_available
+judgeUpdate(newer target) = {"currentVersion":"1.1.0","latestStable":"1.3.0","latestNext":null,"targetVersion":"1.3.0","updateAvailable":true,"dismissed":false,"dismissExpiresAt":null,"result":"update_available"}
+[PASS] ④远端更高不守旧冷却: dismissedVersion=1.2.0 不约束 1.3.0
+[PASS] 无skip→可更新: 无 skip 状态直接 update_available
+跨进程读回 = {"dismissedVersion":"1.2.0","dismissedAt":"2026-01-01T00:00:00.000Z","expireAt":"2026-01-04T00:00:00.000Z"}
+[PASS] ⑤重启持久化: 新进程 readSkipState 读回同一 skip 状态
+
+=== D1-42 探针结论: ALL PASS ===
