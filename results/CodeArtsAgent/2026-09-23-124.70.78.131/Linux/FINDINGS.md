@@ -1,10 +1,10 @@
 # FINDINGS — 缺陷发现清单（CodeArtsAgent-deepseek-v4-pro-0813）
 
 > **落盘路径**：`results/CodeArtsAgent/2026-09-23-124.70.78.131/Linux/FINDINGS.md`
-> **生成时间**：2026-09-23 05:30（北京时间）
-> **被测对象**：huaweicloud-devkit npm latest v1.1.6（gitHead `46152dd8`）
-> **本轮结论**：设计级 FAIL 15 + SPEC-MISMATCH 1，展开级 FAIL 12（EXP-E 与 D10-3 同源）。全部为历史 issue 复现/延续（1.1.5→1.1.6 未修复），无本轮新增产品缺陷。
-> **关键变化（对比昨日 1.1.5）**：D4-17 空参数 fail-closed 已修复（`classifyHcloudArgs([])`→deny）；D9-6 跨客户端互通经 fixture 双 stdio 客户端互证由 BLOCKED 转 PASS；D1-65 调试模式（DEBUG===1/true）源码级验证通过。其余历史缺陷均延续。
+> **生成时间**：2026-09-23 17:00（北京时间）
+> **被测对象**：huaweicloud-devkit npm @next v1.1.7-next.0（gitHead `0790e92a`）
+> **本轮结论**：设计级 FAIL 15 + SPEC-MISMATCH 1，展开级 FAIL 12（EXP-E 与 D10-3 同源）。全部为历史 issue 复现/延续（1.1.6→1.1.7-next.0 未修复），无本轮新增产品缺陷。
+> **关键变化（对比 1.1.6）**：D4-17 空参数 fail-closed 修复延续（`classifyHcloudArgs([])`→deny）、畸形制品仍 fail-open；D9-6 跨客户端互通经 `d9-6-cross-client.mjs` 双 stdio 客户端互证 7/7 转 PASS；D3-S3 沙箱全链路真机通过（check_user/connect/upload/exec/deploy_nginx/deploy_check/close_session 归零）。其余 27 项历史缺陷均延续。
 
 ---
 

@@ -1,7 +1,7 @@
 # CodeArtsAgent-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`CodeArtsAgent-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-09-23 05:30（北京时间）
+> **生成时间**：2026-09-23 17:00（北京时间）
 > **执行归档**：`results/CodeArtsAgent/2026-09-23-124.70.78.131/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（有 FAIL 与 P0 缺陷，不得写 PASS）
@@ -14,8 +14,8 @@
 |---|---|
 | 客户端 / Agent | CodeArtsAgent + deepseek-v4-pro-0813 |
 | OS / 架构 | Linux aarch64（ecs-hd-ai-work-00-0011） |
-| Node / npm / Python | Node v26.8.1 / npm 11.19.0 / Python 3.12.3 |
-| 被测版本（SUT） | `v1.1.6`（npm latest，gitHead `46152dd8`） |
+| Node / npm / Python | Node v22.13.0 / npm 10.9.2 / Python 3.12.3 |
+| 被测版本（SUT） | `v1.1.7-next.0`（npm @next，gitHead `0790e92a`） |
 | 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS，框架运行时 tools/list=40 一致） |
 | hcloud / 依赖 | hcloud 7.2.12（KooCLI，真云可用） |
 | 真云凭证 | cn-north-4（AKSK 管理员 + test001 只读子账号，均已配置） |
@@ -89,13 +89,13 @@
 | 11 | P2 | D8-9 | sanitizeValue 不脱敏敏感值 | telemetry.mjs:189 仅截断无脱敏 | 历史 #797/#791/#761 |
 | 12 | P1 | D9-9 | 取消语义未声明（SPEC） | mcp-protocol.mjs:47 capabilities 无 cancellation | SPEC 延续 #774/#698 |
 
-### 对比昨日（1.1.5 → 1.1.6）关键变化
+### 对比上一轮（1.1.6 → 1.1.7-next.0）关键变化
 
-- **D4-17 空参数 fail-closed 已修复**：`classifyHcloudArgs([])` 由 allow 转为 deny（risk-rule-engine 空输入兜底生效）；畸形制品仍 fail-open。
+- **D4-17 空参数 fail-closed 修复延续**：`classifyHcloudArgs([])` 由 allow 转为 deny（risk-rule-engine 空输入兜底生效）；畸形制品仍 fail-open。
 - **D9-6 跨客户端互通由 BLOCKED 转 PASS**：`eval/harness/fixtures/d9-6-cross-client.mjs` 双 stdio 客户端（Hermes/AtomCode）互证 initialize/tools-list(40)/tools-call/resources 全通道互通 7/7。
 - **D1-65 调试模式源码级验证通过**：`update-check.mjs` debugLog 分支 `HUAWEICLOUD_DEVKIT_DEBUG==='1'||'true'` 正确开启调试日志。
 - **D2-4 show_profile_redacted 脱敏正确**：accessKeyId/secretAccessKey/securityToken 均 `<redacted>`（小写 ak=/sk= 属历史 #683 已由 D4-26/27 覆盖）。
-- 其余 P0/P1 缺陷在 1.1.6 中均延续（未修复）。
+- 其余 P0/P1 缺陷在 1.1.7-next.0 中均延续（未修复）。
 
 ---
 
@@ -105,7 +105,7 @@
 |---|---|---|---|---|---|---|
 | D1-39 | 设计级 | P0 | NOT_RUN | 【调归属】OS 专属 | Windows 升级检测链（EINVAL/文件锁），OS 列标注「专属」，本机 Linux | 由展开级 EXP-NR3 终端矩阵 + D1-40 代表覆盖，Linux 侧无需执行 |
 
-> 本轮无 BLOCKED（昨日 BLOCKED 的 D9-6 已通过 fixture 补测转 PASS；D3-S3 沙箱真机全链路通过）。
+> 本轮无 BLOCKED（D9-6 跨客户端互通经 fixture 双 stdio 客户端互证转 PASS；D3-S3 沙箱真机全链路通过，测后 close_session 归零）。
 
 ---
 

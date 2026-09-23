@@ -309,6 +309,7 @@
     - 历史单内容：## 问题概述 对 huaweicloud-devkit v1.1.2-next.5（npx 安装，target=officeace）的登录凭证（AK/SK）架构 v4 执行专项测试（测试用例 11 章、60+ 用例），核心链路全部符合规格，发现 6 个缺陷/偏差。经与仓库现有 issue 逐一比对，其中 **D-1 与 #533 重复**（authEncrypt=true 密文指纹误报，本次实测
   - [#304](https://github.com/huaweicloud/huaweicloud-devkit/issues/304)（open）**建议：支持网页登录/扫码授权或临时凭据，降低 AK/SK 配置成本**
     - 历史单内容：提个小建议：全流程跑下来，在终端里手工配置 AK/SK 还是比较麻烦，尤其对第一次使用华为云插件的开发者不太友好。 期望可以考虑增加一种更 Agent 友好的登录授权方式： 1. 支持跳转到华为云登录网页，由用户扫码或网页登录授权，插件自动完成本地凭据配置。 2. 或支持生成临时 AK/SK / 临时凭据，避免用户长期手工管理 AK/SK。 3. 最好能和现有 KooCLI / MCP / 多 A
+- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#804
 
 ## D9-9 tools/call 超时/取消语义未声明（SPEC）
 - 今日证据：`evidence/D9-9/stdout.log`
