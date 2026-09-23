@@ -19,6 +19,7 @@
 策略: 每仓每天至多 1 张合并单（尊重「勿拆单」红线）；提单前查重，命中已跟踪单不重复开。
 """
 import argparse
+import csv
 import datetime
 import os
 import re
@@ -171,6 +172,26 @@ def root_cause_map(summary_md):
     return mapping
 
 
+def load_parent_children():
+    """读展开级母版，建立 设计级父用例(源用例) -> 展开级子用例ID 映射。
+
+    用于「父级聚合回退」：设计级用例（如 D3-C4 服务创建类回归）的 FAIL 由展开级子用例
+    （如 EXP-C4-14 DMS / EXP-C4-18 DEW）解释时，查重应回退到子用例——子用例命中历史单
+    （如 #732「KooCLI 缺少 DMS/DEW 服务映射」）即父用例亦判历史，避免父用例被误当新缺陷提单。
+    """
+    mapping = {}
+    fp = os.path.join(REPO_ROOT, "test-cases", "expanded", "用例矩阵-展开级.csv")
+    if not os.path.isfile(fp):
+        return mapping
+    with open(fp, encoding="utf-8-sig") as f:
+        for r in csv.DictReader(f):
+            src = (r.get("源用例") or "").strip().upper()
+            cid = (r.get("ID") or "").strip().upper()
+            if src and cid and src != cid:
+                mapping.setdefault(src, []).append(cid)
+    return mapping
+
+
 # --------------------------------------------------------------------------- #
 # 提单 / 查重
 # --------------------------------------------------------------------------- #
@@ -302,12 +323,22 @@ def main():
             lines.append("- 本轮「无单号跟踪」清单为空，无需提单。")
         else:
             upstream = fetch_open_issues(REPO_PRODUCT)
+            parent_children = load_parent_children()
             new_items, hist = [], []
             for f in fails:
                 root = rc_map.get(f["id"].upper(), "(未在根因明细中找到，见专项分析)")
                 item = {"num": f["id"], "sev": f["prio"], "title": f"{f['id']} {f['title']}",
                         "现象": f["title"], "断言": "", "根因": root, "影响": "", "证据": ""}
                 strong, weak = fi.match_history(item, upstream) if upstream else ([], [])
+                # 父级聚合回退：设计级父用例未命中时，用其展开级子用例 ID 再查重
+                # （D3-C4 的 EXP-C4-14/18 命中 #732 时，D3-C4 亦判历史，不误提单）
+                if not strong and (f.get("level") or "") == "设计级":
+                    children = parent_children.get(f["id"].upper(), [])
+                    if children:
+                        probe = {"num": f["id"], "sev": f["prio"],
+                                 "title": f"{f['id']} {f['title']}（展开子用例：{'、'.join(children)}）",
+                                 "现象": f["title"], "断言": "", "根因": root, "影响": "", "证据": ""}
+                        strong, weak = fi.match_history(probe, upstream) if upstream else ([], [])
                 (hist if strong else new_items).append((item, strong))
             for item, strong in hist:
                 nums = ", ".join(f"#{h['number']}" for h in strong)
