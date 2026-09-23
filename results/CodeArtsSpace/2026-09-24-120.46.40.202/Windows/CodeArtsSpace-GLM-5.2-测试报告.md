@@ -4,7 +4,7 @@
 > **客户端**: CodeArtsSpace  
 > **模型**: GLM-5.2  
 > **OS**: Windows (PowerShell)  
-> **被测版本**: huaweicloud-devkit@1.1.7-next.0  
+> **被测版本**: huaweicloud-devkit@1.1.7-next.1  
 > **KooCLI**: 7.2.12  
 > **Node**: v22.13.0  
 > **机器IP**: 120.46.40.202  
@@ -22,7 +22,7 @@
 测试环境：
 - 客户端: CodeArtsSpace (GLM-5.2)
 - OS: Windows Server (PowerShell 5.1)
-- 被测包: huaweicloud-devkit@1.1.7-next.0 (npm next)
+- 被测包: huaweicloud-devkit@1.1.7-next.1 (npm next)
 - KooCLI: 7.2.12
 - Node.js: v22.13.0
 - 真云凭证: 已配置 (~/.config/huaweicloud/credentials.json)
