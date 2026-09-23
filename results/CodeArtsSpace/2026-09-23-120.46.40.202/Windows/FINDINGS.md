@@ -1,7 +1,7 @@
 # FINDINGS — 缺陷发现清单（CodeArtsSpace-GLM-5.2）
 
 > **落盘路径**：`results/CodeArtsSpace/2026-09-23-120.46.40.202/Windows/FINDINGS.md`
-> **生成时间**：2026-09-23 16:47（北京时间）
+> **生成时间**：2026-09-23 17:31（北京时间）
 > **被测版本**：huaweicloud-devkit@1.1.7-next.0
 > **本清单是统一提单脚本的解析输入**：`scripts/file_issue.py` 硬编码解析标题与「根因」字段，格式严格遵循。
 
