@@ -50,6 +50,7 @@
     - 历史单内容：## 问题描述 **更新检测功能（#496）在 Windows 上完全失效**：运行 `install` / `update` 时，无论当前版本落后多少，「检测到新版本」的黄字提示**永远不出现**，检测过程中的失败被静默吞掉。 > 说明：此 Issue 曾误提交到 huaweicloud-mate/huaweicloud-devkit#155，现迁移至本仓库，内容不变。 ## 环境 - OS：W
   - [#304](https://github.com/huaweicloud/huaweicloud-devkit/issues/304)（open）**建议：支持网页登录/扫码授权或临时凭据，降低 AK/SK 配置成本**
     - 历史单内容：提个小建议：全流程跑下来，在终端里手工配置 AK/SK 还是比较麻烦，尤其对第一次使用华为云插件的开发者不太友好。 期望可以考虑增加一种更 Agent 友好的登录授权方式： 1. 支持跳转到华为云登录网页，由用户扫码或网页登录授权，插件自动完成本地凭据配置。 2. 或支持生成临时 AK/SK / 临时凭据，避免用户长期手工管理 AK/SK。 3. 最好能和现有 KooCLI / MCP / 多 A
+- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#804
 
 ## D4-3 明文 secret API 拦截漏 kms DecryptData
 - 今日证据：`evidence/D4-3/stdout.log`（FAIL `kms DecryptData deny` → `allow`）
