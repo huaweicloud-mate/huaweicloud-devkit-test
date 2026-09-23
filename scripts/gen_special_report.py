@@ -264,6 +264,8 @@ def _render_blocked(cases):
 
 
 def _render_unlinked(rows, issues):
+    parent_children = load_parent_children()
+    status = {r.get("ID"): R._worst(r.get("当日总执行状态")) for r in rows}
     fail_spec = 0
     unlinked = []
     for r in rows:
@@ -273,8 +275,15 @@ def _render_unlinked(rows, issues):
         fail_spec += 1
         cid = (r.get("ID") or "").strip()
         source = (r.get("源用例") or "").strip()
-        if not (issues.get(cid) or issues.get(source)):
-            unlinked.append((r, st))
+        if issues.get(cid) or issues.get(source):
+            continue
+        # 父级聚合回退：设计级父用例的 FAIL 若由已跟踪的展开子用例解释，则不列「无单号跟踪」
+        if (r.get("层级") or "").strip() == "设计级":
+            children_fail = [c for c in parent_children.get(cid.upper(), [])
+                             if status.get(c) in ("FAIL", "SPEC-MISMATCH")]
+            if children_fail and all(issues.get(c) for c in children_fail):
+                continue
+        unlinked.append((r, st))
     unlinked.sort(key=lambda t: ({"P0": 0, "P1": 1, "P2": 2}.get((t[0].get("优先级") or "").strip(), 9),
                                  t[0].get("层级", ""), t[0].get("ID", "")))
     n_linked = fail_spec - len(unlinked)
@@ -364,6 +373,25 @@ def main():
         f.write(header + body)
     print(f"专项分析报告生成: {out}")
     print(f"  BLOCKED 阻塞用例 {len(blocked)} 条")
+
+
+def load_parent_children():
+    """读展开级母版，建立 设计级父用例(源用例) -> 展开级子用例ID 映射。
+
+    用于「父级聚合回退」：设计级用例（D3-C4）的 FAIL 由展开级子用例（EXP-C4-14/18）解释时，
+    若这些子用例已有关联单号，父用例不单独列入「无单号跟踪」。
+    """
+    mapping = {}
+    fp = os.path.join(REPO, "test-cases", "expanded", "用例矩阵-展开级.csv")
+    if not os.path.isfile(fp):
+        return mapping
+    with open(fp, encoding="utf-8-sig") as f:
+        for r in csv.DictReader(f):
+            src = (r.get("源用例") or "").strip().upper()
+            cid = (r.get("ID") or "").strip().upper()
+            if src and cid and src != cid:
+                mapping.setdefault(src, []).append(cid)
+    return mapping
 
 
 if __name__ == "__main__":
