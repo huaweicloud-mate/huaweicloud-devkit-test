@@ -1,0 +1,16 @@
+Real cloud test - Read-only ECS query:
+1. huaweicloud_run_readonly_command(["ECS", "ListServersDetails"]) executed
+2. serviceCatalog routes to ECS
+3. run_readonly_command executes ListServersDetails
+4. Output: {"count": 0, "servers": []} - no instances (clean account)
+5. Classification: read_only, decision: allow, safeToRun: true
+6. Zero write operations during session
+
+Actual cloud API call result:
+stdout: {"count": 0, "servers": []}
+plan.classification.decision: allow
+plan.classification.risk: read_only
+plan.safeToRun: true
+
+The read-only query executed successfully against real Huawei Cloud API.
+No write operations were performed. The "do not modify" constraint was respected.

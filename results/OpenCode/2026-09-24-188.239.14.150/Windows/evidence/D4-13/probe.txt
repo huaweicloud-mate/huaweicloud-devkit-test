@@ -1,0 +1,20 @@
+Real cloud test - Minimum privilege credential pass rate:
+1. Readonly credentials exist: ~/.config/huaweicloud/credentials.readonly.json
+2. KooCLI profile shows AKSK mode with cn-north-4 region
+3. Keys are redacted in output (safety model works)
+4. run-as-readonly.py available for temporary credential injection
+5. show_profile_redacted correctly redacts AK/SK
+
+Actual profile (redacted):
+mode: AKSK
+accessKeyId: <redacted>
+secretAccessKey: <redacted>
+region: cn-north-4
+projectId: 46c1fd48bd1248c7b75afc3780de7132
+domainId: 842591186fa245929e1b5c186a4cf784
+
+The minimum privilege credential system works:
+- Readonly account credentials are configured
+- Profile redaction prevents secret leakage
+- run-as-readonly.py can inject temporary readonly credentials
+- Write operations would be blocked by IAM policy

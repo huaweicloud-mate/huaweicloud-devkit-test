@@ -1,0 +1,19 @@
+Approval semantics test (FIXED):
+1. huaweicloud_run_approved_command tool found: true
+2. approvedByUser property: true
+3. approvalToken property: true
+4. args property: true
+5. approvedByUser in required: true
+6. approvalToken in required: true
+7. args in required: true
+8. approvedByUser description: Must be true only after the user explicitly approves this exact command.
+9. approvedByUser type: boolean
+
+plan_cli_command:
+10. approvalToken property: false
+11. allowWrites property: true
+
+The approval semantics are correct:
+- run_approved_command requires approvedByUser (boolean, must be true)
+- run_approved_command requires approvalToken (from plan_cli_command)
+- The flow: plan_cli_command → approvalToken → run_approved_command(approvedByUser=true)
