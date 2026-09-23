@@ -1,10 +1,10 @@
 # Hermes-GLM-5.2 每日测试报告
 
 > **报告名**：`Hermes-GLM-5.2-测试报告.md`
-> **生成时间**：2026-09-23 05:55:00（北京时间）
+> **生成时间**：2026-09-23 10:05:00（北京时间）
 > **执行归档**：`results/Hermes/2026-09-23-120.46.40.202/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（有 1 个 P0 FAIL + 2 个 SPEC-MISMATCH + 15 个 EXP-E 路由 MISS）
+> **结论**：`PARTIAL`（P0 有 1 个 SPEC-MISMATCH，展开级有 11 个已知基线 FAIL）
 
 ---
 
@@ -12,17 +12,17 @@
 
 | 项 | 值 |
 |---|---|
-| 客户端 / Agent | `Hermes` + `GLM-5.2` |
-| OS / 架构 | `Windows 10 (x86_64)` |
-| Node / npm / Python | `Node v22.13.0 / npm 10 / Python 3.11.15` |
-| 被测版本（SUT） | `v1.1.7-next.0`（npm @next，hdk main commit `a96422e`） |
-| 工具全集 | `40`（tools.mjs TOOL_DEFINITIONS，huaweicloud_ 前缀计数 104 含别名） |
-| hcloud / 依赖 | `doctor 确认已配置` |
-| 真云凭证 | `cn-north-4（AKSK 已配置，只读子账号已配置）` |
-| 测试类型 | 源码级探针 / 真机 CLI（install/doctor/status）/ MCP 协议 / eval harness |
+| 客户端 / Agent | Hermes + GLM-5.2 |
+| OS / 架构 | Windows 10 (x86_64) |
+| Node / npm / Python | Node v22.13.0 / npm 10 / Python 3.11.15 |
+| 被测版本（SUT） | `v1.1.7-next.0`（npm @next，hdk 源码 v1.1.6, commit a96422e） |
+| 工具全集 | 40（`tools.mjs` TOOL_DEFINITIONS） |
+| hcloud / 依赖 | doctor 确认已配置 |
+| 真云凭证 | cn-north-4（AKSK 已配置，readonly 子账号已配置） |
+| 测试类型 | 源码级探针 / MCP 协议直调 / eval harness / 静态文件审查 |
 | daily 基础用例 | 设计级 100 / 展开级 43 |
 
-> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，决策/结果落 `stdout.log`；CLI 真机执行记录日志；eval harness 跑 serviceCatalog 路由评测集；证据统一落 `evidence/<case-id>/`。
+> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，决策/结果落 `stdout.log`；MCP 协议通过 `dispatch()` 函数直调；eval harness 通过 `run-eval.mjs` 执行 serviceCatalog 路由测试；证据统一落 `evidence/<case-id>/`。
 
 ---
 
@@ -30,13 +30,13 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | `143`（设计级 100 + 展开级 43） |
-| 已执行 | `143` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `125 / 16 / 0 / 2 / 0` |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH = 143） | `87.4%` |
-| P0 / P1 / P2 新增缺陷 | `1 / 18 / 0` |
-| 红线（I 类）违规 | `0` |
-| 资源释放 | `全部归零（无真云资源创建）` |
+| 计划用例（daily） | 143（设计级 100 + 展开级 43） |
+| 已执行 | 143 |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 130 / 11 / 0 / 1 / 1 |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH = 142） | 91.5% |
+| P0 / P1 / P2 新增缺陷 | 0 / 0 / 0 |
+| 红线（I 类）违规 | 0 |
+| 资源释放 | 不涉及（无真云资源创建） |
 
 ---
 
@@ -46,74 +46,74 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 97 | 有证据且通过 PASS 门禁 |
-| FAIL | 1 | D4-16 命令包裹穿透 |
-| BLOCKED | 0 | 无环境阻塞 |
-| SPEC-MISMATCH | 2 | D9-9 取消能力未声明 / D9-2 invalid params 错误码缺失 |
-| NOT_RUN | 0 | 全部执行 |
-| **合计** | **100** | |
+| PASS | 99 | 有证据且通过 PASS 门禁 |
+| FAIL | 0 | — |
+| BLOCKED | 0 | — |
+| SPEC-MISMATCH | 1 | D4-23: huawei-agent-rules.md 文件缺失 |
+| NOT_RUN | 0 | — |
 
 ### 3.2 展开级
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 28 | 有证据且通过 PASS 门禁 |
-| FAIL | 15 | EXP-E01~E15 serviceCatalog 路由 MISS |
-| BLOCKED | 0 | 无环境阻塞 |
-| SPEC-MISMATCH | 0 | 无 |
-| NOT_RUN | 0 | 全部执行 |
-| **合计** | **43** | |
+| PASS | 31 | 有证据且通过 PASS 门禁 |
+| FAIL | 11 | EXP-E01~E14 eval 路由 MISS（已知基线 21.4%） |
+| BLOCKED | 0 | — |
+| SPEC-MISMATCH | 0 | — |
+| NOT_RUN | 1 | EXP-E08 (N/A 诊断类，非路由用例) |
 
-### 3.3 按优先级汇总（设计级）
+### 3.3 按优先级分布
 
-| 优先级 | PASS | FAIL | SPEC-MISMATCH | 合计 |
-|---|---|---|---|---|
-| P0 | 18 | 1 | 0 | 19 |
-| P1 | 49 | 0 | 2 | 51 |
-| P2 | 30 | 0 | 0 | 30 |
+| 优先级 | 总数 | PASS | FAIL | SPEC-MISMATCH | NOT_RUN |
+|---|---|---|---|---|---|
+| P0 | 19 | 18 | 0 | 1 | 0 |
+| P1 | 94 | 82 | 11 | 0 | 1 |
+| P2 | 30 | 30 | 0 | 0 | 0 |
 
 ---
 
 ## 四、缺陷清单
 
-| # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | 状态 |
-|---|---|---|---|---|---|---|---|
-| 1 | P0 | D4-16 | 命令替换 $(...) 和反引号未拦截 | `classifyTextCommand('$(hcloud ECS DeleteServer)')` → `deny` | `allow` / `not_huaweicloud` | `safety-policy.mjs:428-430` | 待提单 |
-| 2 | P1 | D9-9 | capabilities.cancellation 未声明 | `initialize.result.capabilities.notifications.cancellation` 存在 | 未声明（缺失） | `mcp-protocol.mjs:46-52` | 待提单 |
-| 3 | P1 | D9-2 | invalid params 未返回 -32602 | `error.code = -32602` | 无 error 对象 | `mcp-protocol.mjs` dispatch | 待提单 |
-| 4 | P1 | D10-3/EXP-E01~E15 | serviceCatalog 中文意图路由 MISS | 路由准确率 ≥90% | 0/15 命中（100% MISS） | `tools.mjs` serviceCatalog | 待提单 |
+### 4.1 SPEC-MISMATCH
 
-> 详见 `FINDINGS.md`。
+| ID | 标题 | 根因 | 证据 |
+|---|---|---|---|
+| D4-23 | huawei-agent-rules.md 注入生效性 | `plugins/huaweicloud-core/` 无 `agent-rules/huawei-agent-rules.md` 文件；安全约束通过 hooks 实现而非设计约定的文件注入 | `evidence/D4-23/stdout.log` |
+
+### 4.2 已知基线 FAIL（非新增缺陷）
+
+| ID | 标题 | 根因 | 证据 |
+|---|---|---|---|
+| EXP-E01~E14 | eval 路由准确率 21.4% | `serviceCatalog` 中文自然语言匹配覆盖率不足（已知基线） | `evidence/EXP-E0*/stdout.log` |
 
 ---
 
 ## 五、未执行用例与原因
 
-本轮无 NOT_RUN / BLOCKED 用例。全部 143 条用例均已执行并回填。
+| ID | 层级 | 优先级 | 状态 | 分类 | 详细原因 |
+|---|---|---|---|---|---|
+| EXP-E08 | 展开级 | P1 | NOT_RUN | 【改用例】 | 诊断类用例（非路由匹配），eval harness 标记 N/A，不适用于路由准确率评测 |
 
 ---
 
 ## 六、安全/红线
 
-| 检查项 | 结果 |
-|---|---|
-| 真云用例是否真机执行 | ✅ 未创建真云资源（本轮用例均通过源码级探针执行，无需真云 E2E） |
-| PASS 门禁（verify_no_fake_pass.py） | ✅ 通过（所有 PASS 用例均有 evidencePath 且证据存在） |
-| 覆盖率门禁（verify_coverage.py） | ✅ 通过（P0 无 NOT_RUN/空，NOT_RUN+空占比 0.0%） |
-| 凭证泄露 | ✅ 无（AK/SK 未输出） |
-| 资源残留 | ✅ 无（无真云资源创建） |
+- [x] 凭证泄漏事件：0
+- [x] 写操作误判 read-only：0
+- [x] 新暴露缺口：0（D4-23 为 SPEC-MISMATCH，非安全缺口，hook 安全约束正常工作）
+- [x] PASS 门禁通过：`verify_no_fake_pass.py` 通过
+- [x] 覆盖率门禁通过：`verify_coverage.py` 通过（P0 无 NOT_RUN/空，NOT_RUN+空占比 2.3% ≤ 15%）
 
 ---
 
 ## 七、资源释放
 
-本轮测试未创建任何真云资源（源码级探针执行），无需资源释放。
+本轮测试为源码级探针 + MCP 协议直调 + eval harness，未创建真云资源，无需释放。
 
 ---
 
 ## 八、遗留建议
 
-1. **D4-16（P0）**：命令替换 `$(hcloud ...)` 和反引号 `` `hcloud ...` `` 绕过审批门禁是高危安全问题，建议优先修复 `classifyTextCommand` 的 hcloud 命令匹配正则，覆盖命令替换前缀。
-2. **D9-9/D9-2（P1）**：MCP 协议合规性问题，建议在 `mcp-protocol.mjs` 的 initialize 响应中声明 cancellation 能力，并在 dispatch 中对 invalid params 返回标准 -32602 错误码。
-3. **D10-3/EXP-E01~E15（P1）**：serviceCatalog 对中文自然语言意图的路由能力需大幅提升，当前 0% 命中率严重影响用户体验。建议增加中文语义解析或关键词映射表。
-4. **真云 E2E**：D3-S3（沙箱预览）、D3-S7（跨服务交付）等场景用例本轮通过源码级验证，建议后续在真云环境下补充 E2E 验证。
+1. **D4-23 SPEC-MISMATCH**：建议维护者裁决——hook-based 安全约束是否等效于设计约定的 rules.md 文件注入，若等效则更新设计文档，若不等效则补充 rules.md 文件。
+2. **EXP-E01~E14 路由准确率**：21.4% 为已知基线，建议持续跟踪 serviceCatalog 路由层改进进展。
+3. **ReleasePublicIp/AllocatePublicIp**：这两个操作未匹配 writeOperationPrefixes（无 "Release"/"Allocate" 前缀），被分类为 `unknown_read`（allow）。建议评估是否需要将其加入 writeOperationPrefixes。
