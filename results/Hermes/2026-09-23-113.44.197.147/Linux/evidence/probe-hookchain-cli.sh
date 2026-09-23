@@ -3,7 +3,7 @@
 set -uo pipefail
 export PATH="$HOME/nodejs/bin:$HOME/bin:$PATH"
 export HDK_PLUGIN_SRC="/home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core"
-export EVID_DIR="/home/testbot1/devkit-test/Hermes/huaweicloud-devkit-test/results/Hermes/2026-09-22-113.44.197.147/Linux/evidence"
+export EVID_DIR="/home/testbot1/devkit-test/Hermes/huaweicloud-devkit-test/results/Hermes/2026-09-23-113.44.197.147/Linux/evidence"
 HOOK="$HDK_PLUGIN_SRC/hooks/huaweicloud-safety.mjs"
 cd "$EVID_DIR"
 

@@ -1,6 +1,6 @@
-=== CASE D4-5 ===  (Change* 写动词误判检测)
-  hcloud ecs ChangeServerOsWithoutCloudInit -> decision=allow risk=unknown_read (exp deny/write) <<< 误判
-  hcloud ecs ChangeServerOsWithCloudInit -> decision=allow risk=unknown_read (exp deny/write) <<< 误判
-  hcloud vpc ChangeVpc -> decision=allow risk=unknown_read (exp deny/write) <<< 误判
-  hcloud rds ChangeInstanceConfiguration -> decision=allow risk=unknown_read (exp deny/write) <<< 误判
-  RESULT: FAIL  0/4 拦截
+=== CASE D4-5 ===  FAIL
+  SUT: v1.1.7-next.0 (gitHead 0790e92a)
+  defect: Change* 写操作误判为 unknown_read/allow（0/4 拦截）：ChangeServerOs*/ChangeVpc/ChangeInstanceConfiguration 均 allow
+  root: safety/policy.json:27-31 缺 Change 前缀
+  来源: evidence/fresh-*.txt (2026-09-23 下午 fresh 重跑)
+RESULT: FAIL
