@@ -6,8 +6,8 @@ import { createRequire } from 'module';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const EVIDENCE_BASE = __dirname;
-const HDK_SRC = 'C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/src';
-const HDK_ROOT = 'C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk';
+const HDK_SRC = 'C:/Users/Administrator/devkit-test/OpenCode/hdk/plugins/huaweicloud-core/src';
+const HDK_ROOT = 'C:/Users/Administrator/devkit-test/OpenCode/hdk';
 
 const require = createRequire(import.meta.url);
 
@@ -254,7 +254,7 @@ Does not affect normal return values`, {
 
 // D1-66: Telemetry switch and endpoint (P2)
 try {
-  const tel = await import(`file://${HDK_SRC}/telemetry.mjs`);
+  const tel = await import(`file://${HDK_SRC}/telemetry/telemetry.mjs`);
   const isEnabled = tel.isTelemetryEnabled ? tel.isTelemetryEnabled() : 'function not exported';
   saveEvidence('D1-66', `Telemetry env vars:
 isTelemetryEnabled(): ${isEnabled}
@@ -304,7 +304,7 @@ Source: setup-cli.mjs case 'help' (5062)`, {
 
 // D1-70: Proxy config (P1)
 try {
-  const pc = await import(`file://${HDK_SRC}/proxy-config.mjs`);
+  const pc = await import(`file://${HDK_SRC}/proxy/proxy-config.mjs`);
   const ps = pc.getProxySettings ? pc.getProxySettings('https://example.com') : null;
   saveEvidence('D1-70', `Proxy config:
 writeProxyConfig/readProxyConfig/clearProxyConfig: available=${typeof pc.writeProxyConfig === 'function'}
@@ -461,7 +461,7 @@ Source: auth_switch import semantics in tools.mjs`, {
 
 // D2-26: Credential backup/restore (P1)
 try {
-  const creds = await import(`file://${HDK_SRC}/credentials.mjs`);
+  const creds = await import(`file://${HDK_SRC}/auth/credentials.mjs`);
   saveEvidence('D2-26', `Credential backup/restore:
 backupGlobalCredentials: available=${typeof creds.backupGlobalCredentials === 'function'}
 restoreGlobalCredentialsBackup: available=${typeof creds.restoreGlobalCredentialsBackup === 'function'}

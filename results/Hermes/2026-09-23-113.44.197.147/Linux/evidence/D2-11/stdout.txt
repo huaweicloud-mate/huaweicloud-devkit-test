@@ -1,4 +1,6 @@
 === CASE D2-11 ===  FAIL
-  expected: R3: 带 securityToken 的 persist 应先于 R2 立即 rejected
-  actual:   R3拒绝逻辑存在=true, R2冲突门先于R3=true(缺陷)
-  detail:   tools.mjs auth_switch: R2 needs_confirmation 判定(1214-1228)先于 persistCredentials R3 检查(1237)
+  SUT: v1.1.7-next.0 (gitHead 0790e92a)
+  defect: R3 STS token 拒绝逻辑存在，但 auth_switch 先走 R2 needs_confirmation 冲突门，未先于 R2 立即 rejected
+  root: tools.mjs auth_switch R2(1214-1228) 先于 persistCredentials R3(1237)
+  来源: evidence/fresh-*.txt (2026-09-23 下午 fresh 重跑)
+RESULT: FAIL

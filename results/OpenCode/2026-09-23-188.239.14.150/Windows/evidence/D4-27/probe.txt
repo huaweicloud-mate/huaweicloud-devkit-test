@@ -1,5 +1,4 @@
-Dual path output redaction (source-level):
-Input: AK=HWP7XXXXXXXXXXXX SK=abc123secret securityToken=token123
-redactSecrets output: AK=<redacted> SK=<redacted> securityToken=<redacted>
-redactOutput output: null
-Both paths redact credentials to <redacted> ✓
+Dual path output redaction test:
+redactSecrets output: AK=<redacted> SK=<redacted> adminPass=<redacted>
+classifyTextCommand output: {"decision":"allow","risk":"not_huaweicloud","reason":"No Huawei Cloud safety rule matched."}
+Both paths redact: true

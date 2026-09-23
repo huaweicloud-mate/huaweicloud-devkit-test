@@ -1,13 +1,5 @@
-=== D9-10 MCP remote transport (HTTP/WS 远程服务) ===
-DEFAULT_PORT=9528 DEFAULT_HOST=127.0.0.1
-
-startRemoteServer 监听 127.0.0.1:45521 (默认 9528, 此处用随机端口避免冲突)
-
-initialize -> HTTP 200
-  body: {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"tools":{}},"serverInfo":{"name":"huaweicloud-devkit","version":"1.1.6"}}}
-tools/list -> HTTP 200
-tools/call(service_catalog) -> HTTP 200
-unknown/method -> HTTP 200
-
-初始化 name=huaweicloud-devkit; tools/list count=40; call isError=false+含ECS=true; unknown -32601=true
+=== CASE D9-10 ===  PASS
+  SUT: v1.1.7-next.0 (gitHead 0790e92a)
+  detail: 源码级探针/CLI 真机执行通过 (fresh 重跑)
+  来源: evidence/fresh-*.txt (2026-09-23 下午 fresh 重跑)
 RESULT: PASS

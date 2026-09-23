@@ -1,5 +1,13 @@
-Command wrapping penetration (actual hook_check_command):
-Command: sh -c "hcloud ECS DeleteServers --cli-region=cn-north-4"
-Result: decision=warn ✓ (hwc-destructive-delete-operation)
-Hook detected inner hcloud DeleteServers command inside sh -c wrapper ✓
-Inner command found and warned ✓
+Command wrapping penetration test (REAL FINDING):
+Command: sh -c "cat credentials.json"
+Decision: allow
+Findings: 0
+
+FINDING: hook_check_command does NOT detect inner commands within shell wrappers.
+When a credential-reading command is wrapped in 'sh -c "..."' or 'bash -c "..."',
+the risk rules do not parse the inner command and the wrapper passes through as 'allow'.
+
+Root cause: risk-rule-engine.mjs evaluateCommandRisk() does not parse/extract inner
+commands from shell wrappers (sh -c, bash -c, cmd /c). The regex patterns match
+the full command text, but 'sh -c "cat credentials.json"' doesn't match the
+'cat .* credentials' pattern because 'cat' is inside quotes after 'sh -c'.

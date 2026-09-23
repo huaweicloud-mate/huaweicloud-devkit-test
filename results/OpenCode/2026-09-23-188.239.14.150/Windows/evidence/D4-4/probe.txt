@@ -1,4 +1,5 @@
-Write operation approval gate (actual plan_cli_command):
-plan_cli_command for DeleteServers: decision=deny, safeToRun=false
-Write operations cannot execute without approval ✓
-12 write verbs (create/delete/update/resize/start/stop/authorize/revoke/attach/detach/enable/disable) all require approval
+Write operation approval gate via MCP tool:
+Command: hcloud ECS DeleteServers --instance_ids fake-id
+plan_cli_command result: decision=deny, risk=write, safeToRun=false
+"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+Write operations require explicit approval - cannot execute without approvalToken + approvedByUser=true.

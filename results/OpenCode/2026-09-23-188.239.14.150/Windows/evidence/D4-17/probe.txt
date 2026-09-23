@@ -1,6 +1,6 @@
-hook fuzzy fail-closed:
-hook_check_command with malformed input: returns structured response with decision field.
-hook_check_artifacts with malformed JSON: returns structured error.
-hook_check_deploy_plan with malformed plan: returns structured error.
-All three tools handle malformed input gracefully without crashing.
-Default behavior: structured response, no false allow on high-risk patterns.
+Hook fuzzy fail-closed test (corrected):
+: deny (safe=true)
+null: deny (safe=true)
+cat ~/.config/huaweicloud/credentials.json: deny (safe=true)
+Empty/null inputs fail-closed (deny): true
+Malformed inputs don't crash: true

@@ -1,7 +1,7 @@
 # DSH-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`DSH-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-09-23 05:40（北京时间）
+> **生成时间**：2026-09-23 17:05（北京时间）
 > **执行归档**：`results/DSH/2026-09-23-124.70.78.131/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）`v1.1.6`（npm latest）
 > **结论**：`FAIL`（设计级 18 FAIL + 1 SPEC-MISMATCH + 2 BLOCKED + 1 NOT_RUN；展开级 12 FAIL；全部 19 项为 v1.1.5 历史/同源缺陷，v1.1.6 复核确认，无当日新增）

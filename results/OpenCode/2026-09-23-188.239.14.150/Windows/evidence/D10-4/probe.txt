@@ -1,7 +1,8 @@
-Security intervention static rules (source-level):
-loadRiskRules: returns object
-evaluateCommandRisk: available=true
-Rules loaded: 16
-High-risk commands (cat credentials, env-dump, delete resources) -> deny
-Read-only commands (ListServersDetails) -> allow
-cloud-risk-rules.json rule library loaded successfully.
+Security intervention static rule layer via MCP tools:
+1. hook_check_command(cat credentials.json) → deny (credential file read intercepted)
+2. hook_check_command(printenv HW_SECRET_KEY) → allow (env var NOT intercepted - known gap)
+3. hook_check_command(DeleteServers) → warn (destructive intercepted)
+4. hook_check_command(ListServersDetails) → allow (readonly allowed)
+
+Rule library loaded with deny + warn rules. High-risk commands intercepted, readonly allowed.
+Known gap: env var printing not intercepted (tracked as D4-2 finding).

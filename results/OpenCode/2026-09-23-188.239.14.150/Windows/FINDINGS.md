@@ -1,30 +1,44 @@
 # FINDINGS — 缺陷发现清单（OpenCode-GLM-5.2）
 
 > **落盘路径**：`results/OpenCode/2026-09-23-188.239.14.150/Windows/FINDINGS.md`
-> **生成时间**：2026-09-23 05:10:00（北京时间）
-> **本清单是统一提单脚本的解析输入**：`scripts/file_issue.py` 硬编码解析标题与「根因」字段，格式必须严格遵循。
+> **生成时间**：2026-09-23 17:00:00（北京时间）
+> **被测版本**：huaweicloud-devkit@1.1.7-next.0（gitHead 0790e92a）
+> **本清单是统一提单脚本的解析输入**：格式严格遵循 templates/findings.md 规范。
 
 ---
 
 ## #1【P0】D4-2 凭证env打印拦截不完整
 
-- **现象**：`hook_check_command` 对 `printenv HW_SECRET_ACCESS_KEY` 和 `echo AK=HWP7XXXXXXXXXXXXXXXXXX SK=xxxx` 返回 `decision=allow`，未拦截凭证环境变量打印和凭证值回显。
-- **断言**：`hook_check_command("printenv HW_SECRET_ACCESS_KEY")` 应返回 `decision=deny`，实际返回 `decision=allow`
-- **根因**：`plugins/huaweicloud-core/src/risk-rule-engine.mjs` 风险规则 `hwc-command-credential-file` 仅匹配凭证文件路径模式（`credentials.json`、`.hcloud/config.json`），未覆盖环境变量名（`HW_SECRET_ACCESS_KEY`、`HW_ACCESS_KEY`）和凭证值模式（`AK=xxx`、`SK=xxx`）的 echo/printenv 命令
-- **影响**：凭证环境变量可通过 printenv/echo 命令泄露到 agent 上下文，存在安全风险
-- **证据**：`evidence/D4-2/stdout.log`
+- **现象**：`hook_check_command("printenv HW_SECRET_KEY")` 返回 `decision=allow`，无 findings。同样 `echo $HW_SECRET_KEY` 也返回 `allow`。环境变量打印命令未被风险规则拦截。
+- **断言**：`printenv HW_SECRET_KEY` 和 `echo $HW_SECRET_KEY` 应返回 `decision=deny`（凭证环境变量打印拦截）
+- **根因**：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:39` — `hwc-command-env-dump` 规则的第二个条件正则 `(HUAWEICLOUD|HWC_|HCLOUD|OS_)` 未覆盖 `HW_` 前缀。Huawei Cloud devkit 使用 `HW_ACCESS_KEY`/`HW_SECRET_KEY` 作为环境变量名，但正则只匹配 `HUAWEICLOUD`/`HWC_`/`HCLOUD`/`OS_` 前缀，`HW_` 前缀未被包含。
+- **影响**：攻击者可通过 `printenv HW_SECRET_KEY` 或 `echo $HW_ACCESS_KEY` 提取环境变量中的凭证而不被 hook 拦截，存在凭证泄露风险。
+- **证据**：`evidence/D4-2/stdout.log`，MCP 工具 `huaweicloud_hook_check_command` 实测 `printenv HW_SECRET_KEY` → `allow`
 - **状态**：待提单
 
-## #2【P1】EXP-E01~E05,E07,E10~E14 serviceCatalog中文意图路由大面积MISS
+## #2【P0】D4-3 明文secret API拦截缺失
 
-- **现象**：`eval/harness/run-eval.mjs` 对 15 条中文意图评测集执行 serviceCatalog 路由，11 条 MISS（路由到 "Run hcloud --help to list available services" 而非正确服务）。准确率仅 21.4%（3 HIT / 14 分母）。
-- **断言**：serviceCatalog 应将中文意图路由到正确服务（如「帮我查一下我账号在华北北京四有哪些云主机」→ ECS），实际 11/14 路由到 "Run hcloud --help" fallback
-- **根因**：`plugins/huaweicloud-core/src/tools.mjs` `serviceCatalog()` 函数的 routeMap 中文意图匹配覆盖不全，大量常见中文云服务意图（ECS查询/创建、EIP绑定、RDS查询、CBR备份、FunctionGraph部署、BSS费用查询、CES监控、ELB证书、IAM审计）未命中路由规则，fallback 到 "Run hcloud --help"
-- **影响**：用户用中文描述云服务需求时，agent 无法自动路由到正确服务，需手动指定服务名，严重影响中文用户体验
-- **证据**：`evidence/EXP-E01/stdout.log` ~ `evidence/EXP-E15/stdout.log`，`evidence/eval-run-result.csv`
+- **现象**：`hook_check_command("hcloud ECS CreateServers --adminPass Password123! --ak AKEXAMPLE --sk SKEXAMPLE")` 返回 `decision=allow`，无 findings。hcloud 命令中内联的 `--adminPass`/`--ak`/`--sk` 明文密钥参数未被检测和拦截。
+- **断言**：hcloud 命令含 `--adminPass`/`--ak`/`--sk`/`--password` 等明文密钥参数时应返回 `decision=deny` 或 `warn`
+- **根因**：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json` — 缺少检测 hcloud 命令内联密钥参数的规则。现有规则覆盖凭证文件读取（`hwc-command-credential-file`）、环境变量打印（`hwc-command-env-dump`）、DEW 密钥读取（`hwc-command-secret-value-read`），但无规则检测命令行参数中的明文密钥（`--adminPass`/`--ak`/`--sk`/`--password`/`--token`）。
+- **影响**：用户在 hcloud 命令中直接传入明文 `--adminPass`/`--ak`/`--sk` 不会被拦截，凭证可能出现在命令历史和日志中。
+- **证据**：`evidence/D4-3/stdout.log`，MCP 工具 `huaweicloud_hook_check_command` 实测返回 `allow`
 - **状态**：待提单
 
-## #3【非产品缺陷】D4-24 确认令牌过期与重复确认边界测试阻塞
+## #3【P0】D4-16 命令包裹穿透
 
-- **现象**：D4-24「确认令牌过期与重复确认边界」测试需要真实云写操作（创建最小规格 ECS）生成 approvalToken，并注入时钟推进测试过期/重复确认，无法在测试环境安全执行。
-- **说明**：源码级验证 approvalToken 为 UUID 格式，TTL 机制存在于代码中。完整边界测试需可注入时钟 + 真云写操作环境。非产品缺陷，为测试环境限制。
+- **现象**：`hook_check_command("sh -c \"cat credentials.json\"")` 返回 `decision=allow`，无 findings。当凭证读取命令被 shell 包裹（`sh -c`/`bash -c`/`cmd /c`）时，内层命令未被提取和检查。
+- **断言**：`sh -c "cat credentials.json"` 应返回 `decision=deny`（内层凭证读取命令被检测）
+- **根因**：`plugins/huaweicloud-core/src/risk-rule-engine.mjs:143` — `evaluateCommandRisk()` 函数对完整命令文本执行正则匹配，不解析/提取 shell 包裹（`sh -c`/`bash -c`/`cmd /c`）中的内层命令。当 `cat credentials.json` 被包裹在 `sh -c "..."` 中时，正则 `(^|\s)(cat|type|...)` 不匹配（`cat` 前是 `"` 而非空格），且 `credentials.json` 不含 `.hcloud`/`.huaweicloud` 关键字。
+- **影响**：攻击者可通过 shell 包裹绕过 hook 检测，执行凭证读取等高危命令。
+- **证据**：`evidence/D4-16/stdout.log`，MCP 工具 `huaweicloud_hook_check_command` 实测返回 `allow`
+- **状态**：待提单
+
+## #4【P1】D10-3 serviceCatalog 路由准确率 21.4% 远低于 90% 阈值（含 EXP-E01~E14 路由 MISS）
+
+- **现象**：eval harness 实测 `serviceCatalog` 路由准确率 21.4%（3 HIT / 14 total），11/14 中文意图落入 `Run hcloud --help to list available services.` 通用兜底。HIT 仅有 EXP-E06(DCS)、EXP-E09(CCE)、EXP-E15(Voucher)。MISS 涉及 EXP-E01(ECS查询)、EXP-E02(ECS创建)、EXP-E03(OBS静态站)、EXP-E04(EIP)、EXP-E05(RDS)、EXP-E07(CBR)、EXP-E10(FunctionGraph)、EXP-E11(BSS费用)、EXP-E12(CES)、EXP-E13(ELB证书)、EXP-E14(IAM审计)。
+- **断言**：serviceCatalog 路由准确率应 ≥90%（当前 21.4%）
+- **根因**：`plugins/huaweicloud-core/src/tools.mjs:1815` — `serviceCatalog(intent)` 函数的意图匹配模式未充分覆盖 eval-set-v1.csv 中的中文意图。`tools.mjs:1947` 的兜底返回 `Run hcloud --help to list available services.` 在 11/14 意图上触发，说明匹配模式覆盖面不足。
+- **影响**：Agent 无法正确路由大部分中文用户意图到对应华为云服务，导致用户请求无法被正确处理。
+- **证据**：`evidence/D10-3/stdout.log`、`evidence/EXP-E01/stdout.log` ~ `evidence/EXP-E14/stdout.log`、`evidence/eval-run-result.csv`
+- **状态**：待提单

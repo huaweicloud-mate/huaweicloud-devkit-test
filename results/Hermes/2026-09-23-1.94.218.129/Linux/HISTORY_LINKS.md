@@ -1,11 +1,11 @@
 # 历史问题关联清单（不重复提单）
 
-> **生成时间**：`2026-09-23 05:30`（北京时间）
+> **生成时间**：`2026-09-23 16:57`（北京时间，同日第二次执行复测）
 > **来源**：Hermes Linux 每日测试 `results/Hermes/2026-09-23-1.94.218.129/Linux/`
 > **被测对象**：huaweicloud-devkit v1.1.6（npm 官方 latest，gitHead `46152dd`）
 > **生成说明**：本轮 15 项缺陷经历史查重，命中的均为上游仓 `huaweicloud/huaweicloud-devkit` 已有 open issue（此前已作为缺陷提过），**本次不新开单**，避免重复提单堆积。
 
-> 查重方法：本机 `gh issue list` shim 不可用（只实现 `gh auth status/token` 与 `gh issue create`，`gh issue list`/`gh api` 返回空+exit1），改用 `~/.hdk_token` 经 GitHub REST API 直查 `issues?state=open`（119 条 open）并按用例号/缺陷语义匹配。15 项缺陷逐一核对对应历史单当前 `state=open`。
+> 查重方法：本机 `gh issue list` shim 不可用（只实现 `gh auth status/token` 与 `gh issue create`，`gh issue list`/`gh api` 返回空+exit1），改用 `~/.hdk_token` 经 GitHub REST API 直查 `issues?state=open`（本轮实测 open 82 条）并按用例号/缺陷语义匹配。15 项缺陷逐一核对对应历史单当前 `state=open`（已复核 22 个关联单号全部仍 open）。
 
 > 版本对比结论：本轮 SUT 从 v1.1.5（`e7ed6f6`）升到 v1.1.6（`46152dd`，上游合入 30+ commit），15 项缺陷**全部仍在复现**，无新增缺陷、无缺陷修复回归（#704 仅修复 tools/call 错误码，未覆盖本轮 D9-2 的 tools/list 参数校验）。
 

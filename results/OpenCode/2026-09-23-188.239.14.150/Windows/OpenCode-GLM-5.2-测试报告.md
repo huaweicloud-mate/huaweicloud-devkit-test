@@ -1,10 +1,10 @@
 # OpenCode-GLM-5.2 每日测试报告
 
 > **报告名**：`OpenCode-GLM-5.2-测试报告.md`
-> **生成时间**：2026-09-23 05:10:00（北京时间）
+> **生成时间**：2026-09-23 17:10:00（北京时间）
 > **执行归档**：`results/OpenCode/2026-09-23-188.239.14.150/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（有 1 个 P0 FAIL + 11 个 P1 FAIL，P0 缺口已记录）
+> **结论**：`PARTIAL`（有 3 个 P0 FAIL + 1 个 P1 FAIL，不得写 PASS）
 
 ---
 
@@ -13,17 +13,17 @@
 | 项 | 值 |
 |---|---|
 | 客户端 / Agent | `OpenCode` + `GLM-5.2` |
-| OS / 架构 | `Windows NT x64` |
-| Node / npm / Python | `Node v22.22.2 / npm / Python 3.11.9` |
-| 被测版本（SUT） | `v1.1.7-next.0`（npm @next，gitHead `0790e92a`） |
+| OS / 架构 | `Windows` |
+| Node / npm / Python | `Node v22.22.2 / npm 12.1.0 / Python 3.11.9` |
+| 被测版本（SUT） | `v1.1.7-next.0`（npm @next，gitHead `0790e92a`，PR #800） |
 | 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS） |
-| hcloud / 依赖 | `hcloud 7.2.12 / check_cli 确认已配置` |
+| hcloud / 依赖 | `hcloud 7.2.12 / doctor 确认已配置` |
 | 真云凭证 | `cn-north-4（AKSK / 已配置）` |
-| 测试类型 | 源码级探针 / MCP 工具实测 / eval harness / 真云只读 |
-| 设计真源 | 设计级 100 / 展开级 39 / 追踪表 211 |
-| daily 基础用例 | 设计级 100 / 展开级 39 |
+| 测试类型 | 源码级探针 / MCP 工具真机调用 / eval harness / 真云只读查询 |
+| 设计真源 | 设计级 100 / 展开级 17（预筛后） / 追踪表 |
+| daily 基础用例 | 设计级 100 / 展开级 17 |
 
-> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数；MCP 工具实测（check_cli/auth_status/hook_check_command/plan_cli_command/explain_error等）；eval harness（run-eval.mjs）；证据统一落 `evidence/<case-id>/`。
+> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数 + MCP 工具真机调用（check_cli/list_operations/run_readonly/hook_check_*/plan_cli_command/show_profile_redacted/voucher_status/explain_error/detect_framework）+ eval harness（run-eval.mjs）；决策/结果落 `evidence/<case-id>/stdout.log`。
 
 ---
 
@@ -31,13 +31,13 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | `139`（设计级 100 + 展开级 39） |
-| 已执行 | `139` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `126 / 12 / 1 / 0 / 0` |
-| 通过率（分母 = PASS+FAIL = 138） | `91.3%` |
-| P0 / P1 / P2 新增缺陷 | `1 / 11 / 0` |
+| 计划用例（daily） | `117`（设计级 100 + 展开级 17） |
+| 已执行 | `117` |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `102 / 15 / 0 / 0 / 0` |
+| 通过率（分母 = PASS+FAIL = 117） | `87.2%` |
+| P0 / P1 / P2 新增缺陷 | `3 / 1 / 0` |
 | 红线（I 类）违规 | `0` |
-| 资源释放 | `全部归零（无真云写操作）` |
+| 资源释放 | `全部归零（只读查询无创建资源）` |
 
 ---
 
@@ -47,65 +47,82 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `98` | 有证据且通过 PASS 门禁 |
-| FAIL | `1` | D4-2 凭证env打印拦截不完整 |
-| BLOCKED | `1` | D4-24 确认令牌过期测试需真云写操作 |
-| SPEC-MISMATCH | `0` | |
-| NOT_RUN | `0` | |
+| PASS | `96` | 有证据且通过 PASS 门禁 |
+| FAIL | `4` | D4-2/D4-3/D4-16(P0 安全 hook 缺口) + D10-3(P1 路由准确率) |
+| BLOCKED | `0` | 无阻塞 |
+| SPEC-MISMATCH | `0` | 无契约漂移 |
+| NOT_RUN | `0` | 全部执行 |
 | **合计** | **`100`** | |
 
 ### 3.2 展开级
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `28` | 有证据且通过 PASS 门禁 |
-| FAIL | `11` | EXP-E01~E05,E07,E10~E14 serviceCatalog路由MISS |
-| BLOCKED | `0` | |
-| SPEC-MISMATCH | `0` | |
-| NOT_RUN | `0` | |
-| **合计** | **`39`** | |
+| PASS | `6` | EXP-D5-1-1/D5-1-3 + EXP-E06/E08/E09/E15 |
+| FAIL | `11` | EXP-E01~E05/E07/E10~E14 路由 MISS（与 D10-3 同根因） |
+| BLOCKED | `0` | 无阻塞 |
+| SPEC-MISMATCH | `0` | 无契约漂移 |
+| NOT_RUN | `0` | 全部执行 |
+| **合计** | **`17`** | |
+
+> EXP-C4-01~22（22 条，agent=Hermes）在 init_day.py 预筛中未剔除，已手动从展开级 CSV 移除（归属 Hermes 客户端，非 OpenCode 执行）。
 
 ---
 
-## 四、缺陷清单
+## 四、缺陷清单（详尽，每个缺陷一栏）
 
-| # | 级别 | 用例ID | 缺陷描述 | 期望结果 | 实际结果 | 根因 | P/G/I | 状态 |
+| # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | `D4-2` | 凭证env打印拦截不完整 | `printenv HW_SECRET_ACCESS_KEY` → `deny` | 返回 `allow` | `risk-rule-engine.mjs` 规则仅匹配文件路径 | P | 待提单 |
-| 2 | P1 | `EXP-E01~E14` | serviceCatalog中文意图路由大面积MISS | 15条中文意图路由到正确服务 | 11条MISS，准确率21.4% | `tools.mjs` serviceCatalog routeMap中文匹配不全 | P | 待提单 |
+| 1 | P0 | `D4-2` | 凭证 env 打印拦截不完整 | `printenv HW_SECRET_KEY` 应返回 `deny` | 返回 `allow` | `cloud-risk-rules.json:39` | P | 待提单 |
+| 2 | P0 | `D4-3` | 明文 secret API 拦截缺失 | hcloud 含 `--adminPass`/`--ak`/`--sk` 应 `deny/warn` | 返回 `allow` | `cloud-risk-rules.json`（缺规则） | P | 待提单 |
+| 3 | P0 | `D4-16` | 命令包裹穿透 | `sh -c "cat credentials.json"` 应 `deny` | 返回 `allow` | `risk-rule-engine.mjs:143` | P | 待提单 |
+| 4 | P1 | `D10-3` | serviceCatalog 路由准确率 21.4% < 90% | 路由准确率 ≥90% | 21.4%（3/14 HIT） | `tools.mjs:1815` | P | 待提单 |
 
 ### 根因详情
 
 **#1 [P0] D4-2 凭证 env 打印拦截不完整**
 
-- 期望：`printenv HW_SECRET_ACCESS_KEY` → `decision=deny`
-- 实际：返回 `decision=allow`
-- 根因：`plugins/huaweicloud-core/src/risk-rule-engine.mjs` — 风险规则 `hwc-command-credential-file` 仅匹配凭证文件路径模式，未覆盖环境变量名（`HW_SECRET_ACCESS_KEY`）和凭证值模式（`AK=xxx SK=xxx`）的 echo/printenv 命令
-- 证据：`evidence/D4-2/stdout.log`，复现命令实测 `allow`
+- 期望：`printenv HW_SECRET_KEY` → `deny`
+- 实际：返回 `allow`，`HW_SECRET_KEY` 未被拦截
+- 根因：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:39`
+  `hwc-command-env-dump` 规则第二个条件正则 `(HUAWEICLOUD|HWC_|HCLOUD|OS_)` 未覆盖 `HW_` 前缀。devkit 使用 `HW_ACCESS_KEY`/`HW_SECRET_KEY` 环境变量名，但正则不匹配 `HW_` 前缀。
+- 证据：`evidence/D4-2/stdout.log`，MCP `huaweicloud_hook_check_command` 实测 `allow`
 
-**#2 [P1] EXP-E01~E14 serviceCatalog 中文意图路由大面积 MISS**
+**#2 [P0] D4-3 明文 secret API 拦截缺失**
 
-- 期望：15条中文意图评测集路由到正确服务（如「帮我查云主机」→ECS）
-- 实际：11条路由到 "Run hcloud --help to list available services" fallback，准确率仅 21.4%
-- 根因：`plugins/huaweicloud-core/src/tools.mjs` `serviceCatalog()` routeMap 中文意图匹配覆盖不全
-- 证据：`evidence/eval-run-result.csv`，`evidence/EXP-E01~E15/stdout.log`
+- 期望：`hcloud ECS CreateServers --adminPass Password123! --ak AKEXAMPLE --sk SKEXAMPLE` → `deny/warn`
+- 实际：返回 `allow`
+- 根因：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json` 缺少检测 hcloud 命令内联密钥参数（`--adminPass`/`--ak`/`--sk`/`--password`/`--token`）的规则
+- 证据：`evidence/D4-3/stdout.log`，MCP 实测 `allow`
+
+**#3 [P0] D4-16 命令包裹穿透**
+
+- 期望：`sh -c "cat credentials.json"` → `deny`
+- 实际：返回 `allow`
+- 根因：`plugins/huaweicloud-core/src/risk-rule-engine.mjs:143` `evaluateCommandRisk()` 不解析 shell 包裹（`sh -c`/`bash -c`/`cmd /c`）中的内层命令
+- 证据：`evidence/D4-16/stdout.log`，MCP 实测 `allow`
+
+**#4 [P1] D10-3 serviceCatalog 路由准确率 21.4%**
+
+- 期望：路由准确率 ≥90%
+- 实际：21.4%（3 HIT / 14 total），11/14 中文意图落入 `Run hcloud --help` 兜底
+- 根因：`plugins/huaweicloud-core/src/tools.mjs:1815` `serviceCatalog(intent)` 意图匹配模式覆盖不足
+- 证据：`evidence/D10-3/stdout.log`、`evidence/eval-run-result.csv`
 
 ---
 
 ## 五、未执行用例与原因
 
-| 用例ID | 层级 | 优先级 | 状态 | 分类 | 详细原因 | 改用例建议 |
-|---|---|---|---|---|---|---|
-| `D4-24` | 设计级 | P1 | BLOCKED | 补环境 | 确认令牌过期/重复确认边界测试需真实云写操作（创建ECS）+ 可注入时钟，测试环境无法安全执行 | — |
+无未执行用例。EXP-C4-01~22（22 条，agent=Hermes）已从展开级 CSV 移除（init_day.py 预筛未剔除但归属 Hermes，非 OpenCode 执行范围）。
 
 ---
 
 ## 六、安全与红线合规
 
 - [x] 凭证泄漏事件：`0`
-- [x] 写操作误判 read-only：`0`（DeleteServers 正确判定为 write/deny）
-- [x] 红线（I 类）违规：`无`
-- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（show_profile_redacted 全部 `<redacted>`）
+- [x] 写操作误判 read-only：`0`（D4-5 实测 DeleteServers → risk=write, decision=deny）
+- [x] 红线（I 类）违规：`0`
+- [x] 脱敏复核：证据目录无原始凭证/未脱敏日志（show_profile_redacted 实测 AK/SK/securityToken 全部 `<redacted>`）
 
 ---
 
@@ -113,18 +130,18 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| ECS | 否（只读查询） | N/A | N/A |
-| VPC | 否（plan only） | N/A | N/A |
-| 沙箱 | 否（工具注册验证） | N/A | N/A |
+| ECS | 否（只读查询 ListServersDetails） | N/A | count=0，无创建 |
+| 沙箱 | 否（未使用沙箱场景） | N/A | N/A |
 
-> 本轮无真云写操作（建删资源），全部为只读查询/源码级探针/MCP工具实测，无资源残留。
+> 本轮测试以源码级探针 + MCP 只读工具调用为主，未创建任何云资源，无残留。
 
 ---
 
 ## 八、遗留与建议
 
-- 待裁决 SPEC：无
-- 本轮未覆盖：真云 E2E 写操作（D4-24 确认令牌边界）、多终端矩阵（仅 OpenCode 单客户端）
-- 建议：
-  1. `risk-rule-engine.mjs` 应增加环境变量名匹配规则（`HW_ACCESS_KEY`/`HW_SECRET_ACCESS_KEY`/`HUAWEICLOUD_*` 前缀）和凭证值 echo 拦截
-  2. `serviceCatalog` routeMap 应扩充中文意图关键词覆盖，当前 21.4% 准确率远低于 90% 目标
+- **P0 安全 hook 缺口（3 项）**：D4-2/D4-3/D4-16 均为风险规则引擎覆盖不足，建议在 `cloud-risk-rules.json` 中新增/修改规则：
+  - D4-2: env-dump 规则正则增加 `HW_` 前缀
+  - D4-3: 新增 hcloud 内联密钥参数检测规则
+  - D4-16: `evaluateCommandRisk()` 增加 shell 包裹内层命令提取逻辑
+- **P1 路由准确率（D10-3）**：serviceCatalog 中文意图匹配需大幅扩展，当前 21.4% 远低于 90% 阈值，影响 Agent 路由能力
+- **EXP-C4 归属问题**：init_day.py 预筛未剔除 agent=Hermes 的展开级用例，建议修复预筛逻辑

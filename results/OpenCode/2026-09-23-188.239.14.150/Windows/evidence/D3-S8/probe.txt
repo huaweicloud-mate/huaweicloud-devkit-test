@@ -1,6 +1,5 @@
-Error troubleshooting (actual explain_error MCP call):
-explain_error(APIGW.0301, "Incorrect IAM authentication information: Unauthorized", ECS)
-Result: structured suggestions ✓
-- "Check KooCLI profile, region, project_id, and IAM permissions without printing secrets."
-- "APIGW.0301: API Gateway layer error. Incorrect IAM authentication information — verify AK/SK, security token expiry, project_id config."
-Actionable next steps provided, not bare stack trace ✓
+Scenario - operation failure troubleshooting via MCP tools:
+1. explain_error(message="APIGW.0301: Incorrect authentication or token expired", service="ECS")
+2. Returns suggestions: "Check KooCLI profile, region, project_id, and IAM permissions without printing secrets."
+Failure is correctly classified as authentication/permission issue.
+Gives actionable next step (check profile/region/project_id) not bare stack trace.

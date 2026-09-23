@@ -1,11 +1,5 @@
-=== D8-9 安装 ID 与遥测值脱敏 ===
-预期: installId 稳定持久; sanitizeValue 移除 AK/SK/token 等敏感值与非法字符
-实测: installId 稳定=true; sanitizeValue 控制字符/长度=OK; 敏感值移除=未移除(SPEC-MISMATCH)
-详情:
-generateOrRecoverInstallId() 第一次=e87b2066a52c...
-二次调用稳定=true
-sanitizeValue('line1\nline2\ttab') = "line1 line2 tab"
-sanitizeValue(300 chars) 长度=255 (期望 ≤255+3)
-sanitizeValue('ak=AK123456 sk=SKsecret token=Tok123') = "ak=AK123456 sk=SKsecret token=Tok123"
-根因: telemetry.mjs sanitizeValue 仅折叠控制字符+截断长度, 未做 AK/SK/token 等敏感值脱敏。
+=== CASE D8-9 ===  SPEC-MISMATCH
+  SUT: v1.1.7-next.0 (gitHead 0790e92a)
+  drift: sanitizeValue 未移除敏感值：控制字符/长度处理 OK，但敏感值保留
+  root: telemetry.mjs:189 sanitizeValue
 RESULT: SPEC-MISMATCH

@@ -1,10 +1,10 @@
 # FINDINGS — 缺陷发现清单（Hermes-deepseek-v4-pro-0813）
 
 > **落盘路径**：`results/Hermes/2026-09-23-113.44.197.147/Linux/FINDINGS.md`
-> **生成时间**：2026-09-23 05:28（北京时间）
-> **被测版本**：huaweicloud-devkit v1.1.6（npm latest，gitHead `46152dd`，PR #795/#796）
-> **执行方式**：2026-09-23 `run-today.sh` 22 支源码级探针 fresh 重跑（v1.1.6）+ `eval/harness/run-eval.mjs` + 真云补测（D4-13 只读子账号 / D4-14 VPC 建删归零+CTS / D3-S1/S2/C13/S4 真云场景 / D3-S6 FunctionGraph 建删归零 / D3-S3 沙箱预览）+ D2-26/D4-27 源码级直调探针
-> **提单说明**：SUT 由 v1.1.5@e7ed6f6 升级至 v1.1.6@46152dd，全部缺陷实测复现、根因未变；经上游 open issue 查重命中已跟踪缺陷单，不重复开单（`file_issue.py` 内置历史查重 → HISTORY_LINKS.md）。
+> **生成时间**：2026-09-23 17:05（北京时间）
+> **被测版本**：huaweicloud-devkit v1.1.7-next.0（npm @next，gitHead `0790e92a`，PR #800）
+> **执行方式**：2026-09-23 下午 `run-today.sh` 22 支源码级探针 fresh 重跑（v1.1.7-next.0）+ `eval/harness/run-eval.mjs` + 真云补测（D4-13 只读子账号 / D4-14 VPC 建删归零+CTS / D3-S1/S2/C13/S4 真云场景 / D3-S6 FunctionGraph 建删归零 / D3-S3 沙箱预览）+ D2-26/D4-27 源码级直调探针 + 收尾补删 OBS 遗留空桶归零
+> **提单说明**：SUT 由 v1.1.6@46152dd 升级至 v1.1.7-next.0@0790e92a，`git diff` 确认为纯版本号 bump（仅新 plugin manifest/package/CHANGELOG，零源码改动），全部缺陷实测复现、根因未变；经上游 open issue 查重命中已跟踪缺陷单，不重复开单（`file_issue.py` 内置历史查重 → HISTORY_LINKS.md）。
 
 ---
 

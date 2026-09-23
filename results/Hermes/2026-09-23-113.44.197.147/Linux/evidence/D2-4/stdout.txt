@@ -1,4 +1,6 @@
 === CASE D2-4 ===  FAIL
-  expected: 凭证字段与字符串(含小写 ak=/sk=)均脱敏 <redacted>
-  actual:   对象脱敏=true, lowercase字符串=ak=AK123456 sk=SKsecret(未脱敏=缺陷), uppercase=AK=<redacted> SK=<redacted>
-  detail:   safety-policy.mjs:45 .replace(/(AK|SK).../g) 大小写敏感无 /i → lowercase ak=/sk= 漏网(findings #3)
+  SUT: v1.1.7-next.0 (gitHead 0790e92a)
+  defect: 小写 ak=/sk= 不脱敏：redactSecrets 仅匹配大写 AK=/SK=，缺 /i 忽略大小写
+  root: safety-policy.mjs redactSecrets (大小写敏感)
+  来源: evidence/fresh-*.txt (2026-09-23 下午 fresh 重跑)
+RESULT: FAIL

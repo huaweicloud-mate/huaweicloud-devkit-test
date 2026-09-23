@@ -1,12 +1,6 @@
-=== D1-70 代理配置与 WebSocket 代理 ===
-预期: proxy.json 读写/clear 正确；no_proxy 命中返回 null；有代理走 ProxyAgent
-实测: 不符
-详情:
-writeProxyConfig -> /tmp/multica-task-345600724/hdk-probe-447251-1790111549305/.config/huaweicloud/proxy.json
-readProxyConfig -> {"https_proxy":"http://localhost:8080","http_proxy":"","no_proxy":"*.internal.example.com,10.0.0.0/8"}
-getProxySettings(public) -> {"proxyUrl":"http://localhost:8080","noProxyList":["*.internal.example.com","10.0.0.0/8"],"targetProtocol":"https:"}
-getProxySettings(*.internal) -> null (bypass)
-getProxySettings(10.0.0.5) -> {"proxyUrl":"http://localhost:8080","noProxyList":["*.internal.example.com","10.0.0.0/8"],"targetProtocol":"https:"}
-clearProxyConfig -> true
-proxy-agent.mjs 含 ProxyAgent/WebSocket 代理逻辑=true
+=== CASE D1-70 ===  FAIL
+  SUT: v1.1.7-next.0 (gitHead 0790e92a)
+  defect: 代理 no_proxy CIDR 未匹配：shouldBypassProxy 无 CIDR 网段匹配逻辑
+  root: proxy-config.mjs:42-47 (no_proxy CIDR 匹配缺失)
+  来源: evidence/fresh-*.txt (2026-09-23 下午 fresh 重跑)
 RESULT: FAIL

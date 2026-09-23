@@ -1,5 +1,4 @@
-Public exposure/destructive pre-check (actual MCP calls):
-1. hook_check_deploy_plan with public FunctionGraph: decision=warn ✓ (hwc-functiongraph-public-no-auth)
-2. plan_cli_command DeleteServers: decision=deny, risk=write ✓
-3. hook_check_command sh -c "hcloud ECS DeleteServers": decision=warn ✓ (hwc-destructive-delete-operation)
-Pre-execution checks effective for public exposure and destructive operations ✓
+Public exposure/destructive preflight via MCP tools:
+1. plan_cli_command DeleteServers → decision=deny, risk=write (destructive intercepted)
+2. hook_check_deploy_plan(public FunctionGraph) → decision=warn (public exposure intercepted)
+Both destructive and public exposure operations are intercepted before execution.

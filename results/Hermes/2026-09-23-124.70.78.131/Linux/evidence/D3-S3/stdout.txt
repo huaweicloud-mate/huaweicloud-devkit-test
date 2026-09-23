@@ -1,0 +1,68 @@
+check_user -> realnameVerified=true agreementSigned=true err=
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+connect -> status=connected wsId=8d898bc423254635bbe1
+[2026-09-23T08:51:07.436Z] uploadProject: /home/testbot2/.hdk-s3-mudv59da -> /workspace/.hdk-s3-mudv59da.tar.gz (archive=210 bytes, md5=d1a5cae8f9c0846b85ae4f6a63491988)
+[2026-09-23T08:51:07.487Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-3774276413/sandbox-upload-1790153467426/.hdk-s3-mudv59da.tar.gz, size=210, remotePath=/workspace/.hdk-s3-mudv59da.tar.gz)
+[2026-09-23T08:51:07.487Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-09-23T08:51:07.487Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-09-23T08:51:07.537Z] deployFileServer: writing script (2456 b64 chars)
+[2026-09-23T08:51:07.585Z] deployFileServer: starting server on port 8888
+[2026-09-23T08:51:07.621Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 16690\r\n\u001b]133;C\u0007\r\n"
+[2026-09-23T08:51:07.622Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+[2026-09-23T08:51:08.507Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-09-23T08:51:08.509Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-09-23T08:51:08.510Z] uploadViaHttpTunnel: tunnel ready, localPort=45853
+[2026-09-23T08:51:08.511Z] uploadViaHttpTunnel: waiting for server health on localhost:45853
+[2026-09-23T08:51:08.511Z] waitForServerReady: attempt 1, checking http://localhost:45853/health
+[2026-09-23T08:51:08.549Z] waitForServerReady: server ready on port 45853 after 0 retries
+[2026-09-23T08:51:08.549Z] uploadViaHttpTunnel: sending POST with 210 bytes
+[2026-09-23T08:51:08.588Z] uploadViaHttpTunnel: upload complete (bytes=210, md5=d1a5cae8f9c0846b85ae4f6a63491988)
+upload_project -> ok=true md5Verified=true
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+deploy_nginx -> ok=true port=8086 url=
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mudv59da/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""},"tunnel_u
+close_session -> ok
+[OK] 沙箱 connect 成功
+[OK] s3-connect/upload/deploy 链路
+[OK] 部署返回可访问 URL 或检查通过
+[OK] 会话正常关闭

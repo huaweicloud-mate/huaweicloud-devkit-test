@@ -31,11 +31,18 @@ const FIXTURES = [
   'd4-12-supply-chain.mjs',
   'd4-29-classify-assert.mjs',
   'd8-10-mcp-config-backup-merge.mjs',
+  // Issue #16 Track A（mock 层 + 生命周期/互通夹具）
+  'd9-11-ws-tunnel-lifecycle.mjs',
+  'd9-6-cross-client-interop.mjs',
+  'd3-c14-sandbox-cred-mock.mjs',
 ];
 
 const summary = [];
+// 不需要 hdkSrc 参数的夹具（纯 mock 层测试）
+const NO_HDKSRC = new Set(['d9-11-ws-tunnel-lifecycle.mjs']);
 for (const f of FIXTURES) {
-  const args = [join(__dirname, f), hdkSrc];
+  const args = [join(__dirname, f)];
+  if (!NO_HDKSRC.has(f)) args.push(hdkSrc);
   if (EVID) args.push('--evid', EVID);
   const code = await new Promise((resolve) => {
     const p = spawn(process.execPath, args, { stdio: ['inherit', 'inherit', 'inherit'] });

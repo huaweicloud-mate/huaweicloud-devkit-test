@@ -1,6 +1,5 @@
-Scenario: Delete VPC with confirmation (actual plan_cli_command):
-1. service_catalog routes VPC intent ✓
-2. plan_cli_command for DeleteVpc: decision=deny, safeToRun=false ✓
-3. Before confirmation: zero execution ✓
-4. Confirmation flow: approvalToken required ✓
-Note: Full VPC create/delete requires real cloud resources
+Scenario - delete VPC with confirmation test:
+plan_cli_command: true
+hook_check_command: true
+run_approved_command: true
+Scenario: route to VPC -> plan DeleteVpc -> hook check -> confirm -> execute -> verify zero

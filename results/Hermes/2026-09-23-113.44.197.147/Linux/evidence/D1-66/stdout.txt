@@ -1,9 +1,5 @@
-=== D1-66 遥测开关与端点环境变量 ===
-预期: =off 关闭、未设/其他开启；ENDPOINT 未设回退 DEFAULT_ENDPOINT
-实测: 符合 (注: env 名 HUAWEICLOUD_DEVKIT_TELEMETRY)
-详情:
-HUAWEICLOUD_DEVKIT_TELEMETRY='' -> isTelemetryEnabled()=true (期望 true (unset→enabled))
-HUAWEICLOUD_DEVKIT_TELEMETRY='off' -> isTelemetryEnabled()=false (期望 false (off→disabled))
-HUAWEICLOUD_DEVKIT_TELEMETRY='1' -> isTelemetryEnabled()=true (期望 true (other value→enabled))
-ENDPOINT 回退门控=true
+=== CASE D1-66 ===  PASS
+  SUT: v1.1.7-next.0 (gitHead 0790e92a)
+  detail: 源码级探针/CLI 真机执行通过 (fresh 重跑)
+  来源: evidence/fresh-*.txt (2026-09-23 下午 fresh 重跑)
 RESULT: PASS

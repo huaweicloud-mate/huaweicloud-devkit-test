@@ -111,9 +111,12 @@ function loadCloudCreds() {
   const credErrsOnMissing = /sessionId|devStageId|session|devStage/i.test(credErr);
   test('D3-C14', 'hdkitCredentials-missing-errors', credErrsOnMissing, credErr.slice(0, 120), '缺 sessionId+devStageId 报错');
 
-  // hwlink getCredentials 返回 {ak,sk,securitytoken}
+  // hwlink getCredentials 返回 {ak,sk,securitytoken}（ak/sk 值脱敏，避免凭证泄露）
   const hw = getCredentials();
-  test('D3-C14', 'hwlink-getCredentials-struct', !!hw && typeof hw === 'object', JSON.stringify(hw).slice(0, 120), 'getCredentials 返回凭证对象');
+  const hwMasked = hw && typeof hw === 'object'
+    ? JSON.stringify({ ak: hw.ak ? String(hw.ak).slice(0, 4) + '****' : undefined, sk: hw.sk ? '****' : undefined, securitytoken: hw.securitytoken ? String(hw.securitytoken).slice(0, 2) + '****' : '' })
+    : JSON.stringify(hw);
+  test('D3-C14', 'hwlink-getCredentials-struct', !!hw && typeof hw === 'object' && !!hw.ak && !!hw.sk, hwMasked.slice(0, 120), 'getCredentials 返回凭证对象(ak/sk 已脱敏)');
 }
 
 const output = JSON.stringify({ total: results.length, passed: results.filter(r => r.pass).length, failed: results.filter(r => !r.pass).length, results }, null, 2);

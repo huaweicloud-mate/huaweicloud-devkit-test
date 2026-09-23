@@ -42,9 +42,17 @@ node eval/harness/fixtures/run-all.mjs <hdk src> [--evid <dir>]
 | D4-29 | `d4-29-classify-assert.mjs` | 分类断言与原始命令分类入口夹具（classifyRawCommand/classifyTextCommand/assertAllowed/redactSecrets） | ✅ | 无 |
 | D8-10 | `d8-10-mcp-config-backup-merge.mjs` | MCP 配置备份与合并夹具（三风格合并 saveAgentDelta/takeAgentDelta/purgeBackup/extractUserDelta/applyUserDelta） | ✅ | 无 |
 
+### Issue #16 Track A（mock 层 + 生命周期/互通夹具，3 项）
+
+| 用例 | 脚本 | 用途 | 本机可跑 | BLOCKED 条件 |
+|---|---|---|---|---|
+| D9-11 | `d9-11-ws-tunnel-lifecycle.mjs` | WebSocket 隧道通道生命周期 mock 夹具（建连→认证→心跳→正常/异常断开→重连→幂等关闭→帧日志，依赖 `mock/hwlink-ws-mock.mjs`） | ✅ | 无 |
+| D9-6 | `d9-6-cross-client-interop.mjs` | 跨客户端互通协议级夹具（≥2 桩客户端 initialize/tools/list/call/resources/ping/error 一致性，依赖 `mock/mcp-client-stub.mjs`） | ✅ | 无 |
+| D3-C14 | `d3-c14-sandbox-cred-mock.mjs` | sandbox 凭证 mock 层夹具（mock fetch 拦截 HDKit API + 凭证注入 + 端点覆盖 + 独立启停，依赖 `mock/sandbox-cred-mock.mjs`） | ✅ | 无 |
+
 ## 判定口径
 
-- 不含宿主硬依赖的项（批次② D2-10/D2-13/D9-9/D9-10/D9-11/D9-6 + 批次③全部 7 项）：本地执行即可获得真实 PASS/FAIL。
+- 不含宿主硬依赖的项（批次② D2-10/D2-13/D9-9/D9-10/D9-11/D9-6 + 批次③全部 7 项 + Issue #16 Track A 全部 3 项）：本地执行即可获得真实 PASS/FAIL。
 - EXP-D5-2-1/2-3 依赖 **Codex 客户端真实宿主**（插件发现/加载会话、宿主层 tools/list 通道枚举）。夹具已提供宿主检测与协议层基线；宿主未安装时按设计然（BLOCKED）归档，测试机（已配 AK/SK + 客户端）就绪后宿主层即转 PASS。
 - 时间断言遵循规范：超时/生命周期窗口用范围断言（≤ 阈值/2s 窗口/幂等计数），不禁毫秒级相等比较。
 - 批次③全部 7 项为纯代码夹具（源码级直调 + mock），无外部环境依赖，本地执行即 PASS。D1-69 通过 `spawn(process.execPath, [hdkSrc/setup-cli.mjs, ...])` 直接执行目标源码 CLI（非 npx），测试传入的 hdkSrc 版本行为；夹具自动探测 `node:sqlite` 支持并补 `--experimental-sqlite` flag（Node 22 需要），自包含、可复现。

@@ -1,5 +1,11 @@
-Plaintext secret API block:
-hook_check_command checks commands before execution.
-Commands that would return plaintext secrets (e.g., hcloud DEW ShowSecret) are classified as write/deny.
-Plan_cli_command for secret-reading APIs requires approval.
-Note: OpenCode is non-hook client, hook_check_command is pre-check MCP tool.
+Plaintext secret API interception test (REAL FINDING):
+Command: hcloud ECS CreateServers --adminPass Password123! --ak AKEXAMPLE --sk SKEXAMPLE
+Decision: allow
+Findings: 0
+
+FINDING: hook_check_command does NOT intercept inline secrets (--adminPass, --ak, --sk)
+in hcloud commands. The risk rules match credential FILE reads and destructive operations,
+but do not detect plaintext secrets passed as command-line arguments.
+
+Root cause: risk-rule-engine.mjs loadRiskRules() rules do not include a pattern for
+inline secret arguments (--adminPass, --ak, --sk, --password, --token) in hcloud commands.

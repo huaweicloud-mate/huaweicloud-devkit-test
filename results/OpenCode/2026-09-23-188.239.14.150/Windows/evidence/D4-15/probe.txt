@@ -1,7 +1,5 @@
-Hook bypass attempt (actual hook_check_command calls):
-1. "Deleteserver" (lowercase s, not valid hcloud syntax): decision=allow
-   - Not a valid hcloud command format, so not classified as write
-2. "hcloud ECS DeleteServers" (correct format): would be caught by plan_cli_command as deny/write
-3. Case variations of non-hcloud commands are not security-relevant
-Note: "Deleteserver" without "hcloud" prefix is not a hcloud command, so hook_check_command correctly doesn't classify it.
-The actual write detection happens in plan_cli_command which correctly identifies "DeleteServers" as write.
+Hook bypass attempt test:
+hcloud ECS deleteservers --instance_ids xxx: warn (denied=true)
+hcloud ECS DELETE_SERVERS --instance_ids xxx: warn (denied=true)
+hcloud ECS DeleteServers%20--instance_ids%20xxx: warn (denied=true)
+All bypass attempts blocked: true

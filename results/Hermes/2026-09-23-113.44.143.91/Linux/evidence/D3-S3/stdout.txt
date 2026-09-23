@@ -1,0 +1,11 @@
+=== D3-S3 场景-沙箱预览出URL ===
+[1] serviceCatalog("把本地静态网页部署成可访问的预览网站") -> services=["Sandbox","DevStation"]
+[2] check_user -> realname=true agreement=true
+[3] sandbox_connect -> status=connected session=8d898bc423 wsId=8d898bc423
+[4] upload_project -> ok=true md5Verified=true
+[5] deploy_nginx -> ok=true type=static
+[6] deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"FAIL","detail":""},"output_dir":{"status":"PASS","detail":"(/workspace/d3s3-preview/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""},"tunnel_url_accessible":{"status":"FAIL","detail":"(no tunnel)"},"qr_code":{"status":"SKIP","detail":"(not a cross-platform project)"}},"score":{"pass":1,"total":4},"missingSteps":"nginx_serving, devbridg
+[7] close_session -> "ok"
+
+nginx_serving=false tunnel_url_accessible=false publicUrl=undefined
+RESULT: FAIL (deploy_nginx + deploy_check nginx serving + 公网URL可访问)

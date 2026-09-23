@@ -1,0 +1,130 @@
+===== [0] 包版本基线 =====
+└── huaweicloud-devkit@1.1.7-next.0
+node v22.13.0
+0790e92a2065db6b0098394697d4a2c1111d740f
+===== [1] classify (D4-1/2/3/15/16) =====
+exit=0
+6
+===== [2] hook (D4-5/7/9/21/22) =====
+exit=0
+5
+===== [3] auth (D2-4/11/12) =====
+exit=0
+3
+===== [4] protocol (D5-3/D9-*) =====
+exit=0
+8
+===== [5] extended (D2-16/D9-9/D1-41) =====
+exit=0
+3
+===== [6] d4-8 (Python/Node 策略一致) =====
+exit=0
+[py  encoded] block  | echo x | base64 -d | bash   -> Huawei Cloud safety hook blocked this action: The command decodes an encoded pay
+=====END D4-8=====
+(对照 Node classifyTextCommand 结果见 classify.log: HW_ACCESS_KEY->allow / HUAWEICLOUD->deny / hcloud write->deny)
+===== [7] wrap-probe (D4-16 补充) =====
+exit=0
+===== [8] hcl-probe (D4-21 补充) =====
+exit=0
+===== [9] d8 (D8-7 七技能) =====
+exit=0
+7
+===== [10] supplement (D1-26/27 D2-2/5 D3-* D4-4/6/11/17 D6-*) =====
+exit=0
+16
+===== [11] supplement-import (D1-30 D4-10) =====
+exit=0
+2
+===== [12] d1 安装域 (隔离 HOME+HERMES_HOME) =====
+exit=0
+16
+===== [13] updatecheck (D1-28/31/33) =====
+exit=0
+PASS: D1-33 sessionId 清洗(非法字符→_)
+=== DONE ===
+===== [14] disttags (D1-39/NR3-10) =====
+exit=0
+PASS: NR3-10 queryDistTags 返回对象(无 EINVAL/异常)
+=== DONE ===
+===== [15] merge (白名单合并) =====
+exit=0
+- 写入仅新增 mcpServers['huaweicloud-devkit'] = {...MCP_ENTRY}，不覆盖其它键
+=== DONE ===
+===== [16] routing (D10-3 serviceCatalog) =====
+exit=0
+    recommendedServices = Incentive Voucher
+    recommendedSkills   = huawei-voucher
+=== DONE ===
+===== [17] D1-40 反向下发防护 =====
+exit=0
+
+=== D1-40 反向下发防护结论: ALL PASS ===
+===== [18] D1-42 dismiss =====
+exit=0
+
+=== D1-42 探针结论: ALL PASS ===
+===== [19] D1-45 兜底+预热 =====
+exit=0
+
+=== D1-45 探针结论: ALL PASS ===
+===== [20] D5-1 清单发现 =====
+exit=0
+
+=== D5-1 清单发现加载结论: ALL PASS ===
+===== [21] D4-6 脱敏 =====
+exit=0
+=== D4-6 源码级脱敏结论: ALL PASS ===
+（注：真云 E2E「创建 ECS 含 adminPass 回显警告」需真云写场景，属外部依赖，另以 BLOCKED 四要素记录；flag/JSON 形态缺口见 FINDINGS #7）
+===== [22] D2-26 凭证备份/恢复 =====
+exit=0
+    }
+  ]
+}
+===== [23] D4-27 redactSecrets/redactOutput 双路径脱敏 =====
+exit=0
+    }
+  ]
+}
+===== [24] new-env (D1-65/66/67/68) =====
+exit=0
+4
+===== [25] new-config (D2-27/D1-70/D8-9/D8-10/D6-9) =====
+exit=0
+5
+===== [26] new-safety (D10-4/D4-26/D4-29/D4-28/D4-25) =====
+exit=0
+5
+===== [27] new-mcp (D9-10/D9-11) =====
+exit=0
+2
+===== [28] new-cli (D1-69) =====
+exit=0
+1
+===== [29] new-scenario (D3-S1/S5/S8) =====
+exit=0
+3
+===== [30] new-cloud (D3-S2/C13/C14/S4/S3) =====
+exit=0
+5
+===== [31] new-fg-rds (D3-S6/S7) =====
+exit=0
+2
+===== [32] eval-harness (D10-3 serviceCatalog 15 条) =====
+exit=0
+
+=== 路由准确率基线 ===
+HIT=3 MISS=11 N/A=1 | 准确率=21.4% (分母=HIT+MISS=14)
+结果落盘: /home/testbot2/devkit-test/Hermes/huaweicloud-devkit-test/eval/results/eval-run-20260923085139.csv
+===== [33] exp-e08 诊断路由 =====
+exit=0
+
+=== EXP-E08 诊断能力结论: ALL PASS ===
+===== [34] realcloud-probe (D2-1/D3-C4/D4-14/D4-18/19/20) =====
+exit=0
+35
+===== [35] D4-13 只读子账号 =====
+exit=0
+    }
+  ]
+}
+===== ALL DONE (source + realcloud probes) =====

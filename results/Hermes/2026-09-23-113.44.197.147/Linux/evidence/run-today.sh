@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 每日测试执行 runner — Hermes / Linux / v1.1.6 (fresh 全量重跑 2026-09-23)
+# 每日测试执行 runner — Hermes / Linux / v1.1.7-next.0 (fresh 全量重跑 2026-09-23 afternoon)
 set -uo pipefail
 export PATH="$HOME/nodejs/bin:$HOME/bin:$PATH"
 export HDK_PLUGIN_SRC="/home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core"

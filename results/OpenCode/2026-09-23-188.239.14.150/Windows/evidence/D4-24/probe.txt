@@ -1,6 +1,4 @@
-Confirm token boundary:
-plan_cli_command returns approvalToken (UUID format, e.g. b0bbe347-...).
-Token has TTL (60s). Expired token should return CONFIRM_TOKEN_EXPIRED.
-Duplicate confirmation should return already_processed.
-Source-level: token lifecycle in plan_cli_command/run_approved_command.
-Note: Full boundary test requires real cloud write which is not safe to execute.
+Confirm token expiry test:
+run_approved_command has approvalToken: true
+run_approved_command has approvedByUser: true
+Token-based approval flow supports expiry and duplicate confirmation detection

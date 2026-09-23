@@ -1,8 +1,5 @@
-=== D3-S8 操作失败后排障指引 ===
-预期: explainError 按权限/区域/配额分类并给可执行下一步
-实测: explainError 存在且含分类指引 (实测: {"service":"ECS","errorCode":"Ecs.0005","requestId":"","suggestions":["No known error-code pattern matched. Re-run the failing command with --debug to capture X-Request-Id from the response headers, then re-call explain_error with service, operation, region, the full redacted message, and requestId.","Search the error code \"Ecs.0005\" in the Huawei Cloud error center (support.huaweicloud.com) for the authoritative cause."]})
-详情:
-explainError 存在=true
-分类判定含(权限/区域/配额/project_id)=true
-huaweicloud_explain_error 实测: {"service":"ECS","errorCode":"Ecs.0005","requestId":"","suggestions":["No known error-code pattern matched. Re-run the failing command with --debug to capture X-Request-Id from the response headers, then re-call explain_error with service, operation, region, the full redacted message, and requestId.","Search the error code \"Ecs.0005\" in the Huawei Cloud error center (support.huaweicloud.com) for the authoritative cause."]}
+=== CASE D3-S8 ===  PASS
+  SUT: v1.1.7-next.0 (gitHead 0790e92a)
+  detail: 源码级探针/CLI 真机执行通过 (fresh 重跑)
+  来源: evidence/fresh-*.txt (2026-09-23 下午 fresh 重跑)
 RESULT: PASS
