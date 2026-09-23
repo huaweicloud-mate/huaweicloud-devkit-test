@@ -1,0 +1,10 @@
+=== D3-S2 场景-删VPC先确认 (修正: 全量 ListVpcs 校验未确认前 VPC 仍在) ===
+[1] serviceCatalog("删除一个 VPC") -> services=["VPC","EIP"] skills=["huawei-vpc"]
+[2] 创建 VPC hdk1-s2-0197758466 -> 85254fb1-ff64-4472-8cc1-c49d3dd6af2e
+[3] plan_cli_command(DeleteVpc) -> decision=deny risk=write (期望 deny, 未自执行)
+[4] hook_check_command(DeleteVpc) -> decision=warn findings=1
+[5] 未确认前全量 ListVpcs 仍含本 VPC=true (零执行断言: plan 返回 deny 但未删除)
+[6] run_approved(DeleteVpc) -> ok=true exitCode=0
+[7] 确认删除后全量 ListVpcs 不再含本 VPC=true (归零)
+
+RESULT: PASS (未确认前仍在 + 确认后归零)

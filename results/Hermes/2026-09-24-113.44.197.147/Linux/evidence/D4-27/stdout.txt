@@ -1,0 +1,11 @@
+=== D4-27 双路径脱敏完整性 ===
+SUT: v1.1.7-next.1 (gitHead 657ceb7)
+[路径1] redactSecrets 字符串: 大写 AK=/SK= 脱敏 OK; 小写 ak=/sk= 仍明文; 裸 token/password/adminPass 部分明文
+[路径1b] redactSecrets 对象: 全部脱敏 OK
+[路径2a] redactOutput JSON: 全部脱敏 OK
+[路径2b] redactOutput 文本: 小写 ak= 仍明文 (AKLOWER... 泄漏)
+断言汇总: 6 条, PASS 3, FAIL 3 (R2 小写 ak/sk, R3 裸 token/password/adminPass, R6 文本路径)
+defect: 双路径脱敏缺口（小写 ak=/sk= + 裸 token 等未脱敏）
+root: safety-policy.mjs:42-45 redactString 关键字缺裸 token + 大小写敏感无 /i
+来源: evidence/fresh-d4-27.txt (2026-09-24 fresh 重跑)
+RESULT: FAIL
