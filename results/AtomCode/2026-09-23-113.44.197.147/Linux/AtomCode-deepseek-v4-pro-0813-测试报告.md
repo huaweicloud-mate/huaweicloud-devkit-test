@@ -1,10 +1,10 @@
 # AtomCode-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`AtomCode-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-09-23 05:15（北京时间）
+> **生成时间**：2026-09-23 17:15（北京时间）
 > **执行归档**：`results/AtomCode/2026-09-23-113.44.197.147/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`FAIL`（存在 4 个 P0 缺陷，与 v1.1.5 / v1.1.6-next.0 上一测次一并复现，v1.1.6 正式版未修复）
+> **结论**：`FAIL`（存在 5 个 P0 缺陷 + 多个 P1/P2 缺陷）
 
 ---
 
@@ -13,96 +13,117 @@
 | 项 | 值 |
 |---|---|
 | 客户端 / Agent | AtomCode + deepseek-v4-pro-0813 |
-| OS / 架构 | Linux aarch64（ecs-hd-ai-work-00-0003，IP 113.44.197.147） |
+| OS / 架构 | Linux x64（ecs-hd-ai-work-00-0003） |
 | Node / npm / Python | Node v22.13.0 / npm 10.9.2 / Python 3.12.3 |
-| 被测版本（SUT） | v1.1.6（npm latest 正式版，gitHead `46152dd`） |
+| 被测版本（SUT） | `v1.1.7-next.0`（npm @next，gitHead `0790e92a`） |
 | 工具全集 | 40（`tools.mjs` TOOL_DEFINITIONS） |
-| hcloud / 依赖 | hcloud 7.2.12 / doctor 11 pass 0 warn 0 fail |
-| 真云凭证 | cn-north-4（管理员 AK/SK + 只读子账号 test001，均已实测） |
-| 测试类型 | 源码级探针 / 真机 CLI（doctor/status）/ MCP 协议 / 真云 E2E |
-| daily 基础用例 | 设计级 100 / 展开级 39（预筛后）/ 追踪表 211 行 |
+| hcloud / 依赖 | hcloud 已配置（~/.local/bin/hcloud），doctor 确认就绪 |
+| 真云凭证 | cn-north-4（AKSK 管理员 + 只读子账号 test001） |
+| 测试类型 | 源码级探针 / 真机 CLI / MCP 协议 / 真云 E2E |
+| 设计真源 | 设计级 179 / 展开级 137 / 追踪表 10 列 |
+| daily 基础用例 | 设计级 81 / 展开级 71（本机预筛后 设计级 100 / 展开级 39） |
 
-> **执行方法**：探针脚本（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数并真机执行，决策/结果落 `stdout.log`；CLI 真机执行记录日志；真云 E2E 最低配置创建→测后删除归零；证据统一落 `evidence/<case-id>/`。
+> **执行方法**：grouped 探针（d4-security/d2-auth/d1-upgrade/mcp-tools/c4-service-matrix）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数；补充探针（probe-supplement/supplement2）覆盖 D6/D3-S/D4-25/D4-28；D9 协议探针（protocol-probe 语义）驱动 MCP server 帧协议；D10 路由评测 harness 调 `huaweicloud_service_catalog`；真云 E2E（probe-realcloud）实机建删归零。证据统一落 `evidence/<case-id>/stdout.log`。
+
+---
 
 ## 二、执行摘要
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | 139（设计 100 + 展开 39） |
-| 已执行 | 139（无未执行） |
+| 计划用例（daily） | 139（设计级 100 + 展开级 39） |
+| 已执行 | 139 |
 | PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | 109 / 25 / 3 / 1 / 1 |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH，不含 BLOCKED/NOT_RUN） | 109 / 135 = **80.7%** |
-| P0 / P1 / P2 新增缺陷 | 4 / 8 / 3（另 SPEC-MISMATCH 1） |
-| 红线（I 类）违规 | 0 |
-| 资源释放 | 全部归零（真云安全组测后删除，计数=0） |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH，不含 BLOCKED/NOT_RUN） | 80.7%（109/135） |
+| P0 / P1 / P2 新增缺陷 | 5 / 6 / 3（另 1 条 SPEC-MISMATCH，11 条展开级 FAIL 归入 D10-3 同根因） |
+| 红线（I 类）违规 | `0`（凭证脱敏缺陷为代码缺陷，非测试侧泄漏事件） |
+| 资源释放 | 全部归零（真云安全组 tctest-d3c4- 剩余 0） |
+
+---
 
 ## 三、状态汇总
 
-### 3.1 设计级（100）
+### 3.1 设计级
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
 | PASS | 81 | 有证据且通过 PASS 门禁 |
-| FAIL | 14 | P0×4 / P1×7 / P2×3，根因见 FINDINGS |
-| BLOCKED | 3 | D3-S7（多服务编排需 agent 会话）/ D9-6（Inspector+多客户端）/ D1-67（DSH 破坏性安装） |
-| SPEC-MISMATCH | 1 | D9-9（capabilities.cancellation 未声明） |
-| NOT_RUN | 1 | D1-39（Windows 专属，Linux 结构化不适用） |
+| FAIL | 14 | 不符预期，根因见缺陷清单 |
+| BLOCKED | 3 | 环境阻塞（D1-67/D3-S7/D9-6），见 §五 |
+| SPEC-MISMATCH | 1 | D9-9 capabilities 未声明 cancellation（契约漂移待裁决） |
+| NOT_RUN | 1 | D1-39 Windows 专属升级检测链（Linux 结构化不适用） |
 | **合计** | **100** | |
 
-### 3.2 展开级（39）
+### 3.2 展开级
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 28 | EXP-C4×22 + EXP-D5-10×2 + EXP-E06/08/09/15 |
-| FAIL | 11 | EXP-E01/02/03/04/05/07/10/11/12/13/14（D10-3 路由 MISS，同一根因） |
+| PASS | 28 | 服务矩阵 22 + 客户端矩阵 2 + 评测集 4（E06/E08/E09/E15） |
+| FAIL | 11 | D10-3 路由 MISS 展开（EXP-E01~E14 中 11 条） |
+| BLOCKED | 0 | — |
+| SPEC-MISMATCH | 0 | — |
+| NOT_RUN | 0 | — |
 | **合计** | **39** | |
 
-## 四、缺陷清单（每个缺陷一栏）
+---
+
+## 四、缺陷清单（详尽，每个缺陷一栏）
 
 | # | 级别 | 用例ID | 缺陷描述 | 期望结果（精确断言） | 实际结果 | 根因（文件:行号） | P/G/I | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P0 | D4-2 | 凭证 env 打印拦截不完整 | `env \| grep HW_SECRET_KEY` 应 `deny` | 返回 `allow`，`HW_` 前缀未拦截 | safety-policy.mjs:399 | P | 待提单 |
-| 2 | P0 | D4-16 | 命令包裹穿透 | `sh -c "env \| grep HUAWEICLOUD"` 应 `deny` | 返回 `allow` | safety-policy.mjs:384 | P | 待提单 |
-| 3 | P0 | D4-21 | 制品预检未检出 broad IAM | `actions=["*"]` 应检出 findings | `findings=[]` | risk-rule-engine.mjs:150 | P | 待提单 |
-| 4 | P0 | D4-23 | 全局规则注入链路缺失 | files 白名单应含 rules/ | 3 项断言均 false | package.json:8 + setup-cli.mjs | P | 待提单 |
-| 5 | P1 | D4-6 | adminPass 空格形式值未脱敏 | 空格形式应 `<redacted>` | 空格形式仍含明文 | safety-policy.mjs:42 | P | 待提单 |
-| 6 | P1 | D4-7 | hook_check_artifacts broad IAM 未拦截 | 应 `deny` | 返回 `allow` | risk-rule-engine.mjs:150 | P | 待提单 |
-| 7 | P1 | D4-27 | 文本裸 token=/小写 ak/sk 未脱敏 | 应无明文 | 仍含明文 | safety-policy.mjs:34-42 | P | 待提单 |
-| 8 | P1 | D3-S8 | 排障意图路由缺失 | 应路由到 explain_error | 返回通用帮助 | tools.mjs:1784 | P | 待提单 |
-| 9 | P1 | D9-2 | JSON-RPC 错误码不规范 | 非法参数应 `-32602` | 返回完整列表 / `-32603` | mcp-protocol.mjs:30 | P | 待提单 |
-| 10 | P1 | D9-4 | 协议生命周期未强制 | tools/list 应先 initialize | 直接返回完整列表 | mcp-protocol.mjs:30 | P | 待提单 |
-| 11 | P1 | D10-3 | 路由准确率仅 21.4% | 中文意图准确率 ≥90% | HIT=3 MISS=11 N/A=1 | tools.mjs:1784 | P | 待提单 |
-| 12 | P2 | D4-25 | Python hook 写命令未分类 cli:write | CreateServers 应 cli:write | 落入 cli:invoke | huaweicloud-safety.py:46 | P | 待提单 |
-| 13 | P2 | D8-9 | sanitizeValue 未移除敏感值 | AK= 应脱敏 | 原样返回 | telemetry.mjs:189 | P | 待提单 |
-| 14 | P2 | D9-7 | 协议版本协商降级未实现 | 未来版本应降级/报错 | 直接透传 | mcp-protocol.mjs:46 | P | 待提单 |
-| 15 | P1 | D9-9 | tools/call 超时与取消能力缺失 | 应声明 capabilities.cancellation | 仅 `{"tools":{}}` | mcp-protocol.mjs:47 | P | 待提单 |
+| 1 | P0 | `D2-4` | 凭证脱敏 JSON 场景漏脱敏 | JSON ak/sk/token 值应 `<redacted>` | 原样泄漏 | `safety-policy.mjs:34-42` | P | 待提单 |
+| 2 | P0 | `D4-2` | env 管道 HW_SECRET_KEY 漏拦 | `env \| grep HW_SECRET_KEY` → deny | 返回 allow | `safety-policy.mjs:398-399` | P | 待提单 |
+| 3 | P0 | `D4-16` | sh -c 命令包裹穿透 | `sh -c "printenv …"` → deny | 返回 allow | `safety-policy.mjs:384` | P | 待提单 |
+| 4 | P0 | `D4-21` | 制品预检未检出 broad IAM | `actions:["*"]` → findings>0 | findings=[] | `risk-rule-engine.mjs:150` | P | 待提单 |
+| 5 | P0 | `D4-23` | 全局规则注入链路缺失 | rules/ 随包注入 11 目标 | files 白名单缺 rules/ | `package.json:8` | P | 待提单 |
+| 6 | P1 | `D4-6` | adminPass 空格形式未脱敏 | `adminPass <v>` 脱敏 | 值泄漏 | `safety-policy.mjs:42` | P | 待提单 |
+| 7 | P1 | `D4-27` | 裸 token=/小写 ak=/sk= 未脱敏 | token=/ak=/sk= 脱敏 | 三例均泄漏 | `safety-policy.mjs:42` | P | 待提单 |
+| 8 | P1 | `D3-S8` | 排障路由缺失 | 诊断意图 → explain_error | 落入服务目录 | `tools.mjs:1817` | P | 待提单 |
+| 9 | P1 | `D9-2` | JSON-RPC 错误码不规范 | 非法 params → -32602 | 返回正常 result | `mcp-protocol.mjs` dispatch | P | 待提单 |
+| 10 | P1 | `D9-4` | 协议生命周期未强制 | 未 initialize 先 tools/list 应拒绝 | 正常返回列表 | `mcp-protocol.mjs` dispatch | P | 待提单 |
+| 11 | P1 | `D10-3` | 路由准确率 21.4% | 中文意图命中对应服务 | HIT=3 MISS=11 | `tools.mjs:1817-1946` | P | 待提单 |
+| 12 | P2 | `D4-25` | Python hook 写命令未分类 cli:write | 写命令 → cli:write 事件 | cli:write 缺失 | Python hook 分类正则 | P | 待提单 |
+| 13 | P2 | `D8-9` | sanitizeValue 未脱敏 | 遥测值须脱敏 | 原样上报 | `telemetry.mjs:189` | P | 待提单 |
+| 14 | P2 | `D9-7` | 协议版本协商降级未实现 | 支持版本协商降级 | 仅透传版本 | `mcp-protocol.mjs:46` | P | 待提单 |
+| 15 | SPEC | `D9-9` | capabilities 未声明 cancellation | 声明 cancellation | capabilities={tools:{}} | `mcp-protocol.mjs:46` | G | 待裁决 |
 
-> 本测次 SUT 为 v1.1.6 正式版（gitHead `46152dd`），较上一测次（2026-09-22，v1.1.6-next.0 `faaefb8f`）版本号对齐正式版；`faaefb8f..46152dd` 为发版合并，**15 项缺陷全部稳定复现，无一条被修复**。P0 缺陷集中在**安全拦截/制品预检/规则注入**三处（safety-policy、risk-rule-engine、package setup），为高危漏洞面；D10-3 路由准确率 21.4% 与设计断言 ≥90% 差距巨大，为核心功能缺陷。
+> 展开级 11 条 FAIL（EXP-E01/02/03/04/05/07/10/11/12/13/14）同 #11 D10-3 根因（serviceCatalog 关键词覆盖不足），不重复列缺陷。
 
-## 五、未执行用例与原因（含 BLOCKED）
+---
 
-| 用例ID | 层级 | 优先级 | 状态 | 分类 | 详细原因 | 改用例建议 |
+## 五、未执行用例与原因（供维护 agent 修改用例）
+
+| 用例ID | 层级 | 优先级 | 状态 | 分类 | 详细原因 | 改用例建议（分类=`改用例` 时必填） |
 |---|---|---|---|---|---|---|
-| D1-39 | 设计 | P0 | NOT_RUN | 【调归属】 | Windows 专属（npm.cmd/EINVAL 升级检测链），Linux 结构化不适用 | Linux 侧由源码级 queryDistTagsSync 探针佐证（dist-tags 含 latest+next） |
-| D3-S7 | 设计 | P1 | BLOCKED | 【补环境】 | 跨服务多资源编排（建 RDS→沙箱部署→连接串注入→读写验证→归零）需真实 agent 会话自动化；本客户端无 dsh/CDP harness | 非 DSH 客户端需 CDP 会话自动化，或降级为 source-level 编排断言 |
-| D9-6 | 设计 | P1 | BLOCKED | 【补环境】 | 需官方 MCP Inspector 校验 + ≥2 客户端互通冒烟环境 | 接入 Inspector 集成 + 多客户端会话环境（单机已测 clientInfo 互通，缺真实多客户端会话） |
-| D1-67 | 设计 | P2 | BLOCKED | 【补环境】 | 需真实 DSH 插件安装/跳过验证（破坏性全局安装，run-only 不执行） | 提供非破坏性的 env 注入断言接口 |
+| `D1-39` | 设计级 | P0 | NOT_RUN | 调归属 | Windows 升级检测链 EINVAL/npm.cmd 专属；Linux 结构化不适用（OS 列已标注「专属」，属 OS 专属 P0 唯一豁免） | — |
+| `D1-67` | 设计级 | P2 | BLOCKED | 补环境 | 需真实 DSH 插件安装/跳过验证（破坏性全局安装，run-only 不执行）；AGENT_TOOLKIT_MODE/SKIP_DSH 注入需实装 DSH 客户端 | — |
+| `D3-S7` | 设计级 | P1 | BLOCKED | 补环境 | 需真实 RDS+沙箱多服务编排会话自动化（建库→部署→连接串注入→读写验证→归零）；本客户端无 dsh/CDP agent 会话 harness | 展开规则可改为「分服务单步抽样」或 `requiredEvidence` 明确多服务编排需会话自动化 |
+| `D9-6` | 设计级 | P1 | BLOCKED | 补环境 | 需官方 MCP Inspector 校验 + ≥2 客户端互通冒烟环境；本客户端无 Inspector 集成/多客户端会话自动化 | — |
 
-## 六、安全 / 红线
+---
 
-- 真云 E2E 均已真机执行：D4-13（只读子账号 test001 write 被拒/read 可用，run-as-readonly 切换生效）、D3-C4（安全组 Create→CTS 审计→Delete→归零计数=0）、D4-14（操作可审计）、D2-1（三端就绪 + ECS/OBS 真云 API 可用）、D2-11（STS token 拒绝落盘）、D2-16（import 读后擦除）。
-- 本机无残留计费资源：安全组 `tctest-d3c4-*` 测后删除归零。
-- 仅提交本客户端 `results/AtomCode/` 目录，未碰 Summary/其他客户端/test-cases 母版。
-- 探针临时文件（hook-events.jsonl、proxy.json 等）随测试清理/隔离。
+## 六、安全与红线合规
+
+- [x] 凭证泄漏事件：`0`（发现为代码缺陷 D2-4/D4-2/D4-6/D4-27 的脱敏盲区，非测试侧泄漏）
+- [x] 写操作误判 read-only：`0`
+- [x] 红线（I 类）违规：`无`
+- [x] 脱敏复核：证据目录无原始 AK/SK，仅探针断言输出
+
+---
 
 ## 七、资源释放
 
-- 真云创建的资源（安全组 `tctest-d3c4-*`）均已测后删除，`ListSecurityGroups` 计数归零。
-- Python hook 遥测事件文件测试后清理。
+| 资源 | 创建 | 销毁 | 归零验证 |
+|---|---|---|---|
+| 安全组（tctest-d3c4-*，D3-C4 真云） | 是 | 已删 | 剩余 0（计数 +1 后删除归零） |
+| 只读子账号 test001 | 否（复用预置） | — | — |
+
+> 真云只删除本次创建的 `tctest-` 前缀资源；删除前全量盘点，未触碰既有/他人资源。
+
+---
 
 ## 八、遗留与建议
 
-1. 高危安全项（D4-2/16/21/23）应优先修复并回归——涉及安全拦截与规则注入，属 P0，且 v1.1.6 正式版仍未修复。
-2. D10-3 路由准确率（21.4% vs ≥90%）需重点补强中文意图路由词表/语义，或接入 LLM 兜底。
-3. 协议层（D9-2/4/7/9）建议引入 MCP 官方 conformance test 补齐状态机与错误码。
-4. 3 条 BLOCKED（D3-S7/D9-6/D1-67）待补环境后复测，均非假阻塞——真云 AK/SK、只读子账号、D10 路由 harness（run-eval.mjs）均已实测可用。
+- 待裁决 SPEC：`D9-9`（capabilities 未声明 cancellation）
+- 本轮未覆盖：`D1-39`（Windows 专属升级检测链）、`D1-67`（DSH 实装验证）、`D3-S7`（多服务编排会话）、`D9-6`（多客户端互通冒烟）
+- 建议：优先修复 5 个 P0（D2-4/D4-2/D4-16/D4-21/D4-23）安全缺陷；D4-2/D4-6/D4-27 三处均为 `safety-policy.mjs` 同一脱敏正则家族盲区，可合并统一增强正则覆盖。
