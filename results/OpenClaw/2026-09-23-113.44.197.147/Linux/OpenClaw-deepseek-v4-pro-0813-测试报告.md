@@ -1,7 +1,7 @@
 # OpenClaw-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`OpenClaw-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-09-23 05:42（北京时间）
+> **生成时间**：2026-09-23 17:26（北京时间）
 > **执行归档**：`results/OpenClaw/2026-09-23-113.44.197.147/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（14 项 FAIL/SPEC，均为历史同源缺陷 + 2 项非产品缺陷 BLOCKED；无新增 P0 缺陷）
@@ -15,7 +15,7 @@
 | 客户端 / Agent | OpenClaw + deepseek-v4-pro-0813 |
 | OS / 架构 | Linux aarch64（`6.8.0-106-generic`） |
 | Node / npm / Python | Node v22.13.0 / npm 10 / Python 3.12.3 |
-| 被测版本（SUT） | `v1.1.6`（npm latest 正式版，gitHead `46152dd`） |
+| 被测版本（SUT） | `v1.1.7-next.0`（npm @next 预发布，gitHead `0790e92`） |
 | 工具全集 | 40（`tools.mjs` TOOL_DEFINITIONS） |
 | hcloud / 依赖 | hcloud 已安装 / doctor 可执行 |
 | 真云凭证 | cn-north-4（AK/SK + 只读子账号 test001，均已配置） |
@@ -87,11 +87,11 @@
 
 > **FAIL/SPEC 根因均已源码级定位到文件:行号**（详见 FINDINGS.md），15 项中 13 项为历史同源缺陷（`file_issue.py` 自动查重）、2 项为「版本修复」不计入提单。无新增缺陷需开新单。
 
-### 版本修复对照（v1.1.5 → v1.1.6）
+### 版本修复对照（v1.1.6 → v1.1.7-next.0，发布线推进无功能 diff，修复结果延续）
 
 | 用例 | v1.1.5 状态 | v1.1.6 状态 | 说明 |
 |---|---|---|---|
-| D4-17 | FAIL（fail-open） | **PASS** | #564 新增 `invalidRiskResult` fail-closed（`risk-rule-engine.mjs:125-136`） |
+| D4-17 | FAIL（fail-open） | **PASS** | #564 新增 `invalidRiskResult` fail-closed（`risk-rule-engine.mjs:125-136`）；v1.1.7-next.0 保持 PASS |
 | D9-2（tools/call） | FAIL | **部分 PASS** | #704 新增 unknown-tool/缺参 -32602（`mcp-protocol.mjs:62-79`）；tools/list 子项残余 |
 
 ---

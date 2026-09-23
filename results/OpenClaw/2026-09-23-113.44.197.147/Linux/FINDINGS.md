@@ -1,14 +1,14 @@
 # FINDINGS — 缺陷发现清单（OpenClaw-deepseek-v4-pro-0813）
 
 > **落盘路径**：`results/OpenClaw/2026-09-23-113.44.197.147/Linux/FINDINGS.md`
-> **生成时间**：2026-09-23 05:41（北京时间）
-> **被测版本**：`v1.1.6`（npm latest 正式版，gitHead `46152dd`，release-1.1.6）
+> **生成时间**：2026-09-23 17:26（北京时间）
+> **被测版本**：`v1.1.7-next.0`（npm @next 预发布，gitHead `0790e92`）
 > **工具全集**：40（`tools.mjs` TOOL_DEFINITIONS）
 > **本清单是统一提单脚本的解析输入**：`scripts/file_issue.py` 硬编码解析标题与「根因」字段，格式必须严格。
 
 ## 去重结论（本轮先读）
 
-本轮按「每日测试」强制完整重跑，全量探针 fresh 执行、证据全新落盘，被测 v1.1.6（gitHead `46152dd`），与 2026-09-22 的 v1.1.5 相比本次为**跨版本升级测试**。v1.1.6 已修复 2 项历史缺陷（见「版本修复」节，不计入新提单）：**D4-17**（hook 畸形输入 fail-open→fail-closed，`risk-rule-engine.mjs` 新增 `invalidRiskResult`，#564）与 **D9-2 tools/call 未知工具/缺参**（`mcp-protocol.mjs` 返回 -32602，#704）。其余 14 项 FAIL/SPEC 均为**历史同源**缺陷（多客户端多轮复现，上游已开单），`file_issue.py` 将自动查重，命中即不重复提单并生成 `HISTORY_LINKS.md`。
+本轮按「每日测试」强制完整重跑，全量探针 fresh 执行、证据全新落盘，被测 v1.1.7-next.0（gitHead `0790e92`）。v1.1.7-next.0 相对 v1.1.6 仅发布线推进（version/README/manifest 版本号 + CHANGELOG 裁剪，无功能代码 diff），故此前已在 v1.1.6 修复的 2 项历史缺陷仍保持 PASS（见「版本修复」节，不计入新提单）：**D4-17**（hook 畸形输入 fail-open→fail-closed，`risk-rule-engine.mjs` 新增 `invalidRiskResult`，#564）与 **D9-2 tools/call 未知工具/缺参**（`mcp-protocol.mjs` 返回 -32602，#704）。其余 14 项 FAIL/SPEC 均为**历史同源**缺陷（多客户端多轮复现，上游已开单），`file_issue.py` 将自动查重，命中即不重复提单并生成 `HISTORY_LINKS.md`。
 
 ## 版本修复（v1.1.6 已修复，不计入提单）
 
