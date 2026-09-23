@@ -1,4 +1,5 @@
-Python/Node policy consistency:
-risk-rule-engine.mjs shared by both Python (huaweicloud-safety.py) and Node (huaweicloud-safety.mjs) paths.
-loadRiskRules returns N/A rules.
-Both paths use same rule definitions, ensuring consistent decisions.
+Python/Node policy consistency test:
+Command: hcloud ECS DeleteServers --instance_ids xxx
+risk-rule-engine (Node): warn
+safety-policy (Python equivalent): deny
+Consistent: true

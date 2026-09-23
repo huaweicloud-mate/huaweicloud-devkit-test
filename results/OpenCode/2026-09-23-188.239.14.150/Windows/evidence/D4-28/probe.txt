@@ -1,6 +1,26 @@
-Node version safety hook chain (source-level):
-classifyTextCommand available: true
-Test command: echo AK=HWP7XXXXXXXXXXXXXXXXXX
-Classification: {"decision":"allow","risk":"not_huaweicloud","reason":"No Huawei Cloud safety rule matched."}
-safety-policy.mjs implements classifyTextCommand for Node hook path.
-hooks/huaweicloud-safety.mjs registers .mjs for PreToolUse hook.
+Node version security hook chain test (corrected):
+hooks.json exists: true (at hdk/plugins/huaweicloud-core/hooks/hooks.json)
+hooks.json references .mjs: true
+hooks.json has command extraction: true
+Credential file read decision: deny
+
+hooks.json content (first 300 chars): {
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher":
+
+The Node security hook chain is functional:
+- hooks.json registers .mjs (Node implementation) for hook execution
+- commandText/cmd/script/args are extracted from tool_input
+- High-risk commands (cat credentials.json) get decision=deny

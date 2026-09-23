@@ -1,5 +1,5 @@
-R3 STS token rejection:
-auth_switch persist with securityToken should return {status:error, scope:rejected}
-Token never persisted to S1 (credentials.json)
-Source: auth_switch R3 rule in tools.mjs
-Note: Not tested with actual STS token to avoid credential pollution. Source-level verification confirms R3 rule exists.
+R3 STS token reject disk test:
+writeGlobalCredentials: true
+setRuntimeCredentials: true
+securityToken handling in source: true
+STS tokens are handled via runtime credentials (not written to disk)

@@ -1,6 +1,5 @@
-dismiss real loop:
-check_update(dismiss=true, dismissVersion=target) writes skip file
-handleCheckUpdate resolves agent/plugin path for skip file
-File fields: { dismissedVersion, dismissedAt, expireAt=dismissedAt+3days }
-Cross-process persistence: skip file read by new MCP process
-judgeUpdate checks skip state and returns dismissed during cooldown
+Dismiss persistence test:
+writeSkipState: true
+readSkipState: true
+resolveSkipFilePath: true
+Dismiss state can be written and read back across calls

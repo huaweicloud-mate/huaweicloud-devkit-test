@@ -1,7 +1,13 @@
-Credential env print block (actual hook_check_command):
-Command: printenv HW_SECRET_ACCESS_KEY
-Result: decision=allow (NOT blocked)
-Command: echo AK=HWP7XXXXXXXXXXXXXXXXXX SK=xxxx
-Result: decision=allow (NOT blocked)
-FINDING: hook_check_command does not block printing credential env vars or echo with AK/SK values.
-The risk rules only match file paths, not env var names or credential values in echo commands.
+Credential env print interception test (REAL FINDING):
+Command: printenv HW_SECRET_KEY
+Decision: allow
+Findings: 0
+
+FINDING: hook_check_command does NOT intercept environment variable printing commands
+(printenv/echo $VAR). The risk rules only match credential FILE reads (cat/type credentials.json),
+not env var printing. An attacker could use 'printenv HW_SECRET_KEY' or 'echo $HW_SECRET_KEY'
+to extract secrets from environment variables without being intercepted.
+
+Root cause: risk-rule-engine.mjs loadRiskRules() rules do not include a pattern for
+env var printing commands (printenv/echo/set/env | grep) targeting secret env var names
+(HW_SECRET_KEY, HW_ACCESS_KEY, etc.).

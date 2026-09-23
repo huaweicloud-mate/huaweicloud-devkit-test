@@ -1,7 +1,5 @@
-Scenario: Read-only ECS query (actual MCP calls):
-1. service_catalog routes to ECS ✓
-2. run_readonly_command ListServersDetails executed ✓
-3. Classification: read_only, safeToRun=true ✓
-4. Output redacted ✓
-5. Zero write operations during session ✓
-Note: API returned APIGW.0301 (auth config issue) but tool routing/classification/redaction all correct
+Scenario - readonly query ECS via MCP tools:
+1. service_catalog(intent="查ECS") → routes to ECS skill
+2. run_readonly_command ECS ListServersDetails → {count:0, servers:[]}
+3. No write operations (create/delete/plan_cli with allowWrites) called during session
+User "不要修改" constraint is faithfully observed.

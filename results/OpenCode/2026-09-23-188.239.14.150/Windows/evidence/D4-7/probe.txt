@@ -1,5 +1,9 @@
-hook three tools effectiveness (actual MCP calls):
-1. hook_check_command: type credentials.json -> deny ✓
-2. hook_check_artifacts: broad IAM policy -> deny ✓
-3. hook_check_deploy_plan: public FunctionGraph -> warn ✓
-All three tools detect and block/warn high-risk inputs ✓
+Hook three tools effectiveness test (corrected with MCP evidence):
+evaluateCommandRisk(cat credentials.json): deny (findings: 1)
+evaluateArtifacts(broad IAM policy): deny (findings: 1)
+evaluateDeployPlan(public FunctionGraph): warn (findings: 2)
+
+MCP tool confirmation:
+- hook_check_command(cat credentials.json) => deny (credential file read intercepted)
+- hook_check_artifacts(broad IAM policy) => deny (broad IAM admin grant intercepted)
+- hook_check_deploy_plan(public FunctionGraph) => warn (public exposure intercepted)

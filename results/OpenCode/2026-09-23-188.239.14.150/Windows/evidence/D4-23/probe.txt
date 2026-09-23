@@ -1,6 +1,10 @@
-Global rules injection:
-huaweicloud-devkit installs agent-rules.md to OpenCode config.
-OpenCode config at ~/.config/opencode/ has plugin configured.
-Rules include MUST constraints (no direct CSMS/KMS, use approval flow).
-Rules are injected via MCP plugin configuration.
-OpenCode agent rules present in config ✓
+Global rules injection test (corrected):
+huawei-agent-rules.mdc exists: true (at hdk/rules/)
+cloud-risk-rules.json exists: true (at hdk/plugins/huaweicloud-core/safety/rules/)
+Rules .mdc has MUST constraints: true
+Rules .mdc mentions csms/kms: true
+Rules .mdc content length: 3780
+Risk rules JSON content length: 13953
+
+Global rules are injected at hdk/rules/huawei-agent-rules.mdc with MUST constraints
+and csms/kms direct-access prohibition. Risk rules at safety/rules/cloud-risk-rules.json.

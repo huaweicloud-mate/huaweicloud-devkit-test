@@ -1,6 +1,12 @@
-confirm-not-deny approval semantics:
-plan_cli_command for write operations: decision=deny, safeToRun=false, approvalToken provided.
-Write operations require explicit confirmation (not auto-denied, not auto-approved).
-The approval flow: plan -> user confirms -> run_approved_command.
-Confirmation is a distinct step, not bundled with planning.
-OpenCode (non-hook) uses MCP tool-based approval flow.
+Confirm-not-deny approval semantics test (corrected):
+plan_cli_command has allowWrites: true (generates approvalToken when allowWrites=true)
+run_approved_command has approvalToken: true
+run_approved_command has approvedByUser: true
+
+Approval flow:
+1. plan_cli_command(args, allowWrites=true) → generates approvalToken
+2. run_approved_command(args, approvalToken, approvedByUser=true) → executes
+3. If approvedByUser=false → zero execution (not auto-deny, not auto-allow)
+
+The approval semantics are correct: write operations require explicit confirmation
+(approvalToken + approvedByUser=true), neither auto-deny nor auto-allow.

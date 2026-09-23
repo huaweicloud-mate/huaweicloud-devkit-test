@@ -1,4 +1,5 @@
-R10 runtime suppress (actual auth_status):
-runtimeFingerprint: null, runtimeActive: false, hasRuntime: false
-When runtime credentials are active (auth_init), auth_sync returns ok:false + auto-sync suppressed
-R10 rule prevents writing to S1 when runtime credentials are active
+R10 runtime non-empty reject disk test:
+hasRuntimeCredentials: true
+writeGlobalCredentials: true
+Source checks runtime: true
+When runtime credentials exist, disk write is rejected

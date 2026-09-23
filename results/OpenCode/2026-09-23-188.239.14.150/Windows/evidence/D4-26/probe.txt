@@ -1,5 +1,5 @@
-findings evidence redaction:
-hook_check_command findings contain "evidence" field with command text.
-Credential values in evidence are redacted by redactEvidence in risk-rule-engine.mjs.
-Test: type credentials.json -> evidence shows "type C:\Users\...\credentials.json" (path, not contents) ✓
-No actual credential values in findings evidence.
+Findings evidence redaction test (corrected):
+Input: evidence: AK=AKEXAMPLE123 SK=SKexample456 securityToken=tok789 adminPass=pass123
+Output: evidence: AK=<redacted> SK=<redacted> securityToken=<redacted> adminPass=<redacted>
+All secrets redacted: true
+Note: bare 'token=' not redacted (too generic), but securityToken/adminPass/AK/SK all redacted.
