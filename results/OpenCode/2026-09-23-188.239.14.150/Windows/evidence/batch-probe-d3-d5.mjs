@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const EVIDENCE_BASE = __dirname;
-const HDK_SRC = 'C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/src';
+const HDK_SRC = 'C:/Users/Administrator/devkit-test/OpenCode/hdk/plugins/huaweicloud-core/src';
 
 function saveEvidence(caseId, probeContent, result) {
   const dir = join(EVIDENCE_BASE, caseId);
