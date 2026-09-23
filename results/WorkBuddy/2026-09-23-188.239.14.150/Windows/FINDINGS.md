@@ -14,7 +14,7 @@
 - **根因**：`src/update-check.mjs:86` — `parseDistTagsOutput` 中 `if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null;` 直接拒绝数组；而 `npm view <pkg> dist-tags --json` 的标准输出为数组 `[{...}]`，故解析恒 null → `judgeUpdate` 命中 `!distTags` 分支返回 `check_failed`（`update-check.mjs:115-117`）。
 - **影响**：升级提醒 / 版本检测链从源头失效，全平台（Windows/Linux）用户均收不到升级提示；D1-39（Windows 升级检测链可用性，P0）不达标。
 - **证据**：`evidence/D1-39/stdout.log`（含 MCP 响应、queryDistTagsSync=null、parseDistTagsOutput=null、npm 原始输出）
-- **状态**：待提单
+- **状态**：历史问题（上游已存在，重复不复开；关联清单见 `HISTORY_LINKS.md`）
 
 ## #2【P0】D4-23 huawei-agent-rules.md 全局规则文件缺失
 
@@ -23,7 +23,7 @@
 - **根因**：`plugins/huaweicloud-core/` 目录下无 `huawei-agent-rules.md` 文件（源码与已安装包均缺失），插件内也无引用/注入代码，功能未实现或已被移除。
 - **影响**：全局安全规则未注入 Agent 系统提示/规则，MUST 约束（禁止直连 csms/kms 等）无法生效；P0 安全用例不达标。
 - **证据**：`evidence/D4-23/stdout.log`
-- **状态**：待提单
+- **状态**：历史问题（上游已存在，重复不复开；关联清单见 `HISTORY_LINKS.md`）
 
 ## #3【P1】D1-42 dismiss 真实闭环不成立（同源 parse 缺陷致 targetVersion 恒 null）
 
@@ -32,7 +32,7 @@
 - **根因**：`src/update-check.mjs:86`（同 #1）致 `distTags` 恒 null，`judgeUpdate` 永不进入 `update_available` 分支，`dismiss` 无 target 可写入；闭环从首个环节断裂。
 - **影响**：升级提醒的「忽略本次」交互完全失效（与 #1 同源）；D1-42（P1）不达标。
 - **证据**：`evidence/D1-42/stdout.log`
-- **状态**：待提单
+- **状态**：历史问题（上游已存在，重复不复开；关联清单见 `HISTORY_LINKS.md`）
 
 ## #4【P1】EXP-E01~E14 / D10-3 serviceCatalog 中文意图路由准确率仅 21.4%
 
@@ -41,7 +41,7 @@
 - **根因**：`src/tools.mjs:1815` `serviceCatalog` 的中文意图匹配词表覆盖不全（"云主机"/"云服务器"/"弹性公网IP"/"云数据库"/"函数"/"费用"/"用户权限"等未命中），回落至 `Run hcloud --help` 兜底分支。
 - **影响**：Agent 无法将中文用户意图路由到对应华为云服务，中文交互需用户手动指定服务，体验显著下降；覆盖全部中文使用场景。
 - **证据**：`evidence/D10-3/stdout.log`、`evidence/EXP-E01/stdout.log` ~ `evidence/EXP-E14/stdout.log`；harness 结果：`eval/results/eval-run-20260923092452.csv`
-- **状态**：待提单
+- **状态**：历史问题（上游已存在，重复不复开；关联清单见 `HISTORY_LINKS.md`）
 
 ## #5【P1】D4-27 redactSecrets 未脱敏 accessKeyId 字段名
 
@@ -50,7 +50,7 @@
 - **根因**：`src/safety-policy.mjs:49` `redactSecrets` 的字段名正则仅覆盖 `AK:` 等前缀形式，未覆盖 `accessKeyId`（以及 `access_key`/`SecretAccessKey`）等字段名变体，导致双路径脱敏不一致。
 - **影响**：以 `accessKeyId:` 形式出现的凭证值可明文泄露到 Agent 上下文与工具输出；D4-27（P1）不达标。
 - **证据**：`evidence/D4-27/stdout.log`
-- **状态**：待提单
+- **状态**：历史问题（上游已存在，重复不复开；关联清单见 `HISTORY_LINKS.md`）
 
 ## #6【P1】EXP-C4-14/18 DMS/DEW list_operations 静默失败
 
@@ -59,7 +59,7 @@
 - **根因**：`src/tools.mjs:1753` `listOperations` 未校验 `service` 是否为 KooCLI 支持的服务名，也未检查 hcloud 输出中的 `[USE_ERROR]`；KooCLI 7.2.12 服务列表含 `Kafka`（DMS）/`KMS`/`CSMS`（DEW），无 `DMS`/`DEW` 顶层名。
 - **影响**：服务矩阵中 DMS/DEW 路由不可执行且错误被吞，Agent 会基于错误 command 继续规划，误导用户。
 - **证据**：`evidence/EXP-C4-14/stdout.log`、`evidence/EXP-C4-18/stdout.log`
-- **状态**：待提单
+- **状态**：历史问题（上游已存在，重复不复开；关联清单见 `HISTORY_LINKS.md`）
 
 ## #7【P2】D8-9 sanitizeValue 未移除 AK/SK/token 敏感值
 
@@ -68,7 +68,7 @@
 - **根因**：`src/telemetry/telemetry.mjs:189` `sanitizeValue` 仅做换行/制表折叠、trim 与长度截断，无敏感值占位替换，也未过滤 NUL/BEL 等控制字符。
 - **影响**：遥测事件 value 若携带凭证形态文本，将原样上报，存在凭证外泄风险。
 - **证据**：`evidence/D8-9/stdout.log`
-- **状态**：待提单
+- **状态**：历史问题（上游已存在，重复不复开；关联清单见 `HISTORY_LINKS.md`）
 
 ## #8【非产品缺陷】D9-9 协议 capabilities 未声明 notifications.cancellation
 
