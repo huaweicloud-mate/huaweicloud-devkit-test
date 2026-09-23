@@ -1,1 +1,2 @@
-// D3-S3 - real execution probe
+// D3-S3 - real daily probe (MCP tool call / source import / CLI)
+// why: 沙箱工具链注册: huaweicloud_sandbox_exec_with_session,huaweicloud_sandbox_exec_one_shot,huaweicloud_sandbox_close_session,huaweicloud_sandbox_upload_file,huaweicloud_sandbox_upload_project,huaweicloud_sandbox_deploy_nginx,huaweicloud_sandbox_deploy_check,huaweicloud_sandbox_check_user,huaweicloud_sandbox_sign_agreement,huaweicloud_sandbox_connect,huaweicloud_sandbox_credentials

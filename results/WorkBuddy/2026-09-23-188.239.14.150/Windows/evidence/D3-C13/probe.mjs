@@ -1,1 +1,2 @@
-// D3-C13 - real execution probe
+// D3-C13 - real daily probe (MCP tool call / source import / CLI)
+// why: obs_set_website_config 已注册，schema/描述含 get/set/delete/index 语义=true；schema={"type":"object","properties":{"action":{"type":"string","enum":["set","get","delete"],"description":"操作类型：set=配置静态网站托管，get=查询当前配置，delete=删除配置"},"bucket":{"type":"string","description":"OBS 桶名称"},"region":{"type":"string","description":"OBS 桶所在区域，如 cn-north-4"},"indexDocument":{"type":"string","desc
