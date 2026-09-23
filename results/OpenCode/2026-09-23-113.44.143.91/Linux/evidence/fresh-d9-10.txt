@@ -1,0 +1,14 @@
+huaweicloud-devkit MCP server (remote) listening on 127.0.0.1:46465
+=== D9-10 MCP remote transport (HTTP/WS 远程服务) ===
+DEFAULT_PORT=9528 DEFAULT_HOST=127.0.0.1
+
+startRemoteServer 监听 127.0.0.1:46465 (默认 9528, 此处用随机端口避免冲突)
+
+initialize -> HTTP 200
+  body: {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"tools":{}},"serverInfo":{"name":"huaweicloud-devkit","version":"1.1.6"}}}
+tools/list -> HTTP 200
+tools/call(service_catalog) -> HTTP 200
+unknown/method -> HTTP 200
+
+初始化 name=huaweicloud-devkit; tools/list count=40; call isError=false+含ECS=true; unknown -32601=true
+RESULT: PASS

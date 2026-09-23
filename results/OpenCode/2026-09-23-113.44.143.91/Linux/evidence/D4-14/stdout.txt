@@ -1,0 +1,19 @@
+=== D4-14 操作可审计性 (真云 VPC 最小规格) ===
+[1] 创建最小规格 VPC hdk1-audit-0156508623 -> 9233740b-cbe6-46e5-9baf-7c2c92300a7a
+[2] ListVpcs 确认包含 hdk1-audit-0156508623 = true
+[3] CTS 审计含 CreateVpc=true 含本次 vpcId=true
+    CTS 摘要: {
+  "traces": [
+    {
+      "api_version": "v2.0",
+      "code": "201",
+      "domain_id": "842591186fa245929e1b5c186a4cf784",
+      "event_type": "system",
+      "message": "",
+      "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "read_only": false,
+      "request_id": "20d64aa1-8d07-4e1d-
+[4] DeleteVpc -> 
+[5] 删除后 ListVpcs 不再含本次 VPC=true (归零)
+
+RESULT: PASS

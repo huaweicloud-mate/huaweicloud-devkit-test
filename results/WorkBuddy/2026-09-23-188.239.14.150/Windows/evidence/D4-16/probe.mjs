@@ -1,1 +1,2 @@
-// D4-16 - executed via MCP tool call + source-level verification
+// D4-16 - real daily probe (MCP tool call / source import / CLI)
+// why: eval→deny；sh -c→deny

@@ -1,1 +1,2 @@
-// D4-1 - executed via MCP tool call + source-level verification
+// D4-1 - real daily probe (MCP tool call / source import / CLI)
+// why: cat→deny(rule=hwc-command-credential-file)；type→deny
