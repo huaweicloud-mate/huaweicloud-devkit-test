@@ -1,0 +1,12 @@
+=== D1-70 代理配置与 WebSocket 代理 ===
+预期: proxy.json 读写/clear 正确；no_proxy 命中返回 null；有代理走 ProxyAgent
+实测: 不符
+详情:
+writeProxyConfig -> /tmp/hdk-probe-4011831-1790156244525/.config/huaweicloud/proxy.json
+readProxyConfig -> {"https_proxy":"http://localhost:8080","http_proxy":"","no_proxy":"*.internal.example.com,10.0.0.0/8"}
+getProxySettings(public) -> {"proxyUrl":"http://localhost:8080","noProxyList":["*.internal.example.com","10.0.0.0/8"],"targetProtocol":"https:"}
+getProxySettings(*.internal) -> null (bypass)
+getProxySettings(10.0.0.5) -> {"proxyUrl":"http://localhost:8080","noProxyList":["*.internal.example.com","10.0.0.0/8"],"targetProtocol":"https:"}
+clearProxyConfig -> true
+proxy-agent.mjs 含 ProxyAgent/WebSocket 代理逻辑=true
+RESULT: FAIL

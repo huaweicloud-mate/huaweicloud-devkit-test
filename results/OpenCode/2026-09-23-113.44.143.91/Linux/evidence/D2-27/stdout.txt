@@ -1,0 +1,12 @@
+=== D2-27 KooCLI 版本管理 ===
+预期: parse/compare/downloadBase 正确
+实测: 符合
+详情:
+getKooCliVersion() = "7.2.12"
+parseHcloudVersion('hcloud 7.2.12 linux') = 7.2.12
+parseHcloudVersion('KooCLI v5.4.2 build 123') = 5.4.2
+compareVersion(7.2.12,7.2.9)=1 (期望 1)
+compareVersion(7.2.9,7.2.12)=-1 (期望 -1)
+compareVersion(7.2.12,7.2.12)=0 (期望 0)
+kooCliDownloadBase() = https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12
+RESULT: PASS
