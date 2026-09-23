@@ -22,7 +22,7 @@
 | 测试类型 | 源码级探针 / 真机 CLI（install/doctor/status）/ MCP 协议 stdio / 真云 E2E（VPC 建删归零 + CTS 审计 + 只读子账号）/ 沙箱全链路 / D10 评测 harness |
 | daily 基础用例 | 设计级 100 / 展开级 43（Hermes+Linux 预筛后）= 143 |
 
-> **执行方法**：`run_all.sh` 35 支源码级探针 fresh 重跑（对 hdk 源码 `0790e92a` 直调函数/探针）+ `eval/harness/run-eval.mjs` 15 条中文评测集 + 真云补测（D2-1 三端 / D3-C4 22 服务矩阵 / D4-14 VPC 建删归零+CTS / D4-18/19/20 审批流 / D4-13 只读子账号）+ D2-26/D4-27 源码直调 + D4-23 全局规则注入探针。证据统一落 `evidence/<case-id>/`（probe + stdout.log）。本轮另据源码证据把 D4-23（BLOCKED→FAIL）与 D9-9（BLOCKED→SPEC-MISMATCH）纠正。
+> **执行方法**：`run_all.sh` 35 支源码级探针 fresh 重跑（对 hdk 源码 `0790e92a` 直调函数/探针）+ `eval/harness/run-eval.mjs` 15 条中文评测集 + 真云补测（D2-1 三端 / D3-C4 22 服务矩阵 / D4-14 VPC 建删归零+CTS / D4-18/19/20 审批流 / D4-13 只读子账号）+ D2-26/D4-27 源码直调 + D4-23 全局规则注入探针。证据统一落 `evidence/<case-id>/`（probe + stdout.txt）。本轮另据源码证据把 D4-23（BLOCKED→FAIL）与 D9-9（BLOCKED→SPEC-MISMATCH）纠正。
 
 ---
 

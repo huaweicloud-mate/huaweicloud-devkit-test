@@ -3,7 +3,7 @@
 > 生成说明：以下缺陷经查重命中上游仓已有历史 issue，本次**不新开单**。
 
 ## D4-2 凭证 env 打印拦截未覆盖 `HW_` 前缀
-- 今日证据：`evidence/D4-2/stdout.log`（classify-probe）
+- 今日证据：`evidence/D4-2/stdout.txt`（classify-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#770](https://github.com/huaweicloud/huaweicloud-devkit/issues/770)（open）**[daily-test] CodeArtsWork Windows 2026-09-21: 4 defects (3 P0 + 1 P1)**
     - 历史单内容：## 每日测试缺陷汇总 — CodeArtsWork Windows 2026-09-21 **客户端**: CodeArtsWork (GLM-5.2) **OS**: Windows **包版本**: huaweicloud-devkit@1.1.5 **测试日期**: 2026-09-21 **总用例**: 139 (PASS=121, FAIL=16, BLOCKED=2) --- # F
@@ -49,7 +49,7 @@
     - 历史单内容：## 现象（1.1.2-next.4 基线实测） 对 huaweicloud-devkit 规则引擎（`evaluateCommandRisk`，`plugins/huaweicloud-core/src/risk-rule-engine.mjs`）双层验证： | 命令 | 语义 | decision | 命中规则 | |---|---|---|---| | `echo $HW_ACCESS_KE
 
 ## D4-16 env-dump 规则被 shell 包裹穿透
-- 今日证据：`evidence/D4-16/stdout.log`（classify + wrap-probe）
+- 今日证据：`evidence/D4-16/stdout.txt`（classify + wrap-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#797](https://github.com/huaweicloud/huaweicloud-devkit/issues/797)（open）**[每日测试] OfficeAce Windows 2026-09-22: 22 FAIL / 1 BLOCKED (v1.1.5)**
     - 历史单内容：## 测试概况 - **客户端**: OfficeAce (glm-5.2) - **OS**: Windows - **日期**: 2026-09-22 - **被测版本**: huaweicloud-devkit@1.1.5 - **总用例**: 139 (设计级 100 + 展开级 39) - **结果**: 116 PASS / 22 FAIL / 1 BLOCKED - **通过率**:
@@ -102,7 +102,7 @@
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#658
 
 ## D4-21 hook_check_artifacts 未拦截 HCL 形态 broad IAM 制品
-- 今日证据：`evidence/D4-21/stdout.log`（hook + hcl-probe）
+- 今日证据：`evidence/D4-21/stdout.txt`（hook + hcl-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#752](https://github.com/huaweicloud/huaweicloud-devkit/issues/752)（open）**[测试报告] huaweicloud-devkit 1.1.5 每日测试缺陷合并单（9 项，AtomCode/Linux）**
     - 历史单内容：**版本**: v1.1.5 (gitHead e7ed6f6) **客户端**: AtomCode (Linux) **类型**: 每日测试 > 本单为 2026-09-20 AtomCode Linux 每日测试的**新增缺陷**合并单。另有 6 项命中历史 issue 已查重不重复开单（见 HISTORY_LINKS.md：D4-2→#731、D4-16→#731、D4-6→#735/#71
@@ -133,7 +133,7 @@
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#791
 
 ## D4-23 全局规则 huawei-agent-rules.mdc 未注入任何安装目标
-- 今日证据：`evidence/D4-23/stdout.log` + `evidence/D4-23/probe.mjs`（源码零引用 + 隔离安装产物无 .mdc）
+- 今日证据：`evidence/D4-23/stdout.txt` + `evidence/D4-23/probe.mjs`（源码零引用 + 隔离安装产物无 .mdc）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#774](https://github.com/huaweicloud/huaweicloud-devkit/issues/774)（open）**[每日测试] Hermes Windows 2026-09-21: D9-4 MCP未强制initialize前置 + D9-9 取消能力未声明**
     - 历史单内容：## 每日测试发现 — 2 项新 SPEC-MISMATCH **测试版本**: huaweicloud-devkit v1.1.5 (commit e7ed6f6) **客户端**: Hermes / Windows **日期**: 2026-09-21 --- ### #1【SPEC-MISMATCH】D9-4 协议生命周期 — MCP 服务器未强制 initialize 前置 - **现象*
@@ -161,7 +161,7 @@
     - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.3（npm @next，gitHead 3b6290b，PR #647） - 缺陷：12 项（去重后，原始 24 条来自 8 个 agent） - 测试日期：2026-09-13 ## 缺陷清单 ### 1. [P0] hook_check_artifacts 未检测 Terraform HCL 宽泛 IAM 授权 - **描述**：`reso
 
 ## D4-17 hook 模糊输入 fail-open（默认放行）
-- 今日证据：`evidence/D4-17/stdout.log`（supplement-probe）
+- 今日证据：`evidence/D4-17/stdout.txt`（supplement-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#689](https://github.com/huaweicloud/huaweicloud-devkit/issues/689)（open）**[测试报告] huaweicloud-devkit v1.1.4 每日测试缺陷合并单（5 项）**
     - 历史单内容：## 测试概览 - 被测版本：v1.1.4 - 缺陷：5 项 ## 缺陷清单 ### 5. [P1] Python/Node 安全钩子策略不一致 - **描述**：同一高危输入（`hcloud configure show`、`hcloud ECS DeleteServers`），Node hook 返回 `deny`，Python hook 返回空（放行）。 - **预期（精确断言）**：Pyt
@@ -179,7 +179,7 @@
     - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.3（npm @next，gitHead 3b6290b，PR #647） - 缺陷：12 项（去重后，原始 24 条来自 8 个 agent） - 测试日期：2026-09-13 ## 缺陷清单 ### 1. [P0] hook_check_artifacts 未检测 Terraform HCL 宽泛 IAM 授权 - **描述**：`reso
 
 ## D10-3 serviceCatalog 中文意图路由缺失（21.4% 准确率，D3-S5/S6/S7 同根因）
-- 今日证据：`evidence/D10-3/stdout.log`（routing + eval-harness）+ `evidence/D3-S5/stdout.log` + `evidence/D3-S6/stdout.log` + `evidence/D3-S7/stdout.log`
+- 今日证据：`evidence/D10-3/stdout.txt`（routing + eval-harness）+ `evidence/D3-S5/stdout.txt` + `evidence/D3-S6/stdout.txt` + `evidence/D3-S7/stdout.txt`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#797](https://github.com/huaweicloud/huaweicloud-devkit/issues/797)（open）**[每日测试] OfficeAce Windows 2026-09-22: 22 FAIL / 1 BLOCKED (v1.1.5)**
     - 历史单内容：## 测试概况 - **客户端**: OfficeAce (glm-5.2) - **OS**: Windows - **日期**: 2026-09-22 - **被测版本**: huaweicloud-devkit@1.1.5 - **总用例**: 139 (设计级 100 + 展开级 39) - **结果**: 116 PASS / 22 FAIL / 1 BLOCKED - **通过率**:
@@ -210,7 +210,7 @@
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#783, #767, #766, #758
 
 ## D4-27 redactSecrets/redactOutput 字符串路径脱敏缺口（裸 token / admin-pass 变体）
-- 今日证据：`evidence/D4-27/stdout.log`（D4-27-probe）
+- 今日证据：`evidence/D4-27/stdout.txt`（D4-27-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#797](https://github.com/huaweicloud/huaweicloud-devkit/issues/797)（open）**[每日测试] OfficeAce Windows 2026-09-22: 22 FAIL / 1 BLOCKED (v1.1.5)**
     - 历史单内容：## 测试概况 - **客户端**: OfficeAce (glm-5.2) - **OS**: Windows - **日期**: 2026-09-22 - **被测版本**: huaweicloud-devkit@1.1.5 - **总用例**: 139 (设计级 100 + 展开级 39) - **结果**: 116 PASS / 22 FAIL / 1 BLOCKED - **通过率**:
@@ -250,7 +250,7 @@
     - 历史单内容：## 现象（1.1.2-next.4 基线实测） 对 huaweicloud-devkit 规则引擎（`evaluateCommandRisk`，`plugins/huaweicloud-core/src/risk-rule-engine.mjs`）双层验证： | 命令 | 语义 | decision | 命中规则 | |---|---|---|---| | `echo $HW_ACCESS_KE
 
 ## D9-9 capabilities.cancellation 未声明（协议取消能力契约漂移）
-- 今日证据：`evidence/D9-9/stdout.log`（extended-probe）
+- 今日证据：`evidence/D9-9/stdout.txt`（extended-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#774](https://github.com/huaweicloud/huaweicloud-devkit/issues/774)（open）**[每日测试] Hermes Windows 2026-09-21: D9-4 MCP未强制initialize前置 + D9-9 取消能力未声明**
     - 历史单内容：## 每日测试发现 — 2 项新 SPEC-MISMATCH **测试版本**: huaweicloud-devkit v1.1.5 (commit e7ed6f6) **客户端**: Hermes / Windows **日期**: 2026-09-21 --- ### #1【SPEC-MISMATCH】D9-4 协议生命周期 — MCP 服务器未强制 initialize 前置 - **现象*
@@ -259,13 +259,13 @@
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#752
 
 ## D4-25 Python hook 写操作遥测分类误判为 cli:invoke
-- 今日证据：`evidence/D4-25/stdout.log`（new-safety-probe）
+- 今日证据：`evidence/D4-25/stdout.txt`（new-safety-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#752](https://github.com/huaweicloud/huaweicloud-devkit/issues/752)（open）**[测试报告] huaweicloud-devkit 1.1.5 每日测试缺陷合并单（9 项，AtomCode/Linux）**
     - 历史单内容：**版本**: v1.1.5 (gitHead e7ed6f6) **客户端**: AtomCode (Linux) **类型**: 每日测试 > 本单为 2026-09-20 AtomCode Linux 每日测试的**新增缺陷**合并单。另有 6 项命中历史 issue 已查重不重复开单（见 HISTORY_LINKS.md：D4-2→#731、D4-16→#731、D4-6→#735/#71
 
 ## D4-26 findings.evidence 脱敏未覆盖 JSON 带引号 key（明文 secret_key/adminPass 泄漏）
-- 今日证据：`evidence/D4-26/stdout.log`（new-safety-probe）
+- 今日证据：`evidence/D4-26/stdout.txt`（new-safety-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#797](https://github.com/huaweicloud/huaweicloud-devkit/issues/797)（open）**[每日测试] OfficeAce Windows 2026-09-22: 22 FAIL / 1 BLOCKED (v1.1.5)**
     - 历史单内容：## 测试概况 - **客户端**: OfficeAce (glm-5.2) - **OS**: Windows - **日期**: 2026-09-22 - **被测版本**: huaweicloud-devkit@1.1.5 - **总用例**: 139 (设计级 100 + 展开级 39) - **结果**: 116 PASS / 22 FAIL / 1 BLOCKED - **通过率**:
@@ -307,13 +307,13 @@
     - 历史单内容：## 现象（1.1.2-next.4 基线实测） 对 huaweicloud-devkit 规则引擎（`evaluateCommandRisk`，`plugins/huaweicloud-core/src/risk-rule-engine.mjs`）双层验证： | 命令 | 语义 | decision | 命中规则 | |---|---|---|---| | `echo $HW_ACCESS_KE
 
 ## D1-68 区域环境变量优先级与用例契约漂移（SPEC-MISMATCH）
-- 今日证据：`evidence/D1-68/stdout.log`（new-env-probe）
+- 今日证据：`evidence/D1-68/stdout.txt`（new-env-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#765](https://github.com/huaweicloud/huaweicloud-devkit/issues/765)（open）**[测试报告] huaweicloud-devkit v1.1.5 每日测试缺陷合并单（1 项）**
     - 历史单内容：## 测试概览 - 被测版本：v1.1.5 - 缺陷：1 项 ## 缺陷清单 ### 10. [P2] D1-68 区域环境变量优先级与用例契约漂移（SPEC-MISMATCH） - **描述**：用例 D1-68 契约称「HUAWEICLOUD_REGION 优先于 HW_REGION 作为默认 region」，实现 `auth/credentials.mjs` 实际为 `HW_REGION |
 
 ## D8-9 安装 ID 遥测值 sanitizeValue 未脱敏 AK/SK/token（SPEC-MISMATCH）
-- 今日证据：`evidence/D8-9/stdout.log`（new-config-probe）
+- 今日证据：`evidence/D8-9/stdout.txt`（new-config-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#797](https://github.com/huaweicloud/huaweicloud-devkit/issues/797)（open）**[每日测试] OfficeAce Windows 2026-09-22: 22 FAIL / 1 BLOCKED (v1.1.5)**
     - 历史单内容：## 测试概况 - **客户端**: OfficeAce (glm-5.2) - **OS**: Windows - **日期**: 2026-09-22 - **被测版本**: huaweicloud-devkit@1.1.5 - **总用例**: 139 (设计级 100 + 展开级 39) - **结果**: 116 PASS / 22 FAIL / 1 BLOCKED - **通过率**:

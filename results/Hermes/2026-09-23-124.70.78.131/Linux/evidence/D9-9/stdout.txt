@@ -1,0 +1,28 @@
+{
+  generatedAt: "2026-09-23T08:58+08:00",
+  caseId: "D9-9",
+  sev: "P1",
+  status: "SPEC-MISMATCH",
+  probe: "extended-probe.mjs (protocol 源码直调)"
+}
+===== 断言（用例 D9-9）=====
+① 源码级 protocol-probe 探测 initialize 返回 capabilities.cancellation（实测未声明 → SPEC-MISMATCH 标注而非假定）
+② tools/call 注入 30s 挂起 → 超时返回 {code:-32000, message 含 'timeout'}
+③ 若 capabilities.cancellation 存在 → notifications/cancelled(requestId=X) 后 2s 内 in-flight 清零
+④ 重建连接后 initialize/tools/list 正常、无悬挂请求
+
+===== 实测（extended-probe 输出）=====
+capabilities = {"tools":{}}
+capabilities.cancellation 存在? false          ← 契约漂移点：未声明取消能力
+取消通知后 tools/list 工具数 = 40               ← ④ 工具列表仍完整
+重建后 initialize ok? true                      ← ④ 重建正常
+重建后 tools/list 工具数 = 40                   ← ④ 无悬挂请求
+
+===== 结论 =====
+SPEC-MISMATCH：initialize 返回 capabilities 仅含 {"tools":{}}，未声明 cancellation 能力；
+按用例 D9-9 自身口径「取消能力按 capabilities 实测（不存在 → SPEC-MISMATCH 标注而非假定）」判定。
+②③ 的 30s 延迟注入 / 2s 取消窗口需可注入延迟的 MCP 客户端夹具（真·外部依赖，本机无），未覆盖。
+
+===== 根因 =====
+plugins/huaweicloud-core/src/mcp-server.mjs（initialize 响应 capabilities 构造处未声明 cancellation）
+→ 详见 evidence/_probes/extended.log 与 extended-probe.mjs。
