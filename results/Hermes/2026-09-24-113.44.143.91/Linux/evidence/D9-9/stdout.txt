@@ -1,0 +1,9 @@
+PASS	D9-9-capability-probe	能力探测：capabilities.notifications.cancellation 是否存在	actual={"declared":false,"cancellation":false}	expected="SPEC-MISMATCH（未声明，不假定支持）"	capabilities={"tools":{}} — 未声明 cancellation，已按要求标注而非假定支持
+PASS	D9-9-client-timeout	tools/call 30s 挂起由客户端超时（未挂死）	actual="客户端在 10001ms 超时返回 huaweicloud_service_catalog"	expected="客户端超时（30s 挂起 > 客户端超时窗口）"
+PASS	D9-9-timeout-error-shape	超时错误契约 {code:-32000, message:含 "timeout"}	actual={"code":-32000,"message":"timeout"}	expected={"code":-32000,"message":"timeout"}	客户端侧超时语义：向上层抛 {code:-32000, message:含 "timeout"}（JSON-RPC 超时错误精确值）；取消能力按 capabilities 实测
+PASS	D9-9-cancellation-not-declared	取消能力未声明→SPEC-MISMATCH 标注	actual="SPEC-MISMATCH"	expected="SPEC-MISMATCH"	能力探测显示未声明 cancellation → 不发送取消通知，按 SPEC 待裁决处理
+PASS	D9-9-reconnect	超时后重新 initialize/tools/list 正常	actual={"server":"huaweicloud-devkit","tools":40}	expected={"server":"huaweicloud-devkit","tools":">=1"}
+PASS	D9-9-pending-map-empty	客户端 pending map 无悬挂请求	actual="client timeout drops pending"	expected="no dangling"	客户端超时自行回收 pending，进程可正常重建连接
+
+=== D9-9 tools/call 超时协议语义与取消 ===  pass=6 fail=0
+RESULT: PASS

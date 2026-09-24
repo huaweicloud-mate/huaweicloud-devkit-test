@@ -1,0 +1,5 @@
+{
+  "status": "SPEC-MISMATCH",
+  "executedAt": "20260924100000",
+  "why": "确认令牌精确 JSON 契约未实现：auth_confirm(tools.mjs:1258-1269)仅处理 auth_switch reconcile 确认，token 过期抛 throw 'confirmToken not found or expired.'，无 {code:'CONFIRM_TOKEN_EXPIRED',status:'rejected'} 也无 {outcome:'already_processed'} 精确字段；写审批令牌过期走 run_approved 的 consumeApprovalToken(APPROVAL_TTL) 静默返回 null，无机器可断言的响应 JSON（R11 契约漂移）"
+}

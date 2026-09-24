@@ -1,0 +1,12 @@
+=== D9-10 MCP remote transport (HTTP/WS 远程服务) ===
+DEFAULT_PORT=9528 DEFAULT_HOST=127.0.0.1
+startRemoteServer 监听 127.0.0.1:9528 (请求端口 9528)
+PASS	D9-10-defaults	DEFAULT_PORT=9528 DEFAULT_HOST=127.0.0.1	actual={"port":9528,"host":"127.0.0.1"}	expected={"port":9528,"host":"127.0.0.1"}
+PASS	D9-10-listening	服务监听 127.0.0.1:9528	actual={"port":9528}	expected={"port":9528}	9528 端口正常监听
+PASS	D9-10-initialize	remote initialize 返回 serverInfo=huaweicloud-devkit	actual={"name":"huaweicloud-devkit","proto":"2024-11-05"}	expected={"name":"huaweicloud-devkit"}
+PASS	D9-10-tools-list	remote tools/list 返回 40 工具	actual={"tools":40}	expected={"tools":">0"}
+PASS	D9-10-stdio-parity	remote 与 stdio initialize/tools/list 一致	actual={"remoteName":"huaweicloud-devkit","remoteTools":40,"stdioName":"huaweicloud-devkit","stdioTools":40}	expected={"remoteName":"huaweicloud-devkit","remoteTools":40,"stdioName":"huaweicloud-devkit","stdioTools":40}
+PASS	D9-10-unknown-method	remote 未知方法返回 -32601	actual={"code":-32601}	expected={"code":-32601}
+
+=== D9-10 MCP remote transport ===  pass=6 fail=0
+RESULT: PASS
