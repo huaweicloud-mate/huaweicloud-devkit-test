@@ -1,8 +1,8 @@
 # FINDINGS — 缺陷发现清单（Hermes-deepseek-v4-pro-0813 / Linux）
 
 > **落盘路径**：`results/Hermes/2026-09-24-1.94.218.129/Linux/FINDINGS.md`
-> **生成时间**：`2026-09-24 05:15`（北京时间）
-> **被测对象**：huaweicloud-devkit v1.1.6（npm 官方 latest，gitHead `46152dd`）
+> **生成时间**：`2026-09-24 09:27`（北京时间）
+> **被测对象**：huaweicloud-devkit v1.1.7-next.1（npm 官方 @next 预发布，gitHead `657ceb7b`）
 > **测试类型**：每日测试（daily 精选：设计级 100 + 展开级 43）
 
 ---

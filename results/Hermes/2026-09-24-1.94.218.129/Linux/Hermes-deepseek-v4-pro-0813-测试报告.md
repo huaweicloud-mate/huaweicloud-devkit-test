@@ -1,10 +1,10 @@
 # Hermes-deepseek-v4-pro-0813 测试报告
 
 > **报告名**：`Hermes-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：`2026-09-24 05:15`（北京时间）
+> **生成时间**：`2026-09-24 09:27`（北京时间）
 > **执行归档**：`results/Hermes/2026-09-24-1.94.218.129/Linux/`
-> **被测对象**：huaweicloud-devkit v1.1.6（npm 官方 latest，gitHead `46152dd`）
-> **结论**：`PARTIAL`（3 项 P0 历史缺陷 D4-16/D2-4/D4-23 + 12 项 P1/P2 缺陷；真云 E2E 真机完成且归零；SUT 与上一轮同为 v1.1.6，15 项缺陷全部复现，无新增、无修复）
+> **被测对象**：huaweicloud-devkit v1.1.7-next.1（npm 官方 @next 预发布，gitHead `657ceb7b`）
+> **结论**：`PARTIAL`（3 项 P0 历史缺陷 D4-16/D2-4/D4-23 + 12 项 P1/P2 缺陷；真云 E2E 真机完成且归零；补测将 SUT 从首轮误测的 v1.1.6 更正为今日应测的 v1.1.7-next.1，15 项缺陷全部复现，无新增、无修复）
 
 ---
 
@@ -15,16 +15,16 @@
 | 客户端 / Agent | Hermes + deepseek-v4-pro-0813 |
 | OS / 架构 | Linux aarch64（Ubuntu 24.04） |
 | Node / npm / Python | Node v22.13.0 / npm 10.9.2 / Python 3.12.3 |
-| 被测版本（SUT） | v1.1.6（npm 官方 latest，gitHead `46152dd`） |
+| 被测版本（SUT） | v1.1.7-next.1（npm 官方 @next 预发布，gitHead `657ceb7b`） |
 | 工具全集 | 40（protocol-probe tools/list 实测 40） |
 | hcloud / 依赖 | hcloud 7.2.12 已配置 / doctor 环境就绪 |
 | 真云凭证 | cn-north-4（管理员 AKSK + 只读子账号均就绪，实测通过） |
 | 测试类型 | 源码级探针 / 真机 CLI / MCP 协议 / 路由评测 harness / 真云 E2E（建删归零） |
 | daily 基础用例 | 设计级 100 / 展开级 43（已按 Hermes+Linux 预筛） |
 
-> **执行方法**：探针（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，结果落 `evidence/<id>/stdout.log`；协议走 `eval/harness/protocol-probe.mjs`，评测走 `eval/harness/run-eval.mjs`；真云走 hcloud 实机建删归零。本轮 30 组证据全部本机新鲜落盘（非复用昨日 stdout.log），源码 checkout 至 v1.1.6（`46152dd`），npm 全局包装 1.1.6（官方 registry）。
+> **执行方法**：探针（.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数，结果落 `evidence/<id>/stdout.log`；协议走 `eval/harness/protocol-probe.mjs`，评测走 `eval/harness/run-eval.mjs`；真云走 hcloud 实机建删归零。本轮 30 组证据全部本机新鲜落盘（非复用首轮 stdout.log），源码 checkout 至 v1.1.7-next.1（`657ceb7b`），npm 全局包装 1.1.7-next.1（官方 registry）。
 
-> **版本口径修正**：`prepare_env.py --update` 默认「取 latest/next 最高」会误装 next 预发布 `1.1.7-next.1`。每日测试按 AGENTS.md 应测 latest 正式版，本轮已显式固定 SUT=v1.1.6（`npm install -g huaweicloud-devkit@1.1.6 --registry https://registry.npmjs.org` + `git checkout 46152dd`）。
+> **补测版本更正**：今日被测版本应为 `v1.1.7-next.1`（npm @next 预发布，gitHead `657ceb7b`，版本号高于 latest 1.1.6）。当日首轮（05:15）误按「latest 正式版」固定 SUT=v1.1.6（gitHead `46152dd`）；本轮按补测指令用官方源重装 `huaweicloud-devkit@next --registry https://registry.npmjs.org`（绕开本地 npm 镜像 latest 滞后），并源码 checkout 至 `657ceb7b`，重跑回填覆盖本目录。`huaweicloud-devkit --version` 已确认输出 `1.1.7-next.1`。
 
 ---
 
@@ -87,7 +87,7 @@
 | 14 | P2 | D4-26 | findings.evidence 小写 ak=/sk=/token= 未脱敏 | risk-rule-engine.mjs:19-25 |
 | 15 | P2 | D8-9 | sanitizeValue 未剥离 AK/SK/token | telemetry.mjs:189-196 |
 
-**版本对比结论**：本轮 SUT 与上一轮（2026-09-23）同为 v1.1.6（`46152dd`），版本未升版。15 项缺陷**逐一复现**，无新增退化、无修复回归。
+**版本对比结论**：本轮补测将 SUT 从首轮误测的 v1.1.6（`46152dd`）更正为今日应测的 v1.1.7-next.1（`657ceb7b`）。15 项缺陷在新版本上**逐一复现**，无新增退化、无修复回归。
 
 ---
 
@@ -129,7 +129,7 @@
 ## 八、遗留与建议
 
 - 待裁决 SPEC：D9-9（notifications.cancellation）；D4-23 上游已明示「有意不处理」；D1-68 region 优先级需确定契约（HW_REGION vs HUAWEICLOUD_REGION）。
-- 本轮 SUT 与上一轮同为 v1.1.6，15 项缺陷全部复现（无修复回归、无新增退化）。
+- 本轮补测 SUT=v1.1.7-next.1（gitHead `657ceb7b`），15 项缺陷全部复现（无修复回归、无新增退化）。
 - 本轮未覆盖（范围）：D3-S6/D3-S7 真云多服务编排、真实 Agent 会话中文意图路由（需 LLM harness，非 DSH 客户端）。
 - 建议：上游按 FINDINGS.md 推进修复——重点 P0 #1/#2/#3（安全策略 + 规则注入 + 凭证脱敏），P1 #6/#8（tools/list 参数校验 + serviceCatalog 路由）。
-- 环境建议：`prepare_env.py --update` 默认「自动取 next 最高」会误装预发布包（本轮实测误装 1.1.7-next.1），每日测试应显式走 latest 正式版；本机 npm 私有镜像 `127.0.0.1:45998` latest 与官方 registry 漂移问题仍在。
+- 环境建议：每日测试需按当日应测版本显式指定（本日应测 @next 预发布 v1.1.7-next.1，而非 latest 正式版 v1.1.6），并用官方 `--registry https://registry.npmjs.org` 校验 `npm view` 版本/gitHead，避免本地 npm 镜像 latest 滞后误导版本选择。
