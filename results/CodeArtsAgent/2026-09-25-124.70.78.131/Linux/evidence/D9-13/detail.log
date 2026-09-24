@@ -1,0 +1,21 @@
+[PASS] D9-13 hasRuntimeCredentials 校验存在 => true
+[PASS] D9-13 resolveCredentialsWithRuntime 解析运行时凭证 => ak=AKD913RUNTIME
+[PASS] D9-13 clearRuntimeCredentials 清理后 hasRuntimeCredentials=false => false
+[PASS] D9-13 清理后回落 resolveCredentials(不留运行时) => ak=HPUA
+[PASS] D9-13 loadPolicy 加载安全策略(含 secretKeyNamePatterns) => patterns=14
+[PASS] D9-13 classifyHcloudArgs deny(写) => deny/write
+[PASS] D9-13 classifyHcloudArgs allow(只读) => allow/read_only
+[PASS] D9-13 evaluateArtifacts 公开暴露 deny => deny
+[PASS] D9-13 evaluateDeployPlan 公开暴露 deny => deny
+[PASS] D9-13 mergeRiskDecision deny 合并(blockedByRiskRule) => {"decision":"deny","warnings":[],"risk":"public_exposure","reason":"The change appears to expose an administrative or da
+[PASS] D9-13 hashArgs 幂等(相同参数同哈希) => h=354af9bcd38739621ab0
+[PASS] D9-13 审批令牌不可重放(二次 consume 失效) => first=true second=null
+[PASS] D9-13 classifyUnsupported 返回分类 => unknown
+[PASS] D9-13 planHcloudCommand 返回分类 => {"executable":"hcloud","args":["VPC","ListVpcs"],"command":"hcloud VPC ListVpcs","executableBlock":"hcloud VPC ListVpcs"
+[PASS] D9-13 tools/call 返回无 AK/SK/token 明文(show_profile_redacted) => hasRedacted=true len=329
+[PASS] D9-13 writeGlobalCredentials/readGlobalCredentials 持久化一致 => ak=AKD913PERSIST
+[PASS] D9-13 isPlaceholder 识别占位(<HW_ACCESS_KEY>) => placeholder
+[PASS] D9-13 isPlaceholder 不误判真实 AK => realAk=false
+[PASS] D9-13 globalCredentialsPath 指向隔离 HOME => /tmp/multica-task-675611185/hdktest-d913-s4W4EV/.config/huaw
+[PASS] D9-13 obsConfigPath 返回路径 => /home/testbot2/.obsutilconfig
+[PASS] D9-13 writeObsConfig 写入隔离 obsconfig 文件 => true
