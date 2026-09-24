@@ -1,0 +1,13 @@
+=== D4 P0 Security Test Suite ===
+
+[D4-1] PASS: cat ~/.hcloud/config.json 被拦截: MCP tool decision=deny, hook decision=deny
+[D4-2] FAIL: 拦截失败: MCP decision=allow, hook decision=deny
+[D4-5] PASS: hcloud ECS DeleteServers 正确识别为写操作(deny): classification.risk=write, textResult.decision=deny
+[D4-9] PASS: 公网暴露SSH(22)端口被拦截: decision=deny, findings=1
+[D4-15] PASS: 所有 hcloud 变体命令均被拦截(无绕过): hcloud ECS DeleteServers --url_encoded=>deny, hcloud ecs deleteservers=>deny, HCloud ECS DeleteServers=>deny, hcloud ECS DELETE_SERVERS=>deny
+[D4-16] FAIL: 穿透成功: sh -c 'hcloud ECS DeleteServers', bash -c 'hcloud ECS DeleteServer'
+[D4-21] PASS: 宽泛 IAM policy (Action=*, Resource=*) 被拦截: decision=deny, findings=1
+[D4-22] PASS: 公网暴露 FunctionGraph (auth=NONE) 被拦截/告警: decision=warn, findings=2
+[D4-28] FAIL: 部分命令未 deny: echo AKXXXXXXXX
+
+=== All D4 tests completed ===

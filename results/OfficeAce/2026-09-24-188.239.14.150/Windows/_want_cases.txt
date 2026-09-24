@@ -1,0 +1,63 @@
+==== D1-39 | P0 | Windows 升级检测链可用性
+  关联工具: check_update
+  预期: Windows 下检测链真实可用，不得 EINVAL 静默失败
+==== D1-40 | P0 | 镜像 lag 下检测正确性(反向提醒防护)
+  关联工具: check_update
+  预期: 不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验
+==== D2-11 | P0 | R3 STS token拒绝落盘
+  关联工具: auth_switch
+  预期: 返回 {status:error, scope:rejected}，token 永不落盘
+==== D4-18 | P0 | confirm-not-deny审批语义
+  关联工具: plan_cli_command
+  预期: 写操作需显式确认，不被直接拒绝也不被直接放行
+==== D4-19 | P0 | 确认流下预检仍生效
+  关联工具: hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+  预期: 确认流程中风险预检仍生效拦截
+==== D2-4 | P0 | 凭证脱敏正确性
+  关联工具: show_profile_redacted
+  预期: 输出无明文凭证字段
+==== D4-2 | P0 | 凭证env打印拦截
+  关联工具: hook_check_command
+  预期: 被阻断
+==== D4-3 | P0 | 明文secret API拦截
+  关联工具: hook_check_command
+  预期: 被阻断
+==== D4-5 | P0 | 写操作误判检测
+  关联工具: plan_cli_command
+  预期: 写操作不被误判为只读
+==== D4-9 | P0 | 公开暴露/破坏性预检
+  关联工具: hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+  预期: 执行前被拦
+==== D4-15 | P0 | hook绕过尝试
+  关联工具: hook_check_command
+  预期: 无绕过成功
+==== D4-16 | P0 | 命令包裹穿透
+  关联工具: hook_check_command
+  预期: 发现内层命令并拦截
+==== D4-21 | P0 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检）
+  关联工具: hook_check_artifacts
+  预期: broad IAM 制品被拦截
+==== D4-22 | P0 | hook_check_deploy_plan 具名回归（部署计划预检）
+  关联工具: hook_check_deploy_plan
+  预期: 公网暴露 FunctionGraph 等被拦截/告警
+==== D4-23 | P0 | 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）
+  关联工具: install
+  预期: 全部目标注入且约束可执行，无孤儿文件
+==== D4-28 | P0 | Node 版安全 hook 链路
+  关联工具: hook_check_command
+  预期: hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出
+==== D8-7 | P0 | 7 个 meta/通用技能指引可机械执行验证
+  关联工具: retrieve_skill/search_docs
+  预期: 7 技能指引均可机械执行，无断链/幻觉步骤
+==== D9-12 | P0 | initialize 握手协议安全基线
+  关联工具: inspector
+  预期: initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorateResult 包装无副作用；listSkillDirs/findSkillsRoot 返回有效目录；非法时序返回 JSON-RPC -32600 错误
+==== D9-13 | P0 | tools/call 凭证不泄露与权限校验
+  关联工具: inspector
+  预期: tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprovalToken 后失效）；运行时凭证 clearRuntimeCredentials 清理后不留盘；readGlobalCredentials/writeGlobalCredentials 持久化一致；isPlaceholder 正确识别占位凭证
+==== D10-3 | P1 | 路由准确率+混淆矩阵
+  关联工具: harness
+  预期: 源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位
+==== D10-4 | P0 | 安全干预-静态规则层
+  关联工具: harness
+  预期: 规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token

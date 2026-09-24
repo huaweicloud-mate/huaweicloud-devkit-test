@@ -1,0 +1,28 @@
+D1-39=PASS | huaweicloud_check_update 在 Windows 下成功执行，返回有效版本信息(currentVer
+D1-40=PASS | 当前版本 1.1.7-next.2 不低于 latestStable 1.1.6，updateAvailable=fal
+D2-11=PASS | huaweicloud_auth_status 返回认证状态：hasRuntime=false, runtimeFing
+D2-4=PASS | huaweicloud_show_profile_redacted 成功返回脱敏 profile。accessKeyId
+D4-15=PASS | 所有 hcloud 变体命令均被拦截(无绕过): hcloud ECS DeleteServers --url_enco
+D4-16=FAIL | 穿透成功: sh -c 'hcloud ECS DeleteServers', bash -c 'hcloud ECS 
+D4-1=PASS | cat ~/.hcloud/config.json 被拦截: MCP tool decision=deny, hook 
+D4-21=PASS | 宽泛 IAM policy (Action=*, Resource=*) 被拦截: decision=deny, fin
+D4-22=PASS | 公网暴露 FunctionGraph (auth=NONE) 被拦截/告警: decision=warn, findin
+D4-28=FAIL | 部分命令未 deny: echo AKXXXXXXXX
+D4-2=FAIL | 拦截失败: MCP decision=allow, hook decision=deny
+D4-5=PASS | hcloud ECS DeleteServers 正确识别为写操作(deny): classification.risk
+D4-9=PASS | 公网暴露SSH(22)端口被拦截: decision=deny, findings=1
+EXP-E01=FAIL | MISS: 期望路由=ECS，实际=Run hcloud --help to list available servic
+EXP-E02=FAIL | MISS: 期望路由=ECS，实际=Run hcloud --help to list available servic
+EXP-E03=FAIL | MISS: 期望路由=OBS，实际=Sandbox+DevStation（路由错误，未命中目标服务OBS）
+EXP-E04=FAIL | MISS: 期望路由=EIP，实际=Run hcloud --help to list available servic
+EXP-E05=FAIL | MISS: 期望路由=RDS，实际=Run hcloud --help to list available servic
+EXP-E06=PASS | HIT: 期望路由=DCS，实际=DDS+DCS（命中目标服务DCS）
+EXP-E07=FAIL | MISS: 期望路由=CBR，实际=Run hcloud --help to list available servic
+EXP-E08=FAIL | N/A: 期望=诊断类用例，实际=Run hcloud --help to list available service
+EXP-E09=PASS | HIT: 期望路由=CCE，实际=CCE+SWR（命中目标服务CCE）
+EXP-E10=FAIL | MISS: 期望路由=FunctionGraph，实际=Run hcloud --help to list availa
+EXP-E11=FAIL | MISS: 期望路由=BSS，实际=Run hcloud --help to list available servic
+EXP-E12=FAIL | MISS: 期望路由=CES，实际=Run hcloud --help to list available servic
+EXP-E13=FAIL | MISS: 期望路由=ELB，实际=Run hcloud --help to list available servic
+EXP-E14=FAIL | MISS: 期望路由=IAM，实际=Run hcloud --help to list available servic
+EXP-E15=PASS | HIT: 期望路由=Incentive Voucher，实际=Incentive Voucher（精确命中）
