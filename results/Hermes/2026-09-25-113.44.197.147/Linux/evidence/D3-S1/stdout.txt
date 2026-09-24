@@ -1,0 +1,7 @@
+=== D3-S1 场景-只读查ECS(带不改约束) ===
+[1] serviceCatalog("帮我查一下我账号有哪些云主机") -> services=["Run hcloud --help to list available services."] skills=["Use huaweicloud-core to route intent."]
+[2] run_readonly_command(ecs ListServersDetails) -> {"ok":true,"exitCode":0,"signal":null,"stdout":"{\n  \"count\": 0,\n  \"servers\": []\n}","stderr":"","plan":{"executable":"hcloud","args":["ecs","ListServersDetails","--cli-region=cn-north-4"],"command":"hcloud ecs ListServersDetails --cli-region=cn-north-4","executableBlock":"hcloud ecs ListServersDetails --cli-region=cn-north-4","warnings":[],"classification":{"decision":"allow","risk":"read_on
+[3] 全程零写操作: 仅调用 service_catalog + run_readonly_command (无 create/delete/update/run_approved)
+
+路由命中 ECS=false; 只读执行=true; 零写=true
+RESULT: FAIL (路由 miss: 中文意图未映射 ECS)

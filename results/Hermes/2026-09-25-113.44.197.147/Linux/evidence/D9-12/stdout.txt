@@ -1,0 +1,14 @@
+=== D9-12 initialize 握手协议安全基线 (v1.1.7) ===
+  PASS  [1] initialize 返回 protocolVersion  protocol=2024-11-05
+  PASS  [2] initialize 返回 capabilities  capabilities={"tools":{}}
+  PASS  [3] initialize 返回 serverInfo  server=huaweicloud-devkit v1.1.7
+  PASS  [4] tools/list=40 工具  count=40
+  PASS  [5] callTool 路由到 tools.mjs callTool  content type=text
+  PASS  [6] check_cli → runVersionCheck 结构化返回  keys=installed,authenticated,status,output,kooCliVersion,installedVersion
+  FAIL  [7] 非法时序(未 initialize 先 tools/list) 返回 -32600  实际返回 200 tools=40 <<< 未拒绝
+  PASS  [8] 协议/技能函数暴露  缺: 无
+  PASS  [9] _decorateResult 无 hint 兜底不抛错  {"x":1}
+  PASS  [10] _isHintConsumed 初始 false  consumed=false
+  PASS  [11] listSkillDirs 返回数组  dirs=["huawei-cloud-find-skills"]
+  PASS  [12] findSkillsRoot 命中有效目录  found=/home/testbot1/devkit-test/Hermes/hdk/skills
+RESULT: FAIL

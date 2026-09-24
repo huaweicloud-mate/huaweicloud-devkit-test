@@ -1,0 +1,10 @@
+=== D2-26 凭证备份与恢复 (隔离 HOME) ===
+SUT: v1.1.7-next.1 (gitHead 657ceb7)
+隔离 HUAWEICLOUD_HOME (mktemp) 下:
+[1] 写入原始凭证 -> backupGlobalCredentials() 生成 .bak
+[2] .bak 存在 + 内容 == 原始 (含凭证指纹) = true
+[3] 篡改凭证文件 -> 当前 != 原始
+[4] restoreGlobalCredentialsBackup() 返回 true -> 恢复后 == 原始 (恢复成功)
+断言汇总: 4 条, PASS 4, FAIL 0
+来源: evidence/fresh-d2-26.txt (2026-09-24 fresh 重跑)
+RESULT: PASS (备份+恢复闭环完整)

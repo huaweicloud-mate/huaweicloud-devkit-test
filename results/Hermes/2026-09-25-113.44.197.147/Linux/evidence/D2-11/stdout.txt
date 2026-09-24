@@ -1,0 +1,6 @@
+=== CASE D2-11 ===  FAIL
+  SUT: v1.1.7 (gitHead 7456d05)
+  defect: R3 STS token 拒绝逻辑存在，但 auth_switch 先走 R2 needs_confirmation 冲突门，未先于 R2 立即 rejected
+  root: tools.mjs auth_switch R2(1214-1228) 先于 persistCredentials R3(1237)
+  来源: evidence/fresh-*.txt (2026-09-25 fresh 重跑) + 源码级直调
+RESULT: FAIL

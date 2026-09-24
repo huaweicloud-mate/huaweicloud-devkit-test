@@ -1,0 +1,22 @@
+=== D9-13 tools/call 凭证不泄露与权限校验 (v1.1.7) ===
+  PASS  [1] setRuntimeCredentials + hasRuntimeCredentials  has=true
+  PASS  [2] resolveCredentialsWithRuntime 解析运行时凭证  ak命中=true
+  PASS  [3] clearRuntimeCredentials 清理后不留盘  has=false
+  PASS  [4] 清理后 resolve 不再返回运行时 AK  已清除
+  PASS  [5] globalCredentialsPath 返回路径  /home/testbot1/.config/huaweicloud/credentials.json
+  PASS  [6] isPlaceholder 正确识别占位  isPlaceholder=function
+  PASS  [7] obsConfigPath 返回路径  /home/testbot1/.obsutilconfig
+  PASS  [8] loadPolicy 加载安全策略  policy=object
+  PASS  [9] classifyHcloudArgs 写操作 deny/write  decision=deny risk=write
+  PASS  [10] classifyHcloudArgs 只读 allow  decision=allow
+  PASS  [11] evaluateArtifacts/evaluateDeployPlan 返回结构化  art=object, dep=object
+  PASS  [12] mergeRiskDecision deny(含 findings) 合并后 denied  merged={"decision":"deny","risk":"write","reason":"destructive write op","blockedByRiskRule":true,"findings":[{"category":"write","message":"destructive write op"}]}
+  PASS  [13] hashArgs 生成参数哈希  hash=1b19c92763c49957...
+  PASS  [14] createApprovalToken 生成审批令牌  token=1b640ef4-6cd...
+  PASS  [15] consumeApprovalToken 消费后不可重放  二次消费不一致/拒绝
+  PASS  [16] readServiceCatalogs 返回目录  type=object
+  PASS  [17] classifyUnsupported 返回有效分类字符串  classify=unknown
+  PASS  [18] planHcloudCommand 返回计划  decision=undefined
+  PASS  [19] tools/call 返回无 token 明文(v1.1.7 token 已脱敏)  token=<redacted>
+  INFO  小写 ak=/sk= 脱敏: 仍未脱敏(已知缺口 D2-4/D4-27)
+RESULT: PASS
