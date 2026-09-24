@@ -14,7 +14,7 @@
    - 测试仓库：git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git   （结果/用例/脚本）
    - 源码仓库：git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk        （源码检查/根因定位/写探针）
 2. 读测试仓库根目录 AGENTS.md（能力索引 + 公共前置 + 全局红线）。
-3. 自我识别：客户端名（OpenCode / Codex / CodeArtsAgent / CodeArtsWork / WorkBuddy / DSH / OfficeAce / Hermes / OpenClaw / AtomCode 之一）、OS（Windows / Linux）。
+3. 自我识别：客户端名（OpenCode / Codex / CodeArtsAgent / CodeArtsSpace / WorkBuddy / DSH / OfficeAce / Hermes / OpenClaw / AtomCode 之一）、OS（Windows / Linux）。
 ```
 
 > 两个仓库都要有：测试仓库管「测什么、结果记哪」，源码仓库（hdk）管「源码长啥样、bug 定位到哪一行」。
