@@ -1,0 +1,8 @@
+D4-13: Minimum privilege credential pass rate
+1. Readonly sub-account credentials (test001) configured at ~/.config/huaweicloud/credentials.readonly.json
+2. run-as-readonly.py injects HW_ACCESS_KEY/HW_SECRET_KEY env (no token) to override admin credentials
+3. Read-only test: hcloud ECS ListServersDetails -> {"count": 0, "servers": []} (success)
+4. Write plan test: hcloud VPC DeleteVpc -> classification=write, decision=deny, safeToRun=false
+5. IAM permission note: test001 account has VPC creation permissions (CreateVpc succeeded at IAM level)
+6. Resource cleanup: Created VPC deleted immediately, verified via ListVpcs
+7. Devkit correctly handles readonly credential switching via env injection

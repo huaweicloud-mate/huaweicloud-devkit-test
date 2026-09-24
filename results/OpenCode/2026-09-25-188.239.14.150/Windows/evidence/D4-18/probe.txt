@@ -1,0 +1,9 @@
+Confirm-not-deny approval semantics test:
+run_approved_command has approvalToken: true
+run_approved_command has approvedByUser: true
+approvedByUser requires explicit approval: true
+approvedByUser description: "Must be true only after the user explicitly approves this exact command."
+approvalToken is required: true
+approvedByUser is required: true
+plan_cli_command has allowWrites: true
+Flow: plan(return token) -> user approves -> run(token + approvedByUser=true)

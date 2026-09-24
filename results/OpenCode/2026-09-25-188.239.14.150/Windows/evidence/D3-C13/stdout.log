@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "why": "obs_set_website_config tool with action (set/get/delete), indexDocument (required), errorDocument (optional) is registered",
+  "hasObsWebsite": true,
+  "hasAction": {
+    "type": "string",
+    "enum": [
+      "set",
+      "get",
+      "delete"
+    ],
+    "description": "操作类型：set=配置静态网站托管，get=查询当前配置，delete=删除配置"
+  },
+  "hasIndexDoc": {
+    "type": "string",
+    "description": "首页文件名（action=set 时必填），如 index.html"
+  },
+  "hasErrorDoc": {
+    "type": "string",
+    "description": "错误页面文件名（action=set 时可选），如 404.html 或 error.html"
+  },
+  "executedAt": "20260925050536"
+}

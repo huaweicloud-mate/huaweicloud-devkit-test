@@ -1,0 +1,39 @@
+{
+  "status": "FAIL",
+  "why": "Hook tools not effective",
+  "cmdResult": {
+    "decision": "allow",
+    "findings": []
+  },
+  "artifactResult": {
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-iam-admin-policy",
+        "title": "Broad IAM administrator grant",
+        "category": "iam",
+        "severity": "deny",
+        "message": "The change appears to grant broad administrator permissions.",
+        "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+        "source": "policy.json",
+        "evidence": "policy.json {\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+      }
+    ]
+  },
+  "deployResult": {
+    "decision": "warn",
+    "findings": [
+      {
+        "ruleId": "hwc-sandbox-missing-ttl",
+        "title": "Sandbox deployment missing cleanup metadata",
+        "category": "sandbox",
+        "severity": "warn",
+        "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+        "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+        "source": "deploy_plan",
+        "evidence": "{ \"action\": \"create\", \"service\": \"ecs\", \"public_exposure\": true }"
+      }
+    ]
+  },
+  "executedAt": "20260925050535"
+}
