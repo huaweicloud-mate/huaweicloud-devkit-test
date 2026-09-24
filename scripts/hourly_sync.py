@@ -12,7 +12,7 @@ import os, sys, subprocess, datetime, time, socket
 
 REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 OSES = ["Windows", "Linux"]
 

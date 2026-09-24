@@ -8,7 +8,8 @@
 > **KooCLI**: 7.2.12  
 > **Node**: v22.13.0  
 > **机器IP**: 120.46.40.202  
-> **执行时间**: 2026-09-23 16:47 (UTC+8)  
+> **执行时间**: 2026-09-23 17:31 (UTC+8)  
+> **执行轮次**: re-run (autopilot manual trigger 17:26 UTC+8)
 
 ---
 
@@ -130,6 +131,6 @@
 
 ---
 
-> 报告生成时间: 2026-09-23 16:47 (UTC+8)  
+> 报告生成时间: 2026-09-23 17:31 (UTC+8)  
 > 探针脚本: probe_safety.mjs (classifyTextCommand), eval/harness/run-eval.mjs, hdk status/doctor/auth, hcloud NovaListServers  
 > 证据目录: evidence/ (含 137 个用例的 probe.mjs + stdout.log)

@@ -1,6 +1,6 @@
 # AGENTS — huaweicloud-devkit 每日测试执行指南
 
-> 每个客户端 agent（OpenCode/Codex/CodeArtsAgent/CodeArtsWork/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode）读本文件即开始执行当天测试。**不自行 close/reopen/评论任何 GitHub issue（由维护者统一操作）**；收到带 issue 编号的「全链路/回归」指令时，按下方「问题单号回归」节执行（走回归路线，而非每日全量）。
+> 每个客户端 agent（OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode）读本文件即开始执行当天测试。**不自行 close/reopen/评论任何 GitHub issue（由维护者统一操作）**；收到带 issue 编号的「全链路/回归」指令时，按下方「问题单号回归」节执行（走回归路线，而非每日全量）。
 >
 > **完成标准** = 本机 `results/<你的客户端>/<日期>-<IP>/<OS>/` 已含「测试报告.md + 3 份 CSV」且已 push 远端；只读文档 / 只建目录 / 中途退出都不算完成。
 
@@ -55,7 +55,7 @@ npm install -g huaweicloud-devkit
 > 脚本优先读 `HDK_GH_TOKEN`，否则尝试本机 gh shuangheaven token。
 
 1. **自我识别身份**（无需人工告知）：
-   - **客户端名**：从你的运行环境/系统提示/进程名判断你是 10 个客户端中的哪一个——OpenCode、Codex、CodeArtsAgent、CodeArtsWork、WorkBuddy、DSH、OfficeAce、Hermes、OpenClaw、AtomCode。
+   - **客户端名**：从你的运行环境/系统提示/进程名判断你是 10 个客户端中的哪一个——OpenCode、Codex、CodeArtsAgent、CodeArtsSpace、WorkBuddy、DSH、OfficeAce、Hermes、OpenClaw、AtomCode。
    - **OS**：用 `platform.system()` 或运行环境判断 Windows / Linux。
    - 识别不出：**显式输出失败原因后退出**（禁止静默退出、禁止瞎猜冒充其他客户端、禁止假装完成）。无人值守环境没有「询问用户」通道，卡住会被调度器判 idle 杀掉。
 2. 拉最新（**每次执行测试前必跑**，一天可能跑多次，每次都要重新取最新，勿因「今天跑过」跳过）——`python scripts/prepare_env.py --update` 一键完成三件事：
@@ -119,6 +119,6 @@ npm install -g huaweicloud-devkit
 
 ## 脚本清单（本仓库 scripts/）
 
-**agent 用**：`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `backfill_daily.py` 批量回填（读 `evidence/<case-id>/stdout.log` 一次写回 CSV，防工具调用上限）· `verify_no_fake_pass.py` PASS 门禁 · `verify_coverage.py` 覆盖率门禁 · `hourly_sync.py` 每 10 分钟提报 · `file_issue.py` 统一提单
+**agent 用**：`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `backfill_daily.py` 批量回填（读 `evidence/<case-id>/stdout.log` 一次写回 CSV，防工具调用上限）· `gen_report.py` 报告自动生成（读回填 CSV 统计状态 + 出测试报告骨架，模型只补根因）· `verify_no_fake_pass.py` PASS 门禁 · `verify_coverage.py` 覆盖率门禁 · `hourly_sync.py` 每 10 分钟提报 · `file_issue.py` 统一提单
 
 **维护者用**：`build_summary.py` 汇总生成 Summary（agent 不跑，统一由维护者汇总，避免共享冲突）· `report_html.py` 生成 HTML 汇总报告 · `send_email.py` SMTP 邮件发送 · `run_daily_report.py` 每日汇总流水线（收集→HTML→邮件，配合 Windows 计划任务定时跑）

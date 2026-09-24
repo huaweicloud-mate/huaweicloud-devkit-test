@@ -1,0 +1,12 @@
+Debug mode env var test (FIXED):
+1. HUAWEICLOUD_DEVKIT_DEBUG in update-check.mjs: true
+2. HUAWEICLOUD_DEVKIT_DEBUG in telemetry.mjs: true
+3. HUAWEICLOUD_DEVKIT_SKIP_UPDATE: true
+4. HUAWEICLOUD_DEVKIT_TELEMETRY: true
+5. HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT: true
+6. HUAWEICLOUD_ICONS_OFFLINE: true
+7. HUAWEICLOUD_NPM_REGISTRY: true
+
+Source code evidence:
+- update-check.mjs:231: if (process.env.HUAWEICLOUD_DEVKIT_DEBUG === '1' || process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true')
+- telemetry/telemetry.mjs:81: const DEBUG = process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true';

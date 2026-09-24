@@ -1,0 +1,28 @@
+{
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D4-13",
+      "name": "readonly-ListServersDetails",
+      "pass": true,
+      "actual": "exit=0 {\n  \"count\": 0,\n  \"servers\": []\n}\n",
+      "expected": "exit0+可枚举+非参数错误"
+    },
+    {
+      "id": "D4-13",
+      "name": "readonly-ListVpcs",
+      "pass": true,
+      "actual": "exit=0 ListVpcs is a multi-version API, where the version (v3) is default. To specify another ver",
+      "expected": "exit0+可枚举+非参数错误"
+    },
+    {
+      "id": "D4-13",
+      "name": "write-iam-denied",
+      "pass": true,
+      "actual": "exit=0 {\n  \"code\": \"VPC.0010\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Rules on create_router by *** disallowed by policy\\\",\\\"type\\\":\\\"PolicyNotAuthorized\\\",\\\"d",
+      "expected": "IAM拒绝(权限不足/PolicyNotAuthorized)"
+    }
+  ]
+}

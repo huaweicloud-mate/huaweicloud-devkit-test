@@ -1,6 +1,6 @@
 # 测试能力库（prompt-as-skill）
 
-本目录是**任意 agent 通用的测试能力库**：把「测试设计 / 测试执行 / 缺陷回归 / 源码覆盖核对」等能力写成**一篇篇自包含的能力文档（SKILL.md）**。任何 agent（OpenCode / Codex / CodeArtsAgent / CodeArtsWork / WorkBuddy / DSH / OfficeAce / Hermes / OpenClaw / AtomCode）clone 本仓库后，读根目录 `AGENTS.md` 的「能力索引」，按提示语翻开对应 `skills/<能力>/SKILL.md` 即可完成对应工作——**不依赖 Hermes 本机、不依赖任何特定客户端工具**。
+本目录是**任意 agent 通用的测试能力库**：把「测试设计 / 测试执行 / 缺陷回归 / 源码覆盖核对」等能力写成**一篇篇自包含的能力文档（SKILL.md）**。任何 agent（OpenCode / Codex / CodeArtsAgent / CodeArtsSpace / WorkBuddy / DSH / OfficeAce / Hermes / OpenClaw / AtomCode）clone 本仓库后，读根目录 `AGENTS.md` 的「能力索引」，按提示语翻开对应 `skills/<能力>/SKILL.md` 即可完成对应工作——**不依赖 Hermes 本机、不依赖任何特定客户端工具**。
 
 ## 与 AGENTS.md 的分工
 

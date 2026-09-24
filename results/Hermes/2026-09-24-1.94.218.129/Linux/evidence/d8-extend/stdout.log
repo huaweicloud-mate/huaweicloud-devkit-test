@@ -1,0 +1,77 @@
+{
+  "total": 10,
+  "passed": 9,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D8-9",
+      "name": "installId-stable",
+      "pass": true,
+      "actual": "e471067f9ec8==e471067f9ec8",
+      "expected": "二次调用稳定"
+    },
+    {
+      "id": "D8-9",
+      "name": "sanitize-whitespace",
+      "pass": true,
+      "actual": "\"hello world foo\"",
+      "expected": "换行/制表符替换为空格"
+    },
+    {
+      "id": "D8-9",
+      "name": "sanitize-length",
+      "pass": true,
+      "actual": "len=255",
+      "expected": "超长截断"
+    },
+    {
+      "id": "D8-9",
+      "name": "sanitize-credential-strip",
+      "pass": false,
+      "actual": "\"AK=SECRETAK sk=SECRETSK token=SECRETTOK\"",
+      "expected": "AK/SK/token 敏感值被移除（case 预期）"
+    },
+    {
+      "id": "D8-10",
+      "name": "mergeCommandStyle",
+      "pass": true,
+      "actual": "{\"entry\":{\"type\":\"local\",\"command\":[\"node\",\"/tmp/hdk-d810-mcp.mjs\"],\"enabled\":true,\"timeout\":300000},\"changed\":true}",
+      "expected": "命令风格注入 node+mcpPath"
+    },
+    {
+      "id": "D8-10",
+      "name": "mergeArgsStyle",
+      "pass": true,
+      "actual": "{\"entry\":{\"command\":\"node\",\"args\":[\"/tmp/hdk-d810-mcp.mjs\"],\"env\":{},\"timeout\":300000},\"changed\":true}",
+      "expected": "参数风格注入 args[0]=mcpPath"
+    },
+    {
+      "id": "D8-10",
+      "name": "mergeMcpServersFile",
+      "pass": true,
+      "actual": "{\"mcpServers\":{\"other\":{\"command\":\"x\"},\"huaweicloud-devkit\":{\"command\":\"node\",\"args\":[\"/tmp/hdk-d810-mcp.mjs\"],\"env\":{}}}}",
+      "expected": "文件风格合并注入 huaweicloud-devkit"
+    },
+    {
+      "id": "D8-10",
+      "name": "delta-roundtrip-idempotent",
+      "pass": true,
+      "actual": "delta=null",
+      "expected": "delta 提取再应用幂等"
+    },
+    {
+      "id": "D8-10",
+      "name": "agent-delta-save-take",
+      "pass": true,
+      "actual": "{\"foo\":\"bar\",\"savedAt\":\"2026-09-24T01:25:03.109Z\"}",
+      "expected": "save/take 一致"
+    },
+    {
+      "id": "D8-10",
+      "name": "purgeBackup-clears",
+      "pass": true,
+      "actual": "null",
+      "expected": "purgeBackup 后 delta 清空"
+    }
+  ]
+}

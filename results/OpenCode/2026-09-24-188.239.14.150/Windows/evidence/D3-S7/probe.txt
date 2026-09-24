@@ -1,0 +1,21 @@
+Real cloud test - Cross-service delivery (Web app + RDS):
+1. huaweicloud_service_catalog("deploy app with RDS database") executed
+2. Routed to: RDS + CloudDeploy
+3. Recommended skills: huawei-rds, huawei-deployment
+4. RDS available in cn-north-4: true
+5. Sandbox tools available for web app deployment
+6. plan_cli_command available for RDS creation (requires approval)
+
+Actual service_catalog result:
+intent: "deploy app with RDS database"
+recommendedSkills: ["huawei-rds", "huawei-deployment"]
+recommendedServices: ["RDS", "CloudDeploy"]
+
+RDS availability check:
+service: rds, region: cn-north-4, available: true
+
+The composite intent routing correctly identifies RDS + deployment services.
+Orchestration order: create DB first (via plan_cli_command with approval),
+then deploy web app (via sandbox tools).
+Actual resource creation was not performed (cost consideration), but the
+planning and routing layer is verified functional.

@@ -6,7 +6,7 @@
 """
 import os, sys, csv, datetime
 
-CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 OSES = ["Windows", "Linux"]
 COLS = [f"{c}-{o}" for c in CLIENTS for o in OSES]

@@ -1,0 +1,15 @@
+PASS	D4-29-raw-delegates	classifyRawCommand 委托 classifyTextCommand（结果一致）	actual="allow"	expected="allow"
+PASS	D4-29-allow-no-throw	allow 分类 → assertAllowed 不抛错	actual={"decision":"allow","passed":true}	expected={"decision":"allow","passed":true}
+PASS	D4-29-deny-throws	deny 分类 → assertAllowed 抛 Error	actual={"threw":true,"hasPolicy":true,"decision":"deny"}	expected={"threw":true,"hasPolicy":true,"decision":"deny"}	err=Reading Huawei Cloud credential or profile files is blocked. Use redacted profil
+PASS	D4-29-cred-file-deny	凭证文件读取 → deny/credential	actual=true	expected=true
+PASS	D4-29-env-dump-deny	凭证环境变量 dump → deny	actual=true	expected=true
+PASS	D4-29-hcloud-read-allow	hcloud 只读命令 → allow	actual="allow"	expected="allow"	risk=read_only
+PASS	D4-29-hcloud-write-deny	hcloud 写操作 → deny（无 approval）	actual="deny"	expected="deny"	risk=write reason=Huawei Cloud write operation blocked until the agent present
+PASS	D4-29-hcloud-empty-deny	hcloud 空参数 → deny/invalid	actual={"decision":"deny","risk":"invalid"}	expected={"decision":"deny","risk":"invalid"}
+PASS	D4-29-hcloud-help-allow	hcloud --help/version → allow/local_metadata	actual={"help":"allow","version":"allow"}	expected={"help":"allow","version":"allow"}
+PASS	D4-29-redact-secrets	redactSecrets 脱敏凭证字段	actual={"ak":"<redacted>","sk":"<redacted>","name":"test"}	expected={"ak":"<redacted>","sk":"<redacted>","name":"test"}
+PASS	D4-29-load-policy	loadPolicy 返回有效策略	actual=true	expected=true	keys=version,secretKeyNamePatterns,credentialFilePatterns,blockedConfigureSubcommands,blockedSecretOperations,writeOperationPrefixes
+PASS	D4-29-concat-write-deny	拼接命令中 hcloud 写操作 → deny	actual="deny"	expected="deny"	risk=write
+
+=== D4-29 分类断言与原始命令分类入口夹具 ===  pass=12 fail=0
+RESULT: PASS

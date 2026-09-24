@@ -1,0 +1,59 @@
+check_user -> realnameVerified=true agreementSigned=true err=
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+connect -> status=connected wsId=8d898bc423254635bbe1
+[2026-09-23T21:07:23.360Z] uploadProject: /home/testbot2/.hdk-s3-muelg5a7 -> /workspace/.hdk-s3-muelg5a7.tar.gz (archive=210 bytes, md5=06f708edc6dbd0bee2cfde95c4550ce1)
+[2026-09-23T21:07:23.405Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-3878866991/sandbox-upload-1790197643350/.hdk-s3-muelg5a7.tar.gz, size=210, remotePath=/workspace/.hdk-s3-muelg5a7.tar.gz)
+[2026-09-23T21:07:23.405Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-09-23T21:07:23.405Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-09-23T21:07:23.449Z] deployFileServer: writing script (2456 b64 chars)
+[2026-09-23T21:07:23.493Z] deployFileServer: starting server on port 8888
+[2026-09-23T21:07:23.526Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 9515\r\n\u001b]133;C\u0007\r\n"
+[2026-09-23T21:07:23.526Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+[2026-09-23T21:07:24.427Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-09-23T21:07:24.429Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-09-23T21:07:24.430Z] uploadViaHttpTunnel: tunnel ready, localPort=41025
+[2026-09-23T21:07:24.431Z] uploadViaHttpTunnel: waiting for server health on localhost:41025
+[2026-09-23T21:07:24.431Z] waitForServerReady: attempt 1, checking http://localhost:41025/health
+[2026-09-23T21:07:24.466Z] waitForServerReady: server ready on port 41025 after 0 retries
+[2026-09-23T21:07:24.466Z] uploadViaHttpTunnel: sending POST with 210 bytes
+[2026-09-23T21:07:24.501Z] uploadViaHttpTunnel: upload complete (bytes=210, md5=06f708edc6dbd0bee2cfde95c4550ce1)
+upload_project -> ok=true md5Verified=true
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+deploy_nginx -> ok=true port=8083 url=
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-muelg5a7/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""},"tunnel_u
+close_session -> ok
+[OK] 沙箱 connect 成功
+[OK] s3-connect/upload/deploy 链路
+[OK] 部署返回可访问 URL 或检查通过
+[OK] 会话正常关闭

@@ -1,0 +1,49 @@
+{
+  "total": 6,
+  "passed": 6,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D3-C4",
+      "name": "plan-readonly-allow",
+      "pass": true,
+      "actual": "allow",
+      "expected": "readonly→allow"
+    },
+    {
+      "id": "D3-C4",
+      "name": "plan-write-escalate",
+      "pass": true,
+      "actual": "deny",
+      "expected": "write(allowWrites=false)→confirm/deny"
+    },
+    {
+      "id": "D3-C4",
+      "name": "vpc-create",
+      "pass": true,
+      "actual": "{\n  \"vpc\": {\n    \"id\": \"3f154d44-691a-4219-9d7a-bcc38caced75\",\n    \"name\": \"hdk-c4-probe\",\n    \"description\": \"\",\n    \"c",
+      "expected": "返回 vpc.id"
+    },
+    {
+      "id": "D3-C4",
+      "name": "vpc-delete-zero",
+      "pass": true,
+      "actual": "delete=true remain=0",
+      "expected": "删除后 ListVpcs 无此 id"
+    },
+    {
+      "id": "D3-C4",
+      "name": "obs-mb",
+      "pass": true,
+      "actual": "Start at 2026-09-24 01:24:13.443450988 +0000 UTC\n\nCreate bucket [testbot3-hermes-c4-0213051289] successfully, request id",
+      "expected": "OBS 建桶成功"
+    },
+    {
+      "id": "D3-C4",
+      "name": "obs-rm-zero",
+      "pass": true,
+      "actual": "Start at 2026-09-24 01:24:13.910396699 +0000 UTC\n\nDelete bucket [testbot3-hermes-c4-0213051289] successfully!\n",
+      "expected": "OBS 删桶归零"
+    }
+  ]
+}

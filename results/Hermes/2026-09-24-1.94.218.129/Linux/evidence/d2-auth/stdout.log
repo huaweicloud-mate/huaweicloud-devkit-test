@@ -1,0 +1,430 @@
+{
+  "total": 47,
+  "passed": 46,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D2-4",
+      "name": "redact-json",
+      "pass": false,
+      "actual": "{\"ak\":\"AKIDTEST12345678\",\"sk\":\"SKTEST1234567890abcdef1234\",\"",
+      "expected": "redacted",
+      "passMsg": "JSON creds redacted",
+      "failMsg": "JSON creds NOT redacted (defect)"
+    },
+    {
+      "id": "D2-4",
+      "name": "creds-readable",
+      "pass": true,
+      "actual": "present",
+      "expected": "present",
+      "passMsg": "credentials readable",
+      "failMsg": "credentials not readable"
+    },
+    {
+      "id": "D2-11",
+      "name": "writeGlobalCredentials-fn",
+      "pass": true,
+      "actual": "function",
+      "expected": "function",
+      "passMsg": "writeGlobalCredentials exists",
+      "failMsg": "writeGlobalCredentials missing"
+    },
+    {
+      "id": "D2-11",
+      "name": "resolve-safe",
+      "pass": true,
+      "actual": "safe",
+      "expected": "safe",
+      "passMsg": "resolveCredentials safe",
+      "failMsg": null
+    },
+    {
+      "id": "D2-1",
+      "name": "cred-path",
+      "pass": true,
+      "actual": "/home/testbot3/.config/huaweicloud/credentials.json",
+      "expected": "string",
+      "passMsg": "cred path: /home/testbot3/.config/huaweicloud/credentials.json",
+      "failMsg": "cred path error"
+    },
+    {
+      "id": "D2-5",
+      "name": "placeholder-fn",
+      "pass": true,
+      "actual": "function",
+      "expected": "function",
+      "passMsg": "placeholder detection exists",
+      "failMsg": "placeholder detection missing"
+    },
+    {
+      "id": "D2-5",
+      "name": "placeholder-angled",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "angled placeholder detected",
+      "failMsg": "angled placeholder not detected"
+    },
+    {
+      "id": "D2-5",
+      "name": "placeholder-template",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "template placeholder detected",
+      "failMsg": "template placeholder not detected"
+    },
+    {
+      "id": "D2-10",
+      "name": "auth-service",
+      "pass": true,
+      "actual": "available",
+      "expected": "available",
+      "passMsg": "auth service available",
+      "failMsg": null
+    },
+    {
+      "id": "D2-12",
+      "name": "runtime-fns",
+      "pass": true,
+      "actual": "all",
+      "expected": "true",
+      "passMsg": "runtime cred functions exist",
+      "failMsg": "runtime cred functions missing"
+    },
+    {
+      "id": "D2-13",
+      "name": "configured-by-session",
+      "pass": true,
+      "actual": "function",
+      "expected": "function",
+      "passMsg": "setConfiguredBySession exists",
+      "failMsg": "setConfiguredBySession missing"
+    },
+    {
+      "id": "D2-16",
+      "name": "import-erase",
+      "pass": true,
+      "actual": "mechanism",
+      "expected": "available",
+      "passMsg": "import erase mechanism available",
+      "failMsg": null
+    },
+    {
+      "id": "D2-2",
+      "name": "auth-status-fn",
+      "pass": true,
+      "actual": "function",
+      "expected": "function",
+      "passMsg": "auth status function exists",
+      "failMsg": "auth status function missing"
+    },
+    {
+      "id": "D3-A1",
+      "name": "skill-tools",
+      "pass": true,
+      "actual": "3",
+      "expected": ">=3",
+      "passMsg": "skill tools: huaweicloud_search_docs,huaweicloud_retrieve_skill,huaweicloud_search_marketplace",
+      "failMsg": "skill tools insufficient"
+    },
+    {
+      "id": "D3-B1",
+      "name": "list-ops",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "list_operations registered",
+      "failMsg": "list_operations not registered"
+    },
+    {
+      "id": "D3-B3",
+      "name": "run-readonly",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "run_readonly registered",
+      "failMsg": "run_readonly not registered"
+    },
+    {
+      "id": "D3-B5",
+      "name": "detect-framework",
+      "pass": true,
+      "actual": "function",
+      "expected": "function",
+      "passMsg": "detectFramework available",
+      "failMsg": "detectFramework not available"
+    },
+    {
+      "id": "D3-C4",
+      "name": "plan-cli",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "plan_cli_command registered",
+      "failMsg": "plan_cli_command not registered"
+    },
+    {
+      "id": "D3-C5",
+      "name": "smoke-tools",
+      "pass": true,
+      "actual": "all",
+      "expected": "all",
+      "passMsg": "smoke tools present (4)",
+      "failMsg": "missing: "
+    },
+    {
+      "id": "D4-13",
+      "name": "readonly-ok",
+      "pass": true,
+      "actual": "allow",
+      "expected": "allow",
+      "passMsg": "readonly allowed",
+      "failMsg": "readonly denied"
+    },
+    {
+      "id": "D4-14",
+      "name": "audit",
+      "pass": true,
+      "actual": "allow",
+      "expected": "string",
+      "passMsg": "classify returns decision",
+      "failMsg": "classify missing decision"
+    },
+    {
+      "id": "D8-7",
+      "name": "skills",
+      "pass": true,
+      "actual": "29",
+      "expected": ">0",
+      "passMsg": "skills: 29",
+      "failMsg": "skills empty"
+    },
+    {
+      "id": "D8-7",
+      "name": "skill-md",
+      "pass": true,
+      "actual": "29",
+      "expected": ">0",
+      "passMsg": "SKILL.md: 29",
+      "failMsg": "no SKILL.md"
+    },
+    {
+      "id": "D10-4",
+      "name": "hook-tools",
+      "pass": true,
+      "actual": "3",
+      "expected": ">=3",
+      "passMsg": "hook tools: huaweicloud_hook_check_command,huaweicloud_hook_check_artifacts,huaweicloud_hook_check_deploy_plan",
+      "failMsg": "hook tools insufficient"
+    },
+    {
+      "id": "D10-4",
+      "name": "approved-cmd",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "run_approved_command registered",
+      "failMsg": "run_approved_command not registered"
+    },
+    {
+      "id": "D10-1",
+      "name": "tool-desc",
+      "pass": true,
+      "actual": "40/40",
+      "expected": "all",
+      "passMsg": "descriptions: 40/40",
+      "failMsg": "descriptions missing: 0"
+    },
+    {
+      "id": "D10-2",
+      "name": "retrieve-skill",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "retrieve_skill registered",
+      "failMsg": "retrieve_skill not registered"
+    },
+    {
+      "id": "D10-3",
+      "name": "service-catalog",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "service_catalog registered",
+      "failMsg": "service_catalog not registered"
+    },
+    {
+      "id": "D10-5",
+      "name": "multi-turn",
+      "pass": true,
+      "actual": "both",
+      "expected": "true",
+      "passMsg": "multi-turn tools available",
+      "failMsg": "multi-turn tools missing"
+    },
+    {
+      "id": "D8-1",
+      "name": "readme",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "README exists",
+      "failMsg": "README missing"
+    },
+    {
+      "id": "D8-4",
+      "name": "install-doc",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "INSTALL.md exists",
+      "failMsg": "INSTALL.md NOT in npm package (defect)"
+    },
+    {
+      "id": "D8-6",
+      "name": "readme-zh",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "README.zh-CN exists",
+      "failMsg": "README.zh-CN missing"
+    },
+    {
+      "id": "D6-1",
+      "name": "search-latency",
+      "pass": true,
+      "actual": "0ms",
+      "expected": "<100ms",
+      "passMsg": "search latency 0ms",
+      "failMsg": "search latency too slow 0ms"
+    },
+    {
+      "id": "D6-4",
+      "name": "calltool-async",
+      "pass": true,
+      "actual": "AsyncFunction",
+      "expected": "AsyncFunction",
+      "passMsg": "callTool is async",
+      "failMsg": "callTool not async"
+    },
+    {
+      "id": "D9-2",
+      "name": "mcp-compliant",
+      "pass": true,
+      "actual": "all",
+      "expected": "true",
+      "passMsg": "tools MCP compliant",
+      "failMsg": "tools not MCP compliant"
+    },
+    {
+      "id": "D9-6",
+      "name": "stdio",
+      "pass": true,
+      "actual": "40",
+      "expected": ">0",
+      "passMsg": "tools via stdio available",
+      "failMsg": "tools not available"
+    },
+    {
+      "id": "D9-9",
+      "name": "calltool-opts",
+      "pass": true,
+      "actual": "sig has opts: true, length: 1",
+      "expected": "opts param",
+      "passMsg": "callTool accepts opts: true",
+      "failMsg": "callTool missing opts param"
+    },
+    {
+      "id": "D1-1",
+      "name": "setup-cli",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "setup-cli exists",
+      "failMsg": "setup-cli missing"
+    },
+    {
+      "id": "D1-3",
+      "name": "doctor",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "doctor in setup-cli",
+      "failMsg": "doctor not available"
+    },
+    {
+      "id": "D1-5",
+      "name": "uninstall",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "uninstall in setup-cli",
+      "failMsg": "uninstall not available"
+    },
+    {
+      "id": "D1-2",
+      "name": "multi-agent",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "multi-agent detect mechanism",
+      "failMsg": "multi-agent mechanism missing"
+    },
+    {
+      "id": "D1-4",
+      "name": "status-update",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "status/update in setup-cli",
+      "failMsg": "status/update not available"
+    },
+    {
+      "id": "D1-6",
+      "name": "install-hcloud",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "install-hcloud in setup-cli",
+      "failMsg": "install-hcloud not available"
+    },
+    {
+      "id": "D1-58",
+      "name": "merge-exists",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "mcp-config-merge exists",
+      "failMsg": "mcp-config-merge missing"
+    },
+    {
+      "id": "D1-58",
+      "name": "backup-exists",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "mcp-config-backup exists",
+      "failMsg": "mcp-config-backup missing"
+    },
+    {
+      "id": "D1-58",
+      "name": "merge-mod",
+      "pass": true,
+      "actual": "applyUserDelta,extractUserDelta,mergeArgsStyle,mergeCommandStyle,mergeMcpServersFile",
+      "expected": "non-empty",
+      "passMsg": "merge exports: applyUserDelta,extractUserDelta,mergeArgsStyle,mergeCommandStyle,mergeMcpServersFile",
+      "failMsg": "merge no exports"
+    },
+    {
+      "id": "D7-4",
+      "name": "pkg-name",
+      "pass": true,
+      "actual": "huaweicloud-devkit",
+      "expected": "huaweicloud-devkit",
+      "passMsg": "package name correct",
+      "failMsg": "package name wrong"
+    }
+  ]
+}

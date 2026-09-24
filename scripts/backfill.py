@@ -23,7 +23,7 @@ import csv
 import datetime
 import collections
 
-CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 
 GROUPED = ["d4-security", "d2-auth", "d1-upgrade", "mcp-tools", "d2-realcloud-sts"]

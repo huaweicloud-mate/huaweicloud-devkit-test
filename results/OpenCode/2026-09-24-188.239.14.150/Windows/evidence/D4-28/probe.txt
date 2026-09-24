@@ -1,0 +1,43 @@
+Node hook chain test (FIXED):
+1. hooks/huaweicloud-safety.mjs exists: true
+2. hooks/huaweicloud-safety.py exists: true
+3. hooks/hooks.json exists: true
+4. hooks.json has PreToolUse: true
+5. hooks.json has Bash matcher: true
+6. hooks.json has MCP matcher: true
+7. risk-rule-engine.mjs has evaluateCommandRisk: true
+
+hooks.json config:
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*huaweicloud.*|huaweicloud_.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+The Node hook chain is complete:
+- hooks.json configures PreToolUse hooks for Bash and MCP tools
+- huaweicloud-safety.mjs is the Node hook handler
+- huaweicloud-safety.py is the Python hook handler
+- risk-rule-engine.mjs provides the risk evaluation logic

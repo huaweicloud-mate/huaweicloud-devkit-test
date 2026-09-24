@@ -22,7 +22,7 @@ stdout.log 约定（配合「探针执行后写 stdout.log」约定，见 AGENTS
 import os, sys, csv, json, datetime, socket
 
 REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 OSES = ["Windows", "Linux"]
 VALID_STATUS = {"PASS", "FAIL", "BLOCKED", "SPEC-MISMATCH", "NOT_RUN"}

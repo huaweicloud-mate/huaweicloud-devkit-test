@@ -1,0 +1,16 @@
+Real cloud test - Delete VPC requires confirmation:
+1. huaweicloud_plan_cli_command(["VPC", "DeleteVpc", "--vpc_id", "test-vpc-id"]) executed
+2. plan_cli_command classifies as write operation
+3. Classification: write, decision: deny, safeToRun: false
+4. Reason: "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval"
+5. approvalToken provided for user confirmation flow
+
+Actual plan result:
+command: hcloud VPC DeleteVpc --vpc_id test-vpc-id
+classification.decision: deny
+classification.risk: write
+classification.reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval
+safeToRun: false
+approvalToken: a9fe6afa-78c2-486a-96e5-78b06f166dbf
+
+The safety model correctly blocks destructive VPC deletion and requires explicit user approval.

@@ -15,7 +15,7 @@ import os, sys, csv, datetime, socket
 from collections import Counter
 
 REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 OSES = ["Windows", "Linux"]
 NOTRUN_EMPTY_LIMIT = 0.15   # NOT_RUN + 空列 占比上限（daily 是通用基础集，15% 已很宽松）

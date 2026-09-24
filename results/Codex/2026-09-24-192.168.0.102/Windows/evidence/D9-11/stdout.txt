@@ -1,0 +1,11 @@
+PASS	D9-11-attach	attach 注册到 mux	actual={"registered":true,"id":2}	expected=true
+PASS	D9-11-onopen-localserver	onopen 后 localServer 监听	actual={"localServer":true,"localPort":65250}	expected={"localServer":true,"localPort":">0"}
+PASS	D9-11-ready-resolve	ready Promise 在 open 时 resolve	actual={"readyResolved":true,"onReadyCalls":1}	expected={"readyResolved":true,"onReadyCalls":1}
+PASS	D9-11-subconn-open	子连接注册到 subConnections	actual={"subConnections":1}	expected={"subConnections":">=1"}
+PASS	D9-11-close-cleanup	close 后 localServer 关闭/subConnections 清空	actual={"closed":true,"localServer":null,"subConnections":0}	expected={"closed":true,"localServer":null,"subConnections":0}
+PASS	D9-11-close-mux-unregister	close 后 mux 通道注销	actual={"registered":false}	expected=false
+PASS	D9-11-close-callback	onClose 回调触发	actual={"onCloseCalls":1}	expected={"onCloseCalls":1}
+PASS	D9-11-close-idempotent	重复 close 幂等（onClose 仅触发 1 次）	actual={"onCloseCalls":1}	expected={"onCloseCalls":1}
+
+=== D9-11 WebSocket 隧道通道生命周期 ===  pass=8 fail=0
+RESULT: PASS

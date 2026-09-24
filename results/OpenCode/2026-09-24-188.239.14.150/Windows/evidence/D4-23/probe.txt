@@ -1,0 +1,49 @@
+Global rules injection test:
+1. Rules file: rules/huawei-agent-rules.mdc
+2. File exists: true
+3. File size: 3780 chars
+4. Has Core Principles section: true
+5. Has Secret Safety section: true
+6. Has IAM Security section: true
+7. MUST/MUST NOT constraint count: 10
+
+Rules file content (first 30 lines):
+# HuaweiCloud DevKit — Agent Rules
+
+> Agent 加载插件时自动读取，定义全局行为约束。
+
+---
+
+## Core Principles
+
+- **Always use the Huawei MCP server first** (sandboxed, observable, auditable). Fall back to `hcloud` CLI only when MCP is unavailable.
+- **Before any task, check for available skills.** Use `huaweicloud_search_docs` or `huaweicloud_retrieve_skill` via MCP. Follow skill procedures over general knowledge.
+- **When uncertain** about API parameters, quotas, limits, or error codes — search documentation via MCP. Do not guess.
+- **Prefer IaC over direct CLI calls** for infrastructure creation (Terraform for Huawei Cloud, or CloudFormation equivalent).
+- **Never use em dashes in resource names/tags.** Use hyphens only.
+- **Match user language.** Respond in the same language the user writes in.
+
+## Secret Safety
+
+- **MUST load the `huawei-dew` skill** first for any secret, credential, API key, token, or password task.
+- **MUST NOT call** `hcloud csms download-secret` or `hcloud csms show-secret` directly.
+- **MUST NOT call** `hcloud kms decrypt` directly.
+- **MUST use** `{{resolve:csms:secret-id:SecretString:key}}` with the MCP proxy — secrets resolve at runtime, never enter agent context.
+- **NEVER** echo AK/SK values in conversation or logs.
+
+## IAM Security
+
+- **Least privilege by default.** Start with no permissions, add only what is needed.
+- **MUST NOT create IAM users** — use IAM Identity Center (OneAccess) or temporary credentials.
+- **MUST NOT create long-term AK/SK** — use temporary STS tokens.
+- **MUST scope resource ARNs** — no `*` wildcards.
+- **Confused deputy protection:** Add `g:SourceAccount` and `g:SourceUrn` conditions to trust policies.
+
+The huawei-agent-rules.mdc file exists in the source repo with valid agent behavior constraints:
+- Core Principles (MCP first, check skills, no guessing)
+- Secret Safety (MUST NOT call csms/kms directly, MUST use resolve proxy)
+- IAM Security (least privilege, no long-term AK/SK)
+- The rules define MUST constraints that are enforceable via the hook system
+
+Note: The rules file is loaded by agents when the plugin is loaded ("Agent 加载插件时自动读取").
+The hook system (hooks.json + huaweicloud-safety.mjs) enforces the MUST constraints at runtime.

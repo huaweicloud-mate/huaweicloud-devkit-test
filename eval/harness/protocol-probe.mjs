@@ -81,7 +81,7 @@ rec('D9-2b-invalid-params', '-32602 (Invalid params)', String(badParam?.error?.c
     badParam?.error?.code === -32602 ? 'PASS' : 'FAIL', 'error.code');
 
 // ===== D9-6 跨客户端互通：10 客户端 clientInfo 独立连接 initialize+tools/list，验证协议不依赖特定客户端 =====
-const CLIENTS = ['OpenCode', 'Codex', 'CodeArtsAgent', 'CodeArtsWork', 'WorkBuddy',
+const CLIENTS = ['OpenCode', 'Codex', 'CodeArtsAgent', 'CodeArtsSpace', 'WorkBuddy',
     'DSH', 'OfficeAce', 'Hermes', 'OpenClaw', 'AtomCode'];
 let ok6 = 0;
 for (const cn of CLIENTS) {
