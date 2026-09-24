@@ -1,0 +1,9 @@
+=== D9-11 WebSocket 隧道通道生命周期 ===
+预期: attach 注册; ready on open resolve; close 后 localServer 关闭 + subConnections 清空 + onClose 回调
+实测: 符合
+详情:
+attach 后 mux 注册通道=true (identifier=2)
+onopen 后 localServer 监听 127.0.0.1:46207 localServer=true
+ready Promise resolved=true
+close 后: closed=true, localServer=null, subConnections.size=0, onClose 回调=1
+RESULT: PASS
