@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "why": "Public exposure and/or destructive commands are intercepted before execution",
+  "pubResult": {
+    "decision": "allow",
+    "findings": []
+  },
+  "destResult": {
+    "decision": "warn",
+    "findings": [
+      {
+        "ruleId": "hwc-destructive-delete-operation",
+        "title": "Destructive cloud resource operation",
+        "category": "destructive",
+        "severity": "warn",
+        "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+        "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+        "source": "command",
+        "evidence": "hcloud ECS DeleteServers --all"
+      }
+    ]
+  },
+  "executedAt": "20260925050535"
+}

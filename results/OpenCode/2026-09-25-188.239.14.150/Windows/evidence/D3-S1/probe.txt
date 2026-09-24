@@ -1,0 +1,15 @@
+Real cloud test - Read-only ECS query:
+1. huaweicloud_run_readonly_command(["ECS", "ListServersDetails"]) executed
+2. Real Huawei Cloud API call returned: {"count": 0, "servers": []}
+3. Classification: read_only, decision: allow, safeToRun: true
+4. Zero write operations during session
+
+Actual MCP tool result:
+exitCode: 0
+stdout: {"count": 0, "servers": []}
+plan.classification.decision: allow
+plan.classification.risk: read_only
+plan.safeToRun: true
+
+The read-only query executed successfully against real Huawei Cloud API.
+No instances found (clean account). No write operations performed.

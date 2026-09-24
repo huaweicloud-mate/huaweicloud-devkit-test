@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "why": "All hook bypass attempts (case variation, URL encoding) are blocked",
+  "details": [
+    {
+      "cmd": "hcloud ECS deleteservers --instance_ids xxx",
+      "decision": "warn",
+      "denied": true
+    },
+    {
+      "cmd": "hcloud ECS DELETE_SERVERS --instance_ids xxx",
+      "decision": "warn",
+      "denied": true
+    },
+    {
+      "cmd": "hcloud ECS DeleteServers%20--instance_ids%20xxx",
+      "decision": "warn",
+      "denied": true
+    }
+  ],
+  "executedAt": "20260925050535"
+}
