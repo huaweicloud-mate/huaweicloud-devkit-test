@@ -1,0 +1,105 @@
+===== huaweicloud_show_profile_redacted =====
+{
+  "ok": true,
+  "note": "Profile information was returned through the toolkit redaction pipeline.",
+  "result": {
+    "ok": true,
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "{\n  \"name\": \"default\",\n  \"mode\": \"AKSK\",\n  \"accessKeyId\": \"<redacted>\",\n  \"secretAccessKey\": \"<redacted>\",\n  \"securityToken\": \"<redacted>\",\n  \"region\": \"cn-north-4\",\n  \"projectId\": \"46c1fd48bd1248c7b75afc3780de7132\",\n  \"domainId\": \"\",\n  \"skipSecureVerify\": \"false\",\n  \"readTimeout\": 10,\n  \"connectTimeout\": 5,\n  \"retryCount\": 0\n}",
+    "stderr": "",
+    "plan": {
+      "executable": "hcloud",
+      "args": [
+        "configure",
+        "show"
+      ],
+      "command": "hcloud configure show",
+      "executableBlock": "hcloud configure show",
+      "warnings": [],
+      "classification": {
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation.",
+        "service": "configure",
+        "operation": "show",
+        "args": [
+          "configure",
+          "show"
+        ]
+      },
+      "sgFindings": [],
+      "approvalToken": "020bc89e-1964-4e0f-96de-a57071623fe8",
+      "safeToRun": true,
+      "rawArgs": [
+        "configure",
+        "show"
+      ]
+    },
+    "retries": 0,
+    "attempts": 1
+  }
+}
+>>> 疑似密钥泄露? false
+===== huaweicloud_auth_status =====
+{
+  "target": "all",
+  "credentialsConfigured": true,
+  "credentialsPath": "/home/testbot2/.config/huaweicloud/credentials.json",
+  "mcpSettingsConfigured": false,
+  "mcpSettingsSource": null,
+  "obsConfigured": true,
+  "obsConfigPath": "/home/testbot2/.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "caae65f2",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "c2ebe4fb",
+      "runtimeFingerprint": null
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [
+      {
+        "store": "S3",
+        "source": "obsutilconfig",
+        "fingerprint": "c2ebe4fb",
+        "manualModified": true
+      }
+    ],
+    "hasRuntime": false,
+    "runtimeFingerprint": null,
+    "inconsistent": true,
+    "runtimeActive": false
+  },
+  "onboarding": {
+    "needsSetup": true,
+    "scenario": 1,
+    "reason": "s1-only",
+    "message": "已保存账号(指纹 caae65f2)可直接使用。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "use-s1",
+        "args": {},
+        "label": "直接使用已保存账号"
+      },
+      {
+        "order": 2,
+        "action": "switch-new",
+        "args": {
+          "mode": "import",
+          "action": "persist"
+        },
+        "label": "改用新账号(导入)"
+      }
+    ],
+    "accountHint": "caae65f2"
+  },
+  "agents"
+>>> 疑似密钥泄露? false

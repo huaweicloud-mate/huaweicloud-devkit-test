@@ -1,0 +1,8 @@
+hcloud ecs DeleteServer --server_id x
+   decision=deny risk=write safeToRun=false
+hcloud ecs ListServers
+   decision=allow risk=read_only safeToRun=true
+hcloud ecs BatchDeleteServers --force
+   decision=deny risk=write safeToRun=false
+hcloud vpc DeleteSecurityGroup --force
+   decision=deny risk=write safeToRun=false

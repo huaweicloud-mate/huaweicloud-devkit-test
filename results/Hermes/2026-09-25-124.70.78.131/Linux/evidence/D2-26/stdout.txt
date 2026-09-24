@@ -1,0 +1,54 @@
+[OK] backup 返回 .bak 路径且文件生成
+[OK] backup 内容指纹 == 原始指纹
+[OK] 篡改后指纹 != 原始指纹
+[OK] restore 返回 true
+[OK] restore 后凭证文件恢复为 backup 前内容
+[OK] 恢复后内容 == 原始 AK/SK
+[OK] 清理隔离目录
+
+=====SUMMARY JSON=====
+{
+  "generatedAt": "2026-09-24T21:15:28.712Z",
+  "total": 7,
+  "passed": 7,
+  "backupPathGenerated": true,
+  "restoreOk": true,
+  "hashRestored": true,
+  "results": [
+    {
+      "name": "backup 返回 .bak 路径且文件生成",
+      "ok": true,
+      "detail": "{\"bakPath\":\"<ISO>/.config/huaweicloud/credentials.json.bak\"}"
+    },
+    {
+      "name": "backup 内容指纹 == 原始指纹",
+      "ok": true,
+      "detail": "{\"h0\":\"5e3f49df146136c8\",\"hBak\":\"5e3f49df146136c8\"}"
+    },
+    {
+      "name": "篡改后指纹 != 原始指纹",
+      "ok": true,
+      "detail": "{\"hTamper\":\"3e7be3130b6be1ee\"}"
+    },
+    {
+      "name": "restore 返回 true",
+      "ok": true,
+      "detail": "{\"restored\":true}"
+    },
+    {
+      "name": "restore 后凭证文件恢复为 backup 前内容",
+      "ok": true,
+      "detail": "{\"hRestored\":\"5e3f49df146136c8\",\"h0\":\"5e3f49df146136c8\"}"
+    },
+    {
+      "name": "恢复后内容 == 原始 AK/SK",
+      "ok": true,
+      "detail": "{}"
+    },
+    {
+      "name": "清理隔离目录",
+      "ok": true,
+      "detail": "{\"iso\":\"/tmp/multica-task-4280604152/hdk-d226-GWUjhI\"}"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+[OK] redactSecrets 字符串 key=value（AK/SK/token/password/adminPass/secret_key）
+[OK] redactSecrets 字符串 CLI-flag（--key value）
+[OK] redactSecrets 对象路径（含嵌套 ak/sk/token）
+[OK] redactOutput JSON 字符串（对象路径）
+[OK] redactOutput 非 JSON 回退（字符串路径）
+
+=====SUMMARY JSON=====
+{
+  "generatedAt": "2026-09-24T21:15:28.782Z",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "conclusion": "5/5 项双路径脱敏无明文残留",
+  "results": [
+    {
+      "name": "redactSecrets 字符串 key=value（AK/SK/token/password/adminPass/secret_key）",
+      "ok": true,
+      "detail": "{\"output\":\"access_key=<redacted> secret_key=<redacted> token=<redacted> password=<redacted> adminPass=<redacted> secret_key=<redact\"}"
+    },
+    {
+      "name": "redactSecrets 字符串 CLI-flag（--key value）",
+      "ok": true,
+      "detail": "{\"output\":\"--access-key=<redacted> --secret-key=<redacted> --security-token=<redacted> --password=<redacted> --admin-pass=<redacted\"}"
+    },
+    {
+      "name": "redactSecrets 对象路径（含嵌套 ak/sk/token）",
+      "ok": true,
+      "detail": "{\"output\":\"[object Object]\"}"
+    },
+    {
+      "name": "redactOutput JSON 字符串（对象路径）",
+      "ok": true,
+      "detail": "{\"output\":\"{\\n  \\\"access_key\\\": \\\"<redacted>\\\",\\n  \\\"secret_key\\\": \\\"<redacted>\\\",\\n  \\\"token\\\": \\\"<redacted>\\\",\\n  \\\"password\\\": \\\"<redacted>\\\",\\n  \\\"ad\"}"
+    },
+    {
+      "name": "redactOutput 非 JSON 回退（字符串路径）",
+      "ok": true,
+      "detail": "{\"output\":\"stdout: access_key=<redacted> secret_key=<redacted> token=<redacted> password=<redacted> adminPass=<redacted>\"}"
+    }
+  ]
+}
