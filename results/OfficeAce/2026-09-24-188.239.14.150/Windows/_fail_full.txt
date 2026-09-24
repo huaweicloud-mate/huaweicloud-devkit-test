@@ -1,0 +1,48 @@
+--- D1-39: SINGLE status=PASS why=huaweicloud_check_update 在 Windows 下成功执行，返回有效版本信息(currentVersion=1.1.7-next.2, l
+--- D1-40: SINGLE status=PASS why=当前版本 1.1.7-next.2 不低于 latestStable 1.1.6，updateAvailable=false，targetVersion=1.1
+--- D2-11: SINGLE status=PASS why=huaweicloud_auth_status 返回认证状态：hasRuntime=false, runtimeFingerprint=null, runtim
+--- D2-4: SINGLE status=PASS why=huaweicloud_show_profile_redacted 成功返回脱敏 profile。accessKeyId=<redacted>, secretA
+--- D4-15: SINGLE status=PASS why=所有 hcloud 变体命令均被拦截(无绕过): hcloud ECS DeleteServers --url_encoded=>deny, hcloud ec
+--- D4-16: SINGLE status=FAIL why=穿透成功: sh -c 'hcloud ECS DeleteServers', bash -c 'hcloud ECS DeleteServer'
+--- D4-1: SINGLE status=PASS why=cat ~/.hcloud/config.json 被拦截: MCP tool decision=deny, hook decision=deny
+--- D4-21: SINGLE status=PASS why=宽泛 IAM policy (Action=*, Resource=*) 被拦截: decision=deny, findings=1
+--- D4-22: SINGLE status=PASS why=公网暴露 FunctionGraph (auth=NONE) 被拦截/告警: decision=warn, findings=2
+--- D4-28: SINGLE status=FAIL why=部分命令未 deny: echo AKXXXXXXXX
+--- D4-2: SINGLE status=FAIL why=拦截失败: MCP decision=allow, hook decision=deny
+--- D4-5: SINGLE status=PASS why=hcloud ECS DeleteServers 正确识别为写操作(deny): classification.risk=write, textResult.d
+--- D4-9: SINGLE status=PASS why=公网暴露SSH(22)端口被拦截: decision=deny, findings=1
+--- EXP-E01: SINGLE status=FAIL why=MISS: 期望路由=ECS，实际=Run hcloud --help to list available services.（未命中任何服务）
+--- EXP-E02: SINGLE status=FAIL why=MISS: 期望路由=ECS，实际=Run hcloud --help to list available services.（未命中任何服务）
+--- EXP-E03: SINGLE status=FAIL why=MISS: 期望路由=OBS，实际=Sandbox+DevStation（路由错误，未命中目标服务OBS）
+--- EXP-E04: SINGLE status=FAIL why=MISS: 期望路由=EIP，实际=Run hcloud --help to list available services.（未命中任何服务）
+--- EXP-E05: SINGLE status=FAIL why=MISS: 期望路由=RDS，实际=Run hcloud --help to list available services.（未命中任何服务）
+--- EXP-E06: SINGLE status=PASS why=HIT: 期望路由=DCS，实际=DDS+DCS（命中目标服务DCS）
+--- EXP-E07: SINGLE status=FAIL why=MISS: 期望路由=CBR，实际=Run hcloud --help to list available services.（未命中任何服务）
+--- EXP-E08: SINGLE status=FAIL why=N/A: 期望=诊断类用例，实际=Run hcloud --help to list available services.（路由未产生有效诊断结果）
+--- EXP-E09: SINGLE status=PASS why=HIT: 期望路由=CCE，实际=CCE+SWR（命中目标服务CCE）
+--- EXP-E10: SINGLE status=FAIL why=MISS: 期望路由=FunctionGraph，实际=Run hcloud --help to list available services.（未命中任何服
+--- EXP-E11: SINGLE status=FAIL why=MISS: 期望路由=BSS，实际=Run hcloud --help to list available services.（未命中任何服务）
+--- EXP-E12: SINGLE status=FAIL why=MISS: 期望路由=CES，实际=Run hcloud --help to list available services.（未命中任何服务）
+--- EXP-E13: SINGLE status=FAIL why=MISS: 期望路由=ELB，实际=Run hcloud --help to list available services.（未命中任何服务）
+--- EXP-E14: SINGLE status=FAIL why=MISS: 期望路由=IAM，实际=Run hcloud --help to list available services.（未命中任何服务）
+--- EXP-E15: SINGLE status=PASS why=HIT: 期望路由=Incentive Voucher，实际=Incentive Voucher（精确命中）
+--- c4-service-matrix: total=63 passed=52 failed=11
+    [FAIL] id=EXP-E01 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E02 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E03 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E04 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E05 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E07 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E10 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E11 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E12 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E13 name=eval-route expected='HIT' actual='MISS'
+    [FAIL] id=EXP-E14 name=eval-route expected='HIT' actual='MISS'
+--- d1-upgrade: total=49 passed=49 failed=0
+--- d2-auth: total=40 passed=38 failed=2
+    [FAIL] id=D2-4 name=redact-json expected='redacted' actual='{"ak":"AKIDTEST12345678","sk":"SKTEST1234567890abcdef1234","'
+    [FAIL] id=D4-27 name=redact-dual expected='redacted' actual='{"ak":"AKID123","sk":"SK1234567890abcdef","token":"STSTOKEN1'
+--- d4-security: total=36 passed=35 failed=1
+    [FAIL] id=D4-16 name=wrap-sh expected='deny' actual='allow'
+--- mcp-tools: total=31 passed=30 failed=1
+    [FAIL] id=D4-16 name=wrap-mcp expected='deny' actual='{"ok":true,"decision":"allow","findings":[],"nextStep":"No Huawei Cloud hook ris'
