@@ -24,7 +24,7 @@
 """
 import os, sys, datetime, socket, csv, re
 
-CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 OSES = ["Windows", "Linux"]
 

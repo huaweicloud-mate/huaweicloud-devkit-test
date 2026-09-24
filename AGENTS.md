@@ -1,6 +1,6 @@
 # AGENTS — huaweicloud-devkit 每日测试执行指南
 
-> 每个客户端 agent（OpenCode/Codex/CodeArtsAgent/CodeArtsWork/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode）读本文件即开始执行当天测试。**不自行 close/reopen/评论任何 GitHub issue（由维护者统一操作）**；收到带 issue 编号的「全链路/回归」指令时，按下方「问题单号回归」节执行（走回归路线，而非每日全量）。
+> 每个客户端 agent（OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode）读本文件即开始执行当天测试。**不自行 close/reopen/评论任何 GitHub issue（由维护者统一操作）**；收到带 issue 编号的「全链路/回归」指令时，按下方「问题单号回归」节执行（走回归路线，而非每日全量）。
 >
 > **完成标准** = 本机 `results/<你的客户端>/<日期>-<IP>/<OS>/` 已含「测试报告.md + 3 份 CSV」且已 push 远端；只读文档 / 只建目录 / 中途退出都不算完成。
 
@@ -55,7 +55,7 @@ npm install -g huaweicloud-devkit
 > 脚本优先读 `HDK_GH_TOKEN`，否则尝试本机 gh shuangheaven token。
 
 1. **自我识别身份**（无需人工告知）：
-   - **客户端名**：从你的运行环境/系统提示/进程名判断你是 10 个客户端中的哪一个——OpenCode、Codex、CodeArtsAgent、CodeArtsWork、WorkBuddy、DSH、OfficeAce、Hermes、OpenClaw、AtomCode。
+   - **客户端名**：从你的运行环境/系统提示/进程名判断你是 10 个客户端中的哪一个——OpenCode、Codex、CodeArtsAgent、CodeArtsSpace、WorkBuddy、DSH、OfficeAce、Hermes、OpenClaw、AtomCode。
    - **OS**：用 `platform.system()` 或运行环境判断 Windows / Linux。
    - 识别不出：**显式输出失败原因后退出**（禁止静默退出、禁止瞎猜冒充其他客户端、禁止假装完成）。无人值守环境没有「询问用户」通道，卡住会被调度器判 idle 杀掉。
 2. 拉最新（**每次执行测试前必跑**，一天可能跑多次，每次都要重新取最新，勿因「今天跑过」跳过）——`python scripts/prepare_env.py --update` 一键完成三件事：

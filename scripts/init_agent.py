@@ -14,7 +14,7 @@ clone 成功后 origin 仍是 GitHub，push 结果仍回官方仓。
 """
 import os, sys, subprocess, getpass
 
-CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 TEST_REPO_URL = "https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git"
 SRC_URL = "https://github.com/huaweicloud/huaweicloud-devkit.git"

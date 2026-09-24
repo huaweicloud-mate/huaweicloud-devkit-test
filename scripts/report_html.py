@@ -22,7 +22,7 @@ STATUS_COLOR = {"PASS": "#2ecc71", "FAIL": "#e74c3c", "BLOCKED": "#f39c12",
                 "SPEC-MISMATCH": "#e67e22", "NOT_RUN": "#95a5a6", "": "#95a5a6"}
 STATUS_RANK = {"FAIL": 0, "SPEC-MISMATCH": 1, "BLOCKED": 2, "NOT_RUN": 3, "PASS": 4, "": 5}
 # 10 个智能体（客户端）权威枚举，与 scripts/hourly_sync.py 的 CLIENTS 一致
-ALL_CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+ALL_CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
                "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 
 META = {"层级", "ID", "维度", "标题", "优先级", "展开类型", "枚举对象", "源用例",

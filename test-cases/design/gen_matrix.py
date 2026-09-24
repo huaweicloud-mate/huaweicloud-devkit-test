@@ -1404,7 +1404,7 @@ add("D10-8", "D10评测", "评测成本预算", "P2", "评测环境",
 # ============ 展开级矩阵 ============
 E = []
 # E1: D5 客户端矩阵 10 客户端 × D5-1~7
-CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsWork", "WorkBuddy",
+CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 D5_EXPECT = {
     1: "客户端可发现并加载插件清单",
@@ -1640,7 +1640,7 @@ def _terminal_metadata(rid, dim, rule):
         agent = "Hermes; OpenCode; 声明支持的客户端矩阵"
         hook = "按客户端记录"
     elif dim == "D10评测":
-            agent = "OpenCode; Codex; CodeArtsAgent; CodeArtsWork; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode"
+            agent = "OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode"
             hook = "按客户端记录"
     elif dim == "D9协议":
         agent = "Hermes; MCP Inspector/标准协议客户端"
@@ -1688,7 +1688,7 @@ def _expanded_exec_target(etype, obj):
     if etype == "D3-C4服务矩阵":
         return ("Hermes 代表终端", "Hermes", "Windows/Linux")
     if etype == "D10评测集":
-            return ("全部客户端", "OpenCode/Codex/CodeArtsAgent/CodeArtsWork/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode", "Windows/Linux")
+            return ("全部客户端", "OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode", "Windows/Linux")
     if etype == "D1-58白名单矩阵":
         return ("Linux L 真机", "Hermes", "Linux")
     if etype == "NR3终端矩阵":
