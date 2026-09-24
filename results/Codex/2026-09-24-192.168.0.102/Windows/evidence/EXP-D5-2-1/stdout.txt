@@ -1,0 +1,11 @@
+time=2026-09-24T06:08:20.049Z
+case=EXP-D5-2-1
+type=D5客户端矩阵
+object=Codex
+source=D5-1
+result=PASS
+PASS	EXP-D5-2-1-client-host	Codex 客户端宿主检测	actual={"present":true,"bin":"/c/Users/Administrator/AppData/Local/hermes/node/codex","config":"C:\\Users\\Administrator\\multica_workspaces\\vector-8988c3df7bc9\\task-3660d5bef178\\codex-home\\config.toml"}	expected="宿主检测"	找到 codex 可执行，可执行真实客户端加载会话
+PASS	EXP-D5-2-1-manifest-files	插件清单文件存在（.mcp.json / openclaw.plugin.json）	actual={"mcpJson":true,"openclawJson":true}	expected={"mcpJson":true,"openclawJson":true}
+PASS	EXP-D5-2-1-mcp-server-registered	MCP server 注册（huaweicloud-devkit）	actual={"registered":true}	expected=true	command="node"
+PASS	EXP-D5-2-1-plugin-format	插件 manifest 为 codex bundle 格式	actual={"bundleFormat":"codex","family":"bundle-plugin"}	expected={"bundleFormat":"codex","family":"bundle-plugin"}
+PASS	EXP-D5-2-1-codex-register	Codex config 引用 huaweicloud-devkit	actual={"ref":"find in codex config.toml","hostPresent":true}	expected="codex.config 引用"	Codex 宿主存在时须在 config.toml 引用插件
