@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-09-25T21:11:21.181Z",
+  "serverPath": "/home/testbot2/devkit-test/DSH/hdk/plugins/huaweicloud-core/src/mcp-server.mjs",
+  "results": [
+    {
+      "id": "D9-9a-capabilities.cancellation",
+      "expect": "声明 notifications.cancellation",
+      "got": "未声明",
+      "verdict": "SPEC-MISMATCH",
+      "detail": "initialize.result.capabilities.notifications = \"(缺失)\""
+    },
+    {
+      "id": "D9-4-lifecycle-tools/list",
+      "expect": "tools/list 正常返回(数组非空)",
+      "got": "40 工具",
+      "verdict": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D9-2a-unknown-method",
+      "expect": "-32601 (Method not found)",
+      "got": "-32601",
+      "verdict": "PASS",
+      "detail": "error.code"
+    },
+    {
+      "id": "D9-2b-invalid-params",
+      "expect": "-32602 (Invalid params)",
+      "got": "无 error 对象",
+      "verdict": "FAIL",
+      "detail": "error.code"
+    },
+    {
+      "id": "D9-6-clientinfo-matrix",
+      "expect": "10 客户端 clientInfo 均可互通",
+      "got": "10/10",
+      "verdict": "PASS",
+      "detail": "任意 clientInfo 均 initialize+tools/list 正常"
+    }
+  ]
+}

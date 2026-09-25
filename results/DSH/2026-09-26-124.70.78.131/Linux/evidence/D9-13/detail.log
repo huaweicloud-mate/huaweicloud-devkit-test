@@ -1,0 +1,23 @@
+[PASS] D9-13 setRuntimeCredentials 注入后 hasRuntimeCredentials=true => true
+[PASS] D9-13 resolveCredentialsWithRuntime 解析运行时凭证 => {"ak":"AKRT913","sk":"SKRT913","securityToken":"","region":"cn-north-4"}
+[PASS] D9-13 loadPolicy 返回策略对象 => {"version":"0.1.0","secretKeyNamePatterns":["access[_-]?key","secret[_-]?key","security[_-]?token","x[_-]?auth[_-]?token
+[PASS] D9-13 classifyHcloudArgs 写命令→deny/warn => decision=deny risk=write
+[PASS] D9-13 classifyHcloudArgs 只读命令→allow => decision=allow risk=read_only
+[PASS] D9-13 evaluateArtifacts 返回决策对象 => {"decision":"deny","risk":"invalid","findings":[{"ruleId":"invalid-input","title":"Invalid input for risk check","catego
+[PASS] D9-13 mergeRiskDecision 合并取最严 => {"decision":"deny","risk":"secret","reason":"credential leak","blockedByRiskRule":true,"findings":[{"ruleId":"D13-merge","category":"secret","message":"credential leak"}]}
+[PASS] D9-13 hashArgs 确定性(相同参数同哈希) => h1=94c023642f0288f9e52ac8c93ed2efe0988aa3f749417df0f96b52d04ac704e8 h2=94c023642f0288f9e52ac8c93ed2efe0988aa3f749417df0f96b52d04ac704e8
+[PASS] D9-13 hashArgs 不同参数不同哈希 => h1=94c023642f0288f9e52ac8c93ed2efe0988aa3f749417df0f96b52d04ac704e8 h3=eff4390e3cb54664f5b4f121870206bad5f9fd3445978ccc7ac3ac6d5d8c132b
+[PASS] D9-13 createApprovalToken 返回令牌 => 38ea5390-b9ed-4a01-a3d6-a8c427ac2347
+[PASS] D9-13 consumeApprovalToken 首次消费命中 => {"argsHash":"94c023642f0288f9e52ac8c93ed2efe0988aa3f749417df0f96b52d04ac704e8","argsRedacted":["VPC","CreateVpc"],"createdAt":1790370560719}
+[PASS] D9-13 审批令牌不可重放(二次消费 null) => first=true second=false
+[PASS] D9-13 readServiceCatalogs 返回服务目录 => {"dir":"/home/testbot2/.hcloud/metaRepo","t":1790370560721,"cn":{},"en":{},"cnPresent":false,"enPresent":true}
+[PASS] D9-13 classifyUnsupported 返回判定 => "unknown"
+[PASS] D9-13 planHcloudCommand 写命令需审批(safeToRun=false) => safeToRun=false hasToken=true
+[PASS] D9-13 tools/call(auth_status) 返回不含 AK 明文 => akLeak=false
+[PASS] D9-13 tools/call(auth_status) 返回不含 SK 明文 => skLeak=false
+[PASS] D9-13 clearRuntimeCredentials 后不留运行时凭证(hasRuntimeCredentials=false) => false
+[PASS] D9-13 清理后 resolveCredentialsWithRuntime 回落持久凭证(非运行时 AKRT913) => "HPUAN1ROQ4PQXQVBSYXD"
+[PASS] D9-13 writeGlobalCredentials 持久化后读回一致 => "AKTEST913"
+[PASS] D9-13 isPlaceholder 识别占位(模板/掩码) => checked
+[PASS] D9-13 globalCredentialsPath 返回 .config/huaweicloud 路径 => /home/testbot2/.config/huaweicloud/credentials.json
+[PASS] D9-13 writeObsConfig 写出 obs 配置(路径存在) => op=/home/testbot2/.obsutilconfig
