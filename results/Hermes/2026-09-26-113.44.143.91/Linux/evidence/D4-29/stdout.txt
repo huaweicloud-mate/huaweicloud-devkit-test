@@ -1,0 +1,9 @@
+=== D4-29 分类断言与原始命令分类入口 ===
+预期: classifyRawCommand=classifyTextCommand 包装; DENY 抛拒绝 allow 通过
+实测: 符合
+详情:
+classifyRawCommand 存在=true (tools.mjs:2297 包装 classifyTextCommand)
+classifyRawCommand('hcloud ecs DeleteServer').decision === classifyTextCommand(...) ? true
+assertAllowed(deny) = THROW: blocked (期望 throw)
+assertAllowed(allow) = returned decision=allow (期望 通过并返回)
+RESULT: PASS

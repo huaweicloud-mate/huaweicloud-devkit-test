@@ -1,0 +1,10 @@
+=== D3-S2 场景-删VPC先确认 ===
+[1] serviceCatalog("删除一个 VPC") -> services=["VPC","EIP"]
+[2] 创建 VPC hdk1-s2-0370782511 -> 4e697eec-70a3-4a13-aa41-290e75e90585
+[3] plan_cli_command(DeleteVpc) -> decision=deny risk=write
+[4] hook_check_command(DeleteVpc) -> decision=warn findings=1
+[5] 未确认前 ListVpcs 仍含 VPC=false (零执行断言)
+[6] run_approved(DeleteVpc) -> {"ok":true,"exitCode":0,"signal":null,"stdout":"","stderr":"","plan":{"executable":"hcloud","args":["VPC","DeleteVpc","--vpc_id=4e697eec-70a3-4a13-aa41-290e75e90585","--cli-region=cn-north-4"],"comman
+[7] 确认删除后 ListVpcs 不再含 VPC=true (归零)
+
+RESULT: FAIL (未确认前已被删 或 确认后未归零)
