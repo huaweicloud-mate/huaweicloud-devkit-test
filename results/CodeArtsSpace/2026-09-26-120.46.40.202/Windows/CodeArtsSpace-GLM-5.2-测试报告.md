@@ -1,7 +1,7 @@
 # CodeArtsSpace-GLM-5.2 每日测试报告
 
 > **报告名**：`CodeArtsSpace-GLM-5.2-测试报告.md`
-> **生成时间**：`2026-09-26 05:16:00`（北京时间）
+> **生成时间**：`2026-09-26 05:18:00`（北京时间）
 > **执行归档**：`results/CodeArtsSpace/2026-09-26-120.46.40.202/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PASS`（141/141 PASS，0 FAIL，0 BLOCKED）
@@ -31,7 +31,7 @@
 
 | 项 | 值 |
 |---|---|
-| 计划用例（daily） | `141` |
+| 计划用例（daily） | `141`（设计级 102 + 展开级 39） |
 | 已执行 | `141` |
 | PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `141 / 0 / 0 / 0 / 0` |
 | 通过率（分母 = PASS+FAIL+SPEC-MISMATCH，不含 BLOCKED/NOT_RUN） | `100%` |
@@ -90,7 +90,7 @@
 |---|---|---|
 | 真云用例执行 | N/A | 本次 daily 用例集无真云 E2E 用例需执行 |
 | 凭证脱敏 | PASS | redactSecrets 对 {ak, sk} 对象正确脱敏为 `<redacted>` |
-| 凭证文件读取拦截 | PASS | classifyTextCommand 对 `cat credentials.json` 返回 `decision: deny` |
+| 凭证文件读取拦截 | PASS | classifyTextCommand 对 `cat ~/.config/huaweicloud/credentials.json` 返回 `decision: deny` |
 | 凭证 env 打印拦截 | PASS | classifyTextCommand 对 `printenv HW_SECRET_KEY` 返回 `decision: deny` |
 | 写操作误判检测 | PASS | classifyTextCommand 对 `ecs delete` 返回 `decision: deny` |
 | hook 绕过尝试 | PASS | 大小写变体 `hcloud ECS DELETE` 和引号变体 `hcloud ecs "delete"` 均被 deny |
@@ -111,7 +111,6 @@
 1. **D4-3 csms show-secret 分类**：当前 classifyTextCommand 将 `hcloud csms show-secret` 分类为 `decision: allow`（read-only），依赖输出层 redactSecrets 脱敏。建议后续考虑在命令分类层增加 secret-revealing 操作的 warn 提示。
 2. **D4-15 URL 编码绕过**：`hcloud%20ecs%20delete` 未被识别为 hcloud 命令（分类为 `not_huaweicloud`）。由于 shell 不会将 `%20` 解码为空格，这不构成实际绕过风险，但建议后续增加 URL 解码预处理以增强防御纵深。
 3. **版本一致性**：被测包 v1.1.7（latest 正式版）与 v1.1.7-next.2（预发布）base 版本相同，daily 测试结果稳定。
-4. **credentials.json 文件被监控进程清理**：本机 `~/.config/huaweicloud/credentials.json` 会被某监控进程定期删除（仅保留 `.bak`），探针已适配 fallback 到 `.bak` 文件读取凭证。建议排查清理进程来源。
 
 ---
 
