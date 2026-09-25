@@ -1,0 +1,24 @@
+=== D3-S6 场景-FunctionGraph定时任务 (真云) ===
+[1] serviceCatalog("配置一个定时任务，定时触发函数") -> services=["Run hcloud --help to list available services."] skills=["Use huaweicloud-core to route intent."]
+[2] 前置: 清理历史遗留函数 test-d3-s6-timer (若存在)
+     DeleteFunction(test-d3-s6-timer) -> {
+  "error_code": "FSS.1051",
+  "error_msg": "The function does not exist.",
+  "details": [
+    {
+      "error_code": "F
+[3] CreateFunction(hdk1-s6-0371400960, inline Python3.9) -> 成功
+[4] CreateFunctionTrigger(TIMER, Rate 1m) -> 成功
+[5] ListFunctions 含 hdk1-s6-0371400960=true; ListFunctionTriggers 含 TIMER=true
+     trigger 详情: [
+  {
+    "trigger_id": "45e5b76c-9f3c-496e-8e0e-98e0cdacaf7e",
+    "trigger_type_code": "TIMER",
+    "trigger_status": "ACTIVE",
+    "event_data": {
+      "name": "test-timer",
+      "schedule": "1m"
+[6] DeleteFunction(hdk1-s6-0371400960) -> ; 删除后 ListFunctions 不再含=true (归零)
+
+建函数=true; 触发器=true; URN核对=true; 触发器绑定=true; 归零=true => PASS
+RESULT: PASS
