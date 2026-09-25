@@ -1,0 +1,10 @@
+setup-cli AGENT_TOOLKIT_MODE 注入点(前3):
+  const env = [{ key: 'HUAWEICLOUD_AGENT_TOOLKIT_MODE', value: 'local', sensitive: false }];
+  env: { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local' },
+  const env = { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local' };
+setup-cli SKIP_DSH 分支:
+  if (process.env.HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL === '1') {
+mcp-config-merge REQUIRED_ENV_KEYS: const REQUIRED_ENV_KEYS = new Set(['HUAWEICLOUD_AGENT_TOOLKIT_MODE', 'HCLOUD_BIN']);
+[OK] AGENT_TOOLKIT_MODE 注入 agent env(local)
+[OK] SKIP_DSH=1 跳过 DSH 插件安装
+[OK] REQUIRED_ENV_KEYS 含 HCLOUD_BIN

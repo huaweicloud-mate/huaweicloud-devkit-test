@@ -1,0 +1,7 @@
+cmd="hcloud VPC ListVpcs --cli-region=cn-north-4" -> decision=allow risk=read_only assertAllowed=allowed
+[OK] classify+assert: hcloud VPC ListVpcs --cli-regi
+cmd="cat ~/.config/huaweicloud/credentials.json" -> decision=deny risk=credential assertAllowed=blocked:Reading Huawei Cloud credential or profi
+[OK] classify+assert: cat ~/.config/huaweicloud/cred
+cmd="hcloud ecs DeleteServers --servers.1.id=x --delete_publicip=true --cli-region=cn-north-4" -> decision=deny risk=write assertAllowed=blocked:Huawei Cloud write operation blocked unt
+[OK] classify+assert: hcloud ecs DeleteServers --ser
+[OK] 分类结果含 decision/reason

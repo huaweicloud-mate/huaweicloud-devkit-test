@@ -1,0 +1,13 @@
+writeProxyConfig path=/tmp/multica-task-567725196/hdk-probe-1790370307026/.config/huaweicloud/proxy.json
+readProxyConfig={"https_proxy":"http://proxy.example:8080","http_proxy":"http://proxy.example:8080","no_proxy":"internal.corp.com"}
+[OK] write/read proxy.json 正确
+getProxySettings(https)={"proxyUrl":"http://proxy.example:8080","noProxyList":["internal.corp.com"],"targetProtocol":"https:"}
+getProxySettings(no_proxy 命中)=null
+[OK] getProxySettings 拼 file + no_proxy 命中返回 null
+getProxySettings(env 优先)={"proxyUrl":"http://env-proxy:9999","noProxyList":["internal.corp.com"],"targetProtocol":"https:"}
+[OK] env 优先于 file
+getWebSocketImpl(有代理)=ProxyWebSocket
+getWebSocketImpl(no_proxy)=globalThis.WebSocket
+[OK] 有代理返回 undici ProxyWebSocket
+[OK] 无代理回退 globalThis.WebSocket
+[OK] clearProxyConfig 清空

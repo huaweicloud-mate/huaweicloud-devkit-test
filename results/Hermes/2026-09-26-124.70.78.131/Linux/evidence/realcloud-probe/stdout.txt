@@ -1,0 +1,254 @@
+[D2-1] auth_status -> OK
+[D2-1] check_cli(KooCLI S2) -> OK
+[D2-1] setup_obs_config(S3) -> OK
+[D2-1] sandbox_check_user(沙箱端) -> OK
+[D2-1] obs_ls(S3 API 可用) -> OK
+[D3-C4] ECS: list_operations+plan -> OK
+[D3-C4] VPC: list_operations+plan -> OK
+[D3-C4] OBS: list_operations+plan -> OK
+[D3-C4] RDS: list_operations+plan -> OK
+[D3-C4] GaussDB: list_operations+plan -> OK
+[D3-C4] CCE: list_operations+plan -> OK
+[D3-C4] FunctionGraph: list_operations+plan -> OK
+[D3-C4] IAM: list_operations+plan -> OK
+[D3-C4] CTS: list_operations+plan -> OK
+[D3-C4] CES: list_operations+plan -> OK
+[D3-C4] DDS: list_operations+plan -> OK
+[D3-C4] DCS: list_operations+plan -> OK
+[D3-C4] SMN: list_operations+plan -> OK
+[D3-C4] DMS: list_operations+plan -> OK
+[D3-C4] WAF: list_operations+plan -> OK
+[D3-C4] CDN: list_operations+plan -> OK
+[D3-C4] ModelArts: list_operations+plan -> OK
+[D3-C4] DEW: list_operations+plan -> OK
+[D3-C4] CBR: list_operations+plan -> OK
+[D3-C4] EVS: list_operations+plan -> OK
+[D3-C4] EIP: list_operations+plan -> OK
+[D3-C4] ELB: list_operations+plan -> OK
+[D4-14] CreateVpc(tctest-hermes-20260926-hgabll) -> OK
+[D4-14] ListVpcs(执行命令) -> OK
+[D4-14] CTS ListTraces(审计) -> OK
+[D4-14] DeleteVpc(删除) -> OK
+[D4-14] 归零验证(ListVpcs 不含本次资源) -> OK
+[D4-18] plan 写操作需确认(confirm-not-deny) -> OK
+[D4-19] 确认流预检(preflight sgFindings) -> OK
+[D4-20] 拒绝后零操作(拒绝路径未创建资源) -> OK
+
+=====SUMMARY JSON=====
+{
+  "generatedAt": "2026-09-25T21:06:03.646Z",
+  "total": 35,
+  "passed": 35,
+  "results": [
+    {
+      "kind": "D2-1",
+      "name": "auth_status",
+      "ok": true,
+      "detail": "{\n  \"target\": \"all\",\n  \"credentialsConfigured\": true,\n  \"credentialsPath\": \"/home/testbot2/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"obsConfigured\": true,\n  \"obsConfigPath\": \"/home/testbot2/.obsutilconfig\",\n  \"kooCliInstalled\": true,\n  \"kooCliStatus\": \"ok\",\n  \"kooCliNextStep\": \"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\n  \"reconciled\": {\n    \"stores\": {\n      \"s1Fingerprint\": \"caae65f2\",\n      \"envFingerprint\": \"\",\n      \"currentFingerprint\": \"\",\n      \"s3Fingerprint\": \"d37b6fb2\",\n      \"runtimeFingerprint\": null\n    },\n    \"kooCliCurrent\": \"default\",\n    \"envIsPlaceholder\": false,\n    \"s2Encrypted\": true,\n    \"inconsistencies\": [\n      {\n        \"store\": \"S3\",\n        \"source\": \"obsutilconfig\",\n        \"fingerprint\": \"d37b6fb2\",\n        \"manualModified\": true\n      }\n    ],\n    \"hasRuntime\": false,\n    \"runtimeFingerprint\": null,\n    \"inconsistent\": true,\n    \"runtimeActive\": false\n  },\n  \"onboarding\": {\n    \"needsSetup\": true,\n    \"scenario\": 1,\n    \"reason\": \"s1-only\",\n    \"message\": \"已保存账号(指纹 caae65f2)可直接使用。\",\n    \"steps\": [\n      {\n        \"order\": 1,\n        \"action\": \"use-s1\",\n        \"args\": {},\n        \"label\": \"直接使用已保存账号\"\n      },\n      {\n        \"order\": 2,\n        \"action\": \"switch-new\",\n        \"args\": {\n          \"mode\": \"import\",\n          \"action\": \"persist\"\n        },\n        \"label\": \"改用新账号(导入)\"\n      }\n    ],\n    \"accountHint\": \"caae65f2\"\n  },\n  \"agents\": {\n    \"opencode\": {\n      \"configured\": false\n    },\n    \"codex\": {\n      \"configured\": false\n    },\n    \"codex-desktop\": {\n      \"configured\": false\n    },\n    \"codearts\": {\n      \"configured\": true\n    },\n    \"codearts-work\": {\n      \"configured\": false\n    },\n    \"workbuddy\": {\n      \"configured\": false\n    },\n    \"dsh\": {\n      \"configured\": true\n    },\n    \"officeace\": {\n      \"configured\": false\n    },\n    \"hermes\": {\n      \"configured\": false\n    },\n    \"openclaw\": {\n      \"configured\": false\n    },\n    \"atomcode\": {\n      \"configured\": false\n    }\n  }\n}"
+    },
+    {
+      "kind": "D2-1",
+      "name": "check_cli(KooCLI S2)",
+      "ok": true,
+      "detail": "{\n  \"installed\": true,\n  \"authenticated\": true,\n  \"status\": \"ok\",\n  \"output\": \"Current KooCLI version: 7.2.12\",\n  \"kooCliVersion\": \"7.2.12\",\n  \"installedVersion\": \"7.2.12\",\n  \"versionMismatch\": false,\n  \"nextStep\": \"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\n  \"authHint\": \"If hcloud is installed but commands fail with \\\"配置文件中不存在配置项\\\", run `npx huaweicloud-devkit auth init` outside agent chat to configure credentials.\"\n}"
+    },
+    {
+      "kind": "D2-1",
+      "name": "setup_obs_config(S3)",
+      "ok": true,
+      "detail": "{\n  \"ok\": true,\n  \"existed\": false,\n  \"created\": true,\n  \"path\": \"/home/testbot2/.obsutilconfig\",\n  \"region\": \"cn-north-4\",\n  \"endpoint\": \"https://obs.cn-north-4.myhuaweicloud.com\",\n  \"source\": \"global-credentials\",\n  \"note\": \"OBS credentials synced from the global credential vault. OBS commands (hcloud OBS ls, mb, cp, etc.) should now work.\"\n}"
+    },
+    {
+      "kind": "D2-1",
+      "name": "sandbox_check_user(沙箱端)",
+      "ok": true,
+      "detail": "{\n  \"realnameVerified\": true,\n  \"agreementSigned\": true\n}"
+    },
+    {
+      "kind": "D2-1",
+      "name": "obs_ls(S3 API 可用)",
+      "ok": true,
+      "detail": "\"Start at 2026-09-25 21:05:59.598511295 +0000 UTC\\n\\nBucket                   CreationDate             Location       BucketType     \\nobs://hdk1-s13-0284814064\\n                         2026-09-25T05:20:1\""
+    },
+    {
+      "kind": "D3-C4",
+      "name": "ECS: list_operations+plan",
+      "ok": "hcloud ECS --help",
+      "detail": "{\n  \"service\": \"ECS\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "VPC: list_operations+plan",
+      "ok": "hcloud VPC --help",
+      "detail": "{\n  \"service\": \"VPC\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "OBS: list_operations+plan",
+      "ok": "hcloud obs help",
+      "detail": "{\n  \"service\": \"OBS\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "RDS: list_operations+plan",
+      "ok": "hcloud RDS --help",
+      "detail": "{\n  \"service\": \"RDS\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "GaussDB: list_operations+plan",
+      "ok": "hcloud GaussDB --help",
+      "detail": "{\n  \"service\": \"GaussDB\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "CCE: list_operations+plan",
+      "ok": "hcloud CCE --help",
+      "detail": "{\n  \"service\": \"CCE\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "FunctionGraph: list_operations+plan",
+      "ok": "hcloud FunctionGraph --help",
+      "detail": "{\n  \"service\": \"FunctionGraph\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "IAM: list_operations+plan",
+      "ok": "hcloud IAM --help",
+      "detail": "{\n  \"service\": \"IAM\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"unknown_read\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "CTS: list_operations+plan",
+      "ok": "hcloud CTS --help",
+      "detail": "{\n  \"service\": \"CTS\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "CES: list_operations+plan",
+      "ok": "hcloud CES --help",
+      "detail": "{\n  \"service\": \"CES\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "DDS: list_operations+plan",
+      "ok": "hcloud DDS --help",
+      "detail": "{\n  \"service\": \"DDS\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "DCS: list_operations+plan",
+      "ok": "hcloud DCS --help",
+      "detail": "{\n  \"service\": \"DCS\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "SMN: list_operations+plan",
+      "ok": "hcloud SMN --help",
+      "detail": "{\n  \"service\": \"SMN\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "DMS: list_operations+plan",
+      "ok": "hcloud DMS --help",
+      "detail": "{\n  \"service\": \"DMS\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "WAF: list_operations+plan",
+      "ok": "hcloud WAF --help",
+      "detail": "{\n  \"service\": \"WAF\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "CDN: list_operations+plan",
+      "ok": "hcloud CDN --help",
+      "detail": "{\n  \"service\": \"CDN\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "ModelArts: list_operations+plan",
+      "ok": "hcloud ModelArts --help",
+      "detail": "{\n  \"service\": \"ModelArts\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "DEW: list_operations+plan",
+      "ok": "hcloud DEW --help",
+      "detail": "{\n  \"service\": \"DEW\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "CBR: list_operations+plan",
+      "ok": "hcloud CBR --help",
+      "detail": "{\n  \"service\": \"CBR\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "EVS: list_operations+plan",
+      "ok": "hcloud EVS --help",
+      "detail": "{\n  \"service\": \"EVS\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "EIP: list_operations+plan",
+      "ok": "hcloud EIP --help",
+      "detail": "{\n  \"service\": \"EIP\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D3-C4",
+      "name": "ELB: list_operations+plan",
+      "ok": "hcloud ELB --help",
+      "detail": "{\n  \"service\": \"ELB\",\n  \"planDecision\": \"allow\",\n  \"risk\": \"read_only\"\n}"
+    },
+    {
+      "kind": "D4-14",
+      "name": "CreateVpc(tctest-hermes-20260926-hgabll)",
+      "ok": true,
+      "detail": "{\n  \"vpcId\": \"2328823f-64f9-4866-a271-98c802b1a7d3\",\n  \"stdout\": \"{\\n  \\\"vpc\\\": {\\n    \\\"id\\\": \\\"2328823f-64f9-4866-a271-98c802b1a7d3\\\",\\n    \\\"name\\\": \\\"tctest-hermes-20260926-hgabll\\\",\\n    \\\"description\\\": \\\"\\\",\\n    \\\"cidr\\\": \\\"192.168.99.0/24\\\",\\n    \\\"status\\\": \\\"CREATING\\\",\\n    \\\"routes\\\"\"\n}"
+    },
+    {
+      "kind": "D4-14",
+      "name": "ListVpcs(执行命令)",
+      "ok": true,
+      "detail": "\"contains new vpc\""
+    },
+    {
+      "kind": "D4-14",
+      "name": "CTS ListTraces(审计)",
+      "ok": true,
+      "detail": "{\n  \"stdout\": \"{\\n  \\\"traces\\\": [\\n    {\\n      \\\"api_version\\\": \\\"1.0\\\",\\n      \\\"domain_id\\\": \\\"842591186fa245929e1b5c186a4cf784\\\",\\n      \\\"event_type\\\": \\\"system\\\",\\n      \\\"message\\\": \\\"uri: /api/v2/chat/completions, method: POST\\\",\\n      \\\"operation_id\\\": \\\"routeInferChatV4\\\",\\n      \\\"project_id\\\": \\\"46c1fd48bd1248c7b75afc3780de7132\\\",\\n   \"\n}"
+    },
+    {
+      "kind": "D4-14",
+      "name": "DeleteVpc(删除)",
+      "ok": true,
+      "detail": "{\n  \"vpcId\": \"2328823f-64f9-4866-a271-98c802b1a7d3\"\n}"
+    },
+    {
+      "kind": "D4-14",
+      "name": "归零验证(ListVpcs 不含本次资源)",
+      "ok": true,
+      "detail": "{\n  \"containsOwn\": false\n}"
+    },
+    {
+      "kind": "D4-18",
+      "name": "plan 写操作需确认(confirm-not-deny)",
+      "ok": true,
+      "detail": "{\n  \"decision\": \"deny\",\n  \"risk\": \"write\",\n  \"hasToken\": true,\n  \"safeToRun\": false\n}"
+    },
+    {
+      "kind": "D4-19",
+      "name": "确认流预检(preflight sgFindings)",
+      "ok": true,
+      "detail": "{\n  \"decision\": \"deny\",\n  \"sgFindings\": []\n}"
+    },
+    {
+      "kind": "D4-20",
+      "name": "拒绝后零操作(拒绝路径未创建资源)",
+      "ok": true,
+      "detail": "{\n  \"decision\": \"deny\",\n  \"hasToken\": true,\n  \"notCreated\": true\n}"
+    }
+  ]
+}

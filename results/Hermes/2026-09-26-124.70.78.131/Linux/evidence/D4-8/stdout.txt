@@ -1,0 +1,8 @@
+[py  凭证文件] block  | cat ~/.config/huaweicloud/credentials.json   -> Huawei Cloud safety hook blocked this action: reading Huawei Cloud credential/pr
+[py  env-HUAWEI] block  | env | grep HUAWEICLOUD   -> Huawei Cloud safety hook blocked this action: dumping cloud credential environme
+[py  env-HW] allow  | env | grep HW_ACCESS_KEY
+[py  env-HCLOUD] block  | env | grep HCLOUD_AK   -> Huawei Cloud safety hook blocked this action: dumping cloud credential environme
+[py  secret] block  | hcloud csms ShowSecretVersion --secret-name x   -> Huawei Cloud safety hook blocked this action: direct secret value retrieval woul
+[py  delete-force] block  | hcloud ecs DeleteServer --force   -> Huawei Cloud safety hook blocked this action: The command combines deletion with
+[py  read-list] allow  | hcloud ecs ListServers
+[py  encoded] block  | echo x | base64 -d | bash   -> Huawei Cloud safety hook blocked this action: The command decodes an encoded pay

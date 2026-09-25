@@ -1,0 +1,60 @@
+[OK] 只读 ECS NovaListServers
+[OK] 只读 VPC ListVpcs
+[OK] 只读 EVS ListVolumes
+[OK] 只读 IMS ListImages
+[OK] 只读 CES ListMetrics
+[OK] 只读 EIP ListPublicips
+[OK] 写 VPC CreateVpc (最小规格)
+[OK] 归零核实: 未创建任何 VPC
+
+=====SUMMARY=====
+{
+  "generatedAt": "2026-09-25T21:06:07.304Z",
+  "readAvailable": "6/6",
+  "readPassRate": "100%",
+  "writeDenied": true,
+  "residualZero": true,
+  "conclusion": "只读可用 6/6（期望 100%），写操作 IAM 拒绝=true（期望 true），归零=true",
+  "results": [
+    {
+      "name": "只读 ECS NovaListServers",
+      "ok": true,
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"{\\n  \\\"servers\\\": []\\n}\\n\"}"
+    },
+    {
+      "name": "只读 VPC ListVpcs",
+      "ok": true,
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"ListVpcs is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListVpcs/versionNumber'.\\n{\\n  \\\"request_id\\\": \\\"65c1c5652eed724e95660a1672bdce87\\\",\\n  \\\"vpcs\\\": [],\\n  \\\"page\"}"
+    },
+    {
+      "name": "只读 EVS ListVolumes",
+      "ok": true,
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"{\\n  \\\"count\\\": 0,\\n  \\\"volumes\\\": []\\n}\\n\"}"
+    },
+    {
+      "name": "只读 IMS ListImages",
+      "ok": true,
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"{\\n  \\\"images\\\": [\\n    {\\n      \\\"min_disk\\\": 40,\\n      \\\"__image_source_type\\\": \\\"uds\\\",\\n      \\\"container_format\\\": \\\"bare\\\",\\n      \\\"__image_size\\\": \\\"4284329984\\\",\\n      \\\"protected\\\": true,\\n      \\\"max_ram\\\": \\\"0\\\",\\n      \\\"is_migrate\\\": \\\"tr\"}"
+    },
+    {
+      "name": "只读 CES ListMetrics",
+      "ok": true,
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"{\\n  \\\"metrics\\\": [\\n    {\\n      \\\"namespace\\\": \\\"SYS.OBS\\\",\\n      \\\"dimensions\\\": [\\n        {\\n          \\\"name\\\": \\\"tenant_id\\\",\\n          \\\"value\\\": \\\"842591186fa245929e1b5c186a4cf784\\\"\\n        }\\n      ],\\n      \\\"metric_name\\\": \\\"capacity_\"}"
+    },
+    {
+      "name": "只读 EIP ListPublicips",
+      "ok": true,
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"ListPublicips is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListPublicips/versionNumber'.\\n{\\n  \\\"request_id\\\": \\\"85f31f02fd7e035e682349f56ee9cdd2\\\",\\n  \\\"publicip\"}"
+    },
+    {
+      "name": "写 VPC CreateVpc (最小规格)",
+      "ok": true,
+      "detail": "{\"code\":0,\"out\":\"{\\n  \\\"code\\\": \\\"VPC.0010\\\",\\n  \\\"message\\\": \\\"{\\\\\\\"NeutronError\\\\\\\":{\\\\\\\"message\\\\\\\":\\\\\\\"Rules on create_router by *** disallowed by policy\\\\\\\",\\\\\\\"type\\\\\\\":\\\\\\\"PolicyNotAuthorized\\\\\\\",\\\\\\\"detail\\\\\\\":\\\\\\\"\\\\\\\"}}\\\"\\n}\\nFailed to get terminal width. The default width will be used. If characters are un\"}"
+    },
+    {
+      "name": "归零核实: 未创建任何 VPC",
+      "ok": true,
+      "detail": "{\"created\":false}"
+    }
+  ]
+}
