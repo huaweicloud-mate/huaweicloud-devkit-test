@@ -1,0 +1,7 @@
+DEFAULT_ENDPOINT: const DEFAULT_ENDPOINT = 'https://devkit.huaweicloud.com/rest/developer/server/hdkitservice/telemetry/events';
+getEndpoint(): return process.env.HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT || DEFAULT_ENDPOINT;
+  TELEMETRY="off" -> false (期望 false) OK
+  TELEMETRY="on" -> true (期望 true) OK
+  TELEMETRY="" -> true (期望 true) OK
+[OK] isTelemetryEnabled 三态 off/on/未设
+[OK] getEndpoint 未设回退 DEFAULT_ENDPOINT

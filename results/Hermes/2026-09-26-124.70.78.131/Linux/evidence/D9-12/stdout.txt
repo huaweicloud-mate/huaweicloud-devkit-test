@@ -1,0 +1,50 @@
+=====CASE D9-12=====
+initialize => {"protocolVersion":"2024-11-05","capabilities":{"tools":{}},"serverInfo":{"name":"huaweicloud-devkit","version":"1.1.7"}}
+[OK] ① initialize 返回 protocolVersion+capabilities+serverInfo | {"protocolVersion":"2024-11-05","capabilities":{"tools":{}},"serverInfo":{"name":"huaweicloud-devkit","version":"1.1.7"}}
+[OK] ② tools/call 路由到 callTool（content+isError） | tools/call 返回 content[1] isError=false ; TOOL_DEFINITIONS has check_cli=true
+initialize 分支调用 runVersionCheck= false ; 调用 getCachedUpdateInfo/hdkitGenerateUserHash= true
+[FAIL] ③ initialize 阶段版本检查（runVersionCheck） | runVersionCheck in init=false; cached/hash in init=true（版本检查已下沉 prewarm/check_cli 工具）
+[OK] ④ _decorateResult/_resetHintConsumption/_isHintConsumed 存在可用 | _resetHintConsumption 后 _isHintConsumed(旧会话)=false; _decorateResult 返回 object=true
+[OK] ⑤ listSkillDirs/findSkillsRoot 返回有效技能目录 | findSkillsRoot=/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core/skills ; listSkillDirs 目录数=29
+tools/list(未 initialize) => returned tools=true
+[FAIL] ⑥ 非法时序 tools/list 被拒 -32600 | 未拒绝（dispatch 无 initialize 前置校验）: listed=true
+=====END D9-12=====
+
+=====SUMMARY=====
+{
+  "caseId": "D9-12",
+  "okCount": 4,
+  "total": 6,
+  "results": [
+    {
+      "name": "① initialize 返回 protocolVersion+capabilities+serverInfo",
+      "ok": true,
+      "detail": "{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{\"tools\":{}},\"serverInfo\":{\"name\":\"huaweicloud-devkit\",\"version\":\"1.1.7\"}}"
+    },
+    {
+      "name": "② tools/call 路由到 callTool（content+isError）",
+      "ok": true,
+      "detail": "tools/call 返回 content[1] isError=false ; TOOL_DEFINITIONS has check_cli=true"
+    },
+    {
+      "name": "③ initialize 阶段版本检查（runVersionCheck）",
+      "ok": false,
+      "detail": "runVersionCheck in init=false; cached/hash in init=true（版本检查已下沉 prewarm/check_cli 工具）"
+    },
+    {
+      "name": "④ _decorateResult/_resetHintConsumption/_isHintConsumed 存在可用",
+      "ok": true,
+      "detail": "_resetHintConsumption 后 _isHintConsumed(旧会话)=false; _decorateResult 返回 object=true"
+    },
+    {
+      "name": "⑤ listSkillDirs/findSkillsRoot 返回有效技能目录",
+      "ok": true,
+      "detail": "findSkillsRoot=/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core/skills ; listSkillDirs 目录数=29"
+    },
+    {
+      "name": "⑥ 非法时序 tools/list 被拒 -32600",
+      "ok": false,
+      "detail": "未拒绝（dispatch 无 initialize 前置校验）: listed=true"
+    }
+  ]
+}

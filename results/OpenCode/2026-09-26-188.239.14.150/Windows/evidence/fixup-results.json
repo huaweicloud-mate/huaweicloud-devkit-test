@@ -1,0 +1,382 @@
+{
+  "D1-65": {
+    "status": "PASS",
+    "why": "HUAWEICLOUD_DEVKIT_DEBUG env var found in telemetry.mjs and/or update-check.mjs - debug mode is supported",
+    "hasDebug": true,
+    "hasDebugTel": true,
+    "hasDebugUc": true,
+    "executedAt": "20260926050635"
+  },
+  "D4-18": {
+    "status": "PASS",
+    "why": "Approval flow requires approvalToken (from plan) + approvedByUser=true (from user) - neither auto-deny nor auto-allow",
+    "hasApprovalToken": {
+      "type": "string",
+      "description": "The approvalToken returned by huaweicloud_plan_cli_command."
+    },
+    "hasApprovedByUser": {
+      "type": "boolean",
+      "description": "Must be true only after the user explicitly approves this exact command."
+    },
+    "hasMustBeTrue": true,
+    "approvedByUserDesc": "Must be true only after the user explicitly approves this exact command.",
+    "executedAt": "20260926050635"
+  },
+  "D4-23": {
+    "status": "PASS",
+    "why": "Global rules file huawei-agent-rules.mdc exists at hdk/rules/ with 3780 chars - injection target rules are defined",
+    "rulesExist": true,
+    "rulesFiles": [
+      "huawei-agent-rules.mdc"
+    ],
+    "agentRulesExist": true,
+    "hasInstallTargets": false,
+    "executedAt": "20260926050635"
+  },
+  "D4-28": {
+    "status": "PASS",
+    "why": "hooks/hooks.json registers huaweicloud-safety.mjs (Node implementation) with PreToolUse matchers - Node security hook chain is functional",
+    "hasMjs": true,
+    "safetyMjsExists": true,
+    "hasPreToolUse": true,
+    "hasMatcher": true,
+    "denied": true,
+    "denyResult": {
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-command-credential-file",
+          "title": "Credential file read",
+          "category": "credential",
+          "severity": "deny",
+          "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+          "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.",
+          "source": "command",
+          "evidence": "cat ~/.config/huaweicloud/credentials.json"
+        }
+      ]
+    },
+    "executedAt": "20260926050635"
+  },
+  "EXP-E01": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "ECS查询→run_readonly",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E02": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "ECS创建→plan/approve",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E03": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "OBS静态站→deploy",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E04": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "EIP→plan",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E05": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "RDS查询→read",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E06": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "DCS创建→plan",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E07": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "CBR→plan",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E08": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "explain_error→诊断",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E09": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "CCE创建→plan",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E10": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "FunctionGraph→plan",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E11": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "费用查询→read",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E12": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "CES→plan",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E13": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "证书/ELB→plan",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E14": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "IAM审计→read",
+    "executedAt": "20260926050635"
+  },
+  "EXP-E15": {
+    "status": "BLOCKED",
+    "why": "Eval result not found",
+    "expected": "voucher_claim→执行",
+    "executedAt": "20260926050635"
+  },
+  "D10-3": {
+    "status": "FAIL",
+    "why": "serviceCatalog routing accuracy 0% < 90% threshold. 0 out of 0 intents routed to generic fallback instead of correct service.",
+    "hitCount": 0,
+    "missCount": 0,
+    "naCount": 16,
+    "accuracy": 0,
+    "threshold": 90,
+    "missCases": [],
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-01": {
+    "status": "PASS",
+    "why": "ECS read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "ECS",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-02": {
+    "status": "PASS",
+    "why": "VPC read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "VPC",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-03": {
+    "status": "PASS",
+    "why": "OBS read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "OBS",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-04": {
+    "status": "PASS",
+    "why": "RDS read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "RDS",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-05": {
+    "status": "PASS",
+    "why": "GaussDB read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "GaussDB",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-06": {
+    "status": "PASS",
+    "why": "CCE read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "CCE",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-07": {
+    "status": "PASS",
+    "why": "FunctionGraph read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "FunctionGraph",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-08": {
+    "status": "PASS",
+    "why": "IAM read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "IAM",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-09": {
+    "status": "PASS",
+    "why": "CTS read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "CTS",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-10": {
+    "status": "PASS",
+    "why": "CES read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "CES",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-11": {
+    "status": "PASS",
+    "why": "DDS read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "DDS",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-12": {
+    "status": "PASS",
+    "why": "DCS read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "DCS",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-13": {
+    "status": "PASS",
+    "why": "SMN read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "SMN",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-14": {
+    "status": "PASS",
+    "why": "DMS read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "DMS",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-15": {
+    "status": "PASS",
+    "why": "WAF read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "WAF",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-16": {
+    "status": "PASS",
+    "why": "CDN read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "CDN",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-17": {
+    "status": "PASS",
+    "why": "ModelArts read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "ModelArts",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-18": {
+    "status": "PASS",
+    "why": "DEW read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "DEW",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-19": {
+    "status": "PASS",
+    "why": "CBR read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "CBR",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-20": {
+    "status": "PASS",
+    "why": "EVS read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "EVS",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-21": {
+    "status": "PASS",
+    "why": "EIP read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "EIP",
+    "executedAt": "20260926050635"
+  },
+  "EXP-C4-22": {
+    "status": "PASS",
+    "why": "ELB read-only planning smoke passes: list_operations + plan_cli_command + run_readonly_command tools are available and service is known",
+    "listOpsOk": true,
+    "planCliOk": true,
+    "readonlyOk": true,
+    "serviceKnown": true,
+    "service": "ELB",
+    "executedAt": "20260926050635"
+  }
+}

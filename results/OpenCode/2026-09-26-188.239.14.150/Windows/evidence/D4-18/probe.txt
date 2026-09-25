@@ -1,0 +1,6 @@
+Confirm-not-deny approval semantics test (fixed):
+run_approved_command has approvalToken: true
+run_approved_command has approvedByUser: true
+approvedByUser description: Must be true only after the user explicitly approves this exact command.
+Must-be-true semantics: true
+Write operations require explicit confirmation (approvalToken from plan + approvedByUser=true from user), not auto-deny or auto-allow

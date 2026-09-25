@@ -1,0 +1,10 @@
+MCP tools/call credential non-leakage and permission validation test:
+1. Called huaweicloud_list_regions via tools/call - checked for AK/SK leakage: No leakage
+2. Called huaweicloud_auth_status via tools/call - checked for raw AK/SK: No raw credentials
+3. Called huaweicloud_plan_cli_command with ECS CreateServers (write op) - checked permission validation: Write blocked, approval required
+
+Credential non-leakage: PASS
+Permission validation: PASS
+
+tools/call responses are properly redacted - no raw AK/SK values appear in any tool response.
+Write operations (ECS CreateServers) are classified as 'write' risk and blocked with approval required.
