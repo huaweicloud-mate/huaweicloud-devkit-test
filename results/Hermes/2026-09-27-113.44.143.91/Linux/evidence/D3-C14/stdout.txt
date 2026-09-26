@@ -1,0 +1,9 @@
+=== D3-C14 沙箱 HDKit 服务参数与 hwlink 凭证 ===
+预期: miss sessionId+devStageId 报错; getCredentials {ak,sk,securitytoken}
+实测: 符合
+详情:
+hdkitConnect source/env 透传=true
+hdkitCredentials(缺参) = THROW: session_id or dev_stage_id is required (期望 throw 'session_id or dev_stage_id is required')
+hwlink.getCredentials() keys=ak,sk,securitytoken (期望 ak,sk,securitytoken)
+createConnection 签名含 securitytoken=true
+RESULT: PASS
