@@ -1,0 +1,10 @@
+Credential env print interception (OpenCode non-hook):
+Test scope: printenv/echo of Huawei Cloud credential env vars (HW_*/HUAWEICLOUD_* prefix).
+
+  printenv HW_ACCESS_KEY => deny (Printing cloud credential environment variables is blocked.)
+  printenv HUAWEICLOUD_SECRET_ACCESS_KEY => deny (Dumping cloud credential environment variables is blocked.)
+  echo $HW_SECRET_KEY => deny (Printing cloud credential environment variables is blocked.)
+  echo $HUAWEICLOUD_ACCESS_KEY => deny (Printing cloud credential environment variables is blocked.)
+  echo $HW_SECURITY_TOKEN => deny (Printing cloud credential environment variables is blocked.)
+
+All credential env print commands blocked: true

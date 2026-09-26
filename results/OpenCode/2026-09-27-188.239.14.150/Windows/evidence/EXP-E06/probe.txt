@@ -1,0 +1,11 @@
+D10 Eval Set - serviceCatalog routing:
+Intent: 创建一个 Redis 缓存实例用于会话存储
+Expected service: DCS
+Expected action: plan
+Actual routing: DDS+DCS
+Harness verdict: HIT
+
+Source-level: node eval/harness/run-eval.mjs was executed against mcp-server.mjs.
+The harness calls serviceCatalog(intent) for each Chinese intent and checks routing.
+Known baseline: 21.4% MISS (3 HIT + 11 MISS + 1 N/A out of 15).
+Assertion: 未命中即判 FAIL (miss = FAIL).

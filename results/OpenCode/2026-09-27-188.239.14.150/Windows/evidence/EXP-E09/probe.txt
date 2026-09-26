@@ -1,0 +1,11 @@
+D10 Eval Set - serviceCatalog routing:
+Intent: 开设一个 Kubernetes 集群用于微服务部署
+Expected service: CCE
+Expected action: plan
+Actual routing: CCE+SWR
+Harness verdict: HIT
+
+Source-level: node eval/harness/run-eval.mjs was executed against mcp-server.mjs.
+The harness calls serviceCatalog(intent) for each Chinese intent and checks routing.
+Known baseline: 21.4% MISS (3 HIT + 11 MISS + 1 N/A out of 15).
+Assertion: 未命中即判 FAIL (miss = FAIL).

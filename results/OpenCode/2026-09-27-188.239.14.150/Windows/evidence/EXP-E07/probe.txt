@@ -1,0 +1,11 @@
+D10 Eval Set - serviceCatalog routing:
+Intent: 给生产环境的服务器配置一个每日备份策略
+Expected service: CBR
+Expected action: plan
+Actual routing: Run hcloud --help to list available services.
+Harness verdict: MISS
+
+Source-level: node eval/harness/run-eval.mjs was executed against mcp-server.mjs.
+The harness calls serviceCatalog(intent) for each Chinese intent and checks routing.
+Known baseline: 21.4% MISS (3 HIT + 11 MISS + 1 N/A out of 15).
+Assertion: 未命中即判 FAIL (miss = FAIL).

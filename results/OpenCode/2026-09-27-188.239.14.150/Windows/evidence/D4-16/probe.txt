@@ -1,0 +1,14 @@
+Command wrapping penetration (OpenCode non-hook):
+Test: concatenated/pipe-separated write commands + credential access in wrappers.
+Source fix #650: findHcloudCommandSegments splits by ||, &&, ;, | and detects hcloud write commands.
+
+  hcloud ECS ListServersDetails; hcloud ECS DeleteServer --ins => deny
+  hcloud ECS ListServersDetails | hcloud ECS DeleteServer --in => deny
+  hcloud ECS ListServersDetails && hcloud ECS DeleteServer --i => deny
+  hcloud ECS ListServersDetails || hcloud VPC DeleteVpc --vpc_ => deny
+  sh -c "cat ~/.config/huaweicloud/credentials.json" => deny
+
+All wrapped/concatenated write commands blocked: true
+
+Source ref: safety-policy.mjs:71 "wrapped write commands keep their deny classification (#650 D4-16)"
+findHcloudCommandSegments (line 156) splits by shell operators and detects hcloud write commands.

@@ -1,0 +1,11 @@
+D10 Eval Set - serviceCatalog routing:
+Intent: 创建一台 2C4G 的 Ubuntu 云服务器, 规格通用型
+Expected service: ECS
+Expected action: plan/approve
+Actual routing: Run hcloud --help to list available services.
+Harness verdict: MISS
+
+Source-level: node eval/harness/run-eval.mjs was executed against mcp-server.mjs.
+The harness calls serviceCatalog(intent) for each Chinese intent and checks routing.
+Known baseline: 21.4% MISS (3 HIT + 11 MISS + 1 N/A out of 15).
+Assertion: 未命中即判 FAIL (miss = FAIL).

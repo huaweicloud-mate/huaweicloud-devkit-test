@@ -1,0 +1,10 @@
+confirm-not-deny approval semantics:
+1. plan_cli_command has allowWrites param: true
+   - allowWrites must be true after explicit user approval
+2. run_approved_command has approvalToken: true
+   - Token from plan_cli_command, required for execution
+3. run_approved_command has approvedByUser: true
+   - Must be true only after user explicitly approves
+
+Approval flow: plan_cli_command (generates token) → user approves → run_approved_command (executes with token+approval)
+Write operations NOT directly denied (plan generates command block) and NOT directly executed (requires approval).
