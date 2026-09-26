@@ -1,0 +1,62 @@
+{
+  "case": "sandbox-deploy-monitor",
+  "mode": "blackbox",
+  "target": "huaweicloud-devkit",
+  "version": "1.1.7",
+  "repoUrl": "https://gitcode.com/sunzy1940/test",
+  "region": "cn-north-4",
+  "ts": "2026-09-26T160",
+  "workspaceId": null,
+  "summary": {
+    "total": 9,
+    "passed": 4,
+    "failed": 5
+  },
+  "results": [
+    {
+      "assert": "P0.mcp_server",
+      "pass": true,
+      "detail": "server=huaweicloud-devkit version=1.1.7"
+    },
+    {
+      "assert": "P1.tools_list",
+      "pass": true,
+      "detail": "沙箱工具 11 个，缺:无"
+    },
+    {
+      "assert": "C1.check_user",
+      "pass": true,
+      "detail": "{\"realnameVerified\":true,\"agreementSigned\":true}"
+    },
+    {
+      "assert": "C2.connect",
+      "pass": false,
+      "detail": "MCP -32603 fetch failed"
+    },
+    {
+      "assert": "D1.clone",
+      "pass": true,
+      "detail": "https://gitcode.com/sunzy1940/test"
+    },
+    {
+      "assert": "C3.exec_roundtrip",
+      "pass": false,
+      "detail": "无 workspaceId，跳过"
+    },
+    {
+      "assert": "D2.upload_project",
+      "pass": false,
+      "detail": "前置失败（无 workspaceId / 未 clone）"
+    },
+    {
+      "assert": "D3.deploy_nginx",
+      "pass": false,
+      "detail": "前置失败（无 workspaceId）"
+    },
+    {
+      "assert": "D4.nginx_serving",
+      "pass": false,
+      "detail": "前置失败（无 workspaceId）"
+    }
+  ]
+}
