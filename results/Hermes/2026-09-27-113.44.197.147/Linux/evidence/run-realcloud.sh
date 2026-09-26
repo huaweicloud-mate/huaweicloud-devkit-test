@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 真云 E2E 执行 runner — Hermes / Linux / 2026-09-26 (fresh 全量真机执行)
+# 真云 E2E 执行 runner — Hermes / Linux / 2026-09-27 (fresh 全量真机执行)
 set -uo pipefail
 export PATH="$HOME/nodejs/bin:$HOME/bin:$PATH"
 export HDK_PLUGIN_SRC="/home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core"
