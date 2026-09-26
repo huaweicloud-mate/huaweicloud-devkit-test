@@ -1,0 +1,27 @@
+规则库: version=0.1.0 规则数=16 severity={"deny":9,"warn":7}
+规则清单:
+  - hwc-command-credential-file [deny] stages=["command"]
+  - hwc-command-env-dump [deny] stages=["command"]
+  - hwc-command-secret-value-read [deny] stages=["command"]
+  - hwc-command-sts-credential [warn] stages=["command"]
+  - hwc-command-encoded-shell-exec [deny] stages=["command"]
+  - hwc-network-public-admin-port [deny] stages=["command","artifact","deploy_plan"]
+  - hwc-obs-anonymous-write [deny] stages=["command","artifact","deploy_plan"]
+  - hwc-functiongraph-public-no-auth [warn] stages=["command","artifact","deploy_plan"]
+  - hwc-iam-admin-policy [deny] stages=["command","artifact","deploy_plan"]
+  - hwc-destructive-delete-force [deny] stages=["command"]
+  - hwc-destructive-delete-operation [warn] stages=["command"]
+  - hwc-destructive-reset-operation [warn] stages=["command"]
+  - hwc-destructive-delete-cascade [warn] stages=["command"]
+  - hwc-sandbox-missing-ttl [warn] stages=["artifact","deploy_plan"]
+  - hwc-cost-unbounded-scale [warn] stages=["command","artifact","deploy_plan"]
+  - hwc-sandbox-destructive-command [deny] stages=["command"]
+[OK] 规则库完整 16 条(9 deny + 7 warn)
+credential-file     -> deny findings=1
+readonly ListVpcs   -> allow findings=0
+DeleteVpc(无force)  -> warn findings=1
+ShowSecretVersion   -> deny findings=1
+[OK] 高危(凭证文件读取)判 deny
+[OK] 只读 ListVpcs 判 allow
+[OK] 删除操作判 warn/deny(非 allow)
+[OK] 明文 secret 读取判 deny
