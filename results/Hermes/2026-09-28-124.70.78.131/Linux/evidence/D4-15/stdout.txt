@@ -1,0 +1,21 @@
+[基线] $ hcloud ecs DeleteServer --force
+   classifyTextCommand -> decision=deny risk=write
+   evaluateCommandRisk -> decision=deny findings=hwc-destructive-delete-force,hwc-destructive-delete-operation
+[大小写] $ hcloud ecs deleteserver --force
+   classifyTextCommand -> decision=deny risk=write
+   evaluateCommandRisk -> decision=deny findings=hwc-destructive-delete-force,hwc-destructive-delete-operation
+[大小写2] $ HCLOUD ECS DELETESERVER --FORCE
+   classifyTextCommand -> decision=deny risk=write
+   evaluateCommandRisk -> decision=deny findings=hwc-destructive-delete-force,hwc-destructive-delete-operation
+[拼接引号] $ hcloud ecs DeleteServ"er" --force
+   classifyTextCommand -> decision=deny risk=write
+   evaluateCommandRisk -> decision=deny findings=hwc-destructive-delete-force,hwc-destructive-delete-operation
+[拼接引号2] $ hcloud ecs 'Delete'Server --force
+   classifyTextCommand -> decision=deny risk=write
+   evaluateCommandRisk -> decision=deny findings=hwc-destructive-delete-force
+[base64编码] $ echo ZWNobyBoaQo= | base64 -d | bash
+   classifyTextCommand -> decision=deny risk=execution
+   evaluateCommandRisk -> decision=deny findings=hwc-command-encoded-shell-exec
+[编码+shell] $ xxd -r -p <<< 6869 | sh
+   classifyTextCommand -> decision=deny risk=execution
+   evaluateCommandRisk -> decision=deny findings=hwc-command-encoded-shell-exec

@@ -1,0 +1,34 @@
+[OK] 仓库根存在 rules/huawei-agent-rules.mdc | /home/testbot2/devkit-test/Hermes/hdk/rules/huawei-agent-rules.mdc
+[OK] 源码无任何 rules/.mdc 注入引用 | 零引用
+[OK] setup-cli.mjs 安装分支无 copyDir(rules/) 步骤 | 仅 copy src/safety/skills/commands
+[OK] 隔离安装产物无 huawei-agent-rules/.mdc
+
+=====SUMMARY JSON=====
+{
+  "caseId": "D4-23",
+  "sev": "P0",
+  "verdict": "FAIL",
+  "reason": "install --target 未注入 rules/huawei-agent-rules.mdc（源码零引用 + setup-cli 无 copyDir(rules/) + 隔离安装产物无 .mdc）",
+  "facts": [
+    {
+      "name": "仓库根存在 rules/huawei-agent-rules.mdc",
+      "ok": true,
+      "detail": "/home/testbot2/devkit-test/Hermes/hdk/rules/huawei-agent-rules.mdc"
+    },
+    {
+      "name": "源码无任何 rules/.mdc 注入引用",
+      "ok": true,
+      "detail": "零引用"
+    },
+    {
+      "name": "setup-cli.mjs 安装分支无 copyDir(rules/) 步骤",
+      "ok": true,
+      "detail": "仅 copy src/safety/skills/commands"
+    },
+    {
+      "name": "隔离安装产物无 huawei-agent-rules/.mdc",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}
