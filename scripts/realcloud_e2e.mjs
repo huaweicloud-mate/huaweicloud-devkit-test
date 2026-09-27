@@ -39,9 +39,8 @@ async function caseD3B8() {
 
 async function caseD3B7() {
   const args = ['VPC', 'ListVpcs', `--cli-region=${REGION}`];
-  const { plan } = await approve(args);
+  const { plan, run } = await approve(args);
   log('plan分类只读allow', plan?.classification?.decision === 'allow' && !!plan?.approvalToken, plan?.classification?.decision);
-  const run = await call('huaweicloud_run_approved_command', { args, approvalToken: plan?.approvalToken, approvedByUser: true });
   log('run_approved执行', run?.ok === true || run?.exitCode === 0, run?.ok + '/' + run?.exitCode);
 }
 
@@ -122,8 +121,10 @@ async function main() {
   for (const t of targets) {
     if (!CASES[t]) { console.error('未知 case:', t, '（合法值:', Object.keys(CASES).join('/'), '/all）'); process.exit(2); }
     const tid = `case-${t}`;
+    results.length = 0;  // reset per-case
     await CASES[t]();
-    const out = JSON.stringify({ case: t, total: results.length, passed: results.filter(x => x.pass).length, failed: results.filter(x => !x.pass).length, results }, null, 2);
+    const failedCount = results.filter(x => !x.pass).length;
+    const out = JSON.stringify({ case: t, status: failedCount === 0 ? 'PASS' : 'FAIL', total: results.length, passed: results.filter(x => x.pass).length, failed: failedCount, results }, null, 2);
     const ev = process.env.HDK_EVIDENCE ? join(process.env.HDK_EVIDENCE, t) : null;
     if (ev) { mkdirSync(ev, { recursive: true }); writeFileSync(join(ev, 'stdout.log'), out, 'utf8'); }
     console.log(`\n### ${t} ###\n` + out);
