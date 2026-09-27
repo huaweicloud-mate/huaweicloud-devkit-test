@@ -1,0 +1,317 @@
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/auth/reconcile.mjs' imported from /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d2-10-koocli-profile.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/auth/reconcile.mjs'
+}
+
+Node.js v22.13.0
+
+>>> d2-10-koocli-profile.mjs exit=1  ===
+
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/auth/credentials.mjs' imported from /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d2-13-s1-env.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/auth/credentials.mjs'
+}
+
+Node.js v22.13.0
+
+>>> d2-13-s1-env.mjs exit=1  ===
+
+PASS  D9-9-capability-probe  能力探测：capabilities.notifications.cancellation 是否存在 => {"declared":false,"cancellation":false} (期望 "按实测标注")
+    capabilities={} — 未声明→SPEC-MISMATCH 不假定支持
+PASS  D9-9-client-timeout  tools/call 30s 挂起由客户端超时（未挂死） => "客户端在 10010ms 超时返回 huaweicloud_service_catalog" (期望 "客户端超时（30s 挂起 > 客户端超时窗口）")
+PASS  D9-9-timeout-error-shape  超时错误契约 {code:-32000, message:含 "timeout"} => {"code":-32000,"message":"timeout"} (期望 {"code":-32000,"message":"timeout"})
+    客户端侧超时语义：向上层抛 {code:-32000, message:含 "timeout"}（JSON-RPC 超时错误精确值）；取消能力按 capabilities 实测
+PASS  D9-9-cancellation-not-declared  取消能力未声明→SPEC-MISMATCH 标注 => "SPEC-MISMATCH" (期望 "SPEC-MISMATCH")
+    能力探测显示未声明 cancellation → 不发送取消通知，按 SPEC 待裁决处理
+FAIL  D9-9-reconnect  超时后重新 initialize/tools/list 正常 => {"tools":"n/a"} (期望 {"server":"huaweicloud-devkit","tools":">=1"})
+PASS  D9-9-pending-map-empty  客户端 pending map 无悬挂请求 => "client timeout drops pending" (期望 "no dangling")
+    客户端超时自行回收 pending，进程可正常重建连接
+
+=== D9-9 tools/call 超时协议语义与取消（可注入延迟夹具 30000ms 挂起）===  pass=5 fail=1
+RESULT: FAIL
+
+>>> d9-9-delay-timeout.mjs exit=1  ===
+
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/mcp-server-remote.mjs' imported from /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d9-10-remote-transport.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/mcp-server-remote.mjs'
+}
+
+Node.js v22.13.0
+
+>>> d9-10-remote-transport.mjs exit=1  ===
+
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/ws-exec/hwlink-tunnel-channel.mjs' imported from /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d9-11-ws-tunnel.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/ws-exec/hwlink-tunnel-channel.mjs'
+}
+
+Node.js v22.13.0
+
+>>> d9-11-ws-tunnel.mjs exit=1  ===
+
+Warning: Detected unsettled top-level await at file:///home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d9-6-cross-client.mjs:70
+const aInit = await herm.initialize();
+              ^
+
+
+
+
+>>> d9-6-cross-client.mjs exit=13  ===
+
+PASS  EXP-D5-2-1-client-host  Codex 客户端宿主检测 => {"present":false,"bin":null,"config":null} (期望 "宿主检测")
+    本机未安装 codex 客户端 → 解除条件「需 Codex 客户端真实宿主」未就绪，证据按 BLOCKED（携带清单检测结论）归档
+FAIL  EXP-D5-2-1-manifest-files  插件清单文件存在（.mcp.json / openclaw.plugin.json） => {"mcpJson":false,"openclawJson":false} (期望 {"mcpJson":true,"openclawJson":true})
+FAIL  EXP-D5-2-1-mcp-server-registered  MCP server 注册（huaweicloud-devkit） => {"registered":false} (期望 true)
+FAIL  EXP-D5-2-1-plugin-format  插件 manifest 为 codex bundle 格式 => {} (期望 {"bundleFormat":"codex","family":"bundle-plugin"})
+PASS  EXP-D5-2-1-codex-register  Codex config 引用 huaweicloud-devkit => {"ref":null,"hostPresent":false} (期望 "codex.config 引用")
+    无 codex 宿主（BLOCKED 归档，config 检查从略，不误报）
+
+=== EXP-D5-2-1 Codex 插件发现/加载清单会话 harness ===  pass=2 fail=3
+RESULT: BLOCKED
+BLOCKED 原因：需要 Codex 客户端真实宿主；本机未安装 → 清单发现/加载会话待测试机执行（夹具已就绪，宿主就绪即 PASS）
+
+>>> exp-d5-2-1-codex-discovery.mjs exit=0  ===
+
+Warning: Detected unsettled top-level await at file:///home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/exp-d5-2-3-codex-tools-enum.mjs:63
+const init = await send('initialize', { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'exp-d5-2-3', version: '1' } });
+             ^
+
+
+
+
+>>> exp-d5-2-3-codex-tools-enum.mjs exit=13  ===
+
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/telemetry/telemetry.mjs' imported from /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d1-66-telemetry-env.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/telemetry/telemetry.mjs?t=1790543501524'
+}
+
+Node.js v22.13.0
+
+>>> d1-66-telemetry-env.mjs exit=1  ===
+
+(node:565644) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL  D1-69-help-exit0  help 子命令退出码 0 => 1 (期望 0)
+    stderr=node:internal/modules/cjs/loader:1247
+  throw err;
+  ^
+
+Error: Cannot find module '/home/zhangshuang
+FAIL  D1-69-help-banner  help 输出含 BANNER => false (期望 true)
+    stdout len=0
+FAIL  D1-69-help-commands  help 输出含 Commands 列表 => false (期望 true)
+FAIL  D1-69-dash-help-exit0  --help 退出码 0 => 1 (期望 0)
+FAIL  D1-69-dash-help-content  --help 输出含 Usage => false (期望 true)
+    len=0
+FAIL  D1-69-short-h-exit0  -h 退出码 0 => 1 (期望 0)
+FAIL  D1-69-no-arg-default-help  无参数默认 help 退出码 0 => 1 (期望 0)
+    stdout len=0
+FAIL  D1-69-version-exit0  --version 退出码 0 => 1 (期望 0)
+FAIL  D1-69-version-output  --version 输出含版本号 => false (期望 true)
+    stdout=
+FAIL  D1-69-unknown-cmd-no-crash  未知子命令不 crash（落入 help） => 1 (期望 0)
+    stdout len=0
+FAIL  D1-69-unknown-cmd-help  未知子命令输出 help 内容 => false (期望 true)
+
+=== D1-69 CLI help 子命令夹具 ===  pass=0 fail=11
+RESULT: FAIL
+
+>>> d1-69-cli-help.mjs exit=1  ===
+
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/koocli-version.mjs' imported from /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d2-27-koocli-version.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/koocli-version.mjs'
+}
+
+Node.js v22.13.0
+
+>>> d2-27-koocli-version.mjs exit=1  ===
+
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/auth/credentials.mjs' imported from /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d3-c14-sandbox-hwlink-cred.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/auth/credentials.mjs'
+}
+
+Node.js v22.13.0
+
+>>> d3-c14-sandbox-hwlink-cred.mjs exit=1  ===
+
+无法读取 package.json: /home/zhangshuang/devkit-test/Hermes/package.json ENOENT: no such file or directory, open '/home/zhangshuang/devkit-test/Hermes/package.json'
+
+>>> d4-12-supply-chain.mjs exit=2  ===
+
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/safety-policy.mjs' imported from /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d4-29-classify-assert.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/safety-policy.mjs'
+}
+
+Node.js v22.13.0
+
+>>> d4-29-classify-assert.mjs exit=1  ===
+
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/mcp-config-backup.mjs' imported from /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/d8-10-mcp-config-backup-merge.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/mcp-config-backup.mjs'
+}
+
+Node.js v22.13.0
+
+>>> d8-10-mcp-config-backup-merge.mjs exit=1  ===
+
+Mock server listening at ws://127.0.0.1:46661
+PASS  D9-11-LC-connect  WebSocket 客户端成功建连 mock server => {"connected":true,"serverConns":1} (期望 {"connected":true,"serverConns":1})
+PASS  D9-11-LC-auth  认证握手成功（auth:ok） => {"reply":"auth:ok"} (期望 {"reply":"auth:ok"})
+    服务端已标记 authed
+PASS  D9-11-LC-heartbeat  心跳保活 ping→pong 往返 => {"reply":"pong"} (期望 {"reply":"pong"})
+PASS  D9-11-LC-binary-roundtrip  二进制隧道数据 echo 往返 => {"reply":"binary:6"} (期望 {"reply":"binary:6"})
+PASS  D9-11-LC-normal-close  正常断开（客户端主动 close → 服务端 disconnect） => {"disconnects":1,"remainingConns":0} (期望 {"disconnects":1,"remainingConns":0})
+PASS  D9-11-LC-abnormal-setup  异常断开前建立第二个连接 => {"connected":true,"serverConns":1} (期望 {"connected":true,"serverConns":1})
+PASS  D9-11-LC-abnormal-close  服务端强制断开 → 客户端收到 close 事件 => {"ws2Closed":true,"serverConns":0} (期望 {"ws2Closed":true,"serverConns":0})
+    服务端 closeConnection 后客户端收到 close 且连接清零
+PASS  D9-11-LC-reconnect  断开后可重新建连 => {"reconnected":true,"serverConns":1} (期望 {"reconnected":true,"serverConns":1})
+PASS  D9-11-LC-close-idempotent  close() 幂等（二次调用不报错） => {"closeTwiceOk":true} (期望 {"closeTwiceOk":true})
+PASS  D9-11-LC-post-close-reject  关闭后新连接被拒绝 => {"error":true} (期望 {"error":true})
+    server 已 close，新连接应失败
+PASS  D9-11-LC-frame-log  frameLog 记录了生命周期帧 => {"totalFrames":8,"hasIn":true,"hasOut":true} (期望 {"totalFrames":">0","hasIn":true,"hasOut":true})
+
+=== D9-11 WebSocket 隧道通道生命周期 ===  pass=11 fail=0
+RESULT: PASS
+
+>>> d9-11-ws-tunnel-lifecycle.mjs exit=0  ===
+
+FAIL  D9-6-IA-clientA-init  客户端A (Hermes) initialize 互通 => {} (期望 {"server":"huaweicloud-devkit"})
+FAIL  D9-6-IA-clientA-tools-list  客户端A tools/list 枚举 => {"count":0} (期望 {"count":">0"})
+FAIL  D9-6-IA-clientA-tools-call  客户端A tools/call 互通（service_catalog） => {"contentLen":0} (期望 {"isError":false})
+FAIL  D9-6-IB-clientB-init  客户端B (AtomCode) initialize 互通 => {} (期望 {"server":"huaweicloud-devkit"})
+FAIL  D9-6-IB-clientB-tools-list  客户端B tools/list 枚举 => {"count":0} (期望 {"count":">0"})
+FAIL  D9-6-IC-tools-consistency  A/B 客户端 tools/list 一致性 => {"a":0,"b":0} (期望 {"a":0,"b":0})
+FAIL  D9-6-IB-clientB-tools-call  客户端B tools/call 互通（service_catalog） => {"contentLen":0} (期望 {"isError":false})
+FAIL  D9-6-IA-clientA-resources  客户端A resources/list 互通 => {"hasResult":false,"resources":"n/a"} (期望 {"hasResult":true})

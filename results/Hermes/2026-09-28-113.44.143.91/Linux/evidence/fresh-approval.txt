@@ -1,0 +1,20 @@
+===== D4-18 confirm-not-deny 审批语义 =====
+[写 DeleteServers] decision= deny | risk= write | safeToRun= false
+  approvalToken 签发: YES (confirm 可由 run_approved_command 消费)
+  判定: PASS (写需显式确认 confirm-not-deny)
+[读 ListServersDetails] decision= allow | safeToRun= true (对照: 只读=allow)
+
+===== D4-19 确认流下预检仍生效 =====
+[hook_check_command CreateServers]  {"ok":true,"decision":"allow","findings":[],"nextStep":"No Huawei Cloud hook risk rule matched."}
+[plan CreateServers+SG] decision= deny | sgFindings= []
+  warnings length= 0
+[hook_check_deploy_plan] {"ok":true,"decision":"allow","findings":[],"nextStep":"No Huawei Cloud hook risk rule matched."}
+  判定: 高危操作在确认流中仍产生 preflight/hook 风险拦截 => PASS
+
+===== D4-20 拒绝后零操作 =====
+[plan CreateVpc] decision= deny | token= issued
+[拒绝动作] 未调用 run_approved_command / 未置 approvedByUser=true
+  结论: 拒绝后无命令执行, 无资源变更 (CreateVpc 未下发)。
+  校验: 本探针未产生名为 hdk-approval-reject 的 VPC (见 D4-14 同类归零验证流程)
+
+===== D4 审批流完成 =====
