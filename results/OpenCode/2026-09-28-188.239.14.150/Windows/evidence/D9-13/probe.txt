@@ -1,0 +1,27 @@
+tools/call credential non-leak + permission check:
+Credential functions:
+  setRuntimeCredentials: true
+  clearRuntimeCredentials: true
+  hasRuntimeCredentials: true
+  resolveCredentialsWithRuntime: true
+
+Safety functions:
+  loadPolicy: true
+  classifyHcloudArgs: true
+
+Risk functions:
+  evaluateArtifacts: true
+  evaluateDeployPlan: true
+  mergeRiskDecision: true
+
+CLI functions:
+  hashArgs: true
+  createApprovalToken: true
+  consumeApprovalToken: true
+
+Tests:
+  Approval token lifecycle (non-replayable): true
+  Credential non-leak (set→clear): true
+  classifyHcloudArgs (read vs write): [object Object]
+
+All checks passed: true

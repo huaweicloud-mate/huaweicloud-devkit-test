@@ -1,0 +1,12 @@
+Command wrapping penetration (OpenCode non-hook):
+Test wrapped credential access commands:
+  sh -c "cat ~/.config/huaweicloud/credentials.json" => deny (Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.)
+  bash -c "cat ~/.hcloud/config.json" => deny (Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.)
+  powershell -Command "type $env:USERPROFILE\.config\huaweicloud\credentials.json" => deny (Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.)
+  sh -c "printenv HW_ACCESS_KEY" => allow (No Huawei Cloud safety rule matched.)
+  eval "printenv HUAWEICLOUD_SECRET_KEY" => allow (No Huawei Cloud safety rule matched.)
+
+All wrapped credential access commands identified as deny: false
+
+Note: Source code line 71 states "wrapped write commands keep their deny classification (#650 D4-16)".
+Credential file access in wrappers (sh -c, bash -c, powershell -Command, eval) is correctly detected.
