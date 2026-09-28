@@ -1,0 +1,8 @@
+Command wrapping penetration (OpenCode non-hook):
+Test wrapped commands:
+  sh -c "cat ~/.config/huaweicloud/credentials.json" => deny
+  bash -c "hcloud ECS DeleteServer --instance_id=xxx" => allow
+  powershell -Command "type $env:USERPROFILE\.config\huaweicloud\credentials.json" => deny
+  eval "hcloud VPC DeleteVpc --vpc_id=xxx" => allow
+
+All wrapped commands identified as deny: false

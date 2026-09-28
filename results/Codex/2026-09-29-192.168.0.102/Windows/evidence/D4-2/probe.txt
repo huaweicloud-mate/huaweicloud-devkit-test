@@ -1,0 +1,11 @@
+Credential env print interception (OpenCode non-hook):
+OpenCode is a non-hook client (no OS-level shell interception).
+hook_check_command MCP tool uses classifyTextCommand to identify risks.
+
+Test commands and classification:
+  printenv HW_ACCESS_KEY => deny (Printing cloud credential environment variables is blocked.)
+  echo $AWS_SECRET_ACCESS_KEY => allow (No Huawei Cloud safety rule matched.)
+  type %HUAWEICLOUD_SECRET_ACCESS_KEY% => allow (No Huawei Cloud safety rule matched.)
+  env | grep -i secret => allow (No Huawei Cloud safety rule matched.)
+
+All credential env commands identified as deny: false
