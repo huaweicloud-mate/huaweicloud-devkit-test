@@ -1,0 +1,11 @@
+Credential env print interception (OpenCode non-hook):
+OpenCode is a non-hook client. classifyTextCommand identifies credential env print risks.
+
+Test commands (Huawei Cloud credential env vars):
+  printenv HW_ACCESS_KEY => deny (Printing cloud credential environment variables is blocked.)
+  printenv HUAWEICLOUD_SECRET_ACCESS_KEY => deny (Dumping cloud credential environment variables is blocked.)
+  echo $HW_SECRET_KEY => deny (Printing cloud credential environment variables is blocked.)
+  echo $HUAWEICLOUD_ACCESS_KEY => deny (Printing cloud credential environment variables is blocked.)
+  env | grep HW_ => allow (No Huawei Cloud safety rule matched.)
+
+All Huawei Cloud credential env commands identified as deny: false
