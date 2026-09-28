@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "why": "All command wrapping attempts are detected and intercepted",
+  "details": [
+    {
+      "cmd": "bash -c \"hcloud ECS DeleteServers --instance_ids xxx\"",
+      "decision": "warn",
+      "denied": true,
+      "findingsCount": 1
+    },
+    {
+      "cmd": "sh -c \"cat ~/.config/huaweicloud/credentials.json\"",
+      "decision": "deny",
+      "denied": true,
+      "findingsCount": 1
+    },
+    {
+      "cmd": "echo \"hcloud ECS DeleteServers\" | sh",
+      "decision": "warn",
+      "denied": true,
+      "findingsCount": 1
+    }
+  ],
+  "rootCause": "cloud-risk-rules.json hwc-command-credential-file regex does not unwrap sh -c wrappers or match credentials.json without hcloud/huaweicloud path prefix",
+  "file": "safety/rules/cloud-risk-rules.json",
+  "line": 14,
+  "executedAt": "20260929050904"
+}

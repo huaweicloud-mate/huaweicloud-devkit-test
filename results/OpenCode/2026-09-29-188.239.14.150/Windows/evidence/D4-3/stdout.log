@@ -1,0 +1,12 @@
+{
+  "status": "FAIL",
+  "why": "REAL DEFECT: No risk rule covers --adminPass/--ak/--sk in hcloud args. hwc-command-secret-value-read only covers DEW secret APIs.",
+  "result": {
+    "decision": "allow",
+    "findingsCount": 0
+  },
+  "rootCause": "cloud-risk-rules.json hwc-command-secret-value-read only matches ShowSecretVersion|DownloadSecret|GetSecretValue, not --adminPass/--ak/--sk",
+  "file": "safety/rules/cloud-risk-rules.json",
+  "line": 56,
+  "executedAt": "20260929050904"
+}
