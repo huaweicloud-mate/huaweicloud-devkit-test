@@ -1,0 +1,68 @@
+{
+  "case": "sandbox-deploy-monitor",
+  "mode": "blackbox",
+  "target": "huaweicloud-devkit",
+  "version": "1.1.7",
+  "repoUrl": "https://gitcode.com/sunzy1940/test",
+  "region": "cn-north-4",
+  "ts": "2026-09-28T120",
+  "workspaceId": null,
+  "publicUrl": null,
+  "summary": {
+    "total": 10,
+    "passed": 3,
+    "failed": 7
+  },
+  "results": [
+    {
+      "assert": "P0.mcp_server",
+      "pass": true,
+      "detail": "server=huaweicloud-devkit version=1.1.7"
+    },
+    {
+      "assert": "P1.tools_list",
+      "pass": true,
+      "detail": "沙箱工具 11 个，缺:无"
+    },
+    {
+      "assert": "C1.check_user",
+      "pass": false,
+      "detail": "MCP -32603 HDKIT_NOT_AGREEMENT: 用户未签署最新版协议，签署需由用户本人确认后完成 [trace: 21bbc7e506d14d3488ec403306a8d9ba]"
+    },
+    {
+      "assert": "C2.connect",
+      "pass": false,
+      "detail": "MCP -32603 HDKIT_NOT_AGREEMENT: 用户未签署最新版协议，签署需由用户本人确认后完成 [trace: 0b046c3d5a7e40e4b4c95e08952c4dea]"
+    },
+    {
+      "assert": "D1.clone",
+      "pass": true,
+      "detail": "https://gitcode.com/sunzy1940/test"
+    },
+    {
+      "assert": "C3.exec_roundtrip",
+      "pass": false,
+      "detail": "无 workspaceId，跳过"
+    },
+    {
+      "assert": "D2.upload_project",
+      "pass": false,
+      "detail": "前置失败（无 workspaceId / 未 clone）"
+    },
+    {
+      "assert": "D3.deploy_nginx",
+      "pass": false,
+      "detail": "前置失败（无 workspaceId）"
+    },
+    {
+      "assert": "D4.nginx_serving",
+      "pass": false,
+      "detail": "前置失败（无 workspaceId）"
+    },
+    {
+      "assert": "D5.public_url",
+      "pass": false,
+      "detail": "前置失败（无 workspaceId）"
+    }
+  ]
+}
