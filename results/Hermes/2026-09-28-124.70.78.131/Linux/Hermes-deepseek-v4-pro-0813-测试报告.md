@@ -1,7 +1,7 @@
 # Hermes-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`Hermes-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：`2026-09-28 05:12:00`（北京时间）
+> **生成时间**：`2026-09-28 11:09:22`（北京时间，issue #19 派发全量重跑）
 > **执行归档**：`results/Hermes/2026-09-28-124.70.78.131/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`FAIL`（含 P0 缺陷 D4-2/D4-16/D4-21/D4-23/D9-12，均历史已知，均已在上游仓有 open issue，本轮为复核复现）
