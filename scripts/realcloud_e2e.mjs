@@ -19,7 +19,16 @@ function log(name, pass, detail) { results.push({ name, pass, detail: String(det
 async function call(name, args) { try { return await callTool(name, args); } catch (e) { return { __error: String(e).slice(0, 260) }; } }
 function idOf(json) { return /"id"\s*:\s*"([0-9a-fA-F-]{36})"/.exec(json || '')?.[1]; }
 function serverIdOf(json) { return /"serverIds"\s*:\s*\[\s*"([0-9a-fA-F-]{36})"/.exec(json || '')?.[1]; }
-function sh(cmd) { const r = spawnSync('hcloud', cmd, { encoding: 'utf8' }); return (r.stdout || '') + (r.stderr || ''); }
+function sh(cmd) {
+  const r = spawnSync('hcloud', cmd, { encoding: 'utf8' });
+  return { ok: r.status === 0, status: r.status, text: ((r.stdout || '') + (r.stderr || '')).trim() };
+}
+function randomPass() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789@#$%';
+  let s = '';
+  for (let i = 0; i < 16; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return 'Hdk@A1a' + s;
+}
 
 const hdkSrc = process.env.HDK_SRC || join(process.cwd(), '..', 'hdk', 'plugins', 'huaweicloud-core', 'src');
 const { callTool } = await import(pathToFileURL(join(hdkSrc, 'tools.mjs')).href);
@@ -47,13 +56,13 @@ async function caseD3B7() {
 async function caseD3C2() {
   const bucket = `testbot3-hermes-obs-${TS}`;
   const mb = sh(['OBS', 'mb', `obs://${bucket}`, `-location=${REGION}`]);
-  log('OBS建桶', /success/i.test(mb), mb.slice(0, 180));
+  log('OBS建桶', mb.ok && /success/i.test(mb.text), mb.text.slice(0, 180));
   const set = await call('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
   log('set静态站', set?.ok === true && set?.status === 200, JSON.stringify(set));
   const get = await call('huaweicloud_obs_set_website_config', { action: 'get', bucket, region: REGION });
   log('get静态站', get?.ok === true && get?.status === 200, JSON.stringify(get).slice(0, 200));
   const rm = sh(['OBS', 'rm', `obs://${bucket}`, '-f']);   // 删空桶不带 -r
-  log('删桶归零', /success/i.test(rm), rm.slice(0, 120));
+  log('删桶归零', rm.ok && /success/i.test(rm.text), rm.text.slice(0, 120));
 }
 
 async function caseD3C1() {
@@ -67,18 +76,44 @@ async function caseD3C1() {
     subnetId = idOf(r2?.stdout || ''); log('CreateSubnet', !!subnetId, r2?.stdout?.slice(0, 100));
 
     if (vpcId && subnetId) {
-      const { plan, run: r3 } = await approve(['ECS', 'CreateServers', `--server.name=testbot3-hermes-ecs-${TS}`, '--server.flavorRef=c6.large.2', '--server.imageRef=9c2f377e-7f49-4fdf-b0be-c6c8d3b96fde', `--server.vpcid=${vpcId}`, `--server.nics.1.subnet_id=${subnetId}`, '--server.root_volume.volumetype=GPSSD', '--server.root_volume.size=40', '--server.availability_zone=cn-north-4a', '--server.adminPass=Hdk@Test12345', `--cli-region=${REGION}`]);
+      const { plan, run: r3 } = await approve(['ECS', 'CreateServers', `--server.name=testbot3-hermes-ecs-${TS}`, '--server.flavorRef=c6.large.2', '--server.imageRef=9c2f377e-7f49-4fdf-b0be-c6c8d3b96fde', `--server.vpcid=${vpcId}`, `--server.nics.1.subnet_id=${subnetId}`, '--server.root_volume.volumetype=GPSSD', '--server.root_volume.size=40', '--server.availability_zone=cn-north-4a', `--server.adminPass=${randomPass()}`, `--cli-region=${REGION}`]);
       const out = r3?.stdout || JSON.stringify(r3);
       serverId = serverIdOf(out);
       log('CreateServers(审批分类)', plan?.classification?.decision, plan?.classification?.decision);
       log('CreateServers(返回serverIds)', !!serverId, out.slice(0, 120));
     }
   } finally {
-    // 反序删除归零（只删本次创建，唯一时间戳名）
-    if (serverId) sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', `--cli-region=${REGION}`]);
-    if (subnetId) sh(['VPC', 'DeleteSubnet', `--subnet_id=${subnetId}`, `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
-    if (vpcId) sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
-    log('finally归零(已提交删除请求)', true, `${serverId ? 'ECS✓' : 'noECS'} ${subnetId ? 'subnet✓' : ''} ${vpcId ? 'vpc✓' : ''}`);
+    // 反序删除归零，逐步校验真实删除结果（只删本次创建，唯一时间戳名）
+    const cleanup = [];
+    let cleanupOk = true;
+    if (serverId) {
+      const d = sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', `--cli-region=${REGION}`]);
+      cleanup.push('ECS:' + (d.ok ? '提交删除' : 'FAIL:' + d.text.slice(0, 80)));
+      if (d.ok) {
+        // 异步删除：轮询 ListServersDetails 确认 ECS 真正归零（最多约 150s）
+        let gone = false;
+        for (let i = 0; i < 15; i++) {
+          await new Promise((r) => setTimeout(r, 10000));
+          const list = sh(['ECS', 'ListServersDetails', `--cli-region=${REGION}`]);
+          if (list.ok && !list.text.includes(serverId)) { gone = true; break; }
+        }
+        cleanup.push('ECS轮询:' + (gone ? '已归零' : '仍在/未确认'));
+        if (!gone) cleanupOk = false;
+      } else {
+        cleanupOk = false;
+      }
+    }
+    if (subnetId) {
+      const d = sh(['VPC', 'DeleteSubnet', `--subnet_id=${subnetId}`, `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+      cleanup.push('subnet:' + (d.ok ? 'OK' : 'FAIL:' + d.text.slice(0, 60)));
+      if (!d.ok) cleanupOk = false;
+    }
+    if (vpcId) {
+      const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+      cleanup.push('vpc:' + (d.ok ? 'OK' : 'FAIL:' + d.text.slice(0, 60)));
+      if (!d.ok) cleanupOk = false;
+    }
+    log('finally归零(校验真实删除)', cleanupOk, cleanup.join(' ') || '无资源需清理');
   }
 }
 
