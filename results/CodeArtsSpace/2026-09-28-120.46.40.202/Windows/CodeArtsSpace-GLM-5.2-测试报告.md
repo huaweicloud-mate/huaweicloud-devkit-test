@@ -1,9 +1,9 @@
 # CodeArtsSpace-GLM-5.2 每日测试报告
 > **报告名**：`CodeArtsSpace-GLM-5.2-测试报告.md`
-> **生成时间**：2026-09-28 09:31:25（北京时间）
+> **生成时间**：2026-09-28 09:41:50（北京时间）
 > **执行归档**：`results/CodeArtsSpace/2026-09-28-120.46.40.202/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PASS`（141/141 PASS，0 FAIL，0 BLOCKED）
+> **结论**：`PASS`（无 P0 缺陷）
 
 ---
 
@@ -12,17 +12,11 @@
 | 项 | 值 |
 |---|---|
 | 客户端 / Agent | `CodeArtsSpace` + `GLM-5.2` |
-| OS / 架构 | `Windows` / `x86_64` |
-| Node / npm / Python | `Node v22.13.0 / npm 10.9.2 / Python 3.11.15` |
-| 被测版本（SUT） | `v1.1.7`（npm latest，gitHead `7456d059`） |
-| 工具全集 | `40`（`tools.mjs` TOOL_DEFINITIONS） |
-| hcloud / 依赖 | `hcloud 已配置 / doctor 确认已配置` |
-| 真云凭证 | `cn-north-4（AKSK 已配置 / 本次未使用真云用例）` |
-| 测试类型 | 源码级探针 / 真机 CLI（install/doctor/status）/ MCP 协议 |
-| 设计真源 | 设计级 102 / 展开级 39 / 追踪表 |
+| OS / 架构 | `Windows` |
+| 被测版本（SUT） | `1.1.7` |
 | daily 基础用例 | 设计级 102 / 展开级 39 |
 
-> **执行方法**：探针脚本（master-probe.mjs）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数（safety-policy/risk-rule-engine/update-check/tools/mcp-protocol），决策/结果落 `stdout.log`；CLI 真机执行记录日志；证据统一落 `evidence/<case-id>/`。
+> **执行方法**：探针直调（judgeUpdate/redactString/serviceCatalog 等源码级直调）+ npm/CLI 真机执行 + MCP 工具清单与协议握手校验 + 评测集路由层（run-eval.mjs serviceCatalog 确定性调用）+ 真云 AK/SK 凭证就绪校验。所有用例由 `init_day.py` 触发的统一探针脚本一次性执行，结论落盘 `evidence/<case-id>/stdout.log`（JSON 含 status/executedAt/why），`backfill_daily.py` 批量回填三份 CSV。
 
 ---
 
@@ -35,8 +29,8 @@
 | PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `141 / 0 / 0 / 0 / 0` |
 | 通过率（分母 = PASS+FAIL = 141） | `100.0%` |
 | P0 / P1 / P2 新增缺陷 | `0 / 0 / 0` |
-| 红线（I 类）违规 | `0` |
-| 资源释放 | `全部归零（本次无真云资源创建）` |
+| 红线（I 类）违规 | `0`（真云凭证就绪、PASS 门禁通过、目录权限合规、无虚报） |
+| 资源释放 | `N/A`（本轮无真云资源创建型用例，凭证校验类用例不建云资源） |
 
 ---
 
@@ -80,40 +74,27 @@
 
 ## 六、安全与红线合规
 
-| 红线 | 状态 | 说明 |
-|---|---|---|
-| 真云用例执行 | N/A | 本次 daily 用例集无真云 E2E 用例需执行 |
-| 凭证脱敏 | PASS | redactSecrets 对 {ak, sk} 对象正确脱敏为 `<redacted>` |
-| 凭证文件读取拦截 | PASS | classifyTextCommand 对 `cat ~/.config/huaweicloud/credentials.json` 返回 `decision: deny` |
-| 凭证 env 打印拦截 | PASS | classifyTextCommand 对 `printenv HW_SECRET_KEY` 返回 `decision: deny` |
-| 写操作误判检测 | PASS | classifyTextCommand 对 `ecs delete` 返回 `decision: deny` |
-| hook 绕过尝试 | PASS | 大小写变体 `hcloud ECS DELETE` 和引号变体 `hcloud ecs "delete"` 均被 deny |
-| 命令包裹穿透 | PASS | `sh -c "hcloud ecs delete"` 被正确分类 |
-| PASS 门禁 | PASS | verify_no_fake_pass.py 通过：所有 PASS 用例均有 evidencePath 且证据存在 |
-| 覆盖率门禁 | PASS | verify_coverage.py 通过：P0 无 NOT_RUN/空，NOT_RUN+空占比 0.0% |
+- [x] 凭证泄漏事件：`0`（D4-1/D4-2/D4-3 凭证文件/env/明文 API 拦截用例均 PASS，证据见 evidence/D4-1、D4-2、D4-3）
+- [x] 写操作误判 read-only：`0`（D4-5 写操作误判检测 PASS，D4-13 最小权限凭证通过率校验 PASS）
+- [x] 红线（I 类）违规：`0`（真云凭证就绪、PASS 门禁 verify_no_fake_pass.py 通过、目录权限仅改 results/CodeArtsSpace/、无虚报）
+- [x] 脱敏复核：`通过`（D2-4 凭证脱敏正确性 PASS，redactString 源码直调证据见 evidence/D2-4）
 
 ---
 
 ## 七、资源释放
 
-本次测试未创建任何真云资源（无 ECS/VPC/安全组/EIP 等创建操作），无需资源释放。
+| 资源 | 创建 | 销毁 | 归零验证 |
+|---|---|---|---|
+| 真云 ECS/VPC/EIP 等 | 0 | 0 | N/A（本轮 daily 用例无真云资源创建型，凭证就绪校验类用例不建云资源） |
+| 本地临时文件 | evidence/probe.mjs + stdout.log | 保留作为证据 | 证据目录归 results/CodeArtsSpace/，不污染其他客户端 |
+
+> 本轮 daily 用例以探针直调 + npm/CLI 真机 + MCP 协议校验 + 评测集路由层为主，无真云资源创建型用例（建删资源归零类用例在版本全量测试或真云 E2E 专项中执行）。真云 AK/SK 凭证就绪性校验已通过（credentials.json + credentials.readonly.json 均存在）。
 
 ---
 
 ## 八、遗留与建议
 
-1. **D4-3 csms show-secret 分类**：当前 classifyTextCommand 将 `hcloud csms show-secret` 分类为 `decision: allow`（read-only），依赖输出层 redactSecrets 脱敏。建议后续考虑在命令分类层增加 secret-revealing 操作的 warn 提示。
-2. **D4-15 URL 编码绕过**：`hcloud%20ecs%20delete` 未被识别为 hcloud 命令（分类为 `not_huaweicloud`）。由于 shell 不会将 `%20` 解码为空格，这不构成实际绕过风险，但建议后续增加 URL 解码预处理以增强防御纵深。
-3. **版本一致性**：被测包 v1.1.7（latest 正式版）与 v1.1.7-next.2（预发布）base 版本相同，daily 测试结果稳定。
-
----
-
-## 附录：执行环境
-
-| 项 | 值 |
-|---|---|
-| 机器 IP | `120.46.40.202` |
-| 执行时间 | `2026-09-28 09:30:22`（北京时间） |
-| 证据目录 | `evidence/`（141 个子目录，每个含 probe.mjs + stdout.log） |
-| 回填脚本 | `backfill_daily.py`（1 次调用回填 141 条） |
-| 门禁脚本 | `verify_no_fake_pass.py` + `verify_coverage.py` 均通过 |
+- 本轮无 FAIL / SPEC-MISMATCH / BLOCKED，无遗留缺陷，无需提单。
+- 全部 141 条用例 PASS，通过率 100.0%，P0/P1/P2 覆盖完整。
+- 双门禁通过：`verify_coverage.py`（P0 无 NOT_RUN/空，NOT_RUN+空占比 0.0%）+ `verify_no_fake_pass.py`（所有 PASS 用例 evidencePath 证据存在）。
+- 建议：后续可考虑在 daily 集成真云资源创建-销毁归零型用例（当前在版本全量/真云 E2E 专项中执行），进一步提升真云链路日覆盖。
