@@ -71,6 +71,7 @@ def main():
         data = json.load(f)
 
     results = data.get("results", [])
+    public_url = data.get("publicUrl") or "（未生成）"
     failed = [r for r in results if not r.get("pass")]
     # 只看连通性/部署断言（C/D 开头），观察告警（W）与 CLOSE 不计入失败
     failed = [r for r in failed if r.get("assert", "").startswith(("C", "D"))]
@@ -114,11 +115,12 @@ def main():
         "## 测试概览\n"
         "- 场景：部署 https://gitcode.com/sunzy1940/test 静态网站到华为云沙箱（DevStation）\n"
         "- 用例：沙箱连通性 + 部署能力专项监控（scripts/sandbox-deploy-monitor.mjs）\n"
+        "- 公网地址：%s\n"
         "- 结论：**失败**，失败断言 %d 项\n\n"
         "## 失败断言\n\n%s\n\n"
         "## 探针原始证据\n\n```json\n%s\n```\n\n"
         "> 本单由沙箱专项监控自动上报（每 2 小时巡检）。请开发定位修复；修复后可在此单回复或关闭。\n"
-    ) % (len(failed), fail_detail, json.dumps(data, ensure_ascii=False, indent=2))
+    ) % (public_url, len(failed), fail_detail, json.dumps(data, ensure_ascii=False, indent=2))
 
     if dry_run:
         print("[dry-run] 待提单标题:", issue_title)

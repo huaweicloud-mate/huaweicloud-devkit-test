@@ -26,6 +26,7 @@
 //   D2.upload_project 项目上传成功且 md5 校验通过
 //   D3.deploy_nginx  静态站 nginx 部署成功，返回端口
 //   D4.nginx_serving deploy_check 判定 nginx 服务，且 curl 端口返回 2xx/3xx
+//   D5.public_url    部署暴露成功拿到公网地址，且探针本机 curl 该公网地址返回 2xx/3xx（公网预览可用）
 //   观察：W1.publicUrl_domain（legacy 域名告警，不计失败）
 //
 // 退出码：0 = C/D/P 全部通过；1 = 存在 FAIL。
@@ -117,6 +118,7 @@ let serverVersion = null;
 let workspaceId = null;
 let projectDir = null;
 let deployedPort = null;
+let publicUrl = null;
 
 // ---- P0 + P1：initialize / tools/list ----
 try {
@@ -206,6 +208,40 @@ if (workspaceId) {
   log('D3.deploy_nginx', false, '前置失败（无 workspaceId）');
 }
 
+// ---- expose 前置：注入凭证 + DevBridge 建公网隧道，提取公网预览地址（D5 依赖）----
+let exposeErr = '';
+if (workspaceId && deployedPort) {
+  const cd = await mcpCall('huaweicloud_sandbox_credentials', { dev_stage_id: workspaceId });
+  if (cd.err) exposeErr = 'credentials:' + cd.err;
+  else if (cd.r && cd.r.error) exposeErr = 'credentials:' + cd.r.error;
+  else {
+    const exposeSh = [
+      'export PATH="$HOME/.huawei/bin:$PATH"',
+      'source /tmp/hw_creds.sh 2>/dev/null',
+      'if devbridge auth login --help 2>&1 | grep -q -- "--access-key"; then',
+      '  devbridge auth login --access-key "$HW_ACCESS_KEY" --secret-key "$HW_SECRET_KEY" >/dev/null 2>&1 && echo AUTH=AKSK || echo AUTH=AKSK_FAIL',
+      'else',
+      '  source /tmp/hw_api_key 2>/dev/null',
+      '  devbridge auth login --api-key "$HW_API_KEY" >/dev/null 2>&1 && echo AUTH=APIKEY || echo AUTH=APIKEY_FAIL',
+      'fi',
+      'pkill -f "devbridge host" 2>/dev/null || true',
+      'sleep 2',
+      'devbridge delete-all 2>/dev/null || true',
+      'nohup devbridge host -p ' + deployedPort + ' -e 8 > /tmp/host.log 2>&1 &',
+      'sleep 12',
+      'TUNNEL_URL=$(grep -oE "https://[A-Za-z0-9._-]+" /tmp/host.log 2>/dev/null | head -1)',
+      'echo "PUBLIC_URL:${TUNNEL_URL:-}"',
+    ].join('\n');
+    try {
+      const ex = await mcpCall('huaweicloud_sandbox_exec_with_session', { workspace_id: workspaceId, command: exposeSh });
+      const so = String((ex.r && (ex.r.stdout || ex.r.output)) || '');
+      const i = so.indexOf('PUBLIC_URL:');
+      if (i >= 0) publicUrl = so.slice(i + 'PUBLIC_URL:'.length).split('\n')[0].trim();
+    } catch {}
+    if (!publicUrl) exposeErr = 'expose 未返回公网地址（DevBridge 隧道未建立，或缺 API Key）';
+  }
+}
+
 // ---- D4 nginx serving ----
 if (workspaceId) {
   const dc = await mcpCall('huaweicloud_sandbox_deploy_check', { port: deployedPort || 8080, project: 'test', output_dir: '.', framework_type: 'static', workspace_id: workspaceId });
@@ -215,6 +251,7 @@ if (workspaceId) {
     const r = dc.r;
     nginxServing = !!(r.checks && r.checks.nginx_serving && r.checks.nginx_serving.status === 'PASS');
     const pu = r.publicUrl || '';
+    if (pu && !publicUrl) publicUrl = pu;
     if (/cn-north-4-bridge\.myhuaweicloud\.com/.test(pu)) w1 = 'legacy-domain:' + pu;
   }
   const cv = await mcpCall('huaweicloud_sandbox_exec_one_shot', {
@@ -231,6 +268,24 @@ if (workspaceId) {
   if (w1) log('W1.publicUrl_domain', false, w1);
 } else {
   log('D4.nginx_serving', false, '前置失败（无 workspaceId）');
+}
+
+// ---- D5 public_url：公网预览地址验证可用（本机 curl 公网地址）----
+if (workspaceId && publicUrl) {
+  const urlOk = publicUrl.startsWith('https://') && publicUrl.includes('.devbridge-s2.hwtunnel.com');
+  let extOk = false;
+  let extCode = '000';
+  try {
+    const ext = execFileSync('curl', ['-s', '-o', '/dev/null', '-w', '%{http_code}', '--max-time', '15', publicUrl], { encoding: 'utf8', timeout: 20000, stdio: 'pipe' });
+    extCode = String(ext).trim();
+    extOk = extCode.startsWith('2') || extCode.startsWith('3');
+  } catch (e) {
+    extOk = false;
+    extCode = 'ERR';
+  }
+  log('D5.public_url', urlOk && extOk, 'url=' + publicUrl + ' http=' + extCode);
+} else {
+  log('D5.public_url', false, exposeErr || (workspaceId ? '未生成公网地址' : '前置失败（无 workspaceId）'));
 }
 
 // ---- 关闭会话 ----
@@ -255,6 +310,7 @@ const out = {
   region: REGION,
   ts: TS,
   workspaceId: workspaceId ? workspaceId.slice(0, 12) : null,
+  publicUrl: publicUrl || null,
   summary: { total: requiredAsserts.length, passed, failed },
   results,
 };
