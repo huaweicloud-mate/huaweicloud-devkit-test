@@ -1,0 +1,209 @@
+### ID= D1-39 | 维度= D1安装 | 标题= Windows 升级检测链可用性
+  前置: Windows 10 + 1.1.2
+  测试数据: npm.cmd spawnSync 无 shell:true
+  步骤: ①本机直调 queryDistTagsSync/queryDistTags ②观察 EINVAL/结果 ③对照加 shell:true 版本
+  预期: Windows 下检测链真实可用，不得 EINVAL 静默失败
+  关联工具: check_update
+  终端覆盖类型: OS_MATRIX | agent: Hermes 代表终端; fake/fixture | OS: Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证）
+  指引来源: 实: queryDistTagsSync; 关联 #554
+  展开规则: OS_MATRIX|<代表: Windows/Linux>|<证据: Windows 检测链无 EINVAL 静默失败>|<阻塞: 无>
+
+### ID= D1-40 | 维度= D1安装 | 标题= 镜像 lag 下检测正确性(反向提醒防护)
+  前置: 默认 registry=镜像且滞后
+  测试数据: 镜像 latest 滞后于官方
+  步骤: ①设置 npm_config_registry=镜像 ②queryDistTags ③判定结果与官方源对照
+  预期: 不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验
+  关联工具: check_update
+  终端覆盖类型: OS_MATRIX | agent: Hermes 代表终端; fake/fixture | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: 关联 #518/#566; 实: queryDistTags 默认 registry
+  展开规则: OS_MATRIX|<代表: Windows/Linux>|<证据: 镜像 lag 不提示版本倒退>|<阻塞: 无>
+
+### ID= D2-11 | 维度= D2认证 | 标题= R3 STS token拒绝落盘
+  前置: 真云 AK/SK + securityToken
+  测试数据: auth_switch persist + securityToken
+  步骤: ①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token
+  预期: 返回 {status:error, scope:rejected}，token 永不落盘
+  关联工具: auth_switch
+  终端覆盖类型: COMMON | agent: Hermes 代表终端; fake/fixture | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+  指引来源: 方: §五 R3; NR2-003
+  展开规则: COMMON|<代表: Hermes 或 OpenCode>|<证据: scope=rejected+token 不落盘>|<阻塞: 需真云凭证>
+
+### ID= D4-18 | 维度= D4安全 | 标题= confirm-not-deny审批语义
+  前置: 真云+标准客户端
+  测试数据: 写操作触发确认流程
+  步骤: ①发起写操作 ②观察确认对话框 ③分别确认/拒绝
+  预期: 写操作需显式确认，不被直接拒绝也不被直接放行
+  关联工具: plan_cli_command
+  终端覆盖类型: CLIENT_MATRIX | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: 仓: issue-443修复+fix/issue-443-confirm-not-deny分支+test/issue-443-fix.test.mjs
+  展开规则: CLIENT_MATRIX|<代表: 安全基线 Hermes+OpenCode>|<证据: 确认/拒绝路径>|<阻塞: 真云写操作>
+
+### ID= D4-19 | 维度= D4安全 | 标题= 确认流下预检仍生效
+  前置: 真云
+  测试数据: 高危操作进入确认流
+  步骤: ①高危写操作 ②确认流程中观察preflight检查 ③验证拦截
+  预期: 确认流程中风险预检仍生效拦截
+  关联工具: hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+  终端覆盖类型: CLIENT_MATRIX | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: 仓: fix/issue-443-preflight-b1b2分支(双修复)
+  展开规则: CLIENT_MATRIX|<代表: 安全基线 Hermes+OpenCode>|<证据: 确认流预检拦截>|<阻塞: 高危操作构造>
+
+### ID= D2-4 | 维度= D2认证 | 标题= 凭证脱敏正确性
+  前置: 真云凭证
+  测试数据: show_profile_redacted
+  步骤: ①执行脱敏展示 ②检查输出: AK中段、SK永不完整
+  预期: 输出无明文凭证字段
+  关联工具: show_profile_redacted
+  终端覆盖类型: COMMON | agent: Hermes 代表终端; fake/fixture | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+  指引来源: P: safety-model自动脱敏; nightly铁律3
+  展开规则: COMMON|<代表: Hermes 或 OpenCode>|<证据: 输出无明文 AK/SK>|<阻塞: 需真云凭证>
+
+### ID= D4-1 | 维度= D4安全 | 标题= 凭证文件读取拦截
+  前置: 含.hcloud/.huaweicloud目录环境
+  测试数据: 读取凭证文件命令
+  步骤: ①尝试cat/type凭证文件 ②观察拦截
+  预期: 被阻断
+  关联工具: hook_check_command
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: P: safety-model Blocked#1
+  展开规则: COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: cat/type 凭证文件被阻断>|<阻塞: 需hook-capable客户端>
+
+### ID= D4-2 | 维度= D4安全 | 标题= 凭证env打印拦截
+  前置: 凭证env变量已设置
+  测试数据: printenv AK/SK类命令
+  步骤: ①printenv/echo凭证env ②观察拦截
+  预期: 被阻断
+  关联工具: hook_check_command
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: P: safety-model Blocked#2
+  展开规则: COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: printenv/echo 凭证被阻断>|<阻塞: 需hook-capable客户端>
+
+### ID= D4-3 | 维度= D4安全 | 标题= 明文secret API拦截
+  前置: 真云账号
+  测试数据: 返回明文secret的API调用
+  步骤: ①调用返回明文/二进制secret的API ②观察拦截
+  预期: 被阻断
+  关联工具: hook_check_command
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: P: safety-model Blocked#3
+  展开规则: COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: 明文 secret API 被阻断>|<阻塞: 需hook-capable客户端>
+
+### ID= D4-5 | 维度= D4安全 | 标题= 写操作误判检测
+  前置: 真云
+  测试数据: DeleteServer等写命令
+  步骤: ①plan删除类命令 ②记录插件判定 ③若判read-only/allow→记P0
+  预期: 写操作不被误判为只读
+  关联工具: plan_cli_command
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: P: nightly铁律4; 标: AWS IAM condition防线穿透
+  展开规则: COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: 写命令不被误判只读>|<阻塞: 需hook-capable客户端>
+
+### ID= D4-9 | 维度= D4安全 | 标题= 公开暴露/破坏性预检
+  前置: 真云
+  测试数据: 建公网安全组/删库等
+  步骤: ①规划公网暴露操作 ②规划破坏性操作 ③验证执行前拦截
+  预期: 执行前被拦
+  关联工具: hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: P: safety-model pre-execution checks
+  展开规则: COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: 公开暴露/破坏性执行前拦截>|<阻塞: 需hook-capable客户端>
+
+### ID= D4-15 | 维度= D4安全 | 标题= hook绕过尝试
+  前置: hook环境
+  测试数据: 大小写/编码/拼接变体
+  步骤: ①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截
+  预期: 无绕过成功
+  关联工具: hook_check_command
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: 通: 对抗性测试; 仓: risk-rule-engine规则盲区
+  展开规则: COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: 变体无绕过成功>|<阻塞: 需hook-capable客户端>
+
+### ID= D4-16 | 维度= D4安全 | 标题= 命令包裹穿透
+  前置: hook环境
+  测试数据: sh -c/bash -c/eval/$()包裹写命令
+  步骤: ①构造shell包裹 ②执行 ③核对hook是否检查内层
+  预期: 发现内层命令并拦截
+  关联工具: hook_check_command
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: 标: AWS/Azure命令包装绕过用例
+  展开规则: COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: 发现内层命令并拦截>|<阻塞: 需hook-capable客户端>
+
+### ID= D4-21 | 维度= D4安全 | 标题= hook_check_artifacts 具名回归（代码/IaC/策略制品预检）
+  前置: hook-capable 客户端
+  测试数据: 宽泛 IAM 策略制品
+  步骤: ①构造宽泛 IAM policy JSON ②hook_check_artifacts ③核对 deny
+  预期: broad IAM 制品被拦截
+  关联工具: hook_check_artifacts
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: hook 三工具盲区补齐（补自 G1）
+  展开规则: COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: broad IAM 制品拦截>|<阻塞: 需hook-capable客户端>
+
+### ID= D4-22 | 维度= D4安全 | 标题= hook_check_deploy_plan 具名回归（部署计划预检）
+  前置: hook-capable 客户端
+  测试数据: 公网暴露/无清理元数据部署计划
+  步骤: ①构造高危 deploy plan ②hook_check_deploy_plan ③核对 warn/deny
+  预期: 公网暴露 FunctionGraph 等被拦截/告警
+  关联工具: hook_check_deploy_plan
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: hook 三工具盲区补齐（补自 G1）
+  展开规则: COMMON|<代表: hook=Hermes 非hook=OpenCode>|<证据: 公网暴露 deploy 计划拦截/告警>|<阻塞: 需hook-capable客户端>
+
+### ID= D4-23 | 维度= D4安全 | 标题= 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）
+  前置: 11 个 Agent 安装目标
+  测试数据: agent-rules.md 全文
+  步骤: 逐目标安装后：①核对 rules 注入系统提示/规则 ②构造禁直连 csms/kms 场景 ③核对 MUST 约束生效
+  预期: 全部目标注入且约束可执行，无孤儿文件
+  关联工具: install
+  终端覆盖类型: CLIENT_MATRIX | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: agent-rules 注入契约（补自 G6，关联 P1-2）
+  展开规则: CLIENT_MATRIX|<代表: 逐客户端 11 目标>|<证据: agent-rules 注入生效>|<阻塞: 逐个安装目标>
+
+### ID= D4-28 | 维度= D4安全 | 标题= Node 版安全 hook 链路
+  前置: hook-capable 客户端 + hooks.json 注册
+  测试数据: 高危命令经 PreToolUse hook
+  步骤: ①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs ③核对 commandText 提取 ④classifyTextCommand=deny 时输出 permissionDecision:deny
+  预期: hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出
+  关联工具: hook_check_command
+  终端覆盖类型: COMMON | agent: Hermes（Hook）; OpenCode（非 Hook） | OS: Windows/Linux；macOS 若声明支持则单独举证
+  指引来源: 实: hooks/huaweicloud-safety.mjs commandText/deny; safety-policy.classifyTextCommand(384)
+  展开规则: COMMON|<代表: hook客户端>|<证据: deny 决策+reason>|<阻塞: 需hook客户端>
+
+### ID= D8-7 | 维度= D8质量 | 标题= 7 个 meta/通用技能指引可机械执行验证
+  前置: 标准环境
+  测试数据: core/safety/api-and-sdk/capability-discovery/cli-and-auth/troubleshooting/getting-started 各 SKILL.md
+  步骤: 逐技能：retrieve_skill 加载→按指引执行最小路径→核对无外部猜测
+  预期: 7 技能指引均可机械执行，无断链/幻觉步骤
+  关联工具: retrieve_skill/search_docs
+  终端覆盖类型: COMMON | agent: Hermes 代表终端; fake/fixture | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+  指引来源: meta 技能指引可执行性（补自 G4）
+  展开规则: COMMON|<代表: 静态评审人 测试经理>|<证据: 评审记录+链接>|<阻塞: 无>
+
+### ID= D9-12 | 维度= D9协议 | 标题= initialize 握手协议安全基线
+  前置: MCP Inspector + 源码级 protocol-probe.mjs
+  测试数据: initialize 请求/响应报文 + capabilities 协商
+  步骤: ①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/capabilities/serverInfo ②核对 callTool 路由到 tools.mjs callTool 函数 ③核对 runVersionCheck 在 initialize 阶段触发版本检查 ④核对 _decorateResult 包装响应（_resetHintConsumption/_isHintConsumed 消费提示标记） ⑤核对 listSkillDirs/findSkillsRoot 返回有效技能目录 ⑥非法时序（未 initialize 先 tools/list）被拒返回 -32600
+  预期: initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorateResult 包装无副作用；listSkillDirs/findSkillsRoot 返回有效目录；非法时序返回 JSON-RPC -32600 错误
+  关联工具: inspector
+  终端覆盖类型: COMMON | agent: Hermes; MCP Inspector/标准协议客户端 | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+  指引来源: 规: MCP initialize 握手规范; 实: mcp-protocol._decorateResult/_resetHintConsumption/_isHintConsumed; tools.mjs.callTool/runVersionCheck/listSkillDirs/findSkillsRoot
+  展开规则: COMMON|<代表: MCP Inspector + Hermes>|<证据: 协议报文+源码探针>|<阻塞: 无>
+
+### ID= D9-13 | 维度= D9协议 | 标题= tools/call 凭证不泄露与权限校验
+  前置: MCP 客户端 + 隔离 HOME + 源码级探针
+  测试数据: 含 AK/SK 的凭证 + 高危/只读命令
+  步骤: ①setRuntimeCredentials 注入运行时凭证，hasRuntimeCredentials 校验存在 ②resolveCredentialsWithRuntime 解析运行时凭证 ③loadPolicy 加载安全策略，classifyHcloudArgs 分类命令参数 ④evaluateArtifacts/evaluateDeployPlan 评估风险，mergeRiskDecision 合并决策 ⑤hashArgs 生成参数哈希，createApprovalToken/consumeApprovalToken 审批令牌生命周期 ⑥readServiceCatalogs/classifyUnsupported/planHcloudCommand 命令分类 ⑦tools/call 返回核对无 AK/SK/token 明文 ⑧clearRuntimeCredentials 清理运行时凭证 ⑨readGlobalCredentials/writeGlobalCredentials 持久化核对，isPlaceholder 校验占位 ⑩globalCredentialsPath/obsConfigPath/writeObsConfig 路径与配置核对
+  预期: tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprovalToken 后失效）；运行时凭证 clearRuntimeCredentials 清理后不留盘；readGlobalCredentials/writeGlobalCredentials 持久化一致；isPlaceholder 正确识别占位凭证
+  关联工具: inspector
+  终端覆盖类型: COMMON | agent: Hermes; MCP Inspector/标准协议客户端 | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+  指引来源: 规: MCP 安全基线（凭证不泄露）; 实: auth/credentials.setRuntimeCredentials/clearRuntimeCredentials/hasRuntimeCredentials/resolveCredentialsWithRuntime/readGlobalCredentials/writeGlobalCredentials/isPlaceholder/globalCredentialsPath/obsConfigPath/writeObsConfig; safety-policy.loadPolicy/classifyHcloudArgs; risk-rule-engine.evaluateArtifacts/evaluateDeployPlan/mergeRiskDecision; hcloud-cli.hashArgs/createApprovalToken/consumeApprovalToken/readServiceCatalogs/classifyUnsupported/planHcloudCommand
+  展开规则: COMMON|<代表: MCP Inspector + 源码探针>|<证据: 凭证脱敏+权限决策+审批令牌>|<阻塞: 无>
+
+### ID= D10-4 | 维度= D10评测 | 标题= 安全干预-静态规则层
+  前置: 源码+已安装插件
+  测试数据: cloud-risk-rules.json 规则库(16条)
+  步骤: ①直调 loadRiskRules 核对规则数与 severity 分布 ②evaluateCommandRisk 输入高危命令(cat凭证/env-dump/删资源)与只读命令 ③核对 decision 三态(deny/warn/allow)
+  预期: 规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token
+  关联工具: harness
+  终端覆盖类型: COMMON | agent: OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+  指引来源: 实: risk-rule-engine.mjs; 仓: safety/rules/cloud-risk-rules.json
+  展开规则: COMMON|<代表: 源码直调 risk-rule-engine>|<证据: 规则库加载+三态判定>|<阻塞: 无>

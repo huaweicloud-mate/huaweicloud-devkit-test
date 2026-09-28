@@ -1,0 +1,85 @@
+===== DESIGN P0 =====
+D1-39 | dim=D1安装 | os=Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证） | agent=Hermes 代表终端; fake/fixture | Windows 升级检测链可用性
+D1-40 | dim=D1安装 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes 代表终端; fake/fixture | 镜像 lag 下检测正确性(反向提醒防护)
+D2-11 | dim=D2认证 | os=Windows/Linux 代表环境；macOS 若声明支持则单独举证 | agent=Hermes 代表终端; fake/fixture | R3 STS token拒绝落盘
+D4-18 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | confirm-not-deny审批语义
+D4-19 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | 确认流下预检仍生效
+D2-4 | dim=D2认证 | os=Windows/Linux 代表环境；macOS 若声明支持则单独举证 | agent=Hermes 代表终端; fake/fixture | 凭证脱敏正确性
+D4-1 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | 凭证文件读取拦截
+D4-2 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | 凭证env打印拦截
+D4-3 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | 明文secret API拦截
+D4-5 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | 写操作误判检测
+D4-9 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | 公开暴露/破坏性预检
+D4-15 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | hook绕过尝试
+D4-16 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | 命令包裹穿透
+D4-21 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | hook_check_artifacts 具名回归（代码/IaC/策略制品预检）
+D4-22 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | hook_check_deploy_plan 具名回归（部署计划预检）
+D4-23 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）
+D4-28 | dim=D4安全 | os=Windows/Linux；macOS 若声明支持则单独举证 | agent=Hermes（Hook）; OpenCode（非 Hook） | Node 版安全 hook 链路
+D8-7 | dim=D8质量 | os=Windows/Linux 代表环境；macOS 若声明支持则单独举证 | agent=Hermes 代表终端; fake/fixture | 7 个 meta/通用技能指引可机械执行验证
+D9-12 | dim=D9协议 | os=Windows/Linux 代表环境；macOS 若声明支持则单独举证 | agent=Hermes; MCP Inspector/标准协议客户端 | initialize 握手协议安全基线
+D9-13 | dim=D9协议 | os=Windows/Linux 代表环境；macOS 若声明支持则单独举证 | agent=Hermes; MCP Inspector/标准协议客户端 | tools/call 凭证不泄露与权限校验
+D10-4 | dim=D10评测 | os=Windows/Linux 代表环境；macOS 若声明支持则单独举证 | agent=OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | 安全干预-静态规则层
+===== DESIGN P0 expectations =====
+D1-39 :: 操作步骤=①本机直调 queryDistTagsSync/queryDistTags ②观察 EINVAL/结果 ③对照加 shell:true 版本 :: 预期=Windows 下检测链真实可用，不得 EINVAL 静默失败
+D1-40 :: 操作步骤=①设置 npm_config_registry=镜像 ②queryDistTags ③判定结果与官方源对照 :: 预期=不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验
+D2-11 :: 操作步骤=①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token :: 预期=返回 {status:error, scope:rejected}，token 永不落盘
+D4-18 :: 操作步骤=①发起写操作 ②观察确认对话框 ③分别确认/拒绝 :: 预期=写操作需显式确认，不被直接拒绝也不被直接放行
+D4-19 :: 操作步骤=①高危写操作 ②确认流程中观察preflight检查 ③验证拦截 :: 预期=确认流程中风险预检仍生效拦截
+D2-4 :: 操作步骤=①执行脱敏展示 ②检查输出: AK中段、SK永不完整 :: 预期=输出无明文凭证字段
+D4-1 :: 操作步骤=①尝试cat/type凭证文件 ②观察拦截 :: 预期=被阻断
+D4-2 :: 操作步骤=①printenv/echo凭证env ②观察拦截 :: 预期=被阻断
+D4-3 :: 操作步骤=①调用返回明文/二进制secret的API ②观察拦截 :: 预期=被阻断
+D4-5 :: 操作步骤=①plan删除类命令 ②记录插件判定 ③若判read-only/allow→记P0 :: 预期=写操作不被误判为只读
+D4-9 :: 操作步骤=①规划公网暴露操作 ②规划破坏性操作 ③验证执行前拦截 :: 预期=执行前被拦
+D4-15 :: 操作步骤=①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截 :: 预期=无绕过成功
+D4-16 :: 操作步骤=①构造shell包裹 ②执行 ③核对hook是否检查内层 :: 预期=发现内层命令并拦截
+D4-21 :: 操作步骤=①构造宽泛 IAM policy JSON ②hook_check_artifacts ③核对 deny :: 预期=broad IAM 制品被拦截
+D4-22 :: 操作步骤=①构造高危 deploy plan ②hook_check_deploy_plan ③核对 warn/deny :: 预期=公网暴露 FunctionGraph 等被拦截/告警
+D4-23 :: 操作步骤=逐目标安装后：①核对 rules 注入系统提示/规则 ②构造禁直连 csms/kms 场景 ③核对 MUST 约束生效 :: 预期=全部目标注入且约束可执行，无孤儿文件
+D4-28 :: 操作步骤=①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs ③核对 commandText 提取 ④classifyTextCommand=deny 时输出 permissionDecision:deny :: 预期=hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出
+D8-7 :: 操作步骤=逐技能：retrieve_skill 加载→按指引执行最小路径→核对无外部猜测 :: 预期=7 技能指引均可机械执行，无断链/幻觉步骤
+D9-12 :: 操作步骤=①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/capabilities/serverInfo ②核对 callTool 路由到 tools.mjs callTool 函数 ③核对 runVersionCheck 在 initialize 阶段触发版本检查 ④核对 _decorateResult 包装响应（_resetHintConsumption/_isHintConsumed 消费提示标记） ⑤核对 listSkillDirs/findSkillsRoot 返回有效技能目录 ⑥非法时序（未 initialize 先 tools/list）被拒返回 -32600 :: 预期=initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorateResult 包装无副作用；listSkillDirs/findSkillsRoot 返回有效目录；非法时序返回 JSON-RPC -32600 错误
+D9-13 :: 操作步骤=①setRuntimeCredentials 注入运行时凭证，hasRuntimeCredentials 校验存在 ②resolveCredentialsWithRuntime 解析运行时凭证 ③loadPolicy 加载安全策略，classifyHcloudArgs 分类命令参数 ④evaluateArtifacts/evaluateDeployPlan 评估风险，mergeRiskDecision 合并决策 ⑤hashArgs 生成参数哈希，createApprovalToken/consumeApprovalToken 审批令牌生命周期 ⑥readServiceCatalogs/classifyUnsupported/planHcloudCommand 命令分类 ⑦tools/call 返回核对无 AK/SK/token 明文 ⑧clearRuntimeCredentials 清理运行时凭证 ⑨readGlobalCredentials/writeGlobalCredentials 持久化核对，isPlaceholder 校验占位 ⑩globalCredentialsPath/obsConfigPath/writeObsConfig 路径与配置核对 :: 预期=tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprovalToken 后失效）；运行时凭证 clearRuntimeCredentials 清理后不留盘；readGlobalCredentials/writeGlobalCredentials 持久化一致；isPlaceholder 正确识别占位凭证
+D10-4 :: 操作步骤=①直调 loadRiskRules 核对规则数与 severity 分布 ②evaluateCommandRisk 输入高危命令(cat凭证/env-dump/删资源)与只读命令 ③核对 decision 三态(deny/warn/allow) :: 预期=规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token
+
+===== EXPANDED ALL (39) =====
+EXP-D5-7-1 | P1 | src=D5-1 | agent=OfficeAce | OS=Windows/Linux | OfficeAce
+EXP-D5-7-3 | P1 | src=D5-3 | agent=OfficeAce | OS=Windows/Linux | OfficeAce
+EXP-C4-01 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | ECS
+EXP-C4-02 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | VPC
+EXP-C4-03 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | OBS
+EXP-C4-04 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | RDS
+EXP-C4-05 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | GaussDB
+EXP-C4-06 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | CCE
+EXP-C4-07 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | FunctionGraph
+EXP-C4-08 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | IAM
+EXP-C4-09 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | CTS
+EXP-C4-10 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | CES
+EXP-C4-11 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | DDS
+EXP-C4-12 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | DCS
+EXP-C4-13 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | SMN
+EXP-C4-14 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | DMS
+EXP-C4-15 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | WAF
+EXP-C4-16 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | CDN
+EXP-C4-17 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | ModelArts
+EXP-C4-18 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | DEW
+EXP-C4-19 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | CBR
+EXP-C4-20 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | EVS
+EXP-C4-21 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | EIP
+EXP-C4-22 | P1 | src=D3-C4 | agent=Hermes | OS=Windows/Linux | ELB
+EXP-E01 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 帮我查一下我账号在华北北京四有哪些云主机
+EXP-E02 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 创建一台 2C4G 的 Ubuntu 云服务器, 规格通用型
+EXP-E03 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 把本地 dist 目录部署成一个公网静态网站
+EXP-E04 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 给这台服务器绑定一个弹性公网IP
+EXP-E05 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 看一下我的云数据库MySQL实例的状态
+EXP-E06 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 创建一个 Redis 缓存实例用于会话存储
+EXP-E07 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 给生产环境的服务器配置一个每日备份策略
+EXP-E08 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 我的ECS启动失败了, 帮我分析原因
+EXP-E09 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 开设一个 Kubernetes 集群用于微服务部署
+EXP-E10 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 部署一个函数处理图片自动压缩
+EXP-E11 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 查一下我账号这个月的费用情况
+EXP-E12 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 把应用日志指标推送到云监控告警
+EXP-E13 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 申请HTTPS证书并配置到我的域名
+EXP-E14 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 我账号下的用户都有哪些权限, 帮我审计一下
+EXP-E15 | P1 | src=D10-3 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode | OS=Windows/Linux | 帮我领一下华为云的代金券
