@@ -1,0 +1,6 @@
+Eval harness routing test:
+Prompt: 帮我查一下我账号在华北北京四有哪些云主机
+Expected: ECS
+Actual: Run hcloud --help
+Result: MISS
+Eval harness: node eval/harness/run-eval.mjs

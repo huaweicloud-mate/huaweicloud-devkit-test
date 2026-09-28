@@ -1,0 +1,6 @@
+Eval harness routing test:
+Prompt: 把本地 dist 目录部署成一个公网静态网站
+Expected: OBS
+Actual: Sandbox+DevStation
+Result: MISS
+Eval harness: node eval/harness/run-eval.mjs

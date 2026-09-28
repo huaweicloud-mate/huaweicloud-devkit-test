@@ -1,0 +1,6 @@
+Eval harness routing test:
+Prompt: 开设一个 Kubernetes 集群用于微服务部署
+Expected: CCE
+Actual: CCE+SWR
+Result: HIT
+Eval harness: node eval/harness/run-eval.mjs

@@ -1,0 +1,6 @@
+Eval harness routing test:
+Prompt: 我的ECS启动失败了 帮我分析原因
+Expected: (诊断)
+Actual: Run hcloud --help
+Result: N/A (diagnostic)
+Eval harness: node eval/harness/run-eval.mjs

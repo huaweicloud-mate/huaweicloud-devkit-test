@@ -1,0 +1,6 @@
+Eval harness routing test:
+Prompt: 查一下我账号这个月的费用情况
+Expected: BSS
+Actual: Run hcloud --help
+Result: MISS
+Eval harness: node eval/harness/run-eval.mjs

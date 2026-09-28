@@ -1,0 +1,6 @@
+Eval harness routing test:
+Prompt: 帮我领一下华为云的代金券
+Expected: Incentive Voucher
+Actual: Incentive Voucher
+Result: HIT
+Eval harness: node eval/harness/run-eval.mjs

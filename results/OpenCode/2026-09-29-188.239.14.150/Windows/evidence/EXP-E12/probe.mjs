@@ -1,0 +1,6 @@
+Eval harness routing test:
+Prompt: 把应用日志指标推送到云监控告警
+Expected: CES
+Actual: Run hcloud --help
+Result: MISS
+Eval harness: node eval/harness/run-eval.mjs

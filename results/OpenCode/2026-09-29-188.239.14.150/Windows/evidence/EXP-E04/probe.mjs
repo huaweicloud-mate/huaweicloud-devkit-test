@@ -1,0 +1,6 @@
+Eval harness routing test:
+Prompt: 给这台服务器绑定一个弹性公网IP
+Expected: EIP
+Actual: Run hcloud --help
+Result: MISS
+Eval harness: node eval/harness/run-eval.mjs

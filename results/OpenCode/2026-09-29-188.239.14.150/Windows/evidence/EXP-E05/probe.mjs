@@ -1,0 +1,6 @@
+Eval harness routing test:
+Prompt: 看一下我的云数据库MySQL实例的状态
+Expected: RDS
+Actual: Run hcloud --help
+Result: MISS
+Eval harness: node eval/harness/run-eval.mjs
