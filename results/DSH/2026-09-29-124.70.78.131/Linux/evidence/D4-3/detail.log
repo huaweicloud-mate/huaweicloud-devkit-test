@@ -1,0 +1,5 @@
+[PASS] hcloud csms ShowSecretVersion --secret-name x => deny
+[PASS] GetSecretValue --secret-id 123 => deny
+[FAIL] hcloud kms DecryptData --ciphertext x => allow/unknown_read
+[FAIL] hcloud kms Decrypt --ciphertext x => allow/unknown_read
+根因: safety-policy.mjs:240/432 secret 读取拦截模式仅覆盖 showsecretversion/getsecretvalue/secret_string/secret_binary，未覆盖 kms Decrypt/DecryptData
