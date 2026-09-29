@@ -1,0 +1,16 @@
+=== D4-13 最小权限凭证通过率 (只读子账号 test001) ===
+注入 env HW_ACCESS_KEY 指纹 = 9c2d05c1
+HW_SECURITY_TOKEN 已注入 = false (期望 false)
+[1] resolveCredentialsWithRuntime 命中 AK 指纹 = 52966832 (env 覆盖文件, 动态切换)
+[2] validateIamCredentials(KeystoneListProjects 只读) -> valid=true projectId=46c1fd48...
+[3] 只读凭证 ListServersDetails(只读) -> 成功(可用) :: {
+  "count": 0,
+  "servers": []
+}
+
+[4] 只读凭证 CreateVpc(写) -> 被拒(权限不足)  :: {
+  "code": "VPC.0010",
+  "message": "{\"NeutronError\":{\"message\":\"Rules on create_router by *** disallowed by policy\",\"type\":\"PolicyNotAuthor
+
+只读 IAM 校验=true; 只读可用=true; 写被拒=true
+RESULT: PASS
