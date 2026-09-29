@@ -1,0 +1,127 @@
+P1: 51 cases, P2: 30 cases
+
+=== P1 Design Level ===
+D1-3|doctor健康自检|OS_MATRIX|doctor
+D1-26|升级提醒工具注册与协议暴露|COMMON|check_update/upgrade
+D1-27|检测语义-已是最新|OS_MATRIX|check_update
+D1-28|检测语义-有新版本|OS_MATRIX|check_update
+D1-31|dismiss 冷却期|OS_MATRIX|check_update
+D1-41|check_update 真实 MCP 返回契约|COMMON|check_update
+D1-42|dismiss 真实闭环与跨调用持久化|COMMON|check_update
+D1-45|兜底提示真实序列与预热竞态|COMMON|check_update
+D1-70|代理配置与 WebSocket 代理|COMMON|install
+D2-10|R7 current档跟随|COMMON|auth_status
+D2-12|R10 runtime非空禁止落盘|COMMON|huaweicloud_auth_init/auth_status/auth_s
+D2-13|R9 configuredBySession优先env|COMMON|auth_status
+D2-16|import文件读取后擦除|COMMON|auth_switch
+D4-20|拒绝后零操作|COMMON|run_approved_command
+D2-1|auth init三端同步|COMMON|huaweicloud_auth_init
+D2-5|凭证缺失报错指引|COMMON|huaweicloud_auth_init/auth_status
+D2-26|凭证备份与恢复|COMMON|huaweicloud_auth_sync
+D3-A1|skill检索完整性|COMMON|retrieve_skill/search_docs
+D3-B3|run_readonly脱敏执行|COMMON|run_readonly_command
+D3-C4|服务创建类回归|CLIENT_MATRIX|plan_cli_command/run_approved_command
+D3-C5|工具冒烟|COMMON|check_cli/list_operations/plan_cli_comma
+D3-C13|OBS 静态网站托管配置|COMMON|huaweicloud_obs_set_website_config
+D3-S1|场景-只读查ECS(带不改约束)|COMMON|service_catalog/run_readonly_command
+D3-S2|场景-删VPC先确认|COMMON|plan_cli_command/hook_check_command/run_
+D3-S3|场景-沙箱预览出URL|COMMON|sandbox_connect/sandbox_upload_project/s
+D3-S4|场景-领券闭环|COMMON|voucher_status/voucher_claim
+D3-S7|场景-跨服务交付(Web应用+RDS)并归零|COMMON|sandbox_connect/sandbox_deploy_nginx/pla
+D3-S8|场景-操作失败后排障指引|COMMON|explain_error/run_readonly_command
+D4-4|写操作审批门|COMMON|plan_cli_command
+D4-6|adminPass回显警告|COMMON|hook_check_command
+D4-7|hook三工具有效性|COMMON|hook_check_command/hook_check_artifacts/
+D4-8|Python/Node策略一致|COMMON|hook_check_command/hook_check_artifacts/
+D4-11|提示注入防护|COMMON|search_docs/retrieve_skill/search_market
+D4-13|最小权限凭证通过率|COMMON|run_readonly_command
+D4-17|hook模糊fail-closed|COMMON|hook_check_command/hook_check_artifacts/
+D4-24|确认令牌过期与重复确认边界（审批流健壮性）|CLIENT_MATRIX|auth_confirm/plan_cli_command
+D4-27|双路径输出脱敏|COMMON|run_readonly_command
+D5-1|清单发现加载|CLIENT_MATRIX|install
+D5-3|工具全量枚举|CLIENT_MATRIX|mcp-server
+D6-4|并发调度正确性|COMMON|mcp-server
+D9-9|tools/call 超时协议语义与取消|COMMON|inspector
+D8-4|引导步骤可机械执行|COMMON|retrieve_skill
+D9-1|tools/list合规|COMMON|inspector
+D9-2|JSON-RPC错误码|COMMON|inspector
+D9-3|tools/call响应格式|COMMON|inspector
+D9-4|协议生命周期|COMMON|inspector
+D9-5|stdio传输健壮|COMMON|mcp-server
+D9-6|跨客户端互通|COMMON|inspector
+D9-10|MCP remote transport（HTTP/WS 远程服务）|COMMON|mcp-server
+D9-11|WebSocket 隧道通道生命周期|COMMON|mcp-server
+D10-3|路由准确率+混淆矩阵|CLIENT_MATRIX|harness
+
+=== P2 Design Level ===
+D1-4|status/update幂等|OS_MATRIX|status/update
+D1-30|semver 比对正确性|OS_MATRIX|check_update
+D1-33|skip 文件持久化与多路径|OS_MATRIX|check_update
+D1-65|调试模式环境变量|COMMON|check_update
+D1-66|遥测开关与端点环境变量|COMMON|mcp-server
+D1-67|Agent toolkit 模式与 DSH 跳过安装环境变量|COMMON|install
+D1-68|图标离线与区域环境变量|COMMON|get_service_icon/auth_init
+D1-69|CLI help 子命令|COMMON|install
+D2-2|auth status判定准确性|COMMON|auth_status
+D2-27|KooCLI 版本管理|COMMON|auth_status
+D3-B1|list_operations规范名|COMMON|list_operations
+D3-B5|detect_framework识别|COMMON|detect_framework
+D3-C14|沙箱 HDKit 服务参数与 hwlink 凭证|COMMON|sandbox_connect/sandbox_credentials
+D3-S5|场景-复合意图分层路由|COMMON|service_catalog
+D3-S6|场景-FunctionGraph定时任务|COMMON|plan_cli_command/run_approved_command
+D4-10|规则库新增回归|COMMON|hook_check_command/hook_check_artifacts/
+D4-12|供应链安装期安全|COMMON|npm
+D4-14|操作可审计性|COMMON|run_readonly_command
+D4-25|Python hook 事件遥测分类|COMMON|hook_check_command
+D4-26|findings 证据脱敏|COMMON|hook_check_command
+D4-29|分类断言与原始命令分类入口|COMMON|hook_check_command
+D6-1|检索响应延迟|COMMON|search_docs/retrieve_skill
+D6-3|MCP冷启时间|COMMON|mcp-server
+D6-9|缓存清理三入口|COMMON|check_update/get_service_icon/search_mar
+D8-1|文档与能力一致|COMMON|search_docs
+D8-6|中英文文档一致|COMMON|search_docs
+D8-9|安装 ID 与遥测值脱敏|COMMON|mcp-server
+D8-10|MCP 配置备份与合并|COMMON|install
+D9-7|协议版本协商降级|COMMON|mcp-server
+D9-8|inputSchema版本合规|COMMON|inspector
+
+=== Expanded Level (39 cases) ===
+EXP-D5-7-1||P1|
+EXP-D5-7-3||P1|
+EXP-C4-01||P1|
+EXP-C4-02||P1|
+EXP-C4-03||P1|
+EXP-C4-04||P1|
+EXP-C4-05||P1|
+EXP-C4-06||P1|
+EXP-C4-07||P1|
+EXP-C4-08||P1|
+EXP-C4-09||P1|
+EXP-C4-10||P1|
+EXP-C4-11||P1|
+EXP-C4-12||P1|
+EXP-C4-13||P1|
+EXP-C4-14||P1|
+EXP-C4-15||P1|
+EXP-C4-16||P1|
+EXP-C4-17||P1|
+EXP-C4-18||P1|
+EXP-C4-19||P1|
+EXP-C4-20||P1|
+EXP-C4-21||P1|
+EXP-C4-22||P1|
+EXP-E01||P1|
+EXP-E02||P1|
+EXP-E03||P1|
+EXP-E04||P1|
+EXP-E05||P1|
+EXP-E06||P1|
+EXP-E07||P1|
+EXP-E08||P1|
+EXP-E09||P1|
+EXP-E10||P1|
+EXP-E11||P1|
+EXP-E12||P1|
+EXP-E13||P1|
+EXP-E14||P1|
+EXP-E15||P1|

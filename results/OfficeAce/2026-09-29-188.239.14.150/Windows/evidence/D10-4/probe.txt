@@ -1,0 +1,3 @@
+Tool: source inspection: cloud-risk-rules.json + functional testing
+Result: PASS
+Detail: cloud-risk-rules.json contains exactly 9 deny + 7 warn = 16 rules. Verified: deny rules (credential-file, env-dump, secret-value-read, encoded-shell-exec, public-admin-port, obs-anonymous-write, iam-admin-policy, destructive-delete-force, sandbox-destructive-command). warn rules (sts-credential, functiongraph-public-no-auth, destructive-delete-operation, destructive-reset-operation, destructive-delete-cascade, sandbox-missing-ttl, cost-unbounded-scale). Three-state decision (deny/warn/allow) confirmed via functional testing.

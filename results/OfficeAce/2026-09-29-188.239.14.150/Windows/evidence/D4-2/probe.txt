@@ -1,0 +1,3 @@
+Tool: huaweicloud_hook_check_command
+Result: FAIL
+Detail: hook_check_command returned allow for "echo %HW_SECRET_KEY%" and "printenv HW_ACCESS_KEY HW_SECRET_KEY". Rule hwc-command-env-dump regex matches (HUAWEICLOUD|HWC_|HCLOUD|OS_) but misses HW_ prefix used by devkit itself (HW_ACCESS_KEY/HW_SECRET_KEY). Confirmed: HUAWEICLOUD_ACCESS_KEY_ID and HWC_ prefixed vars ARE blocked (deny).

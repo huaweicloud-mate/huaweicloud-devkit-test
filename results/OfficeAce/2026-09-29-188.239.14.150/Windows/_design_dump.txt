@@ -1,0 +1,104 @@
+DESIGN total 102
+PRI Counter({'P1': 51, 'P2': 30, 'P0': 21})
+D1-3|P1|doctor健康自检|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: Windows/Linux>|evid=强断言：<证据: doctor 检测项准确+失败场景报告>；保留脱敏日志、man
+D1-4|P2|status/update幂等|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: Windows/Linux>|evid=强断言：<证据: 增量刷新不碰 config+重复 update 幂等>；保留脱
+D1-26|P1|升级提醒工具注册与协议暴露|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: MCP Inspector+进程>|evid=强断言：<证据: tools/list 两工具注册+schema>；保留脱敏日志
+D1-27|P1|检测语义-已是最新|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: Windows/Linux>|evid=强断言：<证据: result=up_to_date/updateAvailab
+D1-28|P1|检测语义-有新版本|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: Windows/Linux>|evid=强断言：<证据: update_available+targetVersion=
+D1-30|P2|semver 比对正确性|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: Windows/Linux>|evid=强断言：<证据: semverCompare 多组大小关系>；保留脱敏日志、ma
+D1-31|P1|dismiss 冷却期|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: Windows/Linux>|evid=强断言：<证据: 冷却期 result=dismissed+3 天 expire
+D1-33|P2|skip 文件持久化与多路径|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: Windows/Linux>|evid=强断言：<证据: skip 文件字段+回退路径+原子写>；保留脱敏日志、mani
+D1-39|P0|Windows 升级检测链可用性|agent=Hermes 代表终端; fake/fixture|OS=Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证）|term=<代表: Windows/Linux>|evid=强断言：<证据: Windows 检测链无 EINVAL 静默失败>；保留脱敏日
+D1-40|P0|镜像 lag 下检测正确性(反向提醒防护)|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: Windows/Linux>|evid=强断言：<证据: 镜像 lag 不提示版本倒退>；保留脱敏日志、manifest
+D1-41|P1|check_update 真实 MCP 返回契约|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 隔离进程>|evid=强断言：<证据: MCP 四态返回契约>；保留脱敏日志、manifest、前后快
+D1-42|P1|dismiss 真实闭环与跨调用持久化|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 隔离 HOME+CROSS_PROCESS>|evid=强断言：<证据: skip 文件字段+重启复查>；保留脱敏日志、manifest
+D1-45|P1|兜底提示真实序列与预热竞态|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 隔离进程+预热竞态>|evid=强断言：<证据: 兜底一次性消费时序>；保留脱敏日志、manifest、前后快照
+D1-65|P2|调试模式环境变量|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 隔离进程>|evid=强断言：<证据: 调试日志开关>；保留脱敏日志、manifest、前后快照
+D1-66|P2|遥测开关与端点环境变量|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 隔离进程>|evid=强断言：<证据: 开关+端点取值>；保留脱敏日志、manifest、前后快照
+D1-67|P2|Agent toolkit 模式与 DSH 跳过安装环境变量|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: DSH 客户端>|evid=强断言：<证据: env 注入+跳过安装>；保留脱敏日志、manifest、前后
+D1-68|P2|图标离线与区域环境变量|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 隔离进程>|evid=强断言：<证据: 离线图标+region取值>；保留脱敏日志、manifest、
+D1-69|P2|CLI help 子命令|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: CLI>|evid=强断言：<证据: help 输出>；保留脱敏日志、manifest、前后快照
+D1-70|P1|代理配置与 WebSocket 代理|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 隔离进程+proxy夹具>|evid=强断言：<证据: 配置读写+WS代理选择>；保留脱敏日志、manifest、前后
+D2-10|P1|R7 current档跟随|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 或 OpenCode>|evid=强断言：<证据: current 档解析+--cli-profile>；保留脱敏
+D2-11|P0|R3 STS token拒绝落盘|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 或 OpenCode>|evid=强断言：<证据: scope=rejected+token 不落盘>；保留脱敏日
+D2-12|P1|R10 runtime非空禁止落盘|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 或 OpenCode>|evid=强断言：<证据: R10 suppressed 不写 S1>；保留脱敏日志、ma
+D2-13|P1|R9 configuredBySession优先env|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 或 OpenCode>|evid=强断言：<证据: S1 胜出/清除后 env 兜底>；保留脱敏日志、manife
+D2-16|P1|import文件读取后擦除|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 或 OpenCode>|evid=强断言：<证据: 读后 exists=False 密钥不留盘>；保留脱敏日志、m
+D4-18|P0|confirm-not-deny审批语义|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 安全基线 Hermes+OpenCode>|evid=强断言：<证据: 确认/拒绝路径>；保留脱敏日志、manifest、前后快照
+D4-19|P0|确认流下预检仍生效|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 安全基线 Hermes+OpenCode>|evid=强断言：<证据: 确认流预检拦截>；保留脱敏日志、manifest、前后快照
+D4-20|P1|拒绝后零操作|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 拒绝后无资源变更无执行>；保留脱敏日志、manifest、前后
+D2-1|P1|auth init三端同步|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 或 OpenCode>|evid=强断言：<证据: 三端落位(KooCLI/OBS/沙箱)>；保留脱敏日志、man
+D2-2|P2|auth status判定准确性|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 或 OpenCode>|evid=强断言：<证据: 三端就绪组合枚举判定>；保留脱敏日志、manifest、前后快
+D2-4|P0|凭证脱敏正确性|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 或 OpenCode>|evid=强断言：<证据: 输出无明文 AK/SK>；保留脱敏日志、manifest、前后
+D2-5|P1|凭证缺失报错指引|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 或 OpenCode>|evid=强断言：<证据: 报错+可执行指引(非裸堆栈)>；保留脱敏日志、manifest
+D2-26|P1|凭证备份与恢复|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 隔离 HOME>|evid=强断言：<证据: 备份文件+恢复比对>；保留脱敏日志、manifest、前后快照
+D2-27|P2|KooCLI 版本管理|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 隔离进程>|evid=强断言：<证据: 版本解析/比较/下载基址>；保留脱敏日志、manifest、前
+D3-A1|P1|skill检索完整性|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 全量 skill 可检索完整拉取>；保留脱敏日志、manife
+D3-B1|P2|list_operations规范名|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 规范操作名与官方一致>；保留脱敏日志、manifest、前后快
+D3-B3|P1|run_readonly脱敏执行|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 执行成功+输出脱敏+无写入>；保留脱敏日志、manifest、
+D3-B5|P2|detect_framework识别|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 11 框架识别准确>；保留脱敏日志、manifest、前后快照
+D3-C4|P1|服务创建类回归|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 22 服务矩阵>|evid=强断言：<证据: 逐服务只读规划>；保留脱敏日志、manifest、前后快照
+D3-C5|P1|工具冒烟|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 四工具冒烟全通>；保留脱敏日志、manifest、前后快照
+D3-C13|P1|OBS 静态网站托管配置|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 真云 OBS>|evid=强断言：<证据: 配置 XML+状态码>；保留脱敏日志、manifest、前后快
+D3-C14|P2|沙箱 HDKit 服务参数与 hwlink 凭证|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes 沙箱>|evid=强断言：<证据: 参数透传+凭证结构>；保留脱敏日志、manifest、前后快照
+D3-S1|P1|场景-只读查ECS(带不改约束)|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 路由+只读清单+零写调用>；保留脱敏日志、manifest、前
+D3-S2|P1|场景-删VPC先确认|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 命令块+确认前后执行态>；保留脱敏日志、manifest、前后
+D3-S3|P1|场景-沙箱预览出URL|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 预览URL可访问>；保留脱敏日志、manifest、前后快照
+D3-S4|P1|场景-领券闭环|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 状态翻转闭环>；保留脱敏日志、manifest、前后快照
+D3-S5|P2|场景-复合意图分层路由|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 多路命中+分层推荐>；保留脱敏日志、manifest、前后快照
+D3-S6|P2|场景-FunctionGraph定时任务|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 函数URN+触发器>；保留脱敏日志、manifest、前后快照
+D3-S7|P1|场景-跨服务交付(Web应用+RDS)并归零|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 编排顺序+连接串注入+归零>；保留脱敏日志、manifest、
+D3-S8|P1|场景-操作失败后排障指引|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Hermes>|evid=强断言：<证据: 失败分类+可执行下一步>；保留脱敏日志、manifest、前后
+D4-1|P0|凭证文件读取拦截|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: cat/type 凭证文件被阻断>；保留脱敏日志、manife
+D4-2|P0|凭证env打印拦截|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: printenv/echo 凭证被阻断>；保留脱敏日志、man
+D4-3|P0|明文secret API拦截|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 明文 secret API 被阻断>；保留脱敏日志、manif
+D4-4|P1|写操作审批门|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 12 类写动词强制审批>；保留脱敏日志、manifest、前后
+D4-5|P0|写操作误判检测|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 写命令不被误判只读>；保留脱敏日志、manifest、前后快照
+D4-6|P1|adminPass回显警告|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 警告且不裸回显密码>；保留脱敏日志、manifest、前后快照
+D4-7|P1|hook三工具有效性|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 三类高危输入均拦截>；保留脱敏日志、manifest、前后快照
+D4-8|P1|Python/Node策略一致|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: Python/Node 双路径判定一致>；保留脱敏日志、man
+D4-9|P0|公开暴露/破坏性预检|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 公开暴露/破坏性执行前拦截>；保留脱敏日志、manifest、
+D4-10|P2|规则库新增回归|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 新规则不误杀既有操作>；保留脱敏日志、manifest、前后快
+D4-11|P1|提示注入防护|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 4 注入点>|evid=强断言：<证据: 注入 payload 拒绝>；保留脱敏日志、manifest、
+D4-12|P2|供应链安装期安全|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 无恶意行为+pack一致+SBOM>；保留脱敏日志、manif
+D4-13|P1|最小权限凭证通过率|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 只读凭证全量>|evid=强断言：<证据: 最小权限通过率>；保留脱敏日志、manifest、前后快照
+D4-14|P2|操作可审计性|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: CTS 可追溯+区分 agent/人工>；保留脱敏日志、man
+D4-15|P0|hook绕过尝试|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 变体无绕过成功>；保留脱敏日志、manifest、前后快照
+D4-16|P0|命令包裹穿透|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 发现内层命令并拦截>；保留脱敏日志、manifest、前后快照
+D4-17|P1|hook模糊fail-closed|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 异常输入默认拒绝>；保留脱敏日志、manifest、前后快照
+D4-21|P0|hook_check_artifacts 具名回归（代码/IaC|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: broad IAM 制品拦截>；保留脱敏日志、manifest
+D4-22|P0|hook_check_deploy_plan 具名回归（部署计划|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook=Hermes 非hook=OpenCode>|evid=强断言：<证据: 公网暴露 deploy 计划拦截/告警>；保留脱敏日志、man
+D4-23|P0|全局规则 huawei-agent-rules.md 注入生效性|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 逐客户端 11 目标>|evid=强断言：<证据: agent-rules 注入生效>；保留脱敏日志、manife
+D4-24|P1|确认令牌过期与重复确认边界（审批流健壮性）|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表2: Hermes+OpenCode>|evid=强断言：<证据: 响应JSON+计数+归零>；保留脱敏日志、manifest、前
+D4-25|P2|Python hook 事件遥测分类|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook客户端>|evid=强断言：<证据: hook-events.jsonl>；保留脱敏日志、manif
+D4-26|P2|findings 证据脱敏|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook客户端>|evid=强断言：<证据: findings.evidence 脱敏前后>；保留脱敏日志、
+D4-27|P1|双路径输出脱敏|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 隔离进程>|evid=强断言：<证据: 脱敏前后对照>；保留脱敏日志、manifest、前后快照
+D4-28|P0|Node 版安全 hook 链路|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: hook客户端>|evid=强断言：<证据: deny 决策+reason>；保留脱敏日志、manifest
+D4-29|P2|分类断言与原始命令分类入口|agent=Hermes（Hook）; OpenCode（非 Hook）|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 隔离进程>|evid=强断言：<证据: 分类+断言分支>；保留脱敏日志、manifest、前后快照
+D5-1|P1|清单发现加载|agent=Hermes; OpenCode; 声明支持的客户端矩阵|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 10 客户端>|evid=强断言：<证据: 清单发现加载>；保留脱敏日志、manifest、前后快照
+D5-3|P1|工具全量枚举|agent=Hermes; OpenCode; 声明支持的客户端矩阵|OS=Windows/Linux；macOS 若声明支持则单独举证|term=<代表: 10 客户端>|evid=强断言：<证据: tools/list 40 工具枚举>；保留脱敏日志、mani
+D6-1|P2|检索响应延迟|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Windows x64 + Node22>|evid=强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+D6-3|P2|MCP冷启时间|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Windows x64 + Node22>|evid=强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+D6-4|P1|并发调度正确性|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Windows x64 + Node22>|evid=强断言：<证据: 无死锁无消息错乱>；保留脱敏日志、manifest、前后快照
+D6-9|P2|缓存清理三入口|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 隔离进程>|evid=强断言：<证据: 缓存清空+幂等>；保留脱敏日志、manifest、前后快照
+D9-9|P1|tools/call 超时协议语义与取消|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: Inspector+夹具>|evid=强断言：<证据: JSON-RPC错误对象+capabilities+取消时序>
+D8-1|P2|文档与能力一致|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 静态评审人 测试经理>|evid=强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D8-4|P1|引导步骤可机械执行|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 静态评审人 测试经理>|evid=强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D8-6|P2|中英文文档一致|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 静态评审人 测试经理>|evid=强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D8-7|P0|7 个 meta/通用技能指引可机械执行验证|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 静态评审人 测试经理>|evid=强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D8-9|P2|安装 ID 与遥测值脱敏|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 隔离进程>|evid=强断言：<证据: ID稳定+脱敏>；保留脱敏日志、manifest、前后快照
+D8-10|P2|MCP 配置备份与合并|agent=Hermes 代表终端; fake/fixture|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 隔离 HOME>|evid=强断言：<证据: 合并结果+delta回放>；保留脱敏日志、manifest、前
+D9-1|P1|tools/list合规|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + Hermes>|evid=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-2|P1|JSON-RPC错误码|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + Hermes>|evid=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-3|P1|tools/call响应格式|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + Hermes>|evid=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-4|P1|协议生命周期|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + Hermes>|evid=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-5|P1|stdio传输健壮|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + Hermes>|evid=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-6|P1|跨客户端互通|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + Hermes>|evid=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-7|P2|协议版本协商降级|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + Hermes>|evid=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-8|P2|inputSchema版本合规|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + Hermes>|evid=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-10|P1|MCP remote transport（HTTP/WS 远程服|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: remote 客户端>|evid=强断言：<证据: 端口监听+协议响应>；保留脱敏日志、manifest、前后快照
+D9-11|P1|WebSocket 隧道通道生命周期|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 隧道 mux 夹具>|evid=强断言：<证据: ready/close 生命周期>；保留脱敏日志、manife
+D9-12|P0|initialize 握手协议安全基线|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + Hermes>|evid=强断言：<证据: 协议报文+源码探针>；保留脱敏日志、manifest、前后快照
+D9-13|P0|tools/call 凭证不泄露与权限校验|agent=Hermes; MCP Inspector/标准协议客户端|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: MCP Inspector + 源码探针>|evid=强断言：<证据: 凭证脱敏+权限决策+审批令牌>；保留脱敏日志、manifest
+D10-3|P1|路由准确率+混淆矩阵|agent=OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 10 客户端>|evid=强断言：<证据: 评测集结果+模型参数>；保留脱敏日志、manifest、前后快
+D10-4|P0|安全干预-静态规则层|agent=OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode|OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证|term=<代表: 源码直调 risk-rule-engine>|evid=强断言：<证据: 规则库加载+三态判定>；保留脱敏日志、manifest、前后快
