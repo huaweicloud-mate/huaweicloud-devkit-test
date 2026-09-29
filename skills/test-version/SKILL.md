@@ -50,10 +50,12 @@ python scripts/init_day.py <客户端> <OS> --version <版本>   # 版本冻结�
 - 回填「执行状态」+「执行时间」，NOT_RUN/PASS 纪律同「每日测试」。
 - 跑 `python scripts/verify_no_fake_pass.py <客户端> <OS>` + `python scripts/verify_coverage.py <客户端> <OS>`。
 
-### Step 4 出报告 + 归档
+### Step 4 出报告 + 归档（含收口 README，漏了看板不展示该版本）
 - 报告标题含 `Agent+模型名`，文件名/正文标注版本：如 `<客户端>-<模型>-v1.1.4-测试报告.md`，正文注明「版本全量测试 v1.1.4」。
 - FINDINGS.md 记缺陷（file_issue.py 的解析输入）。
-- **维护者汇总各客户端结论 → 归档 `results/version/<版本>/`**（测试报告 + 执行结果 + 缺陷清单）。
+- **归档 `results/version/<版本>/<OS>/`**：把测试报告 + 执行结果 3 CSV + FINDINGS.md + HISTORY_LINKS.md + evidence/ 放到对应 OS 目录（`<OS>` = Windows / Linux）。
+- **归档后必须跑 `python scripts/gen_version_readme.py <版本>` 生成收口 `results/version/<版本>/README.md`**——看板（`gen_dashboard.py` 的 `load_versions()`）只展示有 README 收口记录的版本，漏了则该版本不上看板。字段（实际测试对象 commit、归档路径、执行状态、缺陷、历史单号）自动从测试报告 + CSV + FINDINGS/HISTORY_LINKS 提取，无需手写。
+- **维护者汇总各客户端结论**：多客户端同版本时，维护者以「最差状态」合并去重后重跑 `gen_version_readme.py` 重生成 README 收口 + `gen_dashboard.py` 刷新看板。
 
 ## 红线
 
@@ -69,6 +71,7 @@ python scripts/init_day.py <客户端> <OS> --version <版本>   # 版本冻结�
 | PASS 门禁 | `python scripts/verify_no_fake_pass.py <客户端> <OS>` |
 | 覆盖率门禁 | `python scripts/verify_coverage.py <客户端> <OS>` |
 | 每 10 分钟提报 | `python scripts/hourly_sync.py <客户端> <OS> --interval 600` |
+| 生成版本收口 README | `python scripts/gen_version_readme.py <版本>` |
 | 统一提单 | `python scripts/file_issue.py <FINDINGS.md> <版本> --type=version` |
 
 ## 陷阱
