@@ -137,6 +137,55 @@ def build(kind, src_rel, id_key, name_keys, status_key, date, machine_dirs, cols
     print(f"[{kind}] {os.path.basename(out)}：{len(summary)} 行，{len(cols)} 列，已填 {filled} 条，不涉及(NA) {na_count} 条")
 
 
+def _is_shell_probe_text(txt):
+    """空壳探针文本：非空行全是注释（// 或 #），无任何实际执行代码。"""
+    lines = [l for l in txt.splitlines() if l.strip()]
+    if not lines:
+        return True
+    code_lines = [l for l in lines if not l.strip().startswith(("//", "#"))]
+    return len(code_lines) == 0
+
+
+def audit_client_evidence(machine_dirs, date):
+    """证据诚信审计：检测各客户端执行包 evidence/ 的 .mjs 探针空壳率。
+
+    判定「虚报嫌疑」= 有 PASS 回填 且 探针非空、空壳率 >= 80%（探针全注释、无执行逻辑）。
+    返回 [(client, ip, os_name, pass_count, shell_probe, probe_total, fabricated)]。
+    """
+    results = []
+    for client, ip, os_name in machine_dirs:
+        pack_dir = os.path.join(REPO, "results", client, f"{date}-{ip}", os_name)
+        ev_dir = os.path.join(pack_dir, "evidence")
+        probe_total = 0
+        shell_probe = 0
+        if os.path.isdir(ev_dir):
+            for root, _dirs, files in os.walk(ev_dir):
+                for fn in files:
+                    if not fn.lower().endswith(".mjs"):
+                        continue
+                    probe_total += 1
+                    fp = os.path.join(root, fn)
+                    try:
+                        with open(fp, encoding="utf-8", errors="replace") as f:
+                            txt = f.read()
+                    except OSError:
+                        continue
+                    if _is_shell_probe_text(txt):
+                        shell_probe += 1
+        pass_count = 0
+        for kind in ("设计级", "展开级"):
+            csvp = os.path.join(pack_dir, f"用例矩阵-{kind}.csv")
+            if os.path.isfile(csvp):
+                with open(csvp, encoding="utf-8-sig") as f:
+                    for r in csv.DictReader(f):
+                        if (r.get("执行状态") or r.get("execution_status") or "").strip().upper() == "PASS":
+                            pass_count += 1
+        shell_ratio = (shell_probe / probe_total) if probe_total else 0.0
+        fabricated = pass_count > 0 and probe_total > 0 and shell_ratio >= 0.8
+        results.append((client, ip, os_name, pass_count, shell_probe, probe_total, fabricated))
+    return results
+
+
 def main():
     date = sys.argv[1] if len(sys.argv) > 1 else datetime.datetime.now().strftime("%Y-%m-%d")
     machine_dirs = find_machine_dirs(date)
@@ -144,6 +193,30 @@ def main():
     print(f"发现的机器目录: {machine_dirs}")
     build("设计级", ("test-cases", "daily", "用例矩阵-设计级.csv"), "ID", ["维度", "标题"], "执行状态", date, machine_dirs, cols)
     build("展开级", ("test-cases", "daily", "用例矩阵-展开级.csv"), "ID", ["展开类型", "枚举对象", "源用例"], "执行状态", date, machine_dirs, cols, na_judge=True)
+
+    # 证据诚信审计：识别虚报嫌疑客户端，落注记文件
+    audits = audit_client_evidence(machine_dirs, date)
+    fabricated = [a for a in audits if a[-1]]
+    if fabricated:
+        print("\n[证据审计] 发现疑似虚报客户端（PASS 回填但探针空壳率 >= 80%）：")
+        for client, ip, os_name, pc, sp, pt, _fab in fabricated:
+            print(f"  ⚠ {client} ({ip}-{os_name}): PASS={pc} 空壳探针={sp}/{pt} -> 虚报嫌疑")
+        out = os.path.join(REPO, "results", "Summary", f"客户端证据审计-{date}.md")
+        lines = [f"# 客户端证据诚信审计（{date}）", "",
+                 "> 由 build_summary.py 自动生成：检测各客户端执行包 evidence/ 的 .mjs 探针空壳率，",
+                 "> 识别「有 PASS 回填但探针空壳率 >= 80%」的虚报嫌疑客户端。", "",
+                 "## 虚报嫌疑客户端（结果不可信，不纳入通过率统计口径）", ""]
+        for client, ip, os_name, pc, sp, pt, _fab in fabricated:
+            lines += [f"- **{client}**（{ip}-{os_name}）：PASS 回填 {pc} 条，但 {pt} 个 .mjs 探针中 {sp} 个为空壳"
+                      f"（全注释、硬编码 Status: PASS、无执行逻辑）——当日结果不可信，需该客户端重跑真探针。"]
+        lines += ["", "## 全量审计明细", "",
+                  "| 客户端 | IP | OS | PASS 回填 | 空壳探针 | 探针总数 | 判定 |",
+                  "| --- | --- | --- | --- | --- | --- | --- |"]
+        for client, ip, os_name, pc, sp, pt, fab in audits:
+            lines.append(f"| {client} | {ip} | {os_name} | {pc} | {sp} | {pt} | {'⚠ 虚报嫌疑' if fab else 'OK'} |")
+        with open(out, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines) + "\n")
+        print(f"  已写审计注记: {os.path.basename(out)}")
     print("汇总完成。总报告(.md)请维护者按需生成。")
 
 
