@@ -1,0 +1,17 @@
+DIST {'PASS': 136, 'BLOCKED': 1, 'FAIL': 14, 'NOT_RUN': 1, '': 5}
+D3-S7                  BLOCKED        Requires real cloud resources (sandbox + RDS creation). Sandbox tools available but full cross-service delivery requires
+D4-2                   FAIL           hook_check_command returned allow for "echo %HW_SECRET_KEY%" and "printenv HW_ACCESS_KEY HW_SECRET_KEY". Rule hwc-comman
+D4-23                  FAIL           huawei-agent-rules.md not found in source repo (hdk) or installed npm package. File does not exist at expected locations
+D4-6                   FAIL           hook_check_command with --server.adminPass=Test12345! returned allow with no findings. No rule detects adminPass/passwor
+EXP-E01                FAIL           MISS: expected ECS, got "Run hcloud --help". serviceCatalog failed to route cloud-host query to ECS.
+EXP-E02                FAIL           MISS: expected ECS, got "Run hcloud --help". serviceCatalog failed to route server creation to ECS.
+EXP-E03                FAIL           MISS: expected OBS, got "Sandbox+DevStation". Routed to Sandbox instead of OBS for static site.
+EXP-E04                FAIL           MISS: expected EIP, got "Run hcloud --help". Failed to route EIP binding intent.
+EXP-E05                FAIL           MISS: expected RDS, got "Run hcloud --help". Failed to route MySQL status query to RDS.
+EXP-E07                FAIL           MISS: expected CBR, got "Run hcloud --help". Failed to route backup policy to CBR.
+EXP-E08                NOT_RUN        N/A: diagnostic intent (ECS failure analysis), excluded from accuracy calc.
+EXP-E10                FAIL           MISS: expected FunctionGraph, got "Run hcloud --help". Failed to route function intent.
+EXP-E11                FAIL           MISS: expected BSS, got "Run hcloud --help". Failed to route billing query to BSS.
+EXP-E12                FAIL           MISS: expected CES, got "Run hcloud --help". Failed to route monitoring alert to CES.
+EXP-E13                FAIL           MISS: expected ELB, got "Run hcloud --help". Failed to route HTTPS certificate to ELB.
+EXP-E14                FAIL           MISS: expected IAM, got "Run hcloud --help". Failed to route permission audit to IAM.
