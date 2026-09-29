@@ -1,0 +1,10 @@
+=== CASE D4-29 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: 分类断言与原始命令分类入口通过（classifyRawCommand 与 classifyTextCommand 一致 + assertAllowed）
+source: supplement/probe-supplement.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D4-29  classifyRawCommand 返回决策对象  => "string" (expected "string")
+PASS  D4-29  classifyRawCommand 与 classifyTextCommand 一致  => "deny" (expected "deny")
+PASS  D4-29  DENY 决策 assertAllowed 抛拒绝  => true (expected true)
+PASS  D4-29  allow 决策 assertAllowed 通过  => true (expected true)
+RESULT: PASS

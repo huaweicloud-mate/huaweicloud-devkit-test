@@ -1,0 +1,10 @@
+=== CASE D1-41 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: check_update 真实 MCP 返回契约通过（up_to_date/update_available/check_failed/dismissed 四态）
+source: d1-update-check/probe-d1-update-check.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D1-41 up_to_date: result=up_to_date & updateAvailable=false & currentVersion=1.1.4
+PASS  D1-41 update_available: updateAvailable=true & targetVersion=1.2.0
+PASS  D1-41 check_failed: result=check_failed & note 非空 & updateAvailable=false
+PASS  D1-41 dismissed: result=dismissed & dismissed=true & dismissExpiresAt 非空
+RESULT: PASS

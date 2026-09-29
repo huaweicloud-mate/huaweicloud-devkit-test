@@ -1,0 +1,11 @@
+=== CASE D2-12 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: R10 runtime 非空禁止落盘通过（auto-sync suppressed + clear 后回落 S1）
+source: d2-auth/probe-d2-auth.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D2-12  runtime 存在  => true (expected true)
+PASS  D2-12  R10 auto-sync suppressed  => false (expected false)
+PASS  D2-12  R10 报错含 suppressed  => true (expected true)
+PASS  D2-12  clear 后 runtime 清空  => false (expected false)
+PASS  D2-12  clear 后回落 S1  => "AKPERSIST" (expected "AKPERSIST")
+RESULT: PASS

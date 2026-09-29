@@ -1,0 +1,11 @@
+=== CASE D1-42 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: dismiss 真实闭环与跨调用持久化通过（落盘字段完整 + 重读生效 + 过期恢复）
+source: d1-update-check/probe-d1-update-check.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D1-42 落盘字段完整 (dismissedVersion=dismissedAt=expireAt 齐全)
+PASS  D1-42 expireAt = dismissedAt + 3 天
+PASS  D1-42 重读文件(模拟重启复查) 仍生效
+PASS  D1-42 同版本冷却窗口内 => dismissed
+PASS  D1-42 冷却过期后 => update_available
+RESULT: PASS

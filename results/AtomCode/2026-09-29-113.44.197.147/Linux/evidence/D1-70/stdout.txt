@@ -1,0 +1,11 @@
+=== CASE D1-70 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: 代理配置与 WebSocket 代理往返一致通过（write/read/getProxySettings/clear 均一致）
+source: supplement/probe-supplement.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D1-70  writeProxyConfig→readProxyConfig 往返一致(http_proxy)  => "http://127.0.0.1:8080" (expected "http://127.0.0.1:8080")
+PASS  D1-70  no_proxy 命中 getProxySettings 返回 null  => true (expected true)
+PASS  D1-70  getProxySettings 非 no_proxy 命中返回代理配置(proxyUrl)  => true (expected true)
+PASS  D1-70  clearProxyConfig 后 readProxyConfig 返回 null  => null (expected null)
+PASS  D1-70  getWebSocketImpl 为函数(无代理回退 globalThis.WebSocket)  => "function" (expected "function")
+RESULT: PASS

@@ -1,0 +1,9 @@
+=== CASE D1-40 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: 镜像 lag 反向提醒防护通过（queryDistTagsSync 最新 next 不提示降级到 latest，updateAvailable=false）
+source: d1-upgrade/probe-d1-upgrade.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D1-40  最新 next 不提示降级到 latest (up_to_date)  => "up_to_date" (expected "up_to_date")
+PASS  D1-40  updateAvailable=false  => false (expected false)
+PASS  D1-40  远端滞后不提示版本倒退  => false (expected false)
+RESULT: PASS

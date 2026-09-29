@@ -1,0 +1,14 @@
+=== CASE D1-45 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: _updateInfo 兜底提示与预热竞态/会话隔离通过（probe-d1-update-check 17/17）
+source: d1-update-check/probe-d1-update-check.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D1-45 check_update 不附加 _updateInfo
+PASS  D1-45 upgrade 不附加 _updateInfo
+PASS  D1-45 其它工具附加 _updateInfo(latestVersion=1.2.0)
+PASS  D1-45 首调非 check/upgrade 工具附加 _updateInfo
+PASS  D1-45 首调后该会话已消费
+PASS  D1-45 同会话第二次调用不附加
+PASS  D1-45 check_update 自身不附加不消费
+PASS  D1-45 会话隔离：sessC/sessD 各自首调独立附加
+RESULT: PASS

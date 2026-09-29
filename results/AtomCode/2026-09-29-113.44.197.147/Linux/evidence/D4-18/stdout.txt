@@ -1,0 +1,11 @@
+=== CASE D4-18 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: confirm-not-deny 审批语义通过（高危写分类=deny 且提供 approvalToken 确认流，realcloud E2E）
+source: d4-security-core/probe-d4-18-20-confirm.mjs
+--- 真实探针输出摘录 (run.log) ---
+=== D4-18/19/20 confirm-not-deny 审批语义探针结果 ===
+PASS  D4-18  写操作分类非 allow  => "deny" (expected "deny")
+PASS  D4-18  safeToRun=false  => false (expected false)
+PASS  D4-18  提供 approvalToken  => true (expected true)
+PASS  D4-18  风险标记为 write  => true (expected true)
+RESULT: PASS

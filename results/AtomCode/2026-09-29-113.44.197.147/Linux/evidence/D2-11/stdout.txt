@@ -1,0 +1,12 @@
+=== CASE D2-11 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: R3 STS token 拒绝落盘 + 真实凭证库 S1 不含明文 STS token（probe-d2-11-r3-sts + realcloud 真机验证 pass）
+source: d2-auth/probe-d2-11-r3-sts.mjs
+--- 真实探针输出摘录 (run.log) ---
+=== D2-11 R3 STS 拒落盘探针结果 ===
+PASS  D2-11  persist STS 返回 status=error  => "error" (expected "error")
+PASS  D2-11  scope=rejected  => "rejected" (expected "rejected")
+PASS  D2-11  全局落盘不含 STS token 值  => false (expected false)
+PASS  D2-11  全局落盘不含 STS ak 值  => false (expected false)
+PASS  D2-11  S1 未被 STS 覆盖(ak 为空或非 STS)  => false (expected false)
+RESULT: PASS

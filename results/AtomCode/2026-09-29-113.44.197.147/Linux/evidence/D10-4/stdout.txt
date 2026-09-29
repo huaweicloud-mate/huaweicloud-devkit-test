@@ -1,0 +1,11 @@
+=== CASE D10-4 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: 安全干预-静态规则层通过（写操作/破坏性删除非直通放行；probe-d10-4-security-intervention 4/4）
+source: d4-security-misc/probe-d10-4-security-intervention.mjs
+--- 真实探针输出摘录 (run.log) ---
+=== D10-4 安全干预有效性（源码可验证部分）探针结果 ===
+PASS  D10-4  写操作 ECS DeleteServers 非直通放行  => true (expected true)
+PASS  D10-4  写操作 ECS CreateServers 非直通放行  => true (expected true)
+PASS  D10-4  写操作 RDS DeleteInstance 非直通放行  => true (expected true)
+PASS  D10-4  hook_check_command 破坏性删除非直通放行  => true (expected true)
+RESULT: PASS

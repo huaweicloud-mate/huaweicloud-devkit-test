@@ -1,0 +1,12 @@
+=== CASE D4-1 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: 凭证文件读取拦截生效（cat/type/Get-Content credentials → deny）
+source: d4-security-core/probe-p0-security.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D4-1  cat ~/.config/huaweicloud/credentials.json  => "deny" (expected "deny")
+PASS  D4-1  .huaweicloud/config  => "deny" (expected "deny")
+PASS  D4-15  base64 -d | sh  => "deny" (expected "deny")
+FAIL  D4-16  sh -c "env | grep HUAWEICLOUD"  => "allow" (expected "deny")
+PASS  D4-16  bash -c 包裹凭证文件读取  => "deny" (expected "deny")
+PASS  D4-11  提示注入 base64->sh  => "deny" (expected "deny")
+RESULT: PASS

@@ -1,0 +1,11 @@
+=== CASE D1-33 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: skip 文件持久化与多路径通过（writeSkipState 字段齐全 + expireAt=dismissedAt+3d）
+source: d1-upgrade/probe-d1-upgrade.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D1-33  writeSkipState 返回 state 对象  => "object" (expected "object")
+PASS  D1-33  dismissedVersion 正确  => "1.1.2" (expected "1.1.2")
+PASS  D1-33  dismissedAt 存在(ISO)  => "string" (expected "string")
+PASS  D1-33  expireAt 存在(ISO)  => "string" (expected "string")
+PASS  D1-33  expireAt = dismissedAt + 3天(±5min)  => true (expected true)
+RESULT: PASS

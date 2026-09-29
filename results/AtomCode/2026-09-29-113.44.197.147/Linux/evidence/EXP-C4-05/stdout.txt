@@ -1,0 +1,8 @@
+=== CASE EXP-C4-05 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: D3-C4 服务矩阵只读规划冒烟通过（list_operations + plan_cli_command 归类 allow/read_only，probe-servicematrix 22 服务 ok；真机建删由 D3-C4 设计级 realcloud 承载）
+source: d3-C4-servicematrix/probe-servicematrix.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  EXP-C4-GaussDB  list_operations GaussDB 只读规划可路由  => true (expected true)
+PASS  EXP-C4-GaussDB  plan_cli_command GaussDB DescribeBackupEncryptStatus 归类 allow/read_only  => "allow/read_only" (expected "allow/read_only")
+RESULT: PASS

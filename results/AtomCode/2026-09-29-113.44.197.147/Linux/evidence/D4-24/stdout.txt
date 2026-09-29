@@ -1,0 +1,12 @@
+=== CASE D4-24 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: 确认令牌过期与重复确认边界通过（token 持久化 + 单次消费 + 过期/重复提交被拒，probe-d4-24-token 5/5）
+source: d4-security-core/probe-d4-24-token.mjs
+--- 真实探针输出摘录 (run.log) ---
+=== D4-24 确认令牌过期与重复确认边界探针结果 ===
+PASS  D4-24  plan 产生 approvalToken  => token=true
+PASS  D4-24  approvalToken 持久化到 approvals.json(跨进程)  => exists=true
+PASS  D4-24  不存在 token 提交被拒  => rejected=true
+PASS  D4-24  token 单次消费(重复提交第二次被拒)  => secondRejected=true
+PASS  D4-24  过期 token(>5min TTL)提交被拒  => expiredRejected=true
+RESULT: PASS

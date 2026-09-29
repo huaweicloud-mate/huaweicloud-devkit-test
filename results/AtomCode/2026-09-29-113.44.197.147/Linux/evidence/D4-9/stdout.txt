@@ -1,0 +1,8 @@
+=== CASE D4-9 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: 公开暴露/破坏性预检通过（0.0.0.0/0 安全组规则 confirm，DeleteServers --delete-all 非 allow）
+source: d4-security-core/probe-p0-security.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D4-9  hcloud DeleteServers 无审批被拦  => true (expected true)
+PASS  D4-9  DescribeInstances 只读放行  => "allow" (expected "allow")
+RESULT: PASS

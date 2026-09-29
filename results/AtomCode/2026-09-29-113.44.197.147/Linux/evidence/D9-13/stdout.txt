@@ -1,0 +1,28 @@
+=== CASE D9-13 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: tools/call 凭证不泄露与权限校验通过（分类写命令 deny/confirm、返回无明文 AK/SK、approval token 一次性消费、runtime 凭证解析/清除生效）
+source: d9-12-13-p0/probe-d9-12-13-p0.mjs
+--- 真实探针输出摘录 (run.log) ---
+=== D9-12/D9-13 P0 基线与安全探针结果 ===
+PASS  D9-13  setRuntimeCredentials 后 hasRuntimeCredentials=true  => true (expected true)
+PASS  D9-13  resolveCredentialsWithRuntime 解析运行时凭证 ak  => "RK-AK-TEST" (expected "RK-AK-TEST")
+PASS  D9-13  clearRuntimeCredentials 后 hasRuntimeCredentials=false  => false (expected false)
+PASS  D9-13  loadPolicy 返回策略对象  => "object" (expected "object")
+PASS  D9-13  classifyHcloudArgs 写命令决策非 allow(deny/confirm)  => true (expected true)
+PASS  D9-13  classifyHcloudArgs 只读命令决策 allow  => "allow" (expected "allow")
+PASS  D9-13  evaluateArtifacts 返回对象  => "object" (expected "object")
+PASS  D9-13  evaluateDeployPlan 返回对象  => "object" (expected "object")
+PASS  D9-13  mergeRiskDecision 高危风险合并为 deny  => "deny" (expected "deny")
+PASS  D9-13  hashArgs 幂等(相同参数同哈希)  => "b570ae615a7ca5186efc174f5b38a581a42e0d0c8fa296c21ae2fc0e72d05fcc" (expected "b570ae615a7ca5186efc174f5b38a581a42e0d0c8fa296c21ae2fc0e72d05fcc")
+PASS  D9-13  createApprovalToken 返回 token  => "string" (expected "string")
+PASS  D9-13  consumeApprovalToken 首次消费成功  => true (expected true)
+PASS  D9-13  consumeApprovalToken 二次消费(重放)被拒  => true (expected true)
+PASS  D9-13  readServiceCatalogs 返回对象  => "object" (expected "object")
+PASS  D9-13  classifyUnsupported 返回非 undefined  => true (expected true)
+PASS  D9-13  planHcloudCommand 返回规划对象  => true (expected true)
+PASS  D9-13  tools/call 返回不含明文 AK/SK  => false (expected false)
+PASS  D9-13  globalCredentialsPath 返回路径(字符串)  => "string" (expected "string")
+PASS  D9-13  isPlaceholder 正确识别占位/非占位  => true (expected true)
+PASS  D9-13  obsConfigPath 为导出函数  => "function" (expected "function")
+PASS  D9-13  writeObsConfig 为导出函数  => "function" (expected "function")
+RESULT: PASS

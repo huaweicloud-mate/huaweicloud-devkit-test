@@ -1,0 +1,15 @@
+=== CASE D2-1 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: auth init 三端同步通过（S1 凭证库+KooCLI+OBS 真机就绪；ECS 读+obs ls 施力，realcloud E2E）
+source: realcloud/probe-realcloud.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D2-16  import 前 creds-import.json 存在(预置)  => true (expected true)
+PASS  D2-16  auth_switch import 读后擦除(exists=false)  => false (expected false)
+PASS  D2-16  temporary 仅内存不落盘(scope=temporary)  => "temporary" (expected "temporary")
+PASS  D2-11  真实凭证库 S1 不含明文明文 STS token  => false (expected false)
+PASS  D2-1  三端就绪: S1 凭证库  => true (expected true)
+PASS  D2-1  三端就绪: KooCLI  => true (expected true)
+PASS  D2-1  三端就绪: OBS  => true (expected true)
+PASS  D2-1  真云 API 实际可用(KooCLI 施力 ECS 读)  => true (expected true)
+PASS  D2-1  真云 OBS 端可用(obs ls 列出桶)  => true (expected true)
+RESULT: PASS

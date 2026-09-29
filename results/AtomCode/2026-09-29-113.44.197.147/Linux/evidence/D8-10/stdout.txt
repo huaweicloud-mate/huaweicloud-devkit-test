@@ -1,0 +1,14 @@
+=== CASE D8-10 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: MCP 配置备份与合并通过（mergeCommandStyle/mergeArgsStyle/extractUserDelta/save/take 全对）
+source: supplement/probe-supplement.mjs
+--- 真实探针输出摘录 (run.log) ---
+PASS  D8-10  mergeCommandStyle 修正 command[1]=新 mcpPath  => true (expected true)
+PASS  D8-10  mergeCommandStyle 保留 userArgs(--flag)  => true (expected true)
+PASS  D8-10  mergeArgsStyle 修正 args[0]=新 mcpPath  => true (expected true)
+PASS  D8-10  mergeArgsStyle 保留 userArgs(--extra)  => true (expected true)
+PASS  D8-10  extractUserDelta 捕获 userArgs  => true (expected true)
+PASS  D8-10  saveAgentDelta 持久化(返回 true)  => true (expected true)
+PASS  D8-10  takeAgentDelta 取走后可读  => true (expected true)
+PASS  D8-10  takeAgentDelta 取走后读空(null)  => null (expected null)
+RESULT: PASS

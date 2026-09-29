@@ -1,0 +1,12 @@
+=== CASE D4-12 ===  PASS
+SUT: v1.1.7 (gitHead 7456d05)
+detail: 供应链安装期安全通过（postinstall=node ./bin/dsh-postinstall.cjs 无网络/子进程/任意执行，package-lock 锁定；probe-d4-12-supplychain 5/5）
+source: d4-security-misc/probe-d4-12-supplychain.mjs
+--- 真实探针输出摘录 (run.log) ---
+=== D4-12 供应链安装期安全探针结果 ===
+PASS  D4-12  postinstall 无网络请求/子进程/任意执行  => postinstall=node ./bin/dsh-postinstall.cjs
+PASS  D4-12  package-lock.json 存在(依赖锁定)  => lock exists
+PASS  D4-12  运行时依赖锁定(1 个 dependencies)  => ["undici"]
+PASS  D4-12  pack:verify 脚本存在(源码与 pack 一致性校验)  => node ./scripts/pack-verify.mjs
+PASS  D4-12  SBOM 可产(lock 含依赖树)  => lock packages=242
+RESULT: PASS
