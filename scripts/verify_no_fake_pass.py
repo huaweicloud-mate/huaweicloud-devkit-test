@@ -95,10 +95,11 @@ def check(kind, status_key, ev_key, pack_dir):
                 fake.append((cid, f"evidencePath 指向不存在: {ev}"))
                 continue
             ev_dir = ev_path if os.path.isdir(ev_path) else os.path.dirname(ev_path)
+            has_output = _has_output_file(ev_dir)
             state = _probe_state(ev_dir)
-            if state == "empty_shell":
-                fake.append((cid, "证据为空壳探针（.mjs 全注释、硬编码 Status: PASS、无执行逻辑），疑似虚报"))
-            elif state == "no_probe" and not _has_output_file(ev_dir):
+            if state == "empty_shell" and not has_output:
+                fake.append((cid, "证据为空壳探针（.mjs 全注释、硬编码 Status: PASS）且无执行输出，疑似虚报"))
+            elif state == "no_probe" and not has_output:
                 fake.append((cid, "证据目录无 .mjs 探针也无执行输出文件，疑似未真实执行"))
     return fake
 

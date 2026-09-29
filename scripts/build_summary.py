@@ -146,32 +146,55 @@ def _is_shell_probe_text(txt):
     return len(code_lines) == 0
 
 
-def audit_client_evidence(machine_dirs, date):
-    """证据诚信审计：检测各客户端执行包 evidence/ 的 .mjs 探针空壳率。
+def _dir_has_output(d):
+    """目录（递归）是否有非空执行输出文件。"""
+    for root, _dirs, files in os.walk(d):
+        for fn in files:
+            low = fn.lower()
+            if low.endswith((".txt", ".log", ".json", ".out", ".stdout", ".stderr")) or "stdout" in low or "stderr" in low:
+                fp = os.path.join(root, fn)
+                try:
+                    if os.path.getsize(fp) > 0:
+                        return True
+                except OSError:
+                    pass
+    return False
 
-    判定「虚报嫌疑」= 有 PASS 回填 且 探针非空、空壳率 >= 80%（探针全注释、无执行逻辑）。
-    返回 [(client, ip, os_name, pass_count, shell_probe, probe_total, fabricated)]。
+
+def _dir_probes_all_shell(d):
+    """目录（递归）内是否存在 .mjs 探针且全部为空壳注释。"""
+    probes = []
+    for root, _dirs, files in os.walk(d):
+        for fn in files:
+            if fn.lower().endswith(".mjs"):
+                fp = os.path.join(root, fn)
+                try:
+                    probes.append(open(fp, encoding="utf-8", errors="replace").read())
+                except OSError:
+                    pass
+    return bool(probes) and all(_is_shell_probe_text(t) for t in probes)
+
+
+def audit_client_evidence(machine_dirs, date):
+    """证据诚信审计：按 evidence 用例子目录判定虚报。
+
+    虚报目录 = 目录内 .mjs 探针全空壳注释 且 无非空执行输出（stdout 等）。
+    返回 [(client, ip, os_name, pass_count, shell_dir, total_dir, fabricated)]。
     """
     results = []
     for client, ip, os_name in machine_dirs:
         pack_dir = os.path.join(REPO, "results", client, f"{date}-{ip}", os_name)
         ev_dir = os.path.join(pack_dir, "evidence")
-        probe_total = 0
-        shell_probe = 0
+        total_dir = 0
+        shell_dir = 0
         if os.path.isdir(ev_dir):
-            for root, _dirs, files in os.walk(ev_dir):
-                for fn in files:
-                    if not fn.lower().endswith(".mjs"):
-                        continue
-                    probe_total += 1
-                    fp = os.path.join(root, fn)
-                    try:
-                        with open(fp, encoding="utf-8", errors="replace") as f:
-                            txt = f.read()
-                    except OSError:
-                        continue
-                    if _is_shell_probe_text(txt):
-                        shell_probe += 1
+            subs = [os.path.join(ev_dir, x) for x in os.listdir(ev_dir) if os.path.isdir(os.path.join(ev_dir, x))]
+            if not subs:
+                subs = [ev_dir]
+            for d in subs:
+                total_dir += 1
+                if _dir_probes_all_shell(d) and not _dir_has_output(d):
+                    shell_dir += 1
         pass_count = 0
         for kind in ("设计级", "展开级"):
             csvp = os.path.join(pack_dir, f"用例矩阵-{kind}.csv")
@@ -180,9 +203,9 @@ def audit_client_evidence(machine_dirs, date):
                     for r in csv.DictReader(f):
                         if (r.get("执行状态") or r.get("execution_status") or "").strip().upper() == "PASS":
                             pass_count += 1
-        shell_ratio = (shell_probe / probe_total) if probe_total else 0.0
-        fabricated = pass_count > 0 and probe_total > 0 and shell_ratio >= 0.8
-        results.append((client, ip, os_name, pass_count, shell_probe, probe_total, fabricated))
+        shell_ratio = (shell_dir / total_dir) if total_dir else 0.0
+        fabricated = pass_count > 0 and total_dir > 0 and shell_ratio >= 0.8
+        results.append((client, ip, os_name, pass_count, shell_dir, total_dir, fabricated))
     return results
 
 
@@ -198,22 +221,22 @@ def main():
     audits = audit_client_evidence(machine_dirs, date)
     fabricated = [a for a in audits if a[-1]]
     if fabricated:
-        print("\n[证据审计] 发现疑似虚报客户端（PASS 回填但探针空壳率 >= 80%）：")
-        for client, ip, os_name, pc, sp, pt, _fab in fabricated:
-            print(f"  ⚠ {client} ({ip}-{os_name}): PASS={pc} 空壳探针={sp}/{pt} -> 虚报嫌疑")
+        print("\n[证据审计] 发现疑似虚报客户端（PASS 回填但证据目录空壳率 >= 80%）：")
+        for client, ip, os_name, pc, sd, td, _fab in fabricated:
+            print(f"  ⚠ {client} ({ip}-{os_name}): PASS={pc} 空壳目录={sd}/{td} -> 虚报嫌疑")
         out = os.path.join(REPO, "results", "Summary", f"客户端证据审计-{date}.md")
         lines = [f"# 客户端证据诚信审计（{date}）", "",
-                 "> 由 build_summary.py 自动生成：检测各客户端执行包 evidence/ 的 .mjs 探针空壳率，",
-                 "> 识别「有 PASS 回填但探针空壳率 >= 80%」的虚报嫌疑客户端。", "",
+                 "> 由 build_summary.py 自动生成：按 evidence 用例子目录判定虚报（.mjs 探针全空壳 且 无非空执行输出），",
+                 "> 识别「有 PASS 回填但证据目录空壳率 >= 80%」的虚报嫌疑客户端。", "",
                  "## 虚报嫌疑客户端（结果不可信，不纳入通过率统计口径）", ""]
-        for client, ip, os_name, pc, sp, pt, _fab in fabricated:
-            lines += [f"- **{client}**（{ip}-{os_name}）：PASS 回填 {pc} 条，但 {pt} 个 .mjs 探针中 {sp} 个为空壳"
-                      f"（全注释、硬编码 Status: PASS、无执行逻辑）——当日结果不可信，需该客户端重跑真探针。"]
+        for client, ip, os_name, pc, sd, td, _fab in fabricated:
+            lines += [f"- **{client}**（{ip}-{os_name}）：PASS 回填 {pc} 条，但 {td} 个证据目录中 {sd} 个为空壳"
+                      f"（.mjs 探针全注释且无 stdout 输出）——当日结果不可信，需该客户端重跑真探针。"]
         lines += ["", "## 全量审计明细", "",
-                  "| 客户端 | IP | OS | PASS 回填 | 空壳探针 | 探针总数 | 判定 |",
+                  "| 客户端 | IP | OS | PASS 回填 | 空壳目录 | 目录总数 | 判定 |",
                   "| --- | --- | --- | --- | --- | --- | --- |"]
-        for client, ip, os_name, pc, sp, pt, fab in audits:
-            lines.append(f"| {client} | {ip} | {os_name} | {pc} | {sp} | {pt} | {'⚠ 虚报嫌疑' if fab else 'OK'} |")
+        for client, ip, os_name, pc, sd, td, fab in audits:
+            lines.append(f"| {client} | {ip} | {os_name} | {pc} | {sd} | {td} | {'⚠ 虚报嫌疑' if fab else 'OK'} |")
         with open(out, "w", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n")
         print(f"  已写审计注记: {os.path.basename(out)}")
