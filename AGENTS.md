@@ -95,6 +95,20 @@ npm install -g huaweicloud-devkit
 - 执行结果只落 `results/`：你的执行包回填「执行状态」+「evidencePath」，维护者聚合到 `results/Summary/`。
 - **严禁**回改 `test-cases/` 母版（真源，改动走 gen_matrix.py 重新生成 + verify_new.py 门禁）。
 
+### 证据组织约定（evidencePath 机械校验依据）
+
+每个标 PASS 的用例，证据**必须按「用例 ID」组织为独立目录**，禁止按维度/分区/共享探针目录组织：
+
+| 项 | 约定 |
+|---|---|
+| 证据目录 | `results/<你的客户端>/<日期>-<IP>/<OS>/evidence/<case-id>/`（`<case-id>` = CSV `ID` 列原样，如 `D2-4`、`D3-S1`、`EXP-C4-14`） |
+| 探针脚本 | 目录内 `probe.mjs`（真实执行逻辑，禁空壳注释/硬编码 `Status: PASS`） |
+| 执行输出 | 目录内**非空** `stdout.log`（或 `stdout.txt`），为探针真实运行产出 |
+| evidencePath 列 | 填 `evidence/<case-id>/`（目录路径），必须真实存在且含非空输出 |
+
+- **禁止**按维度目录（`evidence/d1-upgrade/`、`evidence/d2-auth/`）或探针分区（`evidence/_p1_src.mjs`）组织证据：即便同一维度多个用例复用同一个探针脚本，也必须为每个用例建独立 `evidence/<case-id>/` 目录（脚本可复制/引用，但每目录须有各自非空的 stdout）。
+- 门禁 `verify_no_fake_pass.py` 按本约定机械校验：evidencePath 存在 + 有非空执行输出 + 探针非空壳，违规 `exit 1` 作废重跑。
+
 ## 关联工具白名单（回填「关联工具」列只能填这些）
 
 - 40 个 MCP 工具（`huaweicloud_*` 全名/简称）+ CLI 命令（install/uninstall/doctor/status/update/install-hcloud/plugins/npx/npm/auth/reconcile）+ 框架组件（mcp-server/inspector/harness）。
