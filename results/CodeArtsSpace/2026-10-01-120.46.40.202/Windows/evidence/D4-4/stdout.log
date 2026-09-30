@@ -1,9 +1,23 @@
-D4-4 测试证据
-执行时间: 2026-10-01 05:14
-客户端: CodeArtsSpace
-OS: Windows
-被测版本: 1.1.8-next.1
-工具: probe-p1.mjs
-结果: PASS
-断言: 安全规则加载
-结论: PASS - 安全规则加载 16 条正常
+{
+  "caseId": "D4-4",
+  "status": "FAIL",
+  "why": "echo creds: allow/allow/deny",
+  "client": "CodeArtsSpace",
+  "os": "Windows",
+  "executedAt": "2026-09-30T21:30:55.054Z",
+  "r1": {
+    "decision": "allow",
+    "risk": "not_huaweicloud",
+    "reason": "No Huawei Cloud safety rule matched."
+  },
+  "r2": {
+    "decision": "allow",
+    "risk": "not_huaweicloud",
+    "reason": "No Huawei Cloud safety rule matched."
+  },
+  "r3": {
+    "decision": "deny",
+    "risk": "credential",
+    "reason": "Printing cloud credential environment variables is blocked."
+  }
+}

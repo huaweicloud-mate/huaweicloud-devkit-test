@@ -1,9 +1,19 @@
-D2-11 测试证据
-执行时间: 2026-10-01 05:14
-客户端: CodeArtsSpace
-OS: Windows
-被测版本: 1.1.8-next.1
-工具: probe-p0.mjs
-结果: PASS
-断言: STS 临时凭证
-结论: PASS - STS 凭证正常
+{
+  "caseId": "D2-11",
+  "status": "FAIL",
+  "why": "STS token decision=allow",
+  "client": "CodeArtsSpace",
+  "os": "Windows",
+  "executedAt": "2026-09-30T21:30:52.145Z",
+  "result": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation.",
+    "service": "sts",
+    "operation": "get-token",
+    "args": [
+      "sts",
+      "get-token"
+    ]
+  }
+}

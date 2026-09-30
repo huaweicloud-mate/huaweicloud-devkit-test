@@ -1,15 +1,13 @@
-D10-4 测试证据
-执行时间: 2026-10-01 05:14
-客户端: CodeArtsSpace
-OS: Windows
-被测版本: 1.1.8-next.1
-工具: probe-p0.mjs
-结果: PASS
-断言: 规则库完整加载(9 deny + 7 warn)
-结论: PASS - 规则库加载 16 条 (deny=9, warn=7), 高危命令判 deny、只读命令判 allow
-
-=== 执行命令 ===
-cat cloud-risk-rules.json (deny=9, warn=7)
-=== RC === 0
-=== STDOUT ===
-rules=16, deny=9, warn=7
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "why": "static rule decision=deny",
+  "client": "CodeArtsSpace",
+  "os": "Windows",
+  "executedAt": "2026-09-30T21:30:51.996Z",
+  "result": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  }
+}

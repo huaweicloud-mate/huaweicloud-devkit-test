@@ -1,9 +1,17 @@
-D2-4 测试证据
-执行时间: 2026-10-01 05:14
-客户端: CodeArtsSpace
-OS: Windows
-被测版本: 1.1.8-next.1
-工具: probe-p0.mjs
-结果: PASS
-断言: credentials.json 格式校验 {ak,sk,region}
-结论: PASS - 凭证格式正确
+{
+  "caseId": "D2-4",
+  "status": "FAIL",
+  "why": "DEFECT: lowercase ak=/sk= NOT redacted (regex only matches uppercase AK/SK). output=ak=AKIDxxx sk=Secretxxx",
+  "client": "CodeArtsSpace",
+  "os": "Windows",
+  "executedAt": "2026-09-30T21:30:52.493Z",
+  "objResult": {
+    "ak": "<redacted>",
+    "sk": "<redacted>",
+    "token": "<redacted>"
+  },
+  "strLowerOutput": "ak=AKIDxxx sk=Secretxxx",
+  "lowerRedacted": false,
+  "lowerLeaksAk": true,
+  "lowerLeaksSk": true
+}
