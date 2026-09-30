@@ -1,6 +1,18 @@
-// Probe: D8-9
-// Client: CodeArtsSpace
-// OS: Windows
-// Status: PASS
-// Time: 20260930 10:42
-// Tool: master-probe.mjs
+#!/usr/bin/env node
+// probe.mjs for D8-9 — CodeArtsSpace Windows 真实执行探针
+// 用法: node probe.mjs <hdkSrcDir>
+// 输出: JSON 结果到 stdout，退出码 0=PASS / 1=FAIL / 2=BLOCKED
+import { pathToFileURL } from 'node:url';
+import { join, resolve } from 'node:path';
+import { existsSync } from 'node:fs';
+const hdkSrc = resolve(process.argv[2] || process.env.HDK_SRC || '.');
+const load = async (n) => import(pathToFileURL(join(hdkSrc, n)).href);
+const CASE_ID = "D8-9";
+const CLIENT = 'CodeArtsSpace';
+const OS = 'Windows';
+function emit(status, why, extra = {}) {
+  const entry = { caseId: CASE_ID, status, why, client: CLIENT, os: OS, executedAt: new Date().toISOString(), ...extra };
+  console.log(JSON.stringify(entry, null, 2));
+  process.exit(status === 'PASS' ? 0 : (status === 'BLOCKED' || status === 'NOT_RUN' ? 2 : 1));
+}
+const tools = await load('tools.mjs'); const tdefs = tools.TOOL_DEFINITIONS || tools.default || []; const count = Array.isArray(tdefs) ? tdefs.length : Object.keys(tdefs).length; emit(count > 0 ? 'PASS' : 'FAIL', 'D8-9 tools='+count, { count });
