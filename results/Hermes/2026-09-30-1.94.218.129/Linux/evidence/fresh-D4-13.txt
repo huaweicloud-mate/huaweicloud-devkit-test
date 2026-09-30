@@ -1,0 +1,15 @@
+=== D4-13 最小权限凭证通过率 (只读子账号 test001) ===
+注入 env HW_ACCESS_KEY 指纹 = da39a3ee
+HW_SECURITY_TOKEN 已注入 = false (期望 false)
+[1] resolveCredentialsWithRuntime 命中 AK 指纹 = 52966832 (env 覆盖文件, 动态切换)
+[2] validateIamCredentials(KeystoneListProjects 只读) -> valid=true projectId=46c1fd48...
+[3] 只读凭证 ListServersDetails(只读) -> 失败 :: Failed to obtain project ID. Use the project ID in current profile default.
+{
+  "error_msg": "Incorrect IAM authenticati
+[4] 只读凭证 CreateVpc(写) -> 被拒(权限不足)  :: Failed to obtain project ID. Use the project ID in current profile default.
+{
+  "request_id": "5391eb85f61167a4da8d1b3888b021f3",
+  "error_code": "API
+
+只读 IAM 校验=true; 只读可用=false; 写被拒=true
+RESULT: FAIL

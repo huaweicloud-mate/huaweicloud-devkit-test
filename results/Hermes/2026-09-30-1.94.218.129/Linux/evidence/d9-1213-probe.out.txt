@@ -1,0 +1,23 @@
+=== D9-12 initialize 握手协议安全基线 (v1.1.7, 复测) ===
+  PASS  d12-1  protocolVersion=2024-11-05
+  PASS  d12-2  capabilities={"tools":{}}
+  PASS  d12-3  serverInfo={"name":"huaweicloud-devkit","version":"1.1.8-next.1"}
+  PASS  d12-4  tools/list count=41
+  FAIL  d12-illegal-timing  未 initialize 先 tools/list => {"threw":false,"got":41}
+  PASS  d12-decorate  _decorateResult 无 hint 兜底
+  PASS  d12-hintconsumed  _isHintConsumed 初始 false
+RESULT: FAIL 非法时序 tools/list 未返回 -32600
+
+=== D9-13 tools/call 凭证不泄露与权限校验 (v1.1.7, 复测) ===
+  PASS  d13-1  set+hasRuntimeCredentials
+  PASS  d13-2  resolve 运行时 AK 命中=RUN_AK_0001
+  PASS  d13-3  clearRuntimeCredentials 不留盘
+  PASS  d13-4  isPlaceholder 函数存在
+  PASS  d13-5  loadPolicy 加载
+  PASS  d13-6  classifyHcloudArgs 写操作 deny/write
+  PASS  d13-7  classifyHcloudArgs 只读 allow
+  PASS  d13-8  redactSecrets token 脱敏 → token=<redacted> ak=AKLOWER123 sk=sklower123 adminPass=<reda
+  PASS  d13-9  hashArgs 生成参数哈希
+  PASS  d13-10  createApprovalToken/consumeApprovalToken 令牌函数存在
+RESULT: PASS 
+SUMMARY d12=FAIL d13=PASS
