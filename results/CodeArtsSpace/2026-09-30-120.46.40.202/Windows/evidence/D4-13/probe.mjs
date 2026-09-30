@@ -1,18 +1,1 @@
-#!/usr/bin/env node
-// probe.mjs for D4-13 — CodeArtsSpace Windows 真实执行探针
-// 用法: node probe.mjs <hdkSrcDir>
-// 输出: JSON 结果到 stdout，退出码 0=PASS / 1=FAIL / 2=BLOCKED
-import { pathToFileURL } from 'node:url';
-import { join, resolve } from 'node:path';
-import { existsSync } from 'node:fs';
-const hdkSrc = resolve(process.argv[2] || process.env.HDK_SRC || '.');
-const load = async (n) => import(pathToFileURL(join(hdkSrc, n)).href);
-const CASE_ID = "D4-13";
-const CLIENT = 'CodeArtsSpace';
-const OS = 'Windows';
-function emit(status, why, extra = {}) {
-  const entry = { caseId: CASE_ID, status, why, client: CLIENT, os: OS, executedAt: new Date().toISOString(), ...extra };
-  console.log(JSON.stringify(entry, null, 2));
-  process.exit(status === 'PASS' ? 0 : (status === 'BLOCKED' || status === 'NOT_RUN' ? 2 : 1));
-}
-const { existsSync } = await import('node:fs'); const { join } = await import('node:path'); const roPath = join(process.env.USERPROFILE || process.env.HOME, '.config', 'huaweicloud', 'credentials.readonly.json'); const exists = existsSync(roPath); emit(exists ? 'PASS' : 'FAIL', 'readonly credentials exists='+exists, { path: roPath });
+IyEvdXNyL2Jpbi9lbnYgbm9kZQovLyBwcm9iZS5tanMgZm9yIEQ0LTEzIOKAlCBDb2RlQXJ0c1NwYWNlIFdpbmRvd3Mg55yf5a6e5omn6KGM5o6i6ZKICi8vIOeUqOazlTogbm9kZSBwcm9iZS5tanMgPGhka1NyY0Rpcj4KLy8g6L6T5Ye6OiBKU09OIOe7k+aenOWIsCBzdGRvdXTvvIzpgIDlh7rnoIEgMD1QQVNTIC8gMT1GQUlMIC8gMj1CTE9DS0VECmltcG9ydCB7IHBhdGhUb0ZpbGVVUkwgfSBmcm9tICdub2RlOnVybCc7CmltcG9ydCB7IGpvaW4sIHJlc29sdmUgfSBmcm9tICdub2RlOnBhdGgnOwppbXBvcnQgeyBleGlzdHNTeW5jIH0gZnJvbSAnbm9kZTpmcyc7CmNvbnN0IGhka1NyYyA9IHJlc29sdmUocHJvY2Vzcy5hcmd2WzJdIHx8IHByb2Nlc3MuZW52LkhES19TUkMgfHwgJy4nKTsKY29uc3QgbG9hZCA9IGFzeW5jIChuKSA9PiBpbXBvcnQocGF0aFRvRmlsZVVSTChqb2luKGhka1NyYywgbikpLmhyZWYpOwpjb25zdCBDQVNFX0lEID0gIkQ0LTEzIjsKY29uc3QgQ0xJRU5UID0gJ0NvZGVBcnRzU3BhY2UnOwpjb25zdCBPUyA9ICdXaW5kb3dzJzsKZnVuY3Rpb24gZW1pdChzdGF0dXMsIHdoeSwgZXh0cmEgPSB7fSkgewogIGNvbnN0IGVudHJ5ID0geyBjYXNlSWQ6IENBU0VfSUQsIHN0YXR1cywgd2h5LCBjbGllbnQ6IENMSUVOVCwgb3M6IE9TLCBleGVjdXRlZEF0OiBuZXcgRGF0ZSgpLnRvSVNPU3RyaW5nKCksIC4uLmV4dHJhIH07CiAgY29uc29sZS5sb2coSlNPTi5zdHJpbmdpZnkoZW50cnksIG51bGwsIDIpKTsKICBwcm9jZXNzLmV4aXQoc3RhdHVzID09PSAnUEFTUycgPyAwIDogKHN0YXR1cyA9PT0gJ0JMT0NLRUQnIHx8IHN0YXR1cyA9PT0gJ05PVF9SVU4nID8gMiA6IDEpKTsKfQpjb25zdCByb1BhdGggPSBqb2luKHByb2Nlc3MuZW52LlVTRVJQUk9GSUxFIHx8IHByb2Nlc3MuZW52LkhPTUUsICcuY29uZmlnJywgJ2h1YXdlaWNsb3VkJywgJ2NyZWRlbnRpYWxzLnJlYWRvbmx5Lmpzb24nKTsgY29uc3QgZXhpc3RzID0gZXhpc3RzU3luYyhyb1BhdGgpOyBlbWl0KGV4aXN0cyA/ICdQQVNTJyA6ICdGQUlMJywgJ3JlYWRvbmx5IGNyZWRlbnRpYWxzIGV4aXN0cz0nK2V4aXN0cywgeyBwYXRoOiByb1BhdGggfSk7Cg==
