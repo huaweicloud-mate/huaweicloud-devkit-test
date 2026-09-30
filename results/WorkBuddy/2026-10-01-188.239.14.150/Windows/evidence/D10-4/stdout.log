@@ -1,0 +1,68 @@
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "why": "Risk rules loaded: 19 rules (9 deny + 10 warn); high-risk commands → deny; read-only commands → allow (no token); three-state decisions verified",
+  "executedAt": "20260930212135",
+  "totalRules": 19,
+  "denyCount": 9,
+  "warnCount": 10,
+  "severityDistribution": {
+    "deny": 9,
+    "warn": 10,
+    "other": 0
+  },
+  "highRiskResults": [
+    {
+      "cmd": "cat ~/.huaweicloud/credentials.json",
+      "decision": "deny",
+      "findingsCount": 1
+    },
+    {
+      "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+      "decision": "deny",
+      "findingsCount": 1
+    },
+    {
+      "cmd": "hcloud KMS ShowSecret --secret_id=xxx",
+      "decision": "deny",
+      "findingsCount": 1
+    },
+    {
+      "cmd": "hcloud ECS delete-servers --force",
+      "decision": "deny",
+      "findingsCount": 2
+    },
+    {
+      "cmd": "hcloud VPC delete-vpc --recursive -r",
+      "decision": "deny",
+      "findingsCount": 2
+    }
+  ],
+  "readOnlyResults": [
+    {
+      "cmd": "hcloud ECS list-servers",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "cmd": "hcloud VPC list-vpcs",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "cmd": "hcloud RDS list-instances",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "cmd": "ls -la",
+      "decision": "allow",
+      "findingsCount": 0
+    }
+  ],
+  "warnTest": {
+    "cmd": "hcloud ECS reset-server-password --server-id xxx",
+    "decision": "warn",
+    "findings": 1
+  }
+}

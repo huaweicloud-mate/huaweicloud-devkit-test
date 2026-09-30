@@ -1,0 +1,51 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "Node hook chain verified: command/cmd/script/args/arguments all extracted by commandText(); high-risk → deny (permissionDecision=deny); safe command → allow (no false deny); huaweicloud-safety.mjs registered with classifyTextCommand + permissionDecision output",
+  "executedAt": "20260930212131",
+  "highRiskDetails": [
+    {
+      "inputKey": "command",
+      "extractedText": "cat ~/.huaweicloud/credentials.json",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "inputKey": "cmd",
+      "extractedText": "printenv HW_SECRET_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "inputKey": "script",
+      "extractedText": "hcloud ECS delete-servers",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "inputKey": "args",
+      "extractedText": "hcloud KMS ShowSecret --secret_id test",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "inputKey": "arguments",
+      "extractedText": "hcloud VPC delete-vpc",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "inputKey": "command",
+      "extractedText": "hcloud KMS DownloadSecret --secret_id=xxx",
+      "decision": "deny",
+      "risk": "secret"
+    }
+  ],
+  "safeCheck": {
+    "input": {
+      "command": "hcloud ECS list-servers"
+    },
+    "decision": "allow",
+    "risk": "read_only"
+  }
+}

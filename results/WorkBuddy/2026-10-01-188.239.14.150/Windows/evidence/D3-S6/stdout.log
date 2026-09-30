@@ -1,0 +1,29 @@
+{
+  "caseId": "D3-S6",
+  "status": "PASS",
+  "why": "plan_cli_command handles FunctionGraph create (decision=n/a, status=n/a)",
+  "planResult": {
+    "executable": "hcloud",
+    "args": [
+      "FunctionGraph",
+      "CreateFunction",
+      "--name",
+      "test"
+    ],
+    "command": "hcloud FunctionGraph CreateFunction --name test",
+    "executableBlock": "hcloud FunctionGraph CreateFunction --name test",
+    "warnings": [
+      "Missing required parameters: func_name, runtime, handler, memory_size, package, timeout",
+      "Find valid values: Function name must be unique within project; Run `hcloud FunctionGraph ListRuntimes` to see available runtimes"
+    ],
+    "classification": {
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    "sgFindings": [],
+    "approvalToken": "911c5835-0259-4c29-ba8c-0b479a458018",
+    "safeToRun": false
+  },
+  "executedAt": "20260930212930"
+}

@@ -1,0 +1,32 @@
+{
+  "caseId": "D4-1",
+  "status": "PASS",
+  "why": "All 4 credential file read attempts blocked (deny): patterns matched credentialFilePatterns",
+  "details": [
+    {
+      "cmd": "cat ~/.huaweicloud/credentials.json",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "type %USERPROFILE%\\.huaweicloud\\credentials.json",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "cat ~/.hcloud/configure.json",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "Get-Content ~/.config/huaweicloud/credentials.json",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    }
+  ],
+  "executedAt": "20260930211315"
+}
