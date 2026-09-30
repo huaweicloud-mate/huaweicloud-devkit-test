@@ -4,7 +4,7 @@
 > 客户端: CodeArtsSpace | OS: Windows | 模型: GLM-5.2
 > 执行归档: results/CodeArtsSpace/2026-10-01-120.46.40.202/Windows/
 
-## FINDING-1: serviceCatalog 中文意图路由准确率 21.4% 远低于 90% 阈值
+## #1【P1】serviceCatalog 中文意图路由准确率 21.4% 远低于 90% 阈值
 
 - **级别**: P1
 - **描述**: eval harness 实测 15 条中文意图评测集，serviceCatalog 路由准确率仅 21.4%（3 HIT / 14 有效条目），远低于 D10-3 用例要求的 90% 阈值。11 条中文意图未命中对应服务，返回通用 "Run hcloud --help to list available services." 提示。
