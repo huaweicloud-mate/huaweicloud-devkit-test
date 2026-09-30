@@ -1,0 +1,99 @@
+{
+  "total": 18,
+  "pass": 16,
+  "fail": 0,
+  "blocked": 2,
+  "executedAt": "20260930103000",
+  "cases": [
+    {
+      "caseId": "D1-66",
+      "status": "PASS",
+      "why": "遥测开关与端点环境变量: 7/7 断言通过（默认开启/off关闭/on开启/端点覆盖/enqueue跳过/sanitize截断/脱敏）"
+    },
+    {
+      "caseId": "D1-69",
+      "status": "PASS",
+      "why": "CLI help 子命令: 11/11 断言通过（help/--help/-h/无参/--version/未知命令 退出码+输出格式）"
+    },
+    {
+      "caseId": "D2-10",
+      "status": "PASS",
+      "why": "KooCLI 多 profile: 6/6 断言通过（current=deploy解析/切换跟随/runHcloudConfigure --cli-profile=/缺失config error）"
+    },
+    {
+      "caseId": "D2-13",
+      "status": "PASS",
+      "why": "隔离 S1 + env: 5/5 断言通过（configuredBySession优先S1胜出/清除后env兜底/占位符识别）"
+    },
+    {
+      "caseId": "D2-27",
+      "status": "PASS",
+      "why": "KooCLI 版本管理: 6/6 断言通过（KOO_CLI_BASE/getKooCliVersion/parseHcloudVersion/compareVersion/downloadBase）"
+    },
+    {
+      "caseId": "D3-C14",
+      "status": "PASS",
+      "why": "沙箱 HDKit 服务参数与 hwlink 凭证: 10/10 断言通过（runtime注入/hasRuntime/clear/env优先级/hwlink getCredentials/无凭证抛错/端点覆盖/参数校验）"
+    },
+    {
+      "caseId": "D3-C14-mock",
+      "status": "PASS",
+      "why": "sandbox 凭证 mock 层: 13/13 断言通过（install/rt-cred/hwlink/hdkitCheckUser/hdkitCredentials/param校验/hdkitConnect/voucherStatus/requestLog/endpoint覆盖/uninstall/env恢复/独立启停）"
+    },
+    {
+      "caseId": "D4-12",
+      "status": "PASS",
+      "why": "供应链安装期安全: 9/9 断言通过（postinstall自有bin/--omit=dev/--no-audit/--no-fund/无高危包/SBOM版本固定/可枚举/无preinstall/bin入口安全）"
+    },
+    {
+      "caseId": "D4-29",
+      "status": "PASS",
+      "why": "分类断言与原始命令分类: 12/12 断言通过（raw委托/allow不抛/deny抛错/凭证deny/env dump deny/hcloud读allow/写deny/空参deny/help allow/redact/loadPolicy/拼接deny）"
+    },
+    {
+      "caseId": "D8-10",
+      "status": "PASS",
+      "why": "MCP 配置备份与合并: 12/12 断言通过（backupPath/save-read往返/take-once/purge/purge无文件/三风格合并/extract-apply往返/env不覆盖/REQUIRED_ENV排除）"
+    },
+    {
+      "caseId": "D9-6",
+      "status": "PASS",
+      "why": "跨客户端互通冒烟: 7/7 断言通过（双客户端initialize/tools-list/tools-call/resources一致+Inspector按需检测）"
+    },
+    {
+      "caseId": "D9-6-interop",
+      "status": "PASS",
+      "why": "跨客户端互通协议级: 12/12 断言通过（双客户端init/tools/call/resources/ping/error一致性+并发互通+serverInfo一致）"
+    },
+    {
+      "caseId": "D9-9",
+      "status": "PASS",
+      "why": "tools/call 超时协议语义: 6/6 断言通过（能力探测/客户端超时/错误契约/取消SPEC标注/重建连接/pending无悬挂）"
+    },
+    {
+      "caseId": "D9-10",
+      "status": "PASS",
+      "why": "MCP remote transport: 6/6 断言通过（DEFAULT_PORT/监听/initialize/tools-list/stdio parity/未知方法-32601）"
+    },
+    {
+      "caseId": "D9-11",
+      "status": "PASS",
+      "why": "WebSocket mux 生命周期: 8/8 断言通过（attach/onopen localServer/ready resolve/subconn/close清理/mux注销/onClose/幂等）"
+    },
+    {
+      "caseId": "D9-11-lifecycle",
+      "status": "PASS",
+      "why": "WebSocket 隧道生命周期 mock: 11/11 断言通过（建连/认证/心跳/binary echo/正常断开/异常断开/重连/幂等关闭/关闭后拒绝/帧日志）"
+    },
+    {
+      "caseId": "EXP-D5-2-1",
+      "status": "BLOCKED",
+      "why": "Codex 客户端插件发现: 内部5/5断言通过（清单文件存在/MCP注册/bundle格式），但本机无 Codex 客户端宿主 → BLOCKED（夹具已就绪，宿主就绪即PASS）"
+    },
+    {
+      "caseId": "EXP-D5-2-3",
+      "status": "BLOCKED",
+      "why": "Codex 客户端 tools/list 枚举: 协议层基线5/5通过（41工具/schema完整/diff一致），但本机无 Codex 客户端宿主 → 宿主层 BLOCKED"
+    }
+  ]
+}
