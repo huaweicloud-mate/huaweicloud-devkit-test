@@ -1,0 +1,10 @@
+[D8-1] 文档与能力一致性核对（1.1.8-next.1）
+- 实现侧 tools/list 实际工具数 = 41（protocol-probe.mjs D5-3 CASE 实测）
+- 文档侧 AGENTS.md:27 声明 "39 tools in tools.mjs"
+- 文档侧 AGENTS.md:45 声明 "39 MCP tool definitions"
+- 结论: 文档声明 39 != 实现 41 → FAIL（漂移未随版本同步）
+===== 证据 =====
+$ grep -n "39 tools\|39 MCP" hdk/AGENTS.md
+  27:  src/              ← Node.js MCP server (stdio/remote JSON-RPC, 39 tools in tools.mjs)
+  45:- `src/tools.mjs` — 39 MCP tool definitions
+$ node protocol-probe.mjs … tools/list 返回工具数 = 41

@@ -1,0 +1,12 @@
+auth_switch temporary => {
+  "status": "ok",
+  "scope": "temporary",
+  "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files."
+}
+
+auth_sync => {
+  "ok": false,
+  "error": "Runtime credentials are active; auto-sync suppressed (R10).",
+  "nextStep": "Run huaweicloud_auth_switch action=clear or action=persist first."
+}
+>>> R10 拒绝判定: true
