@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "details": {
+    "results": [
+      {
+        "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+        "decision": "deny"
+      },
+      {
+        "cmd": "printenv HWC_SECRET_KEY",
+        "decision": "deny"
+      },
+      {
+        "cmd": "printenv HW_SECRET_KEY",
+        "decision": "deny"
+      },
+      {
+        "cmd": "env | grep HUAWEICLOUD",
+        "decision": "deny"
+      },
+      {
+        "cmd": "echo $HW_ACCESS_KEY",
+        "decision": "deny"
+      }
+    ]
+  },
+  "why": "All env dumps blocked",
+  "caseId": "D4-2",
+  "executedAt": "20260928213448"
+}

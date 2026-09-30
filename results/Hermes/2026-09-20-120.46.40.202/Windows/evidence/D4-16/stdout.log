@@ -1,0 +1,39 @@
+{
+  "D4-2": {
+    "tests": [
+      {"decision": "deny", "risk": "credential", "reason": "Printing cloud credential environment variables is blocked."},
+      {"decision": "deny", "risk": "credential", "reason": "Printing cloud credential environment variables is blocked."},
+      {"decision": "deny", "risk": "credential", "reason": "Printing cloud credential environment variables is blocked."},
+      {"decision": "deny", "risk": "credential", "reason": "Printing cloud credential environment variables is blocked."},
+      {"decision": "deny", "risk": "credential", "reason": "Dumping cloud credential environment variables is blocked."},
+      {"decision": "deny", "risk": "credential", "reason": "Dumping cloud credential environment variables is blocked."}
+    ],
+    "pass": true
+  },
+  "D4-3": {
+    "tests": [
+      {"decision": "deny", "risk": "secret", "reason": "Direct secret value reads are blocked so plaintext secrets d"},
+      {"decision": "deny", "risk": "secret", "reason": "Direct secret value reads are blocked so plaintext secrets d"},
+      {"decision": "deny", "risk": "secret", "reason": "Direct secret value reads are blocked so plaintext secrets d"},
+      {"decision": "deny", "risk": "secret", "reason": "Direct secret value retrieval patterns are blocked."}
+    ],
+    "pass": true
+  },
+  "D4-16": {
+    "tests": [
+      {"decision": "allow", "risk": "not_huaweicloud", "reason": "No Huawei Cloud safety rule matched."},
+      {"decision": "allow", "risk": "not_huaweicloud", "reason": "No Huawei Cloud safety rule matched."},
+      {"decision": "allow", "risk": "not_huaweicloud", "reason": "No Huawei Cloud safety rule matched."},
+      {"decision": "allow", "risk": "not_huaweicloud", "reason": "No Huawei Cloud safety rule matched."},
+      {"decision": "deny", "risk": "write", "reason": "Huawei Cloud write operation blocked until the agent presents a plan"}
+    ],
+    "pass": false
+  },
+  "D10-4": {
+    "total_rules": 16, "deny_count": 9, "warn_count": 7,
+    "rule_ids": ["hwc-command-credential-file","hwc-command-env-dump","hwc-command-secret-value-read","hwc-command-sts-credential","hwc-command-encoded-shell-exec","hwc-network-public-admin-port","hwc-obs-anonymous-write","hwc-functiongraph-public-no-auth","hwc-iam-admin-policy","hwc-destructive-delete-force","hwc-destructive-delete-operation","hwc-destructive-reset-operation","hwc-destructive-delete-cascade","hwc-sandbox-missing-ttl","hwc-cost-unbounded-scale","hwc-sandbox-destructive-command"],
+    "pass": true
+  },
+  "D4-21": {"decision": "deny", "findings": [{"ruleId": "hwc-iam-admin-policy", "severity": "deny"}], "pass": true},
+  "D4-22": {"decision": "warn", "findings": [{"ruleId": "hwc-functiongraph-public-no-auth", "severity": "warn"}], "pass": true}
+}

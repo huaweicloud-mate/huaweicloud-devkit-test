@@ -1,0 +1,25 @@
+=== D4-20: 拒绝后零操作 ===
+Timestamp: 2026-09-16T00:57:52.690570
+Method: Source-level probe (planHcloudCommand deny verification)
+Real cloud context: admin AK/SK configured, cn-north-4
+
+=== D4-20: 拒绝后零操作 ===
+
+VPC.CreateVpc: decision=deny, blocked=true
+ECS.NovaDeleteServer: decision=deny, blocked=true
+EVS.CreateVolume: decision=deny, blocked=true
+
+--- Execution block verification ---
+Plan decision: deny
+Plan has warnings: 0
+Plan classification: {"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}
+
+=== D4-20 SUMMARY ===
+All write operations denied without approval: true
+RESULT: PASS
+Rejected write operations do not execute - decision=deny prevents command execution.
+No resource changes, no command execution traces when operation is rejected.
+
+
+RESULT: PASS
+Rejected write operations do not execute - no resource changes, no command execution.

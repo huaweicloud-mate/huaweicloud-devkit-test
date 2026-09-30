@@ -1,0 +1,48 @@
+hooks.json exists: true
+hooks.json registers .mjs: true
+huaweicloud-safety.mjs exists: true
+  "cat ~/.hcloud/credentials.json" -> text:deny risk:deny correct:true
+  "printenv HW_SECRET_KEY" -> text:deny risk:deny correct:true
+  "hcloud ECS DeleteServers --server_ids i-xxx" -> text:deny risk:warn correct:true
+  "echo hello world" -> text:allow risk:allow correct:true
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260930214833",
+  "details": {
+    "hooksRegistered": true,
+    "hooksMjsExists": true,
+    "testResults": [
+      {
+        "command": "cat ~/.hcloud/credentials.json",
+        "textDecision": "deny",
+        "riskDecision": "deny",
+        "isHighRisk": true,
+        "decisionCorrect": true
+      },
+      {
+        "command": "printenv HW_SECRET_KEY",
+        "textDecision": "deny",
+        "riskDecision": "deny",
+        "isHighRisk": true,
+        "decisionCorrect": true
+      },
+      {
+        "command": "hcloud ECS DeleteServers --server_ids i-xxx",
+        "textDecision": "deny",
+        "riskDecision": "warn",
+        "isHighRisk": true,
+        "decisionCorrect": true
+      },
+      {
+        "command": "echo hello world",
+        "textDecision": "allow",
+        "riskDecision": "allow",
+        "isHighRisk": false,
+        "decisionCorrect": true
+      }
+    ],
+    "allDecisionsCorrect": true
+  }
+}

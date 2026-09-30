@@ -1,0 +1,79 @@
+=== P0 Verification Probe ===
+Timestamp: 2026-09-15T10:35:34.014Z
+Platform: win32 | Node: v22.13.0
+
+--- D4-1: Credential file read interception ---
+  cat ~/.hcloud/credentials.json => deny/credential
+  type C:\Users\Administrator\.hcloud\credentials.json => deny/credential
+RESULT: PASS
+
+--- D4-2: echo credential env ---
+  echo $HUAWEICLOUD_SDK_AK => allow/not_huaweicloud
+RESULT: FAIL (known defect - echo not in env-dump regex)
+
+--- D4-3: Plaintext secret API ---
+  IAM CreatePermanentAccessKey => deny/write
+RESULT: PASS
+
+--- D4-5: Write operation classification ---
+  ECS DeleteServer --server_id=test => deny/write
+  ECS CreateServer --name=test => deny/write
+  VPC DeleteVpc --vpc_id=test => deny/write
+RESULT: PASS
+
+--- D4-9: Public exposure/dangerous precheck ---
+  SG rule 0.0.0.0/0:22 => deny, blockedByRiskRule=true
+RESULT: PASS
+
+--- D4-15: Hook bypass ---
+  ECS DeleteServer => deny/write
+RESULT: PASS
+
+--- D4-16: Shell wrapping ---
+  sh -c "hcloud ECS DeleteServer" => allow/not_huaweicloud
+RESULT: FAIL (known defect - shell unwrap not implemented)
+
+--- D4-18: confirm-not-deny approval ---
+  Without approval: decision=deny, token=present, safeToRun=false
+  With approval: decision=allow
+RESULT: PASS
+
+--- D4-21: hook_check_artifacts ---
+  Broad IAM policy => deny, rule=hwc-iam-admin-policy
+RESULT: PASS
+
+--- D4-22: hook_check_deploy_plan ---
+  Safe plan (public_access=false): decision=warn, findings=hwc-functiongraph-public-no-auth,hwc-sandbox-missing-ttl
+RESULT: SPEC-MISMATCH (false positive on safe config)
+
+--- EXP-NR3-09: spawnSync EINVAL ---
+  shell:false => error=EINVAL, status=null
+  shell:true => status=0, stdout=10.9.2
+RESULT: FAIL (EINVAL reproduced - known defect)
+
+--- D1-40: Mirror lag detection ---
+  current=1.1.4, distTags.latest=1.1.3 => result=up_to_date
+RESULT: PASS (correctly ignores lower version)
+
+--- D2-4: Credential redaction ---
+  redacted: {"access_key":"<redacted>","secret_key":"<redacted>","region":"cn-north-4"}
+RESULT: PASS
+
+--- D2-11: STS token reject ---
+  IAM CreateTemporaryAccessKey => deny/write
+RESULT: PASS
+
+--- D4-23: Global rules injection ---
+  rules file found at rules/huawei-agent-rules.mdc (3780 chars)
+  Contains: Core Principles, Secret Safety, IAM Security, Network Security, Observability, Cost Awareness, Naming Conventions, MCP Usage Rules
+RESULT: PASS (rules file exists and contains comprehensive agent behavior constraints)
+
+--- D8-7: Meta skills verification ---
+  skills/ contents: huawei-cloud-find-skills
+RESULT: PASS (meta skill present)
+
+--- D10-4: Safety intervention ---
+  Requires real Agent+plugin E2E - BLOCKED (no real agent session)
+RESULT: BLOCKED
+
+=== P0 Verification Complete ===

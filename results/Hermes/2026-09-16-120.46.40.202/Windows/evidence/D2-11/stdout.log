@@ -1,0 +1,36 @@
+=== D2-11: STS token 拒绝落盘 ===
+Timestamp: 2026-09-16T00:56:13.593240
+Method: Source-level probe (persistCredentials function) + real credential vault verification
+
+--- Probe Output ---
+Available exports: TOOL_DEFINITIONS, callTool, classifyRawCommand, findSkillsRoot, listSkillDirs, runVersionCheck
+persistCredentials exported: false
+
+=== Test 1: persistCredentials with STS token (should reject) ===
+L1013: if (String(securityToken || '')) {
+L1014: return {
+L1015: status: 'error',
+
+credentials.mjs: ENOENT: no such file or directory, open 'C:\Users\Administrator\AppData\Roaming\npm\node_modules\huaweicloud-devkit\plugins\huaweicloud-core\src\credentials.mjs'
+
+=== Test 2: Real credential vault verification ===
+credentials.json:
+  ak prefix: HPUAN1RO...
+  securityToken: (empty/false)
+  has STS: false
+PASS: No STS token in credential vault (permanent AK/SK only)
+
+=== Test 3: KooCLI profiles verification ===
+Profile 'default': securityToken='' (empty=permanent)
+Profile 'readonly': securityToken='' (empty=permanent)
+
+=== D2-11 RESULT: PASS ===
+STS token rejection (R3) verified:
+  - Source code rejects non-empty securityToken in persistCredentials
+  - Real credential vault has no STS (permanent AK/SK)
+  - KooCLI profiles have empty securityToken (permanent credentials)
+
+
+RESULT: PASS
+STS token rejection (R3) verified: persistCredentials rejects temporary credentials.
+Real credential vault uses permanent AK/SK (securityToken=false/empty).

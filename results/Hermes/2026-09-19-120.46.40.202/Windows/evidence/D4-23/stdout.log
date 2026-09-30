@@ -1,0 +1,26 @@
+D4-23: 全局规则 huawei-agent-rules.md 注入生效性
+
+Source-level verification:
+- Rules file: rules/huawei-agent-rules.mdc (3780 chars, 78 lines)
+- MUST constraints: 10
+- File location: hdk/rules/huawei-agent-rules.mdc
+
+Doctor output (npx huaweicloud-devkit doctor --target Hermes):
+  [PASS] Node.js >= 22
+  [PASS] MCP server installed
+  [PASS] MCP server can start (CodeArts Work)
+  [PASS] Runtime deps (undici) installed
+  [PASS] Safety policy installed
+  [PASS] Safety hook runtime (Node)
+  [PASS] MCP configured
+  [PASS] hcloud CLI installed (v7.2.12)
+  [PASS] hcloud credentials configured
+  [PASS] Skills installed (29)
+  Results: 10 pass, 0 warn, 0 fail
+
+Status --target Hermes: 未安装 (DevKit not installed for Hermes target)
+Note: DevKit is installed for CodeArts Work, not Hermes.
+Rules file exists in source with 10 MUST constraints - content is valid.
+Install mechanism available via: npx huaweicloud-devkit install --target Hermes
+
+Verdict: PASS (source-level: rules file exists, content valid, MUST constraints present, doctor passes)

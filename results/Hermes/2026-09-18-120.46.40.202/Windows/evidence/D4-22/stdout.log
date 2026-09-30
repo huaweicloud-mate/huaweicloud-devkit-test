@@ -1,0 +1,43 @@
+Probe: probe-d4-21-22.mjs
+Return code: 0
+
+D4-21: {
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-iam-admin-policy",
+      "title": "Broad IAM administrator grant",
+      "category": "iam",
+      "severity": "deny",
+      "message": "The change appears to grant broad administrator permissions.",
+      "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+      "source": "policy.json",
+      "evidence": "policy.json {\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+    }
+  ]
+}
+D4-22: {
+  "decision": "warn",
+  "findings": [
+    {
+      "ruleId": "hwc-functiongraph-public-no-auth",
+      "title": "Public FunctionGraph trigger without auth",
+      "category": "public_exposure",
+      "severity": "warn",
+      "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+      "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+      "source": "deploy_plan",
+      "evidence": "{\"service\":\"FunctionGraph\",\"action\":\"create\",\"triggers\":[{\"type\":\"APIG\",\"auth\":false}],\"config\":{\"handler\":\"index.handler\"}}"
+    },
+    {
+      "ruleId": "hwc-sandbox-missing-ttl",
+      "title": "Sandbox deployment missing cleanup metadata",
+      "category": "sandbox",
+      "severity": "warn",
+      "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+      "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+      "source": "deploy_plan",
+      "evidence": "{\"service\":\"FunctionGraph\",\"action\":\"create\",\"triggers\":[{\"type\":\"APIG\",\"auth\":false}],\"config\":{\"handler\":\"index.handler\"}}"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+  ECS DeleteServers -> classify:deny risk:deny plan:undefined
+  IAM CreateUser -> classify:deny risk:warn plan:undefined
+  VPC DeleteVpc -> classify:deny risk:warn plan:undefined
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260930214710",
+  "details": {
+    "testResults": [
+      {
+        "service": "ECS",
+        "operation": "DeleteServers",
+        "classifyDecision": "deny",
+        "riskDecision": "deny",
+        "planDecision": "N/A",
+        "riskPreCheckFired": true
+      },
+      {
+        "service": "IAM",
+        "operation": "CreateUser",
+        "classifyDecision": "deny",
+        "riskDecision": "warn",
+        "planDecision": "N/A",
+        "riskPreCheckFired": true
+      },
+      {
+        "service": "VPC",
+        "operation": "DeleteVpc",
+        "classifyDecision": "deny",
+        "riskDecision": "warn",
+        "planDecision": "N/A",
+        "riskPreCheckFired": true
+      }
+    ],
+    "preCheckStillWorks": true
+  }
+}

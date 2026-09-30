@@ -1,0 +1,38 @@
+{
+  "status": "FAIL",
+  "caseId": "D10-4",
+  "executedAt": "20260924210000",
+  "details": {
+    "ruleCount": 16,
+    "denyCount": 9,
+    "warnCount": 7,
+    "highRiskResults": [
+      {
+        "cmd": "cat ~/.hcloud/credentials.json",
+        "decision": "deny"
+      },
+      {
+        "cmd": "printenv HW_SECRET_KEY",
+        "decision": "allow",
+        "finding": "env-dump rule regex only matches HUAWEICLOUD|HWC_|HCLOUD|OS_, missing HW_ prefix"
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer --server_id=test",
+        "decision": "warn",
+        "finding": "destructive-delete-operation rule is warn severity, not deny"
+      }
+    ],
+    "readOnlyResults": [
+      {
+        "cmd": "hcloud ECS ListServers",
+        "decision": "allow"
+      },
+      {
+        "cmd": "hcloud VPC ListVpcs",
+        "decision": "allow"
+      }
+    ],
+    "noToken": true
+  },
+  "why": "CODE DEFECT: evaluateCommandRisk('printenv HW_SECRET_KEY') returns allow — risk-rule-engine.mjs hwc-command-env-dump rule regex only matches HUAWEICLOUD|HWC_|HCLOUD|OS_ prefixes, missing HW_ prefix (HW_ACCESS_KEY/HW_SECRET_KEY/HW_SECURITY_TOKEN). classifyTextCommand catches it separately, but the risk rule layer does not. Root cause: safety/rules/cloud-risk-rules.json hwc-command-env-dump match.all[1].regex missing HW_"
+}

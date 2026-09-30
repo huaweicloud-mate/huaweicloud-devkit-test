@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "details": {
+    "ruleCount": 16,
+    "denyCount": 9,
+    "warnCount": 7,
+    "highRiskResults": [
+      {
+        "cmd": "cat ~/.hcloud/credentials.json",
+        "decision": "deny"
+      },
+      {
+        "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+        "decision": "deny"
+      },
+      {
+        "cmd": "hcloud CSMS GetSecretValue",
+        "decision": "deny"
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer --server_id=test",
+        "decision": "warn"
+      }
+    ],
+    "readOnlyResults": [
+      {
+        "cmd": "hcloud ECS ListServers",
+        "decision": "allow"
+      },
+      {
+        "cmd": "hcloud VPC ListVpcs",
+        "decision": "allow"
+      }
+    ],
+    "noToken": true,
+    "denyCoverage": "3/4",
+    "readOnlyAllAllow": true
+  },
+  "why": "Rules: 16 (9d+7w), deny coverage: 3/4",
+  "caseId": "D10-4",
+  "executedAt": "20260928213637"
+}

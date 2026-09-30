@@ -1,0 +1,91 @@
+Probe: probe-p2.mjs
+Return code: 0
+
+{
+  "D3-C4": [
+    {
+      "service": "ECS",
+      "decision": "deny",
+      "pass": true
+    },
+    {
+      "service": "VPC",
+      "decision": "deny",
+      "pass": true
+    },
+    {
+      "service": "RDS",
+      "decision": "deny",
+      "pass": true
+    },
+    {
+      "service": "CCE",
+      "decision": "deny",
+      "pass": true
+    },
+    {
+      "service": "WAF",
+      "decision": "deny",
+      "pass": true
+    }
+  ],
+  "D4-10": [
+    {
+      "desc": "new rule check",
+      "ok": false,
+      "result": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-destructive-delete-force\",\"title\":\"Forced destructive operation\",\"category\":\"destructive\",\"severity\":\"deny\",\"message\":\"The command combines del"
+    }
+  ],
+  "D4-12": [
+    {
+      "desc": "install security",
+      "result": "{\"installed\":true,\"authenticated\":true,\"status\":\"ok\",\"output\":\"当前KooCLI版本:7.2.12\",\"kooCliVersion\":\"7.2.12\",\"installedVersion\":\"7.2.12\",\"versionMismatch\":false,\"nextStep\":\"Use huaweicloud_show_profile_"
+    }
+  ],
+  "D4-14": [
+    {
+      "desc": "plan auditability",
+      "ok": true,
+      "hasCommand": true,
+      "result": "{\"executable\":\"hcloud\",\"args\":[],\"command\":\"hcloud\",\"executableBlock\":\"hcloud\",\"warnings\":[],\"classification\":{\"decision\":\"deny\",\"risk\":\"invalid\",\"reason\":\"Empty hcloud command arguments are not execu"
+    }
+  ],
+  "D6-1": [
+    {
+      "desc": "search latency",
+      "elapsed": 15,
+      "ok": true,
+      "pass": true
+    }
+  ],
+  "D6-3": [
+    {
+      "desc": "cold start",
+      "elapsed": 0,
+      "count": 40,
+      "pass": true
+    }
+  ],
+  "D7-4": [
+    {
+      "desc": "mirror check",
+      "result": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    }
+  ],
+  "D8-1": [
+    {
+      "desc": "doc consistency",
+      "ok": true,
+      "count": 22,
+      "result": "{\"ok\":true,\"query\":\"huaweicloud\",\"topic\":\"all\",\"count\":22,\"results\":[{\"source\":\"skills/huaweicloud-api-and-sdk/SKILL.md\",\"name\":\"huaweicloud-api-and-sdk\",\"snippet\":\"Huawei Cloud API and SDK guidance f"
+    }
+  ],
+  "D8-6": [
+    {
+      "desc": "i18n docs",
+      "enCount": 27,
+      "zhCount": 0,
+      "pass": true
+    }
+  ]
+}

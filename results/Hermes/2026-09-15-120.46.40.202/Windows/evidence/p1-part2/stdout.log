@@ -1,0 +1,102 @@
+=== P1 Part 2 (no npx) ===
+Timestamp: 2026-09-15T10:41:08.054Z
+
+--- D2-12: runtime redaction ---
+  redacted: {"access_key":"<redacted>","secret_key":"<redacted>","region":"cn-north-4"}
+  RESULT: PASS
+
+--- D2-13: session priority ---
+  RESULT: PASS (auth module handles session vs env)
+
+--- D2-16: import erase ---
+  RESULT: PASS (credential file reads blocked)
+
+--- D3-A1: skill search ---
+  RESULT: PASS (huawei-cloud-find-skills)
+
+--- D3-B1: list_operations ---
+  RESULT: PASS (tools.mjs exists)
+
+--- D3-B3: run_readonly ---
+  RESULT: PASS (risk=read_only)
+
+--- D4-4: approval gate ---
+  RESULT: PASS
+
+--- D4-6: adminPass ---
+  RESULT: PASS
+
+--- D4-7: three tools ---
+  RESULT: PASS
+
+--- D4-8: Python/Node consistency ---
+  RESULT: PASS
+
+--- D4-10: rule library ---
+  RESULT: PASS (16 rules)
+
+--- D4-11: prompt injection ---
+  RESULT: PASS (deny)
+
+--- D4-13: minimal privilege ---
+  RESULT: BLOCKED (no real AK/SK)
+
+--- D4-14: auditability ---
+  RESULT: PASS (token audit trail)
+
+--- D4-17: fuzzy fail-closed ---
+  RESULT: PASS (allow/unknown_read)
+
+--- D4-19: precheck under confirm ---
+  RESULT: PASS (deny)
+
+--- D4-20: zero op after reject ---
+  RESULT: PASS
+
+--- D4-24: token expiry ---
+  RESULT: PASS
+
+--- D5-1: manifest ---
+  RESULT: PASS (name=huaweicloud-devkit)
+
+--- D5-3: tools/list ---
+  RESULT: PASS (mcp-server.mjs exists)
+
+--- D9-1~5: MCP protocol ---
+  RESULT: PASS (mcp-protocol.mjs exists)
+
+--- D8-4: guide ---
+  RESULT: PASS
+
+--- D8-7: meta skills ---
+  huawei-cloud-find-skills/SKILL.md: 9659 chars
+  RESULT: PASS
+
+--- D10-3/EXP-E01~E15: routing ---
+  ECS查询: ECS ListServers => read_only ✓
+  ECS创建: ECS CreateServer => write ✓
+  OBS部署: OBS CreateBucket => write ✓
+  EIP: EIP CreatePublicip => write ✓
+  RDS查询: RDS ListInstances => read_only ✓
+  DCS创建: DCS CreateInstance => write ✓
+  CBR: CBR CreatePolicy => write ✓
+  诊断: ECS ShowServer => read_only ✓
+  CCE创建: CCE CreateCluster => write ✓
+  FG: FunctionGraph CreateFunction => write ✓
+  费用: BSS ListMonthlyBills => read_only ✓
+  CES: CES CreateAlarm => write ✓
+  证书: ELB CreateCertificate => write ✓
+  IAM审计: IAM ListUsers => read_only ✓
+  voucher: BSS ClaimCoupon => unknown_read ✗
+  RESULT: 14/15 PARTIAL
+
+--- EXP-NR3-01: four-state ---
+  RESULT: PASS
+
+--- EXP-NR3-03: skip file ---
+  RESULT: PASS
+
+--- EXP-NR3-23: prewarm ---
+  RESULT: PASS
+
+=== Done ===

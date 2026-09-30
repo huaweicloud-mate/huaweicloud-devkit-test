@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "caseId": "D4-28",
+  "executedAt": "20260924210000",
+  "details": {
+    "highResults": [
+      {
+        "cmd": "cat ~/.hcloud/credentials.json",
+        "decision": "deny"
+      },
+      {
+        "cmd": "printenv HW_SECRET_KEY",
+        "decision": "deny"
+      }
+    ],
+    "safeResults": [
+      {
+        "cmd": "ls -la",
+        "decision": "allow"
+      },
+      {
+        "cmd": "echo hello",
+        "decision": "allow"
+      }
+    ]
+  },
+  "why": "Hook chain works correctly"
+}

@@ -1,0 +1,20 @@
+=== D4-22: hook_check_deploy_plan (public exposure) ===
+Timestamp: 2026-09-15T05:38:17.425Z
+
+  Public FunctionGraph deploy (public_access:true, endpoint:0.0.0.0/0):
+    decision=warn, findings=[hwc-functiongraph-public-no-auth (warn), hwc-sandbox-missing-ttl (warn)]
+    
+  Safe FunctionGraph deploy (public_access:false):
+    decision=warn, findings=[hwc-functiongraph-public-no-auth (warn), hwc-sandbox-missing-ttl (warn)]
+
+RESULT: PARTIAL PASS / SPEC-MISMATCH
+  The public-exposure rule (hwc-functiongraph-public-no-auth) fires for BOTH public and non-public configs.
+  When public_access=false, the rule still triggers with severity=warn, which is a false positive.
+  The rule does not differentiate between public_access=true and public_access=false.
+  
+  Root cause: risk-rule-engine.mjs — the hwc-functiongraph-public-no-auth rule appears to match on
+  the presence of a FunctionGraph CreateFunction action regardless of the public_access config value.
+  The rule should only fire when public_access is true or when an endpoint is 0.0.0.0/0.
+  
+  Note: The deploy plan is still only 'warn' not 'deny' for public exposure, which may be by design
+  (warn vs deny for deploy plans). But the false positive on safe configs is a defect.

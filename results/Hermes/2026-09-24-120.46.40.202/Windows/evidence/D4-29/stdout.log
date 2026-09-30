@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "caseId": "D4-29",
+  "executedAt": "20260924210000",
+  "details": {
+    "allPass": true,
+    "results": [
+      {
+        "cmd": "cat ~/.hcloud/credentials.json",
+        "decision": "deny",
+        "pass": true
+      },
+      {
+        "cmd": "hcloud ECS ListServers",
+        "decision": "allow",
+        "pass": true
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer --server_id=test",
+        "decision": "deny",
+        "pass": true
+      }
+    ]
+  },
+  "why": "classification assertion: allPass=True"
+}

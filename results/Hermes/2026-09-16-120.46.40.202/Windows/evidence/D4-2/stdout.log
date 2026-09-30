@@ -1,0 +1,22 @@
+=== D4-2: Credential env print interception (classifyTextCommand) ===
+Timestamp: 2026-09-15T05:37:32.755Z
+
+  printenv HUAWEICLOUD_SDK_AK => decision=deny, risk=credential (CORRECT)
+  printenv HUAWEICLOUD_SDK_SK => decision=deny, risk=credential (CORRECT)
+  env | grep HUAWEICLOUD => decision=deny, risk=credential (CORRECT)
+  echo $HUAWEICLOUD_SDK_AK => decision=allow, risk=not_huaweicloud (GAP)
+  echo %HUAWEICLOUD_SDK_SK% => decision=allow, risk=not_huaweicloud (GAP)
+  env | grep AK => decision=allow, risk=not_huaweicloud (GAP - only matches HUAWEICLOUD, not generic AK)
+
+RESULT: PARTIAL PASS
+  printenv and env|grep HUAWEICLOUD are correctly blocked.
+  However, 'echo $HUAWEICLOUD_SDK_AK' and 'echo %HUAWEICLOUD_SDK_SK%' are NOT blocked.
+  The classifier's env-dump regex only matches env/printenv/Get-ChildItem Env:/gci Env:/dir Env:
+  but does NOT match 'echo' with credential variable names.
+  
+  Root cause: plugins/huaweicloud-core/src/safety-policy.mjs:335
+    The regex /(^|\s)(env|printenv|Get-ChildItem\s+Env:|gci\s+Env:|dir\s+Env:)/i does not include 'echo'
+    as a credential-dumping command. 'echo $HUAWEICLOUD_SDK_AK' bypasses the check.
+    
+  Also: 'env | grep AK' is NOT blocked because the regex requires HUAWEICLOUD|HWC_|HCLOUD|OS_ in the
+  text, but 'AK' alone doesn't match. However 'env | grep HUAWEICLOUD' IS correctly blocked.

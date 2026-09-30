@@ -1,0 +1,47 @@
+  "cat ~/.hcloud/credentials.json" -> text:deny risk:deny
+  "cat ~/.huaweicloud/credentials.json" -> text:deny risk:deny
+  "type %USERPROFILE%\.hcloud\config" -> text:deny risk:deny
+  "Get-Content ~/.hcloud/credentials.json" -> text:deny risk:deny
+  "less ~/.hcloud/credentials" -> text:deny risk:deny
+  "cat /root/.hcloud/config.yaml" -> text:deny risk:deny
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260930214439",
+  "details": {
+    "testResults": [
+      {
+        "command": "cat ~/.hcloud/credentials.json",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "command": "cat ~/.huaweicloud/credentials.json",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "command": "type %USERPROFILE%\\.hcloud\\config",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "command": "Get-Content ~/.hcloud/credentials.json",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "command": "less ~/.hcloud/credentials",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "command": "cat /root/.hcloud/config.yaml",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      }
+    ],
+    "allBlocked": true
+  }
+}

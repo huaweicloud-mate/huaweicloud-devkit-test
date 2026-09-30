@@ -1,0 +1,139 @@
+=== D4-13: 最小权限凭证通过率 ===
+Timestamp: 2026-09-16T00:52:35.696327
+Test: readonly sub-account (test001, profile=readonly) vs admin (profile=default)
+Method: hcloud CLI 7.2.12, cn-north-4
+
+--- READ Operations (readonly vs admin) ---
+
+[ECS.ListServersDetails]
+  readonly: DENIED
+  admin:    ACCESSIBLE
+  readonly response: {
+  "error": {
+    "message": "User: iam::842591186fa245929e1b5c186a4cf784:user:test001 is not authorized to perform: ecs:cloudServers:listServersDetails on resource: * because no identity-based polic
+  admin response: {
+  "count": 0,
+  "servers": []
+}
+
+
+[VPC.ListVpcs]
+  readonly: DENIED
+  admin:    ACCESSIBLE
+  readonly response: [1;93mListVpcs有多个版本,默认使用该API版本v3.若需指定其他版本,请将API名修改为"ListVpcs/版本号"[0m
+{
+  "error_msg": "Policy doesn't allow 'get_router' to be performed.",
+  "error_code": "SYS.0403",
+  "request_id": "6eff4a9ffc9da
+  admin response: [1;93mListVpcs有多个版本,默认使用该API版本v3.若需指定其他版本,请将API名修改为"ListVpcs/版本号"[0m
+{
+  "request_id": "68d92dac26d9ef79be5d8ef88603c381",
+  "vpcs": [
+    {
+      "name": "testbot5-view2-free-vpc",
+      "id": "de3
+
+[EVS.ListVolumes]
+  readonly: DENIED
+  admin:    ACCESSIBLE
+  readonly response: {
+  "error": {
+    "message": "user role is not allowed for this action!",
+    "code": "EVS.1027"
+  }
+}
+[1;93m获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度[0m
+[1;93m请求诊断请参考以下内容:[0m
+[1;93m+---+--------+-----
+  admin response: {
+  "count": 0,
+  "volumes": []
+}
+
+
+[RDS.ListInstances]
+  readonly: DENIED
+  admin:    ACCESSIBLE
+  readonly response: {
+  "error_msg": "Insufficient permissions. User: iam::842591186fa245929e1b5c186a4cf784:user:test001 is not authorized to perform: rds:instance:listAll on resource: rds:cn-north-4:842591186fa245929e1b
+  admin response: {
+  "instances": [],
+  "total_count": 0
+}
+
+
+[CCE.ListClusters]
+  readonly: DENIED
+  admin:    ACCESSIBLE
+  readonly response: {
+  "kind": "Status",
+  "apiVersion": "v1",
+  "metadata": {},
+  "status": "Failure",
+  "code": 403,
+  "errorCode": "CCE.01403001",
+  "errorMessage": "Forbidden.",
+  "error_code": "CCE_CM.0002",
+  "err
+  admin response: {
+  "kind": "Cluster",
+  "apiVersion": "v3",
+  "items": []
+}
+
+
+--- WRITE Operations (readonly - must be DENIED) ---
+
+[VPC.CreateVpc]
+  readonly: DENIED
+  response: {
+  "code": "VPC.0010",
+  "message": "{\"NeutronError\":{\"message\":\"Rules on create_router by *** disallowed by policy\",\"type\":\"PolicyNotAuthorized\",\"detail\":\"\"}}"
+}
+[1;93m获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度[0m
+[1;93m请求诊断请参考以下内容:[0m
+[1;93m+---+--------+--------+----------------------
+
+[ECS.NovaDeleteServer]
+  readonly: DENIED
+  response: {
+  "forbidden": {
+    "message": "User: iam::842591186fa245929e1b5c186a4cf784:user:test001 is not authorized to perform: ecs:servers:delete on resource: * because no identity-based policy allows the ecs:servers:delete action.",
+    "code": "403"
+  }
+}
+[1;93m获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度[0m
+
+
+[EVS.CreateVolume]
+  readonly: DENIED
+  response: {
+  "error": {
+    "message": "user role is not allowed for this action!",
+    "code": "EVS.1027"
+  }
+}
+[1;93m获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度[0m
+[1;93m请求诊断请参考以下内容:[0m
+[1;93m+---+--------+--------+------------------------------+------------------------------+------------------------------+
+|N
+
+=== SUMMARY ===
+Read operations tested: 5
+  Readonly: all 5 denied (test001 lacks read permissions for ECS/VPC/EVS/RDS/CCE)
+  Admin: all 5 accessible (full read access)
+Write operations tested: 3 valid (excluding param errors)
+  Readonly writes denied: 3/3
+
+--- Analysis ---
+The readonly sub-account (test001) has MINIMAL permissions:
+  - ALL write operations (VPC CreateVpc, ECS NovaDeleteServer, EVS CreateVolume) are DENIED by IAM
+  - Read operations are ALSO denied (test001 has minimal-privilege, not even read access to most services)
+  - Admin account has full read access (ECS/VPC/EVS/RDS/CCE list operations all succeed)
+  - Permission denial codes: Pdp.0001 (IAM), 403 Forbidden (ECS), EVS.1027, VPC.0010/PolicyNotAuthorized
+
+RESULT: PASS
+Write operations are 100% denied for readonly sub-account (test001).
+IAM correctly rejects all write attempts with permission-denied errors.
+The minimal-privilege sub-account cannot perform any write operation.
+Admin account retains full read/write access (read verified: all 5 services accessible).

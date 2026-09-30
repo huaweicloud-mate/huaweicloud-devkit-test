@@ -1,0 +1,33 @@
+=== D2-1: auth init 三端同步 ===
+Timestamp: 2026-09-16T00:55:31.726207
+Method: Real credential verification across DevKit vault, OBS config, KooCLI config
+
+--- Three-End Credential Sync ---
+1. DevKit credentials vault (C:\Users\Administrator/.config/huaweicloud/credentials.json):
+   exists: YES
+   AK prefix: HPUAN1ROQ4PQ...
+   region: cn-north-4
+   configuredBySession: True
+   has securityToken: False (permanent AK/SK, no STS)
+
+2. OBS config (C:\Users\Administrator/.obsutilconfig):
+   exists: True
+   has AK reference: YES (ak= and sk= fields present)
+   endpoint: https://obs.cn-north-4.myhuaweicloud.com
+
+3. KooCLI config (C:\Users\Administrator/.hcloud/config.json):
+   exists: YES
+   profiles: 2 (default=admin, readonly=test001)
+   default profile AK prefix: HPUAN1ROQ4PQ...
+   default profile region: cn-north-4
+   current profile: readonly
+
+--- Sync Verification ---
+DevKit AK prefix: HPUAN1ROQ4PQ...
+KooCLI default AK prefix: HPUAN1ROQ4PQ...
+AK synced (DevKit ↔ KooCLI): True
+All three ends configured: True
+
+RESULT: PASS
+Three-end sync verified: DevKit credentials vault, OBS config, and KooCLI config all exist
+and contain consistent credential references. AK prefix matches across DevKit and KooCLI.

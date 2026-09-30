@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "details": {
+    "results": [
+      {
+        "cmd": "hcloud ECS Deleteserver --server_id=test",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "cmd": "hcloud ecs deleteserver --server_id=test",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "cmd": "hcloud ECS DELETE_SERVER --server_id=test",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer%20--server_id=test",
+        "decision": "deny",
+        "risk": "write"
+      }
+    ]
+  },
+  "why": "No bypass succeeded",
+  "caseId": "D4-15",
+  "executedAt": "20260928213449"
+}

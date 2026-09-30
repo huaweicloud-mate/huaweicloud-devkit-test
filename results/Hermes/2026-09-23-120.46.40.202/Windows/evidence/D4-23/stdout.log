@@ -1,0 +1,26 @@
+{
+  "caseId": "D4-23",
+  "status": "SPEC-MISMATCH",
+  "why": "huawei-agent-rules.md file not found in any location. Safety constraints ARE enforced via hooks (huaweicloud-safety.mjs + hooks.json), but the design specifies a standalone rules.md file for 11 install targets. The hook-based approach achieves the same goal but differs from the designed file-injection approach.",
+  "executedAt": "20260923094709",
+  "found": false,
+  "locations": [
+    "C:\\Users\\Administrator\\devkit-test\\hermes\\hdk\\plugins\\huaweicloud-core\\agent-rules\\huawei-agent-rules.md",
+    "C:\\Users\\Administrator\\devkit-test\\hermes\\hdk\\plugins\\huaweicloud-core\\huawei-agent-rules.md",
+    "C:\\Users\\Administrator\\AppData\\Roaming\\npm\\node_modules\\huaweicloud-devkit\\plugins\\huaweicloud-core\\agent-rules\\huawei-agent-rules.md",
+    "C:\\Users\\Administrator\\AppData\\Roaming\\npm\\node_modules\\huaweicloud-devkit\\plugins\\huaweicloud-core\\huawei-agent-rules.md"
+  ],
+  "hasRulesRef": false,
+  "constraintsEnforced": true,
+  "csmsBlock": {
+    "decision": "deny",
+    "risk": "secret",
+    "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context."
+  },
+  "kmsBlock": {
+    "decision": "deny",
+    "risk": "secret",
+    "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context."
+  },
+  "hooksContent": "{\r\n  \"hooks\": {\r\n    \"PreToolUse\": [\r\n      {\r\n        \"matcher\": \"Bash\",\r\n        \"hooks\": [\r\n          {\r\n            \"type\": \"command\",\r\n            \"command\": \"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/h"
+}

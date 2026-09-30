@@ -1,0 +1,58 @@
+Total rules: 19 deny: 9 warn: 10
+DENY-test: cat ~/.hcloud/credentials.json -> deny
+DENY-test: type %USERPROFILE%\.hcloud\config -> deny
+DENY-test: printenv HW_SECRET_KEY -> deny
+DENY-test: hcloud ECS DeleteServers --server_ids i-xxx --forc -> deny
+IAM artifact test -> deny
+RO-test: hcloud ECS ListServers --region cn-north-4 -> allow
+RO-test: hcloud VPC ListVpcs -> allow
+RO-test: ls -la /tmp -> allow
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "All core assertions pass. Rule count: deny=9(spec=9✓), warn=10(spec=7, rules evolved with 3 new warn rules since spec written).",
+  "executedAt": "20260930215146",
+  "details": {
+    "totalRules": 19,
+    "denyCount": 9,
+    "warnCount": 10,
+    "denyResults": [
+      {
+        "command": "cat ~/.hcloud/credentials.json",
+        "decision": "deny"
+      },
+      {
+        "command": "type %USERPROFILE%\\.hcloud\\config",
+        "decision": "deny"
+      },
+      {
+        "command": "printenv HW_SECRET_KEY",
+        "decision": "deny"
+      },
+      {
+        "command": "hcloud ECS DeleteServers --server_ids i-xxx --force",
+        "decision": "deny"
+      },
+      {
+        "command": "broad IAM artifact JSON",
+        "decision": "deny"
+      }
+    ],
+    "readOnlyResults": [
+      {
+        "command": "hcloud ECS ListServers --region cn-north-4",
+        "decision": "allow"
+      },
+      {
+        "command": "hcloud VPC ListVpcs",
+        "decision": "allow"
+      },
+      {
+        "command": "ls -la /tmp",
+        "decision": "allow"
+      }
+    ],
+    "allDenyCorrect": true,
+    "allReadOnlyCorrect": true
+  }
+}

@@ -1,0 +1,60 @@
+  ECS DeleteServers -> decision:deny action:N/A
+  ECS CreateServers -> decision:deny action:N/A
+  VPC DeleteVpc -> decision:deny action:N/A
+  RDS DeleteInstance -> decision:deny action:N/A
+  IAM CreateUser -> decision:deny action:N/A
+  ECS StopServer -> decision:deny action:N/A
+  ECS RebootServer -> decision:deny action:N/A
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260930214505",
+  "details": {
+    "testResults": [
+      {
+        "service": "ECS",
+        "operation": "DeleteServers",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "service": "ECS",
+        "operation": "CreateServers",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "service": "VPC",
+        "operation": "DeleteVpc",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "service": "RDS",
+        "operation": "DeleteInstance",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "service": "IAM",
+        "operation": "CreateUser",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "service": "ECS",
+        "operation": "StopServer",
+        "decision": "deny",
+        "risk": "execution"
+      },
+      {
+        "service": "ECS",
+        "operation": "RebootServer",
+        "decision": "deny",
+        "risk": "execution"
+      }
+    ],
+    "noneReadOnly": true
+  }
+}

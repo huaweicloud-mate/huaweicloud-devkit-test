@@ -1,0 +1,91 @@
+  CORE: "printenv HW_SECRET_KEY" -> text:deny risk:deny
+  CORE: "echo $HW_SECRET_ACCESS_KEY" -> text:deny risk:allow
+  CORE: "printenv HW_ACCESS_KEY" -> text:deny risk:deny
+  CORE: "printenv HUAWEICLOUD_SECRET_ACCESS_KEY" -> text:deny risk:deny
+  CORE: "echo $HUAWEICLOUD_ACCESS_KEY" -> text:deny risk:allow
+  CORE: "echo $HW_SECURITY_TOKEN" -> text:deny risk:allow
+  CORE: "env | grep HW_" -> text:deny risk:deny
+  CORE: "env | grep HUAWEICLOUD" -> text:deny risk:deny
+  EDGE: "echo %HW_SECRET_KEY%" -> text:allow risk:allow
+  EDGE: "echo %HW_ACCESS_KEY%" -> text:allow risk:allow
+  EDGE: "echo $AWS_SECRET_ACCESS_KEY" -> text:allow risk:allow
+  EDGE: "echo $AWS_ACCESS_KEY_ID" -> text:allow risk:allow
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "Core credential env vars blocked. Potential gap: 4 edge-case commands not blocked (Windows %VAR% style, AWS_* prefix).",
+  "executedAt": "20260930214541",
+  "details": {
+    "coreResults": [
+      {
+        "command": "printenv HW_SECRET_KEY",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "command": "echo $HW_SECRET_ACCESS_KEY",
+        "textDecision": "deny",
+        "riskDecision": "allow"
+      },
+      {
+        "command": "printenv HW_ACCESS_KEY",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "command": "printenv HUAWEICLOUD_SECRET_ACCESS_KEY",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "command": "echo $HUAWEICLOUD_ACCESS_KEY",
+        "textDecision": "deny",
+        "riskDecision": "allow"
+      },
+      {
+        "command": "echo $HW_SECURITY_TOKEN",
+        "textDecision": "deny",
+        "riskDecision": "allow"
+      },
+      {
+        "command": "env | grep HW_",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "command": "env | grep HUAWEICLOUD",
+        "textDecision": "deny",
+        "riskDecision": "deny"
+      }
+    ],
+    "edgeResults": [
+      {
+        "command": "echo %HW_SECRET_KEY%",
+        "textDecision": "allow",
+        "riskDecision": "allow"
+      },
+      {
+        "command": "echo %HW_ACCESS_KEY%",
+        "textDecision": "allow",
+        "riskDecision": "allow"
+      },
+      {
+        "command": "echo $AWS_SECRET_ACCESS_KEY",
+        "textDecision": "allow",
+        "riskDecision": "allow"
+      },
+      {
+        "command": "echo $AWS_ACCESS_KEY_ID",
+        "textDecision": "allow",
+        "riskDecision": "allow"
+      }
+    ],
+    "allCoreBlocked": true,
+    "edgeGaps": [
+      "echo %HW_SECRET_KEY%",
+      "echo %HW_ACCESS_KEY%",
+      "echo $AWS_SECRET_ACCESS_KEY",
+      "echo $AWS_ACCESS_KEY_ID"
+    ]
+  }
+}

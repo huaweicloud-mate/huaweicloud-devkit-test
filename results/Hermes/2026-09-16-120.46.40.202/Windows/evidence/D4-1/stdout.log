@@ -1,0 +1,59 @@
+=== Safety Policy Probe ===
+Timestamp: 2026-09-15T05:36:48.402Z
+
+--- D4-1: Credential file read interception ---
+  cmd: cat ~/.hcloud/credentials.json => decision=deny, risk=credential
+  cmd: type C:\Users\Administrator\.hcloud\credentials.json => decision=deny, risk=credential
+  cmd: cat /root/.huaweicloud/credentials.json => decision=deny, risk=credential
+  cmd: Get-Content $env:HOME/.hcloud/credentials.json => decision=deny, risk=credential
+RESULT: PASS - All credential file read attempts blocked (decision=deny)
+
+--- D4-2: Credential env print interception ---
+  cmd: printenv HUAWEICLOUD_SDK_AK => decision=deny, risk=credential
+  cmd: echo $HUAWEICLOUD_SDK_AK => decision=allow, risk=unknown_read  [NOTE: echo not recognized as hcloud cmd]
+  cmd: echo %HUAWEICLOUD_SDK_SK% => decision=allow, risk=unknown_read  [NOTE: echo not recognized as hcloud cmd]
+  cmd: env | grep AK => decision=deny, risk=credential
+  cmd: printenv HUAWEICLOUD_SDK_SK => decision=deny, risk=credential
+RESULT: PARTIAL - printenv and env|grep blocked; echo variants classified as allow/unknown_read
+  NOTE: echo $VAR is a shell builtin, classifyHcloudArgs treats non-hcloud commands as 'allow' by default
+  This is expected behavior - hook_check_command operates on hcloud commands, not generic shell echo
+
+--- D4-5: Write operation misclassification ---
+  cmd: ECS DeleteServer --server_id=test-001 => decision=deny, risk=write
+  cmd: ECS CreateServer --name=test => decision=deny, risk=write
+  cmd: VPC DeleteVpc --vpc_id=test => decision=deny, risk=write
+  cmd: RDS DeleteInstance --instance_id=test => decision=deny, risk=write
+  cmd: ECS UpdateServer --server_id=test => decision=deny, risk=write
+  cmd: IAM DeleteUser --user_id=test => decision=deny, risk=write
+RESULT: PASS - All write operations correctly classified as deny/write, no misclassification
+
+--- D4-15: Hook bypass attempts ---
+  cmd: ECS DeleteServer => decision=deny, risk=write (baseline)
+  cmd: ecs deleteserver => decision=deny, risk=write (lowercase)
+  cmd: ECS DELETE_SERVER => decision=deny, risk=write (snake upper)
+  cmd: ECS Delete%53erver => decision=deny, risk=write (URL encoded)
+  cmd: ECS Delete\x53erver => decision=deny, risk=write (hex escape)
+  cmd: ECS DeleteServer => decision=deny, risk=write (concat)
+RESULT: PASS - No bypass succeeded; all variants blocked
+
+--- D4-16: Command wrapping penetration ---
+  cmd: sh -c hcloud ECS DeleteServer => decision=allow, risk=unknown_read
+  cmd: bash -c hcloud ECS DeleteServer => decision=allow, risk=unknown_read
+  cmd: eval hcloud ECS DeleteServer => decision=allow, risk=unknown_read
+  cmd: sh -c $(hcloud ECS DeleteServer) => decision=allow, risk=unknown_read
+  cmd: cmd /c hcloud ECS DeleteServer => decision=allow, risk=unknown_read
+RESULT: FAIL - Shell-wrapped hcloud commands (sh -c, bash -c, eval, cmd /c) are NOT detected
+  The classifier treats 'sh', 'bash', 'eval', 'cmd' as the command, not the inner hcloud command
+  Root cause: classifyHcloudArgs expects hcloud CLI args (service+action), not shell-wrapped commands
+  The hook layer (hook_check_command) is responsible for unwrapping shell commands before classification
+  This is a source-level probe limitation - the actual hook layer may handle unwrapping differently
+
+--- D2-4: Credential redaction correctness ---
+  Original AK: AKIDTEST1234567890ABCDEFGHIJ -> Redacted: <redacted>
+  Original SK: SKTEST1234567890ABCDEFGHIJKLM -> Redacted: <redacted>
+  Original STS: STS1234567890ABCDEFGHIJKLMN -> Redacted: <redacted>
+  Redacted region: cn-north-4 (non-secret preserved)
+  Full AK in output? false
+  Full SK in output? false
+  Full STS in output? false
+RESULT: PASS - All credentials fully redacted, no plaintext leakage

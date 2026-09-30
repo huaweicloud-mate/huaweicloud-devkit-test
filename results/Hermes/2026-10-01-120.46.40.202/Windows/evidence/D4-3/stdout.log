@@ -1,0 +1,41 @@
+  "hcloud KMS ListSecrets" -> risk:allow hcloud:allow
+  "hcloud CSMS ShowSecret --secret_id xxx" -> risk:deny hcloud:deny
+  "hcloud DEW ListSecrets" -> risk:allow hcloud:allow
+  "cat /etc/shadow" -> risk:allow hcloud:allow
+  "hcloud RDS ShowInstanceConfiguration --instance_id xxx" -> risk:allow hcloud:allow
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260930214505",
+  "details": {
+    "testResults": [
+      {
+        "command": "hcloud KMS ListSecrets",
+        "riskDecision": "allow",
+        "hcloudDecision": "allow"
+      },
+      {
+        "command": "hcloud CSMS ShowSecret --secret_id xxx",
+        "riskDecision": "deny",
+        "hcloudDecision": "deny"
+      },
+      {
+        "command": "hcloud DEW ListSecrets",
+        "riskDecision": "allow",
+        "hcloudDecision": "allow"
+      },
+      {
+        "command": "cat /etc/shadow",
+        "riskDecision": "allow",
+        "hcloudDecision": "allow"
+      },
+      {
+        "command": "hcloud RDS ShowInstanceConfiguration --instance_id xxx",
+        "riskDecision": "allow",
+        "hcloudDecision": "allow"
+      }
+    ],
+    "someBlocked": true
+  }
+}

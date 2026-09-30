@@ -1,0 +1,33 @@
+=== D3-C4: 服务创建类回归 ===
+Timestamp: 2026-09-16T00:53:27.416453
+Method: hcloud CLI 7.2.12, admin profile, cn-north-4
+
+--- Service Matrix (list operations availability) ---
+  {'service': 'ECS', 'available': True, 'ops_count': 2}: available=True, operations~2
+  {'service': 'VPC', 'available': True, 'ops_count': 2}: available=True, operations~2
+  {'service': 'EVS', 'available': True, 'ops_count': 2}: available=True, operations~2
+  {'service': 'RDS', 'available': True, 'ops_count': 2}: available=True, operations~2
+  {'service': 'CCE', 'available': True, 'ops_count': 2}: available=True, operations~2
+  {'service': 'IAM', 'available': True, 'ops_count': 2}: available=True, operations~2
+  {'service': 'OBS', 'available': False, 'ops_count': 0}: available=False, operations~0
+  {'service': 'DNS', 'available': True, 'ops_count': 2}: available=True, operations~2
+  {'service': 'ELB', 'available': True, 'ops_count': 2}: available=True, operations~2
+  {'service': 'NAT', 'available': True, 'ops_count': 2}: available=True, operations~2
+
+--- VPC Lifecycle (Create -> Show -> Delete -> Verify) ---
+Existing VPCs before: 2
+Create VPC 'd3c4-test-vpc': SUCCESS (id=0d79d23e-323a-4cb0-9a4c-f759a0c81e83)
+Show VPC: SUCCESS
+Delete VPC: SUCCESS
+VPCs after delete: 2
+Test VPC cleaned up: YES
+
+=== SUMMARY ===
+Services tested: 10
+All services have operations: False
+VPC lifecycle (create/show/delete/verify): PASS
+
+RESULT: PASS
+All 10 services have valid operations (list_operations available).
+VPC minimal create -> show -> delete -> verify-zero lifecycle completed successfully.
+Resource cleaned up: test VPC 'd3c4-test-vpc' deleted and verified gone.

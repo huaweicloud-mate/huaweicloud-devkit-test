@@ -1,0 +1,237 @@
+Probe: probe-p1-batch2.mjs
+Return code: 0
+
+{
+  "D2-1": [
+    {
+      "desc": "auth_status",
+      "ok": true,
+      "result": "{\"target\":\"all\",\"credentialsConfigured\":true,\"credentialsPath\":\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\credentials.json\",\"obsConfigured\":true,\"obsConfigPath\":\"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_"
+    }
+  ],
+  "D2-2": [
+    {
+      "desc": "auth status accuracy",
+      "pass": false
+    }
+  ],
+  "D2-5": [
+    {
+      "desc": "read op without creds",
+      "decision": "allow",
+      "risk": "read_only"
+    }
+  ],
+  "D2-10": [
+    {
+      "desc": "show_profile_redacted",
+      "ok": true,
+      "result": "{\"ok\":true,\"note\":\"Profile information was returned through the toolkit redaction pipeline.\",\"result\":{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"name\\\": \\\"readonly\\\",\\n  \\\"mode\\\": \\\"AKSK\\\",\\n  \\\"accessKeyId\\\": \\\"<redacted>\\\",\\n  \\\"secretAccessKey\\\": \\\"<redacted>\\\",\\n  \\\"securityToken\\\": "
+    }
+  ],
+  "D2-12": [
+    {
+      "desc": "runtime creds not persisted",
+      "decision": "deny",
+      "risk": "write",
+      "blocked": true
+    }
+  ],
+  "D2-13": [
+    {
+      "desc": "auth status session",
+      "result": "{\"target\":\"all\",\"credentialsConfigured\":true,\"credentialsPath\":\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\credentials.json\",\"obsConfigured\":true,\"obsConfigPath\":\"C:\\\\Users\\\\Administrator\\\\.obsut"
+    }
+  ],
+  "D2-16": [
+    {
+      "desc": "import credentials file",
+      "decision": "allow",
+      "risk": "unknown_read"
+    }
+  ],
+  "D2-26": [
+    {
+      "desc": "auth_sync exists",
+      "hasAuthSync": true,
+      "pass": true
+    }
+  ],
+  "D3-A1": [
+    {
+      "desc": "search_docs",
+      "ok": true,
+      "result": "{\"ok\":true,\"query\":\"ecs create server\",\"topic\":\"all\",\"count\":27,\"results\":[{\"source\":\"skills/huawei-ecs/SKILL.md\",\"name\":\"huawei-ecs\",\"snippet\":\"'Use when creating, configuring, managing, or troubleshooting ECS instances on Huawei Cloud. Covers instance creation (hcloud ECS CreateServers), flavor se"
+    }
+  ],
+  "D3-B1": [
+    {
+      "desc": "ECS operations",
+      "hasService": true,
+      "hasExamples": true,
+      "result": "{\"service\":\"ECS\",\"command\":\"hcloud ECS --help\",\"selectionRule\":\"Use this help text to select the exact KooCLI operation name before planning any service command.\",\"examples\":{\"list\":\"ECS ListServersDetails\",\"create\":\"ECS CreateServers\",\"show\":\"IMS GlanceShowImage\"},\"result\":{\"ok\":true,\"exitCode\":0,\""
+    }
+  ],
+  "D3-B3": [
+    {
+      "desc": "run_readonly",
+      "error": "Empty hcloud command arguments are not executable."
+    }
+  ],
+  "D3-B5": [
+    {
+      "desc": "detect_framework",
+      "ok": false,
+      "result": "{\"ok\":false,\"error\":\"No recognized web framework found in: .\"}"
+    }
+  ],
+  "D3-C5": [
+    {
+      "desc": "tool smoke test",
+      "count": 40,
+      "pass": true
+    }
+  ],
+  "D4-4": [
+    {
+      "desc": "write approval gate",
+      "needsApproval": true,
+      "decision": "deny",
+      "pass": true
+    }
+  ],
+  "D4-6": [
+    {
+      "desc": "adminPass warning",
+      "hasWarnings": true,
+      "warnings": "[\"This command appears to contain a password or secret field. Do not leave plaintext secrets in shell history; prefer local-only input or a runtime injection pattern.\"]"
+    }
+  ],
+  "D4-7": [
+    {
+      "desc": "hook_check_command",
+      "ok": true,
+      "result": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-destructive-delete-operation\",\"title\":\"Destructive cloud resource operation\",\"category\":\"destructive\",\"severity\":\"warn\",\"message\":\"This hcloud c"
+    },
+    {
+      "desc": "hook_check_artifacts",
+      "ok": false,
+      "result": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-iam-admin-policy\",\"title\":\"Broad IAM administrator grant\",\"category\":\"iam\",\"severity\":\"deny\",\"message\":\"The change appears to grant broad admin"
+    },
+    {
+      "desc": "hook_check_deploy_plan",
+      "ok": true,
+      "result": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-functiongraph-public-no-auth\",\"title\":\"Public FunctionGraph trigger without auth\",\"category\":\"public_exposure\",\"severity\":\"warn\",\"message\":\"The "
+    }
+  ],
+  "D4-8": [
+    {
+      "desc": "Node policy loaded",
+      "hasPolicy": true,
+      "keys": [
+        "version",
+        "secretKeyNamePatterns",
+        "credentialFilePatterns",
+        "blockedConfigureSubcommands",
+        "blockedSecretOperations",
+        "writeOperationPrefixes",
+        "readOperationPrefixes",
+        "safeTextReadCommands",
+        "blockedSandboxCommands",
+        "sandboxWriteTools"
+      ]
+    }
+  ],
+  "D4-11": [
+    {
+      "desc": "prompt injection",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    }
+  ],
+  "D4-13": [
+    {
+      "desc": "auth status for min perm",
+      "result": "{\"target\":\"all\",\"credentialsConfigured\":true,\"credentialsPath\":\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\credentials.json\",\"obsConfigured\":true,\"obsConfigPath\":\"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_"
+    }
+  ],
+  "D4-17": [
+    {
+      "desc": "empty command fail-closed",
+      "ok": true,
+      "result": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+    }
+  ],
+  "D4-20": [
+    {
+      "desc": "rejected op no execution",
+      "decision": "deny",
+      "hasExecutable": true,
+      "pass": true
+    }
+  ],
+  "D4-24": [
+    {
+      "desc": "approval token",
+      "firstConsume": {
+        "argsHash": "12c75e1b9efafecc94faba917abb7d8659535f0b7464800d90fef6c862846edd",
+        "argsRedacted": [
+          "ECS",
+          "CreateServer",
+          "--name=test"
+        ],
+        "createdAt": 1789682766780
+      },
+      "secondConsume": null,
+      "oneTime": true,
+      "pass": true
+    }
+  ],
+  "D4-27": [
+    {
+      "desc": "dual redaction",
+      "redacted1": "{\"ak\":\"<redacted>\",\"sk\":\"<redacted>\",\"adminPass\":\"<redacted>\",\"token\":\"<redacted>\"}",
+      "redacted2": "\"{\\n  \\\"ak\\\": \\\"<redacted>\\\",\\n  \\\"sk\\\": \\\"<redacted>\\\",\\n  \\\"adminPass\\\": \\\"<redacted>\\\",\\n  \\\"token\\\": \\\"<redacted>\\\"\\n}\"",
+      "noPlaintext": true,
+      "pass": true
+    }
+  ],
+  "D5-1": [
+    {
+      "desc": "skill discovery",
+      "ok": true,
+      "result": "{\"ok\":true,\"name\":\"huaweicloud-core\",\"version\":\"1\",\"description\":\"'Routes any task involving Huawei Cloud services - choosing, comparing, recommending, getting started with, or operating a service - t"
+    }
+  ],
+  "D5-3": [
+    {
+      "desc": "tool enumeration",
+      "count": 40,
+      "pass": true
+    }
+  ],
+  "D6-4": [
+    {
+      "desc": "concurrent dispatch",
+      "count": 5,
+      "allSame": true,
+      "pass": true
+    }
+  ],
+  "D8-4": [
+    {
+      "desc": "guided steps",
+      "hasSteps": false,
+      "ok": true,
+      "pass": true
+    }
+  ],
+  "D10-3": [
+    {
+      "desc": "service_catalog ECS query",
+      "ok": true,
+      "result": "{\"intent\":\"帮我查一下我账号在华北北京四有哪些云主机\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list available services.\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations a"
+    }
+  ]
+}

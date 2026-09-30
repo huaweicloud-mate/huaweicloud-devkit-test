@@ -1,0 +1,65 @@
+  EXPOSURE: ECS CreateServers -> hcloud:deny risk:allow
+  EXPOSURE: ELB CreateLoadBalancer -> hcloud:deny risk:allow
+  EXPOSURE: FunctionGraph CreateFunction -> hcloud:deny risk:allow
+  DESTRUCT: ECS DeleteServers -> hcloud:deny risk:deny
+  DESTRUCT: RDS DeleteInstance -> hcloud:deny risk:warn
+  DESTRUCT: VPC DeleteVpc -> hcloud:deny risk:warn
+  DESTRUCT: EVS DeleteVolume -> hcloud:deny risk:warn
+  DEPLOY PLAN (public FG): -> warn
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260930214633",
+  "details": {
+    "exposureResults": [
+      {
+        "service": "ECS",
+        "operation": "CreateServers",
+        "hcloudDecision": "deny",
+        "riskDecision": "allow"
+      },
+      {
+        "service": "ELB",
+        "operation": "CreateLoadBalancer",
+        "hcloudDecision": "deny",
+        "riskDecision": "allow"
+      },
+      {
+        "service": "FunctionGraph",
+        "operation": "CreateFunction",
+        "hcloudDecision": "deny",
+        "riskDecision": "allow"
+      }
+    ],
+    "destructiveResults": [
+      {
+        "service": "ECS",
+        "operation": "DeleteServers",
+        "hcloudDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "service": "RDS",
+        "operation": "DeleteInstance",
+        "hcloudDecision": "deny",
+        "riskDecision": "warn"
+      },
+      {
+        "service": "VPC",
+        "operation": "DeleteVpc",
+        "hcloudDecision": "deny",
+        "riskDecision": "warn"
+      },
+      {
+        "service": "EVS",
+        "operation": "DeleteVolume",
+        "hcloudDecision": "deny",
+        "riskDecision": "warn"
+      }
+    ],
+    "deployPlanResult": "warn",
+    "exposurePreChecked": true,
+    "destructivePreChecked": true
+  }
+}

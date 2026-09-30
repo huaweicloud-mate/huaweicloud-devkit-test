@@ -1,0 +1,25 @@
+=== D1-39 Detailed Investigation ===
+
+Test 1: spawnSync('npm.cmd') WITHOUT shell:true
+  error: EINVAL
+  status: null
+  stdout: (empty)
+
+Test 2: spawnSync('npm.cmd') WITH shell:true
+  error: none
+  status: 0
+  stdout: {
+  "next": "1.1.6-next.0",
+  "latest": "1.1.5"
+}
+
+
+Test 3: queryDistTagsSync() from update-check.mjs
+  result: null
+
+=== VERDICT: BUG CONFIRMED ===
+Root cause: update-check.mjs L238 queryDistTagsSync uses spawnSync('npm.cmd') without shell:true
+  -> On Windows, spawnSync of .cmd files requires shell:true (Node.js known issue)
+  -> Without shell:true, spawnSync throws EINVAL, caught at L249, returns null
+  -> queryDistTagsSync always returns null on Windows -> update detection chain broken
+Fix: add shell: true to spawnSync options at L239 (queryDistTagsSync) and L259 (queryDistTags)

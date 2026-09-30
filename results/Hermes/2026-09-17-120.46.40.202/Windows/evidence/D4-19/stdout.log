@@ -1,0 +1,25 @@
+=== D4-18: confirm-not-deny approval semantics ===
+  Without approval: decision=deny risk=write approvalToken=present safeToRun=false
+  With approval: decision=allow risk=write safeToRun=true
+  Read operation: decision=allow risk=read_only safeToRun=true
+  RESULT: PASS
+
+=== D4-19: preflight in confirm flow ===
+  Public SSH rule WITH approval: decision=deny blockedByRiskRule=true safeToRun=false
+  Force delete WITH approval: decision=deny safeToRun=false findings=[hwc-destructive-delete-force, hwc-destructive-delete-operation]
+  RESULT: PASS
+
+=== D4-21: artifact pre-check (broad IAM policy) ===
+  Broad IAM policy: decision=deny findings=[{rule: hwc-iam-admin-policy, sev: deny}]
+  Normal IAM policy: decision=warn (hwc-sandbox-missing-ttl false positive - not a defect)
+  RESULT: PASS (broad IAM blocked correctly)
+
+=== D4-22: deploy plan pre-check (public FunctionGraph) ===
+  Public FG no-auth: decision=warn findings=[{rule: hwc-functiongraph-public-no-auth, sev: warn}]
+  Normal ECS plan: decision=warn (hwc-sandbox-missing-ttl)
+  RESULT: PASS (public FG warned correctly)
+
+=== D4-24: approval token lifecycle ===
+  First consume: entry returned
+  Second consume (reuse): null (correct - single use)
+  RESULT: PASS

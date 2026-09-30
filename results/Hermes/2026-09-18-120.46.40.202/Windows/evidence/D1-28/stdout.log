@@ -1,0 +1,170 @@
+Probe: probe-p1-d1.mjs
+Return code: 0
+
+{
+  "D1-1": [
+    {
+      "desc": "check_update tool",
+      "ok": true,
+      "result": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    }
+  ],
+  "D1-3": [
+    {
+      "desc": "check_cli (doctor)",
+      "ok": true,
+      "result": "{\"installed\":true,\"authenticated\":true,\"status\":\"ok\",\"output\":\"当前KooCLI版本:7.2.12\",\"kooCliVersion\":\"7.2.12\",\"installedVersion\":\"7.2.12\",\"versionMismatch\":false,\"nextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"authHint\":\"If hcloud is installed but comman"
+    }
+  ],
+  "D1-5": [
+    {
+      "desc": "upgrade tool exists",
+      "hasUninstall": true,
+      "pass": true
+    }
+  ],
+  "D1-26": [
+    {
+      "desc": "update tools registered",
+      "hasCheckUpdate": true,
+      "hasUpgrade": true,
+      "pass": true
+    }
+  ],
+  "D1-27": [
+    {
+      "desc": "already latest",
+      "judge": "{\"currentVersion\":\"1.1.5\",\"latestStable\":\"1.1.5\",\"latestNext\":\"1.1.5-next.1\",\"targetVersion\":\"1.1.5\",\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"up_to_date\"}",
+      "isUpToDate": true
+    }
+  ],
+  "D1-28": [
+    {
+      "desc": "new version available",
+      "judge": "{\"currentVersion\":\"1.1.5\",\"latestStable\":\"99.0.0\",\"latestNext\":\"99.0.0-next.1\",\"targetVersion\":\"99.0.0\",\"updateAvailable\":true,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"update_available\"}",
+      "hasUpdate": true
+    }
+  ],
+  "D1-31": [
+    {
+      "desc": "dismiss cooldown",
+      "isDismissed": true,
+      "notExpired": false,
+      "isExpired": false,
+      "pass": false
+    }
+  ],
+  "D1-30": [
+    {
+      "a": "1.1.5",
+      "b": "1.1.4",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "a": "1.1.5",
+      "b": "1.1.5",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "a": "1.1.4",
+      "b": "1.1.5",
+      "expected": -1,
+      "actual": -1,
+      "pass": true
+    },
+    {
+      "a": "1.2.0",
+      "b": "1.1.5",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "a": "1.1.5-next.1",
+      "b": "1.1.5",
+      "expected": -1,
+      "actual": -1,
+      "pass": true
+    },
+    {
+      "a": "1.1.5-next.2",
+      "b": "1.1.5-next.1",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "desc": "overall",
+      "pass": true
+    }
+  ],
+  "D1-33": [
+    {
+      "desc": "skip file paths",
+      "skipPath": "C:\\Users\\Administrator\\devkit-test\\hermes\\hdk\\plugins\\huaweicloud-core\\.update-skip.json",
+      "fallbackPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\devkit-skip.json",
+      "resolvedPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\devkit-skip.json",
+      "hasPaths": true
+    },
+    {
+      "desc": "write+read skip state",
+      "persisted": true,
+      "pass": true
+    }
+  ],
+  "D1-41": [
+    {
+      "desc": "check_update MCP contract",
+      "hasOk": false,
+      "hasResult": true,
+      "result": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    }
+  ],
+  "D1-42": [
+    {
+      "desc": "cross-call persistence",
+      "state1": "99.0.0",
+      "state2": "99.0.0",
+      "persistent": true,
+      "pass": true
+    }
+  ],
+  "D1-45": [
+    {
+      "desc": "double check_update consistency",
+      "consistent": true,
+      "result1": "{\"currentVersion\":\"1.1.5\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null",
+      "pass": true
+    }
+  ],
+  "D1-58": [
+    {
+      "desc": "MCP whitelist tools",
+      "hasAuthSync": true,
+      "hasMcpBackup": true,
+      "pass": true
+    }
+  ],
+  "D1-2": [
+    {
+      "desc": "multi-agent detection",
+      "result": "{\"installed\":true,\"authenticated\":true,\"status\":\"ok\",\"output\":\"当前KooCLI版本:7.2.12\",\"kooCliVersion\":\"7.2.12\",\"installedVersion\":\"7.2.12\",\"versionMismatch\":false,\"nextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"authHint\":\"If hcloud is installed but comman"
+    }
+  ],
+  "D1-4": [
+    {
+      "desc": "idempotent check_update",
+      "idempotent": true,
+      "pass": true
+    }
+  ],
+  "D1-6": [
+    {
+      "desc": "hcloud installed"
+    }
+  ]
+}

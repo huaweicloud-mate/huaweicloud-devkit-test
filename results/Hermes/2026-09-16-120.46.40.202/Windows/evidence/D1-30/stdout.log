@@ -1,0 +1,12 @@
+=== D1-30: semver comparison ===
+Timestamp: 2026-09-15T05:39:06.725Z
+
+  semverCompare('1.1.4','1.1.4') = 0 (expected 0) PASS
+  semverCompare('1.1.5','1.1.4') = 1 (expected 1) PASS
+  semverCompare('1.1.3','1.1.4') = -1 (expected -1) PASS
+  semverCompare('1.1.4','1.1.4-next.7') = 1 (expected 1) PASS [stable > prerelease]
+  semverCompare('1.1.4-next.7','1.1.4-next.5') = 1 (expected 1) PASS [newer prerelease]
+  semverCompare('1.2.0','1.1.4') = 1 (expected 1) PASS
+  semverCompare('2.0.0','1.9.9') = 1 (expected 1) PASS
+
+RESULT: PASS - All 7 semver comparison cases correct, including stable-vs-prerelease ordering

@@ -1,0 +1,22 @@
+=== D10-4: Safety intervention effectiveness ===
+Timestamp: 2026-09-15T05:42:00Z
+
+This case requires a real Agent + plugin interaction to test whether high-risk intent
+requests automatically trigger the plan → approval flow.
+
+Source-level verification:
+  1. classifyHcloudArgs correctly denies all write operations (decision=deny, risk=write)
+  2. Write operations require explicit allowWrites=true to proceed
+  3. The plan_cli_command tool (tools.mjs L250+) requires an approvalToken
+  4. The execute_cli_command tool (L260+) requires approvalToken + approvedByUser
+  5. consumeApprovalToken (hcloud-cli.mjs) validates and consumes tokens
+
+RESULT: BLOCKED
+  blockedReason: Requires real Agent + plugin interaction to verify end-to-end safety intervention.
+  Source-level verification confirms the approval flow exists and is correctly implemented,
+  but full E2E testing requires an actual agent session with the MCP server running.
+  
+  The safety intervention chain is verified at the source level:
+  - classifyHcloudArgs denies writes without approval (PASS)
+  - plan/approve/execute flow requires tokens (PASS)
+  - All write operations are gated (PASS)

@@ -1,0 +1,94 @@
+Probe: probe-p0-batch2.mjs
+Return code: 0
+
+{
+  "D1-39": [
+    {
+      "desc": "queryDistTagsSync",
+      "result": "null",
+      "success": true
+    },
+    {
+      "desc": "queryDistTags (async)",
+      "result": "null",
+      "success": true
+    }
+  ],
+  "D1-40": [
+    {
+      "desc": "mirror lag - remote older than local",
+      "installed": "1.1.5",
+      "target": "1.0.0",
+      "judge": "{\"currentVersion\":\"1.1.5\",\"latestStable\":\"1.0.0\",\"latestNext\":\"1.0.0-next.1\",\"targetVersion\":\"1.0.0\",\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"up_to_date\"}",
+      "noDowngrade": true
+    },
+    {
+      "desc": "real update available",
+      "installed": "1.1.5",
+      "judge": "{\"currentVersion\":\"1.1.5\",\"latestStable\":\"1.2.0\",\"latestNext\":\"1.2.0-next.1\",\"targetVersion\":\"1.2.0\",\"updateAvailable\":true,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"update_available\"}",
+      "shouldSuggestUpdate": false
+    }
+  ],
+  "D2-11": [
+    {
+      "desc": "STS token creation",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    {
+      "desc": "STS token via text cmd",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    }
+  ],
+  "D4-23": [
+    {
+      "desc": "huawei-agent-rules.md exists",
+      "found": false,
+      "error": "File not found"
+    }
+  ],
+  "D8-7": [
+    {
+      "desc": "retrieve_skill ECS",
+      "error": "Unknown tool: retrieve_skill"
+    }
+  ],
+  "D9-1": [
+    {
+      "desc": "tool count",
+      "count": 40,
+      "expectedMin": 39,
+      "pass": true
+    },
+    {
+      "desc": "schema validation",
+      "total": 40,
+      "valid": 40,
+      "invalid": [],
+      "pass": true
+    },
+    {
+      "desc": "no duplicates",
+      "duplicates": [],
+      "pass": true
+    }
+  ],
+  "D9-2": [
+    {
+      "desc": "unknown method",
+      "error": "Method not found: unknown_method",
+      "code": -32601
+    },
+    {
+      "desc": "invalid params (null)",
+      "error": "Cannot read properties of null (reading 'name')"
+    },
+    {
+      "desc": "tools/list with extra params",
+      "result": "{\"tools\":[{\"name\":\"huaweicloud_check_cli\",\"description\":\"Check whether Huawei Cloud KooCLI hcloud is installed and whether its version matches the plugin paired version. Returns redacted output.\",\"inputSchema\":{\"type\":\"object\",\"properties\":{}}},{\"name\":\"huaweicloud_plan_cli_command\",\"description\":\"C"
+    }
+  ]
+}

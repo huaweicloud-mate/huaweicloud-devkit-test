@@ -1,0 +1,45 @@
+=== D4-1: Credential file read interception ===
+  [deny] cat ~/.hcloud/credentials.json
+  [deny] type %USERPROFILE%\.hcloud\credentials.json
+  [deny] cat ~/.huaweicloud/credentials.json
+  [deny] cat ~/.config/huaweicloud/credentials.json
+  [deny] cat ~/.hcloud/credential.json
+RESULT: PASS - all credential file reads blocked by hwc-command-credential-file rule
+
+=== D4-2: Credential env print interception ===
+  [allow] env | grep HW_ACCESS_KEY       ← NOT BLOCKED
+  [allow] printenv HW_ACCESS_KEY         ← NOT BLOCKED
+  [allow] echo $HW_ACCESS_KEY            ← NOT BLOCKED
+  [deny] printenv HUAWEICLOUD_ACCESS_KEY (blocked by hwc-command-env-dump)
+  [deny] env | grep HWC_SECRET_KEY       (blocked by hwc-command-env-dump)
+  [allow] echo $HCLOUD_ACCESS_KEY        ← NOT BLOCKED
+  [allow] printenv HW_SECRET_ACCESS_KEY  ← NOT BLOCKED
+  [allow] env | grep AK                  ← NOT BLOCKED
+RESULT: FAIL - HW_ACCESS_KEY, HW_SECRET_ACCESS_KEY, HCLOUD_ACCESS_KEY env vars NOT blocked
+
+=== D4-3: Plaintext secret API interception ===
+  [allow/read_only] hcloud DEW ShowSecret --secret_id=test     ← NOT BLOCKED (returns plaintext secret)
+  [allow/read_only] hcloud KMS ShowSecret --secret_id=test     ← NOT BLOCKED
+  [deny/secret] hcloud CSMS ShowSecretVersion --secret_id=test (blocked - correct)
+  [allow/read_only] hcloud DEW ListSecrets --name=test         ← NOT BLOCKED
+  [allow/unknown_read] hcloud KMS DecryptData --cipher_text=test ← NOT BLOCKED
+RESULT: FAIL - DEW ShowSecret, KMS ShowSecret, DEW ListSecrets, KMS DecryptData not blocked
+
+=== D4-5: Write operation classification (must not be read_only/allow) ===
+  [deny/write] all 8 write operations correctly classified
+RESULT: PASS - no misjudgment
+
+=== D4-9: Public exposure / destructive pre-check ===
+  [deny] VPC CreateSecurityGroupRule 0.0.0.0/0 port 22 (blockedByRiskRule=true) ✓
+  [deny] VPC CreateSecurityGroupRule 0.0.0.0/0 port 3389 (blockedByRiskRule=true) ✓
+  [allow] ELB CreateListener TCP port 22 ← NOT BLOCKED (public SSH exposure)
+  [deny/write] all destructive ops safeToRun=false ✓
+RESULT: FAIL - ELB CreateListener on port 22 (SSH) not blocked
+
+=== D4-15: Hook bypass attempt detection ===
+  [deny/write] all 6 case variants correctly classified
+RESULT: PASS - no bypass
+
+=== D4-16: Command wrapping penetration ===
+  [warn] all 8 wrapped commands detected as warn (not allow)
+RESULT: PASS - no penetration (wrapped commands flagged as warn)

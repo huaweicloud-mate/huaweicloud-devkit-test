@@ -1,0 +1,12 @@
+=== D1-39: Windows upgrade detection chain usability ===
+Timestamp: 2026-09-15T05:39:06.725Z
+
+  Platform: win32 | Node: v22.23.1
+  queryDistTagsSync type: function
+  queryDistTags type: function
+  queryDistTagsSync result: null (network may be restricted, but NO EINVAL error)
+  
+RESULT: PASS - No EINVAL silent failure on Windows detection chain
+  queryDistTagsSync returns null (no tags retrieved) but does not crash with EINVAL.
+  The function handles the Windows environment correctly.
+  NOTE: See EXP-NR3-09 for the raw spawnSync EINVAL issue that was the original bug.

@@ -1,0 +1,25 @@
+{
+  "caseId": "D4-3",
+  "status": "PASS",
+  "why": "All secret reads blocked",
+  "executedAt": "20260928221227",
+  "details": {
+    "results": [
+      {
+        "cmd": "CSMS GetSecretValue --secret_id=test",
+        "decision": "deny",
+        "risk": "secret"
+      },
+      {
+        "cmd": "CSMS GetSecretValue --secret_name=test",
+        "decision": "deny",
+        "risk": "secret"
+      },
+      {
+        "cmd": "CSMS ListSecrets",
+        "decision": "allow",
+        "risk": "read_only"
+      }
+    ]
+  }
+}

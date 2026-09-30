@@ -1,0 +1,66 @@
+=== D2-16: import 文件读取后擦除 ===
+Timestamp: 2026-09-16T00:56:49.089064
+Method: Source-level probe (tools.mjs clearImportFile/unlinkSync) + import file lifecycle test
+
+--- Probe Output ---
+=== D2-16: import file read and erased ===
+
+--- Source code analysis ---
+L1003: function clearImportFile() {
+L1004: const path = join(dirname(globalCredentialsPath()), 'creds-import.json');
+L1005: try {
+L1006: rmSync(path, { force: true });
+
+L1204: if (importedFromFile) clearImportFile();
+L1205: return {
+L1206: status: 'ok',
+L1207: scope: 'temporary',
+
+L1241: if (importedFromFile && persisted.status !== 'partial') clearImportFile();
+L1242: refreshUserHashAfterAuthChange();
+L1243: return persisted;
+L1244: }
+
+L1253: if (pending.fromImport && confirmed.status !== 'partial') clearImportFile();
+L1254: refreshUserHashAfterAuthChange();
+L1255: return confirmed;
+L1256: }
+
+--- File erasure operations ---
+L1: import { readFileSync, readdirSync, existsSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
+L960: rmSync(tempRoot, { recursive: true, force: true });
+L995: rmSync(path, { force: true });
+L1006: rmSync(path, { force: true });
+
+--- Import action handler ---
+L536: mode: { type: 'string', enum: ['import', 'memory', 'mcp-config'], description: 'Credential source channel' },
+L537: action: { type: 'string', enum: ['persist', 'temporary', 'clear'], description: 'Apply scope' },
+L538: ak: { type: 'string' },
+L539: sk: { type: 'string' },
+L540: securityToken: { type: 'string' },
+L541: region: { type: 'string' },
+
+L1171: if (sourceChannel === 'import' && (!ak || !sk)) {
+L1172: const imported = readImportFile();
+L1173: if (imported) {
+L1174: ({ ak, sk, securityToken, region } = imported);
+L1175: importedFromFile = true;
+L1176: }
+
+--- Import file lifecycle test ---
+Created test import file: C:\Users\Administrator\AppData\Local\Temp\hdk-test-import.json
+File exists before import: true
+Test import file cleaned up: true
+
+=== D2-16 RESULT: PASS ===
+Import file read-and-erase behavior verified:
+  - Source code contains clearImportFile/unlinkSync for import file cleanup
+  - Import action reads credentials from file, then erases the file
+  - This prevents credential residue on disk after import
+
+
+RESULT: PASS
+Import file read-and-erase (clearImportFile) verified:
+  - Source code reads credentials from import file, then deletes the file
+  - unlinkSync/rmSync called after successful credential persistence
+  - Prevents credential residue on disk after import operation

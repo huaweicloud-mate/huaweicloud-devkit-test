@@ -1,0 +1,44 @@
+=== v1.1.5 Re-test Verification ===
+Timestamp: 2026-09-16T07:48:42 (CST)
+SUT: huaweicloud-devkit@1.1.5
+
+=== v1.1.5 Re-test: D4-2, D4-16, D4-22, D9-2 ===
+Timestamp: 2026-09-15T23:48:42.225Z
+
+--- D4-2: echo credential env variable interception ---
+  GAP | echo $HUAWEICLOUD_SDK_AK => decision=allow, risk=not_huaweicloud (expected deny)
+  GAP | echo $HUAWEICLOUD_SDK_SK => decision=allow, risk=not_huaweicloud (expected deny)
+  GAP | echo %HUAWEICLOUD_SDK_AK% => decision=allow, risk=not_huaweicloud (expected deny)
+  GAP | echo %HUAWEICLOUD_SDK_SK% => decision=allow, risk=not_huaweicloud (expected deny)
+  OK | echo $HW_ACCESS_KEY => decision=deny, risk=credential (expected deny)
+  OK | echo $HW_SECRET_KEY => decision=deny, risk=credential (expected deny)
+  OK | printenv HUAWEICLOUD_SDK_AK => decision=deny, risk=credential (expected deny)
+  OK | printenv HW_ACCESS_KEY => decision=deny, risk=credential (expected deny)
+  GAP | env | grep HUAWEICLOUD => decision=deny, risk=credential (expected allow)
+  OK | echo $HOME => decision=allow, risk=not_huaweicloud (expected allow)
+  OK | echo $PATH => decision=allow, risk=not_huaweicloud (expected allow)
+D4-2 RESULT: FAIL - echo credential env bypass still present
+
+--- D4-16: shell-wrapped hcloud write command interception ---
+  GAP | sh -c "hcloud ECS DeleteServer --server_id=test" => decision=allow, risk=not_huaweicloud (expected deny)
+  GAP | bash -c "hcloud ECS DeleteServer" => decision=allow, risk=not_huaweicloud (expected deny)
+  GAP | eval "hcloud ECS DeleteServer --server_id=test" => decision=allow, risk=not_huaweicloud (expected deny)
+  GAP | sh -c $(hcloud ECS DeleteServer) => decision=allow, risk=not_huaweicloud (expected deny)
+  GAP | cmd /c "hcloud ECS DeleteServer --server_id=test" => decision=allow, risk=not_huaweicloud (expected deny)
+  OK | sudo hcloud ECS DeleteServer --server_id=test => decision=deny, risk=write (expected deny)
+  GAP | /bin/bash -c "hcloud ECS CreateServer --name=test" => decision=allow, risk=not_huaweicloud (expected deny)
+  CTRL | direct hcloud ECS DeleteServer => decision=deny (expected deny)
+D4-16 RESULT: FAIL - shell wrap bypass still present
+
+--- D4-22: deploy plan public_access false positive ---
+  Safe (public_access=false): decision=warn, findings=["hwc-functiongraph-public-no-auth","hwc-sandbox-missing-ttl"]
+  Public (public_access=true): decision=warn, findings=["hwc-functiongraph-public-no-auth","hwc-sandbox-missing-ttl"]
+D4-22 RESULT: SPEC-MISMATCH - false positive still present (both configs trigger rule)
+
+--- D9-2: JSON-RPC error code for unknown method ---
+  Unknown method error code: -32601 (expected -32601)
+D9-2 RESULT: PASS - unknown method returns -32601 (method not found)
+
+=== Summary ===
+D4-2: FAIL (still broken)
+D4-16: FAIL (still broken)

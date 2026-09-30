@@ -1,0 +1,101 @@
+  "bash -c "hcloud ECS DeleteServers --server_ids i-xxx"" -> text:deny risk:warn inner:FOUND
+  "sh -c "hcloud ECS DeleteServers --server_ids i-xxx"" -> text:deny risk:warn inner:FOUND
+  "cmd /c "hcloud ECS DeleteServers --server_ids i-xxx"" -> text:deny risk:warn inner:FOUND
+  "powershell -Command "hcloud ECS DeleteServers --server_ids i" -> text:deny risk:warn inner:FOUND
+  "eval "hcloud ECS DeleteServers --server_ids i-xxx"" -> text:deny risk:warn inner:FOUND
+  "$(hcloud ECS DeleteServers --server_ids i-xxx)" -> text:deny risk:warn inner:FOUND
+  "bash -c "cat ~/.hcloud/credentials.json"" -> text:deny risk:deny inner:FOUND
+  "sh -c "printenv HW_SECRET_KEY"" -> text:deny risk:allow inner:FOUND
+  "cmd /c "type %USERPROFILE%\.hcloud\config"" -> text:deny risk:deny inner:FOUND
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260930214611",
+  "details": {
+    "testResults": [
+      {
+        "command": "bash -c \"hcloud ECS DeleteServers --server_ids i-xxx\"",
+        "textDecision": "deny",
+        "riskDecision": "warn",
+        "innerCommandsFound": true,
+        "innerCommands": [
+          "hcloud ECS DeleteServers --server_ids i-xxx"
+        ]
+      },
+      {
+        "command": "sh -c \"hcloud ECS DeleteServers --server_ids i-xxx\"",
+        "textDecision": "deny",
+        "riskDecision": "warn",
+        "innerCommandsFound": true,
+        "innerCommands": [
+          "hcloud ECS DeleteServers --server_ids i-xxx"
+        ]
+      },
+      {
+        "command": "cmd /c \"hcloud ECS DeleteServers --server_ids i-xxx\"",
+        "textDecision": "deny",
+        "riskDecision": "warn",
+        "innerCommandsFound": true,
+        "innerCommands": [
+          "hcloud ECS DeleteServers --server_ids i-xxx"
+        ]
+      },
+      {
+        "command": "powershell -Command \"hcloud ECS DeleteServers --server_ids i-xxx\"",
+        "textDecision": "deny",
+        "riskDecision": "warn",
+        "innerCommandsFound": true,
+        "innerCommands": [
+          "hcloud ECS DeleteServers --server_ids i-xxx"
+        ]
+      },
+      {
+        "command": "eval \"hcloud ECS DeleteServers --server_ids i-xxx\"",
+        "textDecision": "deny",
+        "riskDecision": "warn",
+        "innerCommandsFound": true,
+        "innerCommands": [
+          "hcloud ECS DeleteServers --server_ids i-xxx"
+        ]
+      },
+      {
+        "command": "$(hcloud ECS DeleteServers --server_ids i-xxx)",
+        "textDecision": "deny",
+        "riskDecision": "warn",
+        "innerCommandsFound": true,
+        "innerCommands": [
+          "hcloud ECS DeleteServers --server_ids i-xxx"
+        ]
+      },
+      {
+        "command": "bash -c \"cat ~/.hcloud/credentials.json\"",
+        "textDecision": "deny",
+        "riskDecision": "deny",
+        "innerCommandsFound": true,
+        "innerCommands": [
+          "cat ~/.hcloud/credentials.json"
+        ]
+      },
+      {
+        "command": "sh -c \"printenv HW_SECRET_KEY\"",
+        "textDecision": "deny",
+        "riskDecision": "allow",
+        "innerCommandsFound": true,
+        "innerCommands": [
+          "printenv HW_SECRET_KEY"
+        ]
+      },
+      {
+        "command": "cmd /c \"type %USERPROFILE%\\.hcloud\\config\"",
+        "textDecision": "deny",
+        "riskDecision": "deny",
+        "innerCommandsFound": true,
+        "innerCommands": [
+          "type %USERPROFILE%\\.hcloud\\config"
+        ]
+      }
+    ],
+    "allBlocked": true
+  }
+}

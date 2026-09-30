@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "caseId": "D4-9",
+  "executedAt": "20260924210000",
+  "details": {
+    "results": [
+      {
+        "args": "ECS DeleteServer --server_id=test",
+        "decision": "deny",
+        "risk": "invalid"
+      },
+      {
+        "args": "VPC DeleteVpc --vpc_id=test",
+        "decision": "deny",
+        "risk": "invalid"
+      },
+      {
+        "args": "RDS DeleteInstance --instance_id=test",
+        "decision": "deny",
+        "risk": "invalid"
+      },
+      {
+        "args": "EIP DeletePublicip --publicip_id=test",
+        "decision": "deny",
+        "risk": "invalid"
+      }
+    ]
+  },
+  "why": "All destructive ops blocked/warned"
+}

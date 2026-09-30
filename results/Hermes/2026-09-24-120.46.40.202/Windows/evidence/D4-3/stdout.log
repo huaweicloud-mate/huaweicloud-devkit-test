@@ -1,0 +1,35 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-3",
+  "executedAt": "20260924210000",
+  "details": {
+    "results": [
+      {
+        "args": "ECS ShowServerPassword --server_id=test",
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation."
+      },
+      {
+        "args": "RDS ShowInstanceConfiguration --instance_id=test",
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation."
+      },
+      {
+        "args": "KMS ShowKeyVersion --key_id=test",
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation."
+      },
+      {
+        "args": "CSMS ShowSecretVersion --secret_id=test",
+        "decision": "deny",
+        "risk": "secret",
+        "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agen"
+      }
+    ],
+    "gap": "ECS ShowServerPassword classified as allow/read_only - returns decrypted admin password"
+  },
+  "why": "CODE DEFECT: ShowServerPassword not intercepted as secret-returning API"
+}

@@ -1,0 +1,38 @@
+=== D4-18: confirm-not-deny 审批语义 ===
+Timestamp: 2026-09-16T00:57:29.854260
+Method: Source-level probe (planHcloudCommand with real cloud context)
+Real cloud credentials: admin AK/SK configured, cn-north-4
+
+--- Probe Output ---
+=== D4-18: confirm-not-deny approval semantics ===
+
+--- Test 1: Write WITHOUT approval (VPC CreateVpc) ---
+decision=deny, risk=write
+PASS: Write blocked without approval: true
+
+--- Test 2: Write WITH approval (VPC CreateVpc, allowWrites=true) ---
+decision=allow, risk=write
+PASS: Write allowed with approval: true
+PASS: Risk still 'write' even when approved: true
+
+--- Test 3: Read operation (VPC ListVpcs) ---
+decision=allow, risk=read_only
+PASS: Read auto-allowed: true
+
+--- Test 4: Delete WITHOUT approval (ECS NovaDeleteServer) ---
+decision=deny, risk=write
+PASS: Delete blocked without approval: true
+
+=== D4-18 SUMMARY ===
+Write without approval: DENY (not auto-executed) ✓
+Write with approval: ALLOW (not denied) ✓
+Read operation: ALLOW auto (no confirmation needed) ✓
+Delete without approval: DENY ✓
+RESULT: PASS
+Write operations are NOT directly denied (they can be approved via allowWrites=true).
+Write operations are NOT directly executed (without approval, decision=deny).
+Read operations are auto-allowed (no confirmation needed).
+
+
+RESULT: PASS
+Approval semantics verified: write ops require explicit confirmation (not auto-denied, not auto-executed).

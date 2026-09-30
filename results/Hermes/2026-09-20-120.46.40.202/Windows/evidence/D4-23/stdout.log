@@ -1,0 +1,23 @@
+{
+  "D4-23": {
+    "rules_file_exists": false,
+    "rules_file_at_source": "rules/huawei-agent-rules.mdc",
+    "rules_in_npm_package": false,
+    "package_files_missing_rules": true,
+    "root_cause": "package.json files array does not include 'rules/' directory, so huawei-agent-rules.mdc is not shipped in npm package and not available for injection during install",
+    "root_cause_file": "package.json:files array",
+    "pass": false,
+    "status": "SPEC-MISMATCH"
+  },
+  "D4-28": {
+    "hooks_json_exists": true,
+    "hooks_mjs_exists": true,
+    "uses_mjs": true,
+    "command_text_fields": ["command", "cmd", "script", "args", "commandText"],
+    "has_permission_decision": true,
+    "has_deny_output": true,
+    "high_risk_test": {"cmd": "cat ~/.hcloud/credentials.json", "decision": "deny", "risk": "credential"},
+    "normal_test": {"cmd": "ls -la", "decision": "allow", "risk": "not_huaweicloud"},
+    "pass": true
+  }
+}

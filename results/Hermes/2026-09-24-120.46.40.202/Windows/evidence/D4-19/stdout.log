@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "caseId": "D4-19",
+  "executedAt": "20260924210000",
+  "details": {
+    "riskResult": {
+      "decision": "deny",
+      "risk": "invalid",
+      "findings": [
+        {
+          "ruleId": "invalid-input",
+          "title": "Invalid input for risk check",
+          "category": "invalid",
+          "severity": "deny",
+          "message": "command must be a non-empty string.",
+          "remediation": "Provide a valid, non-empty input before re-running the check.",
+          "source": "command",
+          "evidence": ""
+        }
+      ]
+    },
+    "planResult": {
+      "executable": "hcloud",
+      "args": [
+        "ECS",
+        "DeleteServer",
+        "--server_id=prod-server"
+      ],
+      "command": "hcloud ECS DeleteServer --server_id=prod-server",
+      "executableBlock": "hcloud ECS DeleteServer --server_id=prod-server",
+      "warnings": [],
+      "classification": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      "sgFindings": [],
+      "approvalToken": "961127e0-eb09-4436-89fd-e8ce94504a3f",
+      "safeToRun": false
+    }
+  },
+  "why": "Preflight active in confirm flow"
+}

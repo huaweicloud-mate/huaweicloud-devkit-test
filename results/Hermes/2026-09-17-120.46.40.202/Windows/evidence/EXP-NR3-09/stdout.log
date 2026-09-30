@@ -1,0 +1,15 @@
+=== EXP-NR3-09: spawnSync npm.cmd EINVAL direct capture ===
+Test 1 (sync, no shell): error.code=EINVAL status=null → EINVAL captured: TRUE
+Test 2 (sync, shell:true): status=0 stdout={"next":"1.1.6-next.0","latest":"1.1.5"} → Success: TRUE
+Test 3 (async spawn): Error: spawn EINVAL (uncaught in probe, but queryDistTags catches and resolves null)
+
+RESULT: FAIL
+- EINVAL is reproduced on both sync and async paths
+- queryDistTagsSync (line 238): spawnSync('npm.cmd',...) without shell:true → EINVAL → returns null
+- queryDistTags (line 259): spawn('npm.cmd',...) without shell:true → EINVAL → resolves null
+- Both paths silently fail on Windows, update check chain is broken
+- Fix: add shell:true to spawnSync/spawn options on Windows, or use process.execPath for npm
+
+Root cause: plugins/huaweicloud-core/src/update-check.mjs:238 and :259
+NPM_BIN = IS_WINDOWS ? 'npm.cmd' : 'npm' (line 12)
+Both spawnSync and spawn calls lack shell:true option needed for .cmd files on Windows

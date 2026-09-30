@@ -1,0 +1,29 @@
+=== D4-19: 确认流下预检仍生效 ===
+Timestamp: 2026-09-16T00:57:52.623381
+Method: Source-level probe (planHcloudCommand with/without allowWrites)
+Real cloud context: admin AK/SK configured, cn-north-4
+
+=== D4-19: preflight in confirmation flow ===
+
+VPC.CreateVpc:
+  Without approval: decision=deny, risk=write
+  With approval:    decision=allow, risk=write
+  Risk is 'write' in both cases: true
+ECS.NovaDeleteServer:
+  Without approval: decision=deny, risk=write
+  With approval:    decision=allow, risk=write
+  Risk is 'write' in both cases: true
+EVS.CreateVolume:
+  Without approval: decision=deny, risk=write
+  With approval:    decision=allow, risk=write
+  Risk is 'write' in both cases: true
+
+=== D4-19 SUMMARY ===
+All operations maintain risk='write' regardless of approval state: true
+RESULT: PASS
+Even when a write operation is approved (allowWrites=true), the risk is still classified as write.
+The preflight classification is independent of the approval state.
+
+
+RESULT: PASS
+Preflight classification is independent of approval state - risk always 'write' for write operations.

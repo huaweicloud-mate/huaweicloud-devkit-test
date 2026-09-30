@@ -1,0 +1,34 @@
+{
+  "caseId": "D4-17",
+  "status": "PASS",
+  "why": "Empty cmd=deny (deny=fail-closed), hcloud alone=allow (allow=ok, it's help), unknown Delete=deny/write",
+  "executedAt": "20260923094935",
+  "empty": {
+    "decision": "deny",
+    "risk": "invalid",
+    "reason": "command must be a non-empty string.",
+    "blockedByRiskRule": true,
+    "findings": [
+      {
+        "ruleId": "invalid-input",
+        "title": "Invalid input for risk check",
+        "category": "invalid",
+        "severity": "deny",
+        "message": "command must be a non-empty string.",
+        "remediation": "Provide a valid, non-empty input before re-running the check.",
+        "source": "command",
+        "evidence": ""
+      }
+    ]
+  },
+  "noArgs": {
+    "decision": "allow",
+    "risk": "not_huaweicloud",
+    "reason": "No Huawei Cloud safety rule matched."
+  },
+  "unknown": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  }
+}

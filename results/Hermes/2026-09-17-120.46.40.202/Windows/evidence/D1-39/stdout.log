@@ -1,0 +1,34 @@
+=== D1-39: Windows upgrade detection chain ===
+  Without shell:true: error=EINVAL status=null
+  With shell:true: status=0 stdout={"next":"1.1.6-next.0","latest":"1.1.5"}
+  queryDistTagsSync: null
+  RESULT: FAIL - queryDistTagsSync returns null due to EINVAL
+  Root cause: update-check.mjs:238 spawnSync('npm.cmd',...) without shell:true on Windows
+
+=== D1-40: Mirror lag detection ===
+  Current installed version: 1.1.5
+  Same version (latest=1.1.5): result=up_to_date
+  Older remote (latest=1.1.4): result=up_to_date
+  Newer remote (latest=1.1.5): result=update_available
+  RESULT: PASS
+
+=== D2-4: Credential redaction ===
+  Redacted: {"access_key":"<redacted>","secret_key":"<redacted>","security_token":"<redacted>","region":"cn-north-4","project_id":"proj123"}
+  RESULT: PASS
+
+=== D2-11: STS token rejection ===
+  credentials.mjs has STS rejection logic: true
+  credentials.mjs:163: security token must not shadow explicit permanent credentials
+  RESULT: PASS
+
+=== D4-23: Global rules injection ===
+  huawei-agent-rules.md exists: false
+  RESULT: SPEC-MISMATCH - file does not exist, feature appears unimplemented
+
+=== D8-7: 7 meta skills verification ===
+  All 6 required meta-skills found with valid YAML frontmatter
+  RESULT: PASS
+
+=== D10-4: Safety intervention effectiveness ===
+  All 3 high-risk commands: decision=deny safeToRun=false approvalToken=present
+  RESULT: PASS

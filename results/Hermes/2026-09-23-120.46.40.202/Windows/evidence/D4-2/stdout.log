@@ -1,0 +1,27 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "Cloud credential env vars (HW_/HUAWEICLOUD_ prefix) all blocked; general env grep without cloud prefix is allowed by design",
+  "executedAt": "20260923094144",
+  "r1": {
+    "decision": "deny",
+    "risk": "credential",
+    "reason": "Printing cloud credential environment variables is blocked."
+  },
+  "r2": {
+    "decision": "deny",
+    "risk": "credential",
+    "reason": "Printing cloud credential environment variables is blocked."
+  },
+  "r3": {
+    "decision": "deny",
+    "risk": "credential",
+    "reason": "Dumping cloud credential environment variables is blocked."
+  },
+  "r4": {
+    "decision": "deny",
+    "risk": "credential",
+    "reason": "Dumping cloud credential environment variables is blocked."
+  },
+  "r5_note": "env|grep without HW prefix is allowed by design - only cloud-specific credentials are targeted"
+}

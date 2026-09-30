@@ -1,0 +1,23 @@
+{
+  "caseId": "D4-1",
+  "status": "PASS",
+  "why": "All credential file reads blocked",
+  "executedAt": "20260928221200",
+  "details": {
+    "results": [
+      {
+        "cmd": "hcloud configure show --cli-credentials-file=/etc/passwd",
+        "decision": "deny",
+        "risk": "credential"
+      },
+      {
+        "cmd": "cat ~/.hcloud/credentials.json",
+        "decision": "deny"
+      },
+      {
+        "cmd": "type %USERPROFILE%.hcloudcredentials.json",
+        "decision": "deny"
+      }
+    ]
+  }
+}

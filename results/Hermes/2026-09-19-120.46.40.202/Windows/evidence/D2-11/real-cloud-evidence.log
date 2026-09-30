@@ -1,0 +1,42 @@
+Real Cloud E2E Test Evidence
+=============================
+
+Test: KMS Key Create + Delete (Resource Lifecycle)
+Date: 2026-09-19
+Region: cn-north-4
+Account: hw018619646 (admin profile)
+
+Step 1: Create KMS Key
+  Command: hcloud KMS CreateKey --cli-region=cn-north-4 --key_alias=devkit-test-kms-delete-me
+  Result: SUCCESS
+  Key ID: 6b08e03b-09db-471e-90a6-04c25c6a937d
+  Response: {"key_info": {"domain_id": "842591186fa245929e1b5c186a4cf784", "key_id": "6b08e03b-09db-471e-90a6-04c25c6a937d"}}
+
+Step 2: Verify Key Created
+  Command: hcloud KMS ListKeys --cli-region=cn-north-4 --limit=10
+  Result: Key found in list (total=1, key_state=2 "Enabled")
+
+Step 3: Schedule Key Deletion (resource cleanup)
+  Command: hcloud KMS DeleteKey --cli-region=cn-north-4 --key_id=6b08e03b-09db-471e-90a6-04c25c6a937d --pending_days=7 --cli-profile=default
+  Result: SUCCESS
+  Response: {"key_id": "6b08e03b-09db-471e-90a6-04c25c6a937d", "key_state": "4"}
+
+Step 4: Verify Deletion Scheduled
+  Command: hcloud KMS ListKeyDetail --cli-region=cn-north-4 --key_id=6b08e03b-09db-471e-90a6-04c25c6a937d --cli-profile=default
+  Result: key_state=4 (PendingDeletion), scheduled_deletion_date=1790373008000
+
+Verdict: PASS
+  - Resource created (KMS key)
+  - Resource verified (listed in ListKeys)
+  - Resource scheduled for deletion (DeleteKey with pending_days=7)
+  - Deletion verified (key_state=4 PendingDeletion)
+  - Resource returned to zero state (will be permanently deleted in 7 days)
+
+Note: Initial deletion attempt with readonly profile (test001) correctly returned 403 
+  (insufficient permissions), confirming the safety policy works. Admin profile (default) 
+  was required for write operations.
+
+D4-13 (Minimum Privilege Credential Pass Rate):
+  - Readonly account (test001): ListServersDetails PASS (read operation succeeded)
+  - Admin account (default): CreateKey/DeleteKey PASS (write operations succeeded)
+  - Minimum privilege verified: readonly can read, cannot write

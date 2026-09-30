@@ -1,0 +1,36 @@
+{
+  "caseId": "D4-9",
+  "status": "PASS",
+  "why": "delete=warn publicExpose=deny",
+  "executedAt": "20260925214254",
+  "r1": {
+    "decision": "warn",
+    "findings": [
+      {
+        "ruleId": "hwc-destructive-delete-operation",
+        "title": "Destructive cloud resource operation",
+        "category": "destructive",
+        "severity": "warn",
+        "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+        "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+        "source": "command",
+        "evidence": "hcloud ECS DeleteServer --server_id=prod-server"
+      }
+    ]
+  },
+  "r2": {
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-network-public-admin-port",
+        "title": "Public admin port exposure",
+        "category": "public_exposure",
+        "severity": "deny",
+        "message": "The change appears to expose an administrative or database port to the public internet. Web ports (80/443) are allowed - this rule only covers admin/database ports.",
+        "remediation": "Restrict the source CIDR to a trusted range, use a bastion or VPN, and keep public preview endpoints behind authenticated HTTP services.",
+        "source": "command",
+        "evidence": "hcloud VPC CreateSecurityGroupRule --direction=ingress --port_range_min=22 --remote_ip_prefix=0.0.0.0/0"
+      }
+    ]
+  }
+}

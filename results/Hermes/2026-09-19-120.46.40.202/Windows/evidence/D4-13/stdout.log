@@ -1,0 +1,13 @@
+D4-13: 最小权限凭证通过率
+
+Readonly account (test001) via run-as-readonly.py:
+  hcloud ECS ListServersDetails --cli-region=cn-north-4
+  Result: {"count": 0, "servers": []} (RC=0, read operation succeeded)
+
+Admin account (default):
+  hcloud KMS CreateKey --key_alias=devkit-test-kms-delete-me
+  Result: key_id=6b08e03b-09db-471e-90a6-04c25c6a937d (RC=0, write succeeded)
+  hcloud KMS DeleteKey --key_id=... --pending_days=7 --cli-profile=default
+  Result: key_state=4 PendingDeletion (RC=0, deletion scheduled)
+
+Verdict: PASS (readonly can read, cannot write; admin can write; minimum privilege enforced)

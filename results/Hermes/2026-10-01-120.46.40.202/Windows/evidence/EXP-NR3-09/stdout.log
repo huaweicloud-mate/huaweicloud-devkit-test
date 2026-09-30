@@ -1,0 +1,32 @@
+Test 1: queryDistTagsSync...
+queryDistTagsSync returned: {"latest":"1.1.7","next":"1.1.8-next.1"}
+
+Test 2: queryDistTagsFetch...
+queryDistTagsFetch returned: {"latest":"1.1.7","next":"1.1.8-next.1"}
+
+Test 3: spawnSync npm.cmd...
+npm.cmd exit code: 0
+npm.cmd stdout: 1.1.7
+
+
+Test 4: spawnSync npm.cmd without shell...
+npm.cmd (no shell) exit code: null
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "EINVAL bug no longer reproduces. syncWorks=true, fetchWorks=true, npmWorks=true. Detection chain functional on Windows.",
+  "executedAt": "20260930215138",
+  "details": {
+    "syncResult": "got result",
+    "syncError": null,
+    "hasEinval": null,
+    "syncWorks": true,
+    "fetchResult": "got result",
+    "fetchError": null,
+    "fetchWorks": true,
+    "npmWorks": true,
+    "npmEinval": null,
+    "npmNoShellEinval": null,
+    "detectionChainWorks": true
+  }
+}

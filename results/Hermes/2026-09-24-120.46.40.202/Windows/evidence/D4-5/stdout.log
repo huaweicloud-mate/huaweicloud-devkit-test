@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "caseId": "D4-5",
+  "executedAt": "20260924210000",
+  "details": {
+    "results": [
+      {
+        "args": "ECS DeleteServer --server_id=test",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "args": "VPC DeleteVpc --vpc_id=test",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "args": "RDS DeleteInstance --instance_id=test",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "args": "IAM DeleteUser --user_id=test",
+        "decision": "deny",
+        "risk": "write"
+      }
+    ]
+  },
+  "why": "All write ops correctly classified"
+}

@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "caseId": "D4-4",
+  "executedAt": "20260924210000",
+  "details": {
+    "plan": {
+      "executable": "hcloud",
+      "args": [
+        "ECS",
+        "DeleteServer",
+        "--server_id=test"
+      ],
+      "command": "hcloud ECS DeleteServer --server_id=test",
+      "executableBlock": "hcloud ECS DeleteServer --server_id=test",
+      "warnings": [],
+      "classification": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      "sgFindings": [],
+      "approvalToken": "19483833-6e51-4ec2-acba-1f503670d656",
+      "safeToRun": false
+    },
+    "classify": {
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    "needsApproval": true
+  },
+  "why": "write op approval gate: needsApproval=True"
+}

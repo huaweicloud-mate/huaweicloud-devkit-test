@@ -1,0 +1,47 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-2",
+  "executedAt": "20260924210000",
+  "details": {
+    "results": [
+      {
+        "cmd": "printenv HW_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Printing cloud credential environment variables is blocked."
+      },
+      {
+        "cmd": "echo $HW_SECRET_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Printing cloud credential environment variables is blocked."
+      },
+      {
+        "cmd": "env | grep HW_",
+        "decision": "allow",
+        "risk": "not_huaweicloud",
+        "reason": "No Huawei Cloud safety rule matched."
+      },
+      {
+        "cmd": "printenv HUAWEICLOUD_SDK_AK",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Dumping cloud credential environment variables is blocked."
+      },
+      {
+        "cmd": "env | grep HUAWEICLOUD",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Dumping cloud credential environment variables is blocked."
+      },
+      {
+        "cmd": "env | grep HWC_",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Dumping cloud credential environment variables is blocked."
+      }
+    ],
+    "gap": "env | grep HW_ not blocked - credential env vars with HW_ prefix could be exposed"
+  },
+  "why": "CODE DEFECT: env|grep HW_ bypasses credential env print detection"
+}

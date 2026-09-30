@@ -1,0 +1,34 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "Node safety hook correctly classifies commands",
+  "executedAt": "20260923093946",
+  "r1": {
+    "decision": "deny",
+    "risk": "credential",
+    "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+  },
+  "r2": {
+    "decision": "deny",
+    "risk": "destructive",
+    "reason": "The sandbox terminal command is destructively dangerous and could destroy the workspace.",
+    "blockedByRiskRule": true,
+    "findings": [
+      {
+        "ruleId": "hwc-sandbox-destructive-command",
+        "title": "Destructive command in sandbox terminal",
+        "category": "destructive",
+        "severity": "deny",
+        "message": "The sandbox terminal command is destructively dangerous and could destroy the workspace.",
+        "remediation": "Use targeted deletions instead of recursive root removal. Avoid disk format, fork bombs, and system shutdown commands in sandbox terminals.",
+        "source": "command",
+        "evidence": "rm -rf /"
+      }
+    ]
+  },
+  "r3": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  }
+}

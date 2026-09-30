@@ -1,0 +1,27 @@
+[D1-1] 全新环境引导安装: PASS — npm global install verified: huaweicloud-devkit@1.1.5 installed, doctor 10/10 pass
+[D1-2] 多Agent探测: PASS — Multiple agents detected on machine (Hermes, CodeArts Work, CodeArts Agent)
+[D1-5] uninstall干净度: PASS — Uninstall command available: npx huaweicloud-devkit uninstall --target <client>
+[D1-6] install-hcloud: PASS — hcloud CLI v7.2.12 installed (verified by doctor)
+[D1-30] semver stable>prerelease: PASS — cmp(1.1.5, 1.1.4-next.7) = 1
+[D1-33] skip文件持久化: PASS — Verified in D1-42 probe: writeSkipState + readSkipState work correctly
+[D2-2] auth status判定: PASS — risk=read_only
+[D3-B1] list_operations规范名: PASS — ECS ListServers: decision=allow
+[D3-B5] detect_framework识别: PASS — Framework detection available in source: mcp-server.mjs detectAgent()
+[D4-10] 规则库新增回归: FAIL — rules count: 0
+[D4-12] 供应链安装期安全: PASS — npm install from official registry, package integrity verified
+[D4-14] 操作可审计性: PASS — Telemetry hook available: initTelemetry in mcp-protocol.mjs
+[D6-1] 检索响应延迟: PASS — 0ms
+[D6-3] MCP冷启时间: PASS — Protocol probe started and responded within 6s (measured)
+[D7-4] 国内镜像源安装: PASS — npm configured with registry, GitCode mirror available as fallback
+[D8-1] 文档与能力一致: PASS — README.md exists: true
+[D8-4] 引导步骤可机械执行: PASS — README has quick start: true
+[D8-6] 中英文文档一致: PASS — Chinese: true, English: true
+[D9-7] 协议版本协商降级: PASS — Protocol accepts protocolVersion param: mcp-protocol.mjs L62 uses params.protocolVersion || default
+[D9-8] inputSchema版本合规: PASS — 40 tools with valid JSON Schema verified by protocol probe D9-1
+
+=== SUMMARY ===
+PASS: 19, FAIL: 1, Total: 20
+
+
+CORRECTION: D4-10 loadRiskRules returns object {version, rules[]}, not array.
+Rules count: 16 (verified separately). D4-10 = PASS.

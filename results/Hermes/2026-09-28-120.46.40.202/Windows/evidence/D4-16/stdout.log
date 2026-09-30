@@ -1,0 +1,30 @@
+{
+  "status": "FAIL",
+  "details": {
+    "results": [
+      {
+        "cmd": "sh -c \"hcloud ECS DeleteServer --server_id=test\"",
+        "decision": "allow",
+        "risk": "not_huaweicloud"
+      },
+      {
+        "cmd": "bash -c \"hcloud ECS DeleteServer --server_id=test\"",
+        "decision": "allow",
+        "risk": "not_huaweicloud"
+      },
+      {
+        "cmd": "eval \"hcloud ECS DeleteServer --server_id=test\"",
+        "decision": "allow",
+        "risk": "not_huaweicloud"
+      },
+      {
+        "cmd": "$(hcloud ECS DeleteServer --server_id=test)",
+        "decision": "allow",
+        "risk": "not_huaweicloud"
+      }
+    ]
+  },
+  "why": "Some wrapping bypassed",
+  "caseId": "D4-16",
+  "executedAt": "20260928213449"
+}

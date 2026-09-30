@@ -1,0 +1,101 @@
+[D4-1] 凭证文件读取拦截: PASS — 3/3 blocked
+[D4-2] 凭证env打印拦截: PASS — 5/5 blocked
+[D4-3] 明文secret API拦截: PASS — 3/3 blocked
+[D4-5] 写操作误判检测: PASS — 0/5 misjudged
+[D4-9] 公开暴露/破坏性预检: PASS — 3/3 blocked
+[D4-15] hook绕过尝试: PASS — 0 bypasses
+[D4-16] 命令包裹穿透: PASS — 4/4 detected
+[D4-21] hook_check_artifacts回归: PASS — decision=deny, rule=hwc-iam-admin-policy
+[D4-22] hook_check_deploy_plan回归: PASS — decision=warn, rule=hwc-functiongraph-public-no-auth
+[D2-4] 凭证脱敏正确性: PASS — redacted={"access_key":"<redacted>","secret_key":"<redacted>","region":"cn-north-4","security_token":"<redacted>"}
+[D4-18] confirm-not-deny审批语义: PASS — token=true, safeToRun=false, decision=deny
+[D4-19] 确认流下预检仍生效: PASS — decision=deny, blockedByRiskRule=true
+[D4-20] 拒绝后零操作: PASS — safeToRun=false
+[D4-24] 确认令牌单次消费: PASS — first=true, second=false
+[D2-11] STS token拒绝落盘: PASS — token leaked: false
+[D4-27] 双路径脱敏完整性: PASS — leaked=false
+
+=== SUMMARY ===
+PASS: 16, FAIL: 0, Total: 16
+{
+  "D4-1": {
+    "test": "凭证文件读取拦截",
+    "status": "PASS",
+    "detail": "3/3 blocked"
+  },
+  "D4-2": {
+    "test": "凭证env打印拦截",
+    "status": "PASS",
+    "detail": "5/5 blocked"
+  },
+  "D4-3": {
+    "test": "明文secret API拦截",
+    "status": "PASS",
+    "detail": "3/3 blocked"
+  },
+  "D4-5": {
+    "test": "写操作误判检测",
+    "status": "PASS",
+    "detail": "0/5 misjudged"
+  },
+  "D4-9": {
+    "test": "公开暴露/破坏性预检",
+    "status": "PASS",
+    "detail": "3/3 blocked"
+  },
+  "D4-15": {
+    "test": "hook绕过尝试",
+    "status": "PASS",
+    "detail": "0 bypasses"
+  },
+  "D4-16": {
+    "test": "命令包裹穿透",
+    "status": "PASS",
+    "detail": "4/4 detected"
+  },
+  "D4-21": {
+    "test": "hook_check_artifacts回归",
+    "status": "PASS",
+    "detail": "decision=deny, rule=hwc-iam-admin-policy"
+  },
+  "D4-22": {
+    "test": "hook_check_deploy_plan回归",
+    "status": "PASS",
+    "detail": "decision=warn, rule=hwc-functiongraph-public-no-auth"
+  },
+  "D2-4": {
+    "test": "凭证脱敏正确性",
+    "status": "PASS",
+    "detail": "redacted={\"access_key\":\"<redacted>\",\"secret_key\":\"<redacted>\",\"region\":\"cn-north-4\",\"security_token\":\"<redacted>\"}"
+  },
+  "D4-18": {
+    "test": "confirm-not-deny审批语义",
+    "status": "PASS",
+    "detail": "token=true, safeToRun=false, decision=deny"
+  },
+  "D4-19": {
+    "test": "确认流下预检仍生效",
+    "status": "PASS",
+    "detail": "decision=deny, blockedByRiskRule=true"
+  },
+  "D4-20": {
+    "test": "拒绝后零操作",
+    "status": "PASS",
+    "detail": "safeToRun=false"
+  },
+  "D4-24": {
+    "test": "确认令牌单次消费",
+    "status": "PASS",
+    "detail": "first=true, second=false"
+  },
+  "D2-11": {
+    "test": "STS token拒绝落盘",
+    "status": "PASS",
+    "detail": "token leaked: false"
+  },
+  "D4-27": {
+    "test": "双路径脱敏完整性",
+    "status": "PASS",
+    "detail": "leaked=false"
+  }
+}

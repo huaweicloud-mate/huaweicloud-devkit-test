@@ -1,0 +1,65 @@
+[D1-39] Windows升级检测链可用性: FAIL — spawnSync EINVAL reproduced (direct call). queryDistTagsSync returned but no tags: null
+[D1-40] 镜像lag下检测正确性: PASS — current=1.1.5, mirror_latest=1.1.4, result=up_to_date
+[D1-27] 检测语义-已是最新: PASS — current=1.1.5, latest=1.1.5, result=up_to_date
+[D1-28] 检测语义-有新版本: PASS — current=1.1.5, latest=99.0.0, result=update_available
+[D1-31] semver比对正确性: PASS — cmp(1.1.4,1.1.5)=-1, cmp(1.1.5,1.1.5)=0, cmp(1.1.6,1.1.5)=1, cmp(1.1.5,1.1.4-next.7)=1
+[D1-41] check_update真实MCP返回契约: FAIL — tags=null
+[D1-42] dismiss真实闭环与持久化: PASS — result=dismissed, skip1=true, skip2=true, persisted=true
+[D1-45] 兜底提示真实序列与预热竞态: PASS — cold=update_available, warm=update_available
+[D1-30] semver stable>prerelease: PASS — cmp(1.1.5,1.1.4-next.7)=1
+[D1-33] skip文件持久化: PASS — dismissedVersion=99.0.0
+
+=== SUMMARY ===
+PASS: 8, FAIL: 2, Total: 10
+{
+  "D1-39": {
+    "test": "Windows升级检测链可用性",
+    "status": "FAIL",
+    "detail": "spawnSync EINVAL reproduced (direct call). queryDistTagsSync returned but no tags: null"
+  },
+  "D1-40": {
+    "test": "镜像lag下检测正确性",
+    "status": "PASS",
+    "detail": "current=1.1.5, mirror_latest=1.1.4, result=up_to_date"
+  },
+  "D1-27": {
+    "test": "检测语义-已是最新",
+    "status": "PASS",
+    "detail": "current=1.1.5, latest=1.1.5, result=up_to_date"
+  },
+  "D1-28": {
+    "test": "检测语义-有新版本",
+    "status": "PASS",
+    "detail": "current=1.1.5, latest=99.0.0, result=update_available"
+  },
+  "D1-31": {
+    "test": "semver比对正确性",
+    "status": "PASS",
+    "detail": "cmp(1.1.4,1.1.5)=-1, cmp(1.1.5,1.1.5)=0, cmp(1.1.6,1.1.5)=1, cmp(1.1.5,1.1.4-next.7)=1"
+  },
+  "D1-41": {
+    "test": "check_update真实MCP返回契约",
+    "status": "FAIL",
+    "detail": "tags=null"
+  },
+  "D1-42": {
+    "test": "dismiss真实闭环与持久化",
+    "status": "PASS",
+    "detail": "result=dismissed, skip1=true, skip2=true, persisted=true"
+  },
+  "D1-45": {
+    "test": "兜底提示真实序列与预热竞态",
+    "status": "PASS",
+    "detail": "cold=update_available, warm=update_available"
+  },
+  "D1-30": {
+    "test": "semver stable>prerelease",
+    "status": "PASS",
+    "detail": "cmp(1.1.5,1.1.4-next.7)=1"
+  },
+  "D1-33": {
+    "test": "skip文件持久化",
+    "status": "PASS",
+    "detail": "dismissedVersion=99.0.0"
+  }
+}

@@ -1,0 +1,46 @@
+  ECS CreateServers -> classify:deny/write plan:deny safeToRun:false hasToken:true
+  VPC CreateVpc -> classify:deny/write plan:deny safeToRun:false hasToken:true
+  RDS CreateInstance -> classify:deny/write plan:deny safeToRun:false hasToken:true
+  Token inspect after consume: state=already_consumed
+STATUS: PASS
+{
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260930214754",
+  "details": {
+    "testResults": [
+      {
+        "service": "ECS",
+        "operation": "CreateServers",
+        "classifyDecision": "deny",
+        "classifyRisk": "write",
+        "planClassification": "deny",
+        "planSafeToRun": false,
+        "hasApprovalToken": true
+      },
+      {
+        "service": "VPC",
+        "operation": "CreateVpc",
+        "classifyDecision": "deny",
+        "classifyRisk": "write",
+        "planClassification": "deny",
+        "planSafeToRun": false,
+        "hasApprovalToken": true
+      },
+      {
+        "service": "RDS",
+        "operation": "CreateInstance",
+        "classifyDecision": "deny",
+        "classifyRisk": "write",
+        "planClassification": "deny",
+        "planSafeToRun": false,
+        "hasApprovalToken": true
+      }
+    ],
+    "writeOpsNeedApproval": true,
+    "hasApprovalFlow": true,
+    "tokenWorks": true,
+    "replayBlocked": true,
+    "inspectState": "already_consumed"
+  }
+}

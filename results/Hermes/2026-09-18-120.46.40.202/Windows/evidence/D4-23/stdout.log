@@ -1,0 +1,99 @@
+Probe: probe-d4-23.mjs
+Return code: 0
+
+[
+  {
+    "dir": ".claude-plugin",
+    "files": [
+      "plugin.json"
+    ]
+  },
+  {
+    "dir": ".codex-plugin",
+    "files": [
+      "plugin.json"
+    ]
+  },
+  {
+    "dir": ".cursor-plugin",
+    "files": [
+      "plugin.json"
+    ]
+  },
+  {
+    "dir": ".hermes-plugin",
+    "files": [
+      "plugin.json"
+    ]
+  },
+  {
+    "dir": ".workbuddy-plugin",
+    "files": [
+      "plugin.json"
+    ]
+  },
+  {
+    "integration": "atomcode",
+    "files": [
+      "hooks",
+      "hooks.json"
+    ]
+  },
+  {
+    "integration": "dsh",
+    "files": [
+      "hook-plugin.mjs"
+    ]
+  },
+  {
+    "integration": "hermes",
+    "files": [
+      "hooks",
+      "manifest.yaml",
+      "skills-snapshot.json"
+    ]
+  },
+  {
+    "integration": "opencode",
+    "files": [
+      "commands",
+      "hooks",
+      "opencode.json",
+      "skills"
+    ]
+  },
+  {
+    "integration": "workbuddy",
+    "files": [
+      "hooks"
+    ]
+  },
+  {
+    "desc": "safety skill has rules content",
+    "hasRules": false,
+    "preview": "---\nname: huaweicloud-safety\ndescription: Huawei Cloud safety policy for agents. Use when handling credentials, secrets, IAM, public exposure, billing, destructive actions, scaling, write operations, hooks, command approval, output redaction, or risk review.\n---\n\n# Huawei Cloud Safety\n\n**STOP - Do n"
+  },
+  {
+    "desc": "safety policy.json",
+    "keys": [
+      "version",
+      "secretKeyNamePatterns",
+      "credentialFilePatterns",
+      "blockedConfigureSubcommands",
+      "blockedSecretOperations",
+      "writeOperationPrefixes",
+      "readOperationPrefixes",
+      "safeTextReadCommands",
+      "blockedSandboxCommands",
+      "sandboxWriteTools"
+    ],
+    "preview": "{\"version\":\"0.1.0\",\"secretKeyNamePatterns\":[\"access[_-]?key\",\"secret[_-]?key\",\"security[_-]?token\",\"x[_-]?auth[_-]?token\",\"authorization\",\"password\",\"passwd\",\"token\",\"credential\",\"private[_-]?key\",\"user[_-]?data\",\"metadata\",\"ak\",\"sk\"],\"credentialFilePatterns\":[\"\\\\.hcloud\",\"\\\\.huaweicloud\",\"hcloud[/\\"
+  },
+  {
+    "desc": "hooks.json",
+    "hooks": [
+      "hooks"
+    ],
+    "preview": "{\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Bash\",\"hooks\":[{\"type\":\"command\",\"command\":\"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\\\"\",\"timeout\":5}]},{\"matcher\":\"mcp__.*huaweicloud.*|huaweicloud_.*\",\"hooks\":[{\"type\":\"command\",\"command\":\"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs"
+  }
+]
