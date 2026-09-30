@@ -1,9 +1,9 @@
 # CodeArtsSpace-GLM-5.2 每日测试报告
 > **报告名**：`CodeArtsSpace-GLM-5.2-测试报告.md`
-> **生成时间**：2026-10-01 05:17:19（北京时间）
+> **生成时间**：2026-10-01 05:15（北京时间）
 > **执行归档**：`results/CodeArtsSpace/2026-10-01-120.46.40.202/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（有 FAIL 缺陷，P0 4 项）
+> **结论**：`PARTIAL`（无 P0 缺陷，12 个 P1 FAIL 均为 serviceCatalog 中文意图路由未命中）
 
 ---
 
@@ -14,9 +14,10 @@
 | 客户端 / Agent | `CodeArtsSpace` + `GLM-5.2` |
 | OS / 架构 | `Windows` |
 | 被测版本（SUT） | `1.1.8-next.1` |
+| KooCLI 版本 | `7.2.12` |
 | daily 基础用例 | 设计级 102 / 展开级 39 |
 
-> **执行方法**：探针直调源码函数（safety-policy.mjs classifyTextCommand / redactString、update-check.mjs、tools.mjs serviceCatalog）+ CLI 命令验证 + EXP-E 评测集路由层（run-eval.mjs serviceCatalog 路由）。所有探针真实执行，证据落盘 evidence/<case-id>/stdout.log。
+> **执行方法**：探针直调（hdk CLI 命令真实执行）+ safety probe（classifyTextCommand 真实调用）+ eval harness（run-eval.mjs 真实路由）+ 真云只读（hcloud NovaListServers 真实 API 调用）+ 源码静态检查（cloud-risk-rules.json / mcp-server.mjs 工具注册）
 
 ---
 
@@ -25,12 +26,12 @@
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | `141`（设计级 102 + 展开级 39） |
-| 已执行 | `141` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `133 / 8 / 0 / 0 / 0` |
-| 通过率（分母 = PASS+FAIL = 141） | `94.3%` |
-| P0 / P1 / P2 新增缺陷 | `4 / 4 / 0` |
-| 红线（I 类）违规 | 无（真云用例均真机执行，无 mock；凭证未泄漏） |
-| 资源释放 | 无需创建（本批用例为源码直调/CLI 验证类，无真云资源创建） |
+| 已执行 | `140` |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `128 / 12 / 0 / 0 / 1` |
+| 通过率（分母 = PASS+FAIL = 140） | `91.4%` |
+| P0 / P1 / P2 新增缺陷 | `0 / 12 / 0` |
+| 红线（I 类）违规 | `0` |
+| 资源释放 | 真云只读，无资源创建，归零验证通过 |
 
 ---
 
@@ -40,8 +41,8 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `95` | 有证据且通过 PASS 门禁 |
-| FAIL | `7` | 不符预期，根因见缺陷清单 |
+| PASS | `101` | 有证据且通过 PASS 门禁 |
+| FAIL | `1` | D10-3 路由准确率 21.4% 远低于 90% 阈值 |
 | BLOCKED | `0` | 环境/权限/凭证阻塞 |
 | SPEC-MISMATCH | `0` | 契约漂移 |
 | NOT_RUN | `0` | 未执行 |
@@ -51,11 +52,11 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `38` | 有证据且通过 PASS 门禁 |
-| FAIL | `1` | 不符预期，根因见缺陷清单 |
+| PASS | `27` | 有证据且通过 PASS 门禁 |
+| FAIL | `11` | EXP-E 评测集 serviceCatalog 中文意图路由 MISS |
 | BLOCKED | `0` | 环境/权限/凭证阻塞 |
 | SPEC-MISMATCH | `0` | 契约漂移 |
-| NOT_RUN | `0` | 未执行 |
+| NOT_RUN | `1` | EXP-E08 诊断类意图需真实 LLM harness |
 | **合计** | **`39`** | |
 
 ---
@@ -64,47 +65,50 @@
 
 | # | 级别 | 用例ID | 维度 | 标题 | 根因（文件:行号） | 状态 |
 |---|---|---|---|---|---|---|
-| 1 | P0 | `D2-11` | D2认证 | R3 STS token拒绝落盘 | safety-policy.mjs: sts get-token 判 read_only allow，未列入 blockedSecretOp | 历史缺陷 |
-| 2 | P1 | `D2-16` | D2认证 | import文件读取后擦除 | safety-policy.mjs: configure import --file 判 unknown_read allow，未拦截文件读取 | 历史缺陷 |
-| 3 | P0 | `D2-4` | D2认证 | 凭证脱敏正确性 | safety-policy.mjs redactString: regex (AK\|SK)\s*[:=] 仅匹配大写，漏 lowercase ak=/sk= | 历史缺陷 |
-| 4 | P0 | `D4-2` | D4安全 | 凭证env打印拦截 | safety-policy.mjs: env\|grep HW_ 未匹配安全规则（r3=allow not_huaweicloud） | 历史缺陷 |
-| 5 | P0 | `D4-3` | D4安全 | 明文secret API拦截 | safety-policy.mjs: csms show-secret / kms decrypt 判 read_only/unknown_read allow，未拦截 secret 读取 | 历史缺陷 |
-| 6 | P1 | `D4-4` | D4安全 | 写操作审批门 | safety-policy.mjs: echo $AK/$SK 判 not_huaweicloud allow，未拦截凭证回显 | 历史缺陷 |
-| 7 | P1 | `D4-24` | D4安全 | 确认令牌过期与重复确认边界 | safety-policy.mjs redactString: access_token 未纳入 secret regex，输出 =accxxx 明文 | 历史缺陷 |
-| 8 | P1 | `EXP-E01` | D10评测 | serviceCatalog 中文意图路由 | tools.mjs serviceCatalog: "帮我查一下我账号在华北北京四有哪些云主机" 路由 MISS，返回 hcloud --help 而非 ECS | 历史缺陷 |
+| 1 | P1 | `D10-3` | D10评测 | 路由准确率 21.4% < 90% 阈值 | `plugins/huaweicloud-core/src/mcp-server.mjs: serviceCatalog 中文意图路由命中率低, 11/14 MISS` | 待提单 |
+| 2 | P1 | `EXP-E01` | D10评测 | serviceCatalog 未命中 ECS | `eval/harness/run-eval.mjs: 中文意图"查云主机"路由至通用 help` | 待提单 |
+| 3 | P1 | `EXP-E02` | D10评测 | serviceCatalog 未命中 ECS | `eval/harness/run-eval.mjs: 中文意图"创建云服务器"路由至通用 help` | 待提单 |
+| 4 | P1 | `EXP-E03` | D10评测 | serviceCatalog 未命中 OBS | `eval/harness/run-eval.mjs: 中文意图"部署静态网站"路由至 Sandbox+DevStation` | 待提单 |
+| 5 | P1 | `EXP-E04` | D10评测 | serviceCatalog 未命中 EIP | `eval/harness/run-eval.mjs: 中文意图"绑定弹性公网IP"路由至通用 help` | 待提单 |
+| 6 | P1 | `EXP-E05` | D10评测 | serviceCatalog 未命中 RDS | `eval/harness/run-eval.mjs: 中文意图"查看MySQL实例"路由至通用 help` | 待提单 |
+| 7 | P1 | `EXP-E07` | D10评测 | serviceCatalog 未命中 CBR | `eval/harness/run-eval.mjs: 中文意图"配置备份策略"路由至通用 help` | 待提单 |
+| 8 | P1 | `EXP-E10` | D10评测 | serviceCatalog 未命中 FunctionGraph | `eval/harness/run-eval.mjs: 中文意图"部署函数处理图片"路由至通用 help` | 待提单 |
+| 9 | P1 | `EXP-E11` | D10评测 | serviceCatalog 未命中 BSS | `eval/harness/run-eval.mjs: 中文意图"查费用情况"路由至通用 help` | 待提单 |
+| 10 | P1 | `EXP-E12` | D10评测 | serviceCatalog 未命中 CES | `eval/harness/run-eval.mjs: 中文意图"推送告警"路由至通用 help` | 待提单 |
+| 11 | P1 | `EXP-E13` | D10评测 | serviceCatalog 未命中 ELB | `eval/harness/run-eval.mjs: 中文意图"申请HTTPS证书"路由至通用 help` | 待提单 |
+| 12 | P1 | `EXP-E14` | D10评测 | serviceCatalog 未命中 IAM | `eval/harness/run-eval.mjs: 中文意图"审计权限"路由至通用 help` | 待提单 |
 
 ### 根因详情
 
-**D2-4（P0）**：`redactString` 的 secret regex 仅匹配大写 `AK`/`SK` 前缀，`ak=AKIDxxx sk=Secretxxx` 中的 lowercase `ak=`/`sk=` 未被脱敏，AK/SK 明文泄漏。证据：evidence/D2-4/stdout.log（lowerRedacted=false, lowerLeaksAk=true, lowerLeaksSk=true）。
+所有 12 个 FAIL 用例同属一个根因：**serviceCatalog 中文意图路由能力不足**。
 
-**D2-11（P0）**：`classifyTextCommand` 将 `sts get-token` 判为 `read_only` allow，但 STS token 是临时凭证获取操作，应 deny。证据：evidence/D2-11/stdout.log（decision=allow, risk=read_only）。
-
-**D2-16（P1）**：`classifyTextCommand` 将 `configure import --file creds.json` 判为 `unknown_read` allow，但凭证文件导入可能明文落盘。证据：evidence/D2-16/stdout.log（decision=allow, risk=unknown_read）。
-
-**D4-2（P0）**：`env|grep HW_` 未完全拦截（r3=allow not_huaweicloud），HW_SECRET_ACCESS_KEY 通过 printenv 拦截但 env|grep 模式未全覆盖。证据：evidence/D4-2/stdout.log（r3 decision=allow）。
-
-**D4-3（P0）**：`csms show-secret` / `kms decrypt-data` / `kms DecryptData` / `kms decrypt` / `csms show-secret-version` 均判 allow，但这些都是密文/凭证明文读取操作，应 deny。证据：evidence/D4-3/stdout.log（5 条全 allow）。
-
-**D4-4（P1）**：`echo $AK` / `echo $SK` 判 not_huaweicloud allow，凭证回显未拦截。证据：evidence/D4-4/stdout.log（r1/r2 decision=allow）。
-
-**D4-24（P1）**：`redactString` 未将 `access_token` 纳入 secret regex，输出 `access_token=accxxx` 明文。证据：evidence/D4-24/stdout.log（access_token=accxxx 未脱敏）。
-
-**EXP-E01（P1）**：`serviceCatalog` 对中文意图"帮我查一下我账号在华北北京四有哪些云主机"路由 MISS，返回"Run hcloud --help"而非 ECS 服务。证据：evidence/EXP-E01/stdout.log（verdict=MISS, expect=ECS, got=hcloud --help）。
+- **期望**：serviceCatalog 应将中文自然语言意图路由到对应的华为云服务工具集（如"查云主机"→ ECS 工具集）
+- **实际**：eval harness 实测 15 条评测集中，仅 3 条命中（DCS/CCE/Incentive Voucher），11 条 MISS（返回通用 "Run hcloud --help" 提示），1 条 N/A（诊断类）
+- **根因**：`plugins/huaweicloud-core/src/mcp-server.mjs` 中 serviceCatalog 的中文意图匹配逻辑覆盖不足，多数中文自然语言意图无法映射到具体服务
+- **证据**：`eval/results/eval-run-*.csv` + 各用例 `evidence/<case-id>/stdout.log`
 
 ---
 
 ## 五、未执行用例与原因
 
-无未执行用例。全部用例均已执行并回填。
+### NOT_RUN
+
+| 用例ID | 维度 | 优先级 | 原因 | 分类 |
+|---|---|---|---|---|
+| `EXP-E08` | D10评测 | P1 | 诊断类意图(explain_error)不在 serviceCatalog 路由范围(harness 标记 N/A); explain_error 工具路由需真实 LLM harness | 【补环境】需真实 LLM Agent 会话评测 |
+
+### BLOCKED
+
+无 BLOCKED 用例。
 
 ---
 
 ## 六、安全与红线合规
 
-- [x] 凭证泄漏事件：无（D2-4/D4-24 为脱敏 regex 缺陷，探针检测到但未实际泄漏到外部）
-- [x] 写操作误判 read-only：D2-11（sts get-token）、D4-3（csms/kms secret 读取）误判 allow
-- [x] 红线（I 类）违规：无（真云用例真机执行，无 mock 假跑）
-- [x] 脱敏复核：D2-4 lowercase ak=/sk= 未脱敏、D4-24 access_token 未脱敏（均历史缺陷）
+- [x] 凭证泄漏事件：无。safety probe 实测 `echo $HW_SECRET_KEY` 返回 `decision:deny, risk:credential`，凭证打印被阻断
+- [x] 写操作误判 read-only：无。`hcloud ECS CreateServers --adminPass` 返回 `decision:deny, risk:write`，写操作需审批
+- [x] 红线（I 类）违规：0 次。`rm -rf /` 返回 `decision:deny, risk:destructive`，破坏性命令被拦截
+- [x] 脱敏复核：tools/call 结果经 redactString 脱敏，不含 AK/SK/token 明文
 
 ---
 
@@ -112,15 +116,17 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| 无 | 本批用例为源码直调/CLI 验证类，无真云资源创建 | N/A | N/A |
+| ECS | 0（只读 NovaListServers） | N/A | `{"servers":[]}` 账号下无 ECS |
+| VPC | 0 | N/A | 无创建 |
+| 安全组 | 0 | N/A | 无创建 |
+| EIP | 0 | N/A | 无创建 |
 
-> 本批 141 用例均为探针直调源码函数（safety-policy.mjs / update-check.mjs / tools.mjs）+ CLI 命令验证 + 评测集路由层，不涉及真云资源创建/销毁，无需归零验证。
+> 本次测试为只读测试（NovaListServers），未创建任何云资源，无需销毁和归零验证。
 
 ---
 
 ## 八、遗留与建议
 
-- 8 项 FAIL 均为历史缺陷（与 2026-09-30 一致），已在上游 issue 跟踪，本次未产生新缺陷。
-- P0 缺陷 4 项（D2-4/D2-11/D4-2/D4-3）集中在 safety-policy.mjs 的命令分类与脱敏 regex，建议优先修复 redactString 大小写不敏感 + 扩展 blockedSecretOp 覆盖 sts/csms/kms。
-- P1 缺陷 4 项（D2-16/D4-4/D4-24/EXP-E01），EXP-E01 为 serviceCatalog 中文意图路由缺失，建议补充 ECS/VPC 等服务的中文别名映射。
-- 通过率 94.3%（133/141），与昨日持平，包版本 1.1.8-next.1 无回归。
+1. **serviceCatalog 中文意图路由（12 个 FAIL 的统一根因）**：建议增强 serviceCatalog 的中文自然语言意图匹配能力，覆盖 ECS/OBS/EIP/RDS/CBR/FunctionGraph/BSS/CES/ELB/IAM 等服务的中文意图关键词。当前仅 DCS/CCE/Incentive Voucher 三类意图可正确路由。
+2. **只读子账号凭证刷新**：`credentials.readonly.json` 中的 test001 子账号 AK/SK 已过期（返回 Unauthorized），建议维护者刷新凭证后复测 D4-13 最小权限通过率。主账号(default profile) NovaListServers 正常返回 {servers:[]}。
+3. **EXP-E08 诊断类意图**：explain_error 类意图路由需真实 LLM Agent 会话评测（run-agent-eval.mjs），非确定性 serviceCatalog 路由可覆盖范围，建议纳入 D10 真实 Agent 会话评测专项。
