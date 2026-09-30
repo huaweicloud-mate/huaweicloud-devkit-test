@@ -1,0 +1,65 @@
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "secret API: allow/allow/allow/allow/allow",
+  "client": "CodeArtsSpace",
+  "os": "Windows",
+  "executedAt": "2026-09-30T21:15:41.465Z",
+  "r1": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation.",
+    "service": "csms",
+    "operation": "show-secret",
+    "args": [
+      "csms",
+      "show-secret"
+    ]
+  },
+  "r2": {
+    "decision": "allow",
+    "risk": "unknown_read",
+    "reason": "Command does not match a known write or secret operation; treat output as untrusted and redact it.",
+    "service": "kms",
+    "operation": "decrypt-data",
+    "args": [
+      "kms",
+      "decrypt-data"
+    ]
+  },
+  "r3": {
+    "decision": "allow",
+    "risk": "unknown_read",
+    "reason": "Command does not match a known write or secret operation; treat output as untrusted and redact it.",
+    "service": "kms",
+    "operation": "DecryptData",
+    "args": [
+      "kms",
+      "DecryptData"
+    ]
+  },
+  "r4": {
+    "decision": "allow",
+    "risk": "unknown_read",
+    "reason": "Command does not match a known write or secret operation; treat output as untrusted and redact it.",
+    "service": "kms",
+    "operation": "decrypt",
+    "args": [
+      "kms",
+      "decrypt",
+      "--ciphertext-file",
+      "enc.txt"
+    ]
+  },
+  "r5": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation.",
+    "service": "csms",
+    "operation": "show-secret-version",
+    "args": [
+      "csms",
+      "show-secret-version"
+    ]
+  }
+}
