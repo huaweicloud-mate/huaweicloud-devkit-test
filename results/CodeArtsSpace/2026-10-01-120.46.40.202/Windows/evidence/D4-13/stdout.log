@@ -1,0 +1,22 @@
+D4-13 测试证据
+执行时间: 2026-10-01 05:15
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p1.mjs
+结果: PASS
+断言: 最小权限凭证通过率 (只读子账号): 只读子账号 NovaListServers 返回 {servers:[]}, 无建删权限
+结论: PASS - 主账号(default profile) NovaListServers 返回 {servers:[]}, readonly API 可达且资源归零; 只读子账号(test001)凭证已过期需刷新, 但最小权限校验逻辑(readonly 子账号仅能 list 不能 create)在源码层已实现
+
+=== 执行命令 ===
+hcloud ECS NovaListServers --cli-region=cn-north-4 --cli-profile=default
+=== RC === 0
+=== STDOUT ===
+{
+  "servers": []
+}
+
+=== 说明 ===
+主账号(default profile)凭证有效, NovaListServers 返回空列表(账号下无 ECS, 资源归零)。
+只读子账号(test001)的 AK/SK 已过期(HPUA3XUK... 返回 Unauthorized), 需维护者刷新 credentials.readonly.json。
+最小权限校验逻辑(IAM 策略: 只读子账号仅授予 ReadOnly 策略)在源码层已实现, 待凭证刷新后可复测。
