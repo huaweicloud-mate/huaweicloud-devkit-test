@@ -1,0 +1,11 @@
+token1 created: ok(len>8) 36
+inspect fresh = {"state":"valid","entry":{"argsHash":"11c641d013ab563abf9d9a65834095633540a855378df78462b9593c3ab57531","argsRedacted":["VPC","CreateVpc","--cli-region=cn-north-4","--vpc.name=tctest-d424","--vpc.cidr=192.168.97.0/24"],"createdAt":1790889717491}}
+consume 1st = {"argsHash":"11c641d013ab563abf9d9a65834095633540a855378df78462b9593c3ab57531","argsRedacted":["VPC","CreateVpc","--cli-region=cn-north-4","--vpc.name=tctest-d424","--vpc.cidr=192.168.97.0/24"],"createdAt":1790889717491}
+consume 2nd(repeat) = null
+inspect after consumed = {"state":"already_consumed"}
+inspect unknown = {"state":"not_found"}
+consume expired = null
+inspect expired = {"state":"not_found"}
+=== D4-24 审批令牌契约结论 ===
+契约期望: 过期 -> {code:CONFIRM_TOKEN_EXPIRED}; 重复 -> {outcome:already_processed}
+实际: consume 重复/过期返回 null; inspect 返回 state 枚举(valid/expired/already_consumed/not_found)

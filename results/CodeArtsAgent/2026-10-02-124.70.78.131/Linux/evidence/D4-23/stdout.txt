@@ -1,0 +1,35 @@
+[OK] 仓库根存在 rules/huawei-agent-rules.mdc | /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/hdk/rules/huawei-agent-rules.mdc
+[FAIL] 源码无任何 rules/.mdc 注入引用 | 命中: /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/hdk/plugins/huaweicloud-core/src/setup-cli.mjs:569:// Copy the global agent rules file (rules/huawei-agent-rules.mdc) into the
+/home/testbot2/dev
+[FAIL] setup-cli.mjs 安装分支无 copyDir(rules/) 步骤 | 存在 rules 复制
+[FAIL] 隔离安装产物无 huawei-agent-rules/.mdc |   Agent Rules -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261002/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc   Agent Rules -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261002/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261002/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc
+
+=====SUMMARY JSON=====
+{
+  "caseId": "D4-23",
+  "sev": "P0",
+  "verdict": "FAIL",
+  "reason": "install --target 未注入 rules/huawei-agent-rules.mdc（源码零引用 + setup-cli 无 copyDir(rules/) + 隔离安装产物无 .mdc）",
+  "facts": [
+    {
+      "name": "仓库根存在 rules/huawei-agent-rules.mdc",
+      "ok": true,
+      "detail": "/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/hdk/rules/huawei-agent-rules.mdc"
+    },
+    {
+      "name": "源码无任何 rules/.mdc 注入引用",
+      "ok": false,
+      "detail": "命中: /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/hdk/plugins/huaweicloud-core/src/setup-cli.mjs:569:// Copy the global agent rules file (rules/huawei-agent-rules.mdc) into the\n/home/testbot2/dev"
+    },
+    {
+      "name": "setup-cli.mjs 安装分支无 copyDir(rules/) 步骤",
+      "ok": false,
+      "detail": "存在 rules 复制"
+    },
+    {
+      "name": "隔离安装产物无 huawei-agent-rules/.mdc",
+      "ok": false,
+      "detail": "  Agent Rules -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261002/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc   Agent Rules -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261002/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261002/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc"
+    }
+  ]
+}
