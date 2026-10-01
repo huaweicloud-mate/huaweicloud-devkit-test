@@ -1,0 +1,164 @@
+{
+  "D4-27": {
+    "status": "FAIL",
+    "why": "redactSecrets('token=abc123 ak=AKID456 sk=secret789') => \"token=<redacted> ak=AKID456 sk=secret789\"（ak=/sk= 小写短形是否仍明文：ak=true sk=true）",
+    "actual": "token=<redacted> ak=AKID456 sk=secret789",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D8-9": {
+    "status": "FAIL",
+    "why": "sanitizeValue('AK=ABC123XYZ') => \"AK=ABC123XYZ\"（遥测值是否未调 redactSecrets 明文保留：true）",
+    "actual": "AK=ABC123XYZ",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D4-16": {
+    "status": "PASS",
+    "why": "classifyTextCommand('sh -c \"printenv HUAWEICLOUD_ACCESS_KEY_ID\"') => {\"decision\":\"deny\",\"risk\":\"credential\",\"reason\":\"Dumping cloud credential environment variables is blocked.\"}",
+    "actual": "{\"decision\":\"deny\",\"risk\":\"credential\",\"reason\":\"Dumping cloud credential environment variables is blocked.\"}",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D6-9": {
+    "status": "PASS",
+    "why": "clearIconCache() 连续调用不抛错（幂等）",
+    "actual": "no-throw",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D3-S1": {
+    "status": "PASS",
+    "why": "service_catalog(\"帮我查一下云服务器/云主机列表\") 期望命中 ECS，实际 {\"intent\":\"帮我查一下云服务器/云主机列表\",\"recommendedSkills\":[\"huawei-ecs\"],\"recommendedServices\":[\"ECS\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operat",
+    "actual": "{\"intent\":\"帮我查一下云服务器/云主机列表\",\"recommendedSkills\":[\"huawei-ecs\"],\"recommendedServices\":[\"ECS\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an ",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D3-S2": {
+    "status": "PASS",
+    "why": "service_catalog(\"删除一个 VPC\") 期望命中 VPC/EIP，实际 {\"intent\":\"删除一个 VPC\",\"recommendedSkills\":[\"huawei-vpc\"],\"recommendedServices\":[\"VPC\",\"EIP\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operati",
+    "actual": "{\"intent\":\"删除一个 VPC\",\"recommendedSkills\":[\"huawei-vpc\"],\"recommendedServices\":[\"VPC\",\"EIP\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an o",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D3-S3": {
+    "status": "PASS",
+    "why": "service_catalog(\"沙箱预览一个网站\") 期望命中 Sandbox/DevStation，实际 {\"intent\":\"沙箱预览一个网站\",\"recommendedSkills\":[\"huawei-sandbox\"],\"recommendedServices\":[\"Sandbox\",\"DevStation\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authen",
+    "actual": "{\"intent\":\"沙箱预览一个网站\",\"recommendedSkills\":[\"huawei-sandbox\"],\"recommendedServices\":[\"Sandbox\",\"DevStation\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Clou",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D3-S4": {
+    "status": "PASS",
+    "why": "service_catalog(\"帮我领一下代金券\") 期望命中 Incentive Voucher，实际 {\"intent\":\"帮我领一下代金券\",\"recommendedSkills\":[\"huawei-voucher\"],\"recommendedServices\":[\"Incentive Voucher\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authentic",
+    "actual": "{\"intent\":\"帮我领一下代金券\",\"recommendedSkills\":[\"huawei-voucher\"],\"recommendedServices\":[\"Incentive Voucher\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud M",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D3-S5": {
+    "status": "PASS",
+    "why": "service_catalog(\"数据存 DDS 且对象托管到 OBS\") 期望命中 DDS/OBS，实际 {\"intent\":\"数据存 DDS 且对象托管到 OBS\",\"recommendedSkills\":[\"huawei-obs\",\"huawei-dds-dcs\"],\"recommendedServices\":[\"OBS\",\"DDS\",\"DCS\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hclou",
+    "actual": "{\"intent\":\"数据存 DDS 且对象托管到 OBS\",\"recommendedSkills\":[\"huawei-obs\",\"huawei-dds-dcs\"],\"recommendedServices\":[\"OBS\",\"DDS\",\"DCS\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integra",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D3-S6": {
+    "status": "PASS",
+    "why": "service_catalog(\"给函数配置一个定时触发任务\") 期望命中 FunctionGraph，实际 {\"intent\":\"给函数配置一个定时触发任务\",\"recommendedSkills\":[\"huawei-functiongraph\"],\"recommendedServices\":[\"FunctionGraph\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local au",
+    "actual": "{\"intent\":\"给函数配置一个定时触发任务\",\"recommendedSkills\":[\"huawei-functiongraph\"],\"recommendedServices\":[\"FunctionGraph\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei ",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D3-S7": {
+    "status": "PASS",
+    "why": "service_catalog(\"搭建一个带数据库的网站\") 期望命中 Sandbox/DevStation/RDS，实际 {\"intent\":\"搭建一个带数据库的网站\",\"recommendedSkills\":[\"huawei-sandbox\",\"huawei-rds\"],\"recommendedServices\":[\"RDS\",\"Sandbox\",\"DevStation\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI h",
+    "actual": "{\"intent\":\"搭建一个带数据库的网站\",\"recommendedSkills\":[\"huawei-sandbox\",\"huawei-rds\"],\"recommendedServices\":[\"RDS\",\"Sandbox\",\"DevStation\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code int",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D3-S8": {
+    "status": "PASS",
+    "why": "service_catalog(\"我的 ECS 启动失败帮我分析原因\") 期望命中 troubleshoot/explain_error，实际 {\"intent\":\"我的 ECS 启动失败帮我分析原因\",\"recommendedSkills\":[\"huawei-ecs\"],\"recommendedServices\":[\"ECS\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated oper",
+    "actual": "{\"intent\":\"我的 ECS 启动失败帮我分析原因\",\"recommendedSkills\":[\"huawei-ecs\"],\"recommendedServices\":[\"ECS\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when a",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D4-23": {
+    "status": "FAIL",
+    "why": "npm 全局包 rules/ 目录存在=false；hdk 源码 rules/ 存在=false；setup-cli.mjs 含 rules 注入逻辑=true",
+    "actual": "npmpkg-rules=false",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D1-65": {
+    "status": "PASS",
+    "why": "update-check.mjs 含 DEBUG 门控",
+    "actual": "has-DEBUG=true",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D1-67": {
+    "status": "PASS",
+    "why": "setup-cli.mjs 含 HUAWEICLOUD_AGENT_TOOLKIT_MODE=true、SKIP_DSH=true",
+    "actual": "",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D1-68": {
+    "status": "PASS",
+    "why": "icon-library.mjs 含 getServiceIcon/clearIconCache",
+    "actual": "",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D1-70": {
+    "status": "FAIL",
+    "why": "proxy-config 读失败: ENOENT: no such file or directory, open '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/proxy-config.mjs'",
+    "actual": "Error: ENOENT: no such file or directory, open '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/proxy-config.mjs'",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  },
+  "D2-4": {
+    "status": "FAIL",
+    "why": "redactSecrets('{\"ak\":\"AK123\",\"sk\":\"SK456\",\"token\":\"TOK\"}') => \"{\"ak\":\"AK123\",\"sk\":\"SK456\",\"token\":\"TOK\"}\"（JSON 键值形态是否未脱敏：true）",
+    "actual": "{\"ak\":\"AK123\",\"sk\":\"SK456\",\"token\":\"TOK\"}",
+    "executedAt": "20261001211746",
+    "assistant": "AtomCode(deepseek-v4-pro-0813)",
+    "os": "Linux",
+    "sut": "huaweicloud-devkit@1.1.8-next.1"
+  }
+}
