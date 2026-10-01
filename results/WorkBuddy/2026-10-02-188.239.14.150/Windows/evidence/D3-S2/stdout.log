@@ -1,0 +1,26 @@
+{
+  "caseId": "D3-S2",
+  "status": "PASS",
+  "why": "plan_cli_command for delete VPC: decision=n/a, status=n/a (write op denied without approval)",
+  "planResult": {
+    "executable": "hcloud",
+    "args": [
+      "VPC",
+      "DeleteVpc",
+      "--vpc-id",
+      "xxx"
+    ],
+    "command": "hcloud VPC DeleteVpc --vpc-id xxx",
+    "executableBlock": "hcloud VPC DeleteVpc --vpc-id xxx",
+    "warnings": [],
+    "classification": {
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    "sgFindings": [],
+    "approvalToken": "391f696c-7bf1-4fcf-a0f1-f60ce0e5da1a",
+    "safeToRun": false
+  },
+  "executedAt": "20261001210319"
+}

@@ -1,0 +1,56 @@
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "Expected all deny; got: hcloud csms show-secret --secr=allow, hcloud csms show-secret-versio=allow, hcloud csms get-secret-value -=allow, hcloud csms showsecret=deny",
+  "details": [
+    {
+      "cmd": "hcloud csms show-secret --secret-id test",
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "service": "csms",
+      "operation": "show-secret",
+      "args": [
+        "csms",
+        "show-secret",
+        "--secret-id",
+        "test"
+      ]
+    },
+    {
+      "cmd": "hcloud csms show-secret-version --version-id v1",
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "service": "csms",
+      "operation": "show-secret-version",
+      "args": [
+        "csms",
+        "show-secret-version",
+        "--version-id",
+        "v1"
+      ]
+    },
+    {
+      "cmd": "hcloud csms get-secret-value --name mysecret",
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "service": "csms",
+      "operation": "get-secret-value",
+      "args": [
+        "csms",
+        "get-secret-value",
+        "--name",
+        "mysecret"
+      ]
+    },
+    {
+      "cmd": "hcloud csms showsecret",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context."
+    }
+  ],
+  "executedAt": "20261001210312"
+}
