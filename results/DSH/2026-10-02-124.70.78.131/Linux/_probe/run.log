@@ -1,0 +1,147 @@
+[main] hdkSrc = /home/testbot2/devkit-test/DSH/hdk/plugins/huaweicloud-core/src
+[main] 共 141 个用例待执行
+D1-3 => PASS | check_cli 自检通过(skillsRoot=null, skills=0)
+D1-4 => PASS | status 二次调用幂等(结果一致)
+D1-26 => PASS | check_update/upgrade 均注册且含 description+inputSchema(names=41)
+D1-27 => PASS | {"currentVersion":"1.1.7","latestStable":"1.1.7","latestNext
+D1-28 => PASS | {"currentVersion":"1.1.5","latestStable":"1.1.7","latestNext
+D1-30 => PASS | semver 多组比对正确(升>0/正式>预发布/相等=0)
+D1-31 => PASS | dismiss 冷却期内 dismissed: result=dismissed dismissed=true
+D1-33 => PASS | skip 文件字段完整 dismissedVersion/dismissedAt/expireAt; resolveSk
+D1-39 => NOT_RUN | Windows 专属用例(OS 列标注专属)，本机为 Linux，不适用
+D1-40 => PASS | 镜像 lag 下不提示倒退: judgeUpdate=up_to_date
+D1-41 => PASS | check_update 契约字段齐备: {"result":"up_to_date","currentVersion"
+D1-42 => PASS | dismiss 闭环: first=up_to_date dismissed=null
+D1-45 => PASS | 兜底提示 applyUpdateHint/_decorateResult 可用且可重置消费
+D1-65 => PASS | update-check.mjs 含 HUAWEICLOUD_DEVKIT_DEBUG 调试分支
+D1-66 => PASS | fixture exit=0
+D1-67 => PASS | AGENT_TOOLKIT_MODE/SKIP_DSH/REQUIRED_ENV_KEYS(HCLOUD_BIN) 均存
+D1-68 => SPEC-MISMATCH | region 优先级契约漂移：实现 HW_REGION 优先，用例期望 HUAWEICLOUD_REGION 优先
+D1-69 => PASS | fixture exit=0
+D1-70 => PASS | proxy write/read/getProxySettings/no_proxy 绕过正确: read={"http
+D2-10 => PASS | fixture exit=0
+D2-11 => PASS | STS persist 拒绝落盘(R3): {"status":"error","error":"Temporary S
+D2-12 => PASS | auth_sync 可调用(R10 runtime 抑制): {"ok":true,"profile":"default
+D2-13 => PASS | fixture exit=0
+D2-16 => PASS | auth_switch import 后擦除 creds-import.json 逻辑存在
+D4-18 => PASS | confirm-not-deny 审批语义: approvalToken=true
+D4-19 => PASS | 确认流下预检生效: classification={"decision":"allow","risk":"write",
+D4-20 => PASS | 拒绝后零操作(未批准 → 抛拒绝, 零执行): Error: approvedByUser must be true a
+D2-1 => PASS | auth 三端可用: auth_status={"target":"all","credentialsConfigure
+D2-2 => PASS | auth_status 判定可执行: {"target":"all","credentialsConfigured":t
+D2-4 => FAIL | 凭证脱敏漏小写 ak=/sk=（明文残留）
+D2-5 => PASS | 凭证缺失时返回状态+指引结构
+D2-26 => PASS | backup/restore 闭环: backup=true restore=true
+D2-27 => PASS | fixture exit=0
+D3-A1 => PASS | skill 检索 reachable: listSkillDirs=0 retrieve_skill 命中=5
+D3-B1 => PASS | list_operations(ECS) 返回规范操作名: {"service":"ECS","command":"hc
+D3-B3 => PASS | run_readonly 执行只读命令成功(脱敏)
+D3-B5 => PASS | detect_framework 识别: {"type":"spa","framework":"Vite (React/
+D3-C4 => PASS | 22 服务 list_operations 只读规划: ok=22/22 fail=0 bad=
+D3-C5 => PASS | 四工具冒烟(check_cli/list_operations/explain_error) 通过
+D3-C13 => PASS | OBS 静态网站 get/set: mb=true set=true get=true(已归零)
+D3-C14 => PASS | fixture exit=0
+D3-S1 => PASS | 只读查 ECS: 路由命中ecs=true 命令返回=true
+D3-S2 => PASS | 删VPC先确认: 路由=true plan写=true 删除=true
+D3-S3 => BLOCKED | 沙箱 connect/upload/deploy 依赖 DevStation 配额与 devbridge_tunnel(
+D3-S4 => PASS | voucher status→claim 闭环: status=true claim={"alreadyClaimed"
+D3-S5 => PASS | 复合意图分层路由命中多服务: OBS+IAM+Sandbox+DevStation
+D3-S6 => PASS | FunctionGraph 定时任务路由命中: FunctionGraph
+D3-S7 => FAIL | 仅部分命中: RDS
+D3-S8 => PASS | 失败排障 explain_error/extractApiError 可执行: extract={"errorCode"
+D4-1 => PASS | 凭证文件读取拦截 deny: decision=deny rule=
+D4-2 => PASS | 凭证 env 打印拦截 deny: decision=deny
+D4-3 => FAIL | kms DecryptData 未拦截: {"decision":"allow","findings":[]}
+D4-4 => PASS | 写操作审批门: approvalToken 存在=true
+D4-5 => PASS | 写操作未误判只读: decision=allow
+D4-6 => PASS | adminPass 回显脱敏: redact=adminPass=<redacted> classify={"decis
+D4-7 => PASS | hook 三工具可调用: cmd=deny artifact=deny plan=warn
+D4-8 => PASS | Python/Node 策略一致: risk=deny classify=deny
+D4-9 => PASS | 公网暴露/破坏性预检: pub=deny dest=deny
+D4-10 => PASS | 规则库可加载并回归(规则数=19)
+D4-11 => PASS | search_docs 返回内容为数据（注入指令未执行）
+D4-12 => PASS | fixture exit=0
+D4-13 => PASS | 只读子账号 run_readonly 成功: {"ok":true,"exitCode":0,"signal":null
+D4-14 => PASS | 操作可审计(request_id 可追溯): traceable=false
+D4-15 => PASS | hook 绕过变体均拦截: ["warn","warn","warn","deny"]
+D4-16 => FAIL | {"decision":"allow","findings":[]}
+D4-17 => FAIL | {"decision":"allow","findings":[]}
+D4-21 => FAIL | HCL IAM 未拦截: json=deny hcl=allow
+D4-22 => PASS | 高危部署计划拦截: decision=warn
+D4-23 => PASS | package.json files 含 rules/(全局规则注入)
+D4-24 => PASS | 审批令牌一次性消费: first={"argsHash":"cf3347a9c99d9616af874c602cbccc
+D4-25 => PASS | Python hook 遥测分类: writeOperationPrefixes=true cli:write映射=tr
+D4-26 => PASS | findings.evidence 已脱敏(无明文 secret_key/adminPass)
+D4-27 => PASS | 双路径脱敏(SK/AK 均替换): redactSecrets=AK=<redacted> SK=<redacted> 
+D4-28 => PASS | Node 安全 hook 链路: risk=allow classify=deny
+D4-29 => PASS | fixture exit=0
+D5-1 => PASS | 插件清单安装目标存在(SUPPORTED_AGENT_TARGETS=11)
+D5-3 => PASS | 工具全量可达且 schema 完整: n=41(注册源数量) schemaOk=true dup=false
+D6-1 => PASS | 检索响应延迟 4ms < 2s
+D6-3 => PASS | MCP 冷启 508ms < 5s
+D6-4 => PASS | 并发 30 请求无死锁: ok=30/30
+D6-9 => PASS | 三缓存清理入口可调用(update/icon/market)
+D9-9 => PASS | fixture exit=0
+D8-1 => PASS | README.md 文档存在(链接/命令一致性可扫描)
+D8-4 => PASS | skill 指引可机械加载(huawei-ecs)
+D8-6 => PASS | 中英文文档并存: en=true zh=true
+D8-7 => PASS | 7 个 meta 技能可机械执行: 7/7
+D8-9 => FAIL | sanitizeValue 未脱敏: AK=AK123 secret_key=SECRET token=abc123
+D8-10 => PASS | fixture exit=0
+D9-1 => PASS | tools/list schema 合法且无重复: valid=true dup=false
+D9-2 => PASS | JSON-RPC 错误码: unknown method code=-32601, bad params code=un
+D9-3 => PASS | tools/call 响应格式(content/isError): {"installed":true,"authent
+D9-4 => PASS | 协议生命周期 initialize→tools/list 正常
+D9-5 => PASS | stdio 大 payload 不崩
+D9-6 => PASS | fixture exit=0
+D9-7 => PASS | 协议版本协商不挂死(旧客户端 initialize 有响应)
+D9-8 => PASS | inputSchema 版本统一: draft07=false 2020-12=false
+D9-10 => PASS | fixture exit=0
+D9-11 => PASS | fixture exit=0
+D9-12 => FAIL | 握手=[object Object] 非法时序拒绝=undefined (未init先list 返回 40 工具)
+D9-13 => PASS | tools/call 凭证不泄露链路: loadPolicy=true classifyHcloudArgs={"dec
+D10-3 => PASS | 路由准确率 92.9% (HIT=13 MISS=1)
+D10-4 => PASS | 静态规则层完整: deny=9 warn=10 高危=deny 只读=allow
+EXP-D5-6-1 => PASS | DSH 客户端可发现并加载插件清单: target=dsh
+EXP-D5-6-3 => PASS | DSH tools/list 枚举全部注册工具可达: n=41(注册源数量) dup=false
+EXP-C4-01 => PASS | ECS list_operations 只读规划 OK
+EXP-C4-02 => PASS | VPC list_operations 只读规划 OK
+EXP-C4-03 => PASS | OBS list_operations 只读规划 OK
+EXP-C4-04 => PASS | RDS list_operations 只读规划 OK
+EXP-C4-05 => PASS | GaussDB list_operations 只读规划 OK
+EXP-C4-06 => PASS | CCE list_operations 只读规划 OK
+EXP-C4-07 => PASS | FunctionGraph list_operations 只读规划 OK
+EXP-C4-08 => PASS | IAM list_operations 只读规划 OK
+EXP-C4-09 => PASS | CTS list_operations 只读规划 OK
+EXP-C4-10 => PASS | CES list_operations 只读规划 OK
+EXP-C4-11 => PASS | DDS list_operations 只读规划 OK
+EXP-C4-12 => PASS | DCS list_operations 只读规划 OK
+EXP-C4-13 => PASS | SMN list_operations 只读规划 OK
+EXP-C4-14 => PASS | DMS list_operations 只读规划 OK
+EXP-C4-15 => PASS | WAF list_operations 只读规划 OK
+EXP-C4-16 => PASS | CDN list_operations 只读规划 OK
+EXP-C4-17 => PASS | ModelArts list_operations 只读规划 OK
+EXP-C4-18 => PASS | DEW list_operations 只读规划 OK
+EXP-C4-19 => PASS | CBR list_operations 只读规划 OK
+EXP-C4-20 => PASS | EVS list_operations 只读规划 OK
+EXP-C4-21 => PASS | EIP list_operations 只读规划 OK
+EXP-C4-22 => PASS | ELB list_operations 只读规划 OK
+EXP-E01 => FAIL | 路由 MISS: got=Run hcloud --help to list available services. 期
+EXP-E02 => PASS | 路由 HIT: got=ECS
+EXP-E03 => PASS | 路由 HIT: got=OBS+Sandbox+DevStation
+EXP-E04 => PASS | 路由 HIT: got=ECS+VPC+EIP
+EXP-E05 => PASS | 路由 HIT: got=RDS
+EXP-E06 => PASS | 路由 HIT: got=OBS+DDS+DCS
+EXP-E07 => PASS | 路由 HIT: got=ECS+IAM+CBR
+EXP-E08 => PASS | 诊断类 N/A(走 explain_error)
+EXP-E09 => PASS | 路由 HIT: got=CCE+SWR
+EXP-E10 => PASS | 路由 HIT: got=FunctionGraph
+EXP-E11 => PASS | 路由 HIT: got=BSS
+EXP-E12 => PASS | 路由 HIT: got=CES
+EXP-E13 => PASS | 路由 HIT: got=CSMS+KMS+ELB
+EXP-E14 => PASS | 路由 HIT: got=IAM+CTS
+EXP-E15 => PASS | 路由 HIT: got=Incentive Voucher
+
+===== 汇总 =====
+{"PASS":129,"FAIL":9,"BLOCKED":1,"SPEC-MISMATCH":1,"NOT_RUN":1}
+FAIL/SPEC: D1-68, D2-4, D3-S7, D4-3, D4-16, D4-17, D4-21, D8-9, D9-12, EXP-E01
