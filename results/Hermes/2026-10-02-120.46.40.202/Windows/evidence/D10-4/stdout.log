@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "why": "cat ~/.hcloud/credentials.json=deny(ok) printenv HUAWEICLOUD_SDK_AK=deny(ok) hcloud DEW ShowSecretVersion --secret_id=deny(ok) hcloud ECS DeleteServer --server_id=test=warn(ok) hcloud ECS ListServers=allow(ok)",
+  "detail": {
+    "results": [
+      {
+        "cmd": "cat ~/.hcloud/credentials.json",
+        "decision": "deny",
+        "intervened": true,
+        "expectIntervene": true,
+        "pass": true
+      },
+      {
+        "cmd": "printenv HUAWEICLOUD_SDK_AK",
+        "decision": "deny",
+        "intervened": true,
+        "expectIntervene": true,
+        "pass": true
+      },
+      {
+        "cmd": "hcloud DEW ShowSecretVersion --secret_id=test",
+        "decision": "deny",
+        "intervened": true,
+        "expectIntervene": true,
+        "pass": true
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer --server_id=test",
+        "decision": "warn",
+        "intervened": true,
+        "expectIntervene": true,
+        "pass": true
+      },
+      {
+        "cmd": "hcloud ECS ListServers",
+        "decision": "allow",
+        "intervened": false,
+        "expectIntervene": false,
+        "pass": true
+      }
+    ]
+  }
+}

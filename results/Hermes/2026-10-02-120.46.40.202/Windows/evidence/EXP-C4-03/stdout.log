@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "why": "OBS uses obsutil (separate CLI tool) not hcloud API. obsutil help shows available operations (abort, cp, ls, mb, mv, rm, etc). OBS API operations are accessible via MCP huaweicloud_obs_set_website_config and obsutil commands.",
+  "detail": {
+    "service": "OBS",
+    "note": "OBS has a separate CLI tool (obsutil) in KooCLI. hcloud OBS list-operations is not available because OBS is managed via obsutil, not the hcloud API layer. The MCP plugin provides huaweicloud_obs_set_website_config for OBS operations.",
+    "obsutilAvailable": true
+  }
+}

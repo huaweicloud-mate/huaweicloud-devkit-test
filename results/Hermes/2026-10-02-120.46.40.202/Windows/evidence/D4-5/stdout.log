@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "why": "writeOk=true readOk=true",
+  "detail": {
+    "writeResults": [
+      {
+        "op": "ECS DeleteServer --server_id=test",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "op": "VPC DeleteVpc --vpc_id=test",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "op": "RDS DeleteInstance --instance_id=test",
+        "decision": "deny",
+        "risk": "write"
+      }
+    ],
+    "readResults": [
+      {
+        "op": "ECS ListServers",
+        "decision": "allow",
+        "risk": "read_only"
+      },
+      {
+        "op": "VPC ListVpcs",
+        "decision": "allow",
+        "risk": "read_only"
+      },
+      {
+        "op": "RDS ListInstances",
+        "decision": "allow",
+        "risk": "read_only"
+      }
+    ]
+  }
+}
