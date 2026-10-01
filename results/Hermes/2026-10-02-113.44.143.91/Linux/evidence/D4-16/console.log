@@ -1,0 +1,9 @@
+sh -c "hcloud ecs DeleteServer" -> deny (exp deny) 
+  bash -c 'hcloud ecs DeleteServer' -> deny (exp deny) 
+  eval "hcloud ecs DeleteServer" -> deny (exp deny) 
+  $(hcloud ecs DeleteServer) -> deny (exp deny) 
+=== D4-16 命令包裹穿透 ===  PASS
+  expected: sh/bash/eval/$() 包裹均检测内层写操作 | actual: 4/4 拦截
+RESULT: PASS 4/4 拦截
+
+=== STDERR ===
