@@ -1,0 +1,25 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "sh -c wrap decision=allow",
+  "executedAt": "20260927051241",
+  "client": "CodeArtsSpace",
+  "os": "Windows",
+  "result": {
+    "decision": "allow",
+    "risk": "not_huaweicloud",
+    "reason": "No Huawei Cloud safety rule matched.",
+    "warnings": [
+      {
+        "ruleId": "hwc-destructive-delete-operation",
+        "title": "Destructive cloud resource operation",
+        "category": "destructive",
+        "severity": "warn",
+        "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+        "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+        "source": "command",
+        "evidence": "sh -c \"hcloud ecs delete\""
+      }
+    ]
+  }
+}
