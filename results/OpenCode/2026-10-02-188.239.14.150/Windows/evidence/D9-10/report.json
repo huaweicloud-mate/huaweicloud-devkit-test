@@ -1,0 +1,53 @@
+{
+  "caseId": "D9-10",
+  "title": "MCP remote transport(9528)",
+  "assertionTotal": 4,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "remote initialize 返回 serverInfo",
+      "ok": false,
+      "actual": "initialize",
+      "expected": "PASS"
+    },
+    {
+      "name": "remote tools/list 与 stdio 一致",
+      "ok": false,
+      "actual": "parity",
+      "expected": "PASS"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "remote 服务在 127.0.0.1:9528 监听",
+      "ok": true,
+      "actual": "9528",
+      "expected": "监听"
+    },
+    {
+      "name": "remote initialize 返回 serverInfo",
+      "ok": false,
+      "actual": "initialize",
+      "expected": "PASS"
+    },
+    {
+      "name": "remote tools/list 与 stdio 一致",
+      "ok": false,
+      "actual": "parity",
+      "expected": "PASS"
+    },
+    {
+      "name": "夹具全部断言通过 (6/6)",
+      "ok": true,
+      "actual": {
+        "pass": 6,
+        "fail": 0,
+        "tail": "eicloud-devkit\",\"stdioTools\":40})\nPASS  D9-10-unknown-method  remote 未知方法返回 -32601 => {\"code\":-32601} (期望 {\"code\":-32601})\n\n=== D9-10 MCP remote transport（HTTP/WS 远程服务）===  pass=6 fail=0\nRESULT: PASS\n"
+      },
+      "expected": "fail=0"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:15.065Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,31 @@
+{
+  "caseId": "D1-65",
+  "title": "调试模式环境变量",
+  "assertionTotal": 3,
+  "assertionPassed": 3,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "源码含 HUAWEICLOUD_DEVKIT_DEBUG 判定",
+      "ok": true,
+      "actual": "HUAWEICLOUD_DEVKIT_DEBUG",
+      "expected": "存在"
+    },
+    {
+      "name": "DEBUG=1 时检测链执行且不抛异常",
+      "ok": true,
+      "actual": "null(D1-39 缺陷)",
+      "expected": "不抛异常"
+    },
+    {
+      "name": "DEBUG=off 时行为一致且不抛异常",
+      "ok": true,
+      "actual": "null(D1-39 缺陷)",
+      "expected": "不抛异常"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:17.492Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64",
+  "note": "DEBUG 开关不改变返回值语义；两者均为 null 系 D1-39 的 parseDistTagsOutput 缺陷所致，非本用例范围。"
+}

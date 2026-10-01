@@ -1,0 +1,85 @@
+{
+  "caseId": "D3-B1",
+  "title": "list_operations 规范性",
+  "assertionTotal": 9,
+  "assertionPassed": 5,
+  "failed": [
+    {
+      "name": "ECS list_operations 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "VPC list_operations 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "OBS list_operations 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "OBS 含 Create/Delete/List 类操作",
+      "ok": false,
+      "actual": "含操作",
+      "expected": "存在"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "ECS list_operations 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "ECS 返回规范操作名(大驼峰)",
+      "ok": true,
+      "actual": "{\"service\":\"ECS\",\"command\":\"hcloud ECS --help\",\"selectionRule\":\"Use this help text to select the exact KooCLI operation name before planning any service command",
+      "expected": "CamelCase"
+    },
+    {
+      "name": "ECS 含 Create/Delete/List 类操作",
+      "ok": true,
+      "actual": "含操作",
+      "expected": "存在"
+    },
+    {
+      "name": "VPC list_operations 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "VPC 返回规范操作名(大驼峰)",
+      "ok": true,
+      "actual": "{\"service\":\"VPC\",\"command\":\"hcloud VPC --help\",\"selectionRule\":\"Use this help text to select the exact KooCLI operation name before planning any service command",
+      "expected": "CamelCase"
+    },
+    {
+      "name": "VPC 含 Create/Delete/List 类操作",
+      "ok": true,
+      "actual": "含操作",
+      "expected": "存在"
+    },
+    {
+      "name": "OBS list_operations 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "OBS 返回规范操作名(大驼峰)",
+      "ok": true,
+      "actual": "{\"service\":\"OBS\",\"command\":\"hcloud obs help\",\"selectionRule\":\"Use this help text to select the exact KooCLI operation name before planning any service command. ",
+      "expected": "CamelCase"
+    },
+    {
+      "name": "OBS 含 Create/Delete/List 类操作",
+      "ok": false,
+      "actual": "含操作",
+      "expected": "存在"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:27.471Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

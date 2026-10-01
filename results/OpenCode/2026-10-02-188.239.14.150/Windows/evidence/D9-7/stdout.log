@@ -1,0 +1,57 @@
+{
+  "caseId": "D9-7",
+  "title": "协议版本协商降级",
+  "assertionTotal": 5,
+  "assertionPassed": 5,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "老版本客户端完成协商(不挂死)",
+      "ok": true,
+      "actual": {
+        "proto": "2024-11-05",
+        "err": null,
+        "ok": true,
+        "tools": 41
+      },
+      "expected": "ok"
+    },
+    {
+      "name": "协商后 tools/list 可用",
+      "ok": true,
+      "actual": 41,
+      "expected": ">0"
+    },
+    {
+      "name": "超新版本不挂死(协商或明确报错)",
+      "ok": true,
+      "actual": {
+        "proto": "2099-01-01",
+        "err": null,
+        "ok": true,
+        "tools": 41
+      },
+      "expected": "协商或报错"
+    },
+    {
+      "name": "capabilities 缺失仍可完成握手",
+      "ok": true,
+      "actual": {
+        "proto": "2024-11-05",
+        "err": null,
+        "ok": true,
+        "tools": 41
+      },
+      "expected": "协商或报错"
+    },
+    {
+      "name": "协商结果版本可预测",
+      "ok": true,
+      "actual": "2024-11-05",
+      "expected": "semver string"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:27.014Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

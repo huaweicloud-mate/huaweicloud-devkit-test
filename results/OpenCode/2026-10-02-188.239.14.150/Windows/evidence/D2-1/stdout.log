@@ -1,0 +1,109 @@
+{
+  "caseId": "D2-1",
+  "title": "auth init 三端同步(源码级+真云E2E)",
+  "assertionTotal": 13,
+  "assertionPassed": 9,
+  "failed": [
+    {
+      "name": "KooCLI 配置为 AKSK 模式",
+      "ok": false,
+      "actual": {},
+      "expected": "AKSK"
+    },
+    {
+      "name": "KooCLI 配置含 region",
+      "ok": false,
+      "expected": "非空"
+    },
+    {
+      "name": "真云只读 API 实际可用",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "KooCLI 侧实际可用(configure show 成功)",
+      "ok": false,
+      "expected": false
+    }
+  ],
+  "assertions": [
+    {
+      "name": "KooCLI 配置文件存在",
+      "ok": true,
+      "actual": "C:\\Users\\Administrator\\.hcloud\\config.json",
+      "expected": "exists"
+    },
+    {
+      "name": "KooCLI 配置非空",
+      "ok": true,
+      "actual": "size",
+      "expected": ">0"
+    },
+    {
+      "name": "OBS 配置文件存在",
+      "ok": true,
+      "actual": "C:\\Users\\Administrator\\.obsutilconfig",
+      "expected": "exists"
+    },
+    {
+      "name": "OBS 配置非空",
+      "ok": true,
+      "actual": "size",
+      "expected": ">0"
+    },
+    {
+      "name": "S1凭证 配置文件存在",
+      "ok": true,
+      "actual": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+      "expected": "exists"
+    },
+    {
+      "name": "S1凭证 配置非空",
+      "ok": true,
+      "actual": "size",
+      "expected": ">0"
+    },
+    {
+      "name": "OBS 配置含 ak/sk 键(格式正确)",
+      "ok": true,
+      "actual": "format",
+      "expected": "ak=/sk="
+    },
+    {
+      "name": "KooCLI 配置为 AKSK 模式",
+      "ok": false,
+      "actual": {},
+      "expected": "AKSK"
+    },
+    {
+      "name": "KooCLI 配置含 region",
+      "ok": false,
+      "expected": "非空"
+    },
+    {
+      "name": "真云只读 API 实际可用",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "KooCLI 侧实际可用(configure show 成功)",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "OBS 侧已配置(obsConfigured=true)",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "沙箱侧凭证可用(resolveCredentials 不抛错)",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    }
+  ],
+  "executedAt": "2026-10-01T21:32:15.395Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,62 @@
+{
+  "caseId": "D8-9",
+  "title": "安装 ID 与遥测值脱敏",
+  "verdict": "SPEC-MISMATCH",
+  "assertionTotal": 6,
+  "assertionPassed": 4,
+  "failed": [
+    {
+      "name": "sanitizeValue 移除 AK 敏感值",
+      "ok": false,
+      "actual": "AKIAIOSFODNN7EXAMPLE",
+      "expected": "已移除/脱敏"
+    },
+    {
+      "name": "sanitizeValue 移除 token 敏感值",
+      "ok": false,
+      "actual": "HUAWEICLOUD_SDK_SK=secretvalue123",
+      "expected": "已移除/脱敏"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "二次调用 ID 稳定",
+      "ok": true,
+      "actual": "15e0147c29d4215ab8d1ed1a0baf51097d85bea006eb6aaee7de87b28b05052f",
+      "expected": "15e0147c29d4215ab8d1ed1a0baf51097d85bea006eb6aaee7de87b28b05052f"
+    },
+    {
+      "name": "ID 为 sha256 长度",
+      "ok": true,
+      "actual": 64,
+      "expected": 64
+    },
+    {
+      "name": "sanitizeValue 清除换行/制表",
+      "ok": true,
+      "actual": "a b c",
+      "expected": "a b c"
+    },
+    {
+      "name": "sanitizeValue 不改变合法值",
+      "ok": true,
+      "actual": "cn-north-4",
+      "expected": "cn-north-4"
+    },
+    {
+      "name": "sanitizeValue 移除 AK 敏感值",
+      "ok": false,
+      "actual": "AKIAIOSFODNN7EXAMPLE",
+      "expected": "已移除/脱敏"
+    },
+    {
+      "name": "sanitizeValue 移除 token 敏感值",
+      "ok": false,
+      "actual": "HUAWEICLOUD_SDK_SK=secretvalue123",
+      "expected": "已移除/脱敏"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:24.891Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

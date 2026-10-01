@@ -1,0 +1,73 @@
+{
+  "caseId": "D2-4",
+  "title": "凭证脱敏正确(无明文字段)",
+  "assertionTotal": 6,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "accessKeyId 被替换为 <redacted>",
+      "ok": false,
+      "actual": "accessKeyId",
+      "expected": "<redacted>"
+    },
+    {
+      "name": "secretAccessKey 被替换为 <redacted>",
+      "ok": false,
+      "actual": "secretAccessKey",
+      "expected": "<redacted>"
+    },
+    {
+      "name": "securityToken 被替换为 <redacted>",
+      "ok": false,
+      "actual": "securityToken",
+      "expected": "<redacted>"
+    },
+    {
+      "name": "region 等非敏感字段保留",
+      "ok": false,
+      "actual": "region",
+      "expected": "cn-*"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "返回中 AK 出现次数<=1(仅脱敏占位)",
+      "ok": true,
+      "actual": 0,
+      "expected": "<=1"
+    },
+    {
+      "name": "返回中不含明文 SK",
+      "ok": true,
+      "actual": "found",
+      "expected": "不含 SK"
+    },
+    {
+      "name": "accessKeyId 被替换为 <redacted>",
+      "ok": false,
+      "actual": "accessKeyId",
+      "expected": "<redacted>"
+    },
+    {
+      "name": "secretAccessKey 被替换为 <redacted>",
+      "ok": false,
+      "actual": "secretAccessKey",
+      "expected": "<redacted>"
+    },
+    {
+      "name": "securityToken 被替换为 <redacted>",
+      "ok": false,
+      "actual": "securityToken",
+      "expected": "<redacted>"
+    },
+    {
+      "name": "region 等非敏感字段保留",
+      "ok": false,
+      "actual": "region",
+      "expected": "cn-*"
+    }
+  ],
+  "executedAt": "2026-10-01T21:32:09.907Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

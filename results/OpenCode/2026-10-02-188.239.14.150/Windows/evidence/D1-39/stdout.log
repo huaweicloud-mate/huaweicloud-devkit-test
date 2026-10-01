@@ -1,0 +1,62 @@
+{
+  "caseId": "D1-39",
+  "title": "Windows 升级检测链可用(不静默失败)",
+  "assertionTotal": 5,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "registry 返回体为对象而非数组",
+      "ok": false,
+      "actual": "array",
+      "expected": "object"
+    },
+    {
+      "name": "parseDistTagsOutput 解析出 latest 字符串",
+      "ok": false,
+      "actual": null,
+      "expected": "latest=semver"
+    },
+    {
+      "name": "queryDistTagsSync 返回非 null（检测链真实可用）",
+      "ok": false,
+      "actual": null,
+      "expected": "非 null"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "npm view 退出码 0",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "npm view 无 EINVAL/无 error",
+      "ok": true,
+      "actual": null,
+      "expected": true
+    },
+    {
+      "name": "registry 返回体为对象而非数组",
+      "ok": false,
+      "actual": "array",
+      "expected": "object"
+    },
+    {
+      "name": "parseDistTagsOutput 解析出 latest 字符串",
+      "ok": false,
+      "actual": null,
+      "expected": "latest=semver"
+    },
+    {
+      "name": "queryDistTagsSync 返回非 null（检测链真实可用）",
+      "ok": false,
+      "actual": null,
+      "expected": "非 null"
+    }
+  ],
+  "executedAt": "2026-10-01T21:32:09.592Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64",
+  "note": "npm registry.npmjs.org 的 dist-tags --json 返回 array 形态（原始: \"[\\n  {\\n    \\\"latest\\\": \\\"1.1.7\\\",\\n    \\\"next\\\": \\\"1.1.8-next.1\\\"\\n  }\\n]\"），parseDistTagsOutput 将其判为无效并静默返回 null，queryDistTagsSync 随之返回 null → check_update 在 Windows 上稳定返回 check_failed，无任何错误提示。"
+}

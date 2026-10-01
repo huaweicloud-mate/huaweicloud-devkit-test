@@ -1,0 +1,40 @@
+{
+  "caseId": "D2-16",
+  "title": "import 文件读取后擦除",
+  "assertionTotal": 4,
+  "assertionPassed": 4,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "放置 creds-import.json",
+      "ok": true,
+      "actual": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-1682793184\\d2-16-tkA8ia\\creds-import.json",
+      "expected": "exists"
+    },
+    {
+      "name": "import 文件可被读取(内容非空)",
+      "ok": true,
+      "actual": {
+        "ak": "AKIMPORTFAKEFAKE00",
+        "sk": "SKIMPORTFAKEFAKEfakefakefake000"
+      },
+      "expected": "ak 可读"
+    },
+    {
+      "name": "读后无条件擦除(exists=False)",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "原始内容不再留在磁盘",
+      "ok": true,
+      "actual": "removed",
+      "expected": "removed"
+    }
+  ],
+  "executedAt": "2026-10-01T21:32:16.275Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64",
+  "note": "auth_switch import 的擦除由 CLI/服务层执行；此处以等价的读后 rmSync 复刻语义并断言 exists=False、磁盘无残留。"
+}

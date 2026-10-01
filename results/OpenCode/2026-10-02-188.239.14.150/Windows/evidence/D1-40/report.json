@@ -1,0 +1,54 @@
+{
+  "caseId": "D1-40",
+  "title": "镜像 lag 下检测正确(防反向提醒)",
+  "assertionTotal": 4,
+  "assertionPassed": 4,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "远端<=本地时不提示 available(不提示版本倒退)",
+      "ok": true,
+      "actual": {
+        "currentVersion": "1.1.8-next.1",
+        "latestStable": "1.1.7",
+        "latestNext": "1.1.8-next.1",
+        "targetVersion": "1.1.8-next.1",
+        "updateAvailable": false,
+        "dismissed": false,
+        "dismissExpiresAt": null,
+        "result": "up_to_date"
+      },
+      "expected": "updateAvailable=false"
+    },
+    {
+      "name": "targetVersion 不低于本地",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "determineTarget 回落本地版本",
+      "ok": true,
+      "actual": "1.1.8-next.1",
+      "expected": "1.1.8-next.1"
+    },
+    {
+      "name": "官方源真有新版本时仍能提示",
+      "ok": true,
+      "actual": {
+        "currentVersion": "1.1.8-next.1",
+        "latestStable": "1.1.9",
+        "latestNext": "1.1.9",
+        "targetVersion": "1.1.9",
+        "updateAvailable": true,
+        "dismissed": false,
+        "dismissExpiresAt": null,
+        "result": "update_available"
+      },
+      "expected": "updateAvailable=true"
+    }
+  ],
+  "executedAt": "2026-10-01T21:32:09.661Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

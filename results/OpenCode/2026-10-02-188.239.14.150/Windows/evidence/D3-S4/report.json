@@ -1,0 +1,81 @@
+{
+  "caseId": "D3-S4",
+  "title": "场景-领券闭环",
+  "assertionTotal": 6,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "voucher_status 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "voucher_claim 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "领取返回 claimed=true",
+      "ok": false,
+      "actual": {
+        "claimed": false,
+        "voucherId": null,
+        "amount": 0,
+        "message": "AK/SK 无效或不匹配，请检查配置",
+        "code": "HDKIT_CRED_INVALID"
+      },
+      "expected": "claimed=true"
+    },
+    {
+      "name": "再查状态翻转为 claimed=true",
+      "ok": false,
+      "actual": false,
+      "expected": true
+    }
+  ],
+  "assertions": [
+    {
+      "name": "voucher_status 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "返回 claimed 布尔",
+      "ok": true,
+      "actual": false,
+      "expected": "boolean"
+    },
+    {
+      "name": "voucher_claim 成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "领取返回 claimed=true",
+      "ok": false,
+      "actual": {
+        "claimed": false,
+        "voucherId": null,
+        "amount": 0,
+        "message": "AK/SK 无效或不匹配，请检查配置",
+        "code": "HDKIT_CRED_INVALID"
+      },
+      "expected": "claimed=true"
+    },
+    {
+      "name": "再查状态翻转为 claimed=true",
+      "ok": false,
+      "actual": false,
+      "expected": true
+    },
+    {
+      "name": "闭环连贯 status→claim→status",
+      "ok": true,
+      "actual": "false→false→false",
+      "expected": "连贯"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:01.717Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

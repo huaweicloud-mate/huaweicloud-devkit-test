@@ -1,0 +1,106 @@
+{
+  "caseId": "D3-C13",
+  "title": "OBS 静态网站托管配置(get/set/delete)",
+  "assertionTotal": 8,
+  "assertionPassed": 1,
+  "failed": [
+    {
+      "name": "创建测试 bucket 成功",
+      "ok": false,
+      "actual": {
+        "code": 3,
+        "out": "Error: No such command: \"CreateBucket\", please try \"help\" for more information!\n"
+      },
+      "expected": "成功"
+    },
+    {
+      "name": "未配置时 get 返回未配置(非崩溃)",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "set 配置成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "get 核对 indexDocument 一致",
+      "ok": false,
+      "actual": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0F962821447D26156E244",
+      "expected": "index.html"
+    },
+    {
+      "name": "get 核对 errorDocument 一致",
+      "ok": false,
+      "actual": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0F962821447D26156E244",
+      "expected": "404.html"
+    },
+    {
+      "name": "delete 配置成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "probe 执行未抛异常",
+      "ok": false,
+      "actual": "indexDocument is required for action=set",
+      "expected": "不抛异常"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "创建测试 bucket 成功",
+      "ok": false,
+      "actual": {
+        "code": 3,
+        "out": "Error: No such command: \"CreateBucket\", please try \"help\" for more information!\n"
+      },
+      "expected": "成功"
+    },
+    {
+      "name": "未配置时 get 返回未配置(非崩溃)",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "set 配置成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "get 核对 indexDocument 一致",
+      "ok": false,
+      "actual": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0F962821447D26156E244",
+      "expected": "index.html"
+    },
+    {
+      "name": "get 核对 errorDocument 一致",
+      "ok": false,
+      "actual": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0F962821447D26156E244",
+      "expected": "404.html"
+    },
+    {
+      "name": "delete 配置成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "资源已归零(bucket 删除)",
+      "ok": true,
+      "actual": {
+        "code": 3,
+        "out": "Error: No such command: \"HeadBucket\", please try \"help\" for more information!\n"
+      },
+      "expected": "不存在"
+    },
+    {
+      "name": "probe 执行未抛异常",
+      "ok": false,
+      "actual": "indexDocument is required for action=set",
+      "expected": "不抛异常"
+    }
+  ],
+  "executedAt": "2026-10-01T21:32:58.184Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

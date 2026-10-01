@@ -1,0 +1,70 @@
+{
+  "caseId": "D1-42",
+  "title": "dismiss 真实闭环与跨进程持久化",
+  "assertionTotal": 6,
+  "assertionPassed": 3,
+  "failed": [
+    {
+      "name": "首次调用返回合法结果",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "dismiss 调用被受理且不抛错",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "expireAt = dismissedAt + 3天",
+      "ok": false,
+      "actual": null,
+      "expected": 3
+    }
+  ],
+  "assertions": [
+    {
+      "name": "首次调用返回合法结果",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "dismiss 调用被受理且不抛错",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "dismiss 落盘到插件目录或回退路径之一",
+      "ok": true,
+      "actual": {
+        "p1": "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\hdk\\plugins\\huaweicloud-core\\.update-skip.json",
+        "p2": "C:\\Users\\Administrator\\.config\\huaweicloud\\devkit-skip.json"
+      },
+      "expected": "其一存在"
+    },
+    {
+      "name": "skip 文件含 dismissedVersion",
+      "ok": true,
+      "actual": {
+        "dismissedVersion": "1.1.8",
+        "dismissedAt": "2026-09-30T21:56:14.944Z",
+        "expireAt": "2026-10-03T21:56:14.944Z"
+      },
+      "expected": "dismissedVersion"
+    },
+    {
+      "name": "expireAt = dismissedAt + 3天",
+      "ok": false,
+      "actual": null,
+      "expected": 3
+    },
+    {
+      "name": "同版本冷却内再次调用不再提示 available",
+      "ok": true,
+      "actual": "{\"currentVersion\":\"1.1.8-next.1\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用",
+      "expected": "冷却内 dismissed"
+    }
+  ],
+  "executedAt": "2026-10-01T21:32:13.107Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

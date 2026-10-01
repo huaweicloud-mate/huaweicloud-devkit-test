@@ -1,0 +1,81 @@
+{
+  "caseId": "D1-3",
+  "title": "doctor 健康自检(含失败场景如实报告)",
+  "assertionTotal": 6,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "status 可执行并退出码 0",
+      "ok": false,
+      "actual": {
+        "code": 1,
+        "err": "node:internal/modules/cjs/loader:1386\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\hdk\\bin\\huaweicloud-devkit.cjs'\r\n    at Function._resolv"
+      },
+      "expected": 0
+    },
+    {
+      "name": "status 输出非空",
+      "ok": false,
+      "actual": 0,
+      "expected": ">0"
+    },
+    {
+      "name": "doctor 输出含修复指引(nextStep/修复/安装等)",
+      "ok": false,
+      "actual": "node:internal/modules/cjs/loader:1386\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\hdk\\bin\\huaweicloud-devkit.cjs'\r\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)\r\n    at defaultResolveImpl (node:internal/modul",
+      "expected": "含指引"
+    },
+    {
+      "name": "doctor 不输出裸堆栈",
+      "ok": false,
+      "actual": "no raw stack",
+      "expected": "no raw stack"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "status 可执行并退出码 0",
+      "ok": false,
+      "actual": {
+        "code": 1,
+        "err": "node:internal/modules/cjs/loader:1386\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\hdk\\bin\\huaweicloud-devkit.cjs'\r\n    at Function._resolv"
+      },
+      "expected": 0
+    },
+    {
+      "name": "status 输出非空",
+      "ok": false,
+      "actual": 0,
+      "expected": ">0"
+    },
+    {
+      "name": "doctor 可执行",
+      "ok": true,
+      "actual": {
+        "code": 1
+      },
+      "expected": "0 或 1"
+    },
+    {
+      "name": "doctor 输出检测项",
+      "ok": true,
+      "actual": 808,
+      "expected": ">0"
+    },
+    {
+      "name": "doctor 输出含修复指引(nextStep/修复/安装等)",
+      "ok": false,
+      "actual": "node:internal/modules/cjs/loader:1386\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\hdk\\bin\\huaweicloud-devkit.cjs'\r\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)\r\n    at defaultResolveImpl (node:internal/modul",
+      "expected": "含指引"
+    },
+    {
+      "name": "doctor 不输出裸堆栈",
+      "ok": false,
+      "actual": "no raw stack",
+      "expected": "no raw stack"
+    }
+  ],
+  "executedAt": "2026-10-01T21:32:11.299Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,52 @@
+{
+  "caseId": "D1-4",
+  "title": "status/update 幂等且不碰用户 config",
+  "assertionTotal": 4,
+  "assertionPassed": 3,
+  "failed": [
+    {
+      "name": "update 可执行(退出码 0 或幂等提示)",
+      "ok": false,
+      "actual": {
+        "code": 1,
+        "out": ""
+      },
+      "expected": 0
+    }
+  ],
+  "assertions": [
+    {
+      "name": "update 可执行(退出码 0 或幂等提示)",
+      "ok": false,
+      "actual": {
+        "code": 1,
+        "out": ""
+      },
+      "expected": 0
+    },
+    {
+      "name": "用户 credentials.json 内容未被触碰",
+      "ok": true,
+      "actual": "{\n  \"ak\": \"HPUAN1ROQ4PQXQVBSYXD\",\n  \"sk\": \"ExzAgLDfOfbaLm8pgyVCJKmtF4Nb5lLX6LnUFrfN\",\n  \"securityToken\": \"\",\n  \"region\": \"cn-north-4\",\n  \"configuredBySession\": false\n}",
+      "expected": "{\n  \"ak\": \"HPUAN1ROQ4PQXQVBSYXD\",\n  \"sk\": \"ExzAgLDfOfbaLm8pgyVCJKmtF4Nb5lLX6LnUFrfN\",\n  \"securityToken\": \"\",\n  \"region\": \"cn-north-4\",\n  \"configuredBySession\": false\n}"
+    },
+    {
+      "name": "重复 update 幂等(退出码一致)",
+      "ok": true,
+      "actual": {
+        "first": 1,
+        "second": 1
+      },
+      "expected": "一致"
+    },
+    {
+      "name": "package.json 仍可解析",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:15.912Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,53 @@
+{
+  "caseId": "D9-3",
+  "title": "tools/call 响应格式(content/isError)",
+  "assertionTotal": 5,
+  "assertionPassed": 3,
+  "failed": [
+    {
+      "name": "失败/拦截调用 isError=true",
+      "ok": false,
+      "expected": true
+    },
+    {
+      "name": "失败时 content 仍为数组",
+      "ok": false,
+      "actual": false,
+      "expected": true
+    }
+  ],
+  "assertions": [
+    {
+      "name": "成功调用 isError=false",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "content 为数组",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "content[0].type=text",
+      "ok": true,
+      "actual": "text",
+      "expected": "text"
+    },
+    {
+      "name": "失败/拦截调用 isError=true",
+      "ok": false,
+      "expected": true
+    },
+    {
+      "name": "失败时 content 仍为数组",
+      "ok": false,
+      "actual": false,
+      "expected": true
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:04.400Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

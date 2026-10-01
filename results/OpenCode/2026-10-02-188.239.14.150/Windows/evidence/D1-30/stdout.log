@@ -1,0 +1,42 @@
+{
+  "caseId": "D1-30",
+  "title": "semver 比对正确性",
+  "assertionTotal": 5,
+  "assertionPassed": 5,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "1.1.2 > 1.1.1",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "1.1.1 < 1.1.2",
+      "ok": true,
+      "actual": -1,
+      "expected": -1
+    },
+    {
+      "name": "1.1.0 > 1.1.0-next.9",
+      "ok": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "1.1.1 == 1.1.1",
+      "ok": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "无效串按字典序不抛异常",
+      "ok": true,
+      "actual": 1,
+      "expected": "number"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:15.974Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

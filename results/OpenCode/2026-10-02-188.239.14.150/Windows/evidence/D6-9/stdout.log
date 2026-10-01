@@ -1,0 +1,60 @@
+{
+  "caseId": "D6-9",
+  "title": "缓存清理三入口(幂等+清空后重新拉取)",
+  "assertionTotal": 8,
+  "assertionPassed": 8,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "invalidateUpdateCache 存在",
+      "ok": true,
+      "actual": "function",
+      "expected": "function"
+    },
+    {
+      "name": "clearIconCache 存在",
+      "ok": true,
+      "actual": "function",
+      "expected": "function"
+    },
+    {
+      "name": "clearMarketCache 存在",
+      "ok": true,
+      "actual": "function",
+      "expected": "function"
+    },
+    {
+      "name": "invalidateUpdateCache 幂等(再调不抛)",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "clearIconCache 幂等",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "clearMarketCache 幂等",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "清理后查询触发重新拉取(有结果)",
+      "ok": true,
+      "actual": "ok",
+      "expected": "有结果"
+    },
+    {
+      "name": "清理后市场查询可用",
+      "ok": true,
+      "actual": "ok",
+      "expected": "有结果"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:24.675Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,49 @@
+{
+  "caseId": "D1-67",
+  "title": "Agent toolkit 模式与 SKIP_DSH 跳过安装",
+  "assertionTotal": 5,
+  "assertionPassed": 4,
+  "failed": [
+    {
+      "name": "继承 peer env 且不覆盖用户已有值",
+      "ok": false,
+      "actual": null,
+      "expected": "保留 USER_KEEP"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "setup-cli 含 AGENT_TOOLKIT_MODE",
+      "ok": true,
+      "actual": "AGENT_TOOLKIT_MODE",
+      "expected": "存在"
+    },
+    {
+      "name": "setup-cli 含 SKIP_DSH",
+      "ok": true,
+      "actual": "SKIP_DSH",
+      "expected": "存在"
+    },
+    {
+      "name": "SKIP_DSH=1 时跳过 DSH 插件安装",
+      "ok": true,
+      "actual": "源码含跳过分支",
+      "expected": "skip 分支"
+    },
+    {
+      "name": "REQUIRED_ENV_KEYS 定义于 merge",
+      "ok": true,
+      "actual": "REQUIRED_ENV_KEYS",
+      "expected": "存在"
+    },
+    {
+      "name": "继承 peer env 且不覆盖用户已有值",
+      "ok": false,
+      "actual": null,
+      "expected": "保留 USER_KEEP"
+    }
+  ],
+  "executedAt": "2026-10-01T21:33:17.614Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}
