@@ -1,0 +1,13 @@
+$ hcloud csms ShowSecretVersion --secret-name x
+   decision=deny risk=secret
+$ GetSecretValue --secret-id 123
+   decision=deny risk=secret
+$ hcloud csms ListSecretVersions --secret-name x
+   decision=allow risk=read_only
+
+$ hcloud kms DecryptData --ciphertext xyz
+   decision=allow risk=unknown_read
+$ hcloud kms DecryptData --key-id 1 --ciphertext x
+   decision=allow risk=unknown_read
+$ hcloud kms CreateDatakey --key-id 1
+   decision=deny risk=write
