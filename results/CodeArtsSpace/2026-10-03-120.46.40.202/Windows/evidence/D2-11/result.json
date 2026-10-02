@@ -1,0 +1,9 @@
+{
+  "caseId": "D2-11",
+  "status": "FAIL",
+  "executedAt": "20261003051521",
+  "assertion": "STS get-token 应返回 decision:deny",
+  "conclusion": "FAIL - sts get-token 返回 decision=allow, risk=read_only, 未拦截临时凭证获取",
+  "rootCause": "safety/rules/cloud-risk-rules.json:94 正则未覆盖 sts get-token, severity 为 warn 而非 deny",
+  "version": "1.1.8-next.1"
+}

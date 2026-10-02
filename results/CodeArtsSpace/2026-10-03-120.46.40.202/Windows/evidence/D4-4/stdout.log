@@ -1,0 +1,10 @@
+D4-4 测试证据
+执行时间: 2026-10-03 05:15
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p1.mjs
+结果: FAIL
+断言: echo $ACCESS_KEY 应返回 decision:deny
+结论: FAIL - echo $ACCESS_KEY 返回 decision=allow, risk=not_huaweicloud, 通用凭证变量名未拦截
+根因: safety-policy.mjs 凭证打印拦截仅匹配华为云特定变量名, 未覆盖 ACCESS_KEY/SECRET_KEY
