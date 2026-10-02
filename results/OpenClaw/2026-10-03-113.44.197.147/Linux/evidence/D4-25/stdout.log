@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "why": "Python hook 写命令遥测误分类 cli:write：record_cli_event(hcloud VPC CreateSecurityGroup) 产出 cli:invoke 而非 cli:write。根因 huaweicloud-safety.py:46 WRITE_OPERATION_RE 前缀组 (^|[A-Za-z0-9]) 排斥空格，Service Operation 中写动词前是空格永远不匹配（真机直调三态实测 ['cli:read','cli:invoke','cli:invoke']）。",
+  "executedAt": "20261003054428",
+  "assistant": "OpenClaw(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "huaweicloud-devkit@1.1.8-next.1 (npm next; hdk gitHead ffd7b47)"
+}

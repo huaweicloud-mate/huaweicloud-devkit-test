@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "why": "hook_check_artifacts 宽泛 IAM 未完全拦截：JSON 形式 {\"Action\":\"*\",\"Effect\":\"Allow\"} → deny hwc-iam-admin-policy（已覆盖），但 Terraform HCL 形式 resource huaweicloud_iam_policy { statement { actions = [\"*\"] } } → allow 不检出。根因 cloud-risk-rules.json hwc-iam-admin-policy 正则仅匹配大写\"Action\"\"*\" / Action=* / AdministratorAccess/FullAccess，不识别 Terraform 小写复数 actions=[\"*\"] 语法（真机直调 evaluateArtifacts/hook_check_artifacts 实测）。",
+  "executedAt": "20261003054428",
+  "assistant": "OpenClaw(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "huaweicloud-devkit@1.1.8-next.1 (npm next; hdk gitHead ffd7b47)"
+}
