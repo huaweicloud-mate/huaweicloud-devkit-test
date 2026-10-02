@@ -1,0 +1,43 @@
+{
+  "caseId": "D4-21",
+  "status": "PASS",
+  "why": "hook_check_artifacts denies broad IAM admin policy (Action=*:*, Effect=Allow); safe least-privilege policy not denied; rule hwc-iam-admin-policy effective",
+  "executedAt": "20261002210835",
+  "broadIamResult": {
+    "decision": "deny",
+    "findingsCount": 1,
+    "findings": [
+      {
+        "ruleId": "hwc-iam-admin-policy",
+        "title": "Broad IAM administrator grant",
+        "category": "iam",
+        "severity": "deny",
+        "message": "The change appears to grant broad administrator permissions.",
+        "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+        "source": "artifact",
+        "evidence": "{\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"*:*\"],\"Resource\":[\"*\"]}]}"
+      }
+    ]
+  },
+  "callToolResult": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-iam-admin-policy",
+        "title": "Broad IAM administrator grant",
+        "category": "iam",
+        "severity": "deny",
+        "message": "The change appears to grant broad administrator permissions.",
+        "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+        "source": "artifact",
+        "evidence": "{\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"*:*\"],\"Resource\":[\"*\"]}]}"
+      }
+    ],
+    "nextStep": "Revise the command, artifact, or deployment plan before execution."
+  },
+  "safeResult": {
+    "decision": "warn",
+    "findingsCount": 1
+  }
+}

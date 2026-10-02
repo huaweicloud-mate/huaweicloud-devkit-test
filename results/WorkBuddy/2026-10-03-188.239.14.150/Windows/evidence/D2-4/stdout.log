@@ -1,0 +1,22 @@
+{
+  "caseId": "D2-4",
+  "status": "PASS",
+  "why": "redactSecrets correctly redacts: AK/SK/token/password all replaced with <redacted>; no plaintext credentials in output; nested objects handled",
+  "executedAt": "20261002210834",
+  "redactedObj": {
+    "ak": "<redacted>",
+    "sk": "<redacted>",
+    "securityToken": "<redacted>",
+    "region": "cn-north-4",
+    "password": "<redacted>",
+    "normal": "hello"
+  },
+  "redactedStr": "AK=<redacted> SK=<redacted> token=<redacted>",
+  "redactedNested": {
+    "config": {
+      "access_key": "<redacted>",
+      "secret_key": "<redacted>"
+    },
+    "data": "ok"
+  }
+}

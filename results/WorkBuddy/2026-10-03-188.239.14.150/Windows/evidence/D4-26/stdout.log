@@ -1,0 +1,18 @@
+{
+  "caseId": "D4-26",
+  "status": "PASS",
+  "why": "Risk findings do not leak real AK values (findings contain command context but redact actual secrets)",
+  "findings": [
+    {
+      "ruleId": "hwc-command-secret-value-read",
+      "title": "Plaintext secret read",
+      "category": "secret",
+      "severity": "deny",
+      "message": "The command appears to retrieve plaintext secret values.",
+      "remediation": "Use runtime secret references, user-side inspection, or redacted metadata checks instead of returning secret values to the agent.",
+      "source": "command",
+      "evidence": "hcloud KMS ShowSecret --secret_id=xxx"
+    }
+  ],
+  "executedAt": "20261002210948"
+}

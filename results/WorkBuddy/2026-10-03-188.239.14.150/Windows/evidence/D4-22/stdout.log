@@ -1,0 +1,63 @@
+{
+  "caseId": "D4-22",
+  "status": "PASS",
+  "why": "hook_check_deploy_plan flags public FunctionGraph without auth (decision=warn, findings=2); safe IAM-auth plan clean (decision=allow); rule hwc-functiongraph-public-no-auth effective",
+  "executedAt": "20261002210835",
+  "publicFgResult": {
+    "decision": "warn",
+    "findingsCount": 2,
+    "findings": [
+      {
+        "ruleId": "hwc-functiongraph-public-no-auth",
+        "title": "Public FunctionGraph trigger without auth",
+        "category": "public_exposure",
+        "severity": "warn",
+        "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+        "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+        "source": "deploy_plan",
+        "evidence": "{ \"service\": \"FunctionGraph\", \"action\": \"CreateTrigger\", \"config\": { \"trigger_type\": \"APIG\", \"auth\": \"NONE\", \"public_access\": \"0.0.0.0/0\" } }"
+      },
+      {
+        "ruleId": "hwc-sandbox-missing-ttl",
+        "title": "Sandbox deployment missing cleanup metadata",
+        "category": "sandbox",
+        "severity": "warn",
+        "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+        "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+        "source": "deploy_plan",
+        "evidence": "{ \"service\": \"FunctionGraph\", \"action\": \"CreateTrigger\", \"config\": { \"trigger_type\": \"APIG\", \"auth\": \"NONE\", \"public_access\": \"0.0.0.0/0\" } }"
+      }
+    ]
+  },
+  "callToolResult": {
+    "ok": true,
+    "decision": "warn",
+    "findings": [
+      {
+        "ruleId": "hwc-functiongraph-public-no-auth",
+        "title": "Public FunctionGraph trigger without auth",
+        "category": "public_exposure",
+        "severity": "warn",
+        "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+        "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+        "source": "deploy_plan",
+        "evidence": "{ \"service\": \"FunctionGraph\", \"action\": \"CreateTrigger\", \"config\": { \"trigger_type\": \"APIG\", \"auth\": \"NONE\", \"public_access\": \"0.0.0.0/0\" } }"
+      },
+      {
+        "ruleId": "hwc-sandbox-missing-ttl",
+        "title": "Sandbox deployment missing cleanup metadata",
+        "category": "sandbox",
+        "severity": "warn",
+        "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+        "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+        "source": "deploy_plan",
+        "evidence": "{ \"service\": \"FunctionGraph\", \"action\": \"CreateTrigger\", \"config\": { \"trigger_type\": \"APIG\", \"auth\": \"NONE\", \"public_access\": \"0.0.0.0/0\" } }"
+      }
+    ],
+    "nextStep": "Review the warnings with the user before proceeding."
+  },
+  "safeResult": {
+    "decision": "allow",
+    "findingsCount": 0
+  }
+}
