@@ -1,0 +1,41 @@
+{
+  "caseId": "D4-14",
+  "title": "操作可审计",
+  "status": "FAIL",
+  "why": "断言未通过: 只读命令执行成功(实际=undefined 期望=false)",
+  "assertionTotal": 3,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "只读命令执行成功",
+      "ok": false,
+      "expected": false
+    }
+  ],
+  "assertions": [
+    {
+      "name": "只读命令执行成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "返回含 command 可追溯字段",
+      "ok": true,
+      "actual": "含命令",
+      "expected": "可追溯"
+    },
+    {
+      "name": "CTS 可查询审计记录",
+      "ok": true,
+      "actual": {
+        "code": 0,
+        "out": "[USE_ERROR]参数5的格式错误,正确格式为:--param=value\n"
+      },
+      "expected": "可查"
+    }
+  ],
+  "executedAt": "20261003051343",
+  "executedAtIso": "2026-10-02T21:13:43.853Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

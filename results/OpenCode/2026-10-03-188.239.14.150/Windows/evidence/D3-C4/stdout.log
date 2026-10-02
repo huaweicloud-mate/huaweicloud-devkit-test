@@ -1,0 +1,61 @@
+{
+  "caseId": "D3-C4",
+  "title": "服务创建类回路(20+服务路由+最小规格创建/释放)",
+  "status": "FAIL",
+  "why": "断言未通过: ≥20 服务 list_operations 可达 (0/30)(实际=0 期望=\">=20\"); 拿到 VPC id(实际=null 期望=\"vpc_id\")",
+  "assertionTotal": 5,
+  "assertionPassed": 3,
+  "failed": [
+    {
+      "name": "≥20 服务 list_operations 可达 (0/30)",
+      "ok": false,
+      "actual": 0,
+      "expected": ">=20"
+    },
+    {
+      "name": "拿到 VPC id",
+      "ok": false,
+      "actual": null,
+      "expected": "vpc_id"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "≥20 服务 list_operations 可达 (0/30)",
+      "ok": false,
+      "actual": 0,
+      "expected": ">=20"
+    },
+    {
+      "name": "全部服务意图可路由 (30/30)",
+      "ok": true,
+      "actual": 30,
+      "expected": 30
+    },
+    {
+      "name": "真云创建 VPC 成功",
+      "ok": true,
+      "actual": {
+        "code": 0,
+        "out": "[USE_ERROR]参数hdkprobe75586013的格式错误,正确格式为:--param=value\n"
+      },
+      "expected": "成功"
+    },
+    {
+      "name": "拿到 VPC id",
+      "ok": false,
+      "actual": null,
+      "expected": "vpc_id"
+    },
+    {
+      "name": "资源归零(删除后不再存在)",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    }
+  ],
+  "executedAt": "20261003051306",
+  "executedAtIso": "2026-10-02T21:13:06.635Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,58 @@
+{
+  "caseId": "D2-11",
+  "title": "R3 STS token 拒绝落盘",
+  "status": "FAIL",
+  "why": "断言未通过: 返回非成功状态(实际={\"status\":\"needs_confirmation\"} 期望=\"error/rejected/需确认\")",
+  "assertionTotal": 5,
+  "assertionPassed": 4,
+  "failed": [
+    {
+      "name": "返回非成功状态",
+      "ok": false,
+      "actual": {
+        "status": "needs_confirmation"
+      },
+      "expected": "error/rejected/需确认"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "service/tools 存在 R3 拒绝语义(scope=rejected)",
+      "ok": true,
+      "actual": "rejected",
+      "expected": "存在"
+    },
+    {
+      "name": "带 token 的 persist 未写入 S1 主凭证",
+      "ok": true,
+      "actual": {
+        "changed": false
+      },
+      "expected": "unchanged"
+    },
+    {
+      "name": "返回非成功状态",
+      "ok": false,
+      "actual": {
+        "status": "needs_confirmation"
+      },
+      "expected": "error/rejected/需确认"
+    },
+    {
+      "name": "token 未出现在主凭证文件",
+      "ok": true,
+      "actual": "token 未落盘",
+      "expected": "未落盘"
+    },
+    {
+      "name": "token 未出现在返回值",
+      "ok": true,
+      "actual": "token 未回显",
+      "expected": "未回显"
+    }
+  ],
+  "executedAt": "20261003051250",
+  "executedAtIso": "2026-10-02T21:12:50.438Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

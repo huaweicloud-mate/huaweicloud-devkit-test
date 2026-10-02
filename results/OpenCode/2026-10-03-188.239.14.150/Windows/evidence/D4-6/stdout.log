@@ -1,0 +1,33 @@
+{
+  "caseId": "D4-6",
+  "title": "adminPass 回显脱敏",
+  "status": "PASS",
+  "why": "",
+  "assertionTotal": 3,
+  "assertionPassed": 3,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "findings 中不含明文 adminPass",
+      "ok": true,
+      "actual": "[{\"ruleId\":\"hwc-command-secret-in-arg\",\"title\":\"Plaintext secret in command argument\",\"category\":\"secret\",\"severity\":\"warn\",\"message\":\"The command passes a plaintext password or secret as a direct CLI",
+      "expected": "已脱敏"
+    },
+    {
+      "name": "redactSecrets 脱敏 adminPass",
+      "ok": true,
+      "actual": "<redacted>",
+      "expected": "<redacted>"
+    },
+    {
+      "name": "redactOutput 脱敏 adminPass",
+      "ok": true,
+      "actual": "Created server with adminPass=<redacted> ok",
+      "expected": "已脱敏"
+    }
+  ],
+  "executedAt": "20261003051313",
+  "executedAtIso": "2026-10-02T21:13:13.924Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

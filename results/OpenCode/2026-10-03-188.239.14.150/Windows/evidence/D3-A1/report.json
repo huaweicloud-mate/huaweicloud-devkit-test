@@ -1,0 +1,52 @@
+{
+  "caseId": "D3-A1",
+  "title": "skill 检索完整性(~30 个 SKILL.md)",
+  "status": "FAIL",
+  "why": "断言未通过: 全部 skill 可 retrieve_skill 检索(实际=0 期望=30); 全部 skill 可 search_docs 命中(实际=0 期望=30)",
+  "assertionTotal": 4,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "全部 skill 可 retrieve_skill 检索",
+      "ok": false,
+      "actual": 0,
+      "expected": 30
+    },
+    {
+      "name": "全部 skill 可 search_docs 命中",
+      "ok": false,
+      "actual": 0,
+      "expected": 30
+    }
+  ],
+  "assertions": [
+    {
+      "name": "本地 SKILL.md 数量达到 ~30 量级",
+      "ok": true,
+      "actual": 30,
+      "expected": ">=20"
+    },
+    {
+      "name": "全部 skill 可 retrieve_skill 检索",
+      "ok": false,
+      "actual": 0,
+      "expected": 30
+    },
+    {
+      "name": "全部 skill 可 search_docs 命中",
+      "ok": false,
+      "actual": 0,
+      "expected": 30
+    },
+    {
+      "name": "retrieve_skill 返回完整内容(非仅摘要)",
+      "ok": true,
+      "actual": 8462,
+      "expected": ">400"
+    }
+  ],
+  "executedAt": "20261003051300",
+  "executedAtIso": "2026-10-02T21:13:00.113Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

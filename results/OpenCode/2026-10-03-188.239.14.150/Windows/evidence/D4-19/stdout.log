@@ -1,0 +1,33 @@
+{
+  "caseId": "D4-19",
+  "title": "确认流下预检仍生效",
+  "status": "PASS",
+  "why": "",
+  "assertionTotal": 3,
+  "assertionPassed": 3,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "高危写操作在预检层被拦",
+      "ok": true,
+      "actual": "warn",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "预检 findings 非空",
+      "ok": true,
+      "actual": 1,
+      "expected": ">0"
+    },
+    {
+      "name": "plan 阶段同样给出风险判定",
+      "ok": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"DeleteServer\",\"--serverid\",\"x\"],\"command\":\"hcloud ECS DeleteServer --serverid x\",\"executableBlock\":\"hcloud ECS DeleteServer --serverid x\",\"warnings\":[],\"classification\":{\"decision\":\"",
+      "expected": "含风险判定"
+    }
+  ],
+  "executedAt": "20261003051250",
+  "executedAtIso": "2026-10-02T21:12:50.844Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,39 @@
+{
+  "caseId": "D4-1",
+  "title": "凭证文件读取拦截",
+  "status": "PASS",
+  "why": "",
+  "assertionTotal": 4,
+  "assertionPassed": 4,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "被拦截: cat ~/.config/huaweicloud/credentials.json",
+      "ok": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "被拦截: type %USERPROFILE%\\.hcloud\\config.json",
+      "ok": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "被拦截: cat ./.config/huaweicloud/credentials.json",
+      "ok": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "被拦截: more ~/.config/huaweicloud/credentials.jso",
+      "ok": true,
+      "actual": "deny",
+      "expected": "deny"
+    }
+  ],
+  "executedAt": "20261003051250",
+  "executedAtIso": "2026-10-02T21:12:50.959Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

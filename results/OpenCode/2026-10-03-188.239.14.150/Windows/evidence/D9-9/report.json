@@ -1,0 +1,102 @@
+{
+  "caseId": "D9-9",
+  "title": "tools/call 超时协议语义与取消",
+  "status": "SPEC-MISMATCH",
+  "verdict": "SPEC-MISMATCH",
+  "why": "断言未通过: ②服务端源码声明了 notifications/cancelled 取消处理(实际=\"mcp-server.mjs/mcp-protocol.mjs 均无 notifications/cancelled 分支\" 期望=\"存在取消处理\"); ③超时以 JSON-RPC error {code:-32000, message 含 timeout} 返回(实际=\"无 -32000；initialize 内部 3s 超时仅用于丢弃结果（mcp-protocol.mjs:39），tools/call 无超时语义\" 期望=\"code=-32000 且 message 含 timeout\"); ⑤tools/list 工具数=40(实际=41 期望=40)",
+  "assertionTotal": 10,
+  "assertionPassed": 7,
+  "failed": [
+    {
+      "name": "②服务端源码声明了 notifications/cancelled 取消处理",
+      "ok": false,
+      "actual": "mcp-server.mjs/mcp-protocol.mjs 均无 notifications/cancelled 分支",
+      "expected": "存在取消处理"
+    },
+    {
+      "name": "③超时以 JSON-RPC error {code:-32000, message 含 timeout} 返回",
+      "ok": false,
+      "actual": "无 -32000；initialize 内部 3s 超时仅用于丢弃结果（mcp-protocol.mjs:39），tools/call 无超时语义",
+      "expected": "code=-32000 且 message 含 timeout"
+    },
+    {
+      "name": "⑤tools/list 工具数=40",
+      "ok": false,
+      "actual": 41,
+      "expected": 40
+    }
+  ],
+  "assertions": [
+    {
+      "name": "①真实 MCP stdio 握手成功(initialize 有 result)",
+      "ok": true,
+      "actual": "result ok",
+      "expected": "result"
+    },
+    {
+      "name": "①initialize 返回 serverInfo",
+      "ok": true,
+      "actual": "huaweicloud-devkit",
+      "expected": "huaweicloud-devkit"
+    },
+    {
+      "name": "①capabilities 为对象",
+      "ok": true,
+      "actual": {
+        "tools": {}
+      },
+      "expected": "object"
+    },
+    {
+      "name": "②capabilities.cancellation/notifications 实测结果已记录",
+      "ok": true,
+      "actual": {
+        "capabilities": {
+          "tools": {}
+        },
+        "hasCancellation": false
+      },
+      "expected": "记录实测值"
+    },
+    {
+      "name": "②服务端源码声明了 notifications/cancelled 取消处理",
+      "ok": false,
+      "actual": "mcp-server.mjs/mcp-protocol.mjs 均无 notifications/cancelled 分支",
+      "expected": "存在取消处理"
+    },
+    {
+      "name": "③超时以 JSON-RPC error {code:-32000, message 含 timeout} 返回",
+      "ok": false,
+      "actual": "无 -32000；initialize 内部 3s 超时仅用于丢弃结果（mcp-protocol.mjs:39），tools/call 无超时语义",
+      "expected": "code=-32000 且 message 含 timeout"
+    },
+    {
+      "name": "④无悬挂请求(pending map 为空)",
+      "ok": true,
+      "actual": "mcp-server.mjs 无 in-flight/pending 表；handleMessage 为 fire-and-forget (mcp-server.mjs:186-198)",
+      "expected": "pending 为空"
+    },
+    {
+      "name": "⑤同会话 tools/list 正常返回 tools 数组",
+      "ok": true,
+      "actual": 41,
+      "expected": "数组"
+    },
+    {
+      "name": "⑤tools/list 工具数=40",
+      "ok": false,
+      "actual": 41,
+      "expected": 40
+    },
+    {
+      "name": "⑤tools/call 返回 result（非错误对象）",
+      "ok": true,
+      "actual": "result",
+      "expected": "result"
+    }
+  ],
+  "executedAt": "20261003051334",
+  "executedAtIso": "2026-10-02T21:13:35.001Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,39 @@
+{
+  "caseId": "D4-15",
+  "title": "hook 绕过尝试(对抗性)",
+  "status": "FAIL",
+  "why": "以下 4 条绕过成功：\n  - hcloud ECS  Del\\x65teServer\n  - hcloud ECS 'DeleteServer'\n  - hcloud ECS $(printf Delete)Server\n  - hcloud ECS Delet%65Server\n根因：risk-rule-engine.evaluateCommandRisk 按顶层 token 匹配，未展开 sh -c / bash -c / 命令替换 / URL 编码的嵌套命令；而 safety-policy.classifyTextCommand 会递归展开并判定 deny。tools.mjs 的 hook_check_command 走的正是前者。",
+  "assertionTotal": 1,
+  "assertionPassed": 0,
+  "failed": [
+    {
+      "name": "全部变体均未被放行",
+      "ok": false,
+      "actual": [
+        "hcloud ECS  Del\\x65teServer",
+        "hcloud ECS 'DeleteServer'",
+        "hcloud ECS $(printf Delete)Server",
+        "hcloud ECS Delet%65Server"
+      ],
+      "expected": []
+    }
+  ],
+  "assertions": [
+    {
+      "name": "全部变体均未被放行",
+      "ok": false,
+      "actual": [
+        "hcloud ECS  Del\\x65teServer",
+        "hcloud ECS 'DeleteServer'",
+        "hcloud ECS $(printf Delete)Server",
+        "hcloud ECS Delet%65Server"
+      ],
+      "expected": []
+    }
+  ],
+  "executedAt": "20261003051251",
+  "executedAtIso": "2026-10-02T21:12:51.592Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64",
+  "note": "以下 4 条绕过成功：\n  - hcloud ECS  Del\\x65teServer\n  - hcloud ECS 'DeleteServer'\n  - hcloud ECS $(printf Delete)Server\n  - hcloud ECS Delet%65Server\n根因：risk-rule-engine.evaluateCommandRisk 按顶层 token 匹配，未展开 sh -c / bash -c / 命令替换 / URL 编码的嵌套命令；而 safety-policy.classifyTextCommand 会递归展开并判定 deny。tools.mjs 的 hook_check_command 走的正是前者。"
+}

@@ -1,0 +1,58 @@
+{
+  "caseId": "D3-C14",
+  "title": "沙箱 HDKit 服务参数与 hwlink 凭证",
+  "status": "FAIL",
+  "why": "断言未通过: probe 执行未抛异常(实际=\"HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 903c8d0b85b642618ec873692751092c]\" 期望=\"不抛异常\")",
+  "assertionTotal": 6,
+  "assertionPassed": 5,
+  "failed": [
+    {
+      "name": "probe 执行未抛异常",
+      "ok": false,
+      "actual": "HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 903c8d0b85b642618ec873692751092c]",
+      "expected": "不抛异常"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "runtime 凭证注入成功",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "resolveCredentialsWithRuntime 返回注入值",
+      "ok": true,
+      "actual": "AKTESTPROBE00000",
+      "expected": "AKTESTPROBE00000"
+    },
+    {
+      "name": "hwlink getCredentials 返回 ak",
+      "ok": true,
+      "actual": "AKTESTPROBE00000",
+      "expected": "AKTESTPROBE00000"
+    },
+    {
+      "name": "createConnection 签名含 x-security-token",
+      "ok": true,
+      "actual": "源码",
+      "expected": "含 securitytoken"
+    },
+    {
+      "name": "缺 devStageId 时报错",
+      "ok": true,
+      "actual": "HDKIT_INTERNAL: 服务内部错误 [trace: 6301a46924314b9e997b1391c466f255]",
+      "expected": "报错"
+    },
+    {
+      "name": "probe 执行未抛异常",
+      "ok": false,
+      "actual": "HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 903c8d0b85b642618ec873692751092c]",
+      "expected": "不抛异常"
+    }
+  ],
+  "executedAt": "20261003051342",
+  "executedAtIso": "2026-10-02T21:13:42.259Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

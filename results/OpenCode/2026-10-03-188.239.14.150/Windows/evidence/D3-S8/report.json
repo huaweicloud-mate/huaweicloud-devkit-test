@@ -1,0 +1,64 @@
+{
+  "caseId": "D3-S8",
+  "title": "场景-操作失败后排障指引",
+  "status": "FAIL",
+  "why": "断言未通过: 给出可执行下一步(实际=\"{\\\"service\\\":\\\"ECS\\\",\\\"errorCode\\\":\\\"AuthFailure\\\",\\\"requestId\\\":\\\"\\\",\\\"suggestions\\\":[\\\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\\\"]}\" 期望=\"含下一步\"); extractApiError 可解析服务端错误(实际=null 期望=\"可解析\")",
+  "assertionTotal": 6,
+  "assertionPassed": 4,
+  "failed": [
+    {
+      "name": "给出可执行下一步",
+      "ok": false,
+      "actual": "{\"service\":\"ECS\",\"errorCode\":\"AuthFailure\",\"requestId\":\"\",\"suggestions\":[\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\"]}",
+      "expected": "含下一步"
+    },
+    {
+      "name": "extractApiError 可解析服务端错误",
+      "ok": false,
+      "actual": null,
+      "expected": "可解析"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "权限类失败有分类",
+      "ok": true,
+      "actual": "{\"service\":\"ECS\",\"errorCode\":\"AuthFailure\",\"requestId\":\"\",\"suggestions\":[\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\"]}",
+      "expected": "权限分类"
+    },
+    {
+      "name": "给出可执行下一步",
+      "ok": false,
+      "actual": "{\"service\":\"ECS\",\"errorCode\":\"AuthFailure\",\"requestId\":\"\",\"suggestions\":[\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\"]}",
+      "expected": "含下一步"
+    },
+    {
+      "name": "非裸报错堆栈",
+      "ok": true,
+      "actual": "no raw stack",
+      "expected": "no raw stack"
+    },
+    {
+      "name": "区域类失败有分类",
+      "ok": true,
+      "actual": "{\"service\":\"ECS\",\"errorCode\":\"InvalidRegion\",\"requestId\":\"\",\"suggestions\":[\"Confirm the service endpoint, region, and project_id match the target resource.\"]}",
+      "expected": "区域分类"
+    },
+    {
+      "name": "配额类失败有分类",
+      "ok": true,
+      "actual": "{\"service\":\"ECS\",\"errorCode\":\"QuotaExceeded\",\"requestId\":\"\",\"suggestions\":[\"Check quota and resource limits before retrying a create or scale operation. Consider switching accounts or requesting a quota increase.\"]}",
+      "expected": "配额分类"
+    },
+    {
+      "name": "extractApiError 可解析服务端错误",
+      "ok": false,
+      "actual": null,
+      "expected": "可解析"
+    }
+  ],
+  "executedAt": "20261003051312",
+  "executedAtIso": "2026-10-02T21:13:12.018Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

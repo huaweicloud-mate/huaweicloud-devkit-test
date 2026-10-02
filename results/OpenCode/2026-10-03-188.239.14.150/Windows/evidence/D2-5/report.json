@@ -1,0 +1,62 @@
+{
+  "caseId": "D2-5",
+  "title": "凭证缺失/错误/过期报错与指引",
+  "status": "FAIL",
+  "why": "断言未通过: 正常凭证只读命令成功(对照组)(实际=undefined 期望=false); 错误凭证不返回成功(实际=0 期望=\"!=0\")",
+  "assertionTotal": 6,
+  "assertionPassed": 4,
+  "failed": [
+    {
+      "name": "正常凭证只读命令成功(对照组)",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "错误凭证不返回成功",
+      "ok": false,
+      "actual": 0,
+      "expected": "!=0"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "正常凭证只读命令成功(对照组)",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "错误凭证不返回成功",
+      "ok": false,
+      "actual": 0,
+      "expected": "!=0"
+    },
+    {
+      "name": "错误凭证有可读报错信息",
+      "ok": true,
+      "actual": "获取项目ID失败:API response body: {\"error_msg\":\"Incorrect IAM authentication information: Unauthorized\",\"error_code\":\"APIGW.0301\",\"request_id\":\"dfc8a330bf3474a97b0c00",
+      "expected": ">0"
+    },
+    {
+      "name": "报错不含裸堆栈",
+      "ok": true,
+      "actual": "no raw stack",
+      "expected": "no raw stack"
+    },
+    {
+      "name": "explain_error 返回非空诊断",
+      "ok": true,
+      "actual": "{\"service\":\"ECS\",\"errorCode\":\"AuthFailure\",\"requestId\":\"\",\"suggestions\":[\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\",\"Confirm the service endpoint, region",
+      "expected": ">20"
+    },
+    {
+      "name": "explain_error 给出可执行下一步(nextStep/steps)",
+      "ok": true,
+      "actual": "{\"service\":\"ECS\",\"errorCode\":\"AuthFailure\",\"requestId\":\"\",\"suggestions\":[\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\",\"Confirm the service endpoint, region, and project_id match the target resource.\"]}",
+      "expected": "含指引"
+    }
+  ],
+  "executedAt": "20261003051259",
+  "executedAtIso": "2026-10-02T21:12:59.299Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

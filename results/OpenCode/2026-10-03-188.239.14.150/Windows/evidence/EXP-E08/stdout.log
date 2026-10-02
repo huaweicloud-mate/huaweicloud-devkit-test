@@ -1,0 +1,40 @@
+{
+  "caseId": "EXP-E08",
+  "title": "路由评测: ECS 启动失败诊断",
+  "status": "FAIL",
+  "why": "断言未通过: service_catalog 调用成功(实际=undefined 期望=false)",
+  "assertionTotal": 3,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "service_catalog 调用成功",
+      "ok": false,
+      "expected": false
+    }
+  ],
+  "assertions": [
+    {
+      "name": "service_catalog 调用成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "返回 recommendedServices",
+      "ok": true,
+      "actual": [
+        "Run hcloud --help to list available services."
+      ],
+      "expected": ">0"
+    },
+    {
+      "name": "诊断类意图有 nextStep/建议(可定位)",
+      "ok": true,
+      "actual": "nextStep",
+      "expected": "存在"
+    }
+  ],
+  "executedAt": "20261003051350",
+  "executedAtIso": "2026-10-02T21:13:50.306Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,48 @@
+{
+  "caseId": "D4-20",
+  "title": "拒绝后零操作",
+  "status": "FAIL",
+  "why": "断言未通过: 拒绝前基线可读(实际=undefined 期望=false); plan 仅生成命令不执行(实际=undefined 期望=\"待确认\"); 未确认期间实例清单零变化(实际=\"{\\\"ok\\\":false,\\\"exitCode\\\":0,\\\"signal\\\":null,\\\"errorCode\\\":\\\"APIGW.0301\\\",\\\"errorMessage\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"stdout\\\":\\\"{\\\\\\\"error_msg\\\\\\\":\\\\\\\"Incorrect IAM authentication information: Unauthorized\\\\\\\",\\\\\\\"error_code\\\\\\\":\\\\\\\"APIGW.0301\\\\\\\",\\\\\\\"request_id\\\\\\\":\\\\\\\"bdde984dfdbdbf50199f7c36c44474a2\\\\\\\"}\\\\n[USE_ERROR]缺少必填参数:project_id\\\\n\\\",\\\"stderr\\\":\\\"\\\",\\\"plan\\\":{\\\"executable\\\":\\\"hcloud\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"],\\\"command\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"executableBlock\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"warnings\\\":[],\\\"classification\\\":{\\\"decision\\\":\\\"allow\\\",\\\"risk\\\":\\\"read_only\\\",\\\"reason\\\":\\\"Command appears to be a read-only Huawei Cloud operation.\\\",\\\"service\\\":\\\"ECS\\\",\\\"operation\\\":\\\"ListServersDetails\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"]},\\\"sgFindings\\\":[],\\\"approvalToken\\\":\\\"fd08004c-8140-4ef3-909f-1591c609b9b6\\\",\\\"safeToRun\\\":true,\\\"rawArgs\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\",\\\"--cli-access-key=<redacted>\\\",\\\"--cli-secret-key=<redacted>\\\",\\\"--cli-security-token=<redacted>\\\"]},\\\"retries\\\":0,\\\"attempts\\\":1}\" 期望=\"{\\\"ok\\\":false,\\\"exitCode\\\":0,\\\"signal\\\":null,\\\"errorCode\\\":\\\"APIGW.0301\\\",\\\"errorMessage\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"stdout\\\":\\\"{\\\\\\\"error_msg\\\\\\\":\\\\\\\"Incorrect IAM authentication information: Unauthorized\\\\\\\",\\\\\\\"error_code\\\\\\\":\\\\\\\"APIGW.0301\\\\\\\",\\\\\\\"request_id\\\\\\\":\\\\\\\"09ccab287a1244f635a8f058be89ccf6\\\\\\\"}\\\\n[USE_ERROR]缺少必填参数:project_id\\\\n\\\",\\\"stderr\\\":\\\"\\\",\\\"plan\\\":{\\\"executable\\\":\\\"hcloud\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"],\\\"command\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"executableBlock\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"warnings\\\":[],\\\"classification\\\":{\\\"decision\\\":\\\"allow\\\",\\\"risk\\\":\\\"read_only\\\",\\\"reason\\\":\\\"Command appears to be a read-only Huawei Cloud operation.\\\",\\\"service\\\":\\\"ECS\\\",\\\"operation\\\":\\\"ListServersDetails\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"]},\\\"sgFindings\\\":[],\\\"approvalToken\\\":\\\"20677d32-c861-45b6-ae91-baf6bbe282ff\\\",\\\"safeToRun\\\":true,\\\"rawArgs\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\",\\\"--cli-access-key=<redacted>\\\",\\\"--cli-secret-key=<redacted>\\\",\\\"--cli-security-token=<redacted>\\\"]},\\\"retries\\\":0,\\\"attempts\\\":1}\")",
+  "assertionTotal": 3,
+  "assertionPassed": 0,
+  "failed": [
+    {
+      "name": "拒绝前基线可读",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "plan 仅生成命令不执行",
+      "ok": false,
+      "expected": "待确认"
+    },
+    {
+      "name": "未确认期间实例清单零变化",
+      "ok": false,
+      "actual": "{\"ok\":false,\"exitCode\":0,\"signal\":null,\"errorCode\":\"APIGW.0301\",\"errorMessage\":\"Incorrect IAM authentication information: Unauthorized\",\"stdout\":\"{\\\"error_msg\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"error_code\\\":\\\"APIGW.0301\\\",\\\"request_id\\\":\\\"bdde984dfdbdbf50199f7c36c44474a2\\\"}\\n[USE_ERROR]缺少必填参数:project_id\\n\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServersDetails\"],\"command\":\"hcloud ECS ListServersDetails\",\"executableBlock\":\"hcloud ECS ListServersDetails\",\"warnings\":[],\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServersDetails\",\"args\":[\"ECS\",\"ListServersDetails\"]},\"sgFindings\":[],\"approvalToken\":\"fd08004c-8140-4ef3-909f-1591c609b9b6\",\"safeToRun\":true,\"rawArgs\":[\"ECS\",\"ListServersDetails\",\"--cli-access-key=<redacted>\",\"--cli-secret-key=<redacted>\",\"--cli-security-token=<redacted>\"]},\"retries\":0,\"attempts\":1}",
+      "expected": "{\"ok\":false,\"exitCode\":0,\"signal\":null,\"errorCode\":\"APIGW.0301\",\"errorMessage\":\"Incorrect IAM authentication information: Unauthorized\",\"stdout\":\"{\\\"error_msg\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"error_code\\\":\\\"APIGW.0301\\\",\\\"request_id\\\":\\\"09ccab287a1244f635a8f058be89ccf6\\\"}\\n[USE_ERROR]缺少必填参数:project_id\\n\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServersDetails\"],\"command\":\"hcloud ECS ListServersDetails\",\"executableBlock\":\"hcloud ECS ListServersDetails\",\"warnings\":[],\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServersDetails\",\"args\":[\"ECS\",\"ListServersDetails\"]},\"sgFindings\":[],\"approvalToken\":\"20677d32-c861-45b6-ae91-baf6bbe282ff\",\"safeToRun\":true,\"rawArgs\":[\"ECS\",\"ListServersDetails\",\"--cli-access-key=<redacted>\",\"--cli-secret-key=<redacted>\",\"--cli-security-token=<redacted>\"]},\"retries\":0,\"attempts\":1}"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "拒绝前基线可读",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "plan 仅生成命令不执行",
+      "ok": false,
+      "expected": "待确认"
+    },
+    {
+      "name": "未确认期间实例清单零变化",
+      "ok": false,
+      "actual": "{\"ok\":false,\"exitCode\":0,\"signal\":null,\"errorCode\":\"APIGW.0301\",\"errorMessage\":\"Incorrect IAM authentication information: Unauthorized\",\"stdout\":\"{\\\"error_msg\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"error_code\\\":\\\"APIGW.0301\\\",\\\"request_id\\\":\\\"bdde984dfdbdbf50199f7c36c44474a2\\\"}\\n[USE_ERROR]缺少必填参数:project_id\\n\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServersDetails\"],\"command\":\"hcloud ECS ListServersDetails\",\"executableBlock\":\"hcloud ECS ListServersDetails\",\"warnings\":[],\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServersDetails\",\"args\":[\"ECS\",\"ListServersDetails\"]},\"sgFindings\":[],\"approvalToken\":\"fd08004c-8140-4ef3-909f-1591c609b9b6\",\"safeToRun\":true,\"rawArgs\":[\"ECS\",\"ListServersDetails\",\"--cli-access-key=<redacted>\",\"--cli-secret-key=<redacted>\",\"--cli-security-token=<redacted>\"]},\"retries\":0,\"attempts\":1}",
+      "expected": "{\"ok\":false,\"exitCode\":0,\"signal\":null,\"errorCode\":\"APIGW.0301\",\"errorMessage\":\"Incorrect IAM authentication information: Unauthorized\",\"stdout\":\"{\\\"error_msg\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"error_code\\\":\\\"APIGW.0301\\\",\\\"request_id\\\":\\\"09ccab287a1244f635a8f058be89ccf6\\\"}\\n[USE_ERROR]缺少必填参数:project_id\\n\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServersDetails\"],\"command\":\"hcloud ECS ListServersDetails\",\"executableBlock\":\"hcloud ECS ListServersDetails\",\"warnings\":[],\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServersDetails\",\"args\":[\"ECS\",\"ListServersDetails\"]},\"sgFindings\":[],\"approvalToken\":\"20677d32-c861-45b6-ae91-baf6bbe282ff\",\"safeToRun\":true,\"rawArgs\":[\"ECS\",\"ListServersDetails\",\"--cli-access-key=<redacted>\",\"--cli-secret-key=<redacted>\",\"--cli-security-token=<redacted>\"]},\"retries\":0,\"attempts\":1}"
+    }
+  ],
+  "executedAt": "20261003051313",
+  "executedAtIso": "2026-10-02T21:13:13.612Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

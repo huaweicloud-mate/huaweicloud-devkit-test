@@ -1,0 +1,46 @@
+{
+  "caseId": "D3-S1",
+  "title": "场景-只读查 ECS(零写操作)",
+  "status": "FAIL",
+  "why": "断言未通过: 只读命令成功(实际=undefined 期望=false)",
+  "assertionTotal": 4,
+  "assertionPassed": 3,
+  "failed": [
+    {
+      "name": "只读命令成功",
+      "ok": false,
+      "expected": false
+    }
+  ],
+  "assertions": [
+    {
+      "name": "路由命中 ECS",
+      "ok": true,
+      "actual": [
+        "ECS"
+      ],
+      "expected": "含 ecs"
+    },
+    {
+      "name": "只读命令成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "返回实例清单",
+      "ok": true,
+      "actual": "{\"ok\":false,\"exitCode\":0,\"signal\":null,\"errorCode\":\"APIGW.0301\",\"errorMessage\":\"Incorrect IAM authentication information: Unauthorized\",\"stdout\":\"{\\\"error_msg\\\":\\\"Incorrect IAM authentication informat",
+      "expected": "含清单"
+    },
+    {
+      "name": "全程未调用任何写工具",
+      "ok": true,
+      "actual": "本探针仅调用 service_catalog + run_readonly_command",
+      "expected": "零写"
+    }
+  ],
+  "executedAt": "20261003051308",
+  "executedAtIso": "2026-10-02T21:13:08.941Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

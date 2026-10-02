@@ -1,0 +1,59 @@
+{
+  "caseId": "D9-2",
+  "title": "JSON-RPC 错误码(-32601/-32602/-32700)",
+  "status": "FAIL",
+  "why": "tools/list 传 string 类型 params 时未返回 -32602，服务端实际返回: {\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"tools\":[{\"name\":\"huaweicloud_check_cli\",\"description\":\"Check whether Huawei Cloud KooCLI hcloud is installed and whether its version matches the plugin paired versio",
+  "assertionTotal": 5,
+  "assertionPassed": 3,
+  "failed": [
+    {
+      "name": "非法 params 类型 → -32602",
+      "ok": false,
+      "actual": null,
+      "expected": -32602
+    },
+    {
+      "name": "非法 protocolVersion → -32602",
+      "ok": false,
+      "actual": null,
+      "expected": -32602
+    }
+  ],
+  "assertions": [
+    {
+      "name": "未知方法 → -32601",
+      "ok": true,
+      "actual": -32601,
+      "expected": -32601
+    },
+    {
+      "name": "非法 params 类型 → -32602",
+      "ok": false,
+      "actual": null,
+      "expected": -32602
+    },
+    {
+      "name": "tools/call 非法 arguments → -32602",
+      "ok": true,
+      "actual": -32602,
+      "expected": -32602
+    },
+    {
+      "name": "未知工具 → -32602",
+      "ok": true,
+      "actual": -32602,
+      "expected": -32602
+    },
+    {
+      "name": "非法 protocolVersion → -32602",
+      "ok": false,
+      "actual": null,
+      "expected": -32602
+    }
+  ],
+  "executedAt": "20261003051317",
+  "executedAtIso": "2026-10-02T21:13:17.150Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64",
+  "note": "tools/list 传 string 类型 params 时未返回 -32602，服务端实际返回: {\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"tools\":[{\"name\":\"huaweicloud_check_cli\",\"description\":\"Check whether Huawei Cloud KooCLI hcloud is installed and whether its version matches the plugin paired versio"
+}

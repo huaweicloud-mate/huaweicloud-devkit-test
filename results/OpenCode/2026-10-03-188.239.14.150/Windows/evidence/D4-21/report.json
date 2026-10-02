@@ -1,0 +1,42 @@
+{
+  "caseId": "D4-21",
+  "title": "hook_check_artifacts 具名回归",
+  "status": "PASS",
+  "why": "",
+  "assertionTotal": 3,
+  "assertionPassed": 3,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "宽权限 IAM policy 被 deny",
+      "ok": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "返回 ruleId",
+      "ok": true,
+      "actual": {
+        "ruleId": "hwc-iam-admin-policy",
+        "title": "Broad IAM administrator grant",
+        "category": "iam",
+        "severity": "deny",
+        "message": "The change appears to grant broad administrator permissions.",
+        "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+        "source": "iam-policy.json",
+        "evidence": "iam-policy.json {\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+      },
+      "expected": "含 ruleId"
+    },
+    {
+      "name": "最小权限 policy 不误杀",
+      "ok": true,
+      "actual": "warn",
+      "expected": "allow|warn"
+    }
+  ],
+  "executedAt": "20261003051251",
+  "executedAtIso": "2026-10-02T21:12:51.772Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

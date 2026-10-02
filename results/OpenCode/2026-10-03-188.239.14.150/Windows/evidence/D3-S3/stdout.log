@@ -1,0 +1,34 @@
+{
+  "caseId": "D3-S3",
+  "title": "场景-沙箱预览出公网 URL",
+  "status": "FAIL",
+  "why": "断言未通过: probe 执行未抛异常(实际=\"HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 167089c14ad74b24835526af2e6980b9]\" 期望=\"不抛异常\")",
+  "assertionTotal": 2,
+  "assertionPassed": 1,
+  "failed": [
+    {
+      "name": "probe 执行未抛异常",
+      "ok": false,
+      "actual": "HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 167089c14ad74b24835526af2e6980b9]",
+      "expected": "不抛异常"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "路由命中沙箱",
+      "ok": true,
+      "actual": "sandbox",
+      "expected": "含 sandbox"
+    },
+    {
+      "name": "probe 执行未抛异常",
+      "ok": false,
+      "actual": "HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 167089c14ad74b24835526af2e6980b9]",
+      "expected": "不抛异常"
+    }
+  ],
+  "executedAt": "20261003051309",
+  "executedAtIso": "2026-10-02T21:13:09.877Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

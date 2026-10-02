@@ -1,0 +1,64 @@
+{
+  "caseId": "D4-3",
+  "title": "明文 secret API 拦截",
+  "status": "FAIL",
+  "why": "断言未通过: 拦截或告警: hcloud KMS Decrypt --plaintext(实际=\"allow\" 期望=\"deny|warn\"); 拦截或告警: hcloud OBS ShowBucketPolicy --acl body(实际=\"allow\" 期望=\"deny|warn\"); 拦截或告警: hcloud IAM ShowCredential --with-secret(实际=\"allow\" 期望=\"deny|warn\"); 至少一条被 deny(实际=0 期望=\">0\")",
+  "assertionTotal": 4,
+  "assertionPassed": 0,
+  "failed": [
+    {
+      "name": "拦截或告警: hcloud KMS Decrypt --plaintext",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "拦截或告警: hcloud OBS ShowBucketPolicy --acl body",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "拦截或告警: hcloud IAM ShowCredential --with-secret",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "至少一条被 deny",
+      "ok": false,
+      "actual": 0,
+      "expected": ">0"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "拦截或告警: hcloud KMS Decrypt --plaintext",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "拦截或告警: hcloud OBS ShowBucketPolicy --acl body",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "拦截或告警: hcloud IAM ShowCredential --with-secret",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "至少一条被 deny",
+      "ok": false,
+      "actual": 0,
+      "expected": ">0"
+    }
+  ],
+  "executedAt": "20261003051251",
+  "executedAtIso": "2026-10-02T21:12:51.198Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,46 @@
+{
+  "caseId": "D4-22",
+  "title": "hook_check_deploy_plan 具名回归",
+  "status": "FAIL",
+  "why": "断言未通过: 显式 IAM 鉴权后风险降低(实际={\"with\":\"warn\",\"without\":\"warn\"} 期望=\"降低\")",
+  "assertionTotal": 3,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "显式 IAM 鉴权后风险降低",
+      "ok": false,
+      "actual": {
+        "with": "warn",
+        "without": "warn"
+      },
+      "expected": "降低"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "公网暴露 FunctionGraph 被 warn/deny",
+      "ok": true,
+      "actual": "warn",
+      "expected": "warn|deny"
+    },
+    {
+      "name": "命中 functiongraph 规则",
+      "ok": true,
+      "actual": "hwc-functiongraph-public-no-auth",
+      "expected": "functiongraph 规则"
+    },
+    {
+      "name": "显式 IAM 鉴权后风险降低",
+      "ok": false,
+      "actual": {
+        "with": "warn",
+        "without": "warn"
+      },
+      "expected": "降低"
+    }
+  ],
+  "executedAt": "20261003051251",
+  "executedAtIso": "2026-10-02T21:12:51.888Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

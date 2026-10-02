@@ -1,0 +1,46 @@
+{
+  "caseId": "D1-31",
+  "title": "dismiss 冷却期",
+  "status": "FAIL",
+  "why": "断言未通过: dismissExpiresAt 非空(实际=true 期望=\"number\")",
+  "assertionTotal": 4,
+  "assertionPassed": 3,
+  "failed": [
+    {
+      "name": "dismissExpiresAt 非空",
+      "ok": false,
+      "actual": true,
+      "expected": "number"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "冷却期内 result=dismissed",
+      "ok": true,
+      "actual": "dismissed",
+      "expected": "dismissed"
+    },
+    {
+      "name": "dismissed=true",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "dismissExpiresAt 非空",
+      "ok": false,
+      "actual": true,
+      "expected": "number"
+    },
+    {
+      "name": "3天后过期→重新提醒",
+      "ok": true,
+      "actual": "update_available",
+      "expected": "update_available"
+    }
+  ],
+  "executedAt": "20261003051253",
+  "executedAtIso": "2026-10-02T21:12:53.970Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

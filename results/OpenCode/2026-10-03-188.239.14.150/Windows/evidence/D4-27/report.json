@@ -1,0 +1,70 @@
+{
+  "caseId": "D4-27",
+  "title": "双路径输出脱敏(策略/CLI)",
+  "status": "FAIL",
+  "why": "断言未通过: redactOutput 替换 ak(实际=\"ak=AKIAIOSFODNN7EXAMPLE sk=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY region=cn-north-4\" 期望=\"已脱敏\"); redactOutput 替换 sk(实际=\"ak=AKIAIOSFODNN7EXAMPLE sk=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY region=cn-north-4\" 期望=\"已脱敏\")",
+  "assertionTotal": 7,
+  "assertionPassed": 5,
+  "failed": [
+    {
+      "name": "redactOutput 替换 ak",
+      "ok": false,
+      "actual": "ak=AKIAIOSFODNN7EXAMPLE sk=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY region=cn-north-4",
+      "expected": "已脱敏"
+    },
+    {
+      "name": "redactOutput 替换 sk",
+      "ok": false,
+      "actual": "ak=AKIAIOSFODNN7EXAMPLE sk=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY region=cn-north-4",
+      "expected": "已脱敏"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "redactSecrets 替换 ak",
+      "ok": true,
+      "actual": "{\"ak\":\"<redacted>\",\"sk\":\"<redacted>\",\"region\":\"cn-north-4\",\"note\":\"safe-text\"}",
+      "expected": "已脱敏"
+    },
+    {
+      "name": "redactSecrets 替换 sk",
+      "ok": true,
+      "actual": "{\"ak\":\"<redacted>\",\"sk\":\"<redacted>\",\"region\":\"cn-north-4\",\"note\":\"safe-text\"}",
+      "expected": "已脱敏"
+    },
+    {
+      "name": "redactSecrets 不误伤 region",
+      "ok": true,
+      "actual": "{\"ak\":\"<redacted>\",\"sk\":\"<redacted>\",\"region\":\"cn-north-4\",\"note\":\"safe-text\"}",
+      "expected": "保留 region"
+    },
+    {
+      "name": "redactSecrets 不误伤普通文本",
+      "ok": true,
+      "actual": "{\"ak\":\"<redacted>\",\"sk\":\"<redacted>\",\"region\":\"cn-north-4\",\"note\":\"safe-text\"}",
+      "expected": "保留 note"
+    },
+    {
+      "name": "redactOutput 替换 ak",
+      "ok": false,
+      "actual": "ak=AKIAIOSFODNN7EXAMPLE sk=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY region=cn-north-4",
+      "expected": "已脱敏"
+    },
+    {
+      "name": "redactOutput 替换 sk",
+      "ok": false,
+      "actual": "ak=AKIAIOSFODNN7EXAMPLE sk=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY region=cn-north-4",
+      "expected": "已脱敏"
+    },
+    {
+      "name": "redactOutput 保留 region",
+      "ok": true,
+      "actual": "ak=AKIAIOSFODNN7EXAMPLE sk=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY region=cn-north-4",
+      "expected": "保留 region"
+    }
+  ],
+  "executedAt": "20261003051313",
+  "executedAtIso": "2026-10-02T21:13:13.814Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

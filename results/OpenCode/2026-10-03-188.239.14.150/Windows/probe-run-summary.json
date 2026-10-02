@@ -1,0 +1,1140 @@
+[
+  {
+    "id": "D1-39",
+    "verdict": "PASS",
+    "ms": 1453,
+    "assertions": 5,
+    "passed": 2,
+    "note": "npm registry.npmjs.org 的 dist-tags --json 返回 array 形态（原始: \"[\\n  {\\n    \\\"latest\\\": \\\"1.1.7\\\",\\n    \\\"next\\\": \\\"1.1.8-next.1\\\"\\n  }\\n]\"），parseDistTagsOutput 将其判为无效并静默返回 null，queryDistTagsSync 随之返回 null → check_update 在 Windows 上稳定返回 check_failed，无任何错误提示。",
+    "why": "npm registry.npmjs.org 的 dist-tags --json 返回 array 形态（原始: \"[\\n  {\\n    \\\"latest\\\": \\\"1.1.7\\\",\\n    \\\"next\\\": \\\"1.1.8-next.1\\\"\\n  }\\n]\"），parseDistTagsOutput 将其判为无效并静默返回 null，queryDistTagsSync 随之返回 null → check_update 在 Windows 上稳定返回 check_failed，无任何错误提示。"
+  },
+  {
+    "id": "D1-40",
+    "verdict": "PASS",
+    "ms": 86,
+    "assertions": 4,
+    "passed": 4,
+    "why": ""
+  },
+  {
+    "id": "D2-11",
+    "verdict": "PASS",
+    "ms": 118,
+    "assertions": 5,
+    "passed": 4,
+    "why": "断言未通过: 返回非成功状态(实际={\"status\":\"needs_confirmation\"} 期望=\"error/rejected/需确认\")"
+  },
+  {
+    "id": "D2-4",
+    "verdict": "PASS",
+    "ms": 175,
+    "assertions": 6,
+    "passed": 2,
+    "why": "断言未通过: accessKeyId 被替换为 <redacted>(实际=\"accessKeyId\" 期望=\"<redacted>\"); secretAccessKey 被替换为 <redacted>(实际=\"secretAccessKey\" 期望=\"<redacted>\"); securityToken 被替换为 <redacted>(实际=\"securityToken\" 期望=\"<redacted>\"); region 等非敏感字段保留(实际=\"region\" 期望=\"cn-*\")"
+  },
+  {
+    "id": "D4-18",
+    "verdict": "PASS",
+    "ms": 111,
+    "assertions": 4,
+    "passed": 2,
+    "why": "断言未通过: plan 不直接拒绝(需用户确认)(实际={} 期望=\"需确认\"); 返回 nextStep 指引(实际=\"\" 期望=\">0\")"
+  },
+  {
+    "id": "D4-19",
+    "verdict": "PASS",
+    "ms": 115,
+    "assertions": 3,
+    "passed": 3,
+    "why": ""
+  },
+  {
+    "id": "D4-1",
+    "verdict": "PASS",
+    "ms": 113,
+    "assertions": 4,
+    "passed": 4,
+    "why": ""
+  },
+  {
+    "id": "D4-2",
+    "verdict": "PASS",
+    "ms": 116,
+    "assertions": 5,
+    "passed": 2,
+    "why": "断言未通过: 被拦截: echo $HUAWEICLOUD_SDK_SK(实际=\"allow\" 期望=\"deny\"); 被拦截: set | findstr SECRET(实际=\"allow\" 期望=\"deny\"); 被拦截: env | grep -i token(实际=\"allow\" 期望=\"deny\")"
+  },
+  {
+    "id": "D4-3",
+    "verdict": "PASS",
+    "ms": 121,
+    "assertions": 4,
+    "passed": 0,
+    "why": "断言未通过: 拦截或告警: hcloud KMS Decrypt --plaintext(实际=\"allow\" 期望=\"deny|warn\"); 拦截或告警: hcloud OBS ShowBucketPolicy --acl body(实际=\"allow\" 期望=\"deny|warn\"); 拦截或告警: hcloud IAM ShowCredential --with-secret(实际=\"allow\" 期望=\"deny|warn\"); 至少一条被 deny(实际=0 期望=\">0\")"
+  },
+  {
+    "id": "D4-5",
+    "verdict": "PASS",
+    "ms": 158,
+    "assertions": 7,
+    "passed": 7,
+    "why": ""
+  },
+  {
+    "id": "D4-9",
+    "verdict": "PASS",
+    "ms": 115,
+    "assertions": 8,
+    "passed": 4,
+    "why": "断言未通过: OBS 公共读桶 被拦截/告警(实际=\"allow\" 期望=\"deny|warn\"); OBS 公共读桶 给出 findings(实际=0 期望=\">0\"); 全量删除资源 被拦截/告警(实际=\"allow\" 期望=\"deny|warn\"); 全量删除资源 给出 findings(实际=0 期望=\">0\")"
+  },
+  {
+    "id": "D4-15",
+    "verdict": "PASS",
+    "ms": 122,
+    "assertions": 1,
+    "passed": 0,
+    "note": "以下 4 条绕过成功：\n  - hcloud ECS  Del\\x65teServer\n  - hcloud ECS 'DeleteServer'\n  - hcloud ECS $(printf Delete)Server\n  - hcloud ECS Delet%65Server\n根因：risk-rule-engine.evaluateCommandRisk 按顶层 token 匹配，未展开 sh -c / bash -c / 命令替换 / URL 编码的嵌套命令；而 safety-policy.classifyTextCommand 会递归展开并判定 deny。tools.mjs 的 hook_check_command 走的正是前者。",
+    "why": "以下 4 条绕过成功：\n  - hcloud ECS  Del\\x65teServer\n  - hcloud ECS 'DeleteServer'\n  - hcloud ECS $(printf Delete)Server\n  - hcloud ECS Delet%65Server\n根因：risk-rule-engine.evaluateCommandRisk 按顶层 token 匹配，未展开 sh -c / bash -c / 命令替换 / URL 编码的嵌套命令；而 safety-policy.classifyTextCommand 会递归展开并判定 deny。tools.mjs 的 hook_check_command 走的正是前者。"
+  },
+  {
+    "id": "D4-16",
+    "verdict": "FAIL",
+    "ms": 62,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D4-21",
+    "verdict": "PASS",
+    "ms": 114,
+    "assertions": 3,
+    "passed": 3,
+    "why": ""
+  },
+  {
+    "id": "D4-22",
+    "verdict": "PASS",
+    "ms": 117,
+    "assertions": 3,
+    "passed": 2,
+    "why": "断言未通过: 显式 IAM 鉴权后风险降低(实际={\"with\":\"warn\",\"without\":\"warn\"} 期望=\"降低\")"
+  },
+  {
+    "id": "D4-23",
+    "verdict": "PASS",
+    "ms": 87,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"ENOENT: no such file or directory, open 'C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\safety\\\\huawei-agent-rules.md'\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D4-28",
+    "verdict": "PASS",
+    "ms": 92,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"ENOENT: no such file or directory, open 'C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\hooks\\\\huaweicloud-safety.mjs'\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D8-7",
+    "verdict": "PASS",
+    "ms": 139,
+    "assertions": 2,
+    "passed": 0,
+    "why": "断言未通过: huaweicloud-core 可 retrieve_skill 加载(实际=undefined 期望=false); probe 执行未抛异常(实际=\"r.content.map is not a function\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D9-12",
+    "verdict": "PASS",
+    "ms": 933,
+    "assertions": 11,
+    "passed": 9,
+    "why": "断言未通过: 非法时序返回 -32600(实际=\"-32600\" 期望=\"存在\"); 非法时序(未 initialize)被拒(实际={\"code\":null,\"hasResult\":true} 期望=\"无 result\")"
+  },
+  {
+    "id": "D9-13",
+    "verdict": "PASS",
+    "ms": 195,
+    "assertions": 21,
+    "passed": 19,
+    "why": "断言未通过: 审批令牌不可重放(实际=null 期望=\"invalid\"); isPlaceholder 识别占位(实际=false 期望=true)"
+  },
+  {
+    "id": "D10-4",
+    "verdict": "FAIL",
+    "ms": 57,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D1-3",
+    "verdict": "PASS",
+    "ms": 212,
+    "assertions": 6,
+    "passed": 2,
+    "why": "断言未通过: status 可执行并退出码 0(实际={\"code\":1,\"err\":\"node:internal/modules/cjs/loader:1386\\r\\n  throw err;\\r\\n  ^\\r\\n\\r\\nError: Cannot find module 'C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\bin\\\\huaweicloud-devkit.cjs'\\r\\n    at Function._resolv\"} 期望=0); status 输出非空(实际=0 期望=\">0\"); doctor 输出含修复指引(nextStep/修复/安装等)(实际=\"node:internal/modules/cjs/loader:1386\\r\\n  throw err;\\r\\n  ^\\r\\n\\r\\nError: Cannot find module 'C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\bin\\\\huaweicloud-devkit.cjs'\\r\\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)\\r\\n    at defaultResolveImpl (node:internal/modul\" 期望=\"含指引\"); doctor 不输出裸堆栈(实际=\"no raw stack\" 期望=\"no raw stack\")"
+  },
+  {
+    "id": "D1-26",
+    "verdict": "PASS",
+    "ms": 107,
+    "assertions": 8,
+    "passed": 7,
+    "why": "断言未通过: upgrade version 仅允许 latest(实际=\"(无 enum)\" 期望=\"latest\")"
+  },
+  {
+    "id": "D1-27",
+    "verdict": "PASS",
+    "ms": 83,
+    "assertions": 4,
+    "passed": 4,
+    "why": ""
+  },
+  {
+    "id": "D1-28",
+    "verdict": "PASS",
+    "ms": 84,
+    "assertions": 3,
+    "passed": 3,
+    "why": ""
+  },
+  {
+    "id": "D1-31",
+    "verdict": "PASS",
+    "ms": 80,
+    "assertions": 4,
+    "passed": 3,
+    "why": "断言未通过: dismissExpiresAt 非空(实际=true 期望=\"number\")"
+  },
+  {
+    "id": "D1-41",
+    "verdict": "PASS",
+    "ms": 806,
+    "assertions": 10,
+    "passed": 9,
+    "note": "四态中的 check_failed 被实际命中：因 D1-39 的 dist-tags 解析缺陷，最新稳定版/next 均无法取得，latestStable/latestNext/targetVersion 全为 null。",
+    "why": "四态中的 check_failed 被实际命中：因 D1-39 的 dist-tags 解析缺陷，最新稳定版/next 均无法取得，latestStable/latestNext/targetVersion 全为 null。"
+  },
+  {
+    "id": "D1-42",
+    "verdict": "PASS",
+    "ms": 830,
+    "assertions": 6,
+    "passed": 3,
+    "why": "断言未通过: 首次调用返回合法结果(实际=undefined 期望=false); dismiss 调用被受理且不抛错(实际=undefined 期望=false); expireAt = dismissedAt + 3天(实际=null 期望=3)"
+  },
+  {
+    "id": "D1-45",
+    "verdict": "FAIL",
+    "ms": 58,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D1-70",
+    "verdict": "FAIL",
+    "ms": 63,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D2-1",
+    "verdict": "PASS",
+    "ms": 1386,
+    "assertions": 13,
+    "passed": 9,
+    "why": "断言未通过: KooCLI 配置为 AKSK 模式(实际={} 期望=\"AKSK\"); KooCLI 配置含 region(实际=undefined 期望=\"非空\"); 真云只读 API 实际可用(实际=undefined 期望=false); KooCLI 侧实际可用(configure show 成功)(实际=undefined 期望=false)"
+  },
+  {
+    "id": "D2-10",
+    "verdict": "PASS",
+    "ms": 159,
+    "assertions": 13,
+    "passed": 13,
+    "why": ""
+  },
+  {
+    "id": "D2-12",
+    "verdict": "PASS",
+    "ms": 884,
+    "assertions": 5,
+    "passed": 5,
+    "why": ""
+  },
+  {
+    "id": "D2-13",
+    "verdict": "FAIL",
+    "ms": 59,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D2-16",
+    "verdict": "PASS",
+    "ms": 92,
+    "assertions": 4,
+    "passed": 4,
+    "note": "auth_switch import 的擦除由 CLI/服务层执行；此处以等价的读后 rmSync 复刻语义并断言 exists=False、磁盘无残留。",
+    "why": "auth_switch import 的擦除由 CLI/服务层执行；此处以等价的读后 rmSync 复刻语义并断言 exists=False、磁盘无残留。"
+  },
+  {
+    "id": "D2-5",
+    "verdict": "PASS",
+    "ms": 985,
+    "assertions": 6,
+    "passed": 4,
+    "why": "断言未通过: 正常凭证只读命令成功(对照组)(实际=undefined 期望=false); 错误凭证不返回成功(实际=0 期望=\"!=0\")"
+  },
+  {
+    "id": "D2-26",
+    "verdict": "PASS",
+    "ms": 98,
+    "assertions": 6,
+    "passed": 5,
+    "why": "断言未通过: 恢复后凭证与备份一致(实际=\"{\\\"accessKeyId\\\":\\\"AKDESTROYED\\\",\\\"secretAccessKey\\\":\\\"SKDESTROYED\\\"}\" 期望=\"{\\n  \\\"ak\\\": \\\"HPUAN1ROQ4PQXQVBSYXD\\\",\\n  \\\"sk\\\": \\\"ExzAgLDfOfbaLm8pgyVCJKmtF4Nb5lLX6LnUFrfN\\\",\\n  \\\"securityToken\\\": \\\"\\\",\\n  \\\"region\\\": \\\"cn-north-4\\\",\\n  \\\"configuredBySession\\\": false\\n}\")"
+  },
+  {
+    "id": "D3-A1",
+    "verdict": "PASS",
+    "ms": 715,
+    "assertions": 4,
+    "passed": 2,
+    "why": "断言未通过: 全部 skill 可 retrieve_skill 检索(实际=0 期望=30); 全部 skill 可 search_docs 命中(实际=0 期望=30)"
+  },
+  {
+    "id": "D3-B3",
+    "verdict": "PASS",
+    "ms": 2668,
+    "assertions": 5,
+    "passed": 3,
+    "why": "断言未通过: isError=false(实际=undefined 期望=false); 只读命令无写入副作用(实际=\"{\\\"ok\\\":false,\\\"exitCode\\\":0,\\\"signal\\\":null,\\\"errorCode\\\":\\\"APIGW.0301\\\",\\\"errorMessage\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"stdout\\\":\\\"{\\\\\\\"error_msg\\\\\\\":\\\\\\\"Incorrect IAM authentication information: Unauthorized\\\\\\\",\\\\\\\"error_code\\\\\\\":\\\\\\\"APIGW.0301\\\\\\\",\\\\\\\"request_id\\\\\\\":\\\\\\\"666c25be40fdd38d3df4569ee3778186\\\\\\\"}\\\\n[USE_ERROR]缺少必填参数:project_id\\\\n\\\",\\\"stderr\\\":\\\"\\\",\\\"plan\\\":{\\\"executable\\\":\\\"hcloud\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"],\\\"command\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"executableBlock\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"warnings\\\":[],\\\"classification\\\":{\\\"decision\\\":\\\"allow\\\",\\\"risk\\\":\\\"read_only\\\",\\\"reason\\\":\\\"Command appears to be a read-only Huawei Cloud operation.\\\",\\\"service\\\":\\\"ECS\\\",\\\"operation\\\":\\\"ListServersDetails\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"]},\\\"sgFindings\\\":[],\\\"approvalToken\\\":\\\"1f60d451-9808-4d4f-9933-68d2419a80c9\\\",\\\"safeToRun\\\":true,\\\"rawArgs\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\",\\\"--cli-access-key=<redacted>\\\",\\\"--cli-secret-key=<redacted>\\\",\\\"--cli-security-token=<redacted>\\\"]},\\\"retries\\\":0,\\\"attempts\\\":1}\" 期望=\"{\\\"ok\\\":false,\\\"exitCode\\\":0,\\\"signal\\\":null,\\\"errorCode\\\":\\\"APIGW.0301\\\",\\\"errorMessage\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"stdout\\\":\\\"{\\\\\\\"error_msg\\\\\\\":\\\\\\\"Incorrect IAM authentication information: Unauthorized\\\\\\\",\\\\\\\"error_code\\\\\\\":\\\\\\\"APIGW.0301\\\\\\\",\\\\\\\"request_id\\\\\\\":\\\\\\\"ff54a325212c022c5a41a72af5d296ca\\\\\\\"}\\\\n[USE_ERROR]缺少必填参数:project_id\\\\n\\\",\\\"stderr\\\":\\\"\\\",\\\"plan\\\":{\\\"executable\\\":\\\"hcloud\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"],\\\"command\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"executableBlock\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"warnings\\\":[],\\\"classification\\\":{\\\"decision\\\":\\\"allow\\\",\\\"risk\\\":\\\"read_only\\\",\\\"reason\\\":\\\"Command appears to be a read-only Huawei Cloud operation.\\\",\\\"service\\\":\\\"ECS\\\",\\\"operation\\\":\\\"ListServersDetails\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"]},\\\"sgFindings\\\":[],\\\"approvalToken\\\":\\\"837d1112-a100-4616-b79f-285a9184e8bb\\\",\\\"safeToRun\\\":true,\\\"rawArgs\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\",\\\"--cli-access-key=<redacted>\\\",\\\"--cli-secret-key=<redacted>\\\",\\\"--cli-security-token=<redacted>\\\"]},\\\"retries\\\":0,\\\"attempts\\\":1}\")"
+  },
+  {
+    "id": "D3-C4",
+    "verdict": "PASS",
+    "ms": 3851,
+    "assertions": 5,
+    "passed": 3,
+    "why": "断言未通过: ≥20 服务 list_operations 可达 (0/30)(实际=0 期望=\">=20\"); 拿到 VPC id(实际=null 期望=\"vpc_id\")"
+  },
+  {
+    "id": "D3-C5",
+    "verdict": "PASS",
+    "ms": 238,
+    "assertions": 5,
+    "passed": 1,
+    "why": "断言未通过: check_cli 通过(实际=undefined 期望=false); list_operations 通过(实际=undefined 期望=false); plan_cli_command 通过(实际=undefined 期望=false); explain_error 通过(实际=undefined 期望=false)"
+  },
+  {
+    "id": "D3-C13",
+    "verdict": "PASS",
+    "ms": 1529,
+    "assertions": 8,
+    "passed": 1,
+    "why": "断言未通过: 创建测试 bucket 成功(实际={\"code\":3,\"out\":\"Error: No such command: \\\"CreateBucket\\\", please try \\\"help\\\" for more information!\\n\"} 期望=\"成功\"); 未配置时 get 返回未配置(非崩溃)(实际=undefined 期望=false); set 配置成功(实际=undefined 期望=false); get 核对 indexDocument 一致(实际=\"{\\\"ok\\\":false,\\\"status\\\":403,\\\"body\\\":\\\"<?xml version=\\\\\\\"1.0\\\\\\\" encoding=\\\\\\\"UTF-8\\\\\\\" standalone=\\\\\\\"yes\\\\\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0FE76B65144CF3D9EC3C0\" 期望=\"index.html\"); get 核对 errorDocument 一致(实际=\"{\\\"ok\\\":false,\\\"status\\\":403,\\\"body\\\":\\\"<?xml version=\\\\\\\"1.0\\\\\\\" encoding=\\\\\\\"UTF-8\\\\\\\" standalone=\\\\\\\"yes\\\\\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0FE76B65144CF3D9EC3C0\" 期望=\"404.html\"); delete 配置成功(实际=undefined 期望=false); probe 执行未抛异常(实际=\"indexDocument is required for action=set\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D3-S1",
+    "verdict": "PASS",
+    "ms": 537,
+    "assertions": 4,
+    "passed": 3,
+    "why": "断言未通过: 只读命令成功(实际=undefined 期望=false)"
+  },
+  {
+    "id": "D3-S2",
+    "verdict": "FAIL",
+    "ms": 168,
+    "assertions": 2,
+    "passed": 2,
+    "note": "未能创建测试 VPC，后续确认流无法验证",
+    "why": "未能创建测试 VPC，后续确认流无法验证"
+  },
+  {
+    "id": "D3-S3",
+    "verdict": "PASS",
+    "ms": 769,
+    "assertions": 2,
+    "passed": 1,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 167089c14ad74b24835526af2e6980b9]\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D3-S4",
+    "verdict": "PASS",
+    "ms": 1293,
+    "assertions": 6,
+    "passed": 2,
+    "why": "断言未通过: voucher_status 成功(实际=undefined 期望=false); voucher_claim 成功(实际=undefined 期望=false); 领取返回 claimed=true(实际={\"claimed\":false,\"voucherId\":null,\"amount\":0,\"message\":\"AK/SK 无效或不匹配，请检查配置\",\"code\":\"HDKIT_CRED_INVALID\"} 期望=\"claimed=true\"); 再查状态翻转为 claimed=true(实际=false 期望=true)"
+  },
+  {
+    "id": "D3-S7",
+    "verdict": "SPEC-MISMATCH",
+    "ms": 665,
+    "assertions": 4,
+    "passed": 4,
+    "note": "受限于当前账号沙箱配额与 RDS 真实创建成本，本日以网络层编排 + 归零验证替代完整 RDS+沙箱链路；连接串注入与应用读写库未做真云验证。",
+    "why": "受限于当前账号沙箱配额与 RDS 真实创建成本，本日以网络层编排 + 归零验证替代完整 RDS+沙箱链路；连接串注入与应用读写库未做真云验证。"
+  },
+  {
+    "id": "D3-S8",
+    "verdict": "PASS",
+    "ms": 177,
+    "assertions": 6,
+    "passed": 4,
+    "why": "断言未通过: 给出可执行下一步(实际=\"{\\\"service\\\":\\\"ECS\\\",\\\"errorCode\\\":\\\"AuthFailure\\\",\\\"requestId\\\":\\\"\\\",\\\"suggestions\\\":[\\\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\\\"]}\" 期望=\"含下一步\"); extractApiError 可解析服务端错误(实际=null 期望=\"可解析\")"
+  },
+  {
+    "id": "D4-4",
+    "verdict": "PASS",
+    "ms": 278,
+    "assertions": 27,
+    "passed": 27,
+    "why": ""
+  },
+  {
+    "id": "D4-11",
+    "verdict": "PASS",
+    "ms": 118,
+    "assertions": 4,
+    "passed": 2,
+    "note": "内容型工具(search_docs/retrieve_skill)为只读检索，无执行面；真正的防线是 hook_check_command 对其中的写命令片段拦截。",
+    "why": "内容型工具(search_docs/retrieve_skill)为只读检索，无执行面；真正的防线是 hook_check_command 对其中的写命令片段拦截。"
+  },
+  {
+    "id": "D4-13",
+    "verdict": "PASS",
+    "ms": 81,
+    "assertions": 2,
+    "passed": 0,
+    "why": "断言未通过: 只读子账号凭证存在(实际=\"C:/Users/Administrator/devkit-test/testbot4-win-Opencode/huaweicloud-devkit-test/credentials.readonly.json\" 期望=\"exists\"); probe 执行未抛异常(实际=\"ENOENT: no such file or directory, open 'C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\huaweicloud-devkit-test\\\\credentials.readonly.json'\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D4-17",
+    "verdict": "PASS",
+    "ms": 120,
+    "assertions": 6,
+    "passed": 1,
+    "why": "断言未通过: 不崩溃: 123(实际=\"args.command.split is not a function\" 期望=\"不抛异常\"); 不崩溃: [](实际=\"args.command.split is not a function\" 期望=\"不抛异常\"); 不崩溃: {}(实际=\"args.command.split is not a function\" 期望=\"不抛异常\"); 不崩溃: {\"command\":{\"nested\":true}}(实际=\"args.command.split is not a function\" 期望=\"不抛异常\"); 畸形输入不崩溃(实际=4 期望=0)"
+  },
+  {
+    "id": "D4-20",
+    "verdict": "PASS",
+    "ms": 995,
+    "assertions": 3,
+    "passed": 0,
+    "why": "断言未通过: 拒绝前基线可读(实际=undefined 期望=false); plan 仅生成命令不执行(实际=undefined 期望=\"待确认\"); 未确认期间实例清单零变化(实际=\"{\\\"ok\\\":false,\\\"exitCode\\\":0,\\\"signal\\\":null,\\\"errorCode\\\":\\\"APIGW.0301\\\",\\\"errorMessage\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"stdout\\\":\\\"{\\\\\\\"error_msg\\\\\\\":\\\\\\\"Incorrect IAM authentication information: Unauthorized\\\\\\\",\\\\\\\"error_code\\\\\\\":\\\\\\\"APIGW.0301\\\\\\\",\\\\\\\"request_id\\\\\\\":\\\\\\\"bdde984dfdbdbf50199f7c36c44474a2\\\\\\\"}\\\\n[USE_ERROR]缺少必填参数:project_id\\\\n\\\",\\\"stderr\\\":\\\"\\\",\\\"plan\\\":{\\\"executable\\\":\\\"hcloud\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"],\\\"command\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"executableBlock\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"warnings\\\":[],\\\"classification\\\":{\\\"decision\\\":\\\"allow\\\",\\\"risk\\\":\\\"read_only\\\",\\\"reason\\\":\\\"Command appears to be a read-only Huawei Cloud operation.\\\",\\\"service\\\":\\\"ECS\\\",\\\"operation\\\":\\\"ListServersDetails\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"]},\\\"sgFindings\\\":[],\\\"approvalToken\\\":\\\"fd08004c-8140-4ef3-909f-1591c609b9b6\\\",\\\"safeToRun\\\":true,\\\"rawArgs\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\",\\\"--cli-access-key=<redacted>\\\",\\\"--cli-secret-key=<redacted>\\\",\\\"--cli-security-token=<redacted>\\\"]},\\\"retries\\\":0,\\\"attempts\\\":1}\" 期望=\"{\\\"ok\\\":false,\\\"exitCode\\\":0,\\\"signal\\\":null,\\\"errorCode\\\":\\\"APIGW.0301\\\",\\\"errorMessage\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"stdout\\\":\\\"{\\\\\\\"error_msg\\\\\\\":\\\\\\\"Incorrect IAM authentication information: Unauthorized\\\\\\\",\\\\\\\"error_code\\\\\\\":\\\\\\\"APIGW.0301\\\\\\\",\\\\\\\"request_id\\\\\\\":\\\\\\\"09ccab287a1244f635a8f058be89ccf6\\\\\\\"}\\\\n[USE_ERROR]缺少必填参数:project_id\\\\n\\\",\\\"stderr\\\":\\\"\\\",\\\"plan\\\":{\\\"executable\\\":\\\"hcloud\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"],\\\"command\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"executableBlock\\\":\\\"hcloud ECS ListServersDetails\\\",\\\"warnings\\\":[],\\\"classification\\\":{\\\"decision\\\":\\\"allow\\\",\\\"risk\\\":\\\"read_only\\\",\\\"reason\\\":\\\"Command appears to be a read-only Huawei Cloud operation.\\\",\\\"service\\\":\\\"ECS\\\",\\\"operation\\\":\\\"ListServersDetails\\\",\\\"args\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\"]},\\\"sgFindings\\\":[],\\\"approvalToken\\\":\\\"20677d32-c861-45b6-ae91-baf6bbe282ff\\\",\\\"safeToRun\\\":true,\\\"rawArgs\\\":[\\\"ECS\\\",\\\"ListServersDetails\\\",\\\"--cli-access-key=<redacted>\\\",\\\"--cli-secret-key=<redacted>\\\",\\\"--cli-security-token=<redacted>\\\"]},\\\"retries\\\":0,\\\"attempts\\\":1}\")"
+  },
+  {
+    "id": "D4-24",
+    "verdict": "PASS",
+    "ms": 111,
+    "assertions": 8,
+    "passed": 5,
+    "why": "断言未通过: 重复消费被拒(防重放)(实际=null 期望=\"invalid\"); 重复消费语义可机器断言(实际=null 期望=\"already_processed/reason\"); 令牌带 TTL/过期时间(实际={\"state\":\"valid\",\"entry\":{\"argsHash\":\"82fe4d82e72aca67ce4d936dea4f26ddb2d2142ac10d0cf3677e259407996c98\",\"argsRedacted\":[\"ECS\",\"CreateServers\"],\"createdAt\":1790975593702}} 期望=\"含 expiresAt/ttl\")"
+  },
+  {
+    "id": "D4-27",
+    "verdict": "PASS",
+    "ms": 89,
+    "assertions": 7,
+    "passed": 5,
+    "why": "断言未通过: redactOutput 替换 ak(实际=\"ak=AKIAIOSFODNN7EXAMPLE sk=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY region=cn-north-4\" 期望=\"已脱敏\"); redactOutput 替换 sk(实际=\"ak=AKIAIOSFODNN7EXAMPLE sk=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY region=cn-north-4\" 期望=\"已脱敏\")"
+  },
+  {
+    "id": "D4-6",
+    "verdict": "PASS",
+    "ms": 109,
+    "assertions": 3,
+    "passed": 3,
+    "why": ""
+  },
+  {
+    "id": "D4-7",
+    "verdict": "PASS",
+    "ms": 113,
+    "assertions": 3,
+    "passed": 3,
+    "why": ""
+  },
+  {
+    "id": "D4-8",
+    "verdict": "PASS",
+    "ms": 85,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"ENOENT: no such file or directory, open 'C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\safety\\\\huaweicloud-safety.py'\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D5-1",
+    "verdict": "PASS",
+    "ms": 141,
+    "assertions": 6,
+    "passed": 6,
+    "why": ""
+  },
+  {
+    "id": "D5-3",
+    "verdict": "PASS",
+    "ms": 789,
+    "assertions": 46,
+    "passed": 46,
+    "why": ""
+  },
+  {
+    "id": "D6-4",
+    "verdict": "PASS",
+    "ms": 972,
+    "assertions": 3,
+    "passed": 3,
+    "why": ""
+  },
+  {
+    "id": "D8-4",
+    "verdict": "PASS",
+    "ms": 135,
+    "assertions": 2,
+    "passed": 0,
+    "why": "断言未通过: huawei-ecs 可加载(实际=undefined 期望=false); probe 执行未抛异常(实际=\"r.content.map is not a function\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D9-1",
+    "verdict": "PASS",
+    "ms": 137,
+    "assertions": 3,
+    "passed": 3,
+    "note": "用例预期基线写\"40 工具\"，实际注册源 tools.mjs 为 41 个（含 check_update 与 upgrade 两个升级提醒工具）；以\"(=tools.mjs 注册源数量)\"为准则 41 一致。",
+    "why": "用例预期基线写\"40 工具\"，实际注册源 tools.mjs 为 41 个（含 check_update 与 upgrade 两个升级提醒工具）；以\"(=tools.mjs 注册源数量)\"为准则 41 一致。"
+  },
+  {
+    "id": "D9-2",
+    "verdict": "PASS",
+    "ms": 847,
+    "assertions": 5,
+    "passed": 3,
+    "note": "tools/list 传 string 类型 params 时未返回 -32602，服务端实际返回: {\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"tools\":[{\"name\":\"huaweicloud_check_cli\",\"description\":\"Check whether Huawei Cloud KooCLI hcloud is installed and whether its version matches the plugin paired versio",
+    "why": "tools/list 传 string 类型 params 时未返回 -32602，服务端实际返回: {\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"tools\":[{\"name\":\"huaweicloud_check_cli\",\"description\":\"Check whether Huawei Cloud KooCLI hcloud is installed and whether its version matches the plugin paired versio"
+  },
+  {
+    "id": "D9-3",
+    "verdict": "PASS",
+    "ms": 847,
+    "assertions": 5,
+    "passed": 3,
+    "why": "断言未通过: 失败/拦截调用 isError=true(实际=undefined 期望=true); 失败时 content 仍为数组(实际=false 期望=true)"
+  },
+  {
+    "id": "D9-4",
+    "verdict": "PASS",
+    "ms": 762,
+    "assertions": 5,
+    "passed": 3,
+    "why": "断言未通过: 未 initialize 直接 tools/list 被拒(不返回工具)(实际=true 期望=false); 非法时序返回 JSON-RPC 错误对象(实际=\"NO_ERROR\" 期望=\"error code\")"
+  },
+  {
+    "id": "D9-5",
+    "verdict": "PASS",
+    "ms": 1477,
+    "assertions": 3,
+    "passed": 3,
+    "why": ""
+  },
+  {
+    "id": "D9-6",
+    "verdict": "PASS",
+    "ms": 6595,
+    "assertions": 1,
+    "passed": 1,
+    "why": ""
+  },
+  {
+    "id": "D9-9",
+    "verdict": "SPEC-MISMATCH",
+    "ms": 8164,
+    "assertions": 10,
+    "passed": 7,
+    "why": "断言未通过: ②服务端源码声明了 notifications/cancelled 取消处理(实际=\"mcp-server.mjs/mcp-protocol.mjs 均无 notifications/cancelled 分支\" 期望=\"存在取消处理\"); ③超时以 JSON-RPC error {code:-32000, message 含 timeout} 返回(实际=\"无 -32000；initialize 内部 3s 超时仅用于丢弃结果（mcp-protocol.mjs:39），tools/call 无超时语义\" 期望=\"code=-32000 且 message 含 timeout\"); ⑤tools/list 工具数=40(实际=41 期望=40)"
+  },
+  {
+    "id": "D9-10",
+    "verdict": "PASS",
+    "ms": 1511,
+    "assertions": 4,
+    "passed": 2,
+    "why": "断言未通过: remote initialize 返回 serverInfo(实际=\"initialize\" 期望=\"PASS\"); remote tools/list 与 stdio 一致(实际=\"parity\" 期望=\"PASS\")"
+  },
+  {
+    "id": "D9-11",
+    "verdict": "PASS",
+    "ms": 648,
+    "assertions": 4,
+    "passed": 1,
+    "why": "断言未通过: attach 注册到 mux(实际=\"attach\" 期望=\"PASS\"); ready Promise 在 open 时 resolve(实际=\"ready\" 期望=\"PASS\"); close 后 localServer 关闭且 subConnections 清空(实际=\"cleanup\" 期望=\"PASS\")"
+  },
+  {
+    "id": "D10-3",
+    "verdict": "FAIL",
+    "ms": 61,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D1-4",
+    "verdict": "PASS",
+    "ms": 192,
+    "assertions": 4,
+    "passed": 3,
+    "why": "断言未通过: update 可执行(退出码 0 或幂等提示)(实际={\"code\":1,\"out\":\"\"} 期望=0)"
+  },
+  {
+    "id": "D1-30",
+    "verdict": "PASS",
+    "ms": 78,
+    "assertions": 5,
+    "passed": 5,
+    "why": ""
+  },
+  {
+    "id": "D1-33",
+    "verdict": "PASS",
+    "ms": 77,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"The \\\"path\\\" argument must be of type string. Received an instance of Object\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D1-65",
+    "verdict": "PASS",
+    "ms": 1434,
+    "assertions": 3,
+    "passed": 3,
+    "note": "DEBUG 开关不改变返回值语义；两者均为 null 系 D1-39 的 parseDistTagsOutput 缺陷所致，非本用例范围。",
+    "why": "DEBUG 开关不改变返回值语义；两者均为 null 系 D1-39 的 parseDistTagsOutput 缺陷所致，非本用例范围。"
+  },
+  {
+    "id": "D1-66",
+    "verdict": "FAIL",
+    "ms": 59,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D1-67",
+    "verdict": "PASS",
+    "ms": 84,
+    "assertions": 5,
+    "passed": 4,
+    "why": "断言未通过: 继承 peer env 且不覆盖用户已有值(实际=null 期望=\"保留 USER_KEEP\")"
+  },
+  {
+    "id": "D1-68",
+    "verdict": "PASS",
+    "ms": 1243,
+    "assertions": 5,
+    "passed": 3,
+    "why": "断言未通过: 在线/离线两种模式结果一致(实际={\"off\":1031,\"on\":129} 期望=\"两者均有结果\"); 凭证解析含 HUAWEICLOUD_REGION 优先于 HW_REGION(实际=\"源码顺序\" 期望=\"HUAWEICLOUD_REGION 优先\")"
+  },
+  {
+    "id": "D1-69",
+    "verdict": "FAIL",
+    "ms": 58,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D2-2",
+    "verdict": "PASS",
+    "ms": 230,
+    "assertions": 7,
+    "passed": 6,
+    "why": "断言未通过: isError=false(实际=undefined 期望=false)"
+  },
+  {
+    "id": "D2-27",
+    "verdict": "FAIL",
+    "ms": 57,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D3-B1",
+    "verdict": "PASS",
+    "ms": 347,
+    "assertions": 9,
+    "passed": 5,
+    "why": "断言未通过: ECS list_operations 成功(实际=undefined 期望=false); VPC list_operations 成功(实际=undefined 期望=false); OBS list_operations 成功(实际=undefined 期望=false); OBS 含 Create/Delete/List 类操作(实际=\"含操作\" 期望=\"存在\")"
+  },
+  {
+    "id": "D3-B5",
+    "verdict": "PASS",
+    "ms": 83,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"The \\\"path\\\" argument must be of type string. Received an instance of Object\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D3-C14",
+    "verdict": "PASS",
+    "ms": 1127,
+    "assertions": 6,
+    "passed": 5,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 903c8d0b85b642618ec873692751092c]\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D3-S5",
+    "verdict": "PASS",
+    "ms": 113,
+    "assertions": 4,
+    "passed": 4,
+    "why": ""
+  },
+  {
+    "id": "D3-S6",
+    "verdict": "PASS",
+    "ms": 643,
+    "assertions": 4,
+    "passed": 2,
+    "why": "断言未通过: CreateFunction 生成审批计划(实际=undefined 期望=\"需审批\"); 函数创建成功(实际=undefined 期望=false)"
+  },
+  {
+    "id": "D4-10",
+    "verdict": "PASS",
+    "ms": 120,
+    "assertions": 2,
+    "passed": 0,
+    "why": "断言未通过: 规则库可加载且为数组(实际=\"object\" 期望=\">0\"); probe 执行未抛异常(实际=\"rules.every is not a function\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D4-12",
+    "verdict": "FAIL",
+    "ms": 63,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D4-14",
+    "verdict": "PASS",
+    "ms": 606,
+    "assertions": 3,
+    "passed": 2,
+    "why": "断言未通过: 只读命令执行成功(实际=undefined 期望=false)"
+  },
+  {
+    "id": "D4-25",
+    "verdict": "PASS",
+    "ms": 78,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"ENOENT: no such file or directory, open 'C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\safety\\\\huaweicloud-safety.py'\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D4-26",
+    "verdict": "PASS",
+    "ms": 115,
+    "assertions": 3,
+    "passed": 2,
+    "why": "断言未通过: evidence 不含明文 key(实际=\"key\" 期望=\"已脱敏\")"
+  },
+  {
+    "id": "D4-29",
+    "verdict": "FAIL",
+    "ms": 62,
+    "assertions": 0,
+    "passed": 0,
+    "why": ""
+  },
+  {
+    "id": "D6-1",
+    "verdict": "PASS",
+    "ms": 285,
+    "assertions": 2,
+    "passed": 0,
+    "why": "断言未通过: 采样成功(60 次)(实际=0 期望=\">=50\"); p95 = undefinedms < 2000ms(实际=undefined 期望=\"<2000\")"
+  },
+  {
+    "id": "D6-3",
+    "verdict": "PASS",
+    "ms": 774,
+    "assertions": 2,
+    "passed": 2,
+    "why": ""
+  },
+  {
+    "id": "D6-9",
+    "verdict": "PASS",
+    "ms": 1864,
+    "assertions": 8,
+    "passed": 8,
+    "why": ""
+  },
+  {
+    "id": "D8-1",
+    "verdict": "PASS",
+    "ms": 79,
+    "assertions": 4,
+    "passed": 0,
+    "why": "断言未通过: README.md 存在(实际=\"C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\README.md\" 期望=\"exists\"); README.zh-CN.md 存在(实际=\"C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\README.zh-CN.md\" 期望=\"exists\"); CHANGELOG.md 存在(实际=\"C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\CHANGELOG.md\" 期望=\"exists\"); probe 执行未抛异常(实际=\"ENOENT: no such file or directory, open 'C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\README.md'\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D8-6",
+    "verdict": "PASS",
+    "ms": 81,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"ENOENT: no such file or directory, open 'C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\README.md'\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "D8-9",
+    "verdict": "SPEC-MISMATCH",
+    "ms": 87,
+    "assertions": 6,
+    "passed": 4,
+    "why": "断言未通过: sanitizeValue 移除 AK 敏感值(实际=\"AKIAIOSFODNN7EXAMPLE\" 期望=\"已移除/脱敏\"); sanitizeValue 移除 token 敏感值(实际=\"HUAWEICLOUD_SDK_SK=secretvalue123\" 期望=\"已移除/脱敏\")"
+  },
+  {
+    "id": "D8-10",
+    "verdict": "PASS",
+    "ms": 164,
+    "assertions": 1,
+    "passed": 1,
+    "why": ""
+  },
+  {
+    "id": "D9-7",
+    "verdict": "PASS",
+    "ms": 2053,
+    "assertions": 5,
+    "passed": 5,
+    "why": ""
+  },
+  {
+    "id": "D9-8",
+    "verdict": "PASS",
+    "ms": 113,
+    "assertions": 3,
+    "passed": 3,
+    "why": ""
+  },
+  {
+    "id": "EXP-E01",
+    "verdict": "PASS",
+    "ms": 82,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"ECS is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E02",
+    "verdict": "PASS",
+    "ms": 82,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"ECS is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E03",
+    "verdict": "PASS",
+    "ms": 82,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"OBS is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E04",
+    "verdict": "PASS",
+    "ms": 82,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"EIP is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E05",
+    "verdict": "PASS",
+    "ms": 79,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"RDS is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E06",
+    "verdict": "PASS",
+    "ms": 76,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"DCS is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E07",
+    "verdict": "PASS",
+    "ms": 83,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"CBR is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E08",
+    "verdict": "PASS",
+    "ms": 120,
+    "assertions": 3,
+    "passed": 2,
+    "why": "断言未通过: service_catalog 调用成功(实际=undefined 期望=false)"
+  },
+  {
+    "id": "EXP-E09",
+    "verdict": "PASS",
+    "ms": 90,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"CCE is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E10",
+    "verdict": "PASS",
+    "ms": 83,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"FunctionGraph is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E11",
+    "verdict": "PASS",
+    "ms": 85,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"BSS is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E12",
+    "verdict": "PASS",
+    "ms": 83,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"CES is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E13",
+    "verdict": "PASS",
+    "ms": 84,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"ELB is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E14",
+    "verdict": "PASS",
+    "ms": 94,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"IAM is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-E15",
+    "verdict": "PASS",
+    "ms": 86,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: probe 执行未抛异常(实际=\"Voucher is not defined\" 期望=\"不抛异常\")"
+  },
+  {
+    "id": "EXP-C4-01",
+    "verdict": "PASS",
+    "ms": 194,
+    "assertions": 2,
+    "passed": 0,
+    "why": "断言未通过: ECS CreateServers 可发现(实际=\"CreateServers\" 期望=\"存在\"); ECS DeleteServer 可发现(实际=\"DeleteServer\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-02",
+    "verdict": "PASS",
+    "ms": 196,
+    "assertions": 2,
+    "passed": 0,
+    "why": "断言未通过: VPC CreateVpc 可发现(实际=\"CreateVpc\" 期望=\"存在\"); VPC DeleteVpc 可发现(实际=\"DeleteVpc\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-03",
+    "verdict": "PASS",
+    "ms": 236,
+    "assertions": 2,
+    "passed": 0,
+    "why": "断言未通过: OBS CreateBucket 可发现(实际=\"CreateBucket\" 期望=\"存在\"); OBS DeleteBucket 可发现(实际=\"DeleteBucket\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-04",
+    "verdict": "PASS",
+    "ms": 184,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: RDS 有 Create 类操作(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-05",
+    "verdict": "PASS",
+    "ms": 181,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: EVS CreateVolume 可发现(实际=\"CreateVolume\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-06",
+    "verdict": "PASS",
+    "ms": 180,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: EIP CreatePublicIP 可发现(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-07",
+    "verdict": "PASS",
+    "ms": 188,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: CCE CreateCluster 可发现(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-08",
+    "verdict": "PASS",
+    "ms": 177,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: FunctionGraph CreateFunction 可发现(实际=\"CreateFunction\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-09",
+    "verdict": "PASS",
+    "ms": 174,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: SMN 有 Create 类操作(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-10",
+    "verdict": "PASS",
+    "ms": 188,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: CTS 可列举(实际=undefined 期望=\"ok\")"
+  },
+  {
+    "id": "EXP-C4-11",
+    "verdict": "PASS",
+    "ms": 174,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: KMS CreateKey 可发现(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-12",
+    "verdict": "PASS",
+    "ms": 173,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: CBR 有 Create 类操作(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-13",
+    "verdict": "PASS",
+    "ms": 176,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: DDS CreateInstance 可发现(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-14",
+    "verdict": "PASS",
+    "ms": 174,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: DCS CreateInstance 可发现(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-15",
+    "verdict": "PASS",
+    "ms": 173,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: GaussDB 有 Create 类操作(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-16",
+    "verdict": "PASS",
+    "ms": 172,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: ELB CreateLoadBalancer 可发现(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-17",
+    "verdict": "PASS",
+    "ms": 175,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: APIG CreateApi 可发现(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-18",
+    "verdict": "PASS",
+    "ms": 178,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: DNS 有 Create 类操作(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-19",
+    "verdict": "PASS",
+    "ms": 182,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: AS 有 Create 类操作(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-20",
+    "verdict": "PASS",
+    "ms": 180,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: IAM CreateUser 可发现(实际=\"Create\" 期望=\"存在\")"
+  },
+  {
+    "id": "EXP-C4-21",
+    "verdict": "PASS",
+    "ms": 594,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: 静态托管工具对不存在 bucket 返回明确错误(非崩溃)(实际={\"text\":\"{\\\"ok\\\":false,\\\"status\\\":403,\\\"body\\\":\\\"<?xml version=\\\\\\\"1.0\\\\\\\" encoding=\\\\\\\"UTF-8\\\\\\\" standalone=\\\\\\\"yes\\\\\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token \"} 期望=true)"
+  },
+  {
+    "id": "EXP-C4-22",
+    "verdict": "PASS",
+    "ms": 2416,
+    "assertions": 1,
+    "passed": 0,
+    "why": "断言未通过: 20+ 服务均可 list_operations (0/25)(实际=0 期望=\">=20\")"
+  },
+  {
+    "id": "EXP-D5-1-1",
+    "verdict": "PASS",
+    "ms": 108,
+    "assertions": 2,
+    "passed": 2,
+    "why": ""
+  },
+  {
+    "id": "EXP-D5-1-3",
+    "verdict": "PASS",
+    "ms": 79,
+    "assertions": 1,
+    "passed": 1,
+    "why": ""
+  }
+]

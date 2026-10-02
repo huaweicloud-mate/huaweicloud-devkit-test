@@ -1,0 +1,154 @@
+{
+  "caseId": "D9-13",
+  "title": "tools/call 凭证不泄露与权限校验",
+  "status": "FAIL",
+  "why": "断言未通过: 审批令牌不可重放(实际=null 期望=\"invalid\"); isPlaceholder 识别占位(实际=false 期望=true)",
+  "assertionTotal": 21,
+  "assertionPassed": 19,
+  "failed": [
+    {
+      "name": "审批令牌不可重放",
+      "ok": false,
+      "actual": null,
+      "expected": "invalid"
+    },
+    {
+      "name": "isPlaceholder 识别占位",
+      "ok": false,
+      "actual": false,
+      "expected": true
+    }
+  ],
+  "assertions": [
+    {
+      "name": "setRuntimeCredentials 生效",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "resolveCredentialsWithRuntime 返回注入 AK",
+      "ok": true,
+      "actual": "AKPROBE00000000000A",
+      "expected": "AKPROBE00000000000A"
+    },
+    {
+      "name": "loadPolicy 加载策略",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "classifyHcloudArgs 返回三态判定",
+      "ok": true,
+      "actual": "allow",
+      "expected": "三态"
+    },
+    {
+      "name": "evaluateArtifacts 可用",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "evaluateDeployPlan 可用",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "mergeRiskDecision 可用",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "审批令牌不可重放",
+      "ok": false,
+      "actual": null,
+      "expected": "invalid"
+    },
+    {
+      "name": "readServiceCatalogs 可用",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "classifyUnsupported 可用",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "planHcloudCommand 可用",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "tools/call 返回不含明文 AK",
+      "ok": true,
+      "actual": "AK",
+      "expected": "不含"
+    },
+    {
+      "name": "tools/call 返回不含明文 SK",
+      "ok": true,
+      "actual": "SK",
+      "expected": "不含"
+    },
+    {
+      "name": "tools/call 返回不含明文 token",
+      "ok": true,
+      "actual": "token",
+      "expected": "不含"
+    },
+    {
+      "name": "clearRuntimeCredentials 清理 runtime",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "clearRuntimeCredentials 不落盘到 S1",
+      "ok": true,
+      "actual": "{\n  \"ak\": \"HPUAN1ROQ4PQXQVBSYXD\",\n  \"sk\": \"ExzAgLDfOfbaLm8pgyVCJKmtF4Nb5lLX6LnUFrfN\",\n  \"securityToken\": \"\",\n  \"region\": \"cn-north-4\",\n  \"configuredBySession\": false\n}",
+      "expected": "{\n  \"ak\": \"HPUAN1ROQ4PQXQVBSYXD\",\n  \"sk\": \"ExzAgLDfOfbaLm8pgyVCJKmtF4Nb5lLX6LnUFrfN\",\n  \"securityToken\": \"\",\n  \"region\": \"cn-north-4\",\n  \"configuredBySession\": false\n}"
+    },
+    {
+      "name": "readGlobalCredentials 可读",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "globalCredentialsPath 路径正确",
+      "ok": true,
+      "actual": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+      "expected": "credentials.json"
+    },
+    {
+      "name": "obsConfigPath 路径正确",
+      "ok": true,
+      "actual": "C:\\Users\\Administrator\\.obsutilconfig",
+      "expected": "obsutilconfig"
+    },
+    {
+      "name": "isPlaceholder 识别占位",
+      "ok": false,
+      "actual": false,
+      "expected": true
+    },
+    {
+      "name": "isPlaceholder 不误判真实值",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    }
+  ],
+  "executedAt": "20261003051253",
+  "executedAtIso": "2026-10-02T21:12:53.342Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

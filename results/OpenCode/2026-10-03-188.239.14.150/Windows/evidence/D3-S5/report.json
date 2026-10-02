@@ -1,0 +1,49 @@
+{
+  "caseId": "D3-S5",
+  "title": "场景-复合意图分层路由",
+  "status": "PASS",
+  "why": "",
+  "assertionTotal": 4,
+  "assertionPassed": 4,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "命中数据库(GaussDB/DDS)",
+      "ok": true,
+      "actual": [
+        "OBS",
+        "RDS",
+        "GaussDB",
+        "Sandbox"
+      ],
+      "expected": "含数据库"
+    },
+    {
+      "name": "命中托管服务(OBS/Sandbox/ECS)",
+      "ok": true,
+      "actual": [
+        "OBS",
+        "RDS",
+        "GaussDB",
+        "Sandbox"
+      ],
+      "expected": "含托管"
+    },
+    {
+      "name": "分层推荐(预览→生产分流)",
+      "ok": true,
+      "actual": "分层",
+      "expected": "存在"
+    },
+    {
+      "name": "未盲选单一服务",
+      "ok": true,
+      "actual": 5,
+      "expected": ">=2"
+    }
+  ],
+  "executedAt": "20261003051342",
+  "executedAtIso": "2026-10-02T21:13:42.419Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

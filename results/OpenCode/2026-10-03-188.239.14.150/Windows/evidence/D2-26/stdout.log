@@ -1,0 +1,61 @@
+{
+  "caseId": "D2-26",
+  "title": "凭证备份与恢复闭环",
+  "status": "FAIL",
+  "why": "断言未通过: 恢复后凭证与备份一致(实际=\"{\\\"accessKeyId\\\":\\\"AKDESTROYED\\\",\\\"secretAccessKey\\\":\\\"SKDESTROYED\\\"}\" 期望=\"{\\n  \\\"ak\\\": \\\"HPUAN1ROQ4PQXQVBSYXD\\\",\\n  \\\"sk\\\": \\\"ExzAgLDfOfbaLm8pgyVCJKmtF4Nb5lLX6LnUFrfN\\\",\\n  \\\"securityToken\\\": \\\"\\\",\\n  \\\"region\\\": \\\"cn-north-4\\\",\\n  \\\"configuredBySession\\\": false\\n}\")",
+  "assertionTotal": 6,
+  "assertionPassed": 5,
+  "failed": [
+    {
+      "name": "恢复后凭证与备份一致",
+      "ok": false,
+      "actual": "{\"accessKeyId\":\"AKDESTROYED\",\"secretAccessKey\":\"SKDESTROYED\"}",
+      "expected": "{\n  \"ak\": \"HPUAN1ROQ4PQXQVBSYXD\",\n  \"sk\": \"ExzAgLDfOfbaLm8pgyVCJKmtF4Nb5lLX6LnUFrfN\",\n  \"securityToken\": \"\",\n  \"region\": \"cn-north-4\",\n  \"configuredBySession\": false\n}"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "backupGlobalCredentials 返回备份路径",
+      "ok": true,
+      "actual": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json.bak",
+      "expected": "string"
+    },
+    {
+      "name": "备份文件已落盘且非空",
+      "ok": true,
+      "actual": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json.bak",
+      "expected": "exists && >0"
+    },
+    {
+      "name": "备份写入独立文件(与主文件不同)",
+      "ok": true,
+      "actual": {
+        "bkPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json.bak",
+        "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-1586778385\\d2-26-kUWaLS\\credentials.json"
+      },
+      "expected": "不同"
+    },
+    {
+      "name": "主凭证已被破坏",
+      "ok": true,
+      "actual": "destroyed",
+      "expected": "destroyed"
+    },
+    {
+      "name": "恢复后凭证与备份一致",
+      "ok": false,
+      "actual": "{\"accessKeyId\":\"AKDESTROYED\",\"secretAccessKey\":\"SKDESTROYED\"}",
+      "expected": "{\n  \"ak\": \"HPUAN1ROQ4PQXQVBSYXD\",\n  \"sk\": \"ExzAgLDfOfbaLm8pgyVCJKmtF4Nb5lLX6LnUFrfN\",\n  \"securityToken\": \"\",\n  \"region\": \"cn-north-4\",\n  \"configuredBySession\": false\n}"
+    },
+    {
+      "name": "重复恢复幂等不报错",
+      "ok": true,
+      "actual": null,
+      "expected": true
+    }
+  ],
+  "executedAt": "20261003051259",
+  "executedAtIso": "2026-10-02T21:12:59.397Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

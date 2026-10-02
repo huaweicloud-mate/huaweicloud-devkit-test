@@ -1,0 +1,40 @@
+{
+  "caseId": "D4-26",
+  "title": "findings 证据脱敏",
+  "status": "FAIL",
+  "why": "断言未通过: evidence 不含明文 key(实际=\"key\" 期望=\"已脱敏\")",
+  "assertionTotal": 3,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "evidence 不含明文 key",
+      "ok": false,
+      "actual": "key",
+      "expected": "已脱敏"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "evidence 不含明文 adminPass",
+      "ok": true,
+      "actual": "[{\"ruleId\":\"hwc-command-secret-in-arg\",\"title\":\"Plaintext secret in command argument\",\"category\":\"secret\",\"severity\":\"warn\",\"message\":\"The command passes a plaintext password or secret as a direct CLI argument, which may leak into shell his",
+      "expected": "已脱敏"
+    },
+    {
+      "name": "evidence 不含明文 key",
+      "ok": false,
+      "actual": "key",
+      "expected": "已脱敏"
+    },
+    {
+      "name": "含 <redacted> 占位",
+      "ok": true,
+      "actual": "redacted",
+      "expected": "<redacted>"
+    }
+  ],
+  "executedAt": "20261003051344",
+  "executedAtIso": "2026-10-02T21:13:44.046Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

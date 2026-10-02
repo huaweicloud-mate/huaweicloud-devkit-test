@@ -1,0 +1,64 @@
+{
+  "caseId": "D1-68",
+  "title": "图标离线与区域环境变量",
+  "status": "FAIL",
+  "why": "断言未通过: 在线/离线两种模式结果一致(实际={\"off\":1031,\"on\":129} 期望=\"两者均有结果\"); 凭证解析含 HUAWEICLOUD_REGION 优先于 HW_REGION(实际=\"源码顺序\" 期望=\"HUAWEICLOUD_REGION 优先\")",
+  "assertionTotal": 5,
+  "assertionPassed": 3,
+  "failed": [
+    {
+      "name": "在线/离线两种模式结果一致",
+      "ok": false,
+      "actual": {
+        "off": 1031,
+        "on": 129
+      },
+      "expected": "两者均有结果"
+    },
+    {
+      "name": "凭证解析含 HUAWEICLOUD_REGION 优先于 HW_REGION",
+      "ok": false,
+      "actual": "源码顺序",
+      "expected": "HUAWEICLOUD_REGION 优先"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "ICONS_OFFLINE=1 仍能返回图标(本地 manifest)",
+      "ok": true,
+      "actual": 1,
+      "expected": ">0"
+    },
+    {
+      "name": "离线分支不依赖网络(有结果)",
+      "ok": true,
+      "actual": 1031,
+      "expected": "有结果"
+    },
+    {
+      "name": "在线/离线两种模式结果一致",
+      "ok": false,
+      "actual": {
+        "off": 1031,
+        "on": 129
+      },
+      "expected": "两者均有结果"
+    },
+    {
+      "name": "凭证解析含 HUAWEICLOUD_REGION 优先于 HW_REGION",
+      "ok": false,
+      "actual": "源码顺序",
+      "expected": "HUAWEICLOUD_REGION 优先"
+    },
+    {
+      "name": "isPlaceholder 可用",
+      "ok": true,
+      "actual": false,
+      "expected": "boolean"
+    }
+  ],
+  "executedAt": "20261003051340",
+  "executedAtIso": "2026-10-02T21:13:40.394Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

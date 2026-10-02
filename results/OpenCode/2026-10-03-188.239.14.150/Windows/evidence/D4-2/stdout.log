@@ -1,0 +1,64 @@
+{
+  "caseId": "D4-2",
+  "title": "凭证 env 打印拦截",
+  "status": "FAIL",
+  "why": "断言未通过: 被拦截: echo $HUAWEICLOUD_SDK_SK(实际=\"allow\" 期望=\"deny\"); 被拦截: set | findstr SECRET(实际=\"allow\" 期望=\"deny\"); 被拦截: env | grep -i token(实际=\"allow\" 期望=\"deny\")",
+  "assertionTotal": 5,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "被拦截: echo $HUAWEICLOUD_SDK_SK",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny"
+    },
+    {
+      "name": "被拦截: set | findstr SECRET",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny"
+    },
+    {
+      "name": "被拦截: env | grep -i token",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "被拦截: printenv HUAWEICLOUD_SDK_AK",
+      "ok": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "被拦截: echo $HUAWEICLOUD_SDK_SK",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny"
+    },
+    {
+      "name": "被拦截: printenv HW_ACCESS_KEY",
+      "ok": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "被拦截: set | findstr SECRET",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny"
+    },
+    {
+      "name": "被拦截: env | grep -i token",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny"
+    }
+  ],
+  "executedAt": "20261003051251",
+  "executedAtIso": "2026-10-02T21:12:51.074Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

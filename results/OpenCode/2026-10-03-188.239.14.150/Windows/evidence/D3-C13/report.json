@@ -1,0 +1,109 @@
+{
+  "caseId": "D3-C13",
+  "title": "OBS 静态网站托管配置(get/set/delete)",
+  "status": "FAIL",
+  "why": "断言未通过: 创建测试 bucket 成功(实际={\"code\":3,\"out\":\"Error: No such command: \\\"CreateBucket\\\", please try \\\"help\\\" for more information!\\n\"} 期望=\"成功\"); 未配置时 get 返回未配置(非崩溃)(实际=undefined 期望=false); set 配置成功(实际=undefined 期望=false); get 核对 indexDocument 一致(实际=\"{\\\"ok\\\":false,\\\"status\\\":403,\\\"body\\\":\\\"<?xml version=\\\\\\\"1.0\\\\\\\" encoding=\\\\\\\"UTF-8\\\\\\\" standalone=\\\\\\\"yes\\\\\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0FE76B65144CF3D9EC3C0\" 期望=\"index.html\"); get 核对 errorDocument 一致(实际=\"{\\\"ok\\\":false,\\\"status\\\":403,\\\"body\\\":\\\"<?xml version=\\\\\\\"1.0\\\\\\\" encoding=\\\\\\\"UTF-8\\\\\\\" standalone=\\\\\\\"yes\\\\\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0FE76B65144CF3D9EC3C0\" 期望=\"404.html\"); delete 配置成功(实际=undefined 期望=false); probe 执行未抛异常(实际=\"indexDocument is required for action=set\" 期望=\"不抛异常\")",
+  "assertionTotal": 8,
+  "assertionPassed": 1,
+  "failed": [
+    {
+      "name": "创建测试 bucket 成功",
+      "ok": false,
+      "actual": {
+        "code": 3,
+        "out": "Error: No such command: \"CreateBucket\", please try \"help\" for more information!\n"
+      },
+      "expected": "成功"
+    },
+    {
+      "name": "未配置时 get 返回未配置(非崩溃)",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "set 配置成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "get 核对 indexDocument 一致",
+      "ok": false,
+      "actual": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0FE76B65144CF3D9EC3C0",
+      "expected": "index.html"
+    },
+    {
+      "name": "get 核对 errorDocument 一致",
+      "ok": false,
+      "actual": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0FE76B65144CF3D9EC3C0",
+      "expected": "404.html"
+    },
+    {
+      "name": "delete 配置成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "probe 执行未抛异常",
+      "ok": false,
+      "actual": "indexDocument is required for action=set",
+      "expected": "不抛异常"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "创建测试 bucket 成功",
+      "ok": false,
+      "actual": {
+        "code": 3,
+        "out": "Error: No such command: \"CreateBucket\", please try \"help\" for more information!\n"
+      },
+      "expected": "成功"
+    },
+    {
+      "name": "未配置时 get 返回未配置(非崩溃)",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "set 配置成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "get 核对 indexDocument 一致",
+      "ok": false,
+      "actual": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0FE76B65144CF3D9EC3C0",
+      "expected": "index.html"
+    },
+    {
+      "name": "get 核对 errorDocument 一致",
+      "ok": false,
+      "actual": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A0FE76B65144CF3D9EC3C0",
+      "expected": "404.html"
+    },
+    {
+      "name": "delete 配置成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "资源已归零(bucket 删除)",
+      "ok": true,
+      "actual": {
+        "code": 3,
+        "out": "Error: No such command: \"HeadBucket\", please try \"help\" for more information!\n"
+      },
+      "expected": "不存在"
+    },
+    {
+      "name": "probe 执行未抛异常",
+      "ok": false,
+      "actual": "indexDocument is required for action=set",
+      "expected": "不抛异常"
+    }
+  ],
+  "executedAt": "20261003051308",
+  "executedAtIso": "2026-10-02T21:13:08.400Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,88 @@
+{
+  "caseId": "D4-9",
+  "title": "公开暴露/破坏性预检拦截",
+  "status": "FAIL",
+  "why": "断言未通过: OBS 公共读桶 被拦截/告警(实际=\"allow\" 期望=\"deny|warn\"); OBS 公共读桶 给出 findings(实际=0 期望=\">0\"); 全量删除资源 被拦截/告警(实际=\"allow\" 期望=\"deny|warn\"); 全量删除资源 给出 findings(实际=0 期望=\">0\")",
+  "assertionTotal": 8,
+  "assertionPassed": 4,
+  "failed": [
+    {
+      "name": "OBS 公共读桶 被拦截/告警",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "OBS 公共读桶 给出 findings",
+      "ok": false,
+      "actual": 0,
+      "expected": ">0"
+    },
+    {
+      "name": "全量删除资源 被拦截/告警",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "全量删除资源 给出 findings",
+      "ok": false,
+      "actual": 0,
+      "expected": ">0"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "公网暴露 FunctionGraph 被拦截/告警",
+      "ok": true,
+      "actual": "warn",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "公网暴露 FunctionGraph 给出 findings",
+      "ok": true,
+      "actual": 2,
+      "expected": ">0"
+    },
+    {
+      "name": "OBS 公共读桶 被拦截/告警",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "OBS 公共读桶 给出 findings",
+      "ok": false,
+      "actual": 0,
+      "expected": ">0"
+    },
+    {
+      "name": "ECS 0.0.0.0/0 安全组 被拦截/告警",
+      "ok": true,
+      "actual": "warn",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "ECS 0.0.0.0/0 安全组 给出 findings",
+      "ok": true,
+      "actual": 1,
+      "expected": ">0"
+    },
+    {
+      "name": "全量删除资源 被拦截/告警",
+      "ok": false,
+      "actual": "allow",
+      "expected": "deny|warn"
+    },
+    {
+      "name": "全量删除资源 给出 findings",
+      "ok": false,
+      "actual": 0,
+      "expected": ">0"
+    }
+  ],
+  "executedAt": "20261003051251",
+  "executedAtIso": "2026-10-02T21:12:51.473Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,98 @@
+{
+  "caseId": "D2-10",
+  "title": "R7 current 档跟随",
+  "status": "PASS",
+  "why": "",
+  "assertionTotal": 13,
+  "assertionPassed": 13,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "夹具配置可解析(无 error)",
+      "ok": true,
+      "actual": "ok",
+      "expected": "无 error"
+    },
+    {
+      "name": "①current=deploy 被解析",
+      "ok": true,
+      "actual": "deploy",
+      "expected": "deploy"
+    },
+    {
+      "name": "①resolveManagedProfile 返回 current 档",
+      "ok": true,
+      "actual": "deploy",
+      "expected": "deploy"
+    },
+    {
+      "name": "①profile 列表长度=2",
+      "ok": true,
+      "actual": 2,
+      "expected": 2
+    },
+    {
+      "name": "①profile 名称含 deploy/default",
+      "ok": true,
+      "actual": [
+        "deploy",
+        "default"
+      ],
+      "expected": "deploy,default"
+    },
+    {
+      "name": "③切换后 current=default 被解析",
+      "ok": true,
+      "actual": "default",
+      "expected": "default"
+    },
+    {
+      "name": "③resolveManagedProfile 跟随切换",
+      "ok": true,
+      "actual": "default",
+      "expected": "default"
+    },
+    {
+      "name": "③再次切回 deploy 跟随",
+      "ok": true,
+      "actual": "deploy",
+      "expected": "deploy"
+    },
+    {
+      "name": "④runHcloudConfigure 实参含 `--cli-profile=${profile}`",
+      "ok": true,
+      "actual": "未找到 --cli-profile=${profile}",
+      "expected": "`--cli-profile=${profile}`"
+    },
+    {
+      "name": "④cli-access-key/secret-key/region 实参齐备",
+      "ok": true,
+      "actual": [],
+      "expected": "三个实参齐备"
+    },
+    {
+      "name": "④tools.mjs 调用 KooCLI 时跟随 managed profile(--cli-profile)",
+      "ok": true,
+      "actual": "tools.mjs 未见 --cli-profile + resolveManagedProfile",
+      "expected": "两者并存"
+    },
+    {
+      "name": "④runHcloudConfigure 返回结构含 ok 布尔",
+      "ok": true,
+      "actual": {
+        "ok": true
+      },
+      "expected": "boolean"
+    },
+    {
+      "name": "④runHcloudConfigure 不泄露 SK 明文",
+      "ok": true,
+      "actual": "{\"ok\":true,\"error\":\"\"}",
+      "expected": "已脱敏"
+    }
+  ],
+  "executedAt": "20261003051257",
+  "executedAtIso": "2026-10-02T21:12:57.276Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

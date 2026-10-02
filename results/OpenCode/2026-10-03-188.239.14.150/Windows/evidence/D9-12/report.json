@@ -1,0 +1,102 @@
+{
+  "caseId": "D9-12",
+  "title": "initialize 握手协议安全基线",
+  "status": "FAIL",
+  "why": "断言未通过: 非法时序返回 -32600(实际=\"-32600\" 期望=\"存在\"); 非法时序(未 initialize)被拒(实际={\"code\":null,\"hasResult\":true} 期望=\"无 result\")",
+  "assertionTotal": 11,
+  "assertionPassed": 9,
+  "failed": [
+    {
+      "name": "非法时序返回 -32600",
+      "ok": false,
+      "actual": "-32600",
+      "expected": "存在"
+    },
+    {
+      "name": "非法时序(未 initialize)被拒",
+      "ok": false,
+      "actual": {
+        "code": null,
+        "hasResult": true
+      },
+      "expected": "无 result"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "mcp-protocol 导出 callTool 路由",
+      "ok": true,
+      "actual": "callTool",
+      "expected": "存在"
+    },
+    {
+      "name": "_decorateResult 包装响应",
+      "ok": true,
+      "actual": "_decorateResult",
+      "expected": "存在"
+    },
+    {
+      "name": "_resetHintConsumption 消费提示标记",
+      "ok": true,
+      "actual": "_resetHintConsumption",
+      "expected": "存在"
+    },
+    {
+      "name": "_isHintConsumed 标记检查",
+      "ok": true,
+      "actual": "_isHintConsumed",
+      "expected": "存在"
+    },
+    {
+      "name": "listSkillDirs/findSkillsRoot 存在",
+      "ok": true,
+      "actual": "skills root",
+      "expected": "存在"
+    },
+    {
+      "name": "非法时序返回 -32600",
+      "ok": false,
+      "actual": "-32600",
+      "expected": "存在"
+    },
+    {
+      "name": "模块可加载(无副作用崩溃)",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "name": "initialize 返回 protocolVersion",
+      "ok": true,
+      "actual": "2024-11-05",
+      "expected": "2024-11-05"
+    },
+    {
+      "name": "initialize 返回 serverInfo.name",
+      "ok": true,
+      "actual": "huaweicloud-devkit",
+      "expected": "huaweicloud-devkit"
+    },
+    {
+      "name": "initialize 返回 capabilities 对象",
+      "ok": true,
+      "actual": {
+        "tools": {}
+      },
+      "expected": "object"
+    },
+    {
+      "name": "非法时序(未 initialize)被拒",
+      "ok": false,
+      "actual": {
+        "code": null,
+        "hasResult": true
+      },
+      "expected": "无 result"
+    }
+  ],
+  "executedAt": "20261003051253",
+  "executedAtIso": "2026-10-02T21:12:53.142Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

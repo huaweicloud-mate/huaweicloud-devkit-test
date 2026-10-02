@@ -1,0 +1,45 @@
+{
+  "caseId": "D2-12",
+  "title": "R10 runtime 非空禁止落盘",
+  "status": "PASS",
+  "why": "",
+  "assertionTotal": 5,
+  "assertionPassed": 5,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "runtime 凭证已激活",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "auth_status 反映 runtime 激活",
+      "ok": true,
+      "actual": "temporary-sts",
+      "expected": "runtime"
+    },
+    {
+      "name": "sync 不把 runtime 写入 S1",
+      "ok": true,
+      "actual": "S1 unchanged",
+      "expected": "unchanged"
+    },
+    {
+      "name": "sync 标注 suppressed/ok:false 或明确未落盘",
+      "ok": true,
+      "actual": "{\"ok\":false,\"error\":\"Runtime credentials are active; auto-sync suppressed (R10).\",\"nextStep\":\"Run huaweicloud_auth_switch action=clear or action=persist first.\"}",
+      "expected": "suppressed 或 S1 未变"
+    },
+    {
+      "name": "clearRuntimeCredentials 后 runtime 清空",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    }
+  ],
+  "executedAt": "20261003051257",
+  "executedAtIso": "2026-10-02T21:12:57.538Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

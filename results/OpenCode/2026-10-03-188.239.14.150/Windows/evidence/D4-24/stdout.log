@@ -1,0 +1,122 @@
+{
+  "caseId": "D4-24",
+  "title": "确认令牌过期与重复确认边界",
+  "status": "FAIL",
+  "why": "断言未通过: 重复消费被拒(防重放)(实际=null 期望=\"invalid\"); 重复消费语义可机器断言(实际=null 期望=\"already_processed/reason\"); 令牌带 TTL/过期时间(实际={\"state\":\"valid\",\"entry\":{\"argsHash\":\"82fe4d82e72aca67ce4d936dea4f26ddb2d2142ac10d0cf3677e259407996c98\",\"argsRedacted\":[\"ECS\",\"CreateServers\"],\"createdAt\":1790975593702}} 期望=\"含 expiresAt/ttl\")",
+  "assertionTotal": 8,
+  "assertionPassed": 5,
+  "failed": [
+    {
+      "name": "重复消费被拒(防重放)",
+      "ok": false,
+      "actual": null,
+      "expected": "invalid"
+    },
+    {
+      "name": "重复消费语义可机器断言",
+      "ok": false,
+      "actual": null,
+      "expected": "already_processed/reason"
+    },
+    {
+      "name": "令牌带 TTL/过期时间",
+      "ok": false,
+      "actual": {
+        "state": "valid",
+        "entry": {
+          "argsHash": "82fe4d82e72aca67ce4d936dea4f26ddb2d2142ac10d0cf3677e259407996c98",
+          "argsRedacted": [
+            "ECS",
+            "CreateServers"
+          ],
+          "createdAt": 1790975593702
+        }
+      },
+      "expected": "含 expiresAt/ttl"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "创建确认令牌成功",
+      "ok": true,
+      "actual": "string",
+      "expected": "string"
+    },
+    {
+      "name": "令牌可检视",
+      "ok": true,
+      "actual": {
+        "state": "valid",
+        "entry": {
+          "argsHash": "82fe4d82e72aca67ce4d936dea4f26ddb2d2142ac10d0cf3677e259407996c98",
+          "argsRedacted": [
+            "ECS",
+            "CreateServers"
+          ],
+          "createdAt": 1790975593686
+        }
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "首次消费成功",
+      "ok": true,
+      "actual": {
+        "argsHash": "82fe4d82e72aca67ce4d936dea4f26ddb2d2142ac10d0cf3677e259407996c98",
+        "argsRedacted": [
+          "ECS",
+          "CreateServers"
+        ],
+        "createdAt": 1790975593686
+      },
+      "expected": "valid"
+    },
+    {
+      "name": "重复消费被拒(防重放)",
+      "ok": false,
+      "actual": null,
+      "expected": "invalid"
+    },
+    {
+      "name": "重复消费语义可机器断言",
+      "ok": false,
+      "actual": null,
+      "expected": "already_processed/reason"
+    },
+    {
+      "name": "hashArgs 同参数稳定",
+      "ok": true,
+      "actual": "82fe4d82e72aca67ce4d936dea4f26ddb2d2142ac10d0cf3677e259407996c98",
+      "expected": "82fe4d82e72aca67ce4d936dea4f26ddb2d2142ac10d0cf3677e259407996c98"
+    },
+    {
+      "name": "hashArgs 不同参数不同",
+      "ok": true,
+      "actual": {
+        "h1": "82fe4d82e72aca67ce4d936dea4f26ddb2d2142ac10d0cf3677e259407996c98",
+        "h3": "034946c2e7513ff08960c2514fe8fbe1de152de3cca6765ed92f3b617ca680b4"
+      },
+      "expected": "不同"
+    },
+    {
+      "name": "令牌带 TTL/过期时间",
+      "ok": false,
+      "actual": {
+        "state": "valid",
+        "entry": {
+          "argsHash": "82fe4d82e72aca67ce4d936dea4f26ddb2d2142ac10d0cf3677e259407996c98",
+          "argsRedacted": [
+            "ECS",
+            "CreateServers"
+          ],
+          "createdAt": 1790975593702
+        }
+      },
+      "expected": "含 expiresAt/ttl"
+    }
+  ],
+  "executedAt": "20261003051313",
+  "executedAtIso": "2026-10-02T21:13:13.724Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

@@ -1,0 +1,48 @@
+{
+  "caseId": "D3-S6",
+  "title": "场景-FunctionGraph 定时任务",
+  "status": "FAIL",
+  "why": "断言未通过: CreateFunction 生成审批计划(实际=undefined 期望=\"需审批\"); 函数创建成功(实际=undefined 期望=false)",
+  "assertionTotal": 4,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "CreateFunction 生成审批计划",
+      "ok": false,
+      "expected": "需审批"
+    },
+    {
+      "name": "函数创建成功",
+      "ok": false,
+      "expected": false
+    }
+  ],
+  "assertions": [
+    {
+      "name": "路由命中 FunctionGraph",
+      "ok": true,
+      "actual": "functiongraph",
+      "expected": "含 functiongraph"
+    },
+    {
+      "name": "CreateFunction 生成审批计划",
+      "ok": false,
+      "expected": "需审批"
+    },
+    {
+      "name": "函数创建成功",
+      "ok": false,
+      "expected": false
+    },
+    {
+      "name": "资源归零(函数已释放)",
+      "ok": true,
+      "actual": false,
+      "expected": false
+    }
+  ],
+  "executedAt": "20261003051343",
+  "executedAtIso": "2026-10-02T21:13:43.062Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

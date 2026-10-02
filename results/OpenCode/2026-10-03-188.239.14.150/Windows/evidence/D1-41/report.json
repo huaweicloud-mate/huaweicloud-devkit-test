@@ -1,0 +1,142 @@
+{
+  "caseId": "D1-41",
+  "title": "check_update 真实 MCP 返回契约",
+  "status": "FAIL",
+  "why": "四态中的 check_failed 被实际命中：因 D1-39 的 dist-tags 解析缺陷，最新稳定版/next 均无法取得，latestStable/latestNext/targetVersion 全为 null。",
+  "assertionTotal": 10,
+  "assertionPassed": 9,
+  "failed": [
+    {
+      "name": "tools/call isError=false",
+      "ok": false,
+      "actual": {},
+      "expected": false
+    }
+  ],
+  "assertions": [
+    {
+      "name": "tools/call isError=false",
+      "ok": false,
+      "actual": {},
+      "expected": false
+    },
+    {
+      "name": "content 可解析为 JSON",
+      "ok": true,
+      "expected": false
+    },
+    {
+      "name": "字段 currentVersion 存在",
+      "ok": true,
+      "actual": [
+        "currentVersion",
+        "latestStable",
+        "latestNext",
+        "targetVersion",
+        "updateAvailable",
+        "dismissed",
+        "dismissExpiresAt",
+        "result",
+        "note"
+      ],
+      "expected": "含 currentVersion"
+    },
+    {
+      "name": "字段 latestStable 存在",
+      "ok": true,
+      "actual": [
+        "currentVersion",
+        "latestStable",
+        "latestNext",
+        "targetVersion",
+        "updateAvailable",
+        "dismissed",
+        "dismissExpiresAt",
+        "result",
+        "note"
+      ],
+      "expected": "含 latestStable"
+    },
+    {
+      "name": "字段 updateAvailable 存在",
+      "ok": true,
+      "actual": [
+        "currentVersion",
+        "latestStable",
+        "latestNext",
+        "targetVersion",
+        "updateAvailable",
+        "dismissed",
+        "dismissExpiresAt",
+        "result",
+        "note"
+      ],
+      "expected": "含 updateAvailable"
+    },
+    {
+      "name": "字段 dismissed 存在",
+      "ok": true,
+      "actual": [
+        "currentVersion",
+        "latestStable",
+        "latestNext",
+        "targetVersion",
+        "updateAvailable",
+        "dismissed",
+        "dismissExpiresAt",
+        "result",
+        "note"
+      ],
+      "expected": "含 dismissed"
+    },
+    {
+      "name": "字段 dismissExpiresAt 存在",
+      "ok": true,
+      "actual": [
+        "currentVersion",
+        "latestStable",
+        "latestNext",
+        "targetVersion",
+        "updateAvailable",
+        "dismissed",
+        "dismissExpiresAt",
+        "result",
+        "note"
+      ],
+      "expected": "含 dismissExpiresAt"
+    },
+    {
+      "name": "字段 result 存在",
+      "ok": true,
+      "actual": [
+        "currentVersion",
+        "latestStable",
+        "latestNext",
+        "targetVersion",
+        "updateAvailable",
+        "dismissed",
+        "dismissExpiresAt",
+        "result",
+        "note"
+      ],
+      "expected": "含 result"
+    },
+    {
+      "name": "result 属四态之一",
+      "ok": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "失败态不抛协议错误（返回 check_failed）",
+      "ok": true,
+      "actual": "check_failed",
+      "expected": "不抛协议错误"
+    }
+  ],
+  "executedAt": "20261003051254",
+  "executedAtIso": "2026-10-02T21:12:54.775Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64",
+  "note": "四态中的 check_failed 被实际命中：因 D1-39 的 dist-tags 解析缺陷，最新稳定版/next 均无法取得，latestStable/latestNext/targetVersion 全为 null。"
+}

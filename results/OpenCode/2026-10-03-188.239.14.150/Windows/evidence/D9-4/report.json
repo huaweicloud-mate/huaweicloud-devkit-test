@@ -1,0 +1,58 @@
+{
+  "caseId": "D9-4",
+  "title": "协议生命周期(强制时序)",
+  "status": "FAIL",
+  "why": "断言未通过: 未 initialize 直接 tools/list 被拒(不返回工具)(实际=true 期望=false); 非法时序返回 JSON-RPC 错误对象(实际=\"NO_ERROR\" 期望=\"error code\")",
+  "assertionTotal": 5,
+  "assertionPassed": 3,
+  "failed": [
+    {
+      "name": "未 initialize 直接 tools/list 被拒(不返回工具)",
+      "ok": false,
+      "actual": true,
+      "expected": false
+    },
+    {
+      "name": "非法时序返回 JSON-RPC 错误对象",
+      "ok": false,
+      "actual": "NO_ERROR",
+      "expected": "error code"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "未 initialize 直接 tools/list 被拒(不返回工具)",
+      "ok": false,
+      "actual": true,
+      "expected": false
+    },
+    {
+      "name": "非法时序返回 JSON-RPC 错误对象",
+      "ok": false,
+      "actual": "NO_ERROR",
+      "expected": "error code"
+    },
+    {
+      "name": "initialize 返回 protocolVersion",
+      "ok": true,
+      "actual": "2024-11-05",
+      "expected": "2024-11-05"
+    },
+    {
+      "name": "initialize 返回 serverInfo.name",
+      "ok": true,
+      "actual": "huaweicloud-devkit",
+      "expected": "huaweicloud-devkit"
+    },
+    {
+      "name": "initialize 后 tools/list 正常",
+      "ok": true,
+      "actual": 41,
+      "expected": ">0"
+    }
+  ],
+  "executedAt": "20261003051318",
+  "executedAtIso": "2026-10-02T21:13:18.760Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

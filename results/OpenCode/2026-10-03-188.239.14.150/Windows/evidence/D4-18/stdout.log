@@ -1,0 +1,51 @@
+{
+  "caseId": "D4-18",
+  "title": "confirm-not-deny 审批语义",
+  "status": "FAIL",
+  "why": "断言未通过: plan 不直接拒绝(需用户确认)(实际={} 期望=\"需确认\"); 返回 nextStep 指引(实际=\"\" 期望=\">0\")",
+  "assertionTotal": 4,
+  "assertionPassed": 2,
+  "failed": [
+    {
+      "name": "plan 不直接拒绝(需用户确认)",
+      "ok": false,
+      "actual": {},
+      "expected": "需确认"
+    },
+    {
+      "name": "返回 nextStep 指引",
+      "ok": false,
+      "actual": "",
+      "expected": ">0"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "plan 不直接放行(非 allow)",
+      "ok": true,
+      "expected": "非 allow"
+    },
+    {
+      "name": "plan 不直接拒绝(需用户确认)",
+      "ok": false,
+      "actual": {},
+      "expected": "需确认"
+    },
+    {
+      "name": "返回确认令牌",
+      "ok": true,
+      "actual": "string",
+      "expected": "string"
+    },
+    {
+      "name": "返回 nextStep 指引",
+      "ok": false,
+      "actual": "",
+      "expected": ">0"
+    }
+  ],
+  "executedAt": "20261003051250",
+  "executedAtIso": "2026-10-02T21:12:50.727Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

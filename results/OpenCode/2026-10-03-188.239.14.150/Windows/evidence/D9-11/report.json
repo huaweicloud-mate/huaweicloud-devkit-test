@@ -1,0 +1,62 @@
+{
+  "caseId": "D9-11",
+  "title": "WebSocket 隧道通道生命周期",
+  "status": "FAIL",
+  "why": "断言未通过: attach 注册到 mux(实际=\"attach\" 期望=\"PASS\"); ready Promise 在 open 时 resolve(实际=\"ready\" 期望=\"PASS\"); close 后 localServer 关闭且 subConnections 清空(实际=\"cleanup\" 期望=\"PASS\")",
+  "assertionTotal": 4,
+  "assertionPassed": 1,
+  "failed": [
+    {
+      "name": "attach 注册到 mux",
+      "ok": false,
+      "actual": "attach",
+      "expected": "PASS"
+    },
+    {
+      "name": "ready Promise 在 open 时 resolve",
+      "ok": false,
+      "actual": "ready",
+      "expected": "PASS"
+    },
+    {
+      "name": "close 后 localServer 关闭且 subConnections 清空",
+      "ok": false,
+      "actual": "cleanup",
+      "expected": "PASS"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "attach 注册到 mux",
+      "ok": false,
+      "actual": "attach",
+      "expected": "PASS"
+    },
+    {
+      "name": "ready Promise 在 open 时 resolve",
+      "ok": false,
+      "actual": "ready",
+      "expected": "PASS"
+    },
+    {
+      "name": "close 后 localServer 关闭且 subConnections 清空",
+      "ok": false,
+      "actual": "cleanup",
+      "expected": "PASS"
+    },
+    {
+      "name": "夹具全部断言通过 (8/8)",
+      "ok": true,
+      "actual": {
+        "pass": 8,
+        "fail": 0,
+        "tail": "alls\":1} (期望 {\"onCloseCalls\":1})\nPASS  D9-11-close-idempotent  重复 close 幂等（onClose 仅触发 1 次） => {\"onCloseCalls\":1} (期望 {\"onCloseCalls\":1})\n\n=== D9-11 WebSocket 隧道通道生命周期 ===  pass=8 fail=0\nRESULT: PASS\n"
+      },
+      "expected": "fail=0"
+    }
+  ],
+  "executedAt": "20261003051337",
+  "executedAtIso": "2026-10-02T21:13:37.162Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}

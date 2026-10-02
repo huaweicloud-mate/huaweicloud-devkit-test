@@ -1,0 +1,33 @@
+{
+  "caseId": "D4-7",
+  "title": "hook 三工具有效性(高危输入均被拦截)",
+  "status": "PASS",
+  "why": "",
+  "assertionTotal": 3,
+  "assertionPassed": 3,
+  "failed": [],
+  "assertions": [
+    {
+      "name": "hook_check_command 拦截凭证读取",
+      "ok": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "hook_check_artifacts 拦截宽权限 IAM 策略",
+      "ok": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "hook_check_deploy_plan 对公网无鉴权告警/拦截",
+      "ok": true,
+      "actual": "warn",
+      "expected": "warn|deny"
+    }
+  ],
+  "executedAt": "20261003051314",
+  "executedAtIso": "2026-10-02T21:13:14.039Z",
+  "node": "v22.22.2",
+  "platform": "win32-x64"
+}
