@@ -1,0 +1,8 @@
+{
+  "case": "D4-12",
+  "status": "PASS",
+  "why": "fixture d4-12-supply-chain.mjs executed in this run",
+  "executedAt": "20261003050646",
+  "source": "eval\\harness\\fixtures\\d4-12-supply-chain.mjs",
+  "excerpt": "PASS\tD4-12-postinstall-self\tpostinstall 指向自有 bin（非远程脚本）\tactual=\"node ./bin/dsh-postinstall.cjs\"\texpected=\"node ./bin/*\"\tscript=node ./bin/dsh-postinstall.cjs\nPASS\tD4-12-install-omit-dev\tnpm install --omit=dev（不拉 dev 依赖）\tactual=true\texpected=true\targs snippet=spawnSync('npm', ['install', '--omit=dev', '--no-audit', '--no-fund']\nPASS\tD4-12-install-no-audit\tnpm install --no-audit（不外传审计）\tactual=true\texpected=true\nPASS\tD4-12-install-no-fund\tnpm install --no-fund（不拉资助信息）\tactual=true\texpected=true\nPASS\tD4-12-no-known-cve-deps\t依赖无已知高危包（vm2/eval）\tactual=[]\texpected=[]\tdeps=1个: undici...\nPASS\tD4-12-sbom-all-versioned\tSBOM: 全部依赖版本固定\tactual=true\texpected=true\tdeps=1 allVersioned=true\nPASS\tD4-12-sbom-enumerable\tSBOM: 依赖可枚举（≥1 条）\tactual=1\texpected=\"≥1\"\nPASS\tD4-12-no-preinstall\t无 preinstall 脚本（供应链攻击高发点）\tactual=false\texpected=false\tnone\nPASS\tD4-12-bin-safe-extensions\tbin 入口均为 .cjs/.js/.mjs\tactual=[\"./bin/setup.cjs\",\"./plugins/huaweicloud-core/src/mcp-server.mjs\"]\texpected=\"all .cjs/.js/.mjs\"\tbins=[\"./bin/setup.cjs\",\"./plugins/huaweicloud-core/src/mcp-server.mjs\"]\n\n=== D4-12 供应链安装期安全夹具 ===  pass=9 fail=0\nRESULT: PASS"
+}

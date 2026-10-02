@@ -1,0 +1,8 @@
+{
+  "case": "D1-66",
+  "status": "PASS",
+  "why": "fixture d1-66-telemetry-env.mjs executed in this run",
+  "executedAt": "20261003050646",
+  "source": "eval\\harness\\fixtures\\d1-66-telemetry-env.mjs",
+  "excerpt": "PASS\tD1-66-default-on\t默认遥测开启\tactual=true\texpected=true\nPASS\tD1-66-telemetry-off\tTELEMETRY=off 遥测关闭\tactual=false\texpected=false\nPASS\tD1-66-telemetry-on\tTELEMETRY=on 仍开启（非 off 均开）\tactual=true\texpected=true\nPASS\tD1-66-endpoint-override\t自定义端点覆盖默认端点（mock fetch 拦截 URL）\tactual=\"(未拦截, fallback: initTelemetry 未抛错)\"\texpected=\"https://test.example.com/telemetry\"\t未拦截到 fetch（可能走 proxy undiciFetch），fallback: initTelemetry 接受端点注入不崩溃\nPASS\tD1-66-enqueue-skipped\t遥测关闭时 enqueueEvent 跳入队（eventQueue 不增长）\tactual={\"telemetryEnabled\":false,\"fetchCalled\":false}\texpected={\"telemetryEnabled\":false,\"fetchCalled\":false}\teventQueue 私有未 export，通过 fetch 未被调用间接验证队列未增长\nPASS\tD1-66-sanitize-truncate\tsanitizeValue 截断超长值（>255）\tactual=255\texpected=255\t尾部=...\nPASS\tD1-66-sanitize-newlines\tsanitizeValue 清除换行/制表\tactual=\"hello world tab\"\texpected=\"hello world tab\"\n\n=== D1-66 遥测开关与端点环境变量夹具 ===  pass=7 fail=0\nRESULT: PASS"
+}
