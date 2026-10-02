@@ -1,0 +1,12 @@
+=== D4-25 Python hook 事件遥测分类 ===
+'hcloud ecs ListServersDetails --limit 10'    期望=cli:read   实际=cli:read     PASS
+'hcloud ecs DeleteServer --id i-123'          期望=cli:write  实际=cli:invoke   FAIL<<<
+'hcloud configure show'                       期望=cli:invoke 实际=cli:read     FAIL<<<
+'hcloud ecs CreateServer --flavor s6.small.1' 期望=cli:write  实际=cli:invoke   FAIL<<<
+
+源码: hooks/huaweicloud-safety.py record_cli_event():
+  READ_OPERATION_RE = \b(List|Show|Get|Describe|NovaList|NovaShow)\w*
+  WRITE_OPERATION_RE = (^|[A-Za-z0-9])(Create|Delete|Update|...)\w*  (要求写前缀前有字母/数字/行首)
+
+结论: 写操作删除类若落 cli:invoke 即 FAIL (发现 2 条写操作误分类)
+RESULT: FAIL
