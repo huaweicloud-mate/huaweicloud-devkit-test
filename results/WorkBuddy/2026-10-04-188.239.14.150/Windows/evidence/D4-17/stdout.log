@@ -1,0 +1,75 @@
+{
+  "caseId": "D4-17",
+  "status": "PASS",
+  "why": "Fail-closed: empty input → deny, hcloud-only (no args) → deny; other non-huaweicloud inputs → allow (correct)",
+  "results": [
+    {
+      "input": "",
+      "decision": "deny",
+      "risk": "invalid",
+      "reason": "command must be a non-empty string.",
+      "blockedByRiskRule": true,
+      "findings": [
+        {
+          "ruleId": "invalid-input",
+          "title": "Invalid input for risk check",
+          "category": "invalid",
+          "severity": "deny",
+          "message": "command must be a non-empty string.",
+          "remediation": "Provide a valid, non-empty input before re-running the check.",
+          "source": "command",
+          "evidence": ""
+        }
+      ]
+    },
+    {
+      "input": "   ",
+      "decision": "deny",
+      "risk": "invalid",
+      "reason": "command must be a non-empty string.",
+      "blockedByRiskRule": true,
+      "findings": [
+        {
+          "ruleId": "invalid-input",
+          "title": "Invalid input for risk check",
+          "category": "invalid",
+          "severity": "deny",
+          "message": "command must be a non-empty string.",
+          "remediation": "Provide a valid, non-empty input before re-running the check.",
+          "source": "command",
+          "evidence": ""
+        }
+      ]
+    },
+    {
+      "input": "\u0000\u0001",
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "reason": "No Huawei Cloud safety rule matched."
+    },
+    {
+      "input": "hcloud",
+      "decision": "deny",
+      "risk": "invalid",
+      "reason": "Empty hcloud command arguments are not executable."
+    },
+    {
+      "input": "hcloud --",
+      "decision": "allow",
+      "risk": "unknown_read",
+      "reason": "Command does not match a known write or secret operation; treat output as untrusted and redact it.",
+      "service": "",
+      "operation": "",
+      "args": [
+        "--"
+      ]
+    },
+    {
+      "input": "{\"weird\":\"object\"}",
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "reason": "No Huawei Cloud safety rule matched."
+    }
+  ],
+  "executedAt": "20261003210444"
+}

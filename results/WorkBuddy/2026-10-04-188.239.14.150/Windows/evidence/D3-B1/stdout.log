@@ -1,0 +1,54 @@
+{
+  "caseId": "D3-B1",
+  "status": "PASS",
+  "why": "list_operations returns operations for ECS service",
+  "result": {
+    "service": "ECS",
+    "command": "hcloud ECS --help",
+    "selectionRule": "Use this help text to select the exact KooCLI operation name before planning any service command. After selecting an operation, run \"hcloud <Service> <Operation> --help\" to confirm exact parameter names before constructing the command.",
+    "identityNotes": null,
+    "examples": {
+      "list": "ECS ListServersDetails",
+      "create": "ECS CreateServers",
+      "show": "IMS GlanceShowImage"
+    },
+    "result": {
+      "ok": true,
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "\nKooCLI Version 7.2.12 Copyright(C) 2020-2026 www.huaweicloud.com\n\nUsage:\n  hcloud ECS <operation> --param1=value1 --param2=value2 ...\n\nService:\n  ECS\n\nAvailable Operations:\n  AcceptScheduledEvent\n  AddServerGroupMember\n  AssociateServerVirtualIp\n  AttachServerVolume\n  BatchAddServerGroupMember\n  BatchAddServerNics\n  BatchAttachSharableVolumes\n  BatchCreateServerTags\n  BatchDeleteServerGroupMember\n  BatchDeleteServerNics\n  BatchDeleteServerTags\n  BatchDetachVolumes\n  BatchRebootServers\n  BatchResetServersPassword\n  BatchResizeServers\n  BatchStartServers\n  BatchStopServers\n  BatchUpdateServersName\n  ChangeServerChargeMode\n  ChangeServerNetworkInterface\n  ChangeServerOsWithCloudInit\n  ChangeServerOsWithoutCloudInit\n  ChangeVpc\n  CreateLaunchTemplate\n  CreatePostPaidServers\n  CreateServerGroup\n  CreateServers\n  DeleteLaunchTemplates\n  DeleteRecycleBinServer\n  DeleteServerGroup\n  DeleteServerGroupMember\n  DeleteServerMetadata\n  DeleteServerPassword\n  DeleteServers\n  DetachServerVolume\n  DisassociateServerVirtualIp\n  ExecuteServerDump\n  ExecuteServerRedeploy\n  ListCloudServers\n  ListFlavorSellPolicies\n  ListFlavors\n  ListLaunchTemplateVersions\n  ListRecycleBinServers\n  ListResizeFlavors\n  ListScheduledEvents\n  ListServerAzInfo\n  ListServerBlockDevices\n  ListServerGroups\n  ListServerInterfaces\n  ListServerTags\n  ListServerVolumeAttachments\n  ListServersDetails\n  ListTemplates\n  MigrateServer\n  NovaAssociateSecurityGroup\n  NovaAttachInterface\n  NovaAttachVolume\n  NovaCreateKeypair\n  NovaCreateServerGroup\n  NovaCreateServerMetadata\n  NovaCreateServers\n  NovaDeleteKeypair\n  NovaDeleteServer\n  NovaDeleteServerGroup\n  NovaDeleteServerMetadataItem\n  NovaDetachInterface\n  NovaDetachVolume\n  NovaDisassociateSecurityGroup\n  NovaListAvailabilityZones\n  NovaListFlavors\n  NovaListFlavorsDetails\n  NovaListKeypairs\n  NovaListServerActions\n  NovaListServerGroups\n  NovaListServerInterfaces\n  NovaListServerSecurityGroups\n  NovaListServerVolumes\n  NovaListServers\n  NovaListServersDetails\n  NovaListVersions\n  NovaLockServer\n  NovaRebootServer\n  NovaShowFlavor\n  NovaShowFlavorExtraSpecs\n  NovaShowKeypair\n  NovaShowServer\n  NovaShowServerAction\n  NovaShowServerGroup\n  NovaShowServerInterface\n  NovaShowServerMetadata\n  NovaShowServerMetadataItem\n  NovaShowServerVolume\n  NovaShowVersion\n  NovaStartServer\n  NovaStopServer\n  NovaUnlockServer\n  NovaUpdateServer\n  NovaUpdateServerMetadata\n  NovaUpdateServerMetadataItem\n  RegisterServerMonitor\n  ReinstallServerWithCloudInit\n  ReinstallServerWithoutCloudInit\n  ResetServerPassword\n  ResizePostPaidServer\n  ResizeServer\n  RevertRecycleBinServer\n  ShowAppendableVolumeQuota\n  ShowFlavorCapacity\n  ShowJob\n  ShowMetadataOptions\n  ShowRecycleBin\n  ShowResetPasswordFlag\n  ShowSerialConsoleActions\n  ShowServer\n  ShowServerAttachableNicNum\n  ShowServerBlockDevice\n  ShowServerGroup\n  ShowServerLimits\n  ShowServerPassword\n  ShowServerRemoteConsole\n  ShowServerTags\n  UpdateMetadataOptions\n  UpdateRecycleBin\n  UpdateRecycleBinPolicy\n  UpdateScheduledEvent\n  UpdateSerialConsoleOptions\n  UpdateServer\n  UpdateServerAutoTerminateTime\n  UpdateServerBlockDevice\n  UpdateServerInterface\n  UpdateServerMetadata\n\n运行`hcloud ECS <operation> --help`获取更多的关于operation的使用帮助\n",
+      "stderr": "",
+      "plan": {
+        "executable": "hcloud",
+        "args": [
+          "ECS",
+          "--help"
+        ],
+        "command": "hcloud ECS --help",
+        "executableBlock": "hcloud ECS --help",
+        "warnings": [],
+        "classification": {
+          "decision": "allow",
+          "risk": "local_metadata",
+          "reason": "KooCLI local help and version commands are read-only and do not call Huawei Cloud resource APIs.",
+          "service": "ECS",
+          "operation": "ECS",
+          "args": [
+            "ECS",
+            "--help"
+          ]
+        },
+        "sgFindings": [],
+        "approvalToken": "8162c488-ceb8-41d8-bb25-32e4fee573a3",
+        "safeToRun": true,
+        "rawArgs": [
+          "ECS",
+          "--help"
+        ]
+      },
+      "retries": 0,
+      "attempts": 1
+    }
+  },
+  "executedAt": "20261003210429"
+}

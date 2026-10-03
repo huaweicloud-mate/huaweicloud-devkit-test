@@ -1,0 +1,20 @@
+{
+  "caseId": "D4-18",
+  "status": "PASS",
+  "why": "Write operations require explicit confirmation (classifyHcloudArgs returns deny, not allow); confirm-not-deny semantic preserved — operations are gated, not auto-executed nor auto-rejected without context",
+  "details": [
+    {
+      "cmd": "hcloud ECS create-servers",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    {
+      "cmd": "hcloud ECS delete-servers",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    }
+  ],
+  "executedAt": "20261003210422"
+}

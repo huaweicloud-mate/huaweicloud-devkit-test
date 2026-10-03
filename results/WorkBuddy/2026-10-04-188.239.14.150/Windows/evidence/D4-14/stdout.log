@@ -1,0 +1,52 @@
+{
+  "caseId": "D4-14",
+  "status": "PASS",
+  "why": "run_readonly_command returns auditable info (fields: ok,exitCode,signal,stdout,stderr,plan)",
+  "result": {
+    "ok": true,
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "[USE_ERROR]参数1的格式错误,正确格式为:--param=value\n",
+    "stderr": "",
+    "plan": {
+      "executable": "hcloud",
+      "args": [
+        "ECS",
+        "NovaListServers",
+        "--limit",
+        "1"
+      ],
+      "command": "hcloud ECS NovaListServers --limit 1",
+      "executableBlock": "hcloud ECS NovaListServers --limit 1",
+      "warnings": [],
+      "classification": {
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation.",
+        "service": "ECS",
+        "operation": "NovaListServers",
+        "args": [
+          "ECS",
+          "NovaListServers",
+          "--limit",
+          "1"
+        ]
+      },
+      "sgFindings": [],
+      "approvalToken": "a2da1721-7d22-4c43-b6d1-6e79f6327740",
+      "safeToRun": true,
+      "rawArgs": [
+        "ECS",
+        "NovaListServers",
+        "--limit",
+        "1",
+        "--cli-access-key=<redacted>",
+        "--cli-secret-key=<redacted>",
+        "--cli-security-token=<redacted>"
+      ]
+    },
+    "retries": 0,
+    "attempts": 1
+  },
+  "executedAt": "20261003210444"
+}

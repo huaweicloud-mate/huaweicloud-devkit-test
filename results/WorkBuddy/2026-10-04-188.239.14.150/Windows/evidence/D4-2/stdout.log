@@ -1,0 +1,44 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "All 6 credential env dump attempts blocked (deny)",
+  "details": [
+    {
+      "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Dumping cloud credential environment variables is blocked."
+    },
+    {
+      "cmd": "printenv HW_SECRET_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Dumping cloud credential environment variables is blocked."
+    },
+    {
+      "cmd": "echo $HUAWEICLOUD_SECRET_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Printing cloud credential environment variables is blocked."
+    },
+    {
+      "cmd": "env | grep HUAWEICLOUD",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Dumping cloud credential environment variables is blocked."
+    },
+    {
+      "cmd": "env | grep HW_",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Dumping cloud credential environment variables is blocked."
+    },
+    {
+      "cmd": "Get-ChildItem Env: | Where-Object {$_.Name -like \"HW_*\"}",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Dumping cloud credential environment variables is blocked."
+    }
+  ],
+  "executedAt": "20261003210422"
+}

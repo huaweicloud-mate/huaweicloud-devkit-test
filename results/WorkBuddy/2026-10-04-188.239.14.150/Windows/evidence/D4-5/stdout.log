@@ -1,0 +1,32 @@
+{
+  "caseId": "D4-5",
+  "status": "PASS",
+  "why": "All 4 write/delete commands correctly NOT classified as allow (decisions: deny,deny,deny,deny)",
+  "details": [
+    {
+      "cmd": "hcloud ECS delete-servers",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    {
+      "cmd": "hcloud VPC delete-vpc",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    {
+      "cmd": "hcloud EVS delete-volume",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    {
+      "cmd": "hcloud RDS delete-instance",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    }
+  ],
+  "executedAt": "20261003210422"
+}
