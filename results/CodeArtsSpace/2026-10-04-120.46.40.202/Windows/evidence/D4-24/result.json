@@ -1,0 +1,9 @@
+{
+  "caseId": "D4-24",
+  "status": "FAIL",
+  "executedAt": "20261004050517",
+  "assertion": "redactSecrets({access_token}) 应返回 {access_token:<redacted>}",
+  "conclusion": "FAIL - access_token 字段未被脱敏, 明文 token 泄漏",
+  "rootCause": "safety-policy.mjs:25 isSecretKeyName 正则将 access_token 归一化为 accesstoken, 不匹配 access.*key; policy.json:11 模式 token 经锚定不匹配 access_token",
+  "version": "1.1.8-next.1"
+}

@@ -1,0 +1,9 @@
+{
+  "caseId": "D2-4",
+  "status": "FAIL",
+  "executedAt": "20261004050517",
+  "assertion": "redactString 大小写均脱敏",
+  "conclusion": "FAIL - 小写 ak=/sk= 未被脱敏, redactString 正则仅匹配大写 AK/SK",
+  "rootCause": "safety-policy.mjs:45 正则 /(AK|SK)\\s*[:=]/g 缺少 i 标志, 小写 ak/sk 不匹配",
+  "version": "1.1.8-next.1"
+}

@@ -1,0 +1,10 @@
+D2-11 测试证据
+执行时间: 2026-10-04 05:05
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p0.mjs
+结果: FAIL
+断言: STS get-token 应返回 decision:deny
+结论: FAIL - sts get-token 返回 decision=allow, risk=read_only, 未拦截临时凭证获取
+根因: safety/rules/cloud-risk-rules.json:94 正则未覆盖 sts get-token, severity 为 warn 而非 deny

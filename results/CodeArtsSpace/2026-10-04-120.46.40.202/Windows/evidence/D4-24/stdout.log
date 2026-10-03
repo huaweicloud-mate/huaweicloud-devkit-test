@@ -1,0 +1,10 @@
+D4-24 测试证据
+执行时间: 2026-10-04 05:05
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p1.mjs
+结果: FAIL
+断言: redactSecrets({access_token}) 应返回 {access_token:<redacted>}
+结论: FAIL - access_token 字段未被脱敏, 明文 token 泄漏
+根因: safety-policy.mjs:25 isSecretKeyName 正则将 access_token 归一化为 accesstoken, 不匹配 access.*key; policy.json:11 模式 token 经锚定不匹配 access_token
