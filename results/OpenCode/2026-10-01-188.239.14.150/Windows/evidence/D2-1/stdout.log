@@ -1,0 +1,51 @@
+{
+  "caseId": "D2-1",
+  "status": "PASS",
+  "executedAt": "20261001054402",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "7/7 checks passed",
+  "checks": [
+    {
+      "name": "隔离 HOME 探针子进程正常退出",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"(node:13008) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "auth init 后 runtimeActive=true 且仅会话级生效（未写 S1）",
+      "ok": true,
+      "detail": "{\"paths\":{\"global\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-d2-1-auth-init-awoQ9C\\\\home\\\\.config\\\\huaweicloud\\\\credentials.json\",\"obs\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-d2-1-auth-init-awoQ9C\\\\home\\\\.obsutilconfig\"},\"before\":false,\"initRes\":{\"status\":\"ok\",\"message\":\"Runtime credentials set for this MCP session.\"},\"runtimeActive\":true,\"runtimeResolved\":{\"ak\":\"AKIAPROBED2AAAAAAAAA\",\"sk\":\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"securityToken\":\"\",\"region\":\"cn-north-4\"},\"sessionOnly\":true,\"status\":{\"credentialsCo…(+874)"
+    },
+    {
+      "name": "auth_status 判定 runtimeActive=true 且 credentialsConfigured=false",
+      "ok": true,
+      "detail": "{\"credentialsConfigured\":false,\"runtimeActive\":true,\"activeSource\":\"none\",\"obsConfigured\":false,\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\"}"
+    },
+    {
+      "name": "credentialPanel.activeSource 反映真实来源（会话 runtime 非 s1-persistent）",
+      "ok": true,
+      "detail": "\"none\""
+    },
+    {
+      "name": "persist 后 S1 全局凭证落盘且含 ak/sk/region/configuredBySession",
+      "ok": true,
+      "detail": "{\"ak\":\"AKIAPROBED2AAAAAAAAA\",\"sk\":\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"securityToken\":\"\",\"region\":\"cn-north-4\",\"configuredBySession\":true}"
+    },
+    {
+      "name": "persist 后 S3 OBS 配置落盘且格式正确（endpoint/ak/sk 扁平 key=value）",
+      "ok": true,
+      "detail": "\"endpoint=https://obs.cn-north-4.myhuaweicloud.com\\nak=AKIAPROBED2AAAAAAAAA\\nsk=ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\n\""
+    },
+    {
+      "name": "persist 返回结构化结果（status/scope/obs/hcloud 三端结论）",
+      "ok": true,
+      "detail": "{\"status\":\"partial\",\"scope\":\"persist\",\"backedUp\":false,\"obs\":{\"configured\":true},\"hcloud\":{\"ok\":false,\"reason\":\"KooCLI current profile unresolved\"},\"note\":\"S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority.\"}"
+    }
+  ],
+  "child": {
+    "code": 0,
+    "stderr": "(node:13008) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+  },
+  "rootCause": "auth/service.mjs:189 getAuthStatus + tools.mjs:1055 persistCredentials"
+}

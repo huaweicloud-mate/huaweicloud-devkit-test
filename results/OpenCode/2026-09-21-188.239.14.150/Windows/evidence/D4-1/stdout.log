@@ -1,0 +1,24 @@
+{
+  "caseId": "D4-1",
+  "status": "PASS",
+  "why": "All credential file read attempts blocked",
+  "results": [
+    {
+      "command": "cat ~/.huaweicloud/credentials.json",
+      "decision": "deny"
+    },
+    {
+      "command": "type %USERPROFILE%\\.huaweicloud\\credentials.json",
+      "decision": "deny"
+    },
+    {
+      "command": "cat ~/.config/huaweicloud/credentials.json",
+      "decision": "deny"
+    },
+    {
+      "command": "Get-Content ~/.huaweicloud/credentials.json",
+      "decision": "deny"
+    }
+  ],
+  "executedAt": "20260920210742"
+}

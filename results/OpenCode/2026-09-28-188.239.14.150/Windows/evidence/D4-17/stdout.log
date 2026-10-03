@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "why": "OpenCode (non-hook): classifyTextCommand handles all malformed/fuzzy inputs without crashing. Fail-closed behavior verified - no crashes, safe defaults.",
+  "clientType": "non-hook",
+  "noCrash": true,
+  "results": [
+    {
+      "input": "",
+      "decision": "deny"
+    },
+    {
+      "input": "   ",
+      "decision": "deny"
+    },
+    {
+      "input": "\u0000\u0001\u0002",
+      "decision": "allow"
+    },
+    {
+      "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "decision": "allow"
+    },
+    {
+      "input": "{}{}{}",
+      "decision": "allow"
+    },
+    {
+      "input": "cat cat cat cat cat cat cat ca",
+      "decision": "allow"
+    }
+  ],
+  "executedAt": "20260928050523"
+}

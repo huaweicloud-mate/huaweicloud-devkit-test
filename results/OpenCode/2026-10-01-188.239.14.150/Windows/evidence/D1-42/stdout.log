@@ -1,0 +1,64 @@
+{
+  "caseId": "D1-42",
+  "status": "PASS",
+  "executedAt": "20261001053236",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "10/10 checks passed",
+  "checks": [
+    {
+      "name": "首次 check_update → update_available",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"update_available\\\"\",\"expected\":\"\\\"update_available\\\"\"}"
+    },
+    {
+      "name": "首次 check_update targetVersion=99.1.0（预发布走 next 候选）",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"99.1.0\\\"\",\"expected\":\"\\\"99.1.0\\\"\"}"
+    },
+    {
+      "name": "dismiss 调用成功（isError=false）",
+      "ok": true,
+      "detail": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\n  \\\"currentVersion\\\": \\\"1.1.8-next.1\\\",\\n  \\\"latestStable\\\": \\\"99.0.0\\\",\\n  \\\"latestNext\\\": \\\"99.1.0\\\",\\n  \\\"targetVersion\\\": \\\"99.1.0\\\",\\n  \\\"updateAvailable\\\": false,\\n  \\\"dismissed\\\": true,\\n  \\\"dismissExpiresAt\\\": \\\"2026-10-03T21:32:36.423Z\\\",\\n  \\\"result\\\": \\\"dismissed\\\"\\n}\"}],\"isError\":false}"
+    },
+    {
+      "name": "dismiss 调用真实写入隔离 home 的 skip 文件",
+      "ok": true,
+      "detail": "{\"expectedSkip\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-dismiss-closure-S8w423\\\\.config\\\\huaweicloud\\\\devkit-skip.json\",\"altSkip\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-dismiss-closure-S8w423\\\\.config\\\\huaweicloud\\\\devkit-skip.json.default\",\"exists\":[true,false]}"
+    },
+    {
+      "name": "skip 文件含 dismissedVersion/dismissedAt/expireAt",
+      "ok": true,
+      "detail": "{\"dismissedVersion\":\"99.1.0\",\"dismissedAt\":\"2026-09-30T21:32:36.423Z\",\"expireAt\":\"2026-10-03T21:32:36.423Z\"}"
+    },
+    {
+      "name": "expireAt = dismissedAt + 3 天",
+      "ok": true,
+      "detail": "{\"actual\":\"259200000\",\"expected\":\"259200000\"}"
+    },
+    {
+      "name": "dismiss 落盘位置在隔离 home 内，未写入插件目录",
+      "ok": true,
+      "detail": "{\"written\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-dismiss-closure-S8w423\\\\.config\\\\huaweicloud\\\\devkit-skip.json\",\"expectedSkip\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-dismiss-closure-S8w423\\\\.config\\\\huaweicloud\\\\devkit-skip.json\"}"
+    },
+    {
+      "name": "同版本冷却内再次 check_update → dismissed",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"dismissed\\\"\",\"expected\":\"\\\"dismissed\\\"\"}"
+    },
+    {
+      "name": "进程重启后冷却仍生效 → dismissed",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"dismissed\\\"\",\"expected\":\"\\\"dismissed\\\"\"}"
+    },
+    {
+      "name": "进程重启后 dismissed=true",
+      "ok": true,
+      "detail": "{\"actual\":\"true\",\"expected\":\"true\"}"
+    }
+  ],
+  "skipFile": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-dismiss-closure-S8w423\\.config\\huaweicloud\\devkit-skip.json",
+  "resolveSkipFilePathInChild": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-dismiss-closure-S8w423\\.config\\huaweicloud\\devkit-skip.json",
+  "isolatedHome": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-dismiss-closure-S8w423"
+}

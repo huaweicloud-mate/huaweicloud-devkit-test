@@ -1,0 +1,37 @@
+{
+  "caseId": "D1-65",
+  "status": "PASS",
+  "executedAt": "20261001053245",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "5/5 checks passed",
+  "checks": [
+    {
+      "name": "DEBUG=1 → 打印 [debug] 调试日志",
+      "ok": true,
+      "detail": "{\"head\":\"[debug] queryDistTags: npm view exited with code 1\\n\"}"
+    },
+    {
+      "name": "DEBUG=true → 打印 [debug] 调试日志",
+      "ok": true,
+      "detail": "{\"head\":\"[debug] queryDistTags: npm view exited with code 1\\n\"}"
+    },
+    {
+      "name": "DEBUG=off → 无调试输出",
+      "ok": true,
+      "detail": "{\"head\":\"\"}"
+    },
+    {
+      "name": "未设 DEBUG → 无调试输出",
+      "ok": true,
+      "detail": "{\"head\":\"\"}"
+    },
+    {
+      "name": "调试开关不影响正常返回（四种取值 result 一致）",
+      "ok": true,
+      "detail": "{\"results\":[\"check_failed\",\"check_failed\",\"check_failed\",\"check_failed\"]}"
+    }
+  ],
+  "source": "update-check.mjs debugLog:230 / env 判断:231"
+}

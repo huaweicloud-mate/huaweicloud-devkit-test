@@ -1,0 +1,76 @@
+{
+  "caseId": "D2-11",
+  "status": "PASS",
+  "executedAt": "20261001054358",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "11/11 checks passed",
+  "checks": [
+    {
+      "name": "探针子进程退出 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"\"}"
+    },
+    {
+      "name": "STS + persist 返回 status=error",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"error\\\"\",\"expected\":\"\\\"error\\\"\"}"
+    },
+    {
+      "name": "STS + persist 拒绝范围 scope=rejected",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"rejected\\\"\",\"expected\":\"\\\"rejected\\\"\"}"
+    },
+    {
+      "name": "拒绝信息指明 R3 与改用 temporary 的动作",
+      "ok": true,
+      "detail": "{\"status\":\"error\",\"error\":\"Temporary STS credentials cannot be persisted (R3). Use action=temporary.\",\"scope\":\"rejected\"}"
+    },
+    {
+      "name": "S1 未被写入 securityToken",
+      "ok": true,
+      "detail": "{\"ak\":\"AKIAPROBED2AAAAAAAAA\",\"sk\":\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"securityToken\":\"\",\"region\":\"cn-north-4\"}"
+    },
+    {
+      "name": "S1 内容未被 STS 覆盖（ak 不变）",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\",\"expected\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\"}"
+    },
+    {
+      "name": "OBS 配置未落盘 STS token",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "STS + temporary 成功（status=ok/scope=temporary）",
+      "ok": true,
+      "detail": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note\":\"Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files.\"}"
+    },
+    {
+      "name": "temporary 模式下 runtime 确实携带 securityToken",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"ProbeSecurityTokenD2bbbbbbbbbbbbbbbbbb\\\"\",\"expected\":\"\\\"ProbeSecurityTokenD2bbbbbbbbbbbbbbbbbb\\\"\"}"
+    },
+    {
+      "name": "temporary 不落盘：S1 仍无 token",
+      "ok": true,
+      "detail": "{\"ak\":\"AKIAPROBED2AAAAAAAAA\",\"sk\":\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"securityToken\":\"\",\"region\":\"cn-north-4\"}"
+    },
+    {
+      "name": "temporary 不落盘：OBS 配置不含 token",
+      "ok": true,
+      "detail": "null"
+    }
+  ],
+  "child": {
+    "code": 0,
+    "stderr": ""
+  },
+  "persistSts": {
+    "status": "error",
+    "error": "Temporary STS credentials cannot be persisted (R3). Use action=temporary.",
+    "scope": "rejected"
+  },
+  "rootCause": "tools.mjs:1055-1062 persistCredentials 前置 R3 拒绝"
+}

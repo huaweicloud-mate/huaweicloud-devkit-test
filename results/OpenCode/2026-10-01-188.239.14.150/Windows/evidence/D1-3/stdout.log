@@ -1,0 +1,52 @@
+{
+  "caseId": "D1-3",
+  "status": "PASS",
+  "executedAt": "20261001053142",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "8/8 checks passed",
+  "checks": [
+    {
+      "name": "doctor 正常环境退出码 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"stderr\":\"(node:11664) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "doctor 输出覆盖 hcloud/MCP/Skills/Auth 四类检测项",
+      "ok": true,
+      "detail": "{\"items\":{\"hcloud\":true,\"MCP\":true,\"Skill\":true,\"Auth\":true},\"head\":\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nHuaweiCloud DevKit Doctor\\n\\n  \\u001b[32m[PASS]\\u001b[0m Node.js >= 22\\n  \\u001b[32m[PASS]\\u001b[0m MCP server installed\\n  \\u001b[32m[PASS]\\u001b[0m MCP server can start (OpenCode)\\n  \\u001b[32m[PASS]\\u001b[0m Runtime deps (undici) installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety policy installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety ho…(+409)"
+    },
+    {
+      "name": "doctor 输出汇总计数行（Results: N pass, M warn, K fail）",
+      "ok": true,
+      "detail": "\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nHuaweiCloud DevKit Doctor\\n\\n  \\u001b[32m[PASS]\\u001b[0m Node.js >= 22\\n  \\u001b[32m[PASS]\\u001b[0m MCP server installed\\n  \\u001b[32m[PASS]\\u001b[0m MCP server can start (OpenCode)\\n  \\u001b[32m[PASS]\\u001b[0m Runtime deps (undici) installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety policy installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety hook runtime (Node)\\n  \\u001b[32m[PASS]\\u001b[0m MCP configured\\n  \\u0…(+783)"
+    },
+    {
+      "name": "doctor 输出逐项 [PASS]/[FAIL]/[WARN] 标记",
+      "ok": true,
+      "detail": "\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nHuaweiCloud DevKit Doctor\\n\\n  \\u001b[32m[PASS]\\u001b[0m Node.js >= 22\\n  \\u001b[32m[PASS]\\u001b[0m MCP server installed\\n  \\u001b[32m[PASS]\\u001b[0m MCP server can start (OpenCode)\\n  \\u001b[32m[PASS]\\u001b[0m Runtime deps (undici) installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety policy installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety hook runtime (Node)\\n  \\u001b[32m[PASS]\\u001b[0m MCP configured\\n  \\u0…(+340)"
+    },
+    {
+      "name": "doctor 对 WARN 项给出可执行修复指引",
+      "ok": true,
+      "detail": "\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nHuaweiCloud DevKit Doctor\\n\\n  \\u001b[32m[PASS]\\u001b[0m Node.js >= 22\\n  \\u001b[32m[PASS]\\u001b[0m MCP server installed\\n  \\u001b[32m[PASS]\\u001b[0m MCP server can start (OpenCode)\\n  \\u001b[32m[PASS]\\u001b[0m Runtime deps (undici) installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety policy installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety hook runtime (Node)\\n  \\u001b[32m[PASS]\\u001b[0m MCP configured\\n  \\u0…(+783)"
+    },
+    {
+      "name": "隔离 HOME（无凭证/无配置）下 doctor 如实报告失败项（存在 [FAIL] 条目）",
+      "ok": true,
+      "detail": "{\"failCount\":1,\"code\":0,\"out\":\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nHuaweiCloud DevKit Doctor\\n\\n  \\u001b[32m[PASS]\\u001b[0m Node.js >= 22\\n  \\u001b[32m[PASS]\\u001b[0m MCP server installed\\n  \\u001b[32m[PASS]\\u001b[0m MCP server can start (OfficeAce)\\n  \\u001b[32m[PASS]\\u001b[0m Runtime deps (undici) installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety policy installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety hook runtime (Node)\\n  \\u001b[31m[FAIL]…(+597)"
+    },
+    {
+      "name": "失败场景 doctor 未静默返回全绿（stdout 不含 All checks passed）",
+      "ok": true,
+      "detail": "\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nHuaweiCloud DevKit Doctor\\n\\n  \\u001b[32m[PASS]\\u001b[0m Node.js >= 22\\n  \\u001b[32m[PASS]\\u001b[0m MCP server installed\\n  \\u001b[32m[PASS]\\u001b[0m MCP server can start (OfficeAce)\\n  \\u001b[32m[PASS]\\u001b[0m Runtime deps (undici) installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety policy installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety hook runtime (Node)\\n  \\u001b[31m[FAIL]\\u001b[0m MCP configured — Run…(+105)"
+    },
+    {
+      "name": "汇总行 fail 计数与 [FAIL] 条数一致",
+      "ok": true,
+      "detail": "{\"summary\":\"Results: 9 pass, 0 warn, 1 fail\",\"failMarkers\":1}"
+    }
+  ],
+  "isolatedHome": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-doctor-aBYDcR"
+}

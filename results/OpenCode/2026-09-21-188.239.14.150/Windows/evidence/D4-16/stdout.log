@@ -1,0 +1,20 @@
+{
+  "caseId": "D4-16",
+  "status": "FAIL",
+  "why": "Some wrapped commands bypassed",
+  "results": [
+    {
+      "command": "bash -c \"hcloud ECS DeleteServers --cli-region=cn-north-4\"",
+      "decision": "allow"
+    },
+    {
+      "command": "sh -c \"cat ~/.huaweicloud/credentials.json\"",
+      "decision": "deny"
+    },
+    {
+      "command": "sh -c 'printenv HW_SECRET_KEY'",
+      "decision": "allow"
+    }
+  ],
+  "executedAt": "20260920210953"
+}

@@ -1,0 +1,20 @@
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "Some secret APIs not blocked",
+  "results": [
+    {
+      "command": "hcloud DEW ShowSecretVersion --cli-region=cn-north-4 --secret_id=xxx",
+      "decision": "deny"
+    },
+    {
+      "command": "hcloud DEW GetSecretValue --cli-region=cn-north-4 --secret_id=xxx",
+      "decision": "deny"
+    },
+    {
+      "command": "hcloud ECS ShowServerPassword --cli-region=cn-north-4 --server_id=xxx",
+      "decision": "allow"
+    }
+  ],
+  "executedAt": "20260920210953"
+}

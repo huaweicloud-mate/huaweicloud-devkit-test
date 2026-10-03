@@ -1,0 +1,32 @@
+{
+  "caseId": "D4-2",
+  "status": "FAIL",
+  "why": "Some attempts not blocked",
+  "results": [
+    {
+      "command": "printenv HW_SECRET_KEY",
+      "decision": "deny"
+    },
+    {
+      "command": "echo $HW_SECRET_KEY",
+      "decision": "deny"
+    },
+    {
+      "command": "echo %HW_SECRET_KEY%",
+      "decision": "allow"
+    },
+    {
+      "command": "env | grep HUAWEICLOUD",
+      "decision": "deny"
+    },
+    {
+      "command": "printenv HW_ACCESS_KEY",
+      "decision": "deny"
+    },
+    {
+      "command": "printenv HWC_SECRET_KEY",
+      "decision": "deny"
+    }
+  ],
+  "executedAt": "20260920210953"
+}

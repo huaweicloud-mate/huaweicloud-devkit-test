@@ -1,0 +1,61 @@
+{
+  "caseId": "D2-12",
+  "status": "PASS",
+  "executedAt": "20261001054400",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "9/9 checks passed",
+  "checks": [
+    {
+      "name": "探针子进程退出 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"(node:13684) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "auth_init 后 runtimeActive=true",
+      "ok": true,
+      "detail": "{\"syncNoRuntime\":{\"ok\":false,\"error\":\"KooCLI current profile unresolved; run \\\"npx huaweicloud-devkit auth init\\\" in a real terminal.\",\"nextStep\":\"Run \\\"npx huaweicloud-devkit auth init\\\" in a real terminal to create the KooCLI current profile.\",\"obs\":{\"configured\":true,\"path\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-d2-12-runtime-suppress-CJXfWg\\\\home\\\\.obsutilconfig\",\"endpoint\":\"https://obs.cn-north-4.myhuaweicloud.com\"}},\"lastSyncNoRuntime\":null,\"runtimeActive\":true,\"statusRuntime\":true,\"obsBefore\":\"endpoint=https://obs.cn-north-4.myhuaweicloud.com\\nak=AKI…(+999)"
+    },
+    {
+      "name": "auth_status 反映 runtimeActive",
+      "ok": true,
+      "detail": "{\"actual\":\"true\",\"expected\":\"true\"}"
+    },
+    {
+      "name": "R10：runtime 非空时 auth_sync 拒绝同步（ok=false）",
+      "ok": true,
+      "detail": "{\"ok\":false,\"error\":\"Runtime credentials are active; auto-sync suppressed (R10).\",\"nextStep\":\"Run huaweicloud_auth_switch action=clear or action=persist first.\"}"
+    },
+    {
+      "name": "拒绝原因为 runtime 凭证激活并指明清除方式",
+      "ok": true,
+      "detail": "{\"ok\":false,\"error\":\"Runtime credentials are active; auto-sync suppressed (R10).\",\"nextStep\":\"Run huaweicloud_auth_switch action=clear or action=persist first.\"}"
+    },
+    {
+      "name": "被拒绝时 OBS 配置未被改写（内容与 mtime 均不变）",
+      "ok": true,
+      "detail": "{\"before\":\"endpoint=https://obs.cn-north-4.myhuaweicloud.com\\nak=AKIAPROBED2AAAAAAAAA\\nsk=ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\n\",\"after\":\"endpoint=https://obs.cn-north-4.myhuaweicloud.com\\nak=AKIAPROBED2AAAAAAAAA\\nsk=ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\n\",\"mtimeBefore\":1790804639407.8054,\"mtimeAfter\":1790804639407.8054,\"rejectLine\":236,\"writeLine\":243}"
+    },
+    {
+      "name": "action=clear 后 runtimeActive=false",
+      "ok": true,
+      "detail": "false"
+    },
+    {
+      "name": "clear 后 auth_sync 恢复可执行（不再受 R10 抑制）",
+      "ok": true,
+      "detail": "{\"ok\":false,\"error\":\"KooCLI current profile unresolved; run \\\"npx huaweicloud-devkit auth init\\\" in a real terminal.\",\"nextStep\":\"Run \\\"npx huaweicloud-devkit auth init\\\" in a real terminal to create the KooCLI current profile.\",\"obs\":{\"configured\":true,\"path\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-d2-12-runtime-suppress-CJXfWg\\\\home\\\\.obsutilconfig\",\"endpoint\":\"https://obs.cn-north-4.myhuaweicloud.com\"}}"
+    },
+    {
+      "name": "R10 分支源码含明确规则注释",
+      "ok": true,
+      "detail": "{\"line\":236}"
+    }
+  ],
+  "child": {
+    "code": 0,
+    "stderr": "(node:13684) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+  },
+  "rootCause": "auth/service.mjs:233-239 syncAuth 的 R10 分支"
+}

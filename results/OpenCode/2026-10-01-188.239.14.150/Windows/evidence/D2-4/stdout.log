@@ -1,0 +1,298 @@
+{
+  "caseId": "D2-4",
+  "status": "FAIL",
+  "executedAt": "20261001054404",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "断言不成立: 多行 user_data 的后续行也被清空（safety-policy.mjs:40 的 `.` 缺 s 标志，只清空首行）",
+  "summary": "24/26 checks passed",
+  "checks": [
+    {
+      "name": "脱敏：access_key= 明文 明文值不出现在输出中",
+      "ok": true,
+      "detail": "{\"out\":\"hcloud configure set --cli-profile=default --access-key=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：access_key= 明文 命中 <redacted> 占位",
+      "ok": true,
+      "detail": "{\"out\":\"hcloud configure set --cli-profile=default --access-key=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：security_token= STS 明文值不出现在输出中",
+      "ok": true,
+      "detail": "{\"out\":\"security_token=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：security_token= STS 命中 <redacted> 占位",
+      "ok": true,
+      "detail": "{\"out\":\"security_token=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：admin_pass 回显 明文值不出现在输出中",
+      "ok": true,
+      "detail": "{\"out\":\"admin_pass=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：admin_pass 回显 命中 <redacted> 占位",
+      "ok": true,
+      "detail": "{\"out\":\"admin_pass=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：adminPass camelCase 明文值不出现在输出中",
+      "ok": true,
+      "detail": "{\"out\":\"adminPass=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：adminPass camelCase 命中 <redacted> 占位",
+      "ok": true,
+      "detail": "{\"out\":\"adminPass=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：AK=/SK: 简写 明文值不出现在输出中",
+      "ok": true,
+      "detail": "{\"out\":\"AK=<redacted>\\nSK=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：AK=/SK: 简写 命中 <redacted> 占位",
+      "ok": true,
+      "detail": "{\"out\":\"AK=<redacted>\\nSK=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：x_auth_token 明文值不出现在输出中",
+      "ok": true,
+      "detail": "{\"out\":\"x_auth_token=<redacted>\"}"
+    },
+    {
+      "name": "脱敏：x_auth_token 命中 <redacted> 占位",
+      "ok": true,
+      "detail": "{\"out\":\"x_auth_token=<redacted>\"}"
+    },
+    {
+      "name": "AK 中段被隐藏（AK 完整明文不出现）",
+      "ok": true,
+      "detail": "{\"out\":\"hcloud configure set --cli-profile=default --access-key=<redacted>\"}"
+    },
+    {
+      "name": "SK 永不完整出现",
+      "ok": true,
+      "detail": "{\"out\":\"AK=<redacted>\\nSK=<redacted>\"}"
+    },
+    {
+      "name": "多行 user_data 的后续行也被清空（safety-policy.mjs:40 的 `.` 缺 s 标志，只清空首行）",
+      "ok": false,
+      "detail": "{\"in\":\"--server.user_data=#!/bin/sh\\necho \\\"-----BEGIN RSA PRIVATE KEY-----\\\"\\nDB_PASSWORD=hunter2\",\"out\":\"--server.user_data=<redacted>\\necho \\\"-----BEGIN RSA PRIVATE KEY-----\\\"\\nDB_PASSWORD=<redacted>\",\"line\":40}"
+    },
+    {
+      "name": "单行 user_data/private_key 整值被清空（产品声明契约）",
+      "ok": true,
+      "detail": "[\"--server.user_data=<redacted>\",\"--keypair.private_key=<redacted>\"]"
+    },
+    {
+      "name": "对象键名命中 secretKeyNamePatterns 时整值替换为 <redacted>",
+      "ok": true,
+      "detail": "{\"profile\":\"default\",\"secret_key\":\"<redacted>\",\"nested\":{\"password\":\"<redacted>\",\"items\":[{\"security_token\":\"<redacted>\"}]}}"
+    },
+    {
+      "name": "嵌套对象与数组内 secret 同样脱敏",
+      "ok": true,
+      "detail": "{\"password\":\"<redacted>\",\"items\":[{\"security_token\":\"<redacted>\"}]}"
+    },
+    {
+      "name": "非敏感字段（profile）保持原值",
+      "ok": true,
+      "detail": "\"default\""
+    },
+    {
+      "name": "redactArgsWithObs 对 --server.adminPass= 形参脱敏",
+      "ok": true,
+      "detail": "\"[\\\"ECS\\\",\\\"CreateServers\\\",\\\"--server.adminPass=<redacted>\\\",\\\"--name\\\",\\\"x\\\"]\""
+    },
+    {
+      "name": "redactArgsWithObs 对 OBS -i/-k 凭证形参脱敏",
+      "ok": true,
+      "detail": "\"[\\\"OBS\\\",\\\"ShowBucket\\\",\\\"-i\\\",\\\"<redacted>\\\",\\\"-k<redacted>\\\"]\""
+    },
+    {
+      "name": "redactOutput JSON 路径：parse 后按 key 脱敏且保留非敏感字段",
+      "ok": true,
+      "detail": "\"{\\n  \\\"token\\\": \\\"<redacted>\\\",\\n  \\\"note\\\": \\\"keep\\\"\\n}\""
+    },
+    {
+      "name": "redactOutput 文本路径：token/security_token/adminPass 三种均脱敏",
+      "ok": true,
+      "detail": "\"adminPass=<redacted> security_token=<redacted> token=<redacted>\""
+    },
+    {
+      "name": "JSON 片段（JSON 后带尾随文本，hcloud-cli.mjs:774 parse 失败回退文本路径）仍被脱敏",
+      "ok": false,
+      "detail": "{\"in\":\"Error: {\\\"secret_key\\\":\\\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"} (truncated)\",\"out\":\"{\\\"secret_key\\\":\\\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"} (truncated)\",\"line\":774}"
+    },
+    {
+      "name": "policy.json secretKeyNamePatterns 覆盖全部敏感键名形态（含 adminPass 走 redactString 正则）",
+      "ok": true,
+      "detail": "{\"uncovered\":[],\"patterns\":[\"access[_-]?key\",\"secret[_-]?key\",\"security[_-]?token\",\"x[_-]?auth[_-]?token\",\"authorization\",\"password\",\"passwd\",\"token\",\"credential\",\"private[_-]?key\",\"user[_-]?data\",\"metadata\",\"ak\",\"sk\"]}"
+    },
+    {
+      "name": "admin_pass/adminPass 变体由 redactString 正则覆盖（不在 key patterns 列表但实测脱敏）",
+      "ok": true,
+      "detail": "{\"line\":42}"
+    }
+  ],
+  "redacted": [
+    {
+      "name": "access_key= 明文",
+      "text": "hcloud configure set --cli-profile=default --access-key=AKIAPROBED2AAAAAAAAA",
+      "secret": "AKIAPROBED2AAAAAAAAA",
+      "out": "hcloud configure set --cli-profile=default --access-key=<redacted>"
+    },
+    {
+      "name": "security_token= STS",
+      "text": "security_token=ProbeSecurityTokenD2bbbbbbbbbbbbbbbbbb",
+      "secret": "ProbeSecurityTokenD2bbbbbbbbbbbbbbbbbb",
+      "out": "security_token=<redacted>"
+    },
+    {
+      "name": "admin_pass 回显",
+      "text": "admin_pass=Huawei@12345",
+      "secret": "Huawei@12345",
+      "out": "admin_pass=<redacted>"
+    },
+    {
+      "name": "adminPass camelCase",
+      "text": "adminPass=Huawei@12345",
+      "secret": "Huawei@12345",
+      "out": "adminPass=<redacted>"
+    },
+    {
+      "name": "AK=/SK: 简写",
+      "text": "AK=AKIAPROBED2AAAAAAAAA\nSK=ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "secret": "ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "out": "AK=<redacted>\nSK=<redacted>"
+    },
+    {
+      "name": "x_auth_token",
+      "text": "x_auth_token=ProbeSecurityTokenD2bbbbbbbbbbbbbbbbbb",
+      "secret": "ProbeSecurityTokenD2bbbbbbbbbbbbbbbbbb",
+      "out": "x_auth_token=<redacted>"
+    }
+  ],
+  "multilineUserData": {
+    "in": "--server.user_data=#!/bin/sh\necho \"-----BEGIN RSA PRIVATE KEY-----\"\nDB_PASSWORD=hunter2",
+    "out": "--server.user_data=<redacted>\necho \"-----BEGIN RSA PRIVATE KEY-----\"\nDB_PASSWORD=<redacted>"
+  },
+  "objectRedacted": {
+    "profile": "default",
+    "secret_key": "<redacted>",
+    "nested": {
+      "password": "<redacted>",
+      "items": [
+        {
+          "security_token": "<redacted>"
+        }
+      ]
+    }
+  },
+  "redactArgsWithObs": [
+    "ECS",
+    "CreateServers",
+    "--server.adminPass=<redacted>",
+    "--name",
+    "x"
+  ],
+  "redactArgsWithObsObs": [
+    "OBS",
+    "ShowBucket",
+    "-i",
+    "<redacted>",
+    "-k<redacted>"
+  ],
+  "redactOutputJson": "{\n  \"token\": \"<redacted>\",\n  \"note\": \"keep\"\n}",
+  "redactOutputText": "adminPass=<redacted> security_token=<redacted> token=<redacted>",
+  "redactOutputJsonFallback": {
+    "in": "Error: {\"secret_key\":\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"} (truncated)",
+    "out": "{\"secret_key\":\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"} (truncated)"
+  },
+  "policySecretKeyNamePatterns": [
+    "access[_-]?key",
+    "secret[_-]?key",
+    "security[_-]?token",
+    "x[_-]?auth[_-]?token",
+    "authorization",
+    "password",
+    "passwd",
+    "token",
+    "credential",
+    "private[_-]?key",
+    "user[_-]?data",
+    "metadata",
+    "ak",
+    "sk"
+  ],
+  "keyNameCoverage": [
+    {
+      "key": "access_key",
+      "covered": true
+    },
+    {
+      "key": "accessKey",
+      "covered": true
+    },
+    {
+      "key": "secret_key",
+      "covered": true
+    },
+    {
+      "key": "secretKey",
+      "covered": true
+    },
+    {
+      "key": "security_token",
+      "covered": true
+    },
+    {
+      "key": "x_auth_token",
+      "covered": true
+    },
+    {
+      "key": "authorization",
+      "covered": true
+    },
+    {
+      "key": "password",
+      "covered": true
+    },
+    {
+      "key": "passwd",
+      "covered": true
+    },
+    {
+      "key": "token",
+      "covered": true
+    },
+    {
+      "key": "credential",
+      "covered": true
+    },
+    {
+      "key": "private_key",
+      "covered": true
+    },
+    {
+      "key": "user_data",
+      "covered": true
+    },
+    {
+      "key": "metadata",
+      "covered": true
+    },
+    {
+      "key": "ak",
+      "covered": true
+    },
+    {
+      "key": "sk",
+      "covered": true
+    }
+  ],
+  "rootCause": "safety-policy.mjs:40 多行 opaque blob 正则缺 s 标志；hcloud-cli.mjs:774 redactOutput JSON 回退路径"
+}

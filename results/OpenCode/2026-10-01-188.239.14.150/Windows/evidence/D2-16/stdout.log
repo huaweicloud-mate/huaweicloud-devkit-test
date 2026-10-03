@@ -1,0 +1,69 @@
+{
+  "caseId": "D2-16",
+  "status": "PASS",
+  "executedAt": "20261001054401",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "8/8 checks passed",
+  "checks": [
+    {
+      "name": "探针子进程退出 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"\"}"
+    },
+    {
+      "name": "导入前 creds-import.json 存在",
+      "ok": true,
+      "detail": "\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-d2-16-import-wipe-sC4zEa\\\\home\\\\.config\\\\huaweicloud\\\\creds-import.json\""
+    },
+    {
+      "name": "mode=import action=temporary 读取成功",
+      "ok": true,
+      "detail": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note\":\"Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files.\"}"
+    },
+    {
+      "name": "temporary 成功后 import 文件已擦除（明文不残留磁盘）",
+      "ok": true,
+      "detail": "{\"exists\":false}"
+    },
+    {
+      "name": "runtime 内存凭证来自 import 文件",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\",\"expected\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\"}"
+    },
+    {
+      "name": "mode=import action=persist 成功/部分成功",
+      "ok": true,
+      "detail": "{\"status\":\"partial\",\"scope\":\"persist\",\"backedUp\":false,\"obs\":{\"configured\":true},\"hcloud\":{\"ok\":false,\"reason\":\"KooCLI current profile unresolved\"},\"note\":\"S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority.\"}"
+    },
+    {
+      "name": "persist 结果非 partial 时 import 文件被擦除（partial 保留以支持重试）",
+      "ok": true,
+      "detail": "{\"status\":\"partial\",\"exists\":true}"
+    },
+    {
+      "name": "源码 readImportFile/clearImportFile 成对存在（读取后擦除）",
+      "ok": true,
+      "detail": "{\"readLine\":1023,\"clearLine\":1046}"
+    }
+  ],
+  "child": {
+    "code": 0,
+    "stderr": ""
+  },
+  "persistResult": {
+    "status": "partial",
+    "scope": "persist",
+    "backedUp": false,
+    "obs": {
+      "configured": true
+    },
+    "hcloud": {
+      "ok": false,
+      "reason": "KooCLI current profile unresolved"
+    },
+    "note": "S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority."
+  },
+  "rootCause": "tools.mjs:1023 readImportFile / :1046 clearImportFile / :1247,:1284 调用点"
+}

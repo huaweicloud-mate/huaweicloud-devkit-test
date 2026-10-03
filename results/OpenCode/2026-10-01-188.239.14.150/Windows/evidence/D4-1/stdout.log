@@ -1,0 +1,154 @@
+{
+  "caseId": "D4-1",
+  "status": "PASS",
+  "executedAt": "20261001054550",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "4/4 checks passed",
+  "checks": [
+    {
+      "name": "6 类 cat/type/Get-Content/gc/less/more 凭证文件读取命令全部 deny",
+      "ok": true,
+      "detail": "{\"denied\":6,\"total\":6,\"misses\":[]}"
+    },
+    {
+      "name": "拦截命中 credential 规则 hwc-command-credential-file 且 severity=deny",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "每条 deny 均给出可执行替代方案（非裸拒绝）",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "规则库中 credential-file 规则 severity=deny",
+      "ok": true,
+      "detail": "{\"severity\":\"deny\",\"stages\":[\"command\"]}"
+    }
+  ],
+  "hookResults": [
+    {
+      "command": "cat ~/.hcloud/config.json",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-credential-file",
+            "title": "Credential file read",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+            "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.",
+            "source": "command",
+            "evidence": "cat ~/.hcloud/config.json"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    },
+    {
+      "command": "type C:\\Users\\test\\.huaweicloud\\credentials.json",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-credential-file",
+            "title": "Credential file read",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+            "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.",
+            "source": "command",
+            "evidence": "type C:\\Users\\test\\.huaweicloud\\credentials.json"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    },
+    {
+      "command": "Get-Content $env:USERPROFILE\\.hcloud\\config.json",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-credential-file",
+            "title": "Credential file read",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+            "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.",
+            "source": "command",
+            "evidence": "Get-Content $env:USERPROFILE\\.hcloud\\config.json"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    },
+    {
+      "command": "gc ~/.huaweicloud/credentials.json",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-credential-file",
+            "title": "Credential file read",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+            "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.",
+            "source": "command",
+            "evidence": "gc ~/.huaweicloud/credentials.json"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    },
+    {
+      "command": "less /home/u/.hcloud/config.json",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-credential-file",
+            "title": "Credential file read",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+            "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.",
+            "source": "command",
+            "evidence": "less /home/u/.hcloud/config.json"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    },
+    {
+      "command": "more ~/.hcloud/config.json",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-credential-file",
+            "title": "Credential file read",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+            "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.",
+            "source": "command",
+            "evidence": "more ~/.hcloud/config.json"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    }
+  ],
+  "rootCause": "safety/rules/cloud-risk-rules.json#hwc-command-credential-file；risk-rule-engine.mjs command 阶段"
+}

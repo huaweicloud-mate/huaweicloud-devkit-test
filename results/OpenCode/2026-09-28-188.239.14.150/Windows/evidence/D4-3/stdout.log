@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "why": "OpenCode (non-hook): classifyTextCommand correctly identifies all credential file access commands (cat/type/Get-Content of credentials.json and config.json) as 'deny'. MCP-level risk identification works correctly.",
+  "clientType": "non-hook",
+  "results": [
+    {
+      "cmd": "cat ~/.config/huaweicloud/credentials.json",
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "cat ~/.hcloud/config.json",
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "type %USERPROFILE%\\.config\\huaweicloud\\credentials.json",
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "type %USERPROFILE%\\.hcloud\\config.json",
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "Get-Content ~/.config/huaweicloud/credentials.json",
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    }
+  ],
+  "executedAt": "20260928050546"
+}

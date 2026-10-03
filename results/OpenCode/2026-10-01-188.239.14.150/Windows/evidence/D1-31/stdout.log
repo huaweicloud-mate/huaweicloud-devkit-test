@@ -1,0 +1,52 @@
+{
+  "caseId": "D1-31",
+  "status": "PASS",
+  "executedAt": "20261001053209",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "8/8 checks passed",
+  "checks": [
+    {
+      "name": "writeSkipState 写入 dismissedVersion/dismissedAt/expireAt",
+      "ok": true,
+      "detail": "{\"dismissedVersion\":\"9.9.9\",\"dismissedAt\":\"2026-10-01T00:00:00.000Z\",\"expireAt\":\"2026-10-04T00:00:00.000Z\"}"
+    },
+    {
+      "name": "expireAt = dismissedAt + 3 天",
+      "ok": true,
+      "detail": "{\"actual\":\"259200000\",\"expected\":\"259200000\"}"
+    },
+    {
+      "name": "readSkipState 读回一致",
+      "ok": true,
+      "detail": "{\"actual\":\"{\\\"dismissedVersion\\\":\\\"9.9.9\\\",\\\"dismissedAt\\\":\\\"2026-10-01T00:00:00.000Z\\\",\\\"expireAt\\\":\\\"2026-10-04T00:00:00.000Z\\\"}\",\"expected\":\"{\\\"dismissedVersion\\\":\\\"9.9.9\\\",\\\"dismissedAt\\\":\\\"2026-10-01T00:00:00.000Z\\\",\\\"expireAt\\\":\\\"2026-10-04T00:00:00.000Z\\\"}\"}"
+    },
+    {
+      "name": "冷却期内 result=dismissed",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"dismissed\\\"\",\"expected\":\"\\\"dismissed\\\"\"}"
+    },
+    {
+      "name": "冷却期内 dismissed=true",
+      "ok": true,
+      "detail": "{\"actual\":\"true\",\"expected\":\"true\"}"
+    },
+    {
+      "name": "冷却期内 dismissExpiresAt 透传",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"2026-10-04T00:00:00.000Z\\\"\",\"expected\":\"\\\"2026-10-04T00:00:00.000Z\\\"\"}"
+    },
+    {
+      "name": "3 天冷却过期后重新提醒 → result=update_available",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"update_available\\\"\",\"expected\":\"\\\"update_available\\\"\"}"
+    },
+    {
+      "name": "冷却期内出现更高版本仍应提醒（target>dismissedVersion）",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"update_available\\\"\",\"expected\":\"\\\"update_available\\\"\"}"
+    }
+  ],
+  "isolatedHome": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-dismiss-dwgZSs"
+}

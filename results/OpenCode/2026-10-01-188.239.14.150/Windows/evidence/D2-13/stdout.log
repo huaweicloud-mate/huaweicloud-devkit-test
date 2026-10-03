@@ -1,0 +1,56 @@
+{
+  "caseId": "D2-13",
+  "status": "PASS",
+  "executedAt": "20261001054400",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "8/8 checks passed",
+  "checks": [
+    {
+      "name": "探针子进程退出 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"\"}"
+    },
+    {
+      "name": "R9：configuredBySession=true 时 S1 覆盖 env 的 AK",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\",\"expected\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\"}"
+    },
+    {
+      "name": "R9：configuredBySession=true 时 S1 覆盖 env 的 SK",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"\",\"expected\":\"\\\"ProbeSecretKeyD2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"\"}"
+    },
+    {
+      "name": "R9：region 仍以 env HW_REGION 为准（仅凭证字段被 S1 接管）",
+      "ok": true,
+      "detail": "\"cn-south-1\""
+    },
+    {
+      "name": "清除 configuredBySession 标记后 env AK 重新生效",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"AKENVINJECTED0000000000000\\\"\",\"expected\":\"\\\"AKENVINJECTED0000000000000\\\"\"}"
+    },
+    {
+      "name": "清除标记后 env SK 重新生效",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"sk-env-injected-000000000\\\"\",\"expected\":\"\\\"sk-env-injected-000000000\\\"\"}"
+    },
+    {
+      "name": "S1 为空时回退到 env AK（env 兜底）",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"AKENVINJECTED0000000000000\\\"\",\"expected\":\"\\\"AKENVINJECTED0000000000000\\\"\"}"
+    },
+    {
+      "name": "源码含 R9 显式规则说明",
+      "ok": true,
+      "detail": "{\"line\":242}"
+    }
+  ],
+  "child": {
+    "code": 0,
+    "stderr": ""
+  },
+  "rootCause": "auth/credentials.mjs:242-250 R9 分支"
+}

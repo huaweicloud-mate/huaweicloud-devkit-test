@@ -1,0 +1,42 @@
+{
+  "caseId": "D1-69",
+  "status": "PASS",
+  "executedAt": "20261001053247",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "6/6 checks passed",
+  "checks": [
+    {
+      "name": "help 退出码 0",
+      "ok": true,
+      "detail": "{\"code\":0}"
+    },
+    {
+      "name": "help 输出帮助文案 + 命令列表（≥7 个子命令）",
+      "ok": true,
+      "detail": "{\"cmds\":[\"install\",\"uninstall\",\"update\",\"status\",\"doctor\",\"auth\",\"install-hcloud\",\"help\"]}"
+    },
+    {
+      "name": "help 输出含 Usage 用法段",
+      "ok": true,
+      "detail": "\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nUsage: np…(+1839)\""
+    },
+    {
+      "name": "help 输出非 TODO / 非空",
+      "ok": true,
+      "detail": "{\"len\":2039}"
+    },
+    {
+      "name": "help 输出版本号（与已装包一致）",
+      "ok": true,
+      "detail": "{\"version\":\"1.1.8-next.1\"}"
+    },
+    {
+      "name": "--version 退出码 0 且输出版本",
+      "ok": true,
+      "detail": "{\"code\":0,\"out\":\"HuaweiCloud DevKit CLI: 1.1.8-next.1\\n\\nInstalled agent plugins:\\nOpenCode: 1.1.8-next.1\\nCodex Desktop: 1.1.8-next.1\\nOpenClaw: 1.1.8-next.1\\nCodeArts: 1.1.8-next.1\\nCodeArts Work: 1.1.8-next.1\\nWorkBuddy: 1…(+188)\"}"
+    }
+  ],
+  "helpHead": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nUsage: npx huaweicloud-devkit <command> [--target <opencode|codex|codearts|codearts-work|workbuddy|dsh|officeace|hermes|openclaw|atomcode|all>]\n\nCommands:\n  install      Install skills, MCP server, safety policy\n  uninstall    Remove installed files\n  update       Update to latest version\n  reinstall    Full clean reinstall\n  status       Show installation status\n  doctor       Self-check: hcloud, MCP, ski…(+1439)"
+}

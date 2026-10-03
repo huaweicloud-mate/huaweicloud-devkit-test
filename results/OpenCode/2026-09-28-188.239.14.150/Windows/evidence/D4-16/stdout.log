@@ -1,0 +1,34 @@
+{
+  "status": "FAIL",
+  "why": "Some wrapped commands not blocked",
+  "clientType": "non-hook",
+  "results": [
+    {
+      "cmd": "sh -c \"cat ~/.config/huaweicloud/credentials.json\"",
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "bash -c \"cat ~/.hcloud/config.json\"",
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "powershell -Command \"type $env:USERPROFILE\\.config\\huaweicloud\\credentials.json\"",
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "sh -c \"printenv HW_ACCESS_KEY\"",
+      "decision": "allow",
+      "reason": "No Huawei Cloud safety rule matched."
+    },
+    {
+      "cmd": "eval \"printenv HUAWEICLOUD_SECRET_KEY\"",
+      "decision": "allow",
+      "reason": "No Huawei Cloud safety rule matched."
+    }
+  ],
+  "sourceRef": "safety-policy.mjs:71 - wrapped write commands keep deny classification",
+  "executedAt": "20260928050546"
+}

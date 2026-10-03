@@ -1,0 +1,20 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "Node hook chain verified: hooks.json + .mjs + classifyTextCommand working",
+  "checks": {
+    "hooksFileExists": true,
+    "safetyMjsExists": true,
+    "hooksRefMjs": true,
+    "credDenied": true,
+    "deleteDenied": true,
+    "readonlyAllowed": true
+  },
+  "hooksContentSample": "{\n  \"hooks\": {\n    \"PreToolUse\": [\n      {\n        \"matcher\": \"Bash\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\\\"\",\n            \"timeout\": 5\n          }\n        ]\n      },\n      {\n        \"matcher\":",
+  "classifyResults": {
+    "cred": "deny",
+    "delete": "deny",
+    "readonly": "allow"
+  },
+  "executedAt": "20260920210953"
+}

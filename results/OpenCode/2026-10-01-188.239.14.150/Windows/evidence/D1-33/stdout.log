@@ -1,0 +1,67 @@
+{
+  "caseId": "D1-33",
+  "status": "PASS",
+  "executedAt": "20261001053209",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "10/10 checks passed",
+  "checks": [
+    {
+      "name": "writeSkipState 递归建目录并写入",
+      "ok": true,
+      "detail": "{\"f\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-skipfile-jVllKD\\\\a\\\\b\\\\skip.json\"}"
+    },
+    {
+      "name": "文件结构 {dismissedVersion,dismissedAt,expireAt}",
+      "ok": true,
+      "detail": "[\"dismissedVersion\",\"dismissedAt\",\"expireAt\"]"
+    },
+    {
+      "name": "原子写：临时文件已清理（无残留 .tmp）",
+      "ok": true,
+      "detail": "[\"skip.json\"]"
+    },
+    {
+      "name": "readSkipState 读回 dismissedVersion",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"2.0.0\\\"\",\"expected\":\"\\\"2.0.0\\\"\"}"
+    },
+    {
+      "name": "readSkipState 对非法文件返回 null",
+      "ok": true,
+      "detail": "{\"actual\":\"null\",\"expected\":\"null\"}"
+    },
+    {
+      "name": "readSkipState 对损坏 JSON 返回 null（不抛）",
+      "ok": true,
+      "detail": "{\"actual\":\"null\",\"expected\":\"null\"}"
+    },
+    {
+      "name": "skipFilePath 指向插件目录副本",
+      "ok": true,
+      "detail": "{\"sp\":\"C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-Opencode\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\.update-skip.json\"}"
+    },
+    {
+      "name": "fallbackSkipFilePath 指向 $HUAWEICLOUD_HOME/.config/huaweicloud/devkit-skip.json",
+      "ok": true,
+      "detail": "{\"fb\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-skipfile-jVllKD\\\\.config\\\\huaweicloud\\\\devkit-skip.json\",\"home\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-skipfile-jVllKD\"}"
+    },
+    {
+      "name": "resolveSkipFilePath(null) 返回一个有效路径（非空 .json）",
+      "ok": true,
+      "detail": "\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-skipfile-jVllKD\\\\.config\\\\huaweicloud\\\\devkit-skip.json\""
+    },
+    {
+      "name": "resolveSkipFilePath(sessionId) 按会话拆分后缀",
+      "ok": true,
+      "detail": "{\"rs\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-skipfile-jVllKD\\\\.config\\\\huaweicloud\\\\devkit-skip.json\",\"rsSess\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-skipfile-jVllKD\\\\.config\\\\huaweicloud\\\\devkit-skip.json.sess-01\"}"
+    }
+  ],
+  "paths": {
+    "skipFilePath": "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\hdk\\plugins\\huaweicloud-core\\.update-skip.json",
+    "fallbackSkipFilePath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-skipfile-jVllKD\\.config\\huaweicloud\\devkit-skip.json",
+    "resolved": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-skipfile-jVllKD\\.config\\huaweicloud\\devkit-skip.json",
+    "resolvedSession": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-skipfile-jVllKD\\.config\\huaweicloud\\devkit-skip.json.sess-01"
+  }
+}

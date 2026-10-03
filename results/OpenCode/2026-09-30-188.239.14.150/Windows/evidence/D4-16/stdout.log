@@ -1,0 +1,14 @@
+{
+  "caseId": "D4-16",
+  "status": "FAIL",
+  "executedAt": "20260929211036",
+  "test": "cmd-wrap",
+  "finding": "Command wrapping bypass: hook_check_command returns allow for sh -c wrapped credential dump",
+  "rootCause": "tools.mjs:1146-1147 - hook_check_command only calls evaluateCommandRisk (regex rules), does not call classifyTextCommand/extractInnerCommand to detect inner commands in shell wrappers",
+  "sourceClassify": "deny",
+  "innerCommand": [
+    "printenv HUAWEICLOUD_ACCESS_KEY_ID"
+  ],
+  "mcpDecision": "allow",
+  "mcpResponse": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook risk rule matched.\"}"
+}

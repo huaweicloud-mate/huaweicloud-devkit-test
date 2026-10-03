@@ -1,0 +1,41 @@
+{
+  "caseId": "D1-66",
+  "status": "PASS",
+  "executedAt": "20261001053245",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "6/6 checks passed",
+  "checks": [
+    {
+      "name": "TELEMETRY=off → isTelemetryEnabled()=false",
+      "ok": true,
+      "detail": "{\"actual\":\"false\",\"expected\":\"false\"}"
+    },
+    {
+      "name": "TELEMETRY=on → isTelemetryEnabled()=true",
+      "ok": true,
+      "detail": "{\"actual\":\"true\",\"expected\":\"true\"}"
+    },
+    {
+      "name": "未设 TELEMETRY → isTelemetryEnabled()=true（默认开）",
+      "ok": true,
+      "detail": "{\"actual\":\"true\",\"expected\":\"true\"}"
+    },
+    {
+      "name": "自定义 TELEMETRY_ENDPOINT 被读取（mcp-server --telemetry-endpoint 注入 env）",
+      "ok": true,
+      "detail": "{\"line\":33}"
+    },
+    {
+      "name": "ENDPOINT 未设时回退 DEFAULT_ENDPOINT（源码常量）",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "telemetry.mjs 端点取值 = env 或 DEFAULT_ENDPOINT",
+      "ok": true,
+      "detail": "{\"line\":180}"
+    }
+  ]
+}

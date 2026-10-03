@@ -1,0 +1,36 @@
+{
+  "caseId": "D1-68",
+  "status": "SPEC-MISMATCH",
+  "executedAt": "20261001053112",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "区域优先级漂移：设计契约「HUAWEICLOUD_REGION 优先于 HW_REGION」，实现为 HW_REGION 优先（credentials.mjs:222 `process.env.HW_REGION || process.env.HUAWEICLOUD_REGION`）；实测同时设置两者时 region=cn-north-4",
+  "summary": "3/4 checks passed",
+  "checks": [
+    {
+      "name": "ICONS_OFFLINE=1 时 getServiceIcon 走本地 manifest 返回图标",
+      "ok": false,
+      "detail": "\"[object Object]\""
+    },
+    {
+      "name": "离线分支读本地 manifest 而非网络",
+      "ok": true,
+      "detail": "{\"line\":52}"
+    },
+    {
+      "name": "同时设置 HW_REGION 与 HUAWEICLOUD_REGION 时实际取值",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"cn-north-4\\\"\",\"expected\":\"\\\"cn-north-4\\\"\"}"
+    },
+    {
+      "name": "仅设 HUAWEICLOUD_REGION 时取该值（env 兜底生效）",
+      "ok": true,
+      "detail": "\"cn-south-1\""
+    }
+  ],
+  "regionPrecedenceObserved": {
+    "HW_REGION_and_HUAWEICLOUD_REGION": "cn-north-4",
+    "HUAWEICLOUD_REGION_only": "cn-south-1"
+  },
+  "rootCause": "plugins/huaweicloud-core/src/auth/credentials.mjs:222"
+}

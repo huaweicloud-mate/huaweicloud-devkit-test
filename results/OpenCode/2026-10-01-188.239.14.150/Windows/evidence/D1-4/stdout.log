@@ -1,0 +1,42 @@
+{
+  "caseId": "D1-4",
+  "status": "PASS",
+  "executedAt": "20261001053206",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "6/6 checks passed",
+  "checks": [
+    {
+      "name": "status 退出码 0",
+      "ok": true,
+      "detail": "{\"code\":0}"
+    },
+    {
+      "name": "status 输出含已安装客户端清单",
+      "ok": true,
+      "detail": "\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nHuaweiCloud DevKit Status\\n\\n  已安装: OpenCode, CodeArts, CodeArts Work, WorkBuddy, DSH, OfficeAce, Hermes Agent, OpenClaw, AtomCode | 未安装: Codex\\n\\n[OpenCode]\\n  MCP Server: \\u001b[32mInstalled\\u001b[0m\\n  Safety Policy: \\u001b[32mInstalled\\u001b[0m\\n  Skills: \\u001b[32m29 installed\\u001b[0m\\n  MCP config: \\u001b[32mConfigured\\u001b[0m\\n\\n[CodeArts]\\n  MCP Se…(+1572)\""
+    },
+    {
+      "name": "update 退出码 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"(node:9708) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "update 增量刷新未改动用户 MCP config（md5 不变）",
+      "ok": true,
+      "detail": "{\"before\":{\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\credentials.json\":\"26bee36a90f37d1b6b9d4f16203c57f2\"},\"mid\":{\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\credentials.json\":\"26bee36a90f37d1b6b9d4f16203c57f2\"},\"cfgCandidates\":[]}"
+    },
+    {
+      "name": "update 未改动真云凭证文件 credentials.json",
+      "ok": true,
+      "detail": "{\"creds\":\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\credentials.json\"}"
+    },
+    {
+      "name": "重复 update 幂等（第二次退出码 0 且配置仍不变）",
+      "ok": true,
+      "detail": "{\"code2\":0,\"mid\":{\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\credentials.json\":\"26bee36a90f37d1b6b9d4f16203c57f2\"},\"after\":{\"C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\credentials.json\":\"26bee36a90f37d1b6b9d4f16203c57f2\"}}"
+    }
+  ],
+  "version": "1.1.8-next.1"
+}

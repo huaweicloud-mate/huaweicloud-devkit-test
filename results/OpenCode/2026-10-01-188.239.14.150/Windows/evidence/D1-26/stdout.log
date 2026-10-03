@@ -1,0 +1,51 @@
+{
+  "caseId": "D1-26",
+  "status": "PASS",
+  "executedAt": "20261001053207",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "8/8 checks passed",
+  "checks": [
+    {
+      "name": "tools/list 返回成功且非空",
+      "ok": true,
+      "detail": "{\"count\":41}"
+    },
+    {
+      "name": "huaweicloud_check_update 已注册",
+      "ok": true,
+      "detail": "{\"registered\":[\"huaweicloud_check_update\",\"huaweicloud_upgrade\"]}"
+    },
+    {
+      "name": "huaweicloud_check_update description 非空",
+      "ok": true,
+      "detail": "\"检查 huaweicloud-devkit 插件是否有新版本。结果含 currentVersion / latestStable / latestNext / targetVersion / updateAvailable / dismissExpiresAt / result。支持 dismiss:true 记录用户拒绝（3 天冷却，新版本会重新提醒）。\""
+    },
+    {
+      "name": "huaweicloud_check_update inputSchema 为合法 JSON Schema object",
+      "ok": true,
+      "detail": "{\"type\":\"object\",\"properties\":{\"dismiss\":{\"type\":\"boolean\",\"description\":\"用户拒绝升级时传 true，记录冷却状态。\"},\"dismissVersion\":{\"type\":\"string\",\"description\":\"与 dismiss:true 搭配，用户拒绝的版本号。缺省时用当前检测到的 targetVersion。\"}}}"
+    },
+    {
+      "name": "huaweicloud_upgrade 已注册",
+      "ok": true,
+      "detail": "{\"registered\":[\"huaweicloud_check_update\",\"huaweicloud_upgrade\"]}"
+    },
+    {
+      "name": "huaweicloud_upgrade description 非空",
+      "ok": true,
+      "detail": "\"升级 huaweicloud-devkit 到最新版本。执行前必须先征得用户同意。version 仅支持 \\\"latest\\\"。完成后需重启会话生效。\""
+    },
+    {
+      "name": "huaweicloud_upgrade inputSchema 为合法 JSON Schema object",
+      "ok": true,
+      "detail": "{\"type\":\"object\",\"properties\":{\"version\":{\"type\":\"string\",\"description\":\"仅支持 \\\"latest\\\"（默认）。\"},\"target\":{\"type\":\"string\",\"description\":\"agent 目标（opencode/codex/codearts/.../all）。缺省时用 all（仅更新已安装的）。\"}}}"
+    },
+    {
+      "name": "initialize 返回 protocolVersion + capabilities + serverInfo",
+      "ok": true,
+      "detail": "{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{\"tools\":{}},\"serverInfo\":{\"name\":\"huaweicloud-devkit\",\"version\":\"1.1.8-next.1\"}}"
+    }
+  ]
+}

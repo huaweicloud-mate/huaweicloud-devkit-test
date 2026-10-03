@@ -1,0 +1,100 @@
+{
+  "caseId": "D1-67",
+  "status": "FAIL",
+  "executedAt": "20261001053108",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "OpenCode(command 形态) 未注入 REQUIRED_ENV_KEYS：隔离 HOME 全新安装后 C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-VbSgs0\\.config\\opencode\\opencode.json 的 mcp['huaweicloud-devkit'] 无 env 段（实测 entry={\"type\":\"local\",\"command\":[\"node\",\"C:/Users/ADMINI~1/AppData/Local/Temp/2/multica-task-2981664186/hdk-toolkit-VbSgs0/.config/opencode/huaweicloud-plugins/src/mcp-server.mjs\"],\"enabled\":true,\"timeout\":300000}），而同批 args 形态条目 C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-args-UB9BiP\\plugins\\huaweicloud-devkit\\.mcp.json 写入了 HUAWEICLOUD_AGENT_TOOLKIT_MODE=local。setup-cli.mjs:662 updateOpenCodeConfig 调用 mergeCommandStyle(existing,{mcpPath}) 未传 env，而 writeMcpServersFile(setup-cli.mjs:697) 传入 env:{HUAWEICLOUD_AGENT_TOOLKIT_MODE:'local'}，导致 OpenCode 客户端的 MCP 子进程拿不到 toolkit 模式与 HCLOUD_BIN",
+  "summary": "10/10 checks passed",
+  "checks": [
+    {
+      "name": "setup-cli 注入 HUAWEICLOUD_AGENT_TOOLKIT_MODE=local",
+      "ok": true,
+      "detail": "{\"hits\":9}"
+    },
+    {
+      "name": "HUAWEICLOUD_AGENT_TOOLKIT_MODE 写入 agent env 段（mcp-config-merge 有 env 承载）",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "SKIP_DSH_PLUGIN_INSTALL=1 时跳过 DSH 插件安装（源码分支存在）",
+      "ok": true,
+      "detail": "{\"line\":2272,\"code\":\"if (process.env.HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL === '1') {\"}"
+    },
+    {
+      "name": "隔离 HOME 下 install --target opencode 退出码 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"(node:8264) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "隔离 HOME 下 install --target codex-desktop 退出码 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"(node:15052) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "args 形态条目 env 注入 HUAWEICLOUD_AGENT_TOOLKIT_MODE=local（对照基线成立）",
+      "ok": true,
+      "detail": "{\"HUAWEICLOUD_AGENT_TOOLKIT_MODE\":\"local\"}"
+    },
+    {
+      "name": "SKIP_DSH=1 时 install --target dsh 退出码 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"(node:5624) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "SKIP_DSH=1 时 stdout 明确输出 \"DSH MCP client install skipped by environment\"",
+      "ok": true,
+      "detail": "\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.8-next.1          ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nInstalling HuaweiCloud DevKit for dsh...\\n\\n  Node.js v22.22.2 \\u001b[32mOK\\u001b[0m\\n\\n[DSH]\\n  Skills -> C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-toolkit-skipdsh-tScQy7\\\\.dsh\\\\skills\\n  MCP Server -> C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-toolkit-skipdsh-tScQy7\\\\.dsh\\\\huaw…(+1499)\""
+    },
+    {
+      "name": "SKIP_DSH=1 时未把 @deepseek-ai/dsh-mcp-client 写入 DSH profile 依赖",
+      "ok": true,
+      "detail": "{\"path\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-toolkit-skipdsh-tScQy7\\\\.dsh\\\\profiles\\\\web\\\\package.json\",\"text\":null}"
+    },
+    {
+      "name": "DSH 插件目录（skills/hook 产物）与 SKIP_DSH 分支解耦，可正常落盘",
+      "ok": true,
+      "detail": "{\"dshPluginsDir\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-toolkit-skipdsh-tScQy7\\\\.dsh\\\\huaweicloud-plugins\"}"
+    }
+  ],
+  "opencodeMcpEntry": {
+    "type": "local",
+    "command": [
+      "node",
+      "C:/Users/ADMINI~1/AppData/Local/Temp/2/multica-task-2981664186/hdk-toolkit-VbSgs0/.config/opencode/huaweicloud-plugins/src/mcp-server.mjs"
+    ],
+    "enabled": true,
+    "timeout": 300000
+  },
+  "opencodeConfigPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-VbSgs0\\.config\\opencode\\opencode.json",
+  "argsStyleMcpEntry": {
+    "command": "node",
+    "args": [
+      "C:/Users/ADMINI~1/AppData/Local/Temp/2/multica-task-2981664186/hdk-toolkit-args-UB9BiP/plugins/huaweicloud-devkit/src/mcp-server.mjs"
+    ],
+    "env": {
+      "HUAWEICLOUD_AGENT_TOOLKIT_MODE": "local"
+    }
+  },
+  "argsStyleConfigPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-args-UB9BiP\\plugins\\huaweicloud-devkit\\.mcp.json",
+  "dshProfilePackageJsonExists": false,
+  "dshFileSample": [
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\.installed",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\hook-plugin.mjs",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\.package-lock.json",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\undici\\docs\\docs\\getting-started.md",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\undici\\docs\\docs\\index.md",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\undici\\docs\\docs\\site.json",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\undici\\docs\\docs\\type-map.json",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\undici\\index-fetch.js",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\undici\\index.d.ts",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\undici\\index.js",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\undici\\lib\\api\\abort-signal.js",
+    "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7\\.dsh\\huaweicloud-plugins\\node_modules\\undici\\lib\\api\\api-connect.js"
+  ],
+  "isolatedHome": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-VbSgs0",
+  "isolatedHomeArgsStyle": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-args-UB9BiP",
+  "isolatedHomeSkipDsh": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-toolkit-skipdsh-tScQy7",
+  "rootCause": "plugins/huaweicloud-core/src/setup-cli.mjs:662 updateOpenCodeConfig 未传 env（对比 :697 writeMcpServersFile 传入 env）"
+}

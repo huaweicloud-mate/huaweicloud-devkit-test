@@ -1,0 +1,208 @@
+{
+  "caseId": "D2-2",
+  "status": "PASS",
+  "executedAt": "20261001054403",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "13/13 checks passed",
+  "checks": [
+    {
+      "name": "组合 empty: credentialsConfigured 判定正确",
+      "ok": true,
+      "detail": "{\"expect\":false,\"actual\":false,\"err\":\"(node:4648) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "组合 empty: obsConfigured 判定正确",
+      "ok": true,
+      "detail": "{\"expect\":false,\"actual\":false,\"err\":\"(node:4648) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "组合 s1-only: credentialsConfigured 判定正确",
+      "ok": true,
+      "detail": "{\"expect\":true,\"actual\":true,\"err\":\"(node:13784) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "组合 s1-only: obsConfigured 判定正确",
+      "ok": true,
+      "detail": "{\"expect\":false,\"actual\":false,\"err\":\"(node:13784) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "组合 s1+obs: credentialsConfigured 判定正确",
+      "ok": true,
+      "detail": "{\"expect\":true,\"actual\":true,\"err\":\"(node:13712) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "组合 s1+obs: obsConfigured 判定正确",
+      "ok": true,
+      "detail": "{\"expect\":true,\"actual\":true,\"err\":\"(node:13712) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "组合 s1+obs+runtime: credentialsConfigured 判定正确",
+      "ok": true,
+      "detail": "{\"expect\":true,\"actual\":true,\"err\":\"(node:15016) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "组合 s1+obs+runtime: obsConfigured 判定正确",
+      "ok": true,
+      "detail": "{\"expect\":true,\"actual\":true,\"err\":\"(node:15016) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "组合 s1+obs+runtime: runtimeActive 判定正确",
+      "ok": true,
+      "detail": "{\"expect\":true,\"actual\":true,\"err\":\"(node:15016) ExperimentalWarning: SQLite is an experimental feature and might change at any time\\n(Use `node --trace-warnings ...` to show where the warning was created)\\n\"}"
+    },
+    {
+      "name": "仅 S1+S3（无 runtime）时 activeSource=s1-persistent",
+      "ok": true,
+      "detail": "\"s1-persistent\""
+    },
+    {
+      "name": "runtime 存在时 activeSource 仍为 s1-persistent（runtime 非 STS）且 runtimeActive=true",
+      "ok": true,
+      "detail": "{\"credentialsConfigured\":true,\"obsConfigured\":true,\"runtimeActive\":true,\"activeSource\":\"s1-persistent\",\"s1Configured\":true,\"agentsIsArray\":false,\"agentsIsObject\":true,\"agentKeys\":[\"opencode\",\"codex\",\"codex-desktop\",\"codearts\",\"codearts-work\",\"workbuddy\",\"dsh\",\"officeace\",\"hermes\",\"openclaw\",\"atomcode\"],\"agentsAllBoolean\":true}"
+    },
+    {
+      "name": "status.agents 为 target→{configured} 映射且各客户端注册态可枚举（agent-registration.mjs:223）",
+      "ok": true,
+      "detail": "{\"types\":[\"object\",\"object\",\"object\",\"object\"],\"keySets\":[\"opencode,codex,codex-desktop,codearts,codearts-work,workbuddy,dsh,officeace,hermes,openclaw,atomcode\",\"opencode,codex,codex-desktop,codearts,codearts-work,workbuddy,dsh,officeace,hermes,openclaw,atomcode\",\"opencode,codex,codex-desktop,codearts,codearts-work,workbuddy,dsh,officeace,hermes,openclaw,atomcode\",\"opencode,codex,codex-desktop,codearts,codearts-work,workbuddy,dsh,officeace,hermes,openclaw,atomcode\"]}"
+    },
+    {
+      "name": "status.agents 覆盖全部 11 个客户端 target",
+      "ok": true,
+      "detail": "\"opencode,codex,codex-desktop,codearts,codearts-work,workbuddy,dsh,officeace,hermes,openclaw,atomcode\""
+    }
+  ],
+  "combinations": [
+    {
+      "tag": "empty",
+      "expect": {
+        "credentialsConfigured": false,
+        "obsConfigured": false
+      },
+      "actual": {
+        "credentialsConfigured": false,
+        "obsConfigured": false,
+        "runtimeActive": false,
+        "activeSource": "none",
+        "s1Configured": false,
+        "agentsIsArray": false,
+        "agentsIsObject": true,
+        "agentKeys": [
+          "opencode",
+          "codex",
+          "codex-desktop",
+          "codearts",
+          "codearts-work",
+          "workbuddy",
+          "dsh",
+          "officeace",
+          "hermes",
+          "openclaw",
+          "atomcode"
+        ],
+        "agentsAllBoolean": true
+      },
+      "code": 0,
+      "stderr": "(node:4648) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+    },
+    {
+      "tag": "s1-only",
+      "expect": {
+        "credentialsConfigured": true,
+        "obsConfigured": false
+      },
+      "actual": {
+        "credentialsConfigured": true,
+        "obsConfigured": false,
+        "runtimeActive": false,
+        "activeSource": "s1-persistent",
+        "s1Configured": true,
+        "agentsIsArray": false,
+        "agentsIsObject": true,
+        "agentKeys": [
+          "opencode",
+          "codex",
+          "codex-desktop",
+          "codearts",
+          "codearts-work",
+          "workbuddy",
+          "dsh",
+          "officeace",
+          "hermes",
+          "openclaw",
+          "atomcode"
+        ],
+        "agentsAllBoolean": true
+      },
+      "code": 0,
+      "stderr": "(node:13784) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+    },
+    {
+      "tag": "s1+obs",
+      "expect": {
+        "credentialsConfigured": true,
+        "obsConfigured": true
+      },
+      "actual": {
+        "credentialsConfigured": true,
+        "obsConfigured": true,
+        "runtimeActive": false,
+        "activeSource": "s1-persistent",
+        "s1Configured": true,
+        "agentsIsArray": false,
+        "agentsIsObject": true,
+        "agentKeys": [
+          "opencode",
+          "codex",
+          "codex-desktop",
+          "codearts",
+          "codearts-work",
+          "workbuddy",
+          "dsh",
+          "officeace",
+          "hermes",
+          "openclaw",
+          "atomcode"
+        ],
+        "agentsAllBoolean": true
+      },
+      "code": 0,
+      "stderr": "(node:13712) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+    },
+    {
+      "tag": "s1+obs+runtime",
+      "expect": {
+        "credentialsConfigured": true,
+        "obsConfigured": true,
+        "runtimeActive": true
+      },
+      "actual": {
+        "credentialsConfigured": true,
+        "obsConfigured": true,
+        "runtimeActive": true,
+        "activeSource": "s1-persistent",
+        "s1Configured": true,
+        "agentsIsArray": false,
+        "agentsIsObject": true,
+        "agentKeys": [
+          "opencode",
+          "codex",
+          "codex-desktop",
+          "codearts",
+          "codearts-work",
+          "workbuddy",
+          "dsh",
+          "officeace",
+          "hermes",
+          "openclaw",
+          "atomcode"
+        ],
+        "agentsAllBoolean": true
+      },
+      "code": 0,
+      "stderr": "(node:15016) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+    }
+  ],
+  "rootCause": "auth/service.mjs:189-221 getAuthStatus；auth/agent-registration.mjs:223 getAgentRegistrationStatuses"
+}

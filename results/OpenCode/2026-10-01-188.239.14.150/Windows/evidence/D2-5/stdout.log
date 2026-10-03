@@ -1,0 +1,150 @@
+{
+  "caseId": "D2-5",
+  "status": "FAIL",
+  "executedAt": "20261001054405",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "断言不成立: R11 覆盖常见 IDE/市场预填模板文本（***masked*** / YOUR_SECRET_KEY_HERE 等）不被当作凭证",
+  "summary": "10/11 checks passed",
+  "checks": [
+    {
+      "name": "探针子进程退出 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"\"}"
+    },
+    {
+      "name": "无凭证时抛 HDKIT_CRED_MISSING",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"HDKIT_CRED_MISSING\\\"\",\"expected\":\"\\\"HDKIT_CRED_MISSING\\\"\"}"
+    },
+    {
+      "name": "缺失报错给出可执行指引（auth-init 步骤而非裸堆栈）",
+      "ok": true,
+      "detail": "{\"code\":\"HDKIT_CRED_MISSING\",\"message\":\"Huawei Cloud credentials are not configured. Run \\\"npx huaweicloud-devkit auth init\\\" or set HW_ACCESS_KEY/HW_SECRET_KEY.\",\"onboardingScenario\":3,\"onboardingSteps\":[{\"action\":\"write-import\",\"target\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-d2-5-cred-errors-0H5eYO\\\\home\\\\.config\\\\huaweicloud\\\\creds-import.json\"},{\"action\":\"auth_switch\",\"args\":{\"mode\":\"import\",\"action\":\"persist\"}}]}"
+    },
+    {
+      "name": "缺失时 onboarding 场景=3（s1-missing）",
+      "ok": true,
+      "detail": "{\"actual\":\"3\",\"expected\":\"3\"}"
+    },
+    {
+      "name": "R11：credentials.mjs:66-82 声明的 placeholder/masked 形态全部被识别为未配置",
+      "ok": true,
+      "detail": "{\"missed\":[],\"declared\":[{\"v\":\"<HW_ACCESS_KEY>\",\"isPlaceholder\":true},{\"v\":\"${HW_SECRET_KEY}\",\"isPlaceholder\":true},{\"v\":\"YOUR_AK\",\"isPlaceholder\":true},{\"v\":\"ACCESS_KEY\",\"isPlaceholder\":true},{\"v\":\"SECRET_KEY\",\"isPlaceholder\":true},{\"v\":\"SECURITY_TOKEN\",\"isPlaceholder\":true},{\"v\":\"REPLACE_ME\",\"isPlaceholder\":true},{\"v\":\"abc****\",\"isPlaceholder\":true},{\"v\":\"****\",\"isPlaceholder\":true}]}"
+    },
+    {
+      "name": "placeholder env 下 resolveCredentials 抛 HDKIT_CRED_MISSING",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"HDKIT_CRED_MISSING\\\"\",\"expected\":\"\\\"HDKIT_CRED_MISSING\\\"\"}"
+    },
+    {
+      "name": "R11 覆盖常见 IDE/市场预填模板文本（***masked*** / YOUR_SECRET_KEY_HERE 等）不被当作凭证",
+      "ok": false,
+      "detail": "{\"uncovered\":[\"***masked***\",\"YOUR_SECRET_KEY_HERE\",\"YOUR_AK_HERE\",\"YOUR_SECRET\"],\"isPlaceholder\":[{\"v\":\"***masked***\",\"isPlaceholder\":false},{\"v\":\"YOUR_SECRET_KEY_HERE\",\"isPlaceholder\":false},{\"v\":\"YOUR_AK_HERE\",\"isPlaceholder\":false},{\"v\":\"<your-ak>\",\"isPlaceholder\":true},{\"v\":\"YOUR_SECRET\",\"isPlaceholder\":false}],\"line\":66}"
+    },
+    {
+      "name": "allowMissing=true 时返回 null 而非抛错",
+      "ok": true,
+      "detail": "{\"actual\":\"null\",\"expected\":\"null\"}"
+    },
+    {
+      "name": "错误 AK 的真云校验不通过（valid=false）且给出分类错误（APIGW.0301 / 401）",
+      "ok": true,
+      "detail": "{\"valid\":false,\"projectId\":null,\"error\":\"IAM rejected the credentials (HTTP 401: {\\\"error_msg\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"error_code\\\":\\\"APIGW.0301\\\",\\\"request_id\\\":\\\"8ab457f76798e22e5bfd4b4ecb481f68\\\"}\\n). The AK/SK is invalid - check the SK for typos or expired security tokens.\"}"
+    },
+    {
+      "name": "真云校验失败不泄露 SK 明文",
+      "ok": true,
+      "detail": "\"{\\\"valid\\\":false,\\\"projectId\\\":null,\\\"error\\\":\\\"IAM rejected the credentials (HTTP 401: {\\\\\\\"error_msg\\\\\\\":\\\\\\\"Incorrect IAM authentication information: Unauthorized\\\\\\\",\\\\\\\"error_code\\\\\\\":\\\\\\\"APIGW.0301\\\\\\\",\\\\\\\"request_id\\\\\\\":\\\\\\\"8ab457f76798e22e5bfd4b4ecb481f68\\\\\\\"}\\\\n). The AK/SK is invalid - check the SK for typos or expired s…(+17)\""
+    },
+    {
+      "name": "explain_error 对 401 鉴权错误给出权限类诊断而非裸报错",
+      "ok": true,
+      "detail": "\"{\\\"service\\\":\\\"IAM\\\",\\\"errorCode\\\":\\\"401\\\",\\\"requestId\\\":\\\"req-probe-001\\\",\\\"suggestions\\\":[\\\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\\\",\\\"Provide the Request ID (req-probe-001) when contacting Huawei Cloud support.\\\"]}\""
+    }
+  ],
+  "child": {
+    "code": 0,
+    "stderr": ""
+  },
+  "placeholderProbe": {
+    "declared": [
+      {
+        "v": "<HW_ACCESS_KEY>",
+        "isPlaceholder": true
+      },
+      {
+        "v": "${HW_SECRET_KEY}",
+        "isPlaceholder": true
+      },
+      {
+        "v": "YOUR_AK",
+        "isPlaceholder": true
+      },
+      {
+        "v": "ACCESS_KEY",
+        "isPlaceholder": true
+      },
+      {
+        "v": "SECRET_KEY",
+        "isPlaceholder": true
+      },
+      {
+        "v": "SECURITY_TOKEN",
+        "isPlaceholder": true
+      },
+      {
+        "v": "REPLACE_ME",
+        "isPlaceholder": true
+      },
+      {
+        "v": "abc****",
+        "isPlaceholder": true
+      },
+      {
+        "v": "****",
+        "isPlaceholder": true
+      }
+    ],
+    "extra": [
+      {
+        "v": "***masked***",
+        "isPlaceholder": false
+      },
+      {
+        "v": "YOUR_SECRET_KEY_HERE",
+        "isPlaceholder": false
+      },
+      {
+        "v": "YOUR_AK_HERE",
+        "isPlaceholder": false
+      },
+      {
+        "v": "<your-ak>",
+        "isPlaceholder": true
+      },
+      {
+        "v": "YOUR_SECRET",
+        "isPlaceholder": false
+      }
+    ],
+    "resolve": {
+      "code": "HDKIT_CRED_MISSING"
+    }
+  },
+  "badAkResult": {
+    "valid": false,
+    "projectId": null,
+    "error": "IAM rejected the credentials (HTTP 401: {\"error_msg\":\"Incorrect IAM authentication information: Unauthorized\",\"error_code\":\"APIGW.0301\",\"request_id\":\"8ab457f76798e22e5bfd4b4ecb481f68\"}\n). The AK/SK is invalid - check the SK for typos or expired security tokens."
+  },
+  "explainResult": {
+    "service": "IAM",
+    "errorCode": "401",
+    "requestId": "req-probe-001",
+    "suggestions": [
+      "Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.",
+      "Provide the Request ID (req-probe-001) when contacting Huawei Cloud support."
+    ]
+  },
+  "rootCause": "auth/credentials.mjs:264-305；auth/credential-validator.mjs validateIamCredentials"
+}

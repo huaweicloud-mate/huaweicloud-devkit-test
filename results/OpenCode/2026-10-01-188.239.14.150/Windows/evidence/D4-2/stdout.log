@@ -1,0 +1,136 @@
+{
+  "caseId": "D4-2",
+  "status": "FAIL",
+  "executedAt": "20261001055250",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "断言不成立: 7 类 env/printenv/echo $KEY/Env: 凭证环境变量打印命令全部 deny",
+  "summary": "0/3 checks passed",
+  "checks": [
+    {
+      "name": "7 类 env/printenv/echo $KEY/Env: 凭证环境变量打印命令全部 deny",
+      "ok": false,
+      "detail": "{\"denied\":4,\"total\":7,\"misses\":[{\"command\":\"env\",\"decision\":\"allow\"},{\"command\":\"echo $HW_ACCESS_KEY\",\"decision\":\"allow\"},{\"command\":\"echo $HWCLOUD_AK\",\"decision\":\"allow\"}]}"
+    },
+    {
+      "name": "拦截命中 hwc-command-env-dump 且 severity=deny",
+      "ok": false,
+      "detail": "null"
+    },
+    {
+      "name": "deny 建议只读取必要非敏感项并先脱敏",
+      "ok": false,
+      "detail": "null"
+    }
+  ],
+  "hookResults": [
+    {
+      "command": "printenv | grep HUAWEICLOUD",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-env-dump",
+            "title": "Cloud credential environment dump",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may print cloud credential environment variables.",
+            "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+            "source": "command",
+            "evidence": "printenv | grep HUAWEICLOUD"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    },
+    {
+      "command": "env",
+      "out": {
+        "ok": true,
+        "decision": "allow",
+        "findings": [],
+        "nextStep": "No Huawei Cloud hook risk rule matched."
+      }
+    },
+    {
+      "command": "echo $HW_ACCESS_KEY",
+      "out": {
+        "ok": true,
+        "decision": "allow",
+        "findings": [],
+        "nextStep": "No Huawei Cloud hook risk rule matched."
+      }
+    },
+    {
+      "command": "echo $HWCLOUD_AK",
+      "out": {
+        "ok": true,
+        "decision": "allow",
+        "findings": [],
+        "nextStep": "No Huawei Cloud hook risk rule matched."
+      }
+    },
+    {
+      "command": "Get-ChildItem Env: | grep HW_",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-env-dump",
+            "title": "Cloud credential environment dump",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may print cloud credential environment variables.",
+            "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+            "source": "command",
+            "evidence": "Get-ChildItem Env: | grep HW_"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    },
+    {
+      "command": "dir Env:OS_",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-env-dump",
+            "title": "Cloud credential environment dump",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may print cloud credential environment variables.",
+            "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+            "source": "command",
+            "evidence": "dir Env:OS_"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    },
+    {
+      "command": "gci Env: | Select-String HUAWEICLOUD",
+      "out": {
+        "ok": false,
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-command-env-dump",
+            "title": "Cloud credential environment dump",
+            "category": "credential",
+            "severity": "deny",
+            "message": "The command may print cloud credential environment variables.",
+            "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+            "source": "command",
+            "evidence": "gci Env: | Select-String HUAWEICLOUD"
+          }
+        ],
+        "nextStep": "Revise the command, artifact, or deployment plan before execution."
+      }
+    }
+  ],
+  "rootCause": "safety/rules/cloud-risk-rules.json#hwc-command-env-dump（all: env 命令 + HUAWEICLOUD|HWC_|HCLOUD|HW_|OS_ 变量）"
+}

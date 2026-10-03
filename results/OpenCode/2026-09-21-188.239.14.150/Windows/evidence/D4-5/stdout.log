@@ -1,0 +1,28 @@
+{
+  "caseId": "D4-5",
+  "status": "PASS",
+  "why": "All write operations correctly not allowed (deny)",
+  "results": [
+    {
+      "command": "hcloud ECS DeleteServers --cli-region=cn-north-4 --server_ids.1=xxx",
+      "decision": "deny"
+    },
+    {
+      "command": "hcloud VPC DeleteVpc --cli-region=cn-north-4 --vpc_id=xxx",
+      "decision": "deny"
+    },
+    {
+      "command": "hcloud ECS StopServers --cli-region=cn-north-4",
+      "decision": "deny"
+    },
+    {
+      "command": "hcloud RDS DeleteInstance --cli-region=cn-north-4 --instance_id=xxx",
+      "decision": "deny"
+    },
+    {
+      "command": "hcloud ECS CreateServers --cli-region=cn-north-4",
+      "decision": "deny"
+    }
+  ],
+  "executedAt": "20260920210953"
+}

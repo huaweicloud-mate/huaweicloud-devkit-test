@@ -1,0 +1,171 @@
+{
+  "caseId": "D1-41",
+  "status": "PASS",
+  "executedAt": "20261001053235",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "21/21 checks passed",
+  "checks": [
+    {
+      "name": "up_to_date: tools/call isError=false",
+      "ok": true,
+      "detail": "{\"jsonrpc\":\"2.0\",\"id\":2,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\n  \\\"currentVersion\\\": \\\"1.1.8-next.1\\\",\\n  \\\"latestStable\\\": \\\"1.1.8-next.1\\\",\\n  \\\"latestNext\\\": \\\"1.1.8-next.1\\\",\\n  \\\"targetVersion\\\": \\\"1.1.8-next.1\\\",\\n  \\\"updateAvailable\\\": false,\\n  \\\"dismissed\\\": false,\\n  \\\"dismissExpiresAt\\\": null,\\n  \\\"result\\\": \\\"up_to_date\\\"\\n}\"}],\"isError\":false}}"
+    },
+    {
+      "name": "up_to_date: result=up_to_date",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"up_to_date\\\"\",\"expected\":\"\\\"up_to_date\\\"\"}"
+    },
+    {
+      "name": "up_to_date: updateAvailable=false",
+      "ok": true,
+      "detail": "{\"actual\":\"false\",\"expected\":\"false\"}"
+    },
+    {
+      "name": "up_to_date: currentVersion 回显本机版本",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"1.1.8-next.1\\\"\",\"expected\":\"\\\"1.1.8-next.1\\\"\"}"
+    },
+    {
+      "name": "up_to_date: latestStable 字段存在",
+      "ok": true,
+      "detail": "{\"currentVersion\":\"1.1.8-next.1\",\"latestStable\":\"1.1.8-next.1\",\"latestNext\":\"1.1.8-next.1\",\"targetVersion\":\"1.1.8-next.1\",\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"up_to_date\"}"
+    },
+    {
+      "name": "update_available: isError=false",
+      "ok": true,
+      "detail": "{\"jsonrpc\":\"2.0\",\"id\":2,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\n  \\\"currentVersion\\\": \\\"1.1.8-next.1\\\",\\n  \\\"latestStable\\\": \\\"99.0.0\\\",\\n  \\\"latestNext\\\": \\\"99.1.0\\\",\\n  \\\"targetVersion\\\": \\\"99.1.0\\\",\\n  \\\"updateAvailable\\\": true,\\n  \\\"dismissed\\\": false,\\n  \\\"dismissExpiresAt\\\": null,\\n  \\\"result\\\": \\\"update_available\\\"\\n}\"}],\"isError\":false}}"
+    },
+    {
+      "name": "update_available: result=update_available",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"update_available\\\"\",\"expected\":\"\\\"update_available\\\"\"}"
+    },
+    {
+      "name": "update_available: updateAvailable=true",
+      "ok": true,
+      "detail": "{\"actual\":\"true\",\"expected\":\"true\"}"
+    },
+    {
+      "name": "update_available: 预发布版走 next 候选 targetVersion=99.1.0",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"99.1.0\\\"\",\"expected\":\"\\\"99.1.0\\\"\"}"
+    },
+    {
+      "name": "update_available: latestStable/latestNext 双字段返回",
+      "ok": true,
+      "detail": "{\"currentVersion\":\"1.1.8-next.1\",\"latestStable\":\"99.0.0\",\"latestNext\":\"99.1.0\",\"targetVersion\":\"99.1.0\",\"updateAvailable\":true,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"update_available\"}"
+    },
+    {
+      "name": "dismiss 调用 isError=false",
+      "ok": true,
+      "detail": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\n  \\\"currentVersion\\\": \\\"1.1.8-next.1\\\",\\n  \\\"latestStable\\\": \\\"99.0.0\\\",\\n  \\\"latestNext\\\": \\\"99.1.0\\\",\\n  \\\"targetVersion\\\": \\\"99.1.0\\\",\\n  \\\"updateAvailable\\\": false,\\n  \\\"dismissed\\\": true,\\n  \\\"dismissExpiresAt\\\": \\\"2026-10-03T21:32:35.625Z\\\",\\n  \\\"result\\\": \\\"dismissed\\\"\\n}\"}],\"isError\":false}"
+    },
+    {
+      "name": "dismiss 冷却内再次 check_update → result=dismissed",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"dismissed\\\"\",\"expected\":\"\\\"dismissed\\\"\"}"
+    },
+    {
+      "name": "dismiss 冷却内 dismissed=true",
+      "ok": true,
+      "detail": "{\"actual\":\"true\",\"expected\":\"true\"}"
+    },
+    {
+      "name": "dismiss 冷却内返回 dismissExpiresAt",
+      "ok": true,
+      "detail": "{\"currentVersion\":\"1.1.8-next.1\",\"latestStable\":\"99.0.0\",\"latestNext\":\"99.1.0\",\"targetVersion\":\"99.1.0\",\"updateAvailable\":false,\"dismissed\":true,\"dismissExpiresAt\":\"2026-10-03T21:32:35.625Z\",\"result\":\"dismissed\"}"
+    },
+    {
+      "name": "check_failed: 失败不抛协议错误（isError=false，有 result 字段）",
+      "ok": true,
+      "detail": "{\"jsonrpc\":\"2.0\",\"id\":2,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\n  \\\"currentVersion\\\": \\\"1.1.8-next.1\\\",\\n  \\\"latestStable\\\": null,\\n  \\\"latestNext\\\": null,\\n  \\\"targetVersion\\\": null,\\n  \\\"updateAvailable\\\": false,\\n  \\\"dismissed\\\": false,\\n  \\\"dismissExpiresAt\\\": null,\\n  \\\"result\\\": \\\"check_failed\\\",\\n  \\\"note\\\": \\\"检测失败，不影响使用\\\"\\n}\"}],\"isError\":false}}"
+    },
+    {
+      "name": "check_failed: result ∈ {check_failed, up_to_date, update_available}",
+      "ok": true,
+      "detail": "{\"currentVersion\":\"1.1.8-next.1\",\"latestStable\":null,\"latestNext\":null,\"targetVersion\":null,\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"check_failed\",\"note\":\"检测失败，不影响使用\"}"
+    },
+    {
+      "name": "四态契约 up_to_date: result ∈ 允许枚举",
+      "ok": true,
+      "detail": "{\"k\":\"up_to_date\",\"result\":\"up_to_date\"}"
+    },
+    {
+      "name": "四态契约 update_available: result ∈ 允许枚举",
+      "ok": true,
+      "detail": "{\"k\":\"update_available\",\"result\":\"update_available\"}"
+    },
+    {
+      "name": "四态契约 dismissed: result ∈ 允许枚举",
+      "ok": true,
+      "detail": "{\"k\":\"dismissed\",\"result\":\"dismissed\"}"
+    },
+    {
+      "name": "四态契约 dismissCall: result ∈ 允许枚举",
+      "ok": true,
+      "detail": "{\"k\":\"dismissCall\",\"result\":\"dismissed\"}"
+    },
+    {
+      "name": "四态契约 check_failed: result ∈ 允许枚举",
+      "ok": true,
+      "detail": "{\"k\":\"check_failed\",\"result\":\"check_failed\"}"
+    }
+  ],
+  "currentVersion": "1.1.8-next.1",
+  "injectionMethod": "PATH 前置 npm.cmd 替身注入 dist-tags（被测 spawn/parse/缓存/judgeUpdate 均为真实代码）",
+  "responses": {
+    "up_to_date": {
+      "currentVersion": "1.1.8-next.1",
+      "latestStable": "1.1.8-next.1",
+      "latestNext": "1.1.8-next.1",
+      "targetVersion": "1.1.8-next.1",
+      "updateAvailable": false,
+      "dismissed": false,
+      "dismissExpiresAt": null,
+      "result": "up_to_date"
+    },
+    "update_available": {
+      "currentVersion": "1.1.8-next.1",
+      "latestStable": "99.0.0",
+      "latestNext": "99.1.0",
+      "targetVersion": "99.1.0",
+      "updateAvailable": true,
+      "dismissed": false,
+      "dismissExpiresAt": null,
+      "result": "update_available"
+    },
+    "dismissed": {
+      "currentVersion": "1.1.8-next.1",
+      "latestStable": "99.0.0",
+      "latestNext": "99.1.0",
+      "targetVersion": "99.1.0",
+      "updateAvailable": false,
+      "dismissed": true,
+      "dismissExpiresAt": "2026-10-03T21:32:35.625Z",
+      "result": "dismissed"
+    },
+    "dismissCall": {
+      "currentVersion": "1.1.8-next.1",
+      "latestStable": "99.0.0",
+      "latestNext": "99.1.0",
+      "targetVersion": "99.1.0",
+      "updateAvailable": false,
+      "dismissed": true,
+      "dismissExpiresAt": "2026-10-03T21:32:35.625Z",
+      "result": "dismissed"
+    },
+    "check_failed": {
+      "currentVersion": "1.1.8-next.1",
+      "latestStable": null,
+      "latestNext": null,
+      "targetVersion": null,
+      "updateAvailable": false,
+      "dismissed": false,
+      "dismissExpiresAt": null,
+      "result": "check_failed",
+      "note": "检测失败，不影响使用"
+    }
+  }
+}

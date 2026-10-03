@@ -1,0 +1,119 @@
+{
+  "caseId": "D2-27",
+  "status": "PASS",
+  "executedAt": "20261001054406",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "21/21 checks passed",
+  "checks": [
+    {
+      "name": "getKooCliVersion() 返回 kooCliVersion 字符串或 null（不抛错）",
+      "ok": true,
+      "detail": "\"7.2.12\""
+    },
+    {
+      "name": "getKooCliVersion 与 package.json 声明的 kooCliVersion 一致",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"7.2.12\\\"\",\"expected\":\"\\\"7.2.12\\\"\"}"
+    },
+    {
+      "name": "parseHcloudVersion(\"hcloud 7.2.12 (build 20240101) windows/a…(+4)\") = 7.2.12",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"7.2.12\\\"\",\"expected\":\"\\\"7.2.12\\\"\"}"
+    },
+    {
+      "name": "parseHcloudVersion(\"hcloud version 1.1.0\") = 1.1.0",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"1.1.0\\\"\",\"expected\":\"\\\"1.1.0\\\"\"}"
+    },
+    {
+      "name": "parseHcloudVersion(\"Hcloud 8.0.0-beta.3\") = 8.0.0-beta.3",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"8.0.0-beta.3\\\"\",\"expected\":\"\\\"8.0.0-beta.3\\\"\"}"
+    },
+    {
+      "name": "parseHcloudVersion(\"hcloud 2.0.0+build7\") = 2.0.0+build7",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"2.0.0+build7\\\"\",\"expected\":\"\\\"2.0.0+build7\\\"\"}"
+    },
+    {
+      "name": "parseHcloudVersion(\"no version here\") = null",
+      "ok": true,
+      "detail": "{\"actual\":\"null\",\"expected\":\"null\"}"
+    },
+    {
+      "name": "parseHcloudVersion(\"\") = null",
+      "ok": true,
+      "detail": "{\"actual\":\"null\",\"expected\":\"null\"}"
+    },
+    {
+      "name": "parseHcloudVersion 忽略 build 号与平台后缀（只取首个 semver）",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "compareVersion(7.2.12, 7.2.9) = 1",
+      "ok": true,
+      "detail": "{\"actual\":\"1\",\"expected\":\"1\"}"
+    },
+    {
+      "name": "compareVersion(7.2.9, 7.2.12) = -1",
+      "ok": true,
+      "detail": "{\"actual\":\"-1\",\"expected\":\"-1\"}"
+    },
+    {
+      "name": "compareVersion(7.2.12, 7.2.12) = 0",
+      "ok": true,
+      "detail": "{\"actual\":\"0\",\"expected\":\"0\"}"
+    },
+    {
+      "name": "compareVersion(1.10.0, 1.9.0) = 1",
+      "ok": true,
+      "detail": "{\"actual\":\"1\",\"expected\":\"1\"}"
+    },
+    {
+      "name": "compareVersion(2.0.0, 10.0.0) = -1",
+      "ok": true,
+      "detail": "{\"actual\":\"-1\",\"expected\":\"-1\"}"
+    },
+    {
+      "name": "compareVersion(1.0, 1.0.0) = 0",
+      "ok": true,
+      "detail": "{\"actual\":\"0\",\"expected\":\"0\"}"
+    },
+    {
+      "name": "compareVersion(1.1.0-next.1, 1.1.0) = 0",
+      "ok": true,
+      "detail": "{\"actual\":\"0\",\"expected\":\"0\"}"
+    },
+    {
+      "name": "KOO_CLI_BASE 为 https 官方 OBS 地址",
+      "ok": true,
+      "detail": "\"https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli\""
+    },
+    {
+      "name": "kooCliDownloadBase() = KOO_CLI_BASE/<当前版本>",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12\\\"\",\"expected\":\"\\\"https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12\\\"\"}"
+    },
+    {
+      "name": "下载源包含版本号段（可按版本定位安装包）",
+      "ok": true,
+      "detail": "\"https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12\""
+    },
+    {
+      "name": "getKooCliVersion 读取失败时返回 null 而非抛错（try/catch 包裹）",
+      "ok": true,
+      "detail": "{\"line\":12}"
+    },
+    {
+      "name": "kooCliDownloadBase 在版本缺失时回退 'latest'",
+      "ok": true,
+      "detail": "{\"line\":46}"
+    }
+  ],
+  "getKooCliVersion": "7.2.12",
+  "kooCliDownloadBase": "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12",
+  "rootCause": "src/koocli-version.mjs:12 getKooCliVersion / :21 parseHcloudVersion / :27 compareVersion / :45 kooCliDownloadBase"
+}

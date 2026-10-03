@@ -1,0 +1,83 @@
+{
+  "caseId": "D1-40",
+  "status": "PASS",
+  "executedAt": "20261001053234",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "8/8 checks passed",
+  "checks": [
+    {
+      "name": "镜像 registry 被实际读取（latest=1.0.0，低于本地）",
+      "ok": true,
+      "detail": "{\"mirrorFetch\":{\"latest\":\"1.0.0\",\"next\":\"0.9.0\"},\"mirrorSync\":null,\"mirrorErr\":null}"
+    },
+    {
+      "name": "镜像无 EINVAL/异常抛出",
+      "ok": true,
+      "detail": "{\"mirrorErr\":null}"
+    },
+    {
+      "name": "镜像滞后时不得提示版本倒退（updateAvailable=false）",
+      "ok": true,
+      "detail": "{\"currentVersion\":\"1.1.8-next.1\",\"latestStable\":\"1.0.0\",\"latestNext\":\"0.9.0\",\"targetVersion\":\"1.0.0\",\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"up_to_date\"}"
+    },
+    {
+      "name": "镜像滞后时 result=up_to_date（远端<=本地不提示）",
+      "ok": true,
+      "detail": "{\"currentVersion\":\"1.1.8-next.1\",\"latestStable\":\"1.0.0\",\"latestNext\":\"0.9.0\",\"targetVersion\":\"1.0.0\",\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"up_to_date\"}"
+    },
+    {
+      "name": "determineTarget 取候选中最大版本（1.0.0），防倒退由 judgeUpdate 守卫",
+      "ok": true,
+      "detail": "{\"target\":\"1.0.0\",\"current\":\"1.1.8-next.1\"}"
+    },
+    {
+      "name": "judgeUpdate 守卫生效：target<=current 时判 up_to_date（不提示倒退）",
+      "ok": true,
+      "detail": "{\"currentVersion\":\"1.1.8-next.1\",\"latestStable\":\"1.0.0\",\"latestNext\":\"0.9.0\",\"targetVersion\":\"1.0.0\",\"updateAvailable\":false,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"up_to_date\"}"
+    },
+    {
+      "name": "官方源对照可取到（registry=https://registry.npmjs.org）",
+      "ok": true,
+      "detail": "{\"latest\":\"1.1.7\",\"next\":\"1.1.8-next.1\"}"
+    },
+    {
+      "name": "镜像与官方源结论可区分（镜像 up_to_date 不被官方源结论覆盖）",
+      "ok": true,
+      "detail": "{\"mirror\":\"up_to_date\",\"official\":\"up_to_date\"}"
+    }
+  ],
+  "comparison": {
+    "current": "1.1.8-next.1",
+    "mirrorTags": {
+      "latest": "1.0.0",
+      "next": "0.9.0"
+    },
+    "mirrorJudged": {
+      "currentVersion": "1.1.8-next.1",
+      "latestStable": "1.0.0",
+      "latestNext": "0.9.0",
+      "targetVersion": "1.0.0",
+      "updateAvailable": false,
+      "dismissed": false,
+      "dismissExpiresAt": null,
+      "result": "up_to_date"
+    },
+    "official": {
+      "latest": "1.1.7",
+      "next": "1.1.8-next.1"
+    },
+    "officialJudged": {
+      "currentVersion": "1.1.8-next.1",
+      "latestStable": "1.1.7",
+      "latestNext": "1.1.8-next.1",
+      "targetVersion": "1.1.8-next.1",
+      "updateAvailable": false,
+      "dismissed": false,
+      "dismissExpiresAt": null,
+      "result": "up_to_date"
+    },
+    "mirrorSyncChain": null
+  }
+}

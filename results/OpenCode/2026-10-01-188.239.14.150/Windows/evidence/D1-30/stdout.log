@@ -1,0 +1,66 @@
+{
+  "caseId": "D1-30",
+  "status": "PASS",
+  "executedAt": "20261001053209",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "11/11 checks passed",
+  "checks": [
+    {
+      "name": "semverCompare(1.1.2, 1.1.1) = 1",
+      "ok": true,
+      "detail": "{\"actual\":\"1\",\"expected\":\"1\"}"
+    },
+    {
+      "name": "semverCompare(1.1.1, 1.1.2) = -1",
+      "ok": true,
+      "detail": "{\"actual\":\"-1\",\"expected\":\"-1\"}"
+    },
+    {
+      "name": "semverCompare(1.1.0, 1.1.0-next.9) = 1",
+      "ok": true,
+      "detail": "{\"actual\":\"1\",\"expected\":\"1\"}"
+    },
+    {
+      "name": "semverCompare(1.1.1, 1.1.1) = 0",
+      "ok": true,
+      "detail": "{\"actual\":\"0\",\"expected\":\"0\"}"
+    },
+    {
+      "name": "semverCompare(2.0.0, 1.99.99) = 1",
+      "ok": true,
+      "detail": "{\"actual\":\"1\",\"expected\":\"1\"}"
+    },
+    {
+      "name": "semverCompare(1.2.0, 1.10.0) = -1",
+      "ok": true,
+      "detail": "{\"actual\":\"-1\",\"expected\":\"-1\"}"
+    },
+    {
+      "name": "semverCompare(1.1.0-next.1, 1.1.0-next.2) = -1",
+      "ok": true,
+      "detail": "{\"actual\":\"-1\",\"expected\":\"-1\"}"
+    },
+    {
+      "name": "semverCompare(abc, abc) = 0",
+      "ok": true,
+      "detail": "{\"actual\":\"0\",\"expected\":\"0\"}"
+    },
+    {
+      "name": "1.1.0 > 1.1.0-next.9（正式版大于预发布）",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "无效串按字典序（parse 返回 null 时退化为字符串比较）",
+      "ok": true,
+      "detail": "{\"parse\":null,\"cmp\":-1}"
+    },
+    {
+      "name": "hasPrerelease 区分预发布",
+      "ok": true,
+      "detail": null
+    }
+  ]
+}

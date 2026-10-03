@@ -1,0 +1,30 @@
+{
+  "caseId": "D1-45",
+  "status": "PASS",
+  "executedAt": "20261001053241",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "3/3 checks passed",
+  "checks": [
+    {
+      "name": "会话首个非检查工具可携带 _updateInfo 兜底提示",
+      "ok": true,
+      "detail": "{\"keys\":[\"installed\",\"authenticated\",\"status\",\"output\",\"kooCliVersion\",\"installedVersion\",\"versionMismatch\",\"nextStep\",\"authHint\",\"_updateInfo\"]}"
+    },
+    {
+      "name": "第二个非检查工具不再重复携带（一次性消费）",
+      "ok": true,
+      "detail": "{\"keys\":[\"ok\",\"count\",\"regions\"]}"
+    },
+    {
+      "name": "_resetHintConsumption 后 _isHintConsumed=false",
+      "ok": true,
+      "detail": "{\"before\":false,\"afterReset\":false}"
+    }
+  ],
+  "consumeApi": {
+    "decorate": "mcp-protocol.mjs:11",
+    "reset": "mcp-protocol.mjs:23"
+  }
+}

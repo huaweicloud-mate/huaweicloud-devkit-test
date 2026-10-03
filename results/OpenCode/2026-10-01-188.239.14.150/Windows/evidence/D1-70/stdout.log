@@ -1,0 +1,91 @@
+{
+  "caseId": "D1-70",
+  "status": "PASS",
+  "executedAt": "20261001053249",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "15/15 checks passed",
+  "checks": [
+    {
+      "name": "proxy.json 写入后读回一致",
+      "ok": true,
+      "detail": "{\"before\":null,\"after\":{\"https_proxy\":\"http://127.0.0.1:18443\",\"http_proxy\":\"http://127.0.0.1:18080\",\"no_proxy\":\"\"}}"
+    },
+    {
+      "name": "无 env 时从 proxy.json 取代理（proxyUrl 含 18443）",
+      "ok": true,
+      "detail": "{\"proxyUrl\":\"http://127.0.0.1:18443\",\"noProxyList\":[],\"targetProtocol\":\"https:\"}"
+    },
+    {
+      "name": "env 代理优先于 proxy.json",
+      "ok": true,
+      "detail": "{\"proxyUrl\":\"http://127.0.0.1:19999\",\"noProxyList\":[],\"targetProtocol\":\"https:\"}"
+    },
+    {
+      "name": "no_proxy 命中 → getProxySettings 返回 null（绕过）",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "shouldBypassProxy 对 no_proxy 命中返回 true",
+      "ok": true,
+      "detail": "true"
+    },
+    {
+      "name": "shouldBypassProxy 对未命中域名返回 false",
+      "ok": true,
+      "detail": "false"
+    },
+    {
+      "name": "有代理 → getProxyDispatcher 返回 undici ProxyAgent 实例",
+      "ok": true,
+      "detail": "{\"type\":\"ProxyAgent\",\"isObject\":true}"
+    },
+    {
+      "name": "同一代理 URL 二次调用命中 dispatcher 缓存（同一实例）",
+      "ok": true,
+      "detail": "{\"first\":\"ProxyAgent\",\"second\":\"ProxyAgent\"}"
+    },
+    {
+      "name": "有代理时 getWebSocketImpl 返回代理构造器（非 globalThis.WebSocket）",
+      "ok": true,
+      "detail": "{\"type\":\"function\"}"
+    },
+    {
+      "name": "有代理时 createProxyWebSocket 返回 undici WebSocket 实例（非 globalThis.WebSocket 实例）",
+      "ok": true,
+      "detail": "{\"ctor\":\"WebSocket\",\"isGlobalInstance\":false,\"hasDispatcherPath\":true}"
+    },
+    {
+      "name": "有代理时实例带 undici 内部状态（非全局 WebSocket 的裸实例）",
+      "ok": true,
+      "detail": "{\"ctor\":\"WebSocket\"}"
+    },
+    {
+      "name": "无代理 → getProxyDispatcher 返回 undefined（falsy，回退全局）",
+      "ok": true,
+      "detail": "{\"type\":\"undefined\"}"
+    },
+    {
+      "name": "无代理时 getWebSocketImpl 回退 globalThis.WebSocket",
+      "ok": true,
+      "detail": "{\"same\":true}"
+    },
+    {
+      "name": "无代理时 createProxyWebSocket 回退 globalThis.WebSocket",
+      "ok": true,
+      "detail": "{\"type\":\"WebSocket\"}"
+    },
+    {
+      "name": "clearProxyConfig 后读回 null",
+      "ok": true,
+      "detail": "null"
+    }
+  ],
+  "source": {
+    "proxyConfig": "proxy/proxy-config.mjs getProxySettings:153",
+    "proxyAgent": "proxy/proxy-agent.mjs createProxyWebSocket:52"
+  },
+  "isolatedHome": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-2981664186\\hdk-proxy-9ditaq"
+}

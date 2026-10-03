@@ -1,0 +1,54 @@
+{
+  "caseId": "D1-39",
+  "status": "FAIL",
+  "executedAt": "20261001053212",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "升级检测链在 npm 12.1.0 上静默失效：`npm view huaweicloud-devkit dist-tags --json` 返回数组形态 \"[\\n  {\\n    \\\"latest\\\": \\\"1.1.7\\\",\\n    \\\"next\\\": \\\"1.1.8-next.1\\\"\\n  }\\n]\\n\"，而 parseDistTagsOutput 以 `Array.isArray(parsed)` 直接 return null（update-check.mjs:88），导致 queryDistTagsSync/queryDistTags 恒返回 null → check_update 恒为 check_failed",
+  "summary": "2/6 checks passed",
+  "checks": [
+    {
+      "name": "queryDistTagsSync 返回非 null（Windows 检测链真实可用）",
+      "ok": false,
+      "detail": "null"
+    },
+    {
+      "name": "queryDistTagsSync 未返回 EINVAL 静默失败",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "queryDistTags（spawn 异步）返回非 null",
+      "ok": false,
+      "detail": "null"
+    },
+    {
+      "name": "同步/异步两条检测链结果一致",
+      "ok": false,
+      "detail": "{\"sync\":null,\"async\":null}"
+    },
+    {
+      "name": "对照：queryDistTagsFetch（registry HTTP 路径）可取到 dist-tags",
+      "ok": true,
+      "detail": "{\"latest\":\"1.1.7\",\"next\":\"1.1.8-next.1\"}"
+    },
+    {
+      "name": "parseDistTagsOutput 兼容 npm 实际输出的 JSON 形态（对象/数组均可解析）",
+      "ok": false,
+      "detail": "{\"npmOutputShape\":\"ARRAY\",\"parseResult\":null}"
+    }
+  ],
+  "npmVersion": "12.1.0",
+  "rawNpmViewStdout": "[\n  {\n    \"latest\": \"1.1.7\",\n    \"next\": \"1.1.8-next.1\"\n  }\n]\n",
+  "rawNpmViewJsonShape": "ARRAY",
+  "parseDistTagsOutputResult": null,
+  "control_shell_false": {
+    "error": "EINVAL",
+    "status": null
+  },
+  "rootCause": "plugins/huaweicloud-core/src/update-check.mjs:88 (parseDistTagsOutput 拒绝数组形态 JSON)",
+  "source": {
+    "queryDistTagsSync": "plugins/huaweicloud-core/src/update-check.mjs:256",
+    "parseDistTagsOutput": "plugins/huaweicloud-core/src/update-check.mjs:81"
+  }
+}

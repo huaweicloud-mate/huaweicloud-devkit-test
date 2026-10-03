@@ -1,0 +1,56 @@
+{
+  "caseId": "D2-10",
+  "status": "PASS",
+  "executedAt": "20261001054357",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "8/8 checks passed",
+  "checks": [
+    {
+      "name": "探针子进程退出 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"\"}"
+    },
+    {
+      "name": "readKooCliProfiles 解析出两档（default/deploy）",
+      "ok": true,
+      "detail": "{\"current\":\"deploy\",\"mtimeMs\":1790804637870.977,\"configPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-d2-10-current-profile-0C5PU3\\\\home\\\\.hcloud\\\\config.json\",\"authEncrypt\":false,\"profiles\":[{\"name\":\"default\",\"fingerprint\":\"35f5008c\",\"accessKeyId\":\"AKDEFAULT000000000000000000\",\"encrypted\":false},{\"name\":\"deploy\",\"fingerprint\":\"12338ec9\",\"accessKeyId\":\"AKDEPLOY00000000000000000000\",\"encrypted\":false}]}"
+    },
+    {
+      "name": "current=deploy 时 resolveManagedProfile 返回 deploy",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"deploy\\\"\",\"expected\":\"\\\"deploy\\\"\"}"
+    },
+    {
+      "name": "切换 current=default 后 resolveManagedProfile 跟随为 default（R7）",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"default\\\"\",\"expected\":\"\\\"default\\\"\"}"
+    },
+    {
+      "name": "未加密档 fingerprint 由 AK+SK 派生且随档切换而变",
+      "ok": true,
+      "detail": "{\"deploy\":\"12338ec9\",\"default\":\"35f5008c\"}"
+    },
+    {
+      "name": "authEncrypt=true 时不把密文当凭证（fingerprint/accessKeyId 留空并标 encrypted）",
+      "ok": true,
+      "detail": "{\"current\":\"deploy\",\"mtimeMs\":1790804637875.4758,\"configPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-d2-10-current-profile-0C5PU3\\\\home\\\\.hcloud\\\\config.json\",\"authEncrypt\":true,\"profiles\":[{\"name\":\"deploy\",\"fingerprint\":\"\",\"accessKeyId\":\"\",\"encrypted\":true}]}"
+    },
+    {
+      "name": "runHcloudConfigure 以 --cli-profile=<profile> 实参调用（非裸 hcloud configure set）",
+      "ok": true,
+      "detail": "{\"line\":204,\"code\":\"`--cli-profile=${profile}`,\"}"
+    },
+    {
+      "name": "resolveManagedProfile 结果直接透传为 --cli-profile 实参",
+      "ok": true,
+      "detail": "{\"line\":204}"
+    }
+  ],
+  "child": {
+    "code": 0,
+    "stderr": ""
+  },
+  "rootCause": "auth/reconcile.mjs:79 resolveManagedProfile / :204 runHcloudConfigure"
+}

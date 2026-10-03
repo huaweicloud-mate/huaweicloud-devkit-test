@@ -1,0 +1,33 @@
+{
+  "status": "FAIL",
+  "why": "Some credential env commands not blocked",
+  "clientType": "non-hook",
+  "results": [
+    {
+      "cmd": "printenv HW_ACCESS_KEY",
+      "decision": "deny",
+      "reason": "Printing cloud credential environment variables is blocked."
+    },
+    {
+      "cmd": "printenv HUAWEICLOUD_SECRET_ACCESS_KEY",
+      "decision": "deny",
+      "reason": "Dumping cloud credential environment variables is blocked."
+    },
+    {
+      "cmd": "echo $HW_SECRET_KEY",
+      "decision": "deny",
+      "reason": "Printing cloud credential environment variables is blocked."
+    },
+    {
+      "cmd": "echo $HUAWEICLOUD_ACCESS_KEY",
+      "decision": "deny",
+      "reason": "Printing cloud credential environment variables is blocked."
+    },
+    {
+      "cmd": "env | grep HW_",
+      "decision": "allow",
+      "reason": "No Huawei Cloud safety rule matched."
+    }
+  ],
+  "executedAt": "20260928050546"
+}

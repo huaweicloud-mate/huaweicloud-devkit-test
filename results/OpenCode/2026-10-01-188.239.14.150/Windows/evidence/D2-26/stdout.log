@@ -1,0 +1,66 @@
+{
+  "caseId": "D2-26",
+  "status": "PASS",
+  "executedAt": "20261001054405",
+  "os": "Windows",
+  "client": "OpenCode",
+  "why": "",
+  "summary": "10/10 checks passed",
+  "checks": [
+    {
+      "name": "探针子进程退出 0",
+      "ok": true,
+      "detail": "{\"code\":0,\"err\":\"\"}"
+    },
+    {
+      "name": "backupGlobalCredentials 返回 .bak 路径且文件存在",
+      "ok": true,
+      "detail": "\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-2981664186\\\\hdk-d2-26-backup-restore-BOaigk\\\\home\\\\.config\\\\huaweicloud\\\\credentials.json.bak\""
+    },
+    {
+      "name": "备份内容与原 S1 一致（ak）",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\",\"expected\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\"}"
+    },
+    {
+      "name": "破坏后主凭证为新值",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"AKBROKEN00000000000000000\\\"\",\"expected\":\"\\\"AKBROKEN00000000000000000\\\"\"}"
+    },
+    {
+      "name": "restoreGlobalCredentialsBackup 返回 true",
+      "ok": true,
+      "detail": "{\"actual\":\"true\",\"expected\":\"true\"}"
+    },
+    {
+      "name": "恢复后主凭证回到原 ak",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\",\"expected\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\"}"
+    },
+    {
+      "name": "恢复后 region 也回到原值",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"cn-north-4\\\"\",\"expected\":\"\\\"cn-north-4\\\"\"}"
+    },
+    {
+      "name": "重复恢复幂等（内容不变）",
+      "ok": true,
+      "detail": "{\"actual\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\",\"expected\":\"\\\"AKIAPROBED2AAAAAAAAA\\\"\"}"
+    },
+    {
+      "name": "备份文件缺失时 restore 返回 false",
+      "ok": true,
+      "detail": "{\"actual\":\"false\",\"expected\":\"false\"}"
+    },
+    {
+      "name": "主凭证文件不存在时 backup 返回 null",
+      "ok": true,
+      "detail": "{\"actual\":\"null\",\"expected\":\"null\"}"
+    }
+  ],
+  "child": {
+    "code": 0,
+    "stderr": ""
+  },
+  "rootCause": "auth/credentials.mjs:435 backupGlobalCredentials / :448 restoreGlobalCredentialsBackup"
+}

@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "why": "Malformed/fuzzy inputs (empty, null) are handled safely with deny (fail-closed). Dangerous commands are denied. No crashes.",
+  "details": [
+    {
+      "cmd": "",
+      "decision": "deny",
+      "safe": true
+    },
+    {
+      "cmd": "null",
+      "decision": "deny",
+      "safe": true
+    },
+    {
+      "cmd": "cat ~/.config/huaweicloud/credentials.json",
+      "decision": "deny",
+      "safe": true
+    }
+  ],
+  "executedAt": "20260923165914"
+}
