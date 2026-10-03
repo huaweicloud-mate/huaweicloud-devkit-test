@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "caseId": "D1-30",
+  "source": "group:d1-upgrade",
+  "assertions": [
+    {
+      "id": "D1-30",
+      "name": "semver-1.1.2-gt-1.1.1",
+      "pass": true,
+      "actual": "1",
+      "expected": ">0",
+      "passMsg": "1.1.2>1.1.1",
+      "failMsg": "semver error"
+    },
+    {
+      "id": "D1-30",
+      "name": "semver-stable-gt-pre",
+      "pass": true,
+      "actual": "1",
+      "expected": ">0",
+      "passMsg": "stable>prerelease",
+      "failMsg": "semver error"
+    },
+    {
+      "id": "D1-30",
+      "name": "semver-equal",
+      "pass": true,
+      "actual": "0",
+      "expected": "0",
+      "passMsg": "equal=0",
+      "failMsg": "semver equal error"
+    },
+    {
+      "id": "D1-30",
+      "name": "semver-reverse",
+      "pass": true,
+      "actual": "-1",
+      "expected": "<0",
+      "passMsg": "1.1.1<1.1.2",
+      "failMsg": "semver reverse error"
+    }
+  ],
+  "passed": 4,
+  "total": 4
+}
