@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "why": "Node hook chain passed",
+  "executedAt": "20261003210532",
+  "results": [
+    {
+      "name": "hooks-json-registers-node-mjs",
+      "pass": true,
+      "actual": "{\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Bash\",\"hooks\":[{\"type\":\"command\",\"command\":\"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\\\"\",\"timeout\":5}]},{\"matcher\":\"mcp__.*huaweicloud.*|huaweicloud_.*\",\"hooks\":[{\"type\":\"command\",\"command\":\"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\\\"\",\"timeout\":5}]}]}}",
+      "expected": "node huaweicloud-safety.mjs"
+    },
+    {
+      "name": "node-hook-file-exists",
+      "pass": true,
+      "actual": "commandText present",
+      "expected": "commandText extractor"
+    },
+    {
+      "name": "high-risk-command-deny",
+      "pass": true,
+      "actual": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.\"}}",
+      "expected": "permissionDecision=deny"
+    },
+    {
+      "name": "command-field-extracted",
+      "pass": true,
+      "actual": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.\"}}",
+      "expected": "credential reason"
+    },
+    {
+      "name": "args-field-extracted",
+      "pass": true,
+      "actual": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}}",
+      "expected": "args deny"
+    },
+    {
+      "name": "safe-command-no-deny-output",
+      "pass": true,
+      "actual": "",
+      "expected": "empty stdout for non high-risk"
+    }
+  ]
+}

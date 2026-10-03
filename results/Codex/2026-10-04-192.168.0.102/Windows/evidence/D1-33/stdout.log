@@ -1,0 +1,44 @@
+{
+    "status":  "PASS",
+    "why":  "Executed by grouped probe d1-upgrade; all assertions passed",
+    "executedAt":  "20261004050326",
+    "sourceProbe":  "evidence/d1-upgrade/probe.mjs",
+    "assertions":  [
+                       {
+                           "id":  "D1-33",
+                           "name":  "skipFilePath",
+                           "pass":  true,
+                           "actual":  "C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\plugins\\huaweicloud-core\\.update-skip.json",
+                           "expected":  "string",
+                           "passMsg":  "skipFilePath: C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\plugins\\huaweicloud-core\\.update-skip.json",
+                           "failMsg":  "skipFilePath empty"
+                       },
+                       {
+                           "id":  "D1-33",
+                           "name":  "fallbackSkipFilePath",
+                           "pass":  true,
+                           "actual":  "C:\\Users\\Administrator\\.config\\huaweicloud\\devkit-skip.json",
+                           "expected":  "string",
+                           "passMsg":  "fallback: C:\\Users\\Administrator\\.config\\huaweicloud\\devkit-skip.json",
+                           "failMsg":  "fallback empty"
+                       },
+                       {
+                           "id":  "D1-33",
+                           "name":  "resolveSkipFilePath",
+                           "pass":  true,
+                           "actual":  "C:\\Users\\Administrator\\.config\\huaweicloud\\devkit-skip.json.test",
+                           "expected":  "string",
+                           "passMsg":  "resolveSkipFilePath returns path",
+                           "failMsg":  "resolveSkipFilePath error"
+                       },
+                       {
+                           "id":  "D1-33",
+                           "name":  "skip-fields",
+                           "pass":  true,
+                           "actual":  "dismissedVersion,dismissedAt,expireAt",
+                           "expected":  "all fields",
+                           "passMsg":  "skip file fields complete",
+                           "failMsg":  "skip file fields missing"
+                       }
+                   ]
+}
