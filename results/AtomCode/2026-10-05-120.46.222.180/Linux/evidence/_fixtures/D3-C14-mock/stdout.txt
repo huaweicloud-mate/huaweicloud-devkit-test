@@ -1,0 +1,16 @@
+PASS	D3-C14-MOCK-install	mock 安装后 isInstalled=true	actual={"installed":true}	expected={"installed":true}
+PASS	D3-C14-MOCK-rt-cred	mock 凭证注入→resolveCredentialsWithRuntime 返回	actual={"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","st":"MOCK_ST_D3C14","region":"cn-north-4"}	expected={"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","st":"MOCK_ST_D3C14","region":"cn-north-4"}
+PASS	D3-C14-MOCK-hwlink-getcred	hwlink getCredentials 返回 mock 凭证	actual={"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","st":"MOCK_ST_D3C14"}	expected={"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","st":"MOCK_ST_D3C14"}
+PASS	D3-C14-MOCK-hdkit-check-user	hdkitCheckUser 通过 mock fetch 返回 userHash	actual={"userHash":"mock-user-hash-d3c14"}	expected={"userHash":"mock-user-hash-d3c14"}	mock fetch 拦截 check-user → 返回 mockUserHash
+PASS	D3-C14-MOCK-hdkit-credentials	hdkitCredentials 通过 mock fetch 返回凭证	actual={"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","session":"mock-session-001"}	expected={"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","session":"mock-session-001"}
+PASS	D3-C14-MOCK-cred-param-required	hdkitCredentials 无参时仍抛错（mock 不影响参数校验）	actual=true	expected=true	session_id or dev_stage_id is required
+PASS	D3-C14-MOCK-hdkit-connect	hdkitConnect 通过 mock fetch 返回 session	actual={"session":"mock-session-001","dev_stage":"mock-dev-stage-001"}	expected={"session":"mock-session-001","dev_stage":"mock-dev-stage-001"}
+PASS	D3-C14-MOCK-voucher-status	hdkitVoucherStatus 通过 mock fetch 返回 claimed	actual={"claimed":true}	expected={"claimed":true}
+PASS	D3-C14-MOCK-request-log	mock requestLog 记录了 ≥4 条请求	actual={"count":4}	expected={"count":">=4"}	实际请求: check-user, credentials, connect, voucher/status
+PASS	D3-C14-MOCK-endpoint-override	所有请求打到 mock 端点（HDKITSERVICE_ENDPOINT 覆盖）	actual={"allToMock":true,"endpoint":"https://mock-hdkit.example.com/api/"}	expected={"allToMock":true}
+PASS	D3-C14-MOCK-uninstall	mock 卸载后 isInstalled=false	actual={"installed":false}	expected={"installed":false}
+PASS	D3-C14-MOCK-env-restore	uninstall 后 HDKITSERVICE_ENDPOINT 恢复原始值	actual={}	expected={}	已恢复原始值
+PASS	D3-C14-MOCK-independent	mock 独立启停（新建实例 install/uninstall 不报错）	actual={"installed":false}	expected={"installed":false}
+
+=== D3-C14 sandbox 凭证 mock 层 ===  pass=13 fail=0
+RESULT: PASS

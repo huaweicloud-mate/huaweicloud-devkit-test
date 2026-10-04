@@ -1,0 +1,96 @@
+{
+  "executedAt": "20261005052036",
+  "sut": "hdk gitHead ffd7b47 (v1.1.8-next.1)",
+  "results": {
+    "D4-6": {
+      "status": "PASS",
+      "why": "adminPass 值脱敏为 <redacted>",
+      "actual": "hcloud --server.adminPass=<redacted> create"
+    },
+    "D4-27": {
+      "status": "FAIL",
+      "why": "ak=/sk= 小写短形仍明文",
+      "actual": "token=<redacted> ak=AKID456 sk=secret789"
+    },
+    "D8-9": {
+      "status": "FAIL",
+      "why": "sanitizeValue 未脱敏凭证值",
+      "actual": "AK=ABC123XYZ"
+    },
+    "D6-9": {
+      "status": "PASS",
+      "why": "clearIconCache 连续 3 次幂等不抛错",
+      "actual": "ok"
+    },
+    "D1-68": {
+      "status": "PASS",
+      "why": "getServiceIcon 返回图标信息",
+      "actual": "{\"ok\":true,\"query\":\"ECS\",\"category\":\"compute\",\"source\":\"live\",\"manifestGeneratedAt\":\"2026-07-31T17:23:51.479Z\",\"count\":0,\"iconsPageUrl\":\"https://open.huaweicloud.com/openplatform/icons.html\",\"note\":\"L"
+    },
+    "D3-S1": {
+      "status": "FAIL",
+      "why": "未命中 ECS（路由退化 help）",
+      "actual": "Run hcloud --help to list available services."
+    },
+    "D3-S2": {
+      "status": "FAIL",
+      "why": "未命中 VPC",
+      "actual": "Run hcloud --help to list available services."
+    },
+    "D3-S3": {
+      "status": "FAIL",
+      "why": "未命中 Sandbox",
+      "actual": "Run hcloud --help to list available services."
+    },
+    "D3-S4": {
+      "status": "PASS",
+      "why": "命中领券",
+      "actual": "Incentive Voucher"
+    },
+    "D3-S5": {
+      "status": "FAIL",
+      "why": "复合意图未命中",
+      "actual": "Run hcloud --help to list available services."
+    },
+    "D3-S6": {
+      "status": "PASS",
+      "why": "命中 FunctionGraph",
+      "actual": "FunctionGraph"
+    },
+    "D3-S7": {
+      "status": "PASS",
+      "why": "命中 RDS",
+      "actual": "RDS"
+    },
+    "D3-S8": {
+      "status": "PASS",
+      "why": "explain_error 返回可执行建议",
+      "actual": "{\"service\":\"unknown\",\"errorCode\":\"APIGW.0301\",\"requestId\":\"\",\"suggestions\":[\"APIGW.0301: API Gateway layer error. Incorrect IAM authentication information — verify AK/SK (SK typos are the usual cause), security token expiry, and that project_id is configured (auth init auto-sets it).\"]}"
+    },
+    "D1-65": {
+      "status": "PASS",
+      "why": "update-check.mjs 含 HUAWEICLOUD_DEVKIT_DEBUG 门控",
+      "actual": "true"
+    },
+    "D1-67": {
+      "status": "PASS",
+      "why": "setup-cli.mjs 含 AGENT_TOOLKIT_MODE + SKIP_DSH",
+      "actual": "true/true"
+    },
+    "D1-70": {
+      "status": "PASS",
+      "why": "proxy-config.mjs 含 getProxySettings + shouldBypassProxy",
+      "actual": "true"
+    },
+    "D4-25": {
+      "status": "PASS",
+      "why": "python hook record_cli_event 存在",
+      "actual": "true"
+    },
+    "D4-26": {
+      "status": "PASS",
+      "why": "risk-rule-engine 含 redactEvidence",
+      "actual": "true"
+    }
+  }
+}
