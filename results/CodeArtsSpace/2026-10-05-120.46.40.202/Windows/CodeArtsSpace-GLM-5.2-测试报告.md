@@ -1,0 +1,124 @@
+# CodeArtsSpace-GLM-5.2 每日测试报告
+> **报告名**：`CodeArtsSpace-GLM-5.2-测试报告.md`
+> **生成时间**：2026-10-05 05:19:00（北京时间）
+> **执行归档**：`results/CodeArtsSpace/2026-10-05-120.46.40.202/Windows/`
+> **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
+> **结论**：`PARTIAL`（有 FAIL 缺陷，P0 3 项）
+
+---
+
+## 一、测试概述
+
+| 项 | 值 |
+|---|---|
+| 客户端 / Agent | `CodeArtsSpace` + `GLM-5.2` |
+| OS / 架构 | `Windows` |
+| 被测版本（SUT） | `huaweicloud-devkit@1.1.8-next.1`（gitHead `ffd7b47`） |
+| daily 基础用例 | 设计级 102 / 展开级 39 |
+
+> **执行方法**：Python 驱动真实命令执行（hdk CLI / hcloud CLI / safety-policy 直调 / eval harness / 真云 API），证据落盘 `evidence/<case-id>/stdout.log` + `probe.mjs`。
+
+---
+
+## 二、执行摘要
+
+| 项 | 值 |
+|---|---|
+| 计划用例（daily） | `141`（设计级 102 + 展开级 39） |
+| 已执行 | `140` |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `134 / 6 / 0 / 0 / 1` |
+| 通过率（分母 = PASS+FAIL = 140） | `95.7%` |
+| P0 / P1 / P2 新增缺陷 | `0 / 0 / 0`（全部为历史缺陷） |
+| 红线（I 类）违规 | `0`（真云用例无资源泄漏，凭证未落盘） |
+| 资源释放 | `N/A`（本批用例为源码级/安全策略级，无真云资源创建） |
+
+---
+
+## 三、状态汇总
+
+### 3.1 设计级
+
+| 维度 | 用例数 | PASS | FAIL | BLOCKED | NOT_RUN |
+|---|---|---|---|---|---|
+| D1安装 | 19 | 19 | 0 | 0 | 0 |
+| D2认证 | 11 | 9 | 2 | 0 | 0 |
+| D3功能 | 16 | 16 | 0 | 0 | 0 |
+| D4安全 | 29 | 25 | 4 | 0 | 0 |
+| D5客户端 | 2 | 2 | 0 | 0 | 0 |
+| D6性能 | 4 | 4 | 0 | 0 | 0 |
+| D8质量 | 6 | 6 | 0 | 0 | 0 |
+| D9协议 | 13 | 13 | 0 | 0 | 0 |
+| D10评测 | 2 | 2 | 0 | 0 | 0 |
+| **合计** | **102** | **97** | **5** | **0** | **0** |
+
+### 3.2 展开级
+
+| 展开类型 | 用例数 | PASS | FAIL | BLOCKED | NOT_RUN |
+|---|---|---|---|---|---|
+| EXP-D5（客户端矩阵） | 2 | 2 | 0 | 0 | 0 |
+| EXP-C4（服务矩阵） | 22 | 22 | 0 | 0 | 0 |
+| EXP-E（评测集） | 15 | 13 | 1 | 0 | 1 |
+| **合计** | **39** | **37** | **1** | **0** | **1** |
+
+---
+
+## 四、缺陷清单
+
+> 全部 6 项 FAIL + 1 项 NOT_RUN 均为历史缺陷，包版本 1.1.8-next.1 无变化，无新缺陷、无回归。
+
+### 4.1 设计级 FAIL（5 项）
+
+| # | 用例 | 优先级 | 描述 | 根因（文件:行号） | 历史单号 |
+|---|---|---|---|---|---|
+| 1 | D2-11 | P0 | STS get-token 未被安全规则拦截 | `safety-policy.mjs` classifyTextCommand 返回 decision=allow | #689 |
+| 2 | D2-16 | P1 | configure import --file 未被拦截 | `safety-policy.mjs` classifyTextCommand 返回 decision=allow | #694 |
+| 3 | D4-2 | P0 | 非华为云前缀凭证 env 打印未拦截 | `safety-policy.mjs` classifyTextCommand 对 echo $ACCESS_KEY 返回 allow | #677 |
+| 4 | D4-3 | P0 | CSMS/KMS 密钥操作未拦截 | `safety-policy.mjs` classifyTextCommand 对 csms/kms 返回 allow | #677 |
+| 5 | D4-4 | P1 | echo $ACCESS_KEY 通用凭证变量名未拦截 | `safety-policy.mjs` classifyTextCommand 返回 risk=not_huaweicloud | #757 |
+
+### 4.2 展开级 FAIL（1 项）
+
+| # | 用例 | 描述 | 根因 | 历史单号 |
+|---|---|---|---|---|
+| 1 | EXP-E01 | "云主机"→ECS 未命中（serviceCatalog 路由 MISS） | `mcp-server.mjs` serviceCatalog 中文关键词"云主机"未映射到 ECS | #705 |
+
+### 4.3 展开级 NOT_RUN（1 项）
+
+| # | 用例 | 描述 | 原因 |
+|---|---|---|---|
+| 1 | EXP-E08 | 诊断类意图(explain_error)路由 | 诊断类意图不在 serviceCatalog 路由范围(harness 标记 N/A); explain_error 工具路由需真实 LLM harness |
+
+---
+
+## 五、未执行用例与原因
+
+| 用例 | 层级 | 优先级 | 状态 | 分类 | 详细原因 | 改用例建议 |
+|---|---|---|---|---|---|---|
+| EXP-E08 | 展开级 | P1 | NOT_RUN | 【补环境】 | 诊断类意图(explain_error)不在 serviceCatalog 路由范围，harness 标记 N/A。explain_error 工具路由需真实 LLM harness（run-agent-eval.mjs 驱动 dsh --profile headless），非 DSH 客户端需 CDP 会话自动化。 | 建议将 EXP-E08 标注为「需真实 LLM harness」并在非 DSH 客户端允许 NOT_RUN |
+
+---
+
+## 六、安全/红线
+
+| 检查项 | 结果 |
+|---|---|
+| 凭证未落盘 | ✅ AK/SK 未出现在任何日志/上下文 |
+| 真云资源归零 | ✅ 本批无真云资源创建（只读 NovaListServers） |
+| PASS 门禁 | ✅ verify_no_fake_pass.py 通过 |
+| 覆盖率门禁 | ✅ verify_coverage.py 通过（P0 无 NOT_RUN，NOT_RUN+空占比 2.6%） |
+| 目录权限 | ✅ 只提交 results/CodeArtsSpace/ |
+
+---
+
+## 七、资源释放
+
+本批用例为源码级/安全策略级/eval harness 级测试，无真云资源创建。真云探针（D4-13）仅执行只读 `ECS NovaListServers`，未创建任何 ECS/VPC/EIP 等资源，无需清理。
+
+---
+
+## 八、遗留建议
+
+1. **历史缺陷跟踪**：6 项 FAIL 全部为历史缺陷（#677/#689/#694/#705/#757），包版本 1.1.8-next.1 无变化。建议持续跟踪上游修复进度。
+2. **serviceCatalog 路由改善**：相比昨日（21.4% 命中率），今日 eval harness 命中率提升至 92.9%（13/14 HIT），仅 EXP-E01 "云主机"→ECS 未命中。建议扩充 serviceCatalog 中文关键词词典（如"云主机"→ECS）。
+3. **EXP-E08 诊断类意图**：需真实 LLM harness 才能评测，非 DSH 客户端暂标 NOT_RUN。建议后续接入 CDP 会话自动化或扩展 run-agent-eval.mjs 支持非 DSH 客户端。
+4. **安全规则增强**：D2-11/D2-16/D4-2/D4-3/D4-4 均为 classifyTextCommand 返回 allow 的问题，建议增强安全规则覆盖 STS get-token、configure import --file、通用凭证变量名等场景。

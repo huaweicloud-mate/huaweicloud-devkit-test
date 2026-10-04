@@ -1,0 +1,7 @@
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "plaintext secret API",
+  "executedAt": "20261005051143",
+  "detail": "{\"caseId\": \"D4-3\", \"status\": \"FAIL\", \"why\": \"plaintext secret API\", \"executedAt\": \"20261005051143\"}\n\n=== Detailed Output ===\n=== RC === 0\n=== STDOUT ===\nhcloud csms secret-show --name mysecret -> {\"decision\":\"allow\",\"risk\":\"unknown_read\",\"reason\":\"Command does not match a known write or secret operation; treat output as untrusted and redact it.\",\"service\":\"csms\",\"operation\":\"secret-show\",\"args\":[\"csms\",\"secret-show\",\"--name\",\"mysecret\"]}\nhcloud kms decrypt --cipher-text abc -> {\"decision\":\"allow\",\"risk\":\"unknown_read\",\"reason\":\"Command does not match a known write or secret operation; treat output as untrusted and redact it.\",\"service\":\"kms\",\"operation\":\"decrypt\",\"args\":[\"kms\",\"decrypt\",\"--cipher-text\",\"abc\"]}"
+}
