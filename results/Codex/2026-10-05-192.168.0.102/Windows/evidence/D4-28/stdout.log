@@ -1,0 +1,55 @@
+{
+  "caseId": "D4-28",
+  "status": "FAIL",
+  "why": "allHighRiskDenied=false, safeNotDenied=true; high-risk decisions: deny,deny,deny,allow,deny; safe=allow",
+  "details": [
+    {
+      "input": {
+        "command": "cat ~/.huaweicloud/credentials.json"
+      },
+      "extractedText": "cat ~/.huaweicloud/credentials.json",
+      "decision": "deny"
+    },
+    {
+      "input": {
+        "cmd": "printenv HW_SECRET_KEY"
+      },
+      "extractedText": "printenv HW_SECRET_KEY",
+      "decision": "deny"
+    },
+    {
+      "input": {
+        "script": "hcloud ECS delete-servers"
+      },
+      "extractedText": "hcloud ECS delete-servers",
+      "decision": "deny"
+    },
+    {
+      "input": {
+        "args": [
+          "hcloud",
+          "CSMS",
+          "show-secret",
+          "--secret-id",
+          "test"
+        ]
+      },
+      "extractedText": "hcloud CSMS show-secret --secret-id test",
+      "decision": "allow"
+    },
+    {
+      "input": {
+        "arguments": "hcloud VPC delete-vpc"
+      },
+      "extractedText": "hcloud VPC delete-vpc",
+      "decision": "deny"
+    }
+  ],
+  "safeCheck": {
+    "input": {
+      "command": "hcloud ECS list-servers"
+    },
+    "decision": "allow"
+  },
+  "executedAt": "20261004210709"
+}

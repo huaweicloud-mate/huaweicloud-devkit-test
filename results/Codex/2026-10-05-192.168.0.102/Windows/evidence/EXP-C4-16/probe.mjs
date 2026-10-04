@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: c4-service-matrix
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"EXP-C4-16\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"EXP-C4-16\",\"name\":\"list-ops-CDN\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"CDN list_operations OK\",\"failMsg\":\"CDN list_operations FAIL\",\"group\":\"c4-service-matrix\"},{\"id\":\"EXP-C4-16\",\"name\":\"plan-CDN\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"CDN plan OK\",\"failMsg\":\"CDN plan FAIL\",\"group\":\"c4-service-matrix\"}]}");

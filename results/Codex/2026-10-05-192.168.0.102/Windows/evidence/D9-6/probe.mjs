@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D9-6\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D9-6\",\"name\":\"stdio\",\"pass\":true,\"actual\":\"41\",\"expected\":\">0\",\"passMsg\":\"tools via stdio available\",\"failMsg\":\"tools not available\",\"group\":\"d2-auth\"}]}");

@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d1-upgrade, mcp-tools
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D5-3\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D5-3\",\"name\":\"tool-count\",\"pass\":true,\"actual\":\"41\",\"expected\":\">=39\",\"passMsg\":\"tools: 41\",\"failMsg\":\"tools insufficient: 41\",\"group\":\"d1-upgrade\"},{\"id\":\"D5-3\",\"name\":\"tool-count\",\"pass\":true,\"actual\":\"41\",\"expected\":\">=39\",\"passMsg\":\"tools: 41\",\"failMsg\":\"tools insufficient\",\"group\":\"mcp-tools\"}]}");

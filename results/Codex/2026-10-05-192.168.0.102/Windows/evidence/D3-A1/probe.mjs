@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D3-A1\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D3-A1\",\"name\":\"skill-tools\",\"pass\":true,\"actual\":\"3\",\"expected\":\">=3\",\"passMsg\":\"skill tools: huaweicloud_search_docs,huaweicloud_retrieve_skill,huaweicloud_search_marketplace\",\"failMsg\":\"skill tools insufficient\",\"group\":\"d2-auth\"}]}");

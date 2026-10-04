@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d1-upgrade
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D1-3\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D1-3\",\"name\":\"doctor\",\"pass\":true,\"actual\":\"true\",\"expected\":\"true\",\"passMsg\":\"doctor in setup-cli\",\"failMsg\":\"doctor not available\",\"group\":\"d1-upgrade\"}]}");

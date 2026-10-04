@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D10-5\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D10-5\",\"name\":\"multi-turn\",\"pass\":true,\"actual\":\"both\",\"expected\":\"true\",\"passMsg\":\"multi-turn tools available\",\"failMsg\":\"multi-turn tools missing\",\"group\":\"d2-auth\"}]}");

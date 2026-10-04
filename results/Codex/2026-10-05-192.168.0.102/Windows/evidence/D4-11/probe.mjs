@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d4-security
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D4-11\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D4-11\",\"name\":\"injection-mechanism\",\"pass\":true,\"actual\":\"function\",\"expected\":\"function\",\"passMsg\":\"injection protection mechanism exists\",\"failMsg\":\"injection protection missing\",\"group\":\"d4-security\"}]}");

@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth
+console.log("{\"status\":\"FAIL\",\"executedAt\":\"20261004211028\",\"caseId\":\"D4-27\",\"total\":1,\"passed\":0,\"failed\":1,\"why\":\"redact-dual: expected redacted, actual {\\\"ak\\\":\\\"AKID123\\\",\\\"sk\\\":\\\"SK1234567890abcdef\\\",\\\"token\\\":\\\"STSTOKEN1; dual path redaction incomplete\",\"results\":[{\"id\":\"D4-27\",\"name\":\"redact-dual\",\"pass\":false,\"actual\":\"{\\\"ak\\\":\\\"AKID123\\\",\\\"sk\\\":\\\"SK1234567890abcdef\\\",\\\"token\\\":\\\"STSTOKEN1\",\"expected\":\"redacted\",\"passMsg\":\"dual path redaction complete\",\"failMsg\":\"dual path redaction incomplete\",\"group\":\"d2-auth\"}]}");

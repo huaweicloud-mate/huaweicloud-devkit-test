@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D7-4\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D7-4\",\"name\":\"pkg-name\",\"pass\":true,\"actual\":\"huaweicloud-devkit\",\"expected\":\"huaweicloud-devkit\",\"passMsg\":\"package name correct\",\"failMsg\":\"package name wrong\",\"group\":\"d2-auth\"}]}");

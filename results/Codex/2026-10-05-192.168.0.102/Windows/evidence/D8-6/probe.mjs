@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D8-6\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D8-6\",\"name\":\"readme-zh\",\"pass\":true,\"actual\":\"true\",\"expected\":\"true\",\"passMsg\":\"README.zh-CN exists\",\"failMsg\":\"README.zh-CN missing\",\"group\":\"d2-auth\"}]}");

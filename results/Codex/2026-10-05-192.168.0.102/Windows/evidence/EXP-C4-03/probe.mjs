@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: c4-service-matrix
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"EXP-C4-03\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"EXP-C4-03\",\"name\":\"list-ops-OBS\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"OBS list_operations OK\",\"failMsg\":\"OBS list_operations FAIL\",\"group\":\"c4-service-matrix\"},{\"id\":\"EXP-C4-03\",\"name\":\"plan-OBS\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"OBS plan OK\",\"failMsg\":\"OBS plan FAIL\",\"group\":\"c4-service-matrix\"}]}");

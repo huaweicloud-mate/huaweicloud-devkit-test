@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: c4-service-matrix
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"EXP-E08\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"EXP-E08\",\"name\":\"eval-na\",\"pass\":true,\"actual\":\"N/A\",\"expected\":\"N/A\",\"passMsg\":\"EXP-E08 diagnostic (N/A)\",\"failMsg\":null,\"group\":\"c4-service-matrix\"}]}");

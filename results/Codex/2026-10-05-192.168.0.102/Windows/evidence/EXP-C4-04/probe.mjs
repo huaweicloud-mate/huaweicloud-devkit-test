@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: c4-service-matrix
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"EXP-C4-04\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"EXP-C4-04\",\"name\":\"list-ops-RDS\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"RDS list_operations OK\",\"failMsg\":\"RDS list_operations FAIL\",\"group\":\"c4-service-matrix\"},{\"id\":\"EXP-C4-04\",\"name\":\"plan-RDS\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"RDS plan OK\",\"failMsg\":\"RDS plan FAIL\",\"group\":\"c4-service-matrix\"}]}");

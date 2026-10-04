@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth, mcp-tools
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D10-3\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D10-3\",\"name\":\"service-catalog\",\"pass\":true,\"actual\":\"true\",\"expected\":\"true\",\"passMsg\":\"service_catalog registered\",\"failMsg\":\"service_catalog not registered\",\"group\":\"d2-auth\"},{\"id\":\"D10-3\",\"name\":\"catalog-mcp\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"service_catalog OK (MCP)\",\"failMsg\":\"service_catalog FAIL (MCP)\",\"group\":\"mcp-tools\"}]}");

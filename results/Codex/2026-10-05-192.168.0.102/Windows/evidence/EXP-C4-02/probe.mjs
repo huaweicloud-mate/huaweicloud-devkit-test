@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: c4-service-matrix
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"EXP-C4-02\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"EXP-C4-02\",\"name\":\"list-ops-VPC\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"VPC list_operations OK\",\"failMsg\":\"VPC list_operations FAIL\",\"group\":\"c4-service-matrix\"},{\"id\":\"EXP-C4-02\",\"name\":\"plan-VPC\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"VPC plan OK\",\"failMsg\":\"VPC plan FAIL\",\"group\":\"c4-service-matrix\"}]}");

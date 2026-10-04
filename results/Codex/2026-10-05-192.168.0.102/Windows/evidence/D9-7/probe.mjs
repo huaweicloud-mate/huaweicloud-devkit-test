@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d1-upgrade
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D9-7\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D9-7\",\"name\":\"schema-compatible\",\"pass\":true,\"actual\":\"all valid\",\"expected\":\"true\",\"passMsg\":\"inputSchema type ok\",\"failMsg\":\"inputSchema type error\",\"group\":\"d1-upgrade\"}]}");

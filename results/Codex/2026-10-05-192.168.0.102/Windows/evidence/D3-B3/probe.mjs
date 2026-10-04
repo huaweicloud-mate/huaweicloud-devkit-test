@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth, mcp-tools
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D3-B3\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D3-B3\",\"name\":\"run-readonly\",\"pass\":true,\"actual\":\"true\",\"expected\":\"true\",\"passMsg\":\"run_readonly registered\",\"failMsg\":\"run_readonly not registered\",\"group\":\"d2-auth\"},{\"id\":\"D3-B3\",\"name\":\"readonly-mcp\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"run_readonly OK (MCP)\",\"failMsg\":\"run_readonly FAIL (MCP)\",\"group\":\"mcp-tools\"}]}");

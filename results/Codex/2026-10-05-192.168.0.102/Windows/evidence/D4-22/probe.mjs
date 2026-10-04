@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d4-security, mcp-tools
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D4-22\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D4-22\",\"name\":\"deploy-plan-eval\",\"pass\":true,\"actual\":\"object\",\"expected\":\"object\",\"passMsg\":\"evaluateDeployPlan returns result\",\"failMsg\":\"evaluateDeployPlan error\",\"group\":\"d4-security\"},{\"id\":\"D4-22\",\"name\":\"deploy-mcp\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"deploy plan OK (MCP)\",\"failMsg\":\"deploy plan FAIL (MCP)\",\"group\":\"mcp-tools\"}]}");

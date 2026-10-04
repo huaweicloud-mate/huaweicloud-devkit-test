@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth, d4-security
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D4-14\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D4-14\",\"name\":\"audit\",\"pass\":true,\"actual\":\"allow\",\"expected\":\"string\",\"passMsg\":\"classify returns decision\",\"failMsg\":\"classify missing decision\",\"group\":\"d2-auth\"},{\"id\":\"D4-14\",\"name\":\"audit-metadata\",\"pass\":true,\"actual\":\"allow\",\"expected\":\"string\",\"passMsg\":\"classify returns decision\",\"failMsg\":\"classify missing decision\",\"group\":\"d4-security\"}]}");

@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D10-4\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D10-4\",\"name\":\"hook-tools\",\"pass\":true,\"actual\":\"3\",\"expected\":\">=3\",\"passMsg\":\"hook tools: huaweicloud_hook_check_command,huaweicloud_hook_check_artifacts,huaweicloud_hook_check_deploy_plan\",\"failMsg\":\"hook tools insufficient\",\"group\":\"d2-auth\"},{\"id\":\"D10-4\",\"name\":\"approved-cmd\",\"pass\":true,\"actual\":\"true\",\"expected\":\"true\",\"passMsg\":\"run_approved_command registered\",\"failMsg\":\"run_approved_command not registered\",\"group\":\"d2-auth\"}]}");

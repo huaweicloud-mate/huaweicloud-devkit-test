@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d4-security, mcp-tools
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D4-20\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D4-20\",\"name\":\"deny-definitive\",\"pass\":true,\"actual\":\"deny\",\"expected\":\"deny\",\"passMsg\":\"deny is definitive\",\"failMsg\":\"deny not definitive\",\"group\":\"d4-security\"},{\"id\":\"D4-20\",\"name\":\"deny-mcp\",\"pass\":true,\"actual\":\"{\\\"ok\\\":false,\\\"decision\\\":\\\"deny\\\",\\\"findings\\\":[{\\\"ruleId\\\":\\\"hwc-command-credential-file\",\"expected\":\"deny\",\"passMsg\":\"deny definitive (MCP)\",\"failMsg\":\"deny not definitive (MCP)\",\"group\":\"mcp-tools\"}]}");

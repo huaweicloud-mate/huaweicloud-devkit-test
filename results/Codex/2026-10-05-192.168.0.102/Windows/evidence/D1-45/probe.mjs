@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d1-upgrade
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D1-45\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D1-45\",\"name\":\"check_update-no-hint\",\"pass\":true,\"actual\":\"\\\"none\\\"\",\"expected\":\"none/preserved\",\"passMsg\":\"check_update no hint\",\"failMsg\":\"check_update wrong hint\",\"group\":\"d1-upgrade\"},{\"id\":\"D1-45\",\"name\":\"upgrade-no-hint\",\"pass\":true,\"actual\":\"\\\"none\\\"\",\"expected\":\"none/preserved\",\"passMsg\":\"upgrade no hint\",\"failMsg\":\"upgrade wrong hint\",\"group\":\"d1-upgrade\"}]}");

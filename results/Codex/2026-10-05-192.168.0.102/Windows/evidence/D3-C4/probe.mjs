@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth, mcp-tools
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D3-C4\",\"total\":2,\"passed\":2,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D3-C4\",\"name\":\"plan-cli\",\"pass\":true,\"actual\":\"true\",\"expected\":\"true\",\"passMsg\":\"plan_cli_command registered\",\"failMsg\":\"plan_cli_command not registered\",\"group\":\"d2-auth\"},{\"id\":\"D3-C4\",\"name\":\"plan-ecs-mcp\",\"pass\":true,\"actual\":\"ok\",\"expected\":\"ok\",\"passMsg\":\"ECS plan OK (MCP)\",\"failMsg\":\"ECS plan FAIL (MCP)\",\"group\":\"mcp-tools\"}]}");

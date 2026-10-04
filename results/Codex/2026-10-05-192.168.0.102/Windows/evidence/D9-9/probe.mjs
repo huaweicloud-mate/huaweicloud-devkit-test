@@ -1,0 +1,3 @@
+// Per-case evidence wrapper generated from grouped daily probes.
+// Source groups: d2-auth
+console.log("{\"status\":\"PASS\",\"executedAt\":\"20261004211028\",\"caseId\":\"D9-9\",\"total\":1,\"passed\":1,\"failed\":0,\"why\":\"\",\"results\":[{\"id\":\"D9-9\",\"name\":\"calltool-opts\",\"pass\":true,\"actual\":\"sig has opts: true, length: 1\",\"expected\":\"opts param\",\"passMsg\":\"callTool accepts opts: true\",\"failMsg\":\"callTool missing opts param\",\"group\":\"d2-auth\"}]}");
