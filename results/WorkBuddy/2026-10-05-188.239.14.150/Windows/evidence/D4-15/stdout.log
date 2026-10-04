@@ -1,0 +1,40 @@
+{
+  "caseId": "D4-15",
+  "status": "PASS",
+  "why": "所有绕过变体被 deny",
+  "evidence": {
+    "results": [
+      {
+        "cmd": "CAT ~/.hcloud/credentials.json",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "cat ~\\.hcloud%2Fcredentials.json",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "cat .huaweicloud/credentials",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "type C:\\Users\\X\\.huaweicloud\\config",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "bash -c \"cat ~/.hcloud/credentials.json\"",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "sh -c \"type $HOME/.huaweicloud/credentials\"",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      }
+    ]
+  },
+  "executedAt": "20261005050100"
+}

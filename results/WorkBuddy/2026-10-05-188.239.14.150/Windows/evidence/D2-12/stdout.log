@@ -1,0 +1,10 @@
+{
+  "caseId": "D2-12",
+  "status": "FAIL",
+  "why": "R10 未强制执行：runtime 非空时 persist 未被拒绝。根因：tools.mjs auth_switch persist 路径未检查 hasRuntimeCredentials()，R10 仅在文档/工具描述中声明但代码层无强制（tools.mjs:1199-1280 persistCredentials 与 auth_switch 均无 hasRuntimeCredentials 拒绝逻辑）",
+  "evidence": {
+    "hasRT": true,
+    "result": "{\"status\":\"ok\",\"scope\":\"persist\",\"backedUp\":true,\"obs\":{\"configured\":true},\"hcloud\":{\"ok\":true,\"error\":\"\"},\"note\":\"S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configure"
+  },
+  "executedAt": "20261005051500"
+}

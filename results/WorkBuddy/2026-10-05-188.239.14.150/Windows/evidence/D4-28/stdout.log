@@ -1,0 +1,16 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "hooks.json 注册 .mjs；commandText 提取高危命令；classifyTextCommand=deny；hook 输出 permissionDecision=deny",
+  "evidence": {
+    "hooksJsonRegistersMjs": true,
+    "commandTextExtracted": [],
+    "denyResult": {
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    "hookOutput": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.\"}}\n"
+  },
+  "executedAt": "20261005050100"
+}

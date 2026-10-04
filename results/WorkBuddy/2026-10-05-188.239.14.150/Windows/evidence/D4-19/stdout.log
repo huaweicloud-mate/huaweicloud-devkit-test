@@ -1,0 +1,30 @@
+{
+  "caseId": "D4-19",
+  "status": "PASS",
+  "why": "确认流下高危命令预检仍生效（deny）",
+  "evidence": {
+    "results": [
+      {
+        "cmd": "cat ~/.hcloud/credentials.json",
+        "classifyDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "cmd": "printenv HUAWEICLOUD",
+        "classifyDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "cmd": "hcloud ECS delete-servers --instance-ids i-xxxx --force",
+        "classifyDecision": "deny",
+        "riskDecision": "deny"
+      },
+      {
+        "cmd": "rm -rf /var/lib/mysql",
+        "classifyDecision": "deny",
+        "riskDecision": "deny"
+      }
+    ]
+  },
+  "executedAt": "20261005050100"
+}

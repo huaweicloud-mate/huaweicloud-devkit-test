@@ -1,0 +1,39 @@
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "why": "规则库 9 deny + 10 warn 完整加载；凭证类命令 deny、破坏性命令 warn、只读命令 allow",
+  "evidence": {
+    "ruleCount": 19,
+    "denyCount": 9,
+    "warnCount": 10,
+    "highRiskResults": [
+      {
+        "cmd": "cat ~/.hcloud/credentials.json",
+        "decision": "deny"
+      },
+      {
+        "cmd": "env | grep HUAWEICLOUD",
+        "decision": "deny"
+      },
+      {
+        "cmd": "hcloud ECS delete-servers --instance-ids i-xxxx",
+        "decision": "warn"
+      }
+    ],
+    "readResults": [
+      {
+        "cmd": "hcloud ECS list-servers",
+        "decision": "allow"
+      },
+      {
+        "cmd": "hcloud VPC list-vpcs",
+        "decision": "allow"
+      },
+      {
+        "cmd": "ls -la",
+        "decision": "allow"
+      }
+    ]
+  },
+  "executedAt": "20261005050100"
+}

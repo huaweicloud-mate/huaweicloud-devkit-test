@@ -1,0 +1,40 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "所有包裹命令被识别并拦截",
+  "evidence": {
+    "results": [
+      {
+        "cmd": "bash -c \"cat ~/.hcloud/credentials.json\"",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "sh -c \"printenv HW_ACCESS_KEY\"",
+        "riskDecision": "allow",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "powershell -Command \"Get-Content ~/.huaweicloud/credentials.json\"",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "eval \"cat ~/.hcloud/credentials\"",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "echo $(cat ~/.hcloud/credentials.json)",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "cmd /c \"type %USERPROFILE%\\.huaweicloud\\credentials.json\"",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      }
+    ]
+  },
+  "executedAt": "20261005050100"
+}

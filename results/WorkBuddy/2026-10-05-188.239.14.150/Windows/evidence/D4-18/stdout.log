@@ -1,0 +1,40 @@
+{
+  "caseId": "D4-18",
+  "status": "PASS",
+  "why": "写操作在确认前被 deny（block until approval），审批语义正确",
+  "evidence": {
+    "classifyResults": [
+      {
+        "cmd": "hcloud ECS create-servers --image-id xxx --flavor-id s6.small.1",
+        "decision": "deny",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      {
+        "cmd": "hcloud RDS create-instance --name rds-test",
+        "decision": "deny",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      {
+        "cmd": "hcloud VPC create-vpc --name vpc-test --cidr 192.168.0.0/16",
+        "decision": "deny",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      }
+    ],
+    "planResult": {
+      "executable": "hcloud",
+      "args": [],
+      "command": "hcloud",
+      "executableBlock": "hcloud",
+      "warnings": [],
+      "classification": {
+        "decision": "deny",
+        "risk": "invalid",
+        "reason": "Empty hcloud command arguments are not executable."
+      },
+      "sgFindings": [],
+      "approvalToken": "f1b2fb0c-d65f-48e9-b3e6-0499b53b5635",
+      "safeToRun": false
+    }
+  },
+  "executedAt": "20261005050100"
+}

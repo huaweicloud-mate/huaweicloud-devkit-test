@@ -1,0 +1,29 @@
+{
+  "caseId": "D4-22",
+  "status": "PASS",
+  "why": "高危 deploy plan 被拦截（1/2）",
+  "evidence": {
+    "results": [
+      {
+        "decision": "warn",
+        "findings": [
+          {
+            "ruleId": "hwc-functiongraph-public-no-auth",
+            "title": "Public FunctionGraph trigger without auth",
+            "category": "public_exposure",
+            "severity": "warn",
+            "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+            "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+            "source": "deploy_plan",
+            "evidence": "{\"service\":\"FunctionGraph\",\"function\":{\"handler\":\"index.handler\",\"code\":\"rm -rf /\",\"public\":true}}"
+          }
+        ]
+      },
+      {
+        "decision": "allow",
+        "findings": []
+      }
+    ]
+  },
+  "executedAt": "20261005050100"
+}

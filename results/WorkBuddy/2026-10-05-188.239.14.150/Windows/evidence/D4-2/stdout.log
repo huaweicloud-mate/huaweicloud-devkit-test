@@ -1,0 +1,82 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "所有凭证 env 打印命令被 deny",
+  "evidence": {
+    "results": [
+      {
+        "cmd": "env | grep HUAWEICLOUD",
+        "result": {
+          "decision": "deny",
+          "findings": [
+            {
+              "ruleId": "hwc-command-env-dump",
+              "title": "Cloud credential environment dump",
+              "category": "credential",
+              "severity": "deny",
+              "message": "The command may print cloud credential environment variables.",
+              "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+              "source": "command",
+              "evidence": "env | grep HUAWEICLOUD"
+            }
+          ]
+        }
+      },
+      {
+        "cmd": "printenv HW_ACCESS_KEY",
+        "result": {
+          "decision": "deny",
+          "findings": [
+            {
+              "ruleId": "hwc-command-env-dump",
+              "title": "Cloud credential environment dump",
+              "category": "credential",
+              "severity": "deny",
+              "message": "The command may print cloud credential environment variables.",
+              "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+              "source": "command",
+              "evidence": "printenv HW_ACCESS_KEY"
+            }
+          ]
+        }
+      },
+      {
+        "cmd": "Get-ChildItem Env: | Where-Object {$_.Name -like \"HWC_*\"}",
+        "result": {
+          "decision": "deny",
+          "findings": [
+            {
+              "ruleId": "hwc-command-env-dump",
+              "title": "Cloud credential environment dump",
+              "category": "credential",
+              "severity": "deny",
+              "message": "The command may print cloud credential environment variables.",
+              "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+              "source": "command",
+              "evidence": "Get-ChildItem Env: | Where-Object {$_.Name -like \"HWC_*\"}"
+            }
+          ]
+        }
+      },
+      {
+        "cmd": "dir Env: | findstr HUAWEICLOUD",
+        "result": {
+          "decision": "deny",
+          "findings": [
+            {
+              "ruleId": "hwc-command-env-dump",
+              "title": "Cloud credential environment dump",
+              "category": "credential",
+              "severity": "deny",
+              "message": "The command may print cloud credential environment variables.",
+              "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+              "source": "command",
+              "evidence": "dir Env: | findstr HUAWEICLOUD"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "executedAt": "20261005050100"
+}

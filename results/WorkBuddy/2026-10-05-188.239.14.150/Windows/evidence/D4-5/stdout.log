@@ -1,0 +1,35 @@
+{
+  "caseId": "D4-5",
+  "status": "PASS",
+  "why": "所有写操作未被误判为 allow",
+  "evidence": {
+    "results": [
+      {
+        "cmd": "hcloud ECS delete-servers --instance-ids i-xxxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "hcloud RDS delete-instance --instance-id rds-xxxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "hcloud VPC delete-vpc --vpc-id vpc-xxxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "rm -rf /",
+        "riskDecision": "deny",
+        "classifyDecision": "deny"
+      },
+      {
+        "cmd": "hcloud ECS stop-servers --instance-ids i-xxxx",
+        "riskDecision": "allow",
+        "classifyDecision": "deny"
+      }
+    ]
+  },
+  "executedAt": "20261005050100"
+}

@@ -1,0 +1,12 @@
+{
+  "caseId": "D1-39",
+  "status": "FAIL",
+  "why": "parseDistTagsOutput 拒绝了 npm view 的数组输出 [{latest,next}] → 返回 null；update-check.mjs:81-94 Array.isArray(parsed) 提前返回 null，导致 queryDistTagsSync=null，Windows 升级检测链失效",
+  "evidence": {
+    "queryDistTagsSync": null,
+    "npmStatus": 0,
+    "npmStdout": "[\n  {\n    \"latest\": \"1.1.7\",\n    \"next\": \"1.1.8-next.1\"\n  }\n]\n",
+    "parsed": null
+  },
+  "executedAt": "20261005050100"
+}

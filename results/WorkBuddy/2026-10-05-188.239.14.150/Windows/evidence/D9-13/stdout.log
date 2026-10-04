@@ -1,0 +1,26 @@
+{
+  "caseId": "D9-13",
+  "status": "PASS",
+  "why": "setRuntimeCredentials/has/resolve/clear 链路工作；callTool 返回不含 AK/SK 明文（经 redaction pipeline 脱敏）",
+  "evidence": {
+    "hasRuntimeCredentials": true,
+    "resolvedAkPresent": true,
+    "resolvedSkPresent": true,
+    "policyLoaded": true,
+    "classifyHcloudArgs": {
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "service": "ECS",
+      "operation": "list-servers",
+      "args": [
+        "ECS",
+        "list-servers"
+      ]
+    },
+    "bodyHasAk": false,
+    "bodyHasSk": false,
+    "afterClear": false
+  },
+  "executedAt": "20261005050100"
+}

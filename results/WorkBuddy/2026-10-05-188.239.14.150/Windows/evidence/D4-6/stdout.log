@@ -1,0 +1,11 @@
+{
+  "caseId": "D4-6",
+  "status": "FAIL",
+  "why": "hcloud ECS create-servers --adminPass PlainPwd123（空格分隔，hcloud CLI 实际语法）被判 allow，未拦截。根因：cloud-risk-rules.json hwc-command-secret-in-arg 规则 regex \"--adminPass|--password|--secret|--token)s*[=:]s*[^s<]\" 仅匹配 = 或 : 分隔符，不匹配空格分隔的 CLI 参数语法。文件: plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json hwc-command-secret-in-arg.match.all[1].regex",
+  "evidence": {
+    "spaceSep": "allow",
+    "eqSep": "warn",
+    "colonSep": "warn"
+  },
+  "executedAt": "20261005052500"
+}
