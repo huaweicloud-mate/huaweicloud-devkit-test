@@ -1,6 +1,6 @@
 # OpenCode-unknown 每日测试报告
 > **报告名**：`OpenCode-unknown-测试报告.md`
-> **生成时间**：2026-10-05 05:40:42（北京时间）
+> **生成时间**：2026-10-05 05:41:57（北京时间）
 > **执行归档**：`results/OpenCode/2026-10-05-188.239.14.150/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（无 P0 缺陷）
