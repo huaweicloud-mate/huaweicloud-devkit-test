@@ -1,6 +1,6 @@
 # OpenCode-unknown 每日测试报告
 > **报告名**：`OpenCode-unknown-测试报告.md`
-> **生成时间**：2026-10-05 05:38:32（北京时间）
+> **生成时间**：2026-10-05 05:40:42（北京时间）
 > **执行归档**：`results/OpenCode/2026-10-05-188.239.14.150/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（无 P0 缺陷）
@@ -25,9 +25,9 @@
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | `141`（设计级 102 + 展开级 39） |
-| 已执行 | `13` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `13 / 0 / 0 / 0 / 128` |
-| 通过率（分母 = PASS+FAIL = 13） | `100.0%` |
+| 已执行 | `14` |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `14 / 0 / 0 / 0 / 127` |
+| 通过率（分母 = PASS+FAIL = 14） | `100.0%` |
 | P0 / P1 / P2 新增缺陷 | `0 / 0 / 0` |
 | 红线（I 类）违规 | `TODO: 待填` |
 | 资源释放 | `TODO: 待填` |
@@ -40,11 +40,11 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `13` | 有证据且通过 PASS 门禁 |
+| PASS | `14` | 有证据且通过 PASS 门禁 |
 | FAIL | `0` | 不符预期，根因见缺陷清单 |
 | BLOCKED | `0` | 环境/权限/凭证阻塞 |
 | SPEC-MISMATCH | `0` | 契约漂移 |
-| NOT_RUN | `89` | 未执行 |
+| NOT_RUN | `88` | 未执行 |
 | **合计** | **`102`** | |
 
 ### 3.2 展开级
@@ -80,7 +80,6 @@
 | `D1-31` | D1安装 | dismiss 冷却期 | TODO: 待补原因 |
 | `D1-33` | D1安装 | skip 文件持久化与多路径 | TODO: 待补原因 |
 | `D1-39` | D1安装 | Windows 升级检测链可用性 | TODO: 待补原因 |
-| `D1-40` | D1安装 | 镜像 lag 下检测正确性(反向提醒防护) | TODO: 待补原因 |
 | `D1-41` | D1安装 | check_update 真实 MCP 返回契约 | TODO: 待补原因 |
 | `D1-42` | D1安装 | dismiss 真实闭环与跨调用持久化 | TODO: 待补原因 |
 | `D1-45` | D1安装 | 兜底提示真实序列与预热竞态 | TODO: 待补原因 |
