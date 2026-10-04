@@ -1,0 +1,62 @@
+########## STEP 4: status (2nd) — idempotency check (D1-4) ##########
+
+================================================================================
+$ HOME=/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005 HERMES_HOME=/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes huaweicloud-devkit status --target hermes
+================================================================================
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.8-next.1          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+HuaweiCloud DevKit Status
+
+  已安装: Hermes Agent
+
+[Hermes Agent]
+  MCP Server: [32mInstalled[0m
+  Safety Policy: [32mInstalled[0m
+  Safety Hooks: [32mInstalled[0m
+  Telemetry Hook: [32mInstalled[0m
+  Hook allowlist: [32mApproved[0m
+  Hook plugin: [32mInstalled[0m
+  MCP Python SDK: [31mMissing[0m
+  Skills: [32m29 installed[0m
+  MCP config: [32mConfigured[0m
+  Hooks config: [32mConfigured[0m
+
+Environment:
+  Node.js: v22.13.0
+  Platform: linux
+--- exit=0 ---
+
+########## STEP 5: update — idempotency check (D1-4) ##########
+
+================================================================================
+$ HOME=/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005 HERMES_HOME=/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes huaweicloud-devkit update --target hermes
+================================================================================
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.8-next.1          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+[Hermes Agent]
+  Skills updated -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/skills
+  MCP Server updated -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/huaweicloud-plugins/src
+  Safety Policy updated -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/huaweicloud-plugins/safety
+  Agent Rules -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc
+  Safety Hooks updated -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/huaweicloud-plugins/hooks
+  MCP config unchanged: /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/config.yaml
+  Hooks config unchanged: /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/config.yaml
+  Hook allowlist unchanged: /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/shell-hooks-allowlist.json
+  Hook plugin unchanged: /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/plugins/huaweicloud-safety
+  Installing Hermes MCP Python SDK...
+  MCP Python SDK: [33mInstall failed[0m
+  [33m  Run manually: python3 -m pip install mcp[0m
+  Runtime deps installed -> /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/iso-home-20261005/.hermes/huaweicloud-plugins/node_modules
+
+[32mUpdate complete.[0m
+[33mRestart Hermes Agent for changes to take effect.[0m
+--- exit=0 ---
+

@@ -1,0 +1,19 @@
+[sh-c-env-HWCLOUD] $ sh -c "env | grep HUAWEICLOUD_ACCESS_KEY"
+   decision=deny risk=credential reason=Dumping cloud credential environment variables is blocked.
+[sh-c-env-HW] $ sh -c "env | grep HW_ACCESS_KEY"
+   decision=deny risk=credential reason=Dumping cloud credential environment variables is blocked.
+[bash-c-printenv] $ bash -c "printenv HUAWEICLOUD_SDK_AK"
+   decision=deny risk=credential reason=Dumping cloud credential environment variables is blocked.
+[eval-env] $ eval "env | grep HUAWEICLOUD_ACCESS_KEY"
+   decision=deny risk=credential reason=Dumping cloud credential environment variables is blocked.
+[sh-c-secret] $ sh -c "hcloud csms ShowSecretVersion --secret-name x"
+   decision=deny risk=secret reason=Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+[sh-c-cred-file] $ sh -c "cat ~/.config/huaweicloud/credentials.json"
+   decision=deny risk=credential reason=Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
+[sh-c-delete] $ sh -c "hcloud ecs DeleteServer --force"
+   decision=deny risk=write reason=Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+[ctrl-env-naked] $ env | grep HUAWEICLOUD_ACCESS_KEY
+   decision=deny risk=credential reason=Dumping cloud credential environment variables is blocked.
+[ctrl-secret-naked] $ hcloud csms ShowSecretVersion --secret-name x
+   decision=deny risk=secret reason=Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+=== DONE ===
