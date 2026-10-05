@@ -1,0 +1,20 @@
+PASS	D1-67	mergeArgsStyle.env={"HUAWEICLOUD_AGENT_TOOLKIT_MODE":"local","HCLOUD_BIN":"/usr/bin/hcloud"}; mergeMcpServersFile.env={"HUAWEICLOUD_AGENT_TOOLKIT_MODE":"local","HCLOUD_BIN":"/usr/bin/hcloud"}; SKIP_DSH分支存在=true
+SPEC-MISMATCH	D1-68	resolveCredentials region=cn-test-hw-wins（HW_REGION||HUAWEICLOUD_REGION，HW_REGION 胜出）
+  D1-68 ICONS_OFFLINE getServiceIcon -> {"ok":true,"query":"ecs","source":"snapshot","manifestGeneratedAt":"2026-07-31T17:23:51.479Z","count":2,"iconsPageUrl":"https://open.huaweicloud.com/openplatfor
+PASS	D1-70	write/read=true no_proxy绕过=true clear=true proxy-agent含WS代理=true
+PASS	D2-26	bak=true bakExists=true restored=true content==orig=true idempotent=true
+PASS	D2-27	ver=7.2.12 parsed=7.2.12 cmp(7.2.12,7.2.9)=1 cmp(7.2.9,7.2.12)=-1 base=https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12
+PASS	D3-C14	hdkitCredentials缺参抛错=true("session_id or dev_stage_id is required") getCredentials keys=true createConnection=true 透传=true 安全头=true
+FAIL	D3-S5	recommendedServices=["ECS"] recommendedSkills=["huawei-ecs"]
+PASS	D3-S8	explain_error -> {"service":"ECS","errorCode":"APIGW.0301","requestId":"","suggestions":["Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.","APIGW.0301: API Gateway layer error. Incorrect IAM authentication information
+FAIL	D4-25	写命令事件写到了 plugins/telemetry；keys=["cli:read","cli:invoke","cli:invoke"]；Node 读取目录存在=false
+FAIL	D4-26	decision=warn findings=1 evidence="hcloud IAM CreateUser --password MyS3cret123 --cli-region=cn-north-4" (明文残留=true)
+PASS	D4-27	redactSecrets leaks=[]; redactOutput leaks=[]
+PASS	D4-29	raw.decision=deny direct=deny same=true denyThrows=true allowPass=true
+PASS	D6-9	clearIconCache/clearMarketCache/invalidateUpdateCache 均调用成功且幂等 (errs: icon=- market=- upd=-)
+SPEC-MISMATCH	D8-9	installId 稳定持久=true; 但 sanitizeValue("ak=AK123456 sk=SKsecret token=Tok123") = "ak=AK123456 sk=SKsecret token=Tok123" 未移除敏感值
+PASS	D8-10	cmdStyleKeepArg=true argsStyleEnvMerge=true delta={"argsExtra":["--extra"],"env":{"MINE":"v"}} idempotent=true
+PASS	D9-11	HwlinkTunnelChannel attach=true close=true members=true 源码生命周期标记=true ctorErr=-
+FAIL	D9-12	protocolVersion=true capabilities=true serverInfo=true tools>=40=true decorate=true 非法时序拒绝=false({"threw":false,"code":"listed:41"})
+PASS	D9-13	runtime注入=true/true 清理=true 脱敏无泄露=true 令牌一次性=true
+probe_missing.mjs DONE
