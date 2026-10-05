@@ -1,0 +1,21 @@
+D4-9 测试证据
+执行时间: 2026-10-06 05:14
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p0.mjs
+结果: PASS
+断言: destructive 命令拦截
+结论: PASS - hcloud ECS DeleteServers 被拦截 decision:deny risk:write
+
+=== 执行命令 ===
+node probe_safety.mjs (classifyTextCommand)
+=== RC === 0
+=== STDOUT ===
+D4-2 | echo $HW_SECRET_KEY => {"decision":"deny","risk":"credential","reason":"Printing cloud credential environment variables is blocked."}
+D4-2b | printenv HW_ACCESS_KEY => {"decision":"deny","risk":"credential","reason":"Dumping cloud credential environment variables is blocked."}
+D4-3 | hcloud ECS CreateServers --adminPass MySecret123 => {"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}
+D4-3b | hcloud ECS CreateServers --adminPass=MySecret123 => {"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}
+D4-5 | rm -rf / => {"decision":"deny","risk":"destructive","reason":"The sandbox terminal command is destructively dangerous and could destroy the workspace.","blockedByRiskRule":true,"findings":[{"ruleId":"hwc-sandbox-destructive-command","title":"Destructiv
+D4-9 | hcloud ECS DeleteServers => {"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}
+
