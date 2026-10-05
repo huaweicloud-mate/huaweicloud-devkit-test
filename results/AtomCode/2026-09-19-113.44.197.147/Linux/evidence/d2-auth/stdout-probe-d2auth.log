@@ -1,0 +1,9 @@
+PASS  D2-11  auth_switch persist + securityToken 返回 {status:error, scope:rejected}  => true | {"status":"error","scope":"rejected"}
+PASS  D2-11  S1 (credentials.json) 未写入 securityToken（token 永不落盘）  => true | securityToken=<empty>
+PASS  D2-16  mode=import 读取 creds-import.json 后无条件擦除（exists=False）  => true | before=true after=false
+PASS  D2-16  import 进入 temporary（不落盘，不破坏 S1）  => true | {"status":"ok","scope":"temporary"}
+PASS  D2-1  S1 credentials.json 存在且含 ak/sk  => true | path=/home/testbot1/.config/huaweicloud/credentials.json ak=HPUA***SYXD
+PASS  D2-1  S2 KooCLI current 档存在 (~/.hcloud/config[.json])  => true | path=/home/testbot1/.hcloud/config.json (alt=false)
+PASS  D2-1  S3 OBS config 存在 (~/.obsutilconfig)  => true | path=/home/testbot1/.obsutilconfig exists=true
+PASS  D2-1  真云 E2E：S2 KooCLI 只读 API 实际可用（KeystoneListProjects 返回 projects）  => true | ok
+TOTAL pass=8 fail=0

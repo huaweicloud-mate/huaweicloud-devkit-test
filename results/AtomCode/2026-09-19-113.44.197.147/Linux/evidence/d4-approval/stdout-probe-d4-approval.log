@@ -1,0 +1,8 @@
+PASS  D4-18  写操作未审批时被拦截（plan allowWrites=false → deny，非直接放行）  => true | decision=deny
+PASS  D4-18  确认流可触发（plan 产出 approvalToken，非永久拒绝）  => true | token=present
+PASS  D4-18  审批放行后允许执行（allowWrites=true → allow）  => true | decision=allow
+PASS  D4-19  确认流下风险预检仍产出 findings  => true | findings=1
+PASS  D4-19  公网 0.0.0.0/0 高危写操作在确认流中被预检拦截（deny）  => true | decision=deny
+PASS  D4-20  assertAllowed(deny) 抛错拦截（拒绝后不执行）  => true
+PASS  D4-20  未审批写操作 runHcloud 被阻断（拒绝 → 无 hcloud 执行 → 零资源）  => true
+TOTAL pass=7 fail=0

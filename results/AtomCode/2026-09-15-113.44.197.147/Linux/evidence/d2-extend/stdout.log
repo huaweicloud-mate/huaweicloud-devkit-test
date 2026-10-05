@@ -1,0 +1,11 @@
+INFO   D2-10  readKooCliProfiles => {"current":"default","mtimeMs":1788840030739.5579,"configPath":"/home/testbot1/.hcloud/config.json","authEncrypt":true,"profiles":[{"name":"default","fingerprint":"","accessKeyId":"","encrypted":true}
+PASS  D2-10  readKooCliProfiles 返回含 current 字段或明确 error  => true (expected true)
+PASS  D2-10  resolveManagedProfile 返回 current 档名或 null（无配置）  => true (expected true)
+INFO   D2-12  syncAuth(runtime active) => {"ok":false,"error":"Runtime credentials are active; auto-sync suppressed (R10).","nextStep":"Run huaweicloud_auth_switch action=clear or action=persist first."}
+PASS  D2-12  runtime 激活时 syncAuth 返回 ok:false  => true (expected true)
+PASS  D2-12  syncAuth 错误含 R10 auto-sync suppressed 语义  => true (expected true)
+PASS  D2-12  清理后 hasRuntimeCredentials=false  => true (expected true)
+INFO   D2-16  clearImportFile 定义=true rmSync(force) 擦除=true
+PASS  D2-16  import 文件存在 clearImportFile 擦除函数  => true (expected true)
+PASS  D2-16  擦除通过 rmSync(path,{force:true}) 实现（读后无条件擦除）  => true (expected true)
+TOTAL pass=7 fail=0

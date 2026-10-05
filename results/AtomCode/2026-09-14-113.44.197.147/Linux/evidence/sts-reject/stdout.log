@@ -1,0 +1,120 @@
+TAP version 13
+# Subtest: runVersionCheck uses hcloud version instead of --version
+ok 1 - runVersionCheck uses hcloud version instead of --version
+  ---
+  duration_ms: 53.358111
+  ...
+# Subtest: runVersionCheck returns installed:false and errorCode on ENOENT
+ok 2 - runVersionCheck returns installed:false and errorCode on ENOENT
+  ---
+  duration_ms: 3.42463
+  ...
+# Subtest: runVersionCheck reports versionMismatch when installed version differs from kooCliVersion
+ok 3 - runVersionCheck reports versionMismatch when installed version differs from kooCliVersion
+  ---
+  duration_ms: 49.027841
+  ...
+# Subtest: runVersionCheck reports no versionMismatch when installed version matches kooCliVersion
+ok 4 - runVersionCheck reports no versionMismatch when installed version matches kooCliVersion
+  ---
+  duration_ms: 49.285764
+  ...
+# Subtest: TOOL_DEFINITIONS includes all required tools including sandbox
+ok 5 - TOOL_DEFINITIONS includes all required tools including sandbox
+  ---
+  duration_ms: 0.82253
+  ...
+# Subtest: TOOL_DEFINITIONS expose cwd parameter on run tools
+ok 6 - TOOL_DEFINITIONS expose cwd parameter on run tools
+  ---
+  duration_ms: 0.353274
+  ...
+# Subtest: TOOL_DEFINITIONS includes proactive hook check tools
+ok 7 - TOOL_DEFINITIONS includes proactive hook check tools
+  ---
+  duration_ms: 0.505246
+  ...
+# Subtest: huaweicloud_hook_check_command returns deny finding
+ok 8 - huaweicloud_hook_check_command returns deny finding
+  ---
+  duration_ms: 5.522254
+  ...
+# Subtest: huaweicloud_explain_error maps APIGW.0301 to credential/project_id guidance
+ok 9 - huaweicloud_explain_error maps APIGW.0301 to credential/project_id guidance
+  ---
+  duration_ms: 2.096844
+  ...
+# Subtest: callTool rejects invalid numeric timeoutMs instead of silently ignoring it
+ok 10 - callTool rejects invalid numeric timeoutMs instead of silently ignoring it
+  ---
+  duration_ms: 1.993333
+  ...
+# Subtest: callTool accepts maxRetries 0 and integer timeoutMs (no false rejection)
+ok 11 - callTool accepts maxRetries 0 and integer timeoutMs (no false rejection)
+  ---
+  duration_ms: 8.168545
+  ...
+# Subtest: huaweicloud_hook_check_artifacts detects broad IAM policy
+ok 12 - huaweicloud_hook_check_artifacts detects broad IAM policy
+  ---
+  duration_ms: 2.057134
+  ...
+# Subtest: huaweicloud_hook_check_deploy_plan warns on sandbox without ttl
+ok 13 - huaweicloud_hook_check_deploy_plan warns on sandbox without ttl
+  ---
+  duration_ms: 1.459507
+  ...
+# Subtest: service_catalog recommends sandbox first for static website deployment intent
+ok 14 - service_catalog recommends sandbox first for static website deployment intent
+  ---
+  duration_ms: 1.690669
+  ...
+# Subtest: service_catalog keeps storage routing for pure storage intent
+ok 15 - service_catalog keeps storage routing for pure storage intent
+  ---
+  duration_ms: 1.822081
+  ...
+# Subtest: findSkillsRoot skips stale dirs without SKILL.md and picks the first real skills root
+ok 16 - findSkillsRoot skips stale dirs without SKILL.md and picks the first real skills root
+  ---
+  duration_ms: 2.779132
+  ...
+# Subtest: listSkillDirs ignores files, subdirs without SKILL.md, and counts symlinked skill dirs
+ok 17 - listSkillDirs ignores files, subdirs without SKILL.md, and counts symlinked skill dirs
+  ---
+  duration_ms: 3.179097
+  ...
+# Subtest: auth_switch temporary sets runtime credentials for api path
+ok 18 - auth_switch temporary sets runtime credentials for api path
+  ---
+  duration_ms: 93.68558
+  ...
+# Subtest: auth_switch clear resets runtime
+ok 19 - auth_switch clear resets runtime
+  ---
+  duration_ms: 1.905352
+  ...
+# Subtest: auth_switch persist(mode=import) rejects missing region and keeps import file (\#502)
+ok 20 - auth_switch persist(mode=import) rejects missing region and keeps import file (\#502)
+  ---
+  duration_ms: 3.202668
+  ...
+# Subtest: auth_switch temporary(mode=import) clears import file on success
+ok 21 - auth_switch temporary(mode=import) clears import file on success
+  ---
+  duration_ms: 4.129589
+  ...
+# Subtest: auth_switch persist(mode=import) with STS token is rejected and clears import file
+ok 22 - auth_switch persist(mode=import) with STS token is rejected and clears import file
+  ---
+  duration_ms: 2.184916
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1058.790459

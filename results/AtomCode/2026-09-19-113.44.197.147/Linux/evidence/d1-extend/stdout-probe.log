@@ -1,0 +1,11 @@
+INFO   D1-33  writeSkipState => {"dismissedVersion":"1.1.4","dismissedAt":"2026-09-18T21:10:21.267Z","expireAt":"2026-09-21T21:10:21.267Z"}
+PASS  D1-33  writeSkipState 返回状态对象（dismissedVersion/expireAt）  => true (expected true)
+INFO   D1-33  readSkipState => {"dismissedVersion":"1.1.4","dismissedAt":"2026-09-18T21:10:21.267Z","expireAt":"2026-09-21T21:10:21.267Z"}
+PASS  D1-33  skip 文件含 dismissedVersion/expireAt  => true (expected true)
+PASS  D1-33  resolveSkipFilePath 返回可解析路径  => true (expected true)
+PASS  D1-42  冷却期内 dismiss 状态落盘（dismissedVersion=1.1.5）  => true (expected true)
+PASS  D1-42  过期 skip 状态可读（expireAt 已过期）  => true (expected true)
+INFO   D1-41  check_update => {"content":[{"type":"text","text":"{\n  \"currentVersion\": \"1.1.5\",\n  \"latestStable\": \"1.1.5\",\n  \"latestNext\": \"1.1.6-next.0\",\n  \"targetVersion\": \"1.1.5\",\n  \"updateAvailable\": false,\n  \"dismissed\": false,\n  \"dismissExpiresAt\": null,\
+PASS  D1-41  check_update tools/call isError=false  => true (expected true)
+PASS  D1-41  check_update 返回 currentVersion/latestVersion 字段  => true (expected true)
+TOTAL pass=7 fail=0

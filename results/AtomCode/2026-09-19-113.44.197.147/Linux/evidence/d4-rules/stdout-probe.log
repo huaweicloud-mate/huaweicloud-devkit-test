@@ -1,0 +1,9 @@
+PASS  D4-23  全局规则源文件 huawei-agent-rules.mdc 存在  => true (expected true)
+PASS  D4-23  规则含 MUST NOT call csms download-secret/show-secret  => true (expected true)
+PASS  D4-23  规则含 MUST NOT call kms decrypt  => true (expected true)
+PASS  D4-23  规则含 least-privilege（最小权限）  => true (expected true)
+INFO   D4-23  csms ShowSecretVersion => {"decision":"deny","risk":"secret","reason":"Direct secret value reads are blocked so plaintext secrets do not enter the agent context."}
+INFO   D4-23  kms Decrypt => {"decision":"allow","risk":"unknown_read","reason":"Command does not match a known write or secret operation; treat output as untrusted and redact it.","service":"kms","operation":"Decrypt","args":["kms","Decrypt","--ciphertext-blob","x"]}
+PASS  D4-23  直连 csms ShowSecretVersion 被 deny  => true (expected true)
+FAIL  D4-23  直连 kms Decrypt 被识别（secret 拦截）  => false (expected true)
+TOTAL pass=5 fail=1

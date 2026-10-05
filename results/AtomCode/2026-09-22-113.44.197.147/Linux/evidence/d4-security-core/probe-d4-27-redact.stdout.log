@@ -1,0 +1,16 @@
+
+=== D4-27 双路径脱敏完整性探针结果（v1.1.5 全量断言）===
+PASS  D4-27  redactSecrets 对象键 ak 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D4-27  redactSecrets 对象键 sk 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D4-27  redactSecrets 对象键 token 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D4-27  redactSecrets 对象键 password 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D4-27  redactSecrets 对象键 adminPass 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D4-27  redactSecrets 对象键 secret_key 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D4-27  redactSecrets 对象非敏感键 region 保留  => "cn-north-4" (expected "cn-north-4")
+PASS  D4-27  文本大写 AK=/SK= 脱敏(无明文)  => true (expected true)
+PASS  D4-27  文本 password=/adminPass= 脱敏(无明文)  => true (expected true)
+FAIL  D4-27  文本裸 token= 关键字脱敏(无明文)  => false (expected true)
+FAIL  D4-27  文本小写 ak=/sk= 脱敏(无明文)  => false (expected true)
+PASS  D4-27  redactOutput JSON 对象键脱敏(无明文)  => true (expected true)
+PASS  D4-27  redactOutput 噪声文本路径脱敏(无明文)  => true (expected true)
+TOTAL pass=11 fail=2

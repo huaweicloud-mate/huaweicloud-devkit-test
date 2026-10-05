@@ -1,0 +1,24 @@
+INFO   D3-C5  huaweicloud_list_operations => {"service":"ecs","command":"hcloud ecs --help","selectionRule":"Use this help text to select the exact KooCLI operation 
+PASS  D3-C5  huaweicloud_list_operations 冒烟可调用  => true (expected true)
+INFO   D3-C5  huaweicloud_service_catalog => {"intent":"","recommendedSkills":["Use huaweicloud-core to route intent."],"recommendedServices":["Run hcloud --help to 
+PASS  D3-C5  huaweicloud_service_catalog 冒烟可调用  => true (expected true)
+INFO   D3-C5  huaweicloud_list_regions => {"ok":true,"count":26,"regions":[{"id":"af-north-1","type":"public","locales":{"en-us":"AF-Cairo","zh-cn":"非洲-开罗"}},{"id
+PASS  D3-C5  huaweicloud_list_regions 冒烟可调用  => true (expected true)
+INFO   D3-C5  huaweicloud_retrieve_skill => {"ok":true,"name":"huawei-getting-started","version":"1","description":"'Use when starting fresh with Huawei Cloud or Ko
+PASS  D3-C5  huaweicloud_retrieve_skill 冒烟可调用  => true (expected true)
+INFO   D5-3  TOOL_DEFINITIONS.length = 40
+PASS  D5-3  工具全集均为含 name/description/inputSchema 的合法定义  => true (expected true)
+INFO   D6-1  listSkillDirs 耗时 0.4ms, 返回 29 技能
+PASS  D6-1  检索/枚举延迟 < 2000ms（p95）  => true (expected true)
+INFO   D6-3  initialize 冷启 574.1ms
+PASS  D6-3  initialize 冷启 < 5000ms  => true (expected true)
+INFO   D6-4  30 并发 tools/list 完成 0.3ms, 全合法=true
+PASS  D6-4  30 并发 tools/list 全部返回合法结果（无死锁/错乱）  => true (expected true)
+INFO   D8-1  技能中缺 SKILL.md 的数量 => 0
+PASS  D8-1  技能目录均含 SKILL.md（无失效技能入口）  => true (expected true)
+PASS  D8-4  getting-started 技能可检索且含可执行步骤  => true (expected true)
+INFO   D8-6  README.md=true README.zh-CN=true
+PASS  D8-6  README 中英文双源存在  => true (expected true)
+INFO   D9-9  超时/非法参数 => {}
+PASS  D9-9  超时/非法参数不导致进程崩溃（返回可处理错误或结果）  => true (expected true)
+TOTAL pass=12 fail=0

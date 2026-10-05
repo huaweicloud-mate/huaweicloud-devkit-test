@@ -1,0 +1,24 @@
+==================== D4-13 最小权限凭证通过率（只读子账号 test001） ====================
+-- 只读凭证下：读操作应为可用（readonly 100%）--
+  READ ECS.ListServersDetails => OK
+  READ VPC.ListVpcs => OK
+  READ IMS.ListImages => OK
+  READ EVS.ListVolumes => OK
+  READ RDS.ListInstances => OK
+  [summary] readonly reads: ok=5 deny=0
+PASS  D4-13 只读 100% 可用（5/5 服务只读 API 全部可用）
+-- 只读凭证下：写操作应被 IAM 拒绝 --
+PASS  D4-13 写操作被 IAM 拒绝（VPC CreateVpc policy deny）
+  WRITE VPC.CreateVpc => DENIED (disallowed by policy)
+==================== D3-C4 服务矩阵（list_operations 只读规划冒烟） ====================
+  MISS list_operations OBS : Error: No such command: "--help", please try "help" for more
+  MISS list_operations DMS : [USE_ERROR]Unsupported service: DMS.
+  MISS list_operations DEW : [USE_ERROR]Unsupported service: DEW.
+  [summary] 服务矩阵 list_operations: ok=19/22
+FAIL  D3-C4 服务矩阵缺路由 (19/22)
+==================== D4-14 操作可审计（建→执行→CTS→删→归零） ====================
+PASS  D4-14 最小规格 VPC 创建成功（id=873fb4d9-f9f9-4048-b3e6-55756352c50a）
+PASS  D4-14 CTS 审计可追溯（查到 CreateVpc trace）
+PASS  D4-14 测后删除归零（list 计数=0）
+==================== 汇总 ====================
+TOTAL pass=5 fail=1

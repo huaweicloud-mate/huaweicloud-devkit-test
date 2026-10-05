@@ -1,0 +1,8 @@
+INFO   D4-18  CreateServers(未确认) => {"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}
+PASS  D4-18  写操作未确认时 decision=deny  => true (expected true)
+PASS  D4-18  deny 原因为「等待显式审批」（不是最终拒绝）  => true (expected true)
+INFO   D4-18  CreateServers(已确认 allowWrites) => {"decision":"allow","risk":"write","reason":"Huawei Cloud write operation approved by user.","service":"ECS","operation":"CreateServers","args":["ECS","CreateServers","--count","1"]}
+PASS  D4-18  显式确认后 decision=allow  => true (expected true)
+INFO   D4-19  DeleteServers(已确认) => {"decision":"allow","risk":"write","reason":"Huawei Cloud write operation approved by user.","service":"ECS","operation":"DeleteServers","args":["ECS","DeleteServers","--servers.0.id","x"],"warnings":[{"ruleId":"hwc-destructive-delete-operation","title":"Destructive cloud resource operation","category":"destructive","severity":"warn","message":"This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.","remediation":"List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.","source":"command","evidence":"hcloud ECS DeleteServers --servers.0.id x"}]}
+PASS  D4-19  确认后破坏性操作仍触发风险预检（warnings 非空）  => true (expected true)
+TOTAL pass=4 fail=0

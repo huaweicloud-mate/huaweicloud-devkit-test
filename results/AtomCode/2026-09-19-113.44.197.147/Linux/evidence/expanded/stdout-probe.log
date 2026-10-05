@@ -1,0 +1,33 @@
+INFO   EXP-NR3-09  platform=linux NPM_BIN=npm
+PASS  EXP-NR3-09  Linux 平台不引入 npm.cmd（无 EINVAL 触发源）  => true (expected true)
+INFO   EXP-NR3-09  queryDistTagsSync => {"latest":"1.1.5","next":"1.1.6-next.0"}
+PASS  EXP-NR3-09  同步路径静默可用（返回 dist-tags，无 EINVAL）  => true (expected true)
+INFO   EXP-NR3-09  queryDistTags(async) => {"latest":"1.1.5","next":"1.1.6-next.0"}
+PASS  EXP-NR3-09  异步路径静默可用（返回 dist-tags）  => true (expected true)
+PASS  EXP-NR3-10  Linux 无 npm.cmd EINVAL 语义（NPM_BIN=npm）  => true (expected true)
+PASS  EXP-NR3-10  检测链端到端可得到最新 dist-tags（latest 非空）  => true (expected true)
+INFO   EXP-C4  list_operations(ecs) => OK command=hcloud ecs --help
+INFO   EXP-C4  list_operations(vpc) => OK command=hcloud vpc --help
+INFO   EXP-C4  list_operations(obs) => OK command=hcloud obs help
+INFO   EXP-C4  list_operations(rds) => OK command=hcloud rds --help
+INFO   EXP-C4  list_operations(gaussdb) => OK command=hcloud gaussdb --help
+INFO   EXP-C4  list_operations(cce) => OK command=hcloud cce --help
+INFO   EXP-C4  list_operations(functiongraph) => OK command=hcloud functiongraph --help
+INFO   EXP-C4  list_operations(iam) => OK command=hcloud iam --help
+INFO   EXP-C4  list_operations(cts) => OK command=hcloud cts --help
+INFO   EXP-C4  list_operations(ces) => OK command=hcloud ces --help
+INFO   EXP-C4  list_operations(dds) => OK command=hcloud dds --help
+INFO   EXP-C4  list_operations(dcs) => OK command=hcloud dcs --help
+INFO   EXP-C4  list_operations(smn) => OK command=hcloud smn --help
+INFO   EXP-C4  list_operations(dms) => OK command=hcloud dms --help
+INFO   EXP-C4  list_operations(waf) => OK command=hcloud waf --help
+INFO   EXP-C4  list_operations(cdn) => OK command=hcloud cdn --help
+INFO   EXP-C4  list_operations(modelarts) => OK command=hcloud modelarts --help
+INFO   EXP-C4  list_operations(dew) => OK command=hcloud dew --help
+INFO   EXP-C4  list_operations(cbr) => OK command=hcloud cbr --help
+INFO   EXP-C4  list_operations(evs) => OK command=hcloud evs --help
+INFO   EXP-C4  list_operations(eip) => OK command=hcloud eip --help
+INFO   EXP-C4  list_operations(elb) => OK command=hcloud elb --help
+INFO   EXP-C4  服务矩阵 22/22 通过，失败: []
+PASS  EXP-C4  22 服务 list_operations 只读规划全部可路由  => true (expected true)
+TOTAL pass=6 fail=0

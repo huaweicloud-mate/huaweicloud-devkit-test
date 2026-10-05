@@ -1,0 +1,22 @@
+
+=== P0 安全核心探针结果 ===
+PASS  D4-1  credentials.json 读取拦截  => "deny" (expected "deny")
+PASS  D4-1  .huaweicloud 配置读取拦截  => "deny" (expected "deny")
+PASS  D4-2  env dump HUAWEICLOUD_* 拦截  => "deny" (expected "deny")
+FAIL  D4-2  printenv HW_ACCESS_KEY 拦截(HW_ 前缀)  => "allow" (expected "deny")
+FAIL  D4-2  env dump HW_SECRET_KEY 拦截(HW_ 前缀)  => "allow" (expected "deny")
+PASS  D4-3  GetSecretValue 拦截  => "deny" (expected "deny")
+PASS  D4-3  ShowSecretVersion 拦截  => "deny" (expected "deny")
+PASS  D4-15  base64 -d | sh 管道拦截  => "deny" (expected "deny")
+FAIL  D4-16  sh -c 包裹 env dump 拦截  => "allow" (expected "deny")
+PASS  D4-16  bash -c 包裹凭证文件读取拦截  => "deny" (expected "deny")
+PASS  D4-9  hcloud 破坏性写操作识别 (decision)  => true (expected true)
+PASS  D4-21  制品预检返回 findings 数组  => true (expected true)
+FAIL  D4-21  broad IAM policy (actions=["*"]) 检出  => false (expected true)
+PASS  D4-22  部署计划预检返回 findings 数组  => true (expected true)
+PASS  D2-4  ak 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D2-4  sk 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D2-4  access_key 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D2-4  username 保留明文  => "admin" (expected "admin")
+
+TOTAL pass=14 fail=4

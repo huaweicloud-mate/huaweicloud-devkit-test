@@ -1,0 +1,5 @@
+PASS  D3-B3  run_readonly_command 执行只读命令成功  => true | {"ok":true}
+PASS  D3-B3  输出脱敏（结果中不含明文 AK 尾段）  => true | ok
+PASS  D3-B3  redactSecrets 对 ak/sk 脱敏  => true | {"ak":"<redacted>","sk":"<redacted>","securityToken":"<redacted>"}
+PASS  D3-B3  只读命令不产生写入（readonly → 无高危写触发）  => true | op=KeystoneListProjects(read)
+TOTAL pass=4 fail=0

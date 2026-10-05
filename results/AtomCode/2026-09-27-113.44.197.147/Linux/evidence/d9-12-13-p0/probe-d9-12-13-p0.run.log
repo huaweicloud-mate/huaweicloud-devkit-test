@@ -1,0 +1,42 @@
+$ node d9-12-13-p0/probe-d9-12-13-p0.mjs
+$ executed at (BJ) 2026-09-27
+
+
+=== D9-12/D9-13 P0 基线与安全探针结果 ===
+PASS  D9-12  initialize 返回 protocolVersion  => "string" (expected "string")
+PASS  D9-12  initialize 返回 capabilities 对象  => "object" (expected "object")
+PASS  D9-12  serverInfo.name  => "huaweicloud-devkit" (expected "huaweicloud-devkit")
+PASS  D9-12  serverInfo 含 version  => "string" (expected "string")
+PASS  D9-12  dispatch tools/call 返回 content 数组  => true (expected true)
+PASS  D9-12  runVersionCheck 可调用(不抛/返回)  => true (expected true)
+PASS  D9-12  _decorateResult 包装返回对象且无副作用  => true (expected true)
+PASS  D9-12  _isHintConsumed 初始(未消费)为 false  => false (expected false)
+PASS  D9-12  findSkillsRoot 返回目录字符串  => "string" (expected "string")
+PASS  D9-12  listSkillDirs 返回技能目录数组  => true (expected true)
+FAIL  D9-12  未 initialize 先 tools/list 返回 -32600(设计契约)  => null (expected -32600)
+NOTE   D9-12 未 initialize 先 tools/list 实测 => {"hasResult":true,"code":null}
+PASS  D9-13  setRuntimeCredentials 后 hasRuntimeCredentials=true  => true (expected true)
+PASS  D9-13  resolveCredentialsWithRuntime 解析运行时凭证 ak  => "RK-AK-TEST" (expected "RK-AK-TEST")
+PASS  D9-13  clearRuntimeCredentials 后 hasRuntimeCredentials=false  => false (expected false)
+PASS  D9-13  loadPolicy 返回策略对象  => "object" (expected "object")
+PASS  D9-13  classifyHcloudArgs 写命令决策非 allow(deny/confirm)  => true (expected true)
+PASS  D9-13  classifyHcloudArgs 只读命令决策 allow  => "allow" (expected "allow")
+PASS  D9-13  evaluateArtifacts 返回对象  => "object" (expected "object")
+PASS  D9-13  evaluateDeployPlan 返回对象  => "object" (expected "object")
+PASS  D9-13  mergeRiskDecision 高危风险合并为 deny  => "deny" (expected "deny")
+PASS  D9-13  hashArgs 幂等(相同参数同哈希)  => "b570ae615a7ca5186efc174f5b38a581a42e0d0c8fa296c21ae2fc0e72d05fcc" (expected "b570ae615a7ca5186efc174f5b38a581a42e0d0c8fa296c21ae2fc0e72d05fcc")
+PASS  D9-13  createApprovalToken 返回 token  => "string" (expected "string")
+PASS  D9-13  consumeApprovalToken 首次消费成功  => true (expected true)
+PASS  D9-13  consumeApprovalToken 二次消费(重放)被拒  => true (expected true)
+PASS  D9-13  readServiceCatalogs 返回对象  => "object" (expected "object")
+PASS  D9-13  classifyUnsupported 返回非 undefined  => true (expected true)
+PASS  D9-13  planHcloudCommand 返回规划对象  => true (expected true)
+PASS  D9-13  tools/call 返回不含明文 AK/SK  => false (expected false)
+PASS  D9-13  globalCredentialsPath 返回路径(字符串)  => "string" (expected "string")
+PASS  D9-13  isPlaceholder 正确识别占位/非占位  => true (expected true)
+PASS  D9-13  obsConfigPath 为导出函数  => "function" (expected "function")
+PASS  D9-13  writeObsConfig 为导出函数  => "function" (expected "function")
+
+TOTAL pass=31 fail=1
+
+[exit=1]

@@ -1,0 +1,16 @@
+$ node supplement/probe-supplement2.mjs
+$ executed at (BJ) 2026-09-27
+
+=== D1-65 调试模式环境变量 ===
+PASS D1-65 DEBUG=1 queryDistTagsSync 正常返回 dist-tags(非空对象) => "1.1.7"
+=== D1-69 CLI help 子命令 ===
+PASS D1-69 help 子命令输出帮助且 exit=0 => exit=0 => true
+PASS D1-69 帮助文本含 Usage/Commands => true
+=== D4-25 Python hook 事件遥测分类 ===
+PASS D4-25 事件键 cli:read => true
+FAIL D4-25 事件键 cli:write => false
+PASS D4-25 事件键 cli:invoke => true
+
+TOTAL pass=5 fail=1
+
+[exit=1]

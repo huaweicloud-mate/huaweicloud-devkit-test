@@ -1,0 +1,14 @@
+
+=== D1 安装/升级检测链探针结果 ===
+PASS  D1-28  1.1.4-next.3 > 1.1.3  => true (expected true)
+PASS  D1-28  1.1.3 < 1.1.4  => true (expected true)
+PASS  D1-28  1.1.3 == 1.1.3  => 0 (expected 0)
+PASS  D1  1.1.4-next.3 是预发布  => true (expected true)
+PASS  D1  1.1.3 非预发布  => false (expected false)
+PASS  D1  determineTarget latest(稳定版)  => "1.1.3" (expected "1.1.3")
+PASS  D1  determineTarget next(pre 取最大)  => "1.1.4-next.3" (expected "1.1.4-next.3")
+PASS  D1  parseDistTags 解析 latest  => "1.1.3" (expected "1.1.3")
+PASS  D1-40  最新 next 不提示降级到 latest  => true (expected true)
+PASS  D1-28  1.1.3 -> 存在升级  => true (expected true)
+
+TOTAL pass=10 fail=0

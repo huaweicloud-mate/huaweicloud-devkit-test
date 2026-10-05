@@ -1,0 +1,22 @@
+
+=== D4 安全核心探针结果 ===
+PASS  D4-1  cat ~/.config/huaweicloud/credentials.json  => "deny" (expected "deny")
+PASS  D4-1  .huaweicloud/config  => "deny" (expected "deny")
+PASS  D4-2  env | grep HUAWEICLOUD_ACCESS_KEY_ID  => "deny" (expected "deny")
+PASS  D4-2  printenv HW_ACCESS_KEY (HW_ 前缀)  => "deny" (expected "deny")
+FAIL  D4-2  env | grep HW_SECRET_KEY (HW_ 前缀)  => "allow" (expected "deny")
+PASS  D4-3  GetSecretValue  => "deny" (expected "deny")
+PASS  D4-3  ShowSecretVersion  => "deny" (expected "deny")
+PASS  D4-15  base64 -d | sh  => "deny" (expected "deny")
+FAIL  D4-16  sh -c "env | grep HUAWEICLOUD"  => "allow" (expected "deny")
+PASS  D4-16  bash -c 包裹凭证文件读取  => "deny" (expected "deny")
+PASS  D4-9  hcloud DeleteServers 无审批被拦  => true (expected true)
+PASS  D4-4  CreateServers 无审批被拦(deny)  => "deny" (expected "deny")
+PASS  D4-9  DescribeInstances 只读放行  => "allow" (expected "allow")
+PASS  D4-21  制品预检返回 findings 数组  => true (expected true)
+FAIL  D4-21  broad IAM policy (actions=["*"]) 检出  => false (expected true)
+PASS  D4-22  部署计划预检返回 findings 数组  => true (expected true)
+PASS  D4-22  公网暴露 22 端口被 deny  => "deny" (expected "deny")
+PASS  D4-11  提示注入 base64->sh  => "deny" (expected "deny")
+
+TOTAL pass=15 fail=3
