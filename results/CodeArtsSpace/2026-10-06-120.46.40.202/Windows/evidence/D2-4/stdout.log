@@ -1,23 +1,10 @@
-<<<<<<< HEAD
-D2-4 测试证据
-执行时间: 2026-10-06 05:14
-客户端: CodeArtsSpace
-OS: Windows
-被测版本: 1.1.8-next.1
-工具: probe-p0.mjs
-结果: FAIL
-断言: redactString 大小写均脱敏
-结论: FAIL - 小写 ak=/sk= 未被脱敏, redactString 正则仅匹配大写 AK/SK
-根因: safety-policy.mjs:45 正则 /(AK|SK)\s*[:=]/g 缺少 i 标志, 小写 ak/sk 不匹配
-=======
 {
   "caseId": "D2-4",
   "status": "FAIL",
   "why": "FAIL - 小写 ak=/sk= 未被脱敏, redactString 正则仅匹配大写 AK/SK",
-  "executedAt": "20261006051036",
+  "executedAt": "20261006051420",
   "assertion": "redactString 大小写均脱敏",
   "rootCause": "safety-policy.mjs:45 正则 /(AK|SK)\\s*[:=]/g 缺少 i 标志, 小写 ak/sk 不匹配",
   "blockedReason": "",
   "version": "1.1.8-next.1"
 }
->>>>>>> 4b89f0993 (test: CodeArtsSpace Windows 2026-10-06 daily test (141 cases, 136 PASS, 8 FAIL historical, 1 NOT_RUN))

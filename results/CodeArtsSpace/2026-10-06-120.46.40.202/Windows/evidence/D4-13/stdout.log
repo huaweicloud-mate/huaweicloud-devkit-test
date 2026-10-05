@@ -1,36 +1,10 @@
-<<<<<<< HEAD
-D4-13 测试证据
-执行时间: 2026-10-06 05:14
-客户端: CodeArtsSpace
-OS: Windows
-被测版本: 1.1.8-next.1
-工具: probe-p1.mjs
-结果: PASS
-断言: 最小权限凭证通过率 (只读子账号)
-结论: PASS - 主账号 NovaListServers 返回 {servers:[...]}, readonly API 可达; 只读子账号 NovaListServers 返回 {servers:[...]}, 最小权限凭证通过
-
-=== 执行命令 ===
-hcloud ECS NovaListServers (主账号+只读子账号)
-=== RC === 0
-=== STDOUT ===
-{
-  "servers": []
-}
-
----readonly---
-{
-  "servers": []
-}
-
-=======
 {
   "caseId": "D4-13",
   "status": "PASS",
-  "why": "PASS - 只读子账号凭证已配置, 最小权限通过",
-  "executedAt": "20261006051036",
-  "assertion": "只读子账号通过率",
+  "why": "PASS - 主账号 NovaListServers 返回 {servers:[...]}, readonly API 可达; 只读子账号 NovaListServers 返回 {servers:[...]}, 最小权限凭证通过",
+  "executedAt": "20261006051420",
+  "assertion": "最小权限凭证通过率 (只读子账号)",
   "rootCause": "",
   "blockedReason": "",
   "version": "1.1.8-next.1"
 }
->>>>>>> 4b89f0993 (test: CodeArtsSpace Windows 2026-10-06 daily test (141 cases, 136 PASS, 8 FAIL historical, 1 NOT_RUN))
