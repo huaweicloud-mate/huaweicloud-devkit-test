@@ -1,0 +1,52 @@
+{
+  "caseId": "D2-12",
+  "status": "PASS",
+  "why": "R10 成立：runtime 凭证非空时 auth_sync 抑制落盘，S1 credentials.json 字节级未被改写且不含 runtime 明文；auth_status 如实反映 runtimeActive",
+  "executedAt": "20261006053950",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "runtimeActive": true,
+  "syncResult": {
+    "ok": false,
+    "error": "Runtime credentials are active; auto-sync suppressed (R10).",
+    "nextStep": "Run huaweicloud_auth_switch action=clear or action=persist first."
+  },
+  "s1Unchanged": true,
+  "runtimeNotOnDisk": true,
+  "authStatusHead": "{\"target\":\"all\",\"credentialsConfigured\":true,\"credentialsPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-4083681250\\\\d2-12-Ul9GeP\\\\.config\\\\huaweicloud\\\\credentials.json\",\"mcpSettingsConfigured\":true,\"mcpSettingsSource\":\"codearts\",\"stsExpiry\":null,\"credentialPanel\":{\"sts\":null,\"s1\":{\"configured\":true,\"fingerprint\":\"f91d2a7f\",\"persistent\":true},\"activeSource\":\"s1-persistent\"},\"obsConfigured\":true,\"obsConfigPath\":\"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"reconciled\":{\"stores\":{\"s1Fingerprint\":\"f91d2a7f\",\"envFingerprint\":\"\",\"currentFingerprint\":\"\",\"s3Fingerprint\":\"b669bb8f\",\"runtimeFingerprint\":\"2dd52b34\"},\"kooCliCurrent\":\"deploy\"",
+  "rows": [
+    {
+      "id": "注入 runtime 凭证后 hasRuntimeCredentials=true",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "id": "auth_sync 在 runtime 非空时抑制落盘",
+      "ok": true,
+      "actual": {
+        "ok": false,
+        "error": "Runtime credentials are active; auto-sync suppressed (R10).",
+        "nextStep": "Run huaweicloud_auth_switch action=clear or action=persist first."
+      }
+    },
+    {
+      "id": "S1 文件字节级未被 runtime 凭证改写",
+      "ok": true,
+      "actual": {
+        "s1Unchanged": true
+      }
+    },
+    {
+      "id": "runtime 凭证未出现在 S1 磁盘文件",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "id": "auth_status 反映 runtimeActive",
+      "ok": true,
+      "actual": "{\"target\":\"all\",\"credentialsConfigured\":true,\"credentialsPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-4083681250\\\\d2-12-Ul9GeP\\\\.config\\\\huaweicloud\\\\credentials.json\",\"mcpSettingsConfigured\":true,\"mcpSettingsSource\":\"codearts\",\"stsExpiry\":null,\"credentialPanel\":{\"sts\":null,\"s1\":{\"configured\":true,\"fingerprint\":\"f91d2a7f\",\"persistent\":true},\"activeSource\":\"s1-persistent\"},\"obsConfigured\":true,\"obsConfigPath\":\"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active Koo"
+    }
+  ],
+  "violations": [],
+  "probeValues": "隔离 HOME 内写入的占位凭证，仅用于本用例"
+}

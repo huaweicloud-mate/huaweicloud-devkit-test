@@ -1,0 +1,126 @@
+{
+  "caseId": "D2-1",
+  "status": "PASS",
+  "why": "auth init 三端同步成立：隔离环境下 S1/KooCLI/OBS 三端配置均落位且格式正确（OBS 键齐备、KooCLI 收到 --cli-profile/--cli-access-key/--cli-region 实参）；真实凭证下 KooCLI 只读 API 实际连通、auth_status 报告 S1/KooCLI/OBS 三端就绪，且真实配置文件全程零改动",
+  "executedAt": "20261006055151",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "initExit": 0,
+  "ends": {
+    "s1": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\d2-1-29pPfZ\\.config\\huaweicloud\\credentials.json",
+      "ok": true
+    },
+    "obs": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\d2-1-29pPfZ\\obsutilconfig",
+      "ok": true,
+      "lines": [
+        "endpoint=https://obs.cn-north-4.myhuaweicloud.com",
+        "ak=AKIAPROBEINIT00000001",
+        "sk=***"
+      ]
+    },
+    "kooCli": {
+      "ok": true,
+      "argv": [
+        "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\huaweicloud-devkit-test\\results\\OpenCode\\2026-10-06-188.239.14.150\\Windows\\evidence\\D2-1\\configure",
+        "set",
+        "--cli-profile=default",
+        "--cli-access-key=AKIAPROBEINIT00000001",
+        "--cli-secret-key=ProbeInitSecretKeyValue0000000000000",
+        "--cli-region=cn-north-4"
+      ]
+    }
+  },
+  "realCloudE2E": {
+    "listServersHead": "{\n  \"count\": 0,\n  \"servers\": []\n}\n",
+    "exit": 0,
+    "authStatus": {
+      "credentialsConfigured": true,
+      "kooCliInstalled": true,
+      "obsConfigured": true
+    }
+  },
+  "realUntouched": true,
+  "rows": [
+    {
+      "id": "隔离 HOME 下 auth init CLI 执行完成",
+      "ok": true,
+      "actual": {
+        "exit": 0
+      }
+    },
+    {
+      "id": "S1（沙箱会话源）落位且格式正确",
+      "ok": true,
+      "actual": {
+        "s1Path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\d2-1-29pPfZ\\.config\\huaweicloud\\credentials.json",
+        "akPrefix": "AKIAPROBEI",
+        "region": "cn-north-4"
+      }
+    },
+    {
+      "id": "OBS 配置落位且格式正确(endpoint/ak/sk 键齐备)",
+      "ok": true,
+      "actual": {
+        "obsPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\d2-1-29pPfZ\\obsutilconfig",
+        "obsOk": true,
+        "obsFormatOk": true,
+        "lines": [
+          "endpoint=https://obs.cn-north-4.myhuaweicloud.com",
+          "ak=AKIAPROBEINIT00000001",
+          "sk=***"
+        ]
+      }
+    },
+    {
+      "id": "KooCLI 端实参落位(--cli-profile/--cli-access-key/--cli-region)",
+      "ok": true,
+      "actual": [
+        "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\huaweicloud-devkit-test\\results\\OpenCode\\2026-10-06-188.239.14.150\\Windows\\evidence\\D2-1\\configure",
+        "set",
+        "--cli-profile=default",
+        "--cli-access-key=AKIAPROBEINIT00000001",
+        "--cli-secret-key=ProbeInitSecretKeyValue0000000000000",
+        "--cli-region=cn-north-4"
+      ]
+    },
+    {
+      "id": "真云 E2E：KooCLI 只读 API 实际连通",
+      "ok": true,
+      "actual": "{\n  \"count\": 0,\n  \"servers\": []\n}\n"
+    },
+    {
+      "id": "真云 E2E：auth_status 报告 S1 凭证已配置",
+      "ok": true,
+      "actual": {
+        "credentialsConfigured": true
+      }
+    },
+    {
+      "id": "真云 E2E：auth_status 报告 KooCLI 已安装",
+      "ok": true,
+      "actual": {
+        "kooCliInstalled": true
+      }
+    },
+    {
+      "id": "真云 E2E：auth_status 报告 OBS 配置就绪",
+      "ok": true,
+      "actual": {
+        "obsConfigured": true,
+        "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig"
+      }
+    },
+    {
+      "id": "真实 KooCLI/OBS 配置文件未被本用例改动",
+      "ok": true,
+      "actual": {
+        "obsUntouched": true,
+        "kooUntouched": true
+      }
+    }
+  ],
+  "violations": [],
+  "probeValues": "源码级用隔离 HOME + 占位凭证 + hcloud shim；真云 E2E 用真实凭证只读调用"
+}

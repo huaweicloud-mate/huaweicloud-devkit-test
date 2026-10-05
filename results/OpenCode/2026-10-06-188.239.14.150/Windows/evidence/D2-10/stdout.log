@@ -1,0 +1,83 @@
+{
+  "caseId": "D2-10",
+  "status": "PASS",
+  "why": "R7 current 跟随成立：隔离配置下 readKooCliProfiles 解析 current=deploy 且 resolveManagedProfile 返回 deploy；切换 current=other 后解析与跟随同步变化；runHcloudConfigure 实参含 --cli-profile=deploy（连同 region/ak），全程真实 KooCLI 配置零改动",
+  "executedAt": "20261006055149",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "kooCliConfigPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\CASE-nyqBO7\\hcloud-config.json",
+  "parsed1Current": "deploy",
+  "managed1": "deploy",
+  "parsed2Current": "other",
+  "managed2": "other",
+  "configureRun": {
+    "ok": true,
+    "error": ""
+  },
+  "configureArgv": [
+    "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\huaweicloud-devkit-test\\results\\OpenCode\\2026-10-06-188.239.14.150\\Windows\\evidence\\D2-10\\configure",
+    "set",
+    "--cli-profile=deploy",
+    "--cli-access-key=AKIAPROBEDEPLOY00001",
+    "--cli-secret-key=ProbeDeploySecretKeyValue000000000",
+    "--cli-region=cn-north-4"
+  ],
+  "rows": [
+    {
+      "id": "kooCliConfigPath 指向隔离配置",
+      "ok": true,
+      "actual": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\CASE-nyqBO7\\hcloud-config.json"
+    },
+    {
+      "id": "readKooCliProfiles 解析 current=deploy",
+      "ok": true,
+      "actual": "deploy"
+    },
+    {
+      "id": "resolveManagedProfile 跟随 current=deploy",
+      "ok": true,
+      "actual": "deploy"
+    },
+    {
+      "id": "切换 current=other 后解析与跟随同步变化",
+      "ok": true,
+      "actual": {
+        "parsed": "other",
+        "managed": "other"
+      }
+    },
+    {
+      "id": "runHcloudConfigure 源码实参含 --cli-profile=",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "id": "runHcloudConfigure 实际 argv 含 --cli-profile=current",
+      "ok": true,
+      "actual": [
+        "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\huaweicloud-devkit-test\\results\\OpenCode\\2026-10-06-188.239.14.150\\Windows\\evidence\\D2-10\\configure",
+        "set",
+        "--cli-profile=deploy",
+        "--cli-access-key=AKIAPROBEDEPLOY00001",
+        "--cli-secret-key=ProbeDeploySecretKeyValue000000000",
+        "--cli-region=cn-north-4"
+      ]
+    },
+    {
+      "id": "argv 同时携带 region/ak 参数",
+      "ok": true,
+      "actual": {
+        "hasRegionArg": true,
+        "hasKeyArg": true
+      }
+    },
+    {
+      "id": "真实 KooCLI 配置文件未被本用例改动",
+      "ok": true,
+      "actual": {
+        "realUntouched": true
+      }
+    }
+  ],
+  "violations": []
+}

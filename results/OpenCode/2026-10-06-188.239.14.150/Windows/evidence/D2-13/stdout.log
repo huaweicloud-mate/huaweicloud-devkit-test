@@ -1,0 +1,55 @@
+{
+  "caseId": "D2-13",
+  "status": "PASS",
+  "why": "R9 优先级语义成立：configuredBySession=true 时 S1 凭证胜出（AK 前缀 AKIAPROBES，非 env 值）；清除标记后 resolveCredentials 回落 env 注入的凭证（AK 前缀 AKIAPROBEE）",
+  "executedAt": "20261006054220",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "markedResolution": {
+    "akPrefix": "AKIAPROBES",
+    "skLen": 36
+  },
+  "clearedFlag": true,
+  "afterClearResolution": {
+    "akPrefix": "AKIAPROBEE",
+    "skLen": 33
+  },
+  "rows": [
+    {
+      "id": "写入 S1 并置 configuredBySession=true",
+      "ok": true,
+      "actual": {
+        "marked": {
+          "ak": "AKIAPROBES1MARKED00001",
+          "sk": "ProbeS1MarkedSecretKeyValue000000000",
+          "securityToken": "hQpjbi1ub3J0aC00AQAABXBIU1RBRDVNMTNWRVRDUzRFNlNCMwbO_DrBpcL2eBz2xqA3LzXju0Yg5cLu7oGPBPxPcTNUXpMUZULFZb3Tb04e3sN-2fUFf9--OvWdPlUoh5RkZEKzQjpp3uZf3ORiT10KanuGVWsnxPHm6wuINKKkuOrBqUDbfb2RLq1luDjWa_yC4s8V0poXmL4sVL3leARuV_NMH39jHW8wk64xkVVJPqoTOJzctD93m8z1xiEBYSQG5PtL44Vn8aRo4Z1AK2Xphh280QdY7qGCtPEHNbHg9R2VBiQjYSpNmOLJBHhOwaNXdid6_ILrapSLWPjyUMt55zujcV4su-IPSCWDwH91YTT68vGJAQmz4pwXQMFvZRFDgv7B3Wf8fbmEUi21tK2ZYlrLVLGC6n_YrCBVyojs3BsfkGqjAJE_WSCZY3bTKY1rUjRIh23jBRj9es2DscEwR7VWIXq8a20OtyHkMH30PLt4nUYO5a-hf2hyOXXFDE9agIXtldGGNy7-05EVdgZIoRpH6G_ps5bLq9aJL9liDhI4",
+          "region": "cn-north-4"
+        }
+      }
+    },
+    {
+      "id": "标记生效时 resolveCredentials 判 S1 胜出（不取 env）",
+      "ok": true,
+      "actual": {
+        "akPrefix": "AKIAPROBES",
+        "isS1": true,
+        "isEnv": false
+      }
+    },
+    {
+      "id": "清除标记后 configuredBySession 不再为 true",
+      "ok": true,
+      "actual": false
+    },
+    {
+      "id": "清除标记后 env 兜底恢复",
+      "ok": true,
+      "actual": {
+        "akPrefix": "AKIAPROBEE",
+        "isEnv": true
+      }
+    }
+  ],
+  "violations": [],
+  "probeValues": "隔离 HOME + 占位凭证，仅用于本用例"
+}

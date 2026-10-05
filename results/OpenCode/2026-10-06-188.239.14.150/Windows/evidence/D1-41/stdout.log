@@ -1,0 +1,120 @@
+{
+  "caseId": "D1-41",
+  "status": "PASS",
+  "why": "真实 MCP check_update 返回契约成立：isError=false，content JSON 含全部 6 个契约字段，当前实测 result=check_failed（四态之一）；judgeUpdate 在 up_to_date/update_available/dismissed/check_failed 四态下 updateAvailable 均为布尔且语义自洽；失败态以业务字段返回而非 JSON-RPC 协议错误",
+  "executedAt": "20261006053848",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "livePayload": {
+    "currentVersion": "1.1.8-next.1",
+    "latestStable": null,
+    "latestNext": null,
+    "targetVersion": null,
+    "updateAvailable": false,
+    "dismissed": false,
+    "dismissExpiresAt": null,
+    "result": "check_failed",
+    "note": "检测失败，不影响使用"
+  },
+  "isError": false,
+  "missingFields": [],
+  "fourStateProbe": [
+    {
+      "expect": "up_to_date",
+      "got": "up_to_date",
+      "updateAvailableType": "boolean",
+      "satisfied": true
+    },
+    {
+      "expect": "update_available",
+      "got": "update_available",
+      "updateAvailableType": "boolean",
+      "satisfied": true
+    },
+    {
+      "expect": "dismissed",
+      "got": "dismissed",
+      "updateAvailableType": "boolean",
+      "satisfied": true
+    },
+    {
+      "expect": "check_failed",
+      "got": "check_failed",
+      "updateAvailableType": "boolean",
+      "satisfied": true
+    }
+  ],
+  "rows": [
+    {
+      "id": "tools/call 返回且 isError=false",
+      "ok": true,
+      "actual": false
+    },
+    {
+      "id": "content[0].text 为合法 JSON",
+      "ok": true
+    },
+    {
+      "id": "必填字段齐备",
+      "ok": true,
+      "actual": []
+    },
+    {
+      "id": "result 属于四态",
+      "ok": true,
+      "actual": "check_failed"
+    },
+    {
+      "id": "result 与 updateAvailable 语义自洽",
+      "ok": true,
+      "actual": {
+        "currentVersion": "1.1.8-next.1",
+        "latestStable": null,
+        "latestNext": null,
+        "targetVersion": null,
+        "updateAvailable": false,
+        "dismissed": false,
+        "dismissExpiresAt": null,
+        "result": "check_failed",
+        "note": "检测失败，不影响使用"
+      }
+    },
+    {
+      "id": "失败态不抛 JSON-RPC 协议错误",
+      "ok": true
+    },
+    {
+      "id": "judgeUpdate 四态契约一致",
+      "ok": true,
+      "actual": [
+        {
+          "expect": "up_to_date",
+          "got": "up_to_date",
+          "updateAvailableType": "boolean",
+          "satisfied": true
+        },
+        {
+          "expect": "update_available",
+          "got": "update_available",
+          "updateAvailableType": "boolean",
+          "satisfied": true
+        },
+        {
+          "expect": "dismissed",
+          "got": "dismissed",
+          "updateAvailableType": "boolean",
+          "satisfied": true
+        },
+        {
+          "expect": "check_failed",
+          "got": "check_failed",
+          "updateAvailableType": "boolean",
+          "satisfied": true
+        }
+      ]
+    }
+  ],
+  "violations": [],
+  "serverExit": null,
+  "serverStderr": ""
+}

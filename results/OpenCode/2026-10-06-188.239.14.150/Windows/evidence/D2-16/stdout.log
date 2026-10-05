@@ -1,0 +1,98 @@
+{
+  "caseId": "D2-16",
+  "status": "PASS",
+  "why": "import 擦除闭环成立：creds-import.json 读取后 exists=false、目录无残留、工具返回不含明文 AK/SK；凭证按 persist 语义落到 S1 并同步 KooCLI/OBS 两端（全部隔离在临时区，真实配置零改动）",
+  "executedAt": "20261006055150",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "importPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\d2-16-KfnRHl\\.config\\huaweicloud\\creds-import.json",
+  "existedBefore": true,
+  "afterExists": false,
+  "dirList": [
+    ".last_sync",
+    "credentials.json"
+  ],
+  "switchResult": {
+    "status": "ok",
+    "scope": "persist",
+    "backedUp": false,
+    "obs": {
+      "configured": true
+    },
+    "hcloud": {
+      "ok": true,
+      "error": ""
+    },
+    "note": "S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority."
+  },
+  "s1After": {
+    "akPrefix": "AKIAPROBEI",
+    "skLen": 34
+  },
+  "configureArgv": [
+    "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\huaweicloud-devkit-test\\results\\OpenCode\\2026-10-06-188.239.14.150\\Windows\\evidence\\D2-16\\configure",
+    "set",
+    "--cli-profile=deploy",
+    "--cli-access-key=AKIAPROBEIMPORT0000001",
+    "--cli-secret-key=ProbeImportSecretKeyValue000000000",
+    "--cli-region=cn-north-4"
+  ],
+  "obsWritten": true,
+  "leaked": [],
+  "rows": [
+    {
+      "id": "import 文件事先存在",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "id": "读取后 import 文件已擦除(exists=false)",
+      "ok": true,
+      "actual": {
+        "afterExists": false,
+        "leftoverHead": null
+      }
+    },
+    {
+      "id": "目录内无 creds-import.json 残留",
+      "ok": true,
+      "actual": [
+        ".last_sync",
+        "credentials.json"
+      ]
+    },
+    {
+      "id": "工具返回不含明文 AK/SK",
+      "ok": true,
+      "actual": []
+    },
+    {
+      "id": "凭证已落到 S1（persist 语义）",
+      "ok": true,
+      "actual": {
+        "akPrefix": "AKIAPROBEI",
+        "skLen": 34,
+        "configuredBySession": true
+      }
+    },
+    {
+      "id": "KooCLI 端同步（shim 捕获导入 AK）",
+      "ok": true,
+      "actual": [
+        "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\huaweicloud-devkit-test\\results\\OpenCode\\2026-10-06-188.239.14.150\\Windows\\evidence\\D2-16\\configure",
+        "set",
+        "--cli-profile=deploy",
+        "--cli-access-key=AKIAPROBEIMPORT0000001",
+        "--cli-secret-key=ProbeImportSecretKeyValue000000000",
+        "--cli-region=cn-north-4"
+      ]
+    },
+    {
+      "id": "OBS 端同步写入隔离配置",
+      "ok": true,
+      "actual": true
+    }
+  ],
+  "violations": [],
+  "probeValues": "隔离 HOME + hcloud shim + 占位凭证，仅用于本用例"
+}

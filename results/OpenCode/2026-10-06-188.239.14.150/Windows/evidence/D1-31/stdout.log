@@ -1,0 +1,94 @@
+{
+  "caseId": "D1-31",
+  "status": "PASS",
+  "why": "dismiss 冷却期闭环成立：skip 文件写入字段完整（dismissedVersion=1.1.2，dismissedAt/expireAt 以 ISO 落盘），expireAt 精确等于 dismissedAt+3 天（实测 3 天）；冷却期内 judgeUpdate 返回 result=dismissed、dismissed=true；3 天后自动恢复 update_available",
+  "executedAt": "20261006053847",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "skipFileRaw": {
+    "dismissedVersion": "1.1.2",
+    "dismissedAt": "2026-01-01T00:00:00.000Z",
+    "expireAt": "2026-01-04T00:00:00.000Z"
+  },
+  "skipState": {
+    "dismissedVersion": "1.1.2",
+    "dismissedAt": "2026-01-01T00:00:00.000Z",
+    "expireAt": "2026-01-04T00:00:00.000Z"
+  },
+  "cooldownJudge": {
+    "currentVersion": "1.1.1",
+    "latestStable": "1.1.2",
+    "latestNext": null,
+    "targetVersion": "1.1.2",
+    "updateAvailable": false,
+    "dismissed": true,
+    "dismissExpiresAt": "2026-01-04T00:00:00.000Z",
+    "result": "dismissed"
+  },
+  "afterCooldownJudge": {
+    "currentVersion": "1.1.1",
+    "latestStable": "1.1.2",
+    "latestNext": null,
+    "targetVersion": "1.1.2",
+    "updateAvailable": true,
+    "dismissed": false,
+    "dismissExpiresAt": null,
+    "result": "update_available"
+  },
+  "rows": [
+    {
+      "id": "skip 文件已写入",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "id": "dismissedAt 记录正确",
+      "ok": true,
+      "actual": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "expireAt = dismissedAt + 3 天",
+      "ok": true,
+      "actual": {
+        "dismissedAt": "2026-01-01T00:00:00.000Z",
+        "expireAt": "2026-01-04T00:00:00.000Z",
+        "deltaDays": 3
+      }
+    },
+    {
+      "id": "dismissedVersion 记录正确",
+      "ok": true,
+      "actual": "1.1.2"
+    },
+    {
+      "id": "冷却期内 result=dismissed 且 dismissed=true",
+      "ok": true,
+      "actual": {
+        "currentVersion": "1.1.1",
+        "latestStable": "1.1.2",
+        "latestNext": null,
+        "targetVersion": "1.1.2",
+        "updateAvailable": false,
+        "dismissed": true,
+        "dismissExpiresAt": "2026-01-04T00:00:00.000Z",
+        "result": "dismissed"
+      }
+    },
+    {
+      "id": "冷却期后恢复提醒(update_available)",
+      "ok": true,
+      "actual": {
+        "currentVersion": "1.1.1",
+        "latestStable": "1.1.2",
+        "latestNext": null,
+        "targetVersion": "1.1.2",
+        "updateAvailable": true,
+        "dismissed": false,
+        "dismissExpiresAt": null,
+        "result": "update_available"
+      }
+    }
+  ],
+  "violations": [],
+  "cooldownDays": 3
+}

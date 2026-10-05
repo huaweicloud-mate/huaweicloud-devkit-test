@@ -1,0 +1,124 @@
+{
+  "caseId": "D1-45",
+  "status": "PASS",
+  "why": "兜底提示时序成立：check_update/upgrade 两工具均不附加 _updateInfo，其余工具附加且不改写入参对象；缓存未预热（peekCachedUpdateInfo 为空）时装饰为恒等返回、耗时 0.032ms 不阻塞，消费标记不被误置；hint 就绪后每个非检查工具调用都能附加",
+  "executedAt": "20261006053849",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "hint": {
+    "currentVersion": "1.1.7",
+    "latestStable": "1.1.2",
+    "latestNext": "1.1.8-next.1",
+    "targetVersion": "1.1.2",
+    "updateAvailable": true
+  },
+  "applyRows": [
+    {
+      "tool": "huaweicloud_check_update",
+      "isCheckOrUpgrade": true,
+      "gotUpdateInfo": false,
+      "inputMutated": false,
+      "satisfied": true
+    },
+    {
+      "tool": "huaweicloud_upgrade",
+      "isCheckOrUpgrade": true,
+      "gotUpdateInfo": false,
+      "inputMutated": false,
+      "satisfied": true
+    },
+    {
+      "tool": "huaweicloud_check_cli",
+      "isCheckOrUpgrade": false,
+      "gotUpdateInfo": true,
+      "inputMutated": false,
+      "satisfied": true
+    },
+    {
+      "tool": "huaweicloud_search_docs",
+      "isCheckOrUpgrade": false,
+      "gotUpdateInfo": true,
+      "inputMutated": false,
+      "satisfied": true
+    }
+  ],
+  "coldPath": {
+    "elapsedMs": 0.032,
+    "gotUpdateInfo": true
+  },
+  "repeatRows": [
+    {
+      "call": 1,
+      "gotUpdateInfo": true
+    },
+    {
+      "call": 2,
+      "gotUpdateInfo": true
+    },
+    {
+      "call": 3,
+      "gotUpdateInfo": true
+    }
+  ],
+  "rows": [
+    {
+      "id": "check_update 工具不附加 _updateInfo",
+      "ok": true,
+      "actual": false
+    },
+    {
+      "id": "upgrade 工具不附加 _updateInfo",
+      "ok": true,
+      "actual": false
+    },
+    {
+      "id": "非检查工具附加 _updateInfo",
+      "ok": true,
+      "actual": [
+        true,
+        true
+      ]
+    },
+    {
+      "id": "applyUpdateHint 不改写入参对象",
+      "ok": true,
+      "actual": [
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "预热未完成(缓存空)时不阻塞工具调用",
+      "ok": true,
+      "actual": {
+        "elapsedMs": 0.032
+      }
+    },
+    {
+      "id": "无 hint 时不置消费标记",
+      "ok": true,
+      "actual": false
+    },
+    {
+      "id": "hint 就绪后每个非检查工具调用均可附加",
+      "ok": true,
+      "actual": [
+        {
+          "call": 1,
+          "gotUpdateInfo": true
+        },
+        {
+          "call": 2,
+          "gotUpdateInfo": true
+        },
+        {
+          "call": 3,
+          "gotUpdateInfo": true
+        }
+      ]
+    }
+  ],
+  "violations": []
+}

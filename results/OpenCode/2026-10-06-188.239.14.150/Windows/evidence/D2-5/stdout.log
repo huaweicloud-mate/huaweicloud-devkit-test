@@ -1,0 +1,60 @@
+{
+  "caseId": "D2-5",
+  "status": "PASS",
+  "why": "凭证缺失指引成立：4 种异常场景（无文件/占位凭证/缺 sk/格式错误）均返回含可执行动作的指引（npx/auth_init/auth_switch/configure 等）",
+  "executedAt": "20261006053952",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "scenarios": [
+    {
+      "name": "无凭证文件",
+      "status": "{\"target\":\"all\",\"credentialsConfigured\":false,\"credentialsPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-4083681250\\\\d2-5-NZJgN4\\\\.config\\\\huaweicloud\\\\credentials.json\",\"mcpSettingsConfigured\":true,\"mcpSettingsSource\":\"codearts\",\"stsExpiry\":{\"status\":\"unknown\",\"expiresAt\":null},\"credentialPanel\":{\"sts\":{\"status\":\"unknown\",\"expiresAt\":null},\"s1\":{\"configured\":false,\"fingerprint\":null,\"persistent\":true},\"activeSource\":\"temporary-sts\"},\"obsConfigured\":true,\"obsConfigPath\":\"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"reconciled\":{\"stores\":{\"s1Fingerprint\":\"\",\"envFingerprint\":\"\",\"currentFingerprint\":\"\",\"s3Fingerprint\":\"032d9ae4\",\"runtimeFingerprint\":null},\"kooCliCurrent\":\"deploy\",\"envIsPlaceholder\":false,\"s2Encrypted\":true,\"inconsi",
+      "resolvedKeys": [
+        "ak",
+        "sk",
+        "securityToken",
+        "region"
+      ],
+      "akConfigured": false,
+      "hintFound": true
+    },
+    {
+      "name": "占位凭证(<your-ak>)",
+      "status": "{\"target\":\"all\",\"credentialsConfigured\":true,\"credentialsPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-4083681250\\\\d2-5-NZJgN4\\\\.config\\\\huaweicloud\\\\credentials.json\",\"mcpSettingsConfigured\":true,\"mcpSettingsSource\":\"codearts\",\"stsExpiry\":{\"status\":\"unknown\",\"expiresAt\":null},\"credentialPanel\":{\"sts\":{\"status\":\"unknown\",\"expiresAt\":null},\"s1\":{\"configured\":true,\"fingerprint\":\"c07fa242\",\"persistent\":true},\"activeSource\":\"temporary-sts\"},\"obsConfigured\":true,\"obsConfigPath\":\"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"reconciled\":{\"stores\":{\"s1Fingerprint\":\"c07fa242\",\"envFingerprint\":\"\",\"currentFingerprint\":\"\",\"s3Fingerprint\":\"032d9ae4\",\"runtimeFingerprint\":null},\"kooCliCurrent\":\"deploy\",\"envIsPlaceholder\":false,\"s2Encrypted\":t",
+      "resolvedKeys": [
+        "ak",
+        "sk",
+        "securityToken",
+        "region"
+      ],
+      "akConfigured": false,
+      "hintFound": true
+    },
+    {
+      "name": "空凭证(缺 sk)",
+      "status": "{\"target\":\"all\",\"credentialsConfigured\":false,\"credentialsPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-4083681250\\\\d2-5-NZJgN4\\\\.config\\\\huaweicloud\\\\credentials.json\",\"mcpSettingsConfigured\":true,\"mcpSettingsSource\":\"codearts\",\"stsExpiry\":{\"status\":\"unknown\",\"expiresAt\":null},\"credentialPanel\":{\"sts\":{\"status\":\"unknown\",\"expiresAt\":null},\"s1\":{\"configured\":false,\"fingerprint\":\"\",\"persistent\":true},\"activeSource\":\"temporary-sts\"},\"obsConfigured\":true,\"obsConfigPath\":\"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"reconciled\":{\"stores\":{\"s1Fingerprint\":\"\",\"envFingerprint\":\"\",\"currentFingerprint\":\"\",\"s3Fingerprint\":\"032d9ae4\",\"runtimeFingerprint\":null},\"kooCliCurrent\":\"deploy\",\"envIsPlaceholder\":false,\"s2Encrypted\":true,\"inconsist",
+      "resolvedKeys": [
+        "ak",
+        "sk",
+        "securityToken",
+        "region"
+      ],
+      "akConfigured": false,
+      "hintFound": true
+    },
+    {
+      "name": "格式错误凭证(非 AK 前缀)",
+      "status": "{\"target\":\"all\",\"credentialsConfigured\":true,\"credentialsPath\":\"C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\2\\\\multica-task-4083681250\\\\d2-5-NZJgN4\\\\.config\\\\huaweicloud\\\\credentials.json\",\"mcpSettingsConfigured\":true,\"mcpSettingsSource\":\"codearts\",\"stsExpiry\":{\"status\":\"unknown\",\"expiresAt\":null},\"credentialPanel\":{\"sts\":{\"status\":\"unknown\",\"expiresAt\":null},\"s1\":{\"configured\":true,\"fingerprint\":\"9d702097\",\"persistent\":true},\"activeSource\":\"temporary-sts\"},\"obsConfigured\":true,\"obsConfigPath\":\"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\"kooCliInstalled\":true,\"kooCliStatus\":\"ok\",\"kooCliNextStep\":\"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\"reconciled\":{\"stores\":{\"s1Fingerprint\":\"9d702097\",\"envFingerprint\":\"\",\"currentFingerprint\":\"\",\"s3Fingerprint\":\"032d9ae4\",\"runtimeFingerprint\":null},\"kooCliCurrent\":\"deploy\",\"envIsPlaceholder\":false,\"s2Encrypted\":t",
+      "resolvedKeys": [
+        "ak",
+        "sk",
+        "securityToken",
+        "region"
+      ],
+      "akConfigured": false,
+      "hintFound": true
+    }
+  ],
+  "violations": [],
+  "probeValues": "隔离 HOME + 占位凭证"
+}

@@ -1,0 +1,115 @@
+{
+  "caseId": "D1-70",
+  "status": "PASS",
+  "why": "代理配置链路成立：隔离 HOME 下 proxy.json 写入/读取/clear 全部正确；getProxySettings 命中代理并按 no_proxy 对 localhost/127.0.0.1/域名后缀三类目标返回 null；env 代理优先于文件配置",
+  "executedAt": "20261006053849",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "cfgPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\d1-70-1bnmnd\\.config\\huaweicloud\\proxy.json",
+  "fileExists": true,
+  "readBack": {
+    "https_proxy": "http://127.0.0.1:18080",
+    "http_proxy": "http://127.0.0.1:18080",
+    "no_proxy": "localhost,127.0.0.1,.internal.example.com"
+  },
+  "withProxy": {
+    "proxyUrl": "http://127.0.0.1:18080",
+    "noProxyList": [
+      "localhost",
+      "127.0.0.1",
+      ".internal.example.com"
+    ],
+    "targetProtocol": "https:"
+  },
+  "bypassSuffix": null,
+  "bypassLocal": null,
+  "bypassIp": null,
+  "bypassDirect": true,
+  "notBypass": false,
+  "envWins": {
+    "proxyUrl": "http://127.0.0.1:19999",
+    "noProxyList": [
+      "localhost",
+      "127.0.0.1",
+      ".internal.example.com"
+    ],
+    "targetProtocol": "https:"
+  },
+  "cleared": true,
+  "rows": [
+    {
+      "id": "proxy.json 写入到隔离 HOME",
+      "ok": true,
+      "actual": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\d1-70-1bnmnd\\.config\\huaweicloud\\proxy.json"
+    },
+    {
+      "id": "readProxyConfig 往返一致",
+      "ok": true,
+      "actual": {
+        "https_proxy": "http://127.0.0.1:18080",
+        "http_proxy": "http://127.0.0.1:18080",
+        "no_proxy": "localhost,127.0.0.1,.internal.example.com"
+      }
+    },
+    {
+      "id": "getProxySettings 命中代理",
+      "ok": true,
+      "actual": {
+        "proxyUrl": "http://127.0.0.1:18080",
+        "noProxyList": [
+          "localhost",
+          "127.0.0.1",
+          ".internal.example.com"
+        ],
+        "targetProtocol": "https:"
+      }
+    },
+    {
+      "id": "no_proxy 域名后缀绕过返回 null",
+      "ok": true,
+      "actual": null
+    },
+    {
+      "id": "no_proxy localhost 绕过返回 null",
+      "ok": true,
+      "actual": null
+    },
+    {
+      "id": "no_proxy 127.0.0.1 绕过返回 null",
+      "ok": true,
+      "actual": null
+    },
+    {
+      "id": "shouldBypassProxy 后缀匹配为 true",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "id": "shouldBypassProxy 非命中为 false",
+      "ok": true,
+      "actual": false
+    },
+    {
+      "id": "env 代理优先于文件配置",
+      "ok": true,
+      "actual": {
+        "proxyUrl": "http://127.0.0.1:19999",
+        "noProxyList": [
+          "localhost",
+          "127.0.0.1",
+          ".internal.example.com"
+        ],
+        "targetProtocol": "https:"
+      }
+    },
+    {
+      "id": "clearProxyConfig 清除配置",
+      "ok": true,
+      "actual": {
+        "cleared": true,
+        "fileAfterClear": null
+      }
+    }
+  ],
+  "violations": []
+}

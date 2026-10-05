@@ -1,0 +1,122 @@
+{
+  "caseId": "D1-42",
+  "status": "PASS",
+  "why": "dismiss 跨调用/跨进程闭环成立：首次判定 update_available -> dismiss 写入 skip 文件（字段完整、expireAt=dismissedAt+3天）-> 同版本冷却内返回 dismissed -> 另起 Node 进程模拟 MCP 重启后仍读到同一 skip 状态并返回 dismissed",
+  "executedAt": "20261006053849",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "target": "1.1.2",
+  "first": {
+    "currentVersion": "1.1.1",
+    "latestStable": "1.1.2",
+    "latestNext": null,
+    "targetVersion": "1.1.2",
+    "updateAvailable": true,
+    "dismissed": false,
+    "dismissExpiresAt": null,
+    "result": "update_available"
+  },
+  "skipState": {
+    "dismissedVersion": "1.1.2",
+    "dismissedAt": "2026-01-01T00:00:00.000Z",
+    "expireAt": "2026-01-04T00:00:00.000Z"
+  },
+  "second": {
+    "currentVersion": "1.1.1",
+    "latestStable": "1.1.2",
+    "latestNext": null,
+    "targetVersion": "1.1.2",
+    "updateAvailable": false,
+    "dismissed": true,
+    "dismissExpiresAt": "2026-01-04T00:00:00.000Z",
+    "result": "dismissed"
+  },
+  "crossProcess": {
+    "st": {
+      "dismissedVersion": "1.1.2",
+      "dismissedAt": "2026-01-01T00:00:00.000Z",
+      "expireAt": "2026-01-04T00:00:00.000Z"
+    },
+    "judge": {
+      "currentVersion": "1.1.1",
+      "latestStable": "1.1.2",
+      "latestNext": null,
+      "targetVersion": "1.1.2",
+      "updateAvailable": false,
+      "dismissed": true,
+      "dismissExpiresAt": "2026-01-04T00:00:00.000Z",
+      "result": "dismissed"
+    }
+  },
+  "childExit": 0,
+  "rows": [
+    {
+      "id": "首次判定 update_available",
+      "ok": true,
+      "actual": {
+        "currentVersion": "1.1.1",
+        "latestStable": "1.1.2",
+        "latestNext": null,
+        "targetVersion": "1.1.2",
+        "updateAvailable": true,
+        "dismissed": false,
+        "dismissExpiresAt": null,
+        "result": "update_available"
+      }
+    },
+    {
+      "id": "skip 文件字段完整",
+      "ok": true,
+      "actual": {
+        "dismissedVersion": "1.1.2",
+        "dismissedAt": "2026-01-01T00:00:00.000Z",
+        "expireAt": "2026-01-04T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "expireAt = dismissedAt + 3 天",
+      "ok": true,
+      "actual": {
+        "deltaDays": 3
+      }
+    },
+    {
+      "id": "同版本冷却内再次判定 dismissed",
+      "ok": true,
+      "actual": {
+        "currentVersion": "1.1.1",
+        "latestStable": "1.1.2",
+        "latestNext": null,
+        "targetVersion": "1.1.2",
+        "updateAvailable": false,
+        "dismissed": true,
+        "dismissExpiresAt": "2026-01-04T00:00:00.000Z",
+        "result": "dismissed"
+      }
+    },
+    {
+      "id": "重启新进程后仍生效",
+      "ok": true,
+      "actual": {
+        "currentVersion": "1.1.1",
+        "latestStable": "1.1.2",
+        "latestNext": null,
+        "targetVersion": "1.1.2",
+        "updateAvailable": false,
+        "dismissed": true,
+        "dismissExpiresAt": "2026-01-04T00:00:00.000Z",
+        "result": "dismissed"
+      }
+    },
+    {
+      "id": "新进程读到同一 skip 字段",
+      "ok": true,
+      "actual": {
+        "dismissedVersion": "1.1.2",
+        "dismissedAt": "2026-01-01T00:00:00.000Z",
+        "expireAt": "2026-01-04T00:00:00.000Z"
+      }
+    }
+  ],
+  "violations": []
+}
