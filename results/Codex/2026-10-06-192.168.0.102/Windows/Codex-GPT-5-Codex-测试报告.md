@@ -1,0 +1,138 @@
+# Codex-GPT-5-Codex 每日测试报告
+> **报告名**：`Codex-GPT-5-Codex-测试报告.md`
+> **生成时间**：2026-10-06 05:12:25（北京时间）
+> **执行归档**：`results/Codex/2026-10-06-192.168.0.102/Windows/`
+> **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
+> **结论**：`PARTIAL`（有 FAIL 缺陷，P0 3 项）
+
+---
+
+## 一、测试概述
+
+| 项 | 值 |
+|---|---|
+| 客户端 / Agent | `Codex` + `GPT-5-Codex` |
+| OS / 架构 | `Windows` |
+| 被测版本（SUT） | `huaweicloud-devkit@1.1.8-next.1+ffd7b47` |
+| daily 基础用例 | 设计级 102 / 展开级 39 |
+
+> **执行方法**：TODO: 待 agent 补充（探针直调 / MCP 真机 / 真云 E2E 等）
+
+---
+
+## 二、执行摘要
+
+| 项 | 值 |
+|---|---|
+| 计划用例（daily） | `141`（设计级 102 + 展开级 39） |
+| 已执行 | `141` |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `108 / 15 / 18 / 0 / 0` |
+| 通过率（分母 = PASS+FAIL = 123） | `87.8%` |
+| P0 / P1 / P2 新增缺陷 | `3 / 12 / 0` |
+| 红线（I 类）违规 | `TODO: 待填` |
+| 资源释放 | `TODO: 待填` |
+
+---
+
+## 三、状态汇总
+
+### 3.1 设计级
+
+| 状态 | 数量 | 说明 |
+|---|---|---|
+| PASS | `80` | 有证据且通过 PASS 门禁 |
+| FAIL | `4` | 不符预期，根因见缺陷清单 |
+| BLOCKED | `18` | 环境/权限/凭证阻塞 |
+| SPEC-MISMATCH | `0` | 契约漂移 |
+| NOT_RUN | `0` | 未执行 |
+| **合计** | **`102`** | |
+
+### 3.2 展开级
+
+| 状态 | 数量 | 说明 |
+|---|---|---|
+| PASS | `28` | 有证据且通过 PASS 门禁 |
+| FAIL | `11` | 不符预期，根因见缺陷清单 |
+| BLOCKED | `0` | 环境/权限/凭证阻塞 |
+| SPEC-MISMATCH | `0` | 契约漂移 |
+| NOT_RUN | `0` | 未执行 |
+| **合计** | **`39`** | |
+
+---
+
+## 四、缺陷清单
+
+| # | 级别 | 用例ID | 维度 | 标题 | 根因（文件:行号） | 状态 |
+|---|---|---|---|---|---|---|
+| 1 | P0 | `D4-16` | D4安全 | 命令包裹穿透 | TODO: 待补根因 | 待提单 |
+| 2 | P1 | `D4-27` | D4安全 | 双路径输出脱敏 | TODO: 待补根因 | 待提单 |
+| 3 | P0 | `D9-12` | D9协议 | initialize 握手协议安全基线 | TODO: 待补根因 | 待提单 |
+| 4 | P0 | `D9-13` | D9协议 | tools/call 凭证不泄露与权限校验 | TODO: 待补根因 | 待提单 |
+| 5 | P1 | `EXP-E01` |  |  | TODO: 待补根因 | 待提单 |
+| 6 | P1 | `EXP-E02` |  |  | TODO: 待补根因 | 待提单 |
+| 7 | P1 | `EXP-E03` |  |  | TODO: 待补根因 | 待提单 |
+| 8 | P1 | `EXP-E04` |  |  | TODO: 待补根因 | 待提单 |
+| 9 | P1 | `EXP-E05` |  |  | TODO: 待补根因 | 待提单 |
+| 10 | P1 | `EXP-E07` |  |  | TODO: 待补根因 | 待提单 |
+| 11 | P1 | `EXP-E10` |  |  | TODO: 待补根因 | 待提单 |
+| 12 | P1 | `EXP-E11` |  |  | TODO: 待补根因 | 待提单 |
+| 13 | P1 | `EXP-E12` |  |  | TODO: 待补根因 | 待提单 |
+| 14 | P1 | `EXP-E13` |  |  | TODO: 待补根因 | 待提单 |
+| 15 | P1 | `EXP-E14` |  |  | TODO: 待补根因 | 待提单 |
+
+### 根因详情
+
+> TODO: 每个 FAIL 用例的「期望 / 实际 / 根因（文件:行号）/ 证据」需由 agent 依据 evidence/<case-id>/stdout.log 补充。
+
+---
+
+## 五、未执行用例与原因
+
+
+### BLOCKED
+
+| 用例ID | 维度 | 标题 | 阻塞原因 |
+|---|---|---|---|
+| `D1-65` | D1安装 | 调试模式环境变量 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D1-65. |
+| `D1-67` | D1安装 | Agent toolkit 模式与 DSH 跳过安装环境变量 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D1-67. |
+| `D1-68` | D1安装 | 图标离线与区域环境变量 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D1-68. |
+| `D1-70` | D1安装 | 代理配置与 WebSocket 代理 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D1-70. |
+| `D3-C13` | D3功能 | OBS 静态网站托管配置 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D3-C13. |
+| `D3-S1` | D3功能 | 场景-只读查ECS(带不改约束) | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D3-S1. |
+| `D3-S2` | D3功能 | 场景-删VPC先确认 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D3-S2. |
+| `D3-S3` | D3功能 | 场景-沙箱预览出URL | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D3-S3. |
+| `D3-S4` | D3功能 | 场景-领券闭环 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D3-S4. |
+| `D3-S5` | D3功能 | 场景-复合意图分层路由 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D3-S5. |
+| `D3-S6` | D3功能 | 场景-FunctionGraph定时任务 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D3-S6. |
+| `D3-S7` | D3功能 | 场景-跨服务交付(Web应用+RDS)并归零 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D3-S7. |
+| `D3-S8` | D3功能 | 场景-操作失败后排障指引 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D3-S8. |
+| `D4-25` | D4安全 | Python hook 事件遥测分类 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D4-25. |
+| `D4-26` | D4安全 | findings 证据脱敏 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D4-26. |
+| `D4-28` | D4安全 | Node 版安全 hook 链路 | 20261005211107: Codex Windows host does not expose Hermes/OpenCode hook execution chain or hookSpecificOutput.permissionDecision contract required by this case;解除条件: run on Hermes Hook or OpenCode non-Hook harness with node huaweicloud-safety.mjs hook integration. |
+| `D6-9` | D6性能 | 缓存清理三入口 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D6-9. |
+| `D8-9` | D8质量 | 安装 ID 与遥测值脱敏 | 20261005211107: no executable Codex-owned fixture/harness is present for this Hermes/real-agent scenario in today package; current run cannot truthfully execute required host/cloud workflow.解除条件: provide Codex fixture or assign to Hermes/OpenCode/real-cloud scenario harness for D8-9. |
+
+---
+
+## 六、安全与红线合规
+
+- [ ] 凭证泄漏事件：`TODO: 待填`
+- [ ] 写操作误判 read-only：`TODO: 待填`
+- [ ] 红线（I 类）违规：`TODO: 待填`
+- [ ] 脱敏复核：`TODO: 待填`
+
+---
+
+## 七、资源释放
+
+| 资源 | 创建 | 销毁 | 归零验证 |
+|---|---|---|---|
+| TODO | TODO | TODO | TODO |
+
+> TODO: 真云用例的资源创建/销毁/归零情况由 agent 依据执行过程补充。
+
+---
+
+## 八、遗留与建议
+
+- TODO: 待裁决 SPEC / 未覆盖项 / 修复建议由 agent 补充。
