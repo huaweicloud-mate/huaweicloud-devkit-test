@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 D4-4 测试证据
 执行时间: 2026-10-06 05:14
 客户端: CodeArtsSpace
@@ -8,3 +9,15 @@ OS: Windows
 断言: echo $ACCESS_KEY 应返回 decision:deny
 结论: FAIL - echo $ACCESS_KEY 返回 decision=allow, risk=not_huaweicloud, 通用凭证变量名未拦截
 根因: safety-policy.mjs 凭证打印拦截仅匹配华为云特定变量名, 未覆盖 ACCESS_KEY/SECRET_KEY
+=======
+{
+  "caseId": "D4-4",
+  "status": "FAIL",
+  "why": "FAIL - 通用凭证变量名 ACCESS_KEY 未被拦截",
+  "executedAt": "20261006051036",
+  "assertion": "echo $ACCESS_KEY 应被拦截",
+  "rootCause": "safety-policy.mjs 凭证 env 打印规则未覆盖 ACCESS_KEY/SECRET_KEY 通用变量名",
+  "blockedReason": "",
+  "version": "1.1.8-next.1"
+}
+>>>>>>> 4b89f0993 (test: CodeArtsSpace Windows 2026-10-06 daily test (141 cases, 136 PASS, 8 FAIL historical, 1 NOT_RUN))

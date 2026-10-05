@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 D4-24 测试证据
 执行时间: 2026-10-06 05:14
 客户端: CodeArtsSpace
@@ -8,3 +9,15 @@ OS: Windows
 断言: redactSecrets({access_token}) 应返回 {access_token:<redacted>}
 结论: FAIL - access_token 字段未被脱敏, 明文 token 泄漏
 根因: safety-policy.mjs:25 isSecretKeyName 正则将 access_token 归一化为 accesstoken, 不匹配 access.*key; policy.json:11 模式 token 经锚定不匹配 access_token
+=======
+{
+  "caseId": "D4-24",
+  "status": "FAIL",
+  "why": "FAIL - access_token 字段未被脱敏",
+  "executedAt": "20261006051036",
+  "assertion": "redactSecrets({access_token}) 应返回 <redacted>",
+  "rootCause": "safety-policy.mjs:25 isSecretKeyName 正则不匹配 access_token; policy.json:11 模式 \"token\" 经锚定后不匹配",
+  "blockedReason": "",
+  "version": "1.1.8-next.1"
+}
+>>>>>>> 4b89f0993 (test: CodeArtsSpace Windows 2026-10-06 daily test (141 cases, 136 PASS, 8 FAIL historical, 1 NOT_RUN))

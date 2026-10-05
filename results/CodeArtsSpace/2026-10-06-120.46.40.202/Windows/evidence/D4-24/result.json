@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "caseId": "D4-24",
   "status": "FAIL",
@@ -6,4 +7,14 @@
   "conclusion": "FAIL - access_token 字段未被脱敏, 明文 token 泄漏",
   "rootCause": "safety-policy.mjs:25 isSecretKeyName 正则将 access_token 归一化为 accesstoken, 不匹配 access.*key; policy.json:11 模式 token 经锚定不匹配 access_token",
   "version": "1.1.8-next.1"
+=======
+{
+  "caseId": "D4-24",
+  "status": "FAIL",
+  "executedAt": "20261006051036",
+  "assertion": "redactSecrets({access_token}) 应返回 <redacted>",
+  "conclusion": "FAIL - access_token 字段未被脱敏",
+  "rootCause": "safety-policy.mjs:25 isSecretKeyName 正则不匹配 access_token; policy.json:11 模式 \"token\" 经锚定后不匹配",
+  "version": "1.1.8-next.1"
+>>>>>>> 4b89f0993 (test: CodeArtsSpace Windows 2026-10-06 daily test (141 cases, 136 PASS, 8 FAIL historical, 1 NOT_RUN))
 }
