@@ -1,0 +1,70 @@
+{
+  "caseId": "D4-19",
+  "status": "PASS",
+  "why": "确认流（allowWrites=true）下风险预检仍生效：2/2 条高危写命令在拿到 approvalToken 的同时仍触发 sgFindings/warnings 或 hook/risk 引擎告警；宽泛 IAM 制品被 deny，公网暴露部署计划被 deny",
+  "executedAt": "20261006052732",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "rows": [
+    {
+      "args": [
+        "VPC",
+        "CreateSecurityGroupRule",
+        "--security-group-id",
+        "sg-probe",
+        "--remote-ip-prefix",
+        "0.0.0.0/0",
+        "--port",
+        "22"
+      ],
+      "plannedCommand": "hcloud VPC CreateSecurityGroupRule --security-group-id sg-probe --remote-ip-prefix 0.0.0.0/0 --port 22",
+      "approvalTokenIssued": true,
+      "planWarnings": [
+        "Missing required parameters: security_group_rule.security_group_id, security_group_rule.direction, security_group_rule.protocol"
+      ],
+      "sgFindings": [],
+      "planClassification": "deny",
+      "preflightHookDecision": "deny",
+      "preflightFindings": [
+        "hwc-network-public-admin-port:deny"
+      ],
+      "riskEngineDecision": "deny",
+      "classifyTextCommandDecision": "deny"
+    },
+    {
+      "args": [
+        "ECS",
+        "DeleteServers",
+        "--server-ids",
+        "probe-id",
+        "--force"
+      ],
+      "plannedCommand": "hcloud ECS DeleteServers --server-ids probe-id --force",
+      "approvalTokenIssued": true,
+      "planWarnings": [],
+      "sgFindings": [],
+      "planClassification": "deny",
+      "preflightHookDecision": "deny",
+      "preflightFindings": [
+        "hwc-destructive-delete-force:deny",
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "riskEngineDecision": "deny",
+      "classifyTextCommandDecision": "deny"
+    }
+  ],
+  "preflightActive": true,
+  "hookCheckArtifacts": {
+    "decision": "deny",
+    "findings": [
+      "hwc-iam-admin-policy:deny"
+    ]
+  },
+  "hookCheckDeployPlan": {
+    "decision": "deny",
+    "findings": [
+      "hwc-network-public-admin-port:deny",
+      "hwc-sandbox-missing-ttl:warn"
+    ]
+  }
+}

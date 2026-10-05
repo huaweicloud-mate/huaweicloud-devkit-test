@@ -1,0 +1,317 @@
+{
+  "caseId": "D4-5",
+  "status": "PASS",
+  "why": "11 条删除/写命令全部未被误判为只读（classifyHcloudArgs≠allow 且 risk-rule-engine≠allow）；4 条只读对照仍为 allow",
+  "executedAt": "20261006052336",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "writeCaseCount": 11,
+  "misjudgedAsReadonly": [],
+  "rows": [
+    {
+      "kind": "write",
+      "args": [
+        "ECS",
+        "DeleteServers",
+        "--server-ids",
+        "id1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "VPC",
+        "DeleteVpc",
+        "--vpc-id",
+        "id1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "OBS",
+        "DeleteBucket",
+        "--bucket",
+        "b1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "EVS",
+        "DeleteVolume",
+        "--volume-id",
+        "v1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "EIP",
+        "DeleteEip",
+        "--eip-id",
+        "e1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "IAM",
+        "DeleteUser",
+        "--user-name",
+        "u1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "DCS",
+        "DeleteInstance",
+        "--instance-id",
+        "d1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "CBR",
+        "DeleteVault",
+        "--vault-id",
+        "vault1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "SMN",
+        "DeleteTopic",
+        "--topic-urn",
+        "urn:x"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "CCE",
+        "DeleteCluster",
+        "--cluster-id",
+        "c1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    },
+    {
+      "kind": "write",
+      "args": [
+        "RDS",
+        "DeleteInstance",
+        "--instance-id",
+        "r1"
+      ],
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit"
+    }
+  ],
+  "readControl": [
+    {
+      "kind": "read",
+      "args": [
+        "ECS",
+        "ListServers"
+      ],
+      "decision": "allow",
+      "risk": "read_only"
+    },
+    {
+      "kind": "read",
+      "args": [
+        "VPC",
+        "ListVpcs"
+      ],
+      "decision": "allow",
+      "risk": "read_only"
+    },
+    {
+      "kind": "read",
+      "args": [
+        "OBS",
+        "ListBuckets"
+      ],
+      "decision": "allow",
+      "risk": "read_only"
+    },
+    {
+      "kind": "read",
+      "args": [
+        "IAM",
+        "ListUsers"
+      ],
+      "decision": "allow",
+      "risk": "read_only"
+    }
+  ],
+  "engineCross": [
+    {
+      "args": [
+        "ECS",
+        "DeleteServers",
+        "--server-ids",
+        "id1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "VPC",
+        "DeleteVpc",
+        "--vpc-id",
+        "id1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "OBS",
+        "DeleteBucket",
+        "--bucket",
+        "b1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "EVS",
+        "DeleteVolume",
+        "--volume-id",
+        "v1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "EIP",
+        "DeleteEip",
+        "--eip-id",
+        "e1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "IAM",
+        "DeleteUser",
+        "--user-name",
+        "u1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "DCS",
+        "DeleteInstance",
+        "--instance-id",
+        "d1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "CBR",
+        "DeleteVault",
+        "--vault-id",
+        "vault1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "SMN",
+        "DeleteTopic",
+        "--topic-urn",
+        "urn:x"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "CCE",
+        "DeleteCluster",
+        "--cluster-id",
+        "c1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "args": [
+        "RDS",
+        "DeleteInstance",
+        "--instance-id",
+        "r1"
+      ],
+      "engineDecision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ]
+    }
+  ],
+  "engineAllowed": []
+}

@@ -1,0 +1,94 @@
+{
+  "caseId": "D4-9",
+  "status": "PASS",
+  "why": "公网暴露 3 条 + 破坏性 5 条命令均被至少一个引擎在执行前拦截（deny/warn）",
+  "executedAt": "20261006052420",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "exposure": {
+    "label": "公网暴露",
+    "rows": [
+      {
+        "command": "hcloud VPC CreateSecurityGroupRule --remote-ip-prefix 0.0.0.0/0 --port 22",
+        "hookDecision": "deny",
+        "hookFindings": [
+          "hwc-network-public-admin-port:deny"
+        ],
+        "classifyDecision": "deny",
+        "classifyRisk": "write"
+      },
+      {
+        "command": "hcloud ECS CreateSecurityGroupRule --cidr 0.0.0.0/0 --port 3389",
+        "hookDecision": "deny",
+        "hookFindings": [
+          "hwc-network-public-admin-port:deny"
+        ],
+        "classifyDecision": "deny",
+        "classifyRisk": "write"
+      },
+      {
+        "command": "hcloud VPC UpdateSecurityGroupRule --remote-ip-prefix 0.0.0.0/0 --port 3306",
+        "hookDecision": "deny",
+        "hookFindings": [
+          "hwc-network-public-admin-port:deny"
+        ],
+        "classifyDecision": "deny",
+        "classifyRisk": "write"
+      }
+    ],
+    "notBlocked": []
+  },
+  "destructive": {
+    "label": "破坏性操作",
+    "rows": [
+      {
+        "command": "rm -rf /",
+        "hookDecision": "deny",
+        "hookFindings": [
+          "hwc-sandbox-destructive-command:deny"
+        ],
+        "classifyDecision": "deny",
+        "classifyRisk": "destructive"
+      },
+      {
+        "command": "hcloud ECS DeleteServers --server-ids x --force",
+        "hookDecision": "deny",
+        "hookFindings": [
+          "hwc-destructive-delete-force:deny",
+          "hwc-destructive-delete-operation:warn"
+        ],
+        "classifyDecision": "deny",
+        "classifyRisk": "write"
+      },
+      {
+        "command": "mkfs.ext4 /dev/sda1",
+        "hookDecision": "deny",
+        "hookFindings": [
+          "hwc-sandbox-destructive-command:deny"
+        ],
+        "classifyDecision": "deny",
+        "classifyRisk": "destructive"
+      },
+      {
+        "command": "dd if=/dev/zero of=/dev/sda",
+        "hookDecision": "deny",
+        "hookFindings": [
+          "hwc-sandbox-destructive-command:deny"
+        ],
+        "classifyDecision": "deny",
+        "classifyRisk": "destructive"
+      },
+      {
+        "command": "hcloud OBS DeleteBucket --bucket my-bucket",
+        "hookDecision": "warn",
+        "hookFindings": [
+          "hwc-destructive-delete-operation:warn"
+        ],
+        "classifyDecision": "deny",
+        "classifyRisk": "write"
+      }
+    ],
+    "notBlocked": []
+  },
+  "notBlocked": []
+}

@@ -1,0 +1,76 @@
+{
+  "caseId": "D4-21",
+  "status": "PASS",
+  "why": "用例断言成立：宽泛 IAM policy JSON 制品被 hook_check_artifacts 判 deny（hwc-iam-admin-policy），最小权限 JSON 对照未被误杀；附加观察：1 个非 JSON 形态（YAML Action: \"*\"）未被拦截，已单独记入 FINDINGS",
+  "executedAt": "20261006052825",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "rows": [
+    {
+      "name": "宽泛 IAM 策略 JSON(*/*)",
+      "gate": true,
+      "expect": "deny",
+      "path": "iam-admin-policy.json",
+      "hookDecision": "deny",
+      "hookOk": false,
+      "findings": [
+        "hwc-iam-admin-policy:deny"
+      ],
+      "engineDecision": "deny",
+      "satisfied": true
+    },
+    {
+      "name": "通配 Principal+IAM JSON",
+      "gate": true,
+      "expect": "deny",
+      "path": "policy-with-adminaccess.json",
+      "hookDecision": "deny",
+      "hookOk": false,
+      "findings": [
+        "hwc-iam-admin-policy:deny",
+        "hwc-sandbox-missing-ttl:warn"
+      ],
+      "engineDecision": "deny",
+      "satisfied": true
+    },
+    {
+      "name": "对照:最小权限 JSON 不得误杀",
+      "gate": true,
+      "expect": "not-deny",
+      "path": "least-privilege-policy.json",
+      "hookDecision": "warn",
+      "hookOk": true,
+      "findings": [
+        "hwc-sandbox-missing-ttl:warn"
+      ],
+      "engineDecision": "warn",
+      "satisfied": true
+    },
+    {
+      "name": "附加观察:YAML 形态 Action: \"*\"",
+      "gate": false,
+      "expect": "deny",
+      "path": "inline-policy.yaml",
+      "hookDecision": "allow",
+      "hookOk": true,
+      "findings": [],
+      "engineDecision": "allow",
+      "satisfied": false
+    }
+  ],
+  "violations": [],
+  "observations": [
+    {
+      "name": "附加观察:YAML 形态 Action: \"*\"",
+      "gate": false,
+      "expect": "deny",
+      "path": "inline-policy.yaml",
+      "hookDecision": "allow",
+      "hookOk": true,
+      "findings": [],
+      "engineDecision": "allow",
+      "satisfied": false
+    }
+  ],
+  "extraObservation": "观察项：YAML 形态 policy（Action: \"*\" / Resource: \"*\"）hook_check_artifacts 返回 allow。根因：plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json 规则 hwc-iam-admin-policy 的 match.all[1] 正则 (\\\"Action\\\"\\s*:\\s*(\\\"(\\*|\\*:\\*)\\\"|\\[\\s*\\\"(\\*|\\*:\\*)\\\")|Action\\s*[=:]\\s*(\\*|\\*:\\*)|AdministratorAccess|FullAccess) 中 Action\\s*[=:]\\s*(\\*|\\*:\\*) 要求星号紧跟冒号（可含空白），不接受带引号标量 Action: \"*\"。"
+}

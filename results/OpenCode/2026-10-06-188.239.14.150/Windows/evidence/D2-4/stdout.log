@@ -1,0 +1,178 @@
+{
+  "caseId": "D2-4",
+  "status": "PASS",
+  "why": "show_profile_redacted / auth_status 输出无明文凭证；redactSecrets 对 access_key/secret_key/adminPass 全部替换为 <redacted> 且不误伤 region",
+  "executedAt": "20261006052733",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "s1Path": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+  "akFingerprint": "HPUA****SYXD (len=20)",
+  "skLengthOnly": "len=40",
+  "profileResult": {
+    "ok": true,
+    "note": "Profile information was returned through the toolkit redaction pipeline.",
+    "result": {
+      "ok": true,
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "{\n  \"name\": \"deploy\",\n  \"mode\": \"AKSK\",\n  \"accessKeyId\": \"<redacted>\",\n  \"secretAccessKey\": \"<redacted>\",\n  \"securityToken\": \"<redacted>\",\n  \"region\": \"cn-north-4\",\n  \"projectId\": \"\",\n  \"domainId\": \"\",\n  \"skipSecureVerify\": \"false\",\n  \"readTimeout\": 10,\n  \"connectTimeout\": 5,\n  \"retryCount\": 0\n}",
+      "stderr": "",
+      "plan": {
+        "executable": "hcloud",
+        "args": [
+          "configure",
+          "show"
+        ],
+        "command": "hcloud configure show",
+        "executableBlock": "hcloud configure show",
+        "warnings": [],
+        "classification": {
+          "decision": "allow",
+          "risk": "read_only",
+          "reason": "Command appears to be a read-only Huawei Cloud operation.",
+          "service": "configure",
+          "operation": "show",
+          "args": [
+            "configure",
+            "show"
+          ]
+        },
+        "sgFindings": [],
+        "approvalToken": "e72ba0b5-d346-438f-96c2-6a25a0999061",
+        "safeToRun": true,
+        "rawArgs": [
+          "configure",
+          "show"
+        ]
+      },
+      "retries": 0,
+      "attempts": 1
+    }
+  },
+  "authStatusResult": {
+    "target": "all",
+    "credentialsConfigured": true,
+    "credentialsPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+    "mcpSettingsConfigured": true,
+    "mcpSettingsSource": "codearts",
+    "stsExpiry": {
+      "status": "unknown",
+      "expiresAt": null
+    },
+    "credentialPanel": {
+      "sts": {
+        "status": "unknown",
+        "expiresAt": null
+      },
+      "s1": {
+        "configured": true,
+        "fingerprint": "caae65f2",
+        "persistent": true
+      },
+      "activeSource": "temporary-sts"
+    },
+    "obsConfigured": true,
+    "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig",
+    "kooCliInstalled": true,
+    "kooCliStatus": "ok",
+    "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+    "reconciled": {
+      "stores": {
+        "s1Fingerprint": "caae65f2",
+        "envFingerprint": "",
+        "currentFingerprint": "",
+        "s3Fingerprint": "b669bb8f",
+        "runtimeFingerprint": null
+      },
+      "kooCliCurrent": "deploy",
+      "envIsPlaceholder": false,
+      "s2Encrypted": true,
+      "inconsistencies": [
+        {
+          "store": "S3",
+          "source": "obsutilconfig",
+          "fingerprint": "b669bb8f",
+          "manualModified": true
+        }
+      ],
+      "hasRuntime": false,
+      "runtimeFingerprint": null,
+      "inconsistent": true,
+      "runtimeActive": false
+    },
+    "onboarding": {
+      "needsSetup": true,
+      "scenario": 1,
+      "reason": "s1-only",
+      "message": "已保存账号(指纹 caae65f2)可直接使用。",
+      "steps": [
+        {
+          "order": 1,
+          "action": "use-s1",
+          "args": {},
+          "label": "直接使用已保存账号"
+        },
+        {
+          "order": 2,
+          "action": "switch-new",
+          "args": {
+            "mode": "import",
+            "action": "persist"
+          },
+          "label": "改用新账号(导入)"
+        }
+      ],
+      "accountHint": "caae65f2"
+    },
+    "agents": {
+      "opencode": {
+        "configured": true
+      },
+      "codex": {
+        "configured": false
+      },
+      "codex-desktop": {
+        "configured": false
+      },
+      "codearts": {
+        "configured": true
+      },
+      "codearts-work": {
+        "configured": true
+      },
+      "workbuddy": {
+        "configured": true
+      },
+      "dsh": {
+        "configured": true
+      },
+      "officeace": {
+        "configured": true
+      },
+      "hermes": {
+        "configured": false
+      },
+      "openclaw": {
+        "configured": true
+      },
+      "atomcode": {
+        "configured": true
+      }
+    }
+  },
+  "redactSecretsProbe": {
+    "input": {
+      "access_key": "AKIAIOSFODNN7EXAMPLE",
+      "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      "adminPass": "Aa@123456",
+      "region": "cn-north-4"
+    },
+    "output": {
+      "access_key": "<redacted>",
+      "secret_key": "<redacted>",
+      "adminPass": "<redacted>",
+      "region": "cn-north-4"
+    }
+  },
+  "leaks": []
+}

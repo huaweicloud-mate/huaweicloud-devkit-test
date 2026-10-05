@@ -1,0 +1,166 @@
+{
+  "caseId": "D4-15",
+  "status": "FAIL",
+  "why": "1 种绕过尝试成功（两个引擎均 allow）：[{\"kind\":\"绝对路径 + 大小写\",\"command\":\"C:\\\\hcloud.exe ECS DELETESERVERS --server-ids x\",\"hookDecision\":\"allow\",\"hookFindings\":[],\"classifyDecision\":\"allow\",\"classifyRisk\":\"not_huaweicloud\",\"riskEngineDecision\":\"allow\",\"bypassed\":true}]",
+  "executedAt": "20261006052641",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "attemptCount": 12,
+  "bypassed": [
+    {
+      "kind": "绝对路径 + 大小写",
+      "command": "C:\\hcloud.exe ECS DELETESERVERS --server-ids x",
+      "hookDecision": "allow",
+      "hookFindings": [],
+      "classifyDecision": "allow",
+      "classifyRisk": "not_huaweicloud",
+      "riskEngineDecision": "allow",
+      "bypassed": true
+    }
+  ],
+  "rows": [
+    {
+      "kind": "大小写变体",
+      "command": "hcloud ECS deleteservers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "混合大小写",
+      "command": "hcloud ECS DeleteServers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "URL编码",
+      "command": "hcloud ECS Delete%53ervers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "参数拼接拆分",
+      "command": "hcloud ECS Delete Servers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "分隔符改写",
+      "command": "hcloud ECS Delete_Servers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "路径分隔前缀",
+      "command": "/usr/local/bin/hcloud ECS DeleteServers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "allow",
+      "classifyRisk": "not_huaweicloud",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "带环境变量前缀",
+      "command": "HW_PROFILE=default hcloud ECS DeleteServers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "allow",
+      "classifyRisk": "not_huaweicloud",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "反引号包裹",
+      "command": "`hcloud ECS DeleteServers --server-ids x`",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "shell包裹(bash -c)",
+      "command": "bash -c \"hcloud ECS DeleteServers --server-ids x\"",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "多空格混淆",
+      "command": "hcloud    ECS     DeleteServers    --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "riskEngineDecision": "warn",
+      "bypassed": false
+    },
+    {
+      "kind": "绝对路径 + 大小写",
+      "command": "C:\\hcloud.exe ECS DELETESERVERS --server-ids x",
+      "hookDecision": "allow",
+      "hookFindings": [],
+      "classifyDecision": "allow",
+      "classifyRisk": "not_huaweicloud",
+      "riskEngineDecision": "allow",
+      "bypassed": true
+    },
+    {
+      "kind": "obsutil rm 变体",
+      "command": "obsutil rm obs://probe-bucket/prefix -r -f",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-destructive-delete-force:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "destructive",
+      "riskEngineDecision": "deny",
+      "bypassed": false
+    }
+  ],
+  "rootCause": "(1) plugins/huaweicloud-core/src/safety-policy.mjs:483 extractHcloudSubcommand() 的前缀白名单仅为 (?:^|[;|&]\\s*|\\$\\(\\s*|`\\s*|sudo\\s+)，不含 Windows 绝对路径前缀；命令 \"C:\\hcloud.exe ECS DELETESERVERS ...\" 中 hcloud 前一字符为反斜杠故不匹配 → classifyTextCommand 返回 allow/not_huaweicloud。(2) safety/rules/cloud-risk-rules.json 中 hwc-destructive-delete-operation / hwc-destructive-reset-operation / hwc-iam-highrisk-write / hwc-command-sts-credential 规则正则写成 \"hcloud\\s+\\w+\\s+...\"，要求 hcloud 后紧跟空白，不匹配 hcloud.exe 或绝对路径 → evaluateCommandRisk 返回 allow。Windows 上 KooCLI 常以绝对路径调用，属可复现真实绕过。"
+}

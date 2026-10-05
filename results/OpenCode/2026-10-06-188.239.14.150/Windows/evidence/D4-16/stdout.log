@@ -1,0 +1,147 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "10 种 shell 包裹场景全部被发现内层命令并拦截",
+  "executedAt": "20261006052420",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "wrapperCount": 10,
+  "penetrated": [],
+  "rows": [
+    {
+      "kind": "bash -c",
+      "command": "bash -c \"hcloud ECS DeleteServers --server-ids x\"",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "extractedInner": [
+        "hcloud ECS DeleteServers --server-ids x"
+      ],
+      "penetrated": false
+    },
+    {
+      "kind": "sh -c",
+      "command": "sh -c 'hcloud ECS DeleteServers --server-ids x'",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "extractedInner": [
+        "hcloud ECS DeleteServers --server-ids x"
+      ],
+      "penetrated": false
+    },
+    {
+      "kind": "cmd /c",
+      "command": "cmd /c \"hcloud ECS DeleteServers --server-ids x\"",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "extractedInner": [
+        "hcloud ECS DeleteServers --server-ids x"
+      ],
+      "penetrated": false
+    },
+    {
+      "kind": "powershell -Command",
+      "command": "powershell -Command \"hcloud ECS DeleteServers --server-ids x\"",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "extractedInner": [
+        "hcloud ECS DeleteServers --server-ids x"
+      ],
+      "penetrated": false
+    },
+    {
+      "kind": "pwsh -c",
+      "command": "pwsh -c \"hcloud ECS DeleteServers --server-ids x\"",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "extractedInner": [
+        "hcloud ECS DeleteServers --server-ids x"
+      ],
+      "penetrated": false
+    },
+    {
+      "kind": "&& 串联",
+      "command": "echo ok && hcloud ECS DeleteServers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "extractedInner": [],
+      "penetrated": false
+    },
+    {
+      "kind": "; 串联",
+      "command": "echo ok ; hcloud ECS DeleteServers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "extractedInner": [],
+      "penetrated": false
+    },
+    {
+      "kind": "管道",
+      "command": "echo x | hcloud ECS DeleteServers --server-ids x",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "extractedInner": [],
+      "penetrated": false
+    },
+    {
+      "kind": "包裹凭证读取",
+      "command": "bash -c \"cat ~/.config/huaweicloud/credentials.json\"",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-credential-file:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "extractedInner": [
+        "cat ~/.config/huaweicloud/credentials.json"
+      ],
+      "penetrated": false
+    },
+    {
+      "kind": "嵌套双层包裹",
+      "command": "bash -c \"sh -c 'hcloud ECS DeleteServers --server-ids x'\"",
+      "hookDecision": "warn",
+      "hookFindings": [
+        "hwc-destructive-delete-operation:warn"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "write",
+      "extractedInner": [
+        "sh -c 'hcloud ECS DeleteServers --server-ids x'",
+        "hcloud ECS DeleteServers --server-ids x"
+      ],
+      "penetrated": false
+    }
+  ]
+}

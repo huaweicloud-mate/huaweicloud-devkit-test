@@ -1,0 +1,190 @@
+{
+  "caseId": "D9-13",
+  "status": "PASS",
+  "why": "凭证不泄露与权限校验基线成立：4 个 tools/call 返回均无 AK/SK/token 明文；运行时凭证注入→解析→清理闭环正确（false→true→true）；审批令牌消费后失效不可重放=true；权限三态 deny/warn/allow 判定正确；isPlaceholder 对 17 个样本判定正确；凭证持久化写-读-还原一致",
+  "executedAt": "20261006053351",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "callResults": [
+    {
+      "tool": "huaweicloud_auth_status",
+      "ok": true,
+      "leaks": [],
+      "satisfied": true
+    },
+    {
+      "tool": "huaweicloud_show_profile_redacted",
+      "ok": true,
+      "leaks": [],
+      "satisfied": true
+    },
+    {
+      "tool": "huaweicloud_hook_check_command",
+      "ok": true,
+      "leaks": [],
+      "satisfied": true
+    },
+    {
+      "tool": "huaweicloud_plan_cli_command",
+      "ok": true,
+      "leaks": [],
+      "satisfied": true
+    }
+  ],
+  "runtimeCredentials": {
+    "hadRuntimeBefore": false,
+    "hasRuntimeAfter": true,
+    "resolvedAkMatch": true,
+    "resolvedSkMatch": true,
+    "cleared": true,
+    "probeValue": "明确的占位假凭证，仅用于闭环验证"
+  },
+  "approvalToken": {
+    "created": true,
+    "argsHash": "ad447e9743160790df63eb6e6db8ac59837eb37ded9fafa48c547246bd82c6de",
+    "firstConsumeOk": true,
+    "secondConsumeOk": false,
+    "replayRejected": true
+  },
+  "threeStateRows": [
+    {
+      "command": "cat ~/.hcloud/credentials.json",
+      "expect": "deny",
+      "engineDecision": "deny",
+      "policyDecision": "deny",
+      "satisfied": true
+    },
+    {
+      "command": "hcloud ECS DeleteServers --server-ids abc --force",
+      "expect": "deny",
+      "engineDecision": "deny",
+      "policyDecision": "deny",
+      "satisfied": true
+    },
+    {
+      "command": "hcloud ECS DeleteServers --server-ids abc",
+      "expect": "warn",
+      "engineDecision": "warn",
+      "policyDecision": "deny",
+      "satisfied": true
+    },
+    {
+      "command": "hcloud ECS ListServers",
+      "expect": "allow",
+      "engineDecision": "allow",
+      "policyDecision": "allow",
+      "satisfied": true
+    }
+  ],
+  "placeholderRows": [
+    {
+      "value": "<your-ak>",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "<HW_ACCESS_KEY>",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "${HW_ACCESS_KEY}",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "YOUR_AK",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "ACCESS_KEY",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "SECRET_KEY",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "SECURITY_TOKEN",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "changeme",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "replace_me",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "change.me",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "placeholder-key",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "abc****",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "****",
+      "expectIsPlaceholder": true,
+      "got": true,
+      "satisfied": true
+    },
+    {
+      "value": "AKIAIOSFODNN7EXAMPLE",
+      "expectIsPlaceholder": false,
+      "got": false,
+      "satisfied": true
+    },
+    {
+      "value": "AKIAPROBEDUMMY000001",
+      "expectIsPlaceholder": false,
+      "got": false,
+      "satisfied": true
+    },
+    {
+      "value": "cn-north-4",
+      "expectIsPlaceholder": false,
+      "got": false,
+      "satisfied": true
+    },
+    {
+      "value": "my-real-access-key-value",
+      "expectIsPlaceholder": false,
+      "got": false,
+      "satisfied": true
+    }
+  ],
+  "persistence": {
+    "backupPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json.bak",
+    "writtenOk": true,
+    "restoredOk": true
+  },
+  "hadRuntimeCredentialsAtStart": false,
+  "violations": []
+}

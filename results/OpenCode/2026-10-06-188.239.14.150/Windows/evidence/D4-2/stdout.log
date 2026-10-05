@@ -1,0 +1,93 @@
+{
+  "caseId": "D4-2",
+  "status": "FAIL",
+  "why": "存在未被阻断的凭证 env 打印命令：[{\"command\":\"echo $HW_SECRET_KEY\",\"hookDecision\":\"allow\",\"hookFindings\":[],\"classifyDecision\":\"deny\",\"classifyRisk\":\"credential\",\"riskEngineDecision\":\"allow\"},{\"command\":\"echo $HW_ACCESS_KEY\",\"hookDecision\":\"allow\",\"hookFindings\":[],\"classifyDecision\":\"deny\",\"classifyRisk\":\"credential\",\"riskEngineDecision\":\"allow\"},{\"command\":\"printenv | grep -i SECRET\",\"hookDecision\":\"allow\",\"hookFindings\":[],\"classifyDecision\":\"allow\",\"classifyRisk\":\"not_huaweicloud\",\"riskEngineDecision\":\"allow\"},{\"command\":\"set | findstr HWC_SECRET\",\"hookDecision\":\"allow\",\"hookFindings\":[],\"classifyDecision\":\"allow\",\"classifyRisk\":\"not_huaweicloud\",\"riskEngineDecision\":\"allow\"},{\"command\":\"echo $X_HW_SECURITY_TOKEN\",\"hookDecision\":\"allow\",\"hookFindings\":[],\"classifyDecision\":\"allow\",\"classifyRisk\":\"not_huaweicloud\",\"riskEngineDecision\":\"allow\"}]",
+  "executedAt": "20261006052641",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "blockedCount": 4,
+  "total": 9,
+  "rows": [
+    {
+      "command": "printenv HW_SECRET_KEY",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-env-dump:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "deny"
+    },
+    {
+      "command": "printenv HW_ACCESS_KEY",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-env-dump:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "deny"
+    },
+    {
+      "command": "echo $HW_SECRET_KEY",
+      "hookDecision": "allow",
+      "hookFindings": [],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "allow"
+    },
+    {
+      "command": "echo $HW_ACCESS_KEY",
+      "hookDecision": "allow",
+      "hookFindings": [],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "allow"
+    },
+    {
+      "command": "env | grep -i huaweicloud",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-env-dump:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "deny"
+    },
+    {
+      "command": "printenv | grep -i SECRET",
+      "hookDecision": "allow",
+      "hookFindings": [],
+      "classifyDecision": "allow",
+      "classifyRisk": "not_huaweicloud",
+      "riskEngineDecision": "allow"
+    },
+    {
+      "command": "set | findstr HWC_SECRET",
+      "hookDecision": "allow",
+      "hookFindings": [],
+      "classifyDecision": "allow",
+      "classifyRisk": "not_huaweicloud",
+      "riskEngineDecision": "allow"
+    },
+    {
+      "command": "echo $X_HW_SECURITY_TOKEN",
+      "hookDecision": "allow",
+      "hookFindings": [],
+      "classifyDecision": "allow",
+      "classifyRisk": "not_huaweicloud",
+      "riskEngineDecision": "allow"
+    },
+    {
+      "command": "printenv HW_SECURITY_TOKEN",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-env-dump:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "deny"
+    }
+  ],
+  "rootCause": "两引擎判定不一致：plugins/huaweicloud-core/src/safety-policy.mjs:536-551 的 classifyTextCommand 已能拦截 \"echo $HW_SECRET_KEY\"（deny/credential，#650/#770 修复），但 plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json 规则 hwc-command-env-dump 的 match.all 要求同时出现 (env|printenv|Get-ChildItem Env:|gci Env:|dir Env:) 与凭证前缀(HUAWEICLOUD|HWC_|HW_|HCLOUD|OS_)，纯 \"echo $HW_SECRET_KEY\" 不含 env/printenv → evaluateCommandRisk=allow；而 MCP 工具 huaweicloud_hook_check_command（src/tools.mjs:1147 hookResult(evaluateCommandRisk(args.command))）走的正是 evaluateCommandRisk，故对外呈现 allow。另 \"printenv | grep -i SECRET\" 两引擎均 allow（凭证前缀正则不含裸 SECRET），属同类盲区。"
+}

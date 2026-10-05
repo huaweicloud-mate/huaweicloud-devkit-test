@@ -1,0 +1,153 @@
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "why": "规则库完整：共 19 条（deny=9 ≥9，warn=10 ≥7，0 disabled）；7 条高危命令全部判 deny；5 条只读命令无一被判 deny；三态分布 {\"deny\":7,\"allow\":5}。另有 5 条边界形态以 warn/allow 判定，已在 evidence 记录并归并到 D4-1 等既有缺陷",
+  "executedAt": "20261006053212",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "rulesPath": "C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json",
+  "rulesReturnShape": "object",
+  "ruleCount": 19,
+  "bySeverity": {
+    "deny": 9,
+    "warn": 10
+  },
+  "denyCount": 9,
+  "warnCount": 10,
+  "disabledRules": [],
+  "missingSeverity": [],
+  "ruleLibOk": true,
+  "highRiskRows": [
+    {
+      "command": "cat ~/.hcloud/credentials.json",
+      "decision": "deny",
+      "ruleIds": [
+        "hwc-command-credential-file"
+      ],
+      "satisfied": true
+    },
+    {
+      "command": "type $HOME/.huaweicloud/credentials.json",
+      "decision": "deny",
+      "ruleIds": [
+        "hwc-command-credential-file"
+      ],
+      "satisfied": true
+    },
+    {
+      "command": "env | grep HUAWEICLOUD",
+      "decision": "deny",
+      "ruleIds": [
+        "hwc-command-env-dump"
+      ],
+      "satisfied": true
+    },
+    {
+      "command": "printenv | grep HW_SECRET",
+      "decision": "deny",
+      "ruleIds": [
+        "hwc-command-env-dump"
+      ],
+      "satisfied": true
+    },
+    {
+      "command": "hcloud CSMS ShowSecretVersion --secret-name prod --version-id v1",
+      "decision": "deny",
+      "ruleIds": [
+        "hwc-command-secret-value-read"
+      ],
+      "satisfied": true
+    },
+    {
+      "command": "hcloud OBS PutBucketPolicy --bucket b --acl public-read-write",
+      "decision": "deny",
+      "ruleIds": [
+        "hwc-obs-anonymous-write"
+      ],
+      "satisfied": true
+    },
+    {
+      "command": "hcloud ECS DeleteServers --server-ids abc-123 --force",
+      "decision": "deny",
+      "ruleIds": [
+        "hwc-destructive-delete-force",
+        "hwc-destructive-delete-operation"
+      ],
+      "satisfied": true
+    }
+  ],
+  "readonlyRows": [
+    {
+      "command": "hcloud ECS ListServers",
+      "decision": "allow",
+      "ruleIds": [],
+      "satisfied": true
+    },
+    {
+      "command": "hcloud OBS ListBuckets",
+      "decision": "allow",
+      "ruleIds": [],
+      "satisfied": true
+    },
+    {
+      "command": "hcloud RDS ListInstances",
+      "decision": "allow",
+      "ruleIds": [],
+      "satisfied": true
+    },
+    {
+      "command": "hcloud IAM ListUsers",
+      "decision": "allow",
+      "ruleIds": [],
+      "satisfied": true
+    },
+    {
+      "command": "hcloud billing ShowBill",
+      "decision": "allow",
+      "ruleIds": [],
+      "satisfied": true
+    }
+  ],
+  "decisionDistribution": {
+    "deny": 7,
+    "allow": 5
+  },
+  "observations": [
+    {
+      "command": "type %USERPROFILE%\\.obsutilconfig",
+      "decision": "allow",
+      "ruleIds": [],
+      "note": "凭证文件读取未 deny（规则 hwc-command-credential-file 的 match.any[0] 仅覆盖 .hcloud|.huaweicloud）；与 D4-1 同根因"
+    },
+    {
+      "command": "cat ~/.obsutilconfig",
+      "decision": "allow",
+      "ruleIds": [],
+      "note": "凭证文件读取未 deny（规则 hwc-command-credential-file 的 match.any[0] 仅覆盖 .hcloud|.huaweicloud）；与 D4-1 同根因"
+    },
+    {
+      "command": "env | grep -i secret",
+      "decision": "allow",
+      "ruleIds": [],
+      "note": "env 转储未 deny（hwc-command-env-dump 的 match.all[1] 要求命中 HUAWEICLOUD|HWC_|HCLOUD|HW_|OS_ 前缀，纯 secret 关键字不命中）"
+    },
+    {
+      "command": "hcloud ECS DeleteServers --server-ids abc-123",
+      "decision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ],
+      "note": "删除类命令判 warn 而非 deny（hwc-destructive-delete-operation severity=warn，属设计取向：删除需审批、--force 才 deny）"
+    },
+    {
+      "command": "hcloud RDS DeleteInstance --instance-id def-456",
+      "decision": "warn",
+      "ruleIds": [
+        "hwc-destructive-delete-operation"
+      ],
+      "note": "删除类命令判 warn 而非 deny（hwc-destructive-delete-operation severity=warn，属设计取向：删除需审批、--force 才 deny）"
+    }
+  ],
+  "violations": [],
+  "tokenExposureCheck": "本探针输出仅含规则 ID 与判定决策，不回显任何 AK/SK/token"
+}

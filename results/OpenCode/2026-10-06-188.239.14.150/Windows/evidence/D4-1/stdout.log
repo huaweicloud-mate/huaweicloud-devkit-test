@@ -1,0 +1,79 @@
+{
+  "caseId": "D4-1",
+  "status": "FAIL",
+  "why": "存在未被阻断的凭证读取命令：[{\"command\":\"cat ~/.obsutilconfig\",\"hookDecision\":\"allow\",\"hookFindings\":[],\"classifyDecision\":\"allow\",\"classifyRisk\":\"not_huaweicloud\",\"riskEngineDecision\":\"allow\"},{\"command\":\"more < %USERPROFILE%\\\\.obsutilconfig\",\"hookDecision\":\"allow\",\"hookFindings\":[],\"classifyDecision\":\"allow\",\"classifyRisk\":\"not_huaweicloud\",\"riskEngineDecision\":\"allow\"}]",
+  "executedAt": "20261006052641",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "blockedCount": 5,
+  "total": 7,
+  "rows": [
+    {
+      "command": "cat ~/.config/huaweicloud/credentials.json",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-credential-file:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "deny"
+    },
+    {
+      "command": "type $env:USERPROFILE\\.config\\huaweicloud\\credentials.json",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-credential-file:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "deny"
+    },
+    {
+      "command": "Get-Content ~/.huaweicloud/credentials.json",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-credential-file:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "deny"
+    },
+    {
+      "command": "cat ~/.config/huaweicloud/credentials.readonly.json",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-credential-file:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "deny"
+    },
+    {
+      "command": "cat ~/.obsutilconfig",
+      "hookDecision": "allow",
+      "hookFindings": [],
+      "classifyDecision": "allow",
+      "classifyRisk": "not_huaweicloud",
+      "riskEngineDecision": "allow"
+    },
+    {
+      "command": "more < %USERPROFILE%\\.obsutilconfig",
+      "hookDecision": "allow",
+      "hookFindings": [],
+      "classifyDecision": "allow",
+      "classifyRisk": "not_huaweicloud",
+      "riskEngineDecision": "allow"
+    },
+    {
+      "command": "cp ~/.config/huaweicloud/credentials.json /tmp/leak.json",
+      "hookDecision": "deny",
+      "hookFindings": [
+        "hwc-command-credential-file:deny"
+      ],
+      "classifyDecision": "deny",
+      "classifyRisk": "credential",
+      "riskEngineDecision": "deny"
+    }
+  ],
+  "rootCause": "(1) plugins/huaweicloud-core/safety/policy.json 的 credentialFilePatterns = [\".hcloud\", \".huaweicloud\", \"hcloud[/\\\\](config|credentials)\", \"huaweicloud[/\\\\](config|credentials)\"]，被 safety-policy.mjs:501 matchesAny(candidate, policy.credentialFilePatterns) 使用，不含 .obsutilconfig；(2) plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json 规则 hwc-command-credential-file 的正则仅覆盖 .hcloud|.huaweicloud 与 hcloud/huaweicloud/(config|credentials)。而 .obsutilconfig 正是 devkit 自身 writeObsConfigFile 写入 AK/SK 的 S3 凭证仓（src/auth/credentials.mjs:45 obsConfigPath），读取它等同读取明文凭证。"
+}

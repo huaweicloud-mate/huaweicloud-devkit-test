@@ -1,0 +1,172 @@
+{
+  "caseId": "D4-23",
+  "status": "PASS",
+  "why": "11 个安装目标全部纳入；规则文件已注入并与源码一致（本机 1/1 个已安装插件含 rules/huawei-agent-rules.mdc，孤儿文件 0）；4 条 MUST 约束全部可机械判定；injectAgentRules 调用点 21 处",
+  "executedAt": "20261006053040",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "targetCount": 11,
+  "targets": [
+    "opencode",
+    "codex",
+    "codex-desktop",
+    "codearts",
+    "codearts-work",
+    "workbuddy",
+    "dsh",
+    "officeace",
+    "hermes",
+    "openclaw",
+    "atomcode"
+  ],
+  "targetMentionsInSetupCli": {
+    "opencode": 32,
+    "codex": 15,
+    "codex-desktop": 14,
+    "codearts": 12,
+    "codearts-work": 13,
+    "workbuddy": 15,
+    "dsh": 14,
+    "officeace": 15,
+    "hermes": 13,
+    "openclaw": 13,
+    "atomcode": 14
+  },
+  "uncoveredTargets": [],
+  "injectAgentRulesCallSites": 21,
+  "rulesPath": "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\hdk\\rules\\huawei-agent-rules.mdc",
+  "rulesExists": true,
+  "mustConstraints": [
+    {
+      "id": "禁直连 csms download-secret/show-secret",
+      "ok": true
+    },
+    {
+      "id": "禁直连 kms decrypt",
+      "ok": true
+    },
+    {
+      "id": "secret 任务须先加载 huawei-dew skill",
+      "ok": true
+    },
+    {
+      "id": "禁止 AK/SK 明文回显",
+      "ok": true
+    }
+  ],
+  "globalPackageRulesPath": "C:\\Users\\Administrator\\.workbuddy\\binaries\\node\\versions\\22.22.2-3\\node_modules\\huaweicloud-devkit\\rules\\huawei-agent-rules.mdc",
+  "rulesIdenticalWithSource": true,
+  "registrationStatuses": {
+    "target": "all",
+    "agents": {
+      "opencode": {
+        "configured": true
+      },
+      "codex": {
+        "configured": false
+      },
+      "codex-desktop": {
+        "configured": false
+      },
+      "codearts": {
+        "configured": true
+      },
+      "codearts-work": {
+        "configured": true
+      },
+      "workbuddy": {
+        "configured": true
+      },
+      "dsh": {
+        "configured": true
+      },
+      "officeace": {
+        "configured": true
+      },
+      "hermes": {
+        "configured": false
+      },
+      "openclaw": {
+        "configured": true
+      },
+      "atomcode": {
+        "configured": true
+      }
+    }
+  },
+  "onDisk": [
+    {
+      "pluginRoot": "C:\\Users\\Administrator\\.workbuddy\\binaries\\node\\versions\\22.22.2-3\\node_modules\\huaweicloud-devkit",
+      "isPackageRoot": true,
+      "registrationRoot": false,
+      "pluginExists": true,
+      "rulesDirExists": true,
+      "rulesFiles": [
+        "huawei-agent-rules.mdc"
+      ],
+      "rulesFileInstalled": true,
+      "orphanRuleFiles": []
+    },
+    {
+      "pluginRoot": "C:\\Users\\Administrator\\.config\\opencode\\plugins",
+      "isPackageRoot": false,
+      "registrationRoot": true,
+      "pluginExists": true,
+      "rulesDirExists": false,
+      "rulesFiles": [],
+      "rulesFileInstalled": null,
+      "orphanRuleFiles": []
+    },
+    {
+      "pluginRoot": "C:\\Users\\Administrator\\.workbuddy\\plugins",
+      "isPackageRoot": false,
+      "registrationRoot": true,
+      "pluginExists": true,
+      "rulesDirExists": false,
+      "rulesFiles": [],
+      "rulesFileInstalled": null,
+      "orphanRuleFiles": []
+    },
+    {
+      "pluginRoot": "C:\\Users\\Administrator\\.codearts\\plugins",
+      "isPackageRoot": false,
+      "registrationRoot": true,
+      "pluginExists": false,
+      "rulesDirExists": false,
+      "rulesFiles": null,
+      "rulesFileInstalled": null,
+      "orphanRuleFiles": []
+    },
+    {
+      "pluginRoot": "C:\\Users\\Administrator\\.dsh\\plugins",
+      "isPackageRoot": false,
+      "registrationRoot": true,
+      "pluginExists": false,
+      "rulesDirExists": false,
+      "rulesFiles": null,
+      "rulesFileInstalled": null,
+      "orphanRuleFiles": []
+    }
+  ],
+  "installedCount": 1,
+  "installedWithRulesCount": 1,
+  "orphanRuleDirs": [],
+  "registrationRoots": [
+    {
+      "root": "C:\\Users\\Administrator\\.config\\opencode\\plugins",
+      "exists": true
+    },
+    {
+      "root": "C:\\Users\\Administrator\\.workbuddy\\plugins",
+      "exists": true
+    },
+    {
+      "root": "C:\\Users\\Administrator\\.codearts\\plugins",
+      "exists": false
+    },
+    {
+      "root": "C:\\Users\\Administrator\\.dsh\\plugins",
+      "exists": false
+    }
+  ]
+}

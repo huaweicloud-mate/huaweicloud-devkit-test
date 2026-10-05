@@ -1,0 +1,63 @@
+{
+  "caseId": "D4-18",
+  "status": "PASS",
+  "why": "写操作走 confirm-not-deny 通道：plan 产出可执行命令块+approvalToken（未硬拒绝），无令牌/伪造令牌/未确认三种路径均被拒且零执行，strict plan 仍受写门禁",
+  "executedAt": "20261006052129",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "writeArgs": [
+    "ECS",
+    "DeleteServers",
+    "--server-ids",
+    "probe-nonexistent-id-0001"
+  ],
+  "planAllowWritesTrue": {
+    "command": "hcloud ECS DeleteServers --server-ids probe-nonexistent-id-0001",
+    "approvalTokenPresent": true,
+    "safeToRun": true,
+    "classification": {
+      "decision": "allow",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation approved by user.",
+      "service": "ECS",
+      "operation": "DeleteServers",
+      "args": [
+        "ECS",
+        "DeleteServers",
+        "--server-ids",
+        "probe-nonexistent-id-0001"
+      ],
+      "warnings": [
+        {
+          "ruleId": "hwc-destructive-delete-operation",
+          "title": "Destructive cloud resource operation",
+          "category": "destructive",
+          "severity": "warn",
+          "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+          "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+          "source": "command",
+          "evidence": "hcloud ECS DeleteServers --server-ids probe-nonexistent-id-0001"
+        }
+      ]
+    },
+    "warnings": []
+  },
+  "execWithoutToken": {
+    "status": "rejected",
+    "code": "CONFIRM_TOKEN_NOT_FOUND"
+  },
+  "execWithFakeToken": {
+    "status": "rejected",
+    "code": "CONFIRM_TOKEN_NOT_FOUND"
+  },
+  "execWithoutConsent": {
+    "threw": true,
+    "message": "approvedByUser must be true after explicit user approval for this exact command."
+  },
+  "strictPlanClassification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "classifyTextCommandSanity": "deny"
+}

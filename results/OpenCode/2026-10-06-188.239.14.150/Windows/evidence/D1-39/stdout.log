@@ -1,0 +1,36 @@
+{
+  "caseId": "D1-39",
+  "status": "FAIL",
+  "why": "检测链在 Windows 上不可用：platform=win32 sync=null async=null EINVAL=false；npm 12.1.0 实际输出=[\n  {\n    \"latest\": \"1.1.7\",\n    \"next\": \"1.1.8-next.1\"\n  }\n] 解析结果=null",
+  "executedAt": "20261006050941",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "npmVersion": "12.1.0",
+  "rawNpmViewStdout": "[\n  {\n    \"latest\": \"1.1.7\",\n    \"next\": \"1.1.8-next.1\"\n  }\n]",
+  "rawNpmViewExit": 0,
+  "parseDistTagsOutputResult": null,
+  "runs": {
+    "queryDistTagsSync": {
+      "ms": 609,
+      "result": null
+    },
+    "queryDistTags": {
+      "ms": 632,
+      "result": null
+    }
+  },
+  "judgeUpdateRoundTrip": {
+    "current": "1.1.8-next.1",
+    "judge": {
+      "currentVersion": "1.1.8-next.1",
+      "latestStable": "1.1.7",
+      "latestNext": "1.1.8-next.1",
+      "targetVersion": "1.1.8-next.1",
+      "updateAvailable": false,
+      "dismissed": false,
+      "dismissExpiresAt": null,
+      "result": "up_to_date"
+    }
+  },
+  "rootCause": "plugins/huaweicloud-core/src/update-check.mjs:86 parseDistTagsOutput() 对 JSON.parse 结果做 Array.isArray(parsed) 早退返回 null；npm>=9 的 `npm view <pkg> dist-tags --json` 输出为数组形态 [{\"latest\":...}]，导致整条检测链恒返回 null、check_update 恒为 result=check_failed（静默失败）"
+}

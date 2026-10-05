@@ -1,0 +1,84 @@
+{
+  "caseId": "D4-22",
+  "status": "PASS",
+  "why": "用例断言成立：公网暴露 FunctionGraph（无鉴权）判 warn、APIG 0.0.0.0/0 与 3389 管理端口暴露判 deny；私有低风险对照判 allow；附加观察：1 个非公网暴露类高危计划（OBS 匿名写策略）未被拦截，已单独记入 FINDINGS",
+  "executedAt": "20261006052825",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "rows": [
+    {
+      "name": "FunctionGraph 公开无鉴权",
+      "expect": "warn|deny",
+      "hookDecision": "warn",
+      "hookOk": true,
+      "findings": [
+        "hwc-functiongraph-public-no-auth:warn"
+      ],
+      "nextStep": "Review the warnings with the user before proceeding.",
+      "engineDecision": "warn",
+      "satisfied": true
+    },
+    {
+      "name": "APIG DEDICATEDGATEWAY 0.0.0.0/0",
+      "expect": "warn|deny",
+      "hookDecision": "deny",
+      "hookOk": false,
+      "findings": [
+        "hwc-network-public-admin-port:deny",
+        "hwc-functiongraph-public-no-auth:warn"
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution.",
+      "engineDecision": "deny",
+      "satisfied": true
+    },
+    {
+      "name": "公网暴露 + 管理端口 3389",
+      "expect": "deny",
+      "hookDecision": "deny",
+      "hookOk": false,
+      "findings": [
+        "hwc-network-public-admin-port:deny"
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution.",
+      "engineDecision": "deny",
+      "satisfied": true
+    },
+    {
+      "name": "OBS 匿名写策略(附加观察)",
+      "gate": false,
+      "expect": "deny",
+      "hookDecision": "allow",
+      "hookOk": true,
+      "findings": [],
+      "nextStep": "No Huawei Cloud hook risk rule matched.",
+      "engineDecision": "allow",
+      "satisfied": false
+    },
+    {
+      "name": "对照:私有低风险部署",
+      "gate": true,
+      "expect": "allow",
+      "hookDecision": "allow",
+      "hookOk": true,
+      "findings": [],
+      "nextStep": "No Huawei Cloud hook risk rule matched.",
+      "engineDecision": "allow",
+      "satisfied": true
+    }
+  ],
+  "violations": [],
+  "observations": [
+    {
+      "name": "OBS 匿名写策略(附加观察)",
+      "gate": false,
+      "expect": "deny",
+      "hookDecision": "allow",
+      "hookOk": true,
+      "findings": [],
+      "nextStep": "No Huawei Cloud hook risk rule matched.",
+      "engineDecision": "allow",
+      "satisfied": false
+    }
+  ],
+  "extraObservation": "观察项：OBS bucketPolicy {Principal:{AWS:[\"*\"]}, Action:[\"obs:object:PutObject\"]} hook_check_deploy_plan 返回 allow。根因：plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json 规则 hwc-obs-anonymous-write 的 match.any[0] 仅识别 Anonymous|Everyone|\"Principal\":\"*\"|AllUsers 三类主体字面量，不识别嵌套 Principal.AWS=[\"*\"] 形态。"
+}

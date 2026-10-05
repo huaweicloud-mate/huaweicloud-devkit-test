@@ -1,0 +1,65 @@
+{
+  "caseId": "D1-40",
+  "status": "FAIL",
+  "why": "镜像链路不可用：插件层 queryDistTagsSync 返回 null（npm 层同 registry 实际输出=[\n  {\n    \"latest\": \"1.1.7\",\n    \"next\": \"1.1.8-next.1\"\n  }\n]，npm 层可解析={\"latest\":\"1.1.7\",\"next\":\"1.1.8-next.1\"}），判定层 judgeUpdate 反向保护正常（downgradePrompts=0）——镜像读取步骤无法完成，同 D1-39 根因",
+  "executedAt": "20261006051016",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "registries": {
+    "official": "https://registry.npmjs.org",
+    "mirror": "https://registry.npmmirror.com"
+  },
+  "officialTags": null,
+  "mirrorTags": null,
+  "rawNpmMirrorStdout": "[\n  {\n    \"latest\": \"1.1.7\",\n    \"next\": \"1.1.8-next.1\"\n  }\n]",
+  "rawNpmMirrorParsed": {
+    "latest": "1.1.7",
+    "next": "1.1.8-next.1"
+  },
+  "mirrorLagBehindOfficial": null,
+  "localVersion": "1.1.8-next.1",
+  "lagScenarios": [
+    {
+      "name": "远端等于本地",
+      "current": "1.1.7",
+      "distTags": {
+        "latest": "1.1.7"
+      },
+      "remote": "1.1.7",
+      "judge": {
+        "result": "up_to_date",
+        "updateAvailable": false,
+        "targetVersion": "1.1.7"
+      }
+    },
+    {
+      "name": "远端低于本地(镜像lag)",
+      "current": "9.9.9",
+      "distTags": {
+        "latest": "1.1.7"
+      },
+      "remote": "1.1.7",
+      "judge": {
+        "result": "up_to_date",
+        "updateAvailable": false,
+        "targetVersion": "1.1.7"
+      }
+    },
+    {
+      "name": "远端为预发布低于本地",
+      "current": "9.9.9",
+      "distTags": {
+        "latest": "1.1.7",
+        "next": "1.1.7"
+      },
+      "remote": "1.1.7",
+      "judge": {
+        "result": "up_to_date",
+        "updateAvailable": false,
+        "targetVersion": "1.1.7"
+      }
+    }
+  ],
+  "childExit": 0,
+  "rootCause": "plugins/huaweicloud-core/src/update-check.mjs:86 parseDistTagsOutput() 拒绝数组形态 JSON（npm>=9 `npm view <pkg> dist-tags --json` 返回 [{\"latest\":...}]），镜像源下同样恒返回 null，镜像 lag 检测链路整体失效"
+}
