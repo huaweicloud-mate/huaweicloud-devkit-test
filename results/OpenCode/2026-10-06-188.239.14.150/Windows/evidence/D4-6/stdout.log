@@ -1,0 +1,197 @@
+{
+  "caseId": "D4-6",
+  "status": "FAIL",
+  "why": "adminPass 回显防护断言不成立。根因：safety-policy.mjs 的 redactString() 只处理 'key<:|=><value>' 形态，缺少 CLI 空格分隔 '--adminPass <value>' 的取值规则（--password/--user-data 同样裸回显），因此 KooCLI 实际传参形态会裸回显明文口令。违规项：[\"KooCLI 实际形态 --adminPass <value> 不裸回显密码\",\"classifyTextCommand 对 adminPass 命令给出非 allow 判定\"]",
+  "executedAt": "20261006055812",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "redaction": [
+    {
+      "label": "字面量 adminPass=xxx (用例字面断言形态)",
+      "redacted": "adminPass=<redacted>",
+      "masked": true,
+      "placeholder": true,
+      "literal": true
+    },
+    {
+      "label": "hcloud CLI 空格分隔 --adminPass xxx (KooCLI 实际形态)",
+      "redacted": "hcloud ECS CreateServers --name probe --adminPass ProbeAdminPass-9f3c1d",
+      "masked": false,
+      "placeholder": false,
+      "literal": false
+    },
+    {
+      "label": "--password 空格分隔",
+      "redacted": "--password ProbeAdminPass-9f3c1d",
+      "masked": false,
+      "placeholder": false,
+      "literal": false
+    },
+    {
+      "label": "user_data 空格分隔",
+      "redacted": "--user-data ProbeAdminPass-9f3c1d",
+      "masked": false,
+      "placeholder": false,
+      "literal": false
+    },
+    {
+      "label": "JSON 字符串形态",
+      "redacted": "{\"adminPass\":\"ProbeAdminPass-9f3c1d\"}",
+      "masked": false,
+      "placeholder": false,
+      "literal": false
+    }
+  ],
+  "objectPath": {
+    "adminPass": "<redacted>",
+    "name": "probe",
+    "region": "cn-north-4"
+  },
+  "classified": [
+    {
+      "label": "字面量 adminPass=xxx (用例字面断言形态)",
+      "decision": "allow",
+      "ruleId": null
+    },
+    {
+      "label": "hcloud CLI 空格分隔 --adminPass xxx (KooCLI 实际形态)",
+      "decision": "deny",
+      "ruleId": null
+    },
+    {
+      "label": "--password 空格分隔",
+      "decision": "allow",
+      "ruleId": null
+    },
+    {
+      "label": "user_data 空格分隔",
+      "decision": "allow",
+      "ruleId": null
+    },
+    {
+      "label": "JSON 字符串形态",
+      "decision": "allow",
+      "ruleId": null
+    }
+  ],
+  "hookDecision": "allow",
+  "rows": [
+    {
+      "id": "字面断言 adminPass=xxx 被替换为 <redacted>",
+      "ok": true,
+      "actual": {
+        "label": "字面量 adminPass=xxx (用例字面断言形态)",
+        "redacted": "adminPass=<redacted>",
+        "masked": true,
+        "placeholder": true,
+        "literal": true
+      }
+    },
+    {
+      "id": "对象路径 redactSecrets({adminPass}) 被替换为 <redacted>",
+      "ok": true,
+      "actual": {
+        "adminPass": "<redacted>",
+        "name": "probe",
+        "region": "cn-north-4"
+      }
+    },
+    {
+      "id": "KooCLI 实际形态 --adminPass <value> 不裸回显密码",
+      "ok": false,
+      "actual": {
+        "label": "hcloud CLI 空格分隔 --adminPass xxx (KooCLI 实际形态)",
+        "redacted": "hcloud ECS CreateServers --name probe --adminPass ProbeAdminPass-9f3c1d",
+        "masked": false,
+        "placeholder": false,
+        "literal": false
+      }
+    },
+    {
+      "id": "classifyTextCommand 对 adminPass 命令给出非 allow 判定",
+      "ok": false,
+      "actual": [
+        {
+          "label": "字面量 adminPass=xxx (用例字面断言形态)",
+          "decision": "allow",
+          "ruleId": null
+        },
+        {
+          "label": "hcloud CLI 空格分隔 --adminPass xxx (KooCLI 实际形态)",
+          "decision": "deny",
+          "ruleId": null
+        },
+        {
+          "label": "--password 空格分隔",
+          "decision": "allow",
+          "ruleId": null
+        },
+        {
+          "label": "user_data 空格分隔",
+          "decision": "allow",
+          "ruleId": null
+        },
+        {
+          "label": "JSON 字符串形态",
+          "decision": "allow",
+          "ruleId": null
+        }
+      ]
+    },
+    {
+      "id": "hook_check_command 不裸回显密码",
+      "ok": true,
+      "actual": {
+        "decision": "allow",
+        "masked": true
+      }
+    }
+  ],
+  "violations": [
+    {
+      "id": "KooCLI 实际形态 --adminPass <value> 不裸回显密码",
+      "ok": false,
+      "actual": {
+        "label": "hcloud CLI 空格分隔 --adminPass xxx (KooCLI 实际形态)",
+        "redacted": "hcloud ECS CreateServers --name probe --adminPass ProbeAdminPass-9f3c1d",
+        "masked": false,
+        "placeholder": false,
+        "literal": false
+      }
+    },
+    {
+      "id": "classifyTextCommand 对 adminPass 命令给出非 allow 判定",
+      "ok": false,
+      "actual": [
+        {
+          "label": "字面量 adminPass=xxx (用例字面断言形态)",
+          "decision": "allow",
+          "ruleId": null
+        },
+        {
+          "label": "hcloud CLI 空格分隔 --adminPass xxx (KooCLI 实际形态)",
+          "decision": "deny",
+          "ruleId": null
+        },
+        {
+          "label": "--password 空格分隔",
+          "decision": "allow",
+          "ruleId": null
+        },
+        {
+          "label": "user_data 空格分隔",
+          "decision": "allow",
+          "ruleId": null
+        },
+        {
+          "label": "JSON 字符串形态",
+          "decision": "allow",
+          "ruleId": null
+        }
+      ]
+    }
+  ],
+  "rootCause": "redactString() 正则要求 key 与 value 之间为 : 或 =，未覆盖 CLI 空格分隔取值（--adminPass xxx）；json 字符串形态仅在走 redactOutput(JSON.parse) 时由对象键路径覆盖",
+  "realCloudE2E": "未执行真云创建（会产生计费资源）；按用例允许的源码级函数直调方式核验",
+  "probeValues": "占位密码字符串，非真实凭证"
+}

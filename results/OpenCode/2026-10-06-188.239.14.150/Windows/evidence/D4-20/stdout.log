@@ -1,0 +1,79 @@
+{
+  "caseId": "D4-20",
+  "status": "PASS",
+  "why": "拒绝路径零执行成立：plan 阶段仅产出计划与 approvalToken，用户拒绝后 ECS/VPC 资源身份集合完全一致；approvedByUser=false 与伪造 token 两条负向路径均被拒且无副作用",
+  "executedAt": "20261006060629",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "bogusVpc": "00000000-0000-0000-0000-000000000000",
+  "before": {
+    "ecsIds": [],
+    "ecsCount": 0,
+    "vpcIds": [],
+    "vpcCount": 0
+  },
+  "afterReject": {
+    "ecsIds": [],
+    "ecsCount": 0,
+    "vpcIds": [],
+    "vpcCount": 0
+  },
+  "afterNegative": {
+    "ecsIds": [],
+    "ecsCount": 0,
+    "vpcIds": [],
+    "vpcCount": 0
+  },
+  "fakeToken": {
+    "status": "rejected",
+    "code": "CONFIRM_TOKEN_NOT_FOUND"
+  },
+  "noApprovalError": "approvedByUser must be true after explicit user approval for this exact command.",
+  "rows": [
+    {
+      "id": "plan 阶段签发 approvalToken 且 safeToRun=false",
+      "ok": true,
+      "actual": {
+        "tokenIssued": true,
+        "safeToRun": false,
+        "decision": "deny"
+      }
+    },
+    {
+      "id": "拒绝前后 ECS 实例身份集合一致(零执行)",
+      "ok": true,
+      "actual": {
+        "before": [],
+        "after": []
+      }
+    },
+    {
+      "id": "拒绝前后 VPC 身份集合一致(零执行)",
+      "ok": true,
+      "actual": {
+        "beforeCount": 0,
+        "afterCount": 0,
+        "before": [],
+        "after": []
+      }
+    },
+    {
+      "id": "approvedByUser=false 时执行被拒",
+      "ok": true,
+      "actual": "approvedByUser must be true after explicit user approval for this exact command."
+    },
+    {
+      "id": "伪造 approvalToken 执行被拒且零副作用",
+      "ok": true,
+      "actual": {
+        "fakeToken": {
+          "status": "rejected",
+          "code": "CONFIRM_TOKEN_NOT_FOUND"
+        },
+        "vpcBefore": [],
+        "vpcAfter": []
+      }
+    }
+  ],
+  "violations": []
+}

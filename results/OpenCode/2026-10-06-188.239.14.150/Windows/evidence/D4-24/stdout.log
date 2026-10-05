@@ -1,0 +1,241 @@
+{
+  "caseId": "D4-24",
+  "status": "PASS",
+  "why": "token 生命周期成立：7 项断言全部通过——confirm token 二次确认返回 already_processed、未知 token 返回 CONFIRM_TOKEN_NOT_FOUND；approvalToken 过期返回 CONFIRM_TOKEN_EXPIRED 且零执行、二次使用返回 already_processed",
+  "executedAt": "20261006061446",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "driver": {
+    "caseId": "D4-24",
+    "steps": [
+      {
+        "label": "persist A",
+        "value": {
+          "status": "ok",
+          "scope": "persist",
+          "backedUp": false,
+          "obs": {
+            "configured": true
+          },
+          "hcloud": {
+            "ok": true,
+            "error": ""
+          },
+          "note": "S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority."
+        }
+      },
+      {
+        "label": "persist B",
+        "value": {
+          "status": "needs_confirmation",
+          "confirmToken": "switch-1791238485581-yko7hh",
+          "options": [
+            {
+              "key": "s1",
+              "label": "以 S1 现有账号为准（不切换，恢复 backup）"
+            },
+            {
+              "key": "newImported",
+              "label": "以新账号（235a09ed）为准，覆盖 S1 并同步全部凭证文件"
+            }
+          ]
+        }
+      },
+      {
+        "label": "confirm #1",
+        "value": {
+          "status": "ok",
+          "outcome": "aborted",
+          "message": "保持 S1 现有账号，未覆盖。"
+        }
+      },
+      {
+        "label": "confirm #2 (repeat)",
+        "value": {
+          "status": "ok",
+          "outcome": "already_processed"
+        }
+      },
+      {
+        "label": "confirm unknown token",
+        "value": {
+          "status": "rejected",
+          "code": "CONFIRM_TOKEN_NOT_FOUND"
+        }
+      },
+      {
+        "label": "expired approvalToken",
+        "value": {
+          "backdated": true,
+          "result": {
+            "status": "rejected",
+            "code": "CONFIRM_TOKEN_EXPIRED"
+          }
+        }
+      },
+      {
+        "label": "approvalToken reuse",
+        "value": {
+          "first": {
+            "ok": true,
+            "exitCode": 0,
+            "signal": null,
+            "stdout": "{\n  \"count\": 0,\n  \"servers\": [],\n  \"buckets\": []\n}",
+            "stderr": "",
+            "plan": {
+              "executable": "hcloud",
+              "args": [
+                "ECS",
+                "ListServersDetails"
+              ],
+              "command": "hcloud ECS ListServersDetails",
+              "executableBlock": "hcloud ECS ListServersDetails",
+              "warnings": [],
+              "classification": {
+                "decision": "allow",
+                "risk": "read_only",
+                "reason": "Command appears to be a read-only Huawei Cloud operation.",
+                "service": "ECS",
+                "operation": "ListServersDetails",
+                "args": [
+                  "ECS",
+                  "ListServersDetails"
+                ]
+              },
+              "sgFindings": [],
+              "approvalToken": "89d7e557-52f9-49fc-8cf2-0509df425639",
+              "safeToRun": true
+            },
+            "retries": 0,
+            "attempts": 1,
+            "approved": true
+          },
+          "second": {
+            "status": "ok",
+            "outcome": "already_processed"
+          }
+        }
+      }
+    ],
+    "rows": [
+      {
+        "id": "账号 A 首次 persist 成功",
+        "ok": true,
+        "actual": {
+          "status": "ok"
+        }
+      },
+      {
+        "id": "persist 不同账号返回 needs_confirmation + confirmToken",
+        "ok": true,
+        "actual": {
+          "status": "needs_confirmation",
+          "hasToken": true
+        }
+      },
+      {
+        "id": "首次 confirm 生效(s1 -> aborted)",
+        "ok": true,
+        "actual": {
+          "status": "ok",
+          "outcome": "aborted",
+          "message": "保持 S1 现有账号，未覆盖。"
+        }
+      },
+      {
+        "id": "同一 confirmToken 二次确认返回 already_processed",
+        "ok": true,
+        "actual": {
+          "status": "ok",
+          "outcome": "already_processed"
+        }
+      },
+      {
+        "id": "未知 confirmToken 返回 CONFIRM_TOKEN_NOT_FOUND",
+        "ok": true,
+        "actual": {
+          "status": "rejected",
+          "code": "CONFIRM_TOKEN_NOT_FOUND"
+        }
+      },
+      {
+        "id": "过期 approvalToken 返回 CONFIRM_TOKEN_EXPIRED 且不执行",
+        "ok": true,
+        "actual": {
+          "status": "rejected",
+          "code": "CONFIRM_TOKEN_EXPIRED"
+        }
+      },
+      {
+        "id": "approvalToken 二次使用返回 already_processed",
+        "ok": true,
+        "actual": {
+          "status": "ok",
+          "outcome": "already_processed"
+        }
+      }
+    ]
+  },
+  "rows": [
+    {
+      "id": "账号 A 首次 persist 成功",
+      "ok": true,
+      "actual": {
+        "status": "ok"
+      }
+    },
+    {
+      "id": "persist 不同账号返回 needs_confirmation + confirmToken",
+      "ok": true,
+      "actual": {
+        "status": "needs_confirmation",
+        "hasToken": true
+      }
+    },
+    {
+      "id": "首次 confirm 生效(s1 -> aborted)",
+      "ok": true,
+      "actual": {
+        "status": "ok",
+        "outcome": "aborted",
+        "message": "保持 S1 现有账号，未覆盖。"
+      }
+    },
+    {
+      "id": "同一 confirmToken 二次确认返回 already_processed",
+      "ok": true,
+      "actual": {
+        "status": "ok",
+        "outcome": "already_processed"
+      }
+    },
+    {
+      "id": "未知 confirmToken 返回 CONFIRM_TOKEN_NOT_FOUND",
+      "ok": true,
+      "actual": {
+        "status": "rejected",
+        "code": "CONFIRM_TOKEN_NOT_FOUND"
+      }
+    },
+    {
+      "id": "过期 approvalToken 返回 CONFIRM_TOKEN_EXPIRED 且不执行",
+      "ok": true,
+      "actual": {
+        "status": "rejected",
+        "code": "CONFIRM_TOKEN_EXPIRED"
+      }
+    },
+    {
+      "id": "approvalToken 二次使用返回 already_processed",
+      "ok": true,
+      "actual": {
+        "status": "ok",
+        "outcome": "already_processed"
+      }
+    }
+  ],
+  "violations": [],
+  "hermeticHome": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-4083681250\\d4-24-home-UZ9oP2",
+  "note": "hermetic: 凭证/approvals/OBS/KooCLI 全部落在临时目录，hcloud 由 shim 拦截",
+  "observation": "persist 通过 resolveManagedProfile() 读取 KooCLI current profile，只读不创建：全新环境（无 .hcloud/config.json）首次 persist 返回 partial + hcloud.reason=KooCLI current profile unresolved，S2 不会同步"
+}

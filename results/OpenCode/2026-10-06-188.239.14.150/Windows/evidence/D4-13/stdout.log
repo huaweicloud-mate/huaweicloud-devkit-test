@@ -1,0 +1,197 @@
+{
+  "caseId": "D4-13",
+  "status": "FAIL",
+  "why": "最小权限断言不成立：[\"只读子账号输出未裸回显 AK/SK\"]（runner exit=0）",
+  "executedAt": "20261006061318",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "runner": "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\huaweicloud-devkit-test\\scripts\\run-as-readonly.py",
+  "helper": {
+    "caseId": "D4-13",
+    "readonlyCredentialFile": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.readonly.json",
+    "akSuffix": "G4MI",
+    "hasSecurityToken": false,
+    "injectedTokenInEnv": false,
+    "steps": [
+      {
+        "label": "readonly 读: ECS ListServersDetails",
+        "ok": true,
+        "error": null,
+        "permissionDenied": false,
+        "validationError": false,
+        "resourceNotFound": false,
+        "blockedByApprovalGate": false,
+        "leakedAk": true,
+        "leakedSk": true,
+        "leakLocation": {
+          "at": 886,
+          "contextMasked": "s to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServersDetails\",\"args\":[\"--cli-access-key=<ak-or-sk-redacted>\",\"--cli-secret-key="
+        },
+        "leakFieldPath": [
+          {
+            "secret": "AK",
+            "path": "result.plan.classification.args[0]"
+          },
+          {
+            "secret": "SK",
+            "path": "result.plan.classification.args[1]"
+          }
+        ],
+        "textSample": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"count\\\": 0,\\n  \\\"servers\\\": []\\n}\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"--cli-access-key=<redacted>\",\"--cli-secret-key=<redacted>\",\"--cli-region=cn-north-4\",\"ECS\",\"ListServersDetails\"],\"command\":\"hcloud --cli-access-key=<redacted> "
+      },
+      {
+        "label": "readonly 写(已审批放行): IAM CreateUser <非法用户名>",
+        "ok": true,
+        "error": null,
+        "permissionDenied": true,
+        "validationError": false,
+        "resourceNotFound": false,
+        "blockedByApprovalGate": false,
+        "leakedAk": false,
+        "leakedSk": false,
+        "leakLocation": null,
+        "leakFieldPath": [],
+        "textSample": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"error\\\": {\\n    \\\"code\\\": 403,\\n    \\\"encoded_authorization_message\\\": \\\"Egpjbi1ub3J0aC00GiA4NDI1OTExODZmYTI0NTkyOWUxYjVjMTg2YTRjZjc4NCD2CioMGgYKok1O5DwMfcIs.pQqrXYWDSyvxULOLVYk0Qka0XFI6osteh4pymPNbIdTOMKa0dGy/h8oxwnMFOHpaUigCSOkj6yUkPdv3NmQw6vS"
+      },
+      {
+        "label": "readonly 写后复核: ECS ListServersDetails",
+        "ok": true,
+        "error": null,
+        "permissionDenied": false,
+        "validationError": false,
+        "resourceNotFound": false,
+        "blockedByApprovalGate": false,
+        "leakedAk": true,
+        "leakedSk": true,
+        "leakLocation": {
+          "at": 886,
+          "contextMasked": "s to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServersDetails\",\"args\":[\"--cli-access-key=<ak-or-sk-redacted>\",\"--cli-secret-key="
+        },
+        "leakFieldPath": [
+          {
+            "secret": "AK",
+            "path": "result.plan.classification.args[0]"
+          },
+          {
+            "secret": "SK",
+            "path": "result.plan.classification.args[1]"
+          }
+        ],
+        "textSample": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"count\\\": 0,\\n  \\\"servers\\\": []\\n}\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"--cli-access-key=<redacted>\",\"--cli-secret-key=<redacted>\",\"--cli-region=cn-north-4\",\"ECS\",\"ListServersDetails\"],\"command\":\"hcloud --cli-access-key=<redacted> "
+      }
+    ],
+    "badUserName": "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+    "domain": "842591186fa245929e1b5c186a4cf784",
+    "postCheckOk": true,
+    "leak": true
+  },
+  "credFile": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.readonly.json",
+  "credExists": true,
+  "helperExit": 0,
+  "adminContrast": {
+    "exitCode": 0,
+    "spawnError": null,
+    "exe": "C:/Users/Administrator/hcloud/hcloud.exe",
+    "stdout": "{\n  \"errorcode\": [\n    \"1101\"\n  ]\n}\n获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度\n请求诊断请参考以下内容:\n+---+--------+--------+------------------------------+------------------------------+------------------------------+\n|No.|产品名称| 错误码 |           错误信息           |             描述             |           处理措施           |\n+---+--------+--------+------------------------------+------------------------------+------------------------------+\n| 1 |  IAM   |  1101  |      Invalid username.       |       用户名校验失败。       |        请检查用户名。        |\n+---+--------+--------+------------------------------+--------------------------",
+    "stderr": ""
+  },
+  "rows": [
+    {
+      "id": "只读子账号凭证文件存在且未注入 security token",
+      "ok": true,
+      "actual": {
+        "credExists": true,
+        "injectedTokenInEnv": false
+      }
+    },
+    {
+      "id": "只读身份读操作成功(ECS ListServersDetails)",
+      "ok": true,
+      "actual": {
+        "label": "readonly 读: ECS ListServersDetails",
+        "ok": true,
+        "error": null,
+        "permissionDenied": false,
+        "validationError": false,
+        "resourceNotFound": false,
+        "blockedByApprovalGate": false,
+        "leakedAk": true,
+        "leakedSk": true,
+        "leakLocation": {
+          "at": 886,
+          "contextMasked": "s to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServersDetails\",\"args\":[\"--cli-access-key=<ak-or-sk-redacted>\",\"--cli-secret-key="
+        },
+        "leakFieldPath": [
+          {
+            "secret": "AK",
+            "path": "result.plan.classification.args[0]"
+          },
+          {
+            "secret": "SK",
+            "path": "result.plan.classification.args[1]"
+          }
+        ],
+        "textSample": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"count\\\": 0,\\n  \\\"servers\\\": []\\n}\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"--cli-access-key=<redacted>\",\"--cli-secret-key=<redacted>\",\"--cli-region=cn-north-4\",\"ECS\",\"ListServersDetails\"],\"command\":\"hcloud --cli-access-key=<redacted> "
+      }
+    },
+    {
+      "id": "只读身份写操作被 IAM 403 拒绝(非审批门/非参数校验)",
+      "ok": true,
+      "actual": {
+        "label": "readonly 写(已审批放行): IAM CreateUser <非法用户名>",
+        "ok": true,
+        "error": null,
+        "permissionDenied": true,
+        "validationError": false,
+        "resourceNotFound": false,
+        "blockedByApprovalGate": false,
+        "leakedAk": false,
+        "leakedSk": false,
+        "leakLocation": null,
+        "leakFieldPath": [],
+        "textSample": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"error\\\": {\\n    \\\"code\\\": 403,\\n    \\\"encoded_authorization_message\\\": \\\"Egpjbi1ub3J0aC00GiA4NDI1OTExODZmYTI0NTkyOWUxYjVjMTg2YTRjZjc4NCD2CioMGgYKok1O5DwMfcIs.pQqrXYWDSyvxULOLVYk0Qka0XFI6osteh4pymPNbIdTOMKa0dGy/h8oxwnMFOHpaUigCSOkj6yUkPdv3NmQw6vS"
+      }
+    },
+    {
+      "id": "管理员同命令未被 403/Unauthorized(止于参数校验) => 403 来自授权层",
+      "ok": true,
+      "actual": {
+        "adminDenied": false,
+        "adminValidation": true,
+        "sample": "{\"exitCode\":0,\"spawnError\":null,\"exe\":\"C:/Users/Administrator/hcloud/hcloud.exe\",\"stdout\":\"{\\n  \\\"errorcode\\\": [\\n    \\\"1101\\\"\\n  ]\\n}\\n获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度\\n请求诊断请参考以下内容:\\n+---+--------+--------+------------------------------+"
+      }
+    },
+    {
+      "id": "写操作未创建任何 IAM 用户",
+      "ok": true,
+      "actual": {
+        "postCheckOk": true,
+        "note": "对照命令使用 80 字符非法用户名，管理员侧返回 1101 参数校验失败，两侧均不可能创建用户"
+      }
+    },
+    {
+      "id": "只读子账号输出未裸回显 AK/SK",
+      "ok": false,
+      "actual": {
+        "leak": true,
+        "leakLocation": {
+          "at": 886,
+          "contextMasked": "s to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServersDetails\",\"args\":[\"--cli-access-key=<ak-or-sk-redacted>\",\"--cli-secret-key="
+        }
+      }
+    }
+  ],
+  "violations": [
+    {
+      "id": "只读子账号输出未裸回显 AK/SK",
+      "ok": false,
+      "actual": {
+        "leak": true,
+        "leakLocation": {
+          "at": 886,
+          "contextMasked": "s to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"ListServersDetails\",\"args\":[\"--cli-access-key=<ak-or-sk-redacted>\",\"--cli-secret-key="
+        }
+      }
+    }
+  ]
+}

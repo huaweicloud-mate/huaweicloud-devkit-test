@@ -1,0 +1,187 @@
+{
+  "caseId": "D4-8",
+  "status": "FAIL",
+  "why": "Python/Node 策略一致性断言不成立，2/7 项不一致。根因：hooks/huaweicloud-safety.py 的 WRITE_OPERATION_RE 为 r\"(^|[A-Za-z0-9])(<前缀>)w*\"，要求写操作前缀紧邻行首或字母数字，而 KooCLI 实际形态 'hcloud <Service> <Operation>' 中 Operation 前是空格，正则不匹配，导致 Python hook 放行未审批写操作（Node 侧 classifyTextCommand 判 deny）。违规项：[\"双路径判定一致: hcloud 空格分隔写操作(hcloud ECS DeleteServers --servers x)\",\"双路径判定一致: shell 包装写操作(bash -c \\\"hcloud ECS DeleteServers\\\")\"]",
+  "executedAt": "20261006055848",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "pyHook": "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\hdk\\plugins\\huaweicloud-core\\hooks\\huaweicloud-safety.py",
+  "samples": [
+    {
+      "label": "读取 .obsutilconfig 凭证文件",
+      "command": "cat C:\\Users\\Administrator\\.obsutilconfig"
+    },
+    {
+      "label": "读取 .hcloud 配置目录",
+      "command": "cat C:\\Users\\Administrator\\.hcloud\\config.json"
+    },
+    {
+      "label": "打印凭证环境变量",
+      "command": "echo $HW_SECRET_KEY"
+    },
+    {
+      "label": "hcloud 空格分隔写操作(hcloud ECS DeleteServers --servers x)",
+      "command": "hcloud ECS DeleteServers --servers probe-id"
+    },
+    {
+      "label": "hcloud 前缀粘连写操作(hcloud ECSxDeleteServers)",
+      "command": "hcloud ECSxDeleteServers"
+    },
+    {
+      "label": "shell 包装写操作(bash -c \"hcloud ECS DeleteServers\")",
+      "command": "bash -c 'hcloud ECS DeleteServers --servers probe-id'"
+    },
+    {
+      "label": "只读调用",
+      "command": "huaweicloud_run_readonly_command ECS ListServersDetails"
+    }
+  ],
+  "rows": [
+    {
+      "id": "双路径判定一致: 读取 .obsutilconfig 凭证文件",
+      "ok": true,
+      "actual": {
+        "python": {
+          "exit": 0,
+          "decision": "allow",
+          "denied": false,
+          "reason": ""
+        },
+        "node": {
+          "decision": "allow",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "双路径判定一致: 读取 .hcloud 配置目录",
+      "ok": true,
+      "actual": {
+        "python": {
+          "exit": 0,
+          "decision": "deny",
+          "denied": true,
+          "reason": "Huawei Cloud safety hook blocked this action: reading Huawei Cloud credential/profile files can expose AK/SK or tokens. Use redacted toolkit tools."
+        },
+        "node": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "双路径判定一致: 打印凭证环境变量",
+      "ok": true,
+      "actual": {
+        "python": {
+          "exit": 0,
+          "decision": "deny",
+          "denied": true,
+          "reason": "Huawei Cloud safety hook blocked this action: printing cloud credential environment variables is not allowed."
+        },
+        "node": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "双路径判定一致: hcloud 空格分隔写操作(hcloud ECS DeleteServers --servers x)",
+      "ok": false,
+      "actual": {
+        "python": {
+          "exit": 0,
+          "decision": "allow",
+          "denied": false,
+          "reason": ""
+        },
+        "node": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "双路径判定一致: hcloud 前缀粘连写操作(hcloud ECSxDeleteServers)",
+      "ok": true,
+      "actual": {
+        "python": {
+          "exit": 0,
+          "decision": "deny",
+          "denied": true,
+          "reason": "Huawei Cloud safety hook blocked this action: unapproved Huawei Cloud write operations must be planned first and explicitly approved by the user."
+        },
+        "node": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "双路径判定一致: shell 包装写操作(bash -c \"hcloud ECS DeleteServers\")",
+      "ok": false,
+      "actual": {
+        "python": {
+          "exit": 0,
+          "decision": "allow",
+          "denied": false,
+          "reason": ""
+        },
+        "node": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "双路径判定一致: 只读调用",
+      "ok": true,
+      "actual": {
+        "python": {
+          "exit": 0,
+          "decision": "allow",
+          "denied": false,
+          "reason": ""
+        },
+        "node": {
+          "decision": "allow",
+          "ruleId": null
+        }
+      }
+    }
+  ],
+  "violations": [
+    {
+      "id": "双路径判定一致: hcloud 空格分隔写操作(hcloud ECS DeleteServers --servers x)",
+      "ok": false,
+      "actual": {
+        "python": {
+          "exit": 0,
+          "decision": "allow",
+          "denied": false,
+          "reason": ""
+        },
+        "node": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "双路径判定一致: shell 包装写操作(bash -c \"hcloud ECS DeleteServers\")",
+      "ok": false,
+      "actual": {
+        "python": {
+          "exit": 0,
+          "decision": "allow",
+          "denied": false,
+          "reason": ""
+        },
+        "node": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "caseId": "D4-27",
+  "status": "FAIL",
+  "why": "双路径脱敏断言不成立，2/6 项违规：[\"redactSecrets 文本路径脱敏全部明文凭证\",\"redactOutput 文本路径脱敏全部明文凭证\"]。根因：safety-policy.mjs redactString() 的 /(AK|SK)s*[:=]s*(...)/g 未加 re.I 标志，小写 'ak=' / 'sk='（OBS .obsutilconfig 与 KooCLI configure show 的实际键名形态）不被脱敏，明文 AK/SK 原样出现在输出；securityToken/adminPass/password 形态正常",
+  "executedAt": "20261006055814",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "inputLines": [
+    "server: probe-b",
+    "ak=AKIAPROBED4D27OUTPUT00001",
+    "sk=ProbeD27CliOutputSecretKey0000000000",
+    "securityToken=ProbeD27SecurityToken000000000000",
+    "adminPass=ProbeD27AdminPass00000000000",
+    "password: ProbeD27AdminPass00000000000",
+    "region: cn-north-4",
+    "flavor: t6.smallest"
+  ],
+  "redactSecretsOutput": "server: probe-b\nak=AKIAPROBED4D27OUTPUT00001\nsk=ProbeD27CliOutputSecretKey0000000000\nsecurityToken=<redacted>\nadminPass=<redacted>\npassword: <redacted>\nregion: cn-north-4\nflavor: t6.smallest",
+  "redactOutputOutput": "server: probe-b\nak=AKIAPROBED4D27OUTPUT00001\nsk=ProbeD27CliOutputSecretKey0000000000\nsecurityToken=<redacted>\nadminPass=<redacted>\npassword: <redacted>\nregion: cn-north-4\nflavor: t6.smallest",
+  "upperCaseOutput": "AK=<redacted>\nSK=<redacted>",
+  "jsonOutput": "{\n  \"ak\": \"<redacted>\",\n  \"secretKey\": \"<redacted>\",\n  \"securityToken\": \"<redacted>\",\n  \"adminPass\": \"<redacted>\",\n  \"region\": \"cn-north-4\"\n}",
+  "rows": [
+    {
+      "id": "redactSecrets 文本路径脱敏全部明文凭证",
+      "ok": false,
+      "actual": {
+        "leakedSecrets": [
+          "AKIAPROBED4D27OUTPUT00001",
+          "ProbeD27CliOutputSecretKey0000000000"
+        ]
+      }
+    },
+    {
+      "id": "redactOutput 文本路径脱敏全部明文凭证",
+      "ok": false,
+      "actual": {
+        "leakedOutput": [
+          "AKIAPROBED4D27OUTPUT00001",
+          "ProbeD27CliOutputSecretKey0000000000"
+        ]
+      }
+    },
+    {
+      "id": "redactOutput JSON 路径脱敏全部明文凭证",
+      "ok": true,
+      "actual": {
+        "leakedJson": []
+      }
+    },
+    {
+      "id": "大写 AK=/SK= 形态被脱敏(定位大小写敏感缺陷)",
+      "ok": true,
+      "actual": {
+        "leakedUpper": []
+      }
+    },
+    {
+      "id": "redactSecrets 未误伤非敏感字段",
+      "ok": true,
+      "actual": {
+        "kept": [
+          "server: probe-b",
+          "region: cn-north-4",
+          "flavor: t6.smallest"
+        ]
+      }
+    },
+    {
+      "id": "redactOutput 未误伤非敏感字段",
+      "ok": true,
+      "actual": {
+        "kept": [
+          "server: probe-b",
+          "region: cn-north-4",
+          "flavor: t6.smallest"
+        ]
+      }
+    }
+  ],
+  "violations": [
+    {
+      "id": "redactSecrets 文本路径脱敏全部明文凭证",
+      "ok": false,
+      "actual": {
+        "leakedSecrets": [
+          "AKIAPROBED4D27OUTPUT00001",
+          "ProbeD27CliOutputSecretKey0000000000"
+        ]
+      }
+    },
+    {
+      "id": "redactOutput 文本路径脱敏全部明文凭证",
+      "ok": false,
+      "actual": {
+        "leakedOutput": [
+          "AKIAPROBED4D27OUTPUT00001",
+          "ProbeD27CliOutputSecretKey0000000000"
+        ]
+      }
+    }
+  ],
+  "probeValues": "占位凭证字符串，非真实凭证"
+}

@@ -1,0 +1,588 @@
+{
+  "caseId": "D4-17",
+  "status": "FAIL",
+  "why": "异常输入 fail-closed 断言不成立，5/11 项违规：[\"携带写操作标记的畸形输入不得放行[command]: 截断 JSON 命令片段 {\\\"args\\\":[\\\"ECS\\\",\\\"Delete\",\"携带写操作标记的畸形输入不得放行[command]: JSON 数组夹带写操作字符串\",\"携带写操作标记的畸形输入不得放行[artifacts]: artifact 内截断 JSON 夹带 DeleteServers\",\"携带写操作标记的畸形输入不得放行[artifacts]: artifact 内 10k 不透明串夹带 DeleteServers\",\"携带写操作标记的畸形输入不得放行[deployPlan]: deploy plan 内 10k 不透明串夹带 DeleteServers\"]。根因：classifyTextCommand 只做字面量关键字匹配，无畸形/截断/超大载荷的规范化与降级策略——(1) 'hcloud ECS DeleteServers ' + 10k 不透明参数由 deny 降级为 warn（正常形态同命令为 deny）；(2) 截断/数组/夹带形态的写操作载荷被判为 allow，属 fail-open；hook_check_artifacts 对含写操作标记的畸形 JSON 内容同样 allow",
+  "executedAt": "20261006061504",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "noiseResults": [
+    {
+      "label": "空字符串",
+      "channel": null,
+      "crashed": null,
+      "command": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "deny",
+        "ruleId": null
+      }
+    },
+    {
+      "label": "纯空白",
+      "channel": null,
+      "crashed": null,
+      "command": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "allow",
+        "ruleId": null
+      }
+    },
+    {
+      "label": "深层嵌套(200层)",
+      "channel": null,
+      "crashed": null,
+      "command": {
+        "decision": "allow",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "allow",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "allow",
+        "ruleId": null
+      }
+    },
+    {
+      "label": "数组/标量异常类型",
+      "channel": null,
+      "crashed": null,
+      "command": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "allow",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "deny",
+        "ruleId": null
+      }
+    }
+  ],
+  "dangerResults": [
+    {
+      "label": "超长不透明参数(10k)夹带 DeleteServers",
+      "channel": "command",
+      "crashed": null,
+      "command": {
+        "decision": "warn",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "allow",
+        "ruleId": null
+      }
+    },
+    {
+      "label": "控制字符/零宽字符夹带 DeleteServers",
+      "channel": "command",
+      "crashed": null,
+      "command": {
+        "decision": "warn",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "deny",
+        "ruleId": null
+      }
+    },
+    {
+      "label": "截断 JSON 命令片段 {\"args\":[\"ECS\",\"Delete",
+      "channel": "command",
+      "crashed": null,
+      "command": {
+        "decision": "allow",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "allow",
+        "ruleId": null
+      }
+    },
+    {
+      "label": "JSON 数组夹带写操作字符串",
+      "channel": "command",
+      "crashed": null,
+      "command": {
+        "decision": "allow",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "deny",
+        "ruleId": null
+      }
+    },
+    {
+      "label": "artifact 内截断 JSON 夹带 DeleteServers",
+      "channel": "artifacts",
+      "crashed": null,
+      "command": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "allow",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "deny",
+        "ruleId": null
+      }
+    },
+    {
+      "label": "artifact 内 10k 不透明串夹带 DeleteServers",
+      "channel": "artifacts",
+      "crashed": null,
+      "command": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "allow",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "deny",
+        "ruleId": null
+      }
+    },
+    {
+      "label": "deploy plan 内 10k 不透明串夹带 DeleteServers",
+      "channel": "deployPlan",
+      "crashed": null,
+      "command": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "artifacts": {
+        "decision": "deny",
+        "ruleId": null
+      },
+      "deployPlan": {
+        "decision": "allow",
+        "ruleId": null
+      }
+    }
+  ],
+  "warnDowngrades": 2,
+  "rows": [
+    {
+      "id": "畸形输入不崩溃: 空字符串",
+      "ok": true,
+      "actual": {
+        "label": "空字符串",
+        "channel": null,
+        "crashed": null,
+        "command": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "畸形输入不崩溃: 纯空白",
+      "ok": true,
+      "actual": {
+        "label": "纯空白",
+        "channel": null,
+        "crashed": null,
+        "command": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "allow",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "畸形输入不崩溃: 深层嵌套(200层)",
+      "ok": true,
+      "actual": {
+        "label": "深层嵌套(200层)",
+        "channel": null,
+        "crashed": null,
+        "command": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "allow",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "畸形输入不崩溃: 数组/标量异常类型",
+      "ok": true,
+      "actual": {
+        "label": "数组/标量异常类型",
+        "channel": null,
+        "crashed": null,
+        "command": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[command]: 超长不透明参数(10k)夹带 DeleteServers",
+      "ok": true,
+      "actual": {
+        "label": "超长不透明参数(10k)夹带 DeleteServers",
+        "channel": "command",
+        "crashed": null,
+        "payload": {
+          "decision": "warn",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "warn",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "allow",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[command]: 控制字符/零宽字符夹带 DeleteServers",
+      "ok": true,
+      "actual": {
+        "label": "控制字符/零宽字符夹带 DeleteServers",
+        "channel": "command",
+        "crashed": null,
+        "payload": {
+          "decision": "warn",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "warn",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[command]: 截断 JSON 命令片段 {\"args\":[\"ECS\",\"Delete",
+      "ok": false,
+      "actual": {
+        "label": "截断 JSON 命令片段 {\"args\":[\"ECS\",\"Delete",
+        "channel": "command",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "allow",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[command]: JSON 数组夹带写操作字符串",
+      "ok": false,
+      "actual": {
+        "label": "JSON 数组夹带写操作字符串",
+        "channel": "command",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[artifacts]: artifact 内截断 JSON 夹带 DeleteServers",
+      "ok": false,
+      "actual": {
+        "label": "artifact 内截断 JSON 夹带 DeleteServers",
+        "channel": "artifacts",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[artifacts]: artifact 内 10k 不透明串夹带 DeleteServers",
+      "ok": false,
+      "actual": {
+        "label": "artifact 内 10k 不透明串夹带 DeleteServers",
+        "channel": "artifacts",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[deployPlan]: deploy plan 内 10k 不透明串夹带 DeleteServers",
+      "ok": false,
+      "actual": {
+        "label": "deploy plan 内 10k 不透明串夹带 DeleteServers",
+        "channel": "deployPlan",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "allow",
+          "ruleId": null
+        }
+      }
+    }
+  ],
+  "violations": [
+    {
+      "id": "携带写操作标记的畸形输入不得放行[command]: 截断 JSON 命令片段 {\"args\":[\"ECS\",\"Delete",
+      "ok": false,
+      "actual": {
+        "label": "截断 JSON 命令片段 {\"args\":[\"ECS\",\"Delete",
+        "channel": "command",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "allow",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[command]: JSON 数组夹带写操作字符串",
+      "ok": false,
+      "actual": {
+        "label": "JSON 数组夹带写操作字符串",
+        "channel": "command",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[artifacts]: artifact 内截断 JSON 夹带 DeleteServers",
+      "ok": false,
+      "actual": {
+        "label": "artifact 内截断 JSON 夹带 DeleteServers",
+        "channel": "artifacts",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[artifacts]: artifact 内 10k 不透明串夹带 DeleteServers",
+      "ok": false,
+      "actual": {
+        "label": "artifact 内 10k 不透明串夹带 DeleteServers",
+        "channel": "artifacts",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "deny",
+          "ruleId": null
+        }
+      }
+    },
+    {
+      "id": "携带写操作标记的畸形输入不得放行[deployPlan]: deploy plan 内 10k 不透明串夹带 DeleteServers",
+      "ok": false,
+      "actual": {
+        "label": "deploy plan 内 10k 不透明串夹带 DeleteServers",
+        "channel": "deployPlan",
+        "crashed": null,
+        "payload": {
+          "decision": "allow",
+          "ruleId": null
+        },
+        "command": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "artifacts": {
+          "decision": "deny",
+          "ruleId": null
+        },
+        "deployPlan": {
+          "decision": "allow",
+          "ruleId": null
+        }
+      }
+    }
+  ]
+}
