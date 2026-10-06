@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "caseId": "D4-13",
+  "title": "最小权限凭证通过率",
+  "expected": "只读子账号只读可用、写被 IAM 拒绝（最小权限）",
+  "actual": "注入 env AK 指纹=9c2d05c1 securityToken注入=false(期望 false) | resolveCredentialsWithRuntime AK指纹=52966832 | validateIamCredentials valid=true projectId=46c1fd48... | 只读 ListServersDetails -> 可用: {\n  \"count\": 0,\n  \"servers\": []\n}\n | 只读凭证 CreateVpc(写) -> 被拒(权限不足) : {\n  \"code\": \"VPC.0010\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Rules on create_router by *** disallowed by polic => 只读IAM校验=true 只读可用=true 写被拒=true",
+  "detail": "",
+  "executedAt": "20261006210352",
+  "probe": "probe_d413.mjs"
+}
