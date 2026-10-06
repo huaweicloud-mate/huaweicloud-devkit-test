@@ -1,0 +1,63 @@
+{
+  "total": {
+    "pass": 5,
+    "fail": 6
+  },
+  "results": {
+    "D3-S1": {
+      "status": "FAIL",
+      "desc": "场景-只读查ECS 路由命中 ECS",
+      "detail": "recommendedServices=[\"Run hcloud --help to list available services.\"]"
+    },
+    "D3-S2": {
+      "status": "FAIL",
+      "desc": "场景-删VPC先确认 路由命中 VPC",
+      "detail": "recommendedServices=[\"Run hcloud --help to list available services.\"]"
+    },
+    "D3-S3": {
+      "status": "FAIL",
+      "desc": "场景-沙箱预览出URL 路由命中 Sandbox/DevStation",
+      "detail": "recommendedServices=[\"Run hcloud --help to list available services.\"]"
+    },
+    "D3-S4": {
+      "status": "PASS",
+      "desc": "场景-领券闭环 路由命中 Incentive Voucher",
+      "detail": "recommendedServices=[\"Incentive Voucher\"]"
+    },
+    "D3-S5": {
+      "status": "FAIL",
+      "desc": "场景-复合意图分层路由 命中多服务",
+      "detail": "recommendedServices=[\"Run hcloud --help to list available services.\"]"
+    },
+    "D3-S6": {
+      "status": "PASS",
+      "desc": "场景-FunctionGraph定时 路由命中 FunctionGraph",
+      "detail": "recommendedServices=[\"FunctionGraph\"]"
+    },
+    "D3-S7": {
+      "status": "PASS",
+      "desc": "场景-跨服务Web+RDS 路由命中 RDS",
+      "detail": "recommendedServices=[\"RDS\"]"
+    },
+    "D3-S8": {
+      "status": "PASS",
+      "desc": "场景-排障 explain_error(APIGW.0301) 返回可执行下一步检查建议",
+      "detail": "{\"service\":\"unknown\",\"errorCode\":\"APIGW.0301\",\"requestId\":\"\",\"suggestions\":[\"APIGW.0301: API Gateway layer error. Incorrect IAM authentication information — ver"
+    },
+    "D4-6": {
+      "status": "PASS",
+      "desc": "adminPass 值被 <redacted> 替换（源码级直调）",
+      "detail": "redactSecrets => hcloud ECS CreateServers --adminPass=<redacted> --server_id=abc"
+    },
+    "D4-27": {
+      "status": "FAIL",
+      "desc": "小写 ak=/sk= 值被 <redacted> 替换（双路径一致）",
+      "detail": "redactSecrets => token=<redacted> ak=AKID456 sk=secret789"
+    },
+    "D8-9": {
+      "status": "FAIL",
+      "desc": "sanitizeValue 移除 AK/SK/token 等敏感值（设计契约）」",
+      "detail": "sanitizeValue('AK=ABC123DEF456GHI') => \"AK=ABC123DEF456GHI\""
+    }
+  }
+}
