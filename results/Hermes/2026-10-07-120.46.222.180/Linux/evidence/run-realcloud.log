@@ -1,0 +1,110 @@
+=== SUT ===
+HuaweiCloud DevKit CLI: 1.1.7
+
+=== HDK HEAD ===
+7456d05 Merge pull request #813 from huaweicloud/release-1.1.7
+=== 时间戳 2026-10-07 05:12:37 CST ===
+
+########## D4-13 (只读子账号) ##########
+=== D4-13 最小权限凭证通过率 (只读子账号 test001) ===
+注入 env HW_ACCESS_KEY 指纹 = 9c2d05c1
+HW_SECURITY_TOKEN 已注入 = false (期望 false)
+[1] resolveCredentialsWithRuntime 命中 AK 指纹 = 9c2d05c1 (env 覆盖文件, 动态切换)
+[2] validateIamCredentials(KeystoneListProjects 只读) -> valid=true projectId=46c1fd48...
+[3] 只读凭证 ListServersDetails(只读) -> 成功(可用) :: {
+  "count": 0,
+  "servers": []
+}
+
+[4] 只读凭证 CreateVpc(写) -> 被拒(权限不足)  :: {
+  "code": "VPC.0010",
+  "message": "{\"NeutronError\":{\"message\":\"Rules on create_router by *** disallowed by policy\",\"type\":\"PolicyNotAuthor
+
+只读 IAM 校验=true; 只读可用=true; 写被拒=true
+RESULT: PASS
+exit=0
+
+########## realcloud-newcases.mjs (D3-S1/S2/C13/S4) ##########
+D3-S1 FAIL routeOk=false readOk=true
+D3-S2 FAIL stillThere=false zero=true
+D3-C13 PASS set=true get=true del=true
+D3-S4 PASS claimed=true
+REALCLOUD-NEWCASES DONE
+exit=0
+
+########## D3-S2/probe.mjs (全量 ListVpcs) ##########
+D3-S2 PASS stillThere=true zero=true
+=== D3-S2 场景-删VPC先确认 (修正: 全量 ListVpcs 校验未确认前 VPC 仍在) ===
+[1] serviceCatalog("删除一个 VPC") -> services=["VPC","EIP"] skills=["huawei-vpc"]
+[2] 创建 VPC hdk1-s2-1321163019 -> f007edd4-8ff2-45e2-98f1-4e5a60f9a18a
+[3] plan_cli_command(DeleteVpc) -> decision=deny risk=write (期望 deny, 未自执行)
+[4] hook_check_command(DeleteVpc) -> decision=warn findings=1
+[5] 未确认前全量 ListVpcs 仍含本 VPC=true (零执行断言: plan 返回 deny 但未删除)
+[6] run_approved(DeleteVpc) -> ok=true exitCode=0
+[7] 确认删除后全量 ListVpcs 不再含本 VPC=true (归零)
+
+RESULT: PASS (未确认前仍在 + 确认后归零)
+exit=0
+
+########## realcloud-s3-d414.mjs (D3-S3/D4-14) ##########
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[2026-10-06T21:12:50.373Z] uploadProject: /tmp/multica-task-3324213099/d3s3-preview -> /workspace/d3s3-preview.tar.gz (archive=216 bytes, md5=780b58a568c8faf2413aa67b7b619edb)
+[2026-10-06T21:12:50.422Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-3324213099/sandbox-upload-1791321170344/d3s3-preview.tar.gz, size=216, remotePath=/workspace/d3s3-preview.tar.gz)
+[2026-10-06T21:12:50.422Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-06T21:12:50.423Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-06T21:12:50.470Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-06T21:12:50.517Z] deployFileServer: starting server on port 8888
+[2026-10-06T21:12:50.555Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 6265\r\n\u001b]133;C\u0007\r\n"
+[2026-10-06T21:12:50.555Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[2026-10-06T21:12:51.614Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-06T21:12:51.615Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-06T21:12:51.617Z] uploadViaHttpTunnel: tunnel ready, localPort=34019
+[2026-10-06T21:12:51.617Z] uploadViaHttpTunnel: waiting for server health on localhost:34019
+[2026-10-06T21:12:51.617Z] waitForServerReady: attempt 1, checking http://localhost:34019/health
+[2026-10-06T21:12:51.658Z] waitForServerReady: server ready on port 34019 after 0 retries
+[2026-10-06T21:12:51.658Z] uploadViaHttpTunnel: sending POST with 216 bytes
+[2026-10-06T21:12:51.699Z] uploadViaHttpTunnel: upload complete (bytes=216, md5=780b58a568c8faf2413aa67b7b619edb)
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+D3-S3 FAIL
+D4-14 PASS vpc=true ctsCreate=true zero=true
+REALCLOUD-S3-D414 DONE
+exit=0
+
+########## D3-S6/probe.mjs (FunctionGraph) ##########
+=== D3-S6 场景-FunctionGraph定时任务 (真云) ===
+[1] serviceCatalog("配置一个定时任务，定时触发函数") -> services=["Run hcloud --help to list available services."] skills=["Use huaweicloud-core to route intent."]
+[2] 前置: 清理历史遗留函数 test-d3-s6-timer (若存在)
+     DeleteFunction(test-d3-s6-timer) -> {
+  "error_code": "FSS.1051",
+  "error_msg": "The function does not exist.",
+  "details": [
+    {
+      "error_code": "F
+[3] CreateFunction(hdk1-s6-1321201688, inline Python3.9) -> 成功
+[4] CreateFunctionTrigger(TIMER, Rate 1m) -> 成功
+[5] ListFunctions 含 hdk1-s6-1321201688=true; ListFunctionTriggers 含 TIMER=true
+     trigger 详情: [
+  {
+    "trigger_id": "642c2c49-9655-44e4-b92c-edab8854b365",
+    "trigger_type_code": "TIMER",
+    "trigger_status": "ACTIVE",
+    "event_data": {
+      "name": "test-timer",
+      "schedule": "1m"
+[6] DeleteFunction(hdk1-s6-1321201688) -> ; 删除后 ListFunctions 不再含=true (归零)
+
+建函数=true; 触发器=true; URN核对=true; 触发器绑定=true; 归零=true => PASS
+RESULT: PASS
+exit=0
+
+ALL REALCLOUD E2E DONE 05:13:24
