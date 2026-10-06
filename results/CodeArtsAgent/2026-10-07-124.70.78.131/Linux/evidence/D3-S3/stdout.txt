@@ -1,0 +1,62 @@
+check_user -> realnameVerified=true agreementSigned=true err=
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+connect -> status=connected wsId=8d898bc423254635bbe1
+[2026-10-06T21:06:56.149Z] uploadProject: /home/testbot2/.hdk-s3-mux65onb -> /workspace/.hdk-s3-mux65onb.tar.gz (archive=209 bytes, md5=70a30f3423d13a3a94cc9e1070dc0431)
+[2026-10-06T21:06:56.196Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-1726989670/sandbox-upload-1791320816138/.hdk-s3-mux65onb.tar.gz, size=209, remotePath=/workspace/.hdk-s3-mux65onb.tar.gz)
+[2026-10-06T21:06:56.196Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-06T21:06:56.196Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-06T21:06:56.241Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-06T21:06:56.287Z] deployFileServer: starting server on port 8888
+[2026-10-06T21:06:56.321Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 5247\r\n\u001b]133;C\u0007\r\n"
+[2026-10-06T21:06:56.321Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+[2026-10-06T21:06:57.259Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-06T21:06:57.261Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-06T21:06:57.262Z] uploadViaHttpTunnel: tunnel ready, localPort=37305
+[2026-10-06T21:06:57.262Z] uploadViaHttpTunnel: waiting for server health on localhost:37305
+[2026-10-06T21:06:57.262Z] waitForServerReady: attempt 1, checking http://localhost:37305/health
+[2026-10-06T21:06:57.301Z] waitForServerReady: server ready on port 37305 after 0 retries
+[2026-10-06T21:06:57.302Z] uploadViaHttpTunnel: sending POST with 209 bytes
+[2026-10-06T21:06:57.341Z] uploadViaHttpTunnel: upload complete (bytes=209, md5=70a30f3423d13a3a94cc9e1070dc0431)
+upload_project -> ok=true md5Verified=true
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+deploy_nginx -> ok=true port=8084 url=
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mux65onb/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
+close_session -> ok
+[OK] 沙箱 connect 成功
+[OK] s3-connect/upload/deploy 链路
+[OK] 部署返回可访问 URL 或检查通过
+[OK] 会话正常关闭

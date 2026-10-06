@@ -1,0 +1,65 @@
+
+=====CASE D9-10=====
+DEFAULT_PORT=9528 DEFAULT_HOST=127.0.0.1
+huaweicloud-devkit MCP server (remote) listening on 127.0.0.1:42281
+remote server 监听 127.0.0.1:42281
+initialize -> status=200 protocolVersion=2024-11-05
+tools/list -> status=200 工具数=41
+stdio dispatch tools/list -> 工具数=41
+未知 method -> {"jsonrpc":"2.0","id":3,"error":{"code":-32601,"message":"Method not found: no/such"}}
+[OK] 默认 port/host 常量正确
+[OK] remote 监听 + initialize 返回协议版本
+[OK] tools/list 与 stdio 路径一致
+[OK] 未指定 port/host 用默认值(常量已核验 + 监听成功)
+=====END D9-10=====
+
+=====CASE D9-11=====
+ready is Promise=true subConnections is Map=true localServer 初始=null
+after close: subConnections.size=0 localServer=null onClose fired=true
+[OK] 实例成员: ready Promise + subConnections Map
+[OK] close 清空 subConnections + localServer + onClose
+[OK] close 幂等
+=====END D9-11=====
+
+=====SUMMARY=====
+{
+  "total": 7,
+  "passed": 7,
+  "results": [
+    {
+      "name": "默认 port/host 常量正确",
+      "ok": true,
+      "detail": "9528/127.0.0.1"
+    },
+    {
+      "name": "remote 监听 + initialize 返回协议版本",
+      "ok": "2024-11-05",
+      "detail": "2024-11-05"
+    },
+    {
+      "name": "tools/list 与 stdio 路径一致",
+      "ok": true,
+      "detail": "remote=41 stdio=41"
+    },
+    {
+      "name": "未指定 port/host 用默认值(常量已核验 + 监听成功)",
+      "ok": true,
+      "detail": "port 0 动态分配并成功监听"
+    },
+    {
+      "name": "实例成员: ready Promise + subConnections Map",
+      "ok": true,
+      "detail": "{\"isPromise\":true,\"isMap\":true}"
+    },
+    {
+      "name": "close 清空 subConnections + localServer + onClose",
+      "ok": true,
+      "detail": "{\"sub\":0,\"ls\":null,\"closed\":true}"
+    },
+    {
+      "name": "close 幂等",
+      "ok": true,
+      "detail": "0"
+    }
+  ]
+}
