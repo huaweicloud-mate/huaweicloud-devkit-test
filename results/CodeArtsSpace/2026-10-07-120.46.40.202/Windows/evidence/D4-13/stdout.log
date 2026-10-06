@@ -1,0 +1,23 @@
+D4-13 测试证据
+执行时间: 2026-10-07 05:10
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p1.mjs
+结果: PASS
+断言: 最小权限凭证通过率 (只读子账号)
+结论: PASS - 主账号 NovaListServers 返回 {servers:[...]}, readonly API 可达; 只读子账号 NovaListServers 返回 {servers:[...]}, 最小权限凭证通过
+
+=== 执行命令 ===
+hcloud ECS NovaListServers (主账号+只读子账号)
+=== RC === 0
+=== STDOUT ===
+{
+  "servers": []
+}
+
+---readonly---
+{
+  "servers": []
+}
+
