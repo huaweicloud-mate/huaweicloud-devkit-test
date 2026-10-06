@@ -1,0 +1,30 @@
+mergeCommandStyle.command=["node","/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/mcp-server.mjs","--flag"]
+[OK] mergeCommandStyle 保留 user args
+mergeArgsStyle.args=["/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/mcp-server.mjs","--x"] env={"MY":"1","HCLOUD_BIN":"/usr/bin/hcloud"}
+[OK] mergeArgsStyle 合并正确
+extractUserDelta={"argsExtra":["--x"],"env":{"MY":"1"}}
+applyUserDelta.args=["/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/mcp-server.mjs","--x"] env={"HCLOUD_BIN":"/usr/bin/hcloud","MY":"1"}
+[OK] delta 提取+应用幂等
+takeAgentDelta.argsExtra=["--x"]
+[OK] save→take→readBackup 闭环
+[OK] purgeBackup 幂等
+
+===== merge-probe 补充 =====
+PASS: mergeMcpServersFile 空配置创建 entry
+PASS: mergeMcpServersFile 唯一 key(changed=true)
+PASS: 重复 merge 幂等(changed=false)
+PASS: 重复 merge 后仍唯一 entry
+PASS: merge 后保留其它 mcpServer 键
+PASS: merge 后保留顶层其它键
+PASS: merge 后 huaweicloud-devkit 唯一(共2个server)
+PASS: command style 保 user extra args
+PASS: command style 重复 merge 幂等
+PASS: args style 保 user extra args
+PASS: args style 保用户自定义 env(MY_KEY)
+PASS: args style 补 required env(HCLOUD_BIN)
+=== 源码复核（configureMCPAgent，setup-cli.mjs:3257-3280）===
+- 已在配置时：读取→JSON.parse 失败则打 is not valid JSON; leaving it untouched 并 return false（零写入）
+- 已配置时：mcpServers.huaweicloud-devkit already configured; skipping（不重复 .bak，幂等）
+- 未配置且目标文件存在时：先 copyFileSync 到 .bak 再写（保留原文件备份）
+- 写入仅新增 mcpServers['huaweicloud-devkit'] = {...MCP_ENTRY}，不覆盖其它键
+=== DONE ===
