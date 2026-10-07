@@ -1,0 +1,10 @@
+D4-4 测试证据
+执行时间: 2026-10-08 05:10
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p1.mjs
+结果: FAIL
+断言: echo $ACCESS_KEY 应被拦截
+结论: FAIL - 通用凭证变量名 ACCESS_KEY 未被拦截
+根因: safety-policy.mjs 凭证 env 打印规则未覆盖 ACCESS_KEY/SECRET_KEY 通用变量名

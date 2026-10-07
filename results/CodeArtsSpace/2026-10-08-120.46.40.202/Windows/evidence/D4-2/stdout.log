@@ -1,0 +1,10 @@
+D4-2 测试证据
+执行时间: 2026-10-08 05:10
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p0.mjs
+结果: FAIL
+断言: 所有打印凭证环境变量的命令应返回 decision=deny
+结论: FAIL - 非华为云前缀 env 打印返回 decision=allow, risk=not_huaweicloud
+根因: safety-policy.mjs 凭证 env 打印规则仅匹配 HUAWEICLOUD_/HW_ 前缀, 未覆盖非标准前缀

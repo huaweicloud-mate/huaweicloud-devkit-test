@@ -1,0 +1,10 @@
+D2-16 测试证据
+执行时间: 2026-10-08 05:10
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p1.mjs
+结果: FAIL
+断言: configure import --file 应返回 decision=deny
+结论: FAIL - configure import --file 返回 decision=allow, 未拦截凭证文件导入
+根因: safety/policy.json:25 blockedConfigureSubcommands 缺少 "import"

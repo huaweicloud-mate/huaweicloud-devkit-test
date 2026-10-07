@@ -1,0 +1,9 @@
+{
+  "caseId": "D4-2",
+  "status": "FAIL",
+  "executedAt": "20261008051014",
+  "assertion": "所有打印凭证环境变量的命令应返回 decision=deny",
+  "conclusion": "FAIL - 非华为云前缀 env 打印返回 decision=allow, risk=not_huaweicloud",
+  "rootCause": "safety-policy.mjs 凭证 env 打印规则仅匹配 HUAWEICLOUD_/HW_ 前缀, 未覆盖非标准前缀",
+  "version": "1.1.8-next.1"
+}

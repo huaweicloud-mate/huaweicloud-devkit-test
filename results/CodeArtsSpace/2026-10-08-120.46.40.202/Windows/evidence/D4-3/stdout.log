@@ -1,0 +1,10 @@
+D4-3 测试证据
+执行时间: 2026-10-08 05:10
+客户端: CodeArtsSpace
+OS: Windows
+被测版本: 1.1.8-next.1
+工具: probe-p0.mjs
+结果: FAIL
+断言: csms show-secret/kms decrypt-data 应返回 decision=deny
+结论: FAIL - csms show-secret/kms decrypt-data 返回 decision=allow
+根因: safety/policy.json:26 blockedSecretOperations 仅覆盖 PascalCase, 未覆盖 CLI 小写形式
