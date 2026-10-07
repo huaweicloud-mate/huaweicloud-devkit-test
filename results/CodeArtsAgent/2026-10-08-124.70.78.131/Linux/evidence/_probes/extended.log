@@ -1,0 +1,32 @@
+=====CASE D9-9=====
+capabilities = {"tools":{}}
+capabilities.cancellation 存在? false
+取消通知后 tools/list 工具数 = 41
+重建后 initialize ok? true
+重建后 tools/list 工具数 = 41
+=====END D9-9=====
+=====CASE D2-16=====
+放置 creds-import.json: /tmp/multica-task-2389990257/hdk-import-otdI0k/.config/huaweicloud/creds-import.json 存在= true
+auth_switch mode=import => {
+  "status": "ok",
+  "scope": "temporary",
+  "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files."
+}
+读取后 creds-import.json 存在? false (期望 false=无条件擦除)
+=====END D2-16=====
+=====CASE D1-41=====
+check_update isError = false
+check_update 返回(前1200):
+{
+  "currentVersion": "1.1.8-next.1",
+  "latestStable": "1.1.7",
+  "latestNext": "1.1.8-next.1",
+  "targetVersion": "1.1.8-next.1",
+  "updateAvailable": false,
+  "dismissed": false,
+  "dismissExpiresAt": null,
+  "result": "up_to_date"
+}
+返回字段: currentVersion, latestStable, latestNext, targetVersion, updateAvailable, dismissed, dismissExpiresAt, result
+=====END D1-41=====
+=== DONE ===
