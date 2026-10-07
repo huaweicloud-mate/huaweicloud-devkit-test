@@ -1,0 +1,183 @@
+=== re-run 2026-10-08 05:11:36 ===
+===== [0] 包版本基线 ===== (2026-10-08 05:11:36)
+└── huaweicloud-devkit@1.1.8-next.1
+node v22.13.0
+ffd7b47492ba9e8d0df062922e303355926a8c67
+===== [1] classify (D4-1/2/3/15/16) ===== 
+exit=0
+6
+===== [2] hook (D4-5/7/9/21/22) ===== 
+exit=0
+5
+===== [3] auth (D2-4/11/12) ===== 
+exit=0
+3
+===== [4] protocol (D5-3/D9-*) ===== 
+exit=0
+8
+===== [5] extended (D2-16/D9-9/D1-41) ===== 
+exit=0
+3
+===== [6] d4-8 (Python/Node 策略一致) ===== 
+exit=0
+[py  encoded] block  | echo x | base64 -d | bash   -> Huawei Cloud safety hook blocked this action: The command decodes an encoded pay
+=====END D4-8=====
+(对照 Node classifyTextCommand 结果见 classify.log: HW_ACCESS_KEY->allow / HUAWEICLOUD->deny / hcloud write->deny)
+===== [7] supplement (D1-26/27 D2-2/5 D3-* D4-4/6/11/17 D6-*) ===== 
+exit=0
+16
+===== [8] supplement-import (D1-30 D4-10) ===== 
+exit=0
+2
+===== [9] d1 安装域 (D1-1/3/4/5, 隔离 HOME) ===== 
+exit=0
+16
+===== [10] updatecheck (D1-28/31/33) ===== 
+exit=0
+PASS: D1-33 sessionId 清洗(非法字符→_)
+=== DONE ===
+===== [11] D1-40 反向下发防护 ===== 
+exit=0
+
+=== D1-40 反向下发防护结论: ALL PASS ===
+===== [12] D1-42 dismiss ===== 
+exit=0
+
+=== D1-42 探针结论: ALL PASS ===
+===== [13] D1-45 兜底+预热 ===== 
+exit=0
+
+=== D1-45 探针结论: ALL PASS ===
+===== [14] D5-1 清单发现 ===== 
+exit=0
+
+=== D5-1 清单发现加载结论: ALL PASS ===
+===== [15] D4-6 脱敏 ===== 
+exit=0
+=== D4-6 源码级脱敏结论: ALL PASS ===
+（注：真云 E2E「创建 ECS 含 adminPass 回显警告」需真云写场景，属外部依赖，另以 BLOCKED 四要素记录；flag/JSON 形态缺口见 FINDINGS #7）
+===== [16] D2-26 凭证备份/恢复 ===== 
+exit=0
+    }
+  ]
+}
+===== [17] D4-27 redactSecrets/redactOutput 双路径脱敏 ===== 
+exit=0
+    }
+  ]
+}
+===== [18] new-env (D1-65/66/67/68) ===== 
+exit=0
+4
+===== [19] new-config (D2-27/D1-70/D8-9/D8-10/D6-9) ===== 
+exit=0
+5
+===== [20] new-safety (D10-4/D4-26/D4-29/D4-28/D4-25) ===== 
+exit=0
+5
+===== [21] new-mcp (D9-10/D9-11) ===== 
+exit=0
+2
+===== [22] new-cli (D1-69) ===== 
+exit=0
+1
+===== [23] new-scenario (D3-S1/S5/S8) ===== 
+exit=0
+3
+===== [24] new-cloud (D3-S2/C13/C14/S4/S3) ===== 
+exit=0
+5
+===== [25] new-fg-rds (D3-S6/S7) ===== 
+exit=0
+2
+===== [26] routing (D10-3 serviceCatalog) ===== 
+exit=0
+    recommendedServices = Incentive Voucher
+    recommendedSkills   = huawei-voucher
+=== DONE ===
+===== [27] eval-harness (D10-3 serviceCatalog 15 条) ===== 
+exit=0
+
+=== 路由准确率基线 ===
+HIT=13 MISS=1 N/A=1 | 准确率=92.9% (分母=HIT+MISS=14)
+结果落盘: /home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test/eval/results/eval-run-20261007211242.csv
+===== [28] exp-e08 诊断路由 ===== 
+exit=0
+
+=== EXP-E08 诊断能力结论: ALL PASS ===
+===== [29] D9-12 initialize 握手协议安全基线 (P0) ===== 
+exit=0
+7
+===== [30] D9-13 tools/call 凭证不泄露与权限校验 (P0) ===== 
+exit=0
+10
+===== [31] fixtures run-all (D1-66/69 D2-10/13/27 D3-C14 D4-12/29 D8-10 D9-6/9/10/11) ===== 
+exit=0
+OK   d2-13-s1-env.mjs (exit=0)
+OK   d9-9-delay-timeout.mjs (exit=0)
+OK   d9-10-remote-transport.mjs (exit=0)
+OK   d9-11-ws-tunnel.mjs (exit=0)
+OK   d9-6-cross-client.mjs (exit=0)
+OK   exp-d5-2-1-codex-discovery.mjs (exit=0)
+OK   exp-d5-2-3-codex-tools-enum.mjs (exit=0)
+OK   d1-66-telemetry-env.mjs (exit=0)
+OK   d1-69-cli-help.mjs (exit=0)
+OK   d2-27-koocli-version.mjs (exit=0)
+OK   d3-c14-sandbox-hwlink-cred.mjs (exit=0)
+OK   d4-12-supply-chain.mjs (exit=0)
+OK   d4-29-classify-assert.mjs (exit=0)
+OK   d8-10-mcp-config-backup-merge.mjs (exit=0)
+OK   d9-11-ws-tunnel-lifecycle.mjs (exit=0)
+OK   d9-6-cross-client-interop.mjs (exit=0)
+OK   d3-c14-sandbox-cred-mock.mjs (exit=0)
+
+总计: pass=18 fail=0 blocked=0
+RESULT: PASS
+===== [32] realcloud (D2-1/D3-C4/D4-14/D4-18/19/20 真云建删归零) ===== 
+exit=0
+35
+      "kind": "D4-14",
+      "name": "归零验证(ListVpcs 不含本次资源)",
+      "ok": true,
+      "detail": "{\n  \"containsOwn\": false\n}"
+    },
+    {
+      "kind": "D4-18",
+      "name": "plan 写操作需确认(confirm-not-deny)",
+      "ok": true,
+      "detail": "{\n  \"decision\": \"deny\",\n  \"risk\": \"write\",\n  \"hasToken\": true,\n  \"safeToRun\": false\n}"
+    },
+    {
+      "kind": "D4-19",
+      "name": "确认流预检(preflight sgFindings)",
+      "ok": true,
+      "detail": "{\n  \"decision\": \"deny\",\n  \"sgFindings\": []\n}"
+    },
+    {
+      "kind": "D4-20",
+      "name": "拒绝后零操作(拒绝路径未创建资源)",
+      "ok": true,
+      "detail": "{\n  \"decision\": \"deny\",\n  \"hasToken\": true,\n  \"notCreated\": true\n}"
+    }
+  ]
+}
+===== [33] D4-13 只读子账号最小权限 (真云) ===== 
+exit=0
+      "ok": true,
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"ListPublicips is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListPublicips/versionNumber'.\\n{\\n  \\\"request_id\\\": \\\"390526678af9639ef277b17d259b54c4\\\",\\n  \\\"publicip\"}"
+    },
+    {
+      "name": "写 VPC CreateVpc (最小规格)",
+      "ok": true,
+      "detail": "{\"code\":0,\"out\":\"{\\n  \\\"code\\\": \\\"VPC.0010\\\",\\n  \\\"message\\\": \\\"{\\\\\\\"NeutronError\\\\\\\":{\\\\\\\"message\\\\\\\":\\\\\\\"Rules on create_router by *** disallowed by policy\\\\\\\",\\\\\\\"type\\\\\\\":\\\\\\\"PolicyNotAuthorized\\\\\\\",\\\\\\\"detail\\\\\\\":\\\\\\\"\\\\\\\"}}\\\"\\n}\\nFailed to get terminal width. The default width will be used. If characters are un\"}"
+    },
+    {
+      "name": "归零核实: 未创建任何 VPC",
+      "ok": true,
+      "detail": "{\"created\":false}"
+    }
+  ]
+}
+===== ALL DONE (source + realcloud probes) ===== 2026-10-08 05:13:23
+EXIT=0
+done 2026-10-08 05:13:23
