@@ -1,0 +1,56 @@
+{
+  "total": 7,
+  "passed": 7,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D4-29",
+      "name": "wrapper-equivalence",
+      "pass": true,
+      "actual": "raw=deny txt=deny",
+      "expected": "classifyRawCommand 与 classifyTextCommand 决策一致"
+    },
+    {
+      "id": "D4-29",
+      "name": "deny-credential-file",
+      "pass": true,
+      "actual": "deny|reason=true",
+      "expected": "deny + 含 decision/reason"
+    },
+    {
+      "id": "D4-29",
+      "name": "deny-credential-env",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "id": "D4-29",
+      "name": "allow-read",
+      "pass": true,
+      "actual": "allow",
+      "expected": "allow"
+    },
+    {
+      "id": "D4-29",
+      "name": "write-need-confirm",
+      "pass": true,
+      "actual": "deny",
+      "expected": "confirm/deny"
+    },
+    {
+      "id": "D4-29",
+      "name": "assertAllowed-deny-throws",
+      "pass": true,
+      "actual": "threw=true policy=true",
+      "expected": "deny 抛异常 + policy 附加"
+    },
+    {
+      "id": "D4-29",
+      "name": "assertAllowed-allow-passes",
+      "pass": true,
+      "actual": "passt=true",
+      "expected": "allow 通过并返回 result"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "total": 10,
+  "passed": 9,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D9-12",
+      "name": "init-protocolVersion",
+      "pass": true,
+      "actual": "2024-11-05",
+      "expected": "protocolVersion 返回"
+    },
+    {
+      "id": "D9-12",
+      "name": "init-capabilities",
+      "pass": true,
+      "actual": "{\"tools\":{}}",
+      "expected": "capabilities.tools 返回"
+    },
+    {
+      "id": "D9-12",
+      "name": "init-serverInfo",
+      "pass": true,
+      "actual": "name=huaweicloud-devkit ver=1.1.7",
+      "expected": "serverInfo.name/version 返回"
+    },
+    {
+      "id": "D9-12",
+      "name": "callTool-routes",
+      "pass": true,
+      "actual": "r=ok",
+      "expected": "callTool 路由到 tools.mjs callTool"
+    },
+    {
+      "id": "D9-12",
+      "name": "decorate-no-hint",
+      "pass": true,
+      "actual": "decoratedIsSame=true",
+      "expected": "_decorateResult 有/无提示均不抛错且可返回"
+    },
+    {
+      "id": "D9-12",
+      "name": "hint-consumed-api",
+      "pass": true,
+      "actual": "notConsumed=true",
+      "expected": "_isHintConsumed 初始 false"
+    },
+    {
+      "id": "D9-12",
+      "name": "listSkillDirs-valid",
+      "pass": true,
+      "actual": "arr=true n=0",
+      "expected": "listSkillDirs 返回数组"
+    },
+    {
+      "id": "D9-12",
+      "name": "findSkillsRoot-valid",
+      "pass": true,
+      "actual": "root=null",
+      "expected": "findSkillsRoot 返回 null 或目录路径"
+    },
+    {
+      "id": "D9-12",
+      "name": "invalid-request--32600",
+      "pass": true,
+      "actual": "code=-32600",
+      "expected": "非对象 JSON 请求返回 -32600"
+    },
+    {
+      "id": "D9-12",
+      "name": "toolslist-before-init-rejected",
+      "pass": false,
+      "actual": "hasTools=true err=undefined",
+      "expected": "未 initialize 先 tools/list 返回 -32600 (实现未强制时记 SPEC-MISMATCH)"
+    }
+  ]
+}

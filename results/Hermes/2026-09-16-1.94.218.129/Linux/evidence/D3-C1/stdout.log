@@ -1,0 +1,43 @@
+{
+  "total": 6,
+  "passed": 5,
+  "failed": 1,
+  "results": [
+    {
+      "caseId": "D3-C1",
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"586be3f0-31fa-4468-a2a9-6086314e28c4\",\n    \"name\": \"testbot3-hermes-e2e-9542175868\",\n    \"description\": \"\",\n    \"cidr\": \"10.98.0.0/16\",\n    \"status\": \"CREATING\",\n    \"routes\": [],\n    \"enterprise_project_id\": \"0\",\n    \"enable_network_ad"
+    },
+    {
+      "caseId": "D3-C1",
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"b294d70c-7f46-45ac-a335-db674bbc41c1\",\n    \"name\": \"testbot3-hermes-e2e-9542175868-subnet\",\n    \"description\": \"\",\n    \"cidr\": \"10.98.0.0/24\",\n    \"dnsList\": [],\n    \"status\": \"UNKNOWN\",\n    \"vpc_id\": \"586be3f0-31fa-4468-a2a9-6086314"
+    },
+    {
+      "caseId": "D3-C1",
+      "name": "CreateServers",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff8080819f8ed3f101a0a906aa3e6289\",\n  \"serverIds\": [\n    \"acbc6fa3-4a88-40aa-9ef1-78073f7b0809\"\n  ]\n}"
+    },
+    {
+      "caseId": "D3-C1",
+      "name": "CreateServers_id",
+      "pass": false,
+      "detail": ""
+    },
+    {
+      "caseId": "D3-C1",
+      "name": "DeleteSubnet",
+      "pass": true,
+      "detail": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":[\"VPC\",\"DeleteSubnet\",\"--subnet_id=b294d70c-7f46-45ac-a335-db674bbc41c1\",\"--vpc_id=586be3f0-31fa-4468-a2a9-6086314e28c4\",\"--cli-region=cn-north-4\"],\"command\":\"hc"
+    },
+    {
+      "caseId": "D3-C1",
+      "name": "DeleteVpc",
+      "pass": true,
+      "detail": "{\n  \"code\": \"VPC.0104\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Router contains subnets, please delete subnet first.\\\",\\\"type\\\":\\\"RouterInUse\\\",\\\"detail\\\":\\\"\\\"}}\"\n}\nFailed to get terminal width. The default width will be used. If characters are unreadab"
+    }
+  ]
+}

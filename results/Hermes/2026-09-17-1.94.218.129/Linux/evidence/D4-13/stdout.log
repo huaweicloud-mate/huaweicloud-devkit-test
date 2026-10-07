@@ -1,0 +1,28 @@
+{
+  "total": 3,
+  "passed": 1,
+  "failed": 2,
+  "results": [
+    {
+      "id": "D4-13",
+      "name": "readonly-ListServers",
+      "pass": false,
+      "actual": "exit=0 [USE_ERROR]Operation ListServers is not supported.\n\nYou may want to select one of the following oper",
+      "expected": "exit0+无权限拒绝+非参数错误"
+    },
+    {
+      "id": "D4-13",
+      "name": "readonly-ListVpcs",
+      "pass": true,
+      "actual": "exit=0 ListVpcs is a multi-version API, where the version (v3) is default. To specify another version, chan",
+      "expected": "exit0+无权限拒绝+非参数错误"
+    },
+    {
+      "id": "D4-13",
+      "name": "write-iam-denied",
+      "pass": false,
+      "actual": "exit=0 {\n  \"vpc\": {\n    \"id\": \"247a407a-dd22-4f6e-9195-8fa0da7b650b\",\n    \"name\": \"hdk-ro-probe\",\n    \"description\": \"\",\n    \"cidr\": \"10.99.0.0/16\"",
+      "expected": "IAM拒绝(权限不足)"
+    }
+  ]
+}

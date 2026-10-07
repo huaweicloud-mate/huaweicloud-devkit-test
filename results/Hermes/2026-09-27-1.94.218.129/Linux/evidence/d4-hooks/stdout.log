@@ -1,0 +1,56 @@
+{
+  "total": 7,
+  "passed": 6,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D4-28",
+      "name": "node-hook-deny",
+      "pass": true,
+      "actual": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Dumping cloud credential e",
+      "expected": "高危命令 → permissionDecision=deny"
+    },
+    {
+      "id": "D4-28",
+      "name": "node-hook-cmd-field",
+      "pass": true,
+      "actual": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operati",
+      "expected": "cmd 字段被提取并 deny"
+    },
+    {
+      "id": "D4-28",
+      "name": "node-hook-safe-no-deny",
+      "pass": true,
+      "actual": "\"\"",
+      "expected": "非高危无 deny 输出"
+    },
+    {
+      "id": "D4-28",
+      "name": "hooks-json-node-registered",
+      "pass": true,
+      "actual": "{\n  \"hooks\": {\n    \"PreToolUse\": [\n      {\n        \"matcher\"",
+      "expected": "hooks.json 注册 Node .mjs 实现"
+    },
+    {
+      "id": "D4-25",
+      "name": "cli-read-classified",
+      "pass": true,
+      "actual": "{\"cli:read\":1,\"cli:invoke\":2}",
+      "expected": "只读 → cli:read"
+    },
+    {
+      "id": "D4-25",
+      "name": "cli-write-classified",
+      "pass": false,
+      "actual": "{\"cli:read\":1,\"cli:invoke\":2}",
+      "expected": "写 → cli:write"
+    },
+    {
+      "id": "D4-25",
+      "name": "cli-invoke-classified",
+      "pass": true,
+      "actual": "{\"cli:read\":1,\"cli:invoke\":2}",
+      "expected": "其他 hcloud → cli:invoke"
+    }
+  ]
+}

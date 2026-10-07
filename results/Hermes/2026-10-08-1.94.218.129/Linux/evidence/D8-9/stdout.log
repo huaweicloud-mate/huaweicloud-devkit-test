@@ -1,0 +1,10 @@
+{
+  "status": "SPEC-MISMATCH",
+  "caseId": "D8-9",
+  "title": "安装 ID 与遥测值脱敏",
+  "expected": "sanitizeValue 移除 AK/SK/token 等敏感值与非法字符",
+  "actual": "installId 稳定持久=true; 但 sanitizeValue(\"ak=AK123456 sk=SKsecret token=Tok123\") = \"ak=AK123456 sk=SKsecret token=Tok123\" 未移除敏感值",
+  "detail": "telemetry.mjs:189 sanitizeValue 仅 trim/截断/去控制字符，未做凭证脱敏（脱敏在 risk-rule-engine/redactSecrets 层）",
+  "executedAt": "20261007210221",
+  "probe": "probe_missing.mjs"
+}

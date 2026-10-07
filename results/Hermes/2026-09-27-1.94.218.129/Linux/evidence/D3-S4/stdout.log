@@ -1,0 +1,28 @@
+{
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D3-S4",
+      "name": "status-returns-claimed",
+      "pass": true,
+      "actual": "{\"claimed\":true,\"message\":\"已领取\",\"code\":null}",
+      "expected": "voucher_status 返回 claimed=true"
+    },
+    {
+      "id": "D3-S4",
+      "name": "claim-idempotent",
+      "pass": true,
+      "actual": "{\"claimed\":true,\"voucherId\":null,\"amount\":0,\"message\":\"已领取过\",\"code\":null}",
+      "expected": "重复 claim 幂等返回已领取/claimed"
+    },
+    {
+      "id": "D3-S4",
+      "name": "recheck-still-claimed",
+      "pass": true,
+      "actual": "{\"claimed\":true,\"message\":\"已领取\",\"code\":null}",
+      "expected": "复核 status 仍 claimed=true"
+    }
+  ]
+}

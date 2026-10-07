@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "caseId": "D1-67",
+  "title": "Agent toolkit 模式与 DSH 跳过安装环境变量",
+  "expected": "AGENT_TOOLKIT_MODE 注入 agent env(REQUIRED_ENV_KEYS 含 HCLOUD_BIN)；SKIP_DSH=1 时跳过 DSH 插件安装",
+  "actual": "mergeArgsStyle.env={\"HUAWEICLOUD_AGENT_TOOLKIT_MODE\":\"local\",\"HCLOUD_BIN\":\"/usr/bin/hcloud\"}; mergeMcpServersFile.env={\"HUAWEICLOUD_AGENT_TOOLKIT_MODE\":\"local\",\"HCLOUD_BIN\":\"/usr/bin/hcloud\"}; SKIP_DSH分支存在=true",
+  "detail": "",
+  "executedAt": "20261007210220",
+  "probe": "probe_missing.mjs"
+}

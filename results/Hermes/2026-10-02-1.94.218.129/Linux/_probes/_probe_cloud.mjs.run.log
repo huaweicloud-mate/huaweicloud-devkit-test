@@ -1,0 +1,35 @@
+FAIL	D3-S1	route=["Run hcloud --help to list available services."] readOk=true (仅调用 service_catalog + run_readonly_command，零写)
+PASS	D3-S2	serviceCatalog=["VPC","EIP"] | createVpc=16fa7afa-50c6-4dc3-889e-4bed596f5cd9 | plan.decision=deny hook.decision=warn 未确认前仍存在=true | approvedDelete={"ok":true,"exitCode":0,"signal":null,"stdout":"","stderr":"","plan":{"executable":"hcloud","args":[ 删后已归零=true
+PASS	D3-S4	status(before).claimed=true claim={"claimed":true,"voucherId":null,"amount":0,"message":"已领取过","code":null} status(after).claimed=true
+PASS	D4-14	CTS ListTraces 返回={
+  "traces": [
+    {
+      "api_version": "1.0",
+      "domain_id": "842591186fa245929e1b5c186a4cf784",
+      "event_type": "system",
+      "message": "uri: /api/v2/chat/completions, method: POST",
+ 
+PASS	EXP-C4-01	list_operations(ECS).ok=true 只读操作=ListServersDetails plan=true decision=allow
+PASS	EXP-C4-02	list_operations(VPC).ok=true 只读操作=ListVpcs plan=true decision=allow
+PASS	EXP-C4-03	list_operations(OBS).ok=true 只读操作=ls plan=true decision=allow
+PASS	EXP-C4-04	list_operations(RDS).ok=true 只读操作=ListInstances plan=true decision=allow
+PASS	EXP-C4-05	list_operations(GaussDB).ok=true 只读操作=ListInstances plan=true decision=allow
+PASS	EXP-C4-06	list_operations(CCE).ok=true 只读操作=GetAccessPolicy plan=true decision=allow
+PASS	EXP-C4-07	list_operations(FunctionGraph).ok=true 只读操作=ListFunctions plan=true decision=allow
+PASS	EXP-C4-08	list_operations(IAM).ok=true 只读操作=ListAgencies plan=true decision=allow
+PASS	EXP-C4-09	list_operations(CTS).ok=true 只读操作=ListNotifications plan=true decision=allow
+PASS	EXP-C4-10	list_operations(CES).ok=true 只读操作=ListAlarms plan=true decision=allow
+PASS	EXP-C4-11	list_operations(DDS).ok=true 只读操作=ListInstances plan=true decision=allow
+PASS	EXP-C4-12	list_operations(DCS).ok=true 只读操作=ListInstances plan=true decision=allow
+PASS	EXP-C4-13	list_operations(SMN).ok=true 只读操作=ListApplicationAttributes plan=true decision=allow
+PASS	EXP-C4-14	list_operations(KAFKA).ok=true 只读操作=ListAvailableZones plan=true decision=allow
+PASS	EXP-C4-15	list_operations(WAF).ok=true 只读操作=ListAntiTamperPolicyRules plan=true decision=allow
+PASS	EXP-C4-16	list_operations(CDN).ok=true 只读操作=ListAccessControlTask plan=true decision=allow
+PASS	EXP-C4-17	list_operations(ModelArts).ok=true 只读操作=GetAppAuthApiInfo plan=true decision=allow
+PASS	EXP-C4-18	list_operations(CSMS).ok=true 只读操作=ListGrants plan=true decision=allow
+PASS	EXP-C4-19	list_operations(CBR).ok=true 只读操作=ListAgent plan=true decision=allow
+PASS	EXP-C4-20	list_operations(EVS).ok=true 只读操作=ListSnapshots plan=true decision=allow
+PASS	EXP-C4-21	list_operations(EIP).ok=true 只读操作=ListBandwidth plan=true decision=allow
+PASS	EXP-C4-22	list_operations(ELB).ok=true 只读操作=ListAllMembers plan=true decision=allow
+PASS	D3-C4	22 服务只读规划通过 22/22: ECS:ok VPC:ok OBS:ok RDS:ok GaussDB:ok CCE:ok FunctionGraph:ok IAM:ok CTS:ok CES:ok DDS:ok DCS:ok SMN:ok DMS:ok WAF:ok CDN:ok ModelArts:ok DEW:ok CBR:ok EVS:ok EIP:ok ELB:ok
+probe_cloud.mjs DONE

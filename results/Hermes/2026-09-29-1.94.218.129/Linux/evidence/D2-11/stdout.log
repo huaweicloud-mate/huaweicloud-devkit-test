@@ -1,0 +1,16 @@
+{
+  "total": 1,
+  "passed": 0,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D2-11",
+      "name": "r3-before-r2",
+      "pass": false,
+      "actual": "R2冲突门(line=1) 先于 persistCredentials(R3, line=1) = true; R3拒绝逻辑存在=true",
+      "expected": "带 securityToken 的 persist 应立即 R3 rejected，而非先命中 R2 needs_confirmation",
+      "passMsg": "R3 先于 R2",
+      "failMsg": "R2 冲突门先于 R3 STS 检查(缺陷)"
+    }
+  ]
+}

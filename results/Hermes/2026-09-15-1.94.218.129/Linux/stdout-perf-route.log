@@ -1,0 +1,20 @@
+@@CASE D10-3@@
+INFO D10-3  路由命中 12/15
+FAIL  D10-3  中/英文意图均命中对应服务？missed=["查询云服务器列表→ECS[got:run hcloud --help to list available services.]","创建存储桶→OBS[got:run hcloud --help to list available services.]","创建云硬盘→ECS[got:run hcloud --help to list available services.]"]
+@@END@@
+@@CASE D6-1@@
+PASS  D6-1  检索响应延迟采样100次 p95=3.6ms avg=2.9ms（阈值<2000ms）
+@@END@@
+@@CASE D6-3@@
+PASS  D6-3  MCP 冷启 770ms（阈值<5000ms，可服务=true）
+@@END@@
+@@CASE D6-4@@
+PASS  D6-4  并发 30 请求全部完成无死锁=true 顺序无错乱=true
+@@END@@
+@@CASE D9-9@@
+INFO D9-9  initialize.capabilities = {"tools":{}}
+INFO D9-9  cancellation 能力声明 = false（不存在 → SPEC-MISMATCH 标注而非假定）
+FAIL  D9-9  cancellation 能力已声明=false（capabilities={"tools":{}}）
+@@END@@
+
+===== perf-route 汇总: PASS 3 / FAIL 2 =====

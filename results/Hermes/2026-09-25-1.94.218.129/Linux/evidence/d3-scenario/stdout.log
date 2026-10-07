@@ -1,0 +1,35 @@
+{
+  "total": 4,
+  "passed": 3,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D3-S5",
+      "name": "compound-multi-hit",
+      "pass": false,
+      "actual": "hit=1 [Run hcloud --help to list available services.]",
+      "expected": "复合意图命中多个 service"
+    },
+    {
+      "id": "D3-S5",
+      "name": "route-returns-services",
+      "pass": true,
+      "actual": "{\"intent\":\"我要部署一个 Web 应用，数据存到数据库，文件存到对象存储\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list avail",
+      "expected": "serviceCatalog 返回推荐服务列表"
+    },
+    {
+      "id": "D3-S8",
+      "name": "explain-error-guidance",
+      "pass": true,
+      "actual": "{\"service\":\"ECS\",\"errorCode\":\"APIGW.0802\",\"requestId\":\"req-12345\",\"suggestions\":[\"APIGW.0802: API Gateway layer error. IAM user has no region permissions — check IAM console → User → Permissions → add",
+      "expected": "给出可执行下一步（非裸报错堆栈）"
+    },
+    {
+      "id": "D3-S8",
+      "name": "explain-error-nonempty",
+      "pass": true,
+      "actual": "{\"service\":\"VPC\",\"errorCode\":\"VPC.0001\",\"requestId\":\"req-2\",\"suggestions\":[\"No known error-code pattern matched. Re-run the failing command with --debug to capt",
+      "expected": "排障输出非空且结构完整"
+    }
+  ]
+}

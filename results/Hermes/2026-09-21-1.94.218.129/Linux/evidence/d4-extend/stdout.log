@@ -1,0 +1,35 @@
+{
+  "total": 4,
+  "passed": 3,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D4-26",
+      "name": "trigger-deny-rule",
+      "pass": true,
+      "actual": "decision=deny findings=1",
+      "expected": "命令触发 deny 规则"
+    },
+    {
+      "id": "D4-26",
+      "name": "evidence-cred-redacted",
+      "pass": true,
+      "actual": "cat ~/.hcloud/credentials access_key=<redacted> secret_key=<redacted> security_token=<redacted>",
+      "expected": "evidence 中 access_key/secret_key/security_token 脱敏"
+    },
+    {
+      "id": "D4-26",
+      "name": "evidence-uppercase-aksk",
+      "pass": true,
+      "actual": "",
+      "expected": "大写 AK=/SK= 脱敏（若触发规则）"
+    },
+    {
+      "id": "D4-26",
+      "name": "evidence-lowercase-aksk",
+      "pass": false,
+      "actual": "cat ~/.hcloud/credentials ak=ACCNO sk=SECNO token=TOKNO",
+      "expected": "小写 ak=/sk=/token= 不泄露明文"
+    }
+  ]
+}

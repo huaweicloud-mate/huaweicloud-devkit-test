@@ -1,0 +1,161 @@
+{
+  "total": 22,
+  "passed": 22,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D9-13",
+      "name": "setRuntime-hasRuntime",
+      "pass": true,
+      "actual": "has=true",
+      "expected": "setRuntimeCredentials 后 hasRuntimeCredentials=true"
+    },
+    {
+      "id": "D9-13",
+      "name": "resolve-with-runtime",
+      "pass": true,
+      "actual": "ak=true sk=true tok=true region=cn-north-4",
+      "expected": "resolveCredentialsWithRuntime 返回运行时凭证"
+    },
+    {
+      "id": "D9-13",
+      "name": "clear-runtime",
+      "pass": true,
+      "actual": "has=false",
+      "expected": "clearRuntimeCredentials 后 hasRuntimeCredentials=false"
+    },
+    {
+      "id": "D9-13",
+      "name": "isPlaceholder-pos",
+      "pass": true,
+      "actual": "placeholders=<HW_ACCESS_KEY>:true,${HW_SECRET_KEY}:true,YOUR_AK:true,SK:true,SECRET_KEY:true,TOKEN:true,replace_me:true,abc****:true,****:true",
+      "expected": "占位凭证均识别为 placeholder"
+    },
+    {
+      "id": "D9-13",
+      "name": "isPlaceholder-neg",
+      "pass": true,
+      "actual": "non=REALAK1234567890ABCDEFG:false,FAKEAKD913TEST1234567890:false",
+      "expected": "真实 AK 不判 placeholder"
+    },
+    {
+      "id": "D9-13",
+      "name": "global-readWrite-persist",
+      "pass": true,
+      "actual": "read.ak=true read.sk=true",
+      "expected": "writeGlobalCredentials 后 readGlobalCredentials 回读一致"
+    },
+    {
+      "id": "D9-13",
+      "name": "approval-token-created",
+      "pass": true,
+      "actual": "len=36",
+      "expected": "createApprovalToken 返回 token"
+    },
+    {
+      "id": "D9-13",
+      "name": "approval-token-consumed",
+      "pass": true,
+      "actual": "got=true",
+      "expected": "consumeApprovalToken 首次返回条目"
+    },
+    {
+      "id": "D9-13",
+      "name": "approval-token-no-replay",
+      "pass": true,
+      "actual": "second=null",
+      "expected": "审批令牌不可重放（二次 consume 返回 null）"
+    },
+    {
+      "id": "D9-13",
+      "name": "hashArgs-deterministic",
+      "pass": true,
+      "actual": "h1=h2:true h1!=h3:true len=64",
+      "expected": "hashArgs sha256 确定性"
+    },
+    {
+      "id": "D9-13",
+      "name": "classify-readonly-allow",
+      "pass": true,
+      "actual": "dec=allow",
+      "expected": "只读命令 allow"
+    },
+    {
+      "id": "D9-13",
+      "name": "classify-write-not-allow",
+      "pass": true,
+      "actual": "dec=deny",
+      "expected": "写命令 confirm/deny"
+    },
+    {
+      "id": "D9-13",
+      "name": "classify-configure-deny",
+      "pass": true,
+      "actual": "dec=deny",
+      "expected": "configure set 拒绝"
+    },
+    {
+      "id": "D9-13",
+      "name": "evaluate-artifacts-returns",
+      "pass": true,
+      "actual": "dec=deny",
+      "expected": "evaluateArtifacts 返回决策"
+    },
+    {
+      "id": "D9-13",
+      "name": "evaluate-deployplan-returns",
+      "pass": true,
+      "actual": "dec=warn",
+      "expected": "evaluateDeployPlan 返回决策"
+    },
+    {
+      "id": "D9-13",
+      "name": "mergeRiskDecision",
+      "pass": true,
+      "actual": "merged.dec=deny",
+      "expected": "mergeRiskDecision 取更严决策(deny)"
+    },
+    {
+      "id": "D9-13",
+      "name": "readServiceCatalogs",
+      "pass": true,
+      "actual": "catalogs=obj err=",
+      "expected": "readServiceCatalogs 返回目录或明确报错"
+    },
+    {
+      "id": "D9-13",
+      "name": "classifyUnsupported",
+      "pass": true,
+      "actual": "\"unknown\"",
+      "expected": "classifyUnsupported 返回不支持标记"
+    },
+    {
+      "id": "D9-13",
+      "name": "planHcloudCommand",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"VPC\",\"ListVpcs\",\"--cli-region=cn-north-4\"],\"command\":\"hcloud VPC ListVpcs --cli-region=c",
+      "expected": "planHcloudCommand 返回 classification"
+    },
+    {
+      "id": "D9-13",
+      "name": "toolscall-no-ak-leak",
+      "pass": true,
+      "actual": "akLeak=false",
+      "expected": "tools/call 结果不含 AK 明文"
+    },
+    {
+      "id": "D9-13",
+      "name": "toolscall-no-sk-leak",
+      "pass": true,
+      "actual": "skLeak=false",
+      "expected": "tools/call 结果不含 SK 明文"
+    },
+    {
+      "id": "D9-13",
+      "name": "toolscall-no-token-leak",
+      "pass": true,
+      "actual": "tokLeak=false",
+      "expected": "tools/call 结果不含 token 明文"
+    }
+  ]
+}

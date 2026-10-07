@@ -1,0 +1,98 @@
+{
+  "total": 13,
+  "passed": 12,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D1-65",
+      "name": "debug-on-stderr",
+      "pass": true,
+      "actual": "[debug] queryDistTagsSync: npm view exited with status null\n",
+      "expected": "DEBUG=1 → stderr 含 [debug]"
+    },
+    {
+      "id": "D1-65",
+      "name": "debug-off-silent",
+      "pass": true,
+      "actual": "",
+      "expected": "未设 DEBUG → 无 [debug]"
+    },
+    {
+      "id": "D1-66",
+      "name": "telemetry-off",
+      "pass": true,
+      "actual": "false",
+      "expected": "TELEMETRY=off → false"
+    },
+    {
+      "id": "D1-66",
+      "name": "telemetry-on",
+      "pass": true,
+      "actual": "true",
+      "expected": "TELEMETRY!=off → true"
+    },
+    {
+      "id": "D1-68",
+      "name": "icon-offline-snapshot",
+      "pass": true,
+      "actual": "snapshot",
+      "expected": "offline=1 → source=snapshot"
+    },
+    {
+      "id": "D1-68",
+      "name": "region-priority",
+      "pass": false,
+      "actual": "got=hw-region-val (HW_REGION=hw-region-val, HUAWEICLOUD_REGION=huaweicloud-region-val)",
+      "expected": "HUAWEICLOUD_REGION 优先于 HW_REGION（case 预期）"
+    },
+    {
+      "id": "D1-70",
+      "name": "proxy-write-read",
+      "pass": true,
+      "actual": "{\"https_proxy\":\"http://127.0.0.1:8080\",\"http_proxy\":\"\",\"no_proxy\":\"internal.example.com,*.local\"}",
+      "expected": "写读一致"
+    },
+    {
+      "id": "D1-70",
+      "name": "no-proxy-bypass",
+      "pass": true,
+      "actual": "null",
+      "expected": "no_proxy 命中 → null"
+    },
+    {
+      "id": "D1-70",
+      "name": "proxy-selected",
+      "pass": true,
+      "actual": "{\"proxyUrl\":\"http://127.0.0.1:8080\",\"noProxyList\":[\"internal.example.com\",\"*.local\"],\"targetProtocol\":\"https:\"}",
+      "expected": "未命中 no_proxy → 走代理"
+    },
+    {
+      "id": "D2-27",
+      "name": "getKooCliVersion",
+      "pass": true,
+      "actual": "7.2.12",
+      "expected": "读 kooCliVersion 为 x.y.z"
+    },
+    {
+      "id": "D2-27",
+      "name": "parseHcloudVersion",
+      "pass": true,
+      "actual": "7.2.12",
+      "expected": "提取首个 x.y.z = 7.2.12"
+    },
+    {
+      "id": "D2-27",
+      "name": "compareVersion",
+      "pass": true,
+      "actual": "ok",
+      "expected": "比较正确"
+    },
+    {
+      "id": "D2-27",
+      "name": "kooCliDownloadBase",
+      "pass": true,
+      "actual": "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12",
+      "expected": "downloadBase=KOO_CLI_BASE/<versionOrLatest>"
+    }
+  ]
+}

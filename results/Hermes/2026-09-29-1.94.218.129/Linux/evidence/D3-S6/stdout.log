@@ -1,0 +1,49 @@
+{
+  "total": 6,
+  "passed": 5,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D3-S6",
+      "name": "serviceCatalog-route-fg",
+      "pass": false,
+      "actual": "{\"intent\":\"配置一个定时任务，定时触发函数\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hc",
+      "expected": "serviceCatalog 路由命中 FunctionGraph"
+    },
+    {
+      "id": "D3-S6",
+      "name": "create-function",
+      "pass": true,
+      "actual": "{\n  \"func_id\": \"dcf9e9e9-135c-4898-a942-95b8bf1c64b8\",\n  \"func_urn\": \"urn:fss:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:function:default:hdk1-s6-0630122046:la",
+      "expected": "CreateFunction 返回 func_urn"
+    },
+    {
+      "id": "D3-S6",
+      "name": "create-timer-trigger",
+      "pass": true,
+      "actual": "{\n  \"trigger_id\": \"f1c678be-8257-402c-be1c-762afbf71a6b\",\n  \"trigger_type_code\": \"TIMER\",\n  \"trigger_status\": \"ACTIVE\",\n  \"event_data\": {\n    \"name\": \"test-time",
+      "expected": "CreateFunctionTrigger TIMER 成功"
+    },
+    {
+      "id": "D3-S6",
+      "name": "verify-urn",
+      "pass": true,
+      "actual": "urnOk=true",
+      "expected": "ListFunctions 含新建函数 URN"
+    },
+    {
+      "id": "D3-S6",
+      "name": "verify-trigger-bound",
+      "pass": true,
+      "actual": "trigBound=true",
+      "expected": "ListFunctionTriggers 含 TIMER 触发器"
+    },
+    {
+      "id": "D3-S6",
+      "name": "delete-zero",
+      "pass": true,
+      "actual": "delete=false gone=true",
+      "expected": "DeleteFunction 后 ListFunctions 不再含(归零)"
+    }
+  ]
+}

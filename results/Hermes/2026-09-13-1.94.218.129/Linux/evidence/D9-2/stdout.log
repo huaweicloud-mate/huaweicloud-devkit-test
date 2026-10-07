@@ -1,0 +1,9 @@
+@@CASE D9-2@@
+JSON-RPC 错误码规范检验（stdio 传输实际 wire 行为）：
+未知方法 (bogus/method) 的 JSON-RPC 错误响应：
+  {"jsonrpc":"2.0","id":1,"error":{"code":-32603,"message":"Unsupported method: bogus/method"}}
+
+预期（JSON-RPC 2.0 规范）：未知方法应返回 -32601 (Method not found)。
+实际：mcp-server.mjs:169 对 dispatch 抛出的所有异常硬编码 error.code = -32603 (Internal error)。
+FAIL D9-2 错误码不符合规范：未知方法返回 -32603 而非 -32601（mcp-server.mjs:169 硬编码）
+@@END@@

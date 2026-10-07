@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-25",
+  "title": "Python hook 事件遥测分类",
+  "expected": "只读→cli:read、写→cli:write、其他→cli:invoke；事件写 Node 读取的 telemetry 目录",
+  "actual": "写命令事件写到了 plugins/telemetry；keys=[\"cli:read\",\"cli:invoke\",\"cli:invoke\"]；Node 读取目录存在=false",
+  "detail": "hooks/huaweicloud-safety.py:46 WRITE_OPERATION_RE 用 (^|[A-Za-z0-9]) 前置字符类，使空格分隔的写动词（ECS CreateServers）不匹配→落 cli:invoke；hooks/huaweicloud-safety.py:24 PLUGIN_DIR=parents[2] 误指向 plugins/，事件落 plugins/telemetry 而 Node telemetry.mjs:21 读 plugins/huaweicloud-core/telemetry，事件不被消费",
+  "executedAt": "20261001210345",
+  "probe": "probe_missing.mjs"
+}
