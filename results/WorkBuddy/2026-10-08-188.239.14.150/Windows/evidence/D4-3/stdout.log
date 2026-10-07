@@ -1,0 +1,8 @@
+{
+  "caseId": "D4-3",
+  "status": "SPEC-MISMATCH",
+  "why": "风险规则 regex (ShowSecret|DownloadSecret|GetSecretValue) 大小写敏感，不匹配实际 CLI 格式 show-secret (小写连字符)",
+  "rootCause": "plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json: rule hwc-command-secret-value-read match.regex",
+  "sample": "{\"cli\":{\"cmd\":\"hcloud csms show-secret --secret-name mysecret\",\"decision\":\"allow\"},\"api\":{\"cmd\":\"hcloud csms ShowSecret --secret-name mysecret\",\"decision\":\"deny\"}}",
+  "executedAt": "20261008050500"
+}

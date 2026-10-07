@@ -1,0 +1,8 @@
+{
+  "caseId": "D8-9",
+  "status": "SPEC-MISMATCH",
+  "why": "sanitizeValue 仅移除控制字符和截断，未脱敏 AK/SK/token 值（spec 要求移除敏感值）",
+  "rootCause": "plugins/huaweicloud-core/src/telemetry/telemetry.mjs: sanitizeValue function (line ~189) — 只做 replace(/[\\r\\n\\t]+/g, \" \") 和 slice(0, MAX_VALUE_LENGTH)，无 AK/SK/token 检测脱敏",
+  "sample": "{\"id1\":\"15e0147c29d4215ab8d1\",\"controlRemoved\":true,\"akRedacted\":false,\"akOutput\":\"AKTEST123456\",\"normalPreserved\":true,\"truncated\":true}",
+  "executedAt": "20261008052200"
+}
