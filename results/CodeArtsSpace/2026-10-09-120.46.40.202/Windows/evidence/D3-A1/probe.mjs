@@ -1,0 +1,7 @@
+// Probe: D3-A1
+// Client: CodeArtsSpace
+// OS: Windows
+// Status: PASS
+// Time: 2026-10-09 05:09
+// Tool: probe-p1.mjs
+// Command: grep huaweicloud_ mcp-server.mjs
