@@ -440,25 +440,49 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
             + kpi(latest_sum["blocked"], "BLOCKED", STATUS_COLOR["BLOCKED"])
             + kpi(latest_sum["rate"], "通过率", "#3498db"))
 
-    # ---- 每日执行趋势表（每天报告的执行摘要） ----
+    # ---- 每日执行趋势（按月份分组展开显示） ----
     daily_head = '<tr style="background:#f2f2f2;">' + ''.join(
         f'<th style="padding:6px 8px;border:1px solid #ddd;">{h}</th>'
         for h in ["日期", "总用例"] + STATUS_ORDER + ["通过率", ""]) + '</tr>'
     summary_fields = {"PASS": "pass", "FAIL": "fail", "BLOCKED": "blocked",
                       "SPEC-MISMATCH": "spec", "NOT_RUN": "not_run"}
-    daily_rows = ""
-    for d in reversed(days):
+
+    def _day_row(d):
         s = d["summary"]
         pct = rate_num(s["rate"])
         bar = (f'<div style="height:8px;background:#eee;border-radius:4px;width:120px;margin-left:auto;">'
                f'<div style="height:8px;width:{pct}%;background:#3498db;border-radius:4px;"></div></div>')
-        daily_rows += ('<tr><td style="padding:6px 8px;border:1px solid #ddd;white-space:nowrap;"><b>'
-                       + d["date"][5:] + '</b></td><td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">'
-                       + str(s["total"]) + '</td>'
-                       + ''.join(f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;color:{STATUS_COLOR[k]}">'
-                                 f'{s[summary_fields[k]]}</td>' for k in STATUS_ORDER)
-                       + f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{s["rate"]}</b></td>'
-                       + f'<td style="padding:6px 8px;border:1px solid #ddd;">{bar}</td></tr>')
+        return ('<tr><td style="padding:6px 8px;border:1px solid #ddd;white-space:nowrap;"><b>'
+                + d["date"][5:] + '</b></td><td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">'
+                + str(s["total"]) + '</td>'
+                + ''.join(f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;color:{STATUS_COLOR[k]}">'
+                          f'{s[summary_fields[k]]}</td>' for k in STATUS_ORDER)
+                + f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{s["rate"]}</b></td>'
+                + f'<td style="padding:6px 8px;border:1px solid #ddd;">{bar}</td></tr>')
+
+    # 按月份分组（最新月份在前，月内按日期倒序）
+    by_month, month_order = {}, []
+    for d in days:
+        m = d["date"][:7]
+        if m not in by_month:
+            by_month[m] = []
+            month_order.append(m)
+        by_month[m].append(d)
+    month_order.sort(reverse=True)
+    daily_blocks = ""
+    for i, m in enumerate(month_order):
+        mdays = by_month[m]
+        n_days = len(mdays)
+        avg_rate = sum(rate_num(x["summary"]["rate"]) for x in mdays) / n_days
+        y, mo = m.split("-")
+        open_attr = " open" if i == 0 else ""
+        mrows = "".join(_day_row(d) for d in reversed(mdays))
+        daily_blocks += (
+            f'<details style="border:1px solid #ddd;border-radius:6px;margin:10px 0;"{open_attr}>'
+            f'<summary style="cursor:pointer;padding:10px 14px;font-size:14px;font-weight:700;background:#f7f7f7;border-radius:6px;">'
+            f'{y} 年 {int(mo)} 月 <span style="color:#7f8c8d;font-weight:400;font-size:12px;">· {n_days} 天 · 平均通过率 {avg_rate:.1f}%</span>'
+            f'</summary><table style="border-collapse:collapse;width:100%;font-size:13px;margin-top:6px;">'
+            f'<thead>{daily_head}</thead><tbody>{mrows}</tbody></table></details>')
 
     # ---- 通过率折线 SVG ----
     def sparkline(values, color="#3498db", height=140, width=560, pct=True):
@@ -803,8 +827,8 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 <p style="color:#7f8c8d;font-size:12px;">通过率分母 = PASS+FAIL+SPEC（不含 BLOCKED/NOT_RUN）；数据直接取自《每日测试汇总》报告执行摘要。</p>
 
 <h2>每日执行趋势</h2>
-<table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead>{daily_head}</thead><tbody>{daily_rows}</tbody></table>
+<p style="color:#7f8c8d;font-size:12px;">按月份分组展开查看；每块显示当月天数与平均通过率，最新月份默认展开。</p>
+{daily_blocks}
 <div style="margin:12px 0;"><div style="color:#7f8c8d;font-size:12px;margin-bottom:4px;">通过率趋势（%）</div>
 {sparkline(rate_vals)}</div>
 <p style="color:#95a5a6;font-size:11px;">趋势数据 = 每日《每日测试汇总》报告的执行摘要。09-13/14 当日报告使用「机器×用例」累加口径，09-15 起为「用例级去重」口径，跨口径仅作趋势参考。</p>
