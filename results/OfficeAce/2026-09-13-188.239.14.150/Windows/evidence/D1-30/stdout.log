@@ -1,0 +1,97 @@
+{
+  "testCase": "D1-30",
+  "description": "semver 比对正确性 (semverCompare multiple inputs)",
+  "platform": "win32",
+  "nodeVersion": "v24.14.1",
+  "checks": {
+    "1.1.2 vs 1.1.1": {
+      "result": 1,
+      "expected": 1,
+      "passed": true
+    },
+    "1.1.1 vs 1.1.2": {
+      "result": -1,
+      "expected": -1,
+      "passed": true
+    },
+    "1.1.0 vs 1.1.0-next.9": {
+      "result": 1,
+      "expected": 1,
+      "passed": true
+    },
+    "1.1.0-next.9 vs 1.1.0": {
+      "result": -1,
+      "expected": -1,
+      "passed": true
+    },
+    "1.1.0 vs 1.1.0 (equal)": {
+      "result": 0,
+      "expected": 0,
+      "passed": true
+    },
+    "1.1.1-next.12 vs 1.1.1-next.12 (equal)": {
+      "result": 0,
+      "expected": 0,
+      "passed": true
+    },
+    "1.1.1-next.15 vs 1.1.1-next.9 (numeric)": {
+      "result": 1,
+      "expected": 1,
+      "note": "Must be numeric comparison: 15 > 9, not lexicographic where \"15\" < \"9\"",
+      "passed": true
+    },
+    "1.1.1-next.9 vs 1.1.1-next.15 (numeric)": {
+      "result": -1,
+      "expected": -1,
+      "passed": true
+    },
+    "2.0.0 vs 1.9.9": {
+      "result": 1,
+      "expected": 1,
+      "passed": true
+    },
+    "1.0.2 vs 1.1.0": {
+      "result": -1,
+      "expected": -1,
+      "passed": true
+    },
+    "1.1.0 vs 1.0.2": {
+      "result": 1,
+      "expected": 1,
+      "passed": true
+    },
+    "invalid: \"abc\" vs \"abd\" (lexicographic)": {
+      "result": -1,
+      "expected": -1,
+      "note": "Invalid semver → lexicographic string comparison",
+      "passed": true
+    },
+    "invalid: \"xyz\" vs \"abc\" (lexicographic)": {
+      "result": 1,
+      "expected": 1,
+      "passed": true
+    },
+    "invalid: \"foo\" vs \"foo\" (lexicographic equal)": {
+      "result": 0,
+      "expected": 0,
+      "passed": true
+    },
+    "mixed: \"1.1.0\" vs \"not-a-version\"": {
+      "result": -1,
+      "note": "One invalid → falls back to lexicographic string comparison",
+      "passed": true
+    },
+    "1.1.0-next.15 vs 1.1.0-next.12": {
+      "result": 1,
+      "expected": 1,
+      "passed": true
+    },
+    "1.1.2 vs 1.1.1 (patch diff)": {
+      "result": 1,
+      "expected": 1,
+      "passed": true
+    }
+  },
+  "verdict": "PASS",
+  "summary": "PASS: semverCompare correctly handles all cases: basic comparison, stable>prerelease, equal=0, numeric prerelease ordering, major/minor/patch differences, and invalid string lexicographic fallback."
+}

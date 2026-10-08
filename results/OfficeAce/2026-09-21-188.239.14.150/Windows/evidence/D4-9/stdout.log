@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "Public SSH 0.0.0.0/0 port 22",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-network-public-admin-port"
+      ]
+    },
+    {
+      "label": "Public RDP 0.0.0.0/0 port 3389",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "Public MySQL 0.0.0.0/0 port 3306",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "rm -rf /",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "DeleteServers --force",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "classifyTextCommand rm -rf /",
+      "pass": true,
+      "decision": "deny",
+      "risk": "destructive"
+    },
+    {
+      "label": "classifyTextCommand public SSH",
+      "pass": true,
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "label": "DeleteServers cascade delete_publicip",
+      "pass": true,
+      "decision": "warn"
+    },
+    {
+      "label": "mkfs destructive",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "shutdown destructive",
+      "pass": true,
+      "decision": "deny"
+    }
+  ]
+}

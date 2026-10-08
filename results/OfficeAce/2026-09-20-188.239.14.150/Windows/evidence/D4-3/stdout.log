@@ -1,0 +1,353 @@
+================================================================================
+D4-3: 明文secret API拦截测试 (Plaintext Secret API Interception)
+================================================================================
+测试时间: 2026-09-20T02:49:49.711Z
+测试函数: classifyTextCommand()
+预期结果: decision=deny, risk=secret
+
+[PASS] CSMS ShowSecretVersion (明文secret读取)
+  命令: hcloud CSMS ShowSecretVersion --secret_id abc123
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] CSMS ShowSecretVersion (--id)
+  命令: hcloud CSMS ShowSecretVersion --id 123456
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] CSMS DownloadSecret (下载secret)
+  命令: hcloud CSMS DownloadSecret --secret_id abc123
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] CSMS GetSecretValue (获取secret值)
+  命令: hcloud CSMS GetSecretValue --secret_name mysecret
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[FAIL] CSMS ShowSecret (展示secret)
+  命令: hcloud CSMS ShowSecret --secret_id abc123
+  decision=allow, risk=read_only
+  reason: Command appears to be a read-only Huawei Cloud operation.
+
+[PASS] KMS GetSecretValue
+  命令: hcloud KMS GetSecretValue --key_id abc123
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[FAIL] KMS ShowSecret
+  命令: hcloud KMS ShowSecret --key_id abc123
+  decision=allow, risk=read_only
+  reason: Command appears to be a read-only Huawei Cloud operation.
+
+[PASS] KMS DownloadSecret
+  命令: hcloud KMS DownloadSecret --key_id abc123
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] CSMS ShowSecretVersion --secret_string
+  命令: hcloud CSMS ShowSecretVersion --secret_string
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] CSMS ShowSecretVersion --secret_binary
+  命令: hcloud CSMS ShowSecretVersion --secret_binary
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] CSMS CreateSecret --secret_string (含明文)
+  命令: hcloud CSMS CreateSecret --secret_string "plaintext-value"
+  decision=deny, risk=secret
+  reason: The command appears to retrieve a secret value. Use a runtime secret reference pattern instead.
+
+[PASS] CSMS CreateSecret --secret_binary (含二进制)
+  命令: hcloud CSMS CreateSecret --secret_binary "base64data"
+  decision=deny, risk=secret
+  reason: The command appears to retrieve a secret value. Use a runtime secret reference pattern instead.
+
+[PASS] CSMS showsecretversion (小写)
+  命令: hcloud CSMS showsecretversion --secret_id abc123
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] CSMS getsecretvalue (小写)
+  命令: hcloud CSMS getsecretvalue --secret_name mysecret
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] CSMS ShowSecretVersion 完整参数
+  命令: hcloud CSMS ShowSecretVersion --secret_id abc123 --version_id v1 --project_id 0
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] CSMS ShowSecretVersion 等号参数
+  命令: hcloud CSMS ShowSecretVersion --secret_id=abc123 --version_id=v1
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] sudo hcloud CSMS ShowSecretVersion
+  命令: sudo hcloud CSMS ShowSecretVersion --secret_id abc123
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+[PASS] bash -c wrapped ShowSecretVersion
+  命令: bash -c "hcloud CSMS ShowSecretVersion --secret_id abc123"
+  decision=deny, risk=secret
+  reason: Direct secret value retrieval patterns are blocked.
+
+[FAIL] curl CSMS API with show_secret_value
+  命令: curl https://csms.myhuaweicloud.com/v1/secrets/abc/versions/v1 --show_secret_value
+  decision=allow, risk=not_huaweicloud
+  reason: No Huawei Cloud safety rule matched.
+
+[PASS] 裸 ShowSecretVersion 命令
+  命令: ShowSecretVersion --secret_id abc123
+  decision=deny, risk=secret
+  reason: Direct secret value retrieval patterns are blocked.
+
+[PASS] 裸 GetSecretValue 命令
+  命令: GetSecretValue --secret_name mysecret
+  decision=deny, risk=secret
+  reason: Direct secret value retrieval patterns are blocked.
+
+[PASS] CSMS DownloadSecret with version
+  命令: hcloud CSMS DownloadSecret --secret_id abc123 --version_id v1
+  decision=deny, risk=secret
+  reason: Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
+
+================================================================================
+汇总: 19/22 PASS, 3/22 FAIL
+总体结果: FAIL
+================================================================================
+
+---JSON_SUMMARY---
+{
+  "testCase": "D4-3",
+  "title": "明文secret API拦截",
+  "total": 22,
+  "passed": 19,
+  "failed": 3,
+  "result": "FAIL",
+  "details": [
+    {
+      "cmd": "hcloud CSMS ShowSecretVersion --secret_id abc123",
+      "desc": "CSMS ShowSecretVersion (明文secret读取)",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS ShowSecretVersion --id 123456",
+      "desc": "CSMS ShowSecretVersion (--id)",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS DownloadSecret --secret_id abc123",
+      "desc": "CSMS DownloadSecret (下载secret)",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS GetSecretValue --secret_name mysecret",
+      "desc": "CSMS GetSecretValue (获取secret值)",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS ShowSecret --secret_id abc123",
+      "desc": "CSMS ShowSecret (展示secret)",
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "passed": false,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud KMS GetSecretValue --key_id abc123",
+      "desc": "KMS GetSecretValue",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud KMS ShowSecret --key_id abc123",
+      "desc": "KMS ShowSecret",
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "passed": false,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud KMS DownloadSecret --key_id abc123",
+      "desc": "KMS DownloadSecret",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS ShowSecretVersion --secret_string",
+      "desc": "CSMS ShowSecretVersion --secret_string",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS ShowSecretVersion --secret_binary",
+      "desc": "CSMS ShowSecretVersion --secret_binary",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS CreateSecret --secret_string \"plaintext-value\"",
+      "desc": "CSMS CreateSecret --secret_string (含明文)",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "The command appears to retrieve a secret value. Use a runtime secret reference pattern instead.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS CreateSecret --secret_binary \"base64data\"",
+      "desc": "CSMS CreateSecret --secret_binary (含二进制)",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "The command appears to retrieve a secret value. Use a runtime secret reference pattern instead.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS showsecretversion --secret_id abc123",
+      "desc": "CSMS showsecretversion (小写)",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS getsecretvalue --secret_name mysecret",
+      "desc": "CSMS getsecretvalue (小写)",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS ShowSecretVersion --secret_id abc123 --version_id v1 --project_id 0",
+      "desc": "CSMS ShowSecretVersion 完整参数",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS ShowSecretVersion --secret_id=abc123 --version_id=v1",
+      "desc": "CSMS ShowSecretVersion 等号参数",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "sudo hcloud CSMS ShowSecretVersion --secret_id abc123",
+      "desc": "sudo hcloud CSMS ShowSecretVersion",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "bash -c \"hcloud CSMS ShowSecretVersion --secret_id abc123\"",
+      "desc": "bash -c wrapped ShowSecretVersion",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value retrieval patterns are blocked.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "curl https://csms.myhuaweicloud.com/v1/secrets/abc/versions/v1 --show_secret_value",
+      "desc": "curl CSMS API with show_secret_value",
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "reason": "No Huawei Cloud safety rule matched.",
+      "passed": false,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "ShowSecretVersion --secret_id abc123",
+      "desc": "裸 ShowSecretVersion 命令",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value retrieval patterns are blocked.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "GetSecretValue --secret_name mysecret",
+      "desc": "裸 GetSecretValue 命令",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value retrieval patterns are blocked.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    },
+    {
+      "cmd": "hcloud CSMS DownloadSecret --secret_id abc123 --version_id v1",
+      "desc": "CSMS DownloadSecret with version",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "passed": true,
+      "blockedByRiskRule": false,
+      "ruleId": null
+    }
+  ]
+}

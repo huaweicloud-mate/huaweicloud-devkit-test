@@ -1,0 +1,94 @@
+=== D2-12 (P1): temporary credentials not persisted ===
+Date: 2026-09-13
+Platform: Windows (win32)
+Client: OfficeAce
+
+--- Probe Results ---
+
+1. Runtime credentials in credentials.mjs:
+   - Module-level variable: `let runtimeCredentials = null`
+   - setRuntimeCredentials(ak, sk, securityToken, region): Sets module-level variable
+   - clearRuntimeCredentials(): Sets runtimeCredentials = null
+   - hasRuntimeCredentials(): Returns runtimeCredentials !== null
+   - resolveCredentialsWithRuntime(): Returns runtime credentials if set, else falls
+     back to file/env resolution
+   - NO writeFileSync in setRuntimeCredentials: CONFIRMED
+   - Runtime credentials are stored ONLY in a JavaScript module-level variable
+   - Module-level variables are in-process memory and are lost on restart
+
+2. auth_switch temporary action (tools.mjs):
+   - action='temporary' calls setRuntimeCredentials() → memory only
+   - Returns: { status: 'ok', scope: 'temporary', note: 'Runtime credentials active
+     for this MCP process. hcloud commands still use the KooCLI current profile;
+     use action=persist to align files.' }
+   - Does NOT call writeGlobalCredentials() or writeObsConfig()
+   - Does NOT modify ~/.config/huaweicloud/credentials.json
+   - Does NOT modify ~/.obsutilconfig
+   - Does NOT modify ~/.hcloud/config.json
+
+3. persistCredentials function - STS rejection:
+   - If securityToken is non-empty, persist is REJECTED:
+     "Temporary STS credentials cannot be persisted (R3). Use action=temporary."
+   - When persisting permanent credentials, securityToken is explicitly set to ''
+   - This enforces R3 rule: STS tokens can only be temporary, never written to disk
+
+4. auth_init handler:
+   - Calls setRuntimeCredentials(args.ak, args.sk, undefined, args.region)
+   - Note: securityToken is passed as undefined (not persisted)
+   - clear=true calls clearRuntimeCredentials() → resets to null
+   - auth_init does NOT write to any file - purely in-memory
+
+5. resolveCredentialsWithRuntime priority:
+   - Runtime credentials take HIGHEST priority (checked first)
+   - Falls back to resolveCredentials() (env → CodeArts → file) if no runtime creds
+   - This means temporary credentials override file-based credentials during the session
+
+6. STS shadowing protection:
+   - When env has HW_SECURITY_TOKEN AND file has permanent credentials,
+     the file credentials WIN (STS does not shadow permanent)
+   - This prevents sandbox-injected STS from overriding user's explicit permanent creds
+   - Code: if (HW_ACCESS_KEY && HW_SECRET_KEY && HW_SECURITY_TOKEN && stored.ak && stored.sk)
+     → ak = stored.ak; sk = stored.sk; (file wins)
+
+7. Sandbox credentials:
+   - huaweicloud_sandbox_credentials has enable_sts option
+   - Validates AK/SK against IAM before injecting
+   - Injects temporary credentials into sandbox (not into devkit config)
+
+--- Security Analysis ---
+
+Temporary credential flow:
+  auth_switch(action=temporary) → setRuntimeCredentials() → module-level var → MEMORY ONLY
+  ↓
+  resolveCredentialsWithRuntime() → returns runtime creds → used for API calls
+  ↓
+  Process restart → module-level var = null → credentials GONE (must re-auth)
+
+Permanent credential flow:
+  auth_switch(action=persist) → persistCredentials() → writeGlobalCredentials() → FILE
+  ↓
+  resolveCredentials() → reads file → used for API calls
+  ↓
+  Process restart → file still exists → credentials PERSIST
+
+STS enforcement:
+  persistCredentials(securityToken!='') → REJECTED with R3 error
+  Only action=temporary can hold STS tokens, and only in memory
+
+--- Verdict ---
+
+STATUS: PASS
+
+Rationale:
+- Temporary credentials (action=temporary) are stored in a module-level JavaScript
+  variable (runtimeCredentials), which is in-process memory only
+- NO file writes occur for temporary credentials:
+  - ~/.config/huaweicloud/credentials.json is NOT modified
+  - ~/.obsutilconfig is NOT modified
+  - ~/.hcloud/config.json is NOT modified
+- STS tokens (securityToken) are explicitly rejected from persistence (R3 rule):
+  "Temporary STS credentials cannot be persisted (R3). Use action=temporary."
+- auth_init also uses in-memory storage only (setRuntimeCredentials)
+- Process restart clears all temporary credentials (module-level variable resets to null)
+- STS shadowing protection prevents sandbox-injected STS from overriding permanent creds
+- The security model is sound: temporary = memory, permanent = file, STS = temporary only

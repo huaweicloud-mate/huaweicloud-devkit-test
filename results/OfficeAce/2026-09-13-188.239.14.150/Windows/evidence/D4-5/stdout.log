@@ -1,0 +1,52 @@
+=== Test D4-5 : Write Operation Misjudgment Detection ===
+Timestamp: 2026-09-13
+
+--- Probe 1: hcloud ECS DeleteServers --ServerId xxx ---
+MCP Tool: huaweicloud-devkit__huaweicloud_plan_cli_command
+Response:
+{
+  "executable": "hcloud",
+  "args": ["ECS", "DeleteServers", "--ServerId", "xxx"],
+  "command": "hcloud ECS DeleteServers --ServerId xxx",
+  "executableBlock": "hcloud ECS DeleteServers --ServerId xxx",
+  "warnings": [],
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "sgFindings": [],
+  "approvalToken": "3c21a2e4-41f8-4c33-b7c7-50e35c123f75",
+  "safeToRun": false
+}
+Verdict: Correctly classified as WRITE (risk=write, decision=deny, safeToRun=false) ✓
+
+--- Probe 2: hcloud ECS CreateServers ---
+MCP Tool: huaweicloud-devkit__huaweicloud_plan_cli_command
+Response:
+{
+  "executable": "hcloud",
+  "args": ["ECS", "CreateServers"],
+  "command": "hcloud ECS CreateServers",
+  "executableBlock": "hcloud ECS CreateServers",
+  "warnings": [
+    "Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id",
+    "Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs"
+  ],
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "sgFindings": [],
+  "approvalToken": "49006885-06fd-4d43-97b2-cdd21fe3d3d8",
+  "safeToRun": false
+}
+Verdict: Correctly classified as WRITE (risk=write, decision=deny, safeToRun=false) ✓
+
+=== SUMMARY ===
+Probe 1 (DeleteServers): WRITE ✓
+Probe 2 (CreateServers): WRITE ✓
+Overall Result: PASS
+Both destructive and creative operations were correctly identified as write operations.
+Neither was misjudged as read-only. safeToRun=false for both.

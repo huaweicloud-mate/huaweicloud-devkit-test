@@ -1,0 +1,191 @@
+===== _gen-evidence.mjs (6238 bytes) =====
+// 证据生成脚本：为 EXP-E01~E15 创建独立 evidence 目录，写入 probe.mjs 和 stdout.log
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const EVIDENCE_BASE = 'C:\\Users\\Administrator\\devkit-test\\OfficeAce\\huaweicloud-devkit-test\\results\\OfficeAce\\2026-09-30-188.239.14.150\\Windows\\evidence';
+const MCP_SERVER = 'C:\\Users\\Administrator\\devkit-test\\OfficeAce\\hdk\\plugins\\huaweicloud-core\\src\\mcp-server.mjs';
+const EXECUTED_AT = '20260930024107';
+
+// 15 条用例数据（来自 harness 运行结果 + eval-set-v1.csv）
+const cases = [
+  { id:'EXP-E01', intent:'帮我查一下我账号在华北北京四有哪些云主机', expectedRoute:'ECS查询→run_readonly', actualRoute:'未命中(返回hcloud帮助提示)', verdict:'MISS', status:'FAIL' },
+  { id:'EXP-E02', intent:'创建一台 2C4G 的 Ubuntu 云服务器 规格通用型', expectedRoute:'ECS创建→plan', actualRoute:'ECS', verdict:'HIT', status:'PASS' },
+  { id:'EXP-E03', intent:'把本地 dist 目录部署成一个公网静态网站', expectedRoute:'OBS静态站→deploy', actualRoute:'OBS+Sandbox+DevStation', verdict:'HIT', status:'PASS' },
+  { id:'EXP-E04', intent:'给这台服务器绑定一个弹性公网IP', expectedRoute:'EIP→plan', actualRoute:'ECS+VPC+EIP', verdict:'HIT', status:'PASS' },
+  { id:'EXP-E05', intent:'看一下我的云数据库MySQL实例的状态', expectedRoute:'RDS查询→read', actualRoute:'RDS', verdict:'HIT', status:'PASS' },
+  { id:'EXP-E06', intent:'创建一个 Redis 缓存实例用于会话存储', expectedRoute:'DCS创建→plan', actualRoute:'OBS+DDS+DCS', verdict:'HIT', status:'PASS' },
+  { id:'EXP-E07', intent:'给生产环境的服务器配置一个每日备份策略', expectedRoute:'CBR→plan', actualRoute:'ECS+IAM+CBR', verdict:'HIT', statu
+===== _helper.mjs (935 bytes) =====
+// Shared helper: absolute path to hdk source
+export const HDK_SRC = 'file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src';
+export async function loadSafety() {
+  return await import(`${HDK_SRC}/safety-policy.mjs`);
+}
+export async function loadTools() {
+  return await import(`${HDK_SRC}/tools.mjs`);
+}
+export async function loadMcpProtocol() {
+  return await import(`${HDK_SRC}/mcp-protocol.mjs`);
+}
+export async function loadUpdateCheck() {
+  return await import(`${HDK_SRC}/update-check.mjs`);
+}
+export async function loadDetectFramework() {
+  return await import(`${HDK_SRC}/detect-framework.mjs`);
+}
+export async function loadMcpConfigMerge() {
+  return await import(`${HDK_SRC}/mcp-config-merge.mjs`);
+}
+export async function loadAuth() {
+  return await import(`${HDK_SRC}/auth/service.mjs`);
+}
+export async function loadRiskEngine() {
+  return await import(`${HDK_SRC}/risk-rule-engine.mjs`);
+}
+===== _run-all-p1.mjs (1461 bytes) =====
+// Wrapper: run all probes and write stdout.log for each
+import { execFileSync } from 'node:child_process';
+import { writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+const NODE = 'C:\\Users\\Administrator\\AppData\\Local\\Programs\\OfficeAce\\tools\\node\\node.exe';
+const EVID = 'C:\\Users\\Administrator\\devkit-test\\OfficeAce\\huaweicloud-devkit-test\\results\\OfficeAce\\2026-09-30-188.239.14.150\\Windows\\evidence';
+const cases = ['D1-3','D1-26','D1-27','D1-28','D1-31','D1-41','D1-42','D1-45','D1-70','D2-12','D2-16','D4-20','D2-1','D2-5','D2-26'];
+
+for (const c of cases) {
+  const probePath = join(EVID, c, 'probe.mjs');
+  const logPath = join(EVID, c, 'stdout.log');
+  if (!existsSync(probePath)) {
+    console.log(`${c}: probe.mjs NOT FOUND`);
+    continue;
+  }
+  try {
+    const stdout = execFileSync(NODE, [probePath], { encoding: 'utf8', timeout: 120000, maxBuffer: 10 * 1024 * 1024 });
+    writeFileSync(logPath, stdout, 'utf8');
+    // Parse to get status
+    try {
+      const parsed = JSON.parse(stdout);
+      console.log(`${c}: ${parsed.status} - ${parsed.why?.slice(0, 80)}`);
+    } catch {
+      console.log(`${c}: written ${stdout.length} bytes (unparseable)`);
+    }
+  } catch (error) {
+    const errOut = error.stdout || error.message || String(error);
+    writeFileSync(logPath, errOut, 'utf8');
+    console.log(`${c}: ERROR - ${error.message?.slice(0, 80)}`);
+  }
+}
+console.log('\nALL DONE');
+===== probe-c4-batch.mjs (9142 bytes) =====
+// EXP-C4-01~22 服务矩阵批量只读规划冒烟 probe
+// 在单个 MCP server 会话中依次执行 22 个服务的 list_operations + plan_cli_command
+import { spawn } from 'node:child_process';
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+const hdkSrc = 'C:\\Users\\Administrator\\devkit-test\\OfficeAce\\hdk\\plugins\\huaweicloud-core\\src';
+const EVID = 'C:\\Users\\Administrator\\devkit-test\\OfficeAce\\huaweicloud-devkit-test\\results\\OfficeAce\\2026-09-30-188.239.14.150\\Windows\\evidence';
+const serverPath = join(hdkSrc, 'mcp-server.mjs');
+
+// 服务矩阵定义: [caseId, service, readonlyOp, isSpecial]
+const services = [
+  ['EXP-C4-01', 'ECS', 'ListCloudServers', false],
+  ['EXP-C4-02', 'VPC', 'ListVpcs/v2', false],
+  ['EXP-C4-03', 'OBS', 'obs', true],           // OBS 是系统命令，特殊处理
+  ['EXP-C4-04', 'RDS', 'ListInstances', false],
+  ['EXP-C4-05', 'GaussDB', 'ListGaussMySqlInstances', false],
+  ['EXP-C4-06', 'CCE', 'ListClusters', false],
+  ['EXP-C4-07', 'FunctionGraph', 'ListFunctions', false],
+  ['EXP-C4-08', 'IAM', 'ListUsersV5', false],
+  ['EXP-C4-09', 'CTS', 'ListTraces', false],
+  ['EXP-C4-10', 'CES', 'ListMetrics', false],
+  ['EXP-C4-11', 'DDS', 'ListInstances', false],
+  ['EXP-C4-12', 'DCS', 'ListInstances', false],
+  ['EXP-C4-13', 'SMN', 'ListTopics', false],
+  ['EXP-C4-14', 'Kafka', 'ListInstances', false],  // DMS → Kafka
+  ['EXP-C4-15', 'WAF', 'ListInstance', false],
+  ['EXP-C4-16', 'CDN', 'ListDomains/v1', false],
+  ['EXP-C4-17', 'ModelArts', 'ListNotebooks', false],
+  ['EXP-C4-
+===== probe-c4.mjs (7194 bytes) =====
+// EXP-C4-XX 服务矩阵只读规划冒烟 probe
+// 用法: node probe-c4.mjs <caseId> <service> <readonlyOp> [--evid <dir>]
+// 例如: node probe-c4.mjs EXP-C4-01 ECS ListCloudServers
+import { spawn, spawnSync } from 'node:child_process';
+import { existsSync, writeFileSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+const caseId = process.argv[2];
+const service = process.argv[3];
+const readonlyOp = process.argv[4];
+const evidIdx = process.argv.indexOf('--evid');
+const EVID = evidIdx > -1 ? process.argv[evidIdx + 1] : 'C:\\Users\\Administrator\\devkit-test\\OfficeAce\\huaweicloud-devkit-test\\results\\OfficeAce\\2026-09-30-188.239.14.150\\Windows\\evidence';
+
+if (!caseId || !service || !readonlyOp) {
+  console.error('用法: node probe-c4.mjs <caseId> <service> <readonlyOp> [--evid <dir>]');
+  process.exit(2);
+}
+
+const hdkSrc = 'C:\\Users\\Administrator\\devkit-test\\OfficeAce\\hdk\\plugins\\huaweicloud-core\\src';
+const serverPath = join(hdkSrc, 'mcp-server.mjs');
+
+const results = [];
+function rec(id, title, ok, actual, expected, detail = '') {
+  results.push({ id, title, ok, actual, expected, detail });
+  const line = `${ok ? 'PASS' : 'FAIL'}  ${id}  ${title} => ${JSON.stringify(actual).substring(0, 200)} (期望 ${JSON.stringify(expected).substring(0, 100)})`;
+  console.log(line);
+  if (detail) console.log('    ' + detail);
+}
+
+// ① 启动 MCP server，调用 list_operations
+const child = spawn(process.execPath, [serverPath], {
+  stdio: ['pipe', 'pipe', 'pipe'],
+  env: { ...process.env, HUAWEICLOUD
+===== probe-summary.json (4237 bytes) =====
+{
+  "total": 18,
+  "pass": 16,
+  "fail": 0,
+  "blocked": 2,
+  "executedAt": "20260930103000",
+  "cases": [
+    {
+      "caseId": "D1-66",
+      "status": "PASS",
+      "why": "遥测开关与端点环境变量: 7/7 断言通过（默认开启/off关闭/on开启/端点覆盖/enqueue跳过/sanitize截断/脱敏）"
+    },
+    {
+      "caseId": "D1-69",
+      "status": "PASS",
+      "why": "CLI help 子命令: 11/11 断言通过（help/--help/-h/无参/--version/未知命令 退出码+输出格式）"
+    },
+    {
+      "caseId": "D2-10",
+      "status": "PASS",
+      "why": "KooCLI 多 profile: 6/6 断言通过（current=deploy解析/切换跟随/runHcloudConfigure --cli-profile=/缺失config error）"
+    },
+    {
+      "caseId": "D2-13",
+      "status": "PASS",
+      "why": "隔离 S1 + env: 5/5 断言通过（configuredBySession优先S1胜出/清除后env兜底/占位符识别）"
+    },
+    {
+      "caseId": "D2-27",
+      "status": "PASS",
+      "why": "KooCLI 版本管理: 6/6 断言通过（KOO_CLI_BASE/getKooCliVersion/parseHcloudVersion/compareVersion/downloadBase）"
+    },
+    {
+      "caseId": "D3-C14",
+      "status": "PASS",
+      "why": "沙箱 HDKit 服务参数与 hwlink 凭证: 10/10 断言通过（runtime注入/hasRuntime/clear/env优先级/hwlink getCredentials/无凭证抛错/端点覆盖/参数校验）"
+    },
+    {
+      "caseId": "D3-C14-mock",
+      "status": "PASS",
+      "why": "sandbox 凭证 mock 层: 13/13 断言通过（install/rt-cred/hwlink/hdkitCheckUser/hdkitCredentials/param校验/hdkitConnect/voucherStatus/requestLog/endpoint覆盖/uninstall/env恢复/独立启停）"
+    },
+    {
+      "caseId": "D4-12",
+      "status": "PASS",
+      "why": "供应链安装期安全: 9/9 断言通过（postinstall自有bin/--omit=dev/--no-audit/--no-fund/无高危包/SBOM版本固定/可枚举/无preinstall/bin入口安全

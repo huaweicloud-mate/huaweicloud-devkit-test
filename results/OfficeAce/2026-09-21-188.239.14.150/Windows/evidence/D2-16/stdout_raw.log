@@ -1,0 +1,17 @@
+=== D2-16: import文件读取后擦除 ===
+[PASS] T1.1 creds-import.json 已放置 :: path: C:\Users\ADMINI~1\AppData\Local\Temp\2\d2-16-t0B9sZ\.config\huaweicloud\creds-import.json
+auth_switch import response: {
+  "status": "ok",
+  "scope": "temporary",
+  "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files."
+}
+[PASS] T2.1 auth_switch import 返回有效响应 :: has response
+[PASS] T3.1 import 文件读取后被擦除 :: 文件已擦除 - 密钥不留盘
+[PASS] T4.1 源码含 import 文件擦除逻辑 :: import erasure logic found in source
+
+=== 汇总 ===
+Total: 4, PASS: 4, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-16","result":"PASS","checks":[{"label":"T1.1 creds-import.json 已放置","pass":true,"detail":"path: C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\d2-16-t0B9sZ\\.config\\huaweicloud\\creds-import.json"},{"label":"T2.1 auth_switch import 返回有效响应","pass":true,"detail":"has response"},{"label":"T3.1 import 文件读取后被擦除","pass":true,"detail":"文件已擦除 - 密钥不留盘"},{"label":"T4.1 源码含 import 文件擦除逻辑","pass":true,"detail":"import erasure logic found in source"}],"timestamp":"2026-09-21T02:07:30.446Z"}

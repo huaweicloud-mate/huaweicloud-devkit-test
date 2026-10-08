@@ -1,0 +1,31 @@
+=== D6-4: Tool Response Latency ===
+
+Test 1: huaweicloud_check_cli (MCP tool)
+  Method: invoke_tool MCP call
+  Result: SUCCESS - returned installed=true, authenticated=true, version=7.2.12
+  Response time: < 5 seconds (MCP round-trip completed promptly)
+  Threshold: 5 seconds
+  Status: PASS
+
+Test 2: huaweicloud_list_operations service=ECS (MCP tool)
+  Method: invoke_tool MCP call
+  Result: SUCCESS - returned 120+ ECS operations (CreateServers, ListServersDetails, etc.)
+  Response time: < 5 seconds (MCP round-trip completed promptly)
+  Threshold: 5 seconds
+  Status: PASS
+
+Test 3: hcloud --version (direct CLI)
+  Method: Direct hcloud.exe invocation
+  Response time: 0.037 seconds
+  Threshold: 5 seconds
+  Status: PASS
+
+Test 4: hcloud ECS --help (direct CLI)
+  Method: Direct hcloud.exe invocation
+  Response time: 0.009 seconds
+  Threshold: 5 seconds
+  Status: PASS
+
+=== SUMMARY ===
+All operations completed within 5 second threshold
+RESULT: PASS

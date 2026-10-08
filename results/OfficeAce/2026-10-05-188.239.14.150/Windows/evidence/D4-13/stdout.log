@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "caseId": "D4-13",
+  "why": "readPass=true, writeDenied=true, readonlyCredsExists=true",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "cmd": "ECS ListServers",
+      "d": "allow"
+    },
+    {
+      "cmd": "ECS ShowServer --server-id=x",
+      "d": "allow"
+    },
+    {
+      "cmd": "VPC ListVpcs",
+      "d": "allow"
+    },
+    {
+      "cmd": "RDS ListInstances",
+      "d": "allow"
+    },
+    {
+      "cmd": "OBS ls",
+      "d": "allow"
+    },
+    {
+      "cmd": "CCE ListClusters",
+      "d": "allow"
+    },
+    {
+      "cmd": "ECS CreateServers",
+      "d": "deny"
+    },
+    {
+      "cmd": "ECS DeleteServers",
+      "d": "deny"
+    },
+    {
+      "cmd": "VPC CreateVpc",
+      "d": "deny"
+    }
+  ]
+}

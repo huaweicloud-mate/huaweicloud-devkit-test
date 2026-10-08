@@ -1,0 +1,21 @@
+=== D1-45: 兜底提示真实序列与预热竞态 ===
+
+Step 1: Pre-warm via check_update → result=update_available, peekCachedUpdateInfo available ✓
+Step 2: First non-check tool (get_service_icon) via dispatch → _updateInfo attached
+  _updateInfo: {"currentVersion":"1.1.5","latestVersion":"1.2.0"} ✓
+Step 3: Second non-check tool → NO _updateInfo (one-time consumption) ✓
+Step 4: check_update tool → NO _updateInfo ✓
+Step 5: applyUpdateHint:
+  check_update → no _updateInfo ✓
+  upgrade → no _updateInfo ✓
+  normal tool → has _updateInfo ✓
+Step 6: Pre-warm non-blocking (peekCachedUpdateInfo returns null when not prewarmed) ✓
+
+--- VERIFICATION ---
+First non-check tool gets _updateInfo: true
+Second non-check tool does NOT get _updateInfo: true
+check_update does NOT carry _updateInfo: true
+upgrade does NOT carry _updateInfo: true
+Normal tool gets _updateInfo via applyUpdateHint: true
+Pre-warm non-blocking: true
+VERDICT D1-45: PASS

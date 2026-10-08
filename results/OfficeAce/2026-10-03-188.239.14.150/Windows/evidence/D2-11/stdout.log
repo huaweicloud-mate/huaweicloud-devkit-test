@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "caseId": "D2-11",
+  "why": "STS token persist correctly rejected with scope=rejected; credentials.json not modified",
+  "executedAt": "20261001103000",
+  "checks": [
+    {
+      "name": "step1-needs-confirmation",
+      "pass": true,
+      "detail": "confirmToken=switch-1790978749334"
+    },
+    {
+      "name": "scope-rejected",
+      "pass": true,
+      "detail": "scope=rejected, status=error"
+    },
+    {
+      "name": "status-error",
+      "pass": true,
+      "detail": "status=error"
+    },
+    {
+      "name": "mentions-sts",
+      "pass": true,
+      "detail": "msg: {\"status\":\"error\",\"error\":\"Temporary STS credentials cannot be persisted (R3). Use action=temporary.\",\"scope\":\"rejected\"}"
+    },
+    {
+      "name": "sts-not-persisted",
+      "pass": true,
+      "detail": "securityToken: empty"
+    }
+  ]
+}

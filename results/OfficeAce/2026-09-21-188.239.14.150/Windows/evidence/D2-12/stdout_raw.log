@@ -1,0 +1,92 @@
+=== D2-12: R10 runtime非空禁止落盘 ===
+auth_init response: {"status":"ok","message":"Runtime credentials set for this MCP session."}
+[PASS] T1.1 auth_init 设置 runtime 凭证 :: status=ok
+auth_status: {
+  "target": "all",
+  "credentialsConfigured": false,
+  "credentialsPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\d2-12-WLMOqj\\.config\\huaweicloud\\credentials.json",
+  "obsConfigured": true,
+  "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "caae65f2",
+      "runtimeFingerprint": "4e60a5f5"
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [],
+    "hasRuntime": true,
+    "runtimeFingerprint": "4e60a5f5",
+    "inconsistent": false,
+    "runtimeActive": true
+  },
+  "onboarding": {
+    "needsSetup": false,
+    "scenario": 0,
+    "reason": "runtime-active",
+    "message": "Runtime credentials are active; no setup needed.",
+    "steps": [],
+    "accountHint": null
+  },
+  "agents": {
+    "opencode": {
+      "configured": false
+    },
+    "codex": {
+      "configured": false
+    },
+    "codex-desktop": {
+      "configured": false
+    },
+    "codearts": {
+      "configured": true
+    },
+    "codearts-work": {
+      "configured": false
+    },
+    "workbuddy": {
+      "configured": false
+    },
+    "dsh": {
+      "configured": false
+    },
+    "officeace": {
+      "configured": true
+    },
+    "hermes": {
+      "configured": false
+    },
+    "openclaw": {
+      "configured": false
+    },
+    "atomcode": {
+      "configured": false
+    }
+  }
+}
+[PASS] T2.1 auth_status 返回有效结构 :: has response
+[PASS] T2.2 runtime 凭证激活 :: auth_init.status=ok, credentialsConfigured=false
+S1 path: C:\Users\ADMINI~1\AppData\Local\Temp\2\d2-12-WLMOqj\.config\huaweicloud\credentials.json
+S1 exists before sync: false
+auth_sync response: {
+  "ok": false,
+  "error": "Global credentials are not configured.",
+  "nextStep": "Run \"npx huaweicloud-devkit auth init\" first."
+}
+[PASS] T3.1 auth_sync 返回有效响应 :: has response
+[PASS] T3.2 S1 未被创建 (R10 suppressed) :: S1 does not exist - runtime not persisted
+[PASS] T4.1 源码含 runtime 检查逻辑 :: runtime credential check found in source
+
+=== 汇总 ===
+Total: 6, PASS: 6, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-12","result":"PASS","checks":[{"label":"T1.1 auth_init 设置 runtime 凭证","pass":true,"detail":"status=ok"},{"label":"T2.1 auth_status 返回有效结构","pass":true,"detail":"has response"},{"label":"T2.2 runtime 凭证激活","pass":true,"detail":"auth_init.status=ok, credentialsConfigured=false"},{"label":"T3.1 auth_sync 返回有效响应","pass":true,"detail":"has response"},{"label":"T3.2 S1 未被创建 (R10 suppressed)","pass":true,"detail":"S1 does not exist - runtime not persisted"},{"label":"T4.1 源码含 runtime 检查逻辑","pass":true,"detail":"runtime credential check found in source"}],"timestamp":"2026-09-21T02:14:57.701Z"}

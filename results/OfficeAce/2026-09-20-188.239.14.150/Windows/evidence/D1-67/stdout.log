@@ -1,0 +1,24 @@
+=== D1-67: Agent toolkit 模式与 DSH 跳过安装环境变量 ===
+Date: 2026-09-20
+Environment: Windows, Node.js v24.14.1, huaweicloud-devkit@1.1.5
+
+Source: setup-cli.mjs
+
+1. HUAWEICLOUD_AGENT_TOOLKIT_MODE=local injection:
+   - OfficeAce (line 249, 626)
+   - CodeArts (line 1226)
+   - CodeArts Work (line 1397, 1421)
+   - WorkBuddy (line 1552)
+   - Atomcode (line 1884)
+   - DSH (line 2036, 2513)
+   All agents inject HUAWEICLOUD_AGENT_TOOLKIT_MODE=local into their environment ✓
+
+2. HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL:
+   - SKIP_DSH=1     → skip: true  ✓
+   - SKIP_DSH unset → skip: false ✓
+   - SKIP_DSH=0     → skip: false ✓
+   Logic: process.env.HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL === '1' (line 2193)
+
+VERDICT: PASS
+AGENT_TOOLKIT_MODE=local is injected for all agent registrations.
+SKIP_DSH_PLUGIN_INSTALL=1 correctly skips DSH MCP client installation.

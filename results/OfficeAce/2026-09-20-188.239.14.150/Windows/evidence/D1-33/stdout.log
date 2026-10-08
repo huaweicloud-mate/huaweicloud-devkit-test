@@ -1,0 +1,31 @@
+=== D1-33: skip 文件持久化与多路径 ===
+Date: 2026-09-20
+Environment: Windows, Node.js v24.14.1, huaweicloud-devkit@1.1.5
+
+Source: update-check.mjs - writeSkipState, readSkipState, resolveSkipFilePath
+
+Test results:
+  1. writeSkipState normal write:
+     - writeSkipState(skipFile, '1.2.0') → {dismissedVersion:'1.2.0', dismissedAt:ISO, expireAt:ISO+3days}
+     - readSkipState returns matching object ✓
+
+  2. resolveSkipFilePath multi-path:
+     - resolveSkipFilePath('session-abc') → devkit-skip.json.session-abc (session-specific)
+     - resolveSkipFilePath(null) → devkit-skip.json (default)
+     - resolveSkipFilePath('stdin') → devkit-skip.json (maps to default)
+     - Session path differs from default ✓
+     - stdin maps to default ✓
+
+  3. Atomic write (tmp+rename):
+     - writeSkipState with custom {at, days} options
+     - File exists after write, content correct ✓
+
+  4. Invalid file content:
+     - writeFileSync(skipFile, '{"invalid": true}')
+     - readSkipState returns null ✓
+
+VERDICT: PASS
+- writeSkipState creates proper JSON with dismissedVersion/dismissedAt/expireAt
+- Atomic write via tmp+rename works correctly
+- resolveSkipFilePath handles session-specific and default paths
+- Invalid file content gracefully returns null

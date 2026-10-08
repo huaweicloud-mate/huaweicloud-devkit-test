@@ -1,0 +1,83 @@
+=== D2-11 (P0): R3 STS token拒绝落盘 ===
+Date: 2026-09-13
+Client: OfficeAce on Windows
+
+--- Probe 1: hcloud configure show ---
+Command: hcloud configure show
+Output:
+{
+  "name": "default",
+  "mode": "AKSK",
+  "accessKeyId": "HPU****YXD",
+  "secretAccessKey": "****",
+  "securityToken": "",
+  "region": "cn-north-4",
+  "projectId": "",
+  "domainId": "",
+  "skipSecureVerify": "false",
+  "readTimeout": 10,
+  "connectTimeout": 5,
+  "retryCount": 0
+}
+Observation: securityToken is empty string — no STS token persisted in KooCLI config.
+
+--- Probe 2: credentials.json on disk ---
+Path: C:\Users\Administrator\.config\huaweicloud\credentials.json
+Content:
+{
+  "ak": "HPUA36M0TSWJWTQBM1CW",
+  "sk": "xN9LXMX2IkWOTueSP4DflREeeNhMXQAwlsEmJDzL",
+  "securityToken": "",
+  "region": "cn-north-4"
+}
+Observation: securityToken is empty string — no STS token persisted in global credentials file.
+
+--- Probe 3: huaweicloud_auth_status ---
+Result: credentialsConfigured=true, runtimeActive=false, hasRuntime=false
+Observation: No runtime (temporary) credentials active. All credentials from file (AKSK mode).
+
+--- Probe 4: Source code analysis ---
+
+File: plugins/huaweicloud-core/src/tools.mjs (lines 970-977)
+Function: persistCredentials(ak, sk, securityToken, region)
+  if (String(securityToken || '')) {
+    return {
+      status: 'error',
+      error: 'Temporary STS credentials cannot be persisted (R3). Use action=temporary.',
+      scope: 'rejected',
+    };
+  }
+  // If STS is empty, proceeds to write with securityToken: '' explicitly
+  writeGlobalCredentials({ ak, sk: String(sk), securityToken: '', region, configuredBySession: true });
+
+ANALYSIS: R3 guard explicitly rejects any non-empty securityToken when action=persist.
+The error message references R3 directly. Even after the guard, securityToken is forced to ''.
+
+File: plugins/huaweicloud-core/src/auth/credentials.mjs (lines 236-261)
+  let runtimeCredentials = null;  // module-level variable, in-memory only
+
+  export function setRuntimeCredentials(ak, sk, securityToken, region) {
+    runtimeCredentials = { ak, sk, securityToken: securityToken || '', region: region || '' };
+  }
+  // No writeFileSync → never persists to disk
+
+ANALYSIS: action=temporary uses setRuntimeCredentials which stores in a module-level
+variable. No file I/O. Token is lost on process restart.
+
+File: plugins/huaweicloud-core/src/tools.mjs (lines 1146-1152)
+  if (action === 'temporary') {
+    setRuntimeCredentials(ak, sk, securityToken || undefined, region);
+    return { status: 'ok', scope: 'temporary', note: 'Runtime credentials active...' };
+  }
+
+ANALYSIS: action=temporary path correctly routes to in-memory storage.
+
+--- Conclusion ---
+STATUS: PASS
+
+R3 is properly enforced:
+1. action=persist with STS token → explicitly rejected with R3 error
+2. action=temporary with STS token → kept in memory only (runtimeCredentials variable)
+3. credentials.json on disk has securityToken="" (verified)
+4. KooCLI config has securityToken="" (verified)
+5. No code path writes a non-empty securityToken to any file

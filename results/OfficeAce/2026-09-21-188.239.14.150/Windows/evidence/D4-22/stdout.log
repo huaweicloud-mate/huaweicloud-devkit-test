@@ -1,0 +1,66 @@
+{
+  "status": "FAIL",
+  "why": "hwc-obs-anonymous-write rule regex in cloud-risk-rules.json does not match JSON-formatted ACL values. The regex 'acl\\s*[=:]\\s*[\"'\\']?public-read-write' expects acl=value or acl:value format but JSON has \"acl\":\"public-read-write\" where the key is quoted. After 'acl' the next char is '\"' (not \\s or [=:]) so regex fails. The 'all' condition matches (bucket present) but 'any' condition fails. Root cause: cloud-risk-rules.json hwc-obs-anonymous-write regex does not handle quoted JSON keys. File: hdk/plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:146",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "Public FunctionGraph no auth",
+      "pass": true,
+      "decision": "warn",
+      "findings": [
+        {
+          "id": "hwc-functiongraph-public-no-auth",
+          "sev": "warn"
+        }
+      ]
+    },
+    {
+      "label": "Public admin port in deploy plan",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-network-public-admin-port"
+      ]
+    },
+    {
+      "label": "Broad IAM in deploy plan",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-iam-admin-policy"
+      ]
+    },
+    {
+      "label": "OBS public-read-write in deploy plan",
+      "pass": false,
+      "decision": "allow",
+      "findings": []
+    },
+    {
+      "label": "Sandbox missing TTL warning",
+      "pass": true,
+      "decision": "warn",
+      "findings": [
+        {
+          "id": "hwc-sandbox-missing-ttl",
+          "cat": "sandbox"
+        }
+      ]
+    },
+    {
+      "label": "High cost resource warning",
+      "pass": true,
+      "decision": "warn",
+      "findings": [
+        {
+          "id": "hwc-sandbox-missing-ttl",
+          "cat": "sandbox"
+        },
+        {
+          "id": "hwc-cost-unbounded-scale",
+          "cat": "cost"
+        }
+      ]
+    }
+  ]
+}

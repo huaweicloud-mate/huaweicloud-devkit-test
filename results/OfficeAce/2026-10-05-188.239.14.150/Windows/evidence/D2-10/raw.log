@@ -1,0 +1,10 @@
+PASS  D2-10-profile-parse  readKooCliProfiles 解析 current=deploy => {"current":"deploy","n":2} (期望 {"current":"deploy","n":2})
+PASS  D2-10-resolve-deploy  resolveManagedProfile 返回 current 档 => "deploy" (期望 "deploy")
+PASS  D2-10-switch-current  切换 current=daily 后解析跟随 => {"current":"daily","profile":"daily"} (期望 {"current":"daily","profile":"daily"})
+PASS  D2-10-cli-profile-arg  runHcloudConfigure 携带 --cli-profile=deploy => "configure\nset\n--cli-profile=deploy\n--cli-access-key=AKDEPLOY\n--cli-secret-key=SKDEPLOY\n--cli-region=cn-north-4" (期望 ["--cli-profile=deploy","..."])
+    spawn 成功=true
+PASS  D2-10-cli-ak-region  runHcloudConfigure 携带 --cli-access-key/--cli-region => "configure\nset\n--cli-profile=deploy\n--cli-access-key=AKDEPLOY\n--cli-secret-key=SKDEPLOY\n--cli-region=cn-north-4" (期望 ["--cli-access-key","--cli-region"])
+PASS  D2-10-missing-config  缺失 config 返回 error => "KooCLI config not found" (期望 "KooCLI config not found")
+
+=== D2-10 KooCLI 多 profile 夹具 ===  pass=6 fail=0
+RESULT: PASS

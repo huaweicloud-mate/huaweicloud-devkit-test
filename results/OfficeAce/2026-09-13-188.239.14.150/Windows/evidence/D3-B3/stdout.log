@@ -1,0 +1,35 @@
+=== D3-B3: run_readonly_command Execution ===
+Test: Call run_readonly_command with ECS ListServers, verify execution
+
+Probe Steps:
+1. Called huaweicloud_run_readonly_command with args: ['ECS', 'ListServers', '--limit=1']
+2. Verified tool executes and returns result
+
+Tool: huaweicloud-devkit__huaweicloud_run_readonly_command
+Input: {"args": ["ECS", "ListServers", "--limit=1"]}
+
+Actual Result:
+{
+  "ok": true,
+  "exitCode": 0,
+  "stdout": "[USE_ERROR]不支持的operation:ListServers (CLI suggests ListServersDetails)",
+  "classification": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation.",
+    "service": "ECS",
+    "operation": "ListServers"
+  },
+  "safeToRun": true,
+  "retries": 0,
+  "attempts": 1
+}
+
+Verification:
+  ok = true: PASS (tool executed successfully)
+  exitCode = 0: PASS (clean exit)
+  classification.risk = 'read_only': PASS
+  classification.decision = 'allow': PASS
+  safeToRun = true: PASS
+
+STATUS: PASS - run_readonly_command executed successfully

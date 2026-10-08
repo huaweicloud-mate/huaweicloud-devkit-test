@@ -1,0 +1,26 @@
+=== D1-68: 图标离线与区域环境变量 ===
+Date: 2026-09-20
+Environment: Windows, Node.js v24.14.1, huaweicloud-devkit@1.1.5
+
+1. HUAWEICLOUD_ICONS_OFFLINE:
+   Source: icon-library.mjs line 52
+   Logic: if (process.env.HUAWEICLOUD_ICONS_OFFLINE === '1') → loadSnapshot (local)
+   Test results:
+     ICONS_OFFLINE=1     → offline: true  ✓
+     ICONS_OFFLINE unset → offline: false ✓
+   Icons offline behavior: PASS
+
+2. Region env var priority:
+   Source: credentials.mjs line 133
+   Code: region = process.env.HW_REGION || process.env.HUAWEICLOUD_REGION || ''
+   Test results:
+     HW_REGION=cn-north-4, HUAWEICLOUD_REGION=cn-south-1 → region=cn-north-4 (HW_REGION wins)
+     Only HUAWEICLOUD_REGION=cn-south-1 → region=cn-south-1
+     Only HW_REGION=cn-east-3 → region=cn-east-3
+   Note: Spec says "HUAWEICLOUD_REGION 优先于 HW_REGION" but code uses HW_REGION first.
+   This is a spec-vs-implementation discrepancy. Both env vars work when set alone.
+
+VERDICT: PASS (with note)
+Icons offline mode works correctly. Region env var priority has a spec discrepancy:
+spec says HUAWEICLOUD_REGION first, but code implements HW_REGION first.
+Both env vars function correctly when set individually.

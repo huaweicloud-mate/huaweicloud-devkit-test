@@ -1,0 +1,83 @@
+═══════════════════════════════════════════════════════════════
+  D4-9: Public Exposure / Destructive Pre-check
+═══════════════════════════════════════════════════════════════
+
+✅ PASS | Public SSH 0.0.0.0/0
+       command: hcloud VPC CreateSecurityGroupRule --remote_ip_prefix 0.0.0.0/0 --port 22
+       decision=deny  risk=N/A
+       findings: [{"id":"hwc-network-public-admin-port","severity":"deny","category":"public_exposure","title":"Public admin port exposure"}]
+
+✅ PASS | Public RDP 0.0.0.0/0
+       command: hcloud VPC CreateSecurityGroupRule --remote_ip_prefix 0.0.0.0/0 --port 3389
+       decision=deny  risk=N/A
+       findings: [{"id":"hwc-network-public-admin-port","severity":"deny","category":"public_exposure"}]
+
+✅ PASS | Public MySQL 0.0.0.0/0
+       command: hcloud VPC CreateSecurityGroupRule --remote_ip_prefix 0.0.0.0/0 --port 3306
+       decision=deny  risk=N/A
+       findings: [{"id":"hwc-network-public-admin-port","severity":"deny","category":"public_exposure"}]
+
+✅ PASS | Public Redis ::/0
+       command: hcloud VPC CreateSecurityGroupRule --remote_ip_prefix ::/0 --port 6379
+       decision=deny  risk=N/A
+       findings: [{"id":"hwc-network-public-admin-port","severity":"deny","category":"public_exposure"}]
+
+✅ PASS | Public MongoDB 0.0.0.0/0
+       command: hcloud VPC CreateSecurityGroupRule --remote_ip_prefix 0.0.0.0/0 --port 27017
+       decision=deny  risk=N/A
+       findings: [{"id":"hwc-network-public-admin-port","severity":"deny","category":"public_exposure"}]
+
+✅ PASS | classifyTextCommand public SSH
+       command: hcloud VPC CreateSecurityGroupRule --remote_ip_prefix 0.0.0.0/0 --port 22
+       decision=deny  risk=write
+       reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+
+✅ PASS | rm -rf /
+       command: rm -rf /
+       decision=deny  risk=N/A
+       findings: [{"id":"hwc-sandbox-destructive-command","severity":"deny","category":"destructive"}]
+
+✅ PASS | DeleteServers --force
+       command: hcloud ECS DeleteServers --force
+       decision=deny  risk=N/A
+       findings: [{"id":"hwc-destructive-delete-force","severity":"deny","category":"destructive"},{"id":"hwc-destructive-delete-operation","severity":"warn","category":"destructive"}]
+
+✅ PASS | classifyTextCommand DeleteServers --force
+       command: hcloud ECS DeleteServers --force
+       decision=deny  risk=write
+       reason: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
+
+✅ PASS | classifyTextCommand rm -rf /
+       command: rm -rf /
+       decision=deny  risk=destructive
+       reason: The sandbox terminal command is destructively dangerous and could destroy the workspace.
+
+✅ PASS | DeleteServers (plain)
+       command: hcloud ECS DeleteServers
+       decision=warn  risk=N/A
+       findings: [{"id":"hwc-destructive-delete-operation","severity":"warn","category":"destructive"}]
+
+✅ PASS | BatchDeleteServers
+       command: hcloud ECS BatchDeleteServers
+       decision=warn  risk=N/A
+       findings: [{"id":"hwc-destructive-delete-operation","severity":"warn","category":"destructive"}]
+
+✅ PASS | mkfs
+       command: mkfs.ext4 /dev/sda
+       decision=deny  risk=N/A
+       findings: [{"id":"hwc-sandbox-destructive-command","severity":"deny","category":"destructive"}]
+
+✅ PASS | shutdown
+       command: shutdown -h now
+       decision=deny  risk=N/A
+       findings: [{"id":"hwc-sandbox-destructive-command","severity":"deny","category":"destructive"}]
+
+✅ PASS | DeleteServers cascade
+       command: hcloud ECS DeleteServers --delete_publicip=true --delete_volume=true
+       decision=warn  risk=N/A
+       findings: [{"id":"hwc-destructive-delete-operation","severity":"warn","category":"destructive"},{"id":"hwc-destructive-delete-cascade","severity":"warn","category":"destructive"}]
+
+───────────────────────────────────────────────────────────────
+  Summary: 15 PASS, 0 FAIL, 15 total
+  Overall: ✅ PASS
+───────────────────────────────────────────────────────────────

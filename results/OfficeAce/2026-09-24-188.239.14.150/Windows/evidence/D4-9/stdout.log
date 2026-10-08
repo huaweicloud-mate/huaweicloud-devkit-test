@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "why": "公网暴露SSH(22)端口被拦截: decision=deny, findings=1",
+  "executedAt": "20260924170514",
+  "toolOutput": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-network-public-admin-port\",\"title\":\"Public admin port exposure\",\"category\":\"public_exposure\",\"severity\":\"deny\",\"message\":\"The change appears to expose an administrative or database port to the public internet. Web ports (80/443) are allowed - this rule only covers admin/database ports.\",\"remediation\":\"Restrict the source CIDR to a trusted range, use a bastion or VPN, and keep public preview endpoints behind authenticated HTTP services.\",\"source\":\"deploy_plan\",\"evidence\":\"{ \\\"resources\\\": [ { \\\"type\\\": \\\"SecurityGroupRule\\\", \\\"properties\\\": { \\\"direction\\\": \\\"ingress\\\", \\\"port_range_min\\\": 22, \\\"port_range_max\\\": 22, \\\"remote_ip_prefix\\\": \\\"0.0.0.0/0\\\" } } ] }\"}],\"nextStep\":\"Revise the command, artifact, or deployment plan before execution.\"}"
+}

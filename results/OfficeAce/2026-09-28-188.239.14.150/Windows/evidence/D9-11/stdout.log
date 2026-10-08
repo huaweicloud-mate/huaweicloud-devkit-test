@@ -1,0 +1,82 @@
+{
+  "case": "D9-11",
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "results": [
+    {
+      "id": "D9-11-attach",
+      "name": "attach-to-mux",
+      "pass": true,
+      "actual": "registered=true id=2",
+      "expected": "registered=true",
+      "passMsg": "attach 注册到 mux",
+      "failMsg": null
+    },
+    {
+      "id": "D9-11-onopen-localserver",
+      "name": "onopen-localserver",
+      "pass": true,
+      "actual": "localServer=true localPort=53509",
+      "expected": "localServer=true localPort>0",
+      "passMsg": "onopen 后 localServer 监听",
+      "failMsg": null
+    },
+    {
+      "id": "D9-11-ready-resolve",
+      "name": "ready-promise-resolve",
+      "pass": true,
+      "actual": "readyResolved=true onReadyCalls=1",
+      "expected": "readyResolved=true onReadyCalls=1",
+      "passMsg": "ready Promise 在 open 时 resolve",
+      "failMsg": null
+    },
+    {
+      "id": "D9-11-subconn-open",
+      "name": "subconn-register",
+      "pass": true,
+      "actual": "subConnections=1",
+      "expected": "subConnections>=1",
+      "passMsg": "子连接注册到 subConnections",
+      "failMsg": null
+    },
+    {
+      "id": "D9-11-close-cleanup",
+      "name": "close-cleanup",
+      "pass": true,
+      "actual": "closed=true localServer=null subConnections=0",
+      "expected": "closed=true localServer=null subConnections=0",
+      "passMsg": "close 后 localServer 关闭/subConnections 清空",
+      "failMsg": null
+    },
+    {
+      "id": "D9-11-close-mux-unregister",
+      "name": "close-mux-unregister",
+      "pass": true,
+      "actual": "registered=false",
+      "expected": "registered=false",
+      "passMsg": "close 后 mux 通道注销",
+      "failMsg": null
+    },
+    {
+      "id": "D9-11-close-callback",
+      "name": "close-callback",
+      "pass": true,
+      "actual": "onCloseCalls=1",
+      "expected": "onCloseCalls=1",
+      "passMsg": "onClose 回调触发",
+      "failMsg": null
+    },
+    {
+      "id": "D9-11-close-idempotent",
+      "name": "close-idempotent",
+      "pass": true,
+      "actual": "onCloseCalls=1",
+      "expected": "onCloseCalls=1",
+      "passMsg": "重复 close 幂等（onClose 仅触发 1 次）",
+      "failMsg": null
+    }
+  ],
+  "source": "eval/harness/fixtures/d9-11-ws-tunnel.mjs",
+  "executedAt": "20260928090100"
+}

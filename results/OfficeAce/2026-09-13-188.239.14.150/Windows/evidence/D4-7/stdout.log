@@ -1,0 +1,28 @@
+=== D4-7: Destructive Operation Grading ===
+Test: Call plan_cli_command and hook_check_command with different risk levels
+
+Tool: huaweicloud-devkit__huaweicloud_plan_cli_command + huaweicloud_hook_check_command
+
+Results from plan_cli_command:
+  DeleteServers:      risk=write,     decision=deny,  safeToRun=false
+  BatchStopServers:   risk=write,     decision=deny,  safeToRun=false
+  ListServersDetails: risk=read_only, decision=allow, safeToRun=true
+
+Results from hook_check_command:
+  DeleteServers:      decision=warn, rule=hwc-destructive-delete-operation, severity=warn, category=destructive
+    message: "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible."
+  BatchStopServers:   decision=allow, no findings (not destructive)
+  ListServersDetails: decision=allow, no findings (read-only)
+
+Risk differentiation:
+  Delete (destructive): specifically flagged with hwc-destructive-delete-operation rule
+  Stop (write): blocked by plan_cli_command as write, but not flagged as destructive by hook
+  List (read-only): allowed by both
+
+Verification:
+  Delete classified differently from List: PASS
+  Stop classified differently from List: PASS
+  Delete has specific destructive rule: PASS
+  Three distinct risk levels (destructive/write/read_only): PASS
+
+STATUS: PASS - Different risk levels properly assigned

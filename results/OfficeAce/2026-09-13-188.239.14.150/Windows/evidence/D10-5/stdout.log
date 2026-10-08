@@ -1,0 +1,65 @@
+=== D10-5: Error Diagnosis Accuracy ===
+
+Method: invoke_tool huaweicloud-devkit__huaweicloud_explain_error
+Arguments: { errorCode: "InvalidAKSK", message: "The access key ID does not exist", service: "IAM" }
+
+Raw Response:
+{
+  "service": "IAM",
+  "errorCode": "InvalidAKSK",
+  "requestId": "",
+  "suggestions": [
+    "Check KooCLI profile, region, project_id, and IAM permissions without printing secrets."
+  ]
+}
+
+Also tested without service parameter:
+{
+  "service": "unknown",
+  "errorCode": "InvalidAKSK",
+  "requestId": "",
+  "suggestions": [
+    "Check KooCLI profile, region, project_id, and IAM permissions without printing secrets."
+  ]
+}
+
+Response Analysis:
+
+  Input:
+    errorCode: InvalidAKSK
+    message: The access key ID does not exist
+    service: IAM
+
+  Output:
+    service: IAM (correctly identified)
+    errorCode: InvalidAKSK (echoed back)
+    suggestions: [
+      'Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.'
+    ]
+
+Actionability Check:
+  1. Identifies the error as credential-related: YES
+  2. Suggests checking KooCLI profile: YES (actionable)
+  3. Mentions region: YES (common misconfiguration)
+  4. Mentions project_id: YES (often causes auth failures)
+  5. Mentions IAM permissions: YES (root cause for AK/SK issues)
+  6. Security-aware: YES ('without printing secrets')
+
+Remediation Steps Implied:
+  - Run 'hcloud configure show' to inspect profile
+  - Verify AK/SK are correct and not expired
+  - Check region matches the AK/SK account
+  - Verify project_id is set for the region
+  - Check IAM permissions for the access key
+
+Helpfulness Assessment:
+  - The suggestion correctly identifies the diagnostic path
+  - It covers the 4 most common causes of InvalidAKSK errors
+  - It is security-conscious (no secrets in output)
+  - The response is concise but actionable
+
+=== SUMMARY ===
+Error diagnosis correctly identifies InvalidAKSK as credential issue
+Suggestion covers profile, region, project_id, and IAM permissions
+Security-aware guidance (no secrets printed)
+RESULT: PASS - Clear error explanation with remediation steps

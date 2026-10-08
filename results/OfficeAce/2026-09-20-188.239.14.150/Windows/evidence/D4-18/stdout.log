@@ -1,0 +1,35 @@
+=== D4-18: confirm-not-deny 审批语义 ===
+
+写操作(未确认): {"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}
+[PASS] T1: 写操作未确认时 decision=deny
+  → decision=deny
+[PASS] T1: 写操作 deny 的 risk=write (非 credential/secret 等永久拒绝)
+  → risk=write
+[PASS] T1: deny reason 包含 "explicit user approval" 语义 (确认而非永久拒绝)
+  → reason="Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+
+写操作(已确认): {"decision":"allow","risk":"write","reason":"Huawei Cloud write operation approved by user.","service":"ECS","operation":"CreateServers","args":["ECS","CreateServers","--cli-region=cn-north-4"]}
+[PASS] T2: 写操作确认后 decision=allow
+  → decision=allow
+[PASS] T2: 确认后 risk 仍为 write (风险标记保留)
+  → risk=write
+[PASS] T2: 确认后 reason 包含 "approved" 语义
+  → reason="Huawei Cloud write operation approved by user."
+
+读操作: {"decision":"allow","risk":"read_only","reason":"Command appears to be a read-only Huawei Cloud operation.","service":"ECS","operation":"ListServers","args":["ECS","ListServers","--cli-region=cn-north-4"]}
+[PASS] T3: 读操作 decision=allow (无需确认)
+  → decision=allow, risk=read_only
+[PASS] T4: confirm-not-deny 核心语义 - deny(未确认) → allow(已确认) 转换存在
+  → 未确认:deny → 已确认:allow
+
+执行类操作(未确认): {"decision":"deny","risk":"execution","reason":"Huawei Cloud execution/trigger operation blocked until approved."}
+执行类操作(已确认): {"decision":"allow","risk":"execution","reason":"Huawei Cloud execution/trigger operation approved by user.","service":"FunctionGraph","operation":"InvokeFunction","args":["FunctionGraph","InvokeFunction","--function_urn=urn:fgs:cn-north-4:test"]}
+[PASS] T5: execution 类操作 confirm-not-deny (deny→allow)
+  → 未确认:deny(risk=execution) → 已确认:allow(risk=execution)
+
+Secret操作(未确认): {"decision":"deny","risk":"secret","reason":"Direct secret value reads are blocked so plaintext secrets do not enter the agent context."}
+Secret操作(已确认): {"decision":"deny","risk":"secret","reason":"Direct secret value reads are blocked so plaintext secrets do not enter the agent context."}
+[PASS] T6: secret 类操作永久 deny (确认也不放行) - 区分于 write 的 confirm 语义
+  → 未确认:deny(risk=secret) → 已确认:deny(risk=secret)
+
+=== D4-18 结果: PASS ===

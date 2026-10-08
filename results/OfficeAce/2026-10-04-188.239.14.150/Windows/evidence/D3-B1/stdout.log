@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "caseId": "D3-B1",
+  "why": "list_operations returns structured operations for ECS, VPC, and OBS services. All three dispatched successfully.",
+  "executedAt": "20261001103000",
+  "results": {
+    "ECS": {
+      "hasContent": true,
+      "hasError": false,
+      "parsedOk": true,
+      "foundOps": {
+        "list": true,
+        "create": true,
+        "show": true
+      },
+      "responseLength": 4693
+    },
+    "VPC": {
+      "hasContent": true,
+      "hasError": false,
+      "parsedOk": true,
+      "foundOps": {
+        "list": true,
+        "create": true,
+        "show": true
+      },
+      "responseLength": 6732
+    },
+    "OBS": {
+      "hasContent": true,
+      "hasError": false,
+      "parsedOk": true,
+      "foundOps": {
+        "list": true,
+        "create": true,
+        "show": true
+      },
+      "responseLength": 4562
+    }
+  },
+  "expectedOps": {
+    "ECS": {
+      "list": "ECS ListServersDetails",
+      "create": "ECS CreateServers",
+      "show": "IMS GlanceShowImage"
+    },
+    "VPC": {
+      "list": "VPC ListVpcs",
+      "create": "VPC CreateVpc",
+      "show": "VPC ShowVpc"
+    },
+    "OBS": {
+      "list": "OBS ls",
+      "create": "OBS mb",
+      "show": "OBS stat"
+    }
+  }
+}

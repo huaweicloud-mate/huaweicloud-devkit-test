@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "caseId": "D6-3",
+  "why": "Source-level analysis confirmed 5 memory management mechanisms (bounded queues, proper cleanup, buffer consumption). Runtime heap growth after 500 iterations was 923KB (< 5MB threshold). No memory leak detected.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "name": "Telemetry queue: module-level + bounded (slice cap + splice flush)",
+      "pass": true,
+      "evidence": "moduleQueue=true, sliceCap=true, spliceFlush=true"
+    },
+    {
+      "name": "FairQueue: unregister deletes channel + readyChannel entries",
+      "pass": true,
+      "evidence": "unregister=true, channelDelete=true, readyDelete=true"
+    },
+    {
+      "name": "MCP server: buffer consumed via subarray after frame parse",
+      "pass": true,
+      "evidence": "subarray=true, allocReset=true"
+    },
+    {
+      "name": "MCP server: keepalive interval properly cleared on stdout close",
+      "pass": true,
+      "evidence": "clearInterval=true, nullAssign=true"
+    },
+    {
+      "name": "Runtime: heap growth after 500 iterations < 5MB",
+      "pass": true,
+      "evidence": "heapBefore=4811KB, heapAfter=5734KB, growth=923KB"
+    }
+  ]
+}

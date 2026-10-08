@@ -1,0 +1,30 @@
+(node:11292) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{
+  "testCase": "D1-39",
+  "description": "Windows upgrade detection chain availability (spawnSync without shell:true)",
+  "platform": "win32",
+  "nodeVersion": "v24.14.1",
+  "checks": {
+    "spawnSync_no_shell": {
+      "status": null,
+      "error": "EINVAL",
+      "hasEINVAL": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    "spawnSync_with_shell": {
+      "status": 0,
+      "error": null,
+      "stdout": "1.1.4-next.3",
+      "stderr": ""
+    },
+    "queryDistTagsSync_source": {
+      "result": null,
+      "isNull": true,
+      "interpretation": "FAILED - returned null (likely EINVAL)"
+    }
+  },
+  "verdict": "FAIL",
+  "summary": "BUG CONFIRMED: spawnSync(npm.cmd) without shell:true produces EINVAL on Windows. The upgrade detection chain silently fails, returning null instead of version data. This means users on Windows will never see update notifications."
+}

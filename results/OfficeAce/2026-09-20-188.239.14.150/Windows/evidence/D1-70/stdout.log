@@ -1,0 +1,26 @@
+=== D1-70: 代理配置与 WebSocket 代理 ===
+
+Step 1: writeProxyConfig → Write correct: true
+Step 2: readProxyConfig → Read matches write: true
+Step 3: getProxySettings → HTTPS=true, HTTP=true
+Step 4: no_proxy bypass → localhost=true, domain=true
+Step 5: clearProxyConfig → true
+Step 6: No proxy → null: true
+Step 7a: WebSocket without proxy = globalThis.WebSocket: true
+Step 7b: WebSocket with proxy = custom ProxyWebSocket class: true
+  (impl name: ProxyWebSocket, is global: false)
+Step 8: getProxyDispatcher without proxy = undefined: true
+Step 9: getProxyDispatcher with proxy returns dispatcher: true
+
+--- VERIFICATION ---
+writeProxyConfig: true
+readProxyConfig: true
+getProxySettings HTTPS/HTTP: true
+no_proxy bypass: true
+clearProxyConfig: true
+No proxy → null: true
+WebSocket no proxy = globalThis.WebSocket: true
+WebSocket with proxy = custom class: true
+getProxyDispatcher no proxy = undefined: true
+getProxyDispatcher with proxy: true
+VERDICT D1-70: PASS

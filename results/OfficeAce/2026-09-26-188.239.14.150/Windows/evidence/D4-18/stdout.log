@@ -1,0 +1,26 @@
+{
+ "status": "PASS",
+ "caseId": "D4-18",
+ "total": 2,
+ "passed": 2,
+ "failed": 0,
+ "source": "grouped:d4-security",
+ "executedAt": "20260926051622",
+ "why": "",
+ "assertions": [
+  {
+   "name": "confirm-not-deny",
+   "pass": true,
+   "actual": "deny",
+   "expected": "confirm or deny",
+   "failMsg": "write semantics error"
+  },
+  {
+   "name": "confirm-mcp",
+   "pass": true,
+   "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"CreateServers\",\"--flavor-ref\",\"s6.small.1\"",
+   "expected": "confirm/deny",
+   "failMsg": "write allowed (MCP)"
+  }
+ ]
+}

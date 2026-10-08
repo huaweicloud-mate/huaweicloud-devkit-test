@@ -1,0 +1,25 @@
+=== D4-4: Credential File Write Interception ===
+Test: Call hook_check_command with credential-writing commands
+
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+
+Probe 1: "echo AK=HPUXXX > ~/.hcloud/credentials"
+Result: DENIED
+  ok: false
+  decision: deny
+  ruleId: hwc-command-credential-file
+  category: credential
+  severity: deny
+  message: The command may read local Huawei Cloud credential or profile files into the agent context.
+  remediation: Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.
+  evidence: echo AK=<redacted> > ~/.hcloud/credentials
+
+Probe 2: "hcloud configure set --access-key=HPUXXX --secret-key=XXX --cli-region=cn-north-4"
+Result: ALLOWED (legitimate CLI credential configuration operation)
+
+Verification:
+  Credential file write detected and denied: PASS
+  Rule hwc-command-credential-file triggered: PASS
+  Severity = 'deny': PASS
+
+STATUS: PASS - Credential file write detected and blocked

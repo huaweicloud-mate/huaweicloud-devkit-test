@@ -1,0 +1,47 @@
+=== D2-4 (P0): 凭证脱敏正确性 ===
+Tool: huaweicloud_show_profile_redacted
+Test Time: 2026-09-13
+
+[1] Calling huaweicloud_show_profile_redacted (no args, uses default profile)
+
+[2] Raw tool response:
+{
+  "ok": true,
+  "note": "Profile information was returned through the toolkit redaction pipeline.",
+  "result": {
+    "ok": true,
+    "exitCode": 0,
+    "stdout": {
+      "name": "default",
+      "mode": "AKSK",
+      "accessKeyId": "<redacted>",
+      "secretAccessKey": "<redacted>",
+      "securityToken": "<redacted>",
+      "region": "cn-north-4",
+      "projectId": "",
+      "domainId": "",
+      "skipSecureVerify": "false",
+      "readTimeout": 10,
+      "connectTimeout": 5,
+      "retryCount": 0
+    },
+    "plan": {
+      "command": "hcloud configure show",
+      "classification": { "decision": "allow", "risk": "read_only" }
+    }
+  }
+}
+
+[3] Verification Checks:
+  ✓ accessKeyId_is_redacted: true (value: "<redacted>")
+  ✓ secretAccessKey_is_redacted: true (value: "<redacted>")
+  ✓ securityToken_is_redacted: true (value: "<redacted>")
+  ✓ no_plaintext_HPU_prefix: true (AK prefix "HPU" not found in output)
+  ✓ no_plaintext_AK_partial: true (partial AK "HPU****YXD" not found)
+  ✓ region_visible: true (non-sensitive field "cn-north-4" visible)
+  ✓ mode_visible: true (non-sensitive field "AKSK" visible)
+
+[4] Result: PASS
+    All credential fields (accessKeyId, secretAccessKey, securityToken) are properly redacted.
+    No plaintext AK/SK detected in the tool output.
+    Non-sensitive fields (region, mode, timeouts) remain visible as expected.

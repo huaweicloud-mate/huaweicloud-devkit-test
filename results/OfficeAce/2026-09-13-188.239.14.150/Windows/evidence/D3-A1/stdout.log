@@ -1,0 +1,31 @@
+=== D3-A1: detect_framework Basic Functionality ===
+Test: Create React project, call detect_framework, verify React detected
+
+Probe Steps:
+1. Created test project at: C:\Users\Administrator\devkit-test\test-react-project
+2. Created package.json with react/react-dom/react-scripts dependencies
+3. Created src/index.js, src/App.js, public/index.html
+4. Called huaweicloud_detect_framework with projectPath
+
+Tool: huaweicloud-devkit__huaweicloud_detect_framework
+Input: {"projectPath": "C:\\Users\\Administrator\\devkit-test\\test-react-project"}
+
+Actual Result:
+{
+  "ok": true,
+  "type": "spa",
+  "framework": "Create React App",
+  "installCmd": "npm install",
+  "buildCmd": "npm run build",
+  "outputDir": "build",
+  "port": 8080,
+  "nginxType": "spa",
+  "packageManager": "npm"
+}
+
+Verification:
+  ok = true: PASS
+  framework = 'Create React App' (React family): PASS
+  packageManager = 'npm': PASS
+
+STATUS: PASS - React framework successfully detected

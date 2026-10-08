@@ -1,0 +1,88 @@
+=== D4-22: hook_check_deploy_plan 具名回归 ===
+
+[1] 构造高危 deploy plan (公网暴露 FunctionGraph, auth=NONE):
+{
+  "service": "FunctionGraph",
+  "operation": "CreateFunction",
+  "functionName": "preview-api-handler",
+  "runtime": "Python3.9",
+  "trigger": {
+    "type": "APIG",
+    "gateway": "DEDICATEDGATEWAY",
+    "auth": "NONE",
+    "path": "/api/preview",
+    "public_access": true
+  },
+  "description": "Publicly exposed FunctionGraph via API Gateway with no authentication"
+}
+
+[2] 直调 evaluateDeployPlan(plan) ...
+
+[3] 原始返回 (evaluateDeployPlan):
+{
+  "decision": "warn",
+  "findings": [
+    {
+      "ruleId": "hwc-functiongraph-public-no-auth",
+      "title": "Public FunctionGraph trigger without auth",
+      "category": "public_exposure",
+      "severity": "warn",
+      "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+      "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+      "source": "deploy_plan",
+      "evidence": "{ \"service\": \"FunctionGraph\", \"operation\": \"CreateFunction\", \"functionName\": \"preview-api-handler\", \"runtime\": \"Python3.9\", \"trigger\": { \"type\": \"APIG\", \"gateway\": \"DEDICATEDGATEWAY\", \"auth\": \"NONE\", \"path\": \"/api/preview\", \"public_acces..."
+    },
+    {
+      "ruleId": "hwc-sandbox-missing-ttl",
+      "title": "Sandbox deployment missing cleanup metadata",
+      "category": "sandbox",
+      "severity": "warn",
+      "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+      "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+      "source": "deploy_plan",
+      "evidence": "{ \"service\": \"FunctionGraph\", \"operation\": \"CreateFunction\", \"functionName\": \"preview-api-handler\", \"runtime\": \"Python3.9\", \"trigger\": { \"type\": \"APIG\", \"gateway\": \"DEDICATEDGATEWAY\", \"auth\": \"NONE\", \"path\": \"/api/preview\", \"public_acces..."
+    }
+  ]
+}
+
+[4] 核对结果:
+  decision in ['warn','deny']   : PASS  (actual: warn)
+  命中 hwc-functiongraph-public-no-auth  : PASS
+  severity in ['warn','deny']   : PASS  (actual: warn)
+  findings count               : 2
+
+[5] 所有命中规则:
+  - hwc-functiongraph-public-no-auth [warn] Public FunctionGraph trigger without auth
+  - hwc-sandbox-missing-ttl [warn] Sandbox deployment missing cleanup metadata
+
+[6] hookResult 等价封装 (tools.mjs hookResult 逻辑):
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [
+    {
+      "ruleId": "hwc-functiongraph-public-no-auth",
+      "title": "Public FunctionGraph trigger without auth",
+      "category": "public_exposure",
+      "severity": "warn",
+      "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+      "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+      "source": "deploy_plan",
+      "evidence": "{ \"service\": \"FunctionGraph\", \"operation\": \"CreateFunction\", \"functionName\": \"preview-api-handler\", \"runtime\": \"Python3.9\", \"trigger\": { \"type\": \"APIG\", \"gateway\": \"DEDICATEDGATEWAY\", \"auth\": \"NONE\", \"path\": \"/api/preview\", \"public_acces..."
+    },
+    {
+      "ruleId": "hwc-sandbox-missing-ttl",
+      "title": "Sandbox deployment missing cleanup metadata",
+      "category": "sandbox",
+      "severity": "warn",
+      "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+      "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+      "source": "deploy_plan",
+      "evidence": "{ \"service\": \"FunctionGraph\", \"operation\": \"CreateFunction\", \"functionName\": \"preview-api-handler\", \"runtime\": \"Python3.9\", \"trigger\": { \"type\": \"APIG\", \"gateway\": \"DEDICATEDGATEWAY\", \"auth\": \"NONE\", \"path\": \"/api/preview\", \"public_acces..."
+    }
+  ],
+  "nextStep": "Review the warnings with the user before proceeding."
+}
+
+[7] 总判定: PASS
+    公网暴露 FunctionGraph 被拦截/告警: 是 (warn)

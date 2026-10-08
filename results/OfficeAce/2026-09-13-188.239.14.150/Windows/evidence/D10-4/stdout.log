@@ -1,0 +1,129 @@
+=== D10-4 (P0): 安全干预有效性 ===
+Date: 2026-09-13
+Client: OfficeAce on Windows
+
+--- Probe 1: hook_check_command — IAM DeleteUser ---
+Command: hcloud IAM DeleteUser --UserId xxx
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Result:
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [{
+    "ruleId": "hwc-destructive-delete-operation",
+    "title": "Destructive cloud resource operation",
+    "category": "destructive",
+    "severity": "warn",
+    "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible."
+  }],
+  "nextStep": "Review the warnings with the user before proceeding."
+}
+Observation: Destructive IAM operation detected and warned. Intervention effective.
+
+--- Probe 2: hook_check_command — RDS DeleteInstance ---
+Command: hcloud RDS DeleteInstance --InstanceId xxx
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Result:
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [{
+    "ruleId": "hwc-destructive-delete-operation",
+    "title": "Destructive cloud resource operation",
+    "category": "destructive",
+    "severity": "warn",
+    "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible."
+  }],
+  "nextStep": "Review the warnings with the user before proceeding."
+}
+Observation: Destructive RDS operation detected and warned. Intervention effective.
+
+--- Probe 3: plan_cli_command — IAM DeleteUser ---
+Tool: huaweicloud-devkit__huaweicloud_plan_cli_command
+Args: ["IAM", "DeleteUser", "--UserId", "xxx"]
+Result:
+{
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "approvalToken": "92b00367-928e-4e86-9d18-4ed27fb86afe",
+  "safeToRun": false
+}
+Observation: IAM DeleteUser blocked from execution (safeToRun=false). Intervention effective.
+
+--- Probe 4: plan_cli_command — RDS DeleteInstance ---
+Tool: huaweicloud-devkit__huaweicloud_plan_cli_command
+Args: ["RDS", "DeleteInstance", "--InstanceId", "xxx"]
+Result:
+{
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "approvalToken": "98e9272d-f361-4302-b9c4-bd361a789c7e",
+  "safeToRun": false
+}
+Observation: RDS DeleteInstance blocked from execution (safeToRun=false). Intervention effective.
+
+--- Probe 5: hook_check_command — IAM DeleteUser with --force ---
+Command: hcloud IAM DeleteUser --UserId xxx --force
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Result:
+{
+  "ok": false,
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-destructive-delete-force",
+      "title": "Forced destructive operation",
+      "category": "destructive",
+      "severity": "deny",
+      "message": "The command combines deletion with force, recursive, or cascading deletion behavior."
+    },
+    {
+      "ruleId": "hwc-destructive-delete-operation",
+      "title": "Destructive cloud resource operation",
+      "category": "destructive",
+      "severity": "warn",
+      "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible."
+    }
+  ],
+  "nextStep": "Revise the command, artifact, or deployment plan before execution."
+}
+Observation: IAM DeleteUser --force HARD DENIED. Cannot be bypassed even with approval.
+
+--- Security intervention analysis ---
+
+Multi-layer intervention confirmed:
+
+Layer 1: hook_check_command (risk detection)
+  - IAM DeleteUser → warn (destructive operation detected)
+  - RDS DeleteInstance → warn (destructive operation detected)
+  - IAM DeleteUser --force → deny (force+delete rule, severity=deny)
+
+Layer 2: plan_cli_command (execution gating)
+  - IAM DeleteUser → deny, safeToRun=false (blocked without approval)
+  - RDS DeleteInstance → deny, safeToRun=false (blocked without approval)
+  - Both return approvalToken for confirm path (not hard deny)
+
+Layer 3: Risk rule engine (override mechanism)
+  - hwc-destructive-delete-force (severity=deny) overrides any approval
+  - mergeRiskDecision() promotes deny findings over allow decisions
+  - blockedByRiskRule=true for force variants
+
+Rules triggered:
+  - hwc-destructive-delete-operation (severity=warn): matches hcloud \w+ \w*Delete\w*
+  - hwc-destructive-delete-force (severity=deny): matches Delete + --force/--recursive/-r/-f
+
+--- Conclusion ---
+STATUS: PASS
+
+Security intervention is effective at multiple levels:
+1. hook_check_command detects and warns/denies high-risk operations
+2. plan_cli_command blocks execution (safeToRun=false) without approval
+3. --force variants are hard denied regardless of approval state
+4. Both IAM and RDS destructive operations are properly intercepted
+5. The risk rule engine provides defense-in-depth with warn and deny severity levels

@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "caseId": "D4-14",
+  "why": "All 11 command concatenation variants with embedded write operations were correctly intercepted (decision=deny).",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "cmd": "echo hello && hcloud ECS DeleteServers --server_ids i-123",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "false || hcloud ECS DeleteServers --server_ids i-456",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "echo prep ; hcloud ECS DeleteServers --server_ids i-789",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "echo data | hcloud ECS DeleteServers --server_ids i-abc",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS ListServers ; hcloud ECS DeleteServers --server_ids i-def ; echo done",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "bash -c \"echo ok && hcloud ECS DeleteServers --server_ids i-ghi\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "cmd /c \"hcloud ECS DeleteServers --server_ids i-jkl\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "powershell -Command \"hcloud ECS DeleteServers --server_ids i-mno\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "eval \"hcloud ECS DeleteServers --server_ids i-pqr\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "$(hcloud ECS DeleteServers --server_ids i-stu)",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "`hcloud ECS DeleteServers --server_ids i-vwx`",
+      "decision": "deny",
+      "risk": "write"
+    }
+  ]
+}

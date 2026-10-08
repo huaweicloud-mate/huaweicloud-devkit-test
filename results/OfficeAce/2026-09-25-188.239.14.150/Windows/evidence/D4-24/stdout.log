@@ -1,0 +1,26 @@
+{
+ "status": "PASS",
+ "caseId": "D4-24",
+ "total": 2,
+ "passed": 2,
+ "failed": 0,
+ "source": "grouped:d4-security",
+ "executedAt": "20260925050900",
+ "why": "",
+ "assertions": [
+  {
+   "name": "confirm-write",
+   "pass": true,
+   "actual": "deny/undefined",
+   "expected": "confirm/deny/isWrite",
+   "failMsg": "write allowed"
+  },
+  {
+   "name": "confirm-boundary-mcp",
+   "pass": true,
+   "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"CreateServers\",\"--flavor-ref\",\"s6.small.1\"",
+   "expected": "confirm/deny",
+   "failMsg": "confirm boundary fail (MCP)"
+  }
+ ]
+}

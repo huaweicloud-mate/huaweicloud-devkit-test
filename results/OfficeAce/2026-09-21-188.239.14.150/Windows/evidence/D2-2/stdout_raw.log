@@ -1,0 +1,278 @@
+=== D2-2: auth status判定准确性 ===
+Real credentials exist: true
+Status with real creds: {
+  "target": "all",
+  "credentialsConfigured": true,
+  "credentialsPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+  "obsConfigured": true,
+  "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "4e60a5f5",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "caae65f2",
+      "runtimeFingerprint": null
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [
+      {
+        "store": "S3",
+        "source": "obsutilconfig",
+        "fingerprint": "caae65f2",
+        "manualModified": false
+      }
+    ],
+    "hasRuntime": false,
+    "runtimeFingerprint": null,
+    "inconsistent": true,
+    "runtimeActive": false
+  },
+  "onboarding": {
+    "needsSetup": true,
+    "scenario": 1,
+    "reason": "s1-only",
+    "message": "已保存账号(指纹 4e60a5f5)可直接使用。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "use-s1",
+        "args": {},
+        "label": "直接使用已保存账号"
+      },
+      {
+        "order": 2,
+        "action": "switch-new",
+        "args": {
+          "mode": "import",
+          "action": "persist"
+        },
+        "label": "改用新账号(导入)"
+      }
+    ],
+    "accountHint": "4e60a5f5"
+  },
+  "agents": {
+    "opencode": {
+      "configured": true
+    },
+    "codex": {
+      "configured": false
+    },
+    "codex-desktop": {
+      "configured": false
+    },
+    "codearts": {
+      "configured": true
+    },
+    "codearts-work": {
+      "configured": true
+    },
+    "workbuddy": {
+      "configured": true
+    },
+    "dsh": {
+      "configured": true
+    },
+    "officeace": {
+      "configured": true
+    },
+    "hermes": {
+      "configured": true
+    },
+    "openclaw": {
+      "configured": true
+    },
+    "atomcode": {
+      "configured": true
+    }
+  }
+}
+[PASS] T1.1 auth_status 返回有效结构 :: has response object
+[PASS] T1.2 auth_status 含 credentialsConfigured 字段 :: keys: target,credentialsConfigured,credentialsPath,obsConfigured,obsConfigPath,kooCliInstalled,kooCliStatus,kooCliNextStep,reconciled,onboarding,agents
+[PASS] T1.3 有凭证时 credentialsConfigured=true :: credentialsConfigured=true
+Status without creds: {
+  "target": "all",
+  "credentialsConfigured": false,
+  "credentialsPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\d2-2-7DwRb4\\.config\\huaweicloud\\credentials.json",
+  "obsConfigured": true,
+  "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "caae65f2",
+      "runtimeFingerprint": null
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [],
+    "hasRuntime": false,
+    "runtimeFingerprint": null,
+    "inconsistent": false,
+    "runtimeActive": false
+  },
+  "onboarding": {
+    "needsSetup": true,
+    "scenario": 3,
+    "reason": "s1-missing",
+    "message": "未配置华为云凭证,需要完成登录后才能使用云能力。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "obtain-aksk",
+        "target": "console",
+        "label": "获取 AK/SK(华为云控制台)"
+      },
+      {
+        "order": 2,
+        "action": "write-import",
+        "target": "C:\\Users\\Administrator\\.config\\huaweicloud\\creds-import.json",
+        "label": "把 AK/SK 写入 creds-import.json"
+      },
+      {
+        "order": 3,
+        "action": "auth_switch",
+        "args": {
+          "mode": "import",
+          "action": "persist"
+        },
+        "label": "执行导入完成配置"
+      }
+    ],
+    "accountHint": null
+  },
+  "agents": {
+    "opencode": {
+      "configured": false
+    },
+    "codex": {
+      "configured": false
+    },
+    "codex-desktop": {
+      "configured": false
+    },
+    "codearts": {
+      "configured": true
+    },
+    "codearts-work": {
+      "configured": false
+    },
+    "workbuddy": {
+      "configured": false
+    },
+    "dsh": {
+      "configured": false
+    },
+    "officeace": {
+      "configured": true
+    },
+    "hermes": {
+      "configured": false
+    },
+    "openclaw": {
+      "configured": false
+    },
+    "atomcode": {
+      "configured": false
+    }
+  }
+}
+[PASS] T2.1 无凭证状态返回有效结构 :: has response object
+[PASS] T2.2 无凭证状态标识未就绪 :: credentialsConfigured=false
+Status with runtime creds: {
+  "target": "all",
+  "credentialsConfigured": true,
+  "credentialsPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+  "obsConfigured": true,
+  "obsConfigPath": "C:\\Users\\Administrator\\.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "4e60a5f5",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "caae65f2",
+      "runtimeFingerprint": "4e60a5f5"
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [
+      {
+        "store": "S3",
+        "source": "obsutilconfig",
+        "fingerprint": "caae65f2",
+        "manualModified": false
+      }
+    ],
+    "hasRuntime": true,
+    "runtimeFingerprint": "4e60a5f5",
+    "inconsistent": true,
+    "runtimeActive": true
+  },
+  "onboarding": {
+    "needsSetup": false,
+    "scenario": 0,
+    "reason": "runtime-active",
+    "message": "Runtime credentials are active; no setup needed.",
+    "steps": [],
+    "accountHint": "4e60a5f5"
+  },
+  "agents": {
+    "opencode": {
+      "configured": true
+    },
+    "codex": {
+      "configured": false
+    },
+    "codex-desktop": {
+      "configured": false
+    },
+    "codearts": {
+      "configured": true
+    },
+    "codearts-work": {
+      "configured": true
+    },
+    "workbuddy": {
+      "configured": true
+    },
+    "dsh": {
+      "configured": true
+    },
+    "officeace": {
+      "configured": true
+    },
+    "hermes": {
+      "configured": true
+    },
+    "openclaw": {
+      "configured": true
+    },
+    "atomcode": {
+      "configured": true
+    }
+  }
+}
+[PASS] T3.1 runtime凭证状态返回有效结构 :: has response object
+[PASS] T3.2 runtime凭证状态标识就绪 :: credentialsConfigured=true
+
+=== 汇总 ===
+Total: 7, PASS: 7, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-2","result":"PASS","checks":[{"label":"T1.1 auth_status 返回有效结构","pass":true,"detail":"has response object"},{"label":"T1.2 auth_status 含 credentialsConfigured 字段","pass":true,"detail":"keys: target,credentialsConfigured,credentialsPath,obsConfigured,obsConfigPath,kooCliInstalled,kooCliStatus,kooCliNextStep,reconciled,onboarding,agents"},{"label":"T1.3 有凭证时 credentialsConfigured=true","pass":true,"detail":"credentialsConfigured=true"},{"label":"T2.1 无凭证状态返回有效结构","pass":true,"detail":"has response object"},{"label":"T2.2 无凭证状态标识未就绪","pass":true,"detail":"credentialsConfigured=false"},{"label":"T3.1 runtime凭证状态返回有效结构","pass":true,"detail":"has response object"},{"label":"T3.2 runtime凭证状态标识就绪","pass":true,"detail":"credentialsConfigured=true"}],"timestamp":"2026-09-21T02:07:15.225Z"}

@@ -1,0 +1,73 @@
+=== D2-10 (P1): multi-profile switching ===
+Date: 2026-09-13
+Platform: Windows (win32)
+Client: OfficeAce
+
+--- Probe Results ---
+
+1. hcloud configure list output:
+   {
+     "authEncrypt": "true",
+     "current": "default",
+     "profiles": [
+       { "name": "default", "mode": "AKSK", "region": "cn-north-4" }
+     ]
+   }
+   Currently 1 profile ("default") configured.
+   KooCLI inherently supports multiple profiles (profiles array in config.json).
+
+2. Profile management in reconcile.mjs:
+   - readKooCliProfiles(): Reads ~/.hcloud/config.json, extracts current profile
+     and all profiles with their fingerprints
+   - resolveManagedProfile(): Returns the current profile name
+   - Handles authEncrypt (KooCLI 7.x encrypts AK/SK on disk)
+   - kooCliConfigPath(): Returns ~/.hcloud/config.json path
+   - Fingerprint comparison for drift detection (S1 vs S2)
+
+3. auth_switch tool in tools.mjs:
+   - Tool name: huaweicloud_auth_switch
+   - Actions: 'temporary' (memory only), 'persist' (write S1+S2+S3), 'clear' (reset)
+   - Modes: 'import' (from file), 'memory' (from args), 'mcp-config' (from CodeArts env)
+   - Conflict detection: When persisting, checks if S1 already has different AK
+     (prev.ak !== ak) and creates a confirmation flow
+   - Confirmation flow: huaweicloud_auth_confirm with token-based confirmation
+     - Options: keep S1 existing OR overwrite with new account
+   - Backup: backupGlobalCredentials() before overwriting
+
+4. show_profile_redacted:
+   - Accepts optional "profile" parameter to inspect specific profiles
+   - Returns redacted output (AK/SK masked)
+
+5. Doctor command profile check:
+   - Uses "hcloud configure list" to check if credentials are configured
+   - Checks for access key pattern in output
+
+6. KooCLI multi-profile support:
+   KooCLI (hcloud) inherently supports multiple profiles via config.json:
+   - "current" field selects active profile
+   - "profiles" array stores all profiles
+   - --cli-profile flag selects profile per-command
+   The devkit wraps this with:
+   - resolveManagedProfile() to get current profile
+   - runHcloudConfigure() to write profile config
+   - auth_switch for switching between accounts
+
+--- Verdict ---
+
+STATUS: PASS
+
+Rationale:
+- KooCLI inherently supports multiple profiles (profiles array in config.json)
+- The devkit provides full multi-profile management:
+  - readKooCliProfiles() reads all profiles from config
+  - resolveManagedProfile() identifies the current active profile
+  - auth_switch tool supports switching between accounts with 3 actions:
+    temporary (memory), persist (file), clear (reset)
+  - Conflict detection prevents accidental overwrites (confirmation flow)
+  - show_profile_redacted can inspect any profile by name
+- Currently only 1 profile ("default") is configured, but the infrastructure
+  fully supports adding and switching between multiple profiles
+- auth_switch with action=persist propagates to S1 (credentials.json),
+  S2 (KooCLI profile), and S3 (OBS config) with backup and confirmation
+- The confirmation flow (huaweicloud_auth_confirm) prevents accidental
+  credential overwrites when switching accounts

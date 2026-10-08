@@ -1,0 +1,64 @@
+{
+  "case": "D9-10",
+  "status": "PASS",
+  "total": 6,
+  "passed": 6,
+  "results": [
+    {
+      "id": "D9-10-defaults",
+      "name": "default-port-host",
+      "pass": true,
+      "actual": "port=9528 host=127.0.0.1",
+      "expected": "port=9528 host=127.0.0.1",
+      "passMsg": "DEFAULT_PORT=9528 DEFAULT_HOST=127.0.0.1",
+      "failMsg": null
+    },
+    {
+      "id": "D9-10-listening",
+      "name": "server-listening",
+      "pass": true,
+      "actual": "127.0.0.1:9528",
+      "expected": "127.0.0.1:9528",
+      "passMsg": "9528 端口正常监听",
+      "failMsg": null
+    },
+    {
+      "id": "D9-10-initialize",
+      "name": "remote-initialize",
+      "pass": true,
+      "actual": "serverInfo=huaweicloud-devkit proto=2024-11-05",
+      "expected": "serverInfo=huaweicloud-devkit",
+      "passMsg": "remote initialize OK",
+      "failMsg": null
+    },
+    {
+      "id": "D9-10-tools-list",
+      "name": "remote-tools-list",
+      "pass": true,
+      "actual": "40 tools",
+      "expected": ">0 tools",
+      "passMsg": "remote tools/list returned 40 tools",
+      "failMsg": null
+    },
+    {
+      "id": "D9-10-stdio-parity",
+      "name": "remote-stdio-parity",
+      "pass": true,
+      "actual": "remote=40 stdio=40 name=huaweicloud-devkit",
+      "expected": "remote=40 stdio=40 name=huaweicloud-devkit",
+      "passMsg": "remote 与 stdio initialize/tools/list 一致",
+      "failMsg": null
+    },
+    {
+      "id": "D9-10-unknown-method",
+      "name": "remote-unknown-method",
+      "pass": true,
+      "actual": "error.code=-32601",
+      "expected": "error.code=-32601",
+      "passMsg": "remote 未知方法返回 -32601",
+      "failMsg": null
+    }
+  ],
+  "source": "eval/harness/fixtures/d9-10-remote-transport.mjs",
+  "executedAt": "20260928090100"
+}

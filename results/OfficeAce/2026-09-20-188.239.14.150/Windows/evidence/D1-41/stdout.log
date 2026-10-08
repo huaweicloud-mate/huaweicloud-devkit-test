@@ -1,0 +1,28 @@
+=== D1-41: check_update 真实 MCP 返回契约 ===
+
+--- Test 1: up_to_date ---
+Result: { "currentVersion": "1.1.5", "latestStable": "1.1.5", "result": "up_to_date", "updateAvailable": false }
+All required fields present: true
+result === 'up_to_date': true
+
+--- Test 2: update_available ---
+Result: { "currentVersion": "1.1.5", "latestStable": "1.2.0", "targetVersion": "1.2.0", "result": "update_available", "updateAvailable": true }
+result === 'update_available': true
+updateAvailable === true: true
+targetVersion === '1.2.0': true
+
+--- Test 3: check_failed ---
+Result: { "currentVersion": "1.1.5", "latestStable": null, "result": "check_failed", "note": "检测失败，不影响使用" }
+result === 'check_failed': true
+Has note: true
+
+--- Test 4: MCP tools/call wrapping ---
+Has content: true
+content[0].type: text
+isError: false
+Inner has all required fields: currentVersion, latestStable, updateAvailable, dismissed, dismissExpiresAt, result
+
+--- VERIFICATION ---
+isError=false: true
+All required fields present: true
+VERDICT D1-41: PASS

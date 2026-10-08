@@ -1,0 +1,33 @@
+{
+ "status": "FAIL",
+ "caseId": "D4-16",
+ "total": 3,
+ "passed": 1,
+ "failed": 2,
+ "source": "grouped:d4-security",
+ "executedAt": "20260926051622",
+ "why": "wrap-sh: sh wrap NOT blocked (defect); wrap-mcp: wrap not blocked (MCP)",
+ "assertions": [
+  {
+   "name": "wrap-powershell",
+   "pass": true,
+   "actual": "deny",
+   "expected": "deny",
+   "failMsg": "powershell wrap not blocked"
+  },
+  {
+   "name": "wrap-sh",
+   "pass": false,
+   "actual": "allow",
+   "expected": "deny",
+   "failMsg": "sh wrap NOT blocked (defect)"
+  },
+  {
+   "name": "wrap-mcp",
+   "pass": false,
+   "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook ris",
+   "expected": "deny",
+   "failMsg": "wrap not blocked (MCP)"
+  }
+ ]
+}

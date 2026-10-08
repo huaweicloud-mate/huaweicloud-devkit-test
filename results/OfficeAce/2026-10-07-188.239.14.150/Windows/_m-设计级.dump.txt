@@ -1,0 +1,103 @@
+==== 用例矩阵-设计级.csv rows=102 ====
+D1-3 | P1 | D1安装 | doctor健康自检 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows/Linux> | OS_MATRIX|<代表: Windows/Linux>|<证据: docto
+D1-4 | P2 | D1安装 | status/update幂等 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows/Linux> | OS_MATRIX|<代表: Windows/Linux>|<证据: 增量刷新不
+D1-26 | P1 | D1安装 | 升级提醒工具注册与协议暴露 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: MCP Inspector+进程> | COMMON|<代表: MCP Inspector+进程>|<证据: tools
+D1-27 | P1 | D1安装 | 检测语义-已是最新 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows/Linux> | OS_MATRIX|<代表: Windows/Linux>|<证据: resul
+D1-28 | P1 | D1安装 | 检测语义-有新版本 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows/Linux> | OS_MATRIX|<代表: Windows/Linux>|<证据: updat
+D1-30 | P2 | D1安装 | semver 比对正确性 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows/Linux> | OS_MATRIX|<代表: Windows/Linux>|<证据: semve
+D1-31 | P1 | D1安装 | dismiss 冷却期 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows/Linux> | OS_MATRIX|<代表: Windows/Linux>|<证据: 冷却期 r
+D1-33 | P2 | D1安装 | skip 文件持久化与多路径 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows/Linux> | OS_MATRIX|<代表: Windows/Linux>|<证据: skip 
+D1-39 | P0 | D1安装 | Windows 升级检测链可用性 | Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证） | Hermes 代表终端; fake/fixture | <代表: Windows/Linux> | OS_MATRIX|<代表: Windows/Linux>|<证据: Windo
+D1-40 | P0 | D1安装 | 镜像 lag 下检测正确性(反向提醒防护) | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows/Linux> | OS_MATRIX|<代表: Windows/Linux>|<证据: 镜像 la
+D1-41 | P1 | D1安装 | check_update 真实 MCP 返回契约 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离进程> | COMMON|<代表: 隔离进程>|<证据: MCP 四态返回契约>|<阻塞: 
+D1-42 | P1 | D1安装 | dismiss 真实闭环与跨调用持久化 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离 HOME+CROSS_PROCESS> | COMMON|<代表: 隔离 HOME+CROSS_PROCESS>|<证据: 
+D1-45 | P1 | D1安装 | 兜底提示真实序列与预热竞态 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离进程+预热竞态> | COMMON|<代表: 隔离进程+预热竞态>|<证据: 兜底一次性消费时序>|<
+D1-65 | P2 | D1安装 | 调试模式环境变量 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离进程> | COMMON|<代表: 隔离进程>|<证据: 调试日志开关>|<阻塞: 无>
+D1-66 | P2 | D1安装 | 遥测开关与端点环境变量 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离进程> | COMMON|<代表: 隔离进程>|<证据: 开关+端点取值>|<阻塞: 无>
+D1-67 | P2 | D1安装 | Agent toolkit 模式与 DSH 跳过安装环境变量 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: DSH 客户端> | COMMON|<代表: DSH 客户端>|<证据: env 注入+跳过安装>|<
+D1-68 | P2 | D1安装 | 图标离线与区域环境变量 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离进程> | COMMON|<代表: 隔离进程>|<证据: 离线图标+region取值>|<阻
+D1-69 | P2 | D1安装 | CLI help 子命令 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: CLI> | COMMON|<代表: CLI>|<证据: help 输出>|<阻塞: 无>
+D1-70 | P1 | D1安装 | 代理配置与 WebSocket 代理 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离进程+proxy夹具> | COMMON|<代表: 隔离进程+proxy夹具>|<证据: 配置读写+WS代理
+D2-10 | P1 | D2认证 | R7 current档跟随 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 或 OpenCode> | COMMON|<代表: Hermes 或 OpenCode>|<证据: curr
+D2-11 | P0 | D2认证 | R3 STS token拒绝落盘 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 或 OpenCode> | COMMON|<代表: Hermes 或 OpenCode>|<证据: scop
+D2-12 | P1 | D2认证 | R10 runtime非空禁止落盘 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 或 OpenCode> | COMMON|<代表: Hermes 或 OpenCode>|<证据: R10 
+D2-13 | P1 | D2认证 | R9 configuredBySession优先env | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 或 OpenCode> | COMMON|<代表: Hermes 或 OpenCode>|<证据: S1 胜
+D2-16 | P1 | D2认证 | import文件读取后擦除 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 或 OpenCode> | COMMON|<代表: Hermes 或 OpenCode>|<证据: 读后 e
+D4-18 | P0 | D4安全 | confirm-not-deny审批语义 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: 安全基线 Hermes+OpenCode> | CLIENT_MATRIX|<代表: 安全基线 Hermes+OpenCode>
+D4-19 | P0 | D4安全 | 确认流下预检仍生效 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: 安全基线 Hermes+OpenCode> | CLIENT_MATRIX|<代表: 安全基线 Hermes+OpenCode>
+D4-20 | P1 | D4安全 | 拒绝后零操作 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D2-1 | P1 | D2认证 | auth init三端同步 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 或 OpenCode> | COMMON|<代表: Hermes 或 OpenCode>|<证据: 三端落位
+D2-2 | P2 | D2认证 | auth status判定准确性 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 或 OpenCode> | COMMON|<代表: Hermes 或 OpenCode>|<证据: 三端就绪
+D2-4 | P0 | D2认证 | 凭证脱敏正确性 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 或 OpenCode> | COMMON|<代表: Hermes 或 OpenCode>|<证据: 输出无明
+D2-5 | P1 | D2认证 | 凭证缺失报错指引 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 或 OpenCode> | COMMON|<代表: Hermes 或 OpenCode>|<证据: 报错+可
+D2-26 | P1 | D2认证 | 凭证备份与恢复 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离 HOME> | COMMON|<代表: 隔离 HOME>|<证据: 备份文件+恢复比对>|<阻塞
+D2-27 | P2 | D2认证 | KooCLI 版本管理 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离进程> | COMMON|<代表: 隔离进程>|<证据: 版本解析/比较/下载基址>|<阻塞
+D3-A1 | P1 | D3功能 | skill检索完整性 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 全量 skill 可检索完整拉
+D3-B1 | P2 | D3功能 | list_operations规范名 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 规范操作名与官方一致>|<阻塞
+D3-B3 | P1 | D3功能 | run_readonly脱敏执行 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 执行成功+输出脱敏+无写入>|
+D3-B5 | P2 | D3功能 | detect_framework识别 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 11 框架识别准确>|<阻塞:
+D3-C4 | P1 | D3功能 | 服务创建类回归 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 22 服务矩阵> | CLIENT_MATRIX|<代表: 22 服务矩阵>|<证据: 逐服务只读规划
+D3-C5 | P1 | D3功能 | 工具冒烟 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 四工具冒烟全通>|<阻塞: 按
+D3-C13 | P1 | D3功能 | OBS 静态网站托管配置 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 真云 OBS> | COMMON|<代表: 真云 OBS>|<证据: 配置 XML+状态码>|<阻塞
+D3-C14 | P2 | D3功能 | 沙箱 HDKit 服务参数与 hwlink 凭证 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes 沙箱> | COMMON|<代表: Hermes 沙箱>|<证据: 参数透传+凭证结构>|<
+D3-S1 | P1 | D3功能 | 场景-只读查ECS(带不改约束) | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 路由+只读清单+零写调用>|<
+D3-S2 | P1 | D3功能 | 场景-删VPC先确认 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 命令块+确认前后执行态>|<阻
+D3-S3 | P1 | D3功能 | 场景-沙箱预览出URL | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 预览URL可访问>|<阻塞: 
+D3-S4 | P1 | D3功能 | 场景-领券闭环 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 状态翻转闭环>|<阻塞: 需未
+D3-S5 | P2 | D3功能 | 场景-复合意图分层路由 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 多路命中+分层推荐>|<阻塞:
+D3-S6 | P2 | D3功能 | 场景-FunctionGraph定时任务 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 函数URN+触发器>|<阻塞:
+D3-S7 | P1 | D3功能 | 场景-跨服务交付(Web应用+RDS)并归零 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 编排顺序+连接串注入+归零>|
+D3-S8 | P1 | D3功能 | 场景-操作失败后排障指引 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Hermes> | COMMON|<代表: Hermes>|<证据: 失败分类+可执行下一步>|<阻
+D4-1 | P0 | D4安全 | 凭证文件读取拦截 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-2 | P0 | D4安全 | 凭证env打印拦截 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-3 | P0 | D4安全 | 明文secret API拦截 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-4 | P1 | D4安全 | 写操作审批门 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-5 | P0 | D4安全 | 写操作误判检测 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-6 | P1 | D4安全 | adminPass回显警告 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-7 | P1 | D4安全 | hook三工具有效性 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-8 | P1 | D4安全 | Python/Node策略一致 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-9 | P0 | D4安全 | 公开暴露/破坏性预检 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-10 | P2 | D4安全 | 规则库新增回归 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-11 | P1 | D4安全 | 提示注入防护 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: 4 注入点> | COMMON|<代表: 4 注入点>|<证据: 注入 payload 拒绝>|<
+D4-12 | P2 | D4安全 | 供应链安装期安全 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-13 | P1 | D4安全 | 最小权限凭证通过率 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: 只读凭证全量> | COMMON|<代表: 只读凭证全量>|<证据: 最小权限通过率>|<阻塞: 需
+D4-14 | P2 | D4安全 | 操作可审计性 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-15 | P0 | D4安全 | hook绕过尝试 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-16 | P0 | D4安全 | 命令包裹穿透 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-17 | P1 | D4安全 | hook模糊fail-closed | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-21 | P0 | D4安全 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检） | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-22 | P0 | D4安全 | hook_check_deploy_plan 具名回归（部署计划预检） | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook=Hermes 非hook=OpenCode> | COMMON|<代表: hook=Hermes 非hook=OpenCode>|
+D4-23 | P0 | D4安全 | 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: 逐客户端 11 目标> | CLIENT_MATRIX|<代表: 逐客户端 11 目标>|<证据: agen
+D4-24 | P1 | D4安全 | 确认令牌过期与重复确认边界（审批流健壮性） | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表2: Hermes+OpenCode> | CLIENT_MATRIX|<代表2: Hermes+OpenCode>|<证据
+D4-25 | P2 | D4安全 | Python hook 事件遥测分类 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook客户端> | COMMON|<代表: hook客户端>|<证据: hook-events.js
+D4-26 | P2 | D4安全 | findings 证据脱敏 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook客户端> | COMMON|<代表: hook客户端>|<证据: findings.evide
+D4-27 | P1 | D4安全 | 双路径输出脱敏 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: 隔离进程> | COMMON|<代表: 隔离进程>|<证据: 脱敏前后对照>|<阻塞: 无>
+D4-28 | P0 | D4安全 | Node 版安全 hook 链路 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: hook客户端> | COMMON|<代表: hook客户端>|<证据: deny 决策+reason
+D4-29 | P2 | D4安全 | 分类断言与原始命令分类入口 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes（Hook）; OpenCode（非 Hook） | <代表: 隔离进程> | COMMON|<代表: 隔离进程>|<证据: 分类+断言分支>|<阻塞: 无>
+D5-1 | P1 | D5客户端 | 清单发现加载 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes; OpenCode; 声明支持的客户端矩阵 | <代表: 10 客户端> | CLIENT_MATRIX|<代表: 10 客户端>|<证据: 清单发现加载>|
+D5-3 | P1 | D5客户端 | 工具全量枚举 | Windows/Linux；macOS 若声明支持则单独举证 | Hermes; OpenCode; 声明支持的客户端矩阵 | <代表: 10 客户端> | CLIENT_MATRIX|<代表: 10 客户端>|<证据: tools/li
+D6-1 | P2 | D6性能 | 检索响应延迟 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows x64 + Node22> | COMMON|<代表: Windows x64 + Node22>|<证据: 采
+D6-3 | P2 | D6性能 | MCP冷启时间 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows x64 + Node22> | COMMON|<代表: Windows x64 + Node22>|<证据: 采
+D6-4 | P1 | D6性能 | 并发调度正确性 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: Windows x64 + Node22> | COMMON|<代表: Windows x64 + Node22>|<证据: 无
+D6-9 | P2 | D6性能 | 缓存清理三入口 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离进程> | COMMON|<代表: 隔离进程>|<证据: 缓存清空+幂等>|<阻塞: 无>
+D9-9 | P1 | D9协议 | tools/call 超时协议语义与取消 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: Inspector+夹具> | COMMON|<代表: Inspector+夹具>|<证据: JSON-RPC错
+D8-1 | P2 | D8质量 | 文档与能力一致 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 静态评审人 测试经理> | COMMON|<代表: 静态评审人 测试经理>|<证据: 评审记录+链接>|<阻
+D8-4 | P1 | D8质量 | 引导步骤可机械执行 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 静态评审人 测试经理> | COMMON|<代表: 静态评审人 测试经理>|<证据: 评审记录+链接>|<阻
+D8-6 | P2 | D8质量 | 中英文文档一致 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 静态评审人 测试经理> | COMMON|<代表: 静态评审人 测试经理>|<证据: 评审记录+链接>|<阻
+D8-7 | P0 | D8质量 | 7 个 meta/通用技能指引可机械执行验证 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 静态评审人 测试经理> | COMMON|<代表: 静态评审人 测试经理>|<证据: 评审记录+链接>|<阻
+D8-9 | P2 | D8质量 | 安装 ID 与遥测值脱敏 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离进程> | COMMON|<代表: 隔离进程>|<证据: ID稳定+脱敏>|<阻塞: 无>
+D8-10 | P2 | D8质量 | MCP 配置备份与合并 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes 代表终端; fake/fixture | <代表: 隔离 HOME> | COMMON|<代表: 隔离 HOME>|<证据: 合并结果+delta回放>|
+D9-1 | P1 | D9协议 | tools/list合规 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + Hermes> | COMMON|<代表: MCP Inspector + Hermes>|<证据:
+D9-2 | P1 | D9协议 | JSON-RPC错误码 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + Hermes> | COMMON|<代表: MCP Inspector + Hermes>|<证据:
+D9-3 | P1 | D9协议 | tools/call响应格式 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + Hermes> | COMMON|<代表: MCP Inspector + Hermes>|<证据:
+D9-4 | P1 | D9协议 | 协议生命周期 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + Hermes> | COMMON|<代表: MCP Inspector + Hermes>|<证据:
+D9-5 | P1 | D9协议 | stdio传输健壮 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + Hermes> | COMMON|<代表: MCP Inspector + Hermes>|<证据:
+D9-6 | P1 | D9协议 | 跨客户端互通 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + Hermes> | COMMON|<代表: MCP Inspector + Hermes>|<证据:
+D9-7 | P2 | D9协议 | 协议版本协商降级 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + Hermes> | COMMON|<代表: MCP Inspector + Hermes>|<证据:
+D9-8 | P2 | D9协议 | inputSchema版本合规 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + Hermes> | COMMON|<代表: MCP Inspector + Hermes>|<证据:
+D9-10 | P1 | D9协议 | MCP remote transport（HTTP/WS 远程服务） | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: remote 客户端> | COMMON|<代表: remote 客户端>|<证据: 端口监听+协议响应>|
+D9-11 | P1 | D9协议 | WebSocket 隧道通道生命周期 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: 隧道 mux 夹具> | COMMON|<代表: 隧道 mux 夹具>|<证据: ready/close 
+D9-12 | P0 | D9协议 | initialize 握手协议安全基线 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + Hermes> | COMMON|<代表: MCP Inspector + Hermes>|<证据:
+D9-13 | P0 | D9协议 | tools/call 凭证不泄露与权限校验 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | Hermes; MCP Inspector/标准协议客户端 | <代表: MCP Inspector + 源码探针> | COMMON|<代表: MCP Inspector + 源码探针>|<证据: 凭
+D10-3 | P1 | D10评测 | 路由准确率+混淆矩阵 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | <代表: 10 客户端> | CLIENT_MATRIX|<代表: 10 客户端>|<证据: 评测集结果+模型
+D10-4 | P0 | D10评测 | 安全干预-静态规则层 | Windows/Linux 代表环境；macOS 若声明支持则单独举证 | OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | <代表: 源码直调 risk-rule-engine> | COMMON|<代表: 源码直调 risk-rule-engine>|<证据: 

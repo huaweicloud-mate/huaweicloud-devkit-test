@@ -1,0 +1,30 @@
+{
+  "status": "BLOCKED",
+  "caseId": "D3-S3",
+  "why": "Sandbox code path verified (skill + tools + session-manager + API module all present), but cannot execute real sandbox check-user/connect without MCP server context. Unblock condition: run probe through MCP server with valid sandbox service quota.",
+  "executedAt": "20260930103000",
+  "details": [
+    {
+      "step": "sandbox_skill_exists",
+      "pass": true
+    },
+    {
+      "step": "sandbox_tools_defined",
+      "pass": true
+    },
+    {
+      "step": "session_manager_exists",
+      "pass": true
+    },
+    {
+      "step": "hdkit_api_exists",
+      "pass": true
+    },
+    {
+      "step": "sandbox_execution_check",
+      "result": "module_exists_but_cannot_invoke_without_mcp_context",
+      "canExecute": false,
+      "reason": "MCP server context required for sandbox API calls"
+    }
+  ]
+}

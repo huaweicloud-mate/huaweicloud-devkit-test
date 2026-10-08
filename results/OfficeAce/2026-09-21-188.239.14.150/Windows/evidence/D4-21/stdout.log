@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "Broad IAM policy: Action=* Effect=Allow",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        {
+          "id": "hwc-iam-admin-policy",
+          "sev": "deny"
+        }
+      ]
+    },
+    {
+      "label": "AdministratorAccess policy",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-iam-admin-policy"
+      ]
+    },
+    {
+      "label": "Action=*:* Effect=Allow",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-iam-admin-policy"
+      ]
+    },
+    {
+      "label": "OBS anonymous write",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-obs-anonymous-write"
+      ]
+    },
+    {
+      "label": "Public admin port in artifact",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-network-public-admin-port"
+      ]
+    },
+    {
+      "label": "Safe IAM policy not denied",
+      "pass": true,
+      "decision": "warn",
+      "findings": [
+        "hwc-sandbox-missing-ttl"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+const HDK = 'C:/Users/Administrator/devkit-test/OfficeAce/hdk';
+const tools = await import('file:///' + HDK + '/plugins/huaweicloud-core/src/tools.mjs');
+const proto = await import('file:///' + HDK + '/plugins/huaweicloud-core/src/mcp-protocol.mjs');
+const risk = await import('file:///' + HDK + '/plugins/huaweicloud-core/src/risk-rule-engine.mjs');
+const safety = await import('file:///' + HDK + '/plugins/huaweicloud-core/src/safety-policy.mjs');
+const updateMod = await import('file:///' + HDK + '/plugins/huaweicloud-core/src/update-check.mjs');
+const tel = await import('file:///' + HDK + '/plugins/huaweicloud-core/src/telemetry/telemetry.mjs');
+
+console.log('tools.listSkills?', typeof tools.listSkillDirs);
+console.log('TOOL_DEFINITIONS count:', tools.TOOL_DEFINITIONS.length);
+console.log('callTool:', typeof tools.callTool);
+const list = await proto.dispatch('tools/list', {});
+console.log('tools/list count:', (list.tools || []).length);
+console.log('risk.loadRiskRules:', typeof risk.loadRiskRules);
+console.log('safety.classifyTextCommand:', typeof safety.classifyTextCommand);
+console.log('safety.redactSecrets:', typeof safety.redactSecrets);
+console.log('update.invalidateUpdateCache:', typeof updateMod.invalidateUpdateCache);
+console.log('update.semverCompare:', typeof updateMod.semverCompare);
+console.log('tel.generateOrRecoverInstallId:', typeof tel.generateOrRecoverInstallId);
+console.log('tel.sanitizeValue:', typeof tel.sanitizeValue);

@@ -1,0 +1,25 @@
+=== D4-6: Read-only Operation Misjudgment Detection ===
+Test: Call plan_cli_command with read-only operations, verify correct classification
+
+Tool: huaweicloud-devkit__huaweicloud_plan_cli_command
+
+Probe 1: hcloud ECS ListServersDetails
+Result:
+  decision: allow
+  risk: read_only
+  reason: Command appears to be a read-only Huawei Cloud operation.
+  safeToRun: true
+
+Probe 2: hcloud VPC ListVpcs
+Result:
+  decision: allow
+  risk: read_only
+  reason: Command appears to be a read-only Huawei Cloud operation.
+  safeToRun: true
+
+Verification:
+  ECS ListServersDetails classified as read_only: PASS
+  VPC ListVpcs classified as read_only: PASS
+  Neither misjudged as write operation: PASS
+
+STATUS: PASS - Read-only operations correctly classified

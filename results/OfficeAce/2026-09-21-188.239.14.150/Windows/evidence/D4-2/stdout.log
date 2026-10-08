@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "printenv HUAWEICLOUD_ACCESS_KEY",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "echo $HWC_SECRET_KEY",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "echo $HW_ACCESS_KEY",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "echo $HW_SECRET_KEY",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "echo $HW_SECURITY_TOKEN",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "printenv HW_ACCESS_KEY",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "env | grep HUAWEICLOUD",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "Get-ChildItem Env: | grep HWC_",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "echo $OS_ACCESS_KEY",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "escaped $HW_SECRET_KEY (should allow)",
+      "pass": true,
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "note": "Escaped var should not trigger deny"
+    }
+  ]
+}

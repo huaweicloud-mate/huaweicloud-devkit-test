@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "caseId": "D8-1",
+  "why": "All 8 MCP config backup read/write operations verified: save, read, take (consume), multi-agent coexist, purge. Uses temp file, no real config touched.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "name": "saveAgentDelta returns true and writes file",
+      "pass": true,
+      "evidence": "saved=true, fileExists=true"
+    },
+    {
+      "name": "readAgentDelta returns saved delta with savedAt",
+      "pass": "2026-09-30T21:56:27.984Z",
+      "evidence": "commandExtra=[\"--transport\",\"remote\"], hasSavedAt=true"
+    },
+    {
+      "name": "readAgentDelta for non-existent agent returns null",
+      "pass": true,
+      "evidence": "result=null"
+    },
+    {
+      "name": "takeAgentDelta returns delta and removes it from file",
+      "pass": true,
+      "evidence": "taken=true, readAfterTake=null"
+    },
+    {
+      "name": "Backup file removed after last agent delta consumed",
+      "pass": true,
+      "evidence": "fileExists=false"
+    },
+    {
+      "name": "Multiple agents coexist in backup file",
+      "pass": true,
+      "evidence": "agentX.timeout=60000, agentY.enabled=false"
+    },
+    {
+      "name": "purgeBackup removes backup file",
+      "pass": true,
+      "evidence": "purged=true, fileExists=false"
+    },
+    {
+      "name": "purgeBackup on non-existent file returns false",
+      "pass": true,
+      "evidence": "result=false"
+    }
+  ]
+}

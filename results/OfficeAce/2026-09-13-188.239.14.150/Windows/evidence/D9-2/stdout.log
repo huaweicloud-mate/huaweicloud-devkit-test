@@ -1,0 +1,35 @@
+=== D9-2: JSON-RPC 错误码合规 ===
+
+Test 1: Send invalid method "tools/nonexistent"
+  [FAIL] Invalid method error code: Got code -32603 (expected -32601), message: "Unsupported method: tools/nonexistent"
+
+Test 2: Send invalid params to tools/call (missing required "name")
+  [FAIL] Invalid params error code: Got code -32603 (expected -32602), message: "Unknown tool: undefined"
+
+Test 3: Send malformed JSON
+  [PASS] Server alive before malformed JSON: Server responded with 39 tools
+  [stderr] <anonymous_script>:1
+{"jsonrpc":"2.0","id":999,"method":"tools/list","params":{INVALID}
+                                                          ^
+
+SyntaxError: Expected property name or '}' in JSON at position 58 (line 1 column 59)
+    at JSON.parse (<anonymous>)
+    at readFrames (file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/mcp-server.mjs:131:43)
+    at Socket.<anonymous> (file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/mcp-server.mjs:113:5)
+    at Socket.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+Node.js v24.14.1
+  [FAIL] Malformed JSON parse error: Server crashed/hung after malformed JSON. No -32700 error returned. Server does not handle parse errors gracefully.
+
+=== Summary ===
+  FAIL - Invalid method error code: Got code -32603 (expected -32601), message: "Unsupported method: tools/nonexistent"
+  FAIL - Invalid params error code: Got code -32603 (expected -32602), message: "Unknown tool: undefined"
+  PASS - Server alive before malformed JSON: Server responded with 39 tools
+  FAIL - Malformed JSON parse error: Server crashed/hung after malformed JSON. No -32700 error returned. Server does not handle parse errors gracefully.
+
+Overall: FAIL
+

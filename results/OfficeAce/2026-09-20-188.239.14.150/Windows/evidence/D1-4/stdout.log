@@ -1,0 +1,43 @@
+=== D1-4: status/update 幂等性验证 ===
+Date: 2026-09-20
+Environment: Windows, Node.js v24.14.1, huaweicloud-devkit@1.1.5
+
+--- Step 1: status ---
+Command: npx huaweicloud-devkit status
+Exit code: 0
+Output:
+  已安装: OpenCode, CodeArts, CodeArts Work, WorkBuddy, DSH, OfficeAce, Hermes Agent, OpenClaw, AtomCode | 未安装: Codex
+  All agents show MCP Server: Installed, Safety Policy: Installed, Skills: 29 installed
+  Environment: Node.js v24.14.1, Platform: win32
+
+--- Step 2: update (first run) ---
+Command: npx huaweicloud-devkit update
+Exit code: 0
+Key observations:
+  - All MCP config files marked "unchanged" (user config not touched):
+    * OpenCode MCP config unchanged: opencode.jsonc
+    * Codex MCP Config unchanged: .mcp.json
+    * CodeArts MCP config unchanged: mcp_settings.json
+    * CodeArts Work MCP config unchanged: mcp_settings.json
+    * WorkBuddy MCP config unchanged: mcp.json
+    * OfficeAce MCP config unchanged: mcp-connectors.sqlite
+    * Hermes MCP config unchanged: config.yaml
+    * OpenClaw MCP Config unchanged: .mcp.json
+    * AtomCode MCP config unchanged: mcp.json
+  - Skills/MCP Server/Safety Policy updated (expected behavior)
+  - "Update complete." message displayed
+
+--- Step 3: update (second run - idempotency) ---
+Command: npx huaweicloud-devkit update
+Exit code: 0
+Key observations:
+  - Same output structure as first run
+  - All MCP config files still marked "unchanged"
+  - CodeArts secondary MCP config: first run "updated", second run "unchanged" (confirms idempotency)
+  - "Update complete." message displayed
+  - No errors or failures
+
+VERDICT: PASS
+- status command exits 0 with correct installation status
+- update command exits 0, user MCP configs preserved (unchanged)
+- second update is idempotent: same output, configs still unchanged

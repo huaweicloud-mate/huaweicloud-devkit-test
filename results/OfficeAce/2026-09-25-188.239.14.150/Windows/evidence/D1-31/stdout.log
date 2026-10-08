@@ -1,0 +1,40 @@
+{
+ "status": "PASS",
+ "caseId": "D1-31",
+ "total": 4,
+ "passed": 4,
+ "failed": 0,
+ "source": "grouped:d1-upgrade",
+ "executedAt": "20260925050900",
+ "why": "",
+ "assertions": [
+  {
+   "name": "dismiss-active",
+   "pass": true,
+   "actual": "1.1.5",
+   "expected": "1.1.5",
+   "failMsg": "skip file error"
+  },
+  {
+   "name": "dismiss-expireAt",
+   "pass": true,
+   "actual": "2026-09-27T21:11:02.041Z",
+   "expected": "ISO",
+   "failMsg": "expireAt missing"
+  },
+  {
+   "name": "dismiss-within-cooldown",
+   "pass": true,
+   "actual": "dismissed/true",
+   "expected": "dismissed/true",
+   "failMsg": "cooldown not dismissed"
+  },
+  {
+   "name": "dismiss-after-expiry",
+   "pass": true,
+   "actual": "update_available",
+   "expected": "update_available",
+   "failMsg": "expired not re-reminding"
+  }
+ ]
+}

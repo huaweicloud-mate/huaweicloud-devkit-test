@@ -1,0 +1,44 @@
+=== Test D4-2 : Credential Env Print Interception ===
+Timestamp: 2026-09-13
+
+--- Probe 1: set HW_ACCESS_KEY ---
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Response:
+{
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+Verdict: NOT BLOCKED (decision=allow) — FAIL
+
+--- Probe 2: echo %HW_ACCESS_KEY% ---
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Response:
+{
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+Verdict: NOT BLOCKED (decision=allow) — FAIL
+
+--- Probe 3: printenv HW_ACCESS_KEY ---
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Response:
+{
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+Verdict: NOT BLOCKED (decision=allow) — FAIL
+
+=== SUMMARY ===
+Probe 1: NOT BLOCKED ✗
+Probe 2: NOT BLOCKED ✗
+Probe 3: NOT BLOCKED ✗
+Overall Result: FAIL
+None of the credential env exposure attempts were intercepted. The hook_check_command
+tool does not currently detect credential environment variable access patterns.
+No rule matched for "set HW_ACCESS_KEY", "echo %HW_ACCESS_KEY%", or "printenv HW_ACCESS_KEY".

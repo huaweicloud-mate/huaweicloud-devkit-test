@@ -1,0 +1,35 @@
+=== Test D4-9 : Public Exposure / Destructive Pre-check ===
+Timestamp: 2026-09-13
+
+--- Probe 1: hook_check_command ---
+Command: hcloud VPC CreateSecurityGroupRules --Direction ingress --Protocol tcp --Port 0-65535 --RemoteIpRange 0.0.0.0/0
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Response:
+{
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+Verdict: NOT DETECTED (decision=allow, no findings) — FAIL
+The hook did not detect that this command opens ALL ports (0-65535) to ALL IPs (0.0.0.0/0).
+
+--- Probe 2: hook_check_deploy_plan ---
+Plan: {"service":"VPC","action":"CreateSecurityGroupRules","config":{"Direction":"ingress","Protocol":"tcp","Port":"0-65535","RemoteIpRange":"0.0.0.0/0"}}
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_deploy_plan
+Response:
+{
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+Verdict: NOT DETECTED (decision=allow, no findings) — FAIL
+The deploy plan checker did not detect public exposure in the security group rule configuration.
+
+=== SUMMARY ===
+Probe 1 (hook_check_command): NOT DETECTED ✗
+Probe 2 (hook_check_deploy_plan): NOT DETECTED ✗
+Overall Result: FAIL
+Neither hook_check_command nor hook_check_deploy_plan detected the dangerous public exposure
+configuration (0.0.0.0/0 ingress on all ports). No rule matched for either probe.

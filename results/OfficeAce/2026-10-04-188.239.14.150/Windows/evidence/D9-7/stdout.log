@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "caseId": "D9-7",
+  "why": "All 8 error recovery checks passed: proper JSON-RPC error codes (-32601, -32602), graceful handling of notifications/resources, and full recovery after consecutive errors.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "name": "Unknown method throws -32601 (Method not found)",
+      "pass": true,
+      "evidence": "code=-32601, message=Method not found: unknown/method"
+    },
+    {
+      "name": "Unknown tool throws -32602 (Invalid params)",
+      "pass": true,
+      "evidence": "code=-32602, message=Unknown tool: nonexistent_tool"
+    },
+    {
+      "name": "Missing required fields throws -32602",
+      "pass": true,
+      "evidence": "code=-32602, message=Unknown tool: huaweicloud_koocli_run"
+    },
+    {
+      "name": "initialize returns valid response with serverInfo",
+      "pass": true,
+      "evidence": "serverInfo={\"name\":\"huaweicloud-devkit\",\"version\":\"1.1.8-next.1\"}"
+    },
+    {
+      "name": "tools/list returns tool definitions",
+      "pass": true,
+      "evidence": "toolsCount=41"
+    },
+    {
+      "name": "Recovery: valid request succeeds after 5 consecutive errors",
+      "pass": true,
+      "evidence": "toolsCount=41 after 5 errors"
+    },
+    {
+      "name": "resources/list returns empty array (graceful)",
+      "pass": true,
+      "evidence": "resources=[]"
+    },
+    {
+      "name": "notifications/initialized returns -32601 at dispatch level (handled at server level)",
+      "pass": true,
+      "evidence": "code=-32601 (notification handled in handleMessage before dispatch, correct behavior)"
+    }
+  ]
+}

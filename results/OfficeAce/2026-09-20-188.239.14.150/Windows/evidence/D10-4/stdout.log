@@ -1,0 +1,88 @@
+[2026-09-20T02:25:19.540Z] ═══════════════════════════════════════════════════════
+[2026-09-20T02:25:19.541Z] Step ①: loadRiskRules — rule count & severity distribution
+[2026-09-20T02:25:19.541Z] ═══════════════════════════════════════════════════════
+[2026-09-20T02:25:19.541Z] Catalog version: 0.1.0
+[2026-09-20T02:25:19.541Z] Total rules loaded: 16
+[2026-09-20T02:25:19.541Z] Severity distribution: deny=9, warn=7, info=0
+[2026-09-20T02:25:19.541Z] 
+[2026-09-20T02:25:19.541Z] Rule inventory:
+[2026-09-20T02:25:19.541Z]   [DENY] hwc-command-credential-file — Credential file read (stages: command)
+[2026-09-20T02:25:19.542Z]   [DENY] hwc-command-env-dump — Cloud credential environment dump (stages: command)
+[2026-09-20T02:25:19.542Z]   [DENY] hwc-command-secret-value-read — Plaintext secret read (stages: command)
+[2026-09-20T02:25:19.542Z]   [WARN] hwc-command-sts-credential — Temporary credential exposure (stages: command)
+[2026-09-20T02:25:19.542Z]   [DENY] hwc-command-encoded-shell-exec — Encoded payload piped to shell (stages: command)
+[2026-09-20T02:25:19.542Z]   [DENY] hwc-network-public-admin-port — Public admin port exposure (stages: command,artifact,deploy_plan)
+[2026-09-20T02:25:19.542Z]   [DENY] hwc-obs-anonymous-write — OBS anonymous write (stages: command,artifact,deploy_plan)
+[2026-09-20T02:25:19.542Z]   [WARN] hwc-functiongraph-public-no-auth — Public FunctionGraph trigger without auth (stages: command,artifact,deploy_plan)
+[2026-09-20T02:25:19.542Z]   [DENY] hwc-iam-admin-policy — Broad IAM administrator grant (stages: command,artifact,deploy_plan)
+[2026-09-20T02:25:19.542Z]   [DENY] hwc-destructive-delete-force — Forced destructive operation (stages: command)
+[2026-09-20T02:25:19.542Z]   [WARN] hwc-destructive-delete-operation — Destructive cloud resource operation (stages: command)
+[2026-09-20T02:25:19.542Z]   [WARN] hwc-destructive-reset-operation — Destructive resource reset operation (stages: command)
+[2026-09-20T02:25:19.542Z]   [WARN] hwc-destructive-delete-cascade — Cascading cloud resource deletion (stages: command)
+[2026-09-20T02:25:19.542Z]   [WARN] hwc-sandbox-missing-ttl — Sandbox deployment missing cleanup metadata (stages: artifact,deploy_plan)
+[2026-09-20T02:25:19.542Z]   [WARN] hwc-cost-unbounded-scale — Unbounded scale or high-cost resource (stages: command,artifact,deploy_plan)
+[2026-09-20T02:25:19.542Z]   [DENY] hwc-sandbox-destructive-command — Destructive command in sandbox terminal (stages: command)
+[2026-09-20T02:25:19.542Z] 
+[2026-09-20T02:25:19.542Z] ✅ PASS | Total rules = 16 (got 16)
+[2026-09-20T02:25:19.542Z] ✅ PASS | Deny rules = 9 (got 9)
+[2026-09-20T02:25:19.542Z] ✅ PASS | Warn rules = 7 (got 7)
+[2026-09-20T02:25:19.542Z] ═══════════════════════════════════════════════════════
+[2026-09-20T02:25:19.542Z] Step ②: evaluateCommandRisk — high-risk & read-only commands
+[2026-09-20T02:25:19.542Z] ═══════════════════════════════════════════════════════
+[2026-09-20T02:25:19.544Z]   [DENY ] cat credentials file         │ cmd: "cat ~/.hcloud/credentials.json"
+[2026-09-20T02:25:19.544Z]            expected=deny, matched: hwc-command-credential-file(deny)
+[2026-09-20T02:25:19.544Z]            ↳ hwc-command-credential-file: The command may read local Huawei Cloud credential or profile files into the agent context.
+[2026-09-20T02:25:19.544Z] 
+[2026-09-20T02:25:19.545Z]   [DENY ] env-dump HUAWEICLOUD         │ cmd: "env | grep HUAWEICLOUD_ACCESS_KEY_ID"
+[2026-09-20T02:25:19.545Z]            expected=deny, matched: hwc-command-env-dump(deny)
+[2026-09-20T02:25:19.545Z]            ↳ hwc-command-env-dump: The command may print cloud credential environment variables.
+[2026-09-20T02:25:19.545Z] 
+[2026-09-20T02:25:19.545Z]   [ALLOW] echo secret env var          │ cmd: "echo $HW_SECRET_ACCESS_KEY"
+[2026-09-20T02:25:19.545Z]            expected=deny, matched: —none—
+[2026-09-20T02:25:19.545Z] 
+[2026-09-20T02:25:19.546Z]   [WARN ] hcloud ECS DeleteServers     │ cmd: "hcloud ECS DeleteServers --server-ids i-123"
+[2026-09-20T02:25:19.546Z]            expected=warn, matched: hwc-destructive-delete-operation(warn)
+[2026-09-20T02:25:19.546Z]            ↳ hwc-destructive-delete-operation: This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.
+[2026-09-20T02:25:19.546Z] 
+[2026-09-20T02:25:19.546Z]   [ALLOW] hcloud ECS ListServers       │ cmd: "hcloud ECS ListServers"
+[2026-09-20T02:25:19.546Z]            expected=allow, matched: —none—
+[2026-09-20T02:25:19.546Z] 
+[2026-09-20T02:25:19.546Z]   [ALLOW] hcloud VPC ListVpcs          │ cmd: "hcloud VPC ListVpcs"
+[2026-09-20T02:25:19.546Z]            expected=allow, matched: —none—
+[2026-09-20T02:25:19.546Z] 
+[2026-09-20T02:25:19.546Z] ═══════════════════════════════════════════════════════
+[2026-09-20T02:25:19.546Z] Step ③: decision three-state verification (deny/warn/allow)
+[2026-09-20T02:25:19.546Z] ═══════════════════════════════════════════════════════
+[2026-09-20T02:25:19.546Z] Distinct decisions observed: allow, deny, warn
+[2026-09-20T02:25:19.546Z] ✅ PASS | All three decision states observed: deny=true, warn=true, allow=true
+[2026-09-20T02:25:19.546Z] 
+[2026-09-20T02:25:19.546Z] Per-command assertions:
+[2026-09-20T02:25:19.546Z] ✅ PASS | cat credentials → deny (got deny)
+[2026-09-20T02:25:19.546Z] ✅ PASS | env-dump HUAWEICLOUD → deny (got deny)
+[2026-09-20T02:25:19.546Z] ❌ FAIL | echo $HW_SECRET_ACCESS_KEY → deny (got allow)
+[2026-09-20T02:25:19.546Z] ✅ PASS | hcloud ECS DeleteServers → warn/deny (got warn)
+[2026-09-20T02:25:19.546Z] ✅ PASS | hcloud ECS ListServers → allow (got allow)
+[2026-09-20T02:25:19.546Z] ✅ PASS | hcloud VPC ListVpcs → allow (got allow)
+[2026-09-20T02:25:19.546Z] 
+[2026-09-20T02:25:19.546Z] Token leakage check: no real tokens in evidence output
+[2026-09-20T02:25:19.547Z] ✅ PASS | No token-like strings found in output
+[2026-09-20T02:25:19.547Z] 
+[2026-09-20T02:25:19.547Z] ═══════════════════════════════════════════════════════
+[2026-09-20T02:25:19.547Z] FINAL VERDICT
+[2026-09-20T02:25:19.547Z] ═══════════════════════════════════════════════════════
+[2026-09-20T02:25:19.547Z]   ✅ Total rules = 16
+[2026-09-20T02:25:19.547Z]   ✅ Deny rules = 9
+[2026-09-20T02:25:19.547Z]   ✅ Warn rules = 7
+[2026-09-20T02:25:19.547Z]   ✅ Three-state decisions
+[2026-09-20T02:25:19.547Z]   ✅ cat credentials → deny
+[2026-09-20T02:25:19.547Z]   ✅ env-dump → deny
+[2026-09-20T02:25:19.547Z]   ❌ echo secret → deny
+[2026-09-20T02:25:19.547Z]   ✅ DeleteServers → warn/deny
+[2026-09-20T02:25:19.547Z]   ✅ ListServers → allow
+[2026-09-20T02:25:19.547Z]   ✅ ListVpcs → allow
+[2026-09-20T02:25:19.547Z]   ✅ No token leakage
+[2026-09-20T02:25:19.547Z] 
+[2026-09-20T02:25:19.547Z] RESULT: FAIL ❌
+[2026-09-20T02:25:19.547Z] Asserts: 10/11 passed
+[2026-09-20T02:25:19.547Z] 
+[2026-09-20T02:25:19.547Z] === END OF PROBE ===

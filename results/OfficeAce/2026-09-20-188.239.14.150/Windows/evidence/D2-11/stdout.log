@@ -1,0 +1,71 @@
+
+=== Test 1: auth_switch persist + securityToken ===
+S1 path: C:\Users\ADMINI~1\AppData\Local\Temp\2\d2-11-I7ZsLc\.config\huaweicloud\credentials.json
+S1 exists before: false
+Response: {
+  "status": "error",
+  "error": "Temporary STS credentials cannot be persisted (R3). Use action=temporary.",
+  "scope": "rejected"
+}
+[PASS] T1.1 返回 status=error
+       actual status=error
+[PASS] T1.2 返回 scope=rejected
+       actual scope=rejected
+[PASS] T1.3 错误消息包含 R3
+       error="Temporary STS credentials cannot be persisted (R3). Use action=temporary."
+
+=== Test 2: S1 未写入 token ===
+S1 exists after: false
+[PASS] T2.1 S1 文件未创建 (token 未落盘)
+       S1 不存在 → token 确实未落盘
+[PASS] T2.2 S1 securityToken 字段为空 (文件不存在)
+       N/A
+
+=== Test 3: 预存在 S1 (同账号) + token → 仍 rejected ===
+Pre-existing S1 written (same AK=MOCKAKD2ELEVEN0001, no token)
+Response: {
+  "status": "error",
+  "error": "Temporary STS credentials cannot be persisted (R3). Use action=temporary.",
+  "scope": "rejected"
+}
+[PASS] T3.1 预存在 S1 (同账号) + token 仍返回 rejected
+       status=error, scope=rejected
+S1 after attempt: {"ak":"MOCKAKD2ELEVEN0001","sk":"MOCKSKd2elevenscret0001ForTestOnly","securityToken":"","region":"cn-north-4"}
+[PASS] T3.2 S1 中仍不含模拟 STS token
+       token 不应出现在 S1 中
+[PASS] T3.3 S1 securityToken 仍为空
+       securityToken=""
+
+=== Test 4: persist 不带 token (对照组) ===
+Response: {
+  "status": "ok",
+  "scope": "persist",
+  "backedUp": true,
+  "obs": {
+    "configured": true
+  },
+  "hcloud": {
+    "ok": true,
+    "error": ""
+  },
+  "note": "S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority."
+}
+[PASS] T4.1 无 token 时 persist 不被 rejected
+       status=ok, scope=persist
+[PASS] T4.2 对照组 S1 securityToken 为空字符串
+       securityToken=""
+
+=== Test 5: 源码静态验证 ===
+[PASS] T5.1 源码含 STS 拒绝逻辑 (R3)
+       persistCredentials 中存在 R3 拒绝分支
+[PASS] T5.2 源码含 scope: rejected
+       拒绝分支返回 scope=rejected
+[PASS] T5.3 持久化时 securityToken 显式置空
+       writeGlobalCredentials 调用中 securityToken 被设为空字符串
+
+=== 汇总 ===
+Total: 13, PASS: 13, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-11","title":"R3 STS token拒绝落盘","result":"PASS","checks":[{"label":"T1.1 返回 status=error","pass":true,"detail":"actual status=error"},{"label":"T1.2 返回 scope=rejected","pass":true,"detail":"actual scope=rejected"},{"label":"T1.3 错误消息包含 R3","pass":true,"detail":"error=\"Temporary STS credentials cannot be persisted (R3). Use action=temporary.\""},{"label":"T2.1 S1 文件未创建 (token 未落盘)","pass":true,"detail":"S1 不存在 → token 确实未落盘"},{"label":"T2.2 S1 securityToken 字段为空 (文件不存在)","pass":true,"detail":"N/A"},{"label":"T3.1 预存在 S1 (同账号) + token 仍返回 rejected","pass":true,"detail":"status=error, scope=rejected"},{"label":"T3.2 S1 中仍不含模拟 STS token","pass":true,"detail":"token 不应出现在 S1 中"},{"label":"T3.3 S1 securityToken 仍为空","pass":true,"detail":"securityToken=\"\""},{"label":"T4.1 无 token 时 persist 不被 rejected","pass":true,"detail":"status=ok, scope=persist"},{"label":"T4.2 对照组 S1 securityToken 为空字符串","pass":true,"detail":"securityToken=\"\""},{"label":"T5.1 源码含 STS 拒绝逻辑 (R3)","pass":true,"detail":"persistCredentials 中存在 R3 拒绝分支"},{"label":"T5.2 源码含 scope: rejected","pass":true,"detail":"拒绝分支返回 scope=rejected"},{"label":"T5.3 持久化时 securityToken 显式置空","pass":true,"detail":"writeGlobalCredentials 调用中 securityToken 被设为空字符串"}],"timestamp":"2026-09-20T03:20:28.010Z"}

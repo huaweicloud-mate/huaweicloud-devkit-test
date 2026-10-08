@@ -1,0 +1,103 @@
+{
+  "status": "PASS",
+  "caseId": "D2-4",
+  "why": "redactSecrets strips all plaintext AK/SK/token from objects, strings, nested structures; tool registered",
+  "executedAt": "20260930103000",
+  "checks": [
+    {
+      "name": "redact-obj-ak",
+      "pass": true,
+      "detail": "ak=<redacted>"
+    },
+    {
+      "name": "redact-obj-sk",
+      "pass": true,
+      "detail": "sk=<redacted>"
+    },
+    {
+      "name": "redact-obj-region-preserved",
+      "pass": true,
+      "detail": "region=cn-north-4"
+    },
+    {
+      "name": "redact-accessKey",
+      "pass": true,
+      "detail": "accessKey=<redacted>"
+    },
+    {
+      "name": "redact-secretKey",
+      "pass": true,
+      "detail": "secretKey=<redacted>"
+    },
+    {
+      "name": "redact-securityToken",
+      "pass": true,
+      "detail": "securityToken=<redacted>"
+    },
+    {
+      "name": "redact-str-no-ak",
+      "pass": true,
+      "detail": "str=AK=<redacted> SK=<redacted> region=cn-north-4"
+    },
+    {
+      "name": "redact-str-no-sk",
+      "pass": true,
+      "detail": "str=AK=<redacted> SK=<redacted> region=cn-north-4"
+    },
+    {
+      "name": "redact-str-has-redacted",
+      "pass": true,
+      "detail": "str=AK=<redacted> SK=<redacted> region=cn-north-4"
+    },
+    {
+      "name": "redact-nested-ak",
+      "pass": true,
+      "detail": "nested.config.ak=<redacted>"
+    },
+    {
+      "name": "redact-nested-sk",
+      "pass": true,
+      "detail": "nested.config.sk=<redacted>"
+    },
+    {
+      "name": "redact-nested-region",
+      "pass": true,
+      "detail": "nested.meta.region=cn-north-4"
+    },
+    {
+      "name": "redact-array",
+      "pass": true,
+      "detail": "[{\"ak\":\"<redacted>\"},{\"sk\":\"<redacted>\"}]"
+    },
+    {
+      "name": "tool-exists",
+      "pass": true,
+      "detail": "found=true"
+    },
+    {
+      "name": "tool-has-desc",
+      "pass": true,
+      "detail": "desc=Inspect a KooCLI profile through hcloud configure show and r"
+    },
+    {
+      "name": "tool-has-schema",
+      "pass": true,
+      "detail": "schema=present"
+    },
+    {
+      "name": "no-plaintext-ak",
+      "pass": true,
+      "detail": "AK not found in any redacted output"
+    },
+    {
+      "name": "no-plaintext-sk",
+      "pass": true,
+      "detail": "SK not found in any redacted output"
+    },
+    {
+      "name": "no-plaintext-token",
+      "pass": true,
+      "detail": "Token not found in redacted output"
+    }
+  ]
+}

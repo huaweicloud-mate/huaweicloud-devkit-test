@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "caseId": "D4-10",
+  "why": "All shell-wrapped writes denied.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "cmd": "bash -c \"hcloud ECS DeleteServers --server-ids=xxx\"",
+      "d": "deny",
+      "r": "write"
+    },
+    {
+      "cmd": "sh -c \"hcloud ECS DeleteServers\"",
+      "d": "deny",
+      "r": "write"
+    },
+    {
+      "cmd": "cmd /c \"hcloud ECS DeleteServers --server-ids=xxx\"",
+      "d": "deny",
+      "r": "write"
+    },
+    {
+      "cmd": "powershell -Command \"hcloud ECS DeleteServers\"",
+      "d": "deny",
+      "r": "write"
+    },
+    {
+      "cmd": "sudo hcloud ECS DeleteServers",
+      "d": "deny",
+      "r": "write"
+    },
+    {
+      "cmd": "eval \"hcloud ECS DeleteServers\"",
+      "d": "deny",
+      "r": "write"
+    }
+  ]
+}

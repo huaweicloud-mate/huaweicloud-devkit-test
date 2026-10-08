@@ -1,0 +1,26 @@
+=== D4-11: IAM Least Privilege Detection ===
+Test: Call hook_check_artifacts with broad and narrow IAM policies
+
+Tool: huaweicloud-devkit__huaweicloud_hook_check_artifacts
+
+Probe 1 (Broad): {"Statement":[{"Effect":"Allow","Action":["iam:*"],"Resource":["*"]}]}
+Result:
+  ok: true
+  decision: allow
+  findings: []
+  nextStep: "No Huawei Cloud hook risk rule matched."
+  (Broad IAM policy NOT warned)
+
+Probe 2 (Narrow): {"Statement":[{"Effect":"Allow","Action":["iam:ListUsers"],"Resource":["urn:iam:::user/specific"]}]}
+Result:
+  ok: true
+  decision: allow
+  findings: []
+  (Narrow policy allowed - correct)
+
+Verification:
+  Broad policy warned: FAIL (no findings, same as narrow)
+  Narrow policy allowed: PASS (correct)
+  Differentiation between broad and narrow: FAIL (both returned same result)
+
+STATUS: FAIL - Broad IAM policy not differentiated from narrow policy

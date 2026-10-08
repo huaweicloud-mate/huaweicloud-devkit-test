@@ -1,0 +1,162 @@
+======================================================================
+EXP-D5-7-1 [P1] 
+展开类型=D5客户端矩阵 枚举对象=OfficeAce 源用例=D5-1
+agent=OfficeAce | OS=Windows/Linux
+指引来源=
+步骤=在 OfficeAce 上执行 D5-1 用例
+预期=OfficeAce：客户端可发现并加载插件清单
+requiredEvidence=强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+
+======================================================================
+EXP-D5-7-3 [P1] 
+展开类型=D5客户端矩阵 枚举对象=OfficeAce 源用例=D5-3
+agent=OfficeAce | OS=Windows/Linux
+指引来源=
+步骤=在 OfficeAce 上执行 D5-3 用例
+预期=OfficeAce：tools/list 枚举 40 工具全量可达，schema 完整
+requiredEvidence=强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+
+======================================================================
+D9-10 [P1] MCP remote transport（HTTP/WS 远程服务）
+展开类型= 枚举对象= 源用例=
+agent=Hermes; MCP Inspector/标准协议客户端 | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=实: mcp-server-remote.startRemoteServer(11)/DEFAULT_PORT(8); mcp-server.mjs transport 分支(56)
+步骤=①夹具: node eval/harness/fixtures/d9-10-remote-transport.mjs <hdk src> --evid <dir>（9528 端口启动+initialize/tools/list+stdio 对照）②--transport remote 启动 ③核对 port=9528/host=127.0.0.1 ④initialize/tools/list ⑤对照 stdio 路径
+预期=remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 port/host 用默认值
+requiredEvidence=强断言：<证据: 端口监听+协议响应>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D9-11 [P1] WebSocket 隧道通道生命周期
+展开类型= 枚举对象= 源用例=
+agent=Hermes; MCP Inspector/标准协议客户端 | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=实: ws-exec/hwlink-tunnel-channel.HwlinkTunnelChannel
+步骤=①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localServer/readyPromise/subConnections 清理 ⑥夹具: node eval/harness/fixtures/d9-11-ws-tunnel.mjs <hdk src> --evid <dir>
+预期=通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 localServer 关闭、subConnections 清空、onClose 回调触发
+requiredEvidence=强断言：<证据: ready/close 生命周期>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D9-12 [P0] initialize 握手协议安全基线
+展开类型= 枚举对象= 源用例=
+agent=Hermes; MCP Inspector/标准协议客户端 | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=规: MCP initialize 握手规范; 实: mcp-protocol._decorateResult/_resetHintConsumption/_isHintConsumed; tools.mjs.callTool/runVersionCheck/listSkillDirs/findSkillsRoot
+步骤=①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/capabilities/serverInfo ②核对 callTool 路由到 tools.mjs callTool 函数 ③核对 runVersionCheck 在 initialize 阶段触发版本检查 ④核对 _decorateResult 包装响应（_resetHintConsumption/_isHintConsumed 消费提示标记） ⑤核对 listSkillDirs/findSkillsRoot 返回有效技能目录 ⑥非法时序（未 initialize 先 tools/list）被拒返回 -32600
+预期=initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorateResult 包装无副作用；listSkillDirs/findSkillsRoot 返回有效目录；非法时序返回 JSON-RPC -32600 错误
+requiredEvidence=强断言：<证据: 协议报文+源码探针>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D9-13 [P0] tools/call 凭证不泄露与权限校验
+展开类型= 枚举对象= 源用例=
+agent=Hermes; MCP Inspector/标准协议客户端 | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=规: MCP 安全基线（凭证不泄露）; 实: auth/credentials.setRuntimeCredentials/clearRuntimeCredentials/hasRuntimeCredentials/resolveCredentialsWithRuntime/readGlobalCredentials/writeGlobalCredentials/isPlaceholder/globalCredentialsPath/obsConfigPath/writeObsConfig; safety-policy.loadPolicy/classifyHcloudArgs; risk-rule-engine.evaluateArtifacts/evaluateDeployPlan/mergeRiskDecision; hcloud-cli.hashArgs/createApprova
+步骤=①setRuntimeCredentials 注入运行时凭证，hasRuntimeCredentials 校验存在 ②resolveCredentialsWithRuntime 解析运行时凭证 ③loadPolicy 加载安全策略，classifyHcloudArgs 分类命令参数 ④evaluateArtifacts/evaluateDeployPlan 评估风险，mergeRiskDecision 合并决策 ⑤hashArgs 生成参数哈希，createApprovalToken/consumeApprovalToken 审批令牌生命周期 ⑥readServiceCatalogs/classifyUnsupported/planHcloudCommand 命令分类 ⑦tools/call 返回核对无 AK/SK/token 明文 ⑧clearRuntimeCredentials 清理运行时凭证 ⑨readGlobalCredentials/writeGlobalCredentials 持久化核对，isPlaceholder 校验占位 ⑩globalCredentialsPath/o
+预期=tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprovalToken 后失效）；运行时凭证 clearRuntimeCredentials 清理后不留盘；readGlobalCredentials/writeGlobalCredentials 持久化一致；isPlaceholder 正确识别占位凭证
+requiredEvidence=强断言：<证据: 凭证脱敏+权限决策+审批令牌>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D4-28 [P0] Node 版安全 hook 链路
+展开类型= 枚举对象= 源用例=
+agent=Hermes（Hook）; OpenCode（非 Hook） | OS=Windows/Linux；macOS 若声明支持则单独举证
+指引来源=实: hooks/huaweicloud-safety.mjs commandText/deny; safety-policy.classifyTextCommand(384)
+步骤=①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs ③核对 commandText 提取 ④classifyTextCommand=deny 时输出 permissionDecision:deny
+预期=hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出
+requiredEvidence=强断言：<证据: deny 决策+reason>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D4-29 [P2] 分类断言与原始命令分类入口
+展开类型= 枚举对象= 源用例=
+agent=Hermes（Hook）; OpenCode（非 Hook） | OS=Windows/Linux；macOS 若声明支持则单独举证
+指引来源=实: safety-policy.classifyRawCommand(=classifyTextCommand 384)/assertAllowed(451)
+步骤=①classifyRawCommand(cmd) ②对照 classifyTextCommand ③assertAllowed(result) allow/deny 分支
+预期=classifyRawCommand=classifyTextCommand 包装；DENY 决策 assertAllowed 抛拒绝、allow 通过；分类结果含 decision/reason
+requiredEvidence=强断言：<证据: 分类+断言分支>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D4-25 [P2] Python hook 事件遥测分类
+展开类型= 枚举对象= 源用例=
+agent=Hermes（Hook）; OpenCode（非 Hook） | OS=Windows/Linux；macOS 若声明支持则单独举证
+指引来源=实: huaweicloud-safety.py record_cli_event(85)/HOOK_EVENTS_PATH
+步骤=①执行只读 hcloud 命令 ②执行写命令 ③执行非 hcloud 命令 ④核对 hook-events.jsonl 三键分类
+预期=只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capability
+requiredEvidence=强断言：<证据: hook-events.jsonl>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D4-26 [P2] findings 证据脱敏
+展开类型= 枚举对象= 源用例=
+agent=Hermes（Hook）; OpenCode（非 Hook） | OS=Windows/Linux；macOS 若声明支持则单独举证
+指引来源=实: risk-rule-engine.redactEvidence(19)
+步骤=①触发含凭证的命令规则 ②核对 findings.evidence 已脱敏 ③对照原命令
+预期=findings.evidence 中 AK/SK/token/password 均被 <redacted> 替换，不泄露明文
+requiredEvidence=强断言：<证据: findings.evidence 脱敏前后>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D10-3 [P1] 路由准确率+混淆矩阵
+展开类型= 枚举对象= 源用例=
+agent=OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=标: Azure e2eTestPrompts; 混淆矩阵方法论
+步骤=①源码级: 直调 serviceCatalog(intent) 核对中/英文意图→服务路由映射(无需LLM) ②评测集: 逐任务记录路由 ③生成混淆矩阵 ④定位错路由去向
+预期=源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位
+requiredEvidence=强断言：<证据: 评测集结果+模型参数>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D10-4 [P0] 安全干预-静态规则层
+展开类型= 枚举对象= 源用例=
+agent=OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=实: risk-rule-engine.mjs; 仓: safety/rules/cloud-risk-rules.json
+步骤=①直调 loadRiskRules 核对规则数与 severity 分布 ②evaluateCommandRisk 输入高危命令(cat凭证/env-dump/删资源)与只读命令 ③核对 decision 三态(deny/warn/allow)
+预期=规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token
+requiredEvidence=强断言：<证据: 规则库加载+三态判定>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D8-9 [P2] 安装 ID 与遥测值脱敏
+展开类型= 枚举对象= 源用例=
+agent=Hermes 代表终端; fake/fixture | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=实: telemetry.generateOrRecoverInstallId(150)/sanitizeValue(189)
+步骤=①generateOrRecoverInstallId ②核对 ID 落盘且二次调用稳定 ③sanitizeValue 输入凭证/非法字符 ④核对脱敏
+预期=installId 生成/恢复稳定持久；sanitizeValue 移除 AK/SK/token 等敏感值与非法字符，不改变合法值
+requiredEvidence=强断言：<证据: ID稳定+脱敏>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D8-10 [P2] MCP 配置备份与合并
+展开类型= 枚举对象= 源用例=
+agent=Hermes 代表终端; fake/fixture | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=实: mcp-config-merge.mergeCommandStyle(36)/mergeArgsStyle(58)/mergeMcpServersFile(85)/extractUserDelta(98)/applyUserDelta(118); mcp-config-backup.takeAgentDelta(47)/saveAgentDelta(33)/purgeBackup(62)
+步骤=①mergeCommandStyle ②mergeArgsStyle ③mergeMcpServersFile ④extractUserDelta/applyUserDelta ⑤takeAgentDelta/saveAgentDelta/purgeBackup
+预期=命令/参数/文件三风格合并正确；用户 delta 提取再应用幂等；agent delta 持久化与 purgeBackup 清空
+requiredEvidence=强断言：<证据: 合并结果+delta回放>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D6-9 [P2] 缓存清理三入口
+展开类型= 枚举对象= 源用例=
+agent=Hermes 代表终端; fake/fixture | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=实: update-check.invalidateUpdateCache(302)/icon-library.clearIconCache(16)/search-market.clearMarketCache(82)
+步骤=①预热更新/图标/市场缓存 ②分别调三个清理函数 ③核对缓存文件/内存态清空 ④重复清理幂等
+预期=三缓存清理入口各自清空对应缓存且幂等；清理后再查询触发重新拉取
+requiredEvidence=强断言：<证据: 缓存清空+幂等>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D2-27 [P2] KooCLI 版本管理
+展开类型= 枚举对象= 源用例=
+agent=Hermes 代表终端; fake/fixture | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=实: koocli-version.getKooCliVersion(12)/parseHcloudVersion(21)/compareVersion(27)/kooCliDownloadBase(45)/KOO_CLI_BASE(8)
+步骤=①getKooCliVersion ②parseHcloudVersion('hcloud 7.2.12 ...') ③compareVersion(7.2.12,7.2.9) ④kooCliDownloadBase
+预期=getKooCliVersion 读 kooCliVersion；parseHcloudVersion 正则提取首个 x.y.z；compareVersion 正确比较；downloadBase=KOO_CLI_BASE/<version或latest>
+requiredEvidence=强断言：<证据: 版本解析/比较/下载基址>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D3-C13 [P1] OBS 静态网站托管配置
+展开类型= 枚举对象= 源用例=
+agent=Hermes 代表终端; fake/fixture | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=实: tools.handleObsWebsiteConfig(2303)/obsSignedRequest
+步骤=①get 未配置 bucket ②set indexDocument ③get 核对 ④delete ⑤无 indexDocument set 报错
+预期=get/set/delete 走 AWS4 签名 REST；set 必须 indexDocument(缺失报错)；errorDocument 可选；返回 status 与 XML 一致
+requiredEvidence=强断言：<证据: 配置 XML+状态码>；保留脱敏日志、manifest、前后快照
+
+======================================================================
+D3-C14 [P2] 沙箱 HDKit 服务参数与 hwlink 凭证
+展开类型= 枚举对象= 源用例=
+agent=Hermes 代表终端; fake/fixture | OS=Windows/Linux 代表环境；macOS 若声明支持则单独举证
+指引来源=实: hdkitservice-api.hdkitConnect(90)/hdkitCredentials(101); hwlink-api.getCredentials(80)/createConnection(122)
+步骤=①hdkitConnect 带 source/env ②hdkitCredentials 缺 sessionId+devStageId 报错 ③hwlink getCredentials ④createConnection
+预期=hdkitConnect 透传可选参数到 body；hdkitCredentials 缺 sessionId 且缺 devStageId 时报错；hwlink getCredentials 返回 {ak,sk,securitytoken}；createConnection 用 securitytoken 走 x-security-token 签名头
+requiredEvidence=强断言：<证据: 参数透传+凭证结构>；保留脱敏日志、manifest、前后快照
+

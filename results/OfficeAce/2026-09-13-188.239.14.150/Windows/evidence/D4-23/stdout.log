@@ -1,0 +1,100 @@
+=== D4-23 (P0): 全局规则注入生效性 ===
+Date: 2026-09-13
+Client: OfficeAce on Windows
+
+--- Probe 1: Check for rules files in source repo ---
+
+File: plugins/huaweicloud-core/safety/policy.json
+  Size: 1,674 bytes
+  Status: FOUND
+  Role: Safety policy enforcement (loaded by safety-policy.mjs at module init)
+  In package.json "files": YES (via "plugins/huaweicloud-core")
+
+File: plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json
+  Size: 14,470 bytes
+  Status: FOUND
+  Role: Risk rule definitions (14 rules, loaded by risk-rule-engine.mjs at runtime)
+  In package.json "files": YES (via "plugins/huaweicloud-core")
+
+File: rules/huawei-agent-rules.mdc
+  Size: 3,918 bytes
+  Status: FOUND (in repo root)
+  Role: Declarative agent guidance (like Cursor rules)
+  In package.json "files": NO — not distributed via npm
+  Referenced by plugin code: NO — no import/require found
+  Content: Core principles, secret safety, IAM security, network security,
+           observability, cost awareness, naming conventions, MCP usage rules,
+           skill discovery priority, red flags
+
+--- Probe 2: Agent registration status ---
+From huaweicloud_auth_status (target=all):
+
+  Agent          | Configured
+  ----------------+-----------
+  opencode       | YES
+  codex          | NO
+  codex-desktop  | NO
+  codearts       | YES
+  codearts-work  | YES
+  workbuddy      | YES
+  dsh            | YES
+  officeace      | YES
+  hermes         | YES
+  openclaw       | YES
+  atomcode       | YES
+
+  Total configured: 9/11
+
+--- Probe 3: Rule enforcement mechanism ---
+
+File: plugins/huaweicloud-core/src/safety-policy.mjs
+  Line 14: const DEFAULT_POLICY = loadPolicy();
+  - Loads policy.json at module initialization time
+  - Policy contains: blockedConfigureSubcommands, blockedSecretOperations,
+    writeOperationPrefixes, readOperationPrefixes, secretKeyNamePatterns,
+    credentialFilePatterns
+
+File: plugins/huaweicloud-core/src/risk-rule-engine.mjs
+  Line 6: defaultRulesPath = join(__dirname, '..', 'safety', 'rules', 'cloud-risk-rules.json')
+  Line 14: loadRiskRules() reads the JSON at runtime
+  - 14 rules covering: credential files, env dumps, secret reads, STS ops,
+    encoded shell, public ports, OBS anonymous write, FunctionGraph public,
+    IAM admin policy, destructive delete+force, destructive delete, destructive reset,
+    cascade delete, sandbox destructive
+
+File: plugins/huaweicloud-core/src/auth/agent-registration.mjs
+  Line 7: SUPPORTED_AGENT_TARGETS = [11 agents]
+  - All agents use the same huaweicloud-core plugin
+  - Safety rules are shared across all installations
+
+--- Probe 4: Package distribution ---
+package.json "files" array:
+  - "plugins/huaweicloud-core" ← includes safety/ directory with policy.json and rules/
+  - "rules/" NOT in files array ← huawei-agent-rules.mdc not distributed via npm
+
+--- Analysis ---
+
+The enforcement rules (policy.json + cloud-risk-rules.json) are:
+1. Present in plugins/huaweicloud-core/safety/
+2. Included in the npm package via "plugins/huaweicloud-core" in files array
+3. Loaded at runtime by safety-policy.mjs and risk-rule-engine.mjs
+4. Shared across ALL 10 client plugins (single core plugin architecture)
+5. Active for all 9 configured agents
+
+The agent guidance file (huawei-agent-rules.mdc) is:
+1. Present in the repo at rules/huawei-agent-rules.mdc
+2. NOT distributed via npm (not in files array)
+3. NOT loaded by any plugin code at runtime
+4. Declarative guidance for agent behavior, not enforced code
+5. Supplementary to the actual enforcement mechanism
+
+--- Conclusion ---
+STATUS: PASS
+
+Safety enforcement rules are present and loaded at runtime for all configured agents.
+The huaweicloud-core plugin contains:
+- safety/policy.json (classification rules for write/read/secret operations)
+- safety/rules/cloud-risk-rules.json (14 risk rules for command/artifact/deploy_plan stages)
+
+These are the actual enforcement mechanism, active for all 9 configured agents.
+The huawei-agent-rules.mdc is supplementary guidance, not the enforcement mechanism.

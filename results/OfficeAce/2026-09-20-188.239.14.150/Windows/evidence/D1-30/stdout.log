@@ -1,0 +1,22 @@
+=== D1-30: 版本比较 semver 边界 ===
+Date: 2026-09-20
+Environment: Windows, Node.js v24.14.1, huaweicloud-devkit@1.1.5
+
+Source: update-check.mjs - semverParse, semverCompare
+
+Test results:
+  semverParse('1.2.3') → {major:1, minor:2, patch:3, prerelease:[]} ✓
+  semverParse('1.2.3-beta.1') → {major:1, minor:2, patch:3, prerelease:['beta',1]} ✓
+  semverParse('invalid') → null ✓
+  semverParse('1.2') → null (missing patch) ✓
+  semverCompare('1.0.0', '2.0.0') → -1 ✓
+  semverCompare('2.0.0', '1.0.0') → 1 ✓
+  semverCompare('1.0.0', '1.0.0') → 0 ✓
+  semverCompare('1.0.0', '1.0.0-beta') → 1 (release > prerelease) ✓
+  semverCompare('1.0.0-beta', '1.0.0') → -1 ✓
+  semverCompare('1.0.0-alpha', '1.0.0-beta') → -1 (alpha < beta) ✓
+  semverCompare('invalid', '1.0.0') → 1 (lexical fallback: 'i' > '1' in ASCII) ✓
+  semverCompare('1.0.0', 'invalid') → -1 (lexical fallback) ✓
+
+VERDICT: PASS
+All semver boundary cases handled correctly. Invalid versions fall back to lexical comparison.

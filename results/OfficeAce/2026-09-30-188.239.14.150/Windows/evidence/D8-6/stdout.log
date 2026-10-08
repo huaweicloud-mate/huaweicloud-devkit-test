@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "caseId": "D8-6",
+  "why": "All 6 multi-client config isolation checks passed: user env/args preserved across merge, delta round-trip works for both command and args styles, other MCP servers isolated, REQUIRED_ENV_KEYS excluded from user assets.",
+  "executedAt": "20260930103000",
+  "details": [
+    {
+      "name": "mergeArgsStyle: user env preserved, required env added",
+      "pass": true,
+      "evidence": "env={\"MY_CUSTOM\":\"keepme\",\"HCLOUD_BIN\":\"/bin/hcloud\",\"HUAWEICLOUD_AGENT_TOOLKIT_MODE\":\"officeace\"}, argsLen=3"
+    },
+    {
+      "name": "mergeCommandStyle: user args preserved after node+mcpPath",
+      "pass": true,
+      "evidence": "command=[\"node\",\"/path/to/mcp-server.mjs\",\"--debug\"]"
+    },
+    {
+      "name": "extractUserDelta + applyUserDelta round-trip (args style)",
+      "pass": true,
+      "evidence": "args=[\"/path/to/mcp-server.mjs\",\"--verbose\",\"--port\",\"9999\"], env.CUSTOM_ENV=val, timeout=99999, enabled=false"
+    },
+    {
+      "name": "extractUserDelta + applyUserDelta round-trip (command style)",
+      "pass": true,
+      "evidence": "command=[\"node\",\"/path/to/mcp-server.mjs\",\"--remote\"], env.MY_KEY=myval, timeout=50000"
+    },
+    {
+      "name": "mergeMcpServersFile: other servers preserved, devkit merged",
+      "pass": true,
+      "evidence": "otherTool=python, devkitArgs=[\"/path/to/mcp-server.mjs\",\"--user-flag\"], USER_VAR=preserved"
+    },
+    {
+      "name": "extractUserDelta: REQUIRED_ENV_KEYS excluded from user delta",
+      "pass": true,
+      "evidence": "delta.env={\"USER_PRESERVED\":\"keep\"}"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+=== D4-3 (P0): 明文secret API拦截 ===
+Date: 2026-09-13
+Client: OfficeAce on Windows
+
+--- Probe 1: hook_check_command with --access-key/--secret-key ---
+Command: hcloud ECS CreateServers --access-key HPUXXXXXXXX --secret-key ABCDEF123456
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Result:
+{
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+Observation: Plaintext credentials NOT detected. Command allowed.
+
+--- Probe 2: hook_check_command with --AK/--SK ---
+Command: hcloud ECS CreateServers --AK HPUXXXXXXXX --SK ABCDEF123456
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Result:
+{
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "nextStep": "No Huawei Cloud hook risk rule matched."
+}
+Observation: Plaintext credentials NOT detected. Command allowed.
+
+--- Source code analysis ---
+
+File: plugins/huaweicloud-core/src/safety-policy.mjs
+Function: classifyHcloudArgs(args, options)
+- Checks for: empty args, local help, configure subcommands, blocked secret operations,
+  write prefixes, execution ops, OBS operations
+- Does NOT check for --access-key, --secret-key, --AK, --SK flags with inline values
+- redactString() exists but only redacts output, doesn't block input
+
+File: plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json
+Rules present (14 total):
+1. hwc-command-credential-file — blocks cat/type of credential files
+2. hwc-command-env-dump — blocks env var dumps
+3. hwc-command-secret-value-read — blocks ShowSecretVersion/GetSecretValue
+4. hwc-command-sts-credential — warns on STS operations
+5. hwc-command-encoded-shell-exec — blocks base64|shell
+6. hwc-network-public-admin-port — blocks 0.0.0.0/0 + admin port
+7. hwc-obs-anonymous-write — blocks public OBS write
+8. hwc-functiongraph-public-no-auth — warns on public FG
+9. hwc-iam-admin-policy — blocks broad IAM grant
+10. hwc-destructive-delete-force — blocks delete+force
+11. hwc-destructive-delete-operation — warns on delete ops
+12. hwc-destructive-reset-operation — warns on reset ops
+13. hwc-destructive-delete-cascade — warns on cascade delete
+14. hwc-sandbox-destructive-command — blocks rm -rf /, mkfs, etc.
+
+MISSING: No rule for inline credential flags (--access-key, --secret-key, --AK, --SK)
+No regex pattern matching credential flag names with inline values in commands.
+
+--- Conclusion ---
+STATUS: FAIL
+
+Plaintext credentials in command line are NOT intercepted by hook_check_command.
+Neither the safety-policy classifier nor the cloud-risk-rules.json rules detect
+inline credential flags. Both test commands were allowed without any warning.
+
+Remediation: Add a risk rule matching patterns like:
+  --access-key\s+\S+|--secret-key\s+\S+|--AK\s+\S+|--SK\s+\S+
+with severity=deny, category=credential

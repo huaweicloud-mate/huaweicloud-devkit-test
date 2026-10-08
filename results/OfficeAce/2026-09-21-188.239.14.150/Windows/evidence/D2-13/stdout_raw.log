@@ -1,0 +1,16 @@
+=== D2-13: R9 configuredBySession优先env ===
+S1 path: C:\Users\ADMINI~1\AppData\Local\Temp\2\d2-13-0FtLFu\.config\huaweicloud\credentials.json
+[PASS] T1.1 S1 写入完成 :: path: C:\Users\ADMINI~1\AppData\Local\Temp\2\d2-13-0FtLFu\.config\huaweicloud\credentials.json
+[PASS] T1.2 S1 含 configuredBySession 标记 :: configuredBySession=true
+Resolved with configuredBySession: {"ak":"S1AKD2TH"}
+[PASS] T3.1 configuredBySession 时 S1 胜出 :: resolved ak=S1AKD2TH... (expected S1: S1AKD2TH...)
+Resolved without configuredBySession: {"ak":"ENVAKD2T"}
+[PASS] T4.1 清除标记后 env 兜底恢复 :: resolved ak=ENVAKD2T... (env: ENVAKD2T..., S1: S1AKD2TH...)
+[PASS] T5.1 源码含 configuredBySession 逻辑 :: R9 priority logic found in source
+
+=== 汇总 ===
+Total: 5, PASS: 5, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-13","result":"PASS","checks":[{"label":"T1.1 S1 写入完成","pass":true,"detail":"path: C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\d2-13-0FtLFu\\.config\\huaweicloud\\credentials.json"},{"label":"T1.2 S1 含 configuredBySession 标记","pass":true,"detail":"configuredBySession=true"},{"label":"T3.1 configuredBySession 时 S1 胜出","pass":true,"detail":"resolved ak=S1AKD2TH... (expected S1: S1AKD2TH...)"},{"label":"T4.1 清除标记后 env 兜底恢复","pass":true,"detail":"resolved ak=ENVAKD2T... (env: ENVAKD2T..., S1: S1AKD2TH...)"},{"label":"T5.1 源码含 configuredBySession 逻辑","pass":true,"detail":"R9 priority logic found in source"}],"timestamp":"2026-09-21T02:01:57.885Z"}

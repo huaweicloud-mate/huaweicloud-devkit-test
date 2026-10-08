@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "caseId": "D8-9",
+  "why": "All 7 config migration steps verified: extract delta -> save -> fresh install -> take delta -> apply delta. Both args-style and command-style migrations work. Take-once semantics confirmed.",
+  "executedAt": "20260930103000",
+  "details": [
+    {
+      "name": "Step 2: extractUserDelta captures user customizations",
+      "pass": true,
+      "evidence": "argsExtra=[\"--transport\",\"remote\",\"--port\",\"9999\"], env.STS_KEY=temp-sts-123, timeout=120000"
+    },
+    {
+      "name": "Step 3: saveAgentDelta persists delta for agent",
+      "pass": true,
+      "evidence": "saved=true, fileExists=true"
+    },
+    {
+      "name": "Step 4: Fresh install creates default entry",
+      "pass": true,
+      "evidence": "command=node, args[0]=/path/to/mcp-server.mjs"
+    },
+    {
+      "name": "Step 5: takeAgentDelta retrieves saved delta",
+      "pass": true,
+      "evidence": "argsExtra=[\"--transport\",\"remote\",\"--port\",\"9999\"], env.STS_KEY=temp-sts-123"
+    },
+    {
+      "name": "Step 6: applyUserDelta restores user customizations onto fresh entry",
+      "pass": true,
+      "evidence": "args=[\"/path/to/mcp-server.mjs\",\"--transport\",\"remote\",\"--port\",\"9999\"], env.STS_KEY=temp-sts-123, timeout=120000"
+    },
+    {
+      "name": "Step 7: Backup consumed (take-once semantics)",
+      "pass": true,
+      "evidence": "readAfterConsume=null"
+    },
+    {
+      "name": "Step 8: Command-style migration round-trip",
+      "pass": true,
+      "evidence": "command=[\"node\",\"/path/to/mcp-server.mjs\",\"--debug\"], env.MY_VAR=xyz, timeout=50000"
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+=== D4-28: Node 版安全 hook 链路 ===
+
+--- Part A: hooks.json 注册验证 ---
+hooks.json: {
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*huaweicloud.*|huaweicloud_.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+[PASS] A1: hooks.json 存在 PreToolUse 配置
+  → PreToolUse entries: 2
+[PASS] A2: hook command 使用 node 执行 .mjs (Node 实现)
+  → commands: ["node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"","node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\""]
+[PASS] A3: hook 注册 Bash matcher
+  → matchers: ["Bash","mcp__.*huaweicloud.*|huaweicloud_.*"]
+[PASS] A4: hook 注册 huaweicloud MCP matcher
+  → matchers: ["Bash","mcp__.*huaweicloud.*|huaweicloud_.*"]
+[PASS] A5: huaweicloud-safety.mjs 文件存在
+  → path: C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/hooks/huaweicloud-safety.mjs
+
+--- Part B: commandText 提取验证 ---
+[PASS] B1: command 字段提取
+  → result="echo $HW_SECRET_KEY"
+[PASS] B2: cmd 字段提取
+  → result="env | grep HUAWEICLOUD"
+[PASS] B3: script 字段提取
+  → result="printenv HW_ACCESS_KEY"
+[PASS] B4: args 字段(数组)提取并 join
+  → result="echo $HW_SECRET_KEY"
+[PASS] B5: arguments 字段提取
+  → result="env HUAWEICLOUD_ACCESS_KEY"
+[PASS] B6: 多字段组合提取 (command + args 用 \n 连接)
+  → result="echo $HW_SECRET_KEY
+extra"
+[PASS] B7: 字符串 toolInput 直接返回
+  → result="echo $HW_SECRET_KEY"
+[PASS] B8: 空对象 fallback 到 JSON.stringify
+  → result="{}"
+
+--- Part C: classifyTextCommand 高危命令 deny ---
+[PASS] C: "echo $HW_SECRET_KEY" → deny (risk=credential)
+  → decision=deny, risk=credential, reason="Printing cloud credential environment variables is blocked."
+[PASS] C: "echo ${HW_ACCESS_KEY}" → deny (risk=credential)
+  → decision=deny, risk=credential, reason="Printing cloud credential environment variables is blocked."
+[PASS] C: "printenv HW_SECRET_KEY" → deny (risk=credential)
+  → decision=deny, risk=credential, reason="Printing cloud credential environment variables is blocked."
+[PASS] C: "env | grep HUAWEICLOUD" → deny (risk=credential)
+  → decision=deny, risk=credential, reason="Dumping cloud credential environment variables is blocked."
+[PASS] C: "cat ~/.hcloud/config.json" → deny (risk=credential)
+  → decision=deny, risk=credential, reason="Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+
+--- Part D: 非高危命令无 deny ---
+[PASS] D: "ls -la" → 非 deny
+  → decision=allow, risk=not_huaweicloud
+[PASS] D: "echo hello" → 非 deny
+  → decision=allow, risk=not_huaweicloud
+[PASS] D: "git status" → 非 deny
+  → decision=allow, risk=not_huaweicloud
+[PASS] D: "npm install" → 非 deny
+  → decision=allow, risk=not_huaweicloud
+
+--- Part E: 完整 hook 链路 (实际执行 .mjs) ---
+E1 hook 输出: {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked."}}
+[PASS] E1: 高危命令 hook 输出有效 JSON
+  → parsed: {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked."}}
+[PASS] E1: hook 输出 hookSpecificOutput.permissionDecision=deny
+  → permissionDecision=deny
+[PASS] E1: hook 输出 hookEventName=PreToolUse
+  → hookEventName=PreToolUse
+[PASS] E1: hook 输出 permissionDecisionReason 包含阻断原因
+  → reason="Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked."
+E2 hook 输出 (cmd字段): {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked."}}
+[PASS] E2: cmd 字段高危命令 hook 输出 deny
+  → permissionDecision=deny
+E3 hook 输出 (args字段): {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked."}}
+[PASS] E3: args 字段高危命令 hook 输出 deny
+  → permissionDecision=deny
+E4 hook 输出 (script字段): {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Dumping cloud credential environment variables is blocked."}}
+[PASS] E4: script 字段高危命令 hook 输出 deny
+  → permissionDecision=deny
+E5 hook 输出 (安全命令): ""
+[PASS] E5: 非高危命令 hook 无 deny 输出 (空输出)
+  → output=""
+E6 hook 输出 (多字段组合): {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked."}}
+[PASS] E6: 多字段组合含高危 → deny (commandText 合并后检测)
+  → permissionDecision=deny
+
+=== D4-28 结果: PASS ===

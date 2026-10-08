@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "why": "hook_check_command returned allow for \"echo %HW_SECRET_KEY%\" and \"printenv HW_ACCESS_KEY HW_SECRET_KEY\". Rule hwc-command-env-dump regex matches (HUAWEICLOUD|HWC_|HCLOUD|OS_) but misses HW_ prefix used by devkit itself (HW_ACCESS_KEY/HW_SECRET_KEY). Confirmed: HUAWEICLOUD_ACCESS_KEY_ID and HWC_ prefixed vars ARE blocked (deny).",
+  "executedAt": "20260929090053",
+  "tool": "huaweicloud_hook_check_command",
+  "rootCause": "plugins/huawei-core/safety/rules/cloud-risk-rules.json line 39: regex (HUAWEICLOUD|HWC_|HCLOUD|OS_) missing HW_ prefix"
+}

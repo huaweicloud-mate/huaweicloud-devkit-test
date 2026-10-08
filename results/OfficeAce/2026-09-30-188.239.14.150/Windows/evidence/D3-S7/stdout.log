@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "caseId": "D3-S7",
+  "why": "Cross-service delivery verified: IaC skill covers multi-resource (VPC+Subnet+SG+ECS+RDS), all write ops denied without approval and allowed with approval, cost estimation mentioned.",
+  "executedAt": "20260930103000",
+  "details": [
+    {
+      "step": "iac_skill_exists",
+      "exists": true,
+      "skillSize": 28481,
+      "pass": true
+    },
+    {
+      "step": "iac_mentions_multi_resource",
+      "pass": true
+    },
+    {
+      "step": "vpc_create_classified",
+      "command": "hcloud VPC CreateVpc",
+      "decision": "deny",
+      "risk": "write",
+      "expected": "deny/write",
+      "pass": true
+    },
+    {
+      "step": "ecs_create_classified",
+      "command": "hcloud ECS CreateServers",
+      "decision": "deny",
+      "risk": "write",
+      "expected": "deny/write",
+      "pass": true
+    },
+    {
+      "step": "rds_create_classified",
+      "command": "hcloud RDS CreateInstance",
+      "decision": "deny",
+      "risk": "write",
+      "expected": "deny/write",
+      "pass": true
+    },
+    {
+      "step": "all_approved_with_allowWrites",
+      "vpc": "allow",
+      "ecs": "allow",
+      "rds": "allow",
+      "pass": true
+    },
+    {
+      "step": "iac_has_cost_estimation",
+      "pass": true
+    }
+  ]
+}

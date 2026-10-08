@@ -1,0 +1,25 @@
+=== D4-8: Sensitive Parameter Detection ===
+Test: Call hook_check_command with commands containing sensitive parameters
+
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+
+Probe 1: "hcloud ECS CreateServers --adminPass=MyPassword123 --imageId=img-xxx"
+Result:
+  ok: true
+  decision: allow
+  findings: []
+  (No sensitive parameter detected)
+
+Probe 2: "hcloud RDS CreateInstance --password=SecretPass456 --name=test"
+Result:
+  ok: true
+  decision: allow
+  findings: []
+  nextStep: "No Huawei Cloud hook risk rule matched."
+  (No sensitive parameter detected)
+
+Verification:
+  adminPass parameter detected: FAIL (no findings)
+  password parameter detected: FAIL (no findings)
+
+STATUS: FAIL - Sensitive parameters (adminPass, password) not detected by hook rules

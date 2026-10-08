@@ -1,0 +1,76 @@
+{
+  "testCase": "D1-27",
+  "description": "检测语义-已是最新 (judgeUpdate current==latest → up_to_date)",
+  "platform": "win32",
+  "nodeVersion": "v24.14.1",
+  "checks": {
+    "exact_match_stable": {
+      "input": {
+        "current": "1.1.3",
+        "distTags": {
+          "latest": "1.1.3",
+          "next": null
+        }
+      },
+      "result": "up_to_date",
+      "updateAvailable": false,
+      "targetVersion": "1.1.3",
+      "currentVersion": "1.1.3",
+      "passed": true
+    },
+    "exact_match_with_next": {
+      "input": {
+        "current": "1.1.3",
+        "distTags": {
+          "latest": "1.1.3",
+          "next": "1.1.4-next.3"
+        }
+      },
+      "result": "up_to_date",
+      "updateAvailable": false,
+      "targetVersion": "1.1.3",
+      "passed": true
+    },
+    "prerelease_at_next": {
+      "input": {
+        "current": "1.1.4-next.3",
+        "distTags": {
+          "latest": "1.1.3",
+          "next": "1.1.4-next.3"
+        }
+      },
+      "result": "up_to_date",
+      "updateAvailable": false,
+      "targetVersion": "1.1.4-next.3",
+      "note": "current is prerelease at next tag; latest stable is older. determineTarget picks max(latest, next) for prerelease users.",
+      "passed": true
+    },
+    "local_ahead": {
+      "input": {
+        "current": "1.2.0",
+        "distTags": {
+          "latest": "1.1.3",
+          "next": null
+        }
+      },
+      "result": "up_to_date",
+      "updateAvailable": false,
+      "targetVersion": "1.1.3",
+      "passed": true
+    },
+    "all_same": {
+      "input": {
+        "current": "1.1.3",
+        "distTags": {
+          "latest": "1.1.3",
+          "next": "1.1.3"
+        }
+      },
+      "result": "up_to_date",
+      "updateAvailable": false,
+      "passed": true
+    }
+  },
+  "verdict": "PASS",
+  "summary": "PASS: judgeUpdate correctly returns up_to_date when current >= latest. No false update suggestion in all 5 scenarios."
+}

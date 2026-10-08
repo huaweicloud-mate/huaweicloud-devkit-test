@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "caseId": "D9-13",
+  "why": "MCP error handling correct: proper error codes and messages",
+  "executedAt": "20261001103000",
+  "checks": [
+    {
+      "name": "unknown-method-error",
+      "pass": true,
+      "detail": "code=-32601, msg=Method not found: foo/bar"
+    },
+    {
+      "name": "unknown-tool-error",
+      "pass": true,
+      "detail": "code=-32602, msg=Unknown tool: nonexistent"
+    },
+    {
+      "name": "missing-params-handled",
+      "pass": true,
+      "detail": "code=-32602, msg=Invalid params: missing required field(s) \"args\" for tool \"huaweicloud_plan_cli_command\"."
+    },
+    {
+      "name": "null-args-handled",
+      "pass": true,
+      "detail": "result={\"content\":[{\"type\":\"text\",\"text\":\"{\\n  \\\"installed\\\": true,\\n  \\\"authenticated\\"
+    },
+    {
+      "name": "undefined-args-handled",
+      "pass": true,
+      "detail": "result type=object"
+    },
+    {
+      "name": "init-no-clientInfo",
+      "pass": true,
+      "detail": "serverInfo=huaweicloud-devkit"
+    },
+    {
+      "name": "error-descriptive",
+      "pass": true,
+      "detail": "msg=Method not found: nonexistent/method"
+    }
+  ]
+}

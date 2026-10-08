@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "caseId": "D4-24",
+  "why": "All concat variants denied.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "cmd": "hcloud ECS ListServers ; hcloud ECS DeleteServers --server-ids=xxx",
+      "d": "deny",
+      "r": "write"
+    },
+    {
+      "cmd": "hcloud ECS ListServers && hcloud ECS DeleteServers --server-ids=xxx",
+      "d": "deny",
+      "r": "write"
+    },
+    {
+      "cmd": "hcloud ECS ListServers || hcloud ECS DeleteServers --server-ids=xxx",
+      "d": "deny",
+      "r": "write"
+    },
+    {
+      "cmd": "hcloud ECS ListServers | hcloud ECS DeleteServers --server-ids=xxx",
+      "d": "deny",
+      "r": "write"
+    }
+  ]
+}

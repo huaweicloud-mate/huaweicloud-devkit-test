@@ -1,0 +1,40 @@
+{
+ "status": "PASS",
+ "caseId": "D4-2",
+ "total": 4,
+ "passed": 4,
+ "failed": 0,
+ "source": "grouped:d4-security",
+ "executedAt": "20260925050900",
+ "why": "",
+ "assertions": [
+  {
+   "name": "env-grep",
+   "pass": true,
+   "actual": "deny",
+   "expected": "deny",
+   "failMsg": "env grep not blocked"
+  },
+  {
+   "name": "printenv",
+   "pass": true,
+   "actual": "deny",
+   "expected": "deny",
+   "failMsg": "printenv not blocked"
+  },
+  {
+   "name": "echo-hw",
+   "pass": true,
+   "actual": "deny",
+   "expected": "deny",
+   "failMsg": "echo HW_ACCESS_KEY NOT blocked (defect)"
+  },
+  {
+   "name": "env-dump-mcp",
+   "pass": true,
+   "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-command-env-dump\",\"titl",
+   "expected": "deny",
+   "failMsg": "env dump not blocked (MCP)"
+  }
+ ]
+}

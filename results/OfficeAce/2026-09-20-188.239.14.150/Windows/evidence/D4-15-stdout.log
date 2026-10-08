@@ -1,0 +1,69 @@
+═══════════════════════════════════════════════════════════════
+  D4-15: Hook Bypass Attempt
+═══════════════════════════════════════════════════════════════
+
+✅ PASS | Lowercase: hcloud ecs deleteservers
+       command: hcloud ecs deleteservers
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"warn","findings":1}
+
+✅ PASS | Normal: hcloud ECS DeleteServers
+       command: hcloud ECS DeleteServers
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"warn","findings":1}
+
+✅ PASS | ALL CAPS: HCLOUD ECS DELETESERVERS
+       command: HCLOUD ECS DELETESERVERS
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"warn","findings":1}
+
+✅ PASS | Snake: hcloud ECS delete_servers
+       command: hcloud ECS delete_servers
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"warn","findings":1}
+
+✅ PASS | Underscore: hcloud ECS DELETE_SERVER
+       command: hcloud ECS DELETE_SERVER
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"warn","findings":1}
+
+✅ PASS | URL encoded: hcloud%20ECS%20DeleteServers
+       command: hcloud%20ECS%20DeleteServers
+       bypass=false  classify={"decision":"allow","risk":"not_huaweicloud"}  risk={"decision":"allow","findings":0}
+       note: URL-encoded cmd is not valid hcloud syntax; not_huaweicloud is correct (not a bypass)
+
+✅ PASS | HTML entity: hcloud&#32;ECS&#32;DeleteServers
+       command: hcloud&#32;ECS&#32;DeleteServers
+       bypass=false  classify={"decision":"allow","risk":"not_huaweicloud"}  risk={"decision":"allow","findings":0}
+
+✅ PASS | Backslash escape: hcloud\ ECS\ DeleteServers
+       command: hcloud\ ECS\ DeleteServers
+       bypass=false  classify={"decision":"allow","risk":"not_huaweicloud"}  risk={"decision":"allow","findings":0}
+
+✅ PASS | Tab separated: hcloud\tECS\tDeleteServers
+       command: hcloud	ECS	DeleteServers
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"warn","findings":1}
+
+✅ PASS | Param split: hcloud ECS Delete --servers
+       command: hcloud ECS Delete --servers
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"warn","findings":1}
+
+✅ PASS | Extra whitespace: hcloud   ECS   DeleteServers
+       command: hcloud   ECS   DeleteServers
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"warn","findings":1}
+
+✅ PASS | hcloud.exe: hcloud.exe ECS DeleteServers
+       command: hcloud.exe ECS DeleteServers
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"allow","findings":0}
+
+✅ PASS | Full path: /usr/local/bin/hcloud ECS DeleteServers
+       command: /usr/local/bin/hcloud ECS DeleteServers
+       bypass=false  classify={"decision":"allow","risk":"not_huaweicloud"}  risk={"decision":"warn","findings":1}
+
+❌ FAIL | Windows path: C:\tools\hcloud.exe ECS DeleteServers
+       command: C:\tools\hcloud.exe ECS DeleteServers
+       bypass=true  classify={"decision":"allow","risk":"not_huaweicloud"}  risk={"decision":"allow","findings":0}
+
+✅ PASS | Lowercase VPC: hcloud vpc deletevpc
+       command: hcloud vpc deletevpc
+       bypass=false  classify={"decision":"deny","risk":"write"}  risk={"decision":"warn","findings":1}
+
+───────────────────────────────────────────────────────────────
+  Summary: 14 PASS, 1 FAIL, 15 total
+  Overall: ❌ FAIL (P0 finding!)
+───────────────────────────────────────────────────────────────

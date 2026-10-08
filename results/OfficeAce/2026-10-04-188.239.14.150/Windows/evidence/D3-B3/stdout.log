@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "caseId": "D3-B3",
+  "why": "Read-only command classified as read_only, executed successfully (rc=0), and redacted output contains no AK/SK.",
+  "executedAt": "20261001103000",
+  "classification": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation."
+  },
+  "execution": {
+    "command": "hcloud ECS ListServers --limit=1",
+    "rc": 0,
+    "rawOutputLength": 211,
+    "rawStderrLength": 0,
+    "akInRawOutput": false,
+    "skInRawOutput": false,
+    "akInRedactedOutput": false,
+    "skInRedactedOutput": false
+  },
+  "redactedOutputPreview": "[USE_ERROR]不支持的operation:ListServers\n\n你可能是需要使用如下operation:\n\n  ListServersDetails\n  NovaListServerSecurityGroups\n  NovaListServers\n  NovaListServersDetails\n\n运行`hcloud ECS <operation> --help`获取更多的关于operation的使用帮助\n"
+}

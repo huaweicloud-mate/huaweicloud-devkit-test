@@ -1,0 +1,70 @@
+=== D1-41 (P1): uninstall residual detection ===
+Date: 2026-09-13
+Platform: Windows (win32)
+Client: OfficeAce
+
+--- Probe Results ---
+
+1. "files" field in package.json:
+   PRESENT - controls what npm packs/installs:
+   [
+     "cordis.patch.yml",
+     "bin",
+     ".agents",
+     "plugins/huaweicloud-core",
+     "integrations/hermes",
+     "integrations/opencode",
+     "integrations/dsh",
+     "integrations/workbuddy",
+     "integrations/atomcode"
+   ]
+   This means npm install only places these paths; npm uninstall removes them.
+   No stray files outside "files" are installed.
+
+2. Postinstall script:
+   PRESENT: "node ./bin/dsh-postinstall.cjs"
+   Script analysis:
+   - Has try/catch error handling
+   - Silently fails (does not process.exit(1) on error) - safe for install
+   - No global config writes (no hcloud configure)
+   - No network calls (no fetch/http)
+   - No environment variable writes
+   The postinstall only creates a telemetry install counter (1 byte file).
+   This is inside "files" field (plugins/huaweicloud-core/telemetry/install-counter)
+   so it gets cleaned up on uninstall.
+
+3. Cleanup logic in setup-cli.mjs:
+   - pruneStale() function exists - removes stale files from older versions
+   - Used across all agent integrations (opencode, codex, codearts, workbuddy, dsh,
+     officeace, hermes, atomcode)
+   - Ensures incremental updates don't leave orphaned files
+
+4. Sandbox uninstall cleanup:
+   plugins/huaweicloud-core/src/sandbox/uninstall-cleanup.mjs EXISTS
+   Dedicated cleanup module for sandbox resources.
+
+5. npm pack --dry-run:
+   Total files: 137
+   All files are within the "files" field directories.
+   No files outside "files" are included in the tarball.
+   This means npm uninstall will cleanly remove all installed files.
+
+6. No global side effects:
+   Postinstall does not:
+   - Write to global config (hcloud configure)
+   - Make network calls
+   - Modify environment variables
+   - Create files outside package directory
+
+--- Verdict ---
+
+STATUS: PASS
+
+Rationale:
+- "files" field properly scopes what npm installs (9 entries covering all needed dirs)
+- Postinstall script (dsh-postinstall.cjs) is safe: try/catch, no global side effects,
+  no network calls, no config writes
+- pruneStale() function handles cleanup of old version files during updates
+- Dedicated uninstall-cleanup.mjs module exists for sandbox resources
+- npm pack --dry-run confirms all 137 files are within "files" field scope
+- No files outside "files" would be left as residuals after uninstall

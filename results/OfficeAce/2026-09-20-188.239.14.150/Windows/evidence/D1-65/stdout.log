@@ -1,0 +1,16 @@
+=== D1-65: 调试模式环境变量 ===
+Date: 2026-09-20
+Environment: Windows, Node.js v24.14.1, huaweicloud-devkit@1.1.5
+
+Source: update-check.mjs - debugLog function
+Logic: process.env.HUAWEICLOUD_DEVKIT_DEBUG === '1' || process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true'
+
+Test results:
+  DEBUG=1     → debug enabled: true  ✓
+  DEBUG=true  → debug enabled: true  ✓
+  DEBUG=off   → debug enabled: false ✓
+  DEBUG unset → debug enabled: false ✓
+  DEBUG=0     → debug enabled: false ✓
+
+VERDICT: PASS
+HUAWEICLOUD_DEVKIT_DEBUG accepts '1' and 'true' to enable debug logging; all other values (including unset) disable it.

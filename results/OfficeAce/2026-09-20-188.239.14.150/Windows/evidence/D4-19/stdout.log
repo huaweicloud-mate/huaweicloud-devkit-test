@@ -1,0 +1,82 @@
+=== D4-19: 确认流下预检仍生效 ===
+
+确认流下 plan 结果: {
+  "executable": "hcloud",
+  "args": [
+    "ECS",
+    "CreateServers",
+    "--cli-region=cn-north-4",
+    "--security_group_id.1=sg-test-123"
+  ],
+  "command": "hcloud ECS CreateServers --cli-region=cn-north-4 --security_group_id.1=sg-test-123",
+  "executableBlock": "hcloud ECS CreateServers --cli-region=cn-north-4 --security_group_id.1=sg-test-123",
+  "warnings": [
+    "Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id",
+    "Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs"
+  ],
+  "classification": {
+    "decision": "allow",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation approved by user.",
+    "service": "ECS",
+    "operation": "CreateServers",
+    "args": [
+      "ECS",
+      "CreateServers",
+      "--cli-region=cn-north-4",
+      "--security_group_id.1=sg-test-123"
+    ]
+  },
+  "sgFindings": [],
+  "approvalToken": "1be664bc-b898-4b79-926c-3ef0fcfcbdf0",
+  "safeToRun": true
+}
+[PASS] T1: 确认流(allowWrites=true)下 sgFindings 字段存在 (preflight 被调用)
+  → sgFindings type=object, length=0
+[PASS] T1: 确认流下 classification.decision=allow (无 hcloud 时 preflight 空发现, 写操作已确认)
+  → decision=allow, risk=write
+
+未确认流下 plan 结果: {
+  "executable": "hcloud",
+  "args": [
+    "ECS",
+    "CreateServers",
+    "--cli-region=cn-north-4",
+    "--security_group_id.1=sg-test-123"
+  ],
+  "command": "hcloud ECS CreateServers --cli-region=cn-north-4 --security_group_id.1=sg-test-123",
+  "executableBlock": "hcloud ECS CreateServers --cli-region=cn-north-4 --security_group_id.1=sg-test-123",
+  "warnings": [
+    "Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id",
+    "Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs"
+  ],
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "sgFindings": [],
+  "approvalToken": "90c40d40-e7dd-4ace-a07e-0bcbfb1cec5c",
+  "safeToRun": false
+}
+[PASS] T2: 未确认流(allowWrites=false)下 sgFindings 字段也存在 (preflight 无条件执行)
+  → sgFindings type=object, length=0
+
+模拟 applyPreflightFindings 逻辑:
+模拟 preflight deny 覆盖结果: {"decision":"deny","risk":"public_exposure","reason":"安全组 sg-test-123 已对公网开放 22 端口（TCP）。确认继续创建 ECS？"}
+[PASS] T3: preflight deny 将 allow 覆盖为 deny (即使原 decision=allow)
+  → 原:allow → 覆盖后:deny
+[PASS] T3: 覆盖后 risk=public_exposure (preflight 特有风险类型)
+  → risk=public_exposure
+[PASS] T3: 覆盖后 reason 为 preflight 发现的消息 (非原 approval reason)
+  → reason="安全组 sg-test-123 已对公网开放 22 端口（TCP）。确认继续创建 ECS？"
+[PASS] T4: 确认流下 preflight 拦截路径完整 - planHcloudCommand(allowWrites=true) 仍经过 applyPreflightFindings
+  → classification.decision=allow, sgFindings.length=0
+[PASS] T5: assertAllowed 在 preflight deny 时抛异常 (确认流下仍拦截)
+  → assertAllowed threw: true
+
+非高危(warn) preflight 结果: {"decision":"allow","risk":"write","reason":"approved by user"}
+[PASS] T6: preflight warn 不覆盖 allow (仅 deny 覆盖)
+  → decision=allow (warn 不拦截, 仅提示)
+
+=== D4-19 结果: PASS ===

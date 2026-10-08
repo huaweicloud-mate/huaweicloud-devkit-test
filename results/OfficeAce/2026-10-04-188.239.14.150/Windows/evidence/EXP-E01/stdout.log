@@ -1,0 +1,14 @@
+{
+  "status": "FAIL",
+  "caseId": "EXP-E01",
+  "why": "eval harness verdict=MISS | 意图含「云主机」+「账号在华北北京四」；serviceCatalog 中 ECS 路由关键词(elastic云服务器/云服务器/服务器/虚拟机/镜像)不含「云主机」，tokens={我,帮我,查,一下,我,账号,在,华北,北京,四,有,哪些,云,主机}，无 token 命中 ECS 关键词(ecs/server/vm/instance/compute/flavor/image)亦无 CJK 子串命中，故 matched 为空，返回兜底 \"Run hcloud --help to list available services.\"；「云主机」=「云服务器」同义，应命中 ECS",
+  "executedAt": "20261004054000",
+  "intent": "帮我查一下我账号在华北北京四有哪些云主机",
+  "expect": [
+    "ECS"
+  ],
+  "got": [
+    "Run hcloud --help to list available services."
+  ],
+  "verdict": "MISS"
+}

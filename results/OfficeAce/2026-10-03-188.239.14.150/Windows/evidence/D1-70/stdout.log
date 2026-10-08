@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "caseId": "D1-70",
+  "why": "write/read config OK, bypass proxy OK (localhost+internal bypass, external no bypass), env override OK",
+  "executedAt": "20261001103000",
+  "detail": {
+    "writtenPath": "C:\\Users\\Administrator\\.config\\huaweicloud\\proxy.json",
+    "readBack": {
+      "https_proxy": "http://proxy.example.com:8080",
+      "http_proxy": "http://proxy.example.com:8080",
+      "no_proxy": "localhost,127.0.0.1,*.internal"
+    },
+    "bypassLocalhost": true,
+    "bypassInternal": true,
+    "noBypassExternal": false,
+    "settings": {
+      "proxyUrl": "http://env-proxy:3128",
+      "noProxyList": [
+        "127.0.0.1",
+        "localhost",
+        "::1"
+      ],
+      "targetProtocol": "https:"
+    }
+  }
+}

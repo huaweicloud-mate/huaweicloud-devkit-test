@@ -1,0 +1,32 @@
+=== Test D4-22 : hook_check_deploy_plan Named Regression ===
+Timestamp: 2026-09-13
+
+--- Probe: FunctionGraph Public Exposure ---
+Plan: {"service":"FunctionGraph","config":{"trigger":{"type":"APIG","auth":"none"},"code":"exports.handler=async()=>({body:'hello'})"}}
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_deploy_plan
+Response:
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [
+    {
+      "ruleId": "hwc-functiongraph-public-no-auth",
+      "title": "Public FunctionGraph trigger without auth",
+      "category": "public_exposure",
+      "severity": "warn",
+      "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+      "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+      "source": "deploy_plan",
+      "evidence": "{\"service\":\"FunctionGraph\",\"config\":{\"trigger\":{\"type\":\"APIG\",\"auth\":\"none\"},\"code\":\"exports.handler=async()=>({body:'hello'})\"}}"
+    }
+  ],
+  "nextStep": "Review the warnings with the user before proceeding."
+}
+Verdict: DETECTED (decision=warn, ruleId=hwc-functiongraph-public-no-auth, category=public_exposure) ✓
+
+=== SUMMARY ===
+Probe 1 (FunctionGraph public no-auth): DETECTED ✓
+Overall Result: PASS
+The hook_check_deploy_plan tool correctly identified the public exposure risk in the
+FunctionGraph deployment plan with APIG trigger and auth=none. The hwc-functiongraph-public-no-auth
+rule fired with severity=warn, advising to add an authentication layer.

@@ -1,0 +1,15 @@
+PASS  D8-10-backup-path  mcpBackupFilePath 路径 => "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-1837529952\\d8-10-mcp-1790891199216\\.config\\huaweicloud\\devkit-mcp-backup.json" (期望 "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-1837529952\\d8-10-mcp-1790891199216\\.config\\huaweicloud\\devkit-mcp-backup.json")
+PASS  D8-10-save-read-delta  saveAgentDelta → readAgentDelta 往返 => {"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000} (期望 {"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000})
+PASS  D8-10-take-once  takeAgentDelta 取走后 readAgentDelta 返回 null => {"taken":true,"after":null} (期望 {"taken":true,"after":null})
+PASS  D8-10-purge-deletes  purgeBackup 删除文件 => {"purged":true,"exists":false} (期望 {"purged":true,"exists":false})
+PASS  D8-10-purge-no-file  purgeBackup 文件不存在不崩溃 => false (期望 false)
+PASS  D8-10-merge-command-style  mergeCommandStyle 保留用户参数 + 更新路径 => {"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-arg"],"timeout":100000,"changed":true} (期望 {"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-arg"],"timeout":100000,"changed":true})
+PASS  D8-10-merge-args-style  mergeArgsStyle 保留 env + 注入 required => {"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"env":{"MY_VAR":"val","REQUIRED_ENV":"1"},"changed":true} (期望 {"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"env":{"MY_VAR":"val","REQUIRED_ENV":"1"},"changed":true})
+PASS  D8-10-merge-file-style  mergeMcpServersFile 合并 mcpServers => {"entryArgs":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"configHas":true,"changed":true} (期望 {"entryArgs":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"configHas":true,"changed":true})
+PASS  D8-10-extract-apply-command  extractUserDelta→applyUserDelta 往返（command） => {"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-flag"],"env":{"MY_VAR":"x"},"timeout":500000} (期望 {"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-flag"],"env":{"MY_VAR":"x"},"timeout":500000})
+PASS  D8-10-extract-apply-args  extractUserDelta→applyUserDelta 往返（args） => {"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--arg1"],"env":{"K":"v"},"enabled":false} (期望 {"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--arg1"],"env":{"K":"v"},"enabled":false})
+PASS  D8-10-merge-env-no-overwrite  mergeEnv 不覆盖用户已设值 => "user-override" (期望 "user-override")
+PASS  D8-10-required-env-excluded  REQUIRED_ENV_KEYS 不被备份 => ["MY_VAR"] (期望 ["MY_VAR"])
+
+=== D8-10 MCP 配置备份与合并夹具 ===  pass=12 fail=0
+RESULT: PASS

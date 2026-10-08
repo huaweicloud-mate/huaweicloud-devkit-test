@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "redactSecrets: access_key",
+      "pass": true,
+      "result": {
+        "access_key": "<redacted>"
+      }
+    },
+    {
+      "label": "redactSecrets: secret_key",
+      "pass": true,
+      "result": {
+        "secret_key": "<redacted>"
+      }
+    },
+    {
+      "label": "redactSecrets: security_token",
+      "pass": true,
+      "result": {
+        "security_token": "<redacted>"
+      }
+    },
+    {
+      "label": "redactSecrets: password",
+      "pass": true,
+      "result": {
+        "password": "<redacted>"
+      }
+    },
+    {
+      "label": "redactSecrets: string AK=xxx",
+      "pass": true,
+      "result": "AK=<redacted> SK=<redacted>"
+    },
+    {
+      "label": "redactSecrets: string password=xxx",
+      "pass": true,
+      "result": "password=<redacted>"
+    },
+    {
+      "label": "redactSecrets: non-sensitive field not affected",
+      "pass": true,
+      "result": {
+        "name": "myserver",
+        "flavor": "s6.large.1"
+      }
+    },
+    {
+      "label": "redactSecrets: user_data fully redacted",
+      "pass": true,
+      "result": "user_data=<redacted>"
+    },
+    {
+      "label": "redactSecrets: private_key fully redacted",
+      "pass": true,
+      "result": "private_key=<redacted>"
+    }
+  ]
+}

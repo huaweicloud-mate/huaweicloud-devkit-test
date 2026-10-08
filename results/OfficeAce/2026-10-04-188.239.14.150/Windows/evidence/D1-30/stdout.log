@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "caseId": "D1-30",
+  "why": "All 10 semver comparisons correct, parse correct, prerelease detection correct.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "a": "1.0.0",
+      "b": "1.0.1",
+      "expect": -1,
+      "got": -1,
+      "pass": true
+    },
+    {
+      "a": "1.0.0",
+      "b": "1.1.0",
+      "expect": -1,
+      "got": -1,
+      "pass": true
+    },
+    {
+      "a": "1.0.0",
+      "b": "2.0.0",
+      "expect": -1,
+      "got": -1,
+      "pass": true
+    },
+    {
+      "a": "1.0.1",
+      "b": "1.0.0",
+      "expect": 1,
+      "got": 1,
+      "pass": true
+    },
+    {
+      "a": "1.0.0",
+      "b": "1.0.0",
+      "expect": 0,
+      "got": 0,
+      "pass": true
+    },
+    {
+      "a": "1.0.0",
+      "b": "1.0.0-beta",
+      "expect": 1,
+      "got": 1,
+      "pass": true
+    },
+    {
+      "a": "1.0.0-beta",
+      "b": "1.0.0",
+      "expect": -1,
+      "got": -1,
+      "pass": true
+    },
+    {
+      "a": "1.0.0-alpha",
+      "b": "1.0.0-beta",
+      "expect": -1,
+      "got": -1,
+      "pass": true
+    },
+    {
+      "a": "1.1.8-next.1",
+      "b": "1.1.7",
+      "expect": 1,
+      "got": 1,
+      "pass": true
+    },
+    {
+      "a": "1.1.7",
+      "b": "1.1.8-next.1",
+      "expect": -1,
+      "got": -1,
+      "pass": true
+    }
+  ],
+  "parseOk": true,
+  "preCheck": true
+}

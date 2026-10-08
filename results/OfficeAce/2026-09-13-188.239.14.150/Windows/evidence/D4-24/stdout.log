@@ -1,0 +1,31 @@
+=== D4-24: Rule Version Compatibility ===
+Test: Check if hook rules are consistent across different tools
+
+Tool 1: huaweicloud-devkit__huaweicloud_hook_check_command
+Tool 2: huaweicloud-devkit__huaweicloud_hook_check_deploy_plan
+
+Probe 1: hook_check_command - "hcloud ECS DeleteServers --InstanceId=i-xxx"
+Result: WARNED
+  ruleId: hwc-destructive-delete-operation, category: destructive, severity: warn
+
+Probe 2: hook_check_command - "hcloud VPC DeleteVpc --VpcId=vpc-xxx"
+Result: WARNED
+  ruleId: hwc-destructive-delete-operation, category: destructive, severity: warn
+  (Same ruleId as Probe 1 - consistent)
+
+Probe 3: hook_check_deploy_plan - "Deploy ECS with DeleteServers operation"
+Result: WARNED
+  ruleId: hwc-sandbox-missing-ttl, category: sandbox, severity: warn
+
+Probe 4: hook_check_deploy_plan - "Create ECS server with adminPass=Test123 and open port 22"
+Result: WARNED
+  ruleId: hwc-sandbox-missing-ttl, category: sandbox, severity: warn
+  Note: adminPass was redacted to <redacted> in evidence - sensitive param detection works in deploy_plan
+
+Verification:
+  Rules consistent across hook_check_command calls: PASS
+  Rules consistent across hook_check_deploy_plan calls: PASS
+  Same ruleId used for same category of risk: PASS
+  Deploy plan redacts sensitive params: PASS (adminPass=<redacted>)
+
+STATUS: PASS - Rule version compatible and consistent across tools

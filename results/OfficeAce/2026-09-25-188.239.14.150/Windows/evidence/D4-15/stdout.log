@@ -1,0 +1,33 @@
+{
+ "status": "PASS",
+ "caseId": "D4-15",
+ "total": 3,
+ "passed": 3,
+ "failed": 0,
+ "source": "grouped:d4-security",
+ "executedAt": "20260925050900",
+ "why": "",
+ "assertions": [
+  {
+   "name": "bypass-chained",
+   "pass": true,
+   "actual": "deny",
+   "expected": "deny",
+   "failMsg": "chained bypass not blocked"
+  },
+  {
+   "name": "bypass-bash",
+   "pass": true,
+   "actual": "deny",
+   "expected": "deny",
+   "failMsg": "bash wrapper not blocked"
+  },
+  {
+   "name": "bypass-mcp",
+   "pass": true,
+   "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-command-credential-file",
+   "expected": "deny",
+   "failMsg": "bypass not blocked (MCP)"
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+=== D4-13: Resource Deletion Protection ===
+Test: Call hook_check_command with resource deletion commands
+
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+
+Probe 1: "hcloud RDS DeleteInstance --InstanceId=rds-xxxxx"
+Result: WARNED
+  ok: true, decision: warn
+  ruleId: hwc-destructive-delete-operation
+  category: destructive, severity: warn
+  message: "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible."
+  remediation: "List the resources to be affected first, confirm with the user..."
+
+Probe 2: "hcloud OBS DeleteBucket --BucketName=my-bucket"
+Result: WARNED
+  ok: true, decision: warn
+  ruleId: hwc-destructive-delete-operation
+  category: destructive, severity: warn
+  message: "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible."
+
+Verification:
+  RDS DeleteInstance detected as destructive: PASS
+  OBS DeleteBucket detected as destructive: PASS
+  Both flagged with hwc-destructive-delete-operation: PASS
+
+STATUS: PASS - Resource deletion commands detected as high-risk

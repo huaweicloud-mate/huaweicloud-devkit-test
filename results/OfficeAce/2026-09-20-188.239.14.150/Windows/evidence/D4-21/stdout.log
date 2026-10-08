@@ -1,0 +1,64 @@
+=== D4-21: hook_check_artifacts 具名回归 ===
+
+[1] 构造宽泛 IAM policy 制品:
+{
+  "Version": "1.1",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}
+
+[2] 直调 evaluateArtifacts(artifacts) ...
+
+[3] 原始返回 (evaluateArtifacts):
+{
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-iam-admin-policy",
+      "title": "Broad IAM administrator grant",
+      "category": "iam",
+      "severity": "deny",
+      "message": "The change appears to grant broad administrator permissions.",
+      "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+      "source": "generated/iam-broad-policy.json",
+      "evidence": "generated/iam-broad-policy.json { \"Version\": \"1.1\", \"Statement\": [ { \"Effect\": \"Allow\", \"Action\": [ \"*\" ], \"Resource\": [ \"*\" ] } ] }"
+    }
+  ]
+}
+
+[4] 核对结果:
+  decision === 'deny'          : PASS  (actual: deny)
+  命中 hwc-iam-admin-policy  : PASS
+  severity === 'deny'          : PASS  (actual: deny)
+  findings count              : 1
+
+[5] hookResult 等价封装 (tools.mjs hookResult 逻辑):
+{
+  "ok": false,
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-iam-admin-policy",
+      "title": "Broad IAM administrator grant",
+      "category": "iam",
+      "severity": "deny",
+      "message": "The change appears to grant broad administrator permissions.",
+      "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+      "source": "generated/iam-broad-policy.json",
+      "evidence": "generated/iam-broad-policy.json { \"Version\": \"1.1\", \"Statement\": [ { \"Effect\": \"Allow\", \"Action\": [ \"*\" ], \"Resource\": [ \"*\" ] } ] }"
+    }
+  ],
+  "nextStep": "Revise the command, artifact, or deployment plan before execution."
+}
+
+[6] 总判定: PASS
+    broad IAM 制品被拦截 (deny): 是

@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "DeleteServers --force denied even with allowWrites",
+      "pass": true,
+      "classifyDecision": "deny",
+      "riskDecision": "deny",
+      "note": "Risk rule denies forced delete even if write approved"
+    },
+    {
+      "label": "rm -rf / denied regardless of approval",
+      "pass": true,
+      "riskDecision": "deny"
+    },
+    {
+      "label": "Public exposure denied even with allowWrites",
+      "pass": true,
+      "riskDecision": "deny"
+    },
+    {
+      "label": "Broad IAM policy denied in deploy plan",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-iam-admin-policy"
+      ]
+    },
+    {
+      "label": "Credential read denied regardless of approval",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "Secret read denied regardless of approval",
+      "pass": true,
+      "decision": "deny"
+    }
+  ]
+}

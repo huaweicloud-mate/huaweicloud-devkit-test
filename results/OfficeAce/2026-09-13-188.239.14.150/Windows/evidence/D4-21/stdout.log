@@ -1,0 +1,33 @@
+=== Test D4-21 : hook_check_artifacts Named Regression ===
+Timestamp: 2026-09-13
+
+--- Probe: Broad IAM Admin Policy ---
+Artifact: policy.json
+Content: {"Statement":[{"Effect":"Allow","Action":["*"],"Resource":["*"]}]}
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_artifacts
+Response:
+{
+  "ok": false,
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-iam-admin-policy",
+      "title": "Broad IAM administrator grant",
+      "category": "iam",
+      "severity": "deny",
+      "message": "The change appears to grant broad administrator permissions.",
+      "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+      "source": "policy.json",
+      "evidence": "policy.json {\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"*\"],\"Resource\":[\"*\"]}]}"
+    }
+  ],
+  "nextStep": "Revise the command, artifact, or deployment plan before execution."
+}
+Verdict: DETECTED (decision=deny, ruleId=hwc-iam-admin-policy, category=iam) ✓
+
+=== SUMMARY ===
+Probe 1 (broad IAM policy): DETECTED & DENIED ✓
+Overall Result: PASS
+The hook_check_artifacts tool correctly identified the broad IAM administrator policy
+(Action=["*"], Resource=["*"]) and denied it with the hwc-iam-admin-policy rule.
+The rule fires on wildcard actions and resources in IAM policy statements.

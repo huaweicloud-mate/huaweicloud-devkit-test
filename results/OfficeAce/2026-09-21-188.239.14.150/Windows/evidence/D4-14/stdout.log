@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "classifyTextCommand returns reason",
+      "pass": true,
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    {
+      "label": "evaluateCommandRisk returns findings with evidence",
+      "pass": true,
+      "findings": [
+        {
+          "id": "hwc-destructive-delete-force",
+          "evidence": "hcloud ECS DeleteServers --force"
+        },
+        {
+          "id": "hwc-destructive-delete-operation",
+          "evidence": "hcloud ECS DeleteServers --force"
+        }
+      ]
+    },
+    {
+      "label": "Finding has ruleId for traceability",
+      "pass": true,
+      "findings": [
+        "hwc-sandbox-destructive-command"
+      ]
+    },
+    {
+      "label": "Finding has category for classification",
+      "pass": true,
+      "findings": [
+        "destructive"
+      ]
+    }
+  ]
+}

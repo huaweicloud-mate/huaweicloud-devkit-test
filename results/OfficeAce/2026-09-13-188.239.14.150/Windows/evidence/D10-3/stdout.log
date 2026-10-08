@@ -1,0 +1,49 @@
+=== D10-3: Skill Recommendation Accuracy ===
+
+Method 1: invoke_tool huaweicloud_service_catalog with intent="create virtual machine"
+Method 2: invoke_tool huaweicloud_search_docs with query="create virtual machine"
+Method 3: invoke_tool huaweicloud_search_marketplace with query="create virtual machine" category="computing"
+
+Method 1 - service_catalog (intent='create virtual machine'):
+  Response: Returns generic routing (huaweicloud-core, capabilityOrder)
+  Analysis: service_catalog provides capability routing, not specific skill matching
+  ECS mention: Not directly, but recommends starting with Skills
+
+Method 2 - search_docs (query='create virtual machine'):
+  Total results: 24
+  Rank 1: huawei-modelarts (relevance=5) - AI/ML models
+  Rank 2: huawei-ecs (relevance=4) - ECS instances, CreateServers
+  Rank 3: huawei-iac (relevance=4) - Infrastructure deployment
+  Rank 4: huawei-rds (relevance=2) - Database instances
+  Rank 5: huawei-sandbox (relevance=2) - Sandbox instances
+  Rank 6: huawei-vpc (relevance=2) - VPC networks
+  Analysis: huawei-ecs appears at rank 2 with relevance=4
+  ECS snippet: 'Covers instance creation (hcloud ECS CreateServers)'
+
+Method 3 - search_marketplace (query='create virtual machine', category='computing'):
+  Total results: 6
+  Rank 1: huawei-cloud-devkit-webui-create (score=10, service=ecs)
+    Description: Install Kunpeng DevKit in WebUI mode on Huawei Cloud. Create a Kunpeng (aarch64) ECS via Python SDK
+  Rank 2: huawei-cloud-functiongraph-function-create (score=10, service=functiongraph)
+  Rank 3: huawei-cloud-functiongraph-trigger-create (score=10, service=functiongraph)
+  Rank 4: huawei-cloud-ecs-dsh-deploy (score=8, service=ecs/billing)
+    Description: Huawei Cloud Flexus X Instance Deployment - DeepSeek Harness (dsh)
+  Rank 5: huawei-cloud-flexus-l-deploy-jiuwenswarm (score=5, service=flexus-l)
+  Rank 6: huawei-cloud-flexus-l-server-openclaw-deployment (score=5, service=flexus-l)
+  Analysis: ECS-related skills appear at rank 1 and 4
+
+ECS Skill Recommendation Check:
+  - search_docs: huawei-ecs at rank 2 (relevance=4) with CreateServers reference
+  - search_marketplace: ECS service skills at rank 1 (score=10) and rank 4 (score=8)
+  - service_catalog: Recommends starting with Skills for guided workflows
+
+Combined Assessment:
+  - ECS-related skills ARE recommended for 'create virtual machine'
+  - huawei-ecs skill explicitly covers 'instance creation (hcloud ECS CreateServers)'
+  - Marketplace returns ECS service skills with high scores
+
+=== SUMMARY ===
+ECS-related skills are recommended for 'create virtual machine' task
+search_docs returns huawei-ecs at rank 2 with CreateServers reference
+search_marketplace returns ECS service skills at rank 1 (score=10)
+RESULT: PASS - Correct skill recommendation

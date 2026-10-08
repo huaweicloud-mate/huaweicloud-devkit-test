@@ -1,0 +1,127 @@
+{
+  "status": "PASS",
+  "caseId": "D10-4",
+  "why": "eval-set-v1.csv has 15 entries, 15 unique routes, 5 action types",
+  "executedAt": "20260930103000",
+  "checks": [
+    {
+      "name": "v1-exists",
+      "pass": true,
+      "detail": "path=C:/Users/Administrator/devkit-test/OfficeAce/huaweicloud-devkit-test/eval/prompts/eval-set-v1.csv"
+    },
+    {
+      "name": "v2-exists",
+      "pass": true,
+      "detail": "path=C:/Users/Administrator/devkit-test/OfficeAce/huaweicloud-devkit-test/eval/prompts/eval-set-v2.csv"
+    },
+    {
+      "name": "has-header",
+      "pass": true,
+      "detail": "header=id,prompt,期望路由,期望动作,来源\r"
+    },
+    {
+      "name": "header-has-id",
+      "pass": true,
+      "detail": "id col=id"
+    },
+    {
+      "name": "header-has-route",
+      "pass": true,
+      "detail": "route col=期望路由"
+    },
+    {
+      "name": "header-has-action",
+      "pass": true,
+      "detail": "action col=期望动作"
+    },
+    {
+      "name": "min-entries",
+      "pass": true,
+      "detail": "count=15"
+    },
+    {
+      "name": "entries-non-empty",
+      "pass": true,
+      "detail": "count=15"
+    },
+    {
+      "name": "all-have-id",
+      "pass": true,
+      "detail": "all have id"
+    },
+    {
+      "name": "all-have-prompt",
+      "pass": true,
+      "detail": "all have prompt"
+    },
+    {
+      "name": "all-have-route",
+      "pass": true,
+      "detail": "all have route"
+    },
+    {
+      "name": "all-have-action",
+      "pass": true,
+      "detail": "all have action"
+    },
+    {
+      "name": "route-diversity",
+      "pass": true,
+      "detail": "unique routes=15"
+    },
+    {
+      "name": "action-diversity",
+      "pass": true,
+      "detail": "unique actions=5"
+    },
+    {
+      "name": "ids-unique",
+      "pass": true,
+      "detail": "unique=15, total=15"
+    },
+    {
+      "name": "v2-has-entries",
+      "pass": true,
+      "detail": "v2 count=15"
+    },
+    {
+      "name": "v2-superset",
+      "pass": true,
+      "detail": "v2=15, v1=15"
+    },
+    {
+      "name": "key-routes-covered",
+      "pass": true,
+      "detail": "covered=ECS查询,ECS创建,OBS静态站,RDS查询,CCE创建"
+    }
+  ],
+  "summary": {
+    "totalEntries": 15,
+    "uniqueRoutes": 15,
+    "uniqueActions": 5,
+    "routes": [
+      "ECS查询",
+      "ECS创建",
+      "OBS静态站",
+      "EIP",
+      "RDS查询",
+      "DCS创建",
+      "CBR",
+      "explain_error",
+      "CCE创建",
+      "FunctionGraph",
+      "费用查询",
+      "CES",
+      "证书/ELB",
+      "IAM审计",
+      "voucher_claim"
+    ],
+    "actions": [
+      "read",
+      "plan",
+      "deploy",
+      "诊断",
+      "执行"
+    ]
+  }
+}

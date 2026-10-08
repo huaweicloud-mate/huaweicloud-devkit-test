@@ -1,0 +1,26 @@
+{
+  "status": "FAIL",
+  "why": "DEW只读规划冒烟失败: T2 含只读操作(list/show), T4 serviceCatalog含此服务",
+  "executedAt": "20260922144316",
+  "testCase": "EXP-C4-18",
+  "designCaseId": "D3-C4",
+  "service": "DEW",
+  "hcloudService": "DEW",
+  "checks": [
+    {
+      "label": "T1 hcloud服务可发现",
+      "pass": true,
+      "detail": "DEW --help OK"
+    },
+    {
+      "label": "T2 含只读操作(list/show)",
+      "pass": false,
+      "detail": "no readonly ops"
+    },
+    {
+      "label": "T4 serviceCatalog含此服务",
+      "pass": false,
+      "detail": "not in routeMap"
+    }
+  ]
+}

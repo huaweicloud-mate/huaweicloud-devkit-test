@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "caseId": "D1-39",
+  "why": "queryDistTagsSync completed without EINVAL on Windows; judgeUpdate correctly detects updates",
+  "executedAt": "20260930103000",
+  "checks": [
+    {
+      "name": "queryDistTagsSync-no-throw",
+      "pass": true,
+      "detail": "returned: {\"latest\":\"1.1.7\",\"next\":\"1.1.8-next.1\"}"
+    },
+    {
+      "name": "queryDistTagsSync-no-EINVAL",
+      "pass": true,
+      "detail": "no EINVAL thrown on Windows"
+    },
+    {
+      "name": "judgeUpdate-update-available",
+      "pass": true,
+      "detail": "result=update_available"
+    },
+    {
+      "name": "judgeUpdate-currentVersion",
+      "pass": true,
+      "detail": "currentVersion=1.1.0"
+    },
+    {
+      "name": "judgeUpdate-latestStable",
+      "pass": true,
+      "detail": "latestStable=1.1.5"
+    },
+    {
+      "name": "determineTarget-correct",
+      "pass": true,
+      "detail": "target=1.1.5"
+    },
+    {
+      "name": "readInstalledVersion-string",
+      "pass": true,
+      "detail": "version=1.1.8-next.1"
+    },
+    {
+      "name": "parseDistTags-valid",
+      "pass": true,
+      "detail": "{\"latest\":\"1.1.5\",\"next\":\"1.1.6-next.0\"}"
+    },
+    {
+      "name": "parseDistTags-empty",
+      "pass": true,
+      "detail": "result=null"
+    }
+  ]
+}

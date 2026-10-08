@@ -1,0 +1,112 @@
+=== D4-19 (P0): 确认流下预检仍生效 ===
+Date: 2026-09-13
+Client: OfficeAce on Windows
+
+--- Probe 1: hook_check_command — delete without force ---
+Command: hcloud ECS DeleteServers --ServerId i-xxxxx
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Result:
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [{
+    "ruleId": "hwc-destructive-delete-operation",
+    "severity": "warn",
+    "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible."
+  }],
+  "nextStep": "Review the warnings with the user before proceeding."
+}
+Observation: Write operation detected as warning (confirmable path exists).
+
+--- Probe 2: hook_check_command — delete WITH force ---
+Command: hcloud ECS DeleteServers --ServerId i-xxxxx --force
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Result:
+{
+  "ok": false,
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-destructive-delete-force",
+      "severity": "deny",
+      "message": "The command combines deletion with force, recursive, or cascading deletion behavior."
+    },
+    {
+      "ruleId": "hwc-destructive-delete-operation",
+      "severity": "warn",
+      "message": "This hcloud command will delete, detach, or remove cloud resources."
+    }
+  ],
+  "nextStep": "Revise the command, artifact, or deployment plan before execution."
+}
+Observation: --force flag triggers deny-severity rule. Blocked regardless of approval.
+
+--- Probe 3: plan_cli_command with allowWrites=true — delete WITH force ---
+Tool: huaweicloud-devkit__huaweicloud_plan_cli_command
+Args: ["ECS", "DeleteServers", "--ServerId", "i-xxxxx", "--force"]
+allowWrites: true (simulating confirmed/approved state)
+
+Result:
+{
+  "classification": {
+    "decision": "deny",
+    "risk": "destructive",
+    "reason": "The command combines deletion with force, recursive, or cascading deletion behavior.",
+    "blockedByRiskRule": true,
+    "findings": [
+      {
+        "ruleId": "hwc-destructive-delete-force",
+        "severity": "deny"
+      },
+      {
+        "ruleId": "hwc-destructive-delete-operation",
+        "severity": "warn"
+      }
+    ]
+  },
+  "approvalToken": "594b2181-bc03-410a-b188-be2064451a30",
+  "safeToRun": false
+}
+
+CRITICAL OBSERVATION: Even with allowWrites=true (user has confirmed), the --force
+variant is STILL DENIED. safeToRun=false. blockedByRiskRule=true.
+
+The deny-severity risk rule (hwc-destructive-delete-force) overrides the allowWrites flag.
+Preflight safety checks are NOT bypassed by the confirm flow.
+
+--- Source code analysis ---
+
+File: plugins/huaweicloud-core/src/safety-policy.mjs (lines 104-110)
+Function: applyCommandRiskRules(base, normalizedArgs, options)
+  if (base.decision === 'deny' || options.skipRiskRules === true) {
+    return base;  // Early return if already denied
+  }
+  const risk = evaluateCommandRisk(commandRiskText(normalizedArgs, options));
+  return mergeRiskDecision(base, risk);
+
+File: plugins/huaweicloud-core/src/risk-rule-engine.mjs (lines 123-139)
+Function: mergeRiskDecision(base, risk)
+  if (risk.decision === 'deny') {
+    return {
+      ...base,
+      decision: 'deny',  // OVERRIDES any 'allow' from allowWrites
+      risk: topFinding.category,
+      reason: topFinding.message,
+      blockedByRiskRule: true,
+      findings: risk.findings,
+    };
+  }
+
+ANALYSIS: The risk rule engine runs AFTER the allowWrites check. If a deny-severity
+rule matches, mergeRiskDecision overrides the decision to 'deny' regardless of
+the base decision from allowWrites. This ensures preflight safety checks always run.
+
+--- Conclusion ---
+STATUS: PASS
+
+Preflight safety checks remain effective even under the confirm flow:
+1. Without --force: write operation is warn (confirmable via approvalToken)
+2. With --force: deny-severity rule blocks regardless of allowWrites=true
+3. mergeRiskDecision() overrides allow decision when deny-severity rule matches
+4. blockedByRiskRule=true confirms risk rules take precedence over approval
+5. safeToRun=false even with allowWrites=true for dangerous variants

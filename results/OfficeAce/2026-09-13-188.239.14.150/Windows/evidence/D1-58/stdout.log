@@ -1,0 +1,89 @@
+=== D1-58 (P1): whitelist matrix ===
+Date: 2026-09-13
+Platform: Windows (win32)
+Client: OfficeAce
+
+--- Probe Results ---
+
+1. Bin entries (package.json "bin" field):
+   huaweicloud-devkit -> ./bin/setup.cjs
+     EXISTS: true
+   huaweicloud-devkit-mcp -> ./plugins/huaweicloud-core/src/mcp-server.mjs
+     EXISTS: true
+   Both bin entry points exist on disk.
+
+2. Package metadata:
+   main: null (not set - bin entries are the entry points)
+   exports: null (not set - ESM module, uses bin entries)
+   type: "module" (ESM)
+
+3. MCP tool registration (from tools.mjs):
+   Registered tools (extracted from name: '...' patterns):
+   - huaweicloud_check_cli
+   - huaweicloud_plan_cli_command
+   - huaweicloud_run_readonly_command
+   - huaweicloud_run_approved_command
+   - huaweicloud_list_operations
+   - huaweicloud_show_profile_redacted
+   - huaweicloud_hook_check_command
+   - huaweicloud_hook_check_artifacts
+   - huaweicloud_hook_check_deploy_plan
+   - huaweicloud_service_catalog
+   - huaweicloud_search_docs
+   - huaweicloud_retrieve_skill
+   - huaweicloud_list_regions
+   - huaweicloud_get_regional_availability
+   - huaweicloud_explain_error
+   - huaweicloud_search_marketplace
+   - huaweicloud_auth_status
+   - huaweicloud_auth_init
+   - huaweicloud_auth_switch
+   - huaweicloud_auth_confirm
+   - huaweicloud_auth_sync
+   - huaweicloud_setup_obs_config
+   - huaweicloud_detect_framework
+   - huaweicloud_sandbox_connect
+   - huaweicloud_sandbox_exec_with_session
+   - huaweicloud_sandbox_exec_one_shot
+   - huaweicloud_sandbox_close_session
+   - huaweicloud_sandbox_credentials
+   - huaweicloud_sandbox_deploy_nginx
+   - huaweicloud_sandbox_deploy_check
+   - huaweicloud_sandbox_upload_file
+   - huaweicloud_sandbox_upload_project
+   - huaweicloud_sandbox_sign_agreement
+   - huaweicloud_sandbox_check_user
+   - huaweicloud_get_service_icon
+   - huaweicloud_voucher_claim
+   - huaweicloud_voucher_status
+   Total: 36 registered MCP tools
+
+4. MCP server entry point:
+   plugins/huaweicloud-core/src/mcp-server.mjs EXISTS: true
+
+5. Plugin manifest files:
+   .claude-plugin/plugin.json: true
+   .codex-plugin/plugin.json: true
+   .cursor-plugin/plugin.json: true
+   .hermes-plugin/plugin.json: true
+   .workbuddy-plugin/plugin.json: true
+   openclaw.plugin.json: true
+   All 6 plugin manifests present.
+
+6. MCP config (.mcp.json): EXISTS
+
+7. Safety policy (safety/policy.json): EXISTS
+
+8. All entry points valid: true
+
+--- Verdict ---
+
+STATUS: PASS
+
+Rationale:
+- Both bin entries (huaweicloud-devkit, huaweicloud-devkit-mcp) exist on disk
+- 36 MCP tools are properly registered in tools.mjs
+- MCP server entry point (mcp-server.mjs) exists
+- All 6 plugin manifest files present (claude, codex, cursor, hermes, workbuddy, openclaw)
+- MCP config (.mcp.json) and safety policy (policy.json) both present
+- All entry points are valid and accessible

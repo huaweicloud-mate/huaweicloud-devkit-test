@@ -1,0 +1,50 @@
+D1-39 Probe Log - Windows Upgrade Detection Chain
+OS: win32 / Node: v24.14.1
+======================================================================
+[2026-09-20T02:38:49.100Z] --- Test 1: spawnSync npm.cmd WITHOUT shell:true (queryDistTagsSync 内部逻辑) ---
+[2026-09-20T02:38:49.103Z]   status: null
+[2026-09-20T02:38:49.104Z]   error: spawnSync npm.cmd EINVAL
+[2026-09-20T02:38:49.104Z]   error.code: EINVAL
+[2026-09-20T02:38:49.104Z]   stdout (first 200 chars): 
+[2026-09-20T02:38:49.104Z]   stderr (first 200 chars): 
+[2026-09-20T02:38:49.104Z] 
+--- Test 2: spawnSync npm.cmd WITH shell:true (对照) ---
+[2026-09-20T02:38:53.650Z]   status: 0
+[2026-09-20T02:38:53.650Z]   error: none
+[2026-09-20T02:38:53.651Z]   stdout (first 200 chars): {
+  "next": "1.1.6-next.0",
+  "latest": "1.1.5"
+}
+
+[2026-09-20T02:38:53.652Z] 
+--- Test 3: spawn npm.cmd WITHOUT shell:true (queryDistTags 内部逻辑) ---
+[2026-09-20T02:38:53.653Z]   SPAWN THROWN: spawn EINVAL (code: EINVAL)
+[2026-09-20T02:38:53.654Z] 
+--- Test 4: spawn npm.cmd WITH shell:true (对照) ---
+[2026-09-20T02:38:57.910Z]   exit code: 0
+[2026-09-20T02:38:57.910Z]   stdout (first 200 chars): {
+  "next": "1.1.6-next.0",
+  "latest": "1.1.5"
+}
+
+[2026-09-20T02:38:57.910Z] 
+--- Test 5: 真实 queryDistTagsSync 调用 ---
+[2026-09-20T02:38:57.916Z]   queryDistTagsSync result: null
+[2026-09-20T02:38:57.916Z] 
+--- Test 6: 真实 queryDistTags (async) 调用 ---
+[2026-09-20T02:38:57.917Z]   queryDistTags result: null
+[2026-09-20T02:38:57.917Z] 
+--- Test 7: queryDistTagsFetch (HTTP 直连) ---
+[2026-09-20T02:38:58.200Z]   queryDistTagsFetch result: {"next":"1.1.6-next.0","latest":"1.1.5"}
+[2026-09-20T02:38:58.200Z] 
+======================================================================
+[2026-09-20T02:38:58.200Z] --- D1-39 判定 ---
+[2026-09-20T02:38:58.200Z] spawnSync 无 shell: EINVAL=true, works=false
+[2026-09-20T02:38:58.201Z] spawn 无 shell: EINVAL=true, works=false
+[2026-09-20T02:38:58.201Z] queryDistTagsFetch: works=true
+[2026-09-20T02:38:58.201Z] queryDistTagsSync 返回 null: true
+[2026-09-20T02:38:58.201Z] queryDistTags 返回 null: true
+[2026-09-20T02:38:58.201Z] 判定: PASS_WITH_FETCH_FALLBACK - spawn 路径失败但 queryDistTagsFetch 可用
+[2026-09-20T02:38:58.202Z] 
+最终判定: PASS_WITH_FETCH_FALLBACK
+[2026-09-20T02:38:58.202Z] 证据已保存到 C:\Users\Administrator\devkit-test\OfficeAce\huaweicloud-devkit-test\results\OfficeAce\2026-09-20-188.239.14.150\Windows\evidence\D1-39

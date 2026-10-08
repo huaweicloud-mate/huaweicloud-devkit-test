@@ -1,0 +1,64 @@
+=== D2-5 (P1): credential missing error ===
+Date: 2026-09-13
+Platform: Windows (win32)
+Client: OfficeAce
+
+--- Probe Results ---
+
+1. resolveCredentials() in credentials.mjs:
+   - Has allowMissing option: true (callers can opt into null return instead of throw)
+   - Error message: "Huawei Cloud credentials are not configured. Run
+     \"npx huaweicloud-devkit auth init\" or set HW_ACCESS_KEY/HW_SECRET_KEY."
+   - Clear error message: YES
+   - Has next step guidance: YES ("Run npx huaweicloud-devkit auth init")
+   - Has env var hint: YES ("set HW_ACCESS_KEY/HW_SECRET_KEY")
+
+2. credential-validator.mjs (IAM validation):
+   - "AK and SK are both required for credential validation." (upfront check)
+   - "IAM rejected the credentials (HTTP 401: ...). The AK/SK is invalid -
+     check the SK for typos or expired security tokens." (401 handling)
+   - "Credentials signed successfully but project listing was denied (HTTP 403).
+     Continuing without project_id." (403 warning, not error)
+   - Specific hints: YES (SK typos, expired tokens)
+   - Distinguishes 401 (auth failure) from 403 (permission denied)
+
+3. tools.mjs auth error handling:
+   - "ak and sk are required. Set clear=true to clear runtime credentials."
+   - "Temporary STS credentials cannot be persisted (R3). Use action=temporary."
+   - "confirmToken not found or expired." (confirmation flow)
+   - "Invalid or expired approval token. Please re-plan the command."
+   - "Incorrect IAM authentication information. The AK/SK is invalid (check the SK
+     for typos), the security token is missing or expired, or the profile lacks
+     project_id. Fix: re-run npx huaweicloud-devkit auth init..."
+   - All errors include actionable fix instructions
+
+4. syncAuth() in service.mjs:
+   - "Global credentials are not configured." + nextStep: "Run npx huaweicloud-devkit auth init first."
+   - "Runtime credentials are active; auto-sync suppressed (R10)." + nextStep
+   - "KooCLI current profile unresolved; run npx huaweicloud-devkit auth init..."
+   - "KooCLI not ready." + nextStep
+   - All errors have nextStep guidance
+
+5. Error quality assessment:
+   - Clear messages: YES (all error paths produce human-readable messages)
+   - Next steps: YES (every error includes actionable fix instructions)
+   - Specific hints: YES (SK typos, expired tokens, project_id missing)
+   - Environment variable guidance: YES (HW_ACCESS_KEY/HW_SECRET_KEY)
+
+--- Verdict ---
+
+STATUS: PASS
+
+Rationale:
+- When credentials are missing, resolveCredentials() throws a clear error:
+  "Huawei Cloud credentials are not configured. Run npx huaweicloud-devkit auth init
+  or set HW_ACCESS_KEY/HW_SECRET_KEY."
+- The error message includes both a CLI command fix AND an environment variable alternative
+- IAM credential validator provides specific diagnostics:
+  - 401: "AK/SK is invalid - check the SK for typos or expired security tokens"
+  - 403: "Credentials signed successfully but project listing was denied" (warning, not error)
+- All auth-related errors in tools.mjs include actionable next steps
+- syncAuth() errors all include nextStep guidance
+- The allowMissing option allows callers to gracefully handle missing credentials
+  (returns null instead of throwing)
+- No cryptic error codes or stack traces exposed to users

@@ -1,0 +1,162 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C4",
+  "why": "All 7 services: list_operations succeeded, read-only plan allowed, write plan denied.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "service": "ECS",
+      "listOperations": {
+        "command": "hcloud ECS --help",
+        "rc": 0,
+        "outputLength": 3216,
+        "ok": true
+      },
+      "planReadonly": {
+        "command": "hcloud ECS ListServers",
+        "decision": "allow",
+        "risk": "read_only",
+        "ok": true
+      },
+      "planWrite": {
+        "command": "hcloud ECS CreateServers",
+        "decision": "deny",
+        "risk": "write",
+        "ok": true
+      },
+      "pass": true
+    },
+    {
+      "service": "VPC",
+      "listOperations": {
+        "command": "hcloud VPC --help",
+        "rc": 0,
+        "outputLength": 5193,
+        "ok": true
+      },
+      "planReadonly": {
+        "command": "hcloud VPC ListServers",
+        "decision": "allow",
+        "risk": "read_only",
+        "ok": true
+      },
+      "planWrite": {
+        "command": "hcloud VPC CreateServers",
+        "decision": "deny",
+        "risk": "write",
+        "ok": true
+      },
+      "pass": true
+    },
+    {
+      "service": "RDS",
+      "listOperations": {
+        "command": "hcloud RDS --help",
+        "rc": 0,
+        "outputLength": 8448,
+        "ok": true
+      },
+      "planReadonly": {
+        "command": "hcloud RDS ListServers",
+        "decision": "allow",
+        "risk": "read_only",
+        "ok": true
+      },
+      "planWrite": {
+        "command": "hcloud RDS CreateServers",
+        "decision": "deny",
+        "risk": "write",
+        "ok": true
+      },
+      "pass": true
+    },
+    {
+      "service": "IAM",
+      "listOperations": {
+        "command": "hcloud IAM --help",
+        "rc": 0,
+        "outputLength": 6496,
+        "ok": true
+      },
+      "planReadonly": {
+        "command": "hcloud IAM ListServers",
+        "decision": "allow",
+        "risk": "read_only",
+        "ok": true
+      },
+      "planWrite": {
+        "command": "hcloud IAM CreateServers",
+        "decision": "deny",
+        "risk": "write",
+        "ok": true
+      },
+      "pass": true
+    },
+    {
+      "service": "OBS",
+      "listOperations": {
+        "command": "hcloud OBS help",
+        "rc": 0,
+        "outputLength": 3151,
+        "ok": true
+      },
+      "planReadonly": {
+        "command": "hcloud OBS ls",
+        "decision": "allow",
+        "risk": "read_only",
+        "ok": true
+      },
+      "planWrite": {
+        "command": "hcloud OBS cp",
+        "decision": "deny",
+        "risk": "write",
+        "ok": true
+      },
+      "pass": true
+    },
+    {
+      "service": "CCE",
+      "listOperations": {
+        "command": "hcloud CCE --help",
+        "rc": 0,
+        "outputLength": 4680,
+        "ok": true
+      },
+      "planReadonly": {
+        "command": "hcloud CCE ListServers",
+        "decision": "allow",
+        "risk": "read_only",
+        "ok": true
+      },
+      "planWrite": {
+        "command": "hcloud CCE CreateServers",
+        "decision": "deny",
+        "risk": "write",
+        "ok": true
+      },
+      "pass": true
+    },
+    {
+      "service": "CDN",
+      "listOperations": {
+        "command": "hcloud CDN --help",
+        "rc": 0,
+        "outputLength": 2682,
+        "ok": true
+      },
+      "planReadonly": {
+        "command": "hcloud CDN ListServers",
+        "decision": "allow",
+        "risk": "read_only",
+        "ok": true
+      },
+      "planWrite": {
+        "command": "hcloud CDN CreateServers",
+        "decision": "deny",
+        "risk": "write",
+        "ok": true
+      },
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "redactSecrets adminPass=xxx",
+      "pass": true,
+      "result": {
+        "adminPass": "<redacted>"
+      }
+    },
+    {
+      "label": "redactSecrets password=xxx",
+      "pass": true,
+      "result": {
+        "password": "<redacted>"
+      }
+    },
+    {
+      "label": "redactSecrets access_key=xxx",
+      "pass": true,
+      "result": {
+        "access_key": "<redacted>"
+      }
+    },
+    {
+      "label": "redactSecrets secret_key=xxx",
+      "pass": true,
+      "result": {
+        "secret_key": "<redacted>"
+      }
+    },
+    {
+      "label": "redactSecrets string adminPass=xxx",
+      "pass": true,
+      "result": "adminPass=<redacted>"
+    },
+    {
+      "label": "redactSecrets nested object",
+      "pass": true,
+      "result": {
+        "server": {
+          "adminPass": "<redacted>",
+          "name": "myserver"
+        }
+      }
+    },
+    {
+      "label": "redactSecrets array",
+      "pass": true,
+      "result": [
+        {
+          "password": "<redacted>"
+        },
+        {
+          "name": "ok"
+        }
+      ]
+    }
+  ]
+}

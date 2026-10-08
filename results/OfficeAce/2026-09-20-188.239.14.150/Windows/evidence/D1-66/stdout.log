@@ -1,0 +1,17 @@
+=== D1-66: 遥测开关与端点环境变量 ===
+Date: 2026-09-20
+Environment: Windows, Node.js v24.14.1, huaweicloud-devkit@1.1.5
+
+Source: telemetry/telemetry.mjs - isTelemetryEnabled, getEndpoint
+
+Test results:
+  TELEMETRY=off    → isTelemetryEnabled(): false ✓
+  TELEMETRY unset  → isTelemetryEnabled(): true  ✓ (default enabled)
+  TELEMETRY=on     → isTelemetryEnabled(): true  ✓
+
+  Custom ENDPOINT set (https://custom.example.com/telemetry) → getEndpoint returns custom ✓
+  ENDPOINT unset → getEndpoint returns default (https://devkit.huaweicloud.com/rest/developer/server/hdkitservice/telemetry/events) ✓
+
+VERDICT: PASS
+Telemetry is enabled by default; HUAWEICLOUD_DEVKIT_TELEMETRY=off disables it.
+Custom endpoint can be set via HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT.

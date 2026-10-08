@@ -1,0 +1,26 @@
+=== D4-17: Pipe Command Bypass Detection ===
+Test: Call hook_check_command with piped/redirected/chained destructive commands
+
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+
+Probe 1: "hcloud ECS DeleteServers | cat"
+Result: WARNED
+  ruleId: hwc-destructive-delete-operation, category: destructive, severity: warn
+  evidence: "hcloud ECS DeleteServers | cat"
+
+Probe 2: "hcloud ECS DeleteServers > /dev/null"
+Result: WARNED
+  ruleId: hwc-destructive-delete-operation, category: destructive, severity: warn
+  evidence: "hcloud ECS DeleteServers > /dev/null"
+
+Probe 3: "hcloud ECS DeleteServers && echo done"
+Result: WARNED
+  ruleId: hwc-destructive-delete-operation, category: destructive, severity: warn
+  evidence: "hcloud ECS DeleteServers && echo done"
+
+Verification:
+  Pipe does not bypass detection: PASS
+  Redirection does not bypass detection: PASS
+  Chaining does not bypass detection: PASS
+
+STATUS: PASS - Destructive operation detected through pipe/redirection/chaining

@@ -1,0 +1,55 @@
+{
+  "testCase": "D1-26",
+  "description": "Upgrade reminder tool registration and protocol exposure (MCP tools/list)",
+  "platform": "win32",
+  "nodeVersion": "v24.14.1",
+  "checks": {
+    "initialize": {
+      "received": true,
+      "protocolVersion": "2024-11-05",
+      "serverInfo": {
+        "name": "huaweicloud-devkit",
+        "version": "1.1.3"
+      }
+    },
+    "tools_list": {
+      "totalTools": 39,
+      "hasCheckUpdate": true,
+      "hasUpgrade": true,
+      "checkUpdateHasSchema": true,
+      "upgradeHasSchema": true,
+      "checkUpdateSchema": {
+        "type": "object",
+        "properties": {
+          "dismiss": {
+            "type": "boolean",
+            "description": "用户拒绝升级时传 true，记录冷却状态。"
+          },
+          "dismissVersion": {
+            "type": "string",
+            "description": "与 dismiss:true 搭配，用户拒绝的版本号。缺省时用当前检测到的 targetVersion。"
+          }
+        }
+      },
+      "upgradeSchema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "仅支持 \"latest\"（默认）。"
+          },
+          "target": {
+            "type": "string",
+            "description": "agent 目标（opencode/codex/codearts/.../all）。缺省时用 all（仅更新已安装的）。"
+          }
+        }
+      },
+      "updateRelatedTools": [
+        "huaweicloud_check_update",
+        "huaweicloud_upgrade"
+      ]
+    }
+  },
+  "verdict": "PASS",
+  "summary": "PASS: Both huaweicloud_check_update and huaweicloud_upgrade tools are registered with proper inputSchema."
+}

@@ -1,0 +1,19 @@
+=== D1-42: dismiss 真实闭环与跨调用持久化 ===
+
+Step 1: First check_update → result=update_available, targetVersion=1.2.0 ✓
+Step 2: Dismiss call → result=dismissed, dismissed=true ✓
+Step 3: Skip file on disk:
+  Path: C:\Users\Administrator\.config\huaweicloud\devkit-skip.json.test42
+  dismissedVersion: 1.2.0
+  dismissedAt: 2026-09-20T03:59:22.026Z
+  expireAt: 2026-09-23T03:59:22.026Z (3 days later) ✓
+Step 4: Second check_update same session → result=dismissed ✓
+Step 5: Persisted across restart → result=dismissed ✓
+
+--- VERIFICATION ---
+Step 1 update_available: true
+Step 2 dismissed: true
+Step 3 skip file written: true
+Step 4 same session dismissed: true
+Step 5 persisted across restart: true
+VERDICT D1-42: PASS

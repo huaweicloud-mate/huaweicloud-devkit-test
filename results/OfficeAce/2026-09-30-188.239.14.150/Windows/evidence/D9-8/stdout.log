@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "caseId": "D9-8",
+  "why": "All 9 connection lifecycle checks passed: initial connect, reconnect after disconnect, 10 rapid sequential connections, error recovery, CORS preflight, 405 for non-POST, and clean shutdown.",
+  "executedAt": "20260930103000",
+  "details": [
+    {
+      "name": "Remote MCP server started on test port",
+      "pass": true,
+      "evidence": "port=19328"
+    },
+    {
+      "name": "Connection 1: initialize succeeds",
+      "pass": true,
+      "evidence": "httpStatus=200, serverName=huaweicloud-devkit"
+    },
+    {
+      "name": "Connection 1: tools/list succeeds",
+      "pass": true,
+      "evidence": "toolsCount=41"
+    },
+    {
+      "name": "Connection 2 (reconnect): initialize succeeds after implicit disconnect",
+      "pass": true,
+      "evidence": "httpStatus=200, serverName=huaweicloud-devkit"
+    },
+    {
+      "name": "10 rapid sequential connections all succeed",
+      "pass": true,
+      "evidence": "successCount=10/10"
+    },
+    {
+      "name": "Server survives error request and serves subsequent valid request",
+      "pass": true,
+      "evidence": "toolsCount=41"
+    },
+    {
+      "name": "CORS preflight (OPTIONS) returns 204",
+      "pass": true,
+      "evidence": "httpStatus=204"
+    },
+    {
+      "name": "Non-POST method returns 405",
+      "pass": true,
+      "evidence": "httpStatus=405"
+    },
+    {
+      "name": "Connection fails after server close (clean shutdown)",
+      "pass": true,
+      "evidence": "error type: TypeError"
+    }
+  ]
+}

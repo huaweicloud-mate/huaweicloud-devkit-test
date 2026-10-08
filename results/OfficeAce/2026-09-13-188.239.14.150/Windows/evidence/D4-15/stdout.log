@@ -1,0 +1,76 @@
+=== Test D4-15 : Hook Bypass Attempt ===
+Timestamp: 2026-09-13
+
+--- Probe 1: hcloud ECS Deleteserver --ServerId xxx (lowercase s) ---
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Response:
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [
+    {
+      "ruleId": "hwc-destructive-delete-operation",
+      "title": "Destructive cloud resource operation",
+      "category": "destructive",
+      "severity": "warn",
+      "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+      "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+      "source": "command",
+      "evidence": "hcloud ECS Deleteserver --ServerId xxx"
+    }
+  ],
+  "nextStep": "Review the warnings with the user before proceeding."
+}
+Verdict: DETECTED (decision=warn, ruleId=hwc-destructive-delete-operation) ✓
+
+--- Probe 2: hcloud ECS DELETE_SERVERS --ServerId xxx (underscore) ---
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Response:
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [
+    {
+      "ruleId": "hwc-destructive-delete-operation",
+      "title": "Destructive cloud resource operation",
+      "category": "destructive",
+      "severity": "warn",
+      "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+      "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+      "source": "command",
+      "evidence": "hcloud ECS DELETE_SERVERS --ServerId xxx"
+    }
+  ],
+  "nextStep": "Review the warnings with the user before proceeding."
+}
+Verdict: DETECTED (decision=warn, ruleId=hwc-destructive-delete-operation) ✓
+
+--- Probe 3: hcloud ECS DeleteServers --ServerId xxx (normal baseline) ---
+MCP Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+Response:
+{
+  "ok": true,
+  "decision": "warn",
+  "findings": [
+    {
+      "ruleId": "hwc-destructive-delete-operation",
+      "title": "Destructive cloud resource operation",
+      "category": "destructive",
+      "severity": "warn",
+      "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+      "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+      "source": "command",
+      "evidence": "hcloud ECS DeleteServers --ServerId xxx"
+    }
+  ],
+  "nextStep": "Review the warnings with the user before proceeding."
+}
+Verdict: DETECTED (decision=warn, ruleId=hwc-destructive-delete-operation) ✓
+
+=== SUMMARY ===
+Probe 1 (Deleteserver): DETECTED ✓
+Probe 2 (DELETE_SERVERS): DETECTED ✓
+Probe 3 (DeleteServers): DETECTED ✓
+Overall Result: PASS
+All naming variants were correctly detected as destructive operations. No bypass achieved.
+The hwc-destructive-delete-operation rule uses case-insensitive pattern matching.

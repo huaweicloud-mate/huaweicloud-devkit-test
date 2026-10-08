@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "classifyTextCommand: credential file",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "classifyTextCommand: secret API",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "classifyTextCommand: write op",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "evaluateCommandRisk: public exposure",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "evaluateArtifacts: broad IAM policy",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-iam-admin-policy"
+      ]
+    },
+    {
+      "label": "evaluateDeployPlan: public FunctionGraph",
+      "pass": true,
+      "decision": "warn",
+      "findings": [
+        "hwc-functiongraph-public-no-auth"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "testCase": "D1-28",
+  "description": "检测语义-有新版本 (judgeUpdate current < latest → update_available)",
+  "platform": "win32",
+  "nodeVersion": "v24.14.1",
+  "checks": {
+    "stable_update": {
+      "input": {
+        "current": "1.0.2",
+        "distTags": {
+          "latest": "1.1.0",
+          "next": null
+        }
+      },
+      "result": "update_available",
+      "updateAvailable": true,
+      "targetVersion": "1.1.0",
+      "currentVersion": "1.0.2",
+      "passed": true
+    },
+    "prerelease_to_stable": {
+      "input": {
+        "current": "1.1.1-next.12",
+        "distTags": {
+          "latest": "1.1.1",
+          "next": "1.1.1-next.15"
+        }
+      },
+      "result": "update_available",
+      "updateAvailable": true,
+      "targetVersion": "1.1.1",
+      "passed": true
+    },
+    "prerelease_to_newer_prerelease": {
+      "input": {
+        "current": "1.1.1-next.12",
+        "distTags": {
+          "latest": "1.1.0",
+          "next": "1.1.1-next.15"
+        }
+      },
+      "result": "update_available",
+      "updateAvailable": true,
+      "targetVersion": "1.1.1-next.15",
+      "passed": true
+    },
+    "prerelease_at_next_stable_newer": {
+      "input": {
+        "current": "1.1.1-next.15",
+        "distTags": {
+          "latest": "1.1.1",
+          "next": "1.1.1-next.15"
+        }
+      },
+      "result": "update_available",
+      "updateAvailable": true,
+      "targetVersion": "1.1.1",
+      "passed": true
+    },
+    "major_bump": {
+      "input": {
+        "current": "1.1.3",
+        "distTags": {
+          "latest": "2.0.0",
+          "next": null
+        }
+      },
+      "result": "update_available",
+      "updateAvailable": true,
+      "targetVersion": "2.0.0",
+      "passed": true
+    },
+    "patch_bump": {
+      "input": {
+        "current": "1.1.3",
+        "distTags": {
+          "latest": "1.1.4",
+          "next": null
+        }
+      },
+      "result": "update_available",
+      "updateAvailable": true,
+      "targetVersion": "1.1.4",
+      "passed": true
+    }
+  },
+  "verdict": "PASS",
+  "summary": "PASS: judgeUpdate correctly returns update_available when current < latest in all 6 scenarios. Target version is correctly identified."
+}

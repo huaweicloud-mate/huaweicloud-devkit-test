@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "cat ~/.hcloud/config",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "label": "type .huaweicloud/credentials",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "Get-Content ~/.hcloud/config",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "less ~/.huaweicloud/credentials",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "cat hcloud/config (no dot)",
+      "pass": true,
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "label": "risk rule: credential file",
+      "pass": true,
+      "decision": "deny",
+      "findings": [
+        "hwc-command-credential-file"
+      ]
+    }
+  ]
+}

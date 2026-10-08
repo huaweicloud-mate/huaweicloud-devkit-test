@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "caseId": "D4-22",
+  "why": "Configure subcommands correctly blocked for credential reads",
+  "executedAt": "20260930103000",
+  "checks": [
+    {
+      "name": "configure-show-denied",
+      "pass": true,
+      "detail": "decision=deny, risk=credential"
+    },
+    {
+      "name": "configure-show-credential",
+      "pass": true,
+      "detail": "risk=credential"
+    },
+    {
+      "name": "configure-list-checked",
+      "pass": true,
+      "detail": "decision=deny"
+    },
+    {
+      "name": "configure-show-allowed-with-flag",
+      "pass": true,
+      "detail": "decision=allow"
+    },
+    {
+      "name": "configure-set-checked",
+      "pass": true,
+      "detail": "decision=deny, risk=write"
+    }
+  ]
+}

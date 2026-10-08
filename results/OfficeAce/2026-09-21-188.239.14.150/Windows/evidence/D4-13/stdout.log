@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "why": "All sub-tests passed",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "Read op allowed with readonly creds",
+      "pass": true,
+      "decision": "allow",
+      "risk": "read_only"
+    },
+    {
+      "label": "Write op denied (IAM would reject)",
+      "pass": true,
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "label": "Show op allowed with readonly creds",
+      "pass": true,
+      "decision": "allow",
+      "risk": "read_only"
+    },
+    {
+      "label": "Get op allowed with readonly creds",
+      "pass": true,
+      "decision": "allow",
+      "risk": "read_only"
+    },
+    {
+      "label": "Create op denied (needs write permission)",
+      "pass": true,
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "label": "OBS ls (read) allowed",
+      "pass": true,
+      "decision": "allow",
+      "risk": "read_only"
+    }
+  ]
+}

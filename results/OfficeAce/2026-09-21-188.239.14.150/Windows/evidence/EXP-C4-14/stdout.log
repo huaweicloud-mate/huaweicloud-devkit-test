@@ -1,0 +1,26 @@
+{
+  "status": "FAIL",
+  "why": "DMS只读规划冒烟失败: T2 含只读操作(list/show)",
+  "executedAt": "20260922144314",
+  "testCase": "EXP-C4-14",
+  "designCaseId": "D3-C4",
+  "service": "DMS",
+  "hcloudService": "DMS",
+  "checks": [
+    {
+      "label": "T1 hcloud服务可发现",
+      "pass": true,
+      "detail": "DMS --help OK"
+    },
+    {
+      "label": "T2 含只读操作(list/show)",
+      "pass": false,
+      "detail": "no readonly ops"
+    },
+    {
+      "label": "T4 serviceCatalog含此服务",
+      "pass": true,
+      "detail": "found in routeMap"
+    }
+  ]
+}

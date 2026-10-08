@@ -1,0 +1,14 @@
+=== D3-C4: Service Operation Listing (ECS/VPC/RDS) ===
+Test: Call list_operations for ECS, VPC, RDS; verify each returns valid operation lists
+
+Tool: huaweicloud-devkit__huaweicloud_list_operations
+
+Results:
+  ECS: ok=true, exitCode=0, operations=120+ (CreateServers, DeleteServers, ListServersDetails, ShowServer, etc.)
+  VPC: ok=true, exitCode=0, operations=180+ (CreateVpc, DeleteVpc, ListVpcs, CreateSecurityGroup, etc.)
+  RDS: ok=true, exitCode=0, operations=300+ (CreateInstance, DeleteInstance, ListInstances, ResetPwd, etc.)
+
+All three services returned valid operation lists with ok=true and exitCode=0.
+Each returned the full KooCLI operation list for that service.
+
+STATUS: PASS - All services (ECS, VPC, RDS) returned valid operation lists

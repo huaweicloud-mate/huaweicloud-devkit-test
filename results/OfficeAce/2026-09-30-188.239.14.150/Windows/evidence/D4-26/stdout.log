@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "caseId": "D4-26",
+  "why": "All configure read subcommands were ALLOWED with allowCredentialRead:true (5 args-based + 3 text-based), and correctly DENIED without the flag.",
+  "executedAt": "20260930103000",
+  "details": {
+    "withFlag": [
+      {
+        "cmd": "configure show",
+        "decision": "allow",
+        "risk": "read_only"
+      },
+      {
+        "cmd": "configure list",
+        "decision": "allow",
+        "risk": "read_only"
+      },
+      {
+        "cmd": "configure get",
+        "decision": "allow",
+        "risk": "read_only"
+      },
+      {
+        "cmd": "configure export",
+        "decision": "allow",
+        "risk": "unknown_read"
+      },
+      {
+        "cmd": "configure init",
+        "decision": "allow",
+        "risk": "unknown_read"
+      }
+    ],
+    "withFlagText": [
+      {
+        "cmd": "hcloud configure show",
+        "decision": "allow",
+        "risk": "read_only"
+      },
+      {
+        "cmd": "hcloud configure list",
+        "decision": "allow",
+        "risk": "read_only"
+      },
+      {
+        "cmd": "hcloud configure get",
+        "decision": "allow",
+        "risk": "read_only"
+      }
+    ],
+    "withoutFlagDenied": true
+  }
+}

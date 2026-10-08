@@ -1,0 +1,83 @@
+{
+  "status": "FAIL",
+  "why": "classifyTextCommand regex /(^|\\s)hcloud(\\.exe)?\\s+/i at safety-policy.mjs:428 does not match hcloud inside shell quotes. For 'bash -c \"hcloud ECS DeleteServers\"', hcloud is preceded by '\"' not whitespace, so regex fails. Falls through to applyRawCommandRiskRules with not_huaweicloud. Risk rule hwc-destructive-delete-operation (severity=warn) matches but mergeRiskDecision only adds warning, does not change decision to deny. stripExecutable() in classifyHcloudArgs handles bash -c wrappers but is never reached because classifyTextCommand never routes to classifyHcloudArgs. Root cause: safety-policy.mjs:428 regex does not account for hcloud inside quotes. File: hdk/plugins/huaweicloud-core/src/safety-policy.mjs:428",
+  "executedAt": "20260921025826",
+  "subTests": [
+    {
+      "label": "bash -c \"hcloud ECS DeleteServers\"",
+      "pass": false,
+      "decision": "allow",
+      "risk": "not_huaweicloud"
+    },
+    {
+      "label": "sh -c 'hcloud VPC DeleteVpc'",
+      "pass": false,
+      "decision": "allow",
+      "risk": "not_huaweicloud"
+    },
+    {
+      "label": "zsh -c \"hcloud ECS DeleteServers\"",
+      "pass": false,
+      "decision": "allow",
+      "risk": "not_huaweicloud"
+    },
+    {
+      "label": "/bin/bash -c \"hcloud ECS DeleteServers\"",
+      "pass": false,
+      "decision": "allow",
+      "risk": "not_huaweicloud"
+    },
+    {
+      "label": "sudo hcloud ECS DeleteServers",
+      "pass": true,
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "label": "sudo bash -c \"hcloud ECS DeleteServers\"",
+      "pass": false,
+      "decision": "allow",
+      "risk": "not_huaweicloud"
+    },
+    {
+      "label": "&& chaining: List && Delete",
+      "pass": true,
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "label": "; chaining: List ; Delete",
+      "pass": true,
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "label": "|| chaining: List || Delete",
+      "pass": true,
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "label": "| piping: List | Delete",
+      "pass": true,
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "label": "Nested: bash -c \"sh -c 'hcloud ECS DeleteServers'\"",
+      "pass": false,
+      "decision": "allow",
+      "risk": "not_huaweicloud"
+    },
+    {
+      "label": "Risk: bash -c \"rm -rf /\"",
+      "pass": true,
+      "decision": "deny"
+    },
+    {
+      "label": "sudo bash -c \"rm -rf /\"",
+      "pass": true,
+      "decision": "deny"
+    }
+  ]
+}

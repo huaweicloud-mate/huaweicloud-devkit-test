@@ -1,0 +1,93 @@
+=== D4-18 (P0): confirm-not-deny审批语义 ===
+Date: 2026-09-13
+Client: OfficeAce on Windows
+
+--- Probe 1: plan_cli_command without approval ---
+Tool: huaweicloud-devkit__huaweicloud_plan_cli_command
+Args: ["ECS", "DeleteServers", "--ServerId", "i-xxxxx"]
+allowWrites: not set (default false)
+
+Result:
+{
+  "executable": "hcloud",
+  "args": ["ECS", "DeleteServers", "--ServerId", "i-xxxxx"],
+  "command": "hcloud ECS DeleteServers --ServerId i-xxxxx",
+  "warnings": [],
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "approvalToken": "49d8dece-2980-432b-8ec1-b75b1d7c36ab",
+  "safeToRun": false
+}
+
+Key observation: Despite decision=deny, an approvalToken IS returned.
+This is NOT a hard deny — it's a "needs approval" gate with a confirm path.
+
+--- Probe 2: plan_cli_command with allowWrites=true ---
+Args: ["ECS", "DeleteServers", "--ServerId", "i-xxxxx"]
+allowWrites: true
+
+Result:
+{
+  "classification": {
+    "decision": "allow",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation approved by user.",
+    "warnings": [{
+      "ruleId": "hwc-destructive-delete-operation",
+      "title": "Destructive cloud resource operation",
+      "category": "destructive",
+      "severity": "warn",
+      "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible."
+    }]
+  },
+  "approvalToken": "da8c9ab9-cf3c-44a0-ba2b-73ccf25f62a1",
+  "safeToRun": true
+}
+
+Key observation: With allowWrites=true, decision flips to "allow" with safeToRun=true.
+The destructive warning is still surfaced (not suppressed by approval).
+
+--- Source code analysis ---
+
+File: plugins/huaweicloud-core/src/hcloud-cli.mjs (lines 143-171)
+Function: planHcloudCommand(args, options)
+  const classification = classifyHcloudArgs(normalizedArgs, options);
+  ...
+  return {
+    ...
+    classification: applyPreflightFindings(classification, sgFindings),
+    approvalToken: createApprovalToken(normalizedArgs),  // ALWAYS generated
+    safeToRun: classification.decision === 'allow',
+  };
+
+ANALYSIS: approvalToken is unconditionally created via createApprovalToken().
+Even when classification.decision is "deny", the token provides a path to approval.
+
+File: plugins/huaweicloud-core/src/tools.mjs (lines 258-267)
+Tool: huaweicloud_run_approved_command
+  required: ['args', 'approvalToken', 'approvedByUser']
+  approvalToken: { type: 'string', description: 'The approvalToken returned by huaweicloud_plan_cli_command.' }
+
+ANALYSIS: The run_approved_command tool accepts the approvalToken from plan_cli_command.
+This is the explicit confirm mechanism — the agent presents the plan, the user approves,
+and the approved command is executed with the token.
+
+File: plugins/huaweicloud-core/src/tools.mjs (lines 1692-1694)
+  const strictPlan = planHcloudCommand(providedArgs, { allowWrites: false });
+  // Then runs with allowWrites: true after token validation
+
+ANALYSIS: run_approved_command first re-plans with allowWrites=false (strict check),
+then validates the token, then executes with allowWrites=true.
+
+--- Conclusion ---
+STATUS: PASS
+
+The system implements confirm-not-deny semantics:
+1. Write operations return decision=deny BUT with an approvalToken (confirm path)
+2. The approvalToken can be used with huaweicloud_run_approved_command
+3. allowWrites=true parameter is the explicit approval mechanism
+4. The "deny" is a gate pending approval, not a permanent rejection
+5. Even after approval, destructive warnings are still surfaced

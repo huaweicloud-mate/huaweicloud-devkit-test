@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "caseId": "D3-S1",
+  "why": "Scenario complete: serviceCatalog→ECS skill loaded, command classified read_only, real hcloud executed (rc=0), output redacted with no AK/SK.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "step": "service_catalog_route",
+      "action": "huaweicloud-core SKILL.md mentions ECS",
+      "pass": true
+    },
+    {
+      "step": "ecs_skill_loaded",
+      "action": "huawei-ecs SKILL.md loaded",
+      "skillSize": 14150,
+      "pass": true
+    },
+    {
+      "step": "classify_readonly",
+      "command": "hcloud ECS ListServersDetails --limit=1",
+      "decision": "allow",
+      "risk": "read_only",
+      "pass": true
+    },
+    {
+      "step": "execute_readonly",
+      "command": "hcloud ECS ListServersDetails --limit=1",
+      "rc": 0,
+      "outputLength": 34,
+      "noSecretsInRedacted": true,
+      "pass": true
+    }
+  ]
+}

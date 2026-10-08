@@ -1,0 +1,21 @@
+=== D2-26: 凭证备份与恢复 ===
+S1 path: C:\Users\ADMINI~1\AppData\Local\Temp\2\d2-26-TC4i70\.config\huaweicloud\credentials.json
+[PASS] T1.1 初始凭证写入 :: S1 exists
+Backup result: "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\d2-26-TC4i70\\.config\\huaweicloud\\credentials.json.bak"
+[PASS] T2.1 backup 返回有效结果 :: has result
+[PASS] T2.2 备份文件已创建 :: backup via result: C:\Users\ADMINI~1\AppData\Local\Temp\2\d2-26-TC4i70\.config\huaweicloud\credentials.json.bak
+[PASS] T2.3 备份含原始凭证 (via restore验证) :: backup verified via successful restore
+[PASS] T2.4 备份含原始凭证 (via restore验证) :: backup verified via successful restore
+[PASS] T3.1 主凭证已破坏 :: ak=CORRUPTED_AK
+Restore result: true
+[PASS] T4.1 restore 返回有效结果 :: has result
+[PASS] T4.2 恢复后 AK 与备份一致 :: ak=ORIGAKD2... (expected ORIGAKD2...)
+[PASS] T4.3 恢复后 SK 与备份一致 :: SK matches backup
+[PASS] T5.1 重复 restore 幂等不报错 :: no error on repeated restore
+
+=== 汇总 ===
+Total: 10, PASS: 10, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-26","result":"PASS","checks":[{"label":"T1.1 初始凭证写入","pass":true,"detail":"S1 exists"},{"label":"T2.1 backup 返回有效结果","pass":true,"detail":"has result"},{"label":"T2.2 备份文件已创建","pass":true,"detail":"backup via result: C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\d2-26-TC4i70\\.config\\huaweicloud\\credentials.json.bak"},{"label":"T2.3 备份含原始凭证 (via restore验证)","pass":true,"detail":"backup verified via successful restore"},{"label":"T2.4 备份含原始凭证 (via restore验证)","pass":true,"detail":"backup verified via successful restore"},{"label":"T3.1 主凭证已破坏","pass":true,"detail":"ak=CORRUPTED_AK"},{"label":"T4.1 restore 返回有效结果","pass":true,"detail":"has result"},{"label":"T4.2 恢复后 AK 与备份一致","pass":true,"detail":"ak=ORIGAKD2... (expected ORIGAKD2...)"},{"label":"T4.3 恢复后 SK 与备份一致","pass":true,"detail":"SK matches backup"},{"label":"T5.1 重复 restore 幂等不报错","pass":true,"detail":"no error on repeated restore"}],"timestamp":"2026-09-21T02:12:57.551Z"}

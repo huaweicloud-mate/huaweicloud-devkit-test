@@ -1,0 +1,25 @@
+=== D4-20: Environment Variable Injection Detection ===
+Test: Call hook_check_command with credentials in env vars
+
+Tool: huaweicloud-devkit__huaweicloud_hook_check_command
+
+Probe 1: "HW_ACCESS_KEY=HPUXXX hcloud ECS ListServersDetails"
+Result:
+  ok: true
+  decision: allow
+  findings: []
+  nextStep: "No Huawei Cloud hook risk rule matched."
+  (NOT detected)
+
+Probe 2: "AK=HPUXXX SK=XXX hcloud ECS ListServersDetails"
+Result:
+  ok: true
+  decision: allow
+  findings: []
+  (NOT detected)
+
+Verification:
+  HW_ACCESS_KEY in env var detected: FAIL
+  AK/SK in env vars detected: FAIL
+
+STATUS: FAIL - Credentials in environment variables not detected

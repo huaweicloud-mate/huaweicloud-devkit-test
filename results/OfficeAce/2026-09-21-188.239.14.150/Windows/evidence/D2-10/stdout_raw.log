@@ -1,0 +1,32 @@
+=== D2-10: R7 current档跟随 ===
+[PASS] T1.1 hcloud config.json 存在 :: path: C:\Users\Administrator\.hcloud\config.json
+[PASS] T1.2 含 current 字段 :: current: default
+[PASS] T1.3 含 profiles 数组 :: profiles: 1 items
+[PASS] T1.4 current profile 可定位 :: name: default
+[PASS] T1.5 current profile 含 accessKeyId :: has accessKeyId
+[PASS] T1.6 current profile 含 secretAccessKey :: has secretAccessKey
+[PASS] T1.7 current profile 含 region :: region: cn-north-4
+[PASS] T2.1 源码含 profile 解析逻辑 :: profile parsing logic found in source
+auth_switch persist response: {
+  "status": "ok",
+  "scope": "persist",
+  "backedUp": true,
+  "obs": {
+    "configured": true
+  },
+  "hcloud": {
+    "ok": true,
+    "error": ""
+  },
+  "note": "S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority."
+}
+[PASS] T3.1 persist 返回 ok :: status=ok
+[PASS] T3.2 更新后仍含 current :: current: default
+[PASS] T3.3 更新后 profiles 非空 :: profiles: 1
+
+=== 汇总 ===
+Total: 11, PASS: 11, FAIL: 0
+Overall: PASS
+
+=== RESULT ===
+{"testCase":"D2-10","result":"PASS","checks":[{"label":"T1.1 hcloud config.json 存在","pass":true,"detail":"path: C:\\Users\\Administrator\\.hcloud\\config.json"},{"label":"T1.2 含 current 字段","pass":true,"detail":"current: default"},{"label":"T1.3 含 profiles 数组","pass":true,"detail":"profiles: 1 items"},{"label":"T1.4 current profile 可定位","pass":true,"detail":"name: default"},{"label":"T1.5 current profile 含 accessKeyId","pass":true,"detail":"has accessKeyId"},{"label":"T1.6 current profile 含 secretAccessKey","pass":true,"detail":"has secretAccessKey"},{"label":"T1.7 current profile 含 region","pass":true,"detail":"region: cn-north-4"},{"label":"T2.1 源码含 profile 解析逻辑","pass":true,"detail":"profile parsing logic found in source"},{"label":"T3.1 persist 返回 ok","pass":true,"detail":"status=ok"},{"label":"T3.2 更新后仍含 current","pass":true,"detail":"current: default"},{"label":"T3.3 更新后 profiles 非空","pass":true,"detail":"profiles: 1"}],"timestamp":"2026-09-21T02:07:22.820Z"}

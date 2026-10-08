@@ -1,0 +1,54 @@
+=== D10-2: Documentation Retrieval Accuracy ===
+
+Method: invoke_tool huaweicloud-devkit__huaweicloud_search_docs
+Arguments: { query: "ECS create server" }
+
+Raw Response (formatted):
+{
+  "ok": true,
+  "query": "ecs create server",
+  "topic": "all",
+  "count": 27,
+  "results": [
+    { "source": "skills/huawei-ecs/SKILL.md", "name": "huawei-ecs", "snippet": "'Use when creating, configuring, managing, or troubleshooting ECS instances on Huawei Cloud. Covers instance creation (hcloud ECS CreateServers), flavor selection, image management, security groups, E...", "relevance": 14 },
+    { "source": "skills/huawei-iac/SKILL.md", "name": "huawei-iac", "snippet": "'Use whenever the user wants to DEPLOY, host, or purchase anything on Huawei Cloud that creates billable resources: application deployments...", "relevance": 9 },
+    { "source": "skills/huawei-functiongraph/SKILL.md", "name": "huawei-functiongraph", "snippet": "'Use when creating, deploying, or managing serverless functions on FunctionGraph...", "relevance": 6 },
+    { "source": "skills/huawei-getting-started/SKILL.md", "name": "huawei-getting-started", "snippet": "'Use when starting fresh with Huawei Cloud or KooCLI...", "relevance": 6 },
+    { "source": "skills/huawei-sandbox/SKILL.md", "name": "huawei-sandbox", "snippet": "'Use when creating, connecting, or managing Huawei Cloud Sandbox instances...", "relevance": 6 },
+    { "source": "skills/huawei-cce/SKILL.md", "name": "huawei-cce", "snippet": "'Use when creating or managing CCE Kubernetes clusters...", "relevance": 5 },
+    { "source": "skills/huawei-obs/SKILL.md", "name": "huawei-obs", "snippet": "'Use when creating, configuring, or managing OBS buckets and objects...", "relevance": 5 },
+    { "source": "skills/huawei-rds/SKILL.md", "name": "huawei-rds", "snippet": "'Use when creating, configuring, managing, or troubleshooting RDS instances...", "relevance": 5 },
+    { "source": "skills/huawei-billing/SKILL.md", "name": "huawei-billing", "snippet": "'Use when querying bills, costs, resource usage...", "relevance": 4 },
+    { "source": "skills/huawei-cbr/SKILL.md", "name": "huawei-cbr", "snippet": "'Use when creating or managing Cloud Backup and Recovery (CBR)...", "relevance": 3 }
+  ]
+}
+
+Response Analysis:
+  Total results: 27
+  Top 10 returned with relevance scores
+
+  Rank 1: huawei-ecs (relevance=14)
+    Source: skills/huawei-ecs/SKILL.md
+    Snippet: 'Use when creating, configuring, managing, or troubleshooting ECS instances'
+    Contains: hcloud ECS CreateServers, flavor selection, image management
+    RELEVANT: YES - Directly covers ECS server creation
+
+  Rank 2: huawei-iac (relevance=9)
+    Source: skills/huawei-iac/SKILL.md
+    Snippet: 'DEPLOY, host, or purchase anything on Huawei Cloud that creates billable resources'
+    RELEVANT: YES - Infrastructure deployment includes ECS
+
+  Rank 3-10: Other services with lower relevance
+    All have meaningful snippets describing their scope
+
+Relevance check:
+  - Top result (huawei-ecs) directly matches 'ECS create server'
+  - Snippet mentions 'hcloud ECS CreateServers' - exact operation
+  - Relevance score descending: 14, 9, 6, 6, 6, 5, 5, 5, 4, 3
+  - Results include source path, name, snippet, and relevance score
+
+=== SUMMARY ===
+Top result is huawei-ecs skill with highest relevance (14)
+Snippet directly references ECS CreateServers operation
+Results are relevant and properly ranked
+RESULT: PASS - Relevant documentation returned

@@ -1,0 +1,106 @@
+{
+  "status": "PASS",
+  "caseId": "D4-8",
+  "why": "All 14 credential read commands correctly denied by classifyTextCommand.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "command": "cat ~/.hcloud/config.json",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+      "pass": true
+    },
+    {
+      "command": "cat ~/.huaweicloud/credentials.json",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+      "pass": true
+    },
+    {
+      "command": "type C:\\Users\\Administrator\\.hcloud\\config.json",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+      "pass": true
+    },
+    {
+      "command": "cat /home/user/.huaweicloud/credentials",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+      "pass": true
+    },
+    {
+      "command": "env | grep HUAWEICLOUD",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Dumping cloud credential environment variables is blocked.",
+      "pass": true
+    },
+    {
+      "command": "printenv HW_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Dumping cloud credential environment variables is blocked.",
+      "pass": true
+    },
+    {
+      "command": "printenv HUAWEICLOUD_SECRET_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Dumping cloud credential environment variables is blocked.",
+      "pass": true
+    },
+    {
+      "command": "echo $HW_SECRET_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Printing cloud credential environment variables is blocked.",
+      "pass": true
+    },
+    {
+      "command": "echo $HUAWEICLOUD_SECRET_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Printing cloud credential environment variables is blocked.",
+      "pass": true
+    },
+    {
+      "command": "bash -c \"cat ~/.hcloud/config.json\"",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+      "pass": true
+    },
+    {
+      "command": "hcloud configure show",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Direct hcloud configure inspection may expose profile credentials. Use the redacted toolkit tools instead.",
+      "pass": true
+    },
+    {
+      "command": "hcloud configure get",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Direct hcloud configure inspection may expose profile credentials. Use the redacted toolkit tools instead.",
+      "pass": true
+    },
+    {
+      "command": "hcloud configure list",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Direct hcloud configure inspection may expose profile credentials. Use the redacted toolkit tools instead.",
+      "pass": true
+    },
+    {
+      "command": "hcloud configure export",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Direct hcloud configure inspection may expose profile credentials. Use the redacted toolkit tools instead.",
+      "pass": true
+    }
+  ]
+}

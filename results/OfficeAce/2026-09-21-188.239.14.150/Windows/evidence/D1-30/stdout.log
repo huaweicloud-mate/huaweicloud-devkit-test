@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "why": "semverCompare/semverParse全部测试通过：大小关系、预发布、相等、无效串",
+  "executedAt": "20260921012653",
+  "tests": [
+    {
+      "name": "1.1.2 > 1.1.1",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "1.1.0 > 1.1.0-next.9",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "1.1.2 == 1.1.2",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "1.1.1 < 1.1.2",
+      "expected": -1,
+      "actual": -1,
+      "pass": true
+    },
+    {
+      "name": "invalid vs 1.0.0 (lexical)",
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "parse 1.2.3",
+      "actual": "{\"major\":1,\"minor\":2,\"patch\":3,\"pre\":null,\"raw\":\"1.2.3\"}",
+      "pass": true
+    },
+    {
+      "name": "parse 1.2.3-beta.1",
+      "actual": "{\"major\":1,\"minor\":2,\"patch\":3,\"pre\":[\"beta\",\"1\"],\"raw\":\"1.2.3-beta.1\"}",
+      "pass": true
+    },
+    {
+      "name": "parse invalid",
+      "actual": "null",
+      "pass": true
+    }
+  ]
+}

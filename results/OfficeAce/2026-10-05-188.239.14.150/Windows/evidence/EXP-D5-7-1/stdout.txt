@@ -1,0 +1,14 @@
+time=2026-10-03T21:40:11.004Z
+case=EXP-D5-7-1
+type=D5客户端矩阵
+object=OfficeAce
+source=D5-7
+result=PASS
+--- fixture 内部断言 ---
+PASS	EXP-D5-7-1-client-host	OfficeAce 客户端宿主检测	actual={"present":true,"installDir":"C:\\Users\\Administrator\\AppData\\Local\\Programs\\OfficeAce"}	expected={"present":true}	找到 OfficeAce 安装: C:\Users\Administrator\AppData\Local\Programs\OfficeAce
+PASS	EXP-D5-7-1-system-connector	system-mcp-connectors.json 注册 huaweicloud-devkit (enabled=true, transport=stdio)	actual={"registered":true,"key":"huaweicloud-devkit","enabled":true,"transport":"stdio"}	expected={"registered":true,"enabled":true,"transport":"stdio"}
+PASS	EXP-D5-7-1-physical-install	物理安装标记 .installed 存在	actual={"installed":true,"markerTime":"2026-09-30T21:32:02.914Z"}	expected={"installed":true}
+PASS	EXP-D5-7-1-manifest-files	插件清单文件存在（openclaw.plugin.json / mcp.json）	actual={"openclawJson":true,"mcpJson":true}	expected={"openclawJson":true,"mcpJson":true}
+PASS	EXP-D5-7-1-plugin-format	插件 manifest family=bundle-plugin + name=huaweicloud-devkit	actual={"family":"bundle-plugin","name":"huaweicloud-devkit","version":"1.1.8-next.1"}	expected={"family":"bundle-plugin","name":"huaweicloud-devkit"}
+PASS	EXP-D5-7-1-mcp-server-registered	MCP server 注册（huaweicloud-devkit）	actual={"registered":true,"command":"npx"}	expected={"registered":true}
+PASS	EXP-D5-7-1-discovery-path	OfficeAce 发现1发现路径（system-mcp-connectors.json 或 .mcp.json）	actual={"systemConnectors":true,"mcpJsonMerge":false}	expected={"systemConnectors":true}	通过 system-mcp-connectors.json 发现（权威路径）

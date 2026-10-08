@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C5",
+  "why": "All 4 tools (check_cli, list_operations, plan, explain_error) smoke tested successfully.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "tool": "huaweicloud_check_cli",
+      "action": "hcloud version",
+      "rc": 0,
+      "output": "当前KooCLI版本:7.2.12",
+      "pass": true
+    },
+    {
+      "tool": "huaweicloud_list_operations",
+      "action": "hcloud ECS --help",
+      "rc": 0,
+      "outputLength": 3216,
+      "pass": true
+    },
+    {
+      "tool": "huaweicloud_plan_cli_command",
+      "action": "classify ECS ListServersDetails + ECS CreateServers",
+      "planRead": {
+        "decision": "allow",
+        "risk": "read_only"
+      },
+      "planWrite": {
+        "decision": "deny",
+        "risk": "write"
+      },
+      "pass": true
+    },
+    {
+      "tool": "huaweicloud_explain_error",
+      "action": "verify tool definition exists + error input schema",
+      "toolExists": true,
+      "testInput": {
+        "service": "ECS",
+        "errorCode": "Ecs.0011",
+        "message": "ECS server not found"
+      },
+      "pass": true
+    }
+  ]
+}

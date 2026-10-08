@@ -1,0 +1,33 @@
+{
+ "status": "FAIL",
+ "caseId": "D2-4",
+ "total": 3,
+ "passed": 2,
+ "failed": 1,
+ "source": "grouped:d2-auth",
+ "executedAt": "20260926051622",
+ "why": "redact-json: JSON creds NOT redacted (defect)",
+ "assertions": [
+  {
+   "name": "redact-json",
+   "pass": false,
+   "actual": "{\"ak\":\"AKIDTEST12345678\",\"sk\":\"SKTEST1234567890abcdef1234\",\"",
+   "expected": "redacted",
+   "failMsg": "JSON creds NOT redacted (defect)"
+  },
+  {
+   "name": "creds-readable",
+   "pass": true,
+   "actual": "present",
+   "expected": "present",
+   "failMsg": "credentials not readable"
+  },
+  {
+   "name": "profile-mcp",
+   "pass": true,
+   "actual": "ok",
+   "expected": "ok",
+   "failMsg": "profile redacted FAIL (MCP)"
+  }
+ ]
+}

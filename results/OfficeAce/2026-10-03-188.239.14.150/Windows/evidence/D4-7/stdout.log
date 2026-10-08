@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "caseId": "D4-7",
+  "why": "All 8 secret operations correctly denied by classifyHcloudArgs.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "command": "hcloud DEW ShowSecret",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "pass": true
+    },
+    {
+      "command": "hcloud DEW ShowSecretVersion",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "pass": true
+    },
+    {
+      "command": "hcloud DEW DownloadSecret",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "pass": true
+    },
+    {
+      "command": "hcloud DEW GetSecretValue",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "pass": true
+    },
+    {
+      "command": "hcloud CSMS ShowSecret",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "pass": true
+    },
+    {
+      "command": "hcloud CSMS ShowSecretVersion",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+      "pass": true
+    },
+    {
+      "command": "hcloud DEW CreateSecret --secret_string my-secret-value",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "The command appears to retrieve a secret value. Use a runtime secret reference pattern instead.",
+      "pass": true
+    },
+    {
+      "command": "hcloud DEW UpdateSecret --secret_binary base64data",
+      "decision": "deny",
+      "risk": "secret",
+      "reason": "The command appears to retrieve a secret value. Use a runtime secret reference pattern instead.",
+      "pass": true
+    }
+  ]
+}

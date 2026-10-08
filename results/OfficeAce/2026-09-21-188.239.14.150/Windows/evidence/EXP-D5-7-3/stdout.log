@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "why": "tools/list枚举通过: 15/15 checks, 40 tools全量可达, schema完整",
+  "executedAt": "20260921121150",
+  "testCase": "EXP-D5-7-3",
+  "designCaseId": "D5-3",
+  "toolCount": 40,
+  "checks": [
+    {"label": "T1.1 .mcp.json 存在", "pass": true, "detail": "found"},
+    {"label": "T1.2 .mcp.json 有效JSON", "pass": true, "detail": "parsed OK"},
+    {"label": "T1.3 .mcp.json 含 mcpServers", "pass": true, "detail": "servers: office-claw-collab, office-claw-memory"},
+    {"label": "T2.1 MCP server 脚本存在", "pass": true, "detail": "mcp-server.mjs found"},
+    {"label": "T3.1 MCP server 可启动", "pass": true, "detail": "started OK"},
+    {"label": "T3.2 MCP server 响应 tools/list", "pass": true, "detail": "40 tools"},
+    {"label": "T4.huaweicloud_auth_init 存在", "pass": true, "detail": "found in 40 tools"},
+    {"label": "T4.huaweicloud_auth_status 存在", "pass": true, "detail": "found in 40 tools"},
+    {"label": "T4.huaweicloud_show_profile_redacted 存在", "pass": true, "detail": "found in 40 tools"},
+    {"label": "T4.4 工具数量 >= 10", "pass": true, "detail": "40 tools"},
+    {"label": "T4.5 所有工具有 inputSchema", "pass": true, "detail": "40/40 have schema"},
+    {"label": "T4.6 所有工具有 description", "pass": true, "detail": "all have description"},
+    {"label": "T5.1 status 含 OfficeAce MCP config", "pass": true, "detail": "MCP config line found"},
+    {"label": "T6.1 mcp-connectors.sqlite 存在", "pass": true, "detail": "MCP connectors DB"},
+    {"label": "T7.1 builtin-mcp-connectors.json 有效", "pass": true, "detail": "24 connectors"}
+  ]
+}

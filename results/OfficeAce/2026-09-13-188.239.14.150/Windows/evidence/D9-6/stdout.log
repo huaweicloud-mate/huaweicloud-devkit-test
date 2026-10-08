@@ -1,0 +1,18 @@
+=== D9-6: 并发请求处理 ===
+
+Test 1: Send 3 requests simultaneously → all should get responses with correct IDs
+  [PASS] 3 concurrent requests all responded: Results: r1=true, r2=true, r3=true
+  [PASS] Response IDs are correct: Expected IDs: 2,3,4, Actual IDs: 2,3,4
+
+Test 2: Send 10 concurrent requests (mix of tools/list and tools/call)
+  [PASS] 10 concurrent requests all responded: 10/10 responded
+  [PASS] 10 concurrent request IDs correct: Expected: 5,6,7,8,9,10,11,12,13,14, Actual: 5,6,7,8,9,10,11,12,13,14
+
+=== Summary ===
+  PASS - 3 concurrent requests all responded: Results: r1=true, r2=true, r3=true
+  PASS - Response IDs are correct: Expected IDs: 2,3,4, Actual IDs: 2,3,4
+  PASS - 10 concurrent requests all responded: 10/10 responded
+  PASS - 10 concurrent request IDs correct: Expected: 5,6,7,8,9,10,11,12,13,14, Actual: 5,6,7,8,9,10,11,12,13,14
+
+Overall: PASS
+

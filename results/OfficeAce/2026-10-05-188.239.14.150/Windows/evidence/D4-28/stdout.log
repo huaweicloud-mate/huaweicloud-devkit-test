@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "caseId": "D4-28",
+  "why": "Output redaction correctly strips credentials from JSON, strings, nested structures",
+  "executedAt": "20261001103000",
+  "checks": [
+    {
+      "name": "json-ak-redacted",
+      "pass": true,
+      "detail": "ak=<redacted>"
+    },
+    {
+      "name": "json-sk-redacted",
+      "pass": true,
+      "detail": "sk=<redacted>"
+    },
+    {
+      "name": "json-region-preserved",
+      "pass": true,
+      "detail": "region=cn-north-4"
+    },
+    {
+      "name": "str-ak-redacted",
+      "pass": true,
+      "detail": "contains AK: false"
+    },
+    {
+      "name": "str-sk-redacted",
+      "pass": true,
+      "detail": "contains SK: false"
+    },
+    {
+      "name": "str-has-redacted-marker",
+      "pass": true,
+      "detail": "has marker: true"
+    },
+    {
+      "name": "nested-ak-redacted",
+      "pass": true,
+      "detail": "ak=<redacted>"
+    },
+    {
+      "name": "nested-sk-redacted",
+      "pass": true,
+      "detail": "sk=<redacted>"
+    },
+    {
+      "name": "nested-name-preserved",
+      "pass": true,
+      "detail": "name=server1"
+    },
+    {
+      "name": "arr-no-ak",
+      "pass": true,
+      "detail": "[\"AK=<redacted>\",\"SK=<redacted>\",\"region=cn-north-4\"]"
+    },
+    {
+      "name": "arr-no-sk",
+      "pass": true,
+      "detail": "[\"AK=<redacted>\",\"SK=<redacted>\",\"region=cn-north-4\"]"
+    },
+    {
+      "name": "plain-preserved",
+      "pass": true,
+      "detail": "non-cred data preserved"
+    }
+  ]
+}

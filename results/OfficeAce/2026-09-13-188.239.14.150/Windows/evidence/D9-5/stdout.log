@@ -1,0 +1,22 @@
+=== D9-5: stdio 传输健壮性 ===
+
+Test 1: Send 10 requests rapidly → all should get responses
+  [PASS] All rapid requests get responses: 10/10 responded, tool counts: 39,39,39,39,39,39,39,39,39,39
+
+Test 2: Send large request (big params) → should handle without crash
+  [PASS] Large request handled without crash: Server processed 100KB params, response content length: 600591
+
+Test 3: Send request with extra whitespace/newlines → should still parse
+  [PASS] Extra whitespace handled: Server parsed request with leading/trailing whitespace, got 39 tools
+
+Test 3b: Send with empty lines between requests
+  [PASS] Empty lines between requests handled: Request 1: 39 tools, Request 2: 39 tools
+
+=== Summary ===
+  PASS - All rapid requests get responses: 10/10 responded, tool counts: 39,39,39,39,39,39,39,39,39,39
+  PASS - Large request handled without crash: Server processed 100KB params, response content length: 600591
+  PASS - Extra whitespace handled: Server parsed request with leading/trailing whitespace, got 39 tools
+  PASS - Empty lines between requests handled: Request 1: 39 tools, Request 2: 39 tools
+
+Overall: PASS
+

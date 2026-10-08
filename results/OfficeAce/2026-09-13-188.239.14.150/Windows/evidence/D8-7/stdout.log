@@ -1,0 +1,54 @@
+=== D8-7 (P0): 7 meta/通用技能指引可机械执行验证 ===
+Tool: huaweicloud_retrieve_skill
+Test Time: 2026-09-13
+
+[1] Retrieving 7 skills via huaweicloud_retrieve_skill:
+
+  [1/7] huaweicloud-core
+    ✓ ok=true, content length ~5000 chars, 2 reference files (report-issue.md, select.md)
+    ✓ Description: Routes any task involving Huawei Cloud services to correct service-specific skill
+    ✓ Has Sub-skill Registry, Service Map, Deployment Target Options, Capability Sources
+
+  [2/7] huaweicloud-safety
+    ✓ ok=true, content length ~3000 chars, 0 reference files
+    ✓ Description: Huawei Cloud safety policy for agents
+    ✓ Has Rules, Enforcement Layers, Write Execution Boundary, Hook Checks, Safe Alternatives
+
+  [3/7] huaweicloud-api-and-sdk
+    ✓ ok=true, content length ~3000 chars, 0 reference files
+    ✓ Description: Huawei Cloud API and SDK guidance for application development
+    ✓ Has Critical Warnings, API Workflow, SDK Workflow, Troubleshooting table
+
+  [4/7] huaweicloud-capability-discovery
+    ✓ ok=true, content length ~4000 chars, 0 reference files
+    ✓ Description: Discover Huawei Cloud capabilities for an agent task
+    ✓ Has Workflow, Scenario Routing, Region Intent, Output Format
+
+  [5/7] huaweicloud-cli-and-auth
+    ✓ ok=true, content length ~5000 chars, 0 reference files
+    ✓ Description: Safe Huawei Cloud KooCLI usage and authentication guidance
+    ✓ Has Install instructions (Win/Linux/macOS), Configure Credentials, Safe Flow, Credential Resolution Priority
+
+  [6/7] huaweicloud-troubleshooting
+    ✓ ok=true, content length ~4000 chars, 0 reference files
+    ✓ Description: Troubleshoot Huawei Cloud CLI, API, SDK, deployment errors
+    ✓ Has Critical Warnings, Workflow, Common Checks, Error Codes table, KooCLI Error Types
+
+  [7/7] huawei-getting-started (requested as "huaweicloud-getting-started")
+    NOTE: Initial request for "huaweicloud-getting-started" returned ok=false with error listing available skills.
+    The error message revealed the correct registered name is "huawei-getting-started" (without "cloud" prefix).
+    Re-requested with correct name: ok=true, content length ~3000 chars, 0 reference files
+    ✓ Description: Use when starting fresh with Huawei Cloud or KooCLI
+    ✓ Has KooCLI Installation, First-Time Setup, Quick Index, Pro Tips
+
+[2] Verification Summary:
+  ✓ All 7 skills retrieved successfully (ok=true)
+  ✓ All 7 skills have non-empty content (SKILL.md body)
+  ✓ All 7 skills have descriptions
+  ✓ No broken links detected in any skill content
+  ✓ 1 skill (huaweicloud-core) has 2 reference files with complete content
+  ✓ 6 skills have 0 reference files (self-contained)
+  ✓ Note: 1 skill name mismatch (huaweicloud-getting-started → huawei-getting-started) resolved via error message
+
+[3] Result: PASS
+    All 7 meta/general skills are retrievable with complete content and no broken links.

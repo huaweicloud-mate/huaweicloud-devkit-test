@@ -1,0 +1,55 @@
+PASS  EXP-D5-7-3-client-host  OfficeAce 客户端宿主检测 => {"present":true} (期望 {"present":true})
+    OfficeAce 宿主存在 → 客户端通道枚举可执行
+PASS  EXP-D5-7-3-server-exists  MCP server 文件存在 => {"path":"C:\\Users\\Administrator\\devkit-test\\OfficeAce\\hdk\\plugins\\huaweicloud-core\\src\\mcp-server.mjs","exists":true} (期望 {"exists":true})
+PASS  EXP-D5-7-3-init  MCP initialize 握手成功 => {"initOk":true} (期望 {"initOk":true})
+PASS  EXP-D5-7-3-list-ok  tools/list 响应有效 => {"listOk":true} (期望 {"listOk":true})
+PASS  EXP-D5-7-3-enum-count  tools/list 枚举工具数 >= 40 => {"count":41} (期望 {"count":">=40"})
+PASS  EXP-D5-7-3-schema-complete  inputSchema 完整（type=object 全覆盖） => {"allSchema":true,"count":41} (期望 {"allSchema":true})
+PASS  EXP-D5-7-3-prefix-huaweicloud  工具名统一 huaweicloud_ 前缀 => {"prefixOk":true,"prefixed":41,"total":41} (期望 {"prefixOk":true})
+PASS  EXP-D5-7-3-source-diff  与 tools.mjs TOOL_DEFINITIONS 注册源 diff 一致 => {"miss":[],"extra":[],"sourceCount":41,"enumCount":41} (期望 {"miss":[],"extra":[]})
+
+--- 枚举工具列表 ---
+  huaweicloud_check_cli  schema=object
+  huaweicloud_plan_cli_command  schema=object
+  huaweicloud_run_readonly_command  schema=object
+  huaweicloud_list_operations  schema=object
+  huaweicloud_run_approved_command  schema=object
+  huaweicloud_show_profile_redacted  schema=object
+  huaweicloud_hook_check_command  schema=object
+  huaweicloud_hook_check_artifacts  schema=object
+  huaweicloud_hook_check_deploy_plan  schema=object
+  huaweicloud_service_catalog  schema=object
+  huaweicloud_explain_error  schema=object
+  huaweicloud_search_docs  schema=object
+  huaweicloud_retrieve_skill  schema=object
+  huaweicloud_list_regions  schema=object
+  huaweicloud_get_regional_availability  schema=object
+  huaweicloud_search_marketplace  schema=object
+  huaweicloud_get_service_icon  schema=object
+  huaweicloud_detect_framework  schema=object
+  huaweicloud_setup_obs_config  schema=object
+  huaweicloud_auth_status  schema=object
+  huaweicloud_auth_sync  schema=object
+  huaweicloud_auth_init  schema=object
+  huaweicloud_auth_switch  schema=object
+  huaweicloud_auth_confirm  schema=object
+  huaweicloud_sandbox_exec_with_session  schema=object
+  huaweicloud_sandbox_exec_one_shot  schema=object
+  huaweicloud_sandbox_close_session  schema=object
+  huaweicloud_sandbox_upload_file  schema=object
+  huaweicloud_sandbox_upload_project  schema=object
+  huaweicloud_sandbox_deploy_nginx  schema=object
+  huaweicloud_sandbox_deploy_check  schema=object
+  huaweicloud_sandbox_expose_tunnel  schema=object
+  huaweicloud_sandbox_check_user  schema=object
+  huaweicloud_sandbox_sign_agreement  schema=object
+  huaweicloud_sandbox_connect  schema=object
+  huaweicloud_sandbox_credentials  schema=object
+  huaweicloud_voucher_status  schema=object
+  huaweicloud_voucher_claim  schema=object
+  huaweicloud_check_update  schema=object
+  huaweicloud_upgrade  schema=object
+  huaweicloud_obs_set_website_config  schema=object
+
+=== EXP-D5-7-3 OfficeAce 客户端 tools/list 枚举 harness ===  pass=8 fail=0
+RESULT: PASS

@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "caseId": "D3-S8",
+  "why": "Troubleshooting scenario complete: error injected (rc=0), explain_error tool exists, troubleshooting skill loaded, error output redacted, error classifiable, failed command still correctly classified.",
+  "executedAt": "20260930103000",
+  "details": [
+    {
+      "step": "inject_error",
+      "command": "hcloud ECS ShowServer (missing required param)",
+      "rc": 0,
+      "outputLength": 75,
+      "outputPreview": "[USE_ERROR]缺少必填参数:server_id\n\n运行`hcloud ECS ShowServer --help`获取有关此API的详细信息\n",
+      "hasError": true,
+      "pass": true
+    },
+    {
+      "step": "explain_error_tool_exists",
+      "pass": true
+    },
+    {
+      "step": "troubleshoot_skill_exists",
+      "skillSize": 10054,
+      "pass": true
+    },
+    {
+      "step": "error_output_redacted",
+      "noSecrets": true,
+      "pass": true
+    },
+    {
+      "step": "error_classifiable",
+      "patterns": {
+        "hasUseError": true,
+        "hasMissingParam": true,
+        "hasErrorKeyword": true
+      },
+      "pass": true
+    },
+    {
+      "step": "failed_command_still_classified",
+      "command": "hcloud ECS ShowServer",
+      "decision": "allow",
+      "risk": "read_only",
+      "pass": true
+    }
+  ]
+}
