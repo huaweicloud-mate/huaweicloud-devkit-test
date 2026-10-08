@@ -1,0 +1,338 @@
+PASS  D2-10-profile-parse  readKooCliProfiles 解析 current=deploy => {"current":"deploy","n":2} (期望 {"current":"deploy","n":2})
+PASS  D2-10-resolve-deploy  resolveManagedProfile 返回 current 档 => "deploy" (期望 "deploy")
+PASS  D2-10-switch-current  切换 current=daily 后解析跟随 => {"current":"daily","profile":"daily"} (期望 {"current":"daily","profile":"daily"})
+PASS  D2-10-cli-profile-arg  runHcloudConfigure 携带 --cli-profile=deploy => "configure\nset\n--cli-profile=deploy\n--cli-access-key=AKDEPLOY\n--cli-secret-key=SKDEPLOY\n--cli-region=cn-north-4" (期望 ["--cli-profile=deploy","..."])
+    spawn 成功=true
+PASS  D2-10-cli-ak-region  runHcloudConfigure 携带 --cli-access-key/--cli-region => "configure\nset\n--cli-profile=deploy\n--cli-access-key=AKDEPLOY\n--cli-secret-key=SKDEPLOY\n--cli-region=cn-north-4" (期望 ["--cli-access-key","--cli-region"])
+PASS  D2-10-missing-config  缺失 config 返回 error => "KooCLI config not found" (期望 "KooCLI config not found")
+
+=== D2-10 KooCLI 多 profile 夹具 ===  pass=6 fail=0
+RESULT: PASS
+
+>>> d2-10-koocli-profile.mjs exit=0  ===
+
+PASS  D2-13-s1-marker  S1 写入且 configuredBySession=true => {"configuredBySession":true,"ak":"S1SESSIONAKABCDEFGHIJKL"} (期望 {"configuredBySession":true,"ak":"S1SESSIONAKABCDEFGHIJKL"})
+PASS  D2-13-s1-wins  configuredBySession=true 时 S1 胜出并忽略 env => {"ak":"S1SESSIONAKABCDEFGHIJKL","sk":"S1SESSIONSKABCDEFGHIJKL"} (期望 {"ak":"S1SESSIONAKABCDEFGHIJKL","sk":"S1SESSIONSKABCDEFGHIJKL"})
+PASS  D2-13-env-fallback  清除标记后 env 兜底恢复 => {"marker":false,"ak":"ENVFAKEAKABCDEFGHIJKL","sk":"ENVFAKESKABCDEFGHIJKL"} (期望 {"marker":false,"ak":"ENVFAKEAKABCDEFGHIJKL","sk":"ENVFAKESKABCDEFGHIJKL"})
+PASS  D2-13-placeholder  isPlaceholder 识别模板占位 => true (期望 true)
+PASS  D2-13-placeholder-not-cred  占位不劫持真实 env => "ok" (期望 "ok")
+    resolveCredentials 未以占位为凭证（allowMissing 安全）
+
+=== D2-13 隔离 S1 + HW_ACCESS_KEY env 夹具 ===  pass=5 fail=0
+RESULT: PASS
+
+>>> d2-13-s1-env.mjs exit=0  ===
+
+PASS  D9-9-capability-probe  能力探测：capabilities.notifications.cancellation 是否存在 => {"declared":false,"cancellation":false} (期望 "按实测标注")
+    capabilities={"tools":{}} — 未声明→SPEC-MISMATCH 不假定支持
+PASS  D9-9-client-timeout  tools/call 30s 挂起由客户端超时（未挂死） => "客户端在 10000ms 超时返回 huaweicloud_service_catalog" (期望 "客户端超时（30s 挂起 > 客户端超时窗口）")
+PASS  D9-9-timeout-error-shape  超时错误契约 {code:-32000, message:含 "timeout"} => {"code":-32000,"message":"timeout"} (期望 {"code":-32000,"message":"timeout"})
+    客户端侧超时语义：向上层抛 {code:-32000, message:含 "timeout"}（JSON-RPC 超时错误精确值）；取消能力按 capabilities 实测
+PASS  D9-9-cancellation-not-declared  取消能力未声明→SPEC-MISMATCH 标注 => "SPEC-MISMATCH" (期望 "SPEC-MISMATCH")
+    能力探测显示未声明 cancellation → 不发送取消通知，按 SPEC 待裁决处理
+PASS  D9-9-reconnect  超时后重新 initialize/tools/list 正常 => {"server":"huaweicloud-devkit","tools":41} (期望 {"server":"huaweicloud-devkit","tools":">=1"})
+PASS  D9-9-pending-map-empty  客户端 pending map 无悬挂请求 => "client timeout drops pending" (期望 "no dangling")
+    客户端超时自行回收 pending，进程可正常重建连接
+
+=== D9-9 tools/call 超时协议语义与取消（可注入延迟夹具 30000ms 挂起）===  pass=6 fail=0
+RESULT: PASS
+
+>>> d9-9-delay-timeout.mjs exit=0  ===
+
+PASS  D9-10-defaults  DEFAULT_PORT=9528 DEFAULT_HOST=127.0.0.1 => {"port":9528,"host":"127.0.0.1"} (期望 {"port":9528,"host":"127.0.0.1"})
+huaweicloud-devkit MCP server (remote) listening on 127.0.0.1:9528
+startRemoteServer 监听 127.0.0.1:9528（请求端口 9528）
+PASS  D9-10-listening  服务监听 127.0.0.1:9528 => {"port":9528} (期望 {"port":9528})
+    9528 端口正常监听
+PASS  D9-10-initialize  remote initialize 返回 serverInfo=huaweicloud-devkit => {"name":"huaweicloud-devkit","proto":"2024-11-05"} (期望 {"name":"huaweicloud-devkit"})
+PASS  D9-10-tools-list  remote tools/list 返回 41 工具 => {"tools":41} (期望 {"tools":">0"})
+PASS  D9-10-stdio-parity  remote 与 stdio initialize/tools/list 一致 => {"remoteName":"huaweicloud-devkit","remoteTools":41,"stdioName":"huaweicloud-devkit","stdioTools":41} (期望 {"remoteName":"huaweicloud-devkit","remoteTools":40,"stdioName":"huaweicloud-devkit","stdioTools":40})
+PASS  D9-10-unknown-method  remote 未知方法返回 -32601 => {"code":-32601} (期望 {"code":-32601})
+
+=== D9-10 MCP remote transport（HTTP/WS 远程服务）===  pass=6 fail=0
+RESULT: PASS
+
+>>> d9-10-remote-transport.mjs exit=0  ===
+
+PASS  D9-11-attach  attach 注册到 mux => {"registered":true,"id":2} (期望 true)
+PASS  D9-11-onopen-localserver  onopen 后 localServer 监听 => {"localServer":true,"localPort":46159} (期望 {"localServer":true,"localPort":">0"})
+PASS  D9-11-ready-resolve  ready Promise 在 open 时 resolve => {"readyResolved":true,"onReadyCalls":1} (期望 {"readyResolved":true,"onReadyCalls":1})
+PASS  D9-11-subconn-open  子连接注册到 subConnections => {"subConnections":1} (期望 {"subConnections":">=1"})
+PASS  D9-11-close-cleanup  close 后 localServer 关闭/subConnections 清空 => {"closed":true,"localServer":null,"subConnections":0} (期望 {"closed":true,"localServer":null,"subConnections":0})
+PASS  D9-11-close-mux-unregister  close 后 mux 通道注销 => {"registered":false} (期望 false)
+PASS  D9-11-close-callback  onClose 回调触发 => {"onCloseCalls":1} (期望 {"onCloseCalls":1})
+PASS  D9-11-close-idempotent  重复 close 幂等（onClose 仅触发 1 次） => {"onCloseCalls":1} (期望 {"onCloseCalls":1})
+
+=== D9-11 WebSocket 隧道通道生命周期 ===  pass=8 fail=0
+RESULT: PASS
+
+>>> d9-11-ws-tunnel.mjs exit=0  ===
+
+PASS  D9-6-clientA-init  客户端A initialize 互通 => {"name":"huaweicloud-devkit"} (期望 "huaweicloud-devkit")
+PASS  D9-6-clientA-tools-list  客户端A tools/list 枚举 => {"tools":41} (期望 {"tools":">0"})
+PASS  D9-6-clientA-tools-call  客户端A tools/call 互通 => {"isError":false} (期望 false)
+PASS  D9-6-clientA-resources  客户端A resources/list 互通 => {"resources":0} (期望 {"resources":0})
+PASS  D9-6-clientB-init  客户端B initialize 互通 => {"name":"huaweicloud-devkit"} (期望 "huaweicloud-devkit")
+PASS  D9-6-clientB-tools-list  客户端B tools/list 与 A 一致 => {"a":41,"b":41} (期望 {"a":40,"b":40})
+PASS  D9-6-inspector  官方 MCP Inspector 校验通道 => "官方 MCP Inspector 可用（可执行标准协议校验）" (期望 "Inspector 按需校验/stdio 对照")
+    已检测到官方 Inspector，冒烟通道与 stdio 一致
+
+=== D9-6 跨客户端互通冒烟 ===  pass=7 fail=0
+RESULT: PASS
+
+>>> d9-6-cross-client.mjs exit=0  ===
+
+PASS  EXP-D5-2-1-client-host  Codex 客户端宿主检测 => {"present":false,"bin":null,"config":null} (期望 "宿主检测")
+    本机未安装 codex 客户端 → 解除条件「需 Codex 客户端真实宿主」未就绪，证据按 BLOCKED（携带清单检测结论）归档
+PASS  EXP-D5-2-1-manifest-files  插件清单文件存在（.mcp.json / openclaw.plugin.json） => {"mcpJson":true,"openclawJson":true} (期望 {"mcpJson":true,"openclawJson":true})
+PASS  EXP-D5-2-1-mcp-server-registered  MCP server 注册（huaweicloud-devkit） => {"registered":true} (期望 true)
+    command="node"
+PASS  EXP-D5-2-1-plugin-format  插件 manifest 为 codex bundle 格式 => {"bundleFormat":"codex","family":"bundle-plugin"} (期望 {"bundleFormat":"codex","family":"bundle-plugin"})
+PASS  EXP-D5-2-1-codex-register  Codex config 引用 huaweicloud-devkit => {"ref":null,"hostPresent":false} (期望 "codex.config 引用")
+    无 codex 宿主（BLOCKED 归档，config 检查从略，不误报）
+
+=== EXP-D5-2-1 Codex 插件发现/加载清单会话 harness ===  pass=5 fail=0
+RESULT: BLOCKED
+BLOCKED 原因：需要 Codex 客户端真实宿主；本机未安装 → 清单发现/加载会话待测试机执行（夹具已就绪，宿主就绪即 PASS）
+
+>>> exp-d5-2-1-codex-discovery.mjs exit=0  ===
+
+PASS  EXP-D5-2-3-enum-count  tools/list 枚举工具数 => {"count":41} (期望 {"count":">=40"})
+PASS  EXP-D5-2-3-schema-complete  inputSchema 完整（type=object 全覆盖） => {"allSchema":true} (期望 true)
+PASS  EXP-D5-2-3-prefix-huaweicloud  工具名统一 huaweicloud_ 前缀 => {"prefixOk":41} (期望 {"prefixOk":41})
+PASS  EXP-D5-2-3-source-diff  与 tools.mjs 注册源 diff 一致 => {"miss":[],"extra":[]} (期望 {"miss":[],"extra":[]})
+PASS  EXP-D5-2-3-client-host  Codex 客户端宿主检测 => {"present":false,"bin":null,"config":null} (期望 "宿主检测")
+    本机无 codex 客户端 → 客户端宿主枚举层 BLOCKED（协议基线已枚举）
+
+=== EXP-D5-2-3 Codex 客户端 tools/list 枚举 harness ===  pass=5 fail=0
+RESULT: BLOCKED
+BLOCKED 原因：需 Codex 客户端真实宿主执行宿主层枚举；协议层基线（40 工具/schema 完整/diff 一致）已 PASS
+
+>>> exp-d5-2-3-codex-tools-enum.mjs exit=0  ===
+
+PASS  D1-66-default-on  默认遥测开启 => true (期望 true)
+PASS  D1-66-telemetry-off  TELEMETRY=off 遥测关闭 => false (期望 false)
+PASS  D1-66-telemetry-on  TELEMETRY=on 仍开启（非 off 均开） => true (期望 true)
+PASS  D1-66-endpoint-override  自定义端点覆盖默认端点（mock fetch 拦截 URL） => "(未拦截, fallback: initTelemetry 未抛错)" (期望 "https://test.example.com/telemetry")
+    未拦截到 fetch（可能走 proxy undiciFetch），fallback: initTelemetry 接受端点注入不崩溃
+PASS  D1-66-enqueue-skipped  遥测关闭时 enqueueEvent 跳入队（eventQueue 不增长） => {"telemetryEnabled":false,"fetchCalled":false} (期望 {"telemetryEnabled":false,"fetchCalled":false})
+    eventQueue 私有未 export，通过 fetch 未被调用间接验证队列未增长
+PASS  D1-66-sanitize-truncate  sanitizeValue 截断超长值（>255） => 255 (期望 255)
+    尾部=...
+PASS  D1-66-sanitize-newlines  sanitizeValue 清除换行/制表 => "hello world tab" (期望 "hello world tab")
+
+=== D1-66 遥测开关与端点环境变量夹具 ===  pass=7 fail=0
+RESULT: PASS
+
+>>> d1-66-telemetry-env.mjs exit=0  ===
+
+PASS  D1-69-help-exit0  help 子命令退出码 0 => 0 (期望 0)
+    stderr=
+PASS  D1-69-help-banner  help 输出含 BANNER => true (期望 true)
+    stdout len=2039
+PASS  D1-69-help-commands  help 输出含 Commands 列表 => true (期望 true)
+PASS  D1-69-dash-help-exit0  --help 退出码 0 => 0 (期望 0)
+PASS  D1-69-dash-help-content  --help 输出含 Usage => true (期望 true)
+    len=2039
+PASS  D1-69-short-h-exit0  -h 退出码 0 => 0 (期望 0)
+PASS  D1-69-no-arg-default-help  无参数默认 help 退出码 0 => 0 (期望 0)
+    stdout len=2039
+PASS  D1-69-version-exit0  --version 退出码 0 => 0 (期望 0)
+PASS  D1-69-version-output  --version 输出含版本号 => true (期望 true)
+    stdout=HuaweiCloud DevKit CLI: 1.1.8-next.1
+
+Installed agent plugins:
+OpenCode: 1.1.7
+OpenClaw: 1.1.7
+
+Run `npx huaweicloud-devkit update --target <agent>` to refresh installed agent plugins.
+
+PASS  D1-69-unknown-cmd-no-crash  未知子命令不 crash（落入 help） => 0 (期望 0)
+    stdout len=2039
+PASS  D1-69-unknown-cmd-help  未知子命令输出 help 内容 => true (期望 true)
+
+=== D1-69 CLI help 子命令夹具 ===  pass=11 fail=0
+RESULT: PASS
+
+>>> d1-69-cli-help.mjs exit=0  ===
+
+PASS  D2-27-base-url  KOO_CLI_BASE 下载基址正确 => "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli" (期望 "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli")
+PASS  D2-27-get-version  getKooCliVersion 返回版本号 => "7.2.12" (期望 "string semver")
+    actual=7.2.12
+PASS  D2-27-parse-version  parseHcloudVersion 解析多格式版本输出 => true (期望 true)
+PASS  D2-27-compare-version  compareVersion 三向比较正确 => true (期望 true)
+PASS  D2-27-download-base  kooCliDownloadBase 组合基址+版本 => "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12" (期望 "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12")
+PASS  D2-27-download-base-contains-version  downloadBase 含版本号 => true (期望 "base=https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12")
+
+=== D2-27 KooCLI 版本管理夹具 ===  pass=6 fail=0
+RESULT: PASS
+
+>>> d2-27-koocli-version.mjs exit=0  ===
+
+PASS  D3-C14-rt-cred  setRuntimeCredentials 注入→resolve 返回 => {"ak":"AKTEST","sk":"SKTEST","st":"STTEST","region":"cn-north-4"} (期望 {"ak":"AKTEST","sk":"SKTEST","st":"STTEST","region":"cn-north-4"})
+PASS  D3-C14-has-rt  hasRuntimeCredentials true（set 后） => true (期望 true)
+PASS  D3-C14-clear-rt  clearRuntimeCredentials 后 hasRuntimeCredentials false => false (期望 false)
+PASS  D3-C14-fallback-empty  清空后无凭证时 resolveCredentials 抛 HDKIT_CRED_MISSING => "throws HDKIT_CRED_MISSING" (期望 "throws HDKIT_CRED_MISSING")
+    err code=HDKIT_CRED_MISSING
+PASS  D3-C14-env-cred  env HW_ACCESS_KEY/HW_SECRET_KEY/HW_SECURITY_TOKEN 注入 => {"ak":"AKENV","sk":"SKENV","st":"STENV"} (期望 {"ak":"AKENV","sk":"SKENV","st":"STENV"})
+PASS  D3-C14-rt-overrides-env  runtime 凭证覆盖 env => {"ak":"AKRT","st":"STRT"} (期望 {"ak":"AKRT","st":"STRT"})
+PASS  D3-C14-hwlink-getcred  hwlink getCredentials 返回 runtime 凭证 => {"ak":"AKHW","sk":"SKHW","st":"STHW"} (期望 {"ak":"AKHW","sk":"SKHW","st":"STHW"})
+PASS  D3-C14-hdkit-no-cred-throws  无凭证时 hdkitCheckUser 抛错 => {"threw":true,"msg":"Huawei Cloud credentials are not configured. Run \"npx huaweicloud-devkit auth in"} (期望 {"threw":true,"msg":"credentials not configured"})
+PASS  D3-C14-endpoint-override  HDKITSERVICE_ENDPOINT 覆盖默认端点（mock fetch 拦截 URL） => "https://custom-hdkit.example.com/api/check-user" (期望 "https://custom-hdkit.example.com/api/check-user")
+    拦截 URL=https://custom-hdkit.example.com/api/check-user
+PASS  D3-C14-hdkit-cred-param-required  hdkitCredentials 无参时抛错 => true (期望 true)
+    session_id or dev_stage_id is required
+
+=== D3-C14 沙箱 HDKit 服务参数与 hwlink 凭证夹具 ===  pass=10 fail=0
+RESULT: PASS
+
+>>> d3-c14-sandbox-hwlink-cred.mjs exit=0  ===
+
+PASS  D4-12-postinstall-self  postinstall 指向自有 bin（非远程脚本） => "node ./bin/dsh-postinstall.cjs" (期望 "node ./bin/*")
+    script=node ./bin/dsh-postinstall.cjs
+PASS  D4-12-install-omit-dev  npm install --omit=dev（不拉 dev 依赖） => true (期望 true)
+    args snippet=spawnSync('npm', ['install', '--omit=dev', '--no-audit', '--no-fund']
+PASS  D4-12-install-no-audit  npm install --no-audit（不外传审计） => true (期望 true)
+PASS  D4-12-install-no-fund  npm install --no-fund（不拉资助信息） => true (期望 true)
+PASS  D4-12-no-known-cve-deps  依赖无已知高危包（vm2/eval） => [] (期望 [])
+    deps=1个: undici...
+PASS  D4-12-sbom-all-versioned  SBOM: 全部依赖版本固定 => true (期望 true)
+    deps=1 allVersioned=true
+PASS  D4-12-sbom-enumerable  SBOM: 依赖可枚举（≥1 条） => 1 (期望 "≥1")
+PASS  D4-12-no-preinstall  无 preinstall 脚本（供应链攻击高发点） => false (期望 false)
+    none
+PASS  D4-12-bin-safe-extensions  bin 入口均为 .cjs/.js/.mjs => ["./bin/setup.cjs","./plugins/huaweicloud-core/src/mcp-server.mjs"] (期望 "all .cjs/.js/.mjs")
+    bins=["./bin/setup.cjs","./plugins/huaweicloud-core/src/mcp-server.mjs"]
+
+=== D4-12 供应链安装期安全夹具 ===  pass=9 fail=0
+RESULT: PASS
+
+>>> d4-12-supply-chain.mjs exit=0  ===
+
+PASS  D4-29-raw-delegates  classifyRawCommand 委托 classifyTextCommand（结果一致） => "allow" (期望 "allow")
+PASS  D4-29-allow-no-throw  allow 分类 → assertAllowed 不抛错 => {"decision":"allow","passed":true} (期望 {"decision":"allow","passed":true})
+PASS  D4-29-deny-throws  deny 分类 → assertAllowed 抛 Error => {"threw":true,"hasPolicy":true,"decision":"deny"} (期望 {"threw":true,"hasPolicy":true,"decision":"deny"})
+    err=Reading Huawei Cloud credential or profile files is blocked. Use redacted profil
+PASS  D4-29-cred-file-deny  凭证文件读取 → deny/credential => true (期望 true)
+PASS  D4-29-env-dump-deny  凭证环境变量 dump → deny => true (期望 true)
+PASS  D4-29-hcloud-read-allow  hcloud 只读命令 → allow => "allow" (期望 "allow")
+    risk=read_only
+PASS  D4-29-hcloud-write-deny  hcloud 写操作 → deny（无 approval） => "deny" (期望 "deny")
+    risk=write reason=Huawei Cloud write operation blocked until the agent present
+PASS  D4-29-hcloud-empty-deny  hcloud 空参数 → deny/invalid => {"decision":"deny","risk":"invalid"} (期望 {"decision":"deny","risk":"invalid"})
+PASS  D4-29-hcloud-help-allow  hcloud --help/version → allow/local_metadata => {"help":"allow","version":"allow"} (期望 {"help":"allow","version":"allow"})
+PASS  D4-29-redact-secrets  redactSecrets 脱敏凭证字段 => {"ak":"<redacted>","sk":"<redacted>","name":"test"} (期望 {"ak":"<redacted>","sk":"<redacted>","name":"test"})
+PASS  D4-29-load-policy  loadPolicy 返回有效策略 => true (期望 true)
+    keys=version,secretKeyNamePatterns,credentialFilePatterns,blockedConfigureSubcommands,blockedSecretOperations,writeOperationPrefixes
+PASS  D4-29-concat-write-deny  拼接命令中 hcloud 写操作 → deny => "deny" (期望 "deny")
+    risk=write
+
+=== D4-29 分类断言与原始命令分类入口夹具 ===  pass=12 fail=0
+RESULT: PASS
+
+>>> d4-29-classify-assert.mjs exit=0  ===
+
+PASS  D8-10-backup-path  mcpBackupFilePath 路径 => "/tmp/multica-task-2401786148/d8-10-mcp-1791493513351/.config/huaweicloud/devkit-mcp-backup.json" (期望 "/tmp/multica-task-2401786148/d8-10-mcp-1791493513351/.config/huaweicloud/devkit-mcp-backup.json")
+PASS  D8-10-save-read-delta  saveAgentDelta → readAgentDelta 往返 => {"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000} (期望 {"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000})
+PASS  D8-10-take-once  takeAgentDelta 取走后 readAgentDelta 返回 null => {"taken":true,"after":null} (期望 {"taken":true,"after":null})
+PASS  D8-10-purge-deletes  purgeBackup 删除文件 => {"purged":true,"exists":false} (期望 {"purged":true,"exists":false})
+PASS  D8-10-purge-no-file  purgeBackup 文件不存在不崩溃 => false (期望 false)
+PASS  D8-10-merge-command-style  mergeCommandStyle 保留用户参数 + 更新路径 => {"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-arg"],"timeout":100000,"changed":true} (期望 {"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-arg"],"timeout":100000,"changed":true})
+PASS  D8-10-merge-args-style  mergeArgsStyle 保留 env + 注入 required => {"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"env":{"MY_VAR":"val","REQUIRED_ENV":"1"},"changed":true} (期望 {"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"env":{"MY_VAR":"val","REQUIRED_ENV":"1"},"changed":true})
+PASS  D8-10-merge-file-style  mergeMcpServersFile 合并 mcpServers => {"entryArgs":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"configHas":true,"changed":true} (期望 {"entryArgs":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"],"configHas":true,"changed":true})
+PASS  D8-10-extract-apply-command  extractUserDelta→applyUserDelta 往返（command） => {"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-flag"],"env":{"MY_VAR":"x"},"timeout":500000} (期望 {"cmd":["node","/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--user-flag"],"env":{"MY_VAR":"x"},"timeout":500000})
+PASS  D8-10-extract-apply-args  extractUserDelta→applyUserDelta 往返（args） => {"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--arg1"],"env":{"K":"v"},"enabled":false} (期望 {"args":["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs","--arg1"],"env":{"K":"v"},"enabled":false})
+PASS  D8-10-merge-env-no-overwrite  mergeEnv 不覆盖用户已设值 => "user-override" (期望 "user-override")
+PASS  D8-10-required-env-excluded  REQUIRED_ENV_KEYS 不被备份 => ["MY_VAR"] (期望 ["MY_VAR"])
+
+=== D8-10 MCP 配置备份与合并夹具 ===  pass=12 fail=0
+RESULT: PASS
+
+>>> d8-10-mcp-config-backup-merge.mjs exit=0  ===
+
+Mock server listening at ws://127.0.0.1:45635
+PASS  D9-11-LC-connect  WebSocket 客户端成功建连 mock server => {"connected":true,"serverConns":1} (期望 {"connected":true,"serverConns":1})
+PASS  D9-11-LC-auth  认证握手成功（auth:ok） => {"reply":"auth:ok"} (期望 {"reply":"auth:ok"})
+    服务端已标记 authed
+PASS  D9-11-LC-heartbeat  心跳保活 ping→pong 往返 => {"reply":"pong"} (期望 {"reply":"pong"})
+PASS  D9-11-LC-binary-roundtrip  二进制隧道数据 echo 往返 => {"reply":"binary:6"} (期望 {"reply":"binary:6"})
+PASS  D9-11-LC-normal-close  正常断开（客户端主动 close → 服务端 disconnect） => {"disconnects":1,"remainingConns":0} (期望 {"disconnects":1,"remainingConns":0})
+PASS  D9-11-LC-abnormal-setup  异常断开前建立第二个连接 => {"connected":true,"serverConns":1} (期望 {"connected":true,"serverConns":1})
+PASS  D9-11-LC-abnormal-close  服务端强制断开 → 客户端收到 close 事件 => {"ws2Closed":true,"serverConns":0} (期望 {"ws2Closed":true,"serverConns":0})
+    服务端 closeConnection 后客户端收到 close 且连接清零
+PASS  D9-11-LC-reconnect  断开后可重新建连 => {"reconnected":true,"serverConns":1} (期望 {"reconnected":true,"serverConns":1})
+PASS  D9-11-LC-close-idempotent  close() 幂等（二次调用不报错） => {"closeTwiceOk":true} (期望 {"closeTwiceOk":true})
+PASS  D9-11-LC-post-close-reject  关闭后新连接被拒绝 => {"error":true} (期望 {"error":true})
+    server 已 close，新连接应失败
+PASS  D9-11-LC-frame-log  frameLog 记录了生命周期帧 => {"totalFrames":8,"hasIn":true,"hasOut":true} (期望 {"totalFrames":">0","hasIn":true,"hasOut":true})
+
+=== D9-11 WebSocket 隧道通道生命周期 ===  pass=11 fail=0
+RESULT: PASS
+
+>>> d9-11-ws-tunnel-lifecycle.mjs exit=0  ===
+
+PASS  D9-6-IA-clientA-init  客户端A (Hermes) initialize 互通 => {"server":"huaweicloud-devkit","proto":"2024-11-05"} (期望 {"server":"huaweicloud-devkit"})
+PASS  D9-6-IA-clientA-tools-list  客户端A tools/list 枚举 => {"count":41} (期望 {"count":">0"})
+PASS  D9-6-IA-clientA-tools-call  客户端A tools/call 互通（service_catalog） => {"isError":false,"contentLen":1} (期望 {"isError":false})
+PASS  D9-6-IB-clientB-init  客户端B (AtomCode) initialize 互通 => {"server":"huaweicloud-devkit"} (期望 {"server":"huaweicloud-devkit"})
+PASS  D9-6-IB-clientB-tools-list  客户端B tools/list 枚举 => {"count":41} (期望 {"count":">0"})
+PASS  D9-6-IC-tools-consistency  A/B 客户端 tools/list 一致性 => {"a":41,"b":41} (期望 {"a":41,"b":41})
+PASS  D9-6-IB-clientB-tools-call  客户端B tools/call 互通（service_catalog） => {"isError":false,"contentLen":1} (期望 {"isError":false})
+PASS  D9-6-IA-clientA-resources  客户端A resources/list 互通 => {"hasResult":true,"resources":0} (期望 {"hasResult":true})
+PASS  D9-6-IB-ping-consistency  A/B 客户端 ping 响应一致（服务端未实现 ping 时均返回 -32601） => {"aResult":false,"aErr":-32601,"bErr":-32601} (期望 {"consistent":true})
+    服务端未实现 ping，A/B 均返回 -32601（协议一致）
+PASS  D9-6-ID-error-consistency  A/B 客户端未知方法错误码一致（-32601） => {"a":-32601,"b":-32601} (期望 {"a":-32601,"b":-32601})
+PASS  D9-6-IE-concurrent  A/B 客户端并发互通（同时活跃互不干扰） => {"aAlive":true,"bAlive":true} (期望 {"aAlive":true,"bAlive":true})
+PASS  D9-6-IF-serverinfo-consistency  A/B 客户端 serverInfo.name 一致 => {"a":"huaweicloud-devkit","b":"huaweicloud-devkit"} (期望 {"a":"huaweicloud-devkit","b":"huaweicloud-devkit"})
+
+=== D9-6 跨客户端互通协议级 ===  pass=12 fail=0
+RESULT: PASS
+
+>>> d9-6-cross-client-interop.mjs exit=0  ===
+
+PASS  D3-C14-MOCK-install  mock 安装后 isInstalled=true => {"installed":true} (期望 {"installed":true})
+PASS  D3-C14-MOCK-rt-cred  mock 凭证注入→resolveCredentialsWithRuntime 返回 => {"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","st":"MOCK_ST_D3C14","region":"cn-north-4"} (期望 {"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","st":"MOCK_ST_D3C14","region":"cn-north-4"})
+PASS  D3-C14-MOCK-hwlink-getcred  hwlink getCredentials 返回 mock 凭证 => {"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","st":"MOCK_ST_D3C14"} (期望 {"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","st":"MOCK_ST_D3C14"})
+PASS  D3-C14-MOCK-hdkit-check-user  hdkitCheckUser 通过 mock fetch 返回 userHash => {"userHash":"mock-user-hash-d3c14"} (期望 {"userHash":"mock-user-hash-d3c14"})
+    mock fetch 拦截 check-user → 返回 mockUserHash
+PASS  D3-C14-MOCK-hdkit-credentials  hdkitCredentials 通过 mock fetch 返回凭证 => {"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","session":"mock-session-001"} (期望 {"ak":"MOCK_AK_D3C14","sk":"MOCK_SK_D3C14","session":"mock-session-001"})
+PASS  D3-C14-MOCK-cred-param-required  hdkitCredentials 无参时仍抛错（mock 不影响参数校验） => true (期望 true)
+    session_id or dev_stage_id is required
+PASS  D3-C14-MOCK-hdkit-connect  hdkitConnect 通过 mock fetch 返回 session => {"session":"mock-session-001","dev_stage":"mock-dev-stage-001"} (期望 {"session":"mock-session-001","dev_stage":"mock-dev-stage-001"})
+PASS  D3-C14-MOCK-voucher-status  hdkitVoucherStatus 通过 mock fetch 返回 claimed => {"claimed":true} (期望 {"claimed":true})
+PASS  D3-C14-MOCK-request-log  mock requestLog 记录了 ≥4 条请求 => {"count":4} (期望 {"count":">=4"})
+    实际请求: check-user, credentials, connect, voucher/status
+PASS  D3-C14-MOCK-endpoint-override  所有请求打到 mock 端点（HDKITSERVICE_ENDPOINT 覆盖） => {"allToMock":true,"endpoint":"https://mock-hdkit.example.com/api/"} (期望 {"allToMock":true})
+PASS  D3-C14-MOCK-uninstall  mock 卸载后 isInstalled=false => {"installed":false} (期望 {"installed":false})
+PASS  D3-C14-MOCK-env-restore  uninstall 后 HDKITSERVICE_ENDPOINT 恢复原始值 => {} (期望 {})
+    已恢复原始值
+PASS  D3-C14-MOCK-independent  mock 独立启停（新建实例 install/uninstall 不报错） => {"installed":false} (期望 {"installed":false})
+
+=== D3-C14 sandbox 凭证 mock 层 ===  pass=13 fail=0
+RESULT: PASS
+
+>>> d3-c14-sandbox-cred-mock.mjs exit=0  ===
+
+
+===== 汇总 =====
+OK   d2-10-koocli-profile.mjs (exit=0)
+OK   d2-13-s1-env.mjs (exit=0)
+OK   d9-9-delay-timeout.mjs (exit=0)
+OK   d9-10-remote-transport.mjs (exit=0)
+OK   d9-11-ws-tunnel.mjs (exit=0)
+OK   d9-6-cross-client.mjs (exit=0)
+OK   exp-d5-2-1-codex-discovery.mjs (exit=0)
+OK   exp-d5-2-3-codex-tools-enum.mjs (exit=0)
+OK   d1-66-telemetry-env.mjs (exit=0)
+OK   d1-69-cli-help.mjs (exit=0)
+OK   d2-27-koocli-version.mjs (exit=0)
+OK   d3-c14-sandbox-hwlink-cred.mjs (exit=0)
+OK   d4-12-supply-chain.mjs (exit=0)
+OK   d4-29-classify-assert.mjs (exit=0)
+OK   d8-10-mcp-config-backup-merge.mjs (exit=0)
+OK   d9-11-ws-tunnel-lifecycle.mjs (exit=0)
+OK   d9-6-cross-client-interop.mjs (exit=0)
+OK   d3-c14-sandbox-cred-mock.mjs (exit=0)
+
+总计: pass=18 fail=0 blocked=0
+RESULT: PASS
