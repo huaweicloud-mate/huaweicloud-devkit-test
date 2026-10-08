@@ -1,0 +1,35 @@
+==============================================================
+新增用例源码级探针  v1.1.5 (e7ed6f6)  2026-09-20
+==============================================================
+
+PASS	D1-65	调试模式环境变量	门控存在
+PASS	D1-66	遥测开关与端点环境变量	符合 (注: env 名 HUAWEICLOUD_DEVKIT_TELEMETRY)
+SPEC-MISMATCH	D1-68	图标离线与区域环境变量	图标离线=OK; region 实测=cn-east-3 (HW_REGION 胜出, 用例预期 HUAWEICLOUD_REGION 优先)
+FAIL	D1-70	代理配置与 WebSocket 代理	不符
+PASS	D2-27	KooCLI 版本管理	符合
+PASS	D3-C14	沙箱 HDKit 服务参数与 hwlink 凭证	符合
+FAIL	D3-S5	复合意图分层路由	中文复合意图实测(见详情)
+PASS	D3-S8	操作失败后排障指引	explainError 存在且含分类指引 (实测: {"service":"ECS","errorCode":"Ecs.0005","requestId":"","suggestions":["No known error-code pattern matched. Re-run the failing command with --debug to capture X-Request-Id from the response headers, then re-call explain_error with service, operation, region, the full redacted message, and requestId.","Search the error code \"Ecs.0005\" in the Huawei Cloud error center (support.huaweicloud.com) for the authoritative cause."]})
+FAIL	D4-26	findings 证据脱敏	泄密
+PASS	D4-29	分类断言与原始命令分类入口	符合
+PASS	D6-9	缓存清理三入口	符合
+SPEC-MISMATCH	D8-9	安装 ID 与遥测值脱敏	installId 稳定=true; sanitizeValue 控制字符/长度=OK; 敏感值移除=未移除(SPEC-MISMATCH)
+PASS	D8-10	MCP 配置备份与合并	符合
+PASS	D9-11	WebSocket 隧道通道生命周期	符合
+
+==============================================================
+PASS	D1-65	调试模式环境变量
+PASS	D1-66	遥测开关与端点环境变量
+SPEC-MISMATCH	D1-68	图标离线与区域环境变量
+FAIL	D1-70	代理配置与 WebSocket 代理
+PASS	D2-27	KooCLI 版本管理
+PASS	D3-C14	沙箱 HDKit 服务参数与 hwlink 凭证
+FAIL	D3-S5	复合意图分层路由
+PASS	D3-S8	操作失败后排障指引
+FAIL	D4-26	findings 证据脱敏
+PASS	D4-29	分类断言与原始命令分类入口
+PASS	D6-9	缓存清理三入口
+SPEC-MISMATCH	D8-9	安装 ID 与遥测值脱敏
+PASS	D8-10	MCP 配置备份与合并
+PASS	D9-11	WebSocket 隧道通道生命周期
+TOTAL=14
