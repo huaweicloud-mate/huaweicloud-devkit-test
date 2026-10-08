@@ -1,89 +1,80 @@
-# FINDINGS — CodeArtsSpace 每日测试缺陷清单
+# FINDINGS — 缺陷发现清单（CodeArtsSpace-GLM-5.2）
 
-> **执行日期**：2026-10-09
-> **客户端**：CodeArtsSpace (GLM-5.2)
-> **OS**：Windows
-> **被测版本**：1.1.8-next.1
-> **执行归档**：`results/CodeArtsSpace/2026-10-09-120.46.40.202/Windows/`
+> **落盘路径**：`results/CodeArtsSpace/2026-10-09-120.46.40.202/Windows/FINDINGS.md`
+> **生成时间**：2026-10-09 05:10（北京时间）
+> **被测版本**：huaweicloud-devkit@1.1.8-next.1
+> **本清单是统一提单脚本的解析输入**：`scripts/file_issue.py` 硬编码解析标题与「根因」字段，**格式必须严格遵循**。
 
 ---
 
-## FINDING-1: D2-11 (P0) STS get-token 未拦截
+## #1【P0】D2-4 凭证脱敏正则未覆盖小写 ak/sk
 
-- **级别**：P0
-- **用例ID**：D2-11
-- **维度**：D2认证
-- **描述**：R3 STS token 拒绝落盘——期望 STS get-token 返回 decision:deny，实际返回 decision=allow, risk=read_only
-- **断言**：classifyTextCommand("hcloud sts get-token") 返回 {decision: "deny"}
-- **根因**：safety/rules/cloud-risk-rules.json:94 正则未覆盖 sts get-token, severity 为 warn 而非 deny
-- **证据**：evidence/D2-11/stdout.log
+- **现象**：redactString 输入 `ak=AKIDTEST1234567890 sk=SKTEST1234567890abcdef`，小写 ak/sk 未被脱敏，明文凭证残留输出。
+- **断言**：redactString 对 `ak=`/`sk=`（小写）输入应脱敏为 `ak=***`/`sk=***`，输出不含明文 AK/SK。
+- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:45` 正则 `/(AK|SK)\s*[:=]/g` 缺少 `i` 标志，仅匹配大写 AK/SK，小写 ak/sk 不匹配。
+- **影响**：小写凭证变量名场景下明文凭证泄漏到日志/输出，违反脱敏红线。
+- **证据**：`evidence/D2-4/stdout.log`
+- **状态**：待提单
 
-## FINDING-2: D2-16 (P1) configure import --file 未拦截
+## #2【P0】D2-11 STS get-token 未拦截临时凭证获取
 
-- **级别**：P1
-- **用例ID**：D2-16
-- **维度**：D2认证
-- **描述**：import 文件读取后擦除——期望 configure import --file 返回 decision:deny，实际返回 decision=allow, risk=unknown_read
-- **断言**：classifyTextCommand("hcloud configure import --file creds.json") 返回 {decision: "deny"}
-- **根因**：safety/policy.json:25 blockedConfigureSubcommands 缺少 'import'
-- **证据**：evidence/D2-16/stdout.log
+- **现象**：`hcloud STS GetSecurityToken` 返回 decision=allow, risk=read_only，未拦截临时凭证获取操作。
+- **断言**：STS get-token 应返回 decision:deny（临时凭证获取属高危操作，应拦截）。
+- **根因**：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:94` 正则未覆盖 `sts get-token`，severity 为 warn 而非 deny。
+- **影响**：攻击者可获取临时凭证绕过静态凭证管控。
+- **证据**：`evidence/D2-11/stdout.log`
+- **状态**：待提单
 
-## FINDING-3: D2-4 (P0) 凭证脱敏大小写未覆盖
+## #3【P0】D4-2 凭证env打印拦截未覆盖非华为云前缀
 
-- **级别**：P0
-- **用例ID**：D2-4
-- **维度**：D2认证
-- **描述**：凭证脱敏正确性——期望 redactString 大小写均脱敏，实际小写 ak=/sk= 未被脱敏
-- **断言**：redactString("ak=ABCDEFG\nsk=HIJKLMN") 返回脱敏后字符串（不含明文）
-- **根因**：safety-policy.mjs:45 正则 /(AK|SK)\s*[:=]/g 缺少 i 标志, 小写 ak/sk 不匹配
-- **证据**：evidence/D2-4/stdout.log
+- **现象**：echo $HW_SECRET_KEY 被拦截(decision:deny)，但非华为云前缀凭证变量（如 $SECRET_KEY）打印返回 decision=allow, risk=not_huaweicloud。
+- **断言**：所有凭证变量名（含非华为云前缀）打印应返回 decision:deny。
+- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs` 凭证env打印规则仅匹配 HUAWEICLOUD_/HW_ 前缀，未覆盖非标准前缀。
+- **影响**：非华为云前缀凭证变量明文打印未拦截，凭证泄漏。
+- **证据**：`evidence/D4-2/stdout.log`
+- **状态**：待提单
 
-## FINDING-4: D4-2 (P0) 非华为云前缀凭证env打印未拦截
+## #4【P0】D4-3 密钥服务操作未拦截 CLI 小写命令
 
-- **级别**：P0
-- **用例ID**：D4-2
-- **维度**：D4安全
-- **描述**：凭证env打印拦截——期望 echo $HW_SECRET_KEY 被阻断(decision:deny)，实际返回 decision=allow, risk=not_huaweicloud
-- **断言**：classifyTextCommand("echo $HW_SECRET_KEY") 返回 {decision: "deny"}
-- **根因**：safety-policy.mjs 凭证env打印规则仅匹配 HUAWEICLOUD_/HW_ 前缀, 未覆盖非标准前缀
-- **证据**：evidence/D4-2/stdout.log
+- **现象**：hcloud CSMS/KMS 密钥操作（csms show-secret, kms decrypt-data）返回 decision=allow，未拦截密钥服务操作。
+- **断言**：hcloud csms show-secret / kms decrypt-data 应返回 decision:deny。
+- **根因**：`plugins/huaweicloud-core/safety/policy.json:26` blockedSecretOperations 仅覆盖 PascalCase，未覆盖 CLI 小写 show-secret/decrypt-data。
+- **影响**：密钥服务明文读取操作未拦截，敏感数据泄漏。
+- **证据**：`evidence/D4-3/stdout.log`
+- **状态**：待提单
 
-## FINDING-5: D4-3 (P0) 密钥服务操作未拦截
+## #5【P1】D2-16 configure import --file 未拦截凭证文件导入
 
-- **级别**：P0
-- **用例ID**：D4-3
-- **维度**：D4安全
-- **描述**：明文secret API拦截——期望 hcloud CSMS/KMS 密钥操作被阻断(decision:deny)，实际返回 decision=allow
-- **断言**：classifyTextCommand("hcloud csms show-secret") 返回 {decision: "deny"}
-- **根因**：safety/policy.json:26 blockedSecretOperations 仅覆盖 PascalCase, 未覆盖 CLI 小写 show-secret/decrypt-data
-- **证据**：evidence/D4-3/stdout.log
+- **现象**：configure import --file creds.json 返回 decision=allow, risk=unknown_read，未拦截凭证文件导入。
+- **断言**：configure import --file 应返回 decision:deny（凭证文件导入属高危操作）。
+- **根因**：`plugins/huaweicloud-core/safety/policy.json:25` blockedConfigureSubcommands 缺少 'import'。
+- **影响**：凭证文件可被导入读取，凭证泄漏。
+- **证据**：`evidence/D2-16/stdout.log`
+- **状态**：待提单
 
-## FINDING-6: D4-4 (P1) 通用凭证变量名未拦截
+## #6【P1】D4-4 通用凭证变量名 ACCESS_KEY/SECRET_KEY 未拦截
 
-- **级别**：P1
-- **用例ID**：D4-4
-- **维度**：D4安全
-- **描述**：写操作审批门——期望 echo $ACCESS_KEY 返回 decision:deny，实际返回 decision=allow, risk=not_huaweicloud
-- **断言**：classifyTextCommand("echo $ACCESS_KEY") 返回 {decision: "deny"}
-- **根因**：safety-policy.mjs 凭证打印拦截仅匹配华为云特定变量名, 未覆盖 ACCESS_KEY/SECRET_KEY
-- **证据**：evidence/D4-4/stdout.log
+- **现象**：echo $ACCESS_KEY 返回 decision=allow, risk=not_huaweicloud，通用凭证变量名未拦截。
+- **断言**：echo $ACCESS_KEY 应返回 decision:deny。
+- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs` 凭证打印拦截仅匹配华为云特定变量名，未覆盖 ACCESS_KEY/SECRET_KEY。
+- **影响**：通用凭证变量名明文打印未拦截，凭证泄漏。
+- **证据**：`evidence/D4-4/stdout.log`
+- **状态**：待提单
 
-## FINDING-7: D4-24 (P1) access_token 字段未脱敏
+## #7【P1】D4-24 access_token 字段未被 redactSecrets 脱敏
 
-- **级别**：P1
-- **用例ID**：D4-24
-- **维度**：D4安全
-- **描述**：确认令牌过期与重复确认边界——期望 redactSecrets({access_token}) 返回 {access_token:<redacted>}，实际 access_token 字段未被脱敏
-- **断言**：redactSecrets({access_token: "xxx"}) 返回 {access_token: "<redacted>"}
-- **根因**：safety-policy.mjs:25 isSecretKeyName 正则将 access_token 归一化为 accesstoken, 不匹配 access.*key; policy.json:11 模式 token 经锚定不匹配 access_token
-- **证据**：evidence/D4-24/stdout.log
+- **现象**：redactSecrets({access_token: "xxx"}) 返回 {access_token: "xxx"}，access_token 字段未被脱敏。
+- **断言**：redactSecrets({access_token: "xxx"}) 应返回 {access_token: "<redacted>"}。
+- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:25` isSecretKeyName 正则将 access_token 归一化为 accesstoken，不匹配 access.*key; policy.json:11 模式 token 经锚定不匹配 access_token。
+- **影响**：access_token 明文泄漏到日志/输出。
+- **证据**：`evidence/D4-24/stdout.log`
+- **状态**：待提单
 
-## FINDING-8: EXP-E01 (P1) serviceCatalog ECS 路由未命中
+## #8【P1】EXP-E01 serviceCatalog 中文意图"查云主机"未命中 ECS
 
-- **级别**：P1
-- **用例ID**：EXP-E01
-- **维度**：D10评测
-- **描述**：serviceCatalog routes -> ECS matched——期望 serviceCatalog 路由命中 ECS，实际 MISS（路由至 'Run hcloud --help'）
-- **断言**：serviceCatalog("帮我查一下我账号在华北北京四有哪些云主机") 返回 {intent: "list_ecs", tool: "huaweicloud_ecs_*"}
-- **根因**：eval/harness/run-eval.mjs: serviceCatalog 中文意图'帮我查一下我账号在华北北京四有哪些云主机'未命中 ECS, 返回通用 help 提示
-- **证据**：evidence/EXP-E01/stdout.log
+- **现象**：serviceCatalog 中文意图"帮我查一下我账号在华北北京四有哪些云主机"未命中 ECS，路由至 'Run hcloud --help'。
+- **断言**：serviceCatalog 应将"查云主机"意图路由到 ECS 工具集。
+- **根因**：`eval/harness/run-eval.mjs` serviceCatalog 中文意图路由未命中 ECS，返回通用 help 提示。
+- **影响**：中文意图路由准确率降低，用户查询云资源无法自动路由到正确工具。
+- **证据**：`evidence/EXP-E01/stdout.log`
+- **状态**：待提单
