@@ -1,0 +1,14 @@
+=== D3-C13 OBS 静态网站托管配置 ===
+[1] OBS 建桶 obs://hdk1-s13-1493731329 -> success
+[2] set indexDocument -> {"ok":true,"status":200,"websiteUrl":"http://hdk1-s13-1493731329.obs-website.cn-north-4.myhuaweicloud.com","message":"Static website hosting configured. Website URL: http://hdk1-s13-1493731329.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min
+[3] get 核对 -> {"ok":true,"status":200,"body":"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><WebsiteConfiguration xmlns=\"http://obs.myhwclouds.com/doc/2015-06-30/\"><IndexDocument><Suffix>index.html</Suffix><Type>0</Type></IndexDocument><SignatureVerification>false</SignatureVerification></Website
+[4] delete -> {"ok":true,"status":204}
+[5] 无 indexDocument set -> THROW: indexDocument is required for action=set (期望报错)
+[6] 删桶归零 -> Start at 2026-10-08 21:08:54.216470399 +0000 UTC
+
+Warn: No task to run
+[________________________________________________
+
+RESULT: PASS
+[7] 收尾补删空桶: hcloud OBS rm obs://hdk1-s13-1493731329 -f (不带 -r 删空桶) -> Delete bucket successfully!
+[8] 归零核验: hcloud OBS ls 无 hdk1-* 桶 (仅剩 huaweicloud-open-capability-home 既有桶)
