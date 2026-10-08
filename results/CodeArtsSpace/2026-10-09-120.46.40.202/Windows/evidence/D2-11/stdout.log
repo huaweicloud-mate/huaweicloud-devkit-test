@@ -1,0 +1,10 @@
+{
+  "caseId": "D2-11",
+  "status": "FAIL",
+  "executedAt": "20261009050812",
+  "assertion": "sts get-token 应返回 decision=deny",
+  "conclusion": "FAIL - sts get-token 返回 decision=allow, risk=read_only, 未拦截临时凭证获取",
+  "rootCause": "safety/rules/cloud-risk-rules.json:94 正则未覆盖 sts get-token; severity 为 warn 而非 deny",
+  "blockedReason": "",
+  "log": "{\n  \"caseId\": \"D2-11\",\n  \"status\": \"FAIL\",\n  \"executedAt\": \"20261009050812\",\n  \"assertion\": \"sts get-token 应返回 decision=deny\",\n  \"conclusion\": \"FAIL - sts get-token 返回 decision=allow, risk=read_only, 未拦截临时凭证获取\",\n  \"rootCause\": \"safety/rules/cloud-risk-rules.json:94 正则未覆盖 sts get-token; severity 为 warn 而非 deny\",\n  \"blockedReason\": \"\",\n  \"log\": \"D2-11 测试证据\\n执行时间: 2026-10-09 05:08\\n客户端: CodeArtsSpace\\nOS: Windows\\n被测版本: 1.1.8-next.1\\n工具: probe-p0.mjs\\n结果: FAIL\\n断言: sts get-token 应返回 decision=deny\\n结论: FAIL - sts get-token 返回 decision=allow, risk=read_only, 未拦截临时凭证获取\\n根因: safety/rules/cloud-risk-rules.json:94 正则未覆盖 sts get-token; severity 为 warn 而非 deny\\n\"\n}"
+}
