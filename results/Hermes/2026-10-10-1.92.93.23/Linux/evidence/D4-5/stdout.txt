@@ -1,0 +1,6 @@
+=== CASE D4-5 ===  (Change* 写动词误判检测)
+  hcloud ecs ChangeServerOsWithoutCloudInit -> decision=allow risk=unknown_read (exp deny/write) <<< 误判
+  hcloud ecs ChangeServerOsWithCloudInit -> decision=allow risk=unknown_read (exp deny/write) <<< 误判
+  hcloud vpc ChangeVpc -> decision=allow risk=unknown_read (exp deny/write) <<< 误判
+  hcloud rds ChangeInstanceConfiguration -> decision=allow risk=unknown_read (exp deny/write) <<< 误判
+  RESULT: FAIL  0/4 拦截
