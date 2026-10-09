@@ -73,7 +73,7 @@ npm install -g huaweicloud-devkit
 
 ## 1–7. 每日执行流程 → 详见 skills/test-execution/SKILL.md
 
-七步（建包 → 执行 → 回填 → 报告 → 每 10 分钟提报 → 统一提单 + push → BLOCKED 补测收尾）的完整说明见 [skills/test-execution/SKILL.md](skills/test-execution/SKILL.md)。关键纪律同见该文档「门禁」「红线」节：NOT_RUN 覆盖率红线（P0 不得 NOT_RUN）、PASS 门禁（禁虚报，标 PASS 必①实测②证据落盘③evidencePath 回填）、提单必做（只 push 不提单 = 未完成）、BLOCKED 补测收尾（全部 BLOCKED 必追一轮，假阻塞能解必解）。
+七步（建包 → 执行 → 回填 → 报告 → 每 10 分钟后台增量提报【硬步骤】→ 统一提单 + push → BLOCKED 补测收尾）的完整说明见 [skills/test-execution/SKILL.md](skills/test-execution/SKILL.md)。关键纪律同见该文档「门禁」「红线」节：NOT_RUN 覆盖率红线（P0 不得 NOT_RUN）、PASS 门禁（禁虚报，标 PASS 必①实测②证据落盘③evidencePath 回填）、提单必做（只 push 不提单 = 未完成）、**每 10 分钟增量提报必做（全量长任务在 `init_day` 建包后立即 `nohup python scripts/hourly_sync.py <客户端> <OS> --interval 600 >/tmp/hourly_sync.log 2>&1 &` 后台拉起循环；禁止以「攒到最后统一 push」顶替，防中途被工具调用上限 / idle watchdog 掐断后已执行结果丢失）**、BLOCKED 补测收尾（全部 BLOCKED 必追一轮，假阻塞能解必解）。
 
 ## 问题单号回归 → 详见 skills/test-regression/SKILL.md
 
@@ -87,7 +87,7 @@ npm install -g huaweicloud-devkit
 4. **环境阻塞（从严）**：标 BLOCKED + 写 blockedReason，不得假装 PASS。**凡探针/脚本已存在（如 D6 压测 `supplement-probe.mjs`、D10 评测 `eval/harness/run-eval.mjs`、D9 协议 `eval/harness/protocol-probe.mjs`）、或有历史结论可复用、或可源码级直调函数（如 `judgeUpdate`/`redactString`/`serviceCatalog`）的用例，不得以「需环境/需基准/缺 harness/需 Inspector」为由标 BLOCKED——必须跑完探针/直调/harness 并回填结果**。BLOCKED 仅用于真·外部依赖（真实 Agent 会话行为评测需 LLM harness 且 `run-eval.mjs` 的 serviceCatalog 路由层无法代理），且 blockedReason 必须写明缺的具体资源 + 解除条件。
    - **D10 评测集执行路径（EXP-E01~E15 / D10-3 路由层）**：`eval/harness/run-eval.mjs` 已建成并跑出基线（`node eval/harness/run-eval.mjs <hdk>/plugins/huaweicloud-core/src/mcp-server.mjs`，读 `eval/prompts/eval-set-v1.csv` 15 条中文意图逐条调 `huaweicloud_service_catalog`）。**serviceCatalog 路由层是确定性调用、无需真实 LLM Agent**，故「缺评测 harness」是假阻塞——必须跑 harness 得真实路由结论（基线 21.4% MISS → 未命中判 FAIL），不得标 BLOCKED。真实 Agent 会话评测（D10-1/2/5/9）已建成 `eval/harness/run-agent-eval.mjs`（驱动 `dsh --profile headless`，仅 DSH 客户端/装了 dsh 的机器可用），非 DSH 客户端才需 CDP 会话自动化，标 BLOCKED 时写明该客户端缺什么。
 5. **目录权限（只提交自己）**：只改/提交 `results/<你的客户端>/` 目录，**完全不碰 Summary**（维护者统一生成）、其他客户端目录、test-cases 真源。
-6. **完成门禁（禁空跑）**：任务完成的唯一判定 = `results/<你的客户端>/<日期>-<IP>/<OS>/` 已落 ①测试报告.md ②3 份 CSV（执行状态列已回填）③ PASS 用例证据 ④已 push ⑤有 FAIL/SPEC 缺陷时已向源码仓库提单。**只读文档 / 只建目录 / 中途退出 / 只 push 不提单 = 未完成**；即使环境阻塞也必须按第 4 条回填 BLOCKED + 出一份最小报告 + push，**不得零产出**。
+6. **完成门禁（禁空跑）**：任务完成的唯一判定 = `results/<你的客户端>/<日期>-<IP>/<OS>/` 已落 ①测试报告.md ②3 份 CSV（执行状态列已回填）③ PASS 用例证据 ④已 push（**全量长任务中途须按步骤 5 后台增量提报，禁止攒到最后统一 push 顶替**）⑤有 FAIL/SPEC 缺陷时已向源码仓库提单。**只读文档 / 只建目录 / 中途退出 / 只 push 不提单 = 未完成**；即使环境阻塞也必须按第 4 条回填 BLOCKED + 出一份最小报告 + push，**不得零产出**。
 
 ## 用例与执行结果分离（架构铁律）
 

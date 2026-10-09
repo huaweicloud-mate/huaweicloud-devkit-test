@@ -65,11 +65,19 @@ python scripts/init_day.py <客户端> <OS>
 - 按 `templates/daily-agent-report.md` 输出 `<客户端>-<模型>-测试报告.md`，八节：①测试概述 ②执行摘要 ③状态汇总 ④缺陷清单 ⑤未执行用例与原因 ⑥安全/红线 ⑦资源释放 ⑧遗留建议。
 - 每个 FAIL/SPEC 按 `templates/findings.md` 写 `FINDINGS.md`：**级别 + 描述(现象) + 断言(唯一可判定) + 根因(文件:行号) + 证据**，这是 `file_issue.py` 的解析输入，格式必须严格。
 
-### 5. 每 10 分钟提报（只提交自己目录）
+### 5. 每 10 分钟增量提报（后台循环，只提交自己目录；长任务必做）
+
+**这是硬步骤，不是可选项**：全量每日测试执行链长（尤其真云 E2E 建删资源），一旦中途被工具调用上限 / idle watchdog 掐断，没有增量提报 = 已执行结果全部丢失、只能重跑。**必须在 `init_day` 建包后、首条用例执行前，后台拉起提报循环**：
+
 ```bash
-python scripts/hourly_sync.py <客户端> <OS> --interval 600
+nohup python scripts/hourly_sync.py <客户端> <OS> --interval 600 > /tmp/hourly_sync.log 2>&1 &
 ```
-只 `git add` 自己 `results/<客户端>/`，**不碰 Summary**（维护者统一 `build_summary.py` 生成）。
+
+- 它每 10 分钟 `git add` 自己 `results/<客户端>/<日期>-<IP>/<OS>/` → commit → push 一次；无改动时自动跳过（打印「无改动，跳过」）。
+- **禁止前台阻塞跑** `--interval 600`（内部 `while True` 会卡死主流程）——一律 `nohup ... &` 后台拉起，再继续前台执行用例。
+- **禁止「攒到最后统一 push」顶替增量提报**：最后统一 push 仍要做（第 6 步），但中途必须已有后台增量提报在跑。
+- 只 `git add` 自己 `results/<客户端>/`，**不碰 Summary**（维护者统一 `build_summary.py` 生成）。
+- 后台循环随会话结束终止是正常现象；若任务中断，远端已有增量子集 → 用「补推送」而非重跑全量。
 
 ### 6. 统一提单 + 提交（全量测完后必做）
 ```bash
@@ -105,7 +113,7 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 3. **PASS 门禁**：标 PASS 必须①实测②证据落盘③evidencePath 回填，未执行禁标 PASS。
 4. **环境阻塞**：标 BLOCKED + blockedReason，不得假装 PASS。
 5. **目录权限**：只改 `results/<你的客户端>/`，不碰 Summary / 其他客户端 / test-cases 母版。
-6. **完成门禁**：完成 = 测试报告 + 3 CSV（已回填）+ PASS 证据 + 已 push + 有缺陷时已提单；即使环境阻塞也必须回填 BLOCKED + 最小报告 + push，不得零产出。
+6. **完成门禁**：完成 = 测试报告 + 3 CSV（已回填）+ PASS 证据 + 已 push + 有缺陷时已提单；即使环境阻塞也必须回填 BLOCKED + 最小报告 + push，不得零产出。**全量长任务中途须按步骤 5 后台增量提报，不得攒到最后统一 push 顶替。**
 
 ## 状态口径
 
@@ -126,7 +134,7 @@ T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.hel
 | 建执行包 | `python scripts/init_day.py <客户端> <OS>` |
 | PASS 门禁 | `python scripts/verify_no_fake_pass.py <客户端> <OS>` |
 | 覆盖率门禁 | `python scripts/verify_coverage.py <客户端> <OS>` |
-| 每 10 分钟提报 | `python scripts/hourly_sync.py <客户端> <OS> --interval 600` |
+| 每 10 分钟增量提报（后台，硬步骤） | `nohup python scripts/hourly_sync.py <客户端> <OS> --interval 600 >/tmp/hourly_sync.log 2>&1 &` |
 | 统一提单 | `python scripts/file_issue.py <FINDINGS.md> <版本> --type=daily` |
 
 ## 陷阱
