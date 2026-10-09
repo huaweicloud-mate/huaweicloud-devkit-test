@@ -1,0 +1,54 @@
+
+=== OpenClaw Linux D3-S7 跨服务交付 探针结果 (2026-09-20) ===
+NOTE   D3-S7 复合意图 => ["RDS","Sandbox","DevStation"]
+PASS  D3-S7  复合意图命中 RDS  => true (expected true)
+PASS  D3-S7  复合意图命中部署目标(sandbox)  => true (expected true)
+PASS  D3-S7  创建 VPC  => true (expected true)
+PASS  D3-S7  创建 Subnet  => true (expected true)
+NOTE   D3-S7 default SG id=c4acbd81-7473-40c1-832a-4ba40ae109ac
+NOTE   D3-S7 RDS create rc=undefined id=2f6bc12196e24096bd9a833dd29592e3in01
+PASS  D3-S7  postPaid RDS 创建受理(id 非空)  => true (expected true)
+NOTE   D3-S7 RDS status=BUILD (1/90)
+NOTE   D3-S7 RDS status=BUILD (2/90)
+NOTE   D3-S7 RDS status=BUILD (3/90)
+NOTE   D3-S7 RDS status=BUILD (4/90)
+NOTE   D3-S7 RDS status=BUILD (5/90)
+NOTE   D3-S7 RDS status=BUILD (6/90)
+NOTE   D3-S7 RDS status=BUILD (7/90)
+NOTE   D3-S7 RDS status=BUILD (8/90)
+NOTE   D3-S7 RDS status=BUILD (9/90)
+NOTE   D3-S7 RDS status=BUILD (10/90)
+NOTE   D3-S7 RDS status=BUILD (11/90)
+NOTE   D3-S7 RDS status=BUILD (12/90)
+NOTE   D3-S7 RDS status=BUILD (13/90)
+NOTE   D3-S7 RDS status=BUILD (14/90)
+NOTE   D3-S7 RDS status=BUILD (15/90)
+NOTE   D3-S7 RDS status=BUILD (16/90)
+NOTE   D3-S7 RDS status=BUILD (17/90)
+NOTE   D3-S7 RDS status=BUILD (18/90)
+NOTE   D3-S7 RDS status=BUILD (19/90)
+NOTE   D3-S7 RDS status=BUILD (20/90)
+NOTE   D3-S7 RDS status=BUILD (21/90)
+NOTE   D3-S7 RDS status=BUILD (22/90)
+NOTE   D3-S7 RDS status=BUILD (23/90)
+NOTE   D3-S7 RDS status=BUILD (24/90)
+NOTE   D3-S7 RDS status=BUILD (25/90)
+NOTE   D3-S7 RDS status=BUILD (26/90)
+NOTE   D3-S7 RDS status=BUILD (27/90)
+NOTE   D3-S7 RDS status=BUILD (28/90)
+NOTE   D3-S7 RDS status=BUILD (29/90)
+NOTE   D3-S7 RDS status=ACTIVE (30/90)
+PASS  D3-S7  RDS 实例到达 ACTIVE  => true (expected true)
+PASS  D3-S7  连接串字段(ip/port)存在  => true (expected true)
+NOTE   D3-S7 连接串注入: mysql://10.210.1.172:3306
+NOTE   D3-S7 DeleteInstance rc=0 job=ae36bc6b-17f7-48b3-b034-cd7476d734cf
+PASS  D3-S7  删除本次 RDS 受理(job_id)  => true (expected true)
+NOTE   D3-S7 RDS 删除完成=true
+NOTE   D3-S7 subnet 删除=false
+FAIL  D3-S7  测后 tctest-s7- 资源归零  => false (expected true)
+
+TOTAL pass=8 fail=1
+
+NOTE  D3-S7 归零补充（2026-09-26 手动核查）：探针内 subnet 删除因 v3/v2 API 版本不一致报 VPC.0207 失败，实测残留 1 个 tctest-s7 子网+1 个 VPC。
+NOTE  D3-S7 手动清理：NeutronDeleteSubnet(38eac5a0-...) + DeleteVpc(b8d3088c-...) 后归零。
+NOTE  D3-S7 最终核查（hcloud 各服务 List）：VPC/Subnets/SecurityGroups/RDS/ECS/FunctionGraph/OBS 中 tctest 前缀资源 = 0，真机建删归零达成。

@@ -1,0 +1,17 @@
+
+=== D2-R11 占位/掩码凭证探针结果 ===
+PASS  D2-R11  <HW_ACCESS_KEY> 占位  => true (expected true)
+PASS  D2-R11  ${HW_SECRET_KEY} 模板  => true (expected true)
+PASS  D2-R11  YOUR_ACCESS_KEY 关键字  => true (expected true)
+PASS  D2-R11  ACCESS_KEY 裸关键字  => true (expected true)
+PASS  D2-R11  SECRET_KEY 裸关键字  => true (expected true)
+PASS  D2-R11  placeholder 字面  => true (expected true)
+PASS  D2-R11  change.me 字面  => true (expected true)
+PASS  D2-R11  掩码 abc****  => true (expected true)
+PASS  D2-R11  纯星号 ****  => true (expected true)
+PASS  D2-R11  真实 AK (20+ 字母数字) 非占位  => false (expected false)
+PASS  D2-R11  真实 SK 非占位  => false (expected false)
+PASS  D2-R11  空串非占位  => false (expected false)
+PASS  D2-R11  普通 region 值非占位  => false (expected false)
+
+TOTAL pass=13 fail=0

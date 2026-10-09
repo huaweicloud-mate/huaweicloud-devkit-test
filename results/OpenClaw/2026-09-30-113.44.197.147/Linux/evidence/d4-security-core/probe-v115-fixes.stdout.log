@@ -1,0 +1,8 @@
+D4-2 printenv HW_ACCESS_KEY => deny
+D4-2 env | grep HW_SECRET_KEY => allow
+D4-2 echo $HW_SECRET_KEY => deny
+D4-2 HUAWEICLOUD_ACCESS_KEY_ID => deny
+D4-16 sh -c "env | grep HUAWEICLOUD" => allow
+D4-16 bash -c "cat ~/.config/huaweicloud/credentials.json" => deny
+D4-16 sudo hcloud ECS CreateServers => deny
+D9-2 unknown method error.code => -32601 | message => Method not found: nonexistent/method

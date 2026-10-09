@@ -1,0 +1,16 @@
+
+=== D4-17 hook 畸形输入 fail-closed 探针结果 (v1.1.6) ===
+PASS  D4-17  huaweicloud_hook_check_command(command=null) fail-closed=deny  => "deny" (expected "deny")
+PASS  D4-17  huaweicloud_hook_check_command(command=null) 带 invalid 提示(findings 非空)  => true (expected true)
+PASS  D4-17  huaweicloud_hook_check_command(command="") fail-closed=deny  => "deny" (expected "deny")
+PASS  D4-17  huaweicloud_hook_check_command(command="") 带 invalid 提示(findings 非空)  => true (expected true)
+PASS  D4-17  huaweicloud_hook_check_artifacts(artifacts=null) fail-closed=deny  => "deny" (expected "deny")
+PASS  D4-17  huaweicloud_hook_check_artifacts(artifacts=null) 带 invalid 提示(findings 非空)  => true (expected true)
+PASS  D4-17  huaweicloud_hook_check_artifacts(artifacts="not-an-array") fail-closed=deny  => "deny" (expected "deny")
+PASS  D4-17  huaweicloud_hook_check_artifacts(artifacts="not-an-array") 带 invalid 提示(findings 非空)  => true (expected true)
+PASS  D4-17  huaweicloud_hook_check_deploy_plan(plan=null) fail-closed=deny  => "deny" (expected "deny")
+PASS  D4-17  huaweicloud_hook_check_deploy_plan(plan=null) 带 invalid 提示(findings 非空)  => true (expected true)
+PASS  D4-17  huaweicloud_hook_check_deploy_plan(plan=12345) fail-closed=deny  => "deny" (expected "deny")
+PASS  D4-17  huaweicloud_hook_check_deploy_plan(plan=12345) 带 invalid 提示(findings 非空)  => true (expected true)
+
+TOTAL pass=12 fail=0

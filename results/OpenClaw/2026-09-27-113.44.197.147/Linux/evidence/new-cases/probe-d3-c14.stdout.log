@@ -1,0 +1,14 @@
+
+=== OpenClaw Linux D3-C14 沙箱参数/凭证 探针结果 (2026-09-20) ===
+PASS  D3-C14  hdkitConnect 透传 source  => true (expected true)
+PASS  D3-C14  hdkitConnect 透传 env/git/template_id/flavor_id  => true (expected true)
+NOTE   D3-C14 hdkitCredentials() => session_id or dev_stage_id is required
+PASS  D3-C14  hdkitCredentials 缺 sessionId+devStageId 抛错  => true (expected true)
+NOTE   D3-C14 getCredentials keys=ak,sk,securitytoken
+PASS  D3-C14  getCredentials 返回含 ak 字段  => true (expected true)
+PASS  D3-C14  getCredentials 返回含 sk 字段  => true (expected true)
+PASS  D3-C14  getCredentials 返回含 securitytoken 字段  => true (expected true)
+PASS  D3-C14  签名字段含 x-security-token(securitytoken 时)  => true (expected true)
+PASS  D3-C14  createConnection 导出可调用  => "function" (expected "function")
+
+TOTAL pass=8 fail=0
