@@ -35,6 +35,13 @@ const FIXTURES = [
   'd9-11-ws-tunnel-lifecycle.mjs',
   'd9-6-cross-client-interop.mjs',
   'd3-c14-sandbox-cred-mock.mjs',
+  // Issue #22（10 项测试侧改进项：6 新建 + 4 回填）
+  'd1-40-mirror-lag.mjs',
+  'd4-18-confirm-not-deny.mjs',
+  'd4-19-preflight-in-confirm.mjs',
+  'd8-7-retrieve-skill.mjs',
+  'd9-13-credential-leak.mjs',
+  'env-var-coverage.mjs',
 ];
 
 const summary = [];
