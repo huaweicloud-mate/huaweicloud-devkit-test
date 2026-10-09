@@ -1,0 +1,8 @@
+{
+  "caseId": "D4-17",
+  "status": "FAIL",
+  "why": "hook 对非法/截断 stdin JSON fail-open(静默 return，不 deny)",
+  "detail": "{\"invalidJson\":\"\",\"truncated\":\"\",\"writeDeny\":\"{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PreToolUse\\\",\\\"permissionDecision\\\":\\\"deny\\\",\\\"permissionDecisionReason\\\":\\\"Huawei Cloud\"}",
+  "rootCause": "plugins/huaweicloud-core/hooks/huaweicloud-safety.mjs:47-49 catch { return; } 未 fail-closed",
+  "executedAt": "20261009111650"
+}

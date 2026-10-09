@@ -1,0 +1,8 @@
+{
+  "caseId": "D4-16",
+  "status": "FAIL",
+  "why": "sh -c/eval 包裹凭证泄露命令穿透(risk-rule-engine 未识别内层命令)",
+  "detail": "[{\"cmd\":\"sh -c \\\"printenv HW_ACCESS_KEY\\\"\",\"riskDecision\":\"allow\"},{\"cmd\":\"sh -c \\\"cat credentials.json\\\"\",\"riskDecision\":\"allow\"},{\"cmd\":\"eval \\\"env\\\"\",\"riskDecision\":\"allow\"}]",
+  "rootCause": "plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:14/35 规则锚点 (^|\\s) 不匹配 sh -c \"...\" 内层命令；risk-rule-engine.mjs evaluate 未复用 safety-policy.mjs extractInnerCommand",
+  "executedAt": "20261009111650"
+}
