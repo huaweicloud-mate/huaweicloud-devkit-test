@@ -7,7 +7,7 @@ const CORE = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/hua
 const HDK = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk';
 const OUT = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devkit-test/results/AtomCode/2026-10-10-120.46.222.180/Linux/evidence/D1-70/stdout.log';
 const _m = async (f) => await import(pathToFileURL(SRC + '/' + f).href);
-const executedAt = '20261010051928';
+const executedAt = '20261010052436';
 const META = { case: 'D1-70', assistant: 'AtomCode(deepseek-v4-pro-0813)', os: 'Linux', sut: 'hdk gitHead 681895da (v1.1.8-next.2)' };
 function finish(r) { const out = { ...META, status: r.status, why: r.why || '', actual: r.actual, executedAt };
   writeFileSync(OUT, JSON.stringify(out, null, 2), 'utf8');
@@ -18,7 +18,7 @@ async function run() {
   const mod = await _m('proxy/proxy-config.mjs');
   const fn = mod['shouldBypassProxy'];
   if (!fn) return { status: 'FAIL', actual: 'shouldBypassProxy 不存在于 proxy/proxy-config.mjs' };
-  const rawArgs = ["localhost", "[\"localhost\",\"127.0.0.1\"]"];
+  const rawArgs = ["localhost", ["localhost", "127.0.0.1"]];
   let raw; try { raw = await fn(...rawArgs); } catch(e) { raw = 'THROW:' + String(e).slice(0,100); }
   const actual = typeof raw === 'object' ? JSON.stringify(raw) : String(raw);
   const pass = actual === "true";

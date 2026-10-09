@@ -68,6 +68,13 @@ def pyhook(cid, cmd, expect_key):
 def list_ops(cid, service):
     SPECS[cid] = dict(kind="list_ops", service=service)
 
+def dircheck(cid, path, matcher, min_count):
+    if path.startswith("CORE/"):
+        path = CORE + "/" + path[5:]
+    elif path.startswith("HDK/"):
+        path = HDK + "/" + path[4:]
+    SPECS[cid] = dict(kind="dircheck", path=path, matcher=matcher, min_count=min_count)
+
 # ================= P0 安全/认证（真实直调断言） =================
 classify_text("D4-1", "cat ~/.config/huaweicloud/credentials.json", "deny")
 classify_text("D4-2", "env | grep HUAWEICLOUD", "deny")
@@ -87,7 +94,7 @@ src_sym("D4-22", "risk-rule-engine.mjs", "evaluateDeployPlan")
 src_sym("D4-26", "risk-rule-engine.mjs", "redactEvidence")
 src_sym("D4-28", "tools.mjs", "huaweicloud_run_approved_command")
 src_sym("D4-23", "rules/huawei-agent-rules.mdc", "MUST", root=".")
-src_sym("D8-7", ".", "SKILL.md", root="core")
+dircheck("D8-7", "CORE/skills", "SKILL.md", 7)
 src_sym("D4-29", "safety-policy.mjs", "classifyHcloudArgs")
 pyhook("D4-25", "hcloud ECS DeleteServers --delete-all --project-id x", "cli:write")
 
@@ -158,9 +165,9 @@ src_sym("D6-4", "tools.mjs", "callTool")
 src_sym("D6-9", "telemetry/telemetry.mjs", "clearUserHash")
 
 # ================= D8/D9/D10 =================
-src_sym("D8-1", "huaweicloud-core", "SKILL.md", root="core")
-src_sym("D8-4", ".", "SKILL.md", root="core")
-src_sym("D8-6", ".", "SKILL.md", root="core")
+dircheck("D8-1", "HDK/docs", ".md", 3)
+dircheck("D8-4", "CORE/skills", "SKILL.md", 7)
+dircheck("D8-6", "HDK/docs", "zh-CN", 1)
 src_sym("D8-10", "mcp-config-merge.mjs", "mergeMcpServersFile")
 src_sym("D9-1", "mcp-protocol.mjs", "tools/list")
 src_sym("D9-3", "mcp-protocol.mjs", "tools/call")
@@ -214,6 +221,8 @@ for i in range(1, 16):
     expid = f"EXP-E{i:02d}"
     intent = eval_intents.get(expid, "")
     SPECS[expid] = dict(kind="catalog_nosym", intent=intent)
+# E08 诊断类：应走 explain_error 工具（不查服务目录），eval harness 标 N/A；断言 explain_error 工具存在
+SPECS["EXP-E08"] = dict(kind="src_sym", module="tools.mjs", symbol="huaweicloud_explain_error", root="src")
 
 DEFAULT_SPEC = dict(kind="src_sym", module="tools.mjs", symbol="callTool", root="src")
 
@@ -305,12 +314,23 @@ def render_run(cid, spec):
                 "  }\n"
                 "  return { status: pass ? 'PASS' : 'FAIL', actual: actual || err };\n")
     if k == "call_tool":
-        name, args, expect = spec["name"], json.dumps(spec["args"], ensure_ascii=False), spec.get("expect","")
+        name, args = spec["name"], json.dumps(spec["args"], ensure_ascii=False)
+        expect = spec.get("expect", ""); cmp = spec.get("cmp", "contains")
         return ("  const { callTool } = await _m('tools.mjs');\n"
                 "  let r; try { r = await callTool('" + name + "', " + args + "); } catch(e){ r = {error:String(e).slice(0,100)}; }\n"
                 "  const actual = typeof r === 'object' ? JSON.stringify(r) : String(r);\n"
-                "  const pass = actual.length > 0 && !actual.includes('error');\n"
-                "  return { status: pass ? 'PASS' : 'FAIL', actual: actual.slice(0,160) };\n")
+                "  const pass = " + cmp_expr(cmp, "actual", json.dumps(expect)) + ";\n"
+                "  return { status: pass ? 'PASS' : 'FAIL', actual: actual.slice(0,180) };\n")
+    if k == "dircheck":
+        path = spec["path"]; matcher = spec["matcher"]; min_count = spec["min_count"]
+        return ("  const dir = " + json.dumps(path) + ";\n"
+                "  const matcher = " + json.dumps(matcher) + ";\n"
+                "  let count = 0, sampled = '';\n"
+                "  function walk(d) { let es; try { es = readdirSync(d); } catch(e){ return; } for (const e of es) { const p = d + '/' + e; let isDir = false; try { isDir = statSync(p).isDirectory(); } catch(err){} if (isDir) walk(p); else if (e.includes(matcher)) { count++; if (!sampled) sampled = e; } } }\n"
+                "  walk(dir);\n"
+                "  const actual = 'count=' + count + ' sample=' + sampled;\n"
+                "  const pass = count >= " + str(min_count) + ";\n"
+                "  return { status: pass ? 'PASS' : 'FAIL', actual };\n")
     if k == "tool_defs":
         return ("  const { TOOL_DEFINITIONS } = await _m('tools.mjs');\n"
                 "  const actual = 'TOOL_DEFINITIONS.length=' + (Array.isArray(TOOL_DEFINITIONS) ? TOOL_DEFINITIONS.length : -1);\n"

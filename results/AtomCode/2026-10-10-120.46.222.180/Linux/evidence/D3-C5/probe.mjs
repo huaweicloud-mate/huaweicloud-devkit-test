@@ -7,7 +7,7 @@ const CORE = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/hua
 const HDK = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk';
 const OUT = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devkit-test/results/AtomCode/2026-10-10-120.46.222.180/Linux/evidence/D3-C5/stdout.log';
 const _m = async (f) => await import(pathToFileURL(SRC + '/' + f).href);
-const executedAt = '20261010051928';
+const executedAt = '20261010052436';
 const META = { case: 'D3-C5', assistant: 'AtomCode(deepseek-v4-pro-0813)', os: 'Linux', sut: 'hdk gitHead 681895da (v1.1.8-next.2)' };
 function finish(r) { const out = { ...META, status: r.status, why: r.why || '', actual: r.actual, executedAt };
   writeFileSync(OUT, JSON.stringify(out, null, 2), 'utf8');
@@ -15,10 +15,11 @@ function finish(r) { const out = { ...META, status: r.status, why: r.why || '', 
 
 async function run() {
   const { callTool } = await _m('tools.mjs');
-  let r; try { r = await callTool('huaweicloud_service_catalog', {"intent": "创建ECS"}); } catch(e){ r = {error:String(e).slice(0,100)}; }
-  const actual = typeof r === 'object' ? JSON.stringify(r) : String(r);
-  const pass = actual.length > 0 && !actual.includes('error');
-  return { status: pass ? 'PASS' : 'FAIL', actual: actual.slice(0,160) };
+  const r = await callTool('huaweicloud_service_catalog', { intent: "\u521b\u5efa\u4e00\u53f0ECS\u4e91\u670d\u52a1\u5668\uff0c2\u68384G" });
+  const svcs = Array.isArray(r?.recommendedServices) ? r.recommendedServices.map(String) : [];
+  const actual = svcs.join(', ');
+  const pass = actual.includes("ECS");
+  return { status: pass ? 'PASS' : 'FAIL', actual: actual.slice(0,180) };
 }
 
 run().then(finish).catch(e => finish({ status:'BLOCKED', why:String(e).slice(0,200), actual:String(e).slice(0,120) }));

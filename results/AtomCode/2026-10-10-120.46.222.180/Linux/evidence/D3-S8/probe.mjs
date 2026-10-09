@@ -7,7 +7,7 @@ const CORE = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/hua
 const HDK = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk';
 const OUT = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devkit-test/results/AtomCode/2026-10-10-120.46.222.180/Linux/evidence/D3-S8/stdout.log';
 const _m = async (f) => await import(pathToFileURL(SRC + '/' + f).href);
-const executedAt = '20261010051928';
+const executedAt = '20261010052436';
 const META = { case: 'D3-S8', assistant: 'AtomCode(deepseek-v4-pro-0813)', os: 'Linux', sut: 'hdk gitHead 681895da (v1.1.8-next.2)' };
 function finish(r) { const out = { ...META, status: r.status, why: r.why || '', actual: r.actual, executedAt };
   writeFileSync(OUT, JSON.stringify(out, null, 2), 'utf8');
@@ -17,8 +17,8 @@ async function run() {
   const { callTool } = await _m('tools.mjs');
   let r; try { r = await callTool('huaweicloud_explain_error', {"service": "APIGW", "errorCode": "APIGW.0301", "message": "Incorrect IAM authentication"}); } catch(e){ r = {error:String(e).slice(0,100)}; }
   const actual = typeof r === 'object' ? JSON.stringify(r) : String(r);
-  const pass = actual.length > 0 && !actual.includes('error');
-  return { status: pass ? 'PASS' : 'FAIL', actual: actual.slice(0,160) };
+  const pass = actual.includes("KeystoneListProjects");
+  return { status: pass ? 'PASS' : 'FAIL', actual: actual.slice(0,180) };
 }
 
 run().then(finish).catch(e => finish({ status:'BLOCKED', why:String(e).slice(0,200), actual:String(e).slice(0,120) }));
