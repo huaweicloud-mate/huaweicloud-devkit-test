@@ -1,0 +1,21 @@
+PASS	ENV-INJECT-unset	HUAWEICLOUD_INJECT_STS_CMD='unset' -> inject	actual=true	expected=true	value=undefined result.len=3
+PASS	ENV-INJECT-0	HUAWEICLOUD_INJECT_STS_CMD='0' -> no-inject	actual=false	expected=false	value="0" result.len=0
+PASS	ENV-INJECT-false	HUAWEICLOUD_INJECT_STS_CMD='false' -> no-inject	actual=false	expected=false	value="false" result.len=0
+PASS	ENV-INJECT-1	HUAWEICLOUD_INJECT_STS_CMD='1' -> inject	actual=true	expected=true	value="1" result.len=3
+PASS	ENV-INJECT-true	HUAWEICLOUD_INJECT_STS_CMD='true' -> inject	actual=true	expected=true	value="true" result.len=3
+PASS	ENV-INJECT-empty	HUAWEICLOUD_INJECT_STS_CMD='empty' -> inject	actual=true	expected=true	value="" result.len=3
+PASS	ENV-INJECT-FALSE-upper	HUAWEICLOUD_INJECT_STS_CMD='FALSE-upper' -> inject	actual=true	expected=true	value="FALSE" result.len=3
+PASS	ENV-INJECT-False-mixed	HUAWEICLOUD_INJECT_STS_CMD='False-mixed' -> inject	actual=true	expected=true	value="False" result.len=3
+PASS	ENV-INJECT-2-illegal	HUAWEICLOUD_INJECT_STS_CMD='2-illegal' -> inject	actual=true	expected=true	value="2" result.len=3
+PASS	ENV-INJECT-src-strict-compare	源码: resolveStsInjectArgs 使用 === "0" / === "false" 精确比较	actual={"hasStrict0":true,"hasStrictFalse":true}	expected={"hasStrict0":true,"hasStrictFalse":true}
+PASS	ENV-SKIP-isusable-valid	isUsableOfficeaceRoot 对含 capabilities.json 的目录 -> true	actual=true	expected=true	dir=/tmp/env-var-oca-1791563356180
+PASS	ENV-SKIP-isusable-invalid	isUsableOfficeaceRoot 对不存在目录 -> false	actual=false	expected=false
+PASS	ENV-SKIP-marker-roundtrip	writeOfficeaceRootMarker -> readOfficeaceRootMarker 往返一致	actual="/tmp/env-var-oca-marker-1791563356181"	expected="/tmp/env-var-oca-marker-1791563356181"
+PASS	ENV-SKIP-marker-unaffected-by-skip	SKIP='1' 时 readOfficeaceRootMarker 仍返回 marker（SKIP 在 marker 之后）	actual="/tmp/env-var-oca-marker-1791563356181"	expected="/tmp/env-var-oca-marker-1791563356181"	SKIP 检查在 marker 之后，marker 路径不受影响
+PASS	ENV-SKIP-src-strict-compare	[源码契约快照] 源码: HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT === "1" 精确比较	actual=true	expected=true
+PASS	ENV-SKIP-src-not-truthy	[源码契约快照] 源码: 非 truthy 检查（精确 === "1" 而非 if(env)）	actual={"line":"if (process.env.HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT === '1') return null;","isStrictEqual":true,"isNotTruthy":true}	expected={"isStrictEqual":true,"isNotTruthy":true}
+
+=== 环境变量覆盖夹具 (SKIP_OFFICEACE_DETECT + INJECT_STS_CMD) ===
+  行为断言: pass=14 fail=0
+  源码契约快照（非行为断言）: pass=2 fail=0
+RESULT: PASS

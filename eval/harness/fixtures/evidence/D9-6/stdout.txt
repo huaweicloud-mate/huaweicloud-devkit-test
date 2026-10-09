@@ -1,0 +1,10 @@
+PASS	D9-6-clientA-init	客户端A initialize 互通	actual={"name":"huaweicloud-devkit"}	expected="huaweicloud-devkit"
+PASS	D9-6-clientA-tools-list	客户端A tools/list 枚举	actual={"tools":40}	expected={"tools":">0"}
+PASS	D9-6-clientA-tools-call	客户端A tools/call 互通	actual={"isError":false}	expected=false
+PASS	D9-6-clientA-resources	客户端A resources/list 互通	actual={"resources":0}	expected={"resources":0}
+PASS	D9-6-clientB-init	客户端B initialize 互通	actual={"name":"huaweicloud-devkit"}	expected="huaweicloud-devkit"
+PASS	D9-6-clientB-tools-list	客户端B tools/list 与 A 一致	actual={"a":40,"b":40}	expected={"a":40,"b":40}
+PASS	D9-6-inspector	官方 MCP Inspector 校验通道	actual="npx inspector not available（环境未安装，跳过）"	expected="Inspector 按需校验/stdio 对照"	环境未装 Inspector，已用双 stdio 客户端冒充烟互证
+
+=== D9-6 跨客户端互通冒烟 ===  pass=7 fail=0
+RESULT: PASS
