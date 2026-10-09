@@ -1,0 +1,132 @@
+=====CASE D2-4=====
+===== huaweicloud_show_profile_redacted =====
+{
+  "ok": true,
+  "note": "Profile information was returned through the toolkit redaction pipeline.",
+  "result": {
+    "ok": true,
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "{\n  \"name\": \"default\",\n  \"mode\": \"AKSK\",\n  \"accessKeyId\": \"<redacted>\",\n  \"secretAccessKey\": \"<redacted>\",\n  \"securityToken\": \"<redacted>\",\n  \"region\": \"cn-north-4\",\n  \"projectId\": \"46c1fd48bd1248c7b75afc3780de7132\",\n  \"domainId\": \"\",\n  \"skipSecureVerify\": \"false\",\n  \"readTimeout\": 10,\n  \"connectTimeout\": 5,\n  \"retryCount\": 0\n}",
+    "stderr": "",
+    "plan": {
+      "executable": "hcloud",
+      "args": [
+        "configure",
+        "show"
+      ],
+      "command": "hcloud configure show",
+      "executableBlock": "hcloud configure show",
+      "warnings": [],
+      "classification": {
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation.",
+        "service": "configure",
+        "operation": "show",
+        "args": [
+          "configure",
+          "show"
+        ]
+      },
+      "sgFindings": [],
+      "approvalToken": "76ab7aba-5b3b-4340-a21e-76e961450a75",
+      "safeToRun": true,
+      "rawArgs": [
+        "configure",
+        "show"
+      ]
+    },
+    "retries": 0,
+    "attempts": 1
+  }
+}
+>>> 疑似密钥泄露? false
+===== huaweicloud_auth_status =====
+{
+  "target": "all",
+  "credentialsConfigured": true,
+  "credentialsPath": "/home/testbot2/.config/huaweicloud/credentials.json",
+  "mcpSettingsConfigured": false,
+  "mcpSettingsSource": null,
+  "stsExpiry": null,
+  "credentialPanel": {
+    "sts": null,
+    "s1": {
+      "configured": true,
+      "fingerprint": "caae65f2",
+      "persistent": true
+    },
+    "activeSource": "s1-persistent"
+  },
+  "obsConfigured": true,
+  "obsConfigPath": "/home/testbot2/.obsutilconfig",
+  "kooCliInstalled": true,
+  "kooCliStatus": "ok",
+  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "reconciled": {
+    "stores": {
+      "s1Fingerprint": "caae65f2",
+      "envFingerprint": "",
+      "currentFingerprint": "",
+      "s3Fingerprint": "29bb0bb0",
+      "runtimeFingerprint": null
+    },
+    "kooCliCurrent": "default",
+    "envIsPlaceholder": false,
+    "s2Encrypted": true,
+    "inconsistencies": [
+      {
+        "store": "S3",
+        "source": "obsutilconfig",
+        "fingerprint": "29bb0bb0",
+        "manualModified": true
+      }
+    ],
+    "hasRuntime": false,
+    "runtimeFingerprint": null,
+    "inconsistent": true,
+    "runtimeActive": false
+  },
+  "onboarding": {
+    "needsSetup": true,
+    "scenario": 1,
+    "reason": "s1-only",
+    "message": "已保存账号(指纹 caae65f2)可直接使用。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "use-s1",
+        "args": {},
+        "label": "直接使用已保存账号"
+      },
+      {
+        "order": 2,
+   
+>>> 疑似密钥泄露? false
+=====END D2-4=====
+=====CASE D2-11=====
+{
+  "status": "error",
+  "error": "Temporary STS credentials cannot be persisted (R3). Use action=temporary.",
+  "scope": "rejected"
+}
+>>> R3 拒绝判定: true
+>>> 隔离S1凭证文件是否被写入: false
+>>> ISOLATED_HOME=/tmp/multica-task-4167481405/hdk-r3-cbvejH
+=====END D2-11=====
+=====CASE D2-12=====
+auth_switch temporary => {
+  "status": "ok",
+  "scope": "temporary",
+  "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files."
+}
+
+auth_sync => {
+  "ok": false,
+  "error": "Runtime credentials are active; auto-sync suppressed (R10).",
+  "nextStep": "Run huaweicloud_auth_switch action=clear or action=persist first."
+}
+>>> R10 拒绝判定: true
+=====END D2-12=====
+=== DONE ===
