@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-10-08 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.8-next.1 预发布 gitHead ffd7b474）。"""
+"""Hermes Linux 2026-10-10 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.8-next.2 预发布 gitHead 681895da）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -123,8 +123,8 @@ append_case("D8-10", "\n===== merge-probe 补充 =====\n" + read("merge.log"))
 shutil.copy2(os.path.join(P, "merge-probe.mjs"), os.path.join(EVID, "D8-10", "merge-probe.mjs"))
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
-write_case("_baseline", "huaweicloud-devkit v1.1.8-next.1\ngitHead ffd7b474\n", None)
-print("  _baseline: v1.1.8-next.1 (gitHead ffd7b474)")
+write_case("_baseline", "huaweicloud-devkit v1.1.8-next.2\ngitHead 681895da\n", None)
+print("  _baseline: v1.1.8-next.2 (gitHead 681895da)")
 
 # ===== 2. 回填 CSV =====
 PASS_D = [
