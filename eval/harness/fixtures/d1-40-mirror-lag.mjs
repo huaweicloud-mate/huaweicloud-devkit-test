@@ -1,5 +1,5 @@
 // D1-40 镜像 lag 检测正确性夹具（反向提醒防护）
-// 本地 verdaccio mock registry 注入滞后 dist-tags，验证「源领先于镜像」时正确提示、「镜像领先」时不误报版本倒退
+// 源码级直调 judgeUpdate 注入滞后 dist-tags，验证「源领先于镜像」时正确提示、「镜像领先」时不误报版本倒退
 // 用法: node d1-40-mirror-lag.mjs <hdk src> [--evid <dir>]
 // 输出: 控制台断言汇总 + <evid>/D1-40/stdout.txt（若 --evid 给定）
 import { writeFileSync, mkdirSync } from 'node:fs';

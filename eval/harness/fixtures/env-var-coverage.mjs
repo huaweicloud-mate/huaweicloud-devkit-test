@@ -71,37 +71,35 @@ for (const { label, value, shouldInject } of INJECT_MATRIX) {
       { hasStrict0: true, hasStrictFalse: true });
 }
 
-// ─── HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT 行为验证 ───
-// 生效条件：严格 === '1' → 跳过 OfficeAce 系统探针（return null）
-// 其他值（包括 '0'/'true'/''/未设置）→ 照常探针
-// SUT: officeace-paths.mjs 导出的 isUsableOfficeaceRoot / readOfficeaceRootMarker / writeOfficeaceRootMarker
-//      setup-cli.mjs officeaceCapabilitiesDir() 是 private function，通过导出函数 + 文件系统观测行为
+// ─── officeace root/marker 探针行为验证（officeace-paths.mjs）───
+// 说明：SKIP 决策「HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT === '1' → return null（跳过系统探针）」
+// 位于 setup-cli.mjs 的 private function officeaceCapabilitiesDir 内，行为级触达不到，仅由下方源码契约快照覆盖。
+// 本节仅验证 officeace-paths.mjs 导出的 root/marker 探针函数真实行为（与 SKIP 变量无关）。
 
 const pathsBase = new URL(`file://${hdkSrc}/officeace-paths.mjs`);
 const { isUsableOfficeaceRoot, readOfficeaceRootMarker, writeOfficeaceRootMarker } = await import(pathsBase);
 
-// ① 行为断言：isUsableOfficeaceRoot 对有效目录返回 true（capabilities.json 存在）
+// 探针①：isUsableOfficeaceRoot 对有效目录返回 true（capabilities.json 存在）
 {
   const tmpRoot = join(tmpdir(), `env-var-oca-${Date.now()}`);
   mkdirSync(tmpRoot, { recursive: true });
   writeFileSync(join(tmpRoot, 'capabilities.json'), '{}', 'utf8');
-  rec('ENV-SKIP-isusable-valid', 'isUsableOfficeaceRoot 对含 capabilities.json 的目录 -> true',
+  rec('OCA-PROBE-isusable-valid', 'isUsableOfficeaceRoot 对含 capabilities.json 的目录 -> true',
       isUsableOfficeaceRoot(tmpRoot) === true,
       isUsableOfficeaceRoot(tmpRoot), true,
       `dir=${tmpRoot}`);
   rmSync(tmpRoot, { recursive: true, force: true });
 }
 
-// ② 行为断言：isUsableOfficeaceRoot 对不存在目录返回 false
+// 探针②：isUsableOfficeaceRoot 对不存在目录返回 false
 {
   const fakeDir = join(tmpdir(), `env-var-fake-${Date.now()}`);
-  rec('ENV-SKIP-isusable-invalid', 'isUsableOfficeaceRoot 对不存在目录 -> false',
+  rec('OCA-PROBE-isusable-invalid', 'isUsableOfficeaceRoot 对不存在目录 -> false',
       isUsableOfficeaceRoot(fakeDir) === false,
       isUsableOfficeaceRoot(fakeDir), false);
 }
 
-// ③ 行为断言：writeOfficeaceRootMarker → readOfficeaceRootMarker 往返一致
-//   SKIP_OFFICEACE_DETECT 不影响 marker 路径（源码中 SKIP 检查在 marker 之后）
+// 探针③：writeOfficeaceRootMarker → readOfficeaceRootMarker 往返一致
 {
   const tmpHome = join(tmpdir(), `env-var-home-${Date.now()}`);
   mkdirSync(join(tmpHome, '.config', 'huaweicloud'), { recursive: true });
@@ -112,18 +110,14 @@ const { isUsableOfficeaceRoot, readOfficeaceRootMarker, writeOfficeaceRootMarker
   const oldHome = process.env.HUAWEICLOUD_HOME;
   process.env.HUAWEICLOUD_HOME = tmpHome;
   try {
+    const before = readOfficeaceRootMarker();
+    rec('OCA-PROBE-marker-absent-null', '未写入 marker 时 readOfficeaceRootMarker -> null',
+        before === null, before, null,
+        '未写入 marker，readOfficeaceRootMarker 应返回 null');
     writeOfficeaceRootMarker(tmpRoot);
     const marker = readOfficeaceRootMarker();
-    rec('ENV-SKIP-marker-roundtrip', 'writeOfficeaceRootMarker -> readOfficeaceRootMarker 往返一致',
+    rec('OCA-PROBE-marker-roundtrip', 'writeOfficeaceRootMarker -> readOfficeaceRootMarker 往返一致',
         marker === tmpRoot, marker, tmpRoot);
-
-    // SKIP='1' 时 marker 仍被读取（SKIP 检查在 marker 之后，不影响 marker 路径）
-    process.env.HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT = '1';
-    const markerWithSkip = readOfficeaceRootMarker();
-    rec('ENV-SKIP-marker-unaffected-by-skip', "SKIP='1' 时 readOfficeaceRootMarker 仍返回 marker（SKIP 在 marker 之后）",
-        markerWithSkip === tmpRoot, markerWithSkip, tmpRoot,
-        'SKIP 检查在 marker 之后，marker 路径不受影响');
-    delete process.env.HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT;
   } finally {
     if (oldHome === undefined) delete process.env.HUAWEICLOUD_HOME;
     else process.env.HUAWEICLOUD_HOME = oldHome;
