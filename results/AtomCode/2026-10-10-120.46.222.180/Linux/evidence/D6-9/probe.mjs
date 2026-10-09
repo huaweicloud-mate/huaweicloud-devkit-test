@@ -1,21 +1,23 @@
 // D6-9 每日测试探针（真实执行，SUT=hdk gitHead 681895da (v1.1.8-next.2)）
 import { pathToFileURL } from 'node:url';
-import { writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { writeFileSync, readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 const SRC = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src';
+const CORE = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core';
+const HDK = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk';
 const OUT = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devkit-test/results/AtomCode/2026-10-10-120.46.222.180/Linux/evidence/D6-9/stdout.log';
 const _m = async (f) => await import(pathToFileURL(SRC + '/' + f).href);
-const executedAt = '20261010050953';
+const executedAt = '20261010051928';
 const META = { case: 'D6-9', assistant: 'AtomCode(deepseek-v4-pro-0813)', os: 'Linux', sut: 'hdk gitHead 681895da (v1.1.8-next.2)' };
 function finish(r) { const out = { ...META, status: r.status, why: r.why || '', actual: r.actual, executedAt };
   writeFileSync(OUT, JSON.stringify(out, null, 2), 'utf8');
   console.log('D6-9 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
 
 async function run() {
-  const candidates = [ SRC + '/cache/cache.mjs', '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/cache/cache.mjs', '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/cache/cache.mjs' ];
-  let src = ''; for (const c of candidates) { if (existsSync(c)) { try { src = readFileSync(c, 'utf8'); } catch(e){} if (src) break; } }
-  const ok = src.length > 0 && src.includes('clear');
-  return { status: ok ? 'PASS' : 'FAIL', actual: 'clear ' + (ok ? '存在' : '缺失(或模块未找到)') + ' @ ' + m };
+  const p = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src/telemetry/telemetry.mjs';
+  let src = ''; if (existsSync(p)) { try { src = readFileSync(p, 'utf8'); } catch(e){} }
+  const ok = src.length > 0 && src.includes('clearUserHash');
+  return { status: ok ? 'PASS' : 'FAIL', actual: 'clearUserHash ' + (ok ? '存在' : '缺失') + ' @ telemetry/telemetry.mjs ' };
 }
 
 run().then(finish).catch(e => finish({ status:'BLOCKED', why:String(e).slice(0,200), actual:String(e).slice(0,120) }));
