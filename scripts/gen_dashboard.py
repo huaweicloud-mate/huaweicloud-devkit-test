@@ -4,7 +4,6 @@
 数据源（以「每日测试汇总报告」为准，不再自行重算）：
     results/Summary/每日测试汇总-<日期>.md / .html   （每日执行摘要 = 跨日趋势）
     results/Summary/用例矩阵-*-总执行结果-<日期>.csv   （仅用于最新日「客户端/维度/缺陷」明细）
-    metrics/execution.csv                             （跨迭代执行/通过趋势）
 
 用法:
     python gen_dashboard.py
@@ -104,32 +103,6 @@ def baseline_version(dates):
             if m and m.group(1).strip() and m.group(1).strip() != "（未指定）":
                 return m.group(1), d
     return "—", dates[-1] if dates else "—"
-
-
-def build_metrics():
-    p = os.path.join(REPO, "metrics", "execution.csv")
-    if not os.path.isfile(p):
-        return []
-    rows = list(csv.DictReader(open(p, encoding="utf-8-sig")))
-    by_iter = {}
-    order = []
-    for r in rows:
-        it = r["iteration"]
-        if it not in by_iter:
-            by_iter[it] = {"planned": 0, "executed": 0, "passed": 0, "failed": 0, "blocked": 0}
-            order.append(it)
-        for k in ("planned", "executed", "passed", "failed", "blocked"):
-            try:
-                by_iter[it][k] += int(r.get(k) or 0)
-            except ValueError:
-                pass
-    out = []
-    for it in order:
-        m = by_iter[it]
-        ex_rate = round(m["executed"] / m["planned"] * 100, 1) if m["planned"] else 0
-        pass_rate = round(m["passed"] / m["executed"] * 100, 1) if m["executed"] else 0
-        out.append({"iter": it, "exec_rate": ex_rate, "pass_rate": pass_rate, **m})
-    return out
 
 
 def _parse_counts(status_line, level):
@@ -419,7 +392,7 @@ def load_defect_notes(dates):
     return {k: sorted(v) for k, v in notes.items()}
 
 
-def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
+def render(days, version, vdate, gen_ts, links, notes, versions):
     latest_date = days[-1]["date"]
     latest_sum = days[-1]["summary"]
 
@@ -642,18 +615,6 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
             f'<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;">{dots}</td>'
             f'<td style="padding:4px 8px;border:1px solid #eee;white-space:nowrap;">{iss}</td></tr>')
 
-    # ---- 跨迭代 metrics 表 ----
-    metrics_rows = "".join(
-        f'<tr><td style="padding:6px 8px;border:1px solid #ddd;"><b>{m["iter"]}</b></td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{m["planned"]}</td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{m["executed"]}</td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{m["passed"]}</td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{m["failed"]}</td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{m["blocked"]}</td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{m["exec_rate"]}%</b></td>'
-        f'<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b>{m["pass_rate"]}%</b></td></tr>'
-        for m in metrics) or '<tr><td colspan="8" style="color:#95a5a6;padding:6px;">无度量数据</td></tr>'
-
     # ---- 版本全量测试 ----
     V_ST = [("PASS", "PASS"), ("FAIL", "FAIL"), ("BLOCKED", "BLOCKED"), ("SPEC-MISMATCH", "SPEC"), ("NOT_RUN", "NOT_RUN")]
 
@@ -870,10 +831,6 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 <thead><tr style="background:#f2f2f2;"><th style="padding:5px 8px;border:1px solid #ddd;">状态</th><th style="padding:5px 8px;border:1px solid #ddd;">ID</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">维度</th><th style="padding:5px 8px;border:1px solid #ddd;">P</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">客户端（10 智能体）</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">历史单号</th></tr></thead>
 <tbody>{case_rows}</tbody></table>
 
-<h2>跨迭代执行率 / 通过率</h2>
-<table style="border-collapse:collapse;width:100%;font-size:13px;">
-<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">迭代</th><th style="padding:6px 8px;border:1px solid #ddd;">计划</th><th style="padding:6px 8px;border:1px solid #ddd;">已执行</th><th style="padding:6px 8px;border:1px solid #ddd;">通过</th><th style="padding:6px 8px;border:1px solid #ddd;">失败</th><th style="padding:6px 8px;border:1px solid #ddd;">阻塞</th><th style="padding:6px 8px;border:1px solid #ddd;">执行率</th><th style="padding:6px 8px;border:1px solid #ddd;">通过率</th></tr></thead>
-<tbody>{metrics_rows}</tbody></table>
 </div>
 
 <div id="tab-version" style="display:none;">
@@ -888,7 +845,7 @@ def render(days, metrics, version, vdate, gen_ts, links, notes, versions):
 {version_detail}
 </div>
 
-<p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；执行摘要取自每日《每日测试汇总》报告，跨迭代取自 metrics/execution.csv。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准。</p>
+<p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；执行摘要取自每日《每日测试汇总》报告。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准。</p>
 <script>
 function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');}}
 function filterCase(st){{var btns=document.querySelectorAll('.casebtn');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('onclick').indexOf(st)!==-1?' active':'');}}var rows=document.querySelectorAll('.caserow');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-st');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
@@ -908,16 +865,15 @@ def main():
     if not days:
         print("[错误] 报告执行摘要解析失败")
         sys.exit(2)
-    metrics = build_metrics()
     links = load_issue_links(dates)
     notes = load_defect_notes(dates)
     versions = load_versions()
     gen_ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    html = render(days, metrics, version, vdate, gen_ts, links, notes, versions)
+    html = render(days, version, vdate, gen_ts, links, notes, versions)
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"总览看板生成: {OUT}")
-    print(f"覆盖 {len(days)} 天报告（{days[0]['date']} ~ {days[-1]['date']}），{len(metrics)} 个迭代度量")
+    print(f"覆盖 {len(days)} 天报告（{days[0]['date']} ~ {days[-1]['date']}）")
 
 
 if __name__ == "__main__":
