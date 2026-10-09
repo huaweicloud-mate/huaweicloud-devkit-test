@@ -2,7 +2,7 @@
  * OpenCode 1.1.5 daily test probe - MCP tool-level tests
  * Covers: D3-C5, D4-1,2,5,9,21,22, D2-4,11, D3-B3, D8-7, D10-2,3, D1-39, D3-B1, D3-C4, D4-13
  */
-import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/src/tools.mjs';
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 

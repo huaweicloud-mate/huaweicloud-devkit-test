@@ -3,7 +3,7 @@
  * Tests list_operations + plan_cli_command for 22 services
  * Also covers D9-4 (protocol lifecycle), D9-5 (stdio transport)
  */
-import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/src/tools.mjs';
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 

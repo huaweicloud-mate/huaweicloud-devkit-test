@@ -2,14 +2,14 @@
  * OpenCode 1.1.5 daily test probe - D2 auth + D3 func + D4-13/14 + D8 quality + D10 eval + D6 perf + D9 protocol + D7 package
  * Covers: D2-1,2,4,5,10,11,12,13,16,26, D3-A1,B1,B3,B5,C4,C5, D4-13,14, D8-1,4,6,7, D10-1~5, D6-1,4, D9-2,6,9, D7-4
  */
-import { globalCredentialsPath, readGlobalCredentials, resolveCredentials, setConfiguredBySession, hasRuntimeCredentials, setRuntimeCredentials, clearRuntimeCredentials, isPlaceholder, writeGlobalCredentials } from 'file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
-import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/tools.mjs';
-import { classifyTextCommand, classifyHcloudArgs, redactSecrets } from 'file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { globalCredentialsPath, readGlobalCredentials, resolveCredentials, setConfiguredBySession, hasRuntimeCredentials, setRuntimeCredentials, clearRuntimeCredentials, isPlaceholder, writeGlobalCredentials } from 'file:///C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/src/auth/credentials.mjs';
+import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/src/tools.mjs';
+import { classifyTextCommand, classifyHcloudArgs, redactSecrets } from 'file:///C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { writeFileSync } from 'node:fs';
 
-const pkgRoot = 'C:/Users/Administrator/devkit-test/OfficeAce/hdk';
+const pkgRoot = 'C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk';
 const evDir = 'C:/Users/Administrator/devkit-test/OfficeAce/huaweicloud-devkit-test/results/OfficeAce/2026-10-10-119.8.181.45/Windows/evidence';
 const results = [];
 function test(id, name, pass, actual, expected, passMsg, failMsg) {
@@ -65,7 +65,7 @@ test('D3-B1', 'list-ops', TOOL_DEFINITIONS.some(t=>t.name==='huaweicloud_list_op
 test('D3-B3', 'run-readonly', TOOL_DEFINITIONS.some(t=>t.name==='huaweicloud_run_readonly_command'), TOOL_DEFINITIONS.some(t=>t.name==='huaweicloud_run_readonly_command'), true, 'run_readonly registered', 'run_readonly not registered');
 
 // D3-B5: detect_framework
-let dfMod; try { dfMod = await import('file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/detect-framework.mjs'); } catch { dfMod = null; }
+let dfMod; try { dfMod = await import('file:///C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/src/detect-framework.mjs'); } catch { dfMod = null; }
 test('D3-B5', 'detect-framework', dfMod!==null&&typeof dfMod.detectFramework==='function', dfMod?typeof dfMod.detectFramework:'null', 'function', 'detectFramework available', 'detectFramework not available');
 
 // D3-C4: plan_cli_command
