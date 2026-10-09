@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """每日测试结果 → issue 分诊：测试侧完善（测试仓）+ 产品侧需求（产品仓）。
 
-确定性脚本（不依赖 LLM），由 GitHub Actions daily-issue-triage 每天 20:45（北京）定时跑，
-或维护者本机手动跑。
+确定性脚本（不依赖 LLM），由 GitHub Actions daily-issue-triage 触发：auto-summary 完成后 workflow_run 自动跑 + 每天 19:45（北京）schedule 兜底；或维护者本机手动跑。
 
 用法:
     python scripts/daily_issue_triage.py [--date 2026-09-21] [--dry-run | --live] [--repo both|test|product]
