@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "why": "Credential env print command is intercepted with decision=deny",
+  "result": {
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-env-dump",
+        "title": "Cloud credential environment dump",
+        "category": "credential",
+        "severity": "deny",
+        "message": "The command may print cloud credential environment variables.",
+        "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+        "source": "command",
+        "evidence": "printenv HW_SECRET_KEY"
+      }
+    ]
+  },
+  "executedAt": "20261009105017"
+}
