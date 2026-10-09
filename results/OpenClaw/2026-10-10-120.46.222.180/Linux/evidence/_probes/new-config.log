@@ -1,0 +1,186 @@
+
+=====CASE D2-27=====
+getKooCliVersion=7.2.12
+parseHcloudVersion=7.2.12
+compare(7.2.12,7.2.9)=1 compare(7.2.9,7.2.12)=-1 compare(7.2.12,7.2.12)=0
+downloadBase=https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12
+[OK] getKooCliVersion 读 package.json
+[OK] parseHcloudVersion 提取首个 x.y.z
+[OK] compareVersion 正确比较
+[OK] downloadBase 含版本或 latest
+=====END D2-27=====
+
+=====CASE D1-70=====
+writeProxyConfig path=/tmp/multica-task-2146726231/hdk-probe-1791579982886/.config/huaweicloud/proxy.json
+readProxyConfig={"https_proxy":"http://proxy.example:8080","http_proxy":"http://proxy.example:8080","no_proxy":"internal.corp.com"}
+[OK] write/read proxy.json 正确
+getProxySettings(https)={"proxyUrl":"http://proxy.example:8080","noProxyList":["internal.corp.com"],"targetProtocol":"https:"}
+getProxySettings(no_proxy 命中)=null
+[OK] getProxySettings 拼 file + no_proxy 命中返回 null
+getProxySettings(env 优先)={"proxyUrl":"http://env-proxy:9999","noProxyList":["internal.corp.com"],"targetProtocol":"https:"}
+[OK] env 优先于 file
+getWebSocketImpl(有代理)=ProxyWebSocket
+getWebSocketImpl(no_proxy)=globalThis.WebSocket
+[OK] 有代理返回 undici ProxyWebSocket
+[OK] 无代理回退 globalThis.WebSocket
+[OK] clearProxyConfig 清空
+=====END D1-70=====
+
+=====CASE D8-9=====
+installId len=64 稳定=true (前8=e87b2066…)
+[OK] installId 稳定持久
+sanitize(newline/tab)="AK123456  with tab and newline"
+sanitize(长值 5000) len=255
+sanitize(trim)="legal-value"
+sanitize(AK=...)="AK=ABC123DEF456GHI"
+sanitize(access_key/token=...)="access_key=AKIA123 secret_key=SECRET token=T0K3N_SECRET"
+[OK] sanitize 移除控制字符
+[OK] sanitize 超长截断
+[OK] sanitize 保留合法值
+[FAIL] sanitize 移除 AK/SK/token 敏感值(契约)
+=====END D8-9=====
+
+=====CASE D8-10=====
+mergeCommandStyle.command=["node","/home/testbot1/devkit-test/OpenClaw/hdk/plugins/huaweicloud-core/src/mcp-server.mjs","--flag"]
+[OK] mergeCommandStyle 保留 user args
+mergeArgsStyle.args=["/home/testbot1/devkit-test/OpenClaw/hdk/plugins/huaweicloud-core/src/mcp-server.mjs","--x"] env={"MY":"1","HCLOUD_BIN":"/usr/bin/hcloud"}
+[OK] mergeArgsStyle 合并正确
+extractUserDelta={"argsExtra":["--x"],"env":{"MY":"1"}}
+applyUserDelta.args=["/home/testbot1/devkit-test/OpenClaw/hdk/plugins/huaweicloud-core/src/mcp-server.mjs","--x"] env={"HCLOUD_BIN":"/usr/bin/hcloud","MY":"1"}
+[OK] delta 提取+应用幂等
+takeAgentDelta.argsExtra=["--x"]
+[OK] save→take→readBackup 闭环
+[OK] purgeBackup 幂等
+=====END D8-10=====
+
+=====CASE D6-9=====
+invalidateUpdateCache x2 -> peek=null
+clearIconCache x2 后重查 source=snapshot count=2
+clearMarketCache x2 OK
+[OK] update cache 清理后 peek 为空
+[OK] icon 清理后重查可拉取
+[OK] market 清理幂等
+=====END D6-9=====
+
+=====SUMMARY=====
+{
+  "total": 23,
+  "passed": 22,
+  "results": [
+    {
+      "name": "getKooCliVersion 读 package.json",
+      "ok": true,
+      "detail": "7.2.12"
+    },
+    {
+      "name": "parseHcloudVersion 提取首个 x.y.z",
+      "ok": true,
+      "detail": "7.2.12"
+    },
+    {
+      "name": "compareVersion 正确比较",
+      "ok": true,
+      "detail": "1/-1/0"
+    },
+    {
+      "name": "downloadBase 含版本或 latest",
+      "ok": true,
+      "detail": "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12"
+    },
+    {
+      "name": "write/read proxy.json 正确",
+      "ok": true,
+      "detail": "{\"https_proxy\":\"http://proxy.example:8080\",\"http_proxy\":\"http://proxy.example:8080\",\"no_proxy\":\"internal.corp.com\"}"
+    },
+    {
+      "name": "getProxySettings 拼 file + no_proxy 命中返回 null",
+      "ok": true,
+      "detail": "{\"psHttps\":{\"proxyUrl\":\"http://proxy.example:8080\",\"noProxyList\":[\"internal.corp.com\"],\"targetProtocol\":\"https:\"},\"psBypass\":null}"
+    },
+    {
+      "name": "env 优先于 file",
+      "ok": true,
+      "detail": "{\"proxyUrl\":\"http://env-proxy:9999\",\"noProxyList\":[\"internal.corp.com\"],\"targetProtocol\":\"https:\"}"
+    },
+    {
+      "name": "有代理返回 undici ProxyWebSocket",
+      "ok": true,
+      "detail": "ProxyWebSocket"
+    },
+    {
+      "name": "无代理回退 globalThis.WebSocket",
+      "ok": true,
+      "detail": "globalThis.WebSocket"
+    },
+    {
+      "name": "clearProxyConfig 清空",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "installId 稳定持久",
+      "ok": true,
+      "detail": "len=64"
+    },
+    {
+      "name": "sanitize 移除控制字符",
+      "ok": true,
+      "detail": "\"AK123456  with tab and newline\""
+    },
+    {
+      "name": "sanitize 超长截断",
+      "ok": true,
+      "detail": "len=255"
+    },
+    {
+      "name": "sanitize 保留合法值",
+      "ok": true,
+      "detail": "\"legal-value\""
+    },
+    {
+      "name": "sanitize 移除 AK/SK/token 敏感值(契约)",
+      "ok": false,
+      "detail": "{\"s4\":\"AK=ABC123DEF456GHI\",\"s5\":\"access_key=AKIA123 secret_key=SECRET token=T0K3N_SECRET\"}"
+    },
+    {
+      "name": "mergeCommandStyle 保留 user args",
+      "ok": true,
+      "detail": "[\"node\",\"/home/testbot1/devkit-test/OpenClaw/hdk/plugins/huaweicloud-core/src/mcp-server.mjs\",\"--flag\"]"
+    },
+    {
+      "name": "mergeArgsStyle 合并正确",
+      "ok": true,
+      "detail": "{\"args\":[\"/home/testbot1/devkit-test/OpenClaw/hdk/plugins/huaweicloud-core/src/mcp-server.mjs\",\"--x\"],\"env\":{\"MY\":\"1\",\"HCLOUD_BIN\":\"/usr/bin/hcloud\"}}"
+    },
+    {
+      "name": "delta 提取+应用幂等",
+      "ok": true,
+      "detail": "{\"command\":\"node\",\"args\":[\"/home/testbot1/devkit-test/OpenClaw/hdk/plugins/huaweicloud-core/src/mcp-server.mjs\",\"--x\"],\"env\":{\"HCLOUD_BIN\":\"/usr/bin/hcloud\",\"MY\":\"1\"}}"
+    },
+    {
+      "name": "save→take→readBackup 闭环",
+      "ok": true,
+      "detail": "{\"taken\":{\"argsExtra\":[\"--x\"],\"env\":{\"MY\":\"1\"},\"savedAt\":\"2026-10-09T21:06:23.060Z\"},\"afterTake\":null}"
+    },
+    {
+      "name": "purgeBackup 幂等",
+      "ok": true,
+      "detail": "false"
+    },
+    {
+      "name": "update cache 清理后 peek 为空",
+      "ok": true,
+      "detail": "null"
+    },
+    {
+      "name": "icon 清理后重查可拉取",
+      "ok": true,
+      "detail": "source=snapshot"
+    },
+    {
+      "name": "market 清理幂等",
+      "ok": true,
+      "detail": "clearMarketCache 两次调用成功"
+    }
+  ]
+}
