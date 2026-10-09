@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "caseId": "D1-33",
+  "source": "group:d1-upgrade",
+  "assertions": [
+    {
+      "id": "D1-33",
+      "name": "skipFilePath",
+      "pass": true,
+      "actual": "/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/.update-skip.json",
+      "expected": "string",
+      "passMsg": "skipFilePath: /home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/.update-skip.json",
+      "failMsg": "skipFilePath empty"
+    },
+    {
+      "id": "D1-33",
+      "name": "fallbackSkipFilePath",
+      "pass": true,
+      "actual": "/home/testbot3/.config/huaweicloud/devkit-skip.json",
+      "expected": "string",
+      "passMsg": "fallback: /home/testbot3/.config/huaweicloud/devkit-skip.json",
+      "failMsg": "fallback empty"
+    },
+    {
+      "id": "D1-33",
+      "name": "resolveSkipFilePath",
+      "pass": true,
+      "actual": "/home/testbot3/.config/huaweicloud/devkit-skip.json.test",
+      "expected": "string",
+      "passMsg": "resolveSkipFilePath returns path",
+      "failMsg": "resolveSkipFilePath error"
+    },
+    {
+      "id": "D1-33",
+      "name": "skip-fields",
+      "pass": true,
+      "actual": "dismissedVersion,dismissedAt,expireAt",
+      "expected": "all fields",
+      "passMsg": "skip file fields complete",
+      "failMsg": "skip file fields missing"
+    }
+  ],
+  "passed": 4,
+  "total": 4
+}
