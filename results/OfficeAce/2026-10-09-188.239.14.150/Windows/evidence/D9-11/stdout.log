@@ -1,0 +1,86 @@
+{
+  "status": "PASS",
+  "caseId": "D9-11",
+  "why": "WebSocket 隧道通道生命周期全部通过：客户端成功建连 mock server、认证握手成功、心跳 ping→pong 往返、二进制隧道数据 echo 往返、正常/异常断开均正确处理、断开后可重新建连、close() 幂等、关闭后新连接被拒绝、frameLog 记录了生命周期帧",
+  "executedAt": "20261009084229",
+  "summary": "11 pass / 0 fail",
+  "details": [
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-connect",
+      "desc": "WebSocket 客户端成功建连 mock server",
+      "actual": {"connected": true, "serverConns": 1},
+      "expected": {"connected": true, "serverConns": 1}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-auth",
+      "desc": "认证握手成功（auth:ok）",
+      "actual": {"reply": "auth:ok"},
+      "expected": {"reply": "auth:ok"}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-heartbeat",
+      "desc": "心跳保活 ping→pong 往返",
+      "actual": {"reply": "pong"},
+      "expected": {"reply": "pong"}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-binary-roundtrip",
+      "desc": "二进制隧道数据 echo 往返",
+      "actual": {"reply": "binary:6"},
+      "expected": {"reply": "binary:6"}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-normal-close",
+      "desc": "正常断开（客户端主动 close → 服务端 disconnect）",
+      "actual": {"disconnects": 1, "remainingConns": 0},
+      "expected": {"disconnects": 1, "remainingConns": 0}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-abnormal-setup",
+      "desc": "异常断开前建立第二个连接",
+      "actual": {"connected": true, "serverConns": 1},
+      "expected": {"connected": true, "serverConns": 1}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-abnormal-close",
+      "desc": "服务端强制断开 → 客户端收到 close 事件",
+      "actual": {"ws2Closed": true, "serverConns": 0},
+      "expected": {"ws2Closed": true, "serverConns": 0}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-reconnect",
+      "desc": "断开后可重新建连",
+      "actual": {"reconnected": true, "serverConns": 1},
+      "expected": {"reconnected": true, "serverConns": 1}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-close-idempotent",
+      "desc": "close() 幂等（二次调用不报错）",
+      "actual": {"closeTwiceOk": true},
+      "expected": {"closeTwiceOk": true}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-post-close-reject",
+      "desc": "关闭后新连接被拒绝",
+      "actual": {"error": true},
+      "expected": {"error": true}
+    },
+    {
+      "result": "PASS",
+      "name": "D9-11-LC-frame-log",
+      "desc": "frameLog 记录了生命周期帧",
+      "actual": {"totalFrames": 8, "hasIn": true, "hasOut": true},
+      "expected": {"totalFrames": ">0", "hasIn": true, "hasOut": true}
+    }
+  ]
+}

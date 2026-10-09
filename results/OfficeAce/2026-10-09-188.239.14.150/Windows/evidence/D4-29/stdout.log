@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "caseId": "D4-29",
+  "why": "classifyRawCommand 委托 classifyTextCommand 结果一致；assertAllowed allow/deny 分支正确；凭证文件/环境变量 dump deny；hcloud 只读 allow/写操作 deny/空参数 deny/help allow；redactSecrets 脱敏正确；loadPolicy 返回有效策略；拼接命令写操作 deny。12 pass / 0 fail",
+  "executedAt": "20261009084229",
+  "details": [
+    {"step": "raw-delegates", "pass": true, "result": "classifyRawCommand delegates to classifyTextCommand, result consistent => allow"},
+    {"step": "allow-no-throw", "pass": true, "result": "allow classification, assertAllowed no throw => {decision:allow, passed:true}"},
+    {"step": "deny-throws", "pass": true, "result": "deny classification, assertAllowed throws Error => {threw:true, hasPolicy:true, decision:deny}"},
+    {"step": "cred-file-deny", "pass": true, "result": "credential file read => deny/credential"},
+    {"step": "env-dump-deny", "pass": true, "result": "credential env var dump => deny"},
+    {"step": "hcloud-read-allow", "pass": true, "result": "hcloud read-only command => allow"},
+    {"step": "hcloud-write-deny", "pass": true, "result": "hcloud write operation => deny (no approval)"},
+    {"step": "hcloud-empty-deny", "pass": true, "result": "hcloud empty params => deny/invalid"},
+    {"step": "hcloud-help-allow", "pass": true, "result": "hcloud --help/version => allow/local_metadata"},
+    {"step": "redact-secrets", "pass": true, "result": "redactSecrets redacts credential fields => {ak:<redacted>, sk:<redacted>}"},
+    {"step": "load-policy", "pass": true, "result": "loadPolicy returns valid policy => true"},
+    {"step": "concat-write-deny", "pass": true, "result": "concatenated command with hcloud write => deny"}
+  ],
+  "summary": "12 pass / 0 fail"
+}

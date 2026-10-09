@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "caseId": "D3-S5",
+  "why": "Compound intent routing verified: ECS+VPC→both skills, OBS+RDS→both skills, CCE only→cce skill only.",
+  "executedAt": "20261001103000",
+  "test1": {
+    "intent": "ECS+VPC",
+    "skills": [
+      "huawei-ecs",
+      "huawei-vpc"
+    ],
+    "services": [
+      "ECS",
+      "VPC",
+      "EIP"
+    ],
+    "hasEcsSkill": true,
+    "hasVpcSkill": true
+  },
+  "test2": {
+    "intent": "OBS+RDS",
+    "skills": [
+      "huawei-obs",
+      "huawei-rds"
+    ],
+    "hasObsSkill": true,
+    "hasRdsSkill": true
+  },
+  "test3": {
+    "intent": "CCE only",
+    "skills": [
+      "huawei-cce"
+    ],
+    "hasCceSkill": true,
+    "hasEcsSkillInCce": false
+  }
+}
