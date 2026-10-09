@@ -1,6 +1,6 @@
 =====CASE D9-13=====
 [OK] ① setRuntimeCredentials/hasRuntimeCredentials/resolve/clear | has=true resolvedHasAk=true cleared=true
-[OK] ⑦ clearRuntimeCredentials 后运行时不落盘 | /tmp/multica-task-2146726231/d913-idCBS6/.config/huaweicloud/credentials.json 不存在
+[OK] ⑦ clearRuntimeCredentials 后运行时不落盘 | /tmp/multica-task-2146726231/d913-5FRt2R/.config/huaweicloud/credentials.json 不存在
 [OK] ② loadPolicy + classifyHcloudArgs 可用 | policy.version=0.1.0 ; classifyHcloudArgs(DeleteServer)={"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}
 evaluateArtifacts(broad IAM) => {"decision":"deny","findings":[{"ruleId":"hwc-iam-admin-policy","title":"Broad IAM administrator grant","category":"iam","severity":"deny","message":"The change appears to grant broad administrator permissions.","remediation":"Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.","source":"artifact","evidence":"{\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"}]}
 evaluateDeployPlan => {"decision":"allow","findings":[]}
@@ -13,7 +13,7 @@ planHcloudCommand(CreateVpc) => decision=deny hasToken=true safeToRun=false
 [OK] ⑤ readServiceCatalogs + classifyUnsupported + planHcloudCommand 可用 | cn.size=0 unsupported=unknown plan.decision=deny
 [OK] ⑥ tools/call 返回无 AK/SK/token 明文 | huaweicloud_auth_status: ok; huaweicloud_plan_cli_command: ok; 
 [OK] ⑧ write/readGlobalCredentials 持久化 + isPlaceholder | persist=true ph=<..>=true,placeholder=true,real-not-placeholder=true
-[OK] ⑨ globalCredentialsPath/obsConfigPath/writeObsConfig | gp=/tmp/multica-task-2146726231/d913-idCBS6/.config/huaweicloud ; op=/tmp/multica-task-2146726231/d913-idCBS6/.obsutilconfig ; obs撰=true
+[OK] ⑨ globalCredentialsPath/obsConfigPath/writeObsConfig | gp=/tmp/multica-task-2146726231/d913-5FRt2R/.config/huaweicloud ; op=/tmp/multica-task-2146726231/d913-5FRt2R/.obsutilconfig ; obs撰=true
 =====END D9-13=====
 
 =====SUMMARY=====
@@ -30,7 +30,7 @@ planHcloudCommand(CreateVpc) => decision=deny hasToken=true safeToRun=false
     {
       "name": "⑦ clearRuntimeCredentials 后运行时不落盘",
       "ok": true,
-      "detail": "/tmp/multica-task-2146726231/d913-idCBS6/.config/huaweicloud/credentials.json 不存在"
+      "detail": "/tmp/multica-task-2146726231/d913-5FRt2R/.config/huaweicloud/credentials.json 不存在"
     },
     {
       "name": "② loadPolicy + classifyHcloudArgs 可用",
@@ -65,7 +65,7 @@ planHcloudCommand(CreateVpc) => decision=deny hasToken=true safeToRun=false
     {
       "name": "⑨ globalCredentialsPath/obsConfigPath/writeObsConfig",
       "ok": true,
-      "detail": "gp=/tmp/multica-task-2146726231/d913-idCBS6/.config/huaweicloud ; op=/tmp/multica-task-2146726231/d913-idCBS6/.obsutilconfig ; obs撰=true"
+      "detail": "gp=/tmp/multica-task-2146726231/d913-5FRt2R/.config/huaweicloud ; op=/tmp/multica-task-2146726231/d913-5FRt2R/.obsutilconfig ; obs撰=true"
     }
   ]
 }

@@ -2,7 +2,7 @@
 =====CASE D3-S6=====
 路由 -> {"skills":["huawei-functiongraph"],"services":["FunctionGraph"]}
 plan CreateFunction -> decision=allow safeToRun=true
-run CreateFunction -> ok=true stdout=[USE_ERROR]Invalid parameter: code.filename
+run CreateFunction -> ok=true stdout=[USE_ERROR]Invalid parameter: code.zip_file
 
 Run `hcloud FunctionGraph CreateFunction --help` for details about this API.
 
@@ -16,7 +16,7 @@ Run `hcloud FunctionGraph CreateFunction --help` for details about this API.
 复合意图路由 -> services=["RDS"] (RDS命中=true 部署目标命中=false)
 RDS ListInstances -> ok=true (基线)
 plan RDS CreateInstance -> decision=allow
-run RDS CreateInstance -> ok=true stdout=[USE_ERROR]Invalid parameter: db.port
+run RDS CreateInstance -> ok=true stdout=[USE_ERROR]Invalid parameter: db.password
 
 Run `hcloud RDS CreateInstance --help` for details about this API.
 
@@ -64,7 +64,7 @@ Run `hcloud RDS CreateInstance --help` for details about this API.
     {
       "name": "最小 RDS 实例创建(真·外部依赖: 需 vpc/subnet/sg 前置环境)",
       "ok": false,
-      "detail": "RDS 实例创建未成功(preflight 缺 vpc/subnet/sg 前置或配额): [USE_ERROR]Invalid parameter: db.port\n\nRun `hcloud RDS CreateInstance --help` for details about this API.\n"
+      "detail": "RDS 实例创建未成功(preflight 缺 vpc/subnet/sg 前置或配额): [USE_ERROR]Invalid parameter: db.password\n\nRun `hcloud RDS CreateInstance --help` for details about this API.\n"
     }
   ]
 }
