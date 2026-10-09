@@ -1,0 +1,15 @@
+PASS	D9-6-IA-clientA-init	客户端A (Hermes) initialize 互通	actual={"server":"huaweicloud-devkit","proto":"2024-11-05"}	expected={"server":"huaweicloud-devkit"}
+PASS	D9-6-IA-clientA-tools-list	客户端A tools/list 枚举	actual={"count":40}	expected={"count":">0"}
+PASS	D9-6-IA-clientA-tools-call	客户端A tools/call 互通（service_catalog）	actual={"isError":false,"contentLen":1}	expected={"isError":false}
+PASS	D9-6-IB-clientB-init	客户端B (AtomCode) initialize 互通	actual={"server":"huaweicloud-devkit"}	expected={"server":"huaweicloud-devkit"}
+PASS	D9-6-IB-clientB-tools-list	客户端B tools/list 枚举	actual={"count":40}	expected={"count":">0"}
+PASS	D9-6-IC-tools-consistency	A/B 客户端 tools/list 一致性	actual={"a":40,"b":40}	expected={"a":40,"b":40}
+PASS	D9-6-IB-clientB-tools-call	客户端B tools/call 互通（service_catalog）	actual={"isError":false,"contentLen":1}	expected={"isError":false}
+PASS	D9-6-IA-clientA-resources	客户端A resources/list 互通	actual={"hasResult":true,"resources":0}	expected={"hasResult":true}
+PASS	D9-6-IB-ping-consistency	A/B 客户端 ping 响应一致（服务端未实现 ping 时均返回 -32601）	actual={"aResult":false,"aErr":-32601,"bErr":-32601}	expected={"consistent":true}	服务端未实现 ping，A/B 均返回 -32601（协议一致）
+PASS	D9-6-ID-error-consistency	A/B 客户端未知方法错误码一致（-32601）	actual={"a":-32601,"b":-32601}	expected={"a":-32601,"b":-32601}
+PASS	D9-6-IE-concurrent	A/B 客户端并发互通（同时活跃互不干扰）	actual={"aAlive":true,"bAlive":true}	expected={"aAlive":true,"bAlive":true}
+PASS	D9-6-IF-serverinfo-consistency	A/B 客户端 serverInfo.name 一致	actual={"a":"huaweicloud-devkit","b":"huaweicloud-devkit"}	expected={"a":"huaweicloud-devkit","b":"huaweicloud-devkit"}
+
+=== D9-6 跨客户端互通协议级 ===  pass=12 fail=0
+RESULT: PASS

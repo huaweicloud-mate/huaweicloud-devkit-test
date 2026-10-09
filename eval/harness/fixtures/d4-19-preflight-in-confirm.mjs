@@ -1,12 +1,5 @@
 // D4-19 确认流下预检仍生效夹具
 // 协议层 harness：高危进入确认流 → preflight 拦截；非高危 → 不受干扰
-// 验证点：
-//   1. 写操作命令在确认流中（allowWrites=false）→ classification=deny → assertAllowed 拦截
-//   2. 写操作命令 allowWrites=true → classification=allow → assertAllowed 放行
-//   3. 只读命令 → classification=allow → 不受确认流影响
-//   4. hook_check_command 对高危命令返回 deny/warn → ok=false
-//   5. hook_check_command 对安全命令返回 allow → ok=true
-//   6. runApprovedCommand 即使 approvedByUser=true，token 无效仍被拦截
 // 用法: node d4-19-preflight-in-confirm.mjs <hdk src> [--evid <dir>]
 // 输出: 控制台断言汇总 + <evid>/D4-19/stdout.txt（若 --evid 给定）
 import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
@@ -45,40 +38,37 @@ mkdirSync(join(tmpHome, '.config', 'huaweicloud'), { recursive: true });
 const oldHome = process.env.HUAWEICLOUD_HOME;
 process.env.HUAWEICLOUD_HOME = tmpHome;
 
+// Mock hcloud 二进制：用 /bin/echo 替代真实 hcloud，使 runHcloud 成功返回（exit 0）
+// 传入 stdin:'' 跳过 stdin 写入，避免 EPIPE
+const oldHcloudBin = process.env.HCLOUD_BIN;
+process.env.HCLOUD_BIN = '/bin/echo';
+
 try {
-  // ① 高危写操作：确认流中（allowWrites=false）→ classification=deny → assertAllowed 拦截
+  // ① 高危写操作：确认流中（allowWrites=false）→ deny → assertAllowed 拦截
   {
     const writeArgs = ['ECS', 'CreateServers', '--cli-region=cn-north-4', '--server.flavor_id=s6.small.1'];
     const cls = classifyHcloudArgs(writeArgs, { allowWrites: false });
     let blocked = false;
-    try {
-      assertAllowed(cls);
-    } catch (e) {
-      blocked = true;
-    }
-    rec('D4-19-write-deny-in-confirm', '高危写操作确认流中 → classification=deny → assertAllowed 拦截',
+    try { assertAllowed(cls); } catch { blocked = true; }
+    rec('D4-19-write-deny-in-confirm', '高危写操作确认流中 -> deny -> assertAllowed 拦截',
         cls.decision === 'deny' && blocked,
         { decision: cls.decision, blocked },
         { decision: 'deny', blocked: true });
   }
 
-  // ② 高危写操作 allowWrites=true → classification=allow → assertAllowed 放行
+  // ② 高危写操作 allowWrites=true → allow → 放行
   {
     const writeArgs = ['ECS', 'CreateServers', '--cli-region=cn-north-4', '--server.flavor_id=s6.small.1'];
     const cls = classifyHcloudArgs(writeArgs, { allowWrites: true });
     let blocked = false;
-    try {
-      assertAllowed(cls);
-    } catch (e) {
-      blocked = true;
-    }
-    rec('D4-19-write-allow-with-approval', '高危写操作 allowWrites=true → classification=allow → 放行',
+    try { assertAllowed(cls); } catch { blocked = true; }
+    rec('D4-19-write-allow-with-approval', '高危写操作 allowWrites=true -> allow -> 放行',
         cls.decision === 'allow' && !blocked,
         { decision: cls.decision, blocked },
         { decision: 'allow', blocked: false });
   }
 
-  // ③ 只读命令 → classification=allow → 不受确认流影响
+  // ③ 只读命令 → allow → 不受确认流影响
   {
     const readArgs = ['ECS', 'ListServers', '--cli-region=cn-north-4'];
     const clsNoAllow = classifyHcloudArgs(readArgs, { allowWrites: false });
@@ -86,46 +76,44 @@ try {
     let blockedNoAllow = false, blockedAllow = false;
     try { assertAllowed(clsNoAllow); } catch { blockedNoAllow = true; }
     try { assertAllowed(clsAllow); } catch { blockedAllow = true; }
-    rec('D4-19-readonly-not-affected', '只读命令 → 不受确认流影响（allowWrites 前后均 allow）',
+    rec('D4-19-readonly-not-affected', '只读命令 -> 不受确认流影响',
         clsNoAllow.decision === 'allow' && clsAllow.decision === 'allow' && !blockedNoAllow && !blockedAllow,
         { noAllow: clsNoAllow.decision, allow: clsAllow.decision, blockedNoAllow, blockedAllow },
         { noAllow: 'allow', allow: 'allow', blockedNoAllow: false, blockedAllow: false });
   }
 
-  // ④ hook_check_command 对高危命令（rm -rf）返回 deny → ok=false
+  // ④ hook_check_command 对 rm -rf / → deny → ok=false
   {
-    const result = await callTool('huaweicloud_hook_check_command', {
-      command: 'rm -rf /',
-    });
-    rec('D4-19-hook-check-dangerous', 'hook_check_command 对高危 rm -rf / → deny → ok=false',
+    const result = await callTool('huaweicloud_hook_check_command', { command: 'rm -rf /' });
+    rec('D4-19-hook-check-dangerous', 'hook_check_command rm -rf / -> deny -> ok=false',
         result.decision === 'deny' && result.ok === false,
         { decision: result.decision, ok: result.ok },
         { decision: 'deny', ok: false });
   }
 
-  // ④b hook_check_command 对华为云高危命令（DeleteServers）返回 warn → ok=true（warn 不阻断）
+  // ④b hook_check_command 对 DeleteServers → warn → ok=true
   {
     const result = await callTool('huaweicloud_hook_check_command', {
       command: 'hcloud ECS DeleteServers --server.id.1=abc --cli-region=cn-north-4',
     });
-    rec('D4-19-hook-check-hcloud-warn', 'hook_check_command 对 DeleteServers → warn → ok=true（warn 不阻断）',
+    rec('D4-19-hook-check-hcloud-warn', 'hook_check_command DeleteServers -> warn -> ok=true',
         result.decision === 'warn' && result.ok === true,
         { decision: result.decision, ok: result.ok },
         { decision: 'warn', ok: true });
   }
 
-  // ⑤ hook_check_command 对安全命令（ListServers）返回 allow → ok=true
+  // ⑤ hook_check_command 对 ListServers → allow → ok=true
   {
     const result = await callTool('huaweicloud_hook_check_command', {
       command: 'hcloud ECS ListServers --cli-region=cn-north-4',
     });
-    rec('D4-19-hook-check-safe', 'hook_check_command 对安全 ListServers → allow → ok=true',
+    rec('D4-19-hook-check-safe', 'hook_check_command ListServers -> allow -> ok=true',
         result.decision === 'allow' && result.ok === true,
         { decision: result.decision, ok: result.ok },
         { decision: 'allow', ok: true });
   }
 
-  // ⑥ runApprovedCommand approvedByUser=true 但 token 无效 → 仍被拦截
+  // ⑥ approvedByUser=true 但 token 无效 → 拦截
   {
     const writeArgs = ['ECS', 'CreateServers', '--cli-region=cn-north-4', '--server.flavor_id=s6.small.1'];
     let threw = false;
@@ -140,44 +128,43 @@ try {
       threw = true;
       errMsg = e.message;
     }
-    rec('D4-19-approved-but-bad-token-blocked', 'approvedByUser=true 但 token 无效 → 仍被拦截',
+    rec('D4-19-approved-but-bad-token-blocked', 'approvedByUser=true 但 token 无效 -> 拦截',
         threw && /Invalid or expired approval token/.test(errMsg),
         { threw, errMsg: errMsg.slice(0, 80) },
         { threw: true, errMsgContains: 'Invalid or expired approval token' });
   }
 
-  // ⑦ plan 生成 token → runApprovedCommand 通过审批门 + token 验证（不因 approvedByUser 被拦）
+  // ⑦ plan→approvedByUser=true+有效token → 通过审批+token 门禁 + 执行成功
+  // Mock hcloud=/bin/echo, stdin:'' 避免 EPIPE，真正断言门禁通过后执行成功
   {
     const writeArgs = ['ECS', 'CreateServers', '--cli-region=cn-north-4', '--server.flavor_id=s6.small.1'];
     const plan = planHcloudCommand(writeArgs, { allowWrites: false });
-    const token = plan.approvalToken;
     let threw = false;
     let errMsg = '';
+    let resultOk = false;
     try {
-      await callTool('huaweicloud_run_approved_command', {
+      const result = await callTool('huaweicloud_run_approved_command', {
         args: writeArgs,
-        approvalToken: token,
+        approvalToken: plan.approvalToken,
         approvedByUser: true,
+        stdin: '',
       });
+      resultOk = result?.ok === true || result?.approved === true;
     } catch (e) {
       threw = true;
       errMsg = e.message;
     }
-    // 审批门 + token 验证通过（不因 approvedByUser/token 被拦）
-    // 可能因 hcloud 未安装继续抛出，但不应该是 approvedByUser 或 token 错误
-    const passedApprovalAndToken = !threw || (!/approvedByUser must be true/.test(errMsg) && !/Invalid or expired approval token/.test(errMsg));
-    rec('D4-19-plan-then-approve-passes-gates', 'plan→approvedByUser=true+有效token → 通过审批+token 门禁',
-        passedApprovalAndToken,
-        { threw, errMsg: errMsg.slice(0, 80) },
-        { approvalAndTokenPassed: true },
-        threw ? `threw but not approval/token: ${errMsg.slice(0, 120)}` : 'gates passed');
+    rec('D4-19-plan-then-approve-passes-gates', 'plan->approvedByUser=true+有效token -> 通过审批+token 门禁 + 执行成功',
+        !threw && resultOk,
+        { threw, errMsg: errMsg.slice(0, 80), resultOk },
+        { threw: false, resultOk: true },
+        threw ? `unexpected throw: ${errMsg.slice(0, 120)}` : 'approval + token gates passed, execution succeeded');
   }
 
-  // ⑧ 预检（preflightSecurityGroupCheck）嵌入 plan 结果
+  // ⑧ 预检嵌入 plan 结果
   {
     const sgArgs = ['ECS', 'CreateServers', '--cli-region=cn-north-4', '--server.flavor_id=s6.small.1', '--security_group_id.1=sg-test-123'];
     const plan = planHcloudCommand(sgArgs, { allowWrites: false });
-    // plan 应包含 sgFindings 字段（即使为空数组，也说明 preflight 已运行）
     rec('D4-19-plan-includes-preflight', 'plan 结果包含 sgFindings（preflight 已运行）',
         Array.isArray(plan.sgFindings),
         { hasSgFindings: Array.isArray(plan.sgFindings), len: plan.sgFindings?.length },
@@ -186,6 +173,8 @@ try {
 } finally {
   if (oldHome === undefined) delete process.env.HUAWEICLOUD_HOME;
   else process.env.HUAWEICLOUD_HOME = oldHome;
+  if (oldHcloudBin === undefined) delete process.env.HCLOUD_BIN;
+  else process.env.HCLOUD_BIN = oldHcloudBin;
   rmSync(tmpHome, { recursive: true, force: true });
 }
 

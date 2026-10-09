@@ -25,12 +25,11 @@ function rec(id, title, ok, actual, expected, detail = '') {
   if (detail) console.log('    ' + detail);
 }
 
-// SUT imports: tools.mjs → callTool (huaweicloud_run_approved_command)
-//             hcloud-cli.mjs → planHcloudCommand, createApprovalToken, consumeApprovalToken
+// SUT imports
 const toolsBase = new URL(`file://${hdkSrc}/tools.mjs`);
 const hcloudBase = new URL(`file://${hdkSrc}/hcloud-cli.mjs`);
 const { callTool } = await import(toolsBase);
-const { planHcloudCommand, createApprovalToken, consumeApprovalToken, hashArgs } = await import(hcloudBase);
+const { planHcloudCommand, consumeApprovalToken, hashArgs } = await import(hcloudBase);
 
 // 隔离审批文件到临时目录
 const tmpHome = join(tmpdir(), `d4-18-${Date.now()}`);
@@ -38,15 +37,17 @@ mkdirSync(join(tmpHome, '.config', 'huaweicloud'), { recursive: true });
 const oldHome = process.env.HUAWEICLOUD_HOME;
 process.env.HUAWEICLOUD_HOME = tmpHome;
 
+// Mock hcloud 二进制：用 /bin/echo 替代真实 hcloud，使 runHcloud 成功返回（exit 0）
+// 传入 stdin:'' 跳过 stdin 写入，避免 EPIPE（/bin/echo 不读 stdin）
+const oldHcloudBin = process.env.HCLOUD_BIN;
+process.env.HCLOUD_BIN = '/bin/echo';
+
 try {
-  // 准备：plan 一个写命令获取 approvalToken
   const writeArgs = ['ECS', 'CreateServers', '--cli-region=cn-north-4', '--server.flavor_id=s6.small.1', '--server.image_id=abc123'];
   const plan = planHcloudCommand(writeArgs, { allowWrites: false });
   const approvalToken = plan.approvalToken;
 
-  // ① approvedByUser=false → deny（拒绝执行）
-  // callTool('huaweicloud_run_approved_command', { args: writeArgs, approvalToken, approvedByUser: false })
-  // 应该 throw Error: 'approvedByUser must be true...'
+  // ① approvedByUser=false → deny
   {
     let threw = false;
     let errMsg = '';
@@ -60,104 +61,95 @@ try {
       threw = true;
       errMsg = e.message;
     }
-    rec('D4-18-false-deny', 'approvedByUser=false → deny（拒绝执行）',
+    rec('D4-18-false-deny', 'approvedByUser=false -> deny（拒绝执行）',
         threw && /approvedByUser must be true/.test(errMsg),
         { threw, errMsg: errMsg.slice(0, 80) },
         { threw: true, errMsgContains: 'approvedByUser must be true' });
   }
 
-  // ② approvedByUser=true → allow（不因 approvedByUser 被拒绝）
-  // 注意：callTool 会继续执行 runHcloud（需要 hcloud），但 approvedByUser 检查会通过
-  // 我们验证的是：不会因 approvedByUser 抛出，而是因为 token 消费后继续执行
-  // token 已在 ① 中未被消费（因为 ① 在 runApprovedCommand 入口即抛出）
+  // ② approvedByUser=true → 通过审批门禁 + 执行成功（mock hcloud=/bin/echo, stdin:'' 避免 EPIPE）
   {
-    let threw = false;
-    let errMsg = '';
-    try {
-      await callTool('huaweicloud_run_approved_command', {
-        args: writeArgs,
-        approvalToken,
-        approvedByUser: true,
-      });
-    } catch (e) {
-      threw = true;
-      errMsg = e.message;
-    }
-    // approvedByUser=true 通过审批门禁 → 不因 approvedByUser 抛出
-    // 可能因 hcloud 未安装或 token 消费抛出，但不应该是 'approvedByUser must be true'
-    const passedApprovalGate = !threw || !/approvedByUser must be true/.test(errMsg);
-    rec('D4-18-true-allow', 'approvedByUser=true → 通过审批门禁（不因 approvedByUser 拒绝）',
-        passedApprovalGate,
-        { threw, errMsg: errMsg.slice(0, 80) },
-        { approvalGatePassed: true },
-        threw ? `threw but not approval gate: ${errMsg.slice(0, 120)}` : 'no throw from approval gate');
-  }
-
-  // ③ 缺 approvedByUser 字段（undefined）→ 不静默 deny（strict !== true 拒绝）
-  {
-    // 重新 plan 获取新 token（上一个已被消费）
     const plan2 = planHcloudCommand(writeArgs, { allowWrites: false });
-    const token2 = plan2.approvalToken;
-
     let threw = false;
     let errMsg = '';
+    let resultOk = false;
     try {
-      await callTool('huaweicloud_run_approved_command', {
+      const result = await callTool('huaweicloud_run_approved_command', {
         args: writeArgs,
-        approvalToken: token2,
-        // approvedByUser 不传 → undefined
+        approvalToken: plan2.approvalToken,
+        approvedByUser: true,
+        stdin: '',
       });
+      resultOk = result?.ok === true || result?.approved === true;
     } catch (e) {
       threw = true;
       errMsg = e.message;
     }
-    rec('D4-18-missing-field-deny', '缺 approvedByUser 字段 → 不静默 deny（strict !== true 拒绝）',
-        threw && /approvedByUser must be true/.test(errMsg),
-        { threw, errMsg: errMsg.slice(0, 80) },
-        { threw: true, errMsgContains: 'approvedByUser must be true' });
+    rec('D4-18-true-allow', 'approvedByUser=true -> 通过审批门禁 + 执行成功（mock hcloud=/bin/echo）',
+        !threw && resultOk,
+        { threw, errMsg: errMsg.slice(0, 80), resultOk },
+        { threw: false, resultOk: true },
+        threw ? `unexpected throw: ${errMsg.slice(0, 120)}` : 'approval gate passed, execution succeeded');
   }
 
-  // ④ approvedByUser 非布尔值（如 'true' 字符串）→ strict 比较 !== true → deny
+  // ③ 缺 approvedByUser 字段 → deny
   {
     const plan3 = planHcloudCommand(writeArgs, { allowWrites: false });
-    const token3 = plan3.approvalToken;
-
     let threw = false;
     let errMsg = '';
     try {
       await callTool('huaweicloud_run_approved_command', {
         args: writeArgs,
-        approvalToken: token3,
-        approvedByUser: 'true', // 字符串而非布尔
+        approvalToken: plan3.approvalToken,
       });
     } catch (e) {
       threw = true;
       errMsg = e.message;
     }
-    rec('D4-18-string-true-deny', 'approvedByUser="true"(字符串) → strict !== true → deny',
+    rec('D4-18-missing-field-deny', '缺 approvedByUser 字段 -> 不静默 deny（strict !== true 拒绝）',
         threw && /approvedByUser must be true/.test(errMsg),
         { threw, errMsg: errMsg.slice(0, 80) },
         { threw: true, errMsgContains: 'approvedByUser must be true' });
   }
 
-  // ⑤ approvalToken 验证：plan 生成 token → consumeApprovalToken 成功消费
+  // ④ approvedByUser='true'（字符串）→ strict !== true → deny
   {
     const plan4 = planHcloudCommand(writeArgs, { allowWrites: false });
-    const token4 = plan4.approvalToken;
-    const consumed = consumeApprovalToken(token4);
-    rec('D4-18-token-create-consume', 'plan 生成 token → consume 成功消费',
+    let threw = false;
+    let errMsg = '';
+    try {
+      await callTool('huaweicloud_run_approved_command', {
+        args: writeArgs,
+        approvalToken: plan4.approvalToken,
+        approvedByUser: 'true',
+      });
+    } catch (e) {
+      threw = true;
+      errMsg = e.message;
+    }
+    rec('D4-18-string-true-deny', 'approvedByUser="true"(字符串) -> strict !== true -> deny',
+        threw && /approvedByUser must be true/.test(errMsg),
+        { threw, errMsg: errMsg.slice(0, 80) },
+        { threw: true, errMsgContains: 'approvedByUser must be true' });
+  }
+
+  // ⑤ plan 生成 token → consumeApprovalToken 成功消费
+  {
+    const plan5 = planHcloudCommand(writeArgs, { allowWrites: false });
+    const consumed = consumeApprovalToken(plan5.approvalToken);
+    rec('D4-18-token-create-consume', 'plan 生成 token -> consume 成功消费',
         consumed !== null && consumed.argsHash === hashArgs(writeArgs),
         { consumed: !!consumed, hashMatch: consumed?.argsHash === hashArgs(writeArgs) },
         { consumed: true, hashMatch: true });
   }
 
-  // ⑥ 重复消费同一 token → 返回 null（防重放）
+  // ⑥ 重复消费同一 token → null（防重放）
   {
-    const plan5 = planHcloudCommand(writeArgs, { allowWrites: false });
-    const token5 = plan5.approvalToken;
-    const first = consumeApprovalToken(token5);
-    const second = consumeApprovalToken(token5);
-    rec('D4-18-token-no-replay', 'token 重复消费 → 返回 null（防重放）',
+    const plan6 = planHcloudCommand(writeArgs, { allowWrites: false });
+    const token6 = plan6.approvalToken;
+    const first = consumeApprovalToken(token6);
+    const second = consumeApprovalToken(token6);
+    rec('D4-18-token-no-replay', 'token 重复消费 -> 返回 null（防重放）',
         first !== null && second === null,
         { first: !!first, second: !!second },
         { first: true, second: false });
@@ -165,6 +157,8 @@ try {
 } finally {
   if (oldHome === undefined) delete process.env.HUAWEICLOUD_HOME;
   else process.env.HUAWEICLOUD_HOME = oldHome;
+  if (oldHcloudBin === undefined) delete process.env.HCLOUD_BIN;
+  else process.env.HCLOUD_BIN = oldHcloudBin;
   rmSync(tmpHome, { recursive: true, force: true });
 }
 
