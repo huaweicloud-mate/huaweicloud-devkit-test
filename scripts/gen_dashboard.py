@@ -94,14 +94,49 @@ def build_daily(dates):
     return daily
 
 
+def extract_sut_version(text):
+    """从客户端测试报告提取「被测版本（SUT）」，返回版本号字符串或 None。"""
+    line = re.search(r"被测版本（SUT）[^\n]*", text)
+    if not line:
+        return None
+    m = re.search(r"\d+\.\d+\.\d+(?:-[A-Za-z0-9.]+)?", line.group(0))
+    return m.group(0) if m else None
+
+
+def daily_tested_version(date):
+    """汇总某日各客户端报告的被测版本（SUT，多数投票），返回版本串或 None。"""
+    vers = Counter()
+    results_dir = os.path.join(REPO, "results")
+    if not os.path.isdir(results_dir):
+        return None
+    for client in sorted(os.listdir(results_dir)):
+        if client in ("Summary", "Regression", "version", "history"):
+            continue
+        cdir = os.path.join(results_dir, client)
+        if not os.path.isdir(cdir):
+            continue
+        for sub in sorted(os.listdir(cdir)):
+            if not sub.startswith(date + "-"):
+                continue
+            for osn in ("Windows", "Linux"):
+                osdir = os.path.join(cdir, sub, osn)
+                if not os.path.isdir(osdir):
+                    continue
+                for fn in os.listdir(osdir):
+                    if not fn.endswith("测试报告.md"):
+                        continue
+                    v = extract_sut_version(open(os.path.join(osdir, fn), encoding="utf-8").read())
+                    if v:
+                        vers[v] += 1
+    return vers.most_common(1)[0][0] if vers else None
+
+
 def baseline_version(dates):
+    """最新日被测版本：优先取客户端报告「被测版本（SUT）」，取不到回退「—」。"""
     for d in reversed(dates):
-        md = os.path.join(SUMMARY_DIR, f"每日测试汇总-{d}.md")
-        if os.path.isfile(md):
-            text = open(md, encoding="utf-8").read()
-            m = re.search(r"被测版本：\*\*(.+?)\*\*", text)
-            if m and m.group(1).strip() and m.group(1).strip() != "（未指定）":
-                return m.group(1), d
+        v = daily_tested_version(d)
+        if v:
+            return v, d
     return "—", dates[-1] if dates else "—"
 
 
@@ -775,7 +810,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 </style></head>
 <body style="font-family:'Segoe UI',Arial,'Microsoft YaHei',sans-serif;color:#2c3e50;max-width:1040px;margin:20px auto;padding:0 16px;">
 <h1 style="border-bottom:3px solid #2c3e50;padding-bottom:8px;">huaweicloud-devkit 测试执行总览看板</h1>
-<p style="color:#7f8c8d;">基线版本：<b>{version}</b> ｜ 数据截至：<b>{vdate}</b> ｜ 最后更新：<b>{gen_ts}</b>（北京时间，每小时刷新）</p>
+<p style="color:#7f8c8d;">被测版本：<b>{version}</b> ｜ 数据截至：<b>{vdate}</b> ｜ 最后更新：<b>{gen_ts}</b>（北京时间，每小时刷新）</p>
 
 <div class="tabs">
 <button class="tab-btn active" id="btn-daily" onclick="showTab('daily')">每日执行</button>
