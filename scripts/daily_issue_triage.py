@@ -154,7 +154,7 @@ def test_infra_gaps(special_md):
 # C. 无单号跟踪的 FAIL/SPEC（真实待提单缺陷/需求）
 # --------------------------------------------------------------------------- #
 def untracked_failures(special_md):
-    rows = _table_rows(special_md, "### 无单号跟踪清单")
+    rows = _table_rows(special_md, "### 未标注单号清单") or _table_rows(special_md, "### 无单号跟踪清单")
     return [{"id": c[0], "title": c[1], "prio": c[2], "level": c[3], "status": c[4]} for c in rows if len(c) >= 5]
 
 
