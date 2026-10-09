@@ -69,6 +69,42 @@ def read_file(path):
         return f.read()
 
 
+def sut_version_from_clients(date):
+    """从各客户端当日《测试报告.md》的「被测版本（SUT）」多数投票，取不到返回空串。"""
+    votes = {}
+    results_dir = os.path.join(REPO_ROOT, "results")
+    if not os.path.isdir(results_dir):
+        return ""
+    for client in sorted(os.listdir(results_dir)):
+        if client in ("Summary", "Regression", "version", "history"):
+            continue
+        cdir = os.path.join(results_dir, client)
+        if not os.path.isdir(cdir):
+            continue
+        for sub in sorted(os.listdir(cdir)):
+            if not sub.startswith(date + "-"):
+                continue
+            for osn in ("Windows", "Linux"):
+                osdir = os.path.join(cdir, sub, osn)
+                if not os.path.isdir(osdir):
+                    continue
+                for fn in os.listdir(osdir):
+                    if not fn.endswith("测试报告.md"):
+                        continue
+                    try:
+                        text = read_file(os.path.join(osdir, fn))
+                    except OSError:
+                        continue
+                    line = re.search(r"被测版本（SUT）.*", text)
+                    if not line:
+                        continue
+                    vm = re.search(r"\d+\.\d+\.\d+(?:-[A-Za-z0-9.]+)?", line.group(0))
+                    if vm:
+                        votes[vm.group(0)] = votes.get(vm.group(0), 0) + 1
+    return max(votes, key=votes.get) if votes else ""
+
+
+
 # --------------------------------------------------------------------------- #
 # A. 覆盖缺口（分析测试用例是否完善）
 # --------------------------------------------------------------------------- #
@@ -260,6 +296,8 @@ def main():
     m = re.search(r"被测版本[：:]\s*\*{0,2}([^*\s|]+)", special_md) or re.search(r"被测版本[：:]\s*\*{0,2}([^*\s|]+)", summary_md)
     if m:
         version = m.group(1)
+    if not version or "未指定" in version:
+        version = sut_version_from_clients(d)
 
     lines = []  # 报告
     lines.append(f"# 每日 issue 分诊待提单（预览）")
