@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "why": "hook_check_artifacts 宽 IAM 策略 → decision=deny, rule=hwc-iam-admin-policy",
+  "executedAt": "20260923093110",
+  "response": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-iam-admin-policy",
+        "title": "Broad IAM administrator grant",
+        "category": "iam",
+        "severity": "deny",
+        "message": "The change appears to grant broad administrator permissions.",
+        "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+        "source": "policy.json",
+        "evidence": "policy.json {\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+      }
+    ],
+    "nextStep": "Revise the command, artifact, or deployment plan before execution."
+  }
+}

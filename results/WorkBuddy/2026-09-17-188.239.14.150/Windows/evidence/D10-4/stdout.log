@@ -1,0 +1,6 @@
+D10-4 security intervention (source-level):
+High-risk intents (create/deploy) should route to plan/approve path.
+From eval set: E02(ECS create), E04(EIP), E06(DCS create), E07(CBR), E09(CCE create), E10(FG), E12(CES), E13(cert/ELB)
+All should trigger plan_cli_command → approval flow in real Agent session.
+Source-level: serviceCatalog identifies service, Agent uses plan/approve for create operations.
+Note: Full validation requires real LLM Agent session (BLOCKED for Agent-behavior layer).

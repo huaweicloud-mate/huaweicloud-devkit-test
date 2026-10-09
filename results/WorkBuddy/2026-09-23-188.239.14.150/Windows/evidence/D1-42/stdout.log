@@ -1,0 +1,28 @@
+{
+  "status": "FAIL",
+  "why": "dismiss:true 后 dismissed=false；再次调用 dismissed=false。因 targetVersion 恒为 null（parse 层失效），dismiss 无法记录冷却 → 闭环不成立",
+  "executedAt": "20260923093452",
+  "first": {
+    "currentVersion": "1.1.7-next.0",
+    "latestStable": null,
+    "latestNext": null,
+    "targetVersion": null,
+    "updateAvailable": false,
+    "dismissed": false,
+    "dismissExpiresAt": null,
+    "result": "check_failed",
+    "note": "检测失败，不影响使用"
+  },
+  "second": {
+    "currentVersion": "1.1.7-next.0",
+    "latestStable": null,
+    "latestNext": null,
+    "targetVersion": null,
+    "updateAvailable": false,
+    "dismissed": false,
+    "dismissExpiresAt": null,
+    "result": "check_failed",
+    "note": "检测失败，不影响使用"
+  },
+  "rootCause": "src/update-check.mjs:86 同上，targetVersion 恒 null 导致 dismiss 无版本可记录"
+}

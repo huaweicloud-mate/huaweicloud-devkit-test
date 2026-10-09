@@ -1,0 +1,88 @@
+{
+  "status": "PASS",
+  "detail": "Rules: 16(9d+7w)=true, deny cmds→deny: true, warn cmds→warn: true, allow cmds→allow: true, no token: true",
+  "executedAt": "20260920210752",
+  "rules": {
+    "total": 16,
+    "deny": 9,
+    "warn": 7
+  },
+  "denyResults": [
+    {
+      "command": "type C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+      "desc": "credential file read",
+      "decision": "deny",
+      "findingsCount": 1,
+      "findings": [
+        {
+          "ruleId": "hwc-command-credential-file",
+          "severity": "deny"
+        }
+      ]
+    },
+    {
+      "command": "printenv HUAWEICLOUD_AK HUAWEICLOUD_SK",
+      "desc": "env dump (HUAWEICLOUD prefix)",
+      "decision": "deny",
+      "findingsCount": 1,
+      "findings": [
+        {
+          "ruleId": "hwc-command-env-dump",
+          "severity": "deny"
+        }
+      ]
+    },
+    {
+      "command": "hcloud ECS DeleteServers --force",
+      "desc": "force delete",
+      "decision": "deny",
+      "findingsCount": 2,
+      "findings": [
+        {
+          "ruleId": "hwc-destructive-delete-force",
+          "severity": "deny"
+        },
+        {
+          "ruleId": "hwc-destructive-delete-operation",
+          "severity": "warn"
+        }
+      ]
+    }
+  ],
+  "warnResults": [
+    {
+      "command": "hcloud ECS DeleteServers --server.id=xxx",
+      "desc": "delete without force",
+      "decision": "warn",
+      "findingsCount": 1
+    },
+    {
+      "command": "hcloud ECS BatchDeleteServers --server.ids=xxx",
+      "desc": "batch delete",
+      "decision": "warn",
+      "findingsCount": 1
+    }
+  ],
+  "allowResults": [
+    {
+      "command": "hcloud ECS ListServers",
+      "desc": "list servers",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "command": "hcloud VPC ListVpcs",
+      "desc": "list vpcs",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "command": "hcloud IAM ListUsers",
+      "desc": "list users",
+      "decision": "allow",
+      "findingsCount": 0
+    }
+  ],
+  "noToken": true,
+  "triStateOk": true
+}

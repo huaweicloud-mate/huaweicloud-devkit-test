@@ -1,0 +1,31 @@
+{
+  "case": "D4-4",
+  "status": "PASS",
+  "executedAt": "20260929050639",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D4-4",
+      "name": "write-verbs",
+      "pass": true,
+      "actual": "12/12",
+      "expected": ">=10",
+      "passMsg": "write verbs: 12/12",
+      "failMsg": "write verbs insufficient: 12/12",
+      "_source": "d4-security"
+    },
+    {
+      "id": "D4-4",
+      "name": "write-verb-mcp",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"DeleteServers\",\"--server-ids\",\"test\"],\"com",
+      "expected": "confirm/deny",
+      "passMsg": "write verb gated (MCP)",
+      "failMsg": "write verb not gated (MCP)",
+      "_source": "mcp-tools"
+    }
+  ],
+  "source": "mcp-tools, d4-security"
+}

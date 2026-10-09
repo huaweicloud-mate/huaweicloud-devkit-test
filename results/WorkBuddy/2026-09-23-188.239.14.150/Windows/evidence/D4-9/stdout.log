@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "why": "DeleteServers→warn(hwc-destructive-delete-operation)；DeleteVpc→warn(hwc-destructive-delete-operation)",
+  "executedAt": "20260923093110",
+  "delSrv": {
+    "ok": true,
+    "decision": "warn",
+    "findings": [
+      {
+        "ruleId": "hwc-destructive-delete-operation",
+        "title": "Destructive cloud resource operation",
+        "category": "destructive",
+        "severity": "warn",
+        "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+        "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+        "source": "command",
+        "evidence": "hcloud ECS DeleteServers --server_ids=123"
+      }
+    ],
+    "nextStep": "Review the warnings with the user before proceeding."
+  },
+  "delVpc": {
+    "ok": true,
+    "decision": "warn",
+    "findings": [
+      {
+        "ruleId": "hwc-destructive-delete-operation",
+        "title": "Destructive cloud resource operation",
+        "category": "destructive",
+        "severity": "warn",
+        "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+        "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+        "source": "command",
+        "evidence": "hcloud VPC DeleteVpc --vpc_id=abc"
+      }
+    ],
+    "nextStep": "Review the warnings with the user before proceeding."
+  }
+}

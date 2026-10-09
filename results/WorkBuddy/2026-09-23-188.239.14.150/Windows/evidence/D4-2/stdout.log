@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "why": "printenv HUAWEICLOUD_AK→deny(rule=hwc-command-env-dump)；env|grep HWC_→deny",
+  "executedAt": "20260923093110",
+  "printenv": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-env-dump",
+        "title": "Cloud credential environment dump",
+        "category": "credential",
+        "severity": "deny",
+        "message": "The command may print cloud credential environment variables.",
+        "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+        "source": "command",
+        "evidence": "printenv HUAWEICLOUD_AK"
+      }
+    ],
+    "nextStep": "Revise the command, artifact, or deployment plan before execution."
+  },
+  "env": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-env-dump",
+        "title": "Cloud credential environment dump",
+        "category": "credential",
+        "severity": "deny",
+        "message": "The command may print cloud credential environment variables.",
+        "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+        "source": "command",
+        "evidence": "env | grep HWC_"
+      }
+    ],
+    "nextStep": "Revise the command, artifact, or deployment plan before execution."
+  }
+}

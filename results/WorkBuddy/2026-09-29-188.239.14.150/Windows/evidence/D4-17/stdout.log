@@ -1,0 +1,31 @@
+{
+  "case": "D4-17",
+  "status": "PASS",
+  "executedAt": "20260929050639",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D4-17",
+      "name": "fail-closed",
+      "pass": true,
+      "actual": "deny",
+      "expected": "non-allow",
+      "passMsg": "ambiguous fail-closed",
+      "failMsg": "ambiguous allowed",
+      "_source": "d4-security"
+    },
+    {
+      "id": "D4-17",
+      "name": "fail-closed-mcp",
+      "pass": true,
+      "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-sandbox-destructive-com",
+      "expected": "non-allow",
+      "passMsg": "fail-closed (MCP)",
+      "failMsg": "ambiguous allowed (MCP)",
+      "_source": "mcp-tools"
+    }
+  ],
+  "source": "mcp-tools, d4-security"
+}
