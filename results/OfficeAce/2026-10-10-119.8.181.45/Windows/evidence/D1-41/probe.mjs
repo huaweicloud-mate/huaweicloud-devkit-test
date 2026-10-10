@@ -1,0 +1,1 @@
+// D1-41: check_update returns structured MCP response

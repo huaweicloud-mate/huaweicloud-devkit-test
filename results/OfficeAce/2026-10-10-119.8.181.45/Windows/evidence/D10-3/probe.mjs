@@ -1,0 +1,1 @@
+// D10-3: service_catalog returns routing capability chain

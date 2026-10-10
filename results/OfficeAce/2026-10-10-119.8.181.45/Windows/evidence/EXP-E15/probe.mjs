@@ -1,0 +1,1 @@
+// EXP-E15: service_catalog routes '查看监控告警' to appropriate skill

@@ -1,0 +1,1 @@
+// D1-31: dismiss cooldown mechanism exists in check_update

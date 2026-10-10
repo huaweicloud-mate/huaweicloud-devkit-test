@@ -1,0 +1,1 @@
+// EXP-E05: service_catalog routes '上传OBS对象' to appropriate skill

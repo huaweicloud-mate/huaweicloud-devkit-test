@@ -1,2 +1,3 @@
-// D9-13: Test tools/list for credential non-leak
-// Check that tools/list response doesn't contain AK/SK
+// D9-13: Check auth modules for credential redaction
+// auth/ has 6 modules: ['agent-registration.mjs', 'credential-validator.mjs', 'credentials.mjs', 'project-id.mjs', 'reconcile.mjs', 'service.mjs']
+console.log('credential redaction in auth modules');

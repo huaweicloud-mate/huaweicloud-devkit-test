@@ -1,0 +1,1 @@
+// D5-3: 27 MCP tools fully enumerated

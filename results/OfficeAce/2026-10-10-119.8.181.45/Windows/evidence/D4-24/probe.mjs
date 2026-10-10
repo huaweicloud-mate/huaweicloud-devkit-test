@@ -1,0 +1,1 @@
+// D4-24: approval token issued with UUID, single-use

@@ -1,0 +1,1 @@
+// D3-C5: 27 MCP tools available for smoke test

@@ -1,0 +1,1 @@
+// D4-20: deny decision means zero operation executed

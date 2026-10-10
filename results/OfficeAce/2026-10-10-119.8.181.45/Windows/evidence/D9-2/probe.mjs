@@ -1,0 +1,1 @@
+// D9-2: JSON-RPC error codes used (e.g. -32600, 182301)

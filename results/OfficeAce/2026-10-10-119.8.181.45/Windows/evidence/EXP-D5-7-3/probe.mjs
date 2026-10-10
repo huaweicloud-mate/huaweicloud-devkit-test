@@ -1,0 +1,1 @@
+// EXP-D5-7-3: client tool enumeration across all MCP tools

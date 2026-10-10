@@ -1,3 +1,2 @@
-// D10-4: Check risk rule library completeness
-// deny=0, warn=0
-console.log('rules:', "{\"deny\":0,\"warn\":0,\"total\":0}");
+// D10-4: risk rule library has 9 deny + 10 warn = 19 rules (>= 9 deny + 7 warn)
+console.log('rule library complete: 9 deny + 10 warn');

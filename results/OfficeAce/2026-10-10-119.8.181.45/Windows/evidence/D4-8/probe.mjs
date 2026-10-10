@@ -1,0 +1,1 @@
+// D4-8: hook rules apply to both Python and Node commands

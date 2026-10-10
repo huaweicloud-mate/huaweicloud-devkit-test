@@ -1,0 +1,1 @@
+// D1-27: check_update updateAvailable=false (already latest)

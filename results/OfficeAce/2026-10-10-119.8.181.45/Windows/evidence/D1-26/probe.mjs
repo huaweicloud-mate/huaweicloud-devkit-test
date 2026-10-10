@@ -1,0 +1,1 @@
+// D1-26: check_update registered as MCP tool

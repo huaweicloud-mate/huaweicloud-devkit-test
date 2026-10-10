@@ -1,0 +1,1 @@
+// D8-6: Chinese and English docs consistent

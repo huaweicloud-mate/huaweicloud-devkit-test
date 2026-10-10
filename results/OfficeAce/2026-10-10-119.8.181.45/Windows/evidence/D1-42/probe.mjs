@@ -1,0 +1,1 @@
+// D1-42: dismiss persists across calls (dismissExpiresAt field)

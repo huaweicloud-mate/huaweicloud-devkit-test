@@ -1,0 +1,1 @@
+// D9-10: mcp-server-remote.mjs provides HTTP/WS transport

@@ -1,0 +1,1 @@
+// D2-27: KooCLI version management (kooCliStatus='ok')

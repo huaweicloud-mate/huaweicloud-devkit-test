@@ -1,0 +1,1 @@
+// D1-3: hcloud --version works
