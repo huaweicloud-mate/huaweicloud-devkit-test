@@ -88,3 +88,34 @@ jobs:
         with:
           name: replay-results
           path: eval/replay/results/*.csv
+
+  test-manager:
+    runs-on: ubuntu-latest
+    # AI Test Manager 决策引擎（test-ai-orchestration-architecture.md §2.2）：
+    # 基于本次 push 相对 main 的变更文件生成测试策略 + 使命清单，上传供 Worker 消费。
+    # 变更命中安全/凭证/协议模块时 job 标记为 high（提示人工关注，不阻断）。
+    continue-on-error: true
+    steps:
+      - name: Checkout 测试仓（完整历史）
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 生成测试策略与使命
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            node test-manager/run-plan.mjs --version "${{ github.ref_name }}" --diff "origin/main...HEAD" --out ./plan-out
+          else
+            node test-manager/run-plan.mjs --version "${{ github.ref_name }}" --out ./plan-out
+          fi
+
+      - name: 上传策略产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-plan
+          path: plan-out/
