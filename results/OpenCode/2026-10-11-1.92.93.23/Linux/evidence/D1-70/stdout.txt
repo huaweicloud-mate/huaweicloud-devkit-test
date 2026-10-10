@@ -1,0 +1,12 @@
+=====CASE D1-70=====
+writeProxyConfig path=/tmp/hdk-probe-1791580081960/.config/huaweicloud/proxy.json
+readProxyConfig={"https_proxy":"http://proxy.example:8080","http_proxy":"http://proxy.example:8080","no_proxy":"internal.corp.com"}
+[OK] write/read proxy.json 正确
+getProxySettings(https)={"proxyUrl":"http://proxy.example:8080","noProxyList":["internal.corp.com"],"targetProtocol":"https:"}
+getProxySettings(no_proxy 命中)=null
+[OK] getProxySettings 拼 file + no_proxy 命中返回 null
+getProxySettings(env 优先)={"proxyUrl":"http://env-proxy:9999","noProxyList":["internal.corp.com"],"targetProtocol":"https:"}
+[OK] env 优先于 file
+EXC: Cannot find package 'undici' imported from /home/zhangshuang/devkit-test/OpenCode/hdk/plugins/huaweicloud-core/src/proxy/proxy-agent.mjs
+[FAIL] D1-70::exception
+=====END D1-70=====
