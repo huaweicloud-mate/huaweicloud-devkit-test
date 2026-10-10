@@ -8,6 +8,13 @@ on:
 permissions:
   contents: read
 
+# 串行化同一 ref 的同步：Hermes 快速连续 commit 会触发多个并发实例，
+# 并发 --force push 到 GitCode 同一 main ref 会互相 reject（cannot lock ref）。
+# 加 concurrency 让同一时间只跑一个，后到的排队（group 内排队，非取消）。
+concurrency:
+  group: sync-gitcode-main
+  cancel-in-progress: false
+
 jobs:
   sync-to-gitcode:
     runs-on: ubuntu-latest
@@ -17,11 +24,19 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
+          # 关键：checkout 默认拿到的是触发 push 的 commit SHA，而非当前最新 HEAD。
+          # 若直接 push 该 SHA，并发/排队场景会推旧状态到 GitCode。
+          ref: main
 
-      - name: Push to GitCode mirror
+      - name: Sync latest main to GitCode mirror
         env:
           GITCODE_TOKEN: ${{ secrets.GITCODE_TOKEN }}
         run: |
-          git remote add gitcode "https://oauth2:${GITCODE_TOKEN}@gitcode.com/hd-vector/huaweicloud-devkit-test.git"
+          # 拉 GitHub 端当前最新 main（而非触发 commit 的 SHA），确保推的是最新状态
+          git fetch origin main
+          git checkout -B main origin/main
+
+          remote_url="https://oauth2:${GITCODE_TOKEN}@gitcode.com/hd-vector/huaweicloud-devkit-test.git"
+          git remote add gitcode "${remote_url}" 2>/dev/null || git remote set-url gitcode "${remote_url}"
           git push gitcode main --force
           git push gitcode --tags --force
