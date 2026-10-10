@@ -1,0 +1,53 @@
+name: contract-unit-tests
+
+# 契约单测（Layer 2）：对 hdk 源码纯函数做 node:test 契约断言。
+# 本轮加入 huaweicloud-devkit-test 仓库第一个真正的「测试执行」CI（其余 workflow 均为汇总/门禁/分诊）。
+#
+# 触发：
+#   1. push / PR 改动 test/** 或 package.json 或本 workflow（硬门禁，FAIL 阻断）
+#   2. 每天 19:20 北京时间兜底跑一次（检测上游 huaweicloud/huaweicloud-devkit 变更是否破坏契约）
+#   3. 手动 workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'test/**'
+      - 'package.json'
+      - '.github/workflows/contract-unit-tests.yml'
+  pull_request:
+    paths:
+      - 'test/**'
+      - 'package.json'
+  schedule:
+    - cron: '20 11 * * *'    # UTC 11:20 = 北京时间 19:20
+
+permissions:
+  contents: read             # 只读测试仓 + 公开源码仓，不写回，无凭证
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: 运行契约单测
+        env:
+          HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
+        run: npm run test:unit
