@@ -1,0 +1,21 @@
+===== D1-27/probe.mjs len=61
+// D1-27: check_update updateAvailable=false (already latest)
+
+===== D1-28/probe.mjs len=42
+// D1-28: No new version available to test
+
+===== D2-4/probe.mjs len=123
+// D2-4: auth_status output uses fingerprints (caae65f2), no raw AK/SK
+console.log('credentials masked with fingerprints');
+
+===== D4-1/probe.mjs len=153
+// D4-1: hook_check_command denied credential file read
+// Rule: hwc-command-credential-file, decision: deny
+console.log('credential file read blocked');
+
+===== D2-13/probe.mjs len=47
+// D2-13: configuredBySession priority over env
+
+===== D9-12/probe.mjs len=121
+// D9-12: Test MCP initialize handshake
+// Send initialize request, check for protocolVersion + capabilities + serverInfo
