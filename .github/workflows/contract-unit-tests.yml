@@ -14,12 +14,16 @@ on:
     paths:
       - 'test/**'
       - 'eval/**'
+      - 'scripts/**'
+      - 'test-manager/**'
       - 'package.json'
       - '.github/workflows/contract-unit-tests.yml'
   pull_request:
     paths:
       - 'test/**'
       - 'eval/**'
+      - 'scripts/**'
+      - 'test-manager/**'
       - 'package.json'
   schedule:
     - cron: '20 11 * * *'    # UTC 11:20 = 北京时间 19:20
@@ -119,3 +123,18 @@ jobs:
         with:
           name: test-plan
           path: plan-out/
+
+  python-unit-tests:
+    runs-on: ubuntu-latest
+    # Python 侧契约单测（mission_ingest 等 scripts 模块；标准库 unittest 无第三方依赖）
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 运行 Python 契约单测
+        run: python -m unittest discover -s test/python -p 'test_*.py'

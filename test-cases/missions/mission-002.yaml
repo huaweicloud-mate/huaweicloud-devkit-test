@@ -1,0 +1,22 @@
+apiVersion: test.huaweicloud.com/v1
+kind: TestMission
+metadata:
+  id: "mission-002"
+  domain: "D10 Agent行为评测"
+  priority: P1
+  estimatedDuration: "15m"
+spec:
+  scope: |
+    D10 Agent行为评测 回归：源码变更命中 mcp-server (serviceCatalog 路由/Agent 行为评测)
+  affectedTools:
+  affectedCases:
+    - EXP-E01
+    - EXP-E03
+    - EXP-E08
+    - EXP-E15
+  constraints:
+    - "P0 用例不得 NOT_RUN"
+  qualityCriteria:
+    - "4 条相关用例全部执行，P0 不得 NOT_RUN"
+    - "输出不得包含 AK/SK/token 明文"
+    - "FAIL/SPEC 需记根因(文件:行号)"

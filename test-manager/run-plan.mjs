@@ -84,7 +84,12 @@ function renderMission(mission) {
 
 const version = argv('--version', 'unversioned');
 const diff = argv('--diff', '');
-const outDir = argv('--out', join(__dirname, 'out'));
+// 默认输出：
+//   策略  → test-cases/test-strategy.md（仓库根可见）
+//   使命  → test-cases/missions/*.yaml（机群 prepare_env --update 拉取即广播 + init_day 摄入）
+// --out 可覆盖（CI 用临时目录上传 artifact）
+const defaultOut = join(__dirname, '..', 'test-cases');
+const outDir = argv('--out', defaultOut);
 
 const changeScope = { changedFiles: diff ? diffChangedFiles(diff) : [], changedTools: [] };
 const { strategy, missions } = planTestRun({ version, changeScope });
