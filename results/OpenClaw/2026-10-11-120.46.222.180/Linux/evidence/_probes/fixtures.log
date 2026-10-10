@@ -55,7 +55,7 @@ RESULT: PASS
 >>> d9-10-remote-transport.mjs exit=0  ===
 
 PASS  D9-11-attach  attach 注册到 mux => {"registered":true,"id":2} (期望 true)
-PASS  D9-11-onopen-localserver  onopen 后 localServer 监听 => {"localServer":true,"localPort":43815} (期望 {"localServer":true,"localPort":">0"})
+PASS  D9-11-onopen-localserver  onopen 后 localServer 监听 => {"localServer":true,"localPort":41991} (期望 {"localServer":true,"localPort":">0"})
 PASS  D9-11-ready-resolve  ready Promise 在 open 时 resolve => {"readyResolved":true,"onReadyCalls":1} (期望 {"readyResolved":true,"onReadyCalls":1})
 PASS  D9-11-subconn-open  子连接注册到 subConnections => {"subConnections":1} (期望 {"subConnections":">=1"})
 PASS  D9-11-close-cleanup  close 后 localServer 关闭/subConnections 清空 => {"closed":true,"localServer":null,"subConnections":0} (期望 {"closed":true,"localServer":null,"subConnections":0})
@@ -232,7 +232,7 @@ RESULT: PASS
 
 >>> d4-29-classify-assert.mjs exit=0  ===
 
-PASS  D8-10-backup-path  mcpBackupFilePath 路径 => "/tmp/multica-task-2146726231/d8-10-mcp-1791580664778/.config/huaweicloud/devkit-mcp-backup.json" (期望 "/tmp/multica-task-2146726231/d8-10-mcp-1791580664778/.config/huaweicloud/devkit-mcp-backup.json")
+PASS  D8-10-backup-path  mcpBackupFilePath 路径 => "/tmp/multica-task-2721777650/d8-10-mcp-1791666386518/.config/huaweicloud/devkit-mcp-backup.json" (期望 "/tmp/multica-task-2721777650/d8-10-mcp-1791666386518/.config/huaweicloud/devkit-mcp-backup.json")
 PASS  D8-10-save-read-delta  saveAgentDelta → readAgentDelta 往返 => {"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000} (期望 {"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000})
 PASS  D8-10-take-once  takeAgentDelta 取走后 readAgentDelta 返回 null => {"taken":true,"after":null} (期望 {"taken":true,"after":null})
 PASS  D8-10-purge-deletes  purgeBackup 删除文件 => {"purged":true,"exists":false} (期望 {"purged":true,"exists":false})
@@ -250,7 +250,7 @@ RESULT: PASS
 
 >>> d8-10-mcp-config-backup-merge.mjs exit=0  ===
 
-Mock server listening at ws://127.0.0.1:37183
+Mock server listening at ws://127.0.0.1:38565
 PASS  D9-11-LC-connect  WebSocket 客户端成功建连 mock server => {"connected":true,"serverConns":1} (期望 {"connected":true,"serverConns":1})
 PASS  D9-11-LC-auth  认证握手成功（auth:ok） => {"reply":"auth:ok"} (期望 {"reply":"auth:ok"})
     服务端已标记 authed
@@ -313,6 +313,156 @@ RESULT: PASS
 
 >>> d3-c14-sandbox-cred-mock.mjs exit=0  ===
 
+PASS  D1-40-mirror-lag-no-false-downgrade  镜像 latest≤本地 → 不提示版本倒退 => "up_to_date" (期望 "up_to_date")
+    current=1.1.7 distTags.latest=1.1.5 result=up_to_date updateAvailable=false
+PASS  D1-40-source-ahead-correct-reminder  官方源 latest>本地 → 正确提示更新 => {"result":"update_available","target":"1.1.7"} (期望 {"result":"update_available","target":"1.1.7"})
+    current=1.1.5 distTags.latest=1.1.7
+PASS  D1-40-mirror-equal-local  镜像 latest=本地 → up_to_date => "up_to_date" (期望 "up_to_date")
+PASS  D1-40-determine-target-semver  determineTarget 返回的 target semverCompare ≤ current → 安全 => -1 (期望 "<= 0")
+    target=1.1.5 current=1.1.7 compare=-1
+PASS  D1-40-parse-empty-null  空输出 → null（检测失败） => null (期望 null)
+PASS  D1-40-parse-invalid-null  无效 JSON → null => null (期望 null)
+PASS  D1-40-parse-valid  有效 JSON → 正确解析 => "1.1.7" (期望 "1.1.7")
+PASS  D1-40-null-disttags-check-failed  distTags=null → check_failed（不误报倒退） => "check_failed" (期望 "check_failed")
+    current=1.1.7
+PASS  D1-40-empty-disttags-check-failed  distTags{latest:null,next:null} → check_failed => "check_failed" (期望 "check_failed")
+PASS  D1-40-prerelease-mirror-lag  prerelease 镜像 next 滞后 → 不误报 => "up_to_date" (期望 "up_to_date")
+    current=1.1.8-next.1 distTags.next=1.1.8-next.0
+
+=== D1-40 镜像 lag 检测正确性夹具 ===  pass=10 fail=0
+RESULT: PASS
+
+>>> d1-40-mirror-lag.mjs exit=0  ===
+
+PASS  D4-18-false-deny  approvedByUser=false -> deny（拒绝执行） => {"threw":true,"errMsg":"approvedByUser must be true after explicit user approval for this exact command."} (期望 {"threw":true,"errMsgContains":"approvedByUser must be true"})
+PASS  D4-18-true-allow  approvedByUser=true -> 通过审批门禁 + 执行成功（mock hcloud=/bin/echo） => {"threw":false,"errMsg":"","resultOk":true} (期望 {"threw":false,"resultOk":true})
+    approval gate passed, execution succeeded
+PASS  D4-18-missing-field-deny  缺 approvedByUser 字段 -> 不静默 deny（strict !== true 拒绝） => {"threw":true,"errMsg":"approvedByUser must be true after explicit user approval for this exact command."} (期望 {"threw":true,"errMsgContains":"approvedByUser must be true"})
+PASS  D4-18-string-true-deny  approvedByUser="true"(字符串) -> strict !== true -> deny => {"threw":true,"errMsg":"approvedByUser must be true after explicit user approval for this exact command."} (期望 {"threw":true,"errMsgContains":"approvedByUser must be true"})
+PASS  D4-18-token-create-consume  plan 生成 token -> consume 成功消费 => {"consumed":true,"hashMatch":true} (期望 {"consumed":true,"hashMatch":true})
+PASS  D4-18-token-no-replay  token 重复消费 -> 返回 null（防重放） => {"first":true,"second":false} (期望 {"first":true,"second":false})
+
+=== D4-18 confirm-not-deny 审批语义夹具 ===  pass=6 fail=0
+RESULT: PASS
+
+>>> d4-18-confirm-not-deny.mjs exit=0  ===
+
+PASS  D4-19-write-deny-in-confirm  高危写操作确认流中 -> deny -> assertAllowed 拦截 => {"decision":"deny","blocked":true} (期望 {"decision":"deny","blocked":true})
+PASS  D4-19-write-allow-with-approval  高危写操作 allowWrites=true -> allow -> 放行 => {"decision":"allow","blocked":false} (期望 {"decision":"allow","blocked":false})
+PASS  D4-19-readonly-not-affected  只读命令 -> 不受确认流影响 => {"noAllow":"allow","allow":"allow","blockedNoAllow":false,"blockedAllow":false} (期望 {"noAllow":"allow","allow":"allow","blockedNoAllow":false,"blockedAllow":false})
+PASS  D4-19-hook-check-dangerous  hook_check_command rm -rf / -> deny -> ok=false => {"decision":"deny","ok":false} (期望 {"decision":"deny","ok":false})
+PASS  D4-19-hook-check-hcloud-warn  hook_check_command DeleteServers -> warn -> ok=true => {"decision":"warn","ok":true} (期望 {"decision":"warn","ok":true})
+PASS  D4-19-hook-check-safe  hook_check_command ListServers -> allow -> ok=true => {"decision":"allow","ok":true} (期望 {"decision":"allow","ok":true})
+FAIL  D4-19-approved-but-bad-token-blocked  approvedByUser=true 但 token 无效 -> 拦截 => {"threw":false,"errMsg":""} (期望 {"threw":true,"errMsgContains":"Invalid or expired approval token"})
+PASS  D4-19-plan-then-approve-passes-gates  plan->approvedByUser=true+有效token -> 通过审批+token 门禁 + 执行成功 => {"threw":false,"errMsg":"","resultOk":true} (期望 {"threw":false,"resultOk":true})
+    approval + token gates passed, execution succeeded
+PASS  D4-19-plan-includes-preflight  plan 结果包含 sgFindings（preflight 已运行） => {"hasSgFindings":true,"len":0} (期望 {"hasSgFindings":true})
+
+=== D4-19 确认流下预检仍生效夹具 ===  pass=8 fail=1
+RESULT: FAIL
+
+>>> d4-19-preflight-in-confirm.mjs exit=1  ===
+
+PASS  D8-7-skill-1-ok  huawei-ecs retrieve_skill → ok=true => true (期望 true)
+    content_len=13957
+PASS  D8-7-skill-1-name  huawei-ecs retrieve_skill → name 匹配 => "huawei-ecs" (期望 "huawei-ecs")
+PASS  D8-7-skill-1-content  huawei-ecs content 非空 + 含 frontmatter => {"contentLen":13957,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
+PASS  D8-7-skill-1-version  huawei-ecs version 字段存在 => "1" (期望 "non-empty")
+PASS  D8-7-skill-2-ok  huawei-vpc retrieve_skill → ok=true => true (期望 true)
+    content_len=17999
+PASS  D8-7-skill-2-name  huawei-vpc retrieve_skill → name 匹配 => "huawei-vpc" (期望 "huawei-vpc")
+PASS  D8-7-skill-2-content  huawei-vpc content 非空 + 含 frontmatter => {"contentLen":17999,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
+PASS  D8-7-skill-2-version  huawei-vpc version 字段存在 => "1" (期望 "non-empty")
+PASS  D8-7-skill-3-ok  huawei-obs retrieve_skill → ok=true => true (期望 true)
+    content_len=11005
+PASS  D8-7-skill-3-name  huawei-obs retrieve_skill → name 匹配 => "huawei-obs" (期望 "huawei-obs")
+PASS  D8-7-skill-3-content  huawei-obs content 非空 + 含 frontmatter => {"contentLen":11005,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
+PASS  D8-7-skill-3-version  huawei-obs version 字段存在 => "1" (期望 "non-empty")
+PASS  D8-7-skill-4-ok  huawei-rds retrieve_skill → ok=true => true (期望 true)
+    content_len=13909
+PASS  D8-7-skill-4-name  huawei-rds retrieve_skill → name 匹配 => "huawei-rds" (期望 "huawei-rds")
+PASS  D8-7-skill-4-content  huawei-rds content 非空 + 含 frontmatter => {"contentLen":13909,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
+PASS  D8-7-skill-4-version  huawei-rds version 字段存在 => "1" (期望 "non-empty")
+PASS  D8-7-skill-5-ok  huawei-iam retrieve_skill → ok=true => true (期望 true)
+    content_len=7408
+PASS  D8-7-skill-5-name  huawei-iam retrieve_skill → name 匹配 => "huawei-iam" (期望 "huawei-iam")
+PASS  D8-7-skill-5-content  huawei-iam content 非空 + 含 frontmatter => {"contentLen":7408,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
+PASS  D8-7-skill-5-version  huawei-iam version 字段存在 => "1" (期望 "non-empty")
+PASS  D8-7-skill-6-ok  huawei-cce retrieve_skill → ok=true => true (期望 true)
+    content_len=11927
+PASS  D8-7-skill-6-name  huawei-cce retrieve_skill → name 匹配 => "huawei-cce" (期望 "huawei-cce")
+PASS  D8-7-skill-6-content  huawei-cce content 非空 + 含 frontmatter => {"contentLen":11927,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
+PASS  D8-7-skill-6-version  huawei-cce version 字段存在 => "1" (期望 "non-empty")
+PASS  D8-7-skill-7-ok  huawei-functiongraph retrieve_skill → ok=true => true (期望 true)
+    content_len=10506
+PASS  D8-7-skill-7-name  huawei-functiongraph retrieve_skill → name 匹配 => "huawei-functiongraph" (期望 "huawei-functiongraph")
+PASS  D8-7-skill-7-content  huawei-functiongraph content 非空 + 含 frontmatter => {"contentLen":10506,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
+PASS  D8-7-skill-7-version  huawei-functiongraph version 字段存在 => "1" (期望 "non-empty")
+PASS  D8-7-nonexistent-skill  不存在技能 → ok=false + error 含可用列表 => {"ok":false,"errorHasNotFound":true} (期望 {"ok":false,"errorContains":"not found"})
+PASS  D8-7-nonexistent-lists-available  不存在技能 → error 列出可用技能 => true (期望 true)
+PASS  D8-7-empty-name  空技能名 → ok=false => false (期望 false)
+    error=Skill name is required.
+PASS  D8-7-references-loaded  huawei-ecs references 目录被加载 => {"refsCount":5} (期望 {"refsCount":">0"})
+PASS  D8-7-references-structure  references 每项有 filename + content => true (期望 true)
+
+=== D8-7 7 个 meta/通用技能 retrieve_skill 验证夹具 ===  pass=33 fail=0
+RESULT: PASS
+
+>>> d8-7-retrieve-skill.mjs exit=0  ===
+
+PASS  D9-13-redact-args-no-leak  redactSecrets: args 中 AK/SK/STK 被 <redacted> => {"noLeak":true,"allRedacted":true} (期望 {"noLeak":true,"allRedacted":true})
+PASS  D9-13-redact-obj-no-leak  redactSecrets: 对象 AK/SK/STK 字段 <redacted> => {"noLeak":true,"ak":"<redacted>","sk":"<redacted>","securityToken":"<redacted>"} (期望 {"noLeak":true,"ak":"<redacted>","sk":"<redacted>","securityToken":"<redacted>"})
+PASS  D9-13-plan-no-leak  planHcloudCommand: plan 结果不含明文 AK/SK => {"noLeak":true,"argsHasRedacted":true} (期望 {"noLeak":true,"argsHasRedacted":true})
+PASS  D9-13-classify-deny  classifyHcloudArgs: 写操作无审批 → deny => "deny" (期望 "deny")
+PASS  D9-13-classify-allow  classifyHcloudArgs: 只读操作 → allow => "allow" (期望 "allow")
+PASS  D9-13-assert-deny-throws  assertAllowed: deny → throw => true (期望 true)
+PASS  D9-13-assert-allow-passes  assertAllowed: allow → 不 throw => false (期望 false)
+PASS  D9-13-clear-before-set  clearRuntimeCredentials 后 hasRuntimeCredentials=false => false (期望 false)
+PASS  D9-13-set-runtime-creds  setRuntimeCredentials 后 hasRuntimeCredentials=true => true (期望 true)
+PASS  D9-13-resolve-runtime-creds  resolveCredentialsWithRuntime 返回 runtime 凭证 => {"ak":"AKTESTLEAK123456789ABC","sk":"SKTESTLEAK987654321DEF","securityToken":"STKTESTLEAK555555555GHI"} (期望 {"ak":"AKTESTLEAK123456789ABC","sk":"SKTESTLEAK987654321DEF","securityToken":"STKTESTLEAK555555555GHI"})
+PASS  D9-13-clear-runtime-creds  clearRuntimeCredentials 后 hasRuntimeCredentials=false => false (期望 false)
+PASS  D9-13-token-no-leak  approvalToken + stored.argsRedacted 不含明文 AK/SK => {"tokenSafe":true,"storedSafe":true,"argsRedacted":["ECS","CreateServers","--cli-access-key=<redacted>","--cli-secret-key=<redacted>","--cli-region=cn-north-4"]} (期望 {"tokenSafe":true,"storedSafe":true})
+
+=== D9-13 tools/call 凭证不泄露与权限校验夹具 ===  pass=12 fail=0
+RESULT: PASS
+
+>>> d9-13-credential-leak.mjs exit=0  ===
+
+PASS  ENV-INJECT-unset  HUAWEICLOUD_INJECT_STS_CMD='unset' -> inject => true (期望 true)
+    value=undefined result.len=3
+PASS  ENV-INJECT-0  HUAWEICLOUD_INJECT_STS_CMD='0' -> no-inject => false (期望 false)
+    value="0" result.len=0
+PASS  ENV-INJECT-false  HUAWEICLOUD_INJECT_STS_CMD='false' -> no-inject => false (期望 false)
+    value="false" result.len=0
+PASS  ENV-INJECT-1  HUAWEICLOUD_INJECT_STS_CMD='1' -> inject => true (期望 true)
+    value="1" result.len=3
+PASS  ENV-INJECT-true  HUAWEICLOUD_INJECT_STS_CMD='true' -> inject => true (期望 true)
+    value="true" result.len=3
+PASS  ENV-INJECT-empty  HUAWEICLOUD_INJECT_STS_CMD='empty' -> inject => true (期望 true)
+    value="" result.len=3
+PASS  ENV-INJECT-FALSE-upper  HUAWEICLOUD_INJECT_STS_CMD='FALSE-upper' -> inject => true (期望 true)
+    value="FALSE" result.len=3
+PASS  ENV-INJECT-False-mixed  HUAWEICLOUD_INJECT_STS_CMD='False-mixed' -> inject => true (期望 true)
+    value="False" result.len=3
+PASS  ENV-INJECT-2-illegal  HUAWEICLOUD_INJECT_STS_CMD='2-illegal' -> inject => true (期望 true)
+    value="2" result.len=3
+PASS  ENV-INJECT-src-strict-compare  源码: resolveStsInjectArgs 使用 === "0" / === "false" 精确比较 => {"hasStrict0":true,"hasStrictFalse":true} (期望 {"hasStrict0":true,"hasStrictFalse":true})
+PASS  OCA-PROBE-isusable-valid  isUsableOfficeaceRoot 对含 capabilities.json 的目录 -> true => true (期望 true)
+    dir=/tmp/multica-task-2721777650/env-var-oca-1791666389725
+PASS  OCA-PROBE-isusable-invalid  isUsableOfficeaceRoot 对不存在目录 -> false => false (期望 false)
+PASS  OCA-PROBE-marker-absent-null  未写入 marker 时 readOfficeaceRootMarker -> null => null (期望 null)
+    未写入 marker，readOfficeaceRootMarker 应返回 null
+PASS  OCA-PROBE-marker-roundtrip  writeOfficeaceRootMarker -> readOfficeaceRootMarker 往返一致 => "/tmp/multica-task-2721777650/env-var-oca-marker-1791666389727" (期望 "/tmp/multica-task-2721777650/env-var-oca-marker-1791666389727")
+PASS  ENV-SKIP-src-strict-compare  [源码契约快照] 源码: HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT === "1" 精确比较 => true (期望 true)
+PASS  ENV-SKIP-src-not-truthy  [源码契约快照] 源码: 非 truthy 检查（精确 === "1" 而非 if(env)） => {"line":"if (process.env.HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT === '1') return null;","isStrictEqual":true,"isNotTruthy":true} (期望 {"isStrictEqual":true,"isNotTruthy":true})
+
+=== 环境变量覆盖夹具 (SKIP_OFFICEACE_DETECT + INJECT_STS_CMD) ===
+  行为断言: pass=14 fail=0
+  源码契约快照（非行为断言）: pass=2 fail=0
+RESULT: PASS
+
+>>> env-var-coverage.mjs exit=0  ===
+
 
 ===== 汇总 =====
 OK   d2-10-koocli-profile.mjs (exit=0)
@@ -333,6 +483,12 @@ OK   d8-10-mcp-config-backup-merge.mjs (exit=0)
 OK   d9-11-ws-tunnel-lifecycle.mjs (exit=0)
 OK   d9-6-cross-client-interop.mjs (exit=0)
 OK   d3-c14-sandbox-cred-mock.mjs (exit=0)
+OK   d1-40-mirror-lag.mjs (exit=0)
+OK   d4-18-confirm-not-deny.mjs (exit=0)
+ERR  d4-19-preflight-in-confirm.mjs (exit=1)
+OK   d8-7-retrieve-skill.mjs (exit=0)
+OK   d9-13-credential-leak.mjs (exit=0)
+OK   env-var-coverage.mjs (exit=0)
 
-总计: pass=18 fail=0 blocked=0
-RESULT: PASS
+总计: pass=23 fail=1 blocked=0
+RESULT: FAIL

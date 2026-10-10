@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# OpenClaw Linux 2026-10-09 每日测试（v1.1.8-next.1 gitHead ffd7b47）
+# OpenClaw Linux 2026-10-11 每日测试（v1.1.8-next.2 gitHead 681895da）
 set -u
 export PATH="$HOME/nodejs/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
@@ -10,7 +10,7 @@ SRC="$HDK/plugins/huaweicloud-core/src"
 MCP="$SRC/mcp-server.mjs"
 PKGROOT="$HDK"
 SAMPLE="$P/sample-react"
-ISO_HOME="$BASE/iso-home-20261009"
+ISO_HOME="$BASE/iso-home-20261011"
 EVAL="/home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test/eval/harness/run-eval.mjs"
 FIX="/home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test/eval/harness/fixtures/run-all.mjs"
 
