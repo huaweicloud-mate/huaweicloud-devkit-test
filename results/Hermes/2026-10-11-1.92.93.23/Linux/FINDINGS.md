@@ -174,4 +174,4 @@
 - **断言**：Hermes MCP Python SDK 应在 PEP 668 环境自动安装成功，或给出可机械执行的手动指引（如 `--break-system-packages` / pipx / venv）。
 - **根因**：`plugins/huaweicloud-core/src/setup-cli.mjs:2942` `ensureHermesMcpSdk()` 中 `python3 -m pip install mcp --quiet` 无 `--break-system-packages`/pipx/venv 兜底；`:2949`/`:2952` 手动指引 `python3 -m pip install mcp` 在 PEP 668 环境同样失败，指引不可机械执行。
 - **影响**：Ubuntu 24.04 / Debian 12+ 等 PEP 668 环境安装 Hermes Agent 后 MCP Python SDK 缺失，doctor/status 报缺且修复指引失效。
-- **证据**：`evidence/fresh-cli.txt`、`evidence/D1-3/stdout.log`、`evidence/D1-4/stdout.log`
+- **证据**：`evidence/fresh-cli.txt`（install --target hermes 输出「Installing Hermes MCP Python SDK... Install failed」+ doctor 10 pass/1 fail）
