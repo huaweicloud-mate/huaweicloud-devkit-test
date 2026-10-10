@@ -24,18 +24,19 @@ const MODULE_INDEX = (() => {
 export function analyzeImpact({ changedFiles = [], changedTools = [] } = {}) {
   const dims = new Map(); // dim -> { risk, note, casesSet, modules }
   for (const file of changedFiles) {
-    const norm = normalizeModuleName(file);
-    const row = MODULE_INDEX.get(norm);
-    if (!row) continue;
-    const cur = dims.get(row.dim) || {
-      dim: row.dim,
-      risk: row.risk,
-      note: row.note,
-      modules: new Set(),
-      cases: new Set(row.cases),
-    };
-    cur.modules.add(norm);
-    dims.set(row.dim, cur);
+    for (const norm of normalizeModuleName(file)) {
+      const row = MODULE_INDEX.get(norm);
+      if (!row) continue;
+      const cur = dims.get(row.dim) || {
+        dim: row.dim,
+        risk: row.risk,
+        note: row.note,
+        modules: new Set(),
+        cases: new Set(row.cases),
+      };
+      cur.modules.add(norm);
+      dims.set(row.dim, cur);
+    }
   }
   for (const tool of changedTools) {
     const dim = TOOL_DIMENSIONS[tool];

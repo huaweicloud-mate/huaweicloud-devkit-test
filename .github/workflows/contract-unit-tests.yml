@@ -10,7 +10,7 @@ name: contract-unit-tests
 on:
   workflow_dispatch:
   push:
-    branches: [main, dev]
+    branches: [main]
     paths:
       - 'test/**'
       - 'eval/**'
@@ -96,13 +96,20 @@ jobs:
   test-manager:
     runs-on: ubuntu-latest
     # AI Test Manager 决策引擎（test-ai-orchestration-architecture.md §2.2）：
-    # 基于本次 push 相对 main 的变更文件生成测试策略 + 使命清单，上传供 Worker 消费。
-    # 变更命中安全/凭证/协议模块时 job 标记为 high（提示人工关注，不阻断）。
+    # 分析上游 hdk 源码仓相对上个 release tag 的变更模块，生成测试策略 + 使命清单，
+    # 上传供 Worker 消费。变更命中安全/凭证/协议模块时 risk=high（提示人工关注，不阻断）。
+    # 注：真正发布使命到机群由维护者 `publish-missions.mjs` 本地执行；本 job 仅产出参考策略。
     continue-on-error: true
     steps:
-      - name: Checkout 测试仓（完整历史）
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit（完整历史取 tag）
         uses: actions/checkout@v4
         with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
           fetch-depth: 0
 
       - name: Setup Node
@@ -110,13 +117,17 @@ jobs:
         with:
           node-version: 22
 
-      - name: 生成测试策略与使命
+      - name: 生成测试策略（分析 hdk 相对上个 release tag 的变更）
         run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
-            node test-manager/run-plan.mjs --version "${{ github.ref_name }}" --diff "origin/main...HEAD" --out ./plan-out
+          cd hdk
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || true)
+          if [ -n "$LAST_TAG" ] && [ "$LAST_TAG" != "$(git rev-parse HEAD)" ]; then
+            RANGE="$LAST_TAG..HEAD"
           else
-            node test-manager/run-plan.mjs --version "${{ github.ref_name }}" --out ./plan-out
+            RANGE="HEAD~10..HEAD"
           fi
+          echo "diff range: $RANGE (baseline $LAST_TAG)"
+          node ../test-manager/run-plan.mjs --version "${LAST_TAG:-unversioned}" --diff "$RANGE" --out "${{ github.workspace }}/plan-out"
 
       - name: 上传策略产物
         uses: actions/upload-artifact@v4

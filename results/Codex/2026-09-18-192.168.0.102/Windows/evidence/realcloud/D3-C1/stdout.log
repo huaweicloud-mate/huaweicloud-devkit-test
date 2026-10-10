@@ -1,0 +1,68 @@
+{
+  "case": "D3-C1",
+  "total": 12,
+  "passed": 11,
+  "failed": 1,
+  "results": [
+    {
+      "name": "voucher_status",
+      "pass": true,
+      "detail": "{\"claimed\":true,\"message\":\"已领取\",\"code\":null}"
+    },
+    {
+      "name": "plan分类只读allow",
+      "pass": true,
+      "detail": "allow"
+    },
+    {
+      "name": "run_approved执行",
+      "pass": false,
+      "detail": "undefined/undefined"
+    },
+    {
+      "name": "OBS建桶",
+      "pass": true,
+      "detail": "Start at 2026-09-18 07:39:04.7042228 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-9717142447] successfully, request id [000001A0B37465E347CAA293F27755F5]\nNotice: If the configured"
+    },
+    {
+      "name": "set静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-9717142447.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-9717142447.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
+    },
+    {
+      "name": "get静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+    },
+    {
+      "name": "删桶归零",
+      "pass": true,
+      "detail": "Start at 2026-09-18 07:39:06.3183981 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-9717142447] successfully!\n"
+    },
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"db33c5d7-561c-4131-bb20-3d9709b730fa\",\n    \"name\": \"testbot3-hermes-e2e-9717"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"0df71e12-8ea7-4bc1-b2b5-1d504b1a32c5\",\n    \"name\": \"testbot3-hermes-e2e-9"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff8080819f8ed3f101a0b374898749c2\",\n  \"serverIds\": [\n    \"39ac390d-7db6-488e-a04d-0628b9a2f427\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(已提交删除请求)",
+      "pass": true,
+      "detail": "ECS✓ subnet✓ vpc✓"
+    }
+  ]
+}

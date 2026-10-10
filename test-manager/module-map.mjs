@@ -22,7 +22,7 @@ export const DIMENSION_LABELS = {
 // 模块 → 维度 + 风险级 + 典型用例
 // 变更命中任一模块即触发对应维度的测试回归
 export const MODULE_DIMENSIONS = [
-  { dim: 'D1', risk: 'medium', modules: ['setup-cli', 'update-check'], cases: ['D1-1', 'D1-2', 'D1-3', 'D1-5'], note: '安装/升级/卸载生命周期' },
+  { dim: 'D1', risk: 'medium', modules: ['setup-cli', 'update-check', 'uninstall-cleanup'], cases: ['D1-1', 'D1-2', 'D1-3', 'D1-5'], note: '安装/升级/卸载生命周期' },
   { dim: 'D2', risk: 'high', modules: ['auth', 'credentials', 'reconcile', 'project-id', 'agent-registration'], cases: ['D2-1', 'D2-2', 'D2-3', 'D2-4', 'D2-5', 'D2-26'], note: '凭证读写/同步/脱敏，涉密必须重点回归' },
   { dim: 'D3', risk: 'low', modules: ['tools', 'detect-framework', 'search-market', 'icon-library', 'hcloud-cli', 'mcp-config-merge', 'mcp-config-backup'], cases: ['D3-A1', 'D3-B1', 'D3-B2', 'D3-B3', 'D3-B5', 'D3-B6'], note: '功能路由/命令规划/能力发现' },
   { dim: 'D4', risk: 'high', modules: ['safety-policy', 'risk-rule-engine', 'hooks'], cases: ['D4-1', 'D4-2', 'D4-4', 'D4-5', 'D4-7', 'D4-15', 'D4-16', 'D4-25', 'D4-27'], note: '安全策略/风险规则/拦截，P0 必测、禁剪枝' },
@@ -30,7 +30,7 @@ export const MODULE_DIMENSIONS = [
   { dim: 'D6', risk: 'low', modules: ['session-manager', 'ws-exec', 'hdkitservice-api', 'hwlink-api'], cases: ['D6-1', 'D6-3', 'D6-4', 'D6-5', 'D6-9'], note: '性能/并发/大对象' },
   { dim: 'D7', risk: 'medium', modules: ['setup-cli', 'mcp-server'], cases: ['D7-1', 'D7-2', 'D7-3', 'D7-4', 'D7-5'], note: '跨平台/跨Node版本/共存' },
   { dim: 'D8', risk: 'low', modules: ['telemetry', 'agent-registry', 'mcp-config-backup', 'mcp-config-merge'], cases: ['D8-1', 'D8-2', 'D8-3', 'D8-9', 'D8-10'], note: '遥测/配置备份合并/文档一致性' },
-  { dim: 'D9', risk: 'high', modules: ['mcp-server', 'mcp-server-remote', 'mcp-protocol'], cases: ['D9-1', 'D9-2', 'D9-3', 'D9-4', 'D9-5', 'D9-6', 'D9-10', 'D9-11'], note: 'MCP 协议合规，禁剪枝' },
+  { dim: 'D9', risk: 'high', modules: ['mcp-server', 'mcp-server-remote', 'mcp-protocol', 'proxy'], cases: ['D9-1', 'D9-2', 'D9-3', 'D9-4', 'D9-5', 'D9-6', 'D9-10', 'D9-11'], note: 'MCP 协议合规 + 远程传输代理，禁剪枝' },
   { dim: 'D10', risk: 'medium', modules: ['tools', 'mcp-server'], cases: ['EXP-E01', 'EXP-E03', 'EXP-E08', 'EXP-E15'], note: 'serviceCatalog 路由/Agent 行为评测' },
 ];
 
@@ -59,10 +59,13 @@ export const RISK_POLICY = {
 };
 
 export function normalizeModuleName(relPath) {
-  // 相对源码 src 的路径 → 模块短名：取首段（子目录展开为顶层模块）
-  const p = String(relPath).replace(/\\/g, '/').replace(/^plugins\/huaweicloud-core\/src\//, '').replace(/\.mjs$/, '');
-  const parts = p.split('/');
-  if (parts.length === 1) return parts[0];
-  // 子目录模块（auth/credentials → auth）映射到父模块；若父模块不在表内则用全名匹配模块表条目
-  return parts[0];
+  // 相对源码 src 的路径 → 模块名候选列表（顶层目录名 + 各子目录段的具体文件名均入列）。
+  // 例：auth/credentials.mjs → ['auth', 'credentials']，使 module-map 里目录名（auth）
+  // 与子目录具体文件名（credentials）都能命中；顶层文件 safety-policy.mjs → ['safety-policy']。
+  // 剥除 plugins/huaweicloud-core/src/ 前缀与常见扩展名后按 '/' 分段，每段均为独立候选（去重）。
+  const p = String(relPath)
+    .replace(/\\/g, '/')
+    .replace(/^plugins\/huaweicloud-core\/src\//, '')
+    .replace(/\.(mjs|js|py|json)$/, '');
+  return [...new Set(p.split('/').filter(Boolean))];
 }
