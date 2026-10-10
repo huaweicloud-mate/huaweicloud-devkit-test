@@ -1,0 +1,58 @@
+name: trend-metrics
+
+# 趋势度量：从每日汇总（results/Summary/用例矩阵-设计级-总执行结果-*.csv）
+# 生成跨日质量趋势 metrics/trend.csv + trend.md（§5.1 度量体系）。
+#
+# 触发：
+#   1. auto-summary 成功后（Summary 更新即重算趋势）
+#   2. 每天 20:00 北京时间兜底
+#   3. 手动 workflow_dispatch
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [auto-summary]
+    types: [completed]
+  schedule:
+    - cron: '0 12 * * *'    # UTC 12:00 = 北京时间 20:00
+
+permissions:
+  contents: write             # 写回 metrics/ 趋势产物所需（复用 auto-summary 的 HDK_GH_TOKEN）
+
+jobs:
+  generate-trend:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 生成趋势度量
+        run: python scripts/trend_metrics.py
+
+      - name: 上传趋势产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: trend-metrics
+          path: metrics/trend.*
+
+      - name: Commit & push 趋势产物
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add metrics/trend.csv metrics/trend.md
+          if git diff --cached --quiet; then
+            echo "趋势无变动，跳过提交"
+          else
+            git commit -m "chore: 更新质量趋势 $(date +%Y-%m-%d)"
+            git push https://shuangheaven:${{ secrets.HDK_GH_TOKEN }}@github.com/huaweicloud-mate/huaweicloud-devkit-test.git HEAD:main
+          fi
