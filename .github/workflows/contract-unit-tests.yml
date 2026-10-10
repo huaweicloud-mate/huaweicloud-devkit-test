@@ -13,11 +13,13 @@ on:
     branches: [main, dev]
     paths:
       - 'test/**'
+      - 'eval/**'
       - 'package.json'
       - '.github/workflows/contract-unit-tests.yml'
   pull_request:
     paths:
       - 'test/**'
+      - 'eval/**'
       - 'package.json'
   schedule:
     - cron: '20 11 * * *'    # UTC 11:20 = 北京时间 19:20
@@ -51,3 +53,38 @@ jobs:
         env:
           HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
         run: npm run test:unit
+
+  replay-trend:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    # 录制回放趋势监控（test-panorama-plan §6.2-6.4）：
+    # 当前 serviceCatalog 路由基线仅 ~7% 通过（已知缺陷态，见 run-eval 21.4% MISS 溯源）。
+    # 本 job 持续记录 each run 的 replay-*.csv 形成趋势，不阻断合并；修复后提升改硬门禁。
+    continue-on-error: true
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 运行录制回放
+        env:
+          HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
+        run: npm run test:replay
+
+      - name: 上传回放结果
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: replay-results
+          path: eval/replay/results/*.csv
