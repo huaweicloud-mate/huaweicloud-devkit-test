@@ -1,0 +1,361 @@
+=== 设计级 P0 (21) ===
+D1-39 | Windows 升级检测链可用性 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows/Linux>
+D1-40 | 镜像 lag 下检测正确性(反向提醒防护) | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows/Linux>
+D2-11 | R3 STS token拒绝落盘 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 或 OpenCode>
+D4-18 | confirm-not-deny审批语义 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: 安全基线 Hermes+OpenCode>
+D4-19 | 确认流下预检仍生效 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: 安全基线 Hermes+OpenCode>
+D2-4 | 凭证脱敏正确性 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 或 OpenCode>
+D4-1 | 凭证文件读取拦截 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-2 | 凭证env打印拦截 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-3 | 明文secret API拦截 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-5 | 写操作误判检测 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-9 | 公开暴露/破坏性预检 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-15 | hook绕过尝试 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-16 | 命令包裹穿透 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-21 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检） | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-22 | hook_check_deploy_plan 具名回归（部署计划预检） | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-23 | 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标） | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: 逐客户端 11 目标>
+D4-28 | Node 版安全 hook 链路 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook客户端>
+D8-7 | 7 个 meta/通用技能指引可机械执行验证 | dim=D8质量 | os=Hermes 代表终端; fake/fixture | agent=<代表: 静态评审人 测试经理>
+D9-12 | initialize 握手协议安全基线 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + Hermes>
+D9-13 | tools/call 凭证不泄露与权限校验 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + 源码探针>
+D10-4 | 安全干预-静态规则层 | dim=D10评测 | os=OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | agent=<代表: 源码直调 risk-rule-engine>
+
+=== 设计级 P1 (51) ===
+D1-3 | doctor健康自检 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows/Linux>
+D1-26 | 升级提醒工具注册与协议暴露 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: MCP Inspector+进程>
+D1-27 | 检测语义-已是最新 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows/Linux>
+D1-28 | 检测语义-有新版本 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows/Linux>
+D1-31 | dismiss 冷却期 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows/Linux>
+D1-41 | check_update 真实 MCP 返回契约 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离进程>
+D1-42 | dismiss 真实闭环与跨调用持久化 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离 HOME+CROSS_PROCESS>
+D1-45 | 兜底提示真实序列与预热竞态 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离进程+预热竞态>
+D1-70 | 代理配置与 WebSocket 代理 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离进程+proxy夹具>
+D2-10 | R7 current档跟随 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 或 OpenCode>
+D2-12 | R10 runtime非空禁止落盘 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 或 OpenCode>
+D2-13 | R9 configuredBySession优先env | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 或 OpenCode>
+D2-16 | import文件读取后擦除 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 或 OpenCode>
+D4-20 | 拒绝后零操作 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D2-1 | auth init三端同步 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 或 OpenCode>
+D2-5 | 凭证缺失报错指引 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 或 OpenCode>
+D2-26 | 凭证备份与恢复 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离 HOME>
+D3-A1 | skill检索完整性 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-B3 | run_readonly脱敏执行 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-C4 | 服务创建类回归 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: 22 服务矩阵>
+D3-C5 | 工具冒烟 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-C13 | OBS 静态网站托管配置 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: 真云 OBS>
+D3-S1 | 场景-只读查ECS(带不改约束) | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-S2 | 场景-删VPC先确认 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-S3 | 场景-沙箱预览出URL | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-S4 | 场景-领券闭环 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-S7 | 场景-跨服务交付(Web应用+RDS)并归零 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-S8 | 场景-操作失败后排障指引 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D4-4 | 写操作审批门 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-6 | adminPass回显警告 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-7 | hook三工具有效性 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-8 | Python/Node策略一致 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-11 | 提示注入防护 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: 4 注入点>
+D4-13 | 最小权限凭证通过率 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: 只读凭证全量>
+D4-17 | hook模糊fail-closed | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-24 | 确认令牌过期与重复确认边界（审批流健壮性） | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表2: Hermes+OpenCode>
+D4-27 | 双路径输出脱敏 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: 隔离进程>
+D5-1 | 清单发现加载 | dim=D5客户端 | os=Hermes; OpenCode; 声明支持的客户端矩阵 | agent=<代表: 10 客户端>
+D5-3 | 工具全量枚举 | dim=D5客户端 | os=Hermes; OpenCode; 声明支持的客户端矩阵 | agent=<代表: 10 客户端>
+D6-4 | 并发调度正确性 | dim=D6性能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows x64 + Node22>
+D9-9 | tools/call 超时协议语义与取消 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: Inspector+夹具>
+D8-4 | 引导步骤可机械执行 | dim=D8质量 | os=Hermes 代表终端; fake/fixture | agent=<代表: 静态评审人 测试经理>
+D9-1 | tools/list合规 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + Hermes>
+D9-2 | JSON-RPC错误码 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + Hermes>
+D9-3 | tools/call响应格式 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + Hermes>
+D9-4 | 协议生命周期 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + Hermes>
+D9-5 | stdio传输健壮 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + Hermes>
+D9-6 | 跨客户端互通 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + Hermes>
+D9-10 | MCP remote transport（HTTP/WS 远程服务） | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: remote 客户端>
+D9-11 | WebSocket 隧道通道生命周期 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: 隧道 mux 夹具>
+D10-3 | 路由准确率+混淆矩阵 | dim=D10评测 | os=OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | agent=<代表: 10 客户端>
+
+=== 设计级 P2 (30) ===
+D1-4 | status/update幂等 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows/Linux>
+D1-30 | semver 比对正确性 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows/Linux>
+D1-33 | skip 文件持久化与多路径 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows/Linux>
+D1-65 | 调试模式环境变量 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离进程>
+D1-66 | 遥测开关与端点环境变量 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离进程>
+D1-67 | Agent toolkit 模式与 DSH 跳过安装环境变量 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: DSH 客户端>
+D1-68 | 图标离线与区域环境变量 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离进程>
+D1-69 | CLI help 子命令 | dim=D1安装 | os=Hermes 代表终端; fake/fixture | agent=<代表: CLI>
+D2-2 | auth status判定准确性 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 或 OpenCode>
+D2-27 | KooCLI 版本管理 | dim=D2认证 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离进程>
+D3-B1 | list_operations规范名 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-B5 | detect_framework识别 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-C14 | 沙箱 HDKit 服务参数与 hwlink 凭证 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes 沙箱>
+D3-S5 | 场景-复合意图分层路由 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D3-S6 | 场景-FunctionGraph定时任务 | dim=D3功能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Hermes>
+D4-10 | 规则库新增回归 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-12 | 供应链安装期安全 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-14 | 操作可审计性 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook=Hermes 非hook=OpenCode>
+D4-25 | Python hook 事件遥测分类 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook客户端>
+D4-26 | findings 证据脱敏 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: hook客户端>
+D4-29 | 分类断言与原始命令分类入口 | dim=D4安全 | os=Hermes（Hook）; OpenCode（非 Hook） | agent=<代表: 隔离进程>
+D6-1 | 检索响应延迟 | dim=D6性能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows x64 + Node22>
+D6-3 | MCP冷启时间 | dim=D6性能 | os=Hermes 代表终端; fake/fixture | agent=<代表: Windows x64 + Node22>
+D6-9 | 缓存清理三入口 | dim=D6性能 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离进程>
+D8-1 | 文档与能力一致 | dim=D8质量 | os=Hermes 代表终端; fake/fixture | agent=<代表: 静态评审人 测试经理>
+D8-6 | 中英文文档一致 | dim=D8质量 | os=Hermes 代表终端; fake/fixture | agent=<代表: 静态评审人 测试经理>
+D8-9 | 安装 ID 与遥测值脱敏 | dim=D8质量 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离进程>
+D8-10 | MCP 配置备份与合并 | dim=D8质量 | os=Hermes 代表终端; fake/fixture | agent=<代表: 隔离 HOME>
+D9-7 | 协议版本协商降级 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + Hermes>
+D9-8 | inputSchema版本合规 | dim=D9协议 | os=Hermes; MCP Inspector/标准协议客户端 | agent=<代表: MCP Inspector + Hermes>
+
+=== 展开级 ALL (39) ===
+EXP-D5-7-1 | OfficeAce | src=D5-1 | pr=P1 | agent=OfficeAce
+EXP-D5-7-3 | OfficeAce | src=D5-3 | pr=P1 | agent=OfficeAce
+EXP-C4-01 | ECS | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-02 | VPC | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-03 | OBS | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-04 | RDS | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-05 | GaussDB | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-06 | CCE | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-07 | FunctionGraph | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-08 | IAM | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-09 | CTS | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-10 | CES | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-11 | DDS | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-12 | DCS | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-13 | SMN | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-14 | DMS | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-15 | WAF | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-16 | CDN | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-17 | ModelArts | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-18 | DEW | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-19 | CBR | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-20 | EVS | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-21 | EIP | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-C4-22 | ELB | src=D3-C4 | pr=P1 | agent=Hermes 代表终端
+EXP-E01 | 帮我查一下我账号在华北北京四有哪些云主机 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E02 | 创建一台 2C4G 的 Ubuntu 云服务器, 规格通用型 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E03 | 把本地 dist 目录部署成一个公网静态网站 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E04 | 给这台服务器绑定一个弹性公网IP | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E05 | 看一下我的云数据库MySQL实例的状态 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E06 | 创建一个 Redis 缓存实例用于会话存储 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E07 | 给生产环境的服务器配置一个每日备份策略 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E08 | 我的ECS启动失败了, 帮我分析原因 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E09 | 开设一个 Kubernetes 集群用于微服务部署 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E10 | 部署一个函数处理图片自动压缩 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E11 | 查一下我账号这个月的费用情况 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E12 | 把应用日志指标推送到云监控告警 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E13 | 申请HTTPS证书并配置到我的域名 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E14 | 我账号下的用户都有哪些权限, 帮我审计一下 | src=D10-3 | pr=P1 | agent=全部客户端
+EXP-E15 | 帮我领一下华为云的代金券 | src=D10-3 | pr=P1 | agent=全部客户端
+
+=== 追踪表 ALL (211) ===
+v1.5规划(v1.3基线) | req=全新环境引导安装 | des=D1-1 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=安装/生命周期 | scope=<代表: 逐客户端 10+>
+v1.5规划(v1.3基线) | req=多Agent探测 | des=D1-2 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+v1.5规划(v1.3基线) | req=doctor健康自检 | des=D1-3 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+v1.5规划(v1.3基线) | req=status/update幂等 | des=D1-4 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+v1.5规划(v1.3基线) | req=uninstall干净度 | des=D1-5 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows 重点>
+v1.5规划(v1.3基线) | req=install-hcloud | des=D1-6 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+v1.5规划(v1.3基线) | req=OpenClaw插件流 | des=D1-7 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+v1.5规划(v1.3基线) | req=通用MCP通道 | des=D1-8 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+v1.5规划(v1.3基线) | req=重启生效语义 | des=D1-9 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=安装/生命周期 | scope=<代表: 逐客户端 10+>
+v1.5规划(v1.3基线) | req=卸载全局清理(新flag) | des=D1-10 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=安装/生命周期 | scope=<代表: 全客户端+Windows>
+v1.5规划(v1.3基线) | req=自定义HCLOUD_BIN保留 | des=D1-11 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+v1.5规划(v1.3基线) | req=清理幂等归零 | des=D1-12 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+v1.5规划(v1.3基线) | req=Windows文件锁下清理 | des=D1-13 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows 专项>
+v1.5规划(v1.3基线) | req=copyFileVerified安装完整性 | des=D1-14 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+v1.5规划(v1.3基线) | req=checkForUpdate更新提示 | des=D1-15 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=升级提醒工具注册与协议暴露 | des=D1-26 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: MCP Inspector+进程>
+NR3版本升级提醒 | req=检测语义-已是最新 | des=D1-27 | exp=EXP-NR3-01;EXP-NR3-02 | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=检测语义-有新版本 | des=D1-28 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=pre-release 用户提醒策略(文档vs实现差异) | des=D1-29 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=semver 比对正确性 | des=D1-30 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=dismiss 冷却期 | des=D1-31 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=新版本>dismissedVersion 无视冷却 | des=D1-32 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=skip 文件持久化与多路径 | des=D1-33 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=check_failed 不阻塞正常调用 | des=D1-34 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=缓存 TTL 与失败节流 | des=D1-35 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=首调用兜底提示（会话首个工具附加更新信息） | des=D1-36 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=SKILL.md 会话启动指令存在性 | des=D1-37 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=huaweicloud_upgrade 语义 | des=D1-38 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=Windows 升级检测链可用性 | des=D1-39 | exp=EXP-NR3-09;EXP-NR3-10;EXP-NR3-11 | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=镜像 lag 下检测正确性(反向提醒防护) | des=D1-40 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+NR3版本升级提醒 | req=check_update 真实 MCP 返回契约 | des=D1-41 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离进程>
+NR3版本升级提醒 | req=dismiss 真实闭环与跨调用持久化 | des=D1-42 | exp=EXP-NR3-03;EXP-NR3-04 | layer=安装/生命周期 | scope=<代表: 隔离 HOME+CROSS_PROCESS>
+NR3版本升级提醒 | req=dismiss 参数边界与失败语义 | des=D1-43 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离 HOME>
+NR3版本升级提醒 | req=冷却边界与异常 skip 状态 | des=D1-44 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 时间注入>
+NR3版本升级提醒 | req=兜底提示真实序列与预热竞态 | des=D1-45 | exp=EXP-NR3-23;EXP-NR3-24 | layer=安装/生命周期 | scope=<代表: 隔离进程+预热竞态>
+NR3版本升级提醒 | req=缓存 TTL 边界与查询异常恢复 | des=D1-46 | exp=EXP-NR3-05;EXP-NR3-06 | layer=安装/生命周期 | scope=<代表: 时间与函数注入>
+NR3版本升级提醒 | req=缓存与当前版本解耦 | des=D1-47 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离进程>
+NR3版本升级提醒 | req=多 Agent 路径与多进程隔离 | des=D1-48 | exp=EXP-NR3-18 | layer=安装/生命周期 | scope=<代表: 双 HOME 双进程>
+NR3版本升级提醒 | req=upgrade handler 无更新与参数校验 | des=D1-49 | exp=EXP-NR3-12;EXP-NR3-13 | layer=安装/生命周期 | scope=<代表: 隔离进程>
+NR3版本升级提醒 | req=upgrade 命令语义与目标选择 | des=D1-50 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 命令 mock>
+NR3版本升级提醒 | req=upgrade 失败恢复与副作用 | des=D1-51 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离 HOME>
+NR3版本升级提醒 | req=真实升级安装与重启生效 | des=D1-52 | exp=EXP-NR3-14;EXP-NR3-15;EXP-NR3-15b;EXP-NR3-16 | layer=安装/生命周期 | scope=<代表: 一次性环境 OpenCode+Hermes>
+NR3版本升级提醒 | req=镜像滞后确定性夹具 | des=D1-53 | exp=EXP-NR3-07;EXP-NR3-08 | layer=安装/生命周期 | scope=<代表: registry 夹具>
+NR3版本升级提醒 | req=Hermes 会话级用户闭环 | des=D1-54 | exp=EXP-NR3-17 | layer=安装/生命周期 | scope=<代表: 真实客户端 Hermes>
+NR3版本升级提醒 | req=多会话提示隔离 | des=D1-55 | exp=EXP-NR3-19;EXP-NR3-20;EXP-NR3-21;EXP-NR3-22 | layer=安装/生命周期 | scope=<代表: 并行进程>
+全量评审补齐REV-20260911004604 | req=安装中断恢复（网络/进程中断后半装补全） | des=D1-56 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=安装/生命周期 | scope=<代表: Windows/Linux>
+全量评审补齐REV-20260911004604 | req=升级坏版本回滚（装坏可退） | des=D1-57 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=安装/生命周期 | scope=<代表2: Hermes(隔离profile)+OpenCode>
+R12回填ITER-005-P2 | req=通用 MCP 白名单接入（Claude/Cursor merge 语义） | des=D1-58 | exp=EXP-D1-58-01;EXP-D1-58-02;EXP-D1-58-03;EXP-D1-58-04;EXP-D1-58-05 | layer=安装/生命周期 | scope=<代表: Linux L 真机>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=SKIP_UPDATE 环境变量跳过升级检测 | des=D1-59 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离进程>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=HTTP 查询路径与自定义 registry（fetch 版） | des=D1-60 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离进程>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=升级重启文案 officeace 分支 | des=D1-61 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: officeace+Hermes>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=未覆盖 CLI 子命令 reinstall/proxy/version | des=D1-62 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=安装/生命周期 | scope=<代表: 逐客户端>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=安装版本读取双回退 | des=D1-63 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离目录>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=agent 自动检测匹配与版本 | des=D1-64 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 多 agent clientInfo>
+v1.5规划(v1.3基线) | req=调试模式环境变量 | des=D1-65 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离进程>
+v1.5规划(v1.3基线) | req=遥测开关与端点环境变量 | des=D1-66 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离进程>
+v1.5规划(v1.3基线) | req=Agent toolkit 模式与 DSH 跳过安装环境变量 | des=D1-67 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: DSH 客户端>
+v1.5规划(v1.3基线) | req=图标离线与区域环境变量 | des=D1-68 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离进程>
+v1.5规划(v1.3基线) | req=CLI help 子命令 | des=D1-69 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: CLI>
+v1.5规划(v1.3基线) | req=代理配置与 WebSocket 代理 | des=D1-70 | exp=无(不展开/代表执行) | layer=安装/生命周期 | scope=<代表: 隔离进程+proxy夹具>
+NR2 AK/SK架构v4 | req=credentials变更后auth回归 | des=D2-8 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=reconcile幂等(一致态零写) | des=D2-9 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=R7 current档跟随 | des=D2-10 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=R3 STS token拒绝落盘 | des=D2-11 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=R10 runtime非空禁止落盘 | des=D2-12 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=R9 configuredBySession优先env | des=D2-13 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=R2 冲突交互仲裁(confirmToken) | des=D2-14 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=auth_switch行为矩阵抽查 | des=D2-15 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=import文件读取后擦除 | des=D2-16 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=cmdAuthReconcile非TTY守卫 | des=D2-17 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=.last_sync mtime手动改动检测 | des=D2-18 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=命名档只审计不自动动(R5) | des=D2-19 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+NR2 AK/SK架构v4 | req=HUAWEICLOUD_HOME重定向(R6) | des=D2-20 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Win/Linux 真机>
+全量评审补齐REV-20260911004604 | req=AK/SK 轮换后 auth_status 正确感知（凭证状态维度） | des=D2-21 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<真云代表: Hermes>
+v1.5规划(v1.3基线) | req=confirm-not-deny审批语义 | des=D4-18 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=安全/审批 | scope=<代表: 安全基线 Hermes+OpenCode>
+v1.5规划(v1.3基线) | req=确认流下预检仍生效 | des=D4-19 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=安全/审批 | scope=<代表: 安全基线 Hermes+OpenCode>
+v1.5规划(v1.3基线) | req=拒绝后零操作 | des=D4-20 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=auth init三端同步 | des=D2-1 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+v1.5规划(v1.3基线) | req=auth status判定准确性 | des=D2-2 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+v1.5规划(v1.3基线) | req=auth sync幂等 | des=D2-3 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+v1.5规划(v1.3基线) | req=凭证脱敏正确性 | des=D2-4 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+v1.5规划(v1.3基线) | req=凭证缺失报错指引 | des=D2-5 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+v1.5规划(v1.3基线) | req=OBS独立配置引导 | des=D2-6 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+v1.5规划(v1.3基线) | req=无凭证降级 | des=D2-7 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: Hermes 或 OpenCode>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=CodeArts 上下文凭证读取 | des=D2-22 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: 隔离进程>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=agent 注册状态 | des=D2-23 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: 单机多 target>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=auth 同步 projectId 自动解析 | des=D2-24 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<真云代表: Hermes>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=KooCLI 探测状态分类 | des=D2-25 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: 隔离进程>
+v1.5规划(v1.3基线) | req=凭证备份与恢复 | des=D2-26 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: 隔离 HOME>
+v1.5规划(v1.3基线) | req=KooCLI 版本管理 | des=D2-27 | exp=无(不展开/代表执行) | layer=认证/凭证 | scope=<代表: 隔离进程>
+v1.5规划(v1.3基线) | req=skill检索完整性 | des=D3-A1 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=触发词路由准确 | des=D3-A2 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=沙箱vs生产路由 | des=D3-A3 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=区域意图提取 | des=D3-A4 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=元数据正确性 | des=D3-A5 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=市场/图标检索质量 | des=D3-A6 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=list_operations规范名 | des=D3-B1 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=plan命令质量 | des=D3-B2 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=run_readonly脱敏执行 | des=D3-B3 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=explain_error可执行 | des=D3-B4 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=detect_framework识别 | des=D3-B5 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=search_docs命中率 | des=D3-B6 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=ECS生命周期E2E | des=D3-C1 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: 真云 ECS 贵资源>
+v1.5规划(v1.3基线) | req=OBS静态站部署E2E | des=D3-C2 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=沙箱部署E2E | des=D3-C3 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: 沙箱 DevStation>
+v1.5规划(v1.3基线) | req=服务创建类回归 | des=D3-C4 | exp=EXP-C4-01;EXP-C4-02;EXP-C4-03;EXP-C4-04;EXP-C4-05;EXP-C4-06;EXP-C4-07;EXP-C4-08;EXP-C4-09;EXP-C4-10;EXP-C4-11;EXP-C4-12;EXP-C4-13;EXP-C4-14;EXP-C4-15;EXP-C4-16;EXP-C4-17;EXP-C4-18;EXP-C4-19;EXP-C4-20;EXP-C4-21;EXP-C4-22 | layer=功能/配置 | scope=<代表: 22 服务矩阵>
+v1.5规划(v1.3基线) | req=工具冒烟 | des=D3-C5 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=run_approved_command 审批后执行闭环 | des=D3-B7 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=voucher_status 状态查询（领券状态读取） | des=D3-B8 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/upload_file/close_session/deploy_check） | des=D3-C6 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+全量评审补齐REV-20260911004604 | req=跨区域资源操作引导（区域维度） | des=D3-C7 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<真云代表: Hermes>
+全量评审补齐REV-20260911004604 | req=企业项目（enterprise_project_id）参数支持（项目维度） | des=D3-C8 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<真云代表: Hermes>
+全量评审补齐REV-20260911004604 | req=资源不存在/已删除/冻结状态操作引导（资源状态维度） | des=D3-C9 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<真云代表: Hermes>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=市场分类列表 | des=D3-C10 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=沙箱凭证注入前 IAM 验证 | des=D3-C11 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=沙箱批量关闭与分块上传参数 | des=D3-C12 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=OBS 静态网站托管配置 | des=D3-C13 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: 真云 OBS>
+v1.5规划(v1.3基线) | req=沙箱 HDKit 服务参数与 hwlink 凭证 | des=D3-C14 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes 沙箱>
+v1.5规划(v1.3基线) | req=场景-只读查ECS(带不改约束) | des=D3-S1 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=场景-删VPC先确认 | des=D3-S2 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=场景-沙箱预览出URL | des=D3-S3 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=场景-领券闭环 | des=D3-S4 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=场景-复合意图分层路由 | des=D3-S5 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=场景-FunctionGraph定时任务 | des=D3-S6 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=场景-跨服务交付(Web应用+RDS)并归零 | des=D3-S7 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=场景-操作失败后排障指引 | des=D3-S8 | exp=无(不展开/代表执行) | layer=功能/配置 | scope=<代表: Hermes>
+v1.5规划(v1.3基线) | req=凭证文件读取拦截 | des=D4-1 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=凭证env打印拦截 | des=D4-2 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=明文secret API拦截 | des=D4-3 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=写操作审批门 | des=D4-4 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=写操作误判检测 | des=D4-5 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=adminPass回显警告 | des=D4-6 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=hook三工具有效性 | des=D4-7 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=Python/Node策略一致 | des=D4-8 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=公开暴露/破坏性预检 | des=D4-9 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=规则库新增回归 | des=D4-10 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=提示注入防护 | des=D4-11 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: 4 注入点>
+v1.5规划(v1.3基线) | req=供应链安装期安全 | des=D4-12 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=最小权限凭证通过率 | des=D4-13 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: 只读凭证全量>
+v1.5规划(v1.3基线) | req=操作可审计性 | des=D4-14 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=hook绕过尝试 | des=D4-15 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=命令包裹穿透 | des=D4-16 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=hook模糊fail-closed | des=D4-17 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=hook_check_artifacts 具名回归（代码/IaC/策略制品预检） | des=D4-21 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=hook_check_deploy_plan 具名回归（部署计划预检） | des=D4-22 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook=Hermes 非hook=OpenCode>
+v1.5规划(v1.3基线) | req=全局规则 huawei-agent-rules.md 注入生效性（11 安装目标） | des=D4-23 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=安全/审批 | scope=<代表: 逐客户端 11 目标>
+全量评审补齐REV-20260911004604 | req=确认令牌过期与重复确认边界（审批流健壮性） | des=D4-24 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=安全/审批 | scope=<代表2: Hermes+OpenCode>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=Python hook 事件遥测分类 | des=D4-25 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook客户端>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=findings 证据脱敏 | des=D4-26 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook客户端>
+v1.5规划(v1.3基线) | req=双路径输出脱敏 | des=D4-27 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: 隔离进程>
+v1.5规划(v1.3基线) | req=Node 版安全 hook 链路 | des=D4-28 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: hook客户端>
+v1.5规划(v1.3基线) | req=分类断言与原始命令分类入口 | des=D4-29 | exp=无(不展开/代表执行) | layer=安全/审批 | scope=<代表: 隔离进程>
+v1.5规划(v1.3基线) | req=清单发现加载 | des=D5-1 | exp=EXP-D5-1-1;EXP-D5-2-1;EXP-D5-3-1;EXP-D5-4-1;EXP-D5-5-1;EXP-D5-6-1;EXP-D5-7-1;EXP-D5-8-1;EXP-D5-9-1;EXP-D5-10-1 | layer=客户端适配 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=install落点正确 | des=D5-2 | exp=EXP-D5-1-2;EXP-D5-2-2;EXP-D5-3-2;EXP-D5-4-2;EXP-D5-5-2;EXP-D5-6-2;EXP-D5-7-2;EXP-D5-8-2;EXP-D5-9-2;EXP-D5-10-2 | layer=客户端适配 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=工具全量枚举 | des=D5-3 | exp=EXP-D5-1-3;EXP-D5-2-3;EXP-D5-3-3;EXP-D5-4-3;EXP-D5-5-3;EXP-D5-6-3;EXP-D5-7-3;EXP-D5-8-3;EXP-D5-9-3;EXP-D5-10-3 | layer=客户端适配 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=hook支持差异 | des=D5-4 | exp=EXP-D5-1-4;EXP-D5-2-4;EXP-D5-3-4;EXP-D5-4-4;EXP-D5-5-4;EXP-D5-6-4;EXP-D5-7-4;EXP-D5-8-4;EXP-D5-9-4;EXP-D5-10-4 | layer=客户端适配 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=沙箱/终端模式差异 | des=D5-5 | exp=EXP-D5-1-5;EXP-D5-2-5;EXP-D5-3-5;EXP-D5-4-5;EXP-D5-5-5;EXP-D5-6-5;EXP-D5-7-5;EXP-D5-8-5;EXP-D5-9-5;EXP-D5-10-5 | layer=客户端适配 | scope=<代表: CodeArts 重点>
+v1.5规划(v1.3基线) | req=Windows特有问题 | des=D5-6 | exp=EXP-D5-1-6;EXP-D5-2-6;EXP-D5-3-6;EXP-D5-4-6;EXP-D5-5-6;EXP-D5-6-6;EXP-D5-7-6;EXP-D5-8-6;EXP-D5-9-6;EXP-D5-10-6 | layer=客户端适配 | scope=<代表: Windows 专项>
+v1.5规划(v1.3基线) | req=重启生效一致性 | des=D5-7 | exp=EXP-D5-1-7;EXP-D5-2-7;EXP-D5-3-7;EXP-D5-4-7;EXP-D5-5-7;EXP-D5-6-7;EXP-D5-7-7;EXP-D5-8-7;EXP-D5-9-7;EXP-D5-10-7 | layer=客户端适配 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=服务矩阵↔技能目录双向对齐 + codex-desktop 补全 | des=D5-8 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=客户端适配 | scope=<代表: 逐客户端 10+>
+v1.5规划(v1.3基线) | req=检索响应延迟 | des=D6-1 | exp=无(不展开/代表执行) | layer=性能/可靠性 | scope=<代表: Windows x64 + Node22>
+v1.5规划(v1.3基线) | req=只读执行端到端 | des=D6-2 | exp=无(不展开/代表执行) | layer=性能/可靠性 | scope=<代表: Windows x64 + Node22>
+v1.5规划(v1.3基线) | req=MCP冷启时间 | des=D6-3 | exp=无(不展开/代表执行) | layer=性能/可靠性 | scope=<代表: Windows x64 + Node22>
+v1.5规划(v1.3基线) | req=并发调度正确性 | des=D6-4 | exp=无(不展开/代表执行) | layer=性能/可靠性 | scope=<代表: Windows x64 + Node22>
+v1.5规划(v1.3基线) | req=大目录/大上传 | des=D6-5 | exp=无(不展开/代表执行) | layer=性能/可靠性 | scope=<代表: Windows x64 + Node22>
+v1.5规划(v1.3基线) | req=弱网重试幂等 | des=D6-6 | exp=无(不展开/代表执行) | layer=性能/可靠性 | scope=<代表: Windows x64 + Node22>
+v1.5规划(v1.3基线) | req=长会话稳定性 | des=D6-7 | exp=无(不展开/代表执行) | layer=性能/可靠性 | scope=<代表: Windows x64 + Node22>
+全量评审补齐REV-20260911004604 | req=MCP 工具调用超时（网络/后端挂起） | des=D6-8 | exp=无(不展开/代表执行) | layer=性能/可靠性 | scope=<代表: MCP进程+夹具>
+v1.5规划(v1.3基线) | req=缓存清理三入口 | des=D6-9 | exp=无(不展开/代表执行) | layer=性能/可靠性 | scope=<代表: 隔离进程>
+全量评审补齐REV-20260911004604 | req=tools/call 超时协议语义与取消 | des=D9-9 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: Inspector+夹具>
+v1.5规划(v1.3基线) | req=OS矩阵 | des=D7-1 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=兼容性 | scope=<代表: Windows/Linux/macOS × Node22/24>
+v1.5规划(v1.3基线) | req=Node版本矩阵 | des=D7-2 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=兼容性 | scope=<代表: Windows/Linux/macOS × Node22/24>
+v1.5规划(v1.3基线) | req=Windows better-sqlite3缺口 | des=D7-3 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=兼容性 | scope=<代表: Windows 专项>
+v1.5规划(v1.3基线) | req=国内镜像源安装 | des=D7-4 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=兼容性 | scope=<代表: Windows/Linux/macOS × Node22/24>
+v1.5规划(v1.3基线) | req=与既有配置共存 | des=D7-5 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=兼容性 | scope=<代表: Windows/Linux/macOS × Node22/24>
+v1.5规划(v1.3基线) | req=升级兼容 | des=D7-6 | exp=由EXP-D7 OS矩阵覆盖(OS×Node) | layer=兼容性 | scope=<代表: Windows/Linux/macOS × Node22/24>
+v1.5规划(v1.3基线) | req=文档与能力一致 | des=D8-1 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 静态评审人 测试经理>
+v1.5规划(v1.3基线) | req=错误信息可执行 | des=D8-2 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 静态评审人 测试经理>
+v1.5规划(v1.3基线) | req=脱敏误报平衡 | des=D8-3 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 静态评审人 测试经理>
+v1.5规划(v1.3基线) | req=引导步骤可机械执行 | des=D8-4 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 静态评审人 测试经理>
+v1.5规划(v1.3基线) | req=运行时日志安全 | des=D8-5 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 静态评审人 测试经理>
+v1.5规划(v1.3基线) | req=中英文文档一致 | des=D8-6 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 静态评审人 测试经理>
+v1.5规划(v1.3基线) | req=7 个 meta/通用技能指引可机械执行验证 | des=D8-7 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 静态评审人 测试经理>
+v1.5规划(v1.3基线) | req=遥测策略端到端（trackTool/trackSandbox/hook 事件/上报脱敏） | des=D8-8 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 静态评审人 测试经理>
+v1.5规划(v1.3基线) | req=安装 ID 与遥测值脱敏 | des=D8-9 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 隔离进程>
+v1.5规划(v1.3基线) | req=MCP 配置备份与合并 | des=D8-10 | exp=无(不展开/代表执行) | layer=文档/质量 | scope=<代表: 隔离 HOME>
+v1.5规划(v1.3基线) | req=tools/list合规 | des=D9-1 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + Hermes>
+v1.5规划(v1.3基线) | req=JSON-RPC错误码 | des=D9-2 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + Hermes>
+v1.5规划(v1.3基线) | req=tools/call响应格式 | des=D9-3 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + Hermes>
+v1.5规划(v1.3基线) | req=协议生命周期 | des=D9-4 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + Hermes>
+v1.5规划(v1.3基线) | req=stdio传输健壮 | des=D9-5 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + Hermes>
+v1.5规划(v1.3基线) | req=跨客户端互通 | des=D9-6 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + Hermes>
+v1.5规划(v1.3基线) | req=协议版本协商降级 | des=D9-7 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + Hermes>
+v1.5规划(v1.3基线) | req=inputSchema版本合规 | des=D9-8 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + Hermes>
+覆盖缺口落用例20260913(coverage-gaps.md) | req=MCP remote transport（HTTP/WS 远程服务） | des=D9-10 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: remote 客户端>
+v1.5规划(v1.3基线) | req=WebSocket 隧道通道生命周期 | des=D9-11 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: 隧道 mux 夹具>
+v1.5规划(v1.3基线) | req=initialize 握手协议安全基线 | des=D9-12 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + Hermes>
+v1.5规划(v1.3基线) | req=tools/call 凭证不泄露与权限校验 | des=D9-13 | exp=无(不展开/代表执行) | layer=MCP协议 | scope=<代表: MCP Inspector + 源码探针>
+v1.5规划(v1.3基线) | req=工具描述可选择性 | des=D10-1 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=Agent评测 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=skill激活率 | des=D10-2 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=Agent评测 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=路由准确率+混淆矩阵 | des=D10-3 | exp=EXP-E01;EXP-E02;EXP-E03;EXP-E04;EXP-E05;EXP-E06;EXP-E07;EXP-E08;EXP-E09;EXP-E10;EXP-E11;EXP-E12;EXP-E13;EXP-E14;EXP-E15 | layer=Agent评测 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=安全干预-静态规则层 | des=D10-4 | exp=无(不展开/代表执行) | layer=Agent评测 | scope=<代表: 源码直调 risk-rule-engine>
+v1.5规划(v1.3基线) | req=安全干预-LLM会话层 | des=D10-9 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=Agent评测 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=多轮任务完成率 | des=D10-5 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=Agent评测 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=评测基建 | des=D10-6 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=Agent评测 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=评测失败分级 | des=D10-7 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=Agent评测 | scope=<代表: 10 客户端>
+v1.5规划(v1.3基线) | req=评测成本预算 | des=D10-8 | exp=由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端) | layer=Agent评测 | scope=<代表: 10 客户端>
+ITER-005(PR#592) | req=README 徽章动态化 D1-1~4 | des=- | exp=- | layer=静态核对+CLI | scope=Windows W
+ITER-005(PR#592) | req=P1 install 目标解析四态 | des=D1-2/D1-7/D1-9 | exp=- | layer=CLI+PTY/非TTY | scope=Windows W + Linux L
+ITER-005(PR#592) | req=P2 通用 MCP 白名单接入 | des=D1-58 | exp=- | layer=CLI | scope=Linux L
+ITER-002 hand | req=各客户端 CDP 会话级自动化 | des=D5-1~7 | exp=EXP-D5-1-1;EXP-D5-5-1 | layer=客户端会话 | scope=7 客户端
