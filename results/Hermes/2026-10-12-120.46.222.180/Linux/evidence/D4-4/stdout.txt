@@ -1,6 +1,9 @@
-=== CASE D4-4 ===  FAIL
-  SUT: v1.1.7 (gitHead 7456d05)
-  defect: 审批门 Change* 写操作漏拦截：ChangeServerOsWithoutCloudInit/ChangeVpc/ChangeInstanceConfiguration 均 allow (Create/Delete 正常 deny)
-  root: safety/policy.json:27-31 缺 Change 前缀
-  来源: evidence/fresh-*.txt (2026-10-11 fresh 重跑) + 源码级直调
-RESULT: FAIL
+=== CASE D4-4 ===  FAIL  (写操作审批门，含 Change* 漏拦截)
+  expected: 写操作未经审批 -> deny
+  actual:   Change* 变更类写操作未经审批被放行（仅 Create/Delete 正常 deny）
+  hcloud ecs ChangeServerOsWithoutCloudInit -> allow (exp deny) <<< 漏拦截
+  hcloud vpc ChangeVpc -> allow (exp deny) <<< 漏拦截
+  hcloud rds ChangeInstanceConfiguration -> allow (exp deny) <<< 漏拦截
+  hcloud ecs CreateServer -> deny (exp deny)
+  RESULT: FAIL  (1/4 拦截, 根因: plugins/huaweicloud-core/safety/policy.json:27-31 writeOperationPrefixes 缺 Change 前缀)
+  NOTE: probe-remaining.mjs 只测 Create/Delete 写操作为 PASS，真实断言（审批门 Change* 漏拦截）以 fresh-supplement2.txt D4-4 段为准=FAIL
