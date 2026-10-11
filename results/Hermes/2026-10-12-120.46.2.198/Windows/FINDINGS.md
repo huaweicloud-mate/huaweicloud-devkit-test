@@ -7,12 +7,9 @@
 
 ---
 
-## FINDING-001: serviceCatalog 中文意图路由大面积未命中
+## #1【P1】serviceCatalog 中文意图路由大面积未命中 (D3-S1/D10-3/EXP-E01~E14)
 
-### 级别
-P1 (功能缺陷)
-
-### 描述 (现象)
+### 现象
 `huaweicloud_service_catalog` 工具的 `serviceCatalog()` 函数在处理中文自然语言意图时，大面积未命中预期服务路由。eval harness (run-eval.mjs) 实测 15 条评测集，仅 3 条 HIT (准确率 21.4%)，远低于用例预期的 ≥90%。
 
 ### 断言 (唯一可判定)
@@ -30,6 +27,11 @@ P1 (功能缺陷)
 - 唯一有中文关键词的是 voucher 路由: `keywords: ['voucher', 'coupon', 'incentive', 'credit', '领券', '代金券', '优惠券', '激励金', '领取']` — 因此 EXP-E15 HIT
 - DCS 路由有 'redis' 英文关键词，但意图中包含 'Redis'，因此 EXP-E06 HIT
 - CCE 路由有 'kubernetes'/'k8s' 英文关键词，因此 EXP-E09 HIT
+
+### 影响
+- D3-S1 (FAIL): 只读查ECS场景路由未命中
+- D10-3 (FAIL): 路由准确率21.4%，远低于≥90%预期
+- EXP-E01~E14 (11 FAIL): 评测集路由未命中（ECS/OBS/EIP/RDS/CBR/FunctionGraph/BSS/CES/ELB/IAM）
 
 ### 证据
 - eval harness 结果: `eval/results/eval-run-20261011213513.csv`
