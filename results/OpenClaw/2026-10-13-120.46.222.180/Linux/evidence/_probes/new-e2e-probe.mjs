@@ -128,10 +128,11 @@ console.log('\n=====CASE D3-C2=====');
     // ③ public-read：set 静态站 + public-read ACL
     const set = await call('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
     console.log('set 静态站 = ok=' + set.ok + ' status=' + set.status + ' url=' + (set.websiteUrl || ''));
-    // public-read ACL（obsutil chmod）
-    const acl = sh(['OBS', 'chmod', `obs://${bucket}`, '-acl=public-read', '-r']);
-    console.log('chmod public-read = ' + (acl.slice(0, 120)));
-    publicOk = set.ok === true && (set.status === 200 || set.status === 204);
+    // public-read ACL：需同时设桶与对象级 ACL（obsutil chattri）
+    sh(['OBS', 'chattri', `obs://${bucket}`, '-acl=public-read']);
+    const aclObj = sh(['OBS', 'chattri', `obs://${bucket}/index.html`, '-acl=public-read']);
+    console.log('chattri public-read 桶+对象 = ' + (/success/i.test(aclObj) ? 'ok' : aclObj.slice(0, 100)));
+    publicOk = set.ok === true && (set.status === 200 || set.status === 204) && /success/i.test(aclObj);
     // ④ curl 网站 URL（静态站域名，可能需传播数秒）
     const websiteUrl = set.websiteUrl || `http://${bucket}.obs-website.${REGION}.myhuaweicloud.com/index.html`;
     let code = '';
