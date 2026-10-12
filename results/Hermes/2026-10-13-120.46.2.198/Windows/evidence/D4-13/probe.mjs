@@ -1,4 +1,4 @@
 // Probe for D4-13
-// Test: run_readonly_command tool registered: true
+// Test: readonly creds: true, run_readonly tool: true, run-as-readonly.py: true
 // Status: PASS
-// Source: probe-p1-batch2.mjs
+// Source: probe-realcloud-e2e.mjs

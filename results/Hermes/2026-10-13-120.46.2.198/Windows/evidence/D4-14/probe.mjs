@@ -1,4 +1,4 @@
 // Probe for D4-14
-// Test: tools.mjs has audit/log capability: true
+// Test: CTS ListTraces: isError=false, response length=1012. CTS tool availability: true
 // Status: PASS
-// Source: probe-p2-batch1.mjs
+// Source: probe-realcloud-e2e.mjs
