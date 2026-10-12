@@ -7,7 +7,7 @@ const SRC = '/home/zhangshuang/devkit-test/OpenCode/hdk/plugins/huaweicloud-core
 const { callTool } = await import(pathToFileURL(SRC).href);
 const REGION = 'cn-north-4';
 const AZ = 'cn-north-4a';
-const FLAVOR = 'kc1.small.1';
+const FLAVOR = 'c6.large.2';
 const IMAGE = '9c2f377e-7f49-4fdf-b0be-c6c8d3b96fde';
 
 const out = [];
@@ -37,7 +37,7 @@ try {
 
 // ② Subnet
 try {
-  const r = await runW(['VPC', 'CreateSubnet', '--cli-region=' + REGION, '--vpc_id=' + vpcId, '--subnet.name=' + vpcName + '-sub', '--subnet.cidr=192.168.100.0/26', '--availability_zone=' + AZ]);
+  const r = await runW(['VPC', 'CreateSubnet', '--cli-region=' + REGION, '--subnet.vpc_id=' + vpcId, '--subnet.name=' + vpcName + '-sub', '--subnet.cidr=192.168.100.0/26', '--subnet.gateway_ip=192.168.100.1', '--subnet.availability_zone=' + AZ]);
   const m = /"id"\s*:\s*"([0-9a-f-]{36})"/.exec(r?.stdout || '');
   subnetId = m ? m[1] : '';
   rec('CreateSubnet', r?.ok === true && !!subnetId, { subnetId });
@@ -45,7 +45,7 @@ try {
 
 // ③ CreateServers（最小规格）
 try {
-  const args = ['ECS', 'CreateServers', '--cli-region=' + REGION, '--server.name=' + vpcName + '-srv', '--server.flavorRef=' + FLAVOR, '--server.imageRef=' + IMAGE, '--server.vpcid=' + vpcId, '--server.subnet_id=' + subnetId, '--server.root_volume.volumetype=SSD', '--server.root_volume.size=10', '--server.count=1', '--server.availability_zone=' + AZ];
+  const args = ['ECS', 'CreateServers', '--cli-region=' + REGION, '--server.name=' + vpcName + '-srv', '--server.flavorRef=' + FLAVOR, '--server.imageRef=' + IMAGE, '--server.vpcid=' + vpcId, '--server.nics.1.subnet_id=' + subnetId, '--server.root_volume.volumetype=GPSSD', '--server.root_volume.size=10', '--server.count=1', '--server.availability_zone=' + AZ];
   const plan = await callTool('huaweicloud_plan_cli_command', { args, timeoutMs: 30000 });
   rec('CreateServers(审批分类)', plan.classification?.decision === 'deny' && plan.classification?.risk === 'write', plan.classification);
   const r = await callTool('huaweicloud_run_approved_command', { args, approvalToken: plan.approvalToken, approvedByUser: true, timeoutMs: 60000 });
@@ -102,9 +102,9 @@ try {
 
 // ⑦ 清理 VPC + 子网
 try {
-  if (subnetId) { await runW(['VPC', 'DeleteSubnet', '--cli-region=' + REGION, '--subnet_id=' + subnetId]); }
-  if (vpcId) { await runW(['VPC', 'DeleteVpc', '--cli-region=' + REGION, '--vpc_id=' + vpcId]); }
-  rec('清理 VPC+子网', true, { vpcId, subnetId });
+  if (subnetId && vpcId) { await runW(['VPC', 'DeleteSubnet', '--cli-region=' + REGION, '--vpc_id=' + vpcId, '--subnet_id=' + subnetId]); }
+  if (vpcId) { await new Promise((r) => setTimeout(r, 3000)); await runW(['VPC', 'DeleteVpc', '--cli-region=' + REGION, '--vpc_id=' + vpcId]); }
+  rec('清理 VPC+子网', true, JSON.stringify({ vpcId, subnetId }));
 } catch (e) { rec('清理 VPC+子网', false, e.message); }
 
 const allPass = out.filter((x) => !x.pass).length === 0;
