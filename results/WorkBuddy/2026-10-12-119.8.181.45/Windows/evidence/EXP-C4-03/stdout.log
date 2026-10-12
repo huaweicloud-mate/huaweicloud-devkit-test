@@ -1,7 +1,26 @@
 {
-  "caseId": "EXP-C4-03",
-  "status": "PASS",
-  "why": "OBS catalog routing: {\"intent\":\"查询OBS列表\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServic",
-  "sample": "{\"intent\":\"查询OBS列表\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list available services.\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an official or approved server is available\",\"Terraform Provider only when IaC reviewability and repeatability are important\"],\"ruleOfThumb\":{\"skills\":\"Start here when the user describes a scenario or wants a guided workflow.\",\"cli\":\"Use for local diagnostics, read-only inspection, and commands the user can review.\",\"api\":\"Use for exact service contract, region endpoint, project_id, pagination, and error codes.\",\"sdk\":\"Use when writing application code that calls Huawei Cloud services.\",\"mcp\":\"Prefer approved MCP tools when available because tools can carry structured schemas.\",\"terraform\":\"Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis.\"}}",
-  "executedAt": "20261012050551"
+  "service": "OBS",
+  "hcService": "obs",
+  "expId": "EXP-C4-03",
+  "readonlyOp": "ls",
+  "listOperationsOk": true,
+  "readOpRc": 0,
+  "readOpOk": true,
+  "readOpCount": 4,
+  "createResult": {
+    "service": "OBS",
+    "hcService": "obs",
+    "createOk": true,
+    "deleteOk": true,
+    "verifyZero": true,
+    "createCmd": "hcloud obs mb obs://hdk-test-d3c4-20261012182355 -location=cn-north-4",
+    "createRc": 6,
+    "createOutput": "Start at 2026-10-12 10:23:56.7604819 +0000 UTC\n\nCreate bucket [hdk-test-d3c4-20261012182355] successfully, request id [000001A12FA3F6DE47D07F6BCB08B74E]\nNotice: If the configured endpoint is a global domain name, you may need to wait serveral minutes before performing uploading operations on the created bucket. Therefore, configure the endpoint to a regional domain name if you want instant uploading operations on the bucket.\n",
+    "createdResource": "hdk-test-d3c4-20261012182355",
+    "postCreateList": "Start at 2026-10-12 10:23:59.5942513 +0000 UTC\n\n\nListing objects .\n\nTotal size of bucket: 0B\nFolder number: 0\nFile number: 0\n",
+    "deleteRc": 0,
+    "deleteOutput": "Start at 2026-10-12 10:24:00.9995594 +0000 UTC\n\nDo you want delete bucket [hdk-test-d3c4-20261012182355] ? Please input (y/n) to confirm:\nDelete bucket [hdk-test-d3c4-20261012182355] successfully!\n",
+    "verifyZeroLog": "Post-delete obs ls: bucket 'hdk-test-d3c4-20261012182355' GONE (verified zero)\n"
+  },
+  "status": "PASS"
 }

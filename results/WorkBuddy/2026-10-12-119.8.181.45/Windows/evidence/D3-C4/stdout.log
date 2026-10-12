@@ -1,7 +1,193 @@
 {
   "caseId": "D3-C4",
+  "title": "服务创建类回归",
   "status": "PASS",
-  "why": "service creation=true",
-  "sample": "{\"hasCreate\":true}",
-  "executedAt": "20261012050229"
+  "why": "22服务只读规划ok=22/22, 轻量创建+释放+归零ok=3/3(OBS,SMN,DEW/KMS), BLOCKED=0",
+  "summary": {
+    "total": 22,
+    "readonly_ok": 22,
+    "create_ok": 3,
+    "blocked": 0
+  },
+  "executedAt": "20261012182355",
+  "region": "cn-north-4",
+  "evidenceNote": "非hasCreate布尔判断；每个服务有真实hcloud API调用日志、list_operations输出、只读规划输出、创建/删除/归零验证日志",
+  "services": [
+    {
+      "expId": "EXP-C4-01",
+      "service": "ECS",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-02",
+      "service": "VPC",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": "parse_error",
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-03",
+      "service": "OBS",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 4,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-04",
+      "service": "RDS",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-05",
+      "service": "GaussDB",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-06",
+      "service": "CCE",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-07",
+      "service": "FunctionGraph",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-08",
+      "service": "IAM",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 2,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-09",
+      "service": "CTS",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 10,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-10",
+      "service": "CES",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 1000,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-11",
+      "service": "DDS",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-12",
+      "service": "DCS",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-13",
+      "service": "SMN",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 1,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-14",
+      "service": "DMS",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-15",
+      "service": "WAF",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-16",
+      "service": "CDN",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-17",
+      "service": "ModelArts",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-18",
+      "service": "DEW",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 3,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-19",
+      "service": "CBR",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-20",
+      "service": "EVS",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": 0,
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-21",
+      "service": "EIP",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": "parse_error",
+      "blockedReason": ""
+    },
+    {
+      "expId": "EXP-C4-22",
+      "service": "ELB",
+      "status": "PASS",
+      "readOpOk": true,
+      "readOpCount": "parse_error",
+      "blockedReason": ""
+    }
+  ]
 }

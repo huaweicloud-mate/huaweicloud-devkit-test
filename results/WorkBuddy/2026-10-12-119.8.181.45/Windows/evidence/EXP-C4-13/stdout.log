@@ -1,7 +1,27 @@
 {
-  "caseId": "EXP-C4-13",
-  "status": "PASS",
-  "why": "SMN catalog routing: {\"intent\":\"查询SMN列表\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServic",
-  "sample": "{\"intent\":\"查询SMN列表\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list available services.\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an official or approved server is available\",\"Terraform Provider only when IaC reviewability and repeatability are important\"],\"ruleOfThumb\":{\"skills\":\"Start here when the user describes a scenario or wants a guided workflow.\",\"cli\":\"Use for local diagnostics, read-only inspection, and commands the user can review.\",\"api\":\"Use for exact service contract, region endpoint, project_id, pagination, and error codes.\",\"sdk\":\"Use when writing application code that calls Huawei Cloud services.\",\"mcp\":\"Prefer approved MCP tools when available because tools can carry structured schemas.\",\"terraform\":\"Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis.\"}}",
-  "executedAt": "20261012050551"
+  "service": "SMN",
+  "hcService": "SMN",
+  "expId": "EXP-C4-13",
+  "readonlyOp": "ListTopics",
+  "listOperationsOk": true,
+  "readOpRc": 0,
+  "readOpOk": true,
+  "readOpCount": 1,
+  "createResult": {
+    "service": "SMN",
+    "hcService": "SMN",
+    "createOk": true,
+    "deleteOk": true,
+    "verifyZero": true,
+    "createCmd": "hcloud SMN CreateTopic --name=hdk_test_d3c4_20261012182355 --display_name=hdk_test_d3c4",
+    "createRc": 0,
+    "createOutput": "{\n  \"request_id\": \"a18c011eff004059aa220362d45ec83a\",\n  \"topic_urn\": \"urn:smn:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:hdk_test_d3c4_20261012182355\"\n}\n",
+    "createdResource": "hdk_test_d3c4_20261012182355",
+    "topicUrn": "urn:smn:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:hdk_test_d3c4_20261012182355",
+    "postCreateList": "{\n  \"request_id\": \"77ef480ab78e4baeb3d1785ece412056\",\n  \"topic_count\": 2,\n  \"topics\": [\n    {\n      \"topic_id\": \"bee7760bc8134c72a5225e63c451063f\",\n      \"topic_urn\": \"urn:smn:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:hdk_test_d3c4_20261012182355\",\n      \"display_name\": \"hdk_test_d3c4\",\n      \"name\": \"hdk_test_d3c4_20261012182355\",\n      \"push_policy\": 0,\n      \"enterprise_project_id\": \"0\",\n      \"create_time\": \"2026-10-12T10:24:10Z\",\n      \"update_time\": \"2026-10-12T10:24:10Z\"\n    },\n    {\n      \"topic_id\": \"bdc3485f91b84beea721f4d04f11a111\",\n      \"topic_urn\": \"urn:smn:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:AUTO_ALARM_NOTIFY_TOPIC_MYSQL_mysql_46c1fd48bd1248c7b75afc3780de7132\",\n      \"display_name\": \"RDS自动告警内置主题\",\n      \"name\": \"AUTO_ALARM_NOTIFY_TOPIC_MYSQL_mysql_46c1fd48bd1248c7b75afc3780de7132\",\n      \"push_policy\": 0,\n      \"enterprise_project_id\": \"0\",\n      \"create_time\": \"2026-09-08T16:36:10Z\",\n      \"update_time\": \"2026-09-08T16:36:10Z\"\n    }\n  ]\n}\n",
+    "deleteRc": 0,
+    "deleteOutput": "{\n  \"request_id\": \"0dd9e54dd0ed495ebd5376bfa661907b\"\n}\n",
+    "verifyZeroLog": "Post-delete ListTopics: topic 'hdk_test_d3c4_20261012182355' GONE (verified zero)\nTotal topics after: 1\n"
+  },
+  "status": "PASS"
 }

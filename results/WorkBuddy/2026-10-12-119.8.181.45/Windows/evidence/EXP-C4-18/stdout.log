@@ -1,7 +1,27 @@
 {
-  "caseId": "EXP-C4-18",
-  "status": "PASS",
-  "why": "DEW catalog routing: {\"intent\":\"查询DEW列表\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServic",
-  "sample": "{\"intent\":\"查询DEW列表\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list available services.\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an official or approved server is available\",\"Terraform Provider only when IaC reviewability and repeatability are important\"],\"ruleOfThumb\":{\"skills\":\"Start here when the user describes a scenario or wants a guided workflow.\",\"cli\":\"Use for local diagnostics, read-only inspection, and commands the user can review.\",\"api\":\"Use for exact service contract, region endpoint, project_id, pagination, and error codes.\",\"sdk\":\"Use when writing application code that calls Huawei Cloud services.\",\"mcp\":\"Prefer approved MCP tools when available because tools can carry structured schemas.\",\"terraform\":\"Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis.\"}}",
-  "executedAt": "20261012050551"
+  "service": "DEW",
+  "hcService": "KMS",
+  "expId": "EXP-C4-18",
+  "readonlyOp": "ListKeys",
+  "listOperationsOk": true,
+  "readOpRc": 0,
+  "readOpOk": true,
+  "readOpCount": 3,
+  "createResult": {
+    "service": "DEW",
+    "hcService": "KMS",
+    "createOk": true,
+    "deleteOk": true,
+    "verifyZero": true,
+    "createCmd": "hcloud KMS CreateKey --key_alias=hdk-test-d3c4-20261012182355",
+    "createRc": 0,
+    "createOutput": "{\n  \"key_info\": {\n    \"domain_id\": \"842591186fa245929e1b5c186a4cf784\",\n    \"key_id\": \"d4993006-000a-47e6-898a-ccf7715bd7af\"\n  }\n}\n\n",
+    "createdResource": "hdk-test-d3c4-20261012182355",
+    "keyId": "d4993006-000a-47e6-898a-ccf7715bd7af",
+    "postCreateList": "{\n  \"next_marker\": \"\",\n  \"total\": 4,\n  \"key_details\": [\n    {\n      \"key_rotation_enabled\": \"false\",\n      \"key_usage\": \"ENCRYPT_DECRYPT\",\n      \"key_type\": \"1\",\n      \"key_id\": \"d4993006-000a-47e6-898a-ccf7715bd7af\",\n      \"key_spec\": \"AES_256\",\n      \"origin\": \"kms\",\n      \"expiration_time\": \"\",\n      \"sys_enterprise_project_id\": \"0\",\n      \"default_key_flag\": \"0\",\n      \"creation_date\": \"1791800660000\",\n      \"pending_days\": \"\",\n      \"domain_id\": \"842591186fa245929e1b5c186a4cf784\",\n      \"keystore_type\": \"DEFAULT\",\n      \"scheduled_deletion_date\": \"\",\n      \"multi_region_key_type\": \"SINGLE\",\n      \"key_alias\": \"hdk-test-d3c4-20261012182355\",\n      \"key_description\": \"\",\n      \"realm\": \"cn-north-4\",\n      \"keystore_id\": \"0\",\n      \"key_state\": \"2\"\n    },\n    {\n      \"key_rotation_enabled\": \"false\",\n      \"key_usage\": \"ENCRYPT_DECRYPT\",\n      \"key_type\": \"1\",\n      \"key_id\": \"e2464a9f-b2dd-4454-8367-125496c81b2a\",\n      \"key_spec\": \"AES_256\",\n      \"origin\": \"kms\",\n      \"expiration_",
+    "deleteRc": 0,
+    "deleteOutput": "{\n  \"key_id\": \"d4993006-000a-47e6-898a-ccf7715bd7af\",\n  \"key_state\": \"4\"\n}\n\n",
+    "verifyZeroLog": "Post-delete ListKeys: key 'hdk-test-d3c4-20261012182355' state=PENDING_DELETION(state=4)\nActive keys matching alias: 0\n"
+  },
+  "status": "PASS"
 }

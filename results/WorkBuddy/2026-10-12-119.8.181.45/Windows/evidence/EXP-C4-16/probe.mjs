@@ -1,3 +1,8 @@
-// P1/P2 probe for EXP-C4-16
-// Auto-generated from p1p2_batch_probe.mjs
-// See p1p2_batch_probe.mjs for full execution logic
+// EXP-C4-16: CDN (hcloud:CDN) 真云只读规划验证探针
+// 执行时间: 20261012182355
+// 区域: cn-north-4
+// 只读操作: hcloud CDN ListDomains/v1 --cli-region=cn-north-4
+// 结果: status=PASS, readOpOk=True, count=0
+// 证据文件: list_operations.txt, readonly_plan.log, pre_snapshot.json, post_snapshot.json
+// 轻量创建: SKIP - CDN域名加速需已备案域名且按流量计费；CDN API仅在cn-north-1可用，仅做只读规划
+// 状态: PASS (只读规划验证通过)
