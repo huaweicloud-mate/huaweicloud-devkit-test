@@ -61,7 +61,7 @@ npm install -g huaweicloud-devkit
 2. 拉最新（**每次执行测试前必跑**，一天可能跑多次，每次都要重新取最新，勿因「今天跑过」跳过）——`python scripts/prepare_env.py --update` 一键完成三件事：
    - 测试仓库 pull main 最新（含其他 agent 的最新改动与脚本）
    - 源码仓库 `hdk` fetch + checkout 到 npm 最新包（默认 `latest` 正式版，`--next` 则预发布）对应 commit（源码检查/根因定位用）
-   - `npm install -g huaweicloud-devkit` 安装最新正式包（latest；测 NR 预发布新功能时才用 `--next`）
+   - `npm install -g huaweicloud-devkit` 装最新正式包（latest）—— 以下一步 sync_agent_plugin 确保 agent 运行副本同步
 
 > **环境 PATH**：node/npm/gh 若装在用户目录（`~/nodejs/bin`、`~/bin`），非交互 shell 不自动加载。执行前先 `export PATH=$HOME/nodejs/bin:$HOME/bin:$PATH`（脚本 `prepare_env.py` 会自动加入 PATH，无需手动）。
 

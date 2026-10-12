@@ -25,6 +25,7 @@ clone 两仓库、自我识别客户端/OS、推送凭证 `HDK_GH_TOKEN`、真�
 - 测试仓库 pull main 最新（含其他 agent 最新改动/脚本）
 - 源码仓库 hdk checkout 到 npm 最新包（默认 latest 正式版）对应 commit
 - `npm install -g huaweicloud-devkit` 装最新正式包（latest）
+- `sync_agent_plugin()` 同步 npm 全局包到 Hermes 运行副本（huaweicloud-plugins/），确保 MCP 服务实际运行的版本与测试包一致
 
 ## 七步执行流程
 
