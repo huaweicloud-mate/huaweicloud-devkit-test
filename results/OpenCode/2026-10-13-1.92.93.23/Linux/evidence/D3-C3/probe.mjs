@@ -20,7 +20,7 @@ mkdirSync(projDir, { recursive: true });
 wf(join(projDir, 'index.html'), '<!doctype html><html><body><h1>d3c3-probe</h1></body></html>');
 
 let ws = '';
-try { const r = await callTool('huaweicloud_sandbox_connect', { source: 'CLI' }); ws = r.workspace_id || r.workspaceId || r.session_id || ''; rec('connect', !!ws, `ws=${ws}`); }
+try { const r = await callTool('huaweicloud_sandbox_connect', { source: 'CLI' }); ws = r.dev_stage_id || r.devStageId || r.session_id || r.sessionId || r.workspace_id || ''; rec('connect', !!ws, `ws=${ws}`); }
 catch (e) { rec('connect', false, e.message); }
 
 try { const r = await callTool('huaweicloud_sandbox_upload_project', { local_dir: projDir, workspace_id: ws || undefined }); rec('upload_project', r && (r.ok === true || r.error === undefined), JSON.stringify(r).slice(0, 150)); }

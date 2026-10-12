@@ -20,7 +20,7 @@ try { const r = await callTool('huaweicloud_sandbox_check_user', {}); rec('check
 catch (e) { rec('check_user', false, e.message); }
 
 // ② connect（拿 workspace/session）
-try { const r = await callTool('huaweicloud_sandbox_connect', { source: 'CLI' }); ws = r.workspace_id || r.workspaceId || r.session_id || ''; rec('connect', !!ws, `ws=${ws}`); }
+try { const r = await callTool('huaweicloud_sandbox_connect', { source: 'CLI' }); ws = r.dev_stage_id || r.devStageId || r.session_id || r.sessionId || r.workspace_id || ''; rec('connect', !!ws, `ws=${ws}`); }
 catch (e) { rec('connect', false, e.message); }
 
 // ③ credentials
