@@ -39,15 +39,16 @@ try {
 
 // ④ EIP 最小规格创建 → 断言命令带 region → 立即释放 → 归零
 let eipId = '';
-const eipArgs = ['EIP', 'CreatePublicip', '--cli-region=' + REGION, '--publicip.type=5_bgp', '--bandwidth.size=1', '--bandwidth.name=tctest-d3c7-' + Date.now().toString(36).slice(-6)];
+const eipName = 'tctest-d3c7-' + Date.now().toString(36).slice(-6);
+const eipArgs = ['EIP', 'CreatePublicip', '--cli-region=' + REGION, '--publicip.type=5_bgp', '--bandwidth.size=1', '--bandwidth.share_type=PER', '--bandwidth.name=' + eipName];
 try {
   const plan = await callTool('huaweicloud_plan_cli_command', { args: eipArgs });
   const hasRegion = eipArgs.some((a) => a.includes('--cli-region=' + REGION));
   const create = await callTool('huaweicloud_run_approved_command', { args: eipArgs, approvalToken: plan.approvalToken, approvedByUser: true, timeoutMs: 60000 });
-  const m = /"id"\s*:\s*"([0-9a-f-]{36})"/.exec(create?.stdout || '') || /"publicip_id"\s*:\s*"([0-9a-f-]{36})"/.exec(create?.stdout || '');
+  const m = /"id"\s*:\s*"([0-9a-f-]{36})"/.exec(create?.stdout || '') || /"publicip_id"\s*:\s*"([0-9a-f-]{36})"/.exec(create?.stdout || '') || /"id"\s*":\s*"([0-9a-f-]{36})"/.exec(create?.stdout || '');
   eipId = m ? m[1] : '';
   rec('EIP 建删命令含 region', hasRegion, `hasRegion=${hasRegion}`);
-  rec('CreatePublicip 返回 id', create?.ok === true && !!eipId, { eipId });
+  rec('CreatePublicip 返回 id', create?.ok === true && !!eipId, { id: eipId, out: (create?.stdout || '').slice(0, 160) });
 } catch (e) { rec('CreatePublicip', false, e.message); }
 
 // 释放归零

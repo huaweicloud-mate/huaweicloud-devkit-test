@@ -40,10 +40,11 @@ try {
   rec('obsutil上传', ok, redact(r?.stdout || r?.message || '').slice(0, 150));
 } catch (e) { rec('obsutil上传', false, e.message); }
 
-// ③ public-read（obsutil chattri 设置桶 ACL=public-read）
+// ③ public-read（obsutil chattri 设置桶 + 对象 ACL=public-read）
 try {
   execSync(`hcloud obs chattri obs://${bucket} -acl=public-read -f`, { encoding: 'utf8', stdio: 'pipe' });
-  rec('public-read(ACL)', true, 'chattri -acl=public-read 已执行');
+  execSync(`hcloud obs chattri obs://${bucket}/index.html -acl=public-read -f`, { encoding: 'utf8', stdio: 'pipe' });
+  rec('public-read(ACL)', true, '桶+对象 chattri -acl=public-read 已执行');
 } catch (e) { rec('public-read(ACL)', false, e.message); }
 
 // ④ set website（工具内部 AWS4 签名）
@@ -64,10 +65,10 @@ try {
 try {
   const url = websiteUrl || `http://${bucket}.obs-website.${REGION}.myhuaweicloud.com/index.html`;
   let code = '';
-  for (let i = 0; i < 6; i++) {
-    code = execSync(`curl -s -o /dev/null -w "%{http_code}" --max-time 30 "${url}"`, { encoding: 'utf8' }).trim();
+  for (let i = 0; i < 12; i++) {
+    code = execSync(`curl -s -o /dev/null -w "%{http_code}" --max-time 20 "${url}"`, { encoding: 'utf8' }).trim();
     if (code === '200') break;
-    await new Promise((r) => setTimeout(r, 10000));
+    await new Promise((r) => setTimeout(r, 8000));
   }
   rec('curl200', code === '200', `code=${code} url=${url}`);
 } catch (e) { rec('curl200', false, e.message); }

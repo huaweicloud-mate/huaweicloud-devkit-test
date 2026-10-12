@@ -1,23 +1,28 @@
 {
   "case": "D3-C2",
-  "status": "FAIL",
-  "total": 6,
-  "passed": 4,
+  "status": "PASS",
+  "total": 7,
+  "passed": 7,
   "results": [
     {
       "name": "OBS建桶",
       "pass": true,
-      "detail": "Start at 2026-10-12 21:29:05.026463225 +0000 UTC\n\nCreate bucket [tctest-opencode-obs-5rlh1e] successfully, request id [000001A13204E92644CC0D8015E5FD7"
+      "detail": "Start at 2026-10-12 21:34:05.903425829 +0000 UTC\n\nCreate bucket [tctest-opencode-obs-5rrx73] successfully, request id [000001A1320980614417884800BFED3"
     },
     {
       "name": "obsutil上传",
       "pass": true,
-      "detail": "Start at 2026-10-12 21:29:05.562861884 +0000 UTC\n\n\nParallel:      5                   Jobs:          5                   \nThreshold:     50.00MB      "
+      "detail": "Start at 2026-10-12 21:34:07.854796922 +0000 UTC\n\n\nParallel:      5                   Jobs:          5                   \nThreshold:     50.00MB      "
     },
     {
-      "name": "set静态站(public-read+website)",
+      "name": "public-read(ACL)",
       "pass": true,
-      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://tctest-opencode-obs-5rlh1e.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://tctest-opencode-obs-"
+      "detail": "桶+对象 chattri -acl=public-read 已执行"
+    },
+    {
+      "name": "set静态站(website)",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://tctest-opencode-obs-5rrx73.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://tctest-opencode-obs-"
     },
     {
       "name": "get静态站",
@@ -26,14 +31,14 @@
     },
     {
       "name": "curl200",
-      "pass": false,
-      "detail": "code=403 url=http://tctest-opencode-obs-5rlh1e.obs-website.cn-north-4.myhuaweicloud.com"
+      "pass": true,
+      "detail": "code=200 url=http://tctest-opencode-obs-5rrx73.obs-website.cn-north-4.myhuaweicloud.com"
     },
     {
       "name": "删桶归零",
-      "pass": false,
-      "detail": "Command failed: hcloud obs rb obs://tctest-opencode-obs-5rlh1e -f"
+      "pass": true,
+      "detail": "rm -r -f 清对象 + rm obs://bucket -f 删桶"
     }
   ],
-  "executedAt": "20261012212906"
+  "executedAt": "20261012213419"
 }
