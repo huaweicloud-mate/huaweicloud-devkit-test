@@ -34,5 +34,6 @@
     }
   ],
   "executedAt": "20261012210745",
-  "probe": "probe.mjs"
+  "probe": "probe.mjs",
+  "why": "跨区（ap-southeast-3）执行失败非设计预期错误码：只读查询返回 Common.0013（current region [ap-southeast-3] does not match with the project name [cn-north-4] in tk）；EIP CreatePublicip 返回 VPC.0501（token 携带 region 信息，仅 region-scoped token 可通过鉴权）；设计断言要求 Ecs.0021/Ecs.0200 精确命中 → 未命中。根因：KooCLI/工具链按 profile 的 cn-north-4 project 签发 region-scoped token，跨区无对应 project/token 注入路径，plan 层虽正确透传 --cli-region 但执行层被 IAM 拒绝。"
 }
