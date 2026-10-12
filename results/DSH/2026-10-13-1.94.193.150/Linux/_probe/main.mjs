@@ -3,6 +3,7 @@ import { CHECKS, runOne, writeEvidence, genProbe, PACK, EVID, hdkSrc } from './c
 import './checks1.mjs';
 import './checks2.mjs';
 import './checks3.mjs';
+import './checks4.mjs';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
