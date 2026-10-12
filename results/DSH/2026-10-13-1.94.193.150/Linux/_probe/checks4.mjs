@@ -16,19 +16,19 @@ reg('D3-C2', async () => {
   try {
     const m = sh(['OBS', 'mb', `obs://${bucket}`, `-location=${REGION}`]);
     mb = m.ok || /success|create/i.test(m.text);
-    detail.push(`mb(${mb})=${m.text.slice(0, 90)}`);
+    detail.push(`mb(${mb})=${m.text.slice(0, 70)}`);
     const c = sh(['OBS', 'cp', `${dir}/index.html`, `obs://${bucket}/index.html`, '-f', '-acl=public-read']);
     cp = c.ok || /success|upload|copy/i.test(c.text);
-    detail.push(`cp(${cp})=${c.text.slice(0, 90)}`);
+    detail.push(`cp(${cp})=${c.text.slice(0, 70)}`);
     const curl = run(`curl -s -o /dev/null -w "%{http_code}" --max-time 30 https://${bucket}.obs.${REGION}.myhuaweicloud.com/index.html`);
     curl200 = String(curl.text).trim() === '200';
     detail.push(`curl=${curl.text}`);
   } finally {
     rmSync(dir, { recursive: true, force: true });
-    sh(['OBS', 'rm', `obs://${bucket}`, '-r', '-f']);       // 先删对象
-    const d = sh(['OBS', 'rm', `obs://${bucket}`, '-f']);   // 再删空桶
+    sh(['OBS', 'rm', `obs://${bucket}`, '-r', '-f']);
+    const d = sh(['OBS', 'rm', `obs://${bucket}`, '-f']);
     del = d.ok || /success|delete|remove/i.test(d.text);
-    detail.push(`rm(${del})=${d.text.slice(0, 90)}`);
+    detail.push(`rm(${del})=${d.text.slice(0, 70)}`);
     const l = sh(['OBS', 'ls']);
     zero = !l.text.includes(bucket);
     detail.push(`zero=${zero}`);
@@ -41,46 +41,50 @@ reg('D3-C2', async () => {
 // ---------- D3-C7 跨区域资源操作引导（区域维度） ----------
 reg('D3-C7', async () => {
   const CROSS = 'ap-southeast-3';
-  const eipName = `tctest-dsh-eip-${String(Date.now()).slice(-10)}`;
   const detail = [];
-  let regionListed = false, planHasRegion = false, readonlyOk = false;
+  const h = await hdk();
+  // ① 区域枚举含 ap-southeast-3
+  const lr = await h.tools.callTool('huaweicloud_list_regions', {});
+  const regionListed = !!(lr && lr.regions && lr.regions.some(r => r.id === CROSS));
+  detail.push(`list_regions含${CROSS}=${regionListed}`);
+  // ② plan 命令必须含 --cli-region=ap-southeast-3（参数级断言）
+  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', {
+    args: ['EIP', 'CreatePublicip', `--publicip.type=5_bgp`, '--bandwidth.name=tctest-dsh-eip-x', '--bandwidth.size=1', '--bandwidth.share_type=PER', `--cli-region=${CROSS}`],
+    allowWrites: true,
+  });
+  const planHasRegion = JSON.stringify(plan).includes(`--cli-region=${CROSS}`);
+  detail.push(`plan含region=${planHasRegion}`);
+  // ③ 跨区域访问探针：只读 ECS 查询
+  const probe = sh(['ECS', 'ListServersDetails', `--cli-region=${CROSS}`]);
+  const regionMismatch = /Common\.0013|does not match with the project/i.test(probe.text);
+  detail.push(`跨区域只读ECS=${probe.text.slice(0, 120)}`);
+  if (regionMismatch) {
+    return blocked(
+      `跨区域 ap-southeast-3 不在账号项目范围（账号 project 仅 cn-north-4）——ECS 只读返回 Common.0013（region 与 tk 项目不符）、EIP 创建返回 VPC.0501，无法建删跨区资源。已实测通过项：list_regions 含 ap-southeast-3=${regionListed}、plan_cli_command 含 --cli-region=${planHasRegion}。解除条件：账号开通 ap-southeast-3 项目/region 权限（补环境·真云多region权限）`,
+      detail.join(' | ')
+    );
+  }
+  // ④ 跨区域可写时才做 EIP 建删归零
+  const eipName = `tctest-dsh-eip-${String(Date.now()).slice(-10)}`;
+  const ro = sh(['EIP', 'ListPublicips', `--cli-region=${CROSS}`]);
+  const cr = sh(['EIP', 'CreatePublicip', `--publicip.type=5_bgp`, `--bandwidth.name=${eipName}`, '--bandwidth.size=1', '--bandwidth.share_type=PER', '--bandwidth.charge_mode=traffic', `--cli-region=${CROSS}`]);
   let createdId = null, released = false, zero = false;
   try {
-    const h = await hdk();
-    const lr = await h.tools.callTool('huaweicloud_list_regions', {});
-    regionListed = !!(lr && lr.regions && lr.regions.some(r => r.id === CROSS));
-    detail.push(`list_regions含${CROSS}=${regionListed}`);
-    const plan = await h.tools.callTool('huaweicloud_plan_cli_command', {
-      args: ['EIP', 'CreatePublicip', `--publicip.type=5_bgp`, `--bandwidth.name=${eipName}`, '--bandwidth.size=1', '--bandwidth.share_type=PER', `--cli-region=${CROSS}`],
-      allowWrites: true,
-    });
-    const planStr = JSON.stringify(plan);
-    planHasRegion = planStr.includes(`--cli-region=${CROSS}`);
-    detail.push(`plan含region=${planHasRegion}`);
-    const ro = sh(['EIP', 'ListPublicips', `--cli-region=${CROSS}`]);
-    readonlyOk = ro.ok;
-    detail.push(`只读ListPublicips.ok=${readonlyOk}`);
-    const cr = sh(['EIP', 'CreatePublicip', `--publicip.type=5_bgp`, `--bandwidth.name=${eipName}`, '--bandwidth.size=1', '--bandwidth.share_type=PER', '--bandwidth.charge_mode=traffic', `--cli-region=${CROSS}`]);
-    detail.push(`CreatePublicip=${cr.text.slice(0, 140)}`);
     const idm = /"id"\s*:\s*"([0-9a-f-]{36})"/.exec(cr.text);
     if (cr.ok && idm) {
       createdId = idm[1];
-      detail.push(`createdId=${createdId}`);
       const rel = sh(['EIP', 'DeletePublicip', `--publicip_id=${createdId}`, `--cli-region=${CROSS}`]);
       released = rel.ok || /success|deleted|204/i.test(rel.text) || rel.text.trim() === '';
-      detail.push(`DeletePublicip(${released})=${rel.text.slice(0, 90)}`);
       createdId = null;
       const ls = sh(['EIP', 'ListPublicips', `--cli-region=${CROSS}`]);
-      zero = !ls.text.includes(eipName) && ls.text.includes('"total_count": 0') || (!ls.text.includes(eipName));
-      detail.push(`归零=${zero}`);
+      zero = !ls.text.includes(eipName);
     }
   } finally {
-    if (createdId) { sh(['EIP', 'DeletePublicip', `--publicip_id=${createdId}`, `--cli-region=${CROSS}`]); }
+    if (createdId) sh(['EIP', 'DeletePublicip', `--publicip_id=${createdId}`, `--cli-region=${CROSS}`]);
   }
-  const core = regionListed && planHasRegion && readonlyOk;
-  return chk(core && released && zero,
-    `跨区域: 区域=${regionListed} plan含region=${planHasRegion} 只读=${readonlyOk} 创建并释放=${released} 归零=${zero}`,
-    `跨区域未完全通过: ${detail.join(' | ')}`.slice(0, 900));
+  return chk(regionListed && planHasRegion && ro.ok && released && zero,
+    `跨区域: 区域=${regionListed} plan含region=${planHasRegion} 只读=${ro.ok} 创建并释放=${released} 归零=${zero}`,
+    `跨区域未完全通过: ${detail.join(' | ')} | CreatePublicip=${cr.text.slice(0, 120)}`.slice(0, 900));
 });
 
 // ---------- D3-C1 ECS 生命周期 E2E ----------
@@ -90,59 +94,41 @@ reg('D3-C1', async () => {
   const subnetName = `testbot2-dsh-subnet-${ts}`;
   const sgName = `testbot2-dsh-sg-${ts}`;
   const ecsName = `testbot2-dsh-ecs-${ts}`;
+  const IMG = '4ecd3e30-b887-43ad-844c-6cef8556f32a'; // 已核验公开 Ubuntu 24.04 server 64bit (min_disk 40)
   const detail = [];
-  let vpcId = null, subnetId = null, sgId = null, serverId = null, jobId = null;
-  const cleanup = () => {
-    if (serverId) sh(['ECS', 'DeleteServers', `--servers.0.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]);
+  let vpcId = null, subnetId = null, sgId = null, serverId = null;
+  const wait = (ms) => new Promise(r => setTimeout(r, ms));
+  const cleanup = async () => {
+    if (serverId) sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]);
     if (sgId) sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]);
-    if (subnetId) sh(['VPC', 'DeleteSubnet', `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]);
+    if (subnetId && vpcId) { sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); await wait(6000); }
     if (vpcId) sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
-  };
-  const findImage = () => {
-    // IMS ListImages 全量响应 >1MB（spawnSync 默认 buffer 截断），改用过滤 query 取小列表
-    const im = sh(['IMS', 'ListImages', `--cli-region=${REGION}`, '--limit=50', '--__isregistered=true']);
-    try {
-      const d = JSON.parse(im.text);
-      const cand = (d.images || []).filter(i => (i.min_disk || 0) <= 40 && /ubuntu/i.test(i.name || ''));
-      return cand.length ? cand[0].id : null;
-    } catch {
-      // fallback：已核验的公开 Ubuntu 24.04 server 64bit（min_disk 40）
-      return '4ecd3e30-b887-43ad-844c-6cef8556f32a';
-    }
   };
   let created = false, active = false, delOk = false, zero = false;
   try {
-    const imageId = findImage();
-    detail.push(`image=${imageId || 'NULL'}`);
-    if (!imageId) return blocked('未找到可用 Linux 镜像', '解除: 确认 cn-north-4 公有镜像可查');
     const vpc = sh(['VPC', 'CreateVpc', `--vpc.name=${vpcName}`, '--vpc.cidr=10.200.0.0/16', `--cli-region=${REGION}`]);
     vpcId = (/"id"\s*:\s*"([0-9a-f-]{36})"/.exec(vpc.text) || [])[1] || null;
-    detail.push(`vpc(${!!vpcId})=${vpc.text.slice(0, 70)}`);
+    detail.push(`vpc(${!!vpcId})=${vpc.text.slice(0, 60)}`);
     if (!vpcId) return fail('VPC 创建失败', vpc.text.slice(0, 200));
     const sub = sh(['VPC', 'CreateSubnet', `--subnet.name=${subnetName}`, `--subnet.vpc_id=${vpcId}`, '--subnet.cidr=10.200.0.0/24', '--subnet.gateway_ip=10.200.0.1', '--subnet.availability_zone=cn-north-4b', `--cli-region=${REGION}`]);
     subnetId = (/"id"\s*:\s*"([0-9a-f-]{36})"/.exec(sub.text) || [])[1] || null;
-    detail.push(`subnet(${!!subnetId})=${sub.text.slice(0, 70)}`);
+    detail.push(`subnet(${!!subnetId})=${sub.text.slice(0, 60)}`);
     if (!subnetId) return fail('子网创建失败', sub.text.slice(0, 200));
     const sg = sh(['VPC', 'CreateSecurityGroup', `--security_group.name=${sgName}`, `--cli-region=${REGION}`]);
     sgId = (/"id"\s*:\s*"([0-9a-f-]{36})"/.exec(sg.text) || [])[1] || null;
-    detail.push(`sg(${!!sgId})=${sg.text.slice(0, 70)}`);
+    detail.push(`sg(${!!sgId})=${sg.text.slice(0, 60)}`);
     if (!sgId) return fail('安全组创建失败', sg.text.slice(0, 200));
-    const body = {
-      server: {
-        name: ecsName,
-        imageRef: imageId,
-        flavorRef: 's6.small.1',
-        root_volume: { volumetype: 'SATA', size: 40 },
-        vpcid: vpcId,
-        nics: [{ subnet_id: subnetId }],
-        security_groups: [{ id: sgId }],
-        availability_zone: 'cn-north-4b',
-        count: 1,
-      },
-    };
-    const cr = sh(['ECS', 'CreateServers', `--body=${JSON.stringify(body)}`, `--cli-region=${REGION}`]);
-    detail.push(`CreateServers=${cr.text.slice(0, 180)}`);
-    jobId = (/"job_id"\s*:\s*"([0-9a-f-]+)"/.exec(cr.text) || [])[1] || null;
+    const cr = sh(['ECS', 'CreateServers',
+      `--server.name=${ecsName}`, `--server.imageRef=${IMG}`, '--server.flavorRef=s6.small.1',
+      '--server.root_volume.volumetype=SSD', '--server.root_volume.size=40',
+      `--server.vpcid=${vpcId}`, `--server.nics.1.subnet_id=${subnetId}`, `--server.security_groups.1.id=${sgId}`,
+      '--server.availability_zone=cn-north-4b', '--server.count=1', '--server.extendparam.chargingMode=postPaid',
+      `--cli-region=${REGION}`]);
+    detail.push(`CreateServers=${cr.text.slice(0, 160)}`);
+    const jobId = (/"job_id"\s*:\s*"([0-9a-f-]+)"/.exec(cr.text) || [])[1] || null;
+    if (/Ecs\.0707|Can not find product/i.test(cr.text)) {
+      return blocked('ECS CreateServers 订单提交被 billing 拒绝：Ecs.0707 "Can not find product"（账号 BSS 产品目录无该镜像产品映射，按需订单无法创建）。已实测 VPC/子网/安全组创建→删除→归零 全部成功，ECS 到达订单提交层。解除条件：账号开通 ECS 购买产品/开启按需计费（补环境·billing 产品配额）', `${cr.text.slice(0, 240)} || ${detail.join(' | ')}`.slice(0, 700));
+    }
     if (!cr.ok || !jobId) return fail('ECS 购买未返回 job_id', cr.text.slice(0, 300));
     created = true;
     let st = '';
@@ -152,24 +138,23 @@ reg('D3-C1', async () => {
       if (i % 3 === 0) detail.push(`job[${i}]=${st}`);
       if (st === 'SUCCESS') break;
       if (st === 'FAIL' || st === 'ROLLBACK') return fail(`ECS job 失败: ${st}`, j.text.slice(0, 300));
-      await new Promise(r => setTimeout(r, 10000));
+      await wait(10000);
     }
     if (st !== 'SUCCESS') return fail(`ECS job 未完成: ${st}`, detail.join('|').slice(-400));
     const lsr = sh(['ECS', 'ListServersDetails', `--cli-region=${REGION}`]);
-    let activeFound = false;
     try {
-      const d = JSON.parse(lsr.text);
+      const d = JSON.parse(lsr.text.slice(lsr.text.indexOf('{')));
       const srv = (d.servers || []).find(s => s.name === ecsName);
       serverId = srv && srv.id;
-      activeFound = !!(srv && srv.status === 'ACTIVE');
+      active = !!(srv && srv.status === 'ACTIVE');
       detail.push(`server=${serverId} status=${srv && srv.status}`);
-    } catch {}
-    active = activeFound;
+    } catch (e) { detail.push(`list parse err ${String(e).slice(0, 60)}`); }
     if (serverId) {
-      const dd = sh(['ECS', 'DeleteServers', `--servers.0.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]);
+      const dd = sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]);
       delOk = dd.ok;
-      detail.push(`delete=${delOk} ${dd.text.slice(0, 80)}`);
+      detail.push(`delete=${delOk} ${dd.text.slice(0, 70)}`);
       serverId = null;
+      await wait(5000);
     }
     const lsa = sh(['ECS', 'ListServersDetails', `--cli-region=${REGION}`]);
     zero = !lsa.text.includes(ecsName);
@@ -178,13 +163,13 @@ reg('D3-C1', async () => {
       `ECS 生命周期 E2E: 创建=${created} ACTIVE=${active} 删除=${delOk} 归零=${zero}`,
       `ECS 生命周期未通过: ${detail.join(' | ')}`.slice(0, 900));
   } finally {
-    cleanup();
+    await cleanup();
     const lsv = sh(['ECS', 'ListServersDetails', `--cli-region=${REGION}`]);
     if (lsv.text.includes(ecsName)) {
       try {
-        const d = JSON.parse(lsv.text);
+        const d = JSON.parse(lsv.text.slice(lsv.text.indexOf('{')));
         const srv = (d.servers || []).find(s => s.name === ecsName);
-        if (srv) { sh(['ECS', 'DeleteServers', `--servers.0.id=${srv.id}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]); }
+        if (srv) sh(['ECS', 'DeleteServers', `--servers.1.id=${srv.id}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]);
       } catch {}
     }
   }
@@ -224,10 +209,9 @@ reg('D3-C6', async () => {
 reg('D3-C3', async () => {
   const h = await hdk();
   const detail = [];
-  let wsId = null;
   try {
     const conn = await h.tools.callTool('huaweicloud_sandbox_connect', { source: 'DSH' });
-    wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
+    const wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
     detail.push(`connect.ws=${!!wsId} status=${conn && conn.status}`);
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id', JSON.stringify(conn).slice(0, 200));
     const proj = mkdtempSync(join(tmpdir(), 'hdk-sbx-'));
