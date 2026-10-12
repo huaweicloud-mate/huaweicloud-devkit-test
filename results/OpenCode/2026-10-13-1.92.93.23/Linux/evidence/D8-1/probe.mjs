@@ -38,7 +38,7 @@ if (CASE === 'D8-4') {
   for (const cmd of ['install', 'status', 'doctor', 'update', 'uninstall', 'reinstall']) {
     rec(`CLI 子命令 ${cmd} 存在`, new RegExp(`case ['"]${cmd}['"]|'${cmd}'|"${cmd}"`).test(t) || t.includes("'" + cmd + "'"), `cmd=${cmd}`);
   }
-  const help = read(join(HDK, core, 'commands', 'huaweicloud-doctor.md'));
+  const help = read(join(HDK, 'integrations', 'opencode', 'commands', 'huaweicloud-doctor.md'));
   rec('commands 引导步骤存在', help.length > 50, `len=${help.length}`);
 }
 

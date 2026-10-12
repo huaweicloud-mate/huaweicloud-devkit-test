@@ -92,19 +92,31 @@ try {
   rec('删除含磁盘', delOk, { serverId });
 } catch (e) { rec('DeleteServers', false, e.message); }
 
-// ⑥ 归零验证
+// ⑥ 归零验证（轮询删除任务完成，异步删除）
 try {
-  await new Promise((r) => setTimeout(r, 5000));
-  const l = await runR(['ECS', 'ListServersDetails', '--cli-region=' + REGION, '--name=' + vpcName + '-srv'], 60000);
-  const zeroed = !(l?.stdout || '').includes(vpcName + '-srv');
+  let zeroed = false;
+  for (let i = 0; i < 12; i++) {
+    await new Promise((r) => setTimeout(r, 10000));
+    const l = await runR(['ECS', 'ListServersDetails', '--cli-region=' + REGION, '--name=' + vpcName + '-srv'], 60000);
+    const stillThere = (l?.stdout || '').includes(vpcName + '-srv');
+    if (!stillThere) { zeroed = true; break; }
+  }
   rec('归零验证(ECS 不含本次资源)', zeroed, { containsOwn: !zeroed });
 } catch (e) { rec('归零验证', false, e.message); }
 
 // ⑦ 清理 VPC + 子网
 try {
-  if (subnetId && vpcId) { await runW(['VPC', 'DeleteSubnet', '--cli-region=' + REGION, '--vpc_id=' + vpcId, '--subnet_id=' + subnetId]); }
-  if (vpcId) { await new Promise((r) => setTimeout(r, 3000)); await runW(['VPC', 'DeleteVpc', '--cli-region=' + REGION, '--vpc_id=' + vpcId]); }
-  rec('清理 VPC+子网', true, JSON.stringify({ vpcId, subnetId }));
+  let cleanOk = true;
+  if (subnetId && vpcId) {
+    const ds = await runW(['VPC', 'DeleteSubnet', '--cli-region=' + REGION, '--vpc_id=' + vpcId, '--subnet_id=' + subnetId]);
+    cleanOk = cleanOk && ds?.ok === true;
+  }
+  if (vpcId) {
+    await new Promise((r) => setTimeout(r, 3000));
+    const dv = await runW(['VPC', 'DeleteVpc', '--cli-region=' + REGION, '--vpc_id=' + vpcId]);
+    cleanOk = cleanOk && dv?.ok === true;
+  }
+  rec('清理 VPC+子网', cleanOk, JSON.stringify({ vpcId, subnetId, cleanOk }));
 } catch (e) { rec('清理 VPC+子网', false, e.message); }
 
 const allPass = out.filter((x) => !x.pass).length === 0;
