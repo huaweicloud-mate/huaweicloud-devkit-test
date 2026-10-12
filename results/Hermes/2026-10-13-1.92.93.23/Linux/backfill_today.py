@@ -138,26 +138,23 @@ for cid, src in [("EXP-D5-8-1","D5-1"),("EXP-D5-8-3","D5-3"),
 
 # ===== 2. 写 stdout.log JSON（供 backfill_daily 读取）=====
 status_map = json.load(open("/tmp/status_map.json", encoding="utf-8"))
-# 覆盖 D4-14 → BLOCKED（真云 VPC Unauthorized）
-status_map["D4-14"] = "BLOCKED"
 
 WHY = {
-    "D4-2": "env | grep -i access_key 未拦截（generic access_key 无云厂商前缀），应 deny",
-    "D4-21": "hook_check_artifacts 未拦截 HCL actions=[*] 与 AdministratorFullAccess broad IAM",
-    "D9-12": "initialize 不触发版本检查 + 非法时序 tools/list 未拒 -32600",
-    "D4-6": "hook_check_command --admin-pass 不告警（warning 缺失）",
-    "D4-17": "hook 模糊输入 fail-open（&& rm -rf /、$(curl|sh) 放行）",
-    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺 vpc/subnet/sg 前置",
-    "D3-S5": "serviceCatalog 复合意图（存储+托管）未命中多 service，回退 --help",
-    "D3-S6": "FunctionGraph CreateFunction 返回 code.filename 参数错误，未生成 URN/触发器",
-    "D4-25": "Python hook 写操作遥测误分类 cli:invoke（应 cli:write）",
-    "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 泄漏",
-    "EXP-E01": "serviceCatalog 中文意图「云主机」未命中（92.9% 未达 100%）",
-    "D8-9": "sanitizeValue 未脱敏 AK/SK/token 敏感值（SPEC 契约漂移）",
-    "D9-9": "capabilities.cancellation 未声明（SPEC 契约漂移）",
-    "D10-4": "规则库 16 条增至 19 条，用例断言契约漂移（非安全回归）",
+    "D4-2": "classifyTextCommand env-dump 正则未覆盖无云厂商前缀的泛化 access_key/secret_key 词（env | grep -i access_key -> allow）; 根因 safety-policy.mjs:517-520",
+    "D4-21": "evaluateArtifacts 仅拦 JSON 形态 IAM；Terraform HCL actions=[\"*\"] 与 data huaweicloud_iam_policy name=AdministratorFullAccess 未拦截; 根因 cloud-risk-rules.json:196(hwc-iam-admin-policy 规则缺 HCL 匹配)",
+    "D9-12": "initialize 不触发 runVersionCheck + dispatch 无 initialize 前置校验(tools/list 未 initialize 未拒 -32600); 根因 mcp-server.mjs:183-187",
+    "D4-6": "redactString 未覆盖 --admin_pass 空格形态与 camelCase adminPass JSON 字符串(未脱敏/不告警); 根因 safety-policy.mjs:41",
+    "D4-17": "hook_check_command 对空/模糊/注入命令 fail-open(&& rm -rf /*、$(curl|sh) 结论=ok); 根因 tools.mjs:1161-1162 evaluateCommandRisk 空输入回退 allow，未走 invalidRiskResult fail-closed",
+    "D3-S7": "serviceCatalog 复合意图未命中 RDS 部署目标(仅 RDS) + CreateInstance 返回 Invalid parameter: db.password(缺 vpc/subnet/sg 前置); 根因 tools.mjs:1983 serviceCatalog",
+    "D3-S5": "serviceCatalog 复合意图(存储+托管)未命中多 service, 回退 --help; 根因 tools.mjs:1983 serviceCatalog 复合意图拆分",
+    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: function_name, 未生成 URN/绑定定时触发器; 根因 tools.mjs FunctionGraph 编排参数缺 function_name",
+    "D4-25": "Python hook 写操作遥测误分类 cli:invoke(应 cli:write); 根因 hooks/huaweicloud-safety.py:112",
+    "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 残留(未脱敏); 根因 tools.mjs:1643 findings 未过 redactSecrets",
+    "EXP-E01": "serviceCatalog 中文意图「云主机」未命中 ECS(回退 --help), 92.9%(MISS=1); 根因 tools.mjs:1983 serviceCatalog 中文词表缺「云主机」",
+    "D8-9": "sanitizeValue 仅去控制字符/截断, 未移除 AK/SK/token 敏感值(SPEC 契约漂移); 根因 telemetry/telemetry.mjs:189",
+    "D9-9": "initialize capabilities 未声明 cancellation(SPEC 契约漂移, 非假定); 根因 mcp-server.mjs initialize capabilities={tools:{}}",
+    "D10-4": "规则库 16 条增至 19 条(9 deny+10 warn), 用例断言契约漂移(非安全回归); 根因 cloud-risk-rules.json 规则数变化",
     "D1-39": "OS 列=Windows 升级检测链 EINVAL 专属；Linux 侧由 EXP-NR3-10(disttags)代表覆盖",
-    "D4-14": "真云 VPC 建删归零无法执行：devkit 凭证解析命中 stale KooCLI 'deploy' profile(AK 无效)而非 'default'，CreateVpc/ListVpcs/CTS 均返回 APIGW.0301 Unauthorized；直接 hcloud(default 档)ListVpcs 成功→解除条件=清理 stale profile 或修正 reconcile 归 current=default",
 }
 
 # 需要写 stdout.log 的 case：所有非 NOT_RUN
