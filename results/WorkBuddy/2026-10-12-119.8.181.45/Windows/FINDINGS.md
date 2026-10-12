@@ -1,0 +1,3 @@
+# FINDINGS
+
+本轮测试无 FAIL/SPEC-MISMATCH 缺陷，无需提单。
