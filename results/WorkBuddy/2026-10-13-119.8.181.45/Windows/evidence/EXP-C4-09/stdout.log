@@ -1,7 +1,23 @@
 {
   "caseId": "EXP-C4-09",
   "status": "PASS",
-  "why": "CTS catalog routing: {\"intent\":\"查询CTS列表\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServic",
-  "sample": "{\"intent\":\"查询CTS列表\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list available services.\"],\"capabilityOrder\":[\"Huawei Cloud Skills for task-specific workflows and examples\",\"KooCLI hcloud for local authenticated operations and quick inspection\",\"Huawei Cloud API documentation for exact request and response contracts\",\"Huawei Cloud SDKs for application code integration\",\"Huawei Cloud MCP when an official or approved server is available\",\"Terraform Provider only when IaC reviewability and repeatability are important\"],\"ruleOfThumb\":{\"skills\":\"Start here when the user describes a scenario or wants a guided workflow.\",\"cli\":\"Use for local diagnostics, read-only inspection, and commands the user can review.\",\"api\":\"Use for exact service contract, region endpoint, project_id, pagination, and error codes.\",\"sdk\":\"Use when writing application code that calls Huawei Cloud services.\",\"mcp\":\"Prefer approved MCP tools when available because tools can carry structured schemas.\",\"terraform\":\"Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis.\"}}",
-  "executedAt": "20261013050231"
+  "why": "CTS: read=allow/read_only, plan=true, create=deny",
+  "executedAt": "20261013030930",
+  "readResult": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation.",
+    "service": "CTS",
+    "operation": "ListTraces",
+    "args": [
+      "CTS",
+      "ListTraces"
+    ]
+  },
+  "createResult": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "hasPlan": true
 }

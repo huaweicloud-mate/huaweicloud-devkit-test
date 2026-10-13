@@ -1,7 +1,11 @@
 {
   "caseId": "D4-6",
   "status": "PASS",
-  "why": "adminPass warning: deny/write",
-  "sample": "{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}",
-  "executedAt": "20261013050224"
+  "why": "adminPass warning: hasWarning=true, warnsPassword=true",
+  "executedAt": "20261013030843",
+  "warnings": [
+    "This command appears to contain a password or secret field. Do not leave plaintext secrets in shell history; prefer local-only input or a runtime injection pattern.",
+    "Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id",
+    "Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs"
+  ]
 }

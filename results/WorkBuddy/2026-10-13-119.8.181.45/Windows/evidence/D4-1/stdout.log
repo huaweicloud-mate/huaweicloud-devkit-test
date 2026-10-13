@@ -1,7 +1,32 @@
 {
   "caseId": "D4-1",
   "status": "PASS",
-  "why": "cat credential file denied",
-  "sample": "{\"decision\":\"deny\",\"risk\":\"credential\",\"reason\":\"Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.\"}",
-  "executedAt": "20261013050212"
+  "why": "credential file read blocked: 4/4 denied",
+  "executedAt": "20261013030427",
+  "results": [
+    {
+      "cmd": "cat ~/.hcloud/config.json",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "cat ~/.huaweicloud/credentials",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "type %USERPROFILE%\\.hcloud\\config.json",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    {
+      "cmd": "cat /root/.hcloud/config",
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    }
+  ]
 }

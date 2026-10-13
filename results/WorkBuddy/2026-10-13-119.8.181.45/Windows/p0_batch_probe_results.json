@@ -1,0 +1,648 @@
+{
+  "total": 22,
+  "pass": 19,
+  "fail": 3,
+  "executedAt": "2026-10-13T03:04:28.253Z",
+  "results": [
+    {
+      "caseId": "D2-4",
+      "status": "FAIL",
+      "why": "redactSecrets: obj ak=true sk=true, str=false, env=true",
+      "executedAt": "20261013030427",
+      "input": {
+        "ak": "AKIDEXAMPLE12345",
+        "sk": "SKEXAMPLE67890",
+        "region": "cn-north-4"
+      },
+      "result": {
+        "ak": "<redacted>",
+        "sk": "<redacted>",
+        "region": "cn-north-4"
+      },
+      "strResult": "ak=AKIDEXAMPLE12345 sk=SKEXAMPLE67890",
+      "envResult": "HUAWEICLOUD_ACCESS_KEY=<redacted> HUAWEICLOUD_SECRET_ACCESS_KEY=<redacted>"
+    },
+    {
+      "caseId": "D4-1",
+      "status": "PASS",
+      "why": "credential file read blocked: 4/4 denied",
+      "executedAt": "20261013030427",
+      "results": [
+        {
+          "cmd": "cat ~/.hcloud/config.json",
+          "decision": "deny",
+          "risk": "credential",
+          "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+        },
+        {
+          "cmd": "cat ~/.huaweicloud/credentials",
+          "decision": "deny",
+          "risk": "credential",
+          "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+        },
+        {
+          "cmd": "type %USERPROFILE%\\.hcloud\\config.json",
+          "decision": "deny",
+          "risk": "credential",
+          "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+        },
+        {
+          "cmd": "cat /root/.hcloud/config",
+          "decision": "deny",
+          "risk": "credential",
+          "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+        }
+      ]
+    },
+    {
+      "caseId": "D4-2",
+      "status": "PASS",
+      "why": "env print blocked: 6/6 denied; lowerAkCmd decision=allow",
+      "executedAt": "20261013030427",
+      "results": [
+        {
+          "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+          "decision": "deny",
+          "risk": "credential"
+        },
+        {
+          "cmd": "printenv HW_SECRET_KEY",
+          "decision": "deny",
+          "risk": "credential"
+        },
+        {
+          "cmd": "echo $HUAWEICLOUD_SECRET_ACCESS_KEY",
+          "decision": "deny",
+          "risk": "credential"
+        },
+        {
+          "cmd": "env | grep HUAWEICLOUD",
+          "decision": "deny",
+          "risk": "credential"
+        },
+        {
+          "cmd": "printenv HW_ACCESS_KEY",
+          "decision": "deny",
+          "risk": "credential"
+        },
+        {
+          "cmd": "echo $HW_SECRET_KEY",
+          "decision": "deny",
+          "risk": "credential"
+        }
+      ],
+      "lowerAkTest": {
+        "cmd": "echo ak=AKIDTEST123",
+        "result": {
+          "decision": "allow",
+          "risk": "not_huaweicloud",
+          "reason": "No Huawei Cloud safety rule matched."
+        }
+      }
+    },
+    {
+      "caseId": "D4-3",
+      "status": "FAIL",
+      "why": "secret API: 4/5 blocked; DecryptData decision=allow risk=unknown_read — NOT BLOCKED (known red-line)",
+      "executedAt": "20261013030427",
+      "results": [
+        {
+          "service": "KMS",
+          "operation": "ShowSecret",
+          "decision": "deny",
+          "risk": "secret"
+        },
+        {
+          "service": "KMS",
+          "operation": "ShowSecretVersion",
+          "decision": "deny",
+          "risk": "secret"
+        },
+        {
+          "service": "KMS",
+          "operation": "GetSecretValue",
+          "decision": "deny",
+          "risk": "secret"
+        },
+        {
+          "service": "KMS",
+          "operation": "DownloadSecret",
+          "decision": "deny",
+          "risk": "secret"
+        },
+        {
+          "service": "KMS",
+          "operation": "DecryptData",
+          "decision": "allow",
+          "risk": "unknown_read"
+        }
+      ],
+      "redLine": "DecryptData not in blockedSecretOperations list, leaks plaintext decrypted data"
+    },
+    {
+      "caseId": "D4-5",
+      "status": "PASS",
+      "why": "write ops denied: 9/9; misjudged as read: 0",
+      "executedAt": "20261013030427",
+      "results": [
+        {
+          "service": "ECS",
+          "operation": "DeleteServers",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "ECS",
+          "operation": "DeleteServer",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "VPC",
+          "operation": "DeleteVpc",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "ECS",
+          "operation": "CreateServers",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "ECS",
+          "operation": "UpdateServer",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "ECS",
+          "operation": "ResizeServer",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "ECS",
+          "operation": "StopServer",
+          "decision": "deny",
+          "risk": "execution"
+        },
+        {
+          "service": "ECS",
+          "operation": "StartServer",
+          "decision": "deny",
+          "risk": "execution"
+        },
+        {
+          "service": "ECS",
+          "operation": "RebootServer",
+          "decision": "deny",
+          "risk": "execution"
+        }
+      ]
+    },
+    {
+      "caseId": "D4-9",
+      "status": "PASS",
+      "why": "public exposure: cmd decision=allow findings=0; deploy plan decision=deny findings=1",
+      "executedAt": "20261013030427",
+      "cmdResult": {
+        "decision": "allow",
+        "findings": []
+      },
+      "planResult": {
+        "decision": "deny",
+        "findings": [
+          {
+            "ruleId": "hwc-network-public-admin-port",
+            "title": "Public admin port exposure",
+            "category": "public_exposure",
+            "severity": "deny",
+            "message": "The change appears to expose an administrative or database port to the public internet. Web ports (80/443) are allowed - this rule only covers admin/database ports.",
+            "remediation": "Restrict the source CIDR to a trusted range, use a bastion or VPN, and keep public preview endpoints behind authenticated HTTP services.",
+            "source": "deploy_plan",
+            "evidence": "{\"resources\":[{\"type\":\"security_group_rule\",\"direction\":\"ingress\",\"remote_ip_prefix\":\"0.0.0.0/0\",\"port_range\":22}]}"
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "D4-15",
+      "status": "PASS",
+      "why": "variants denied: 6/6",
+      "executedAt": "20261013030427",
+      "results": [
+        {
+          "cmd": "hcloud ECS deleteserver --server.id=xxx",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "hcloud ECS DELETEserver --server.id=xxx",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "hcloud ECS DeleteServer --server.id=xxx",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "bash -c \"hcloud ECS DeleteServer --server.id=xxx\"",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "sh -c \"hcloud ECS DeleteServer --server.id=xxx\"",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "hcloud ECS ListServers; hcloud ECS DeleteServer --server.id=xxx",
+          "decision": "deny",
+          "risk": "write"
+        }
+      ]
+    },
+    {
+      "caseId": "D4-16",
+      "status": "PASS",
+      "why": "wrapped commands denied: 9/9",
+      "executedAt": "20261013030427",
+      "results": [
+        {
+          "cmd": "bash -c \"hcloud ECS DeleteServer --server.id=xxx\"",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "sh -c \"hcloud ECS DeleteServer --server.id=xxx\"",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "eval \"hcloud ECS DeleteServer --server.id=xxx\"",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "$(hcloud ECS DeleteServer --server.id=xxx)",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "`hcloud ECS DeleteServer --server.id=xxx`",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "cmd /c \"hcloud ECS DeleteServer --server.id=xxx\"",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "powershell -Command \"hcloud ECS DeleteServer --server.id=xxx\"",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "cmd": "bash -c \"env | grep HUAWEICLOUD\"",
+          "decision": "deny",
+          "risk": "credential"
+        },
+        {
+          "cmd": "bash -c \"printenv HW_SECRET_KEY\"",
+          "decision": "deny",
+          "risk": "credential"
+        }
+      ]
+    },
+    {
+      "caseId": "D4-18",
+      "status": "PASS",
+      "why": "without approval: deny/write; with approval: allow/write",
+      "executedAt": "20261013030427",
+      "withoutApproval": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      "withApproval": {
+        "decision": "allow",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation approved by user.",
+        "service": "ECS",
+        "operation": "DeleteServer",
+        "args": [
+          "ECS",
+          "DeleteServer",
+          "--server.id=xxx"
+        ],
+        "warnings": [
+          {
+            "ruleId": "hwc-destructive-delete-operation",
+            "title": "Destructive cloud resource operation",
+            "category": "destructive",
+            "severity": "warn",
+            "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+            "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+            "source": "command",
+            "evidence": "hcloud ECS DeleteServer --server.id=xxx"
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "D4-19",
+      "status": "PASS",
+      "why": "secret with approval: deny/secret; without: deny/secret",
+      "executedAt": "20261013030427",
+      "secretWithApproval": {
+        "decision": "deny",
+        "risk": "secret",
+        "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context."
+      },
+      "secretWithoutApproval": {
+        "decision": "deny",
+        "risk": "secret",
+        "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context."
+      }
+    },
+    {
+      "caseId": "D4-21",
+      "status": "PASS",
+      "why": "artifacts checked: decision=warn, findings=1",
+      "executedAt": "20261013030427",
+      "result": {
+        "decision": "warn",
+        "findings": [
+          {
+            "ruleId": "hwc-command-adminpass-exposure",
+            "title": "Plaintext adminPass exposure",
+            "category": "secret",
+            "severity": "warn",
+            "message": "The artifact or plan contains a plaintext adminPass parameter. The password may be exposed in version control, logs, or agent context.",
+            "remediation": "Use userData cloud-init, KMS/CSMS secret references, or encrypted password injection instead of embedding adminPass as plaintext in deployment files.",
+            "source": "terraform.tf",
+            "evidence": "terraform.tf resource \"huaweicloud_compute_instance\" \"test\" { admin_pass = <redacted> }"
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "D4-22",
+      "status": "PASS",
+      "why": "deploy plans checked: 3/3 have findings",
+      "executedAt": "20261013030427",
+      "results": [
+        {
+          "decision": "deny",
+          "findings": [
+            {
+              "ruleId": "hwc-network-public-admin-port",
+              "title": "Public admin port exposure",
+              "category": "public_exposure",
+              "severity": "deny",
+              "message": "The change appears to expose an administrative or database port to the public internet. Web ports (80/443) are allowed - this rule only covers admin/database ports.",
+              "remediation": "Restrict the source CIDR to a trusted range, use a bastion or VPN, and keep public preview endpoints behind authenticated HTTP services.",
+              "source": "deploy_plan",
+              "evidence": "{\"public_ip\":true,\"ports\":[22],\"security_groups\":[\"0.0.0.0/0\"]}"
+            }
+          ]
+        },
+        {
+          "decision": "warn",
+          "findings": [
+            {
+              "ruleId": "hwc-sandbox-missing-ttl",
+              "title": "Sandbox deployment missing cleanup metadata",
+              "category": "sandbox",
+              "severity": "warn",
+              "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+              "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+              "source": "deploy_plan",
+              "evidence": "{\"resources\":[{\"type\":\"ecs\",\"public_ip\":true,\"open_ports\":[3389]}]}"
+            }
+          ]
+        },
+        {
+          "decision": "deny",
+          "findings": [
+            {
+              "ruleId": "hwc-network-public-admin-port",
+              "title": "Public admin port exposure",
+              "category": "public_exposure",
+              "severity": "deny",
+              "message": "The change appears to expose an administrative or database port to the public internet. Web ports (80/443) are allowed - this rule only covers admin/database ports.",
+              "remediation": "Restrict the source CIDR to a trusted range, use a bastion or VPN, and keep public preview endpoints behind authenticated HTTP services.",
+              "source": "deploy_plan",
+              "evidence": "Plan: open SSH port 22 to 0.0.0.0/0 in production"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "caseId": "D4-23",
+      "status": "PASS",
+      "why": "rules file exists=true, length=3801",
+      "executedAt": "20261013030427",
+      "path": "C:\\Users\\Administrator\\multica_workspaces\\vector-8988c3df7bc9\\task-a256598c335c\\workdir\\huaweicloud-devkit\\rules\\huawei-agent-rules.mdc",
+      "exists": true,
+      "contentLength": 3801
+    },
+    {
+      "caseId": "D4-28",
+      "status": "PASS",
+      "why": "Node hook exists=true hasImport=true; Python hook exists=true",
+      "executedAt": "20261013030427",
+      "nodeHookExists": true,
+      "hasImport": true,
+      "pyExists": true
+    },
+    {
+      "caseId": "D2-11",
+      "status": "PASS",
+      "why": "configure show blocked=true; STS token persist rejection is in persistCredentials (tested via tools.callTool)",
+      "executedAt": "20261013030427",
+      "configureShow": {
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Direct hcloud configure inspection may expose profile credentials. Use the redacted toolkit tools instead."
+      }
+    },
+    {
+      "caseId": "D1-39",
+      "status": "PASS",
+      "why": "version=1.1.8, upToDate=true, semverCompare correct=true",
+      "executedAt": "20261013030427",
+      "current": "1.1.8",
+      "sameResult": {
+        "currentVersion": "1.1.8",
+        "latestStable": "1.1.8",
+        "latestNext": null,
+        "targetVersion": "1.1.8",
+        "updateAvailable": false,
+        "dismissed": false,
+        "dismissExpiresAt": null,
+        "result": "up_to_date"
+      },
+      "cmp": -1
+    },
+    {
+      "caseId": "D1-40",
+      "status": "PASS",
+      "why": "null=true, empty=true, older=true",
+      "executedAt": "20261013030427",
+      "nullResult": {
+        "currentVersion": "1.1.8",
+        "latestStable": null,
+        "latestNext": null,
+        "targetVersion": null,
+        "updateAvailable": false,
+        "dismissed": false,
+        "dismissExpiresAt": null,
+        "result": "check_failed",
+        "note": "检测失败，不影响使用"
+      },
+      "emptyResult": {
+        "currentVersion": "1.1.8",
+        "latestStable": null,
+        "latestNext": null,
+        "targetVersion": null,
+        "updateAvailable": false,
+        "dismissed": false,
+        "dismissExpiresAt": null,
+        "result": "check_failed",
+        "note": "检测失败，不影响使用"
+      },
+      "olderResult": {
+        "currentVersion": "1.1.8",
+        "latestStable": "1.1.7",
+        "latestNext": null,
+        "targetVersion": "1.1.7",
+        "updateAvailable": false,
+        "dismissed": false,
+        "dismissExpiresAt": null,
+        "result": "up_to_date"
+      }
+    },
+    {
+      "caseId": "D8-7",
+      "status": "PASS",
+      "why": "skills present: 7/7",
+      "executedAt": "20261013030427",
+      "skillResults": [
+        {
+          "skill": "huawei-getting-started",
+          "exists": true,
+          "contentLength": 5120,
+          "hasActionable": true
+        },
+        {
+          "skill": "huawei-ecs",
+          "exists": true,
+          "contentLength": 13957,
+          "hasActionable": true
+        },
+        {
+          "skill": "huawei-obs",
+          "exists": true,
+          "contentLength": 11005,
+          "hasActionable": true
+        },
+        {
+          "skill": "huawei-iam",
+          "exists": true,
+          "contentLength": 7408,
+          "hasActionable": true
+        },
+        {
+          "skill": "huawei-rds",
+          "exists": true,
+          "contentLength": 13909,
+          "hasActionable": true
+        },
+        {
+          "skill": "huawei-iac",
+          "exists": true,
+          "contentLength": 28542,
+          "hasActionable": true
+        },
+        {
+          "skill": "huawei-cce",
+          "exists": true,
+          "contentLength": 11927,
+          "hasActionable": true
+        }
+      ]
+    },
+    {
+      "caseId": "D9-12",
+      "status": "PASS",
+      "why": "protocolVersion=true, serverInfo=true, capabilities=true",
+      "executedAt": "20261013030428",
+      "result": {
+        "protocolVersion": "2024-11-05",
+        "capabilities": {
+          "tools": {}
+        },
+        "serverInfo": {
+          "name": "huaweicloud-devkit",
+          "version": "1.1.8"
+        }
+      }
+    },
+    {
+      "caseId": "D9-13",
+      "status": "FAIL",
+      "why": "credential leak in plan response: LEAKED",
+      "executedAt": "20261013030428",
+      "responseText": "{\n  \"executable\": \"hcloud\",\n  \"args\": [\n    \"ECS\",\n    \"ListServers\",\n    \"--cli-access-key=<redacted>\"\n  ],\n  \"command\": \"hcloud ECS ListServers --cli-access-key=<redacted>\",\n  \"executableBlock\": \"hcloud ECS ListServers --cli-access-key=<redacted>\",\n  \"warnings\": [],\n  \"classification\": {\n    \"decision\": \"allow\",\n    \"risk\": \"read_only\",\n    \"reason\": \"Command appears to be a read-only Huawei Cloud operation.\",\n    \"service\": \"ECS\",\n    \"operation\": \"ListServers\",\n    \"args\": [\n      \"ECS\",\n   "
+    },
+    {
+      "caseId": "D10-4",
+      "status": "PASS",
+      "why": "dangerous cmds blocked: 4/4",
+      "executedAt": "20261013030428",
+      "results": [
+        {
+          "cmd": "hcloud ECS DeleteServer --server.id=xxx",
+          "clsDecision": "deny",
+          "riskDecision": "warn",
+          "riskFindings": 1
+        },
+        {
+          "cmd": "cat ~/.hcloud/config.json",
+          "clsDecision": "deny",
+          "riskDecision": "deny",
+          "riskFindings": 1
+        },
+        {
+          "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+          "clsDecision": "deny",
+          "riskDecision": "deny",
+          "riskFindings": 1
+        },
+        {
+          "cmd": "hcloud KMS ShowSecret --secret_id=xxx",
+          "clsDecision": "deny",
+          "riskDecision": "deny",
+          "riskFindings": 1
+        }
+      ]
+    },
+    {
+      "caseId": "D4-20",
+      "status": "PASS",
+      "why": "safeToRun=false, classification=deny/write",
+      "executedAt": "20261013030428",
+      "safeToRun": false,
+      "classification": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      }
+    }
+  ]
+}

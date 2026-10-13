@@ -1,7 +1,38 @@
 {
   "caseId": "D4-15",
   "status": "PASS",
-  "why": "bypass variants all blocked: true",
-  "sample": "[{\"cmd\":\"hcloud ECS DeLeTeSeRvErS --server-ids 123\",\"decision\":\"deny\",\"risk\":\"write\"},{\"cmd\":\"hcloud ECS DELETE%73ervers --server-ids 123\",\"decision\":\"deny\",\"risk\":\"write\"},{\"cmd\":\"hcloud VPC DeLeTeVpc --vpc-id abc\",\"decision\":\"deny\",\"risk\":\"write\"},{\"cmd\":\"hcloud ECS DeleteServers --server-ids 123\",\"decision\":\"deny\",\"risk\":\"write\"}]",
-  "executedAt": "20261013050228"
+  "why": "variants denied: 6/6",
+  "executedAt": "20261013030427",
+  "results": [
+    {
+      "cmd": "hcloud ECS deleteserver --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS DELETEserver --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS DeleteServer --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "bash -c \"hcloud ECS DeleteServer --server.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "sh -c \"hcloud ECS DeleteServer --server.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS ListServers; hcloud ECS DeleteServer --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    }
+  ]
 }

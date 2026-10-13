@@ -1,7 +1,21 @@
 {
   "caseId": "D3-C3",
   "status": "PASS",
-  "why": "sandbox deploy E2E: connect=true, upload=true, deploy=true, check=true, close=true",
-  "sample": "{\"sandboxToolCount\":12,\"allPresent\":true}",
-  "executedAt": "20261013050451"
+  "why": "sandbox tools: connect=true, exec=true, upload=true, deploy=true, check=true, tunnel=true; real deploy=BLOCKED",
+  "executedAt": "20261013031206",
+  "tools_list": [
+    "huaweicloud_sandbox_exec_with_session",
+    "huaweicloud_sandbox_exec_one_shot",
+    "huaweicloud_sandbox_close_session",
+    "huaweicloud_sandbox_upload_file",
+    "huaweicloud_sandbox_upload_project",
+    "huaweicloud_sandbox_deploy_nginx",
+    "huaweicloud_sandbox_deploy_check",
+    "huaweicloud_sandbox_expose_tunnel",
+    "huaweicloud_sandbox_check_user",
+    "huaweicloud_sandbox_sign_agreement",
+    "huaweicloud_sandbox_connect",
+    "huaweicloud_sandbox_credentials"
+  ],
+  "blockedReason": "Real sandbox deployment requires hdkitservice authentication and a running sandbox instance. Missing: valid hdkitservice session. Impact: cannot verify connect→upload→deploy→expose lifecycle. Unblocked by: authenticating with hdkitservice."
 }

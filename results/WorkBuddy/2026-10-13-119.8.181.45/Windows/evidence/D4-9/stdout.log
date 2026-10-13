@@ -1,7 +1,25 @@
 {
   "caseId": "D4-9",
   "status": "PASS",
-  "why": "exposure=deny, destructive=deny",
-  "sample": "{\"r1\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"},\"r2\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}}",
-  "executedAt": "20261013050212"
+  "why": "public exposure: cmd decision=allow findings=0; deploy plan decision=deny findings=1",
+  "executedAt": "20261013030427",
+  "cmdResult": {
+    "decision": "allow",
+    "findings": []
+  },
+  "planResult": {
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-network-public-admin-port",
+        "title": "Public admin port exposure",
+        "category": "public_exposure",
+        "severity": "deny",
+        "message": "The change appears to expose an administrative or database port to the public internet. Web ports (80/443) are allowed - this rule only covers admin/database ports.",
+        "remediation": "Restrict the source CIDR to a trusted range, use a bastion or VPN, and keep public preview endpoints behind authenticated HTTP services.",
+        "source": "deploy_plan",
+        "evidence": "{\"resources\":[{\"type\":\"security_group_rule\",\"direction\":\"ingress\",\"remote_ip_prefix\":\"0.0.0.0/0\",\"port_range\":22}]}"
+      }
+    ]
+  }
 }

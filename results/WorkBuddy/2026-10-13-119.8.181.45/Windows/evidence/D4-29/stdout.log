@@ -1,7 +1,26 @@
 {
   "caseId": "D4-29",
   "status": "PASS",
-  "why": "classification entry: decision=allow, risk=read_only",
-  "sample": "{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"listServers\",\"args\":[\"ECS\",\"listServers\"]}",
-  "executedAt": "20261013050224"
+  "why": "classification: 3/3",
+  "executedAt": "20261013030843",
+  "results": [
+    {
+      "cmd": "hcloud ECS ListServers",
+      "expected": "allow",
+      "actual": "allow",
+      "pass": true
+    },
+    {
+      "cmd": "hcloud ECS DeleteServer --server.id=x",
+      "expected": "deny",
+      "actual": "deny",
+      "pass": true
+    },
+    {
+      "cmd": "ls -la",
+      "expected": "allow",
+      "actual": "allow",
+      "pass": true
+    }
+  ]
 }

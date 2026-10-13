@@ -1,7 +1,32 @@
 {
   "caseId": "D4-13",
   "status": "PASS",
-  "why": "readonly creds available=true",
-  "sample": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.readonly.json",
-  "executedAt": "20261013050224"
+  "why": "read cmds allowed: 4/4",
+  "executedAt": "20261013030843",
+  "results": [
+    {
+      "service": "ECS",
+      "operation": "ListServers",
+      "decision": "allow",
+      "risk": "read_only"
+    },
+    {
+      "service": "VPC",
+      "operation": "ListVpcs",
+      "decision": "allow",
+      "risk": "read_only"
+    },
+    {
+      "service": "RDS",
+      "operation": "ListInstances",
+      "decision": "allow",
+      "risk": "read_only"
+    },
+    {
+      "service": "IAM",
+      "operation": "ListUsers",
+      "decision": "allow",
+      "risk": "read_only"
+    }
+  ]
 }

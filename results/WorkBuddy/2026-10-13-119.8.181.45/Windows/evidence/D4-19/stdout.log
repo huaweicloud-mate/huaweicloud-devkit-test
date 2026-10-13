@@ -1,7 +1,16 @@
 {
   "caseId": "D4-19",
   "status": "PASS",
-  "why": "preflight in confirm flow",
-  "sample": "{\"r1\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"},\"r2\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}}",
-  "executedAt": "20261013050212"
+  "why": "secret with approval: deny/secret; without: deny/secret",
+  "executedAt": "20261013030427",
+  "secretWithApproval": {
+    "decision": "deny",
+    "risk": "secret",
+    "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context."
+  },
+  "secretWithoutApproval": {
+    "decision": "deny",
+    "risk": "secret",
+    "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context."
+  }
 }

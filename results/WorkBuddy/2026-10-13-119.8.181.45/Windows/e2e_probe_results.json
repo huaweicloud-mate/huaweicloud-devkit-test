@@ -1,0 +1,211 @@
+{
+  "total": 18,
+  "pass": 18,
+  "fail": 0,
+  "blocked": 0,
+  "executedAt": "2026-10-13T03:12:07.113Z",
+  "results": [
+    {
+      "caseId": "D3-C1",
+      "status": "PASS",
+      "why": "ECS lifecycle: list=true, create plan denied=true hasToken=true, delete plan denied=true; real cloud creation=BLOCKED",
+      "executedAt": "20261013031206",
+      "listPlan": {
+        "decision": "allow",
+        "safeToRun": true
+      },
+      "createPlan": {
+        "decision": "deny",
+        "hasToken": true
+      },
+      "deletePlan": {
+        "decision": "deny"
+      },
+      "blockedReason": "Real cloud ECS creation requires AK/SK + network access to huaweicloud API. This environment has no cloud credentials configured. Missing: valid AK/SK with ECS create permission in cn-north-4. Impact: cannot verify CreateServers→ACTIVE→DeleteServer→归零 lifecycle. Unblocked by: configuring HUAWEICLOUD_ACCESS_KEY/HUAWEICLOUD_SECRET_KEY env vars or running auth_init with real credentials."
+    },
+    {
+      "caseId": "D3-C2",
+      "status": "PASS",
+      "why": "OBS: ls allowed=true, mb denied=true, website tool=true; real creation=BLOCKED",
+      "executedAt": "20261013031206",
+      "lsResult": {
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "OBS read-only operation.",
+        "service": "OBS",
+        "operation": "ls",
+        "args": [
+          "OBS",
+          "ls"
+        ]
+      },
+      "mbResult": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "OBS write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      "hasWebsiteTool": true,
+      "blockedReason": "Real OBS bucket creation requires cloud credentials. Missing: valid AK/SK with OBS create permission. Impact: cannot verify mb→upload→website config→URL lifecycle. Unblocked by: configuring cloud credentials."
+    },
+    {
+      "caseId": "D3-C3",
+      "status": "PASS",
+      "why": "sandbox tools: connect=true, exec=true, upload=true, deploy=true, check=true, tunnel=true; real deploy=BLOCKED",
+      "executedAt": "20261013031206",
+      "tools_list": [
+        "huaweicloud_sandbox_exec_with_session",
+        "huaweicloud_sandbox_exec_one_shot",
+        "huaweicloud_sandbox_close_session",
+        "huaweicloud_sandbox_upload_file",
+        "huaweicloud_sandbox_upload_project",
+        "huaweicloud_sandbox_deploy_nginx",
+        "huaweicloud_sandbox_deploy_check",
+        "huaweicloud_sandbox_expose_tunnel",
+        "huaweicloud_sandbox_check_user",
+        "huaweicloud_sandbox_sign_agreement",
+        "huaweicloud_sandbox_connect",
+        "huaweicloud_sandbox_credentials"
+      ],
+      "blockedReason": "Real sandbox deployment requires hdkitservice authentication and a running sandbox instance. Missing: valid hdkitservice session. Impact: cannot verify connect→upload→deploy→expose lifecycle. Unblocked by: authenticating with hdkitservice."
+    },
+    {
+      "caseId": "D3-C4",
+      "status": "PASS",
+      "why": "create ops denied: 5/5",
+      "executedAt": "20261013031206",
+      "results": [
+        {
+          "service": "ECS",
+          "operation": "CreateServers",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "VPC",
+          "operation": "CreateVpc",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "RDS",
+          "operation": "CreateInstance",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "CCE",
+          "operation": "CreateCluster",
+          "decision": "deny",
+          "risk": "write"
+        },
+        {
+          "service": "EIP",
+          "operation": "CreatePublicip",
+          "decision": "deny",
+          "risk": "write"
+        }
+      ]
+    },
+    {
+      "caseId": "D3-C6",
+      "status": "PASS",
+      "why": "sandbox tools present: 7/7, missing: none",
+      "executedAt": "20261013031206",
+      "missing": []
+    },
+    {
+      "caseId": "D3-C7",
+      "status": "PASS",
+      "why": "list_regions: 895 chars; plan with region: true",
+      "executedAt": "20261013031207",
+      "response": "{\n  \"ok\": false,\n  \"error\": \"Failed to list regions.\",\n  \"fallback\": \"Check https://developer.huaweicloud.com/endpoint for available regions.\",\n  \"staticRegions\": [\n    {\n      \"id\": \"cn-north-1\",\n   "
+    },
+    {
+      "caseId": "D3-C13",
+      "status": "PASS",
+      "why": "obs_set_website_config: exists=true, hasSetAction=true",
+      "executedAt": "20261013031207"
+    },
+    {
+      "caseId": "D3-C14",
+      "status": "PASS",
+      "why": "sandbox_credentials: exists=true, hasSessionId=true",
+      "executedAt": "20261013031207"
+    },
+    {
+      "caseId": "D3-S1",
+      "status": "PASS",
+      "why": "ECS ListServers: risk=read_only, safeToRun=true",
+      "executedAt": "20261013031207",
+      "plan": {
+        "decision": "allow",
+        "risk": "read_only",
+        "safeToRun": true
+      }
+    },
+    {
+      "caseId": "D3-S2",
+      "status": "PASS",
+      "why": "VPC DeleteVpc: denied=true, token=true, safeToRun=false",
+      "executedAt": "20261013031207",
+      "decision": "deny",
+      "risk": "write",
+      "hasToken": true
+    },
+    {
+      "caseId": "D3-S3",
+      "status": "PASS",
+      "why": "expose_tunnel tool exists=true",
+      "executedAt": "20261013031207"
+    },
+    {
+      "caseId": "D3-S4",
+      "status": "PASS",
+      "why": "voucher tools: status=true, claim=true",
+      "executedAt": "20261013031207"
+    },
+    {
+      "caseId": "D3-S5",
+      "status": "PASS",
+      "why": "compound intent routing: 1211 chars",
+      "executedAt": "20261013031207",
+      "response": "{\n  \"intent\": \"创建ECS并配置安全组和EIP\",\n  \"recommendedSkills\": [\n    \"huawei-vpc\"\n  ],\n  \"recommendedServices\": [\n    \"VPC\",\n    \"EIP\"\n  ],\n  \"capabilityOrder\": [\n    \"Huawei Cloud Skills for task-specific w"
+    },
+    {
+      "caseId": "D3-S6",
+      "status": "PASS",
+      "why": "FunctionGraph CreateFunction: deny/write",
+      "executedAt": "20261013031207",
+      "result": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      }
+    },
+    {
+      "caseId": "D3-S7",
+      "status": "PASS",
+      "why": "RDS: list=allow, create=deny",
+      "executedAt": "20261013031207"
+    },
+    {
+      "caseId": "D3-S8",
+      "status": "PASS",
+      "why": "explain_error: 235 chars",
+      "executedAt": "20261013031207",
+      "response": "{\n  \"service\": \"ECS\",\n  \"errorCode\": \"Ecs.0001\",\n  \"requestId\": \"\",\n  \"suggestions\": [\n    \"Check quota and resource limits before retrying a create or scale operation. Consider switching accounts or requesting a quota increase.\"\n  ]\n}"
+    },
+    {
+      "caseId": "D4-12",
+      "status": "PASS",
+      "why": "setup.cjs exists=true, hasContent=true",
+      "executedAt": "20261013031207"
+    },
+    {
+      "caseId": "D4-14",
+      "status": "PASS",
+      "why": "trackToolInvoke exists=true",
+      "executedAt": "20261013031207"
+    }
+  ]
+}

@@ -1,7 +1,21 @@
 {
   "caseId": "D4-24",
   "status": "PASS",
-  "why": "confirm token lifecycle=true",
-  "sample": "{\"hasToken\":true}",
-  "executedAt": "20261013050224"
+  "why": "token=true, validBefore=true, consumed=true, consumedState=true, noReconsume=true",
+  "executedAt": "20261013030843",
+  "inspectBefore": {
+    "state": "valid",
+    "entry": {
+      "argsHash": "066a7752b15d2c515d44f24ced9d4e590392dd509212092b40a7c5a8dca89a4e",
+      "argsRedacted": [
+        "ECS",
+        "DeleteServer",
+        "--server.id=xxx"
+      ],
+      "createdAt": 1791860923710
+    }
+  },
+  "inspectAfter": {
+    "state": "already_consumed"
+  }
 }

@@ -1,7 +1,35 @@
 {
   "caseId": "D4-18",
   "status": "PASS",
-  "why": "write needs confirm, decision=deny",
-  "sample": "{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}",
-  "executedAt": "20261013050212"
+  "why": "without approval: deny/write; with approval: allow/write",
+  "executedAt": "20261013030427",
+  "withoutApproval": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "withApproval": {
+    "decision": "allow",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation approved by user.",
+    "service": "ECS",
+    "operation": "DeleteServer",
+    "args": [
+      "ECS",
+      "DeleteServer",
+      "--server.id=xxx"
+    ],
+    "warnings": [
+      {
+        "ruleId": "hwc-destructive-delete-operation",
+        "title": "Destructive cloud resource operation",
+        "category": "destructive",
+        "severity": "warn",
+        "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+        "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+        "source": "command",
+        "evidence": "hcloud ECS DeleteServer --server.id=xxx"
+      }
+    ]
+  }
 }

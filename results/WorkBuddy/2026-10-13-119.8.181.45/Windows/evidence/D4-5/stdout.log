@@ -1,7 +1,62 @@
 {
   "caseId": "D4-5",
   "status": "PASS",
-  "why": "delete classified as deny",
-  "sample": "{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}",
-  "executedAt": "20261013050212"
+  "why": "write ops denied: 9/9; misjudged as read: 0",
+  "executedAt": "20261013030427",
+  "results": [
+    {
+      "service": "ECS",
+      "operation": "DeleteServers",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "service": "ECS",
+      "operation": "DeleteServer",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "service": "VPC",
+      "operation": "DeleteVpc",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "service": "ECS",
+      "operation": "CreateServers",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "service": "ECS",
+      "operation": "UpdateServer",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "service": "ECS",
+      "operation": "ResizeServer",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "service": "ECS",
+      "operation": "StopServer",
+      "decision": "deny",
+      "risk": "execution"
+    },
+    {
+      "service": "ECS",
+      "operation": "StartServer",
+      "decision": "deny",
+      "risk": "execution"
+    },
+    {
+      "service": "ECS",
+      "operation": "RebootServer",
+      "decision": "deny",
+      "risk": "execution"
+    }
+  ]
 }

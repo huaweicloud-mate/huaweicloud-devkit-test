@@ -1,7 +1,24 @@
 {
   "caseId": "D3-C2",
   "status": "PASS",
-  "why": "OBS static site: toolRegistered=true, planResult=true",
-  "sample": "{\"hasObs\":true,\"hasPlan\":true,\"result\":\"{\\\"executable\\\":\\\"hcloud\\\",\\\"args\\\":[],\\\"command\\\":\\\"hcloud\\\",\\\"executableBlock\\\":\\\"hcloud\\\",\\\"warnings\\\":[],\\\"classification\\\":{\\\"decision\\\":\\\"deny\\\",\\\"risk\\\":\\\"invalid\\\",\\\"reason\\\":\\\"Empty hcloud command arguments are not executable.\\\"},\\\"sgFindings\\\":[],\\\"approvalToken\\\":\\\"2eea02a3-5902-438e-882f-442ad6811b88\\\",\\\"safeToRun\\\":false}\"}",
-  "executedAt": "20261013050451"
+  "why": "OBS: ls allowed=true, mb denied=true, website tool=true; real creation=BLOCKED",
+  "executedAt": "20261013031206",
+  "lsResult": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "OBS read-only operation.",
+    "service": "OBS",
+    "operation": "ls",
+    "args": [
+      "OBS",
+      "ls"
+    ]
+  },
+  "mbResult": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "OBS write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "hasWebsiteTool": true,
+  "blockedReason": "Real OBS bucket creation requires cloud credentials. Missing: valid AK/SK with OBS create permission. Impact: cannot verify mb→upload→website config→URL lifecycle. Unblocked by: configuring cloud credentials."
 }
