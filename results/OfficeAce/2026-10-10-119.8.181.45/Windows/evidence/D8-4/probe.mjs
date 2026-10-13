@@ -1,0 +1,1 @@
+// D8-4: skill SKILL.md files have executable steps

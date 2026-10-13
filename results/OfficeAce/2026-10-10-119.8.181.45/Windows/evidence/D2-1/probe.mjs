@@ -1,0 +1,1 @@
+// D2-1: auth_status shows S1(fingerprint), S2(kooCli), S3(obs) all configured

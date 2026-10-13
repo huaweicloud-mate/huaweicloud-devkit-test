@@ -1,0 +1,107 @@
+== serviceCatalog 区域路由 ==
+{
+  "intent": "",
+  "recommendedSkills": [
+    "Use huaweicloud-core to route intent."
+  ],
+  "recommendedServices": [
+    "Run hcloud --help to list available services."
+  ],
+  "capabilityOrder": [
+    "Huawei Cloud Skills for task-specific workflows and examples",
+    "KooCLI hcloud for local authenticated operations and quick inspection",
+    "Huawei Cloud API documentation for exact request and response contracts",
+    "Huawei Cloud SDKs for application code integration",
+    "Huawei Cloud MCP when an official or approved server is available",
+    "Terraform Provider only when IaC reviewability and repeatability are important"
+  ],
+  "ruleOfThumb": {
+    "skills": "Start here when the user describes a scenario or wants a guided workflow.",
+    "cli": "Use for local diagnostics, read-only inspection, and commands the user can review.",
+    "api": "Use for exact service contract, region endpoint, project_id, pagination, and error codes.",
+    "sdk": "Use when writing application code that calls Huawei Cloud services.",
+    "mcp": "Prefer approved MCP tools when available because tools can carry structured schemas.",
+    "terraform": "Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis."
+  }
+}
+== plan_cli_command 香港区 EIP 查询 ==
+{
+  "executable": "hcloud",
+  "args": [
+    "EIP",
+    "ListPublicips",
+    "--cli-region=ap-southeast-1"
+  ],
+  "command": "hcloud EIP ListPublicips --cli-region=ap-southeast-1",
+  "executableBlock": "hcloud EIP ListPublicips --cli-region=ap-southeast-1",
+  "warnings": [],
+  "classification": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation.",
+    "service": "EIP",
+    "operation": "ListPublicips",
+    "args": [
+      "EIP",
+      "ListPublicips",
+      "--cli-region=ap-southeast-1"
+    ]
+  },
+  "sgFindings": [],
+  "approvalToken": "9eff64ff-4154-42f3-980f-9727eb2bb38c",
+  "safeToRun": true
+}
+== get_regional_availability 预查 ==
+{
+  "ok": false,
+  "service": "eip",
+  "region": "ap-southeast-1",
+  "available": false,
+  "note": "Service eip is not in the regional availability cache. Run hcloud EIP --help to verify, or check https://developer.huaweicloud.com/endpoint."
+}
+== 创建最小 EIP(香港区 5_bgp PER size1) ==
+{
+  "code": "VPC.0501",
+  "message": "{\"NeutronError\":{\"message\":\"The project name cn-north-4 carried by the token from IAM contains region information. Only token issued for setting region could pass the authentication.\",\"type\":\"BadRequest\",\"detail\":\"\"}}"
+}
+Failed to get terminal width. The default width will be used. If characters are unreadable, adjust the command window width.
+Diagnose the request as follows:
++---+------------+----------+-----------------------+-----------------------+-------------------------------------+
+|No.|Product Name|Error Code|     Error Message     |      Description      |               Action                |
++---+------------+----------+-----------------------+-----------------------+-------------------------------------+
+| 1 |    EIP     | VPC.0501 |invalid EIP parameters.|invalid EIP parameters.|Check whether the parameter values ar|
+|   |            |          |                       |                       |e valid based on the returned error m|
+|   |            |          |                       |                       | essage and API reference document.  |
++---+------------+----------+-----------------------+-----------------------+-------------------------------------+
+== 在 cn-north-4 创建最小 EIP(账号可用区域) ==
+{
+  "publicip": {
+    "id": "e0a463ac-7a2a-4b9a-9bbe-df65a46dc7ce",
+    "type": "5_bgp",
+    "public_ip_address": "121.36.54.113",
+    "status": "DOWN",
+    "tenant_id": "46c1fd48bd1248c7b75afc3780de7132",
+    "create_time": "2026-10-12T21:29:07Z",
+    "bandwidth_id": "e7256976-77e2-40b0-9fa0-1f4e8a6e7e80",
+    "bandwidth_name": "tctest-eip-c7nr4",
+    "bandwidth_share_type": "PER",
+    "bandwidth_size": 1,
+    "enterprise_project_id": "0",
+    "ip_version": 4
+  }
+}
+== 释放 EIP ==
+== 释放带宽 ==
+{
+  "code": "VPC.0305",
+  "message": "{\"NeutronError\":{\"message\":\"No Eip bandwidth exist with id e7256976-77e2-40b0-9fa0-1f4e8a6e7e80\",\"type\":\"NoEipBandWidthExist\",\"detail\":\"\"}}"
+}
+Failed to get terminal width. The default width will be used. If characters are unreadable, adjust the command window width.
+Diagnose the request as follows:
++---+------------+----------+----------------------+-----------------------------------+--------------------------+
+|No.|Product Name|Error Code|    Error Message     |            Description            |          Action          |
++---+------------+----------+----------------------+-----------------------------------+--------------------------+
+| 1 |    EIP     | VPC.0305 |updateBandwidth error.|An internal error occurs during the|Contact technical support.|
+== 归零验证(ListPublicips 不含 121.36.54.113) ==
+0
+0(已归零)

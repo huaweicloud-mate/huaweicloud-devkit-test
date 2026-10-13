@@ -1,0 +1,1 @@
+// D6-4: concurrent MCP tool calls executed in parallel

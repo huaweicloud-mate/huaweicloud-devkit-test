@@ -1,0 +1,21 @@
+{
+  "caseId": "D4-21",
+  "status": "PASS",
+  "why": "artifacts checked: decision=warn, findings=1",
+  "executedAt": "20261013030427",
+  "result": {
+    "decision": "warn",
+    "findings": [
+      {
+        "ruleId": "hwc-command-adminpass-exposure",
+        "title": "Plaintext adminPass exposure",
+        "category": "secret",
+        "severity": "warn",
+        "message": "The artifact or plan contains a plaintext adminPass parameter. The password may be exposed in version control, logs, or agent context.",
+        "remediation": "Use userData cloud-init, KMS/CSMS secret references, or encrypted password injection instead of embedding adminPass as plaintext in deployment files.",
+        "source": "terraform.tf",
+        "evidence": "terraform.tf resource \"huaweicloud_compute_instance\" \"test\" { admin_pass = <redacted> }"
+      }
+    ]
+  }
+}

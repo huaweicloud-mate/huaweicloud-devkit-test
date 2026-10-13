@@ -1,0 +1,25 @@
+{
+  "caseId": "D1-40",
+  "status": "PASS",
+  "why": "镜像 lag 检测逻辑完整，无版本倒退提示",
+  "executedAt": "20261009210820",
+  "evidence": [
+    {
+      "hasRegistryCheck": true,
+      "hasDistTagCheck": true,
+      "hasVersionCompare": true
+    },
+    {
+      "current": "1.1.2",
+      "latest": "1.1.2",
+      "expected": "up_to_date",
+      "actual": "up_to_date"
+    },
+    {
+      "current": "1.1.1",
+      "latest": "1.1.2",
+      "expected": "update_available",
+      "actual": "update_available"
+    }
+  ]
+}

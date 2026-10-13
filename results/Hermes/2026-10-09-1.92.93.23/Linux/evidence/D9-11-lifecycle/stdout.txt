@@ -1,0 +1,14 @@
+PASS	D9-11-LC-connect	WebSocket 客户端成功建连 mock server	actual={"connected":true,"serverConns":1}	expected={"connected":true,"serverConns":1}
+PASS	D9-11-LC-auth	认证握手成功（auth:ok）	actual={"reply":"auth:ok"}	expected={"reply":"auth:ok"}	服务端已标记 authed
+PASS	D9-11-LC-heartbeat	心跳保活 ping→pong 往返	actual={"reply":"pong"}	expected={"reply":"pong"}
+PASS	D9-11-LC-binary-roundtrip	二进制隧道数据 echo 往返	actual={"reply":"binary:6"}	expected={"reply":"binary:6"}
+PASS	D9-11-LC-normal-close	正常断开（客户端主动 close → 服务端 disconnect）	actual={"disconnects":1,"remainingConns":0}	expected={"disconnects":1,"remainingConns":0}
+PASS	D9-11-LC-abnormal-setup	异常断开前建立第二个连接	actual={"connected":true,"serverConns":1}	expected={"connected":true,"serverConns":1}
+PASS	D9-11-LC-abnormal-close	服务端强制断开 → 客户端收到 close 事件	actual={"ws2Closed":true,"serverConns":0}	expected={"ws2Closed":true,"serverConns":0}	服务端 closeConnection 后客户端收到 close 且连接清零
+PASS	D9-11-LC-reconnect	断开后可重新建连	actual={"reconnected":true,"serverConns":1}	expected={"reconnected":true,"serverConns":1}
+PASS	D9-11-LC-close-idempotent	close() 幂等（二次调用不报错）	actual={"closeTwiceOk":true}	expected={"closeTwiceOk":true}
+PASS	D9-11-LC-post-close-reject	关闭后新连接被拒绝	actual={"error":true}	expected={"error":true}	server 已 close，新连接应失败
+PASS	D9-11-LC-frame-log	frameLog 记录了生命周期帧	actual={"totalFrames":8,"hasIn":true,"hasOut":true}	expected={"totalFrames":">0","hasIn":true,"hasOut":true}
+
+=== D9-11 WebSocket 隧道通道生命周期 ===  pass=11 fail=0
+RESULT: PASS

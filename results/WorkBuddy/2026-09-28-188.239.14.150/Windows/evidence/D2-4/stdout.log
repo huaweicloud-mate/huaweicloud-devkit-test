@@ -1,0 +1,30 @@
+{
+  "case": "D2-4",
+  "status": "FAIL",
+  "why": "redactSecrets 对 JSON 字符串输入（含小写 ak/sk 键）未脱敏：redactString 正则只匹配大写 AK/SK，小写 ak/sk 键的值漏脱敏。根因: safety-policy.mjs:34-46 redactString 正则 /(AK|SK)\\s*[:=]\\s*.../ 未覆盖小写键名。注：redactSecrets 对对象输入正常（isSecretKeyName 匹配 ak/sk），但字符串输入走 redactString 正则路径漏脱敏。",
+  "executedAt": "20260928051800",
+  "total": 2,
+  "passed": 1,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D2-4",
+      "name": "redact-json",
+      "pass": false,
+      "actual": "{\"ak\":\"AKIDTEST12345678\",\"sk\":\"SKTEST1234567890abcdef1234\",\"region\":\"cn-north-4\"}",
+      "expected": "redacted",
+      "passMsg": "JSON creds redacted",
+      "failMsg": "JSON creds NOT redacted (defect)"
+    },
+    {
+      "id": "D2-4",
+      "name": "profile-mcp",
+      "pass": true,
+      "actual": "ok",
+      "expected": "ok",
+      "passMsg": "profile redacted OK (MCP)",
+      "failMsg": "profile redacted FAIL (MCP)"
+    }
+  ],
+  "source": "d2-auth/probe.mjs + mcp-tools/probe.mjs"
+}

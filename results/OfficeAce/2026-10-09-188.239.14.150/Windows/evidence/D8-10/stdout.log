@@ -1,0 +1,93 @@
+{
+  "status": "PASS",
+  "caseId": "D8-10",
+  "why": "MCP 配置备份与合并夹具全部通过：备份路径正确、saveAgentDelta/readAgentDelta 往返一致、takeAgentDelta 取走后返回 null、purgeBackup 删除及容错正常、mergeCommandStyle/mergeArgsStyle/mergeMcpServersFile 三种合并风格正确、extractUserDelta/applyUserDelta 往返一致(command/args)、mergeEnv 不覆盖用户已设值、REQUIRED_ENV_KEYS 不被备份",
+  "executedAt": "20261009084229",
+  "summary": "12 pass / 0 fail",
+  "details": [
+    {
+      "result": "PASS",
+      "name": "D8-10-backup-path",
+      "desc": "mcpBackupFilePath 路径",
+      "actual": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\multica-task-3193756058\\d8-10-mcp-1791494411156\\.config\\huaweicloud\\devkit-mcp-backup.json",
+      "expected": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\multica-task-3193756058\\d8-10-mcp-1791494411156\\.config\\huaweicloud\\devkit-mcp-backup.json"
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-save-read-delta",
+      "desc": "saveAgentDelta → readAgentDelta 往返",
+      "actual": {"cmd": ["--debug"], "env": {"MY_VAR": "val"}, "timeout": 600000},
+      "expected": {"cmd": ["--debug"], "env": {"MY_VAR": "val"}, "timeout": 600000}
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-take-once",
+      "desc": "takeAgentDelta 取走后 readAgentDelta 返回 null",
+      "actual": {"taken": true, "after": null},
+      "expected": {"taken": true, "after": null}
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-purge-deletes",
+      "desc": "purgeBackup 删除文件",
+      "actual": {"purged": true, "exists": false},
+      "expected": {"purged": true, "exists": false}
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-purge-no-file",
+      "desc": "purgeBackup 文件不存在不崩溃",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-merge-command-style",
+      "desc": "mergeCommandStyle 保留用户参数 + 更新路径",
+      "actual": {"cmd": ["node", "/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs", "--user-arg"], "timeout": 100000, "changed": true},
+      "expected": {"cmd": ["node", "/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs", "--user-arg"], "timeout": 100000, "changed": true}
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-merge-args-style",
+      "desc": "mergeArgsStyle 保留 env + 注入 required",
+      "actual": {"args": ["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"], "env": {"MY_VAR": "val", "REQUIRED_ENV": "1"}, "changed": true},
+      "expected": {"args": ["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"], "env": {"MY_VAR": "val", "REQUIRED_ENV": "1"}, "changed": true}
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-merge-file-style",
+      "desc": "mergeMcpServersFile 合并 mcpServers",
+      "actual": {"entryArgs": ["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"], "configHas": true, "changed": true},
+      "expected": {"entryArgs": ["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs"], "configHas": true, "changed": true}
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-extract-apply-command",
+      "desc": "extractUserDelta→applyUserDelta 往返（command）",
+      "actual": {"cmd": ["node", "/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs", "--user-flag"], "env": {"MY_VAR": "x"}, "timeout": 500000},
+      "expected": {"cmd": ["node", "/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs", "--user-flag"], "env": {"MY_VAR": "x"}, "timeout": 500000}
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-extract-apply-args",
+      "desc": "extractUserDelta→applyUserDelta 往返（args）",
+      "actual": {"args": ["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs", "--arg1"], "env": {"K": "v"}, "enabled": false},
+      "expected": {"args": ["/opt/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs", "--arg1"], "env": {"K": "v"}, "enabled": false}
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-merge-env-no-overwrite",
+      "desc": "mergeEnv 不覆盖用户已设值",
+      "actual": "user-override",
+      "expected": "user-override"
+    },
+    {
+      "result": "PASS",
+      "name": "D8-10-required-env-excluded",
+      "desc": "REQUIRED_ENV_KEYS 不被备份",
+      "actual": ["MY_VAR"],
+      "expected": ["MY_VAR"]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "env print blocked: 6/6 denied; lowerAkCmd decision=allow",
+  "executedAt": "20261013030427",
+  "results": [
+    {
+      "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "printenv HW_SECRET_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "echo $HUAWEICLOUD_SECRET_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "env | grep HUAWEICLOUD",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "printenv HW_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "echo $HW_SECRET_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    }
+  ],
+  "lowerAkTest": {
+    "cmd": "echo ak=AKIDTEST123",
+    "result": {
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "reason": "No Huawei Cloud safety rule matched."
+    }
+  }
+}

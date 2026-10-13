@@ -1,0 +1,100 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C14",
+  "why": "沙箱凭证 mock 层全部通过：mock 安装/卸载生命周期正常、resolveCredentialsWithRuntime 与 hwlink getCredentials 返回正确凭证、hdkitCheckUser/credentials/connect/voucherStatus 通过 mock fetch 返回预期结果、参数校验不受 mock 影响、requestLog 记录≥4条请求、所有请求打到 mock 端点、卸载后环境变量恢复、mock 独立启停正常",
+  "executedAt": "20261009084229",
+  "summary": "13 pass / 0 fail",
+  "details": [
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-install",
+      "desc": "mock 安装后 isInstalled=true",
+      "actual": {"installed": true},
+      "expected": {"installed": true}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-rt-cred",
+      "desc": "mock 凭证注入→resolveCredentialsWithRuntime 返回",
+      "actual": {"ak": "MOCK_AK_D3C14", "sk": "MOCK_SK_D3C14", "st": "MOCK_ST_D3C14", "region": "cn-north-4"},
+      "expected": {"ak": "MOCK_AK_D3C14", "sk": "MOCK_SK_D3C14", "st": "MOCK_ST_D3C14", "region": "cn-north-4"}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-hwlink-getcred",
+      "desc": "hwlink getCredentials 返回 mock 凭证",
+      "actual": {"ak": "MOCK_AK_D3C14", "sk": "MOCK_SK_D3C14", "st": "MOCK_ST_D3C14"},
+      "expected": {"ak": "MOCK_AK_D3C14", "sk": "MOCK_SK_D3C14", "st": "MOCK_ST_D3C14"}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-hdkit-check-user",
+      "desc": "hdkitCheckUser 通过 mock fetch 返回 userHash",
+      "actual": {"userHash": "mock-user-hash-d3c14"},
+      "expected": {"userHash": "mock-user-hash-d3c14"}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-hdkit-credentials",
+      "desc": "hdkitCredentials 通过 mock fetch 返回凭证",
+      "actual": {"ak": "MOCK_AK_D3C14", "sk": "MOCK_SK_D3C14", "session": "mock-session-001"},
+      "expected": {"ak": "MOCK_AK_D3C14", "sk": "MOCK_SK_D3C14", "session": "mock-session-001"}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-cred-param-required",
+      "desc": "hdkitCredentials 无参时仍抛错（mock 不影响参数校验）",
+      "actual": true,
+      "expected": true
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-hdkit-connect",
+      "desc": "hdkitConnect 通过 mock fetch 返回 session",
+      "actual": {"session": "mock-session-001", "dev_stage": "mock-dev-stage-001"},
+      "expected": {"session": "mock-session-001", "dev_stage": "mock-dev-stage-001"}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-voucher-status",
+      "desc": "hdkitVoucherStatus 通过 mock fetch 返回 claimed",
+      "actual": {"claimed": true},
+      "expected": {"claimed": true}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-request-log",
+      "desc": "mock requestLog 记录了 ≥4 条请求",
+      "actual": {"count": 4},
+      "expected": {"count": ">=4"}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-endpoint-override",
+      "desc": "所有请求打到 mock 端点（HDKITSERVICE_ENDPOINT 覆盖）",
+      "actual": {"allToMock": true, "endpoint": "https://mock-hdkit.example.com/api/"},
+      "expected": {"allToMock": true}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-uninstall",
+      "desc": "mock 卸载后 isInstalled=false",
+      "actual": {"installed": false},
+      "expected": {"installed": false}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-env-restore",
+      "desc": "uninstall 后 HDKITSERVICE_ENDPOINT 恢复原始值",
+      "actual": {},
+      "expected": {}
+    },
+    {
+      "result": "PASS",
+      "name": "D3-C14-MOCK-independent",
+      "desc": "mock 独立启停（新建实例 install/uninstall 不报错）",
+      "actual": {"installed": false},
+      "expected": {"installed": false}
+    }
+  ]
+}

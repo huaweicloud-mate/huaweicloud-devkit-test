@@ -1,0 +1,30 @@
+{
+  "case": "D10-3",
+  "status": "FAIL",
+  "why": "serviceCatalog 路由准确率仅 26.7%（15 条评测意图中 4 条命中，11 条 MISS）。根因: service_catalog 路由层对中文自然语言意图的匹配覆盖不足，多数意图返回 'Run hcloud --help' 而非正确路由到对应服务。详见 c4-service-matrix/probe.mjs 和 eval/results/eval-run-*.csv。",
+  "executedAt": "20260928051700",
+  "total": 16,
+  "passed": 5,
+  "failed": 11,
+  "results": [
+    {
+      "id": "D10-3",
+      "name": "catalog-mcp-available",
+      "pass": true,
+      "actual": "ok",
+      "expected": "ok",
+      "passMsg": "service_catalog tool available (MCP)",
+      "failMsg": "service_catalog tool unavailable"
+    },
+    {
+      "id": "D10-3-route-accuracy",
+      "name": "route-accuracy",
+      "pass": false,
+      "actual": "4/15 HIT (26.7%)",
+      "expected": ">=80% HIT",
+      "passMsg": "route accuracy >=80%",
+      "failMsg": "route accuracy 26.7% (11 MISS)"
+    }
+  ],
+  "source": "mcp-tools/probe.mjs + c4-service-matrix/probe.mjs"
+}

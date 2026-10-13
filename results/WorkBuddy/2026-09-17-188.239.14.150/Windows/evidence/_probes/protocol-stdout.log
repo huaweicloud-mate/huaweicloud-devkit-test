@@ -1,0 +1,9 @@
+[D9-1] tools/list compliance: PASS | count=40, allValidSchema=true, noDuplicates=true
+[D9-2] JSON-RPC error codes: PASS | invalidMethod code=-32601 (expect -32601), invalidParams code=undefined (expect -32602 or error), hasMethodNotFound=true
+[D9-3] tools/call response format: PASS | hasContent=true, hasType=true, isError=false, contentLen=1
+[D9-4] protocol lifecycle: PASS | initResult=true, blockedBeforeInit=true
+[D9-5] stdio transport robustness: PASS | largePayload=true, concurrentAllSettled=true, concurrentCount=5
+[D9-6] cross-client interoperability: PASS | Hermes: 40 tools, OpenCode: 40 tools, WorkBuddy: 40 tools, Codex: 40 tools
+[D9-7] protocol version negotiation: PASS | requested=2024-10-07, got=2024-10-07, hasResult=true
+[D9-8] inputSchema version compliance: PASS | versions=default, allValid=true, toolCount=40
+[D9-9] tools/call timeout/cancel: SPEC-MISMATCH | capabilities.cancellation=NOT declared (SPEC-MISMATCH), timeoutHandling=true

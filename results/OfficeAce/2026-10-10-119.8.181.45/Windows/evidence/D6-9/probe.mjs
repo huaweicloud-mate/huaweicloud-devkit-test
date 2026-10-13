@@ -1,0 +1,1 @@
+// D6-9: cache cleanup via setup_obs_config and mcp-config-backup

@@ -1,0 +1,1 @@
+// D1-4: status/update idempotent (same result on repeated calls)

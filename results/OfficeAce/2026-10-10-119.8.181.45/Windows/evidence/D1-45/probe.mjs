@@ -1,0 +1,1 @@
+// D1-45: check_update note field provides fallback hint

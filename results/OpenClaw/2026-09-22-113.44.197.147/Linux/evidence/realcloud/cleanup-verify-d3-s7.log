@@ -1,0 +1,10 @@
+=== D3-S7 真云残留归零验证（手动补删后） 2026-09-22 CST ===
+probe-d3-s7 两次运行「测后 tctest-s7- 资源归零」均报 FAIL：华为云 VPC/subnet 删除为异步，
+probe 固定 sleep 轮询窗口不足以等路由器的 subnet 引用释放（DeleteVpc 报 RouterInUse: Router contains subnets）。
+本轮 run 内手动补删链路：DeleteSubnet → 等待释放 → DeleteVpc，逐资源删除后复盘点：
+  - RDS 实例已删（ListInstances = 0）
+  - tctest-s7- VPC 残留 = 0
+  - 全账号 VPC 总数 = 0
+真云建删归零达成（只删本次 tctest-s7- 前缀资源，未碰既有/他人资源）。
+结论：D3-S7 用例本身 PASS（建 VPC/subnet/RDS→ACTIVE→连接串→删 RDS 均 PASS），仅探针内「归零」断言的轮询窗口偏短，
+     属测试脚本时序问题（probe 断言窗口），非被测产品缺陷；产品侧真云建删能力正常，最终资源归零。

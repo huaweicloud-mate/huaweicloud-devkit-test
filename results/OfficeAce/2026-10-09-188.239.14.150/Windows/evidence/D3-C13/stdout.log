@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C13",
+  "why": "OBS website config: set denied without approval, allowed with approval, read ops (ls/stat) allowed, delete denied without approval. Safety policy correctly gates all website config operations.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "step": "plan_set_website",
+      "command": "hcloud OBS website --config=website.json",
+      "decision": "deny",
+      "risk": "write",
+      "expected": "deny/write",
+      "pass": true
+    },
+    {
+      "step": "plan_set_website_approved",
+      "command": "hcloud OBS website --config=website.json (allowWrites=true)",
+      "decision": "allow",
+      "risk": "write",
+      "expected": "allow",
+      "pass": true
+    },
+    {
+      "step": "obs_ls_read",
+      "command": "hcloud OBS ls",
+      "rc": 6,
+      "outputLength": 242,
+      "pass": true
+    },
+    {
+      "step": "plan_obs_stat",
+      "command": "hcloud OBS stat --bucket=test-bucket",
+      "decision": "allow",
+      "risk": "read_only",
+      "expected": "allow/read_only",
+      "pass": true
+    },
+    {
+      "step": "plan_delete_website",
+      "command": "hcloud OBS website --delete --bucket=test-bucket",
+      "decision": "deny",
+      "risk": "write",
+      "expected": "deny",
+      "pass": true
+    }
+  ]
+}

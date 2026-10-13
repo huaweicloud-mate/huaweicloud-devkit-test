@@ -1,0 +1,9 @@
+
+=== D4-24 确认令牌过期与重复确认边界探针结果 ===
+PASS  D4-24  plan 产生 approvalToken  => token=true
+PASS  D4-24  approvalToken 持久化到 approvals.json(跨进程)  => exists=true
+PASS  D4-24  不存在 token 提交被拒  => rejected=true
+PASS  D4-24  token 单次消费(重复提交第二次被拒)  => secondRejected=true
+PASS  D4-24  过期 token(>5min TTL)提交被拒  => expiredRejected=true
+
+TOTAL pass=5 fail=0

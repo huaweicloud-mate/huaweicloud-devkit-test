@@ -1,0 +1,27 @@
+apiVersion: test.huaweicloud.com/v1
+kind: TestMission
+metadata:
+  id: "mission-001"
+  domain: "D4 安全与风险护栏"
+  priority: P0
+  estimatedDuration: "30m"
+spec:
+  scope: |
+    D4 安全与风险护栏 回归：源码变更命中 safety-policy (安全策略/风险规则/拦截，P0 必测、禁剪枝)
+  affectedTools:
+  affectedCases:
+    - D4-1
+    - D4-2
+    - D4-4
+    - D4-5
+    - D4-7
+    - D4-15
+    - D4-16
+    - D4-25
+    - D4-27
+  constraints:
+    - "P0 用例不得 NOT_RUN"
+  qualityCriteria:
+    - "9 条相关用例全部执行，P0 不得 NOT_RUN"
+    - "输出不得包含 AK/SK/token 明文"
+    - "FAIL/SPEC 需记根因(文件:行号)"

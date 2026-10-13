@@ -1,0 +1,28 @@
+{
+  "case": "D9-9",
+  "status": "SPEC-MISMATCH",
+  "why": "initialize.result.capabilities.notifications 未声明 notifications.cancellation。MCP 协议要求 server 在 capabilities 中声明支持的 notifications，cancellation 未声明 = 契约漂移。",
+  "executedAt": "20260929050729",
+  "total": 2,
+  "passed": 1,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D9-9a-capabilities.cancellation",
+      "expect": "声明 notifications.cancellation",
+      "got": "未声明",
+      "verdict": "SPEC-MISMATCH",
+      "detail": "initialize.result.capabilities.notifications = \"(缺失)\""
+    },
+    {
+      "id": "D9-9",
+      "name": "calltool-opts",
+      "pass": true,
+      "actual": "sig has opts: true, length: 1",
+      "expected": "opts param",
+      "passMsg": "callTool accepts opts: true",
+      "failMsg": "callTool missing opts param"
+    }
+  ],
+  "source": "eval/harness/protocol-probe.mjs + d2-auth/probe.mjs"
+}

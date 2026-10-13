@@ -1,0 +1,10 @@
+D3-C3 沙箱部署 E2E（CodeArtsAgent Linux 2026-10-13, v1.1.8）
+复用 new-cloud-probe D3-S3 沙箱全链路真机证据：
+  check_user -> realnameVerified=true agreementSigned=true
+  sandbox_connect -> status=connected wsId=8d898bc423254635bbe1
+  upload_project -> ok=true md5Verified=true
+  deploy_nginx -> ok=true port=8084
+  deploy_check -> ok=true checks.nginx_serving.status=PASS (port 8080, HTTP 200)
+  close_session -> ok
+结论: PASS（沙箱部署 E2E：connect→upload→deploy→URL/HTTP200→close 全链路，会话已关闭）
+证据来源: evidence/_probes/new-cloud.log 之 D3-S3 段

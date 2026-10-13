@@ -1,0 +1,1 @@
+// D3-S2: plan_cli_command requires confirmation for VPC delete

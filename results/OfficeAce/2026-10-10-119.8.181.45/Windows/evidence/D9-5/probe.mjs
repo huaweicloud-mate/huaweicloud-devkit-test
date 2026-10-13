@@ -1,0 +1,1 @@
+// D9-5: stdio transport works (MCP server responds via stdin/stdout)

@@ -1,0 +1,21 @@
+
+=== OpenClaw Linux D9-12 initialize 握手安全基线 探针结果 (2026-09-25) ===
+NOTE   D9-12 initialize keys=protocolVersion,capabilities,serverInfo
+PASS  D9-12  initialize 返回 protocolVersion  => true (expected true)
+PASS  D9-12  initialize 返回 capabilities  => true (expected true)
+PASS  D9-12  initialize 返回 serverInfo.name  => true (expected true)
+NOTE   D9-12 tools/call(list_regions) content=true isError=false
+PASS  D9-12  tools/call 路由到 tools.mjs callTool(返回 content 数组)  => true (expected true)
+PASS  D9-12  runVersionCheck 在 tools.mjs 导出  => true (expected true)
+NOTE   D9-12 runVersionCheck 返回 keys=installed,authenticated,errorCode,status,output,kooCliVersion,installedVersion,versionMismatch,nextStep,authHint
+PASS  D9-12  runVersionCheck 可调用（返回对象或 null，不抛）  => true (expected true)
+PASS  D9-12  _decorateResult 返回对象且不抛错  => true (expected true)
+PASS  D9-12  无 hint 时 _decorateResult 不误消费(_isHintConsumed=false)  => false (expected false)
+NOTE   D9-12 peekCachedUpdateInfo=无 consumed=false
+NOTE   D9-12 listSkillDirs len=29 findSkillsRoot="/home/testbot1/devkit-test/OpenClaw/hdk/plugins/huaweicloud-core/skills"
+PASS  D9-12  listSkillDirs 返回非空数组(技能目录)  => true (expected true)
+PASS  D9-12  findSkillsRoot 返回有效技能目录路径  => true (expected true)
+NOTE   D9-12 未 initialize 先 tools/list => 实际返回 object（未报错）
+FAIL  D9-12  未 initialize 先 tools/list 返回 -32600  => "no-error" (expected -32600)
+
+TOTAL pass=10 fail=1

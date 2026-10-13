@@ -1,0 +1,17 @@
+{
+  "status": "FAIL",
+  "detail": "EXP-E01~E15: 3 HIT, 11 MISS, 1 N/A; accuracy=21.4% < 90% target. Most prompts return 'Run hcloud --help' instead of routing to correct service.",
+  "executedAt": "20260920210700",
+  "evalResults": {
+    "hit": 3,
+    "miss": 11,
+    "na": 1,
+    "accuracy": "21.4%",
+    "target": "90%",
+    "pass": false
+  },
+  "hitCases": ["EXP-E06", "EXP-E09", "EXP-E15"],
+  "missCases": ["EXP-E01", "EXP-E02", "EXP-E03", "EXP-E04", "EXP-E05", "EXP-E07", "EXP-E10", "EXP-E11", "EXP-E12", "EXP-E13", "EXP-E14"],
+  "naCases": ["EXP-E08"],
+  "rootCause": "serviceCatalog routing fails to match most Chinese intent prompts to correct services, returning generic 'Run hcloud --help' fallback"
+}

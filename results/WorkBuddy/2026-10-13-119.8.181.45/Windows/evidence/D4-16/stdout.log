@@ -1,0 +1,53 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "wrapped commands denied: 9/9",
+  "executedAt": "20261013030427",
+  "results": [
+    {
+      "cmd": "bash -c \"hcloud ECS DeleteServer --server.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "sh -c \"hcloud ECS DeleteServer --server.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "eval \"hcloud ECS DeleteServer --server.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "$(hcloud ECS DeleteServer --server.id=xxx)",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "`hcloud ECS DeleteServer --server.id=xxx`",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "cmd /c \"hcloud ECS DeleteServer --server.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "powershell -Command \"hcloud ECS DeleteServer --server.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "bash -c \"env | grep HUAWEICLOUD\"",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "bash -c \"printenv HW_SECRET_KEY\"",
+      "decision": "deny",
+      "risk": "credential"
+    }
+  ]
+}

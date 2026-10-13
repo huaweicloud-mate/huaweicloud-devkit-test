@@ -1,0 +1,9 @@
+=== D4-6 fix 2026-09-15T12:36:06.605Z ===
+equals format: adminPass=<redacted> REDACTED
+CLI equals format: --adminPass=<redacted> REDACTED
+CLI space format: --adminPass MyPassword123! NOT_REDACTED
+Redacted 2/3
+FAIL: --adminPass value (space-separated) not redacted
+Root cause: safety-policy.mjs:42 - regex requires [:=] after adminPass, does not match space-separated CLI args
+
+=== exit:0 ===

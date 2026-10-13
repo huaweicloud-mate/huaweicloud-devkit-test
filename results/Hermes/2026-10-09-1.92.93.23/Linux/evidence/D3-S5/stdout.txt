@@ -1,0 +1,8 @@
+=== D3-S5 复合意图分层路由 ===
+预期: 复合意图拆分命中多服务; 分层推荐按预览/生产分流
+实测: 中文复合意图实测(见详情)
+详情:
+"数据用 DDS 或 GaussDB 存储, 部署到 OBS 静态托管" (复合(存储+托管)) -> skills=["huawei-sandbox","huawei-obs","huawei-gaussdb","huawei-dds-dcs"] services=["OBS","GaussDB","Sandbox","DevStation","DDS"]
+"先预览沙箱再上生产 ECS" (分层(预览→沙箱, 生产→ECS)) -> skills=["huawei-ecs"] services=["ECS"]
+根因: tools.mjs serviceCatalog() routeMap 英文-only, 中文意图 miss (同 D10-3 已跟踪)。
+RESULT: FAIL

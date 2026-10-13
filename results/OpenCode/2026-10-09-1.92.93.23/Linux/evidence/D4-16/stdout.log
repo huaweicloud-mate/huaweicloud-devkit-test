@@ -1,0 +1,24 @@
+{
+  "status": "FAIL",
+  "why": "sh -c/eval 包裹内层命令未被 risk-rule-engine 解包检测（printenv HW_*/cat credentials.json 返回 allow）",
+  "root": "safety/rules/cloud-risk-rules.json:14,35 使用 (^|\\s) 锚点；risk-rule-engine.mjs 未解包 sh -c/eval 内层",
+  "details": [
+    {
+      "cmd": "bash -c \"hcloud ECS DeleteServers --instance_ids xxx\"",
+      "decision": "warn"
+    },
+    {
+      "cmd": "sh -c \"cat credentials.json\"",
+      "decision": "allow"
+    },
+    {
+      "cmd": "sh -c \"printenv HW_ACCESS_KEY\"",
+      "decision": "allow"
+    },
+    {
+      "cmd": "echo \"hcloud ECS DeleteServers\" | sh",
+      "decision": "warn"
+    }
+  ],
+  "executedAt": "20261009105544"
+}

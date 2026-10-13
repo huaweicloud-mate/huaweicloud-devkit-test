@@ -1,0 +1,64 @@
+=====CASE D3-S3=====
+check_user -> realnameVerified=true agreementSigned=true err=
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+connect -> status=connected wsId=8d898bc423254635bbe1
+[2026-10-09T21:08:19.235Z] uploadProject: /home/zhangshuang/.hdk-s3-mv1gixyb -> /workspace/.hdk-s3-mv1gixyb.tar.gz (archive=214 bytes, md5=98442a69972d4c00f5c28ee537af0c88)
+[2026-10-09T21:08:19.287Z] uploadViaHttpTunnel: start (archive=/tmp/sandbox-upload-1791580099225/.hdk-s3-mv1gixyb.tar.gz, size=214, remotePath=/workspace/.hdk-s3-mv1gixyb.tar.gz)
+[2026-10-09T21:08:19.287Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-09T21:08:19.287Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-09T21:08:19.337Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-09T21:08:19.386Z] deployFileServer: starting server on port 8888
+[2026-10-09T21:08:19.425Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 18649\r\n\u001b]133;C\u0007\r\n"
+[2026-10-09T21:08:19.425Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+[2026-10-09T21:08:20.410Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-09T21:08:20.411Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-09T21:08:20.413Z] uploadViaHttpTunnel: tunnel ready, localPort=35633
+[2026-10-09T21:08:20.413Z] uploadViaHttpTunnel: waiting for server health on localhost:35633
+[2026-10-09T21:08:20.413Z] waitForServerReady: attempt 1, checking http://localhost:35633/health
+[2026-10-09T21:08:20.454Z] waitForServerReady: server ready on port 35633 after 0 retries
+[2026-10-09T21:08:20.454Z] uploadViaHttpTunnel: sending POST with 214 bytes
+[2026-10-09T21:08:20.495Z] uploadViaHttpTunnel: upload complete (bytes=214, md5=98442a69972d4c00f5c28ee537af0c88)
+upload_project -> ok=true md5Verified=true
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+deploy_nginx -> ok=true port=8084 url=
+
+Waiting for connection 578348... (0s)
+Connection 578348 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mv1gixyb/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
+close_session -> ok
+[OK] 沙箱 connect 成功
+[OK] s3-connect/upload/deploy 链路
+[OK] 部署返回可访问 URL 或检查通过
+[OK] 会话正常关闭
+=====END D3-S3=====

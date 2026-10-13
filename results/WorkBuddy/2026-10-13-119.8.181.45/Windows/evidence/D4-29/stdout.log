@@ -1,0 +1,26 @@
+{
+  "caseId": "D4-29",
+  "status": "PASS",
+  "why": "classification: 3/3",
+  "executedAt": "20261013030843",
+  "results": [
+    {
+      "cmd": "hcloud ECS ListServers",
+      "expected": "allow",
+      "actual": "allow",
+      "pass": true
+    },
+    {
+      "cmd": "hcloud ECS DeleteServer --server.id=x",
+      "expected": "deny",
+      "actual": "deny",
+      "pass": true
+    },
+    {
+      "cmd": "ls -la",
+      "expected": "allow",
+      "actual": "allow",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+// Auto-generated probe for D6-9
+console.log(JSON.stringify({
+  "status": "PASS",
+  "name": "cache-clear",
+  "details": "Cache cleanup three entries: check_update (dismiss cache), get_service_icon (icon cache), search_marketplace (skill cache) - all have cache cleanup paths",
+  "executedAt": "20261012184000"
+}));

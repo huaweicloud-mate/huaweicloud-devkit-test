@@ -1,0 +1,115 @@
+{
+  "total": 12,
+  "passed": 10,
+  "failed": 2,
+  "results": [
+    {
+      "id": "D2-11",
+      "name": "runtime-set",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "runtime creds with token set",
+      "failMsg": "runtime creds not set"
+    },
+    {
+      "id": "D2-11",
+      "name": "token-not-persisted",
+      "pass": true,
+      "actual": "no token",
+      "expected": "no token",
+      "passMsg": "STS token not persisted",
+      "failMsg": "STS token leaked to file"
+    },
+    {
+      "id": "D2-11",
+      "name": "runtime-cleared",
+      "pass": true,
+      "actual": "false",
+      "expected": "false",
+      "passMsg": "runtime cleared",
+      "failMsg": "runtime not cleared"
+    },
+    {
+      "id": "D2-11",
+      "name": "auth-switch-tool",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "auth_switch tool registered",
+      "failMsg": "auth_switch not registered"
+    },
+    {
+      "id": "D2-11",
+      "name": "no-token-field",
+      "pass": true,
+      "actual": "clean",
+      "expected": "clean",
+      "passMsg": "no token in cred file",
+      "failMsg": "token in cred file"
+    },
+    {
+      "id": "D4-23",
+      "name": "rules-file-exists",
+      "pass": true,
+      "actual": ".mdc",
+      "expected": "mdc or md",
+      "passMsg": "rules file exists",
+      "failMsg": "rules file missing"
+    },
+    {
+      "id": "D4-23",
+      "name": "must-constraint",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "MUST constraint present",
+      "failMsg": "MUST constraint missing"
+    },
+    {
+      "id": "D4-23",
+      "name": "principles",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "principles present",
+      "failMsg": "principles missing"
+    },
+    {
+      "id": "D4-23",
+      "name": "secret-safety",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "secret safety section present",
+      "failMsg": "secret safety missing"
+    },
+    {
+      "id": "D4-23",
+      "name": "integration-targets",
+      "pass": true,
+      "actual": "atomcode,dsh,hermes,opencode,workbuddy",
+      "expected": "non-empty",
+      "passMsg": "5 targets: atomcode,dsh,hermes,opencode,workbuddy",
+      "failMsg": "no integration targets"
+    },
+    {
+      "id": "D4-23",
+      "name": "rules-injected-in-setup",
+      "pass": false,
+      "actual": "false",
+      "expected": "true",
+      "passMsg": "rules referenced in setup-cli",
+      "failMsg": "rules NOT referenced in setup-cli (SPEC-MISMATCH: no injection logic)"
+    },
+    {
+      "id": "D4-23",
+      "name": "installed-rules",
+      "pass": false,
+      "actual": "false/false",
+      "expected": "exists",
+      "passMsg": "rules installed in plugins dir",
+      "failMsg": "rules not installed in plugins dir"
+    }
+  ]
+}

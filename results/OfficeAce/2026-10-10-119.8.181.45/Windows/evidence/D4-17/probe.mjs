@@ -1,0 +1,1 @@
+// D4-17: hook returns deny for invalid/fuzzy input (fail-closed)

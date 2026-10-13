@@ -1,0 +1,32 @@
+{
+  "case": "D4-13",
+  "status": "PASS",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D4-13",
+      "name": "readonly-classify-allow",
+      "pass": true,
+      "actual": "allow",
+      "expected": "allow",
+      "passMsg": "classifyHcloudArgs readonly allowed",
+      "failMsg": "readonly denied"
+    },
+    {
+      "name": "readonly-list-allowed",
+      "pass": true,
+      "detail": "ListServersDetails 成功返回实例清单（只读子账号 test001 可执行只读操作）",
+      "executedAt": "20260928051500"
+    },
+    {
+      "name": "write-denied",
+      "pass": true,
+      "detail": "DeleteServers 被 IAM 拒绝（Ecs.0005，写操作未执行成功）",
+      "executedAt": "20260928051500"
+    }
+  ],
+  "source": "realcloud-readonly-execution+d4-security",
+  "executedAt": "20260928051500"
+}

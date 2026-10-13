@@ -18,7 +18,12 @@ const results = [];
 function log(name, pass, detail) { results.push({ name, pass, detail: String(detail).slice(0, 300) }); }
 async function call(name, args) { try { return await callTool(name, args); } catch (e) { return { __error: String(e).slice(0, 260) }; } }
 function idOf(json) { return /"id"\s*:\s*"([0-9a-fA-F-]{36})"/.exec(json || '')?.[1]; }
-function serverIdOf(json) { return /"serverIds"\s*:\s*\[\s*"([0-9a-fA-F-]{36})"/.exec(json || '')?.[1]; }
+function serverIdOf(json) {
+  const s = json || '';
+  const u = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
+  return new RegExp('"serverIds"\\s*:\\s*\\[\\s*"(' + u + ')"').exec(s)?.[1]
+    || new RegExp('"server"\\s*:\\s*\\{\\s*"id"\\s*:\\s*"(' + u + ')"').exec(s)?.[1];
+}
 function sh(cmd) {
   const r = spawnSync('hcloud', cmd, { encoding: 'utf8' });
   return { ok: r.status === 0, status: r.status, text: ((r.stdout || '') + (r.stderr || '')).trim() };
@@ -86,6 +91,19 @@ async function caseD3C1() {
     // 反序删除归零，逐步校验真实删除结果（只删本次创建，唯一时间戳名）
     const cleanup = [];
     let cleanupOk = true;
+    // 兜底：serverId 提取失败也按本轮命名前缀反查删除（根治 9-27/10-09 同前缀泄漏）
+    if (!serverId) {
+      const probe = sh(['ECS', 'ListServersDetails', `--cli-region=${REGION}`]);
+      const name = `testbot3-hermes-ecs-${TS}`;
+      const idx = probe.text.indexOf(name);
+      if (idx >= 0) {
+        const before = probe.text.slice(0, idx);
+        const idRe = /"id"\s*:\s*"([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})"/g;
+        let mm, last = null;
+        while ((mm = idRe.exec(before)) !== null) last = mm[1];
+        if (last) serverId = last;
+      }
+    }
     if (serverId) {
       const d = sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', `--cli-region=${REGION}`]);
       cleanup.push('ECS:' + (d.ok ? '提交删除' : 'FAIL:' + d.text.slice(0, 80)));

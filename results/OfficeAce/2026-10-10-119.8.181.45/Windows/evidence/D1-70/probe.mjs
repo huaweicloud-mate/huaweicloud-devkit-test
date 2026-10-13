@@ -1,0 +1,1 @@
+// D1-70: proxy config in mcp-server-remote.mjs

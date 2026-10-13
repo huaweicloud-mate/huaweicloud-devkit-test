@@ -1,0 +1,1 @@
+// D8-1: docs and capability consistent (search_docs returns SKILL.md)

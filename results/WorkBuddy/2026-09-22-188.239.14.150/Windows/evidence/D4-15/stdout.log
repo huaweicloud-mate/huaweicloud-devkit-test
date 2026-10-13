@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "why": "Tested bypass attempts: \"Deleteserver --server-ids 123\" (case variation without hcloud prefix) was allowed because it is not a valid hcloud command. \"hcloud ECS DeleteServers\" (correct format) was caught with warn. No bypass of actual hcloud commands succeeded. URL encoding/escape confusion does not bypass the regex matching.",
+  "executedAt": "20260921210815",
+  "tool": "huaweicloud_hook_check_command",
+  "bypassAttempts": [
+    "Deleteserver (no hcloud prefix) -> allow (not hcloud cmd)",
+    "hcloud ECS DeleteServers -> warn (caught)"
+  ]
+}

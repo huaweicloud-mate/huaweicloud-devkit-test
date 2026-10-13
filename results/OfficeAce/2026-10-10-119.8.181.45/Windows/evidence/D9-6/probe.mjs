@@ -1,0 +1,1 @@
+// D9-6: cross-client: agents config shows multiple clients

@@ -1,0 +1,1 @@
+// D4-4: plan_cli_command safeToRun=false for write ops

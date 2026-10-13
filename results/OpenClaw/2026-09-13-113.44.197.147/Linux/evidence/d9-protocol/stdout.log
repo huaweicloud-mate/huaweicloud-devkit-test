@@ -1,0 +1,18 @@
+
+=== D9 MCP 协议域探针结果 ===
+PASS  D9-5  initialize 返回 protocolVersion  => "2024-11-05" (expected "2024-11-05")
+PASS  D9-5  initialize 返回 capabilities  => "object" (expected "object")
+PASS  D9-5  serverInfo.name  => "huaweicloud-devkit" (expected "huaweicloud-devkit")
+PASS  D9-1  tools/list 返回数组  => true (expected true)
+PASS  D9-1  工具数量 = tools.mjs 注册源数量  => 39 (expected 39)
+PASS  D9-1  每个工具含 name + inputSchema  => 0 (expected 0)
+PASS  D9-3  tools/call 返回 content 数组  => true (expected true)
+PASS  D9-3  content[0].type=text  => "text" (expected "text")
+PASS  D9-3  isError=false  => false (expected false)
+PASS  D9-2  未知方法抛 Unsupported method  => "Unsupported method: nonexistent/method" (expected "Unsupported method: nonexistent/method")
+FAIL  D9-2  服务端区分 -32601 (Method not found)  => false (expected true)
+PASS  D9-2  服务端含 -32603  => true (expected true)
+SKIP  D9-9  结构探测 timeoutMs 描述存在 => true
+PASS  D9-9  存在带 timeoutMs 参数的工具  => true (expected true)
+
+TOTAL pass=12 fail=1

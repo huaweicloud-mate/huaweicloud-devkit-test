@@ -6,12 +6,23 @@
     python init_day.py OpenCode Windows 2026-09-12          # 指定日期，daily
     python init_day.py OpenCode Windows --full              # 母版全量（design 179 + expanded 137）
     python init_day.py OpenCode Windows --version v1.1.3    # 版本冻结快照
+    python init_day.py OpenCode Windows --mission <file|dir>  # 摄入 AI Test Manager 使命
+    python init_day.py OpenCode Windows --no-missions       # 跳过默认 missions/ 目录扫描
 
 模式（用例源）:
     daily（默认）      : test-cases/daily/ 精选子集（设计级 81 + 展开级 71）
     full               : test-cases/design/ + test-cases/expanded/ 母版全量（179 + 137）
     version <版本>     : test-cases/versions/<版本>/ 冻结快照（文件名带版本后缀）
     追踪表三种模式统一用 test-cases/tracing/（版本快照不含追踪表，用母版追踪表）。
+
+Mission 摄入（2026-10-10 起，AI Test Manager Layer 2 使命）:
+    默认扫描 test-cases/missions/*.yaml（机群 prepare_env --update 后即拉到最新使命），
+    或 --mission <file|dir> 显式指定。摄入逻辑（scripts/mission_ingest.py）：
+      1. 解析每条 mission（id/domain/priority/affectedCases/affectedTools）
+      2. 按本客户端相关性预筛（filter_mission_for，命中客户端专属工具时才定向）
+      3. 为每条使命生成「使命-<id>.csv」到执行包（含命中用例 + 执行态空列，与主 CSV 同列约定）
+      4. 同时在设计级/展开级 CSV 命中行打标 mission / missionPriority 两列
+    使命清单与主用例矩阵并行执行、走同一套回填/PASS 门禁/evidence 约定。
 
 展开级预筛（2026-09-15 起）: 复制展开级时按「本客户端 + 本 OS」过滤，只下发归本 agent 执行的行，
     不涉及本客户端的展开级不再下发（不再靠 agent 自己标 NOT_RUN）。设计级/追踪表保持全量下发。
@@ -24,11 +35,21 @@
 """
 import os, sys, datetime, socket, csv, re
 
+from mission_ingest import (
+    load_missions_dirs,
+    filter_mission_for,
+    merge_mission,
+    to_mission_csv,
+    MISSION_COL,
+    MISSION_PRIORITY_COL,
+)
+
 CLIENTS = ["OpenCode", "Codex", "CodeArtsAgent", "CodeArtsSpace", "WorkBuddy",
            "DSH", "OfficeAce", "Hermes", "OpenClaw", "AtomCode"]
 OSES = ["Windows", "Linux"]
 
 REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_MISSIONS_DIR = os.path.join(REPO, "test-cases", "missions")
 
 # 展开级「通用能力类」：所有客户端都跑（代表客户端 = 全体，服务/评测能力属通用验证）
 GENERAL_TYPES = ("D3-C4服务矩阵", "D10评测集")
@@ -81,13 +102,24 @@ def check_prereq():
 
 
 def parse_args(argv):
-    """从 sys.argv[3:] 解析 mode / version / date（三者可任意顺序）。返回 (mode, version, date)。"""
+    """从 sys.argv[3:] 解析 mode / version / date / mission（可任意顺序）。返回 (mode, version, date, missions, no_missions)。"""
     mode, version, date = "daily", None, None
+    missions = []
+    no_missions = False
     i = 0
     while i < len(argv):
         a = argv[i]
         if a == "--full":
             mode = "full"
+        elif a == "--mission":
+            if i + 1 < len(argv) and not argv[i + 1].startswith("--"):
+                missions.append(argv[i + 1])
+                i += 1
+            else:
+                print("【错误】--mission 需指定文件或目录")
+                sys.exit(2)
+        elif a == "--no-missions":
+            no_missions = True
         elif a == "--version":
             mode = "version"
             if i + 1 < len(argv) and not argv[i + 1].startswith("--"):
@@ -101,7 +133,7 @@ def parse_args(argv):
         sys.exit(2)
     if date is None:
         date = datetime.datetime.now().strftime("%Y-%m-%d")
-    return mode, version, date
+    return mode, version, date, missions, no_missions
 
 
 def build_copies(mode, version):
@@ -121,13 +153,62 @@ def build_copies(mode, version):
     return [design, expanded, tracing]
 
 
+def ingest_missions(client, os_name, dst, missions_src):
+    """摄入 AI Test Manager 使命：为每条使命生成「使命-<id>.csv」到执行包。
+
+    返回 (mission_count, skip_self, errors)。
+    - missions_src: 文件或目录列表（--mission 显式指定）或 [DEFAULT_MISSIONS_DIR]。
+    - 只生成本客户端相关的使命清单（filter_mission_for），并打印处理结果。
+    """
+    found, errs = load_missions_dirs(missions_src)
+    if errs:
+        for e in errs:
+            print("  [mission-err]", e)
+    skip = 0
+    written = 0
+    for m in found:
+        if not filter_mission_for(m, client):
+            skip += 1
+            continue
+        # 读本执行包已复制的设计级 CSV 作为用例行源（使命受影响行打标 + 清单）
+        design_csv = os.path.join(dst, "用例矩阵-设计级.csv")
+        rows = []
+        if os.path.isfile(design_csv):
+            with open(design_csv, encoding="utf-8-sig") as f:
+                rows = list(csv.DictReader(f))
+        # 打标（在复制出来的副本上重写，不影响母版）
+        if rows:
+            tagged = merge_mission(rows, m)
+            fields = list(rows[0].keys()) + ([MISSION_COL, MISSION_PRIORITY_COL] if MISSION_COL not in rows[0] else [])
+            with open(design_csv, "w", encoding="utf-8-sig", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=fields)
+                w.writeheader()
+                for r in tagged:
+                    w.writerow(r)
+        # 使命清单 CSV
+        headers, mrows = to_mission_csv(rows, m)
+        if mrows:
+            out = os.path.join(dst, f"使命-{m.get('id')}.csv")
+            with open(out, "w", encoding="utf-8-sig", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=headers)
+                w.writeheader()
+                for r in mrows:
+                    w.writerow(r)
+            written += 1
+            print(f"使命摄入: {out} (id={m.get('id')} priority={m.get('priority')} cases={len(mrows)})")
+        else:
+            print(f"使命 {m.get('id')}: 无 affectedCases 命中执行包用例矩阵，仅打标")
+    return written, skip, len(errs)
+
+
 def main():
     check_prereq()
     if len(sys.argv) < 3:
-        print("用法: python init_day.py <客户端> <OS> [日期] [--full | --version <版本>]")
+        print("用法: python init_day.py <客户端> <OS> [日期] [--full | --version <版本>] [--mission <file|dir>]")
         print("客户端:", ", ".join(CLIENTS))
         print("OS:", ", ".join(OSES))
         print("模式: 默认 daily 精选 | --full 母版全量 | --version <版本> 版本冻结快照")
+        print("使命: 默认扫描 test-cases/missions/ | --mission <file|dir> 显式指定 | --no-missions 跳过")
         sys.exit(2)
     client, os_name = sys.argv[1], sys.argv[2]
     if client not in CLIENTS:
@@ -136,7 +217,7 @@ def main():
     if os_name not in OSES:
         print(f"未知 OS '{os_name}'，可选: {', '.join(OSES)}")
         sys.exit(2)
-    mode, version, date = parse_args(sys.argv[3:])
+    mode, version, date, mission_srcs, no_missions = parse_args(sys.argv[3:])
     ip = get_machine_ip()
 
     dst = os.path.join(REPO, "results", client, f"{date}-{ip}", os_name)
@@ -173,6 +254,19 @@ def main():
 
     print("执行包:", dst)
     print(f"模式: {mode}" + (f"（版本 {version}）" if version else ""))
+
+    # Mission 摄入（AI Test Manager Layer 2 使命）
+    if no_missions:
+        print("[missions] 已通过 --no-missions 跳过")
+    else:
+        srcs = mission_srcs if mission_srcs else [DEFAULT_MISSIONS_DIR]
+        if not any(os.path.isfile(s) or os.path.isdir(s) for s in srcs):
+            print("[missions] 未发现使命目录/文件（test-cases/missions/ 或 --mission），跳过摄入")
+        else:
+            written, skip, nerr = ingest_missions(client, os_name, dst, srcs)
+            tail = f"，跳过非本客户端 {skip}，解析错误 {nerr}" if (skip or nerr) else ""
+            print(f"[missions] 摄入完成: {written} 条使命清单" + tail)
+
     print("下一步: 逐条执行 -> 回填「执行状态」+「执行时间」列 -> 出测试报告(<Agent>-<模型>-测试报告.md)")
 
 

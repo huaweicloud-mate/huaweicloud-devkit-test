@@ -1,0 +1,189 @@
+name: contract-unit-tests
+
+# 契约单测（Layer 2）：对 hdk 源码纯函数做 node:test 契约断言。
+# 本轮加入 huaweicloud-devkit-test 仓库第一个真正的「测试执行」CI（其余 workflow 均为汇总/门禁/分诊）。
+#
+# 触发：
+#   1. push / PR 改动 test/** 或 package.json 或本 workflow（硬门禁，FAIL 阻断）
+#   2. 每天 19:20 北京时间兜底跑一次（检测上游 huaweicloud/huaweicloud-devkit 变更是否破坏契约）
+#   3. 手动 workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'test/**'
+      - 'eval/**'
+      - 'scripts/**'
+      - 'test-manager/**'
+      - 'package.json'
+      - '.github/workflows/contract-unit-tests.yml'
+  pull_request:
+    paths:
+      - 'test/**'
+      - 'eval/**'
+      - 'scripts/**'
+      - 'test-manager/**'
+      - 'package.json'
+  schedule:
+    - cron: '20 11 * * *'    # UTC 11:20 = 北京时间 19:20
+
+permissions:
+  contents: read             # 只读测试仓 + 公开源码仓，不写回，无凭证
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: 运行契约单测
+        env:
+          HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
+        run: npm run test:unit
+
+  replay-trend:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    # 录制回放趋势监控（test-panorama-plan §6.2-6.4）：
+    # 当前 serviceCatalog 路由基线仅 ~7% 通过（已知缺陷态，见 run-eval 21.4% MISS 溯源）。
+    # 本 job 持续记录 each run 的 replay-*.csv 形成趋势，不阻断合并；修复后提升改硬门禁。
+    continue-on-error: true
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 运行录制回放
+        env:
+          HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
+        run: npm run test:replay
+
+      - name: 上传回放结果
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: replay-results
+          path: eval/replay/results/*.csv
+
+  d11-ux-fixtures:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    # UX 体验用例（D11）夹具：**需求验收**口径（闭环有效性 / 反断言 / 宿主隔离前置门）。
+    # 当前 hdk main 上 UX-R1（缺"去哪拿 AK/SK"步骤）、UX-R7（英文整句残留）等需求尚未实现，
+    # 夹具预期 NOT_IMPLEMENTED(exit 1) 属**已知缺口态** —— 与 replay-trend 同样先记趋势、不阻断合并；
+    # 需求实现到位后本 job 改为硬门禁（去掉 continue-on-error）。
+    # 宿主隔离由 run-ux.mjs 内置完成（空 HOME/USERPROFILE），CI 无需额外准备。
+    continue-on-error: true
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 运行 D11 体验夹具（内置宿主隔离）
+        env:
+          HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
+        run: npm run test:ux -- --evid ux-evidence
+
+      - name: 上传体验用例证据
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d11-ux-evidence
+          path: ux-evidence/**
+          if-no-files-found: ignore
+
+  test-manager:
+    runs-on: ubuntu-latest
+    # AI Test Manager 决策引擎（test-ai-orchestration-architecture.md §2.2）：
+    # 分析上游 hdk 源码仓相对上个 release tag 的变更模块，生成测试策略 + 使命清单，
+    # 上传供 Worker 消费。变更命中安全/凭证/协议模块时 risk=high（提示人工关注，不阻断）。
+    # 注：真正发布使命到机群由维护者 `publish-missions.mjs` 本地执行；本 job 仅产出参考策略。
+    continue-on-error: true
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit（完整历史取 tag）
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 生成测试策略（分析 hdk 相对上个 release tag 的变更）
+        run: |
+          cd hdk
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || true)
+          if [ -n "$LAST_TAG" ] && [ "$LAST_TAG" != "$(git rev-parse HEAD)" ]; then
+            RANGE="$LAST_TAG..HEAD"
+          else
+            RANGE="HEAD~10..HEAD"
+          fi
+          echo "diff range: $RANGE (baseline $LAST_TAG)"
+          node ../test-manager/run-plan.mjs --version "${LAST_TAG:-unversioned}" --diff "$RANGE" --out "${{ github.workspace }}/plan-out"
+
+      - name: 上传策略产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-plan
+          path: plan-out/
+
+  python-unit-tests:
+    runs-on: ubuntu-latest
+    # Python 侧契约单测（mission_ingest 等 scripts 模块；标准库 unittest 无第三方依赖）
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 运行 Python 契约单测
+        run: python -m unittest discover -s test/python -p 'test_*.py'

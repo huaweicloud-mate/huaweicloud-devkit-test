@@ -1,0 +1,1 @@
+// D3-C4: list_operations available for service enumeration

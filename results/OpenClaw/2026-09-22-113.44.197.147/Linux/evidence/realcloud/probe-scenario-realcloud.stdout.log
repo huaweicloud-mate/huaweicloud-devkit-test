@@ -1,0 +1,35 @@
+
+=== OpenClaw Linux 真云场景探针结果 (2026-09-20) ===
+NOTE   D3-S1 ECS 只读返回 ok=true 结构=ok,exitCode,signal,stdout,stderr,plan,retries,attempts
+PASS  D3-S1  只读查 ECS 成功(ok=true)  => true (expected true)
+PASS  D3-S1  NovaListServers 分类为 allow(只读不改)  => "allow" (expected "allow")
+PASS  D3-S2  真机创建最小 VPC 成功  => true (expected true)
+PASS  D3-S2  删除命令块分类非 allow(需确认)  => true (expected true)
+PASS  D3-S2  plan 提供 approvalToken(等待确认)  => true (expected true)
+PASS  D3-S2  确认后 run_approved 真删成功  => true (expected true)
+PASS  D3-S2  删除后 tctest-s2- 归零  => false (expected false)
+PASS  D3-C13  真机创建 OBS 桶  => true (expected true)
+PASS  D3-C13  set 缺 indexDocument 报错  => true (expected true)
+PASS  D3-C13  set website 返回 ok  => true (expected true)
+PASS  D3-C13  set 返回 websiteUrl  => true (expected true)
+PASS  D3-C13  get website 返回 indexDocument  => true (expected true)
+PASS  D3-C13  delete website 成功(status 204)  => true (expected true)
+NOTE   D3-C13 删桶: Start at 2026-09-21 21:58:17.120518309 +0000 UTC
+
+Delete bucket [tctest-obs-webs
+NOTE   D3-S4 status→claim→status: {"claimed":true,"message":"已领取","code":null} / claim={"claimed":true,"voucherId":null,"amount":0,"message":"已领取过","code":null} / {"claimed":true,"message":"已领取","code":null}
+PASS  D3-S4  voucher_status 返回 claimed 布尔  => true (expected true)
+PASS  D3-S4  claimed=true 后 claim 幂等(不抛错/返回已领取)  => true (expected true)
+PASS  D3-S6  真机创建 FunctionGraph 函数(URN)  => true (expected true)
+NOTE   D3-S6 create stdout: {
+  "func_id": "287b0175-11f5-489f-9166-66c0d4c1469a",
+  "func_urn": "urn:fss:cn-north-4:46c1fd48bd1248c7b75afc3780de713 fnUrn=true
+PASS  D3-S6  测后删除函数归零(ListFunctions 无残留)  => true (expected true)
+NOTE   D3-S6 delete stdout: {
+  "error_code": "FSS.1051",
+  "error_msg": "The function does not exist.",
+  "details": [
+    {
+  
+
+TOTAL pass=17 fail=0

@@ -1,0 +1,1 @@
+// D9-1: tools/list returns all MCP tools with schemas

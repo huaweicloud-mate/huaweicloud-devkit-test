@@ -1,0 +1,32 @@
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "why": "dangerous cmds blocked: 4/4",
+  "executedAt": "20261013030428",
+  "results": [
+    {
+      "cmd": "hcloud ECS DeleteServer --server.id=xxx",
+      "clsDecision": "deny",
+      "riskDecision": "warn",
+      "riskFindings": 1
+    },
+    {
+      "cmd": "cat ~/.hcloud/config.json",
+      "clsDecision": "deny",
+      "riskDecision": "deny",
+      "riskFindings": 1
+    },
+    {
+      "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+      "clsDecision": "deny",
+      "riskDecision": "deny",
+      "riskFindings": 1
+    },
+    {
+      "cmd": "hcloud KMS ShowSecret --secret_id=xxx",
+      "clsDecision": "deny",
+      "riskDecision": "deny",
+      "riskFindings": 1
+    }
+  ]
+}

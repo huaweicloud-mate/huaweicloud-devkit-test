@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "why": "ShowSecretVersion→deny(rule=hwc-command-secret-value-read)；DownloadSecret→deny",
+  "executedAt": "20260923093110",
+  "show": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-secret-value-read",
+        "title": "Plaintext secret read",
+        "category": "secret",
+        "severity": "deny",
+        "message": "The command appears to retrieve plaintext secret values.",
+        "remediation": "Use runtime secret references, user-side inspection, or redacted metadata checks instead of returning secret values to the agent.",
+        "source": "command",
+        "evidence": "hcloud DEW ShowSecretVersion --secret_name test"
+      }
+    ],
+    "nextStep": "Revise the command, artifact, or deployment plan before execution."
+  },
+  "download": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-secret-value-read",
+        "title": "Plaintext secret read",
+        "category": "secret",
+        "severity": "deny",
+        "message": "The command appears to retrieve plaintext secret values.",
+        "remediation": "Use runtime secret references, user-side inspection, or redacted metadata checks instead of returning secret values to the agent.",
+        "source": "command",
+        "evidence": "hcloud DEW DownloadSecret --secret_name test"
+      }
+    ],
+    "nextStep": "Revise the command, artifact, or deployment plan before execution."
+  }
+}

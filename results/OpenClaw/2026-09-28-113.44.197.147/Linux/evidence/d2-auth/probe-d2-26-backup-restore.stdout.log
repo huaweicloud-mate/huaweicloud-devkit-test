@@ -1,0 +1,12 @@
+
+=== D2-26 凭证备份与恢复探针结果 ===
+PASS  D2-26  backup 前置: 凭证库存在  => true (expected true)
+PASS  D2-26  backupGlobalCredentials 返回 .bak 路径  => true (expected true)
+PASS  D2-26  .bak 文件已生成  => true (expected true)
+PASS  D2-26  .bak 内容指纹 == 原始凭证指纹  => true (expected true)
+PASS  D2-26  篡改后凭证 != 原始  => true (expected true)
+PASS  D2-26  restoreGlobalCredentialsBackup 返回 true  => true (expected true)
+PASS  D2-26  恢复后凭证指纹 == 原始指纹  => true (expected true)
+PASS  D2-26  恢复后不再含被篡改值  => true (expected true)
+PASS  D2-26  无 .bak 时 restore 返回 false  => false (expected false)
+TOTAL pass=9 fail=0

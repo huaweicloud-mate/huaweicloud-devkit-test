@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """每日测试结果 → issue 分诊：测试侧完善（测试仓）+ 产品侧需求（产品仓）。
 
-确定性脚本（不依赖 LLM），由 GitHub Actions daily-issue-triage 每天 20:45（北京）定时跑，
-或维护者本机手动跑。
+确定性脚本（不依赖 LLM），由 GitHub Actions daily-issue-triage 触发：auto-summary 完成后 workflow_run 自动跑 + 每天 19:45（北京）schedule 兜底；或维护者本机手动跑。
 
 用法:
     python scripts/daily_issue_triage.py [--date 2026-09-21] [--dry-run | --live] [--repo both|test|product]
@@ -68,6 +67,42 @@ def _table_rows(md, anchor, skip_header_first_col="ID"):
 def read_file(path):
     with open(path, encoding="utf-8") as f:
         return f.read()
+
+
+def sut_version_from_clients(date):
+    """从各客户端当日《测试报告.md》的「被测版本（SUT）」多数投票，取不到返回空串。"""
+    votes = {}
+    results_dir = os.path.join(REPO_ROOT, "results")
+    if not os.path.isdir(results_dir):
+        return ""
+    for client in sorted(os.listdir(results_dir)):
+        if client in ("Summary", "Regression", "version", "history"):
+            continue
+        cdir = os.path.join(results_dir, client)
+        if not os.path.isdir(cdir):
+            continue
+        for sub in sorted(os.listdir(cdir)):
+            if not sub.startswith(date + "-"):
+                continue
+            for osn in ("Windows", "Linux"):
+                osdir = os.path.join(cdir, sub, osn)
+                if not os.path.isdir(osdir):
+                    continue
+                for fn in os.listdir(osdir):
+                    if not fn.endswith("测试报告.md"):
+                        continue
+                    try:
+                        text = read_file(os.path.join(osdir, fn))
+                    except OSError:
+                        continue
+                    line = re.search(r"被测版本（SUT）.*", text)
+                    if not line:
+                        continue
+                    vm = re.search(r"\d+\.\d+\.\d+(?:-[A-Za-z0-9.]+)?", line.group(0))
+                    if vm:
+                        votes[vm.group(0)] = votes.get(vm.group(0), 0) + 1
+    return max(votes, key=votes.get) if votes else ""
+
 
 
 # --------------------------------------------------------------------------- #
@@ -154,7 +189,7 @@ def test_infra_gaps(special_md):
 # C. 无单号跟踪的 FAIL/SPEC（真实待提单缺陷/需求）
 # --------------------------------------------------------------------------- #
 def untracked_failures(special_md):
-    rows = _table_rows(special_md, "### 无单号跟踪清单")
+    rows = _table_rows(special_md, "### 未标注单号清单") or _table_rows(special_md, "### 无单号跟踪清单")
     return [{"id": c[0], "title": c[1], "prio": c[2], "level": c[3], "status": c[4]} for c in rows if len(c) >= 5]
 
 
@@ -261,6 +296,8 @@ def main():
     m = re.search(r"被测版本[：:]\s*\*{0,2}([^*\s|]+)", special_md) or re.search(r"被测版本[：:]\s*\*{0,2}([^*\s|]+)", summary_md)
     if m:
         version = m.group(1)
+    if not version or "未指定" in version:
+        version = sut_version_from_clients(d)
 
     lines = []  # 报告
     lines.append(f"# 每日 issue 分诊待提单（预览）")

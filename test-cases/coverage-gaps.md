@@ -19,6 +19,11 @@
 | **G20** | `HUAWEICLOUD_AGENT_TOOLKIT_MODE` / `HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL` env | `setup-cli.mjs` | ✅ 已覆盖（D1-67，2026-09-17 新增） |
 | **G21** | `HUAWEICLOUD_ICONS_OFFLINE` / `HUAWEICLOUD_REGION` env | `icon-library.mjs / setup-cli.mjs` | ✅ 已覆盖（D1-68，2026-09-17 新增） |
 | **G22** | CLI `help` 子命令 | `setup-cli.mjs case "help"` | ✅ 已覆盖（D1-69，2026-09-17 新增） |
+| **G28** | `sandbox_expose_tunnel` 沙箱隧道暴露工具 | `tools.mjs:741 / sandbox/session-manager.mjs:1307 exposeTunnel` | ✅ 已覆盖（D1-71，2026-10-13 新增） |
+| **G29** | `competition_voucher_claim` 激励代金券领取工具 | `tools.mjs:861 / sandbox/hdkitservice-api.mjs:151 hdkitCompetitionVoucherClaim` | ✅ 已覆盖（D1-72，2026-10-13 新增） |
+| **G30** | `HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT` 跳过 OfficeAce 探测 env | `setup-cli.mjs:209 officeaceCapabilitiesDir` | ✅ 已覆盖（D1-73，2026-10-13 新增） |
+| **G31** | `HUAWEICLOUD_INJECT_STS_CMD` 控制 STS 命令注入 env | `hcloud-cli.mjs:307 resolveStsInjectArgs(300)` | ✅ 已覆盖（D1-74，2026-10-13 新增） |
+| **G32** | `HUAWEICLOUD_SKIP_HCLOUD_PREINSTALL` 跳过 KooCLI 预装 env | `preflight.mjs:87 maybePreinstallKooCli(85)/resolvePreinstallCliEntry(72); mcp-server.mjs:60` | ✅ 已覆盖（D1-75，2026-10-13 新增） |
 
 **已修正**：D1-36/45 指引来源 `mcp-protocol.decorateResult` → `mcp-protocol.dispatch(内部decorateResult)`、`mcp-server.updatePrewarm` → `mcp-server(内部updatePrewarm)`（均内部函数，非导出）。
 
@@ -133,3 +138,17 @@
 > 2026-09-19 二补复杂场景：D3-S7 跨服务交付（Web+RDS 编排+归零）、D3-S8 操作失败后排障指引（explain_error 确定性错误码分类），均为确定性链路、不依赖 LLM。
 
 > 设计原则：路由层锚定 `serviceCatalog(intent)` 确定性映射（tools.mjs:1776），工具层走源码级直调或真云 E2E，**不依赖 LLM**，可进 daily 实跑。设计级 197 → **205 条**，daily 设计级 92 → **100 条**。
+
+## Issue #25 补齐 hdk main 新增能力覆盖缺口（2026-10-13）
+
+上游 hdk main 新增 2 工具 + 3 环境变量，completeness-gate 规则 1/3/7 报红（工具缺口 2、env 缺口 3、覆盖率 59.6%<60%）。本次补 5 条 D1-7x 用例覆盖清零：
+
+| 缺口 | 能力 | 位置 | 新用例 | 维度 |
+|---|---|---|---|---|
+| G28 | `sandbox_expose_tunnel` 工具 | `tools.mjs:741 / session-manager.mjs:1307` | D1-71 | D3功能 |
+| G29 | `competition_voucher_claim` 工具 | `tools.mjs:861 / hdkitservice-api.mjs:151` | D1-72 | D3功能 |
+| G30 | `HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT` env | `setup-cli.mjs:209` | D1-73 | D1安装 |
+| G31 | `HUAWEICLOUD_INJECT_STS_CMD` env | `hcloud-cli.mjs:307` | D1-74 | D1安装 |
+| G32 | `HUAWEICLOUD_SKIP_HCLOUD_PREINSTALL` env | `preflight.mjs:87 / mcp-server.mjs:60` | D1-75 | D1安装 |
+
+> 2026-10-13 落地后设计级 205 → **212 条**。覆盖率 59.6% → 62.2%（+5 导出函数：exposeTunnel/hdkitCompetitionVoucherClaim/resolveStsInjectArgs/maybePreinstallKooCli/resolvePreinstallCliEntry）。门禁 verify_new.py + verify_test_completeness.py 双绿。

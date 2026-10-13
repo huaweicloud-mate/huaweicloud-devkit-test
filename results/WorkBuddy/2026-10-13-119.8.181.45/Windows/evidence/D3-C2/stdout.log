@@ -1,0 +1,24 @@
+{
+  "caseId": "D3-C2",
+  "status": "PASS",
+  "why": "OBS: ls allowed=true, mb denied=true, website tool=true; real creation=BLOCKED",
+  "executedAt": "20261013031206",
+  "lsResult": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "OBS read-only operation.",
+    "service": "OBS",
+    "operation": "ls",
+    "args": [
+      "OBS",
+      "ls"
+    ]
+  },
+  "mbResult": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "OBS write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "hasWebsiteTool": true,
+  "blockedReason": "Real OBS bucket creation requires cloud credentials. Missing: valid AK/SK with OBS create permission. Impact: cannot verify mb→upload→website config→URL lifecycle. Unblocked by: configuring cloud credentials."
+}

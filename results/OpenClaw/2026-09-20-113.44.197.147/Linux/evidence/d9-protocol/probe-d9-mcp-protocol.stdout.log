@@ -1,0 +1,19 @@
+
+=== D9 MCP 协议域探针结果（v1.1.5）===
+PASS  D9-5  initialize 返回 protocolVersion  => "2024-11-05" (expected "2024-11-05")
+PASS  D9-5  initialize 返回 capabilities  => "object" (expected "object")
+PASS  D9-5  serverInfo.name  => "huaweicloud-devkit" (expected "huaweicloud-devkit")
+PASS  D9-1  tools/list 返回数组  => true (expected true)
+PASS  D9-1  工具数量 = tools.mjs 注册源数量  => 40 (expected 40)
+PASS  D9-1  每个工具含 name + inputSchema  => 0 (expected 0)
+PASS  D9-3  tools/call 返回 content 数组  => true (expected true)
+PASS  D9-3  content[0].type=text  => "text" (expected "text")
+PASS  D9-3  isError=false  => false (expected false)
+PASS  D9-2  未知方法 dispatch 抛错且 code=-32601  => -32601 (expected -32601)
+PASS  D9-2  错误消息含 Method not found  => true (expected true)
+
+TOTAL pass=11 fail=0
+stdio unknown method => {"code":-32601,"msg":"Method not found: no/such/method"}
+stdio tools/list invalid-params => {"hasError":false,"code":null,"hasResult":true}
+
+NOTE  D9-2 -32602(invalid params) 残余 => 由 eval/harness/protocol-probe.mjs 判定（tools/list 传 string params 未返回 -32602）

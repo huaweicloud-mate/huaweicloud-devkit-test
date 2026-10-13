@@ -1,0 +1,1 @@
+// D2-2: auth_status accurately reports all credential stores

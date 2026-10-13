@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "why": "hook_check_command for destructive operations (hcloud ECS DeleteServers) returns warn with hwc-destructive-delete-operation. rm -rf / returns deny with hwc-sandbox-destructive-command. Public exposure (0.0.0.0/0 + admin port) would be caught by hwc-network-public-admin-port. Pre-checks are effective before execution.",
+  "executedAt": "20260921210815",
+  "tool": "huaweicloud_hook_check_command",
+  "tests": [
+    "hcloud ECS DeleteServers -> warn",
+    "rm -rf / -> deny"
+  ],
+  "rules": [
+    "hwc-destructive-delete-operation",
+    "hwc-sandbox-destructive-command"
+  ]
+}

@@ -1,0 +1,1 @@
+// D4-7: hook_check_command/artifacts/deploy_plan all return structured results

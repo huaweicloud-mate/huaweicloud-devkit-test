@@ -1,0 +1,8 @@
+=== D1-68 图标离线与区域环境变量 ===
+预期: ICONS_OFFLINE=1 走本地 manifest；HUAWEICLOUD_REGION 优先于 HW_REGION
+实测: 图标离线=OK; region 实测=cn-east-3 (HW_REGION 胜出, 用例预期 HUAWEICLOUD_REGION 优先)
+详情:
+ICONS_OFFLINE=1 → getServiceIcon('ecs') source=snapshot ok=true
+region 优先级源码: credentials.mjs:133 'HW_REGION || HUAWEICLOUD_REGION' (HW_REGION 优先)
+实测 resolveCredentials(HW_REGION=cn-east-3, HUAWEICLOUD_REGION=cn-north-4) → region=cn-east-3 (期望 per 用例 HUAWEICLOUD_REGION 优先，冲突)
+RESULT: SPEC-MISMATCH

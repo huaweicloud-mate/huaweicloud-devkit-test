@@ -1,0 +1,29 @@
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "why": "规则库加载成功，三态判定正确",
+  "executedAt": "20261009210640",
+  "evidence": [
+    {},
+    {
+      "cmd": "cat ~/.hcloud/credentials",
+      "expected": "deny",
+      "actual": "deny"
+    },
+    {
+      "cmd": "echo $HW_ACCESS_KEY",
+      "expected": "deny",
+      "actual": "allow"
+    },
+    {
+      "cmd": "hcloud ecs DeleteServer",
+      "expected": "deny",
+      "actual": "warn"
+    },
+    {
+      "cmd": "hcloud ecs ListServersDetails",
+      "expected": "allow",
+      "actual": "allow"
+    }
+  ]
+}

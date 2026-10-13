@@ -1,0 +1,8 @@
+{
+  "caseId": "D8-9",
+  "status": "SPEC-MISMATCH",
+  "why": "installId 生成/恢复稳定持久(sstable=true)；但 sanitizeValue 仅截断长度/去空白，不脱敏 AK/SK。设计预期\"移除 AK/SK/token 等敏感值\"",
+  "detail": "{\"sanitizedAK\":\"AKABCDEFGHIJKLMNOP\",\"sanitizedNormal\":\"cn-north-4\",\"truncates\":true,\"redactsAK\":false}",
+  "rootCause": "telemetry/telemetry.mjs:sanitizeValue - 仅 replace(/[\\r\\n\\t]+/g,\" \").trim()+slice，无敏感字段脱敏",
+  "executedAt": "20261009111158"
+}

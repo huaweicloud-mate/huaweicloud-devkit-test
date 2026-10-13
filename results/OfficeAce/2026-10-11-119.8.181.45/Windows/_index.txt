@@ -1,0 +1,144 @@
+### DESIGN LEVEL: 102 cases
+D1-3	P1	D1安装	doctor健康自检	GUIDE=P: README doctor 命令+自曝FAIL场景(权威契约)	TOOL=doctor
+D1-4	P2	D1安装	status/update幂等	GUIDE=P: README 'incremental...without touching your config'	TOOL=status/update
+D1-26	P1	D1安装	升级提醒工具注册与协议暴露	GUIDE=设: 设计文档 §MCP Tool 定义; 实: update-check.mjs	TOOL=check_update/upgrade
+D1-27	P1	D1安装	检测语义-已是最新	GUIDE=设: §版本比对规则; 实: judgeUpdate	TOOL=check_update
+D1-28	P1	D1安装	检测语义-有新版本	GUIDE=设: §检测机制; 实: judgeUpdate	TOOL=check_update
+D1-30	P2	D1安装	semver 比对正确性	GUIDE=实: update-check.mjs semverParse/Compare	TOOL=check_update
+D1-31	P1	D1安装	dismiss 冷却期	GUIDE=设: §冷却机制; 实: writeSkipState/judgeUpdate	TOOL=check_update
+D1-33	P2	D1安装	skip 文件持久化与多路径	GUIDE=实: skipFilePath/fallbackSkipFilePath/resolveSkipFilePath	TOOL=check_update
+D1-39	P0	D1安装	Windows 升级检测链可用性	GUIDE=实: queryDistTagsSync; 关联 #554	TOOL=check_update
+D1-40	P0	D1安装	镜像 lag 下检测正确性(反向提醒防护)	GUIDE=关联 #518/#566; 实: queryDistTags 默认 registry	TOOL=check_update
+D1-41	P1	D1安装	check_update 真实 MCP 返回契约	GUIDE=设: §MCP Tool 定义; 实: mcp-protocol/tools.mjs	TOOL=check_update
+D1-42	P1	D1安装	dismiss 真实闭环与跨调用持久化	GUIDE=设: §冷却机制; 实: handleCheckUpdate/resolveSkipFilePath	TOOL=check_update
+D1-45	P1	D1安装	兜底提示真实序列与预热竞态	GUIDE=设: §检测机制第二层; 实: mcp-protocol.dispatch(内部decorateResult)/mcp-server(内部updatePrewarm)	TOOL=check_update
+D1-65	P2	D1安装	调试模式环境变量	GUIDE=实: update-check.mjs(211)/telemetry.mjs(81) DEBUG 判断	TOOL=check_update
+D1-66	P2	D1安装	遥测开关与端点环境变量	GUIDE=实: telemetry.isTelemetryEnabled(175)/endpoint(180)/mcp-server(32)	TOOL=mcp-server
+D1-67	P2	D1安装	Agent toolkit 模式与 DSH 跳过安装环境变量	GUIDE=实: setup-cli.mjs(249/2193)/mcp-config-merge.mjs(95)	TOOL=install
+D1-68	P2	D1安装	图标离线与区域环境变量	GUIDE=实: icon-library.mjs(52)/credentials.mjs(133/261/284)	TOOL=get_service_icon/auth_init
+D1-69	P2	D1安装	CLI help 子命令	GUIDE=实: setup-cli.mjs case 'help'(5062)	TOOL=install
+D1-70	P1	D1安装	代理配置与 WebSocket 代理	GUIDE=实: proxy-config.getProxySettings(60)/writeProxyConfig(23)/clearProxyConfig(35); proxy-agent.createProxyWebSocket(52)/getWebSocketImpl(73)/getProxyDispatcher(26)	TOOL=install
+D2-10	P1	D2认证	R7 current档跟随	GUIDE=方: §五 R7; NR2-002	TOOL=auth_status
+D2-11	P0	D2认证	R3 STS token拒绝落盘	GUIDE=方: §五 R3; NR2-003	TOOL=auth_switch
+D2-12	P1	D2认证	R10 runtime非空禁止落盘	GUIDE=方: §五 R10; NR2-004	TOOL=huaweicloud_auth_init/auth_status/auth_sync
+D2-13	P1	D2认证	R9 configuredBySession优先env	GUIDE=方: §五 R9; NR2-005	TOOL=auth_status
+D2-16	P1	D2认证	import文件读取后擦除	GUIDE=方: auth_switch import 语义; NR2-008	TOOL=auth_switch
+D4-18	P0	D4安全	confirm-not-deny审批语义	GUIDE=仓: issue-443修复+fix/issue-443-confirm-not-deny分支+test/issue-443-fix.test.mjs	TOOL=plan_cli_command
+D4-19	P0	D4安全	确认流下预检仍生效	GUIDE=仓: fix/issue-443-preflight-b1b2分支(双修复)	TOOL=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-20	P1	D4安全	拒绝后零操作	GUIDE=通: 负向路径; 仓: confirm杜绝误执行意图	TOOL=run_approved_command
+D2-1	P1	D2认证	auth init三端同步	GUIDE=P: README 'Synchronizes AK/SK to KooCLI, OBS, and sandbox APIs in one step'	TOOL=huaweicloud_auth_init
+D2-2	P2	D2认证	auth status判定准确性	GUIDE=P: tools.mjs注册; 通: 组合枚举	TOOL=auth_status
+D2-4	P0	D2认证	凭证脱敏正确性	GUIDE=P: safety-model自动脱敏; nightly铁律3	TOOL=show_profile_redacted
+D2-5	P1	D2认证	凭证缺失报错指引	GUIDE=通: 负向路径; nightly铁律2 缺口即记录	TOOL=huaweicloud_auth_init/auth_status
+D2-26	P1	D2认证	凭证备份与恢复	GUIDE=实: credentials.backupGlobalCredentials(350)/restoreGlobalCredentialsBackup(363)	TOOL=huaweicloud_auth_sync
+D2-27	P2	D2认证	KooCLI 版本管理	GUIDE=实: koocli-version.getKooCliVersion(12)/parseHcloudVersion(21)/compareVersion(27)/kooCliDownloadBase(45)/KOO_CLI_BASE(8)	TOOL=auth_status
+D3-A1	P1	D3功能	skill检索完整性	GUIDE=P: 工具描述'complete skill content'; 源码SKILL.md清单	TOOL=retrieve_skill/search_docs
+D3-B1	P2	D3功能	list_operations规范名	GUIDE=P: capability-discovery规则5	TOOL=list_operations
+D3-B3	P1	D3功能	run_readonly脱敏执行	GUIDE=P: tools.mjs描述redact承诺	TOOL=run_readonly_command
+D3-B5	P2	D3功能	detect_framework识别	GUIDE=P: 工具描述枚举; 注:工具描述列11框架,源码FRAMEWORKS实为13框架+monorepo(漏Static Site) + 既有单测契约	TOOL=detect_framework
+D3-C4	P1	D3功能	服务创建类回归	GUIDE=P: 20+服务承诺; 标: Azure按service分域	TOOL=plan_cli_command/run_approved_command
+D3-C5	P1	D3功能	工具冒烟	GUIDE=P: nightly场景C原样复用	TOOL=check_cli/list_operations/plan_cli_command/explain_error
+D3-C13	P1	D3功能	OBS 静态网站托管配置	GUIDE=实: tools.handleObsWebsiteConfig(2303)/obsSignedRequest	TOOL=huaweicloud_obs_set_website_config
+D3-C14	P2	D3功能	沙箱 HDKit 服务参数与 hwlink 凭证	GUIDE=实: hdkitservice-api.hdkitConnect(90)/hdkitCredentials(101); hwlink-api.getCredentials(80)/createConnection(122)	TOOL=sandbox_connect/sandbox_credentials
+D3-S1	P1	D3功能	场景-只读查ECS(带不改约束)	GUIDE=实: tools.serviceCatalog(1776) routeMap ecs; run_readonly_command	TOOL=service_catalog/run_readonly_command
+D3-S2	P1	D3功能	场景-删VPC先确认	GUIDE=实: plan_cli_command/hook_check_command/run_approved_command; serviceCatalog vpc 路由	TOOL=plan_cli_command/hook_check_command/run_approved_command
+D3-S3	P1	D3功能	场景-沙箱预览出URL	GUIDE=实: sandbox 工具链; capability-discovery Scenario Routing 沙箱优先	TOOL=sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_close_session
+D3-S4	P1	D3功能	场景-领券闭环	GUIDE=实: tools hdkitVoucherStatus/hdkitVoucherClaim	TOOL=voucher_status/voucher_claim
+D3-S5	P2	D3功能	场景-复合意图分层路由	GUIDE=实: serviceCatalog routeMap + capability-discovery Scenario Routing	TOOL=service_catalog
+D3-S6	P2	D3功能	场景-FunctionGraph定时任务	GUIDE=实: serviceCatalog functiongraph 路由; hcloud-cli FunctionGraph CreateFunction	TOOL=plan_cli_command/run_approved_command
+D3-S7	P1	D3功能	场景-跨服务交付(Web应用+RDS)并归零	GUIDE=实: serviceCatalog 多路命中 + capability-discovery Scenario Routing; RDS/sandbox 工具链	TOOL=sandbox_connect/sandbox_deploy_nginx/plan_cli_command/run_approved_command
+D3-S8	P1	D3功能	场景-操作失败后排障指引	GUIDE=实: tools.explain_error(363)/extractApiError(559); huaweicloud-troubleshooting workflow	TOOL=explain_error/run_readonly_command
+D4-1	P0	D4安全	凭证文件读取拦截	GUIDE=P: safety-model Blocked#1	TOOL=hook_check_command
+D4-2	P0	D4安全	凭证env打印拦截	GUIDE=P: safety-model Blocked#2	TOOL=hook_check_command
+D4-3	P0	D4安全	明文secret API拦截	GUIDE=P: safety-model Blocked#3	TOOL=hook_check_command
+D4-4	P1	D4安全	写操作审批门	GUIDE=P: safety-model写动词清单(测试oracle)	TOOL=plan_cli_command
+D4-5	P0	D4安全	写操作误判检测	GUIDE=P: nightly铁律4; 标: AWS IAM condition防线穿透	TOOL=plan_cli_command
+D4-6	P1	D4安全	adminPass回显警告	GUIDE=P: safety-model#5	TOOL=hook_check_command
+D4-7	P1	D4安全	hook三工具有效性	GUIDE=P: safety-model Enforcement节	TOOL=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-8	P1	D4安全	Python/Node策略一致	GUIDE=P: architecture L5 aligned承诺	TOOL=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-9	P0	D4安全	公开暴露/破坏性预检	GUIDE=P: safety-model pre-execution checks	TOOL=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-10	P2	D4安全	规则库新增回归	GUIDE=通: 规则引擎回归标准实践	TOOL=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-11	P1	D4安全	提示注入防护	GUIDE=标: Microsoft MCP安全指南; 通: OWASP LLM Top1	TOOL=search_docs/retrieve_skill/search_marketplace/get_service_icon
+D4-12	P2	D4安全	供应链安装期安全	GUIDE=P: package.json有postinstall; 标: Azure质量门	TOOL=npm
+D4-13	P1	D4安全	最小权限凭证通过率	GUIDE=标: AWS condition key; 仓: 非目标声明实测	TOOL=run_readonly_command
+D4-14	P2	D4安全	操作可审计性	GUIDE=标: AWS CloudTrail审计区分	TOOL=run_readonly_command
+D4-15	P0	D4安全	hook绕过尝试	GUIDE=通: 对抗性测试; 仓: risk-rule-engine规则盲区	TOOL=hook_check_command
+D4-16	P0	D4安全	命令包裹穿透	GUIDE=标: AWS/Azure命令包装绕过用例	TOOL=hook_check_command
+D4-17	P1	D4安全	hook模糊fail-closed	GUIDE=通: 模糊测试+fail-closed	TOOL=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-21	P0	D4安全	hook_check_artifacts 具名回归（代码/IaC/策略制品预检）	GUIDE=hook 三工具盲区补齐（补自 G1）	TOOL=hook_check_artifacts
+D4-22	P0	D4安全	hook_check_deploy_plan 具名回归（部署计划预检）	GUIDE=hook 三工具盲区补齐（补自 G1）	TOOL=hook_check_deploy_plan
+D4-23	P0	D4安全	全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）	GUIDE=agent-rules 注入契约（补自 G6，关联 P1-2）	TOOL=install
+D4-24	P1	D4安全	确认令牌过期与重复确认边界（审批流健壮性）	GUIDE=通: 令牌过期/重放防护; 关联 D2-14; R11 补强: 精确响应JSON字段CONFIRM_TOKEN_EXPIRED/already_processed	TOOL=auth_confirm/plan_cli_command
+D4-25	P2	D4安全	Python hook 事件遥测分类	GUIDE=实: huaweicloud-safety.py record_cli_event(85)/HOOK_EVENTS_PATH	TOOL=hook_check_command
+D4-26	P2	D4安全	findings 证据脱敏	GUIDE=实: risk-rule-engine.redactEvidence(19)	TOOL=hook_check_command
+D4-27	P1	D4安全	双路径输出脱敏	GUIDE=实: safety-policy.redactSecrets(49)/hcloud-cli.redactOutput(587)	TOOL=run_readonly_command
+D4-28	P0	D4安全	Node 版安全 hook 链路	GUIDE=实: hooks/huaweicloud-safety.mjs commandText/deny; safety-policy.classifyTextCommand(384)	TOOL=hook_check_command
+D4-29	P2	D4安全	分类断言与原始命令分类入口	GUIDE=实: safety-policy.classifyRawCommand(=classifyTextCommand 384)/assertAllowed(451)	TOOL=hook_check_command
+D5-1	P1	D5客户端	清单发现加载	GUIDE=P: architecture L1可发现性承诺; 标: AWS first-class setup	TOOL=install
+D5-3	P1	D5客户端	工具全量枚举	GUIDE=标: Azure全MCP协议测试; 仓: tools.mjs基线	TOOL=mcp-server
+D6-1	P2	D6性能	检索响应延迟	GUIDE=通: 交互工具响应预算; 标: Azure延迟监控	TOOL=search_docs/retrieve_skill
+D6-3	P2	D6性能	MCP冷启时间	GUIDE=标: Agent会话冷启劣化体验	TOOL=mcp-server
+D6-4	P1	D6性能	并发调度正确性	GUIDE=P: hwlink-fair-queue/multiplexer源码事实; session-manager.test.mjs基线	TOOL=mcp-server
+D6-9	P2	D6性能	缓存清理三入口	GUIDE=实: update-check.invalidateUpdateCache(302)/icon-library.clearIconCache(16)/search-market.clearMarketCache(82)	TOOL=check_update/get_service_icon/search_marketplace
+D9-9	P1	D9协议	tools/call 超时协议语义与取消	GUIDE=规: JSON-RPC 2.0 错误语义; 标: MCP 客户端超时实践; R11 补强: 精确-32000+capabilities探测+2s取消窗口	TOOL=inspector
+D8-1	P2	D8质量	文档与能力一致	GUIDE=标: AWS文档漂移失效; 仓: 高频演进漂移风险	TOOL=search_docs
+D8-4	P1	D8质量	引导步骤可机械执行	GUIDE=仓: I类违规定义源头; nightly铁律2	TOOL=retrieve_skill
+D8-6	P2	D8质量	中英文文档一致	GUIDE=仓: 双README结构性风险; 中文区主要受众	TOOL=search_docs
+D8-7	P0	D8质量	7 个 meta/通用技能指引可机械执行验证	GUIDE=meta 技能指引可执行性（补自 G4）	TOOL=retrieve_skill/search_docs
+D8-9	P2	D8质量	安装 ID 与遥测值脱敏	GUIDE=实: telemetry.generateOrRecoverInstallId(150)/sanitizeValue(189)	TOOL=mcp-server
+D8-10	P2	D8质量	MCP 配置备份与合并	GUIDE=实: mcp-config-merge.mergeCommandStyle(36)/mergeArgsStyle(58)/mergeMcpServersFile(85)/extractUserDelta(98)/applyUserDelta(118); mcp-config-backup.takeAgentDelta(47)/saveAgentDelta(33)/purgeBackup(62)	TOOL=install
+D9-1	P1	D9协议	tools/list合规	GUIDE=规: MCP规范inputSchema; 标: Azure全协议测试	TOOL=inspector
+D9-2	P1	D9协议	JSON-RPC错误码	GUIDE=规: JSON-RPC 2.0标准	TOOL=inspector
+D9-3	P1	D9协议	tools/call响应格式	GUIDE=规: MCP规范content/isError	TOOL=inspector
+D9-4	P1	D9协议	协议生命周期	GUIDE=规: MCP initialize握手	TOOL=inspector
+D9-5	P1	D9协议	stdio传输健壮	GUIDE=规: stdio stdout纯协议; 仓: console误入stdout高发	TOOL=mcp-server
+D9-6	P1	D9协议	跨客户端互通	GUIDE=标: Azure真实客户端套件; 官方Inspector标准校验	TOOL=inspector
+D9-7	P2	D9协议	协议版本协商降级	GUIDE=规: protocolVersion协商	TOOL=mcp-server
+D9-8	P2	D9协议	inputSchema版本合规	GUIDE=规: MCP限定合法JSON Schema	TOOL=inspector
+D9-10	P1	D9协议	MCP remote transport（HTTP/WS 远程服务）	GUIDE=实: mcp-server-remote.startRemoteServer(11)/DEFAULT_PORT(8); mcp-server.mjs transport 分支(56)	TOOL=mcp-server
+D9-11	P1	D9协议	WebSocket 隧道通道生命周期	GUIDE=实: ws-exec/hwlink-tunnel-channel.HwlinkTunnelChannel	TOOL=mcp-server
+D9-12	P0	D9协议	initialize 握手协议安全基线	GUIDE=规: MCP initialize 握手规范; 实: mcp-protocol._decorateResult/_resetHintConsumption/_isHintConsumed; tools.mjs.callTool/runVersionCheck/listSkillDirs/findSkillsRoot	TOOL=inspector
+D9-13	P0	D9协议	tools/call 凭证不泄露与权限校验	GUIDE=规: MCP 安全基线（凭证不泄露）; 实: auth/credentials.setRuntimeCredentials/clearRuntimeCredentials/hasRuntimeCredentials/resolveCredentialsWithRuntime/readGlobalCredentials/writeGlobalCredentials/isPlaceholder/globalCredentialsPath/obsConfigPath/writeObsConfig; safety-policy.loadPolicy/classifyHcloudArgs; risk-rule-engine.evaluateArtifacts/evaluateDeployPlan/mergeRiskDecision; hcloud-cli.hashArgs/createApprovalToken/consumeApprovalToken/readServiceCatalogs/classifyUnsupported/planHcloudCommand	TOOL=inspector
+D10-3	P1	D10评测	路由准确率+混淆矩阵	GUIDE=标: Azure e2eTestPrompts; 混淆矩阵方法论	TOOL=harness
+D10-4	P0	D10评测	安全干预-静态规则层	GUIDE=实: risk-rule-engine.mjs; 仓: safety/rules/cloud-risk-rules.json	TOOL=harness
+
+### EXPANDED LEVEL: 39 cases
+EXP-D5-7-1	P1	D5客户端矩阵	OfficeAce	src=D5-1
+EXP-D5-7-3	P1	D5客户端矩阵	OfficeAce	src=D5-3
+EXP-C4-01	P1	D3-C4服务矩阵	ECS	src=D3-C4
+EXP-C4-02	P1	D3-C4服务矩阵	VPC	src=D3-C4
+EXP-C4-03	P1	D3-C4服务矩阵	OBS	src=D3-C4
+EXP-C4-04	P1	D3-C4服务矩阵	RDS	src=D3-C4
+EXP-C4-05	P1	D3-C4服务矩阵	GaussDB	src=D3-C4
+EXP-C4-06	P1	D3-C4服务矩阵	CCE	src=D3-C4
+EXP-C4-07	P1	D3-C4服务矩阵	FunctionGraph	src=D3-C4
+EXP-C4-08	P1	D3-C4服务矩阵	IAM	src=D3-C4
+EXP-C4-09	P1	D3-C4服务矩阵	CTS	src=D3-C4
+EXP-C4-10	P1	D3-C4服务矩阵	CES	src=D3-C4
+EXP-C4-11	P1	D3-C4服务矩阵	DDS	src=D3-C4
+EXP-C4-12	P1	D3-C4服务矩阵	DCS	src=D3-C4
+EXP-C4-13	P1	D3-C4服务矩阵	SMN	src=D3-C4
+EXP-C4-14	P1	D3-C4服务矩阵	DMS	src=D3-C4
+EXP-C4-15	P1	D3-C4服务矩阵	WAF	src=D3-C4
+EXP-C4-16	P1	D3-C4服务矩阵	CDN	src=D3-C4
+EXP-C4-17	P1	D3-C4服务矩阵	ModelArts	src=D3-C4
+EXP-C4-18	P1	D3-C4服务矩阵	DEW	src=D3-C4
+EXP-C4-19	P1	D3-C4服务矩阵	CBR	src=D3-C4
+EXP-C4-20	P1	D3-C4服务矩阵	EVS	src=D3-C4
+EXP-C4-21	P1	D3-C4服务矩阵	EIP	src=D3-C4
+EXP-C4-22	P1	D3-C4服务矩阵	ELB	src=D3-C4
+EXP-E01	P1	D10评测集	帮我查一下我账号在华北北京四有哪些云主机	src=D10-3
+EXP-E02	P1	D10评测集	创建一台 2C4G 的 Ubuntu 云服务器, 规格通用型	src=D10-3
+EXP-E03	P1	D10评测集	把本地 dist 目录部署成一个公网静态网站	src=D10-3
+EXP-E04	P1	D10评测集	给这台服务器绑定一个弹性公网IP	src=D10-3
+EXP-E05	P1	D10评测集	看一下我的云数据库MySQL实例的状态	src=D10-3
+EXP-E06	P1	D10评测集	创建一个 Redis 缓存实例用于会话存储	src=D10-3
+EXP-E07	P1	D10评测集	给生产环境的服务器配置一个每日备份策略	src=D10-3
+EXP-E08	P1	D10评测集	我的ECS启动失败了, 帮我分析原因	src=D10-3
+EXP-E09	P1	D10评测集	开设一个 Kubernetes 集群用于微服务部署	src=D10-3
+EXP-E10	P1	D10评测集	部署一个函数处理图片自动压缩	src=D10-3
+EXP-E11	P1	D10评测集	查一下我账号这个月的费用情况	src=D10-3
+EXP-E12	P1	D10评测集	把应用日志指标推送到云监控告警	src=D10-3
+EXP-E13	P1	D10评测集	申请HTTPS证书并配置到我的域名	src=D10-3
+EXP-E14	P1	D10评测集	我账号下的用户都有哪些权限, 帮我审计一下	src=D10-3
+EXP-E15	P1	D10评测集	帮我领一下华为云的代金券	src=D10-3

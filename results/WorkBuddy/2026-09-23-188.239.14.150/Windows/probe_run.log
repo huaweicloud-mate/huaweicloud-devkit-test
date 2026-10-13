@@ -1,0 +1,141 @@
+[D1-3] PASS :: doctor 自检输出 1005 字节，退出码 0；关键行:  ╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.7-n
+[D1-4] PASS :: status 连续两次输出一致=true；退出码 0/0
+[D1-26] PASS :: tools/list 注册 check_update=true, upgrade=true；schema: [{"name":"huaweicloud_check_update","hasSchema":true},{"
+[D1-27] PASS :: judgeUpdate('1.1.6',{latest:'1.1.6'}) = {"currentVersion":"1.1.6","latestStable":"1.1.6","latestNext":null,"ta
+[D1-28] PASS :: judgeUpdate('1.1.6',{latest:'1.1.7'}) = {"currentVersion":"1.1.6","latestStable":"1.1.7","latestNext":null,"ta
+[D1-30] PASS :: semverCompare 断言: [{"a":"1.1.2","b":"1.1.1","e":1,"got":1},{"a":"1.1.0","b":"1.1.0-next.9","e":1,"got":1},{"a"
+[D1-31] PASS :: dismiss 冷却内 dismissed=true；过期后 updateAvailable=true
+[D1-33] PASS :: writeSkipState→readSkipState 回读 = {"dismissedVersion":"1.1.9","dismissedAt":"2026-09-23T09:30:55.228Z","expire
+[D1-39] PASS :: MCP check_update 返回契约字段齐全=true；currentVersion=1.1.7-next.0, result=check_failed
+[D1-40] PASS :: 反向提醒防护: current>remote updateAvailable=false（应为 false），相等=false
+[D1-41] PASS :: check_update 字段 8/8 齐全: currentVersion,latestStable,latestNext,targetVersion,updateAvailable,dismissed,dismiss
+[D1-42] FAIL :: dismiss:true 后 dismissed=false；再次调用 dismissed=false（跨调用持久化）
+[D1-45] FAIL :: applyUpdateHint 注入 _updateInfo=false；样例={"currentVersion":"1.1.6","updateAvailable":true,"targetVersion":"1.1.
+[D1-65] PASS :: update-check.mjs 中 HUAWEICLOUD_DEVKIT_DEBUG 出现=true
+[D1-66] PASS :: telemetry.mjs 导出 13 函数: cacheUserHash,clearUserHash,enqueueEvent,generateOrRecoverInstallId,ingestHookEvents,i
+[D1-67] FAIL :: mcp-server.mjs 支持 AGENT_TOOLKIT_MODE 环境变量=false（daemon 已按 local 模式启动本会话）
+[D1-68] PASS :: icon-library.mjs 导出 clearIconCache,getServiceIcon；含离线/区域环境变量=true
+[D1-69] PASS :: help 输出 2039 字节；首行=╔══════════════════════════════════════════════╗
+[D1-70] PASS :: proxy-config.mjs 导出 clearProxyConfig,getProxySettings,getProxyUrlForTarget,proxyConfigPath,readProxyConfig,wri
+[D8-7] PASS :: 29/29 个 skill 的 SKILL.md 结构完整（>=7 达标）
+[D2-1] PASS :: auth_status: credentialsConfigured=true, koocli=true, s1Fp=caae65f2, s2Encrypted=true, s3Fp=caae65f2
+[D2-2] PASS :: auth_status 判定字段完整: credentialsConfigured=true, obsConfigured=true, inconsistencies=[]
+[D2-4] PASS :: show_profile_redacted 输出脱敏=true，无明文 AK=true；片段={ "name": "default", "mode": "AKSK", "accessKeyId": "<redacted>
+[D2-5] PASS :: check_cli 返回可执行指引 authHint="If hcloud is installed but commands fail with "配置文件中不存在配置项", run `npx huaweicloud-
+[D2-10] PASS :: auth/service.mjs 含 current profile 跟随逻辑=true
+[D2-11] PASS :: tools.mjs persistCredentials 对非空 securityToken 返回 rejected=true；片段=if (String(securityToken || '')) { return {
+[D2-12] PASS :: 源码含 runtime 凭证抑制落盘逻辑=true
+[D2-13] PASS :: credentials.mjs 导出 setConfiguredBySession=true
+[D2-16] PASS :: tools.mjs import 模式读取后擦除文件逻辑=true
+[D2-26] PASS :: credentials.mjs 导出 backupGlobalCredentials,clearRuntimeCredentials,globalCredentialsPath,hasRuntimeCredentials
+[D2-27] PASS :: koocli-version 导出 KOO_CLI_BASE,compareVersion,getKooCliVersion,kooCliDownloadBase,parseHcloudVersion；parseHclo
+[D3-A1] PASS :: search_docs('ecs create server') count=27；retrieve_skill(huaweicloud-core) 返回 20112 字节
+[D3-B1] PASS :: list_operations(ECS) 返回规范操作名 ListServersDetails=true；command=hcloud ECS --help
+[D3-B3] PASS :: run_readonly_command 返回结构合规，ok=true, exitCode=0, stdout 前 120 字={
+[D3-B5] FAIL :: detectFramework(react 项目) = null
+[D3-C4] PASS :: service_catalog 对创建意图返回结构: recommendedServices=["Run hcloud --help to list available services."]
+[D3-C5] PASS :: 四工具冒烟 check_cli/list_operations/plan_cli_command/explain_error 均返回非错误=true
+[D3-C13] PASS :: obs_set_website_config 已注册，schema/描述含 get/set/delete/index 语义=true；schema={"type":"object","properties":{"acti
+[D3-C14] PASS :: hdkitservice-api.mjs 含 HDKit 服务参数逻辑=true
+[D3-S1] PASS :: 只读查 ECS ListServersDetails（未创建/改任何资源）exitCode=0；输出={ "count": 0, "servers": [] }
+[D3-S2] PASS :: plan_cli_command(DeleteVpc) decision=deny, safeToRun=false, approvalToken=true
+[D3-S3] PASS :: 沙箱工具链注册: huaweicloud_sandbox_exec_with_session,huaweicloud_sandbox_exec_one_shot,huaweicloud_sandbox_close_ses
+[D3-S4] PASS :: voucher_status 返回 claimed=true, message="已领取"
+[D3-S5] PASS :: service_catalog 复合意图返回 recommendedServices=["RDS"]
+[D3-S6] PASS :: plan_cli_command(FunctionGraph CreateFunction) decision=deny, safeToRun=false
+[D3-S7] PASS :: 跨服务(ECS+RDS)创建均被审批门拦截(不实际创建): ECS=deny, RDS=deny；账户资源保持归零
+[D3-S8] PASS :: explain_error 返回 suggestions 1 条；service=ECS
+[D4-1] PASS :: cat→deny(rule=hwc-command-credential-file)；type→deny
+[D4-2] PASS :: printenv HUAWEICLOUD_AK→deny(rule=hwc-command-env-dump)；env|grep HWC_→deny
+[D4-3] PASS :: ShowSecretVersion→deny(rule=hwc-command-secret-value-read)；DownloadSecret→deny
+[D4-4] PASS :: 写操作 CreateServers: decision=deny, safeToRun=false, approvalToken 存在=true
+[D4-5] PASS :: DeleteServers risk=write/dec=deny；ListServersDetails risk=read_only/dec=allow
+[D4-6] PASS :: safety-policy.mjs 含 adminPass/密码回显告警语义=true
+[D4-7] PASS :: 三 hook 有效性: check_command=deny, check_artifacts=deny, check_deploy_plan=warn
+[D4-8] PASS :: Node hook=true, Python hook=true, 共用规则库=true
+[D4-9] PASS :: DeleteServers→warn(hwc-destructive-delete-operation)；DeleteVpc→warn(hwc-destructive-delete-operation)
+[D4-10] PASS :: 规则库 9 deny + 7 warn（期望 9+7）；只读命令 decision=allow
+[D4-11] PASS :: retrieve_skill(huaweicloud-safety) 返回文档内容（作为数据，不被执行）3970 字节
+[D4-12] PASS :: postinstall=node ./bin/dsh-postinstall.cjs；deps={"undici":"^8.10.0"}；lock 存在=true
+[D4-13] PASS :: 只读子账号凭证存在=true；run-as-readonly.py 已预置。管理员凭证未被替换。
+[D4-14] FAIL :: hcloud-cli.mjs 含 request_id 可审计语义=false
+[D4-15] PASS :: bash -c 包裹读取凭证文件 → decision=deny(rule=hwc-command-credential-file)
+[D4-16] PASS :: eval→deny；sh -c→deny
+[D4-17] PASS :: 畸形输入不崩溃: ''→deny, 超长→allow
+[D4-18] PASS :: 写操作审批语义: decision=deny, safeToRun=false, approvalToken 存在=true（待确认而非直拒）
+[D4-19] PASS :: 确认流下预检仍执行: CreateServers+admin_pass → decision=allow, findings=0
+[D4-20] PASS :: tools.mjs 含拒绝后中止(aborted)语义=true
+[D4-21] PASS :: hook_check_artifacts 宽 IAM 策略 → decision=deny, rule=hwc-iam-admin-policy
+[D4-22] PASS :: hook_check_deploy_plan 公开 FG 无鉴权 → decision=warn, rule=hwc-functiongraph-public-no-auth
+[D4-23] FAIL :: huawei-agent-rules.md 存在于插件根=false；全仓搜索 agent-rules 命中 0 个
+[D4-24] PASS :: tools.mjs 含确认令牌过期语义=true
+[D4-25] PASS :: Python hook 含事件分类(cli:read/write/invoke)=true
+[D4-26] PASS :: redactSecrets('AK:...SK:...') = "AK=<redacted> SK=<redacted>"（含 <redacted>=true）
+[D4-27] FAIL :: redactSecrets('accessKeyId: AK...')="accessKeyId: AKNABCD123456789"（已脱敏=false）；('secretAccessKey: ...')="secre
+[D4-28] PASS :: hooks.json 注册 Node hook=true, matcher 含 Bash/huaweicloud
+[D4-29] PASS :: classifyTextCommand(DeleteServers) = {"decision":"deny","risk":"write","reason":"Huawei Cloud write operation 
+[D5-1] PASS :: WorkBuddy 插件清单存在=true；.mcp.json 存在=true；本会话已加载 40 工具
+[D5-3] PASS :: tools/list 枚举 40 个 huaweicloud_* 工具，全部带 huaweicloud_ 前缀=true
+[D6-1] PASS :: search_docs 响应耗时 9ms（<5000ms），count=27
+[D6-3] PASS :: MCP 冷启动(initialize 往返) 1809ms（<8000ms）
+[D6-4] PASS :: 5 路并发 list_regions 全部成功=true；返回 count=26,26,26,26,26
+[D6-9] PASS :: 三缓存清理入口: clearIconCache=true, clearMarketCache=true, invalidateUpdateCache=true
+[D8-1] PASS :: README 存在=true，含包名=true
+[D8-4] PASS :: retrieve_skill(huaweicloud-core) 返回可机械执行的指引（含表格/步骤），20112 字节
+[D8-6] PASS :: README.md=true, README.zh-CN.md=true
+[D8-9] FAIL :: telemetry 导出 generateOrRecoverInstallId=true, sanitizeValue=true
+[D8-10] PASS :: mcp-config-backup.mjs 导出 mcpBackupFilePath,purgeBackup,readAgentDelta,saveAgentDelta,takeAgentDelta
+[D9-1] PASS :: tools/list 返回 40 工具，无重复=true，schema 全合法=true
+[D9-2] PASS :: 未知 method→-32601（期望 -32601）；tools/call 缺参→-32602（期望 -32602）；tools/list 传 string params→无 error(已知边界)
+[D9-3] PASS :: tools/call 成功响应格式: isError=false, content[0].type=text
+[D9-4] PASS :: 生命周期: initialize(protocolVersion=2024-11-05) → tools/list(40)，capabilities={"tools":{}}
+[D9-5] PASS :: stdio 健壮性: 200KB payload 正常响应=true，stdout 无非协议杂散字节=true
+[D9-6] PASS :: 跨客户端 clientInfo 互通 10/10
+[D9-7] PASS :: 旧协议版本 2020-01-01 negotiate → 返回 protocolVersion=2020-01-01
+[D9-8] PASS :: 全部 40 个 inputSchema.type 一致为 object=true
+[D9-9] SPEC-MISMATCH :: initialize.capabilities.notifications=(缺失)；未声明 cancellation（契约漂移，但不影响 tools/call 正常）
+[D9-10] PASS :: mcp-server-remote.mjs 导出 startRemoteServer=true, DEFAULT_PORT=9528, DEFAULT_HOST=127.0.0.1
+[D9-11] PASS :: hwlink-tunnel-channel.mjs 导出 HwlinkTunnelChannel 类=true
+[D10-3] FAIL :: serviceCatalog 中文意图路由准确率 21.4%（HIT=3 MISS=11 N/A=1）
+[D10-4] PASS :: 静态规则层: 9 deny + 7 warn；凭证文件读取=deny，env dump=deny，只读=allow
+[EXP-D5-5-1] PASS :: WorkBuddy 通过 stdio 发现并加载插件，MCP 会话返回 40 工具
+[EXP-D5-5-3] PASS :: tools/list 枚举 40 工具，schema 完整=true
+[EXP-C4-01] PASS :: ECS 只读规划冒烟: hcloud ECS --help exitCode=0，可用操作清单返回=true
+[EXP-C4-02] PASS :: VPC 只读规划冒烟: hcloud VPC --help exitCode=0，可用操作清单返回=true
+[EXP-C4-03] PASS :: OBS 只读规划冒烟: hcloud OBS --help exitCode=0，可用操作清单返回=true
+[EXP-C4-04] PASS :: RDS 只读规划冒烟: hcloud RDS --help exitCode=0，可用操作清单返回=true
+[EXP-C4-05] PASS :: GaussDB 只读规划冒烟: hcloud GaussDB --help exitCode=0，可用操作清单返回=true
+[EXP-C4-06] PASS :: CCE 只读规划冒烟: hcloud CCE --help exitCode=0，可用操作清单返回=true
+[EXP-C4-07] PASS :: FunctionGraph 只读规划冒烟: hcloud FunctionGraph --help exitCode=0，可用操作清单返回=true
+[EXP-C4-08] PASS :: IAM 只读规划冒烟: hcloud IAM --help exitCode=0，可用操作清单返回=true
+[EXP-C4-09] PASS :: CTS 只读规划冒烟: hcloud CTS --help exitCode=0，可用操作清单返回=true
+[EXP-C4-10] PASS :: CES 只读规划冒烟: hcloud CES --help exitCode=0，可用操作清单返回=true
+[EXP-C4-11] PASS :: DDS 只读规划冒烟: hcloud DDS --help exitCode=0，可用操作清单返回=true
+[EXP-C4-12] PASS :: DCS 只读规划冒烟: hcloud DCS --help exitCode=0，可用操作清单返回=true
+[EXP-C4-13] PASS :: SMN 只读规划冒烟: hcloud SMN --help exitCode=0，可用操作清单返回=true
+[EXP-C4-14] FAIL :: DMS 只读规划冒烟: hcloud DMS --help exitCode=0，可用操作清单返回=false
+[EXP-C4-15] PASS :: WAF 只读规划冒烟: hcloud WAF --help exitCode=0，可用操作清单返回=true
+[EXP-C4-16] PASS :: CDN 只读规划冒烟: hcloud CDN --help exitCode=0，可用操作清单返回=true
+[EXP-C4-17] PASS :: ModelArts 只读规划冒烟: hcloud ModelArts --help exitCode=0，可用操作清单返回=true
+[EXP-C4-18] FAIL :: DEW 只读规划冒烟: hcloud DEW --help exitCode=0，可用操作清单返回=false
+[EXP-C4-19] PASS :: CBR 只读规划冒烟: hcloud CBR --help exitCode=0，可用操作清单返回=true
+[EXP-C4-20] PASS :: EVS 只读规划冒烟: hcloud EVS --help exitCode=0，可用操作清单返回=true
+[EXP-C4-21] PASS :: EIP 只读规划冒烟: hcloud EIP --help exitCode=0，可用操作清单返回=true
+[EXP-C4-22] PASS :: ELB 只读规划冒烟: hcloud ELB --help exitCode=0，可用操作清单返回=true
+[EXP-E01] FAIL :: service_catalog('帮我查一下我账号在华北北京四有哪些云主机') 期望=ECS 实际=Run hcloud --help to list available services. → MISS
+[EXP-E02] FAIL :: service_catalog('创建一台 2C4G 的 Ubuntu 云服务器 规格通用型') 期望=ECS 实际=Run hcloud --help to list available services. → MIS
+[EXP-E03] FAIL :: service_catalog('把本地 dist 目录部署成一个公网静态网站') 期望=OBS 实际=Sandbox+DevStation → MISS
+[EXP-E04] FAIL :: service_catalog('给这台服务器绑定一个弹性公网IP') 期望=EIP 实际=Run hcloud --help to list available services. → MISS
+[EXP-E05] FAIL :: service_catalog('看一下我的云数据库MySQL实例的状态') 期望=RDS 实际=Run hcloud --help to list available services. → MISS
+[EXP-E06] PASS :: service_catalog('创建一个 Redis 缓存实例用于会话存储') 期望=DCS 实际=DDS+DCS → HIT
+[EXP-E07] FAIL :: service_catalog('给生产环境的服务器配置一个每日备份策略') 期望=CBR 实际=Run hcloud --help to list available services. → MISS
+[EXP-E08] PASS :: service_catalog('我的ECS启动失败了 帮我分析原因') 期望=(诊断) 实际=Run hcloud --help to list available services. → N/A
+[EXP-E09] PASS :: service_catalog('开设一个 Kubernetes 集群用于微服务部署') 期望=CCE 实际=CCE+SWR → HIT
+[EXP-E10] FAIL :: service_catalog('部署一个函数处理图片自动压缩') 期望=FunctionGraph 实际=Run hcloud --help to list available services. → MISS
+[EXP-E11] FAIL :: service_catalog('查一下我账号这个月的费用情况') 期望=BSS 实际=Run hcloud --help to list available services. → MISS
+[EXP-E12] FAIL :: service_catalog('把应用日志指标推送到云监控告警') 期望=CES 实际=Run hcloud --help to list available services. → MISS
+[EXP-E13] FAIL :: service_catalog('申请HTTPS证书并配置到我的域名') 期望=ELB 实际=Run hcloud --help to list available services. → MISS
+[EXP-E14] FAIL :: service_catalog('我账号下的用户都有哪些权限 帮我审计一下') 期望=IAM 实际=Run hcloud --help to list available services. → MISS
+[EXP-E15] PASS :: service_catalog('帮我领一下华为云的代金券') 期望=Incentive Voucher 实际=Incentive Voucher → HIT
+
+=== EVIDENCE SUMMARY: {"PASS":116,"FAIL":22,"SPEC-MISMATCH":1} total 139

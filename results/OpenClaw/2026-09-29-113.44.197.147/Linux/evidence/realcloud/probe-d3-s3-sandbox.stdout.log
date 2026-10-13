@@ -1,0 +1,52 @@
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[2026-09-28T21:25:10.197Z] uploadProject: /tmp/multica-task-3494652694/hdk-s3-iheYXu/site -> /workspace/site.tar.gz (archive=204 bytes, md5=1d271f032d1904a44986d9e11e59745f)
+[2026-09-28T21:25:10.246Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-3494652694/sandbox-upload-1790630710186/site.tar.gz, size=204, remotePath=/workspace/site.tar.gz)
+[2026-09-28T21:25:10.246Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-09-28T21:25:10.246Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-09-28T21:25:10.293Z] deployFileServer: writing script (2456 b64 chars)
+[2026-09-28T21:25:10.339Z] deployFileServer: starting server on port 8888
+[2026-09-28T21:25:10.375Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 18630\r\n\u001b]133;C\u0007\r\n"
+[2026-09-28T21:25:10.375Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[2026-09-28T21:25:11.259Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-09-28T21:25:11.261Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-09-28T21:25:11.262Z] uploadViaHttpTunnel: tunnel ready, localPort=43133
+[2026-09-28T21:25:11.263Z] uploadViaHttpTunnel: waiting for server health on localhost:43133
+[2026-09-28T21:25:11.263Z] waitForServerReady: attempt 1, checking http://localhost:43133/health
+[2026-09-28T21:25:11.300Z] waitForServerReady: server ready on port 43133 after 0 retries
+[2026-09-28T21:25:11.300Z] uploadViaHttpTunnel: sending POST with 204 bytes
+[2026-09-28T21:25:11.338Z] uploadViaHttpTunnel: upload complete (bytes=204, md5=1d271f032d1904a44986d9e11e59745f)
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+
+=== OpenClaw Linux D3-S3 沙箱预览出 URL 探针结果 (2026-09-20) ===
+PASS  D3-S3  serviceCatalog 部署意图命中 sandbox 技能  => true (expected true)
+PASS  D3-S3  sandbox 在 deploymentIntent 下置前  => true (expected true)
+PASS  D3-S3  check_user realname+agreement 就绪  => true (expected true)
+NOTE   D3-S3 connect: sessionId=true workspaceId=8d898bc423254635bbe12bb34d7f68c1 status=connected
+PASS  D3-S3  connect 返回 sessionId  => true (expected true)
+PASS  D3-S3  connect 返回可访问 connectionAddress(wss)  => true (expected true)
+NOTE   D3-S3 sandbox_credentials ok=undefined
+NOTE   D3-S3 upload_project ok=true md5Verified=true
+PASS  D3-S3  upload_project 上传成功  => true (expected true)
+NOTE   D3-S3 deploy_nginx => port=8083 ok=true
+PASS  D3-S3  deploy_nginx 执行成功  => true (expected true)
+NOTE   D3-S3 devbridge login: {"stdout":"\u001b]133;C\u0007  -v, --verbose   Enable debug logging\r\n\r\n\u001b]133;C\u0007\r\n","exitCode":0}
+NOTE   D3-S3 devbridge host: {"stdout":"\u001b]133;C\u0007[1] 18948\r\nnohup: ignoring input\r\nCreated tunnel: wh7hiqeq\r\nHosting port: \u001b[36m8083\u001b[0m\r\nTunnel URL: https://wh7hiqeq-8083.devbridge-s2.hwtunnel.com\r\nReady to accept connections\r\nAuto reconnect: enabled\r\n\u001b]133;C\u0007\r\n","exitCode":0}
+PASS  D3-S3  expose 返回公网 URL  => true (expected true)
+NOTE   D3-S3 GET https://wh7hiqeq-8083.devbridge-s2.hwtunnel.com => HTTP 200
+PASS  D3-S3  公网 URL 可访问(HTTP 200)  => 200 (expected 200)
+NOTE   D3-S3 close_session => "ok"
+PASS  D3-S3  会话可正常关闭  => true (expected true)
+
+TOTAL pass=10 fail=0

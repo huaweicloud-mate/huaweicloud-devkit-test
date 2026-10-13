@@ -1,0 +1,23 @@
+{
+  "caseId": "EXP-C4-03",
+  "status": "PASS",
+  "why": "OBS: read=allow/read_only, plan=true, create=deny",
+  "executedAt": "20261013030930",
+  "readResult": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "OBS read-only operation.",
+    "service": "OBS",
+    "operation": "ls",
+    "args": [
+      "OBS",
+      "ls"
+    ]
+  },
+  "createResult": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "OBS write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "hasPlan": true
+}

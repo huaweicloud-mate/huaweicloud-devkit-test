@@ -1,0 +1,1 @@
+// D4-11: prompt injection patterns in hook rules

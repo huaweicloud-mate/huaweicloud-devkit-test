@@ -1,0 +1,20 @@
+{
+  "status": "FAIL",
+  "why": "Windows 升级检测链: MCP check_update.result=check_failed（latestStable=null）；queryDistTagsSync()=null；parseDistTagsOutput(npm 数组输出)=null → 检测链不可用",
+  "executedAt": "20260923093452",
+  "mcpResult": {
+    "currentVersion": "1.1.7-next.0",
+    "latestStable": null,
+    "latestNext": null,
+    "targetVersion": null,
+    "updateAvailable": false,
+    "dismissed": false,
+    "dismissExpiresAt": null,
+    "result": "check_failed",
+    "note": "检测失败，不影响使用"
+  },
+  "queryDistTagsSync": null,
+  "parseArrayOutput": null,
+  "rootCause": "src/update-check.mjs:86 parseDistTagsOutput 对 npm view --json 返回的数组 [{}] 直接 return null（Array.isArray 分支），导致 distTags=null → judgeUpdate 返回 check_failed",
+  "npmRaw": "[{\"next\":\"1.1.7-next.0\",\"latest\":\"1.1.6\"}]"
+}

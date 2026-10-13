@@ -1,0 +1,372 @@
+[
+  {
+    "case": "D4-1",
+    "name": "cat credentials.json -> deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-1",
+    "name": "type credentials.json(win) -> deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-1",
+    "name": "Get-Content hcloud config -> deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-2",
+    "name": "env|grep HUAWEICLOUD -> deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-2",
+    "name": "printenv HWC_ACCESS_KEY -> deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-2",
+    "name": "env|grep HW_ACCESS_KEY -> deny",
+    "pass": false,
+    "actual": "allow",
+    "expected": "deny",
+    "note": "产品凭证 env 前缀 HW_ 未纳入 env-dump 拦截正则(safety-policy.mjs:333)"
+  },
+  {
+    "case": "D4-2",
+    "name": "echo $HW_SECRET_KEY -> deny",
+    "pass": false,
+    "actual": "allow",
+    "expected": "deny",
+    "note": "echo 打印产品凭证 env 未拦截"
+  },
+  {
+    "case": "D4-3",
+    "name": "showsecretversion -> deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-3",
+    "name": "getsecretvalue -> deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-4",
+    "name": "12 写动词无审批全 deny",
+    "pass": false,
+    "actual": "10/12",
+    "expected": "12/12",
+    "note": "drop:allow,grant:allow"
+  },
+  {
+    "case": "D4-5",
+    "name": "写命令无误判 allow",
+    "pass": true,
+    "actual": "0 误判",
+    "expected": "0 误判",
+    "note": ""
+  },
+  {
+    "case": "D4-5",
+    "name": "detail hcloud ecs delete-servers --server-ids 0",
+    "pass": null,
+    "actual": "deny",
+    "expected": "-",
+    "note": "risk=write reason=Huawei Cloud write operation blocked until the agent present"
+  },
+  {
+    "case": "D4-5",
+    "name": "detail hcloud vpc delete-vpcs/--vpc-id x",
+    "pass": null,
+    "actual": "deny",
+    "expected": "-",
+    "note": "risk=write reason=Huawei Cloud write operation blocked until the agent present"
+  },
+  {
+    "case": "D4-5",
+    "name": "detail hcloud iam create-user --name t",
+    "pass": null,
+    "actual": "deny",
+    "expected": "-",
+    "note": "risk=write reason=Huawei Cloud write operation blocked until the agent present"
+  },
+  {
+    "case": "D4-6",
+    "name": "adminPass 脱敏",
+    "pass": true,
+    "actual": "{\"adminPass\":\"<redacted>\",\"name\":\"ecs-1\",\"admin_pass\":\"<redacted>\"}",
+    "expected": "adminPass 不裸回显",
+    "note": ""
+  },
+  {
+    "case": "D4-7",
+    "name": "高危命令被拦",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-7",
+    "name": "高危制品被拦/警告",
+    "pass": true,
+    "actual": "deny/1",
+    "expected": "deny|warn",
+    "note": ""
+  },
+  {
+    "case": "D4-7",
+    "name": "高危部署计划被拦/警告",
+    "pass": true,
+    "actual": "warn/2",
+    "expected": "deny|warn",
+    "note": ""
+  },
+  {
+    "case": "D4-7",
+    "name": "观察: 制品含明文 admin_pass 无专门规则",
+    "pass": null,
+    "actual": "allow/findings=0",
+    "expected": "-",
+    "note": "规则库无 secret-in-artifact 规则(仅 evidence 脱敏), 记录观察"
+  },
+  {
+    "case": "D4-9",
+    "name": "观察: 无端口号的 0.0.0.0/0 计划不命中 admin-port 规则",
+    "pass": null,
+    "actual": "allow/findings=0",
+    "expected": "-",
+    "note": "hwc-network-public-admin-port 需同时含 0.0.0.0/0 与管理端口(设计行为)"
+  },
+  {
+    "case": "D4-9",
+    "name": "公网暴露计划有 findings",
+    "pass": true,
+    "actual": "1",
+    "expected": ">0",
+    "note": ""
+  },
+  {
+    "case": "D4-9",
+    "name": "破坏性命令被拦",
+    "pass": true,
+    "actual": "deny/findings=2",
+    "expected": "deny/findings>0",
+    "note": ""
+  },
+  {
+    "case": "D4-10",
+    "name": "加载规则库 OK + 正常只读不误杀",
+    "pass": true,
+    "actual": "rules=object / normal=allow",
+    "expected": "rules 载入 / allow",
+    "note": ""
+  },
+  {
+    "case": "D4-11",
+    "name": "注入指令不触发命令执行语义",
+    "pass": true,
+    "actual": "deny",
+    "expected": "-",
+    "note": "检索入参含注入文本时 classifyTextCommand 不把它当作待执行命令（工具返回内容为数据）"
+  },
+  {
+    "case": "D4-11",
+    "name": "注入内容作为命令时仍拦截凭证泄露",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-15",
+    "name": "base64 编码绕过",
+    "pass": null,
+    "actual": "deny",
+    "expected": "-",
+    "note": "risk=execution"
+  },
+  {
+    "case": "D4-15",
+    "name": "换行混淆",
+    "pass": null,
+    "actual": "deny",
+    "expected": "-",
+    "note": "risk=credential"
+  },
+  {
+    "case": "D4-16",
+    "name": "bash -c 包裹凭证读取 -> deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-16",
+    "name": "sh -c 包裹 env 打印 -> deny",
+    "pass": false,
+    "actual": "allow",
+    "expected": "deny",
+    "note": "wrapper 内层 env 打印未拦截"
+  },
+  {
+    "case": "D4-16",
+    "name": "cmd /c 包裹凭证读取 -> deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-17",
+    "name": "畸形输入 0 崩溃 0 放行",
+    "pass": true,
+    "actual": "crash=0 leak=0",
+    "expected": "crash=0 leak=0",
+    "note": ""
+  },
+  {
+    "case": "D4-17",
+    "name": "evaluateArtifacts 畸形入参不崩溃",
+    "pass": true,
+    "actual": "no-throw",
+    "expected": "no-throw",
+    "note": ""
+  },
+  {
+    "case": "D4-17",
+    "name": "evaluateDeployPlan 畸形入参不崩溃",
+    "pass": true,
+    "actual": "no-throw",
+    "expected": "no-throw",
+    "note": ""
+  },
+  {
+    "case": "D4-18",
+    "name": "写操作无审批 deny + 提示确认",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny+hint",
+    "note": ""
+  },
+  {
+    "case": "D4-18",
+    "name": "审批后 allow",
+    "pass": true,
+    "actual": "allow",
+    "expected": "allow",
+    "note": ""
+  },
+  {
+    "case": "D4-19",
+    "name": "审批后 secret API 仍 deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-20",
+    "name": "删除类无审批 deny",
+    "pass": true,
+    "actual": "deny",
+    "expected": "deny",
+    "note": ""
+  },
+  {
+    "case": "D4-21",
+    "name": "broad IAM 制品被拦",
+    "pass": true,
+    "actual": "deny/findings=1",
+    "expected": "findings>0",
+    "note": ""
+  },
+  {
+    "case": "D4-21",
+    "name": "代码制品高危命令检出",
+    "pass": null,
+    "actual": "allow/findings=0",
+    "expected": "-",
+    "note": ""
+  },
+  {
+    "case": "D4-21",
+    "name": "正常 IaC 不误杀",
+    "pass": true,
+    "actual": "allow",
+    "expected": "allow",
+    "note": ""
+  },
+  {
+    "case": "D4-22",
+    "name": "公网 FG 部署计划被拦/警告",
+    "pass": true,
+    "actual": "warn/findings=2",
+    "expected": "deny|warn",
+    "note": ""
+  },
+  {
+    "case": "D4-22",
+    "name": "正常部署计划不误杀(非deny)",
+    "pass": true,
+    "actual": "warn/[\"hwc-sandbox-missing-ttl\"]",
+    "expected": "非deny",
+    "note": "正常计划触发 hwc-sandbox-missing-ttl warn(噪声观察)"
+  },
+  {
+    "case": "D4-24",
+    "name": "confirmToken 过期/重复确认逻辑存在(源码, INFO)",
+    "pass": null,
+    "actual": "true/false",
+    "expected": "true/true",
+    "note": "真云+可注入时钟环境下再复测协议级行为"
+  },
+  {
+    "case": "D2-4",
+    "name": "ak/sk/token 脱敏",
+    "pass": true,
+    "actual": "{\"access_key\":\"<redacted>\",\"secret_key\":\"<redacted>\",\"security_token\":\"<redacted>\",\"project_id\":\"cn-north-4\",\"region\":\"c",
+    "expected": "敏感字段非原文",
+    "note": ""
+  },
+  {
+    "case": "D2-4",
+    "name": "非敏感字段保留",
+    "pass": true,
+    "actual": "cn-north-4/cn-north-4",
+    "expected": "cn-north-4/cn-north-4",
+    "note": ""
+  },
+  {
+    "case": "D2-4",
+    "name": "字符串脱敏",
+    "pass": true,
+    "actual": "access_key=<redacted> secret_key=<redacted>",
+    "expected": "不含原文密钥",
+    "note": ""
+  }
+]
+
+=== D4 安全核心: 33 PASS / 4 FAIL / 9 INFO / 46 TOTAL ===

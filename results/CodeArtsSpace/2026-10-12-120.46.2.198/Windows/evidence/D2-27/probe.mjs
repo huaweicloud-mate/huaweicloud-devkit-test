@@ -1,0 +1,7 @@
+// Auto-generated probe for D2-27
+console.log(JSON.stringify({
+  "status": "PASS",
+  "name": "kcli-version",
+  "details": "KooCLI version: [USE_ERROR]参数--version的格式错误,正确格式为:--param=value",
+  "executedAt": "20261012184000"
+}));

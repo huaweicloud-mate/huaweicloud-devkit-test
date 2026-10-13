@@ -7,9 +7,13 @@ name: daily-issue-triage
 #  仅验证过 push，未验证 issues:write；③ 尊重「全量测完统一合并一张单 + 先落盘根因」红线）。
 #
 # 触发：
-#   1. 每天 19:45 北京时间（schedule，兜底）
-#   2. 手动 workflow_dispatch（可即时出一版）
+#   1. auto-summary（专项分析）完成后即刻分诊（workflow_run，根治「待提单早于专项分析」时序错位）
+#   2. 每天 19:45 北京时间（schedule，兜底）
+#   3. 手动 workflow_dispatch（可即时出一版）
 on:
+  workflow_run:
+    workflows: [auto-summary]   # 专项分析(gen_special_report.py)落盘后立即重新分诊，保证读到当天最新「无单号清单」
+    types: [completed]
   workflow_dispatch:
   schedule:
     - cron: '45 11 * * *'    # UTC 11:45 = 北京时间 19:45

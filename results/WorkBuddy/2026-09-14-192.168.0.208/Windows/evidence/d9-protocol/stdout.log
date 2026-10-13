@@ -1,0 +1,196 @@
+[
+  {
+    "case": "D6-3",
+    "name": "冷启动(spawn→initialize 应答) < 10s",
+    "pass": true,
+    "actual": "1895ms",
+    "expected": "<10000ms",
+    "note": "{\"name\":\"huaweicloud-devkit\",\"version\":\"1.1.4-next.6\"}"
+  },
+  {
+    "case": "D9-4",
+    "name": "initialize 返回 protocolVersion/capabilities/serverInfo",
+    "pass": true,
+    "actual": "[\"protocolVersion\",\"capabilities\",\"serverInfo\"]",
+    "expected": "三字段齐",
+    "note": ""
+  },
+  {
+    "case": "D9-7",
+    "name": "协议版本协商(请求 2024-11-05)",
+    "pass": true,
+    "actual": "2024-11-05",
+    "expected": "字符串版本号",
+    "note": ""
+  },
+  {
+    "case": "D9-1",
+    "name": "tools/list 返回数组",
+    "pass": true,
+    "actual": "count=40",
+    "expected": "array",
+    "note": ""
+  },
+  {
+    "case": "D9-1",
+    "name": "每个工具 name+description+inputSchema",
+    "pass": true,
+    "actual": "bad=0",
+    "expected": "0",
+    "note": ""
+  },
+  {
+    "case": "D9-8",
+    "name": "inputSchema 全部 type=object+properties(+required数组)",
+    "pass": true,
+    "actual": "bad=0",
+    "expected": "0",
+    "note": ""
+  },
+  {
+    "case": "D1-26",
+    "name": "check_update/upgrade 均注册且 schema 完整",
+    "pass": true,
+    "actual": "check_update=true upgrade=true",
+    "expected": "均注册",
+    "note": ""
+  },
+  {
+    "case": "D5-3",
+    "name": "工具全量枚举",
+    "pass": true,
+    "actual": "count=40",
+    "expected": ">=39",
+    "note": "实际 40 个 vs 用例基线/白名单 39 口径"
+  },
+  {
+    "case": "D9-2",
+    "name": "未知方法 → -32601",
+    "pass": false,
+    "actual": "{\"code\":-32603,\"message\":\"Unsupported method: nonexistent/method\"}",
+    "expected": "-32601",
+    "note": "返回 -32603(方法不存在被当内部错误), mcp-server.mjs handleMessage catch 统一 -32603"
+  },
+  {
+    "case": "D9-3",
+    "name": "tools/call 返回 content 数组",
+    "pass": true,
+    "actual": "[\"content\",\"isError\"]",
+    "expected": "content[]",
+    "note": ""
+  },
+  {
+    "case": "D9-3",
+    "name": "isError 字段存在",
+    "pass": true,
+    "actual": "false",
+    "expected": "boolean",
+    "note": ""
+  },
+  {
+    "case": "D1-41",
+    "name": "check_update isError=false 且返回结构化 JSON",
+    "pass": true,
+    "actual": "isError=false",
+    "expected": "isError=false+JSON",
+    "note": ""
+  },
+  {
+    "case": "D1-41",
+    "name": "契约字段齐",
+    "pass": true,
+    "actual": "missing=无",
+    "expected": "无缺失",
+    "note": "result=check_failed cur=1.1.4-next.6 latest=null next=null"
+  },
+  {
+    "case": "D6-1",
+    "name": "retrieve_skill 延迟 < 10s",
+    "pass": true,
+    "actual": "45ms isError=false",
+    "expected": "<10000ms",
+    "note": ""
+  },
+  {
+    "case": "D6-4",
+    "name": "5 并发 tools/call 全部成功",
+    "pass": true,
+    "actual": "5/5",
+    "expected": "5/5",
+    "note": "false,false,false,false,false"
+  },
+  {
+    "case": "D10-4",
+    "name": "高危写操作经 plan 工具返回审批信息",
+    "pass": true,
+    "actual": "isError=false",
+    "expected": "计划+审批语义",
+    "note": "{\"executable\":\"hcloud\",\"args\":[\"ecs\",\"create-servers\",\"--name\",\"tctest-1\",\"--flavor\",\"c6s.large.2\",\"--image-id\",\"x\"],\"command\":\"hcloud ecs create-servers --name tctest-1 --flavor c6s.large.2 --image-id x\",\"executableBloc"
+  },
+  {
+    "case": "D10-4",
+    "name": "凭证读取类高危命令被拦截",
+    "pass": true,
+    "actual": "{   \"executable\": \"hcloud\",   \"args\": [     \"csms\",     \"showsecretversion\",     \"--secret-id\",     ",
+    "expected": "deny/blocked",
+    "note": ""
+  },
+  {
+    "case": "D1-42",
+    "name": "真实 registry 无更新可 dismiss(记录)",
+    "pass": null,
+    "actual": "result=check_failed",
+    "expected": "-",
+    "note": "当前 next.6 已是最新, 无 update_available 可触发 dismiss; 写读持久化由单测覆盖(update-check.test.mjs skip 会话隔离 PASS)"
+  },
+  {
+    "case": "D9-5",
+    "name": "initialize(新进程)成功",
+    "pass": true,
+    "actual": "ok",
+    "expected": "ok",
+    "note": ""
+  },
+  {
+    "case": "D9-5",
+    "name": "半帧续写后正确解析",
+    "pass": true,
+    "actual": "tools=40",
+    "expected": "tools[]",
+    "note": ""
+  },
+  {
+    "case": "D9-5",
+    "name": "50KB 大参数有响应不崩溃",
+    "pass": true,
+    "actual": "result",
+    "expected": "有响应",
+    "note": ""
+  },
+  {
+    "case": "D9-5",
+    "name": "垃圾块后服务仍存活",
+    "pass": true,
+    "actual": "alive",
+    "expected": "alive",
+    "note": ""
+  },
+  {
+    "case": "D9-9",
+    "name": "观察: 超时取消语义",
+    "pass": null,
+    "actual": "-",
+    "expected": "-",
+    "note": "tools/call 超时/取消需可控慢端点注入, 本环境无注入通道; 本轮全部调用 60s 内正常返回"
+  },
+  {
+    "case": "D9-2",
+    "name": "非法 JSON → -32700 且服务存活",
+    "pass": false,
+    "actual": "SERVER_CRASHED exit=1, stderr=<anonymous_script>:1\r | Content-Length: 146\r",
+    "expected": "-32700+存活",
+    "note": "mcp-server.mjs:152 parseContentLengthFrame JSON.parse 未捕获 → 进程崩溃, 未按 JSON-RPC 规范返回 -32700"
+  }
+]
+
+=== D9 协议+D1/D6/D10: 20 PASS / 2 FAIL / 2 INFO / 24 TOTAL ===

@@ -1,0 +1,1 @@
+// D4-27: dual path output uses redactEvidence function

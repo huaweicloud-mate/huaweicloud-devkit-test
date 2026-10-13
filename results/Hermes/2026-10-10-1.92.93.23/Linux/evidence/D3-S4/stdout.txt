@@ -1,0 +1,6 @@
+=== D3-S4 场景-领券闭环 ===
+[1] voucher_status -> {"claimed":true,"message":"已领取","code":null}
+[2] voucher_claim (已领取, 幂等复核) -> {"claimed":true,"voucherId":null,"amount":0,"message":"已领取过","code":null}
+[3] voucher_status (复核) -> {"claimed":true,"message":"已领取","code":null}
+
+RESULT: PASS (status->claim->status 闭环, 最终 claimed=true)

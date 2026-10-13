@@ -1,0 +1,54 @@
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[2026-09-23T21:41:15.195Z] uploadProject: /tmp/multica-task-305715405/hdk-s3-s4WnZ4/site -> /workspace/site.tar.gz (archive=205 bytes, md5=3e1cf88fadbccbd56dd20ac9b4fd95f6)
+[2026-09-23T21:41:15.241Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-305715405/sandbox-upload-1790199675184/site.tar.gz, size=205, remotePath=/workspace/site.tar.gz)
+[2026-09-23T21:41:15.242Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-09-23T21:41:15.242Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-09-23T21:41:15.288Z] deployFileServer: writing script (2456 b64 chars)
+[2026-09-23T21:41:15.333Z] deployFileServer: starting server on port 8888
+[2026-09-23T21:41:15.367Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 12890\r\n\u001b]133;C\u0007\r\n"
+[2026-09-23T21:41:15.367Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[2026-09-23T21:41:16.243Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-09-23T21:41:16.244Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-09-23T21:41:16.246Z] uploadViaHttpTunnel: tunnel ready, localPort=37055
+[2026-09-23T21:41:16.246Z] uploadViaHttpTunnel: waiting for server health on localhost:37055
+[2026-09-23T21:41:16.246Z] waitForServerReady: attempt 1, checking http://localhost:37055/health
+[2026-09-23T21:41:16.282Z] waitForServerReady: server ready on port 37055 after 0 retries
+[2026-09-23T21:41:16.282Z] uploadViaHttpTunnel: sending POST with 205 bytes
+[2026-09-23T21:41:16.318Z] uploadViaHttpTunnel: upload complete (bytes=205, md5=3e1cf88fadbccbd56dd20ac9b4fd95f6)
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+
+=== OpenClaw Linux D3-S3 沙箱预览出 URL 探针结果 (2026-09-20) ===
+PASS  D3-S3  serviceCatalog 部署意图命中 sandbox 技能  => true (expected true)
+PASS  D3-S3  sandbox 在 deploymentIntent 下置前  => true (expected true)
+PASS  D3-S3  check_user realname+agreement 就绪  => true (expected true)
+NOTE   D3-S3 connect: sessionId=true workspaceId=8d898bc423254635bbe12bb34d7f68c1 status=connected
+PASS  D3-S3  connect 返回 sessionId  => true (expected true)
+PASS  D3-S3  connect 返回可访问 connectionAddress(wss)  => true (expected true)
+NOTE   D3-S3 sandbox_credentials ok=undefined
+NOTE   D3-S3 upload_project ok=true md5Verified=true
+PASS  D3-S3  upload_project 上传成功  => true (expected true)
+NOTE   D3-S3 deploy_nginx => port=8087 ok=true
+PASS  D3-S3  deploy_nginx 执行成功  => true (expected true)
+NOTE   D3-S3 devbridge login: {"stdout":"\u001b]133;C\u0007Login successful\r\n\u001b]133;C\u0007\r\n","exitCode":0}
+NOTE   D3-S3 devbridge host: {"stdout":"\u001b]133;C\u0007[1] 13318\r\nnohup: ignoring input\r\nCreated tunnel: au7z2g3l\r\nConnection failed, retrying...\r\nConnection lost, reconnecting...\r\nConnection failed, retrying...\r\n\u001b]133;C\u0007\r\n","exitCode":0}
+FAIL  D3-S3  expose 返回公网 URL  => false (expected true)
+NOTE   D3-S3 close_session => "ok"
+PASS  D3-S3  会话可正常关闭  => true (expected true)
+
+TOTAL pass=8 fail=1

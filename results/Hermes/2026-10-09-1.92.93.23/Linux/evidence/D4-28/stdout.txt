@@ -1,0 +1,40 @@
+=== D4-28 Node 版安全 hook 链路 (P0) ===
+hooks.json 注册 Node hook:
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*huaweicloud.*|huaweicloud_.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+
+--- 输入 1: echo 凭证 (预期 deny) ---
+{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked."}}
+--- 输入 2: 高危写命令 (预期 deny) ---
+{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}}
+--- 输入 3: 读取凭证文件 (预期 deny) ---
+{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."}}
+--- 输入 4: 普通只读命令 (预期 allow / 无 deny 输出) ---
+--- 输入 5: 经 cmd 键提取 (预期 deny) ---
+{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}}
+
+=== 判定: hooks.json 走 node huaweicloud-safety.mjs; command/cmd/script/args 提取; 高危 deny 输出 hookSpecificOutput.permissionDecision=deny ===

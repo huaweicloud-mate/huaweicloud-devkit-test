@@ -1,0 +1,61 @@
+[OK] huaweicloud_sandbox_check_user
+[OK] huaweicloud_sandbox_sign_agreement
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[connect] connected 8d898bc423254635bbe12bb34d7f68c1
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[OK] huaweicloud_sandbox_credentials
+[ERR] huaweicloud_sandbox_upload_file local_path and remote_path are required.
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[OK] huaweicloud_sandbox_exec_one_shot
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[OK] huaweicloud_sandbox_deploy_check
+[OK] huaweicloud_sandbox_close_session
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C6",
+  "total": 7,
+  "results": [
+    {
+      "n": "huaweicloud_sandbox_check_user",
+      "ok": true,
+      "out": "{\n  \"realnameVerified\": true,\n  \"agreementSigned\": true\n}"
+    },
+    {
+      "n": "huaweicloud_sandbox_sign_agreement",
+      "ok": true,
+      "out": "{\n  \"signed\": true,\n  \"signedCount\": 0\n}"
+    },
+    {
+      "n": "huaweicloud_sandbox_credentials",
+      "ok": true,
+      "out": "{\n  \"sessionId\": \"8d898bc423254635bbe12bb34d7f68c1\",\n  \"expiresAt\": \"2026-10-13T21:26:42.391000Z\",\n  \"credentialValidation\": \"passed\",\n  \"apiKeyInjected\": false,\n  \"apiKeyHint\": \"No DevBridge API Key provided locally — that is fine on recent sandbox images (hd-space-ai-shell line): the platform auto-injects the key into the sandbox keyring (HW_DEVBRIDGE_API_KEY via hwcloud) and the expose-time auth waterfall picks it up with zero user action. Only older sandboxes (created before the injection existed, image not upgradeable in place) need the one-time manual fallback: create an API Key at https://devstation.connect.huaweicloud.com/space/devbridge/apikey, set the local HW_API_KEY environment variable (preferred — keeps the key out of the conversation), and re-run this tool to inject it as /tmp/hw_api_key.\",\n  \"projectId\": \"46c1fd48bd1248c7b75afc3780de7132\"\n}"
+    },
+    {
+      "n": "huaweicloud_sandbox_upload_file",
+      "ok": false,
+      "err": "local_path and remote_path are required."
+    },
+    {
+      "n": "huaweicloud_sandbox_exec_one_shot",
+      "ok": true,
+      "out": "{\n  \"stdout\": \"\\u001b]133;C\\u0007smoke-test-ok\\r\\n\\u001b]133;C\\u0007\\r\\n\",\n  \"exitCode\": 0\n}"
+    },
+    {
+      "n": "huaweicloud_sandbox_deploy_check",
+      "ok": true,
+      "out": "{\n  \"ok\": true,\n  \"complete\": false,\n  \"checkType\": \"standard\",\n  \"checks\": {\n    \"nginx_serving\": {\n      \"status\": \"PASS\",\n      \"detail\": \"(port 8080, HTTP 200)\"\n    },\n    \"output_dir\": {\n      \"status\": \"FAIL\",\n      \"detail\": \"(/tmp/smoke empty or missing)\"\n    },\n    \"content_verified\": {\n      \"status\": \"SKIP\",\n      \"detail\": \"(no fingerprint file)\"\n    },\n    \"devbridge_tunnel\": {\n      \"status\": \"FAIL\",\n      \"detail\": \"\"\n    },\n    \"tunnel_url_accessible\": {\n      \"status\": \"FAIL\",\n      \"detail\": \"(no tunnel)\"\n    },\n    \"qr_code\": {\n      \"status\": \"SKIP\",\n      \"detail\": \"(not a cross-platform project)\"\n    }\n  },\n  \"score\": {\n    \"pass\": 1,\n    \"total\": 4\n  },\n  \"missingSteps\": \"output_dir, devbridge_tunnel, tunnel_url_accessible\",\n  \"nextStep\": \"expose_via_devbridge\",\n  \"remediation\": \"In the sandbox: source /tmp/hw_creds.sh; source /tmp/hw_api_key 2>/dev/null; devbridge delete-all; devbridge create <name>; devbridge port create <tunnelId> -p 8080 --protocol http -a; nohup devbridge host <tunnelId> -p 8080 > /tmp/host.log 2>&1 & If deploy_nginx reported a different (auto-incremented) port in its \\\"port\\\" field, use THAT port instead of the one shown here. Full procedure in huawei-sandbox skill, Step 7 (Expose via DevBridge).\"\n}"
+    },
+    {
+      "n": "huaweicloud_sandbox_close_session",
+      "ok": true,
+      "out": "\"ok\""
+    }
+  ]
+}
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+  upload progress: batch 1/1
+[OK] upload_file {"ok":true,"localPath":"/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/huaweicloud-devkit-test/results/CodeArtsAgent/2026-10-13-1.94.193.150/Linux/evidence/D3-C6/smoke-local.txt","remotePath":"/tmp/smoke-uploaded.txt","bytes":19,"chunks":1,"md5":"e7e99cab3aa80153fd931c668868ee10","md5Verified":true}

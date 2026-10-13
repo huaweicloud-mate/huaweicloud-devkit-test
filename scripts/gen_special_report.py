@@ -288,29 +288,30 @@ def _render_unlinked(rows, issues):
                                  t[0].get("层级", ""), t[0].get("ID", "")))
     n_linked = fail_spec - len(unlinked)
 
-    lines = ["## 二、无单号跟踪的失败问题（FAIL / SPEC-MISMATCH）", ""]
+    lines = ["## 二、客户端未标注单号的失败问题（FAIL / SPEC-MISMATCH，待查重）", ""]
     lines.append("> 判定口径：FAIL / SPEC-MISMATCH 用例中，在当日各客户端 **HISTORY_LINKS.md** 与 **FINDINGS.md** "
-                 "里均找不到任何 GitHub issue 单号（`#数字`）关联的，列为「无单号跟踪」。展开级用例回退到其 `源用例` 判定。")
+                 "里均找不到任何 GitHub issue 单号（`#数字`）关联的，列为「客户端未标注单号」。⚠️ 「未标注单号」≠「无历史问题」——仅表示客户端本地漏写单号，不代表上游无历史单（多数命中历史单，由待提单分诊自动查重）。展开级用例回退到其 `源用例` 判定。")
     lines.append("")
     lines.append(f"- FAIL + SPEC-MISMATCH 用例总数：**{fail_spec}**")
     lines.append(f"- 已有关联单号：**{n_linked}**")
-    lines.append(f"- **无单号跟踪：{len(unlinked)}** ← 需重点处理（真正待提单/待查重缺口）")
+    lines.append(f"- **客户端未标注单号：{len(unlinked)}** ← 待查重（多数命中历史单，非必然新缺陷）")
     lines.append("")
     if not unlinked:
         lines.append("> 今日全部 FAIL / SPEC-MISMATCH 均已关联 issue 单号，无缺口。")
         lines.append("")
         return "\n".join(lines)
 
-    lines.append("### 无单号跟踪清单")
+    lines.append("### 未标注单号清单（待查重）")
     lines.append("| ID | 标题 | 优先级 | 层级 | 状态 |")
     lines.append("| --- | --- | --- | --- | --- |")
     for r, st in unlinked:
         lines.append(f"| {r.get('ID','')} | {R._case_title(r)} | {r.get('优先级','')} | {r.get('层级','')} | {st} |")
     lines.append("")
     lines.append("### 建议动作")
-    lines.append("1. 对上述无单号跟踪项执行 `python scripts/file_issue.py --dry-run` 查询上游历史 issue（查重）。")
-    lines.append("2. 命中历史单 → 补 `HISTORY_LINKS.md` 关联，不重复开单（仅在既有单补复核评论）。")
+    lines.append("1. 对上述未标注单号项执行 `python scripts/file_issue.py --dry-run` 查询上游历史 issue（查重）。")
+    lines.append("2. 命中历史单（占多数）→ 补 `HISTORY_LINKS.md` 关联，不重复开单（仅在既有单补复核评论）。")
     lines.append("3. 确认新问题 → 合并一张单提单，附根因与测试报告。")
+    lines.append("4. 待提单分诊（daily_issue_triage）会在每日汇总后自动对上述项查重，可直接以其结论为准。")
     lines.append("")
     return "\n".join(lines)
 
@@ -363,7 +364,7 @@ def main():
         f"# huaweicloud-devkit 每日专项分析报告\n\n"
         f"日期：**{date}** ｜ 被测版本：**{version}** ｜ 生成时间：**{now}**（北京时间）\n\n"
         f"> 本报告聚焦两类需维护者关注的问题：① BLOCKED 阻塞项（含阻塞原因四要素）；"
-        f"② FAIL / SPEC-MISMATCH 中尚无 GitHub issue 单号跟踪的失败问题。\n"
+        f"② FAIL / SPEC-MISMATCH 中客户端未标注单号的失败问题（待查重）。\n"
         f"> 数据源：results/Summary 总执行结果 + 各客户端执行包 blockedReason + HISTORY_LINKS.md / FINDINGS.md 单号关联。\n\n"
     )
     body = _render_blocked(blocked) + "\n" + _render_unlinked(rows, issues)

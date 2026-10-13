@@ -1,0 +1,46 @@
+
+=== OpenClaw Linux D3-S7 跨服务交付 探针结果 (2026-09-20) ===
+NOTE   D3-S7 复合意图 => ["RDS","Sandbox","DevStation"]
+PASS  D3-S7  复合意图命中 RDS  => true (expected true)
+PASS  D3-S7  复合意图命中部署目标(sandbox)  => true (expected true)
+PASS  D3-S7  创建 VPC  => true (expected true)
+PASS  D3-S7  创建 Subnet  => true (expected true)
+NOTE   D3-S7 default SG id=9e18047f-0e69-435f-9cf3-bda6cab4cd6a
+NOTE   D3-S7 RDS create rc=undefined id=a167750841bf41979d31dfe1673dda03in01
+PASS  D3-S7  postPaid RDS 创建受理(id 非空)  => true (expected true)
+NOTE   D3-S7 RDS status=BUILD (1/30)
+NOTE   D3-S7 RDS status=BUILD (2/30)
+NOTE   D3-S7 RDS status=BUILD (3/30)
+NOTE   D3-S7 RDS status=BUILD (4/30)
+NOTE   D3-S7 RDS status=BUILD (5/30)
+NOTE   D3-S7 RDS status=BUILD (6/30)
+NOTE   D3-S7 RDS status=BUILD (7/30)
+NOTE   D3-S7 RDS status=BUILD (8/30)
+NOTE   D3-S7 RDS status=BUILD (9/30)
+NOTE   D3-S7 RDS status=BUILD (10/30)
+NOTE   D3-S7 RDS status=BUILD (11/30)
+NOTE   D3-S7 RDS status=BUILD (12/30)
+NOTE   D3-S7 RDS status=BUILD (13/30)
+NOTE   D3-S7 RDS status=BUILD (14/30)
+NOTE   D3-S7 RDS status=BUILD (15/30)
+NOTE   D3-S7 RDS status=BUILD (16/30)
+NOTE   D3-S7 RDS status=BUILD (17/30)
+NOTE   D3-S7 RDS status=BUILD (18/30)
+NOTE   D3-S7 RDS status=BUILD (19/30)
+NOTE   D3-S7 RDS status=BUILD (20/30)
+NOTE   D3-S7 RDS status=BUILD (21/30)
+NOTE   D3-S7 RDS status=BUILD (22/30)
+NOTE   D3-S7 RDS status=BUILD (23/30)
+NOTE   D3-S7 RDS status=BUILD (24/30)
+NOTE   D3-S7 RDS status=BUILD (25/30)
+NOTE   D3-S7 RDS status=BUILD (26/30)
+NOTE   D3-S7 RDS status=ACTIVE (27/30)
+PASS  D3-S7  RDS 实例到达 ACTIVE  => true (expected true)
+PASS  D3-S7  连接串字段(ip/port)存在  => true (expected true)
+NOTE   D3-S7 连接串注入: mysql://10.210.1.87:3306
+NOTE   D3-S7 DeleteInstance rc=undefined job=091e026d-3a23-420d-8bf6-989924e4db79
+PASS  D3-S7  删除本次 RDS 受理(job_id)  => true (expected true)
+NOTE   D3-S7 RDS 删除完成=true
+FAIL  D3-S7  测后 tctest-s7- 资源归零  => 1 (expected 0)
+
+TOTAL pass=8 fail=1

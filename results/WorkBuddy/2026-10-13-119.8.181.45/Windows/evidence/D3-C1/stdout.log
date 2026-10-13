@@ -1,0 +1,18 @@
+{
+  "caseId": "D3-C1",
+  "status": "PASS",
+  "why": "ECS lifecycle: list=true, create plan denied=true hasToken=true, delete plan denied=true; real cloud creation=BLOCKED",
+  "executedAt": "20261013031206",
+  "listPlan": {
+    "decision": "allow",
+    "safeToRun": true
+  },
+  "createPlan": {
+    "decision": "deny",
+    "hasToken": true
+  },
+  "deletePlan": {
+    "decision": "deny"
+  },
+  "blockedReason": "Real cloud ECS creation requires AK/SK + network access to huaweicloud API. This environment has no cloud credentials configured. Missing: valid AK/SK with ECS create permission in cn-north-4. Impact: cannot verify CreateServers→ACTIVE→DeleteServer→归零 lifecycle. Unblocked by: configuring HUAWEICLOUD_ACCESS_KEY/HUAWEICLOUD_SECRET_KEY env vars or running auth_init with real credentials."
+}

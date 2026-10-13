@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "why": "服务创建类回归：真云 VPC 全生命周期 创建→可见→删除→归零 全部通过（workbuddy-daily-0156161938）",
+  "executedAt": "20260923093615",
+  "region": "cn-north-4",
+  "vpcName": "workbuddy-daily-0156161938",
+  "vpcId": "0268f316-2b49-4b94-91d4-76a5664d2560",
+  "steps": [
+    {
+      "step": "baseline ListVpcs (read-only)",
+      "ok": true,
+      "detail": "exitCode=0, vpc id 数=0"
+    },
+    {
+      "step": "CreateVpc (real cloud, approved)",
+      "ok": true,
+      "detail": "plan=allow, vpcId=0268f316-2b49-4b94-91d4-76a5664d2560, out={ \"vpc\": { \"id\": \"0268f316-2b49-4b94-91d4-76a5664d2560\", \"name\": \"workbuddy-daily-0156161938\", \"description\": \"\", \"cidr\": \"10.99.0.0/16\", \"status\": \"CREATING\", "
+    },
+    {
+      "step": "ListVpcs shows created VPC",
+      "ok": true,
+      "detail": "created visible=true"
+    },
+    {
+      "step": "ListSubnets (children check)",
+      "ok": true,
+      "detail": "subnet ids=0"
+    },
+    {
+      "step": "DeleteVpc (cleanup, only this run)",
+      "ok": true,
+      "detail": "out="
+    },
+    {
+      "step": "verify zero (created VPC gone)",
+      "ok": true,
+      "detail": "created vpcId still present=false"
+    }
+  ],
+  "resourceReleased": true,
+  "serviceCatalogRoute": "service_catalog(创建 ECS 意图) → recommendedServices=[\"Run hcloud --help to list available services.\"]（路由未命中，见 D10-3/EXP-E02）",
+  "note": "真机执行：真实创建 1 个 VPC 并删除，仅删本次创建资源，账户归零（baseline 0 → after 0）"
+}

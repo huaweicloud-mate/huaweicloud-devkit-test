@@ -1,0 +1,41 @@
+{
+  "case": "D4-15",
+  "status": "PASS",
+  "executedAt": "20260929050639",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D4-15",
+      "name": "bypass-chained",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "chained bypass blocked",
+      "failMsg": "chained bypass not blocked",
+      "_source": "d4-security"
+    },
+    {
+      "id": "D4-15",
+      "name": "bypass-bash",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "bash wrapper blocked",
+      "failMsg": "bash wrapper not blocked",
+      "_source": "d4-security"
+    },
+    {
+      "id": "D4-15",
+      "name": "bypass-mcp",
+      "pass": true,
+      "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-command-credential-file",
+      "expected": "deny",
+      "passMsg": "bypass blocked (MCP)",
+      "failMsg": "bypass not blocked (MCP)",
+      "_source": "mcp-tools"
+    }
+  ],
+  "source": "mcp-tools, d4-security"
+}

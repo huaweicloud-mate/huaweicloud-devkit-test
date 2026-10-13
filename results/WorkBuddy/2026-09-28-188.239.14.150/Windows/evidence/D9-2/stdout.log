@@ -1,0 +1,26 @@
+{
+  "case": "D9-2",
+  "status": "FAIL",
+  "why": "D9-2b: invalid params 调用未返回 -32602 (Invalid params) 错误码，实际返回无 error 对象。根因: mcp-server.mjs 未对 invalid params 返回标准 JSON-RPC -32602 错误。",
+  "executedAt": "20260928051600",
+  "total": 2,
+  "passed": 1,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D9-2a-unknown-method",
+      "expect": "-32601 (Method not found)",
+      "got": "-32601",
+      "verdict": "PASS",
+      "detail": "error.code"
+    },
+    {
+      "id": "D9-2b-invalid-params",
+      "expect": "-32602 (Invalid params)",
+      "got": "无 error 对象",
+      "verdict": "FAIL",
+      "detail": "error.code"
+    }
+  ],
+  "source": "eval/harness/protocol-probe.mjs"
+}

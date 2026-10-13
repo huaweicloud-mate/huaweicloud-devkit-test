@@ -1,0 +1,155 @@
+=== 1. 创建 VPC tctest-c1-vpc-1791840826 ===
+{
+  "vpc": {
+    "id": "5e4fb7bf-31b3-41cc-926e-98a01aeb6e94",
+    "name": "tctest-c1-vpc-1791840826",
+    "description": "",
+    "cidr": "192.168.200.0/24",
+    "status": "CREATING",
+    "routes": [],
+    "enterprise_project_id": "0",
+    "enable_network_address_usage_metrics": false,
+    "tenant_id": "46c1fd48bd1248c7b75afc3780de7132",
+    "created_at": "2026-10-12T21:33:46",
+    "updated_at": "2026-10-12T21:33:46"
+  }
+}
+VPCID=5e4fb7bf-31b3-41cc-926e-98a01aeb6e94
+=== 2. 创建子网 tctest-c1-subnet-1791840826 ===
+[USE_ERROR]Invalid parameter: gateway_ip
+
+Run `hcloud VPC CreateSubnet --help` for details about this API.
+SUBID=
+=== 3. 创建安全组 tctest-c1-sg-1791840826 ===
+CreateSecurityGroup is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'CreateSecurityGroup/versionNumber'.
+{
+  "security_group": {
+    "name": "tctest-c1-sg-1791840826",
+    "id": "058cfb60-12cc-4638-99e6-5e3854e6e00c",
+    "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+    "description": "",
+    "enterprise_project_id": "0",
+    "security_group_rules": [
+      {
+        "id": "b2b54423-1826-4040-96ed-9a53517fe0cd",
+        "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+        "security_group_id": "058cfb60-12cc-4638-99e6-5e3854e6e00c",
+        "remote_group_id": null,
+        "direction": "egress",
+SGID=
+=== 2b. 创建子网 tctest-c1-subnet-1791840846 (去掉 gateway_ip) ===
+[USE_ERROR]Invalid parameter: vpc_id
+
+Run `hcloud VPC CreateSubnet --help` for details about this API.
+SUBID=
+=== 2c. 创建子网 tctest-c1-subnet-1791840874 (v3 body 参数) ===
+{
+  "subnet": {
+    "id": "43cdbaa4-928a-44f0-9415-4501fabcbf5d",
+    "name": "tctest-c1-subnet-1791840874",
+    "description": "",
+    "cidr": "192.168.200.0/24",
+    "dnsList": [],
+    "status": "UNKNOWN",
+    "vpc_id": "5e4fb7bf-31b3-41cc-926e-98a01aeb6e94",
+    "ipv6_enable": false,
+    "gateway_ip": "192.168.200.1",
+    "dhcp_enable": true,
+    "availability_zone": "cn-north-4a",
+    "neutron_network_id": "43cdbaa4-928a-44f0-9415-4501fabcbf5d",
+    "neutron_subnet_id": "c3cf6b79-f891-4be4-a2c6-d1a3d351ceec",
+    "extra_dhcp_opts": [
+      {
+        "opt_value": "87600h",
+        "opt_name": "addresstime"
+      }
+SUBID=43cdbaa4-928a-44f0-9415-4501fabcbf5d
+=== 4. 创建 ECS tctest-c1-ecs-1791840925 (kc1.small.1 + Ubuntu20.04) ===
+{
+  "error": {
+    "message": "The flavor does not match the image.",
+    "code": "Ecs.0005"
+  }
+}
+Failed to get terminal width. The default width will be used. If characters are unreadable, adjust the command window width.
+Diagnose the request as follows:
++---+------------+----------+-------------------------+-------------------+---------------------------------------+
+|No.|Product Name|Error Code|      Error Message      |    Description    |                Action                 |
++---+------------+----------+-------------------------+-------------------+---------------------------------------+
+| 1 |    ECS     | Ecs.0005 |request body is illeagal.|Invalid parameters.|Check whether the request body is of th|
+|   |            |          |                         |                   |e correct JSON structure according to t|
+|   |            |          |                         |                   |           he API reference.           |
++---+------------+----------+-------------------------+-------------------+---------------------------------------+
+SID= JOBID=
+=== 4b. 创建 ECS tctest-c1-ecs-1791840945 (c6.large.2 + Ubuntu20.04) ===
+{
+  "job_id": "ff808081a0ed145901a1320b09cb606e",
+  "serverIds": [
+    "d4ee76e7-6f44-4249-9a25-17c502110ba5"
+  ]
+}
+SID= JOBID=ff808081a0ed145901a1320b09cb606e
+=== 5. 轮询 ECS 状态 ===
+  [1] None None
+  [2] None None
+  [3] None None
+  [4] None None
+  [5] None None
+  [6] None None
+  [7] None None
+  [8] None None
+  [9] None None
+  [10] None None
+=== 5b. 轮询 ECS 状态 (SID=d4ee76e7-6f44-4249-9a25-17c502110ba5) ===
+  [1] ACTIVE tctest-c1-ecs-1791840945
+  => ACTIVE 达成
+=== 6. 删除 ECS (含磁盘) ===
+{
+  "job_id": "ff808081a0ed1f3901a1320e31e12db3"
+}
+=== 7. 验证 ECS 已删除 ===
+{
+  "count": 1,
+  "servers": [
+    {
+      "flavor": {
+        "disk": "0",
+        "vcpus": "2",
+        "ram": "4096",
+        "id": "c6.large.2",
+        "name": "c6.large.2",
+        "gpus": [],
+        "asic_accelerators": []
+=== 8. 等待 ECS 删除完成 ===
+servers count: 1
+=== 9. 删除安全组 ===
+DeleteSecurityGroup is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'DeleteSecurityGroup/versionNumber'.
+=== 10. 删除子网 ===
+[USE_ERROR]The following parameters are required: vpc_id
+
+Run `hcloud VPC DeleteSubnet --help` for details about this API.
+=== 11. 删除 VPC ===
+{
+  "code": "VPC.0104",
+  "message": "{\"NeutronError\":{\"message\":\"Router contains subnets, please delete subnet first.\",\"type\":\"RouterInUse\",\"detail\":\"\"}}"
+}
+Failed to get terminal width. The default width will be used. If characters are unreadable, adjust the command window width.
+=== 12. 删除子网(带 vpc_id) ===
+=== 13. 删除 VPC ===
+=== 14. 删除安全组 ===
+DeleteSecurityGroup is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'DeleteSecurityGroup/versionNumber'.
+{
+  "request_id": "6680597729aab5a90a39e1fcb7f3aa5f",
+  "error_msg": "Security_group 058cfb60-12cc-4638-99e6-5e3854e6e00c could not be found.",
+  "error_code": "VPC.9904"
+=== 15. 归零验证 (VPC/子网/安全组/ECS) ===
+VPC 5e4fb7bf-31b3-41cc-926e-98a01aeb6e94:
+0
+  已删除
+SG 058cfb60-12cc-4638-99e6-5e3854e6e00c:
+0
+  已删除
+ECS d4ee76e7-6f44-4249-9a25-17c502110ba5:
+  count= 1
+=== 16. 再次等待并检查 ECS 删除状态 ===
+  status= DELETED count= 1

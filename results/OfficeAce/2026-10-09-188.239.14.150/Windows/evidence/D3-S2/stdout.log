@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "caseId": "D3-S2",
+  "why": "Scenario complete: VPC skill loaded, DeleteVpc denied without approval, allowed with approval, approvalToken mechanism exists, ListVpcs read allowed for pre-check.",
+  "executedAt": "20261001103000",
+  "details": [
+    {
+      "step": "vpc_skill_loaded",
+      "skillSize": 18083,
+      "pass": true
+    },
+    {
+      "step": "plan_delete_without_approval",
+      "command": "hcloud VPC DeleteVpc --vpc_id=test-vpc-id",
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.",
+      "expected": "deny/write",
+      "pass": true
+    },
+    {
+      "step": "plan_delete_with_approval",
+      "command": "hcloud VPC DeleteVpc --vpc_id=test-vpc-id (allowWrites=true)",
+      "decision": "allow",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation approved by user.",
+      "expected": "allow",
+      "pass": true
+    },
+    {
+      "step": "approval_token_mechanism",
+      "action": "hcloud-cli.mjs has approvalToken/hashArgs/consumeApprovalToken",
+      "pass": true
+    },
+    {
+      "step": "plan_list_vpcs_read",
+      "command": "hcloud VPC ListVpcs",
+      "decision": "allow",
+      "risk": "read_only",
+      "expected": "allow/read_only",
+      "pass": true
+    }
+  ]
+}

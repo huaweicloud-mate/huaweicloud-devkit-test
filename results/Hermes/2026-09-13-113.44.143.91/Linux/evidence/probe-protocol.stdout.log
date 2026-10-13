@@ -1,0 +1,38 @@
+D9-4 initialize -> PASS {"name":"huaweicloud-devkit","version":"1.1.4-next.3"}
+D9-1 tools/list -> 39 工具, 全含 name+description+inputSchema=true
+D9-2 错误码 -> 未知方法=-32603 未知工具=-32603 (规范要求均 -32601)
+D9-3 tools/call -> content数组=true isError=false list_regions返回regions数=undefined
+D10-1 -> 39 工具, description>10 全含=true
+
+JSON_RESULTS=[
+  {
+    "id": "D9-4",
+    "title": "协议生命周期 initialize",
+    "pass": true,
+    "detail": "{\"name\":\"huaweicloud-devkit\",\"version\":\"1.1.4-next.3\"}"
+  },
+  {
+    "id": "D9-1",
+    "title": "tools/list 合规",
+    "pass": true,
+    "detail": "39 工具, 全含 schema=true"
+  },
+  {
+    "id": "D9-2",
+    "title": "JSON-RPC 错误码",
+    "pass": "false",
+    "detail": "未知方法=-32603(规范-32601) 未知工具=-32603(规范-32601)"
+  },
+  {
+    "id": "D9-3",
+    "title": "tools/call 响应格式",
+    "pass": true,
+    "detail": "content数组=true isError=false regions数=undefined"
+  },
+  {
+    "id": "D10-1",
+    "title": "工具描述可选择性",
+    "pass": true,
+    "detail": "39 工具, 全含 description>10=true"
+  }
+]

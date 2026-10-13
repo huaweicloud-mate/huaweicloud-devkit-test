@@ -1,0 +1,53 @@
+{
+  "caseId": "D4-22",
+  "status": "PASS",
+  "why": "deploy plans checked: 3/3 have findings",
+  "executedAt": "20261013030427",
+  "results": [
+    {
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-network-public-admin-port",
+          "title": "Public admin port exposure",
+          "category": "public_exposure",
+          "severity": "deny",
+          "message": "The change appears to expose an administrative or database port to the public internet. Web ports (80/443) are allowed - this rule only covers admin/database ports.",
+          "remediation": "Restrict the source CIDR to a trusted range, use a bastion or VPN, and keep public preview endpoints behind authenticated HTTP services.",
+          "source": "deploy_plan",
+          "evidence": "{\"public_ip\":true,\"ports\":[22],\"security_groups\":[\"0.0.0.0/0\"]}"
+        }
+      ]
+    },
+    {
+      "decision": "warn",
+      "findings": [
+        {
+          "ruleId": "hwc-sandbox-missing-ttl",
+          "title": "Sandbox deployment missing cleanup metadata",
+          "category": "sandbox",
+          "severity": "warn",
+          "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+          "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+          "source": "deploy_plan",
+          "evidence": "{\"resources\":[{\"type\":\"ecs\",\"public_ip\":true,\"open_ports\":[3389]}]}"
+        }
+      ]
+    },
+    {
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-network-public-admin-port",
+          "title": "Public admin port exposure",
+          "category": "public_exposure",
+          "severity": "deny",
+          "message": "The change appears to expose an administrative or database port to the public internet. Web ports (80/443) are allowed - this rule only covers admin/database ports.",
+          "remediation": "Restrict the source CIDR to a trusted range, use a bastion or VPN, and keep public preview endpoints behind authenticated HTTP services.",
+          "source": "deploy_plan",
+          "evidence": "Plan: open SSH port 22 to 0.0.0.0/0 in production"
+        }
+      ]
+    }
+  ]
+}

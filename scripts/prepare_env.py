@@ -175,6 +175,21 @@ def install_pkg():
     return False
 
 
+def sync_agent_plugin():
+    """npm 全局包装好后，同步到 agent 运行副本（如 Hermes 的 huaweicloud-plugins/）。
+    否则 MCP 服务实际运行的版本会停留在首次安装时的旧版本，与每日测试安装的包不一致。"""
+    print("=== 同步 agent 插件副本 ===")
+    rc, out, err = run("npx --yes huaweicloud-devkit update --target hermes")
+    if rc == 0 and "Update complete" in (out or ""):
+        # 读回版本确认
+        rc2, vout, _ = run("npx --yes huaweicloud-devkit version")
+        ver_line = [l for l in (vout or "").splitlines() if "Hermes:" in l]
+        print(f"  [OK] Hermes 插件已同步: {(ver_line[0].strip() if ver_line else '版本未知')}")
+        return True
+    print(f"  [失败] sync agent plugin: {(out or err)[:300]}")
+    return False
+
+
 def update_src_to_pkg():
     """源码 hdk fetch 并 checkout 到被测包对应 commit，保证源码检查与黑盒测的是同一版。
     跟随 resolve_target()：默认自动取 latest/next 最高，--next 强制预发布，--latest 强制正式。"""
@@ -270,10 +285,13 @@ def main():
     cred_ok = check_credentials()
     if setup and not pkg_ok:
         pkg_ok = install_pkg()
+        if pkg_ok:
+            sync_agent_plugin()
     if update:
         pull_test_repo()
         update_src_to_pkg()
         install_pkg()
+        sync_agent_plugin()
     print("=== 汇总 ===")
     if tools_ok and repo_ok and src_ok and pkg_ok and cred_ok:
         print("环境就绪，可开始测试执行。")
