@@ -1,6 +1,6 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-codeartsagent-s2-mv5qyk4f -> id=b349fa67-a471-4f83-a199-cad3d8a04d02
+创建测试VPC tctest-codeartsagent-s2-mv76i5jt -> id=4408d933-555c-4312-a854-fe0751c2fac7
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
@@ -55,23 +55,23 @@ check_user -> realnameVerified=true agreementSigned=true err=
 Waiting for connection 578348... (0s)Connection 578348 established (0s).
 Waiting for connection 578348... (0s)Connection 578348 established (0s).
 connect -> status=connected wsId=8d898bc423254635bbe1
-[2026-10-12T21:11:26.095Z] uploadProject: /home/testbot1/.hdk-s3-mv5qyk4f -> /workspace/.hdk-s3-mv5qyk4f.tar.gz (archive=216 bytes, md5=3911fef6e791b5437063433756dbe175)
-[2026-10-12T21:11:26.146Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-2016229883/sandbox-upload-1791839486083/.hdk-s3-mv5qyk4f.tar.gz, size=216, remotePath=/workspace/.hdk-s3-mv5qyk4f.tar.gz)
-[2026-10-12T21:11:26.146Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
-[2026-10-12T21:11:26.146Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
-[2026-10-12T21:11:26.195Z] deployFileServer: writing script (2456 b64 chars)
-[2026-10-12T21:11:26.245Z] deployFileServer: starting server on port 8888
-[2026-10-12T21:11:26.283Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 22187\r\n\u001b]133;C\u0007\r\n"
-[2026-10-12T21:11:26.283Z] uploadViaHttpTunnel: creating dedicated tunnel session
+[2026-10-13T21:14:20.363Z] uploadProject: /home/testbot1/.hdk-s3-mv76i5jt -> /workspace/.hdk-s3-mv76i5jt.tar.gz (archive=210 bytes, md5=3a61859704b90ff0348a19fb9a5e8159)
+[2026-10-13T21:14:20.413Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-3726195857/sandbox-upload-1791926060352/.hdk-s3-mv76i5jt.tar.gz, size=210, remotePath=/workspace/.hdk-s3-mv76i5jt.tar.gz)
+[2026-10-13T21:14:20.414Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-13T21:14:20.414Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-13T21:14:20.462Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-13T21:14:20.510Z] deployFileServer: starting server on port 8888
+[2026-10-13T21:14:20.548Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 10264\r\n\u001b]133;C\u0007\r\n"
+[2026-10-13T21:14:20.548Z] uploadViaHttpTunnel: creating dedicated tunnel session
 Waiting for connection 578348... (0s)Connection 578348 established (0s).
-[2026-10-12T21:11:27.180Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
-[2026-10-12T21:11:27.182Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
-[2026-10-12T21:11:27.183Z] uploadViaHttpTunnel: tunnel ready, localPort=39259
-[2026-10-12T21:11:27.184Z] uploadViaHttpTunnel: waiting for server health on localhost:39259
-[2026-10-12T21:11:27.184Z] waitForServerReady: attempt 1, checking http://localhost:39259/health
-[2026-10-12T21:11:27.223Z] waitForServerReady: server ready on port 39259 after 0 retries
-[2026-10-12T21:11:27.224Z] uploadViaHttpTunnel: sending POST with 216 bytes
-[2026-10-12T21:11:27.265Z] uploadViaHttpTunnel: upload complete (bytes=216, md5=3911fef6e791b5437063433756dbe175)
+[2026-10-13T21:14:21.435Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-13T21:14:21.437Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-13T21:14:21.438Z] uploadViaHttpTunnel: tunnel ready, localPort=42575
+[2026-10-13T21:14:21.438Z] uploadViaHttpTunnel: waiting for server health on localhost:42575
+[2026-10-13T21:14:21.439Z] waitForServerReady: attempt 1, checking http://localhost:42575/health
+[2026-10-13T21:14:21.477Z] waitForServerReady: server ready on port 42575 after 0 retries
+[2026-10-13T21:14:21.477Z] uploadViaHttpTunnel: sending POST with 210 bytes
+[2026-10-13T21:14:21.517Z] uploadViaHttpTunnel: upload complete (bytes=210, md5=3a61859704b90ff0348a19fb9a5e8159)
 upload_project -> ok=true md5Verified=true
 Waiting for connection 578348... (0s)Connection 578348 established (0s).
 Waiting for connection 578348... (0s)Connection 578348 established (0s).
@@ -81,9 +81,12 @@ upload_project -> ok=true md5Verified=true
 Waiting for connection 578348... (0s)Connection 578348 established (0s).
 Waiting for connection 578348... (0s)Connection 578348 established (0s).
 Waiting for connection 578348... (0s)Connection 578348 established (0s).
-deploy_nginx -> ok=true port=8084 url=
 Waiting for connection 578348... (0s)Connection 578348 established (0s).
-deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mv5qyk4f/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+deploy_nginx -> ok=true port=8087 url=
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mv76i5jt/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
 close_session -> ok
 [OK] 沙箱 connect 成功
 [OK] s3-connect/upload/deploy 链路
@@ -99,7 +102,7 @@ close_session -> ok
     {
       "name": "测试 VPC 创建成功",
       "ok": true,
-      "detail": "vpcId=b349fa67-a47"
+      "detail": "vpcId=4408d933-555"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -124,7 +127,7 @@ close_session -> ok
     {
       "name": "OBS 建桶成功",
       "ok": true,
-      "detail": "bucket=tctest-codeartsagent-obs-mv5qyk4f"
+      "detail": "bucket=tctest-codeartsagent-obs-mv76i5jt"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -144,7 +147,7 @@ close_session -> ok
     {
       "name": "删除归零",
       "ok": true,
-      "detail": "bucket removed=tctest-codeartsagent-obs-mv5qyk4f"
+      "detail": "bucket removed=tctest-codeartsagent-obs-mv76i5jt"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
