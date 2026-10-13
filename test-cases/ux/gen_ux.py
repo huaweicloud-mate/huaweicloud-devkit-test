@@ -453,16 +453,16 @@ add("D11-41", "误导性归因矩阵（4 类已知误导）", "P1",
     "COMMON|<代表: 隔离宿主>|<证据: 4 场景归因矩阵>|<阻塞: 需可控注入四类场景>",
     requiredEvidence="强断言：4 场景 实际归因 vs 正确根因 对照矩阵；含修复动作文本")
 
-add("D11-42", "Windows GBK(cp936) 终端中文不乱码", "P1",
-    "Windows 控制台（代码页 936，chcp 936）；隔离宿主",
-    "未登录引导 / 错误返回 / 登录成功 三类中文输出的 stdout 字节",
-    "①在 cp936 控制台执行 auth init 与一次未登录调用 ②捕获 stdout 原始字节 ③以 cp936 解码检查",
-    "cp936 解码后无 U+FFFD 且无乱码序列；关键中文（\"未配置\"/\"登录\"）完整可读",
-    "P: UX 终端兼容 + 通: 终端编码矩阵(升级方案§3.2)",
-    "auth,run_readonly_command", "fixture:eval/harness/fixtures/d11-42-cp936-terminal.mjs",
-    "OS_MATRIX|<代表: Windows(cp936)>|<证据: cp936 解码结果>|<阻塞: 需 Windows 控制台>",
-    tct="OS_MATRIX", TTY="TTY(cp936)",
-    requiredEvidence="强断言：stdout 原始字节 + cp936 解码文本；不得以 UTF-8 终端结果替代")
+add("D11-42", "输出编码契约：恒为 UTF-8（与代码页/locale 无关）", "P1",
+    "Windows cp936 控制台 / 非 Windows LC_ALL=C（管道捕获）；隔离宿主",
+    "未登录引导的 stdout 原始字节 + UTF-8 与本地编码双解码结果",
+    "①在 cp936(Windows) 或 LC_ALL=C(非 Windows) 环境跑未登录调用 ②捕获 stdout 原始字节 ③分别按 UTF-8 与本地编码解码",
+    "正断言：UTF-8 解码含「未配置」；反断言：本地编码(cp936/latin1)解码不含「未配置」（防退化成 GBK 输出）",
+    "P: UX 终端兼容（判据修正：原「cp936 可读」为错误判据，见夹具头注）+ 通: 终端编码矩阵(升级方案§3.2)",
+    "auth,run_readonly_command", "fixture:eval/harness/fixtures/d11-42-encoding-contract.mjs",
+    "OS_MATRIX|<代表: Windows(cp936)/Linux(C locale)>|<证据: 原始字节 + 双解码>|<阻塞: 无>",
+    tct="OS_MATRIX", TTY="管道与非 TTY 均可",
+    requiredEvidence="强断言：stdout 原始字节 + UTF-8/本地编码双解码文本；单一解码结果不足以判定")
 
 add("D11-43", "窄终端/无颜色/C locale 可读性", "P2",
     "隔离宿主；可控制终端列宽与环境变量",

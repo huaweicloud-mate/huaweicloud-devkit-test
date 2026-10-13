@@ -39,7 +39,7 @@
 | 层 | 载体 | 适用用例 |
 |---|---|---|
 | L1 单测 | `test/unit/d11-*.test.mjs` | 文案/字段/反断言类（D11-1/10/16/26） |
-| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 5 个**：`d11-36-guidance-closure` / `d11-41-misleading-attribution` / `d11-42-cp936-terminal` / `d11-43-terminal-env-matrix` / `d11-44-fault-injection`；共用工具 `ux-common.mjs`） | 闭环有效性、误导归因、故障注入、终端矩阵（D11-36/41/42/43/44） |
+| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 5 个**：`d11-36-guidance-closure` / `d11-41-misleading-attribution` / `d11-42-encoding-contract` / `d11-43-terminal-env-matrix` / `d11-44-fault-injection`；共用工具 `ux-common.mjs`） | 闭环有效性、误导归因、故障注入、输出编码契约（D11-36/41/42/43/44） |
 | L3 回放对照 | `eval/replay/`（待新增 `recordings/ux-baseline-v1.jsonl`） | 体验回归量化（D11-39） |
 | L4 Agent 评测 | `eval/harness/run-agent-eval.mjs` + `eval/prompts/eval-set-ux.csv` | 度量对照（D11-40） |
 
