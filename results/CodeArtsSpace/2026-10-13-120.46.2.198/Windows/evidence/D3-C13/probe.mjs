@@ -1,0 +1,8 @@
+// Auto-generated probe for D3-C13
+console.log(JSON.stringify({
+  "status": "BLOCKED",
+  "name": "real-cloud-e2e",
+  "details": "OBS static website hosting config requires real cloud AK/SK to set OBS bucket website configuration",
+  "executedAt": "20261012184000",
+  "blockedReason": "OBS static website hosting config requires real cloud AK/SK to set OBS bucket website configuration. credentials.json contains placeholder AK/SK (4 chars each, AK=AKRT), not real credentials. STS token empty. APIGW.0301 Unauthorized on all cloud API calls. Need fresh AK/SK or STS token for account hw018619646."
+}));
