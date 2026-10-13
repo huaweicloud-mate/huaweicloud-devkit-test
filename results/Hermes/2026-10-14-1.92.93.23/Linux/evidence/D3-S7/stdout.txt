@@ -1,0 +1,11 @@
+复合意图路由 -> services=["RDS"] (RDS命中=true 部署目标命中=false)
+RDS ListInstances -> ok=true (基线)
+plan RDS CreateInstance -> decision=allow
+run RDS CreateInstance -> ok=true stdout=[USE_ERROR]Invalid parameter: db.password
+
+Run `hcloud RDS CreateInstance --help` for details about this API.
+
+[FAIL] serviceCatalog 复合意图命中 RDS + 部署目标
+[OK] RDS API 只读可达
+[FAIL] 最小 RDS 实例创建(真·外部依赖: 需 vpc/subnet/sg 前置环境)
+→ D3-S7 需完整 VPC/子网/安全组前置 + RDS 配额，编排后半段在沙箱内注入连接串；本轮记录真实 blocker
