@@ -29,6 +29,11 @@ COMMENT_IDS = {
     "D3-C10", "D3-C11", "D3-C12", "D4-25", "D4-26", "D9-10",
 }
 
+# Issue #25 覆盖缺口落用例（2026-10-13，hdk main 新增能力补齐）
+COMMENT_IDS_20261013 = {
+    "D1-71", "D1-72", "D1-73", "D1-74", "D1-75",
+}
+
 with open(DES, encoding="utf-8-sig") as f:
     drows = list(csv.DictReader(f))
 with open(EXP, encoding="utf-8-sig") as f:
@@ -46,6 +51,8 @@ fk_errors = []
 
 
 def source_asset(rid):
+    if rid in COMMENT_IDS_20261013:
+        return "覆盖缺口落用例20261013(Issue#25)"
     if rid in COMMENT_IDS:
         return "覆盖缺口落用例20260913(coverage-gaps.md)"
     if rid in ("D1-56", "D1-57", "D1-58", "D2-21", "D3-C7", "D3-C8", "D3-C9", "D4-24", "D6-8", "D9-9"):
