@@ -81,6 +81,11 @@ NEW_IDS_20260921 = {
     "D9-12", "D9-13",
 }
 
+# 2026-10-13 Issue #25 批次：补齐 hdk main 新增能力覆盖缺口（2 工具 + 3 环境变量），固定日期可溯源
+NEW_IDS_20261013 = {
+    "D1-71", "D1-72", "D1-73", "D1-74", "D1-75",
+}
+
 # 存量 v1.5 其余维度（D3~D10 全区间）——先于未知 ID 判定
 LEGACY_PREFIXES = ("D3-", "D4-", "D5-", "D6-", "D7-", "D8-", "D9-", "D10-")
 
@@ -91,6 +96,8 @@ def gen_ts(rid):
         return "2026-09-19"          # 2026-09-19 覆盖核对补缺口新增
     if rid in NEW_IDS_20260921:
         return "2026-09-21"          # 2026-09-21 Issue #7 D9 P0 用例新增
+    if rid in NEW_IDS_20261013:
+        return "2026-10-13"          # 2026-10-13 Issue #25 补齐 hdk main 新增能力覆盖缺口
     if rid in NEW_REVIEW_IDS_20260911:
         return "2026-09-11"          # 2026-09-11 全量评审补充：固定日期（可溯源 REV-20260911004604）
     for pred, ts in BATCH_TS:
@@ -624,6 +631,33 @@ add("D1-70", "D1安装", "代理配置与 WebSocket 代理", "P1", "可设 proxy
     "①writeProxyConfig ②readProxyConfig 核对 ③getProxySettings(targetUrl) ④no_proxy 绕过 ⑤createProxyWebSocket 走代理",
     "proxy.json 读写/clear 正确；getProxySettings 拼 env+file 且 no_proxy 命中返回 null；有代理时 WebSocket 走 undici ProxyAgent、无代理回退 globalThis.WebSocket", "实: proxy-config.getProxySettings(60)/writeProxyConfig(23)/clearProxyConfig(35); proxy-agent.createProxyWebSocket(52)/getWebSocketImpl(73)/getProxyDispatcher(26)",
     "install", "脚本", "COMMON|<代表: 隔离进程+proxy夹具>|<证据: 配置读写+WS代理选择>|<阻塞: 需可控proxy>")
+
+# ---------- 2026-10-13 Issue #25：补齐 hdk main 新增能力覆盖缺口（2 工具 + 3 环境变量） ----------
+add("D1-71", "D3功能", "sandbox_expose_tunnel 沙箱隧道暴露", "P1", "已连接沙箱+已部署nginx(有port返回值)",
+    "sandbox_expose_tunnel(port=<nginx实际port>, workspace_id=<connect返回值>)",
+    "①sandbox_connect 获取 workspace_id ②sandbox_deploy_nginx 获取实际 port ③sandbox_expose_tunnel 传入 port+workspace_id ④核对返回 publicUrl/tunnelId/port ⑤curl publicUrl 核对 HTTP 可达 ⑥close_session 清理",
+    "返回 ok=true + publicUrl(https://<id>-<port>.devbridge-s2.hwtunnel.com) + tunnelId + port；publicUrl 可 HTTP 200 访问；无 stale tunnel 残留；缺 port 或 workspace_id 时抛 Error", "实: sandbox/session-manager.mjs(1307) exposeTunnel; tools.mjs(741) huaweicloud_sandbox_expose_tunnel",
+    "sandbox_expose_tunnel", "半自动", "COMMON|<代表: Hermes+沙箱>|<证据: publicUrl可访问+tunnelId>|<阻塞: 需沙箱配额+DevBridge>")
+add("D1-72", "D3功能", "competition_voucher_claim 激励代金券领取", "P1", "已报名华为开发者大赛的IAM账号",
+    "competition_voucher_claim(domain_id可选)",
+    "①确认用户明确要求领取赛事代金券 ②competition_voucher_claim ③核对返回领取结果 ④未报名账号核对返回 code=HDKIT_NOT_SIGNED_UP ⑤重复领取核对返回已领取",
+    "已报名→领取成功返回 voucher 信息；未报名→code=HDKIT_NOT_SIGNED_UP；重复领取→返回已领取状态；domain_id 省略时从 IAM 自动解析", "实: sandbox/hdkitservice-api.mjs(151) hdkitCompetitionVoucherClaim; tools.mjs(861) huaweicloud_competition_voucher_claim",
+    "competition_voucher_claim", "半自动", "COMMON|<代表: Hermes>|<证据: 领取结果+code校验>|<阻塞: 需已报名赛事账号>")
+add("D1-73", "D1安装", "HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT 跳过 OfficeAce 探测", "P2", "隔离 HOME + 无 OfficeAce 安装",
+    "HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT=1 env",
+    "①设 HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT=1 ②启动 install --target OfficeAce ③核对 officeaceCapabilitiesDir 返回 null 跳过系统探测 ④不设 env 重试核对走 registry/Program Files 探测 ⑤核对沙箱/隔离 HOME 下不泄漏真实 OfficeAce 安装",
+    "设 env=1 时 officeaceCapabilitiesDir 返回 null 跳过 registry/Program Files 探测，不泄漏真实安装到隔离 HOME；未设时走正常探测路径", "实: setup-cli.mjs(209) officeaceCapabilitiesDir; #654",
+    "install", "脚本", "COMMON|<代表: 隔离HOME>|<证据: 探测跳过+无泄漏>|<阻塞: 无>")
+add("D1-74", "D1安装", "HUAWEICLOUD_INJECT_STS_CMD 控制 STS 命令注入", "P1", "非交互环境 + STS 凭证",
+    "HUAWEICLOUD_INJECT_STS_CMD=0/false env + hcloud 命令参数",
+    "①设 HUAWEICLOUD_INJECT_STS_CMD=0 ②resolveStsInjectArgs(rawArgs) 核对返回空数组 ③设 HUAWEICLOUD_INJECT_STS_CMD=false 重核对 ④未设 env 时核对正常注入 STS 参数 ⑤核对 help/-h 子命令不注入 ⑥核对 wrapper(bash/sudo)调用不注入",
+    "env=0/false 时 resolveStsInjectArgs 返回空数组(禁用 argv 注入)；help/-h 和 wrapper 调用不注入；正常场景按规则注入 STS 参数到 hcloud argv", "实: hcloud-cli.mjs(307) resolveStsInjectArgs(300)",
+    "auth/run_approved_command", "脚本", "COMMON|<代表: 隔离进程>|<证据: STS注入开关+argv核对>|<阻塞: 无>")
+add("D1-75", "D1安装", "HUAWEICLOUD_SKIP_HCLOUD_PREINSTALL 跳过 KooCLI 预装", "P2", "无 KooCLI 环境 + 隔离进程",
+    "HUAWEICLOUD_SKIP_HCLOUD_PREINSTALL=1 env",
+    "①设 HUAWEICLOUD_SKIP_HCLOUD_PREINSTALL=1 ②启动 mcp-server ③核对 maybePreinstallKooCli 返回 {launched:false, reason:'disabled_by_env'} ④核对未触发 install-hcloud 下载 ⑤不设 env 时核对 findHcloudBin 缺失时正常预装 ⑥核对 resolvePreinstallCliEntry 返回正确入口",
+    "设 env=1 时 maybePreinstallKooCli 返回 {launched:false, reason:'disabled_by_env'} 不触发下载；未设时 findHcloudBin 缺失则后台预装；resolvePreinstallCliEntry 返回正确 CLI 入口", "实: preflight.mjs(87) maybePreinstallKooCli(85)/resolvePreinstallCliEntry(72); mcp-server.mjs(60)",
+    "install", "脚本", "COMMON|<代表: 隔离进程>|<证据: 预装跳过+reason核对>|<阻塞: 无>")
 add("D2-8", "D2认证", "credentials变更后auth回归", "P1", "真云+本地凭证",
     "credentials.mjs 变更后的 auth init",
     "①auth init ②验证KooCLI/OBS/沙箱三端 ③脱敏检查",
