@@ -1,5 +1,9 @@
 // run-all.mjs：批量运行 Issue #7 批次②+③ 全部夹具/harness
 // 用法: node eval/harness/fixtures/run-all.mjs <hdk src> [--evid <dir>]
+//
+// 注意：UX 体验用例（D11，d11-*.mjs）**不列入本清单** —— 它们是「需求验收」口径，
+// 未实现时期望 exit 1（NOT_IMPLEMENTED），混入本清单会让 run-all 长期恒红、丧失门禁意义。
+// 请改用专用运行器：`npm run test:ux`（自动发现 d11-*.mjs + 内置宿主隔离 + 三态退出码）。
 import { spawn } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';

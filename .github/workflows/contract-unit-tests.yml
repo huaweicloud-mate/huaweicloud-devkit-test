@@ -93,6 +93,44 @@ jobs:
           name: replay-results
           path: eval/replay/results/*.csv
 
+  d11-ux-fixtures:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    # UX 体验用例（D11）夹具：**需求验收**口径（闭环有效性 / 反断言 / 宿主隔离前置门）。
+    # 当前 hdk main 上 UX-R1（缺"去哪拿 AK/SK"步骤）、UX-R7（英文整句残留）等需求尚未实现，
+    # 夹具预期 NOT_IMPLEMENTED(exit 1) 属**已知缺口态** —— 与 replay-trend 同样先记趋势、不阻断合并；
+    # 需求实现到位后本 job 改为硬门禁（去掉 continue-on-error）。
+    # 宿主隔离由 run-ux.mjs 内置完成（空 HOME/USERPROFILE），CI 无需额外准备。
+    continue-on-error: true
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 运行 D11 体验夹具（内置宿主隔离）
+        env:
+          HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
+        run: npm run test:ux -- --evid ux-evidence
+
+      - name: 上传体验用例证据
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d11-ux-evidence
+          path: ux-evidence/**
+          if-no-files-found: ignore
+
   test-manager:
     runs-on: ubuntu-latest
     # AI Test Manager 决策引擎（test-ai-orchestration-architecture.md §2.2）：
