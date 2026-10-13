@@ -1,0 +1,67 @@
+[OK] 创建 VPC tctest-c1-vpc-mv779pzp
+[OK] 创建子网 tctest-c1-subnet-mv779pzp
+[OK] 创建安全组 tctest-c1-sg-mv779pzp
+[FAIL] 创建 ECS tctest-c1-ecs-mv779pzp
+  raw: [USE_ERROR]Invalid parameter: server.nics.1.security_groups.1.id
+
+Run `hcloud ECS CreateServers --help` for details about this API.
+
+[OK] 删除 ECS
+[OK] 删除安全组
+[OK] 删除子网
+[OK] 删除 VPC
+[FAIL] 归零验证(VPC/ECS 均不含本次资源)
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C1",
+  "total": 9,
+  "passed": 7,
+  "results": [
+    {
+      "n": "创建 VPC tctest-c1-vpc-mv779pzp",
+      "ok": true,
+      "detail": "[object Object]"
+    },
+    {
+      "n": "创建子网 tctest-c1-subnet-mv779pzp",
+      "ok": true,
+      "detail": "[object Object]"
+    },
+    {
+      "n": "创建安全组 tctest-c1-sg-mv779pzp",
+      "ok": true,
+      "detail": "[object Object]"
+    },
+    {
+      "n": "创建 ECS tctest-c1-ecs-mv779pzp",
+      "ok": false,
+      "detail": "[object Object]"
+    },
+    {
+      "n": "删除 ECS",
+      "ok": true,
+      "detail": "未创建无需删除"
+    },
+    {
+      "n": "删除安全组",
+      "ok": true,
+      "detail": "[object Object]"
+    },
+    {
+      "n": "删除子网",
+      "ok": true,
+      "detail": "[object Object]"
+    },
+    {
+      "n": "删除 VPC",
+      "ok": true,
+      "detail": "[object Object]"
+    },
+    {
+      "n": "归零验证(VPC/ECS 均不含本次资源)",
+      "ok": false,
+      "detail": "[object Object]"
+    }
+  ]
+}
