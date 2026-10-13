@@ -438,7 +438,7 @@ add("D11-40", "体验度量对照（范式④：步数/失败/求助 三指标�
     "①对基线版跑评测集，记录 steps/fails/clarifications ②对新版跑同一集 ③逐条比对三指标",
     "新版 steps<=基线 且 fails<=基线 且 clarifications<=基线，且三项中至少一项严格改善；无一条指标恶化",
     "P: UX 可度量 + 通: 对照基准(升级方案§2④); 实: eval/harness/run-agent-eval.mjs",
-    "service_catalog,retrieve_skill", "脚本",
+    "service_catalog,retrieve_skill", "评测集:eval/prompts/eval-set-ux.csv",
     "AGENT_E2E|<代表: 真实客户端 × 多 agent>|<证据: 三指标对照表>|<阻塞: 需评测预算 + 双版本可就绪>",
     tct="AGENT_E2E",
     requiredEvidence="强断言：逐条三指标对照表 + 评测集版本；须注明模型与客户端参数")
