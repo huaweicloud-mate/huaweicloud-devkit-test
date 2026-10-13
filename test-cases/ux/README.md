@@ -2,6 +2,10 @@
 
 本目录存放 huaweicloud-devkit 的 **UX 体验用例**——独立分区，**不与 `design/` 母版混放**。
 
+> **关联上游需求单：[#900](https://github.com/huaweicloud/huaweicloud-devkit/issues/900)**
+> 「未登录引导两份实现不一致 + 错误返回未统一」（UX-R1 + UX-R7 合并单，2026-10-13 提交）。
+> 对应用例：**D11-1 / D11-2**（引导双路径，UX-R1）、**D11-16**（统一错误卡，UX-R7）、**D11-12**（IAM-401 文案）。
+
 ## 文件
 
 | 路径 | 内容 |
