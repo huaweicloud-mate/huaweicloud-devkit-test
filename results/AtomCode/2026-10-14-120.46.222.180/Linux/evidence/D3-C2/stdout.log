@@ -1,0 +1,11 @@
+{
+  "case": "D3-C2",
+  "assistant": "AtomCode(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "hdk gitHead 74f519d (v1.1.8)",
+  "status": "PASS",
+  "why": "OBS静态站部署E2E真实执行：建桶→obs_set_website_config set(get)=HTTP 200→删桶归零。注：realcloud_e2e.mjs 的『OBS建桶』子断言用 hcloud OBS mb 退出码===0 判定，而 KooCLI 建桶成功后返回退出码6(Notice 全局域名提示)，故该项被误判为 false；这是 hcloud CLI/测试 harness 断言口径问题，非 devkit 产品缺陷（devkit 的 obs_set_website_config set/get 均返回 200，删除归零验证通过）。",
+  "actual": "bucket=testbot3-hermes-obs 创建成功; obs_set_website_config set=200 (websiteUrl 已生成) / get=200 (WebsiteConfiguration XML 含 IndexDocument); OBS rm 删桶 successfully → 归零",
+  "executedAt": "20261014051500",
+  "resourceZeroVerified": true
+}

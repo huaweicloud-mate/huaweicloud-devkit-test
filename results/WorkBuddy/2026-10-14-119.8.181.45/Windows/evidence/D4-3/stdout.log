@@ -1,0 +1,40 @@
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "Not all blocked: ShowSecret=deny, ShowSecretVersion=deny, GetSecretValue=deny, DownloadSecret=deny, DecryptData=allow",
+  "executedAt": "20261014050753",
+  "results": [
+    {
+      "service": "KMS",
+      "operation": "ShowSecret",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "service": "KMS",
+      "operation": "ShowSecretVersion",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "service": "KMS",
+      "operation": "GetSecretValue",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "service": "KMS",
+      "operation": "DownloadSecret",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "service": "KMS",
+      "operation": "DecryptData",
+      "decision": "allow",
+      "risk": "unknown_read"
+    }
+  ],
+  "redLine": "DecryptData not blocked — leaks plaintext decrypted data",
+  "rootCause": "safety-policy.mjs:249 — blockedSecretOperations list does not include DecryptData. KMS DecryptData returns plaintext decrypted data but is classified as unknown_read (allow)"
+}
