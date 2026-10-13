@@ -14,7 +14,7 @@
 //       hdk src 可省略 —— 依次尝试 env HUAWEICLOUD_DEVKIT_HOME / HDK_PATH / sibling ../hdk
 // CI 口径：实现到位前以 continue-on-error 记录趋势（同 replay-trend），到位后提升为硬门禁。
 import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -55,16 +55,16 @@ if (fixtures.length === 0) {
   process.exit(2);
 }
 
-// 隔离宿主：所有夹具共用一个空 HOME（不碰真实宿主）
-const isoHome = mkdtempSync(join(tmpdir(), 'ux-home-'));
-mkdirSync(isoHome, { recursive: true });
-
+// 隔离宿主：**每个夹具一个全新空 HOME**（不碰真实宿主）。
+// 之所以逐夹具重建而非共用一个：夹具可能写入 S1 凭证（如 D11-41 的占位符遮蔽场景），
+// 共用 HOME 会让后续夹具的前置门误判「宿主受污染」→ 夹具顺序相关的假 BLOCKED。
 console.log(`[UX] hdk src = ${hdkSrc}  (${hdkTag})`);
-console.log(`[UX] 隔离宿主 HOME/USERPROFILE = ${isoHome}`);
+console.log(`[UX] 隔离宿主: 每个夹具独立空 HOME/USERPROFILE（位于 ${tmpdir()}）`);
 console.log(`[UX] 待运行夹具 ${fixtures.length} 个: ${fixtures.join(', ')}`);
 
 const summary = [];
 for (const f of fixtures) {
+  const isoHome = mkdtempSync(join(tmpdir(), 'ux-home-'));
   const args = [join(__dirname, f), hdkSrc];
   if (EVID) args.push('--evid', EVID);
   const env = { ...process.env, HOME: isoHome, USERPROFILE: isoHome, HUAWEICLOUD_HOME: isoHome };
@@ -72,11 +72,10 @@ for (const f of fixtures) {
     const p = spawn(process.execPath, args, { stdio: ['inherit', 'inherit', 'inherit'], env });
     p.on('close', resolve);
   });
+  rmSync(isoHome, { recursive: true, force: true });
   summary.push([f, code]);
   console.log(`\n>>> ${f} exit=${code}  ===\n`);
 }
-
-rmSync(isoHome, { recursive: true, force: true });
 
 console.log('===== UX 体验用例（D11）汇总 =====');
 let pass = 0, notImpl = 0, blocked = 0;
