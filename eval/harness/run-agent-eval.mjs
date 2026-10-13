@@ -13,6 +13,8 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { extractUxMetrics } from './ux-metrics.mjs';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const EVAL_DIR = join(__dirname, '..');
 const DEFAULT_CSV = join(EVAL_DIR, 'prompts', 'eval-set-v2.csv');
@@ -126,8 +128,19 @@ for (const r of rows) {
 
   const ev = extractEvidence(res.out);
   const judge = judgeAction(res.out, ev, r.action);
-  console.log(`→ ${judge} | 命令=${ev.commands.join(';') || '-'} | 工具=${ev.tools.join(';') || '-'}`);
-  results.push({ ...r, verdict: judge, commands: ev.commands.join(';'), tools: ev.tools.join(';'), evidence: res.out.slice(0, 200).replace(/[\r\n]+/g, ' ') });
+  const ux = extractUxMetrics(res.out, ev);
+  console.log(
+    `→ ${judge} | 命令=${ev.commands.join(';') || '-'} | 工具=${ev.tools.join(';') || '-'}` +
+      ` | 指标 steps=${ux.steps} fails=${ux.fails} clarif=${ux.clarifications}`,
+  );
+  results.push({
+    ...r,
+    ...ux,
+    verdict: judge,
+    commands: ev.commands.join(';'),
+    tools: ev.tools.join(';'),
+    evidence: res.out.slice(0, 200).replace(/[\r\n]+/g, ' '),
+  });
 }
 
 // 汇总
@@ -137,16 +150,35 @@ const unclear = results.filter((r) => r.verdict && (r.verdict.includes('UNCLEAR'
 console.log(`\n=== 真实 Agent 会话评测汇总 ===`);
 console.log(`动作达标=${okCount} 违规=${badCount} 未明确/超时=${unclear} / 总=${results.length}`);
 
+// UX 体验度量三指标（D11-40 对照用；逐条明细见落盘 CSV）
+const sumMetric = (k) => results.reduce((acc, r) => acc + (typeof r[k] === 'number' ? r[k] : 0), 0);
+console.log(
+  `UX 三指标合计: steps=${sumMetric('steps')} fails=${sumMetric('fails')} clarifications=${sumMetric('clarifications')}`,
+);
+console.log(
+  '（口径：启发式近似，仅用于同 SUT「基线版 ↔ 新版」相对对照，不作绝对判定；定义见 eval/harness/ux-metrics.mjs）',
+);
+
 // 落盘
 const outDir = join(EVAL_DIR, 'results');
 mkdirSync(outDir, { recursive: true });
 const ts = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
 const outPath = join(outDir, `agent-eval-${ts}.csv`);
-const cols = ['id', 'prompt', '期望路由', '期望动作', '期望skill', '安全期望', 'verdict', 'commands', 'tools'];
+const cols = [
+  'id', 'prompt', '期望路由', '期望动作', '期望skill', '安全期望',
+  'verdict', 'commands', 'tools', 'steps', 'fails', 'clarifications',
+];
 const lines = [cols.join(',')];
 for (const r of results) {
   const esc = (s) => `"${String(s ?? '').replace(/"/g, '""')}"`;
-  lines.push([r.id, r.prompt, r.route, r.action, r.skill, r.safety, r.verdict, r.commands, r.tools].map(esc).join(','));
+  lines.push(
+    [
+      r.id, r.prompt, r.route, r.action, r.skill, r.safety, r.verdict, r.commands, r.tools,
+      r.steps ?? '', r.fails ?? '', r.clarifications ?? '',
+    ]
+      .map(esc)
+      .join(','),
+  );
 }
 writeFileSync(outPath, lines.join('\n') + '\n', 'utf-8');
 console.log(`结果落盘: ${outPath}`);

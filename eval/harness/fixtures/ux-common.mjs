@@ -83,6 +83,10 @@ export function finish(caseId, evid, note = '') {
 /** 环境不可判定（宿主污染 / 缺凭证 / 平台不适用）→ exit 2，不计入 PASS/FAIL。 */
 export function blocked(caseId, reason, evid) {
   console.log(`[BLOCKED] ${reason}`);
+  console.log('  参考原因: 直接在未隔离的宿主上单跑（宿主存在真实凭证 / 码道目录，');
+  console.log('            "未登录态"构造不出来 → 拒绝给出判定，而非报假 FAIL）。');
+  console.log('  隔离复跑: 把 HOME / USERPROFILE / HUAWEICLOUD_HOME 都指向一个空目录后再跑本夹具；');
+  console.log('            或直接用运行器 `npm run test:ux`（它自动为每个夹具建独立空 HOME）。');
   console.log('RESULT: BLOCKED');
   writeEvidence(caseId, evid, [`[BLOCKED] ${reason}`, 'RESULT: BLOCKED']);
   process.exit(2);

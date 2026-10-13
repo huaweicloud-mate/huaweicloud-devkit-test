@@ -41,7 +41,10 @@
 | L1 单测 | `test/unit/d11-*.test.mjs` | 文案/字段/反断言类（D11-1/10/16/26） |
 | L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 5 个**：`d11-36-guidance-closure` / `d11-41-misleading-attribution` / `d11-42-encoding-contract` / `d11-43-terminal-env-matrix` / `d11-44-fault-injection`；共用工具 `ux-common.mjs`） | 闭环有效性、误导归因、故障注入、输出编码契约（D11-36/41/42/43/44） |
 | L3 回放对照 | `eval/replay/`（待新增 `recordings/ux-baseline-v1.jsonl`） | 体验回归量化（D11-39） |
-| L4 Agent 评测 | `eval/harness/run-agent-eval.mjs` + `eval/prompts/eval-set-ux.csv` | 度量对照（D11-40） |
+| L4 Agent 评测 | `eval/harness/run-agent-eval.mjs` + **`eval/prompts/eval-set-ux.csv`（已落地，10 条模糊中文需求）**；三指标提取见 `eval/harness/ux-metrics.mjs`（`steps`/`fails`/`clarifications`），对照判定 `compareUxMetrics` | 度量对照（D11-40） |
+
+> **L4 口径边界（重要）**：三指标是**启发式近似**，只用于**同 SUT「基线版 ↔ 新版」相对对照**（不劣化 + 至少一项改善），**不作绝对判定**。绝对阈值换客户端/模型即失效，相对比较可抵消输出格式差异。
+> D10 的意图路由评测（`eval-set-v2.csv`）判的是「动作达标/是否走审批」；D11-40 判的是「体验三指标是否劣化」——同一 runner、不同口径。
 
 ## 已接入自动化
 
