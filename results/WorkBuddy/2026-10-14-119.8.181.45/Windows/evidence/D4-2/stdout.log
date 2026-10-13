@@ -1,0 +1,34 @@
+{
+  "caseId": "D4-2",
+  "status": "FAIL",
+  "why": "3/5 blocked. Not blocked: \"env | grep AK\"=allow, \"echo HUAWEICLOUD_ACCESS_KEY=AKIDTEST\"=allow",
+  "executedAt": "20261014050753",
+  "results": [
+    {
+      "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "echo $HUAWEICLOUD_SECRET_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "env | grep AK",
+      "decision": "allow",
+      "risk": "not_huaweicloud"
+    },
+    {
+      "cmd": "echo HUAWEICLOUD_ACCESS_KEY=AKIDTEST",
+      "decision": "allow",
+      "risk": "not_huaweicloud"
+    },
+    {
+      "cmd": "printenv HW_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    }
+  ],
+  "rootCause": "safety-policy.mjs classifyTextCommand — \"env | grep AK\" and \"echo HUAWEICLOUD_ACCESS_KEY=AKIDTEST\" classified as not_huaweicloud (allow). The classifier only checks hcloud commands, not generic shell env-dump commands."
+}

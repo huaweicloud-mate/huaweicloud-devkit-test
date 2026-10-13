@@ -1,0 +1,33 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "All shell-wrapped commands blocked (inner command detected)",
+  "executedAt": "20261014050753",
+  "results": [
+    {
+      "cmd": "sh -c \"hcloud ECS DeleteServer --server.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "bash -c \"hcloud ECS DeleteServer\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "eval \"hcloud ECS DeleteServer --server.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "sh -c \"hcloud KMS ShowSecret --secret_id=xxx\"",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "cmd": "bash -c \"hcloud VPC DeleteVpc --vpc.id=xxx\"",
+      "decision": "deny",
+      "risk": "write"
+    }
+  ]
+}

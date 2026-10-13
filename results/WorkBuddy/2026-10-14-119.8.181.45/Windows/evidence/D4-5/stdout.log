@@ -1,0 +1,28 @@
+{
+  "caseId": "D4-5",
+  "status": "PASS",
+  "why": "All write operations correctly denied",
+  "executedAt": "20261014050753",
+  "results": [
+    {
+      "op": "ECS DeleteServer --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "op": "ECS CreateServer --name=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "op": "VPC DeleteVpc --vpc.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "op": "RDS DeleteInstance --instance.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    }
+  ]
+}

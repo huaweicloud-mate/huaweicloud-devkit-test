@@ -1,0 +1,45 @@
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "why": "rules=19 (deny=9, warn=10), danger blocked, safe allowed",
+  "executedAt": "20261014050753",
+  "result": {
+    "ruleCount": 19,
+    "denyCount": 9,
+    "warnCount": 10,
+    "dangerResults": [
+      {
+        "cmd": "cat ~/.hcloud/config.json",
+        "decision": "deny",
+        "findings": 1
+      },
+      {
+        "cmd": "printenv HUAWEICLOUD_ACCESS_KEY",
+        "decision": "deny",
+        "findings": 1
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer --server.id=xxx",
+        "decision": "warn",
+        "findings": 1
+      },
+      {
+        "cmd": "hcloud KMS ShowSecret --secret_id=xxx",
+        "decision": "deny",
+        "findings": 1
+      }
+    ],
+    "safeResults": [
+      {
+        "cmd": "hcloud ECS ListServers",
+        "decision": "allow",
+        "findings": 0
+      },
+      {
+        "cmd": "hcloud VPC ListVpcs",
+        "decision": "allow",
+        "findings": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "caseId": "D2-4",
+  "status": "FAIL",
+  "why": "obj:ak=true,sk=true; str:akLeak=true,skLeak=true; env:akLeak=false; lowerAk:leak=true",
+  "executedAt": "20261014050753",
+  "result": {
+    "redactedObj": {
+      "ak": "<redacted>",
+      "sk": "<redacted>",
+      "region": "cn-north-4",
+      "other": "visible"
+    },
+    "redactedStr": "ak=AKIDEXAMPLE123456789 sk=SKEXAMPLE987654321 region=cn-north-4",
+    "redactedEnv": "HUAWEICLOUD_ACCESS_KEY=<redacted> HUAWEICLOUD_SECRET_ACCESS_KEY=<redacted>",
+    "lowerAkRedacted": "ak=AKIDEXAMPLE123456789 sk=SKEXAMPLE987654321"
+  },
+  "rootCause": "safety-policy.mjs:42 — redactString regex only matches access_key/secret_key (with underscore), not bare ak=/sk= (lowercase no underscore). Regex: /((?:access[_-]?key|secret[_-]?key|...)/gi — \"ak\" and \"sk\" without \"key\" suffix are not matched"
+}
