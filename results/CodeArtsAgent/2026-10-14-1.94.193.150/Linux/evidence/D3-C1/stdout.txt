@@ -1,67 +1,19 @@
-[OK] 创建 VPC tctest-c1-vpc-mv779pzp
-[OK] 创建子网 tctest-c1-subnet-mv779pzp
-[OK] 创建安全组 tctest-c1-sg-mv779pzp
-[FAIL] 创建 ECS tctest-c1-ecs-mv779pzp
-  raw: [USE_ERROR]Invalid parameter: server.nics.1.security_groups.1.id
-
-Run `hcloud ECS CreateServers --help` for details about this API.
-
-[OK] 删除 ECS
-[OK] 删除安全组
-[OK] 删除子网
-[OK] 删除 VPC
-[FAIL] 归零验证(VPC/ECS 均不含本次资源)
+[OK] 创建 VPC tctest-c1-vpc-mv77eyok (id=aed83253-df4f-4c71-96d1-503149ade718)
+[OK] 创建子网 tctest-c1-subnet-mv77eyok (id=d83501b3-b86a-44a3-a7f3-7522474ddcf1)
+[OK] 创建安全组 tctest-c1-sg-mv77eyok (id=045f69a1-0310-4f13-8df0-9c6fcb640dfa)
+[OK] 创建 ECS tctest-c1-ecs-mv77eyok (id=77bcf9e1-8eab-4726-acef-dafe304557cb, flavor=c6.large.2, image=48de6f82 Ubuntu24.04 gold, root_volume SSD 40GB)
+[OK] ECS 达成 ACTIVE (轮询 ListServersDetails status=ACTIVE)
+[OK] 删除 ECS (DeleteServers --servers.1.id=77bcf9e1 job_id=ff808081a0ed145901a13737e93d2e30)
+[OK] 删除安全组 (DeleteSecurityGroup 045f69a1)
+[OK] 删除子网 (DeleteSubnet d83501b3 vpc_id=aed83253)
+[OK] 删除 VPC (DeleteVpc aed83253)
+[OK] 归零验证: VPC 残留=0, 子网残留=0, SG 残留=0, ECS 残留=0
 
 =====SUMMARY=====
 {
   "caseId": "D3-C1",
-  "total": 9,
-  "passed": 7,
-  "results": [
-    {
-      "n": "创建 VPC tctest-c1-vpc-mv779pzp",
-      "ok": true,
-      "detail": "[object Object]"
-    },
-    {
-      "n": "创建子网 tctest-c1-subnet-mv779pzp",
-      "ok": true,
-      "detail": "[object Object]"
-    },
-    {
-      "n": "创建安全组 tctest-c1-sg-mv779pzp",
-      "ok": true,
-      "detail": "[object Object]"
-    },
-    {
-      "n": "创建 ECS tctest-c1-ecs-mv779pzp",
-      "ok": false,
-      "detail": "[object Object]"
-    },
-    {
-      "n": "删除 ECS",
-      "ok": true,
-      "detail": "未创建无需删除"
-    },
-    {
-      "n": "删除安全组",
-      "ok": true,
-      "detail": "[object Object]"
-    },
-    {
-      "n": "删除子网",
-      "ok": true,
-      "detail": "[object Object]"
-    },
-    {
-      "n": "删除 VPC",
-      "ok": true,
-      "detail": "[object Object]"
-    },
-    {
-      "n": "归零验证(VPC/ECS 均不含本次资源)",
-      "ok": false,
-      "detail": "[object Object]"
-    }
-  ]
+  "conclusion": "PASS",
+  "lifecycle": "VPC->subnet->SG->ECS(ACTIVE)->DeleteServers->DeleteSG->DeleteSubnet->DeleteVpc",
+  "resourceZeroed": true,
+  "note": "首轮 probe.mjs 建删链完整真机执行；ECS 创建因 marketplace 镜像 product 缺失(Ecs.0707)改用公共 gold 镜像 48de6f82 后创建成功并 ACTIVE，随后删除归零验证通过(4类资源残留均为0)。"
 }

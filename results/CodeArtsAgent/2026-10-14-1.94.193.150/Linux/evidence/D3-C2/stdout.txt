@@ -1,0 +1,18 @@
+[OK] setup_obs_config 同步 OBS 凭证 (endpoint=obs.cn-north-4)
+[OK] 创建 OBS 桶 tctest-c2-77p667 (Create bucket successfully)
+[OK] 上传 index.html (44B, status=200, md5 verified)
+[OK] obs_set_website_config set (websiteUrl=http://tctest-c2-77p667.obs-website.cn-north-4.myhuaweicloud.com)
+[OK] obs_set_website_config get 验证 (IndexDocument=Suffix index.html)
+[OK] 删除 OBS 桶归零 (hcloud obs rm obs://tctest-c2-77p667 -f -> Delete bucket successfully)
+[OK] 归零验证 (obs ls 不含本次桶, 残留=0)
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C2",
+  "bucket": "tctest-c2-77p667",
+  "conclusion": "PASS",
+  "lifecycle": "setup_obs_config -> mb -> cp index.html -> website set -> website get -> rm -f -> 归零",
+  "resourceZeroed": true,
+  "websiteUrl": "http://tctest-c2-77p667.obs-website.cn-north-4.myhuaweicloud.com",
+  "note": "删桶命令 hcloud obs rm obs://bucket -f (空桶用 -f 强制, 不用 rb)"
+}
