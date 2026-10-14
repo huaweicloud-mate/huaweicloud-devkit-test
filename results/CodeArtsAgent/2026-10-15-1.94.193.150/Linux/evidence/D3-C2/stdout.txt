@@ -1,0 +1,52 @@
+[OK] setup_obs_config 同步 OBS 凭证
+[OK] 创建 OBS 桶 tctest-c2-8o6dyz
+[------------------------------------------------------------------------] 100.00% ?/s 44B/44B 186ms[OK] 上传 index.html
+[OK] obs_set_website_config set
+[OK] obs_set_website_config get 验证
+[------------------------------------------------------------------------] 100.00% tps:0.00 1/1 28ms[FAIL] 删除 OBS 桶归零
+[FAIL] 归零验证(ls 不含本次桶)
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C2",
+  "bucket": "tctest-c2-8o6dyz",
+  "total": 7,
+  "passed": 5,
+  "results": [
+    {
+      "n": "setup_obs_config 同步 OBS 凭证",
+      "ok": true,
+      "out": "{\"ok\":true,\"existed\":false,\"created\":true,\"path\":\"/home/testbot2/.obsutilconfig\",\"region\":\"cn-north-4\",\"endpoint\":\"https"
+    },
+    {
+      "n": "创建 OBS 桶 tctest-c2-8o6dyz",
+      "ok": true,
+      "out": "Start at 2026-10-14 22:16:40.943774088 +0000 UTC\n\nCreate bucket [tctest-c2-8o6dyz] successfully, request id [000001A13C7D3502440C6740B2BA2B95]\nNotice: If the configured endpoint is a global domain nam"
+    },
+    {
+      "n": "上传 index.html",
+      "ok": true,
+      "out": "-14-1.94.193.150/Linux/evidence/D3-C2/index.html --> obs://tctest-c2-8o6dyz/index.html, cost [185], status [200], request id [000001A13C7D376E47C6943454B3FE53]\n"
+    },
+    {
+      "n": "obs_set_website_config set",
+      "ok": true,
+      "out": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://tctest-c2-8o6dyz.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://tctest-c2-8o6dyz.obs-website.c"
+    },
+    {
+      "n": "obs_set_website_config get 验证",
+      "ok": true,
+      "out": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+    },
+    {
+      "n": "删除 OBS 桶归零",
+      "ok": false,
+      "out": "Error: No such command: \"rb\", please try \"help\" for more information!\n"
+    },
+    {
+      "n": "归零验证(ls 不含本次桶)",
+      "ok": false,
+      "out": "{\"containsOwn\":true}"
+    }
+  ]
+}
