@@ -824,9 +824,18 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '</tr>'.format(t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
                            t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0))
             for t in bench.get("tasks", []))
-        bare_items = "".join(
-            '<li style="margin:4px 0;"><b>{}</b>：{}</li>'.format(tid, note)
-            for tid, note in bench.get("bare", {}).items())
+        bare_rows = "".join(
+            '<tr>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{} / {}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,} / {:,}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{} / {}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
+            '</tr>'.format(b.get("title", ""), b.get("std_rate", "—"), b.get("bare_rate", "—"),
+                           b.get("std_token", 0), b.get("bare_token", 0),
+                           b.get("std_steps", 0), b.get("bare_steps", 0),
+                           b.get("note", ""))
+            for b in bench.get("bare", []))
         finding_items = "".join(
             '<li style="margin:4px 0;">{}</li>'.format(f)
             for f in bench.get("findings", []))
@@ -841,8 +850,14 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<th style="padding:6px 8px;border:1px solid #ddd;">token OUT</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;">步数</th></tr></thead>'
             '<tbody>' + bench_rows + '</tbody></table>'
-            '<h2 style="margin-top:16px;">裸模型对照（--bare，初步）</h2>'
-            '<ul style="font-size:13px;">' + bare_items + '</ul>'
+            '<h2 style="margin-top:16px;">裸模型对照（--bare，初步：标准=3采样中位 / 裸=1采样）</h2>'
+            '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
+            '<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">任务</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;">成功率<br>标准/裸</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;">token<br>标准/裸</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;">步数<br>标准/裸</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">裸模型问题</th></tr></thead>'
+            '<tbody>' + bare_rows + '</tbody></table>'
             '<h2 style="margin-top:16px;">关键发现</h2>'
             '<ul style="font-size:13px;">' + finding_items + '</ul>'
             '<p style="color:#7f8c8d;font-size:12px;">详情见 skill-bench/results/baseline-report-20261014.md 与 baseline-bare-comparison-20261014.md。</p>'
