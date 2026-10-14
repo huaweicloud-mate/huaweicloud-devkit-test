@@ -83,7 +83,7 @@ ID | 维度 | 标题 | 优先级 | 前置条件 | 测试数据 | 操作步骤 | 
 mcpTransport | hookSupport | requiredEvidence | owner | 依赖
 ```
 
-（= 12 个设计字段 + 生成时间/设计状态 + 9 个终端元数据 + requiredEvidence + owner/依赖）
+（= 12 个设计字段 + 生成时间/设计状态 + 终端覆盖类型 + 9 个终端元数据 + requiredEvidence + owner/依赖）
 
 | 列 | 应填（语义） | 禁止 / 常见错位 |
 |---|---|---|
@@ -110,7 +110,7 @@ designCaseId | expandedCaseId | design_status | terminalType | terminal | agent 
 shell | TTY | installLayout | mcpTransport | hookSupport | owner | 依赖
 ```
 
-- 展开类型：`D5客户端矩阵`（逐客户端 70）/ `D3-C4服务矩阵`（22）/ `D10评测集`（15）/ `NR3终端展开`（25）/ `D1-58白名单`（5）。
+- 展开类型：`D5客户端矩阵`（逐客户端 70）/ `D3-C4服务矩阵`（22）/ `D10评测集`（15）/ `NR3终端矩阵`（25）/ `D1-58白名单矩阵`（5）——字面量与 `gen_matrix.py` 写入 CSV 的真值一致（`_nr3()` / `_d158()`）。
 - `执行要点` = 「在 <枚举对象> 上执行 <源用例>」；`预期结果` 必须带枚举对象前缀（如 `OpenCode：…`）。
 - 外键：`designCaseId` 必须能在设计级找到，`expandedCaseId` = 本行 ID。
 
