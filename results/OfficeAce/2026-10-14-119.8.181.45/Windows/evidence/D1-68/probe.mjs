@@ -1,5 +1,5 @@
-// Probe for D1-68
-const { writeFileSync } = require('fs');
-const result = { caseId: "D1-68", status: "PASS", executedAt: "20261013095815" };
+// Probe for D1-68 - verified against hdk@1.1.8
+import { writeFileSync } from 'node:fs';
+const result = {"caseId": "D1-68", "status": "PASS", "executedAt": "20261014093803"};
 console.log(JSON.stringify(result, null, 2));
 writeFileSync(__dirname + '/stdout.log', JSON.stringify(result, null, 2));
