@@ -1,8 +1,8 @@
 [D2-1] auth_status -> OK
 [D2-1] check_cli(KooCLI S2) -> OK
 [D2-1] setup_obs_config(S3) -> OK
-[D2-1] sandbox_check_user -> FAIL
-[D2-1] obs_ls(S3 API 可用) -> FAIL
+[D2-1] sandbox_check_user(沙箱端) -> OK
+[D2-1] obs_ls(S3 API 可用) -> OK
 [D3-C4] ECS: list_operations+plan -> OK
 [D3-C4] VPC: list_operations+plan -> OK
 [D3-C4] OBS: list_operations+plan -> OK
@@ -25,9 +25,10 @@
 [D3-C4] EVS: list_operations+plan -> OK
 [D3-C4] EIP: list_operations+plan -> OK
 [D3-C4] ELB: list_operations+plan -> OK
-[D4-14] CreateVpc(tctest-hermes-20261014-8ls0ps) -> FAIL
+[D4-14] CreateVpc(tctest-hermes-20261014-8m1gx2) -> OK
 [D4-14] ListVpcs(执行命令) -> OK
 [D4-14] CTS ListTraces(审计) -> OK
+[D4-14] DeleteVpc(删除) -> OK
 [D4-14] 归零验证(ListVpcs 不含本次资源) -> OK
 [D4-18] plan 写操作需确认(confirm-not-deny) -> OK
 [D4-19] 确认流预检(preflight sgFindings) -> OK
@@ -35,15 +36,15 @@
 
 =====SUMMARY JSON=====
 {
-  "generatedAt": "2026-10-14T21:09:31.566Z",
-  "total": 34,
-  "passed": 29,
+  "generatedAt": "2026-10-14T21:16:54.292Z",
+  "total": 35,
+  "passed": 33,
   "results": [
     {
       "kind": "D2-1",
       "name": "auth_status",
       "ok": true,
-      "detail": "{\n  \"target\": \"all\",\n  \"credentialsConfigured\": true,\n  \"credentialsPath\": \"/home/zhangshuang/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": true,\n      \"fingerprint\": \"caae65f2\",\n      \"persistent\": true\n    },\n    \"activeSource\": \"s1-persistent\"\n  },\n  \"obsConfigured\": true,\n  \"obsConfigPath\": \"/home/zhangshuang/.obsutilconfig\",\n  \"kooCliInstalled\": true,\n  \"kooCliStatus\": \"ok\",\n  \"kooCliNextStep\": \"huaweicloud_show_profile_redacted\",\n  \"kooCliRaw\": \"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\n  \"reconciled\": {\n    \"stores\": {\n      \"s1Fingerprint\": \"caae65f2\",\n      \"envFingerprint\": \"\",\n      \"currentFingerprint\": \"\",\n      \"s3Fingerprint\": \"eb8a3bf1\",\n      \"runtimeFingerprint\": null\n    },\n    \"kooCliCurrent\": \"default\",\n    \"envIsPlaceholder\": false,\n    \"s2Encrypted\": true,\n    \"inconsistencies\": [\n      {\n        \"store\": \"S3\",\n        \"source\": \"obsutilconfig\",\n        \"fingerprint\": \"eb8a3bf1\",\n        \"manualModified\": true\n      }\n    ],\n    \"hasRuntime\": false,\n    \"runtimeFingerprint\": null,\n    \"inconsistent\": true,\n    \"runtimeActive\": false\n  },\n  \"onboarding\": {\n    \"needsSetup\": true,\n    \"scenario\": 1,\n    \"reason\": \"s1-only\",\n    \"message\": \"已保存账号(指纹 caae65f2)可直接使用。\",\n    \"steps\": [\n      {\n        \"order\": 1,\n        \"action\": \"use-s1\",\n        \"args\": {},\n        \"label\": \"直接使用已保存账号\"\n      },\n      {\n        \"order\": 2,\n        \"action\": \"switch-new\",\n        \"args\": {\n          \"mode\": \"import\",\n          \"action\": \"persist\"\n        },\n        \"label\": \"改用新账号(导入)\"\n      }\n    ],\n    \"accountHint\": \"caae65f2\"\n  },\n  \"agents\": {\n    \"opencode\": {\n      \"configured\": false\n    },\n    \"codex\": {\n      \"configured\": false\n    },\n    \"codex-desktop\": {\n      \"configured\": false\n    },\n    \"codearts\": {\n      \"configured\": false\n    },\n    \"codearts-work\": {\n      \"configured\": false\n    },\n    \"workbuddy\": {\n      \"configured\": false\n    },\n    \"dsh\": {\n      \"configured\": false\n    },\n    \"officeace\": {\n      \"configured\": false\n    },\n    \"hermes\": {\n      \"configured\": true\n    },\n    \"openclaw\": {\n      \"configured\": false\n    },\n    \"atomcode\": {\n      \"configured\": false\n    }\n  }\n}"
+      "detail": "{\n  \"target\": \"all\",\n  \"credentialsConfigured\": true,\n  \"credentialsPath\": \"/home/zhangshuang/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": true,\n      \"fingerprint\": \"caae65f2\",\n      \"persistent\": true\n    },\n    \"activeSource\": \"s1-persistent\"\n  },\n  \"obsConfigured\": true,\n  \"obsConfigPath\": \"/home/zhangshuang/.obsutilconfig\",\n  \"kooCliInstalled\": true,\n  \"kooCliStatus\": \"ok\",\n  \"kooCliNextStep\": \"huaweicloud_show_profile_redacted\",\n  \"kooCliRaw\": \"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\n  \"reconciled\": {\n    \"stores\": {\n      \"s1Fingerprint\": \"caae65f2\",\n      \"envFingerprint\": \"\",\n      \"currentFingerprint\": \"\",\n      \"s3Fingerprint\": \"858deb48\",\n      \"runtimeFingerprint\": null\n    },\n    \"kooCliCurrent\": \"default\",\n    \"envIsPlaceholder\": false,\n    \"s2Encrypted\": true,\n    \"inconsistencies\": [\n      {\n        \"store\": \"S3\",\n        \"source\": \"obsutilconfig\",\n        \"fingerprint\": \"858deb48\",\n        \"manualModified\": true\n      }\n    ],\n    \"hasRuntime\": false,\n    \"runtimeFingerprint\": null,\n    \"inconsistent\": true,\n    \"runtimeActive\": false\n  },\n  \"onboarding\": {\n    \"needsSetup\": true,\n    \"scenario\": 1,\n    \"reason\": \"s1-only\",\n    \"message\": \"已保存账号(指纹 caae65f2)可直接使用。\",\n    \"steps\": [\n      {\n        \"order\": 1,\n        \"action\": \"use-s1\",\n        \"args\": {},\n        \"label\": \"直接使用已保存账号\"\n      },\n      {\n        \"order\": 2,\n        \"action\": \"switch-new\",\n        \"args\": {\n          \"mode\": \"import\",\n          \"action\": \"persist\"\n        },\n        \"label\": \"改用新账号(导入)\"\n      }\n    ],\n    \"accountHint\": \"caae65f2\"\n  },\n  \"agents\": {\n    \"opencode\": {\n      \"configured\": false\n    },\n    \"codex\": {\n      \"configured\": false\n    },\n    \"codex-desktop\": {\n      \"configured\": false\n    },\n    \"codearts\": {\n      \"configured\": false\n    },\n    \"codearts-work\": {\n      \"configured\": false\n    },\n    \"workbuddy\": {\n      \"configured\": false\n    },\n    \"dsh\": {\n      \"configured\": false\n    },\n    \"officeace\": {\n      \"configured\": false\n    },\n    \"hermes\": {\n      \"configured\": true\n    },\n    \"openclaw\": {\n      \"configured\": false\n    },\n    \"atomcode\": {\n      \"configured\": false\n    }\n  }\n}"
     },
     {
       "kind": "D2-1",
@@ -59,15 +60,15 @@
     },
     {
       "kind": "D2-1",
-      "name": "sandbox_check_user",
-      "ok": false,
-      "detail": "\"fetch failed\""
+      "name": "sandbox_check_user(沙箱端)",
+      "ok": true,
+      "detail": "{\n  \"realnameVerified\": true,\n  \"agreementSigned\": true\n}"
     },
     {
       "kind": "D2-1",
       "name": "obs_ls(S3 API 可用)",
-      "ok": false,
-      "detail": "\"Start at 2026-10-14 21:09:22.574811567 +0000 UTC\\n\\nList buckets failed, error [Get \\\"https://obs.cn-north-4.myhuaweicloud.com:443\\\": proxyconnect tcp: dial tcp: lookup proxy.example on 127.0.0.53:53: no \""
+      "ok": true,
+      "detail": "\"Start at 2026-10-14 21:16:51.190539689 +0000 UTC\\n\\nBucket                   CreationDate             Location       BucketType     \\nobs://hdk1-c13-26631096  2026-10-14T05:23:51Z     cn-north-4     OBJE\""
     },
     {
       "kind": "D3-C4",
@@ -201,21 +202,27 @@
     },
     {
       "kind": "D4-14",
-      "name": "CreateVpc(tctest-hermes-20261014-8ls0ps)",
-      "ok": false,
-      "detail": "{\n  \"vpcId\": \"\",\n  \"stdout\": \"[OPENAPI_ERROR]proxyconnect tcp: dial tcp: lookup proxy.example on *.*.*.*:53: no such host\\n\"\n}"
+      "name": "CreateVpc(tctest-hermes-20261014-8m1gx2)",
+      "ok": true,
+      "detail": "{\n  \"vpcId\": \"b21aebcf-622e-4085-b057-1ae1bcdacf18\",\n  \"stdout\": \"{\\n  \\\"vpc\\\": {\\n    \\\"id\\\": \\\"b21aebcf-622e-4085-b057-1ae1bcdacf18\\\",\\n    \\\"name\\\": \\\"tctest-hermes-20261014-8m1gx2\\\",\\n    \\\"description\\\": \\\"\\\",\\n    \\\"cidr\\\": \\\"192.168.99.0/24\\\",\\n    \\\"status\\\": \\\"CREATING\\\",\\n    \\\"routes\\\"\"\n}"
     },
     {
       "kind": "D4-14",
       "name": "ListVpcs(执行命令)",
       "ok": true,
-      "detail": "\"ListVpcs is a multi-version API, where the version (v3) is default. To specify another version, change the API name to '\""
+      "detail": "\"contains new vpc\""
     },
     {
       "kind": "D4-14",
       "name": "CTS ListTraces(审计)",
       "ok": true,
-      "detail": "{\n  \"stdout\": \"[OPENAPI_ERROR]proxyconnect tcp: dial tcp: lookup proxy.example on *.*.*.*:53: no such host\\n\"\n}"
+      "detail": "{\n  \"stdout\": \"{\\n  \\\"traces\\\": [\\n    {\\n      \\\"api_version\\\": \\\"2.0\\\",\\n      \\\"code\\\": \\\"200\\\",\\n      \\\"domain_id\\\": \\\"842591186fa245929e1b5c186a4cf784\\\",\\n      \\\"event_type\\\": \\\"system\\\",\\n      \\\"operation_id\\\": \\\"CreateVpc\\\",\\n      \\\"project_id\\\": \\\"46c1fd48bd1248c7b75afc3780de7132\\\",\\n      \\\"read_only\\\": false,\\n      \\\"resource_account_id\\\"\"\n}"
+    },
+    {
+      "kind": "D4-14",
+      "name": "DeleteVpc(删除)",
+      "ok": true,
+      "detail": "{\n  \"vpcId\": \"b21aebcf-622e-4085-b057-1ae1bcdacf18\"\n}"
     },
     {
       "kind": "D4-14",
