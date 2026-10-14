@@ -1,0 +1,9 @@
+=== D4-26 findings 证据脱敏 ===
+预期: findings.evidence 中 AK/SK/token/password 被 <redacted>
+实测: 泄密
+详情:
+cmd="hcloud csms ShowSecretVersion --secret-name x --ak..." -> findings=1, evidence 泄漏明文=true
+   evidence 原文: hcloud csms ShowSecretVersion --secret-name x --ak AK123456789 sk=SKsecret123
+cmd="hcloud ecs CreateServer --password MyP@ss --token ..." -> findings=0, evidence 泄漏明文=false
+   evidence 原文: (无)
+RESULT: FAIL

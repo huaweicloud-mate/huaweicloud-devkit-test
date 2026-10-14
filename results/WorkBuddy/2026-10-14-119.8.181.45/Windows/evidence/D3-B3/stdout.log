@@ -1,0 +1,54 @@
+{
+  "caseId": "D3-B3",
+  "status": "PASS",
+  "why": "run_readonly_command executed, output redacted (no AK/SK leak)",
+  "executedAt": "20261014051359",
+  "result": {
+    "hasContent": true,
+    "isError": false,
+    "hasAkLeak": false,
+    "hasSkLeak": false,
+    "parsed": {
+      "ok": false,
+      "exitCode": 0,
+      "signal": null,
+      "errorCode": "APIGW.0301",
+      "errorMessage": "Incorrect IAM authentication information: Unauthorized",
+      "stdout": "{\n  \"error_msg\": \"Incorrect IAM authentication information: Unauthorized\",\n  \"error_code\": \"APIGW.0301\",\n  \"request_id\": \"e86a1d5ebcb13f1dd0e3ccbff109f41d\"\n}\n\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/ECS'\n",
+      "stderr": "",
+      "plan": {
+        "executable": "hcloud",
+        "args": [
+          "ECS",
+          "ListServersDetails",
+          "--cli-region=cn-north-4"
+        ],
+        "command": "hcloud ECS ListServersDetails --cli-region=cn-north-4",
+        "executableBlock": "hcloud ECS ListServersDetails --cli-region=cn-north-4",
+        "warnings": [],
+        "classification": {
+          "decision": "allow",
+          "risk": "read_only",
+          "reason": "Command appears to be a read-only Huawei Cloud operation.",
+          "service": "ECS",
+          "operation": "ListServersDetails",
+          "args": [
+            "ECS",
+            "ListServersDetails",
+            "--cli-region=cn-north-4"
+          ]
+        },
+        "sgFindings": [],
+        "approvalToken": "bf48f1e2-5bdf-413c-a94d-2d150e5fe2f6",
+        "safeToRun": true,
+        "rawArgs": [
+          "ECS",
+          "ListServersDetails",
+          "--cli-region=cn-north-4"
+        ]
+      },
+      "retries": 0,
+      "attempts": 1
+    }
+  }
+}

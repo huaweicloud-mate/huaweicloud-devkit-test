@@ -20,12 +20,12 @@ PASS  D4-2  凭证env打印拦截
       echo $HW_ACCESS_KEY -> deny (exp deny) 
       echo $HW_SECRET_KEY -> deny (exp deny) 
       printenv HW_SECRET_KEY -> deny (exp deny) 
-PASS  D4-3  明文secret API拦截
-      expected: ShowSecretVersion/GetSecretValue deny; ShowSecret 元数据 allow | actual: 符合
+FAIL  D4-3  明文secret API拦截
+      expected: ShowSecretVersion/GetSecretValue deny; ShowSecret 元数据 allow | actual: 不符合
       detail: hcloud csms ShowSecretVersion --secret-name x -> deny (exp deny) 
       hcloud csms GetSecretValue --secret-name x -> deny (exp deny) 
       ShowSecretVersion secret-name=x -> deny (exp deny) 
-      hcloud csms ShowSecret --secret-name x -> allow (exp allow) 
+      hcloud csms ShowSecret --secret-name x -> deny (exp allow) <<<
 PASS  D4-5  写操作误判检测
       expected: 写操作 deny / 读操作 allow 无误判 | actual: 符合
       detail: hcloud ecs CreateServer -> deny (exp deny) 
@@ -44,12 +44,12 @@ PASS  D4-15  hook绕过尝试
       hcloud ecs BatchDeleteServers -> deny (exp deny) 
       hcloud ecs DeleteServer --force -> deny (exp deny) 
       hcloud ecs Delete%53erver -> deny (exp deny) 
-FAIL  D4-16  命令包裹穿透
-      expected: sh/bash/eval/$() 包裹均检测内层写操作 | actual: 0/4 拦截
-      detail: sh -c "hcloud ecs DeleteServer" -> allow (exp deny) <<<
-      bash -c 'hcloud ecs DeleteServer' -> allow (exp deny) <<<
-      eval "hcloud ecs DeleteServer" -> allow (exp deny) <<<
-      $(hcloud ecs DeleteServer) -> allow (exp deny) <<<
+PASS  D4-16  命令包裹穿透
+      expected: sh/bash/eval/$() 包裹均检测内层写操作 | actual: 4/4 拦截
+      detail: sh -c "hcloud ecs DeleteServer" -> deny (exp deny) 
+      bash -c 'hcloud ecs DeleteServer' -> deny (exp deny) 
+      eval "hcloud ecs DeleteServer" -> deny (exp deny) 
+      $(hcloud ecs DeleteServer) -> deny (exp deny) 
 PASS  D4-18  confirm-not-deny审批语义
       expected: 写操作 deny+risk=write+提供审批路径 | actual: decision=deny risk=write
       detail: reason=Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
@@ -71,10 +71,10 @@ PASS  D1-40  镜像lag下检测正确性
       expected: judgeUpdate 语义存在 | actual: 源码含检测语义
       detail: grep update-check.mjs
 PASS  D10-1  工具描述可选择性
-      expected: 40 工具全含 description+inputSchema | actual: desc=40/40 schema=40/40
-      detail: 总工具数=40
+      expected: 42 工具全含 description+inputSchema | actual: desc=42/42 schema=42/42
+      detail: 总工具数=42
 
-[工具名全集] (40) huaweicloud_check_cli, huaweicloud_plan_cli_command, huaweicloud_run_readonly_command, huaweicloud_list_operations, huaweicloud_run_approved_command, huaweicloud_show_profile_redacted, huaweicloud_hook_check_command, huaweicloud_hook_check_artifacts, huaweicloud_hook_check_deploy_plan, huaweicloud_service_catalog, huaweicloud_explain_error, huaweicloud_search_docs, huaweicloud_retrieve_skill, huaweicloud_list_regions, huaweicloud_get_regional_availability, huaweicloud_search_marketplace, huaweicloud_get_service_icon, huaweicloud_detect_framework, huaweicloud_setup_obs_config, huaweicloud_auth_status, huaweicloud_auth_sync, huaweicloud_auth_init, huaweicloud_auth_switch, huaweicloud_auth_confirm, huaweicloud_sandbox_exec_with_session, huaweicloud_sandbox_exec_one_shot, huaweicloud_sandbox_close_session, huaweicloud_sandbox_upload_file, huaweicloud_sandbox_upload_project, huaweicloud_sandbox_deploy_nginx, huaweicloud_sandbox_deploy_check, huaweicloud_sandbox_check_user, huaweicloud_sandbox_sign_agreement, huaweicloud_sandbox_connect, huaweicloud_sandbox_credentials, huaweicloud_voucher_status, huaweicloud_voucher_claim, huaweicloud_check_update, huaweicloud_upgrade, huaweicloud_obs_set_website_config
+[工具名全集] (42) huaweicloud_check_cli, huaweicloud_plan_cli_command, huaweicloud_run_readonly_command, huaweicloud_list_operations, huaweicloud_run_approved_command, huaweicloud_show_profile_redacted, huaweicloud_hook_check_command, huaweicloud_hook_check_artifacts, huaweicloud_hook_check_deploy_plan, huaweicloud_service_catalog, huaweicloud_explain_error, huaweicloud_search_docs, huaweicloud_retrieve_skill, huaweicloud_list_regions, huaweicloud_get_regional_availability, huaweicloud_search_marketplace, huaweicloud_get_service_icon, huaweicloud_detect_framework, huaweicloud_setup_obs_config, huaweicloud_auth_status, huaweicloud_auth_sync, huaweicloud_auth_init, huaweicloud_auth_switch, huaweicloud_auth_confirm, huaweicloud_sandbox_exec_with_session, huaweicloud_sandbox_exec_one_shot, huaweicloud_sandbox_close_session, huaweicloud_sandbox_upload_file, huaweicloud_sandbox_upload_project, huaweicloud_sandbox_deploy_nginx, huaweicloud_sandbox_deploy_check, huaweicloud_sandbox_expose_tunnel, huaweicloud_sandbox_check_user, huaweicloud_sandbox_sign_agreement, huaweicloud_sandbox_connect, huaweicloud_sandbox_credentials, huaweicloud_voucher_status, huaweicloud_voucher_claim, huaweicloud_competition_voucher_claim, huaweicloud_check_update, huaweicloud_upgrade, huaweicloud_obs_set_website_config
 
 ==============================================================
 总计 15 条, PASS 14, FAIL 1
@@ -99,9 +99,9 @@ JSON_RESULTS=[
     "id": "D4-3",
     "title": "明文secret API拦截",
     "expected": "ShowSecretVersion/GetSecretValue deny; ShowSecret 元数据 allow",
-    "actual": "符合",
-    "pass": true,
-    "detail": "hcloud csms ShowSecretVersion --secret-name x -> deny (exp deny) \n      hcloud csms GetSecretValue --secret-name x -> deny (exp deny) \n      ShowSecretVersion secret-name=x -> deny (exp deny) \n      hcloud csms ShowSecret --secret-name x -> allow (exp allow) "
+    "actual": "不符合",
+    "pass": false,
+    "detail": "hcloud csms ShowSecretVersion --secret-name x -> deny (exp deny) \n      hcloud csms GetSecretValue --secret-name x -> deny (exp deny) \n      ShowSecretVersion secret-name=x -> deny (exp deny) \n      hcloud csms ShowSecret --secret-name x -> deny (exp allow) <<<"
   },
   {
     "id": "D4-5",
@@ -131,9 +131,9 @@ JSON_RESULTS=[
     "id": "D4-16",
     "title": "命令包裹穿透",
     "expected": "sh/bash/eval/$() 包裹均检测内层写操作",
-    "actual": "0/4 拦截",
-    "pass": false,
-    "detail": "sh -c \"hcloud ecs DeleteServer\" -> allow (exp deny) <<<\n      bash -c 'hcloud ecs DeleteServer' -> allow (exp deny) <<<\n      eval \"hcloud ecs DeleteServer\" -> allow (exp deny) <<<\n      $(hcloud ecs DeleteServer) -> allow (exp deny) <<<"
+    "actual": "4/4 拦截",
+    "pass": true,
+    "detail": "sh -c \"hcloud ecs DeleteServer\" -> deny (exp deny) \n      bash -c 'hcloud ecs DeleteServer' -> deny (exp deny) \n      eval \"hcloud ecs DeleteServer\" -> deny (exp deny) \n      $(hcloud ecs DeleteServer) -> deny (exp deny) "
   },
   {
     "id": "D4-18",
@@ -194,9 +194,9 @@ JSON_RESULTS=[
   {
     "id": "D10-1",
     "title": "工具描述可选择性",
-    "expected": "40 工具全含 description+inputSchema",
-    "actual": "desc=40/40 schema=40/40",
+    "expected": "42 工具全含 description+inputSchema",
+    "actual": "desc=42/42 schema=42/42",
     "pass": true,
-    "detail": "总工具数=40"
+    "detail": "总工具数=42"
   }
 ]

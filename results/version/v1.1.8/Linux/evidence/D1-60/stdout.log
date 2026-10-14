@@ -1,0 +1,44 @@
+{
+  "case": "D1-60",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 3,
+  "failed": 2,
+  "results": [
+    {
+      "id": "D1-60-1",
+      "name": "custom-registry-used-single-slash",
+      "pass": true,
+      "actual": "/-/package/huaweicloud-devkit/dist-tags",
+      "expected": "/-/package/huaweicloud-devkit/dist-tags"
+    },
+    {
+      "id": "D1-60-2",
+      "name": "fetch-returns-dist-tags",
+      "pass": true,
+      "actual": "{\"latest\":\"9.9.9\",\"next\":\"2.0.0-next.0\"}",
+      "expected": "{\"latest\":\"9.9.9\",\"next\":\"2.0.0-next.0\"}"
+    },
+    {
+      "id": "D1-60-3",
+      "name": "slow-response-timeout-null-no-throw",
+      "pass": false,
+      "actual": "r2=[object Object],threw=false",
+      "expected": "null,false"
+    },
+    {
+      "id": "D1-60-4",
+      "name": "timeout-bounded",
+      "pass": false,
+      "actual": "10007ms",
+      "expected": "<5000ms"
+    },
+    {
+      "id": "D1-60-5",
+      "name": "connection-refused-null-no-throw",
+      "pass": true,
+      "actual": "r3=null,threw=false",
+      "expected": "null,false"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "case": "D2-19",
+  "status": "PASS",
+  "total": 6,
+  "passed": 6,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-19",
+      "name": "parses-current-deploy",
+      "pass": true,
+      "actual": "\"deploy\"",
+      "expected": "\"deploy\"",
+      "passMsg": "current profile = deploy",
+      "failMsg": "current wrong"
+    },
+    {
+      "id": "D2-19",
+      "name": "multi-profile-present",
+      "pass": true,
+      "actual": "\"default,deploy\"",
+      "expected": "\"default,deploy\"",
+      "passMsg": "both named profiles audited",
+      "failMsg": "profiles missing"
+    },
+    {
+      "id": "D2-19",
+      "name": "managed-profile-is-current",
+      "pass": true,
+      "actual": "\"deploy\"",
+      "expected": "\"deploy\"",
+      "passMsg": "resolveManagedProfile = current (deploy)",
+      "failMsg": "managed profile wrong"
+    },
+    {
+      "id": "D2-19",
+      "name": "fingerprint-follows-current",
+      "pass": true,
+      "actual": "\"beca903c\"",
+      "expected": "\"beca903c\"",
+      "passMsg": "current fingerprint = deploy fingerprint",
+      "failMsg": "fingerprint follows wrong profile"
+    },
+    {
+      "id": "D2-19",
+      "name": "audit-does-not-write",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "named-profile audit is read-only (no auto write)",
+      "failMsg": "scanState wrote to config"
+    },
+    {
+      "id": "D2-19",
+      "name": "scan-uses-current-only",
+      "pass": true,
+      "actual": "\"beca903c/beca903c\"",
+      "expected": "\"beca903c\"",
+      "passMsg": "scan reconciles against current (deploy) only",
+      "failMsg": "scan swept a non-current profile"
+    }
+  ]
+}

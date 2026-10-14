@@ -1,0 +1,33 @@
+{
+  "caseId": "D4-1",
+  "status": "PASS",
+  "why": "All credential file read commands blocked",
+  "executedAt": "20261014050753",
+  "results": [
+    {
+      "cmd": "cat ~/.hcloud/config.json",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "type %USERPROFILE%\\.hcloud\\config.json",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "cat ~/.huaweicloud/credentials.json",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "hcloud configure list",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "hcloud configure show",
+      "decision": "deny",
+      "risk": "credential"
+    }
+  ]
+}

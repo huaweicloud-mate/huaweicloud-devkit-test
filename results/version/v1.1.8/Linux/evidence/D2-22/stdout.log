@@ -1,0 +1,36 @@
+{
+  "case": "D2-22",
+  "status": "PASS",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-22",
+      "name": "readCodeArtsCredentials",
+      "pass": true,
+      "actual": "\"CAKCODEARTS0000001/cn-north-4\"",
+      "expected": "\"CAKCODEARTS0000001/cn-north-4\"",
+      "passMsg": "readCodeArtsCredentials reads injected creds",
+      "failMsg": "codearts creds not read"
+    },
+    {
+      "id": "D2-22",
+      "name": "codearts-branch-used",
+      "pass": true,
+      "actual": "\"CAKCODEARTS0000001\"",
+      "expected": "\"CAKCODEARTS0000001\"",
+      "passMsg": "resolveCredentials adopts CodeArts creds (S1/env empty)",
+      "failMsg": "codearts branch not used"
+    },
+    {
+      "id": "D2-22",
+      "name": "non-codearts-falls-through",
+      "pass": true,
+      "actual": "\"HDKIT_CRED_MISSING\"",
+      "expected": "\"HDKIT_CRED_MISSING\"",
+      "passMsg": "non-CodeArts falls through to S1/env (missing)",
+      "failMsg": "non-codearts path misbehaved"
+    }
+  ]
+}

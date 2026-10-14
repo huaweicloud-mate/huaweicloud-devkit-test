@@ -8,8 +8,8 @@ payload: {"tool_name":"Bash","tool_input":{"command":"hcloud ECS DeleteServers -
   py:   <空=放行>
 ----- D4-2 env HW key -----
 payload: {"tool_name":"Bash","tool_input":{"command":"env | grep HW_ACCESS_KEY"}}
-  node: <空=放行>
-  py:   <空=放行>
+  node: {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Dumping cloud credential environment variables is blocked."}}
+  py:   {"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": "Huawei Cloud safety hook blocked this action: dumping cloud credential environment variables is not allowed."}}
 ----- D4-17 malformed -----
 payload: not-json-at-all
   node: <空=放行>

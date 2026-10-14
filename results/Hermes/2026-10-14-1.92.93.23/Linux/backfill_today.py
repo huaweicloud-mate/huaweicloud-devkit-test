@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-10-12 每日测试：证据分发（stdout.txt）+ 写 stdout.log JSON + 回填三 CSV。"""
+"""Hermes Linux 2026-10-14 每日测试：证据分发（stdout.txt）+ 写 stdout.log JSON + 回填三 CSV。"""
 import os, re, json, csv, shutil
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -147,7 +147,7 @@ WHY = {
     "D4-17": "hook_check_command 对空/模糊/注入命令 fail-open(&& rm -rf /*、$(curl|sh) 结论=ok); 根因 tools.mjs:1161-1162 evaluateCommandRisk 空输入回退 allow，未走 invalidRiskResult fail-closed",
     "D3-S7": "serviceCatalog 复合意图未命中 RDS 部署目标(仅 RDS) + CreateInstance 返回 Invalid parameter: db.password(缺 vpc/subnet/sg 前置); 根因 tools.mjs:1983 serviceCatalog",
     "D3-S5": "serviceCatalog 复合意图(存储+托管)未命中多 service, 回退 --help; 根因 tools.mjs:1983 serviceCatalog 复合意图拆分",
-    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: function_name, 未生成 URN/绑定定时触发器; 根因 tools.mjs FunctionGraph 编排参数缺 function_name",
+    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.filename, 未生成 URN/绑定定时触发器; 根因 tools.mjs FunctionGraph 编排创建命令缺有效 code.zip_file/code.filename 参数",
     "D4-25": "Python hook 写操作遥测误分类 cli:invoke(应 cli:write); 根因 hooks/huaweicloud-safety.py:112",
     "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 残留(未脱敏); 根因 tools.mjs:1643 findings 未过 redactSecrets",
     "EXP-E01": "serviceCatalog 中文意图「云主机」未命中 ECS(回退 --help), 92.9%(MISS=1); 根因 tools.mjs:1983 serviceCatalog 中文词表缺「云主机」",

@@ -1,0 +1,41 @@
+{
+  "case": "D6-8",
+  "status": "PASS",
+  "total": 4,
+  "passed": 4,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D6-8",
+      "name": "timeout-returned",
+      "pass": true,
+      "actual": "code=TIMEOUT err=hcloud command timed out after 100 ms.",
+      "expected": "ok=false + code=TIMEOUT (impl code; SPEC contract says ETIMEDOUT/TOOL_TIMEOUT_MS — SPEC-MISMATCH note)",
+      "detail": "elapsed=127ms"
+    },
+    {
+      "id": "D6-8",
+      "name": "bounded-not-hang",
+      "pass": true,
+      "actual": "127ms",
+      "expected": "<5000ms (no infinite hang)",
+      "detail": ""
+    },
+    {
+      "id": "D6-8",
+      "name": "heap-stable",
+      "pass": true,
+      "actual": "396296B",
+      "expected": "<50MB",
+      "detail": ""
+    },
+    {
+      "id": "D6-8",
+      "name": "recovers-after-timeout",
+      "pass": true,
+      "actual": "true",
+      "expected": "true/false structured (no ECONNRESET residue)",
+      "detail": "retries=0"
+    }
+  ]
+}

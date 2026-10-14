@@ -1,0 +1,33 @@
+{
+  "case": "D7-5",
+  "status": "PASS",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D7-5",
+      "name": "merge-keeps-user-env",
+      "pass": true,
+      "actual": "{\"MY_VAR\":\"user-value\",\"REQUIRED_ENV\":\"installer-default\"}",
+      "expected": "MY_VAR=user-value preserved",
+      "detail": ""
+    },
+    {
+      "id": "D7-5",
+      "name": "no-overwrite-existing",
+      "pass": true,
+      "actual": "user-override",
+      "expected": "user-override (not installer-default)",
+      "detail": ""
+    },
+    {
+      "id": "D7-5",
+      "name": "merge-preserves-other-keys",
+      "pass": true,
+      "actual": "[\"huaweicloud-devkit\",\"other\"]",
+      "expected": "other key intact + devkit merged",
+      "detail": ""
+    }
+  ]
+}

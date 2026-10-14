@@ -1,0 +1,140 @@
+
+=====CASE D3-C6=====
+check_user -> realnameVerified=true agreementSigned=true err=
+[OK] sandbox_check_user 返回 realnameVerified+agreementSigned
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+connect -> status=connected wsId=8d898bc423254635 err=
+[OK] sandbox_connect 返回 workspace_id
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+credentials -> {"sessionId":"8d898bc423254635bbe12bb34d7f68c1","expiresAt":"2026-10-14T21:26:41.218000Z","credentialValidation":"passed","apiKeyInjected":false,"apiKeyHint":"N
+[OK] sandbox_credentials 注入临时 AK/SK 无异常
+  upload progress: batch 1/1
+upload_file -> ok=true md5Verified=true err=
+[OK] sandbox_upload_file 上传并 md5 校验
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+exec_one_shot -> {"stdout":"\u001b]133;C\u0007hdk-c6-16\r\n/root\r\n\u001b]133;C\u0007\r\n","exitCode":0}
+[OK] sandbox_exec_one_shot 执行只读命令返回输出
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8088, HTTP 200)"},"output_dir":{"status":"FAIL","detail":"(/workspace/
+[OK] sandbox_deploy_check 返回规范结果（无静默失败）
+close_session -> "ok"
+[OK] sandbox_close_session 正常关闭
+=====END D3-C6=====
+
+=====CASE D3-C3=====
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+connect -> status=connected wsId=8d898bc423254635
+[OK] connect 成功
+[2026-10-13T21:26:50.801Z] uploadProject: /tmp/multica-task-3726195857/hdk-c3-mv76y3xo -> /workspace/hdk-c3-mv76y3xo.tar.gz (archive=206 bytes, md5=6d1574ab7c8b951311fba23e9034f313)
+[2026-10-13T21:26:50.855Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-3726195857/sandbox-upload-1791926810789/hdk-c3-mv76y3xo.tar.gz, size=206, remotePath=/workspace/hdk-c3-mv76y3xo.tar.gz)
+[2026-10-13T21:26:50.855Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-13T21:26:50.855Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-13T21:26:50.903Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-13T21:26:50.951Z] deployFileServer: starting server on port 8888
+[2026-10-13T21:26:50.988Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 13731\r\n\u001b]133;C\u0007\r\n"
+[2026-10-13T21:26:50.988Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+[2026-10-13T21:26:51.973Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-13T21:26:51.975Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-13T21:26:51.976Z] uploadViaHttpTunnel: tunnel ready, localPort=36391
+[2026-10-13T21:26:51.976Z] uploadViaHttpTunnel: waiting for server health on localhost:36391
+[2026-10-13T21:26:51.977Z] waitForServerReady: attempt 1, checking http://localhost:36391/health
+[2026-10-13T21:26:52.015Z] waitForServerReady: server ready on port 36391 after 0 retries
+[2026-10-13T21:26:52.015Z] uploadViaHttpTunnel: sending POST with 206 bytes
+[2026-10-13T21:26:52.054Z] uploadViaHttpTunnel: upload complete (bytes=206, md5=6d1574ab7c8b951311fba23e9034f313)
+upload_project -> ok=true md5Verified=true err=
+[OK] upload_project 上传 + md5 校验
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+Waiting for connection 578348... (0s)Connection 578348 established (0s).
+deploy_nginx -> ok=undefined port=undefined
+[FAIL] deploy_nginx 静态站部署
+[FAIL] deploy_check 通过（nginx_serving PASS=URL 可达）
+[FAIL] URL 可达（沙箱内 HTTP 核验 200）
+close_session -> "ok"
+[OK] 会话关闭
+=====END D3-C3=====
+
+=====SUMMARY=====
+{
+  "total": 13,
+  "passed": 10,
+  "results": [
+    {
+      "name": "sandbox_check_user 返回 realnameVerified+agreementSigned",
+      "ok": true,
+      "detail": "{\"r\":true,\"a\":true}"
+    },
+    {
+      "name": "sandbox_connect 返回 workspace_id",
+      "ok": true,
+      "detail": "wsId=8d898bc423254635"
+    },
+    {
+      "name": "sandbox_credentials 注入临时 AK/SK 无异常",
+      "ok": true,
+      "detail": "credOk=true"
+    },
+    {
+      "name": "sandbox_upload_file 上传并 md5 校验",
+      "ok": true,
+      "detail": "upOk=true"
+    },
+    {
+      "name": "sandbox_exec_one_shot 执行只读命令返回输出",
+      "ok": true,
+      "detail": "execOk=true"
+    },
+    {
+      "name": "sandbox_deploy_check 返回规范结果（无静默失败）",
+      "ok": true,
+      "detail": "dchkOk=true"
+    },
+    {
+      "name": "sandbox_close_session 正常关闭",
+      "ok": true,
+      "detail": "closeOk=true"
+    },
+    {
+      "name": "connect 成功",
+      "ok": true,
+      "detail": "{\"status\":\"connected\"}"
+    },
+    {
+      "name": "upload_project 上传 + md5 校验",
+      "ok": true,
+      "detail": "upOk=true"
+    },
+    {
+      "name": "deploy_nginx 静态站部署",
+      "ok": false,
+      "detail": "port=8080"
+    },
+    {
+      "name": "deploy_check 通过（nginx_serving PASS=URL 可达）",
+      "ok": false,
+      "detail": "dcOk=false"
+    },
+    {
+      "name": "URL 可达（沙箱内 HTTP 核验 200）",
+      "ok": false,
+      "detail": "urlOk=false"
+    },
+    {
+      "name": "会话关闭",
+      "ok": true,
+      "detail": "closeOk=true"
+    }
+  ]
+}

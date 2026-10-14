@@ -1,13 +1,13 @@
 ===== 环境基线 =====
 v22.13.0
 10.9.2
-HuaweiCloud DevKit CLI: 1.1.7
+HuaweiCloud DevKit CLI: 1.1.8-next.3
 
 
 ===== D1-1 install --target hermes (隔离 HOME) =====
 
 ╔══════════════════════════════════════════════╗
-║     HuaweiCloud DevKit v1.1.7                 ║
+║     HuaweiCloud DevKit v1.1.8-next.3          ║
 ║     https://github.com/huaweicloud   ║
 ╚══════════════════════════════════════════════╝
 
@@ -16,16 +16,17 @@ Installing HuaweiCloud DevKit for hermes...
   Node.js v22.13.0 [32mOK[0m
 
 [Hermes Agent]
-  Skills -> /tmp/hdk-cli.OGrO9t/skills
-  MCP Server -> /tmp/hdk-cli.OGrO9t/huaweicloud-plugins/src
-  Safety Policy -> /tmp/hdk-cli.OGrO9t/huaweicloud-plugins/safety
-  Safety Hooks -> /tmp/hdk-cli.OGrO9t/huaweicloud-plugins/hooks
-  MCP config updated: /tmp/hdk-cli.OGrO9t/config.yaml
+  Skills -> /tmp/hdk-cli.aPrlO0/skills
+  MCP Server -> /tmp/hdk-cli.aPrlO0/huaweicloud-plugins/src
+  Safety Policy -> /tmp/hdk-cli.aPrlO0/huaweicloud-plugins/safety
+  Agent Rules -> /tmp/hdk-cli.aPrlO0/huaweicloud-plugins/rules/huawei-agent-rules.mdc
+  Safety Hooks -> /tmp/hdk-cli.aPrlO0/huaweicloud-plugins/hooks
+  MCP config updated: /tmp/hdk-cli.aPrlO0/config.yaml
   Hooks config cleaned
-  Hooks config updated: /tmp/hdk-cli.OGrO9t/config.yaml
-  Hook allowlist updated: /tmp/hdk-cli.OGrO9t/shell-hooks-allowlist.json
-  Hook plugin installed: /tmp/hdk-cli.OGrO9t/plugins/huaweicloud-safety
-  Runtime deps installed -> /tmp/hdk-cli.OGrO9t/huaweicloud-plugins/node_modules
+  Hooks config updated: /tmp/hdk-cli.aPrlO0/config.yaml
+  Hook allowlist updated: /tmp/hdk-cli.aPrlO0/shell-hooks-allowlist.json
+  Hook plugin installed: /tmp/hdk-cli.aPrlO0/plugins/huaweicloud-safety
+  Runtime deps installed -> /tmp/hdk-cli.aPrlO0/huaweicloud-plugins/node_modules
   MCP Python SDK: [32mAlready installed[0m
 
 [32mInstallation complete![0m
@@ -44,7 +45,6 @@ KooCLI (hcloud) detected.
   1. 配置统一凭据：npx huaweicloud-devkit auth init
   2. 配置代理（企业内网）：npx huaweicloud-devkit proxy init
   3. 重启 Hermes Agent 会话（MCP 工具重启后生效）
-  4. 运行自检：npx huaweicloud-devkit doctor
 
 ===== D1-1/D5-1 安装产物（manifest / plugin / rules） =====
 <HOME>/config.yaml
@@ -75,6 +75,7 @@ KooCLI (hcloud) detected.
 <HOME>/huaweicloud-plugins/src/mcp-server.mjs
 <HOME>/huaweicloud-plugins/src/mcp-server-remote.mjs
 <HOME>/huaweicloud-plugins/src/officeace-paths.mjs
+<HOME>/huaweicloud-plugins/src/preflight.mjs
 <HOME>/huaweicloud-plugins/src/proxy/proxy-agent.mjs
 <HOME>/huaweicloud-plugins/src/proxy/proxy-config.mjs
 <HOME>/huaweicloud-plugins/src/risk-rule-engine.mjs
@@ -92,13 +93,13 @@ KooCLI (hcloud) detected.
 <HOME>/huaweicloud-plugins/src/update-check.mjs
 <HOME>/huaweicloud-plugins/src/ws-exec/hwlink-tunnel-channel.mjs
 <HOME>/shell-hooks-allowlist.json
-<HOME>/skills/huawei-apig/SKILL.md
 <HOME>/skills/huawei-billing/SKILL.md
 <HOME>/skills/huawei-cbr/SKILL.md
 <HOME>/skills/huawei-cce/SKILL.md
 <HOME>/skills/huaweicloud-api-and-sdk/SKILL.md
 
 ===== D4-23 全局规则 huawei-agent-rules.md 注入 =====
+<HOME>/huaweicloud-plugins/rules/huawei-agent-rules.mdc
   [缺] 未找到 huawei-agent-rules.md
 
 ===== D1-3 doctor（安装态） =====
@@ -116,13 +117,13 @@ KooCLI (hcloud) detected.
   [32m[PASS][0m Skills installed (29)
 Results: 11 pass, 0 warn, 0 fail
 [32mAll checks passed.[0m You can now describe your Huawei Cloud task
-(node:399098) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:421514) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 
 ===== D1-2 多Agent探测（省略 --target） =====
 
 ╔══════════════════════════════════════════════╗
-║     HuaweiCloud DevKit v1.1.7                 ║
+║     HuaweiCloud DevKit v1.1.8-next.3          ║
 ║     https://github.com/huaweicloud   ║
 ╚══════════════════════════════════════════════╝
 
@@ -142,24 +143,24 @@ Multiple agents detected (opencode, hermes, openclaw, atomcode). Cannot prompt i
 --- update（应报已是最新或提示） ---
 
 ╔══════════════════════════════════════════════╗
-║     HuaweiCloud DevKit v1.1.7                 ║
+║     HuaweiCloud DevKit v1.1.8-next.3          ║
 ║     https://github.com/huaweicloud   ║
 ╚══════════════════════════════════════════════╝
 
 [OpenCode]
-  Skills updated -> /home/testbot1/.config/opencode/skills
+  Skills updated -> /home/testbot1/.config/opencode/skills (removed 8 stale)
   Commands updated -> /home/testbot1/.config/opencode/commands
   MCP Server updated -> /home/testbot1/.config/opencode/huaweicloud-plugins/src
   Safety Policy updated -> /home/testbot1/.config/opencode/huaweicloud-plugins/safety
+  Agent Rules -> /home/testbot1/.config/opencode/huaweicloud-plugins/rules/huawei-agent-rules.mdc
   Plugin updated -> /home/testbot1/.config/opencode/plugins
   OpenCode MCP config unchanged: /home/testbot1/.config/opencode/opencode.json
   Runtime deps installed -> /home/testbot1/.config/opencode/huaweicloud-plugins/node_modules
 
-
 ===== D1-6 install-hcloud 幂等 =====
 
 ╔══════════════════════════════════════════════╗
-║     HuaweiCloud DevKit v1.1.7                 ║
+║     HuaweiCloud DevKit v1.1.8-next.3          ║
 ║     https://github.com/huaweicloud   ║
 ╚══════════════════════════════════════════════╝
 
@@ -169,7 +170,7 @@ Installing KooCLI (hcloud)...
   Downloading https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12/huaweicloud-cli-linux-arm64.tar.gz...
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 11.9M  100 11.9M    0     0  26.6M      0 --:--:-- --:--:-- --:--:-- 26.7M
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 11.9M  100 11.9M    0     0  53.2M      0 --:--:-- --:--:-- --:--:-- 53.4M
   Extracting...
   Installing...
 
@@ -182,12 +183,12 @@ Uninstalling HuaweiCloud DevKit from hermes...
 [Hermes Agent]
   Hooks config cleaned
   Hooks config removed
-  Removed hook plugin: /tmp/hdk-cli.OGrO9t/plugins/huaweicloud-safety
+  Removed hook plugin: /tmp/hdk-cli.aPrlO0/plugins/huaweicloud-safety
   Removed 1 hook approvals from allowlist
   MCP config cleaned
   MCP config removed
   Removed 29 skills
-  Removed empty skills directory: /tmp/hdk-cli.OGrO9t/skills
+  Removed empty skills directory: /tmp/hdk-cli.aPrlO0/skills
   Removed MCP server, safety policy and hooks
 
 [32mUninstall complete.[0m

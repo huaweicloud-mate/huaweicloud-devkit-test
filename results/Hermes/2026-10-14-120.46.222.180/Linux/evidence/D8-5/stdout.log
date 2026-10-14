@@ -1,0 +1,54 @@
+{
+  "case": "D8-5",
+  "status": "PASS",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D8-5",
+      "name": "probe-output-redacted",
+      "pass": true,
+      "actual": "\"KooCLI 7.2.12 secret_key=<redacted>\"",
+      "expected": "\"no secret\"",
+      "passMsg": "probe output redacted (no secret)",
+      "failMsg": "secret leaked in probe output"
+    },
+    {
+      "id": "D8-5",
+      "name": "configure-error-redacted",
+      "pass": true,
+      "actual": "\"<redacted>\"",
+      "expected": "\"<redacted>\"",
+      "passMsg": "configure failure stderr redacted",
+      "failMsg": "secret leaked in configure error: configure set --cli-profile=default --cli-access-key=<redacted> --cli-secret-key=<redacted> --cli-region=cn-north-4"
+    },
+    {
+      "id": "D8-5",
+      "name": "sanitize-strips-newlines",
+      "pass": true,
+      "actual": "\"\\\"line1 line2 line3 SKRUNTIMELOGSECRET99\\\"\"",
+      "expected": "\"no control chars\"",
+      "passMsg": "sanitizeValue strips newlines/tabs",
+      "failMsg": "control chars survived"
+    },
+    {
+      "id": "D8-5",
+      "name": "sanitize-truncates",
+      "pass": true,
+      "actual": "255",
+      "expected": "\"<=255\"",
+      "passMsg": "sanitizeValue truncates to 255",
+      "failMsg": "truncation failed"
+    },
+    {
+      "id": "D8-5",
+      "name": "redaction-layer-masks",
+      "pass": true,
+      "actual": "\"hcloud configure failed: secret_key=<redacted> (region=cn-north-4)\"",
+      "expected": "\"<redacted> + region\"",
+      "passMsg": "diagnostic redaction: secret masked, region kept",
+      "failMsg": "redaction unbalanced"
+    }
+  ]
+}

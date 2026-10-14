@@ -1,0 +1,49 @@
+[OK] CreateVpc  vpcId=3e3dbea7-32bb-4c70-8449-5de56071a516
+[OK] CreateSubnet  subnetId=81e5c0c6-bd61-4e2f-81d9-3e6330106dd2
+[OK] CreateServers(plan 分类 allow)  allow
+[OK] CreateServers(返回 serverIds)  {
+  "job_id": "ff808081a0ed145901a1372560081da2",
+  "serverIds": [
+    "252554d1-e95a-4b6a-93c2-eff8
+[OK] ListServersDetails 状态=ACTIVE  active=true
+[FAIL] finally归零(ECS/VPC/子网/EIP 全删)  ECS提交删除:OK | ECS归零:OK | subnet:OK | vpc:OK | 最终归零(vpc=false,eip=true)
+
+=====SUMMARY=====
+{
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 6,
+  "passed": 5,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "ok": true,
+      "detail": "vpcId=3e3dbea7-32bb-4c70-8449-5de56071a516"
+    },
+    {
+      "name": "CreateSubnet",
+      "ok": true,
+      "detail": "subnetId=81e5c0c6-bd61-4e2f-81d9-3e6330106dd2"
+    },
+    {
+      "name": "CreateServers(plan 分类 allow)",
+      "ok": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回 serverIds)",
+      "ok": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed145901a1372560081da2\",\n  \"serverIds\": [\n    \"252554d1-e95a-4b6a-93c2-eff8"
+    },
+    {
+      "name": "ListServersDetails 状态=ACTIVE",
+      "ok": true,
+      "detail": "active=true"
+    },
+    {
+      "name": "finally归零(ECS/VPC/子网/EIP 全删)",
+      "ok": false,
+      "detail": "ECS提交删除:OK | ECS归零:OK | subnet:OK | vpc:OK | 最终归零(vpc=false,eip=true)"
+    }
+  ]
+}

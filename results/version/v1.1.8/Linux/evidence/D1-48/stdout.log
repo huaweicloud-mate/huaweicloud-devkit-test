@@ -1,0 +1,44 @@
+{
+  "case": "D1-48",
+  "status": "PASS",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D1-48-1",
+      "name": "distinct-per-session",
+      "pass": true,
+      "actual": "/home/testbot1/.config/huaweicloud/devkit-skip.json.agent-A <-> /home/testbot1/.config/huaweicloud/devkit-skip.json.agent-B",
+      "expected": "different paths"
+    },
+    {
+      "id": "D1-48-2",
+      "name": "suffix-per-session",
+      "pass": true,
+      "actual": "/home/testbot1/.config/huaweicloud/devkit-skip.json.agent-A | /home/testbot1/.config/huaweicloud/devkit-skip.json.agent-B",
+      "expected": "ends .agent-A/.agent-B"
+    },
+    {
+      "id": "D1-48-3",
+      "name": "default-null-stdin-same-file",
+      "pass": true,
+      "actual": "/home/testbot1/.config/huaweicloud/devkit-skip.json | /home/testbot1/.config/huaweicloud/devkit-skip.json | /home/testbot1/.config/huaweicloud/devkit-",
+      "expected": "same path"
+    },
+    {
+      "id": "D1-48-4",
+      "name": "session-id-sanitized",
+      "pass": true,
+      "actual": "/home/testbot1/.config/huaweicloud/devkit-skip.json.a_b_c_d",
+      "expected": "ends .a_b_c_d"
+    },
+    {
+      "id": "D1-48-5",
+      "name": "skip-and-fallback-paths-are-strings",
+      "pass": true,
+      "actual": "strings",
+      "expected": "strings"
+    }
+  ]
+}

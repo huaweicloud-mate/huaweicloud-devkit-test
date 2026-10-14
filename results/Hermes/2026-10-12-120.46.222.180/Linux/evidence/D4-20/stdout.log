@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "createApprovalToken 生成令牌",
+      "pass": true,
+      "detail": "6efb1481-745"
+    },
+    {
+      "name": "新令牌 state=valid",
+      "pass": true,
+      "detail": "valid"
+    },
+    {
+      "name": "consumeApprovalToken 首次消费返回存储条目(非空)",
+      "pass": true,
+      "detail": "{\"argsHash\":\"a4305c0de21e5cd9efdfae58a500dc68718651da2e1e082"
+    },
+    {
+      "name": "消费后 state=already_consumed(墓碑)",
+      "pass": true,
+      "detail": "already_consumed"
+    },
+    {
+      "name": "二次消费不可重放(返回 null)",
+      "pass": true,
+      "detail": "null"
+    },
+    {
+      "name": "未知令牌 state=not_found",
+      "pass": true,
+      "detail": "not_found"
+    },
+    {
+      "name": "超期令牌 state=expired",
+      "pass": true,
+      "detail": "expired"
+    }
+  ],
+  "SUT": "huaweicloud-devkit 1.1.8-next.3 (gitHead 1afbcf1)"
+}

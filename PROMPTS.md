@@ -21,7 +21,7 @@
 
 ## 二、能力完整提示语（复制即用，已内含通用前置）
 
-下面五条整段复制发给 agent 即可。本地 agent、远程测试机 agent、新加入的 agent 均适用。
+下面六条整段复制发给 agent 即可。本地 agent、远程测试机 agent、新加入的 agent 均适用。
 
 ### 1. 测试设计
 
@@ -101,6 +101,22 @@ init_day 建包 → P0→P1→P2 执行 + 证据落盘 → 回填执行状态/�
 只提交自己 `results/<你的客户端>/` 目录；真云禁用 mock/假跑、必须真机执行（环境已具备）；历史查重命中不重复提单。
 ```
 
+### 6. 用例结构与规范
+
+```
+【huaweicloud-devkit 测试】前置准备：
+1. 第一次在 ~/devkit-test/<你的客户端名>/ 目录下 clone 两个仓库：
+   - 测试仓库：git clone https://github.com/huaweicloud-mate/huaweicloud-devkit-test.git
+   - 源码仓库：git clone https://github.com/huaweicloud/huaweicloud-devkit.git hdk
+2. 读测试仓库根目录 AGENTS.md（能力索引 + 公共前置 + 红线），自我识别客户端名与 OS。
+
+任务：用例规范 [<维度/用例ID>]。按 skills/case-design/SKILL.md 核对/设计 huaweicloud-devkit 测试用例：
+- 结构对齐：三层矩阵列语义（设计级 27 列 / 展开级 24 列 / 追踪表 10 列）、维度 D1–D11、ID 三铁律（永不复用 / OBSOLETE 标记 / 修改 = 新 ID + supersedes）。
+- 新增用例：只改生成器 test-cases/design/gen_matrix.py 的 add(...)（禁手改 CSV），同步 BATCH_TS / NEW_REVIEW_IDS_<日期> / gen_ts() 三处联动，展开级同步 gen_tracing.py。
+- 门禁复现：python gen_matrix.py + gen_tracing.py → verify_new.py（exit 0）→ scan_gaps.py（GATE-PASS）。
+- 只做设计与结构核对，不跑真实探针/真云；不改 results/。
+```
+
 ## 三、简短版对照（仅本地已初始化 agent 可用）
 
 本地 agent 已 clone 两仓库、已读过 AGENTS.md 时，可只用短提示语；**新人 / 新 agent 一律用第二节完整版**。
@@ -112,6 +128,7 @@ init_day 建包 → P0→P1→P2 执行 + 证据落盘 → 回填执行状态/�
 | 缺陷回归 | 第二节 · 3 | `回归 #<编号>` |
 | 覆盖核对 | 第二节 · 4 | `覆盖核对 [<维度>]` |
 | 版本全量测试 | 第二节 · 5 | `版本全量测试 <版本>` |
+| 用例结构与规范 | 第二节 · 6 | `用例规范 [<维度/用例ID>]` |
 
 ## 四、维护者专属（Hermes 本机，不跨 agent 分发）
 

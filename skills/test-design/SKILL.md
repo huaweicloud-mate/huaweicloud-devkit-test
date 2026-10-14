@@ -40,6 +40,8 @@ tags: [testing, test-design, huaweicloud, devkit, coverage]
 
 ## 二、设计方法论（产出用例前先过一遍）
 
+> **用例的「结构/列语义/ID 规则/展开规则/门禁」以 [skills/case-design/SKILL.md](../case-design/SKILL.md) 为准**（本节的六技术/六要素/源码核对四步为方法论真源，两处不一致时以本节为准）。
+
 ### A. 覆盖完整性——六种技术交叉查缺口
 
 | 技术 | 核心问法 | huaweicloud-devkit 落点示例 |

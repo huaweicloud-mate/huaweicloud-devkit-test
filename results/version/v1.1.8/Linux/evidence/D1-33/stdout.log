@@ -1,0 +1,45 @@
+{
+  "case": "D1-33",
+  "status": "PASS",
+  "total": 4,
+  "passed": 4,
+  "results": [
+    {
+      "id": "D1-33",
+      "name": "skipFilePath",
+      "pass": true,
+      "actual": "/home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/.update-skip.json",
+      "expected": "string",
+      "passMsg": "skipFilePath: /home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/.update-skip.json",
+      "failMsg": "skipFilePath empty"
+    },
+    {
+      "id": "D1-33",
+      "name": "fallbackSkipFilePath",
+      "pass": true,
+      "actual": "/home/testbot1/devkit-test/Hermes/hdk/.config/huaweicloud/devkit-skip.json",
+      "expected": "string",
+      "passMsg": "fallback: /home/testbot1/devkit-test/Hermes/hdk/.config/huaweicloud/devkit-skip.json",
+      "failMsg": "fallback empty"
+    },
+    {
+      "id": "D1-33",
+      "name": "resolveSkipFilePath",
+      "pass": true,
+      "actual": "/home/testbot1/devkit-test/Hermes/hdk/.config/huaweicloud/devkit-skip.json.test",
+      "expected": "string",
+      "passMsg": "resolveSkipFilePath returns path",
+      "failMsg": "resolveSkipFilePath error"
+    },
+    {
+      "id": "D1-33",
+      "name": "skip-fields",
+      "pass": true,
+      "actual": "dismissedVersion,dismissedAt,expireAt",
+      "expected": "all fields",
+      "passMsg": "skip file fields complete",
+      "failMsg": "skip file fields missing"
+    }
+  ],
+  "source": "d1-upgrade/probe.mjs"
+}

@@ -1,0 +1,1235 @@
+{
+  "date": "2026-10-14",
+  "generatedAt": "2026-10-14 23:48:33",
+  "timezone": "Asia/Shanghai",
+  "scope": "UX（D11）体验专项 —— 可执行门禁夹具三态结果",
+  "caveat": "红线基线口径：NOT_IMPLEMENTED = 需求验收未达标（已知缺口，非 harness 故障），BLOCKED = 宿主/环境不可判定（不计入 PASS/FAIL）。本数据是回归防退化门禁的趋势线，不等价于体验验收（认知负荷 / 文案是否够新手用 / 视觉排版仍需人工 rubric）。",
+  "suts": [
+    {
+      "label": "1.1.8（npm）",
+      "version": "1.1.8",
+      "hdkSrc": "/home/runner/work/_temp/ux-sut/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src",
+      "summary": {
+        "pass": 1,
+        "not_implemented": 19,
+        "blocked": 0,
+        "harness_error": 0,
+        "total": 20,
+        "exit": 1
+      },
+      "cases": [
+        {
+          "file": "d11-1-onboarding-first-touch.mjs",
+          "case": "D11-1",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 4,
+          "fail": 3,
+          "note": "口径: 需求验收（UX-R1）；FAIL = 需求未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-1-code",
+              "title": "错误码为 HDKIT_CRED_MISSING",
+              "ok": true,
+              "actual": "HDKIT_CRED_MISSING",
+              "expected": "HDKIT_CRED_MISSING",
+              "detail": ""
+            },
+            {
+              "id": "D11-1-scenario",
+              "title": "onboarding.scenario == 3（未登录首触场景）",
+              "ok": true,
+              "actual": {
+                "scenario": 3,
+                "message": "未配置华为云凭证,需要完成登录后才能使用云能力。"
+              },
+              "expected": "scenario=3",
+              "detail": ""
+            },
+            {
+              "id": "D11-1-zh",
+              "title": "onboarding.message 为中文",
+              "ok": true,
+              "actual": "未配置华为云凭证,需要完成登录后才能使用云能力。",
+              "expected": "含中文字符",
+              "detail": ""
+            },
+            {
+              "id": "D11-1-steps-obtain",
+              "title": "steps 含取得 AK/SK 的动作（action=obtain-aksk）",
+              "ok": false,
+              "actual": [
+                "auth-init"
+              ],
+              "expected": "含 obtain-aksk",
+              "detail": ""
+            },
+            {
+              "id": "D11-1-steps-label",
+              "title": "取得 AK/SK 的步骤 label 指向「控制台」",
+              "ok": false,
+              "actual": null,
+              "expected": "label 含「控制台」",
+              "detail": ""
+            },
+            {
+              "id": "D11-1-step-auth-init",
+              "title": "steps 含会话内登录动作（auth-init）",
+              "ok": true,
+              "actual": [
+                "auth-init"
+              ],
+              "expected": "含 auth-init|auth_switch",
+              "detail": ""
+            },
+            {
+              "id": "D11-1-no-en",
+              "title": "顶层 message 无英文整句残留（反断言）",
+              "ok": false,
+              "actual": "Huawei Cloud credentials are not configured. Run \"npx huaweicloud-devkit",
+              "expected": "不含英文整句",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-11-region-explicit.mjs",
+          "case": "D11-11",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 2,
+          "fail": 3,
+          "note": "口径: 需求验收（UX-R5）；FAIL = 需求未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-11-obs-default",
+              "title": "缺 region 时不报 \"region, ak, and sk are required\"",
+              "ok": false,
+              "actual": "region, ak, and sk are required to write OBS config",
+              "expected": "不报该错",
+              "detail": ""
+            },
+            {
+              "id": "D11-11-ask-region",
+              "title": "auth init 显式询问 region（而不是静默硬编码）",
+              "ok": false,
+              "actual": "未发现 region 询问语句",
+              "expected": "存在 region 询问",
+              "detail": ""
+            },
+            {
+              "id": "D11-11-ask-zh",
+              "title": "region 询问提示为中文",
+              "ok": false,
+              "actual": "（无该语句）",
+              "expected": "提示含中文字符",
+              "detail": ""
+            },
+            {
+              "id": "D11-11-default-value",
+              "title": "缺省区域显式回落 cn-north-4（默认值可回车跳过）",
+              "ok": true,
+              "actual": "cn-north-4",
+              "expected": "cn-north-4",
+              "detail": ""
+            },
+            {
+              "id": "D11-11-s1-region",
+              "title": "S1.region == \"cn-north-4\"",
+              "ok": true,
+              "actual": "cn-north-4",
+              "expected": "cn-north-4",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-12-iam401-zh.mjs",
+          "case": "D11-12",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 1,
+          "fail": 3,
+          "note": "口径: 需求验收（UX-R5/R7）；FAIL = 文案未中文化/缺可执行动作，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-12-invalid",
+              "title": "无效 SK 判定为校验失败（valid=false）",
+              "ok": true,
+              "actual": false,
+              "expected": false,
+              "detail": ""
+            },
+            {
+              "id": "D11-12-zh",
+              "title": "失败提示含中文字符（面向用户可读）",
+              "ok": false,
+              "actual": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is invalid - check the SK f",
+              "expected": "含中文字符",
+              "detail": ""
+            },
+            {
+              "id": "D11-12-actionable",
+              "title": "提示含可执行动作（控制台重新生成密钥 / npx / hcloud）",
+              "ok": false,
+              "actual": {
+                "action": null,
+                "命中": false
+              },
+              "expected": "含「控制台重新生成访问密钥」类可执行动作",
+              "detail": ""
+            },
+            {
+              "id": "D11-12-no-en",
+              "title": "不出现英文 \"IAM rejected the credentials\" 裸串（反断言）",
+              "ok": false,
+              "actual": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is invalid - check the SK f",
+              "expected": "不含该英文整句",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-16-error-cards.mjs",
+          "case": "D11-16",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 0,
+          "fail": 19,
+          "note": "口径: 需求验收（UX-R7）；FAIL = 统一错误卡契约未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-16-HDKIT_CRED_MISSING-shape",
+              "title": "HDKIT_CRED_MISSING：返回统一错误卡 {code,messageZh,action}",
+              "ok": false,
+              "actual": {
+                "code": "HDKIT_CRED_MISSING",
+                "messageZh": "undefined",
+                "action": "undefined"
+              },
+              "expected": {
+                "code": "HDKIT_CRED_MISSING",
+                "messageZh": "string",
+                "action": "string"
+              },
+              "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+            },
+            {
+              "id": "D11-16-HDKIT_CRED_MISSING-zh",
+              "title": "HDKIT_CRED_MISSING：messageZh 含中文且无英文整句",
+              "ok": false,
+              "actual": "Huawei Cloud credentials are not configured. Run \"npx huaweicloud-devkit auth init\" or set HW_ACCESS_KEY/HW_SE",
+              "expected": "中文且无英文整句",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-HDKIT_CRED_MISSING-action",
+              "title": "HDKIT_CRED_MISSING：action 为可执行命令（npx / hcloud 开头）",
+              "ok": false,
+              "actual": null,
+              "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-IAM-401-shape",
+              "title": "IAM-401：返回统一错误卡 {code,messageZh,action}",
+              "ok": false,
+              "actual": {
+                "code": null,
+                "messageZh": "undefined",
+                "action": "undefined"
+              },
+              "expected": {
+                "code": "IAM-401",
+                "messageZh": "string",
+                "action": "string"
+              },
+              "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+            },
+            {
+              "id": "D11-16-IAM-401-zh",
+              "title": "IAM-401：messageZh 含中文且无英文整句",
+              "ok": false,
+              "actual": "IAM rejected the credentials (HTTP 401: HTTP 401 synthetic). The AK/SK is invalid - check the SK for typos or ",
+              "expected": "中文且无英文整句",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-IAM-401-action",
+              "title": "IAM-401：action 为可执行命令（npx / hcloud 开头）",
+              "ok": false,
+              "actual": null,
+              "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-IAM-403-shape",
+              "title": "IAM-403：返回统一错误卡 {code,messageZh,action}",
+              "ok": false,
+              "actual": {
+                "code": null,
+                "messageZh": "undefined",
+                "action": "undefined"
+              },
+              "expected": {
+                "code": "IAM-403",
+                "messageZh": "string",
+                "action": "string"
+              },
+              "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+            },
+            {
+              "id": "D11-16-IAM-403-zh",
+              "title": "IAM-403：messageZh 含中文且无英文整句",
+              "ok": false,
+              "actual": "",
+              "expected": "中文且无英文整句",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-IAM-403-action",
+              "title": "IAM-403：action 为可执行命令（npx / hcloud 开头）",
+              "ok": false,
+              "actual": null,
+              "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-region-缺失-shape",
+              "title": "region-缺失：返回统一错误卡 {code,messageZh,action}",
+              "ok": false,
+              "actual": {
+                "code": null,
+                "messageZh": "undefined",
+                "action": "undefined"
+              },
+              "expected": {
+                "code": "region-缺失",
+                "messageZh": "string",
+                "action": "string"
+              },
+              "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+            },
+            {
+              "id": "D11-16-region-缺失-zh",
+              "title": "region-缺失：messageZh 含中文且无英文整句",
+              "ok": false,
+              "actual": "region, ak, and sk are required to write OBS config",
+              "expected": "中文且无英文整句",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-region-缺失-action",
+              "title": "region-缺失：action 为可执行命令（npx / hcloud 开头）",
+              "ok": false,
+              "actual": null,
+              "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-KooCLI-未装-shape",
+              "title": "KooCLI-未装：返回统一错误卡 {code,messageZh,action}",
+              "ok": false,
+              "actual": {
+                "code": null,
+                "messageZh": "undefined",
+                "action": "undefined"
+              },
+              "expected": {
+                "code": "KooCLI-未装",
+                "messageZh": "string",
+                "action": "string"
+              },
+              "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+            },
+            {
+              "id": "D11-16-KooCLI-未装-zh",
+              "title": "KooCLI-未装：messageZh 含中文且无英文整句",
+              "ok": false,
+              "actual": "",
+              "expected": "中文且无英文整句",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-KooCLI-未装-action",
+              "title": "KooCLI-未装：action 为可执行命令（npx / hcloud 开头）",
+              "ok": false,
+              "actual": null,
+              "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-project-id-未设-shape",
+              "title": "project-id-未设：返回统一错误卡 {code,messageZh,action}",
+              "ok": false,
+              "actual": {
+                "code": null,
+                "messageZh": "undefined",
+                "action": "undefined"
+              },
+              "expected": {
+                "code": "project-id-未设",
+                "messageZh": "string",
+                "action": "string"
+              },
+              "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+            },
+            {
+              "id": "D11-16-project-id-未设-zh",
+              "title": "project-id-未设：messageZh 含中文且无英文整句",
+              "ok": false,
+              "actual": "",
+              "expected": "中文且无英文整句",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-project-id-未设-action",
+              "title": "project-id-未设：action 为可执行命令（npx / hcloud 开头）",
+              "ok": false,
+              "actual": null,
+              "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+              "detail": ""
+            },
+            {
+              "id": "D11-16-actions-distinct",
+              "title": "六码 action 互不相同（决策表可分辨）",
+              "ok": false,
+              "actual": "0/6 有 action",
+              "expected": "六码各有一个且互不相同的 action",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-19-approval-explainable.mjs",
+          "case": "D11-19",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 1,
+          "fail": 3,
+          "note": "口径: 需求验收（UX-R9）；FAIL = 拦截文案未中文化/缺两点指引，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-19-deny",
+              "title": "未审批写命令被拦截（permissionDecision=deny）",
+              "ok": false,
+              "actual": "",
+              "expected": "deny",
+              "detail": ""
+            },
+            {
+              "id": "D11-19-reason-zh",
+              "title": "拦截理由含中文（面向用户可读）",
+              "ok": false,
+              "actual": "",
+              "expected": "含中文字符",
+              "detail": ""
+            },
+            {
+              "id": "D11-19-two-steps",
+              "title": "给出两点可执行指引（含 plan 与 run_approved 工具名）",
+              "ok": false,
+              "actual": {
+                "plan": false,
+                "approve": false
+              },
+              "expected": "含 huaweicloud_plan_cli_command 与 huaweicloud_run_approved_command",
+              "detail": ""
+            },
+            {
+              "id": "D11-19-no-en",
+              "title": "不出现英文整句裸串（反断言）",
+              "ok": true,
+              "actual": "",
+              "expected": "不含该英文整句",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-2-noninteractive-guidance.mjs",
+          "case": "D11-2",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 4,
+          "fail": 1,
+          "note": "口径: 需求验收（UX-R1 CLI 侧）；FAIL = 需求未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-2-exit",
+              "title": "非交互会话下退出码为 1",
+              "ok": true,
+              "actual": 1,
+              "expected": 1,
+              "detail": ""
+            },
+            {
+              "id": "D11-2-mention-import",
+              "title": "提示含 creds-import.json（给 Agent 的导入通道）",
+              "ok": true,
+              "actual": "╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.8 ║ ║ https://github.com/huaweicloud ║ ╚═════════════════════════════════════════════",
+              "expected": "含 creds-import.json",
+              "detail": ""
+            },
+            {
+              "id": "D11-2-mention-switch",
+              "title": "提示含 huaweicloud_auth_switch（会话内切换工具名）",
+              "ok": true,
+              "actual": "present",
+              "expected": "含 huaweicloud_auth_switch",
+              "detail": ""
+            },
+            {
+              "id": "D11-2-zh",
+              "title": "提示文本含中文字符（面向用户可读）",
+              "ok": true,
+              "actual": "╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.8 ║ ║ https://github.com/huaweicloud ║ ╚═════",
+              "expected": "含中文字符",
+              "detail": ""
+            },
+            {
+              "id": "D11-2-no-en",
+              "title": "不出现英文原文 \"Non-interactive session detected.\"（反断言）",
+              "ok": false,
+              "actual": "╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.8 ║ ║ https://github.com/huaweicloud ║ ╚═════",
+              "expected": "不含该英文整句",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-22-koocli-privacy.mjs",
+          "case": "D11-22",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 3,
+          "fail": 2,
+          "note": "口径: 需求验收（UX-R13）；FAIL = 文案未中文化/缺两条路径，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-22-classified",
+              "title": "privacy_pending 归因分类正确",
+              "ok": true,
+              "actual": {
+                "status": "privacy_pending",
+                "errorCode": "HCLOUD_PRIVACY_PENDING"
+              },
+              "expected": "HCLOUD_PRIVACY_PENDING",
+              "detail": ""
+            },
+            {
+              "id": "D11-22-zh",
+              "title": "下一步指引含中文说明（首次运行需同意隐私协议）",
+              "ok": false,
+              "actual": "KooCLI requires accepting its one-time privacy agreement. Run hcloud version in a real terminal and accept the prompt, then restar",
+              "expected": "含中文「隐私协议」说明",
+              "detail": ""
+            },
+            {
+              "id": "D11-22-two-paths",
+              "title": "给出两条可执行路径（Agent 代答 stdin=y / 用户自行终端执行）",
+              "ok": false,
+              "actual": {
+                "代答路径": false,
+                "终端路径": true
+              },
+              "expected": "含 stdin=y 代答 + 用户自行终端执行两条路径",
+              "detail": ""
+            },
+            {
+              "id": "D11-22-no-en",
+              "title": "不出现英文整句 \"KooCLI requires accepting its privacy agreement.\"（反断言）",
+              "ok": true,
+              "actual": "KooCLI requires accepting its one-time privacy agreement. Run hcloud version in a real terminal and accept the prompt, then restar",
+              "expected": "不含该英文整句",
+              "detail": ""
+            },
+            {
+              "id": "D11-22-no-invalid-char",
+              "title": "不出现「您输入的是无效字符」裸串（反断言）",
+              "ok": true,
+              "actual": "KooCLI requires accepting its one-time privacy agreement. Run hcloud version in a real terminal and accept the prompt, then restar",
+              "expected": "不含无效字符提示",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-26-terminology.mjs",
+          "case": "D11-26",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 0,
+          "fail": 2,
+          "note": "口径: 需求验收（UX-R17）；FAIL = 文案未母语化/含内部代号，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-26-no-codename",
+              "title": "工具/参数描述不含内部代号（S1/S2/S3/A+C/R2/R9/R10/R11）",
+              "ok": false,
+              "actual": "huaweicloud_auth_switch.description | huaweicloud_auth_confirm.description",
+              "expected": "不含内部代号",
+              "detail": "反断言：内部代号不应出现在面向用户的文案里"
+            },
+            {
+              "id": "D11-26-no-en-sentence",
+              "title": "工具/参数描述不含英文整句（反断言）",
+              "ok": false,
+              "actual": "huaweicloud_check_cli.description | huaweicloud_plan_cli_command.description | huaweicloud_plan_cli_command.args | huaweicloud_plan_cli_command.allowWrites | huaweicloud_run_readonly_command.description …共 114 处",
+              "expected": "全中文描述",
+              "detail": "纯英文且无中文的描述 = 未母语化"
+            }
+          ]
+        },
+        {
+          "file": "d11-27-cn-summary.mjs",
+          "case": "D11-27",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 1,
+          "fail": 2,
+          "note": "口径: 需求验收（UX-R18）；FAIL = 摘要/截断提示未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-27-zh-summary",
+              "title": "返回含中文字段摘要（资源标识 / 名称 / 状态 三项字段映射）",
+              "ok": false,
+              "actual": {
+                "命中": [],
+                "长度": 1254
+              },
+              "expected": "含资源标识/名称/状态三项映射",
+              "detail": "UX-R18：只读结果须有人话摘要，而非整段英文 JSON"
+            },
+            {
+              "id": "D11-27-truncation-hint",
+              "title": "长输出（4474 字符）须有截断或分页提示",
+              "ok": false,
+              "actual": "{\"servers\":[{\"id\":\"srv-000\",\"name\":\"demo-0\",\"status\":\"SHUTOFF\",\"region\":\"cn-north-4\"},{\"id\":\"srv-001\",\"name\":\"demo-1\",\"s",
+              "expected": "含截断/分页提示",
+              "detail": ""
+            },
+            {
+              "id": "D11-27-raw-kept",
+              "title": "原始 JSON 与中文摘要并存（原始数据不丢）",
+              "ok": true,
+              "actual": "原始 servers 字段仍在",
+              "expected": "保留原始 JSON",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-28-sts-expiry-actionable.mjs",
+          "case": "D11-28",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 2,
+          "fail": 4,
+          "note": "口径: 需求验收（UX-R19）；FAIL = 用户可见提示未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-28-expiry-detected",
+              "title": "STS 到期可被解析为 expired（不误判为 AK 无效）",
+              "ok": true,
+              "actual": "expired",
+              "expected": "expired",
+              "detail": ""
+            },
+            {
+              "id": "D11-28-notice-zh",
+              "title": "到期后返回中文提示（含「已失效/已过期」）",
+              "ok": false,
+              "actual": "remainingMs\":-3600318",
+              "expected": "含中文「已过期/已失效」",
+              "detail": ""
+            },
+            {
+              "id": "D11-28-unique-action",
+              "title": "给出唯一可执行 action（重新 auth init）",
+              "ok": false,
+              "actual": "已扫描 auth_status 返回体",
+              "expected": "含 npx huaweicloud-devkit auth init",
+              "detail": ""
+            },
+            {
+              "id": "D11-28-remaining",
+              "title": "临时凭证额外标注剩余有效期",
+              "ok": true,
+              "actual": "remainingMs\":-3600318",
+              "expected": "含「剩余有效期」标注",
+              "detail": ""
+            },
+            {
+              "id": "D11-28-401-zh-action",
+              "title": "失效态返回中文 + 唯一 action",
+              "ok": false,
+              "actual": {
+                "action": null,
+                "error": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information"
+              },
+              "expected": "中文 action（npx/hcloud 开头）",
+              "detail": ""
+            },
+            {
+              "id": "D11-28-401-no-en",
+              "title": "失效提示不出现英文 401 裸串（反断言）",
+              "ok": false,
+              "actual": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is invalid - chec",
+              "expected": "不含该英文整句",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-29-switch-effective-now.mjs",
+          "case": "D11-29",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 2,
+          "fail": 1,
+          "note": "口径: 需求验收（UX-R20）；FAIL = 用户可见提示未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-29-switch-applied",
+              "title": "切号后运行时解析立即指向新账号（无需重启）",
+              "ok": true,
+              "actual": {
+                "切换前": "cb6fac89",
+                "切换后": "20912077"
+              },
+              "expected": {
+                "切换前": "cb6fac89",
+                "切换后": "20912077"
+              },
+              "detail": ""
+            },
+            {
+              "id": "D11-29-region-follows",
+              "title": "切号后区域随新账号生效",
+              "ok": true,
+              "actual": "cn-east-3",
+              "expected": "cn-east-3",
+              "detail": ""
+            },
+            {
+              "id": "D11-29-restart-hint",
+              "title": "返回/文案含「已生效，无需重启会话」提示",
+              "ok": false,
+              "actual": "tools.mjs 中未找到「无需重启」相关提示",
+              "expected": "含「已生效，无需重启会话」",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-3-effective-runtime.mjs",
+          "case": "D11-3",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 1,
+          "fail": 3,
+          "note": "口径: 需求验收（UX-R2）；FAIL = 契约字段未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-3-source",
+              "title": "effective.source == \"runtime\"",
+              "ok": false,
+              "actual": {
+                "source": null,
+                "现有相关字段": [
+                  "credentialsConfigured",
+                  "credentialsPath",
+                  "credentialPanel"
+                ]
+              },
+              "expected": "runtime",
+              "detail": "UX-R2：本次生效账号来源须显式可见"
+            },
+            {
+              "id": "D11-3-fingerprint",
+              "title": "effective.fingerprint == sha256(ak+sk)[:8]",
+              "ok": false,
+              "actual": null,
+              "expected": "d64a05cc",
+              "detail": ""
+            },
+            {
+              "id": "D11-3-region",
+              "title": "effective.region == cn-north-4",
+              "ok": false,
+              "actual": null,
+              "expected": "cn-north-4",
+              "detail": ""
+            },
+            {
+              "id": "D11-3-no-secret",
+              "title": "返回体不含 AK/SK 明文（反断言）",
+              "ok": true,
+              "actual": "已检查返回体全文",
+              "expected": "无 AK/SK 明文",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-30-auth-state-machine.mjs",
+          "case": "D11-30",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 1,
+          "fail": 7,
+          "note": "口径: 需求验收（UX-R2/R4 状态机）；FAIL = 契约字段未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-30-p1",
+              "title": "①空态（无任何来源） → effective.source 应为 HDKIT_CRED_MISSING",
+              "ok": true,
+              "actual": "HDKIT_CRED_MISSING",
+              "expected": "HDKIT_CRED_MISSING",
+              "detail": ""
+            },
+            {
+              "id": "D11-30-p2",
+              "title": "②仅 S1 落盘 → effective.source 应为 s1",
+              "ok": false,
+              "actual": null,
+              "expected": "s1",
+              "detail": ""
+            },
+            {
+              "id": "D11-30-p3",
+              "title": "③仅 env 三件套 → effective.source 应为 env",
+              "ok": false,
+              "actual": null,
+              "expected": "env",
+              "detail": ""
+            },
+            {
+              "id": "D11-30-p4",
+              "title": "④S1 + env（S1 优先） → effective.source 应为 s1",
+              "ok": false,
+              "actual": null,
+              "expected": "s1",
+              "detail": ""
+            },
+            {
+              "id": "D11-30-p5",
+              "title": "⑤S1 + runtime（runtime 最高） → effective.source 应为 runtime",
+              "ok": false,
+              "actual": null,
+              "expected": "runtime",
+              "detail": ""
+            },
+            {
+              "id": "D11-30-p6",
+              "title": "⑥runtime → clear（回退 S1） → effective.source 应为 s1",
+              "ok": false,
+              "actual": null,
+              "expected": "s1",
+              "detail": ""
+            },
+            {
+              "id": "D11-30-p7",
+              "title": "⑦删 S1 后（回退 env） → effective.source 应为 env",
+              "ok": false,
+              "actual": null,
+              "expected": "env",
+              "detail": ""
+            },
+            {
+              "id": "D11-30-all-paths",
+              "title": "7 条迁移路径全部与预期一致（无一条状态与实际生效来源不符）",
+              "ok": false,
+              "actual": "1/7 一致",
+              "expected": "7/7 一致",
+              "detail": "状态转换法：迁移后状态必须唯一且正确回退"
+            }
+          ]
+        },
+        {
+          "file": "d11-37-guidance-closure.mjs",
+          "case": "D11-37",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 3,
+          "fail": 2,
+          "note": "口径: 需求验收（UX-R1）；FAIL = 需求未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-37-code",
+              "title": "无凭证抛 HDKIT_CRED_MISSING",
+              "ok": true,
+              "actual": "HDKIT_CRED_MISSING",
+              "expected": "HDKIT_CRED_MISSING",
+              "detail": ""
+            },
+            {
+              "id": "D11-37-zh",
+              "title": "onboarding.message 为中文",
+              "ok": true,
+              "actual": "未配置华为云凭证,需要完成登录后才能使用云能力。",
+              "expected": "含中文字符",
+              "detail": ""
+            },
+            {
+              "id": "D11-37-steps",
+              "title": "steps 同时含 取AK 与 登录动作",
+              "ok": false,
+              "actual": [
+                "auth-init"
+              ],
+              "expected": [
+                "obtain-aksk",
+                "auth-init|auth_switch"
+              ],
+              "detail": ""
+            },
+            {
+              "id": "D11-37-no-en",
+              "title": "顶层 message 无英文整句残留（反断言）",
+              "ok": false,
+              "actual": "Huawei Cloud credentials are not configured. Run \"npx huaweicloud-devkit",
+              "expected": "不含英文整句",
+              "detail": ""
+            },
+            {
+              "id": "D11-37-closure",
+              "title": "按引导完成登录后症状消失（闭环有效性）",
+              "ok": true,
+              "actual": "D11FAKEAKABCDEFGHIJKL",
+              "expected": "D11FAKEAKABCDEFGHIJKL",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-4-effective-s1.mjs",
+          "case": "D11-4",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 1,
+          "fail": 3,
+          "note": "口径: 需求验收（UX-R2）；FAIL = 契约字段未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-4-source",
+              "title": "effective.source == \"s1\"（已落盘的全局凭证）",
+              "ok": false,
+              "actual": {
+                "source": null,
+                "credentialsConfigured": true
+              },
+              "expected": "s1",
+              "detail": ""
+            },
+            {
+              "id": "D11-4-fingerprint",
+              "title": "effective.fingerprint == 该 S1 账号指纹",
+              "ok": false,
+              "actual": null,
+              "expected": "ebc42744",
+              "detail": ""
+            },
+            {
+              "id": "D11-4-region",
+              "title": "effective.region == 该 S1 的区域",
+              "ok": false,
+              "actual": null,
+              "expected": "cn-north-4",
+              "detail": ""
+            },
+            {
+              "id": "D11-4-no-secret",
+              "title": "返回体不含 AK/SK 明文（反断言）",
+              "ok": true,
+              "actual": "已检查返回体全文",
+              "expected": "无 AK/SK 明文",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-41-misleading-attribution.mjs",
+          "case": "D11-41",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 7,
+          "fail": 1,
+          "note": "口径: 需求验收（误导性归因 + 可动作性）；FAIL=归因/引导不达标（对齐上游 #900）",
+          "assertions": [
+            {
+              "id": "D11-41-placeholder-only",
+              "title": "仅占位符 env 时判「未配置」（不得误报可用）",
+              "ok": true,
+              "actual": "HDKIT_CRED_MISSING",
+              "expected": "HDKIT_CRED_MISSING",
+              "detail": "前置: #570「占位符遮蔽报连接成功」类缺陷防退化"
+            },
+            {
+              "id": "D11-41-placeholder-shadow",
+              "title": "占位符 env 不得遮蔽真实 S1",
+              "ok": true,
+              "actual": "D11REALAK000000000000",
+              "expected": "D11REALAK000000000000",
+              "detail": ""
+            },
+            {
+              "id": "D11-41-sts-expiry",
+              "title": "STS 过期可由 token 解析（不误导为 AK 无效）",
+              "ok": true,
+              "actual": 1791989314000,
+              "expected": "早于当前时间(ms)=1791992914671",
+              "detail": ""
+            },
+            {
+              "id": "D11-41-koocli-not_found",
+              "title": "KooCLI「not_found」归因分类正确",
+              "ok": true,
+              "actual": "HCLOUD_NOT_FOUND",
+              "expected": "HCLOUD_NOT_FOUND",
+              "detail": ""
+            },
+            {
+              "id": "D11-41-koocli-privacy_pending",
+              "title": "KooCLI「privacy_pending」归因分类正确",
+              "ok": true,
+              "actual": "HCLOUD_PRIVACY_PENDING",
+              "expected": "HCLOUD_PRIVACY_PENDING",
+              "detail": ""
+            },
+            {
+              "id": "D11-41-koocli-sandbox_home_failure",
+              "title": "KooCLI「sandbox_home_failure」归因分类正确",
+              "ok": true,
+              "actual": "HCLOUD_SANDBOX_HOME_FAILURE",
+              "expected": "HCLOUD_SANDBOX_HOME_FAILURE",
+              "detail": ""
+            },
+            {
+              "id": "D11-41-koocli-ok",
+              "title": "KooCLI 正常不得误报故障",
+              "ok": true,
+              "actual": "ok",
+              "expected": "ok",
+              "detail": ""
+            },
+            {
+              "id": "D11-41-nextstep-actionable",
+              "title": "nextStep 为可直接执行的命令（非英文散文）",
+              "ok": false,
+              "actual": "KooCLI is not installed yet. Background auto-install may be running — pl",
+              "expected": "以 npx / hcloud 开头",
+              "detail": "UX-R7 / 上游 #900——当前为英文长句，属已知缺口"
+            }
+          ]
+        },
+        {
+          "file": "d11-42-encoding-contract.mjs",
+          "case": "D11-42",
+          "status": "PASS",
+          "exit": 0,
+          "pass": 3,
+          "fail": 0,
+          "note": "口径: 输出编码契约（恒为 UTF-8）；控制台渲染可读性属终端配置，不在本用例范围（见 D11-43）",
+          "assertions": [
+            {
+              "id": "D11-42-ascii",
+              "title": "关键 ASCII 字段（错误码）在 latin1 环境下完好",
+              "ok": true,
+              "actual": [
+                "HDKIT_CRED_MISSING",
+                "未配置华为云凭证,需要完成登录后才能使用云能力。"
+              ],
+              "expected": "含 HDKIT_CRED_MISSING",
+              "detail": ""
+            },
+            {
+              "id": "D11-42-utf8-contract",
+              "title": "中文输出为 UTF-8（与代码页/locale 无关）",
+              "ok": true,
+              "actual": "UTF-8 解码含「未配置」",
+              "expected": "UTF-8 解码含「未配置」",
+              "detail": "正断言：UTF-8 解码可读（消费方应按 UTF-8 解码）"
+            },
+            {
+              "id": "D11-42-not-local-encoded",
+              "title": "输出未被转成本地编码（反断言，防退化成 latin1）",
+              "ok": true,
+              "actual": "未被 latin1 转码",
+              "expected": "反断言：latin1 解码不含「未配置」",
+              "detail": "防退化：若日后为\"迁就控制台\"改成 GBK/latin1 输出，会破坏 agent 等 UTF-8 消费方"
+            }
+          ]
+        },
+        {
+          "file": "d11-43-terminal-env-matrix.mjs",
+          "case": "D11-43",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 3,
+          "fail": 1,
+          "note": "口径: 需求验收（终端环境兼容）；FAIL=受限终端下信息缺失/污染",
+          "assertions": [
+            {
+              "id": "D11-43-nocolor",
+              "title": "NO_COLOR=1 时输出不含 ANSI 转义序列",
+              "ok": false,
+              "actual": "检测到 ANSI 序列",
+              "expected": "无 ANSI 序列",
+              "detail": "失败=未尊重 NO_COLOR 约定（终端兼容体验改进 UX-R16）"
+            },
+            {
+              "id": "D11-43-langc",
+              "title": "LC_ALL=C 时输出无替换字符（不依赖 locale）",
+              "ok": true,
+              "actual": "无 U+FFFD",
+              "expected": "无 U+FFFD",
+              "detail": ""
+            },
+            {
+              "id": "D11-43-cols",
+              "title": "COLUMNS=40 下关键标识完整（未被截断）",
+              "ok": true,
+              "actual": "creds-import.json",
+              "expected": "含 creds-import.json / auth init / huaweicloud_auth_switch 之一",
+              "detail": ""
+            },
+            {
+              "id": "D11-43-exit",
+              "title": "非交互会话应拒绝执行（exit 非 0）",
+              "ok": true,
+              "actual": 1,
+              "expected": "非 0（预期 1）",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-44-fault-injection.mjs",
+          "case": "D11-44",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 6,
+          "fail": 1,
+          "note": "口径: 需求验收（故障注入下有界性与归因正确性）；FAIL=挂起/归因误导/缺可动作项",
+          "assertions": [
+            {
+              "id": "D11-44-network-bounded",
+              "title": "网络不可达时有界返回且标记 skipped",
+              "ok": true,
+              "actual": {
+                "skipped": true,
+                "ms": 0
+              },
+              "expected": {
+                "skipped": true,
+                "ms": "<5000"
+              },
+              "detail": ""
+            },
+            {
+              "id": "D11-44-network-attribution",
+              "title": "网络不可达不得归因为「凭证无效」",
+              "ok": true,
+              "actual": "IAM validation request failed (treating credentials as unverified): getaddrinfo ENOTFOUND iam.cn",
+              "expected": "不出现「AK/SK is invalid」",
+              "detail": "失败=归因误导（用户会误以为自己 AK/SK 配错）"
+            },
+            {
+              "id": "D11-44-hang-bounded",
+              "title": "请求挂起时在超时余量内返回（timeoutMs=600）",
+              "ok": true,
+              "actual": {
+                "ms": 601,
+                "skipped": true
+              },
+              "expected": {
+                "ms": "<3100",
+                "skipped": true
+              },
+              "detail": "失败=无上界等待（agent 会长时间无响应）"
+            },
+            {
+              "id": "D11-44-http-429",
+              "title": "HTTP 429（限流）归因含状态码且不误报凭证无效",
+              "ok": true,
+              "actual": "Unexpected IAM response (HTTP 429): {\"error\":{\"message\":\"HTTP 429 synthetic\"}}",
+              "expected": "含 429 且不出现「AK/SK is invalid」",
+              "detail": ""
+            },
+            {
+              "id": "D11-44-http-404",
+              "title": "HTTP 404（端点/网络）归因含状态码且不误报凭证无效",
+              "ok": true,
+              "actual": "Unexpected IAM response (HTTP 404): {\"error\":{\"message\":\"HTTP 404 synthetic\"}}",
+              "expected": "含 404 且不出现「AK/SK is invalid」",
+              "detail": ""
+            },
+            {
+              "id": "D11-44-http-401-attribution",
+              "title": "HTTP 401 必须明确指向 AK/SK（真原因不弱化）",
+              "ok": true,
+              "actual": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is ",
+              "expected": "valid=false 且提及 AK/SK",
+              "detail": ""
+            },
+            {
+              "id": "D11-44-actionable",
+              "title": "故障错误须给可执行 action（非纯英文散文）",
+              "ok": false,
+              "actual": null,
+              "expected": "非空 action（如 npx / hcloud 开头）",
+              "detail": "UX-R7 / 上游 #900——当前错误对象无 action 字段，属已知缺口"
+            }
+          ]
+        },
+        {
+          "file": "d11-5-effective-env.mjs",
+          "case": "D11-5",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 1,
+          "fail": 3,
+          "note": "口径: 需求验收（UX-R2）；FAIL = 契约字段未实现，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-5-source",
+              "title": "effective.source == \"env\"（环境注入来源）",
+              "ok": false,
+              "actual": {
+                "source": null
+              },
+              "expected": "env",
+              "detail": ""
+            },
+            {
+              "id": "D11-5-account-type",
+              "title": "effective.accountType == \"temporary\"（含 STS 的临时凭证）",
+              "ok": false,
+              "actual": null,
+              "expected": "temporary",
+              "detail": ""
+            },
+            {
+              "id": "D11-5-fingerprint",
+              "title": "effective.fingerprint == env 账号指纹",
+              "ok": false,
+              "actual": null,
+              "expected": "a3f315f8",
+              "detail": ""
+            },
+            {
+              "id": "D11-5-no-secret",
+              "title": "返回体不含 AK/SK 明文（反断言）",
+              "ok": true,
+              "actual": "已检查返回体全文",
+              "expected": "无 AK/SK 明文",
+              "detail": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

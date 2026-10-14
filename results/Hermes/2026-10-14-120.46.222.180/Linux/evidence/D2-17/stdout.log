@@ -1,0 +1,45 @@
+{
+  "case": "D2-17",
+  "status": "PASS",
+  "total": 4,
+  "passed": 4,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-17",
+      "name": "no-hang-fast-exit",
+      "pass": true,
+      "actual": "\"clean\"",
+      "expected": "\"no ETIMEDOUT\"",
+      "passMsg": "exits promptly (non-TTY)",
+      "failMsg": "hung / timed out"
+    },
+    {
+      "id": "D2-17",
+      "name": "stderr-warning",
+      "pass": true,
+      "actual": "\"\\u001b[31mNon-interactive session. Cannot run interactive reconciliation. Use \\\"npx huaweicloud-devkit auth sync\\\" or run reconciliation in a real terminal.\\u001b[0m\"",
+      "expected": "\"Non-interactive session\"",
+      "passMsg": "stderr warning present",
+      "failMsg": "stderr warning missing"
+    },
+    {
+      "id": "D2-17",
+      "name": "exit-code-1",
+      "pass": true,
+      "actual": "1",
+      "expected": "1",
+      "passMsg": "non-zero exit code",
+      "failMsg": "exit code not 1"
+    },
+    {
+      "id": "D2-17",
+      "name": "consistent-clean-exit",
+      "pass": true,
+      "actual": "0",
+      "expected": "0",
+      "passMsg": "consistent state exits 0 + \"consistent\"",
+      "failMsg": "consistent state misbehaved"
+    }
+  ]
+}

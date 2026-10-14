@@ -1,0 +1,63 @@
+{
+  "case": "D2-9",
+  "status": "PASS",
+  "total": 6,
+  "passed": 6,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-9",
+      "name": "consistent-zero-inconsistencies",
+      "pass": true,
+      "actual": "0",
+      "expected": "0",
+      "passMsg": "consistent state: no inconsistencies",
+      "failMsg": "unexpected inconsistencies"
+    },
+    {
+      "id": "D2-9",
+      "name": "export-inconsistent-false",
+      "pass": true,
+      "actual": "false",
+      "expected": "false",
+      "passMsg": "exportStateForStatus.inconsistent === false",
+      "failMsg": "inconsistent flag true"
+    },
+    {
+      "id": "D2-9",
+      "name": "fingerprints-unified",
+      "pass": true,
+      "actual": "[\"dbce5898\",\"dbce5898\",\"dbce5898\"]",
+      "expected": "\"dbce5898\"",
+      "passMsg": "three stores share fingerprint",
+      "failMsg": "fingerprint drift"
+    },
+    {
+      "id": "D2-9",
+      "name": "scan-idempotent",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "scanState idempotent (identical output)",
+      "failMsg": "scanState output changed between runs"
+    },
+    {
+      "id": "D2-9",
+      "name": "zero-write",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "scanState does not write S1/S2/S3 (zero side effect)",
+      "failMsg": "scanState mutated a store"
+    },
+    {
+      "id": "D2-9",
+      "name": "drift-detected",
+      "pass": true,
+      "actual": "\"S3\"",
+      "expected": "\"S3\"",
+      "passMsg": "drift on S3 detected",
+      "failMsg": "drift NOT detected (stub?)"
+    }
+  ]
+}

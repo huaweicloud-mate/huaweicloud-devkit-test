@@ -1,0 +1,28 @@
+{
+  "caseId": "D4-9",
+  "status": "PASS",
+  "why": "All dangerous/destructive operations blocked",
+  "executedAt": "20261014050753",
+  "results": [
+    {
+      "cmd": "hcloud ECS CreateServer --nics.0.subnet_id=xxx --p",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud VPC CreateSecurityGroupRule --direction=ing",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud RDS DeleteInstance --instance.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS DeleteServer --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    }
+  ]
+}

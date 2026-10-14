@@ -1,0 +1,21 @@
+{
+  "caseId": "D1-40",
+  "status": "FAIL",
+  "why": "Mirror registry (npmmirror) returns array format [{latest,next}] but parseDistTagsOutput rejects arrays (line 86: Array.isArray(parsed) return null), causing null result → judgeUpdate returns check_failed",
+  "executedAt": "20261014050753",
+  "rootCause": "update-check.mjs:86 — parseDistTagsOutput does JSON.parse(text) then checks Array.isArray(parsed) return null. npm view with --registry=npmmirror returns [{\"latest\":\"1.1.8\",\"next\":\"1.1.8-next.3\"}] (array wrapper), which gets rejected. Should unwrap array[0] before checking.",
+  "result": {
+    "mirrorResult": {
+      "status": "called",
+      "tags": [],
+      "rawNpmOutput": "[{\"latest\":\"1.1.8\",\"next\":\"1.1.8-next.3\"}]"
+    },
+    "judgeResult": {
+      "currentVersion": "1.1.8",
+      "latestStable": null,
+      "latestNext": null,
+      "result": "check_failed",
+      "note": "检测失败，不影响使用"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+diff --git a/.github/workflows/refresh-dashboard.yml b/.github/workflows/refresh-dashboard.yml
+index 2cc22139e..b356929b9 100644
+--- a/.github/workflows/refresh-dashboard.yml
++++ b/.github/workflows/refresh-dashboard.yml
+@@ -49,5 +49,26 @@ jobs:
+             echo "dashboard 无变动，跳过提交"
+           else
+             git commit -m "chore: 自动刷新看板 $(date +%Y-%m-%d_%H:%M)"
+-            git push origin HEAD:main
+-          fi
+\ No newline at end of file
++            # checkout 到 push 之间 main 可能被其他提交更新（CI 并发竞态），
++            # 推送前先 rebase 到远端最新；push 被拒时再 rebase 重试（≤2 次重试，共 3 次尝试）。
++            git pull --rebase origin main || {
++              echo "::error::rebase 失败：dashboard 与远端 main 冲突，需人工介入解决"
++              exit 1
++            }
++            for attempt in 1 2 3; do
++              if git push origin HEAD:main; then
++                echo "push 成功（第 ${attempt} 次尝试）"
++                break
++              fi
++              if [ "$attempt" -lt 3 ]; then
++                echo "push 失败（第 ${attempt} 次尝试），远端 main 可能又更新，rebase 后重试"
++                git pull --rebase origin main || {
++                  echo "::error::rebase 失败：dashboard 与远端 main 冲突，需人工介入解决"
++                  exit 1
++                }
++              else
++                echo "::error::git push 连续 ${attempt} 次被拒，请人工检查远端 main 状态"
++                exit 1
++              fi
++            done
++          fi

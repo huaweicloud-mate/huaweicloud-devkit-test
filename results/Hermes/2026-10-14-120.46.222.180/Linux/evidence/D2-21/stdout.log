@@ -1,0 +1,64 @@
+{
+  "case": "D2-21",
+  "status": "BLOCKED",
+  "total": 6,
+  "passed": 6,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-21",
+      "name": "fingerprint-f1-8hex",
+      "pass": true,
+      "actual": "\"4f508d2e\"",
+      "expected": "\"8-hex\"",
+      "passMsg": "F1 = sha256(ak+sk)[:8]",
+      "failMsg": "F1 malformed"
+    },
+    {
+      "id": "D2-21",
+      "name": "fingerprint-rotation-changes",
+      "pass": true,
+      "actual": "\"4f508d2e -> bcfdd50a\"",
+      "expected": "\"different\"",
+      "passMsg": "rotation changes fingerprint",
+      "failMsg": "fingerprint unchanged after rotation"
+    },
+    {
+      "id": "D2-21",
+      "name": "before-rotation-consistent",
+      "pass": true,
+      "actual": "[\"4f508d2e\",\"4f508d2e\",\"4f508d2e\"]",
+      "expected": "\"4f508d2e\"",
+      "passMsg": "pre-rotation: all F1, no inconsistency",
+      "failMsg": "pre-rotation drift"
+    },
+    {
+      "id": "D2-21",
+      "name": "rotation-drift-detected",
+      "pass": true,
+      "actual": "\"bcfdd50a drifts=S2-current,S3\"",
+      "expected": "\"F2 + S2-current,S3\"",
+      "passMsg": "post-rotation drift flagged on S2/S3",
+      "failMsg": "drift NOT flagged"
+    },
+    {
+      "id": "D2-21",
+      "name": "s3-propagates-f2",
+      "pass": true,
+      "actual": "\"bcfdd50a\"",
+      "expected": "\"bcfdd50a\"",
+      "passMsg": "S3 propagates to F2",
+      "failMsg": "S3 still old fingerprint"
+    },
+    {
+      "id": "D2-21",
+      "name": "last-sync-marker-f2",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "writeLastSync records F2",
+      "failMsg": ".last_sync marker wrong"
+    }
+  ],
+  "blockedReason": "真云 IAM 凭证轮换 + 30s 三端指纹轮询 + 只读 API 返回 200 无法安全执行：会轮换共享管理账号凭证、触碰真云资源（违反\"不破坏凭证文件 / 不真云建删\"约束）。已源码级验证指纹算法、轮换漂移检测与传播标记（见 results）。"
+}

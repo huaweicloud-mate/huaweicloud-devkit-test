@@ -21,7 +21,7 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 | [eval/](eval/) | D10 Agent 行为评测：评测集 / harness / 结果 / 趋势（纪律见 eval/README.md） |
 | [scripts/](scripts/) | 工具脚本：init_agent.py（初始化）/ prepare_env.py（环境准备+凭证自检）/ init_day.py（建执行包）/ build_summary.py（聚合汇总）/ file_issue.py（统一提单）/ run-as-readonly.py（只读子账号动态切换）/ verify_no_fake_pass.py（PASS 门禁）/ sync-to-remote.ps1（每日 20:00 自动同步） |
 | [PROMPTS.md](PROMPTS.md) | 测试能力提示语速查手册（开发/测试人员用：复制提示语触发能力） |
-| [skills/](skills/) | 跨 agent 通用测试能力库（prompt-as-skill）：测试设计 / 执行 / 回归 / 覆盖核对 |
+| [skills/](skills/) | 跨 agent 通用测试能力库（prompt-as-skill）：测试设计 / 执行 / 回归 / 覆盖核对 / 用例规范 |
 | [assets/](assets/) | 可视化素材（规划中：金字塔 / 缺口热力图 / 框架总览图） |
 
 ## 文档清单（docs/）

@@ -1,0 +1,33 @@
+{
+  "caseId": "D4-15",
+  "status": "PASS",
+  "why": "All case/encoding variants blocked",
+  "executedAt": "20261014050753",
+  "results": [
+    {
+      "cmd": "hcloud ECS deleteserver --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS DELETE_SERVER --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS DeleteServer --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS Delete%53erver --server.id=xxx",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS DeleteServer --server.id=xxx --dry-run",
+      "decision": "deny",
+      "risk": "write"
+    }
+  ]
+}

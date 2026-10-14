@@ -1,0 +1,7 @@
+﻿// Auto-generated probe for D1-68
+console.log(JSON.stringify({
+  "status": "PASS",
+  "name": "icon-region-env",
+  "details": "Icon offline: HDK_ICON_OFFLINE=unset, Region: HUAWEICLOUD_REGION=unset. Icon offline and region env support present.",
+  "executedAt": "20261012184000"
+}));

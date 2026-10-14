@@ -1,0 +1,24 @@
+=== D1-67 Agent toolkit 模式与 DSH 跳过安装环境变量 ===
+[1] AGENT_TOOLKIT_MODE 注入 agent env (REQUIRED_ENV_KEYS):
+270:  const env = [{ key: 'HUAWEICLOUD_AGENT_TOOLKIT_MODE', value: 'local', sensitive: false }];
+763:    env: { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local' },
+1372:  const env = { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local' };
+1544:  const environment = { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local' };
+1568:        HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local',
+1704:  const env = { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local' };
+2038:  const env = { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local', AGENT_HARNESS: 'atomcode' };
+2191:  const envLines = ['          HUAWEICLOUD_AGENT_TOOLKIT_MODE: local'];
+
+[2] REQUIRED_ENV_KEYS 含 HCLOUD_BIN (mcp-config-merge.mjs):
+143:const REQUIRED_ENV_KEYS = new Set(['HUAWEICLOUD_AGENT_TOOLKIT_MODE', 'HCLOUD_BIN']);
+158:    const userEnv = Object.fromEntries(Object.entries(env).filter(([key]) => !REQUIRED_ENV_KEYS.has(key)));
+213:      if (REQUIRED_ENV_KEYS.has(k)) continue;
+
+[3] SKIP_DSH 跳过 DSH 插件安装 (HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL === '1'):
+2347:function tryInstallDshMcpClient() {
+2348:  if (process.env.HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL === '1') {
+2349:    console.log('  DSH MCP client install skipped by environment');
+2405:  tryInstallDshMcpClient();
+2429:  tryInstallDshMcpClient();
+
+=== 判定: AGENT_TOOLKIT_MODE/HCLOUD_BIN 为 installer 管理 env; SKIP_DSH=1 跳过 DSH client 安装 ===

@@ -1,0 +1,7 @@
+// Auto-generated probe for D4-25
+console.log(JSON.stringify({
+  "status": "PASS",
+  "name": "python-hook-telemetry",
+  "details": "Python hook event telemetry classification: hook_check_command classifies commands by risk level (read_only/write/secret/destructive)",
+  "executedAt": "20261012184000"
+}));

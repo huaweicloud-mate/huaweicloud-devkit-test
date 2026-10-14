@@ -1,0 +1,9 @@
+D8-1 文档与能力一致 — FAIL（历史延续）
+文档声明（hdk/AGENTS.md）:
+  AGENTS.md:27  "src/  <- Node.js MCP server (stdio/remote JSON-RPC, 39 tools in tools.mjs)"
+  AGENTS.md:45  "src/tools.mjs — 39 MCP tool definitions"
+实际实现:
+  tools/list 返回 42 个工具（protocol-probe D5-3 实测 "tools/list 返回工具数 = 42"）
+漂移: 文档声明 39 vs 实现 42（漂移 +3，文档未随新增工具更新）
+根因: hdk/AGENTS.md:27,45 硬编码 "39 tools" 未随 tools.mjs 新增 3 个工具同步更新
+结论: FAIL（存在过时命令/数量声明，不符合"无过时"预期）

@@ -1,0 +1,95 @@
+[
+  {
+    "id": "t01-deploy-static-site",
+    "title": "部署静态网站到华为云 OBS",
+    "prompt": "我有一个单页静态网站要部署到华为云，希望得到一个公网可访问的网址。网页文件在本机：<FIXTURE_SITE>。请用对象存储 OBS 的方式部署：创建桶（桶名必须为 devkit-bench-{{RUNID}}），把 index.html 上传到桶根并设为公开可读，然后把可以公网直接访问这个页面的完整 URL 告诉我。无人值守环境，请自主完成全部步骤。",
+    "expectedService": "OBS",
+    "expectedSkill": "huawei-obs",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-static-site.mjs",
+    "cleanup": "verifiers/cleanup-static-site.mjs",
+    "write": true
+  },
+  {
+    "id": "t02-query-billing",
+    "title": "查询华为云账户余额",
+    "prompt": "帮我查一下这个华为云账户当前的余额（含欠费情况），把余额金额和币种告诉我。无人值守环境，请自主完成查询。",
+    "expectedService": "BSS",
+    "expectedSkill": "huawei-billing",
+    "region": "cn-north-1",
+    "verifier": "verifiers/verify-billing.mjs",
+    "write": false
+  },
+  {
+    "id": "t03-config-security-group",
+    "title": "配置安全组放行 TCP 80 端口",
+    "prompt": "给我创建一个名为 devkit-bench-{{RUNID}} 的安全组，并在其中加一条入方向（ingress）放行 TCP 80 端口的规则。完成后把这个安全组的名称、ID 和规则告诉我。无人值守环境，请自主完成。",
+    "expectedService": "VPC",
+    "expectedSkill": "huawei-vpc",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-security-group.mjs",
+    "cleanup": "verifiers/cleanup-security-group.mjs",
+    "write": true
+  },
+  {
+    "id": "t10-create-smn-topic",
+    "title": "创建 SMN 通知主题",
+    "prompt": "在华为云创建一个 SMN 通知主题，主题名和显示名都用 devkit-bench-{{RUNID}}。创建成功后把主题的 topic_urn 告诉我。无人值守环境，请自主完成。",
+    "expectedService": "SMN",
+    "expectedSkill": "huawei-smn-dms",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-smn-topic.mjs",
+    "cleanup": "verifiers/cleanup-smn-topic.mjs",
+    "write": true
+  },
+  {
+    "id": "t05-list-iam-users",
+    "title": "查询 IAM 用户列表",
+    "prompt": "帮我列出当前华为云账户下的所有 IAM 用户，告诉我每个用户的名字和描述。无人值守环境，请自主完成。",
+    "expectedService": "IAM",
+    "expectedSkill": "huawei-iam",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-iam-users.mjs",
+    "write": false
+  },
+  {
+    "id": "t04-list-ecs",
+    "title": "查询 ECS 实例列表",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有多少台 ECS 云服务器，并列出实例列表。无人值守环境，请自主完成。",
+    "expectedService": "ECS",
+    "expectedSkill": "huawei-ecs",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-ecs-list.mjs",
+    "write": false
+  },
+  {
+    "id": "t06-list-rds",
+    "title": "查询 RDS 实例列表",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 RDS 数据库实例，并列出。无人值守环境，请自主完成。",
+    "expectedService": "RDS",
+    "expectedSkill": "huawei-rds",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-rds-list.mjs",
+    "write": false
+  },
+  {
+    "id": "t07-list-functions",
+    "title": "查询函数列表",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些函数（FunctionGraph 函数列表），并列出。无人值守环境，请自主完成。",
+    "expectedService": "FunctionGraph",
+    "expectedSkill": "huawei-functiongraph",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-fg-list.mjs",
+    "write": false
+  },
+  {
+    "id": "t08-list-cce",
+    "title": "查询 CCE 集群列表",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 CCE（华为云容器引擎）Kubernetes 集群。无人值守环境，请自主完成。",
+    "expectedService": "CCE",
+    "expectedSkill": "huawei-cce",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-cce-list.mjs",
+    "write": false
+  }
+]

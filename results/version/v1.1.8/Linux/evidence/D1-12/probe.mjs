@@ -1,0 +1,1 @@
+// D1-12 [BLOCKED] 清理幂等需先执行清理(uninstall/cleanup), 属破坏性操作, 本机为活安装不可重复清理【补环境: 隔离可清理环境】\nimport { writeFileSync } from 'node:fs';\nconst out = {"case": "D1-12", "status": "BLOCKED", "why": "清理幂等需先执行清理(uninstall/cleanup), 属破坏性操作, 本机为活安装不可重复清理【补环境: 隔离可清理环境】", "executedAt": "20261014154000"};\nwriteFileSync(new URL('./stdout.log', import.meta.url), JSON.stringify(out, null, 2));\n

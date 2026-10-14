@@ -1,0 +1,81 @@
+{
+  "case": "D2-25",
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-25",
+      "name": "classify-enoent-not-found",
+      "pass": true,
+      "actual": "\"HCLOUD_NOT_FOUND\"",
+      "expected": "\"HCLOUD_NOT_FOUND\"",
+      "passMsg": "ENOENT → not_found",
+      "failMsg": "ENOENT misclassified"
+    },
+    {
+      "id": "D2-25",
+      "name": "classify-sandbox-home",
+      "pass": true,
+      "actual": "\"HCLOUD_SANDBOX_HOME_FAILURE\"",
+      "expected": "\"HCLOUD_SANDBOX_HOME_FAILURE\"",
+      "passMsg": "sandbox home failure classified",
+      "failMsg": "sandbox home misclassified"
+    },
+    {
+      "id": "D2-25",
+      "name": "classify-privacy-pending",
+      "pass": true,
+      "actual": "\"HCLOUD_PRIVACY_PENDING\"",
+      "expected": "\"HCLOUD_PRIVACY_PENDING\"",
+      "passMsg": "privacy pending classified",
+      "failMsg": "privacy misclassified"
+    },
+    {
+      "id": "D2-25",
+      "name": "classify-ok",
+      "pass": true,
+      "actual": "\"ok\"",
+      "expected": "\"ok\"",
+      "passMsg": "normal version probe → ok",
+      "failMsg": "ok probe misclassified"
+    },
+    {
+      "id": "D2-25",
+      "name": "classify-version-mismatch",
+      "pass": true,
+      "actual": "\"version_mismatch\"",
+      "expected": "\"version_mismatch\"",
+      "passMsg": "version mismatch detected",
+      "failMsg": "mismatch not detected"
+    },
+    {
+      "id": "D2-25",
+      "name": "nextstep-not-found",
+      "pass": true,
+      "actual": "\"KooCLI is not installed yet. Background auto-install may be running — please ret\"",
+      "expected": "\"install guidance\"",
+      "passMsg": "nextStep for not_found",
+      "failMsg": "nextStep missing"
+    },
+    {
+      "id": "D2-25",
+      "name": "nextstep-privacy",
+      "pass": true,
+      "actual": "\"KooCLI requires accepting its one-time privacy agreement. Run hcloud version in \"",
+      "expected": "\"non-empty\"",
+      "passMsg": "nextStep for privacy_pending",
+      "failMsg": "privacy nextStep missing"
+    },
+    {
+      "id": "D2-25",
+      "name": "find-hcloud-bin",
+      "pass": true,
+      "actual": "\"/home/testbot1/.local/bin/hcloud\"",
+      "expected": "\"string\"",
+      "passMsg": "findHcloudBin resolves real binary",
+      "failMsg": "findHcloudBin returned nothing"
+    }
+  ]
+}

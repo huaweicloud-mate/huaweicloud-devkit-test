@@ -1,0 +1,25 @@
+{
+  "case": "D3-C9",
+  "status": "PASS",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D3-C9",
+      "name": "frozen-guidance",
+      "pass": true,
+      "actual": "No known error-code pattern matched. Re-run the failing command with --debug to capture X-Request-Id from the response headers, then re-call explain_error with service, operation, region, the full red",
+      "expected": "non-empty guidance (SIM fixture)",
+      "detail": "evidence-level=SIM(frozen), real=nonexistent lookup"
+    },
+    {
+      "id": "D3-C9",
+      "name": "nonexistent-guide",
+      "pass": true,
+      "actual": "{\"ok\":false,\"exitCode\":0,\"signal\":null,\"errorCode\":\"SYS.0404\",\"errorMessage\":\"The resource could not be found...\",\"stdout\":\"{\\n  \\\"error_msg\\\": \\\"The resource could not be found...\\\",\\n  \\\"error_code\\",
+      "expected": "structured error (APIGW.0101 / not found)",
+      "detail": ""
+    }
+  ]
+}
