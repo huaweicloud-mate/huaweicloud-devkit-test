@@ -15,8 +15,9 @@
 | `版本全量测试 <版本>` | 版本全量测试：母版全量 316（或版本快照）→ 全量执行 → 回填 → 报告 → 归档 results/version | [skills/test-version/SKILL.md](skills/test-version/SKILL.md) |
 | `回归 #<编号>` / `全链路测 #<编号>` | 缺陷回归：定位 → 复现 → 根因 → 用例 → 复测 → 结论 | [skills/test-regression/SKILL.md](skills/test-regression/SKILL.md) |
 | `覆盖核对` | 源码能力 ↔ 用例覆盖核对（函数/字段/错误码核对 + 缺口落用例） | [skills/source-coverage/SKILL.md](skills/source-coverage/SKILL.md) |
+| `用例规范` | 用例结构与规范：三层矩阵列语义 / 维度与 ID / 展开规则四段 / 新增用例三处联动 / 门禁复现校验 | [skills/case-design/SKILL.md](skills/case-design/SKILL.md) |
 
-> 能力文档与 AGENTS.md 分工：四项能力的**完整流程**落 `skills/<能力>/SKILL.md`；本文件是**入口**——能力索引 + 公共前置（仓库地址/专属目录/自我识别/凭证）+ 全局红线 + 状态口径。维护者专属能力（资产治理、汇总、邮件派发）不进本库。
+> 能力文档与 AGENTS.md 分工：各能力的**完整流程**落 `skills/<能力>/SKILL.md`；本文件是**入口**——能力索引 + 公共前置（仓库地址/专属目录/自我识别/凭证）+ 全局红线 + 状态口径。维护者专属能力（资产治理、汇总、邮件派发）不进本库。
 
 ## 仓库地址
 
