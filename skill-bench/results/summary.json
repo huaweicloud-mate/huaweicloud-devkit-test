@@ -1,0 +1,21 @@
+{
+  "updated": "2026-10-14",
+  "model": "deepseek-v4-pro-0813",
+  "runs": 3,
+  "tasks": [
+    { "id": "t01", "title": "部署静态网站（OBS）", "skill": "huawei-obs", "rate": "3/3", "token_in": 219830, "token_out": 10167, "steps": 21 },
+    { "id": "t02", "title": "查账户余额（BSS）", "skill": "huawei-billing", "rate": "3/3", "token_in": 68281, "token_out": 1857, "steps": 8 },
+    { "id": "t03", "title": "配置安全组（VPC）", "skill": "huawei-vpc", "rate": "3/3", "token_in": 405978, "token_out": 17803, "steps": 26 }
+  ],
+  "bare": {
+    "t01": "幻觉成功（对象未部署）",
+    "t02": "省 3 倍 token（无 37 工具 schema 开销）",
+    "t03": "放行 0.0.0.0/0 高危"
+  },
+  "findings": [
+    "input token 占 95.5%~97.4%（工具 schema 每轮重发）",
+    "verifier 假阴性已修（匿名 fetch 网络抖动）",
+    "安全 Hook 真实生效（拦截 0.0.0.0/0，收窄 10.0.0.0/8）",
+    "工具数 37（当前版本，非规划文档 40）"
+  ]
+}
