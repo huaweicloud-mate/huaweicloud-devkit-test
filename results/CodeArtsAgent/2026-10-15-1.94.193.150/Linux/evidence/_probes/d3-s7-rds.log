@@ -1,0 +1,46 @@
+
+=====CASE D3-S7=====
+serviceCatalog 复合意图路由 -> services=["RDS"] RDS命中=true 部署目标命中=false
+CreateVpc -> ok=true id=ece33df8-b9e5-479d-9
+CreateSubnet -> ok=true id=79ed2da8-edc6-4832-9
+CreateSecurityGroup -> ok=true id=54638683-2c61-4a4c-8
+RDS CreateInstance(jsonInput) -> ok=false job_id= err=API parameters transferred for the path, query, body, formData, header, and cookies in cli-jsonInput take precedence over command transfers.
+[USE_ERROR]The cli-jsonInput file contains invalid content. For details, see 'https://support.huaweicloud.com/usermanua
+RDS 实例定位 -> instanceId=
+DeleteSecurityGroup -> ok=true
+DeleteSubnet -> ok=true
+DeleteVpc -> ok=true
+归零验证 = false
+[OK] serviceCatalog 复合意图命中 RDS
+[OK] VPC/子网/安全组前置编排完成
+[FAIL] 最小 RDS 实例创建成功并定位 instance
+[FAIL] 测后删除归零(RDS+SG+子网+VPC)
+=====END D3-S7=====
+
+=====SUMMARY=====
+{
+  "total": 4,
+  "passed": 2,
+  "results": [
+    {
+      "name": "serviceCatalog 复合意图命中 RDS",
+      "ok": true,
+      "detail": "[\"RDS\"]"
+    },
+    {
+      "name": "VPC/子网/安全组前置编排完成",
+      "ok": true,
+      "detail": "vpc=ece33df8 subnet=79ed2da8 sg=54638683"
+    },
+    {
+      "name": "最小 RDS 实例创建成功并定位 instance",
+      "ok": false,
+      "detail": "instanceId="
+    },
+    {
+      "name": "测后删除归零(RDS+SG+子网+VPC)",
+      "ok": false,
+      "detail": "{\"rdsCleanup\":true,\"sgCleanup\":true,\"subnetCleanup\":true,\"vpcCleanup\":true,\"zeroed\":false}"
+    }
+  ]
+}

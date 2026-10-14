@@ -1,28 +1,34 @@
 
 =====CASE D3-S6=====
 serviceCatalog 路由 -> services=["FunctionGraph"]
-CreateFunction -> ok=true urn=
-归零验证 = false
+CreateFunction -> status=0 urn=urn:fss:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:function
+CreateFunctionTrigger -> status=0 trigger_id=31b4af61-bbcf-493d-b
+DeleteFunction -> status=0
+归零验证 = true
 [OK] serviceCatalog 路由 FunctionGraph
-[FAIL] 创建 Python 函数返回 URN
-[FAIL] 定时触发器绑定成功
-[FAIL] 测后删除函数归零
+[OK] 创建 Python 函数返回 URN
+[OK] 定时触发器绑定成功
+[OK] 测后删除函数归零
 =====END D3-S6=====
 
 =====CASE D3-S7=====
 serviceCatalog 复合意图路由 -> services=["RDS"] RDS命中=true 部署目标命中=false
-CreateVpc -> ok=true id=
-归零验证 = true
+CreateVpc -> status=0 id=e23dc7fe-a132-
+CreateSubnet -> status=0 id=420859e5-fe81-
+CreateSecurityGroup -> status=0 id=
+DeleteSubnet -> status=0
+DeleteVpc -> status=0
+归零验证 = false
 [OK] serviceCatalog 复合意图命中 RDS
 [FAIL] VPC/子网/安全组前置编排完成
-[FAIL] 最小 RDS 实例创建成功
-[OK] 测后删除归零(RDS+SG+子网+VPC)
+[FAIL] 最小 RDS 实例创建成功(返回 job_id)
+[FAIL] 测后删除归零(RDS+SG+子网+VPC)
 =====END D3-S7=====
 
 =====SUMMARY=====
 {
   "total": 8,
-  "passed": 3,
+  "passed": 5,
   "results": [
     {
       "name": "serviceCatalog 路由 FunctionGraph",
@@ -31,18 +37,18 @@ CreateVpc -> ok=true id=
     },
     {
       "name": "创建 Python 函数返回 URN",
-      "ok": false,
-      "detail": "urn="
+      "ok": true,
+      "detail": "urn=urn:fss:cn-north-4:46c1fd48bd1248c7b75af"
     },
     {
       "name": "定时触发器绑定成功",
-      "ok": false,
-      "detail": "trigger_id="
+      "ok": true,
+      "detail": "trigger_id=31b4af61-bbcf-493d-b4a9-93d8eafaf284"
     },
     {
       "name": "测后删除函数归零",
-      "ok": false,
-      "detail": "cleanup=false zeroed=false"
+      "ok": true,
+      "detail": "cleanup=true zeroed=true"
     },
     {
       "name": "serviceCatalog 复合意图命中 RDS",
@@ -52,17 +58,17 @@ CreateVpc -> ok=true id=
     {
       "name": "VPC/子网/安全组前置编排完成",
       "ok": false,
-      "detail": "vpc= subnet= sg="
+      "detail": "vpc=e23dc7fe subnet=420859e5 sg="
     },
     {
-      "name": "最小 RDS 实例创建成功",
+      "name": "最小 RDS 实例创建成功(返回 job_id)",
       "ok": false,
-      "detail": "instanceId="
+      "detail": "job_id="
     },
     {
       "name": "测后删除归零(RDS+SG+子网+VPC)",
-      "ok": true,
-      "detail": "{\"rdsCleanup\":true,\"sgCleanup\":true,\"subnetCleanup\":true,\"vpcCleanup\":true,\"zeroed\":true}"
+      "ok": false,
+      "detail": "{\"rdsCleanup\":true,\"sgCleanup\":true,\"subnetCleanup\":true,\"vpcCleanup\":true,\"zeroed\":false}"
     }
   ]
 }
