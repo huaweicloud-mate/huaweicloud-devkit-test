@@ -7,6 +7,7 @@ const SRC = CORE + '/src';
 const { callTool } = await import(pathToFileURL(SRC + '/tools.mjs').href);
 
 const REGION = 'cn-north-4';
+const PROJECT_ID = '46c1fd48bd1248c7b75afc3780de7132';
 const TS = Date.now().toString(36).slice(-8);
 const results = [];
 function check(name, ok, detail) {
@@ -62,29 +63,35 @@ console.log('\n=====CASE D3-S7=====');
   let createdOk = false, instanceId = '';
   if (vpcId && subnetId && sgId) {
     const instName = 'hdk-s7-' + TS;
-    const body = {
-      name: instName,
-      datastore: { type: 'MySQL', version: '8.0' },
-      flavor_ref: 'rds.mysql.large.arm2.single',
-      volume: { type: 'ULTRAHIGH', size: 40 },
-      availability_zone: 'cn-north-4a',
-      vpc_id: vpcId,
-      subnet_id: subnetId,
-      security_group_id: sgId,
-      password: 'HdkS7@Test12345',
+    const jsonBody = {
+      path: { project_id: PROJECT_ID },
+      body: {
+        name: instName,
+        region: REGION,
+        datastore: { type: 'MySQL', version: '8.0' },
+        ha: { mode: 'single', replication_mode: 'semisync' },
+        flavor_ref: 'rds.mysql.large.arm2.single',
+        volume: { type: 'ULTRAHIGH', size: 40 },
+        vpc_id: vpcId,
+        subnet_id: subnetId,
+        security_group_id: sgId,
+        availability_zone: 'cn-north-4a',
+        password: 'HdkS7@Test12345',
+        charge_info: { charge_mode: 'postPaid' },
+      },
     };
     const jsonFile = '/tmp/hdk-rds-body-' + TS + '.json';
-    writeFileSync(jsonFile, JSON.stringify(body));
+    writeFileSync(jsonFile, JSON.stringify(jsonBody));
     const r = hc(['RDS', 'CreateInstance', '--cli-jsonInput=' + jsonFile, '--cli-region=' + REGION, '--cli-output=json'], 300000);
     const jobId = grab(r.out, 'job_id');
-    console.log('RDS CreateInstance(jsonInput) -> ok=' + r.ok + ' job_id=' + jobId.slice(0, 20) + (r.ok ? '' : ' err=' + redact(r.out).slice(0, 260)));
+    console.log('RDS CreateInstance(jsonInput) -> ok=' + r.ok + ' job_id=' + jobId.slice(0, 20) + (r.ok ? '' : ' err=' + redact(r.out).slice(0, 300)));
     if (r.ok && jobId) {
-      for (let i = 0; i < 20 && !instanceId; i++) {
+      for (let i = 0; i < 24 && !instanceId; i++) {
         await sleep(30000);
         const lr = hc(['RDS', 'ListInstances', '--cli-region=' + REGION, '--cli-output=json'], 60000);
         const m = new RegExp('"id"\\s*:\\s*"([^"]+)"[^}]*"name"\\s*:\\s*"' + instName + '"').exec(lr.out) || new RegExp('"name"\\s*:\\s*"' + instName + '"[^}]*"id"\\s*:\\s*"([^"]+)"').exec(lr.out);
         if (m) instanceId = m[1];
-        if (i % 3 === 0) console.log('  轮询 ' + (i + 1) + ' 次, instanceId=' + (instanceId || '(未就绪)').slice(0, 20));
+        if (i % 4 === 0) console.log('  轮询 ' + (i + 1) + ' 次, instanceId=' + (instanceId || '(未就绪)').slice(0, 20));
       }
     }
     createdOk = r.ok && !!instanceId;
@@ -99,7 +106,7 @@ console.log('\n=====CASE D3-S7=====');
   }
   if (sgId) { const d = hc(['VPC', 'DeleteSecurityGroup', '--security_group_id=' + sgId, '--cli-region=' + REGION, '--cli-output=json'], 60000); sgCleanup = d.ok; console.log('DeleteSecurityGroup -> ok=' + d.ok); }
   if (subnetId && vpcId) { const d = hc(['VPC', 'DeleteSubnet', '--vpc_id=' + vpcId, '--subnet_id=' + subnetId, '--cli-region=' + REGION, '--cli-output=json'], 60000); subnetCleanup = d.ok; console.log('DeleteSubnet -> ok=' + d.ok); }
-  await sleep(3000);
+  await sleep(5000);
   if (vpcId) { const d = hc(['VPC', 'DeleteVpc', '--vpc_id=' + vpcId, '--cli-region=' + REGION, '--cli-output=json'], 60000); vpcCleanup = d.ok; console.log('DeleteVpc -> ok=' + d.ok); }
   const listVpc = hc(['VPC', 'ListVpcs', '--cli-region=' + REGION, '--cli-output=json'], 60000);
   const zeroed = !(listVpc.out || '').includes(vpcName);
