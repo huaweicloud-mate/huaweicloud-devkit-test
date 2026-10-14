@@ -44,7 +44,7 @@
 | 层 | 载体 | 适用用例 |
 |---|---|---|
 | L1 单测 | `test/unit/d11-*.test.mjs` | 文案/字段/反断言类（D11-1/10/16/26） |
-| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 14 个**，与 `gen_ux.py` 的 `LANDED` 登记一致：`d11-1-onboarding-first-touch` / `d11-2-noninteractive-guidance` / `d11-3-effective-runtime` / `d11-4-effective-s1` / `d11-5-effective-env` / `d11-11-region-explicit` / `d11-26-terminology` / `d11-29-switch-effective-now` / `d11-30-auth-state-machine` / `d11-37-guidance-closure` / `d11-41-misleading-attribution` / `d11-42-encoding-contract` / `d11-43-terminal-env-matrix` / `d11-44-fault-injection`；共用工具 `ux-common.mjs`） | 登录引导、生效账号可见、状态机、术语人话化、切号生效、编码契约、误导归因、故障注入等 |
+| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 20 个**，与 `gen_ux.py` 的 `LANDED` 登记一致：D11-1/2/3/4/5/11/12/16/19/22/26/27/28/29/30/37/41/42/43/44 各一个夹具；共用工具 `ux-common.mjs`） | 登录引导与母语化、生效账号可见、状态机、术语人话化、统一错误卡、IAM-401 文案、审批可解释、KooCLI 隐私协议、STS 到期可动作、输出摘要与截断、编码契约、误导归因、故障注入等 |
 | L3 回放对照 | `eval/replay/`（待新增 `recordings/ux-baseline-v1.jsonl`） | 体验回归量化（D11-39） |
 | L4 Agent 评测 | `eval/harness/run-agent-eval.mjs` + **`eval/prompts/eval-set-ux.csv`（已落地，10 条模糊中文需求）**；三指标提取见 `eval/harness/ux-metrics.mjs`（`steps`/`fails`/`clarifications`），对照判定 `compareUxMetrics` | 度量对照（D11-40） |
 
