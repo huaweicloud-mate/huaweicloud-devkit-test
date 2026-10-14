@@ -68,4 +68,4 @@ BENCH_MCP_SERVER=/path/to/mcp-server.mjs node harness/run-bench.mjs t01 --runs 1
 
 - 写任务（T1/T3）真机创建，**每 run 后必须归零**（cleanup 脚本），跑完人工 `hcloud OBS ls` / `hcloud VPC ListSecurityGroups` 终验无 `devkit-bench` 残留。
 - 首份基线报告见 `results/baseline-report-20261014.md`。
-- 演进路线：L3 对照组（裸模型 vs 开 skill）→ L1 任务集扩到 8~10 场景 → L2 逐 skill 覆盖地图 → token→成本折算。
+- 演进路线：L3 对照组（裸模型 vs 开 skill）→ L1 任务集扩到 8~10 场景 → L2 逐 skill 覆盖地图。

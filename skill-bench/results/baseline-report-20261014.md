@@ -42,9 +42,9 @@ OBS 无 `devkit-bench` 残留、VPC 无 `devkit-bench` 安全组残留（终验�
 - **已补**：L2 覆盖地图（`coverage-map.md`）、L3 对照组初步（`baseline-bare-comparison-20261014.md`）。
 - **待补**：① L1 任务集扩到 8~10 场景（T4~T10）② L2 轻量激活评测 11 技能落地 ③ L3 裸模型补 3 次采样 + 工具 schema 精简实验。
 
-## 六、token 成本折算（待模型单价）
+## 六、token 统计
 
-首份基线 9 runs 总 token（IN=prompt / OUT=completion）：
+首份基线 9 runs 总 token（IN=prompt 输入 / OUT=completion 输出）：
 
 | 任务 | IN 合计 | OUT 合计 | total |
 |---|---|---|---|
@@ -52,7 +52,3 @@ OBS 无 `devkit-bench` 残留、VPC 无 `devkit-bench` 安全组残留（终验�
 | T2 查账单 | 204,751 | 5,864 | 210,615 |
 | T3 配安全组 | 1,227,319 | 45,668 | 1,272,987 |
 | **合计** | **2,121,177** | **83,104** | **2,204,281** |
-
-成本公式：`成本 = (IN × 输入单价 + OUT × 输出单价) / 1,000,000`（单价单位：元/百万 token）。
-
-待填 opengw 对 deepseek-v4-pro-0813 的输入/输出单价即得总成本。
