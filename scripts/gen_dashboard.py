@@ -4,6 +4,8 @@
 数据源（以「每日测试汇总报告」为准，不再自行重算）：
     results/Summary/每日测试汇总-<日期>.md / .html   （每日执行摘要 = 跨日趋势）
     results/Summary/用例矩阵-*-总执行结果-<日期>.csv   （仅用于最新日「客户端/维度/缺陷」明细）
+    results/UX专项/UX专项-<日期>.json                （UX 专项门禁三态；scripts/gen_ux_special.py 生成）
+    test-cases/ux/用例矩阵-体验级.csv                （UX 用例设计态概览；真源 = 同目录 gen_ux.py）
 
 用法:
     python gen_dashboard.py
@@ -20,6 +22,8 @@ sys.path.insert(0, SCRIPTS)
 import report_html as R
 
 SUMMARY_DIR = os.path.join(REPO, "results", "Summary")
+UX_DIR = os.path.join(REPO, "results", "UX专项")
+UX_CSV = os.path.join(REPO, "test-cases", "ux", "用例矩阵-体验级.csv")
 OUT = os.path.join(REPO, "dashboard.html")
 
 STATUS_COLOR = {"PASS": "#2ecc71", "FAIL": "#e74c3c", "BLOCKED": "#f39c12",
@@ -438,6 +442,218 @@ def load_bench():
             return json.load(f)
     except Exception:
         return None
+
+
+def load_ux_special():
+    """UX（D11）体验专项执行态：读 results/UX专项/UX专项-<日期>.json 中最新一份。
+
+    该 JSON 由 scripts/gen_ux_special.py 调用 eval/harness/fixtures/run-ux.mjs 生成
+    （夹具内置宿主隔离 + 需求验收三态退出码）；本看板只读不重算，保持单一真源。
+    """
+    import json
+    if not os.path.isdir(UX_DIR):
+        return None
+    cands = sorted(f for f in os.listdir(UX_DIR)
+                   if f.startswith("UX专项-") and f.endswith(".json"))
+    if not cands:
+        return None
+    p = os.path.join(UX_DIR, cands[-1])
+    try:
+        with open(p, encoding="utf-8") as f:
+            doc = json.load(f)
+    except Exception:
+        return None
+    doc["_file"] = os.path.relpath(p, REPO).replace("\\", "/")
+    return doc
+
+
+def load_ux_design():
+    """UX 用例设计态概览：读 test-cases/ux/用例矩阵-体验级.csv（唯一真源 = 同目录 gen_ux.py）。"""
+    if not os.path.isfile(UX_CSV):
+        return None
+    try:
+        with open(UX_CSV, encoding="utf-8-sig", newline="") as f:
+            rows = list(csv.DictReader(f))
+    except Exception:
+        return None
+    if not rows:
+        return None
+
+    def num(cid):
+        m = re.search(r"-(\d+)$", cid or "")
+        return int(m.group(1)) if m else 0
+
+    def prio(r, want):
+        return (r.get("优先级") or "").strip() == want
+
+    def frozen(r):
+        return "契约依赖" in (r.get("依赖") or "")
+
+    # 夹具 ↔ 用例 的权威映射：取自 CSV「自动化建议」列的 `fixture:<路径>`（真源仍是 gen_ux.py）
+    fixture_map = {}
+    for r in rows:
+        for m in re.finditer(r"fixture:([^\s,;]+)", (r.get("自动化建议") or "")):
+            fixture_map[os.path.basename(m.group(1))] = r.get("ID", "")
+
+    batches = [("第一批 · 登录体验", 1, 21), ("第二批 · 使用体验", 22, 35),
+               ("第三批 · 范式升级", 36, 10 ** 6)]
+    out = []
+    for name, lo, hi in batches:
+        grp = [r for r in rows if lo <= num(r.get("ID", "")) <= hi]
+        nums = sorted(num(r.get("ID", "")) for r in grp)
+        out.append({
+            "name": name,
+            "range": f"D11-{nums[0]} ~ D11-{nums[-1]}" if nums else "—",
+            "total": len(grp),
+            "p1": sum(1 for r in grp if prio(r, "P1")),
+            "p2": sum(1 for r in grp if prio(r, "P2")),
+            "frozen": sum(1 for r in grp if frozen(r)),
+        })
+    return {
+        "total": len(rows),
+        "p1": sum(1 for r in rows if prio(r, "P1")),
+        "p2": sum(1 for r in rows if prio(r, "P2")),
+        "frozen": sum(1 for r in rows if frozen(r)),
+        "batches": out,
+        "fixture_map": fixture_map,
+        "source": os.path.relpath(UX_CSV, REPO).replace("\\", "/"),
+    }
+
+
+UX_STATUS_COLOR = {"PASS": "#2ecc71", "NOT_IMPLEMENTED": "#e74c3c", "BLOCKED": "#f39c12"}
+UX_STATUS_LABEL = {"PASS": "PASS", "NOT_IMPLEMENTED": "需求未实现", "BLOCKED": "BLOCKED(ENV)"}
+_TD = 'padding:6px 8px;border:1px solid #ddd;'
+_TH = 'padding:6px 8px;border:1px solid #ddd;background:#f2f2f2;'
+
+
+def _ux_kpi(value, label, color):
+    return (f'<div style="flex:1;min-width:110px;background:{color};color:#fff;border-radius:8px;'
+            f'padding:14px 10px;text-align:center;margin:4px;">'
+            f'<div style="font-size:24px;font-weight:700;">{value}</div>'
+            f'<div style="font-size:12px;opacity:.9;">{label}</div></div>')
+
+
+def render_ux_block(ux, design):
+    """渲染「UX 专项」页签：门禁三态矩阵 + 失败断言明细 + 用例设计态概览。"""
+    if not ux:
+        return ('<p style="color:#95a5a6;">暂无 UX（D11）体验专项数据。生成方式：'
+                '<code>python scripts/gen_ux_special.py --sut "&lt;标签&gt;=&lt;plugins/huaweicloud-core/src&gt;"</code></p>')
+
+    suts = ux.get("suts", [])
+    cases = [c for c in (suts[0].get("cases") if suts else []) or []]
+    main = suts[0] if suts else {}
+    msum = main.get("summary", {}) or {}
+
+    parts = ['<h2>UX（D11）体验专项 · 可执行门禁</h2>']
+    parts.append(
+        '<p style="color:#7f8c8d;font-size:12px;">数据源 <code>' + ux.get("_file", "") +
+        '</code>（由 <code>scripts/gen_ux_special.py</code> 跑 <code>eval/harness/fixtures/run-ux.mjs</code> 生成：'
+        '夹具内置宿主隔离 + 需求验收三态退出码）；数据日期 <b>' + str(ux.get("date", "—")) +
+        '</b>，生成于 ' + str(ux.get("generatedAt", "—")) + '（' + str(ux.get("timezone", "Asia/Shanghai")) + '）。</p>')
+
+    # KPI
+    k = _ux_kpi(len(cases), "可执行门禁用例", "#34495e")
+    if design:
+        k += _ux_kpi(design["total"], "D11 用例总数（设计态）", "#7f8c8d")
+        k += _ux_kpi(f'{design["p1"]} / {design["p2"]}', "P1 / P2", "#8e44ad")
+    k += _ux_kpi(f'{msum.get("pass", 0)} / {msum.get("total", len(cases))}', "主列 PASS / 总数", "#3498db")
+    k += _ux_kpi(msum.get("not_implemented", 0), "需求未实现", UX_STATUS_COLOR["NOT_IMPLEMENTED"])
+    k += _ux_kpi(msum.get("blocked", 0), "BLOCKED(ENV)", UX_STATUS_COLOR["BLOCKED"])
+    parts.append(f'<div style="display:flex;flex-wrap:wrap;margin:-4px;">{k}</div>')
+
+    # 口径声明
+    parts.append(
+        '<div style="background:#fdf6e3;border-left:4px solid #e67e22;padding:8px 12px;margin:10px 0;font-size:12px;color:#7f5f00;">'
+        '<b>口径（必读）</b>：' + str(ux.get("caveat", "")) +
+        ' 因此「需求未实现」<b>不是</b> harness 故障，也不等于体验验收结论。</div>')
+
+    # 三态矩阵
+    parts.append('<h3>门禁三态矩阵（列 = 被测包）</h3>')
+    head = ('<tr>' + f'<th style="{_TH}">用例</th><th style="{_TH}">夹具</th>'
+            + ''.join(f'<th style="{_TH}">' +
+                      f'{s.get("label", "")}<br><span style="font-weight:400;color:#7f8c8d;">v{s.get("version") or "?"}</span>'
+                      f'</th>' for s in suts) + '</tr>')
+    rows = []
+    fmap = (design or {}).get("fixture_map", {})
+    for c in cases:
+        fname = c.get("file", "")
+        own_id = c.get("case", "")
+        matrix_id = fmap.get(fname, "")
+        label_id = matrix_id or own_id or "—"
+        sub = (f'<br><span style="color:#e67e22;font-size:10px;">夹具自标 {own_id}</span>'
+               if matrix_id and own_id and matrix_id != own_id else '')
+        recs = {s["label"]: next((x for x in s.get("cases", []) if x.get("case") == c.get("case")), None) for s in suts}
+        tds = []
+        for s in suts:
+            r = recs.get(s.get("label"))
+            if not r:
+                tds.append(f'<td style="{_TD}text-align:center;color:#95a5a6;">—</td>')
+                continue
+            st = r.get("status", "")
+            tot = (r.get("pass") or 0) + (r.get("fail") or 0)
+            tds.append(f'<td style="{_TD}text-align:center;color:{UX_STATUS_COLOR.get(st, "#2c3e50")};">'
+                       f'<b>{UX_STATUS_LABEL.get(st, st)}</b><br><span style="color:#7f8c8d;">'
+                       f'{(r.get("pass") if r.get("pass") is not None else "?")}/{tot or "?"} 断言</span></td>')
+        rows.append(f'<tr><td style="{_TD}"><b>{label_id}</b>{sub}</td>'
+                    f'<td style="{_TD}color:#7f8c8d;font-size:11px;">{fname}</td>' + ''.join(tds) + '</tr>')
+    parts.append('<table style="border-collapse:collapse;width:100%;font-size:12px;">'
+                 f'<thead>{head}</thead><tbody>{"".join(rows)}</tbody></table>')
+    parts.append('<p style="color:#7f8c8d;font-size:12px;">单元格 = 三态判定 ｜ 通过/全部断言数。'
+                 '「需求未实现」= 需求验收未达标（已知缺口）；BLOCKED(ENV) = 宿主/环境不可判定。'
+                 '用例 ID 以设计矩阵（<code>test-cases/ux/</code>，真源 <code>gen_ux.py</code>）为准；'
+                 '夹具文件名/内部 case id 与用例号不一致处标注为橙色「夹具自标」。</p>')
+
+    # 失败断言明细
+    parts.append('<h3>失败断言明细（逐条 actual / expected）</h3>')
+    for s in suts:
+        fails = [(c, a) for c in s.get("cases", []) for a in (c.get("assertions") or []) if not a.get("ok")]
+        if not fails:
+            parts.append(f'<details style="margin:6px 0;"><summary style="cursor:pointer;font-size:13px;">'
+                         f'{s.get("label")}（v{s.get("version") or "?"}）—— 无失败断言</summary></details>')
+            continue
+        frows = ''.join(
+            f'<tr><td style="{_TD}"><b>{a.get("id", "")}</b></td>'
+            f'<td style="{_TD}">{a.get("title", "")}</td>'
+            f'<td style="{_TD}font-family:Consolas,monospace;font-size:11px;color:#c0392b;">{str(a.get("actual"))[:160]}</td>'
+            f'<td style="{_TD}font-family:Consolas,monospace;font-size:11px;color:#27ae60;">{str(a.get("expected"))[:160]}</td>'
+            f'<td style="{_TD}font-size:11px;color:#7f8c8d;">{a.get("detail", "")}</td></tr>'
+            for _c, a in fails)
+        parts.append(
+            f'<details style="margin:6px 0;"><summary style="cursor:pointer;padding:8px 12px;background:#f7f7f7;'
+            f'border-radius:6px;font-size:13px;font-weight:700;">{s.get("label")}（v{s.get("version") or "?"}）'
+            f'—— {len(fails)} 条失败断言</summary>'
+            '<table style="border-collapse:collapse;width:100%;font-size:12px;margin-top:6px;">'
+            f'<thead><tr><th style="{_TH}">断言</th><th style="{_TH}">标题</th>'
+            f'<th style="{_TH}">actual</th><th style="{_TH}">expected</th><th style="{_TH}">说明</th></tr></thead>'
+            f'<tbody>{frows}</tbody></table></details>')
+
+    # 设计态概览
+    if design:
+        drows = ''.join(
+            f'<tr><td style="{_TD}">{b["name"]}</td><td style="{_TD}text-align:center;">{b["range"]}</td>'
+            f'<td style="{_TD}text-align:center;">{b["total"]}</td>'
+            f'<td style="{_TD}text-align:center;">{b["p1"]}</td>'
+            f'<td style="{_TD}text-align:center;">{b["p2"]}</td>'
+            f'<td style="{_TD}text-align:center;">{b["frozen"]}</td></tr>'
+            for b in design["batches"])
+        parts.append(
+            f'<h3>用例设计态概览（共 {design["total"]} 条，P1 {design["p1"]} / P2 {design["p2"]}）</h3>'
+            f'<p style="color:#7f8c8d;font-size:12px;">数据源 <code>{design["source"]}</code>（唯一真源 = 同目录 <code>gen_ux.py</code>；'
+            '本表不含执行态，执行态见上方门禁矩阵）。</p>'
+            '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
+            f'<thead><tr><th style="{_TH}text-align:left;">批次</th><th style="{_TH}">ID 区间</th>'
+            f'<th style="{_TH}">条数</th><th style="{_TH}">P1</th><th style="{_TH}">P2</th>'
+            f'<th style="{_TH}">契约依赖待冻结</th></tr></thead>'
+            f'<tbody>{drows}</tbody></table>')
+        parts.append(
+            f'<p style="color:#7f8c8d;font-size:12px;">三类体验<b>无法用断言覆盖</b>、需人工 rubric：认知负荷、'
+            f'错误文案是否够新手用、视觉排版。另：{design["frozen"]} 条用例带「契约依赖…待冻结」，'
+            '契约冻结前应标 NOT_RUN，不得以「设计完整」冒充「已通过」。</p>')
+
+    parts.append('<p style="color:#95a5a6;font-size:11px;">复跑：<code>python scripts/gen_ux_special.py '
+                 '--sut "&lt;标签&gt;=&lt;plugins/huaweicloud-core/src&gt;"</code> 生成同一数据源后本页自动刷新；'
+                 'exit 0 = 全部通过（需求已实现）/ 1 = 需求未实现 / 2 = 环境不可判定。</p>')
+    return ''.join(parts)
 
 
 def render(days, version, vdate, gen_ts, links, notes, versions):
@@ -874,6 +1090,9 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
     else:
         bench_block = '<p style="color:#95a5a6;">暂无技能评测基线（运行 skill-bench harness 后生成 summary.json）。</p>'
 
+    # ---- UX 专项页签（读 results/UX专项/UX专项-<日期>.json + test-cases/ux 设计态）----
+    ux_block = render_ux_block(load_ux_special(), load_ux_design())
+
     html = f"""<!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -893,6 +1112,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 <button class="tab-btn active" id="btn-daily" onclick="showTab('daily')">每日执行</button>
 <button class="tab-btn" id="btn-version" onclick="showTab('version')">版本执行</button>
 <button class="tab-btn" id="btn-bench" onclick="showTab('bench')">技能评测</button>
+<button class="tab-btn" id="btn-ux" onclick="showTab('ux')">UX 专项</button>
 </div>
 
 <div id="tab-daily">
@@ -962,9 +1182,13 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 {bench_block}
 </div>
 
-<p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；执行摘要取自每日《每日测试汇总》报告。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准。</p>
+<div id="tab-ux" style="display:none;">
+{ux_block}
+</div>
+
+<p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；执行摘要取自每日《每日测试汇总》报告。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准；UX 专项取自 results/UX专项/（由 scripts/gen_ux_special.py 跑 eval/harness/fixtures/run-ux.mjs 生成）。</p>
 <script>
-function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('tab-bench').style.display=n==='bench'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');document.getElementById('btn-bench').className='tab-btn'+(n==='bench'?' active':'');}}
+function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('tab-bench').style.display=n==='bench'?'block':'none';document.getElementById('tab-ux').style.display=n==='ux'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');document.getElementById('btn-bench').className='tab-btn'+(n==='bench'?' active':'');document.getElementById('btn-ux').className='tab-btn'+(n==='ux'?' active':'');}}
 function filterCase(st){{var btns=document.querySelectorAll('.casebtn');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('onclick').indexOf(st)!==-1?' active':'');}}var rows=document.querySelectorAll('.caserow');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-st');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 function filterVCase(vk,st){{var btns=document.querySelectorAll('.casebtn[data-vk="'+vk+'"]');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('data-st')===st?' active':'');}}var rows=document.querySelectorAll('.vcaserow[data-vk="'+vk+'"]');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-vst');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 </script>

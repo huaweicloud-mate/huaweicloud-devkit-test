@@ -60,7 +60,7 @@ export function rec(id, title, ok, actual, expected, detail = '') {
   if (detail) console.log(`      ${detail}`);
 }
 
-/** 收尾：打印汇总 + 落证据 + 三态退出（0 通过 / 1 有 FAIL）。 */
+/** 收尾：打印汇总 + 落证据（stdout.txt + result.json）+ 三态退出（0 通过 / 1 有 FAIL）。 */
 export function finish(caseId, evid, note = '') {
   const pass = results.filter((r) => r.ok).length;
   const fail = results.length - pass;
@@ -77,6 +77,15 @@ export function finish(caseId, evid, note = '') {
     `=== ${caseId} ===  pass=${pass} fail=${fail}`,
     `RESULT: ${fail === 0 ? 'PASS' : 'FAIL'}`,
   ]);
+  writeResult(caseId, evid, {
+    case: caseId,
+    file: process.env.UX_FIXTURE_FILE || '',
+    result: fail === 0 ? 'PASS' : 'FAIL',
+    pass,
+    fail,
+    note,
+    assertions: results.map((r) => ({ ...r })),
+  });
   process.exit(fail > 0 ? 1 : 0);
 }
 
@@ -89,6 +98,15 @@ export function blocked(caseId, reason, evid) {
   console.log('            或直接用运行器 `npm run test:ux`（它自动为每个夹具建独立空 HOME）。');
   console.log('RESULT: BLOCKED');
   writeEvidence(caseId, evid, [`[BLOCKED] ${reason}`, 'RESULT: BLOCKED']);
+  writeResult(caseId, evid, {
+    case: caseId,
+    file: process.env.UX_FIXTURE_FILE || '',
+    result: 'BLOCKED',
+    pass: 0,
+    fail: 0,
+    note: reason,
+    assertions: [],
+  });
   process.exit(2);
 }
 
@@ -97,4 +115,16 @@ export function writeEvidence(caseId, evid, lines) {
   const dir = join(evid, caseId);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, 'stdout.txt'), lines.join('\n'), 'utf8');
+}
+
+/**
+ * 机器可读结果 sidecar：`<evid>/<caseId>/result.json`。
+ * 供 `run-ux.mjs --json <path>` 汇总为看板/门禁可直接消费的结构化数据；
+ * 未传 `--evid` 时静默跳过（不影响既有控制台行为与退出码）。
+ */
+export function writeResult(caseId, evid, payload) {
+  if (!evid) return;
+  const dir = join(evid, caseId);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, 'result.json'), `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
 }

@@ -9,52 +9,34 @@
 //
 // 口径：这是**需求验收**用例（UX-R1）。实现前预期 FAIL —— 如实记录，不以 FAIL 掩盖"未实现"。
 // 用法: node d11-36-guidance-closure.mjs <hdk src> [--evid <dir>]
-import { writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
+// 收尾走 ux-common.mjs 的统一契约（断言记录 / 证据双落盘 / 三态退出码），与其他 D11 夹具同形。
+import { mkdirSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { homedir, tmpdir } from 'node:os';
-import { pathToFileURL } from 'node:url';
+import { blocked, contaminatedHost, finish, importHdk, parseArgs, rec } from './ux-common.mjs';
 
-const hdkSrc = process.argv[2];
-const evidIdx = process.argv.indexOf('--evid');
-const EVID = evidIdx > -1 ? process.argv[evidIdx + 1] : null;
+const CASE_ID = 'D11-36';
+const { hdkSrc, evid } = parseArgs();
 if (!hdkSrc) {
   console.error('用法: node d11-36-guidance-closure.mjs <hdk src> [--evid <dir>]');
   process.exit(2);
 }
 
-const results = [];
-function rec(id, title, ok, actual, expected, detail = '') {
-  results.push({ id, title, ok, actual, expected, detail });
-  console.log(`${ok ? 'PASS' : 'FAIL'}  ${id}  ${title} => ${JSON.stringify(actual)} (期望 ${JSON.stringify(expected)})`);
-  if (detail) console.log('    ' + detail);
-}
-
 const ZH = /[\u4e00-\u9fff]/;
 const tmp = join(tmpdir(), `d11-36-${Date.now()}`);
-mkdirSync(tmp, { recursive: true });
 
 // ---- 0) 宿主隔离前置门（不是用例，是前置条件；污染时整例不可判定） ----
-const contam = ['.config/huaweicloud/credentials.json', '.hcloud/config.json',
-  '.codeartsdoer', '.codearts', '.codeartswork']
-  .filter((p) => existsSync(join(homedir(), p)));
+const contam = contaminatedHost();
 console.log(`[HOST] ${contam.length ? 'CONTAMINATED' : 'CLEAN'}${contam.length ? ' :: ' + contam.join(', ') : ''}`);
 if (contam.length) {
-  console.log('RESULT: ENV_CONTAMINATED');
-  console.log('  未登录态不可构造 → 整例不可判定（不计入 PASS/FAIL）。');
-  console.log('  重跑: 置 USERPROFILE/HOME 到空目录后再执行本夹具。');
-  if (EVID) {
-    const outDir = join(EVID, 'D11-36');
-    mkdirSync(outDir, { recursive: true });
-    writeFileSync(join(outDir, 'stdout.txt'),
-      `[HOST] CONTAMINATED :: ${contam.join(', ')}\nRESULT: ENV_CONTAMINATED\n`, 'utf8');
-  }
-  process.exit(2);
+  blocked(CASE_ID, `宿主未隔离：${contam.join(', ')}`, evid);
 }
 
+mkdirSync(tmp, { recursive: true });
 process.env.HUAWEICLOUD_HOME = tmp;
 for (const k of ['HW_ACCESS_KEY', 'HW_SECRET_KEY', 'HW_SECURITY_TOKEN', 'HW_REGION', 'HUAWEICLOUD_REGION']) delete process.env[k];
 
-const creds = await import(pathToFileURL(join(hdkSrc, 'auth', 'credentials.mjs')).href);
+const creds = await importHdk(hdkSrc, 'auth/credentials.mjs');
 
 // ---- 1) 文案达标：错误码 + 中文 + 步骤 + 反断言 ----
 let err = null;
@@ -83,20 +65,4 @@ rec('D11-36-closure', '按引导完成登录后症状消失（闭环有效性）
 rmSync(tmp, { recursive: true, force: true });
 delete process.env.HUAWEICLOUD_HOME;
 
-const pass = results.filter((r) => r.ok).length;
-const fail = results.length - pass;
-console.log(`\n=== D11-36 未登录引导闭环有效性 ===  pass=${pass} fail=${fail}`);
-console.log(`RESULT: ${fail === 0 ? 'PASS' : 'FAIL'}`);
-console.log('口径: 需求验收（UX-R1）；FAIL = 需求未实现，非 harness 问题');
-
-if (EVID) {
-  const outDir = join(EVID, 'D11-36');
-  mkdirSync(outDir, { recursive: true });
-  const lines = results.map((r) =>
-    `${r.ok ? 'PASS' : 'FAIL'}\t${r.id}\t${r.title}\tactual=${JSON.stringify(r.actual)}\texpected=${JSON.stringify(r.expected)}${r.detail ? '\t' + r.detail : ''}`);
-  lines.push(`\n=== D11-36 未登录引导闭环有效性 ===  pass=${pass} fail=${fail}`);
-  lines.push(`RESULT: ${fail === 0 ? 'PASS' : 'FAIL'}`);
-  writeFileSync(join(outDir, 'stdout.txt'), lines.join('\n'), 'utf8');
-}
-
-process.exit(fail > 0 ? 1 : 0);
+finish(CASE_ID, evid, '口径: 需求验收（UX-R1）；FAIL = 需求未实现，非 harness 问题');
