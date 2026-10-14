@@ -30,5 +30,26 @@
     "verifier": "verifiers/verify-security-group.mjs",
     "cleanup": "verifiers/cleanup-security-group.mjs",
     "write": true
+  },
+  {
+    "id": "t10-create-smn-topic",
+    "title": "创建 SMN 通知主题",
+    "prompt": "在华为云创建一个 SMN 通知主题，主题名和显示名都用 devkit-bench-{{RUNID}}。创建成功后把主题的 topic_urn 告诉我。无人值守环境，请自主完成。",
+    "expectedService": "SMN",
+    "expectedSkill": "huawei-smn-dms",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-smn-topic.mjs",
+    "cleanup": "verifiers/cleanup-smn-topic.mjs",
+    "write": true
+  },
+  {
+    "id": "t05-list-iam-users",
+    "title": "查询 IAM 用户列表",
+    "prompt": "帮我列出当前华为云账户下的所有 IAM 用户，告诉我每个用户的名字和描述。无人值守环境，请自主完成。",
+    "expectedService": "IAM",
+    "expectedSkill": "huawei-iam",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-iam-users.mjs",
+    "write": false
   }
 ]
