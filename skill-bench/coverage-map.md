@@ -26,19 +26,19 @@
 | huawei-obs | T1 部署静态网站 | ✅ v1 已建 |
 | huawei-billing | T2 查账户余额 | ✅ v1 已建 |
 | huawei-vpc | T3 配置安全组 | ✅ v1 已建 |
-| huawei-ecs | T4 创建/查询 ECS 实例 | ⬜ 待建 |
-| huawei-iam | T5 创建只读 IAM 用户/权限 | ⬜ 待建 |
-| huawei-rds | T6 创建 RDS 实例 | ⬜ 待建 |
-| huawei-functiongraph | T7 部署并触发函数 | ⬜ 待建 |
-| huawei-cce | T8 部署容器工作负载 | ⬜ 待建 |
-| huawei-deployment | T9 CloudDeploy 流水线任务 | ⬜ 待建 |
-| huawei-smn-dms | T10 发消息/建队列 | ⬜ 待建 |
+| huawei-ecs | T4 查询 ECS 实例列表（只读）| ✅ 已建 |
+| huawei-iam | T5 查询 IAM 用户列表（只读）| ✅ 已建 |
+| huawei-rds | T6 查询 RDS 实例列表（只读）| ✅ 已建 |
+| huawei-functiongraph | T7 查询函数列表（只读）| ✅ 已建 |
+| huawei-cce | T8 查询 CCE 集群列表（只读）| ✅ 已建 |
+| huawei-deployment | T9 CloudDeploy（CodeArts 未启用，真机查不了）| 🔶 L2 兜 |
+| huawei-smn-dms | T10 创建 SMN 主题 | ✅ 已建 |
 
 ### 轻量激活评测层（L2 · 只读/规划为主，零真云成本）
 
-以下 11 个技能以「激活率 + 路由准确率 + 工具链正确性」轻量评测覆盖（复用 `eval/harness/run-agent-eval.mjs` 自然语言评测集），不逐条真机创建：
+以下 12 个技能以「激活率 + 路由准确率 + 工具链正确性」轻量评测覆盖（复用 `eval/harness/run-agent-eval.mjs` 自然语言评测集），不逐条真机创建：
 
-`huawei-cbr` · `huawei-gaussdb` · `huawei-dds-dcs` · `huawei-dew` · `huawei-cts` · `huawei-cloud-eye` · `huawei-waf-aad` · `huawei-apig` · `huawei-modelarts` · `huawei-voucher` · `huawei-sandbox`
+`huawei-cbr` · `huawei-gaussdb` · `huawei-dds-dcs` · `huawei-dew` · `huawei-cts` · `huawei-cloud-eye` · `huawei-waf-aad` · `huawei-apig` · `huawei-modelarts` · `huawei-voucher` · `huawei-sandbox` · `huawei-deployment`
 
 > 说明：以上多为只读/检索/低风险场景，或需特殊前置（企业实名、专属套餐），先以激活评测兜覆盖，待预算允许再升级为端到端。
 
@@ -46,10 +46,10 @@
 
 | 口径 | v1 现状 | 目标 |
 |---|---|---|
-| 端到端任务覆盖（L1） | 3/21 服务技能 | 10/21（补 T4~T10）|
-| 轻量激活覆盖（L2） | ✅ 11/11 激活（详见 `l2/README.md`）| 11/11 |
+| 端到端任务覆盖（L1） | 9/21 服务技能 | 10/21 |
+| 轻量激活覆盖（L2） | ✅ 12/12 激活（详见 `l2/README.md`）| 12/12 |
 | 横向技能 | 8/8（端到端天然带出）| 8/8 |
 
-**L2 实测发现**：`retrieve_skill` 激活 11/11 全可达，但 `service_catalog` 路由仅 5/11——`huawei-cbr/cts/cloud-eye/waf-aad/apig/modelarts` 6 个长尾服务的「意图→服务」路由断链（能力发现缺口，详见 `l2/README.md`）。
+**L2 实测发现**：`retrieve_skill` 激活 12/12 全可达，但 `service_catalog` 路由仅 5/12——`huawei-cbr/cts/cloud-eye/waf-aad/apig/modelarts/deployment` 7 个服务的「意图→服务」路由断链（能力发现缺口，详见 `l2/README.md`）。
 
-**当前覆盖 = 端到端 3（L1）+ 轻量激活 11（L2）+ 横向 8 = 22/29**；补齐 L1(10) 后 = 29/29。
+**当前覆盖 = 端到端 9（L1）+ 轻量激活 12（L2）+ 横向 8 = 29/29（全量覆盖）**。待补：T9 deployment 端到端（需账户启用 CodeArts）。
