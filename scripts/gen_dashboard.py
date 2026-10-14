@@ -495,10 +495,13 @@ def load_ux_design():
         for m in re.finditer(r"fixture:([^\s,;]+)", (r.get("自动化建议") or "")):
             fixture_map[os.path.basename(m.group(1))] = r.get("ID", "")
 
-    batches = [("第一批 · 登录体验", 1, 21), ("第二批 · 使用体验", 22, 35),
-               ("第三批 · 范式升级", 36, 10 ** 6)]
+    def batch_of(n):
+        return "第一批 · 登录体验" if n <= 21 else ("第二批 · 使用体验" if n <= 35 else "第三批 · 范式升级")
+
+    # 批次概览（区间按实际存在的 ID 求，避免硬编码漂移）
     out = []
-    for name, lo, hi in batches:
+    for name, lo, hi in [("第一批 · 登录体验", 1, 21), ("第二批 · 使用体验", 22, 35),
+                         ("第三批 · 范式升级", 36, 10 ** 6)]:
         grp = [r for r in rows if lo <= num(r.get("ID", "")) <= hi]
         nums = sorted(num(r.get("ID", "")) for r in grp)
         out.append({
@@ -509,13 +512,43 @@ def load_ux_design():
             "p2": sum(1 for r in grp if prio(r, "P2")),
             "frozen": sum(1 for r in grp if frozen(r)),
         })
+
+    def block_of(r):
+        m = re.search(r"<阻塞:\s*([^>|]+)", r.get("展开规则") or "")
+        return m.group(1).strip() if m else ""
+
+    # 全量用例清单（43 条，含未建载体的）：看板要把每条用例都体现出来
+    cases = []
+    for r in rows:
+        cid = (r.get("ID") or "").strip()
+        advice = (r.get("自动化建议") or "").strip()
+        fm = re.search(r"fixture:([^\s,;]+)", advice)
+        dep = (r.get("依赖") or "").strip()
+        cases.append({
+            "id": cid,
+            "title": (r.get("标题") or "").strip(),
+            "prio": (r.get("优先级") or "").strip(),
+            "batch": batch_of(num(cid)),
+            "advice": advice.split(":")[0].strip() if advice else "",
+            "fixture": os.path.basename(fm.group(1)) if fm else "",
+            "landed": bool(fm),
+            "frozen": "契约依赖" in dep,
+            "dep": dep,
+            "block": block_of(r),
+        })
     return {
         "total": len(rows),
         "p1": sum(1 for r in rows if prio(r, "P1")),
         "p2": sum(1 for r in rows if prio(r, "P2")),
         "frozen": sum(1 for r in rows if frozen(r)),
+        "carrier": {
+            "landed": sum(1 for c in cases if c["landed"]),
+            "frozen_only": sum(1 for c in cases if c["frozen"] and not c["landed"]),
+            "none": sum(1 for c in cases if not c["frozen"] and not c["landed"]),
+        },
         "batches": out,
         "fixture_map": fixture_map,
+        "cases": cases,
         "source": os.path.relpath(UX_CSV, REPO).replace("\\", "/"),
     }
 
@@ -552,10 +585,12 @@ def render_ux_block(ux, design):
         '</b>，生成于 ' + str(ux.get("generatedAt", "—")) + '（' + str(ux.get("timezone", "Asia/Shanghai")) + '）。</p>')
 
     # KPI
-    k = _ux_kpi(len(cases), "可执行门禁用例", "#34495e")
+    k = _ux_kpi(design["total"] if design else len(cases), "D11 用例总数", "#34495e")
     if design:
-        k += _ux_kpi(design["total"], "D11 用例总数（设计态）", "#7f8c8d")
         k += _ux_kpi(f'{design["p1"]} / {design["p2"]}', "P1 / P2", "#8e44ad")
+        k += _ux_kpi(design["carrier"]["landed"], "已建可执行载体", "#16a085")
+        k += _ux_kpi(design["carrier"]["frozen_only"], "契约依赖待冻结", "#e67e22")
+        k += _ux_kpi(design["carrier"]["none"], "未建可执行载体", "#95a5a6")
     k += _ux_kpi(f'{msum.get("pass", 0)} / {msum.get("total", len(cases))}', "主列 PASS / 总数", "#3498db")
     k += _ux_kpi(msum.get("not_implemented", 0), "需求未实现", UX_STATUS_COLOR["NOT_IMPLEMENTED"])
     k += _ux_kpi(msum.get("blocked", 0), "BLOCKED(ENV)", UX_STATUS_COLOR["BLOCKED"])
@@ -602,6 +637,78 @@ def render_ux_block(ux, design):
                  '「需求未实现」= 需求验收未达标（已知缺口）；BLOCKED(ENV) = 宿主/环境不可判定。'
                  '用例 ID 以设计矩阵（<code>test-cases/ux/</code>，真源 <code>gen_ux.py</code>）为准；'
                  '夹具文件名/内部 case id 与用例号不一致处标注为橙色「夹具自标」。</p>')
+
+    # ---- 全量用例清单（43 条：已建载体的给三态结果，未建载体的也逐条列出）----
+    if design and design.get("cases"):
+        stat = {}
+        for s in suts:
+            for c in s.get("cases", []):
+                stat.setdefault(c.get("case"), {})[s.get("label")] = c
+        main_label = main.get("label")
+        urows, cnt = [], Counter()
+        for c in design["cases"]:
+            per = stat.get(c["id"], {})
+            mr = per.get(main_label) or (next(iter(per.values())) if per else None)
+            if per:
+                kind = "PASS" if (mr or {}).get("status") == "PASS" else "FAIL"
+            elif c["frozen"]:
+                kind = "FROZEN"
+            else:
+                kind = "NONE"
+            cnt[kind] += 1
+            tds = []
+            for s in suts:
+                rr = per.get(s.get("label"))
+                if not rr:
+                    tds.append(f'<td style="{_TD}text-align:center;color:#bdc3c7;">—</td>')
+                    continue
+                st = rr.get("status", "")
+                tot = (rr.get("pass") or 0) + (rr.get("fail") or 0)
+                tds.append(f'<td style="{_TD}text-align:center;color:{UX_STATUS_COLOR.get(st, "#2c3e50")};">'
+                           f'<b>{UX_STATUS_LABEL.get(st, st)}</b>'
+                           f'<br><span style="color:#7f8c8d;">{rr.get("pass")}/{tot or "?"}</span></td>')
+            if c["fixture"]:
+                carrier = f'夹具 <code>{c["fixture"]}</code>'
+            else:
+                carrier = f'{c["advice"] or "—"}（纸面定义）'
+            notes = []
+            if c["frozen"]:
+                notes.append('<span style="color:#e67e22;">契约依赖待冻结</span>')
+            if c["block"] and c["block"] != "无":
+                notes.append(c["block"])
+            note = ' ｜ '.join(notes)
+            stripe = ' style="background:#fbfbfb;"' if len(urows) % 2 else ''
+            urows.append(
+                f'<tr class="uxrow" data-ux="{kind}"{stripe}>'
+                f'<td style="{_TD}white-space:nowrap;"><b>{c["id"]}</b></td>'
+                f'<td style="{_TD}text-align:center;">{c["prio"]}</td>'
+                f'<td style="{_TD}color:#7f8c8d;font-size:11px;white-space:nowrap;">{c["batch"].split(" · ")[0]}</td>'
+                f'<td style="{_TD}">{c["title"]}</td>'
+                f'<td style="{_TD}color:#7f8c8d;font-size:11px;">{carrier}</td>'
+                + ''.join(tds)
+                + f'<td style="{_TD}color:#7f8c8d;font-size:11px;">{note}</td></tr>')
+        parts.append(
+            f'<h3>全部 D11 用例（{design["total"]} 条 · 每条都列出）</h3>'
+            '<p style="color:#7f8c8d;font-size:12px;">执行态列 = 该用例的门禁结果（未建载体者该列标 '
+            '<b>—</b>，不计入通过率）。载体列「纸面定义」= 目前只有用例定义、尚未落 L1/L2 可执行载体；'
+            '「契约依赖待冻结」= 依赖字段未冻结，契约冻结前应标 NOT_RUN。</p>'
+            '<div style="margin:0 0 8px;">'
+            f'<button class="uxbtn active" data-f="ALL" onclick="filterUxCase(\'ALL\')">全部 {design["total"]}</button>'
+            f'<button class="uxbtn" data-f="PASS" onclick="filterUxCase(\'PASS\')">PASS {cnt["PASS"]}</button>'
+            f'<button class="uxbtn" data-f="FAIL" onclick="filterUxCase(\'FAIL\')">需求未实现 {cnt["FAIL"]}</button>'
+            f'<button class="uxbtn" data-f="FROZEN" onclick="filterUxCase(\'FROZEN\')">契约待冻结 {cnt["FROZEN"]}</button>'
+            f'<button class="uxbtn" data-f="NONE" onclick="filterUxCase(\'NONE\')">未建载体 {cnt["NONE"]}</button>'
+            '</div>'
+            '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
+            f'<thead><tr><th style="{_TH}">用例</th><th style="{_TH}">P</th><th style="{_TH}">批次</th>'
+            f'<th style="{_TH}">标题</th><th style="{_TH}">载体</th>'
+            + ''.join(f'<th style="{_TH}">{s.get("label", "")}</th>' for s in suts)
+            + f'<th style="{_TH}">阻塞 / 依赖</th></tr></thead>'
+            f'<tbody>{"".join(urows)}</tbody></table>')
+        parts.append(
+            f'<p style="color:#7f8c8d;font-size:12px;">载体分布：已建可执行夹具 <b>{cnt["PASS"] + cnt["FAIL"]}</b> 条 ｜ '
+            f'契约依赖待冻结 <b>{cnt["FROZEN"]}</b> 条（契约冻结前应标 NOT_RUN）｜ 未建可执行载体 '
+            f'<b>{cnt["NONE"]}</b> 条（纸面定义，需评审后决定是否落载体）。</p>')
 
     # 失败断言明细
     parts.append('<h3>失败断言明细（逐条 actual / expected）</h3>')
@@ -1103,6 +1210,8 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 .tab-btn.active{{background:#2c3e50;color:#fff;border-color:#2c3e50;font-weight:700;}}
 .casebtn{{padding:3px 12px;margin-right:4px;cursor:pointer;border:1px solid #ddd;background:#fff;color:#2c3e50;font-size:12px;border-radius:4px;}}
 .casebtn.active{{background:#2c3e50;color:#fff;border-color:#2c3e50;}}
+.uxbtn{{padding:3px 12px;margin-right:4px;cursor:pointer;border:1px solid #ddd;background:#fff;color:#2c3e50;font-size:12px;border-radius:4px;}}
+.uxbtn.active{{background:#2c3e50;color:#fff;border-color:#2c3e50;}}
 </style></head>
 <body style="font-family:'Segoe UI',Arial,'Microsoft YaHei',sans-serif;color:#2c3e50;max-width:1040px;margin:20px auto;padding:0 16px;">
 <h1 style="border-bottom:3px solid #2c3e50;padding-bottom:8px;">huaweicloud-devkit 测试执行总览看板</h1>
@@ -1191,6 +1300,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('tab-bench').style.display=n==='bench'?'block':'none';document.getElementById('tab-ux').style.display=n==='ux'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');document.getElementById('btn-bench').className='tab-btn'+(n==='bench'?' active':'');document.getElementById('btn-ux').className='tab-btn'+(n==='ux'?' active':'');}}
 function filterCase(st){{var btns=document.querySelectorAll('.casebtn');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('onclick').indexOf(st)!==-1?' active':'');}}var rows=document.querySelectorAll('.caserow');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-st');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 function filterVCase(vk,st){{var btns=document.querySelectorAll('.casebtn[data-vk="'+vk+'"]');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('data-st')===st?' active':'');}}var rows=document.querySelectorAll('.vcaserow[data-vk="'+vk+'"]');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-vst');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
+function filterUxCase(st){{var btns=document.querySelectorAll('.uxbtn');for(var i=0;i<btns.length;i++){{btns[i].className='uxbtn'+(btns[i].getAttribute('data-f')===st?' active':'');}}var rows=document.querySelectorAll('.uxrow');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-ux');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 </script>
 </body></html>"""
     return html
