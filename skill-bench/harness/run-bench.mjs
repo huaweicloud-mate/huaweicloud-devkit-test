@@ -1,12 +1,16 @@
 // run-bench.mjs — 端到端技能评测 harness（可复现基线采集）
 // 架构：直连 opengw(OpenAI 兼容) + devkit MCP 工具（自建 agent loop），忠实复现
-//       「模型 + 40 工具 + retrieve_skill」的 agent 环境，采集三指标：
+//       「模型 + 工具 + retrieve_skill」的 agent 环境，采集三指标：
 //       ① 任务成功率（ground-truth verifier 独立判定）② token 数 ③ 步数（工具调用次数）
 // 不依赖 dsh（dsh headless 是黑盒，拿不到 token/步数）。
+// 模式：
+//   标准（默认）：模型 + devkit MCP 工具（37 个）+ retrieve_skill 检索技能
+//   --bare 对照：模型 + 单一 shell 工具（无 devkit 技能指引），用于 L3 对照组
 // 用法:
 //   node harness/run-bench.mjs [task-id]               # 跑单个任务（默认 3 次采样）
 //   node harness/run-bench.mjs --all                   # 跑全部任务
 //   node harness/run-bench.mjs t01 --runs 5 --model deepseek-v4-flash-0731
+//   node harness/run-bench.mjs t01 --bare              # 裸模型对照（无 devkit）
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -31,8 +35,10 @@ const args = process.argv.slice(2);
 let taskFilter = null;
 let runs = 3;
 let all = false;
+let bare = false;
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--all') all = true;
+  else if (args[i] === '--bare') bare = true;
   else if (args[i] === '--runs' && args[i + 1]) { runs = parseInt(args[++i], 10); }
   else if (args[i] === '--model' && args[i + 1]) { CFG.model = args[++i]; }
   else if (args[i] === '--mcp' && args[i + 1]) { CFG.mcpServer = args[++i]; }
@@ -60,8 +66,36 @@ async function chat(apiKey, messages, tools) {
   return res.json();
 }
 
+// ---- 裸模型对照：单一 shell 工具 ----
+const SHELL_TOOL = {
+  type: 'function',
+  function: {
+    name: 'run_command',
+    description: 'Run a shell command and return its output. Use the hcloud CLI or any command to accomplish the cloud task.',
+    parameters: {
+      type: 'object',
+      properties: { command: { type: 'string', description: 'the shell command to run' } },
+      required: ['command'],
+    },
+  },
+};
+
+function execShell(command) {
+  if (!command) return '(no command)';
+  const r = spawnSync('cmd', ['/c', command], { encoding: 'utf-8', timeout: 120000, cwd: ROOT, maxBuffer: 10 * 1024 * 1024 });
+  return (((r.stdout || '') + (r.stderr || '')).trim() || '(empty output)').slice(0, 8000);
+}
+
 // ---- system prompt ----
-function buildSystemPrompt(task, toolCount) {
+function buildSystemPrompt(task, toolCount, bare) {
+  if (bare) {
+    return [
+      '你是普通 coding agent，可以通过 run_command 工具执行 shell 命令。',
+      '你没有华为云 devkit 插件的技能指引，只能依靠自己的知识完成任务。',
+      '评测任务（headless 无人环境，请自主完成）：',
+      '完成云任务后，最终回答必须给出可独立验证的结果（部署后的公网 URL、查询到的金额、创建的安全组名称与规则）。' + (task.region ? ` 本任务区域默认 ${task.region}。` : ''),
+    ].join('\n');
+  }
   return [
     '你是接入华为云 devkit 插件的 coding agent。你的环境已通过 MCP 加载了华为云的工具（下文 tools 参数已列出全部可用工具，共 ' + toolCount + ' 个）。',
     '评测任务（评测环境 headless，无人工在场，请自主完成）：',
@@ -75,12 +109,12 @@ function buildSystemPrompt(task, toolCount) {
 }
 
 // ---- 单次 agent 运行（一个 run）----
-async function runOnce(task, apiKey, mcpsrv, openaiTools, runid) {
+async function runOnce(task, apiKey, mcpsrv, openaiTools, runid, bare) {
   const prompt = task.prompt
     .replace(/\{\{RUNID\}\}/g, runid)
     .replace(/<FIXTURE_SITE>/g, join(ROOT, 'fixtures', 'site', 'index.html'));
   const messages = [
-    { role: 'system', content: buildSystemPrompt(task, openaiTools.length) },
+    { role: 'system', content: buildSystemPrompt(task, openaiTools.length, bare) },
     { role: 'user', content: prompt },
   ];
   let totalTokens = 0;
@@ -110,17 +144,19 @@ async function runOnce(task, apiKey, mcpsrv, openaiTools, runid) {
       stepCount++;
       let a = {};
       try { a = JSON.parse(tc.function.arguments || '{}'); } catch { a = {}; }
-      // 审批自动放行：run_approved_command 恒注入 approvedByUser=true（模拟评测环境用户已确认）
       if (tc.function.name === 'huaweicloud_run_approved_command') a.approvedByUser = true;
       toolTrace.push(tc.function.name);
       let resultText;
-      try {
-        const resp = await mcpsrv.call('tools/call', { name: tc.function.name, arguments: a });
-        resultText = extractToolResult(resp);
-      } catch (e) {
-        resultText = `TOOL_CALL_ERROR: ${e.message}`;
+      if (bare) {
+        resultText = execShell(a.command || a.cmd || '');
+      } else {
+        try {
+          const resp = await mcpsrv.call('tools/call', { name: tc.function.name, arguments: a });
+          resultText = extractToolResult(resp);
+        } catch (e) {
+          resultText = `TOOL_CALL_ERROR: ${e.message}`;
+        }
       }
-      // 结果截断，防 token 暴涨
       messages.push({ role: 'tool', tool_call_id: tc.id, content: resultText.slice(0, 8000) });
     }
   }
@@ -145,10 +181,18 @@ async function main() {
   if (selected.length === 0) { console.error(`未找到任务 ${taskFilter}，可用: ${tasks.map((t) => t.id).join(', ')}`); process.exit(2); }
 
   const apiKey = readApiKey();
-  const mcpsrv = startMcpServer(CFG.mcpServer);
-  const tools = await listTools(mcpsrv);
-  const openaiTools = toOpenAITools(tools);
-  console.log(`[harness] 模型=${CFG.model} 工具数=${tools.length} 任务=${selected.length} 采样=${runs}`);
+  let mcpsrv = null;
+  let tools = [];
+  let openaiTools;
+  if (bare) {
+    openaiTools = [SHELL_TOOL];
+  } else {
+    mcpsrv = startMcpServer(CFG.mcpServer);
+    tools = await listTools(mcpsrv);
+    openaiTools = toOpenAITools(tools);
+  }
+  const toolLabel = bare ? 'shell(裸模型) ' : `MCP ${tools.length} 工具`;
+  console.log(`[harness] 模型=${CFG.model} 工具=${toolLabel} 任务=${selected.length} 采样=${runs} 模式=${bare ? 'bare对照' : '标准'}`);
 
   const ts = new Date().toISOString().replace(/[-:T]/g, '').replace(/Z/, '').replace(/\.\d+/, '');
   const tsCompact = ts.slice(0, 14);
@@ -160,8 +204,7 @@ async function main() {
     for (let i = 0; i < runs; i++) {
       const runid = `${tsCompact}-${task.id.split('-')[0]}-${i}`.toLowerCase();
       console.log(`  run ${i + 1}/${runs} (runid=${runid}) ...`);
-      const r = await runOnce(task, apiKey, mcpsrv, openaiTools, runid);
-      // 只有没有崩溃/卡死的 run 才跑 verifier
+      const r = await runOnce(task, apiKey, mcpsrv, openaiTools, runid, bare);
       let verdict = null;
       if (!r.lastError) {
         verdict = runVerifier(task.verifier, [runid, task.region || CFG.region, r.finalAnswer]);
@@ -172,7 +215,6 @@ async function main() {
       r.verdictDetail = verdict.detail || '';
       taskRuns.push(r);
       console.log(`    verdict=${r.verdict} token=${r.totalTokens} step=${r.stepCount} ${verdict.detail ? '| ' + String(verdict.detail).slice(0, 80) : ''}`);
-      // 写操作任务：每 run 后归零
       if (task.cleanup) {
         const ret = runVerifier(task.cleanup, [runid, task.region || CFG.region, '']);
         console.log(`    cleanup: ${ret.success ? 'OK' : 'FAIL ' + ret.detail}`);
@@ -185,17 +227,15 @@ async function main() {
       runs: taskRuns, successRate: pass / runs, medianTokens: med, medianSteps: medStep });
   }
 
-  mcpsrv.kill();
+  if (mcpsrv) mcpsrv.kill();
 
-  // 落盘
   const outDir = join(ROOT, 'results');
   mkdirSync(outDir, { recursive: true });
-  const outJson = join(outDir, `baseline-${tsCompact}.json`);
-  writeFileSync(outJson, JSON.stringify({ meta: { ts, model: CFG.model, mcpServer: CFG.mcpServer, runs }, tasks: allResults }, null, 2), 'utf-8');
+  const outJson = join(outDir, `baseline-${bare ? 'bare-' : ''}${tsCompact}.json`);
+  writeFileSync(outJson, JSON.stringify({ meta: { ts, model: CFG.model, mcpServer: CFG.mcpServer, runs, bare }, tasks: allResults }, null, 2), 'utf-8');
   console.log(`\n结果落盘: ${outJson}`);
 
-  // 控制台汇总
-  console.log('\n=== 首份基线汇总（token=中位数, step=中位数）===');
+  console.log(`\n=== ${bare ? '裸模型对照' : '首份基线'}汇总（token=中位数, step=中位数）===`);
   for (const t of allResults) {
     console.log(`  ${t.task.id} ${t.task.title}: 成功率=${(t.successRate * 100).toFixed(0)}% (${t.runs.filter((r) => r.verdict === 'PASS').length}/${t.runs.length})  token中位=${t.medianTokens}  step中位=${t.medianSteps}`);
   }
