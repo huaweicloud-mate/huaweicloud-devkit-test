@@ -32,14 +32,19 @@
 |---|---|---|
 | 第一批 | D11-1 ~ D11-21（21 条） | 登录体验专题 |
 | 第二批 | D11-22 ~ D11-35（14 条） | 使用体验专题（安装/可读性/凭据生命周期/审批/归零/沙箱） |
-| 第三批 | D11-36 ~ D11-43（8 条） | **范式升级**（闭环有效性 / 回放分类 / 独立观测 / 度量对照 / 专项矩阵） |
+| 第三批 | D11-37 ~ D11-44（8 条） | **范式升级**（闭环有效性 / 回放分类 / 独立观测 / 度量对照 / 专项矩阵） |
+
+> **编号沿革（2026-10-14 统一）**：`d11-37-guidance-closure.mjs` 原为 `d11-36-guidance-closure.mjs`
+> （CASE_ID 与断言前缀 `D11-36`），与设计矩阵本分区真源（`gen_ux.py`：本条 = **D11-37**）错位 1 位，
+> 且本表此前误写为「D11-36 ~ D11-43」。现三处（`gen_ux.py` / 夹具 / 本 README）统一为 **D11-37 ~ D11-44**。
+> 历史编号（`evidence/D11-36/`、2026-10-13 归档报告、上游 #900 评论）保留原样，按"历史编号"理解。
 
 ## 可执行载体映射
 
 | 层 | 载体 | 适用用例 |
 |---|---|---|
 | L1 单测 | `test/unit/d11-*.test.mjs` | 文案/字段/反断言类（D11-1/10/16/26） |
-| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 5 个**：`d11-36-guidance-closure` / `d11-41-misleading-attribution` / `d11-42-encoding-contract` / `d11-43-terminal-env-matrix` / `d11-44-fault-injection`；共用工具 `ux-common.mjs`） | 闭环有效性、误导归因、故障注入、输出编码契约（D11-36/41/42/43/44） |
+| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 5 个**：`d11-37-guidance-closure` / `d11-41-misleading-attribution` / `d11-42-encoding-contract` / `d11-43-terminal-env-matrix` / `d11-44-fault-injection`；共用工具 `ux-common.mjs`） | 闭环有效性、误导归因、故障注入、输出编码契约（D11-37/41/42/43/44） |
 | L3 回放对照 | `eval/replay/`（待新增 `recordings/ux-baseline-v1.jsonl`） | 体验回归量化（D11-39） |
 | L4 Agent 评测 | `eval/harness/run-agent-eval.mjs` + **`eval/prompts/eval-set-ux.csv`（已落地，10 条模糊中文需求）**；三指标提取见 `eval/harness/ux-metrics.mjs`（`steps`/`fails`/`clarifications`），对照判定 `compareUxMetrics` | 度量对照（D11-40） |
 
@@ -79,7 +84,7 @@ npm run test:ux
 npm run test:ux -- --evid <dir>                    # 同时落证据
 
 # 备选：单跑某个夹具（需自行隔离宿主：USERPROFILE/HOME 指向空目录）
-node eval/harness/fixtures/d11-36-guidance-closure.mjs <hdk src> --evid <dir>
+node eval/harness/fixtures/d11-37-guidance-closure.mjs <hdk src> --evid <dir>
 #   exit 0 = 通过；exit 1 = 需求未实现；exit 2 = ENV_CONTAMINATED（宿主受污染，整例不可判定）
 ```
 
