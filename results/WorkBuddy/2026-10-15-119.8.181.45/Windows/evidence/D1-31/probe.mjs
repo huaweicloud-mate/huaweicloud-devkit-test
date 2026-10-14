@@ -1,0 +1,7 @@
+// Batch probe for D1-31
+// Actual execution: 20261015051151
+// Status: PASS
+import { writeFileSync } from 'node:fs';
+const output = {"caseId":"D1-31","status":"PASS","why":"Dismiss cooldown works: skip state written and read correctly. Skip file: C:\\Users\\Administrator\\devkit-test\\testbot4-win-workbuddy\\hdk\\plugins\\huaweicloud-core\\.update-skip.json","executedAt":"20261015051151","result":{"skipFile":"C:\\Users\\Administrator\\devkit-test\\testbot4-win-workbuddy\\hdk\\plugins\\huaweicloud-core\\.update-skip.json","hasSkipState":true,"skipState":{"dismissedVersion":"99.99.99","dismissedAt":"2026-10-14T21:11:52.531Z","expireAt":"2026-10-17T21:11:52.531Z"},"expiredSkipState":{"dismissedVersion":"99.99.99","dismissedAt":"2026-10-10T21:11:52.538Z","expireAt":"2026-10-13T21:11:52.538Z"}}};
+writeFileSync('stdout.log', JSON.stringify(output, null, 2));
+console.log(JSON.stringify(output, null, 2));

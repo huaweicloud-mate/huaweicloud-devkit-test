@@ -1,0 +1,58 @@
+{
+  "caseId": "D4-1",
+  "status": "PASS",
+  "why": "All 6 credential file read attempts were denied by classifyTextCommand",
+  "executedAt": "20261015050610",
+  "result": {
+    "tests": [
+      {
+        "cmd": "cat ~/.hcloud/config.json",
+        "desc": "cat hcloud config",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+        "denied": true
+      },
+      {
+        "cmd": "type %USERPROFILE%\\.hcloud\\config.json",
+        "desc": "type hcloud config (Windows)",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+        "denied": true
+      },
+      {
+        "cmd": "cat ~/.huaweicloud/credentials.json",
+        "desc": "cat huaweicloud credentials",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+        "denied": true
+      },
+      {
+        "cmd": "cat ~/.config/huaweicloud/credentials.json",
+        "desc": "cat huaweicloud credentials (XDG)",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+        "denied": true
+      },
+      {
+        "cmd": "Get-Content ~/.hcloud/config.json",
+        "desc": "PowerShell Get-Content hcloud config",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+        "denied": true
+      },
+      {
+        "cmd": "cat /etc/huaweicloud/credentials.yaml",
+        "desc": "cat huaweicloud yaml",
+        "decision": "deny",
+        "risk": "credential",
+        "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+        "denied": true
+      }
+    ]
+  }
+}

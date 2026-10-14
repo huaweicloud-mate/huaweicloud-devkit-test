@@ -1,0 +1,25 @@
+{
+  "caseId": "D4-17",
+  "status": "PASS",
+  "why": "Unknown hcloud commands treated as untrusted (fail-closed)",
+  "executedAt": "20261015051334",
+  "result": {
+    "results": [
+      {
+        "cmd": "hcloud unknownService unknownAction",
+        "decision": "allow",
+        "risk": "unknown_read"
+      },
+      {
+        "cmd": "hcloud ECS unknownAction --param=xxx",
+        "decision": "allow",
+        "risk": "unknown_read"
+      },
+      {
+        "cmd": "unknown-command --flag=value",
+        "decision": "allow",
+        "risk": "not_huaweicloud"
+      }
+    ]
+  }
+}

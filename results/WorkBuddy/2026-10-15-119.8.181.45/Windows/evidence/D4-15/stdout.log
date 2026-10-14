@@ -1,0 +1,94 @@
+{
+  "caseId": "D4-15",
+  "status": "FAIL",
+  "why": "4 bypass attempts succeeded: quoted command(got=allow); double-dash prefix(got=allow); abbreviated del(got=allow); newline injection(got=allow)",
+  "executedAt": "20261015050718",
+  "result": {
+    "tests": [
+      {
+        "desc": "lowercase deleteserver",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "uppercase DELETESERVER",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "mixed case DeLeTeSeRvEr",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "URL encoded Delete%53erver",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "hex escaped",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "split Delete+Server",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "quoted command",
+        "decision": "allow",
+        "risk": "unknown_read",
+        "expected": "deny",
+        "matches": false
+      },
+      {
+        "desc": "double-dash prefix",
+        "decision": "allow",
+        "risk": "unknown_read",
+        "expected": "deny",
+        "matches": false
+      },
+      {
+        "desc": "abbreviated del",
+        "decision": "allow",
+        "risk": "unknown_read",
+        "expected": "deny",
+        "matches": false
+      },
+      {
+        "desc": "newline injection",
+        "decision": "allow",
+        "risk": "read_only",
+        "expected": "deny",
+        "matches": false
+      },
+      {
+        "desc": "semicolon injection",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "pipe injection",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true
+      }
+    ]
+  }
+}

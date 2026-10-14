@@ -1,0 +1,165 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "All 19 tests passed: 17 denied, 2 allowed (negative tests).",
+  "executedAt": "20261015050629",
+  "result": {
+    "totalTests": 19,
+    "correct": 19,
+    "incorrect": 0,
+    "tests": [
+      {
+        "cmd": "printenv HW_AK",
+        "desc": "printenv HW_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "printenv HW_SK",
+        "desc": "printenv HW_SECRET_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "printenv HL_AK",
+        "desc": "printenv HUAWEICLOUD_ACCESS_KEY_ID",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "printenv HL_SK",
+        "desc": "printenv HUAWEICLOUD_SECRET_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "printenv HW_ST",
+        "desc": "printenv HW_SECURITY_TOKEN",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "echo $HW_AK",
+        "desc": "echo $HW_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "echo $HW_SK",
+        "desc": "echo $HW_SECRET_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "echo $HL_SK",
+        "desc": "echo $HUAWEICLOUD_SECRET_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "echo ${HW_AK}",
+        "desc": "echo ${HW_ACCESS_KEY} (braced)",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "env | grep HUAWEICLOUD",
+        "desc": "env grep HUAWEICLOUD",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "env | grep HW_",
+        "desc": "env grep HW_",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "env | grep HCLOUD",
+        "desc": "env grep HCLOUD",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "bash -c \"printenv HW_AK\"",
+        "desc": "bash -c printenv HW_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "bash -c \"echo $HW_SK\"",
+        "desc": "bash -c echo $HW_SECRET_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "bash -c \"env | grep -E 'HUAWEICLOUD|HW_|HCLOUD'\"",
+        "desc": "bash -c env grep cloud creds",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "Get-ChildItem Env: | findstr HUAWEICLOUD",
+        "desc": "PowerShell Env: findstr HUAWEICLOUD",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "gci Env: | Select-String HW_",
+        "desc": "PowerShell gci Env: Select-String HW_",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "cmd": "echo hello",
+        "desc": "echo hello (negative test)",
+        "decision": "allow",
+        "risk": "not_huaweicloud",
+        "expected": "allow",
+        "matches": true
+      },
+      {
+        "cmd": "printenv PATH",
+        "desc": "printenv PATH (negative test)",
+        "decision": "allow",
+        "risk": "not_huaweicloud",
+        "expected": "allow",
+        "matches": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "caseId": "D2-4",
+  "status": "FAIL",
+  "why": "redactSecrets failed: object_leak=false, uppercase_leak=false, lowercase_leak=true. The lowercase ak= pattern is NOT matched by the regex /(AK|SK)\\s*[:=]\\s*.../g (only uppercase). This is a credential leak vector.",
+  "executedAt": "20261015050524",
+  "result": {
+    "redactedObj": {
+      "ak": "<redacted>",
+      "sk": "<redacted>",
+      "region": "cn-north-4"
+    },
+    "redactedStr": "{\n  \"ak\": \"TESTAKXXXXXXXXXXXXXXXX\",\n  \"sk\": \"TESTSKYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY\",\n  \"region\"",
+    "redactedUpper": "AK=<redacted> SK=<redacted>",
+    "redactedLower": "config: ak=TESTAKXXXXXXXXXXXXXXXX sk=TESTSKYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+    "redactedMixed": "AccessKey=<redacted> SecretKey=<redacted>",
+    "akInRedactedObj": false,
+    "skInRedactedObj": false,
+    "akInRedactedUpper": false,
+    "skInRedactedUpper": false,
+    "akInRedactedLower": true,
+    "skInRedactedLower": true,
+    "akInRedactedMixed": false,
+    "skInRedactedMixed": false,
+    "rootCause": "safety-policy.mjs:45 redactString regex /(AK|SK)\\s*[:=]\\s*.../g only matches UPPERCASE AK/SK. Lowercase ak= and sk= patterns are NOT redacted, leaking credentials."
+  }
+}

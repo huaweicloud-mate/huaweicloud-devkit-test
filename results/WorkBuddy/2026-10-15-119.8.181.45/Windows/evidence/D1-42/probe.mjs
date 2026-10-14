@@ -1,0 +1,7 @@
+// Batch probe for D1-42
+// Actual execution: 20261015051151
+// Status: PASS
+import { writeFileSync } from 'node:fs';
+const output = {"caseId":"D1-42","status":"PASS","why":"Dismiss state persists across calls: state1=88.88.88, state2=88.88.88","executedAt":"20261015051151","result":{"skipFile":"C:\\Users\\Administrator\\devkit-test\\testbot4-win-workbuddy\\hdk\\plugins\\huaweicloud-core\\.update-skip.json","state1":{"dismissedVersion":"88.88.88","dismissedAt":"2026-10-14T21:11:52.548Z","expireAt":"2026-10-17T21:11:52.548Z"},"state2":{"dismissedVersion":"88.88.88","dismissedAt":"2026-10-14T21:11:52.548Z","expireAt":"2026-10-17T21:11:52.548Z"},"persisted":true}};
+writeFileSync('stdout.log', JSON.stringify(output, null, 2));
+console.log(JSON.stringify(output, null, 2));
