@@ -1,0 +1,43 @@
+
+### D3-C1 ###
+{
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"b71d4135-9210-4e1c-bc7c-6b059c4cf378\",\n    \"name\": \"testbot3-hermes-e2e-2012"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"3b838be3-33ec-42d5-bbeb-fc073e1a4dd2\",\n    \"name\": \"testbot3-hermes-e2e-2"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed1f3901a13c4091b03ee7\",\n  \"serverIds\": [\n    \"403316b6-3985-40a1-8caa-018dbb62fcae\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(校验真实删除)",
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+    }
+  ]
+}
+
+### 手工归零核实（2026-10-15 05:15 北京时间）###
+自动 finally 归零未确认 ECS 删除（DeleteServers 缺 --delete_volume=true），隔离重跑后：
+- ECS 403316b6-3985-40a1-8caa-018dbb62fcae --delete_volume=true 删除 → ListServersDetails 不含该 id（已归零）
+- subnet 3b838be3-33ec-42d5-bbeb-fc073e1a4dd2 删除 → ListSubnets 不含（已归零）
+- VPC b71d4135-9210-4e1c-bc7c-6b059c4cf378 删除 → ListVpcs 不含（已归零）
+结论：残留 ECS/VPC/subnet 全部归零；根因 = realcloud_e2e.mjs DeleteServers 缺 --delete_volume=true + subnet/vpc 删除仅校验退出码未校验真删。

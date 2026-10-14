@@ -138,7 +138,7 @@ PASS_D = [
     "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69","D1-70",
     "D2-1","D2-2","D2-4","D2-5","D2-11","D2-12","D2-16","D2-26","D2-27",
-    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C2","D3-C3","D3-C4","D3-C5","D3-C6","D3-C7","D3-C13","D3-C14",
+    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C2","D3-C3","D3-C4","D3-C5","D3-C6","D3-C7","D3-C13","D3-C14",
     "D3-S1","D3-S2","D3-S3","D3-S4","D3-S8",
     "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11","D4-13","D4-14",
     "D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23","D4-27","D4-28","D4-29",
@@ -147,6 +147,7 @@ PASS_D = [
 ]
 
 FAIL_D = {
+    "D3-C1": "【测试侧】ECS 生命周期真云 E2E 清理缺陷：realcloud_e2e.mjs:108 DeleteServers 缺 --delete_volume=true 致系统盘未随删、ECS 保持 ACTIVE，subnet/vpc 仅校验退出码未校验真删，残留 ECS/VPC/subnet；已手工 --delete_volume=true 删除并归零核实",
     "D4-2":  "env | grep -i access_key 未拦截（generic access_key 无云前缀）",
     "D4-6":  "hook_check_command(--admin-pass) 返回 allow 未告警",
     "D4-17": "hook 模糊输入 fail-open（&& rm -rf /、$(curl|sh) 放行）",
