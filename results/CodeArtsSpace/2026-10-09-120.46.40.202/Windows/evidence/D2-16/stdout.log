@@ -1,10 +1,10 @@
-D2-16 测试证据
-执行时间: 2026-10-09 05:09
-客户端: CodeArtsSpace
-OS: Windows
-被测版本: 1.1.8-next.1
-工具: probe-p1.mjs
-结果: FAIL
-断言: configure import --file 应返回 decision:deny
-结论: FAIL - configure import --file creds.json 返回 decision=allow, risk=unknown_read, 未拦截凭证文件导入
-根因: safety/policy.json:25 blockedConfigureSubcommands 缺少 'import'
+{
+  "caseId": "D2-16",
+  "status": "FAIL",
+  "executedAt": "20261009050812",
+  "assertion": "configure import --file 应返回 decision=deny",
+  "conclusion": "FAIL - configure import --file 返回 decision=allow, 未拦截凭证文件导入",
+  "rootCause": "safety/policy.json:25 blockedConfigureSubcommands 缺少 \"import\"",
+  "blockedReason": "",
+  "log": "{\n  \"caseId\": \"D2-16\",\n  \"status\": \"FAIL\",\n  \"executedAt\": \"20261009050812\",\n  \"assertion\": \"configure import --file 应返回 decision=deny\",\n  \"conclusion\": \"FAIL - configure import --file 返回 decision=allow, 未拦截凭证文件导入\",\n  \"rootCause\": \"safety/policy.json:25 blockedConfigureSubcommands 缺少 \\\"import\\\"\",\n  \"blockedReason\": \"\",\n  \"log\": \"D2-16 测试证据\\n执行时间: 2026-10-09 05:08\\n客户端: CodeArtsSpace\\nOS: Windows\\n被测版本: 1.1.8-next.1\\n工具: probe-p1.mjs\\n结果: FAIL\\n断言: configure import --file 应返回 decision=deny\\n结论: FAIL - configure import --file 返回 decision=allow, 未拦截凭证文件导入\\n根因: safety/policy.json:25 blockedConfigureSubcommands 缺少 \\\"import\\\"\\n\"\n}"
+}

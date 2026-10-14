@@ -1,9 +1,10 @@
-{
-  "caseId": "EXP-E08",
-  "status": "NOT_RUN",
-  "executedAt": "20261009050957",
-  "assertion": "诊断类意图(explain_error)路由",
-  "conclusion": "NOT_RUN - 诊断类意图(explain_error)不在 serviceCatalog 路由范围(harness 标记 N/A); explain_error 工具路由需真实 LLM harness",
-  "rootCause": "",
-  "version": "1.1.8-next.1"
+﻿{
+    "caseId":  "EXP-E08",
+    "status":  "BLOCKED",
+    "executedAt":  "20261009050812",
+    "assertion":  "ECS启动失败诊断 应被 serviceCatalog 命中",
+    "conclusion":  "BLOCKED - ECS启动失败诊断需真实 LLM harness, serviceCatalog 路由层返回 N/A (诊断类意图需 LLM 推理非路由)",
+    "rootCause":  "",
+    "version":  "1.1.8-next.1",
+    "blockedReason":  "需真实 Agent 会话评测 (run-agent-eval.mjs 驱动 dsh --profile headless), 非 DSH 客户端缺 CDP 会话自动化环境; 解除条件: 部署 CDP 会话自动化或安装 dsh"
 }

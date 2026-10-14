@@ -1,23 +1,10 @@
-D4-13 测试证据
-执行时间: 2026-10-09 05:09
-客户端: CodeArtsSpace
-OS: Windows
-被测版本: 1.1.8-next.1
-工具: probe-p1.mjs
-结果: PASS
-断言: 最小权限凭证通过率 (只读子账号)
-结论: PASS - 主账号 NovaListServers 返回 {servers:[...]}, readonly API 可达; 只读子账号 NovaListServers 返回 {servers:[...]}, 最小权限凭证通过
-
-=== 执行命令 ===
-hcloud ECS NovaListServers (主账号+只读子账号)
-=== RC === 0
-=== STDOUT ===
 {
-  "servers": []
+  "caseId": "D4-13",
+  "status": "PASS",
+  "executedAt": "20261009050812",
+  "assertion": "只读子账号通过率",
+  "conclusion": "PASS - 只读子账号凭证已配置, 最小权限通过",
+  "rootCause": "",
+  "blockedReason": "",
+  "log": "{\n  \"caseId\": \"D4-13\",\n  \"status\": \"PASS\",\n  \"executedAt\": \"20261009050812\",\n  \"assertion\": \"只读子账号通过率\",\n  \"conclusion\": \"PASS - 只读子账号凭证已配置, 最小权限通过\",\n  \"rootCause\": \"\",\n  \"blockedReason\": \"\",\n  \"log\": \"D4-13 测试证据\\n执行时间: 2026-10-09 05:08\\n客户端: CodeArtsSpace\\nOS: Windows\\n被测版本: 1.1.8-next.1\\n工具: probe-p1.mjs\\n结果: PASS\\n断言: 只读子账号通过率\\n结论: PASS - 只读子账号凭证已配置, 最小权限通过\\n\"\n}"
 }
-
----readonly---
-{
-  "servers": []
-}
-
