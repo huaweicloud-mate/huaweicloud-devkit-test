@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "caseId": "D4-27",
+  "title": "双路径输出脱敏",
+  "totalTests": 6,
+  "passedTests": 6,
+  "failedTests": 0,
+  "results": [
+    {
+      "test": "redactSecrets key=value",
+      "pass": true
+    },
+    {
+      "test": "redactSecrets token=",
+      "pass": true
+    },
+    {
+      "test": "redactSecrets security_token",
+      "pass": true
+    },
+    {
+      "test": "redactSecrets object",
+      "pass": true
+    },
+    {
+      "test": "redactOutput plain",
+      "pass": true
+    },
+    {
+      "test": "non-sensitive keep",
+      "pass": true
+    }
+  ],
+  "executedAt": "20261014210932",
+  "assertion": "redactSecrets与redactOutput双路径均替换明文凭证为占位符",
+  "rootCause": null
+}
