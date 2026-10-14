@@ -23,6 +23,7 @@ const L2_SET = [
   ['huawei-modelarts', '部署一个机器学习模型训练任务', 'ModelArts'],
   ['huawei-voucher', '查看账户里的代金券', 'Incentive Voucher'],
   ['huawei-sandbox', '在沙箱环境临时部署一个网站预览', 'Sandbox'],
+  ['huawei-deployment', '帮我创建一个部署任务（CloudDeploy 流水线应用）', 'CodeArtsDeploy'],
 ];
 
 function makeServer(serverPath) {
@@ -84,8 +85,8 @@ for (const [skill, prompt, expectSvc] of L2_SET) {
 
 const routeHit = results.filter((r) => r.routeHit).length;
 const skillHit = results.filter((r) => r.skillHit).length;
-console.log(`\n=== L2 轻量激活评测汇总（11 长尾技能）===`);
-console.log(`service_catalog 路由命中=${routeHit}/11   retrieve_skill 激活成功=${skillHit}/11`);
+console.log(`\n=== L2 轻量激活评测汇总（${L2_SET.length} 长尾技能）===`);
+console.log(`service_catalog 路由命中=${routeHit}/${L2_SET.length}   retrieve_skill 激活成功=${skillHit}/${L2_SET.length}`);
 const missRoute = results.filter((r) => !r.routeHit).map((r) => r.skill);
 if (missRoute.length) console.log(`路由未命中的技能: ${missRoute.join(', ')}`);
 
