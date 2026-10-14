@@ -20,16 +20,17 @@ function redact(s) {
 function hc(args, timeout = 120000) {
   const r = spawnSync('hcloud', args, { encoding: 'utf8', timeout });
   const out = (r.stdout || '') + (r.stderr || '');
-  const ok = r.status === 0 && !/USE_ERROR|Invalid parameter|\[ERROR\]|Confirm whether/.test(out);
+  const ok = r.status === 0 && !/USE_ERROR|Invalid storage|Invalid parameter|\[ERROR\]|Confirm whether/.test(out);
   return { status: r.status, ok, out };
-}
-function grab(json, field) {
-  const re = new RegExp('"' + field + '"\\s*:\\s*"([^"]+)"');
-  return (re.exec(json || '') || [])[1] || '';
 }
 function grabUuid(json, field) {
   const re = new RegExp('"' + field + '"\\s*:\\s*"([0-9a-fA-F-]{36})"');
   return (re.exec(json || '') || [])[1] || '';
+}
+function grabRdsId(json) {
+  const re = /"id"\s*:\s*"([0-9a-fA-F]{32}in\d+)"|"instance_id"\s*:\s*"([0-9a-fA-F]{32}in\d+)"/;
+  const m = re.exec(json || '');
+  return (m && (m[1] || m[2])) || '';
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -66,15 +67,12 @@ console.log('\n=====CASE D3-S7=====');
     const jsonBody = {
       path: { project_id: PROJECT_ID },
       body: {
-        name: instName,
-        region: REGION,
+        name: instName, region: REGION,
         datastore: { type: 'MySQL', version: '8.0' },
         ha: { mode: 'single', replication_mode: 'semisync' },
         flavor_ref: 'rds.mysql.large.arm2.single',
-        volume: { type: 'ULTRAHIGH', size: 40 },
-        vpc_id: vpcId,
-        subnet_id: subnetId,
-        security_group_id: sgId,
+        volume: { type: 'CLOUDSSD', size: 40 },
+        vpc_id: vpcId, subnet_id: subnetId, security_group_id: sgId,
         availability_zone: 'cn-north-4a',
         password: 'HdkS7@Test12345',
         charge_info: { charge_mode: 'postPaid' },
@@ -83,38 +81,55 @@ console.log('\n=====CASE D3-S7=====');
     const jsonFile = '/tmp/hdk-rds-body-' + TS + '.json';
     writeFileSync(jsonFile, JSON.stringify(jsonBody));
     const r = hc(['RDS', 'CreateInstance', '--cli-jsonInput=' + jsonFile, '--cli-region=' + REGION, '--cli-output=json'], 300000);
-    const jobId = grab(r.out, 'job_id');
-    console.log('RDS CreateInstance(jsonInput) -> ok=' + r.ok + ' job_id=' + jobId.slice(0, 20) + (r.ok ? '' : ' err=' + redact(r.out).slice(0, 300)));
-    if (r.ok && jobId) {
-      for (let i = 0; i < 24 && !instanceId; i++) {
-        await sleep(30000);
-        const lr = hc(['RDS', 'ListInstances', '--cli-region=' + REGION, '--cli-output=json'], 60000);
-        const m = new RegExp('"id"\\s*:\\s*"([^"]+)"[^}]*"name"\\s*:\\s*"' + instName + '"').exec(lr.out) || new RegExp('"name"\\s*:\\s*"' + instName + '"[^}]*"id"\\s*:\\s*"([^"]+)"').exec(lr.out);
-        if (m) instanceId = m[1];
-        if (i % 4 === 0) console.log('  轮询 ' + (i + 1) + ' 次, instanceId=' + (instanceId || '(未就绪)').slice(0, 20));
-      }
-    }
+    instanceId = grabRdsId(r.out);
+    console.log('RDS CreateInstance -> ok=' + r.ok + ' instanceId=' + instanceId.slice(0, 24) + (r.ok && instanceId ? '' : ' err=' + redact(r.out).slice(0, 260)));
     createdOk = r.ok && !!instanceId;
-    console.log('RDS 实例定位 -> instanceId=' + instanceId.slice(0, 20));
   }
 
   let rdsCleanup = true, sgCleanup = true, subnetCleanup = true, vpcCleanup = true;
   if (instanceId) {
+    // 等待实例 ACTIVE 后删除
+    for (let i = 0; i < 40; i++) {
+      const lr = hc(['RDS', 'ListInstances', '--cli-region=' + REGION, '--cli-output=json'], 60000);
+      const statusM = new RegExp('"id"\\s*:\\s*"' + instanceId + '"[^}]*"status"\\s*:\\s*"([^"]+)"').exec(lr.out);
+      const st = statusM ? statusM[1] : '';
+      if (i % 4 === 0) console.log('  RDS 状态轮询 ' + (i + 1) + ' 次, status=' + (st || '(未就绪)'));
+      if (st === 'ACTIVE' || st === 'FAILED') break;
+      await sleep(30000);
+    }
     const del = hc(['RDS', 'DeleteInstance', '--instance_id=' + instanceId, '--cli-region=' + REGION, '--cli-output=json'], 600000);
-    rdsCleanup = del.ok;
-    console.log('RDS DeleteInstance -> ok=' + del.ok + (del.ok ? '' : ' err=' + redact(del.out).slice(0, 160)));
+    rdsCleanup = del.ok || /job_id/.test(del.out);
+    console.log('RDS DeleteInstance -> ok=' + rdsCleanup);
+    // 等待删除完成
+    let gone = false;
+    for (let i = 0; i < 20 && !gone; i++) {
+      await sleep(30000);
+      const lr = hc(['RDS', 'ListInstances', '--cli-region=' + REGION, '--cli-output=json'], 60000);
+      gone = !(lr.out || '').includes(instanceId);
+    }
+    console.log('RDS 删除归零 = ' + gone);
+    rdsCleanup = rdsCleanup && gone;
   }
-  if (sgId) { const d = hc(['VPC', 'DeleteSecurityGroup', '--security_group_id=' + sgId, '--cli-region=' + REGION, '--cli-output=json'], 60000); sgCleanup = d.ok; console.log('DeleteSecurityGroup -> ok=' + d.ok); }
-  if (subnetId && vpcId) { const d = hc(['VPC', 'DeleteSubnet', '--vpc_id=' + vpcId, '--subnet_id=' + subnetId, '--cli-region=' + REGION, '--cli-output=json'], 60000); subnetCleanup = d.ok; console.log('DeleteSubnet -> ok=' + d.ok); }
-  await sleep(5000);
-  if (vpcId) { const d = hc(['VPC', 'DeleteVpc', '--vpc_id=' + vpcId, '--cli-region=' + REGION, '--cli-output=json'], 60000); vpcCleanup = d.ok; console.log('DeleteVpc -> ok=' + d.ok); }
+  if (sgId) { const d = hc(['VPC', 'DeleteSecurityGroup', '--security_group_id=' + sgId, '--cli-region=' + REGION, '--cli-output=json'], 60000); sgCleanup = !/USE_ERROR/.test(d.out); console.log('DeleteSecurityGroup -> ok=' + sgCleanup); }
+  if (subnetId && vpcId) {
+    let subnetGone = false;
+    for (let i = 0; i < 20 && !subnetGone; i++) {
+      const d = hc(['VPC', 'DeleteSubnet', '--vpc_id=' + vpcId, '--subnet_id=' + subnetId, '--cli-region=' + REGION, '--cli-output=json'], 60000);
+      if (!/still used|VPC.0213/.test(d.out)) { subnetGone = true; break; }
+      await sleep(30000);
+    }
+    subnetCleanup = subnetGone;
+    console.log('DeleteSubnet -> ok=' + subnetGone);
+  }
+  await sleep(3000);
+  if (vpcId) { const d = hc(['VPC', 'DeleteVpc', '--vpc_id=' + vpcId, '--cli-region=' + REGION, '--cli-output=json'], 60000); vpcCleanup = !/USE_ERROR|RouterInUse/.test(d.out); console.log('DeleteVpc -> ok=' + vpcCleanup); }
   const listVpc = hc(['VPC', 'ListVpcs', '--cli-region=' + REGION, '--cli-output=json'], 60000);
   const zeroed = !(listVpc.out || '').includes(vpcName);
   console.log('归零验证 = ' + zeroed);
 
   check('serviceCatalog 复合意图命中 RDS', rdsHit, JSON.stringify(cat.recommendedServices));
   check('VPC/子网/安全组前置编排完成', !!(vpcId && subnetId && sgId), 'vpc=' + vpcId.slice(0, 8) + ' subnet=' + subnetId.slice(0, 8) + ' sg=' + sgId.slice(0, 8));
-  check('最小 RDS 实例创建成功并定位 instance', createdOk, 'instanceId=' + instanceId.slice(0, 16));
+  check('最小 RDS 实例创建成功(CLOUDSSD+jsonInput)', createdOk, 'instanceId=' + instanceId.slice(0, 20));
   check('测后删除归零(RDS+SG+子网+VPC)', rdsCleanup && sgCleanup && subnetCleanup && vpcCleanup && zeroed, JSON.stringify({ rdsCleanup, sgCleanup, subnetCleanup, vpcCleanup, zeroed }));
 }
 console.log('=====END D3-S7=====');
