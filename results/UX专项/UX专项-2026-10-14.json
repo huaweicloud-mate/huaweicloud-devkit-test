@@ -1,6 +1,6 @@
 {
   "date": "2026-10-14",
-  "generatedAt": "2026-10-14 19:37:42",
+  "generatedAt": "2026-10-14 19:40:25",
   "timezone": "Asia/Shanghai",
   "scope": "UX（D11）体验专项 —— 可执行门禁夹具三态结果",
   "caveat": "红线基线口径：NOT_IMPLEMENTED = 需求验收未达标（已知缺口，非 harness 故障），BLOCKED = 宿主/环境不可判定（不计入 PASS/FAIL）。本数据是回归防退化门禁的趋势线，不等价于体验验收（认知负荷 / 文案是否够新手用 / 视觉排版仍需人工 rubric）。",
@@ -8,7 +8,7 @@
     {
       "label": "1.1.8（npm）",
       "version": "1.1.8",
-      "hdkSrc": "C:\\Users\\Administrator\\devkit-test\\_sut\\1.1.8\\package\\plugins\\huaweicloud-core\\src",
+      "hdkSrc": "/home/runner/work/_temp/ux-sut/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src",
       "summary": {
         "pass": 1,
         "not_implemented": 13,
@@ -518,8 +518,8 @@
               "id": "D11-41-sts-expiry",
               "title": "STS 过期可由 token 解析（不误导为 AK 无效）",
               "ok": true,
-              "actual": 1791974264000,
-              "expected": "早于当前时间(ms)=1791977864910",
+              "actual": 1791974425000,
+              "expected": "早于当前时间(ms)=1791978025702",
               "detail": ""
             },
             {
@@ -575,7 +575,7 @@
           "assertions": [
             {
               "id": "D11-42-ascii",
-              "title": "关键 ASCII 字段（错误码）在 cp936(GBK) 环境下完好",
+              "title": "关键 ASCII 字段（错误码）在 latin1 环境下完好",
               "ok": true,
               "actual": [
                 "HDKIT_CRED_MISSING",
@@ -594,10 +594,10 @@
             },
             {
               "id": "D11-42-not-local-encoded",
-              "title": "输出未被转成本地编码（反断言，防退化成 cp936(GBK)）",
+              "title": "输出未被转成本地编码（反断言，防退化成 latin1）",
               "ok": true,
-              "actual": "未被 cp936(GBK) 转码",
-              "expected": "反断言：cp936(GBK) 解码不含「未配置」",
+              "actual": "未被 latin1 转码",
+              "expected": "反断言：latin1 解码不含「未配置」",
               "detail": "防退化：若日后为\"迁就控制台\"改成 GBK/latin1 输出，会破坏 agent 等 UTF-8 消费方"
             }
           ]
@@ -681,7 +681,7 @@
               "title": "请求挂起时在超时余量内返回（timeoutMs=600）",
               "ok": true,
               "actual": {
-                "ms": 601,
+                "ms": 602,
                 "skipped": true
               },
               "expected": {
