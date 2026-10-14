@@ -1,7 +1,7 @@
 
 =====CASE D3-S1=====
 serviceCatalog.intent 路由: {"intent":"列出 cn-north-4 的 ECS 实例清单，只读不改","skills":["huawei-ecs"],"services":["ECS"]}
-run_readonly ListServersDetails -> ok=true servers=
+run_readonly ListServersDetails -> ok=true servers="count": 2
 [OK] serviceCatalog 路由命中 ECS
 [OK] 只读命令返回实例清单(空也可)
 [OK] 全程零写工具调用(本探针仅调用 service_catalog+run_readonly)
@@ -35,7 +35,7 @@ explain_error(配额) -> {"service":"ECS","errorCode":"Ecs.0070","requestId":"",
     {
       "name": "只读命令返回实例清单(空也可)",
       "ok": true,
-      "detail": "[OPENAPI_ERROR]proxyconnect tcp: dial tcp: lookup proxy.example on *.*.*.*:53: no such host\n"
+      "detail": "{\n  \"count\": 2,\n  \"servers\": [\n    {\n      \"flavor\": {\n        \"disk\": \"0\",\n        \"vcpus\": \"2\",\n        \"ram\": \"4096\",\n        \"id\": \"c6.l"
     },
     {
       "name": "全程零写工具调用(本探针仅调用 service_catalog+run_readonly)",
