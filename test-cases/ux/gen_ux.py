@@ -48,6 +48,9 @@ ROWS = []
 def add(cid, title, pri, pre, data, steps, expect, src, tools, auto, expand, tct="COMMON", **meta):
     d = dict(BASE)
     d.update(meta)
+    # 已落地可执行载体登记（单一登记处，避免与夹具文件名两处真源不一致）
+    if cid in LANDED:
+        auto = f"fixture:{LANDED[cid]}"
     d["requiredEvidence"] = d.get("requiredEvidence") or "强断言：按预期结果字段逐项判定（正断言 + 反断言）；保留脱敏日志、返回体 JSON、前后快照"
     ROWS.append([cid, "D11体验", title, pri, pre, data, steps, expect, src, tools, auto, expand,
                  TS, "DESIGN_COVERED", tct] + [d[k] for k in HEADER[15:]])
@@ -55,6 +58,28 @@ def add(cid, title, pri, pre, data, steps, expect, src, tools, auto, expand, tct
 
 def dep(field, req):
     return f"契约依赖: {field} 待冻结（{req}）；需求来源与前置条件；独立 manifest；finally 清理"
+
+
+# ==================== 已落地可执行载体登记（用例 -> 夹具路径） ====================
+# 登记即代表：该用例有可执行载体（L2 夹具，`npm run test:ux` 自动发现），
+# 「自动化建议」列随之变为 `fixture:<路径>`，看板「载体」列显示为「夹具 <文件名>」。
+# 批次沿革：D11-37/41/42/43/44 为 2026-10-13 首批；其余为 2026-10-14「P1 纸面用例落实」批次。
+LANDED = {
+    "D11-1": "eval/harness/fixtures/d11-1-onboarding-first-touch.mjs",
+    "D11-2": "eval/harness/fixtures/d11-2-noninteractive-guidance.mjs",
+    "D11-3": "eval/harness/fixtures/d11-3-effective-runtime.mjs",
+    "D11-4": "eval/harness/fixtures/d11-4-effective-s1.mjs",
+    "D11-5": "eval/harness/fixtures/d11-5-effective-env.mjs",
+    "D11-11": "eval/harness/fixtures/d11-11-region-explicit.mjs",
+    "D11-26": "eval/harness/fixtures/d11-26-terminology.mjs",
+    "D11-29": "eval/harness/fixtures/d11-29-switch-effective-now.mjs",
+    "D11-30": "eval/harness/fixtures/d11-30-auth-state-machine.mjs",
+    "D11-37": "eval/harness/fixtures/d11-37-guidance-closure.mjs",
+    "D11-41": "eval/harness/fixtures/d11-41-misleading-attribution.mjs",
+    "D11-42": "eval/harness/fixtures/d11-42-encoding-contract.mjs",
+    "D11-43": "eval/harness/fixtures/d11-43-terminal-env-matrix.mjs",
+    "D11-44": "eval/harness/fixtures/d11-44-fault-injection.mjs",
+}
 
 
 # ==================== 第一批：登录体验专题（D11-1 ~ D11-21） ====================
@@ -487,6 +512,13 @@ add("D11-44", "故障注入矩阵（超时/限流/404/断网）", "P1",
 
 
 def main():
+    # 登记守卫：LANDED 里写的夹具必须真实存在于仓库（防止"登记了却没有载体"的幽灵登记）
+    repo = os.path.dirname(os.path.dirname(HERE))
+    missing = [f"{cid} -> {rel}" for cid, rel in LANDED.items()
+               if not os.path.isfile(os.path.join(repo, rel.replace("/", os.sep)))]
+    if missing:
+        raise SystemExit("[错误] LANDED 登记的夹具不存在：\n  " + "\n  ".join(missing))
+
     with open(OUT, "w", newline="", encoding="utf-8-sig") as f:
         w = csv.writer(f)
         w.writerow(HEADER)
@@ -497,6 +529,8 @@ def main():
     print(f"[OK] 第一批(登录专题) = {n(1, 21)} 条；"
           f"第二批(使用体验) = {n(22, 35)} 条；"
           f"第三批(范式升级) = {n(36, 99)} 条")
+    nfx = len([r for r in ROWS if str(r[10]).startswith("fixture:")])
+    print(f"[OK] 已落地可执行载体 = {nfx} 条（LANDED 登记 {len(LANDED)} 条，全部存在）")
 
 
 if __name__ == "__main__":

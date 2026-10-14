@@ -707,8 +707,10 @@ def render_ux_block(ux, design):
             f'<tbody>{"".join(urows)}</tbody></table>')
         parts.append(
             f'<p style="color:#7f8c8d;font-size:12px;">载体分布：已建可执行夹具 <b>{cnt["PASS"] + cnt["FAIL"]}</b> 条 ｜ '
-            f'契约依赖待冻结 <b>{cnt["FROZEN"]}</b> 条（契约冻结前应标 NOT_RUN）｜ 未建可执行载体 '
-            f'<b>{cnt["NONE"]}</b> 条（纸面定义，需评审后决定是否落载体）。</p>')
+            f'契约依赖待冻结（无载体）<b>{cnt["FROZEN"]}</b> 条 ｜ 未建可执行载体 '
+            f'<b>{cnt["NONE"]}</b> 条（纸面定义，需评审后决定是否落载体）。'
+            '已落载体且契约未冻结的用例按「门禁先行」执行，结果如实计为需求未实现、仅记趋势，'
+            '待契约冻结后才作正式契约验收。</p>')
 
     # 失败断言明细
     parts.append('<h3>失败断言明细（逐条 actual / expected）</h3>')
