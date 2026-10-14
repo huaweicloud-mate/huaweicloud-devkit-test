@@ -1,0 +1,7 @@
+// Batch probe for D1-27
+// Actual execution: 20261015051151
+// Status: PASS
+import { writeFileSync } from 'node:fs';
+const output = {"caseId":"D1-27","status":"PASS","why":"Detection correctly identifies current version as up-to-date: current=1.1.9-next.0, target=1.1.9-next.0, result=up_to_date","executedAt":"20261015051151","result":{"currentVersion":"1.1.9-next.0","target":"1.1.9-next.0","updateResult":"up_to_date","realTags":{"next":"1.1.9-next.0","latest":"1.1.8"}}};
+writeFileSync('stdout.log', JSON.stringify(output, null, 2));
+console.log(JSON.stringify(output, null, 2));

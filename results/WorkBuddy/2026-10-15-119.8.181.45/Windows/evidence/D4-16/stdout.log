@@ -1,0 +1,98 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "All 11 command wrapping tests correctly classified. extractInnerCommand works on shell wrappers.",
+  "executedAt": "20261015050718",
+  "result": {
+    "tests": [
+      {
+        "desc": "bash -c hcloud Delete",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      },
+      {
+        "desc": "sh -c hcloud DeleteUser",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      },
+      {
+        "desc": "eval hcloud Delete",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      },
+      {
+        "desc": "$() hcloud Delete",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      },
+      {
+        "desc": "backtick hcloud Delete",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      },
+      {
+        "desc": "cmd /c hcloud Delete",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      },
+      {
+        "desc": "powershell -Command hcloud Delete",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      },
+      {
+        "desc": "nested bash->sh hcloud Delete",
+        "decision": "deny",
+        "risk": "write",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[2 extracted]"
+      },
+      {
+        "desc": "bash -c cat credentials",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      },
+      {
+        "desc": "bash -c printenv HW_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential",
+        "expected": "deny",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      },
+      {
+        "desc": "bash -c ls (non-hcloud)",
+        "decision": "allow",
+        "risk": "not_huaweicloud",
+        "expected": "allow",
+        "matches": true,
+        "innerCommands": "[1 extracted]"
+      }
+    ]
+  }
+}

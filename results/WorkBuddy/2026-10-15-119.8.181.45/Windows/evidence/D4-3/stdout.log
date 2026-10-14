@@ -1,0 +1,90 @@
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "3 tests did not match expected: KMS DecryptData(expected=deny, got=allow), kms decrypt-data (kebab)(expected=deny, got=allow), csms show-secret-version(expected=deny, got=allow)",
+  "executedAt": "20261015050610",
+  "result": {
+    "tests": [
+      {
+        "desc": "KMS DecryptData",
+        "decision": "allow",
+        "risk": "unknown_read",
+        "reason": "Command does not match a known write or secret operation; treat output as untrusted and redact it.",
+        "expected": "deny",
+        "matches": false
+      },
+      {
+        "desc": "kms decrypt-data (kebab)",
+        "decision": "allow",
+        "risk": "unknown_read",
+        "reason": "Command does not match a known write or secret operation; treat output as untrusted and redact it.",
+        "expected": "deny",
+        "matches": false
+      },
+      {
+        "desc": "CSMS ShowSecretVersion",
+        "decision": "deny",
+        "risk": "secret",
+        "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "csms show-secret-version",
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation.",
+        "expected": "deny",
+        "matches": false
+      },
+      {
+        "desc": "CSMS GetSecretValue",
+        "decision": "deny",
+        "risk": "secret",
+        "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "CSMS ShowSecret",
+        "decision": "deny",
+        "risk": "secret",
+        "reason": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context.",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "AWS-style GetSecretValue",
+        "decision": "deny",
+        "risk": "secret",
+        "reason": "Direct secret value retrieval patterns are blocked.",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "secret_string pattern",
+        "decision": "deny",
+        "risk": "secret",
+        "reason": "Direct secret value retrieval patterns are blocked.",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "secret_binary pattern",
+        "decision": "deny",
+        "risk": "secret",
+        "reason": "Direct secret value retrieval patterns are blocked.",
+        "expected": "deny",
+        "matches": true
+      },
+      {
+        "desc": "KMS ListKeys (read-only)",
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation.",
+        "expected": "allow",
+        "matches": true
+      }
+    ]
+  }
+}

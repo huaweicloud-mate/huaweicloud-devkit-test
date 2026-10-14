@@ -1,0 +1,23 @@
+{
+  "caseId": "D1-39",
+  "status": "FAIL",
+  "why": "queryDistTagsSync returned null due to parse failure: npm output is array-wrapped [{}] but parseDistTagsOutput rejects arrays (line 86: Array.isArray check). npm exit=0, raw output type=array. No EINVAL but detection chain broken.",
+  "executedAt": "20261015050423",
+  "result": {
+    "queryDistTagsSyncResult": null,
+    "npmExitCode": 0,
+    "npmOutputType": "array",
+    "npmOutputSample": "[\n  {\n    \"next\": \"1.1.9-next.0\",\n    \"latest\": \"1.1.8\"\n  }\n]",
+    "parsedTags": null,
+    "unwrappedTags": {
+      "next": "1.1.9-next.0",
+      "latest": "1.1.8"
+    },
+    "target": "1.1.8",
+    "updateStatus": "up_to_date",
+    "platform": "win32",
+    "hasEINVAL": false,
+    "hasParseFailure": true,
+    "rootCause": "update-check.mjs:86 parseDistTagsOutput rejects Array.isArray(parsed) but npm view returns array-wrapped output"
+  }
+}
