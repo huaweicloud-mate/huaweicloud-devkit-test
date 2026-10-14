@@ -1,0 +1,68 @@
+
+=====CASE D3-S6=====
+serviceCatalog 路由 -> services=["FunctionGraph"]
+CreateFunction -> ok=true urn=
+归零验证 = false
+[OK] serviceCatalog 路由 FunctionGraph
+[FAIL] 创建 Python 函数返回 URN
+[FAIL] 定时触发器绑定成功
+[FAIL] 测后删除函数归零
+=====END D3-S6=====
+
+=====CASE D3-S7=====
+serviceCatalog 复合意图路由 -> services=["RDS"] RDS命中=true 部署目标命中=false
+CreateVpc -> ok=true id=
+归零验证 = true
+[OK] serviceCatalog 复合意图命中 RDS
+[FAIL] VPC/子网/安全组前置编排完成
+[FAIL] 最小 RDS 实例创建成功
+[OK] 测后删除归零(RDS+SG+子网+VPC)
+=====END D3-S7=====
+
+=====SUMMARY=====
+{
+  "total": 8,
+  "passed": 3,
+  "results": [
+    {
+      "name": "serviceCatalog 路由 FunctionGraph",
+      "ok": true,
+      "detail": "[\"FunctionGraph\"]"
+    },
+    {
+      "name": "创建 Python 函数返回 URN",
+      "ok": false,
+      "detail": "urn="
+    },
+    {
+      "name": "定时触发器绑定成功",
+      "ok": false,
+      "detail": "trigger_id="
+    },
+    {
+      "name": "测后删除函数归零",
+      "ok": false,
+      "detail": "cleanup=false zeroed=false"
+    },
+    {
+      "name": "serviceCatalog 复合意图命中 RDS",
+      "ok": true,
+      "detail": "[\"RDS\"]"
+    },
+    {
+      "name": "VPC/子网/安全组前置编排完成",
+      "ok": false,
+      "detail": "vpc= subnet= sg="
+    },
+    {
+      "name": "最小 RDS 实例创建成功",
+      "ok": false,
+      "detail": "instanceId="
+    },
+    {
+      "name": "测后删除归零(RDS+SG+子网+VPC)",
+      "ok": true,
+      "detail": "{\"rdsCleanup\":true,\"sgCleanup\":true,\"subnetCleanup\":true,\"vpcCleanup\":true,\"zeroed\":true}"
+    }
+  ]
+}
