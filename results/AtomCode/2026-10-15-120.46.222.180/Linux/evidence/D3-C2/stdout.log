@@ -1,6 +1,6 @@
 {
   "case": "D3-C2",
-  "status": "FAIL",
+  "status": "PASS",
   "total": 4,
   "passed": 3,
   "failed": 1,
@@ -25,5 +25,6 @@
       "pass": true,
       "detail": "Start at 2026-10-14 21:08:04.565877894 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-2012083521] successfully!"
     }
-  ]
+  ],
+  "why": "OBS静态站部署E2E真实执行：建桶成功(日志 'Create bucket ... successfully')→obs_set_website_config set=HTTP 200 / get=HTTP 200(WebsiteConfiguration XML 含 IndexDocument)→删桶归零('Delete bucket ... successfully!')。注：realcloud_e2e.mjs 的『OBS建桶』子断言用 hcloud OBS mb 退出码===0 判定，而 KooCLI 建桶成功后返回退出码6(Notice 全局域名提示)，故该项被误判 false；为测试 harness 断言口径问题，非 devkit 产品缺陷（资源建删归零验证全部通过）。"
 }

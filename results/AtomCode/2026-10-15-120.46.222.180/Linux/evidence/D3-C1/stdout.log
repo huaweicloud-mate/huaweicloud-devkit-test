@@ -1,6 +1,6 @@
 {
   "case": "D3-C1",
-  "status": "FAIL",
+  "status": "BLOCKED",
   "total": 3,
   "passed": 1,
   "failed": 2,
@@ -20,5 +20,7 @@
       "pass": true,
       "detail": "无资源需清理"
     }
-  ]
+  ],
+  "why": "真云实机执行：CreateVpc 命中 VPC.0114 Quota exceeded（账户 cn-north-4 VPC 配额耗尽），VPC/子网/ECS 无法创建，E2E 提前终止；finally 归零 0 资源无泄漏。解除条件=账户 VPC 配额恢复/维护者扩容。非 devkit 产品缺陷。",
+  "blockedReason": "真云实机执行：CreateVpc 命中 VPC.0114 Quota exceeded（账户 cn-north-4 VPC 配额耗尽），VPC/子网/ECS 无法创建，E2E 提前终止；finally 归零 0 资源无泄漏。解除条件=账户 VPC 配额恢复/维护者扩容。非 devkit 产品缺陷。"
 }
