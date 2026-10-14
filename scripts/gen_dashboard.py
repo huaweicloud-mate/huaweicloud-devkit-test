@@ -827,11 +827,15 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
         bare_rows = "".join(
             '<tr>'
             '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{} / {}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,} / {:,}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{} / {}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
+            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
             '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
-            '</tr>'.format(b.get("title", ""), b.get("std_rate", "—"), b.get("bare_rate", "—"),
+            '</tr>'.format(b.get("title", ""),
+                           b.get("std_rate", "—"), b.get("bare_rate", "—"),
                            b.get("std_token", 0), b.get("bare_token", 0),
                            b.get("std_steps", 0), b.get("bare_steps", 0),
                            b.get("note", ""))
@@ -852,11 +856,16 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<tbody>' + bench_rows + '</tbody></table>'
             '<h2 style="margin-top:16px;">裸模型对照（--bare，初步：标准=3采样中位 / 裸=1采样）</h2>'
             '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
-            '<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">任务</th>'
-            '<th style="padding:6px 8px;border:1px solid #ddd;">成功率<br>标准/裸</th>'
-            '<th style="padding:6px 8px;border:1px solid #ddd;">token<br>标准/裸</th>'
-            '<th style="padding:6px 8px;border:1px solid #ddd;">步数<br>标准/裸</th>'
-            '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">裸模型问题</th></tr></thead>'
+            '<thead>'
+            '<tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">任务</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">成功率</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">token</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">步数</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">裸模型问题</th></tr>'
+            '<tr style="background:#f2f2f2;"><th style="padding:4px 6px;border:1px solid #ddd;">标准</th><th style="padding:4px 6px;border:1px solid #ddd;">裸模型</th>'
+            '<th style="padding:4px 6px;border:1px solid #ddd;">标准</th><th style="padding:4px 6px;border:1px solid #ddd;">裸模型</th>'
+            '<th style="padding:4px 6px;border:1px solid #ddd;">标准</th><th style="padding:4px 6px;border:1px solid #ddd;">裸模型</th></tr>'
+            '</thead>'
             '<tbody>' + bare_rows + '</tbody></table>'
             '<h2 style="margin-top:16px;">关键发现</h2>'
             '<ul style="font-size:13px;">' + finding_items + '</ul>'
