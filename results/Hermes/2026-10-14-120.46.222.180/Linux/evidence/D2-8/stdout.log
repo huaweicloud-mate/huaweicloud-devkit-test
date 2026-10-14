@@ -1,0 +1,99 @@
+{
+  "case": "D2-8",
+  "status": "PASS",
+  "total": 10,
+  "passed": 10,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-8",
+      "name": "creds-readable",
+      "pass": true,
+      "actual": "\"present\"",
+      "expected": "\"present\"",
+      "passMsg": "S1 credentials readable",
+      "failMsg": "S1 credentials missing"
+    },
+    {
+      "id": "D2-8",
+      "name": "s1-configured",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "S1 configured",
+      "failMsg": "S1 not configured"
+    },
+    {
+      "id": "D2-8",
+      "name": "obs-configured",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "OBS (S3) configured",
+      "failMsg": "S3 missing"
+    },
+    {
+      "id": "D2-8",
+      "name": "koocli-installed",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "KooCLI (S2) installed",
+      "failMsg": "KooCLI not installed"
+    },
+    {
+      "id": "D2-8",
+      "name": "koocli-status-ok",
+      "pass": true,
+      "actual": "\"ok\"",
+      "expected": "\"ok|version_mismatch\"",
+      "passMsg": "KooCLI probe succeeded",
+      "failMsg": "KooCLI probe unavailable"
+    },
+    {
+      "id": "D2-8",
+      "name": "s1-fingerprint-present",
+      "pass": true,
+      "actual": "\"caae65f2\"",
+      "expected": "\"8-char\"",
+      "passMsg": "S1 fingerprint computed",
+      "failMsg": "S1 fingerprint missing"
+    },
+    {
+      "id": "D2-8",
+      "name": "account-hint-correct",
+      "pass": true,
+      "actual": "\"caae65f2\"",
+      "expected": "\"caae65f2\"",
+      "passMsg": "onboarding accountHint == fingerprint",
+      "failMsg": "accountHint mismatch"
+    },
+    {
+      "id": "D2-8",
+      "name": "no-plaintext-sk-leak",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "auth_status JSON does not leak SK plaintext",
+      "failMsg": "SK leaked into status output"
+    },
+    {
+      "id": "D2-8",
+      "name": "redaction-works",
+      "pass": true,
+      "actual": "\"secret_key=<redacted> access_key=<redacted>\"",
+      "expected": "\"<redacted>\"",
+      "passMsg": "redactSecrets masks SK",
+      "failMsg": "redactSecrets failed to mask SK"
+    },
+    {
+      "id": "D2-8",
+      "name": "no-plaintext-ak-leak",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "auth_status JSON does not leak AK plaintext",
+      "failMsg": "AK leaked into status output"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "case": "D2-14",
+  "status": "PASS",
+  "total": 7,
+  "passed": 7,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-14",
+      "name": "conflict-needs-confirmation",
+      "pass": true,
+      "actual": "\"needs_confirmation\"",
+      "expected": "\"needs_confirmation\"",
+      "passMsg": "conflict detected, R2 arbitration raised",
+      "failMsg": "no needs_confirmation: "
+    },
+    {
+      "id": "D2-14",
+      "name": "confirm-token-issued",
+      "pass": true,
+      "actual": "\"issued\"",
+      "expected": "\"non-empty\"",
+      "passMsg": "confirmToken issued",
+      "failMsg": "confirmToken missing"
+    },
+    {
+      "id": "D2-14",
+      "name": "both-options",
+      "pass": true,
+      "actual": "\"s1,newImported\"",
+      "expected": "\"s1,newImported\"",
+      "passMsg": "both arbitration options present",
+      "failMsg": "options incomplete"
+    },
+    {
+      "id": "D2-14",
+      "name": "confirm-s1-aborted",
+      "pass": true,
+      "actual": "\"ok/aborted\"",
+      "expected": "\"ok/aborted\"",
+      "passMsg": "decision=s1 keeps S1 (aborted)",
+      "failMsg": "wrong outcome: {\"status\":\"ok\",\"outcome\":\"aborted\",\"message\":\"保持 S1 现有账号，未覆盖。\"}"
+    },
+    {
+      "id": "D2-14",
+      "name": "s1-preserved",
+      "pass": true,
+      "actual": "\"AKACCOUNTAAAAAAA01\"",
+      "expected": "\"AKACCOUNTAAAAAAA01\"",
+      "passMsg": "S1 truth preserved after abort",
+      "failMsg": "S1 overwritten with imported account"
+    },
+    {
+      "id": "D2-14",
+      "name": "repeat-already-processed",
+      "pass": true,
+      "actual": "\"already_processed\"",
+      "expected": "\"already_processed\"",
+      "passMsg": "repeat confirm flagged already_processed",
+      "failMsg": "repeat confirm not guarded"
+    },
+    {
+      "id": "D2-14",
+      "name": "unknown-token-rejected",
+      "pass": true,
+      "actual": "\"CONFIRM_TOKEN_NOT_FOUND\"",
+      "expected": "\"CONFIRM_TOKEN_NOT_FOUND\"",
+      "passMsg": "unknown token rejected cleanly",
+      "failMsg": "unknown token mishandled"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "case": "D2-6",
+  "status": "PASS",
+  "total": 7,
+  "passed": 7,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-6",
+      "name": "no-throw",
+      "pass": true,
+      "actual": "\"ok\"",
+      "expected": "\"ok\"",
+      "passMsg": "setup_obs_config did not throw",
+      "failMsg": "threw: "
+    },
+    {
+      "id": "D2-6",
+      "name": "returns-ok",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "setup_obs_config ok",
+      "failMsg": "setup_obs_config not ok"
+    },
+    {
+      "id": "D2-6",
+      "name": "source-global-creds",
+      "pass": true,
+      "actual": "\"global-credentials\"",
+      "expected": "\"global-credentials\"",
+      "passMsg": "sourced from global credential vault",
+      "failMsg": "wrong source"
+    },
+    {
+      "id": "D2-6",
+      "name": "obs-file-created",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "obsutil config file written to disk",
+      "failMsg": "obsutil config file missing"
+    },
+    {
+      "id": "D2-6",
+      "name": "obs-keys-present",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "obs config has endpoint/ak/sk keys",
+      "failMsg": "obs config incomplete"
+    },
+    {
+      "id": "D2-6",
+      "name": "idempotent-rewrite",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "re-run stable (unattended)",
+      "failMsg": "re-run drifted or failed"
+    },
+    {
+      "id": "D2-6",
+      "name": "endpoint-derivation",
+      "pass": true,
+      "actual": "\"https://obs.cn-north-4.myhuaweicloud.com\"",
+      "expected": "\"https://obs.cn-north-4.myhuaweicloud.com\"",
+      "passMsg": "endpoint derived from region",
+      "failMsg": "endpoint wrong"
+    }
+  ],
+  "note": "obsutil ls 真实云端列表验证未执行（本机无 obsutil 二进制），落盘+幂等已源码级验证"
+}

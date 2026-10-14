@@ -1,0 +1,58 @@
+{
+  "case": "D1-46",
+  "status": "PASS",
+  "total": 7,
+  "passed": 7,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D1-46-1",
+      "name": "ttl-equal-still-cached",
+      "pass": true,
+      "actual": "result=update_available,q=1",
+      "expected": "update_available,q=1"
+    },
+    {
+      "id": "D1-46-2",
+      "name": "ttl-exceeded-requeries",
+      "pass": true,
+      "actual": "q=2",
+      "expected": "2"
+    },
+    {
+      "id": "D1-46-3",
+      "name": "throttled-before-5min",
+      "pass": true,
+      "actual": "f=1",
+      "expected": "1"
+    },
+    {
+      "id": "D1-46-4",
+      "name": "retry-at-5min-boundary",
+      "pass": true,
+      "actual": "f=2",
+      "expected": "2"
+    },
+    {
+      "id": "D1-46-5",
+      "name": "null-query-check_failed",
+      "pass": true,
+      "actual": "check_failed",
+      "expected": "check_failed"
+    },
+    {
+      "id": "D1-46-6",
+      "name": "recover-after-failure",
+      "pass": true,
+      "actual": "update_available",
+      "expected": "update_available"
+    },
+    {
+      "id": "D1-46-7",
+      "name": "spawn-error-resolves-null-no-throw",
+      "pass": true,
+      "actual": "qd=null,threw=false",
+      "expected": "null,false"
+    }
+  ]
+}

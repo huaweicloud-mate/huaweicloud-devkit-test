@@ -1,0 +1,36 @@
+{
+  "case": "D2-18",
+  "status": "PASS",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-18",
+      "name": "no-marker-manual",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "no marker → manual",
+      "failMsg": "no marker misclassified"
+    },
+    {
+      "id": "D2-18",
+      "name": "mtime-le-marker-not-manual",
+      "pass": true,
+      "actual": "false",
+      "expected": "false",
+      "passMsg": "mtime <= marker → not manual (R4 rewrite ok)",
+      "failMsg": "mtime<=marker misclassified as manual"
+    },
+    {
+      "id": "D2-18",
+      "name": "mtime-gt-marker-manual",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "mtime > marker → manual (R2 arbitration)",
+      "failMsg": "manual edit not detected"
+    }
+  ]
+}

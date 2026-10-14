@@ -1,0 +1,49 @@
+{
+  "case": "D3-C11",
+  "status": "PASS",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D3-C11",
+      "name": "invalid-cred-valid-false",
+      "pass": true,
+      "actual": "false",
+      "expected": "false",
+      "detail": "error=IAM rejected the credentials (HTTP 401: {\"error_msg\":\"Incorrect IAM authentication information: Unauthorized\",\"error_code\":\"APIGW.0301\",\"request_id\":\"36e7c56df3"
+    },
+    {
+      "id": "D3-C11",
+      "name": "error-nonempty",
+      "pass": true,
+      "actual": "present",
+      "expected": "non-empty error",
+      "detail": ""
+    },
+    {
+      "id": "D3-C11",
+      "name": "no-injection-on-invalid",
+      "pass": true,
+      "actual": "undefined",
+      "expected": "rejected/skipped => NOT injected",
+      "detail": ""
+    },
+    {
+      "id": "D3-C11",
+      "name": "source-gate-present",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "detail": "tools.mjs inject gate (!valid && !skipped) present"
+    },
+    {
+      "id": "D3-C11",
+      "name": "no-secret-inject-performed",
+      "pass": true,
+      "actual": "no test cred injected",
+      "expected": "no injection",
+      "detail": "probe never calls hdkitCredentials"
+    }
+  ]
+}

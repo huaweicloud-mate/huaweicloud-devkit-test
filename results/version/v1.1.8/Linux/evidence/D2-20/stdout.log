@@ -1,0 +1,54 @@
+{
+  "case": "D2-20",
+  "status": "PASS",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-20",
+      "name": "s1-relocated-to-env",
+      "pass": true,
+      "actual": "\"/tmp/d2-20-VhwqPU/.config/huaweicloud/credentials.json\"",
+      "expected": "\"/tmp/d2-20-VhwqPU\"",
+      "passMsg": "S1 credentials.json follows HUAWEICLOUD_HOME",
+      "failMsg": "S1 not relocated"
+    },
+    {
+      "id": "D2-20",
+      "name": "s2-fixed-real-home",
+      "pass": true,
+      "actual": "\"/home/testbot1/.hcloud/config.json\"",
+      "expected": "\"/home/testbot1/.hcloud/config.json\"",
+      "passMsg": "S2 KooCLI config stays at real ~/.hcloud (unaffected)",
+      "failMsg": "S2 leaked to HUAWEICLOUD_HOME"
+    },
+    {
+      "id": "D2-20",
+      "name": "s1-write-isolated",
+      "pass": true,
+      "actual": "\"/tmp/d2-20-VhwqPU/.config/huaweicloud/credentials.json\"",
+      "expected": "\"/tmp/d2-20-VhwqPU\"",
+      "passMsg": "write lands in isolated root",
+      "failMsg": "write escaped isolation"
+    },
+    {
+      "id": "D2-20",
+      "name": "s1-read-isolated",
+      "pass": true,
+      "actual": "\"AKREDIR00000001\"",
+      "expected": "\"AKREDIR00000001\"",
+      "passMsg": "read is consistent with isolated write",
+      "failMsg": "read/write mismatch"
+    },
+    {
+      "id": "D2-20",
+      "name": "s2-read-real",
+      "pass": true,
+      "actual": "\"default\"",
+      "expected": "\"string\"",
+      "passMsg": "S2 still read from real ~/.hcloud",
+      "failMsg": "S2 read broken: "
+    }
+  ]
+}

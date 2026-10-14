@@ -1,0 +1,81 @@
+{
+  "case": "D8-3",
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D8-3",
+      "name": "secret-redacted",
+      "pass": true,
+      "actual": "\"access_key=<redacted> secret_key=<redacted> security_token=<redacted> password=<redacted>\"",
+      "expected": "\"<redacted>\"",
+      "passMsg": "secret values masked",
+      "failMsg": "secret leaked: access_key=<redacted> secret_key=<redacted> security_token=<redacted> password=<redacted>"
+    },
+    {
+      "id": "D8-3",
+      "name": "project-id-preserved",
+      "pass": true,
+      "actual": "\"46c1fd48bd1248c7b75afc3780de7132\"",
+      "expected": "\"46c1fd48bd1248c7b75afc3780de7132\"",
+      "passMsg": "project_id preserved",
+      "failMsg": "project_id over-redacted: project_id=46c1fd48bd1248c7b75afc3780de7132 region=cn-north-4 secret_key=<redacted>"
+    },
+    {
+      "id": "D8-3",
+      "name": "region-preserved",
+      "pass": true,
+      "actual": "\"cn-north-4\"",
+      "expected": "\"cn-north-4\"",
+      "passMsg": "region preserved",
+      "failMsg": "region over-redacted"
+    },
+    {
+      "id": "D8-3",
+      "name": "secret-still-masked",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "secret masked while project_id/region kept",
+      "failMsg": "secret not masked"
+    },
+    {
+      "id": "D8-3",
+      "name": "obj-secret-key-redacted",
+      "pass": true,
+      "actual": "\"<redacted>\"",
+      "expected": "\"<redacted>\"",
+      "passMsg": "object secret_key redacted",
+      "failMsg": "object secret_key leaked"
+    },
+    {
+      "id": "D8-3",
+      "name": "obj-project-id-preserved",
+      "pass": true,
+      "actual": "\"46c1fd48bd1248c7b75afc3780de7132\"",
+      "expected": "\"46c1fd48bd1248c7b75afc3780de7132\"",
+      "passMsg": "object project_id preserved",
+      "failMsg": "object project_id over-redacted"
+    },
+    {
+      "id": "D8-3",
+      "name": "obj-region-preserved",
+      "pass": true,
+      "actual": "\"cn-north-4\"",
+      "expected": "\"cn-north-4\"",
+      "passMsg": "object region preserved",
+      "failMsg": "object region over-redacted"
+    },
+    {
+      "id": "D8-3",
+      "name": "innocent-fields-untouched",
+      "pass": true,
+      "actual": "\"{\\\"project_id\\\":\\\"46c1fd48bd1248c7b75afc3780de7132\\\",\\\"region\\\":\\\"cn-north-4\\\",\\\"count\\\":5,\\\"name\\\":\\\"ecs-001\\\"}\"",
+      "expected": "\"untouched\"",
+      "passMsg": "ordinary fields untouched",
+      "failMsg": "innocent field over-redacted"
+    }
+  ]
+}

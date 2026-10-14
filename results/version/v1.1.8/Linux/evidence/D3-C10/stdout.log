@@ -1,0 +1,33 @@
+{
+  "case": "D3-C10",
+  "status": "FAIL",
+  "total": 3,
+  "passed": 1,
+  "failed": 2,
+  "results": [
+    {
+      "id": "D3-C10",
+      "name": "categories-api-responds",
+      "pass": true,
+      "actual": "ok=true categories.length=0",
+      "expected": "ok=true + array",
+      "detail": ""
+    },
+    {
+      "id": "D3-C10",
+      "name": "categories-list-complete",
+      "pass": false,
+      "actual": "0",
+      "expected": ">0 categories",
+      "detail": "市场 index.json categories 为空/缺失 → 分类列表不完整 (真实缺口)"
+    },
+    {
+      "id": "D3-C10",
+      "name": "filter-consistent",
+      "pass": null,
+      "actual": "blocked-by-empty-categories",
+      "expected": "depends on non-empty categories",
+      "detail": "按分类过滤返回结果数组"
+    }
+  ]
+}

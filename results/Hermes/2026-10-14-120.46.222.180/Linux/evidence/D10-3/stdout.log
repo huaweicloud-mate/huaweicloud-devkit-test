@@ -1,18 +1,16 @@
 {
   "case": "D10-3",
-  "status": "PASS",
-  "total": 1,
-  "passed": 1,
+  "status": "FAIL",
+  "why": "EXP-E01 路由 MISS，准确率 92.9%",
+  "executedAt": "20261014064000",
   "results": [
     {
-      "id": "D10-3",
-      "name": "catalog-mcp",
-      "pass": true,
-      "actual": "ok",
-      "expected": "ok",
-      "passMsg": "service_catalog OK (MCP)",
-      "failMsg": "service_catalog FAIL (MCP)"
+      "id": "run-eval",
+      "name": "serviceCatalog路由",
+      "pass": false,
+      "actual": "HIT=13 MISS=1 N/A=1 (准确率92.9%)",
+      "expected": "15条全部命中",
+      "why": "EXP-E01 '查云主机' 路由到 'Run hcloud --help' 而非 ECS"
     }
-  ],
-  "source": "mcp-tools/probe.mjs"
+  ]
 }

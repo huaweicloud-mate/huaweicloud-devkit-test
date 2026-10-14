@@ -1,0 +1,126 @@
+{
+  "case": "D2-15",
+  "status": "PASS",
+  "total": 13,
+  "passed": 13,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-15",
+      "name": "temporary-ok",
+      "pass": true,
+      "actual": "\"ok/temporary\"",
+      "expected": "\"ok/temporary\"",
+      "passMsg": "temporary switch ok",
+      "failMsg": "temporary failed"
+    },
+    {
+      "id": "D2-15",
+      "name": "temporary-runtime-active",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "runtime credentials active",
+      "failMsg": "runtime not active"
+    },
+    {
+      "id": "D2-15",
+      "name": "temporary-no-s1",
+      "pass": true,
+      "actual": "false",
+      "expected": "false",
+      "passMsg": "temporary does NOT write S1",
+      "failMsg": "S1 written by temporary"
+    },
+    {
+      "id": "D2-15",
+      "name": "temporary-no-s3",
+      "pass": true,
+      "actual": "false",
+      "expected": "false",
+      "passMsg": "temporary does NOT write S3",
+      "failMsg": "S3 written by temporary"
+    },
+    {
+      "id": "D2-15",
+      "name": "clear-ok",
+      "pass": true,
+      "actual": "\"cleared\"",
+      "expected": "\"cleared\"",
+      "passMsg": "clear ok",
+      "failMsg": "clear failed"
+    },
+    {
+      "id": "D2-15",
+      "name": "clear-runtime-inactive",
+      "pass": true,
+      "actual": "true",
+      "expected": "false",
+      "passMsg": "runtime cleared (fallback to env/file/S1)",
+      "failMsg": "runtime still active after clear"
+    },
+    {
+      "id": "D2-15",
+      "name": "persist-no-region-rejected",
+      "pass": true,
+      "actual": "\"error/invalid_region\"",
+      "expected": "\"error/invalid_region\"",
+      "passMsg": "persist without region rejected",
+      "failMsg": "region gate missing"
+    },
+    {
+      "id": "D2-15",
+      "name": "persist-ok-or-partial",
+      "pass": true,
+      "actual": "\"ok\"",
+      "expected": "\"ok|partial\"",
+      "passMsg": "persist accepted",
+      "failMsg": "persist failed: {\"status\":\"ok\",\"scope\":\"persist\",\"backedUp\":false,\"obs\":{\"configured\":true},\"hcloud\":{\"ok\":true,\"error\":\"\"},\"note\":\"S1 written with configuredBySession (R9), which now takes priority over env-injected credentials; S2(current profile) and S3 synced. Note: running `auth init` later clears the configuredBySession flag and env credentials regain priority.\"}"
+    },
+    {
+      "id": "D2-15",
+      "name": "persist-s1-written",
+      "pass": true,
+      "actual": "\"AKPERSIST00000001/true\"",
+      "expected": "\"AKPERSIST00000001/true\"",
+      "passMsg": "S1 written with configuredBySession",
+      "failMsg": "S1 wrong"
+    },
+    {
+      "id": "D2-15",
+      "name": "persist-s3-synced",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "S3 OBS synced",
+      "failMsg": "S3 not synced"
+    },
+    {
+      "id": "D2-15",
+      "name": "persist-last-sync",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": ".last_sync refreshed with new fingerprint",
+      "failMsg": ".last_sync wrong"
+    },
+    {
+      "id": "D2-15",
+      "name": "import-temporary-ok",
+      "pass": true,
+      "actual": "\"ok/temporary\"",
+      "expected": "\"ok/temporary\"",
+      "passMsg": "import temporary ok",
+      "failMsg": "import temporary failed"
+    },
+    {
+      "id": "D2-15",
+      "name": "import-file-wiped",
+      "pass": true,
+      "actual": "false",
+      "expected": "false",
+      "passMsg": "creds-import.json wiped after read",
+      "failMsg": "import file not wiped"
+    }
+  ]
+}

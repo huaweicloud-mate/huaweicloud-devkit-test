@@ -1,0 +1,27 @@
+{
+  "case": "D10-9",
+  "status": "BLOCKED",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D10-9",
+      "name": "safety-intercept-source-present",
+      "pass": true,
+      "actual": "true/plan-approval=true",
+      "expected": "true",
+      "detail": "LLM-session safety interception (PreToolUse hook + safety skill + plan→approval flow) present at source"
+    },
+    {
+      "id": "D10-9",
+      "name": "no-real-agent-harness",
+      "pass": true,
+      "actual": "BLOCKED detail",
+      "expected": "BLOCKED: Hermes not DSH; run-agent-eval.mjs drives \"dsh --profile headless\" (dsh not installed on this host), no CDP/rea",
+      "detail": ""
+    }
+  ],
+  "why": "安全干预-LLM会话层：源码级已确认 PreToolUse hook + safety skill + plan→approval 流程存在，但真实 LLM 会话层干预需 dsh/CDP 真实 agent harness；Hermes 客户端无 dsh，无人值守无法驱动真实会话",
+  "blockedReason": "安全干预-LLM会话层：源码级已确认 PreToolUse hook + safety skill + plan→approval 流程存在，但真实 LLM 会话层干预需 dsh/CDP 真实 agent harness；Hermes 客户端无 dsh，无人值守无法驱动真实会话"
+}

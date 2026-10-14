@@ -1,0 +1,23 @@
+{
+  "case": "D9-2",
+  "status": "FAIL",
+  "why": "D9-2b: 非法参数未返回 JSON-RPC -32602",
+  "executedAt": "20261014064000",
+  "results": [
+    {
+      "id": "D9-2a",
+      "name": "unknown-method",
+      "pass": true,
+      "actual": "-32601",
+      "expected": "-32601"
+    },
+    {
+      "id": "D9-2b",
+      "name": "invalid-params",
+      "pass": false,
+      "actual": "无 error 对象",
+      "expected": "-32602",
+      "why": "tools/list 传 string params 未返回 -32602 Invalid params"
+    }
+  ]
+}

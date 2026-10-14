@@ -1,0 +1,65 @@
+{
+  "case": "D1-38",
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D1-38-1",
+      "name": "upgrade-success",
+      "pass": true,
+      "actual": "true",
+      "expected": "true"
+    },
+    {
+      "id": "D1-38-2",
+      "name": "previous-version",
+      "pass": true,
+      "actual": "1.1.0",
+      "expected": "1.1.0"
+    },
+    {
+      "id": "D1-38-3",
+      "name": "installed-version",
+      "pass": true,
+      "actual": "1.2.0",
+      "expected": "1.2.0"
+    },
+    {
+      "id": "D1-38-4",
+      "name": "requires-restart-true",
+      "pass": true,
+      "actual": "true",
+      "expected": "true"
+    },
+    {
+      "id": "D1-38-5",
+      "name": "restart-hint-present",
+      "pass": true,
+      "actual": "升级完成，请重启当前会话使新版本生效。",
+      "expected": "含\"重启\""
+    },
+    {
+      "id": "D1-38-6",
+      "name": "query-fail-not-success",
+      "pass": true,
+      "actual": "false",
+      "expected": "false"
+    },
+    {
+      "id": "D1-38-7",
+      "name": "query-fail-manual-npx",
+      "pass": true,
+      "actual": "npx --yes huaweicloud-devkit@latest update --target opencode",
+      "expected": "含 npx + huaweicloud-devkit"
+    },
+    {
+      "id": "D1-38-8",
+      "name": "exec-fail-manual",
+      "pass": true,
+      "actual": "false/npx --yes huaweicloud-devkit@latest update --target opencode",
+      "expected": "false/含 npx"
+    }
+  ]
+}

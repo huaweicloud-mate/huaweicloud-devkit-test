@@ -1,0 +1,36 @@
+{
+  "case": "D2-24",
+  "status": "PASS",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D2-24",
+      "name": "resolve-ok",
+      "pass": true,
+      "actual": "\"ok/proj-test-123\"",
+      "expected": "\"ok/proj-test-123\"",
+      "passMsg": "projectId auto-resolved",
+      "failMsg": "projectId not resolved: {\"ok\":true,\"projectId\":\"proj-test-123\"}"
+    },
+    {
+      "id": "D2-24",
+      "name": "no-project-no-throw",
+      "pass": true,
+      "actual": "\"ok=false no projects found for region cn-north-4\"",
+      "expected": "\"ok=false + reason\"",
+      "passMsg": "no-project degrades with reason (no throw)",
+      "failMsg": "no-project misbehaved: {\"ok\":false,\"reason\":\"no projects found for region cn-north-4\"}"
+    },
+    {
+      "id": "D2-24",
+      "name": "missing-region-reason",
+      "pass": true,
+      "actual": "\"region is required\"",
+      "expected": "\"region is required\"",
+      "passMsg": "missing region rejected cleanly",
+      "failMsg": "missing region mishandled"
+    }
+  ]
+}

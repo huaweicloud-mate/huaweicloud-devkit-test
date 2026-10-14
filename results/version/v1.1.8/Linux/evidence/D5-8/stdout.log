@@ -1,0 +1,33 @@
+{
+  "case": "D5-8",
+  "status": "PASS",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D5-8",
+      "name": "service-skill-count",
+      "pass": true,
+      "actual": "23",
+      "expected": ">=17 huawei-* service skills",
+      "detail": "dirs=billing,cbr,cce,cloud-apig-instance-management,cloud-cts-trace-management,cloud-dds-dcs-instance-management,cloud-deployment-task-management,cloud-dew-key-management,cloud-eye,cloud-gaussdb-instance-m"
+    },
+    {
+      "id": "D5-8",
+      "name": "no-skill-services-degrade",
+      "pass": true,
+      "actual": "CDN,EVS,EIP,ELB",
+      "expected": "CDN,EIP,ELB,EVS (4 no-skill matrix services → degrade route)",
+      "detail": "ELB 无独立 skill（routeMap 归 huawei-vpc），同列降级"
+    },
+    {
+      "id": "D5-8",
+      "name": "codex-desktop-runtime",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "detail": "codex-desktop recognized in skill-dir resolution"
+    }
+  ]
+}

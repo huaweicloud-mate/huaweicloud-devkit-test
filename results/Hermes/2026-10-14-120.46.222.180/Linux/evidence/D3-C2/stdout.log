@@ -1,31 +1,29 @@
 {
   "case": "D3-C2",
-  "status": "PASS",
+  "status": "FAIL",
   "total": 4,
-  "passed": 4,
-  "failed": 0,
+  "passed": 3,
+  "failed": 1,
   "results": [
     {
       "name": "OBS建桶",
-      "pass": true,
-      "detail": "Create bucket [testbot1-hermes-obs-1926909125] successfully (OBS mb 返回 exitCode=6 为 KooCLI OBS 成功码，非失败；'Create bucket ... successfully' 确认创建成功)"
+      "pass": false,
+      "detail": "Start at 2026-10-14 06:40:29.017111101 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-1959866333] successfully, request id [000001A13924178A440D79C508570373]\nNotice: If the configur"
     },
     {
       "name": "set静态站",
       "pass": true,
-      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot1-hermes-obs-1926909125.obs-website.cn-north-4.myhuaweicloud.com\"}"
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-1959866333.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-1959866333.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
     },
     {
       "name": "get静态站",
       "pass": true,
-      "detail": "{\"ok\":true,\"status\":200, WebsiteConfiguration/IndexDocument=index.html}"
+      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
     },
     {
       "name": "删桶归零",
       "pass": true,
-      "detail": "Delete bucket [testbot1-hermes-obs-1926909125] successfully!"
+      "detail": "Start at 2026-10-14 06:40:30.100397462 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-1959866333] successfully!"
     }
-  ],
-  "executedAt": "20261014052829",
-  "probe": "realcloud_e2e.mjs --case=D3-C2"
+  ]
 }

@@ -1,0 +1,82 @@
+{
+  "case": "D8-8",
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D8-8",
+      "name": "off-switch-1",
+      "pass": true,
+      "actual": "false",
+      "expected": "false",
+      "passMsg": "telemetry off switch respected",
+      "failMsg": "off switch not respected"
+    },
+    {
+      "id": "D8-8",
+      "name": "install-id-computed",
+      "pass": true,
+      "actual": "64",
+      "expected": "\">0\"",
+      "passMsg": "installation id computed",
+      "failMsg": "install id missing"
+    },
+    {
+      "id": "D8-8",
+      "name": "off-noop-no-throw",
+      "pass": true,
+      "actual": "\"clean\"",
+      "expected": "\"clean\"",
+      "passMsg": "track* no-ops when disabled",
+      "failMsg": "disabled track threw"
+    },
+    {
+      "id": "D8-8",
+      "name": "on-switch",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "passMsg": "telemetry enabled when env cleared",
+      "failMsg": "enable not detected"
+    },
+    {
+      "id": "D8-8",
+      "name": "enqueue-no-throw",
+      "pass": true,
+      "actual": "\"clean\"",
+      "expected": "\"clean\"",
+      "passMsg": "trackTool/trackSandbox/enqueue all succeed",
+      "failMsg": "enqueue threw"
+    },
+    {
+      "id": "D8-8",
+      "name": "value-sanitized",
+      "pass": true,
+      "actual": "\"a b c\"",
+      "expected": "\"no control chars\"",
+      "passMsg": "event values sanitized (no control chars)",
+      "failMsg": "value not sanitized"
+    },
+    {
+      "id": "D8-8",
+      "name": "sandbox-tracker-zero-arg",
+      "pass": true,
+      "actual": "\"0/0\"",
+      "expected": "\"0/0\"",
+      "passMsg": "trackSandbox* accept no args (no creds)",
+      "failMsg": "sandbox trackers accept args"
+    },
+    {
+      "id": "D8-8",
+      "name": "hook-events-ingested",
+      "pass": true,
+      "actual": "\"ingest=ok hookGone=true procGone=true\"",
+      "expected": "\"ingested\"",
+      "passMsg": "hook-events.jsonl consumed by telemetry ingestion",
+      "failMsg": "hook events not ingested"
+    }
+  ],
+  "note": "上报脱敏由 MCP 层 toolInvokeValue（仅转发服务名/固定 \"1\"，从不携带命令行 flag 或凭证）+ sanitizeValue 控制字符清洗双重保证；真实网络上报端点未触发（本地队列 < batch 阈值，不发起 POST）。"
+}

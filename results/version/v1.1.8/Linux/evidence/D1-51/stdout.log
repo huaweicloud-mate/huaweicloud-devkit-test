@@ -1,0 +1,65 @@
+{
+  "case": "D1-51",
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D1-51-1",
+      "name": "nonzero-exit-not-success",
+      "pass": true,
+      "actual": "false",
+      "expected": "false"
+    },
+    {
+      "id": "D1-51-2",
+      "name": "nonzero-exit-error-reason",
+      "pass": true,
+      "actual": "EBUSY: resource busy or locked",
+      "expected": "含 EBUSY"
+    },
+    {
+      "id": "D1-51-3",
+      "name": "nonzero-exit-manual-with-tag",
+      "pass": true,
+      "actual": "npx --yes huaweicloud-devkit@latest update --target all",
+      "expected": "含 @latest + --target all"
+    },
+    {
+      "id": "D1-51-4",
+      "name": "spawn-throw-not-crash",
+      "pass": true,
+      "actual": "false",
+      "expected": "false"
+    },
+    {
+      "id": "D1-51-5",
+      "name": "spawn-throw-manual",
+      "pass": true,
+      "actual": "npx --yes huaweicloud-devkit@latest update --target all",
+      "expected": "含 npx"
+    },
+    {
+      "id": "D1-51-6",
+      "name": "query-throw-manual",
+      "pass": true,
+      "actual": "false/EINVAL",
+      "expected": "false/含 EINVAL"
+    },
+    {
+      "id": "D1-51-7",
+      "name": "recovery-succeeds",
+      "pass": true,
+      "actual": "true/1.2.0/true",
+      "expected": "true/1.2.0/true"
+    },
+    {
+      "id": "D1-51-8",
+      "name": "no-skip-pollution-by-upgrade",
+      "pass": true,
+      "actual": "no dismissed field",
+      "expected": "no dismissed field"
+    }
+  ]
+}

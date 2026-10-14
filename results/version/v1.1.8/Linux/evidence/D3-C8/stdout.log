@@ -1,0 +1,33 @@
+{
+  "case": "D3-C8",
+  "status": "PASS",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "id": "D3-C8",
+      "name": "param-enterprise-project-id",
+      "pass": true,
+      "actual": "hcloud EVS CreateVolume --volume.name=tctest-c8-vol --volume.size=1 --availability_zone=cn-north-4a --enterprise_project_id=eps-tctest-c8-0001",
+      "expected": "command contains --enterprise_project_id=eps-tctest-c8-0001",
+      "detail": ""
+    },
+    {
+      "id": "D3-C8",
+      "name": "write-not-auto-allow",
+      "pass": true,
+      "actual": "deny",
+      "expected": "!= allow (needs approval, no default-drop)",
+      "detail": ""
+    },
+    {
+      "id": "D3-C8",
+      "name": "eps-guidance",
+      "pass": true,
+      "actual": "The enterprise_project_id is required for enterprise accounts. Add --enterprise_project_id=0.",
+      "expected": "mentions enterprise_project_id",
+      "detail": ""
+    }
+  ]
+}
