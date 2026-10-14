@@ -66,19 +66,42 @@ jobs:
         run: |
           set -euo pipefail
           SRC="${RUNNER_TEMP}/ux-sut/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src"
-          python scripts/gen_ux_special.py --sut "${{ steps.sut.outputs.version }}（npm）=$SRC"
+          # 先落到仓外：提交步骤会 reset --hard 对齐远端后，再把产物拷进仓库
+          python scripts/gen_ux_special.py \
+            --sut "${{ steps.sut.outputs.version }}（npm）=$SRC" \
+            --out "${RUNNER_TEMP}/UX专项.json"
 
       - name: Render dashboard
         run: python scripts/gen_dashboard.py
 
       - name: Commit & push dashboard
+        # 本仓写入者众多（多 agent 直推 + 其他自动写回），直接 commit+push 极易
+        # non-fast-forward 被拒 → 每轮先对齐远端再生成产物，失败即重试。
         run: |
+          set -euo pipefail
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard.html results/UX专项
-          if git diff --cached --quiet; then
-            echo "dashboard/UX 专项 无变动，跳过提交"
-          else
+          UX_OUT="results/UX专项/UX专项-$(date +%F).json"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            if [ -f "${RUNNER_TEMP}/UX专项.json" ]; then
+              mkdir -p results/UX专项
+              cp "${RUNNER_TEMP}/UX专项.json" "$UX_OUT"
+            fi
+            python scripts/gen_dashboard.py
+            git add dashboard.html results/UX专项
+            if git diff --cached --quiet; then
+              echo "dashboard/UX 专项 无变动，跳过提交"
+              exit 0
+            fi
             git commit -m "chore: 自动刷新看板 $(date +%Y-%m-%d_%H:%M)"
-            git push origin HEAD:main
-          fi
+            if git push origin HEAD:main; then
+              echo "推送成功（第 ${attempt} 次尝试）"
+              exit 0
+            fi
+            echo "push 被拒（生成期间远端又前进）→ 第 $((attempt + 1)) 次重试"
+            sleep 5
+          done
+          echo "连续 3 次 push 被拒，放弃" >&2
+          exit 1
