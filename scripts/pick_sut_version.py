@@ -33,10 +33,13 @@ def _npm():
 
 
 def view(spec):
-    r = subprocess.run(
-        [_npm(), "view", spec, "version", "--registry", REGISTRY],
-        capture_output=True, text=True,
-    )
+    try:
+        r = subprocess.run(
+            [_npm(), "view", spec, "version", "--registry", REGISTRY],
+            capture_output=True, text=True,
+        )
+    except OSError:  # npm 不存在/不可执行 → 当作"取不到版本"，由调用方统一报错
+        return ""
     return r.stdout.strip() if r.returncode == 0 else ""
 
 
