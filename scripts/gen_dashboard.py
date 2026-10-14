@@ -427,6 +427,19 @@ def load_defect_notes(dates):
     return {k: sorted(v) for k, v in notes.items()}
 
 
+def load_bench():
+    """从 skill-bench/results/summary.json 读取技能评测基线汇总（脱敏看板数据源）。"""
+    import json
+    p = os.path.join(REPO, "skill-bench", "results", "summary.json")
+    if not os.path.exists(p):
+        return None
+    try:
+        with open(p, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
 def render(days, version, vdate, gen_ts, links, notes, versions):
     latest_date = days[-1]["date"]
     latest_sum = days[-1]["summary"]
@@ -797,6 +810,46 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             + case_block
             + '</div></details>')
 
+    # ---- 技能评测页签（读 skill-bench summary.json）----
+    bench = load_bench()
+    if bench:
+        bench_rows = "".join(
+            '<tr>'
+            '<td style="padding:6px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
+            '<td style="padding:6px 8px;border:1px solid #ddd;color:#7f8c8d;">{}</td>'
+            '<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b style="color:#2ecc71;">{}</b></td>'
+            '<td style="padding:6px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
+            '<td style="padding:6px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
+            '<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
+            '</tr>'.format(t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
+                           t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0))
+            for t in bench.get("tasks", []))
+        bare_items = "".join(
+            '<li style="margin:4px 0;"><b>{}</b>：{}</li>'.format(tid, note)
+            for tid, note in bench.get("bare", {}).items())
+        finding_items = "".join(
+            '<li style="margin:4px 0;">{}</li>'.format(f)
+            for f in bench.get("findings", []))
+        bench_block = (
+            '<h2>技能评测 · 端到端三指标基线</h2>'
+            '<p style="color:#7f8c8d;font-size:12px;">数据源 skill-bench/（独立于每日测试流水线）；模型 {}，temperature=0，每任务采样 {} 次，更新于 {}。</p>'
+            '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
+            '<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">任务</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;">技能</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;">成功率</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;">token IN</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;">token OUT</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;">步数</th></tr></thead>'
+            '<tbody>' + bench_rows + '</tbody></table>'
+            '<h2 style="margin-top:16px;">裸模型对照（--bare，初步）</h2>'
+            '<ul style="font-size:13px;">' + bare_items + '</ul>'
+            '<h2 style="margin-top:16px;">关键发现</h2>'
+            '<ul style="font-size:13px;">' + finding_items + '</ul>'
+            '<p style="color:#7f8c8d;font-size:12px;">详情见 skill-bench/results/baseline-report-20261014.md 与 baseline-bare-comparison-20261014.md。</p>'
+        ).format(bench.get("model", "—"), bench.get("runs", "3"), bench.get("updated", "—"))
+    else:
+        bench_block = '<p style="color:#95a5a6;">暂无技能评测基线（运行 skill-bench harness 后生成 summary.json）。</p>'
+
     html = f"""<!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -815,6 +868,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 <div class="tabs">
 <button class="tab-btn active" id="btn-daily" onclick="showTab('daily')">每日执行</button>
 <button class="tab-btn" id="btn-version" onclick="showTab('version')">版本执行</button>
+<button class="tab-btn" id="btn-bench" onclick="showTab('bench')">技能评测</button>
 </div>
 
 <div id="tab-daily">
@@ -880,9 +934,13 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 {version_detail}
 </div>
 
+<div id="tab-bench" style="display:none;">
+{bench_block}
+</div>
+
 <p style="color:#95a5a6;font-size:11px;margin-top:24px;">本看板由 scripts/gen_dashboard.py 自动生成；执行摘要取自每日《每日测试汇总》报告。执行态与母版用例定义分离，真实结果以 results/Summary/ 为准。</p>
 <script>
-function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');}}
+function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('tab-bench').style.display=n==='bench'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');document.getElementById('btn-bench').className='tab-btn'+(n==='bench'?' active':'');}}
 function filterCase(st){{var btns=document.querySelectorAll('.casebtn');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('onclick').indexOf(st)!==-1?' active':'');}}var rows=document.querySelectorAll('.caserow');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-st');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 function filterVCase(vk,st){{var btns=document.querySelectorAll('.casebtn[data-vk="'+vk+'"]');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('data-st')===st?' active':'');}}var rows=document.querySelectorAll('.vcaserow[data-vk="'+vk+'"]');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-vst');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 </script>
