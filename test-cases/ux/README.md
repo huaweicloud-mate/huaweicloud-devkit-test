@@ -44,7 +44,7 @@
 | 层 | 载体 | 适用用例 |
 |---|---|---|
 | L1 单测 | `test/unit/d11-*.test.mjs` | 文案/字段/反断言类（D11-1/10/16/26） |
-| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 20 个**，与 `gen_ux.py` 的 `LANDED` 登记一致：D11-1/2/3/4/5/11/12/16/19/22/26/27/28/29/30/37/41/42/43/44 各一个夹具；共用工具 `ux-common.mjs`） | 登录引导与母语化、生效账号可见、状态机、术语人话化、统一错误卡、IAM-401 文案、审批可解释、KooCLI 隐私协议、STS 到期可动作、输出摘要与截断、编码契约、误导归因、故障注入等 |
+| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 24 个**，与 `gen_ux.py` 的 `LANDED` 登记一致：D11-1/2/3/4/5/8/9/11/12/13/16/19/22/26/27/28/29/30/34/37/41/42/43/44 各一个夹具；共用工具 `ux-common.mjs`。其中 **D11-13 / D11-34 为真机用例**：需 `export HW_ACCESS_KEY/HW_SECRET_KEY` 后由客户端 agent 在真机执行，无真凭证时判 `BLOCKED` 计入"环境不可判定"） | 登录引导与母语化、生效账号可见、切换三元组、状态机、术语人话化、统一错误卡、IAM-401 文案、审批可解释、KooCLI 隐私协议、STS 到期可动作、输出摘要与截断、编码契约、误导归因、故障注入、登录后自检、资源归零等 |
 | L3 回放对照 | `eval/replay/`（待新增 `recordings/ux-baseline-v1.jsonl`） | 体验回归量化（D11-39） |
 | L4 Agent 评测 | `eval/harness/run-agent-eval.mjs` + **`eval/prompts/eval-set-ux.csv`（已落地，10 条模糊中文需求）**；三指标提取见 `eval/harness/ux-metrics.mjs`（`steps`/`fails`/`clarifications`），对照判定 `compareUxMetrics` | 度量对照（D11-40） |
 
