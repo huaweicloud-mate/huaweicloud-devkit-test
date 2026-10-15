@@ -1,0 +1,28 @@
+name: skill-bench gate
+
+# 口径门禁：校验已入库的 skill-bench run 记录（数据完整性 / 版本锚点 / 成功率 / 指标不退化）。
+# 注意：这是「离线口径门禁」，不真机复跑（CI runner 无云凭证、无评测机资源）；
+#      真机跑批仍在评测机本地执行（node skill-bench/harness/run-bench.mjs）。
+on:
+  push:
+    paths:
+      - 'skill-bench/**'
+      - '.github/workflows/skill-bench.yml'
+  pull_request:
+    paths:
+      - 'skill-bench/**'
+  workflow_dispatch:
+
+jobs:
+  gate:
+    name: skill-bench 口径门禁
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 运行门禁
+        run: node skill-bench/gate.mjs
