@@ -173,6 +173,94 @@
         "huaweicloud_plan_cli_command",
         "huaweicloud_run_approved_command"
       ]
+    },
+    {
+      "id": "t11",
+      "title": "VPC 出向规则",
+      "skill": "huawei-vpc",
+      "rate": "3/3",
+      "token_in": 267591,
+      "token_out": 7645,
+      "steps": 17,
+      "detail": "安全组出向(egress)规则已放行（3 条出向规则）",
+      "prompt": "创建一个名为 devkit-bench-{{RUNID}} 的安全组，并在其中加一条出方向（egress）放行规则。完成后告诉我安全组名称和出向规则。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_service_catalog",
+        "huaweicloud_check_cli",
+        "huaweicloud_list_operations",
+        "huaweicloud_retrieve_skill",
+        "huaweicloud_run_readonly_command",
+        "huaweicloud_plan_cli_command",
+        "huaweicloud_run_approved_command"
+      ]
+    },
+    {
+      "id": "t12",
+      "title": "发布 SMN 消息",
+      "skill": "huawei-smn-dms",
+      "rate": "3/3",
+      "token_in": 179922,
+      "token_out": 6799,
+      "steps": 16,
+      "detail": "SMN 主题发布消息成功",
+      "prompt": "创建一个名为 devkit-bench-{{RUNID}} 的 SMN 通知主题，并向该主题发布一条测试消息。完成后告诉我主题 URN 和消息 ID。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_check_cli",
+        "huaweicloud_service_catalog",
+        "huaweicloud_list_regions",
+        "huaweicloud_list_operations",
+        "huaweicloud_retrieve_skill",
+        "huaweicloud_run_readonly_command",
+        "huaweicloud_search_docs",
+        "huaweicloud_show_profile_redacted",
+        "huaweicloud_plan_cli_command",
+        "huaweicloud_run_approved_command"
+      ]
+    },
+    {
+      "id": "t13",
+      "title": "IAM 用户组+策略",
+      "skill": "huawei-iam",
+      "rate": "3/3",
+      "token_in": 166880,
+      "token_out": 9445,
+      "steps": 17,
+      "detail": "IAM 用户组+自定义策略创建成功",
+      "prompt": "创建一个名为 devkit-bench-{{RUNID}} 的 IAM 用户组，并创建一个同名自定义策略（只读 ECS 权限，Effect=Allow）。完成后告诉我组名和策略名。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_service_catalog",
+        "huaweicloud_search_docs",
+        "huaweicloud_list_operations",
+        "huaweicloud_retrieve_skill",
+        "huaweicloud_run_readonly_command",
+        "huaweicloud_auth_status",
+        "huaweicloud_check_cli",
+        "huaweicloud_plan_cli_command",
+        "huaweicloud_run_approved_command"
+      ]
+    },
+    {
+      "id": "t14",
+      "title": "账单费用明细",
+      "skill": "huawei-billing",
+      "rate": "3/3",
+      "token_in": 194400,
+      "token_out": 9201,
+      "steps": 14,
+      "detail": "账单明细回读成功",
+      "prompt": "帮我查一下当前华为云账户最近的账单费用明细（消费流水），告诉我最近有几条费用记录、金额大概多少。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_check_cli",
+        "huaweicloud_service_catalog",
+        "huaweicloud_search_docs",
+        "huaweicloud_retrieve_skill",
+        "huaweicloud_list_operations",
+        "huaweicloud_show_profile_redacted",
+        "huaweicloud_run_readonly_command",
+        "huaweicloud_sandbox_check_user",
+        "huaweicloud_sandbox_connect",
+        "huaweicloud_sandbox_exec_one_shot"
+      ]
     }
   ],
   "bare": [

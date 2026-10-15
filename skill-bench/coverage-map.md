@@ -33,6 +33,10 @@
 | huawei-cce | T8 查询 CCE 集群列表（只读）| ✅ 已建 |
 | huawei-deployment | T9 CloudDeploy（CodeArts 未启用，真机查不了）| 🔶 L2 兜 |
 | huawei-smn-dms | T10 创建 SMN 主题 | ✅ 已建 |
+| huawei-vpc | T11 出向规则（egress）| ✅ 已建 |
+| huawei-smn-dms | T12 发布消息 | ✅ 已建 |
+| huawei-iam | T13 用户组+自定义策略 | ✅ 已建 |
+| huawei-billing | T14 账单费用明细 | ✅ 已建 |
 
 ### 轻量激活评测层（L2 · 只读/规划为主，零真云成本）
 
@@ -46,10 +50,22 @@
 
 | 口径 | v1 现状 | 目标 |
 |---|---|---|
-| 端到端任务覆盖（L1） | 9/21 服务技能 | 10/21 |
+| 端到端任务覆盖（L1） | 13/21 服务技能 | 14/21 |
 | 轻量激活覆盖（L2） | ✅ 12/12 激活（详见 `l2/README.md`）| 12/12 |
 | 横向技能 | 8/8（端到端天然带出）| 8/8 |
 
 **L2 实测发现**：`retrieve_skill` 激活 12/12 全可达，但 `service_catalog` 路由仅 5/12——`huawei-cbr/cts/cloud-eye/waf-aad/apig/modelarts/deployment` 7 个服务的「意图→服务」路由断链（能力发现缺口，详见 `l2/README.md`）。
 
-**当前覆盖 = 端到端 9（L1）+ 轻量激活 12（L2）+ 横向 8 = 29/29（全量覆盖）**。待补：T9 deployment 端到端（需账户启用 CodeArts）。
+**当前覆盖 = 端到端 13（L1）+ 轻量激活 12（L2）+ 横向 8 = 33 次覆盖 / 29 skill（L1 多能力已超出「skill 粒度」）**。
+
+## 五、L1 仍缺的深层能力（高成本/前置/CLI 坑，暂 L2 兜）
+
+| 技能 | 未补能力 | 原因 |
+|---|---|---|
+| huawei-ecs | 创建实例 / EIP / 磁盘 / 弹性伸缩 | 创建按量付费 + 需 flavor/镜像 |
+| huawei-rds | 创建实例 / 备份 / 恢复 | 创建按量付费 |
+| huawei-cce | 创建集群 / 节点池 / SWR 镜像推送 | 付费+需节点，且 CreateCluster 在 KooCLI 7.2.12 有 bug |
+| huawei-functiongraph | 创建函数 / 触发器 / 调用 | inline 传参不明确，zip 假成功坑 |
+| huawei-iam | 委托 STS / 访问密钥 | 需跨服务信任；skill 红线禁建长时凭证 |
+| huawei-obs | 版本控制 / 生命周期 / CORS | hcloud CLI 无对应命令（走 obsutil）|
+| huawei-vpc | EIP / 子网 / 对等连接 | 需独立资源/配额 |
