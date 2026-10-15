@@ -1,0 +1,74 @@
+{
+  "case": "D11-9",
+  "file": "d11-9-switch-persist-clear.mjs",
+  "result": "FAIL",
+  "pass": 0,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R4）；FAIL = 持久性未显式化/回退结论缺失，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-9-persist-hot",
+      "title": "persist 返回 persistsAfterRestart == true（写盘 → 重启仍生效）",
+      "ok": false,
+      "actual": {
+        "persistsAfterRestart": null,
+        "status": "needs_confirmation",
+        "keys": [
+          "status",
+          "confirmToken",
+          "options"
+        ]
+      },
+      "expected": true,
+      "detail": ""
+    },
+    {
+      "id": "D11-9-s1-session-flag",
+      "title": "persist 后 S1.configuredBySession == true（会话写入标记须显式可读）",
+      "ok": false,
+      "actual": {
+        "s1_configuredBySession": "(字段不存在)",
+        "stores": {
+          "s1Fingerprint": "6e483539",
+          "envFingerprint": "",
+          "currentFingerprint": null,
+          "s3Fingerprint": "6e483539",
+          "runtimeFingerprint": null
+        },
+        "reconciledKeys": [
+          "stores",
+          "kooCliCurrent",
+          "envIsPlaceholder",
+          "s2Encrypted",
+          "inconsistencies",
+          "hasRuntime",
+          "runtimeFingerprint",
+          "inconsistent",
+          "runtimeActive"
+        ]
+      },
+      "expected": true,
+      "detail": "confirm 结果: {\"status\":\"partial\",\"scope\":\"persist\",\"backedUp\":true,\"obs\":{\"configured\":true},"
+    },
+    {
+      "id": "D11-9-clear-fallback",
+      "title": "clear 后 effective.source 回退为 \"s1\"",
+      "ok": false,
+      "actual": {
+        "effective": null,
+        "clearStatus": "cleared",
+        "credentialPanel": {
+          "sts": null,
+          "s1": {
+            "configured": true,
+            "fingerprint": "6e483539",
+            "persistent": true
+          },
+          "activeSource": "s1-persistent"
+        }
+      },
+      "expected": "s1",
+      "detail": ""
+    }
+  ]
+}

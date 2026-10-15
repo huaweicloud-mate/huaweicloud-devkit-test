@@ -1,0 +1,8 @@
+FAIL	D11-25-list-zh	能力清单为中文（非纯英文文案）	actual={"清单片断":"{\"intent\":\"\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud "}	expected="含中文字符"
+FAIL	D11-25-pointers	清单指向 huaweicloud_retrieve_skill 与 huaweicloud_service_catalog 两个工具	actual={"retrieve_skill":false,"service_catalog":false}	expected="两个工具名均出现"
+FAIL	D11-25-grouped	分组列举核心能力（而非扁平英文工具名罗列）	actual={"capabilityOrder条数":6}	expected=">=3 条且中文"
+PASS	D11-25-nonempty	不返回空结果（两个入口均非空）	actual={"catalog空":false,"retrieve_skill空":false}	expected="均非空"
+PASS	D11-25-skill-zh	技能检索返回中文化技能说明（反断言：非纯英文）	actual={"片断":"{\"ok\":true,\"name\":\"huaweicloud-cli-and-auth\",\"version\":1,\"description\":\"Safe Huawei Cloud KooCLI usage and aut"}	expected="含中文字符"
+
+=== D11-25 ===  pass=2 fail=3
+RESULT: FAIL

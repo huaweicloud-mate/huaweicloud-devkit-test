@@ -1,0 +1,50 @@
+{
+  "case": "D11-11",
+  "file": "d11-11-region-explicit.mjs",
+  "result": "FAIL",
+  "pass": 3,
+  "fail": 2,
+  "note": "口径: 需求验收（UX-R5）；FAIL = 需求未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-11-obs-default",
+      "title": "缺 region 时不报 \"region, ak, and sk are required\"",
+      "ok": true,
+      "actual": "缺少 region(区域),登录配置不完整。",
+      "expected": "不报该错",
+      "detail": ""
+    },
+    {
+      "id": "D11-11-ask-region",
+      "title": "auth init 显式询问 region（而不是静默硬编码）",
+      "ok": false,
+      "actual": "未发现 region 询问语句",
+      "expected": "存在 region 询问",
+      "detail": ""
+    },
+    {
+      "id": "D11-11-ask-zh",
+      "title": "region 询问提示为中文",
+      "ok": false,
+      "actual": "（无该语句）",
+      "expected": "提示含中文字符",
+      "detail": ""
+    },
+    {
+      "id": "D11-11-default-value",
+      "title": "缺省区域显式回落 cn-north-4（默认值可回车跳过）",
+      "ok": true,
+      "actual": "cn-north-4",
+      "expected": "cn-north-4",
+      "detail": ""
+    },
+    {
+      "id": "D11-11-s1-region",
+      "title": "S1.region == \"cn-north-4\"",
+      "ok": true,
+      "actual": "cn-north-4",
+      "expected": "cn-north-4",
+      "detail": ""
+    }
+  ]
+}

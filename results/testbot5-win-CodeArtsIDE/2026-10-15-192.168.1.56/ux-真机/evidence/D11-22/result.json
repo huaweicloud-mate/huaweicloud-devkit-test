@@ -1,0 +1,56 @@
+{
+  "case": "D11-22",
+  "file": "d11-22-koocli-privacy.mjs",
+  "result": "FAIL",
+  "pass": 3,
+  "fail": 2,
+  "note": "口径: 需求验收（UX-R13）；FAIL = 文案未中文化/缺两条路径，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-22-classified",
+      "title": "privacy_pending 归因分类正确",
+      "ok": true,
+      "actual": {
+        "status": "privacy_pending",
+        "errorCode": "HCLOUD_PRIVACY_PENDING"
+      },
+      "expected": "HCLOUD_PRIVACY_PENDING",
+      "detail": ""
+    },
+    {
+      "id": "D11-22-zh",
+      "title": "下一步指引含中文说明（首次运行需同意隐私协议）",
+      "ok": false,
+      "actual": "npx huaweicloud-devkit install-hcloud",
+      "expected": "含中文「隐私协议」说明",
+      "detail": ""
+    },
+    {
+      "id": "D11-22-two-paths",
+      "title": "给出两条可执行路径（Agent 代答 stdin=y / 用户自行终端执行）",
+      "ok": false,
+      "actual": {
+        "代答路径": false,
+        "终端路径": false
+      },
+      "expected": "含 stdin=y 代答 + 用户自行终端执行两条路径",
+      "detail": ""
+    },
+    {
+      "id": "D11-22-no-en",
+      "title": "不出现英文整句 \"KooCLI requires accepting its privacy agreement.\"（反断言）",
+      "ok": true,
+      "actual": "npx huaweicloud-devkit install-hcloud",
+      "expected": "不含该英文整句",
+      "detail": ""
+    },
+    {
+      "id": "D11-22-no-invalid-char",
+      "title": "不出现「您输入的是无效字符」裸串（反断言）",
+      "ok": true,
+      "actual": "npx huaweicloud-devkit install-hcloud",
+      "expected": "不含无效字符提示",
+      "detail": ""
+    }
+  ]
+}

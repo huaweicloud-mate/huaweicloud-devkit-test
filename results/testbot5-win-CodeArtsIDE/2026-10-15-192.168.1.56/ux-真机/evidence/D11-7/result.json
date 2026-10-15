@@ -1,0 +1,85 @@
+{
+  "case": "D11-7",
+  "file": "d11-7-conflict-one-click.mjs",
+  "result": "FAIL",
+  "pass": 3,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R2/R4）；FAIL = 冲突选择闭环未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-7-needs-confirm",
+      "title": "首次返回标示需确认（status=needs_confirmation 或 needs_confirmation==true）",
+      "ok": true,
+      "actual": {
+        "status": "needs_confirmation",
+        "needs_confirmation": null
+      },
+      "expected": "needs_confirmation",
+      "detail": ""
+    },
+    {
+      "id": "D11-7-token",
+      "title": "返回 confirmToken（可继续完成确认闭环）",
+      "ok": true,
+      "actual": "(已返回)",
+      "expected": "非空 token",
+      "detail": ""
+    },
+    {
+      "id": "D11-7-labels-zh",
+      "title": "候选 label 均为中文（人话化）",
+      "ok": true,
+      "actual": {
+        "候选数": 2,
+        "示例": [
+          "以 S1 现有账号为准（不切换，恢复 backup）",
+          "以新账号（8704b838）为准，覆盖 S1 并同步全部凭证文件"
+        ]
+      },
+      "expected": "≥2 条且全中文",
+      "detail": ""
+    },
+    {
+      "id": "D11-7-labels-fp",
+      "title": "候选 label 各自含账号指纹（可分辨选的是谁）",
+      "ok": false,
+      "actual": {
+        "期望指纹": [
+          "e73ac60a",
+          "8704b838"
+        ],
+        "命中": [
+          false,
+          true
+        ]
+      },
+      "expected": "含 e73ac60a 与 8704b838",
+      "detail": ""
+    },
+    {
+      "id": "D11-7-no-codename",
+      "title": "候选 label 不含裸代号 S1/S2/S3（反断言）",
+      "ok": false,
+      "actual": [
+        "以 S1 现有账号为准（不切换，恢复 backup）",
+        "以新账号（8704b838）为准，覆盖 S1 并同步全部凭证文件"
+      ],
+      "expected": "不含裸代号",
+      "detail": ""
+    },
+    {
+      "id": "D11-7-triple-consistent",
+      "title": "confirm 后 S1 / env / S3 三端指纹一致",
+      "ok": false,
+      "actual": {
+        "s1": "8704b838",
+        "env": "8704b838",
+        "s3": null,
+        "confirm结果": "{\"status\":\"partial\",\"scope\":\"persist\",\"backedUp\":true,\"obs\":{\"configured\":true},",
+        "说明": "env 由平台注入、确认流程不改写入，故只对 S1 与 S3 做一致性断言"
+      },
+      "expected": "S1 == S3（env 由平台侧负责）",
+      "detail": ""
+    }
+  ]
+}

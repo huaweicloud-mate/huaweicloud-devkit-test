@@ -1,0 +1,7 @@
+FAIL	D11-8-persists	temporary 返回 persistsAfterRestart == false（重启即失效须显式可见）	actual={"persistsAfterRestart":null,"keys":["status","scope","note"]}	expected=false	UX-R4：三个关键副作用须显式化
+FAIL	D11-8-affects-hcloud	temporary 返回 affects.hcloud == false（不影响 hcloud 命令行）	actual=null	expected={"hcloud":false}
+FAIL	D11-8-zh-warning	返回含中文警告字段（且不含裸代号 "A+C"）	actual={"note":"Runtime credentials active for this MCP process. hcloud commands still use the KooCLI curr","含裸代号":false}	expected="中文警告、不含 A+C"
+FAIL	D11-8-effective-runtime	切换后 effective.source == "runtime"	actual={"source":null,"credentialPanel":{"sts":null,"s1":{"configured":true,"fingerprint":"ca1399d1","persistent":true},"activeSource":"s1-persistent"}}	expected="runtime"
+
+=== D11-8 ===  pass=0 fail=4
+RESULT: FAIL

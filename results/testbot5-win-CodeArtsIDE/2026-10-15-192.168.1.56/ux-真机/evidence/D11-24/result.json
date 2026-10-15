@@ -1,0 +1,34 @@
+{
+  "case": "D11-24",
+  "file": "d11-24-codearts-sandbox-koocli.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 2,
+  "note": "口径: 需求验收（UX-R13 码道环境）；FAIL = 指引未中文/缺恢复路径，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-24-sandbox-block-zh",
+      "title": "输出含中文说明「码道沙箱模式阻止 KooCLI 运行」",
+      "ok": false,
+      "actual": "{\"installed\":true,\"authenticated\":true,\"status\":\"ok\",\"output\":\"当前KooCLI版本:7.2.12\",\"kooCliVersion\":\"7.2.12\",\"installedVersion\":\"7.2.12\",\"versionMismatc",
+      "expected": "中文「码道沙箱阻止 KooCLI」说明",
+      "detail": ""
+    },
+    {
+      "id": "D11-24-recovery-path",
+      "title": "给出可执行恢复路径（码道外终端安装 / 终端命令运行模式设为自动运行）",
+      "ok": false,
+      "actual": "{\"installed\":true,\"authenticated\":true,\"status\":\"ok\",\"output\":\"当前KooCLI版本:7.2.12\",\"kooCliVersion\":\"7.2.12\",\"installedVersion\":\"7.2.12\",\"versionMismatc",
+      "expected": "含恢复路径",
+      "detail": ""
+    },
+    {
+      "id": "D11-24-actionable",
+      "title": "恢复路径唯一且可执行（非纯说明性文字）",
+      "ok": true,
+      "actual": "{\"installed\":true,\"authenticated\":true,\"status\":\"ok\",\"output\":\"当前KooCLI版本:7.2.12\",\"kooCliVersion\":\"7.2.12\",\"installedVersion\":\"7.2.12\",\"versionMismatc",
+      "expected": "含可执行动作",
+      "detail": ""
+    }
+  ]
+}

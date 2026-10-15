@@ -1,0 +1,75 @@
+{
+  "case": "D11-1",
+  "file": "d11-1-onboarding-first-touch.mjs",
+  "result": "PASS",
+  "pass": 7,
+  "fail": 0,
+  "note": "口径: 需求验收（UX-R1）；FAIL = 需求未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-1-code",
+      "title": "错误码为 HDKIT_CRED_MISSING",
+      "ok": true,
+      "actual": "HDKIT_CRED_MISSING",
+      "expected": "HDKIT_CRED_MISSING",
+      "detail": ""
+    },
+    {
+      "id": "D11-1-scenario",
+      "title": "onboarding.scenario == 3（未登录首触场景）",
+      "ok": true,
+      "actual": {
+        "scenario": 3,
+        "message": "未配置华为云凭证,需要完成登录后才能使用云能力。"
+      },
+      "expected": "scenario=3",
+      "detail": ""
+    },
+    {
+      "id": "D11-1-zh",
+      "title": "onboarding.message 为中文",
+      "ok": true,
+      "actual": "未配置华为云凭证,需要完成登录后才能使用云能力。",
+      "expected": "含中文字符",
+      "detail": ""
+    },
+    {
+      "id": "D11-1-steps-obtain",
+      "title": "steps 含取得 AK/SK 的动作（action=obtain-aksk）",
+      "ok": true,
+      "actual": [
+        "obtain-aksk",
+        "auth-init"
+      ],
+      "expected": "含 obtain-aksk",
+      "detail": ""
+    },
+    {
+      "id": "D11-1-steps-label",
+      "title": "取得 AK/SK 的步骤 label 指向「控制台」",
+      "ok": true,
+      "actual": "获取 AK/SK(华为云控制台)",
+      "expected": "label 含「控制台」",
+      "detail": ""
+    },
+    {
+      "id": "D11-1-step-auth-init",
+      "title": "steps 含会话内登录动作（auth-init）",
+      "ok": true,
+      "actual": [
+        "obtain-aksk",
+        "auth-init"
+      ],
+      "expected": "含 auth-init|auth_switch",
+      "detail": ""
+    },
+    {
+      "id": "D11-1-no-en",
+      "title": "顶层 message 无英文整句残留（反断言）",
+      "ok": true,
+      "actual": "未配置华为云凭证,需要先完成登录。",
+      "expected": "不含英文整句",
+      "detail": ""
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "case": "D11-15",
+  "file": "d11-15-credential-safety-disclosure.mjs",
+  "result": "FAIL",
+  "pass": 2,
+  "fail": 1,
+  "note": "口径: 需求验收（UX-R5/R11）；FAIL = 缺安全感披露，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-15-two-of-three",
+      "title": "三项安全披露中至少显式出现两项（AK/SK 不进会话上下文 / 不写 shell 历史 / 文件 0600）",
+      "ok": true,
+      "actual": {
+        "命中": [
+          "AK/SK 不进入会话上下文",
+          "凭证文件权限 0600"
+        ],
+        "核对文件": [
+          "setup-cli.mjs",
+          "auth/credentials.mjs",
+          "auth/service.mjs",
+          "tools.mjs"
+        ]
+      },
+      "expected": ">= 2 项",
+      "detail": "UX-R5/R11：首次登录须给用户“凭证不会被泄漏”的确认"
+    },
+    {
+      "id": "D11-15-status-surface",
+      "title": "auth_status 暴露安全/隐私披露面（security/privacy 字段）",
+      "ok": false,
+      "actual": {
+        "相关字段": []
+      },
+      "expected": "存在披露字段",
+      "detail": ""
+    },
+    {
+      "id": "D11-15-no-secret-echo",
+      "title": "登录返回体不回显 AK/SK 明文（反断言）",
+      "ok": true,
+      "actual": "已检查返回体全文",
+      "expected": "无明文",
+      "detail": ""
+    }
+  ]
+}

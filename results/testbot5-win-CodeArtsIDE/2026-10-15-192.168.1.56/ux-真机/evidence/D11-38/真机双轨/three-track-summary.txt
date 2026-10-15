@@ -1,0 +1,21 @@
+﻿=== D11-38 独立观测双轨（范式③：三轨一致）真机验证 ===
+
+轨1 自述轨（auth_status.reconciled.stores）:
+  s1Fingerprint     = abf7fe87
+  currentFingerprint = abf7fe87
+  effective.fingerprint = (字段不存在 → 需求未实现)
+  effective.source      = (字段不存在)
+
+轨2 独立文件/env反推指纹:
+  sha256(AK+SK)[:8] = abf7fe87
+
+轨3 真实只读调用:
+  hcloud ECS ListServersDetails --limit=1 → count=1, reachable=true
+
+三轨比对:
+  自述指纹(abf7fe87) == 独立反推(abf7fe87) → 一致 ✓
+  真实只读调用 → 可达 ✓
+  effective.fingerprint 字段缺失 → 需求未实现 ✗
+
+结论: 指纹实质一致（s1Fingerprint/currentFingerprint == 独立反推），
+      但 effective.fingerprint 字段未暴露，自述轨不完整。

@@ -1,0 +1,11 @@
+PASS	D11-30-p1	①空态（无任何来源） → effective.source 应为 HDKIT_CRED_MISSING	actual="HDKIT_CRED_MISSING"	expected="HDKIT_CRED_MISSING"
+FAIL	D11-30-p2	②仅 S1 落盘 → effective.source 应为 s1	actual=null	expected="s1"
+FAIL	D11-30-p3	③仅 env 三件套 → effective.source 应为 env	actual=null	expected="env"
+FAIL	D11-30-p4	④S1 + env（S1 优先） → effective.source 应为 s1	actual=null	expected="s1"
+FAIL	D11-30-p5	⑤S1 + runtime（runtime 最高） → effective.source 应为 runtime	actual=null	expected="runtime"
+FAIL	D11-30-p6	⑥runtime → clear（回退 S1） → effective.source 应为 s1	actual=null	expected="s1"
+FAIL	D11-30-p7	⑦删 S1 后（回退 env） → effective.source 应为 env	actual=null	expected="env"
+FAIL	D11-30-all-paths	7 条迁移路径全部与预期一致（无一条状态与实际生效来源不符）	actual="1/7 一致"	expected="7/7 一致"	状态转换法：迁移后状态必须唯一且正确回退
+
+=== D11-30 ===  pass=1 fail=7
+RESULT: FAIL

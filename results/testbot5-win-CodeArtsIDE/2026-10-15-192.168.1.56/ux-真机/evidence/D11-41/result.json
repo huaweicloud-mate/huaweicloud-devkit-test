@@ -1,0 +1,74 @@
+{
+  "case": "D11-41",
+  "file": "d11-41-misleading-attribution.mjs",
+  "result": "PASS",
+  "pass": 8,
+  "fail": 0,
+  "note": "口径: 需求验收（误导性归因 + 可动作性）；FAIL=归因/引导不达标（对齐上游 #900）",
+  "assertions": [
+    {
+      "id": "D11-41-placeholder-only",
+      "title": "仅占位符 env 时判「未配置」（不得误报可用）",
+      "ok": true,
+      "actual": "HDKIT_CRED_MISSING",
+      "expected": "HDKIT_CRED_MISSING",
+      "detail": "前置: #570「占位符遮蔽报连接成功」类缺陷防退化"
+    },
+    {
+      "id": "D11-41-placeholder-shadow",
+      "title": "占位符 env 不得遮蔽真实 S1",
+      "ok": true,
+      "actual": "D11REALAK000000000000",
+      "expected": "D11REALAK000000000000",
+      "detail": ""
+    },
+    {
+      "id": "D11-41-sts-expiry",
+      "title": "STS 过期可由 token 解析（不误导为 AK 无效）",
+      "ok": true,
+      "actual": 1792037070000,
+      "expected": "早于当前时间(ms)=1792040670000",
+      "detail": ""
+    },
+    {
+      "id": "D11-41-koocli-not_found",
+      "title": "KooCLI「not_found」归因分类正确",
+      "ok": true,
+      "actual": "HCLOUD_NOT_FOUND",
+      "expected": "HCLOUD_NOT_FOUND",
+      "detail": ""
+    },
+    {
+      "id": "D11-41-koocli-privacy_pending",
+      "title": "KooCLI「privacy_pending」归因分类正确",
+      "ok": true,
+      "actual": "HCLOUD_PRIVACY_PENDING",
+      "expected": "HCLOUD_PRIVACY_PENDING",
+      "detail": ""
+    },
+    {
+      "id": "D11-41-koocli-sandbox_home_failure",
+      "title": "KooCLI「sandbox_home_failure」归因分类正确",
+      "ok": true,
+      "actual": "HCLOUD_SANDBOX_HOME_FAILURE",
+      "expected": "HCLOUD_SANDBOX_HOME_FAILURE",
+      "detail": ""
+    },
+    {
+      "id": "D11-41-koocli-ok",
+      "title": "KooCLI 正常不得误报故障",
+      "ok": true,
+      "actual": "ok",
+      "expected": "ok",
+      "detail": ""
+    },
+    {
+      "id": "D11-41-nextstep-actionable",
+      "title": "nextStep 为可直接执行的命令（非英文散文）",
+      "ok": true,
+      "actual": "npx huaweicloud-devkit install-hcloud",
+      "expected": "以 npx / hcloud 开头",
+      "detail": "UX-R7 / 上游 #900——当前为英文长句，属已知缺口"
+    }
+  ]
+}

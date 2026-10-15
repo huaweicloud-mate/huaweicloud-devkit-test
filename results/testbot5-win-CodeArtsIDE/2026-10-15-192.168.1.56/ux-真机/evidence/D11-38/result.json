@@ -1,0 +1,54 @@
+{
+  "case": "D11-38",
+  "file": "d11-38-independent-observation.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R2/R4 范式③ 独立观测）；FAIL = 自述与独立观侧面不一致，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-38-self-report",
+      "title": "自述轨给出生效账号指纹与来源（基线对照）",
+      "ok": false,
+      "actual": {
+        "selfFingerprint": null,
+        "selfSource": null
+      },
+      "expected": "指纹 + source",
+      "detail": ""
+    },
+    {
+      "id": "D11-38-independent-match",
+      "title": "独立观测面（文件/env 反推）与自述指纹一致",
+      "ok": false,
+      "actual": {
+        "自述": null,
+        "独立反推": "abf7fe87"
+      },
+      "expected": "abf7fe87",
+      "detail": "范式③：自述不得是唯一证据"
+    },
+    {
+      "id": "D11-38-cross-track",
+      "title": "独立连通轨证实自述「已登录」为真（外部行为可证伪）",
+      "ok": true,
+      "actual": {
+        "只读调用": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"count\\\": 1,\\n  \\\"servers\\\": [\\n    {\\n      \\\"flavor\\\":"
+      },
+      "expected": "只读调用成功",
+      "detail": ""
+    },
+    {
+      "id": "D11-38-three-track-consistent",
+      "title": "三轨一致（自述 == 文件/env 反推 && 真实连通）",
+      "ok": false,
+      "actual": {
+        "自述": null,
+        "反推": "abf7fe87",
+        "连通": true
+      },
+      "expected": "三轨一致",
+      "detail": ""
+    }
+  ]
+}
