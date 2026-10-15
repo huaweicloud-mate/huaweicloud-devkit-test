@@ -1167,8 +1167,15 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
     # ---- 技能评测页签（读 skill-bench summary.json）----
     bench = load_bench()
     if bench:
+        def _tid(x, i):
+            """任务编号：数据源 id（t01）→ 报告口径（T1）；缺失时按序号兜底。"""
+            raw = str(x.get("id") or "").strip()
+            m = re.fullmatch(r"[tT]0*(\d+)", raw)
+            return "T" + m.group(1) if m else (raw or "T" + str(i + 1))
+
         bench_rows = "".join(
             '<tr>'
+            '<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;white-space:nowrap;color:#7f8c8d;">{}</td>'
             '<td style="padding:6px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
             '<td style="padding:6px 8px;border:1px solid #ddd;color:#7f8c8d;">{}</td>'
             '<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;"><b style="color:#2ecc71;">{}</b></td>'
@@ -1176,16 +1183,17 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<td style="padding:6px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
             '<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
             '<td style="padding:6px 8px;border:1px solid #ddd;text-align:left;color:#555;">{}</td>'
-            '</tr>'.format(t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
+            '</tr>'.format(_tid(t, _i), t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
                            t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0),
                            t.get("detail", ""))
-            for t in bench.get("tasks", []))
-        def _bare_td(b):
+            for _i, t in enumerate(bench.get("tasks", [])))
+        def _bare_td(b, _i):
             std = b.get("std_token", 0) or 0
             bm = b.get("bare_token", 0) or 0
             save = std - bm
             pct = (save / std * 100) if std else 0
             return ('<tr>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;white-space:nowrap;color:#7f8c8d;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
@@ -1195,32 +1203,33 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
-                    '</tr>'.format(b.get("title", ""),
+                    '</tr>'.format(_tid(b, _i), b.get("title", ""),
                                    b.get("std_rate", "—"), b.get("bare_rate", "—"),
                                    std, bm, pct, save,
                                    b.get("std_steps", 0), b.get("bare_steps", 0),
                                    b.get("note", "")))
-        bare_rows = "".join(_bare_td(b) for b in bench.get("bare", []))
+        bare_rows = "".join(_bare_td(b, _i) for _i, b in enumerate(bench.get("bare", [])))
         finding_items = "".join(
             '<li style="margin:4px 0;">{}</li>'.format(f)
             for f in bench.get("findings", []))
         task_details = "".join(
             '<tr>'
+            '<td style="padding:8px;border:1px solid #ddd;text-align:center;white-space:nowrap;color:#7f8c8d;"><b>{}</b></td>'
             '<td style="padding:8px;border:1px solid #ddd;text-align:left;white-space:nowrap;"><b>{}</b><br><span style="color:#7f8c8d;font-size:12px;">{} · {} · token {:,}/{:,} · {} 步</span></td>'
             '<td style="padding:8px;border:1px solid #ddd;text-align:left;color:#555;font-size:12px;">{}</td>'
             '<td style="padding:8px;border:1px solid #ddd;text-align:left;font-size:12px;">{}</td>'
             '<td style="padding:8px;border:1px solid #ddd;text-align:left;color:#7f8c8d;font-size:11px;">{}</td>'
             '</tr>'.format(
-                t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
+                _tid(t, _i), t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
                 t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0),
                 (t.get("prompt", "") or "").replace("<", "&lt;").replace(">", "&gt;"),
                 t.get("detail", ""), ", ".join(t.get("tools", [])))
-            for t in bench.get("tasks", []))
+            for _i, t in enumerate(bench.get("tasks", [])))
         bench_block = (
             '<h2>技能评测 · 端到端三指标基线</h2>'
             '<p style="color:#7f8c8d;font-size:12px;">数据源 skill-bench/（独立于每日测试流水线）；模型 {}，temperature=0，每任务采样 {} 次，更新于 {}。</p>'
             '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
-            '<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">任务</th>'
+            '<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;">编号</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">任务</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;">技能</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;">成功率</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;">token IN</th>'
@@ -1231,7 +1240,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<h2 style="margin-top:16px;">裸模型对照（--bare，初步：标准=3采样中位 / 裸=1采样）</h2>'
             '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
             '<thead>'
-            '<tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">任务</th>'
+            '<tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;" rowspan="2">编号</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">任务</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">成功率</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">token</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;" rowspan="2">裸模型省 token</th>'
@@ -1244,7 +1253,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<tbody>' + bare_rows + '</tbody></table>'
             '<h2 style="margin-top:16px;">任务详情</h2>'
             '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
-            '<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">任务</th>'
+            '<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;">编号</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">任务</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">目标</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">结果</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">工具链</th></tr></thead>'
