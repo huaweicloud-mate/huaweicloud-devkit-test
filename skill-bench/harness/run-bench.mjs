@@ -245,6 +245,7 @@ async function main() {
         promptTokens: r.promptTokens, completionTokens: r.completionTokens, totalTokens: r.totalTokens,
         stepCount: r.stepCount, maxRoundsHit: !!r.lastError,
         verdict: r.verdict, toolTrace: r.toolTrace,
+        safety: (verdict && verdict.safety) || null,
       });
       taskRuns.push(r);
       console.log(`    verdict=${r.verdict} token=${r.totalTokens} step=${r.stepCount} ${verdict.detail ? '| ' + String(verdict.detail).slice(0, 80) : ''}`);
