@@ -1,0 +1,41 @@
+{
+  "case": "D11-17",
+  "file": "d11-17-routing-hitrate.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 1,
+  "note": "口径: 需求验收（UX-R16）；FAIL = 路由未达 85%（含基线 21.4%），非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-17-hitrate",
+      "title": "中文口语路由命中率 >= 85%（1/20 = 5.0%）",
+      "ok": false,
+      "actual": {
+        "命中": "1/20",
+        "命中率": "5.0%",
+        "未命中": [
+          "帮我建一台云服务器→ecs",
+          "买一个对象存储桶→obs",
+          "创建虚拟私有云→vpc",
+          "加一块云硬盘→evs",
+          "申请弹性公网IP→eip",
+          "帮我做个私有镜像→ims",
+          "看看我有哪些子用户→iam",
+          "建一个MySQL数据库→rds"
+        ]
+      },
+      "expected": ">= 85%（>=17/20）",
+      "detail": "依据 issue #852 实测基线 21.4%，本用例目标 85%"
+    },
+    {
+      "id": "D11-17-no-empty-route",
+      "title": "无一条返回空路由",
+      "ok": true,
+      "actual": {
+        "空路由条数": 0
+      },
+      "expected": 0,
+      "detail": ""
+    }
+  ]
+}

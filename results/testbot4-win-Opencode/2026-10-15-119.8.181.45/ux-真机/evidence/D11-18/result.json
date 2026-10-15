@@ -1,0 +1,48 @@
+{
+  "case": "D11-18",
+  "file": "d11-18-route-miss-clarify.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 2,
+  "note": "口径: 需求验收（UX-R16 兜底）；FAIL = 兜底未给中文澄清，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-18-clarify-zh",
+      "title": "无关输入返回非空中文澄清字段（候选服务或追问语句）",
+      "ok": false,
+      "actual": {
+        "字段": "（无澄清字段）",
+        "文本": null
+      },
+      "expected": "存在澄清字段且含中文",
+      "detail": ""
+    },
+    {
+      "id": "D11-18-candidates",
+      "title": "或给出候选服务列表（可选项而非静默失败）",
+      "ok": false,
+      "actual": {
+        "candidates": null
+      },
+      "expected": "候选列表非空",
+      "detail": ""
+    },
+    {
+      "id": "D11-18-not-silent-empty",
+      "title": "不返回静默空路由",
+      "ok": true,
+      "actual": {
+        "空路由": false,
+        "返回字段": [
+          "intent",
+          "recommendedSkills",
+          "recommendedServices",
+          "capabilityOrder",
+          "ruleOfThumb"
+        ]
+      },
+      "expected": "返回体非空",
+      "detail": ""
+    }
+  ]
+}

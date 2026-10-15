@@ -1,0 +1,49 @@
+{
+  "case": "D11-21",
+  "file": "d11-21-post-login-nextsteps.mjs",
+  "result": "FAIL",
+  "pass": 0,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R1 登录后引导）；FAIL = 空态引导未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-21-three-steps",
+      "title": "登录成功后给出至少 3 条示例任务",
+      "ok": false,
+      "actual": {
+        "条数": 0,
+        "中文条数": 0,
+        "示例": []
+      },
+      "expected": ">= 3 条",
+      "detail": ""
+    },
+    {
+      "id": "D11-21-zh",
+      "title": "示例任务提示语均为中文",
+      "ok": false,
+      "actual": {
+        "中文": 0,
+        "总数": 0
+      },
+      "expected": "全部中文",
+      "detail": ""
+    },
+    {
+      "id": "D11-21-covers-three",
+      "title": "覆盖 只读查询 / 资源创建 / 沙箱预览 三类",
+      "ok": false,
+      "actual": {
+        "只读查询": false,
+        "资源创建": false,
+        "沙箱预览": false
+      },
+      "expected": {
+        "只读查询": true,
+        "资源创建": true,
+        "沙箱预览": true
+      },
+      "detail": ""
+    }
+  ]
+}

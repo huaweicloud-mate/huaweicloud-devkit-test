@@ -1,0 +1,43 @@
+D11-34 资源归零 E2E 真机测试日志
+=====================================
+测试时间: 2026-10-15
+测试机: testbot4-win-Opencode (119.8.181.45)
+被测包: huaweicloud-devkit@1.1.9-next.0
+区域: cn-north-4
+
+步骤 1: 创建前快照
+  命令: hcloud EIP ListPublicips/v2 --cli-region=cn-north-4
+  结果: 1 个已有 EIP (ID: 02fb8998-83b2-41e3-a1ff-4b85187b4d22, IP: 121.36.54.113)
+  证据: 00-before-eip-list.json
+
+步骤 2: 创建最小按需 EIP
+  命令: hcloud EIP CreatePublicip --cli-region=cn-north-4 --publicip.type=5_bgp --bandwidth.share_type=PER --bandwidth.name=d11-34-zeroing-test --bandwidth.size=1 --bandwidth.charge_mode=traffic --publicip.alias=d11-34-zeroing-test
+  结果: 创建成功
+    ID: fdfe3fc7-1e9e-4484-9779-64557bdb7a11
+    IP: 123.249.16.246
+    Status: DOWN (未绑定实例)
+    Bandwidth: 1Mbit/s, traffic 计费 (按需)
+  证据: 01-create.command.txt, 01-create.stdout.txt
+
+步骤 3: 创建后列表核验
+  命令: hcloud EIP ListPublicips/v2 --cli-region=cn-north-4
+  结果: 2 个 EIP (原有 1 + 新建 1)，新 EIP 在列表中确认
+  证据: 02-after-create-list.json
+
+步骤 4: 删除测试 EIP
+  命令: hcloud EIP DeletePublicip --cli-region=cn-north-4 --publicip_id=fdfe3fc7-1e9e-4484-9779-64557bdb7a11
+  结果: 删除成功 (exit code 0)
+  证据: 03-delete.command.txt, 03-delete.stdout.txt
+
+步骤 5: 删除后复核归零
+  命令: hcloud EIP ListPublicips/v2 --cli-region=cn-north-4
+  结果: 1 个 EIP (回到初始状态)
+    - 测试 EIP fdfe3fc7-1e9e-4484-9779-64557bdb7a11 已不在列表中 (已归零)
+    - 原有 EIP 02fb8998-83b2-41e3-a1ff-4b85187b4d22 仍在 (无误删)
+  证据: 04-after-delete-list.json
+
+归零结论: PASS
+  - 创建→列表核验→删除→复核为空 全流程成功
+  - 无残留资源 (测试 EIP 已删除)
+  - 无费用残留 (按需 traffic 计费，创建到删除约 1 分钟)
+  - 无误删 (原有 EIP 未受影响)

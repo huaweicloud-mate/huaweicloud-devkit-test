@@ -1,0 +1,54 @@
+{
+  "case": "D11-10",
+  "file": "d11-10-authinit-prompt-zh.mjs",
+  "result": "FAIL",
+  "pass": 0,
+  "fail": 5,
+  "note": "口径: 需求验收（UX-R6 登录流程母语化）；FAIL = 提示未中文化，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-10-no-en-original",
+      "title": "源码中不再出现三处英文提示原文",
+      "ok": false,
+      "actual": [
+        "Access Key ID (AK): ",
+        "Secret Access Key (SK): ",
+        "Security Token (optional, press Enter to skip): "
+      ],
+      "expected": "三处英文原文均为 0",
+      "detail": ""
+    },
+    {
+      "id": "D11-10-AK-zh",
+      "title": "AK 类提示为中文",
+      "ok": false,
+      "actual": "Access Key ID (AK): ",
+      "expected": "存在且含中文字符",
+      "detail": ""
+    },
+    {
+      "id": "D11-10-SK-zh",
+      "title": "SK 类提示为中文",
+      "ok": false,
+      "actual": "Secret Access Key (SK): ",
+      "expected": "存在且含中文字符",
+      "detail": ""
+    },
+    {
+      "id": "D11-10-安全令牌-zh",
+      "title": "安全令牌 类提示为中文",
+      "ok": false,
+      "actual": "Security Token (optional, press Enter to skip): ",
+      "expected": "存在且含中文字符",
+      "detail": ""
+    },
+    {
+      "id": "D11-10-region-zh",
+      "title": "region 类提示为中文",
+      "ok": false,
+      "actual": "（未找到该类提示语句）",
+      "expected": "存在且含中文字符",
+      "detail": ""
+    }
+  ]
+}
