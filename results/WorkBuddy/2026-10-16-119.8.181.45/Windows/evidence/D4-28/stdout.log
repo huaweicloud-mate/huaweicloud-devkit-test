@@ -1,0 +1,46 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "hooks.json found at C:/Users/Administrator/devkit-test/testbot4-win-workbuddy/hdk/plugins/huaweicloud-core/hooks/hooks.json: hasMjs=true. All 4 tool_input fields (command/cmd/script/args) extracted and classified as deny. Deny output has permissionDecision=deny. Safe command not denied.",
+  "executedAt": "20261016051358",
+  "result": {
+    "hooksPath": "C:/Users/Administrator/devkit-test/testbot4-win-workbuddy/hdk/plugins/huaweicloud-core/hooks/hooks.json",
+    "hasMjsHook": true,
+    "extractionResults": [
+      {
+        "field": "command",
+        "extractedCommand": "hcloud ECS DeleteServer --server_ids=\"xxx\"",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "field": "cmd",
+        "extractedCommand": "hcloud IAM DeleteUser --user_id=\"xxx\"",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "field": "script",
+        "extractedCommand": "hcloud VPC DeleteVpc --vpc_id=\"xxx\"",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "field": "args",
+        "extractedCommand": "hcloud ECS DeleteServer --server_ids=xxx",
+        "decision": "deny",
+        "risk": "write"
+      }
+    ],
+    "denyOutput": {
+      "hookSpecificOutput": {
+        "permissionDecision": "deny",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      }
+    },
+    "safeResult": {
+      "decision": "allow",
+      "risk": "read_only"
+    }
+  }
+}

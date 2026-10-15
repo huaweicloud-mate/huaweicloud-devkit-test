@@ -1,0 +1,128 @@
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "why": "Rules loaded: 19 total (9 deny, 10 warn). Credential file: deny. Env dump: deny. Destructive delete: warn. Read-only: all allow. KMS DecryptData: allow (rule engine gap - caught by classifyTextCommand ShowSecret pattern).",
+  "executedAt": "20261016051403",
+  "result": {
+    "totalRules": 19,
+    "denyCount": 9,
+    "warnCount": 10,
+    "highRiskResults": [
+      {
+        "cmd": "cat ~/.hcloud/config.json",
+        "decision": "deny",
+        "findings": 1
+      },
+      {
+        "cmd": "printenv HW_ACCESS_KEY",
+        "decision": "deny",
+        "findings": 1
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer --server_ids=xxx",
+        "decision": "warn",
+        "findings": 1
+      },
+      {
+        "cmd": "hcloud KMS DecryptData --cipher-text=xxx",
+        "decision": "allow",
+        "findings": 0
+      }
+    ],
+    "readOnlyResults": [
+      {
+        "cmd": "hcloud ECS ListServers --limit=10",
+        "decision": "allow",
+        "findings": 0
+      },
+      {
+        "cmd": "hcloud IAM ListUsers --limit=10",
+        "decision": "allow",
+        "findings": 0
+      },
+      {
+        "cmd": "hcloud VPC ListVpcs",
+        "decision": "allow",
+        "findings": 0
+      }
+    ],
+    "ruleIds": [
+      {
+        "id": "hwc-command-credential-file",
+        "severity": "deny"
+      },
+      {
+        "id": "hwc-command-env-dump",
+        "severity": "deny"
+      },
+      {
+        "id": "hwc-command-secret-value-read",
+        "severity": "deny"
+      },
+      {
+        "id": "hwc-command-adminpass-exposure",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-command-sts-credential",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-command-encoded-shell-exec",
+        "severity": "deny"
+      },
+      {
+        "id": "hwc-network-public-admin-port",
+        "severity": "deny"
+      },
+      {
+        "id": "hwc-obs-anonymous-write",
+        "severity": "deny"
+      },
+      {
+        "id": "hwc-functiongraph-public-no-auth",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-iam-admin-policy",
+        "severity": "deny"
+      },
+      {
+        "id": "hwc-iam-highrisk-write",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-destructive-delete-force",
+        "severity": "deny"
+      },
+      {
+        "id": "hwc-destructive-delete-operation",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-destructive-reset-operation",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-destructive-delete-cascade",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-sandbox-missing-ttl",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-cost-unbounded-scale",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-command-secret-in-arg",
+        "severity": "warn"
+      },
+      {
+        "id": "hwc-sandbox-destructive-command",
+        "severity": "deny"
+      }
+    ]
+  }
+}
