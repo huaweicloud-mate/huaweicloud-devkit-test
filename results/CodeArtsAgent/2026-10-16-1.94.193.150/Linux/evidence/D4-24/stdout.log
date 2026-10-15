@@ -1,0 +1,16 @@
+inspectApprovalToken(valid) => {"state":"valid","entry":{"argsHash":"881666dadd3b91f6930964ca3abfb4430d9c1c8769bf69c5dbb4de4922ccd58c","argsRedacted":["ECS","CreateServers","--cli-region=cn-north-4","--server.name=tctest-d424-probe","--server.count=1","--server.flavorRef=c6.large.2"],"createdAt":1792101480090}}
+[DRIFT] 过期令牌契约 {code,status} | 实际返回字段=state,entry
+inspectApprovalToken(expired) => {"state":"valid","entry":{"argsHash":"881666dadd3b91f6930964ca3abfb4430d9c1c8769bf69c5dbb4de4922ccd58c","argsRedacted":["ECS","CreateServers","--cli-region=cn-north-4","--server.name=tctest-d424-probe","--server.count=1","--server.flavorRef=c6.large.2"],"createdAt":1792101410092}}
+[DRIFT] 过期令牌实现字段 state=expired | state=valid
+[DRIFT] 过期令牌契约字段存在 | code=undefined status=undefined
+consumeApprovalToken(首次) => {"argsHash":"881666dadd3b91f6930964ca3abfb4430d9c1c8769bf69c5dbb4de4922ccd58c","argsRedacted":["ECS","CreateServers","--cli-region=cn-north-4","--server.name=tctest-d424-probe","--server.count=1","--server.flavorRef=c6.large.2"],"createdAt":1792101410092}
+inspectApprovalToken(已消费) => {"state":"already_consumed"}
+[OK] 重复确认实现字段 state=already_consumed | state=already_consumed
+[DRIFT] 重复确认契约字段 outcome=already_processed | outcome=undefined
+
+=====SUMMARY=====
+{
+  "caseId": "D4-24",
+  "verdict": "SPEC-MISMATCH",
+  "rootCause": "hcloud-cli.mjs:inspectApprovalToken 返回 state 字段(valid/expired/already_consumed/not_found)，契约要求 {code,status}/{outcome} 字段"
+}

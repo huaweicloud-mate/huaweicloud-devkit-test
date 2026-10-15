@@ -25,10 +25,9 @@
 [D3-C4] EVS: list_operations+plan -> OK
 [D3-C4] EIP: list_operations+plan -> OK
 [D3-C4] ELB: list_operations+plan -> OK
-[D4-14] CreateVpc(tctest-codeartsagent-20261001-8ocq6b) -> OK
+[D4-14] CreateVpc(tctest-codeartsagent-20261001-a2vm8j) -> FAIL
 [D4-14] ListVpcs(执行命令) -> OK
 [D4-14] CTS ListTraces(审计) -> OK
-[D4-14] DeleteVpc(删除) -> OK
 [D4-14] 归零验证(ListVpcs 不含本次资源) -> OK
 [D4-18] plan 写操作需确认(confirm-not-deny) -> OK
 [D4-19] 确认流预检(preflight sgFindings) -> OK
@@ -36,15 +35,15 @@
 
 =====SUMMARY JSON=====
 {
-  "generatedAt": "2026-10-14T22:21:38.982Z",
-  "total": 35,
-  "passed": 35,
+  "generatedAt": "2026-10-15T21:56:02.398Z",
+  "total": 34,
+  "passed": 33,
   "results": [
     {
       "kind": "D2-1",
       "name": "auth_status",
       "ok": true,
-      "detail": "{\n  \"target\": \"all\",\n  \"credentialsConfigured\": true,\n  \"credentialsPath\": \"/home/testbot2/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": true,\n      \"fingerprint\": \"caae65f2\",\n      \"persistent\": true\n    },\n    \"activeSource\": \"s1-persistent\"\n  },\n  \"obsConfigured\": true,\n  \"obsConfigPath\": \"/home/testbot2/.obsutilconfig\",\n  \"kooCliInstalled\": true,\n  \"kooCliStatus\": \"ok\",\n  \"kooCliNextStep\": \"huaweicloud_show_profile_redacted\",\n  \"kooCliRaw\": \"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\n  \"reconciled\": {\n    \"stores\": {\n      \"s1Fingerprint\": \"caae65f2\",\n      \"envFingerprint\": \"\",\n      \"currentFingerprint\": \"\",\n      \"s3Fingerprint\": \"c3e52220\",\n      \"runtimeFingerprint\": null\n    },\n    \"kooCliCurrent\": \"default\",\n    \"envIsPlaceholder\": false,\n    \"s2Encrypted\": true,\n    \"inconsistencies\": [\n      {\n        \"store\": \"S3\",\n        \"source\": \"obsutilconfig\",\n        \"fingerprint\": \"c3e52220\",\n        \"manualModified\": true\n      }\n    ],\n    \"hasRuntime\": false,\n    \"runtimeFingerprint\": null,\n    \"inconsistent\": true,\n    \"runtimeActive\": false\n  },\n  \"onboarding\": {\n    \"needsSetup\": true,\n    \"scenario\": 1,\n    \"reason\": \"s1-only\",\n    \"message\": \"已保存账号(指纹 caae65f2)可直接使用。\",\n    \"steps\": [\n      {\n        \"order\": 1,\n        \"action\": \"use-s1\",\n        \"args\": {},\n        \"label\": \"直接使用已保存账号\"\n      },\n      {\n        \"order\": 2,\n        \"action\": \"switch-new\",\n        \"args\": {\n          \"mode\": \"import\",\n          \"action\": \"persist\"\n        },\n        \"label\": \"改用新账号(导入)\"\n      }\n    ],\n    \"accountHint\": \"caae65f2\"\n  },\n  \"agents\": {\n    \"opencode\": {\n      \"configured\": false\n    },\n    \"codex\": {\n      \"configured\": false\n    },\n    \"codex-desktop\": {\n      \"configured\": false\n    },\n    \"codearts\": {\n      \"configured\": true\n    },\n    \"codearts-work\": {\n      \"configured\": false\n    },\n    \"workbuddy\": {\n      \"configured\": false\n    },\n    \"dsh\": {\n      \"configured\": true\n    },\n    \"officeace\": {\n      \"configured\": false\n    },\n    \"hermes\": {\n      \"configured\": false\n    },\n    \"openclaw\": {\n      \"configured\": false\n    },\n    \"atomcode\": {\n      \"configured\": false\n    }\n  }\n}"
+      "detail": "{\n  \"target\": \"all\",\n  \"credentialsConfigured\": true,\n  \"credentialsPath\": \"/home/testbot2/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": true,\n      \"fingerprint\": \"caae65f2\",\n      \"persistent\": true\n    },\n    \"activeSource\": \"s1-persistent\"\n  },\n  \"obsConfigured\": true,\n  \"obsConfigPath\": \"/home/testbot2/.obsutilconfig\",\n  \"kooCliInstalled\": true,\n  \"kooCliStatus\": \"ok\",\n  \"kooCliNextStep\": \"huaweicloud_show_profile_redacted\",\n  \"kooCliRaw\": \"Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.\",\n  \"reconciled\": {\n    \"stores\": {\n      \"s1Fingerprint\": \"caae65f2\",\n      \"envFingerprint\": \"\",\n      \"currentFingerprint\": \"\",\n      \"s3Fingerprint\": \"bae048b7\",\n      \"runtimeFingerprint\": null\n    },\n    \"kooCliCurrent\": \"default\",\n    \"envIsPlaceholder\": false,\n    \"s2Encrypted\": true,\n    \"inconsistencies\": [\n      {\n        \"store\": \"S3\",\n        \"source\": \"obsutilconfig\",\n        \"fingerprint\": \"bae048b7\",\n        \"manualModified\": true\n      }\n    ],\n    \"hasRuntime\": false,\n    \"runtimeFingerprint\": null,\n    \"inconsistent\": true,\n    \"runtimeActive\": false\n  },\n  \"onboarding\": {\n    \"needsSetup\": true,\n    \"scenario\": 1,\n    \"reason\": \"s1-only\",\n    \"message\": \"已保存账号(指纹 caae65f2)可直接使用。\",\n    \"steps\": [\n      {\n        \"order\": 1,\n        \"action\": \"use-s1\",\n        \"args\": {},\n        \"label\": \"直接使用已保存账号\"\n      },\n      {\n        \"order\": 2,\n        \"action\": \"switch-new\",\n        \"args\": {\n          \"mode\": \"import\",\n          \"action\": \"persist\"\n        },\n        \"label\": \"改用新账号(导入)\"\n      }\n    ],\n    \"accountHint\": \"caae65f2\"\n  },\n  \"agents\": {\n    \"opencode\": {\n      \"configured\": false\n    },\n    \"codex\": {\n      \"configured\": false\n    },\n    \"codex-desktop\": {\n      \"configured\": false\n    },\n    \"codearts\": {\n      \"configured\": true\n    },\n    \"codearts-work\": {\n      \"configured\": false\n    },\n    \"workbuddy\": {\n      \"configured\": false\n    },\n    \"dsh\": {\n      \"configured\": true\n    },\n    \"officeace\": {\n      \"configured\": false\n    },\n    \"hermes\": {\n      \"configured\": false\n    },\n    \"openclaw\": {\n      \"configured\": false\n    },\n    \"atomcode\": {\n      \"configured\": false\n    }\n  }\n}"
     },
     {
       "kind": "D2-1",
@@ -68,7 +67,7 @@
       "kind": "D2-1",
       "name": "obs_ls(S3 API 可用)",
       "ok": true,
-      "detail": "\"Start at 2026-10-14 22:21:35.725163843 +0000 UTC\\n\\nBucket                   CreationDate             Location       BucketType     \\nobs://hdk1-c13-26631096  2026-10-14T05:23:51Z     cn-north-4     OBJE\""
+      "detail": "\"Start at 2026-10-15 21:55:57.124043699 +0000 UTC\\n\\nBucket                   CreationDate             Location       BucketType     \\nobs://hdk1-c13-26631096  2026-10-14T05:23:51Z     cn-north-4     OBJE\""
     },
     {
       "kind": "D3-C4",
@@ -204,27 +203,21 @@
     },
     {
       "kind": "D4-14",
-      "name": "CreateVpc(tctest-codeartsagent-20261001-8ocq6b)",
-      "ok": true,
-      "detail": "{\n  \"vpcId\": \"536a68ab-fe3e-4557-a18d-d129682de0fc\",\n  \"stdout\": \"{\\n  \\\"vpc\\\": {\\n    \\\"id\\\": \\\"536a68ab-fe3e-4557-a18d-d129682de0fc\\\",\\n    \\\"name\\\": \\\"tctest-codeartsagent-20261001-8ocq6b\\\",\\n    \\\"description\\\": \\\"\\\",\\n    \\\"cidr\\\": \\\"192.168.99.0/24\\\",\\n    \\\"status\\\": \\\"CREATING\\\",\\n    \\\"\"\n}"
+      "name": "CreateVpc(tctest-codeartsagent-20261001-a2vm8j)",
+      "ok": false,
+      "detail": "{\n  \"vpcId\": \"\",\n  \"stdout\": \"{\\n  \\\"code\\\": \\\"VPC.0114\\\",\\n  \\\"message\\\": \\\"{\\\\\\\"NeutronError\\\\\\\":{\\\\\\\"message\\\\\\\":\\\\\\\"Quota exceeded for resources: ['router'] \\\\\\\",\\\\\\\"type\\\\\\\":\\\\\\\"OverQuota\\\\\\\",\\\\\\\"detail\\\\\\\":\\\\\\\"\\\\\\\"}}\\\"\\n}\\nFailed to get terminal width. The default\"\n}"
     },
     {
       "kind": "D4-14",
       "name": "ListVpcs(执行命令)",
       "ok": true,
-      "detail": "\"contains new vpc\""
+      "detail": "\"{\\n  \\\"request_id\\\": \\\"3490ef54d2cd67347cb89f6d6b883ca7\\\",\\n  \\\"vpcs\\\": [\\n    {\\n      \\\"name\\\": \\\"tctest-diag2\\\",\\n      \\\"id\\\": \\\"1d5a1\""
     },
     {
       "kind": "D4-14",
       "name": "CTS ListTraces(审计)",
       "ok": true,
-      "detail": "{\n  \"stdout\": \"{\\n  \\\"traces\\\": [\\n    {\\n      \\\"api_version\\\": \\\"1.0\\\",\\n      \\\"domain_id\\\": \\\"842591186fa245929e1b5c186a4cf784\\\",\\n      \\\"event_type\\\": \\\"system\\\",\\n      \\\"message\\\": \\\"uri: /v1/sessions, method: GET\\\",\\n      \\\"operation_id\\\": \\\"routeHttpV1\\\",\\n      \\\"project_id\\\": \\\"46c1fd48bd1248c7b75afc3780de7132\\\",\\n      \\\"read_only\\\": fa\"\n}"
-    },
-    {
-      "kind": "D4-14",
-      "name": "DeleteVpc(删除)",
-      "ok": true,
-      "detail": "{\n  \"vpcId\": \"536a68ab-fe3e-4557-a18d-d129682de0fc\"\n}"
+      "detail": "{\n  \"stdout\": \"{\\n  \\\"traces\\\": [\\n    {\\n      \\\"api_version\\\": \\\"1.0\\\",\\n      \\\"domain_id\\\": \\\"842591186fa245929e1b5c186a4cf784\\\",\\n      \\\"event_type\\\": \\\"system\\\",\\n      \\\"message\\\": \\\"uri: /v1/agent-center/agents/detail, method: GET\\\",\\n      \\\"operation_id\\\": \\\"routeHttpV1\\\",\\n      \\\"project_id\\\": \\\"46c1fd48bd1248c7b75afc3780de7132\\\",\\n   \"\n}"
     },
     {
       "kind": "D4-14",
