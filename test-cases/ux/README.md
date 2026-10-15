@@ -44,7 +44,7 @@
 | 层 | 载体 | 适用用例 |
 |---|---|---|
 | L1 单测 | `test/unit/d11-*.test.mjs` | 文案/字段/反断言类（D11-1/10/16/26） |
-| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 36 个**，与 `gen_ux.py` 的 `LANDED` 登记一致）。数据源另见 `eval/prompts/ux-routing-intents.csv`（D11-17 的 20 条中文口语意图集）。其中 **D11-13 / D11-34 为真机用例**（需 `export HW_ACCESS_KEY/HW_SECRET_KEY`，无真凭证判 `BLOCKED` 计入"环境不可判定"；已分发客户端 agent 自主执行）。**剩余 7 条未落载体**：D11-20/23/24/35/38/39/40（阻塞点=各客户端环境 / PTY 交互捕获 / 码道沙箱 / 沙箱 devbridge / 真实双账号 / 基线录制 / 评测预算） | 登录引导与母语化、生效账号可见、切换三元组与冲突态、状态机、术语人话化、统一错误卡、IAM-401 文案、审批可解释与拒绝/超时路径、KooCLI 隐私协议、STS 到期可动作、输出摘要与截断、中文路由命中率、能力可发现性、region 边界、不可写 HOME、安全披露、编码契约、误导归因、故障注入、登录后自检、资源归零等 |
+| L2 逐用例夹具 | `eval/harness/fixtures/d11-*.mjs` + 运行器 `run-ux.mjs`（**已落地 41 个**，与 `gen_ux.py` 的 `LANDED` 登记一致）。数据源另见 `eval/prompts/ux-routing-intents.csv`（D11-17 的 20 条中文口语意图集）。**真机/环境门控载体 8 条**（无前置时判 `BLOCKED`，计入"环境不可判定"、不计 PASS/FAIL，由真机批次在客户端执行）：D11-13 登录后自检 / D11-24 码道沙箱 / D11-34 资源归零 / D11-35 沙箱排障 / D11-38 独立观测双轨（需真云凭证或沙箱 devbridge / 码道环境）。**剩余 2 条未落载体**：D11-39 回放差异分类、D11-40 度量对照（属独立专项：需基线录制与评测预算，建议与每日流水线隔离单独立项） | 登录引导与母语化、生效账号可见、切换三元组与冲突态、状态机、术语人话化、统一错误卡、IAM-401 文案、审批可解释与拒绝/超时路径、安装后重启提示、无客户端询问、KooCLI 隐私协议与沙箱阻断、STS 到期可动作、输出摘要与截断、中文路由命中率、能力可发现性、region 边界、不可写 HOME、安全披露、沙箱排障、独立观测双轨、编码契约、误导归因、故障注入、登录后自检、资源归零等 |
 | L3 回放对照 | `eval/replay/`（待新增 `recordings/ux-baseline-v1.jsonl`） | 体验回归量化（D11-39） |
 | L4 Agent 评测 | `eval/harness/run-agent-eval.mjs` + **`eval/prompts/eval-set-ux.csv`（已落地，10 条模糊中文需求）**；三指标提取见 `eval/harness/ux-metrics.mjs`（`steps`/`fails`/`clarifications`），对照判定 `compareUxMetrics` | 度量对照（D11-40） |
 
