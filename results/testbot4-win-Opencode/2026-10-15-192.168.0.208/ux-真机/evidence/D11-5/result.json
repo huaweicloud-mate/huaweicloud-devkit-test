@@ -1,0 +1,44 @@
+{
+  "case": "D11-5",
+  "file": "d11-5-effective-env.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R2）；FAIL = 契约字段未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-5-source",
+      "title": "effective.source == \"env\"（环境注入来源）",
+      "ok": false,
+      "actual": {
+        "source": null
+      },
+      "expected": "env",
+      "detail": ""
+    },
+    {
+      "id": "D11-5-account-type",
+      "title": "effective.accountType == \"temporary\"（含 STS 的临时凭证）",
+      "ok": false,
+      "actual": null,
+      "expected": "temporary",
+      "detail": ""
+    },
+    {
+      "id": "D11-5-fingerprint",
+      "title": "effective.fingerprint == env 账号指纹",
+      "ok": false,
+      "actual": null,
+      "expected": "a3f315f8",
+      "detail": ""
+    },
+    {
+      "id": "D11-5-no-secret",
+      "title": "返回体不含 AK/SK 明文（反断言）",
+      "ok": true,
+      "actual": "已检查返回体全文",
+      "expected": "无 AK/SK 明文",
+      "detail": ""
+    }
+  ]
+}

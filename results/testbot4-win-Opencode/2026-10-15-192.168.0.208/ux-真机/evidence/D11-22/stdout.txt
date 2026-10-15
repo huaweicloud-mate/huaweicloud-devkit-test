@@ -1,0 +1,8 @@
+PASS	D11-22-classified	privacy_pending 归因分类正确	actual={"status":"privacy_pending","errorCode":"HCLOUD_PRIVACY_PENDING"}	expected="HCLOUD_PRIVACY_PENDING"
+FAIL	D11-22-zh	下一步指引含中文说明（首次运行需同意隐私协议）	actual="npx huaweicloud-devkit install-hcloud"	expected="含中文「隐私协议」说明"
+FAIL	D11-22-two-paths	给出两条可执行路径（Agent 代答 stdin=y / 用户自行终端执行）	actual={"代答路径":false,"终端路径":false}	expected="含 stdin=y 代答 + 用户自行终端执行两条路径"
+PASS	D11-22-no-en	不出现英文整句 "KooCLI requires accepting its privacy agreement."（反断言）	actual="npx huaweicloud-devkit install-hcloud"	expected="不含该英文整句"
+PASS	D11-22-no-invalid-char	不出现「您输入的是无效字符」裸串（反断言）	actual="npx huaweicloud-devkit install-hcloud"	expected="不含无效字符提示"
+
+=== D11-22 ===  pass=3 fail=2
+RESULT: FAIL

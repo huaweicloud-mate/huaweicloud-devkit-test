@@ -1,0 +1,42 @@
+{
+  "case": "D11-43",
+  "file": "d11-43-terminal-env-matrix.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 3,
+  "note": "口径: 需求验收（终端环境兼容）；FAIL=受限终端下信息缺失/污染",
+  "assertions": [
+    {
+      "id": "D11-43-nocolor",
+      "title": "NO_COLOR=1 时输出不含 ANSI 转义序列",
+      "ok": false,
+      "actual": "检测到 ANSI 序列",
+      "expected": "无 ANSI 序列",
+      "detail": "失败=未尊重 NO_COLOR 约定（终端兼容体验改进 UX-R16）"
+    },
+    {
+      "id": "D11-43-langc",
+      "title": "LC_ALL=C 时输出无替换字符（不依赖 locale）",
+      "ok": true,
+      "actual": "无 U+FFFD",
+      "expected": "无 U+FFFD",
+      "detail": ""
+    },
+    {
+      "id": "D11-43-cols",
+      "title": "COLUMNS=40 下关键标识完整（未被截断）",
+      "ok": false,
+      "actual": "未出现任何关键标识",
+      "expected": "含 creds-import.json / auth init / huaweicloud_auth_switch 之一",
+      "detail": ""
+    },
+    {
+      "id": "D11-43-exit",
+      "title": "非交互会话应拒绝执行（exit 非 0）",
+      "ok": false,
+      "actual": 0,
+      "expected": "非 0（预期 1）",
+      "detail": ""
+    }
+  ]
+}

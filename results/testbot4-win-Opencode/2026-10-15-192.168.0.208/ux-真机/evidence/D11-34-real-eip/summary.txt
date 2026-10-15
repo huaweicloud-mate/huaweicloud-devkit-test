@@ -1,0 +1,185 @@
+=== D11-34 真机资源归零全链路 ===
+时间: 2026-10-15T03:45:38.666Z
+区域: cn-north-4
+EIP别名: ux-testbot4-1792035938667
+
+=== Step 1: 创建前快照（ListPublicips/v2） ===
+创建前 EIP 数量: 1
+$ hcloud EIP ListPublicips/v2 --cli-region=cn-north-4
+{
+  "publicips": [
+    {
+      "id": "02fb8998-83b2-41e3-a1ff-4b85187b4d22",
+      "type": "5_bgp",
+      "port_id": "e60dff09-944b-4c6b-8aa2-8cc5373c7b27",
+      "public_ip_address": "121.36.54.113",
+      "private_ip_address": "192.168.101.167",
+      "status": "ACTIVE",
+      "tenant_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "create_time": "2026-10-14 11:32:04",
+      "bandwidth_id": "0cbecd80-32ce-4778-8e78-bed9aa4ba276",
+      "bandwidth_name": "hc-activity-2048-ecs-bandwidth-f7ac",
+      "bandwidth_share_type": "PER",
+      "bandwidth_size": 1,
+      "profile": {},
+      "tags": [],
+      "enterprise_project_id": "0",
+      "ip_version": 4,
+      "public_border_group": "center",
+      "allow_share_bandwidth_types": [
+        "share",
+        "share_bgp_enter",
+        "share_bgp_ext",
+        "share_bgp_flx",
+        "share_dedi_vacant",
+        "share_inner_spec_enter",
+        "share_op"
+      ]
+    }
+  ]
+}
+
+
+=== Step 2: 创建最小按需 EIP（CreatePublicip） ===
+参数: share_type=PER, size=1, charge_mode=traffic, type=5_bgp
+创建成功: EIP ID=4f924a85-e7f6-4186-9d1f-3b65b4f4058e, IP=123.249.16.246
+$ hcloud EIP CreatePublicip --bandwidth.share_type=PER --bandwidth.size=1 --bandwidth.charge_mode=traffic --bandwidth.name=ux-testbot4-1792035938667-bw --publicip.type=5_bgp --publicip.alias=ux-testbot4-1792035938667 --cli-region=cn-north-4
+{
+  "publicip": {
+    "id": "4f924a85-e7f6-4186-9d1f-3b65b4f4058e",
+    "alias": "ux-testbot4-1792035938667",
+    "type": "5_bgp",
+    "public_ip_address": "123.249.16.246",
+    "status": "DOWN",
+    "tenant_id": "46c1fd48bd1248c7b75afc3780de7132",
+    "create_time": "2026-10-15T03:45:40Z",
+    "bandwidth_id": "7b9234ef-48db-47a9-9718-f39444f010d2",
+    "bandwidth_name": "ux-testbot4-1792035938667-bw",
+    "bandwidth_share_type": "PER",
+    "bandwidth_size": 1,
+    "enterprise_project_id": "0",
+    "ip_version": 4
+  }
+}
+
+
+=== Step 3: 列表核验（确认新 EIP 存在） ===
+创建后 EIP 数量: 2（之前: 1）
+新 EIP 在列表中: YES ✓
+$ hcloud EIP ListPublicips/v2 --cli-region=cn-north-4
+{
+  "publicips": [
+    {
+      "id": "02fb8998-83b2-41e3-a1ff-4b85187b4d22",
+      "type": "5_bgp",
+      "port_id": "e60dff09-944b-4c6b-8aa2-8cc5373c7b27",
+      "public_ip_address": "121.36.54.113",
+      "private_ip_address": "192.168.101.167",
+      "status": "ACTIVE",
+      "tenant_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "create_time": "2026-10-14 11:32:04",
+      "bandwidth_id": "0cbecd80-32ce-4778-8e78-bed9aa4ba276",
+      "bandwidth_name": "hc-activity-2048-ecs-bandwidth-f7ac",
+      "bandwidth_share_type": "PER",
+      "bandwidth_size": 1,
+      "profile": {},
+      "tags": [],
+      "enterprise_project_id": "0",
+      "ip_version": 4,
+      "public_border_group": "center",
+      "allow_share_bandwidth_types": [
+        "share",
+        "share_bgp_enter",
+        "share_bgp_ext",
+        "share_bgp_flx",
+        "share_dedi_vacant",
+        "share_inner_spec_enter",
+        "share_op"
+      ]
+    },
+    {
+      "id": "4f924a85-e7f6-4186-9d1f-3b65b4f4058e",
+      "alias": "ux-testbot4-1792035938667",
+      "type": "5_bgp",
+      "public_ip_address": "123.249.16.246",
+      "status": "DOWN",
+      "tenant_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "create_time": "2026-10-15 03:45:40",
+      "bandwidth_id": "7b9234ef-48db-47a9-9718-f39444f010d2",
+      "bandwidth_name": "ux-testbot4-1792035938667-bw",
+      "bandwidth_share_type": "PER",
+      "bandwidth_size": 1,
+      "profile": {},
+      "tags": [],
+      "enterprise_project_id": "0",
+      "ip_version": 4,
+      "public_border_group": "center",
+      "allow_share_bandwidth_types": [
+        "share",
+        "share_bgp_enter",
+        "share_bgp_ext",
+        "share_bgp_flx",
+        "share_dedi_vacant",
+        "share_inner_spec_enter",
+        "share_op"
+      ]
+    }
+  ]
+}
+
+
+=== Step 4: 删除 EIP（DeletePublicip） ===
+删除结果: SUCCESS ✓
+$ hcloud EIP DeletePublicip --publicip_id=4f924a85-e7f6-4186-9d1f-3b65b4f4058e --cli-region=cn-north-4
+
+
+=== Step 5: 复核为空（确认 EIP 已删除） ===
+删除后 EIP 数量: 1（之前: 1）
+已删除 EIP 仍在列表中: NO ✓（已归零）
+$ hcloud EIP ListPublicips/v2 --cli-region=cn-north-4
+{
+  "publicips": [
+    {
+      "id": "02fb8998-83b2-41e3-a1ff-4b85187b4d22",
+      "type": "5_bgp",
+      "port_id": "e60dff09-944b-4c6b-8aa2-8cc5373c7b27",
+      "public_ip_address": "121.36.54.113",
+      "private_ip_address": "192.168.101.167",
+      "status": "ACTIVE",
+      "tenant_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "create_time": "2026-10-14 11:32:04",
+      "bandwidth_id": "0cbecd80-32ce-4778-8e78-bed9aa4ba276",
+      "bandwidth_name": "hc-activity-2048-ecs-bandwidth-f7ac",
+      "bandwidth_share_type": "PER",
+      "bandwidth_size": 1,
+      "profile": {},
+      "tags": [],
+      "enterprise_project_id": "0",
+      "ip_version": 4,
+      "public_border_group": "center",
+      "allow_share_bandwidth_types": [
+        "share",
+        "share_bgp_enter",
+        "share_bgp_ext",
+        "share_bgp_flx",
+        "share_dedi_vacant",
+        "share_inner_spec_enter",
+        "share_op"
+      ]
+    }
+  ]
+}
+
+
+=== 归零全链路汇总 ===
+创建前 EIP 数量: 1
+创建后 EIP 数量: 2（+1，新 EIP ID=4f924a85-e7f6-4186-9d1f-3b65b4f4058e, IP=123.249.16.246）
+删除后 EIP 数量: 1
+归零结果: ✓ 已归零（无残留）
+所用命令:
+  创建: hcloud EIP CreatePublicip --bandwidth.share_type=PER --bandwidth.size=1 --bandwidth.charge_mode=traffic --bandwidth.name=ux-testbot4-1792035938667-bw --publicip.type=5_bgp --publicip.alias=ux-testbot4-1792035938667 --cli-region=cn-north-4
+  列表: hcloud EIP ListPublicips/v2 --cli-region=cn-north-4
+  删除: hcloud EIP DeletePublicip --publicip_id=4f924a85-e7f6-4186-9d1f-3b65b4f4058e --cli-region=cn-north-4
+  复核: hcloud EIP ListPublicips/v2 --cli-region=cn-north-4
+
+清理状态: ✓ 已清理，无残留资源与费用

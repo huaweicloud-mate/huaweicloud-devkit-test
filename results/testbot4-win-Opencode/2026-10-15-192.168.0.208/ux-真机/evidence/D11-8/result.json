@@ -1,0 +1,65 @@
+{
+  "case": "D11-8",
+  "file": "d11-8-switch-temporary-explicit.mjs",
+  "result": "FAIL",
+  "pass": 0,
+  "fail": 4,
+  "note": "口径: 需求验收（UX-R4）；FAIL = 切换语义未显式化，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-8-persists",
+      "title": "temporary 返回 persistsAfterRestart == false（重启即失效须显式可见）",
+      "ok": false,
+      "actual": {
+        "persistsAfterRestart": null,
+        "keys": [
+          "status",
+          "scope",
+          "note"
+        ]
+      },
+      "expected": false,
+      "detail": "UX-R4：三个关键副作用须显式化"
+    },
+    {
+      "id": "D11-8-affects-hcloud",
+      "title": "temporary 返回 affects.hcloud == false（不影响 hcloud 命令行）",
+      "ok": false,
+      "actual": null,
+      "expected": {
+        "hcloud": false
+      },
+      "detail": ""
+    },
+    {
+      "id": "D11-8-zh-warning",
+      "title": "返回含中文警告字段（且不含裸代号 \"A+C\"）",
+      "ok": false,
+      "actual": {
+        "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI curr",
+        "含裸代号": false
+      },
+      "expected": "中文警告、不含 A+C",
+      "detail": ""
+    },
+    {
+      "id": "D11-8-effective-runtime",
+      "title": "切换后 effective.source == \"runtime\"",
+      "ok": false,
+      "actual": {
+        "source": null,
+        "credentialPanel": {
+          "sts": null,
+          "s1": {
+            "configured": true,
+            "fingerprint": "ca1399d1",
+            "persistent": true
+          },
+          "activeSource": "s1-persistent"
+        }
+      },
+      "expected": "runtime",
+      "detail": ""
+    }
+  ]
+}

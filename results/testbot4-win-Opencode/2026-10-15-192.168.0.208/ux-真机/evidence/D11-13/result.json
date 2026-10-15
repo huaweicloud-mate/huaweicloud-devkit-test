@@ -1,0 +1,56 @@
+{
+  "case": "D11-13",
+  "file": "d11-13-post-login-selfcheck.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R3，真机）；FAIL = 体检摘要未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-13-five-ready",
+      "title": "自检五项全部 ready",
+      "ok": false,
+      "actual": {
+        "明细": {
+          "凭据": false,
+          "OBS": false,
+          "KooCLI 版本": true,
+          "project-id": false,
+          "MCP 注册": false
+        },
+        "ready": "1/5"
+      },
+      "expected": "5/5",
+      "detail": "真机自检：任一项未就绪须给出单项修复动作，而非笼统失败"
+    },
+    {
+      "id": "D11-13-summary-zh",
+      "title": "返回中文体检摘要（逐项中文 + 状态）",
+      "ok": false,
+      "actual": {
+        "相关字段": []
+      },
+      "expected": "含中文体检摘要（逐项）",
+      "detail": ""
+    },
+    {
+      "id": "D11-13-nextstep-empty",
+      "title": "全部就绪时 nextStep 为空（不再催促登录）",
+      "ok": false,
+      "actual": {
+        "kooCliNextStep": "huaweicloud_show_profile_redacted",
+        "onboardingScenario": 4
+      },
+      "expected": "无 nextStep 催促",
+      "detail": ""
+    },
+    {
+      "id": "D11-13-no-codename",
+      "title": "体检摘要不含内部代号（S1/S2/A+C 等）（反断言）",
+      "ok": true,
+      "actual": "已检查 selfCheck 字段",
+      "expected": "不含内部代号",
+      "detail": ""
+    }
+  ]
+}

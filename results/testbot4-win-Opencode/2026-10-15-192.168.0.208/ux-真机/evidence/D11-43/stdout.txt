@@ -1,0 +1,7 @@
+FAIL	D11-43-nocolor	NO_COLOR=1 时输出不含 ANSI 转义序列	actual="检测到 ANSI 序列"	expected="无 ANSI 序列"	失败=未尊重 NO_COLOR 约定（终端兼容体验改进 UX-R16）
+PASS	D11-43-langc	LC_ALL=C 时输出无替换字符（不依赖 locale）	actual="无 U+FFFD"	expected="无 U+FFFD"
+FAIL	D11-43-cols	COLUMNS=40 下关键标识完整（未被截断）	actual="未出现任何关键标识"	expected="含 creds-import.json / auth init / huaweicloud_auth_switch 之一"
+FAIL	D11-43-exit	非交互会话应拒绝执行（exit 非 0）	actual=0	expected="非 0（预期 1）"
+
+=== D11-43 ===  pass=1 fail=3
+RESULT: FAIL
