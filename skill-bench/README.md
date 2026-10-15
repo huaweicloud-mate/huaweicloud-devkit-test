@@ -13,13 +13,15 @@
 
 ```
 skill-bench/
-├── tasks/tasks.json          # 3 个端到端任务（prompt + 期望技能 + verifier + cleanup）
+├── tasks/tasks.json          # 端到端任务 + L2 只读真机用例（prompt + 期望技能 + verifier + cleanup/readonlySpec）
 ├── fixtures/site/index.html  # T1 部署的静态站 fixture（含判据标记 DEVBENCH-PING-OK）
 ├── harness/
 │   ├── mcp-client.mjs        # devkit MCP stdio 客户端 + tools/list → OpenAI function calling
 │   └── run-bench.mjs         # 主 harness：agent loop + 三指标采集
-├── verifiers/                # 每条任务的 ground-truth 判定 + 归零脚本
-└── results/                  # 基线数据 JSON + 报告
+├── verifiers/                # 每条任务的 ground-truth 判定 + 归零脚本（verify-readonly.mjs = L2 通用只读判定）
+├── gate.mjs / gate.config.json  # 口径门禁（读 results/runs/*.json 断言口径完整/成功率/指标不退化）
+├── results/runs/             # 每 run 原子落盘记录（脱敏，入库可复算）
+└── results/                  # 基线数据 JSON（原始，本地）+ 报告 + summary.json（看板数据源）
 ```
 
 ## 评测架构
@@ -54,6 +56,12 @@ node harness/run-bench.mjs --all --runs 3
 # 自定义模型 / 指定 MCP
 node harness/run-bench.mjs t01 --runs 1 --model deepseek-v4-flash-0731
 BENCH_MCP_SERVER=/path/to/mcp-server.mjs node harness/run-bench.mjs t01 --runs 1
+
+# L2 只读真机用例（t21–t33：13 条 / 10 技能，零创建、无归零需求）
+node harness/run-bench.mjs t21-list-cbr-vaults --runs 3
+
+# 口径门禁（读 results/runs/*.json：采样数 / 版本锚点 / 成功率 / 指标退化）
+node gate.mjs
 ```
 
 ## 三指标口径
@@ -68,4 +76,5 @@ BENCH_MCP_SERVER=/path/to/mcp-server.mjs node harness/run-bench.mjs t01 --runs 1
 
 - 写任务（T1/T3）真机创建，**每 run 后必须归零**（cleanup 脚本），跑完人工 `hcloud OBS ls` / `hcloud VPC ListSecurityGroups` 终验无 `devkit-bench` 残留。
 - 首份基线报告见 `results/baseline-report-20261014.md`。
-- 演进路线：L3 对照组（裸模型 vs 开 skill）→ L1 任务集扩到 8~10 场景 → L2 逐 skill 覆盖地图。
+- 演进路线（2026-10-15）：R1 bare 全量对齐（待做）→ **R2 版本锚点 ✅** → **R3 口径门禁 ✅** → R4 安全指标化（待做）→ **R5 L2 执行层只读真机 ✅**（13 条 39/39 run PASS）→ R6 上游提单（待做）→ R7 deployment（需先人工开通租户级 CodeArts）。策略全文见 `docs/技能评测-策略-20261015.md`。
+- `results/runs/*.json` 为脱敏后的每 run 记录（不含 agent 完整答复），**入库**以保证汇总可独立复算；原始 `baseline-*.json` 仍不入库。

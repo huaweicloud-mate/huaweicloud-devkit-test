@@ -200,5 +200,239 @@
     "verifier": "verifiers/verify-subnet.mjs",
     "cleanup": "verifiers/cleanup-subnet.mjs",
     "write": true
+  },
+  {
+    "id": "t21-list-cbr-vaults",
+    "title": "查询 CBR 存储库",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 CBR（云备份）存储库，把存储库名称和数量告诉我。无人值守环境，请自主完成。",
+    "expectedService": "CBR",
+    "expectedSkill": "huawei-cbr",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "CBR",
+      "op": "ListVault",
+      "mode": "empty",
+      "countPath": "count"
+    }
+  },
+  {
+    "id": "t22-list-gaussdb-instances",
+    "title": "查询 GaussDB 实例",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 GaussDB 数据库实例，并列出。无人值守环境，请自主完成。",
+    "expectedService": "GaussDB",
+    "expectedSkill": "huawei-gaussdb",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "GaussDB",
+      "op": "ListGaussMySqlInstances",
+      "mode": "empty",
+      "countPath": "total_count"
+    }
+  },
+  {
+    "id": "t23-list-dds-instances",
+    "title": "查询 DDS 实例",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 DDS（文档数据库）实例，并列出。无人值守环境，请自主完成。",
+    "expectedService": "DDS",
+    "expectedSkill": "huawei-dds-dcs",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "DDS",
+      "op": "ListInstances",
+      "mode": "empty",
+      "countPath": "total_count"
+    }
+  },
+  {
+    "id": "t24-list-dcs-instances",
+    "title": "查询 DCS 实例",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 DCS（分布式缓存 Redis）实例，并列出。无人值守环境，请自主完成。",
+    "expectedService": "DCS",
+    "expectedSkill": "huawei-dds-dcs",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "DCS",
+      "op": "ListInstances",
+      "mode": "empty",
+      "countPath": "instance_num"
+    }
+  },
+  {
+    "id": "t25-list-dew-secrets",
+    "title": "查询 DEW 凭据（CSMS）",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 DEW 凭据管理（CSMS）的凭据（secret），并列出。无人值守环境，请自主完成。",
+    "expectedService": "CSMS",
+    "expectedSkill": "huawei-dew",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "CSMS",
+      "op": "ListSecrets",
+      "mode": "empty",
+      "countPath": "page_info.current_count"
+    }
+  },
+  {
+    "id": "t26-list-dew-keys",
+    "title": "查询 DEW 密钥（KMS）",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域创建了多少个 KMS 密钥，把密钥数量和密钥 ID 告诉我。无人值守环境，请自主完成。",
+    "expectedService": "KMS",
+    "expectedSkill": "huawei-dew",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "KMS",
+      "op": "ListKeys",
+      "mode": "nonEmpty",
+      "countPath": "total",
+      "answerKeywords": [
+        "密钥"
+      ]
+    }
+  },
+  {
+    "id": "t27-list-cts-trackers",
+    "title": "查询 CTS 追踪器",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域启用了哪些 CTS（云审计）追踪器，并列出。无人值守环境，请自主完成。",
+    "expectedService": "CTS",
+    "expectedSkill": "huawei-cts",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "CTS",
+      "op": "ListTrackers",
+      "mode": "empty",
+      "countPath": "trackers"
+    }
+  },
+  {
+    "id": "t28-list-ces-alarms",
+    "title": "查询 CES 告警规则",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有多少条 CES（云监控）告警规则，并列出前几条。无人值守环境，请自主完成。",
+    "expectedService": "CES",
+    "expectedSkill": "huawei-cloud-eye",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "CES",
+      "op": "ListAlarms",
+      "mode": "nonEmpty",
+      "countPath": "metric_alarms",
+      "answerKeywords": [
+        "告警"
+      ]
+    }
+  },
+  {
+    "id": "t29-list-waf-hosts",
+    "title": "查询 WAF 防护域名",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域接入了哪些 WAF 防护域名（host），并列出。无人值守环境，请自主完成。",
+    "expectedService": "WAF",
+    "expectedSkill": "huawei-waf-aad",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "WAF",
+      "op": "ListHost",
+      "mode": "empty",
+      "countPath": "total"
+    }
+  },
+  {
+    "id": "t30-list-aad-instances",
+    "title": "查询 AAD 高防实例",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 AAD（DDoS 高防）实例，并列出。无人值守环境，请自主完成。",
+    "expectedService": "AAD",
+    "expectedSkill": "huawei-waf-aad",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "AAD",
+      "op": "ListInstance",
+      "mode": "empty",
+      "countPath": "count"
+    }
+  },
+  {
+    "id": "t31-list-apig-instances",
+    "title": "查询 APIG 实例",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 APIG（API 网关）实例，并列出。无人值守环境，请自主完成。",
+    "expectedService": "APIG",
+    "expectedSkill": "huawei-apig",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "APIG",
+      "op": "ListInstancesV2",
+      "mode": "empty",
+      "countPath": "total"
+    }
+  },
+  {
+    "id": "t32-list-modelarts-notebooks",
+    "title": "查询 ModelArts Notebook",
+    "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 ModelArts Notebook 实例（开发环境），并列出。无人值守环境，请自主完成。",
+    "expectedService": "ModelArts",
+    "expectedSkill": "huawei-modelarts",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "ModelArts",
+      "op": "ListAllNotebooks",
+      "mode": "empty",
+      "countPath": "total"
+    }
+  },
+  {
+    "id": "t33-count-bss-coupon-records",
+    "title": "查询代金券变更记录",
+    "prompt": "帮我查一下当前华为云账户的代金券变更记录一共有多少条，把总条数告诉我。无人值守环境，请自主完成。",
+    "expectedService": "BSS",
+    "expectedSkill": "huawei-voucher",
+    "region": "cn-north-1",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "cleanup": null,
+    "write": false,
+    "readonlySpec": {
+      "service": "BSS",
+      "op": "ListCustomerCouponChangeRecords",
+      "mode": "nonEmpty",
+      "countPath": "total_count",
+      "answerKeywords": [
+        "代金券",
+        "记录"
+      ],
+      "extraArgs": [
+        "--balance_type=BALANCE_TYPE_COUPON"
+      ]
+    }
   }
 ]
