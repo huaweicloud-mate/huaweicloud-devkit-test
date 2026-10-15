@@ -54,7 +54,7 @@ try {
 if (ecsId) {
   let active = false;
   for (let i = 0; i < 15; i++) {
-    const r = await read(['ECS', 'ListServers', '--cli-region=' + REGION, '--id=' + ecsId, '--cli-output=json'], 30000);
+    const r = await read(['ECS', 'ListServersDetails', '--cli-region=' + REGION, '--server_id=' + ecsId, '--cli-output=json'], 30000);
     const st = /"status"\s*:\s*"([A-Z]+)"/.exec(r.stdout || ''); const s = st ? st[1] : '';
     if (s === 'ACTIVE') { active = true; break; }
     if (s === 'ERROR') break;
@@ -67,7 +67,15 @@ try {
   if (ecsId) { const r = await run(['ECS', 'DeleteServers', '--cli-region=' + REGION, '--servers.1.id=' + ecsId, '--servers.1.delete_volume=true'], 60000); rec('删除 ECS', r.ok === true, ecsId); }
   else rec('删除 ECS', true, '未创建');
 } catch (e) { rec('删除 ECS', false, e.message); }
-await sleep(5000);
+if (ecsId) {
+  let gone = false;
+  for (let i = 0; i < 15; i++) {
+    await sleep(8000);
+    const rr = await read(['ECS', 'ListServersDetails', '--cli-region=' + REGION, '--server_id=' + ecsId, '--cli-output=json'], 30000);
+    if (!(rr.stdout || '').includes(ecsId)) { gone = true; break; }
+  }
+  rec('ECS 删除达成 DELETED/消失', gone, ecsId);
+}
 
 try {
   if (sgId) { const r = await run(['VPC', 'DeleteSecurityGroup', '--cli-region=' + REGION, '--security_group_id=' + sgId], 30000); rec('删除安全组', r.ok === true, sgId); }
@@ -88,7 +96,7 @@ await sleep(5000);
 
 const lv = await read(['VPC', 'ListVpcs', '--cli-region=' + REGION, '--cli-output=json'], 60000);
 const vpcZero = !(lv.stdout || '').includes(vpcId);
-const le = await read(['ECS', 'ListServers', '--cli-region=' + REGION, '--cli-output=json'], 60000);
+const le = await read(['ECS', 'ListServersDetails', '--cli-region=' + REGION, '--cli-output=json'], 60000);
 const ecsZero = !(le.stdout || '').includes(ecsId || 'tctest-c1-ecs');
 rec('归零验证(VPC/ECS 均不含本次资源)', vpcZero && ecsZero, { vpcZero, ecsZero });
 
