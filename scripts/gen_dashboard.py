@@ -1146,8 +1146,10 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<td style="padding:6px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
             '<td style="padding:6px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
             '<td style="padding:6px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
+            '<td style="padding:6px 8px;border:1px solid #ddd;text-align:left;color:#555;">{}</td>'
             '</tr>'.format(t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
-                           t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0))
+                           t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0),
+                           t.get("detail", ""))
             for t in bench.get("tasks", []))
         def _bare_td(b):
             std = b.get("std_token", 0) or 0
@@ -1182,7 +1184,8 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<th style="padding:6px 8px;border:1px solid #ddd;">成功率</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;">token IN</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;">token OUT</th>'
-            '<th style="padding:6px 8px;border:1px solid #ddd;">步数</th></tr></thead>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;">步数</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">执行结果</th></tr></thead>'
             '<tbody>' + bench_rows + '</tbody></table>'
             '<h2 style="margin-top:16px;">裸模型对照（--bare，初步：标准=3采样中位 / 裸=1采样）</h2>'
             '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
