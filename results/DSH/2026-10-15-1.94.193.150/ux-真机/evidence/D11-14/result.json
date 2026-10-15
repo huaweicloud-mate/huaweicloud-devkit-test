@@ -1,0 +1,49 @@
+{
+  "case": "D11-14",
+  "file": "d11-14-single-end-locate.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R3）；FAIL = 单端定位契约未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-14-obs-ready-false",
+      "title": "单端（OBS）破坏后 obs.ready == false（可定位到具体端）",
+      "ok": false,
+      "actual": {
+        "selfCheck字段": "（无自检对象）",
+        "obsConfigured": false
+      },
+      "expected": false,
+      "detail": "UX-R3：体检须能指出哪一端坏了"
+    },
+    {
+      "id": "D11-14-obs-nextstep",
+      "title": "obs.nextStep 唯一且含 huaweicloud_auth_sync",
+      "ok": false,
+      "actual": {
+        "nextStep": null
+      },
+      "expected": "含 huaweicloud_auth_sync",
+      "detail": ""
+    },
+    {
+      "id": "D11-14-others-ready",
+      "title": "其余四项 ready 仍为 true（不误伤健康端）",
+      "ok": false,
+      "actual": {
+        "明细": null
+      },
+      "expected": "4/4",
+      "detail": ""
+    },
+    {
+      "id": "D11-14-no-en",
+      "title": "破坏态提示不含英文整句（反断言）",
+      "ok": true,
+      "actual": "（无）",
+      "expected": "无英文整句",
+      "detail": ""
+    }
+  ]
+}

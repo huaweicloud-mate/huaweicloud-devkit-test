@@ -1,0 +1,49 @@
+{
+  "case": "D11-3",
+  "file": "d11-3-effective-runtime.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R2）；FAIL = 契约字段未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-3-source",
+      "title": "effective.source == \"runtime\"",
+      "ok": false,
+      "actual": {
+        "source": null,
+        "现有相关字段": [
+          "credentialsConfigured",
+          "credentialsPath",
+          "credentialPanel"
+        ]
+      },
+      "expected": "runtime",
+      "detail": "UX-R2：本次生效账号来源须显式可见"
+    },
+    {
+      "id": "D11-3-fingerprint",
+      "title": "effective.fingerprint == sha256(ak+sk)[:8]",
+      "ok": false,
+      "actual": null,
+      "expected": "d64a05cc",
+      "detail": ""
+    },
+    {
+      "id": "D11-3-region",
+      "title": "effective.region == cn-north-4",
+      "ok": false,
+      "actual": null,
+      "expected": "cn-north-4",
+      "detail": ""
+    },
+    {
+      "id": "D11-3-no-secret",
+      "title": "返回体不含 AK/SK 明文（反断言）",
+      "ok": true,
+      "actual": "已检查返回体全文",
+      "expected": "无 AK/SK 明文",
+      "detail": ""
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+FAIL	D11-27-zh-summary	返回含中文字段摘要（资源标识 / 名称 / 状态 三项字段映射）	actual={"命中":[],"长度":1254}	expected="含资源标识/名称/状态三项映射"	UX-R18：只读结果须有人话摘要，而非整段英文 JSON
+FAIL	D11-27-truncation-hint	长输出（4474 字符）须有截断或分页提示	actual="{\"servers\":[{\"id\":\"srv-000\",\"name\":\"demo-0\",\"status\":\"SHUTOFF\",\"region\":\"cn-north-4\"},{\"id\":\"srv-001\",\"name\":\"demo-1\",\"s"	expected="含截断/分页提示"
+PASS	D11-27-raw-kept	原始 JSON 与中文摘要并存（原始数据不丢）	actual="原始 servers 字段仍在"	expected="保留原始 JSON"
+
+=== D11-27 ===  pass=1 fail=2
+RESULT: FAIL

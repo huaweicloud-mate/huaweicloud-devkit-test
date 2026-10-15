@@ -1,0 +1,6 @@
+FAIL	D11-9-persist-hot	persist 返回 persistsAfterRestart == true（写盘 → 重启仍生效）	actual={"persistsAfterRestart":null,"status":"needs_confirmation","keys":["status","confirmToken","options"]}	expected=true
+FAIL	D11-9-s1-session-flag	persist 后 S1.configuredBySession == true（会话写入标记须显式可读）	actual={"s1_configuredBySession":"(字段不存在)","stores":{"s1Fingerprint":"6e483539","envFingerprint":"","currentFingerprint":null,"s3Fingerprint":"6e483539","runtimeFingerprint":null},"reconciledKeys":["stores","kooCliCurrent","envIsPlaceholder","s2Encrypted","inconsistencies","hasRuntime","runtimeFingerprint","inconsistent","runtimeActive"]}	expected=true	confirm 结果: {"status":"partial","scope":"persist","backedUp":true,"obs":{"configured":true},
+FAIL	D11-9-clear-fallback	clear 后 effective.source 回退为 "s1"	actual={"effective":null,"clearStatus":"cleared","credentialPanel":{"sts":null,"s1":{"configured":true,"fingerprint":"6e483539","persistent":true},"activeSource":"s1-persistent"}}	expected="s1"
+
+=== D11-9 ===  pass=0 fail=3
+RESULT: FAIL

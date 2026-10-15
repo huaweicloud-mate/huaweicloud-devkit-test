@@ -1,0 +1,210 @@
+{
+  "case": "D11-16",
+  "file": "d11-16-error-cards.mjs",
+  "result": "FAIL",
+  "pass": 9,
+  "fail": 10,
+  "note": "口径: 需求验收（UX-R7）；FAIL = 统一错误卡契约未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-16-HDKIT_CRED_MISSING-shape",
+      "title": "HDKIT_CRED_MISSING：返回统一错误卡 {code,messageZh,action}",
+      "ok": true,
+      "actual": {
+        "code": "HDKIT_CRED_MISSING",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "expected": {
+        "code": "HDKIT_CRED_MISSING",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+    },
+    {
+      "id": "D11-16-HDKIT_CRED_MISSING-zh",
+      "title": "HDKIT_CRED_MISSING：messageZh 含中文且无英文整句",
+      "ok": true,
+      "actual": "未配置华为云凭证,需要先完成登录。",
+      "expected": "中文且无英文整句",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-HDKIT_CRED_MISSING-action",
+      "title": "HDKIT_CRED_MISSING：action 为可执行命令（npx / hcloud 开头）",
+      "ok": true,
+      "actual": "npx huaweicloud-devkit auth init",
+      "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-IAM-401-shape",
+      "title": "IAM-401：返回统一错误卡 {code,messageZh,action}",
+      "ok": false,
+      "actual": {
+        "code": "HDKIT_CRED_INVALID",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "expected": {
+        "code": "IAM-401",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+    },
+    {
+      "id": "D11-16-IAM-401-zh",
+      "title": "IAM-401：messageZh 含中文且无英文整句",
+      "ok": true,
+      "actual": "凭证已被华为云拒绝(AK/SK 无效或已过期),请重新生成。(HTTP 401: HTTP 401 synthetic)",
+      "expected": "中文且无英文整句",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-IAM-401-action",
+      "title": "IAM-401：action 为可执行命令（npx / hcloud 开头）",
+      "ok": true,
+      "actual": "npx huaweicloud-devkit auth status",
+      "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-IAM-403-shape",
+      "title": "IAM-403：返回统一错误卡 {code,messageZh,action}",
+      "ok": false,
+      "actual": {
+        "code": "HDKIT_CRED_FORBIDDEN",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "expected": {
+        "code": "IAM-403",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+    },
+    {
+      "id": "D11-16-IAM-403-zh",
+      "title": "IAM-403：messageZh 含中文且无英文整句",
+      "ok": true,
+      "actual": "凭证有效但无权限列出项目,请检查账号授权。(HTTP 403: HTTP 403 synthetic)",
+      "expected": "中文且无英文整句",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-IAM-403-action",
+      "title": "IAM-403：action 为可执行命令（npx / hcloud 开头）",
+      "ok": true,
+      "actual": "hcloud IAM KeystoneListProjects --cli-region=<region>",
+      "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-region-缺失-shape",
+      "title": "region-缺失：返回统一错误卡 {code,messageZh,action}",
+      "ok": false,
+      "actual": {
+        "code": "HDKIT_CRED_REGION_MISSING",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "expected": {
+        "code": "region-缺失",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+    },
+    {
+      "id": "D11-16-region-缺失-zh",
+      "title": "region-缺失：messageZh 含中文且无英文整句",
+      "ok": true,
+      "actual": "缺少 region(区域),登录配置不完整。",
+      "expected": "中文且无英文整句",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-region-缺失-action",
+      "title": "region-缺失：action 为可执行命令（npx / hcloud 开头）",
+      "ok": true,
+      "actual": "hcloud configure set --cli-region=<region>",
+      "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-KooCLI-未装-shape",
+      "title": "KooCLI-未装：返回统一错误卡 {code,messageZh,action}",
+      "ok": false,
+      "actual": {
+        "code": null,
+        "messageZh": "undefined",
+        "action": "undefined"
+      },
+      "expected": {
+        "code": "KooCLI-未装",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+    },
+    {
+      "id": "D11-16-KooCLI-未装-zh",
+      "title": "KooCLI-未装：messageZh 含中文且无英文整句",
+      "ok": false,
+      "actual": "",
+      "expected": "中文且无英文整句",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-KooCLI-未装-action",
+      "title": "KooCLI-未装：action 为可执行命令（npx / hcloud 开头）",
+      "ok": false,
+      "actual": null,
+      "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-project-id-未设-shape",
+      "title": "project-id-未设：返回统一错误卡 {code,messageZh,action}",
+      "ok": false,
+      "actual": {
+        "code": null,
+        "messageZh": "undefined",
+        "action": "undefined"
+      },
+      "expected": {
+        "code": "project-id-未设",
+        "messageZh": "string",
+        "action": "string"
+      },
+      "detail": "UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）"
+    },
+    {
+      "id": "D11-16-project-id-未设-zh",
+      "title": "project-id-未设：messageZh 含中文且无英文整句",
+      "ok": false,
+      "actual": "",
+      "expected": "中文且无英文整句",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-project-id-未设-action",
+      "title": "project-id-未设：action 为可执行命令（npx / hcloud 开头）",
+      "ok": false,
+      "actual": null,
+      "expected": "以 npx huaweicloud-devkit 或 hcloud 开头",
+      "detail": ""
+    },
+    {
+      "id": "D11-16-actions-distinct",
+      "title": "六码 action 互不相同（决策表可分辨）",
+      "ok": false,
+      "actual": "4/6 有 action",
+      "expected": "六码各有一个且互不相同的 action",
+      "detail": ""
+    }
+  ]
+}

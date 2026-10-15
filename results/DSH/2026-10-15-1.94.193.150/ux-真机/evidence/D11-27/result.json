@@ -1,0 +1,37 @@
+{
+  "case": "D11-27",
+  "file": "d11-27-cn-summary.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 2,
+  "note": "口径: 需求验收（UX-R18）；FAIL = 摘要/截断提示未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-27-zh-summary",
+      "title": "返回含中文字段摘要（资源标识 / 名称 / 状态 三项字段映射）",
+      "ok": false,
+      "actual": {
+        "命中": [],
+        "长度": 1254
+      },
+      "expected": "含资源标识/名称/状态三项映射",
+      "detail": "UX-R18：只读结果须有人话摘要，而非整段英文 JSON"
+    },
+    {
+      "id": "D11-27-truncation-hint",
+      "title": "长输出（4474 字符）须有截断或分页提示",
+      "ok": false,
+      "actual": "{\"servers\":[{\"id\":\"srv-000\",\"name\":\"demo-0\",\"status\":\"SHUTOFF\",\"region\":\"cn-north-4\"},{\"id\":\"srv-001\",\"name\":\"demo-1\",\"s",
+      "expected": "含截断/分页提示",
+      "detail": ""
+    },
+    {
+      "id": "D11-27-raw-kept",
+      "title": "原始 JSON 与中文摘要并存（原始数据不丢）",
+      "ok": true,
+      "actual": "原始 servers 字段仍在",
+      "expected": "保留原始 JSON",
+      "detail": ""
+    }
+  ]
+}

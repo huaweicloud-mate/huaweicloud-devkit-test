@@ -1,0 +1,75 @@
+{
+  "case": "D11-31",
+  "file": "d11-31-region-boundary.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 5,
+  "note": "口径: 需求验收（UX-R5）；FAIL = region 边界处理未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-31-legal-ok",
+      "title": "合法 region 正常生效（基线对照）",
+      "ok": true,
+      "actual": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note\":\"Runtime credentials active for this MCP process",
+      "expected": "正常返回",
+      "detail": ""
+    },
+    {
+      "id": "D11-31-invalid-hint-zh",
+      "title": "非法 region 返回中文可动作提示",
+      "ok": false,
+      "actual": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note\":\"Runtime credentials active for this MCP process. hcloud commands still use th",
+      "expected": "中文「无效/不支持」提示",
+      "detail": ""
+    },
+    {
+      "id": "D11-31-invalid-candidates",
+      "title": "非法提示含可用区域候选（源自 list_regions）",
+      "ok": false,
+      "actual": {
+        "候选来源条数": 24,
+        "候选示例": [
+          "af-north-1",
+          "af-south-1",
+          "ap-southeast-1",
+          "ap-southeast-2",
+          "ap-southeast-3"
+        ],
+        "提示是否含候选": false
+      },
+      "expected": "提示里出现候选区域",
+      "detail": ""
+    },
+    {
+      "id": "D11-31-empty-default",
+      "title": "空串回退默认值 cn-north-4",
+      "ok": false,
+      "actual": {
+        "回读region": ""
+      },
+      "expected": "cn-north-4",
+      "detail": ""
+    },
+    {
+      "id": "D11-31-case-normalize-zh",
+      "title": "大小写不规范给出中文规范化提示",
+      "ok": false,
+      "actual": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note\":\"Runtime credentials active for this MCP process. hcloud commands still use th",
+      "expected": "中文规范化提示",
+      "detail": ""
+    },
+    {
+      "id": "D11-31-distinct-hints",
+      "title": "五类取值提示互不混淆（去重后至少 4 类不同文本）",
+      "ok": false,
+      "actual": {
+        "合法": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note",
+        "非法": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note",
+        "大小写": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note",
+        "格式不符": "{\"status\":\"ok\",\"scope\":\"temporary\",\"note"
+      },
+      "expected": "四类文本互不相同",
+      "detail": ""
+    }
+  ]
+}

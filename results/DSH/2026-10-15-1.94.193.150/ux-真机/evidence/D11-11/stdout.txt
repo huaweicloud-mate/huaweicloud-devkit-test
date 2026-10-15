@@ -1,0 +1,8 @@
+PASS	D11-11-obs-default	缺 region 时不报 "region, ak, and sk are required"	actual="缺少 region(区域),登录配置不完整。"	expected="不报该错"
+FAIL	D11-11-ask-region	auth init 显式询问 region（而不是静默硬编码）	actual="未发现 region 询问语句"	expected="存在 region 询问"
+FAIL	D11-11-ask-zh	region 询问提示为中文	actual="（无该语句）"	expected="提示含中文字符"
+PASS	D11-11-default-value	缺省区域显式回落 cn-north-4（默认值可回车跳过）	actual="cn-north-4"	expected="cn-north-4"
+PASS	D11-11-s1-region	S1.region == "cn-north-4"	actual="cn-north-4"	expected="cn-north-4"
+
+=== D11-11 ===  pass=3 fail=2
+RESULT: FAIL

@@ -1,0 +1,71 @@
+{
+  "case": "D11-34",
+  "file": "d11-34-zeroing-report.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R12，真机）；FAIL = 归零报告未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-34-readonly-recheck",
+      "title": "真机只读复核可执行（ECS/EIP/EVS 三类列表）",
+      "ok": true,
+      "actual": {
+        "成功": "3/3",
+        "明细": [
+          {
+            "label": "ECS 云服务器",
+            "ok": true,
+            "residual": null,
+            "textLen": 5106
+          },
+          {
+            "label": "EIP 弹性公网",
+            "ok": true,
+            "residual": null,
+            "textLen": 680
+          },
+          {
+            "label": "EVS 云硬盘",
+            "ok": true,
+            "residual": null,
+            "textLen": 2696
+          }
+        ]
+      },
+      "expected": "3/3",
+      "detail": ""
+    },
+    {
+      "id": "D11-34-report-zh",
+      "title": "归零报告为中文且逐资源列出（已释放/未释放 + 剩余计数）",
+      "ok": false,
+      "actual": {
+        "命中": "（无归零报告字段）"
+      },
+      "expected": "含中文「已释放/未释放/剩余计数」逐项报告",
+      "detail": ""
+    },
+    {
+      "id": "D11-34-zero-conclusion",
+      "title": "零残留时给出明确中文结论（无残留 / 已归零）",
+      "ok": false,
+      "actual": {
+        "当前剩余合计": 0,
+        "结论命中": false
+      },
+      "expected": "含「无残留/已归零」结论",
+      "detail": ""
+    },
+    {
+      "id": "D11-34-delete-hint",
+      "title": "未释放项附唯一补删命令（可复制执行）",
+      "ok": false,
+      "actual": {
+        "命中": false
+      },
+      "expected": "含补删命令",
+      "detail": ""
+    }
+  ]
+}

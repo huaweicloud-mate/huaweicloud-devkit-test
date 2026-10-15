@@ -1,0 +1,7 @@
+FAIL	D11-38-self-report	自述轨给出生效账号指纹与来源（基线对照）	actual={"selfFingerprint":null,"selfSource":null}	expected="指纹 + source"
+FAIL	D11-38-independent-match	独立观测面（文件/env 反推）与自述指纹一致	actual={"自述":null,"独立反推":"caae65f2"}	expected="caae65f2"	范式③：自述不得是唯一证据
+PASS	D11-38-cross-track	独立连通轨证实自述「已登录」为真（外部行为可证伪）	actual={"只读调用":"{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"count\\\": 1,\\n  \\\"servers\\\": [\\n    {\\n      \\\"flavor\\\":"}	expected="只读调用成功"
+FAIL	D11-38-three-track-consistent	三轨一致（自述 == 文件/env 反推 && 真实连通）	actual={"自述":null,"反推":"caae65f2","连通":true}	expected="三轨一致"
+
+=== D11-38 ===  pass=1 fail=3
+RESULT: FAIL

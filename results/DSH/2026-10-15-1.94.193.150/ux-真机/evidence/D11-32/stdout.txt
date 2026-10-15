@@ -1,0 +1,9 @@
+FAIL	D11-32-zh-error	写盘失败时返回中文错误（无法写入凭证目录 / 沙箱无法解析主目录）	actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-871871471/d11-32-bCdMqS/blocker-file/creds/.config/huaweicloud'"	expected="中文可诊断错误"
+FAIL	D11-32-alt-path	给出替代路径（HUAWEICLOUD_HOME / env 注入）	actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-871871471/d11-32-bCdMqS/blocker-file/creds/.config/huaweicloud'"	expected="含 HUAWEICLOUD_HOME 或 env 注入指引"
+PASS	D11-32-no-en	不出现英文整句 "KooCLI detected but cannot resolve the user home directory..."（反断言）	actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-871871471/d11-32-bCdMqS/blocker-file/creds/.config/huaweicloud'"	expected="不含该英文整句"
+PASS	D11-32-koocli-classified	沙箱 home 失败被正确归类	actual={"status":"sandbox_home_failure","errorCode":"HCLOUD_SANDBOX_HOME_FAILURE"}	expected="HCLOUD_SANDBOX_HOME_FAILURE"
+FAIL	D11-32-koocli-zh-next	KooCLI 沙箱 home 失败的下一步提示为中文且给替代路径	actual="npx huaweicloud-devkit install-hcloud"	expected="中文 + 替代路径"
+PASS	D11-32-koocli-no-en	KooCLI 侧不得以英文整句作为唯一提示（反断言）	actual="npx huaweicloud-devkit install-hcloud"	expected="不含该英文整句"
+
+=== D11-32 ===  pass=3 fail=3
+RESULT: FAIL

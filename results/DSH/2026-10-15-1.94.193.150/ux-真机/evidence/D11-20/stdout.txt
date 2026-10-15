@@ -1,0 +1,7 @@
+PASS	D11-20-restart-item-zh	doctor 给出「需重启会话 / 本会话未加载插件」判定项且为中文	actual={"判定行":"║  请重启 DSH！MCP 工具尚未激活     ║"}	expected="中文「需重启/未加载」判定项"
+FAIL	D11-20-readme-consistent	与 README「安装后重启会话」表述一致	actual={"判定行":"║  请重启 DSH！MCP 工具尚未激活     ║"}	expected="README 与 doctor 两侧均以中文表述一致"
+PASS	D11-20-no-en-only	不以英文整句作为唯一重启提示（反断言）	actual={"英文原文存在":false}	expected="英文原文不得是唯一提示"
+PASS	D11-20-doctor-ran	doctor 可执行（基线对照）	actual={"exit":0}	expected=0
+
+=== D11-20 ===  pass=3 fail=1
+RESULT: FAIL

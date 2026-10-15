@@ -1,0 +1,74 @@
+{
+  "case": "D11-30",
+  "file": "d11-30-auth-state-machine.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 7,
+  "note": "口径: 需求验收（UX-R2/R4 状态机）；FAIL = 契约字段未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-30-p1",
+      "title": "①空态（无任何来源） → effective.source 应为 HDKIT_CRED_MISSING",
+      "ok": true,
+      "actual": "HDKIT_CRED_MISSING",
+      "expected": "HDKIT_CRED_MISSING",
+      "detail": ""
+    },
+    {
+      "id": "D11-30-p2",
+      "title": "②仅 S1 落盘 → effective.source 应为 s1",
+      "ok": false,
+      "actual": null,
+      "expected": "s1",
+      "detail": ""
+    },
+    {
+      "id": "D11-30-p3",
+      "title": "③仅 env 三件套 → effective.source 应为 env",
+      "ok": false,
+      "actual": null,
+      "expected": "env",
+      "detail": ""
+    },
+    {
+      "id": "D11-30-p4",
+      "title": "④S1 + env（S1 优先） → effective.source 应为 s1",
+      "ok": false,
+      "actual": null,
+      "expected": "s1",
+      "detail": ""
+    },
+    {
+      "id": "D11-30-p5",
+      "title": "⑤S1 + runtime（runtime 最高） → effective.source 应为 runtime",
+      "ok": false,
+      "actual": null,
+      "expected": "runtime",
+      "detail": ""
+    },
+    {
+      "id": "D11-30-p6",
+      "title": "⑥runtime → clear（回退 S1） → effective.source 应为 s1",
+      "ok": false,
+      "actual": null,
+      "expected": "s1",
+      "detail": ""
+    },
+    {
+      "id": "D11-30-p7",
+      "title": "⑦删 S1 后（回退 env） → effective.source 应为 env",
+      "ok": false,
+      "actual": null,
+      "expected": "env",
+      "detail": ""
+    },
+    {
+      "id": "D11-30-all-paths",
+      "title": "7 条迁移路径全部与预期一致（无一条状态与实际生效来源不符）",
+      "ok": false,
+      "actual": "1/7 一致",
+      "expected": "7/7 一致",
+      "detail": "状态转换法：迁移后状态必须唯一且正确回退"
+    }
+  ]
+}
