@@ -14,5 +14,5 @@ const servers = j.json?.servers || [];
 const s = servers.find((x) => x.name === name);
 if (!s) { console.log(JSON.stringify({ success: true, detail: `ECS 实例 ${name} 不存在（无残留）` })); process.exit(0); }
 const d = hc(['ECS', 'DeleteServers', `--cli-region=${region}`,
-  `--servers.1.id=${s.id}`, '--servers.1.delete_publicip=true', '--servers.1.delete_volume=true']);
+  `--servers.1.id=${s.id}`, '--delete_publicip=true', '--delete_volume=true']);
 console.log(JSON.stringify({ success: !d.json || !/error/i.test(d.raw), detail: `DeleteServers ${name} → ${d.raw.slice(0, 120) || '(空)'}` }));
