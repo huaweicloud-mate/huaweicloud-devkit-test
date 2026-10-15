@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C2",
+  "title": "OBS 静态网站托管 E2E",
+  "expected": "建桶→set/get 网站配置成功→删桶归零，无残留",
+  "total": 4,
+  "passed": 4,
+  "failed": 0,
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": true,
+      "detail": "exitCode=6 out=Start at 2026-10-15 21:16:13.950914554 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2098973802] successfully, request id [000001A1416C391044C83031C3BE772B]\nNotice: If the configured endpoint is a glo"
+    },
+    {
+      "name": "set静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-2098973802.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-2098973802.obs-website.cn-north-4.my"
+    },
+    {
+      "name": "get静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html</Suffix><Type>0</Type></IndexDocument><"
+    },
+    {
+      "name": "删桶归零",
+      "pass": true,
+      "detail": "exitCode=0 out=Start at 2026-10-15 21:16:14.574714523 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-2098973802] successfully!"
+    }
+  ],
+  "bucket": "testbot3-hermes-obs-2098973802",
+  "executedAt": "20261015211615",
+  "probe": "probe.mjs"
+}

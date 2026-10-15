@@ -1,0 +1,17 @@
+{
+  "status": "BLOCKED",
+  "caseId": "D4-13",
+  "blockedReason": "环境阻塞【补环境】：只读子账号只读可用断言已实测通过（ListServersDetails 可用、validateIamCredentials valid=true），但「写被 IAM 拒绝」断言无法验证——写命令 CreateVpc 返回 VPC.0114 OverQuota（router 配额耗尽），配额校验先于策略拒绝返回，未能取得期望的 VPC.0010「disallowed by policy」。解除条件：清理残留 VPC/提升 router 配额后复测。",
+  "executedAt": "20261015211308",
+  "probe": "probe_d413.mjs",
+  "probeOutput": {
+    "status": "FAIL",
+    "caseId": "D4-13",
+    "title": "最小权限凭证通过率",
+    "expected": "只读子账号只读可用、写被 IAM 拒绝（最小权限）",
+    "actual": "注入 env AK 指纹=9c2d05c1 securityToken注入=false(期望 false) | resolveCredentialsWithRuntime AK指纹=52966832 | validateIamCredentials valid=true projectId=46c1fd48... | 只读 ListServersDetails -> 可用: {\n  \"count\": 1,\n  \"servers\": [\n    {\n      \"flavor\": {\n        \"disk\": \"0\",\n        \"vcpus\": \"1\",\n   | 只读凭证 CreateVpc(写) -> 意外放行 : {\n  \"code\": \"VPC.0114\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Quota exceeded for resources: ['router'] \\\",\\\"typ => 只读IAM校验=true 只读可用=true 写被拒=false",
+    "detail": "",
+    "executedAt": "20261015211308",
+    "probe": "probe_d413.mjs"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "status": "BLOCKED",
+  "caseId": "D3-C3",
+  "blockedReason": "环境阻塞【补环境】：沙箱编排上游 hdkitservice 返回 502（GET /open-api-public/v1/agreements / /v2/devenvs failed，trace 5bd279466d974ad79c84d93ad440f028；05:15 重试仍 502），sandbox_connect 无法建立会话，上传/部署/预览断言无法取证。解除条件：沙箱编排服务恢复。",
+  "executedAt": "20261016051623",
+  "probe": "probe.mjs",
+  "probeOutput": {
+    "case": "D3-C3",
+    "status": "FAIL",
+    "total": 5,
+    "passed": 0,
+    "failed": 5,
+    "results": [
+      {
+        "name": "connect",
+        "pass": false,
+        "detail": "ws="
+      },
+      {
+        "name": "upload_project",
+        "pass": false,
+        "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WO"
+      },
+      {
+        "name": "deploy_nginx",
+        "pass": false,
+        "detail": "undefined:undefined"
+      },
+      {
+        "name": "deploy_check",
+        "pass": false,
+        "detail": "undefined"
+      },
+      {
+        "name": "close_session",
+        "pass": false,
+        "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox conn"
+      }
+    ]
+  }
+}

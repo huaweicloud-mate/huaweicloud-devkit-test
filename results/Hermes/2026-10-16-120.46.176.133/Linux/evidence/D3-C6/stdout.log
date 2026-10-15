@@ -1,0 +1,41 @@
+{
+  "status": "BLOCKED",
+  "caseId": "D3-C6",
+  "blockedReason": "环境阻塞【补环境】：同 D3-C3，沙箱编排上游 502（agreements endpoint failed），sandbox_check_user/connect/exec 全部无法执行。解除条件：沙箱编排服务恢复。",
+  "executedAt": "20261016051623",
+  "probe": "probe.mjs",
+  "probeOutput": {
+    "case": "D3-C6",
+    "status": "FAIL",
+    "total": 5,
+    "passed": 1,
+    "failed": 4,
+    "results": [
+      {
+        "name": "check_user",
+        "pass": true,
+        "detail": "{\"realnameVerified\":true,\"agreementSigned\":true}"
+      },
+      {
+        "name": "connect",
+        "pass": false,
+        "detail": "undefined ws="
+      },
+      {
+        "name": "credentials",
+        "pass": false,
+        "detail": "undefined"
+      },
+      {
+        "name": "exec_one_shot",
+        "pass": false,
+        "detail": ""
+      },
+      {
+        "name": "close_session",
+        "pass": false,
+        "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox conn"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "status": "BLOCKED",
+  "caseId": "D3-C1",
+  "blockedReason": "环境阻塞【补环境】：账户 VPC 配额耗尽（VPC.0114 OverQuota: Quota exceeded for resources: ['router']，CreateVpc 重试仍失败；ShowQuota vpc=-1 但 neutron router 配额已达上限，账户内残留 tctest-diag2 / devkit-bench-* / testbot1-hermes-* 等他人 VPC）。ECS 全生命周期（建→ACTIVE→删→归零）无法取证。2026-10-16 05:14 实测复现；解除条件：清理账户残留 VPC/提升 router 配额。",
+  "executedAt": "20261016051623",
+  "probe": "probe.mjs",
+  "probeOutput": {
+    "case": "D3-C1",
+    "status": "FAIL",
+    "total": 3,
+    "passed": 1,
+    "failed": 2,
+    "results": [
+      {
+        "name": "CreateVpc",
+        "pass": false,
+        "detail": "{\n  \"code\": \"VPC.0114\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Quota exceeded for resources:"
+      },
+      {
+        "name": "CreateSubnet",
+        "pass": false,
+        "detail": "{\n  \"code\": \"VPC.0201\",\n  \"message\": \"VPC ID is invalid.\"\n}\nFailed to get terminal width. The defaul"
+      },
+      {
+        "name": "finally归零(校验真实删除)",
+        "pass": true,
+        "detail": "无资源需清理"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+FAIL	D4-13	注入 env AK 指纹=9c2d05c1 securityToken注入=false(期望 false) | resolveCredentialsWithRuntime AK指纹=52966832 | validateIamCredentials valid=true projectId=46c1fd48... | 只读 ListServersDetails -> 可用: {
+  "count": 1,
+  "servers": [
+    {
+      "flavor": {
+        "disk": "0",
+        "vcpus": "1",
+   | 只读凭证 CreateVpc(写) -> 意外放行 : {
+  "code": "VPC.0114",
+  "message": "{\"NeutronError\":{\"message\":\"Quota exceeded for resources: ['router'] \",\"typ => 只读IAM校验=true 只读可用=true 写被拒=false
