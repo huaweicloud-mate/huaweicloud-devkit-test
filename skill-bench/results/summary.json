@@ -3,26 +3,188 @@
   "model": "deepseek-v4-pro-0813",
   "runs": 3,
   "tasks": [
-    { "id": "t01", "title": "部署静态网站（OBS）", "skill": "huawei-obs", "rate": "3/3", "token_in": 219830, "token_out": 10167, "steps": 21 },
-    { "id": "t02", "title": "查账户余额（BSS）", "skill": "huawei-billing", "rate": "3/3", "token_in": 68281, "token_out": 1857, "steps": 8 },
-    { "id": "t03", "title": "配置安全组（VPC）", "skill": "huawei-vpc", "rate": "3/3", "token_in": 405978, "token_out": 17803, "steps": 26 },
-    { "id": "t04", "title": "查询 ECS 实例", "skill": "huawei-ecs", "rate": "3/3", "token_in": 39551, "token_out": 951, "steps": 5 },
-    { "id": "t05", "title": "查询 IAM 用户", "skill": "huawei-iam", "rate": "3/3", "token_in": 42877, "token_out": 1727, "steps": 7 },
-    { "id": "t06", "title": "查询 RDS 实例", "skill": "huawei-rds", "rate": "3/3", "token_in": 47519, "token_out": 1127, "steps": 5 },
-    { "id": "t07", "title": "查询函数列表", "skill": "huawei-functiongraph", "rate": "3/3", "token_in": 43580, "token_out": 1267, "steps": 8 },
-    { "id": "t08", "title": "查询 CCE 集群", "skill": "huawei-cce", "rate": "3/3", "token_in": 65068, "token_out": 1205, "steps": 7 },
-    { "id": "t10", "title": "创建 SMN 主题", "skill": "huawei-smn-dms", "rate": "3/3", "token_in": 64112, "token_out": 1433, "steps": 8 }
+    {
+      "id": "t01",
+      "title": "部署静态网站（OBS）",
+      "skill": "huawei-obs",
+      "rate": "3/3",
+      "token_in": 219830,
+      "token_out": 10167,
+      "steps": 21
+    },
+    {
+      "id": "t02",
+      "title": "查账户余额（BSS）",
+      "skill": "huawei-billing",
+      "rate": "3/3",
+      "token_in": 68281,
+      "token_out": 1857,
+      "steps": 8
+    },
+    {
+      "id": "t03",
+      "title": "配置安全组（VPC）",
+      "skill": "huawei-vpc",
+      "rate": "3/3",
+      "token_in": 405978,
+      "token_out": 17803,
+      "steps": 26
+    },
+    {
+      "id": "t04",
+      "title": "查询 ECS 实例",
+      "skill": "huawei-ecs",
+      "rate": "3/3",
+      "token_in": 39551,
+      "token_out": 951,
+      "steps": 5
+    },
+    {
+      "id": "t05",
+      "title": "查询 IAM 用户",
+      "skill": "huawei-iam",
+      "rate": "3/3",
+      "token_in": 42877,
+      "token_out": 1727,
+      "steps": 7
+    },
+    {
+      "id": "t06",
+      "title": "查询 RDS 实例",
+      "skill": "huawei-rds",
+      "rate": "3/3",
+      "token_in": 47519,
+      "token_out": 1127,
+      "steps": 5
+    },
+    {
+      "id": "t07",
+      "title": "查询函数列表",
+      "skill": "huawei-functiongraph",
+      "rate": "3/3",
+      "token_in": 43580,
+      "token_out": 1267,
+      "steps": 8
+    },
+    {
+      "id": "t08",
+      "title": "查询 CCE 集群",
+      "skill": "huawei-cce",
+      "rate": "3/3",
+      "token_in": 65068,
+      "token_out": 1205,
+      "steps": 7
+    },
+    {
+      "id": "t10",
+      "title": "创建 SMN 主题",
+      "skill": "huawei-smn-dms",
+      "rate": "3/3",
+      "token_in": 64112,
+      "token_out": 1433,
+      "steps": 8
+    }
   ],
   "bare": [
-    { "id": "t01", "title": "部署静态网站", "std_rate": "3/3", "bare_rate": "3/3", "std_token": 228741, "bare_token": 133438, "std_steps": 21, "bare_steps": 23, "note": "也能部署（首采 FAIL 系波动）" },
-    { "id": "t02", "title": "查账户余额", "std_rate": "3/3", "bare_rate": "3/3", "std_token": 70138, "bare_token": 36367, "std_steps": 8, "bare_steps": 12, "note": "省 token（无 37 工具 schema 开销）" },
-    { "id": "t03", "title": "配置安全组", "std_rate": "3/3", "bare_rate": "3/3", "std_token": 425205, "bare_token": 53256, "std_steps": 26, "bare_steps": 12, "note": "3/3 放行 0.0.0.0/0 高危" },
-    { "id": "t04", "title": "查询 ECS 实例", "std_rate": "3/3", "bare_rate": "3/3", "std_token": 40467, "bare_token": 10737, "std_steps": 5, "bare_steps": 5, "note": "省 token，步数一致" },
-    { "id": "t05", "title": "查询 IAM 用户", "std_rate": "3/3", "bare_rate": "3/3", "std_token": 44105, "bare_token": 24903, "std_steps": 7, "bare_steps": 10, "note": "省 token，步数多 + 波动大" },
-    { "id": "t06", "title": "查询 RDS 实例", "std_rate": "3/3", "bare_rate": "3/3", "std_token": 48646, "bare_token": 30083, "std_steps": 5, "bare_steps": 11, "note": "省 token，步数多（试错）" },
-    { "id": "t07", "title": "查询函数列表", "std_rate": "3/3", "bare_rate": "3/3", "std_token": 44847, "bare_token": 28336, "std_steps": 8, "bare_steps": 11, "note": "省 token，步数多（试错）" },
-    { "id": "t08", "title": "查询 CCE 集群", "std_rate": "3/3", "bare_rate": "3/3", "std_token": 66273, "bare_token": 16810, "std_steps": 7, "bare_steps": 8, "note": "省 token，步数基本一致" },
-    { "id": "t10", "title": "创建 SMN 主题", "std_rate": "3/3", "bare_rate": "3/3", "std_token": 65572, "bare_token": 51771, "std_steps": 8, "bare_steps": 17, "note": "省 token，步数多 + 波动大" }
+    {
+      "id": "t01",
+      "title": "部署静态网站",
+      "std_rate": "3/3",
+      "bare_rate": "3/3",
+      "std_token": 228741,
+      "bare_token": 133438,
+      "std_steps": 21,
+      "bare_steps": 23,
+      "note": "也能部署（首采 FAIL 系波动）"
+    },
+    {
+      "id": "t02",
+      "title": "查账户余额",
+      "std_rate": "3/3",
+      "bare_rate": "3/3",
+      "std_token": 70138,
+      "bare_token": 36367,
+      "std_steps": 8,
+      "bare_steps": 12,
+      "note": "无 37 工具 schema 开销"
+    },
+    {
+      "id": "t03",
+      "title": "配置安全组",
+      "std_rate": "3/3",
+      "bare_rate": "3/3",
+      "std_token": 425205,
+      "bare_token": 53256,
+      "std_steps": 26,
+      "bare_steps": 12,
+      "note": "3/3 放行 0.0.0.0/0 高危"
+    },
+    {
+      "id": "t04",
+      "title": "查询 ECS 实例",
+      "std_rate": "3/3",
+      "bare_rate": "3/3",
+      "std_token": 40467,
+      "bare_token": 10737,
+      "std_steps": 5,
+      "bare_steps": 5,
+      "note": "步数一致"
+    },
+    {
+      "id": "t05",
+      "title": "查询 IAM 用户",
+      "std_rate": "3/3",
+      "bare_rate": "3/3",
+      "std_token": 44105,
+      "bare_token": 24903,
+      "std_steps": 7,
+      "bare_steps": 10,
+      "note": "步数多 + 波动大"
+    },
+    {
+      "id": "t06",
+      "title": "查询 RDS 实例",
+      "std_rate": "3/3",
+      "bare_rate": "3/3",
+      "std_token": 48646,
+      "bare_token": 30083,
+      "std_steps": 5,
+      "bare_steps": 11,
+      "note": "步数多（试错）"
+    },
+    {
+      "id": "t07",
+      "title": "查询函数列表",
+      "std_rate": "3/3",
+      "bare_rate": "3/3",
+      "std_token": 44847,
+      "bare_token": 28336,
+      "std_steps": 8,
+      "bare_steps": 11,
+      "note": "步数多（试错）"
+    },
+    {
+      "id": "t08",
+      "title": "查询 CCE 集群",
+      "std_rate": "3/3",
+      "bare_rate": "3/3",
+      "std_token": 66273,
+      "bare_token": 16810,
+      "std_steps": 7,
+      "bare_steps": 8,
+      "note": "步数基本一致"
+    },
+    {
+      "id": "t10",
+      "title": "创建 SMN 主题",
+      "std_rate": "3/3",
+      "bare_rate": "3/3",
+      "std_token": 65572,
+      "bare_token": 51771,
+      "std_steps": 8,
+      "bare_steps": 17,
+      "note": "步数多 + 波动大"
+    }
   ],
   "findings": [
     "input token 占 95.5%~97.8%（工具 schema 每轮重发）",

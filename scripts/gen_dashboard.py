@@ -1149,22 +1149,27 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '</tr>'.format(t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
                            t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0))
             for t in bench.get("tasks", []))
-        bare_rows = "".join(
-            '<tr>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
-            '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
-            '</tr>'.format(b.get("title", ""),
-                           b.get("std_rate", "—"), b.get("bare_rate", "—"),
-                           b.get("std_token", 0), b.get("bare_token", 0),
-                           b.get("std_steps", 0), b.get("bare_steps", 0),
-                           b.get("note", ""))
-            for b in bench.get("bare", []))
+        def _bare_td(b):
+            std = b.get("std_token", 0) or 0
+            bm = b.get("bare_token", 0) or 0
+            save = std - bm
+            pct = (save / std * 100) if std else 0
+            return ('<tr>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;color:#27ae60;">-{:.0f}% ({:,})</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
+                    '</tr>'.format(b.get("title", ""),
+                                   b.get("std_rate", "—"), b.get("bare_rate", "—"),
+                                   std, bm, pct, save,
+                                   b.get("std_steps", 0), b.get("bare_steps", 0),
+                                   b.get("note", "")))
+        bare_rows = "".join(_bare_td(b) for b in bench.get("bare", []))
         finding_items = "".join(
             '<li style="margin:4px 0;">{}</li>'.format(f)
             for f in bench.get("findings", []))
@@ -1185,6 +1190,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">任务</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">成功率</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">token</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;" rowspan="2">省 token</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">步数</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">裸模型问题</th></tr>'
             '<tr style="background:#f2f2f2;"><th style="padding:4px 6px;border:1px solid #ddd;">标准</th><th style="padding:4px 6px;border:1px solid #ddd;">裸模型</th>'
