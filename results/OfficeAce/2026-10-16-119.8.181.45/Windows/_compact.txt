@@ -1,0 +1,147 @@
+D1-3	P1	D1安装	doctor健康自检	工具=doctor	覆盖=OS_MATRIX
+D1-4	P2	D1安装	status/update幂等	工具=status/update	覆盖=OS_MATRIX
+D1-26	P1	D1安装	升级提醒工具注册与协议暴露	工具=check_update/upgrade	覆盖=COMMON
+D1-27	P1	D1安装	检测语义-已是最新	工具=check_update	覆盖=OS_MATRIX
+D1-28	P1	D1安装	检测语义-有新版本	工具=check_update	覆盖=OS_MATRIX
+D1-30	P2	D1安装	semver 比对正确性	工具=check_update	覆盖=OS_MATRIX
+D1-31	P1	D1安装	dismiss 冷却期	工具=check_update	覆盖=OS_MATRIX
+D1-33	P2	D1安装	skip 文件持久化与多路径	工具=check_update	覆盖=OS_MATRIX
+D1-39	P0	D1安装	Windows 升级检测链可用性	工具=check_update	覆盖=OS_MATRIX
+D1-40	P0	D1安装	镜像 lag 下检测正确性(反向提醒防护)	工具=check_update	覆盖=OS_MATRIX
+D1-41	P1	D1安装	check_update 真实 MCP 返回契约	工具=check_update	覆盖=COMMON
+D1-42	P1	D1安装	dismiss 真实闭环与跨调用持久化	工具=check_update	覆盖=COMMON
+D1-45	P1	D1安装	兜底提示真实序列与预热竞态	工具=check_update	覆盖=COMMON
+D1-65	P2	D1安装	调试模式环境变量	工具=check_update	覆盖=COMMON
+D1-66	P2	D1安装	遥测开关与端点环境变量	工具=mcp-server	覆盖=COMMON
+D1-67	P2	D1安装	Agent toolkit 模式与 DSH 跳过安装环境变量	工具=install	覆盖=COMMON
+D1-68	P2	D1安装	图标离线与区域环境变量	工具=get_service_icon/auth_init	覆盖=COMMON
+D1-69	P2	D1安装	CLI help 子命令	工具=install	覆盖=COMMON
+D1-70	P1	D1安装	代理配置与 WebSocket 代理	工具=install	覆盖=COMMON
+D2-10	P1	D2认证	R7 current档跟随	工具=auth_status	覆盖=COMMON
+D2-11	P0	D2认证	R3 STS token拒绝落盘	工具=auth_switch	覆盖=COMMON
+D2-12	P1	D2认证	R10 runtime非空禁止落盘	工具=huaweicloud_auth_init/auth_status/auth_sync	覆盖=COMMON
+D2-13	P1	D2认证	R9 configuredBySession优先env	工具=auth_status	覆盖=COMMON
+D2-16	P1	D2认证	import文件读取后擦除	工具=auth_switch	覆盖=COMMON
+D4-18	P0	D4安全	confirm-not-deny审批语义	工具=plan_cli_command	覆盖=CLIENT_MATRIX
+D4-19	P0	D4安全	确认流下预检仍生效	工具=hook_check_command/hook_check_artifacts/hook_check_deploy_plan	覆盖=CLIENT_MATRIX
+D4-20	P1	D4安全	拒绝后零操作	工具=run_approved_command	覆盖=COMMON
+D2-1	P1	D2认证	auth init三端同步	工具=huaweicloud_auth_init	覆盖=COMMON
+D2-2	P2	D2认证	auth status判定准确性	工具=auth_status	覆盖=COMMON
+D2-4	P0	D2认证	凭证脱敏正确性	工具=show_profile_redacted	覆盖=COMMON
+D2-5	P1	D2认证	凭证缺失报错指引	工具=huaweicloud_auth_init/auth_status	覆盖=COMMON
+D2-26	P1	D2认证	凭证备份与恢复	工具=huaweicloud_auth_sync	覆盖=COMMON
+D2-27	P2	D2认证	KooCLI 版本管理	工具=auth_status	覆盖=COMMON
+D3-A1	P1	D3功能	skill检索完整性	工具=retrieve_skill/search_docs	覆盖=COMMON
+D3-B1	P2	D3功能	list_operations规范名	工具=list_operations	覆盖=COMMON
+D3-B3	P1	D3功能	run_readonly脱敏执行	工具=run_readonly_command	覆盖=COMMON
+D3-B5	P2	D3功能	detect_framework识别	工具=detect_framework	覆盖=COMMON
+D3-C1	P1	D3功能	ECS生命周期E2E	工具=plan_cli_command/run_approved_command	覆盖=COMMON
+D3-C2	P1	D3功能	OBS静态站部署E2E	工具=obs_set_website_config/setup_obs_config	覆盖=COMMON
+D3-C3	P1	D3功能	沙箱部署E2E	工具=sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_close_session/sandbox_upload_file/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_check_user/sandbox_sign_agreement/sandbox_connect/sandbox_credentials	覆盖=COMMON
+D3-C4	P1	D3功能	服务创建类回归	工具=plan_cli_command/run_approved_command	覆盖=CLIENT_MATRIX
+D3-C5	P1	D3功能	工具冒烟	工具=check_cli/list_operations/plan_cli_command/explain_error	覆盖=COMMON
+D3-C6	P1	D3功能	沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/upload_file/close_session/deploy_check）	工具=sandbox_check_user/sandbox_credentials/sandbox_sign_agreement/sandbox_upload_file/sandbox_exec_one_shot/sandbox_deploy_check/sandbox_close_session	覆盖=COMMON
+D3-C7	P1	D3功能	跨区域资源操作引导（区域维度）	工具=plan_cli_command/list_regions/get_regional_availability	覆盖=COMMON
+D3-C13	P1	D3功能	OBS 静态网站托管配置	工具=huaweicloud_obs_set_website_config	覆盖=COMMON
+D3-C14	P2	D3功能	沙箱 HDKit 服务参数与 hwlink 凭证	工具=sandbox_connect/sandbox_credentials	覆盖=COMMON
+D3-S1	P1	D3功能	场景-只读查ECS(带不改约束)	工具=service_catalog/run_readonly_command	覆盖=COMMON
+D3-S2	P1	D3功能	场景-删VPC先确认	工具=plan_cli_command/hook_check_command/run_approved_command	覆盖=COMMON
+D3-S3	P1	D3功能	场景-沙箱预览出URL	工具=sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_close_session	覆盖=COMMON
+D3-S4	P1	D3功能	场景-领券闭环	工具=voucher_status/voucher_claim	覆盖=COMMON
+D3-S5	P2	D3功能	场景-复合意图分层路由	工具=service_catalog	覆盖=COMMON
+D3-S6	P2	D3功能	场景-FunctionGraph定时任务	工具=plan_cli_command/run_approved_command	覆盖=COMMON
+D3-S7	P1	D3功能	场景-跨服务交付(Web应用+RDS)并归零	工具=sandbox_connect/sandbox_deploy_nginx/plan_cli_command/run_approved_command	覆盖=COMMON
+D3-S8	P1	D3功能	场景-操作失败后排障指引	工具=explain_error/run_readonly_command	覆盖=COMMON
+D4-1	P0	D4安全	凭证文件读取拦截	工具=hook_check_command	覆盖=COMMON
+D4-2	P0	D4安全	凭证env打印拦截	工具=hook_check_command	覆盖=COMMON
+D4-3	P0	D4安全	明文secret API拦截	工具=hook_check_command	覆盖=COMMON
+D4-4	P1	D4安全	写操作审批门	工具=plan_cli_command	覆盖=COMMON
+D4-5	P0	D4安全	写操作误判检测	工具=plan_cli_command	覆盖=COMMON
+D4-6	P1	D4安全	adminPass回显警告	工具=hook_check_command	覆盖=COMMON
+D4-7	P1	D4安全	hook三工具有效性	工具=hook_check_command/hook_check_artifacts/hook_check_deploy_plan	覆盖=COMMON
+D4-8	P1	D4安全	Python/Node策略一致	工具=hook_check_command/hook_check_artifacts/hook_check_deploy_plan	覆盖=COMMON
+D4-9	P0	D4安全	公开暴露/破坏性预检	工具=hook_check_command/hook_check_artifacts/hook_check_deploy_plan	覆盖=COMMON
+D4-10	P2	D4安全	规则库新增回归	工具=hook_check_command/hook_check_artifacts/hook_check_deploy_plan	覆盖=COMMON
+D4-11	P1	D4安全	提示注入防护	工具=search_docs/retrieve_skill/search_marketplace/get_service_icon	覆盖=COMMON
+D4-12	P2	D4安全	供应链安装期安全	工具=npm	覆盖=COMMON
+D4-13	P1	D4安全	最小权限凭证通过率	工具=run_readonly_command	覆盖=COMMON
+D4-14	P2	D4安全	操作可审计性	工具=run_readonly_command	覆盖=COMMON
+D4-15	P0	D4安全	hook绕过尝试	工具=hook_check_command	覆盖=COMMON
+D4-16	P0	D4安全	命令包裹穿透	工具=hook_check_command	覆盖=COMMON
+D4-17	P1	D4安全	hook模糊fail-closed	工具=hook_check_command/hook_check_artifacts/hook_check_deploy_plan	覆盖=COMMON
+D4-21	P0	D4安全	hook_check_artifacts 具名回归（代码/IaC/策略制品预检）	工具=hook_check_artifacts	覆盖=COMMON
+D4-22	P0	D4安全	hook_check_deploy_plan 具名回归（部署计划预检）	工具=hook_check_deploy_plan	覆盖=COMMON
+D4-23	P0	D4安全	全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）	工具=install	覆盖=CLIENT_MATRIX
+D4-24	P1	D4安全	确认令牌过期与重复确认边界（审批流健壮性）	工具=auth_confirm/plan_cli_command	覆盖=CLIENT_MATRIX
+D4-25	P2	D4安全	Python hook 事件遥测分类	工具=hook_check_command	覆盖=COMMON
+D4-26	P2	D4安全	findings 证据脱敏	工具=hook_check_command	覆盖=COMMON
+D4-27	P1	D4安全	双路径输出脱敏	工具=run_readonly_command	覆盖=COMMON
+D4-28	P0	D4安全	Node 版安全 hook 链路	工具=hook_check_command	覆盖=COMMON
+D4-29	P2	D4安全	分类断言与原始命令分类入口	工具=hook_check_command	覆盖=COMMON
+D5-1	P1	D5客户端	清单发现加载	工具=install	覆盖=CLIENT_MATRIX
+D5-3	P1	D5客户端	工具全量枚举	工具=mcp-server	覆盖=CLIENT_MATRIX
+D6-1	P2	D6性能	检索响应延迟	工具=search_docs/retrieve_skill	覆盖=COMMON
+D6-3	P2	D6性能	MCP冷启时间	工具=mcp-server	覆盖=COMMON
+D6-4	P1	D6性能	并发调度正确性	工具=mcp-server	覆盖=COMMON
+D6-9	P2	D6性能	缓存清理三入口	工具=check_update/get_service_icon/search_marketplace	覆盖=COMMON
+D9-9	P1	D9协议	tools/call 超时协议语义与取消	工具=inspector	覆盖=COMMON
+D8-1	P2	D8质量	文档与能力一致	工具=search_docs	覆盖=COMMON
+D8-4	P1	D8质量	引导步骤可机械执行	工具=retrieve_skill	覆盖=COMMON
+D8-6	P2	D8质量	中英文文档一致	工具=search_docs	覆盖=COMMON
+D8-7	P0	D8质量	7 个 meta/通用技能指引可机械执行验证	工具=retrieve_skill/search_docs	覆盖=COMMON
+D8-9	P2	D8质量	安装 ID 与遥测值脱敏	工具=mcp-server	覆盖=COMMON
+D8-10	P2	D8质量	MCP 配置备份与合并	工具=install	覆盖=COMMON
+D9-1	P1	D9协议	tools/list合规	工具=inspector	覆盖=COMMON
+D9-2	P1	D9协议	JSON-RPC错误码	工具=inspector	覆盖=COMMON
+D9-3	P1	D9协议	tools/call响应格式	工具=inspector	覆盖=COMMON
+D9-4	P1	D9协议	协议生命周期	工具=inspector	覆盖=COMMON
+D9-5	P1	D9协议	stdio传输健壮	工具=mcp-server	覆盖=COMMON
+D9-6	P1	D9协议	跨客户端互通	工具=inspector	覆盖=COMMON
+D9-7	P2	D9协议	协议版本协商降级	工具=mcp-server	覆盖=COMMON
+D9-8	P2	D9协议	inputSchema版本合规	工具=inspector	覆盖=COMMON
+D9-10	P1	D9协议	MCP remote transport（HTTP/WS 远程服务）	工具=mcp-server	覆盖=COMMON
+D9-11	P1	D9协议	WebSocket 隧道通道生命周期	工具=mcp-server	覆盖=COMMON
+D9-12	P0	D9协议	initialize 握手协议安全基线	工具=inspector	覆盖=COMMON
+D9-13	P0	D9协议	tools/call 凭证不泄露与权限校验	工具=inspector	覆盖=COMMON
+D10-3	P1	D10评测	路由准确率+混淆矩阵	工具=harness	覆盖=CLIENT_MATRIX
+D10-4	P0	D10评测	安全干预-静态规则层	工具=harness	覆盖=COMMON
+==== EXPANDED ====
+EXP-D5-7-1	P1	D5客户端矩阵	D5-1	在 OfficeAce 上执行 D5-1 用例
+EXP-D5-7-3	P1	D5客户端矩阵	D5-3	在 OfficeAce 上执行 D5-3 用例
+EXP-C4-01	P1	D3-C4服务矩阵	D3-C4	ECS 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-02	P1	D3-C4服务矩阵	D3-C4	VPC 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-03	P1	D3-C4服务矩阵	D3-C4	OBS 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-04	P1	D3-C4服务矩阵	D3-C4	RDS 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-05	P1	D3-C4服务矩阵	D3-C4	GaussDB 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-06	P1	D3-C4服务矩阵	D3-C4	CCE 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-07	P1	D3-C4服务矩阵	D3-C4	FunctionGraph 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-08	P1	D3-C4服务矩阵	D3-C4	IAM 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-09	P1	D3-C4服务矩阵	D3-C4	CTS 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-10	P1	D3-C4服务矩阵	D3-C4	CES 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-11	P1	D3-C4服务矩阵	D3-C4	DDS 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-12	P1	D3-C4服务矩阵	D3-C4	DCS 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-13	P1	D3-C4服务矩阵	D3-C4	SMN 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-14	P1	D3-C4服务矩阵	D3-C4	DMS 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-15	P1	D3-C4服务矩阵	D3-C4	WAF 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-16	P1	D3-C4服务矩阵	D3-C4	CDN 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-17	P1	D3-C4服务矩阵	D3-C4	ModelArts 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-18	P1	D3-C4服务矩阵	D3-C4	DEW 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-19	P1	D3-C4服务矩阵	D3-C4	CBR 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-20	P1	D3-C4服务矩阵	D3-C4	EVS 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-21	P1	D3-C4服务矩阵	D3-C4	EIP 只读规划冒烟: list_operations + plan 只读命令
+EXP-C4-22	P1	D3-C4服务矩阵	D3-C4	ELB 只读规划冒烟: list_operations + plan 只读命令
+EXP-E01	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: ECS查
+EXP-E02	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: ECS创
+EXP-E03	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: OBS静
+EXP-E04	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: EIP→
+EXP-E05	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: RDS查
+EXP-E06	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: DCS创
+EXP-E07	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: CBR→
+EXP-E08	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: expl
+EXP-E09	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: CCE创
+EXP-E10	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: Func
+EXP-E11	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: 费用查询
+EXP-E12	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: CES→
+EXP-E13	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: 证书/E
+EXP-E14	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: IAM审
+EXP-E15	P1	D10评测集	D10-3	①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: vouc
