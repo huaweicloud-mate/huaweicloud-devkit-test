@@ -1,0 +1,44 @@
+{
+  "case": "D3-C7",
+  "status": "PASS",
+  "total": 7,
+  "passed": 7,
+  "results": [
+    {
+      "name": "list_regions 返回区域",
+      "pass": true,
+      "detail": "{\"ok\":true,\"count\":26,\"regions\":[{\"id\":\"af-north-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"AF-Cairo\",\"zh-cn\":\"非洲-开罗\"}},{\"id\":\"af-south-1\",\"type\":\"public\""
+    },
+    {
+      "name": "get_regional_availability",
+      "pass": true,
+      "detail": "{\"ok\":true,\"service\":\"vpc\",\"region\":\"cn-north-4\",\"available\":true,\"note\":\"vpc is available in cn-north-4.\",\"sourcedFrom\":\"static cache, update via npm"
+    },
+    {
+      "name": "plan 只读含 --cli-region(参数级断言)",
+      "pass": true,
+      "detail": "[\"VPC\",\"ListVpcs\",\"--cli-region=cn-north-4\",\"--cli-output=json\"]"
+    },
+    {
+      "name": "执行只读查询",
+      "pass": true,
+      "detail": "{\n  \"request_id\": \"da206a497b17e9239070e5c7c2271a05\",\n  \"vpcs\": [\n    {\n      \"name\": \"tctest-diag2\",\n      \"id\": \"1d5a1"
+    },
+    {
+      "name": "EIP 建删命令含 region",
+      "pass": true,
+      "detail": "hasRegion=true"
+    },
+    {
+      "name": "CreatePublicip 返回 id",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "DeletePublicip 释放",
+      "pass": true,
+      "detail": "{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"\",\"stderr\":\"\",\"plan\":{\"executable\":\"hcloud\",\"args\":["
+    }
+  ],
+  "executedAt": "20261015212019"
+}
