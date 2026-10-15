@@ -30,6 +30,28 @@ const CFG = {
   credentialFile: resolve(os.homedir(), '.dsh', '.credentials.yaml'),
 };
 
+// ---- 被测版本锚点（防退化门必需：跨版本对照要有锚）----
+function detectDevkitVersion() {
+  if (process.env.BENCH_DEVKIT_VERSION) return process.env.BENCH_DEVKIT_VERSION;
+  try {
+    const pkg = JSON.parse(readFileSync(join(dirname(CFG.mcpServer), '..', 'package.json'), 'utf-8'));
+    return `${pkg.name}@${pkg.version}`;
+  } catch { return 'unknown'; }
+}
+function detectKoolcliVersion() {
+  try {
+    const r = spawnSync('hcloud', ['CBR', '--help'], { encoding: 'utf-8', timeout: 30000 });
+    const m = ((r.stdout || '') + (r.stderr || '')).match(/KooCLI Version ([\d.]+)/);
+    return m ? m[1] : 'unknown';
+  } catch { return 'unknown'; }
+}
+
+// ---- 每 run 原子落盘（脱敏：不含 finalAnswer/verdictDetail，只留可复算的口径字段）----
+const RUNS_DIR = join(ROOT, 'results', 'runs');
+function writeRunRecord(rec) {
+  mkdirSync(RUNS_DIR, { recursive: true });
+  writeFileSync(join(RUNS_DIR, `${rec.runid}.json`), JSON.stringify(rec, null, 2) + "\n", "utf-8");
+}
 // ---- 参数解析 ----
 const args = process.argv.slice(2);
 let taskFilter = null;
@@ -180,6 +202,8 @@ async function main() {
   const selected = all ? tasks : tasks.filter((t) => t.id === taskFilter);
   if (selected.length === 0) { console.error(`未找到任务 ${taskFilter}，可用: ${tasks.map((t) => t.id).join(', ')}`); process.exit(2); }
 
+  const devkitVersion = detectDevkitVersion();
+  const koolcliVersion = detectKoolcliVersion();
   const apiKey = readApiKey();
   let mcpsrv = null;
   let tools = [];
@@ -193,6 +217,7 @@ async function main() {
   }
   const toolLabel = bare ? 'shell(裸模型) ' : `MCP ${tools.length} 工具`;
   console.log(`[harness] 模型=${CFG.model} 工具=${toolLabel} 任务=${selected.length} 采样=${runs} 模式=${bare ? 'bare对照' : '标准'}`);
+  console.log(`[harness] 被测版本=${devkitVersion} KooCLI=${koolcliVersion}`);
 
   const ts = new Date().toISOString().replace(/[-:T]/g, '').replace(/Z/, '').replace(/\.\d+/, '');
   const tsCompact = ts.slice(0, 14);
@@ -213,6 +238,14 @@ async function main() {
       }
       r.verdict = verdict.success ? 'PASS' : 'FAIL';
       r.verdictDetail = verdict.detail || '';
+      writeRunRecord({
+        runid: r.runid, ts, taskId: task.id, taskTitle: task.title,
+        expectedService: task.expectedService, expectedSkill: task.expectedSkill,
+        model: CFG.model, devkitVersion, koolcliVersion, bare: !!bare,
+        promptTokens: r.promptTokens, completionTokens: r.completionTokens, totalTokens: r.totalTokens,
+        stepCount: r.stepCount, maxRoundsHit: !!r.lastError,
+        verdict: r.verdict, toolTrace: r.toolTrace,
+      });
       taskRuns.push(r);
       console.log(`    verdict=${r.verdict} token=${r.totalTokens} step=${r.stepCount} ${verdict.detail ? '| ' + String(verdict.detail).slice(0, 80) : ''}`);
       if (task.cleanup) {
@@ -232,7 +265,7 @@ async function main() {
   const outDir = join(ROOT, 'results');
   mkdirSync(outDir, { recursive: true });
   const outJson = join(outDir, `baseline-${bare ? 'bare-' : ''}${tsCompact}.json`);
-  writeFileSync(outJson, JSON.stringify({ meta: { ts, model: CFG.model, mcpServer: CFG.mcpServer, runs, bare }, tasks: allResults }, null, 2), 'utf-8');
+  writeFileSync(outJson, JSON.stringify({ meta: { ts, model: CFG.model, mcpServer: CFG.mcpServer, runs, bare, devkitVersion, koolcliVersion }, tasks: allResults }, null, 2), 'utf-8');
   console.log(`\n结果落盘: ${outJson}`);
 
   console.log(`\n=== ${bare ? '裸模型对照' : '首份基线'}汇总（token=中位数, step=中位数）===`);
