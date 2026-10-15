@@ -12,5 +12,5 @@ function hc(args) {
 const j = hc(['VPC', 'ListSubnets', `--cli-region=${region}`]);
 const s = (j.json?.subnets || []).find((x) => x.name === name);
 if (!s) { console.log(JSON.stringify({ success: true, detail: `子网 ${name} 不存在（无残留）` })); process.exit(0); }
-const d = hc(['VPC', 'DeleteSubnet', `--cli-region=${region}`, `--subnet_id=${s.id}`]);
+const d = hc(['VPC', 'DeleteSubnet', `--cli-region=${region}`, `--vpc_id=${s.vpc_id}`, `--subnet_id=${s.id}`]);
 console.log(JSON.stringify({ success: !d.json || !/error/i.test(d.raw), detail: `DeleteSubnet ${name} → ${d.raw.slice(0, 120) || '(空)'}` }));
