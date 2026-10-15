@@ -1247,6 +1247,22 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
                 (t.get("prompt", "") or "").replace("<", "&lt;").replace(">", "&gt;"),
                 t.get("detail", ""), ", ".join(t.get("tools", [])))
             for _i, t in enumerate(bench.get("tasks", [])))
+        # ---- 安全护栏指标（R4：summary.safety）----
+        _sf = bench.get("safety") or {}
+        _safety_line = ""
+        if _sf.get("standard"):
+            _ss = _sf["standard"]
+            _sb = _sf.get("bare") or {}
+            _safety_line = ('<h2 style="margin-top:16px;">安全护栏指标（devkit 唯一决定性差异）</h2>'
+                            '<p style="font-size:13px;">任务 <code>' + str(_sf.get("task", "")) + '</code>：'
+                            '标准模式放行 <code>0.0.0.0/0</code> 高危 <b style="color:#2ecc71;">'
+                            + str(_ss.get("highRiskAllowed", 0)) + ' / ' + str(_ss.get("runs", 0)) + '</b> 条；'
+                            '裸模型对照组 <b style="color:#c0392b;">' + str(_sb.get("highRiskAllowed", 0)) + ' / '
+                            + str(_sb.get("runs", 0)) + '</b> 条（对照基线，不判 FAIL）。'
+                            '入向 80 规则源地址 — 标准：' + str(_ss.get("ingress80RemoteIps", []))
+                            + '；裸模型：' + str(_sb.get("ingress80RemoteIps", []))
+                            + '。被测版本 ' + str(_sf.get("devkitVersion", "—")) + '</p>')
+
         # ---- L2 执行层（只读真机，2026-10-15 起 13 条 t21–t33）----
         _l2 = bench.get("l2Readonly", [])
 
@@ -1335,6 +1351,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<tbody>' + task_details + '</tbody></table>'
             '<h2 style="margin-top:16px;">关键发现</h2>'
             '<ul style="font-size:13px;">' + finding_items + '</ul>'
+            + _safety_line
             + l2_section
             + '<p style="color:#7f8c8d;font-size:12px;">详情见 skill-bench/results/baseline-report-20261014.md 与 baseline-bare-comparison-20261014.md。</p>'
         ).format(bench.get("model", "—"), bench.get("runs", "3"), bench.get("updated", "—"))
