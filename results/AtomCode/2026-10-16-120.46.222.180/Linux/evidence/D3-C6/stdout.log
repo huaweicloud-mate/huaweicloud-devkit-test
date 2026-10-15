@@ -1,0 +1,40 @@
+{
+  "case": "D3-C6",
+  "assistant": "AtomCode(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "hdk gitHead 6302921c (v1.1.9-next.0)",
+  "executedAt": "20261016051747",
+  "status": "BLOCKED",
+  "why": "真云实机执行：huaweicloud_sandbox_check_user 返回 HDKIT_UPSTREAM_ERROR(status 502, 查询实名状态失败, trace 810da946...)，沙箱上游 HDKit 服务 502 网关故障，connect/credentials/exec/close 连锁失败(workspace_id is required)。非 devkit 产品缺陷。解除条件=沙箱上游 HDKit 服务恢复(502→200)。",
+  "blockedReason": "沙箱上游 HDKit 服务返回 HTTP 502(查询实名状态失败，已 3 次重试均 502)，sandbox connect 无法建立 workspace，7 隐式工具冒烟连锁失败。非 devkit 产品缺陷。解除条件=沙箱上游 HDKit 服务恢复。",
+  "total": 5,
+  "passed": 0,
+  "failed": 5,
+  "results": [
+    {
+      "name": "check_user",
+      "pass": false,
+      "detail": "HDKIT_UPSTREAM_ERROR: 查询实名状态失败 (status 502, trace 810da946351441129ac28600331e5d50)"
+    },
+    {
+      "name": "connect",
+      "pass": false,
+      "detail": "undefined ws="
+    },
+    {
+      "name": "credentials",
+      "pass": false,
+      "detail": "undefined"
+    },
+    {
+      "name": "exec_one_shot",
+      "pass": false,
+      "detail": ""
+    },
+    {
+      "name": "close_session",
+      "pass": false,
+      "detail": "workspace_id is required. No sandbox connected"
+    }
+  ]
+}

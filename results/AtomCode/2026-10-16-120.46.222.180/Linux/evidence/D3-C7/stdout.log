@@ -1,0 +1,38 @@
+{
+  "case": "D3-C7",
+  "assistant": "AtomCode(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "hdk gitHead 6302921c (v1.1.9-next.0)",
+  "status": "BLOCKED",
+  "why": "真云实机执行：跨区域只读规划/引导 4/5 通过（get_regional_availability+plan含--cli-region+只读查询+EIP归零均 PASS）；最小 EIP 创建被账户级 region/project 绑定阻断（VPC.0501：token 项目 cn-north-4 与 region ap-southeast-3 不匹配），非 devkit 产品缺陷；EIP 归零 total_count=0。解除条件=授予跨区域 EIP 权限或改用匹配 region 的 project。",
+  "actual": "total=5 passed=4 failed=1",
+  "executedAt": "20261015211533",
+  "results": [
+    {
+      "name": "get_regional_availability(ecs,ap-southeast-3)",
+      "pass": true,
+      "detail": "{\"ok\":true,\"service\":\"ecs\",\"region\":\"ap-southeast-3\",\"available\":true,\"note\":\"ecs is available in ap-southeast-3.\",\"sourcedFrom\":\"static cache, update via npm package upgrade\",\"disclaimer\":\"This result reflects service-level availability only. It does NOT guar"
+    },
+    {
+      "name": "plan含--cli-region",
+      "pass": true,
+      "detail": "hcloud ECS ListServersDetails --cli-region=ap-southeast-3"
+    },
+    {
+      "name": "只读查询ap-southeast-3",
+      "pass": true,
+      "detail": "ok count-queried | {\n  \"error\": {\n    \"message\": \"the current region is [ap-southeast-3] and does not match with the project name [cn-north"
+    },
+    {
+      "name": "创建EIP(minimal)",
+      "pass": false,
+      "detail": "ok | {\n  \"code\": \"VPC.0501\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"The project name cn-north-4 carried by the token from IAM contains region information. On"
+    },
+    {
+      "name": "EIP归零(tctest-前缀空)",
+      "pass": true,
+      "detail": "total_count=0"
+    }
+  ],
+  "blockedReason": "真云实机执行：跨区域只读规划/引导 4/5 通过（get_regional_availability+plan含--cli-region+只读查询+EIP归零均 PASS）；最小 EIP 创建被账户级 region/project 绑定阻断（VPC.0501：token 项目 cn-north-4 与 region ap-southeast-3 不匹配），非 devkit 产品缺陷；EIP 归零 total_count=0。解除条件=授予跨区域 EIP 权限或改用匹配 region 的 project。"
+}

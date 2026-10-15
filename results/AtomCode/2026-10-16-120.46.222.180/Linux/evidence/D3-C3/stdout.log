@@ -1,0 +1,40 @@
+{
+  "case": "D3-C3",
+  "assistant": "AtomCode(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "hdk gitHead 6302921c (v1.1.9-next.0)",
+  "executedAt": "20261016051747",
+  "status": "BLOCKED",
+  "why": "真云实机执行：sandbox connect 返回空 workspace（上游 HDKit 服务 502→check_user 失败导致 connect 无法建立会话），upload_project/deploy_nginx/deploy_check/close_session 连锁失败。非 devkit 产品缺陷。解除条件=沙箱上游 HDKit 服务恢复。",
+  "blockedReason": "沙箱上游 HDKit 服务 502 故障，connect 返回空 workspace，部署静站 E2E 无法执行。非 devkit 产品缺陷。解除条件=沙箱上游 HDKit 服务恢复。",
+  "total": 5,
+  "passed": 0,
+  "failed": 5,
+  "results": [
+    {
+      "name": "connect",
+      "pass": false,
+      "detail": "ws=(空)"
+    },
+    {
+      "name": "upload_project",
+      "pass": false,
+      "detail": "workspace_id is required. No sandbox connected"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": false,
+      "detail": "undefined:undefined"
+    },
+    {
+      "name": "deploy_check",
+      "pass": false,
+      "detail": "undefined"
+    },
+    {
+      "name": "close_session",
+      "pass": false,
+      "detail": "workspace_id is required. No sandbox connected"
+    }
+  ]
+}
