@@ -35,7 +35,7 @@ rec('obs_set_website_config get 验证', !wget?.__error && JSON.stringify(wget).
 
 // 6. 删除归零（清空对象 + 删桶）
 const rm = sh('hcloud obs rm obs://' + bucket + ' -r -f');
-const rb = sh('hcloud obs rb obs://' + bucket + ' -f');
+const rb = sh('hcloud obs rm obs://' + bucket + ' -f');
 rec('删除 OBS 桶归零', /successfully/i.test(rb.out) || /Delete bucket/i.test(rb.out), rb.out.slice(-160));
 
 // 7. 归零验证
