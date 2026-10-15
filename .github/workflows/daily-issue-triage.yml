@@ -55,13 +55,33 @@ jobs:
         run: python scripts/daily_issue_triage.py --dry-run
 
       - name: Commit & push 待提单
+        # 本仓写入者众多（多 agent 直推 + 其他自动写回），commit 与 push 之间 main 若有新提交，
+        # 直接 push 会 non-fast-forward 被拒（见 #41）。故 push 前先 fetch + rebase 对齐远端，
+        # 冲突则 abort 后重试，最多 3 次（参考 #33 refresh-dashboard 已验证的重试模式）。
         run: |
+          set -uo pipefail
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add results/Summary/待提单-*.md
           if git diff --cached --quiet; then
             echo "待提单无变动，跳过提交"
-          else
-            git commit -m "chore: 每日 issue 分诊待提单 $(date +%Y-%m-%d)"
-            git push https://shuangheaven:${{ secrets.HDK_GH_TOKEN }}@github.com/huaweicloud-mate/huaweicloud-devkit-test.git HEAD:main
+            exit 0
           fi
+          git commit -m "chore: 每日 issue 分诊待提单 $(date +%Y-%m-%d)"
+          REMOTE="https://shuangheaven:${{ secrets.HDK_GH_TOKEN }}@github.com/huaweicloud-mate/huaweicloud-devkit-test.git"
+          for attempt in 1 2 3; do
+            if ! git fetch "$REMOTE" main; then
+              echo "fetch 失败（第 ${attempt} 次尝试）" >&2
+            elif ! git rebase FETCH_HEAD; then
+              echo "rebase 冲突，abort（第 ${attempt} 次尝试）" >&2
+              git rebase --abort || true
+            elif git push "$REMOTE" HEAD:main; then
+              echo "推送成功（第 ${attempt} 次尝试）"
+              exit 0
+            else
+              echo "push 被拒，远端又前进（第 ${attempt} 次尝试）" >&2
+            fi
+            sleep 5
+          done
+          echo "连续 3 次 fetch+rebase+push 失败，放弃" >&2
+          exit 1
