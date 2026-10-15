@@ -1162,7 +1162,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">{:,}</td>'
-                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;color:#27ae60;">-{:.0f}% ({:,})</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;color:#c0392b;font-weight:bold;">-{:.0f}% ({:,})</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
