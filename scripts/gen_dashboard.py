@@ -584,136 +584,156 @@ def render_ux_block(ux, design):
         '夹具内置宿主隔离 + 需求验收三态退出码）；数据日期 <b>' + str(ux.get("date", "—")) +
         '</b>，生成于 ' + str(ux.get("generatedAt", "—")) + '（' + str(ux.get("timezone", "Asia/Shanghai")) + '）。</p>')
 
-    # KPI
-    k = _ux_kpi(design["total"] if design else len(cases), "D11 用例总数", "#34495e")
+    # KPI —— 分两组（设计态 / 执行态），避免两套口径混在一行
+    _cap = '<div style="color:#7f8c8d;font-size:12px;margin:6px 0 2px;">{}</div>'
+    kd = _ux_kpi(design["total"] if design else len(cases), "D11 用例总数", "#34495e")
     if design:
-        k += _ux_kpi(f'{design["p1"]} / {design["p2"]}', "P1 / P2", "#8e44ad")
-        k += _ux_kpi(design["carrier"]["landed"], "已建可执行载体", "#16a085")
-        k += _ux_kpi(design["carrier"]["frozen_only"], "契约依赖待冻结", "#e67e22")
-        k += _ux_kpi(design["carrier"]["none"], "未建可执行载体", "#95a5a6")
-    k += _ux_kpi(f'{msum.get("pass", 0)} / {msum.get("total", len(cases))}', "主列 PASS / 总数", "#3498db")
-    k += _ux_kpi(msum.get("not_implemented", 0), "需求未实现", UX_STATUS_COLOR["NOT_IMPLEMENTED"])
-    k += _ux_kpi(msum.get("blocked", 0), "BLOCKED(ENV)", UX_STATUS_COLOR["BLOCKED"])
-    parts.append(f'<div style="display:flex;flex-wrap:wrap;margin:-4px;">{k}</div>')
+        kd += _ux_kpi(f'{design["p1"]} / {design["p2"]}', "P1 / P2", "#8e44ad")
+        kd += _ux_kpi(design["carrier"]["landed"], "已建可执行载体", "#16a085")
+        kd += _ux_kpi(design["carrier"]["frozen_only"], "契约依赖·无载体", "#e67e22")
+        kd += _ux_kpi(design["carrier"]["none"], "未建可执行载体", "#95a5a6")
+    ke = _ux_kpi(f'{msum.get("pass", 0)} / {msum.get("total", len(cases))}', "主列 PASS / 总数", "#3498db")
+    ke += _ux_kpi(msum.get("not_implemented", 0), "需求未实现", UX_STATUS_COLOR["NOT_IMPLEMENTED"])
+    ke += _ux_kpi(msum.get("blocked", 0), "BLOCKED(ENV)", UX_STATUS_COLOR["BLOCKED"])
+    dsrc = design["source"] if design else "test-cases/ux/用例矩阵-体验级.csv"
+    parts.append(_cap.format('设计态 · 用例定义（真源 <code>' + dsrc + '</code>）')
+                 + f'<div style="display:flex;flex-wrap:wrap;margin:-4px;">{kd}</div>'
+                 + _cap.format('执行态 · 本轮门禁（真源 <code>' + ux.get("_file", "") + '</code>）')
+                 + f'<div style="display:flex;flex-wrap:wrap;margin:-4px;">{ke}</div>')
 
     # 口径声明
     parts.append(
         '<div style="background:#fdf6e3;border-left:4px solid #e67e22;padding:8px 12px;margin:10px 0;font-size:12px;color:#7f5f00;">'
         '<b>口径（必读）</b>：' + str(ux.get("caveat", "")) +
         ' 因此「需求未实现」<b>不是</b> harness 故障，也不等于体验验收结论。</div>')
-
-    # 三态矩阵
-    parts.append('<h3>门禁三态矩阵（列 = 被测包）</h3>')
-    head = ('<tr>' + f'<th style="{_TH}">用例</th><th style="{_TH}">夹具</th>'
-            + ''.join(f'<th style="{_TH}">' +
-                      f'{s.get("label", "")}<br><span style="font-weight:400;color:#7f8c8d;">v{s.get("version") or "?"}</span>'
-                      f'</th>' for s in suts) + '</tr>')
-    rows = []
-    fmap = (design or {}).get("fixture_map", {})
-    for c in cases:
-        fname = c.get("file", "")
-        own_id = c.get("case", "")
-        matrix_id = fmap.get(fname, "")
-        label_id = matrix_id or own_id or "—"
-        sub = (f'<br><span style="color:#e67e22;font-size:10px;">夹具自标 {own_id}</span>'
-               if matrix_id and own_id and matrix_id != own_id else '')
-        recs = {s["label"]: next((x for x in s.get("cases", []) if x.get("case") == c.get("case")), None) for s in suts}
-        tds = []
-        for s in suts:
-            r = recs.get(s.get("label"))
-            if not r:
-                tds.append(f'<td style="{_TD}text-align:center;color:#95a5a6;">—</td>')
-                continue
-            st = r.get("status", "")
-            tot = (r.get("pass") or 0) + (r.get("fail") or 0)
-            tds.append(f'<td style="{_TD}text-align:center;color:{UX_STATUS_COLOR.get(st, "#2c3e50")};">'
-                       f'<b>{UX_STATUS_LABEL.get(st, st)}</b><br><span style="color:#7f8c8d;">'
-                       f'{(r.get("pass") if r.get("pass") is not None else "?")}/{tot or "?"} 断言</span></td>')
-        rows.append(f'<tr><td style="{_TD}"><b>{label_id}</b>{sub}</td>'
-                    f'<td style="{_TD}color:#7f8c8d;font-size:11px;">{fname}</td>' + ''.join(tds) + '</tr>')
-    parts.append('<table style="border-collapse:collapse;width:100%;font-size:12px;">'
-                 f'<thead>{head}</thead><tbody>{"".join(rows)}</tbody></table>')
-    parts.append('<p style="color:#7f8c8d;font-size:12px;">单元格 = 三态判定 ｜ 通过/全部断言数。'
-                 '「需求未实现」= 需求验收未达标（已知缺口）；BLOCKED(ENV) = 宿主/环境不可判定。'
-                 '用例 ID 以设计矩阵（<code>test-cases/ux/</code>，真源 <code>gen_ux.py</code>）为准；'
-                 '夹具文件名/内部 case id 与用例号不一致处标注为橙色「夹具自标」。</p>')
-
-    # ---- 全量用例清单（43 条：已建载体的给三态结果，未建载体的也逐条列出）----
-    if design and design.get("cases"):
-        stat = {}
-        for s in suts:
-            for c in s.get("cases", []):
-                stat.setdefault(c.get("case"), {})[s.get("label")] = c
-        main_label = main.get("label")
-        urows, cnt = [], Counter()
-        for c in design["cases"]:
-            per = stat.get(c["id"], {})
-            mr = per.get(main_label) or (next(iter(per.values())) if per else None)
-            if per:
-                mainSt = (mr or {}).get('status')
-                kind = 'BLOCKED' if mainSt == 'BLOCKED' else ('PASS' if mainSt == 'PASS' else 'FAIL')
-            elif c["frozen"]:
-                kind = "FROZEN"
-            else:
-                kind = "NONE"
-            cnt[kind] += 1
-            tds = []
-            for s in suts:
-                rr = per.get(s.get("label"))
-                if not rr:
-                    tds.append(f'<td style="{_TD}text-align:center;color:#bdc3c7;">—</td>')
-                    continue
-                st = rr.get("status", "")
-                tot = (rr.get("pass") or 0) + (rr.get("fail") or 0)
-                tds.append(f'<td style="{_TD}text-align:center;color:{UX_STATUS_COLOR.get(st, "#2c3e50")};">'
-                           f'<b>{UX_STATUS_LABEL.get(st, st)}</b>'
-                           f'<br><span style="color:#7f8c8d;">{rr.get("pass")}/{tot or "?"}</span></td>')
-            if c["fixture"]:
-                carrier = f'夹具 <code>{c["fixture"]}</code>'
-            else:
-                carrier = f'{c["advice"] or "—"}（纸面定义）'
-            notes = []
-            if c["frozen"]:
-                notes.append('<span style="color:#e67e22;">契约依赖待冻结</span>')
-            if c["block"] and c["block"] != "无":
-                notes.append(c["block"])
-            note = ' ｜ '.join(notes)
-            stripe = ' style="background:#fbfbfb;"' if len(urows) % 2 else ''
-            urows.append(
-                f'<tr class="uxrow" data-ux="{kind}"{stripe}>'
-                f'<td style="{_TD}white-space:nowrap;"><b>{c["id"]}</b></td>'
-                f'<td style="{_TD}text-align:center;">{c["prio"]}</td>'
-                f'<td style="{_TD}color:#7f8c8d;font-size:11px;white-space:nowrap;">{c["batch"].split(" · ")[0]}</td>'
-                f'<td style="{_TD}">{c["title"]}</td>'
-                f'<td style="{_TD}color:#7f8c8d;font-size:11px;">{carrier}</td>'
-                + ''.join(tds)
-                + f'<td style="{_TD}color:#7f8c8d;font-size:11px;">{note}</td></tr>')
+    if design:
+        _fz, _fz_landed = design["frozen"], sum(1 for c in design["cases"] if c["frozen"] and c["landed"])
         parts.append(
-            f'<h3>全部 D11 用例（{design["total"]} 条 · 每条都列出）</h3>'
-            '<p style="color:#7f8c8d;font-size:12px;">执行态列 = 该用例的门禁结果（未建载体者该列标 '
-            '<b>—</b>，不计入通过率）。载体列「纸面定义」= 目前只有用例定义、尚未落 L1/L2 可执行载体；'
-            '「契约依赖待冻结」= 依赖字段未冻结，契约冻结前应标 NOT_RUN。'
-            '<b>环境不可判定</b>= 真机用例在当前宿主缺真云凭证而跳过（不等于需求缺口，须在真机复跑）。</p>'
-            '<div style="margin:0 0 8px;">'
-            f'<button class="uxbtn active" data-f="ALL" onclick="filterUxCase(\'ALL\')">全部 {design["total"]}</button>'
-            f'<button class="uxbtn" data-f="PASS" onclick="filterUxCase(\'PASS\')">PASS {cnt["PASS"]}</button>'
-            f'<button class="uxbtn" data-f="FAIL" onclick="filterUxCase(\'FAIL\')">需求未实现 {cnt["FAIL"]}</button>'
-            f'<button class="uxbtn" data-f="BLOCKED" onclick="filterUxCase(\'BLOCKED\')">环境不可判定 {cnt["BLOCKED"]}</button>'
-            f'<button class="uxbtn" data-f="FROZEN" onclick="filterUxCase(\'FROZEN\')">契约待冻结 {cnt["FROZEN"]}</button>'
-            f'<button class="uxbtn" data-f="NONE" onclick="filterUxCase(\'NONE\')">未建载体 {cnt["NONE"]}</button>'
-            '</div>'
+            '<div style="background:#eef6fb;border-left:4px solid #2980b9;padding:8px 12px;margin:10px 0;font-size:12px;color:#1b4f72;">'
+            '<b>两个「契约依赖」口径不同（勿相加 / 勿混比）</b>：'
+            f'执行态 KPI「契约依赖·无载体」= <b>{design["carrier"]["frozen_only"]}</b> 条'
+            '（= 带契约依赖标记 且 无 L1/L2 载体 → 本轮不进入执行）；'
+            f'设计态「用例设计态概览」末列「带契约依赖标记」= <b>{_fz}</b> 条'
+            f'（用例定义中带「契约依赖…待冻结」的条目总数，其中 <b>{_fz_landed}</b> 条已建载体、'
+            '按「门禁先行」执行，结果仅记趋势）。两者不是同一集合，<b>不可相加</b>。</div>')
+
+    # ---- 门禁三态矩阵（行 = 被测包；列 = 三态判定）---- 对齐「版本执行」页签「版本全量测试」表结构
+    G_ST = [("PASS", "PASS"), ("NOT_IMPLEMENTED", "需求未实现"), ("BLOCKED", "BLOCKED(ENV)")]
+    g_stat = {}
+    for s in suts:
+        g_stat[s.get("label", "")] = Counter((c.get("status") or "") for c in (s.get("cases") or []))
+
+    def _g_rate(cnt):
+        denom = cnt.get("PASS", 0) + cnt.get("NOT_IMPLEMENTED", 0)
+        return f"{round(cnt.get('PASS', 0) / denom * 100)}%" if denom else "—"
+
+    def _cidnum(cid):
+        m = re.search(r"-(\d+)$", cid or "")
+        return int(m.group(1)) if m else 0
+
+    parts.append('<h3>门禁三态矩阵（行 = 被测包）</h3>')
+    parts.append('<p style="color:#7f8c8d;font-size:12px;">行 = 被测包（本轮实际执行门禁的 SUT），列 = 三态判定计数；'
+                 '通过率分母 = PASS + 需求未实现（BLOCKED(ENV) = 宿主/环境不可判定，不计入分母），'
+                 '与「版本执行」页签同一口径。逐用例结果见下方「被测包明细」。</p>')
+    grow = []
+    for s in suts:
+        cnt = g_stat.get(s.get("label", "")) or Counter()
+        cells = ''.join(f'<td style="{_TD}text-align:center;color:{UX_STATUS_COLOR[k]};">'
+                        f'<b>{cnt.get(k, 0)}</b></td>' for k, _lb in G_ST)
+        grow.append(f'<tr><td style="{_TD}"><b>{s.get("label", "")}</b></td>'
+                    f'<td style="{_TD}color:#7f8c8d;">v{s.get("version") or "?"}</td>'
+                    f'<td style="{_TD}text-align:center;"><b style="font-size:15px;">{sum(cnt.values())}</b></td>'
+                    + cells
+                    + f'<td style="{_TD}text-align:center;"><b>{_g_rate(cnt)}</b></td></tr>')
+    parts.append('<table style="border-collapse:collapse;width:100%;font-size:13px;"><thead>'
+                 f'<tr><th style="{_TH}" rowspan="2">被测包</th><th style="{_TH}" rowspan="2">版本</th>'
+                 f'<th style="{_TH}" rowspan="2">已执行用例</th>'
+                 f'<th style="{_TH}" colspan="{len(G_ST)}">三态判定</th>'
+                 f'<th style="{_TH}" rowspan="2">通过率</th></tr><tr>'
+                 + ''.join(f'<th style="{_TH}">{lb}</th>' for _k, lb in G_ST)
+                 + '</tr></thead><tbody>' + ''.join(grow) + '</tbody></table>')
+
+    # ---- 被测包明细（每个被测包一个可展开块，对齐「版本执行」页签的版本明细）----
+    dcases = {c["id"]: c for c in ((design or {}).get("cases") or [])}
+    fmap = (design or {}).get("fixture_map", {})
+    executed_ids = set()
+    parts.append('<h3>被测包明细（逐用例三态）</h3>')
+    for s in suts:
+        label = s.get("label", "")
+        cnt = g_stat.get(label) or Counter()
+        skey = re.sub(r"[^0-9A-Za-z]+", "", label) or "sut"
+        scases = sorted((s.get("cases") or []), key=lambda x: _cidnum(x.get("case")))
+        rws = []
+        for c in scases:
+            cid = c.get("case") or ""
+            owned = c.get("file") or ""
+            mid = fmap.get(owned, "")
+            disp = mid or cid or "—"
+            if mid and cid and mid != cid:
+                disp += f'<br><span style="color:#e67e22;font-size:10px;">夹具自标 {cid}</span>'
+            d = dcases.get(cid) or dcases.get(mid) or {}
+            st = c.get("status") or ""
+            pf = c.get("pass") or 0
+            fl = c.get("fail") or 0
+            tot = pf + fl
+            kind = "BLOCKED" if st == "BLOCKED" else ("PASS" if st == "PASS" else "FAIL")
+            note = c.get("note") or ""
+            executed_ids.add(cid)
+            if mid:
+                executed_ids.add(mid)
+            rws.append(
+                f'<tr class="uxrow" data-uxk="{skey}" data-ux="{kind}">'
+                f'<td style="{_TD}white-space:nowrap;"><b>{disp}</b></td>'
+                f'<td style="{_TD}text-align:center;">{d.get("prio", "")}</td>'
+                f'<td style="{_TD}color:#7f8c8d;font-size:11px;white-space:nowrap;">{(d.get("batch") or "").split(" · ")[0]}</td>'
+                f'<td style="{_TD}">{d.get("title", "")}</td>'
+                f'<td style="{_TD}color:#7f8c8d;font-size:11px;">夹具 <code>{owned}</code></td>'
+                f'<td style="{_TD}text-align:center;color:{UX_STATUS_COLOR.get(st, "#2c3e50")};">'
+                f'<b>{UX_STATUS_LABEL.get(st, st)}</b><br><span style="color:#7f8c8d;">{pf}/{tot or "?"} 断言</span></td>'
+                f'<td style="{_TD}color:#7f8c8d;font-size:11px;">{note}</td></tr>')
+        summ = (f'{label}（v{s.get("version") or "?"}） · {len(scases)} 用例 · '
+                f'PASS {cnt.get("PASS", 0)} / 需求未实现 {cnt.get("NOT_IMPLEMENTED", 0)} / '
+                f'BLOCKED(ENV) {cnt.get("BLOCKED", 0)} · 通过率 {_g_rate(cnt)}')
+        btns = (f'<button class="uxbtn active" data-uxk="{skey}" data-f="ALL" '
+                f'onclick="filterUxPkg(\'{skey}\',\'ALL\')">全部 {len(scases)}</button>'
+                + ''.join(f'<button class="uxbtn" data-uxk="{skey}" data-f="{fk}" '
+                          f'onclick="filterUxPkg(\'{skey}\',\'{fk}\')">{lb} {cnt.get(sk, 0)}</button>'
+                          for fk, lb, sk in [("PASS", "PASS", "PASS"),
+                                             ("FAIL", "需求未实现", "NOT_IMPLEMENTED"),
+                                             ("BLOCKED", "环境不可判定", "BLOCKED")]))
+        parts.append(
+            '<details class="uxdetail" style="border:1px solid #ddd;border-radius:6px;margin:10px 0;">'
+            f'<summary style="cursor:pointer;padding:10px 14px;font-size:14px;font-weight:700;">{summ}</summary>'
+            f'<div style="padding:0 14px 12px;"><div style="margin:6px 0;">{btns}</div>'
             '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
             f'<thead><tr><th style="{_TH}">用例</th><th style="{_TH}">P</th><th style="{_TH}">批次</th>'
-            f'<th style="{_TH}">标题</th><th style="{_TH}">载体</th>'
-            + ''.join(f'<th style="{_TH}">{s.get("label", "")}</th>' for s in suts)
-            + f'<th style="{_TH}">阻塞 / 依赖</th></tr></thead>'
-            f'<tbody>{"".join(urows)}</tbody></table>')
+            f'<th style="{_TH}">标题</th><th style="{_TH}">夹具</th><th style="{_TH}">三态判定</th>'
+            f'<th style="{_TH}">阻塞 / 依赖</th></tr></thead><tbody>'
+            + ''.join(rws) + '</tbody></table></div></details>')
+
+    # 设计矩阵存在但本轮无执行结果的用例（无载体 / 契约依赖待冻结），单列，避免与门禁三态混淆
+    rest = [c for c in ((design or {}).get("cases") or []) if c["id"] not in executed_ids]
+    if rest:
+        rrows = ''.join(
+            f'<tr><td style="{_TD}white-space:nowrap;"><b>{c["id"]}</b></td>'
+            f'<td style="{_TD}text-align:center;">{c["prio"]}</td>'
+            f'<td style="{_TD}">{c["title"]}</td>'
+            f'<td style="{_TD}color:#7f8c8d;font-size:11px;">'
+            + (f'夹具 <code>{c["fixture"]}</code>' if c["fixture"] else f'{c["advice"] or "—"}（纸面定义）')
+            + '</td>'
+            f'<td style="{_TD}color:#95a5a6;">'
+            + ("契约依赖待冻结" if c["frozen"] else "未建可执行载体")
+            + '</td></tr>'
+            for c in rest)
         parts.append(
-            f'<p style="color:#7f8c8d;font-size:12px;">载体分布：已建可执行夹具 <b>{cnt["PASS"] + cnt["FAIL"]}</b> 条 ｜ '
-            f'契约依赖待冻结（无载体）<b>{cnt["FROZEN"]}</b> 条 ｜ 未建可执行载体 '
-            f'<b>{cnt["NONE"]}</b> 条（纸面定义，需评审后决定是否落载体）。'
-            '已落载体且契约未冻结的用例按「门禁先行」执行，结果如实计为需求未实现、仅记趋势，'
-            '待契约冻结后才作正式契约验收。</p>')
+            f'<h4 style="margin:14px 0 4px;">未进入本轮执行的用例（{len(rest)} 条 · 不计入门禁三态）</h4>'
+            '<p style="color:#7f8c8d;font-size:12px;">「未建可执行载体」= 只有用例定义、尚未落 L1/L2 可执行夹具；'
+            '「契约依赖待冻结」= 依赖字段未冻结，冻结前应标 NOT_RUN。'
+            '<b>BLOCKED(ENV)</b> = 真机用例在当前宿主缺真云凭证而跳过（不等于需求缺口，须在真机复跑）。</p>'
+            '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
+            f'<thead><tr><th style="{_TH}">用例</th><th style="{_TH}">P</th><th style="{_TH}">标题</th>'
+            f'<th style="{_TH}">载体</th><th style="{_TH}">状态</th></tr></thead><tbody>'
+            + rrows + '</tbody></table>')
 
     # 失败断言明细
     parts.append('<h3>失败断言明细（逐条 actual / expected）</h3>')
@@ -748,6 +768,11 @@ def render_ux_block(ux, design):
             f'<td style="{_TD}text-align:center;">{b["p2"]}</td>'
             f'<td style="{_TD}text-align:center;">{b["frozen"]}</td></tr>'
             for b in design["batches"])
+        drows += (f'<tr><td style="{_TD}"><b>合计</b></td><td style="{_TD}text-align:center;color:#95a5a6;">—</td>'
+                  f'<td style="{_TD}text-align:center;"><b>{design["total"]}</b></td>'
+                  f'<td style="{_TD}text-align:center;"><b>{design["p1"]}</b></td>'
+                  f'<td style="{_TD}text-align:center;"><b>{design["p2"]}</b></td>'
+                  f'<td style="{_TD}text-align:center;"><b>{design["frozen"]}</b></td></tr>')
         parts.append(
             f'<h3>用例设计态概览（共 {design["total"]} 条，P1 {design["p1"]} / P2 {design["p2"]}）</h3>'
             f'<p style="color:#7f8c8d;font-size:12px;">数据源 <code>{design["source"]}</code>（唯一真源 = 同目录 <code>gen_ux.py</code>；'
@@ -755,12 +780,13 @@ def render_ux_block(ux, design):
             '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
             f'<thead><tr><th style="{_TH}text-align:left;">批次</th><th style="{_TH}">ID 区间</th>'
             f'<th style="{_TH}">条数</th><th style="{_TH}">P1</th><th style="{_TH}">P2</th>'
-            f'<th style="{_TH}">契约依赖待冻结</th></tr></thead>'
+            f'<th style="{_TH}">带契约依赖标记（设计态）</th></tr></thead>'
             f'<tbody>{drows}</tbody></table>')
         parts.append(
             f'<p style="color:#7f8c8d;font-size:12px;">三类体验<b>无法用断言覆盖</b>、需人工 rubric：认知负荷、'
-            f'错误文案是否够新手用、视觉排版。另：{design["frozen"]} 条用例带「契约依赖…待冻结」，'
-            '契约冻结前应标 NOT_RUN，不得以「设计完整」冒充「已通过」。</p>')
+            f'错误文案是否够新手用、视觉排版。另：设计态带「契约依赖…待冻结」标记 <b>{design["frozen"]}</b> 条'
+            '（= 上表末列合计，与执行态 KPI「契约依赖·无载体」口径不同），契约冻结前其结果仅记趋势，'
+            '不得以「设计完整」冒充「已通过」。</p>')
 
     parts.append('<p style="color:#95a5a6;font-size:11px;">复跑：<code>python scripts/gen_ux_special.py '
                  '--sut "&lt;标签&gt;=&lt;plugins/huaweicloud-core/src&gt;"</code> 生成同一数据源后本页自动刷新；'
@@ -1333,7 +1359,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 function showTab(n){{document.getElementById('tab-daily').style.display=n==='daily'?'block':'none';document.getElementById('tab-version').style.display=n==='version'?'block':'none';document.getElementById('tab-bench').style.display=n==='bench'?'block':'none';document.getElementById('tab-ux').style.display=n==='ux'?'block':'none';document.getElementById('btn-daily').className='tab-btn'+(n==='daily'?' active':'');document.getElementById('btn-version').className='tab-btn'+(n==='version'?' active':'');document.getElementById('btn-bench').className='tab-btn'+(n==='bench'?' active':'');document.getElementById('btn-ux').className='tab-btn'+(n==='ux'?' active':'');}}
 function filterCase(st){{var btns=document.querySelectorAll('.casebtn');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('onclick').indexOf(st)!==-1?' active':'');}}var rows=document.querySelectorAll('.caserow');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-st');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 function filterVCase(vk,st){{var btns=document.querySelectorAll('.casebtn[data-vk="'+vk+'"]');for(var i=0;i<btns.length;i++){{btns[i].className='casebtn'+(btns[i].getAttribute('data-st')===st?' active':'');}}var rows=document.querySelectorAll('.vcaserow[data-vk="'+vk+'"]');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-vst');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
-function filterUxCase(st){{var btns=document.querySelectorAll('.uxbtn');for(var i=0;i<btns.length;i++){{btns[i].className='uxbtn'+(btns[i].getAttribute('data-f')===st?' active':'');}}var rows=document.querySelectorAll('.uxrow');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-ux');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
+function filterUxPkg(vk,st){{var btns=document.querySelectorAll('.uxbtn[data-uxk="'+vk+'"]');for(var i=0;i<btns.length;i++){{btns[i].className='uxbtn'+(btns[i].getAttribute('data-f')===st?' active':'');}}var rows=document.querySelectorAll('.uxrow[data-uxk="'+vk+'"]');for(var j=0;j<rows.length;j++){{var s=rows[j].getAttribute('data-ux');rows[j].style.display=(st==='ALL'||s===st)?'':'none';}}}}
 </script>
 </body></html>"""
     return html
