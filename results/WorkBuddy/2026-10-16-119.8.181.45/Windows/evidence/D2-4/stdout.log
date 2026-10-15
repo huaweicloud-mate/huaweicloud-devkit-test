@@ -1,0 +1,12 @@
+{
+  "caseId": "D2-4",
+  "status": "FAIL",
+  "why": "Lowercase ak= pattern NOT redacted (credential leak)",
+  "executedAt": "20261016051031",
+  "result": {
+    "akLeak": true,
+    "skLeak": true,
+    "redactedLower": "config: ak=TESTAKXXXXXXXXXXXXXXXX sk=TESTSKYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+    "rootCause": "safety-policy.mjs redactString regex only matches UPPERCASE AK/SK"
+  }
+}
