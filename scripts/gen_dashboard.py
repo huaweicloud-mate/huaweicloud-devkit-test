@@ -1176,12 +1176,12 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<li style="margin:4px 0;">{}</li>'.format(f)
             for f in bench.get("findings", []))
         task_details = "".join(
-            '<div style="border:1px solid #e0e0e0;border-radius:6px;padding:10px 12px;margin:8px 0;background:#fafafa;">'
-            '<div style="font-weight:bold;">{} <span style="color:#7f8c8d;font-weight:normal;">{} · {} · token {:,}/{:,} · {} 步</span></div>'
-            '<div style="color:#555;margin:6px 0;font-size:13px;">目标：{}</div>'
-            '<div style="margin:4px 0;font-size:13px;">结果：{}</div>'
-            '<div style="color:#95a5a6;font-size:12px;">工具链：{}</div>'
-            '</div>'.format(
+            '<tr>'
+            '<td style="padding:8px;border:1px solid #ddd;text-align:left;white-space:nowrap;"><b>{}</b><br><span style="color:#7f8c8d;font-size:12px;">{} · {} · token {:,}/{:,} · {} 步</span></td>'
+            '<td style="padding:8px;border:1px solid #ddd;text-align:left;color:#555;font-size:12px;">{}</td>'
+            '<td style="padding:8px;border:1px solid #ddd;text-align:left;font-size:12px;">{}</td>'
+            '<td style="padding:8px;border:1px solid #ddd;text-align:left;color:#7f8c8d;font-size:11px;">{}</td>'
+            '</tr>'.format(
                 t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
                 t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0),
                 (t.get("prompt", "") or "").replace("<", "&lt;").replace(">", "&gt;"),
@@ -1214,7 +1214,12 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '</thead>'
             '<tbody>' + bare_rows + '</tbody></table>'
             '<h2 style="margin-top:16px;">任务详情</h2>'
-            + task_details +
+            '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
+            '<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">任务</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">目标</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">结果</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">工具链</th></tr></thead>'
+            '<tbody>' + task_details + '</tbody></table>'
             '<h2 style="margin-top:16px;">关键发现</h2>'
             '<ul style="font-size:13px;">' + finding_items + '</ul>'
             '<p style="color:#7f8c8d;font-size:12px;">详情见 skill-bench/results/baseline-report-20261014.md 与 baseline-bare-comparison-20261014.md。</p>'
