@@ -1247,6 +1247,58 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
                 (t.get("prompt", "") or "").replace("<", "&lt;").replace(">", "&gt;"),
                 t.get("detail", ""), ", ".join(t.get("tools", [])))
             for _i, t in enumerate(bench.get("tasks", [])))
+        # ---- L2 执行层（只读真机，2026-10-15 起 13 条 t21–t33）----
+        _l2 = bench.get("l2Readonly", [])
+
+        def _l2_no(x):
+            raw = str(x.get("id") or "").split("-")[0]
+            m = re.fullmatch(r"[tT]0*(\d+)", raw)
+            return "T" + m.group(1) if m else raw
+
+        def _l2_td(t):
+            mode_txt = {"empty": "回读 0 + 诚实回答空",
+                        "nonEmpty": "非空：回读计数与答案一致"}.get(t.get("mode"), str(t.get("mode") or ""))
+            op_txt = ("%s %s" % (t.get("service", ""), t.get("op", ""))).strip()
+            return ('<tr>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;white-space:nowrap;color:#7f8c8d;">%s</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">%s</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;color:#555;font-size:12px;"><code>%s</code></td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;font-size:12px;">%s</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;"><b style="color:#2ecc71;">%s</b></td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:right;">%s</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">%s</td>'
+                    '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;color:#555;font-size:12px;">%s</td>'
+                    '</tr>' % (_l2_no(t), t.get("skill", ""), op_txt, mode_txt, t.get("rate", "—"),
+                               "{:,}".format(int(t.get("token_in") or 0)), t.get("steps", "—"),
+                               t.get("detail", "")))
+
+        l2_rows = "".join(_l2_td(t) for t in _l2)
+        _l2_pass = sum(int(str(t.get("rate", "0/1")).split("/")[0]) for t in _l2)
+        _l2_run = sum(int(str(t.get("rate", "0/1")).split("/")[1]) for t in _l2)
+        _l2_skills = len({t.get("skill") for t in _l2})
+        l2_section = ""
+        if _l2:
+            _l2_ver = _l2[0].get("devkitVersion") or bench.get("model", "—")
+            _l2_intro = (
+                '<h2 style="margin-top:16px;">L2 执行层真机（只读，独立回读判定 · 不采信 agent 自报）</h2>'
+                '<p style="color:#7f8c8d;font-size:12px;">覆盖 ' + str(_l2_skills) + ' 个技能 / ' + str(len(_l2))
+                + ' 条只读用例，合计 <b>' + str(_l2_pass) + '/' + str(_l2_run) + '</b> run PASS；'
+                + '零创建、无归零需求（被测版本 ' + str(_l2_ver) + '）。判据：'
+                + 'empty = 独立回读计数为 0 且 agent 诚实回答空；'
+                + 'nonEmpty = 独立回读计数 &gt; 0 且 agent 答案含该实时计数（KMS/CES/voucher）。</p>')
+            l2_section = (
+                _l2_intro
+                + '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
+                + '<thead><tr style="background:#f2f2f2;">'
+                + '<th style="padding:6px 8px;border:1px solid #ddd;">编号</th>'
+                + '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">技能</th>'
+                + '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">只读操作</th>'
+                + '<th style="padding:6px 8px;border:1px solid #ddd;">判据</th>'
+                + '<th style="padding:6px 8px;border:1px solid #ddd;">成功率</th>'
+                + '<th style="padding:6px 8px;border:1px solid #ddd;">token IN 中位</th>'
+                + '<th style="padding:6px 8px;border:1px solid #ddd;">步数中位</th>'
+                + '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">执行结果</th>'
+                + '</tr></thead><tbody>' + l2_rows + '</tbody></table>')
         bench_block = (
             '<h2>技能评测 · 端到端三指标基线</h2>'
             '<p style="color:#7f8c8d;font-size:12px;">数据源 skill-bench/（独立于每日测试流水线）；模型 {}，temperature=0，每任务采样 {} 次，更新于 {}。</p>'
@@ -1283,7 +1335,8 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<tbody>' + task_details + '</tbody></table>'
             '<h2 style="margin-top:16px;">关键发现</h2>'
             '<ul style="font-size:13px;">' + finding_items + '</ul>'
-            '<p style="color:#7f8c8d;font-size:12px;">详情见 skill-bench/results/baseline-report-20261014.md 与 baseline-bare-comparison-20261014.md。</p>'
+            + l2_section
+            + '<p style="color:#7f8c8d;font-size:12px;">详情见 skill-bench/results/baseline-report-20261014.md 与 baseline-bare-comparison-20261014.md。</p>'
         ).format(bench.get("model", "—"), bench.get("runs", "3"), bench.get("updated", "—"))
     else:
         bench_block = '<p style="color:#95a5a6;">暂无技能评测基线（运行 skill-bench harness 后生成 summary.json）。</p>'
