@@ -1,3 +1,4 @@
+=====CASE D2-4=====
 ===== huaweicloud_show_profile_redacted =====
 {
   "ok": true,
@@ -29,7 +30,7 @@
         ]
       },
       "sgFindings": [],
-      "approvalToken": "13c10982-3ea3-43cc-b53c-bb323f37943b",
+      "approvalToken": "c04480df-1fdc-4be7-898a-da03fb6cc6e1",
       "safeToRun": true,
       "rawArgs": [
         "configure",
@@ -62,13 +63,14 @@
   "obsConfigPath": "/home/testbot2/.obsutilconfig",
   "kooCliInstalled": true,
   "kooCliStatus": "ok",
-  "kooCliNextStep": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+  "kooCliNextStep": "huaweicloud_show_profile_redacted",
+  "kooCliRaw": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
   "reconciled": {
     "stores": {
       "s1Fingerprint": "caae65f2",
       "envFingerprint": "",
       "currentFingerprint": "",
-      "s3Fingerprint": "91e8f059",
+      "s3Fingerprint": "138c6c5e",
       "runtimeFingerprint": null
     },
     "kooCliCurrent": "default",
@@ -78,7 +80,7 @@
       {
         "store": "S3",
         "source": "obsutilconfig",
-        "fingerprint": "91e8f059",
+        "fingerprint": "138c6c5e",
         "manualModified": true
       }
     ],
@@ -97,9 +99,34 @@
         "order": 1,
         "action": "use-s1",
         "args": {},
-        "label": "直接使用已保存账号"
-      },
-      {
-        "order": 2,
-   
+        "label": 
 >>> 疑似密钥泄露? false
+=====END D2-4=====
+=====CASE D2-11=====
+{
+  "status": "error",
+  "error": "Temporary STS credentials cannot be persisted (R3). Use action=temporary.",
+  "scope": "rejected"
+}
+>>> R3 拒绝判定: true
+>>> 隔离S1凭证文件是否被写入: false
+>>> ISOLATED_HOME=/tmp/multica-task-3617411848/hdk-r3-jhuyIl
+=====END D2-11=====
+=====CASE D2-12=====
+auth_switch temporary => {
+  "status": "ok",
+  "scope": "temporary",
+  "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files."
+}
+
+auth_sync => {
+  "ok": false,
+  "error": "运行时凭证生效,自动同步已跳过。",
+  "code": "HDKIT_SYNC_SKIPPED_RUNTIME",
+  "messageZh": "运行时凭证生效,自动同步已跳过。",
+  "action": "huaweicloud_auth_switch action=clear",
+  "nextStep": "huaweicloud_auth_switch action=clear"
+}
+>>> R10 拒绝判定: false
+=====END D2-12=====
+=== DONE ===

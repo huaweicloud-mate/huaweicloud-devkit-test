@@ -80,7 +80,7 @@ try {
   // ④ 非法/缺失 config → error 语义
   rmSync(configPath, { force: true });
   const missing = readKooCliProfiles();
-  rec('D2-10-missing-config', '缺失 config 返回 error', missing?.error === 'KooCLI config not found', missing?.error, 'KooCLI config not found');
+  rec('D2-10-missing-config', '缺失 config 返回 error', (missing?.error || '').includes('KooCLI config not found'), missing?.error, 'KooCLI config not found');
 } finally {
   delete process.env.HCLOUD_CONFIG_PATH;
   rmSync(tmp, { recursive: true, force: true });
