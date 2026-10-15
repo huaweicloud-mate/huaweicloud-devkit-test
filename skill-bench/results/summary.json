@@ -11,7 +11,22 @@
       "token_in": 219830,
       "token_out": 10167,
       "steps": 21,
-      "detail": "匿名 HTTP 200 + 标记命中（部署成功）"
+      "detail": "匿名 HTTP 200 + 标记命中（部署成功）",
+      "prompt": "我有一个单页静态网站要部署到华为云，希望得到一个公网可访问的网址。网页文件在本机：<FIXTURE_SITE>。请用对象存储 OBS 的方式部署：创建桶（桶名必须为 devkit-bench-{{RUNID}}），把 index.html 上传到桶根并设为公开可读，然后把可以公网直接访问这个页面的完整 URL 告诉我。无人值守环境，请自主完成全部步骤。",
+      "tools": [
+        "huaweicloud_check_cli",
+        "huaweicloud_service_catalog",
+        "huaweicloud_list_regions",
+        "huaweicloud_search_docs",
+        "huaweicloud_retrieve_skill",
+        "huaweicloud_setup_obs_config",
+        "huaweicloud_show_profile_redacted",
+        "huaweicloud_get_regional_availability",
+        "huaweicloud_list_operations",
+        "huaweicloud_run_readonly_command",
+        "huaweicloud_plan_cli_command",
+        "huaweicloud_run_approved_command"
+      ]
     },
     {
       "id": "t02",
@@ -21,7 +36,16 @@
       "token_in": 68281,
       "token_out": 1857,
       "steps": 8,
-      "detail": "真实余额 1 CNY，无欠费"
+      "detail": "真实余额 1 CNY，无欠费",
+      "prompt": "帮我查一下这个华为云账户当前的余额（含欠费情况），把余额金额和币种告诉我。无人值守环境，请自主完成查询。",
+      "tools": [
+        "huaweicloud_service_catalog",
+        "huaweicloud_search_docs",
+        "huaweicloud_retrieve_skill",
+        "huaweicloud_list_operations",
+        "huaweicloud_show_profile_redacted",
+        "huaweicloud_run_readonly_command"
+      ]
     },
     {
       "id": "t03",
@@ -31,7 +55,21 @@
       "token_in": 405978,
       "token_out": 17803,
       "steps": 26,
-      "detail": "安全组存在，入向 80 端口规则已放行"
+      "detail": "安全组存在，入向 80 端口规则已放行",
+      "prompt": "给我创建一个名为 devkit-bench-{{RUNID}} 的安全组，并在其中加一条入方向（ingress）放行 TCP 80 端口的规则。完成后把这个安全组的名称、ID 和规则告诉我。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_service_catalog",
+        "huaweicloud_list_operations",
+        "huaweicloud_list_regions",
+        "huaweicloud_retrieve_skill",
+        "huaweicloud_run_readonly_command",
+        "huaweicloud_check_cli",
+        "huaweicloud_show_profile_redacted",
+        "huaweicloud_plan_cli_command",
+        "huaweicloud_run_approved_command",
+        "huaweicloud_hook_check_command",
+        "huaweicloud_search_docs"
+      ]
     },
     {
       "id": "t04",
@@ -41,7 +79,14 @@
       "token_in": 39551,
       "token_out": 951,
       "steps": 5,
-      "detail": "回读 0 台 ECS 实例（诚实回答空）"
+      "detail": "回读 0 台 ECS 实例（诚实回答空）",
+      "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有多少台 ECS 云服务器，并列出实例列表。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_check_cli",
+        "huaweicloud_list_operations",
+        "huaweicloud_list_regions",
+        "huaweicloud_run_readonly_command"
+      ]
     },
     {
       "id": "t05",
@@ -51,7 +96,13 @@
       "token_in": 42877,
       "token_out": 1727,
       "steps": 7,
-      "detail": "回读 2 个 IAM 用户：hw018619646、test001"
+      "detail": "回读 2 个 IAM 用户：hw018619646、test001",
+      "prompt": "帮我列出当前华为云账户下的所有 IAM 用户，告诉我每个用户的名字和描述。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_list_operations",
+        "huaweicloud_check_cli",
+        "huaweicloud_run_readonly_command"
+      ]
     },
     {
       "id": "t06",
@@ -61,7 +112,13 @@
       "token_in": 47519,
       "token_out": 1127,
       "steps": 5,
-      "detail": "回读 0 个 RDS 实例"
+      "detail": "回读 0 个 RDS 实例",
+      "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 RDS 数据库实例，并列出。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_check_cli",
+        "huaweicloud_list_operations",
+        "huaweicloud_run_readonly_command"
+      ]
     },
     {
       "id": "t07",
@@ -71,7 +128,13 @@
       "token_in": 43580,
       "token_out": 1267,
       "steps": 8,
-      "detail": "回读 0 个 FunctionGraph 函数"
+      "detail": "回读 0 个 FunctionGraph 函数",
+      "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些函数（FunctionGraph 函数列表），并列出。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_service_catalog",
+        "huaweicloud_list_operations",
+        "huaweicloud_run_readonly_command"
+      ]
     },
     {
       "id": "t08",
@@ -81,7 +144,14 @@
       "token_in": 65068,
       "token_out": 1205,
       "steps": 7,
-      "detail": "回读 0 个 CCE 集群"
+      "detail": "回读 0 个 CCE 集群",
+      "prompt": "帮我查一下当前华为云账户在 cn-north-4 区域有哪些 CCE（华为云容器引擎）Kubernetes 集群。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_check_cli",
+        "huaweicloud_list_operations",
+        "huaweicloud_auth_status",
+        "huaweicloud_run_readonly_command"
+      ]
     },
     {
       "id": "t10",
@@ -91,7 +161,18 @@
       "token_in": 64112,
       "token_out": 1433,
       "steps": 8,
-      "detail": "SMN 主题创建成功（含 topic_urn）"
+      "detail": "SMN 主题创建成功（含 topic_urn）",
+      "prompt": "在华为云创建一个 SMN 通知主题，主题名和显示名都用 devkit-bench-{{RUNID}}。创建成功后把主题的 topic_urn 告诉我。无人值守环境，请自主完成。",
+      "tools": [
+        "huaweicloud_service_catalog",
+        "huaweicloud_search_docs",
+        "huaweicloud_list_regions",
+        "huaweicloud_retrieve_skill",
+        "huaweicloud_list_operations",
+        "huaweicloud_run_readonly_command",
+        "huaweicloud_plan_cli_command",
+        "huaweicloud_run_approved_command"
+      ]
     }
   ],
   "bare": [

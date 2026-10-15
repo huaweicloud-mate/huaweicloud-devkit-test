@@ -1175,6 +1175,18 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
         finding_items = "".join(
             '<li style="margin:4px 0;">{}</li>'.format(f)
             for f in bench.get("findings", []))
+        task_details = "".join(
+            '<div style="border:1px solid #e0e0e0;border-radius:6px;padding:10px 12px;margin:8px 0;background:#fafafa;">'
+            '<div style="font-weight:bold;">{} <span style="color:#7f8c8d;font-weight:normal;">{} · {} · token {:,}/{:,} · {} 步</span></div>'
+            '<div style="color:#555;margin:6px 0;font-size:13px;">目标：{}</div>'
+            '<div style="margin:4px 0;font-size:13px;">结果：{}</div>'
+            '<div style="color:#95a5a6;font-size:12px;">工具链：{}</div>'
+            '</div>'.format(
+                t.get("title", ""), t.get("skill", ""), t.get("rate", "—"),
+                t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0),
+                (t.get("prompt", "") or "").replace("<", "&lt;").replace(">", "&gt;"),
+                t.get("detail", ""), ", ".join(t.get("tools", [])))
+            for t in bench.get("tasks", []))
         bench_block = (
             '<h2>技能评测 · 端到端三指标基线</h2>'
             '<p style="color:#7f8c8d;font-size:12px;">数据源 skill-bench/（独立于每日测试流水线）；模型 {}，temperature=0，每任务采样 {} 次，更新于 {}。</p>'
@@ -1201,6 +1213,8 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<th style="padding:4px 6px;border:1px solid #ddd;">标准</th><th style="padding:4px 6px;border:1px solid #ddd;">裸模型</th></tr>'
             '</thead>'
             '<tbody>' + bare_rows + '</tbody></table>'
+            '<h2 style="margin-top:16px;">任务详情</h2>'
+            + task_details +
             '<h2 style="margin-top:16px;">关键发现</h2>'
             '<ul style="font-size:13px;">' + finding_items + '</ul>'
             '<p style="color:#7f8c8d;font-size:12px;">详情见 skill-bench/results/baseline-report-20261014.md 与 baseline-bare-comparison-20261014.md。</p>'
