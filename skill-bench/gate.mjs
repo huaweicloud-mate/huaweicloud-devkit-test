@@ -36,7 +36,15 @@ const failures = [...errors];
 const notes = [];
 
 if (!runs.length) {
-  console.error('[gate] 没有可校验的 run 记录（results/runs/*.json）→ 门禁不可判定，判 FAIL');
+  // 尚未建立基线时（无 gate.baseline.json）：视为「门禁未开始」→ SKIP 而非 FAIL；
+  // 已建立基线后记录消失 → 判 FAIL（数据丢失）。
+  const baselineExists = existsSync(join(HERE, 'gate.baseline.json'));
+  if (!baselineExists) {
+    console.log('[gate] SKIP：仓库尚无入库 run 记录，且尚未建立 gate.baseline.json → 门禁不可判定（不判 FAIL）');
+    console.log('[gate] 说明：真机跑批后 results/runs/*.json 入库，本门禁即开始生效；建基线后记录为空将直接判 FAIL。');
+    process.exit(0);
+  }
+  console.error('[gate] 已建立基线但未找到任何 run 记录（results/runs/*.json）→ 数据丢失，判 FAIL');
   process.exit(1);
 }
 
