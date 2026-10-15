@@ -1187,7 +1187,23 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
                            t.get("token_in", 0), t.get("token_out", 0), t.get("steps", 0),
                            t.get("detail", ""))
             for _i, t in enumerate(bench.get("tasks", [])))
-        def _bare_td(b, _i):
+        # 行 = 任务全集（与另两张表同集合）；裸侧未采集的任务给「未评测」占位行，不计入任何统计
+        _bmap = {b.get("id"): b for b in bench.get("bare", [])}
+        _tids = [t.get("id") for t in bench.get("tasks", [])]
+        _cov_ids = [i for i in _tids if i in _bmap]
+        _miss_ids = [i for i in _tids if i not in _bmap]
+        _toT = lambda i: "T" + str(int(str(i)[1:]))
+
+        def _bare_td(t, _i):
+            b = _bmap.get(t.get("id"))
+            if not b:
+                return ('<tr>'
+                        '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;white-space:nowrap;color:#7f8c8d;">{}</td>'
+                        '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;color:#95a5a6;">{}</td>'
+                        '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;color:#95a5a6;" colspan="7">'
+                        '未评测 · 裸侧未采集（不计入统计）</td>'
+                        '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;color:#95a5a6;">—</td>'
+                        '</tr>'.format(_tid(t, _i), t.get("title", "")))
             std = b.get("std_token", 0) or 0
             bm = b.get("bare_token", 0) or 0
             save = std - bm
@@ -1203,12 +1219,18 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:center;">{}</td>'
                     '<td style="padding:5px 8px;border:1px solid #ddd;text-align:left;">{}</td>'
-                    '</tr>'.format(_tid(b, _i), b.get("title", ""),
+                    '</tr>'.format(_tid(t, _i), t.get("title", ""),
                                    b.get("std_rate", "—"), b.get("bare_rate", "—"),
                                    std, bm, pct, save,
                                    b.get("std_steps", 0), b.get("bare_steps", 0),
                                    b.get("note", "")))
-        bare_rows = "".join(_bare_td(b, _i) for _i, b in enumerate(bench.get("bare", [])))
+        bare_rows = "".join(_bare_td(t, _i) for _i, t in enumerate(bench.get("tasks", [])))
+        bare_cov = ('<p style="color:#7f8c8d;font-size:12px;">'
+                    '覆盖 <b>%d/%d</b> 个任务 ｜ 已评测：%s ｜ 未评测（裸侧未采集）：%s。'
+                    '未评测行不计入任何统计；裸侧数据采集于任务集扩充前（对照报告 baseline-bare-comparison-20261014.md），'
+                    '补测后本表自动补齐。「裸模型省 token」= 标准 token 中位 − 裸 token 中位，负值（红色）= devkit 多花。</p>'
+                    % (len(_cov_ids), len(_tids), "、".join(_toT(i) for i in _cov_ids),
+                       "、".join(_toT(i) for i in _miss_ids) or "无"))
         finding_items = "".join(
             '<li style="margin:4px 0;">{}</li>'.format(f)
             for f in bench.get("findings", []))
@@ -1237,7 +1259,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<th style="padding:6px 8px;border:1px solid #ddd;">步数</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">执行结果</th></tr></thead>'
             '<tbody>' + bench_rows + '</tbody></table>'
-            '<h2 style="margin-top:16px;">裸模型对照（--bare，初步：标准=3采样中位 / 裸=1采样）</h2>'
+            '<h2 style="margin-top:16px;">裸模型对照（--bare；标准 / 裸两侧各取该任务最晚一次运行 · 采样=3 中位）</h2>'
             '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
             '<thead>'
             '<tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;" rowspan="2">编号</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">任务</th>'
@@ -1251,7 +1273,8 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<th style="padding:4px 6px;border:1px solid #ddd;">标准</th><th style="padding:4px 6px;border:1px solid #ddd;">裸模型</th></tr>'
             '</thead>'
             '<tbody>' + bare_rows + '</tbody></table>'
-            '<h2 style="margin-top:16px;">任务详情</h2>'
+            + bare_cov
+            + '<h2 style="margin-top:16px;">任务详情</h2>'
             '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
             '<thead><tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;">编号</th><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">任务</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">目标</th>'
