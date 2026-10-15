@@ -650,7 +650,8 @@ def render_ux_block(ux, design):
             per = stat.get(c["id"], {})
             mr = per.get(main_label) or (next(iter(per.values())) if per else None)
             if per:
-                kind = "PASS" if (mr or {}).get("status") == "PASS" else "FAIL"
+                mainSt = (mr or {}).get('status')
+                kind = 'BLOCKED' if mainSt == 'BLOCKED' else ('PASS' if mainSt == 'PASS' else 'FAIL')
             elif c["frozen"]:
                 kind = "FROZEN"
             else:
@@ -691,11 +692,13 @@ def render_ux_block(ux, design):
             f'<h3>全部 D11 用例（{design["total"]} 条 · 每条都列出）</h3>'
             '<p style="color:#7f8c8d;font-size:12px;">执行态列 = 该用例的门禁结果（未建载体者该列标 '
             '<b>—</b>，不计入通过率）。载体列「纸面定义」= 目前只有用例定义、尚未落 L1/L2 可执行载体；'
-            '「契约依赖待冻结」= 依赖字段未冻结，契约冻结前应标 NOT_RUN。</p>'
+            '「契约依赖待冻结」= 依赖字段未冻结，契约冻结前应标 NOT_RUN。'
+            '<b>环境不可判定</b>= 真机用例在当前宿主缺真云凭证而跳过（不等于需求缺口，须在真机复跑）。</p>'
             '<div style="margin:0 0 8px;">'
             f'<button class="uxbtn active" data-f="ALL" onclick="filterUxCase(\'ALL\')">全部 {design["total"]}</button>'
             f'<button class="uxbtn" data-f="PASS" onclick="filterUxCase(\'PASS\')">PASS {cnt["PASS"]}</button>'
             f'<button class="uxbtn" data-f="FAIL" onclick="filterUxCase(\'FAIL\')">需求未实现 {cnt["FAIL"]}</button>'
+            f'<button class="uxbtn" data-f="BLOCKED" onclick="filterUxCase(\'BLOCKED\')">环境不可判定 {cnt["BLOCKED"]}</button>'
             f'<button class="uxbtn" data-f="FROZEN" onclick="filterUxCase(\'FROZEN\')">契约待冻结 {cnt["FROZEN"]}</button>'
             f'<button class="uxbtn" data-f="NONE" onclick="filterUxCase(\'NONE\')">未建载体 {cnt["NONE"]}</button>'
             '</div>'
