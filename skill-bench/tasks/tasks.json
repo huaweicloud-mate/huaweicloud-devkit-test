@@ -91,5 +91,48 @@
     "region": "cn-north-4",
     "verifier": "verifiers/verify-cce-list.mjs",
     "write": false
+  },
+  {
+    "id": "t11-vpc-egress",
+    "title": "配置安全组出向规则",
+    "prompt": "创建一个名为 devkit-bench-{{RUNID}} 的安全组，并在其中加一条出方向（egress）放行规则。完成后告诉我安全组名称和出向规则。无人值守环境，请自主完成。",
+    "expectedService": "VPC",
+    "expectedSkill": "huawei-vpc",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-vpc-egress.mjs",
+    "cleanup": "verifiers/cleanup-security-group.mjs",
+    "write": true
+  },
+  {
+    "id": "t12-smn-publish",
+    "title": "发布 SMN 通知消息",
+    "prompt": "创建一个名为 devkit-bench-{{RUNID}} 的 SMN 通知主题，并向该主题发布一条测试消息。完成后告诉我主题 URN 和消息 ID。无人值守环境，请自主完成。",
+    "expectedService": "SMN",
+    "expectedSkill": "huawei-smn-dms",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-smn-publish.mjs",
+    "cleanup": "verifiers/cleanup-smn-topic.mjs",
+    "write": true
+  },
+  {
+    "id": "t13-iam-group-policy",
+    "title": "创建 IAM 用户组与自定义策略",
+    "prompt": "创建一个名为 devkit-bench-{{RUNID}} 的 IAM 用户组，并创建一个同名自定义策略（只读 ECS 权限，Effect=Allow）。完成后告诉我组名和策略名。无人值守环境，请自主完成。",
+    "expectedService": "IAM",
+    "expectedSkill": "huawei-iam",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-iam-group.mjs",
+    "cleanup": "verifiers/cleanup-iam-group.mjs",
+    "write": true
+  },
+  {
+    "id": "t14-billing-detail",
+    "title": "查询账单费用明细",
+    "prompt": "帮我查一下当前华为云账户最近的账单费用明细（消费流水），告诉我最近有几条费用记录、金额大概多少。无人值守环境，请自主完成。",
+    "expectedService": "BSS",
+    "expectedSkill": "huawei-billing",
+    "region": "cn-north-1",
+    "verifier": "verifiers/verify-billing-detail.mjs",
+    "write": false
   }
 ]
