@@ -1,6 +1,6 @@
 {
   "date": "2026-10-15",
-  "generatedAt": "2026-10-15 10:00:38",
+  "generatedAt": "2026-10-15 11:32:45",
   "timezone": "Asia/Shanghai",
   "scope": "UX（D11）体验专项 —— 可执行门禁夹具三态结果",
   "caveat": "红线基线口径：NOT_IMPLEMENTED = 需求验收未达标（已知缺口，非 harness 故障），BLOCKED = 宿主/环境不可判定（不计入 PASS/FAIL）。本数据是回归防退化门禁的趋势线，不等价于体验验收（认知负荷 / 文案是否够新手用 / 视觉排版仍需人工 rubric）。",
@@ -11,10 +11,10 @@
       "hdkSrc": "/home/runner/work/_temp/ux-sut/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src",
       "summary": {
         "pass": 5,
-        "not_implemented": 15,
-        "blocked": 0,
+        "not_implemented": 17,
+        "blocked": 2,
         "harness_error": 0,
-        "total": 20,
+        "total": 24,
         "exit": 1
       },
       "cases": [
@@ -190,6 +190,16 @@
               "detail": ""
             }
           ]
+        },
+        {
+          "file": "d11-13-post-login-selfcheck.mjs",
+          "case": "D11-13",
+          "status": "BLOCKED",
+          "exit": 2,
+          "pass": 0,
+          "fail": 0,
+          "note": "需真机真云凭证：请先 export HW_ACCESS_KEY/HW_SECRET_KEY（运行器隔离 HOME，不读 ~/.config 的 S1）",
+          "assertions": []
         },
         {
           "file": "d11-16-error-cards.mjs",
@@ -642,7 +652,7 @@
               "id": "D11-28-notice-zh",
               "title": "到期后返回中文提示（含「已失效/已过期」）",
               "ok": false,
-              "actual": "remainingMs\":-3600367",
+              "actual": "remainingMs\":-3600933",
               "expected": "含中文「已过期/已失效」",
               "detail": ""
             },
@@ -658,7 +668,7 @@
               "id": "D11-28-remaining",
               "title": "临时凭证额外标注剩余有效期",
               "ok": true,
-              "actual": "remainingMs\":-3600367",
+              "actual": "remainingMs\":-3600933",
               "expected": "含「剩余有效期」标注",
               "detail": ""
             },
@@ -850,6 +860,16 @@
           ]
         },
         {
+          "file": "d11-34-zeroing-report.mjs",
+          "case": "D11-34",
+          "status": "BLOCKED",
+          "exit": 2,
+          "pass": 0,
+          "fail": 0,
+          "note": "需真机真云凭证：请先 export HW_ACCESS_KEY/HW_SECRET_KEY（运行器隔离 HOME，不读 ~/.config 的 S1）",
+          "assertions": []
+        },
+        {
           "file": "d11-37-guidance-closure.mjs",
           "case": "D11-37",
           "status": "PASS",
@@ -981,8 +1001,8 @@
               "id": "D11-41-sts-expiry",
               "title": "STS 过期可由 token 解析（不误导为 AK 无效）",
               "ok": true,
-              "actual": 1792026039000,
-              "expected": "早于当前时间(ms)=1792029639690",
+              "actual": 1792031566000,
+              "expected": "早于当前时间(ms)=1792035166276",
               "detail": ""
             },
             {
@@ -1228,6 +1248,147 @@
               "ok": true,
               "actual": "已检查返回体全文",
               "expected": "无 AK/SK 明文",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-8-switch-temporary-explicit.mjs",
+          "case": "D11-8",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 0,
+          "fail": 4,
+          "note": "口径: 需求验收（UX-R4）；FAIL = 切换语义未显式化，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-8-persists",
+              "title": "temporary 返回 persistsAfterRestart == false（重启即失效须显式可见）",
+              "ok": false,
+              "actual": {
+                "persistsAfterRestart": null,
+                "keys": [
+                  "status",
+                  "scope",
+                  "note"
+                ]
+              },
+              "expected": false,
+              "detail": "UX-R4：三个关键副作用须显式化"
+            },
+            {
+              "id": "D11-8-affects-hcloud",
+              "title": "temporary 返回 affects.hcloud == false（不影响 hcloud 命令行）",
+              "ok": false,
+              "actual": null,
+              "expected": {
+                "hcloud": false
+              },
+              "detail": ""
+            },
+            {
+              "id": "D11-8-zh-warning",
+              "title": "返回含中文警告字段（且不含裸代号 \"A+C\"）",
+              "ok": false,
+              "actual": {
+                "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI curr",
+                "含裸代号": false
+              },
+              "expected": "中文警告、不含 A+C",
+              "detail": ""
+            },
+            {
+              "id": "D11-8-effective-runtime",
+              "title": "切换后 effective.source == \"runtime\"",
+              "ok": false,
+              "actual": {
+                "source": null,
+                "credentialPanel": {
+                  "sts": null,
+                  "s1": {
+                    "configured": true,
+                    "fingerprint": "ca1399d1",
+                    "persistent": true
+                  },
+                  "activeSource": "s1-persistent"
+                }
+              },
+              "expected": "runtime",
+              "detail": ""
+            }
+          ]
+        },
+        {
+          "file": "d11-9-switch-persist-clear.mjs",
+          "case": "D11-9",
+          "status": "NOT_IMPLEMENTED",
+          "exit": 1,
+          "pass": 0,
+          "fail": 3,
+          "note": "口径: 需求验收（UX-R4）；FAIL = 持久性未显式化/回退结论缺失，非 harness 问题",
+          "assertions": [
+            {
+              "id": "D11-9-persist-hot",
+              "title": "persist 返回 persistsAfterRestart == true（写盘 → 重启仍生效）",
+              "ok": false,
+              "actual": {
+                "persistsAfterRestart": null,
+                "status": "needs_confirmation",
+                "keys": [
+                  "status",
+                  "confirmToken",
+                  "options"
+                ]
+              },
+              "expected": true,
+              "detail": ""
+            },
+            {
+              "id": "D11-9-s1-session-flag",
+              "title": "persist 后 S1.configuredBySession == true（会话写入标记须显式可读）",
+              "ok": false,
+              "actual": {
+                "s1_configuredBySession": "(字段不存在)",
+                "stores": {
+                  "s1Fingerprint": "6e483539",
+                  "envFingerprint": "",
+                  "currentFingerprint": null,
+                  "s3Fingerprint": "6e483539",
+                  "runtimeFingerprint": null
+                },
+                "reconciledKeys": [
+                  "stores",
+                  "kooCliCurrent",
+                  "envIsPlaceholder",
+                  "s2Encrypted",
+                  "inconsistencies",
+                  "hasRuntime",
+                  "runtimeFingerprint",
+                  "inconsistent",
+                  "runtimeActive"
+                ]
+              },
+              "expected": true,
+              "detail": "confirm 结果: {\"status\":\"partial\",\"scope\":\"persist\",\"backedUp\":true,\"obs\":{\"configured\":true},"
+            },
+            {
+              "id": "D11-9-clear-fallback",
+              "title": "clear 后 effective.source 回退为 \"s1\"",
+              "ok": false,
+              "actual": {
+                "effective": null,
+                "clearStatus": "cleared",
+                "credentialPanel": {
+                  "sts": null,
+                  "s1": {
+                    "configured": true,
+                    "fingerprint": "6e483539",
+                    "persistent": true
+                  },
+                  "activeSource": "s1-persistent"
+                }
+              },
+              "expected": "s1",
               "detail": ""
             }
           ]
