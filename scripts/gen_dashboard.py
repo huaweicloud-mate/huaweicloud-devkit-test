@@ -1190,7 +1190,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             '<tr style="background:#f2f2f2;"><th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">任务</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">成功率</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">token</th>'
-            '<th style="padding:6px 8px;border:1px solid #ddd;" rowspan="2">省 token</th>'
+            '<th style="padding:6px 8px;border:1px solid #ddd;" rowspan="2">裸模型省 token</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;" colspan="2">步数</th>'
             '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;" rowspan="2">裸模型问题</th></tr>'
             '<tr style="background:#f2f2f2;"><th style="padding:4px 6px;border:1px solid #ddd;">标准</th><th style="padding:4px 6px;border:1px solid #ddd;">裸模型</th>'
