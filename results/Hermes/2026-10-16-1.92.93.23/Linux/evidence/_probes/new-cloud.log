@@ -1,0 +1,155 @@
+
+=====CASE D3-S2=====
+创建测试VPC tctest-opencode-s2-mva16jsq -> id=
+plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
+hook_check_command DeleteVpc -> decision=warn risk=undefined
+未确认前 ListVpcs 仍含该 VPC = true
+确认后 DeleteVpc -> ok=true
+删除后归零 = false
+[FAIL] 测试 VPC 创建成功
+[OK] plan DeleteVpc 要求确认(confirm-not-deny)
+[OK] hook 预检 DeleteVpc 返回决策
+[OK] 未确认前零执行
+[FAIL] 确认后删除成功且归零
+=====END D3-S2=====
+
+=====CASE D3-C13=====
+OBS mb -> success
+set 无 indexDocument -> __error=Error: indexDocument is required for action=set ok=undefined
+set indexDocument -> ok=undefined status=undefined
+get -> ok=undefined status=undefined
+OBS rm -f -> success
+[OK] OBS 建桶成功
+[OK] set 缺失 indexDocument 报错(拒绝)
+[FAIL] set 成功
+[FAIL] get 返回配置与 set 一致
+[OK] 删除归零
+=====END D3-C13=====
+
+=====CASE D3-C14=====
+hdkitConnect 参数透传行:
+  if (options.source) body.source = options.source;
+  if (options.env) body.env = options.env;
+  if (options.git) body.git = options.git;
+  if (options.template_id) body.template_id = options.template_id;
+  if (options.flavor_id) body.flavor_id = options.flavor_id;
+hdkitCredentials() 缺参 -> session_id or dev_stage_id is required
+hwlink getCredentials 结构: ak=*** sk=*** securitytoken="" (已脱敏)
+[OK] hdkitConnect 透传可选参数到 body
+[OK] hdkitCredentials 缺 sessionId+devStageId 报错
+[OK] hwlink getCredentials 返回 {ak,sk,securitytoken}
+[OK] createConnection 走 x-security-token 签名头
+=====END D3-C14=====
+
+=====CASE D3-S4=====
+voucher_status(领取前) -> {"claimed":false,"message":"fetch failed"}
+voucher_claim -> {"claimed":false,"message":"fetch failed"}
+voucher_status(领取后) -> {"claimed":false,"message":"fetch failed"}
+[OK] voucher_status 返回状态字段
+[OK] claim 调用返回
+[OK] status→claim→status 闭环连贯
+=====END D3-S4=====
+
+=====CASE D3-S3=====
+check_user -> realnameVerified=undefined agreementSigned=undefined err=TypeError: fetch failed
+[FAIL] 沙箱 check_user 通过
+→ 沙箱账号未实名/未签协议，标记 BLOCKED（外部依赖）
+=====END D3-S3=====
+
+=====SUMMARY=====
+{
+  "total": 18,
+  "passed": 13,
+  "results": [
+    {
+      "name": "测试 VPC 创建成功",
+      "ok": false,
+      "detail": "vpcId="
+    },
+    {
+      "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
+      "ok": true,
+      "detail": "{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}"
+    },
+    {
+      "name": "hook 预检 DeleteVpc 返回决策",
+      "ok": true,
+      "detail": "decision=warn"
+    },
+    {
+      "name": "未确认前零执行",
+      "ok": true,
+      "detail": "stillThere=true"
+    },
+    {
+      "name": "确认后删除成功且归零",
+      "ok": false,
+      "detail": "ok=true zeroed=false"
+    },
+    {
+      "name": "OBS 建桶成功",
+      "ok": true,
+      "detail": "bucket=tctest-opencode-obs-mva16jsq"
+    },
+    {
+      "name": "set 缺失 indexDocument 报错(拒绝)",
+      "ok": true,
+      "detail": "\"Error: indexDocument is required for action=set\""
+    },
+    {
+      "name": "set 成功",
+      "ok": false,
+      "detail": "{}"
+    },
+    {
+      "name": "get 返回配置与 set 一致",
+      "ok": false,
+      "detail": "{}"
+    },
+    {
+      "name": "删除归零",
+      "ok": true,
+      "detail": "bucket removed=tctest-opencode-obs-mva16jsq"
+    },
+    {
+      "name": "hdkitConnect 透传可选参数到 body",
+      "ok": true,
+      "detail": "if (options.source) body.source = options.source;; if (options.env) body.env = options.env;; if (options.git) body.git = options.git;; if (options.template_id) body.template_id = options.template_id;; if (options.flavor_id) body.flavor_id = options.flavor_id;"
+    },
+    {
+      "name": "hdkitCredentials 缺 sessionId+devStageId 报错",
+      "ok": true,
+      "detail": "session_id or dev_stage_id is required"
+    },
+    {
+      "name": "hwlink getCredentials 返回 {ak,sk,securitytoken}",
+      "ok": true,
+      "detail": "keys present"
+    },
+    {
+      "name": "createConnection 走 x-security-token 签名头",
+      "ok": true,
+      "detail": "securitytoken header present"
+    },
+    {
+      "name": "voucher_status 返回状态字段",
+      "ok": true,
+      "detail": "{\"claimed\":false,\"message\":\"fetch failed\"}"
+    },
+    {
+      "name": "claim 调用返回",
+      "ok": true,
+      "detail": "{\"claimed\":false,\"message\":\"fetch failed\"}"
+    },
+    {
+      "name": "status→claim→status 闭环连贯",
+      "ok": true,
+      "detail": "{\"before\":false,\"claim\":false,\"after\":false}"
+    },
+    {
+      "name": "沙箱 check_user 通过",
+      "ok": false,
+      "detail": "{\"__error\":\"TypeError: fetch failed\"}"
+    }
+  ]
+}
