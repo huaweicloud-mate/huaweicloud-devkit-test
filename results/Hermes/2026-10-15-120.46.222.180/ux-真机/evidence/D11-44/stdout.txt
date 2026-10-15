@@ -1,0 +1,10 @@
+PASS	D11-44-network-bounded	网络不可达时有界返回且标记 skipped	actual={"skipped":true,"ms":0}	expected={"skipped":true,"ms":"<5000"}
+PASS	D11-44-network-attribution	网络不可达不得归因为「凭证无效」	actual="IAM validation request failed (treating credentials as unverified): getaddrinfo ENOTFOUND iam.cn"	expected="不出现「AK/SK is invalid」"	失败=归因误导（用户会误以为自己 AK/SK 配错）
+PASS	D11-44-hang-bounded	请求挂起时在超时余量内返回（timeoutMs=600）	actual={"ms":601,"skipped":true}	expected={"ms":"<3100","skipped":true}	失败=无上界等待（agent 会长时间无响应）
+PASS	D11-44-http-429	HTTP 429（限流）归因含状态码且不误报凭证无效	actual="Unexpected IAM response (HTTP 429): {\"error\":{\"message\":\"HTTP 429 synthetic\"}}"	expected="含 429 且不出现「AK/SK is invalid」"
+PASS	D11-44-http-404	HTTP 404（端点/网络）归因含状态码且不误报凭证无效	actual="Unexpected IAM response (HTTP 404): {\"error\":{\"message\":\"HTTP 404 synthetic\"}}"	expected="含 404 且不出现「AK/SK is invalid」"
+PASS	D11-44-http-401-attribution	HTTP 401 必须明确指向 AK/SK（真原因不弱化）	actual="IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is "	expected="valid=false 且提及 AK/SK"
+PASS	D11-44-actionable	故障错误须给可执行 action（非纯英文散文）	actual="hcloud <Service> <Op> --cli-debug=true"	expected="非空 action（如 npx / hcloud 开头）"	UX-R7 / 上游 #900——当前错误对象无 action 字段，属已知缺口
+
+=== D11-44 ===  pass=7 fail=0
+RESULT: PASS

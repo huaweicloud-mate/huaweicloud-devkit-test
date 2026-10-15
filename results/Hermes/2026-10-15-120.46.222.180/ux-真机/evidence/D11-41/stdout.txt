@@ -1,0 +1,11 @@
+PASS	D11-41-placeholder-only	仅占位符 env 时判「未配置」（不得误报可用）	actual="HDKIT_CRED_MISSING"	expected="HDKIT_CRED_MISSING"	前置: #570「占位符遮蔽报连接成功」类缺陷防退化
+PASS	D11-41-placeholder-shadow	占位符 env 不得遮蔽真实 S1	actual="D11REALAK000000000000"	expected="D11REALAK000000000000"
+PASS	D11-41-sts-expiry	STS 过期可由 token 解析（不误导为 AK 无效）	actual=1792032656000	expected="早于当前时间(ms)=1792036256023"
+PASS	D11-41-koocli-not_found	KooCLI「not_found」归因分类正确	actual="HCLOUD_NOT_FOUND"	expected="HCLOUD_NOT_FOUND"
+PASS	D11-41-koocli-privacy_pending	KooCLI「privacy_pending」归因分类正确	actual="HCLOUD_PRIVACY_PENDING"	expected="HCLOUD_PRIVACY_PENDING"
+PASS	D11-41-koocli-sandbox_home_failure	KooCLI「sandbox_home_failure」归因分类正确	actual="HCLOUD_SANDBOX_HOME_FAILURE"	expected="HCLOUD_SANDBOX_HOME_FAILURE"
+PASS	D11-41-koocli-ok	KooCLI 正常不得误报故障	actual="ok"	expected="ok"
+PASS	D11-41-nextstep-actionable	nextStep 为可直接执行的命令（非英文散文）	actual="npx huaweicloud-devkit install-hcloud"	expected="以 npx / hcloud 开头"	UX-R7 / 上游 #900——当前为英文长句，属已知缺口
+
+=== D11-41 ===  pass=8 fail=0
+RESULT: PASS

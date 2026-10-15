@@ -1,0 +1,61 @@
+{
+  "case": "D11-28",
+  "file": "d11-28-sts-expiry-actionable.mjs",
+  "result": "FAIL",
+  "pass": 2,
+  "fail": 4,
+  "note": "口径: 需求验收（UX-R19）；FAIL = 用户可见提示未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-28-expiry-detected",
+      "title": "STS 到期可被解析为 expired（不误判为 AK 无效）",
+      "ok": true,
+      "actual": "expired",
+      "expected": "expired",
+      "detail": ""
+    },
+    {
+      "id": "D11-28-notice-zh",
+      "title": "到期后返回中文提示（含「已失效/已过期」）",
+      "ok": false,
+      "actual": "remainingMs\":-3600130",
+      "expected": "含中文「已过期/已失效」",
+      "detail": ""
+    },
+    {
+      "id": "D11-28-unique-action",
+      "title": "给出唯一可执行 action（重新 auth init）",
+      "ok": false,
+      "actual": "已扫描 auth_status 返回体",
+      "expected": "含 npx huaweicloud-devkit auth init",
+      "detail": ""
+    },
+    {
+      "id": "D11-28-remaining",
+      "title": "临时凭证额外标注剩余有效期",
+      "ok": true,
+      "actual": "remainingMs\":-3600130",
+      "expected": "含「剩余有效期」标注",
+      "detail": ""
+    },
+    {
+      "id": "D11-28-401-zh-action",
+      "title": "失效态返回中文 + 唯一 action",
+      "ok": false,
+      "actual": {
+        "action": "npx huaweicloud-devkit auth status",
+        "error": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information"
+      },
+      "expected": "中文 action（npx/hcloud 开头）",
+      "detail": ""
+    },
+    {
+      "id": "D11-28-401-no-en",
+      "title": "失效提示不出现英文 401 裸串（反断言）",
+      "ok": false,
+      "actual": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is invalid - chec",
+      "expected": "不含该英文整句",
+      "detail": ""
+    }
+  ]
+}

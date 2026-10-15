@@ -1,0 +1,78 @@
+{
+  "case": "D11-44",
+  "file": "d11-44-fault-injection.mjs",
+  "result": "PASS",
+  "pass": 7,
+  "fail": 0,
+  "note": "口径: 需求验收（故障注入下有界性与归因正确性）；FAIL=挂起/归因误导/缺可动作项",
+  "assertions": [
+    {
+      "id": "D11-44-network-bounded",
+      "title": "网络不可达时有界返回且标记 skipped",
+      "ok": true,
+      "actual": {
+        "skipped": true,
+        "ms": 0
+      },
+      "expected": {
+        "skipped": true,
+        "ms": "<5000"
+      },
+      "detail": ""
+    },
+    {
+      "id": "D11-44-network-attribution",
+      "title": "网络不可达不得归因为「凭证无效」",
+      "ok": true,
+      "actual": "IAM validation request failed (treating credentials as unverified): getaddrinfo ENOTFOUND iam.cn",
+      "expected": "不出现「AK/SK is invalid」",
+      "detail": "失败=归因误导（用户会误以为自己 AK/SK 配错）"
+    },
+    {
+      "id": "D11-44-hang-bounded",
+      "title": "请求挂起时在超时余量内返回（timeoutMs=600）",
+      "ok": true,
+      "actual": {
+        "ms": 601,
+        "skipped": true
+      },
+      "expected": {
+        "ms": "<3100",
+        "skipped": true
+      },
+      "detail": "失败=无上界等待（agent 会长时间无响应）"
+    },
+    {
+      "id": "D11-44-http-429",
+      "title": "HTTP 429（限流）归因含状态码且不误报凭证无效",
+      "ok": true,
+      "actual": "Unexpected IAM response (HTTP 429): {\"error\":{\"message\":\"HTTP 429 synthetic\"}}",
+      "expected": "含 429 且不出现「AK/SK is invalid」",
+      "detail": ""
+    },
+    {
+      "id": "D11-44-http-404",
+      "title": "HTTP 404（端点/网络）归因含状态码且不误报凭证无效",
+      "ok": true,
+      "actual": "Unexpected IAM response (HTTP 404): {\"error\":{\"message\":\"HTTP 404 synthetic\"}}",
+      "expected": "含 404 且不出现「AK/SK is invalid」",
+      "detail": ""
+    },
+    {
+      "id": "D11-44-http-401-attribution",
+      "title": "HTTP 401 必须明确指向 AK/SK（真原因不弱化）",
+      "ok": true,
+      "actual": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is ",
+      "expected": "valid=false 且提及 AK/SK",
+      "detail": ""
+    },
+    {
+      "id": "D11-44-actionable",
+      "title": "故障错误须给可执行 action（非纯英文散文）",
+      "ok": true,
+      "actual": "hcloud <Service> <Op> --cli-debug=true",
+      "expected": "非空 action（如 npx / hcloud 开头）",
+      "detail": "UX-R7 / 上游 #900——当前错误对象无 action 字段，属已知缺口"
+    }
+  ]
+}

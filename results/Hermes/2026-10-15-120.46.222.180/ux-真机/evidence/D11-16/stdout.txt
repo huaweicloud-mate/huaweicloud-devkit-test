@@ -1,0 +1,22 @@
+PASS	D11-16-HDKIT_CRED_MISSING-shape	HDKIT_CRED_MISSING：返回统一错误卡 {code,messageZh,action}	actual={"code":"HDKIT_CRED_MISSING","messageZh":"string","action":"string"}	expected={"code":"HDKIT_CRED_MISSING","messageZh":"string","action":"string"}	UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）
+PASS	D11-16-HDKIT_CRED_MISSING-zh	HDKIT_CRED_MISSING：messageZh 含中文且无英文整句	actual="未配置华为云凭证,需要先完成登录。"	expected="中文且无英文整句"
+PASS	D11-16-HDKIT_CRED_MISSING-action	HDKIT_CRED_MISSING：action 为可执行命令（npx / hcloud 开头）	actual="npx huaweicloud-devkit auth init"	expected="以 npx huaweicloud-devkit 或 hcloud 开头"
+FAIL	D11-16-IAM-401-shape	IAM-401：返回统一错误卡 {code,messageZh,action}	actual={"code":"HDKIT_CRED_INVALID","messageZh":"string","action":"string"}	expected={"code":"IAM-401","messageZh":"string","action":"string"}	UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）
+PASS	D11-16-IAM-401-zh	IAM-401：messageZh 含中文且无英文整句	actual="凭证已被华为云拒绝(AK/SK 无效或已过期),请重新生成。(HTTP 401: HTTP 401 synthetic)"	expected="中文且无英文整句"
+PASS	D11-16-IAM-401-action	IAM-401：action 为可执行命令（npx / hcloud 开头）	actual="npx huaweicloud-devkit auth status"	expected="以 npx huaweicloud-devkit 或 hcloud 开头"
+FAIL	D11-16-IAM-403-shape	IAM-403：返回统一错误卡 {code,messageZh,action}	actual={"code":"HDKIT_CRED_FORBIDDEN","messageZh":"string","action":"string"}	expected={"code":"IAM-403","messageZh":"string","action":"string"}	UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）
+PASS	D11-16-IAM-403-zh	IAM-403：messageZh 含中文且无英文整句	actual="凭证有效但无权限列出项目,请检查账号授权。(HTTP 403: HTTP 403 synthetic)"	expected="中文且无英文整句"
+PASS	D11-16-IAM-403-action	IAM-403：action 为可执行命令（npx / hcloud 开头）	actual="hcloud IAM KeystoneListProjects --cli-region=<region>"	expected="以 npx huaweicloud-devkit 或 hcloud 开头"
+FAIL	D11-16-region-缺失-shape	region-缺失：返回统一错误卡 {code,messageZh,action}	actual={"code":"HDKIT_CRED_REGION_MISSING","messageZh":"string","action":"string"}	expected={"code":"region-缺失","messageZh":"string","action":"string"}	UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）
+PASS	D11-16-region-缺失-zh	region-缺失：messageZh 含中文且无英文整句	actual="缺少 region(区域),登录配置不完整。"	expected="中文且无英文整句"
+PASS	D11-16-region-缺失-action	region-缺失：action 为可执行命令（npx / hcloud 开头）	actual="hcloud configure set --cli-region=<region>"	expected="以 npx huaweicloud-devkit 或 hcloud 开头"
+FAIL	D11-16-KooCLI-未装-shape	KooCLI-未装：返回统一错误卡 {code,messageZh,action}	actual={"code":null,"messageZh":"undefined","action":"undefined"}	expected={"code":"KooCLI-未装","messageZh":"string","action":"string"}	UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）
+FAIL	D11-16-KooCLI-未装-zh	KooCLI-未装：messageZh 含中文且无英文整句	actual=""	expected="中文且无英文整句"
+FAIL	D11-16-KooCLI-未装-action	KooCLI-未装：action 为可执行命令（npx / hcloud 开头）	actual=null	expected="以 npx huaweicloud-devkit 或 hcloud 开头"
+FAIL	D11-16-project-id-未设-shape	project-id-未设：返回统一错误卡 {code,messageZh,action}	actual={"code":null,"messageZh":"undefined","action":"undefined"}	expected={"code":"project-id-未设","messageZh":"string","action":"string"}	UX-R7：六码须同形同源（上游 #900「两份实现不一致」的病根）
+FAIL	D11-16-project-id-未设-zh	project-id-未设：messageZh 含中文且无英文整句	actual=""	expected="中文且无英文整句"
+FAIL	D11-16-project-id-未设-action	project-id-未设：action 为可执行命令（npx / hcloud 开头）	actual=null	expected="以 npx huaweicloud-devkit 或 hcloud 开头"
+FAIL	D11-16-actions-distinct	六码 action 互不相同（决策表可分辨）	actual="4/6 有 action"	expected="六码各有一个且互不相同的 action"
+
+=== D11-16 ===  pass=9 fail=10
+RESULT: FAIL

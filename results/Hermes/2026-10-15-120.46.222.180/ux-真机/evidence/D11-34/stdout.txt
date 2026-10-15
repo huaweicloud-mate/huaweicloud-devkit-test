@@ -1,0 +1,7 @@
+PASS	D11-34-readonly-recheck	真机只读复核可执行（ECS/EIP/EVS 三类列表）	actual={"成功":"3/3","明细":[{"label":"ECS 云服务器","ok":true,"residual":null,"textLen":9580},{"label":"EIP 弹性公网","ok":true,"residual":null,"textLen":680},{"label":"EVS 云硬盘","ok":true,"residual":null,"textLen":4756}]}	expected="3/3"
+FAIL	D11-34-report-zh	归零报告为中文且逐资源列出（已释放/未释放 + 剩余计数）	actual={"命中":"（无归零报告字段）"}	expected="含中文「已释放/未释放/剩余计数」逐项报告"
+FAIL	D11-34-zero-conclusion	零残留时给出明确中文结论（无残留 / 已归零）	actual={"当前剩余合计":0,"结论命中":false}	expected="含「无残留/已归零」结论"
+FAIL	D11-34-delete-hint	未释放项附唯一补删命令（可复制执行）	actual={"命中":false}	expected="含补删命令"
+
+=== D11-34 ===  pass=1 fail=3
+RESULT: FAIL

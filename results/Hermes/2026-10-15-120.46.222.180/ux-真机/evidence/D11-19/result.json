@@ -1,0 +1,45 @@
+{
+  "case": "D11-19",
+  "file": "d11-19-approval-explainable.mjs",
+  "result": "FAIL",
+  "pass": 1,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R9）；FAIL = 拦截文案未中文化/缺两点指引，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-19-deny",
+      "title": "未审批写命令被拦截（permissionDecision=deny）",
+      "ok": false,
+      "actual": "",
+      "expected": "deny",
+      "detail": ""
+    },
+    {
+      "id": "D11-19-reason-zh",
+      "title": "拦截理由含中文（面向用户可读）",
+      "ok": false,
+      "actual": "",
+      "expected": "含中文字符",
+      "detail": ""
+    },
+    {
+      "id": "D11-19-two-steps",
+      "title": "给出两点可执行指引（含 plan 与 run_approved 工具名）",
+      "ok": false,
+      "actual": {
+        "plan": false,
+        "approve": false
+      },
+      "expected": "含 huaweicloud_plan_cli_command 与 huaweicloud_run_approved_command",
+      "detail": ""
+    },
+    {
+      "id": "D11-19-no-en",
+      "title": "不出现英文整句裸串（反断言）",
+      "ok": true,
+      "actual": "",
+      "expected": "不含该英文整句",
+      "detail": ""
+    }
+  ]
+}
