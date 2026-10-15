@@ -1,6 +1,6 @@
 [UX] hdk src = /home/testbot1/devkit-test/Hermes/.ux-pkg-2026-10-15/package/plugins/huaweicloud-core/src  (argv)
-[UX] 隔离宿主: 每个夹具独立空 HOME/USERPROFILE（位于 /tmp/multica-task-3332165954）
-[UX] 待运行夹具 24 个: d11-1-onboarding-first-touch.mjs, d11-11-region-explicit.mjs, d11-12-iam401-zh.mjs, d11-13-post-login-selfcheck.mjs, d11-16-error-cards.mjs, d11-19-approval-explainable.mjs, d11-2-noninteractive-guidance.mjs, d11-22-koocli-privacy.mjs, d11-26-terminology.mjs, d11-27-cn-summary.mjs, d11-28-sts-expiry-actionable.mjs, d11-29-switch-effective-now.mjs, d11-3-effective-runtime.mjs, d11-30-auth-state-machine.mjs, d11-34-zeroing-report.mjs, d11-37-guidance-closure.mjs, d11-4-effective-s1.mjs, d11-41-misleading-attribution.mjs, d11-42-encoding-contract.mjs, d11-43-terminal-env-matrix.mjs, d11-44-fault-injection.mjs, d11-5-effective-env.mjs, d11-8-switch-temporary-explicit.mjs, d11-9-switch-persist-clear.mjs
+[UX] 隔离宿主: 每个夹具独立空 HOME/USERPROFILE（位于 /tmp/multica-task-2670131509）
+[UX] 待运行夹具 41 个: d11-1-onboarding-first-touch.mjs, d11-10-authinit-prompt-zh.mjs, d11-11-region-explicit.mjs, d11-12-iam401-zh.mjs, d11-13-post-login-selfcheck.mjs, d11-14-single-end-locate.mjs, d11-15-credential-safety-disclosure.mjs, d11-16-error-cards.mjs, d11-17-routing-hitrate.mjs, d11-18-route-miss-clarify.mjs, d11-19-approval-explainable.mjs, d11-2-noninteractive-guidance.mjs, d11-20-post-install-restart-hint.mjs, d11-21-post-login-nextsteps.mjs, d11-22-koocli-privacy.mjs, d11-23-no-client-ask.mjs, d11-24-codearts-sandbox-koocli.mjs, d11-25-capability-discoverable.mjs, d11-26-terminology.mjs, d11-27-cn-summary.mjs, d11-28-sts-expiry-actionable.mjs, d11-29-switch-effective-now.mjs, d11-3-effective-runtime.mjs, d11-30-auth-state-machine.mjs, d11-31-region-boundary.mjs, d11-32-unwritable-home.mjs, d11-33-approval-paths.mjs, d11-34-zeroing-report.mjs, d11-35-sandbox-unreachable-guide.mjs, d11-37-guidance-closure.mjs, d11-38-independent-observation.mjs, d11-4-effective-s1.mjs, d11-41-misleading-attribution.mjs, d11-42-encoding-contract.mjs, d11-43-terminal-env-matrix.mjs, d11-44-fault-injection.mjs, d11-5-effective-env.mjs, d11-6-conflict-dual-source.mjs, d11-7-conflict-one-click.mjs, d11-8-switch-temporary-explicit.mjs, d11-9-switch-persist-clear.mjs
 [HOST] CLEAN
 PASS  D11-1-code  错误码为 HDKIT_CRED_MISSING
       actual="HDKIT_CRED_MISSING"  expected="HDKIT_CRED_MISSING"
@@ -22,6 +22,23 @@ PASS  D11-1-no-en  顶层 message 无英文整句残留（反断言）
 RESULT: PASS
 
 >>> d11-1-onboarding-first-touch.mjs exit=0  ===
+
+FAIL  D11-10-no-en-original  源码中不再出现三处英文提示原文
+      actual=["Access Key ID (AK): ","Secret Access Key (SK): ","Security Token (optional, press Enter to skip): "]  expected="三处英文原文均为 0"
+FAIL  D11-10-AK-zh  AK 类提示为中文
+      actual="Access Key ID (AK): "  expected="存在且含中文字符"
+FAIL  D11-10-SK-zh  SK 类提示为中文
+      actual="Secret Access Key (SK): "  expected="存在且含中文字符"
+FAIL  D11-10-安全令牌-zh  安全令牌 类提示为中文
+      actual="Security Token (optional, press Enter to skip): "  expected="存在且含中文字符"
+FAIL  D11-10-region-zh  region 类提示为中文
+      actual="（未找到该类提示语句）"  expected="存在且含中文字符"
+
+=== D11-10 ===  pass=0 fail=5
+注: 口径: 需求验收（UX-R6 登录流程母语化）；FAIL = 提示未中文化，非 harness 问题
+RESULT: FAIL
+
+>>> d11-10-authinit-prompt-zh.mjs exit=1  ===
 
 PASS  D11-11-obs-default  缺 region 时不报 "region, ak, and sk are required"
       actual="缺少 region(区域),登录配置不完整。"  expected="不报该错"
@@ -72,6 +89,37 @@ PASS  D11-13-no-codename  体检摘要不含内部代号（S1/S2/A+C 等）（�
 RESULT: FAIL
 
 >>> d11-13-post-login-selfcheck.mjs exit=1  ===
+
+[HOST] CLEAN
+FAIL  D11-14-obs-ready-false  单端（OBS）破坏后 obs.ready == false（可定位到具体端）
+      actual={"selfCheck字段":"（无自检对象）","obsConfigured":false}  expected=false
+      UX-R3：体检须能指出哪一端坏了
+FAIL  D11-14-obs-nextstep  obs.nextStep 唯一且含 huaweicloud_auth_sync
+      actual={"nextStep":null}  expected="含 huaweicloud_auth_sync"
+FAIL  D11-14-others-ready  其余四项 ready 仍为 true（不误伤健康端）
+      actual={"明细":null}  expected="4/4"
+PASS  D11-14-no-en  破坏态提示不含英文整句（反断言）
+      actual="（无）"  expected="无英文整句"
+
+=== D11-14 ===  pass=1 fail=3
+注: 口径: 需求验收（UX-R3）；FAIL = 单端定位契约未实现，非 harness 问题
+RESULT: FAIL
+
+>>> d11-14-single-end-locate.mjs exit=1  ===
+
+PASS  D11-15-two-of-three  三项安全披露中至少显式出现两项（AK/SK 不进会话上下文 / 不写 shell 历史 / 文件 0600）
+      actual={"命中":["AK/SK 不进入会话上下文","凭证文件权限 0600"],"核对文件":["setup-cli.mjs","auth/credentials.mjs","auth/service.mjs","tools.mjs"]}  expected=">= 2 项"
+      UX-R5/R11：首次登录须给用户“凭证不会被泄漏”的确认
+FAIL  D11-15-status-surface  auth_status 暴露安全/隐私披露面（security/privacy 字段）
+      actual={"相关字段":[]}  expected="存在披露字段"
+PASS  D11-15-no-secret-echo  登录返回体不回显 AK/SK 明文（反断言）
+      actual="已检查返回体全文"  expected="无明文"
+
+=== D11-15 ===  pass=2 fail=1
+注: 口径: 需求验收（UX-R5/R11）；FAIL = 缺安全感披露，非 harness 问题
+RESULT: FAIL
+
+>>> d11-15-credential-safety-disclosure.mjs exit=1  ===
 
 [HOST] CLEAN
 PASS  D11-16-HDKIT_CRED_MISSING-shape  HDKIT_CRED_MISSING：返回统一错误卡 {code,messageZh,action}
@@ -125,6 +173,32 @@ RESULT: FAIL
 
 >>> d11-16-error-cards.mjs exit=1  ===
 
+[INFO] 意图集 20 条，命中 1，未命中 19，空路由 0
+FAIL  D11-17-hitrate  中文口语路由命中率 >= 85%（1/20 = 5.0%）
+      actual={"命中":"1/20","命中率":"5.0%","未命中":["帮我建一台云服务器→ecs","买一个对象存储桶→obs","创建虚拟私有云→vpc","加一块云硬盘→evs","申请弹性公网IP→eip","帮我做个私有镜像→ims","看看我有哪些子用户→iam","建一个MySQL数据库→rds"]}  expected=">= 85%（>=17/20）"
+      依据 issue #852 实测基线 21.4%，本用例目标 85%
+PASS  D11-17-no-empty-route  无一条返回空路由
+      actual={"空路由条数":0}  expected=0
+
+=== D11-17 ===  pass=1 fail=1
+注: 口径: 需求验收（UX-R16）；FAIL = 路由未达 85%（含基线 21.4%），非 harness 问题
+RESULT: FAIL
+
+>>> d11-17-routing-hitrate.mjs exit=1  ===
+
+FAIL  D11-18-clarify-zh  无关输入返回非空中文澄清字段（候选服务或追问语句）
+      actual={"字段":"（无澄清字段）","文本":null}  expected="存在澄清字段且含中文"
+FAIL  D11-18-candidates  或给出候选服务列表（可选项而非静默失败）
+      actual={"candidates":null}  expected="候选列表非空"
+PASS  D11-18-not-silent-empty  不返回静默空路由
+      actual={"空路由":false,"返回字段":["intent","recommendedSkills","recommendedServices","capabilityOrder","ruleOfThumb"]}  expected="返回体非空"
+
+=== D11-18 ===  pass=1 fail=2
+注: 口径: 需求验收（UX-R16 兜底）；FAIL = 兜底未给中文澄清，非 harness 问题
+RESULT: FAIL
+
+>>> d11-18-route-miss-clarify.mjs exit=1  ===
+
 FAIL  D11-19-deny  未审批写命令被拦截（permissionDecision=deny）
       actual=""  expected="deny"
 FAIL  D11-19-reason-zh  拦截理由含中文（面向用户可读）
@@ -158,6 +232,35 @@ RESULT: FAIL
 
 >>> d11-2-noninteractive-guidance.mjs exit=1  ===
 
+FAIL  D11-20-restart-item-zh  doctor 给出「需重启会话 / 本会话未加载插件」判定项且为中文
+      actual={"判定行":"Fix failures above, then restart your session."}  expected="中文「需重启/未加载」判定项"
+FAIL  D11-20-readme-consistent  与 README「安装后重启会话」表述一致
+      actual={"判定行":"Fix failures above, then restart your session."}  expected="README 与 doctor 两侧均以中文表述一致"
+FAIL  D11-20-no-en-only  不以英文整句作为唯一重启提示（反断言）
+      actual={"英文原文存在":true}  expected="英文原文不得是唯一提示"
+PASS  D11-20-doctor-ran  doctor 可执行（基线对照）
+      actual={"exit":0}  expected=0
+
+=== D11-20 ===  pass=1 fail=3
+注: 口径: 需求验收（UX-R8 安装后会话提示）；FAIL = 提示未中文化/未与 README 对齐，非 harness 问题
+RESULT: FAIL
+
+>>> d11-20-post-install-restart-hint.mjs exit=1  ===
+
+[HOST] CLEAN
+FAIL  D11-21-three-steps  登录成功后给出至少 3 条示例任务
+      actual={"条数":0,"中文条数":0,"示例":[]}  expected=">= 3 条"
+FAIL  D11-21-zh  示例任务提示语均为中文
+      actual={"中文":0,"总数":0}  expected="全部中文"
+FAIL  D11-21-covers-three  覆盖 只读查询 / 资源创建 / 沙箱预览 三类
+      actual={"只读查询":false,"资源创建":false,"沙箱预览":false}  expected={"只读查询":true,"资源创建":true,"沙箱预览":true}
+
+=== D11-21 ===  pass=0 fail=3
+注: 口径: 需求验收（UX-R1 登录后引导）；FAIL = 空态引导未实现，非 harness 问题
+RESULT: FAIL
+
+>>> d11-21-post-login-nextsteps.mjs exit=1  ===
+
 PASS  D11-22-classified  privacy_pending 归因分类正确
       actual={"status":"privacy_pending","errorCode":"HCLOUD_PRIVACY_PENDING"}  expected="HCLOUD_PRIVACY_PENDING"
 FAIL  D11-22-zh  下一步指引含中文说明（首次运行需同意隐私协议）
@@ -174,6 +277,47 @@ PASS  D11-22-no-invalid-char  不出现「您输入的是无效字符」裸串�
 RESULT: FAIL
 
 >>> d11-22-koocli-privacy.mjs exit=1  ===
+
+PASS  D11-23-nontty-zh  non-TTY 报错为中文
+      actual="\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v1.1.9-next.0          ║\n║     https://github.com/huawe"  expected="含中文字符"
+FAIL  D11-23-lists-targets  non-TTY 报错列出全部 --target 取值（而非只给一个示例）
+      actual={"源码候选":["opencode","officeace","codearts-data","codex","codex-desktop","codearts","codearts-work","dsh","hermes","all"],"报错中列出":["hermes","all"]}  expected="列出全部 10 个取值"
+FAIL  D11-23-three-paths-zh  提供三条可选路径的中文说明（指定 target / 全部安装 / 通用 MCP 接入）
+      actual=["MCP Server -> /home/testbot1/multica_workspaces/vector-8988c3df7bc9/ta","MCP config cleaned","MCP config updated: /home/testbot1/multica_workspaces/vector-8988c3df7"]  expected="三条路径且中文"
+PASS  D11-23-no-en-only  不以英文整句作为唯一报错（反断言）
+      actual={"英文原文存在":false}  expected="英文原文不得是唯一提示"
+
+=== D11-23 ===  pass=2 fail=2
+注: 口径: 需求验收（UX-R8）；本载体覆盖 non-TTY 侧；TTY 询问文案需真机交互捕获（真机批次补证）
+RESULT: FAIL
+
+>>> d11-23-no-client-ask.mjs exit=1  ===
+
+[BLOCKED] 需码道（CodeArts）环境：未探测到 ~/.codeartsdoer / ~/.codeartswork / CODEARTS_* 变量；请由码道客户端机器（如 testbot5-win-CodeArtsIDE）在真机执行本用例
+  参考原因: 直接在未隔离的宿主上单跑（宿主存在真实凭证 / 码道目录，
+            "未登录态"构造不出来 → 拒绝给出判定，而非报假 FAIL）。
+  隔离复跑: 把 HOME / USERPROFILE / HUAWEICLOUD_HOME 都指向一个空目录后再跑本夹具；
+            或直接用运行器 `npm run test:ux`（它自动为每个夹具建独立空 HOME）。
+RESULT: BLOCKED
+
+>>> d11-24-codearts-sandbox-koocli.mjs exit=2  ===
+
+FAIL  D11-25-list-zh  能力清单为中文（非纯英文文案）
+      actual={"清单片断":"{\"intent\":\"\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud "}  expected="含中文字符"
+FAIL  D11-25-pointers  清单指向 huaweicloud_retrieve_skill 与 huaweicloud_service_catalog 两个工具
+      actual={"retrieve_skill":false,"service_catalog":false}  expected="两个工具名均出现"
+FAIL  D11-25-grouped  分组列举核心能力（而非扁平英文工具名罗列）
+      actual={"capabilityOrder条数":6}  expected=">=3 条且中文"
+PASS  D11-25-nonempty  不返回空结果（两个入口均非空）
+      actual={"catalog空":false,"retrieve_skill空":false}  expected="均非空"
+PASS  D11-25-skill-zh  技能检索返回中文化技能说明（反断言：非纯英文）
+      actual={"片断":"{\"ok\":true,\"name\":\"huaweicloud-cli-and-auth\",\"version\":1,\"description\":\"Safe Huawei Cloud KooCLI usage and aut"}  expected="含中文字符"
+
+=== D11-25 ===  pass=2 fail=3
+注: 口径: 需求验收（UX-R15）；FAIL = 能力清单未中文化/未指向工具，非 harness 问题
+RESULT: FAIL
+
+>>> d11-25-capability-discoverable.mjs exit=1  ===
 
 [INFO] 工具定义 42 条
 FAIL  D11-26-no-codename  工具/参数描述不含内部代号（S1/S2/S3/A+C/R2/R9/R10/R11）
@@ -208,11 +352,11 @@ RESULT: FAIL
 PASS  D11-28-expiry-detected  STS 到期可被解析为 expired（不误判为 AK 无效）
       actual="expired"  expected="expired"
 FAIL  D11-28-notice-zh  到期后返回中文提示（含「已失效/已过期」）
-      actual="remainingMs\":-3600130"  expected="含中文「已过期/已失效」"
+      actual="remainingMs\":-3600643"  expected="含中文「已过期/已失效」"
 FAIL  D11-28-unique-action  给出唯一可执行 action（重新 auth init）
       actual="已扫描 auth_status 返回体"  expected="含 npx huaweicloud-devkit auth init"
 PASS  D11-28-remaining  临时凭证额外标注剩余有效期
-      actual="remainingMs\":-3600130"  expected="含「剩余有效期」标注"
+      actual="remainingMs\":-3600643"  expected="含「剩余有效期」标注"
 FAIL  D11-28-401-zh-action  失效态返回中文 + 唯一 action
       actual={"action":"npx huaweicloud-devkit auth status","error":"IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information"}  expected="中文 action（npx/hcloud 开头）"
 FAIL  D11-28-401-no-en  失效提示不出现英文 401 裸串（反断言）
@@ -278,8 +422,63 @@ RESULT: FAIL
 >>> d11-30-auth-state-machine.mjs exit=1  ===
 
 [HOST] CLEAN
+PASS  D11-31-legal-ok  合法 region 正常生效（基线对照）
+      actual="{\"status\":\"ok\",\"scope\":\"temporary\",\"note\":\"Runtime credentials active for this MCP process"  expected="正常返回"
+FAIL  D11-31-invalid-hint-zh  非法 region 返回中文可动作提示
+      actual="{\"status\":\"ok\",\"scope\":\"temporary\",\"note\":\"Runtime credentials active for this MCP process. hcloud commands still use th"  expected="中文「无效/不支持」提示"
+FAIL  D11-31-invalid-candidates  非法提示含可用区域候选（源自 list_regions）
+      actual={"候选来源条数":24,"候选示例":["af-north-1","af-south-1","ap-southeast-1","ap-southeast-2","ap-southeast-3"],"提示是否含候选":false}  expected="提示里出现候选区域"
+FAIL  D11-31-empty-default  空串回退默认值 cn-north-4
+      actual={"回读region":""}  expected="cn-north-4"
+FAIL  D11-31-case-normalize-zh  大小写不规范给出中文规范化提示
+      actual="{\"status\":\"ok\",\"scope\":\"temporary\",\"note\":\"Runtime credentials active for this MCP process. hcloud commands still use th"  expected="中文规范化提示"
+FAIL  D11-31-distinct-hints  五类取值提示互不混淆（去重后至少 4 类不同文本）
+      actual={"合法":"{\"status\":\"ok\",\"scope\":\"temporary\",\"note","非法":"{\"status\":\"ok\",\"scope\":\"temporary\",\"note","大小写":"{\"status\":\"ok\",\"scope\":\"temporary\",\"note","格式不符":"{\"status\":\"ok\",\"scope\":\"temporary\",\"note"}  expected="四类文本互不相同"
+
+=== D11-31 ===  pass=1 fail=5
+注: 口径: 需求验收（UX-R5）；FAIL = region 边界处理未实现，非 harness 问题
+RESULT: FAIL
+
+>>> d11-31-region-boundary.mjs exit=1  ===
+
+[HOST] CLEAN
+FAIL  D11-32-zh-error  写盘失败时返回中文错误（无法写入凭证目录 / 沙箱无法解析主目录）
+      actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-2670131509/d11-32-KMCiRe/blocker-file/creds/.config/huaweicloud'"  expected="中文可诊断错误"
+FAIL  D11-32-alt-path  给出替代路径（HUAWEICLOUD_HOME / env 注入）
+      actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-2670131509/d11-32-KMCiRe/blocker-file/creds/.config/huaweicloud'"  expected="含 HUAWEICLOUD_HOME 或 env 注入指引"
+PASS  D11-32-no-en  不出现英文整句 "KooCLI detected but cannot resolve the user home directory..."（反断言）
+      actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-2670131509/d11-32-KMCiRe/blocker-file/creds/.config/huaweicloud'"  expected="不含该英文整句"
+PASS  D11-32-koocli-classified  沙箱 home 失败被正确归类
+      actual={"status":"sandbox_home_failure","errorCode":"HCLOUD_SANDBOX_HOME_FAILURE"}  expected="HCLOUD_SANDBOX_HOME_FAILURE"
+FAIL  D11-32-koocli-zh-next  KooCLI 沙箱 home 失败的下一步提示为中文且给替代路径
+      actual="npx huaweicloud-devkit install-hcloud"  expected="中文 + 替代路径"
+PASS  D11-32-koocli-no-en  KooCLI 侧不得以英文整句作为唯一提示（反断言）
+      actual="npx huaweicloud-devkit install-hcloud"  expected="不含该英文整句"
+
+=== D11-32 ===  pass=3 fail=3
+注: 口径: 需求验收（UX-R14）；FAIL = 异常诊断未中文化/缺替代路径，非 harness 问题
+RESULT: FAIL
+
+>>> d11-32-unwritable-home.mjs exit=1  ===
+
+FAIL  D11-33-deny-zh  拒绝路径返回中文「操作已按你的决定取消」
+      actual=""  expected="含中文取消语义"
+FAIL  D11-33-deny-no-change  拒绝路径说明「资源未发生变更」
+      actual=""  expected="含「资源未发生变更」"
+FAIL  D11-33-timeout-zh  无效/超时审批返回中文提示（等待审批超时 / 令牌失效）
+      actual="approvedByUser must be true after explicit user approval for this exact command."  expected="含中文超时/失效语义"
+FAIL  D11-33-retry-hint  给出可重试指引（重新 plan / 再次确认）
+      actual="approvedByUser must be true after explicit user approval for this exact command."  expected="含重试指引"
+
+=== D11-33 ===  pass=0 fail=4
+注: 口径: 需求验收（UX-R9/R10）；「资源未发生变更」的只读复核属真机项，由 D11-34 载体在真机覆盖
+RESULT: FAIL
+
+>>> d11-33-approval-paths.mjs exit=1  ===
+
+[HOST] CLEAN
 PASS  D11-34-readonly-recheck  真机只读复核可执行（ECS/EIP/EVS 三类列表）
-      actual={"成功":"3/3","明细":[{"label":"ECS 云服务器","ok":true,"residual":null,"textLen":9580},{"label":"EIP 弹性公网","ok":true,"residual":null,"textLen":680},{"label":"EVS 云硬盘","ok":true,"residual":null,"textLen":4756}]}  expected="3/3"
+      actual={"成功":"3/3","明细":[{"label":"ECS 云服务器","ok":true,"residual":null,"textLen":5106},{"label":"EIP 弹性公网","ok":true,"residual":null,"textLen":680},{"label":"EVS 云硬盘","ok":true,"residual":null,"textLen":2696}]}  expected="3/3"
 FAIL  D11-34-report-zh  归零报告为中文且逐资源列出（已释放/未释放 + 剩余计数）
       actual={"命中":"（无归零报告字段）"}  expected="含中文「已释放/未释放/剩余计数」逐项报告"
 FAIL  D11-34-zero-conclusion  零残留时给出明确中文结论（无残留 / 已归零）
@@ -292,6 +491,15 @@ FAIL  D11-34-delete-hint  未释放项附唯一补删命令（可复制执行）
 RESULT: FAIL
 
 >>> d11-34-zeroing-report.mjs exit=1  ===
+
+[BLOCKED] 需沙箱环境：沙箱探针未就绪（threw=true，返回片段=未配置华为云凭证,需要先完成登录。）；请由真机批次在具备 devbridge 通道的客户端执行
+  参考原因: 直接在未隔离的宿主上单跑（宿主存在真实凭证 / 码道目录，
+            "未登录态"构造不出来 → 拒绝给出判定，而非报假 FAIL）。
+  隔离复跑: 把 HOME / USERPROFILE / HUAWEICLOUD_HOME 都指向一个空目录后再跑本夹具；
+            或直接用运行器 `npm run test:ux`（它自动为每个夹具建独立空 HOME）。
+RESULT: BLOCKED
+
+>>> d11-35-sandbox-unreachable-guide.mjs exit=2  ===
 
 [HOST] CLEAN
 PASS  D11-37-code  无凭证抛 HDKIT_CRED_MISSING
@@ -310,6 +518,22 @@ PASS  D11-37-closure  按引导完成登录后症状消失（闭环有效性）
 RESULT: PASS
 
 >>> d11-37-guidance-closure.mjs exit=0  ===
+
+FAIL  D11-38-self-report  自述轨给出生效账号指纹与来源（基线对照）
+      actual={"selfFingerprint":null,"selfSource":null}  expected="指纹 + source"
+FAIL  D11-38-independent-match  独立观测面（文件/env 反推）与自述指纹一致
+      actual={"自述":null,"独立反推":"caae65f2"}  expected="caae65f2"
+      范式③：自述不得是唯一证据
+PASS  D11-38-cross-track  独立连通轨证实自述「已登录」为真（外部行为可证伪）
+      actual={"只读调用":"{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"count\\\": 1,\\n  \\\"servers\\\": [\\n    {\\n      \\\"flavor\\\":"}  expected="只读调用成功"
+FAIL  D11-38-three-track-consistent  三轨一致（自述 == 文件/env 反推 && 真实连通）
+      actual={"自述":null,"反推":"caae65f2","连通":true}  expected="三轨一致"
+
+=== D11-38 ===  pass=1 fail=3
+注: 口径: 需求验收（UX-R2/R4 范式③ 独立观测）；FAIL = 自述与独立观侧面不一致，非 harness 问题
+RESULT: FAIL
+
+>>> d11-38-independent-observation.mjs exit=1  ===
 
 FAIL  D11-4-source  effective.source == "s1"（已落盘的全局凭证）
       actual={"source":null,"credentialsConfigured":true}  expected="s1"
@@ -332,7 +556,7 @@ PASS  D11-41-placeholder-only  仅占位符 env 时判「未配置」（不得�
 PASS  D11-41-placeholder-shadow  占位符 env 不得遮蔽真实 S1
       actual="D11REALAK000000000000"  expected="D11REALAK000000000000"
 PASS  D11-41-sts-expiry  STS 过期可由 token 解析（不误导为 AK 无效）
-      actual=1792032656000  expected="早于当前时间(ms)=1792036256023"
+      actual=1792037350000  expected="早于当前时间(ms)=1792040950476"
 PASS  D11-41-koocli-not_found  KooCLI「not_found」归因分类正确
       actual="HCLOUD_NOT_FOUND"  expected="HCLOUD_NOT_FOUND"
 PASS  D11-41-koocli-privacy_pending  KooCLI「privacy_pending」归因分类正确
@@ -382,7 +606,7 @@ PASS  D11-44-network-attribution  网络不可达不得归因为「凭证无效�
       actual="IAM validation request failed (treating credentials as unverified): getaddrinfo ENOTFOUND iam.cn"  expected="不出现「AK/SK is invalid」"
       失败=归因误导（用户会误以为自己 AK/SK 配错）
 PASS  D11-44-hang-bounded  请求挂起时在超时余量内返回（timeoutMs=600）
-      actual={"ms":601,"skipped":true}  expected={"ms":"<3100","skipped":true}
+      actual={"ms":600,"skipped":true}  expected={"ms":"<3100","skipped":true}
       失败=无上界等待（agent 会长时间无响应）
 PASS  D11-44-http-429  HTTP 429（限流）归因含状态码且不误报凭证无效
       actual="Unexpected IAM response (HTTP 429): {\"error\":{\"message\":\"HTTP 429 synthetic\"}}"  expected="含 429 且不出现「AK/SK is invalid」"
@@ -414,6 +638,44 @@ PASS  D11-5-no-secret  返回体不含 AK/SK 明文（反断言）
 RESULT: FAIL
 
 >>> d11-5-effective-env.mjs exit=1  ===
+
+[HOST] CLEAN
+PASS  D11-6-scenario  冲突态 onboarding.scenario == 2
+      actual={"scenario":2,"message":"检测到两套账号:已保存 与 环境注入,请选择其一。"}  expected="scenario=2"
+FAIL  D11-6-two-sources  onboarding 携带两组 {fingerprint,region,source}（分别指向 S1 与 env）
+      actual={"候选数":0,"来源":[],"示例":[]}  expected="两条来源三元组（s1 + env）"
+FAIL  D11-6-fingerprints  两组候选各指真实账号指纹（S1=A / env=B）
+      actual={"期望":["c005ba78","1b74886b"],"实际":[]}  expected="含 c005ba78(S1) 与 1b74886b(env)"
+FAIL  D11-6-effective-unique  effective.source 取唯一值（冲突下不模糊）
+      actual={"source":null}  expected="s1 或 env 之一"
+PASS  D11-6-no-secret  返回体不含 AK/SK 明文（反断言）
+      actual="已检查返回体全文"  expected="无明文"
+
+=== D11-6 ===  pass=2 fail=3
+注: 口径: 需求验收（UX-R2/R4 冲突态）；FAIL = 冲突态契约未实现，非 harness 问题
+RESULT: FAIL
+
+>>> d11-6-conflict-dual-source.mjs exit=1  ===
+
+[HOST] CLEAN
+PASS  D11-7-needs-confirm  首次返回标示需确认（status=needs_confirmation 或 needs_confirmation==true）
+      actual={"status":"needs_confirmation","needs_confirmation":null}  expected="needs_confirmation"
+PASS  D11-7-token  返回 confirmToken（可继续完成确认闭环）
+      actual="(已返回)"  expected="非空 token"
+PASS  D11-7-labels-zh  候选 label 均为中文（人话化）
+      actual={"候选数":2,"示例":["以 S1 现有账号为准（不切换，恢复 backup）","以新账号（8704b838）为准，覆盖 S1 并同步全部凭证文件"]}  expected="≥2 条且全中文"
+FAIL  D11-7-labels-fp  候选 label 各自含账号指纹（可分辨选的是谁）
+      actual={"期望指纹":["e73ac60a","8704b838"],"命中":[false,true]}  expected="含 e73ac60a 与 8704b838"
+FAIL  D11-7-no-codename  候选 label 不含裸代号 S1/S2/S3（反断言）
+      actual=["以 S1 现有账号为准（不切换，恢复 backup）","以新账号（8704b838）为准，覆盖 S1 并同步全部凭证文件"]  expected="不含裸代号"
+FAIL  D11-7-triple-consistent  confirm 后 S1 / env / S3 三端指纹一致
+      actual={"s1":"8704b838","env":"8704b838","s3":null,"confirm结果":"{\"status\":\"partial\",\"scope\":\"persist\",\"backedUp\":true,\"obs\":{\"configured\":true},","说明":"env 由平台注入、确认流程不改写入，故只对 S1 与 S3 做一致性断言"}  expected="S1 == S3（env 由平台侧负责）"
+
+=== D11-7 ===  pass=3 fail=3
+注: 口径: 需求验收（UX-R2/R4）；FAIL = 冲突选择闭环未实现，非 harness 问题
+RESULT: FAIL
+
+>>> d11-7-conflict-one-click.mjs exit=1  ===
 
 [HOST] CLEAN
 FAIL  D11-8-persists  temporary 返回 persistsAfterRestart == false（重启即失效须显式可见）
@@ -449,31 +711,48 @@ RESULT: FAIL
 
 ===== UX 体验用例（D11）汇总 =====
 PASS             d11-1-onboarding-first-touch.mjs (exit=0)
+NOT_IMPLEMENTED  d11-10-authinit-prompt-zh.mjs (exit=1)
 NOT_IMPLEMENTED  d11-11-region-explicit.mjs (exit=1)
 NOT_IMPLEMENTED  d11-12-iam401-zh.mjs (exit=1)
 NOT_IMPLEMENTED  d11-13-post-login-selfcheck.mjs (exit=1)
+NOT_IMPLEMENTED  d11-14-single-end-locate.mjs (exit=1)
+NOT_IMPLEMENTED  d11-15-credential-safety-disclosure.mjs (exit=1)
 NOT_IMPLEMENTED  d11-16-error-cards.mjs (exit=1)
+NOT_IMPLEMENTED  d11-17-routing-hitrate.mjs (exit=1)
+NOT_IMPLEMENTED  d11-18-route-miss-clarify.mjs (exit=1)
 NOT_IMPLEMENTED  d11-19-approval-explainable.mjs (exit=1)
 NOT_IMPLEMENTED  d11-2-noninteractive-guidance.mjs (exit=1)
+NOT_IMPLEMENTED  d11-20-post-install-restart-hint.mjs (exit=1)
+NOT_IMPLEMENTED  d11-21-post-login-nextsteps.mjs (exit=1)
 NOT_IMPLEMENTED  d11-22-koocli-privacy.mjs (exit=1)
+NOT_IMPLEMENTED  d11-23-no-client-ask.mjs (exit=1)
+BLOCKED(ENV)     d11-24-codearts-sandbox-koocli.mjs (exit=2)
+NOT_IMPLEMENTED  d11-25-capability-discoverable.mjs (exit=1)
 NOT_IMPLEMENTED  d11-26-terminology.mjs (exit=1)
 NOT_IMPLEMENTED  d11-27-cn-summary.mjs (exit=1)
 NOT_IMPLEMENTED  d11-28-sts-expiry-actionable.mjs (exit=1)
 NOT_IMPLEMENTED  d11-29-switch-effective-now.mjs (exit=1)
 NOT_IMPLEMENTED  d11-3-effective-runtime.mjs (exit=1)
 NOT_IMPLEMENTED  d11-30-auth-state-machine.mjs (exit=1)
+NOT_IMPLEMENTED  d11-31-region-boundary.mjs (exit=1)
+NOT_IMPLEMENTED  d11-32-unwritable-home.mjs (exit=1)
+NOT_IMPLEMENTED  d11-33-approval-paths.mjs (exit=1)
 NOT_IMPLEMENTED  d11-34-zeroing-report.mjs (exit=1)
+BLOCKED(ENV)     d11-35-sandbox-unreachable-guide.mjs (exit=2)
 PASS             d11-37-guidance-closure.mjs (exit=0)
+NOT_IMPLEMENTED  d11-38-independent-observation.mjs (exit=1)
 NOT_IMPLEMENTED  d11-4-effective-s1.mjs (exit=1)
 PASS             d11-41-misleading-attribution.mjs (exit=0)
 BLOCKED(ENV)     d11-42-encoding-contract.mjs (exit=2)
 NOT_IMPLEMENTED  d11-43-terminal-env-matrix.mjs (exit=1)
 PASS             d11-44-fault-injection.mjs (exit=0)
 NOT_IMPLEMENTED  d11-5-effective-env.mjs (exit=1)
+NOT_IMPLEMENTED  d11-6-conflict-dual-source.mjs (exit=1)
+NOT_IMPLEMENTED  d11-7-conflict-one-click.mjs (exit=1)
 NOT_IMPLEMENTED  d11-8-switch-temporary-explicit.mjs (exit=1)
 NOT_IMPLEMENTED  d11-9-switch-persist-clear.mjs (exit=1)
 
-总计: pass=4 not_implemented=19 blocked=1 harness_error=0 / 共 24
+总计: pass=4 not_implemented=34 blocked=3 harness_error=0 / 共 41
 口径: NOT_IMPLEMENTED = 需求验收未达标（已知缺口，非 harness 故障）；BLOCKED = 宿主/环境不满足；HARNESS_ERROR = 夹具自身崩溃，结果不可判定
 RESULT: NOT_IMPLEMENTED
 [UX] 结构化结果已写出: results/Hermes/2026-10-15-120.46.222.180/ux-真机/UX专项-2026-10-15.json

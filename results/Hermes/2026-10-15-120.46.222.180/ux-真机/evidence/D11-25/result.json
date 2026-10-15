@@ -1,0 +1,62 @@
+{
+  "case": "D11-25",
+  "file": "d11-25-capability-discoverable.mjs",
+  "result": "FAIL",
+  "pass": 2,
+  "fail": 3,
+  "note": "口径: 需求验收（UX-R15）；FAIL = 能力清单未中文化/未指向工具，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-25-list-zh",
+      "title": "能力清单为中文（非纯英文文案）",
+      "ok": false,
+      "actual": {
+        "清单片断": "{\"intent\":\"\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud "
+      },
+      "expected": "含中文字符",
+      "detail": ""
+    },
+    {
+      "id": "D11-25-pointers",
+      "title": "清单指向 huaweicloud_retrieve_skill 与 huaweicloud_service_catalog 两个工具",
+      "ok": false,
+      "actual": {
+        "retrieve_skill": false,
+        "service_catalog": false
+      },
+      "expected": "两个工具名均出现",
+      "detail": ""
+    },
+    {
+      "id": "D11-25-grouped",
+      "title": "分组列举核心能力（而非扁平英文工具名罗列）",
+      "ok": false,
+      "actual": {
+        "capabilityOrder条数": 6
+      },
+      "expected": ">=3 条且中文",
+      "detail": ""
+    },
+    {
+      "id": "D11-25-nonempty",
+      "title": "不返回空结果（两个入口均非空）",
+      "ok": true,
+      "actual": {
+        "catalog空": false,
+        "retrieve_skill空": false
+      },
+      "expected": "均非空",
+      "detail": ""
+    },
+    {
+      "id": "D11-25-skill-zh",
+      "title": "技能检索返回中文化技能说明（反断言：非纯英文）",
+      "ok": true,
+      "actual": {
+        "片断": "{\"ok\":true,\"name\":\"huaweicloud-cli-and-auth\",\"version\":1,\"description\":\"Safe Huawei Cloud KooCLI usage and aut"
+      },
+      "expected": "含中文字符",
+      "detail": ""
+    }
+  ]
+}

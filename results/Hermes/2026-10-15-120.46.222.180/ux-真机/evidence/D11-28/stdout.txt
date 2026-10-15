@@ -1,7 +1,7 @@
 PASS	D11-28-expiry-detected	STS 到期可被解析为 expired（不误判为 AK 无效）	actual="expired"	expected="expired"
-FAIL	D11-28-notice-zh	到期后返回中文提示（含「已失效/已过期」）	actual="remainingMs\":-3600130"	expected="含中文「已过期/已失效」"
+FAIL	D11-28-notice-zh	到期后返回中文提示（含「已失效/已过期」）	actual="remainingMs\":-3600643"	expected="含中文「已过期/已失效」"
 FAIL	D11-28-unique-action	给出唯一可执行 action（重新 auth init）	actual="已扫描 auth_status 返回体"	expected="含 npx huaweicloud-devkit auth init"
-PASS	D11-28-remaining	临时凭证额外标注剩余有效期	actual="remainingMs\":-3600130"	expected="含「剩余有效期」标注"
+PASS	D11-28-remaining	临时凭证额外标注剩余有效期	actual="remainingMs\":-3600643"	expected="含「剩余有效期」标注"
 FAIL	D11-28-401-zh-action	失效态返回中文 + 唯一 action	actual={"action":"npx huaweicloud-devkit auth status","error":"IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information"}	expected="中文 action（npx/hcloud 开头）"
 FAIL	D11-28-401-no-en	失效提示不出现英文 401 裸串（反断言）	actual="IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is invalid - chec"	expected="不含该英文整句"
 

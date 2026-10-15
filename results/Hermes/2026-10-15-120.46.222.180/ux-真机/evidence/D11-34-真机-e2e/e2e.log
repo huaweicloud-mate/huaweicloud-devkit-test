@@ -425,3 +425,270 @@ hcloud EIP DeletePublicip --cli-region=cn-north-4 --publicip_id=ea5ecafa-810e-47
 
 ==================== D11-34 真机 e2e 完成 ====================
 >>> [finally cleanup] 无待清理 EIP
+==================== [T0] 创建前快照 (ListPublicips/v3) ====================
+{
+  "request_id": "68a672536ff304c18125ade63f6f8ca8",
+  "publicips": [
+    {
+      "created_at": "2026-10-14T11:32:04Z",
+      "updated_at": "2026-10-14T11:32:04Z",
+      "lock_status": null,
+      "allow_share_bandwidth_types": [
+        "share",
+        "share_bgp_enter",
+        "share_bgp_ext",
+        "share_bgp_flx",
+        "share_dedi_vacant",
+        "share_inner_spec_enter",
+        "share_op"
+      ],
+      "id": "02fb8998-83b2-41e3-a1ff-4b85187b4d22",
+      "alias": null,
+      "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "ip_version": 4,
+      "public_ip_address": "121.36.54.113",
+      "public_ipv6_address": null,
+      "status": "ACTIVE",
+      "description": null,
+      "tags": [],
+      "enterprise_project_id": "0",
+      "billing_info": null,
+      "type": "EIP",
+      "vnic": {
+        "private_ip_address": "192.168.101.167",
+        "device_id": "b979e905-19bd-474f-b871-d1144f97d9e5",
+        "device_owner": "compute:cn-north-4a",
+        "vpc_id": "1d5a17e9-091a-4d98-9efa-b19176c470a5",
+        "port_id": "e60dff09-944b-4c6b-8aa2-8cc5373c7b27",
+        "mac": "fa:16:3e:4d:0a:4c",
+        "vtep": null,
+        "vni": null,
+        "instance_id": "",
+        "instance_type": "",
+        "port_vif_details": "{\"vhostuser_mode\":\"client\",\"segmentation_id\":716724,\"gaea_uuid\":\"e60dff09-944b-4c6b-8aa2-8cc5373c7b27\",\"vhostuser_dpdk_plug\":true,\"network_type\":\"vxlan\",\"primary_interface\":true,\"vhostuser_socket\":\"/var/run/vhost-user/tape60dff09-94\"}",
+        "port_profile": null
+      },
+      "bandwidth": {
+        "id": "0cbecd80-32ce-4778-8e78-bed9aa4ba276",
+        "size": 1,
+        "share_type": "PER",
+        "charge_mode": "traffic",
+        "name": "hc-activity-2048-ecs-bandwidth-f7ac",
+        "billing_info": ""
+      },
+      "associate_instance_type": "PORT",
+      "associate_instance_id": "e60dff09-944b-4c6b-8aa2-8cc5373c7b27",
+      "associate_instance_metadata": null,
+      "publicip_pool_id": "33ea3307-da81-40f6-8647-03fed19f6cea",
+      "publicip_pool_name": "5_bgp",
+      "public_border_group": "center"
+    }
+  ],
+  "total_count": 1,
+  "page_info": {
+    "previous_marker": "02fb8998-83b2-41e3-a1ff-4b85187b4d22",
+    "current_count": 1
+  }
+}
+>>> 基线 EIP ids=["02fb8998-83b2-41e3-a1ff-4b85187b4d22"]  count=1
+
+==================== [T1] 创建命令 ====================
+hcloud EIP CreatePublicip --cli-region=cn-north-4 --publicip.type=5_bgp --bandwidth.share_type=PER --bandwidth.name=ux-d11-34-e2e-b2-20261015131038 --bandwidth.size=1 --bandwidth.charge_mode=traffic --publicip.alias=ux-d11-34-e2e-b2-20261015131038
+{
+  "publicip": {
+    "id": "88e17837-1091-46dd-a14a-23e95043ed83",
+    "alias": "ux-d11-34-e2e-b2-20261015131038",
+    "type": "5_bgp",
+    "public_ip_address": "123.249.16.246",
+    "status": "DOWN",
+    "tenant_id": "46c1fd48bd1248c7b75afc3780de7132",
+    "create_time": "2026-10-15T05:10:40Z",
+    "bandwidth_id": "02f8013e-906a-4296-b658-17ce3261892e",
+    "bandwidth_name": "ux-d11-34-e2e-b2-20261015131038",
+    "bandwidth_share_type": "PER",
+    "bandwidth_size": 1,
+    "enterprise_project_id": "0",
+    "ip_version": 4
+  }
+}
+>>> 创建结果: EIP_ID=88e17837-1091-46dd-a14a-23e95043ed83  NEW_IP=123.249.16.246
+
+==================== [T2] 创建后列表核验 ====================
+{
+  "request_id": "cd3590abb528633b0e033dde434cc27d",
+  "publicips": [
+    {
+      "created_at": "2026-10-14T11:32:04Z",
+      "updated_at": "2026-10-14T11:32:04Z",
+      "lock_status": null,
+      "allow_share_bandwidth_types": [
+        "share",
+        "share_bgp_enter",
+        "share_bgp_ext",
+        "share_bgp_flx",
+        "share_dedi_vacant",
+        "share_inner_spec_enter",
+        "share_op"
+      ],
+      "id": "02fb8998-83b2-41e3-a1ff-4b85187b4d22",
+      "alias": null,
+      "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "ip_version": 4,
+      "public_ip_address": "121.36.54.113",
+      "public_ipv6_address": null,
+      "status": "ACTIVE",
+      "description": null,
+      "tags": [],
+      "enterprise_project_id": "0",
+      "billing_info": null,
+      "type": "EIP",
+      "vnic": {
+        "private_ip_address": "192.168.101.167",
+        "device_id": "b979e905-19bd-474f-b871-d1144f97d9e5",
+        "device_owner": "compute:cn-north-4a",
+        "vpc_id": "1d5a17e9-091a-4d98-9efa-b19176c470a5",
+        "port_id": "e60dff09-944b-4c6b-8aa2-8cc5373c7b27",
+        "mac": "fa:16:3e:4d:0a:4c",
+        "vtep": null,
+        "vni": null,
+        "instance_id": "",
+        "instance_type": "",
+        "port_vif_details": "{\"vhostuser_mode\":\"client\",\"segmentation_id\":716724,\"gaea_uuid\":\"e60dff09-944b-4c6b-8aa2-8cc5373c7b27\",\"vhostuser_dpdk_plug\":true,\"network_type\":\"vxlan\",\"primary_interface\":true,\"vhostuser_socket\":\"/var/run/vhost-user/tape60dff09-94\"}",
+        "port_profile": null
+      },
+      "bandwidth": {
+        "id": "0cbecd80-32ce-4778-8e78-bed9aa4ba276",
+        "size": 1,
+        "share_type": "PER",
+        "charge_mode": "traffic",
+        "name": "hc-activity-2048-ecs-bandwidth-f7ac",
+        "billing_info": ""
+      },
+      "associate_instance_type": "PORT",
+      "associate_instance_id": "e60dff09-944b-4c6b-8aa2-8cc5373c7b27",
+      "associate_instance_metadata": null,
+      "publicip_pool_id": "33ea3307-da81-40f6-8647-03fed19f6cea",
+      "publicip_pool_name": "5_bgp",
+      "public_border_group": "center"
+    },
+    {
+      "created_at": "2026-10-15T05:10:40Z",
+      "updated_at": "2026-10-15T05:10:40Z",
+      "lock_status": null,
+      "allow_share_bandwidth_types": [
+        "share",
+        "share_bgp_enter",
+        "share_bgp_ext",
+        "share_bgp_flx",
+        "share_dedi_vacant",
+        "share_inner_spec_enter",
+        "share_op"
+      ],
+      "id": "88e17837-1091-46dd-a14a-23e95043ed83",
+      "alias": "ux-d11-34-e2e-b2-20261015131038",
+      "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "ip_version": 4,
+      "public_ip_address": "123.249.16.246",
+      "public_ipv6_address": null,
+      "status": "DOWN",
+      "description": null,
+      "tags": [],
+      "enterprise_project_id": "0",
+      "billing_info": null,
+      "type": "EIP",
+      "vnic": null,
+      "bandwidth": {
+        "id": "02f8013e-906a-4296-b658-17ce3261892e",
+        "size": 1,
+        "share_type": "PER",
+        "charge_mode": "traffic",
+        "name": "ux-d11-34-e2e-b2-20261015131038",
+        "billing_info": ""
+      },
+      "associate_instance_type": null,
+      "associate_instance_id": null,
+      "associate_instance_metadata": null,
+      "publicip_pool_id": "33ea3307-da81-40f6-8647-03fed19f6cea",
+      "publicip_pool_name": "5_bgp",
+      "public_border_group": "center"
+    }
+  ],
+  "total_count": 2,
+  "page_info": {
+    "previous_marker": "02fb8998-83b2-41e3-a1ff-4b85187b4d22",
+    "current_count": 2
+  }
+}
+
+==================== [T3] 删除命令 ====================
+hcloud EIP DeletePublicip --cli-region=cn-north-4 --publicip_id=88e17837-1091-46dd-a14a-23e95043ed83
+>>> 已提交删除: 88e17837-1091-46dd-a14a-23e95043ed83
+
+==================== [T4] 删除后复核（归零，回到基线） ====================
+{
+  "request_id": "1ac5ef8856e852f3e86dc5bad271e5c4",
+  "publicips": [
+    {
+      "created_at": "2026-10-14T11:32:04Z",
+      "updated_at": "2026-10-14T11:32:04Z",
+      "lock_status": null,
+      "allow_share_bandwidth_types": [
+        "share",
+        "share_bgp_enter",
+        "share_bgp_ext",
+        "share_bgp_flx",
+        "share_dedi_vacant",
+        "share_inner_spec_enter",
+        "share_op"
+      ],
+      "id": "02fb8998-83b2-41e3-a1ff-4b85187b4d22",
+      "alias": null,
+      "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "ip_version": 4,
+      "public_ip_address": "121.36.54.113",
+      "public_ipv6_address": null,
+      "status": "ACTIVE",
+      "description": null,
+      "tags": [],
+      "enterprise_project_id": "0",
+      "billing_info": null,
+      "type": "EIP",
+      "vnic": {
+        "private_ip_address": "192.168.101.167",
+        "device_id": "b979e905-19bd-474f-b871-d1144f97d9e5",
+        "device_owner": "compute:cn-north-4a",
+        "vpc_id": "1d5a17e9-091a-4d98-9efa-b19176c470a5",
+        "port_id": "e60dff09-944b-4c6b-8aa2-8cc5373c7b27",
+        "mac": "fa:16:3e:4d:0a:4c",
+        "vtep": null,
+        "vni": null,
+        "instance_id": "",
+        "instance_type": "",
+        "port_vif_details": "{\"vhostuser_mode\":\"client\",\"segmentation_id\":716724,\"gaea_uuid\":\"e60dff09-944b-4c6b-8aa2-8cc5373c7b27\",\"vhostuser_dpdk_plug\":true,\"network_type\":\"vxlan\",\"primary_interface\":true,\"vhostuser_socket\":\"/var/run/vhost-user/tape60dff09-94\"}",
+        "port_profile": null
+      },
+      "bandwidth": {
+        "id": "0cbecd80-32ce-4778-8e78-bed9aa4ba276",
+        "size": 1,
+        "share_type": "PER",
+        "charge_mode": "traffic",
+        "name": "hc-activity-2048-ecs-bandwidth-f7ac",
+        "billing_info": ""
+      },
+      "associate_instance_type": "PORT",
+      "associate_instance_id": "e60dff09-944b-4c6b-8aa2-8cc5373c7b27",
+      "associate_instance_metadata": null,
+      "publicip_pool_id": "33ea3307-da81-40f6-8647-03fed19f6cea",
+      "publicip_pool_name": "5_bgp",
+      "public_border_group": "center"
+    }
+  ],
+  "total_count": 1,
+  "page_info": {
+    "previous_marker": "02fb8998-83b2-41e3-a1ff-4b85187b4d22",
+    "current_count": 1
+  }
+}
+
+==================== D11-34 真机 e2e（第 2 批）完成 ====================
+>>> [finally cleanup] 无待清理 EIP（已删或未创建）
