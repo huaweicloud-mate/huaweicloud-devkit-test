@@ -1,0 +1,37 @@
+{
+  "case": "D3-C3",
+  "assistant": "AtomCode(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "hdk gitHead 6302921c (v1.1.9-next.0)",
+  "status": "PASS",
+  "why": "沙箱部署E2E真机执行：connect(ws=e7e9310835)→upload_project(ok md5校验)→deploy_nginx(static:8088)→deploy_check(PASS)→close_session(ok)。沙箱上游 HDKit 服务已恢复（昨日 502 已消除），全链路 5/5 通过。",
+  "actual": "total=5 passed=5 failed=0",
+  "executedAt": "20261017051426",
+  "results": [
+    {
+      "name": "connect",
+      "pass": true,
+      "detail": "connected ws=e7e9310835"
+    },
+    {
+      "name": "upload_project",
+      "pass": true,
+      "detail": "{\"ok\":true,\"localDir\":\"/tmp/d3c3-proj\",\"remotePath\":\"/workspace/d3c3-proj\",\"bytes\":217,\"md5\":\"31c97ec681ef79b0373afcd481\"}"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": true,
+      "detail": "static:8088"
+    },
+    {
+      "name": "deploy_check",
+      "pass": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "close_session",
+      "pass": true,
+      "detail": "ok"
+    }
+  ]
+}
