@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "details": [
+    {
+      "args": "ECS deleteServer --server_id=test",
+      "decision": "deny"
+    },
+    {
+      "args": "ecs DeleteServer --server_id=test",
+      "decision": "deny"
+    },
+    {
+      "args": "ECS DELETEserver --server_id=test",
+      "decision": "deny"
+    },
+    {
+      "args": "ECS DeleteServer --server_id=test%00",
+      "decision": "deny"
+    }
+  ],
+  "evidence": "All variants blocked, none bypassed"
+}

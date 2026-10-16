@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "details": [
+    {
+      "cmd": "hcloud ECS DeleteServers --server_ids=test",
+      "decision": "deny"
+    },
+    {
+      "cmd": "bash -c \"hcloud ECS DeleteServers --server_ids=test\"",
+      "decision": "deny"
+    },
+    {
+      "cmd": "sh -c \"hcloud ECS DeleteServers\"",
+      "decision": "deny"
+    },
+    {
+      "cmd": "ECS.DeleteServers({\"server_ids\":\"test\"})",
+      "decision": "allow"
+    }
+  ],
+  "evidence": "Inner command detected in wrapped commands"
+}
