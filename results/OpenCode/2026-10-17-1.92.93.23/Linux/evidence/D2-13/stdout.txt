@@ -1,0 +1,75 @@
+PASS	D2-10-readKooCliProfiles 解析 profiles	{"current":"default","n":2}
+PASS	D2-10-resolveManagedProfile 返回 current 档	{"profile":"default"}
+PASS	D2-10-切换 current 后解析跟随(profile 名一致)	{"resolved":"default","current":"default"}
+PASS	D2-13-isPlaceholder 识别模板占位(<...>/${...}/bare)	{"angle":true,"dollar":true,"bare":true}
+PASS	D2-13-占位不劫持真实凭证	{"realAkIsPlaceholder":false}
+PASS	D4-12-postinstall 指向自有 bin（非远程脚本）	script=node ./bin/dsh-postinstall.cjs
+PASS	D4-12-无已知高危依赖	[]
+PASS	D4-12-依赖版本固定(SBOM 可枚举)	deps=1
+PASS	D9-6-客户端A initialize/tools-list 互通	tools=42
+PASS	D9-6-客户端B tools/list 与 A 一致	a=42,b=42
+{
+  "generatedAt": "2026-10-16T21:14:54.302Z",
+  "results": [
+    {
+      "id": "D2-10",
+      "name": "readKooCliProfiles 解析 profiles",
+      "ok": true,
+      "detail": "{\"current\":\"default\",\"n\":2}"
+    },
+    {
+      "id": "D2-10",
+      "name": "resolveManagedProfile 返回 current 档",
+      "ok": true,
+      "detail": "{\"profile\":\"default\"}"
+    },
+    {
+      "id": "D2-10",
+      "name": "切换 current 后解析跟随(profile 名一致)",
+      "ok": true,
+      "detail": "{\"resolved\":\"default\",\"current\":\"default\"}"
+    },
+    {
+      "id": "D2-13",
+      "name": "isPlaceholder 识别模板占位(<...>/${...}/bare)",
+      "ok": true,
+      "detail": "{\"angle\":true,\"dollar\":true,\"bare\":true}"
+    },
+    {
+      "id": "D2-13",
+      "name": "占位不劫持真实凭证",
+      "ok": true,
+      "detail": "{\"realAkIsPlaceholder\":false}"
+    },
+    {
+      "id": "D4-12",
+      "name": "postinstall 指向自有 bin（非远程脚本）",
+      "ok": true,
+      "detail": "script=node ./bin/dsh-postinstall.cjs"
+    },
+    {
+      "id": "D4-12",
+      "name": "无已知高危依赖",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "id": "D4-12",
+      "name": "依赖版本固定(SBOM 可枚举)",
+      "ok": true,
+      "detail": "deps=1"
+    },
+    {
+      "id": "D9-6",
+      "name": "客户端A initialize/tools-list 互通",
+      "ok": true,
+      "detail": "tools=42"
+    },
+    {
+      "id": "D9-6",
+      "name": "客户端B tools/list 与 A 一致",
+      "ok": true,
+      "detail": "a=42,b=42"
+    }
+  ]
+}

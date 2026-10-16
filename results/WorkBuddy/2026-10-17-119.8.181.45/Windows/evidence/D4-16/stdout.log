@@ -1,0 +1,67 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "Shell-wrapped commands inner detected=true; [{\"cmd\":\"bash -c \\\"hcloud ECS DeleteServer --server_ids=xxx\\\"\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"argsClsDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"sh -c \\\"hcloud ECS DeleteServer --server_ids=xxx\\\"\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"argsClsDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"sudo hcloud ECS DeleteServer --server_ids=xxx\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"argsClsDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"cmd /c \\\"hcloud ECS DeleteServer --server_ids=xxx\\\"\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"argsClsDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"powershell -Command \\\"hcloud ECS DeleteServer --server_ids=xxx\\\"\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"argsClsDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"bash -c \\\"echo $HW_SECRET_KEY\\\"\",\"riskDecision\":\"allow\",\"classifyDecision\":\"deny\",\"argsClsDecision\":\"allow\",\"blocked\":true},{\"cmd\":\"sh -c \\\"printenv HW_ACCESS_KEY\\\"\",\"riskDecision\":\"allow\",\"classifyDecision\":\"deny\",\"argsClsDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"bash -c \\\"cat ~/.config/huaweicloud/credentials.json\\\"\",\"riskDecision\":\"deny\",\"classifyDecision\":\"deny\",\"argsClsDecision\":\"allow\",\"blocked\":true}]",
+  "executedAt": "20261017053300",
+  "result": {
+    "results": [
+      {
+        "cmd": "bash -c \"hcloud ECS DeleteServer --server_ids=xxx\"",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "argsClsDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "sh -c \"hcloud ECS DeleteServer --server_ids=xxx\"",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "argsClsDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "sudo hcloud ECS DeleteServer --server_ids=xxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "argsClsDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "cmd /c \"hcloud ECS DeleteServer --server_ids=xxx\"",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "argsClsDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "powershell -Command \"hcloud ECS DeleteServer --server_ids=xxx\"",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "argsClsDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "bash -c \"echo $HW_SECRET_KEY\"",
+        "riskDecision": "allow",
+        "classifyDecision": "deny",
+        "argsClsDecision": "allow",
+        "blocked": true
+      },
+      {
+        "cmd": "sh -c \"printenv HW_ACCESS_KEY\"",
+        "riskDecision": "allow",
+        "classifyDecision": "deny",
+        "argsClsDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "bash -c \"cat ~/.config/huaweicloud/credentials.json\"",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "argsClsDecision": "allow",
+        "blocked": true
+      }
+    ],
+    "allBlocked": true
+  }
+}

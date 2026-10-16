@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C1",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "title": "ECS生命周期E2E",
+  "expected": "创建VPC/子网/ECS → 审批链 → 测后删除并按列表结构确证归零",
+  "ts": "2185234000",
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"16470efb-0447-4fe5-a6a4-bc761d8020ec\",\n    \"name\": \"testbot3-hermes-e2e-2185"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"48257b7a-90bb-46f7-93b9-0f93842c7ac2\",\n    \"name\": \"testbot3-hermes-e2e-2"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": true,
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed143a01a1469087805a19\",\n  \"serverIds\": [\n    \"37519977-354c-40a6-b668-a8fdd3ff3f57\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(按列表结构确证)",
+      "pass": true,
+      "detail": "ECS:已归零(列表确证) subnet:已归零(列表确证) vpc:已归零(列表确证)"
+    }
+  ]
+}

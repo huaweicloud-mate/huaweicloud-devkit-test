@@ -1,0 +1,74 @@
+{
+  "caseId": "D4-21",
+  "status": "PASS",
+  "why": "Broad IAM policy (* action, * resource) denied=true (decision=deny); narrow policy decision=warn",
+  "executedAt": "20261017053700",
+  "result": {
+    "broadResult": {
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-iam-admin-policy",
+          "title": "Broad IAM administrator grant",
+          "category": "iam",
+          "severity": "deny",
+          "message": "The change appears to grant broad administrator permissions.",
+          "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+          "source": "policy.json",
+          "evidence": "policy.json {\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"*\"],\"Resource\":[\"*\"]}]}"
+        }
+      ]
+    },
+    "narrowResult": {
+      "decision": "warn",
+      "findings": [
+        {
+          "ruleId": "hwc-sandbox-missing-ttl",
+          "title": "Sandbox deployment missing cleanup metadata",
+          "category": "sandbox",
+          "severity": "warn",
+          "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+          "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+          "source": "policy.json",
+          "evidence": "policy.json {\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"ecs:servers:list\"],\"Resource\":[\"ecs:cn-north-4:server/xxx\"]}]}"
+        }
+      ]
+    },
+    "broadHook": {
+      "ok": false,
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-iam-admin-policy",
+          "title": "Broad IAM administrator grant",
+          "category": "iam",
+          "severity": "deny",
+          "message": "The change appears to grant broad administrator permissions.",
+          "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+          "source": "policy.json",
+          "evidence": "policy.json {\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"*\"],\"Resource\":[\"*\"]}]}"
+        }
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution."
+    },
+    "narrowHook": {
+      "ok": true,
+      "decision": "warn",
+      "findings": [
+        {
+          "ruleId": "hwc-sandbox-missing-ttl",
+          "title": "Sandbox deployment missing cleanup metadata",
+          "category": "sandbox",
+          "severity": "warn",
+          "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+          "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+          "source": "policy.json",
+          "evidence": "policy.json {\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"ecs:servers:list\"],\"Resource\":[\"ecs:cn-north-4:server/xxx\"]}]}"
+        }
+      ],
+      "nextStep": "Review the warnings with the user before proceeding."
+    },
+    "broadDenied": true,
+    "narrowOk": true
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "caseId": "D4-9",
+  "status": "PASS",
+  "why": "Public exposure/destructive commands blocked=true; [{\"cmd\":\"hcloud ECS CreateServer --public_ip=true\",\"riskDecision\":\"allow\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud VPC CreateSecurityGroupRule --direction=ingress --port_range=0-65535 --protocol=all --remote_ip_prefix=0.0.0.0/0\",\"riskDecision\":\"allow\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud ECS DeleteServer --server_ids=xxx --force\",\"riskDecision\":\"deny\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud RDS DeleteInstance --instance_id=xxx --force\",\"riskDecision\":\"deny\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud ECS ResetServerPassword --server_id=xxx\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud IAM DeleteUser --user_id=xxx\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"rm -rf /\",\"riskDecision\":\"deny\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud ECS DeleteServers --delete_public_ip\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true}]",
+  "executedAt": "20261017053100",
+  "result": {
+    "results": [
+      {
+        "cmd": "hcloud ECS CreateServer --public_ip=true",
+        "riskDecision": "allow",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud VPC CreateSecurityGroupRule --direction=ingress --port_range=0-65535 --protocol=all --remote_ip_prefix=0.0.0.0/0",
+        "riskDecision": "allow",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer --server_ids=xxx --force",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud RDS DeleteInstance --instance_id=xxx --force",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud ECS ResetServerPassword --server_id=xxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud IAM DeleteUser --user_id=xxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "rm -rf /",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud ECS DeleteServers --delete_public_ip",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      }
+    ],
+    "allBlocked": true
+  }
+}

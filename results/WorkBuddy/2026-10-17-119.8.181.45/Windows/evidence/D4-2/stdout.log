@@ -1,0 +1,59 @@
+{
+  "caseId": "D4-2",
+  "status": "FAIL",
+  "why": "Env print commands blocked=false; printenv HW_ACCESS_KEY->deny/deny; echo $HW_SECRET_KEY->allow/deny; env | grep HW_->deny/deny; echo $HW_ACCESS_KEY $HW_SECRET_KEY->allow/deny; printenv | grep -i ak->allow/allow; set HW_ACCESS_KEY->allow/allow; echo %HW_ACCESS_KEY%->allow/allow; bash -c \"echo $HW_SECRET_KEY\"->allow/deny",
+  "executedAt": "20261017052700",
+  "result": {
+    "results": [
+      {
+        "cmd": "printenv HW_ACCESS_KEY",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "echo $HW_SECRET_KEY",
+        "riskDecision": "allow",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "env | grep HW_",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "echo $HW_ACCESS_KEY $HW_SECRET_KEY",
+        "riskDecision": "allow",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "printenv | grep -i ak",
+        "riskDecision": "allow",
+        "classifyDecision": "allow",
+        "blocked": false
+      },
+      {
+        "cmd": "set HW_ACCESS_KEY",
+        "riskDecision": "allow",
+        "classifyDecision": "allow",
+        "blocked": false
+      },
+      {
+        "cmd": "echo %HW_ACCESS_KEY%",
+        "riskDecision": "allow",
+        "classifyDecision": "allow",
+        "blocked": false
+      },
+      {
+        "cmd": "bash -c \"echo $HW_SECRET_KEY\"",
+        "riskDecision": "allow",
+        "classifyDecision": "deny",
+        "blocked": true
+      }
+    ],
+    "allBlocked": false
+  }
+}
