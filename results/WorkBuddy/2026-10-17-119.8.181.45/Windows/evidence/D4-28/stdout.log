@@ -1,0 +1,45 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "hooks.json registers .mjs=true; high-risk deny=true; safe no-deny=true; commandText extraction tested on 5 input shapes",
+  "executedAt": "20261017054100",
+  "result": {
+    "registersMjs": true,
+    "extractionResults": [
+      {
+        "input": "{\"command\":\"cat ~/.config/huaweicloud/credentials.json\"}",
+        "extractedText": "cat ~/.config/huaweicloud/credentials.json",
+        "decision": "deny"
+      },
+      {
+        "input": "{\"cmd\":\"echo $HW_SECRET_KEY\"}",
+        "extractedText": "echo $HW_SECRET_KEY",
+        "decision": "deny"
+      },
+      {
+        "input": "{\"script\":\"hcloud ECS DeleteServer --server_ids=xxx\"}",
+        "extractedText": "hcloud ECS DeleteServer --server_ids=xxx",
+        "decision": "deny"
+      },
+      {
+        "input": "{\"args\":[\"hcloud\",\"ECS\",\"DeleteServer\",\"--server_ids=xxx\"]}",
+        "extractedText": "hcloud ECS DeleteServer --server_ids=xxx",
+        "decision": "deny"
+      },
+      {
+        "input": "{\"arguments\":\"rm -rf /\"}",
+        "extractedText": "rm -rf /",
+        "decision": "deny"
+      }
+    ],
+    "highRiskCls": {
+      "decision": "deny",
+      "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+    },
+    "safeCls": {
+      "decision": "allow"
+    },
+    "highRiskDeny": true,
+    "safeNoDeny": true
+  }
+}

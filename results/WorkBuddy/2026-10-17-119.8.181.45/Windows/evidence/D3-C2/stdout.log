@@ -1,0 +1,29 @@
+{
+  "case": "D3-C2",
+  "status": "FAIL",
+  "total": 4,
+  "passed": 1,
+  "failed": 3,
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": false,
+      "detail": "Start at 2026-10-16 21:11:16.1957805 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2185075964] successfully, request id [000001A1468E0B6D47CE3F2BE98CAF3A]\nNotice: If the configured"
+    },
+    {
+      "name": "set静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":403,\"websiteUrl\":\"http://testbot3-hermes-obs-2185075964.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 403\"}"
+    },
+    {
+      "name": "get静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A1"
+    },
+    {
+      "name": "删桶归零",
+      "pass": true,
+      "detail": "Start at 2026-10-16 21:11:17.7667797 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-2185075964] successfully!"
+    }
+  ]
+}
