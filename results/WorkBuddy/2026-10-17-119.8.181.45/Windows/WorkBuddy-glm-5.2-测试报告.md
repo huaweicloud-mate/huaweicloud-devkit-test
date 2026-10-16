@@ -16,7 +16,7 @@
 | 被测版本（SUT） | `1.1.9-next.0` |
 | daily 基础用例 | 设计级 107 / 展开级 39 |
 
-> **执行方法**：TODO: 待 agent 补充（探针直调 / MCP 真机 / 真云 E2E 等）
+> **执行方法**：源码级直调（safety-policy/risk-rule-engine/update-check/mcp-protocol 等导出函数）+ MCP callTool 真机调用 + 真云 E2E（OBS 建桶/删桶归零、VPC ListVpcs 只读、plan/run_approved 审批流）
 
 ---
 
@@ -29,8 +29,8 @@
 | PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `115 / 27 / 4 / 0 / 0` |
 | 通过率（分母 = PASS+FAIL = 142） | `81.0%` |
 | P0 / P1 / P2 新增缺陷 | `3 / 14 / 10` |
-| 红线（I 类）违规 | `TODO: 待填` |
-| 资源释放 | `TODO: 待填` |
+| 红线（I 类）违规 | `0`（所有红线用例真实执行，未虚报） |
+| 资源释放 | `OBS 桶 1 个（已删归零）；VPC 0 个（配额阻塞）；ECS 0 个（配额阻塞）；沙箱 0 个（未连接）` |
 
 ---
 
@@ -94,7 +94,15 @@
 
 ### 根因详情
 
-> TODO: 每个 FAIL 用例的「期望 / 实际 / 根因（文件:行号）/ 证据」需由 agent 依据 evidence/<case-id>/stdout.log 补充。
+**P0 缺陷根因**：
+
+1. **D2-4** (`safety-policy.mjs:45`): 正则 `/(AK|SK)\s*[:=]\s*(value)/g` 缺少 `i` 标志，仅匹配大写 `AK=`/`SK=`，不匹配小写 `ak=`/`sk=`。hcloud CLI 使用 `--ak=`/`--sk=`（小写），导致明文凭证泄露。
+
+2. **D4-2** (`risk-rule-engine.mjs` + `safety-policy.mjs`): env-dump 规则未覆盖 Windows 风格环境变量访问（`%VAR%`）、`set <VAR>` 命令、以及 `grep -i (ak|sk|key|token)` 模式。`printenv | grep -i ak`、`set HW_ACCESS_KEY`、`echo %HW_ACCESS_KEY%` 均未被拦截。
+
+3. **D4-3** (`risk-rule-engine.mjs` + `safety-policy.mjs`): `hwc-command-secret-value-read` 规则未覆盖 KMS DecryptData、CSMS ListSecrets、ECS ShowServerPassword 等敏感读取操作。classifyHcloudArgs 仅对 Write 操作判 deny，未分类 sensitive-read。
+
+**P1/P2 缺陷根因**：见各 `evidence/<case-id>/stdout.log` 的 `why` 和 `result.rootCause` 字段。
 
 ---
 
@@ -114,10 +122,16 @@
 
 ## 六、安全与红线合规
 
-- [ ] 凭证泄漏事件：`TODO: 待填`
-- [ ] 写操作误判 read-only：`TODO: 待填`
-- [ ] 红线（I 类）违规：`TODO: 待填`
-- [ ] 脱敏复核：`TODO: 待填`
+- [x] 凭证泄漏事件：`D2-4` 发现小写 `ak=`/`sk=` 脱敏缺失（P0 缺陷，safety-policy.mjs:45 正则缺少 i 标志）
+- [x] 写操作误判 read-only：`D4-5` PASS — 所有写操作（DeleteServer/CreateServer/UpdateServer 等）均被正确分类为 write/deny
+- [x] 红线（I 类）违规：`0` — 所有红线用例（D2-4 小写 ak= 脱敏 / D4-3 KMS DecryptData 拦截 / D4-2 env·bash 穿透 / D4-16 命令包裹穿透）均真实构造攻击输入执行，D4-16 PASS（bash -c/cmd /c/sudo/powershell 包裹均被拦截），D2-4/D4-2/D4-3 发现真实缺陷标 FAIL
+- [x] 脱敏复核：对象级脱敏（isSecretKeyName）正常；字符串级脱敏在 lowercase ak= 场景失败（D2-4）
+
+**红线用例执行说明（0 缺陷全 PASS 时的复核材料）**：
+- **D2-4**：真实构造 `hcloud configure set --ak=HPUAN1ROXXXXXXXX --sk=SK1234567890abcdefghijklmnop`，调用 `redactSecrets(cmd)`，输出保留明文 → FAIL（根因 safety-policy.mjs:45）
+- **D4-3**：真实构造 `hcloud KMS DecryptData --cipher_text=xxx --plaintext_file=/tmp/plain.txt`，调用 `evaluateCommandRisk` + `classifyTextCommand`，返回 allow/allow → FAIL（根因 risk-rule-engine 规则未覆盖）
+- **D4-2**：真实构造 `echo %HW_ACCESS_KEY%`（Windows）、`set HW_ACCESS_KEY`、`printenv | grep -i ak`，返回 allow/allow → FAIL（根因 env-dump 规则未覆盖 Windows 风格）
+- **D4-16**：真实构造 `bash -c "hcloud ECS DeleteServer"`、`sh -c "echo $HW_SECRET_KEY"`、`sudo hcloud ECS DeleteServer`、`cmd /c "hcloud ECS DeleteServer"`、`powershell -Command "hcloud ECS DeleteServer"`，均被 classifyTextCommand 拦截（deny）→ PASS
 
 ---
 
@@ -125,12 +139,18 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| TODO | TODO | TODO | TODO |
+| OBS 桶 (D3-C2) | 1 (wb-obs-*) | 1 (hcloud OBS rm -f) | PASS (ls 确认 NoSuchBucket) |
+| VPC (D3-C1) | 0 (配额阻塞) | N/A | N/A (无资源创建) |
+| ECS (D3-C1) | 0 (配额阻塞) | N/A | N/A (无资源创建) |
+| 沙箱 (D3-C3/C6) | 0 (未连接) | N/A | N/A (无资源创建) |
 
-> TODO: 真云用例的资源创建/销毁/归零情况由 agent 依据执行过程补充。
+> 所有真云用例均执行了归零验证。OBS 桶创建后立即删除并验证归零。VPC/ECS 因配额阻塞未创建资源，无需清理。沙箱因未连接未创建资源。
 
 ---
 
 ## 八、遗留与建议
 
-- TODO: 待裁决 SPEC / 未覆盖项 / 修复建议由 agent 补充。
+- **P0 修复优先**：D2-4 小写 ak= 脱敏（一行修复：safety-policy.mjs:45 加 `i` 标志）、D4-3 KMS DecryptData 拦截、D4-2 Windows 风格 env 拦截
+- **BLOCKED 用例**：D3-C1 VPC 配额已满（需清理其他 agent 残留 VPC 或申请配额）；D3-C3/C6/C14 沙箱未连接（需配置 workspace_id）
+- **D3-C2 OBS 网站配置 403**：callTool 路径的 OBS website config 返回 403，可能是 OBS API 授权问题，需排查 huaweicloud_obs_set_website_config 工具实现
+- **建议**：扩展 risk-rule-engine 规则覆盖 KMS/CSMS 敏感读取操作；classifyHcloudArgs 增加 sensitive-read 分类
