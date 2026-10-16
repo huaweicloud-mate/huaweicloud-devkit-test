@@ -1,16 +1,16 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-codeartsagent-s2-mva1gfuo -> id=
+创建测试VPC tctest-codeartsagent-s2-mvbgj68k -> id=e5149aad-2334-415f-a805-991e3bbf1375
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
 确认后 DeleteVpc -> ok=true
-删除后归零 = false
-[FAIL] 测试 VPC 创建成功
+删除后归零 = true
+[OK] 测试 VPC 创建成功
 [OK] plan DeleteVpc 要求确认(confirm-not-deny)
 [OK] hook 预检 DeleteVpc 返回决策
 [OK] 未确认前零执行
-[FAIL] 确认后删除成功且归零
+[OK] 确认后删除成功且归零
 =====END D3-S2=====
 
 =====CASE D3-C13=====
@@ -42,7 +42,7 @@ hwlink getCredentials 结构: ak=*** sk=*** securitytoken="" (已脱敏)
 =====END D3-C14=====
 
 =====CASE D3-S4=====
-voucher_status(领取前) -> {"claimed":false,"message":"AK 调用已达限额，请稍后重试","code":"HDKIT_CRED_RATE_LIMIT"}
+voucher_status(领取前) -> {"claimed":true,"message":"已领取","code":null}
 voucher_claim -> {"claimed":true,"voucherId":null,"amount":0,"message":"已领取过","code":null}
 voucher_status(领取后) -> {"claimed":true,"message":"已领取","code":null}
 [OK] voucher_status 返回状态字段
@@ -51,20 +51,52 @@ voucher_status(领取后) -> {"claimed":true,"message":"已领取","code":null}
 =====END D3-S4=====
 
 =====CASE D3-S3=====
-check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: faf96bb7016a417f94d633d2aba4480d]
-[FAIL] 沙箱 check_user 通过
-→ 沙箱账号未实名/未签协议，标记 BLOCKED（外部依赖）
+check_user -> realnameVerified=true agreementSigned=true err=
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+connect -> status=connected wsId=e7e9310835d44e5abbcb
+[2026-10-16T21:06:07.280Z] uploadProject: /home/testbot1/.hdk-s3-mvbgj68k -> /workspace/.hdk-s3-mvbgj68k.tar.gz (archive=211 bytes, md5=0620db721e925a420df616ec17c8c6e6)
+[2026-10-16T21:06:07.348Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-1008935134/sandbox-upload-1792184767269/.hdk-s3-mvbgj68k.tar.gz, size=211, remotePath=/workspace/.hdk-s3-mvbgj68k.tar.gz)
+[2026-10-16T21:06:07.348Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-16T21:06:07.348Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-16T21:06:07.396Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-16T21:06:07.448Z] deployFileServer: starting server on port 8888
+[2026-10-16T21:06:07.484Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 19888\r\n\u001b]133;C\u0007\r\n"
+[2026-10-16T21:06:07.484Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[2026-10-16T21:06:08.392Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-16T21:06:08.394Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-16T21:06:08.395Z] uploadViaHttpTunnel: tunnel ready, localPort=38969
+[2026-10-16T21:06:08.395Z] uploadViaHttpTunnel: waiting for server health on localhost:38969
+[2026-10-16T21:06:08.396Z] waitForServerReady: attempt 1, checking http://localhost:38969/health
+[2026-10-16T21:06:08.433Z] waitForServerReady: server ready on port 38969 after 0 retries
+[2026-10-16T21:06:08.433Z] uploadViaHttpTunnel: sending POST with 211 bytes
+[2026-10-16T21:06:08.472Z] uploadViaHttpTunnel: upload complete (bytes=211, md5=0620db721e925a420df616ec17c8c6e6)
+upload_project -> ok=true md5Verified=true
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+deploy_nginx -> ok=true port=8081 url=
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mvbgj68k/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
+close_session -> ok
+[OK] 沙箱 connect 成功
+[OK] s3-connect/upload/deploy 链路
+[OK] 部署返回可访问 URL 或检查通过
+[OK] 会话正常关闭
 =====END D3-S3=====
 
 =====SUMMARY=====
 {
-  "total": 18,
-  "passed": 15,
+  "total": 21,
+  "passed": 21,
   "results": [
     {
       "name": "测试 VPC 创建成功",
-      "ok": false,
-      "detail": "vpcId="
+      "ok": true,
+      "detail": "vpcId=e5149aad-233"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -83,13 +115,13 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     },
     {
       "name": "确认后删除成功且归零",
-      "ok": false,
-      "detail": "ok=true zeroed=false"
+      "ok": true,
+      "detail": "ok=true zeroed=true"
     },
     {
       "name": "OBS 建桶成功",
       "ok": true,
-      "detail": "bucket=tctest-codeartsagent-obs-mva1gfuo"
+      "detail": "bucket=tctest-codeartsagent-obs-mvbgj68k"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -109,7 +141,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "删除归零",
       "ok": true,
-      "detail": "bucket removed=tctest-codeartsagent-obs-mva1gfuo"
+      "detail": "bucket removed=tctest-codeartsagent-obs-mvbgj68k"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
@@ -134,7 +166,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "voucher_status 返回状态字段",
       "ok": true,
-      "detail": "{\"claimed\":false,\"message\":\"AK 调用已达限额，请稍后重试\",\"code\":\"HDKIT_CRED_RATE_LIMIT\"}"
+      "detail": "{\"claimed\":true,\"message\":\"已领取\",\"code\":null}"
     },
     {
       "name": "claim 调用返回",
@@ -144,12 +176,27 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "status→claim→status 闭环连贯",
       "ok": true,
-      "detail": "{\"before\":false,\"claim\":true,\"after\":true}"
+      "detail": "{\"before\":true,\"claim\":true,\"after\":true}"
     },
     {
-      "name": "沙箱 check_user 通过",
-      "ok": false,
-      "detail": "{\"__error\":\"Error: HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: faf96bb7016a417f94d633d2aba4480d]\"}"
+      "name": "沙箱 connect 成功",
+      "ok": true,
+      "detail": "wsId=e7e9310835d44e5abbcb"
+    },
+    {
+      "name": "s3-connect/upload/deploy 链路",
+      "ok": true,
+      "detail": "{\"upMd5\":true,\"dnOk\":true}"
+    },
+    {
+      "name": "部署返回可访问 URL 或检查通过",
+      "ok": true,
+      "detail": "{\"nginx\":{\"status\":\"PASS\",\"detail\":\"(port 8080, HTTP 200)\"}}"
+    },
+    {
+      "name": "会话正常关闭",
+      "ok": true,
+      "detail": "\"ok\""
     }
   ]
 }
