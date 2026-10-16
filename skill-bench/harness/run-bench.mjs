@@ -33,9 +33,23 @@ const CFG = {
 // ---- 被测版本锚点（防退化门必需：跨版本对照要有锚）----
 function detectDevkitVersion() {
   if (process.env.BENCH_DEVKIT_VERSION) return process.env.BENCH_DEVKIT_VERSION;
+  // 从 mcpServer 路径逐级上溯，找 name=huaweicloud-devkit 的 package.json
+  // （兼容：包根布局 `.dsh/huaweicloud-plugins/`；npm 包布局 `node_modules/huaweicloud-devkit/plugins/**/src/`）
   try {
-    const pkg = JSON.parse(readFileSync(join(dirname(CFG.mcpServer), '..', 'package.json'), 'utf-8'));
-    return `${pkg.name}@${pkg.version}`;
+    let dir = dirname(CFG.mcpServer);
+    for (let i = 0; i < 6; i++) {
+      const pkgPath = join(dir, 'package.json');
+      if (existsSync(pkgPath)) {
+        try {
+          const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+          if (pkg.name === 'huaweicloud-devkit') return `${pkg.name}@${pkg.version}`;
+        } catch { /* 该层 package.json 不可解析则继续上溯 */ }
+      }
+      const up = dirname(dir);
+      if (up === dir) break;
+      dir = up;
+    }
+    return 'unknown';
   } catch { return 'unknown'; }
 }
 function detectKoolcliVersion() {

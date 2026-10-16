@@ -40,3 +40,18 @@
 ```bash
 node skill-bench/l2/run-l2-eval.mjs
 ```
+## 版本对比（2026-10-16 加测）：SUT 升级后 L2 重测
+
+同一探测脚本、同一评测机，仅换被测 SUT（`BENCH_MCP_SERVER` 指向不同安装目录）：
+
+| 被测版本 | `service_catalog` 路由 | `retrieve_skill` 激活（旧名） | `retrieve_skill`（新名） | 产物 |
+|---|---|---|---|---|
+| `huaweicloud-devkit@1.1.1-next.15` | 5/12 | **12/12** | — | `l2-eval-20261016015831-huaweicloud-devkit_1.1.1-next.15.json` |
+| `huaweicloud-devkit@1.1.9-next.0` | **8/12** | **5/12** | **7/7** | `l2-eval-20261016020017-huaweicloud-devkit_1.1.9-next.0.json` |
+
+**两条结论**：
+
+1. **路由缺口部分修复**：`cbr`/`cts`/`cloud-eye` 已可命中（上游 1.1.8 中文关键词修复生效）；仍 MISS 的 4 个 = `waf-aad`/`apig`/`modelarts`/`deployment` → 已在既有单 [#852](https://github.com/huaweicloud/huaweicloud-devkit/issues/852) 更新版本化证据。
+2. **技能改名导致旧名激活回归（新发现）**：1.1.9-next.0 将 7 个长尾技能改名（`huawei-gaussdb` → `huawei-cloud-gaussdb-instance-management` 等），**旧名全部 MISS、新名 7/7 可达** → 技能本体都在，缺的是**旧名别名回退**；影响所有按旧名调用的下游。已提上游 **[#930](https://github.com/huaweicloud/huaweicloud-devkit/issues/930)**。
+
+> 探测已加固：结果 `meta` 记录 `mcpServer` + `devkitVersion`，文件名带版本后缀（可自证跑在哪版 SUT 上）；`L2_SET` 支持「旧名 + 新名」双探测，用于区分「改名」与「缺失」。
