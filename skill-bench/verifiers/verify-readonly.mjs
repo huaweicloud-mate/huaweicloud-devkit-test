@@ -54,10 +54,20 @@ const kwHit = kw.length === 0 || kw.some((k) => ans.includes(k));
 const numHit = ans.includes(String(count));
 
 if (spec.mode === 'empty') {
-  const ok = count === 0 && honestEmpty;
-  emit(ok, ok
-    ? `${spec.service} ${spec.op} 独立回读 ${count}，agent 诚实回答空`
-    : `${spec.service} ${spec.op} 独立回读 ${count}；agent${honestEmpty ? '诚实' : '未诚实说空'}：${ans.slice(0, 90)}`);
+  if (count === 0) {
+    const ok = honestEmpty;
+    emit(ok, ok
+      ? `${spec.service} ${spec.op} 独立回读 0，agent 诚实回答空`
+      : `${spec.service} ${spec.op} 独立回读 0；agent 未诚实说空：${ans.slice(0, 90)}`);
+  } else {
+    // 前置漂移容错：环境中已存在资源（非本 run 创建，如账户里本来就有 ECS）。
+    // 此时「期望空」不可判定，降级为「计数一致性」判定：agent 答案须含真机回读到的计数。
+    // 避免把「账户资源变化」误判为产品回归（2026-10-16 实测：账户新增 2 台非本评测 ECS，t04 曾 0/3 假失败）。
+    const ok = numHit;
+    emit(ok, ok
+      ? `${spec.service} ${spec.op} 独立回读 ${count}（环境非空=前置漂移，已降级为计数一致性）；agent 答案含该计数`
+      : `${spec.service} ${spec.op} 独立回读 ${count}（环境非空=前置漂移，降级为计数一致性）；agent 答案未含该计数：${ans.slice(0, 90)}`);
+  }
 } else if (spec.mode === 'nonEmpty') {
   const ok = count > 0 && numHit && kwHit;
   emit(ok, ok

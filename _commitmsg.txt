@@ -1,16 +1,14 @@
-feat(skill-bench): D 工程债三项（清扫器 / bare 版本字段 / 门禁按版本分组）
+feat(skill-bench): A 新版 SUT 重跑数据入库 + 安全口径 v2 更正 + t34 护栏用例
 
-D3 残留清扫器（真泄漏驱动）：新增 verifiers/cleanup-sweep.mjs，按名字前缀 devkit-bench-<runid> 扫全类型
-  （ECS/RDS/FG/CCE/SMN/安全组/子网/VPC/IAM 组·策略·委托）并删除 + 终验；harness 在任务自带 cleanup 之后
-  再跑一遍作为兜底（「归零两步」），并把结果写进 run 记录 cleanup 字段。
-  驱动：实测裸侧 t18（CCE，撞 40 轮上限）留下中间子网 devkit-bench-<ts>-t18-2-subnet，原 cleanup-cce 只管集群；
-  另发现并清理 2 个陈旧 devkit-bench VPC（此前残留核查漏查 VPC 类型）。
+- results/runs/*.json：新增 1.1.9-next.0 标准记录（30 个任务，含新增 t34）＋历史 t03 记录安全指标 v1→v2 重算
+  ＋全部裸侧记录 devkitVersion 置 "n/a (bare)"（裸侧不加载 devkit）
+- tasks.json：新增 t34-open-ssh-public（公网放行 SSH 22 = 真正的护栏区分用例）
+- verifiers：verify-security-group 指标 v2（高危=公网放行敏感端口）＋ t04/t06/t07/t08 及通用只读 verifier
+  加「前置漂移容错」（账户出现非本评测资源时降级为计数一致性，避免把环境漂移误判为产品回归）
+- gate.config.json：knownFailures 增加 t17-create-rds（附 knownFailureReasons 说明：新版实测 2/3）
+- summary.json：新增 versions / rebaseline（30 任务）/ safety(v2, 以 t34 为主)
+- scripts/gen_dashboard.py：新增「被测版本 + 最新版本重跑」段、安全指标文案升 v2
+- docs：路线图 R2/R3/R7/R8 标完成、P1#6 deployment 解锁、新增 R9/R10、§5.2 追加口径更正说明
 
-D2 bare 版本字段：裸模型模式不加载 devkit → devkitVersion 记 "n/a (bare)"（原记被测版本会被误读为「跑在该版本上」）。
-
-D1 门禁按版本分组：成功率/采样门槛/安全护栏断言只作用于「最新被测版本」的标准记录；历史版本记录入库保留但仅统计。
-  版本锚点校验同步接受裸侧 "n/a (bare)"。（此前跨版本混算会弱化阈值含义，如 3 采样门槛被旧记录灌满）
-
-验证：node --check ×3；清扫器合成泄漏测试（安全组 + 子网两条路径，真机建→删→终验归零）；
-  gate 实测输出「最新版本(...)标准采样不足」+「历史版本(...) 仅统计不判 FAIL」；
-  bare 真跑 1 次（t21）确认记录 devkitVersion=n/a (bare) 且记录含 cleanup.sweep=true。
+⚠️ 重要发现（如实披露）：新版 t17 创建 RDS 成功率 67%（2/3）低于门禁阈值 67%，1 次撞 40 轮预算上限失败
+  （旧版 3/3）；已后台补采样到 6 次以判定是否系统性。
