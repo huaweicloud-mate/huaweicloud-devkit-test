@@ -35,7 +35,7 @@ rec('get静态站配置', get.ok === true && get.status === 200, JSON.stringify(
 
 // 5. 删桶归零
 const rm = await sh(['rm', `obs://${bucket}`, '-r', '-f']);
-rec('删桶归零', /success/i.test(rm) || /successfully/i.test(rm), rm.slice(0, 160));
+  rec('删桶归零', /success/i.test(rm) || /successfully/i.test(rm) || /succeed/i.test(rm), rm.slice(0, 160));
 
 const passed = results.filter((x) => x.pass).length;
 const failed = results.filter((x) => !x.pass).length;

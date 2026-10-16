@@ -1,12 +1,12 @@
-[OK] CreateVpc | vpcId=03f4fa84-0ce7-488e-85e0-acdcfdb95d3d err={
+[OK] CreateVpc | vpcId=08a23322-6df8-4803-b9cc-7da31ffb2108 err={
   "vpc": {
-    "id": "03f4fa84-0ce7-488e-85e0-acdcfdb95d3d",
-    "name": "tctest-hermes-c1-mvbh4gx9",
+    "id": "08a23322-6df8-4803-b9cc-7da31ffb2108",
+    "name": "tctest-hermes-c1-mvbh7j3r",
     "desc
-[FAIL] CreateSubnet | subnetId=(空) err=[USE_ERROR]Invalid parameter: vpc_id
-
-Run `hcloud VPC CreateSubnet --help` for details about this API.
-
+[OK] CreateSubnet | subnetId=9453f542-d002-43fe-bdb9-9905ee8a04f5 err={
+  "subnet": {
+    "id": "9453f542-d002-43fe-bdb9-9905ee8a04f5",
+    "name": "tctest-hermes-c1-mvbh7j3r-sub",
 [OK] ListServersDetails(只读) | {
   "count": 2,
   "servers": [
@@ -15,31 +15,37 @@ Run `hcloud VPC CreateSubnet --help` for details about this API.
         "disk": "0",
         "vcpus": "2",
         "ram": "4096",
+[OK] DeleteSubnet | true
 [OK] DeleteVpc | true
-[OK] 归零验证(不含本次资源) | 已归零
+[FAIL] 归零验证(不含本次资源) | 仍含本次 VPC
 
 =====SUMMARY JSON=====
 {
   "case": "D3-C1",
   "status": "FAIL",
-  "total": 5,
-  "passed": 4,
+  "total": 6,
+  "passed": 5,
   "failed": 1,
   "results": [
     {
       "name": "CreateVpc",
       "pass": true,
-      "detail": "vpcId=03f4fa84-0ce7-488e-85e0-acdcfdb95d3d err={\n  \"vpc\": {\n    \"id\": \"03f4fa84-0ce7-488e-85e0-acdcfdb95d3d\",\n    \"name\": \"tctest-hermes-c1-mvbh4gx9\",\n    \"description"
+      "detail": "vpcId=08a23322-6df8-4803-b9cc-7da31ffb2108 err={\n  \"vpc\": {\n    \"id\": \"08a23322-6df8-4803-b9cc-7da31ffb2108\",\n    \"name\": \"tctest-hermes-c1-mvbh7j3r\",\n    \"description"
     },
     {
       "name": "CreateSubnet",
-      "pass": false,
-      "detail": "subnetId=(空) err=[USE_ERROR]Invalid parameter: vpc_id\n\nRun `hcloud VPC CreateSubnet --help` for details about this API.\n"
+      "pass": true,
+      "detail": "subnetId=9453f542-d002-43fe-bdb9-9905ee8a04f5 err={\n  \"subnet\": {\n    \"id\": \"9453f542-d002-43fe-bdb9-9905ee8a04f5\",\n    \"name\": \"tctest-hermes-c1-mvbh7j3r-sub\",\n    \"desc"
     },
     {
       "name": "ListServersDetails(只读)",
       "pass": true,
       "detail": "{\n  \"count\": 2,\n  \"servers\": [\n    {\n      \"flavor\": {\n        \"disk\": \"0\",\n        \"vcpus\": \"2\",\n        \"ram\": \"4096\","
+    },
+    {
+      "name": "DeleteSubnet",
+      "pass": true,
+      "detail": "true"
     },
     {
       "name": "DeleteVpc",
@@ -48,8 +54,8 @@ Run `hcloud VPC CreateSubnet --help` for details about this API.
     },
     {
       "name": "归零验证(不含本次资源)",
-      "pass": true,
-      "detail": "已归零"
+      "pass": false,
+      "detail": "仍含本次 VPC"
     }
   ]
 }

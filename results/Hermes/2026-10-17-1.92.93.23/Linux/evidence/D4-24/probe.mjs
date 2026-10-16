@@ -2,7 +2,7 @@
 // 源码级验证 §745 精确 JSON 契约：plan 生成令牌 → 消费 → 重复消费/already_consumed → 未知名 NOT_FOUND
 import { pathToFileURL } from 'node:url';
 const HC = '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/hcloud-cli.mjs';
-import { inspectApprovalToken, consumeApprovalToken, planHcloudCommand } from (await import(pathToFileURL(HC).href));
+const { inspectApprovalToken, consumeApprovalToken, planHcloudCommand } = await import(pathToFileURL(HC).href);
 const out = [];
 function rec(name, ok, detail='') { out.push({name, ok, detail:String(detail).slice(0,200)}); console.log(`[${ok?'OK':'FAIL'}] ${name}${detail?' | '+detail:''}`); }
 

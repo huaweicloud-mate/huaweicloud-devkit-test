@@ -1,27 +1,29 @@
-[FAIL] check_user | {"isError":true,"error":"HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 2675656dc75c453187d012658f9a6520]"}
-[FAIL] connect | {"isError":true,"error":"HDKIT_UPSTREAM_ERROR: 沙箱编排上游调用失败: GET /open-api-public/v1/agreements failed [trace: 42f5dae4116
+[OK] check_user | {"realnameVerified":true,"agreementSigned":true}
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[FAIL] connect | {"sessionId":"e7e9310835d44e5abbcb35cd03e86da2","devStageId":"e7e9310835d44e5abbcb35cd03e86da2","connectionId":"673279",
 [FAIL] upload_project | {"isError":true,"error":"local_dir is required."}
 [FAIL] deploy_nginx | {"isError":true,"error":"nginx_type, port, project, and output_dir are required."}
 [FAIL] deploy_check | {"isError":true,"error":"port, project, and output_dir are required."}
-[FAIL] close_session | {"isError":true,"error":"workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set
+[OK] close_session | "ok"
 
 =====SUMMARY JSON=====
 {
   "case": "D3-C3",
   "status": "FAIL",
   "total": 6,
-  "passed": 0,
-  "failed": 6,
+  "passed": 2,
+  "failed": 4,
   "results": [
     {
       "name": "check_user",
-      "pass": false,
-      "detail": "{\"isError\":true,\"error\":\"HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 2675656dc75c453187d012658f9a6520]\"}"
+      "pass": true,
+      "detail": "{\"realnameVerified\":true,\"agreementSigned\":true}"
     },
     {
       "name": "connect",
       "pass": false,
-      "detail": "{\"isError\":true,\"error\":\"HDKIT_UPSTREAM_ERROR: 沙箱编排上游调用失败: GET /open-api-public/v1/agreements failed [trace: 42f5dae4116"
+      "detail": "{\"sessionId\":\"e7e9310835d44e5abbcb35cd03e86da2\",\"devStageId\":\"e7e9310835d44e5abbcb35cd03e86da2\",\"connectionId\":\"673279\","
     },
     {
       "name": "upload_project",
@@ -40,8 +42,8 @@
     },
     {
       "name": "close_session",
-      "pass": false,
-      "detail": "{\"isError\":true,\"error\":\"workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set"
+      "pass": true,
+      "detail": "\"ok\""
     }
   ]
 }

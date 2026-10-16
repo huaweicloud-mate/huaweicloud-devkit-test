@@ -23,7 +23,7 @@ let vpcId = '';
 // 2. CreateSubnet (plan + approved)
 let subnetId = '';
 if (vpcId) {
-  const sa = ['VPC', 'CreateSubnet', '--cli-region=' + REGION, '--vpc_id=' + vpcId, '--name=' + vpcName + '-sub', '--cidr=192.168.1.0/24', '--gateway_ip=192.168.1.1'];
+  const sa = ['VPC', 'CreateSubnet', '--cli-region=' + REGION, '--subnet.vpc_id=' + vpcId, '--subnet.name=' + vpcName + '-sub', '--subnet.cidr=192.168.1.0/24', '--subnet.gateway_ip=192.168.1.1'];
   const sp = await call('huaweicloud_plan_cli_command', { args: sa, allowWrites: true });
   const sr = await call('huaweicloud_run_approved_command', { args: sa, approvalToken: sp.approvalToken, approvedByUser: true, timeoutMs: 30000 });
   subnetId = (/"id"\s*:\s*"([0-9a-f-]{36})"/.exec(sr.stdout || '') || [])[1] || '';

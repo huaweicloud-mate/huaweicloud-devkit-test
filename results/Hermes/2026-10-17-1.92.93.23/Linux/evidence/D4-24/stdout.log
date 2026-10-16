@@ -1,12 +1,51 @@
-file:///home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/results/Hermes/2026-10-17-1.92.93.23/Linux/evidence/D4-24/probe.mjs:5
-import { inspectApprovalToken, consumeApprovalToken, planHcloudCommand } from (await import(pathToFileURL(HC).href));
-                                                                              ^
+[OK] ① 未知名令牌 state=not_found | not_found
+[FAIL] ② 只读 plan 无确认令牌(read_only) | roToken=c76eb039-a43a-4347-9fa0-840f158eb0de
+[OK] ③ 写 plan 生成 approvalToken | decision=allow token=true
+[OK] ④ 消费前 state=valid | valid
+[OK] ⑤ 首次消费返回存储条目 | argsRedacted=["VPC","CreateVpc","--vpc.name=tctest-d424-probe","--vpc.cidr=192.168.250.0/24","--cli-region=cn-north-4"]
+[OK] ⑥ 二次 inspect state=already_consumed | already_consumed
+[OK] ⑦ 重复消费返回 null(防重放) | c2=null
 
-SyntaxError: Unexpected token '('
-    at compileSourceTextModule (node:internal/modules/esm/utils:338:16)
-    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:102:18)
-    at #translate (node:internal/modules/esm/loader:437:12)
-    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:484:27)
-    at async ModuleJob._link (node:internal/modules/esm/module_job:115:19)
-
-Node.js v22.13.0
+=====SUMMARY JSON=====
+{
+  "case": "D4-24",
+  "total": 7,
+  "passed": 6,
+  "results": [
+    {
+      "name": "① 未知名令牌 state=not_found",
+      "ok": true,
+      "detail": "not_found"
+    },
+    {
+      "name": "② 只读 plan 无确认令牌(read_only)",
+      "ok": false,
+      "detail": "roToken=c76eb039-a43a-4347-9fa0-840f158eb0de"
+    },
+    {
+      "name": "③ 写 plan 生成 approvalToken",
+      "ok": true,
+      "detail": "decision=allow token=true"
+    },
+    {
+      "name": "④ 消费前 state=valid",
+      "ok": true,
+      "detail": "valid"
+    },
+    {
+      "name": "⑤ 首次消费返回存储条目",
+      "ok": true,
+      "detail": "argsRedacted=[\"VPC\",\"CreateVpc\",\"--vpc.name=tctest-d424-probe\",\"--vpc.cidr=192.168.250.0/24\",\"--cli-region=cn-north-4\"]"
+    },
+    {
+      "name": "⑥ 二次 inspect state=already_consumed",
+      "ok": true,
+      "detail": "already_consumed"
+    },
+    {
+      "name": "⑦ 重复消费返回 null(防重放)",
+      "ok": true,
+      "detail": "c2=null"
+    }
+  ]
+}
