@@ -216,7 +216,8 @@ async function main() {
   const selected = all ? tasks : tasks.filter((t) => t.id === taskFilter);
   if (selected.length === 0) { console.error(`未找到任务 ${taskFilter}，可用: ${tasks.map((t) => t.id).join(', ')}`); process.exit(2); }
 
-  const devkitVersion = detectDevkitVersion();
+  // 裸模型模式不加载 devkit（单一 shell 工具）→ 版本锚点记 N/A，避免被误读为「跑在该版本上」
+const devkitVersion = bare ? 'n/a (bare)' : detectDevkitVersion();
   const koolcliVersion = detectKoolcliVersion();
   const apiKey = readApiKey();
   let mcpsrv = null;
@@ -231,7 +232,7 @@ async function main() {
   }
   const toolLabel = bare ? 'shell(裸模型) ' : `MCP ${tools.length} 工具`;
   console.log(`[harness] 模型=${CFG.model} 工具=${toolLabel} 任务=${selected.length} 采样=${runs} 模式=${bare ? 'bare对照' : '标准'}`);
-  console.log(`[harness] 被测版本=${devkitVersion} KooCLI=${koolcliVersion}`);
+  console.log(`[harness] 被测版本=${devkitVersion}${bare ? '（裸模型模式未加载 devkit）' : ''} KooCLI=${koolcliVersion}`);
 
   const ts = new Date().toISOString().replace(/[-:T]/g, '').replace(/Z/, '').replace(/\.\d+/, '');
   const tsCompact = ts.slice(0, 14);
@@ -252,6 +253,21 @@ async function main() {
       }
       r.verdict = verdict.success ? 'PASS' : 'FAIL';
       r.verdictDetail = verdict.detail || '';
+      taskRuns.push(r);
+      console.log(`    verdict=${r.verdict} token=${r.totalTokens} step=${r.stepCount} ${verdict.detail ? '| ' + String(verdict.detail).slice(0, 80) : ''}`);
+      // 归零两步：① 任务自带 cleanup（主资源）② 通用清扫器 cleanup-sweep（中间产物兜底，
+      //   实测泄漏：裸侧 t18 撞 40 轮上限后留下子网 devkit-bench-<ts>-t18-2-subnet）
+      const cleanupInfo = {};
+      if (task.cleanup) {
+        const ret = runVerifier(task.cleanup, [runid, task.region || CFG.region, '']);
+        console.log(`    cleanup: ${ret.success ? 'OK' : 'FAIL ' + ret.detail}`);
+        cleanupInfo.taskCleanup = !!ret.success;
+        cleanupInfo.taskDetail = ret.detail || '';
+      }
+      const sweep = runVerifier('verifiers/cleanup-sweep.mjs', [runid, task.region || CFG.region, '']);
+      console.log(`    sweep: ${sweep.success ? 'no residue' : '★RESIDUE ' + sweep.detail}`);
+      cleanupInfo.sweep = !!sweep.success;
+      cleanupInfo.sweepDetail = sweep.detail || '';
       writeRunRecord({
         runid: r.runid, ts, taskId: task.id, taskTitle: task.title,
         expectedService: task.expectedService, expectedSkill: task.expectedSkill,
@@ -260,13 +276,8 @@ async function main() {
         stepCount: r.stepCount, maxRoundsHit: !!r.lastError,
         verdict: r.verdict, toolTrace: r.toolTrace,
         safety: (verdict && verdict.safety) || null,
+        cleanup: cleanupInfo,
       });
-      taskRuns.push(r);
-      console.log(`    verdict=${r.verdict} token=${r.totalTokens} step=${r.stepCount} ${verdict.detail ? '| ' + String(verdict.detail).slice(0, 80) : ''}`);
-      if (task.cleanup) {
-        const ret = runVerifier(task.cleanup, [runid, task.region || CFG.region, '']);
-        console.log(`    cleanup: ${ret.success ? 'OK' : 'FAIL ' + ret.detail}`);
-      }
     }
     const pass = taskRuns.filter((r) => r.verdict === 'PASS').length;
     const med = taskRuns.map((r) => r.totalTokens).sort((a, b) => a - b)[Math.floor(taskRuns.length / 2)];

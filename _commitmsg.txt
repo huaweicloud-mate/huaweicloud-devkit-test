@@ -1,11 +1,16 @@
-feat(skill-bench): R8 评测 SUT 升级至 1.1.9-next.0 + L2 探测加固
+feat(skill-bench): D 工程债三项（清扫器 / bare 版本字段 / 门禁按版本分组）
 
-- SUT 升级（隔离安装，不动现有 ~/.dsh 安装）：npm install --prefix _sut_119 huaweicloud-devkit@1.1.9-next.0
-  （按 prepare_env 策略取 latest/next 最高 = next 1.1.9-next.0，与每日测试同版本）；BENCH_MCP_SERVER 指向新包
-- harness：detectDevkitVersion 改为逐级上溯找包根（npm 包布局下原实现返回 unknown，会让门禁误判 FAIL）
-- L2 脚本：① meta 记录 mcpServer + devkitVersion（provenance，此前无法自证跑在哪版 SUT）
-  ② 文件名加版本后缀（不同 SUT 不再互相覆盖）③ L2_SET 支持「旧名 + 新名」双探测
-- 升级即刻产出两条结论（L2 零成本探测）：
-  · 路由 5/12 → 8/12（上游中文关键词修复生效；剩 waf-aad/apig/modelarts/deployment）→ 已在既有单 #852 更新版本化证据
-  · retrieve_skill 旧名激活 12/12 → 5/12（7 技能改名、无别名回退）；新名 7/7 可达 → 已提上游 #930
-- 报告 skill-bench/results/sut-upgrade-20261016.md；策略文档差距 #12 与路线图 R8 回填；l2/README.md 加版本对比
+D3 残留清扫器（真泄漏驱动）：新增 verifiers/cleanup-sweep.mjs，按名字前缀 devkit-bench-<runid> 扫全类型
+  （ECS/RDS/FG/CCE/SMN/安全组/子网/VPC/IAM 组·策略·委托）并删除 + 终验；harness 在任务自带 cleanup 之后
+  再跑一遍作为兜底（「归零两步」），并把结果写进 run 记录 cleanup 字段。
+  驱动：实测裸侧 t18（CCE，撞 40 轮上限）留下中间子网 devkit-bench-<ts>-t18-2-subnet，原 cleanup-cce 只管集群；
+  另发现并清理 2 个陈旧 devkit-bench VPC（此前残留核查漏查 VPC 类型）。
+
+D2 bare 版本字段：裸模型模式不加载 devkit → devkitVersion 记 "n/a (bare)"（原记被测版本会被误读为「跑在该版本上」）。
+
+D1 门禁按版本分组：成功率/采样门槛/安全护栏断言只作用于「最新被测版本」的标准记录；历史版本记录入库保留但仅统计。
+  版本锚点校验同步接受裸侧 "n/a (bare)"。（此前跨版本混算会弱化阈值含义，如 3 采样门槛被旧记录灌满）
+
+验证：node --check ×3；清扫器合成泄漏测试（安全组 + 子网两条路径，真机建→删→终验归零）；
+  gate 实测输出「最新版本(...)标准采样不足」+「历史版本(...) 仅统计不判 FAIL」；
+  bare 真跑 1 次（t21）确认记录 devkitVersion=n/a (bare) 且记录含 cleanup.sweep=true。
