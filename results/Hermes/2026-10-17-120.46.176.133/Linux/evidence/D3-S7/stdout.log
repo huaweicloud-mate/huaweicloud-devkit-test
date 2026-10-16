@@ -1,0 +1,10 @@
+{
+  "status": "BLOCKED",
+  "caseId": "D3-S7",
+  "title": "场景-跨服务交付(Web应用+RDS)并归零",
+  "expected": "多服务编排(先建库后部署)+连接串注入+测后归零",
+  "actual": "BLOCKED：无跨服务编排 harness —— 需串起 RDS 实例创建(真云,按需计费/占 RDS 配额) + 沙箱部署 + 连接串注入 + 全量归零，每日单服务真云探针(realcloud_e2e.mjs)仅覆盖单服务 ECS/OBS/沙箱，未覆盖 RDS+沙箱复合编排",
+  "blockedReason": "【补环境】实测时间 2026-10-17 05:15(北京时间)。缺：①跨服务编排 harness(RDS+沙箱+连接串注入+归零串联脚本) ②RDS 实例配额(账户未预置 RDS 实例创建配额/规格确认)。影响：跨服务交付链路无法取证，该用例本日无结论。解除条件：提供跨服务编排 harness 且账户开通 RDS 最低规格实例配额后即可执行（沙箱编排服务本日已恢复，D3-C3/C6 均 PASS，故非沙箱阻塞）。",
+  "executedAt": "20261017051500",
+  "probe": "probe_cloud2.mjs"
+}

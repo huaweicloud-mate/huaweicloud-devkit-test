@@ -1,0 +1,59 @@
+{
+  "caseId": "D4-15",
+  "status": "PASS",
+  "why": "No bypass succeeded=true; [{\"cmd\":\"hcloud ECS deleteserver --server_ids=xxx\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud ECS DELETEserver --server_ids=xxx\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud ECS DeleteServer --server_ids%3Dxxx\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud%20ECS%20DeleteServer%20--server_ids%3Dxxx\",\"riskDecision\":\"allow\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud ECS Delete --server_ids=xxx Server\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud ECS DeleteServer --server_ids=xxx --confirm\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"hcloud ecs deleteserver --server_ids=xxx\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true},{\"cmd\":\"HCloud ECS DeleteServer --server_ids=xxx\",\"riskDecision\":\"warn\",\"classifyDecision\":\"deny\",\"blocked\":true}]",
+  "executedAt": "20261017053200",
+  "result": {
+    "results": [
+      {
+        "cmd": "hcloud ECS deleteserver --server_ids=xxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud ECS DELETEserver --server_ids=xxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer --server_ids%3Dxxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud%20ECS%20DeleteServer%20--server_ids%3Dxxx",
+        "riskDecision": "allow",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud ECS Delete --server_ids=xxx Server",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud ECS DeleteServer --server_ids=xxx --confirm",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud ecs deleteserver --server_ids=xxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "HCloud ECS DeleteServer --server_ids=xxx",
+        "riskDecision": "warn",
+        "classifyDecision": "deny",
+        "blocked": true
+      }
+    ],
+    "noBypass": true
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "case": "D3-C6",
+  "assistant": "AtomCode(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "hdk gitHead 6302921c (v1.1.9-next.0)",
+  "status": "PASS",
+  "why": "沙箱 7 隐式工具冒烟真机执行：check_user(realnameVerified+agreementSigned)→connect(connected ws=e7e9310835)→credentials(passed)→exec_one_shot(hdk-sandbox-ok, exitCode 0)→close_session(ok)。沙箱上游 HDKit 服务已恢复（昨日 502 已消除），全链路 5/5 通过。",
+  "actual": "total=5 passed=5 failed=0",
+  "executedAt": "20261017051426",
+  "results": [
+    {
+      "name": "check_user",
+      "pass": true,
+      "detail": "{\"realnameVerified\":true,\"agreementSigned\":true}"
+    },
+    {
+      "name": "connect",
+      "pass": true,
+      "detail": "connected ws=e7e9310835"
+    },
+    {
+      "name": "credentials",
+      "pass": true,
+      "detail": "passed"
+    },
+    {
+      "name": "exec_one_shot",
+      "pass": true,
+      "detail": "hdk-sandbox-ok / Linux e7e9310835d44e5abbcb35cd03e86da2 5.10.0（exitCode 0）"
+    },
+    {
+      "name": "close_session",
+      "pass": true,
+      "detail": "ok"
+    }
+  ]
+}

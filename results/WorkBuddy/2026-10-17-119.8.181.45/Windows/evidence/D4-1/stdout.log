@@ -1,0 +1,41 @@
+{
+  "caseId": "D4-1",
+  "status": "PASS",
+  "why": "Credential file read commands blocked=true; cat ~/.config/huaweicloud/credentials.json->deny/deny; type %USERPROFILE%\\.config\\huaweicloud\\credentials.json->deny/deny; cat ~/.hcloud/config.json->deny/deny; cat ~/.huaweicloud/credentials.json->deny/deny; Get-Content ~/.config/huaweicloud/credentials.json->deny/deny",
+  "executedAt": "20261017052600",
+  "result": {
+    "results": [
+      {
+        "cmd": "cat ~/.config/huaweicloud/credentials.json",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "type %USERPROFILE%\\.config\\huaweicloud\\credentials.json",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "cat ~/.hcloud/config.json",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "cat ~/.huaweicloud/credentials.json",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "Get-Content ~/.config/huaweicloud/credentials.json",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      }
+    ],
+    "allBlocked": true
+  }
+}

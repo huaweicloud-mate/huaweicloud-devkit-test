@@ -1,0 +1,31 @@
+{
+  "caseId": "D2-4",
+  "status": "FAIL",
+  "why": "Object key redaction works (ak=true, sk=true, token=true); BUT string redaction FAILS on lowercase ak=/sk=: cmd1 redacted=false (LEAKS plaintext). Root cause: safety-policy.mjs:45 regex only matches uppercase AK=/SK=, not lowercase ak=/sk= used by hcloud CLI flags --ak= --sk=. Uppercase AK= works (true), access_key= works (true).",
+  "executedAt": "20261017052400",
+  "result": {
+    "redactedObj": {
+      "ak": "<redacted>",
+      "sk": "<redacted>",
+      "securityToken": "<redacted>",
+      "region": "cn-north-4"
+    },
+    "cmd1": {
+      "original": "hcloud configure set --ak=HPUAN1ROXXXXXXXX --sk=SK1234567890abcdefghijklmnop",
+      "redacted": "hcloud configure set --ak=HPUAN1ROXXXXXXXX --sk=SK1234567890abcdefghijklmnop",
+      "noPlaintext": false,
+      "issue": "lowercase ak= not redacted (regex missing i flag)"
+    },
+    "cmd2": {
+      "original": "echo AK=HPUAN1ROXXXXXXXX SK=SK1234567890abcdefghijklmnop",
+      "redacted": "echo AK=<redacted> SK=<redacted>",
+      "noPlaintext": true
+    },
+    "cmd3": {
+      "original": "export access_key=HPUAN1ROXXXXXXXX secret_key=SK1234567890abcdefghijklmnop",
+      "redacted": "export access_key=<redacted> secret_key=<redacted>",
+      "noPlaintext": true
+    },
+    "rootCause": "safety-policy.mjs:45 - regex /(AK|SK)\\s*[:=]\\s*(value)/g lacks i flag, only matches uppercase AK/SK"
+  }
+}

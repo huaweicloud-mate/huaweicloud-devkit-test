@@ -1,0 +1,53 @@
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "Plaintext secret API commands blocked=false; hcloud KMS DecryptData --cipher_text=xxx --plaintext_file=/tmp/plain.txt->allow/allow; hcloud kms decrypt-data --key_id=xxx --cipher_text=xxx->allow/allow; hcloud CSMS ShowSecret --secret_id=xxx->deny/deny; hcloud CSMS ListSecrets->allow/allow; hcloud RDS ShowConfiguration --config_id=xxx->allow/allow; cat /etc/shadow->allow/allow; hcloud ECS ShowServerPassword --server_id=xxx->allow/allow",
+  "executedAt": "20261017052800",
+  "result": {
+    "results": [
+      {
+        "cmd": "hcloud KMS DecryptData --cipher_text=xxx --plaintext_file=/tmp/plain.txt",
+        "riskDecision": "allow",
+        "classifyDecision": "allow",
+        "blocked": false
+      },
+      {
+        "cmd": "hcloud kms decrypt-data --key_id=xxx --cipher_text=xxx",
+        "riskDecision": "allow",
+        "classifyDecision": "allow",
+        "blocked": false
+      },
+      {
+        "cmd": "hcloud CSMS ShowSecret --secret_id=xxx",
+        "riskDecision": "deny",
+        "classifyDecision": "deny",
+        "blocked": true
+      },
+      {
+        "cmd": "hcloud CSMS ListSecrets",
+        "riskDecision": "allow",
+        "classifyDecision": "allow",
+        "blocked": false
+      },
+      {
+        "cmd": "hcloud RDS ShowConfiguration --config_id=xxx",
+        "riskDecision": "allow",
+        "classifyDecision": "allow",
+        "blocked": false
+      },
+      {
+        "cmd": "cat /etc/shadow",
+        "riskDecision": "allow",
+        "classifyDecision": "allow",
+        "blocked": false
+      },
+      {
+        "cmd": "hcloud ECS ShowServerPassword --server_id=xxx",
+        "riskDecision": "allow",
+        "classifyDecision": "allow",
+        "blocked": false
+      }
+    ],
+    "allBlocked": false
+  }
+}
