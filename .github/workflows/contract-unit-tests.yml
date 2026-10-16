@@ -187,3 +187,45 @@ jobs:
 
       - name: 运行 Python 契约单测
         run: python -m unittest discover -s test/python -p 'test_*.py'
+
+  ux-replay-trend:
+    runs-on: ubuntu-latest
+    # D11-39 体验回放（范式②）：基线 recordings/ux-baseline-v1.jsonl ↔ 当前 hdk main 的文案语义分类。
+    # 基线与当前均存在已知文案退化（英文整句残留 / 缺可执行下一步），故先记趋势、不阻断合并；
+    # 文案修复到位后去掉 continue-on-error 即为硬门禁。
+    # 场景夹具自带宿主隔离（空 HOME/USERPROFILE）；沙箱场景缺环境时判 BLOCKED，不计入通过率。
+    continue-on-error: true
+    steps:
+      - name: Checkout 测试仓
+        uses: actions/checkout@v4
+
+      - name: Checkout 源码仓 huaweicloud/huaweicloud-devkit
+        uses: actions/checkout@v4
+        with:
+          repository: huaweicloud/huaweicloud-devkit
+          ref: main
+          path: hdk
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 运行体验回放（文案语义分类）
+        env:
+          HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
+        run: |
+          # 注意：`| tee` 会用 tee 的退出码（恒 0）吞掉回放的失败码 → 必须开 pipefail，
+          # 否则本 job 会在「存在体验退化」时假绿（比恒红更危险）。
+          set -o pipefail
+          npm run test:ux-replay 2>&1 | tee ux-replay.log
+
+      - name: 上传回放结果
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ux-replay-results
+          path: |
+            eval/replay/results/ux-replay-*.csv
+            ux-replay.log
+          if-no-files-found: ignore
