@@ -33,7 +33,9 @@ OUT_DIR = os.path.join(REPO, "results", "UX专项")
 
 CAVEAT = (
     "红线基线口径：NOT_IMPLEMENTED = 需求验收未达标（已知缺口，非 harness 故障），"
-    "BLOCKED = 宿主/环境不可判定（不计入 PASS/FAIL）。本数据是回归防退化门禁的趋势线，"
+    "BLOCKED = 宿主/环境不可判定（不计入 PASS/FAIL），"
+    "NOT_RUN = 契约依赖待冻结（依赖字段未冻结，冻结前不可判 FAIL，不计入 PASS/FAIL/BLOCKED）。"
+    "本数据是回归防退化门禁的趋势线，"
     "不等价于体验验收（认知负荷 / 文案是否够新手用 / 视觉排版仍需人工 rubric）。"
 )
 
@@ -95,21 +97,24 @@ def run_one(label, hdk_src, evid, tmp_json):
     cases = []
     for fx in payload.get("fixtures", []):
         r = fx.get("result") or {}
-        cid = r.get("case") or ""
+        # NOT_RUN（契约依赖待冻结）时无 result sidecar → 用例号取运行器从设计矩阵回填的 fx["case"]
+        cid = fx.get("case") or r.get("case") or ""
         cases.append({
             "file": fx.get("file"),
             "case": cid,
             "status": fx.get("status"),
+            "frozen": bool(fx.get("frozen")),
             "exit": fx.get("exit"),
             "pass": r.get("pass"),
             "fail": r.get("fail"),
-            "note": r.get("note") or "",
+            "note": fx.get("note") or r.get("note") or "",
             "assertions": r.get("assertions") or [],
         })
     return {
         "label": label,
         "version": detect_version(hdk_src),
         "hdkSrc": hdk_src,
+        "designGate": payload.get("designGate", {}) or {},
         "summary": payload.get("summary", {}),
         "cases": cases,
     }
@@ -152,7 +157,7 @@ def main():
         "date": date,
         "generatedAt": now,
         "timezone": "Asia/Shanghai",
-        "scope": "UX（D11）体验专项 —— 可执行门禁夹具三态结果",
+        "scope": "UX（D11）体验专项 —— 可执行门禁夹具四态结果（PASS / NOT_IMPLEMENTED / BLOCKED / NOT_RUN）",
         "caveat": CAVEAT,
         "suts": results,
     }
@@ -166,7 +171,8 @@ def main():
         sm = s["summary"]
         print(f"     - {s['label']} v{s['version'] or '?'}: "
               f"pass={sm.get('pass')} not_implemented={sm.get('not_implemented')} "
-              f"blocked={sm.get('blocked')} / {sm.get('total')} → exit {sm.get('exit')}")
+              f"blocked={sm.get('blocked')} not_run={sm.get('not_run', 0)} "
+              f"/ {sm.get('total')} → exit {sm.get('exit')}")
     print(f"[UX] 提醒：{CAVEAT}")
 
 

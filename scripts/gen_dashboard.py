@@ -4,7 +4,7 @@
 数据源（以「每日测试汇总报告」为准，不再自行重算）：
     results/Summary/每日测试汇总-<日期>.md / .html   （每日执行摘要 = 跨日趋势）
     results/Summary/用例矩阵-*-总执行结果-<日期>.csv   （仅用于最新日「客户端/维度/缺陷」明细）
-    results/UX专项/UX专项-<日期>.json                （UX 专项门禁三态；scripts/gen_ux_special.py 生成）
+    results/UX专项/UX专项-<日期>.json                （UX 专项门禁四态；scripts/gen_ux_special.py 生成）
     test-cases/ux/用例矩阵-体验级.csv                （UX 用例设计态概览；真源 = 同目录 gen_ux.py）
 
 用法:
@@ -553,8 +553,10 @@ def load_ux_design():
     }
 
 
-UX_STATUS_COLOR = {"PASS": "#2ecc71", "NOT_IMPLEMENTED": "#e74c3c", "BLOCKED": "#f39c12"}
-UX_STATUS_LABEL = {"PASS": "PASS", "NOT_IMPLEMENTED": "需求未实现", "BLOCKED": "BLOCKED(ENV)"}
+UX_STATUS_COLOR = {"PASS": "#2ecc71", "NOT_IMPLEMENTED": "#e74c3c", "BLOCKED": "#f39c12",
+                   "NOT_RUN": "#95a5a6"}
+UX_STATUS_LABEL = {"PASS": "PASS", "NOT_IMPLEMENTED": "需求未实现", "BLOCKED": "BLOCKED(ENV)",
+                   "NOT_RUN": "NOT_RUN(契约待冻结)"}
 _TD = 'padding:6px 8px;border:1px solid #ddd;'
 _TH = 'padding:6px 8px;border:1px solid #ddd;background:#f2f2f2;'
 
@@ -567,7 +569,7 @@ def _ux_kpi(value, label, color):
 
 
 def render_ux_block(ux, design):
-    """渲染「UX 专项」页签：门禁三态矩阵 + 失败断言明细 + 用例设计态概览。"""
+    """渲染「UX 专项」页签：门禁四态矩阵 + 失败断言明细 + 用例设计态概览。"""
     if not ux:
         return ('<p style="color:#95a5a6;">暂无 UX（D11）体验专项数据。生成方式：'
                 '<code>python scripts/gen_ux_special.py --sut "&lt;标签&gt;=&lt;plugins/huaweicloud-core/src&gt;"</code></p>')
@@ -581,7 +583,8 @@ def render_ux_block(ux, design):
     parts.append(
         '<p style="color:#7f8c8d;font-size:12px;">数据源 <code>' + ux.get("_file", "") +
         '</code>（由 <code>scripts/gen_ux_special.py</code> 跑 <code>eval/harness/fixtures/run-ux.mjs</code> 生成：'
-        '夹具内置宿主隔离 + 需求验收三态退出码）；数据日期 <b>' + str(ux.get("date", "—")) +
+        '夹具内置宿主隔离 + **设计状态门禁**（读设计矩阵「依赖」列：契约依赖待冻结 → NOT_RUN，默认不执行）'
+        '+ 需求验收三态退出码）；数据日期 <b>' + str(ux.get("date", "—")) +
         '</b>，生成于 ' + str(ux.get("generatedAt", "—")) + '（' + str(ux.get("timezone", "Asia/Shanghai")) + '）。</p>')
 
     # KPI —— 分两组（设计态 / 执行态），避免两套口径混在一行
@@ -595,6 +598,7 @@ def render_ux_block(ux, design):
     ke = _ux_kpi(f'{msum.get("pass", 0)} / {msum.get("total", len(cases))}', "主列 PASS / 总数", "#3498db")
     ke += _ux_kpi(msum.get("not_implemented", 0), "需求未实现", UX_STATUS_COLOR["NOT_IMPLEMENTED"])
     ke += _ux_kpi(msum.get("blocked", 0), "BLOCKED(ENV)", UX_STATUS_COLOR["BLOCKED"])
+    ke += _ux_kpi(msum.get("not_run", 0), "NOT_RUN(契约待冻结)", UX_STATUS_COLOR["NOT_RUN"])
     dsrc = design["source"] if design else "test-cases/ux/用例矩阵-体验级.csv"
     parts.append(_cap.format('设计态 · 用例定义（真源 <code>' + dsrc + '</code>）')
                  + f'<div style="display:flex;flex-wrap:wrap;margin:-4px;">{kd}</div>'
@@ -608,17 +612,19 @@ def render_ux_block(ux, design):
         ' 因此「需求未实现」<b>不是</b> harness 故障，也不等于体验验收结论。</div>')
     if design:
         _fz, _fz_landed = design["frozen"], sum(1 for c in design["cases"] if c["frozen"] and c["landed"])
+        _gate_skip = msum.get("not_run", 0)
         parts.append(
             '<div style="background:#eef6fb;border-left:4px solid #2980b9;padding:8px 12px;margin:10px 0;font-size:12px;color:#1b4f72;">'
-            '<b>两个「契约依赖」口径不同（勿相加 / 勿混比）</b>：'
-            f'执行态 KPI「契约依赖·无载体」= <b>{design["carrier"]["frozen_only"]}</b> 条'
-            '（= 带契约依赖标记 且 无 L1/L2 载体 → 本轮不进入执行）；'
-            f'设计态「用例设计态概览」末列「带契约依赖标记」= <b>{_fz}</b> 条'
-            f'（用例定义中带「契约依赖…待冻结」的条目总数，其中 <b>{_fz_landed}</b> 条已建载体、'
-            '按「门禁先行」执行，结果仅记趋势）。两者不是同一集合，<b>不可相加</b>。</div>')
+            '<b>「契约依赖」三个口径各不相同（勿相加 / 勿混比）</b>：'
+            f'① 设计态末列「带契约依赖标记」= <b>{_fz}</b> 条（用例定义中标注「契约依赖…待冻结」的总数，其中 <b>{_fz_landed}</b> 条已建载体）；'
+            f'② 本轮执行态 <b>NOT_RUN</b> = <b>{_gate_skip}</b> 条（运行器读设计矩阵「依赖」列后，对这类用例<b>默认不执行</b>，'
+            '结果不可判 FAIL、不计入 PASS/FAIL/BLOCKED；如需看趋势加 <code>--run-frozen</code>，口径不变）；'
+            f'③ 执行态 KPI「契约依赖·无载体」= <b>{design["carrier"]["frozen_only"]}</b> 条（既是契约依赖、又没有 L1/L2 载体）。'
+            '三者不是同一集合，<b>不可相加</b>。</div>')
 
-    # ---- 门禁三态矩阵（行 = 被测包；列 = 三态判定）---- 对齐「版本执行」页签「版本全量测试」表结构
-    G_ST = [("PASS", "PASS"), ("NOT_IMPLEMENTED", "需求未实现"), ("BLOCKED", "BLOCKED(ENV)")]
+    # ---- 门禁四态矩阵（行 = 被测包；列 = 四态判定）---- 对齐「版本执行」页签「版本全量测试」表结构
+    G_ST = [("PASS", "PASS"), ("NOT_IMPLEMENTED", "需求未实现"), ("BLOCKED", "BLOCKED(ENV)"),
+            ("NOT_RUN", "NOT_RUN(契约待冻结)")]
     g_stat = {}
     for s in suts:
         g_stat[s.get("label", "")] = Counter((c.get("status") or "") for c in (s.get("cases") or []))
@@ -631,10 +637,10 @@ def render_ux_block(ux, design):
         m = re.search(r"-(\d+)$", cid or "")
         return int(m.group(1)) if m else 0
 
-    parts.append('<h3>门禁三态矩阵（行 = 被测包）</h3>')
-    parts.append('<p style="color:#7f8c8d;font-size:12px;">行 = 被测包（本轮实际执行门禁的 SUT），列 = 三态判定计数；'
-                 '通过率分母 = PASS + 需求未实现（BLOCKED(ENV) = 宿主/环境不可判定，不计入分母），'
-                 '与「版本执行」页签同一口径。逐用例结果见下方「被测包明细」。</p>')
+    parts.append('<h3>门禁四态矩阵（行 = 被测包）</h3>')
+    parts.append('<p style="color:#7f8c8d;font-size:12px;">行 = 被测包（本轮实际执行门禁的 SUT），列 = 四态判定计数；'
+                 '通过率分母 = PASS + 需求未实现（BLOCKED(ENV) = 宿主/环境不可判定、NOT_RUN(契约待冻结) = 依赖字段未冻结，'
+                 '两者均不计入分母），与「版本执行」页签同一口径。逐用例结果见下方「被测包明细」。</p>')
     grow = []
     for s in suts:
         cnt = g_stat.get(s.get("label", "")) or Counter()
@@ -647,8 +653,8 @@ def render_ux_block(ux, design):
                     + f'<td style="{_TD}text-align:center;"><b>{_g_rate(cnt)}</b></td></tr>')
     parts.append('<table style="border-collapse:collapse;width:100%;font-size:13px;"><thead>'
                  f'<tr><th style="{_TH}" rowspan="2">被测包</th><th style="{_TH}" rowspan="2">版本</th>'
-                 f'<th style="{_TH}" rowspan="2">已执行用例</th>'
-                 f'<th style="{_TH}" colspan="{len(G_ST)}">三态判定</th>'
+                 f'<th style="{_TH}" rowspan="2">用例数</th>'
+                 f'<th style="{_TH}" colspan="{len(G_ST)}">四态判定</th>'
                  f'<th style="{_TH}" rowspan="2">通过率</th></tr><tr>'
                  + ''.join(f'<th style="{_TH}">{lb}</th>' for _k, lb in G_ST)
                  + '</tr></thead><tbody>' + ''.join(grow) + '</tbody></table>')
@@ -657,7 +663,7 @@ def render_ux_block(ux, design):
     dcases = {c["id"]: c for c in ((design or {}).get("cases") or [])}
     fmap = (design or {}).get("fixture_map", {})
     executed_ids = set()
-    parts.append('<h3>被测包明细（逐用例三态）</h3>')
+    parts.append('<h3>被测包明细（逐用例四态）</h3>')
     for s in suts:
         label = s.get("label", "")
         cnt = g_stat.get(label) or Counter()
@@ -676,7 +682,8 @@ def render_ux_block(ux, design):
             pf = c.get("pass") or 0
             fl = c.get("fail") or 0
             tot = pf + fl
-            kind = "BLOCKED" if st == "BLOCKED" else ("PASS" if st == "PASS" else "FAIL")
+            kind = "BLOCKED" if st == "BLOCKED" else (
+                "NOT_RUN" if st == "NOT_RUN" else ("PASS" if st == "PASS" else "FAIL"))
             note = c.get("note") or ""
             executed_ids.add(cid)
             if mid:
@@ -689,29 +696,33 @@ def render_ux_block(ux, design):
                 f'<td style="{_TD}">{d.get("title", "")}</td>'
                 f'<td style="{_TD}color:#7f8c8d;font-size:11px;">夹具 <code>{owned}</code></td>'
                 f'<td style="{_TD}text-align:center;color:{UX_STATUS_COLOR.get(st, "#2c3e50")};">'
-                f'<b>{UX_STATUS_LABEL.get(st, st)}</b><br><span style="color:#7f8c8d;">{pf}/{tot or "?"} 断言</span></td>'
+                f'<b>{UX_STATUS_LABEL.get(st, st)}</b><br><span style="color:#7f8c8d;">'
+                + ("未执行" if st == "NOT_RUN" else f'{pf}/{tot or "?"} 断言')
+                + '</span></td>'
                 f'<td style="{_TD}color:#7f8c8d;font-size:11px;">{note}</td></tr>')
         summ = (f'{label}（v{s.get("version") or "?"}） · {len(scases)} 用例 · '
                 f'PASS {cnt.get("PASS", 0)} / 需求未实现 {cnt.get("NOT_IMPLEMENTED", 0)} / '
-                f'BLOCKED(ENV) {cnt.get("BLOCKED", 0)} · 通过率 {_g_rate(cnt)}')
+                f'BLOCKED(ENV) {cnt.get("BLOCKED", 0)} / NOT_RUN {cnt.get("NOT_RUN", 0)} · '
+                f'通过率 {_g_rate(cnt)}')
         btns = (f'<button class="uxbtn active" data-uxk="{skey}" data-f="ALL" '
                 f'onclick="filterUxPkg(\'{skey}\',\'ALL\')">全部 {len(scases)}</button>'
                 + ''.join(f'<button class="uxbtn" data-uxk="{skey}" data-f="{fk}" '
                           f'onclick="filterUxPkg(\'{skey}\',\'{fk}\')">{lb} {cnt.get(sk, 0)}</button>'
                           for fk, lb, sk in [("PASS", "PASS", "PASS"),
                                              ("FAIL", "需求未实现", "NOT_IMPLEMENTED"),
-                                             ("BLOCKED", "环境不可判定", "BLOCKED")]))
+                                             ("BLOCKED", "环境不可判定", "BLOCKED"),
+                                             ("NOT_RUN", "契约待冻结", "NOT_RUN")]))
         parts.append(
             '<details class="uxdetail" style="border:1px solid #ddd;border-radius:6px;margin:10px 0;">'
             f'<summary style="cursor:pointer;padding:10px 14px;font-size:14px;font-weight:700;">{summ}</summary>'
             f'<div style="padding:0 14px 12px;"><div style="margin:6px 0;">{btns}</div>'
             '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
             f'<thead><tr><th style="{_TH}">用例</th><th style="{_TH}">P</th><th style="{_TH}">批次</th>'
-            f'<th style="{_TH}">标题</th><th style="{_TH}">夹具</th><th style="{_TH}">三态判定</th>'
+            f'<th style="{_TH}">标题</th><th style="{_TH}">夹具</th><th style="{_TH}">四态判定</th>'
             f'<th style="{_TH}">阻塞 / 依赖</th></tr></thead><tbody>'
             + ''.join(rws) + '</tbody></table></div></details>')
 
-    # 设计矩阵存在但本轮无执行结果的用例（无载体 / 契约依赖待冻结），单列，避免与门禁三态混淆
+    # 设计矩阵存在但本轮无执行结果的用例（无载体 / 契约依赖待冻结），单列，避免与门禁四态混淆
     rest = [c for c in ((design or {}).get("cases") or []) if c["id"] not in executed_ids]
     if rest:
         rrows = ''.join(
@@ -726,9 +737,9 @@ def render_ux_block(ux, design):
             + '</td></tr>'
             for c in rest)
         parts.append(
-            f'<h4 style="margin:14px 0 4px;">未进入本轮执行的用例（{len(rest)} 条 · 不计入门禁三态）</h4>'
+            f'<h4 style="margin:14px 0 4px;">未进入本轮执行的用例（{len(rest)} 条 · 不计入门禁四态）</h4>'
             '<p style="color:#7f8c8d;font-size:12px;">「未建可执行载体」= 只有用例定义、尚未落 L1/L2 可执行夹具；'
-            '「契约依赖待冻结」= 依赖字段未冻结，冻结前应标 NOT_RUN。'
+            '「契约依赖待冻结」= 依赖字段未冻结（若该用例已建载体，已由运行器判 <b>NOT_RUN</b> 并计入上方四态，不在此表）。'
             '<b>BLOCKED(ENV)</b> = 真机用例在当前宿主缺真云凭证而跳过（不等于需求缺口，须在真机复跑）。</p>'
             '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
             f'<thead><tr><th style="{_TH}">用例</th><th style="{_TH}">P</th><th style="{_TH}">标题</th>'
@@ -785,12 +796,15 @@ def render_ux_block(ux, design):
         parts.append(
             f'<p style="color:#7f8c8d;font-size:12px;">三类体验<b>无法用断言覆盖</b>、需人工 rubric：认知负荷、'
             f'错误文案是否够新手用、视觉排版。另：设计态带「契约依赖…待冻结」标记 <b>{design["frozen"]}</b> 条'
-            '（= 上表末列合计，与执行态 KPI「契约依赖·无载体」口径不同），契约冻结前其结果仅记趋势，'
-            '不得以「设计完整」冒充「已通过」。</p>')
+            '（= 上表末列合计，与执行态 KPI「NOT_RUN(契约待冻结)」/「契约依赖·无载体」口径不同）：'
+            '这些用例的验收基准依赖尚未定稿的字段，运行器<b>默认不执行</b>（记 NOT_RUN）；'
+            f'契约冻结后重跑即转为正式契约验收 —— 期间<b>不得</b>以「设计完整」冒充「已通过」。</p>')
 
     parts.append('<p style="color:#95a5a6;font-size:11px;">复跑：<code>python scripts/gen_ux_special.py '
                  '--sut "&lt;标签&gt;=&lt;plugins/huaweicloud-core/src&gt;"</code> 生成同一数据源后本页自动刷新；'
-                 'exit 0 = 全部通过（需求已实现）/ 1 = 需求未实现 / 2 = 环境不可判定。</p>')
+                 'exit 0 = 无失败（全部通过，或剩余仅 NOT_RUN/BLOCKED）/ 1 = 需求未实现 / 2 = 环境不可判定或 harness 故障。'
+                 '契约冻结前如需照跑看趋势：<code>node eval/harness/fixtures/run-ux.mjs &lt;src&gt; --run-frozen</code>'
+                 '（结果仍记 NOT_RUN，不改变口径与退出码）。</p>')
     return ''.join(parts)
 
 

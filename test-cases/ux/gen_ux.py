@@ -343,7 +343,8 @@ add("D11-24", "码道沙箱阻断 KooCLI 的指引可读性", "P2",
     "P: UX-R15 客户端差异化指引(本改善需求); 实: README.zh-CN.md 码道沙箱注释 + setup-cli.mjs install-hcloud",
     "install-hcloud,doctor,check_cli", "手动",
     "CLIENT_MATRIX|<代表: 码道 codearts>|<证据: 沙箱阻断指引文案 + 恢复后可用>|<阻塞: 需码道环境>",
-    tct="CLIENT_MATRIX")
+    tct="CLIENT_MATRIX",
+    **{"依赖": "环境依赖: 码道客户端 + 沙箱模式（须由码道机器执行，见 CLIENT_MATRIX）；需求来源 UX-R15；独立 manifest；finally 清理"})
 
 add("D11-25", "会话内能力可发现性", "P2",
     "已登录；会话内",
@@ -437,7 +438,8 @@ add("D11-34", "资源归零体验（残留提示与清理引导）", "P1",
     "清理后返回中文归零报告（逐资源列出\"已释放/未释放\"并给出剩余计数），未释放项附唯一补删命令；不出现静默成功；只读列表复核返回空",
     "P: UX-R23 归零体验(本改善需求); 实: 现有 E2E 归零纪律(D3-C1/D3-C7) + ListEips/ListVolumes 复核",
     "run_approved_command,run_readonly_command", "脚本",
-    "COMMON|<代表: 真云贵资源>|<证据: 归零报告 + 只读列表复核为空>|<阻塞: 需真云配额>")
+    "COMMON|<代表: 真云贵资源>|<证据: 归零报告 + 只读列表复核为空>|<阻塞: 需真云配额>",
+    **{"依赖": dep("归零报告封装（逐资源 已释放/未释放 + 剩余计数 + 补删命令）", "UX-R23")})
 
 add("D11-35", "沙箱连不通的排障引导", "P1",
     "沙箱服务可达性受限（模拟连接超时 / 预览 URL 不可达）",
@@ -472,7 +474,8 @@ add("D11-38", "独立可观测面双轨断言（范式③：不以自述自证�
     "P: UX-R2 双轨透明 + 通: 自证禁区(升级方案§2③)",
     "auth_init,run_readonly_command,auth_status", "fixture",
     "COMMON|<代表: 真云只读>|<证据: 独立 API 响应反推的账号标识 + 双轨对照>|<阻塞: 需真实双账号>",
-    requiredEvidence="强断言：真云只读响应原文(脱敏) + 反推标识 + 自述字段；两轨须一致")
+    requiredEvidence="强断言：真云只读响应原文(脱敏) + 反推标识 + 自述字段；两轨须一致",
+    **{"依赖": dep("effective.{source,fingerprint}（独立观测面双轨对照字段）", "UX-R2")})
 
 add("D11-39", "体验回放差异分类（范式②：基线 + 语义分类）", "P1",
     "已录制体验基线 eval/replay/recordings/ux-baseline-v1.jsonl（未登录/401/冲突/沙箱失败等场景返回体）",
