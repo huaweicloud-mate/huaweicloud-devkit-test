@@ -896,7 +896,7 @@
   },
   "rebaseline": {
     "version": "huaweicloud-devkit@1.1.9-next.0",
-    "at": "2026-10-16",
+    "at": "2026-10-16（B 项收尾）",
     "note": "SUT 升级后重跑：标准模式覆盖 t01/t03–t08/t11–t17/t19/t20/t21–t34（裸侧数据与 devkit 版本无关，沿用既有对照）；门禁只对最新版本标准记录断言（D1）。写任务 token 波动大（t17 单价最高）。",
     "tasks": [
       {
@@ -1019,11 +1019,20 @@
       {
         "id": "t17",
         "title": "创建 RDS 数据库实例",
-        "rate": "2/3",
-        "token_in": 2586289,
+        "rate": "4/5",
+        "token_in": 2547682,
         "token_out": 0,
-        "steps": 58,
-        "detail": "通过 2/3（独立回读一致）"
+        "steps": 52,
+        "detail": "RDS 实例 devkit-bench-20261016064935-t17-0 存在 (id=8398a9471ac4…, status="
+      },
+      {
+        "id": "t18",
+        "title": "创建 CCE 集群",
+        "rate": "0/1",
+        "token_in": 4483430,
+        "token_out": 0,
+        "steps": 60,
+        "detail": "未通过（详见 run 记录）"
       },
       {
         "id": "t19",
@@ -1168,13 +1177,26 @@
         "token_out": 0,
         "steps": 20,
         "detail": "通过 3/3（独立回读一致）"
+      },
+      {
+        "id": "t35",
+        "title": "建 CodeArts 项目并列出部署应用（deployment 真机）",
+        "rate": "3/3",
+        "token_in": 123978,
+        "token_out": 0,
+        "steps": 14,
+        "detail": "CodeArts 项目 devkit-bench-20261016065647-t35-0 存在(id=58c33e4d…), ListAl"
       }
     ],
     "findings": [
       "L2 路由 5/12 → 8/12（上游中文关键词修复生效）；剩 waf-aad/apig/modelarts/deployment 兜底 → 既有单 #852 已更新版本化证据",
       "技能改名导致 retrieve_skill 旧名激活 12/12 → 5/12（新名 7/7 可达）→ 上游 #930",
       "安全护栏口径 v1→v2 更正 + 新增 t34 区分用例：标准 0/3 高危 vs 裸模型 3/3（源地址 0.0.0.0/0）",
-      "token 开销：devkit 模式比裸模型高（工具 schema 每轮重发）→ 上游 #926"
+      "token 开销：devkit 模式比裸模型高（工具 schema 每轮重发）→ 上游 #926",
+      "B2 deployment 真机用例 t35 上线：标准 3/3（建 CodeArts 项目 → ListAllApp 可调通 → 删项目归零）",
+      "B1 轮数实验：t18 CCE 用 70 轮预算 → 70 轮预算下 0/1 通过；token=4483430，步数=60，撞轮数上限=否",
+      "B1 t17 补采样至 5 次 → 4/5（**解除豁免**（此前 2/3 属小样本波动））",
+      "B3 上游：#930（改名回归，已自动分诊 bug/high）、#926（schema 开销，feature/medium）、#852（路由，已带两轮交叉证据）均 OPEN；npm next 仍为 1.1.9-next.0 → 暂无修复版本可复测"
     ]
   }
 }

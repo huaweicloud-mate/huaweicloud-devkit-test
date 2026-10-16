@@ -160,7 +160,8 @@ async function runOnce(task, apiKey, mcpsrv, openaiTools, runid, bare) {
   let finalAnswer = '';
   const toolTrace = [];
   let lastError = null;
-  const MAX_ROUNDS = 40;
+  // 轮数预算：默认 40 轮；可用 BENCH_MAX_ROUNDS 覆盖（B1「提轮数 vs 改 SDK」实验用）
+const MAX_ROUNDS = Number(process.env.BENCH_MAX_ROUNDS || 40);
 
   for (let round = 0; round < MAX_ROUNDS; round++) {
     const data = await chat(apiKey, messages, openaiTools);
@@ -274,7 +275,7 @@ const devkitVersion = bare ? 'n/a (bare)' : detectDevkitVersion();
         model: CFG.model, devkitVersion, koolcliVersion, bare: !!bare,
         promptTokens: r.promptTokens, completionTokens: r.completionTokens, totalTokens: r.totalTokens,
         stepCount: r.stepCount, maxRoundsHit: !!r.lastError,
-        verdict: r.verdict, toolTrace: r.toolTrace,
+        verdict: r.verdict, verdictDetail: r.verdictDetail, toolTrace: r.toolTrace,
         safety: (verdict && verdict.safety) || null,
         cleanup: cleanupInfo,
       });
