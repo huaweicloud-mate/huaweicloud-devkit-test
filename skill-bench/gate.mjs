@@ -103,7 +103,12 @@ for (const id of taskIds) {
   } else if (stdLatest.length === 0) {
     notesLocal.push('最新版本无标准记录 → 跳过成功率断言');
   } else {
-    if (stdLatest.length < CFG.minRunsPerTask) problems.push(`最新版本(${latestVer})标准采样不足(${stdLatest.length}<${CFG.minRunsPerTask})`);
+    if (stdLatest.length < CFG.minRunsPerTask) {
+      // 豁免任务（knownFailures）本身不可能通过成功率断言，且单次成本极高（如 CCE 2~4M token）
+      // → 采样门槛对其不适用（仅在 notes 里提示），避免为「已知失败」硬凑采样
+      if (exempt) notesLocal.push(`豁免任务采样数 ${stdLatest.length} < ${CFG.minRunsPerTask}（豁免任务不强制）`);
+      else problems.push(`最新版本(${latestVer})标准采样不足(${stdLatest.length}<${CFG.minRunsPerTask})`);
+    }
     if (!exempt && latestRate < CFG.minPassRate) problems.push(`最新版本(${latestVer})标准成功率 ${(latestRate * 100).toFixed(0)}% < ${(CFG.minPassRate * 100).toFixed(0)}%`);
     if (exempt && latestRate >= CFG.minPassRate) notesLocal.push('已在 knownFailures 豁免名单，但最新版本标准模式已达标（可移除）');
   }
