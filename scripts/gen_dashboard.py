@@ -733,12 +733,13 @@ def render_ux_block(ux, design):
             + (f'夹具 <code>{c["fixture"]}</code>' if c["fixture"] else f'{c["advice"] or "—"}（纸面定义）')
             + '</td>'
             f'<td style="{_TD}color:#95a5a6;">'
-            + ("契约依赖待冻结" if c["frozen"] else "未建可执行载体")
+            + ("契约依赖待冻结" if c["frozen"]
+               else ("独立专项载体（不在本门禁运行）" if c["fixture"] else "未建可执行载体"))
             + '</td></tr>'
             for c in rest)
         parts.append(
             f'<h4 style="margin:14px 0 4px;">未进入本轮执行的用例（{len(rest)} 条 · 不计入门禁四态）</h4>'
-            '<p style="color:#7f8c8d;font-size:12px;">「未建可执行载体」= 只有用例定义、尚未落 L1/L2 可执行夹具；'
+            '<p style="color:#7f8c8d;font-size:12px;">「未建可执行载体」= 只有用例定义、尚未落任何可执行载体；「独立专项载体」= 已落载体且由独立专项运行器执行（回放 <code>ux-replay.mjs</code> / 度量 <code>ux-agent-loop.mjs</code>），不在本门禁批量运行；'
             '「契约依赖待冻结」= 依赖字段未冻结（若该用例已建载体，已由运行器判 <b>NOT_RUN</b> 并计入上方四态，不在此表）。'
             '<b>BLOCKED(ENV)</b> = 真机用例在当前宿主缺真云凭证而跳过（不等于需求缺口，须在真机复跑）。</p>'
             '<table style="border-collapse:collapse;width:100%;font-size:12px;">'
@@ -804,7 +805,10 @@ def render_ux_block(ux, design):
                  '--sut "&lt;标签&gt;=&lt;plugins/huaweicloud-core/src&gt;"</code> 生成同一数据源后本页自动刷新；'
                  'exit 0 = 无失败（全部通过，或剩余仅 NOT_RUN/BLOCKED）/ 1 = 需求未实现 / 2 = 环境不可判定或 harness 故障。'
                  '契约冻结前如需照跑看趋势：<code>node eval/harness/fixtures/run-ux.mjs &lt;src&gt; --run-frozen</code>'
-                 '（结果仍记 NOT_RUN，不改变口径与退出码）。</p>')
+                 '（结果仍记 NOT_RUN，不改变口径与退出码）。'
+                 '<br>独立专项（不在本门禁批量运行）：'
+                 '<code>npm run test:ux-replay</code>（D11-39 体验回放差异分类，基线 <code>recordings/ux-baseline-v1.jsonl</code>）、'
+                 '<code>npm run ux:agent-loop -- --mcp &lt;src&gt;/mcp-server.mjs [--baseline &lt;基线.json&gt;]</code>（D11-40 度量对照：网关真实 usage + MCP 调用计数）。</p>')
     return ''.join(parts)
 
 

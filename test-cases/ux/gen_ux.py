@@ -102,6 +102,8 @@ LANDED = {
     "D11-35": "eval/harness/fixtures/d11-35-sandbox-unreachable-guide.mjs",
     "D11-37": "eval/harness/fixtures/d11-37-guidance-closure.mjs",
     "D11-38": "eval/harness/fixtures/d11-38-independent-observation.mjs",
+    "D11-39": "eval/replay/ux-replay.mjs",
+    "D11-40": "eval/harness/ux-agent-loop.mjs",
     "D11-41": "eval/harness/fixtures/d11-41-misleading-attribution.mjs",
     "D11-42": "eval/harness/fixtures/d11-42-encoding-contract.mjs",
     "D11-43": "eval/harness/fixtures/d11-43-terminal-env-matrix.mjs",
