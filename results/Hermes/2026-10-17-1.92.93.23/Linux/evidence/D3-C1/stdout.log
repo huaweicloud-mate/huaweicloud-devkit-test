@@ -1,61 +1,6 @@
-[OK] CreateVpc | vpcId=08a23322-6df8-4803-b9cc-7da31ffb2108 err={
-  "vpc": {
-    "id": "08a23322-6df8-4803-b9cc-7da31ffb2108",
-    "name": "tctest-hermes-c1-mvbh7j3r",
-    "desc
-[OK] CreateSubnet | subnetId=9453f542-d002-43fe-bdb9-9905ee8a04f5 err={
-  "subnet": {
-    "id": "9453f542-d002-43fe-bdb9-9905ee8a04f5",
-    "name": "tctest-hermes-c1-mvbh7j3r-sub",
-[OK] ListServersDetails(只读) | {
-  "count": 2,
-  "servers": [
-    {
-      "flavor": {
-        "disk": "0",
-        "vcpus": "2",
-        "ram": "4096",
-[OK] DeleteSubnet | true
-[OK] DeleteVpc | true
-[FAIL] 归零验证(不含本次资源) | 仍含本次 VPC
-
-=====SUMMARY JSON=====
 {
   "case": "D3-C1",
   "status": "FAIL",
-  "total": 6,
-  "passed": 5,
-  "failed": 1,
-  "results": [
-    {
-      "name": "CreateVpc",
-      "pass": true,
-      "detail": "vpcId=08a23322-6df8-4803-b9cc-7da31ffb2108 err={\n  \"vpc\": {\n    \"id\": \"08a23322-6df8-4803-b9cc-7da31ffb2108\",\n    \"name\": \"tctest-hermes-c1-mvbh7j3r\",\n    \"description"
-    },
-    {
-      "name": "CreateSubnet",
-      "pass": true,
-      "detail": "subnetId=9453f542-d002-43fe-bdb9-9905ee8a04f5 err={\n  \"subnet\": {\n    \"id\": \"9453f542-d002-43fe-bdb9-9905ee8a04f5\",\n    \"name\": \"tctest-hermes-c1-mvbh7j3r-sub\",\n    \"desc"
-    },
-    {
-      "name": "ListServersDetails(只读)",
-      "pass": true,
-      "detail": "{\n  \"count\": 2,\n  \"servers\": [\n    {\n      \"flavor\": {\n        \"disk\": \"0\",\n        \"vcpus\": \"2\",\n        \"ram\": \"4096\","
-    },
-    {
-      "name": "DeleteSubnet",
-      "pass": true,
-      "detail": "true"
-    },
-    {
-      "name": "DeleteVpc",
-      "pass": true,
-      "detail": "true"
-    },
-    {
-      "name": "归零验证(不含本次资源)",
-      "pass": false,
-      "detail": "仍含本次 VPC"
-    }
-  ]
+  "why": "ECS E2E：VPC/子网创建+ECS读均成功，但清理阶段 run_approved_command 未校验底层命令真实结果——DeleteSubnet 缺 vpc_id 底层返回 USE_ERROR 却报 ok=true，导致资源未删除泄漏（已手动归零）。根因见 FINDINGS",
+  "executedAt": "20261017053301"
 }

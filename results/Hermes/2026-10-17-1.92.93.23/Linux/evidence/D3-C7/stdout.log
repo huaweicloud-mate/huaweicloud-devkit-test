@@ -1,46 +1,6 @@
-[OK] ① 跨区域 plan 含 --cli-region=ap-southeast-1
-[OK] ② get_regional_availability(ECS,ap-southeast-1)
-[OK] ③ 只读 ECS ListServersDetails(cn-north-4)
-[OK] ④a 最小 EIP 创建
-[OK] ④b EIP 释放
-[OK] ④c 归零验证(ListPublicips 不含本次 EIP)
-
-=====SUMMARY JSON=====
 {
   "case": "D3-C7",
-  "generatedAt": "2026-10-16T21:19:56.518Z",
-  "total": 6,
-  "passed": 6,
-  "results": [
-    {
-      "name": "① 跨区域 plan 含 --cli-region=ap-southeast-1",
-      "ok": true,
-      "detail": "[object Object]"
-    },
-    {
-      "name": "② get_regional_availability(ECS,ap-southeast-1)",
-      "ok": true,
-      "detail": "{\"ok\":true,\"service\":\"ecs\",\"region\":\"ap-southeast-1\",\"available\":true,\"note\":\"ecs is available in ap-southeast-1.\",\"sourcedFrom\":\"static cache, update via npm package upgrade\",\"disclaimer\":\"This resul"
-    },
-    {
-      "name": "③ 只读 ECS ListServersDetails(cn-north-4)",
-      "ok": true,
-      "detail": "true {\n  \"count\": 2,\n  \"servers\": [\n    {\n      \"flavor\": {\n        \"disk\": \"0\",\n        \"vcpus\": \"2\",\n        \"ram\": \"4096\","
-    },
-    {
-      "name": "④a 最小 EIP 创建",
-      "ok": true,
-      "detail": "[object Object]"
-    },
-    {
-      "name": "④b EIP 释放",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "name": "④c 归零验证(ListPublicips 不含本次 EIP)",
-      "ok": true,
-      "detail": "[object Object]"
-    }
-  ]
+  "status": "PASS",
+  "why": "跨区域资源操作引导：plan 含 --cli-region、get_regional_availability、EIP 创建/释放/归零 全通过",
+  "executedAt": "20261017053301"
 }

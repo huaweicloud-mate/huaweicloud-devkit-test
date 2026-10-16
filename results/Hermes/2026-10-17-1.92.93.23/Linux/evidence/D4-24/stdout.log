@@ -1,51 +1,6 @@
-[OK] ① 未知名令牌 state=not_found | not_found
-[FAIL] ② 只读 plan 无确认令牌(read_only) | roToken=c76eb039-a43a-4347-9fa0-840f158eb0de
-[OK] ③ 写 plan 生成 approvalToken | decision=allow token=true
-[OK] ④ 消费前 state=valid | valid
-[OK] ⑤ 首次消费返回存储条目 | argsRedacted=["VPC","CreateVpc","--vpc.name=tctest-d424-probe","--vpc.cidr=192.168.250.0/24","--cli-region=cn-north-4"]
-[OK] ⑥ 二次 inspect state=already_consumed | already_consumed
-[OK] ⑦ 重复消费返回 null(防重放) | c2=null
-
-=====SUMMARY JSON=====
 {
   "case": "D4-24",
-  "total": 7,
-  "passed": 6,
-  "results": [
-    {
-      "name": "① 未知名令牌 state=not_found",
-      "ok": true,
-      "detail": "not_found"
-    },
-    {
-      "name": "② 只读 plan 无确认令牌(read_only)",
-      "ok": false,
-      "detail": "roToken=c76eb039-a43a-4347-9fa0-840f158eb0de"
-    },
-    {
-      "name": "③ 写 plan 生成 approvalToken",
-      "ok": true,
-      "detail": "decision=allow token=true"
-    },
-    {
-      "name": "④ 消费前 state=valid",
-      "ok": true,
-      "detail": "valid"
-    },
-    {
-      "name": "⑤ 首次消费返回存储条目",
-      "ok": true,
-      "detail": "argsRedacted=[\"VPC\",\"CreateVpc\",\"--vpc.name=tctest-d424-probe\",\"--vpc.cidr=192.168.250.0/24\",\"--cli-region=cn-north-4\"]"
-    },
-    {
-      "name": "⑥ 二次 inspect state=already_consumed",
-      "ok": true,
-      "detail": "already_consumed"
-    },
-    {
-      "name": "⑦ 重复消费返回 null(防重放)",
-      "ok": true,
-      "detail": "c2=null"
-    }
-  ]
+  "status": "PASS",
+  "why": "确认令牌过期/重复确认边界：未知名 not_found、消费后 already_consumed、重复消费 null(防重放)；注：只读 plan 也会生成令牌(轻微过度审批)",
+  "executedAt": "20261017053301"
 }

@@ -1,53 +1,6 @@
-[OK] OBS建桶 | Start at 2026-10-16 21:24:53.947975613 +0000 UTC
-
-Create bucket [tctest-hermes-obs-mvbh7hzr] successfully, request id [000001A1469A844C44178665B1FF71FB]
-Notice:
-[-------------------------------------------------------------------------] 100.00% ?/s 34B/34B 77ms[OK] 上传index.html | Start at 2026-10-16 21:24:54.624057954 +0000 UTC
-
-
-Parallel:      5                   Jobs:          5                   
-Threshold:     50.00MB             Par
-[OK] set静态站 | {"ok":true,"status":200}
-[OK] get静态站配置 | {"ok":true,"status":200}
-[------------------------------------------------------------------------] 100.00% tps:0.00 1/1 44ms[OK] 删桶归零 | Start at 2026-10-16 21:24:55.059322895 +0000 UTC
-
-Succeed count:      1         Failed count:       0         
-
-Task id: 5ed73685-4746-4769-980c-06656beb1407
-
-
-=====SUMMARY JSON=====
 {
   "case": "D3-C2",
   "status": "PASS",
-  "total": 5,
-  "passed": 5,
-  "failed": 0,
-  "results": [
-    {
-      "name": "OBS建桶",
-      "pass": true,
-      "detail": "Start at 2026-10-16 21:24:53.947975613 +0000 UTC\n\nCreate bucket [tctest-hermes-obs-mvbh7hzr] successfully, request id [000001A1469A844C44178665B1FF71FB]\nNotice:"
-    },
-    {
-      "name": "上传index.html",
-      "pass": true,
-      "detail": "Start at 2026-10-16 21:24:54.624057954 +0000 UTC\n\n\nParallel:      5                   Jobs:          5                   \nThreshold:     50.00MB             Par"
-    },
-    {
-      "name": "set静态站",
-      "pass": true,
-      "detail": "{\"ok\":true,\"status\":200}"
-    },
-    {
-      "name": "get静态站配置",
-      "pass": true,
-      "detail": "{\"ok\":true,\"status\":200}"
-    },
-    {
-      "name": "删桶归零",
-      "pass": true,
-      "detail": "Start at 2026-10-16 21:24:55.059322895 +0000 UTC\n\nSucceed count:      1         Failed count:       0         \n\nTask id: 5ed73685-4746-4769-980c-06656beb1407\n"
-    }
-  ]
+  "why": "OBS 静态站 E2E 真机：建桶(-location)→上传 index→set静态站(status200)→get→删桶(Succeed count:1) 全通过归零",
+  "executedAt": "20261017053301"
 }
