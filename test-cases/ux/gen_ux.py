@@ -372,7 +372,7 @@ add("D11-27", "工具返回中文摘要与长输出可读性", "P1",
     "huaweicloud_run_readonly_command args=[\"ecs\",\"ListServersDetails\"]",
     "①执行返回长列表的只读命令 ②读返回体",
     "返回体含中文字段摘要（至少覆盖 资源标识/名称/状态 三项字段映射），长输出有截断或分页提示；原始 JSON 与中文摘要并存不互相覆盖",
-    "P: UX-R18 输出可读性(本改善需求); 实: mcp-protocol.mjs(decorateResult) + tools.mjs 返回包装",
+    "P: UX-R18 输出可读性(本改善需求); 实: mcp-protocol.mjs(_decorateResult) + tools.mjs 返回包装",
     "run_readonly_command", "函数/fixture",
     "COMMON|<代表: Hermes + 真云只读>|<证据: 中文字段摘要 + 截断提示>|<阻塞: 需真云只读凭证>")
 
