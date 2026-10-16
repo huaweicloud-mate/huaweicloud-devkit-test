@@ -1,8 +1,11 @@
-feat(skill-bench): R1 裸模型对照全量对齐（t11–t20 ×3 采样）+ 修正 L3 结论
+feat(skill-bench): R8 评测 SUT 升级至 1.1.9-next.0 + L2 探测加固
 
-- results/runs/*.json：新增 30 条裸侧脱敏 run 记录（t11–t20 各 3 采样，含 devkitVersion 锚点）
-- summary.json：bare 数组 9 → 19 行 + bareMeta 口径说明
-- 新增 results/baseline-bare-align-20261015.md（标准/裸对照 + 撞轮数分类 + 结论修正）
-- 策略文档：新增 5.2b 深层任务补测、修正 §5.2 结论（裸模型在 t15 ECS/t17 RDS/t18 CCE 上 0/3，撞 40 轮上限）、
-  差距 P1 #4 与路线图 R1 标记完成
-- 全部写任务裸侧每 run 后 cleanup OK，无残留
+- SUT 升级（隔离安装，不动现有 ~/.dsh 安装）：npm install --prefix _sut_119 huaweicloud-devkit@1.1.9-next.0
+  （按 prepare_env 策略取 latest/next 最高 = next 1.1.9-next.0，与每日测试同版本）；BENCH_MCP_SERVER 指向新包
+- harness：detectDevkitVersion 改为逐级上溯找包根（npm 包布局下原实现返回 unknown，会让门禁误判 FAIL）
+- L2 脚本：① meta 记录 mcpServer + devkitVersion（provenance，此前无法自证跑在哪版 SUT）
+  ② 文件名加版本后缀（不同 SUT 不再互相覆盖）③ L2_SET 支持「旧名 + 新名」双探测
+- 升级即刻产出两条结论（L2 零成本探测）：
+  · 路由 5/12 → 8/12（上游中文关键词修复生效；剩 waf-aad/apig/modelarts/deployment）→ 已在既有单 #852 更新版本化证据
+  · retrieve_skill 旧名激活 12/12 → 5/12（7 技能改名、无别名回退）；新名 7/7 可达 → 已提上游 #930
+- 报告 skill-bench/results/sut-upgrade-20261016.md；策略文档差距 #12 与路线图 R8 回填；l2/README.md 加版本对比
