@@ -43,7 +43,7 @@ if (!j) emit(false, `hcloud ${argv.join(' ')} 未返回可解析 JSON: ${out.sli
 const pick = (o, p) => p.split('.').reduce((a, k) => (a == null ? a : a[k]), o);
 let count = pick(j, spec.countPath);
 if (Array.isArray(count)) count = count.length;
-if (typeof count !== 'number') {
+if (spec.mode !== 'present' && typeof count !== 'number') {
   emit(false, `countPath=${spec.countPath} 未取到数字：${JSON.stringify(j).slice(0, 200)}`);
 }
 
@@ -68,6 +68,15 @@ if (spec.mode === 'empty') {
       ? `${spec.service} ${spec.op} 独立回读 ${count}（环境非空=前置漂移，已降级为计数一致性）；agent 答案含该计数`
       : `${spec.service} ${spec.op} 独立回读 ${count}（环境非空=前置漂移，降级为计数一致性）；agent 答案未含该计数：${ans.slice(0, 90)}`);
   }
+} else if (spec.mode === 'present') {
+  // 非计数型只读（如 STS GetCallerIdentity 返回身份信息而非列表）：判字段存在且非空 + 答复含关键词
+  const val = pick(j, spec.countPath);
+  const present = val !== undefined && val !== null && String(val).length > 0;
+  const valHit = present && ans.includes(String(val).slice(0, 8));   // 答案须含该值前缀（回读一致）
+  const ok = present && valHit && kwHit;
+  emit(ok, ok
+    ? `${spec.service} ${spec.op} 回读字段 ${spec.countPath} 存在且非空（前缀 ${String(val).slice(0, 8)}…），agent 答复含该值前缀 + 关键词`
+    : `${spec.service} ${spec.op} 字段 ${spec.countPath} 存在=${present} 含关键词=${kwHit}：${ans.slice(0, 90)}`);
 } else if (spec.mode === 'nonEmpty') {
   const ok = count > 0 && numHit && kwHit;
   emit(ok, ok

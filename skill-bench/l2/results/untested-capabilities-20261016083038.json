@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "ts": "20261016083038",
+    "mode": "readonly-probe",
+    "region": "cn-north-4",
+    "okCount": 5,
+    "total": 9
+  },
+  "results": [
+    {
+      "capability": "OBS 版本控制/生命周期/CORS",
+      "op": "OBS ListBuckets",
+      "ok": false,
+      "countPath": "buckets",
+      "count": null,
+      "raw": "Error: No such command: \"ListBuckets\", please try \"help\" for more information!"
+    },
+    {
+      "capability": "ECS 弹性伸缩（AS）",
+      "op": "AS ListScalingGroups --cli-region=cn-north-4",
+      "ok": true,
+      "countPath": "scaling_groups",
+      "count": [],
+      "raw": null
+    },
+    {
+      "capability": "RDS 备份",
+      "op": "RDS ListBackups --cli-region=cn-north-4",
+      "ok": false,
+      "countPath": "backups",
+      "count": null,
+      "raw": "[USE_ERROR]缺少必填参数:instance_id\n\n运行`hcloud RDS ListBackups --help`获取有关此API的详细信息"
+    },
+    {
+      "capability": "RDS 可恢复时间段",
+      "op": "RDS ListRestoreTimes --cli-region=cn-north-4 --instance_id=00000000-0000-0000-0000-000000000000",
+      "ok": false,
+      "countPath": "",
+      "count": null,
+      "raw": "{\n  \"error_msg\": \"Invalid database type.\",\n  \"error_code\": \"DBS.280235\"\n}\n获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度\n请求诊断请参考以下内容:\n+---+--------+----------+-------------"
+    },
+    {
+      "capability": "IAM STS 临时凭证（GetCallerIdentity）",
+      "op": "STS GetCallerIdentity --cli-region=cn-north-4",
+      "ok": true,
+      "countPath": "",
+      "count": null,
+      "raw": null
+    },
+    {
+      "capability": "VPC 对等连接",
+      "op": "VPC ListVpcPeerings --cli-region=cn-north-4",
+      "ok": true,
+      "countPath": "peerings",
+      "count": [],
+      "raw": null
+    },
+    {
+      "capability": "VPC 对等连接（备选名）",
+      "op": "VPC ListPeerings --cli-region=cn-north-4",
+      "ok": false,
+      "countPath": "peerings",
+      "count": null,
+      "raw": "[USE_ERROR]不支持的operation:ListPeerings\n\n运行`hcloud VPC --help`获取有关此服务的详细信息"
+    },
+    {
+      "capability": "EVS 快照",
+      "op": "EVS ListSnapshots --cli-region=cn-north-4",
+      "ok": true,
+      "countPath": "snapshots",
+      "count": [],
+      "raw": null
+    },
+    {
+      "capability": "CES 告警规则（读取）",
+      "op": "CES ListAlarmHistories --cli-region=cn-north-4",
+      "ok": true,
+      "countPath": "alarm_histories",
+      "count": [],
+      "raw": null
+    }
+  ]
+}

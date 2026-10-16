@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "ts": "20261016083300",
+    "mode": "sandbox-tool-probe",
+    "mcpServer": "C:/Users/Administrator/devkit-test/_sut_119/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs",
+    "devkitVersion": "huaweicloud-devkit@1.1.9-next.0",
+    "toolTotal": 42,
+    "sandboxTools": [
+      "huaweicloud_sandbox_exec_with_session",
+      "huaweicloud_sandbox_exec_one_shot",
+      "huaweicloud_sandbox_close_session",
+      "huaweicloud_sandbox_upload_file",
+      "huaweicloud_sandbox_upload_project",
+      "huaweicloud_sandbox_deploy_nginx",
+      "huaweicloud_sandbox_deploy_check",
+      "huaweicloud_sandbox_expose_tunnel",
+      "huaweicloud_sandbox_check_user",
+      "huaweicloud_sandbox_sign_agreement",
+      "huaweicloud_sandbox_connect",
+      "huaweicloud_sandbox_credentials"
+    ]
+  },
+  "trials": [
+    {
+      "tool": "huaweicloud_sandbox_exec_with_session",
+      "callable": false,
+      "sample": "{\"code\":-32602,\"message\":\"Invalid params: missing required field(s) \\\"command\\\" for tool \\\"huaweicloud_sandbox_exec_with_session\\\".\"}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_exec_one_shot",
+      "callable": false,
+      "sample": "{\"code\":-32602,\"message\":\"Invalid params: missing required field(s) \\\"command\\\" for tool \\\"huaweicloud_sandbox_exec_one_shot\\\".\"}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_close_session",
+      "callable": false,
+      "sample": "{\"code\":-32603,\"message\":\"workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent.\"}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_upload_file",
+      "callable": false,
+      "sample": "{\"code\":-32602,\"message\":\"Invalid params: missing required field(s) \\\"local_path\\\", \\\"remote_path\\\" for tool \\\"huaweicloud_sandbox_upload_file\\\".\"}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_upload_project",
+      "callable": false,
+      "sample": "{\"code\":-32602,\"message\":\"Invalid params: missing required field(s) \\\"local_dir\\\" for tool \\\"huaweicloud_sandbox_upload_project\\\".\"}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_deploy_nginx",
+      "callable": false,
+      "sample": "{\"code\":-32602,\"message\":\"Invalid params: missing required field(s) \\\"nginx_type\\\", \\\"port\\\", \\\"project\\\", \\\"output_dir\\\" for tool \\\"huaweicloud_sandbox_deploy_nginx\\\".\"}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_deploy_check",
+      "callable": false,
+      "sample": "{\"code\":-32602,\"message\":\"Invalid params: missing required field(s) \\\"port\\\", \\\"project\\\", \\\"output_dir\\\" for tool \\\"huaweicloud_sandbox_deploy_check\\\".\"}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_expose_tunnel",
+      "callable": false,
+      "sample": "{\"code\":-32602,\"message\":\"Invalid params: missing required field(s) \\\"port\\\" for tool \\\"huaweicloud_sandbox_expose_tunnel\\\".\"}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_check_user",
+      "callable": true,
+      "sample": "{\n  \"realnameVerified\": true,\n  \"agreementSigned\": true\n}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_sign_agreement",
+      "callable": true,
+      "sample": "{\n  \"signed\": true,\n  \"signedCount\": 0\n}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_connect",
+      "callable": true,
+      "sample": "{\n  \"sessionId\": \"e7e9310835d44e5abbcb35cd03e86da2\",\n  \"devStageId\": \"e7e9310835d44e5abbcb35cd03e86da2\",\n  \"connectionId\": \"673279\",\n  \"connectionAddress\": \"wss://fd0-cn-north-4.developer.myhuaweiclou"
+    },
+    {
+      "tool": "huaweicloud_sandbox_credentials",
+      "callable": true,
+      "sample": "{\n  \"sessionId\": \"e7e9310835d44e5abbcb35cd03e86da2\",\n  \"expiresAt\": \"2026-10-17T08:32:56.907000Z\",\n  \"credentialValidation\": \"passed\",\n  \"apiKeyInjected\": false,\n  \"apiKeyHint\": \"No DevBridge API Key "
+    }
+  ]
+}
