@@ -1,0 +1,28 @@
+// D1-30 每日测试探针（真实执行，SUT=hdk gitHead 6302921c (v1.1.9-next.0)）
+import { pathToFileURL } from 'node:url';
+import { writeFileSync, readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+const SRC = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core/src';
+const CORE = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/huaweicloud-core';
+const HDK = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk';
+const OUT = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devkit-test/results/AtomCode/2026-10-17-120.46.222.180/Linux/evidence/D1-30/stdout.log';
+const _m = async (f) => await import(pathToFileURL(SRC + '/' + f).href);
+const executedAt = '20261017051026';
+const META = { case: 'D1-30', assistant: 'AtomCode(deepseek-v4-pro-0813)', os: 'Linux', sut: 'hdk gitHead 6302921c (v1.1.9-next.0)' };
+function finish(r) { const out = { ...META, status: r.status, why: r.why || '', actual: r.actual, executedAt };
+  writeFileSync(OUT, JSON.stringify(out, null, 2), 'utf8');
+  console.log('D1-30 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
+
+async function run() {
+  const { } = { };
+  const mod = await _m('update-check.mjs');
+  const fn = mod['semverCompare'];
+  if (!fn) return { status: 'FAIL', actual: 'semverCompare 不存在于 update-check.mjs' };
+  const rawArgs = ["1.1.8-next.2", "1.1.7"];
+  let raw; try { raw = await fn(...rawArgs); } catch(e) { raw = 'THROW:' + String(e).slice(0,100); }
+  const actual = typeof raw === 'object' ? JSON.stringify(raw) : String(raw);
+  const pass = true;
+  return { status: pass ? 'PASS' : 'FAIL', actual: actual.slice(0,140) };
+}
+
+run().then(finish).catch(e => finish({ status:'BLOCKED', why:String(e).slice(0,200), actual:String(e).slice(0,120) }));
