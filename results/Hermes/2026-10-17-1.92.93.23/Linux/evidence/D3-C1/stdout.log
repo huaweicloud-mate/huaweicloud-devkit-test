@@ -1,24 +1,55 @@
+[OK] CreateVpc | vpcId=03f4fa84-0ce7-488e-85e0-acdcfdb95d3d err={
+  "vpc": {
+    "id": "03f4fa84-0ce7-488e-85e0-acdcfdb95d3d",
+    "name": "tctest-hermes-c1-mvbh4gx9",
+    "desc
+[FAIL] CreateSubnet | subnetId=(空) err=[USE_ERROR]Invalid parameter: vpc_id
+
+Run `hcloud VPC CreateSubnet --help` for details about this API.
+
+[OK] ListServersDetails(只读) | {
+  "count": 2,
+  "servers": [
+    {
+      "flavor": {
+        "disk": "0",
+        "vcpus": "2",
+        "ram": "4096",
+[OK] DeleteVpc | true
+[OK] 归零验证(不含本次资源) | 已归零
+
+=====SUMMARY JSON=====
 {
   "case": "D3-C1",
   "status": "FAIL",
-  "total": 3,
-  "passed": 1,
-  "failed": 2,
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
   "results": [
     {
       "name": "CreateVpc",
-      "pass": false,
-      "detail": "{\n  \"code\": \"VPC.0114\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Quota exceeded for resources:"
+      "pass": true,
+      "detail": "vpcId=03f4fa84-0ce7-488e-85e0-acdcfdb95d3d err={\n  \"vpc\": {\n    \"id\": \"03f4fa84-0ce7-488e-85e0-acdcfdb95d3d\",\n    \"name\": \"tctest-hermes-c1-mvbh4gx9\",\n    \"description"
     },
     {
       "name": "CreateSubnet",
       "pass": false,
-      "detail": "{\n  \"code\": \"VPC.0201\",\n  \"message\": \"VPC ID is invalid.\"\n}\nFailed to get terminal width. The defaul"
+      "detail": "subnetId=(空) err=[USE_ERROR]Invalid parameter: vpc_id\n\nRun `hcloud VPC CreateSubnet --help` for details about this API.\n"
     },
     {
-      "name": "finally归零(校验真实删除)",
+      "name": "ListServersDetails(只读)",
       "pass": true,
-      "detail": "无资源需清理"
+      "detail": "{\n  \"count\": 2,\n  \"servers\": [\n    {\n      \"flavor\": {\n        \"disk\": \"0\",\n        \"vcpus\": \"2\",\n        \"ram\": \"4096\","
+    },
+    {
+      "name": "DeleteVpc",
+      "pass": true,
+      "detail": "true"
+    },
+    {
+      "name": "归零验证(不含本次资源)",
+      "pass": true,
+      "detail": "已归零"
     }
   ]
 }

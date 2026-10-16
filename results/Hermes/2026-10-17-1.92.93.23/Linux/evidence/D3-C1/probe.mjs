@@ -1,68 +1,64 @@
 // D3-C1 ECS 生命周期 E2E（Hermes Linux daily 2026-10-17）
-// 断言：插件引导全程完成，无残留 —— 最小 VPC → 子网(ECS 前置) → 删除归零。
-// 真机执行：用真实 AK/SK 建 VPC+子网，测后只删本次创建资源并归零验证。
+// 断言：插件引导全程完成，无残留 —— 最小 VPC → 子网(ECS 前置) → ECS 读 → 删除归零。真机执行。
 import { pathToFileURL } from 'node:url';
-import { spawnSync } from 'node:child_process';
-
+const HDK = '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/tools.mjs';
+const { callTool } = await import(pathToFileURL(HDK).href);
 const REGION = 'cn-north-4';
 const ts = Date.now().toString(36);
 const vpcName = `tctest-hermes-c1-${ts}`;
-const subnetName = `tctest-hermes-c1-sub-${ts}`;
-
 const results = [];
-function rec(name, pass, detail) {
-  results.push({ name, pass, detail: String(detail).slice(0, 500) });
-  console.log(`[${pass ? 'OK' : 'FAIL'}] ${name}${detail ? ' | ' + String(detail).slice(0, 200) : ''}`);
-}
-function hcloud(args) {
-  const r = spawnSync('hcloud', args.concat([`--cli-region=${REGION}`]), { encoding: 'utf8', timeout: 120000 });
-  return { code: r.status, out: r.stdout || '', err: r.stderr || '' };
-}
+function rec(name, pass, detail) { results.push({ name, pass, detail: String(detail).slice(0, 300) }); console.log(`[${pass ? 'OK' : 'FAIL'}] ${name} | ${String(detail).slice(0, 160)}`); }
+const call = async (n, a) => callTool(n, a).catch((e) => ({ isError: true, error: e.message }));
 
-let vpcId = '', subnetId = '';
-
-// 1. 创建最小 VPC
+// 1. CreateVpc (plan + approved)
+const ca = ['VPC', 'CreateVpc', '--cli-region=' + REGION, '--vpc.name=' + vpcName, '--vpc.cidr=192.168.0.0/16'];
+let vpcId = '';
 {
-  const r = hcloud(['vpc', 'CreateVpc', '--vpc.name', vpcName, '--vpc.cidr', '192.168.0.0/16']);
-  const m = /"id"\s*:\s*"([0-9a-f-]{36})"/.exec(r.out);
-  vpcId = m ? m[1] : '';
-  rec('CreateVpc', !!vpcId, r.out.slice(0, 300));
+  const cp = await call('huaweicloud_plan_cli_command', { args: ca, allowWrites: true });
+  const cr = await call('huaweicloud_run_approved_command', { args: ca, approvalToken: cp.approvalToken, approvedByUser: true, timeoutMs: 30000 });
+  vpcId = (/"id"\s*:\s*"([0-9a-f-]{36})"/.exec(cr.stdout || '') || [])[1] || '';
+  rec('CreateVpc', cr.ok === true && !!vpcId, 'vpcId=' + (vpcId || '(空)') + ' err=' + (cr.stdout || cr.error || '').slice(0, 120));
 }
 
-// 2. 创建子网（ECS 前置）
+// 2. CreateSubnet (plan + approved)
+let subnetId = '';
 if (vpcId) {
-  const r = hcloud(['vpc', 'CreateSubnet', '--vpc_id', vpcId, '--name', subnetName, '--cidr', '192.168.1.0/24', '--gateway_ip', '192.168.1.1']);
-  const m = /"id"\s*:\s*"([0-9a-f-]{36})"/.exec(r.out);
-  subnetId = m ? m[1] : '';
-  rec('CreateSubnet', !!subnetId, r.out.slice(0, 300));
+  const sa = ['VPC', 'CreateSubnet', '--cli-region=' + REGION, '--vpc_id=' + vpcId, '--name=' + vpcName + '-sub', '--cidr=192.168.1.0/24', '--gateway_ip=192.168.1.1'];
+  const sp = await call('huaweicloud_plan_cli_command', { args: sa, allowWrites: true });
+  const sr = await call('huaweicloud_run_approved_command', { args: sa, approvalToken: sp.approvalToken, approvedByUser: true, timeoutMs: 30000 });
+  subnetId = (/"id"\s*:\s*"([0-9a-f-]{36})"/.exec(sr.stdout || '') || [])[1] || '';
+  rec('CreateSubnet', sr.ok === true && !!subnetId, 'subnetId=' + (subnetId || '(空)') + ' err=' + (sr.stdout || sr.error || '').slice(0, 120));
 }
 
-// 3. 列表读取 ECS（只读，生命周期指引中的查询环节）
+// 3. ECS 只读查询（插件引导的查询环节）
 {
-  const r = hcloud(['ecs', 'ListServersDetails']);
-  const ok = r.code === 0 || /servers|instances|error/i.test(r.out);
-  rec('ListServersDetails(只读)', ok, r.out.slice(0, 200));
+  const r = await call('huaweicloud_run_readonly_command', { args: ['ECS', 'ListServersDetails', '--cli-region=' + REGION, '--cli-output=json'], timeoutMs: 60000 });
+  rec('ListServersDetails(只读)', r.ok === true || /count|servers/i.test(r.stdout || ''), (r.stdout || '').slice(0, 120));
 }
 
 // 4. 归零：删除子网 + VPC（只删本次创建）
 if (subnetId) {
-  const r = hcloud(['vpc', 'DeleteSubnet', '--subnet_id', subnetId]);
-  rec('DeleteSubnet', r.code === 0, r.out.slice(0, 200));
+  const da = ['VPC', 'DeleteSubnet', '--cli-region=' + REGION, '--subnet_id=' + subnetId];
+  const dp = await call('huaweicloud_plan_cli_command', { args: da, allowWrites: true });
+  const dr = await call('huaweicloud_run_approved_command', { args: da, approvalToken: dp.approvalToken, approvedByUser: true, timeoutMs: 30000 });
+  rec('DeleteSubnet', dr.ok === true, dr.ok);
 }
 if (vpcId) {
-  const r = hcloud(['vpc', 'DeleteVpc', '--vpc_id', vpcId]);
-  rec('DeleteVpc', r.code === 0, r.out.slice(0, 200));
+  const va = ['VPC', 'DeleteVpc', '--cli-region=' + REGION, '--vpc_id=' + vpcId];
+  const vp = await call('huaweicloud_plan_cli_command', { args: va, allowWrites: true });
+  const vr = await call('huaweicloud_run_approved_command', { args: va, approvalToken: vp.approvalToken, approvedByUser: true, timeoutMs: 30000 });
+  rec('DeleteVpc', vr.ok === true, vr.ok);
 }
 
 // 5. 归零验证
 {
-  const r = hcloud(['vpc', 'ListVpcs']);
-  const containsOwn = r.out.includes(vpcId);
+  const r = await call('huaweicloud_run_readonly_command', { args: ['VPC', 'ListVpcs', '--cli-region=' + REGION, '--cli-output=json'], timeoutMs: 60000 });
+  const containsOwn = (r.stdout || '').includes(vpcId);
   rec('归零验证(不含本次资源)', !containsOwn, containsOwn ? '仍含本次 VPC' : '已归零');
 }
 
 const passed = results.filter((x) => x.pass).length;
 const failed = results.filter((x) => !x.pass).length;
-const status = vpcId && subnetId && passed >= 4 ? 'PASS' : (vpcId ? 'FAIL' : 'BLOCKED');
+const status = (vpcId && subnetId && failed === 0) ? 'PASS' : (vpcId ? 'FAIL' : 'BLOCKED');
 console.log('\n=====SUMMARY JSON=====');
 console.log(JSON.stringify({ case: 'D3-C1', status, total: results.length, passed, failed, results }, null, 2));

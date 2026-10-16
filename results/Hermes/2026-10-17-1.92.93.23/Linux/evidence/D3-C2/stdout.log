@@ -1,29 +1,53 @@
+[OK] OBS建桶 | Start at 2026-10-16 21:22:35.047997215 +0000 UTC
+
+Create bucket [tctest-hermes-obs-mvbh4it9] successfully, request id [000001A1469865B84410C43607A3A05C]
+Notice:
+[-------------------------------------------------------------------------] 100.00% ?/s 34B/34B 56ms[OK] 上传index.html | Start at 2026-10-16 21:22:35.524336707 +0000 UTC
+
+
+Parallel:      5                   Jobs:          5                   
+Threshold:     50.00MB             Par
+[OK] set静态站 | {"ok":true,"status":200}
+[OK] get静态站配置 | {"ok":true,"status":200}
+[------------------------------------------------------------------------] 100.00% tps:0.00 1/1 31ms[FAIL] 删桶归零 | Start at 2026-10-16 21:22:35.921104816 +0000 UTC
+
+Succeed count:      1         Failed count:       0         
+
+Task id: b12cbacb-f97f-4ab4-9e85-60138d9bc34f
+
+
+=====SUMMARY JSON=====
 {
   "case": "D3-C2",
   "status": "FAIL",
-  "total": 4,
-  "passed": 3,
+  "total": 5,
+  "passed": 4,
   "failed": 1,
   "results": [
     {
       "name": "OBS建桶",
-      "pass": false,
-      "detail": "Start at 2026-10-15 21:18:37.746085682 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2099117599] successfully, request id [000001A1416E6AC547C7AC11913E0B5E]\nNotice: If the configur"
+      "pass": true,
+      "detail": "Start at 2026-10-16 21:22:35.047997215 +0000 UTC\n\nCreate bucket [tctest-hermes-obs-mvbh4it9] successfully, request id [000001A1469865B84410C43607A3A05C]\nNotice:"
+    },
+    {
+      "name": "上传index.html",
+      "pass": true,
+      "detail": "Start at 2026-10-16 21:22:35.524336707 +0000 UTC\n\n\nParallel:      5                   Jobs:          5                   \nThreshold:     50.00MB             Par"
     },
     {
       "name": "set静态站",
       "pass": true,
-      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-2099117599.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-2099117599.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
+      "detail": "{\"ok\":true,\"status\":200}"
     },
     {
-      "name": "get静态站",
+      "name": "get静态站配置",
       "pass": true,
-      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+      "detail": "{\"ok\":true,\"status\":200}"
     },
     {
       "name": "删桶归零",
-      "pass": true,
-      "detail": "Start at 2026-10-15 21:18:38.45633274 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-2099117599] successfully!"
+      "pass": false,
+      "detail": "Start at 2026-10-16 21:22:35.921104816 +0000 UTC\n\nSucceed count:      1         Failed count:       0         \n\nTask id: b12cbacb-f97f-4ab4-9e85-60138d9bc34f\n"
     }
   ]
 }

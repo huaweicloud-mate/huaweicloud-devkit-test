@@ -1,34 +1,53 @@
+[FAIL] check_user | {"isError":true,"error":"HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 8b0a3cab717a43c7a99eb4e2414b3f29]"}
+[FAIL] credentials | {"isError":true,"error":"session_id or dev_stage_id is required"}
+[OK] sign_agreement | {"isError":true,"error":"HDKIT_INTERNAL: 服务内部错误 [trace: 7d3485fb406e42d5aef43c939fcc723a]"}
+[FAIL] connect | {"isError":true,"error":"HDKIT_UPSTREAM_ERROR: 沙箱编排上游调用失败: GET /open-api-public/v1/agreements failed [trace: 54b2c7935d49459c9d1647c62d7f339e]"}
+[FAIL] exec_one_shot | {"isError":true,"error":"workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment v
+[FAIL] upload_file | {"isError":true,"error":"local_path and remote_path are required."}
+[OK] close_session | {"isError":true,"error":"workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment v
+
+=====SUMMARY JSON=====
 {
   "case": "D3-C6",
-  "status": "PASS",
-  "total": 5,
-  "passed": 5,
-  "failed": 0,
+  "status": "FAIL",
+  "total": 7,
+  "passed": 2,
+  "failed": 5,
   "results": [
     {
       "name": "check_user",
-      "pass": true,
-      "detail": "{\"realnameVerified\":true,\"agreementSigned\":true}"
-    },
-    {
-      "name": "connect",
-      "pass": true,
-      "detail": "connected ws=e7e9310835"
+      "pass": false,
+      "detail": "{\"isError\":true,\"error\":\"HDKIT_UPSTREAM_ERROR: 查询实名状态失败 [trace: 8b0a3cab717a43c7a99eb4e2414b3f29]\"}"
     },
     {
       "name": "credentials",
+      "pass": false,
+      "detail": "{\"isError\":true,\"error\":\"session_id or dev_stage_id is required\"}"
+    },
+    {
+      "name": "sign_agreement",
       "pass": true,
-      "detail": "passed"
+      "detail": "{\"isError\":true,\"error\":\"HDKIT_INTERNAL: 服务内部错误 [trace: 7d3485fb406e42d5aef43c939fcc723a]\"}"
+    },
+    {
+      "name": "connect",
+      "pass": false,
+      "detail": "{\"isError\":true,\"error\":\"HDKIT_UPSTREAM_ERROR: 沙箱编排上游调用失败: GET /open-api-public/v1/agreements failed [trace: 54b2c7935d49459c9d1647c62d7f339e]\"}"
     },
     {
       "name": "exec_one_shot",
-      "pass": true,
-      "detail": "\u001b]133;C\u0007hdk-sandbox-ok\r\nLinux e7e9310835d44e5abbcb35cd03e86da2 5.10.0-182.0.0.95.r3353_274.hce2.aarc"
+      "pass": false,
+      "detail": "{\"isError\":true,\"error\":\"workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment v"
+    },
+    {
+      "name": "upload_file",
+      "pass": false,
+      "detail": "{\"isError\":true,\"error\":\"local_path and remote_path are required.\"}"
     },
     {
       "name": "close_session",
       "pass": true,
-      "detail": "\"ok\""
+      "detail": "{\"isError\":true,\"error\":\"workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment v"
     }
   ]
 }
