@@ -214,7 +214,11 @@ jobs:
       - name: 运行体验回放（文案语义分类）
         env:
           HUAWEICLOUD_DEVKIT_HOME: ${{ github.workspace }}/hdk
-        run: npm run test:ux-replay 2>&1 | tee ux-replay.log
+        run: |
+          # 注意：`| tee` 会用 tee 的退出码（恒 0）吞掉回放的失败码 → 必须开 pipefail，
+          # 否则本 job 会在「存在体验退化」时假绿（比恒红更危险）。
+          set -o pipefail
+          npm run test:ux-replay 2>&1 | tee ux-replay.log
 
       - name: 上传回放结果
         if: always()
