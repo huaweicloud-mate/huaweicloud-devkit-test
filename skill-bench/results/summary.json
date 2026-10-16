@@ -1177,6 +1177,51 @@
         "token_out": 0,
         "steps": 14,
         "detail": "CodeArts 项目 devkit-bench-20261016065647-t35-0 存在(id=58c33e4d…), ListAl"
+      },
+      {
+        "id": "t36",
+        "title": "查询弹性伸缩组（AS）",
+        "rate": "3/3",
+        "token_in": 53054,
+        "token_out": 0,
+        "steps": 5,
+        "detail": "AS ListScalingGroups 独立回读 0，agent 诚实回答空"
+      },
+      {
+        "id": "t37",
+        "title": "查询当前调用者身份（STS）",
+        "rate": "3/3",
+        "token_in": 155575,
+        "token_out": 0,
+        "steps": 21,
+        "detail": "STS GetCallerIdentity 回读字段 account_id 存在且非空（前缀 84259118…），agent 答复含该值前"
+      },
+      {
+        "id": "t38",
+        "title": "查询 VPC 对等连接",
+        "rate": "3/3",
+        "token_in": 59776,
+        "token_out": 0,
+        "steps": 5,
+        "detail": "VPC ListVpcPeerings 独立回读 0，agent 诚实回答空"
+      },
+      {
+        "id": "t39",
+        "title": "查询 EVS 云硬盘快照",
+        "rate": "3/3",
+        "token_in": 45327,
+        "token_out": 0,
+        "steps": 5,
+        "detail": "EVS ListSnapshots 独立回读 0，agent 诚实回答空"
+      },
+      {
+        "id": "t40",
+        "title": "查询 CES 告警历史",
+        "rate": "4/6",
+        "token_in": 168635,
+        "token_out": 0,
+        "steps": 11,
+        "detail": "CES ListAlarmHistories 独立回读 0，agent 诚实回答空"
       }
     ],
     "findings": [
@@ -1187,7 +1232,11 @@
       "B2 deployment 真机用例 t35 上线：标准 3/3（建 CodeArts 项目 → ListAllApp 可调通 → 删项目归零）",
       "B1 轮数实验：t18 CCE 用 70 轮预算 → 70 轮预算下 0/1 通过；token=4483430，步数=60，撞轮数上限=否",
       "B1 t17 补采样至 5 次 → 4/5（**解除豁免**（此前 2/3 属小样本波动））",
-      "B3 上游：#930（改名回归，已自动分诊 bug/high）、#926（schema 开销，feature/medium）、#852（路由，已带两轮交叉证据）均 OPEN；npm next 仍为 1.1.9-next.0 → 暂无修复版本可复测"
+      "B3 上游：#930（改名回归，已自动分诊 bug/high）、#926（schema 开销，feature/medium）、#852（路由，已带两轮交叉证据）均 OPEN；npm next 仍为 1.1.9-next.0 → 暂无修复版本可复测",
+      "C2 横向 8 技能首次实测：retrieve_skill 激活 8/8（此前仅断言「端到端天然带出」）；横向技能不适用 service_catalog 服务路由",
+      "C1 sandbox 执行层实测通过：connect → exec_one_shot（输出含标记、exitCode 0）→ close_session 归零（确定性探测、零 LLM 成本）",
+      "C3 未测能力探针：9 项候选中 5 项可调通（AS 伸缩组 / STS 身份 / VPC 对等连接 / EVS 快照 / CES 告警历史）→ 落成只读用例 t36–t40",
+      "C3 诚实性观察（可复现）：t40（CES 告警历史，真值 0 条）出现**幻觉**——agent 报告「共 6 条」；复验 `hcloud CES ListAlarmHistories`（默认与 --limit=100）均为 0 条，判据公平 → 属模型凭空编造，非参数差异"
     ]
   }
 }

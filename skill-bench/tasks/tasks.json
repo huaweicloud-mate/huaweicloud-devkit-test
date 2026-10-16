@@ -456,5 +456,112 @@
     "verifier": "verifiers/verify-codearts-project.mjs",
     "cleanup": "verifiers/cleanup-codearts-project.mjs",
     "write": true
+  },
+  {
+    "id": "t36-list-as-groups",
+    "title": "查询弹性伸缩组（AS）",
+    "prompt": "帮我列出当前区域里的弹性伸缩组（Auto Scaling 伸缩组），并告诉我一共有几个。无人值守环境，请自主完成。",
+    "expectedService": "CBR",
+    "expectedSkill": "huawei-cbr",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "write": false,
+    "readonlySpec": {
+      "service": "AS",
+      "op": "ListScalingGroups",
+      "region": "cn-north-4",
+      "countPath": "scaling_groups",
+      "mode": "empty",
+      "answerKeywords": [
+        "伸缩",
+        "AS",
+        "弹性"
+      ]
+    }
+  },
+  {
+    "id": "t37-sts-caller-identity",
+    "title": "查询当前调用者身份（STS）",
+    "prompt": "帮我查一下当前凭证对应的调用者身份（账号/用户），把身份信息告诉我。无人值守环境，请自主完成。",
+    "expectedService": "CBR",
+    "expectedSkill": "huawei-cbr",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "write": false,
+    "readonlySpec": {
+      "service": "STS",
+      "op": "GetCallerIdentity",
+      "region": "cn-north-4",
+      "countPath": "account_id",
+      "mode": "present",
+      "answerKeywords": [
+        "身份",
+        "账号",
+        "用户"
+      ]
+    }
+  },
+  {
+    "id": "t38-list-vpc-peerings",
+    "title": "查询 VPC 对等连接",
+    "prompt": "帮我列出当前区域里的 VPC 对等连接，并告诉我一共有几个。无人值守环境，请自主完成。",
+    "expectedService": "CBR",
+    "expectedSkill": "huawei-cbr",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "write": false,
+    "readonlySpec": {
+      "service": "VPC",
+      "op": "ListVpcPeerings",
+      "region": "cn-north-4",
+      "countPath": "peerings",
+      "mode": "empty",
+      "answerKeywords": [
+        "对等",
+        "peering"
+      ]
+    }
+  },
+  {
+    "id": "t39-list-evs-snapshots",
+    "title": "查询 EVS 云硬盘快照",
+    "prompt": "帮我列出当前区域里的云硬盘快照（EVS Snapshot），并告诉我一共有几个。无人值守环境，请自主完成。",
+    "expectedService": "CBR",
+    "expectedSkill": "huawei-cbr",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "write": false,
+    "readonlySpec": {
+      "service": "EVS",
+      "op": "ListSnapshots",
+      "region": "cn-north-4",
+      "countPath": "snapshots",
+      "mode": "empty",
+      "answerKeywords": [
+        "快照",
+        "snapshot"
+      ]
+    }
+  },
+  {
+    "id": "t40-list-ces-alarm-history",
+    "title": "查询 CES 告警历史",
+    "prompt": "帮我查看当前区域的告警历史记录（CES 告警历史），并告诉我一共有几条。无人值守环境，请自主完成。",
+    "expectedService": "CBR",
+    "expectedSkill": "huawei-cbr",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-readonly.mjs",
+    "write": false,
+    "readonlySpec": {
+      "service": "CES",
+      "op": "ListAlarmHistories",
+      "region": "cn-north-4",
+      "countPath": "alarm_histories",
+      "mode": "empty",
+      "answerKeywords": [
+        "告警",
+        "历史"
+      ]
+    }
   }
 ]

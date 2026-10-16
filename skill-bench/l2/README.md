@@ -55,3 +55,12 @@ node skill-bench/l2/run-l2-eval.mjs
 2. **技能改名导致旧名激活回归（新发现）**：1.1.9-next.0 将 7 个长尾技能改名（`huawei-gaussdb` → `huawei-cloud-gaussdb-instance-management` 等），**旧名全部 MISS、新名 7/7 可达** → 技能本体都在，缺的是**旧名别名回退**；影响所有按旧名调用的下游。已提上游 **[#930](https://github.com/huaweicloud/huaweicloud-devkit/issues/930)**。
 
 > 探测已加固：结果 `meta` 记录 `mcpServer` + `devkitVersion`，文件名带版本后缀（可自证跑在哪版 SUT 上）；`L2_SET` 支持「旧名 + 新名」双探测，用于区分「改名」与「缺失」。
+
+## C 项探针（2026-10-16 新增，均可零成本复跑）
+
+| 脚本 | 作用 | 结果文件 |
+|---|---|---|
+| `l2/run-horizontal-eval.mjs` | 横向 8 技能激活实测（C2） | `l2/results/horizontal-eval-*` |
+| `l2/probe-untested-capabilities.mjs` | 未测能力只读探针：9 项候选操作可调通性（C3） | `l2/results/untested-capabilities-*` |
+| `l2/probe-sandbox-tools.mjs` | sandbox 类 MCP 工具清单 + 最小参数探测（C1） | `l2/results/sandbox-probe-*` |
+| `l2/probe-sandbox-exec.mjs` | sandbox 执行层：connect → exec_one_shot → **close（归零）**（C1） | `l2/results/sandbox-exec-*` |
