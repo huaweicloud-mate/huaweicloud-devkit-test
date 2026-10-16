@@ -445,5 +445,16 @@
     "verifier": "verifiers/verify-security-group.mjs",
     "cleanup": "verifiers/cleanup-security-group.mjs",
     "write": true
+  },
+  {
+    "id": "t35-codearts-project-apps",
+    "title": "建 CodeArts 项目并列出部署应用（deployment 真机）",
+    "prompt": "给我创建一个名为 devkit-bench-{{RUNID}} 的 CodeArts 项目（类型 scrum），然后用部署服务列出该项目下的应用列表，最后把项目 ID 和应用数量告诉我。无人值守环境，请自主完成。",
+    "expectedService": "CodeArtsDeploy",
+    "expectedSkill": "huawei-cloud-deployment-task-management（1.1.9-next 起改名，旧名 huawei-deployment）",
+    "region": "cn-north-4",
+    "verifier": "verifiers/verify-codearts-project.mjs",
+    "cleanup": "verifiers/cleanup-codearts-project.mjs",
+    "write": true
   }
 ]
