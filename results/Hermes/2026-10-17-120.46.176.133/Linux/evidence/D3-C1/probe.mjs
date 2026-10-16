@@ -1,9 +1,11 @@
 #!/usr/bin/env node
-// D3-C1 ECS 生命周期 E2E — 本地修正探针（2026-10-17）
-// 与 scripts/realcloud_e2e.mjs caseD3C1 的差异（修正测试侧缺陷，不改 SUT 路径）：
-//   1) 删除按钮不再以 KooCLI 退出码判成败 —— 一律以真实 List* 状态为准；
-//   2) ECS 异步删除轮询窗口由 150s 放宽到 300s（ECS 删除常 >150s）；
-//   3) subnet/vpc 删除后按真实列表再确认归零。
+// D3-C1 ECS 生命周期 E2E — 本地修正探针 v2（2026-10-17）
+// 修正的测试侧缺陷：
+//   1) 归零判定不再以 KooCLI 退出码为准，也不以「列表文本不含 ID」为准
+//      （列表 API 报错/被限流时文本为空会误判已归零）——改为解析 List* 响应 JSON，
+//      要求响应中确实存在对应集合键（servers/vpcs/subnets）后再判定 ID 是否缺席；
+//      无法判定(=列表调用失败) 则重试，绝不判「已归零」。
+//   2) ECS 异步删除轮询窗口放宽到 ~300s，且仍在时周期性重发删除。
 // 创建仍走 SUT 的 plan_cli_command → run_approved_command 审批链（真实被测路径）。
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
@@ -12,7 +14,6 @@ import { spawnSync } from 'node:child_process';
 
 const REGION = process.env.HDK_REGION || 'cn-north-4';
 const TS = String(Date.now()).slice(-10);
-const VTAG = 'testbot3-hermes-e2e';
 const results = [];
 function log(name, pass, detail) { results.push({ name, pass, detail: String(detail).slice(0, 300) }); }
 
@@ -25,25 +26,31 @@ async function approve(args) {
   const run = await call('huaweicloud_run_approved_command', { args, approvalToken: plan.approvalToken, approvedByUser: true });
   return { plan, run };
 }
-function sh(cmd) {
-  const r = spawnSync('hcloud', cmd, { encoding: 'utf8' });
-  return { status: r.status, text: ((r.stdout || '') + (r.stderr || '')).trim() };
-}
+function sh(cmd) { const r = spawnSync('hcloud', cmd, { encoding: 'utf8' }); return { status: r.status, text: ((r.stdout || '') + (r.stderr || '')).trim() }; }
 function idOf(json) { return /"id"\s*:\s*"([0-9a-fA-F-]{36})"/.exec(json || '')?.[1]; }
 function serverIdOf(json) {
   const u = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
   return new RegExp('"serverIds"\\s*:\\s*\\[\\s*"(' + u + ')"').exec(json || '')?.[1];
 }
-function randomPass() {
-  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789@#$%';
-  let s = ''; for (let i = 0; i < 16; i++) s += c[Math.floor(Math.random() * c.length)];
-  return 'Hdk@A1a' + s;
+function randomPass() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789@#$%'; let s = ''; for (let i = 0; i < 16; i++) s += c[Math.floor(Math.random() * c.length)]; return 'Hdk@A1a' + s; }
+// 解析 List* 响应：返回集合数组；调用失败/结构异常返回 null（=不可判定）
+function listArr(args, key) {
+  const r = sh(args); const i = r.text.indexOf('{');
+  if (i < 0) return null;
+  try { const d = JSON.parse(r.text.slice(i)); return Array.isArray(d[key]) ? d[key] : null; } catch { return null; }
 }
-async function listContains(needle, ...args) {
-  const r = sh(args); return r.text.includes(needle);
+function present(arr, id) { return arr === null ? null : arr.some((x) => JSON.stringify(x).includes(id)); }
+async function waitGone(args, key, id, delFn, secs) {
+  for (let i = 0; i < Math.ceil(secs / 10); i++) {
+    await new Promise((r) => setTimeout(r, 10000));
+    const p = present(listArr(args, key), id);
+    if (p === false) return true;              // 确证缺席
+    if (p === true && i > 0 && i % 6 === 0) delFn();   // 仍在 → 周期性重发删除
+  }
+  return false;
 }
 
-const vpcName = `${VTAG}-${TS}`;
+const vpcName = `testbot3-hermes-e2e-${TS}`;
 let vpcId = null, subnetId = null, serverId = null;
 try {
   const { run: r1 } = await approve(['VPC', 'CreateVpc', `--vpc.name=${vpcName}`, '--vpc.cidr=10.98.0.0/16', `--cli-region=${REGION}`]);
@@ -60,32 +67,32 @@ try {
 } finally {
   const cleanup = [];
   let cleanupOk = true;
+  const ecsList = ['ECS', 'ListServersDetails', `--cli-region=${REGION}`];
+  const subList = ['VPC', 'ListSubnets', `--cli-region=${REGION}`];
+  const vpcList = ['VPC', 'ListVpcs', `--cli-region=${REGION}`];
   if (serverId) {
-    sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', `--cli-region=${REGION}`]);
-    let gone = false;
-    for (let i = 0; i < 30; i++) {           // ~300s，按真实列表判定
-      await new Promise((r) => setTimeout(r, 10000));
-      if (!await listContains(serverId, ['ECS', 'ListServersDetails', `--cli-region=${REGION}`])) { gone = true; break; }
-    }
-    cleanup.push('ECS:' + (gone ? '已归零' : '仍在')); if (!gone) cleanupOk = false;
+    const del = () => sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', `--cli-region=${REGION}`]);
+    del();
+    const gone = await waitGone(ecsList, 'servers', serverId, del, 300);
+    cleanup.push('ECS:' + (gone ? '已归零(列表确证)' : '仍在/不可判定')); if (!gone) cleanupOk = false;
   }
   if (subnetId && vpcId) {
-    sh(['VPC', 'DeleteSubnet', `--subnet_id=${subnetId}`, `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
-    await new Promise((r) => setTimeout(r, 5000));
-    const gone = !await listContains(subnetId, ['VPC', 'ListSubnets', `--cli-region=${REGION}`]);
-    cleanup.push('subnet:' + (gone ? '已归零' : '仍在')); if (!gone) cleanupOk = false;
+    const del = () => sh(['VPC', 'DeleteSubnet', `--subnet_id=${subnetId}`, `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+    del();
+    const gone = await waitGone(subList, 'subnets', subnetId, del, 60);
+    cleanup.push('subnet:' + (gone ? '已归零(列表确证)' : '仍在/不可判定')); if (!gone) cleanupOk = false;
   }
   if (vpcId) {
-    sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
-    await new Promise((r) => setTimeout(r, 5000));
-    const gone = !await listContains(vpcId, ['VPC', 'ListVpcs', `--cli-region=${REGION}`]);
-    cleanup.push('vpc:' + (gone ? '已归零' : '仍在')); if (!gone) cleanupOk = false;
+    const del = () => sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+    del();
+    const gone = await waitGone(vpcList, 'vpcs', vpcId, del, 60);
+    cleanup.push('vpc:' + (gone ? '已归零(列表确证)' : '仍在/不可判定')); if (!gone) cleanupOk = false;
   }
-  log('finally归零(按真实列表校验)', cleanupOk, cleanup.join(' ') || '无资源需清理');
+  log('finally归零(按列表结构确证)', cleanupOk, cleanup.join(' ') || '无资源需清理');
 }
 
 const failed = results.filter((x) => !x.pass).length;
-const out = JSON.stringify({ status: failed === 0 ? 'PASS' : 'FAIL', caseId: 'D3-C1', total: results.length, passed: results.length - failed, failed, title: 'ECS生命周期E2E', expected: '创建VPC/子网/ECS → 审批链 → 测后删除并按真实列表确认归零', results }, null, 2);
+const out = JSON.stringify({ status: failed === 0 ? 'PASS' : 'FAIL', caseId: 'D3-C1', total: results.length, passed: results.length - failed, failed, title: 'ECS生命周期E2E', expected: '创建VPC/子网/ECS → 审批链 → 测后删除并按列表结构确证归零', ts: TS, results }, null, 2);
 const dir = process.env.EVID_DIR || join(process.env.HDK_EVIDENCE || '.', 'D3-C1');
 mkdirSync(dir, { recursive: true });
 writeFileSync(join(dir, 'stdout.log'), out, 'utf8');

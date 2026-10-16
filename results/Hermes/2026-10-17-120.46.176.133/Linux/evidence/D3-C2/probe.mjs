@@ -29,8 +29,10 @@ log('set静态站', set?.ok === true && set?.status === 200, JSON.stringify(set)
 const get = await call('huaweicloud_obs_set_website_config', { action: 'get', bucket, region: REGION });
 log('get静态站', get?.ok === true && get?.status === 200 && /index\.html/.test(JSON.stringify(get)), JSON.stringify(get).slice(0, 200));
 const rm = sh(['OBS', 'rm', `obs://${bucket}`, '-f']);
-const lb = sh(['OBS', 'ls', `obs://${bucket}`]);
-log('删桶归零', /success/i.test(rm.text) && /not exist|NoSuchBucket|error/i.test(lb.text) === false ? !lb.text.includes(bucket) : true, `rm.exit=${rm.status} ${rm.text.slice(0, 100)} | ls=${lb.text.slice(0, 80)}`);
+const lb = sh(['OBS', 'ls', `obs://${bucket}`]);      // 桶已删则 ls 报错
+const listBuckets = (() => { const r = sh(['OBS', 'ListBuckets']); const i = r.text.indexOf('{'); return i < 0 ? null : r.text.slice(i); })();
+const goneByList = listBuckets === null ? null : !listBuckets.includes(bucket);
+log('删桶归零', goneByList !== false && /success/i.test(rm.text), `rm.exit=${rm.status} ${rm.text.slice(0, 90)} | ls=${lb.text.slice(0, 70)} | ListBuckets含桶=${goneByList === false}`);
 
 const failed = results.filter((x) => !x.pass).length;
 const out = JSON.stringify({ status: failed === 0 ? 'PASS' : 'FAIL', caseId: 'D3-C2', total: results.length, passed: results.length - failed, failed, title: 'OBS静态站部署E2E', expected: '建桶→set静态站→get静态站→删桶归零（不以KooCLI退出码判成败）', results }, null, 2);

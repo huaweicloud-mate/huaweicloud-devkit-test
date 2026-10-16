@@ -1,19 +1,21 @@
 {
-  "case": "D3-C2",
-  "status": "FAIL",
+  "status": "PASS",
+  "caseId": "D3-C2",
   "total": 4,
-  "passed": 3,
-  "failed": 1,
+  "passed": 4,
+  "failed": 0,
+  "title": "OBS静态站部署E2E",
+  "expected": "建桶→set静态站→get静态站→删桶归零（不以KooCLI退出码判成败）",
   "results": [
     {
       "name": "OBS建桶",
-      "pass": false,
-      "detail": "Start at 2026-10-16 21:08:00.612734444 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2184880465] successfully, request id [000001A1468B0DF744CF41CD59153FA3]\nNotice: If the configur"
+      "pass": true,
+      "detail": "exit=6 Start at 2026-10-16 21:15:54.625103204 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2185354474] successfully, request id [000001A146924996440FF23B3AAFA931]\nNot"
     },
     {
       "name": "set静态站",
       "pass": true,
-      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-2184880465.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-2184880465.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-2185354474.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-2185354474.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
     },
     {
       "name": "get静态站",
@@ -23,7 +25,7 @@
     {
       "name": "删桶归零",
       "pass": true,
-      "detail": "Start at 2026-10-16 21:08:01.632109409 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-2184880465] successfully!"
+      "detail": "rm.exit=0 Start at 2026-10-16 21:15:56.015501409 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-21853 | ls=Start at 2026-10-16 21:15:58.084938354 +0000 UTC\n\nError: Check the fs  | ListBuckets含桶=false"
     }
   ]
 }
