@@ -1,0 +1,44 @@
+{
+  "case": "D3-C2",
+  "status": "PASS",
+  "total": 7,
+  "passed": 7,
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": true,
+      "detail": "Start at 2026-10-17 21:18:31.738320635 +0000 UTC\n\nCreate bucket [tctest-opencode-obs-cwf5pz] successfully, request id [000001A14BBB0B4D44D0BA7FD96401B"
+    },
+    {
+      "name": "obsutil上传",
+      "pass": true,
+      "detail": "Start at 2026-10-17 21:18:32.56284841 +0000 UTC\n\n\nParallel:      5                   Jobs:          5                   \nThreshold:     50.00MB       "
+    },
+    {
+      "name": "public-read(ACL)",
+      "pass": true,
+      "detail": "桶+对象 chattri -acl=public-read 已执行"
+    },
+    {
+      "name": "set静态站(website)",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://tctest-opencode-obs-cwf5pz.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://tctest-opencode-obs-"
+    },
+    {
+      "name": "get静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+    },
+    {
+      "name": "curl200",
+      "pass": true,
+      "detail": "code=200 url=http://tctest-opencode-obs-cwf5pz.obs-website.cn-north-4.myhuaweicloud.com"
+    },
+    {
+      "name": "删桶归零",
+      "pass": true,
+      "detail": "rm -r -f 清对象 + rm obs://bucket -f 删桶"
+    }
+  ],
+  "executedAt": "20261017211836"
+}
