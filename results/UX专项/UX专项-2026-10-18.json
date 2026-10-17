@@ -1,6 +1,6 @@
 {
   "date": "2026-10-18",
-  "generatedAt": "2026-10-18 06:09:10",
+  "generatedAt": "2026-10-18 06:10:17",
   "timezone": "Asia/Shanghai",
   "scope": "UX（D11）体验专项 —— 可执行门禁夹具四态结果（PASS / NOT_IMPLEMENTED / BLOCKED / NOT_RUN）",
   "caveat": "红线基线口径：NOT_IMPLEMENTED = 需求验收未达标（已知缺口，非 harness 故障），BLOCKED = 宿主/环境不可判定（不计入 PASS/FAIL），NOT_RUN = 契约依赖待冻结（依赖字段未冻结，冻结前不可判 FAIL，不计入 PASS/FAIL/BLOCKED）。本数据是回归防退化门禁的趋势线，不等价于体验验收（认知负荷 / 文案是否够新手用 / 视觉排版仍需人工 rubric）。",
@@ -763,7 +763,8 @@
               "title": "提供三条可选路径的中文说明（指定 target / 全部安装 / 通用 MCP 接入）",
               "ok": false,
               "actual": [
-                "Use --target <agent> to specify."
+                "Use --target <agent> to specify.",
+                "(node:2371) ExperimentalWarning: SQLite is an experimental feature and"
               ],
               "expected": "三条路径且中文",
               "detail": ""
@@ -1088,7 +1089,7 @@
               "id": "D11-32-zh-error",
               "title": "写盘失败时返回中文错误（无法写入凭证目录 / 沙箱无法解析主目录）",
               "ok": false,
-              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-1eDfYv/blocker-file/creds/.config/huaweicloud'",
+              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-ssCwxo/blocker-file/creds/.config/huaweicloud'",
               "expected": "中文可诊断错误",
               "detail": ""
             },
@@ -1096,7 +1097,7 @@
               "id": "D11-32-alt-path",
               "title": "给出替代路径（HUAWEICLOUD_HOME / env 注入）",
               "ok": false,
-              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-1eDfYv/blocker-file/creds/.config/huaweicloud'",
+              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-ssCwxo/blocker-file/creds/.config/huaweicloud'",
               "expected": "含 HUAWEICLOUD_HOME 或 env 注入指引",
               "detail": ""
             },
@@ -1104,7 +1105,7 @@
               "id": "D11-32-no-en",
               "title": "不出现英文整句 \"KooCLI detected but cannot resolve the user home directory...\"（反断言）",
               "ok": true,
-              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-1eDfYv/blocker-file/creds/.config/huaweicloud'",
+              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-ssCwxo/blocker-file/creds/.config/huaweicloud'",
               "expected": "不含该英文整句",
               "detail": ""
             },
@@ -1313,8 +1314,8 @@
               "id": "D11-41-sts-expiry",
               "title": "STS 过期可由 token 解析（不误导为 AK 无效）",
               "ok": true,
-              "actual": 1792271352000,
-              "expected": "早于当前时间(ms)=1792274952656",
+              "actual": 1792271418000,
+              "expected": "早于当前时间(ms)=1792275018909",
               "detail": ""
             },
             {
@@ -1458,7 +1459,7 @@
               "ok": true,
               "actual": {
                 "skipped": true,
-                "ms": 1
+                "ms": 0
               },
               "expected": {
                 "skipped": true,
@@ -1479,7 +1480,7 @@
               "title": "请求挂起时在超时余量内返回（timeoutMs=600）",
               "ok": true,
               "actual": {
-                "ms": 600,
+                "ms": 602,
                 "skipped": true
               },
               "expected": {
