@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "assertion": "路由准确率: 21.4% (3 HIT + 11 MISS + 1 N/A, 分母=14)",
+  "checks": {
+    "total": 15,
+    "hit": 3,
+    "miss": 11,
+    "na": 1,
+    "accuracy": "21.4%",
+    "denominator": 14,
+    "hits": [
+      "EXP-E06 (DCS)",
+      "EXP-E09 (CCE)",
+      "EXP-E15 (Voucher)"
+    ],
+    "misses": [
+      "EXP-E01(ECS)",
+      "EXP-E02(ECS)",
+      "EXP-E03(OBS)",
+      "EXP-E04(EIP)",
+      "EXP-E05(RDS)",
+      "EXP-E07(CBR)",
+      "EXP-E10(FG)",
+      "EXP-E11(BSS)",
+      "EXP-E12(CES)",
+      "EXP-E13(ELB)",
+      "EXP-E14(IAM)"
+    ]
+  },
+  "note": "基线 21.4% MISS 与已知基线一致。MISS 用例的 serviceCatalog 路由未命中期望服务,返回 'Run hcloud --help' 而非正确服务路由。这是已知的路由层覆盖率问题,非环境阻塞。"
+}

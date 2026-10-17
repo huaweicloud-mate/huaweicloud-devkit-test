@@ -1,0 +1,1 @@
+import { redactSecrets } from './plugins/huaweicloud-core/src/safety-policy.mjs';

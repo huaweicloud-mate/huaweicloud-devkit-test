@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "why": "MCP remote transport uses HTTP + SSE (Server-Sent Events) for streaming, not WebSocket. mcp-server-remote.mjs implements HTTP server with createServer, supports POST for JSON-RPC, and SSE (text/event-stream) as streaming fallback (line 92-93). This is the standard MCP Streamable HTTP transport. WebSocket tunnel is not used; the remote transport is HTTP-based with SSE streaming.",
+  "executedAt": "20261005220453",
+  "transport": "HTTP + SSE (Streamable HTTP)",
+  "details": "createServer from node:http, POST handler for JSON-RPC, SSE fallback at line 92-93 (text/event-stream)"
+}

@@ -1,0 +1,1 @@
+import { queryDistTagsSync, invalidateUpdateCache, readInstalledVersion, judgeUpdate } from './plugins/huaweicloud-core/src/update-check.mjs';

@@ -1,0 +1,1 @@
+import { classifyTextCommand } from './plugins/huaweicloud-core/src/safety-policy.mjs';

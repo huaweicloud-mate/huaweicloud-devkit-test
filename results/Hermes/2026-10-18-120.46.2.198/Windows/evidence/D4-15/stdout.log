@@ -1,0 +1,33 @@
+{
+  "caseId": "D4-15",
+  "status": "PASS",
+  "why": "所有变体(大小写/空格/注入)均被deny拦截，无绕过",
+  "executedAt": "20261018054500",
+  "details": [
+    {
+      "cmd": "hcloud ECS DeleteServer --server_id=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ecs deleteserver --server_id=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS DELETEserver --server_id=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud  ECS  DeleteServer  --server_id=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "hcloud ECS DeleteServer --server_id=test&DeleteServer",
+      "decision": "deny",
+      "risk": "write"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "caseId": "D4-3",
+  "status": "PASS",
+  "why": "所有明文secret API命令被deny拦截",
+  "executedAt": "20261018054500",
+  "details": [
+    {
+      "cmd": "hcloud DEW ShowSecretVersion --secret_id=test",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "cmd": "hcloud DEW ShowSecret --secret_id=test",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "cmd": "hcloud DEW GetSecretValue --secret_id=test",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "cmd": "hcloud KMS GetSecretValue --secret_id=test",
+      "decision": "deny",
+      "risk": "secret"
+    },
+    {
+      "cmd": "hcloud csms ShowSecretVersion --version_id=v1",
+      "decision": "deny",
+      "risk": "secret"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+import { classifyHcloudArgs } from './plugins/huaweicloud-core/src/safety-policy.mjs';
