@@ -1,0 +1,66 @@
+{
+  "suite": "D4-1",
+  "description": "凭证文件读取拦截 (cat/type 凭证文件应被阻断)",
+  "total": 7,
+  "pass": 7,
+  "fail": 0,
+  "status": "PASS",
+  "tests": [
+    {
+      "case": "cat ~/.hcloud/config",
+      "command": "cat ~/.hcloud/config",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "cat ~/.huaweicloud/credentials",
+      "command": "cat ~/.huaweicloud/credentials",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "type .hcloud/config.json",
+      "command": "type .hcloud/config.json",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "Get-Content ~/.hcloud/config.json",
+      "command": "Get-Content ~/.hcloud/config.json",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "gc ~/.huaweicloud/config",
+      "command": "gc ~/.huaweicloud/config",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "less ~/.hcloud/credentials",
+      "command": "less ~/.hcloud/credentials",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "more ~/.hcloud/config",
+      "command": "more ~/.hcloud/config",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    }
+  ]
+}
