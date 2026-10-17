@@ -110,6 +110,9 @@ reg('D3-S2', async () => {
     const cr = sh(['VPC', 'CreateVpc', `--vpc.name=${name}`, '--vpc.cidr=10.1.0.0/16', `--cli-region=${REGION}`]);
     const idm = /"id"\s*:\s*"([0-9a-f-]{36})"/.exec(cr.text);
     created = idm && idm[1];
+    if (!created && /VPC\.0114|Quota exceeded|OverQuota/i.test(cr.text)) {
+      return blocked(`VPC 创建被配额拒绝（VPC.0114 router quota exceeded）。路由命中=${routeHit}，但 CreateVpc 真机调用被配额层拒绝，未进入删 VPC 确认流。解除条件：清理泄漏 VPC 或提升配额后复测（补环境·真云配额）`, cr.text.slice(0, 300));
+    }
     if (created) {
       const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['VPC', 'DeleteVpc', `--vpc_id=${created}`, `--cli-region=${REGION}`], allowWrites: true });
       planWrite = plan && (plan.classification?.decision !== 'read_only' || plan.needsApproval !== false);

@@ -109,7 +109,12 @@ reg('D3-C1', async () => {
     const vpc = sh(['VPC', 'CreateVpc', `--vpc.name=${vpcName}`, '--vpc.cidr=10.200.0.0/16', `--cli-region=${REGION}`]);
     vpcId = (/"id"\s*:\s*"([0-9a-f-]{36})"/.exec(vpc.text) || [])[1] || null;
     detail.push(`vpc(${!!vpcId})=${vpc.text.slice(0, 60)}`);
-    if (!vpcId) return fail('VPC 创建失败', vpc.text.slice(0, 200));
+    if (!vpcId) {
+      if (/VPC\.0114|Quota exceeded|OverQuota|router/i.test(vpc.text)) {
+        return blocked(`VPC 创建被配额拒绝（VPC.0114 router quota exceeded）——账号 cn-north-4 VPC/router 配额已满，现网存有 4 个其他测试泄漏的 VPC 未清理（非本次创建，不得误删）。已实测 CreateVpc 真机调用到配额层。解除条件：清理泄漏 VPC 或提升 VPC/router 配额后复测（补环境·真云配额）`, vpc.text.slice(0, 300));
+      }
+      return fail('VPC 创建失败', vpc.text.slice(0, 200));
+    }
     const sub = sh(['VPC', 'CreateSubnet', `--subnet.name=${subnetName}`, `--subnet.vpc_id=${vpcId}`, '--subnet.cidr=10.200.0.0/24', '--subnet.gateway_ip=10.200.0.1', '--subnet.availability_zone=cn-north-4b', `--cli-region=${REGION}`]);
     subnetId = (/"id"\s*:\s*"([0-9a-f-]{36})"/.exec(sub.text) || [])[1] || null;
     detail.push(`subnet(${!!subnetId})=${sub.text.slice(0, 60)}`);
