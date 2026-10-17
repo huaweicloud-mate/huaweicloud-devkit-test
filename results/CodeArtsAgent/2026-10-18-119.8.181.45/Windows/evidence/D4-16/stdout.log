@@ -1,0 +1,127 @@
+{
+  "suite": "D4-16",
+  "description": "命令包裹穿透 (sh -c/bash -c/eval 包裹写命令应被拦截)",
+  "total": 13,
+  "pass": 13,
+  "fail": 0,
+  "status": "PASS",
+  "tests": [
+    {
+      "case": "bash -c 包裹创建",
+      "args": "bash -c hcloud ECS CreateServers --flavor=x",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "sh -c 包裹删除",
+      "args": "sh -c hcloud CCE DeleteCluster --cluster_id=x",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "bash -c sudo 组合",
+      "args": "bash -c sudo hcloud OBS rm obs://bucket/obj",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "sudo hcloud",
+      "args": "sudo hcloud ECS CreateServers",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "/bin/bash -c",
+      "args": "/bin/bash -c hcloud ECS DeleteServers --servers=[]",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "zsh -c 包裹",
+      "args": "zsh -c hcloud ECS CreateServers",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "嵌套 bash -c",
+      "args": "bash -c bash -c \"hcloud ECS DeleteServers\"",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "多层 sudo",
+      "args": "sudo sudo hcloud ECS CreateServers",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "分号分隔写命令",
+      "args": "bash -c echo x; hcloud ECS CreateServers",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "&& 分隔写命令",
+      "args": "bash -c echo done && hcloud CCE DeleteCluster",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "|| 分隔写命令",
+      "args": "bash -c echo done || hcloud ECS CreateServers",
+      "expected": "deny",
+      "actual": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "bash -c 读命令",
+      "args": "bash -c hcloud ECS ListServers",
+      "expected": "allow",
+      "actual": "allow",
+      "risk": "read_only",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "sh -c 读命令",
+      "args": "sh -c hcloud VPC ListVpcs",
+      "expected": "allow",
+      "actual": "allow",
+      "risk": "read_only",
+      "passed": true,
+      "status": "PASS"
+    }
+  ]
+}

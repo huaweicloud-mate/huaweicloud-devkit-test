@@ -1,0 +1,130 @@
+{
+  "suite": "D4-15",
+  "description": "hook绕过尝试 (大小写/编码/拼接变体无绕过成功)",
+  "total": 15,
+  "pass": 10,
+  "fail": 5,
+  "status": "FAIL",
+  "tests": [
+    {
+      "case": "大写 CAT",
+      "command": "CAT ~/.hcloud/config",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "混合大小写 Cat",
+      "command": "Cat ~/.hcloud/config",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "大写 PRINTENV",
+      "command": "PRINTENV HW_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "混合大小写 PrintEnv",
+      "command": "PrintEnv HW_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "base64 编码管道",
+      "command": "echo ZWNobyBoaQ== | base64 -d | bash",
+      "decision": "deny",
+      "risk": "execution",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "xxd 反转",
+      "command": "echo 68656c6c6f | xxd -r -p | sh",
+      "decision": "deny",
+      "risk": "execution",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "certutil 解码",
+      "command": "certutil -decode encoded.txt decoded.bat & decoded.bat",
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "blocked": false,
+      "status": "FAIL"
+    },
+    {
+      "case": "变量拼接 hcloud",
+      "command": "cmd=\"hcloud ECS CreateServers\"; eval $cmd",
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "blocked": false,
+      "status": "FAIL"
+    },
+    {
+      "case": "字符串拼接",
+      "command": "echo \"hcloud EC\"\"S CreateServers\" | sh",
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "blocked": false,
+      "status": "FAIL"
+    },
+    {
+      "case": "命令替换",
+      "command": "hcloud $(echo EC)S CreateServers",
+      "decision": "allow",
+      "risk": "unknown_read",
+      "blocked": false,
+      "status": "FAIL"
+    },
+    {
+      "case": "反斜杠绕过",
+      "command": "hcloud\nECS\nCreateServers",
+      "decision": "deny",
+      "risk": "write",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "分号分隔",
+      "command": "echo x; hcloud ECS CreateServers",
+      "decision": "deny",
+      "risk": "write",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "&& 分隔",
+      "command": "echo done && hcloud ECS CreateServers",
+      "decision": "deny",
+      "risk": "write",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "|| 分隔",
+      "command": "echo done || hcloud ECS CreateServers",
+      "decision": "deny",
+      "risk": "write",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "管道符",
+      "command": "echo \"hcloud ECS CreateServers\" | sh",
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "blocked": false,
+      "status": "FAIL"
+    }
+  ]
+}

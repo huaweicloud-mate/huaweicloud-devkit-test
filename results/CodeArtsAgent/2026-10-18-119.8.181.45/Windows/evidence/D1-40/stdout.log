@@ -1,0 +1,81 @@
+{
+  "caseId": "D1-40",
+  "status": "PASS",
+  "why": "10项测试全部通过",
+  "executedAt": "20261017212207",
+  "results": [
+    {
+      "id": "远端<本地不倒退",
+      "status": "PASS",
+      "detail": "远端更低时不 give update_available（不提示倒退）"
+    },
+    {
+      "id": "相等不提示",
+      "status": "PASS",
+      "detail": "远端==本地不提示更新"
+    },
+    {
+      "id": "不受 lag 的 next 蛊惑",
+      "status": "PASS",
+      "detail": "正式版目标=latest（1.1.0），不因 next 领先而越级"
+    },
+    {
+      "id": "无 distTags 不误判",
+      "status": "PASS",
+      "detail": "查询失败返回 check_failed，不误报 update_available"
+    },
+    {
+      "id": "空 distTags 安全",
+      "status": "PASS",
+      "detail": "空 distTags 返回 check_failed"
+    },
+    {
+      "id": "正常升级仍提示",
+      "status": "PASS",
+      "detail": "远端更高时正常 update_available（对照不误伤）"
+    },
+    {
+      "id": "prerelease 滞后不误报",
+      "status": "PASS",
+      "detail": "prerelease 远端滞后不提示升级"
+    },
+    {
+      "id": "parse-有效JSON",
+      "status": "PASS",
+      "detail": "解析有效 JSON"
+    },
+    {
+      "id": "parse-无效JSON",
+      "status": "PASS",
+      "detail": "无效 JSON 返回 null"
+    },
+    {
+      "id": "parse-空对象",
+      "status": "PASS",
+      "detail": "空对象返回 null 字段"
+    },
+    {
+      "id": "镜像等于本地",
+      "status": "PASS",
+      "detail": "镜像 latest = 本地版本时不提示"
+    },
+    {
+      "id": "determineTarget-返回更高版本",
+      "status": "PASS",
+      "detail": "返回比 current 更高的版本"
+    },
+    {
+      "id": "determineTarget-返回distTags最大",
+      "status": "PASS",
+      "detail": "determineTarget 返回 distTags 中最大版本"
+    },
+    {
+      "id": "judgeUpdate-远端更低安全",
+      "status": "PASS",
+      "detail": "远端更低时 judgeUpdate 返回 up_to_date"
+    }
+  ],
+  "platform": "win32",
+  "nodeVersion": "v22.22.2",
+  "srcPath": "C:/Users/Administrator/devkit-test/hdk/plugins/huaweicloud-core/src"
+}

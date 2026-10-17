@@ -1,0 +1,80 @@
+{
+  "suite": "D4-28",
+  "description": "Node 版安全 hook 链路 (hook.json 注册 .mjs, 高危命令决策 deny)",
+  "total": 9,
+  "pass": 9,
+  "fail": 0,
+  "status": "PASS",
+  "tests": [
+    {
+      "case": "hook 文件存在",
+      "path": "C:/Users/Administrator/devkit-test/hdk/plugins/huaweicloud-core/hooks/huaweicloud-safety.mjs",
+      "exists": true,
+      "status": "PASS"
+    },
+    {
+      "case": "凭证文件读取",
+      "expected": "deny",
+      "actual": "deny",
+      "reason": "Huawei Cloud safety hook blocked this action: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "凭证 env 打印",
+      "expected": "deny",
+      "actual": "deny",
+      "reason": "Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked.",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "高危端口暴露",
+      "expected": "deny",
+      "actual": "deny",
+      "reason": "Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "编码 shell 执行",
+      "expected": "deny",
+      "actual": "deny",
+      "reason": "Huawei Cloud safety hook blocked this action: The command decodes an encoded payload and pipes it into an interpreter.",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "写操作命令",
+      "expected": "deny",
+      "actual": "deny",
+      "reason": "Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "删除操作命令",
+      "expected": "deny",
+      "actual": "deny",
+      "reason": "Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "安全读命令",
+      "expected": "allow",
+      "actual": "allow",
+      "reason": "",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "安全 ls 命令",
+      "expected": "allow",
+      "actual": "allow",
+      "reason": "",
+      "passed": true,
+      "status": "PASS"
+    }
+  ]
+}

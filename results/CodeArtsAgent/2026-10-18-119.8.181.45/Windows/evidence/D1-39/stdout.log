@@ -1,0 +1,71 @@
+{
+  "caseId": "D1-39",
+  "status": "PASS",
+  "why": "Windows升级检测链可用，queryDistTagsSync和queryDistTags均无静默失败（12项测试全部通过）",
+  "executedAt": "20261017212130",
+  "results": [
+    {
+      "id": "semverParse-基础",
+      "status": "PASS",
+      "detail": "semverParse 解析正确"
+    },
+    {
+      "id": "semverCompare-基础",
+      "status": "PASS",
+      "detail": "1.2.3 < 1.2.4"
+    },
+    {
+      "id": "queryDistTagsSync-无静默失败",
+      "status": "PASS",
+      "detail": "spawnSync 未抛出 EINVAL 异常，检测链可用"
+    },
+    {
+      "id": "queryDistTagsSync-失败处理正确",
+      "status": "PASS",
+      "detail": "网络不可达时返回 null（非静默失败）"
+    },
+    {
+      "id": "queryDistTags-无静默失败",
+      "status": "PASS",
+      "detail": "异步 spawn 未抛出异常，检测链可用"
+    },
+    {
+      "id": "queryDistTags-失败处理正确",
+      "status": "PASS",
+      "detail": "网络不可达时返回 null（非静默失败）"
+    },
+    {
+      "id": "judgeUpdate-正常升级",
+      "status": "PASS",
+      "detail": "远端更高时正常提示更新"
+    },
+    {
+      "id": "judgeUpdate-已是最新",
+      "status": "PASS",
+      "detail": "版本相等时不提示"
+    },
+    {
+      "id": "judgeUpdate-远端更低不倒退",
+      "status": "PASS",
+      "detail": "远端更低时不提示倒退"
+    },
+    {
+      "id": "judgeUpdate-查询失败安全",
+      "status": "PASS",
+      "detail": "查询失败返回 check_failed 不误报"
+    },
+    {
+      "id": "determineTarget-正式版选latest",
+      "status": "PASS",
+      "detail": "正式版选择 latest 标签"
+    },
+    {
+      "id": "determineTarget-prerelease选next",
+      "status": "PASS",
+      "detail": "prerelease 版本选择 next 标签"
+    }
+  ],
+  "platform": "win32",
+  "nodeVersion": "v22.22.2",
+  "srcPath": "C:/Users/Administrator/devkit-test/hdk/plugins/huaweicloud-core/src"
+}

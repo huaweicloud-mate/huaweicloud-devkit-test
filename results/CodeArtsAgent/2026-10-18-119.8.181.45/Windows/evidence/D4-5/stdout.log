@@ -1,0 +1,82 @@
+{
+  "suite": "D4-5",
+  "description": "写操作误判检测 (DeleteServer等写命令不应被误判为只读)",
+  "total": 8,
+  "pass": 8,
+  "fail": 0,
+  "status": "PASS",
+  "tests": [
+    {
+      "case": "ECS DeleteServers",
+      "type": "args",
+      "command": "ECS DeleteServers --server.id=123",
+      "decision": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "ECS NovaDeleteServers",
+      "type": "args",
+      "command": "ECS NovaDeleteServers --server.id=123",
+      "decision": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "EIP DeletePublicip",
+      "type": "args",
+      "command": "EIP DeletePublicip --publicip.id=123",
+      "decision": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "VPC DeleteVpc",
+      "type": "args",
+      "command": "VPC DeleteVpc --vpc.id=123",
+      "decision": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "CCE DeleteCluster",
+      "type": "args",
+      "command": "CCE DeleteCluster --cluster.id=123",
+      "decision": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "OBS delete",
+      "type": "args",
+      "command": "obs delete obs://bucket/obj",
+      "decision": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "ECS DeleteServers text",
+      "type": "text",
+      "command": "hcloud ECS DeleteServers --server.id=123",
+      "decision": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "case": "EIP DeletePublicip text",
+      "type": "text",
+      "command": "hcloud EIP DeletePublicip --publicip.id=123",
+      "decision": "deny",
+      "risk": "write",
+      "passed": true,
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "suite": "D4-2",
+  "description": "凭证env打印拦截 (printenv/echo 凭证应被阻断)",
+  "total": 9,
+  "pass": 9,
+  "fail": 0,
+  "status": "PASS",
+  "tests": [
+    {
+      "case": "env | grep HUAWEICLOUD",
+      "command": "env | grep HUAWEICLOUD",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "printenv | grep HWC_",
+      "command": "printenv | grep HWC_",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "Get-ChildItem Env: | where HCLOUD",
+      "command": "Get-ChildItem Env: | where HCLOUD",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "printenv HW_ACCESS_KEY",
+      "command": "printenv HW_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "echo $HW_SECRET_KEY",
+      "command": "echo $HW_SECRET_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "echo ${HW_SECURITY_TOKEN}",
+      "command": "echo ${HW_SECURITY_TOKEN}",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "printenv HUAWEICLOUD_ACCESS_KEY",
+      "command": "printenv HUAWEICLOUD_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "gci Env: | findstr HWC_",
+      "command": "gci Env: | findstr HWC_",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    },
+    {
+      "case": "dir Env: | findstr OS_",
+      "command": "dir Env: | findstr OS_",
+      "decision": "deny",
+      "risk": "credential",
+      "blocked": true,
+      "status": "PASS"
+    }
+  ]
+}

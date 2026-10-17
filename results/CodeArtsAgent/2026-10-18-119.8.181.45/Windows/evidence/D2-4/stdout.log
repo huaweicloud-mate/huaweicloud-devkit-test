@@ -1,0 +1,64 @@
+{
+  "suite": "D2-4",
+  "description": "凭证脱敏正确性 (show_profile_redacted 输出无明文 AK/SK)",
+  "total": 8,
+  "pass": 6,
+  "fail": 2,
+  "status": "FAIL",
+  "tests": [
+    {
+      "case": "access_key 脱敏",
+      "passed": true,
+      "checks": [],
+      "status": "PASS"
+    },
+    {
+      "case": "secret_key 脱敏",
+      "passed": true,
+      "checks": [],
+      "status": "PASS"
+    },
+    {
+      "case": "AK/SK 简写脱敏",
+      "passed": true,
+      "checks": [],
+      "status": "PASS"
+    },
+    {
+      "case": "嵌套对象脱敏",
+      "passed": false,
+      "checks": [
+        "field accessKeyId not redacted",
+        "field secretAccessKey not redacted",
+        "field token not redacted"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "case": "数组内脱敏",
+      "passed": true,
+      "checks": [],
+      "status": "PASS"
+    },
+    {
+      "case": "字符串 AK= 模式脱敏",
+      "passed": true,
+      "checks": [],
+      "status": "PASS"
+    },
+    {
+      "case": "user_data 完整脱敏",
+      "passed": true,
+      "checks": [],
+      "status": "PASS"
+    },
+    {
+      "case": "private_key 完整脱敏",
+      "passed": false,
+      "checks": [
+        "field private_key not redacted"
+      ],
+      "status": "FAIL"
+    }
+  ]
+}
