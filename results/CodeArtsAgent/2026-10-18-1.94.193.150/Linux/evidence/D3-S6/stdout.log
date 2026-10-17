@@ -2,7 +2,7 @@
 =====CASE D3-S6=====
 serviceCatalog 路由 -> services=["FunctionGraph"]
 CreateFunction -> status=0 urn=urn:fss:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:function
-CreateFunctionTrigger -> status=0 trigger_id=85a81015-a803-477e-b
+CreateFunctionTrigger -> status=0 trigger_id=c98a256f-16cb-4658-b
 DeleteFunction -> status=0
 归零验证 = true
 [OK] serviceCatalog 路由 FunctionGraph
@@ -13,22 +13,18 @@ DeleteFunction -> status=0
 
 =====CASE D3-S7=====
 serviceCatalog 复合意图路由 -> services=["RDS"] RDS命中=true 部署目标命中=false
-CreateVpc -> status=0 id=e2efef86-cf4b-
-CreateSubnet -> status=0 id=6bc8ef04-3e96-
-CreateSecurityGroup -> status=0 id=
-DeleteSubnet -> status=0
-DeleteVpc -> status=0
-归零验证 = false
+CreateVpc -> status=0 id=
+归零验证 = true
 [OK] serviceCatalog 复合意图命中 RDS
 [FAIL] VPC/子网/安全组前置编排完成
 [FAIL] 最小 RDS 实例创建成功(返回 job_id)
-[FAIL] 测后删除归零(RDS+SG+子网+VPC)
+[OK] 测后删除归零(RDS+SG+子网+VPC)
 =====END D3-S7=====
 
 =====SUMMARY=====
 {
   "total": 8,
-  "passed": 5,
+  "passed": 6,
   "results": [
     {
       "name": "serviceCatalog 路由 FunctionGraph",
@@ -43,7 +39,7 @@ DeleteVpc -> status=0
     {
       "name": "定时触发器绑定成功",
       "ok": true,
-      "detail": "trigger_id=85a81015-a803-477e-be97-e3646502a455"
+      "detail": "trigger_id=c98a256f-16cb-4658-ba5e-2ad354903177"
     },
     {
       "name": "测后删除函数归零",
@@ -58,7 +54,7 @@ DeleteVpc -> status=0
     {
       "name": "VPC/子网/安全组前置编排完成",
       "ok": false,
-      "detail": "vpc=e2efef86 subnet=6bc8ef04 sg="
+      "detail": "vpc= subnet= sg="
     },
     {
       "name": "最小 RDS 实例创建成功(返回 job_id)",
@@ -67,8 +63,8 @@ DeleteVpc -> status=0
     },
     {
       "name": "测后删除归零(RDS+SG+子网+VPC)",
-      "ok": false,
-      "detail": "{\"rdsCleanup\":true,\"sgCleanup\":true,\"subnetCleanup\":true,\"vpcCleanup\":true,\"zeroed\":false}"
+      "ok": true,
+      "detail": "{\"rdsCleanup\":true,\"sgCleanup\":true,\"subnetCleanup\":true,\"vpcCleanup\":true,\"zeroed\":true}"
     }
   ]
 }

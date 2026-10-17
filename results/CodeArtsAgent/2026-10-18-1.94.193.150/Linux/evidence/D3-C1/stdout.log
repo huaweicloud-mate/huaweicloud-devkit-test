@@ -1,74 +1,71 @@
-[OK] 创建 VPC tctest-c1-vpc-mvbh0zyp
-[OK] 创建子网 tctest-c1-subnet-mvbh0zyp
-[OK] 创建安全组 tctest-c1-sg-mvbh0zyp
-[OK] 创建 ECS tctest-c1-ecs-mvbh0zyp
-[OK] ECS 达成 ACTIVE
+[FAIL] 创建 VPC tctest-c1-vpc-mvcwrvuo
+[FAIL] 创建子网 tctest-c1-subnet-mvcwrvuo
+[OK] 创建安全组 tctest-c1-sg-mvcwrvuo
+[FAIL] 创建 ECS tctest-c1-ecs-mvcwrvuo
+  raw: {
+  "error": {
+    "message": "vpcid should not be null or empty.",
+    "code": "Ecs.0005"
+  }
+}
+Failed to get terminal width. The default width will be used. If characters are unreadable, adjust the command window width.
+Diagnose the request as follows:
++---+------------+----------+----------------
 [OK] 删除 ECS
-[OK] ECS 删除达成 DELETED/消失
 [OK] 删除安全组
 [OK] 删除子网
 [OK] 删除 VPC
-[OK] 归零验证(VPC/ECS 均不含本次资源)
+[FAIL] 归零验证(VPC/ECS 均不含本次资源)
 
 =====SUMMARY=====
 {
   "caseId": "D3-C1",
-  "total": 11,
-  "passed": 11,
+  "total": 9,
+  "passed": 5,
   "results": [
     {
-      "n": "创建 VPC tctest-c1-vpc-mvbh0zyp",
-      "ok": true,
-      "detail": "78a2a68a-c135-4f41-9435-ee2b3386739e"
+      "n": "创建 VPC tctest-c1-vpc-mvcwrvuo",
+      "ok": false,
+      "detail": ""
     },
     {
-      "n": "创建子网 tctest-c1-subnet-mvbh0zyp",
-      "ok": true,
-      "detail": "14896f93-8151-4278-ad5d-4eba1e5e2572"
+      "n": "创建子网 tctest-c1-subnet-mvcwrvuo",
+      "ok": false,
+      "detail": ""
     },
     {
-      "n": "创建安全组 tctest-c1-sg-mvbh0zyp",
+      "n": "创建安全组 tctest-c1-sg-mvcwrvuo",
       "ok": true,
-      "detail": "98f257df-38c0-4636-ac82-2af40a9829c0"
+      "detail": "6c94c4cf-3fab-4ae6-83a0-4ff8ad737617"
     },
     {
-      "n": "创建 ECS tctest-c1-ecs-mvbh0zyp",
-      "ok": true,
-      "detail": "298df1ab-6783-4f4f-b3b7-4b99bfcd0032"
-    },
-    {
-      "n": "ECS 达成 ACTIVE",
-      "ok": true,
-      "detail": "298df1ab-6783-4f4f-b3b7-4b99bfcd0032"
+      "n": "创建 ECS tctest-c1-ecs-mvcwrvuo",
+      "ok": false,
+      "detail": ""
     },
     {
       "n": "删除 ECS",
       "ok": true,
-      "detail": "298df1ab-6783-4f4f-b3b7-4b99bfcd0032"
-    },
-    {
-      "n": "ECS 删除达成 DELETED/消失",
-      "ok": true,
-      "detail": "298df1ab-6783-4f4f-b3b7-4b99bfcd0032"
+      "detail": "未创建"
     },
     {
       "n": "删除安全组",
       "ok": true,
-      "detail": "98f257df-38c0-4636-ac82-2af40a9829c0"
+      "detail": "6c94c4cf-3fab-4ae6-83a0-4ff8ad737617"
     },
     {
       "n": "删除子网",
       "ok": true,
-      "detail": "14896f93-8151-4278-ad5d-4eba1e5e2572"
+      "detail": "未创建"
     },
     {
       "n": "删除 VPC",
       "ok": true,
-      "detail": "78a2a68a-c135-4f41-9435-ee2b3386739e"
+      "detail": "未创建"
     },
     {
       "n": "归零验证(VPC/ECS 均不含本次资源)",
-      "ok": true,
+      "ok": false,
       "detail": "[object Object]"
     }
   ]
