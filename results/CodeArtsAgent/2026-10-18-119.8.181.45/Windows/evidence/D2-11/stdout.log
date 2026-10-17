@@ -1,0 +1,36 @@
+{
+  "caseId": "D2-11",
+  "status": "PASS",
+  "why": "R3 STS token 拒绝落盘测试通过（5项测试全部通过）",
+  "executedAt": "20261017212817",
+  "results": [
+    {
+      "id": "persist-返回rejected",
+      "status": "PASS",
+      "detail": "STS token 持久化应返回 {status:error, scope:rejected}"
+    },
+    {
+      "id": "persist-包含R3提示",
+      "status": "PASS",
+      "detail": "错误消息应包含 R3 或 STS 提示"
+    },
+    {
+      "id": "token-未落盘",
+      "status": "PASS",
+      "detail": "STS token 不应写入磁盘凭证文件"
+    },
+    {
+      "id": "normal-persist-成功",
+      "status": "PASS",
+      "detail": "不含 STS token 的普通凭证可以 persist"
+    },
+    {
+      "id": "temporary-设置成功",
+      "status": "PASS",
+      "detail": "temporary 模式设置成功"
+    }
+  ],
+  "platform": "win32",
+  "nodeVersion": "v22.22.2",
+  "srcPath": "C:/Users/Administrator/devkit-test/hdk/plugins/huaweicloud-core/src"
+}

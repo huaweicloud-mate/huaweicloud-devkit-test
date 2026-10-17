@@ -1,0 +1,131 @@
+{
+  "caseId": "D9-13",
+  "status": "PASS",
+  "why": "tools/call 凭证不泄露与权限校验测试通过（24项测试全部通过）",
+  "executedAt": "20261017212834",
+  "results": [
+    {
+      "id": "setruntime-设置成功",
+      "status": "PASS",
+      "detail": "运行时凭证设置后 hasRuntimeCredentials 返回 true"
+    },
+    {
+      "id": "resolve-解析正确",
+      "status": "PASS",
+      "detail": "运行时凭证解析正确"
+    },
+    {
+      "id": "redact-ak脱敏",
+      "status": "PASS",
+      "detail": "AK 字段被脱敏"
+    },
+    {
+      "id": "redact-sk脱敏",
+      "status": "PASS",
+      "detail": "SK 字段被脱敏"
+    },
+    {
+      "id": "redact-token脱敏",
+      "status": "PASS",
+      "detail": "securityToken 字段被脱敏"
+    },
+    {
+      "id": "classify-只读命令",
+      "status": "PASS",
+      "detail": "ListInstances 被分类为只读命令"
+    },
+    {
+      "id": "classify-写入命令",
+      "status": "PASS",
+      "detail": "CreateServers 被分类为写入命令并拒绝"
+    },
+    {
+      "id": "risk-风险评估",
+      "status": "PASS",
+      "detail": "风险评估返回有效结果"
+    },
+    {
+      "id": "artifacts-评估正常",
+      "status": "PASS",
+      "detail": "artifacts 评估正常返回"
+    },
+    {
+      "id": "deployplan-评估正常",
+      "status": "PASS",
+      "detail": "deploy_plan 评估正常返回"
+    },
+    {
+      "id": "merge-合并为deny",
+      "status": "PASS",
+      "detail": "风险决策合并为 deny"
+    },
+    {
+      "id": "hash-相同参数相同哈希",
+      "status": "PASS",
+      "detail": "相同参数生成相同哈希"
+    },
+    {
+      "id": "hash-不同参数不同哈希",
+      "status": "PASS",
+      "detail": "不同参数生成不同哈希"
+    },
+    {
+      "id": "token-创建成功",
+      "status": "PASS",
+      "detail": "审批令牌创建成功"
+    },
+    {
+      "id": "token-消费成功",
+      "status": "PASS",
+      "detail": "审批令牌消费成功"
+    },
+    {
+      "id": "token-不可重放",
+      "status": "PASS",
+      "detail": "已消费的令牌不可再次消费"
+    },
+    {
+      "id": "placeholder-尖括号",
+      "status": "PASS",
+      "detail": "<HW_ACCESS_KEY> 被识别为占位符"
+    },
+    {
+      "id": "placeholder-模板变量",
+      "status": "PASS",
+      "detail": "${SECRET_KEY} 被识别为占位符"
+    },
+    {
+      "id": "placeholder-大写关键字",
+      "status": "PASS",
+      "detail": "YOUR_AK 被识别为占位符"
+    },
+    {
+      "id": "placeholder-真实AK",
+      "status": "PASS",
+      "detail": "真实 AK 不被识别为占位符"
+    },
+    {
+      "id": "clear-清理后无凭证",
+      "status": "PASS",
+      "detail": "清理后 hasRuntimeCredentials 返回 false"
+    },
+    {
+      "id": "calltool-不含AK明文",
+      "status": "PASS",
+      "detail": "工具调用返回不含 AK 明文"
+    },
+    {
+      "id": "assert-allow通过",
+      "status": "PASS",
+      "detail": "allow 决策通过断言"
+    },
+    {
+      "id": "assert-deny抛出",
+      "status": "PASS",
+      "detail": "deny 决策抛出异常"
+    }
+  ],
+  "platform": "win32",
+  "nodeVersion": "v22.22.2",
+  "srcPath": "C:/Users/Administrator/devkit-test/hdk/plugins/huaweicloud-core/src"
+}
