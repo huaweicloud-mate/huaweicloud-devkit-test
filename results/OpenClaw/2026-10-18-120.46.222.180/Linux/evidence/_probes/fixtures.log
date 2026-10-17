@@ -25,7 +25,7 @@ RESULT: PASS
 
 PASS  D9-9-capability-probe  能力探测：capabilities.notifications.cancellation 是否存在 => {"declared":false,"cancellation":false} (期望 "按实测标注")
     capabilities={"tools":{}} — 未声明→SPEC-MISMATCH 不假定支持
-PASS  D9-9-client-timeout  tools/call 30s 挂起由客户端超时（未挂死） => "客户端在 10000ms 超时返回 huaweicloud_service_catalog" (期望 "客户端超时（30s 挂起 > 客户端超时窗口）")
+PASS  D9-9-client-timeout  tools/call 30s 挂起由客户端超时（未挂死） => "客户端在 10001ms 超时返回 huaweicloud_service_catalog" (期望 "客户端超时（30s 挂起 > 客户端超时窗口）")
 PASS  D9-9-timeout-error-shape  超时错误契约 {code:-32000, message:含 "timeout"} => {"code":-32000,"message":"timeout"} (期望 {"code":-32000,"message":"timeout"})
     客户端侧超时语义：向上层抛 {code:-32000, message:含 "timeout"}（JSON-RPC 超时错误精确值）；取消能力按 capabilities 实测
 PASS  D9-9-cancellation-not-declared  取消能力未声明→SPEC-MISMATCH 标注 => "SPEC-MISMATCH" (期望 "SPEC-MISMATCH")
@@ -55,7 +55,7 @@ RESULT: PASS
 >>> d9-10-remote-transport.mjs exit=0  ===
 
 PASS  D9-11-attach  attach 注册到 mux => {"registered":true,"id":2} (期望 true)
-PASS  D9-11-onopen-localserver  onopen 后 localServer 监听 => {"localServer":true,"localPort":39101} (期望 {"localServer":true,"localPort":">0"})
+PASS  D9-11-onopen-localserver  onopen 后 localServer 监听 => {"localServer":true,"localPort":35001} (期望 {"localServer":true,"localPort":">0"})
 PASS  D9-11-ready-resolve  ready Promise 在 open 时 resolve => {"readyResolved":true,"onReadyCalls":1} (期望 {"readyResolved":true,"onReadyCalls":1})
 PASS  D9-11-subconn-open  子连接注册到 subConnections => {"subConnections":1} (期望 {"subConnections":">=1"})
 PASS  D9-11-close-cleanup  close 后 localServer 关闭/subConnections 清空 => {"closed":true,"localServer":null,"subConnections":0} (期望 {"closed":true,"localServer":null,"subConnections":0})
@@ -139,7 +139,7 @@ PASS  D1-69-no-arg-default-help  无参数默认 help 退出码 0 => 0 (期望 0
     stdout len=2139
 PASS  D1-69-version-exit0  --version 退出码 0 => 0 (期望 0)
 PASS  D1-69-version-output  --version 输出含版本号 => true (期望 true)
-    stdout=HuaweiCloud DevKit CLI: 1.1.9-next.0
+    stdout=HuaweiCloud DevKit CLI: 1.1.9-next.1
 
 Installed agent plugins:
 OpenCode: 1.1.8
@@ -157,12 +157,12 @@ RESULT: PASS
 >>> d1-69-cli-help.mjs exit=0  ===
 
 PASS  D2-27-base-url  KOO_CLI_BASE 下载基址正确 => "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli" (期望 "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli")
-PASS  D2-27-get-version  getKooCliVersion 返回版本号 => "7.2.12" (期望 "string semver")
-    actual=7.2.12
+PASS  D2-27-get-version  getKooCliVersion 返回版本号 => "7.3.12" (期望 "string semver")
+    actual=7.3.12
 PASS  D2-27-parse-version  parseHcloudVersion 解析多格式版本输出 => true (期望 true)
 PASS  D2-27-compare-version  compareVersion 三向比较正确 => true (期望 true)
-PASS  D2-27-download-base  kooCliDownloadBase 组合基址+版本 => "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12" (期望 "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12")
-PASS  D2-27-download-base-contains-version  downloadBase 含版本号 => true (期望 "base=https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.2.12")
+PASS  D2-27-download-base  kooCliDownloadBase 组合基址+版本 => "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.3.12" (期望 "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.3.12")
+PASS  D2-27-download-base-contains-version  downloadBase 含版本号 => true (期望 "base=https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.3.12")
 
 === D2-27 KooCLI 版本管理夹具 ===  pass=6 fail=0
 RESULT: PASS
@@ -232,7 +232,7 @@ RESULT: PASS
 
 >>> d4-29-classify-assert.mjs exit=0  ===
 
-PASS  D8-10-backup-path  mcpBackupFilePath 路径 => "/tmp/multica-task-1008935134/d8-10-mcp-1792184819371/.config/huaweicloud/devkit-mcp-backup.json" (期望 "/tmp/multica-task-1008935134/d8-10-mcp-1792184819371/.config/huaweicloud/devkit-mcp-backup.json")
+PASS  D8-10-backup-path  mcpBackupFilePath 路径 => "/tmp/multica-task-829588497/d8-10-mcp-1792271448146/.config/huaweicloud/devkit-mcp-backup.json" (期望 "/tmp/multica-task-829588497/d8-10-mcp-1792271448146/.config/huaweicloud/devkit-mcp-backup.json")
 PASS  D8-10-save-read-delta  saveAgentDelta → readAgentDelta 往返 => {"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000} (期望 {"cmd":["--debug"],"env":{"MY_VAR":"val"},"timeout":600000})
 PASS  D8-10-take-once  takeAgentDelta 取走后 readAgentDelta 返回 null => {"taken":true,"after":null} (期望 {"taken":true,"after":null})
 PASS  D8-10-purge-deletes  purgeBackup 删除文件 => {"purged":true,"exists":false} (期望 {"purged":true,"exists":false})
@@ -250,7 +250,7 @@ RESULT: PASS
 
 >>> d8-10-mcp-config-backup-merge.mjs exit=0  ===
 
-Mock server listening at ws://127.0.0.1:39625
+Mock server listening at ws://127.0.0.1:33393
 PASS  D9-11-LC-connect  WebSocket 客户端成功建连 mock server => {"connected":true,"serverConns":1} (期望 {"connected":true,"serverConns":1})
 PASS  D9-11-LC-auth  认证握手成功（auth:ok） => {"reply":"auth:ok"} (期望 {"reply":"auth:ok"})
     服务端已标记 authed
@@ -364,9 +364,9 @@ RESULT: FAIL
 >>> d4-19-preflight-in-confirm.mjs exit=1  ===
 
 PASS  D8-7-skill-1-ok  huawei-ecs retrieve_skill → ok=true => true (期望 true)
-    content_len=13957
+    content_len=14630
 PASS  D8-7-skill-1-name  huawei-ecs retrieve_skill → name 匹配 => "huawei-ecs" (期望 "huawei-ecs")
-PASS  D8-7-skill-1-content  huawei-ecs content 非空 + 含 frontmatter => {"contentLen":13957,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
+PASS  D8-7-skill-1-content  huawei-ecs content 非空 + 含 frontmatter => {"contentLen":14630,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
 PASS  D8-7-skill-1-version  huawei-ecs version 字段存在 => "1" (期望 "non-empty")
 PASS  D8-7-skill-2-ok  huawei-vpc retrieve_skill → ok=true => true (期望 true)
     content_len=17999
@@ -374,9 +374,9 @@ PASS  D8-7-skill-2-name  huawei-vpc retrieve_skill → name 匹配 => "huawei-vp
 PASS  D8-7-skill-2-content  huawei-vpc content 非空 + 含 frontmatter => {"contentLen":17999,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
 PASS  D8-7-skill-2-version  huawei-vpc version 字段存在 => "1" (期望 "non-empty")
 PASS  D8-7-skill-3-ok  huawei-obs retrieve_skill → ok=true => true (期望 true)
-    content_len=11005
+    content_len=11381
 PASS  D8-7-skill-3-name  huawei-obs retrieve_skill → name 匹配 => "huawei-obs" (期望 "huawei-obs")
-PASS  D8-7-skill-3-content  huawei-obs content 非空 + 含 frontmatter => {"contentLen":11005,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
+PASS  D8-7-skill-3-content  huawei-obs content 非空 + 含 frontmatter => {"contentLen":11381,"hasFrontmatter":true} (期望 {"contentLen":">0","hasFrontmatter":true})
 PASS  D8-7-skill-3-version  huawei-obs version 字段存在 => "1" (期望 "non-empty")
 PASS  D8-7-skill-4-ok  huawei-rds retrieve_skill → ok=true => true (期望 true)
     content_len=13909
@@ -402,7 +402,7 @@ PASS  D8-7-nonexistent-skill  不存在技能 → ok=false + error 含可用列�
 PASS  D8-7-nonexistent-lists-available  不存在技能 → error 列出可用技能 => true (期望 true)
 PASS  D8-7-empty-name  空技能名 → ok=false => false (期望 false)
     error=Skill name is required.
-PASS  D8-7-references-loaded  huawei-ecs references 目录被加载 => {"refsCount":5} (期望 {"refsCount":">0"})
+PASS  D8-7-references-loaded  huawei-ecs references 目录被加载 => {"refsCount":6} (期望 {"refsCount":">0"})
 PASS  D8-7-references-structure  references 每项有 filename + content => true (期望 true)
 
 === D8-7 7 个 meta/通用技能 retrieve_skill 验证夹具 ===  pass=33 fail=0
@@ -448,11 +448,11 @@ PASS  ENV-INJECT-2-illegal  HUAWEICLOUD_INJECT_STS_CMD='2-illegal' -> inject => 
     value="2" result.len=3
 PASS  ENV-INJECT-src-strict-compare  源码: resolveStsInjectArgs 使用 === "0" / === "false" 精确比较 => {"hasStrict0":true,"hasStrictFalse":true} (期望 {"hasStrict0":true,"hasStrictFalse":true})
 PASS  OCA-PROBE-isusable-valid  isUsableOfficeaceRoot 对含 capabilities.json 的目录 -> true => true (期望 true)
-    dir=/tmp/multica-task-1008935134/env-var-oca-1792184822163
+    dir=/tmp/multica-task-829588497/env-var-oca-1792271450917
 PASS  OCA-PROBE-isusable-invalid  isUsableOfficeaceRoot 对不存在目录 -> false => false (期望 false)
 PASS  OCA-PROBE-marker-absent-null  未写入 marker 时 readOfficeaceRootMarker -> null => null (期望 null)
     未写入 marker，readOfficeaceRootMarker 应返回 null
-PASS  OCA-PROBE-marker-roundtrip  writeOfficeaceRootMarker -> readOfficeaceRootMarker 往返一致 => "/tmp/multica-task-1008935134/env-var-oca-marker-1792184822165" (期望 "/tmp/multica-task-1008935134/env-var-oca-marker-1792184822165")
+PASS  OCA-PROBE-marker-roundtrip  writeOfficeaceRootMarker -> readOfficeaceRootMarker 往返一致 => "/tmp/multica-task-829588497/env-var-oca-marker-1792271450918" (期望 "/tmp/multica-task-829588497/env-var-oca-marker-1792271450918")
 PASS  ENV-SKIP-src-strict-compare  [源码契约快照] 源码: HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT === "1" 精确比较 => true (期望 true)
 PASS  ENV-SKIP-src-not-truthy  [源码契约快照] 源码: 非 truthy 检查（精确 === "1" 而非 if(env)） => {"line":"if (process.env.HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT === '1') return null;","isStrictEqual":true,"isNotTruthy":true} (期望 {"isStrictEqual":true,"isNotTruthy":true})
 

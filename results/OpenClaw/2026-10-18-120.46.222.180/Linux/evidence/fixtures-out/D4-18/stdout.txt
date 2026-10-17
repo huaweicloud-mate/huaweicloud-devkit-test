@@ -1,0 +1,9 @@
+PASS	D4-18-false-deny	approvedByUser=false -> deny（拒绝执行）	actual={"threw":true,"errMsg":"approvedByUser must be true after explicit user approval for this exact command."}	expected={"threw":true,"errMsgContains":"approvedByUser must be true"}
+PASS	D4-18-true-allow	approvedByUser=true -> 通过审批门禁 + 执行成功（mock hcloud=/bin/echo）	actual={"threw":false,"errMsg":"","resultOk":true}	expected={"threw":false,"resultOk":true}	approval gate passed, execution succeeded
+PASS	D4-18-missing-field-deny	缺 approvedByUser 字段 -> 不静默 deny（strict !== true 拒绝）	actual={"threw":true,"errMsg":"approvedByUser must be true after explicit user approval for this exact command."}	expected={"threw":true,"errMsgContains":"approvedByUser must be true"}
+PASS	D4-18-string-true-deny	approvedByUser="true"(字符串) -> strict !== true -> deny	actual={"threw":true,"errMsg":"approvedByUser must be true after explicit user approval for this exact command."}	expected={"threw":true,"errMsgContains":"approvedByUser must be true"}
+PASS	D4-18-token-create-consume	plan 生成 token -> consume 成功消费	actual={"consumed":true,"hashMatch":true}	expected={"consumed":true,"hashMatch":true}
+PASS	D4-18-token-no-replay	token 重复消费 -> 返回 null（防重放）	actual={"first":true,"second":false}	expected={"first":true,"second":false}
+
+=== D4-18 confirm-not-deny 审批语义夹具 ===  pass=6 fail=0
+RESULT: PASS
