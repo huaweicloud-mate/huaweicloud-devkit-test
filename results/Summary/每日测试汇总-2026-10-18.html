@@ -4,7 +4,7 @@
 <title>每日测试汇总 - 2026-10-18</title></head>
 <body style="font-family:'Segoe UI',Arial,'Microsoft YaHei',sans-serif;color:#2c3e50;max-width:960px;margin:20px auto;padding:0 16px;">
 <h1 style="border-bottom:3px solid #2c3e50;padding-bottom:8px;">huaweicloud-devkit 每日测试汇总报告</h1>
-<p style="color:#7f8c8d;">日期：<b>2026-10-18</b> ｜ 被测版本：<b>（未指定）</b> ｜ 创建时间：<b>2026-10-18 00:24:50</b> ｜ 最后更新时间：<b>2026-10-18 05:22:05</b>（北京时间）</p>
+<p style="color:#7f8c8d;">日期：<b>2026-10-18</b> ｜ 被测版本：<b>（未指定）</b> ｜ 创建时间：<b>2026-10-18 00:24:50</b> ｜ 最后更新时间：<b>2026-10-18 05:23:10</b>（北京时间）</p>
 
 <h2>执行摘要</h2>
 <table style="border-collapse:collapse;width:100%;">
@@ -45,7 +45,7 @@
 <h2>缺陷根因明细（来自各 agent FINDINGS.md）</h2>
 <table style="border-collapse:collapse;width:100%;font-size:13px;">
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;">客户端</th><th style="padding:6px;border:1px solid #ddd;">级别</th><th style="padding:6px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:6px;border:1px solid #ddd;text-align:left;">根因</th></tr></thead>
-<tbody><tr><td colspan="4" style="color:#95a5a6">无缺陷记录</td></tr></tbody></table>
+<tbody><tr><td>WorkBuddy</td><td><b>P0</b></td><td>D2-4 凭证脱敏未覆盖小写 ak=/sk= 模式</td><td>`hdk/plugins/huaweicloud-core/src/safety-policy.mjs` `redactSecrets`/`redactString` 函数的正则表达式仅匹配大写 `AK=`/`SK=` 模式，未覆盖小写 `ak=`/`sk=` 变体（缺少 `i` flag 或小写分支）。</td></tr><tr><td>WorkBuddy</td><td><b>P0</b></td><td>D4-3 KMS DecryptData 未被安全策略拦截</td><td>`hdk/plugins/huaweicloud-core/src/safety-policy.mjs` `classifyHcloudArgs`/`classifyTextCommand` 的风险规则库未将 `KMS DecryptData` 列入 deny/warn 规则（缺少 KMS DecryptData 的 service+action 映射）。</td></tr><tr><td>WorkBuddy</td><td><b>P1</b></td><td>D4-11 提示词注入未被安全策略拦截</td><td>`hdk/plugins/huaweicloud-core/src/safety-policy.mjs` `classifyTextCommand` 的规则库仅针对 hcloud CLI 命令模式做分类，对自然语言提示词注入（非 hcloud 前缀）无检测规则，默认走 allow 分支。</td></tr></tbody></table>
 
 <p style="color:#95a5a6;font-size:11px;margin-top:24px;">本报告由 scripts/report_html.py 自动生成，数据源 results/Summary/ 每日总执行结果。执行态与母版用例定义分离，真实结果以本报告为准。</p>
 </body></html>
