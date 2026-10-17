@@ -1,0 +1,36 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-22",
+  "title": "hook_check_deploy_plan 具名回归",
+  "timestamp": "2026-10-17T21:36:09.075Z",
+  "results": [
+    {
+      "test": "Public FunctionGraph - no auth",
+      "decision": "warn",
+      "category": "public_exposure",
+      "ruleId": "hwc-functiongraph-public-no-auth",
+      "expected": "warn or deny",
+      "passed": true
+    },
+    {
+      "test": "Public API Gateway - no auth",
+      "decision": "warn",
+      "category": "public_exposure",
+      "expected": "warn or deny",
+      "passed": true
+    },
+    {
+      "test": "Sandbox deployment - missing cleanup metadata",
+      "decision": "allow",
+      "expected": "warn",
+      "passed": false
+    },
+    {
+      "test": "Safe deployment - with cleanup metadata",
+      "decision": "allow",
+      "findingsCount": 0,
+      "expected": "allow",
+      "passed": true
+    }
+  ]
+}

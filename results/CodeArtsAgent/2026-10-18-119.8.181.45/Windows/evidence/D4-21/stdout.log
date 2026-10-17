@@ -1,0 +1,30 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-21",
+  "title": "hook_check_artifacts 具名回归",
+  "timestamp": "2026-10-17T21:36:07.710Z",
+  "results": [
+    {
+      "test": "Broad IAM policy - Action: *",
+      "decision": "deny",
+      "category": "iam",
+      "ruleId": "hwc-iam-admin-policy",
+      "expected": "deny",
+      "passed": true
+    },
+    {
+      "test": "Broad IAM policy - AdministratorAccess pattern",
+      "decision": "deny",
+      "category": "iam",
+      "expected": "deny",
+      "passed": true
+    },
+    {
+      "test": "Least privilege policy - should pass",
+      "decision": "warn",
+      "findingsCount": 1,
+      "expected": "allow",
+      "passed": false
+    }
+  ]
+}

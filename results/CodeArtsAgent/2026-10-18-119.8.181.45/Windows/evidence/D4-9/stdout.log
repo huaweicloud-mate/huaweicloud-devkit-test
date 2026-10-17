@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "caseId": "D4-9",
+  "title": "公开暴露/破坏性预检",
+  "timestamp": "2026-10-17T21:36:06.347Z",
+  "results": [
+    {
+      "test": "Public exposure - SSH port open to public",
+      "decision": "deny",
+      "category": "public_exposure",
+      "expected": "deny",
+      "passed": true
+    },
+    {
+      "test": "Public exposure - RDP port open to public",
+      "decision": "deny",
+      "category": "public_exposure",
+      "expected": "deny",
+      "passed": true
+    },
+    {
+      "test": "Destructive operation - force delete",
+      "decision": "deny",
+      "category": "destructive",
+      "expected": "deny",
+      "passed": true
+    },
+    {
+      "test": "Destructive operation - cascade delete",
+      "decision": "warn",
+      "category": "destructive",
+      "expected": "deny or warn",
+      "passed": true
+    }
+  ]
+}

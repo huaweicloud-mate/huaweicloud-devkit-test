@@ -1,0 +1,29 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-19",
+  "title": "确认流下预检仍生效",
+  "timestamp": "2026-10-17T21:36:05.003Z",
+  "results": [
+    {
+      "test": "Command risk evaluation - public exposure",
+      "decision": "allow",
+      "findingsCount": 0,
+      "expected": "deny",
+      "passed": false
+    },
+    {
+      "test": "Artifact risk evaluation - broad IAM",
+      "decision": "deny",
+      "findingsCount": 1,
+      "expected": "deny",
+      "passed": true
+    },
+    {
+      "test": "Deploy plan risk evaluation - public exposure",
+      "decision": "warn",
+      "findingsCount": 2,
+      "expected": "deny or warn",
+      "passed": true
+    }
+  ]
+}
