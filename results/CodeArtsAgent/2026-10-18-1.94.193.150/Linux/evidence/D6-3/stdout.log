@@ -3,7 +3,7 @@ check_update 注册: true | description 非空: true | inputSchema: {"type":"obj
 upgrade 注册: true | description 非空: true | inputSchema: {"type":"object","properties":{"version":{"type":"string","description":"仅支持 \"latest\"（默认）。"},"target":{"type":"string","description":"agent 目标（opencode/codex/codearts/.../all）。缺省时用 all（仅更新已安装的）。"}}}
 =====END D1-26=====
 =====CASE D1-27=====
-check_update result: {"content":[{"type":"text","text":"{\n  \"currentVersion\": \"1.1.9-next.0\",\n  \"latestStable\": \"1.1.8\",\n  \"latestNext\": \"1.1.9-next.0\",\n  \"targetVersion\": \"1.1.9-next.0\",\n  \"updateAvailable\": false,\n  \"dismissed\": false,\n  \"dismissExpiresAt\": null,\n  \"result\": \"up_to_date\"\n}"}],"isError":false}
+check_update result: {"content":[{"type":"text","text":"{\n  \"currentVersion\": \"1.1.9-next.1\",\n  \"latestStable\": \"1.1.8\",\n  \"latestNext\": \"1.1.9-next.1\",\n  \"targetVersion\": \"1.1.9-next.1\",\n  \"updateAvailable\": false,\n  \"dismissed\": false,\n  \"dismissExpiresAt\": null,\n  \"result\": \"up_to_date\"\n}"}],"isError":false}
 result=up_to_date 判定: true | updateAvailable=false 判定: false
 =====END D1-27=====
 =====CASE D2-2=====
@@ -11,7 +11,7 @@ isError: false | 返回含 credentialsConfigured 字段: true
 结构化字段: 
 =====END D2-2=====
 =====CASE D2-5=====
-无凭证 auth_status: {"content":[{"type":"text","text":"{\n  \"target\": \"all\",\n  \"credentialsConfigured\": false,\n  \"credentialsPath\": \"/tmp/multica-task-525676083/hdk-nocred-rVzpcP/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": false,\n      \"fingerprint\": null,\n      \"persistent\": true\n    },\n    \"activeSource\": \"none\"\n  },\n 
+无凭证 auth_status: {"content":[{"type":"text","text":"{\n  \"target\": \"all\",\n  \"credentialsConfigured\": false,\n  \"credentialsPath\": \"/tmp/multica-task-2157876381/hdk-nocred-nyw2Y1/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": false,\n      \"fingerprint\": null,\n      \"persistent\": true\n    },\n    \"activeSource\": \"none\"\n  },\n
 needsSetup / 可执行指引 判定: true
 =====END D2-5=====
 =====CASE D3-A1=====
@@ -31,7 +31,7 @@ detect_framework(sample-react): {"content":[{"type":"text","text":"{\n  \"ok\": 
 识别出 framework 判定: true
 =====END D3-B5=====
 =====CASE D3-C5=====
-check_cli isError: false | 返回: {"content":[{"type":"text","text":"{\n  \"installed\": true,\n  \"authenticated\": true,\n  \"status\": \"ok\",\n  \"output\": \"Current KooCLI version: 7.2.12\",\n  \"kooCliVersion\": \"7.2.12\",\n  
+check_cli isError: false | 返回: {"content":[{"type":"text","text":"{\n  \"installed\": true,\n  \"authenticated\": true,\n  \"status\": \"version_mismatch\",\n  \"output\": \"Current KooCLI version: 7.2.12\",\n  \"kooCliVersion\": \
 plan_cli_command(ListServers) isError: false | 含 classification: true
 =====END D3-C5=====
 =====CASE D4-4=====
@@ -58,7 +58,7 @@ search_docs 5次耗时(ms): 7, 8, 8, 8, 9
 p95 判定(<2000ms): true
 =====END D6-1=====
 =====CASE D6-3=====
-冷启(进程 spawn -> initialize 响应) = 273 ms
+冷启(进程 spawn -> initialize 响应) = 302 ms
 冷启<5000ms 判定: true
 =====END D6-3=====
 =====CASE D6-4=====
@@ -67,4 +67,3 @@ p95 判定(<2000ms): true
 === stderr(应有协议污染检查) ===
 (空)
 === DONE ===
-

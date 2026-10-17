@@ -1,6 +1,6 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-codeartsagent-s2-mvbhnysw -> id=b10974ce-b389-40c4-a570-26fd43d53fe4
+创建测试VPC tctest-codeartsagent-s2-mvcwbpcu -> id=b600575d-7b78-4fb0-a7e9-7b306e54670c
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
@@ -55,23 +55,23 @@ check_user -> realnameVerified=true agreementSigned=true err=
 Waiting for connection 673280... (0s)Connection 673280 established (0s).
 Waiting for connection 673280... (0s)Connection 673280 established (0s).
 connect -> status=connected wsId=e7e9310835d44e5abbcb
-[2026-10-16T21:37:50.573Z] uploadProject: /home/testbot2/.hdk-s3-mvbhnysw -> /workspace/.hdk-s3-mvbhnysw.tar.gz (archive=211 bytes, md5=b20a5ac42e9ca8c7f35b62a925f03650)
-[2026-10-16T21:37:50.622Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-525676083/sandbox-upload-1792186670562/.hdk-s3-mvbhnysw.tar.gz, size=211, remotePath=/workspace/.hdk-s3-mvbhnysw.tar.gz)
-[2026-10-16T21:37:50.622Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
-[2026-10-16T21:37:50.622Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
-[2026-10-16T21:37:50.676Z] deployFileServer: writing script (2456 b64 chars)
-[2026-10-16T21:37:50.724Z] deployFileServer: starting server on port 8888
-[2026-10-16T21:37:50.758Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 30319\r\n\u001b]133;C\u0007\r\n"
-[2026-10-16T21:37:50.759Z] uploadViaHttpTunnel: creating dedicated tunnel session
+[2026-10-17T21:15:58.695Z] uploadProject: /home/testbot2/.hdk-s3-mvcwbpcu -> /workspace/.hdk-s3-mvcwbpcu.tar.gz (archive=211 bytes, md5=5bb855aaa181ba2488d35c69c8c50c13)
+[2026-10-17T21:15:58.744Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-2157876381/sandbox-upload-1792271758685/.hdk-s3-mvcwbpcu.tar.gz, size=211, remotePath=/workspace/.hdk-s3-mvcwbpcu.tar.gz)
+[2026-10-17T21:15:58.744Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-17T21:15:58.744Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-17T21:15:58.791Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-17T21:15:58.838Z] deployFileServer: starting server on port 8888
+[2026-10-17T21:15:58.874Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 27622\r\n\u001b]133;C\u0007\r\n"
+[2026-10-17T21:15:58.874Z] uploadViaHttpTunnel: creating dedicated tunnel session
 Waiting for connection 673280... (0s)Connection 673280 established (0s).
-[2026-10-16T21:37:51.659Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
-[2026-10-16T21:37:51.661Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
-[2026-10-16T21:37:51.662Z] uploadViaHttpTunnel: tunnel ready, localPort=34225
-[2026-10-16T21:37:51.663Z] uploadViaHttpTunnel: waiting for server health on localhost:34225
-[2026-10-16T21:37:51.663Z] waitForServerReady: attempt 1, checking http://localhost:34225/health
-[2026-10-16T21:37:51.695Z] waitForServerReady: server ready on port 34225 after 0 retries
-[2026-10-16T21:37:51.696Z] uploadViaHttpTunnel: sending POST with 211 bytes
-[2026-10-16T21:37:51.729Z] uploadViaHttpTunnel: upload complete (bytes=211, md5=b20a5ac42e9ca8c7f35b62a925f03650)
+[2026-10-17T21:15:59.774Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-17T21:15:59.776Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-17T21:15:59.777Z] uploadViaHttpTunnel: tunnel ready, localPort=46561
+[2026-10-17T21:15:59.777Z] uploadViaHttpTunnel: waiting for server health on localhost:46561
+[2026-10-17T21:15:59.777Z] waitForServerReady: attempt 1, checking http://localhost:46561/health
+[2026-10-17T21:15:59.816Z] waitForServerReady: server ready on port 46561 after 0 retries
+[2026-10-17T21:15:59.816Z] uploadViaHttpTunnel: sending POST with 211 bytes
+[2026-10-17T21:15:59.854Z] uploadViaHttpTunnel: upload complete (bytes=211, md5=5bb855aaa181ba2488d35c69c8c50c13)
 upload_project -> ok=true md5Verified=true
 Waiting for connection 673280... (0s)Connection 673280 established (0s).
 Waiting for connection 673280... (0s)Connection 673280 established (0s).
@@ -86,7 +86,7 @@ upload_project -> ok=true md5Verified=true
 Waiting for connection 673280... (0s)Connection 673280 established (0s).
 deploy_nginx -> ok=undefined port=undefined url=
 Waiting for connection 673280... (0s)Connection 673280 established (0s).
-deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mvbhnysw/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mvcwbpcu/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
 close_session -> ok
 [OK] 沙箱 connect 成功
 [FAIL] s3-connect/upload/deploy 链路
@@ -102,7 +102,7 @@ close_session -> ok
     {
       "name": "测试 VPC 创建成功",
       "ok": true,
-      "detail": "vpcId=b10974ce-b38"
+      "detail": "vpcId=b600575d-7b7"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -127,7 +127,7 @@ close_session -> ok
     {
       "name": "OBS 建桶成功",
       "ok": true,
-      "detail": "bucket=tctest-codeartsagent-obs-mvbhnysw"
+      "detail": "bucket=tctest-codeartsagent-obs-mvcwbpcu"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -147,7 +147,7 @@ close_session -> ok
     {
       "name": "删除归零",
       "ok": true,
-      "detail": "bucket removed=tctest-codeartsagent-obs-mvbhnysw"
+      "detail": "bucket removed=tctest-codeartsagent-obs-mvcwbpcu"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
