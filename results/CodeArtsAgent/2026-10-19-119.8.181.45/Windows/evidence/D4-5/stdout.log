@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "caseId": "D4-5",
+  "test": "Write operation misclassification detection",
+  "results": [
+    {
+      "cmd": [
+        "ECS",
+        "CreateServers"
+      ],
+      "decision": "deny"
+    },
+    {
+      "cmd": [
+        "ECS",
+        "DeleteServers"
+      ],
+      "decision": "deny"
+    },
+    {
+      "cmd": [
+        "EVS",
+        "CreateVolume"
+      ],
+      "decision": "deny"
+    },
+    {
+      "cmd": [
+        "VPC",
+        "CreateVPC"
+      ],
+      "decision": "deny"
+    }
+  ],
+  "allWriteOpsClassified": true,
+  "executedAt": "20261018211052",
+  "note": "Write operations properly classified (not misclassified as read-only)"
+}

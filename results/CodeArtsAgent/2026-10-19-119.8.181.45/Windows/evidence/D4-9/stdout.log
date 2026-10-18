@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "caseId": "D4-9",
+  "test": "Public exposure and destructive operation pre-check",
+  "results": [
+    {
+      "cmd": [
+        "ECS",
+        "CreateServers",
+        "--security_group_id.1=0.0.0.0/0"
+      ],
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": [
+        "EVS",
+        "DeleteVolume"
+      ],
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": [
+        "OBS",
+        "DeleteBucket"
+      ],
+      "decision": "deny",
+      "risk": "write"
+    }
+  ],
+  "executedAt": "20261018211059",
+  "note": "Pre-execution checks working for public exposure and destructive operations"
+}
