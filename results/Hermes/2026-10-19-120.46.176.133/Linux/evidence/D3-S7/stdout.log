@@ -1,0 +1,10 @@
+{
+  "status": "BLOCKED",
+  "caseId": "D3-S7",
+  "title": "场景-跨服务交付(Web应用+RDS)并归零",
+  "expected": "多服务编排(先建库后部署)+连接串注入+测后归零",
+  "actual": "BLOCKED：跨服务复合编排（RDS 实例创建 + 沙箱/ECS 部署 Web + 连接串注入 + 全量归零）无对应 harness，且账户当前受限",
+  "blockedReason": "【补环境】缺跨服务编排 harness（RDS+沙箱串联）与 RDS 最低规格实例配额；实测本账户写操作受限（OBS CreateBucket 403 UserRestricted、ECS CreateServers Ecs.0067 insufficient balance、FunctionGraph FSS.0403 user restricted），RDS 实例同样无法创建。解除条件：提供跨服务编排 harness + 账户恢复余额/解除受限 + RDS 实例配额。",
+  "executedAt": "20261018210920",
+  "probe": "probe_d3s7.mjs"
+}

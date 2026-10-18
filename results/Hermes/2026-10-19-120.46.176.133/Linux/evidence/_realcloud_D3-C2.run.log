@@ -1,0 +1,31 @@
+{
+  "status": "FAIL",
+  "caseId": "D3-C2",
+  "total": 4,
+  "passed": 0,
+  "failed": 4,
+  "title": "OBS静态站部署E2E",
+  "expected": "建桶→set静态站→get静态站→删桶归零（不以KooCLI退出码判成败）",
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": false,
+      "detail": "exit=6 Start at 2026-10-18 21:05:20.267610331 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2357520110] failed, status [403], error code [UserRestricted], error messag"
+    },
+    {
+      "name": "set静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":404,\"websiteUrl\":\"http://testbot3-hermes-obs-2357520110.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 404\"}"
+    },
+    {
+      "name": "get静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":404,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>NoSuchBucket</Code><Message>The specified bucket does not exist</Message><RequestId>000001A15"
+    },
+    {
+      "name": "删桶归零",
+      "pass": false,
+      "detail": "rm.exit=6 Start at 2026-10-18 21:05:20.964439827 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-23575 | ls=Start at 2026-10-18 21:05:21.142382327 +0000 UTC\n\nError: Check the fs  | ListBuckets含桶=false"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C3",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "title": "沙箱部署E2E",
+  "expected": "URL可访问+会话关闭（deploy_nginx ok + deploy_check nginx_serving=PASS + close_session）",
+  "results": [
+    {
+      "name": "connect",
+      "pass": true,
+      "detail": "ws=e7e9310835"
+    },
+    {
+      "name": "upload_project",
+      "pass": true,
+      "detail": "{\"ok\":true,\"localDir\":\"/tmp/d3c3-proj\",\"remotePath\":\"/workspace/d3c3-proj\",\"bytes\":216,\"md5\":\"cbeafe34ddbfc28de4b0e6091b"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": true,
+      "detail": "static:8080"
+    },
+    {
+      "name": "deploy_check",
+      "pass": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "close_session",
+      "pass": true,
+      "detail": "\"ok\""
+    }
+  ]
+}

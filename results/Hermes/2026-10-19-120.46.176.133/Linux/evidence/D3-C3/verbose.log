@@ -1,0 +1,20 @@
+connect.status= connected ws= e7e9310835d44e5abbcb35cd03e86da2
+deploy_nginx.requested_port= 8091
+deploy_nginx.result= {"ok":true,"nginxType":"static","port":8093,"outputPath":"/workspace/d3c3-proj/.","projectPath":"/workspace/d3c3-proj","exitCode":0,"stdout":"\u001b]133;C\u0007\u001b]133;C\u0007\u001b]133;C\u0007\u001b]133;C\u0007\u001b]133;C\u0007\u001b]133;C\u0007\u001b]133;C\u0007\u001b]133;C\u0007\u001b]133;C\u0007\u001b]133;C\u0007nginx: [warn] conflicting server name \"\" on 0.0.0.0:8091, ignored\r\nnginx: [warn] conflicting server name \"\" on 0.0.0.0:8080, ignored\r\n\u001b]133;C\u0007\r\n","nextStep":"expose_via_devbridge","warning":"Port 8091 is in use — auto-assigned port 8093 | Port 8091 was occupied — nginx now listens on port 8093. Any DevBridge tunnel bound to port 8091 is detached: run \"devbridge port create <tunnelId> -p 8093 --protocol http -a\" and restart \"devbridge host\" for the new port."}
+deploy_check.result= {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8093, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/d3c3-proj/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""},"tunnel_url_accessible":{"status":"FAIL","detail":"(no tunnel)"},"qr_code":{"status":"SKIP","detail":"(not a cross-platform project)"}},"score":{"pass":2,"total":4},"missingSteps":"devbridge_tunnel, tunnel_url_accessible","nextStep":"expose_via_devbridge","remediation":"In the sandbox: source /tmp/hw_creds.sh; source /tmp/hw_api_key 2>/dev/null; devbridge delete-all; devbridge create <name>; devbridge port create <tunnelId> -p 8093 --protocol http -a; nohup devbridge host <tunnelId> -p 8093 > /tmp/host.log 2>&1 & If deploy_nginx reported a different (auto-incremented) port in its \"port\" field, use THAT port instead of the one shown here. Full procedure in huawei-sandbox skill, Step 7 (Expose via DevBridge)."}
+listeners= ]133;CLISTEN 0      0            0.0.0.0[01;31m[K:8080[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=16))      
+LISTEN 0      0            0.0.0.0[01;31m[K:8081[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=11))      
+LISTEN 0      0            0.0.0.0[01;31m[K:8082[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=15))      
+LISTEN 0      0            0.0.0.0[01;31m[K:8083[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=7))       
+LISTEN 0      0            0.0.0.0[01;31m[K:8084[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=12))      
+LISTEN 0      0            0.0.0.0[01;31m[K:8085[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=14))      
+LISTEN 0      0            0.0.0.0[01;31m[K:8086[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=13))      
+LISTEN 0      0            0.0.0.0[01;31m[K:8087[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=17))      
+LISTEN 0      0            0.0.0.0[01;31m[K:8088[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=18))      
+LISTEN 0      0            0.0.0.0[01;31m[K:8089[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=8))       
+LISTEN 0      0            0.0.0.0[01;31m[K:8091[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=6))       
+LISTEN 0      0            0.0.0.0[01;31m[K:8092[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=10))      
+LISTEN 0      0            0.0.0.0[01;31m[K:8093[m[K      0.0.0.0:*    users:(("nginx",pid=3121,fd=9))       
+]133;C
+ exit= 0
+close= ok

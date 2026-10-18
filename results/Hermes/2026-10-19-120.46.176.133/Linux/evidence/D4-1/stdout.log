@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "caseId": "D4-1",
+  "source": "group:d4-security",
+  "sources": [
+    "group:d4-security",
+    "group:mcp-tools"
+  ],
+  "executedAt": "20261019050206",
+  "assertions": [
+    {
+      "id": "D4-1",
+      "name": "cred-cat",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "cat blocked",
+      "failMsg": "cat not blocked"
+    },
+    {
+      "id": "D4-1",
+      "name": "cred-type",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "type blocked",
+      "failMsg": "type not blocked"
+    },
+    {
+      "id": "D4-1",
+      "name": "cred-getcontent",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "Get-Content blocked",
+      "failMsg": "Get-Content not blocked"
+    },
+    {
+      "id": "D4-1",
+      "name": "cred-file-mcp",
+      "pass": true,
+      "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-com",
+      "expected": "deny",
+      "passMsg": "cred file blocked (MCP)",
+      "failMsg": "cred file not blocked (MCP)"
+    }
+  ],
+  "passed": 4,
+  "total": 4
+}
