@@ -1,0 +1,33 @@
+{
+  "caseId": "D4-5",
+  "status": "PASS",
+  "why": "所有写操作/DeleteServer等被deny拦截，无误判为read-only/allow",
+  "executedAt": "20261018054500",
+  "details": [
+    {
+      "cmd": "ECS DeleteServer --server_id=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "ECS CreateServer --name=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "RDS DeleteInstance --instance_id=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "VPC DeleteVpc --vpc_id=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "IAM DeleteUser --user_id=test",
+      "decision": "deny",
+      "risk": "write"
+    }
+  ]
+}

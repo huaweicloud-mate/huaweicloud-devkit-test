@@ -1,0 +1,38 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "所有凭证env打印命令被deny拦截",
+  "executedAt": "20261018054500",
+  "details": [
+    {
+      "cmd": "env | grep HUAWEICLOUD",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "printenv HW_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "echo $HW_SECRET_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "printenv HUAWEICLOUD_SECRET_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "echo $HUAWEICLOUD_ACCESS_KEY",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "Get-ChildItem Env: | Where-Object { $_.Name -match \"HUAWEICLOUD|HW_\" }",
+      "decision": "deny",
+      "risk": "credential"
+    }
+  ]
+}

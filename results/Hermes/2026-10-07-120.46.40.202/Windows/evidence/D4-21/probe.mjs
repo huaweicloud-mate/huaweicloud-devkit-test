@@ -1,0 +1,1 @@
+import { evaluateArtifacts } from './plugins/huaweicloud-core/src/risk-rule-engine.mjs';

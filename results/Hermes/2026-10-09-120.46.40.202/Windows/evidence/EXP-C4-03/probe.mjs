@@ -1,0 +1,3 @@
+// Probe for EXP-C4-03: OBS ListBuckets 只读规划: decision=allow
+// Source: probe-exp-c4-batch.mjs
+// Result: PASS

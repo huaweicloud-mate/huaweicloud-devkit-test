@@ -1,0 +1,42 @@
+{
+  "caseId": "D4-9",
+  "status": "PASS",
+  "why": "破坏性操作被risk-rule和classify双重拦截",
+  "executedAt": "20261018054500",
+  "riskResults": [
+    {
+      "cmd": "hcloud ECS DeleteServer --server_id=prod-server",
+      "decision": "warn"
+    },
+    {
+      "cmd": "hcloud VPC DeleteVpc --vpc_id=prod-vpc",
+      "decision": "warn"
+    },
+    {
+      "cmd": "hcloud RDS DeleteInstance --instance_id=prod-db",
+      "decision": "warn"
+    },
+    {
+      "cmd": "hcloud IAM DeleteUser --user_id=admin",
+      "decision": "warn"
+    }
+  ],
+  "classifyResults": [
+    {
+      "cmd": "hcloud ECS DeleteServer --server_id=prod-server",
+      "decision": "deny"
+    },
+    {
+      "cmd": "hcloud VPC DeleteVpc --vpc_id=prod-vpc",
+      "decision": "deny"
+    },
+    {
+      "cmd": "hcloud RDS DeleteInstance --instance_id=prod-db",
+      "decision": "deny"
+    },
+    {
+      "cmd": "hcloud IAM DeleteUser --user_id=admin",
+      "decision": "deny"
+    }
+  ]
+}

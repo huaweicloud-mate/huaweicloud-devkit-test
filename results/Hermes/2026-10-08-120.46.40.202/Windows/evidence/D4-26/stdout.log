@@ -1,0 +1,33 @@
+{
+  "status": "FAIL",
+  "assertion": "findings 证据脱敏: redactString 正则缺少 case-insensitive flag",
+  "rootCause": {
+    "file": "plugins/huaweicloud-core/src/safety-policy.mjs",
+    "line": "redactString function, regex: /(AK|SK)\\s*[:=]\\s*(\"[^\"]*\"|'[^']*'|[^\\s,;]+)/g",
+    "issue": "正则表达式 (AK|SK) 缺少 'i' flag (case-insensitive), 导致小写 ak=/sk= 不被脱敏",
+    "impact": "如果错误日志或 findings 中包含小写 ak=/sk= 格式的凭证,不会被自动脱敏,存在凭证泄露风险",
+    "fix": "在正则末尾添加 'i' flag: /(AK|SK)\\s*[:=]\\s*(\"[^\"]*\"|'[^']*'|[^\\s,;]+)/gi"
+  },
+  "checks": {
+    "uppercase_AK": {
+      "input": "AK=TEST",
+      "redacted": "AK=<redacted>",
+      "leaked": false
+    },
+    "uppercase_SK": {
+      "input": "SK=TEST123",
+      "redacted": "SK=<redacted>",
+      "leaked": false
+    },
+    "lowercase_ak": {
+      "input": "ak=test",
+      "redacted": "ak=test",
+      "leaked": true
+    },
+    "lowercase_sk": {
+      "input": "sk=1234567890abcdef",
+      "redacted": "sk=1234567890abcdef",
+      "leaked": true
+    }
+  }
+}

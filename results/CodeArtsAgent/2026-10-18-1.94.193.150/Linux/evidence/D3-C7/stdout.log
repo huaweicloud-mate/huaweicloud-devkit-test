@@ -1,0 +1,39 @@
+[OK] plan 香港区 EIP 只读查询
+[OK] get_regional_availability 预查
+[OK] 创建最小 EIP(cn-north-4)
+[OK] 释放 EIP
+[OK] 归零验证(不含本次 EIP)
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C7",
+  "total": 5,
+  "passed": 5,
+  "results": [
+    {
+      "n": "plan 香港区 EIP 只读查询",
+      "ok": true,
+      "out": "{\"decision\":\"allow\",\"risk\":\"read_only\",\"service\":\"EIP\"}"
+    },
+    {
+      "n": "get_regional_availability 预查",
+      "ok": true,
+      "out": "{\"ok\":false,\"service\":\"eip\",\"region\":\"ap-southeast-1\",\"available\":false,\"note\":\"Service eip is not in the regional availability cache. Run hcloud EIP --help to verify, or check https://developer.huawe"
+    },
+    {
+      "n": "创建最小 EIP(cn-north-4)",
+      "ok": true,
+      "out": "{\"eipId\":\"3febffda-c6d0-40bb-a93b-5b78ed41ab90\",\"ip\":\"123.249.16.246\"}"
+    },
+    {
+      "n": "释放 EIP",
+      "ok": true,
+      "out": "{\"eipId\":\"3febffda-c6d0-40bb-a93b-5b78ed41ab90\"}"
+    },
+    {
+      "n": "归零验证(不含本次 EIP)",
+      "ok": true,
+      "out": "{\"containsOwn\":false}"
+    }
+  ]
+}

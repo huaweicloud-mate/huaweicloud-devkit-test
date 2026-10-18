@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-16",
+  "details": [
+    "\"sh -c \"hcloud ECS DeleteServer --server_id=test\"\" -> allow/not_huaweicloud",
+    "\"bash -c \"hcloud ECS DeleteServer\"\" -> allow/not_huaweicloud",
+    "\"hcloud ECS DeleteServer; echo done\" -> deny/write",
+    "\"hcloud ECS DeleteServer && cat credentials.json\" -> deny/write"
+  ],
+  "executedAt": "20261006214142"
+}

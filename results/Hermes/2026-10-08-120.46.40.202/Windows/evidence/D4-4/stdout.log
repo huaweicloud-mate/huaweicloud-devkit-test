@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "assertion": "写操作需审批门: 无审批=deny+token, 有审批=allow",
+  "checks": {
+    "withoutApproval": {
+      "decision": "deny",
+      "hasToken": true,
+      "safeToRun": false
+    },
+    "withApproval": {
+      "decision": "allow",
+      "safeToRun": true
+    }
+  }
+}

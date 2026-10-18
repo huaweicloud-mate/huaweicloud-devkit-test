@@ -1,0 +1,48 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "所有shell包裹(bash/sh/cmd/powershell/sudo/eval/$()/``)均被穿透识别并deny拦截",
+  "executedAt": "20261018054500",
+  "details": [
+    {
+      "cmd": "bash -c \"hcloud ECS DeleteServer --server_id=test\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "sh -c 'hcloud RDS DeleteInstance --instance_id=test'",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "cmd /c \"hcloud VPC DeleteVpc --vpc_id=test\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "powershell -Command \"hcloud IAM DeleteUser --user_id=test\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "sudo hcloud ECS DeleteServer --server_id=test",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "eval \"hcloud ECS DeleteServer --server_id=test\"",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "$(hcloud ECS DeleteServer --server_id=test)",
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "cmd": "`hcloud ECS DeleteServer --server_id=test`",
+      "decision": "deny",
+      "risk": "write"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "tests": [
+    {
+      "input": "empty",
+      "decision": "deny"
+    },
+    {
+      "input": "whitespace",
+      "decision": "deny"
+    },
+    {
+      "input": "garbage",
+      "decision": "allow"
+    },
+    {
+      "input": "emptyArgs",
+      "decision": "deny"
+    }
+  ],
+  "noCrash": true,
+  "noAllow": false,
+  "why": "Edge cases: no crash, empty/whitespace=deny (fail-closed), garbage=allow (correct - not dangerous). Dangerous patterns still denied."
+}
