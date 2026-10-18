@@ -1,0 +1,30 @@
+{
+  "caseId": "D4-15",
+  "status": "PASS",
+  "why": "Attacks: hcloud ECS DELETESERVERS --ser->warn | hcloud ECS deleteservers --ser->warn | hcloud ECS deleteServers --ser->deny | hcloud ECS deleteServers --ser->warn",
+  "executedAt": "20261019050816",
+  "result": {
+    "results": [
+      {
+        "cmd": "hcloud ECS DELETESERVERS --server-ids fake",
+        "decision": "warn",
+        "findings": 1
+      },
+      {
+        "cmd": "hcloud ECS deleteservers --server-ids fake",
+        "decision": "warn",
+        "findings": 1
+      },
+      {
+        "cmd": "hcloud ECS deleteServers --server-ids fake --force",
+        "decision": "deny",
+        "findings": 2
+      },
+      {
+        "cmd": "hcloud ECS deleteServers --server-ids fake --cascade",
+        "decision": "warn",
+        "findings": 1
+      }
+    ]
+  }
+}

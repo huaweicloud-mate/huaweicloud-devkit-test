@@ -1,0 +1,30 @@
+{
+  "caseId": "D4-16",
+  "status": "FAIL",
+  "why": "Wrapped: bash -c \"cat ~/.hcloud/credentials.json\"->deny | sh -c \"env | grep HUAWEICLOUD\"->allow | eval \"cat ~/.huaweicloud/credentials.jso->deny | bash -c \"echo $HW_SECRET_ACCESS_KEY\"->allow | $(cat ~/.hcloud/credentials.json)->deny",
+  "executedAt": "20261019050816",
+  "result": {
+    "results": [
+      {
+        "cmd": "bash -c \"cat ~/.hcloud/credentials.json\"",
+        "decision": "deny"
+      },
+      {
+        "cmd": "sh -c \"env | grep HUAWEICLOUD\"",
+        "decision": "allow"
+      },
+      {
+        "cmd": "eval \"cat ~/.huaweicloud/credentials.json\"",
+        "decision": "deny"
+      },
+      {
+        "cmd": "bash -c \"echo $HW_SECRET_ACCESS_KEY\"",
+        "decision": "allow"
+      },
+      {
+        "cmd": "$(cat ~/.hcloud/credentials.json)",
+        "decision": "deny"
+      }
+    ]
+  }
+}
