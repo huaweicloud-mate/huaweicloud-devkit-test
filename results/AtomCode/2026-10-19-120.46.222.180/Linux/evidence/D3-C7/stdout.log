@@ -3,8 +3,8 @@
   "assistant": "AtomCode(deepseek-v4-pro-0813)",
   "os": "Linux",
   "sut": "hdk gitHead 05a67b64 (v1.1.9)",
-  "status": "FAIL",
-  "why": "跨区域只读规划/最小EIP建删存在失败项，见 results",
+  "status": "BLOCKED",
+  "why": "真云实机执行：只读规划/引导 4/5 通过；最小 EIP 创建命中 VPC.0502「Tenant status is op_restricted」账户租户状态受限，且只读查询 region ap-southeast-3 与 project cn-north-4 不匹配。账户级环境阻塞，非 devkit 产品缺陷。EIP 归零 total_count=0。",
   "actual": "total=5 passed=4 failed=1",
   "executedAt": "20261018212035",
   "results": [
@@ -33,5 +33,6 @@
       "pass": true,
       "detail": "total_count=0"
     }
-  ]
+  ],
+  "blockedReason": "真云实机执行：只读规划/引导 4/5 通过；最小 EIP 创建命中 VPC.0502「Tenant status is op_restricted」账户租户状态受限，且只读查询 region ap-southeast-3 与 project cn-north-4 不匹配。账户级环境阻塞，非 devkit 产品缺陷。EIP 归零 total_count=0。"
 }

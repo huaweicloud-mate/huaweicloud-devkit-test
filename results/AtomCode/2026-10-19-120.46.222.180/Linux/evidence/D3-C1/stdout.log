@@ -1,6 +1,6 @@
 {
   "case": "D3-C1",
-  "status": "FAIL",
+  "status": "BLOCKED",
   "total": 5,
   "passed": 4,
   "failed": 1,
@@ -30,5 +30,8 @@
       "pass": true,
       "detail": "subnet:OK vpc:OK"
     }
-  ]
+  ],
+  "why": "真云实机执行：CreateVpc/CreateSubnet 成功（昨日 VPC 配额已恢复），ECS CreateServers 命中 Ecs.0067「Your account is insufficient balance」账户余额不足，E2E 提前终止；finally 已删 subnet+pc 归零无泄漏。账户级环境阻塞，非 devkit 产品缺陷。解除条件=账户充值/余额恢复。",
+  "blockedReason": "真云实机执行：CreateVpc/CreateSubnet 成功（昨日 VPC 配额已恢复），ECS CreateServers 命中 Ecs.0067「Your account is insufficient balance」账户余额不足，E2E 提前终止；finally 已删 subnet+pc 归零无泄漏。账户级环境阻塞，非 devkit 产品缺陷。解除条件=账户充值/余额恢复。",
+  "executedAt": "20261019358931"
 }
