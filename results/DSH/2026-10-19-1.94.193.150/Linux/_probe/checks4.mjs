@@ -15,7 +15,10 @@ reg('D3-C2', async () => {
   let mb = false, cp = false, curl200 = false, del = false, zero = false;
   try {
     const m = sh(['OBS', 'mb', `obs://${bucket}`, `-location=${REGION}`]);
-    mb = m.ok || /success|create/i.test(m.text);
+    if (/UserRestricted|forbidden for restricted users/i.test(m.text)) {
+      return blocked('OBS 建桶被账号权限拒绝(UserRestricted)——账号 OBS 写权限被限制，无法完成 OBS 静态站 E2E。实测 hcloud OBS mb 返回 status=403 UserRestricted。解除条件：账号恢复 OBS 建桶/写权限（补环境·真云 OBS 权限）', m.text.slice(0, 300));
+    }
+    mb = m.ok;
     detail.push(`mb(${mb})=${m.text.slice(0, 70)}`);
     const c = sh(['OBS', 'cp', `${dir}/index.html`, `obs://${bucket}/index.html`, '-f', '-acl=public-read']);
     cp = c.ok || /success|upload|copy/i.test(c.text);
@@ -235,6 +238,10 @@ reg('D3-C3', async () => {
       `沙箱部署 E2E: 上传/nginx/deploy_check 已执行, check=${JSON.stringify(check).slice(0, 140)}`,
       detail.join(' | ').slice(0, 900));
   } catch (e) {
-    return fail(`沙箱部署 E2E 异常`, `${detail.join(' | ')} || ${String(e).slice(0, 300)}`);
+    const msg = String(e);
+    if (/all ports .* are in use|端口.*被占|port.*in use/i.test(msg)) {
+      return blocked('沙箱 8080-8089 端口被占满（历史多客户端 nginx 残留）：sandbox_deploy_nginx 报 "all ports 8080-8089 are in use"。connect 与 upload_project 已实测成功，仅 nginx 部署取不到空闲端口。解除条件：清理沙箱 8080-8089 端口残留 nginx 进程后复测（补环境·沙箱端口）', `${detail.join(' | ')} || ${msg.slice(0, 300)}`);
+    }
+    return fail(`沙箱部署 E2E 异常`, `${detail.join(' | ')} || ${msg.slice(0, 300)}`);
   }
 });

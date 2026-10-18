@@ -74,7 +74,10 @@ reg('D3-C13', async () => {
   let setOk = false, getOk = false, mbOk = false;
   try {
     const mb = sh(['OBS', 'mb', `obs://${bucket}`, `-location=${REGION}`]);
-    mbOk = /successfully|success/i.test(mb.text);
+    if (/UserRestricted|forbidden for restricted users/i.test(mb.text)) {
+      return blocked('OBS 建桶被账号权限拒绝(UserRestricted "This operation is forbidden for restricted users")——账号 OBS 写权限被限制，无法建 OBS 静态网站。实测 hcloud OBS mb 返回 status=403 UserRestricted。解除条件：账号恢复 OBS 建桶/写权限（补环境·真云 OBS 权限）', mb.text.slice(0, 300));
+    }
+    mbOk = mb.ok;
     if (mbOk) {
       const set = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
       setOk = !set.__error && /200|ok|success|index/i.test(JSON.stringify(set));
