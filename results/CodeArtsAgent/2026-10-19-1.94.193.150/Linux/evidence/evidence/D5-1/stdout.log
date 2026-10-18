@@ -1,0 +1,26 @@
+caseId=D5-1
+client=CodeArtsAgent
+OS=Linux
+version=1.1.9
+command=node /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/huaweicloud-devkit-test/results/CodeArtsAgent/2026-10-18-1.94.193.150/Linux/evidence/D5-1/probe.mjs <SRC>
+rc=1
+duration=0.0s
+
+
+node:fs:442
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/hdk/plugins/huaweicloud-core/src/integrations/hermes/manifest.yaml'
+    at readFileSync (node:fs:442:20)
+    at file:///home/testbot2/devkit-test/testbot2-Linux-CodeArts%20CLI/huaweicloud-devkit-test/results/CodeArtsAgent/2026-10-18-1.94.193.150/Linux/evidence/D5-1/probe.mjs:25:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/hdk/plugins/huaweicloud-core/src/integrations/hermes/manifest.yaml'
+}
+
+Node.js v22.13.0
