@@ -2,7 +2,7 @@
 // EXP-C4-*: real list_operations per service
 // EXP-E*: run-eval.mjs routing per intent
 // EXP-D5-5-*: WorkBuddy plugin loading
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -24,6 +24,7 @@ const EXECUTED_AT = ts();
 
 function writeEv(caseId, status, why, result, probeBody) {
   const dir = join(EVIDENCE, caseId);
+  mkdirSync(dir, { recursive: true });
   const log = { caseId, status, why, executedAt: EXECUTED_AT, result };
   writeFileSync(join(dir, 'stdout.log'), JSON.stringify(log, null, 2));
   writeFileSync(join(dir, 'probe.mjs'), '// Real probe for ' + caseId + '\n// Real execution: ' + EXECUTED_AT + '\n' + probeBody);
@@ -126,7 +127,7 @@ async function runExpE() {
   const evalResultsDir = join(TEST_REPO, 'eval', 'results');
   let evalJson = null;
   try {
-    const files = require('fs').readdirSync(evalResultsDir).filter(f => f.startsWith('eval-') && f.endsWith('.json')).sort().reverse();
+    const files = readdirSync(evalResultsDir).filter(f => f.startsWith('eval-') && f.endsWith('.json')).sort().reverse();
     if (files.length) {
       evalJson = JSON.parse(readFileSync(join(evalResultsDir, files[0]), 'utf8'));
     }

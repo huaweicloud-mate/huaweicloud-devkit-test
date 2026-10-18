@@ -1,0 +1,28 @@
+{
+  "caseId": "D4-10",
+  "status": "PASS",
+  "why": "Rule library regression all pass=true",
+  "executedAt": "20261019051558",
+  "result": {
+    "results": [
+      {
+        "cmd": "cat ~/.hcloud/config.json",
+        "expected": "deny",
+        "actual": "deny",
+        "match": true
+      },
+      {
+        "cmd": "printenv HW_ACCESS_KEY",
+        "expected": "deny",
+        "actual": "deny",
+        "match": true
+      },
+      {
+        "cmd": "hcloud ECS ListServers",
+        "expected": "allow",
+        "actual": "allow",
+        "match": true
+      }
+    ]
+  }
+}

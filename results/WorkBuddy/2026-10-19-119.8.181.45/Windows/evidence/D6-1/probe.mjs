@@ -1,0 +1,11 @@
+import { writeFileSync } from 'node:fs';
+import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/testbot4-win-workbuddy/hdk/plugins/huaweicloud-core/src/tools.mjs';
+const searchTool = TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_search_docs');
+const start = Date.now();
+const r = await callTool('huaweicloud_search_docs', { query: 'ECS listServers' });
+const latency = Date.now() - start;
+const hasResult = r && Object.keys(r).length > 0;
+const status = (searchTool && hasResult && latency < 30000) ? 'PASS' : 'FAIL';
+const output = { caseId: 'D6-1', status, why: 'search_docs tool=' + !!searchTool + ' latency=' + latency + 'ms', executedAt: '20261019051707', result: { hasTool: !!searchTool, hasResult: !!hasResult, latency } };
+writeFileSync('stdout.log', JSON.stringify(output, null, 2));
+console.log(JSON.stringify(output, null, 2));
