@@ -1,0 +1,44 @@
+{
+  "case": "D3-C2",
+  "status": "FAIL",
+  "total": 7,
+  "passed": 0,
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": false,
+      "detail": "Start at 2026-10-18 21:21:06.678937365 +0000 UTC\n\nCreate bucket [tctest-opencode-obs-ebybxz] failed, status [403], error code [UserRestricted], error "
+    },
+    {
+      "name": "obsutil上传",
+      "pass": false,
+      "detail": "Start at 2026-10-18 21:21:06.831107391 +0000 UTC\n\n\nParallel:      5                   Jobs:          5                   \nThreshold:     50.00MB      "
+    },
+    {
+      "name": "public-read(ACL)",
+      "pass": false,
+      "detail": "Command failed: hcloud obs chattri obs://tctest-opencode-obs-ebybxz -acl=public-read -f"
+    },
+    {
+      "name": "set静态站(website)",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":404,\"websiteUrl\":\"http://tctest-opencode-obs-ebybxz.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 404\"}"
+    },
+    {
+      "name": "get静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":404,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>NoSuchBucket</Code><Message>The specified bucket does not exist</Message><RequestId>000001A15"
+    },
+    {
+      "name": "curl200",
+      "pass": false,
+      "detail": "code=404 url=http://tctest-opencode-obs-ebybxz.obs-website.cn-north-4.myhuaweicloud.com"
+    },
+    {
+      "name": "删桶归零",
+      "pass": false,
+      "detail": "Command failed: hcloud obs rm obs://tctest-opencode-obs-ebybxz/ -r -f"
+    }
+  ],
+  "executedAt": "20261018212244"
+}
