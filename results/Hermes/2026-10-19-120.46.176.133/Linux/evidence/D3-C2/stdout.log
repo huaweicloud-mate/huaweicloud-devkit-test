@@ -1,21 +1,22 @@
 {
-  "status": "FAIL",
+  "status": "BLOCKED",
   "caseId": "D3-C2",
+  "blockedReason": "账户状态阻塞：OBS CreateBucket 返回 403 Start at 2026-10-18 21:10:10.422865727 +0000 UTC Create bucket [testbot3-hermes-obs-2357810273] failed, status [403], error code [UserRestricted], error message [This operation is forbidden for restri 【解除条件】账户解除受限后可复测；本次未创建任何 OBS 桶（ListBuckets 未含本次桶名），无残留",
   "total": 4,
   "passed": 0,
   "failed": 4,
   "title": "OBS静态站部署E2E",
-  "expected": "建桶→set静态站→get静态站→删桶归零（不以KooCLI退出码判成败）",
+  "expected": "建桶→set静态站→get静态站→删桶归零（不以KooCLI退出码判成败；账户受限记 BLOCKED）",
   "results": [
     {
       "name": "OBS建桶",
       "pass": false,
-      "detail": "exit=6 Start at 2026-10-18 21:05:20.267610331 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2357520110] failed, status [403], error code [UserRestricted], error messag"
+      "detail": "exit=6 Start at 2026-10-18 21:10:10.422865727 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2357810273] failed, status [403], error code [UserRestricted], error message [This operation is forbidden for restr"
     },
     {
       "name": "set静态站",
       "pass": false,
-      "detail": "{\"ok\":false,\"status\":404,\"websiteUrl\":\"http://testbot3-hermes-obs-2357520110.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 404\"}"
+      "detail": "{\"ok\":false,\"status\":404,\"websiteUrl\":\"http://testbot3-hermes-obs-2357810273.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 404\"}"
     },
     {
       "name": "get静态站",
@@ -25,7 +26,7 @@
     {
       "name": "删桶归零",
       "pass": false,
-      "detail": "rm.exit=6 Start at 2026-10-18 21:05:20.964439827 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-23575 | ls=Start at 2026-10-18 21:05:21.142382327 +0000 UTC\n\nError: Check the fs  | ListBuckets含桶=false"
+      "detail": "rm.exit=6 Start at 2026-10-18 21:10:10.853071312 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-23578 | ListBuckets含桶=false"
     }
   ]
 }

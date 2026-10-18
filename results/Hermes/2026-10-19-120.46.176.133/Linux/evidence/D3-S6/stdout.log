@@ -6,5 +6,6 @@
   "actual": "创建=false urn=no 归零=true",
   "detail": "账户/权限限制：{ \"error_code\": \"FSS.0403\", \"error_msg\": \"user restricted\", \"details\": [ { \"error_code\": \"FSS.0403\", \"error_msg\": \"Forbidden.\" } ] } Failed to get terminal width. The default width will be used. If characters are unreada 【解除条件】账户解除受限（user restricted / sufficient balance）后可复测；本用例未创建任何资源，无残留",
   "executedAt": "20261018210808",
-  "probe": "probe_d3s6.mjs"
+  "probe": "probe_d3s6.mjs",
+  "blockedReason": "【补环境/账户受限】FunctionGraph CreateFunction 返回 FSS.0403 user restricted（Forbidden），账户当前不接受 FunctionGraph 写操作；本次未创建函数（ListFunctions 未含本次函数名），无残留。解除条件：账户解除受限后可复测函数创建+TIMER 触发器绑定。"
 }

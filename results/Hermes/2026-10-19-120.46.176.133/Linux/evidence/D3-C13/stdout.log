@@ -6,5 +6,6 @@
   "actual": "OBS 建桶失败: exit=6 Start at 2026-10-18 21:09:20.355303438 +0000 UTC Create bucket [testbot3-hermes-c13-2357760204] failed, status [403], error code [UserRestricted], error message [This operation is forbidden for restri",
   "detail": "账户状态阻塞：OBS CreateBucket 返回 403 UserRestricted 【解除条件】账户解除受限后可复测；本次未创建任何桶，无残留",
   "executedAt": "20261018210920",
-  "probe": "probe_d3c13.mjs"
+  "probe": "probe_d3c13.mjs",
+  "blockedReason": "【补环境/账户受限】OBS CreateBucket 返回 403 UserRestricted（This operation is forbidden for restricted users），账户当前不接受 OBS 写操作；本次未创建任何桶（ListBuckets 未含本次桶名），无残留。解除条件：账户解除受限后可复测 get/set/delete AWS4 契约。"
 }
