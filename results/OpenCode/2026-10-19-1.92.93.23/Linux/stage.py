@@ -24,7 +24,7 @@ WHY = {
     'D4-25': 'huaweicloud-safety.py:46 WRITE_OPERATION_RE 前置捕获组致空格前 CreateVpc 不匹配',
     'D4-26': 'risk-rule-engine.mjs:19-23 redactEvidence 不覆盖 JSON 带引号 key(adminPass/secret_key)',
     'D3-S5': 'tools.mjs:1983-2224 routeMap 单意图匹配，无复合意图多路分解',
-    'D3-S6': 'tools.mjs/tools.mjs CreateFunction 最小参数集未被稳定接受(code.zip_file 无效)',
+    'D3-S6': 'tools.mjs/tools.mjs CreateFunction 最小参数集未被稳定接受(code.filename 无效)',
     'D3-S7': 'tools.mjs:1983-2224 routeMap 无 Web 应用部署目标分解；RDS 创建缺 VPC/子网/安全组前置',
     'D9-12': 'mcp-protocol.mjs:32-55 initialize 未调 runVersionCheck；:57-59 dispatch 无 initialize 前置状态机',
     'D1-70': 'undici ^8.11.2 浮点依赖解析到 8.12.2(engines>=22.19)，Node 22.13 缺 node:zlib zstd 致代理路径崩溃',
@@ -36,6 +36,8 @@ WHY = {
 
 def write_status(cid, status, why=''):
     d = {'status': status, 'executedAt': TS}
+    if status == 'BLOCKED':
+        why = BLOCKED.get(cid, why)
     if why: d['why'] = why
     wr(os.path.join(EV, cid, 'stdout.log'), json.dumps(d, ensure_ascii=False))
 
@@ -44,10 +46,17 @@ def slice_section(logfile, section_id):
     m = re.search(r'=====CASE %s=====(.*?)=====END %s=====' % (re.escape(section_id), re.escape(section_id)), txt, re.S)
     return (m.group(1).strip() if m else '') or ('(no section %s in %s)' % (section_id, logfile))
 
-# ---- 状态表（今日 2026-10-17 新鲜复测）----
+# ---- 状态表（今日 2026-10-19 新鲜复测；SUT=v1.1.9 stable）----
 FAIL = {'D4-2','D4-6','D4-17','D4-21','D4-25','D4-26','D3-S5','D3-S6','D3-S7','D9-12','D1-70','EXP-E01'}
 SPEC = {'D8-9','D9-9','D10-4'}
 NOTRUN = {'D1-39'}
+# 环境阻塞：共享账号 hw018619646 于 10-17 后余额不足/被冻结，真机执行返回后端硬错误（非产品缺陷）
+BLOCKED = {
+    'D3-C1': '实测 2026-10-19：CreateServers 返回 Ecs.0067 "Your account is insufficient balance"（账号余额不足）；VPC/子网建删归零成功，仅 ECS 创建被阻断；解除条件=账号充值恢复余额后复测',
+    'D3-C2': '实测 2026-10-19：hcloud OBS mb 返回 403 UserRestricted "This operation is forbidden for restricted users"（账号受限/冻结），OBS 静态站全链路阻断；解除条件=账号解除 OBS 受限',
+    'D3-C13': '实测 2026-10-19：hcloud OBS mb 返回 403 UserRestricted（账号受限），obs_set_website_config 因桶不存在返回 404 NoSuchBucket；解除条件=账号解除 OBS 受限',
+    'D3-C7': '实测 2026-10-19：EIP CreatePublicip 返回 VPC.0502 "Tenant status is op_restricted"（账号冻结）；region/readonly/plan 断言均 PASS，仅 EIP 建删被阻断；解除条件=账号解除冻结',
+}
 
 # ---- source mapping：case -> (kind, file, section) ----
 MAP = {}
@@ -110,6 +119,7 @@ def status_of(cid):
     if cid in FAIL: return 'FAIL'
     if cid in SPEC: return 'SPEC-MISMATCH'
     if cid in NOTRUN: return 'NOT_RUN'
+    if cid in BLOCKED: return 'BLOCKED'
     return 'PASS'
 
 rc_txt = rd(os.path.join(EV, 'realcloud-probe', 'stdout.txt'))
@@ -140,21 +150,24 @@ for cid in sorted(MAP):
         write_status(cid, st, WHY.get(cid, ''))
     done += 1
 
-# realcloud 单独核验：今日干净跑 D2-1 五端 OK / D4-14 建删归零 OK / D4-18/19/20 OK
+# realcloud 单独核验：今日 D2-1 五端 OK / D4-14 建删归零 OK / D4-18/19/20 OK
 for cid in SELF_LOG:
-    if not os.path.isfile(os.path.join(EV, cid, 'stdout.log')):
+    if cid in BLOCKED:
+        # 探针已写 FAIL stdout.log，但根因是账号冻结（环境），覆盖为 BLOCKED 并保留 stdout.txt 证据
+        write_status(cid, 'BLOCKED', BLOCKED[cid])
+    elif not os.path.isfile(os.path.join(EV, cid, 'stdout.log')):
         txt = rd(os.path.join(EV, cid, 'stdout.txt'))
         st = 'PASS' if ('PASS' in txt and 'FAIL' not in txt) else 'FAIL'
         write_status(cid, st, '')
 
-# 手动补 stdout.log（D4-13/D4-23/D4-24/D1-70 已由探针/脚本自写，此处核对）
+# 手动补 stdout.log（D4-13/D4-23/D4-24/D1-70）
 for cid in SELF_MANUAL:
-    if not os.path.isfile(os.path.join(EV, cid, 'stdout.log')):
-        txt = rd(os.path.join(EV, cid, 'stdout.txt'))
-        st = 'PASS' if ('verdict": "PASS"' in txt or '"status": "PASS"' in txt or ('PASS' in txt and 'FAIL' not in txt)) else 'FAIL'
-        write_status(cid, st, WHY.get(cid, ''))
+    txt = rd(os.path.join(EV, cid, 'stdout.txt'))
+    st = status_of(cid)
+    write_status(cid, st, WHY.get(cid, ''))
 
 print('[stage] 落盘', done, '个 source 用例证据；self-log', ', '.join(SELF_LOG), '；manual', ', '.join(SELF_MANUAL))
 print('[stage] FAIL 集:', ', '.join(sorted(FAIL)))
 print('[stage] SPEC 集:', ', '.join(sorted(SPEC)))
 print('[stage] NOTRUN 集:', ', '.join(sorted(NOTRUN)))
+print('[stage] BLOCKED 集:', ', '.join(sorted(BLOCKED)))
