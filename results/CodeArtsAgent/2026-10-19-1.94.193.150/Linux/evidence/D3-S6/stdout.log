@@ -1,0 +1,79 @@
+caseId=D3-S6
+client=CodeArtsAgent
+OS=Linux
+version=1.1.9
+command=node /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/huaweicloud-devkit-test/results/CodeArtsAgent/2026-10-18-1.94.193.150/Linux/evidence/D3-S6/probe.mjs
+rc=0
+
+
+=====CASE D3-S6=====
+serviceCatalog 路由 -> services=["FunctionGraph"]
+CreateFunction -> status=0 urn=
+归零验证 = true
+[OK] serviceCatalog 路由 FunctionGraph
+[FAIL] 创建 Python 函数返回 URN
+[FAIL] 定时触发器绑定成功
+[FAIL] 测后删除函数归零
+=====END D3-S6=====
+
+=====CASE D3-S7=====
+serviceCatalog 复合意图路由 -> services=["RDS"] RDS命中=true 部署目标命中=false
+CreateVpc -> status=0 id=329160b9-3acf-
+CreateSubnet -> status=0 id=dc57ed64-e888-
+CreateSecurityGroup -> status=0 id=
+DeleteSubnet -> status=0
+DeleteVpc -> status=0
+归零验证 = false
+[OK] serviceCatalog 复合意图命中 RDS
+[FAIL] VPC/子网/安全组前置编排完成
+[FAIL] 最小 RDS 实例创建成功(返回 job_id)
+[FAIL] 测后删除归零(RDS+SG+子网+VPC)
+=====END D3-S7=====
+
+=====SUMMARY=====
+{
+  "total": 8,
+  "passed": 2,
+  "results": [
+    {
+      "name": "serviceCatalog 路由 FunctionGraph",
+      "ok": true,
+      "detail": "[\"FunctionGraph\"]"
+    },
+    {
+      "name": "创建 Python 函数返回 URN",
+      "ok": false,
+      "detail": "urn="
+    },
+    {
+      "name": "定时触发器绑定成功",
+      "ok": false,
+      "detail": "trigger_id="
+    },
+    {
+      "name": "测后删除函数归零",
+      "ok": false,
+      "detail": "cleanup=false zeroed=true"
+    },
+    {
+      "name": "serviceCatalog 复合意图命中 RDS",
+      "ok": true,
+      "detail": "[\"RDS\"]"
+    },
+    {
+      "name": "VPC/子网/安全组前置编排完成",
+      "ok": false,
+      "detail": "vpc=329160b9 subnet=dc57ed64 sg="
+    },
+    {
+      "name": "最小 RDS 实例创建成功(返回 job_id)",
+      "ok": false,
+      "detail": "job_id="
+    },
+    {
+      "name": "测后删除归零(RDS+SG+子网+VPC)",
+      "ok": false,
+      "detail": "{\"rdsCleanup\":true,\"sgCleanup\":true,\"subnetCleanup\":true,\"vpcCleanup\":true,\"zeroed\":false}"
+    }
+  ]
+}

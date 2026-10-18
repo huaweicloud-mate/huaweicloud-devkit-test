@@ -1,0 +1,51 @@
+caseId=D3-C7
+client=CodeArtsAgent
+OS=Linux
+version=1.1.9
+command=node /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/huaweicloud-devkit-test/results/CodeArtsAgent/2026-10-18-1.94.193.150/Linux/evidence/D3-C7/probe.mjs
+rc=0
+
+[OK] plan 香港区 EIP 只读查询
+[OK] get_regional_availability 预查
+[FAIL] 创建最小 EIP(cn-north-4)
+  raw stdout: {
+  "code": "VPC.0502",
+  "message": "{\"NeutronError\":{\"message\":\"Tenant status is op_restricted.\",\"type\":\"InvalidInput\",\"detail\":\"\"}}"
+}
+Failed to get terminal width. The default width 
+[OK] 释放 EIP
+[OK] 归零验证(不含本次 EIP)
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C7",
+  "total": 5,
+  "passed": 4,
+  "results": [
+    {
+      "n": "plan 香港区 EIP 只读查询",
+      "ok": true,
+      "out": "{\"decision\":\"allow\",\"risk\":\"read_only\",\"service\":\"EIP\"}"
+    },
+    {
+      "n": "get_regional_availability 预查",
+      "ok": true,
+      "out": "{\"ok\":false,\"service\":\"eip\",\"region\":\"ap-southeast-1\",\"available\":false,\"note\":\"Service eip is not in the regional availability cache. Run hcloud EIP --help to verify, or check https://developer.huawe"
+    },
+    {
+      "n": "创建最小 EIP(cn-north-4)",
+      "ok": false,
+      "out": "{\"eipId\":\"\",\"ip\":\"\"}"
+    },
+    {
+      "n": "释放 EIP",
+      "ok": true,
+      "out": "未创建无需释放"
+    },
+    {
+      "n": "归零验证(不含本次 EIP)",
+      "ok": true,
+      "out": "{\"containsOwn\":false}"
+    }
+  ]
+}
