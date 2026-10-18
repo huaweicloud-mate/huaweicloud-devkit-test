@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "assertion": "最小权限凭证通过率: 只读子账号(test001)可执行只读操作成功",
+  "checks": {
+    "readonlyCredentials": "存在 (test001, HPUA3XUK...)",
+    "readOperation_ListServers": {
+      "cmd": "hcloud ECS ListServersDetails --cli-region=cn-north-4 --limit=1",
+      "result": "{\"count\": 0, \"servers\": []}",
+      "status": "PASS (只读成功)"
+    },
+    "readOperation_ListSG": {
+      "cmd": "hcloud VPC ListSecurityGroups/v3 --cli-region=cn-north-4",
+      "result": "返回安全组列表",
+      "status": "PASS (只读成功)"
+    },
+    "writeOperation_CreateSG": {
+      "cmd": "hcloud VPC CreateSecurityGroup/v3 --security_group.name=test-readonly-sg-2026",
+      "result": "创建成功(id=5fcdb321...),已立即删除归零,已验证删除",
+      "status": "WARNING: test001 对 VPC 有写权限,资源已清理归零"
+    }
+  },
+  "note": "只读子账号 test001 成功执行只读操作。写操作测试发现 test001 对 VPC 有写权限,已立即删除创建的安全组并验证归零。建议检查 test001 IAM 策略。"
+}

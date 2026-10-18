@@ -1,0 +1,63 @@
+[OK] huaweicloud_sandbox_check_user
+[OK] huaweicloud_sandbox_sign_agreement
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] huaweicloud_sandbox_connect
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] huaweicloud_sandbox_credentials
+  upload progress: batch 1/1
+[OK] huaweicloud_sandbox_upload_file
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] huaweicloud_sandbox_exec_one_shot
+[ERR] huaweicloud_sandbox_deploy_check
+[OK] huaweicloud_sandbox_close_session
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C6",
+  "total": 8,
+  "passed": 7,
+  "results": [
+    {
+      "n": "huaweicloud_sandbox_check_user",
+      "ok": true,
+      "out": "{\"realnameVerified\":true,\"agreementSigned\":true}"
+    },
+    {
+      "n": "huaweicloud_sandbox_sign_agreement",
+      "ok": true,
+      "out": "{\"signed\":true,\"signedCount\":0}"
+    },
+    {
+      "n": "huaweicloud_sandbox_connect",
+      "ok": true,
+      "out": "status=connected wsId=e7e9310835d44e5abbcb"
+    },
+    {
+      "n": "huaweicloud_sandbox_credentials",
+      "ok": true,
+      "out": "{\"sessionId\":\"e7e9310835d44e5abbcb35cd03e86da2\",\"expiresAt\":\"2026-10-18T21:15:05.598000Z\",\"credentialValidation\":\"passed\",\"apiKeyInjected\":false,\"apiKeyHint\":\"No DevBridge API Key provided locally — t"
+    },
+    {
+      "n": "huaweicloud_sandbox_upload_file",
+      "ok": true,
+      "out": "{\"ok\":true,\"localPath\":\"/etc/hostname\",\"remotePath\":\"/workspace/.hdk-hostname\",\"bytes\":23,\"chunks\":1,\"md5\":\"f467cb78c5d032487eea6af95b90bbdc\",\"md5Verified\":true"
+    },
+    {
+      "n": "huaweicloud_sandbox_exec_one_shot",
+      "ok": true,
+      "out": "\u001b]133;C\u0007probe-ok\r\ne7e9310835d44e5abbcb35cd03e86da2\r\n\u001b]133;C\u0007\r\n"
+    },
+    {
+      "n": "huaweicloud_sandbox_deploy_check",
+      "ok": false,
+      "out": "{\"__error\":\"Error: port, project, and output_dir are required.\"}"
+    },
+    {
+      "n": "huaweicloud_sandbox_close_session",
+      "ok": true,
+      "out": "ok"
+    }
+  ]
+}

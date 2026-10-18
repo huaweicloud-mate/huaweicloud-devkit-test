@@ -1,0 +1,50 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "classifyTextCommand对高危命令deny、只读命令allow，链路正确",
+  "executedAt": "20261018054500",
+  "details": [
+    {
+      "input": "echo $HW_SECRET_KEY",
+      "decision": "deny",
+      "risk": "credential",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "input": "hcloud ECS DeleteServer --server_id=test",
+      "decision": "deny",
+      "risk": "write",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "input": "cat ~/.hcloud/configure.json",
+      "decision": "deny",
+      "risk": "credential",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "input": "env | grep HUAWEICLOUD",
+      "decision": "deny",
+      "risk": "credential",
+      "expected": "deny",
+      "pass": true
+    },
+    {
+      "input": "hcloud ECS ListServers",
+      "decision": "allow",
+      "risk": "read_only",
+      "expected": "allow",
+      "pass": true
+    },
+    {
+      "input": "ls -la",
+      "decision": "allow",
+      "risk": "not_huaweicloud",
+      "expected": "allow",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "caseId": "D4-1",
+  "status": "PASS",
+  "why": "所有凭证文件读取命令被deny拦截",
+  "executedAt": "20261018054500",
+  "details": [
+    {
+      "cmd": "cat ~/.hcloud/configure.json",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "type %USERPROFILE%\\.hcloud\\configure.json",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "cat /root/.huaweicloud/credentials.json",
+      "decision": "deny",
+      "risk": "credential"
+    },
+    {
+      "cmd": "Get-Content ~/.config/huaweicloud/credentials.json",
+      "decision": "deny",
+      "risk": "credential"
+    }
+  ]
+}

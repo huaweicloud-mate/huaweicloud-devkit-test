@@ -1,0 +1,1 @@
+import { dispatch } from './plugins/huaweicloud-core/src/mcp-protocol.mjs';

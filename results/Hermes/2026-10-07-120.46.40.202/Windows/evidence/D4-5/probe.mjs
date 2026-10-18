@@ -1,0 +1,3 @@
+import { classifyHcloudArgs } from './plugins/huaweicloud-core/src/safety-policy.mjs';
+const tests = [{"args":["ECS","DeleteServer","--server_id=test"]},{"args":["ECS","CreateServer","--name=test"]},{"args":["VPC","DeleteVpc","--vpc_id=test"]},{"args":["RDS","DeleteInstance","--instance_id=test"]}];
+for (const t of tests) { const r = classifyHcloudArgs(t.args); console.log(t.args[0]+'.'+t.args[1], '->', r.decision, r.risk); }

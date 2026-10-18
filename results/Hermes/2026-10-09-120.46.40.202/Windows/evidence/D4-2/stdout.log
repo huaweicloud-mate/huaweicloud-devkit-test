@@ -1,0 +1,42 @@
+{
+  "status": "FAIL",
+  "assertion": "classifyTextCommand: env/printenv/echo 凭证环境变量(HW_ACCESS_KEY/HW_SECRET_KEY/HW_SECURITY_TOKEN)被deny",
+  "findings": [
+    {
+      "cmd": "env | grep HW_SECRET",
+      "decision": "allow",
+      "reason": "No Huawei Cloud safety rule matched.",
+      "rootCause": "safety-policy.mjs:399 regex /HUAWEICLOUD|HWC_|HCLOUD|OS_/i does not match 'HW_SECRET' (missing HW_ prefix pattern; only matches HUAWEICLOUD, HWC_, HCLOUD, OS_). env+grep combo with HW_ prefix variables bypasses the env-dump gate.",
+      "file": "plugins/huaweicloud-core/src/safety-policy.mjs:399"
+    },
+    {
+      "cmd": "echo %HW_ACCESS_KEY%",
+      "decision": "allow",
+      "reason": "No Huawei Cloud safety rule matched.",
+      "rootCause": "safety-policy.mjs:418 regex only matches Unix-style $HW_ACCESS_KEY ($ or ${) but not Windows-style %HW_ACCESS_KEY%. Windows cmd.exe %VAR% expansion is not covered by the credential variable detection.",
+      "file": "plugins/huaweicloud-core/src/safety-policy.mjs:418"
+    }
+  ],
+  "passedCmds": [
+    {
+      "cmd": "printenv HW_ACCESS_KEY",
+      "decision": "deny"
+    },
+    {
+      "cmd": "echo $HW_ACCESS_KEY",
+      "decision": "deny"
+    },
+    {
+      "cmd": "env | grep HUAWEICLOUD",
+      "decision": "deny"
+    },
+    {
+      "cmd": "printenv HW_SECRET_KEY",
+      "decision": "deny"
+    },
+    {
+      "cmd": "echo $HW_SECURITY_TOKEN",
+      "decision": "deny"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "why": "Source-level verification in tools.mjs: redactSecrets imported and used (credentials never appear in plaintext in responses), consumeApprovalToken enforces single-use approval tokens, resolveCredentialsWithRuntime handles runtime credentials, readGlobalCredentials/writeGlobalCredentials manage persistent credentials, hashArgs generates parameter hashes, evaluateArtifacts/evaluateDeployPlan evaluate risk. STS token rejection confirmed in tools.mjs:persistCredentials (scope: 'rejected'). Credential redaction confirmed via D2-4 probe.",
+  "executedAt": "20261005215708",
+  "sourceChecks": {
+    "redactSecrets": "imported in tools.mjs from safety-policy.mjs",
+    "consumeApprovalToken": "imported in tools.mjs from hcloud-cli.mjs",
+    "resolveCredentialsWithRuntime": "function in tools.mjs",
+    "hashArgs": "imported in tools.mjs from hcloud-cli.mjs",
+    "evaluateArtifacts": "imported in tools.mjs from risk-rule-engine.mjs",
+    "evaluateDeployPlan": "imported in tools.mjs from risk-rule-engine.mjs",
+    "readGlobalCredentials": "function in tools.mjs",
+    "writeGlobalCredentials": "function in credentials.mjs",
+    "stsTokenRejection": "tools.mjs persistCredentials returns scope:'rejected' for securityToken"
+  }
+}
