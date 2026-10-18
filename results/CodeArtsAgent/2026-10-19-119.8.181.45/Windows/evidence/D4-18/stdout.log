@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "caseId": "D4-18",
+  "test": "confirm-not-deny approval semantics",
+  "results": [
+    {
+      "op": [
+        "ECS",
+        "CreateServers"
+      ],
+      "decision": "deny"
+    },
+    {
+      "op": [
+        "ECS",
+        "DeleteServers"
+      ],
+      "decision": "deny"
+    },
+    {
+      "op": [
+        "EVS",
+        "CreateVolume"
+      ],
+      "decision": "deny"
+    }
+  ],
+  "hasConfirmFlow": true,
+  "executedAt": "20261018211621",
+  "note": "Write operations require explicit confirmation (deny/warn), not direct allow"
+}

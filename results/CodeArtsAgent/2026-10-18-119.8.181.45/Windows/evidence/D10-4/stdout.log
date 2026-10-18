@@ -1,0 +1,201 @@
+{
+  "status": "PASS",
+  "caseId": "D10-4",
+  "title": "安全干预-静态规则层",
+  "timestamp": "2026-10-17T21:49:07.793Z",
+  "summary": {
+    "totalTests": 23,
+    "passed": 23,
+    "failed": 0
+  },
+  "results": [
+    {
+      "test": "规则库完整加载",
+      "passed": true,
+      "totalRules": 17,
+      "severityDistribution": {
+        "deny": 9,
+        "warn": 8,
+        "info": 0
+      },
+      "expected": "9 deny + 7 warn"
+    },
+    {
+      "test": "规则ID列表",
+      "passed": true,
+      "ruleIds": [
+        "hwc-command-credential-file",
+        "hwc-command-env-dump",
+        "hwc-command-secret-value-read",
+        "hwc-command-sts-credential",
+        "hwc-command-encoded-shell-exec",
+        "hwc-network-public-admin-port",
+        "hwc-obs-anonymous-write",
+        "hwc-functiongraph-public-no-auth",
+        "hwc-iam-admin-policy",
+        "hwc-iam-highrisk-write",
+        "hwc-destructive-delete-force",
+        "hwc-destructive-delete-operation",
+        "hwc-destructive-reset-operation",
+        "hwc-destructive-delete-cascade",
+        "hwc-sandbox-missing-ttl",
+        "hwc-cost-unbounded-scale",
+        "hwc-sandbox-destructive-command"
+      ]
+    },
+    {
+      "test": "高危命令: 凭证文件读取",
+      "passed": true,
+      "command": "cat ~/.hcloud/config.json",
+      "expected": "deny",
+      "actual": "deny",
+      "findingsCount": 1
+    },
+    {
+      "test": "高危命令: 华为云凭证文件读取",
+      "passed": true,
+      "command": "cat ~/.huaweicloud/credentials",
+      "expected": "deny",
+      "actual": "deny",
+      "findingsCount": 1
+    },
+    {
+      "test": "高危命令: 环境变量凭证泄露",
+      "passed": true,
+      "command": "env | grep HUAWEICLOUD",
+      "expected": "deny",
+      "actual": "deny",
+      "findingsCount": 1
+    },
+    {
+      "test": "高危命令: 强制删除操作",
+      "passed": true,
+      "command": "hcloud ECS DeleteServer --server_id=123 --force",
+      "expected": "deny",
+      "actual": "deny",
+      "findingsCount": 2
+    },
+    {
+      "test": "高危命令: 根目录递归删除",
+      "passed": true,
+      "command": "rm -rf /",
+      "expected": "deny",
+      "actual": "deny",
+      "findingsCount": 1
+    },
+    {
+      "test": "高危命令: 密钥明文读取",
+      "passed": true,
+      "command": "hcloud CSMS ShowSecretVersion --secret_name=test",
+      "expected": "deny",
+      "actual": "deny",
+      "findingsCount": 1
+    },
+    {
+      "test": "高危命令 deny 判定率",
+      "passed": true,
+      "total": 6,
+      "denied": 6
+    },
+    {
+      "test": "只读命令: 列出服务器",
+      "passed": true,
+      "command": "hcloud ECS ListServers",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "test": "只读命令: 列出服务器详情",
+      "passed": true,
+      "command": "hcloud ECS ListServersDetails",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "test": "只读命令: 列出OBS桶",
+      "passed": true,
+      "command": "hcloud OBS ls",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "test": "只读命令: 列出VPC",
+      "passed": true,
+      "command": "hcloud VPC ListVpcs",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "test": "只读命令: 列出IAM用户",
+      "passed": true,
+      "command": "hcloud IAM ListUsers",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "test": "只读命令: 帮助命令",
+      "passed": true,
+      "command": "hcloud --help",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "test": "只读命令: 版本命令",
+      "passed": true,
+      "command": "hcloud version",
+      "decision": "allow",
+      "findingsCount": 0
+    },
+    {
+      "test": "只读命令 allow 判定率",
+      "passed": true,
+      "total": 7,
+      "allowed": 7
+    },
+    {
+      "test": "决策三态: 删除操作",
+      "passed": true,
+      "command": "hcloud ECS DeleteServer --server_id=123",
+      "expected": "warn",
+      "actual": "warn",
+      "findingsCount": 1
+    },
+    {
+      "test": "决策三态: 创建操作(无风险)",
+      "passed": true,
+      "command": "hcloud ECS CreateServers --name=test",
+      "expected": "allow",
+      "actual": "allow",
+      "findingsCount": 0
+    },
+    {
+      "test": "决策三态: 只读操作",
+      "passed": true,
+      "command": "hcloud ECS ListServers",
+      "expected": "allow",
+      "actual": "allow",
+      "findingsCount": 0
+    },
+    {
+      "test": "决策三态: 公开暴露",
+      "passed": true,
+      "command": "Create FunctionGraph function with public endpoint and no auth",
+      "expected": "warn",
+      "actual": "warn",
+      "findingsCount": 1
+    },
+    {
+      "test": "决策三态正确率",
+      "passed": true,
+      "total": 4,
+      "correct": 4
+    },
+    {
+      "test": "关键规则覆盖",
+      "passed": true,
+      "expectedRules": 8,
+      "actualRules": 17,
+      "missingRules": []
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "caseId": "D4-19",
+  "test": "Preflight checks still effective in confirmation flow",
+  "results": [
+    {
+      "op": [
+        "ECS",
+        "CreateServers",
+        "--security_group_id.1=0.0.0.0/0"
+      ],
+      "decision": "deny",
+      "risk": "write"
+    },
+    {
+      "op": [
+        "ECS",
+        "CreateServers",
+        "--adminPass=password123"
+      ],
+      "decision": "deny",
+      "risk": "write"
+    }
+  ],
+  "hasPreflight": false,
+  "executedAt": "20261018211629",
+  "note": "Preflight checks (public exposure, credential exposure) still work in confirmation flow"
+}

@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "caseId": "D4-23",
+  "title": "全局规则 huawei-agent-rules.md 注入生效性",
+  "timestamp": "2026-10-17T21:47:29.026Z",
+  "summary": {
+    "totalTests": 5,
+    "passed": 5,
+    "failed": 0
+  },
+  "results": [
+    {
+      "test": "huawei-agent-rules.mdc 文件存在",
+      "passed": true,
+      "contentLength": 3780
+    },
+    {
+      "test": "规则文件包含核心安全约束",
+      "passed": true,
+      "checks": {
+        "CorePrinciples": true,
+        "SecretSafety": true,
+        "IamSecurity": true,
+        "NetworkSecurity": true,
+        "hasMUST": true
+      }
+    },
+    {
+      "test": "Agent 安装目标覆盖",
+      "passed": true,
+      "totalTargets": 11,
+      "skillsDir": "C:\\Users\\Administrator\\devkit-test\\hdk\\plugins\\huaweicloud-core\\skills"
+    },
+    {
+      "test": "MUST 约束可执行性",
+      "passed": true,
+      "mustCount": 10
+    },
+    {
+      "test": "关键安全规则存在",
+      "passed": true,
+      "rules": [
+        {
+          "name": "禁止直连 CSMS",
+          "found": true
+        },
+        {
+          "name": "禁止直连 KMS",
+          "found": true
+        },
+        {
+          "name": "最小权限原则",
+          "found": true
+        }
+      ]
+    }
+  ]
+}
