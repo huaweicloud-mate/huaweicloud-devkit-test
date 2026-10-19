@@ -1,15 +1,15 @@
-﻿/**
+/**
  * OpenCode 1.1.5 daily test probe - D4 security core
  * Covers: D4-1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24
  */
-import { classifyTextCommand, classifyHcloudArgs, redactSecrets, loadPolicy } from 'file:///C:/Users/Administrator/devkit-test/CodeArts/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
-import { loadRiskRules, evaluateCommandRisk, evaluateArtifacts, evaluateDeployPlan } from 'file:///C:/Users/Administrator/devkit-test/CodeArts/hdk/plugins/huaweicloud-core/src/risk-rule-engine.mjs';
+import { classifyTextCommand, classifyHcloudArgs, redactSecrets, loadPolicy } from 'file:///C:/Users/Administrator/AppData/Roaming/npm/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/safety-policy.mjs';
+import { loadRiskRules, evaluateCommandRisk, evaluateArtifacts, evaluateDeployPlan } from 'file:///C:/Users/Administrator/AppData/Roaming/npm/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/risk-rule-engine.mjs';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { writeFileSync } from 'node:fs';
 
-const pkgRoot = 'C:/Users/Administrator/devkit-test/CodeArts/hdk';
-const evDir = 'C:/Users/Administrator/devkit-test/CodeArts/huaweicloud-devkit-test/results/CodeArtsSpace/2026-10-19-120.46.2.198/Windows/evidence';
+const pkgRoot = 'C:/Users/Administrator/AppData/Roaming/npm/node_modules/huaweicloud-devkit';
+const evDir = 'C:/Users/Administrator/devkit-test/CodeArtsSpace/huaweicloud-devkit-test/results/CodeArtsSpace/2026-10-19-120.46.2.198/Windows/evidence';
 const results = [];
 function test(id, name, pass, actual, expected, passMsg, failMsg) {
   results.push({ id, name, pass, actual: String(actual).substring(0,120), expected: String(expected).substring(0,120), passMsg, failMsg });
