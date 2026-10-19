@@ -568,6 +568,74 @@ def _ux_kpi(value, label, color):
             f'<div style="font-size:12px;opacity:.9;">{label}</div></div>')
 
 
+def _render_ux_replay(suts):
+    """渲染 D11-39 体验回放（独立专项 · 范式②）区块：每被测包一行汇总 + 逐场景判定明细。"""
+    reps = [(s.get("label") or "—", s.get("replay") or {}) for s in (suts or [])]
+    head = ('<h3>D11-39 体验回放差异分类（独立专项 · 范式②）</h3>'
+            '<p style="color:#7f8c8d;font-size:12px;">口径：场景规则真源 <code>eval/replay/ux-replay.mjs</code> 的 '
+            '<code>SCENARIOS</code>（5 场景），基线快照 <code>eval/replay/recordings/ux-baseline-v1.jsonl</code>，'
+            '分类器 <code>eval/replay/compare.mjs::classifyUxText</code>；退出码 0 无退化 / 1 存在体验退化 / '
+            '2 不可判定；<b>BLOCKED</b>（沙箱等环境不可判定）不计入通过率。</p>')
+    if not reps:
+        return head + '<p style="color:#95a5a6;font-size:12px;">无被测包数据。</p>'
+    if not [r for _, r in reps if r.get("available")]:
+        msg = '；'.join(f'{lb}：{r.get("error") or "未采集"}' for lb, r in reps)
+        return (head + '<p style="color:#95a5a6;font-size:12px;">本轮未采集到回放结果 —— ' + msg +
+                '。复跑：<code>npm run test:ux-replay</code></p>')
+
+    srows, details = [], []
+    for lb, r in reps:
+        if not r.get("available"):
+            srows.append(f'<tr><td style="{_TD}">{lb}</td>'
+                         f'<td style="{_TD}text-align:center;color:#95a5a6;" colspan="6">'
+                         f'未采集（{r.get("error") or "—"}）</td></tr>')
+            continue
+        sm = r.get("summary", {}) or {}
+        pass_n = sm.get("pass", 0) or 0
+        reg_n = sm.get("ux_regression", 0) or 0
+        judged = pass_n + reg_n
+        rate = ('%.1f%%' % (pass_n * 100.0 / judged)) if judged else '—'
+        ex = sm.get("exit")
+        vt = {0: "PASS", 1: "UX_REGRESSION", 2: "INDETERMINATE"}.get(ex, "—")
+        color = "#27ae60" if ex == 0 else ("#c0392b" if ex == 1 else "#e67e22")
+        srows.append(
+            f'<tr><td style="{_TD}">{lb}（v{r.get("sutVersion") or "?"}）</td>'
+            f'<td style="{_TD}text-align:center;">{pass_n}</td>'
+            f'<td style="{_TD}text-align:center;color:#c0392b;font-weight:700;">{reg_n}</td>'
+            f'<td style="{_TD}text-align:center;">{sm.get("blocked", 0)}</td>'
+            f'<td style="{_TD}text-align:center;">{sm.get("harness_error", 0)}</td>'
+            f'<td style="{_TD}text-align:center;">{rate}</td>'
+            f'<td style="{_TD}text-align:center;color:{color};font-weight:700;">exit {ex} · {vt}</td></tr>')
+
+        drows = ''
+        for sc in r.get("scenarios", []) or []:
+            verdict = sc.get("verdict", "")
+            vcolor = "#27ae60" if sc.get("pass") else ("#e67e22" if verdict == "BLOCKED" else "#c0392b")
+            drows += (f'<tr><td style="{_TD}"><b>{sc.get("case", "")}</b></td>'
+                      f'<td style="{_TD}">{sc.get("id", "")}</td>'
+                      f'<td style="{_TD}">{sc.get("title", "")}</td>'
+                      f'<td style="{_TD}color:{vcolor};font-weight:700;">{verdict}</td>'
+                      f'<td style="{_TD}font-size:11px;color:#7f8c8d;">{sc.get("reasons", "")}</td></tr>')
+        details.append(
+            '<details style="margin:6px 0;"><summary style="cursor:pointer;padding:8px 12px;background:#f7f7f7;'
+            'border-radius:6px;font-size:13px;font-weight:700;">'
+            f'{lb}（v{r.get("sutVersion") or "?"}）—— 通过 {pass_n} / 体验退化 {reg_n} / '
+            f'BLOCKED {sm.get("blocked", 0)}（基线 <code>{r.get("recording", "")}</code>）</summary>'
+            '<table style="border-collapse:collapse;width:100%;font-size:12px;margin-top:6px;">'
+            f'<thead><tr><th style="{_TH}">用例</th><th style="{_TH}">场景</th><th style="{_TH}">标题</th>'
+            f'<th style="{_TH}">判定</th><th style="{_TH}">原因</th></tr></thead>'
+            f'<tbody>{drows}</tbody></table></details>')
+
+    summary_rows = ''.join(srows)
+    return (head +
+            '<table style="border-collapse:collapse;width:100%;font-size:13px;">'
+            f'<thead><tr><th style="{_TH}text-align:left;">被测包</th><th style="{_TH}">通过</th>'
+            f'<th style="{_TH}">体验退化</th><th style="{_TH}">BLOCKED</th><th style="{_TH}">HARNESS_ERROR</th>'
+            f'<th style="{_TH}">通过率</th><th style="{_TH}">结论</th></tr></thead>'
+            f'<tbody>{summary_rows}</tbody></table>' +
+            ''.join(details))
+
+
 def render_ux_block(ux, design):
     """渲染「UX 专项」页签：门禁四态矩阵 + 失败断言明细 + 用例设计态概览。"""
     if not ux:
@@ -771,6 +839,9 @@ def render_ux_block(ux, design):
             f'<th style="{_TH}">actual</th><th style="{_TH}">expected</th><th style="{_TH}">说明</th></tr></thead>'
             f'<tbody>{frows}</tbody></table></details>')
 
+    # D11-39 体验回放（独立专项 · 范式②，本轮已并入本数据源）
+    parts.append(_render_ux_replay(suts))
+
     # 设计态概览
     if design:
         drows = ''.join(
@@ -806,9 +877,11 @@ def render_ux_block(ux, design):
                  'exit 0 = 无失败（全部通过，或剩余仅 NOT_RUN/BLOCKED）/ 1 = 需求未实现 / 2 = 环境不可判定或 harness 故障。'
                  '契约冻结前如需照跑看趋势：<code>node eval/harness/fixtures/run-ux.mjs &lt;src&gt; --run-frozen</code>'
                  '（结果仍记 NOT_RUN，不改变口径与退出码）。'
-                 '<br>独立专项（不在本门禁批量运行）：'
-                 '<code>npm run test:ux-replay</code>（D11-39 体验回放差异分类，基线 <code>recordings/ux-baseline-v1.jsonl</code>）、'
-                 '<code>npm run ux:agent-loop -- --mcp &lt;src&gt;/mcp-server.mjs [--baseline &lt;基线.json&gt;]</code>（D11-40 度量对照：网关真实 usage + MCP 调用计数）。</p>')
+                 '<br>独立专项：<b>D11-39 体验回放差异分类</b>已并入本数据源（每轮随看板刷新同跑，见上方区块；单独复跑 '
+                 '<code>npm run test:ux-replay</code>，基线 <code>recordings/ux-baseline-v1.jsonl</code>）；'
+                 '<b>D11-40 度量对照</b>仍为人工/专项（需评测预算 + 双版本 SUT，单独跑 '
+                 '<code>npm run ux:agent-loop -- --mcp &lt;src&gt;/mcp-server.mjs [--baseline &lt;基线.json&gt;]</code>'
+                 '：网关真实 usage + MCP 调用计数），未纳入本看板。</p>')
     return ''.join(parts)
 
 
