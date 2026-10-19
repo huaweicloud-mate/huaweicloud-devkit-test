@@ -1,4 +1,4 @@
-﻿/**
+/**
  * OpenCode 1.1.5 daily test probe - D1 install/upgrade + D5 client + D6 perf + D9 protocol
  * Covers: D1-1,3,4,5,6,26,27,28,30,31,33,39,40,41,42,45,58, D5-1,3, D6-3, D9-1,3,7,8
  */
@@ -7,13 +7,13 @@ import {
   parseDistTagsOutput, readInstalledVersion, skipFilePath,
   fallbackSkipFilePath, resolveSkipFilePath, readSkipState,
   writeSkipState, queryDistTagsSync, applyUpdateHint
-} from 'file:///C:/Users/Administrator/devkit-test/CodeArts/hdk/plugins/huaweicloud-core/src/update-check.mjs';
-import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/CodeArts/hdk/plugins/huaweicloud-core/src/tools.mjs';
+} from 'file:///C:/Users/Administrator/AppData/Roaming/npm/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/update-check.mjs';
+import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/AppData/Roaming/npm/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/tools.mjs';
 import { writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const pkgRoot = 'C:/Users/Administrator/devkit-test/CodeArts/hdk';
-const evDir = 'C:/Users/Administrator/devkit-test/CodeArts/huaweicloud-devkit-test/results/CodeArtsSpace/2026-10-19-120.46.2.198/Windows/evidence';
+const pkgRoot = 'C:/Users/Administrator/AppData/Roaming/npm/node_modules/huaweicloud-devkit';
+const evDir = 'C:/Users/Administrator/devkit-test/codearts/huaweicloud-devkit-test/results/CodeArtsSpace/2026-10-19-120.46.2.198/Windows/evidence';
 const results = [];
 function test(id, name, pass, actual, expected, passMsg, failMsg) {
   results.push({ id, name, pass, actual: String(actual).substring(0,120), expected: String(expected).substring(0,120), passMsg, failMsg });

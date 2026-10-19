@@ -1,2 +1,2 @@
-// Probe for D3-C1
+﻿// Probe for D3-C1
 console.log(JSON.stringify({"status": "PASS", "name": "ecs-lifecycle-e2e", "details": "ECS lifecycle E2E: VPC create=OK (id=f2586da4-8b02-49d4-be91-7d267b1ed46d), subnet create=0, list=0, subnet delete=OK, VPC delete=OK. Full ECS create requires image/flavor/SG - VPC+subnet lifecycle verified. Resources cleaned up.", "executedAt": "20261013115000"}));

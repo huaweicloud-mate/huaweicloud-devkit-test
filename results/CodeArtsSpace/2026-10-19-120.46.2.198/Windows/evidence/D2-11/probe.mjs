@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import { writeFileSync } from 'node:fs';
 
 const pkgRoot = 'C:/Users/Administrator/AppData/Roaming/npm/node_modules/huaweicloud-devkit';
-const evDir = 'C:/Users/Administrator/devkit-test/CodeArtsSpace/huaweicloud-devkit-test/results/CodeArtsSpace/2026-10-19-120.46.2.198/Windows/evidence';
+const evDir = 'C:/Users/Administrator/devkit-test/codearts/huaweicloud-devkit-test/results/CodeArtsSpace/2026-10-19-120.46.2.198/Windows/evidence';
 const results = [];
 function test(id, name, pass, actual, expected, passMsg, failMsg) {
   results.push({ id, name, pass, actual: String(actual).substring(0,120), expected: String(expected).substring(0,120), passMsg, failMsg });
@@ -147,5 +147,5 @@ test('D4-27', 'redact-dual', !String(dualRedact).includes('SK1234567890abcdef')&
 const passed = results.filter(r=>r.pass).length;
 const failed = results.filter(r=>!r.pass).length;
 const output = JSON.stringify({ total: results.length, passed, failed, results }, null, 2);
-try{try{writeFileSync(join(evDir,'d2-auth','stdout.log'),output,'utf8');}catch(e){}}catch(e){}
+writeFileSync(join(evDir,'d2-auth','stdout.log'), output, 'utf8');
 console.log(output);

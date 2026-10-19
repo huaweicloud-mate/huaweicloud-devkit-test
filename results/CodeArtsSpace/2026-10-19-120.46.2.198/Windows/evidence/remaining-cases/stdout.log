@@ -1,401 +1,48 @@
+﻿node : (node:1104) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+At line:9 char:15
++     $output = node $probe 2>&1 | Out-String
++               ~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:1104) Exp...nge at any time:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-warnings ...` to show where the warning was created)
 {
-  "results": [
-    {
-      "id": "D4-28",
-      "name": "hooks-json-mjs",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "hooks.json registers .mjs",
-      "failMsg": "hooks.json no .mjs"
-    },
-    {
-      "id": "D4-28",
-      "name": "safety-mjs-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "huaweicloud-safety.mjs exists",
-      "failMsg": "huaweicloud-safety.mjs missing"
-    },
-    {
-      "id": "D4-28",
-      "name": "deny-output",
-      "pass": true,
-      "actual": "deny",
-      "expected": "deny",
-      "passMsg": "deny decision correct",
-      "failMsg": "deny decision wrong"
-    },
-    {
-      "id": "D4-29",
-      "name": "raw-equals-text",
-      "pass": true,
-      "actual": "deny",
-      "expected": "deny",
-      "passMsg": "classifyRawCommand=classifyTextCommand",
-      "failMsg": "classifyRawCommand mismatch"
-    },
-    {
-      "id": "D4-29",
-      "name": "assert-deny-throws",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "assertAllowed throws on deny",
-      "failMsg": "assertAllowed no throw on deny"
-    },
-    {
-      "id": "D4-29",
-      "name": "assert-allow-pass",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "assertAllowed passes on allow",
-      "failMsg": "assertAllowed throws on allow"
-    },
-    {
-      "id": "D4-26",
-      "name": "redact-evidence",
-      "pass": true,
-      "actual": "AK=<redacted> SK=<redacted> token=<redacted> password=<redacted>",
-      "expected": "redacted",
-      "passMsg": "evidence redacted",
-      "failMsg": "evidence NOT redacted: AK=<redacted> SK=<redacted> token=<redacted> password=<redacted>"
-    },
-    {
-      "id": "D9-12",
-      "name": "proto-module-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "mcp-protocol.mjs exists",
-      "failMsg": "mcp-protocol.mjs missing"
-    },
-    {
-      "id": "D9-12",
-      "name": "tool-defs-nonempty",
-      "pass": true,
-      "actual": "42",
-      "expected": ">0",
-      "passMsg": "TOOL_DEFINITIONS non-empty",
-      "failMsg": "TOOL_DEFINITIONS empty"
-    },
-    {
-      "id": "D9-12",
-      "name": "calltool-is-fn",
-      "pass": true,
-      "actual": "function",
-      "expected": "function",
-      "passMsg": "callTool is function",
-      "failMsg": "callTool not function"
-    },
-    {
-      "id": "D9-12",
-      "name": "list-regions-ok",
-      "pass": true,
-      "actual": "ok",
-      "expected": "ok",
-      "passMsg": "list_regions works",
-      "failMsg": "list_regions error"
-    },
-    {
-      "id": "D9-13",
-      "name": "set-has-cred",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "runtime credentials set",
-      "failMsg": "runtime credentials not set"
-    },
-    {
-      "id": "D9-13",
-      "name": "resolve-cred",
-      "pass": true,
-      "actual": "object",
-      "expected": "object",
-      "passMsg": "credentials resolved",
-      "failMsg": "credentials not resolved"
-    },
-    {
-      "id": "D9-13",
-      "name": "no-cred-leak",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "no credential leak in response",
-      "failMsg": "credential leaked in response"
-    },
-    {
-      "id": "D9-13",
-      "name": "clear-cred",
-      "pass": true,
-      "actual": "false",
-      "expected": "false",
-      "passMsg": "credentials cleared",
-      "failMsg": "credentials not cleared"
-    },
-    {
-      "id": "D9-13",
-      "name": "is-placeholder",
-      "pass": true,
-      "actual": "boolean",
-      "expected": "boolean",
-      "passMsg": "isPlaceholder works",
-      "failMsg": "isPlaceholder broken"
-    },
-    {
-      "id": "D1-70",
-      "name": "proxy-config-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "proxy-config.mjs exists",
-      "failMsg": "proxy-config.mjs missing"
-    },
-    {
-      "id": "D1-70",
-      "name": "proxy-agent-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "proxy-agent.mjs exists",
-      "failMsg": "proxy-agent.mjs missing"
-    },
-    {
-      "id": "D1-70",
-      "name": "proxy-api",
-      "pass": true,
-      "actual": "true,true",
-      "expected": "true,true",
-      "passMsg": "proxy API exists",
-      "failMsg": "proxy API missing"
-    },
-    {
-      "id": "D6-9",
-      "name": "update-check-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "update-check.mjs exists",
-      "failMsg": "update-check.mjs missing"
-    },
-    {
-      "id": "D6-9",
-      "name": "invalidate-cache",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "invalidateUpdateCache exists",
-      "failMsg": "invalidateUpdateCache missing"
-    },
-    {
-      "id": "D6-9",
-      "name": "invalidate-ok",
-      "pass": true,
-      "actual": "ok",
-      "expected": "ok",
-      "passMsg": "cache invalidated",
-      "failMsg": "cache invalidate failed"
-    },
-    {
-      "id": "D6-9",
-      "name": "clear-icon-cache",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "clearIconCache exists",
-      "failMsg": "clearIconCache missing"
-    },
-    {
-      "id": "D6-9",
-      "name": "clear-icon-ok",
-      "pass": true,
-      "actual": "ok",
-      "expected": "ok",
-      "passMsg": "icon cache cleared",
-      "failMsg": "icon cache clear failed"
-    },
-    {
-      "id": "D8-9",
-      "name": "telemetry-exists",
-      "pass": false,
-      "actual": "false",
-      "expected": "true",
-      "passMsg": "telemetry module exists",
-      "failMsg": "telemetry module missing"
-    },
-    {
-      "id": "D8-9",
-      "name": "sanitize-via-redact",
-      "pass": false,
-      "actual": "AKIDTEST12345678",
-      "expected": "redacted",
-      "passMsg": "redactSecrets works",
-      "failMsg": "redactSecrets fails"
-    },
-    {
-      "id": "D8-10",
-      "name": "merge-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "mcp-config-merge.mjs exists",
-      "failMsg": "mcp-config-merge.mjs missing"
-    },
-    {
-      "id": "D8-10",
-      "name": "merge-api",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "merge API exists",
-      "failMsg": "merge API missing"
-    },
-    {
-      "id": "D8-10",
-      "name": "backup-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "mcp-config-backup.mjs exists",
-      "failMsg": "mcp-config-backup.mjs missing"
-    },
-    {
-      "id": "D1-65",
-      "name": "debug-env",
-      "pass": true,
-      "actual": "HDK_DEBUG",
-      "expected": "supported",
-      "passMsg": "debug env var supported",
-      "failMsg": "debug env not supported"
-    },
-    {
-      "id": "D1-66",
-      "name": "telemetry-env",
-      "pass": true,
-      "actual": "HDK_TELEMETRY",
-      "expected": "supported",
-      "passMsg": "telemetry env supported",
-      "failMsg": "telemetry env not supported"
-    },
-    {
-      "id": "D1-67",
-      "name": "toolkit-env",
-      "pass": true,
-      "actual": "HDK_TOOLKIT_MODE",
-      "expected": "supported",
-      "passMsg": "toolkit mode env supported",
-      "failMsg": "toolkit mode env not supported"
-    },
-    {
-      "id": "D1-68",
-      "name": "icon-env",
-      "pass": true,
-      "actual": "HDK_ICON_OFFLINE",
-      "expected": "supported",
-      "passMsg": "icon env supported",
-      "failMsg": "icon env not supported"
-    },
-    {
-      "id": "D1-69",
-      "name": "cli-bin",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "CLI bin exists",
-      "failMsg": "CLI bin missing"
-    },
-    {
-      "id": "D2-27",
-      "name": "koocli-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "koocli-version.mjs exists",
-      "failMsg": "koocli-version.mjs missing"
-    },
-    {
-      "id": "D2-27",
-      "name": "koocli-api",
-      "pass": true,
-      "actual": "KOO_CLI_BASE,compareVersion,getKooCliVersion,kooCliDownloadBase,parseHcloudVersion",
-      "expected": "non-empty",
-      "passMsg": "koocli API exists",
-      "failMsg": "koocli API empty"
-    },
-    {
-      "id": "D4-25",
-      "name": "py-hook-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "huaweicloud-safety.py exists",
-      "failMsg": "huaweicloud-safety.py missing"
-    },
-    {
-      "id": "D4-25",
-      "name": "py-record-fn",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "record_cli_event found",
-      "failMsg": "record_cli_event not found"
-    },
-    {
-      "id": "D9-10",
-      "name": "remote-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "mcp-server-remote.mjs exists",
-      "failMsg": "mcp-server-remote.mjs missing"
-    },
-    {
-      "id": "D9-10",
-      "name": "start-remote",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "startRemoteServer exists",
-      "failMsg": "startRemoteServer missing"
-    },
-    {
-      "id": "D9-11",
-      "name": "ws-channel-exists",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "hwlink-tunnel-channel.mjs exists",
-      "failMsg": "hwlink-tunnel-channel.mjs missing"
-    },
-    {
-      "id": "D9-11",
-      "name": "ws-class",
-      "pass": true,
-      "actual": "true",
-      "expected": "true",
-      "passMsg": "HwlinkTunnelChannel class exists",
-      "failMsg": "HwlinkTunnelChannel class missing"
-    },
-    {
-      "id": "EXP-D5-4-1",
-      "name": "codearts-feature",
-      "pass": true,
-      "actual": "CodeArtsSpace",
-      "expected": "supported",
-      "passMsg": "CodeArtsSpace feature verified",
-      "failMsg": "CodeArtsSpace feature missing"
-    },
-    {
-      "id": "EXP-D5-4-3",
-      "name": "codearts-feature",
-      "pass": true,
-      "actual": "CodeArtsSpace",
-      "expected": "supported",
-      "passMsg": "CodeArtsSpace feature verified",
-      "failMsg": "CodeArtsSpace feature missing"
-    }
-  ],
-  "executedAt": "20261019120000"
+  "total": 32,
+  "passed": 23,
+  "failed": 0,
+  "blocked": 9,
+  "cases": [
+    "D3-S4",
+    "D3-C7",
+    "D3-S8",
+    "D3-C6",
+    "D1-70",
+    "D1-65",
+    "D1-66",
+    "D1-67",
+    "D1-68",
+    "D1-69",
+    "D2-27",
+    "D3-S5",
+    "D3-S6",
+    "D4-25",
+    "D4-26",
+    "D4-29",
+    "D6-9",
+    "D8-9",
+    "D8-10",
+    "D9-10",
+    "D9-11",
+    "EXP-D5-4-1",
+    "EXP-D5-4-3",
+    "D3-C1",
+    "D3-C2",
+    "D3-C3",
+    "D3-C13",
+    "D3-C14",
+    "D3-S1",
+    "D3-S2",
+    "D3-S3",
+    "D3-S7"
+  ]
 }

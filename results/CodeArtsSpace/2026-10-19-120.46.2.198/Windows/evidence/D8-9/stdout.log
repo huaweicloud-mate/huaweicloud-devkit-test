@@ -1,29 +1,33 @@
 {
-  "id": "D8-9",
-  "status": "FAIL",
-  "pass": false,
-  "total": 2,
-  "passed": 0,
-  "failed": 2,
-  "executedAt": "20261019175612",
   "results": [
     {
       "id": "D8-9",
-      "name": "telemetry-exists",
-      "pass": false,
-      "actual": "false",
-      "expected": "true",
-      "passMsg": "telemetry module exists",
-      "failMsg": "telemetry module missing"
+      "name": "install-id-stable",
+      "pass": "5d71846429b6932fef2752440771ba799e04bf08e1b827269cc7576fe5819f85",
+      "actual": "5d71846429b6932fef2752440771ba799e04bf08e1b827269cc7576fe5819f85",
+      "expected": "stable-id",
+      "passMsg": "installId stable",
+      "failMsg": "installId unstable"
     },
     {
       "id": "D8-9",
-      "name": "sanitize-via-redact",
+      "name": "sanitize-cred",
       "pass": false,
       "actual": "AKIDTEST12345678",
       "expected": "redacted",
-      "passMsg": "redactSecrets works",
-      "failMsg": "redactSecrets fails"
+      "passMsg": "credential sanitized",
+      "failMsg": "credential NOT sanitized"
+    },
+    {
+      "id": "D8-9",
+      "name": "sanitize-legit",
+      "pass": true,
+      "actual": "normal_value_123",
+      "expected": "preserved",
+      "passMsg": "legit value preserved",
+      "failMsg": "legit value changed"
     }
-  ]
+  ],
+  "executedAt": "20261019182544",
+  "status": "FAIL"
 }

@@ -1,4 +1,4 @@
-// Auto-generated probe for D3-S6
+﻿// Auto-generated probe for D3-S6
 console.log(JSON.stringify({
   "status": "PASS",
   "name": "functiongraph-timer",
