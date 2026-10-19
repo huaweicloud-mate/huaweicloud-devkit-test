@@ -31,7 +31,7 @@
 | huawei-rds | T6 查询 RDS 实例列表（只读）| ✅ 已建 |
 | huawei-functiongraph | T7 查询函数列表（只读）| ✅ 已建 |
 | huawei-cce | T8 查询 CCE 集群列表（只读）| ✅ 已建 |
-| huawei-deployment | T9 CloudDeploy（CodeArts 未启用，真机查不了）| 🔶 L2 兜 |
+| huawei-deployment | T35 建 CodeArts 项目 + 列出部署应用（`CodeArtsDeploy ListAllApp`）| ✅ 已建 3/3（租户级 CodeArts 已开通）|
 | huawei-smn-dms | T10 创建 SMN 主题 | ✅ 已建 |
 | huawei-vpc | T11 出向规则（egress）| ✅ 已建 |
 | huawei-smn-dms | T12 发布消息 | ✅ 已建 |
@@ -76,21 +76,21 @@
 - **合计 39/39 run PASS**（*t21 含 1 次 harness 冒烟 = 4 次），覆盖 **10 个技能**。
 - 成本：实测 25 分钟 / 286 万 token（**比预估 170 万高 68%** —— GaussDB(262 op)/WAF(206)/ModelArts(333)/BSS(93) 操作面大，agent 需多轮 `list_operations` 试探）。
 - 单 run token 区间 **3.3 万 ~ 15.0 万**；对照 L1 创建档（ECS 62.5 万 / RDS 243 万）仍便宜一个数量级。
-- 未覆盖：`huawei-sandbox`（需真容器，待成本口径）、`huawei-deployment`（需先开通租户级 CodeArts）。
+- 该批 13 条之外，2026-10-16 又补齐：`huawei-sandbox` 执行层实测（`connect → exec_one_shot → close_session`，零成本确定性探测）、`huawei-deployment` 真机只读（t35，租户级 CodeArts 开通后 3/3）。
 - 复跑：`node harness/run-bench.mjs <t21…t33> --runs 3`；门禁 `node gate.mjs`（读 `results/runs/*.json`）。
 
 ## 四、覆盖率口径（双轨）
 
-| 口径 | v1 现状 | 目标 |
+| 口径 | 现状（2026-10-16） | 目标 |
 |---|---|---|
-| 端到端任务覆盖（L1） | 18/21 服务技能 | 19/21 |
+| 端到端任务覆盖（L1） | 任务集 t01–t40（缺 t09）；t18 CCE 0/3 已知失败豁免，其余通过 | 21/21 服务技能 |
 | 轻量激活覆盖（L2） | ✅ 12/12 激活（详见 `l2/README.md`）| 12/12 |
-| 执行层真机覆盖（L2 补测） | ✅ 13 条用例 / 10 技能，39/39 run PASS（`results/summary.json` 的 `l2Readonly`）| 保持 0 失败 |
-| 横向技能 | 8/8（端到端天然带出）| 8/8 |
+| 执行层真机覆盖（L2 补测） | ✅ 13 条用例 / 10 技能 39/39 + t35 deployment 3/3 + t36–t40 能力探针 5 条（`results/summary.json` 的 `l2Readonly` + `rebaseline`）| 保持 0 失败 |
+| 横向技能 | ✅ 8/8（已实测激活，2026-10-16）| 8/8 |
 
 **L2 实测发现**：`retrieve_skill` 激活 12/12 全可达，但 `service_catalog` 路由仅 5/12——`huawei-cbr/cts/cloud-eye/waf-aad/apig/modelarts/deployment` 7 个服务的「意图→服务」路由断链（能力发现缺口，详见 `l2/README.md`）。
 
-**当前覆盖 = 端到端 18（L1）+ 轻量激活 12（L2）+ 执行层真机 13 条用例（L2 补测，10 技能）+ 横向 8 = 51 次覆盖 / 29 skill**（覆盖方式计数，非「每个 skill 的能力全测」）。
+**当前覆盖 = 端到端任务 t01–t40（L1）+ 轻量激活 12（L2）+ 执行层真机 19 条用例（13 只读 + t35 + t36–t40）+ 横向 8 = 21/21 服务技能 + 8 横向技能全部有覆盖方式**（覆盖方式计数，非「每个技能的能力全测」）。
 
 ## 五、仍未能真机覆盖的能力
 
@@ -102,5 +102,5 @@
 | huawei-rds | 备份 / 恢复 | 备份需等实例就绪 + 长时间，恢复同理，暂不测 |
 | huawei-iam | 委托 STS 临时凭证 | 委托已测（T19），STS assume 需跨服务信任方发起 |
 | huawei-vpc | EIP / 对等连接 | EIP 已存在于账户（非新建场景）；对等连接需第二 VPC |
-| huawei-sandbox | 真执行链（`sandbox_check_user` → `connect` → `deploy_nginx`） | 需真沙箱容器与配额，成本口径未定（L2 激活已覆盖） |
-| huawei-deployment | 真机只读（`CodeArtsDeploy ListAllApp`） | 需先**人工开通租户级 CodeArts 服务**（实测 `PM.02100546 该企业租户服务处于关闭状态`），L2 激活已覆盖 |
+| huawei-sandbox | 完整部署链（`deploy_nginx` 真机部署） | 基础执行链已实测（`connect → exec_one_shot → close_session`，零成本）；`deploy_nginx` 完整部署链仍未真机 |
+| huawei-deployment | 真机部署链（`CreateApp → CreateDeployTask → StartDeployTask`） | 只读链已实测（t35：建项目 → `ListAllApp` → 删项目归零）；完整部署链需往目标机装 agent，副作用大未做 |

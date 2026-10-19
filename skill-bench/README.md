@@ -76,5 +76,5 @@ node gate.mjs
 
 - 写任务（T1/T3）真机创建，**每 run 后必须归零**（cleanup 脚本），跑完人工 `hcloud OBS ls` / `hcloud VPC ListSecurityGroups` 终验无 `devkit-bench` 残留。
 - 首份基线报告见 `results/baseline-report-20261014.md`。
-- 演进路线（2026-10-15）：R1 bare 全量对齐（待做）→ **R2 版本锚点 ✅** → **R3 口径门禁 ✅** → R4 安全指标化（待做）→ **R5 L2 执行层只读真机 ✅**（13 条 39/39 run PASS）→ R6 上游提单（待做）→ R7 deployment（需先人工开通租户级 CodeArts）。策略全文见 `docs/技能评测-策略-20261015.md`。
+- 演进路线（截至 2026-10-16 已全部完成）：**R1 裸模型全量对齐 ✅ → R2 版本锚点 ✅ → R3 口径门禁 ✅ → R4 安全指标化 ✅ → R5 L2 执行层只读真机 ✅（13 条 39/39 run PASS）→ R6 上游提单 ✅ → R7 deployment 解锁 ✅ → R8 SUT 升级 1.1.9-next.0 ✅ → R9 工程债三项 ✅ → R10 安全口径 v2 + t34 护栏用例 ✅**。策略全文见 `docs/技能评测-策略-20261015.md`。
 - `results/runs/*.json` 为脱敏后的每 run 记录（不含 agent 完整答复），**入库**以保证汇总可独立复算；原始 `baseline-*.json` 仍不入库。
