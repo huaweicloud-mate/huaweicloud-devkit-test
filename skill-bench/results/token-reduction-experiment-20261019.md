@@ -9,6 +9,8 @@
 
 机制：新增 `BENCH_TOOLS_FILTER=1` 开关（`harness/run-bench.mjs`）。开启后，按 `results/summary.json` 里每个任务的 `tools` 字段（历史实际用到的工具集）裁剪工具 schema，只下发白名单内的工具；开关默认关闭，不影响现有基线。run 记录带 `toolFilter: true` 标记。
 
+实验 run 记录落在 `results/experiments/`（与基线采样 `results/runs/` 隔离）：按需下发采样 ≠ 全量下发基线，进 gate 口径会顶偏「最新被测版本」判定（实测把 1.1.9-next.0 顶成 1.1.1-next.15），故按仓库「实验产物 ≠ 基线采样」纪律隔离。
+
 ## 实验组与对照组（同版本 1.1.1-next.15 对照）
 
 | 任务 | 类型 | 全量工具数 | 按需工具数 |
