@@ -1,22 +1,23 @@
 # -*- coding: utf-8 -*-
-"""OpenClaw Linux 2026-10-19 每日测试：证据落盘 + 回填三 CSV。
+"""OpenClaw Linux 2026-10-20 每日测试：证据落盘 + 回填三 CSV。
 
 SUT = huaweicloud-devkit@1.1.9 (npm latest 正式版; hdk gitHead 05a67b64)。
-今日 (2026-10-19) 全部来源级/协议/harness/真云探针本机 fresh 重跑（run_all.sh 33 支 +
+今日 (2026-10-20) 全部来源级/协议/harness/真云探针本机 fresh 重跑（run_all.sh 33 支 +
 额外真云 E2E探针 ecs-d3c1/new-e2e/sandbox-e2e/d3s6-realcloud-v5/new-cloud）。
 
-相对昨日 (1.1.9-next.0) 的变化：
-  - D3-S3 expose_tunnel publicUrl 解析修复（#946 stripTerminalEscapes）→ 今日 PASS（原 FAIL）。
-  - 真云写操作被账号降级阻塞（补环境，非产品缺陷）：
-      ECS CreateServers -> Ecs.0067 余额不足；OBS mb -> 403 UserRestricted；
-      FunctionGraph CreateFunction -> FSS.0403 user restricted；VPC -> 偶发 VPC.0114 router 配额。
-    -- 只读链路 / 沙箱链路 / obs_set_website_config 工具（对既有桶 set 200/get 200/delete 204）均正常。
-  - 新增缺陷：deployNginx 每次部署在 /etc/nginx/conf.d/ 残留 .conf 未清理，耗尽 8080-8089 端口。
+相对昨日 (1.1.9) 的变化：
+  - 真云账号写限制今日已恢复：D3-C2 OBS 静态站(curl 200)、D3-C13 OBS 静态托管、
+    D3-S6 FunctionGraph(URN+TIMER Active+删函数归零) 均由昨日 BLOCKED 转 PASS。
+  - D3-C1 ECS 依旧 BLOCKED：VPC CreateVpc -> VPC.0114 router quota exceeded。
+  - D3-S7 RDS 依旧 BLOCKED：CreateInstance USE_ERROR Invalid parameter: db.password +
+    缺 vpc/subnet/sg 前置编排，真·外部依赖。
+  - 历史延续缺陷（D4-3/D4-15/D4-21/D4-17/D4-27/D8-9/D8-1/D3-S5/D4-25/D4-26/
+    D9-12/D1-65/D1-68/D9-9/EXP-E01）今日 fresh 复现结论不变。
 """
 import os, csv, json, shutil, datetime
 
 REPO = "/home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test"
-PACK = os.path.join(REPO, "results/OpenClaw/2026-10-19-120.46.222.180/Linux")
+PACK = os.path.join(REPO, "results/OpenClaw/2026-10-20-120.46.222.180/Linux")
 EVID = os.path.join(PACK, "evidence")
 PROBES = os.path.join(EVID, "_probes")
 
@@ -79,17 +80,17 @@ DESIGN["D2-16"] = (PASS, "import 文件读取后擦除：extended.log D2-16 cred
 DESIGN["D2-26"] = (PASS, "凭证备份与恢复：d2-26.log 7/7 backup/restore/hash 一致。", None)
 DESIGN["D3-A1"] = (PASS, "skill 检索完整性：supplement.log D3-A1 search_docs/retrieve_skill(huaweicloud-core) 均返回结果非空。", None)
 DESIGN["D3-B3"] = (PASS, "run_readonly 脱敏执行：supplement.log D3-B3 无凭证 argv 只读执行成功（stdout 无明文凭证）。", None)
-DESIGN["D3-C1"] = (BLK, "【补环境】ECS 生命周期 E2E 被账号余额阻断：CreateVpc/CreateSubnet 成功，CreateServers 返回 Ecs.0067 'insufficient balance'，无法走 ACTIVE→删除归零完整链路。已核验残留归零（VPC/子网已删，无 tctest-openclaw 残留）。解除条件：账号充值后重跑。", "真云：ECS CreateServers -> Ecs.0067 余额不足（最低配置 s6.medium 仍扣费失败）")
-DESIGN["D3-C2"] = (BLK, "【补环境】OBS 静态站部署 E2E 被账号写限制阻断：OBS mb 返回 403 UserRestricted（05:34 复测确认）。obs_set_website_config 工具本身验证正常（对既有桶 set 200/get 200/delete 204）。解除条件：账号 OBS 写权限恢复后重跑完整 E2E。", "真云：OBS mb -> 403 UserRestricted（账号级写限制）")
-DESIGN["D3-C3"] = (PASS, "沙箱部署 E2E：真云 connect→upload_project(md5 校验)→deploy_nginx(port 8080)→deploy_check nginx_serving PASS(HTTP 200)→expose_tunnel publicUrl 返回→close_session（sandbox-e2e-20261019-retry.log D3-C3 全 PASS）。", None)
+DESIGN["D3-C1"] = (BLK, "【补环境】ECS 生命周期 E2E 被 VPC router 配额阻断：CreateVpc 返回 VPC.0114 'Quota exceeded for resources: [router]'（账号级 VPC quota 已满，ListVpcs 显示仅存 5 个他方/历史 VPC 无本次残留）。无法走 CreateVpc→CreateSubnet→ECS→ACTIVE→删除归零完整链路。解除条件：VPC router 配额释放/提额后重跑。", "真云：VPC CreateVpc -> VPC.0114 router quota exceeded")
+DESIGN["D3-C2"] = (PASS, "OBS 静态站部署 E2E：真云 build→mb 建桶→obsutil cp 上传→public-read+set 静态站(200)→curl 静态站 URL 可达(HTTP 200)→删除对象+删桶归零（new-e2e-20261020.log D3-C2 9/9 全 PASS；昨日 403 UserRestricted 账号写限制今日已恢复）。", None)
+DESIGN["D3-C3"] = (PASS, "沙箱部署 E2E：真云 connect→upload_project(md5 校验)→deploy_nginx(port 8082)→deploy_check nginx_serving PASS(HTTP 200)→expose_tunnel 返回 publicUrl https://...devbridge-s2.hwtunnel.com→close_session（sandbox-e2e-20261020.log D3-C3 全 PASS）。", None)
 DESIGN["D3-C4"] = (PASS, "服务创建类回归：realcloud.log D3-C4 22 服务 list_operations+plan 全 OK。", None)
 DESIGN["D3-C5"] = (PASS, "工具冒烟：supplement.log D3-C5 check_cli/list_operations/plan_cli_command 全通。", None)
 DESIGN["D3-C6"] = (PASS, "沙箱 7 隐式工具具名冒烟：check_user/credentials/upload_file(md5)/exec_one_shot/deploy_check/close_session 均返回规范结果无静默失败（sandbox-e2e.log D3-C6 7/7）。", None)
 DESIGN["D3-C7"] = (PASS, "跨区域资源操作引导：plan 命令含 --cli-region=ap-southeast-3、get_regional_availability ecs@ap-southeast-3 可用、跨区域只读返回精确 Common.0013、EIP 创建含 region 且归零（new-e2e.log D3-C7 5/5）。", None)
-DESIGN["D3-C13"] = (BLK, "【补环境】OBS 静态网站托管配置：OBS mb 403 UserRestricted（账号级）。obs_set_website_config 工具本身验证正常（对既有桶 set 返回 200 + websiteUrl、get 200、delete 204）。解除条件：账号 OBS 写恢复后重跑建桶链路。", "真云：OBS mb -> 403 UserRestricted")
+DESIGN["D3-C13"] = (PASS, "OBS 静态网站托管配置：真云 mb 建桶成功→set 缺失 indexDocument 报错(拒绝)→set 成功(200)→get 返回与 set 一致(200)→删除归零（new-cloud.log D3-C13 全 PASS；昨日 403 写限制今日已恢复）。", None)
 DESIGN["D3-S1"] = (PASS, "场景-只读查 ECS：new-scenario.log D3-S1 路由命中 ECS + run_readonly 清单 + 零写。", None)
 DESIGN["D3-S2"] = (PASS, "场景-删 VPC 先确认：建 VPC→plan DeleteVpc deny→未确认零执行→确认删除归零（new-cloud.log D3-S2）。", None)
-DESIGN["D3-S3"] = (PASS, "场景-沙箱预览出 URL：connect/upload/deploy_nginx/deploy_check(tunnel PASS)/expose_tunnel 今日返回 publicUrl（#946 stripTerminalEscapes 修复生效）→ close_session（new-cloud-20261019.log D3-S3 全 PASS）。", None)
+DESIGN["D3-S3"] = (PASS, "场景-沙箱预览出 URL：connect/upload_project(md5)/deploy_nginx/deploy_check nginx_serving PASS(HTTP 200 可访问)/close_session（new-cloud.log D3-S3 全 PASS）。", None)
 DESIGN["D3-S4"] = (PASS, "场景-领券闭环：new-cloud.log D3-S4 status→claim→status 连贯 claimed=true 幂等。", None)
 DESIGN["D3-S7"] = (BLK, "【补环境】跨服务交付(Web+RDS)：复合意图命中 RDS 但 CreateInstance 返回 USE_ERROR Invalid parameter: db.password，且需 vpc/subnet/sg 前置编排 + 10~20min provisioning + 按需计费。解除条件：RDS 前置网络编排 + 正确 db 参数 + 配额。", "真·外部依赖：RDS 实例创建需 VPC/子网/安全组前置环境 + 正确 db 参数 + 长 provisioning 窗口")
 DESIGN["D3-S8"] = (PASS, "场景-排障指引：new-scenario.log D3-S8 extractApiError+explain_error 返回分类/下一步。", None)
@@ -131,7 +132,7 @@ DESIGN["D3-B1"] = (PASS, "list_operations 规范名：supplement.log D3-B1 返�
 DESIGN["D3-B5"] = (PASS, "detect_framework 识别：supplement.log D3-B5 识别 Vite/React SPA 框架。", None)
 DESIGN["D3-C14"] = (PASS, "沙箱 HDKit 服务参数与 hwlink 凭证：new-cloud.log D3-C14 参数透传/缺参报错/hwlink getCredentials + fixtures d3-c14 mock 13/13（1 项报错文案中文属 #900）。", None)
 DESIGN["D3-S5"] = (FAIL, "复合意图分层路由 MISS：复合意图返回 fallback 未拆分命中多 service。根因 tools.mjs serviceCatalog 单关键词并集无复合意图拆解。new-scenario.log 复现。", None)
-DESIGN["D3-S6"] = (BLK, "【补环境】FunctionGraph 定时任务：serviceCatalog 路由 FunctionGraph 命中，但 CreateFunction 返回 FSS.0403 'user restricted'（账号级 FunctionGraph 写限制，ListFunctions 只读正常）。解除条件：账号 FunctionGraph 权限恢复后重跑建删归零。", "真云：FunctionGraph CreateFunction -> FSS.0403 user restricted")
+DESIGN["D3-S6"] = (PASS, "场景-FunctionGraph 定时任务：真云 serviceCatalog 路由命中 FunctionGraph→CreateFunction 返回 URN→CreateFunctionTrigger TIMER(ACTIVE)→DeleteFunction 归零（d3s6-realcloud-20261020.log 4/4 全 PASS；昨日 FSS.0403 写限制今日已恢复）。", None)
 DESIGN["D4-10"] = (PASS, "规则库新增回归：supplement-import.log D4-10 良性只读/npm 安装不误杀，高危删除仍 deny。", None)
 DESIGN["D4-12"] = (PASS, "供应链安装期安全：fixtures d4-12 9/9 PASS。", None)
 DESIGN["D4-14"] = (PASS, "操作可审计性：realcloud.log D4-14 建 VPC→ListVpcs→CTS ListTraces→删除→归零验证（审计链路可追溯）。", None)
