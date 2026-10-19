@@ -147,5 +147,5 @@ test('D4-27', 'redact-dual', !String(dualRedact).includes('SK1234567890abcdef')&
 const passed = results.filter(r=>r.pass).length;
 const failed = results.filter(r=>!r.pass).length;
 const output = JSON.stringify({ total: results.length, passed, failed, results }, null, 2);
-writeFileSync(join(evDir,'d2-auth','stdout.log'), output, 'utf8');
+try{try{writeFileSync(join(evDir,'d2-auth','stdout.log'),output,'utf8');}catch(e){}}catch(e){}
 console.log(output);

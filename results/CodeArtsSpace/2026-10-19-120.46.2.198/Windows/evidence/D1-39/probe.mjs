@@ -150,5 +150,5 @@ try { const mm = await import('file://'+mergePath.replace(/\\/g,'/')); test('D1-
 const passed = results.filter(r=>r.pass).length;
 const failed = results.filter(r=>!r.pass).length;
 const output = JSON.stringify({ total: results.length, passed, failed, results }, null, 2);
-writeFileSync(join(evDir,'d1-upgrade','stdout.log'), output, 'utf8');
+try{try{writeFileSync(join(evDir,'d1-upgrade','stdout.log'),output,'utf8');}catch(e){}}catch(e){}
 console.log(output);

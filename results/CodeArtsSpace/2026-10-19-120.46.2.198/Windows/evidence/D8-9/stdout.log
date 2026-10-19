@@ -1,9 +1,29 @@
 {
   "id": "D8-9",
-  "status": "PASS",
-  "executedAt": "20261019120000",
-  "totalTests": 3,
-  "passTests": 3,
-  "failTests": 0,
-  "note": "sanitizeValue 负责遥测值格式清理(移除换行/制表符/截断)，凭证脱敏由 redactSecrets 负责。installId 生成稳定持久。"
+  "status": "FAIL",
+  "pass": false,
+  "total": 2,
+  "passed": 0,
+  "failed": 2,
+  "executedAt": "20261019175612",
+  "results": [
+    {
+      "id": "D8-9",
+      "name": "telemetry-exists",
+      "pass": false,
+      "actual": "false",
+      "expected": "true",
+      "passMsg": "telemetry module exists",
+      "failMsg": "telemetry module missing"
+    },
+    {
+      "id": "D8-9",
+      "name": "sanitize-via-redact",
+      "pass": false,
+      "actual": "AKIDTEST12345678",
+      "expected": "redacted",
+      "passMsg": "redactSecrets works",
+      "failMsg": "redactSecrets fails"
+    }
+  ]
 }
