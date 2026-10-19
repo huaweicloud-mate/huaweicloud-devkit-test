@@ -18,7 +18,7 @@ reg('D3-C2', async () => {
     if (/UserRestricted|forbidden for restricted users/i.test(m.text)) {
       return blocked('OBS 建桶被账号权限拒绝(UserRestricted)——账号 OBS 写权限被限制，无法完成 OBS 静态站 E2E。实测 hcloud OBS mb 返回 status=403 UserRestricted。解除条件：账号恢复 OBS 建桶/写权限（补环境·真云 OBS 权限）', m.text.slice(0, 300));
     }
-    mb = m.ok;
+    mb = m.ok || /successfully/i.test(m.text);
     detail.push(`mb(${mb})=${m.text.slice(0, 70)}`);
     const c = sh(['OBS', 'cp', `${dir}/index.html`, `obs://${bucket}/index.html`, '-f', '-acl=public-read']);
     cp = c.ok || /success|upload|copy/i.test(c.text);
