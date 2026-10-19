@@ -1,38 +1,52 @@
-# FINDINGS - huaweicloud-devkit 每日测试缺陷清单
+# FINDINGS — 缺陷发现清单（CodeArtsSpace-GLM-5.2）
 
-> **生成时间**: 2026-10-19
-> **客户端**: CodeArtsSpace / GLM-5.2 / Windows
-> **被测版本**: huaweicloud-devkit@1.1.9
-> **执行归档**: results/CodeArtsSpace/2026-10-19-120.46.2.198/Windows/
+> **落盘路径**：`results/CodeArtsSpace/2026-10-19-120.46.2.198/Windows/FINDINGS.md`
+> **生成时间**：2026-10-19 18:35:00（北京时间）
+> **本清单是统一提单脚本的解析输入**
 
-## #1【P0】D4-16 命令包裹穿透
+---
 
-- **现象**: MCP 路径 hook_check_command 对 shell 包裹的写命令（如 `bash -c "hcloud ECS DeleteServers"`）返回 allow 而非 deny，命令包裹穿透。
-- **断言**: classifyTextCommand 对包裹命令 decision === 'deny'
-- **根因**: plugins/huaweicloud-core/src/safety-policy.mjs:489 classifyTextCommand — MCP 调用路径未走 stripExecutable 解包逻辑，包裹的写命令绕过预检
-- **影响**: 攻击者可通过 shell 包裹绕过写操作预检，执行未授权的删除/创建命令
-- **证据**: evidence/D4-16/stdout.log
+## #1【P0】D4-16 命令包裹穿透未拦截
+
+- **现象**：`powershell -Command "Get-Content credentials.json"` 经 MCP 工具分类返回 `allow`（`decision=allow, risk=not_huaweicloud`）
+- **断言**：`classifyTextCommand('powershell -Command "Get-Content ~/.config/huaweicloud/credentials.json"').decision === 'deny'`
+- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs` `classifyTextCommand()` 对 `powershell -Command` 包裹的凭证文件路径未识别为敏感操作，`stripExecutable` 虽处理包裹但 `classifyTextCommand` 文本路径未递归剥离
+- **影响**：攻击者可通过 `powershell -Command`/`cmd /c` 包裹绕过凭证文件读取拦截
+- **证据**：`evidence/D4-16/stdout.log`
+- **状态**：待提单
 
 ## #2【P1】D4-27 双路径输出脱敏不完整
 
-- **现象**: redactSecrets 对含 ak/sk/token 字段的对象脱敏不完整，明文凭证泄露。
-- **断言**: redactSecrets({ak,sk,token}) 所有字段 === '<redacted>'
-- **根因**: plugins/huaweicloud-core/src/safety-policy.mjs:49 redactSecrets — isSecretKeyName 未识别 ak/sk/token 为敏感键名
-- **影响**: 含 ak/sk/token 字段的输出未脱敏，凭证可能泄露到日志/对话
-- **证据**: evidence/D4-27/stdout.log
+- **现象**：`redactSecrets({ak:'AKID123',sk:'SK1234567890abcdef',token:'STSTOKEN123'})` 原样返回 `{"ak":"AKID123","sk":"SK1234567890abcdef","token":"STSTOKEN123"}`
+- **断言**：`redactSecrets({ak,sk,token})` 返回对象所有敏感字段值 === `'<redacted>'`
+- **根因**：`plugins/huaweicloud-core/src/safety-policy.mjs:57` `isSecretKeyName(key)` 未匹配 `ak`/`sk`/`token` 等短键名
+- **影响**：含 ak/sk/token 的对象输出时凭证明文泄露
+- **证据**：`evidence/D4-27/stdout.log`
+- **状态**：待提单
 
-## #3【P2】D8-9 安装 ID 与遥测值脱敏
+## #3【P1】D8-4 引导文档 INSTALL.md 未随 npm 包发布
 
-- **现象**: 遥测模块缺失，且 redactSecrets 对安装 ID 脱敏失败。
-- **断言**: telemetry 模块存在 && redactSecrets('AKIDTEST12345678') === '<redacted>'
-- **根因**: ①遥测模块未实现 ②plugins/huaweicloud-core/src/safety-policy.mjs:49 redactSecrets 对 AK ID 格式脱敏正则不匹配
-- **影响**: 安装 ID 未脱敏，遥测功能缺失
-- **证据**: evidence/D8-9/stdout.log
+- **现象**：npm 包 `huaweicloud-devkit@1.1.9` 内仅有 `README.md`、`README.zh-CN.md`，无 `INSTALL.md`
+- **断言**：`existsSync(join(pkgRoot, 'INSTALL.md')) === true`
+- **根因**：`package.json` `files` 字段未包含 `INSTALL.md`
+- **影响**：用户安装后无引导文档可循
+- **证据**：`evidence/D8-4/stdout.log`
+- **状态**：待提单
 
-## #4【P1】EXP-E01~E05,E07,E10~E14 serviceCatalog 路由 MISS
+## #4【P1】D8-9 安装 ID 与遥测值未脱敏
 
-- **现象**: serviceCatalog 对 11 条中文评测意图路由未命中（MISS），基线 21.4% MISS。
-- **断言**: serviceCatalog(intent) 命中对应 service
-- **根因**: plugins/huaweicloud-core/src/tools.mjs:1997 serviceCatalog — routeMap 关键词未覆盖这 11 条中文评测意图
-- **影响**: 11/15 中文意图路由未命中，用户意图无法正确路由到对应华为云服务
-- **证据**: evidence/EXP-E01/stdout.log ~ evidence/EXP-E14/stdout.log
+- **现象**：遥测值含凭证时 `AKIDTEST12345678` 原样输出
+- **断言**：遥测上报值含 AK/SK 时应经 `redactSecrets` 脱敏为 `<redacted>`
+- **根因**：遥测上报路径未调用 `redactSecrets`
+- **影响**：遥测可能泄露凭证
+- **证据**：`evidence/D8-9/stdout.log`
+- **状态**：待提单
+
+## #5【P1】EXP-E01~E14 serviceCatalog 路由未命中（11 条 MISS）
+
+- **现象**：15 条中文意图经 `huaweicloud_service_catalog` 路由，11 条返回 `MISS`（EXP-E01/E02/E03/E04/E05/E07/E10/E11/E12/E13/E14）
+- **断言**：每条意图 `serviceCatalog(intent).matched === true`
+- **根因**：`serviceCatalog` 路由表中文意图覆盖不全（基线 21.4% MISS）
+- **影响**：用户中文意图无法路由到对应华为云工具
+- **证据**：`evidence/EXP-E01/stdout.log` 等 11 份
+- **状态**：待提单
