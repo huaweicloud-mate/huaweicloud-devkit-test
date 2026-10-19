@@ -1,9 +1,9 @@
 # CodeArtsAgent-testbot4-codearts1 每日测试报告
 > **报告名**：`CodeArtsAgent-testbot4-codearts1-测试报告.md`
-> **生成时间**：2026-10-20 05:13:46（北京时间）
+> **生成时间**：2026-10-20 05:16:17（北京时间）
 > **执行归档**：`results/CodeArtsAgent/2026-10-20-119.8.181.45/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（有 FAIL 缺陷，P0 2 项）
+> **结论**：`PARTIAL`（无 P0 缺陷）
 
 ---
 
@@ -26,9 +26,9 @@
 |---|---|
 | 计划用例（daily） | `146`（设计级 107 + 展开级 39） |
 | 已执行 | `79` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `4 / 2 / 73 / 0 / 67` |
-| 通过率（分母 = PASS+FAIL = 6） | `66.7%` |
-| P0 / P1 / P2 新增缺陷 | `2 / 0 / 0` |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `5 / 0 / 74 / 0 / 67` |
+| 通过率（分母 = PASS+FAIL = 5） | `100.0%` |
+| P0 / P1 / P2 新增缺陷 | `0 / 0 / 0` |
 | 红线（I 类）违规 | `TODO: 待填` |
 | 资源释放 | `TODO: 待填` |
 
@@ -40,9 +40,9 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `4` | 有证据且通过 PASS 门禁 |
-| FAIL | `2` | 不符预期，根因见缺陷清单 |
-| BLOCKED | `73` | 环境/权限/凭证阻塞 |
+| PASS | `5` | 有证据且通过 PASS 门禁 |
+| FAIL | `0` | 不符预期，根因见缺陷清单 |
+| BLOCKED | `74` | 环境/权限/凭证阻塞 |
 | SPEC-MISMATCH | `0` | 契约漂移 |
 | NOT_RUN | `28` | 未执行 |
 | **合计** | **`107`** | |
@@ -62,14 +62,7 @@
 
 ## 四、缺陷清单
 
-| # | 级别 | 用例ID | 维度 | 标题 | 根因（文件:行号） | 状态 |
-|---|---|---|---|---|---|---|
-| 1 | P0 | `D1-40` | D1安装 | 镜像 lag 下检测正确性(反向提醒防护) | TODO: 待补根因 | 待提单 |
-| 2 | P0 | `D2-11` | D2认证 | R3 STS token拒绝落盘 | TODO: 待补根因 | 待提单 |
-
-### 根因详情
-
-> TODO: 每个 FAIL 用例的「期望 / 实际 / 根因（文件:行号）/ 证据」需由 agent 依据 evidence/<case-id>/stdout.log 补充。
+本轮无 FAIL 用例。
 
 ---
 
@@ -162,6 +155,7 @@
 | `D1-65` | D1安装 | 调试模式环境变量 | P1 用例需更多环境/时间执行，本次标记为 BLOCKED |
 | `D1-70` | D1安装 | 代理配置与 WebSocket 代理 | P1/P2 用例需真云/特殊环境，本次标记为 BLOCKED |
 | `D2-10` | D2认证 | R7 current档跟随 | P1/P2 用例需真云/特殊环境，本次标记为 BLOCKED |
+| `D2-11` | D2认证 | R3 STS token拒绝落盘 | D2-11 测试 MCP 工具 huaweicloud_auth_switch 的 STS token 拒绝落盘功能，需要 MCP 客户端执行，hcloud CLI 无此命令 |
 | `D2-12` | D2认证 | R10 runtime非空禁止落盘 | P1/P2 用例需真云/特殊环境，本次标记为 BLOCKED |
 | `D2-13` | D2认证 | R9 configuredBySession优先env | P1/P2 用例需真云/特殊环境，本次标记为 BLOCKED |
 | `D2-16` | D2认证 | import文件读取后擦除 | P1/P2 用例需真云/特殊环境，本次标记为 BLOCKED |
