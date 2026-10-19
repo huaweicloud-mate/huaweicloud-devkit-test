@@ -14,6 +14,14 @@
 #     (global git config untouched)
 #   - Push goes through the repo-local `pushm` alias (gh credentials,
 #     bypassing the machine GCM conflict); failure does not block next run
+#   - Divergence self-heal (2026-10-19): other machines and Actions push to
+#     origin/main continuously, so this clone
+#     drifts behind; a stale history makes pushes non-fast-forward and piles up
+#     dead local commits. When behind, realign to origin/main (server truth)
+#     while preserving uncommitted work via stash (conflict => loud failure).
+#   - results/Summary/** is authored server-side by .github/workflows/
+#     auto-summary.yml (contents: write) and regenerated on every agent report:
+#     a local copy must never overwrite it, so it is excluded from commits here.
 
 $ErrorActionPreference = "Continue"
 $Repo = "C:\Users\Administrator\devkit-test\huaweicloud-devkit-test"
@@ -44,19 +52,55 @@ try {
     # 1. Fetch remote (stderr merged inside cmd to avoid NativeCommandError)
     & cmd /c "git fetchm --quiet 2>&1" | Out-Null
 
-    # 2. Check for pending changes (tracked + untracked)
-    $status = & git status --porcelain
-    if (-not $status) {
+    # 1b. Divergence self-heal (2026-10-19): this clone drifts behind origin/main
+    #     because other machines + GitHub Actions push continuously; a stale local
+    #     history makes the push non-fast-forward and piles up dead local commits.
+    #     When behind, realign history to origin/main (server truth). Uncommitted
+    #     work is stashed and re-applied; a conflict THROWS and keeps the stash
+    #     (never silently drops content).
+    $counts = (& git rev-list --left-right --count "origin/main...HEAD") -split "\s+" |
+        Where-Object { $_ -match '^\d+$' }
+    $behind = [int]$counts[0]
+    $ahead = [int]$counts[1]
+    if ($behind -gt 0) {
+        Write-Log "SYNC: local behind origin/main (behind=$behind ahead=$ahead) -> realign"
+        # results/Summary is authored by Actions (auto-summary.yml) -> drop local edits
+        & cmd /c "git checkout -- results/Summary 2>&1" | Out-Null
+        $pending = @(& git status --porcelain | Where-Object { $_ -notmatch 'results/Summary/' })
+        $stashed = $false
+        if ($pending.Count -gt 0) {
+            & cmd /c "git stash push -u -m auto-sync-realign 2>&1" | Out-Null
+            $stashed = $true
+        }
+        & cmd /c "git reset --hard origin/main 2>&1" | Out-Null
+        if ($stashed) {
+            $pop = (& cmd /c "git stash pop 2>&1") -join "`n"
+            if ($LASTEXITCODE -ne 0 -or $pop -match "CONFLICT") {
+                throw "realign failed: stash pop conflict, stash kept (see 'git stash list'): $pop"
+            }
+        }
+        Write-Log "SYNC: realigned to origin/main (uncommitted work preserved=$stashed)"
+    }
+
+    # 2. Check for pending changes (tracked + untracked), excluding server-authoritative results/Summary
+    $status = @(& git status --porcelain | Where-Object { $_ -notmatch 'results/Summary/' })
+    if ($status.Count -eq 0) {
         Write-Log "SYNC: no changes, skipped (idempotent OK)"
         exit 0
     }
 
     # 3. Change summary (first 10 files)
     $files = ($status | ForEach-Object { $_.Substring(3) } | Select-Object -First 10) -join ", "
-    $count = @($status).Count
+    $count = $status.Count
 
     # 4. Commit with auto message (timestamp + file summary)
     & git add -A
+    # results/Summary is regenerated server-side; never let a local copy overwrite it
+    & cmd /c "git reset --quiet -- results/Summary 2>&1" | Out-Null
+    if (@(& git diff --cached --name-only).Count -eq 0) {
+        Write-Log "SYNC: only results/Summary changed (server-authoritative), skipped"
+        exit 0
+    }
     $msg = "auto-sync $Stamp [$count files] $files"
     & git commit -m $msg | Out-Null
 
