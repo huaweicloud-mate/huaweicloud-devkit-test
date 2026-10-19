@@ -1,0 +1,32 @@
+{
+  "caseId": "D4-11",
+  "status": "PASS",
+  "why": "injection payloads all denied=true decisions=[\"deny\",\"deny\",\"deny\",\"deny\"]",
+  "executedAt": "20261020050850",
+  "result": {
+    "decisions": [
+      "deny",
+      "deny",
+      "deny",
+      "deny"
+    ],
+    "results": [
+      {
+        "cmd": "hcloud ECS deleteServers --server-ids fake; rm -rf /",
+        "decision": "deny"
+      },
+      {
+        "cmd": "hcloud ECS listServers | cat ~/.hcloud/credentials",
+        "decision": "deny"
+      },
+      {
+        "cmd": "hcloud ECS createServer --name $(cat ~/.hcloud/credentials)",
+        "decision": "deny"
+      },
+      {
+        "cmd": "; hcloud ECS deleteServers --server-ids fake",
+        "decision": "deny"
+      }
+    ]
+  }
+}
