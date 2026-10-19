@@ -66,6 +66,21 @@ function writeRunRecord(rec) {
   mkdirSync(RUNS_DIR, { recursive: true });
   writeFileSync(join(RUNS_DIR, `${rec.runid}.json`), JSON.stringify(rec, null, 2) + "\n", "utf-8");
 }
+// 从 results/summary.json 读历史任务实际用到的工具集（BENCH_TOOLS_FILTER 按需下发白名单来源）
+function loadToolWhitelist() {
+  const m = new Map();
+  try {
+    const p = join(ROOT, 'results', 'summary.json');
+    if (!existsSync(p)) return m;
+    const s = JSON.parse(readFileSync(p, 'utf-8'));
+    for (const t of (s.tasks || [])) {
+      if (t.id && Array.isArray(t.tools)) m.set(String(t.id), t.tools);
+    }
+  } catch (e) {
+    console.warn(`[harness] 加载工具白名单失败: ${e.message}`);
+  }
+  return m;
+}
 // ---- 参数解析 ----
 const args = process.argv.slice(2);
 let taskFilter = null;
@@ -223,15 +238,18 @@ const devkitVersion = bare ? 'n/a (bare)' : detectDevkitVersion();
   const apiKey = readApiKey();
   let mcpsrv = null;
   let tools = [];
-  let openaiTools;
+  let allOpenaiTools;
   if (bare) {
-    openaiTools = [SHELL_TOOL];
+    allOpenaiTools = [SHELL_TOOL];
   } else {
     mcpsrv = startMcpServer(CFG.mcpServer);
     tools = await listTools(mcpsrv);
-    openaiTools = toOpenAITools(tools);
+    allOpenaiTools = toOpenAITools(tools);
   }
-  const toolLabel = bare ? 'shell(裸模型) ' : `MCP ${tools.length} 工具`;
+  // 按需下发实验（差距 #10）：BENCH_TOOLS_FILTER=1 时按任务白名单裁剪工具 schema（默认关，不影响现有基线）
+  const filterMode = process.env.BENCH_TOOLS_FILTER === '1';
+  const toolWhitelist = filterMode ? loadToolWhitelist() : new Map();
+  const toolLabel = bare ? 'shell(裸模型) ' : `MCP ${tools.length} 工具${filterMode ? '（按需下发）' : ''}`;
   console.log(`[harness] 模型=${CFG.model} 工具=${toolLabel} 任务=${selected.length} 采样=${runs} 模式=${bare ? 'bare对照' : '标准'}`);
   console.log(`[harness] 被测版本=${devkitVersion}${bare ? '（裸模型模式未加载 devkit）' : ''} KooCLI=${koolcliVersion}`);
 
@@ -241,6 +259,18 @@ const devkitVersion = bare ? 'n/a (bare)' : detectDevkitVersion();
 
   for (const task of selected) {
     console.log(`\n=== 任务 ${task.id}（${task.title}）===`);
+    // 按需下发：每任务裁剪工具（默认全量兜底；开启且命中白名单时才裁剪）
+    let openaiTools = allOpenaiTools;
+    if (filterMode) {
+      const shortId = task.id.split('-')[0];
+      const wl = toolWhitelist.get(shortId);
+      if (wl && wl.length) {
+        const wlSet = new Set(wl);
+        const filtered = allOpenaiTools.filter((t) => wlSet.has(t.function.name));
+        if (filtered.length) openaiTools = filtered;
+      }
+    }
+    console.log(`  [tools] 下发 ${openaiTools.length}/${allOpenaiTools.length} 个工具`);
     const taskRuns = [];
     for (let i = 0; i < runs; i++) {
       const runid = `${tsCompact}-${task.id.split('-')[0]}-${i}`.toLowerCase();
@@ -272,7 +302,7 @@ const devkitVersion = bare ? 'n/a (bare)' : detectDevkitVersion();
       writeRunRecord({
         runid: r.runid, ts, taskId: task.id, taskTitle: task.title,
         expectedService: task.expectedService, expectedSkill: task.expectedSkill,
-        model: CFG.model, devkitVersion, koolcliVersion, bare: !!bare,
+        model: CFG.model, devkitVersion, koolcliVersion, bare: !!bare, toolFilter: filterMode,
         promptTokens: r.promptTokens, completionTokens: r.completionTokens, totalTokens: r.totalTokens,
         stepCount: r.stepCount, maxRoundsHit: !!r.lastError,
         verdict: r.verdict, verdictDetail: r.verdictDetail, toolTrace: r.toolTrace,
