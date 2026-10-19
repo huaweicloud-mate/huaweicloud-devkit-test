@@ -2,7 +2,8 @@
 """UX（D11）体验专项数据生成器 —— 看板「UX 专项」页签的数据源。
 
 做法：对每个被测源码树调用 `eval/harness/fixtures/run-ux.mjs --json`（内置宿主隔离 +
-三态退出码），再把结构化结果与被测包溯源合并，写出 `results/UX专项/UX专项-<日期>.json`。
+三态退出码），再调用 `eval/replay/ux-replay.mjs --json`（D11-39 体验回放 · 范式②，5 场景
+文案语义分类），把结构化结果与被测包溯源合并，写出 `results/UX专项/UX专项-<日期>.json`。
 
 用法:
     # 单/多列对照（label=路径 可重复）
@@ -29,6 +30,7 @@ import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RUNNER = os.path.join(REPO, "eval", "harness", "fixtures", "run-ux.mjs")
+REPLAY_RUNNER = os.path.join(REPO, "eval", "replay", "ux-replay.mjs")
 OUT_DIR = os.path.join(REPO, "results", "UX专项")
 
 CAVEAT = (
@@ -117,6 +119,38 @@ def run_one(label, hdk_src, evid, tmp_json):
         "designGate": payload.get("designGate", {}) or {},
         "summary": payload.get("summary", {}),
         "cases": cases,
+        "replay": run_replay(hdk_src, tmp_json + ".replay"),
+    }
+
+
+def run_replay(hdk_src, tmp_json):
+    """D11-39 体验回放（独立专项 · 范式②）：跑 eval/replay/ux-replay.mjs，把 5 场景判定并入本数据源。
+
+    退出码 0/1/2 都代表「拿到了结论」（1 = 存在体验退化，属已知缺口态；2 = 环境不可判定），
+    因此**不作为生成失败**；只有拿不到结构化结果时才记 available=False（看板显示「未采集」）。
+    """
+    cmd = ["node", str(REPLAY_RUNNER), hdk_src, "--json", tmp_json]
+    code, out, err = _run(cmd, cwd=REPO)
+    if not os.path.isfile(tmp_json):
+        tail = (err or out or "").strip().splitlines()
+        return {"available": False, "exit": code, "error": (tail[-1] if tail else "无输出")[:200]}
+    with open(tmp_json, encoding="utf-8") as f:
+        payload = json.load(f)
+    used = os.path.abspath(payload.get("hdkSrc") or "")
+    if used and used != os.path.abspath(hdk_src):
+        return {"available": False, "exit": code,
+                "error": "运行器实际使用的源码树与请求不符（防呆）: 请求=" + os.path.abspath(hdk_src)
+                         + " 实际=" + used}
+    rec = payload.get("recording") or ""
+    return {
+        "available": True,
+        "mode": payload.get("mode"),
+        "sutVersion": payload.get("sutVersion") or "",
+        "recording": os.path.relpath(rec, REPO).replace("\\", "/") if rec else "",
+        "summary": payload.get("summary", {}) or {},
+        "byVerdict": payload.get("byVerdict", {}) or {},
+        "scenarios": payload.get("scenarios", []) or [],
+        "exit": code,
     }
 
 
@@ -150,14 +184,16 @@ def main():
     for label, path in suts:
         print(f"[UX] 运行夹具: {label}  <- {path}")
         results.append(run_one(label, path, args.evid, tmp_json))
-    if os.path.isfile(tmp_json):
-        os.remove(tmp_json)
+    for p in (tmp_json, tmp_json + ".replay"):
+        if os.path.isfile(p):
+            os.remove(p)
 
     doc = {
         "date": date,
         "generatedAt": now,
         "timezone": "Asia/Shanghai",
-        "scope": "UX（D11）体验专项 —— 可执行门禁夹具四态结果（PASS / NOT_IMPLEMENTED / BLOCKED / NOT_RUN）",
+        "scope": "UX（D11）体验专项 —— 可执行门禁夹具四态结果（PASS / NOT_IMPLEMENTED / BLOCKED / NOT_RUN）"
+                 " + D11-39 体验回放差异分类（范式② · 独立专项，本轮已并入采集）",
         "caveat": CAVEAT,
         "suts": results,
     }
@@ -173,6 +209,15 @@ def main():
               f"pass={sm.get('pass')} not_implemented={sm.get('not_implemented')} "
               f"blocked={sm.get('blocked')} not_run={sm.get('not_run', 0)} "
               f"/ {sm.get('total')} → exit {sm.get('exit')}")
+        rp = s.get("replay") or {}
+        if rp.get("available"):
+            rs = rp.get("summary", {}) or {}
+            print(f"       D11-39 回放 v{rp.get('sutVersion') or '?'}: "
+                  f"pass={rs.get('pass')} ux_regression={rs.get('ux_regression')} "
+                  f"blocked={rs.get('blocked')} harness_error={rs.get('harness_error')} "
+                  f"/ {rs.get('total')} → exit {rs.get('exit')}")
+        else:
+            print(f"       D11-39 回放：未采集（{rp.get('error') or '—'}）")
     print(f"[UX] 提醒：{CAVEAT}")
 
 
