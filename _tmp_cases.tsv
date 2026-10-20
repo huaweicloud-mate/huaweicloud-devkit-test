@@ -1,0 +1,212 @@
+D1-1	P1	D1安装	全新环境引导安装	install
+D1-2	P2	D1安装	多Agent探测	install
+D1-3	P1	D1安装	doctor健康自检	doctor
+D1-4	P2	D1安装	status/update幂等	status/update
+D1-5	P1	D1安装	uninstall干净度	uninstall
+D1-6	P2	D1安装	install-hcloud	install-hcloud
+D1-7	P2	D1安装	OpenClaw插件流	plugins
+D1-8	P1	D1安装	通用MCP通道	mcp-server
+D1-9	P1	D1安装	重启生效语义	install
+D1-10	P1	D1安装	卸载全局清理(新flag)	uninstall
+D1-11	P2	D1安装	自定义HCLOUD_BIN保留	uninstall
+D1-12	P1	D1安装	清理幂等归零	uninstall
+D1-13	P1	D1安装	Windows文件锁下清理	uninstall
+D1-14	P1	D1安装	copyFileVerified安装完整性	install
+D1-15	P2	D1安装	checkForUpdate更新提示	install/doctor
+D1-26	P1	D1安装	升级提醒工具注册与协议暴露	check_update/upgrade
+D1-27	P1	D1安装	检测语义-已是最新	check_update
+D1-28	P1	D1安装	检测语义-有新版本	check_update
+D1-29	P1	D1安装	pre-release 用户提醒策略(文档vs实现差异)	check_update
+D1-30	P2	D1安装	semver 比对正确性	check_update
+D1-31	P1	D1安装	dismiss 冷却期	check_update
+D1-32	P1	D1安装	新版本>dismissedVersion 无视冷却	check_update
+D1-33	P2	D1安装	skip 文件持久化与多路径	check_update
+D1-34	P1	D1安装	check_failed 不阻塞正常调用	check_update
+D1-35	P2	D1安装	缓存 TTL 与失败节流	check_update
+D1-36	P2	D1安装	首调用兜底提示（会话首个工具附加更新信息）	check_update
+D1-37	P2	D1安装	SKILL.md 会话启动指令存在性	retrieve_skill
+D1-38	P1	D1安装	huaweicloud_upgrade 语义	upgrade
+D1-39	P0	D1安装	Windows 升级检测链可用性	check_update
+D1-40	P0	D1安装	镜像 lag 下检测正确性(反向提醒防护)	check_update
+D1-41	P1	D1安装	check_update 真实 MCP 返回契约	check_update
+D1-42	P1	D1安装	dismiss 真实闭环与跨调用持久化	check_update
+D1-43	P1	D1安装	dismiss 参数边界与失败语义	check_update
+D1-44	P1	D1安装	冷却边界与异常 skip 状态	check_update
+D1-45	P1	D1安装	兜底提示真实序列与预热竞态	check_update
+D1-46	P1	D1安装	缓存 TTL 边界与查询异常恢复	check_update
+D1-47	P2	D1安装	缓存与当前版本解耦	check_update
+D1-48	P1	D1安装	多 Agent 路径与多进程隔离	check_update
+D1-49	P1	D1安装	upgrade handler 无更新与参数校验	upgrade
+D1-50	P1	D1安装	upgrade 命令语义与目标选择	upgrade
+D1-51	P1	D1安装	upgrade 失败恢复与副作用	upgrade/check_update
+D1-52	P1	D1安装	真实升级安装与重启生效	upgrade
+D1-53	P1	D1安装	镜像滞后确定性夹具	check_update
+D1-54	P1	D1安装	Hermes 会话级用户闭环	check_update/upgrade
+D1-55	P2	D1安装	多会话提示隔离	check_update
+D1-56	P1	D1安装	安装中断恢复（网络/进程中断后半装补全）	install/doctor
+D1-57	P1	D1安装	升级坏版本回滚（装坏可退）	upgrade/check_update
+D1-58	P1	D1安装	通用 MCP 白名单接入（Claude/Cursor merge 语义）	install
+D1-59	P2	D1安装	SKIP_UPDATE 环境变量跳过升级检测	check_update
+D1-60	P2	D1安装	HTTP 查询路径与自定义 registry（fetch 版）	check_update
+D1-61	P2	D1安装	升级重启文案 officeace 分支	upgrade
+D1-62	P2	D1安装	未覆盖 CLI 子命令 reinstall/proxy/version	install
+D1-63	P2	D1安装	安装版本读取双回退	check_update
+D1-64	P2	D1安装	agent 自动检测匹配与版本	mcp-server
+D1-65	P2	D1安装	调试模式环境变量	check_update
+D1-66	P2	D1安装	遥测开关与端点环境变量	mcp-server
+D1-67	P2	D1安装	Agent toolkit 模式与 DSH 跳过安装环境变量	install
+D1-68	P2	D1安装	图标离线与区域环境变量	get_service_icon/auth_init
+D1-69	P2	D1安装	CLI help 子命令	install
+D1-70	P1	D1安装	代理配置与 WebSocket 代理	install
+D1-71	P1	D3功能	sandbox_expose_tunnel 沙箱隧道暴露	sandbox_expose_tunnel
+D1-72	P1	D3功能	competition_voucher_claim 激励代金券领取	competition_voucher_claim
+D1-73	P2	D1安装	HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT 跳过 OfficeAce 探测	install
+D1-74	P1	D1安装	HUAWEICLOUD_INJECT_STS_CMD 控制 STS 命令注入	auth/run_approved_command
+D1-75	P2	D1安装	HUAWEICLOUD_SKIP_HCLOUD_PREINSTALL 跳过 KooCLI 预装	install
+D2-8	P1	D2认证	credentials变更后auth回归	huaweicloud_auth_init/auth_status
+D2-9	P1	D2认证	reconcile幂等(一致态零写)	auth_status
+D2-10	P1	D2认证	R7 current档跟随	auth_status
+D2-11	P0	D2认证	R3 STS token拒绝落盘	auth_switch
+D2-12	P1	D2认证	R10 runtime非空禁止落盘	huaweicloud_auth_init/auth_status/auth_sync
+D2-13	P1	D2认证	R9 configuredBySession优先env	auth_status
+D2-14	P1	D2认证	R2 冲突交互仲裁(confirmToken)	auth_switch/auth_confirm
+D2-15	P1	D2认证	auth_switch行为矩阵抽查	auth_switch/auth_status
+D2-16	P1	D2认证	import文件读取后擦除	auth_switch
+D2-17	P1	D2认证	cmdAuthReconcile非TTY守卫	auth reconcile
+D2-18	P1	D2认证	.last_sync mtime手动改动检测	auth_status
+D2-19	P1	D2认证	命名档只审计不自动动(R5)	auth_status
+D2-20	P2	D2认证	HUAWEICLOUD_HOME重定向(R6)	auth_status
+D2-21	P1	D2认证	AK/SK 轮换后 auth_status 正确感知（凭证状态维度）	huaweicloud_auth_init/auth_status/auth_sync
+D4-18	P0	D4安全	confirm-not-deny审批语义	plan_cli_command
+D4-19	P0	D4安全	确认流下预检仍生效	hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-20	P1	D4安全	拒绝后零操作	run_approved_command
+D2-1	P1	D2认证	auth init三端同步	huaweicloud_auth_init
+D2-2	P2	D2认证	auth status判定准确性	auth_status
+D2-3	P2	D2认证	auth sync幂等	auth_sync
+D2-4	P0	D2认证	凭证脱敏正确性	show_profile_redacted
+D2-5	P1	D2认证	凭证缺失报错指引	huaweicloud_auth_init/auth_status
+D2-6	P1	D2认证	OBS独立配置引导	setup_obs_config
+D2-7	P2	D2认证	无凭证降级	search_docs/service_catalog/list_regions/retrieve_skill
+D2-22	P2	D2认证	CodeArts 上下文凭证读取	auth_status
+D2-23	P2	D2认证	agent 注册状态	auth_status
+D2-24	P2	D2认证	auth 同步 projectId 自动解析	auth_sync
+D2-25	P2	D2认证	KooCLI 探测状态分类	auth_status
+D2-26	P1	D2认证	凭证备份与恢复	huaweicloud_auth_sync
+D2-27	P2	D2认证	KooCLI 版本管理	auth_status
+D3-A1	P1	D3功能	skill检索完整性	retrieve_skill/search_docs
+D3-A2	P1	D3功能	触发词路由准确	retrieve_skill
+D3-A3	P1	D3功能	沙箱vs生产路由	service_catalog
+D3-A4	P2	D3功能	区域意图提取	list_regions
+D3-A5	P2	D3功能	元数据正确性	service_catalog/list_regions/get_regional_availability
+D3-A6	P2	D3功能	市场/图标检索质量	search_marketplace/get_service_icon
+D3-B1	P2	D3功能	list_operations规范名	list_operations
+D3-B2	P1	D3功能	plan命令质量	plan_cli_command
+D3-B3	P1	D3功能	run_readonly脱敏执行	run_readonly_command
+D3-B4	P2	D3功能	explain_error可执行	explain_error
+D3-B5	P2	D3功能	detect_framework识别	detect_framework
+D3-B6	P2	D3功能	search_docs命中率	search_docs
+D3-C1	P1	D3功能	ECS生命周期E2E	plan_cli_command/run_approved_command
+D3-C2	P1	D3功能	OBS静态站部署E2E	obs_set_website_config/setup_obs_config
+D3-C3	P1	D3功能	沙箱部署E2E	sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_close_session/sandbox_upload_file/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_check_user/sandbox_sign_agreement/sandbox_connect/sandbox_credentials
+D3-C4	P1	D3功能	服务创建类回归	plan_cli_command/run_approved_command
+D3-C5	P1	D3功能	工具冒烟	check_cli/list_operations/plan_cli_command/explain_error
+D3-B7	P1	D3功能	run_approved_command 审批后执行闭环	plan_cli_command/run_approved_command
+D3-B8	P1	D3功能	voucher_status 状态查询（领券状态读取）	voucher_status/voucher_claim
+D3-C6	P1	D3功能	沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/upload_file/close_session/deploy_check）	sandbox_check_user/sandbox_credentials/sandbox_sign_agreement/sandbox_upload_file/sandbox_exec_one_shot/sandbox_deploy_check/sandbox_close_session
+D3-C7	P1	D3功能	跨区域资源操作引导（区域维度）	plan_cli_command/list_regions/get_regional_availability
+D3-C8	P1	D3功能	企业项目（enterprise_project_id）参数支持（项目维度）	plan_cli_command/list_operations
+D3-C9	P1	D3功能	资源不存在/已删除/冻结状态操作引导（资源状态维度）	explain_error/run_readonly_command
+D3-C10	P2	D3功能	市场分类列表	search_marketplace
+D3-C11	P2	D3功能	沙箱凭证注入前 IAM 验证	sandbox_connect
+D3-C12	P2	D3功能	沙箱批量关闭与分块上传参数	sandbox_close_session/sandbox_upload_project
+D3-C13	P1	D3功能	OBS 静态网站托管配置	huaweicloud_obs_set_website_config
+D3-C14	P2	D3功能	沙箱 HDKit 服务参数与 hwlink 凭证	sandbox_connect/sandbox_credentials
+D3-S1	P1	D3功能	场景-只读查ECS(带不改约束)	service_catalog/run_readonly_command
+D3-S2	P1	D3功能	场景-删VPC先确认	plan_cli_command/hook_check_command/run_approved_command
+D3-S3	P1	D3功能	场景-沙箱预览出URL	sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_close_session
+D3-S4	P1	D3功能	场景-领券闭环	voucher_status/voucher_claim
+D3-S5	P2	D3功能	场景-复合意图分层路由	service_catalog
+D3-S6	P2	D3功能	场景-FunctionGraph定时任务	plan_cli_command/run_approved_command
+D3-S7	P1	D3功能	场景-跨服务交付(Web应用+RDS)并归零	sandbox_connect/sandbox_deploy_nginx/plan_cli_command/run_approved_command
+D3-S8	P1	D3功能	场景-操作失败后排障指引	explain_error/run_readonly_command
+D4-1	P0	D4安全	凭证文件读取拦截	hook_check_command
+D4-2	P0	D4安全	凭证env打印拦截	hook_check_command
+D4-3	P0	D4安全	明文secret API拦截	hook_check_command
+D4-4	P1	D4安全	写操作审批门	plan_cli_command
+D4-5	P0	D4安全	写操作误判检测	plan_cli_command
+D4-6	P1	D4安全	adminPass回显警告	hook_check_command
+D4-7	P1	D4安全	hook三工具有效性	hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-8	P1	D4安全	Python/Node策略一致	hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-9	P0	D4安全	公开暴露/破坏性预检	hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-10	P2	D4安全	规则库新增回归	hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-11	P1	D4安全	提示注入防护	search_docs/retrieve_skill/search_marketplace/get_service_icon
+D4-12	P2	D4安全	供应链安装期安全	npm
+D4-13	P1	D4安全	最小权限凭证通过率	run_readonly_command
+D4-14	P2	D4安全	操作可审计性	run_readonly_command
+D4-15	P0	D4安全	hook绕过尝试	hook_check_command
+D4-16	P0	D4安全	命令包裹穿透	hook_check_command
+D4-17	P1	D4安全	hook模糊fail-closed	hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+D4-21	P0	D4安全	hook_check_artifacts 具名回归（代码/IaC/策略制品预检）	hook_check_artifacts
+D4-22	P0	D4安全	hook_check_deploy_plan 具名回归（部署计划预检）	hook_check_deploy_plan
+D4-23	P0	D4安全	全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）	install
+D4-24	P1	D4安全	确认令牌过期与重复确认边界（审批流健壮性）	auth_confirm/plan_cli_command
+D4-25	P2	D4安全	Python hook 事件遥测分类	hook_check_command
+D4-26	P2	D4安全	findings 证据脱敏	hook_check_command
+D4-27	P1	D4安全	双路径输出脱敏	run_readonly_command
+D4-28	P0	D4安全	Node 版安全 hook 链路	hook_check_command
+D4-29	P2	D4安全	分类断言与原始命令分类入口	hook_check_command
+D5-1	P1	D5客户端	清单发现加载	install
+D5-2	P2	D5客户端	install落点正确	install
+D5-3	P1	D5客户端	工具全量枚举	mcp-server
+D5-4	P2	D5客户端	hook支持差异	hook_check_command
+D5-5	P2	D5客户端	沙箱/终端模式差异	check_cli
+D5-6	P1	D5客户端	Windows特有问题	install/doctor
+D5-7	P2	D5客户端	重启生效一致性	install
+D5-8	P1	D5客户端	服务矩阵↔技能目录双向对齐 + codex-desktop 补全	service_catalog/list_operations
+D6-1	P2	D6性能	检索响应延迟	search_docs/retrieve_skill
+D6-2	P2	D6性能	只读执行端到端	run_readonly_command
+D6-3	P2	D6性能	MCP冷启时间	mcp-server
+D6-4	P1	D6性能	并发调度正确性	mcp-server
+D6-5	P2	D6性能	大目录/大上传	detect_framework/sandbox_upload_project
+D6-6	P1	D6性能	弱网重试幂等	plan_cli_command/run_approved_command
+D6-7	P2	D6性能	长会话稳定性	sandbox_exec_with_session
+D6-8	P1	D6性能	MCP 工具调用超时（网络/后端挂起）	run_readonly_command/plan_cli_command
+D6-9	P2	D6性能	缓存清理三入口	check_update/get_service_icon/search_marketplace
+D9-9	P1	D9协议	tools/call 超时协议语义与取消	inspector
+D7-1	P2	D7兼容	OS矩阵	install
+D7-2	P2	D7兼容	Node版本矩阵	install
+D7-3	P1	D7兼容	Windows better-sqlite3缺口	npm
+D7-4	P2	D7兼容	国内镜像源安装	npm
+D7-5	P1	D7兼容	与既有配置共存	update
+D7-6	P2	D7兼容	升级兼容	update
+D8-1	P2	D8质量	文档与能力一致	search_docs
+D8-2	P2	D8质量	错误信息可执行	explain_error
+D8-3	P1	D8质量	脱敏误报平衡	run_readonly_command
+D8-4	P1	D8质量	引导步骤可机械执行	retrieve_skill
+D8-5	P2	D8质量	运行时日志安全	mcp-server
+D8-6	P2	D8质量	中英文文档一致	search_docs
+D8-7	P0	D8质量	7 个 meta/通用技能指引可机械执行验证	retrieve_skill/search_docs
+D8-8	P1	D8质量	遥测策略端到端（trackTool/trackSandbox/hook 事件/上报脱敏）	mcp-server
+D8-9	P2	D8质量	安装 ID 与遥测值脱敏	mcp-server
+D8-10	P2	D8质量	MCP 配置备份与合并	install
+D9-1	P1	D9协议	tools/list合规	inspector
+D9-2	P1	D9协议	JSON-RPC错误码	inspector
+D9-3	P1	D9协议	tools/call响应格式	inspector
+D9-4	P1	D9协议	协议生命周期	inspector
+D9-5	P1	D9协议	stdio传输健壮	mcp-server
+D9-6	P1	D9协议	跨客户端互通	inspector
+D9-7	P2	D9协议	协议版本协商降级	mcp-server
+D9-8	P2	D9协议	inputSchema版本合规	inspector
+D9-10	P1	D9协议	MCP remote transport（HTTP/WS 远程服务）	mcp-server
+D9-11	P1	D9协议	WebSocket 隧道通道生命周期	mcp-server
+D9-12	P0	D9协议	initialize 握手协议安全基线	inspector
+D9-13	P0	D9协议	tools/call 凭证不泄露与权限校验	inspector
+D10-1	P1	D10评测	工具描述可选择性	harness
+D10-2	P1	D10评测	skill激活率	harness
+D10-3	P1	D10评测	路由准确率+混淆矩阵	harness
+D10-4	P0	D10评测	安全干预-静态规则层	harness
+D10-9	P1	D10评测	安全干预-LLM会话层	harness
+D10-5	P1	D10评测	多轮任务完成率	harness
+D10-6	P2	D10评测	评测基建	harness
+D10-7	P2	D10评测	评测失败分级	harness
+D10-8	P2	D10评测	评测成本预算	harness
