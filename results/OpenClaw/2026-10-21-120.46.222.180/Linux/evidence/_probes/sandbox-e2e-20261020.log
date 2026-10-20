@@ -1,0 +1,141 @@
+
+=====CASE D3-C6=====
+check_user -> realnameVerified=true agreementSigned=true err=
+[OK] sandbox_check_user 返回 realnameVerified+agreementSigned
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+connect -> status=connected wsId=e7e9310835d44e5a err=
+[OK] sandbox_connect 返回 workspace_id
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+credentials -> {"sessionId":"e7e9310835d44e5abbcb35cd03e86da2","expiresAt":"2026-10-20T21:22:39.915000Z","credentialValidation":"passed","apiKeyInjected":false,"apiKeyHint":"N
+[OK] sandbox_credentials 注入临时 AK/SK 无异常
+  upload progress: batch 1/1
+upload_file -> ok=true md5Verified=true err=
+[OK] sandbox_upload_file 上传并 md5 校验
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+exec_one_shot -> {"stdout":"\u001b]133;C\u0007hdk-c6-33\r\n/root\r\n\u001b]133;C\u0007\r\n","exitCode":0}
+[OK] sandbox_exec_one_shot 执行只读命令返回输出
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"FAIL","detail":"(port 8088, no HTTP response)"},"output_dir":{"status":"FAIL","detail":"(/wo
+[OK] sandbox_deploy_check 返回规范结果（无静默失败）
+close_session -> "ok"
+[OK] sandbox_close_session 正常关闭
+=====END D3-C6=====
+
+=====CASE D3-C3=====
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+connect -> status=connected wsId=e7e9310835d44e5a
+[OK] connect 成功
+[2026-10-19T21:22:49.145Z] uploadProject: /tmp/multica-task-202346270/hdk-c3-mvfrg2kn -> /workspace/hdk-c3-mvfrg2kn.tar.gz (archive=207 bytes, md5=ec841f8eb6bd33599d7c1c1029578a10)
+[2026-10-19T21:22:49.196Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-202346270/sandbox-upload-1792444969133/hdk-c3-mvfrg2kn.tar.gz, size=207, remotePath=/workspace/hdk-c3-mvfrg2kn.tar.gz)
+[2026-10-19T21:22:49.196Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-19T21:22:49.196Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-19T21:22:49.245Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-19T21:22:49.293Z] deployFileServer: starting server on port 8888
+[2026-10-19T21:22:49.329Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 20633\r\n\u001b]133;C\u0007\r\n"
+[2026-10-19T21:22:49.329Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[2026-10-19T21:22:50.218Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-19T21:22:50.219Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-19T21:22:50.220Z] uploadViaHttpTunnel: tunnel ready, localPort=33537
+[2026-10-19T21:22:50.221Z] uploadViaHttpTunnel: waiting for server health on localhost:33537
+[2026-10-19T21:22:50.221Z] waitForServerReady: attempt 1, checking http://localhost:33537/health
+[2026-10-19T21:22:50.258Z] waitForServerReady: server ready on port 33537 after 0 retries
+[2026-10-19T21:22:50.258Z] uploadViaHttpTunnel: sending POST with 207 bytes
+[2026-10-19T21:22:50.296Z] uploadViaHttpTunnel: upload complete (bytes=207, md5=ec841f8eb6bd33599d7c1c1029578a10)
+upload_project -> ok=true md5Verified=true err=
+[OK] upload_project 上传 + md5 校验
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+deploy_nginx -> ok=true port=8082
+[OK] deploy_nginx 静态站部署
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8082, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/hdk-c3-mvfrg2kn/.)"},"content_verified":{"status":"SKIP","de
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+expose_tunnel -> ok=true url=https://7kwuc2p4-8082.devbridge-s2.hwtunnel.com
+[OK] deploy_check 通过（nginx_serving PASS=URL 可达）
+[OK] URL 可达（沙箱内 HTTP 核验 200）
+close_session -> "ok"
+[OK] 会话关闭
+=====END D3-C3=====
+
+=====SUMMARY=====
+{
+  "total": 13,
+  "passed": 13,
+  "results": [
+    {
+      "name": "sandbox_check_user 返回 realnameVerified+agreementSigned",
+      "ok": true,
+      "detail": "{\"r\":true,\"a\":true}"
+    },
+    {
+      "name": "sandbox_connect 返回 workspace_id",
+      "ok": true,
+      "detail": "wsId=e7e9310835d44e5a"
+    },
+    {
+      "name": "sandbox_credentials 注入临时 AK/SK 无异常",
+      "ok": true,
+      "detail": "credOk=true"
+    },
+    {
+      "name": "sandbox_upload_file 上传并 md5 校验",
+      "ok": true,
+      "detail": "upOk=true"
+    },
+    {
+      "name": "sandbox_exec_one_shot 执行只读命令返回输出",
+      "ok": true,
+      "detail": "execOk=true"
+    },
+    {
+      "name": "sandbox_deploy_check 返回规范结果（无静默失败）",
+      "ok": true,
+      "detail": "dchkOk=true"
+    },
+    {
+      "name": "sandbox_close_session 正常关闭",
+      "ok": true,
+      "detail": "closeOk=true"
+    },
+    {
+      "name": "connect 成功",
+      "ok": true,
+      "detail": "{\"status\":\"connected\"}"
+    },
+    {
+      "name": "upload_project 上传 + md5 校验",
+      "ok": true,
+      "detail": "upOk=true"
+    },
+    {
+      "name": "deploy_nginx 静态站部署",
+      "ok": true,
+      "detail": "port=8082"
+    },
+    {
+      "name": "deploy_check 通过（nginx_serving PASS=URL 可达）",
+      "ok": true,
+      "detail": "dcOk=true"
+    },
+    {
+      "name": "URL 可达（沙箱内 HTTP 核验 200）",
+      "ok": true,
+      "detail": "urlOk=true"
+    },
+    {
+      "name": "会话关闭",
+      "ok": true,
+      "detail": "closeOk=true"
+    }
+  ]
+}

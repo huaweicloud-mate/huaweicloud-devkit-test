@@ -1,0 +1,46 @@
+[OK] CreateVpc  vpcId=86ff06d2-c7c1-4609-8a6b-255a8c881e2d
+[OK] CreateSubnet  subnetId=870fa97a-76c9-4f9f-89f0-b2ac4958b69e
+[OK] CreateServers(plan 分类 allow)  allow
+[FAIL] CreateServers(返回 serverIds)  {
+  "error": {
+    "message": "Your account is insufficient balance.",
+    "code": "Ecs.0067"
+  }
+}
+
+[FAIL] finally归零(ECS/VPC/子网/EIP 全删)  ECS未提取到 serverId | subnet:OK | vpc:OK | 最终归零(vpc=false,eip=true)
+
+=====SUMMARY=====
+{
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 3,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "ok": true,
+      "detail": "vpcId=86ff06d2-c7c1-4609-8a6b-255a8c881e2d"
+    },
+    {
+      "name": "CreateSubnet",
+      "ok": true,
+      "detail": "subnetId=870fa97a-76c9-4f9f-89f0-b2ac4958b69e"
+    },
+    {
+      "name": "CreateServers(plan 分类 allow)",
+      "ok": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回 serverIds)",
+      "ok": false,
+      "detail": "{\n  \"error\": {\n    \"message\": \"Your account is insufficient balance.\",\n    \"code\": \"Ecs.0067\"\n  }\n}\n"
+    },
+    {
+      "name": "finally归零(ECS/VPC/子网/EIP 全删)",
+      "ok": false,
+      "detail": "ECS未提取到 serverId | subnet:OK | vpc:OK | 最终归零(vpc=false,eip=true)"
+    }
+  ]
+}
