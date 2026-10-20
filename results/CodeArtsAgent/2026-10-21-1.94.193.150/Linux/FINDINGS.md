@@ -3,7 +3,7 @@
 > **落盘路径**：`results/CodeArtsAgent/2026-10-21-1.94.193.150/Linux/FINDINGS.md`
 > **生成时间**：2026-10-21（北京时间）
 > **被测对象**：huaweicloud-devkit npm `1.1.10`（gitHead `b0e9f026`）
-> **本轮结论**：设计级 FAIL 8 + SPEC-MISMATCH 1，展开级 FAIL 1（EXP-E01），环境阻塞 BLOCKED 3（D3-S2/D3-S7 Router 配额 VPC.0114，D3-S3 沙箱 devbridge 隧道）。9 项产品缺陷全部与历史结论一致（file_issue.py 查重后不重复开单）；D8-1 文档工具数本轮转 PASS（声明 43=实现 43，1.1.10 修复）；D4-14/D3-C1 本轮 Router 配额释放转 PASS（真机建删归零通过）。
+> **本轮结论**：设计级 FAIL 9 + SPEC-MISMATCH 1，展开级 FAIL 1（EXP-E01），环境阻塞 BLOCKED 2（D3-S2/D3-S7 Router 配额 VPC.0114）。10 项产品缺陷全部与历史结论一致（file_issue.py 查重后不重复开单）；D8-1 文档工具数本轮转 PASS（声明 43=实现 43，1.1.10 修复）；D4-14/D3-C1 本轮 Router 配额释放转 PASS（真机建删归零通过）。
 
 ## 格式铁律
 
@@ -52,7 +52,15 @@
 - **证据**：`evidence/EXP-E01/stdout.log`
 - **状态**：历史（延续）
 
-## #6【P2】D3-S5 复合意图分层路由 MISS
+## #6【P1】D3-S3 沙箱预览 URL 不可达（devbridge 隧道未建立）
+
+- **现象**：`deploy_nginx` 返回 `ok=false`（url 空），deploy_check 显示 `nginx_serving=PASS`（8080 HTTP 200）但 `devbridge_tunnel=FAIL`。nginx 本地部署成功但无法返回可访问公网 URL。
+- **断言**：沙箱部署终点应返回可访问公网 URL。
+- **根因**：`plugins/huaweicloud-core/src/sandbox/session-manager.mjs` devbridge 公网隧道建立失败（nginx 本地 serving 正常但公网 URL 不可达）。
+- **证据**：`evidence/D3-S3/stdout.log`
+- **状态**：历史 #787（未修复）
+
+## #7【P2】D3-S5 复合意图分层路由 MISS
 
 - **现象**：复合意图未拆分命中多个 service（存储+托管），返回 fallback。
 - **断言**：复合意图应拆分命中多个 service。
@@ -60,7 +68,7 @@
 - **证据**：`evidence/D3-S5/stdout.log`
 - **状态**：历史 #11（未修复）
 
-## #7【P2】D4-25 Python hook 写操作遥测分类失效
+## #8【P2】D4-25 Python hook 写操作遥测分类失效
 
 - **现象**：写操作落事件 key=`cli:invoke`（应为 `cli:write`）。
 - **断言**：只读→`cli:read`、写→`cli:write`、其他→`cli:invoke`。
@@ -68,7 +76,7 @@
 - **证据**：`evidence/D4-25/stdout.log`
 - **状态**：历史 #13（未修复）
 
-## #8【P2】D4-26 findings 证据脱敏不完整
+## #9【P2】D4-26 findings 证据脱敏不完整
 
 - **现象**：findings.evidence 中 secret_key/adminPass 等敏感值明文残留（access_key 已脱敏）。
 - **断言**：findings.evidence 中 AK/SK/password 敏感值应全部脱敏。
@@ -76,7 +84,7 @@
 - **证据**：`evidence/D4-26/stdout.log`
 - **状态**：历史（未修复）
 
-## #9【P2】D8-9 sanitizeValue 不脱敏敏感值
+## #10【P2】D8-9 sanitizeValue 不脱敏敏感值
 
 - **现象**：`sanitize('AK=AKID1234567890ABCDEF')`、`sanitize('access_key=abc secret_key=xyz token=tok123')` 返回原样。
 - **断言**：sanitizeValue 应移除 AK/SK/token 敏感值。
@@ -84,7 +92,7 @@
 - **证据**：`evidence/D8-9/stdout.log`
 - **状态**：历史 #797（未修复）
 
-## #10【P1】D9-9 tools/call 取消语义未声明（SPEC）
+## #11【P1】D9-9 tools/call 取消语义未声明（SPEC）
 
 - **现象**：initialize capabilities 仅 `{tools:{}}`，未声明 `notifications.cancellation`。
 - **断言**：tools/call 应声明取消语义（capabilities.notifications.cancellation）。
@@ -96,7 +104,7 @@
 
 ## 环境阻塞（非产品缺陷，不进提单）
 
-## #11【环境阻塞】D3-S2 / D3-S7 Router 配额超限 VPC.0114
+## #12【环境阻塞】D3-S2 / D3-S7 Router 配额超限 VPC.0114
 
 - **现象**：`hcloud VPC CreateVpc` 返回 `VPC.0114 Quota exceeded for resources: ['router']`（OverQuota），测试 VPC 创建失败，导致删 VPC 审批链路（D3-S2）、跨服务 RDS 编排（D3-S7）无法完成。
 - **断言**：创建/删除/归零闭环需真实完成（当前被华为云 Router 配额阻塞）。
@@ -104,14 +112,6 @@
 - **证据**：`evidence/D3-S2/stdout.log`、`evidence/D3-S7/stdout.log`
 - **状态**：环境阻塞（解除条件=释放 router 配额），不进产品提单
 
-## #12【环境阻塞】D3-S3 沙箱 devbridge 公网隧道建立失败
-
-- **现象**：`deploy_nginx` 返回 `ok=false`（url 空），deploy_check 显示 `nginx_serving=PASS`（8080 HTTP 200）但 `devbridge_tunnel=FAIL`（无详情）。nginx 本地部署成功但无法返回可访问公网 URL。
-- **断言**：沙箱部署终点应返回可访问公网 URL。
-- **根因**：沙箱 devbridge 公网转发隧道失败，nginx 本地 serving 正常（8080 HTTP 200），非 devkit 部署逻辑缺陷，疑似沙箱隧道基础设施故障。
-- **证据**：`evidence/D3-S3/stdout.log`
-- **状态**：环境阻塞（解除条件=沙箱隧道服务恢复），不进产品提单
-
 ---
 
-> **汇总**：设计级 FAIL 8（P0×3 P1×1 P2×4）+ SPEC-MISMATCH 1（D9-9）+ 展开级 FAIL 1（EXP-E01）+ 环境阻塞 3（D3-S2/D3-S7 Router 配额、D3-S3 沙箱隧道）。9 项产品缺陷全部命中历史 issue（file_issue.py 查重），无新增产品缺陷；D8-1 文档工具数本轮转 PASS（1.1.10 修复）；D4-14/D3-C1 本轮 Router 配额释放转 PASS（真机建删归零）。
+> **汇总**：设计级 FAIL 9（P0×3 P1×2 P2×4）+ SPEC-MISMATCH 1（D9-9）+ 展开级 FAIL 1（EXP-E01）+ 环境阻塞 2（D3-S2/D3-S7 Router 配额）。10 项产品缺陷全部命中历史 issue（file_issue.py 查重），无新增产品缺陷；D8-1 文档工具数本轮转 PASS（1.1.10 修复）；D4-14/D3-C1 本轮 Router 配额释放转 PASS（真机建删归零）。
