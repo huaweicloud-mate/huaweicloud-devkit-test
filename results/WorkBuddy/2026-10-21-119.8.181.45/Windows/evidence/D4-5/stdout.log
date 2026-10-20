@@ -1,0 +1,35 @@
+{
+  "caseId": "D4-5",
+  "status": "PASS",
+  "why": "All write/delete operations denied or warned (not read-only)",
+  "executedAt": "20261020211911",
+  "result": {
+    "results": [
+      {
+        "cmd": "hcloud ECS DeleteServer --server_ids=xxx",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "cmd": "hcloud IAM DeleteUser --user_id=xxx",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "cmd": "hcloud VPC DeleteVpc --vpc_id=xxx",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "cmd": "hcloud RDS DeleteInstance --instance_id=xxx",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "cmd": "hcloud ECS StopServer --server_id=xxx",
+        "decision": "deny",
+        "risk": "execution"
+      }
+    ]
+  }
+}

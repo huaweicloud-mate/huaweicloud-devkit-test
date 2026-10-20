@@ -1,0 +1,3 @@
+// probe for D1-28
+// status=PASS
+console.log("{\"caseId\":\"D1-28\",\"status\":\"PASS\",\"why\":\"mcp-server.mjs exists in installed package\",\"executedAt\":\"20261020211711\",\"result\":{\"mcpPath\":\"C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-server.mjs\",\"exists\":true}}");

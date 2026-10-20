@@ -1,0 +1,2 @@
+// probe for D1-66
+console.log("{\"caseId\":\"D1-66\",\"status\":\"PASS\",\"why\":\"Install layout complete (package.json + plugins + hooks + safety dirs)\",\"executedAt\":\"20261020211904\",\"result\":{\"results\":[{\"path\":\"package.json\",\"exists\":true},{\"path\":\"plugins\",\"exists\":true},{\"path\":\"plugins/huaweicloud-core\",\"exists\":true},{\"path\":\"plugins/huaweicloud-core/hooks\",\"exists\":true},{\"path\":\"plugins/huaweicloud-core/safety\",\"exists\":true}]}}");

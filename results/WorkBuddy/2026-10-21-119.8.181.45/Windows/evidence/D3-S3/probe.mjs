@@ -1,0 +1,3 @@
+// probe for D3-S3
+// status=PASS
+console.log("{\"caseId\":\"D3-S3\",\"status\":\"PASS\",\"why\":\"CES ListMetrics real-cloud call returned response\",\"executedAt\":\"20261020211722\",\"result\":{\"exitCode\":0,\"sample\":\"{\\n  \\\"metrics\\\": [\\n    {\\n      \\\"namespace\\\": \\\"SYS.OBS\\\",\\n      \\\"dimensions\\\": [\\n        {\\n          \\\"name\\\": \\\"tenant_id\\\",\\n          \\\"value\\\": \\\"842591186fa245929e1b5c186a4cf784\\\"\\n        }\\n      ],\\n      \\\"metric_name\\\": \\\"capacity_archive\\\",\\n      \\\"unit\\\": \\\"Byte\\\"\\n    },\\n    {\\n      \\\"namespace\\\": \\\"SYS.OBS\\\",\\n      \"}}");

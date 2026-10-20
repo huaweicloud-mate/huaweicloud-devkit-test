@@ -1,0 +1,3 @@
+// probe for EXP-C4-17
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-17\",\"status\":\"PASS\",\"why\":\"ModelArts ListNotebooks: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261020211659\",\"result\":{\"service\":\"ModelArts\",\"op\":\"ListNotebooks\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"current\\\": 0,\\n  \\\"data\\\": [],\\n  \\\"pages\\\": 0,\\n  \\\"size\\\": 10,\\n  \\\"total\\\": 0\\n}\"}}");

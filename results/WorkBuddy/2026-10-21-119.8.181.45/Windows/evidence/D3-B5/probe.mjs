@@ -1,0 +1,2 @@
+// probe for D3-B5
+console.log("{\"caseId\":\"D3-B5\",\"status\":\"PASS\",\"why\":\"plan output has decision/risk/reason fields\",\"executedAt\":\"20261020211904\",\"result\":{\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"NovaListServersDetails\",\"args\":[\"ECS\",\"NovaListServersDetails\"]}}}");

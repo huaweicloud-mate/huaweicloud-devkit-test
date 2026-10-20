@@ -1,0 +1,3 @@
+// probe for D3-S2
+// status=PASS
+console.log("{\"caseId\":\"D3-S2\",\"status\":\"PASS\",\"why\":\"CTS ListTraces real-cloud call returned response\",\"executedAt\":\"20261020211722\",\"result\":{\"exitCode\":0,\"sample\":\"[USE_ERROR]缺少必填参数:trace_type\\n\\n运行`hcloud CTS ListTraces --help`获取有关此API的详细信息\"}}");

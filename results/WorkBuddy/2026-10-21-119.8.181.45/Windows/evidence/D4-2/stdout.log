@@ -1,0 +1,40 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "All credential env-print commands denied",
+  "executedAt": "20261020211911",
+  "result": {
+    "results": [
+      {
+        "cmd": "printenv HUAWEICLOUD_SECRET_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential"
+      },
+      {
+        "cmd": "echo $HW_SECRET_KEY",
+        "decision": "deny",
+        "risk": "credential"
+      },
+      {
+        "cmd": "printenv HW_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential"
+      },
+      {
+        "cmd": "env | grep HWC_",
+        "decision": "deny",
+        "risk": "credential"
+      },
+      {
+        "cmd": "echo $HUAWEICLOUD_SECRET_ACCESS_KEY",
+        "decision": "deny",
+        "risk": "credential"
+      },
+      {
+        "cmd": "Get-ChildItem Env: | Where-Object Name -match \"HUAWEICLOUD\"",
+        "decision": "deny",
+        "risk": "credential"
+      }
+    ]
+  }
+}

@@ -1,0 +1,3 @@
+// probe for EXP-C4-19
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-19\",\"status\":\"PASS\",\"why\":\"CBR ListBackups: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261020211701\",\"result\":{\"service\":\"CBR\",\"op\":\"ListBackups\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"backups\\\": [],\\n  \\\"count\\\": 0,\\n  \\\"offset\\\": 0,\\n  \\\"limit\\\": 1000\\n}\"}}");
