@@ -1,0 +1,60 @@
+[OK] D3-C2 构建静态站 | /tmp/d3c2-7h2yCi/index.html
+[OK] D3-C2 OBS建桶 | Start at 2026-10-20 21:26:26.445581749 +0000 UTC
+
+Create bucket [testbot2-hermes-obs-2531586296] successfully, request i
+[OK] D3-C2 obsutil上传index.html | Start at 2026-10-20 21:26:26.808841284 +0000 UTC
+
+
+Parallel:      5                   Jobs:          5                  
+[OK] D3-C2 set静态站(website config) | {"ok":true,"status":200,"websiteUrl":"http://testbot2-hermes-obs-2531586296.obs-website.cn-north-4.myhuaweicloud.com","message":"Static website hosting configured. Website URL: htt
+[OK] D3-C2 get静态站 | {"ok":true,"status":200,"body":"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><WebsiteConfiguration xmlns=\"http://obs.myhwclouds.com/doc/2015-06-30/\"><IndexDocumen
+[FAIL] D3-C2 curl200(静态站可访问) | http_code=403
+[OK] D3-C2 清理归零(删桶+ListBuckets无残留) | Start at 2026-10-20 21:27:27.686404035 +0000 UTC
+
+Delete bucket [testbot2-hermes-obs-2531586296] successfully! [无残留]
+
+=== D3-C2 SUMMARY ===
+{
+  "case": "D3-C2",
+  "status": "FAIL",
+  "total": 7,
+  "passed": 6,
+  "failed": 1,
+  "results": [
+    {
+      "name": "D3-C2 构建静态站",
+      "pass": true,
+      "detail": "/tmp/d3c2-7h2yCi/index.html"
+    },
+    {
+      "name": "D3-C2 OBS建桶",
+      "pass": true,
+      "detail": "Start at 2026-10-20 21:26:26.445581749 +0000 UTC\n\nCreate bucket [testbot2-hermes-obs-2531586296] successfully, request i"
+    },
+    {
+      "name": "D3-C2 obsutil上传index.html",
+      "pass": true,
+      "detail": "Start at 2026-10-20 21:26:26.808841284 +0000 UTC\n\n\nParallel:      5                   Jobs:          5                  "
+    },
+    {
+      "name": "D3-C2 set静态站(website config)",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot2-hermes-obs-2531586296.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot2-hermes-"
+    },
+    {
+      "name": "D3-C2 get静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+    },
+    {
+      "name": "D3-C2 curl200(静态站可访问)",
+      "pass": false,
+      "detail": "http_code=403"
+    },
+    {
+      "name": "D3-C2 清理归零(删桶+ListBuckets无残留)",
+      "pass": true,
+      "detail": "Start at 2026-10-20 21:27:27.686404035 +0000 UTC\n\nDelete bucket [testbot2-hermes-obs-2531586296] successfully! [无残留]"
+    }
+  ]
+}
