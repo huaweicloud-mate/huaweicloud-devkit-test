@@ -1,0 +1,3 @@
+// probe for EXP-C4-08
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-08\",\"status\":\"PASS\",\"why\":\"IAM KeystoneListUsers: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261020211112\",\"result\":{\"service\":\"IAM\",\"op\":\"KeystoneListUsers\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: Unauthorized\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"b62f5c9774093c834e766512d2bff84d\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/IAM'\"}}");

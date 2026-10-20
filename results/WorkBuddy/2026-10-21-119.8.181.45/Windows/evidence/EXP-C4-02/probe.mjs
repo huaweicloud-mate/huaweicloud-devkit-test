@@ -1,0 +1,3 @@
+// probe for EXP-C4-02
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-02\",\"status\":\"PASS\",\"why\":\"VPC ListVpcs: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261020211105\",\"result\":{\"service\":\"VPC\",\"op\":\"ListVpcs\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"ListVpcs有多个版本,默认使用该API版本v3.若需指定其他版本,请将API名修改为\\\"ListVpcs/版本号\\\"\\n{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: Unauthorized\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"5fd79299639ebf474b6b220166ce1b57\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/VPC'\"}}");

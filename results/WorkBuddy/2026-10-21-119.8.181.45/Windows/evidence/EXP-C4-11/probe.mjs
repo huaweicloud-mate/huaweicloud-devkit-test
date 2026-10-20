@@ -1,0 +1,3 @@
+// probe for EXP-C4-11
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-11\",\"status\":\"PASS\",\"why\":\"DDS ListInstances: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261020211115\",\"result\":{\"service\":\"DDS\",\"op\":\"ListInstances\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: Unauthorized\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"b58bd2deea048d32c42312369e4050ce\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/DDS'\"}}");

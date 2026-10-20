@@ -1,0 +1,45 @@
+{
+  "caseId": "D4-16",
+  "status": "FAIL",
+  "why": "Wrapper bypass detected",
+  "executedAt": "20261020210754",
+  "result": {
+    "results": [
+      {
+        "cmd": "bash -c \"cat ~/.hcloud/credentials.json\"",
+        "decision": "deny",
+        "risk": "credential"
+      },
+      {
+        "cmd": "sh -c \"printenv HW_SECRET_KEY\"",
+        "decision": "deny",
+        "risk": "credential"
+      },
+      {
+        "cmd": "eval \"hcloud ECS DeleteServer\"",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "cmd": "bash -c \"hcloud IAM DeleteUser\"",
+        "decision": "deny",
+        "risk": "write"
+      },
+      {
+        "cmd": "$(hcloud KMS DecryptData)",
+        "decision": "allow",
+        "risk": "unknown_read"
+      },
+      {
+        "cmd": "sh -c \"env | grep HWC_\"",
+        "decision": "deny",
+        "risk": "credential"
+      },
+      {
+        "cmd": "powershell -c \"Get-Content ~/.huaweicloud/credentials.json\"",
+        "decision": "deny",
+        "risk": "credential"
+      }
+    ]
+  }
+}

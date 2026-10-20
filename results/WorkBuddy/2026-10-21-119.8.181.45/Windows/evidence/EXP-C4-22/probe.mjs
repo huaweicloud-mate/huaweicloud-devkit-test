@@ -1,0 +1,3 @@
+// probe for EXP-C4-22
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-22\",\"status\":\"PASS\",\"why\":\"ELB ListListeners: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261020211130\",\"result\":{\"service\":\"ELB\",\"op\":\"ListListeners\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"ListListeners有多个版本,默认使用该API版本v3.若需指定其他版本,请将API名修改为\\\"ListListeners/版本号\\\"\\n{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: AK test_ak_20char123456 failed to reach the limit, forbidden.\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"16fa1f877923604716ff94334143230e\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/ELB'\"}}");

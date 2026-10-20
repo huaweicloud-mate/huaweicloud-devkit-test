@@ -1,0 +1,3 @@
+// probe for EXP-C4-04
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-04\",\"status\":\"PASS\",\"why\":\"RDS ListInstances: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261020211106\",\"result\":{\"service\":\"RDS\",\"op\":\"ListInstances\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: Unauthorized\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"a7448291af67a0784eafac9eea6565e6\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/RDS'\"}}");

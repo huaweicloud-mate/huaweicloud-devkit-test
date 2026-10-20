@@ -1,0 +1,21 @@
+{
+  "caseId": "D4-22",
+  "status": "PASS",
+  "why": "Public-exposure FunctionGraph deploy plan blocked/warned",
+  "executedAt": "20261020210754",
+  "result": {
+    "decision": "warn",
+    "findings": [
+      {
+        "ruleId": "hwc-functiongraph-public-no-auth",
+        "title": "Public FunctionGraph trigger without auth",
+        "category": "public_exposure",
+        "severity": "warn",
+        "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+        "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+        "source": "deploy_plan",
+        "evidence": "{ \"plan\": \"{\\\"service\\\":\\\"FunctionGraph\\\",\\\"function\\\":{\\\"handler\\\":\\\"index.handler\\\",\\\"code_type\\\":\\\"inline\\\",\\\"public_access\\\":true},\\\"network\\\":{\\\"public_eip\\\":true}}\" }"
+      }
+    ]
+  }
+}

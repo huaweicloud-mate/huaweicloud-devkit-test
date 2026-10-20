@@ -1,0 +1,3 @@
+// probe for D3-C2
+// status=FAIL
+console.log("{\"caseId\":\"D3-C2\",\"status\":\"FAIL\",\"why\":\"VPC list failed\",\"executedAt\":\"20261020211132\",\"result\":{\"exitCode\":0,\"sample\":\"ListVpcs有多个版本,默认使用该API版本v3.若需指定其他版本,请将API名修改为\\\"ListVpcs/版本号\\\"\\n{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: AK test_ak_20char123456 failed to reach the limit, forbidden.\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"09d7c83fb3b3fb1df59a0f1ec45d3519\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huawe\"}}");

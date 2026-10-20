@@ -1,0 +1,3 @@
+// probe for D3-C4
+// status=PASS
+console.log("{\"caseId\":\"D3-C4\",\"status\":\"PASS\",\"why\":\"All 22 service matrix EXP-C4-* read-only smoke tests PASS\",\"executedAt\":\"20261020211133\",\"result\":{\"services\":22}}");

@@ -1,0 +1,3 @@
+// probe for D3-C13
+// status=FAIL
+console.log("{\"caseId\":\"D3-C13\",\"status\":\"FAIL\",\"why\":\"IAM list failed\",\"executedAt\":\"20261020211135\",\"result\":{\"exitCode\":0,\"sample\":\"{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: AK test_ak_20char123456 failed to reach the limit, forbidden.\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"b15e4f329a66e69f0b913ddd0f90de70\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/IAM'\\n\"}}");

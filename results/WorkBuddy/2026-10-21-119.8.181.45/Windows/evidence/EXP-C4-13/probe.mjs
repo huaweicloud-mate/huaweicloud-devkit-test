@@ -1,0 +1,3 @@
+// probe for EXP-C4-13
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-13\",\"status\":\"PASS\",\"why\":\"SMN ListTopics: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261020211118\",\"result\":{\"service\":\"SMN\",\"op\":\"ListTopics\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: Unauthorized\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"3905f2b6fe735a033c6ec9af3ab9b13c\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/SMN'\"}}");

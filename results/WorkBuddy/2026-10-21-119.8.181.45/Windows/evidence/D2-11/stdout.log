@@ -1,0 +1,20 @@
+{
+  "caseId": "D2-11",
+  "status": "PASS",
+  "why": "STS token: redactSecrets(object) masks securityToken; printenv HW_SECURITY_TOKEN denied",
+  "executedAt": "20261020210754",
+  "result": {
+    "objectRedacted": {
+      "ak": "<redacted>",
+      "sk": "<redacted>",
+      "securityToken": "<redacted>",
+      "region": "cn-north-4"
+    },
+    "classification": {
+      "decision": "deny",
+      "risk": "credential",
+      "reason": "Dumping cloud credential environment variables is blocked."
+    },
+    "tokenLeak": false
+  }
+}

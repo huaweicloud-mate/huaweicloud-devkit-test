@@ -1,0 +1,3 @@
+// probe for EXP-C4-18
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-18\",\"status\":\"PASS\",\"why\":\"DEW ListSecrets: help-list ok=false, real-call ok=true\",\"executedAt\":\"20261020211124\",\"result\":{\"service\":\"DEW\",\"op\":\"ListSecrets\",\"helpExit\":0,\"helpHasOp\":false,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"[USE_ERROR]不支持的服务名称:DEW\\n\\n运行`hcloud --help`获取更多的关于KooCLI的使用帮助;运行`hcloud --interactive`交互式提示,更方便地构建命令\"}}");

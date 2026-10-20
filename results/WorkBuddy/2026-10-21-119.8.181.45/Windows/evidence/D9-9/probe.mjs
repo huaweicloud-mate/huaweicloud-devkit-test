@@ -1,0 +1,3 @@
+// probe for D9-9
+// status=FAIL
+console.log("{\"caseId\":\"D9-9\",\"status\":\"FAIL\",\"why\":\"protocol-probe failed\",\"executedAt\":\"20261020211142\",\"result\":{\"exitCode\":2,\"sample\":\"\"}}");

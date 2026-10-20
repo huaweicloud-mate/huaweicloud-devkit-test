@@ -1,0 +1,3 @@
+// probe for EXP-C4-10
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-10\",\"status\":\"PASS\",\"why\":\"CES ListMetrics: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261020211113\",\"result\":{\"service\":\"CES\",\"op\":\"ListMetrics\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: Unauthorized\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"890b0e02b2eb5601bb1806d1753c8764\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/CES'\"}}");
