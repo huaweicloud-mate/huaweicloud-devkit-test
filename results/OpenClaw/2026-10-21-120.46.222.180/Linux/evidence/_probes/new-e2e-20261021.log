@@ -1,0 +1,92 @@
+
+=====CASE D3-C7=====
+plan 命令 = hcloud ECS ListServersDetails --cli-region=ap-southeast-3
+[OK] 命令含目标 --cli-region=ap-southeast-3（参数级断言）
+get_regional_availability = {"ok":true,"service":"ecs","region":"ap-southeast-3","available":true,"note":"ecs is available in ap-southeast-3.","sourcedFrom":"static cache, update via npm package upgrade","disclaimer":"This resul
+[OK] get_regional_availability ecs@ap-southeast-3 可用
+ECS 跨区域只读 stdout = {
+  "error": {
+    "message": "the current region is [ap-southeast-3] and does not match with the project name [cn-north-4] in tk.",
+    "code": "Common.0013"
+  }
+}
+Failed to get terminal width. The d
+[OK] 跨区域只读返回精确错误码（Ecs.0200/Common.0013/APIGW.0802，非裸 404）
+plan CreatePublicip = hcloud EIP CreatePublicip --cli-region=ap-southeast-3 --publicip.type=EIP --bandwidth.size=1 --bandwidth.share_type=PER --bandwidth.charge_mode=traffic decision=allow
+[OK] 创建 EIP 命令含 --cli-region=ap-southeast-3
+CreatePublicip 结果 ok=true out={
+  "code": "VPC.0301",
+  "message": "{\"NeutronError\":{\"message\":\"Bandwidth name or share_type is invalid.\",\"type\":\"InvalidInput\",\"detail\":\"\"}}"
+}
+Failed to get terminal width. The default width will be use
+归零 (tctest- 清单空) = true
+[OK] 创建资源释放归零（tctest- 前缀清单空，ListEips 空）
+=====END D3-C7=====
+
+=====CASE D3-C2=====
+obsutil -dryRun 键名核对 = Error: bucket [__dry__] in cloud_url [obs://__dry__/index.html] is not in well format
+
+OBS mb = success
+OBS cp 上传 = ok(status 200)
+set 静态站 = ok=true status=200 url=http://tctest-openclaw-c2-mvh6xaiu.obs-website.cn-north-4.myhuaweicloud.com
+chattri public-read 桶+对象 = ok
+curl http://tctest-openclaw-c2-mvh6xaiu.obs-website.cn-north-4.myhuaweicloud.com -> HTTP 200 (retry)
+OBS rm 归零 = ok(删桶)
+[OK] build 静态站 + obsutil 上传（-dryRun 键名/目录语义 + cp）
+[OK] public-read + set 静态站 200
+[OK] curl 静态站 URL 可达（200）
+[OK] 清理归零（先删对象后删桶）
+=====END D3-C2=====
+
+=====SUMMARY=====
+{
+  "total": 9,
+  "passed": 9,
+  "results": [
+    {
+      "name": "命令含目标 --cli-region=ap-southeast-3（参数级断言）",
+      "ok": true,
+      "detail": "hcloud ECS ListServersDetails --cli-region=ap-southeast-3"
+    },
+    {
+      "name": "get_regional_availability ecs@ap-southeast-3 可用",
+      "ok": true,
+      "detail": "{\"ok\":true,\"service\":\"ecs\",\"region\":\"ap-southeast-3\",\"available\":true,\"note\":\"ecs is available in ap-southeast-3.\",\"sourcedFrom\":\"static cache, update via npm p"
+    },
+    {
+      "name": "跨区域只读返回精确错误码（Ecs.0200/Common.0013/APIGW.0802，非裸 404）",
+      "ok": true,
+      "detail": "{\n  \"error\": {\n    \"message\": \"the current region is [ap-southeast-3] and does not match with the project name [cn-north-4] in tk.\",\n    \"code\": \"Common.0013\"\n "
+    },
+    {
+      "name": "创建 EIP 命令含 --cli-region=ap-southeast-3",
+      "ok": true,
+      "detail": "hcloud EIP CreatePublicip --cli-region=ap-southeast-3 --publicip.type=EIP --bandwidth.size=1 --bandwidth.share_type=PER --bandwidth.charge_mode=traffic"
+    },
+    {
+      "name": "创建资源释放归零（tctest- 前缀清单空，ListEips 空）",
+      "ok": true,
+      "detail": "created=false releaseOk=false zeroed=true"
+    },
+    {
+      "name": "build 静态站 + obsutil 上传（-dryRun 键名/目录语义 + cp）",
+      "ok": true,
+      "detail": "mb=true uploadOk=true"
+    },
+    {
+      "name": "public-read + set 静态站 200",
+      "ok": true,
+      "detail": "setStatus=200"
+    },
+    {
+      "name": "curl 静态站 URL 可达（200）",
+      "ok": true,
+      "detail": "http=200"
+    },
+    {
+      "name": "清理归零（先删对象后删桶）",
+      "ok": true,
+      "detail": "rmOk=true"
+    }
+  ]
+}
