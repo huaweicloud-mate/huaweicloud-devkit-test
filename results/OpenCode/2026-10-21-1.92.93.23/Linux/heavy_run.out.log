@@ -1,0 +1,99 @@
+########## D3-C7 ########## 2026-10-21 05:16:16
+[OK] list_regions 返回区域 -> {"ok":true,"count":26,"regions":[{"id":"af-north-1","type":"public","locales":{"en-us":"AF-Cairo","zh-cn":"非洲-开罗"}},{"id":"af-south-1","type":"public"
+[OK] get_regional_availability -> {"ok":true,"service":"vpc","region":"cn-north-4","available":true,"note":"vpc is available in cn-north-4.","sourcedFrom":"static cache, update via npm
+[OK] plan 只读含 --cli-region(参数级断言) -> ["VPC","ListVpcs","--cli-region=cn-north-4","--cli-output=json"]
+[OK] 执行只读查询 -> {
+  "request_id": "1114c3e742f98c063f00b96ce6597bac",
+  "vpcs": [
+    {
+      "name": "testbot3-hermes-e2e-2530689309",
+
+[OK] EIP 建删命令含 region -> hasRegion=true
+[OK] CreatePublicip 返回 id -> [object Object]
+[OK] DeletePublicip 释放 -> {"ok":true,"exitCode":0,"signal":null,"stdout":"","stderr":"","plan":{"executable":"hcloud","args":[
+
+=== D3-C7 PASS 7/7 ===
+########## D3-C7 done exit=0 ########## 2026-10-21 05:16:19
+########## D3-C2 ########## 2026-10-21 05:16:19
+[OK] OBS建桶 -> Start at 2026-10-20 21:16:19.249829907 +0000 UTC
+
+Create bucket [tctest-opencode-obs-h6nvhu] successfully, request id [000001A15B2C1A3F47CD59EF5571D7A
+[OK] obsutil上传 -> Start at 2026-10-20 21:16:20.680428888 +0000 UTC
+
+
+Parallel:      5                   Jobs:          5                   
+Threshold:     50.00MB      
+[OK] public-read(ACL) -> 桶+对象 chattri -acl=public-read 已执行
+[OK] set静态站(website) -> {"ok":true,"status":200,"websiteUrl":"http://tctest-opencode-obs-h6nvhu.obs-website.cn-north-4.myhuaweicloud.com","message":"Static website hosting configured. Website URL: http://tctest-opencode-obs-
+[OK] get静态站 -> {"ok":true,"status":200,"body":"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><WebsiteConfiguration xmlns=\"http://obs.myhwclouds.com/doc/2015-06-30/\"><IndexDocument><Suffix>index.html
+[OK] curl200 -> code=200 url=http://tctest-opencode-obs-h6nvhu.obs-website.cn-north-4.myhuaweicloud.com
+[OK] 删桶归零 -> rm -r -f 清对象 + rm obs://bucket -f 删桶
+
+=== D3-C2 PASS 7/7 ===
+########## D3-C2 done exit=0 ########## 2026-10-21 05:16:25
+########## D3-C3 ########## 2026-10-21 05:16:25
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] connect -> ws=e7e9310835d44e5abbcb35cd03e86da2
+[2026-10-20T21:16:30.255Z] uploadProject: /tmp/d3c3-proj -> /workspace/d3c3-proj.tar.gz (archive=209 bytes, md5=3c5c8a16010cf7f25758f4fb9882d950)
+[2026-10-20T21:16:30.306Z] uploadViaHttpTunnel: start (archive=/tmp/sandbox-upload-1792530990243/d3c3-proj.tar.gz, size=209, remotePath=/workspace/d3c3-proj.tar.gz)
+[2026-10-20T21:16:30.306Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-20T21:16:30.307Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-20T21:16:30.357Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-20T21:16:30.406Z] deployFileServer: starting server on port 8888
+[2026-10-20T21:16:30.443Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 23657\r\n\u001b]133;C\u0007\r\n"
+[2026-10-20T21:16:30.443Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[2026-10-20T21:16:31.327Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-20T21:16:31.328Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-20T21:16:31.330Z] uploadViaHttpTunnel: tunnel ready, localPort=44311
+[2026-10-20T21:16:31.330Z] uploadViaHttpTunnel: waiting for server health on localhost:44311
+[2026-10-20T21:16:31.330Z] waitForServerReady: attempt 1, checking http://localhost:44311/health
+[2026-10-20T21:16:31.371Z] waitForServerReady: server ready on port 44311 after 0 retries
+[2026-10-20T21:16:31.371Z] uploadViaHttpTunnel: sending POST with 209 bytes
+[2026-10-20T21:16:31.410Z] uploadViaHttpTunnel: upload complete (bytes=209, md5=3c5c8a16010cf7f25758f4fb9882d950)
+[OK] upload_project -> {"ok":true,"localDir":"/tmp/d3c3-proj","remotePath":"/workspace/d3c3-proj","bytes":209,"md5":"3c5c8a16010cf7f25758f4fb9882d950","md5Verified":true,"ex
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] deploy_nginx -> {"ok":false,"error":"sandbox deploy nginx: configuration write verification failed — nginx -t did not pass.","nginxType"
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8086, HTTP
+[OK] close_session -> "ok"
+
+=== D3-C3 PASS 5/5 ===
+########## D3-C3 done exit=0 ########## 2026-10-21 05:17:01
+########## D3-C6 ########## 2026-10-21 05:17:01
+[OK] check_user -> {"realnameVerified":true,"agreementSigned":true}
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] connect -> ws=e7e9310835d44e5abbcb35cd03e86da2
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] credentials -> {"sessionId":"e7e9310835d44e5abbcb35cd03e86da2","expiresAt":"2026-10-21T21:17:06.702000Z","credentialValidation":"passed
+[OK] sign_agreement -> {"signed":true,"signedCount":0}
+  upload progress: batch 1/1
+[OK] upload_file -> {"ok":true,"localPath":"/tmp/d3c6-1792531029213/probe.txt","remotePath":"/workspace/d3c6-probe.txt","bytes":25,"chunks":
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] exec_one_shot -> {"stdout":"\u001b]133;C\u0007hdk-sandbox-ok\r\n\u001b]133;C\u0007\r\n","exitCode":0}
+Waiting for connection 673280... (0s)Connection 673280 established (0s).
+[OK] deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"FAIL","detail":"(port 8085, no H
+[OK] close_session -> "ok"
+
+=== D3-C6 PASS 8/8 ===
+########## D3-C6 done exit=0 ########## 2026-10-21 05:17:12
+########## D3-C1 ########## 2026-10-21 05:17:12
+[OK] CreateVpc -> [object Object]
+[OK] CreateSubnet -> [object Object]
+[OK] CreateServers(审批分类) -> [object Object]
+[OK] CreateServers(返回 job_id/serverIds) -> [object Object]
+[OK] 验证 ACTIVE -> [object Object]
+[OK] 删除含磁盘 -> [object Object]
+[OK] 归零验证(ECS 不含本次资源) -> [object Object]
+[OK] 清理 VPC+子网 -> {"vpcId":"34f1f6d6-626b-4683-82e6-14236662528f","subnetId":"f0a84806-284b-460b-bd4c-fd19f2ec30b3","cleanOk":true}
+
+=== D3-C1 PASS 8/8 ===
+########## D3-C1 done exit=0 ########## 2026-10-21 05:18:14
+ALL HEAVY DONE 2026-10-21 05:18:14
