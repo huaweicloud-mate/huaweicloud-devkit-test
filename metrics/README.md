@@ -9,6 +9,7 @@
 |---|---|---|
 | `trend.csv` | 每日一行：date / total(用例) / cells(用例×客户端) / done / pass / fail / spec / blocked / notrun / exec_rate / pass_rate | 自动（`npm run test:trend`，CI `trend-metrics.yml` 每日兜底） |
 | `trend.md` | 跨日 Markdown 趋势报告（表 + 7 日均值 + 风险提示） | 同上 |
+| `trend.svg` | 跨日趋势折线图（执行率 / 通过率双线 + 图例中位数），纯标准库手写 SVG、**确定性输出**（同 trend.csv 必得同文件） | 自动（`npm run test:trend-chart`，`trend-metrics.yml` 随趋势一并重生成） |
 | `execution.csv` | 每轮手工记录：迭代 / 日期 / 范围 / 计划用例 / 已执行 / 通过 / 失败 / 阻塞 / 执行率 / 通过率 | 人工（维护者每轮；**ITER-001~009 已全量回填**，2026-10-20 补齐） |
 | `dashboard.md` | 质量仪表盘（每迭代末更新一页，随 T6 报告呈报） | 人工（模板 `templates/dashboard.md`）；**尚未建立，见下方「未建台账」** |
 

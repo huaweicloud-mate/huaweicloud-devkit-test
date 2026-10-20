@@ -1,0 +1,53 @@
+name: docs-consistency
+
+# 文档一致性体检（test-cases/check_docs.py）：交叉引用 / README 静态事实断言 /
+# 口径双轨标注 / 台账↔文档对账（results/LATEST.md vs metrics/execution.csv）。
+#
+# 背景：该脚本此前无任何 CI 调用、且路径写死 Windows 绝对路径（在 runner 上根本跑不起来），
+# 2026-10-20 修好（路径由脚本位置推导 + 有问题 exit 1）后接入门禁，防"文档与真源漂移"。
+#
+# 触发：
+#   1. push / PR 触及文档、台账、用例母版或检查器本身
+#   2. 每天 20:30 北京时间兜底（UTC 12:30）
+#   3. 手动 workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'docs/**'
+      - 'metrics/**'
+      - 'results/LATEST.md'
+      - 'templates/**'
+      - 'skills/**'
+      - 'test-cases/**'
+      - '.github/workflows/docs-consistency.yml'
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'docs/**'
+      - 'metrics/**'
+      - 'results/LATEST.md'
+      - 'templates/**'
+      - 'skills/**'
+      - 'test-cases/**'
+  schedule:
+    - cron: '30 12 * * *'
+
+jobs:
+  docs-consistency:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 文档一致性体检（有问题即红灯）
+        run: python test-cases/check_docs.py

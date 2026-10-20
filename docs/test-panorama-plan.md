@@ -457,7 +457,7 @@ flowchart LR
 | 录制回放（Record & Playback） | §6.2 | ✅ 已落地 | `eval/replay/replay.mjs` + `recordings/serviceCatalog-v1.jsonl` + `replay-trend` job |
 | 录制数据驱动场景库 | §6.3 | 🔶 基线已建，场景库继续演进 | `eval/replay/recordings/`（15 条 D10 路由） |
 | 差异对比策略 | §6.4 | ✅ 已落地（分类器） | `eval/replay/compare.mjs`（7 分类 + 敏感泄漏扫描） |
-| AI Test Manager（策略+使命） | `test-ai-orchestration-architecture.md` | ✅ Layer1+2 已落地 | `test-manager/`（决策引擎 + CLI + 发布脚本） |
+| AI Test Manager（策略+使命） | `test-ai-orchestration-architecture.md` | ✅ Layer1+2 已落地（含 MCP 包装） | `test-manager/`（决策引擎 + CLI + 发布脚本 + MCP 服务端） |
 | 使命摄入→机群广播 | — | ✅ 已落地 | `scripts/mission_ingest.py` + `init_day.py --mission` |
 | 测试环境矩阵（Mock 环境） | §八 8.1 | ⭕ 未落地（真云+沙箱已具备，本地 Mock 缺） | — |
 | AI Test Manager Worker 自主展开 | `test-ai-orchestration-architecture.md` §三 | ⭕ 未落地（路径 B headless 驱动待建） | — |

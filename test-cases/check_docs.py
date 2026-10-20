@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
-"""文档一致性体检：交叉引用 / 静态事实断言 / 版本同步"""
+"""文档一致性体检：交叉引用 / 静态事实断言 / 版本同步 / 台账↔文档对账。
+
+退出码：有问题 -> 1（可直接作 CI 门禁）；无问题 -> 0。
+路径：全部由脚本位置推导，跨平台可跑（GitHub runner / 本机 Windows 同源）。
+"""
 import os
 import re
+import sys
 import hashlib
 
-REPO = r"C:\Users\Administrator\devkit-test\huaweicloud-devkit-test"
-LOCAL = r"C:\Users\Administrator\devkit-test"
-WB = r"C:\Users\Administrator\WorkBuddy\2026-09-05-16-18-26"
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # 脚本在 test-cases/，上跳两级 = 仓库根
+LOCAL = os.path.dirname(REPO)                                       # 本机工作区（CI 上不存在 → 仅记 📌 note）
+WB = os.path.join(os.path.expanduser("~"), "WorkBuddy", "2026-09-05-16-18-26")
 
 issues = []
 notes = []
@@ -232,3 +237,6 @@ print("-" * 60)
 for n in notes:
     print("  📌", n)
 print("=" * 60)
+
+# 退出码即门禁：发现问题 -> 1（CI 红灯），否则 0
+sys.exit(1 if issues else 0)
