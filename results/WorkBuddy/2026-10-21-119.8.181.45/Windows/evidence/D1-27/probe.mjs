@@ -1,3 +1,3 @@
 // probe for D1-27
 // status=PASS
-console.log("{\"caseId\":\"D1-27\",\"status\":\"PASS\",\"why\":\"huaweicloud-devkit plugins directory present\",\"executedAt\":\"20261020211130\",\"result\":{\"pkgPath\":\"C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit/plugins\",\"exists\":true}}");
+console.log("{\"caseId\":\"D1-27\",\"status\":\"PASS\",\"why\":\"huaweicloud-devkit plugins directory present\",\"executedAt\":\"20261020211711\",\"result\":{\"pkgPath\":\"C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit/plugins\",\"exists\":true}}");

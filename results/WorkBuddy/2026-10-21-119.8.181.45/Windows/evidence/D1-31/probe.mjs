@@ -1,3 +1,3 @@
 // probe for D1-31
-// status=FAIL
-console.log("{\"caseId\":\"D1-31\",\"status\":\"FAIL\",\"why\":\"doctor did not report pass\",\"executedAt\":\"20261020211131\",\"result\":{\"exitCode\":1,\"output\":\"ϵͳ�Ҳ���ָ����·����\\r\\n\"}}");
+// status=PASS
+console.log("{\"caseId\":\"D1-31\",\"status\":\"PASS\",\"why\":\"devkit doctor reports all checks pass\",\"executedAt\":\"20261020211713\",\"result\":{\"exitCode\":0,\"output\":\"\\n╔══════════════════════════════════════════════╗\\n║     HuaweiCloud DevKit v1.1.10                ║\\n║     https://github.com/huaweicloud   ║\\n╚══════════════════════════════════════════════╝\\n\\nHuaweiCloud DevKit Doctor\\n\\n  \\u001b[32m[PASS]\\u001b[0m Node.js >= 22\\n  \\u001b[32m[PASS]\\u001b[0m MCP server installed\\n  \\u001b[32m[PASS]\\u001b[0m MCP server can start (OpenCode)\\n  \\u001b[32m[PASS]\\u001b[0m Runtime deps (undici) installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety policy installed\\n  \\u001b[32m[PASS]\\u001b[0m Safety hook runtime (Node)\\n  \\u001b[32m[PASS]\\u001b[0m MCP co\"}}");

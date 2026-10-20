@@ -1,3 +1,2 @@
 // probe for D4-12
-// status=PASS
-console.log("{\"caseId\":\"D4-12\",\"status\":\"PASS\",\"why\":\"sudo hcloud wrap blocked\",\"executedAt\":\"20261020211141\",\"result\":{\"classification\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}}}");
+console.log("{\"caseId\":\"D4-12\",\"status\":\"PASS\",\"why\":\"sudo hcloud wrap blocked\",\"executedAt\":\"20261020211904\",\"result\":{\"classification\":{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}}}");

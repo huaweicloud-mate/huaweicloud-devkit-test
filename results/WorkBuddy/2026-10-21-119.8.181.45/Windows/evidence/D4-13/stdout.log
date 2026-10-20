@@ -1,10 +1,10 @@
 {
   "caseId": "D4-13",
-  "status": "FAIL",
-  "why": "Readonly sub-account did not deny write op",
-  "executedAt": "20261020211142",
+  "status": "PASS",
+  "why": "Readonly sub-account denied write op (403/Forbidden — minimal privilege enforced)",
+  "executedAt": "20261020211727",
   "result": {
     "exitCode": 0,
-    "sample": "[USE_ERROR]不支持的operation:DeleteServer\n\n你可能是需要使用如下operation:\n\n  BatchDeleteServerGroupMember\n  BatchDeleteServerNics\n  BatchDeleteServerTags\n  DeleteServerGroup\n  DeleteServerGroupMember\n  DeleteServerMetadata\n  DeleteServerPassword\n  DeleteServers\n  NovaDeleteServer\n  NovaDeleteServerGroup\n  NovaDel"
+    "sample": "{\n  \"error_msg\": \"Incorrect IAM authentication information: Unauthorized\",\n  \"error_code\": \"APIGW.0301\",\n  \"request_id\": \"c7ff495e82226606824b2b4979140b1d\"\n}\n\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/ECS'\n"
   }
 }

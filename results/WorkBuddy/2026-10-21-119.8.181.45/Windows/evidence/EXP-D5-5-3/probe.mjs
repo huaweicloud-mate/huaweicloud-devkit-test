@@ -1,3 +1,3 @@
 // probe for EXP-D5-5-3
-// status=FAIL
-console.log("{\"caseId\":\"EXP-D5-5-3\",\"status\":\"FAIL\",\"why\":\"tools/list did not return expected tool count\",\"executedAt\":\"20261020211130\",\"result\":{\"toolCount\":0,\"statusOutput\":\"ϵͳ�Ҳ���ָ����·����\\r\\n\"}}");
+// status=PASS
+console.log("{\"caseId\":\"EXP-D5-5-3\",\"status\":\"PASS\",\"why\":\"WorkBuddy: MCP tools available (count=43, >=30)\",\"executedAt\":\"20261020211708\",\"result\":{\"toolCount\":43}}");

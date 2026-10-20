@@ -1,0 +1,2 @@
+// probe for D1-30
+console.log("{\"caseId\":\"D1-30\",\"status\":\"PASS\",\"why\":\"uninstall command present in setup-cli.mjs\",\"executedAt\":\"20261020211903\",\"result\":{\"hasUninstall\":true}}");

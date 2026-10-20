@@ -1,3 +1,3 @@
 // probe for EXP-C4-16
 // status=PASS
-console.log("{\"caseId\":\"EXP-C4-16\",\"status\":\"PASS\",\"why\":\"CDN ListDomains: help-list ok=true, real-call ok=false\",\"executedAt\":\"20261020211121\",\"result\":{\"service\":\"CDN\",\"op\":\"ListDomains\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":false,\"realOutSample\":\"ListDomains有多个版本,默认使用该API版本v2.若需指定其他版本,请将API名修改为\\\"ListDomains/版本号\\\"\\n[USE_ERROR]cli-region的值不支持,当前支持的区域值如下:\\ncn-north-1\\nap-southeast-1\"}}");
+console.log("{\"caseId\":\"EXP-C4-16\",\"status\":\"PASS\",\"why\":\"CDN ListDomains: help-list ok=true, real-call ok=false\",\"executedAt\":\"20261020211657\",\"result\":{\"service\":\"CDN\",\"op\":\"ListDomains\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":false,\"realOutSample\":\"ListDomains有多个版本,默认使用该API版本v2.若需指定其他版本,请将API名修改为\\\"ListDomains/版本号\\\"\\n[USE_ERROR]cli-region的值不支持,当前支持的区域值如下:\\ncn-north-1\\nap-southeast-1\"}}");

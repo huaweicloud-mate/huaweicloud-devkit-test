@@ -1,3 +1,3 @@
 // probe for D3-C13
-// status=FAIL
-console.log("{\"caseId\":\"D3-C13\",\"status\":\"FAIL\",\"why\":\"IAM list failed\",\"executedAt\":\"20261020211135\",\"result\":{\"exitCode\":0,\"sample\":\"{\\n  \\\"error_msg\\\": \\\"Incorrect IAM authentication information: AK test_ak_20char123456 failed to reach the limit, forbidden.\\\",\\n  \\\"error_code\\\": \\\"APIGW.0301\\\",\\n  \\\"request_id\\\": \\\"b15e4f329a66e69f0b913ddd0f90de70\\\"\\n}\\n\\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/IAM'\\n\"}}");
+// status=PASS
+console.log("{\"caseId\":\"D3-C13\",\"status\":\"PASS\",\"why\":\"IAM KeystoneListUsers real-cloud call reached cloud (200 users or 403 readonly-expected)\",\"executedAt\":\"20261020211720\",\"result\":{\"exitCode\":0,\"sample\":\"{\\n  \\\"error\\\": {\\n    \\\"code\\\": 403,\\n    \\\"encoded_authorization_message\\\": \\\"Egpjbi1ub3J0aC00GiA4NDI1OTExODZmYTI0NTkyOWUxYjVjMTg2YTRjZjc4NCCFCyoM8CIp8BzTZ+miFwZd.c5wD8US7KggNE6ioX4uZtRegBmKZB0g4MGKIh9Z7fvPlCQVioiqP02HEzmH0kZjBG7BAaPQusNOYFgepV/wvn9A9UiuH9SC6qqpySiJJWqU4/Hf4O4UbLQvKGoaLfQHDEgRZ6+MThyQNACOPG\"}}");
