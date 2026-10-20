@@ -1,0 +1,87 @@
+
+### D3-C3 ###
+{
+  "case": "D3-C3",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "connect",
+      "pass": true,
+      "detail": "ws=e7e9310835"
+    },
+    {
+      "name": "upload_project",
+      "pass": true,
+      "detail": "{\"ok\":true,\"localDir\":\"/tmp/d3c3-proj\",\"remotePath\":\"/workspace/d3c3-proj\",\"bytes\":218,\"md5\":\"4c438f67ea21de0d4810306e91"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": false,
+      "detail": "static:8083"
+    },
+    {
+      "name": "deploy_check",
+      "pass": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "close_session",
+      "pass": true,
+      "detail": "\"ok\""
+    }
+  ]
+}
+
+=== STDERR ===
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+[2026-10-20T21:22:06.503Z] uploadProject: /tmp/d3c3-proj -> /workspace/d3c3-proj.tar.gz (archive=218 bytes, md5=4c438f67ea21de0d4810306e91dd0e96)
+[2026-10-20T21:22:06.555Z] uploadViaHttpTunnel: start (archive=/tmp/sandbox-upload-1792531326492/d3c3-proj.tar.gz, size=218, remotePath=/workspace/d3c3-proj.tar.gz)
+[2026-10-20T21:22:06.556Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-20T21:22:06.556Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-20T21:22:06.605Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-20T21:22:06.654Z] deployFileServer: starting server on port 8888
+[2026-10-20T21:22:06.689Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 25404\r\n\u001b]133;C\u0007\r\n"
+[2026-10-20T21:22:06.689Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+[2026-10-20T21:22:07.625Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-20T21:22:07.627Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-20T21:22:07.628Z] uploadViaHttpTunnel: tunnel ready, localPort=38381
+[2026-10-20T21:22:07.628Z] uploadViaHttpTunnel: waiting for server health on localhost:38381
+[2026-10-20T21:22:07.629Z] waitForServerReady: attempt 1, checking http://localhost:38381/health
+[2026-10-20T21:22:07.667Z] waitForServerReady: server ready on port 38381 after 0 retries
+[2026-10-20T21:22:07.667Z] uploadViaHttpTunnel: sending POST with 218 bytes
+[2026-10-20T21:22:07.706Z] uploadViaHttpTunnel: upload complete (bytes=218, md5=4c438f67ea21de0d4810306e91dd0e96)
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).

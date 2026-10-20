@@ -1,0 +1,269 @@
+# -*- coding: utf-8 -*-
+"""Hermes Linux 2026-10-21 每日测试：证据分发(stdout.txt) + 回填三 CSV (v1.1.10 gitHead b0e9f026)。"""
+import os, re, shutil, csv, glob
+from collections import Counter
+from datetime import datetime, timezone, timedelta
+
+BASE = os.path.dirname(os.path.abspath(__file__))
+EVID = os.path.join(BASE, "evidence")
+P = os.path.join(EVID, "_probes")
+BJT = timezone(timedelta(hours=8))
+TS = datetime.now(BJT).strftime("%Y%m%d%H%M%S")
+
+def read(n):
+    with open(os.path.join(P, n), encoding="utf-8", errors="replace") as f:
+        return f.read()
+
+def write_case(cid, content, probe_src=None, probe_name="probe.mjs"):
+    d = os.path.join(EVID, cid)
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "stdout.txt"), "w", encoding="utf-8") as f:
+        f.write(content)
+    if probe_src and os.path.isfile(os.path.join(P, probe_src)):
+        shutil.copy2(os.path.join(P, probe_src), os.path.join(d, probe_name))
+
+def append_case(cid, content):
+    d = os.path.join(EVID, cid)
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "stdout.txt"), "a", encoding="utf-8") as f:
+        f.write(content)
+
+def split_sections(text):
+    out = {}
+    for m in re.finditer(r"=====CASE ([^\n]+)=====\n(.*?)\n=====END \1=====", text, re.S):
+        out[m.group(1)] = m.group(2).rstrip("\n") + "\n"
+    return out
+
+def distribute(logfile, probe_src, mapping, probe_name="probe.mjs"):
+    secs = split_sections(read(logfile)) if os.path.isfile(os.path.join(P, logfile)) else {}
+    for cid in mapping:
+        if cid in secs:
+            write_case(cid, secs[cid], probe_src, probe_name)
+        else:
+            print(f"  [WARN] {cid} 段未找到于 {logfile}")
+
+# ===== 1. 分发证据 =====
+distribute("classify.log", "classify-probe.mjs", ["D4-1","D4-2","D4-3","D4-15","D4-16"])
+distribute("hook.log", "hook-probe.mjs", ["D4-5","D4-7","D4-9","D4-21","D4-22"])
+distribute("auth.log", "auth-probe.mjs", ["D2-4","D2-11","D2-12"])
+distribute("protocol.log", "protocol-probe.mjs", ["D5-3","D9-1","D9-2","D9-3","D9-4","D9-5","D9-7","D9-8"])
+distribute("extended.log", "extended-probe.mjs", ["D2-16","D9-9","D1-41"])
+distribute("d4-8.log", "d4-8-probe.sh", ["D4-8"], probe_name="probe.sh")
+if os.path.isfile(os.path.join(P, "hcl.log")):
+    append_case("D4-21", "\n===== hcl-probe 补充 =====\n" + read("hcl.log"))
+    shutil.copy2(os.path.join(P, "hcl-probe.mjs"), os.path.join(EVID, "D4-21", "hcl-probe.mjs"))
+if os.path.isfile(os.path.join(P, "wrap.log")):
+    append_case("D4-16", "\n===== wrap-probe 补充 =====\n" + read("wrap.log"))
+    shutil.copy2(os.path.join(P, "wrap-probe.mjs"), os.path.join(EVID, "D4-16", "wrap-probe.mjs"))
+d8secs = split_sections(read("d8.log"))
+write_case("D8-7", "".join(d8secs.get(k, "") for k in sorted(d8secs)) + "\n=== DONE ===\n", "d8-probe.mjs")
+d1 = read("d1.log")
+def slice_steps(text, s, e=None):
+    i = text.find(s)
+    if i < 0: return ""
+    j = text.find(e) if e else len(text)
+    return text[i:j]
+for cid, content in [("D1-3", slice_steps(d1, "########## STEP 1", "########## STEP 3")),
+                     ("D1-4", slice_steps(d1, "########## STEP 3", "########## STEP 4"))]:
+    write_case(cid, content, "d1-probe.sh", "probe.sh")
+distribute("supplement.log", "supplement-probe.mjs",
+           ["D1-26","D1-27","D2-2","D2-5","D3-A1","D3-B1","D3-B3","D3-B5","D3-C5","D4-4","D4-6","D4-11","D4-17","D6-1","D6-3","D6-4"])
+distribute("supplement-import.log", "supplement-import.mjs", ["D1-30","D4-10"])
+for cid in ["D1-28","D1-31","D1-33"]:
+    write_case(cid, read("updatecheck.log"), "updatecheck-probe.mjs")
+write_case("EXP-NR3-10", read("disttags.log"), "disttags-probe.mjs")
+write_case("D5-1", read("d5-1.log"), "D5-1-probe.mjs")
+for cid, log, src in [("D1-40","d1-40.log","D1-40-probe.mjs"),("D1-42","d1-42.log","D1-42-probe.mjs"),
+                      ("D1-45","d1-45.log","D1-45-probe.mjs"),
+                      ("D2-26","d2-26.log","D2-26-probe.mjs"),("D4-27","d4-27.log","D4-27-probe.mjs")]:
+    write_case(cid, read(log), src)
+write_case("D4-6", read("d4-6.log"), "D4-6-probe.mjs")
+append_case("D4-6", "\n===== supplement MCP hook 层 =====\n" + split_sections(read("supplement.log")).get("D4-6",""))
+write_case("D10-3", read("routing.log") + "\n===== eval-harness =====\n" + (read("eval-harness.log") if os.path.isfile(os.path.join(P,"eval-harness.log")) else ""), "routing-probe.mjs")
+write_case("EXP-E08", read("exp-e08.log"), "EXP-E08-probe.mjs")
+write_case("D9-12", read("d9-12.log"), "D9-12-probe.mjs")
+write_case("D9-13", read("d9-13.log"), "D9-13-probe.mjs")
+distribute("new-env.log", "new-env-probe.mjs", ["D1-65","D1-66","D1-67","D1-68"])
+distribute("new-config.log", "new-config-probe.mjs", ["D2-27","D1-70","D8-9","D8-10","D6-9"])
+distribute("new-safety.log", "new-safety-probe.mjs", ["D10-4","D4-26","D4-29","D4-28","D4-25"])
+distribute("new-mcp.log", "new-mcp-probe.mjs", ["D9-10","D9-11"])
+distribute("new-cli.log", "new-cli-probe.mjs", ["D1-69"])
+distribute("new-scenario.log", "new-scenario-probe.mjs", ["D3-S1","D3-S5","D3-S8"])
+distribute("new-cloud.log", "new-cloud-probe.mjs", ["D3-S2","D3-C13","D3-C14","D3-S4","D3-S3"])
+distribute("new-fg-rds.log", "new-fg-rds-probe.mjs", ["D3-S6","D3-S7"])
+if os.path.isfile(os.path.join(P, "merge.log")):
+    append_case("D8-10", "\n===== merge-probe 补充 =====\n" + read("merge.log"))
+    shutil.copy2(os.path.join(P, "merge-probe.mjs"), os.path.join(EVID, "D8-10", "merge-probe.mjs"))
+
+# 真云 E2E（realcloud_e2e.mjs / D3-C7 / D3-C2 稳健探针）
+for cid, log, src in [("D3-C1","D3-C1/e2e-run.log","realcloud-e2e-mjs"),
+                      ("D3-C2","_probes/d3-c2.log","D3-C2-probe.mjs"),
+                      ("D3-C3","D3-C3/e2e-run.log","realcloud-e2e-mjs"),
+                      ("D3-C6","D3-C6/e2e-run.log","realcloud-e2e-mjs"),
+                      ("D3-C7","_probes/d3-c7.log","D3-C7-probe.mjs")]:
+    fp = os.path.join(EVID, log) if log.startswith("_probes") else os.path.join(EVID, log)
+    if os.path.isfile(fp):
+        d = os.path.join(EVID, cid); os.makedirs(d, exist_ok=True)
+        with open(fp, encoding="utf-8", errors="replace") as f:
+            content = f.read()
+        with open(os.path.join(d, "stdout.txt"), "w", encoding="utf-8") as f:
+            f.write(content)
+        if src == "D3-C2-probe.mjs" and os.path.isfile(os.path.join(P, src)):
+            shutil.copy2(os.path.join(P, src), os.path.join(d, "probe.mjs"))
+        elif src == "D3-C7-probe.mjs" and os.path.isfile(os.path.join(P, src)):
+            shutil.copy2(os.path.join(P, src), os.path.join(d, "probe.mjs"))
+    else:
+        print(f"  [WARN] {log} 不存在，跳过 {cid}")
+
+# realcloud-probe (D2-1/D3-C4/D4-14/18/19/20) + D4-13 + D4-23
+for cid in ["D2-1","D3-C4","D4-14","D4-18","D4-19","D4-20"]:
+    d = os.path.join(EVID, cid); os.makedirs(d, exist_ok=True)
+    shutil.copy2(os.path.join(EVID, "realcloud-probe", "stdout.txt"), os.path.join(d, "stdout.txt"))
+    shutil.copy2(os.path.join(EVID, "realcloud-probe", "probe.mjs"), os.path.join(d, "probe.mjs"))
+write_case("_baseline", "huaweicloud-devkit v1.1.10\ngitHead b0e9f02643110804fc8eef6377dcad99b39960cc\n", None)
+
+# ===== 2. 回填 CSV（状态映射：本轮 v1.1.10 实际探针结果校准） =====
+PASS_D = [
+    "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
+    "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69","D1-70",
+    "D2-1","D2-2","D2-4","D2-5","D2-11","D2-12","D2-16","D2-26","D2-27",
+    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C2","D3-C4","D3-C5","D3-C6","D3-C7","D3-C13","D3-C14",
+    "D3-S1","D3-S2","D3-S4","D3-S8",
+    "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11",
+    "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23",
+    "D4-27","D4-28","D4-29",
+    "D5-1","D5-3","D6-1","D6-3","D6-4","D6-9","D8-7","D8-10",
+    "D9-1","D9-2","D9-3","D9-4","D9-5","D9-7","D9-8","D9-10","D9-11","D9-13",
+]
+
+FAIL_D = {
+    "D4-2":  "env | grep -i access_key 未拦截（generic access_key 无云厂商前缀）",
+    "D4-6":  "hook_check_command(--admin-pass) 返回 allow 未告警（stages 缺 command）",
+    "D4-17": "hook 模糊输入 fail-open（空/垃圾/&& rm -rf/$(curl|sh) 均放行）",
+    "D4-21": "hook_check_artifacts 未拦截 HCL actions=[*] 与 AdministratorFullAccess",
+    "D4-25": "Python hook 写操作遥测误分类 cli:invoke（应 cli:write）",
+    "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 泄漏",
+    "D9-12": "initialize 版本检查缺失 + 非法时序 tools/list 未拒 -32600",
+    "D10-3": "serviceCatalog 中文意图 EXP-E01「云主机」未命中（92.9% 未达 100%）",
+    "D3-S3": "sandbox deploy_nginx 返回 ok=false/空 url + devbridge_tunnel FAIL",
+    "D3-C3": "sandbox deploy_nginx 返回 ok=false（static:8083，nginx 实际已 serving）",
+    "D3-S5": "serviceCatalog 复合意图未分解多 service（存储+托管 回退 help）",
+    "D3-S6": "FunctionGraph CreateFunction 返回 [USE_ERROR]Invalid parameter: function_name，未生成 URN",
+    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 返回 Invalid parameter: db.password",
+    "D3-C1": "ECS E2E finally 归零 150s 轮询未确认删除（残留 1 台 ECS，后人工二次删除归零）——真云异步删除时序/探针健壮性，非 devkit 源码缺陷",
+}
+
+SPEC_D = {
+    "D8-9":  "sanitizeValue 未脱敏 AK/SK/token 敏感值（契约漂移）",
+    "D9-9":  "capabilities.cancellation 未声明（契约漂移）",
+    "D10-4": "规则库由 16 条(9deny+7warn) 增至 19 条(9deny+10warn)，用例断言漂移",
+}
+
+BLOCKED_D = {
+    "D2-10": "【补环境】R7 current 档跟随需 KooCLI 多 profile 夹具",
+    "D2-13": "【补环境】R9 configuredBySession 优先 env 需隔离 S1 + HW_ACCESS_KEY env 夹具",
+    "D4-12": "【补环境】供应链安装期安全需 npm 安装期抓包/SBOM 审计通道",
+    "D4-24": "【补环境】确认令牌过期/重复确认边界需审批流 + 可注入时钟",
+    "D9-6":  "【调归属】跨客户端互通需多客户端并存环境（单机仅 Hermes）",
+}
+
+NOTRUN_D = {
+    "D1-39": "【调归属】Windows 升级检测链 EINVAL 专属（OS 列标注「专属」）；Linux 侧由 EXP-NR3-10(disttags 探针)代表覆盖",
+    "D8-1":  "【改用例】文档与能力一致需白盒 docs 全量比对，本轮未覆盖",
+    "D8-4":  "【改用例】引导步骤可机械执行需逐条核验 getting-started 步骤，本轮未覆盖",
+    "D8-6":  "【改用例】中英文文档一致需中英双源逐段比对，本轮未覆盖",
+}
+
+DESIGN = {}
+for c in PASS_D:
+    DESIGN[c] = ("PASS", f"evidence/{c}", "")
+for c in ["D2-1","D3-C4","D4-14","D4-18","D4-19","D4-20"]:
+    DESIGN[c] = ("PASS", "evidence/realcloud-probe", "")
+for c, br in FAIL_D.items():
+    DESIGN[c] = ("FAIL", f"evidence/{c}", "")
+for c, br in SPEC_D.items():
+    DESIGN[c] = ("SPEC-MISMATCH", f"evidence/{c}", "")
+for c, br in BLOCKED_D.items():
+    DESIGN[c] = ("BLOCKED", "", br)
+for c, br in NOTRUN_D.items():
+    DESIGN[c] = ("NOT_RUN", "", br)
+
+EXPANDED = {}
+EXPANDED["EXP-D5-8-1"] = ("PASS", "evidence/D5-1", "")
+EXPANDED["EXP-D5-8-3"] = ("PASS", "evidence/D5-3", "")
+for i in range(1, 23):
+    EXPANDED[f"EXP-C4-{i:02d}"] = ("PASS", "evidence/realcloud-probe", "")
+for c in ["EXP-E02","EXP-E03","EXP-E04","EXP-E05","EXP-E06","EXP-E07","EXP-E09","EXP-E10","EXP-E11","EXP-E12","EXP-E13","EXP-E14","EXP-E15"]:
+    EXPANDED[c] = ("PASS", "evidence/D10-3", "")
+EXPANDED["EXP-E08"] = ("PASS", "evidence/EXP-E08", "")
+EXPANDED["EXP-E01"] = ("FAIL", "evidence/D10-3", "")
+EXPANDED["EXP-NR3-02"] = ("PASS", "evidence/D1-27", "")
+EXPANDED["EXP-NR3-04"] = ("PASS", "evidence/D1-42", "")
+EXPANDED["EXP-NR3-10"] = ("PASS", "evidence/EXP-NR3-10", "")
+EXPANDED["EXP-NR3-24"] = ("PASS", "evidence/D1-45", "")
+
+def rewrite(path, mapping, id_col="ID"):
+    with open(path, encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+    fields = list(rows[0].keys())
+    for r in rows:
+        cid = (r.get(id_col) or "").strip()
+        if cid in mapping:
+            st, ev, br = mapping[cid]
+            r["执行状态"] = st
+            r["执行时间"] = TS if st != "NOT_RUN" else ""
+            r["evidencePath"] = ev
+            if "blockedReason" in fields:
+                r["blockedReason"] = br if st in ("BLOCKED", "NOT_RUN") else ""
+        else:
+            r["执行状态"] = "NOT_RUN"
+            r["执行时间"] = ""
+            r["evidencePath"] = ""
+            if "blockedReason" in fields:
+                r["blockedReason"] = "本轮未覆盖（映射缺失）"
+    with open(path, "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fields); w.writeheader(); w.writerows(rows)
+    return rows
+
+drows = rewrite(os.path.join(BASE, "用例矩阵-设计级.csv"), DESIGN)
+erows = rewrite(os.path.join(BASE, "用例矩阵-展开级.csv"), EXPANDED)
+
+tpath = os.path.join(BASE, "需求-设计-证据追踪表.csv")
+with open(tpath, encoding="utf-8-sig") as f:
+    trows = list(csv.DictReader(f))
+tfields = list(trows[0].keys())
+covered = set(DESIGN.keys()) | set(EXPANDED.keys())
+n = 0
+for r in trows:
+    cid = (r.get("designCaseId") or "").strip()
+    ecid = (r.get("expandedCaseId") or "").strip()
+    if (cid in DESIGN) or (ecid in EXPANDED):
+        r["执行时间"] = TS; n += 1
+with open(tpath, "w", encoding="utf-8-sig", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=tfields); w.writeheader(); w.writerows(trows)
+
+for m_path in glob.glob(os.path.join(BASE, "使命-*.csv")):
+    with open(m_path, encoding="utf-8-sig") as f:
+        mrows = list(csv.DictReader(f))
+    mfields = list(mrows[0].keys())
+    for r in mrows:
+        cid = (r.get("ID") or "").strip()
+        if cid in DESIGN:
+            st, ev, br = DESIGN[cid]
+            r["执行状态"] = st
+            r["执行时间"] = TS if st != "NOT_RUN" else ""
+            r["evidencePath"] = ev
+            if "blockedReason" in mfields:
+                r["blockedReason"] = br if st in ("BLOCKED", "NOT_RUN") else ""
+    with open(m_path, "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=mfields); w.writeheader(); w.writerows(mrows)
+    print(f"使命清单 {os.path.basename(m_path)} {len(mrows)} 行已回填")
+
+c1 = Counter((x.get("执行状态") or "").strip() for x in drows)
+c2 = Counter((x.get("执行状态") or "").strip() for x in erows)
+print(f"\n时间戳: {TS}")
+print(f"设计级 {len(drows)} 行: {dict(c1)}")
+print(f"展开级 {len(erows)} 行: {dict(c2)}")
+print(f"追踪表 {len(trows)} 行, 回填执行时间 {n} 行")
+missing_d = [r["ID"] for r in drows if not (r.get("执行状态") or "").strip()]
+print("设计级缺失状态行:", missing_d)
