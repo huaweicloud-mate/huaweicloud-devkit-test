@@ -19,7 +19,10 @@ def md5(p):
 def collect_files(root, exts=(".md", ".html")):
     out = []
     for dirpath, _, files in os.walk(root):
-        if ".git" in dirpath:
+        _rel = os.path.relpath(dirpath, root).replace("\\", "/")
+        # 跳过：.git；归档证据里的 node_modules（第三方包 README 内部相对链接必然失效）；
+        # results/ 整个归档树（含历史报告与取证产物）——口径：归档原文只增不改，不做链接门禁。
+        if ".git" in dirpath or "node_modules" in dirpath or _rel == "results" or _rel.startswith("results/"):
             continue
         for fn in files:
             if fn.endswith(exts):
@@ -27,6 +30,9 @@ def collect_files(root, exts=(".md", ".html")):
     return out
 
 files = collect_files(REPO)
+_archived_n = sum(1 for _dp, _, _fns in os.walk(os.path.join(REPO, "results"))
+                  for _fn in _fns if _fn.endswith((".md", ".html")))
+notes.append(f"链接门禁口径：results/ 归档 {_archived_n} 个 md/html 不参与链接检查（归档原文只增不改）")
 link_re = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 for f in files:
     rel = os.path.relpath(f, REPO)
@@ -106,11 +112,21 @@ def _read_utf8(p):
     with open(p, encoding="utf-8-sig") as f:
         return f.read()
 
+def _find_iter(*parts):
+    """迭代归档已从 results/ 迁至 results/history/（2026-09 迁移），两处都找。"""
+    for base in ("results", os.path.join("results", "history")):
+        p = os.path.join(REPO, base, *parts)
+        if os.path.exists(p):
+            return p
+    return os.path.join(REPO, "results", *parts)  # 保持明确失败，便于定位
+
+
 readme = _read_utf8(os.path.join(REPO, "README.md"))
 
-# 5.1 results/ 已有迭代目录 => 项目状态不得仍为"准备阶段"
-_iter_dirs = sorted(d for d in os.listdir(os.path.join(REPO, "results"))
-                    if d.startswith("ITER-") and os.path.isdir(os.path.join(REPO, "results", d)))
+# 5.1 results/（含 history/）已有迭代目录 => 项目状态不得仍为"准备阶段"
+_iter_dirs = sorted(d for _base in ("results", os.path.join("results", "history"))
+                    for d in os.listdir(os.path.join(REPO, _base))
+                    if d.startswith("ITER-") and os.path.isdir(os.path.join(REPO, _base, d)))
 if _iter_dirs and "准备阶段" in readme:
     issues.append(f"[README 状态陈旧] results/ 已有迭代 {_iter_dirs}，README 项目状态仍为『准备阶段』")
 
@@ -131,6 +147,9 @@ if _m_cases:
         if _decl != _real:
             issues.append(f"[用例数漂移] README {_tag}={_decl}，CSV 真源={_real}")
 for _mm in re.finditer(r"(\d{2,4})\s*用例", readme):
+    _pre = readme[max(0, _mm.start() - 8):_mm.start()]
+    if any(k in _pre for k in ("新增", "落 ", "补 ", "追加", "缺口")):
+        continue  # 增量陈述（新增/落 N 条用例），非总数陈述
     if int(_mm.group(1)) != _design_n + _exp_n:
         issues.append(f"[用例数漂移] README 出现总数『{_mm.group(1)} 用例』，CSV 真源合计={_design_n + _exp_n}")
 notes.append(f"矩阵真源（CSV 动态读）：设计级 {_design_n} + 展开级 {_exp_n} = {_design_n + _exp_n}")
@@ -146,7 +165,7 @@ if _sc_files:
 
 # ---------- 5.5 覆盖率口径 2026-09-09 一致性 ----------
 _lat = _read_utf8(os.path.join(REPO, "results", "LATEST.md"))
-_sum = _read_utf8(os.path.join(REPO, "results", "ITER-002-2026-09-08", "收尾总结.md"))
+_sum = _read_utf8(_find_iter("ITER-002-2026-09-08", "收尾总结.md"))
 # a. LATEST 不得残留孤立旧口径（61.8% 仅允许出现在"轨迹"叙述中；遍历所有匹配）
 for _m61 in re.finditer(r"61\.8%", _lat):
     if "口径修正轨迹" not in _lat[: _m61.start()]:
@@ -157,7 +176,7 @@ if "评估完成" not in _lat or "原子执行记录" not in _lat:
 if "评估完成" not in _sum or "原子执行记录" not in _sum:
     issues.append("[口径缺失] 收尾总结.md 缺『评估完成 / 原子执行记录』双口径标注")
 # c. 未执行清单引用一致性：正文提及清单文件名必须真实存在
-_mdir = os.path.join(REPO, "results", "ITER-002-2026-09-08", "manual")
+_mdir = _find_iter("ITER-002-2026-09-08", "manual")
 _list_files = [f for f in os.listdir(_mdir) if f.startswith("未执行用例清单")]
 for _m in re.finditer(r"未执行用例清单[-\w]*\.md", _lat + _sum):
     if _m.group(0) not in _list_files:
@@ -178,6 +197,30 @@ else:
     _m_atomic = re.search(r"原子执行记录\s*=\s*设计级相关\s*(\d+)", _cover_row[0][2])
     if _m_atomic and int(_m_atomic.group(1)) != _design_exec:
         issues.append(f"[metrics漂移] 口径行称原子记录={_m_atomic.group(1)}，实际设计级批次累计={_design_exec}")
+
+# ---------- 5.6 台账↔文档对账：LATEST.md 各轮速查 vs execution.csv 逐行求和 ----------
+_lat_agg = {}
+for _r in _exec_rows[1:]:
+    if len(_r) != 10:
+        continue
+    _a = _lat_agg.setdefault(_r[0], {"p": 0, "e": 0})
+    for _i, _k in ((3, "p"), (4, "e")):
+        try:
+            _a[_k] += int(_r[_i])
+        except ValueError:
+            _a[_k] = None  # 非数值单元格（issue 口径行）
+_lat_rows = 0
+for _line in _lat.splitlines():
+    if not _line.startswith("| ITER-"):
+        continue
+    _lat_rows += 1
+    _c = [x.strip() for x in _line.strip("|").split("|")]
+    _a = _lat_agg.get(_c[0])
+    if _a is None:
+        issues.append(f"[台账缺行] LATEST.md 提及 {_c[0]}，execution.csv 无该迭代")
+    elif _a["p"] is not None and (_c[3] != str(_a["p"]) or _c[4] != str(_a["e"])):
+        issues.append(f"[台账漂移] {_c[0]}：LATEST.md {_c[3]}/{_c[4]} ≠ execution.csv {_a['p']}/{_a['e']}")
+notes.append(f"台账对账：LATEST.md 速查 {_lat_rows} 行 vs execution.csv {len(_lat_agg)} 个迭代")
 
 # ---------- 输出 ----------
 print("=" * 60)

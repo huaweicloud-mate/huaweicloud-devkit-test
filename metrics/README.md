@@ -9,8 +9,20 @@
 |---|---|---|
 | `trend.csv` | 每日一行：date / total(用例) / cells(用例×客户端) / done / pass / fail / spec / blocked / notrun / exec_rate / pass_rate | 自动（`npm run test:trend`，CI `trend-metrics.yml` 每日兜底） |
 | `trend.md` | 跨日 Markdown 趋势报告（表 + 7 日均值 + 风险提示） | 同上 |
-| `execution.csv` | 每轮手工记录：时间戳 / 迭代 / 计划用例 / 已执行 / 通过 / 阻塞 / 执行率 / 通过率 | 人工（维护者每迭代） |
-| `dashboard.md` | 质量仪表盘（每迭代末更新一页，随 T6 报告呈报） | 人工 |
+| `execution.csv` | 每轮手工记录：迭代 / 日期 / 范围 / 计划用例 / 已执行 / 通过 / 失败 / 阻塞 / 执行率 / 通过率 | 人工（维护者每轮；**ITER-001~009 已全量回填**，2026-10-20 补齐） |
+| `dashboard.md` | 质量仪表盘（每迭代末更新一页，随 T6 报告呈报） | 人工（模板 `templates/dashboard.md`）；**尚未建立，见下方「未建台账」** |
+
+## 迭代台账收官说明
+
+- **ITER 系列收官**：`ITER-001-2026-09-05` ~ `ITER-009-20260912124913`，于 **2026-09-12** 结束；`execution.csv` 覆盖至 ITER-009，不再按迭代手工记录。
+- **执行口径转移**：2026-09-12 起由「每日测试流水线」承接——日汇总 `results/Summary/用例矩阵-设计级-总执行结果-<日期>.csv`，跨日趋势本目录 `trend.csv`/`trend.md`（自动生成）。当前指针见 `results/LATEST.md`。
+
+## 未建台账（口径声明，避免「定义完整 ≠ 已兑现」）
+
+| 文件 | 状态 | 含义 / 补法 |
+|---|---|---|
+| `defects.csv` | ⚠️ 未建（README/目录规划已定义） | 缺陷存量趋势：ID / 级别 / 新增迭代 / 状态。建表数据源 = 各轮 `FINDINGS.md` + 上游 issue 实时状态（`scripts/file_issue.py` 提交记录）。**未建有据可考之前，不得以「已定义」论述缺陷趋势** |
+| `dashboard.md` | ⚠️ 未建（模板已备） | 质量仪表盘：复制 `templates/dashboard.md` 填写，数据源 `execution.csv` + `trend.csv` + 未建中的 `defects.csv`（故依赖项未清前只能部分填） |
 
 ## 指标口径
 
