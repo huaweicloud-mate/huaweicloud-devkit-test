@@ -55,6 +55,12 @@ DEFECT_HINT = [
     "miss", "未命中", "失效", "漂移", "准确率低", "准确率仅", "降级",
 ]
 
+# 「通过」标记：命中窗口内出现这些词 => 否决（该行是通过记录，不是缺陷记录）。
+# 背景（2026-10-20 实测）：issue 正文常内嵌整份测试报告表格，`| D4-19 | PASS — 被 deny 拦截 |`
+# 这类通过行含 DEFECT_HINT 里的 deny/allow/拦截，曾被误判为「作为缺陷提出」，
+# 导致复核评论被追加到主题无关的历史单（实测 #852）。
+PASS_HINT = ["pass", "通过", "正常", "无误", "符合预期", "✅"]
+
 
 def parse_findings(path):
     """从 FINDINGS.md 解析缺陷：返回 [{num, sev, title, 现象, 断言, 根因, 影响, 证据}]，跳过非产品缺陷段。"""
@@ -137,20 +143,55 @@ def _dedup(issues):
     return out
 
 
+def _ctx_window(body_lower, start, end, span=1):
+    """取命中位置所在的**行级窗口**（默认上下各一行）。
+
+    为什么不用 ±120 字符：issue 正文常是 Markdown 表格 / 内嵌整份报告，
+    字符窗口会跨行、跨单元格，把相邻行的 `deny`/`allow`/`fail` 算进本用例号的语境
+    （实测 #852 即因此把 D4-19/D10-4 的 PASS 行误判为「作为缺陷提出」）。
+    """
+    lo = body_lower.rfind("\n", 0, start) + 1
+    for _ in range(span):
+        lo2 = body_lower.rfind("\n", 0, max(0, lo - 1)) + 1
+        if lo2 == lo:
+            break
+        lo = lo2
+    hi = body_lower.find("\n", end)
+    hi = len(body_lower) if hi < 0 else hi
+    for _ in range(span):
+        hi2 = body_lower.find("\n", hi + 1)
+        hi2 = len(body_lower) if hi2 < 0 else hi2
+        if hi2 == hi:
+            break
+        hi = hi2
+    return body_lower[lo:hi]
+
+
+def _has_pass_marker(window):
+    """窗口内出现 PASS/通过/正常 等「通过」标记 => 不作为缺陷语境（否决）。
+
+    防「PASS — 被 deny 拦截」这类**通过行**因含 deny/拦截 而被当成缺陷记录。
+    """
+    return any(h in window for h in PASS_HINT)
+
+
 def _ids_in_defect_context(issue, ids):
-    """判断这些用例号在 issue 正文中是否「作为缺陷提出」（附近出现缺陷语义信号词）。"""
+    """判断这些用例号在 issue 正文中是否「作为缺陷提出」（命中行附近出现缺陷语义信号词）。
+
+    口径（2026-10-20 收紧）：行级窗口 + PASS 否决。标题命中不受此限（标题本就是主张）。
+    """
     body = (issue.get("body") or "").lower()
     title = (issue.get("title") or "").lower()
+
     def has_hint(text_window):
         return any(h in text_window for h in DEFECT_HINT)
+
     for cid in ids:
-        # 标题命中缺陷语义也算
         if cid.lower() in title and has_hint(title):
             return True
         for m in re.finditer(re.escape(cid.lower()), body):
-            s = max(0, m.start() - 120)
-            e = min(len(body), m.end() + 120)
-            if has_hint(body[s:e]):
+            w = _ctx_window(body, m.start(), m.end())
+            if has_hint(w) and not _has_pass_marker(w):
                 return True
     return False
 
@@ -172,15 +213,14 @@ def _kw_in_text(kws, text):
 
 
 def _kw_near_defect(iss, kws):
-    """关键词在 issue 正文中出现的位置附近是否有缺陷语义信号（FAIL/未拦截/绕过…）。"""
+    """关键词在 issue 正文中出现的位置附近是否有缺陷语义信号（行级窗口 + PASS 否决）。"""
     body = (iss.get("body") or "").lower()
     for kw in kws:
         if not kw:
             continue
         for m in re.finditer(re.escape(kw.lower()), body):
-            s = max(0, m.start() - 120)
-            e = min(len(body), m.end() + 120)
-            if any(h in body[s:e] for h in DEFECT_HINT):
+            w = _ctx_window(body, m.start(), m.end())
+            if any(h in w for h in DEFECT_HINT) and not _has_pass_marker(w):
                 return True
     return False
 
