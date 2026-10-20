@@ -116,6 +116,19 @@
     - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.6 - 缺陷：10 项 ## 缺陷清单 ### 1. [P0] 凭证环境变量打印拦截不完整（HW_ 前缀漏网） - **描述**：`env | grep HW_ACCESS_KEY`、`printenv HW_ACCESS_KEY`、`echo $HW_SECRET_KEY` 均返回 `allow`，预期 `deny`。Node 钩子与 Pyt
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#761, #680
 
+## D3-S3 沙箱预览 URL 不可达（devbridge 隧道未建立）
+- 今日证据：`evidence/D3-S3/stdout.log`
+- **关联历史单（已作为缺陷提过，本次为复核）**：
+  - [#787](https://github.com/huaweicloud/huaweicloud-devkit/issues/787)（open）**[P1] D3-S3 沙箱预览 URL 不可达：nginx 未就绪/隧道未建立（拆分自 #786）**
+    - 历史单内容：## 缺陷：[P1] D3-S3 沙箱预览 URL 不可达 > 源自 #786（v1.1.5 每日测试缺陷合并单）拆分。VOD 审视结论：清晰，根因已定位。 ### 描述 沙箱 `upload_project` 成功、`deploy_nginx`/`deploy_check` 返回 `nginx_serving=FAIL`、`tunnel_url_accessible=FAIL`，`publicU
+  - [#786](https://github.com/huaweicloud/huaweicloud-devkit/issues/786)（open）**[测试报告] huaweicloud-devkit v1.1.5 每日测试缺陷合并单（2 项）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.5 - 缺陷：2 项 ## 缺陷清单 ### 14. [P1] D3-S3 场景-沙箱预览出URL：nginx 未就绪、公网 URL 不可达 - **描述**：沙箱 `upload_project` 成功、`deploy_nginx`/`deploy_check` 返回 `nginx_serving=FAIL`、`tunnel_url_accessible=
+  - [#769](https://github.com/huaweicloud/huaweicloud-devkit/issues/769)（open）**[测试报告] huaweicloud-devkit v1.1.5 每日测试缺陷合并单（1 项）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.5 - 缺陷：1 项 ## 缺陷清单 ### 8. [P1] D3-S3 沙箱预览 URL 未就绪（deploy_check nginx FAIL） - **描述**：sandbox connect 成功（ws 建立），deploy_nginx ok=true，但 `deploy_check` 返回 `checks.nginx_serving.status=
+  - [#762](https://github.com/huaweicloud/huaweicloud-devkit/issues/762)（open）**[测试报告] huaweicloud-devkit v1.1.5 每日测试缺陷合并单（3 项）**
+    - 历史单内容：## 测试概览 - 被测版本：v1.1.5 - 缺陷：3 项 ## 缺陷清单 ### 6. [P1] D3-S3 沙箱预览出 URL——deploy_check nginx_serving=FAIL - **描述**：sandbox 部署 `deploy_nginx ok=true`（部署成功）但 `deploy_check nginx_serving.status=FAIL`，预览 URL 未就
+- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#951
+
 ## D3-S5 复合意图分层路由 MISS
 - 今日证据：`evidence/D3-S5/stdout.log`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
@@ -250,16 +263,3 @@
   - [#865](https://github.com/huaweicloud/huaweicloud-devkit/issues/865)（open）**[测试报告] huaweicloud-devkit v1.1.8-next.1 每日测试缺陷合并单（1 项）**
     - 历史单内容：## 目标 修复 service_catalog 自然语言路由：`删除测试VPC，先列命令确认` 应命中 VPC 服务并走先确认审批流。 ## 现状 `service_catalog('删除测试VPC，先列命令确认')` 返回 `Run hcloud --help to list available services.`，未命中 VPC。 - **根因**：`tools.mjs:2193-2217
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#828, #762
-
-## D3-S3 沙箱 devbridge 公网隧道建立失败
-- 今日证据：`evidence/D3-S3/stdout.log`
-- **关联历史单（已作为缺陷提过，本次为复核）**：
-  - [#787](https://github.com/huaweicloud/huaweicloud-devkit/issues/787)（open）**[P1] D3-S3 沙箱预览 URL 不可达：nginx 未就绪/隧道未建立（拆分自 #786）**
-    - 历史单内容：## 缺陷：[P1] D3-S3 沙箱预览 URL 不可达 > 源自 #786（v1.1.5 每日测试缺陷合并单）拆分。VOD 审视结论：清晰，根因已定位。 ### 描述 沙箱 `upload_project` 成功、`deploy_nginx`/`deploy_check` 返回 `nginx_serving=FAIL`、`tunnel_url_accessible=FAIL`，`publicU
-  - [#786](https://github.com/huaweicloud/huaweicloud-devkit/issues/786)（open）**[测试报告] huaweicloud-devkit v1.1.5 每日测试缺陷合并单（2 项）**
-    - 历史单内容：## 测试概览 - 被测版本：v1.1.5 - 缺陷：2 项 ## 缺陷清单 ### 14. [P1] D3-S3 场景-沙箱预览出URL：nginx 未就绪、公网 URL 不可达 - **描述**：沙箱 `upload_project` 成功、`deploy_nginx`/`deploy_check` 返回 `nginx_serving=FAIL`、`tunnel_url_accessible=
-  - [#769](https://github.com/huaweicloud/huaweicloud-devkit/issues/769)（open）**[测试报告] huaweicloud-devkit v1.1.5 每日测试缺陷合并单（1 项）**
-    - 历史单内容：## 测试概览 - 被测版本：v1.1.5 - 缺陷：1 项 ## 缺陷清单 ### 8. [P1] D3-S3 沙箱预览 URL 未就绪（deploy_check nginx FAIL） - **描述**：sandbox connect 成功（ws 建立），deploy_nginx ok=true，但 `deploy_check` 返回 `checks.nginx_serving.status=
-  - [#762](https://github.com/huaweicloud/huaweicloud-devkit/issues/762)（open）**[测试报告] huaweicloud-devkit v1.1.5 每日测试缺陷合并单（3 项）**
-    - 历史单内容：## 测试概览 - 被测版本：v1.1.5 - 缺陷：3 项 ## 缺陷清单 ### 6. [P1] D3-S3 沙箱预览出 URL——deploy_check nginx_serving=FAIL - **描述**：sandbox 部署 `deploy_nginx ok=true`（部署成功）但 `deploy_check nginx_serving.status=FAIL`，预览 URL 未就
-- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#951

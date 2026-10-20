@@ -29,9 +29,9 @@
 |---|---|
 | 计划用例（daily） | `146`（设计级 107 + 展开级 39）+ 使命 9 |
 | 已执行 | `146` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `132 / 9 / 3 / 1 / 1` |
-| 通过率（分母 = PASS+FAIL+SPEC = 142） | `93.0%` |
-| P0 / P1 / P2 新增缺陷 | `0 / 0 / 0`（9 项均历史缺陷） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `132 / 10 / 2 / 1 / 1` |
+| 通过率（分母 = PASS+FAIL+SPEC = 143） | `92.3%` |
+| P0 / P1 / P2 新增缺陷 | `0 / 0 / 0`（10 项均历史缺陷） |
 | 红线（I 类）违规 | `0` |
 | 资源释放 | 本次创建资源全部归零（OBS/EIP/FGS/VPC/Subnet/SG/沙箱会话） |
 
@@ -44,8 +44,8 @@
 | 状态 | 数量 | 说明 |
 |---|---|---|
 | PASS | `94` | 有证据且通过 PASS 门禁 |
-| FAIL | `8` | 不符预期，均为历史缺陷 |
-| BLOCKED | `3` | Router 配额（D3-S2/D3-S7）+ 沙箱隧道（D3-S3） |
+| FAIL | `9` | 不符预期，均为历史缺陷 |
+| BLOCKED | `2` | Router 配额（D3-S2/D3-S7） |
 | SPEC-MISMATCH | `1` | D9-9 取消语义未声明 |
 | NOT_RUN | `1` | D1-39 Windows 专属 |
 | **合计** | **`107`** | |
@@ -72,13 +72,14 @@
 | 3 | P0 | `D9-12` | initialize 时序未强制 | `mcp-server.mjs` 无 initialize 前置校验 | 历史 #699/#774 |
 | 4 | P1 | `D4-17` | hook 命令替换内层仍放行 | `risk-rule-engine.mjs` | 历史 #673 |
 | 5 | P1 | `EXP-E01` | 中文意图「云主机」MISS | `tools.mjs` serviceCatalog | 历史 |
-| 6 | P2 | `D3-S5` | 复合意图分层路由 MISS | `tools.mjs` serviceCatalog | 历史 #11 |
-| 7 | P2 | `D4-25` | Python hook 写操作遥测分类失效 | `huaweicloud-safety.py:46` | 历史 #13 |
-| 8 | P2 | `D4-26` | findings 证据脱敏不完整 | `risk-rule-engine.mjs` | 历史 |
-| 9 | P2 | `D8-9` | sanitizeValue 不脱敏敏感值 | `telemetry.mjs:189` | 历史 #797 |
-| 10 | P1 | `D9-9` | tools/call 取消语义未声明（SPEC） | `mcp-protocol.mjs:47` | SPEC 历史 #698 |
+| 6 | P1 | `D3-S3` | 沙箱预览 URL 不可达（devbridge 隧道） | `sandbox/session-manager.mjs` | 历史 #787 |
+| 7 | P2 | `D3-S5` | 复合意图分层路由 MISS | `tools.mjs` serviceCatalog | 历史 #11 |
+| 8 | P2 | `D4-25` | Python hook 写操作遥测分类失效 | `huaweicloud-safety.py:46` | 历史 #13 |
+| 9 | P2 | `D4-26` | findings 证据脱敏不完整 | `risk-rule-engine.mjs` | 历史 |
+| 10 | P2 | `D8-9` | sanitizeValue 不脱敏敏感值 | `telemetry.mjs:189` | 历史 #797 |
+| 11 | P1 | `D9-9` | tools/call 取消语义未声明（SPEC） | `mcp-protocol.mjs:47` | SPEC 历史 #698 |
 
-> 9 项产品缺陷 + 1 项 SPEC 全部与历史结论一致（源码对应逻辑未变），file_issue.py 查重后不重复开单。
+> 10 项产品缺陷 + 1 项 SPEC 全部与历史结论一致（源码对应逻辑未变），file_issue.py 查重后不重复开单。
 
 ---
 
@@ -96,7 +97,6 @@
 |---|---|---|---|---|---|
 | `D3-S2` | 设计级 | P1 | 补环境 | Router 配额超限 VPC.0114，CreateVpc 失败，删 VPC 审批链路无法完整验证 | 释放 router 配额 |
 | `D3-S7` | 设计级 | P1 | 补环境 | Router 配额超限 VPC.0114，CreateVpc 失败，跨服务 RDS 编排无法完成 | 释放 router 配额 |
-| `D3-S3` | 设计级 | P1 | 补环境 | 沙箱 devbridge 公网隧道建立失败（deploy_check devbridge_tunnel=FAIL），nginx 本地 serving 正常（8080 HTTP 200）但无法返回公网 URL | 沙箱隧道服务恢复 |
 
 ---
 
@@ -129,8 +129,8 @@
 
 ## 八、遗留与建议
 
-1. **9 项历史缺陷未修复**（D4-3/D4-21/D9-12/D4-17/EXP-E01/D3-S5/D4-25/D4-26/D8-9），与 2026-10-20 根因一致，file_issue.py 查重后不重复开单。
+1. **10 项历史缺陷未修复**（D4-3/D4-21/D9-12/D4-17/EXP-E01/D3-S3/D3-S5/D4-25/D4-26/D8-9），与 2026-10-20 根因一致，file_issue.py 查重后不重复开单。
 2. **D9-9 SPEC-MISMATCH**：tools/call 取消语义仍未声明。
 3. **D8-1 文档工具数本轮修复**：1.1.10 已更新声明 43=实现 43，历史缺陷解除。
 4. **D4-14/D3-C1 Router 配额本轮释放**：真机建删归零通过；但 D3-S2/D3-S7 仍受 Router 配额 VPC.0114 间歇性阻塞（配额被并发测试机器人占用），建议维护侧扩容 router 配额或错峰执行。
-5. **D3-S3 沙箱隧道阻塞**：devbridge 公网隧道建立失败（nginx 本地 serving 正常），疑似沙箱基础设施临时故障，非 devkit 部署逻辑缺陷，建议维护侧核查沙箱隧道服务。
+5. **D3-S3 沙箱隧道历史缺陷 #787 复现**：devbridge 公网隧道建立失败（nginx 本地 serving 正常），公网 URL 不可达。
