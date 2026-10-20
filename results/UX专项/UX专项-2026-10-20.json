@@ -1,13 +1,13 @@
 {
   "date": "2026-10-20",
-  "generatedAt": "2026-10-20 11:45:23",
+  "generatedAt": "2026-10-20 12:06:14",
   "timezone": "Asia/Shanghai",
   "scope": "UX（D11）体验专项 —— 可执行门禁夹具四态结果（PASS / NOT_IMPLEMENTED / BLOCKED / NOT_RUN） + D11-39 体验回放差异分类（范式② · 独立专项，本轮已并入采集）",
   "caveat": "红线基线口径：NOT_IMPLEMENTED = 需求验收未达标（已知缺口，非 harness 故障），BLOCKED = 宿主/环境不可判定（不计入 PASS/FAIL），NOT_RUN = 契约依赖待冻结（依赖字段未冻结，冻结前不可判 FAIL，不计入 PASS/FAIL/BLOCKED）。本数据是回归防退化门禁的趋势线，不等价于体验验收（认知负荷 / 文案是否够新手用 / 视觉排版仍需人工 rubric）。",
   "suts": [
     {
-      "label": "1.1.10-next.0（npm）",
-      "version": "1.1.10-next.0",
+      "label": "1.1.9（npm）",
+      "version": "1.1.9",
       "hdkSrc": "/home/runner/work/_temp/ux-sut/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src",
       "designGate": {
         "available": true,
@@ -517,7 +517,7 @@
               "id": "D11-2-mention-import",
               "title": "提示含 creds-import.json（给 Agent 的导入通道）",
               "ok": true,
-              "actual": "╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.10-next.0 ║ ║ https://github.com/huaweicloud ║ ╚═════════════════════════════════════",
+              "actual": "╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.9 ║ ║ https://github.com/huaweicloud ║ ╚═════════════════════════════════════════════",
               "expected": "含 creds-import.json",
               "detail": ""
             },
@@ -533,7 +533,7 @@
               "id": "D11-2-zh",
               "title": "提示文本含中文字符（面向用户可读）",
               "ok": true,
-              "actual": "╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.10-next.0 ║ ║ https://github.com/huaweicloud ",
+              "actual": "╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.9 ║ ║ https://github.com/huaweicloud ║ ╚═════",
               "expected": "含中文字符",
               "detail": ""
             },
@@ -541,7 +541,7 @@
               "id": "D11-2-no-en",
               "title": "不出现英文原文 \"Non-interactive session detected.\"（反断言）",
               "ok": false,
-              "actual": "╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.10-next.0 ║ ║ https://github.com/huaweicloud ",
+              "actual": "╔══════════════════════════════════════════════╗ ║ HuaweiCloud DevKit v1.1.9 ║ ║ https://github.com/huaweicloud ║ ╚═════",
               "expected": "不含该英文整句",
               "detail": ""
             }
@@ -877,7 +877,7 @@
               "id": "D11-26-no-en-sentence",
               "title": "工具/参数描述不含英文整句（反断言）",
               "ok": false,
-              "actual": "huaweicloud_check_cli.description | huaweicloud_plan_cli_command.description | huaweicloud_plan_cli_command.args | huaweicloud_plan_cli_command.allowWrites | huaweicloud_run_readonly_command.description …共 116 处",
+              "actual": "huaweicloud_check_cli.description | huaweicloud_plan_cli_command.description | huaweicloud_plan_cli_command.args | huaweicloud_plan_cli_command.allowWrites | huaweicloud_run_readonly_command.description …共 114 处",
               "expected": "全中文描述",
               "detail": "纯英文且无中文的描述 = 未母语化"
             }
@@ -1088,7 +1088,7 @@
               "id": "D11-32-zh-error",
               "title": "写盘失败时返回中文错误（无法写入凭证目录 / 沙箱无法解析主目录）",
               "ok": false,
-              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-jjL5BY/blocker-file/creds/.config/huaweicloud'",
+              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-MttGTZ/blocker-file/creds/.config/huaweicloud'",
               "expected": "中文可诊断错误",
               "detail": ""
             },
@@ -1096,7 +1096,7 @@
               "id": "D11-32-alt-path",
               "title": "给出替代路径（HUAWEICLOUD_HOME / env 注入）",
               "ok": false,
-              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-jjL5BY/blocker-file/creds/.config/huaweicloud'",
+              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-MttGTZ/blocker-file/creds/.config/huaweicloud'",
               "expected": "含 HUAWEICLOUD_HOME 或 env 注入指引",
               "detail": ""
             },
@@ -1104,7 +1104,7 @@
               "id": "D11-32-no-en",
               "title": "不出现英文整句 \"KooCLI detected but cannot resolve the user home directory...\"（反断言）",
               "ok": true,
-              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-jjL5BY/blocker-file/creds/.config/huaweicloud'",
+              "actual": "ENOTDIR: not a directory, mkdir '/tmp/d11-32-MttGTZ/blocker-file/creds/.config/huaweicloud'",
               "expected": "不含该英文整句",
               "detail": ""
             },
@@ -1313,8 +1313,8 @@
               "id": "D11-41-sts-expiry",
               "title": "STS 过期可由 token 解析（不误导为 AK 无效）",
               "ok": true,
-              "actual": 1792464324000,
-              "expected": "早于当前时间(ms)=1792467924816",
+              "actual": 1792465576000,
+              "expected": "早于当前时间(ms)=1792469176291",
               "detail": ""
             },
             {
@@ -1458,7 +1458,7 @@
               "ok": true,
               "actual": {
                 "skipped": true,
-                "ms": 1
+                "ms": 0
               },
               "expected": {
                 "skipped": true,
@@ -1479,7 +1479,7 @@
               "title": "请求挂起时在超时余量内返回（timeoutMs=600）",
               "ok": true,
               "actual": {
-                "ms": 602,
+                "ms": 601,
                 "skipped": true
               },
               "expected": {
@@ -1657,7 +1657,7 @@
       "replay": {
         "available": true,
         "mode": "replay",
-        "sutVersion": "1.1.10-next.0",
+        "sutVersion": "1.1.9",
         "recording": "eval/replay/recordings/ux-baseline-v1.jsonl",
         "summary": {
           "pass": 3,
@@ -1668,9 +1668,9 @@
           "exit": 1
         },
         "byVerdict": {
-          "MINOR_FORMAT_CHANGE": 2,
+          "MINOR_FORMAT_CHANGE": 1,
           "UNCLEAR_NEXT_STEP": 1,
-          "SEMANTIC_EQUIVALENT": 1,
+          "SEMANTIC_EQUIVALENT": 2,
           "BLOCKED": 1
         },
         "scenarios": [
@@ -1708,9 +1708,9 @@
             "id": "UX-TERMINOLOGY",
             "case": "D11-26",
             "title": "工具描述人话化（内部代号 / 英文残留）",
-            "verdict": "MINOR_FORMAT_CHANGE",
+            "verdict": "SEMANTIC_EQUIVALENT",
             "pass": true,
-            "reasons": "与基线仅格式微差（建议更新基线）",
+            "reasons": "与基线文案一致",
             "fixtureExit": 1,
             "state": "OK"
           },
