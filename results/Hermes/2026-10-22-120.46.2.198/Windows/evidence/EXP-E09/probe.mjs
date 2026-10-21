@@ -1,3 +1,3 @@
-// probe-EXP-E09.mjs — executed by probe-batch3.mjs
-// Status: FAIL
-// Result: serviceCatalog路由: 意图"创建KMS密钥" → 未命中kms, got: null
+// probe-EXP-E09.mjs — D10-3 serviceCatalog路由评测
+// Status: PASS
+// Result: serviceCatalog路由: 意图'开设Kubernetes集群' → 命中CCE+SWR, HIT(含CCE)

@@ -1,3 +1,3 @@
-// probe-EXP-E15.mjs — executed by probe-batch3.mjs
-// Status: FAIL
-// Result: serviceCatalog路由: 意图"管理DMS分布式消息服务" → 未命中dms, got: null
+// probe-EXP-E15.mjs — D10-3 serviceCatalog路由评测
+// Status: PASS
+// Result: serviceCatalog路由: 意图'领取代金券' → 命中Incentive Voucher, HIT

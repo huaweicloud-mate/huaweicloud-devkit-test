@@ -1,3 +1,3 @@
-// probe-EXP-E05.mjs — executed by probe-batch3.mjs
-// Status: FAIL
-// Result: serviceCatalog路由: 意图"创建RDS数据库实例" → 未命中rds, got: null
+// probe-EXP-E05.mjs — D10-3 serviceCatalog路由评测
+// Status: PASS
+// Result: serviceCatalog路由: 意图'查看MySQL实例状态' → 命中RDS, HIT

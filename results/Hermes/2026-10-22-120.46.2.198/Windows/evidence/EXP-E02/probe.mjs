@@ -1,3 +1,3 @@
-// probe-EXP-E02.mjs — executed by probe-batch3.mjs
-// Status: FAIL
-// Result: serviceCatalog路由: 意图"创建一台ECS云服务器" → 未命中ecs, got: null
+// probe-EXP-E02.mjs — D10-3 serviceCatalog路由评测
+// Status: PASS
+// Result: serviceCatalog路由: 意图'创建一台2C4G的Ubuntu云服务器' → 命中ECS, HIT

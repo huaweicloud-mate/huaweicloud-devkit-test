@@ -1,3 +1,3 @@
-// probe-EXP-E04.mjs — executed by probe-batch3.mjs
-// Status: FAIL
-// Result: serviceCatalog路由: 意图"申请弹性公网IP" → 未命中eip, got: null
+// probe-EXP-E04.mjs — D10-3 serviceCatalog路由评测
+// Status: PASS
+// Result: serviceCatalog路由: 意图'绑定弹性公网IP' → 命中ECS+VPC+EIP, HIT
