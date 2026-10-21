@@ -1,0 +1,62 @@
+[2026-10-21T21:08:13.840Z] === D1-39 Windows 升级检测链可用性测试 ===
+[2026-10-21T21:08:13.842Z] 测试环境: Windows, Node v22.22.2
+[2026-10-21T21:08:13.842Z] 证据目录: C:\Users\Administrator\devkit-test\testbot4-codearts1\huaweicloud-devkit-test\results\CodeArtsAgent\evidence\D1-39
+[2026-10-21T21:08:13.842Z] --- 测试1: spawnSync npm.cmd 不带 shell:true ---
+[2026-10-21T21:08:13.844Z] 返回码: null
+[2026-10-21T21:08:13.844Z] 错误: spawnSync npm.cmd EINVAL
+[2026-10-21T21:08:13.844Z] 错误码: EINVAL
+[2026-10-21T21:08:13.844Z] --- 测试2: spawnSync npm.cmd 带 shell:true ---
+[2026-10-21T21:08:14.658Z] 返回码: 0
+[2026-10-21T21:08:14.658Z] 错误: 无
+[2026-10-21T21:08:14.658Z] 解析成功: latest=N/A
+[2026-10-21T21:08:14.658Z] --- 测试3: 模拟 queryDistTagsSync ---
+[2026-10-21T21:08:14.659Z] queryDistTagsSync 失败: spawnSync npm.cmd EINVAL (code: EINVAL)
+[2026-10-21T21:08:14.659Z] --- 测试4: 带 shell:true 的 queryDistTagsSync ---
+[2026-10-21T21:08:15.240Z] 成功获取 dist-tags: latest=N/A
+[2026-10-21T21:08:15.240Z] --- 综合判断 ---
+[2026-10-21T21:08:15.240Z] 最终状态: FAIL
+[2026-10-21T21:08:15.240Z] 原因: Windows 下 spawnSync 调用 npm.cmd 产生 EINVAL 错误，升级检测链不可用（需要 shell:true 修复）
+
+=== JSON RESULTS ===
+{
+  "spawnSync_no_shell": {
+    "status": null,
+    "error": "spawnSync npm.cmd EINVAL",
+    "errorCode": "EINVAL",
+    "hasEINVAL": true,
+    "hasError": true,
+    "stdout": null,
+    "stderr": null
+  },
+  "spawnSync_with_shell": {
+    "status": 0,
+    "error": null,
+    "worksWithShell": true,
+    "stdout": "[\n  {\n    \"next\": \"1.1.10-next.4\",\n    \"latest\": \"1.1.10\"\n  }\n]\n",
+    "parsedTags": [
+      "0"
+    ]
+  },
+  "queryDistTagsSync": {
+    "status": "FAIL",
+    "error": "spawnSync npm.cmd EINVAL",
+    "errorCode": "EINVAL",
+    "isEINVAL": true
+  },
+  "queryDistTagsSync_with_shell": {
+    "status": "SUCCESS",
+    "tags": [
+      "0"
+    ],
+    "latest": null
+  },
+  "D1_39": {
+    "status": "FAIL",
+    "why": "Windows 下 spawnSync 调用 npm.cmd 产生 EINVAL 错误，升级检测链不可用（需要 shell:true 修复）",
+    "hasEINVAL": true,
+    "worksWithShell": true,
+    "nodeVersion": "v22.22.2",
+    "platform": "win32",
+    "timestamp": "2026-10-21T21:08:15.240Z"
+  }
+}
