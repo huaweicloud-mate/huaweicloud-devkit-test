@@ -3,28 +3,3 @@
   "why": "plan returns approvalToken=true, approvalRequired=false, keys=executable,args,command,executableBlock,warnings,classification,sgFindings,approvalToken,safeToRun",
   "executedAt": "20261022050559"
 }
-{
-  "executable": "hcloud",
-  "args": [
-    "ECS",
-    "CreateServers",
-    "--image-id",
-    "img-123",
-    "--flavor",
-    "s6.small.1"
-  ],
-  "command": "hcloud ECS CreateServers --image-id img-123 --flavor s6.small.1",
-  "executableBlock": "hcloud ECS CreateServers --image-id img-123 --flavor s6.small.1",
-  "warnings": [
-    "Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id",
-    "Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs"
-  ],
-  "classification": {
-    "decision": "deny",
-    "risk": "write",
-    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
-  },
-  "sgFindings": [],
-  "approvalToken": "9aa509a4-5af4-401b-b242-520f2417c102",
-  "safeToRun": false
-}

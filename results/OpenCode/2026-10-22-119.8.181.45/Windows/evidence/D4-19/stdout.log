@@ -3,18 +3,3 @@
   "why": "artifact check with secrets: decision=warn, rules=0",
   "executedAt": "20261022050559"
 }
-{
-  "decision": "warn",
-  "findings": [
-    {
-      "ruleId": "hwc-sandbox-missing-ttl",
-      "title": "Sandbox deployment missing cleanup metadata",
-      "category": "sandbox",
-      "severity": "warn",
-      "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
-      "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
-      "source": "deploy.sh",
-      "evidence": "deploy.sh #!/bin/bash access_key=<redacted> secret_key=<redacted> hcloud ECS CreateServers"
-    }
-  ]
-}

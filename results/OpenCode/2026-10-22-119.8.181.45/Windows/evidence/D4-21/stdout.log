@@ -3,28 +3,3 @@
   "why": "evaluateArtifacts with 3 dangerous artifacts: decision=warn, findings=2",
   "executedAt": "20261022050559"
 }
-{
-  "decision": "warn",
-  "findings": [
-    {
-      "ruleId": "hwc-command-adminpass-exposure",
-      "title": "Plaintext adminPass exposure",
-      "category": "secret",
-      "severity": "warn",
-      "message": "The artifact or plan contains a plaintext adminPass parameter. The password may be exposed in version control, logs, or agent context.",
-      "remediation": "Use userData cloud-init, KMS/CSMS secret references, or encrypted password injection instead of embedding adminPass as plaintext in deployment files.",
-      "source": "main.tf",
-      "evidence": "main.tf resource \"huaweicloud_compute_instance\" \"test\" { admin_pass = <redacted> }"
-    },
-    {
-      "ruleId": "hwc-sandbox-missing-ttl",
-      "title": "Sandbox deployment missing cleanup metadata",
-      "category": "sandbox",
-      "severity": "warn",
-      "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
-      "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
-      "source": "deploy.yaml",
-      "evidence": "deploy.yaml access_key: <redacted> secret_key: <redacted>"
-    }
-  ]
-}
