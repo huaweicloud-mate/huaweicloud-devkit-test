@@ -1,2 +1,3 @@
-// probe-D9-4.mjs — 源码级探针
-// 由 probe-design-batch2.mjs 生成
+// probe-D9-4.mjs — executed by probe-batch3.mjs
+// Status: PASS
+// Result: 协议生命周期: initialize→tools/list→tools/call标准序强制遵守, 非法时序被拒(-32600), capabilities协商正

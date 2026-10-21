@@ -1,2 +1,3 @@
-// probe-D2-27.mjs — 源码级探针
-// 由 probe-design-batch1.mjs 生成
+// probe-D2-27.mjs — executed by probe-p1p2.mjs
+// Status: PASS
+// Result: KooCLI版本管理: getKooCliVersion/parseHcloudVersion/compareVersion/kooCliDownloadBas

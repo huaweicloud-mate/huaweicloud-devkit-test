@@ -1,6 +1,7 @@
 {
   "caseId": "D4-17",
   "status": "PASS",
-  "why": "空args=deny=true, 空risk=deny=true (fail-closed)",
-  "executedAt": "20261018062000"
+  "why": "hook模糊fail-closed: 空字符串/null/undefined→deny(command must be non-empty string), 畸形JSON/超长字符串→不崩溃且非高危allow(No safety rule matched), 高危命令仍deny. fail-closed对空/null输入生效, 非危险输入不误杀",
+  "executedAt": "20261022052920",
+  "tests": "empty→deny, null→deny, undefined→deny, whitespace→deny, JSON→allow(non-danger), long→allow(non-danger)"
 }

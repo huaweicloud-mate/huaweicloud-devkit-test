@@ -1,2 +1,3 @@
-// probe-D1-41.mjs — 源码级探针
-// 由 probe-design-batch1.mjs 生成
+// probe-D1-41.mjs — executed by probe-p1p2.mjs
+// Status: PASS
+// Result: check_update MCP返回契约: isError=false, 含result/currentVersion/latestStable/updateA

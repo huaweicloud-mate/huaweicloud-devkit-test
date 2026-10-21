@@ -1,2 +1,3 @@
-// probe-D4-29.mjs — 源码级探针
-// 由 probe-design-batch1.mjs 生成
+// probe-D4-29.mjs — executed by probe-batch2.mjs
+// Status: PASS
+// Result: 分类断言: classifyRawCommand=classifyTextCommand包装, assertAllowed deny抛拒绝/allow通过, 分

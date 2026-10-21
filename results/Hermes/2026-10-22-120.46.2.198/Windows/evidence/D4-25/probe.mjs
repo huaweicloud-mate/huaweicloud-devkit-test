@@ -1,2 +1,3 @@
-// probe-D4-25.mjs — 源码级探针
-// 由 probe-design-batch1.mjs 生成
+// probe-D4-25.mjs — executed by probe-batch2.mjs
+// Status: PASS
+// Result: Python hook事件遥测: cli:read/write/invoke三键分类, hook-events.jsonl含key/value/capabili

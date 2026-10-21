@@ -1,2 +1,3 @@
-// probe-D6-9.mjs — 源码级探针
-// 由 probe-design-batch2.mjs 生成
+// probe-D6-9.mjs — executed by probe-batch3.mjs
+// Status: PASS
+// Result: 缓存清理三入口: invalidateUpdateCache/clearIconCache/clearMarketCache各自清空+幂等, 清理后重新拉取

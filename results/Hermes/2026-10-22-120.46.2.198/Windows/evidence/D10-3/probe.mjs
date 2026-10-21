@@ -1,2 +1,3 @@
-// probe-D10-3.mjs — 源码级探针
-// 由 probe-design-batch2.mjs 生成
+// probe-D10-3.mjs — executed by probe-batch3.mjs
+// Status: FAIL
+// Result: 路由异常: hits=undefined/undefined

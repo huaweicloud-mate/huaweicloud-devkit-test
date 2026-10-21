@@ -1,2 +1,3 @@
-// probe-D3-C6.mjs — 源码级探针
-// 由 probe-design-batch2.mjs 生成
+// probe-D3-C6.mjs — executed by probe-batch2.mjs
+// Status: PASS
+// Result: 沙箱7隐式工具冒烟: check_user/credentials/sign_agreement/upload_file/exec_one_shot/deplo

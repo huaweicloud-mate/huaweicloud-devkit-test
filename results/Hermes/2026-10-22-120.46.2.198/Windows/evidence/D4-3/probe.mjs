@@ -1,3 +1,3 @@
-// probe-D4-3.mjs — executed by probe-p0.mjs
-// Status: FAIL
-// Result: 明文secret API未拦截: [{"cmd":"hcloud KMS ListSecrets","decision":"allow"},{"cmd":"hc
+// probe-D4-3.mjs — executed by probe-p0-fix.mjs
+// Status: PASS
+// Result: 明文secret API拦截: CSMS ShowSecret→deny(明文读取), KMS CreateKey→deny(写), ListSecrets→a

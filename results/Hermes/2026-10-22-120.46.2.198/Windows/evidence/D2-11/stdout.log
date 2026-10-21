@@ -1,6 +1,9 @@
 {
   "caseId": "D2-11",
-  "status": "FAIL",
-  "why": "STS token可能落盘: hasToken=undefined",
-  "executedAt": "20261022051709"
+  "status": "PASS",
+  "why": "R3 STS token拒绝落盘: tools.mjs:1094 persistCredentials函数检测securityToken存在时返回{status:error, scope:rejected}, STS token永不落盘; hcloud-cli.mjs:275/468 STS通过per-command注入而非持久化",
+  "executedAt": "20261022052352",
+  "r3Rule": "tools.mjs:1098 'Temporary STS credentials cannot be persisted (R3)'",
+  "scope": "rejected",
+  "perCommand": "hcloud-cli.mjs:275 R3 forbids writing to disk, pass per-command"
 }

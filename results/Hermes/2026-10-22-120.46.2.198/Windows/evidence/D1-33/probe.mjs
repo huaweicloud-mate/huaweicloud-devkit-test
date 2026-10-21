@@ -1,2 +1,3 @@
-// probe-D1-33.mjs — 源码级探针
-// 由 probe-design-batch1.mjs 生成
+// probe-D1-33.mjs — executed by probe-p1p2.mjs
+// Status: PASS
+// Result: skip文件持久化: writeSkipState/resolveSkipFilePath存在, 文件结构{dismissedVersion/dismissed

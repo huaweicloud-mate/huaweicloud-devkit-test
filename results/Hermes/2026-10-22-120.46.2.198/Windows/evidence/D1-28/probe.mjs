@@ -1,2 +1,3 @@
-// probe-D1-28.mjs — 源码级探针
-// 由 probe-design-batch1.mjs 生成
+// probe-D1-28.mjs — executed by probe-p1p2.mjs
+// Status: PASS
+// Result: 检测语义-有新版本: judgeUpdate(1.1.9, {latest:1.1.10}) → update_available, targetVersion

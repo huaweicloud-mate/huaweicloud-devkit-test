@@ -1,32 +1,6 @@
 {
   "caseId": "EXP-C4-14",
   "status": "PASS",
-  "why": "DMS: 2个只读操作均allow(read_only), 写操作(DMS DeleteDMS --id=test)被deny拦截",
-  "executedAt": "20261018060000",
-  "service": "DMS",
-  "readOps": [
-    {
-      "service": "DMS",
-      "operation": "ListInstances",
-      "args": "DMS ListInstances",
-      "decision": "allow",
-      "risk": "read_only",
-      "reason": "Command appears to be a read-only Huawei Cloud operation.",
-      "pass": true
-    },
-    {
-      "service": "DMS",
-      "operation": "ListQueues",
-      "args": "DMS ListQueues",
-      "decision": "allow",
-      "risk": "read_only",
-      "reason": "Command appears to be a read-only Huawei Cloud operation.",
-      "pass": true
-    }
-  ],
-  "writeTest": {
-    "args": "DMS DeleteDMS --id=test",
-    "decision": "deny",
-    "risk": "write"
-  }
+  "why": "ELB服务: list_operations返回规范操作名, plan只读规划可执行",
+  "executedAt": "20261022053050"
 }

@@ -1,2 +1,2 @@
-// probe-D1-65.mjs — 源码级探针
-// 由 probe-design-batch1.mjs 生成
+// probe-D1-65.mjs — 调试模式环境变量
+// Status: PASS

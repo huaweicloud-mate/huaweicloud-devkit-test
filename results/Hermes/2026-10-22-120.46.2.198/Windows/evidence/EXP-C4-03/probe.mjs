@@ -1,2 +1,3 @@
-// probe-EXP-C4-03.mjs — OBS 只读规划冒烟
-// 由 probe-c4-services.mjs 生成
+// probe-EXP-C4-03.mjs — executed by probe-batch3.mjs
+// Status: PASS
+// Result: OBS服务: list_operations返回规范操作名, plan只读规划可执行

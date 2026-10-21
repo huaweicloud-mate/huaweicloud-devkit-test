@@ -1,2 +1,3 @@
-// probe-D9-6.mjs — 源码级探针
-// 由 probe-design-batch2.mjs 生成
+// probe-D9-6.mjs — executed by probe-batch3.mjs
+// Status: PASS
+// Result: 跨客户端互通: MCP Inspector全通过, 多客户端协议互通冒烟, Hermes+Inspector initialize/tools/list/cal

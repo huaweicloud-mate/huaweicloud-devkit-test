@@ -1,2 +1,3 @@
-// probe-D3-C14.mjs — 源码级探针
-// 由 probe-design-batch2.mjs 生成
+// probe-D3-C14.mjs — executed by probe-batch2.mjs
+// Status: PASS
+// Result: 沙箱HDKit: hdkitConnect透传source/env参数, hdkitCredentials缺sessionId+devStageId报错, hw

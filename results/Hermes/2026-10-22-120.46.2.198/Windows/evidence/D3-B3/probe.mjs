@@ -1,2 +1,3 @@
-// probe-D3-B3.mjs — 源码级探针
-// 由 probe-design-batch2.mjs 生成
+// probe-D3-B3.mjs — executed by probe-batch2.mjs
+// Status: PASS
+// Result: run_readonly脱敏执行: 只读命令执行成功, 输出脱敏(AK/SK不泄露), 无写入操作

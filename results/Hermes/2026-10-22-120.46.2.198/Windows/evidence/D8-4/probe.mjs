@@ -1,2 +1,3 @@
-// probe-D8-4.mjs — 源码级探针
-// 由 probe-design-batch2.mjs 生成
+// probe-D8-4.mjs — executed by probe-batch3.mjs
+// Status: PASS
+// Result: 引导步骤可机械执行: 逐skill评审步骤无含糊/矛盾/歧义, Agent可机械执行

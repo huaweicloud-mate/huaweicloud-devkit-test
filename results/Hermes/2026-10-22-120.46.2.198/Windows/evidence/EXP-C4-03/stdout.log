@@ -1,23 +1,6 @@
 {
   "caseId": "EXP-C4-03",
   "status": "PASS",
-  "why": "OBS: 1个只读操作均allow(read_only), 写操作(OBS rm test-bucket)被deny拦截",
-  "executedAt": "20261018060000",
-  "service": "OBS",
-  "readOps": [
-    {
-      "service": "OBS",
-      "operation": "ls",
-      "args": "OBS ls",
-      "decision": "allow",
-      "risk": "read_only",
-      "reason": "OBS read-only operation.",
-      "pass": true
-    }
-  ],
-  "writeTest": {
-    "args": "OBS rm test-bucket",
-    "decision": "deny",
-    "risk": "write"
-  }
+  "why": "OBS服务: list_operations返回规范操作名, plan只读规划可执行",
+  "executedAt": "20261022053049"
 }

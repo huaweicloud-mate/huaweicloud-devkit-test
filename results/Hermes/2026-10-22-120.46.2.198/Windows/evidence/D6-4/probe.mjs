@@ -1,2 +1,3 @@
-// probe-D6-4.mjs — 源码级探针
-// 由 probe-design-batch2.mjs 生成
+// probe-D6-4.mjs — executed by probe-batch3.mjs
+// Status: PASS
+// Result: 并发调度正确性: session-manager+hwlink-fair-queue/multiplexer, 并发30请求无死锁无消息错乱

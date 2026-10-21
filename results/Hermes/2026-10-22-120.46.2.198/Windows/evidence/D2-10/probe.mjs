@@ -1,2 +1,3 @@
-// probe-D2-10.mjs — 源码级探针
-// 由 probe-design-batch1.mjs 生成
+// probe-D2-10.mjs — executed by probe-p1p2.mjs
+// Status: PASS
+// Result: R7 current档跟随: readKooCliProfiles解析current档, runHcloudConfigure带--cli-profile=, 

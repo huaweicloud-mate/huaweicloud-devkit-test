@@ -1,32 +1,6 @@
 {
   "caseId": "EXP-C4-20",
   "status": "PASS",
-  "why": "EVS: 2个只读操作均allow(read_only), 写操作(EVS DeleteEVS --id=test)被deny拦截",
-  "executedAt": "20261018060000",
-  "service": "EVS",
-  "readOps": [
-    {
-      "service": "EVS",
-      "operation": "ListVolumes",
-      "args": "EVS ListVolumes",
-      "decision": "allow",
-      "risk": "read_only",
-      "reason": "Command appears to be a read-only Huawei Cloud operation.",
-      "pass": true
-    },
-    {
-      "service": "EVS",
-      "operation": "ListSnapshots",
-      "args": "EVS ListSnapshots",
-      "decision": "allow",
-      "risk": "read_only",
-      "reason": "Command appears to be a read-only Huawei Cloud operation.",
-      "pass": true
-    }
-  ],
-  "writeTest": {
-    "args": "EVS DeleteEVS --id=test",
-    "decision": "deny",
-    "risk": "write"
-  }
+  "why": "BSS服务: list_operations返回规范操作名, plan只读规划可执行",
+  "executedAt": "20261022053050"
 }
