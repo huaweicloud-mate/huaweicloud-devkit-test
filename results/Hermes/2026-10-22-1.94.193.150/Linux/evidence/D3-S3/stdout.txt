@@ -1,0 +1,59 @@
+check_user -> realnameVerified=true agreementSigned=true err=
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+connect -> status=connected wsId=e7e9310835d44e5abbcb
+[2026-10-21T21:11:44.830Z] uploadProject: /home/testbot2/.hdk-s3-mvilxoub -> /workspace/.hdk-s3-mvilxoub.tar.gz (archive=211 bytes, md5=a0069ca5a19336bce98af449e92c92dd)
+[2026-10-21T21:11:44.880Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-2360958211/sandbox-upload-1792617104820/.hdk-s3-mvilxoub.tar.gz, size=211, remotePath=/workspace/.hdk-s3-mvilxoub.tar.gz)
+[2026-10-21T21:11:44.881Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-10-21T21:11:44.881Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-10-21T21:11:44.928Z] deployFileServer: writing script (2456 b64 chars)
+[2026-10-21T21:11:44.976Z] deployFileServer: starting server on port 8888
+[2026-10-21T21:11:45.024Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 32296\r\n\u001b]133;C\u0007\r\n"
+[2026-10-21T21:11:45.024Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+[2026-10-21T21:11:45.922Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-10-21T21:11:45.923Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-10-21T21:11:45.925Z] uploadViaHttpTunnel: tunnel ready, localPort=34639
+[2026-10-21T21:11:45.925Z] uploadViaHttpTunnel: waiting for server health on localhost:34639
+[2026-10-21T21:11:45.925Z] waitForServerReady: attempt 1, checking http://localhost:34639/health
+[2026-10-21T21:11:45.961Z] waitForServerReady: server ready on port 34639 after 0 retries
+[2026-10-21T21:11:45.961Z] uploadViaHttpTunnel: sending POST with 211 bytes
+[2026-10-21T21:11:45.998Z] uploadViaHttpTunnel: upload complete (bytes=211, md5=a0069ca5a19336bce98af449e92c92dd)
+upload_project -> ok=true md5Verified=true
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+deploy_nginx -> ok=false port=8083 url=
+
+Waiting for connection 673280... (0s)
+Connection 673280 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mvilxoub/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
+close_session -> ok
+[OK] 沙箱 connect 成功
+[FAIL] s3-connect/upload/deploy 链路
+[OK] 部署返回可访问 URL 或检查通过
+[OK] 会话正常关闭
