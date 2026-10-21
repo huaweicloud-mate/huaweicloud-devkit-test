@@ -1,0 +1,52 @@
+[OK] setup_obs_config 同步 OBS 凭证
+[OK] 创建 OBS 桶 tctest-c2-in6ft8
+[--------------------------------------------------------------------------->] 100.00% ?/s 44B/44B ?[--------------------------------------------------------------------------->] 100.00% ?/s 44B/44B ?[---------------------------------------------------------------------] 100.00% 211B/s 44B/44B 410ms[OK] 上传 index.html
+[OK] obs_set_website_config set
+[OK] obs_set_website_config get 验证
+[------------------------------------------------------------------------] 100.00% tps:0.00 1/1 32ms[OK] 删除 OBS 桶归零
+[OK] 归零验证(ls 不含本次桶)
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C2",
+  "bucket": "tctest-c2-in6ft8",
+  "total": 7,
+  "passed": 7,
+  "results": [
+    {
+      "n": "setup_obs_config 同步 OBS 凭证",
+      "ok": true,
+      "out": "{\"ok\":true,\"existed\":false,\"created\":true,\"path\":\"/home/testbot2/.obsutilconfig\",\"region\":\"cn-north-4\",\"endpoint\":\"https"
+    },
+    {
+      "n": "创建 OBS 桶 tctest-c2-in6ft8",
+      "ok": true,
+      "out": "Start at 2026-10-21 21:46:25.473475968 +0000 UTC\n\nCreate bucket [tctest-c2-in6ft8] successfully, request id [000001A1606E055344C7F7E544F016DE]\nNotice: If the configured endpoint is a global domain nam"
+    },
+    {
+      "n": "上传 index.html",
+      "ok": true,
+      "out": "-16-1.94.193.150/Linux/evidence/D3-C2/index.html --> obs://tctest-c2-in6ft8/index.html, cost [410], status [200], request id [000001A1606E07A047CAA1B2CE60B835]\n"
+    },
+    {
+      "n": "obs_set_website_config set",
+      "ok": true,
+      "out": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://tctest-c2-in6ft8.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://tctest-c2-in6ft8.obs-website.c"
+    },
+    {
+      "n": "obs_set_website_config get 验证",
+      "ok": true,
+      "out": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+    },
+    {
+      "n": "删除 OBS 桶归零",
+      "ok": true,
+      "out": "Start at 2026-10-21 21:46:27.02146787 +0000 UTC\n\nDelete bucket [tctest-c2-in6ft8] successfully!\n"
+    },
+    {
+      "n": "归零验证(ls 不含本次桶)",
+      "ok": true,
+      "out": "{\"containsOwn\":false}"
+    }
+  ]
+}
