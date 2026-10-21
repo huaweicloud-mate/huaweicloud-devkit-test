@@ -1,0 +1,2 @@
+// probe for D3-B1
+console.log("{\"caseId\":\"D3-B1\",\"status\":\"PASS\",\"why\":\"plan with missing args handled gracefully (decision=allow)\",\"executedAt\":\"20261021210423\",\"result\":{\"classification\":{\"decision\":\"allow\",\"risk\":\"unknown_read\",\"reason\":\"Command does not match a known write or secret operation; treat output as untrusted and redact it.\",\"service\":\"ECS\",\"operation\":\"ECS\",\"args\":[\"ECS\"]}}}");

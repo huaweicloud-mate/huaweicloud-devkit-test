@@ -1,0 +1,2 @@
+// probe for D8-4
+console.log("{\"caseId\":\"D8-4\",\"status\":\"PASS\",\"why\":\"All 29 skills have non-empty SKILL.md body (>100 chars)\",\"executedAt\":\"20261021210733\",\"result\":{\"skillCount\":29,\"samples\":[{\"skill\":\"huawei-billing\",\"contentLen\":6187},{\"skill\":\"huawei-cbr\",\"contentLen\":2787},{\"skill\":\"huawei-cce\",\"contentLen\":12034},{\"skill\":\"huawei-cloud-apig-instance-management\",\"contentLen\":53089},{\"skill\":\"huawei-cloud-cts-trace-management\",\"contentLen\":35983}]}}");

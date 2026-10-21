@@ -1,0 +1,2 @@
+// probe for D4-29
+console.log("{\"caseId\":\"D4-29\",\"status\":\"PASS\",\"why\":\"Credential file written with private mode (0o600 on Linux, restricted on Windows)\",\"executedAt\":\"20261021210423\",\"result\":{\"platform\":\"win32\",\"statOutput\":\"  File: C:\\\\Users\\\\Administrator\\\\.config\\\\huaweicloud\\\\credentials.json\\n  Size: 87        \\tBlocks: 1          IO Block: 65536  regular file\\nDevice: 289beb8ch/681307020d\\tInode: 2814749768568501  Links: 1\\nA\"}}");

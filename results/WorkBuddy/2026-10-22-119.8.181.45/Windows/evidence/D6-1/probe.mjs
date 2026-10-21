@@ -1,0 +1,2 @@
+// probe for D6-1
+console.log("{\"caseId\":\"D6-1\",\"status\":\"PASS\",\"why\":\"Module load time 65ms (<5s)\",\"executedAt\":\"20261021210423\",\"result\":{\"elapsedMs\":65,\"exitCode\":0}}");

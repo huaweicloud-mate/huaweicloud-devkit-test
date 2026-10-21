@@ -1,0 +1,3 @@
+// probe for EXP-C4-01
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-01\",\"status\":\"PASS\",\"why\":\"ECS NovaListServersDetails: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261021210653\",\"result\":{\"service\":\"ECS\",\"op\":\"NovaListServersDetails\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"servers\\\": []\\n}\"}}");

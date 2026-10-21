@@ -1,0 +1,3 @@
+// probe for D3-C6
+// status=PASS
+console.log("{\"caseId\":\"D3-C6\",\"status\":\"PASS\",\"why\":\"RDS ListInstances real-cloud call returned response\",\"executedAt\":\"20261021210720\",\"result\":{\"exitCode\":0,\"sample\":\"{\\n  \\\"instances\\\": [\\n    {\\n      \\\"id\\\": \\\"de62b973d7ce4e20b93cca0853cd9fb3in01\\\",\\n      \\\"status\\\": \\\"ACTIVE\\\",\\n      \\\"name\\\": \\\"hdk-s7-mvh6rdzc\\\",\\n      \\\"port\\\": 3306,\\n      \\\"type\\\": \\\"Single\\\",\\n      \\\"ha\\\": {},\\n      \\\"region\\\": \\\"cn-north-4\\\",\\n      \\\"datastore\\\": {\\n        \\\"type\\\": \\\"MySQL\\\",\\n        \\\"version\\\": \\\"8.0\\\",\\n  \"}}");

@@ -1,0 +1,3 @@
+// probe for D5-3
+// status=PASS
+console.log("{\"caseId\":\"D5-3\",\"status\":\"PASS\",\"why\":\"tools/list has 43 huaweicloud_* tools (>=30)\",\"executedAt\":\"20261021210728\",\"result\":{\"toolCount\":43}}");

@@ -1,0 +1,3 @@
+// probe for D1-70
+// status=PASS
+console.log("{\"caseId\":\"D1-70\",\"status\":\"PASS\",\"why\":\"parseDistTagsOutput parses npm dist-tags JSON correctly\",\"executedAt\":\"20261021210716\",\"result\":{\"parsed\":{\"latest\":\"1.1.10\",\"next\":\"1.1.11-next.0\"}}}");

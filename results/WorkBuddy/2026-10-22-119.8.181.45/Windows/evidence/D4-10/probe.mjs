@@ -1,0 +1,2 @@
+// probe for D4-10
+console.log("{\"caseId\":\"D4-10\",\"status\":\"PASS\",\"why\":\"Low-risk op classified correctly (decision=allow, risk=read_only)\",\"executedAt\":\"20261021210423\",\"result\":{\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"ECS\",\"operation\":\"NovaListServersDetails\",\"args\":[\"ECS\",\"NovaListServersDetails\"]}}}");

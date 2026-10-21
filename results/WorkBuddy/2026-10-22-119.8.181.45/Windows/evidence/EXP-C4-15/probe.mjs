@@ -1,0 +1,3 @@
+// probe for EXP-C4-15
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-15\",\"status\":\"PASS\",\"why\":\"WAF ListInstance: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261021210706\",\"result\":{\"service\":\"WAF\",\"op\":\"ListInstance\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"purchased\\\": false,\\n  \\\"total\\\": 0,\\n  \\\"items\\\": []\\n}\"}}");

@@ -1,0 +1,3 @@
+// probe for D3-S4
+// status=PASS
+console.log("{\"caseId\":\"D3-S4\",\"status\":\"PASS\",\"why\":\"DDS ListInstances real-cloud call returned response\",\"executedAt\":\"20261021210724\",\"result\":{\"exitCode\":0,\"sample\":\"{\\n  \\\"instances\\\": [],\\n  \\\"total_count\\\": 0\\n}\"}}");

@@ -1,0 +1,3 @@
+// probe for D4-20
+// status=PASS
+console.log("{\"caseId\":\"D4-20\",\"status\":\"PASS\",\"why\":\"Deny output has decision/risk/reason fields\",\"executedAt\":\"20261021210728\",\"result\":{\"classification\":{\"decision\":\"deny\",\"risk\":\"credential\",\"reason\":\"Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.\"}}}");

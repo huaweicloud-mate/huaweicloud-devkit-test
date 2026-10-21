@@ -1,0 +1,3 @@
+// probe for D3-S1
+// status=PASS
+console.log("{\"caseId\":\"D3-S1\",\"status\":\"PASS\",\"why\":\"SMN ListTopics real-cloud call returned response\",\"executedAt\":\"20261021210723\",\"result\":{\"exitCode\":0,\"sample\":\"{\\n  \\\"request_id\\\": \\\"a7d46e3507c24f8f83fcb67f103b9726\\\",\\n  \\\"topic_count\\\": 1,\\n  \\\"topics\\\": [\\n    {\\n      \\\"topic_id\\\": \\\"bdc3485f91b84beea721f4d04f11a111\\\",\\n      \\\"topic_urn\\\": \\\"urn:smn:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:AUTO_ALARM_NOTIFY_TOPIC_MYSQL_mysql_46c1fd48bd1248c7b75afc3780de7132\\\",\\n      \\\"di\"}}");

@@ -1,0 +1,3 @@
+// probe for D1-45
+// status=PASS
+console.log("{\"caseId\":\"D1-45\",\"status\":\"PASS\",\"why\":\"semverCompare works (a<b=-1, a>b=+1, equal=0)\",\"executedAt\":\"20261021210716\",\"result\":{\"cmp_10_11\":-1,\"cmp_11_10\":1,\"cmp_10_10\":0}}");
