@@ -1,0 +1,63 @@
+[2026-10-21T21:12:40.194Z] === P2 用例综合测试 ===
+[2026-10-21T21:12:40.196Z] 测试环境: Windows, Node v22.22.2
+[2026-10-21T21:12:40.196Z] 
+--- D1-4 status/update幂等 ---
+[2026-10-21T21:12:40.292Z] D1-4: Command failed: huaweicloud-devkit status
+node:internal/modules/cjs/loader:1386
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\Administrator\.workbuddy\binaries\node\versions\22.22.2-2\node_modules\huaweicloud-devkit\bin\setup.cjs'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.22.2
+
+[2026-10-21T21:12:40.292Z] 
+--- D1-30 semver 比对正确性 ---
+[2026-10-21T21:12:40.296Z] semverCompare(1.1.2, 1.1.1) = 1
+[2026-10-21T21:12:40.297Z] semverCompare(1.1.1, 1.1.2) = -1
+[2026-10-21T21:12:40.297Z] semverCompare(1.1.0, 1.1.0-next.9) = 1
+[2026-10-21T21:12:40.297Z] semverCompare(1.1.1, 1.1.1) = 0
+[2026-10-21T21:12:40.297Z] 
+--- D1-33 skip 文件持久化 ---
+[2026-10-21T21:12:40.298Z] skipFilePath 存在: true
+[2026-10-21T21:12:40.298Z] resolveSkipFilePath 存在: true
+[2026-10-21T21:12:40.298Z] 
+--- D1-65 调试模式环境变量 ---
+[2026-10-21T21:12:40.298Z] DEBUG 相关: false
+[2026-10-21T21:12:40.298Z] 
+--- D1-66 遥测开关 ---
+[2026-10-21T21:12:40.298Z] 遥测相关: false
+[2026-10-21T21:12:40.298Z] 
+=== 写入证据文件 ===
+
+=== JSON RESULTS ===
+{
+  "D1-4": {
+    "status": "BLOCKED",
+    "error": "Command failed: huaweicloud-devkit status\nnode:internal/modules/cjs/loader:1386\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'C:\\Users\\Administrator\\.workbuddy\\binaries\\node\\versions\\22.22.2-2\\node_modules\\huaweicloud-devkit\\bin\\setup.cjs'\r\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)\r\n    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)\r\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)\r\n    at Function._load (node:internal/modules/cjs/loader:1192:37)\r\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)\r\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\r\n    at node:internal/main/run_main_module:36:49 {\r\n  code: 'MODULE_NOT_FOUND',\r\n  requireStack: []\r\n}\r\n\r\nNode.js v22.22.2\r\n"
+  },
+  "D1-30": {
+    "status": "PASS",
+    "testCases": 4
+  },
+  "D1-33": {
+    "status": "PASS"
+  },
+  "D1-65": {
+    "status": "FAIL"
+  },
+  "D1-66": {
+    "status": "FAIL"
+  }
+}

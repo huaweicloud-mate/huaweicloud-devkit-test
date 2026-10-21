@@ -1,0 +1,39 @@
+[2026-10-21T21:12:03.667Z] === P1 用例综合测试 ===
+[2026-10-21T21:12:03.670Z] 测试环境: Windows, Node v22.22.2
+[2026-10-21T21:12:03.670Z] 
+--- D1-26 升级提醒工具注册 ---
+[2026-10-21T21:12:03.723Z] judgeUpdate 存在: true
+[2026-10-21T21:12:03.723Z] semverCompare 存在: true
+[2026-10-21T21:12:03.723Z] 
+--- D1-27 检测语义-已是最新 ---
+[2026-10-21T21:12:03.723Z] judgeUpdate(1.1.2, {latest:1.1.2}) = up_to_date
+[2026-10-21T21:12:03.723Z] 
+--- D1-28 检测语义-有新版本 ---
+[2026-10-21T21:12:03.724Z] judgeUpdate(1.1.1, {latest:1.1.2}) = update_available
+[2026-10-21T21:12:03.724Z] 
+--- D1-31 dismiss 冷却期 ---
+[2026-10-21T21:12:03.724Z] judgeUpdate with dismiss=true = update_available
+[2026-10-21T21:12:03.724Z] 
+=== 写入证据文件 ===
+
+=== JSON RESULTS ===
+{
+  "D1-26": {
+    "status": "PASS",
+    "hasJudgeUpdate": true,
+    "hasSemverCompare": true
+  },
+  "D1-27": {
+    "status": "PASS",
+    "result": "up_to_date"
+  },
+  "D1-28": {
+    "status": "PASS",
+    "result": "update_available",
+    "targetVersion": "1.1.2"
+  },
+  "D1-31": {
+    "status": "FAIL",
+    "result": "update_available"
+  }
+}
