@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "why": "ListServers decision=allow (should not deny), CreateServers decision=deny (should deny/approve)",
+  "executedAt": "20261022050559"
+}
+{
+  "r1": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation.",
+    "service": "ECS",
+    "operation": "ListServers",
+    "args": [
+      "ECS",
+      "ListServers",
+      "--limit",
+      "10"
+    ]
+  },
+  "r2": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  }
+}

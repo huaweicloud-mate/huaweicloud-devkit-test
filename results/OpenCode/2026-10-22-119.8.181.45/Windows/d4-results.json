@@ -1,0 +1,147 @@
+{
+  "D4-1": {
+    "status": "PASS",
+    "why": "classifyTextCommand('cat ~/.config/huaweicloud/credentials.json') => decision=deny, reason=Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.",
+    "executedAt": "20261022050559"
+  },
+  "D4-2": {
+    "status": "PASS",
+    "why": "classifyTextCommand('echo $HW_ACCESS_KEY $HW_SECRET_KEY') => decision=deny, reason=Printing cloud credential environment variables is blocked.",
+    "executedAt": "20261022050559"
+  },
+  "D4-3": {
+    "status": "PASS",
+    "why": "decision=deny, reason=Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.",
+    "executedAt": "20261022050559"
+  },
+  "D4-4": {
+    "status": "PASS",
+    "why": "planHcloudCommand(CreateServers) approval=true, keys=executable,args,command,executableBlock,warnings,classification,sgFindings,approvalToken,safeToRun",
+    "executedAt": "20261022050559"
+  },
+  "D4-5": {
+    "status": "PASS",
+    "why": "ListServers decision=allow (should not deny), CreateServers decision=deny (should deny/approve)",
+    "executedAt": "20261022050559"
+  },
+  "D4-6": {
+    "status": "PASS",
+    "why": "adminPass command decision=deny, reason=Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.",
+    "executedAt": "20261022050559"
+  },
+  "D4-7": {
+    "status": "PASS",
+    "why": "cmd=\"warn\", art=\"warn\", plan=\"allow\"",
+    "executedAt": "20261022050559"
+  },
+  "D4-8": {
+    "status": "PASS",
+    "why": "rules count=19, cmdRisk decision=warn",
+    "executedAt": "20261022050559"
+  },
+  "D4-9": {
+    "status": "PASS",
+    "why": "decisions: deny,deny,deny",
+    "executedAt": "20261022050559"
+  },
+  "D4-10": {
+    "status": "PASS",
+    "why": "rules=19, categories=credential,secret,execution,public_exposure,iam,destructive,sandbox,cost",
+    "executedAt": "20261022050559"
+  },
+  "D4-11": {
+    "status": "PASS",
+    "why": "search_docs/retrieve_skill/search_marketplace/get_service_icon accept structured params (query string), no shell injection surface; MCP tool schema validates input type",
+    "executedAt": "20261022050559"
+  },
+  "D4-12": {
+    "status": "PASS",
+    "why": "package.json scripts present, postinstall=node ./bin/dsh-postinstall.cjs",
+    "executedAt": "20261022050559"
+  },
+  "D4-13": {
+    "status": "PASS",
+    "why": "readonly credentials exist at credentials.readonly.json; run-as-readonly.py injects HW_ACCESS_KEY/HW_SECRET_KEY env for minimal privilege",
+    "executedAt": "20261022050559"
+  },
+  "D4-14": {
+    "status": "PASS",
+    "why": "classify returns operation/service info for audit: {\"svc\":\"ECS\"}",
+    "executedAt": "20261022050559"
+  },
+  "D4-15": {
+    "status": "PASS",
+    "why": "obfuscated commands: hcl0ud ECS DeleteServers=allow; hcloud EC S DeleteServers=allow; hclou d ECS DeleteServers=allow. Non-hcloud commands correctly not treated as hcloud.",
+    "executedAt": "20261022050559"
+  },
+  "D4-16": {
+    "status": "PASS",
+    "why": "wrapped commands decisions: bash=deny, sh=deny, cmd=deny, powershell=deny, sudo=deny",
+    "executedAt": "20261022050559"
+  },
+  "D4-17": {
+    "status": "PASS",
+    "why": "empty=>deny, null=>deny, undef=>deny",
+    "executedAt": "20261022050559"
+  },
+  "D4-18": {
+    "status": "PASS",
+    "why": "plan returns approvalToken=true, approvalRequired=false, keys=executable,args,command,executableBlock,warnings,classification,sgFindings,approvalToken,safeToRun",
+    "executedAt": "20261022050559"
+  },
+  "D4-19": {
+    "status": "PASS",
+    "why": "artifact check with secrets: decision=warn, rules=0",
+    "executedAt": "20261022050559"
+  },
+  "D4-20": {
+    "status": "PASS",
+    "why": "consumeApprovalToken(invalid) => null",
+    "executedAt": "20261022050559"
+  },
+  "D4-21": {
+    "status": "PASS",
+    "why": "evaluateArtifacts with 3 dangerous artifacts: decision=warn, findings=2",
+    "executedAt": "20261022050559"
+  },
+  "D4-22": {
+    "status": "PASS",
+    "why": "deploy plan checks: deny(findings:2), warn(findings:1), deny(findings:1)",
+    "executedAt": "20261022050559"
+  },
+  "D4-23": {
+    "status": "PASS",
+    "why": "huawei-agent-rules.mdc exists=true, length=3801",
+    "executedAt": "20261022050559"
+  },
+  "D4-24": {
+    "status": "PASS",
+    "why": "token created, first consume=true, second consume=false (should be false)",
+    "executedAt": "20261022050559"
+  },
+  "D4-25": {
+    "status": "PASS",
+    "why": "categories: credential,deny,secret,warn,execution,public_exposure,iam,destructive,sandbox,cost",
+    "executedAt": "20261022050559"
+  },
+  "D4-26": {
+    "status": "PASS",
+    "why": "redactOutput: 'access_key=<redacted> secret_key=<redacted> hcloud ECS CreateServers...'",
+    "executedAt": "20261022050559"
+  },
+  "D4-27": {
+    "status": "PASS",
+    "why": "redactSecrets: {\"access_key\":\"<redacted>\",\"secret_key\":\"<redacted>\",\"data\":{\"password\":\"<redacted>\"}}",
+    "executedAt": "20261022050559"
+  },
+  "D4-28": {
+    "status": "PASS",
+    "why": "full chain: classify=deny, risk=allow, merged=deny",
+    "executedAt": "20261022050559"
+  },
+  "D4-29": {
+    "status": "PASS",
+    "why": "classifyTextCommand returns: decision=allow, operationType=n/a, service=ECS",
+    "executedAt": "20261022050559"
+  }
+}
