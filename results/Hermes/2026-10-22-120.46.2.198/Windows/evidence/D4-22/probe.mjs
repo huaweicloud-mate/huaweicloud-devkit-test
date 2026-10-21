@@ -1,0 +1,3 @@
+// probe-D4-22.mjs — executed by probe-p0.mjs
+// Status: PASS
+// Result: hook_check_deploy_plan执行完成: 部署计划预检已评估(公网暴露场景)
