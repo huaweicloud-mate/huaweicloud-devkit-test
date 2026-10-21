@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C2",
+  "title": "OBS静态站部署E2E",
+  "expected": "静态站部署成功(上传+public-read+网站配置+curl200)且资源归零",
+  "total": 9,
+  "passed": 9,
+  "failed": 0,
+  "results": [
+    {
+      "name": "build_site",
+      "pass": true,
+      "detail": "index.html written to /tmp/d3c2-site"
+    },
+    {
+      "name": "create_bucket",
+      "pass": true,
+      "detail": "exitCode=6  uploading operations on the created bucket. Therefore, configure the endpoint to a regional domain name if you want instant uploading operations on the bucket."
+    },
+    {
+      "name": "upload_index(目录语义 obs://bucket/)",
+      "pass": true,
+      "detail": "exitCode=0 status [200], request id [000001A15B38622647D11F24EFFBB2C2]\n[-----------------------------------------------------------------------] 100.00% ?/s 106B/106B 89ms"
+    },
+    {
+      "name": "list_object",
+      "pass": true,
+      "detail": "ml    2026-10-20T21:29:44Z          106B      standard            \"bfd254bf3cb873164e923300cbbab539\"\n\nTotal size of bucket: 106B\nFolder number: 0\nFile number: 1"
+    },
+    {
+      "name": "set_public_read",
+      "pass": true,
+      "detail": "exitCode=0 C\n\nSet the acl of object [index.html] in the bucket [testbot1-hermes-c2-2531783592] to [public-read] successfully, request id [000001A15B3867624413112117E24B9F]"
+    },
+    {
+      "name": "website_set",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot1-hermes-c2-2531783592.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot1-hermes-c"
+    },
+    {
+      "name": "website_get",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+    },
+    {
+      "name": "curl_website_200",
+      "pass": true,
+      "detail": "http://testbot1-hermes-c2-2531783592.obs-website.cn-north-4.myhuaweicloud.com/ -> HTTP 200"
+    },
+    {
+      "name": "cleanup_归零",
+      "pass": true,
+      "detail": "rm-object rm-bucket:ok 归零校验:已归零"
+    }
+  ],
+  "executedAt": "20261020212946",
+  "probe": "probe.mjs"
+}

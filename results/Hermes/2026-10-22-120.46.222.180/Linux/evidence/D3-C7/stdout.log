@@ -1,0 +1,38 @@
+{
+  "status": "FAIL",
+  "caseId": "D3-C7",
+  "title": "跨区域资源操作引导（区域维度）",
+  "expected": "命令含 --cli-region=目标区；区域不可用→Ecs.0021；资源不存在→Ecs.0200；创建资源100%释放归零",
+  "total": 5,
+  "passed": 3,
+  "failed": 2,
+  "results": [
+    {
+      "name": "plan含--cli-region=ap-southeast-3",
+      "pass": true,
+      "detail": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"ListServersDetails\",\"--cli-region=ap-southeast-3\"],\"command\":\"hcloud ECS ListServersDetails --cli-region=ap-southeast-3\",\"executableBlock\":\"hcloud ECS ListServersDetails --cli-region=ap-southeast-3\",\"warnings\":[],\"classifi"
+    },
+    {
+      "name": "get_regional_availability(ecs,ap-southeast-3)",
+      "pass": true,
+      "detail": "{\"ok\":true,\"service\":\"ecs\",\"region\":\"ap-southeast-3\",\"available\":true,\"note\":\"ecs is available in ap-southeast-3.\",\"sourcedFrom\":\"static cache, update via npm package upgrade\",\"disclaimer\":\"This result reflects service-level availability only. It does NOT guar"
+    },
+    {
+      "name": "跨区只读查询",
+      "pass": true,
+      "detail": "code=Common.0013 {\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"the current region is [ap-southeast-3] and does not match with the project name [cn-north-4] in tk.\\\",\\n    \\\"code\\\": \\\"Common.0013\\\"\\"
+    },
+    {
+      "name": "不存在资源精确错误码(Ecs.0200/Ecs.0021)",
+      "pass": false,
+      "detail": "code=Common.0013 {\n  \"error\": {\n    \"message\": \"the current region is [ap-southeast-3] and does not match with the project name [cn-north-4] in tk.\",\n    \"code\": \"Common.0013\"\n  }\n}\nFailed to get terminal width. The default width will be"
+    },
+    {
+      "name": "跨区创建EIP",
+      "pass": false,
+      "detail": "code=VPC.0501 {\n  \"code\": \"VPC.0501\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"The project name cn-north-4 carried by the token from IAM contains region information. Only token issued for setting region could pass the authentica (跨区不可用则命中区域错误码，符合契约之一)"
+    }
+  ],
+  "executedAt": "20261020213001",
+  "probe": "probe.mjs"
+}
