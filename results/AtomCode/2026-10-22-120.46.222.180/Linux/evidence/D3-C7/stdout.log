@@ -1,0 +1,37 @@
+{
+  "case": "D3-C7",
+  "assistant": "AtomCode(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "hdk gitHead b0e9f02 (v1.1.10)",
+  "status": "FAIL",
+  "why": "跨区域只读规划/最小EIP建删存在失败项，见 results",
+  "actual": "total=5 passed=4 failed=1",
+  "executedAt": "20261021210821",
+  "results": [
+    {
+      "name": "get_regional_availability(ecs,ap-southeast-3)",
+      "pass": true,
+      "detail": "{\"ok\":true,\"service\":\"ecs\",\"region\":\"ap-southeast-3\",\"available\":true,\"note\":\"ecs is available in ap-southeast-3.\",\"sourcedFrom\":\"static cache, update via npm package upgrade\",\"disclaimer\":\"This result reflects service-level availability only. It does NOT guar"
+    },
+    {
+      "name": "plan含--cli-region",
+      "pass": true,
+      "detail": "hcloud ECS ListServersDetails --cli-region=ap-southeast-3"
+    },
+    {
+      "name": "只读查询ap-southeast-3",
+      "pass": true,
+      "detail": "ok count-queried | {\n  \"error\": {\n    \"message\": \"the current region is [ap-southeast-3] and does not match with the project name [cn-north"
+    },
+    {
+      "name": "创建EIP(minimal)",
+      "pass": false,
+      "detail": "ok | {\n  \"code\": \"VPC.0501\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"The project name cn-north-4 carried by the token from IAM contains region information. On"
+    },
+    {
+      "name": "EIP归零(tctest-前缀空)",
+      "pass": true,
+      "detail": "total_count=0"
+    }
+  ]
+}
