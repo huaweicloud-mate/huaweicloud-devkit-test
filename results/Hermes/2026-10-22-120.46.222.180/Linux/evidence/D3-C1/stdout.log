@@ -1,34 +1,24 @@
 {
   "case": "D3-C1",
   "status": "FAIL",
-  "total": 5,
-  "passed": 4,
-  "failed": 1,
+  "total": 3,
+  "passed": 1,
+  "failed": 2,
   "results": [
     {
       "name": "CreateVpc",
-      "pass": true,
-      "detail": "{\n  \"vpc\": {\n    \"id\": \"341c3c1b-2cca-444f-8ace-d981e1730cd8\",\n    \"name\": \"testbot1-hermes-e2e-2531"
+      "pass": false,
+      "detail": "{\n  \"code\": \"VPC.0114\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Quota exceeded for resources:"
     },
     {
       "name": "CreateSubnet",
-      "pass": true,
-      "detail": "{\n  \"subnet\": {\n    \"id\": \"d1033a69-3315-4edb-b5d3-ee546284efa3\",\n    \"name\": \"testbot1-hermes-e2e-2"
-    },
-    {
-      "name": "CreateServers(审批分类)",
-      "pass": "allow",
-      "detail": "allow"
-    },
-    {
-      "name": "CreateServers(返回serverIds)",
-      "pass": true,
-      "detail": "{\n  \"job_id\": \"ff808081a0ed145901a15b337e6e5d6b\",\n  \"serverIds\": [\n    \"ec1b63b8-eff2-45fc-9335-6a9415751c98\"\n  ]\n}"
+      "pass": false,
+      "detail": "{\n  \"code\": \"VPC.0201\",\n  \"message\": \"VPC ID is invalid.\"\n}\nFailed to get terminal width. The defaul"
     },
     {
       "name": "finally归零(校验真实删除)",
-      "pass": false,
-      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+      "pass": true,
+      "detail": "无资源需清理"
     }
   ]
 }
