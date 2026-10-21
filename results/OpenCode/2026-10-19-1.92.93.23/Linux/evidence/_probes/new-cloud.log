@@ -1,212 +1,0 @@
-
-=====CASE D3-S2=====
-创建测试VPC tctest-opencode-s2-mvebebyk -> id=5b2283ab-c6ee-489b-881d-2a0d85df8e3c
-plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
-hook_check_command DeleteVpc -> decision=warn risk=undefined
-未确认前 ListVpcs 仍含该 VPC = true
-确认后 DeleteVpc -> ok=true
-删除后归零 = true
-[OK] 测试 VPC 创建成功
-[OK] plan DeleteVpc 要求确认(confirm-not-deny)
-[OK] hook 预检 DeleteVpc 返回决策
-[OK] 未确认前零执行
-[OK] 确认后删除成功且归零
-=====END D3-S2=====
-
-=====CASE D3-C13=====
-OBS mb -> Start at 2026-10-18 21:05:35.484735498 +0000 UTC
-
-Create bucket [tctest-opencode-obs-mvebebyk] failed, status [403], err
-set 无 indexDocument -> __error=Error: indexDocument is required for action=set ok=undefined
-set indexDocument -> ok=false status=404
-get -> ok=false status=404
-OBS rm -f -> Start at 2026-10-18 21:05:35.838042613 +0000 UTC
-
-Delete bucket [tctest-opencode-obs-mvebebyk] faile
-[FAIL] OBS 建桶成功
-[OK] set 缺失 indexDocument 报错(拒绝)
-[FAIL] set 成功
-[FAIL] get 返回配置与 set 一致
-[FAIL] 删除归零
-=====END D3-C13=====
-
-=====CASE D3-C14=====
-hdkitConnect 参数透传行:
-  if (options.source) body.source = options.source;
-  if (options.env) body.env = options.env;
-  if (options.git) body.git = options.git;
-  if (options.template_id) body.template_id = options.template_id;
-  if (options.flavor_id) body.flavor_id = options.flavor_id;
-hdkitCredentials() 缺参 -> session_id or dev_stage_id is required
-hwlink getCredentials 结构: ak=*** sk=*** securitytoken="" (已脱敏)
-[OK] hdkitConnect 透传可选参数到 body
-[OK] hdkitCredentials 缺 sessionId+devStageId 报错
-[OK] hwlink getCredentials 返回 {ak,sk,securitytoken}
-[OK] createConnection 走 x-security-token 签名头
-=====END D3-C14=====
-
-=====CASE D3-S4=====
-voucher_status(领取前) -> {"claimed":true,"message":"已领取","code":null}
-voucher_claim -> {"claimed":true,"voucherId":null,"amount":0,"message":"已领取过","code":null}
-voucher_status(领取后) -> {"claimed":true,"message":"已领取","code":null}
-[OK] voucher_status 返回状态字段
-[OK] claim 调用返回
-[OK] status→claim→status 闭环连贯
-=====END D3-S4=====
-
-=====CASE D3-S3=====
-check_user -> realnameVerified=true agreementSigned=true err=
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-connect -> status=connected wsId=e7e9310835d44e5abbcb
-[2026-10-18T21:05:41.537Z] uploadProject: /home/zhangshuang/.hdk-s3-mvebebyk -> /workspace/.hdk-s3-mvebebyk.tar.gz (archive=213 bytes, md5=384ce3db4d7660a2dd980c4af6ccf79c)
-[2026-10-18T21:05:41.587Z] uploadViaHttpTunnel: start (archive=/tmp/sandbox-upload-1792357541523/.hdk-s3-mvebebyk.tar.gz, size=213, remotePath=/workspace/.hdk-s3-mvebebyk.tar.gz)
-[2026-10-18T21:05:41.588Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
-[2026-10-18T21:05:41.588Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
-[2026-10-18T21:05:41.635Z] deployFileServer: writing script (2456 b64 chars)
-[2026-10-18T21:05:41.682Z] deployFileServer: starting server on port 8888
-[2026-10-18T21:05:41.717Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 2102\r\n\u001b]133;C\u0007\r\n"
-[2026-10-18T21:05:41.718Z] uploadViaHttpTunnel: creating dedicated tunnel session
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-[2026-10-18T21:05:42.611Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
-[2026-10-18T21:05:42.613Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
-[2026-10-18T21:05:42.614Z] uploadViaHttpTunnel: tunnel ready, localPort=38963
-[2026-10-18T21:05:42.614Z] uploadViaHttpTunnel: waiting for server health on localhost:38963
-[2026-10-18T21:05:42.615Z] waitForServerReady: attempt 1, checking http://localhost:38963/health
-[2026-10-18T21:05:42.652Z] waitForServerReady: server ready on port 38963 after 0 retries
-[2026-10-18T21:05:42.652Z] uploadViaHttpTunnel: sending POST with 213 bytes
-[2026-10-18T21:05:42.690Z] uploadViaHttpTunnel: upload complete (bytes=213, md5=384ce3db4d7660a2dd980c4af6ccf79c)
-upload_project -> ok=true md5Verified=true
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-deploy_nginx -> ok=undefined port=undefined url=
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 403)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mvebebyk/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
-close_session -> ok
-[OK] 沙箱 connect 成功
-[FAIL] s3-connect/upload/deploy 链路
-[OK] 部署返回可访问 URL 或检查通过
-[OK] 会话正常关闭
-=====END D3-S3=====
-
-=====SUMMARY=====
-{
-  "total": 21,
-  "passed": 16,
-  "results": [
-    {
-      "name": "测试 VPC 创建成功",
-      "ok": true,
-      "detail": "vpcId=5b2283ab-c6e"
-    },
-    {
-      "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
-      "ok": true,
-      "detail": "{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}"
-    },
-    {
-      "name": "hook 预检 DeleteVpc 返回决策",
-      "ok": true,
-      "detail": "decision=warn"
-    },
-    {
-      "name": "未确认前零执行",
-      "ok": true,
-      "detail": "stillThere=true"
-    },
-    {
-      "name": "确认后删除成功且归零",
-      "ok": true,
-      "detail": "ok=true zeroed=true"
-    },
-    {
-      "name": "OBS 建桶成功",
-      "ok": false,
-      "detail": "bucket=tctest-opencode-obs-mvebebyk"
-    },
-    {
-      "name": "set 缺失 indexDocument 报错(拒绝)",
-      "ok": true,
-      "detail": "\"Error: indexDocument is required for action=set\""
-    },
-    {
-      "name": "set 成功",
-      "ok": false,
-      "detail": "{\"ok\":false,\"status\":404}"
-    },
-    {
-      "name": "get 返回配置与 set 一致",
-      "ok": false,
-      "detail": "{\"ok\":false,\"status\":404}"
-    },
-    {
-      "name": "删除归零",
-      "ok": false,
-      "detail": "bucket removed=tctest-opencode-obs-mvebebyk"
-    },
-    {
-      "name": "hdkitConnect 透传可选参数到 body",
-      "ok": true,
-      "detail": "if (options.source) body.source = options.source;; if (options.env) body.env = options.env;; if (options.git) body.git = options.git;; if (options.template_id) body.template_id = options.template_id;; if (options.flavor_id) body.flavor_id = options.flavor_id;"
-    },
-    {
-      "name": "hdkitCredentials 缺 sessionId+devStageId 报错",
-      "ok": true,
-      "detail": "session_id or dev_stage_id is required"
-    },
-    {
-      "name": "hwlink getCredentials 返回 {ak,sk,securitytoken}",
-      "ok": true,
-      "detail": "keys present"
-    },
-    {
-      "name": "createConnection 走 x-security-token 签名头",
-      "ok": true,
-      "detail": "securitytoken header present"
-    },
-    {
-      "name": "voucher_status 返回状态字段",
-      "ok": true,
-      "detail": "{\"claimed\":true,\"message\":\"已领取\",\"code\":null}"
-    },
-    {
-      "name": "claim 调用返回",
-      "ok": true,
-      "detail": "{\"claimed\":true,\"voucherId\":null,\"amount\":0,\"message\":\"已领取过\",\"code\":null}"
-    },
-    {
-      "name": "status→claim→status 闭环连贯",
-      "ok": true,
-      "detail": "{\"before\":true,\"claim\":true,\"after\":true}"
-    },
-    {
-      "name": "沙箱 connect 成功",
-      "ok": true,
-      "detail": "wsId=e7e9310835d44e5abbcb"
-    },
-    {
-      "name": "s3-connect/upload/deploy 链路",
-      "ok": false,
-      "detail": "{\"upMd5\":true}"
-    },
-    {
-      "name": "部署返回可访问 URL 或检查通过",
-      "ok": true,
-      "detail": "{\"nginx\":{\"status\":\"PASS\",\"detail\":\"(port 8080, HTTP 403)\"}}"
-    },
-    {
-      "name": "会话正常关闭",
-      "ok": true,
-      "detail": "\"ok\""
-    }
-  ]
-}

@@ -1,6 +1,0 @@
-Eval harness routing test:
-Prompt: 部署一个函数处理图片自动压缩
-Expected: FunctionGraph
-Actual: Run hcloud --help
-Result: MISS
-Eval harness: node eval/harness/run-eval.mjs

@@ -1,6 +1,0 @@
-Eval harness routing test:
-Prompt: 创建一个 Redis 缓存实例用于会话存储
-Expected: DCS
-Actual: DDS+DCS
-Result: HIT
-Eval harness: node eval/harness/run-eval.mjs
