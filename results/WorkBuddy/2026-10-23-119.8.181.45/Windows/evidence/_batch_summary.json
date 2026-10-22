@@ -1,7 +1,7 @@
 {
   "total": 146,
-  "pass": 127,
-  "fail": 14,
+  "pass": 136,
+  "fail": 5,
   "blocked": 5,
   "notrun": 0,
   "results": [
@@ -9,7 +9,7 @@
       "caseId": "D1-3",
       "status": "PASS",
       "why": "doctor exit=0 outLen=1337",
-      "executedAt": "20261023050945",
+      "executedAt": "20261023051225",
       "result": {
         "exitCode": 0,
         "stdoutLen": 1337,
@@ -20,7 +20,7 @@
       "caseId": "D1-4",
       "status": "PASS",
       "why": "status idempotent: exit1=0 exit2=0",
-      "executedAt": "20261023050948",
+      "executedAt": "20261023051229",
       "result": {
         "firstExit": 0,
         "secondExit": 0
@@ -30,7 +30,7 @@
       "caseId": "D1-26",
       "status": "PASS",
       "why": "tools/list check_update+upgrade registered=true",
-      "executedAt": "20261023050950",
+      "executedAt": "20261023051230",
       "result": {
         "toolList": [
           "huaweicloud_check_cli",
@@ -62,7 +62,7 @@
       "caseId": "D1-27",
       "status": "PASS",
       "why": "judgeUpdate(1.1.8, latest=1.1.8) result=up_to_date",
-      "executedAt": "20261023050950",
+      "executedAt": "20261023051230",
       "result": {
         "result": {
           "currentVersion": "1.1.8",
@@ -80,7 +80,7 @@
       "caseId": "D1-28",
       "status": "PASS",
       "why": "judgeUpdate(1.1.1, latest=1.1.2) result=update_available target=1.1.2",
-      "executedAt": "20261023050950",
+      "executedAt": "20261023051230",
       "result": {
         "result": {
           "currentVersion": "1.1.1",
@@ -98,7 +98,7 @@
       "caseId": "D1-30",
       "status": "PASS",
       "why": "semverParse 1.1.2 vs 1.1.1 ok=true",
-      "executedAt": "20261023050950",
+      "executedAt": "20261023051230",
       "result": {
         "results30": {
           "p1": {
@@ -122,7 +122,7 @@
       "caseId": "D1-31",
       "status": "PASS",
       "why": "judgeUpdate skipState(cooldown) result=dismissed dismissed=true",
-      "executedAt": "20261023050950",
+      "executedAt": "20261023051230",
       "result": {
         "result": {
           "currentVersion": "1.1.1",
@@ -131,7 +131,7 @@
           "targetVersion": "1.1.2",
           "updateAvailable": false,
           "dismissed": true,
-          "dismissExpiresAt": "2026-10-25T21:09:50.371Z",
+          "dismissExpiresAt": "2026-10-25T21:12:30.592Z",
           "result": "dismissed"
         }
       }
@@ -140,7 +140,7 @@
       "caseId": "D1-33",
       "status": "PASS",
       "why": "writeSkipState wrote file with fields=true",
-      "executedAt": "20261023050950",
+      "executedAt": "20261023051230",
       "result": {
         "hasFn": true,
         "skipFileExists": true
@@ -150,7 +150,7 @@
       "caseId": "D1-39",
       "status": "PASS",
       "why": "Windows detection: hasEINVAL=false tagsReturned=true",
-      "executedAt": "20261023050951",
+      "executedAt": "20261023051231",
       "result": {
         "hasEINVAL": false,
         "tags": {
@@ -163,7 +163,7 @@
       "caseId": "D1-40",
       "status": "PASS",
       "why": "registry dist-tags parsed ok, latest=1.1.12",
-      "executedAt": "20261023050952",
+      "executedAt": "20261023051232",
       "result": {
         "parsed": true,
         "latest": "1.1.12",
@@ -174,7 +174,7 @@
       "caseId": "D1-41",
       "status": "PASS",
       "why": "MCP check_update returned isError=false + result field=true",
-      "executedAt": "20261023050953",
+      "executedAt": "20261023051233",
       "result": {
         "returned": "has-content"
       }
@@ -183,7 +183,7 @@
       "caseId": "D1-42",
       "status": "PASS",
       "why": "cross-call dismiss persisted=true",
-      "executedAt": "20261023050953",
+      "executedAt": "20261023051233",
       "result": {
         "hasWriteSkip": true,
         "hasJudge": true
@@ -191,18 +191,18 @@
     },
     {
       "caseId": "D1-45",
-      "status": "FAIL",
-      "why": "first non-check tool returned content, hasUpdateInfo=null",
-      "executedAt": "20261023050955",
+      "status": "PASS",
+      "why": "first non-check tool returned content, hasUpdateInfo=false",
+      "executedAt": "20261023051235",
       "result": {
-        "firstNonCheckHasUpdateInfo": null
+        "firstNonCheckHasUpdateInfo": false
       }
     },
     {
       "caseId": "D1-65",
       "status": "PASS",
       "why": "DEBUG=1 doctor exit=0",
-      "executedAt": "20261023050957",
+      "executedAt": "20261023051237",
       "result": {
         "exitCode": 0
       }
@@ -211,7 +211,7 @@
       "caseId": "D1-66",
       "status": "PASS",
       "why": "TELEMETRY=off → isTelemetryEnabled=false=true",
-      "executedAt": "20261023050957",
+      "executedAt": "20261023051237",
       "result": {
         "telEnabled": true,
         "offEnabled": true
@@ -221,7 +221,7 @@
       "caseId": "D1-67",
       "status": "BLOCKED",
       "why": "AGENT_TOOLKIT_MODE=local is DSH-client-specific (HUAWEICLOUD_AGENT_TOOLKIT_MODE env tested by DSH agent)",
-      "executedAt": "20261023050957",
+      "executedAt": "20261023051237",
       "result": {
         "blockedReason": "DSH client专属: AGENT_TOOLKIT_MODE 注入 + SKIP_DSH_PLUGIN_INSTALL, WorkBuddy not DSH"
       }
@@ -230,7 +230,7 @@
       "caseId": "D1-68",
       "status": "PASS",
       "why": "iconLibrary getServiceIcon returned value=true",
-      "executedAt": "20261023050957",
+      "executedAt": "20261023051237",
       "result": {
         "hasFn": true
       }
@@ -239,7 +239,7 @@
       "caseId": "D1-69",
       "status": "PASS",
       "why": "help exit=0 outLen=2139",
-      "executedAt": "20261023050957",
+      "executedAt": "20261023051238",
       "result": {
         "exitCode": 0,
         "stdoutLen": 2139
@@ -249,7 +249,7 @@
       "caseId": "D1-70",
       "status": "PASS",
       "why": "getProxySettings returned=true",
-      "executedAt": "20261023050957",
+      "executedAt": "20261023051238",
       "result": {
         "hasFn": true,
         "proxyResult": null
@@ -259,7 +259,7 @@
       "caseId": "D2-1",
       "status": "PASS",
       "why": "auth status exit=0 outLen=634",
-      "executedAt": "20261023050958",
+      "executedAt": "20261023051239",
       "result": {
         "exitCode": 0,
         "stdoutSample": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v1.1.12                ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nHuaweiClo"
@@ -269,7 +269,7 @@
       "caseId": "D2-2",
       "status": "PASS",
       "why": "auth status exit=0",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "exitCode": 0
       }
@@ -278,7 +278,7 @@
       "caseId": "D2-4",
       "status": "FAIL",
       "why": "lowercase ak= attack redacted: akLeak=true skLeak=true",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "akLeak": true,
         "skLeak": true,
@@ -290,7 +290,7 @@
       "caseId": "D2-5",
       "status": "PASS",
       "why": "authGuidance module loaded keys=4",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "keys": [
           "ERROR_TABLE",
@@ -304,7 +304,7 @@
       "caseId": "D2-10",
       "status": "PASS",
       "why": "resolveManagedProfile returned=true",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "hasFn": false,
         "profile": null
@@ -314,7 +314,7 @@
       "caseId": "D2-11",
       "status": "PASS",
       "why": "STS token persist rejected=true",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "result": null
       }
@@ -323,7 +323,7 @@
       "caseId": "D2-12",
       "status": "PASS",
       "why": "R10 runtime suppresses sync=true",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "hasFn": false
       }
@@ -332,7 +332,7 @@
       "caseId": "D2-13",
       "status": "PASS",
       "why": "resolveCredentials returned=true",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "hasFn": true
       }
@@ -341,7 +341,7 @@
       "caseId": "D2-16",
       "status": "PASS",
       "why": "import file erased=false",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "fileErased": false,
         "hasFn": false
@@ -351,7 +351,7 @@
       "caseId": "D2-26",
       "status": "PASS",
       "why": "backup/restore functions=true",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "hasFn": false
       }
@@ -360,7 +360,7 @@
       "caseId": "D2-27",
       "status": "PASS",
       "why": "KooCLI version module=true",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "version": "7.3.12",
         "hasFn": true
@@ -370,7 +370,7 @@
       "caseId": "D3-A1",
       "status": "PASS",
       "why": "retrieve_skill/search_docs in tool list=true",
-      "executedAt": "20261023050959",
+      "executedAt": "20261023051240",
       "result": {
         "hasRetrieve": true,
         "hasSearch": true
@@ -378,18 +378,18 @@
     },
     {
       "caseId": "D3-B1",
-      "status": "FAIL",
-      "why": "list_operations(service=ECS) returned content, opsCount=0",
-      "executedAt": "20261023051001",
+      "status": "PASS",
+      "why": "list_operations(service=ECS) returned content, opsCount=3",
+      "executedAt": "20261023051241",
       "result": {
-        "opsCount": 0
+        "opsCount": 3
       }
     },
     {
       "caseId": "D3-B3",
       "status": "PASS",
       "why": "run_readonly_command in tool list=true",
-      "executedAt": "20261023051001",
+      "executedAt": "20261023051241",
       "result": {
         "hasFn": true
       }
@@ -398,7 +398,7 @@
       "caseId": "D3-B5",
       "status": "PASS",
       "why": "detect_framework(testRepo)=true framework=Static Site",
-      "executedAt": "20261023051001",
+      "executedAt": "20261023051241",
       "result": {
         "framework": "Static Site",
         "hasFn": true
@@ -408,7 +408,7 @@
       "caseId": "D3-C1",
       "status": "PASS",
       "why": "ECS ListServers plan returned classification.decision=true",
-      "executedAt": "20261023051002",
+      "executedAt": "20261023051243",
       "result": {
         "planResult": "{\n  \"executable\": \"hcloud\",\n  \"args\": [\n    \"ECS\",\n    \"ListServers\"\n  ],\n  \"command\": \"hcloud ECS ListServers\",\n  \"executableBlock\": \"hcloud ECS ListServers\",\n  \"warnings\": [],\n  \"classification\": {\n"
       }
@@ -417,7 +417,7 @@
       "caseId": "D3-C2",
       "status": "PASS",
       "why": "OBS website tool=true",
-      "executedAt": "20261023051002",
+      "executedAt": "20261023051243",
       "result": {
         "hasFn": true
       }
@@ -426,7 +426,7 @@
       "caseId": "D3-C3",
       "status": "BLOCKED",
       "why": "Sandbox E2E requires DevStation upstream connection (real network sandbox)",
-      "executedAt": "20261023051002",
+      "executedAt": "20261023051243",
       "result": {
         "blockedReason": "Sandbox requires DevStation upstream - real network dependency"
       }
@@ -435,7 +435,7 @@
       "caseId": "D3-C4",
       "status": "PASS",
       "why": "CreateServer plan returned classification=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "planResult": "{\n  \"executable\": \"hcloud\",\n  \"args\": [\n    \"ECS\",\n    \"CreateServer\",\n    \"--image_ref=xxx\",\n    \"--flavor_ref=xxx\"\n  ],\n  \"command\": \"hcloud ECS CreateServer --image_ref=xxx --flavor_ref=xxx\",\n  \"ex"
       }
@@ -444,7 +444,7 @@
       "caseId": "D3-C5",
       "status": "PASS",
       "why": "tools count=46",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "toolCount": 46
       }
@@ -453,7 +453,7 @@
       "caseId": "D3-C6",
       "status": "PASS",
       "why": "sandbox tools=14",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "sandboxTools": [
           "huaweicloud_sandbox_exec_with_session",
@@ -477,7 +477,7 @@
       "caseId": "D3-C7",
       "status": "PASS",
       "why": "cross-region tools=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasFn": true
       }
@@ -486,7 +486,7 @@
       "caseId": "D3-C13",
       "status": "PASS",
       "why": "OBS website config=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasFn": true
       }
@@ -495,7 +495,7 @@
       "caseId": "D3-C14",
       "status": "BLOCKED",
       "why": "Sandbox HDKit requires DevStation upstream",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "blockedReason": "Sandbox HDKit requires DevStation upstream"
       }
@@ -504,7 +504,7 @@
       "caseId": "D3-S1",
       "status": "PASS",
       "why": "service catalog tool=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasFn": true
       }
@@ -513,7 +513,7 @@
       "caseId": "D3-S2",
       "status": "PASS",
       "why": "plan/hook for VPC delete tool=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasFn": true
       }
@@ -522,7 +522,7 @@
       "caseId": "D3-S4",
       "status": "PASS",
       "why": "voucher tool=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasFn": true
       }
@@ -531,7 +531,7 @@
       "caseId": "D3-S5",
       "status": "PASS",
       "why": "service catalog routing tool=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasFn": true
       }
@@ -540,7 +540,7 @@
       "caseId": "D3-S6",
       "status": "PASS",
       "why": "plan for FunctionGraph tool=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasFn": true
       }
@@ -549,7 +549,7 @@
       "caseId": "D3-S8",
       "status": "PASS",
       "why": "explain_error tool=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasFn": true
       }
@@ -558,7 +558,7 @@
       "caseId": "D3-S3",
       "status": "BLOCKED",
       "why": "Sandbox requires DevStation upstream",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "blockedReason": "Sandbox requires DevStation upstream"
       }
@@ -567,7 +567,7 @@
       "caseId": "D3-S7",
       "status": "BLOCKED",
       "why": "Sandbox requires DevStation upstream",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "blockedReason": "Sandbox requires DevStation upstream"
       }
@@ -576,7 +576,7 @@
       "caseId": "D4-1",
       "status": "PASS",
       "why": "cat credentials decision=deny",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "decision": "deny"
       }
@@ -585,7 +585,7 @@
       "caseId": "D4-2",
       "status": "PASS",
       "why": "env print attacks all deny=true decisions=[\"deny\",\"deny\",\"deny\",\"deny\"]",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "decisions": [
           "deny",
@@ -599,7 +599,7 @@
       "caseId": "D4-3",
       "status": "FAIL",
       "why": "KMS DecryptData decision=allow",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "decision": "allow"
       }
@@ -608,7 +608,7 @@
       "caseId": "D4-4",
       "status": "PASS",
       "why": "DeleteServer decision=deny",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "decision": "deny"
       }
@@ -617,7 +617,7 @@
       "caseId": "D4-5",
       "status": "PASS",
       "why": "Delete not misjudged as allow, decision=deny",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "decision": "deny"
       }
@@ -626,7 +626,7 @@
       "caseId": "D4-6",
       "status": "PASS",
       "why": "adminPass decision=deny",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "decision": "deny"
       }
@@ -635,7 +635,7 @@
       "caseId": "D4-7",
       "status": "PASS",
       "why": "safetyPolicy + preflight modules loaded=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasSafety": true,
         "hasPreflight": true
@@ -645,7 +645,7 @@
       "caseId": "D4-8",
       "status": "PASS",
       "why": "Node classifyTextCommand available=true",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "hasFn": true
       }
@@ -654,7 +654,7 @@
       "caseId": "D4-9",
       "status": "PASS",
       "why": "public_ip=deny DeleteUser=deny",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "d1": "deny",
         "d2": "deny"
@@ -664,7 +664,7 @@
       "caseId": "D4-10",
       "status": "PASS",
       "why": "rule library: {\"d1\":\"deny\",\"d2\":\"deny\",\"d3\":\"allow\"}",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "decisions": {
           "d1": "deny",
@@ -677,7 +677,7 @@
       "caseId": "D4-11",
       "status": "PASS",
       "why": "injection payloads all denied=true decisions=[\"deny\",\"deny\",\"deny\",\"deny\"]",
-      "executedAt": "20261023051004",
+      "executedAt": "20261023051244",
       "result": {
         "decisions": [
           "deny",
@@ -709,7 +709,7 @@
       "caseId": "D4-12",
       "status": "PASS",
       "why": "npm audit parsed=true exit=1",
-      "executedAt": "20261023051005",
+      "executedAt": "20261023051245",
       "result": {
         "exitCode": 1,
         "hasAudit": true
@@ -719,7 +719,7 @@
       "caseId": "D4-13",
       "status": "PASS",
       "why": "readonly cred exists with valid AK=true prefix=HPUA3X",
-      "executedAt": "20261023051005",
+      "executedAt": "20261023051245",
       "result": {
         "credExists": true,
         "hasAk": true,
@@ -730,7 +730,7 @@
       "caseId": "D4-14",
       "status": "PASS",
       "why": "run_readonly tool=true",
-      "executedAt": "20261023051005",
+      "executedAt": "20261023051245",
       "result": {
         "hasFn": true
       }
@@ -739,7 +739,7 @@
       "caseId": "D4-15",
       "status": "PASS",
       "why": "bypass variants decisions=[\"deny\",\"deny\",\"deny\"]",
-      "executedAt": "20261023051005",
+      "executedAt": "20261023051245",
       "result": {
         "decisions": [
           "deny",
@@ -752,7 +752,7 @@
       "caseId": "D4-16",
       "status": "PASS",
       "why": "wrapping decisions=[\"deny\",\"deny\",\"deny\"]",
-      "executedAt": "20261023051005",
+      "executedAt": "20261023051245",
       "result": {
         "decisions": [
           "deny",
@@ -765,7 +765,7 @@
       "caseId": "D4-17",
       "status": "PASS",
       "why": "empty input decision=deny",
-      "executedAt": "20261023051005",
+      "executedAt": "20261023051245",
       "result": {
         "decision": "deny"
       }
@@ -774,7 +774,7 @@
       "caseId": "D4-18",
       "status": "PASS",
       "why": "DeleteServer plan decision=deny (not auto-allow)",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "decision": "deny"
       }
@@ -783,7 +783,7 @@
       "caseId": "D4-19",
       "status": "PASS",
       "why": "preflight decisions=[\"deny\",\"deny\",\"deny\"]",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "decisions": [
           "deny",
@@ -796,7 +796,7 @@
       "caseId": "D4-20",
       "status": "PASS",
       "why": "Delete blocked=true decision=deny",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "decision": "deny"
       }
@@ -805,7 +805,7 @@
       "caseId": "D4-21",
       "status": "PASS",
       "why": "hook_check_artifacts=true",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "hasFn": false
       }
@@ -814,7 +814,7 @@
       "caseId": "D4-22",
       "status": "PASS",
       "why": "hook_check_deploy_plan=true",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "hasFn": false
       }
@@ -823,7 +823,7 @@
       "caseId": "D4-23",
       "status": "PASS",
       "why": "huawei-agent-rules.mdc exists=true len=3801",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "exists": true,
         "rulesLen": 3801
@@ -833,7 +833,7 @@
       "caseId": "D4-24",
       "status": "PASS",
       "why": "auth confirm/plan tools=true",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "hasFn": true
       }
@@ -842,7 +842,7 @@
       "caseId": "D4-25",
       "status": "PASS",
       "why": "classify fn for event=true",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "hasFn": true
       }
@@ -851,7 +851,7 @@
       "caseId": "D4-26",
       "status": "PASS",
       "why": "findings redaction no leak=true",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "ok": true
       }
@@ -860,7 +860,7 @@
       "caseId": "D4-27",
       "status": "PASS",
       "why": "dual path no leak=true",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "ok": true
       }
@@ -869,7 +869,7 @@
       "caseId": "D4-28",
       "status": "PASS",
       "why": "hooks.json has .mjs=true extract=true",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "hooksExists": true,
         "hasMjs": true,
@@ -880,7 +880,7 @@
       "caseId": "D4-29",
       "status": "PASS",
       "why": "ListServers decision=allow",
-      "executedAt": "20261023051006",
+      "executedAt": "20261023051247",
       "result": {
         "decision": "allow"
       }
@@ -889,7 +889,7 @@
       "caseId": "D5-1",
       "status": "PASS",
       "why": "plugins exit=0 outLen=2139",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "exitCode": 0,
         "stdoutSample": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v1.1.12                ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nUsage: np"
@@ -899,7 +899,7 @@
       "caseId": "D5-3",
       "status": "PASS",
       "why": "tools count=46",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "toolCount": 46
       }
@@ -908,7 +908,7 @@
       "caseId": "D6-1",
       "status": "PASS",
       "why": "search tools=true",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "hasFn": true
       }
@@ -917,7 +917,7 @@
       "caseId": "D6-3",
       "status": "PASS",
       "why": "cold start=0ms tools=46",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "coldStartMs": 0,
         "loaded": true
@@ -927,7 +927,7 @@
       "caseId": "D6-4",
       "status": "PASS",
       "why": "concurrent counts=[46,46,46]",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "counts": [
           46,
@@ -941,7 +941,7 @@
       "caseId": "D6-9",
       "status": "PASS",
       "why": "cache cleanup functions=true",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "hasFn": true
       }
@@ -950,7 +950,7 @@
       "caseId": "D8-1",
       "status": "PASS",
       "why": "plugin dir exists=true",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "exists": true
       }
@@ -959,7 +959,7 @@
       "caseId": "D8-4",
       "status": "PASS",
       "why": "retrieve_skill=true",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "hasFn": true
       }
@@ -968,7 +968,7 @@
       "caseId": "D8-6",
       "status": "PASS",
       "why": "README exists=true",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "exists": true
       }
@@ -977,7 +977,7 @@
       "caseId": "D8-7",
       "status": "PASS",
       "why": "skills dir count=29",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "skillCount": 29,
         "skillsDir": "C:\\Users\\Administrator\\devkit-test\\testbot4-win-workbuddy\\hdk\\plugins\\huaweicloud-core\\skills"
@@ -987,7 +987,7 @@
       "caseId": "D8-9",
       "status": "PASS",
       "why": "telemetry module loaded=true",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "hasFn": true
       }
@@ -996,7 +996,7 @@
       "caseId": "D8-10",
       "status": "PASS",
       "why": "backup+merge modules=true",
-      "executedAt": "20261023051007",
+      "executedAt": "20261023051248",
       "result": {
         "hasBackup": true,
         "hasMerge": true
@@ -1006,7 +1006,7 @@
       "caseId": "D9-1",
       "status": "PASS",
       "why": "initialize returns protocolVersion+capabilities+serverInfo=[object Object]",
-      "executedAt": "20261023051008",
+      "executedAt": "20261023051249",
       "result": {
         "hasProtocol": true,
         "hasCapabilities": true,
@@ -1017,7 +1017,7 @@
       "caseId": "D9-2",
       "status": "PASS",
       "why": "tools/list count=46",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "toolCount": 46
       }
@@ -1026,7 +1026,7 @@
       "caseId": "D9-3",
       "status": "PASS",
       "why": "mcpProtocol module loaded=true",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "keys": [
           "_decorateResult",
@@ -1040,7 +1040,7 @@
       "caseId": "D9-4",
       "status": "PASS",
       "why": "mcpProtocol module loaded=true",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "keys": [
           "_decorateResult",
@@ -1054,7 +1054,7 @@
       "caseId": "D9-5",
       "status": "PASS",
       "why": "mcpProtocol module loaded=true",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "keys": [
           "_decorateResult",
@@ -1068,7 +1068,7 @@
       "caseId": "D9-6",
       "status": "PASS",
       "why": "mcpProtocol module loaded=true",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "keys": [
           "_decorateResult",
@@ -1082,7 +1082,7 @@
       "caseId": "D9-7",
       "status": "PASS",
       "why": "mcpProtocol module loaded=true",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "keys": [
           "_decorateResult",
@@ -1096,7 +1096,7 @@
       "caseId": "D9-8",
       "status": "PASS",
       "why": "mcpProtocol module loaded=true",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "keys": [
           "_decorateResult",
@@ -1110,7 +1110,7 @@
       "caseId": "D9-9",
       "status": "PASS",
       "why": "delay/timeout handled=true",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "ok": true
       }
@@ -1119,7 +1119,7 @@
       "caseId": "D9-10",
       "status": "PASS",
       "why": "remote transport via mcpProtocol=true",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "hasFn": true
       }
@@ -1128,7 +1128,7 @@
       "caseId": "D9-11",
       "status": "PASS",
       "why": "WS tunnel via mcpProtocol=true",
-      "executedAt": "20261023051010",
+      "executedAt": "20261023051250",
       "result": {
         "hasFn": true
       }
@@ -1137,7 +1137,7 @@
       "caseId": "D9-12",
       "status": "PASS",
       "why": "initialize protocolVersion+capabilities+serverInfo=[object Object]",
-      "executedAt": "20261023051011",
+      "executedAt": "20261023051251",
       "result": {
         "hasProtocol": true
       }
@@ -1146,7 +1146,7 @@
       "caseId": "D9-13",
       "status": "PASS",
       "why": "no AK/SK leak in tools/call response=true",
-      "executedAt": "20261023051012",
+      "executedAt": "20261023051253",
       "result": {
         "leakCheck": {
           "akLeak": false,
@@ -1159,7 +1159,7 @@
       "caseId": "D10-3",
       "status": "PASS",
       "why": "run-eval.mjs ran, outLen=1217 exit=0",
-      "executedAt": "20261023051013",
+      "executedAt": "20261023051253",
       "result": {
         "exitCode": 0,
         "stdoutLen": 1217,
@@ -1170,195 +1170,195 @@
       "caseId": "D10-4",
       "status": "PASS",
       "why": "rule engine denyCount=2 allow works=true",
-      "executedAt": "20261023051013",
+      "executedAt": "20261023051253",
       "result": {
         "denyCount": 2
       }
     },
     {
       "caseId": "EXP-C4-01",
-      "status": "FAIL",
-      "why": "ECS list_operations opsCount=0",
-      "executedAt": "20261023051014",
+      "status": "PASS",
+      "why": "ECS list_operations opsCount=3",
+      "executedAt": "20261023051255",
       "result": {
         "service": "ECS",
-        "opsCount": 0,
+        "opsCount": 3,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-02",
-      "status": "FAIL",
-      "why": "VPC list_operations opsCount=0",
-      "executedAt": "20261023051016",
+      "status": "PASS",
+      "why": "VPC list_operations opsCount=3",
+      "executedAt": "20261023051256",
       "result": {
         "service": "VPC",
-        "opsCount": 0,
+        "opsCount": 3,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-03",
       "status": "PASS",
-      "why": "OBS list_operations opsCount=4",
-      "executedAt": "20261023051017",
+      "why": "OBS list_operations opsCount=3",
+      "executedAt": "20261023051258",
       "result": {
         "service": "OBS",
-        "opsCount": 4,
+        "opsCount": 3,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-04",
       "status": "PASS",
-      "why": "RDS list_operations opsCount=4",
-      "executedAt": "20261023051019",
+      "why": "RDS list_operations opsCount=3",
+      "executedAt": "20261023051259",
       "result": {
         "service": "RDS",
-        "opsCount": 4,
+        "opsCount": 3,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-05",
-      "status": "FAIL",
-      "why": "GaussDB list_operations opsCount=0",
-      "executedAt": "20261023051020",
+      "status": "PASS",
+      "why": "GaussDB list_operations opsCount=3",
+      "executedAt": "20261023051301",
       "result": {
         "service": "GaussDB",
-        "opsCount": 0,
+        "opsCount": 3,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-06",
       "status": "PASS",
-      "why": "CCE list_operations opsCount=2",
-      "executedAt": "20261023051022",
+      "why": "CCE list_operations opsCount=1",
+      "executedAt": "20261023051302",
       "result": {
         "service": "CCE",
-        "opsCount": 2,
+        "opsCount": 1,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-07",
-      "status": "FAIL",
-      "why": "FunctionGraph list_operations opsCount=0",
-      "executedAt": "20261023051023",
+      "status": "PASS",
+      "why": "FunctionGraph list_operations opsCount=3",
+      "executedAt": "20261023051304",
       "result": {
         "service": "FunctionGraph",
-        "opsCount": 0,
+        "opsCount": 3,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-08",
-      "status": "PASS",
-      "why": "IAM list_operations opsCount=2",
-      "executedAt": "20261023051025",
+      "status": "FAIL",
+      "why": "IAM list_operations opsCount=0",
+      "executedAt": "20261023051305",
       "result": {
         "service": "IAM",
-        "opsCount": 2,
+        "opsCount": 0,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-09",
       "status": "PASS",
-      "why": "CTS list_operations opsCount=2",
-      "executedAt": "20261023051026",
+      "why": "CTS list_operations opsCount=1",
+      "executedAt": "20261023051307",
       "result": {
         "service": "CTS",
-        "opsCount": 2,
+        "opsCount": 1,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-10",
       "status": "PASS",
-      "why": "CES list_operations opsCount=4",
-      "executedAt": "20261023051028",
+      "why": "CES list_operations opsCount=3",
+      "executedAt": "20261023051308",
       "result": {
         "service": "CES",
-        "opsCount": 4,
+        "opsCount": 3,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-11",
       "status": "PASS",
-      "why": "DDS list_operations opsCount=4",
-      "executedAt": "20261023051029",
+      "why": "DDS list_operations opsCount=3",
+      "executedAt": "20261023051310",
       "result": {
         "service": "DDS",
-        "opsCount": 4,
+        "opsCount": 3,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-12",
-      "status": "FAIL",
-      "why": "DCS list_operations opsCount=0",
-      "executedAt": "20261023051031",
+      "status": "PASS",
+      "why": "DCS list_operations opsCount=3",
+      "executedAt": "20261023051312",
       "result": {
         "service": "DCS",
-        "opsCount": 0,
+        "opsCount": 3,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-13",
       "status": "PASS",
-      "why": "SMN list_operations opsCount=2",
-      "executedAt": "20261023051032",
+      "why": "SMN list_operations opsCount=1",
+      "executedAt": "20261023051313",
       "result": {
         "service": "SMN",
-        "opsCount": 2,
+        "opsCount": 1,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-14",
       "status": "PASS",
-      "why": "DMS list_operations opsCount=1",
-      "executedAt": "20261023051034",
+      "why": "DMS list_operations opsCount=0",
+      "executedAt": "20261023051315",
       "result": {
         "service": "DMS",
-        "opsCount": 1,
+        "opsCount": 0,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-15",
       "status": "PASS",
-      "why": "WAF list_operations opsCount=2",
-      "executedAt": "20261023051036",
+      "why": "WAF list_operations opsCount=1",
+      "executedAt": "20261023051316",
       "result": {
         "service": "WAF",
-        "opsCount": 2,
+        "opsCount": 1,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-16",
-      "status": "FAIL",
-      "why": "CDN list_operations opsCount=0",
-      "executedAt": "20261023051037",
+      "status": "PASS",
+      "why": "CDN list_operations opsCount=1",
+      "executedAt": "20261023051318",
       "result": {
         "service": "CDN",
-        "opsCount": 0,
+        "opsCount": 1,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-17",
-      "status": "FAIL",
-      "why": "ModelArts list_operations opsCount=0",
-      "executedAt": "20261023051039",
+      "status": "PASS",
+      "why": "ModelArts list_operations opsCount=1",
+      "executedAt": "20261023051319",
       "result": {
         "service": "ModelArts",
-        "opsCount": 0,
+        "opsCount": 1,
         "realCall": true
       }
     },
@@ -1366,7 +1366,7 @@
       "caseId": "EXP-C4-18",
       "status": "FAIL",
       "why": "DEW list_operations opsCount=0",
-      "executedAt": "20261023051040",
+      "executedAt": "20261023051321",
       "result": {
         "service": "DEW",
         "opsCount": 0,
@@ -1376,44 +1376,44 @@
     {
       "caseId": "EXP-C4-19",
       "status": "PASS",
-      "why": "CBR list_operations opsCount=2",
-      "executedAt": "20261023051042",
+      "why": "CBR list_operations opsCount=1",
+      "executedAt": "20261023051322",
       "result": {
         "service": "CBR",
-        "opsCount": 2,
+        "opsCount": 1,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-20",
       "status": "PASS",
-      "why": "EVS list_operations opsCount=2",
-      "executedAt": "20261023051043",
+      "why": "EVS list_operations opsCount=1",
+      "executedAt": "20261023051324",
       "result": {
         "service": "EVS",
-        "opsCount": 2,
+        "opsCount": 1,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-21",
       "status": "PASS",
-      "why": "EIP list_operations opsCount=2",
-      "executedAt": "20261023051045",
+      "why": "EIP list_operations opsCount=1",
+      "executedAt": "20261023051325",
       "result": {
         "service": "EIP",
-        "opsCount": 2,
+        "opsCount": 1,
         "realCall": true
       }
     },
     {
       "caseId": "EXP-C4-22",
-      "status": "FAIL",
-      "why": "ELB list_operations opsCount=0",
-      "executedAt": "20261023051046",
+      "status": "PASS",
+      "why": "ELB list_operations opsCount=1",
+      "executedAt": "20261023051327",
       "result": {
         "service": "ELB",
-        "opsCount": 0,
+        "opsCount": 1,
         "realCall": true
       }
     },
@@ -1421,7 +1421,7 @@
       "caseId": "EXP-E01",
       "status": "FAIL",
       "why": "EXP-E01 MISS expect=ECS got=Run hcloud --help to list available services.",
-      "executedAt": "20261023051048",
+      "executedAt": "20261023051328",
       "result": {
         "prompt": "帮我查一下我账号在华北北京四有哪些云主机",
         "expect": [
@@ -1438,7 +1438,7 @@
       "caseId": "EXP-E02",
       "status": "PASS",
       "why": "EXP-E02 HIT expect=ECS got=ECS",
-      "executedAt": "20261023051049",
+      "executedAt": "20261023051330",
       "result": {
         "prompt": "创建一台 2C4G 的 Ubuntu 云服务器 规格通用型",
         "expect": [
@@ -1455,7 +1455,7 @@
       "caseId": "EXP-E03",
       "status": "PASS",
       "why": "EXP-E03 HIT expect=OBS got=OBS+Sandbox+DevStation",
-      "executedAt": "20261023051051",
+      "executedAt": "20261023051331",
       "result": {
         "prompt": "把本地 dist 目录部署成一个公网静态网站",
         "expect": [
@@ -1474,7 +1474,7 @@
       "caseId": "EXP-E04",
       "status": "PASS",
       "why": "EXP-E04 HIT expect=EIP got=ECS+VPC+EIP",
-      "executedAt": "20261023051052",
+      "executedAt": "20261023051333",
       "result": {
         "prompt": "给这台服务器绑定一个弹性公网IP",
         "expect": [
@@ -1493,7 +1493,7 @@
       "caseId": "EXP-E05",
       "status": "PASS",
       "why": "EXP-E05 HIT expect=RDS got=RDS",
-      "executedAt": "20261023051054",
+      "executedAt": "20261023051334",
       "result": {
         "prompt": "看一下我的云数据库MySQL实例的状态",
         "expect": [
@@ -1510,7 +1510,7 @@
       "caseId": "EXP-E06",
       "status": "PASS",
       "why": "EXP-E06 HIT expect=DCS got=OBS+DDS+DCS",
-      "executedAt": "20261023051055",
+      "executedAt": "20261023051336",
       "result": {
         "prompt": "创建一个 Redis 缓存实例用于会话存储",
         "expect": [
@@ -1529,7 +1529,7 @@
       "caseId": "EXP-E07",
       "status": "PASS",
       "why": "EXP-E07 HIT expect=CBR got=ECS+IAM+CBR",
-      "executedAt": "20261023051057",
+      "executedAt": "20261023051337",
       "result": {
         "prompt": "给生产环境的服务器配置一个每日备份策略",
         "expect": [
@@ -1548,7 +1548,7 @@
       "caseId": "EXP-E08",
       "status": "PASS",
       "why": "EXP-E08 N/A expect= got=Run hcloud --help to list available services.",
-      "executedAt": "20261023051058",
+      "executedAt": "20261023051339",
       "result": {
         "prompt": "我的ECS启动失败了 帮我分析原因",
         "expect": null,
@@ -1563,7 +1563,7 @@
       "caseId": "EXP-E09",
       "status": "PASS",
       "why": "EXP-E09 HIT expect=CCE got=CCE+SWR",
-      "executedAt": "20261023051100",
+      "executedAt": "20261023051340",
       "result": {
         "prompt": "开设一个 Kubernetes 集群用于微服务部署",
         "expect": [
@@ -1581,7 +1581,7 @@
       "caseId": "EXP-E10",
       "status": "PASS",
       "why": "EXP-E10 HIT expect=FunctionGraph got=FunctionGraph",
-      "executedAt": "20261023051101",
+      "executedAt": "20261023051342",
       "result": {
         "prompt": "部署一个函数处理图片自动压缩",
         "expect": [
@@ -1598,7 +1598,7 @@
       "caseId": "EXP-E11",
       "status": "PASS",
       "why": "EXP-E11 HIT expect=BSS got=BSS",
-      "executedAt": "20261023051103",
+      "executedAt": "20261023051343",
       "result": {
         "prompt": "查一下我账号这个月的费用情况",
         "expect": [
@@ -1615,7 +1615,7 @@
       "caseId": "EXP-E12",
       "status": "PASS",
       "why": "EXP-E12 HIT expect=CES got=CES",
-      "executedAt": "20261023051104",
+      "executedAt": "20261023051345",
       "result": {
         "prompt": "把应用日志指标推送到云监控告警",
         "expect": [
@@ -1632,7 +1632,7 @@
       "caseId": "EXP-E13",
       "status": "PASS",
       "why": "EXP-E13 HIT expect=ELB got=CSMS+KMS+ELB",
-      "executedAt": "20261023051106",
+      "executedAt": "20261023051346",
       "result": {
         "prompt": "申请HTTPS证书并配置到我的域名",
         "expect": [
@@ -1651,7 +1651,7 @@
       "caseId": "EXP-E14",
       "status": "PASS",
       "why": "EXP-E14 HIT expect=IAM got=IAM+CTS",
-      "executedAt": "20261023051107",
+      "executedAt": "20261023051348",
       "result": {
         "prompt": "我账号下的用户都有哪些权限 帮我审计一下",
         "expect": [
@@ -1669,7 +1669,7 @@
       "caseId": "EXP-E15",
       "status": "PASS",
       "why": "EXP-E15 HIT expect=Incentive Voucher got=Incentive Voucher",
-      "executedAt": "20261023051109",
+      "executedAt": "20261023051349",
       "result": {
         "prompt": "帮我领一下华为云的代金券",
         "expect": [
@@ -1686,7 +1686,7 @@
       "caseId": "EXP-D5-5-1",
       "status": "PASS",
       "why": "EXP-D5-5-1: plugins+status ran",
-      "executedAt": "20261023051111",
+      "executedAt": "20261023051352",
       "result": {
         "r1Exit": 0,
         "r2Exit": 0
@@ -1696,12 +1696,12 @@
       "caseId": "EXP-D5-5-3",
       "status": "PASS",
       "why": "EXP-D5-5-3: plugins+status ran",
-      "executedAt": "20261023051114",
+      "executedAt": "20261023051354",
       "result": {
         "r1Exit": 0,
         "r2Exit": 0
       }
     }
   ],
-  "executedAt": "20261023051114"
+  "executedAt": "20261023051354"
 }

@@ -1,9 +1,26 @@
 {
   "caseId": "D3-C1",
-  "status": "PASS",
-  "why": "ECS ListServers plan returned classification.decision=true",
-  "executedAt": "20261023051002",
-  "result": {
-    "planResult": "{\n  \"executable\": \"hcloud\",\n  \"args\": [\n    \"ECS\",\n    \"ListServers\"\n  ],\n  \"command\": \"hcloud ECS ListServers\",\n  \"executableBlock\": \"hcloud ECS ListServers\",\n  \"warnings\": [],\n  \"classification\": {\n"
-  }
+  "status": "BLOCKED",
+  "why": "真云E2E实测：CreateVpc/CreateSubnet 返回 APIGW.0301 Unauthorized，credentials.json AK/SK 已过期（test_ak_20char123456 为测试值非有效凭证），需维护者更新真云凭证",
+  "executedAt": "20261023051530",
+  "result": [
+    {
+      "name": "CreateVpc",
+      "pass": false,
+      "detail": "{\n  \"error_msg\": \"Incorrect IAM authentication information: Unauthorized\",\n  \"error_code\": \"APIGW.03"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": false,
+      "detail": "{\n  \"error_msg\": \"Incorrect IAM authentication information: Unauthorized\",\n  \"error_code\": \"APIGW.03"
+    },
+    {
+      "name": "finally归零(校验真实删除)",
+      "pass": true,
+      "detail": "无资源需清理"
+    }
+  ],
+  "blockedReason": "真云E2E实测：CreateVpc/CreateSubnet 返回 APIGW.0301 Unauthorized，credentials.json AK/SK 已过期（test_ak_20char123456 为测试值非有效凭证），需维护者更新真云凭证",
+  "realExecution": true,
+  "note": "真机执行：调了 hcloud CLI + MCP tools/call，返回 403/401 Unauthorized，凭证过期"
 }
