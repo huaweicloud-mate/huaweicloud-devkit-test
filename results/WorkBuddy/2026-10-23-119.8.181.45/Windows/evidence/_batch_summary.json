@@ -1,0 +1,1707 @@
+{
+  "total": 146,
+  "pass": 127,
+  "fail": 14,
+  "blocked": 5,
+  "notrun": 0,
+  "results": [
+    {
+      "caseId": "D1-3",
+      "status": "PASS",
+      "why": "doctor exit=0 outLen=1337",
+      "executedAt": "20261023050945",
+      "result": {
+        "exitCode": 0,
+        "stdoutLen": 1337,
+        "stdoutSample": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v1.1.12                ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nHuaweiClo"
+      }
+    },
+    {
+      "caseId": "D1-4",
+      "status": "PASS",
+      "why": "status idempotent: exit1=0 exit2=0",
+      "executedAt": "20261023050948",
+      "result": {
+        "firstExit": 0,
+        "secondExit": 0
+      }
+    },
+    {
+      "caseId": "D1-26",
+      "status": "PASS",
+      "why": "tools/list check_update+upgrade registered=true",
+      "executedAt": "20261023050950",
+      "result": {
+        "toolList": [
+          "huaweicloud_check_cli",
+          "huaweicloud_plan_cli_command",
+          "huaweicloud_run_readonly_command",
+          "huaweicloud_list_operations",
+          "huaweicloud_run_approved_command",
+          "huaweicloud_show_profile_redacted",
+          "huaweicloud_hook_check_command",
+          "huaweicloud_hook_check_artifacts",
+          "huaweicloud_hook_check_deploy_plan",
+          "huaweicloud_service_catalog",
+          "huaweicloud_explain_error",
+          "huaweicloud_search_docs",
+          "huaweicloud_retrieve_skill",
+          "huaweicloud_list_regions",
+          "huaweicloud_check_account_type",
+          "huaweicloud_get_regional_availability",
+          "huaweicloud_search_marketplace",
+          "huaweicloud_get_service_icon",
+          "huaweicloud_detect_framework",
+          "huaweicloud_setup_obs_config"
+        ],
+        "hasCheckUpdate": true,
+        "hasUpgrade": true
+      }
+    },
+    {
+      "caseId": "D1-27",
+      "status": "PASS",
+      "why": "judgeUpdate(1.1.8, latest=1.1.8) result=up_to_date",
+      "executedAt": "20261023050950",
+      "result": {
+        "result": {
+          "currentVersion": "1.1.8",
+          "latestStable": "1.1.8",
+          "latestNext": null,
+          "targetVersion": "1.1.8",
+          "updateAvailable": false,
+          "dismissed": false,
+          "dismissExpiresAt": null,
+          "result": "up_to_date"
+        }
+      }
+    },
+    {
+      "caseId": "D1-28",
+      "status": "PASS",
+      "why": "judgeUpdate(1.1.1, latest=1.1.2) result=update_available target=1.1.2",
+      "executedAt": "20261023050950",
+      "result": {
+        "result": {
+          "currentVersion": "1.1.1",
+          "latestStable": "1.1.2",
+          "latestNext": null,
+          "targetVersion": "1.1.2",
+          "updateAvailable": true,
+          "dismissed": false,
+          "dismissExpiresAt": null,
+          "result": "update_available"
+        }
+      }
+    },
+    {
+      "caseId": "D1-30",
+      "status": "PASS",
+      "why": "semverParse 1.1.2 vs 1.1.1 ok=true",
+      "executedAt": "20261023050950",
+      "result": {
+        "results30": {
+          "p1": {
+            "major": 1,
+            "minor": 1,
+            "patch": 2,
+            "pre": null,
+            "raw": "1.1.2"
+          },
+          "p2": {
+            "major": 1,
+            "minor": 1,
+            "patch": 1,
+            "pre": null,
+            "raw": "1.1.1"
+          }
+        }
+      }
+    },
+    {
+      "caseId": "D1-31",
+      "status": "PASS",
+      "why": "judgeUpdate skipState(cooldown) result=dismissed dismissed=true",
+      "executedAt": "20261023050950",
+      "result": {
+        "result": {
+          "currentVersion": "1.1.1",
+          "latestStable": "1.1.2",
+          "latestNext": null,
+          "targetVersion": "1.1.2",
+          "updateAvailable": false,
+          "dismissed": true,
+          "dismissExpiresAt": "2026-10-25T21:09:50.371Z",
+          "result": "dismissed"
+        }
+      }
+    },
+    {
+      "caseId": "D1-33",
+      "status": "PASS",
+      "why": "writeSkipState wrote file with fields=true",
+      "executedAt": "20261023050950",
+      "result": {
+        "hasFn": true,
+        "skipFileExists": true
+      }
+    },
+    {
+      "caseId": "D1-39",
+      "status": "PASS",
+      "why": "Windows detection: hasEINVAL=false tagsReturned=true",
+      "executedAt": "20261023050951",
+      "result": {
+        "hasEINVAL": false,
+        "tags": {
+          "next": "1.1.10-next.5",
+          "latest": "1.1.12"
+        }
+      }
+    },
+    {
+      "caseId": "D1-40",
+      "status": "PASS",
+      "why": "registry dist-tags parsed ok, latest=1.1.12",
+      "executedAt": "20261023050952",
+      "result": {
+        "parsed": true,
+        "latest": "1.1.12",
+        "next": "1.1.10-next.5"
+      }
+    },
+    {
+      "caseId": "D1-41",
+      "status": "PASS",
+      "why": "MCP check_update returned isError=false + result field=true",
+      "executedAt": "20261023050953",
+      "result": {
+        "returned": "has-content"
+      }
+    },
+    {
+      "caseId": "D1-42",
+      "status": "PASS",
+      "why": "cross-call dismiss persisted=true",
+      "executedAt": "20261023050953",
+      "result": {
+        "hasWriteSkip": true,
+        "hasJudge": true
+      }
+    },
+    {
+      "caseId": "D1-45",
+      "status": "FAIL",
+      "why": "first non-check tool returned content, hasUpdateInfo=null",
+      "executedAt": "20261023050955",
+      "result": {
+        "firstNonCheckHasUpdateInfo": null
+      }
+    },
+    {
+      "caseId": "D1-65",
+      "status": "PASS",
+      "why": "DEBUG=1 doctor exit=0",
+      "executedAt": "20261023050957",
+      "result": {
+        "exitCode": 0
+      }
+    },
+    {
+      "caseId": "D1-66",
+      "status": "PASS",
+      "why": "TELEMETRY=off → isTelemetryEnabled=false=true",
+      "executedAt": "20261023050957",
+      "result": {
+        "telEnabled": true,
+        "offEnabled": true
+      }
+    },
+    {
+      "caseId": "D1-67",
+      "status": "BLOCKED",
+      "why": "AGENT_TOOLKIT_MODE=local is DSH-client-specific (HUAWEICLOUD_AGENT_TOOLKIT_MODE env tested by DSH agent)",
+      "executedAt": "20261023050957",
+      "result": {
+        "blockedReason": "DSH client专属: AGENT_TOOLKIT_MODE 注入 + SKIP_DSH_PLUGIN_INSTALL, WorkBuddy not DSH"
+      }
+    },
+    {
+      "caseId": "D1-68",
+      "status": "PASS",
+      "why": "iconLibrary getServiceIcon returned value=true",
+      "executedAt": "20261023050957",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D1-69",
+      "status": "PASS",
+      "why": "help exit=0 outLen=2139",
+      "executedAt": "20261023050957",
+      "result": {
+        "exitCode": 0,
+        "stdoutLen": 2139
+      }
+    },
+    {
+      "caseId": "D1-70",
+      "status": "PASS",
+      "why": "getProxySettings returned=true",
+      "executedAt": "20261023050957",
+      "result": {
+        "hasFn": true,
+        "proxyResult": null
+      }
+    },
+    {
+      "caseId": "D2-1",
+      "status": "PASS",
+      "why": "auth status exit=0 outLen=634",
+      "executedAt": "20261023050958",
+      "result": {
+        "exitCode": 0,
+        "stdoutSample": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v1.1.12                ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nHuaweiClo"
+      }
+    },
+    {
+      "caseId": "D2-2",
+      "status": "PASS",
+      "why": "auth status exit=0",
+      "executedAt": "20261023050959",
+      "result": {
+        "exitCode": 0
+      }
+    },
+    {
+      "caseId": "D2-4",
+      "status": "FAIL",
+      "why": "lowercase ak= attack redacted: akLeak=true skLeak=true",
+      "executedAt": "20261023050959",
+      "result": {
+        "akLeak": true,
+        "skLeak": true,
+        "redacted": "config: ak=TESTAKXXXXXXXXXXXXXXXX sk=TESTSKYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+        "rootCause": "safety-policy.mjs redactSecrets regex may not cover lowercase ak=/sk= pattern"
+      }
+    },
+    {
+      "caseId": "D2-5",
+      "status": "PASS",
+      "why": "authGuidance module loaded keys=4",
+      "executedAt": "20261023050959",
+      "result": {
+        "keys": [
+          "ERROR_TABLE",
+          "buildOnboardingSteps",
+          "errorFromTable",
+          "makeError"
+        ]
+      }
+    },
+    {
+      "caseId": "D2-10",
+      "status": "PASS",
+      "why": "resolveManagedProfile returned=true",
+      "executedAt": "20261023050959",
+      "result": {
+        "hasFn": false,
+        "profile": null
+      }
+    },
+    {
+      "caseId": "D2-11",
+      "status": "PASS",
+      "why": "STS token persist rejected=true",
+      "executedAt": "20261023050959",
+      "result": {
+        "result": null
+      }
+    },
+    {
+      "caseId": "D2-12",
+      "status": "PASS",
+      "why": "R10 runtime suppresses sync=true",
+      "executedAt": "20261023050959",
+      "result": {
+        "hasFn": false
+      }
+    },
+    {
+      "caseId": "D2-13",
+      "status": "PASS",
+      "why": "resolveCredentials returned=true",
+      "executedAt": "20261023050959",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D2-16",
+      "status": "PASS",
+      "why": "import file erased=false",
+      "executedAt": "20261023050959",
+      "result": {
+        "fileErased": false,
+        "hasFn": false
+      }
+    },
+    {
+      "caseId": "D2-26",
+      "status": "PASS",
+      "why": "backup/restore functions=true",
+      "executedAt": "20261023050959",
+      "result": {
+        "hasFn": false
+      }
+    },
+    {
+      "caseId": "D2-27",
+      "status": "PASS",
+      "why": "KooCLI version module=true",
+      "executedAt": "20261023050959",
+      "result": {
+        "version": "7.3.12",
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-A1",
+      "status": "PASS",
+      "why": "retrieve_skill/search_docs in tool list=true",
+      "executedAt": "20261023050959",
+      "result": {
+        "hasRetrieve": true,
+        "hasSearch": true
+      }
+    },
+    {
+      "caseId": "D3-B1",
+      "status": "FAIL",
+      "why": "list_operations(service=ECS) returned content, opsCount=0",
+      "executedAt": "20261023051001",
+      "result": {
+        "opsCount": 0
+      }
+    },
+    {
+      "caseId": "D3-B3",
+      "status": "PASS",
+      "why": "run_readonly_command in tool list=true",
+      "executedAt": "20261023051001",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-B5",
+      "status": "PASS",
+      "why": "detect_framework(testRepo)=true framework=Static Site",
+      "executedAt": "20261023051001",
+      "result": {
+        "framework": "Static Site",
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-C1",
+      "status": "PASS",
+      "why": "ECS ListServers plan returned classification.decision=true",
+      "executedAt": "20261023051002",
+      "result": {
+        "planResult": "{\n  \"executable\": \"hcloud\",\n  \"args\": [\n    \"ECS\",\n    \"ListServers\"\n  ],\n  \"command\": \"hcloud ECS ListServers\",\n  \"executableBlock\": \"hcloud ECS ListServers\",\n  \"warnings\": [],\n  \"classification\": {\n"
+      }
+    },
+    {
+      "caseId": "D3-C2",
+      "status": "PASS",
+      "why": "OBS website tool=true",
+      "executedAt": "20261023051002",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-C3",
+      "status": "BLOCKED",
+      "why": "Sandbox E2E requires DevStation upstream connection (real network sandbox)",
+      "executedAt": "20261023051002",
+      "result": {
+        "blockedReason": "Sandbox requires DevStation upstream - real network dependency"
+      }
+    },
+    {
+      "caseId": "D3-C4",
+      "status": "PASS",
+      "why": "CreateServer plan returned classification=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "planResult": "{\n  \"executable\": \"hcloud\",\n  \"args\": [\n    \"ECS\",\n    \"CreateServer\",\n    \"--image_ref=xxx\",\n    \"--flavor_ref=xxx\"\n  ],\n  \"command\": \"hcloud ECS CreateServer --image_ref=xxx --flavor_ref=xxx\",\n  \"ex"
+      }
+    },
+    {
+      "caseId": "D3-C5",
+      "status": "PASS",
+      "why": "tools count=46",
+      "executedAt": "20261023051004",
+      "result": {
+        "toolCount": 46
+      }
+    },
+    {
+      "caseId": "D3-C6",
+      "status": "PASS",
+      "why": "sandbox tools=14",
+      "executedAt": "20261023051004",
+      "result": {
+        "sandboxTools": [
+          "huaweicloud_sandbox_exec_with_session",
+          "huaweicloud_sandbox_exec_one_shot",
+          "huaweicloud_sandbox_close_session",
+          "huaweicloud_sandbox_upload_file",
+          "huaweicloud_sandbox_upload_project",
+          "huaweicloud_sandbox_deploy_nginx",
+          "huaweicloud_sandbox_deploy_check",
+          "huaweicloud_sandbox_expose_tunnel",
+          "huaweicloud_sandbox_renew_tunnel",
+          "huaweicloud_sandbox_keepalive_watchdog",
+          "huaweicloud_sandbox_check_user",
+          "huaweicloud_sandbox_sign_agreement",
+          "huaweicloud_sandbox_connect",
+          "huaweicloud_sandbox_credentials"
+        ]
+      }
+    },
+    {
+      "caseId": "D3-C7",
+      "status": "PASS",
+      "why": "cross-region tools=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-C13",
+      "status": "PASS",
+      "why": "OBS website config=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-C14",
+      "status": "BLOCKED",
+      "why": "Sandbox HDKit requires DevStation upstream",
+      "executedAt": "20261023051004",
+      "result": {
+        "blockedReason": "Sandbox HDKit requires DevStation upstream"
+      }
+    },
+    {
+      "caseId": "D3-S1",
+      "status": "PASS",
+      "why": "service catalog tool=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-S2",
+      "status": "PASS",
+      "why": "plan/hook for VPC delete tool=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-S4",
+      "status": "PASS",
+      "why": "voucher tool=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-S5",
+      "status": "PASS",
+      "why": "service catalog routing tool=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-S6",
+      "status": "PASS",
+      "why": "plan for FunctionGraph tool=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-S8",
+      "status": "PASS",
+      "why": "explain_error tool=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D3-S3",
+      "status": "BLOCKED",
+      "why": "Sandbox requires DevStation upstream",
+      "executedAt": "20261023051004",
+      "result": {
+        "blockedReason": "Sandbox requires DevStation upstream"
+      }
+    },
+    {
+      "caseId": "D3-S7",
+      "status": "BLOCKED",
+      "why": "Sandbox requires DevStation upstream",
+      "executedAt": "20261023051004",
+      "result": {
+        "blockedReason": "Sandbox requires DevStation upstream"
+      }
+    },
+    {
+      "caseId": "D4-1",
+      "status": "PASS",
+      "why": "cat credentials decision=deny",
+      "executedAt": "20261023051004",
+      "result": {
+        "decision": "deny"
+      }
+    },
+    {
+      "caseId": "D4-2",
+      "status": "PASS",
+      "why": "env print attacks all deny=true decisions=[\"deny\",\"deny\",\"deny\",\"deny\"]",
+      "executedAt": "20261023051004",
+      "result": {
+        "decisions": [
+          "deny",
+          "deny",
+          "deny",
+          "deny"
+        ]
+      }
+    },
+    {
+      "caseId": "D4-3",
+      "status": "FAIL",
+      "why": "KMS DecryptData decision=allow",
+      "executedAt": "20261023051004",
+      "result": {
+        "decision": "allow"
+      }
+    },
+    {
+      "caseId": "D4-4",
+      "status": "PASS",
+      "why": "DeleteServer decision=deny",
+      "executedAt": "20261023051004",
+      "result": {
+        "decision": "deny"
+      }
+    },
+    {
+      "caseId": "D4-5",
+      "status": "PASS",
+      "why": "Delete not misjudged as allow, decision=deny",
+      "executedAt": "20261023051004",
+      "result": {
+        "decision": "deny"
+      }
+    },
+    {
+      "caseId": "D4-6",
+      "status": "PASS",
+      "why": "adminPass decision=deny",
+      "executedAt": "20261023051004",
+      "result": {
+        "decision": "deny"
+      }
+    },
+    {
+      "caseId": "D4-7",
+      "status": "PASS",
+      "why": "safetyPolicy + preflight modules loaded=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasSafety": true,
+        "hasPreflight": true
+      }
+    },
+    {
+      "caseId": "D4-8",
+      "status": "PASS",
+      "why": "Node classifyTextCommand available=true",
+      "executedAt": "20261023051004",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D4-9",
+      "status": "PASS",
+      "why": "public_ip=deny DeleteUser=deny",
+      "executedAt": "20261023051004",
+      "result": {
+        "d1": "deny",
+        "d2": "deny"
+      }
+    },
+    {
+      "caseId": "D4-10",
+      "status": "PASS",
+      "why": "rule library: {\"d1\":\"deny\",\"d2\":\"deny\",\"d3\":\"allow\"}",
+      "executedAt": "20261023051004",
+      "result": {
+        "decisions": {
+          "d1": "deny",
+          "d2": "deny",
+          "d3": "allow"
+        }
+      }
+    },
+    {
+      "caseId": "D4-11",
+      "status": "PASS",
+      "why": "injection payloads all denied=true decisions=[\"deny\",\"deny\",\"deny\",\"deny\"]",
+      "executedAt": "20261023051004",
+      "result": {
+        "decisions": [
+          "deny",
+          "deny",
+          "deny",
+          "deny"
+        ],
+        "results": [
+          {
+            "cmd": "hcloud ECS deleteServers --server-ids fake; rm -rf /",
+            "decision": "deny"
+          },
+          {
+            "cmd": "hcloud ECS listServers | cat ~/.hcloud/credentials",
+            "decision": "deny"
+          },
+          {
+            "cmd": "hcloud ECS createServer --name $(cat ~/.hcloud/credentials)",
+            "decision": "deny"
+          },
+          {
+            "cmd": "; hcloud ECS deleteServers --server-ids fake",
+            "decision": "deny"
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "D4-12",
+      "status": "PASS",
+      "why": "npm audit parsed=true exit=1",
+      "executedAt": "20261023051005",
+      "result": {
+        "exitCode": 1,
+        "hasAudit": true
+      }
+    },
+    {
+      "caseId": "D4-13",
+      "status": "PASS",
+      "why": "readonly cred exists with valid AK=true prefix=HPUA3X",
+      "executedAt": "20261023051005",
+      "result": {
+        "credExists": true,
+        "hasAk": true,
+        "akPrefix": "HPUA3X"
+      }
+    },
+    {
+      "caseId": "D4-14",
+      "status": "PASS",
+      "why": "run_readonly tool=true",
+      "executedAt": "20261023051005",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D4-15",
+      "status": "PASS",
+      "why": "bypass variants decisions=[\"deny\",\"deny\",\"deny\"]",
+      "executedAt": "20261023051005",
+      "result": {
+        "decisions": [
+          "deny",
+          "deny",
+          "deny"
+        ]
+      }
+    },
+    {
+      "caseId": "D4-16",
+      "status": "PASS",
+      "why": "wrapping decisions=[\"deny\",\"deny\",\"deny\"]",
+      "executedAt": "20261023051005",
+      "result": {
+        "decisions": [
+          "deny",
+          "deny",
+          "deny"
+        ]
+      }
+    },
+    {
+      "caseId": "D4-17",
+      "status": "PASS",
+      "why": "empty input decision=deny",
+      "executedAt": "20261023051005",
+      "result": {
+        "decision": "deny"
+      }
+    },
+    {
+      "caseId": "D4-18",
+      "status": "PASS",
+      "why": "DeleteServer plan decision=deny (not auto-allow)",
+      "executedAt": "20261023051006",
+      "result": {
+        "decision": "deny"
+      }
+    },
+    {
+      "caseId": "D4-19",
+      "status": "PASS",
+      "why": "preflight decisions=[\"deny\",\"deny\",\"deny\"]",
+      "executedAt": "20261023051006",
+      "result": {
+        "decisions": [
+          "deny",
+          "deny",
+          "deny"
+        ]
+      }
+    },
+    {
+      "caseId": "D4-20",
+      "status": "PASS",
+      "why": "Delete blocked=true decision=deny",
+      "executedAt": "20261023051006",
+      "result": {
+        "decision": "deny"
+      }
+    },
+    {
+      "caseId": "D4-21",
+      "status": "PASS",
+      "why": "hook_check_artifacts=true",
+      "executedAt": "20261023051006",
+      "result": {
+        "hasFn": false
+      }
+    },
+    {
+      "caseId": "D4-22",
+      "status": "PASS",
+      "why": "hook_check_deploy_plan=true",
+      "executedAt": "20261023051006",
+      "result": {
+        "hasFn": false
+      }
+    },
+    {
+      "caseId": "D4-23",
+      "status": "PASS",
+      "why": "huawei-agent-rules.mdc exists=true len=3801",
+      "executedAt": "20261023051006",
+      "result": {
+        "exists": true,
+        "rulesLen": 3801
+      }
+    },
+    {
+      "caseId": "D4-24",
+      "status": "PASS",
+      "why": "auth confirm/plan tools=true",
+      "executedAt": "20261023051006",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D4-25",
+      "status": "PASS",
+      "why": "classify fn for event=true",
+      "executedAt": "20261023051006",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D4-26",
+      "status": "PASS",
+      "why": "findings redaction no leak=true",
+      "executedAt": "20261023051006",
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "caseId": "D4-27",
+      "status": "PASS",
+      "why": "dual path no leak=true",
+      "executedAt": "20261023051006",
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "caseId": "D4-28",
+      "status": "PASS",
+      "why": "hooks.json has .mjs=true extract=true",
+      "executedAt": "20261023051006",
+      "result": {
+        "hooksExists": true,
+        "hasMjs": true,
+        "extractWorks": true
+      }
+    },
+    {
+      "caseId": "D4-29",
+      "status": "PASS",
+      "why": "ListServers decision=allow",
+      "executedAt": "20261023051006",
+      "result": {
+        "decision": "allow"
+      }
+    },
+    {
+      "caseId": "D5-1",
+      "status": "PASS",
+      "why": "plugins exit=0 outLen=2139",
+      "executedAt": "20261023051007",
+      "result": {
+        "exitCode": 0,
+        "stdoutSample": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v1.1.12                ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nUsage: np"
+      }
+    },
+    {
+      "caseId": "D5-3",
+      "status": "PASS",
+      "why": "tools count=46",
+      "executedAt": "20261023051007",
+      "result": {
+        "toolCount": 46
+      }
+    },
+    {
+      "caseId": "D6-1",
+      "status": "PASS",
+      "why": "search tools=true",
+      "executedAt": "20261023051007",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D6-3",
+      "status": "PASS",
+      "why": "cold start=0ms tools=46",
+      "executedAt": "20261023051007",
+      "result": {
+        "coldStartMs": 0,
+        "loaded": true
+      }
+    },
+    {
+      "caseId": "D6-4",
+      "status": "PASS",
+      "why": "concurrent counts=[46,46,46]",
+      "executedAt": "20261023051007",
+      "result": {
+        "counts": [
+          46,
+          46,
+          46
+        ],
+        "consistent": true
+      }
+    },
+    {
+      "caseId": "D6-9",
+      "status": "PASS",
+      "why": "cache cleanup functions=true",
+      "executedAt": "20261023051007",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D8-1",
+      "status": "PASS",
+      "why": "plugin dir exists=true",
+      "executedAt": "20261023051007",
+      "result": {
+        "exists": true
+      }
+    },
+    {
+      "caseId": "D8-4",
+      "status": "PASS",
+      "why": "retrieve_skill=true",
+      "executedAt": "20261023051007",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D8-6",
+      "status": "PASS",
+      "why": "README exists=true",
+      "executedAt": "20261023051007",
+      "result": {
+        "exists": true
+      }
+    },
+    {
+      "caseId": "D8-7",
+      "status": "PASS",
+      "why": "skills dir count=29",
+      "executedAt": "20261023051007",
+      "result": {
+        "skillCount": 29,
+        "skillsDir": "C:\\Users\\Administrator\\devkit-test\\testbot4-win-workbuddy\\hdk\\plugins\\huaweicloud-core\\skills"
+      }
+    },
+    {
+      "caseId": "D8-9",
+      "status": "PASS",
+      "why": "telemetry module loaded=true",
+      "executedAt": "20261023051007",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D8-10",
+      "status": "PASS",
+      "why": "backup+merge modules=true",
+      "executedAt": "20261023051007",
+      "result": {
+        "hasBackup": true,
+        "hasMerge": true
+      }
+    },
+    {
+      "caseId": "D9-1",
+      "status": "PASS",
+      "why": "initialize returns protocolVersion+capabilities+serverInfo=[object Object]",
+      "executedAt": "20261023051008",
+      "result": {
+        "hasProtocol": true,
+        "hasCapabilities": true,
+        "hasServerInfo": true
+      }
+    },
+    {
+      "caseId": "D9-2",
+      "status": "PASS",
+      "why": "tools/list count=46",
+      "executedAt": "20261023051010",
+      "result": {
+        "toolCount": 46
+      }
+    },
+    {
+      "caseId": "D9-3",
+      "status": "PASS",
+      "why": "mcpProtocol module loaded=true",
+      "executedAt": "20261023051010",
+      "result": {
+        "keys": [
+          "_decorateResult",
+          "_isHintConsumed",
+          "_resetHintConsumption",
+          "dispatch"
+        ]
+      }
+    },
+    {
+      "caseId": "D9-4",
+      "status": "PASS",
+      "why": "mcpProtocol module loaded=true",
+      "executedAt": "20261023051010",
+      "result": {
+        "keys": [
+          "_decorateResult",
+          "_isHintConsumed",
+          "_resetHintConsumption",
+          "dispatch"
+        ]
+      }
+    },
+    {
+      "caseId": "D9-5",
+      "status": "PASS",
+      "why": "mcpProtocol module loaded=true",
+      "executedAt": "20261023051010",
+      "result": {
+        "keys": [
+          "_decorateResult",
+          "_isHintConsumed",
+          "_resetHintConsumption",
+          "dispatch"
+        ]
+      }
+    },
+    {
+      "caseId": "D9-6",
+      "status": "PASS",
+      "why": "mcpProtocol module loaded=true",
+      "executedAt": "20261023051010",
+      "result": {
+        "keys": [
+          "_decorateResult",
+          "_isHintConsumed",
+          "_resetHintConsumption",
+          "dispatch"
+        ]
+      }
+    },
+    {
+      "caseId": "D9-7",
+      "status": "PASS",
+      "why": "mcpProtocol module loaded=true",
+      "executedAt": "20261023051010",
+      "result": {
+        "keys": [
+          "_decorateResult",
+          "_isHintConsumed",
+          "_resetHintConsumption",
+          "dispatch"
+        ]
+      }
+    },
+    {
+      "caseId": "D9-8",
+      "status": "PASS",
+      "why": "mcpProtocol module loaded=true",
+      "executedAt": "20261023051010",
+      "result": {
+        "keys": [
+          "_decorateResult",
+          "_isHintConsumed",
+          "_resetHintConsumption",
+          "dispatch"
+        ]
+      }
+    },
+    {
+      "caseId": "D9-9",
+      "status": "PASS",
+      "why": "delay/timeout handled=true",
+      "executedAt": "20261023051010",
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "caseId": "D9-10",
+      "status": "PASS",
+      "why": "remote transport via mcpProtocol=true",
+      "executedAt": "20261023051010",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D9-11",
+      "status": "PASS",
+      "why": "WS tunnel via mcpProtocol=true",
+      "executedAt": "20261023051010",
+      "result": {
+        "hasFn": true
+      }
+    },
+    {
+      "caseId": "D9-12",
+      "status": "PASS",
+      "why": "initialize protocolVersion+capabilities+serverInfo=[object Object]",
+      "executedAt": "20261023051011",
+      "result": {
+        "hasProtocol": true
+      }
+    },
+    {
+      "caseId": "D9-13",
+      "status": "PASS",
+      "why": "no AK/SK leak in tools/call response=true",
+      "executedAt": "20261023051012",
+      "result": {
+        "leakCheck": {
+          "akLeak": false,
+          "skLeak": false,
+          "responseLen": 2553
+        }
+      }
+    },
+    {
+      "caseId": "D10-3",
+      "status": "PASS",
+      "why": "run-eval.mjs ran, outLen=1217 exit=0",
+      "executedAt": "20261023051013",
+      "result": {
+        "exitCode": 0,
+        "stdoutLen": 1217,
+        "stdoutSample": "EXP-E01 | MISS  | 期望=ECS | 实际=Run hcloud --help to list available services. | 帮我查一下我账号在华北北京四有哪些云主机\nEXP-E02 | HIT   | 期望=ECS | 实际=ECS | 创建一台 2C4G 的 Ubuntu 云服务器 \nEXP-E03 | HIT   | 期望=OBS | 实际=OBS+Sandbox+DevStation | 把本地 dist 目录部署成一个公网静态网站\nEXP-E04 | HIT   | 期望=EIP | 实际=ECS+VPC+EIP | 给这台服务器绑定一个弹性公网IP\nE"
+      }
+    },
+    {
+      "caseId": "D10-4",
+      "status": "PASS",
+      "why": "rule engine denyCount=2 allow works=true",
+      "executedAt": "20261023051013",
+      "result": {
+        "denyCount": 2
+      }
+    },
+    {
+      "caseId": "EXP-C4-01",
+      "status": "FAIL",
+      "why": "ECS list_operations opsCount=0",
+      "executedAt": "20261023051014",
+      "result": {
+        "service": "ECS",
+        "opsCount": 0,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-02",
+      "status": "FAIL",
+      "why": "VPC list_operations opsCount=0",
+      "executedAt": "20261023051016",
+      "result": {
+        "service": "VPC",
+        "opsCount": 0,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-03",
+      "status": "PASS",
+      "why": "OBS list_operations opsCount=4",
+      "executedAt": "20261023051017",
+      "result": {
+        "service": "OBS",
+        "opsCount": 4,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-04",
+      "status": "PASS",
+      "why": "RDS list_operations opsCount=4",
+      "executedAt": "20261023051019",
+      "result": {
+        "service": "RDS",
+        "opsCount": 4,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-05",
+      "status": "FAIL",
+      "why": "GaussDB list_operations opsCount=0",
+      "executedAt": "20261023051020",
+      "result": {
+        "service": "GaussDB",
+        "opsCount": 0,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-06",
+      "status": "PASS",
+      "why": "CCE list_operations opsCount=2",
+      "executedAt": "20261023051022",
+      "result": {
+        "service": "CCE",
+        "opsCount": 2,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-07",
+      "status": "FAIL",
+      "why": "FunctionGraph list_operations opsCount=0",
+      "executedAt": "20261023051023",
+      "result": {
+        "service": "FunctionGraph",
+        "opsCount": 0,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-08",
+      "status": "PASS",
+      "why": "IAM list_operations opsCount=2",
+      "executedAt": "20261023051025",
+      "result": {
+        "service": "IAM",
+        "opsCount": 2,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-09",
+      "status": "PASS",
+      "why": "CTS list_operations opsCount=2",
+      "executedAt": "20261023051026",
+      "result": {
+        "service": "CTS",
+        "opsCount": 2,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-10",
+      "status": "PASS",
+      "why": "CES list_operations opsCount=4",
+      "executedAt": "20261023051028",
+      "result": {
+        "service": "CES",
+        "opsCount": 4,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-11",
+      "status": "PASS",
+      "why": "DDS list_operations opsCount=4",
+      "executedAt": "20261023051029",
+      "result": {
+        "service": "DDS",
+        "opsCount": 4,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-12",
+      "status": "FAIL",
+      "why": "DCS list_operations opsCount=0",
+      "executedAt": "20261023051031",
+      "result": {
+        "service": "DCS",
+        "opsCount": 0,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-13",
+      "status": "PASS",
+      "why": "SMN list_operations opsCount=2",
+      "executedAt": "20261023051032",
+      "result": {
+        "service": "SMN",
+        "opsCount": 2,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-14",
+      "status": "PASS",
+      "why": "DMS list_operations opsCount=1",
+      "executedAt": "20261023051034",
+      "result": {
+        "service": "DMS",
+        "opsCount": 1,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-15",
+      "status": "PASS",
+      "why": "WAF list_operations opsCount=2",
+      "executedAt": "20261023051036",
+      "result": {
+        "service": "WAF",
+        "opsCount": 2,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-16",
+      "status": "FAIL",
+      "why": "CDN list_operations opsCount=0",
+      "executedAt": "20261023051037",
+      "result": {
+        "service": "CDN",
+        "opsCount": 0,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-17",
+      "status": "FAIL",
+      "why": "ModelArts list_operations opsCount=0",
+      "executedAt": "20261023051039",
+      "result": {
+        "service": "ModelArts",
+        "opsCount": 0,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-18",
+      "status": "FAIL",
+      "why": "DEW list_operations opsCount=0",
+      "executedAt": "20261023051040",
+      "result": {
+        "service": "DEW",
+        "opsCount": 0,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-19",
+      "status": "PASS",
+      "why": "CBR list_operations opsCount=2",
+      "executedAt": "20261023051042",
+      "result": {
+        "service": "CBR",
+        "opsCount": 2,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-20",
+      "status": "PASS",
+      "why": "EVS list_operations opsCount=2",
+      "executedAt": "20261023051043",
+      "result": {
+        "service": "EVS",
+        "opsCount": 2,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-21",
+      "status": "PASS",
+      "why": "EIP list_operations opsCount=2",
+      "executedAt": "20261023051045",
+      "result": {
+        "service": "EIP",
+        "opsCount": 2,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-C4-22",
+      "status": "FAIL",
+      "why": "ELB list_operations opsCount=0",
+      "executedAt": "20261023051046",
+      "result": {
+        "service": "ELB",
+        "opsCount": 0,
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E01",
+      "status": "FAIL",
+      "why": "EXP-E01 MISS expect=ECS got=Run hcloud --help to list available services.",
+      "executedAt": "20261023051048",
+      "result": {
+        "prompt": "帮我查一下我账号在华北北京四有哪些云主机",
+        "expect": [
+          "ECS"
+        ],
+        "got": [
+          "Run hcloud --help to list available services."
+        ],
+        "verdict": "MISS",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E02",
+      "status": "PASS",
+      "why": "EXP-E02 HIT expect=ECS got=ECS",
+      "executedAt": "20261023051049",
+      "result": {
+        "prompt": "创建一台 2C4G 的 Ubuntu 云服务器 规格通用型",
+        "expect": [
+          "ECS"
+        ],
+        "got": [
+          "ECS"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E03",
+      "status": "PASS",
+      "why": "EXP-E03 HIT expect=OBS got=OBS+Sandbox+DevStation",
+      "executedAt": "20261023051051",
+      "result": {
+        "prompt": "把本地 dist 目录部署成一个公网静态网站",
+        "expect": [
+          "OBS"
+        ],
+        "got": [
+          "OBS",
+          "Sandbox",
+          "DevStation"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E04",
+      "status": "PASS",
+      "why": "EXP-E04 HIT expect=EIP got=ECS+VPC+EIP",
+      "executedAt": "20261023051052",
+      "result": {
+        "prompt": "给这台服务器绑定一个弹性公网IP",
+        "expect": [
+          "EIP"
+        ],
+        "got": [
+          "ECS",
+          "VPC",
+          "EIP"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E05",
+      "status": "PASS",
+      "why": "EXP-E05 HIT expect=RDS got=RDS",
+      "executedAt": "20261023051054",
+      "result": {
+        "prompt": "看一下我的云数据库MySQL实例的状态",
+        "expect": [
+          "RDS"
+        ],
+        "got": [
+          "RDS"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E06",
+      "status": "PASS",
+      "why": "EXP-E06 HIT expect=DCS got=OBS+DDS+DCS",
+      "executedAt": "20261023051055",
+      "result": {
+        "prompt": "创建一个 Redis 缓存实例用于会话存储",
+        "expect": [
+          "DCS"
+        ],
+        "got": [
+          "OBS",
+          "DDS",
+          "DCS"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E07",
+      "status": "PASS",
+      "why": "EXP-E07 HIT expect=CBR got=ECS+IAM+CBR",
+      "executedAt": "20261023051057",
+      "result": {
+        "prompt": "给生产环境的服务器配置一个每日备份策略",
+        "expect": [
+          "CBR"
+        ],
+        "got": [
+          "ECS",
+          "IAM",
+          "CBR"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E08",
+      "status": "PASS",
+      "why": "EXP-E08 N/A expect= got=Run hcloud --help to list available services.",
+      "executedAt": "20261023051058",
+      "result": {
+        "prompt": "我的ECS启动失败了 帮我分析原因",
+        "expect": null,
+        "got": [
+          "Run hcloud --help to list available services."
+        ],
+        "verdict": "N/A",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E09",
+      "status": "PASS",
+      "why": "EXP-E09 HIT expect=CCE got=CCE+SWR",
+      "executedAt": "20261023051100",
+      "result": {
+        "prompt": "开设一个 Kubernetes 集群用于微服务部署",
+        "expect": [
+          "CCE"
+        ],
+        "got": [
+          "CCE",
+          "SWR"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E10",
+      "status": "PASS",
+      "why": "EXP-E10 HIT expect=FunctionGraph got=FunctionGraph",
+      "executedAt": "20261023051101",
+      "result": {
+        "prompt": "部署一个函数处理图片自动压缩",
+        "expect": [
+          "FunctionGraph"
+        ],
+        "got": [
+          "FunctionGraph"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E11",
+      "status": "PASS",
+      "why": "EXP-E11 HIT expect=BSS got=BSS",
+      "executedAt": "20261023051103",
+      "result": {
+        "prompt": "查一下我账号这个月的费用情况",
+        "expect": [
+          "BSS"
+        ],
+        "got": [
+          "BSS"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E12",
+      "status": "PASS",
+      "why": "EXP-E12 HIT expect=CES got=CES",
+      "executedAt": "20261023051104",
+      "result": {
+        "prompt": "把应用日志指标推送到云监控告警",
+        "expect": [
+          "CES"
+        ],
+        "got": [
+          "CES"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E13",
+      "status": "PASS",
+      "why": "EXP-E13 HIT expect=ELB got=CSMS+KMS+ELB",
+      "executedAt": "20261023051106",
+      "result": {
+        "prompt": "申请HTTPS证书并配置到我的域名",
+        "expect": [
+          "ELB"
+        ],
+        "got": [
+          "CSMS",
+          "KMS",
+          "ELB"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E14",
+      "status": "PASS",
+      "why": "EXP-E14 HIT expect=IAM got=IAM+CTS",
+      "executedAt": "20261023051107",
+      "result": {
+        "prompt": "我账号下的用户都有哪些权限 帮我审计一下",
+        "expect": [
+          "IAM"
+        ],
+        "got": [
+          "IAM",
+          "CTS"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-E15",
+      "status": "PASS",
+      "why": "EXP-E15 HIT expect=Incentive Voucher got=Incentive Voucher",
+      "executedAt": "20261023051109",
+      "result": {
+        "prompt": "帮我领一下华为云的代金券",
+        "expect": [
+          "Incentive Voucher"
+        ],
+        "got": [
+          "Incentive Voucher"
+        ],
+        "verdict": "HIT",
+        "realCall": true
+      }
+    },
+    {
+      "caseId": "EXP-D5-5-1",
+      "status": "PASS",
+      "why": "EXP-D5-5-1: plugins+status ran",
+      "executedAt": "20261023051111",
+      "result": {
+        "r1Exit": 0,
+        "r2Exit": 0
+      }
+    },
+    {
+      "caseId": "EXP-D5-5-3",
+      "status": "PASS",
+      "why": "EXP-D5-5-3: plugins+status ran",
+      "executedAt": "20261023051114",
+      "result": {
+        "r1Exit": 0,
+        "r2Exit": 0
+      }
+    }
+  ],
+  "executedAt": "20261023051114"
+}
