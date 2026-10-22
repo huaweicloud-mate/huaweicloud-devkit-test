@@ -1,0 +1,14 @@
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "hook_check_command ALLOWED plaintext adminPass in CLI command. hcloud ECS CreateServers --Server.adminPass=MyPassword123! returned decision=allow with no findings. hook_check_artifacts catches adminPass in IaC files but hook_check_command misses it in CLI args.",
+  "rootCause": "hook_check_command does not scan CLI argument values for plaintext secrets like adminPass",
+  "tool": "huaweicloud_hook_check_command",
+  "input": "hcloud ECS CreateServers --cli-region=cn-north-4 --Server.adminPass=MyPassword123! --Server.name=test",
+  "output": {
+    "ok": true,
+    "decision": "allow",
+    "findings": []
+  },
+  "executedAt": "20261023050506"
+}

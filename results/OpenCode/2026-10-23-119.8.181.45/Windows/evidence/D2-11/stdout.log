@@ -1,0 +1,9 @@
+{
+  "caseId": "D2-11",
+  "status": "PASS",
+  "why": "Source code confirms R3 STS token rejection. tools.mjs:1206-1215 persistCredentials() checks if securityToken is non-empty and returns error \"Temporary STS credentials cannot be persisted (R3). Use action=temporary.\" AK/SK written with securityToken=\"\" (empty). Token never persisted to S1.",
+  "executedAt": "20261023050721",
+  "sourceFile": "plugins/huaweicloud-core/src/tools.mjs",
+  "sourceLines": "1206-1215",
+  "rule": "R3"
+}
