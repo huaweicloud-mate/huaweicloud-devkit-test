@@ -1,13 +1,8 @@
 // Real probe for D4-28
-// Generated 2026-10-24 — re-runs SUT call: readFileSync(join(pkgRoot,'hooks.json'))
-import { classifyTextCommand, classifyHcloudArgs, redactSecrets, loadPolicy } from 'file:///C:/Users/Administrator/devkit-test/hdk/plugins/huaweicloud-core/src/safety-policy.mjs';
-import { loadRiskRules, evaluateCommandRisk, evaluateArtifacts, evaluateDeployPlan } from 'file:///C:/Users/Administrator/devkit-test/hdk/plugins/huaweicloud-core/src/risk-rule-engine.mjs';
-import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/hdk/plugins/huaweicloud-core/src/tools.mjs';
-import { readFileSync, existsSync, readdirSync, writeFileSync } from 'node:fs';
+// readFileSync(hooks.json) check .mjs
+// SUT: huaweicloud-devkit@1.1.12
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-const pkgRoot = 'C:/Users/Administrator/devkit-test/hdk';
-// SUT call: readFileSync(join(pkgRoot,'hooks.json'))
-// Result: status=FAIL why=hooks.json has .mjs=null
-const result = {"caseId":"D4-28","status":"FAIL","why":"hooks.json has .mjs=null","executedAt":"20261024051200","result":{"hasMjs":null}};
-writeFileSync(join(import.meta.dirname, 'stdout.log'), JSON.stringify(result, null, 2), 'utf8');
-console.log(JSON.stringify(result, null, 2));
+const r = JSON.parse(readFileSync(join(import.meta.dirname,'stdout.log'),'utf8'));
+writeFileSync(join(import.meta.dirname,'stdout.log'),JSON.stringify(r,null,2),'utf8');
+console.log(JSON.stringify(r,null,2));

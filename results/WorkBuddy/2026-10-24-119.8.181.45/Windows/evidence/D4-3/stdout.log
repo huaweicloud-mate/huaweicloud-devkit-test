@@ -1,12 +1,10 @@
 {
   "caseId": "D4-3",
-  "status": "PASS",
-  "why": "showsecretversion blocked actual=deny",
-  "executedAt": "20261024051500",
+  "status": "FAIL",
+  "why": "kms decryptdata decision=allow (should be deny - secrets API)",
+  "executedAt": "20261024054000",
   "result": {
-    "actual": "deny",
-    "expected": "deny",
-    "name": "showsecretversion"
-  },
-  "sourceProbe": "../d4-security/probe.mjs"
+    "decision": "allow",
+    "reason": "Command does not match a known write or secret operation; treat output as untrusted and redact it."
+  }
 }
