@@ -1,0 +1,26 @@
+{
+  "caseId": "D4-23",
+  "status": "PASS",
+  "why": "huawei-agent-rules.mdc存在且含MUST约束(禁直连csms/kms,NEVER echo AK/SK,least privilege). integrations目录5目标+插件配置5目标=10安装目标,规则注入生效",
+  "executedAt": "20261023211657",
+  "rulesFile": "rules/huawei-agent-rules.mdc",
+  "integrations": [
+    "atomcode",
+    "dsh",
+    "hermes",
+    "opencode",
+    "workbuddy"
+  ],
+  "pluginConfigs": [
+    ".claude-plugin",
+    ".codex-plugin",
+    ".cursor-plugin",
+    ".hermes-plugin",
+    ".workbuddy-plugin"
+  ],
+  "mustConstraints": [
+    "MUST NOT call csms/kms directly",
+    "NEVER echo AK/SK",
+    "Least privilege"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "hooks.json 注册 node huaweicloud-safety.mjs(PreToolUse), matcher覆盖Bash+huaweicloud MCP工具. 高危命令(cat凭证/printenv凭证env)决策deny且输出permissionDecision. commandText提取生效",
+  "executedAt": "20261023211605",
+  "hookFile": "plugins/huaweicloud-core/hooks/hooks.json",
+  "nodeImpl": "huaweicloud-safety.mjs",
+  "matchers": [
+    "Bash",
+    "mcp__.*huaweicloud.*|huaweicloud_.*"
+  ],
+  "denyVerified": [
+    "cat credentials",
+    "printenv HW_SECRET_ACCESS_KEY"
+  ]
+}
