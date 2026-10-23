@@ -1,0 +1,35 @@
+[OK] 仓库根存在 rules/huawei-agent-rules.mdc | /home/testbot2/devkit-test/Hermes/hdk/rules/huawei-agent-rules.mdc
+[OK] 源码存在规则注入引用(injectAgentRules) | /home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/setup-cli.mjs:571:// Copy the global agent rules file (rules/huawei-agent-rules.mdc) into the
+/home/testbot2/devkit-test/Hermes/hdk/p
+[OK] setup-cli.mjs 存在 injectAgentRules 复制步骤 | injectAgentRules() 调用 + copy rules/huawei-agent-rules.mdc
+[OK] 隔离安装产物含 rules/huawei-agent-rules.mdc |   Agent Rules -> /home/testbot2/devkit-test/Hermes/iso-home-20261024/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc   Agent Rules -> /home/testbot2/devkit-test/Hermes/iso-home-20261024/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc /home/testbot2/devkit-test/Hermes/iso-home-20261024/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc
+
+=====SUMMARY JSON=====
+{
+  "caseId": "D4-23",
+  "sev": "P0",
+  "verdict": "PASS",
+  "reason": "install --target 正确注入 rules/huawei-agent-rules.mdc（根文件+源码引用+install 产物三级一致）",
+  "facts": [
+    {
+      "name": "仓库根存在 rules/huawei-agent-rules.mdc",
+      "ok": true,
+      "detail": "/home/testbot2/devkit-test/Hermes/hdk/rules/huawei-agent-rules.mdc"
+    },
+    {
+      "name": "源码存在规则注入引用(injectAgentRules)",
+      "ok": true,
+      "detail": "/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/setup-cli.mjs:571:// Copy the global agent rules file (rules/huawei-agent-rules.mdc) into the\n/home/testbot2/devkit-test/Hermes/hdk/p"
+    },
+    {
+      "name": "setup-cli.mjs 存在 injectAgentRules 复制步骤",
+      "ok": true,
+      "detail": "injectAgentRules() 调用 + copy rules/huawei-agent-rules.mdc"
+    },
+    {
+      "name": "隔离安装产物含 rules/huawei-agent-rules.mdc",
+      "ok": true,
+      "detail": "  Agent Rules -> /home/testbot2/devkit-test/Hermes/iso-home-20261024/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc   Agent Rules -> /home/testbot2/devkit-test/Hermes/iso-home-20261024/.hermes/huaweicloud-plugins/rules/huawei-agent-rules.mdc /home/testbot2/devkit-test/Hermes/iso-home-20261"
+    }
+  ]
+}
