@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "caseId": "D4-2",
+  "why": "All credential env print attempts blocked",
+  "tests": [
+    "CMD: printenv HW_ACCESS_KEY => decision: deny, risk: credential",
+    "CMD: echo $HW_SECRET_KEY => decision: deny, risk: credential",
+    "CMD: printenv | grep -i HUAWEICLOUD => decision: deny, risk: credential",
+    "CMD: echo $HUAWEICLOUD_ACCESS_KEY => decision: deny, risk: credential",
+    "CMD: printenv HW_SECURITY_TOKEN => decision: deny, risk: credential"
+  ],
+  "executedAt": "20261024053000"
+}

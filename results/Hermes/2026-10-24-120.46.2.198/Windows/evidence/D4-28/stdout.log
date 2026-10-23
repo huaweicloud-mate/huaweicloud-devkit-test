@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "caseId": "D4-28",
+  "why": "All text commands correctly classified",
+  "tests": [
+    "CMD: cat ~/.hcloud/credentials.json => decision: deny (expected: deny)",
+    "CMD: printenv HW_SECRET_KEY => decision: deny (expected: deny)",
+    "CMD: hcloud ECS DeleteServer --server_id=test => decision: deny (expected: deny)",
+    "CMD: hcloud ECS ListServers --cli-region=cn-north-4 => decision: allow (expected: allow)"
+  ],
+  "executedAt": "20261024053000"
+}

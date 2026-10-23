@@ -1,0 +1,29 @@
+{
+  "case": "D3-C2",
+  "status": "FAIL",
+  "total": 4,
+  "passed": 1,
+  "failed": 3,
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": false,
+      "detail": "Start at 2026-10-23 22:13:20.1774788 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2793436930] successfully, request id [000001A16AD360C847D469C70DDF85F4]\nNotice: If the configured"
+    },
+    {
+      "name": "set静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":400,\"websiteUrl\":\"http://testbot3-hermes-obs-2793436930.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 400\"}"
+    },
+    {
+      "name": "get静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":400,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidArgument</Code><Message>Request has x-amz-security-token header but signed headers not"
+    },
+    {
+      "name": "删桶归零",
+      "pass": true,
+      "detail": "Start at 2026-10-23 22:13:21.0890288 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-2793436930] successfully!"
+    }
+  ]
+}
