@@ -1,0 +1,9 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "Source-level classifyTextCommand correctly blocks both printenv HW_SECRET_KEY (deny, env-dump) and echo $HW_ACCESS_KEY (deny, credential variable reference). safety-policy.mjs:571-585 regex matches $HW_* credential vars. MCP tool hook_check_command also blocks printenv.",
+  "executedAt": "20261024050000",
+  "echoDenied": true,
+  "printenvDenied": true,
+  "sourceFunction": "classifyTextCommand"
+}
