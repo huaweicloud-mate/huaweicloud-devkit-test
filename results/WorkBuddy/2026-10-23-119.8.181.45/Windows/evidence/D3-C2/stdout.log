@@ -1,0 +1,31 @@
+{
+  "caseId": "D3-C2",
+  "status": "BLOCKED",
+  "why": "真云E2E实测：OBS建桶返回 403 InvalidAccessKeyId，credentials.json AK/SK 已过期，需维护者更新真云凭证",
+  "executedAt": "20261023051530",
+  "result": [
+    {
+      "name": "OBS建桶",
+      "pass": false,
+      "detail": "Start at 2026-10-22 21:15:43.259176 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2703743132] failed, status [403], error code [InvalidAccessKeyId], error message [The  Access Key "
+    },
+    {
+      "name": "set静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":403,\"websiteUrl\":\"http://testbot3-hermes-obs-2703743132.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 403\"}"
+    },
+    {
+      "name": "get静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><RequestId>000001A1"
+    },
+    {
+      "name": "删桶归零",
+      "pass": false,
+      "detail": "Start at 2026-10-22 21:15:44.4621168 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-2703743132] failed, status [403], err"
+    }
+  ],
+  "blockedReason": "真云E2E实测：OBS建桶返回 403 InvalidAccessKeyId，credentials.json AK/SK 已过期，需维护者更新真云凭证",
+  "realExecution": true,
+  "note": "真机执行：调了 hcloud CLI + MCP tools/call，返回 403/401 Unauthorized，凭证过期"
+}

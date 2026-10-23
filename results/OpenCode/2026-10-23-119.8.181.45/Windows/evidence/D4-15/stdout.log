@@ -1,0 +1,17 @@
+{
+  "caseId": "D4-15",
+  "status": "PASS",
+  "why": "hook_check_command caught bypass attempts. bash -c \"cat credentials.json\" DENIED, sh -c cat credentials.json DENIED. Shell wrapping does not bypass credential file detection.",
+  "tool": "huaweicloud_hook_check_command",
+  "tests": [
+    {
+      "input": "bash -c \"cat ~/.config/huaweicloud/credentials.json\"",
+      "decision": "deny"
+    },
+    {
+      "input": "sh -c 'cat ~/.config/huaweicloud/credentials.json'",
+      "decision": "deny"
+    }
+  ],
+  "executedAt": "20261023050506"
+}

@@ -1,0 +1,18 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "hook_check_command correctly DENIED env credential dump. ruleId=hwc-command-env-dump, severity=deny.",
+  "tool": "huaweicloud_hook_check_command",
+  "input": "echo $HW_SECRET_KEY && printenv HW_ACCESS_KEY",
+  "output": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-env-dump",
+        "severity": "deny"
+      }
+    ]
+  },
+  "executedAt": "20261023050506"
+}

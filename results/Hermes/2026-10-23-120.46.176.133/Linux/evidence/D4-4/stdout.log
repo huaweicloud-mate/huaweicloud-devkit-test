@@ -1,0 +1,51 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-4",
+  "title": "写操作审批门",
+  "expected": "逐一切换写语义操作（含 Change* 变更类），无审批不可执行（decision=deny/confirm）",
+  "actual": "Change* 变更类拦截 0/5；CreateServers 对照 decision=deny",
+  "detail": "writeOperationPrefixes 仅列 Create/Delete/Update/Modify/Resize/Reboot/Stop/Start 等，缺 Change（ChangeServerOs/ChangeVpc/ChangeInstanceConfiguration），变更类写语义绕过审批门 → 无审批可执行",
+  "total": 6,
+  "passed": 1,
+  "failed": 5,
+  "results": [
+    {
+      "name": "Change*-ChangeServerOs",
+      "pass": false,
+      "actual": "ChangeServerOs: decision=allow isWrite=undefined",
+      "expected": "deny/confirm (强制审批)"
+    },
+    {
+      "name": "Change*-ChangeServer",
+      "pass": false,
+      "actual": "ChangeServer: decision=allow isWrite=undefined",
+      "expected": "deny/confirm (强制审批)"
+    },
+    {
+      "name": "Change*-ChangeVpc",
+      "pass": false,
+      "actual": "ChangeVpc: decision=allow isWrite=undefined",
+      "expected": "deny/confirm (强制审批)"
+    },
+    {
+      "name": "Change*-ChangeInstanceConfiguration",
+      "pass": false,
+      "actual": "ChangeInstanceConfiguration: decision=allow isWrite=undefined",
+      "expected": "deny/confirm (强制审批)"
+    },
+    {
+      "name": "Change*-ChangeVolumeType",
+      "pass": false,
+      "actual": "ChangeVolumeType: decision=allow isWrite=undefined",
+      "expected": "deny/confirm (强制审批)"
+    },
+    {
+      "name": "CreateServers(对照)",
+      "pass": true,
+      "actual": "decision=deny",
+      "expected": "deny/confirm"
+    }
+  ],
+  "executedAt": "20261022211803",
+  "probe": "probe-d4-4-change.mjs"
+}

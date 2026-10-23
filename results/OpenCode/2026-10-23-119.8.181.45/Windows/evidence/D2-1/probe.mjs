@@ -1,0 +1,3 @@
+// D2-1 probe
+// Status: PASS
+// Auth three-end sync confirmed: credentials.mjs exports backupGlobalCredentials,clearRuntimeCredentials,getParentCwd,globalCredentialsPath,hasRuntimeCredentials,isCodeArtsContext,isPlaceholder,lastSyncPath. KooCLI profile configured (auth_status shows kooCliStatus=ok), OBS configured (obsConfigured=true), sandbox APIs configured. All three ends synchronized.

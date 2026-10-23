@@ -1,0 +1,23 @@
+{
+  "caseId": "D4-16",
+  "status": "FAIL",
+  "why": "python -c \"import os; print(os.environ.get('HW_SECRET_KEY'))\" was ALLOWED. Command wrapping via python -c bypasses hwc-command-env-dump rule. bash -c and sh -c wrapping of credential file read IS caught.",
+  "rootCause": "hwc-command-env-dump rule only matches shell env var patterns ($VAR, printenv) but not Python os.environ access",
+  "tool": "huaweicloud_hook_check_command",
+  "tests": [
+    {
+      "input": "bash -c \"cat ~/.config/huaweicloud/credentials.json\"",
+      "decision": "deny"
+    },
+    {
+      "input": "sh -c 'cat ~/.config/huaweicloud/credentials.json'",
+      "decision": "deny"
+    },
+    {
+      "input": "python -c \"import os; print(os.environ.get('HW_SECRET_KEY'))\"",
+      "decision": "allow",
+      "finding": "MISSED"
+    }
+  ],
+  "executedAt": "20261023050506"
+}

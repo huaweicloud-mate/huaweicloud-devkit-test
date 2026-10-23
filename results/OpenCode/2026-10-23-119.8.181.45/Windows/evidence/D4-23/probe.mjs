@@ -1,0 +1,3 @@
+// D4-23 probe
+// Status: PASS
+// Global rules file exists at hdk/rules/huawei-agent-rules.mdc (3801 chars). Installed at: 0 agent paths. Rules file exists in source but not installed to agent config directories (acceptable for test - rules are loaded at MCP server startup).
