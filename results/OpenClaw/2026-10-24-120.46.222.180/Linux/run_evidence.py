@@ -4,15 +4,19 @@
 SUT = huaweicloud-devkit@1.1.12 (npm latest; hdk gitHead 4ed07801)。
 今日全部源级/协议/harness/真云探针本机 fresh 重跑（run_all.sh 33 支 + ECS D3-C1 +
 D3-S6 realcloud-v5 + new-e2e D3-C2/C7 + sandbox-e2e D3-C3/C6 + hcl-probe + d4-15-bypass）。
-SUT 由昨日 1.1.10 升级到 1.1.12，13 项产品缺陷均持续（12 历史 + D3-C3/D3-S3 deploy_nginx 验证误判）。
+SUT 与昨日同为 1.1.12（commit 4ed07801 未变），13 项产品缺陷全部 fresh 复现（历史延续，
+含 D3-C3/D3-S3 deploy_nginx 验证误判 #981）。
 
 今日环境注意：
-  - 真云 VPC router 配额间歇性 VPC.0114 OverQuota（账号级共享配额，多 agent 并发消耗）；
-    首次 D3-C1 探针 CreateVpc 命中配额（vpcId=undefined），随后配额释放，重跑完整 create→ACTIVE→delete→zero 链（VPC c42c7ac8）。
-    D4-13 只读子账号写 CreateVpc 本次返回 VPC.0010 PolicyNotAuthorized（IAM 正确拒绝，非配额），
+  - D3-C1 ECS 生命周期 5/6（CreateVpc cd58de70-77d4-4815-9d1e-c5ef90f388b8 → ACTIVE → 删除归零）；
+    finally 归零子断言 vpc=false vpc 为探针即时读回与异步最终一致竞态，手工二次 DeleteVpc 返回
+    RouterNotFound（已消失），复核 VPC 已删、ECS 0、EIP total_count=0——归零成立。
+  - D3-C3 首次 deploy_nginx 抛「all ports 8080-8089 are in use」（沙箱 /etc/nginx/conf.d/ 残留
+    10 个 hdk-c3-*/test/hdk-e2e 等历史 .conf，历史 #951 端口耗尽）；手工 rm 残留 .conf +
+    nginx -s reload 归零后重跑，仍复现 #981 验证误判（stdout DB_NGINX_T=PASS 但解析为空）。
+    D3-C6 upload_file 首跑 WebSocketExecError 临时会话未就绪，重启会话重跑后 7/7 全 PASS。
+  - D4-13 只读子账号写 CreateVpc 返回 VPC.0010 PolicyNotAuthorized（IAM 正确拒绝），
     写被阻断、未创建资源、归零 true——最小权限功能成立。
-  - D3-C1 ECS 生命周期 5/6（最后 finally 归零子断言 vpc=false 为探针即时读回与异步最终一致竞态），
-    手工二次 DeleteVpc+复核 VPC c42c7ac8 已消失、ECS 0、EIP total_count=0。
 """
 import os, csv, json, shutil, datetime
 
