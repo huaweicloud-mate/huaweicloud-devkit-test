@@ -1,9 +1,7 @@
 {
   "caseId": "D3-S8",
   "status": "PASS",
-  "why": "explain_error(APIGW.0301): 返回suggestions=[\"APIGW.0301: API Gateway layer error. Incorrect IAM authentication information — verify AK/SK...\"]. 排障指引正确",
-  "executedAt": "20261023212257",
-  "tool": "explain_error",
-  "errorCode": "APIGW.0301",
-  "suggestions": 1
+  "why": "explain_error(APIGW.0301): 返回 suggestions=[\"Incorrect IAM authentication information. The AK/SK is invalid (check the SK for typos), the security token is missing or expired, or the profile lacks project_id. Fix: re-run \\\"npx huaweicloud-devkit auth init\\\" (it auto-sets project_id), or set it manually: hcloud configure set --cli-project-id=<project_id> after finding it via hcloud IAM KeystoneListProjects --cli-region=<region> --name=<region>.\",\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\"]. 排障指引",
+  "executedAt": "20261025051412",
+  "tool": "explain_error"
 }
