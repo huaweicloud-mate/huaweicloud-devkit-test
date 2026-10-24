@@ -1,82 +1,75 @@
-[OK] 创建 VPC tctest-c1-vpc-mvlhqej8
-[OK] 创建子网 tctest-c1-subnet-mvlhqej8
-[OK] 创建安全组 tctest-c1-sg-mvlhqej8
-[OK] 创建 ECS tctest-c1-ecs-mvlhqej8
+[OK] 创建 VPC tctest-c1-vpc-mvmx0fmt
+[OK] 创建子网 tctest-c1-subnet-mvmx0fmt
+[OK] 创建安全组 tctest-c1-sg-mvmx0fmt
+[OK] 创建 ECS tctest-c1-ecs-mvmx0fmt
 [OK] ECS 达成 ACTIVE
 [OK] 删除 ECS
-[FAIL] ECS 删除达成 DELETED/消失
-[FAIL] 删除安全组
+[OK] ECS 删除达成 DELETED/消失
+[OK] 删除安全组
 [OK] 删除子网
 [OK] 删除 VPC
-[FAIL] 归零验证(VPC/ECS 均不含本次资源)
+[OK] 归零验证(VPC/ECS 均不含本次资源)
 
 =====SUMMARY=====
 {
   "caseId": "D3-C1",
   "total": 11,
-  "passed": 8,
+  "passed": 11,
   "results": [
     {
-      "n": "创建 VPC tctest-c1-vpc-mvlhqej8",
+      "n": "创建 VPC tctest-c1-vpc-mvmx0fmt",
       "ok": true,
-      "detail": "d8dad522-a756-47d2-bf6c-ef909d5b999d"
+      "detail": "cf3cf567-4bf4-4312-a978-04ee47ebe05e"
     },
     {
-      "n": "创建子网 tctest-c1-subnet-mvlhqej8",
+      "n": "创建子网 tctest-c1-subnet-mvmx0fmt",
       "ok": true,
-      "detail": "06c772fb-27b6-4ce9-b839-0c64aca6b6e4"
+      "detail": "e0674f73-1afd-4035-8546-e3735fd6a296"
     },
     {
-      "n": "创建安全组 tctest-c1-sg-mvlhqej8",
+      "n": "创建安全组 tctest-c1-sg-mvmx0fmt",
       "ok": true,
-      "detail": "13a206c5-d92e-477e-9e95-0e7bd898725b"
+      "detail": "238d09b4-70d1-47d2-a10d-394d98325346"
     },
     {
-      "n": "创建 ECS tctest-c1-ecs-mvlhqej8",
+      "n": "创建 ECS tctest-c1-ecs-mvmx0fmt",
       "ok": true,
-      "detail": "9348bdb2-407f-458e-a6f1-d9636b5ce42b"
+      "detail": "9a0ce882-35da-44ff-b562-d6e910f3907e"
     },
     {
       "n": "ECS 达成 ACTIVE",
       "ok": true,
-      "detail": "9348bdb2-407f-458e-a6f1-d9636b5ce42b"
+      "detail": "9a0ce882-35da-44ff-b562-d6e910f3907e"
     },
     {
       "n": "删除 ECS",
       "ok": true,
-      "detail": "9348bdb2-407f-458e-a6f1-d9636b5ce42b"
+      "detail": "9a0ce882-35da-44ff-b562-d6e910f3907e"
     },
     {
       "n": "ECS 删除达成 DELETED/消失",
-      "ok": false,
-      "detail": "9348bdb2-407f-458e-a6f1-d9636b5ce42b"
+      "ok": true,
+      "detail": "9a0ce882-35da-44ff-b562-d6e910f3907e"
     },
     {
       "n": "删除安全组",
-      "ok": false,
-      "detail": "13a206c5-d92e-477e-9e95-0e7bd898725b"
+      "ok": true,
+      "detail": "238d09b4-70d1-47d2-a10d-394d98325346"
     },
     {
       "n": "删除子网",
       "ok": true,
-      "detail": "06c772fb-27b6-4ce9-b839-0c64aca6b6e4"
+      "detail": "e0674f73-1afd-4035-8546-e3735fd6a296"
     },
     {
       "n": "删除 VPC",
       "ok": true,
-      "detail": "d8dad522-a756-47d2-bf6c-ef909d5b999d"
+      "detail": "cf3cf567-4bf4-4312-a978-04ee47ebe05e"
     },
     {
       "n": "归零验证(VPC/ECS 均不含本次资源)",
-      "ok": false,
+      "ok": true,
       "detail": "[object Object]"
     }
   ]
 }
-
-=====手动补充归零=====
-ECS 9348bdb2 删除(Wait DELETED 完成) -> 已 DELETED
-SG 13a206c5 删除 -> gone
-子网 06c772fb 删除 -> gone
-VPC d8dad522 删除 -> gone
-归零验证: ECS/SG/子网/VPC 均 gone（List 不含本次 tctest-c1-* 资源）
