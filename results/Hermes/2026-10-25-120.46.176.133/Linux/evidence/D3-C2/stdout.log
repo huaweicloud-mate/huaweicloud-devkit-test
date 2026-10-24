@@ -1,0 +1,35 @@
+{
+  "case": "D3-C2",
+  "status": "PASS",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "executedAt": "20261024211342",
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": true,
+      "detail": "exit=6 | Start at 2026-10-24 21:13:41.344348277 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2876421192] successfully, request id [000001A16FC320F1440E22FDD29B3382]\nNot"
+    },
+    {
+      "name": "set静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-2876421192.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-2876421192.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
+    },
+    {
+      "name": "get静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html</Suffix><Type>0</Type></IndexDocument><"
+    },
+    {
+      "name": "删桶归零",
+      "pass": true,
+      "detail": "exit=0 | Start at 2026-10-24 21:13:42.167828392 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-2876421192] successfully!"
+    },
+    {
+      "name": "删后不存在",
+      "pass": true,
+      "detail": "Start at 2026-10-24 21:13:42.699697941 +0000 UTC\n\nError: Check the fs status of bucket [testbot3-hermes-obs-2876421192] failed, obs: service"
+    }
+  ]
+}
