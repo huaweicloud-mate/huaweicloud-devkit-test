@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""每日测试证据落盘（OpenCode Linux 2026-10-24）。
+"""每日测试证据落盘（OpenCode Linux 2026-10-25）。
 SUT = huaweicloud-devkit@1.1.12 (gitHead 4ed07801) — 正式版。
 
 把 _probes 聚合日志切片 + 状态写入每个 case-id 的 evidence 目录：
@@ -33,8 +33,8 @@ WHY = {
     'D4-26': "src/risk-rule-engine.mjs:22-23 redactEvidence 正则 key\\s*[:=] 不匹配 JSON 带引号 key(key\":)，secret_key/adminPass 明文残留",
     'D3-S3': "src/sandbox/session-manager.mjs:814-820 evaluateDeployNginxVerify 要求 verify.nginxTest==='PASS'，沙箱 nginx -t 未产出 PASS 标记即判 ok:false(无 URL)，deploy_check 实测 HTTP 200",
     'D3-S5': "src/tools.mjs:2023-2277 serviceCatalog routeMap 单意图匹配，复合意图(存储+托管)未分解，多路=false",
-    'D3-S6': "FunctionGraph CreateFunction 最小参数集(同传 code.filename+code.zip_file) 致 [USE_ERROR]Invalid parameter: code.zip_file，URN 未返回、触发器未绑定",
-    'D3-S7': "RDS CreateInstance 最小参数集缺 db.port([USE_ERROR]Invalid parameter: db.port)+routeMap 无 Web 部署目标分解(部署目标命中=false)",
+    'D3-S6': "FunctionGraph CreateFunction 最小参数集缺失代码上传参数 致 [USE_ERROR]Invalid parameter: code.filename，URN 未返回、触发器未绑定",
+    'D3-S7': "RDS CreateInstance 最小参数集缺 db.password([USE_ERROR]Invalid parameter: db.password)+routeMap 无 Web 部署目标分解(部署目标命中=false)",
     'D9-12': "src/mcp-protocol.mjs:32-59 initialize 不接 runVersionCheck；dispatch 无 initialize 前置状态机，非法时序 tools/list 未拒 -32600",
     'EXP-E01': "src/tools.mjs:2033-2037 routeMap ECS keywords 含云服务器/服务器/虚拟机但缺口语化别名「云主机」-> serviceCatalog MISS",
     'D8-9': "src/telemetry/telemetry.mjs:189-197 sanitizeValue 仅去控制字符+超长截断，无 AK/SK/token 脱敏(SPEC:契约要求移除敏感值)",
