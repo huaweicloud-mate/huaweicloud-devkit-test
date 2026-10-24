@@ -1,0 +1,18 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "hook_check_command correctly DENIED credential file read even when wrapped in sh -c with $HOME expansion. ruleId=hwc-command-credential-file, severity=deny. Command wrapping penetration blocked.",
+  "tool": "huaweicloud_hook_check_command",
+  "input": "sh -c \"cat $HOME/.config/huaweicloud/credentials.json | grep sk\"",
+  "output": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-credential-file",
+        "severity": "deny"
+      }
+    ]
+  },
+  "executedAt": "20261025050819"
+}

@@ -1,0 +1,18 @@
+{
+  "caseId": "D4-15",
+  "status": "PASS",
+  "why": "hook_check_command correctly DENIED credential file read even when wrapped in bash -c. ruleId=hwc-command-credential-file, severity=deny. Hook bypass attempt blocked.",
+  "tool": "huaweicloud_hook_check_command",
+  "input": "bash -c 'cat ~/.config/huaweicloud/credentials.json'",
+  "output": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-credential-file",
+        "severity": "deny"
+      }
+    ]
+  },
+  "executedAt": "20261025050819"
+}
