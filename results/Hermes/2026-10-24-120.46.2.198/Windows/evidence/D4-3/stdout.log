@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "caseId": "D4-3",
+  "why": "All secret API calls blocked",
+  "tests": [
+    "CMD: hcloud CSMS ShowSecretVersion --secret_id=test --version_id=v1 => decision: deny, risk: secret",
+    "CMD: hcloud CSMS GetSecretValue --secret_name=test => decision: deny, risk: secret",
+    "CMD: hcloud CSMS DownloadSecret --secret_id=test => decision: deny, risk: secret"
+  ],
+  "executedAt": "20261024053000"
+}

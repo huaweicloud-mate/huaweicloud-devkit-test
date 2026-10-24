@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "caseId": "D4-9",
+  "why": "All public exposure/destructive ops blocked or warned",
+  "tests": [
+    "CMD: hcloud ECS DeleteServer --server_id=test => decision: warn, findings: 1",
+    "CMD: hcloud VPC CreateSecurityGroupRule --direction=ingress --port_range_min=22 --pro => decision: deny, findings: 1",
+    "CMD: hcloud IAM CreatePolicy --body='{\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"*\"],\" => decision: deny, findings: 1"
+  ],
+  "executedAt": "20261024053000"
+}

@@ -1,0 +1,10 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "hooks.json at plugins/huaweicloud-core/hooks/hooks.json registers .mjs Node implementation. safety-policy.mjs exports classifyTextCommand/classifyHcloudArgs. classifyTextCommand(\"cat credentials\") -> deny with permissionDecision. classifyTextCommand(\"hcloud ECS ListServers\") -> allow. Command text extraction via extractInnerCommand works.",
+  "executedAt": "20261024050000",
+  "hooksJsonHasMjs": true,
+  "hasPermissionDecision": true,
+  "denyTest": true,
+  "allowTest": true
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "caseId": "D4-16",
+  "why": "All wrapped commands intercepted",
+  "tests": [
+    "CMD: sh -c \"hcloud ECS DeleteServer --server_id=test\" => decision: warn, findings: 1",
+    "CMD: bash -c \"hcloud ECS DeleteServer --server_id=test\" => decision: warn, findings: 1",
+    "CMD: cmd /c \"hcloud ECS DeleteServer --server_id=test\" => decision: warn, findings: 1",
+    "CMD: hcloud ECS DeleteServer --server_id=test; echo done => decision: warn, findings: 1"
+  ],
+  "executedAt": "20261024053000"
+}

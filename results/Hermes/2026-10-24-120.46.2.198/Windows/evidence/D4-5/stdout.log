@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "caseId": "D4-5",
+  "why": "All write operations correctly identified as write/deny",
+  "tests": [
+    "Args: [\"ECS\",\"DeleteServer\",\"--server_id=test\"] => decision: deny, risk: write",
+    "Args: [\"ECS\",\"CreateServer\",\"--name=test\"] => decision: deny, risk: write",
+    "Args: [\"VPC\",\"DeleteVpc\",\"--vpc_id=test\"] => decision: deny, risk: write",
+    "Args: [\"RDS\",\"DeleteInstance\",\"--instance_id=test\"] => decision: deny, risk: write",
+    "Args: [\"IAM\",\"DeleteUser\",\"--user_id=test\"] => decision: deny, risk: write"
+  ],
+  "executedAt": "20261024053000"
+}

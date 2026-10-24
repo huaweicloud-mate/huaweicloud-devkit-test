@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "caseId": "D4-15",
+  "why": "No bypass attempts succeeded",
+  "tests": [
+    "Args: [\"ecs\",\"deleteserver\",\"--server_id=test\"] => decision: deny, risk: write",
+    "Args: [\"ECS\",\"DELETE_SERVER\",\"--server_id=test\"] => decision: deny, risk: write",
+    "Args: [\"ECS\",\"DeleteServer\",\"--server_id=t%65st\"] => decision: deny, risk: write",
+    "Args: [\"ECS\",\"Delete\",\"Server\",\"--server_id=test\"] => decision: deny, risk: write"
+  ],
+  "executedAt": "20261024053000"
+}
