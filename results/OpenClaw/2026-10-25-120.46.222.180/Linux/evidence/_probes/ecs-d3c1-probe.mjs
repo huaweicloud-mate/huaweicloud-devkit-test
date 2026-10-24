@@ -121,9 +121,13 @@ try {
     cleanup.push('vpc:' + (d.ok ? 'OK' : d.text.slice(0, 60)));
     if (!d.ok) cleanupOk = false;
   }
-  // 最终只读归零验证
-  const lv = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`, '--cli-output=json']);
-  const vpcZero = !lv.text.includes(vpcId);
+  // 最终只读归零验证（VPC 异步最终一致：ListVpcs 重试最多 6 次 × 5s）
+  let vpcZero = false;
+  for (let i = 0; i < 6; i++) {
+    const lv = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`, '--cli-output=json']);
+    if (lv.ok && !lv.text.includes(vpcId)) { vpcZero = true; break; }
+    await new Promise((r) => setTimeout(r, 5000));
+  }
   const le = sh(['EIP', 'ListPublicips', `--cli-region=${REGION}`, '--cli-output=json']);
   const eipZero = le.ok && /"total_count"\s*:\s*0/.test(le.text);
   const finalZero = cleanupOk && vpcZero && eipZero;

@@ -1,0 +1,33 @@
+[OK] eq-form: leaked=false
+    input =--access-key=AKIAIOSFODNN7EXAMPLE
+    output=--access-key=<redacted>
+[FAIL] space-form: leaked=true
+    input =--access-key AKIAIOSFODNN7EXAMPLE
+    output=--access-key AKIAIOSFODNN7EXAMPLE
+
+=====SUMMARY=====
+{
+  "case": "D4-27",
+  "status": "FAIL",
+  "total": 2,
+  "passed": 1,
+  "failed": [
+    "space-form"
+  ],
+  "results": [
+    {
+      "label": "eq-form",
+      "input": "--access-key=AKIAIOSFODNN7EXAMPLE",
+      "output": "--access-key=<redacted>",
+      "leaked": false,
+      "ok": true
+    },
+    {
+      "label": "space-form",
+      "input": "--access-key AKIAIOSFODNN7EXAMPLE",
+      "output": "--access-key AKIAIOSFODNN7EXAMPLE",
+      "leaked": true,
+      "ok": false
+    }
+  ]
+}

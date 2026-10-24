@@ -1,0 +1,46 @@
+[FAIL] kms DecryptData: decision=allow risk=unknown_read | hcloud kms DecryptData --key-id x --cipher-text y
+[FAIL] kms DecryptDatakey: decision=allow risk=unknown_read | hcloud kms DecryptDatakey --key-id x
+[OK] csms ShowSecretVersion(对照): decision=deny risk=secret | hcloud csms ShowSecretVersion --secret-name x
+[OK] csms GetSecretValue(对照): decision=deny risk=secret | hcloud csms GetSecretValue --secret-id x
+
+=====SUMMARY=====
+{
+  "case": "D4-3",
+  "status": "FAIL",
+  "total": 4,
+  "passed": 2,
+  "failed": [
+    "kms DecryptData",
+    "kms DecryptDatakey"
+  ],
+  "results": [
+    {
+      "label": "kms DecryptData",
+      "cmd": "hcloud kms DecryptData --key-id x --cipher-text y",
+      "decision": "allow",
+      "risk": "unknown_read",
+      "ok": false
+    },
+    {
+      "label": "kms DecryptDatakey",
+      "cmd": "hcloud kms DecryptDatakey --key-id x",
+      "decision": "allow",
+      "risk": "unknown_read",
+      "ok": false
+    },
+    {
+      "label": "csms ShowSecretVersion(对照)",
+      "cmd": "hcloud csms ShowSecretVersion --secret-name x",
+      "decision": "deny",
+      "risk": "secret",
+      "ok": true
+    },
+    {
+      "label": "csms GetSecretValue(对照)",
+      "cmd": "hcloud csms GetSecretValue --secret-id x",
+      "decision": "deny",
+      "risk": "secret",
+      "ok": true
+    }
+  ]
+}

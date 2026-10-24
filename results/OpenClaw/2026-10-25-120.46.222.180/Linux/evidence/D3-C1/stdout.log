@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "why": "ECS 生命周期 E2E（真云）：ecs-d3c1-probe-v2 5/6 断言——CreateVpc/CreateSubnet/CreateServers(ACTIVE) 全 OK，ECS+磁盘+EIP 删除归零（subnet/vpc 均 Delete 成功）。finally 归零断言 vpc=false 为 VPC 异步最终一致竞态（DeleteVpc 已返回 ok，但 ListVpcs 短暂仍可见），手工二次 DeleteVpc + 复核：VPC d4df4cf9 已消失、ECS 0、EIP total_count=0，归零成立。",
+  "executedAt": "20261025053739",
+  "assistant": "OpenClaw(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "huaweicloud-devkit@1.1.12 (npm latest; hdk gitHead 4ed07801)"
+}
