@@ -1,4 +1,4 @@
-// Real probe for EXP-C4-12
-// Real execution: 20261025050622
+// Real probe for EXP-C4-12 (rerun 20261025052026)
+// Real execution via mcpToolCall('huaweicloud_list_operations', {service})
 // Status: PASS
-// Why: DCS list_operations opsCount=3
+// Why: DCS list_operations opsCount=3 ok=true

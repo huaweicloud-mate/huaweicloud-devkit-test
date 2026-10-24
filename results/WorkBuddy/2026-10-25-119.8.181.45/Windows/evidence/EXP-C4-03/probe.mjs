@@ -1,4 +1,4 @@
-// Real probe for EXP-C4-03
-// Real execution: 20261025050608
+// Real probe for EXP-C4-03 (rerun 20261025052013)
+// Real execution via mcpToolCall('huaweicloud_list_operations', {service})
 // Status: PASS
-// Why: OBS list_operations opsCount=3
+// Why: OBS list_operations opsCount=3 ok=true
