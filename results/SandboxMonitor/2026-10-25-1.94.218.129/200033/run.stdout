@@ -1,0 +1,73 @@
+{
+  "case": "sandbox-deploy-monitor",
+  "mode": "blackbox",
+  "target": "huaweicloud-devkit",
+  "version": "1.1.12",
+  "repoUrl": "https://gitcode.com/sunzy1940/test",
+  "region": "cn-north-4",
+  "ts": "2026-10-25T120",
+  "workspaceId": "e7e9310835d4",
+  "publicUrl": null,
+  "summary": {
+    "total": 10,
+    "passed": 8,
+    "failed": 2
+  },
+  "results": [
+    {
+      "assert": "P0.mcp_server",
+      "pass": true,
+      "detail": "server=huaweicloud-devkit version=1.1.12"
+    },
+    {
+      "assert": "P1.tools_list",
+      "pass": true,
+      "detail": "沙箱工具 14 个，缺:无"
+    },
+    {
+      "assert": "C1.check_user",
+      "pass": true,
+      "detail": "{\"realnameVerified\":true,\"agreementSigned\":true}"
+    },
+    {
+      "assert": "C2.connect",
+      "pass": true,
+      "detail": "status=connected ws=e7e9310835d4"
+    },
+    {
+      "assert": "D1.clone",
+      "pass": true,
+      "detail": "https://gitcode.com/sunzy1940/test"
+    },
+    {
+      "assert": "C3.exec_roundtrip",
+      "pass": true,
+      "detail": "stdout 回显正常"
+    },
+    {
+      "assert": "D2.upload_project",
+      "pass": true,
+      "detail": "md5=48141d461c79faa48cca77ff0146b50a verified=true"
+    },
+    {
+      "assert": "D3.deploy_nginx",
+      "pass": false,
+      "detail": "MCP -32603 sandbox deploy nginx: all ports 8080-8089 are in use. Free a port and try again."
+    },
+    {
+      "assert": "D4.nginx_serving",
+      "pass": true,
+      "detail": "deploy_check=PASS curl_http=200"
+    },
+    {
+      "assert": "D5.public_url",
+      "pass": false,
+      "detail": "未生成公网地址"
+    },
+    {
+      "assert": "CLOSE.session",
+      "pass": true,
+      "detail": "ok"
+    }
+  ]
+}
