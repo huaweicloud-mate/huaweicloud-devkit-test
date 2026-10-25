@@ -3,8 +3,8 @@
   "assistant": "AtomCode(deepseek-v4-pro-0813)",
   "os": "Linux",
   "sut": "hdk gitHead 4ed07801 (v1.1.12)",
-  "status": "FAIL",
-  "why": "跨区域只读规划/最小EIP建删存在失败项，见 results",
+  "status": "BLOCKED",
+  "blockedReason": "跨 region(ap-southeast-3) EIP 建删被 IAM token 区域绑定(cn-north-4)阻断(VPC.0501)：只读查询+plan 已通过，EIP 建删归零(count=0)已核实；仅该 region 写操作因 token 区域不匹配不可执行",
   "actual": "total=5 passed=4 failed=1",
   "executedAt": "20261025211230",
   "results": [
