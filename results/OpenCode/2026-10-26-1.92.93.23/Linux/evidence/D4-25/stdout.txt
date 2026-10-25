@@ -1,0 +1,174 @@
+
+=====CASE D10-4=====
+规则库: version=0.1.0 规则数=19 severity={"deny":9,"warn":10}
+规则清单:
+  - hwc-command-credential-file [deny] stages=["command"]
+  - hwc-command-env-dump [deny] stages=["command"]
+  - hwc-command-secret-value-read [deny] stages=["command"]
+  - hwc-command-adminpass-exposure [warn] stages=["artifact","deploy_plan"]
+  - hwc-command-sts-credential [warn] stages=["command"]
+  - hwc-command-encoded-shell-exec [deny] stages=["command"]
+  - hwc-network-public-admin-port [deny] stages=["command","artifact","deploy_plan"]
+  - hwc-obs-anonymous-write [deny] stages=["command","artifact","deploy_plan"]
+  - hwc-functiongraph-public-no-auth [warn] stages=["command","artifact","deploy_plan"]
+  - hwc-iam-admin-policy [deny] stages=["command","artifact","deploy_plan"]
+  - hwc-iam-highrisk-write [warn] stages=["command"]
+  - hwc-destructive-delete-force [deny] stages=["command"]
+  - hwc-destructive-delete-operation [warn] stages=["command"]
+  - hwc-destructive-reset-operation [warn] stages=["command"]
+  - hwc-destructive-delete-cascade [warn] stages=["command"]
+  - hwc-sandbox-missing-ttl [warn] stages=["artifact","deploy_plan"]
+  - hwc-cost-unbounded-scale [warn] stages=["command","artifact","deploy_plan"]
+  - hwc-command-secret-in-arg [warn] stages=["command"]
+  - hwc-sandbox-destructive-command [deny] stages=["command"]
+[FAIL] 规则库完整 16 条(9 deny + 7 warn)
+credential-file     -> deny findings=1
+readonly ListVpcs   -> allow findings=0
+DeleteVpc(无force)  -> warn findings=1
+ShowSecretVersion   -> deny findings=1
+[OK] 高危(凭证文件读取)判 deny
+[OK] 只读 ListVpcs 判 allow
+[OK] 删除操作判 warn/deny(非 allow)
+[OK] 明文 secret 读取判 deny
+=====END D10-4=====
+
+=====CASE D4-26=====
+decision=deny findings=3
+evidence(已脱敏)=tf/main.tf {"access_key":"AKIA***","secret_key":"SKSECRETVALUE9","adminPass":"MyP@ss12345","Statement":[{"Effect":"Allow","Action":"*","Resource":"*"}]}
+[FAIL] findings.evidence 触发且脱敏
+[FAIL] 明文 AK/SK/password 无残留
+=====END D4-26=====
+
+=====CASE D4-29=====
+cmd="hcloud VPC ListVpcs --cli-region=cn-north-4" -> decision=allow risk=read_only assertAllowed=allowed
+[OK] classify+assert: hcloud VPC ListVpcs --cli-regi
+cmd="cat ~/.config/huaweicloud/credentials.json" -> decision=deny risk=credential assertAllowed=blocked:Reading Huawei Cloud credential or profi
+[OK] classify+assert: cat ~/.config/huaweicloud/cred
+cmd="hcloud ecs DeleteServers --servers.1.id=x --delete_publicip=true --cli-region=cn-north-4" -> decision=deny risk=write assertAllowed=blocked:Huawei Cloud write operation blocked unt
+[OK] classify+assert: hcloud ecs DeleteServers --ser
+[OK] 分类结果含 decision/reason
+=====END D4-29=====
+
+=====CASE D4-28=====
+高危险(凭证文件): {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Readin
+高危险(删除): {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Huawei Cloud safety hook blocked this action: Huawei
+只读: (无输出=allow)
+[OK] hooks.json(.mjs) 提取 commandText 并 deny
+[OK] 写操作/删除判 deny
+[OK] 非高危无 deny 输出
+=====END D4-28=====
+
+=====CASE D4-25=====
+hook-events.jsonl 路径: /home/zhangshuang/devkit-test/OpenCode/hdk/plugins/huaweicloud-core/../telemetry/hook-events.jsonl 共 3 条(第4条 npm 视为未落)
+  [0] {"key":"cli:read","value":"hcloud ecs ListServersDetails","capability":"cli"}
+  [1] {"key":"cli:invoke","value":"hcloud vpc CreateVpc","capability":"cli"}
+  [2] {"key":"cli:invoke","value":"hcloud help","capability":"cli"}
+[OK] 只读→cli:read
+[FAIL] 写→cli:write
+[OK] 其他 hcloud→cli:invoke
+[OK] 事件含 key/value/capability
+[OK] 非 hcloud 命令不误判(提前 return 不落事件)
+=====END D4-25=====
+
+=====SUMMARY=====
+{
+  "total": 19,
+  "passed": 15,
+  "results": [
+    {
+      "name": "规则库完整 16 条(9 deny + 7 warn)",
+      "ok": false,
+      "detail": "{\"deny\":9,\"warn\":10}"
+    },
+    {
+      "name": "高危(凭证文件读取)判 deny",
+      "ok": true,
+      "detail": "deny"
+    },
+    {
+      "name": "只读 ListVpcs 判 allow",
+      "ok": true,
+      "detail": "allow"
+    },
+    {
+      "name": "删除操作判 warn/deny(非 allow)",
+      "ok": true,
+      "detail": "warn"
+    },
+    {
+      "name": "明文 secret 读取判 deny",
+      "ok": true,
+      "detail": "deny"
+    },
+    {
+      "name": "findings.evidence 触发且脱敏",
+      "ok": false,
+      "detail": "tf/main.tf {\"access_key\":\"AKIA***\",\"secret_key\":\"SKSECRETVALUE9\",\"adminPass\":\"MyP@ss12345\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+    },
+    {
+      "name": "明文 AK/SK/password 无残留",
+      "ok": false,
+      "detail": "leaked=true"
+    },
+    {
+      "name": "classify+assert: hcloud VPC ListVpcs --cli-regi",
+      "ok": true,
+      "detail": "decision=allow assert=allowed"
+    },
+    {
+      "name": "classify+assert: cat ~/.config/huaweicloud/cred",
+      "ok": true,
+      "detail": "decision=deny assert=blocked:Reading Huawei Cloud credential or profi"
+    },
+    {
+      "name": "classify+assert: hcloud ecs DeleteServers --ser",
+      "ok": true,
+      "detail": "decision=deny assert=blocked:Huawei Cloud write operation blocked unt"
+    },
+    {
+      "name": "分类结果含 decision/reason",
+      "ok": true,
+      "detail": "{\"d\":\"allow\",\"reason\":\"Command appears to be a read-only Huawei\"}"
+    },
+    {
+      "name": "hooks.json(.mjs) 提取 commandText 并 deny",
+      "ok": true,
+      "detail": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud"
+    },
+    {
+      "name": "写操作/删除判 deny",
+      "ok": true,
+      "detail": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud"
+    },
+    {
+      "name": "非高危无 deny 输出",
+      "ok": true,
+      "detail": "(empty)"
+    },
+    {
+      "name": "只读→cli:read",
+      "ok": true,
+      "detail": "cli:read"
+    },
+    {
+      "name": "写→cli:write",
+      "ok": false,
+      "detail": "cli:invoke"
+    },
+    {
+      "name": "其他 hcloud→cli:invoke",
+      "ok": true,
+      "detail": "cli:invoke"
+    },
+    {
+      "name": "事件含 key/value/capability",
+      "ok": true,
+      "detail": "{\"key\":\"cli:invoke\",\"value\":\"hcloud vpc CreateVpc\",\"capability\":\"cli\"}"
+    },
+    {
+      "name": "非 hcloud 命令不误判(提前 return 不落事件)",
+      "ok": true,
+      "detail": "前=3 后=3"
+    }
+  ]
+}
