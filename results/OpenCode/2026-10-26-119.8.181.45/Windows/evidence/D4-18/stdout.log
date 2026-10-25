@@ -1,0 +1,25 @@
+{
+  "caseId": "D4-18",
+  "status": "PASS",
+  "why": "write needs confirmation: true",
+  "executedAt": "20261026051039",
+  "executable": "hcloud",
+  "args": [
+    "ECS",
+    "CreateServers"
+  ],
+  "command": "hcloud ECS CreateServers",
+  "executableBlock": "hcloud ECS CreateServers",
+  "warnings": [
+    "Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id",
+    "Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find valid image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs"
+  ],
+  "classification": {
+    "decision": "deny",
+    "risk": "write",
+    "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "sgFindings": [],
+  "approvalToken": "444a0413-83cb-4e17-9c84-3adcac968ea0",
+  "safeToRun": false
+}

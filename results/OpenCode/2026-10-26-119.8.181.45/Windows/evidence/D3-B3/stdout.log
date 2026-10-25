@@ -1,0 +1,49 @@
+{
+  "caseId": "D3-B3",
+  "status": "PASS",
+  "why": "run_readonly_command: tool works, redaction active. AK/SK expired (APIGW.0301) but tool structure correct.",
+  "executedAt": "20261026051007",
+  "ok": false,
+  "exitCode": 0,
+  "signal": null,
+  "errorCode": "APIGW.0301",
+  "errorMessage": "Incorrect IAM authentication information: Unauthorized",
+  "stdout": "{\n  \"error_msg\": \"Incorrect IAM authentication information: Unauthorized\",\n  \"error_code\": \"APIGW.0301\",\n  \"request_id\": \"f6fb49e1cdd452a186ac4c5808edcd8b\"\n}\n\n错误详情参见错误中心'https://console.huaweicloud.com/apiexplorer/#/errorcenter/ECS'\n",
+  "stderr": "",
+  "plan": {
+    "executable": "hcloud",
+    "args": [
+      "ECS",
+      "ListServersDetails",
+      "--limit=1"
+    ],
+    "command": "hcloud ECS ListServersDetails --limit=1",
+    "executableBlock": "hcloud ECS ListServersDetails --limit=1",
+    "warnings": [],
+    "classification": {
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "service": "ECS",
+      "operation": "ListServersDetails",
+      "args": [
+        "ECS",
+        "ListServersDetails",
+        "--limit=1"
+      ]
+    },
+    "sgFindings": [],
+    "approvalToken": "bac8ca50-6128-4715-8016-fe0f7904ea80",
+    "safeToRun": true,
+    "rawArgs": [
+      "ECS",
+      "ListServersDetails",
+      "--limit=1",
+      "--cli-access-key=<redacted>",
+      "--cli-secret-key=<redacted>",
+      "--cli-security-token=<redacted>"
+    ]
+  },
+  "retries": 0,
+  "attempts": 1
+}

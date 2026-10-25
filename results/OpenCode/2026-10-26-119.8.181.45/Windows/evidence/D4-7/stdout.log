@@ -1,0 +1,21 @@
+{
+  "caseId": "D4-7",
+  "status": "PASS",
+  "why": "high-risk blocked: true",
+  "executedAt": "20261026051027",
+  "ok": false,
+  "decision": "deny",
+  "findings": [
+    {
+      "ruleId": "hwc-sandbox-destructive-command",
+      "title": "Destructive command in sandbox terminal",
+      "category": "destructive",
+      "severity": "deny",
+      "message": "The sandbox terminal command is destructively dangerous and could destroy the workspace.",
+      "remediation": "Use targeted deletions instead of recursive root removal. Avoid disk format, fork bombs, and system shutdown commands in sandbox terminals.",
+      "source": "command",
+      "evidence": "rm -rf /"
+    }
+  ],
+  "nextStep": "Revise the command, artifact, or deployment plan before execution."
+}
