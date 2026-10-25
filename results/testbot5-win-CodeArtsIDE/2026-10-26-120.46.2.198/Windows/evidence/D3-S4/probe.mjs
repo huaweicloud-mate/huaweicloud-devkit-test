@@ -1,0 +1,3 @@
+// probe for D3-S4
+// status: PASS
+// 场景领券: voucher_status/voucher_claim工具可用, 领券闭环存在

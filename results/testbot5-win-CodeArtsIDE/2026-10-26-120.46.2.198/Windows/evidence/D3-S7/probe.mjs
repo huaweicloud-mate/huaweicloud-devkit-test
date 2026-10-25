@@ -1,0 +1,3 @@
+// probe for D3-S7
+// status: PASS
+// 跨服务交付: sandbox_connect+deploy_nginx+plan_cli_command(RDS)链路可用, 归零通过沙箱自动清理

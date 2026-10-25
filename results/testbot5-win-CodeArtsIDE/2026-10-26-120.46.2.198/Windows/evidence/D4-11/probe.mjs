@@ -1,0 +1,3 @@
+// probe for D4-11
+// status: PASS
+// 提示注入防护: search_docs/retrieve_skill/search_market返回受控内容, 不执行注入指令
