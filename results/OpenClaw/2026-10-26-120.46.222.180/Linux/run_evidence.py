@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""OpenClaw Linux 2026-10-23 每日测试：证据落盘 + 回填三 CSV。
+"""OpenClaw Linux 2026-10-26 每日测试：证据落盘 + 回填三 CSV。
 
 SUT = huaweicloud-devkit@1.1.12 (npm latest; hdk gitHead 4ed07801)。
 今日全部源级/协议/harness/真云探针本机 fresh 重跑（run_all.sh 33 支 + ECS D3-C1 +
@@ -21,7 +21,7 @@ SUT 与昨日同为 1.1.12（commit 4ed07801 未变），13 项产品缺陷全�
 import os, csv, json, shutil, datetime
 
 REPO = "/home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test"
-PACK = os.path.join(REPO, "results/OpenClaw/2026-10-25-120.46.222.180/Linux")
+PACK = os.path.join(REPO, "results/OpenClaw/2026-10-26-120.46.222.180/Linux")
 EVID = os.path.join(PACK, "evidence")
 PROBES = os.path.join(EVID, "_probes")
 

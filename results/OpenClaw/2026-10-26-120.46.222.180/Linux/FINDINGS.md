@@ -1,7 +1,7 @@
 # FINDINGS — 缺陷发现清单（OpenClaw-deepseek-v4-pro-0813 / Linux）
 
-> **落盘路径**：`results/OpenClaw/2026-10-25-120.46.222.180/Linux/FINDINGS.md`
-> **生成时间**：`2026-10-25 05:20:00`（北京时间）
+> **落盘路径**：`results/OpenClaw/2026-10-26-120.46.222.180/Linux/FINDINGS.md`
+> **生成时间**：`2026-10-26 05:23:00`（北京时间）
 > **被测对象**：huaweicloud-devkit v1.1.12（npm `latest` 正式版，gitHead `4ed07801`）
 > **测试类型**：每日测试（daily 精选：设计级 107 + 展开级 39）
 > **汇总**：FAIL 标记 14 个（设计级 13 + 展开级 1），归并为 **13 项产品缺陷**（D3-C3 与 D3-S3 同一根因），全部为历史延续（SUT 版本与昨日相同，gitHead 4ed07801 未变，逐条 fresh 复现）；
@@ -12,16 +12,16 @@
 
 ## #1【P1】D3-C3/D3-S3 沙箱 deploy_nginx 写验证误判（历史延续 #981）
 
-- **现象**：`huaweicloud_sandbox_deploy_nginx` 返回 `{ok:false, error:"sandbox deploy nginx: configuration write verification failed — nginx -t did not pass."}`，但实际配置写入成功且 `nginx -t` 通过（stdout 含 `DB_NGINX_T=PASS`）。今日 sandbox-e2e-probe / new-cloud-probe fresh 复现（deploy_nginx ok=false port=8080/8081）。首次因其之前的「沙箱残留 .conf 耗尽 8080-8089 端口」（历史 #951）抛「all ports 8080-8089 are in use」，手工 rm 残留归零后重跑，仍复现本验证误判。
+- **现象**：`huaweicloud_sandbox_deploy_nginx` 返回 `{ok:false, port:8085}`，配置写入命令实际成功但验证步骤误判（stdout 含 `DB_NGINX_T=PASS` 被 OSC-133 终端转义遮挡）。今日 sandbox-e2e-probe fresh 复现（deploy_nginx ok=false，deploy_check/URL 可达均 FAIL）。
 - **断言**：nginx 配置写入验证成功且 `nginx -t` 通过时，`deploy_nginx` 应返回 `ok:true`（不得误报 `nginx -t did not pass`）。
-- **根因**：`plugins/huaweicloud-core/src/sandbox/session-manager.mjs:1010` `deployNginx` 直接调用 `parseDeployNginxVerifyOutput(result.stdout)`，未先 `stripTerminalEscapes()`。shell integration（OSC-133）给每行加 `\x1b]133;C\x07` 前缀，遮挡锚定 `^DB_NGINX_T=` 正则 → `nginxTest` 解析为空 → `evaluateDeployNginxVerify` 误判。1.1.12 已为 `stripTerminalEscapes` 应用到多处（:1224/:1411/:1569/:1595/:1685/:1809/:1846）但 :1010 deployNginx verify 处遗漏。
+- **根因**：`plugins/huaweicloud-core/src/sandbox/session-manager.mjs:1010` `deployNginx` 直接调用 `parseDeployNginxVerifyOutput(result.stdout)`，未先 `stripTerminalEscapes()`。shell integration（OSC-133）给每行加 `\x1b]133;C\x07` 前缀，遮挡锚定 `^DB_NGINX_T=` 正则 → `nginxTest` 解析为空 → `evaluateDeployNginxVerify` 误判。
 - **影响**：#935 A1 新增的 write-verification 逻辑在开启 shell-integration 的沙箱（默认）下 100% 误报失败，deploy_nginx 主要流程不可用，D3-C3/D3-S3 阻断。
 - **证据**：`evidence/D3-C3/stdout.log`、`evidence/D3-S3/stdout.log`
 - **状态**：历史问题，不重复提单（见 HISTORY_LINKS.md #981）
 
 ## #2【P0】D4-3 明文 secret API 未拦截（kms DecryptData / DecryptDatakey）
 
-- **现象**：`classifyTextCommand('hcloud kms DecryptData --key-id x --cipher-text y')` 返回 `decision=allow, risk=unknown_read`；`DecryptDatakey` 同。对照 `ShowSecretVersion`/`GetSecretValue` 正常 deny。今日 classify-probe fresh 复现。
+- **现象**：`classifyTextCommand('hcloud kms DecryptData --key-id x --cipher-text y')` 返回 `decision=allow, risk=unknown_read`；`DecryptDatakey` 同。对照 `ShowSecretVersion`/`GetSecretValue` 正常 deny。今日 classify-probe / D4-3-confirm fresh 复现。
 - **断言**：返回明文/二进制 secret 的 API（含 `kms DecryptData`/`DecryptDatakey`）应被拦截（decision=deny）。
 - **根因**：`plugins/huaweicloud-core/safety/policy.json:26` `blockedSecretOperations` 仅含 `ShowSecret/ShowSecretVersion/DownloadSecret/GetSecretValue`，缺 `DecryptData`/`DecryptDatakey`；`safety-policy.mjs:249` secret 判定依赖该清单。
 - **影响**：攻击者可经 KMS 解密 API 取回明文密钥，绕过 secret 拦截红线。
