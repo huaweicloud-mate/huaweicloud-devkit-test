@@ -1,0 +1,8 @@
+[plain] decision=deny risk=write | hcloud ecs DeleteServer --force
+[case] decision=deny risk=write | hcloud ecs deleteserver --force
+[concat-quote] decision=deny risk=write | hcloud ecs DeleteServ"er" --force
+[base64] decision=deny risk=execution | echo ZWNobyBoaQo= | base64 -d | bash
+[ansi-c-subst] decision=allow risk=unknown_read | hcloud $(echo $'E\x43S DeleteServer') --id x
+[ansi-c-subst2] decision=allow risk=unknown_read | hcloud $(echo $E\x43S DeleteServer) --id x
+[enc-subst] decision=deny risk=write | hcloud $(printf "Delete\x53erver") --id x
+=== DONE ===
