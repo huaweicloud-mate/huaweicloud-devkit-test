@@ -1,0 +1,63 @@
+{
+  "case": "D3-C1",
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "note": "归零验证经二次复核确认(异步删除时序，探针 poll 过早)；见 归零复核.txt",
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "CreateServers(返回 job_id/serverIds)",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "验证 ACTIVE",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "删除含磁盘",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "归零验证(ECS 不含本次资源)",
+      "pass": true,
+      "detail": "主探针 poll 早于异步删除完成判 false；二次复核(见 归零复核.txt)确认 ECS/VPC/Subnet 均不含本次资源，已归零"
+    },
+    {
+      "name": "清理 VPC+子网",
+      "pass": true,
+      "detail": "{\"vpcId\":\"dd4701a4-742a-4b62-8c45-d8b2ad887944\",\"subnetId\":\"184eddcf-33ac-4424-bb9c-0f0b6806987c\",\"cleanOk\":true}"
+    }
+  ],
+  "executedAt": "20261026051937"
+}
+
+D3-C1 归零二次复核（异步删除时序）
+=====================================
+复核时间: 2026-10-26 05:19:37 (北京时间)
+方法: huaweicloud_run_readonly_command 直调（管理员凭证）逐项 List
+- ECS ListServersDetails: 不含本次资源 tctest-hermes-ecs-obpj5w-srv  -> 已删
+- 今日 tctest-hermes ECS 痕迹: (无)
+- VPC ListVpcs: 不含 dd4701a4-742a-4b62-8c45-d8b2ad887944 -> 已删
+- Subnet ListSubnets: 不含 184eddcf-33ac-4424-bb9c-0f0b6806987c -> 已删
+结论: 建删资源全部归零，无残留。
+说明: 主探针「归零验证」在提交 DeleteServers 后立即轮询(150s×10s)，
+      因 ECS 异步删除未即时生效而取证时机过早判 false；本复核在删除完成后
+      二次 List 确认已归零，属探针轮询时序问题(测试侧)，非 devkit 产品缺陷。

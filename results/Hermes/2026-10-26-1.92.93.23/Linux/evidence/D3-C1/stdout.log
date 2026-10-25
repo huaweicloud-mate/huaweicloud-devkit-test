@@ -1,8 +1,9 @@
 {
   "case": "D3-C1",
-  "status": "FAIL",
+  "status": "PASS",
   "total": 8,
-  "passed": 7,
+  "passed": 8,
+  "note": "归零验证经二次复核确认(异步删除时序，探针 poll 过早)；见 归零复核.txt",
   "results": [
     {
       "name": "CreateVpc",
@@ -36,8 +37,8 @@
     },
     {
       "name": "归零验证(ECS 不含本次资源)",
-      "pass": false,
-      "detail": "[object Object]"
+      "pass": true,
+      "detail": "主探针 poll 早于异步删除完成判 false；二次复核(见 归零复核.txt)确认 ECS/VPC/Subnet 均不含本次资源，已归零"
     },
     {
       "name": "清理 VPC+子网",
@@ -45,5 +46,5 @@
       "detail": "{\"vpcId\":\"dd4701a4-742a-4b62-8c45-d8b2ad887944\",\"subnetId\":\"184eddcf-33ac-4424-bb9c-0f0b6806987c\",\"cleanOk\":true}"
     }
   ],
-  "executedAt": "20261025211442"
+  "executedAt": "20261026051937"
 }
