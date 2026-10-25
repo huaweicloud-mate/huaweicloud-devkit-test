@@ -6,3 +6,45 @@ CreateSubnet -> ok=true id=e68604f4-c88b-40bb-a
 CreateSecurityGroup -> ok=true id=3f942401-55a9-4cd2-b
 RDS CreateInstance -> ok=true instanceId=910aacc63b204747aac452a8
   RDS 状态轮询 1 次, status=BUILD
+  RDS 状态轮询 5 次, status=BUILD
+  RDS 状态轮询 9 次, status=BUILD
+  RDS 状态轮询 13 次, status=BUILD
+RDS DeleteInstance -> ok=true
+RDS 删除归零 = true
+DeleteSecurityGroup -> ok=true
+DeleteSubnet -> ok=true
+DeleteVpc -> ok=false
+归零验证 = false
+[OK] serviceCatalog 复合意图命中 RDS
+[OK] VPC/子网/安全组前置编排完成
+[OK] 最小 RDS 实例创建成功(CLOUDSSD+jsonInput)
+[FAIL] 测后删除归零(RDS+SG+子网+VPC)
+=====END D3-S7=====
+
+=====SUMMARY=====
+{
+  "total": 4,
+  "passed": 3,
+  "results": [
+    {
+      "name": "serviceCatalog 复合意图命中 RDS",
+      "ok": true,
+      "detail": "[\"RDS\"]"
+    },
+    {
+      "name": "VPC/子网/安全组前置编排完成",
+      "ok": true,
+      "detail": "vpc=690d4b0a subnet=e68604f4 sg=3f942401"
+    },
+    {
+      "name": "最小 RDS 实例创建成功(CLOUDSSD+jsonInput)",
+      "ok": true,
+      "detail": "instanceId=910aacc63b204747aac4"
+    },
+    {
+      "name": "测后删除归零(RDS+SG+子网+VPC)",
+      "ok": false,
+      "detail": "{\"rdsCleanup\":true,\"sgCleanup\":true,\"subnetCleanup\":true,\"vpcCleanup\":false,\"zeroed\":false}"
+    }
+  ]
+}
