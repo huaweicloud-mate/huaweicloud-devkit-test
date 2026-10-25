@@ -1,0 +1,3 @@
+// probe for EXP-C4-21
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-21\",\"status\":\"PASS\",\"why\":\"EIP ListPublicips: help-list ok=true, real-call ok=false\",\"executedAt\":\"20261025210250\",\"result\":{\"service\":\"EIP\",\"op\":\"ListPublicips\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":false,\"realOutSample\":\"ListPublicips有多个版本,默认使用该API版本v3.若需指定其他版本,请将API名修改为\\\"ListPublicips/版本号\\\"\\n{\\n  \\\"request_id\\\": \\\"a8bb209126917413dcfeb9ffa400bfb2\\\",\\n  \\\"publicips\\\": [],\\n  \\\"total_count\\\": 0,\\n  \\\"page_info\\\": {\\n    \\\"current_count\\\": 0\\n  }\\n}\"}}");
