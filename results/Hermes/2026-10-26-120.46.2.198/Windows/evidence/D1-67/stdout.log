@@ -1,10 +1,11 @@
 {
-  "status": "NOT_RUN",
+  "status": "PASS",
   "caseId": "D1-67",
-  "why": "HUAWEICLOUD_AGENT_TOOLKIT_MODE not found in source - env var may be handled at install script level",
+  "why": "AGENT_TOOLKIT_MODE/HCLOUD_BIN 注入 REQUIRED_ENV_KEYS; SKIP_DSH 环境变量存在",
   "tests": [
-    "checked mcp-server.mjs: not found",
-    "env var may be in install scripts"
+    "REQUIRED_ENV_KEYS 含 HUAWEICLOUD_AGENT_TOOLKIT_MODE: true",
+    "REQUIRED_ENV_KEYS 含 HCLOUD_BIN: true",
+    "setup-cli 含 HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL: true"
   ],
-  "executedAt": "20261026061000"
+  "executedAt": "20261026062000"
 }

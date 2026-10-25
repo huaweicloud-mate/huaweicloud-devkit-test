@@ -1,11 +1,13 @@
 {
-  "status": "PASS",
+  "status": "FAIL",
   "caseId": "D4-13",
-  "why": "read-only commands correctly classified: true",
+  "why": "最小权限未生效：只读子账号注入(HW_ACCESS_KEY/HW_SECRET_KEY env)后 WRITE VPC CreateVpc 仍 status=0 建桶成功(命名 hdk-ro-deny-probe)，说明 hcloud/凭证切换未按预期将写操作判定为 IAM 拒绝",
   "tests": [
-    "ECS.ListServers: decision=allow, risk=read_only",
-    "VPC.ListVpcs: decision=allow, risk=read_only",
-    "RDS.ListInstances: decision=allow, risk=read_only"
+    "READ ECS ListServersDetails: status=0 (JSON ok)",
+    "READ VPC ListVpcs: status=0 (JSON ok)",
+    "WRITE VPC CreateVpc: status=0, denied=false",
+    "WRITE detail: 创建了 VPC hdk-ro-deny-probe (cidr 10.199.0.0/16)，未被拒绝",
+    "cleanup: 已手动删除 hdk-ro-deny-probe 归零"
   ],
-  "executedAt": "20261026055000"
+  "executedAt": "20261026063000"
 }

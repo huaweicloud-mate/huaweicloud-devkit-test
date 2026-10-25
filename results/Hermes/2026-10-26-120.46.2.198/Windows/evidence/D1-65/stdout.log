@@ -1,10 +1,11 @@
 {
-  "status": "NOT_RUN",
+  "status": "PASS",
   "caseId": "D1-65",
-  "why": "debug env var not explicitly in mcp-protocol.mjs - may be in telemetry module",
+  "why": "DEBUG 仅在 HUAWEICLOUD_DEVKIT_DEBUG==='true' 时开启, debugLog 有 guard",
   "tests": [
-    "checked mcp-protocol.mjs: DEBUG not found",
-    "may be in telemetry/agent-detect.mjs"
+    "DEBUG env check: true",
+    "DEBUG === 'true' strict: true",
+    "debugLog guard (if !DEBUG return): true"
   ],
-  "executedAt": "20261026061000"
+  "executedAt": "20261026062000"
 }

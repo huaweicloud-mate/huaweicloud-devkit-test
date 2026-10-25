@@ -1,11 +1,34 @@
 {
-  "status": "PASS",
-  "caseId": "D3-C1",
-  "why": "ECS lifecycle: create=write, delete=deny, list=allow",
-  "tests": [
-    "create: risk=write",
-    "delete: decision=deny",
-    "list: decision=allow"
-  ],
-  "executedAt": "20261026060000"
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"4228c223-fcd6-4799-9b3d-7708a01460b8\",\n    \"name\": \"testbot3-hermes-e2e-2964"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"8a6f11a5-ce8a-464b-bc3f-cb81c8e00f56\",\n    \"name\": \"testbot3-hermes-e2e-2"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed1f3901a174fc2f7e76fa\",\n  \"serverIds\": [\n    \"b5f8e277-8176-4224-8193-2ece61a10115\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(校验真实删除)",
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+    }
+  ]
 }
