@@ -1,0 +1,1 @@
+// EXP-NR3-09: spawnSync EINVAL fix verification
