@@ -1,6 +1,6 @@
 # FINDINGS
 
-## [P0] D1-39/D1-40: Windows 升级检测链 EINVAL 静默失败
+## #1【P0】Windows 升级检测链 EINVAL 静默失败
 
 - **级别**: P0
 - **用例**: D1-39, D1-40
