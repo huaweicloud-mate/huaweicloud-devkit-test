@@ -1,6 +1,6 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-hermes-s2-mvobmg7a -> id=5c70469d-8382-4fbe-9869-647ea283a849
+创建测试VPC tctest-hermes-s2-mvprthoo -> id=241c4912-b393-4be8-99e4-985b33d22ceb
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
@@ -51,60 +51,20 @@ voucher_status(领取后) -> {"claimed":true,"message":"已领取过（代金券
 =====END D3-S4=====
 
 =====CASE D3-S3=====
-check_user -> realnameVerified=true agreementSigned=true err=
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-connect -> status=connected wsId=e7e9310835d44e5abbcb
-[2026-10-25T21:09:42.633Z] uploadProject: /home/zhangshuang/.hdk-s3-mvobmg7a -> /workspace/.hdk-s3-mvobmg7a.tar.gz (archive=217 bytes, md5=5ae1fb9c152fc5fbc687c8518cdd15dd)
-[2026-10-25T21:09:42.688Z] uploadViaHttpTunnel: start (archive=/tmp/sandbox-upload-1792962582614/.hdk-s3-mvobmg7a.tar.gz, size=217, remotePath=/workspace/.hdk-s3-mvobmg7a.tar.gz)
-[2026-10-25T21:09:42.688Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
-[2026-10-25T21:09:42.688Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
-[2026-10-25T21:09:42.739Z] deployFileServer: writing script (2456 b64 chars)
-[2026-10-25T21:09:42.790Z] deployFileServer: starting server on port 8888
-[2026-10-25T21:09:42.827Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 9000\r\n\u001b]133;C\u0007\r\n"
-[2026-10-25T21:09:42.827Z] uploadViaHttpTunnel: creating dedicated tunnel session
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-[2026-10-25T21:09:43.836Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
-[2026-10-25T21:09:43.838Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
-[2026-10-25T21:09:43.839Z] uploadViaHttpTunnel: tunnel ready, localPort=33317
-[2026-10-25T21:09:43.840Z] uploadViaHttpTunnel: waiting for server health on localhost:33317
-[2026-10-25T21:09:43.840Z] waitForServerReady: attempt 1, checking http://localhost:33317/health
-[2026-10-25T21:09:43.880Z] waitForServerReady: server ready on port 33317 after 0 retries
-[2026-10-25T21:09:43.880Z] uploadViaHttpTunnel: sending POST with 217 bytes
-[2026-10-25T21:09:43.920Z] uploadViaHttpTunnel: upload complete (bytes=217, md5=5ae1fb9c152fc5fbc687c8518cdd15dd)
-upload_project -> ok=true md5Verified=true
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-deploy_nginx -> ok=false port=8089 url=
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mvobmg7a/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
-close_session -> ok
-[OK] 沙箱 connect 成功
-[FAIL] s3-connect/upload/deploy 链路
-[OK] 部署返回可访问 URL 或检查通过
-[OK] 会话正常关闭
+check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: cc20c5333974484f902b422081519f95]
+[FAIL] 沙箱 check_user 通过
+→ 沙箱账号未实名/未签协议，标记 BLOCKED（外部依赖）
 =====END D3-S3=====
 
 =====SUMMARY=====
 {
-  "total": 21,
-  "passed": 20,
+  "total": 18,
+  "passed": 17,
   "results": [
     {
       "name": "测试 VPC 创建成功",
       "ok": true,
-      "detail": "vpcId=5c70469d-838"
+      "detail": "vpcId=241c4912-b39"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -129,7 +89,7 @@ close_session -> ok
     {
       "name": "OBS 建桶成功",
       "ok": true,
-      "detail": "bucket=tctest-hermes-obs-mvobmg7a"
+      "detail": "bucket=tctest-hermes-obs-mvprthoo"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -149,7 +109,7 @@ close_session -> ok
     {
       "name": "删除归零",
       "ok": true,
-      "detail": "bucket removed=tctest-hermes-obs-mvobmg7a"
+      "detail": "bucket removed=tctest-hermes-obs-mvprthoo"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
@@ -187,24 +147,9 @@ close_session -> ok
       "detail": "{\"before\":true,\"claim\":true,\"after\":true}"
     },
     {
-      "name": "沙箱 connect 成功",
-      "ok": true,
-      "detail": "wsId=e7e9310835d44e5abbcb"
-    },
-    {
-      "name": "s3-connect/upload/deploy 链路",
+      "name": "沙箱 check_user 通过",
       "ok": false,
-      "detail": "{\"upMd5\":true,\"dnOk\":false}"
-    },
-    {
-      "name": "部署返回可访问 URL 或检查通过",
-      "ok": true,
-      "detail": "{\"nginx\":{\"status\":\"PASS\",\"detail\":\"(port 8080, HTTP 200)\"}}"
-    },
-    {
-      "name": "会话正常关闭",
-      "ok": true,
-      "detail": "\"ok\""
+      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: cc20c5333974484f902b422081519f95]\"}"
     }
   ]
 }

@@ -11,7 +11,7 @@ MCP="$SRC/mcp-server.mjs"
 PKGROOT="$HDK"
 HDKMCP="$SRC/mcp-server.mjs"
 SAMPLE="$P/sample-react"
-ISO_HOME="$HOME/devkit-test/Hermes/iso-home-20261025"
+ISO_HOME="$HOME/devkit-test/Hermes/iso-home-20261027"
 EVAL="/home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/run-eval.mjs"
 
 echo "===== [0] 包版本基线 ===== ($(date '+%F %T'))"
