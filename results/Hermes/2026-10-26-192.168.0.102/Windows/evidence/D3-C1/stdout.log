@@ -1,0 +1,36 @@
+{
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"f3552f2c-00e6-4588-8421-e5d2919a2cf1\",\n    \"name\": \"testbot3-hermes-e2e-2985"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"4788f793-3a96-41c6-99c3-a4fde79fd7dd\",\n    \"name\": \"testbot3-hermes-e2e-2"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed1f3901a176407e5b47aa\",\n  \"serverIds\": [\n    \"bb3557e9-0968-4814-a4d7-073027312a60\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(校验真实删除)",
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+    }
+  ],
+  "why": "ECS生命周期E2E: 创建流程PASS(VPC/子网/ECS创建+审批分类=allow)，但 finally归零 自动清理缺陷——ECS异步删除150s轮询未确认(sh()返回DeleteServers job但ECS仍ACTIVE)，随后子网/VPC删除顺序错触发VPC.0104。已人工兜底: DeleteServers→20s内归零→DeleteSubnet→DeleteVpc，最终归零验证 PASS(ECS/子网/VPC/EVS/EIP 残留=0)。",
+  "executedAt": "20261026113829"
+}

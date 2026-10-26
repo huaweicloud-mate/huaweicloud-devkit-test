@@ -1,0 +1,36 @@
+{
+  "case": "D3-C3",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 3,
+  "failed": 2,
+  "results": [
+    {
+      "name": "connect",
+      "pass": true,
+      "detail": "ws=e7e9310835"
+    },
+    {
+      "name": "upload_project",
+      "pass": false,
+      "detail": "{\"__error\":\"Error: Command failed: tar -czf C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\sandbox-upload-1792985724467\\\\d3c"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": false,
+      "detail": "undefined:undefined"
+    },
+    {
+      "name": "deploy_check",
+      "pass": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "close_session",
+      "pass": true,
+      "detail": "\"ok\""
+    }
+  ],
+  "why": "沙箱部署E2E: connect/close_session PASS，但 sandbox_upload_project 在 Windows 上 tar -czf 打包失败(tar -czf C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\sandbox-upload-... Command failed)，导致 deploy_nginx 无项目(undefined)。根因疑似 Windows 路径/probe 用 /tmp 绝对路径 + tar 参数问题，待源码核对 sandbox_upload_project 的 tar 打包逻辑。",
+  "executedAt": "20261026113829"
+}

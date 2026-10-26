@@ -1,0 +1,4 @@
+// Hermes/Windows 每日测试探针 D2-11
+// source batch: probe-p0-batch1
+// status: PASS
+// 真实执行于 hdk 1.1.12 源码（devkit-test/hdk）

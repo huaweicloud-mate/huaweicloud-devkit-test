@@ -1,0 +1,31 @@
+{
+  "case": "D3-C2",
+  "status": "PASS",
+  "total": 4,
+  "passed": 3,
+  "failed": 1,
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": false,
+      "detail": "Start at 2026-10-26 03:35:02.0481166 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-2985701786] successfully, request id [000001A17646A06344C717919A154115]\nNotice: If the configured"
+    },
+    {
+      "name": "set静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-2985701786.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-2985701786.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
+    },
+    {
+      "name": "get静态站",
+      "pass": true,
+      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+    },
+    {
+      "name": "删桶归零",
+      "pass": true,
+      "detail": "Start at 2026-10-26 03:35:04.7034126 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-2985701786] successfully!"
+    }
+  ],
+  "why": "OBS静态站E2E: 建桶→set/get静态站(websiteUrl=http://testbot3-hermes-obs-<ts>.obs-website.cn-north-4...)→删桶归零 全链路完成，归零已验(OBS ls 无 testbot3-hermes 前缀桶)。注: 脚本 'OBS建桶' 断言因 hcloud OBS mb 退出码非0而误报 False，实际建桶成功(输出含 success)。",
+  "executedAt": "20261026113829"
+}

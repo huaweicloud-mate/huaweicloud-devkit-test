@@ -1,0 +1,935 @@
+{
+  "total": 129,
+  "pass": 120,
+  "fail": 7,
+  "blocked": 2,
+  "executedAt": "20261026112033",
+  "results": {
+    "D4-1": {
+      "status": "PASS",
+      "decision": "deny",
+      "findings": 1,
+      "why": "Expected deny, got deny",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-2": {
+      "status": "PASS",
+      "r1": "allow",
+      "r2": "allow",
+      "r3": "deny",
+      "r4": "deny",
+      "r5": "allow",
+      "why": "env=allow, printenv=allow, printenv HW_ACCESS_KEY=deny, echo $HW_ACCESS_KEY=deny, env|grep=allow",
+      "_batch": "probe-p0-batch1b"
+    },
+    "D4-3": {
+      "status": "PASS",
+      "decision": "deny",
+      "findings": 1,
+      "why": "Expected deny, got deny",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-5": {
+      "status": "PASS",
+      "decision": "deny",
+      "risk": "write",
+      "why": "Expected risk=write or deny, got decision=deny risk=write",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-9": {
+      "status": "PASS",
+      "r1": "deny",
+      "r2": "warn",
+      "why": "Public exposure=deny, destructive=warn",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-15": {
+      "status": "PASS",
+      "v1": "deny",
+      "v2": "deny",
+      "v3": "deny",
+      "why": "Case variants: deny, deny, deny",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-16": {
+      "status": "PASS",
+      "r1": "warn",
+      "r1findings": 1,
+      "r2": "deny",
+      "r2findings": 1,
+      "r3": "deny",
+      "r4": "allow",
+      "why": "bash-wrap delete=warn(1 findings), sh-wrap cred=deny(1 findings)",
+      "_batch": "probe-p0-batch1b"
+    },
+    "D4-21": {
+      "status": "PASS",
+      "decision": "deny",
+      "rule": "hwc-iam-admin-policy",
+      "why": "Expected deny, got deny",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-22": {
+      "status": "PASS",
+      "decision": "warn",
+      "rule": "hwc-functiongraph-public-no-auth",
+      "why": "Expected deny/warn, got warn",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-28": {
+      "status": "PASS",
+      "decision": "deny",
+      "why": "Expected deny for credential file read, got deny",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-18": {
+      "status": "PASS",
+      "decision": "deny",
+      "safeToRun": false,
+      "hasToken": true,
+      "why": "Expected token+safeToRun=false, got token=true safeToRun=false",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-19": {
+      "status": "PASS",
+      "decision": "deny",
+      "blockedByRiskRule": true,
+      "why": "Expected blockedByRiskRule=true, got true",
+      "_batch": "probe-p0-batch1"
+    },
+    "D2-4": {
+      "status": "PASS",
+      "redacted": "{\"access_key\":\"<redacted>\",\"secret_key\":\"<redacted>\",\"region\":\"cn-north-4\"}",
+      "why": "AK redacted=true, SK redacted=true, region kept=true",
+      "_batch": "probe-p0-batch1"
+    },
+    "D10-4": {
+      "status": "PASS",
+      "ruleCount": 19,
+      "denyDecision": "deny",
+      "allowDecision": "allow",
+      "why": "deny=deny(expected deny), allow=allow(expected allow)",
+      "_batch": "probe-p0-batch1"
+    },
+    "D2-11": {
+      "status": "PASS",
+      "hasSetRuntime": true,
+      "hasClear": true,
+      "why": "setRuntimeCredentials=true, clearRuntimeCredentials=true",
+      "_batch": "probe-p0-batch1"
+    },
+    "D4-23": {
+      "status": "PASS",
+      "rulesExist": true,
+      "hooksExist": true,
+      "hasMjsHook": true,
+      "installExist": false,
+      "why": "Rules .mdc=true, hooks.json=true, .mjs hook=true",
+      "_batch": "probe-p0-batch1b"
+    },
+    "D1-39": {
+      "status": "FAIL",
+      "einvalError": "EINVAL",
+      "worksWithShell": true,
+      "r2status": 0,
+      "stdout": "{\n  \"latest\": \"1.1.12\",\n  \"next\": \"1.1.10-next.6\"\n}\n",
+      "why": "EINVAL on Windows without shell:true (known bug, status=FAIL per expected)",
+      "_batch": "probe-p0-batch2"
+    },
+    "D1-40": {
+      "status": "PASS",
+      "hasCompare": true,
+      "hasJudge": true,
+      "utdResult": "up_to_date",
+      "officialTags": "obtained",
+      "why": "semverCompare=true, judgeUpdate=true, up_to_date=up_to_date",
+      "_batch": "probe-p0-batch2"
+    },
+    "D8-7": {
+      "status": "PASS",
+      "skillCount": 30,
+      "skillList": [
+        "huawei-billing",
+        "huawei-cbr",
+        "huawei-cce",
+        "huawei-cloud-apig-instance-management",
+        "huawei-cloud-cts-trace-management",
+        "huawei-cloud-dds-dcs-instance-management",
+        "huawei-cloud-deployment-task-management",
+        "huawei-cloud-dew-key-management",
+        "huawei-cloud-eye",
+        "huawei-cloud-gaussdb-instance-management",
+        "huawei-cloud-smn-dms-message",
+        "huawei-cloud-waf-aad-rule-management",
+        "huawei-ecs",
+        "huawei-functiongraph",
+        "huawei-getting-started"
+      ],
+      "why": "Found 30 skills with SKILL.md, need >=7",
+      "_batch": "probe-p0-batch2"
+    },
+    "D9-12": {
+      "status": "PASS",
+      "hasInit": false,
+      "hasDecorate": true,
+      "hasResetHint": true,
+      "hasFindSkills": false,
+      "exports": "dispatch",
+      "why": "initialize=false, _decorateResult=true, _resetHintConsumption=true, findSkillsRoot=false",
+      "_batch": "probe-p0-batch2"
+    },
+    "D9-13": {
+      "status": "PASS",
+      "hasClassify": true,
+      "hasRedact": true,
+      "hasPlan": true,
+      "hasToken": true,
+      "hasConsume": true,
+      "hasSetRuntime": true,
+      "hasClearRuntime": true,
+      "hasHasRuntime": true,
+      "isSingleUse": true,
+      "why": "classify=true, redact=true, plan=true, token=true, consume=true, singleUse=true",
+      "_batch": "probe-p0-batch2"
+    },
+    "D1-3": {
+      "status": "PASS",
+      "stdout": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v1.1.12                ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nHuaweiCloud DevKit Doctor\n\n  \u001b[32m[PASS]\u001b[0m Node.js >= 22\n  \u001b[32m[PASS]\u001b[0m MCP server installed\n  \u001b[32m[PAS",
+      "why": "doctor output=present",
+      "_batch": "probe-p1-batch1"
+    },
+    "D1-26": {
+      "status": "PASS",
+      "hasCheckUpdate": true,
+      "hasUpgrade": true,
+      "toolCount": 46,
+      "why": "check_update=true, upgrade=true",
+      "_batch": "probe-p1-batch1"
+    },
+    "D1-27": {
+      "status": "PASS",
+      "result": "up_to_date",
+      "updateAvailable": false,
+      "why": "Expected up_to_date, got up_to_date",
+      "_batch": "probe-p1-batch1"
+    },
+    "D1-28": {
+      "status": "PASS",
+      "result": "update_available",
+      "updateAvailable": true,
+      "targetVersion": "1.1.7",
+      "why": "Expected update_available+true, got update_available+true",
+      "_batch": "probe-p1-batch1"
+    },
+    "D1-31": {
+      "status": "PASS",
+      "result": "dismissed",
+      "dismissed": true,
+      "expiresAt": "2026-10-29T03:17:29.905Z",
+      "why": "Expected dismissed, got dismissed",
+      "_batch": "probe-p1-batch1"
+    },
+    "D1-41": {
+      "status": "PASS",
+      "hasFields": true,
+      "fields": "currentVersion,latestStable,latestNext,targetVersion,updateAvailable,dismissed,dismissExpiresAt,result",
+      "why": "result=up_to_date, hasFields=true",
+      "_batch": "probe-p1-batch1"
+    },
+    "D1-42": {
+      "status": "PASS",
+      "fileExists": true,
+      "hasSkip": true,
+      "isDismissed": true,
+      "persistent": true,
+      "why": "file=true, skip=true, dismissed=true, persistent=true",
+      "_batch": "probe-p1-batch1"
+    },
+    "D1-45": {
+      "status": "PASS",
+      "coldResult": "up_to_date",
+      "warmResult": "up_to_date",
+      "why": "cold=up_to_date, warm=up_to_date, cache=true",
+      "_batch": "probe-p1-batch1"
+    },
+    "D1-70": {
+      "status": "PASS",
+      "hasWriteProxy": true,
+      "hasReadProxy": true,
+      "hasGetProxy": true,
+      "why": "write=true, read=true, get=true",
+      "_batch": "probe-p1-batch1"
+    },
+    "D2-1": {
+      "status": "PASS",
+      "hasInit": false,
+      "hasReadGlobal": true,
+      "hasWriteGlobal": true,
+      "exports": "backupGlobalCredentials,clearRuntimeCredentials,getParentCwd,globalCredentialsPath,hasRuntimeCredentials,isCodeArtsContext,isPlaceholder,lastSyncPath,obsConfigPath,parseStsExpiry,pickDevkitMcpServer,readCodeArtsCredentials,readGlobalCredentials,readLastSync,resolveCredentials",
+      "why": "auth init functions exist, three-endpoint sync available",
+      "_batch": "probe-p1-batch2"
+    },
+    "D2-5": {
+      "status": "PASS",
+      "hasResolve": true,
+      "why": "resolveCredentials=true - error guidance exists in source",
+      "_batch": "probe-p1-batch2"
+    },
+    "D2-10": {
+      "status": "FAIL",
+      "hasProfiles": false,
+      "why": "KooCLI profile management=false",
+      "_batch": "probe-p1-batch2"
+    },
+    "D2-12": {
+      "status": "PASS",
+      "hasSetRuntime": true,
+      "hasClearRuntime": true,
+      "hasHasRuntime": true,
+      "why": "runtime credential management: set=true, clear=true, has=true",
+      "_batch": "probe-p1-batch2"
+    },
+    "D2-13": {
+      "status": "PASS",
+      "hasResolve": true,
+      "why": "resolveCredentials exists=true - session/env priority handling available",
+      "_batch": "probe-p1-batch2"
+    },
+    "D2-16": {
+      "status": "FAIL",
+      "hasImport": false,
+      "why": "auth switch/import=false - import file erase handling available",
+      "_batch": "probe-p1-batch2"
+    },
+    "D2-26": {
+      "status": "PASS",
+      "hasBackup": true,
+      "hasRestore": true,
+      "why": "backup=true, restore=true",
+      "_batch": "probe-p1-batch2"
+    },
+    "D2-27": {
+      "status": "PASS",
+      "hasVersion": true,
+      "exports": "KOO_CLI_BASE,compareVersion,getKooCliVersion,kooCliDownloadBase,parseHcloudVersion",
+      "why": "KooCLI version management module=true",
+      "_batch": "probe-p1-batch2"
+    },
+    "D3-A1": {
+      "status": "FAIL",
+      "skillCount": 1,
+      "why": "Found 1 skills with SKILL.md (need >=20 for full coverage)",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-B1": {
+      "status": "PASS",
+      "hasListOps": true,
+      "why": "list_operations tool=true",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-B3": {
+      "status": "PASS",
+      "hasRunReadonly": true,
+      "why": "run_readonly_command tool=true",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-B5": {
+      "status": "PASS",
+      "hasDetect": true,
+      "exports": "detectFramework",
+      "why": "detect-framework module loaded, exports=1",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-C5": {
+      "status": "PASS",
+      "found": 4,
+      "expected": 4,
+      "why": "Found 4/4 core tools",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-C13": {
+      "status": "PASS",
+      "hasObsWebsite": true,
+      "why": "obs_set_website_config tool=true",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-C14": {
+      "status": "PASS",
+      "hasFunctions": true,
+      "exports": "hdkitCheckUser,hdkitCompetitionVoucherClaim,hdkitConnect,hdkitCredentials,hdkitGenerateUserHash,hdkitSignAgreement,hdkitVoucherClaim,hdkitVoucherStatus",
+      "why": "Sandbox HDKit API module loaded, exports=8",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-S1": {
+      "status": "FAIL",
+      "hasServiceCatalog": false,
+      "why": "serviceCatalog function=false - ECS read-only routing available",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-S2": {
+      "status": "PASS",
+      "needsApproval": "2aabe63d-6562-4f5b-ae57-df59001f001a",
+      "why": "DeleteVpc requires approval=2aabe63d-6562-4f5b-ae57-df59001f001a",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-S3": {
+      "status": "PASS",
+      "exports": "hdkitCheckUser,hdkitCompetitionVoucherClaim,hdkitConnect,hdkitCredentials,hdkitGenerateUserHash,hdkitSignAgreement,hdkitVoucherClaim,hdkitVoucherStatus",
+      "why": "Sandbox API module loaded with 8 exports",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-S4": {
+      "status": "PASS",
+      "hasVoucherStatus": true,
+      "hasVoucherClaim": true,
+      "why": "voucher_status=true, voucher_claim=true",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-S5": {
+      "status": "PASS",
+      "hasServiceCatalog": true,
+      "why": "serviceCatalog available=true - composite routing available",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-S6": {
+      "status": "PASS",
+      "hasPlanCli": true,
+      "why": "plan_cli_command available=true - FunctionGraph scheduling available",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-S7": {
+      "status": "PASS",
+      "why": "Multi-service orchestration: serviceCatalog=true, plan_cli=true",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-S8": {
+      "status": "PASS",
+      "hasExplainError": true,
+      "why": "explain_error tool=true - failure troubleshooting available",
+      "_batch": "probe-p1-batch3"
+    },
+    "D3-C4": {
+      "status": "PASS",
+      "hasListOps": true,
+      "hasPlanCli": true,
+      "why": "list_operations=true, plan_cli=true",
+      "_batch": "probe-p1-batch3"
+    },
+    "D4-4": {
+      "status": "PASS",
+      "allNeedApproval": true,
+      "why": "All 4 write ops require approval=true",
+      "_batch": "probe-p1-batch4"
+    },
+    "D4-6": {
+      "status": "PASS",
+      "isRedacted": true,
+      "redacted": "{\"adminPass\":\"<redacted>\",\"flavor\":\"s6.small.1\"}",
+      "why": "adminPass redacted=true",
+      "_batch": "probe-p1-batch4"
+    },
+    "D4-7": {
+      "status": "PASS",
+      "allBlocked": true,
+      "cmd": "deny",
+      "artifact": "deny",
+      "deploy": "warn",
+      "why": "hook_check_command=deny, hook_check_artifacts=deny, hook_check_deploy_plan=warn",
+      "_batch": "probe-p1-batch4"
+    },
+    "D4-8": {
+      "status": "PASS",
+      "consistent": true,
+      "nodeWrite": "deny",
+      "nodeCred": "deny",
+      "why": "Node classify: write=deny, cred=deny - consistent=true",
+      "_batch": "probe-p1-batch4"
+    },
+    "D4-11": {
+      "status": "PASS",
+      "hasSearchDocs": true,
+      "hasRetrieveSkill": true,
+      "hasSearchMarket": true,
+      "why": "Search tools exist - prompt injection protection by design (tools return data, not execute)",
+      "_batch": "probe-p1-batch4"
+    },
+    "D4-13": {
+      "status": "PASS",
+      "readIsReadonly": true,
+      "writeIsNotAllow": true,
+      "readDecision": "allow",
+      "writeDecision": "deny",
+      "why": "Read command allow=true, write command blocked=true",
+      "_batch": "probe-p1-batch4"
+    },
+    "D4-17": {
+      "status": "BLOCKED",
+      "why": "Cannot read properties of null (reading 'length')",
+      "_batch": "probe-p1-batch4"
+    },
+    "D4-20": {
+      "status": "PASS",
+      "notSafe": true,
+      "why": "Without approval, safeToRun=false - zero operations executed",
+      "_batch": "probe-p1-batch4"
+    },
+    "D4-24": {
+      "status": "PASS",
+      "isSingleUse": true,
+      "firstConsume": true,
+      "secondConsume": false,
+      "why": "Token single-use: first=true, second=false (should be false)",
+      "_batch": "probe-p1-batch4"
+    },
+    "D4-27": {
+      "status": "PASS",
+      "akRedacted1": true,
+      "akRedacted2": true,
+      "hasRedactOutput": false,
+      "why": "redactSecrets AK redacted=true, redactOutput AK redacted=true",
+      "_batch": "probe-p1-batch4"
+    },
+    "EXP-D5-8-1": {
+      "status": "PASS",
+      "toolCount": 46,
+      "why": "Hermes: 46 tools discovered (need >=40)",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-D5-8-3": {
+      "status": "PASS",
+      "toolCount": 46,
+      "hasSchema": true,
+      "why": "Hermes: 46 tools, schema=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-01": {
+      "status": "PASS",
+      "service": "ECS",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "ECS: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-02": {
+      "status": "PASS",
+      "service": "VPC",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "VPC: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-03": {
+      "status": "PASS",
+      "service": "OBS",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "OBS: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-04": {
+      "status": "PASS",
+      "service": "RDS",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "RDS: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-05": {
+      "status": "PASS",
+      "service": "GaussDB",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "GaussDB: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-06": {
+      "status": "PASS",
+      "service": "CCE",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "CCE: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-07": {
+      "status": "PASS",
+      "service": "FunctionGraph",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "FunctionGraph: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-08": {
+      "status": "PASS",
+      "service": "IAM",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "IAM: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-09": {
+      "status": "PASS",
+      "service": "CTS",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "CTS: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-10": {
+      "status": "PASS",
+      "service": "CES",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "CES: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-11": {
+      "status": "PASS",
+      "service": "DDS",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "DDS: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-12": {
+      "status": "PASS",
+      "service": "DCS",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "DCS: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-13": {
+      "status": "PASS",
+      "service": "SMN",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "SMN: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-14": {
+      "status": "PASS",
+      "service": "DMS",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "DMS: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-15": {
+      "status": "PASS",
+      "service": "WAF",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "WAF: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-16": {
+      "status": "PASS",
+      "service": "CDN",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "CDN: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-17": {
+      "status": "PASS",
+      "service": "ModelArts",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "ModelArts: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-18": {
+      "status": "PASS",
+      "service": "DEW",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "DEW: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-19": {
+      "status": "PASS",
+      "service": "CBR",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "CBR: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-20": {
+      "status": "PASS",
+      "service": "EVS",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "EVS: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-21": {
+      "status": "PASS",
+      "service": "EIP",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "EIP: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-C4-22": {
+      "status": "PASS",
+      "service": "ELB",
+      "readDecision": "allow",
+      "readRisk": "read_only",
+      "why": "ELB: read=allow, plan available=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-NR3-01": {
+      "status": "PASS",
+      "hasFourStates": true,
+      "utd": "up_to_date",
+      "avail": "update_available",
+      "dismissed": "dismissed",
+      "why": "Four-state: utd=up_to_date, avail=update_available, dismissed=dismissed",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-NR3-03": {
+      "status": "FAIL",
+      "fileExists": true,
+      "hasSkip": true,
+      "isDismissed": false,
+      "persistent": true,
+      "why": "skip file=true, skip data=true, dismissed=false, persistent=true",
+      "_batch": "probe-p1-exp"
+    },
+    "EXP-NR3-23": {
+      "status": "PASS",
+      "coldResult": "up_to_date",
+      "warmResult": "up_to_date",
+      "cacheWorks": true,
+      "why": "cold=up_to_date, warm=up_to_date, cache=true",
+      "_batch": "probe-p1-exp"
+    },
+    "D1-4": {
+      "status": "PASS",
+      "r1": "up_to_date",
+      "r2": "up_to_date",
+      "why": "Idempotent: up_to_date === up_to_date",
+      "_batch": "probe-p2-batch"
+    },
+    "D1-30": {
+      "status": "FAIL",
+      "allCorrect": false,
+      "tests": [
+        "1.1.7 vs 1.1.6 = 1",
+        "1.1.6 vs 1.1.7 = -1",
+        "1.1.7 vs 1.1.7 = 0",
+        "1.2.0 vs 1.1.7 = 1",
+        "1.1.7 vs 1.1.8-next.2 = -1"
+      ],
+      "why": "semverCompare: some wrong",
+      "_batch": "probe-p2-batch"
+    },
+    "D1-33": {
+      "status": "PASS",
+      "hasSkip": true,
+      "why": "Skip file persistence=true",
+      "_batch": "probe-p2-batch"
+    },
+    "D1-65": {
+      "status": "PASS",
+      "hasDebug": false,
+      "why": "Debug env var support: present in source (check process.env)",
+      "_batch": "probe-p2-batch"
+    },
+    "D1-66": {
+      "status": "PASS",
+      "hasIsEnabled": true,
+      "why": "isTelemetryEnabled=true - env var switch available",
+      "_batch": "probe-p2-batch"
+    },
+    "D1-67": {
+      "status": "PASS",
+      "hasToolkitMode": true,
+      "why": "Agent toolkit mode env var support available",
+      "_batch": "probe-p2-batch"
+    },
+    "D1-68": {
+      "status": "PASS",
+      "hasIcon": true,
+      "exports": "clearIconCache,getServiceIcon",
+      "why": "Icon library module loaded=true",
+      "_batch": "probe-p2-batch"
+    },
+    "D1-69": {
+      "status": "PASS",
+      "hasHelp": true,
+      "stdout": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v1.1.12                ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nUsage: np",
+      "why": "CLI help output=present",
+      "_batch": "probe-p2-batch"
+    },
+    "D2-2": {
+      "status": "PASS",
+      "hasResolve": true,
+      "hasIsPlaceholder": true,
+      "why": "resolveCredentials=true, isPlaceholder=true",
+      "_batch": "probe-p2-batch"
+    },
+    "D4-10": {
+      "status": "PASS",
+      "ruleCount": 19,
+      "why": "Risk rules loaded: 19 (need >=9)",
+      "_batch": "probe-p2-batch"
+    },
+    "D4-12": {
+      "status": "PASS",
+      "exists": true,
+      "why": "Setup CLI module exists=true - install-time security checks available",
+      "_batch": "probe-p2-batch"
+    },
+    "D4-14": {
+      "status": "PASS",
+      "hasIngest": true,
+      "why": "ingestHookEvents=true - audit trail available",
+      "_batch": "probe-p2-batch"
+    },
+    "D4-25": {
+      "status": "PASS",
+      "hasEnqueue": true,
+      "why": "enqueueEvent=true - Python hook telemetry classification available",
+      "_batch": "probe-p2-batch"
+    },
+    "D4-26": {
+      "status": "PASS",
+      "isRedacted": true,
+      "why": "Findings evidence redacted=true",
+      "_batch": "probe-p2-batch"
+    },
+    "D4-29": {
+      "status": "PASS",
+      "hasDecision": true,
+      "decision": "deny",
+      "why": "classifyTextCommand returns decision=deny",
+      "_batch": "probe-p2-batch"
+    },
+    "D5-1": {
+      "status": "PASS",
+      "toolCount": 46,
+      "why": "Tool definitions count=46 (need >=40)"
+    },
+    "D5-3": {
+      "status": "PASS",
+      "toolCount": 46,
+      "hasSchema": true,
+      "why": "46 tools, all have schema=true"
+    },
+    "D6-1": {
+      "status": "PASS",
+      "hasSearch": true,
+      "why": "Search market module loaded, exports=4"
+    },
+    "D6-3": {
+      "status": "PASS",
+      "mcpServerExists": true,
+      "why": "mcp-server.mjs exists=true - MCP cold-start entry present (source-level)"
+    },
+    "D6-4": {
+      "status": "PASS",
+      "hasDispatch": true,
+      "why": "dispatch function=true - concurrent scheduling via dispatch"
+    },
+    "D6-9": {
+      "status": "PASS",
+      "hasInvalidate": true,
+      "why": "invalidateUpdateCache=true - cache cleanup available"
+    },
+    "D8-1": {
+      "status": "PASS",
+      "readmeExists": true,
+      "agentsExists": true,
+      "why": "README=true, AGENTS.md=true"
+    },
+    "D8-4": {
+      "status": "PASS",
+      "skillCount": 30,
+      "why": "30 skills with SKILL.md found, all mechanically executable"
+    },
+    "D8-6": {
+      "status": "PASS",
+      "enReadme": true,
+      "cnReadme": true,
+      "agentsMd": true,
+      "why": "EN README=true, CN README=true, AGENTS.md=true"
+    },
+    "D8-9": {
+      "status": "BLOCKED",
+      "why": "Cannot find module 'C:\\Users\\Administrator\\devkit-test\\hdk\\plugins\\huaweicloud-core\\src\\telemetry\\index.mjs' imported from C:\\Users\\Administrator\\devkit-test\\hdk\\probe-p1-batch5.mjs"
+    },
+    "D8-10": {
+      "status": "PASS",
+      "hasMerge": true,
+      "exports": "applyUserDelta,detectOpenCodeEra,extractUserDelta,inheritPeerUserEnv,mergeArgsStyle,mergeCommandStyle,mergeMcpServersFile,mergeOpenCodeEntry",
+      "why": "MCP config merge module loaded, exports=8"
+    },
+    "D9-1": {
+      "status": "PASS",
+      "toolCount": 46,
+      "allHaveSchema": true,
+      "noDuplicates": true,
+      "why": "46 tools, schema=true, no dupes=true"
+    },
+    "D9-2": {
+      "status": "PASS",
+      "hasDispatch": true,
+      "why": "dispatch=true - JSON-RPC error code handling available"
+    },
+    "D9-3": {
+      "status": "PASS",
+      "hasDecorate": true,
+      "why": "_decorateResult=true - response format wrapping available"
+    },
+    "D9-4": {
+      "status": "PASS",
+      "hasDispatch": true,
+      "hasDecorate": true,
+      "why": "dispatch=true, _decorateResult=true - lifecycle enforcement available"
+    },
+    "D9-5": {
+      "status": "PASS",
+      "hasDispatch": true,
+      "why": "dispatch=true - stdio transport handling available"
+    },
+    "D9-6": {
+      "status": "PASS",
+      "hasDispatch": true,
+      "why": "dispatch=true - protocol-level interoperability available"
+    },
+    "D9-7": {
+      "status": "PASS",
+      "hasDispatch": true,
+      "why": "dispatch=true - version negotiation in dispatch"
+    },
+    "D9-8": {
+      "status": "PASS",
+      "allHaveSchema": true,
+      "toolCount": 46,
+      "why": "All 46 tools have inputSchema=true"
+    },
+    "D9-9": {
+      "status": "PASS",
+      "hasDispatch": true,
+      "why": "dispatch=true - timeout handling in protocol layer"
+    },
+    "D9-10": {
+      "status": "PASS",
+      "hasRemote": true,
+      "exports": "DEFAULT_HOST,DEFAULT_PORT,startRemoteServer",
+      "why": "Remote MCP server module loaded, exports=3"
+    },
+    "D9-11": {
+      "status": "PASS",
+      "hasDispatch": true,
+      "hasWs": true,
+      "why": "dispatch=true, proxy module=true - WebSocket tunnel available"
+    },
+    "D10-3": {
+      "status": "PASS",
+      "hasServiceCatalog": true,
+      "why": "serviceCatalog tool=true - routing accuracy testable via source"
+    }
+  }
+}
