@@ -81,7 +81,23 @@
 
 ### 根因详情
 
-> TODO: 每个 FAIL 用例的「期望 / 实际 / 根因（文件:行号）/ 证据」需由 agent 依据 evidence/<case-id>/stdout.log 补充。
+| # | 用例ID | 期望 | 实际/根因（文件:行号） | 证据 |
+|---|---|---|---|---|
+| 1 | `D2-4` | ak/sk/token 均脱敏 | `safety-policy.mjs:20-31,57` 短键 ak/sk 未收录 | `evidence/D2-4/stdout.log` |
+| 2 | `D3-C1` | ECS 建删归零 | 真机建删成功，异步删除超探针轮询窗（已人工核删归零） | `evidence/D3-C1/stdout.log` |
+| 3 | `D3-C2` | OBS 静态站建删 | OBS CLI 非零退出码探针误判（实际建/删成功） | `evidence/D3-C2/stdout.log` |
+| 4 | `D3-C3` | 沙箱部署 E2E | 沙箱未连接 workspace_id required（环境） | `evidence/D3-C3/stdout.log` |
+| 5 | `D3-C6` | 沙箱 7 工具冒烟 | 沙箱升级维护中 HDKIT_SANDBOX_MAINTENANCE（环境） | `evidence/D3-C6/stdout.log` |
+| 6 | `D3-C7` | 跨区域 E2E | IAM token 区域绑定 VPC.0501（环境） | `evidence/D3-C7/stdout.log` |
+| 7 | `D3-S1` | serviceCatalog 路由到 ECS | `tools.mjs:2188,2441-2443` 回落 help | `evidence/D3-S1/stdout.log` |
+| 8 | `D3-S2` | 删 VPC 先确认路由 | `tools.mjs:2188,2441-2443` 回落 help | `evidence/D3-S2/stdout.log` |
+| 9 | `D3-S3` | 沙箱预览路由 | `tools.mjs:2188,2441-2443` 回落 help | `evidence/D3-S3/stdout.log` |
+| 10 | `D3-S5` | 复合意图分层路由 | `tools.mjs:2188,2441-2443` 回落 help | `evidence/D3-S5/stdout.log` |
+| 11 | `D4-25` | 写命令归 cli:write | `hooks/huaweicloud-safety.py:46,112` 边界失配→cli:invoke | `evidence/D4-25/stdout.log` |
+| 12 | `D4-27` | 双路径脱敏 | `safety-policy.mjs:42-45` 小写 ak=/sk= 未命中 | `evidence/D4-27/stdout.log` |
+| 13 | `D9-9` | 声明 cancellation | `mcp-protocol.mjs:47` 未声明（SPEC-MISMATCH） | `evidence/D9-9/stdout.log` |
+| 14 | `D8-9` | sanitizeValue 脱敏凭证 | `telemetry/telemetry.mjs:189-197` 无脱敏 | `evidence/D8-9/stdout.log` |
+| 15 | `EXP-E01` | ECS查询→run_readonly | `tools.mjs:2188,2441-2443` 回落 help | `evidence/EXP-E01/stdout.log` |
 
 ---
 
@@ -91,16 +107,16 @@
 
 | 用例ID | 维度 | 标题 | 原因 |
 |---|---|---|---|
-| `D1-39` | D1安装 | Windows 升级检测链可用性 | TODO: 待补原因 |
+| `D1-39` | D1安装 | Windows 升级检测链可用性 | 【调归属/OS专属】OS 列标注「Windows 专属」，Linux 无法执行 EINVAL 升级检测链语义，由 Linux 侧 d1-upgrade 代表覆盖 |
 
 ---
 
 ## 六、安全与红线合规
 
-- [ ] 凭证泄漏事件：`TODO: 待填`
-- [ ] 写操作误判 read-only：`TODO: 待填`
-- [ ] 红线（I 类）违规：`TODO: 待填`
-- [ ] 脱敏复核：`TODO: 待填`
+- [x] 凭证泄漏事件：`未发生凭证落盘/外发；D2-4/D4-27 脱敏缺陷已验证仅 probing 输入中的测试占位 AK/SK，非真实凭证，且被脱敏路径截获`
+- [x] 写操作误判 read-only：`无；D4 系列（D4-5/D4-9/D4-15/D4-16/D4-18/D4-19/D4-20）均正确 deny/read-only/allow 分类`
+- [x] 红线（I 类）违规：`无；真云用例均走审批分类 allow + 最低配置 + 测后删除归零`
+- [x] 脱敏复核：`D2-4（ak/sk 短键）、D4-27（小写 ak=/sk=）、D8-9（sanitizeValue）三处脱敏缺陷已记入 FINDINGS #1/#2/#5`
 
 ---
 
@@ -108,12 +124,19 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| TODO | TODO | TODO | TODO |
+| ECS `c2dee9e3…`（本轮 `testbot3-hermes-ecs-3048814184`） | 是（D3-C1 CreateServers） | 探针提交删除 + 人工复核删除 | ✅ `ListServersDetails` 复核不再含该 ID |
+| VPC `336223d7…`（本轮 `testbot3-hermes-e2e-3048814184`） | 是（D3-C1 CreateVpc） | finally 反序删除 | ✅ `vpc:OK` |
+| Subnet `f0582c47…` | 是（D3-C1 CreateSubnet） | finally 反序删除 | ✅ `subnet:OK` |
+| OBS bucket `testbot3-hermes-obs-3048814184` | 是（D3-C2 建桶） | `OBS rm -f` 删桶 | ✅ `Delete bucket ... successfully` |
+| EIP / 系统盘 | 未绑定 EIP；系统盘随 ECS 删除 | — | ✅ 无残留 |
 
-> TODO: 真云用例的资源创建/销毁/归零情况由 agent 依据执行过程补充。
+> 真云已归零：本轮 6 项真云用例（D3-C1/C2/C3/C6/C7）所有本次创建资源均已删除归零（ECS 经人工复核确认），仅删除本次（TS=3048814184）创建资源；未触碰其他客户端同名前缀（`testbot3-hermes`，硬编码）下的历史资源。
 
 ---
 
 ## 八、遗留与建议
 
-- TODO: 待裁决 SPEC / 未覆盖项 / 修复建议由 agent 补充。
+- `D2-4`/`D4-27`/`D8-9` 三处凭证脱敏缺陷（`safety-policy.mjs` / `telemetry/telemetry.mjs`）为 I 类安全风险，建议优先修复 `secretKeyNamePatterns` 补 `ak`/`sk` 短键 + 小写 `ak=`/`sk=` 正则 + `sanitizeValue` 脱敏。
+- `serviceCatalog`（`tools.mjs`）中文意图路由覆盖率低（D3-S1/S2/S3/S5、EXP-E01 回落 help），建议扩充 routeMap 关键词与服务映射。
+- 测试侧推论：`scripts/realcloud_e2e.mjs` 资源名前缀**硬编码 `testbot3-hermes`**，未按执行客户端命名，导致多客户端（AtomCode 等）真云资源被统一打上 `hermes` 标签、清理时易与 Hermes 客户端资源混淆，建议改为按客户端名动态取名。
+- `D3-C1` 真云 E2E 的 ECS 异步删除 150s 轮询窗口偏短（ECS 删除可能超过窗口），建议放宽轮询窗口或改轮询为任务状态查询。
