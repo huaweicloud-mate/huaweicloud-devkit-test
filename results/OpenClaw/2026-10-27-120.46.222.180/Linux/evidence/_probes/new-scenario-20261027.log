@@ -1,0 +1,61 @@
+
+=====CASE D3-S1=====
+serviceCatalog.intent 路由: {"intent":"列出 cn-north-4 的 ECS 实例清单，只读不改","skills":["huawei-ecs"],"services":["ECS"]}
+run_readonly ListServersDetails -> ok=true servers="count": 1
+[OK] serviceCatalog 路由命中 ECS
+[OK] 只读命令返回实例清单(空也可)
+[OK] 全程零写工具调用(本探针仅调用 service_catalog+run_readonly)
+=====END D3-S1=====
+
+=====CASE D3-S5=====
+复合意图 -> skills=["Use huaweicloud-core to route intent."] services=["Run hcloud --help to list available services."]
+存储命中=false 托管/部署命中=false 多路命中=false
+[FAIL] 复合意图拆分命中多个 service(存储+托管)
+=====END D3-S5=====
+
+=====CASE D3-S8=====
+extractApiError -> {"errorCode":"APIGW.0301","errorMessage":"IAM authentication failed: verify the AK/SK"}
+explain_error -> {"service":"ECS","errorCode":"APIGW.0301","requestId":"","suggestions":["Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.","APIGW.0301: API Gateway layer error. Incorrect IAM authentication information — verify AK/SK (SK typos are the usual cause), security token expiry, and that project_id is configured (auth init auto-sets it)."]}
+explain_error(区域) -> {"service":"VPC","errorCode":"APIGW.0802","requestId":"","suggestions":["APIGW.0802: API Gateway layer error. IAM user has no region permissions — check IAM console → User → Permissions → add target region.","Confirm the service endpoint, region, and project_id match the target resource."]}
+explain_error(配额) -> {"service":"ECS","errorCode":"Ecs.0070","requestId":"","suggestions":["Check quota and resource limits before retrying a create or scale operation. Consider switching accounts or requesting a quota increase."]}
+[OK] extractApiError 提取 error_code
+[OK] explain_error 给出分类/下一步(非裸报错堆栈)
+=====END D3-S8=====
+
+=====SUMMARY=====
+{
+  "total": 6,
+  "passed": 5,
+  "results": [
+    {
+      "name": "serviceCatalog 路由命中 ECS",
+      "ok": true,
+      "detail": "[\"ECS\"]"
+    },
+    {
+      "name": "只读命令返回实例清单(空也可)",
+      "ok": true,
+      "detail": "{\n  \"count\": 1,\n  \"servers\": [\n    {\n      \"flavor\": {\n        \"disk\": \"0\",\n        \"vcpus\": \"2\",\n        \"ram\": \"4096\",\n        \"id\": \"c6.l"
+    },
+    {
+      "name": "全程零写工具调用(本探针仅调用 service_catalog+run_readonly)",
+      "ok": true,
+      "detail": "未调用 create/delete/plan/run_approved/hook 写路径"
+    },
+    {
+      "name": "复合意图拆分命中多个 service(存储+托管)",
+      "ok": false,
+      "detail": "[\"Run hcloud --help to list available services.\"] (多路=false)"
+    },
+    {
+      "name": "extractApiError 提取 error_code",
+      "ok": true,
+      "detail": "{\"errorCode\":\"APIGW.0301\",\"errorMessage\":\"IAM authentication failed: verify the AK/SK\"}"
+    },
+    {
+      "name": "explain_error 给出分类/下一步(非裸报错堆栈)",
+      "ok": true,
+      "detail": "{\"service\":\"ECS\",\"errorCode\":\"APIGW.0301\",\"requestId\":\"\",\"suggestions\":[\"Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.\",\"APIGW.0301: API Gateway layer error. "
+    }
+  ]
+}

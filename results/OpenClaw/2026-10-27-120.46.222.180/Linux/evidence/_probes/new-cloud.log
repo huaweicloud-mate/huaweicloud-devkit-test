@@ -1,6 +1,6 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-codeartsagent-s2-mvobh2l3 -> id=9da0073f-18f9-4f20-8fc3-ba0a7b07a313
+创建测试VPC tctest-codeartsagent-s2-mvpr55a5 -> id=6f10bca5-0d59-4920-b1a4-4bbadc3ed1c8
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
@@ -51,58 +51,20 @@ voucher_status(领取后) -> {"claimed":true,"message":"已领取过（代金券
 =====END D3-S4=====
 
 =====CASE D3-S3=====
-check_user -> realnameVerified=true agreementSigned=true err=
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-connect -> status=connected wsId=e7e9310835d44e5abbcb
-[2026-10-25T21:05:32.654Z] uploadProject: /home/testbot1/.hdk-s3-mvobh2l3 -> /workspace/.hdk-s3-mvobh2l3.tar.gz (archive=210 bytes, md5=a75cbd1c10726fd5fc435cd202929ae5)
-[2026-10-25T21:05:32.707Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-247385322/sandbox-upload-1792962332643/.hdk-s3-mvobh2l3.tar.gz, size=210, remotePath=/workspace/.hdk-s3-mvobh2l3.tar.gz)
-[2026-10-25T21:05:32.707Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
-[2026-10-25T21:05:32.708Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
-[2026-10-25T21:05:32.756Z] deployFileServer: writing script (2456 b64 chars)
-[2026-10-25T21:05:32.803Z] deployFileServer: starting server on port 8888
-[2026-10-25T21:05:32.838Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 6268\r\n\u001b]133;C\u0007\r\n"
-[2026-10-25T21:05:32.838Z] uploadViaHttpTunnel: creating dedicated tunnel session
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-[2026-10-25T21:05:33.733Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
-[2026-10-25T21:05:33.734Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
-[2026-10-25T21:05:33.736Z] uploadViaHttpTunnel: tunnel ready, localPort=40713
-[2026-10-25T21:05:33.736Z] uploadViaHttpTunnel: waiting for server health on localhost:40713
-[2026-10-25T21:05:33.736Z] waitForServerReady: attempt 1, checking http://localhost:40713/health
-[2026-10-25T21:05:33.776Z] waitForServerReady: server ready on port 40713 after 0 retries
-[2026-10-25T21:05:33.776Z] uploadViaHttpTunnel: sending POST with 210 bytes
-[2026-10-25T21:05:33.817Z] uploadViaHttpTunnel: upload complete (bytes=210, md5=a75cbd1c10726fd5fc435cd202929ae5)
-upload_project -> ok=true md5Verified=true
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-deploy_nginx -> ok=undefined port=undefined url=
-Waiting for connection 673280... (0s)Connection 673280 established (0s).
-deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mvobh2l3/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
-close_session -> ok
-[OK] 沙箱 connect 成功
-[FAIL] s3-connect/upload/deploy 链路
-[OK] 部署返回可访问 URL 或检查通过
-[OK] 会话正常关闭
+check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 579d1c3ac8074d469ba975419388a462]
+[FAIL] 沙箱 check_user 通过
+→ 沙箱账号未实名/未签协议，标记 BLOCKED（外部依赖）
 =====END D3-S3=====
 
 =====SUMMARY=====
 {
-  "total": 21,
-  "passed": 20,
+  "total": 18,
+  "passed": 17,
   "results": [
     {
       "name": "测试 VPC 创建成功",
       "ok": true,
-      "detail": "vpcId=9da0073f-18f"
+      "detail": "vpcId=6f10bca5-0d5"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -127,7 +89,7 @@ close_session -> ok
     {
       "name": "OBS 建桶成功",
       "ok": true,
-      "detail": "bucket=tctest-codeartsagent-obs-mvobh2l3"
+      "detail": "bucket=tctest-codeartsagent-obs-mvpr55a5"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -147,7 +109,7 @@ close_session -> ok
     {
       "name": "删除归零",
       "ok": true,
-      "detail": "bucket removed=tctest-codeartsagent-obs-mvobh2l3"
+      "detail": "bucket removed=tctest-codeartsagent-obs-mvpr55a5"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
@@ -185,24 +147,9 @@ close_session -> ok
       "detail": "{\"before\":true,\"claim\":true,\"after\":true}"
     },
     {
-      "name": "沙箱 connect 成功",
-      "ok": true,
-      "detail": "wsId=e7e9310835d44e5abbcb"
-    },
-    {
-      "name": "s3-connect/upload/deploy 链路",
+      "name": "沙箱 check_user 通过",
       "ok": false,
-      "detail": "{\"upMd5\":true}"
-    },
-    {
-      "name": "部署返回可访问 URL 或检查通过",
-      "ok": true,
-      "detail": "{\"nginx\":{\"status\":\"PASS\",\"detail\":\"(port 8080, HTTP 200)\"}}"
-    },
-    {
-      "name": "会话正常关闭",
-      "ok": true,
-      "detail": "\"ok\""
+      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 579d1c3ac8074d469ba975419388a462]\"}"
     }
   ]
 }

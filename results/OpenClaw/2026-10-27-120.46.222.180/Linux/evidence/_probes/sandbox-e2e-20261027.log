@@ -1,0 +1,95 @@
+
+=====CASE D3-C6=====
+check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: e140df4527af4b20b1a93b8322ad57df]
+[FAIL] sandbox_check_user 返回 realnameVerified+agreementSigned
+connect -> status=undefined wsId= err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: a51234b8749b4592bc9850c3c32b44f0]
+[FAIL] sandbox_connect 返回 workspace_id
+[OK] sandbox_credentials 注入临时 AK/SK 无异常
+[FAIL] sandbox_upload_file 上传并 md5 校验
+[FAIL] sandbox_exec_one_shot 执行只读命令返回输出
+[FAIL] sandbox_deploy_check 返回规范结果（无静默失败）
+[FAIL] sandbox_close_session 正常关闭
+=====END D3-C6=====
+
+=====CASE D3-C3=====
+connect -> status=undefined wsId=
+[FAIL] connect 成功
+[FAIL] upload_project 上传 + md5 校验
+[FAIL] deploy_nginx 静态站部署
+[FAIL] deploy_check 通过（nginx_serving PASS=URL 可达）
+[FAIL] URL 可达（沙箱内 HTTP 核验 200）
+[FAIL] 会话关闭
+=====END D3-C3=====
+
+=====SUMMARY=====
+{
+  "total": 13,
+  "passed": 1,
+  "results": [
+    {
+      "name": "sandbox_check_user 返回 realnameVerified+agreementSigned",
+      "ok": false,
+      "detail": "{}"
+    },
+    {
+      "name": "sandbox_connect 返回 workspace_id",
+      "ok": false,
+      "detail": "wsId="
+    },
+    {
+      "name": "sandbox_credentials 注入临时 AK/SK 无异常",
+      "ok": true,
+      "detail": "credOk=true"
+    },
+    {
+      "name": "sandbox_upload_file 上传并 md5 校验",
+      "ok": false,
+      "detail": "upOk=false"
+    },
+    {
+      "name": "sandbox_exec_one_shot 执行只读命令返回输出",
+      "ok": false,
+      "detail": "execOk=false"
+    },
+    {
+      "name": "sandbox_deploy_check 返回规范结果（无静默失败）",
+      "ok": false,
+      "detail": "dchkOk=false"
+    },
+    {
+      "name": "sandbox_close_session 正常关闭",
+      "ok": false,
+      "detail": "closeOk=false"
+    },
+    {
+      "name": "connect 成功",
+      "ok": false,
+      "detail": "{\"err\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 884a7cb336f04203a3286cb4b76bc605]\"}"
+    },
+    {
+      "name": "upload_project 上传 + md5 校验",
+      "ok": false,
+      "detail": "upOk=false"
+    },
+    {
+      "name": "deploy_nginx 静态站部署",
+      "ok": false,
+      "detail": "port=0"
+    },
+    {
+      "name": "deploy_check 通过（nginx_serving PASS=URL 可达）",
+      "ok": false,
+      "detail": "dcOk=false"
+    },
+    {
+      "name": "URL 可达（沙箱内 HTTP 核验 200）",
+      "ok": false,
+      "detail": "urlOk=false"
+    },
+    {
+      "name": "会话关闭",
+      "ok": false,
+      "detail": "closeOk=false"
+    }
+  ]
+}

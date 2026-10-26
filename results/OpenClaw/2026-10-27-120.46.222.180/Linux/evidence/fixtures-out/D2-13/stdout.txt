@@ -1,0 +1,8 @@
+PASS	D2-13-s1-marker	S1 写入且 configuredBySession=true	actual={"configuredBySession":true,"ak":"S1SESSIONAKABCDEFGHIJKL"}	expected={"configuredBySession":true,"ak":"S1SESSIONAKABCDEFGHIJKL"}
+PASS	D2-13-s1-wins	configuredBySession=true 时 S1 胜出并忽略 env	actual={"ak":"S1SESSIONAKABCDEFGHIJKL","sk":"S1SESSIONSKABCDEFGHIJKL"}	expected={"ak":"S1SESSIONAKABCDEFGHIJKL","sk":"S1SESSIONSKABCDEFGHIJKL"}
+PASS	D2-13-env-fallback	清除标记后 env 兜底恢复	actual={"marker":false,"ak":"ENVFAKEAKABCDEFGHIJKL","sk":"ENVFAKESKABCDEFGHIJKL"}	expected={"marker":false,"ak":"ENVFAKEAKABCDEFGHIJKL","sk":"ENVFAKESKABCDEFGHIJKL"}
+PASS	D2-13-placeholder	isPlaceholder 识别模板占位	actual=true	expected=true
+PASS	D2-13-placeholder-not-cred	占位不劫持真实 env	actual="ok"	expected="ok"	resolveCredentials 未以占位为凭证（allowMissing 安全）
+
+=== D2-13 隔离 S1 + HW_ACCESS_KEY env 夹具 ===  pass=5 fail=0
+RESULT: PASS
