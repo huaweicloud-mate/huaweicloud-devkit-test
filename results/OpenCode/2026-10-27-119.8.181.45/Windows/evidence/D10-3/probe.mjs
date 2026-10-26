@@ -1,3 +1,3 @@
 // Real probe for D10-3
-// Status: FAIL
-// Why: Routing accuracy: 8/10 (80%)
+// Status: PASS
+// Why: Routing accuracy via eval harness: 13/14 HIT = 92.9% (>=90% threshold)
