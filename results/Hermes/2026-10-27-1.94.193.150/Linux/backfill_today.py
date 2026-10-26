@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-10-25 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.12 gitHead 4ed07801）。"""
+"""Hermes Linux 2026-10-27 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.12 gitHead 4ed07801）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -142,8 +142,8 @@ PASS_D = [
     "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69","D1-70",
     "D2-1","D2-2","D2-4","D2-5","D2-11","D2-12","D2-16","D2-26","D2-27",
-    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C2","D3-C4","D3-C5","D3-C6","D3-C7","D3-C13","D3-C14",
-    "D3-S1","D3-S2","D3-S3","D3-S4","D3-S8",
+    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C2","D3-C4","D3-C5","D3-C7","D3-C13","D3-C14",
+    "D3-S1","D3-S2","D3-S4","D3-S8",
     "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11",
     "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23",
     "D4-27","D4-28","D4-29",
@@ -159,12 +159,11 @@ FAIL_D = {
     "D4-25": "Python hook 写操作遥测误分类 cli:invoke（应 cli:write）",
     "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 泄漏",
     "D3-S5": "serviceCatalog 复合意图未命中多 service（回退 help）",
-    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.zip_file，未生成 URN/触发器",
-    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.port）",
+    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.filename，未生成 URN/触发器",
+    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.password）",
     "D9-12": "initialize 版本检查缺失 + 非法时序 tools/list 未拒 -32600",
     "D10-3": "serviceCatalog 中文意图 EXP-E01「云主机」未命中（92.9% 未达 100%）",
-    "D3-C1": "ECS 生命周期 E2E 归零验证未通过：CreateServers 后立即 DeleteServers，150s 轮询 ListServersDetails 仍含 serverId（ECS 删除尚未完成/未确认，subnet/vpc 归零正常）——真云删除时序/探针轮询窗口问题，非 devkit 源码缺陷（今日已手动二次删除归零：servers=0/vpc=0/subnet 归零）",
-    "D3-C3": "沙箱部署 E2E：huaweicloud_sandbox_deploy_nginx 返回 ok:false（v1.1.12 A1 #935 配置写入校验 evaluateDeployNginxVerify 误判 false-negative，session-manager.mjs:812-825），但 deploy_check nginx_serving=PASS（站点实际已可访问）——2 次复跑均复现（upload_project 首跑 120s 超时为瞬时沙箱抖动，复跑通过）",
+    "D3-C1": "ECS 生命周期 E2E 归零验证未通过：CreateServers 后立即 DeleteServers，150s 轮询 ListServersDetails 仍含 serverId（ECS 删除尚未完成/未确认）——真云删除时序/探针轮询窗口问题，非 devkit 源码缺陷（本轮已手动二次删除归零：servers=0/vpc=0/subnet=0）",
 }
 
 SPEC_D = {
@@ -179,6 +178,9 @@ BLOCKED_D = {
     "D4-12": "【补环境】供应链安装期安全需 npm 安装期抓包/SBOM 审计通道",
     "D4-24": "【补环境】确认令牌过期/重复确认边界需审批流 + 可注入时钟",
     "D9-6":  "【调归属】跨客户端互通需多客户端并存环境（单机仅 Hermes）",
+    "D3-C3": "【补环境】沙箱(DevStation)服务维护中 HDKIT_SANDBOX_MAINTENANCE「沙箱功能正在升级优化，暂时无法使用」，实测 2026-10-27 05:0x check_user 失败→deploy_nginx 无法连接沙箱(workspace_id required)；解除条件=维护结束服务恢复后复测（原 deploy_nginx false-negative 缺陷本轮无法在维护期复核）",
+    "D3-C6": "【补环境】沙箱(DevStation)服务维护中 HDKIT_SANDBOX_MAINTENANCE，实测 2026-10-27 05:0x check_user 失败→7 隐式工具冒烟无法 connect(workspace_id required)；解除条件=维护结束服务恢复后复测",
+    "D3-S3": "【补环境】沙箱(DevStation)服务维护中 HDKIT_SANDBOX_MAINTENANCE，实测 2026-10-27 05:0x 前端项目部署场景 check_user 失败；解除条件=维护结束服务恢复后复测",
 }
 
 NOTRUN_D = {
