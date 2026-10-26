@@ -7,5 +7,5 @@ const here = dirname(fileURLToPath(import.meta.url));
 const r = await runOne('D1-27');
 process.stdout.write(JSON.stringify(r) + '\n');
 writeFileSync(join(here, 'stdout.log'), JSON.stringify({
-  status: r.status, why: r.why || '', executedAt: new Date().toISOString().replace(/[-:TZ]/g, '').slice(0, 14),
+  status: r.status, why: r.why || '', executedAt: new Date(Date.now() + 8 * 3600 * 1000).toISOString().replace(/[-:TZ]/g, '').slice(0, 14),
   ...(r.detail ? { detail: r.detail } : {}), ...(r.data !== undefined ? { data: r.data } : {}) }) + '\n');

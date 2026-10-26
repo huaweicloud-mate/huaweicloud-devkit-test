@@ -207,6 +207,9 @@ reg('D3-C6', async () => {
   const keys = Object.keys(results).filter(k => k !== 'exception');
   const hasErr = Object.entries(results).some(([k, v]) => k !== 'exception' && v && v.__error);
   const detail = JSON.stringify({ keys, hasErr, check_user: results.check_user, connect: results.connect, upload: (results.upload_file ? String(results.upload_file).slice(0, 90) : undefined), exec: (results.exec_one_shot ? String(results.exec_one_shot).slice(0, 140) : undefined), deploy_check: (results.deploy_check ? String(results.deploy_check).slice(0, 120) : undefined), exception: results.exception }).slice(0, 1000);
+  if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(results.exception || '')) {
+    return blocked('沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)——connect 即返回「沙箱功能正在升级优化，暂时无法使用」，7 个隐式工具无法执行。解除条件：沙箱服务维护结束恢复可用后复测（补环境·沙箱服务维护）', detail);
+  }
   const ok7 = keys.length >= 7 && !hasErr;
   return chk(ok7,
     `沙箱 7 工具冒烟: ${keys.length} 工具返回规范结果, 无静默失败=${!hasErr}`,
@@ -239,6 +242,9 @@ reg('D3-C3', async () => {
       detail.join(' | ').slice(0, 900));
   } catch (e) {
     const msg = String(e);
+    if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(msg)) {
+      return blocked('沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)——connect 即返回「沙箱功能正在升级优化，暂时无法使用」，无法完成部署 E2E。解除条件：沙箱服务维护结束恢复可用后复测（补环境·沙箱服务维护）', `${detail.join(' | ')} || ${msg.slice(0, 300)}`);
+    }
     if (/all ports .* are in use|端口.*被占|port.*in use/i.test(msg)) {
       return blocked('沙箱 8080-8089 端口被占满（历史多客户端 nginx 残留）：sandbox_deploy_nginx 报 "all ports 8080-8089 are in use"。connect 与 upload_project 已实测成功，仅 nginx 部署取不到空闲端口。解除条件：清理沙箱 8080-8089 端口残留 nginx 进程后复测（补环境·沙箱端口）', `${detail.join(' | ')} || ${msg.slice(0, 300)}`);
     }
