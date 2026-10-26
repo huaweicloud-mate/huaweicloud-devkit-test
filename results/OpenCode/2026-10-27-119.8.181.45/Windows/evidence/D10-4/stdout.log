@@ -1,0 +1,30 @@
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "why": "Rules: 19 total (9 deny + 10 warn); delete=deny(true); readonly=allow(true)",
+  "ruleCounts": {
+    "total": 19,
+    "deny": 9,
+    "warn": 10
+  },
+  "deleteTest": {
+    "decision": "deny",
+    "isDeny": true,
+    "findings": [
+      {
+        "id": "hwc-destructive-delete-force",
+        "severity": "deny"
+      },
+      {
+        "id": "hwc-destructive-delete-operation",
+        "severity": "warn"
+      }
+    ]
+  },
+  "readonlyTest": {
+    "decision": "allow",
+    "isAllow": true,
+    "findings": []
+  },
+  "executedAt": "20261026210635"
+}
