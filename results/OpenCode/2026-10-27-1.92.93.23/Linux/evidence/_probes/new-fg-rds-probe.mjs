@@ -3,7 +3,6 @@ import { pathToFileURL } from 'node:url';
 const CORE = '/home/zhangshuang/devkit-test/OpenCode/hdk/plugins/huaweicloud-core';
 const SRC = CORE + '/src';
 const { callTool } = await import(pathToFileURL(SRC + '/tools.mjs').href);
-const { execFileSync } = await import('node:child_process');
 
 const results = [];
 function check(name, ok, detail) {
@@ -17,7 +16,7 @@ async function call(name, args) {
   try { return await callTool(name, args); } catch (e) { return { __error: String(e).slice(0, 300) }; }
 }
 function idOf(json, field) {
-  const re = new RegExp('"' + (field || 'id') + '"\\s*:\\s*"([0-9a-zA-Z-]{10,})"');
+  const re = new RegExp('"' + (field || 'id') + '"\\s*:\\s*"([0-9a-zA-Z:-]{10,})"');
   return (re.exec(json || '') || [])[1] || '';
 }
 const REGION = 'cn-north-4';
@@ -31,8 +30,9 @@ console.log('\n=====CASE D3-S6=====');
   console.log('路由 -> ' + JSON.stringify({ skills: cat.recommendedSkills, services: cat.recommendedServices }));
   const fgHit = /functiongraph|serverless/.test(svcStr) || /functiongraph/.test(JSON.stringify(cat.recommendedSkills || []).toLowerCase());
   const fnName = 'hdk-s6-' + TS;
-  const code = Buffer.from("def handler(event, context):\n    return {'statusCode': 200, 'body': 'ok'}\n").toString('base64');
-  const createArgs = ['FunctionGraph', 'CreateFunction', '--cli-region=' + REGION, '--function_name=' + fnName, '--package=default', '--runtime=Python3.10', '--handler=index.handler', '--code.filename=index.py', '--code.zip_file=' + code, '--timeout=3', '--memory_size=128'];
+  const pyCode = "def handler(event, context):\n    return {'statusCode': 200, 'body': 'ok'}\n";
+  const code = Buffer.from(pyCode).toString('base64');
+  const createArgs = ['FunctionGraph', 'CreateFunction', '--cli-region=' + REGION, '--func_name=' + fnName, '--package=default', '--runtime=Python3.10', '--handler=index.handler', '--code_type=inline', '--func_code.file=' + code, '--timeout=3', '--memory_size=128'];
   let urn = '';
   let created = false;
   try {
@@ -79,9 +79,9 @@ console.log('\n=====CASE D3-S7=====');
   // RDS 只读可达性 + 现存实例核查（建立归零基线）
   const listBefore = await call('huaweicloud_run_readonly_command', { args: ['RDS', 'ListInstances', '--cli-region=' + REGION, '--cli-output=json'], timeoutMs: 60000 });
   console.log('RDS ListInstances -> ok=' + listBefore.ok + ' (基线)' + (listBefore.ok ? '' : ' err=' + redact(listBefore.stdout || '').slice(0, 140)));
-  // 尝试最小 RDS MySQL 实例创建（最低配置）
+  // 尝试最小 RDS MySQL 实例创建（最低配置，--password 实参；vpc/subnet/sg 前置真实缺失）
   const instName = 'hdk-s7-' + TS;
-  const createArgs = ['RDS', 'CreateInstance', '--cli-region=' + REGION, '--name=' + instName, '--datastore.type=MySQL', '--datastore.version=8.0', '--flavor_ref=rds.mysql.n1.large.1', '--volume.type=ULTRAHIGH', '--volume.size=40', '--availability_zone=cn-north-4a', '--vpc_id=', '--subnet_id=', '--security_group_id=', '--db.password=HdkS7@Test12345', '--db.port=3306'];
+  const createArgs = ['RDS', 'CreateInstance', '--cli-region=' + REGION, '--name=' + instName, '--datastore.type=MySQL', '--datastore.version=8.0', '--flavor_ref=rds.mysql.n1.large.1', '--volume.type=ULTRAHIGH', '--volume.size=40', '--availability_zone=cn-north-4a', '--vpc_id=', '--subnet_id=', '--security_group_id=', '--password=HdkS7@Test12345', '--port=3306'];
   let instanceCreated = false;
   let instanceId = '';
   let blockedReason = '';
@@ -109,7 +109,7 @@ console.log('\n=====CASE D3-S7=====');
     check('最小 RDS 实例创建成功', true, 'instanceId=' + instanceId.slice(0, 16));
     check('测后删除本次 RDS 归零', cleanup, 'cleanup=' + cleanup);
   } else {
-    check('最小 RDS 实例创建(真·外部依赖: 需 vpc/subnet/sg 前置环境)', false, blockedReason);
+    check('最小 RDS 实例创建(需 vpc/subnet/sg 前置环境)', false, blockedReason);
     console.log('→ D3-S7 需完整 VPC/子网/安全组前置 + RDS 配额，编排后半段在沙箱内注入连接串；本轮记录真实 blocker');
   }
 }

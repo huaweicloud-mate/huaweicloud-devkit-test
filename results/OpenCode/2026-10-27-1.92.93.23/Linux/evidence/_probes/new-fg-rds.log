@@ -2,34 +2,37 @@
 =====CASE D3-S6=====
 路由 -> {"skills":["huawei-functiongraph"],"services":["FunctionGraph"]}
 plan CreateFunction -> decision=allow safeToRun=true
-run CreateFunction -> ok=false stdout=[USE_ERROR]Invalid parameter: code.filename
+run CreateFunction -> ok=true stdout={
+  "func_id": "97ea5139-26a3-473b-a07c-f97a8168568a",
+  "func_urn": "urn:fss:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:function:default:hdk-s6-mvpr9hxc:latest",
+  "func_name": "hdk-s6-mvpr9hxc",
+  
+CreateFunctionTrigger -> ok=true stdout={}" or "[]".
 
-Run `hcloud FunctionGraph CreateFunction --help` for details about this API.
+Run `hcloud FunctionGraph CreateFunctionTrigger --help` for details about this API.
 
+DeleteFunction 归零 -> ok=false
 [OK] serviceCatalog 路由 FunctionGraph
-[FAIL] 创建 Python 函数返回 URN
-[FAIL] 定时触发器绑定成功
-[OK] 测后删除函数归零
+[OK] 创建 Python 函数返回 URN
+[OK] 定时触发器绑定成功
+[FAIL] 测后删除函数归零
 =====END D3-S6=====
 
 =====CASE D3-S7=====
 复合意图路由 -> services=["RDS"] (RDS命中=true 部署目标命中=false)
 RDS ListInstances -> ok=true (基线)
 plan RDS CreateInstance -> decision=allow
-run RDS CreateInstance -> ok=false stdout=[USE_ERROR]Invalid parameter: db.password
-
-Run `hcloud RDS CreateInstance --help` for details about this API.
-
+run RDS CreateInstance -> ok=true stdout=The target API contains a parameter with the same name as the KooCLI system parameter password (unknown location --password). Confirm whether this parameter is a KooCLI system para
 [FAIL] serviceCatalog 复合意图命中 RDS + 部署目标
 [OK] RDS API 只读可达
-[FAIL] 最小 RDS 实例创建(真·外部依赖: 需 vpc/subnet/sg 前置环境)
+[FAIL] 最小 RDS 实例创建(需 vpc/subnet/sg 前置环境)
 → D3-S7 需完整 VPC/子网/安全组前置 + RDS 配额，编排后半段在沙箱内注入连接串；本轮记录真实 blocker
 =====END D3-S7=====
 
 =====SUMMARY=====
 {
   "total": 7,
-  "passed": 3,
+  "passed": 4,
   "results": [
     {
       "name": "serviceCatalog 路由 FunctionGraph",
@@ -38,17 +41,17 @@ Run `hcloud RDS CreateInstance --help` for details about this API.
     },
     {
       "name": "创建 Python 函数返回 URN",
-      "ok": false,
-      "detail": "urn="
+      "ok": true,
+      "detail": "urn=urn:fss:cn-north-4:46c1f"
     },
     {
       "name": "定时触发器绑定成功",
-      "ok": false,
-      "detail": "triggerOk=false"
+      "ok": true,
+      "detail": "triggerOk=true"
     },
     {
       "name": "测后删除函数归零",
-      "ok": true,
+      "ok": false,
       "detail": "cleanup=false (未创建亦视为无残留)"
     },
     {
@@ -62,9 +65,9 @@ Run `hcloud RDS CreateInstance --help` for details about this API.
       "detail": "ListInstances ok=true"
     },
     {
-      "name": "最小 RDS 实例创建(真·外部依赖: 需 vpc/subnet/sg 前置环境)",
+      "name": "最小 RDS 实例创建(需 vpc/subnet/sg 前置环境)",
       "ok": false,
-      "detail": "RDS 实例创建未成功(preflight 缺 vpc/subnet/sg 前置或配额): [USE_ERROR]Invalid parameter: db.password\n\nRun `hcloud RDS CreateInstance --help` for details about this API.\n"
+      "detail": "RDS 实例创建未成功(preflight 缺 vpc/subnet/sg 前置或配额): The target API contains a parameter with the same name as the KooCLI system parameter password (unknown location --password). Confirm whether this parameter is "
     }
   ]
 }
