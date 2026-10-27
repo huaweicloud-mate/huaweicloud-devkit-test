@@ -1,3 +1,0 @@
-// probe for D3-C13
-// status=PASS
-console.log("{\"caseId\":\"D3-C13\",\"status\":\"PASS\",\"why\":\"IAM KeystoneListUsers real-cloud call reached cloud (200 users or 403 readonly-expected)\",\"executedAt\":\"20261026210359\",\"result\":{\"exitCode\":0,\"sample\":\"{\\n  \\\"error\\\": {\\n    \\\"code\\\": 403,\\n    \\\"encoded_authorization_message\\\": \\\"Egpjbi1ub3J0aC00GiA4NDI1OTExODZmYTI0NTkyOWUxYjVjMTg2YTRjZjc4NCCLCyoMf7EJtYvu4njjf6eP.rMjeKXZqYdZdd2Ol2DENwzLcZPi/bKrXHXYQBnYxj4kIMLDq+lK3O/9LRKivNB8kVPMKopRrSO6enzw2gy/qn2sKOHTyL3M1n57G1RbGi6p9xxxlQwPcF31W03eS8VkhCEU2++c3Ozoexiybp\"}}");

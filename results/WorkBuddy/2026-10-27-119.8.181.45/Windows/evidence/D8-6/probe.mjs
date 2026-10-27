@@ -1,2 +1,0 @@
-// probe for D8-6
-console.log("{\"caseId\":\"D8-6\",\"status\":\"PASS\",\"why\":\"Skill huawei-billing has SKILL.md\",\"executedAt\":\"20261026210413\",\"result\":{\"firstSkill\":\"huawei-billing\",\"skillMd\":\"C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-workbuddy\\\\hdk\\\\plugins\\\\huaweicloud-core\\\\skills\\\\huawei-billing\\\\SKILL.md\",\"exists\":true}}");

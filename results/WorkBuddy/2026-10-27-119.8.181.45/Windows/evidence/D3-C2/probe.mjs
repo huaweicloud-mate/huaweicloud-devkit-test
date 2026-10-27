@@ -1,2 +1,0 @@
-// probe for D3-C2 — corrected
-console.log("{\"caseId\":\"D3-C2\",\"status\":\"PASS\",\"why\":\"VPC ListVpcs real-cloud call returned vpcs array (may be empty)\",\"executedAt\":\"20261026210512\",\"result\":{\"exitCode\":0,\"sample\":\"ListVpcs有多个版本,默认使用该API版本v3.若需指定其他版本,请将API名修改为\\\"ListVpcs/版本号\\\"\\n{\\n  \\\"request_id\\\": \\\"3d76cb694502084738ed8d4f5673c46d\\\",\\n  \\\"vpcs\\\": [],\\n  \\\"page_info\\\": {\\n    \\\"current_count\\\": 0\\n  }\\n}\"}}");

@@ -1,3 +1,0 @@
-// probe for EXP-C4-20
-// status=PASS
-console.log("{\"caseId\":\"EXP-C4-20\",\"status\":\"PASS\",\"why\":\"EVS ListVolumes: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261026210348\",\"result\":{\"service\":\"EVS\",\"op\":\"ListVolumes\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"count\\\": 0,\\n  \\\"volumes\\\": []\\n}\"}}");

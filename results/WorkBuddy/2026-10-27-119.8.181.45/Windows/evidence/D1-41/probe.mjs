@@ -1,3 +1,0 @@
-// probe for D1-41
-// status=PASS
-console.log("{\"caseId\":\"D1-41\",\"status\":\"PASS\",\"why\":\"judgeUpdate correctly suggests update when remote>local\",\"executedAt\":\"20261026210354\",\"result\":{\"current\":\"1.1.10\",\"remote\":{\"latest\":\"1.1.11\"},\"judged\":{\"currentVersion\":\"1.1.10\",\"latestStable\":\"1.1.11\",\"latestNext\":null,\"targetVersion\":\"1.1.11\",\"updateAvailable\":true,\"dismissed\":false,\"dismissExpiresAt\":null,\"result\":\"update_available\"}}}");

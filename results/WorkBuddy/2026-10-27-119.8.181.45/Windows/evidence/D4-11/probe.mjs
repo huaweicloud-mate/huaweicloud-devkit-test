@@ -1,3 +1,0 @@
-// probe for D4-11
-// status=PASS
-console.log("{\"caseId\":\"D4-11\",\"status\":\"PASS\",\"why\":\"Shell-sep injection blocked (deny); natural-lang prefix warned (allow, warnings=1)\",\"executedAt\":\"20261026210405\",\"result\":{\"sepClassification\":{\"decision\":\"deny\",\"risk\":\"write\"},\"natClassification\":{\"decision\":\"allow\",\"risk\":\"not_huaweicloud\",\"warningsCount\":1}}}");

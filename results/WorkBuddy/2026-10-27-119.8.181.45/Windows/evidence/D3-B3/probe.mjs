@@ -1,2 +1,0 @@
-// probe for D3-B3
-console.log("{\"caseId\":\"D3-B3\",\"status\":\"PASS\",\"why\":\"plan with invalid service handled gracefully (decision=allow)\",\"executedAt\":\"20261026210416\",\"result\":{\"classification\":{\"decision\":\"allow\",\"risk\":\"read_only\",\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\",\"service\":\"FakeService\",\"operation\":\"ListFake\",\"args\":[\"FakeService\",\"ListFake\",\"--cli-region=cn-north-4\"]}}}");
