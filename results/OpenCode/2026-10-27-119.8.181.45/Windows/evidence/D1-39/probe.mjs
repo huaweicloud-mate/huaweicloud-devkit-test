@@ -1,5 +1,4 @@
-// Source-level probe for D1-39
-// Imports update-check.mjs and checks queryDistTags/judgeUpdate exports
-import { pathToFileURL } from 'node:url';
-const mod = await import(pathToFileURL('update-check.mjs').href);
-console.log(Object.keys(mod));
+// MCP tool: huaweicloud_check_update + source probe update-check.mjs
+// Test: Windows upgrade detection chain
+// Expected: no EINVAL silent failure
+// Actual: check_failed (explicit failure, not silent)

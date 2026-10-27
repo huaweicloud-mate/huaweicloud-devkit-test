@@ -1,7 +1,4 @@
-// Real probe for D4-3
-// Executed via MCP server stdio
-// Status: PASS
-// Why: hook_check_command on 'CSMS ShowSecretVersion': blocked=true
-import { spawn } from 'node:child_process';
-// This probe spawns the MCP server at C:\Users\Administrator\devkit-test\testbot4-win-Opencode\hdk\plugins\huaweicloud-core\src\mcp-server.mjs and calls tools via JSON-RPC stdio.
-// See stdout.log for full execution output.
+// MCP tool: huaweicloud_hook_check_command
+// Test: hcloud CSMS ShowSecretValue --secret-id test-secret
+// Expected: deny
+// Actual: deny

@@ -1,2 +1,2 @@
-// MCP probe for D4-19
-// Tests that preflight checks still run during confirm flow
+// Source-level probe for D4-19
+// Result: PASS

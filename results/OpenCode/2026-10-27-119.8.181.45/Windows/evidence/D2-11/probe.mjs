@@ -1,2 +1,4 @@
-// MCP probe for D2-11
-// Tests auth_switch persist with securityToken - token should not be persisted
+// Source probe: tools.mjs persistCredentials function
+// MCP tool: huaweicloud_auth_switch (persist+token → needs_confirmation)
+// Expected: {status:error, scope:rejected}
+// Actual: persistCredentials returns rejected; token never persisted

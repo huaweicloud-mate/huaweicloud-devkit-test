@@ -1,7 +1,8 @@
 {
-  "caseId": "D4-21",
   "status": "PASS",
-  "why": "hook_check_artifacts broad IAM policy: denied=true",
-  "raw": "{\n  \"ok\": false,\n  \"decision\": \"deny\",\n  \"findings\": [\n    {\n      \"ruleid\": \"hwc-iam-admin-policy\",\n      \"title\": \"broad iam administrator grant\",\n      \"category\": \"iam\",\n      \"severity\": \"deny\",\n      \"message\": \"the change appears to grant broad administrator permissions.\",\n      \"remediation\"",
-  "executedAt": "20261026210447"
+  "why": "hook_check_artifacts(broad IAM policy {Allow:*,*}) → decision=deny, rule=hwc-iam-admin-policy. Broad IAM admin grant blocked.",
+  "executedAt": "20261027013928",
+  "tool": "huaweicloud_hook_check_artifacts",
+  "decision": "deny",
+  "ruleId": "hwc-iam-admin-policy"
 }

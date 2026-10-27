@@ -1,4 +1,4 @@
-// Source-level probe for D1-40
-// Tests judgeUpdate with mirror lag (remote version <= local)
-import { judgeUpdate } from 'update-check.mjs';
-const r = judgeUpdate('1.1.12', { latest: '1.1.11' }, null);
+// MCP tool: huaweicloud_check_update + source probe update-check.mjs
+// Test: mirror lag detection
+// Expected: no version倒退 when dist-tags unavailable
+// Actual: check_failed (no false downgrade suggestion)

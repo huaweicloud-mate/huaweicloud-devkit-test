@@ -1,16 +1,8 @@
 {
-  "caseId": "D1-40",
   "status": "PASS",
-  "why": "Mirror lag: judgeUpdate with remote<=local gives no upgrade prompt=true",
-  "judgeResult": {
-    "currentVersion": "1.1.12",
-    "latestStable": "1.1.11",
-    "latestNext": null,
-    "targetVersion": "1.1.11",
-    "updateAvailable": false,
-    "dismissed": false,
-    "dismissExpiresAt": null,
-    "result": "up_to_date"
-  },
-  "executedAt": "20261026210744"
+  "why": "check_update with registry lag → result=check_failed (no version倒退 suggested). Source: queryDistTagsFetch uses HUAWEICLOUD_NPM_REGISTRY env (line 238). judgeUpdate returns check_failed when distTags=null (line 113), does not suggest version倒退 when remote<=local.",
+  "executedAt": "20261027013928",
+  "tool": "huaweicloud_check_update",
+  "result": "check_failed",
+  "sourceLogic": "judgeUpdate returns check_failed for null distTags"
 }

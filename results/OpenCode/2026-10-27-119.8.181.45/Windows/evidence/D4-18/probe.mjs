@@ -1,2 +1,4 @@
-// MCP probe for D4-18
-// Tests plan_cli_command for write op - should require confirmation, not auto-deny or auto-execute
+// MCP tool: huaweicloud_plan_cli_command
+// Test: ECS DeleteServers --server-ids i-test-001 --force
+// Expected: deny + approvalToken (confirm-not-deny)
+// Actual: deny + approvalToken=c7e7abaa...

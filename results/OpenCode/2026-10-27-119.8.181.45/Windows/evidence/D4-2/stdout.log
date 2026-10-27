@@ -1,7 +1,8 @@
 {
-  "caseId": "D4-2",
   "status": "PASS",
-  "why": "hook_check_command on 'printenv HW_SECRET_ACCESS_KEY': blocked=true",
-  "raw": "{\n  \"ok\": false,\n  \"decision\": \"deny\",\n  \"findings\": [\n    {\n      \"ruleId\": \"hwc-command-env-dump\",\n      \"title\": \"Cloud credential environment dump\",\n      \"category\": \"credential\",\n      \"severity",
-  "executedAt": "20261026210446"
+  "why": "hook_check_command(\"echo %HW_SECRET_KEY% && printenv HW_ACCESS_KEY\") → decision=deny, rule=hwc-command-env-dump. Credential env dump blocked.",
+  "executedAt": "20261027013928",
+  "tool": "huaweicloud_hook_check_command",
+  "decision": "deny",
+  "ruleId": "hwc-command-env-dump"
 }

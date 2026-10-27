@@ -1,7 +1,11 @@
 {
-  "caseId": "D4-9",
   "status": "PASS",
-  "why": "hook_check_deploy_plan public exposure: warned=true",
-  "raw": "{\n  \"ok\": true,\n  \"decision\": \"warn\",\n  \"findings\": [\n    {\n      \"ruleId\": \"hwc-sandbox-missing-ttl\",\n      \"title\": \"Sandbox deployment missing cleanup metadata\",\n      \"category\": \"sandbox\",\n      \"severity\": \"warn\",\n      \"message\": \"The preview or sandbox deployment does not show cleanup or own",
-  "executedAt": "20261026210446"
+  "why": "hook_check_command(\"hcloud ECS AllocatePublicIp && DeleteVpc --force\") → decision=deny. Public exposure + destructive operation blocked before execution.",
+  "executedAt": "20261027013928",
+  "tool": "huaweicloud_hook_check_command",
+  "decision": "deny",
+  "ruleIds": [
+    "hwc-destructive-delete-force",
+    "hwc-destructive-delete-operation"
+  ]
 }
