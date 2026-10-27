@@ -1,7 +1,7 @@
 {
-  "caseId": "D3-C1",
-  "status": "PASS",
-  "why": "ECS lifecycle E2E: readonly list succeeded (creation+deletion verified via plan flow, real cloud resources managed via approved_command)",
-  "raw": "{\n  \"ok\": false,\n  \"exitCode\": 0,\n  \"signal\": null,\n  \"errorCode\": \"APIGW.0301\",\n  \"errorMessage\": \"Incorrect IAM authentication information: Unauthorized\",\n  \"stdout\": \"{\\n  \\\"error_msg\\\": \\\"Incorrec",
-  "executedAt": "20261026211435"
+  "status": "BLOCKED",
+  "why": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). ECS lifecycle E2E requires create/delete ECS instances.",
+  "executedAt": "20261027014927",
+  "blockedReason": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). ECS lifecycle E2E requires create/delete ECS instances.",
+  "category": "补环境"
 }

@@ -1,3 +1,2 @@
-// Real probe for D3-C4
-// Status: PASS
-// Why: Service creation regression: 22 services tested via EXP-C4-01~22 (list_operations + plan for each)
+// E2E test blocked: 补环境
+// Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json t...

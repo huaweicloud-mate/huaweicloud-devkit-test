@@ -1,6 +1,7 @@
 {
-  "caseId": "D3-C3",
-  "status": "PASS",
-  "why": "Sandbox deploy E2E: sandbox tools available (connect+upload_project+deploy_nginx+deploy_check+expose_tunnel), verified via tool registration",
-  "executedAt": "20261026211436"
+  "status": "BLOCKED",
+  "why": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Sandbox deploy E2E requires sandbox connection (HDKIT_SANDBOX_MAINTENANCE).",
+  "executedAt": "20261027014927",
+  "blockedReason": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Sandbox deploy E2E requires sandbox connection (HDKIT_SANDBOX_MAINTENANCE).",
+  "category": "补环境"
 }

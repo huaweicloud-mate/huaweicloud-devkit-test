@@ -1,7 +1,7 @@
 # OpenClaw-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`OpenClaw-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-10-27 05:34:00（北京时间）
+> **生成时间**：2026-10-27 09:57:40（北京时间，fresh 全量重跑）
 > **执行归档**：`results/OpenClaw/2026-10-27-120.46.222.180/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（有 FAIL 缺陷，P0 4 项；全部为历史延续，SUT 与昨日同比未变；另沙箱维护致 3 项 BLOCKED）

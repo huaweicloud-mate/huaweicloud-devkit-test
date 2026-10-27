@@ -1,3 +1,1 @@
-// Real probe for D9-7
-// Status: PASS
-// Why: Version negotiation: old protocol returns=2024-10-07
+// Source: mcp-protocol.mjs protocol version negotiation

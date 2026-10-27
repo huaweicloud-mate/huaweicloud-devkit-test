@@ -1,7 +1,7 @@
 {
-  "caseId": "D3-S3",
-  "status": "PASS",
-  "why": "Sandbox preview: check_user responded (realname/agreement status), full E2E (connect→upload→deploy→URL) requires sandbox session",
-  "raw": "{\"code\":-32603,\"message\":\"HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: ebdd40e94169464eb03827a4c3f78aee]\"}",
-  "executedAt": "20261026211458"
+  "status": "BLOCKED",
+  "why": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Sandbox preview URL requires sandbox connection (HDKIT_SANDBOX_MAINTENANCE).",
+  "executedAt": "20261027014927",
+  "blockedReason": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Sandbox preview URL requires sandbox connection (HDKIT_SANDBOX_MAINTENANCE).",
+  "category": "补环境"
 }

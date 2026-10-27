@@ -1,3 +1,1 @@
-// Real probe for D4-14
-// Status: PASS
-// Why: Auditability: command executed with traceable output
+// Analysis: MCP tool response structure includes plan/classification for auditability

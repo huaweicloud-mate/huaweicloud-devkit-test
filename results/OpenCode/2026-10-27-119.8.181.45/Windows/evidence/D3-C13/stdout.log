@@ -1,7 +1,7 @@
 {
-  "caseId": "D3-C13",
-  "status": "PASS",
-  "why": "OBS website config: responded",
-  "raw": "{\n  \"ok\": false,\n  \"status\": 403,\n  \"body\": \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message><Reques",
-  "executedAt": "20261026211156"
+  "status": "BLOCKED",
+  "why": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). OBS website config requires valid bucket with API access.",
+  "executedAt": "20261027014927",
+  "blockedReason": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). OBS website config requires valid bucket with API access.",
+  "category": "补环境"
 }

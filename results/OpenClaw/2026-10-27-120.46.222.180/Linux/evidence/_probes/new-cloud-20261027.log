@@ -1,6 +1,6 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-codeartsagent-s2-mvprgnl1 -> id=a63a8288-832f-41ca-92f3-cd0aee884d8f
+创建测试VPC tctest-codeartsagent-s2-mvq18e00 -> id=f7d6becb-18d9-452a-960e-2273b04af1ef
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
@@ -51,7 +51,7 @@ voucher_status(领取后) -> {"claimed":true,"message":"已领取过（代金券
 =====END D3-S4=====
 
 =====CASE D3-S3=====
-check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 6e1e1da835944d188de3d063f831f03a]
+check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: a14cfdca398e4562950bd244a926422d]
 [FAIL] 沙箱 check_user 通过
 → 沙箱账号未实名/未签协议，标记 BLOCKED（外部依赖）
 =====END D3-S3=====
@@ -64,7 +64,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "测试 VPC 创建成功",
       "ok": true,
-      "detail": "vpcId=a63a8288-832"
+      "detail": "vpcId=f7d6becb-18d"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -89,7 +89,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "OBS 建桶成功",
       "ok": true,
-      "detail": "bucket=tctest-codeartsagent-obs-mvprgnl1"
+      "detail": "bucket=tctest-codeartsagent-obs-mvq18e00"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -109,7 +109,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "删除归零",
       "ok": true,
-      "detail": "bucket removed=tctest-codeartsagent-obs-mvprgnl1"
+      "detail": "bucket removed=tctest-codeartsagent-obs-mvq18e00"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
@@ -149,7 +149,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "沙箱 check_user 通过",
       "ok": false,
-      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 6e1e1da835944d188de3d063f831f03a]\"}"
+      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: a14cfdca398e4562950bd244a926422d]\"}"
     }
   ]
 }

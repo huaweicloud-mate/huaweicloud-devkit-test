@@ -1,7 +1,7 @@
 # Hermes-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`Hermes-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-10-27 05:20（北京时间）
+> **生成时间**：2026-10-27 09:51（北京时间）
 > **执行归档**：`results/Hermes/2026-10-27-1.94.193.150/Linux/`
 > **被测对象**：huaweicloud-devkit v1.1.12（npm `latest` 正式版，gitHead `4ed07801`）
 > **结论**：`PARTIAL`（有 FAIL 缺陷，P0 3 项；另有 3 项沙箱依赖用例因 DevStation 服务维护 BLOCKED）
@@ -125,7 +125,7 @@
 - [x] 写操作误判 read-only：`无`
 - [x] 红线（I 类）违规：`无`
 - [x] 脱敏复核：`发现 4 处脱敏缺口`（D4-2 generic access_key、D4-6 JSON 带引号 key adminPass、D4-26 findings.evidence 明文、D8-9 sanitizeValue 未脱敏）——均已列为缺陷，非测试侧泄漏
-- [x] 真云红线：建删资源全部归零（见 §七），只删本次创建、按名称后缀（`3048785051`）白名单清理
+- [x] 真云红线：建删资源全部归零（见 §七），只删本次创建、按名称后缀（`3065208471`）白名单清理
 
 ---
 
@@ -133,16 +133,16 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| VPC + Subnet（D3-S2） | `tctest-hermes-s2-mvpqy2dn` | DeleteVpc | `仍含=VPC true→确认后删除归零` OK |
-| VPC + Subnet（D3-C1） | `testbot3-hermes-e2e-3048785051` + subnet | DeleteServers + 人工补删 | 最终 VPC=0 / subnet=0 |
-| ECS（D3-C1） | CreateServers（`93e1489d…`，`testbot3-hermes-ecs-3048785051`） | DeleteServers（提交）+ 人工补删 | 最终 ECS count=0（150s 轮询未确认，人工二次删除后归零） |
-| OBS 桶（D3-C2） | `OBS mb testbot3-hermes-obs-3048946393` | 删桶 | `Delete bucket ... successfully!` 归零 OK |
-| OBS 桶（D3-C13） | `OBS mb tctest-hermes-obs-mvpqy2dn` | OBS rm | `bucket removed` 归零 OK |
-| EIP（D3-C7） | 跨区创建 EIP 引导（`9708c14c…`） | DeletePublicip | `ListEips 无本次id` 无残留 |
+| VPC + Subnet（D3-S2） | `tctest-hermes-s2-mvq0pvbr` | DeleteVpc | `仍含=VPC true→确认后删除归零` OK |
+| VPC + Subnet（D3-C1） | `testbot3-hermes-e2e-3065208471` + subnet | DeleteServers + 人工补删 | 最终 VPC=0 / subnet=0 |
+| ECS（D3-C1） | CreateServers（`8a4e9da9…`，`testbot3-hermes-ecs-3065208471`） | DeleteServers（提交）+ 人工补删 | 最终 ECS count=0（150s 轮询未确认，人工二次删除后归零） |
+| OBS 桶（D3-C2） | `OBS mb testbot3-hermes-obs-3065370316` | 删桶 | `Delete bucket ... successfully!` 归零 OK |
+| OBS 桶（D3-C13） | `OBS mb tctest-hermes-obs-mvq0pvbr` | OBS rm | `bucket removed` 归零 OK |
+| EIP（D3-C7） | 跨区创建 EIP 引导（`38f12eca…`） | DeletePublicip | `ListEips 无本次id` 无残留 |
 | 沙箱（D3-C3/D3-C6/D3-S3） | 未连接（服务维护） | — | 无沙箱会话创建（维护期 check_user 失败，未建任何沙箱资源） |
 | FunctionGraph 函数（D3-S6） | CreateFunction（失败未建，`Invalid parameter: code.filename`） | 测后删除 | 删除函数归零 OK |
 
-> 真云用例全部真机执行；D3-C1 ECS（150s 轮询窗口过短致未确认）本轮已人工按名称后缀白名单补删，ECS/VPC/subnet 均归零（ECS=0、VPC=0、subnet=0）。同机并发其他客户端（DSH/CodeArtsAgent）创建的 `testbot3-hermes-*` 前缀资源（后缀 `3048711485`/`3048814184`/`3048940765`）不在本客户端责任范围，未触碰。
+> 真云用例全部真机执行；D3-C1 ECS（150s 轮询窗口过短致未确认）本轮已人工按名称后缀白名单补删，ECS/VPC/subnet 均归零（ECS=0、VPC=0、subnet=0）。同机并发其他客户端/主机创建的 `testbot3-hermes-*` 前缀资源（后缀 `3064978816`/`3065198740`/`3065508610`，另见 `tctest-openclaw-*`/`hdk-s7-*`）不在本客户端责任范围，未触碰。
 
 ---
 

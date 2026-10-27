@@ -1,7 +1,7 @@
 {
-  "caseId": "D3-C7",
-  "status": "PASS",
-  "why": "Cross-region: responded",
-  "raw": "{\n  \"ok\": true,\n  \"service\": \"ecs\",\n  \"region\": \"ap-southeast-3\",\n  \"available\": true,\n  \"note\": \"ecs is available in ap-southeast-3.\",\n  \"sourcedFrom\": \"static cache, update via npm package upgrade\",",
-  "executedAt": "20261026211156"
+  "status": "BLOCKED",
+  "why": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Cross-region resource operations require create/delete EIP with valid credentials.",
+  "executedAt": "20261027014927",
+  "blockedReason": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Cross-region resource operations require create/delete EIP with valid credentials.",
+  "category": "补环境"
 }

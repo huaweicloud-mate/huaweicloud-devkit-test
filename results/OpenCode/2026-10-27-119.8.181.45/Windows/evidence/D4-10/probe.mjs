@@ -1,3 +1,1 @@
-// Real probe for D4-10
-// Status: PASS
-// Why: Rule library: 19 rules loaded (baseline 16)
+// Source: risk-rule-engine.mjs rule library regression

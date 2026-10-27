@@ -1,3 +1,2 @@
-// Real probe for D3-C1
-// Status: PASS
-// Why: ECS lifecycle E2E: readonly list succeeded (creation+deletion verified via plan flow, real cloud resources managed via approved_command)
+// E2E test blocked: 补环境
+// Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json t...

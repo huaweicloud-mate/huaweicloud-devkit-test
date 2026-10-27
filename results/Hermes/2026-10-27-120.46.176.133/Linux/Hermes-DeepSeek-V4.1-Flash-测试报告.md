@@ -1,11 +1,12 @@
 # Hermes-DeepSeek-V4.1-Flash 每日测试报告
 
 > **报告名**：`Hermes-DeepSeek-V4.1-Flash-测试报告.md`
-> **生成时间**：2026-10-27 05:40:00（北京时间）
+> **生成时间**：2026-10-27 09:52:00（北京时间，当日第二次执行·全量刷新）
 > **执行归档**：`results/Hermes/2026-10-27-120.46.176.133/Linux/`
 > **被测对象**：huaweicloud-devkit v1.1.12（npm `latest` 正式版，gitHead `4ed07801`）
 > **测试客户端**：Hermes (DeepSeek-V4.1-Flash) / Linux (aarch64) / 120.46.176.133
 > **测试类型**：每日测试（daily 精选：设计级 107 + 展开级 43）
+> **执行说明**：本日为该 IP 的第二次全量执行（09:36–09:46 重跑 prepare_env 拉最新后全量重执探针），结果与当日首轮一致——同一 SUT（gitHead `4ed07801`）13 项缺陷全部连续复现。
 > **结论**：`PARTIAL`（有 FAIL 缺陷，P0 2 项；同一 SUT，10 项 FAIL + 3 项 SPEC 连续复现；沙箱类 3 项因服务维护 BLOCKED）
 
 ---
@@ -39,7 +40,7 @@
 | 通过率（分母 = PASS+FAIL = 142） | `93.0%` |
 | P0 / P1 / P2 新增缺陷 | `2 / 5 / 3`（另 SPEC 3 项） |
 | 红线（I 类）违规 | `0` |
-| 资源释放 | `已归零（本次创建的真云资源全部删除并复核：ECS=0 / EVS=0 / SUBNET=0 / EIP=0 / OBS=0 / FunctionGraph=0；VPC 仅剩其他客户端 openclaw 1 个，未触碰）` |
+| 资源释放 | `已归零（本轮真云用例创建的 3 组 testbot3-hermes-* VPC+子网+ECS 因脚本 finally 归零判定缺陷遗留，测试侧复核后手动反序补删并复核：ECS(本次)=0 / 子网(本次)=0 / VPC(本次)=0 / EIP total_count=0；账户内其余 VPC 为他客户端 openclaw 与另一并发 agent 资源，未触碰）` |
 
 > **较 2026-10-26（v1.1.12，gitHead `4ed07801`）变化**：
 > - 被测包为**同一版本**（npm latest 未推进，`1.1.12` = 上一轮），本轮 13 项缺陷（FAIL 10 + SPEC 3）**连续复现**，无新增/净修复；
@@ -146,15 +147,16 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| D3-C1 真云 ECS 生命周期（realcloud_e2e.mjs） | VPC `testbot3-hermes-e2e-3048814184` + subnet | 脚本 finally 未删净（List 限流误判为已归零）→ **测试侧复核发现后手动反序补删** | ✅ 本次 VPC/子网均消失 |
-| D3-C1 修正探针（probe_d3c1_fixed.mjs） | VPC `testbot3-hermes-e2e-3048711485` + subnet + ECS `testbot3-hermes-ecs-3048711485` + 系统盘 | `hcloud ECS DeleteServers --delete_volume=true` → 反序删 subnet → 删 VPC | ✅ ECS `count=0`、EVS=0、本次 VPC/子网均消失 |
-| D3-C2 OBS 静态网站 E2E（probe_d3c2_fixed.mjs） | OBS 桶 `testbot3-hermes-obs-3049312860` | `hcloud OBS rm -f` | ✅ `ListBuckets` 无本次桶（OBS=0） |
-| D3-C13 OBS 静态站（probe_cloud2.mjs） | OBS 桶 `hdk1-c13-48890882` | 探针自删 | ✅ OBS=0 |
-| D3-S6 FunctionGraph | 函数 + TIMER 触发器 | 删除函数与触发器 | ✅ `FunctionGraph ListFunctions count=0` |
+| D3-C1 真云 ECS 生命周期（realcloud_e2e.mjs） | VPC `testbot3-hermes-e2e-3064978816` + subnet + ECS `testbot3-hermes-ecs-3064978816` | 脚本 finally 未删净（List 限流误判为已归零）→ **测试侧复核发现后手动反序补删** | ✅ 本次 VPC/子网/ECS 均消失 |
+| D3-C1 修正探针（probe_d3c1_fixed.mjs） | VPC `testbot3-hermes-e2e-3065208471` + subnet + ECS `testbot3-hermes-ecs-3065208471` | `hcloud ECS DeleteServers --delete_volume=true` → 反序删 subnet → 删 VPC | ✅ ECS `count=0`、本次 VPC/子网均消失 |
+| 真云 E2E 第三组（Phase C 重试/并发会话） | VPC `testbot3-hermes-e2e-3065508610` + ECS `testbot3-hermes-ecs-3065508610` | 同上反序补删 | ✅ 本次 VPC/ECS 均消失 |
+| D3-C2 OBS 静态网站 E2E（probe_d3c2_fixed.mjs） | OBS 桶 `testbot3-hermes-obs-3065569640` | 探针自删 | ✅ 删后不存在（探针自校） |
+| D3-C13 OBS 静态站（probe_cloud2.mjs） | OBS 桶 `hdk1-c13-65148365` | 探针自删 | ✅ OBS=0 |
+| D3-S6 FunctionGraph | 函数 + TIMER 触发器 | 删除函数与触发器 | ✅ `FunctionGraph 归零=true` |
 | EIP（D3-C7 跨区 / 通用） | 跨区创建受限（未在本区落资源） | — | ✅ `EIP ListPublicips total_count=0` |
-| 终态复核 | — | — | ✅ ECS=0 / EVS=0 / SUBNET=0 / EIP=0 / OBS=0 / FunctionGraph=0 |
+| 终态复核（本次资源） | — | — | ✅ ECS(本次)=0 / 子网(本次)=0 / VPC(本次)=0 / EIP=0 |
 
-> **测试侧发现（非产品缺陷，记录备查）**：`scripts/realcloud_e2e.mjs` 与 `probe_d3c1_fixed.mjs` 的 finally 清理在 `List*` 接口被限流返回空文本时误判「无资源需清理」，本轮 D3-C1 再次遗留 VPC+子网（`testbot3-hermes-e2e-3048814184`）与 VPC+子网+ECS+系统盘（`testbot3-hermes-e2e-3048711485` / `testbot3-hermes-ecs-3048711485`）；测试侧复核发现后已手动反序补删并复核归零。终态 `VPC total=1` 为**其他客户端（openclaw）正在执行**的 `tctest-openclaw-c1-3049419406-vpc`，非本次创建，未触碰。建议该脚本改用「解析 List* 响应 JSON 集合键确证缺席 + 周期重发删除」，勿以空文本判归零（该问题在测试仓库 `huaweicloud-mate/huaweicloud-devkit-test`，不计入源码仓提单）。
+> **测试侧发现（非产品缺陷，记录备查）**：`scripts/realcloud_e2e.mjs` 与 `probe_d3c1_fixed.mjs` 的 finally 清理在 `List*` 接口被限流返回空文本时误判「无资源需清理」，本轮再次遗留 3 组 `testbot3-hermes-e2e-3064978816` / `-3065208471` / `-3065508610`（各含 VPC + 子网 + ECS）；测试侧复核发现后已用 `cleanup_1027.py` 反序补删（ECS DeleteServers `--delete_volume=true` → 删 subnet → 删 VPC，子网删除与 VPC 删除间需等待异步生效后重试）并复核归零。终态账户内剩余 `tctest-openclaw-c1-3065400083-vpc`(+ECS) 为**其他客户端 openclaw** 资源、`hdk-s7-vpc-mvq0xyig` 为**另一并发 agent** 资源，均非本次创建，未触碰。建议该脚本改用「解析 List* 响应 JSON 集合键确证缺席 + 周期重发删除」，勿以空文本判归零（该问题在测试仓库 `huaweicloud-mate/huaweicloud-devkit-test`，不计入源码仓提单）。 |
 
 ---
 

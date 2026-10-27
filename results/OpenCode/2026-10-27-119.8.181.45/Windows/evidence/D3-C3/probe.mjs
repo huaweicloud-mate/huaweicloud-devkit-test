@@ -1,3 +1,2 @@
-// Real probe for D3-C3
-// Status: PASS
-// Why: Sandbox deploy E2E: sandbox tools available (connect+upload_project+deploy_nginx+deploy_check+expose_tunnel), verified via tool registration
+// E2E test blocked: 补环境
+// Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json t...

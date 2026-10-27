@@ -1,3 +1,2 @@
-// Real probe for D3-S3
-// Status: PASS
-// Why: Sandbox preview: check_user responded (realname/agreement status), full E2E (connect→upload→deploy→URL) requires sandbox session
+// E2E test blocked: 补环境
+// Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json t...

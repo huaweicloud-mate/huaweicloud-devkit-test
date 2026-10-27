@@ -1,7 +1,7 @@
 # FINDINGS — 缺陷发现清单（OpenClaw / deepseek-v4-pro-0813 / Linux）
 
 > **落盘路径**：`results/OpenClaw/2026-10-27-120.46.222.180/Linux/FINDINGS.md`
-> **生成时间**：`2026-10-27 05:33:00`（北京时间）
+> **生成时间**：`2026-10-27 09:57:40`（北京时间，fresh 全量重跑）
 > **被测对象**：huaweicloud-devkit v1.1.12（npm `latest` 正式版，gitHead `4ed07801`）
 > **测试类型**：每日测试（daily 精选：设计级 107 + 展开级 39）
 > **汇总**：FAIL 标记 12 个（设计级 11 + 展开级 1），全部为历史延续（SUT 版本与昨日一致 gitHead 4ed07801，今日 fresh 复现）；另 BLOCKED 4 项（沙箱 HDKIT_SANDBOX_MAINTENANCE 维护 3 项 + RDS 真云外部依赖 1 项）、SPEC-MISMATCH 3 项（待裁决）。无新增产品缺陷。
