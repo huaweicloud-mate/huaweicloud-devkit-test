@@ -1,7 +1,7 @@
 # FINDINGS — 缺陷发现清单（DSH-deepseek-v4-pro-0813）
 
 > **落盘路径**：`results/DSH/2026-10-27-1.94.193.150/Linux/FINDINGS.md`
-> **生成时间**：2026-10-27 05:15（北京时间）
+> **生成时间**：2026-10-27 09:40（北京时间）
 > **被测版本**：huaweicloud-devkit v1.1.12（gitHead 4ed07801）
 
 ## #1【P0】D4-16 sh -c 命令包裹穿透（凭证 env 打印绕过）
