@@ -12,7 +12,7 @@ import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devki
 import { writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const pkgRoot = 'C:/Users/Administrator/devkit-test/Codex/hdk';
+const pkgRoot = 'C:/Users/Administrator/devkit-test/OfficeAce/hdk';
 const evDir = 'C:/Users/Administrator/devkit-test/OfficeAce/huaweicloud-devkit-test/results/OfficeAce/2026-10-27-119.8.181.45/Windows/evidence';
 const results = [];
 function test(id, name, pass, actual, expected, passMsg, failMsg) {
