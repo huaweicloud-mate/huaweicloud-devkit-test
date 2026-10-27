@@ -1,20 +1,19 @@
 {
   "case": "D3-C1",
-  "status": "PASS",
+  "status": "FAIL",
   "total": 5,
-  "passed": 5,
-  "failed": 0,
-  "executedAt": "20261026211512",
+  "passed": 4,
+  "failed": 1,
   "results": [
     {
       "name": "CreateVpc",
       "pass": true,
-      "detail": "{\n  \"vpc\": {\n    \"id\": \"b7e736e1-02d1-47f7-a089-db264da42bda\",\n    \"name\": \"testbot3-hermes-e2e-3048940765\",\n    \"descri"
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"d84eeed8-635a-4d73-8c86-1cb5753bad5b\",\n    \"name\": \"testbot3-hermes-e2e-3064"
     },
     {
       "name": "CreateSubnet",
       "pass": true,
-      "detail": "{\n  \"subnet\": {\n    \"id\": \"22d86d8a-964b-4f09-a633-4b1e72749a21\",\n    \"name\": \"testbot3-hermes-e2e-3048940765-subnet\",\n "
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"7ec48da8-3d8b-4deb-8936-c452e090b6bc\",\n    \"name\": \"testbot3-hermes-e2e-3"
     },
     {
       "name": "CreateServers(审批分类)",
@@ -24,12 +23,12 @@
     {
       "name": "CreateServers(返回serverIds)",
       "pass": true,
-      "detail": "{\n  \"job_id\": \"ff808081a0ed143a01a17a0ba8913698\",\n  \"serverIds\": [\n    \"6101616f-9684-48fc-a426-429554bd0f24\"\n  ]\n}"
+      "detail": "{\n  \"job_id\": \"ff808081a0ed144001a17b0060e93c7c\",\n  \"serverIds\": [\n    \"2e0b1763-2a11-4b52-947a-c2f27e3591aa\"\n  ]\n}"
     },
     {
       "name": "finally归零(校验真实删除)",
-      "pass": true,
-      "detail": "ECS删除提交#1 ECS删除提交#2 ECS归零确认 subnet:ok vpc:归零确认"
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
     }
   ]
 }
