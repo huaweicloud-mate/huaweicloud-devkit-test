@@ -1,3 +1,1 @@
-// Real probe for D1-42
-// Status: PASS
-// Why: dismiss closed loop: dismiss call + recheck responded
+// Source: update-check.mjs judgeUpdate dismiss state persistence

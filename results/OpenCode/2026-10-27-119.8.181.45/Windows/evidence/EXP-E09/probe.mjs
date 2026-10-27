@@ -1,3 +1,4 @@
-// Real probe for EXP-E09
-// Status: PASS
-// Why: HIT: CCE+SWR for Kubernetes cluster
+// MCP tool: huaweicloud_service_catalog
+// Intent: 创建CCE集群
+// Expected: CCE
+// Actual: huaweicloud-core fallback

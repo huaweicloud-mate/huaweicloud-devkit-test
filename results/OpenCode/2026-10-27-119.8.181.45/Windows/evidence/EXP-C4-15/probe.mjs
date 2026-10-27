@@ -1,3 +1,3 @@
-// Real probe for EXP-C4-15
-// Status: PASS
-// Why: WAF: list_operations=true (7860 chars), plan=true
+// MCP tool: huaweicloud_list_operations(WAF)
+// Tested: false
+// Operations: WAF operations available via hcloud

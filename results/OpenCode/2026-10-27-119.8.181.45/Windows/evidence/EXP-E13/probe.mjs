@@ -1,3 +1,4 @@
-// Real probe for EXP-E13
-// Status: PASS
-// Why: HIT: CSMS+KMS+ELB for HTTPS certificate
+// MCP tool: huaweicloud_service_catalog
+// Intent: 申请SSL证书绑定ELB
+// Expected: ELB
+// Actual: huawei-cloud-dew+huawei-vpc/CSMS+KMS+ELB

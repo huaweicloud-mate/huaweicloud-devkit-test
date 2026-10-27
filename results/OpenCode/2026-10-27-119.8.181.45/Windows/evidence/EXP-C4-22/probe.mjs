@@ -1,3 +1,3 @@
-// Real probe for EXP-C4-22
-// Status: PASS
-// Why: ELB: list_operations=true (5541 chars), plan=true
+// MCP tool: huaweicloud_list_operations(ELB)
+// Tested: false
+// Operations: ELB operations available via hcloud

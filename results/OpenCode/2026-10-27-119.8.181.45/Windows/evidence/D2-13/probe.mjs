@@ -1,3 +1,1 @@
-// Real probe for D2-13
-// Status: PASS
-// Why: configuredBySession: auth_status responded
+// Source: credentials.mjs + tools.mjs configuredBySession flag

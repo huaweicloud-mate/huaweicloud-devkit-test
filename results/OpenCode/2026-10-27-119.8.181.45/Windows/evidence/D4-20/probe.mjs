@@ -1,7 +1,1 @@
-// Real probe for D4-20
-// Executed via MCP server stdio
-// Status: PASS
-// Why: Plan without confirm = no execution: true
-import { spawn } from 'node:child_process';
-// This probe spawns the MCP server at C:\Users\Administrator\devkit-test\testbot4-win-Opencode\hdk\plugins\huaweicloud-core\src\mcp-server.mjs and calls tools via JSON-RPC stdio.
-// See stdout.log for full execution output.
+// MCP tool: plan_cli_command (deny without approval = zero-op)
