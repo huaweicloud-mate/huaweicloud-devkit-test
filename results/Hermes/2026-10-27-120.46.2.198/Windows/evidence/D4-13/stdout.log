@@ -1,11 +1,12 @@
 {
   "status": "PASS",
   "caseId": "D4-13",
-  "why": "read-only commands correctly classified: true",
+  "why": "只读子账号读可用、写被 IAM 拒绝(最小权限生效)",
   "tests": [
-    "ECS.ListServers: decision=allow, risk=read_only",
-    "VPC.ListVpcs: decision=allow, risk=read_only",
-    "RDS.ListInstances: decision=allow, risk=read_only"
+    "READ ECS ListServersDetails: status=0 (JSON ok)",
+    "READ VPC ListVpcs: status=0 (JSON ok)",
+    "WRITE VPC CreateVpc: status=0, denied=true",
+    "WRITE detail: {\n  \"code\": \"VPC.0010\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Rules on create_router by *** disallowed by policy\\\",\\\"type\\\":\\\"PolicyNotAuthorized\\\",\\\"detail\\\":\\\"\\\"}}\"\n}\n\u001b[1;93m获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度\u001b"
   ],
   "executedAt": "20261027000000"
 }

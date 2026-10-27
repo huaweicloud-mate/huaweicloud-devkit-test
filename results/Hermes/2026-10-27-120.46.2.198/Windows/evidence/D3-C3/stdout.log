@@ -1,9 +1,35 @@
 {
-  "status": "PASS",
-  "caseId": "D3-C3",
-  "why": "sandbox tools found: 10/10",
-  "tests": [
-    "found: 10/10"
-  ],
-  "executedAt": "20261027000000"
+  "case": "D3-C3",
+  "status": "BLOCKED",
+  "blockedReason": "沙箱 DevStation 服务维护中（HDKIT_SANDBOX_MAINTENANCE，trace 6632253389594cc7b46d422fae7c8ef2）。实测 2026-10-27 02:10 UTC。connect 返回『沙箱功能正在升级优化』，workspace_id 拿不到，后续 upload_project/deploy_nginx/deploy_check/close_session 全依赖 connect 失败。解除条件：沙箱维护结束、sandbox_connect 返回 connected。",
+  "total": 5,
+  "passed": 0,
+  "failed": 5,
+  "results": [
+    {
+      "name": "connect",
+      "pass": false,
+      "detail": "ws="
+    },
+    {
+      "name": "upload_project",
+      "pass": false,
+      "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WO"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": false,
+      "detail": "undefined:undefined"
+    },
+    {
+      "name": "deploy_check",
+      "pass": false,
+      "detail": "undefined"
+    },
+    {
+      "name": "close_session",
+      "pass": false,
+      "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox conn"
+    }
+  ]
 }

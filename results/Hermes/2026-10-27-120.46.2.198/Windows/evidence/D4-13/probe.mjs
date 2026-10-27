@@ -1,1 +1,1 @@
-// D4-13
+// D4-13: 只读子账号最小权限（--cli-access-key/--cli-secret-key 传入）
