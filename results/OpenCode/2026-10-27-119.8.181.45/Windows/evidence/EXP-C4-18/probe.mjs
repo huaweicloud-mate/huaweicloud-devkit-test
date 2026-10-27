@@ -1,3 +1,3 @@
-// Real probe for EXP-C4-18
-// Status: PASS
-// Why: DEW: list_operations=true (5509 chars), plan=true
+// MCP tool: huaweicloud_list_operations(DEW)
+// Tested: false
+// Operations: DEW operations available via hcloud

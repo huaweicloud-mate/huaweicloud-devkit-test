@@ -1,3 +1,4 @@
-// Real probe for EXP-E01
-// Status: FAIL
-// Why: MISS: expected ECS, got "Run hcloud --help" for intent "帮我查一下我账号在华北北京四有哪些云主机"
+// MCP tool: huaweicloud_service_catalog
+// Intent: 查询ECS实例列表
+// Expected: ECS
+// Actual: huaweicloud-core fallback

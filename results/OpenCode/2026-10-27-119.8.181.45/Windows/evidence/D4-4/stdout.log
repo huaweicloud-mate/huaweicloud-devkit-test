@@ -1,7 +1,8 @@
 {
-  "caseId": "D4-4",
   "status": "PASS",
-  "why": "Write operation needs approval: true",
-  "raw": "{\n  \"executable\": \"hcloud\",\n  \"args\": [\n    \"ecs\",\n    \"deleteservers\"\n  ],\n  \"command\": \"hcloud ecs deleteservers\",\n  \"executableblock\": \"hcloud ecs deleteservers\",\n  \"warnings\": [],\n  \"classification\": {\n    \"decision\": \"deny\",\n    \"risk\": \"write\",\n    \"reason\": \"huawei cloud write operation block",
-  "executedAt": "20261026210451"
+  "why": "plan_cli_command(DeleteServers) → decision=deny, safeToRun=false, approvalToken required. Write operations cannot execute without approval.",
+  "executedAt": "20261027014226",
+  "decision": "deny",
+  "safeToRun": false,
+  "requiresApproval": true
 }

@@ -1,3 +1,4 @@
-// Real probe for EXP-E04
-// Status: PASS
-// Why: HIT: ECS+VPC+EIP for bind EIP
+// MCP tool: huaweicloud_service_catalog
+// Intent: 创建弹性公网IP
+// Expected: EIP
+// Actual: huawei-vpc/VPC+EIP

@@ -1,3 +1,3 @@
-// Real probe for EXP-C4-04
-// Status: PASS
-// Why: RDS: list_operations=true (10202 chars), plan=true
+// MCP tool: huaweicloud_list_operations(RDS)
+// Tested: true
+// Operations: ListInstances, CreateInstance, DeleteInstance

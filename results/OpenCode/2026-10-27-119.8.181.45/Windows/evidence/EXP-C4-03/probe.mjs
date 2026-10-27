@@ -1,3 +1,3 @@
-// Real probe for EXP-C4-03
-// Status: PASS
-// Why: OBS: list_operations=true (4562 chars), plan=true
+// MCP tool: huaweicloud_list_operations(OBS)
+// Tested: true
+// Operations: ls, mb, stat, cp

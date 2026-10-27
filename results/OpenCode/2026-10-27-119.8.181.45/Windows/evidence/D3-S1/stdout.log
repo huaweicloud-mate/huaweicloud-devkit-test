@@ -1,7 +1,8 @@
 {
-  "caseId": "D3-S1",
   "status": "PASS",
-  "why": "service_catalog ECS query: routes to ECS=true",
-  "raw": "{\n  \"intent\": \"帮我查看华北北京四的ECS云主机列表\",\n  \"recommendedSkills\": [\n    \"Use huaweicloud-core to route intent.\"\n  ],\n  \"recommendedServices\": [\n    \"Run hcloud --help to list available services.\"\n  ],\n  \"capabilityOrder\": [\n    \"Huawei Cloud Skills for task-specific workflows and examples\",\n    \"KooCLI hcl",
-  "executedAt": "20261026210451"
+  "why": "run_readonly_command(ECS ListServersDetails) classified read_only, safeToRun=true, credentials injected (redacted). No write tools called during session. User do-not-modify constraint respected.",
+  "executedAt": "20261027014439",
+  "decision": "allow",
+  "risk": "read_only",
+  "noWriteOps": true
 }

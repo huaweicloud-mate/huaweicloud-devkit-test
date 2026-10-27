@@ -1,3 +1,1 @@
-// Real probe for D2-1
-// Status: PASS
-// Why: auth_status all: response length=2553
+// Source: auth/credentials.mjs 3-end sync

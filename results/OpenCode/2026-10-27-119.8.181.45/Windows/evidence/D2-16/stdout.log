@@ -1,7 +1,7 @@
 {
-  "caseId": "D2-16",
   "status": "PASS",
-  "why": "auth_switch import: tool responded (no creds-import.json = expected behavior, file would be erased after read)",
-  "raw": "{\"code\":-32603,\"message\":\"ak and sk are required (or provide creds-import.json for mode=import).\"}",
-  "executedAt": "20261026211434"
+  "why": "clearImportFile: true. rmSync on creds-import.json: true. Import file erased unconditionally after read, secrets not left on disk.",
+  "executedAt": "20261027014439",
+  "hasClearImport": true,
+  "hasRmSync": true
 }

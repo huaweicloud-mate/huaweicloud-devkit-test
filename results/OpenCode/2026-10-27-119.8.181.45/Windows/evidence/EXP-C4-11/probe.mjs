@@ -1,3 +1,3 @@
-// Real probe for EXP-C4-11
-// Status: PASS
-// Why: DDS: list_operations=true (4406 chars), plan=true
+// MCP tool: huaweicloud_list_operations(DDS)
+// Tested: false
+// Operations: DDS operations available via hcloud

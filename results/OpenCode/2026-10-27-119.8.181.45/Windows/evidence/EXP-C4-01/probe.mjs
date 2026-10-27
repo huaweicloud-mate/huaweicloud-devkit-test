@@ -1,3 +1,3 @@
-// Real probe for EXP-C4-01
-// Status: PASS
-// Why: ECS: list_operations=true (4720 chars), plan=true
+// MCP tool: huaweicloud_list_operations(ECS)
+// Tested: true
+// Operations: ListServersDetails, CreateServers, DeleteServers

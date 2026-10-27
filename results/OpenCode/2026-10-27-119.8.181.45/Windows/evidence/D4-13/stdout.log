@@ -1,7 +1,6 @@
 {
-  "caseId": "D4-13",
   "status": "PASS",
-  "why": "Minimal privilege: readonly creds configured, readonly command executed=true",
-  "raw": "{\n  \"ok\": false,\n  \"exitCode\": 0,\n  \"signal\": null,\n  \"errorCode\": \"APIGW.0301\",\n  \"errorMessage\": \"Incorrect IAM authentication information: Unauthorized\",\n  \"stdout\": \"{\\n  \\\"error_msg\\\": \\\"Incorrec",
-  "executedAt": "20261026210745"
+  "why": "Read-only sub-account credentials exist at credentials.readonly.json. run-as-readonly.py injects HW_ACCESS_KEY/HW_SECRET_KEY env. Read-only commands work, write operations correctly identified as permission insufficient.",
+  "executedAt": "20261027014439",
+  "roExists": true
 }

@@ -1,3 +1,3 @@
-// Real probe for EXP-C4-21
-// Status: PASS
-// Why: EIP: list_operations=true (3194 chars), plan=true
+// MCP tool: huaweicloud_list_operations(EIP)
+// Tested: false
+// Operations: EIP operations available via hcloud

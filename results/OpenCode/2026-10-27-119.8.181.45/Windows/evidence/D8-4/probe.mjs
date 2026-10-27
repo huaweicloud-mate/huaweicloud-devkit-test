@@ -1,3 +1,1 @@
-// Real probe for D8-4
-// Status: PASS
-// Why: Skill huawei-ecs guide: length=34171
+// MCP tools: search_docs + retrieve_skill skill guidance review

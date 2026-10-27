@@ -1,3 +1,4 @@
-// Real probe for EXP-E05
-// Status: PASS
-// Why: HIT: RDS for MySQL status query
+// MCP tool: huaweicloud_service_catalog
+// Intent: 查询RDS数据库实例
+// Expected: RDS
+// Actual: huawei-rds/RDS

@@ -1,3 +1,3 @@
-// Real probe for EXP-C4-16
-// Status: PASS
-// Why: CDN: list_operations=true (4135 chars), plan=true
+// MCP tool: huaweicloud_list_operations(CDN)
+// Tested: false
+// Operations: CDN operations available via hcloud
