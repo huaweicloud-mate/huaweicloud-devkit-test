@@ -7,8 +7,8 @@ import {
   parseDistTagsOutput, readInstalledVersion, skipFilePath,
   fallbackSkipFilePath, resolveSkipFilePath, readSkipState,
   writeSkipState, queryDistTagsSync, applyUpdateHint
-} from 'file:///C:/Users/Administrator/devkit-test/Codex/hdk/plugins/huaweicloud-core/src/update-check.mjs';
-import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/Codex/hdk/plugins/huaweicloud-core/src/tools.mjs';
+} from 'file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/update-check.mjs';
+import { TOOL_DEFINITIONS, callTool } from 'file:///C:/Users/Administrator/devkit-test/OfficeAce/hdk/plugins/huaweicloud-core/src/tools.mjs';
 import { writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
