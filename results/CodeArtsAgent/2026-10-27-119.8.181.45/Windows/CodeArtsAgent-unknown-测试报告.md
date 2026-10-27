@@ -1,6 +1,6 @@
 # CodeArtsAgent-unknown 每日测试报告
 > **报告名**：`CodeArtsAgent-unknown-测试报告.md`
-> **生成时间**：2026-10-27 05:13:27（北京时间）
+> **生成时间**：2026-10-27 09:43:39（北京时间）
 > **执行归档**：`results/CodeArtsAgent/2026-10-27-119.8.181.45/Windows/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
 > **结论**：`PARTIAL`（有 FAIL 缺陷，P0 6 项）
@@ -25,9 +25,9 @@
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | `146`（设计级 107 + 展开级 39） |
-| 已执行 | `17` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `9 / 6 / 2 / 0 / 129` |
-| 通过率（分母 = PASS+FAIL = 15） | `60.0%` |
+| 已执行 | `22` |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `11 / 6 / 5 / 0 / 124` |
+| 通过率（分母 = PASS+FAIL = 17） | `64.7%` |
 | P0 / P1 / P2 新增缺陷 | `6 / 0 / 0` |
 | 红线（I 类）违规 | `TODO: 待填` |
 | 资源释放 | `TODO: 待填` |
@@ -40,11 +40,11 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `9` | 有证据且通过 PASS 门禁 |
+| PASS | `11` | 有证据且通过 PASS 门禁 |
 | FAIL | `6` | 不符预期，根因见缺陷清单 |
-| BLOCKED | `2` | 环境/权限/凭证阻塞 |
+| BLOCKED | `5` | 环境/权限/凭证阻塞 |
 | SPEC-MISMATCH | `0` | 契约漂移 |
-| NOT_RUN | `90` | 未执行 |
+| NOT_RUN | `85` | 未执行 |
 | **合计** | **`107`** | |
 
 ### 3.2 展开级
@@ -83,9 +83,7 @@
 
 | 用例ID | 维度 | 标题 | 原因 |
 |---|---|---|---|
-| `D1-3` | D1安装 | doctor健康自检 | TODO: 待补原因 |
 | `D1-4` | D1安装 | status/update幂等 | TODO: 待补原因 |
-| `D1-26` | D1安装 | 升级提醒工具注册与协议暴露 | TODO: 待补原因 |
 | `D1-27` | D1安装 | 检测语义-已是最新 | TODO: 待补原因 |
 | `D1-28` | D1安装 | 检测语义-有新版本 | TODO: 待补原因 |
 | `D1-30` | D1安装 | semver 比对正确性 | TODO: 待补原因 |
@@ -101,12 +99,9 @@
 | `D1-69` | D1安装 | CLI help 子命令 | TODO: 待补原因 |
 | `D1-70` | D1安装 | 代理配置与 WebSocket 代理 | TODO: 待补原因 |
 | `D2-10` | D2认证 | R7 current档跟随 | TODO: 待补原因 |
-| `D2-11` | D2认证 | R3 STS token拒绝落盘 | TODO: 待补原因 |
 | `D2-12` | D2认证 | R10 runtime非空禁止落盘 | TODO: 待补原因 |
 | `D2-13` | D2认证 | R9 configuredBySession优先env | TODO: 待补原因 |
 | `D2-16` | D2认证 | import文件读取后擦除 | TODO: 待补原因 |
-| `D4-18` | D4安全 | confirm-not-deny审批语义 | TODO: 待补原因 |
-| `D4-19` | D4安全 | 确认流下预检仍生效 | TODO: 待补原因 |
 | `D4-20` | D4安全 | 拒绝后零操作 | TODO: 待补原因 |
 | `D2-1` | D2认证 | auth init三端同步 | TODO: 待补原因 |
 | `D2-2` | D2认证 | auth status判定准确性 | TODO: 待补原因 |
@@ -217,6 +212,9 @@
 
 | 用例ID | 维度 | 标题 | 阻塞原因 |
 |---|---|---|---|
+| `D2-11` | D2认证 | R3 STS token拒绝落盘 | 凭证中无 STS token，无法执行 STS token 拒绝落盘测试 |
+| `D4-18` | D4安全 | confirm-not-deny审批语义 | 需要真云写操作来触发确认流程，当前环境无法安全执行真云写操作测试 |
+| `D4-19` | D4安全 | 确认流下预检仍生效 | 需要高危写操作进入确认流来测试预检拦截，当前环境无法安全执行 |
 | `D4-25` | D4安全 | Python hook 事件遥测分类 | hook-events.jsonl不存在，需要实际触发hook事件才能生成遥测数据 |
 | `D4-28` | D4安全 | Node 版安全 hook 链路 | hooks.json不存在，需要配置hook环境才能测试 |
 
