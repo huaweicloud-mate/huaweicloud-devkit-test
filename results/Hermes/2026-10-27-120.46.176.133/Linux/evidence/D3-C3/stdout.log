@@ -1,6 +1,6 @@
 {
   "case": "D3-C3",
-  "status": "FAIL",
+  "status": "BLOCKED",
   "total": 5,
   "passed": 0,
   "failed": 5,
@@ -30,5 +30,7 @@
       "pass": false,
       "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox conn"
     }
-  ]
+  ],
+  "blockedReason": "2026-10-27 09:39 实测：华为云沙箱服务不可用（connect 失败 ws=\"\"，上层工具报 'workspace_id is required. No sandbox connected'，同批 D3-C6 直报 HDKIT_SANDBOX_MAINTENANCE）。缺什么：可用沙箱 workspace（服务端维护窗口，非本机可解）。影响：D3-C3 沙箱会话建立/项目上传/Nginx 部署/校验/关闭全链无法执行（5/5 子项失败）。解除条件：华为云沙箱服务维护结束、connect 可取得 workspace_id 后重跑真机执行。",
+  "why": "2026-10-27 09:39 实测：华为云沙箱服务不可用（connect 失败 ws=\"\"，上层工具报 'workspace_id is required. No sandbox connected'，同批 D3-C6 直报 HDKIT_SANDBOX_MAINTENANCE）。缺什么：可用沙箱 workspace（服务端维护窗口，非本机可解）。影响：D3-C3 沙箱会话建立/项目上传/Nginx 部署/校验/关闭全链无法执行（5/5 子项失败）。解除条件：华为云沙箱服务维护结束、connect 可取得 workspace_id 后重跑真机执行。"
 }

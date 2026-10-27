@@ -1,7 +1,7 @@
 # FINDINGS — 缺陷发现清单（Hermes-DeepSeek-V4.1-Flash）
 
 > **落盘路径**：`results/Hermes/2026-10-27-120.46.176.133/Linux/FINDINGS.md`
-> **生成时间**：`2026-10-27 05:40:00`（北京时间）
+> **生成时间**：`2026-10-27 09:53:00`（北京时间，当日第二次全量执行·刷新复核）
 > **被测对象**：huaweicloud-devkit v1.1.12（npm `latest` 正式版，gitHead `4ed07801`）
 > **测试客户端**：Hermes (DeepSeek-V4.1-Flash) / Linux (aarch64) / 120.46.176.133
 > **测试类型**：每日测试（daily 精选：设计级 107 + 展开级 43）
