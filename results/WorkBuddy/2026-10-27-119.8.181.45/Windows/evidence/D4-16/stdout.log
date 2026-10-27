@@ -1,0 +1,18 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "why": "All wrapping vectors (bash -c, sh -c, cmd /c, $() command substitution, eval) correctly deny deny-listed commands. $() unwraps inner hcloud command and applies same classification as bare.",
+  "executedAt": "20261027093500",
+  "result": {
+    "bash_sh_cmd_decisions": ["deny", "deny", "deny"],
+    "dollar_paren_decisions": {
+      "$(hcloud ECS DeleteServer --server_id=test)": "deny",
+      "$(hcloud CSMS ShowSecretVersion --secret_name=x)": "deny",
+      "$(cat ~/.hcloud/credentials.json)": "deny",
+      "$(hcloud KMS DecryptData)": "allow (consequence of D4-3 DecryptData-not-on-deny-list, NOT a wrapping bypass; $() correctly unwraps)"
+    },
+    "eval_decision": "eval \"hcloud ECS DeleteServer --server_id=test\" => deny",
+    "bare_vs_wrap_consistency": "bare DeleteServer=deny, $(DeleteServer)=deny; bare ShowSecret=deny, $(ShowSecret)=deny - $() does not bypass deny"
+  },
+  "redLineNote": "Tested all 4 red-line attack forms per red-line rule iv: bash -c, sh -c, $(), eval. $() command substitution correctly unwraps inner hcloud command and reclassifies. deny-listed commands stay denied. The $(hcloud KMS DecryptData)=allow is NOT a D4-16 wrapping bypass; it inherits D4-3's bug (DecryptData missing from blockedSecretOperations list)."
+}
