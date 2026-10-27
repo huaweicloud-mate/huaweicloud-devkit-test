@@ -1,7 +1,7 @@
 {
-  "caseId": "D3-C2",
-  "status": "PASS",
-  "why": "OBS static site E2E: list_operations OBS succeeded (deploy flow: upload+public-read+verify+cleanup via obsutil/OBS tools)",
-  "raw": "{\n  \"service\": \"OBS\",\n  \"command\": \"hcloud obs help\",\n  \"selectionRule\": \"Use this help text to select the exact KooCLI operation name before planning any service command. After selecting an operation",
-  "executedAt": "20261026211436"
+  "status": "BLOCKED",
+  "why": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). OBS static site E2E requires create bucket, upload, deploy.",
+  "executedAt": "20261027014927",
+  "blockedReason": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). OBS static site E2E requires create bucket, upload, deploy.",
+  "category": "补环境"
 }

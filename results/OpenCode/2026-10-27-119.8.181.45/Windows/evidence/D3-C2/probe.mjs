@@ -1,3 +1,2 @@
-// Real probe for D3-C2
-// Status: PASS
-// Why: OBS static site E2E: list_operations OBS succeeded (deploy flow: upload+public-read+verify+cleanup via obsutil/OBS tools)
+// E2E test blocked: 补环境
+// Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json t...

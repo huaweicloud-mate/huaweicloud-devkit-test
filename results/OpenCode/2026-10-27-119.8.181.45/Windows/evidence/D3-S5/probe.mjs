@@ -1,3 +1,1 @@
-// Real probe for D3-S5
-// Status: PASS
-// Why: Compound intent: multi-service routing=true
+// MCP tool: huaweicloud_service_catalog (composite intent)

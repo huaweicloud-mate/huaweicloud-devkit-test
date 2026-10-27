@@ -1,7 +1,7 @@
 {
-  "caseId": "D3-S7",
-  "status": "PASS",
-  "why": "Cross-service: RDS routing for web app+database intent",
-  "raw": "{\n  \"intent\": \"部署web应用到rds数据库\",\n  \"recommendedskills\": [\n    \"huawei-rds\"\n  ],\n  \"recommendedservices\": [\n    \"rds\"\n  ],\n  \"capabilityorder\": [\n    \"huawei cloud skills for task-specific workflows and",
-  "executedAt": "20261026211436"
+  "status": "BLOCKED",
+  "why": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Cross-service delivery requires RDS + sandbox (both unavailable).",
+  "executedAt": "20261027014927",
+  "blockedReason": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Cross-service delivery requires RDS + sandbox (both unavailable).",
+  "category": "补环境"
 }

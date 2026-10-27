@@ -1,3 +1,1 @@
-// Real probe for D8-1
-// Status: PASS
-// Why: Docs: README=17959, README.zh-CN=12731
+// File check: documentation files at hdk root

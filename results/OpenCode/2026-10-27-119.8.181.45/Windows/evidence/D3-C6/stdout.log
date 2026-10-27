@@ -1,15 +1,7 @@
 {
-  "caseId": "D3-C6",
-  "status": "PASS",
-  "why": "Sandbox 7 tools: all registered=true",
-  "registeredTools": [
-    "huaweicloud_sandbox_check_user",
-    "huaweicloud_sandbox_connect",
-    "huaweicloud_sandbox_credentials",
-    "huaweicloud_sandbox_sign_agreement",
-    "huaweicloud_sandbox_upload_file",
-    "huaweicloud_sandbox_exec_with_session",
-    "huaweicloud_sandbox_close_session"
-  ],
-  "executedAt": "20261026211434"
+  "status": "BLOCKED",
+  "why": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Sandbox 7 implicit tools require sandbox connection (HDKIT_SANDBOX_MAINTENANCE).",
+  "executedAt": "20261027014927",
+  "blockedReason": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Sandbox 7 implicit tools require sandbox connection (HDKIT_SANDBOX_MAINTENANCE).",
+  "category": "补环境"
 }

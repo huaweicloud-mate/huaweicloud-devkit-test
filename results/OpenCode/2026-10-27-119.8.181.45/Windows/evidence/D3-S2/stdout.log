@@ -1,7 +1,7 @@
 {
-  "caseId": "D3-S2",
-  "status": "PASS",
-  "why": "Delete VPC: needs confirm=true",
-  "raw": "{\n  \"executable\": \"hcloud\",\n  \"args\": [\n    \"VPC\",\n    \"DeleteVpc\"\n  ],\n  \"command\": \"hcloud VPC DeleteVpc\",\n  \"executableBlock\": \"hcloud VPC DeleteVpc\",\n  \"warnings\": [],\n  \"classification\": {\n    \"d",
-  "executedAt": "20261026211156"
+  "status": "BLOCKED",
+  "why": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Delete VPC with confirm requires create/delete VPC with valid credentials.",
+  "executedAt": "20261027014927",
+  "blockedReason": "Real cloud API returns APIGW.0301 (Incorrect IAM authentication information: Unauthorized). Credentials exist in credentials.json but hcloud profile has stale encrypted security token in cipher.json that cannot be cleared through available MCP tools. Attempted fixes: auth_confirm(s1)=aborted, auth_switch persist(mcp-config)=rejected(STS R3), auth_init clear=cleared but profile unchanged, hcloud configure delete/set=format errors. Sandbox unavailable (HDKIT_SANDBOX_MAINTENANCE). Delete VPC with confirm requires create/delete VPC with valid credentials.",
+  "category": "补环境"
 }

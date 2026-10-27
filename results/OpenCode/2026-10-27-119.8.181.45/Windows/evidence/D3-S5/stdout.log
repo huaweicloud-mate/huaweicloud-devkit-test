@@ -1,7 +1,14 @@
 {
-  "caseId": "D3-S5",
-  "status": "PASS",
-  "why": "Compound intent: multi-service routing=true",
-  "raw": "{\n  \"intent\": \"部署web应用到rds数据库并配置缓存\",\n  \"recommendedskills\": [\n    \"huawei-rds\",\n    \"huawei-cloud-dds-dcs-instance-management\"\n  ],\n  \"recommendedservices\": [\n    \"rds\",\n    \"dds\",\n    \"dcs\"\n  ],\n  \"c",
-  "executedAt": "20261026211156"
+  "status": "FAIL",
+  "why": "serviceCatalog(\"部署数据库和Web应用到华为云\") → only recommended RDS. Expected: multiple services (RDS + ECS/sandbox for web app). Composite intent not split into multiple service recommendations. Root cause: serviceCatalog does not decompose composite Chinese intents into multi-service routing.",
+  "executedAt": "20261027015118",
+  "intent": "部署数据库和Web应用到华为云",
+  "expected": [
+    "RDS",
+    "ECS/sandbox"
+  ],
+  "actual": [
+    "RDS"
+  ],
+  "miss": true
 }
