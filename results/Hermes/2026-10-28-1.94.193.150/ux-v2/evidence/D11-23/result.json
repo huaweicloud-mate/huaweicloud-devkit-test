@@ -2,15 +2,15 @@
   "case": "D11-23",
   "file": "d11-23-no-client-ask.mjs",
   "result": "FAIL",
-  "pass": 1,
-  "fail": 3,
+  "pass": 2,
+  "fail": 2,
   "note": "口径: 需求验收（UX-R8）；本载体覆盖 non-TTY 侧；TTY 询问文案需真机交互捕获（真机批次补证）",
   "assertions": [
     {
       "id": "D11-23-nontty-zh",
       "title": "non-TTY 报错为中文",
-      "ok": false,
-      "actual": "file:///home/testbot2/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/fixtures/v2/setup-cli.mjs:48\nimport { DEPENDENCIES, ",
+      "ok": true,
+      "actual": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v2.0.0                 ║\n║     https://github.com/huawe",
       "expected": "含中文字符",
       "detail": ""
     },
@@ -30,7 +30,10 @@
           "officeace",
           "hermes"
         ],
-        "报错中列出": []
+        "报错中列出": [
+          "all",
+          "hermes"
+        ]
       },
       "expected": "列出全部 9 个取值",
       "detail": ""
@@ -40,9 +43,9 @@
       "title": "提供三条可选路径的中文说明（指定 target / 全部安装 / 通用 MCP 接入）",
       "ok": false,
       "actual": [
-        "at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:514",
-        "at afterResolve (node:internal/modules/esm/loader:614:52)",
-        "at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader"
+        "MCP Server -> /home/testbot2/multica_workspaces/vector-8988c3df7bc9/ta",
+        "Skills (server data; MCP catalog + stdio skillRoot instructions) -> /h",
+        "MCP config updated: /home/testbot2/multica_workspaces/vector-8988c3df7"
       ],
       "expected": "三条路径且中文",
       "detail": ""
