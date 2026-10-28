@@ -19,12 +19,13 @@
 
 | 模块 | 适配情况 |
 |---|---|
-| `tools.mjs`（callTool / TOOL_DEFINITIONS / classifyRawCommand / listSkillDirs…）| ✅ v2 同名存在 |
+| `tools.mjs`（callTool / TOOL_DEFINITIONS / classifyRawCommand / listSkillDirs…）| ✅ v2 同名存在（`callTool` 外层加 vendor gate 兜底，见下） |
 | `auth/credentials.mjs`（22 个符号）| ✅ v2 同名存在 |
 | `auth/service.mjs`（computeOnboarding / getAuthStatus / syncAuth）| ✅ v2 同名存在 |
 | `auth/credential-validator.mjs`（validateIamCredentials）| ✅ v2 同名存在 |
 | `hcloud-probe.mjs`（6 个符号）| ✅ v2 同名存在 |
 | `mcp-protocol.mjs`（dispatch）| ⚠️ v2 删除 dispatch → shim 提供最小等价实现（tools/list·tools/call·initialize），`_decorateResult` 等桥接 v2 同名函数 |
+| `setup-cli.mjs` | ⚠️ **双用文件**（可 spawn 的 CLI + 源码文本载体），由 `sync-setup-cli.mjs` 生成，见「维护约定」 |
 
 ## 用法（本机 / 测试机通用）
 
@@ -45,6 +46,7 @@ node eval/harness/fixtures/run-ux.mjs \
 
 - `--run-frozen`：照跑契约待冻结夹具（结果仍记 NOT_RUN，只做趋势观察）。
 - 四态口径与 v1 一致：PASS / NOT_IMPLEMENTED / BLOCKED / NOT_RUN（见 `run-ux.mjs` 头部注释）。
+- ⚠️ `V2_DIST` 必须是**本机原生绝对路径**（Windows 上给 `C:/…`，别给 git-bash 的 `/c/…`——原生命令不认）。
 
 ## 已知差异（v2 契约变化，夹具会如实反映，非 shim 缺陷）
 
@@ -56,11 +58,37 @@ node eval/harness/fixtures/run-ux.mjs \
 
 - 本目录是 v2 专用桥接层，**新增/修改只针对 v2 符号差异**，绝不回改 v1 的 `d11-*.mjs` 与 `run-ux.mjs`。
 - v2 每次重构变更 export 面时，跑一遍夹具，凡 HARNESS_ERROR 先核对本目录 shim 的 re-export 是否落伍。
-- `setup-cli.mjs` 是 **v2 源码副本**（d11-11/23 用 `readFileSync` 做源码级文本核对），**禁止手改**，用同步器：
+- **`harness_error == 0` 不等于适配完成**：还要确认每条 FAIL 的断言读到的是**真实 SUT 输出**，而不是 shim 的报错文本（`setup-cli.mjs` 那个坑就是这么漏过去的）。
+- `setup-cli.mjs` 是**双用文件**（由同步器生成，禁止手改），两组夹具都要它：
+
+  | 用法 | 谁需要 | 文件里对应部分 |
+  |---|---|---|
+  | 可 spawn 的 CLI —— `node <hdkSrc>/setup-cli.mjs <args>` | D11-2 / D11-20 / D11-23 / D11-43 | 顶部 bridge：把 argv/stdio/env/cwd/退出码透传给 `V2_DIST/setup-cli.js` |
+  | 源码文本载体 —— 被 `readFileSync` 做文案核对 | D11-10 / D11-11 / D11-15 / D11-23（抽 `--target` 取值） | 末尾以 `// ` 逐行注释形式附上 v2 `src/setup-cli.ts` 副本（**逐字**，仅加前缀） |
+
+  > 历史缺陷（2026-10-28 测试机 agent 的 `FINDINGS.md` 发现）：早先这里只放了 TS 源码逐字拷贝 →
+  > spawn 直接 `SyntaxError: Unexpected identifier 'DependencyId'`，D11-2/20/23/43 的断言读到的是报错文本，
+  > 结论不可归因 v2。已按下述双用形态修复。
 
   ```bash
-  node eval/harness/fixtures/v2/sync-setup-cli.mjs                 # 同步（默认源 ../_hdk_v2，可用 --src 或 HDK_V2_SRC）
-  node eval/harness/fixtures/v2/sync-setup-cli.mjs --check         # 只检查；落伍时 exit=3（可直接当 CI 门禁）
+  node eval/harness/fixtures/v2/sync-setup-cli.mjs                 # 重生成（默认源 ../_hdk_v2，可用 --src 或 HDK_V2_SRC）
+  node eval/harness/fixtures/v2/sync-setup-cli.mjs --check         # 只检查；落伍 exit=3（可直接当 CI / 派发前门禁）
+
+  # 核对 bridge 本身：任选一条 CLI 子命令，应看到真实 v2 CLI 输出（而不是 SyntaxError）
+  V2_DIST=<v2 dist 原生绝对路径> node eval/harness/fixtures/v2/setup-cli.mjs doctor
+
+  # 核对嵌入副本「逐字」：去掉 `// ` 前缀后与 v2 源码比对（应完全一致）
+  # 下面用 chr(13)+chr(10) 写 CRLF，避免行尾字面量被编辑器/补丁工具破坏
+  python - <<'PY'
+  import io
+  EOL = chr(13) + chr(10)
+  norm = lambda p: io.open(p, encoding='utf-8').read().replace(EOL, chr(10))
+  t = norm('eval/harness/fixtures/v2/setup-cli.mjs')
+  body = t[t.index(chr(10), t.index('去前缀逐字比对见该节命令。')) + 1:]
+  stripped = chr(10).join(l[3:] if l.startswith('// ') else '' for l in body.split(chr(10)))
+  src = norm('<v2>/plugins/huaweicloud-core/src/setup-cli.ts')
+  print('逐字一致:', stripped.rstrip(chr(10)) == src.rstrip(chr(10)))
+  PY
   ```
 
   同步会写 `setup-cli.provenance.json`（源 branch/commit、sha256、行数、同步时间）供对账；
