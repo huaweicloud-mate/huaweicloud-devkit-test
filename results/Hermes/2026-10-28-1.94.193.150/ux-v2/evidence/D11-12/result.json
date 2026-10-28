@@ -1,0 +1,45 @@
+{
+  "case": "D11-12",
+  "file": "d11-12-iam401-zh.mjs",
+  "result": "FAIL",
+  "pass": 2,
+  "fail": 2,
+  "note": "口径: 需求验收（UX-R5/R7）；FAIL = 文案未中文化/缺可执行动作，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-12-invalid",
+      "title": "无效 SK 判定为校验失败（valid=false）",
+      "ok": true,
+      "actual": false,
+      "expected": false,
+      "detail": ""
+    },
+    {
+      "id": "D11-12-zh",
+      "title": "失败提示含中文字符（面向用户可读）",
+      "ok": false,
+      "actual": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is invalid - check the SK f",
+      "expected": "含中文字符",
+      "detail": ""
+    },
+    {
+      "id": "D11-12-actionable",
+      "title": "提示含可执行动作（控制台重新生成密钥 / npx / hcloud）",
+      "ok": true,
+      "actual": {
+        "action": "npx huaweicloud-devkit auth status",
+        "命中": true
+      },
+      "expected": "含「控制台重新生成访问密钥」类可执行动作",
+      "detail": ""
+    },
+    {
+      "id": "D11-12-no-en",
+      "title": "不出现英文 \"IAM rejected the credentials\" 裸串（反断言）",
+      "ok": false,
+      "actual": "IAM rejected the credentials (HTTP 401: Incorrect IAM authentication information). The AK/SK is invalid - check the SK f",
+      "expected": "不含该英文整句",
+      "detail": ""
+    }
+  ]
+}

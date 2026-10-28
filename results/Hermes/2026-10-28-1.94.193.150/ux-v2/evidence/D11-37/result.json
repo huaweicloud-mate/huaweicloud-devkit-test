@@ -1,0 +1,56 @@
+{
+  "case": "D11-37",
+  "file": "d11-37-guidance-closure.mjs",
+  "result": "PASS",
+  "pass": 5,
+  "fail": 0,
+  "note": "口径: 需求验收（UX-R1）；FAIL = 需求未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-37-code",
+      "title": "无凭证抛 HDKIT_CRED_MISSING",
+      "ok": true,
+      "actual": "HDKIT_CRED_MISSING",
+      "expected": "HDKIT_CRED_MISSING",
+      "detail": ""
+    },
+    {
+      "id": "D11-37-zh",
+      "title": "onboarding.message 为中文",
+      "ok": true,
+      "actual": "未配置华为云凭证,需要完成登录后才能使用云能力。",
+      "expected": "含中文字符",
+      "detail": ""
+    },
+    {
+      "id": "D11-37-steps",
+      "title": "steps 同时含 取AK 与 登录动作",
+      "ok": true,
+      "actual": [
+        "obtain-aksk",
+        "auth-init"
+      ],
+      "expected": [
+        "obtain-aksk",
+        "auth-init|auth_switch"
+      ],
+      "detail": ""
+    },
+    {
+      "id": "D11-37-no-en",
+      "title": "顶层 message 无英文整句残留（反断言）",
+      "ok": true,
+      "actual": "未配置华为云凭证,需要先完成登录。",
+      "expected": "不含英文整句",
+      "detail": ""
+    },
+    {
+      "id": "D11-37-closure",
+      "title": "按引导完成登录后症状消失（闭环有效性）",
+      "ok": true,
+      "actual": "D11FAKEAKABCDEFGHIJKL",
+      "expected": "D11FAKEAKABCDEFGHIJKL",
+      "detail": ""
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "case": "D11-29",
+  "file": "d11-29-switch-effective-now.mjs",
+  "result": "FAIL",
+  "pass": 2,
+  "fail": 1,
+  "note": "口径: 需求验收（UX-R20）；FAIL = 用户可见提示未实现，非 harness 问题",
+  "assertions": [
+    {
+      "id": "D11-29-switch-applied",
+      "title": "切号后运行时解析立即指向新账号（无需重启）",
+      "ok": true,
+      "actual": {
+        "切换前": "cb6fac89",
+        "切换后": "20912077"
+      },
+      "expected": {
+        "切换前": "cb6fac89",
+        "切换后": "20912077"
+      },
+      "detail": ""
+    },
+    {
+      "id": "D11-29-region-follows",
+      "title": "切号后区域随新账号生效",
+      "ok": true,
+      "actual": "cn-east-3",
+      "expected": "cn-east-3",
+      "detail": ""
+    },
+    {
+      "id": "D11-29-restart-hint",
+      "title": "返回/文案含「已生效，无需重启会话」提示",
+      "ok": false,
+      "actual": "tools.mjs 中未找到「无需重启」相关提示",
+      "expected": "含「已生效，无需重启会话」",
+      "detail": ""
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+PASS	D11-42-ascii	关键 ASCII 字段（错误码）在 latin1 环境下完好	actual=["HDKIT_CRED_MISSING","未配置华为云凭证,需要完成登录后才能使用云能力。"]	expected="含 HDKIT_CRED_MISSING"
+PASS	D11-42-utf8-contract	中文输出为 UTF-8（与代码页/locale 无关）	actual="UTF-8 解码含「未配置」"	expected="UTF-8 解码含「未配置」"	正断言：UTF-8 解码可读（消费方应按 UTF-8 解码）
+PASS	D11-42-not-local-encoded	输出未被转成本地编码（反断言，防退化成 latin1）	actual="未被 latin1 转码"	expected="反断言：latin1 解码不含「未配置」"	防退化：若日后为"迁就控制台"改成 GBK/latin1 输出，会破坏 agent 等 UTF-8 消费方
+
+=== D11-42 ===  pass=3 fail=0
+RESULT: PASS
