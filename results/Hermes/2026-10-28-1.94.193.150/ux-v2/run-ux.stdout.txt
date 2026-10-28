@@ -1,6 +1,6 @@
 [UX] 设计状态门禁：13 个夹具依赖未冻结契约 → NOT_RUN（不计入 PASS/FAIL/BLOCKED）: D11-13, D11-14, D11-16, D11-28, D11-3, D11-30, D11-34, D11-38, D11-4, D11-5, D11-6, D11-8, D11-9
 [UX] hdk src = eval/harness/fixtures/v2  (argv)
-[UX] 隔离宿主: 每个夹具独立空 HOME/USERPROFILE（位于 /tmp/multica-task-1826541405）
+[UX] 隔离宿主: 每个夹具独立空 HOME/USERPROFILE（位于 /tmp/multica-task-3338731048）
 [UX] 待运行夹具 41 个: d11-1-onboarding-first-touch.mjs, d11-10-authinit-prompt-zh.mjs, d11-11-region-explicit.mjs, d11-12-iam401-zh.mjs, d11-13-post-login-selfcheck.mjs, d11-14-single-end-locate.mjs, d11-15-credential-safety-disclosure.mjs, d11-16-error-cards.mjs, d11-17-routing-hitrate.mjs, d11-18-route-miss-clarify.mjs, d11-19-approval-explainable.mjs, d11-2-noninteractive-guidance.mjs, d11-20-post-install-restart-hint.mjs, d11-21-post-login-nextsteps.mjs, d11-22-koocli-privacy.mjs, d11-23-no-client-ask.mjs, d11-24-codearts-sandbox-koocli.mjs, d11-25-capability-discoverable.mjs, d11-26-terminology.mjs, d11-27-cn-summary.mjs, d11-28-sts-expiry-actionable.mjs, d11-29-switch-effective-now.mjs, d11-3-effective-runtime.mjs, d11-30-auth-state-machine.mjs, d11-31-region-boundary.mjs, d11-32-unwritable-home.mjs, d11-33-approval-paths.mjs, d11-34-zeroing-report.mjs, d11-35-sandbox-unreachable-guide.mjs, d11-37-guidance-closure.mjs, d11-38-independent-observation.mjs, d11-4-effective-s1.mjs, d11-41-misleading-attribution.mjs, d11-42-encoding-contract.mjs, d11-43-terminal-env-matrix.mjs, d11-44-fault-injection.mjs, d11-5-effective-env.mjs, d11-6-conflict-dual-source.mjs, d11-7-conflict-one-click.mjs, d11-8-switch-temporary-explicit.mjs, d11-9-switch-persist-clear.mjs
 [HOST] CLEAN
 PASS  D11-1-code  错误码为 HDKIT_CRED_MISSING
@@ -314,11 +314,11 @@ RESULT: FAIL
 
 [HOST] CLEAN
 FAIL  D11-32-zh-error  写盘失败时返回中文错误（无法写入凭证目录 / 沙箱无法解析主目录）
-      actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-1826541405/d11-32-Tipoel/blocker-file/creds/.config/huaweicloud'"  expected="中文可诊断错误"
+      actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-3338731048/d11-32-3SuHyy/blocker-file/creds/.config/huaweicloud'"  expected="中文可诊断错误"
 FAIL  D11-32-alt-path  给出替代路径（HUAWEICLOUD_HOME / env 注入）
-      actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-1826541405/d11-32-Tipoel/blocker-file/creds/.config/huaweicloud'"  expected="含 HUAWEICLOUD_HOME 或 env 注入指引"
+      actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-3338731048/d11-32-3SuHyy/blocker-file/creds/.config/huaweicloud'"  expected="含 HUAWEICLOUD_HOME 或 env 注入指引"
 PASS  D11-32-no-en  不出现英文整句 "KooCLI detected but cannot resolve the user home directory..."（反断言）
-      actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-1826541405/d11-32-Tipoel/blocker-file/creds/.config/huaweicloud'"  expected="不含该英文整句"
+      actual="ENOTDIR: not a directory, mkdir '/tmp/multica-task-3338731048/d11-32-3SuHyy/blocker-file/creds/.config/huaweicloud'"  expected="不含该英文整句"
 PASS  D11-32-koocli-classified  沙箱 home 失败被正确归类
       actual={"status":"sandbox_home_failure","errorCode":"HCLOUD_SANDBOX_HOME_FAILURE"}  expected="HCLOUD_SANDBOX_HOME_FAILURE"
 FAIL  D11-32-koocli-zh-next  KooCLI 沙箱 home 失败的下一步提示为中文且给替代路径
@@ -389,7 +389,7 @@ PASS  D11-41-placeholder-only  仅占位符 env 时判「未配置」（不得�
 PASS  D11-41-placeholder-shadow  占位符 env 不得遮蔽真实 S1
       actual="D11REALAK000000000000"  expected="D11REALAK000000000000"
 PASS  D11-41-sts-expiry  STS 过期可由 token 解析（不误导为 AK 无效）
-      actual=1793169236000  expected="早于当前时间(ms)=1793172836394"
+      actual=1793174915000  expected="早于当前时间(ms)=1793178515120"
 PASS  D11-41-koocli-not_found  KooCLI「not_found」归因分类正确
       actual="HCLOUD_NOT_FOUND"  expected="HCLOUD_NOT_FOUND"
 PASS  D11-41-koocli-privacy_pending  KooCLI「privacy_pending」归因分类正确
