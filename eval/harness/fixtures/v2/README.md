@@ -56,3 +56,12 @@ node eval/harness/fixtures/run-ux.mjs \
 
 - 本目录是 v2 专用桥接层，**新增/修改只针对 v2 符号差异**，绝不回改 v1 的 `d11-*.mjs` 与 `run-ux.mjs`。
 - v2 每次重构变更 export 面时，跑一遍夹具，凡 HARNESS_ERROR 先核对本目录 shim 的 re-export 是否落伍。
+- `setup-cli.mjs` 是 **v2 源码副本**（d11-11/23 用 `readFileSync` 做源码级文本核对），**禁止手改**，用同步器：
+
+  ```bash
+  node eval/harness/fixtures/v2/sync-setup-cli.mjs                 # 同步（默认源 ../_hdk_v2，可用 --src 或 HDK_V2_SRC）
+  node eval/harness/fixtures/v2/sync-setup-cli.mjs --check         # 只检查；落伍时 exit=3（可直接当 CI 门禁）
+  ```
+
+  同步会写 `setup-cli.provenance.json`（源 branch/commit、sha256、行数、同步时间）供对账；
+  源工作区 dirty 时会 `[WARN]`（副本可能对不上任何已发布 commit → 测试机结论不可比）。
