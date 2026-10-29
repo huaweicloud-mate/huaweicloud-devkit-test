@@ -1,0 +1,12 @@
+{
+  "caseId": "D8-9",
+  "status": "SPEC-MISMATCH",
+  "why": "installId stable=true sanitizeLeaksSensitive=true",
+  "executedAt": "20261030052116",
+  "detail": {
+    "stable": true,
+    "s4": "AK=ABC123DEF456GHI",
+    "s5": "access_key=AKIA123 secret_key=SECRET token=T0K3N_SECRET",
+    "rootCause": "telemetry.mjs sanitizeValue 仅去控制字符+截断，未移除 AK/SK/token 敏感值"
+  }
+}
