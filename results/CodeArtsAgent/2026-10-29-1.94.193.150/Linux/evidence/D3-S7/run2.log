@@ -2,3 +2,13 @@
 =====CASE D3-S7=====
 serviceCatalog 复合意图路由 -> services=["RDS"] RDS命中=true 部署目标命中=false
 CreateVpc -> ok=true id=00927019-c293-4355-b
+CreateSubnet -> ok=true id=36cd4d2b-ff03-4b59-a
+CreateSecurityGroup -> ok=true id=7bb57ed1-c678-4afc-a
+RDS CreateInstance -> ok=true instanceId=96ea76926b4546b1a89fcd64
+  RDS 状态轮询 1 次, status=BUILD
+  RDS 状态轮询 5 次, status=BUILD
+  RDS 状态轮询 9 次, status=BUILD
+  RDS 状态轮询 13 次, status=BUILD
+RDS DeleteInstance -> ok=true
+RDS 删除归零 = true
+DeleteSecurityGroup -> ok=true
