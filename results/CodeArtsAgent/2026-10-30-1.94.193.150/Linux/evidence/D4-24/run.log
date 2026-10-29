@@ -1,0 +1,12 @@
+plan1 decision=deny hasToken=true
+过期返回 => {"status":"rejected","code":"CONFIRM_TOKEN_EXPIRED"}
+[OK] 过期 code=CONFIRM_TOKEN_EXPIRED | code=CONFIRM_TOKEN_EXPIRED
+[OK] 过期 status=rejected | status=rejected
+第二次返回 => {"status":"ok","outcome":"already_processed"}
+[OK] 重复确认 outcome=already_processed | outcome=already_processed
+
+=====SUMMARY=====
+{
+  "caseId": "D4-24",
+  "note": "#745 已结构化 runApprovedCommand 返回 code/outcome/status"
+}
