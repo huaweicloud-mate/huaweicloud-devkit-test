@@ -1,0 +1,36 @@
+{
+  "case": "D3-C3",
+  "status": "BLOCKED",
+  "total": 5,
+  "passed": 0,
+  "failed": 5,
+  "results": [
+    {
+      "name": "connect",
+      "pass": false,
+      "detail": "ws="
+    },
+    {
+      "name": "upload_project",
+      "pass": false,
+      "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WO"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": false,
+      "detail": "undefined:undefined"
+    },
+    {
+      "name": "deploy_check",
+      "pass": false,
+      "detail": "undefined"
+    },
+    {
+      "name": "close_session",
+      "pass": false,
+      "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox conn"
+    }
+  ],
+  "blockedReason": "2026-10-30 05:04 实测：沙箱接口直报 HDKIT_SANDBOX_MAINTENANCE『沙箱功能正在升级优化，暂时无法使用』，huaweicloud_sandbox_connect 无法建立 workspace（ws=\"\"，上层工具报 workspace_id is required. No sandbox connected）。缺：可用的华为云沙箱服务；影响：D3-C3 沙箱部署链路（connect/upload_project/deploy_nginx/deploy_check/清理）5 个断言全部无法执行；解除条件：沙箱维护结束、HDKIT_SANDBOX_MAINTENANCE 消失且 sandbox_connect 能返回 workspace_id。",
+  "executedAt": "20261030051500"
+}
