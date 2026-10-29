@@ -1,28 +1,28 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-hermes-s2-mvtkffpi -> id=61ab1a24-6909-4f2f-8922-4bcdd4c18004
+创建测试VPC tctest-hermes-s2-mvu1ah5k -> id=
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
 确认后 DeleteVpc -> ok=true
-删除后归零 = true
-[OK] 测试 VPC 创建成功
+删除后归零 = false
+[FAIL] 测试 VPC 创建成功
 [OK] plan DeleteVpc 要求确认(confirm-not-deny)
 [OK] hook 预检 DeleteVpc 返回决策
 [OK] 未确认前零执行
-[OK] 确认后删除成功且归零
+[FAIL] 确认后删除成功且归零
 =====END D3-S2=====
 
 =====CASE D3-C13=====
 OBS mb -> success
 set 无 indexDocument -> __error=Error: indexDocument is required for action=set ok=undefined
-set indexDocument -> ok=true status=200
-get -> ok=true status=200
+set indexDocument -> ok=undefined status=undefined
+get -> ok=undefined status=undefined
 OBS rm -f -> success
 [OK] OBS 建桶成功
 [OK] set 缺失 indexDocument 报错(拒绝)
-[OK] set 成功
-[OK] get 返回配置与 set 一致
+[FAIL] set 成功
+[FAIL] get 返回配置与 set 一致
 [OK] 删除归零
 =====END D3-C13=====
 
@@ -42,16 +42,16 @@ hwlink getCredentials 结构: ak=*** sk=*** securitytoken="" (已脱敏)
 =====END D3-C14=====
 
 =====CASE D3-S4=====
-voucher_status(领取前) -> {"claimed":true,"message":"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）","code":null}
-voucher_claim -> {"claimed":true,"voucherId":null,"amount":0,"message":"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）","code":null}
-voucher_status(领取后) -> {"claimed":true,"message":"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）","code":null}
+voucher_status(领取前) -> {"claimed":false,"message":"Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/proxy/proxy-agent.mjs","code":"ERR_MODULE_NOT_FOUND"}
+voucher_claim -> {"claimed":false,"message":"Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/proxy/proxy-agent.mjs","code":"ERR_MODULE_NOT_FOUND"}
+voucher_status(领取后) -> {"claimed":false,"message":"Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/proxy/proxy-agent.mjs","code":"ERR_MODULE_NOT_FOUND"}
 [OK] voucher_status 返回状态字段
 [OK] claim 调用返回
 [OK] status→claim→status 闭环连贯
 =====END D3-S4=====
 
 =====CASE D3-S3=====
-check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: bad1e051fdad4ddc8a2c99e665536736]
+check_user -> realnameVerified=undefined agreementSigned=undefined err=Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/proxy/proxy-agent.mjs
 [FAIL] 沙箱 check_user 通过
 → 沙箱账号未实名/未签协议，标记 BLOCKED（外部依赖）
 =====END D3-S3=====
@@ -59,12 +59,12 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
 =====SUMMARY=====
 {
   "total": 18,
-  "passed": 17,
+  "passed": 13,
   "results": [
     {
       "name": "测试 VPC 创建成功",
-      "ok": true,
-      "detail": "vpcId=61ab1a24-690"
+      "ok": false,
+      "detail": "vpcId="
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -83,13 +83,13 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     },
     {
       "name": "确认后删除成功且归零",
-      "ok": true,
-      "detail": "ok=true zeroed=true"
+      "ok": false,
+      "detail": "ok=true zeroed=false"
     },
     {
       "name": "OBS 建桶成功",
       "ok": true,
-      "detail": "bucket=tctest-hermes-obs-mvtkffpi"
+      "detail": "bucket=tctest-hermes-obs-mvu1ah5k"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -98,18 +98,18 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     },
     {
       "name": "set 成功",
-      "ok": true,
-      "detail": "{\"ok\":true,\"status\":200}"
+      "ok": false,
+      "detail": "{}"
     },
     {
       "name": "get 返回配置与 set 一致",
-      "ok": true,
-      "detail": "{\"ok\":true,\"status\":200}"
+      "ok": false,
+      "detail": "{}"
     },
     {
       "name": "删除归零",
       "ok": true,
-      "detail": "bucket removed=tctest-hermes-obs-mvtkffpi"
+      "detail": "bucket removed=tctest-hermes-obs-mvu1ah5k"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
@@ -134,22 +134,22 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "voucher_status 返回状态字段",
       "ok": true,
-      "detail": "{\"claimed\":true,\"message\":\"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）\",\"code\":null}"
+      "detail": "{\"claimed\":false,\"message\":\"Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/hua"
     },
     {
       "name": "claim 调用返回",
       "ok": true,
-      "detail": "{\"claimed\":true,\"voucherId\":null,\"amount\":0,\"message\":\"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）\",\"code\":null}"
+      "detail": "{\"claimed\":false,\"message\":\"Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/hua"
     },
     {
       "name": "status→claim→status 闭环连贯",
       "ok": true,
-      "detail": "{\"before\":true,\"claim\":true,\"after\":true}"
+      "detail": "{\"before\":false,\"claim\":false,\"after\":false}"
     },
     {
       "name": "沙箱 check_user 通过",
       "ok": false,
-      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: bad1e051fdad4ddc8a2c99e665536736]\"}"
+      "detail": "{\"__error\":\"Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/proxy/pr"
     }
   ]
 }

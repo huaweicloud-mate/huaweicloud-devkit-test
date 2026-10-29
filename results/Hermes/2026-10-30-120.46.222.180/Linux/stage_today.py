@@ -47,10 +47,13 @@ WHY = {
     'D3-C6': "华为云沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)，7 隐式工具 check_user/connect 均无法执行(外部依赖)",
     'D3-S3': "华为云沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)，check_user 返回 realnameVerified=undefined(外部依赖)",
     'D1-39': "Windows 升级检测链 EINVAL 专属(OS 列标注「专属」)，Linux 侧由 EXP-NR3-10 覆盖",
+    'D1-70': "undici@8.12.3 在 Node v22.13.0(arm64) 导入即崩：lib/interceptor/decompress.js:78 createZstdDecompress(来自 node:zlib)为 undefined 致 .bind() 报 TypeError；且 import('node:undici') 非 Node22.13 内建模块→回退裸 undici 崩溃。代理功能(有代理时走 undici ProxyAgent)整体不可用，探针崩溃遗留 proxy.json 污染",
+    'D3-C1': "真云 ECS 归零验证未等待异步删除完成——DeleteServers 提交即返回，poll 窗口内 ECS 仍 ACTIVE，归零验证 FAIL(7/8)；VPC+子网 delete 亦异步未落地(cleanOk 仅提交)。已人工补删 ECS→subnet→VPC 归零",
 }
 
 FAIL = {'D2-4','D4-2','D4-21','D9-12','D4-4','D4-6','D4-17','D3-C4','D3-S5',
-        'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18'}
+        'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18',
+        'D1-70','D3-C1'}
 SPEC = {'D8-9','D9-9','D10-4'}
 BLOCKED = {'D3-C3','D3-C6','D3-S3'}
 NOT_RUN = {'D1-39'}
