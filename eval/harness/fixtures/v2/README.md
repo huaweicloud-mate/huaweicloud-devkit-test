@@ -54,6 +54,45 @@ node eval/harness/fixtures/run-ux.mjs \
   D11-17 路由、D11-19/33 审批等夹具会因此 FAIL —— 这是 v2 的真实行为。
 - 安全规则集 16→19 条（D11 相关断言若写死规则数会 FAIL）。
 
+## D9 功能/协议探针的 v2 适配（2026-10-29 落地）
+
+`d9-9/d9-10/d9-11/protocol-probe/d9-6` 这 5 个探针**不是 UX 夹具**，不走 `run-ux.mjs`，而是各自 `import` 或
+`spawn` v1 源码 `.mjs`。本目录补了 3 个 shim 让它们在 v2 下可跑（也是 v2 专用桥接，绝不回改 v1 探针）：
+
+| shim 文件 | 作用 | 覆盖探针 |
+|---|---|---|
+| `mcp-server.mjs` | spawn 入口桥接：`spawnSync` 透传 argv/stdio 到 `dist/mcp-server.js` | d9-6 / d9-10(stdio对照) / protocol-probe |
+| `mcp-server-remote.mjs` | **等价实现** `startRemoteServer/DEFAULT_PORT/DEFAULT_HOST`（v2 无独立 remote 产物，符号内联进 bundle），转发 HTTP JSON-RPC 到 stdio 子进程 | d9-10 |
+| `ws-exec/hwlink-tunnel-channel.mjs` | re-export `dist/ws-exec/hwlink-tunnel-channel.js` 的 `HwlinkTunnelChannel` | d9-11 |
+
+跑法（关键是 `hdkSrc` 指向本 shim 目录，且用**原生绝对路径** `C:/…`，别用 git-bash 的 `/c/…`）：
+
+```bash
+export V2_DIST="<v2仓库>/plugins/huaweicloud-core/dist"       # 原生绝对路径
+SHIM="<测试仓库>/eval/harness/fixtures/v2"                    # 原生绝对路径
+node eval/harness/fixtures/d9-6-cross-client-interop.mjs "$SHIM"
+node eval/harness/fixtures/d9-10-remote-transport.mjs "$SHIM"
+node eval/harness/fixtures/d9-11-ws-tunnel.mjs "$SHIM"
+node eval/harness/protocol-probe.mjs "$SHIM/mcp-server.mjs"
+```
+
+### 实测结果（2026-10-29，本机 Windows + v2 产物 build）
+
+| 探针 | 结果 | 说明 |
+|---|---|---|
+| d9-11-ws-tunnel | **8/8 PASS** | shim 直接桥接，符号未变 |
+| d9-10-remote | **6/6 PASS** | remote shim 等价实现生效；tools/list 返回 56（v2 工具数），stdio/remote parity 一致 |
+| d9-6-interop | 9 PASS / 3 FAIL | 3 个 FAIL 均**真实契约漂移**：`tools/call service_catalog`→isError(true)（vendor gate）、resources/list→无 result（v2 变化）；tools/list=56 证明桥接正确 |
+| protocol-probe | tools/list=56、-32601 正确 | D9-9a cancellation 标 SPEC-MISMATCH（v2 未声明）；有 top-level await 警告（Windows 已知，不影响结论） |
+
+### ⚠️ remote transport 的 Streamable HTTP 契约（真实漂移，报产品时保留）
+
+v2 `startRemoteServer` 用 `WebStandardStreamableHTTPServerTransport`（MCP Streamable HTTP）：
+裸 `fetch` 只带 `Accept: application/json` 会 **406**（要求同时 `application/json, text/event-stream`）。
+本目录 `mcp-server-remote.mjs` shim 把 HTTP 转发到 stdio 子进程、回传纯 JSON，**绕过了 406**，
+故 d9-10 探针 6/6 PASS；但这**掩盖**了探针按 v1 契约本会撞上的真实漂移 —— 账记在
+`reports/v2契约漂移清单` 的 §一之补，报产品时说明「v2 remote 传输契约升级，旧 HTTP 客户端需适配 Accept 头」。
+
 ## 维护约定
 
 - 本目录是 v2 专用桥接层，**新增/修改只针对 v2 符号差异**，绝不回改 v1 的 `d11-*.mjs` 与 `run-ux.mjs`。

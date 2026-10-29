@@ -3,7 +3,7 @@
 > 生成说明：以下缺陷经查重命中上游仓已有历史 issue，本次**不新开单**。
 
 ## D10-3 / EXP-E01~E15  serviceCatalog 新增 vendor gate 导致路由全部 MISS
-- 今日证据：`evidence/_probes/eval-harness.log`（HIT=0 MISS=14 N/A=1）、`evidence/_probes/routing.log`
+- 今日证据：`evidence/_probes/eval-harness.log`（HIT=0 MISS=14 N/A=1）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#896](https://github.com/huaweicloud/huaweicloud-devkit/issues/896)（open）**[daily-test] CodeArtsSpace Windows 2026-10-13: D4-16 命令包裹穿透 + D4-27 脱敏 + eval-route MISS**
     - 历史单内容：## 每日测试缺陷提单 — CodeArtsSpace Windows 2026-10-13 **被测版本**: huaweicloud-devkit@1.1.8-next.3 **测试客户端**: CodeArtsSpace (GLM-5.2) / Windows **测试结果**: 124 PASS / 13 FAIL / 9 BLOCKED **执行归档**: `results/CodeAr
@@ -55,50 +55,52 @@
     - 历史单内容：## 测试概览 - 被测版本：v1.1.4-next.6 - 缺陷：10 项 ## 缺陷清单 ### 1. [P0] 凭证环境变量打印拦截不完整（HW_ 前缀漏网） - **描述**：`env | grep HW_ACCESS_KEY`、`printenv HW_ACCESS_KEY`、`echo $HW_SECRET_KEY` 均返回 `allow`，预期 `deny`。Node 钩子与 Pyt
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#783, #774, #766, #680
 
-## D9-12  mcp-protocol 导出 `dispatch` API 已删除（协议层重构）
-- 今日证据：`evidence/_probes/d9-12.log`（`mp.dispatch is not a function`）
+## D9-12  mcp-protocol 导出 `dispatch` API 已删除
+- 今日证据：`evidence/_probes/d9-12.log`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#844](https://github.com/huaweicloud/huaweicloud-devkit/issues/844)（open）**[测试报告] huaweicloud-devkit 1.1.8-next.1 每日测试缺陷合并单（Hermes Linux 2026-10-02，6 项）**
     - 历史单内容：## 测试概览 - 被测版本：1.1.8-next.1 - 缺陷：6 项 ## 缺陷清单 ### 1. [P1] D3-S1 中文「云主机」意图路由未命中（serviceCatalog ECS 关键词缺失） - **描述**：`service_catalog({intent:'帮我查一下我账号有哪些云主机'})` → `recommendedServices=['Run hcloud --help
   - [#814](https://github.com/huaweicloud/huaweicloud-devkit/issues/814)（open）**[测试报告] huaweicloud-devkit v1.1.7 每日测试缺陷合并单（1 项）**
     - 历史单内容：## 测试概览 - 被测版本：v1.1.7 - 缺陷：1 项 ## 缺陷清单 ### 5. [P0] D9-12 initialize 握手协议安全基线两处缺口（新用例） - **描述**：v1.1.7 新增 P0 用例 D9-12 六项断言 4 通过 / 2 失败——① initialize 返回 protocolVersion/capabilities/serverInfo ✓ ② tools
 
-## D4-5  huaweicloud_plan_cli_command 被 vendor gate 拦截（返回空 classification）
-- 今日证据：`evidence/_probes/hook.log`（CASE D4-5：decision=undefined）、`/tmp/verify-vendor-gate.mjs` 验证输出
+## D4-5  huaweicloud_plan_cli_command 被 vendor gate 拦截
+- 今日证据：`evidence/_probes/hook.log`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#685](https://github.com/huaweicloud/huaweicloud-devkit/issues/685)（open）**[测试报告] huaweicloud-devkit v1.1.4 全量测试缺陷合并单（1 项）**
     - 历史单内容：## 测试概览 - 被测版本：v1.1.4 - 缺陷：1 项 ## 缺陷清单 ### 1. [P0] framework 集成安全策略版本漂移 — Apply* 写操作被误判为只读放行 - **描述**：`huaweicloud_plan_cli_command args=["EIP","ApplyEip"]` 返回 `{decision:allow, risk:unknown_read}`（写操
   - [#679](https://github.com/huaweicloud/huaweicloud-devkit/issues/679)（open）**[测试报告] huaweicloud-devkit v1.1.4 全量测试缺陷合并单（8 项）**
     - 历史单内容：## 测试概览 - 被测版本：v1.1.4 - 缺陷：8 项 ## 缺陷清单 ### 1. [P0] 凭证 env 打印拦截不完整 — HW_ACCESS_KEY/HW_SECRET_KEY/HW_SECURITY_TOKEN 前缀未被 env-dump 规则覆盖 - **描述**：`env | grep HW_ACCESS_KEY`、`printenv HW_ACCESS_KEY HW_SECR
 
-## D9-10/D9-11  MCP remote transport 入口移除
-- 今日证据：`evidence/_probes/new-mcp.log`（ERR_MODULE_NOT_FOUND dist/mcp-server-remote.mjs）
+## D9-10/D9-11  mcp-server-remote 探针入口失配
+- 今日证据：`evidence/_probes/new-mcp.log`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#881](https://github.com/huaweicloud/huaweicloud-devkit/issues/881)（open）**[测试报告] huaweicloud-devkit 1.1.8 每日测试缺陷合并单（1 项）**
     - 历史单内容：## 目标 修复 huaweicloud-devkit 1.1.8 版本 MCP remote transport 缺陷（D9-10），恢复远程 MCP 集成可用性。 ## 现状 - 被测版本：1.1.8，本轮每日测试共 1 项缺陷。 - 缺陷：D9-10 MCP remote transport——HTTP/WS 远程传输探针失败。 - 根因：`plugins/huaweicloud-core/
   - [#876](https://github.com/huaweicloud/huaweicloud-devkit/issues/876)（open）**[测试报告] huaweicloud-devkit 1.1.8-next.2 每日测试缺陷合并单（3 项）**
     - 历史单内容：## 测试概览 - 被测版本：1.1.8-next.2 - 缺陷：3 项 ## 缺陷清单 ### 5. [P1] D2-10 R7 current档跟随 — resolveManagedProfile 未找到 - **描述**：koocli-profile.mjs 中未找到 `current` 或 `resolveManagedProfile` 标识 - **预期（精确断言）**：`resolve
 
-## D1-65  update-check DEBUG 开关逻辑拆分后失配
-- 今日证据：`evidence/_probes/new-env.log`（CASE D1-65: update-check.js DEBUG 判断 undefined）
+## D1-65  update-check DEBUG 开关迁移（契约迁移）
+- 今日证据：`evidence/_probes/new-env.log`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#844](https://github.com/huaweicloud/huaweicloud-devkit/issues/844)（open）**[测试报告] huaweicloud-devkit 1.1.8-next.1 每日测试缺陷合并单（Hermes Linux 2026-10-02，6 项）**
     - 历史单内容：## 测试概览 - 被测版本：1.1.8-next.1 - 缺陷：6 项 ## 缺陷清单 ### 1. [P1] D3-S1 中文「云主机」意图路由未命中（serviceCatalog ECS 关键词缺失） - **描述**：`service_catalog({intent:'帮我查一下我账号有哪些云主机'})` → `recommendedServices=['Run hcloud --help
   - [#754](https://github.com/huaweicloud/huaweicloud-devkit/issues/754)（open）**[测试报告] huaweicloud-devkit v1.1.5 每日测试缺陷合并单（1 项）**
     - 历史单内容：## 目标 统一 `HUAWEICLOUD_DEVKIT_DEBUG` 环境变量的判定逻辑，使 telemetry 模块与 update-check 模块对调试开关的识别保持一致（同时接受 `'1'` 和 `'true'`）。 ## 现状 - `plugins/huaweicloud-core/src/telemetry/telemetry.mjs:81`：`const DEBUG = proce
 
-## D1-66  telemetry getEndpoint/DEFAULT_ENDPOINT 重构后消失
-- 今日证据：`evidence/_probes/new-env.log`（CASE D1-66）
+## D1-66  telemetry 端点环境变量改名
+- 今日证据：`evidence/_probes/new-env.log`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#1036](https://github.com/huaweicloud/huaweicloud-devkit/issues/1036)（open）**[测试报告] huaweicloud-devkit 1.1.12 每日测试缺陷合并单（1 项）**
     - 历史单内容：## 测试概览 - 被测版本：1.1.12 - 缺陷：1 项 ## 缺陷清单 ### 13. [P2] D1-66 遥测开关与端点环境变量——开关/自定义端点不生效 - **描述**：off→enabled=null、未设→enabled=null、自定义端点收到 POST=false（[]），遥测开关/自定义端点环境变量未生效。 - **预期（精确断言）**：遥测开关 off/未设应正确切换，自
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#868
 
-## D10-4  安全规则集 16→19 条（v2 增强，测试契约需更新）
-- 今日证据：`evidence/_probes/new-safety.log`（规则清单 19 条）
+## D10-4  安全规则集 16→19 条（纯新增，无降级，测试侧契约未更新）
+- 今日证据：`evidence/_probes/new-safety.log`（规则数=19）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#978](https://github.com/huaweicloud/huaweicloud-devkit/issues/978)（open）**子任务：D10-4 安全干预静态规则层规则数与设计契约对齐（P0）**
     - 历史单内容：## 父任务 [Issue #976](https://github.com/huaweicloud/huaweicloud-devkit/issues/976) ## 目标 修复 1.1.10 测试缺陷 D10-4：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json` 当前规则数 19 条（9 deny + 10 warn）与
   - [#976](https://github.com/huaweicloud/huaweicloud-devkit/issues/976)（open）**[测试报告] huaweicloud-devkit 1.1.10 每日测试缺陷合并单（2 项）**
     - 历史单内容：## 测试概览 - 被测版本：1.1.10 - 缺陷：2 项 ## 缺陷清单 ### 5. [P0] D10-4 安全干预静态规则层规则数与设计契约漂移 - **描述**：规则库 19 条(9 deny+10 warn) 与设计契约 16 条不匹配 - **预期（精确断言）**：规则数与设计契约一致（16 条 = 9 deny + 7 warn） - **根因**：`cloud-risk-rule
-- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#852, #761
+  - [#712](https://github.com/huaweicloud/huaweicloud-devkit/issues/712)（open）**[P1] D4-6 adminPass 参数回显无警告（CodeArtsWork v1.1.5 每日测试）**
+    - 历史单内容：## 测试概览 - **用例**：D4-6 - **优先级**：P1 - **客户端**：CodeArtsWork (GLM-5.2) - **OS**：Windows - **被测版本**：v1.1.5 ## 现象 `hook_check_command('hcloud ECS CreateServers --adminPass MyPassword123')` 返回 `allow`，admin
+- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#852, #797, #761, #679, #673, #651
