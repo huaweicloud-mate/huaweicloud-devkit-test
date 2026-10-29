@@ -1,5 +1,5 @@
 {
-  "status": "FAIL",
+  "status": "BLOCKED",
   "caseId": "D3-C7",
   "title": "跨区域资源操作引导（区域维度）",
   "expected": "命令含 --cli-region=目标区；区域不可用→Ecs.0021；资源不存在→Ecs.0200；创建资源100%释放归零",
@@ -33,6 +33,7 @@
       "detail": "code=VPC.0501 {\n  \"code\": \"VPC.0501\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"The project name cn-north-4 carried by the token from IAM contains region information. Only token issued for setting region could pass the authentica (跨区不可用则命中区域错误码，符合契约之一)"
     }
   ],
-  "executedAt": "20261029210452",
-  "probe": "probe.mjs"
+  "executedAt": "20261030051500",
+  "probe": "probe.mjs",
+  "blockedReason": "2026-10-30 05:04 实测：跨区断言被凭证作用域阻塞——hcloud ECS/VPC 调用 ap-southeast-3 返回 Common.0013『the current region is [ap-southeast-3] and does not match with the project name [cn-north-4] in tk.』与 VPC.0501，凭证 token 仅绑定 cn-north-4 project，无法验证跨区资源不存在错误码(Ecs.0200)与跨区建 EIP 路径。缺：绑定 ap-southeast-3 project 的 AK/SK（或可透传 region 的 IAM token）；影响：5 条断言中 2 条（不存在资源精确错误码、跨区创建 EIP）无法执行，其余 3 条（--cli-region 规划、region 可用性查询、跨区只读调用）已实测通过；解除条件：提供 ap-southeast-3 作用域凭证后重跑该用例。"
 }
