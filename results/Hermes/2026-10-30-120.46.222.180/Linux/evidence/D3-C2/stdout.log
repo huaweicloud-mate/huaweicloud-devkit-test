@@ -1,1 +1,44 @@
-{"status": "PASS", "executedAt": "20261029212410"}
+{
+  "case": "D3-C2",
+  "status": "FAIL",
+  "total": 7,
+  "passed": 0,
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": false,
+      "detail": "Start at 2026-10-29 21:07:49.86019319 +0000 UTC\n\nCreate bucket [tctest-hermes-obs-u1bmfz] failed, error [Put \"https://tctest-hermes-obs-u1bmfz.obs.cn-"
+    },
+    {
+      "name": "obsutil上传",
+      "pass": false,
+      "detail": "Start at 2026-10-29 21:07:53.654579228 +0000 UTC\n\n\nParallel:      5                   Jobs:          5                   \nThreshold:     50.00MB      "
+    },
+    {
+      "name": "public-read(ACL)",
+      "pass": false,
+      "detail": "Command failed: hcloud obs chattri obs://tctest-hermes-obs-u1bmfz -acl=public-read -f"
+    },
+    {
+      "name": "set静态站",
+      "pass": false,
+      "detail": "Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/proxy/proxy-agent.mjs"
+    },
+    {
+      "name": "get静态站",
+      "pass": false,
+      "detail": "Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/proxy/proxy-agent.mjs"
+    },
+    {
+      "name": "curl200",
+      "pass": false,
+      "detail": "code=404 url=http://tctest-hermes-obs-u1bmfz.obs-website.cn-north-4.myhuaweicloud.com/index.html"
+    },
+    {
+      "name": "删桶归零",
+      "pass": false,
+      "detail": "Command failed: hcloud obs rm obs://tctest-hermes-obs-u1bmfz/ -r -f"
+    }
+  ],
+  "executedAt": "20261029210931"
+}

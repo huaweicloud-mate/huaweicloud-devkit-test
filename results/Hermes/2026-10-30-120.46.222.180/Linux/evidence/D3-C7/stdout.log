@@ -1,1 +1,44 @@
-{"status": "PASS", "executedAt": "20261029212410"}
+{
+  "case": "D3-C7",
+  "status": "FAIL",
+  "total": 7,
+  "passed": 6,
+  "results": [
+    {
+      "name": "list_regions 返回区域",
+      "pass": true,
+      "detail": "{\"ok\":true,\"count\":1,\"regions\":[{\"raw\":\"Failed to obtain account ID. Cause: proxyconnect tcp: dial tcp: lookup proxy.example on *.*.*.*:53: no such ho"
+    },
+    {
+      "name": "get_regional_availability",
+      "pass": true,
+      "detail": "{\"ok\":true,\"service\":\"vpc\",\"region\":\"cn-north-4\",\"available\":true,\"note\":\"vpc is available in cn-north-4.\",\"sourcedFrom\":\"static cache, update via npm"
+    },
+    {
+      "name": "plan 只读含 --cli-region(参数级断言)",
+      "pass": true,
+      "detail": "[\"VPC\",\"ListVpcs\",\"--cli-region=cn-north-4\",\"--cli-output=json\"]"
+    },
+    {
+      "name": "执行只读查询",
+      "pass": true,
+      "detail": "ListVpcs is a multi-version API, where the version (v3) is default. To specify another version, change the API name to '"
+    },
+    {
+      "name": "EIP 建删命令含 region",
+      "pass": true,
+      "detail": "hasRegion=true"
+    },
+    {
+      "name": "CreatePublicip 返回 id",
+      "pass": false,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "DeletePublicip 释放",
+      "pass": true,
+      "detail": "未创建，无需释放"
+    }
+  ],
+  "executedAt": "20261029210749"
+}
