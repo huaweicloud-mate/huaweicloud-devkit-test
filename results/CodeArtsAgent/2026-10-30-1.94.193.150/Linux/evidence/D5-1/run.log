@@ -1,17 +1,11 @@
-node:fs:442
-    return binding.readFileUtf8(path, stringToFlags(options.flag));
-                   ^
+[PASS] ①清单存在: integrations/hermes/manifest.yaml 存在
+[PASS] ①清单字段完整: manifest_version + name 齐备
+[PASS] ①transport 定义: 清单 transport 声明 stdio MCP server
+  清单声明 skills: 27 skills (描述)
+  skills 目录 huawei-* 技能数 = 29
+[PASS] ①skills 落位: 清单 install 目标 skills/ 含 29 个 huawei-* 技能
+  tools/list 返回工具数 = 46
+[PASS] ②清单加载(工具枚举): MCP server 可加载并枚举 46 个工具
+[PASS] ②关键工具在位: 核心工具 huaweicloud_service_catalog/check_update/explain_error 均已发现
 
-Error: ENOENT: no such file or directory, open '/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/hdk/plugins/huaweicloud-core/src/integrations/hermes/manifest.yaml'
-    at readFileSync (node:fs:442:20)
-    at file:///home/testbot2/devkit-test/testbot2-Linux-CodeArts%20CLI/huaweicloud-devkit-test/results/CodeArtsAgent/2026-10-30-1.94.193.150/Linux/evidence/D5-1/probe.mjs:25:18
-    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
-    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
-    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/hdk/plugins/huaweicloud-core/src/integrations/hermes/manifest.yaml'
-}
-
-Node.js v22.13.0
+=== D5-1 清单发现加载结论: ALL PASS ===
