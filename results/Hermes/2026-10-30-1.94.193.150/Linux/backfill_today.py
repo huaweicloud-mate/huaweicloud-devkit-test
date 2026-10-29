@@ -143,7 +143,7 @@ PASS_D = [
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69","D1-70",
     "D2-1","D2-2","D2-4","D2-5","D2-11","D2-12","D2-16","D2-26","D2-27",
     "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C2","D3-C4","D3-C5","D3-C7","D3-C13","D3-C14",
-    "D3-S1","D3-S2","D3-S3","D3-S4","D3-S8",
+    "D3-S1","D3-S2","D3-S4","D3-S8",
     "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11",
     "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23",
     "D4-27","D4-28","D4-29",
@@ -159,8 +159,8 @@ FAIL_D = {
     "D4-25": "Python hook 写操作遥测误分类 cli:invoke（应 cli:write）",
     "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 泄漏",
     "D3-S5": "serviceCatalog 复合意图未命中多 service（回退 help）",
-    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.zip_file，未生成 URN/触发器",
-    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.port）",
+    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.filename，未生成 URN/触发器",
+    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.password）",
     "D9-12": "initialize 版本检查缺失 + 非法时序 tools/list 未拒 -32600",
     "D10-3": "serviceCatalog 中文意图 EXP-E01「云主机」未命中（92.9% 未达 100%）",
 }
@@ -179,6 +179,7 @@ BLOCKED_D = {
     "D9-6":  "【调归属】跨客户端互通需多客户端并存环境（单机仅 Hermes）",
     "D3-C3": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化），sandbox_connect/deploy_nginx 全链路不可达；解除条件=华为云沙箱维护完成",
     "D3-C6": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE），check_user/connect/credentials/exec_one_shot/close_session 7 隐式工具均不可用；解除条件=华为云沙箱维护完成",
+    "D3-S3": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE），check_user 无法返回 realnameVerified/agreementSigned，沙箱预览 URL 场景不可验证；解除条件=华为云沙箱维护完成",
 }
 
 NOTRUN_D = {
