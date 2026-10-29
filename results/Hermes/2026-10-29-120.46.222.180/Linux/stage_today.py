@@ -63,10 +63,10 @@ def add(cases, kind, logfile, sec=None):
 
 for c in ['D4-1','D4-2','D4-3','D4-15','D4-16']: add([c], 'file', 'classify.log')
 for c in ['D4-5','D4-7','D4-9','D4-21','D4-22']: add([c], 'file', 'hook.log')
-for c in ['D2-11','D2-12','D2-4']: add([c], 'file', 'auth.log')
+for c in ['D2-11','D2-12']: add([c], 'file', 'auth.log')
 for c in ['D9-1','D9-2','D9-3','D9-4','D9-5','D9-7','D9-8','D5-3']: add([c], 'file', 'protocol.log')
 for c in ['D9-9','D2-16','D1-41']: add([c], 'file', 'extended.log')
-for c in ['D1-26','D1-27','D2-2','D2-5','D3-A1','D3-B1','D3-B3','D3-B5','D3-C5','D4-4','D4-6','D4-11','D4-17','D6-1','D6-3','D6-4']: add([c], 'file', 'supplement.log')
+for c in ['D1-26','D1-27','D2-2','D2-5','D3-A1','D3-B1','D3-B3','D3-B5','D3-C5','D4-6','D4-11','D4-17','D6-1','D6-3','D6-4']: add([c], 'file', 'supplement.log')
 for c in ['D1-30','D4-10']: add([c], 'file', 'supplement-import.log')
 for c in ['D1-65','D1-66','D1-67','D1-68']: add([c], 'file', 'new-env.log')
 for c in ['D2-27','D8-9','D8-10','D6-9','D1-70']: add([c], 'file', 'new-config.log')
@@ -106,7 +106,7 @@ add(['EXP-E01','EXP-E02','EXP-E03','EXP-E04','EXP-E05','EXP-E06','EXP-E07','EXP-
 add(['EXP-E08'], 'file', 'exp-e08.log')
 
 # 真云 probe 写入自身 stdout.log 的 heavy/aux
-SELF = ['D3-C1','D3-C2','D3-C3','D3-C6','D3-C7','D4-13','D4-23','D4-24','D1-70']
+SELF = ['D3-C1','D3-C2','D3-C3','D3-C6','D3-C7','D4-13','D4-23','D4-24','D1-70','D4-4','D2-4']
 # realcloud（D2-1/D3-C4/D4-14/D4-18/D4-19/D4-20 + EXP-C4-*）
 RC_CASES = ['D2-1','D3-C4','D4-14','D4-18','D4-19','D4-20'] + ['EXP-C4-%02d' % i for i in range(1, 23)]
 

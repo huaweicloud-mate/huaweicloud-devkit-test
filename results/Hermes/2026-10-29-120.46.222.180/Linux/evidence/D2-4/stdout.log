@@ -1,5 +1,1 @@
-{
-  "status": "FAIL",
-  "executedAt": "20261029131930",
-  "why": "src/safety-policy.mjs redactString 第三个 .replace 的 (AK|SK) 正则大小写敏感(无 /i)，小写 ak=/sk= 与 JSON 带引号 key {\"ak\":...} 均未脱敏、原样明文返回"
-}
+{"status": "FAIL", "executedAt": "20261029212410", "why": "src/safety-policy.mjs:49 redactSecrets 键名正则仅匹配 key=value/空格形态，不匹配 JSON 带引号 key 形态：redactSecrets('{\"ak\":\"...\",\"sk\":\"...\"}') 与 '{\"access_key\":\"...\",\"secret_key\":\"...\"}' 均原样明文返回"}
