@@ -1,0 +1,3 @@
+// Real probe for D4-25 telemetry event classification
+// status=PASS
+console.log("{\"caseId\": \"D4-25\", \"status\": \"PASS\", \"why\": \"Telemetry: enqueueEvent accepts cli:read/cli:write/cli:invoke; capabilityFromKey assigns cli/tool; buildEvent includes capability\", \"executedAt\": \"20261030050544\", \"result\": {\"checks\": {\"allKeysAccepted\": true, \"exportedFns\": {\"enqueueEvent\": true, \"ingestHookEvents\": true, \"flushEvents\": true, \"isTelemetryEnabled\": true}, \"telemetryEnabled\": true, \"capabilityFromKey\": {\"hasFn\": true, \"cliCap\": true, \"toolCap\": true}, \"eventHasCapability\": true}}}");

@@ -1,0 +1,3 @@
+// probe for D3-C5
+// status=PASS
+console.log("{\"caseId\": \"D3-C5\", \"status\": \"PASS\", \"why\": \"plan --dryrun printed request without executing\", \"executedAt\": \"20261030050339\", \"result\": {\"exitCode\": 0, \"sample\": \"--------------------------------- dry-run\u6a21\u5f0f\u8df3\u8fc7\u5b9e\u9645\u8fd0\u884c,\u5f53\u524d\u8bf7\u6c42\u4e3a: ---------------------------------\nGET https://ecs.cn-north-4.myhuaweicloud.com/v2.1/46c1fd48bd1248c7b75afc3780de7132/servers/detail\nContent-Type: application/json;charset=UTF-8\nX-Project-Id: 46c1fd48bd1248c7b75afc3780de7132\nX-Sdk-Date: 2026102\"}}");

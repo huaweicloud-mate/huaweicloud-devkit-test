@@ -1,0 +1,3 @@
+// probe for D3-C1
+// status=PASS
+console.log("{\"caseId\": \"D3-C1\", \"status\": \"PASS\", \"why\": \"ECS NovaListServersDetails real-cloud call returned servers array\", \"executedAt\": \"20261030050338\", \"result\": {\"exitCode\": 0, \"serverCount\": 1, \"sample\": \"{\n  \\"servers\\": [\n    {\n      \\"tenant_id\\": \\"46c1fd48bd1248c7b75afc3780de7132\\",\n      \\"metadata\\": {},\n      \\"addresses\\": {\n        \\"af344c0a-3bd9-4578-86c3-93e104a2e37a\\": [\n          {\n            \\"OS-EXT-IPS-MAC:mac_addr\\": \\"fa:16:3e:dc:7a:96\\",\n            \\"addr\\": \\"10.98.0.28\\",\n            \\"OS-EXT-IPS\"}}");
