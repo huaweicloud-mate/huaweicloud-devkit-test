@@ -1,2 +1,2 @@
-// probe for D3-B1 - executed 20261030051740
-// list_operations(ECS) ok=false
+// probe for D3-B1 - executed 20261030051920
+// list_operations(ECS) command=true selectionRule=true
