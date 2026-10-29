@@ -1,0 +1,25 @@
+{
+  "caseId": "D4-21",
+  "status": "FAIL",
+  "why": "artifacts broad-iam decisions=[{\"decision\":\"deny\",\"findings\":[\"hwc-iam-admin-policy\"]},{\"decision\":\"allow\",\"findings\":[]},{\"decision\":\"allow\",\"findings\":[]}]",
+  "executedAt": "20261030051444",
+  "detail": {
+    "rs": [
+      {
+        "decision": "deny",
+        "findings": [
+          "hwc-iam-admin-policy"
+        ]
+      },
+      {
+        "decision": "allow",
+        "findings": []
+      },
+      {
+        "decision": "allow",
+        "findings": []
+      }
+    ],
+    "rootCause": "cloud-risk-rules.json hwc-iam-admin-policy regex 未覆盖 HCL actions=[\"*\"] 与 AdministratorFullAccess 数据源引用"
+  }
+}

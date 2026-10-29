@@ -1,0 +1,19 @@
+{
+  "caseId": "D4-25",
+  "status": "FAIL",
+  "why": "read=cli:read write=cli:invoke invoke=cli:invoke nonHcloudNoEvent=true",
+  "executedAt": "20261030051559",
+  "detail": {
+    "keys": [
+      "cli:read",
+      "cli:invoke",
+      "cli:invoke"
+    ],
+    "lines": [
+      "{\"key\": \"cli:read\", \"value\": \"hcloud ecs ListServersDetails\", \"capability\": \"cli\"}",
+      "{\"key\": \"cli:invoke\", \"value\": \"hcloud vpc CreateVpc\", \"capability\": \"cli\"}",
+      "{\"key\": \"cli:invoke\", \"value\": \"hcloud help\", \"capability\": \"cli\"}"
+    ],
+    "rootCause": "hooks/huaweicloud-safety.py WRITE_OPERATION_RE 前置捕获组致写操作误入 invoke"
+  }
+}

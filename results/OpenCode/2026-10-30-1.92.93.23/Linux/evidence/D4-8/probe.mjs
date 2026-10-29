@@ -1,0 +1,2 @@
+// probe for D4-8 - executed 20261030051443
+// Python/Node policy consistency rows=[{"cmd":"cat ~/.config/huaweicloud/credentials.js","py":"deny","node":"deny"},{"cmd":"hcloud ecs DeleteServer --force","py":"deny","node":"deny"},{"cmd":"hcloud ecs ListServers","py":"allow","node":"allow"},{"cmd":"hcloud csms ShowSecretVersion --secret-n","py":"deny","node":"deny"}]
