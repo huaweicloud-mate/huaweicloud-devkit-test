@@ -1,0 +1,26 @@
+{
+  "caseId": "D4-25",
+  "status": "FAIL",
+  "why": "record_cli_event classifies 'hcloud ECS DeleteServer' as cli:invoke instead of cli:write — WRITE_OPERATION_RE regex (^|[A-Za-z0-9])(Delete)\\w* fails to match Delete preceded by space",
+  "executedAt": "20261031050636",
+  "result": {
+    "eventCount": 2,
+    "readCount": 1,
+    "writeCount": 0,
+    "invokeCount": 1,
+    "events": [
+      {
+        "key": "cli:read",
+        "value": "hcloud ECS ListServers",
+        "capability": "cli"
+      },
+      {
+        "key": "cli:invoke",
+        "value": "hcloud ECS DeleteServer",
+        "capability": "cli"
+      }
+    ],
+    "fieldsOk": true,
+    "rootCause": "plugins/huaweicloud-core/hooks/huaweicloud-safety.py:46 — WRITE_OPERATION_RE = re.compile(r'(^|[A-Za-z0-9])(Create|...|Delete|...)\\w*', re.I) — the alternation (^|[A-Za-z0-9]) requires start-of-string or an alphanumeric char before the write prefix; a space separator (as in 'ECS DeleteServer') is neither, so Delete/DeleteServer does not match → is_write=false → event_key=cli:invoke"
+  }
+}

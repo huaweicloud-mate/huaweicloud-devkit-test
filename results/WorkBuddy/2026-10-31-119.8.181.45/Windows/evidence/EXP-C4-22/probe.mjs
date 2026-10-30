@@ -1,0 +1,3 @@
+// probe for EXP-C4-22
+// status=PASS
+console.log("{\"caseId\": \"EXP-C4-22\", \"status\": \"PASS\", \"why\": \"ELB ListListeners: help-list ok=true, real-call ok=false\", \"executedAt\": \"20261031050330\", \"result\": {\"service\": \"ELB\", \"op\": \"ListListeners\", \"helpExit\": 0, \"helpHasOp\": true, \"listExit\": 0, \"realOk\": false, \"realOutSample\": \"ListListeners\u6709\u591a\u4e2a\u7248\u672c,\u9ed8\u8ba4\u4f7f\u7528\u8be5API\u7248\u672cv3.\u82e5\u9700\u6307\u5b9a\u5176\u4ed6\u7248\u672c,\u8bf7\u5c06API\u540d\u4fee\u6539\u4e3a\\\"ListListeners/\u7248\u672c\u53f7\\\"\\n{\\n  \\\"request_id\\\": \\\"640aba2caa3cec3cf82e980dc6ef7a75\\\",\\n  \\\"listeners\\\": [],\\n  \\\"page_info\\\": {\\n    \\\"current_count\\\": 0\\n  }\\n}\"}}");

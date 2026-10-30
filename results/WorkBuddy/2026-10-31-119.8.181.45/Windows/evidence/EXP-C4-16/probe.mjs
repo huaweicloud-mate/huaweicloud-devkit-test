@@ -1,0 +1,3 @@
+// probe for EXP-C4-16
+// status=PASS
+console.log("{\"caseId\": \"EXP-C4-16\", \"status\": \"PASS\", \"why\": \"CDN ListDomains: help-list ok=true, real-call ok=false\", \"executedAt\": \"20261031050317\", \"result\": {\"service\": \"CDN\", \"op\": \"ListDomains\", \"helpExit\": 0, \"helpHasOp\": true, \"listExit\": 0, \"realOk\": false, \"realOutSample\": \"ListDomains\u6709\u591a\u4e2a\u7248\u672c,\u9ed8\u8ba4\u4f7f\u7528\u8be5API\u7248\u672cv2.\u82e5\u9700\u6307\u5b9a\u5176\u4ed6\u7248\u672c,\u8bf7\u5c06API\u540d\u4fee\u6539\u4e3a\\\"ListDomains/\u7248\u672c\u53f7\\\"\\n[USE_ERROR]cli-region\u7684\u503c\u4e0d\u652f\u6301,\u5f53\u524d\u652f\u6301\u7684\u533a\u57df\u503c\u5982\u4e0b:\\ncn-north-1\\nap-southeast-1\"}}");

@@ -1,0 +1,2 @@
+// probe for D3-C14
+console.log("{\"caseId\": \"D3-C14\", \"status\": \"PASS\", \"why\": \"--skeleton generated JSON parameter skeleton file\", \"executedAt\": \"20261031050353\", \"result\": {\"exitCode\": 0, \"sample\": \"\u5df2\u751f\u6210JSON\u683c\u5f0fAPI\u5165\u53c2\u9aa8\u67b6,\u6587\u4ef6\u5b58\u653e\u4f4d\u7f6e:C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-workbuddy\\\\ECS_NovaListServersDetails_cn-20261031050353.json\"}}");

@@ -1,0 +1,3 @@
+// probe for EXP-E01
+// status=FAIL
+console.log("{\"caseId\": \"EXP-E01\", \"status\": \"FAIL\", \"why\": \"eval harness verdict=MISS (MISS \u2014 serviceCatalog did not route to expected service)\", \"executedAt\": \"20261031050330\", \"result\": {\"verdict\": \"MISS\", \"evalCsv\": \"C:\\\\Users\\\\Administrator\\\\devkit-test\\\\testbot4-win-workbuddy\\\\huaweicloud-devkit-test\\\\eval\\\\results\\\\eval-run-20261029130759.csv\"}}");
