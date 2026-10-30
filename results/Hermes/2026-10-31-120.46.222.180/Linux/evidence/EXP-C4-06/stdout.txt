@@ -2,7 +2,7 @@
 [D2-1] check_cli(KooCLI S2) -> OK
 [D2-1] setup_obs_config(S3) -> OK
 [D2-1] sandbox_check_user -> FAIL
-[D2-1] obs_ls(S3 API 可用) -> FAIL
+[D2-1] obs_ls(S3 API 可用) -> OK
 [D3-C4] ECS: list_operations+plan -> OK
 [D3-C4] VPC: list_operations+plan -> OK
 [D3-C4] OBS: list_operations+plan -> OK
@@ -25,9 +25,10 @@
 [D3-C4] EVS: list_operations+plan -> OK
 [D3-C4] EIP: list_operations+plan -> OK
 [D3-C4] ELB: list_operations+plan -> OK
-[D4-14] CreateVpc(tctest-hermes-20261006-u1blro) -> FAIL
+[D4-14] CreateVpc(tctest-hermes-20261006-vgx7lp) -> OK
 [D4-14] ListVpcs(执行命令) -> OK
 [D4-14] CTS ListTraces(审计) -> OK
+[D4-14] DeleteVpc(删除) -> OK
 [D4-14] 归零验证(ListVpcs 不含本次资源) -> OK
 [D4-18] plan 写操作需确认(confirm-not-deny) -> OK
 [D4-19] 确认流预检(preflight sgFindings) -> OK
@@ -35,15 +36,15 @@
 
 =====SUMMARY JSON=====
 {
-  "generatedAt": "2026-10-29T21:07:49.287Z",
-  "total": 34,
-  "passed": 29,
+  "generatedAt": "2026-10-30T21:12:19.974Z",
+  "total": 35,
+  "passed": 32,
   "results": [
     {
       "kind": "D2-1",
       "name": "auth_status",
       "ok": true,
-      "detail": "{\n  \"target\": \"all\",\n  \"credentialsConfigured\": true,\n  \"credentialsPath\": \"/home/testbot1/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": true,\n      \"fingerprint\": \"caae65f2\",\n      \"persistent\": true\n    },\n    \"activeSource\": \"s1-persistent\"\n  },\n  \"obsConfigured\": true,\n  \"obsConfigPath\": \"/home/testbot1/.obsutilconfig\",\n  \"kooCliInstalled\": true,\n  \"kooCliStatus\": \"version_mismatch\",\n  \"kooCliNextStep\": \"npx huaweicloud-devkit install-hcloud\",\n  \"kooCliRaw\": \"KooCLI version mismatch: installed 7.2.12, this plugin is paired with 7.3.12. Reinstall the pinned version (see huaweicloud-cli-and-auth skill) and restart the agent.\",\n  \"reconciled\": {\n    \"stores\": {\n      \"s1Fingerprint\": \"caae65f2\",\n      \"envFingerprint\": \"\",\n      \"currentFingerprint\": \"\",\n      \"s3Fingerprint\": \"032f8fee\",\n      \"runtimeFingerprint\": null\n    },\n    \"kooCliCurrent\": \"default\",\n    \"envIsPlaceholder\": false,\n    \"s2Encrypted\": true,\n    \"inconsistencies\": [\n      {\n        \"store\": \"S3\",\n        \"source\": \"obsutilconfig\",\n        \"fingerprint\": \"032f8fee\",\n        \"manualModified\": true\n      }\n    ],\n    \"hasRuntime\": false,\n    \"runtimeFingerprint\": null,\n    \"inconsistent\": true,\n    \"runtimeActive\": false\n  },\n  \"onboarding\": {\n    \"needsSetup\": true,\n    \"scenario\": 1,\n    \"reason\": \"s1-only\",\n    \"message\": \"已保存账号(指纹 caae65f2)可直接使用。\",\n    \"steps\": [\n      {\n        \"order\": 1,\n        \"action\": \"use-s1\",\n        \"args\": {},\n        \"label\": \"直接使用已保存账号\"\n      },\n      {\n        \"order\": 2,\n        \"action\": \"switch-new\",\n        \"args\": {\n          \"mode\": \"import\",\n          \"action\": \"persist\"\n        },\n        \"label\": \"改用新账号(导入)\"\n      }\n    ],\n    \"accountHint\": \"caae65f2\"\n  },\n  \"agents\": {\n    \"opencode\": {\n      \"configured\": true\n    },\n    \"codex\": {\n      \"configured\": false\n    },\n    \"codex-desktop\": {\n      \"configured\": false\n    },\n    \"codearts\": {\n      \"configured\": false\n    },\n    \"codearts-work\": {\n      \"configured\": false\n    },\n    \"workbuddy\": {\n      \"configured\": false\n    },\n    \"dsh\": {\n      \"configured\": false\n    },\n    \"officeace\": {\n      \"configured\": false\n    },\n    \"hermes\": {\n      \"configured\": false\n    },\n    \"openclaw\": {\n      \"configured\": true\n    },\n    \"atomcode\": {\n      \"configured\": false\n    }\n  }\n}"
+      "detail": "{\n  \"target\": \"all\",\n  \"credentialsConfigured\": true,\n  \"credentialsPath\": \"/home/testbot1/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": true,\n      \"fingerprint\": \"caae65f2\",\n      \"persistent\": true\n    },\n    \"activeSource\": \"s1-persistent\"\n  },\n  \"obsConfigured\": true,\n  \"obsConfigPath\": \"/home/testbot1/.obsutilconfig\",\n  \"kooCliInstalled\": true,\n  \"kooCliStatus\": \"version_mismatch\",\n  \"kooCliNextStep\": \"npx huaweicloud-devkit install-hcloud\",\n  \"kooCliRaw\": \"KooCLI version mismatch: installed 7.2.12, this plugin is paired with 7.3.12. Reinstall the pinned version (see huaweicloud-cli-and-auth skill) and restart the agent.\",\n  \"reconciled\": {\n    \"stores\": {\n      \"s1Fingerprint\": \"caae65f2\",\n      \"envFingerprint\": \"\",\n      \"currentFingerprint\": \"\",\n      \"s3Fingerprint\": \"4c6e5e7d\",\n      \"runtimeFingerprint\": null\n    },\n    \"kooCliCurrent\": \"default\",\n    \"envIsPlaceholder\": false,\n    \"s2Encrypted\": true,\n    \"inconsistencies\": [\n      {\n        \"store\": \"S3\",\n        \"source\": \"obsutilconfig\",\n        \"fingerprint\": \"4c6e5e7d\",\n        \"manualModified\": true\n      }\n    ],\n    \"hasRuntime\": false,\n    \"runtimeFingerprint\": null,\n    \"inconsistent\": true,\n    \"runtimeActive\": false\n  },\n  \"onboarding\": {\n    \"needsSetup\": true,\n    \"scenario\": 1,\n    \"reason\": \"s1-only\",\n    \"message\": \"已保存账号(指纹 caae65f2)可直接使用。\",\n    \"steps\": [\n      {\n        \"order\": 1,\n        \"action\": \"use-s1\",\n        \"args\": {},\n        \"label\": \"直接使用已保存账号\"\n      },\n      {\n        \"order\": 2,\n        \"action\": \"switch-new\",\n        \"args\": {\n          \"mode\": \"import\",\n          \"action\": \"persist\"\n        },\n        \"label\": \"改用新账号(导入)\"\n      }\n    ],\n    \"accountHint\": \"caae65f2\"\n  },\n  \"agents\": {\n    \"opencode\": {\n      \"configured\": true\n    },\n    \"codex\": {\n      \"configured\": false\n    },\n    \"codex-desktop\": {\n      \"configured\": false\n    },\n    \"codearts\": {\n      \"configured\": false\n    },\n    \"codearts-work\": {\n      \"configured\": false\n    },\n    \"workbuddy\": {\n      \"configured\": false\n    },\n    \"dsh\": {\n      \"configured\": false\n    },\n    \"officeace\": {\n      \"configured\": false\n    },\n    \"hermes\": {\n      \"configured\": false\n    },\n    \"openclaw\": {\n      \"configured\": true\n    },\n    \"atomcode\": {\n      \"configured\": false\n    }\n  }\n}"
     },
     {
       "kind": "D2-1",
@@ -61,13 +62,13 @@
       "kind": "D2-1",
       "name": "sandbox_check_user",
       "ok": false,
-      "detail": "\"Cannot find package 'undici' imported from /home/testbot1/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/proxy/proxy-agent.mjs\""
+      "detail": "\"HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: a478f4b81b6e4653968e2dbb7a35c48a]\""
     },
     {
       "kind": "D2-1",
       "name": "obs_ls(S3 API 可用)",
-      "ok": false,
-      "detail": "\"Start at 2026-10-29 21:07:45.094742679 +0000 UTC\\n\\nList buckets failed, error [Get \\\"https://obs.cn-north-4.myhuaweicloud.com:443\\\": proxyconnect tcp: dial tcp: lookup proxy.example on 127.0.0.53:53: no \""
+      "ok": true,
+      "detail": "\"Start at 2026-10-30 21:12:04.514883933 +0000 UTC\\n\\nBucket                   CreationDate             Location       BucketType     \\nobs://hdk-daily-obs-202610250528\\n                         2026-10-25T\""
     },
     {
       "kind": "D3-C4",
@@ -201,21 +202,27 @@
     },
     {
       "kind": "D4-14",
-      "name": "CreateVpc(tctest-hermes-20261006-u1blro)",
-      "ok": false,
-      "detail": "{\n  \"vpcId\": \"\",\n  \"stdout\": \"[OPENAPI_ERROR]proxyconnect tcp: dial tcp: lookup proxy.example on *.*.*.*:53: no such host\\n\"\n}"
+      "name": "CreateVpc(tctest-hermes-20261006-vgx7lp)",
+      "ok": true,
+      "detail": "{\n  \"vpcId\": \"7e5f9ecc-b4a6-4643-8a64-38ca0c94c0e4\",\n  \"stdout\": \"{\\n  \\\"vpc\\\": {\\n    \\\"id\\\": \\\"7e5f9ecc-b4a6-4643-8a64-38ca0c94c0e4\\\",\\n    \\\"name\\\": \\\"tctest-hermes-20261006-vgx7lp\\\",\\n    \\\"description\\\": \\\"\\\",\\n    \\\"cidr\\\": \\\"192.168.99.0/24\\\",\\n    \\\"status\\\": \\\"CREATING\\\",\\n    \\\"routes\\\"\"\n}"
     },
     {
       "kind": "D4-14",
       "name": "ListVpcs(执行命令)",
       "ok": true,
-      "detail": "\"ListVpcs is a multi-version API, where the version (v3) is default. To specify another version, change the API name to '\""
+      "detail": "\"contains new vpc\""
     },
     {
       "kind": "D4-14",
       "name": "CTS ListTraces(审计)",
       "ok": true,
-      "detail": "{\n  \"stdout\": \"[OPENAPI_ERROR]proxyconnect tcp: dial tcp: lookup proxy.example on *.*.*.*:53: no such host\\n\"\n}"
+      "detail": "{\n  \"stdout\": \"{\\n  \\\"traces\\\": [\\n    {\\n      \\\"api_version\\\": \\\"v2.0\\\",\\n      \\\"code\\\": \\\"204\\\",\\n      \\\"domain_id\\\": \\\"842591186fa245929e1b5c186a4cf784\\\",\\n      \\\"event_type\\\": \\\"system\\\",\\n      \\\"project_id\\\": \\\"46c1fd48bd1248c7b75afc3780de7132\\\",\\n      \\\"read_only\\\": false,\\n      \\\"request_id\\\": \\\"\\\",\\n      \\\"resource_id\\\": \\\"e10607a0-74ef-4\"\n}"
+    },
+    {
+      "kind": "D4-14",
+      "name": "DeleteVpc(删除)",
+      "ok": true,
+      "detail": "{\n  \"vpcId\": \"7e5f9ecc-b4a6-4643-8a64-38ca0c94c0e4\"\n}"
     },
     {
       "kind": "D4-14",

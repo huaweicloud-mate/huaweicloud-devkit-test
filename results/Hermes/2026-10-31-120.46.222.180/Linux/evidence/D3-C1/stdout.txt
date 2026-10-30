@@ -1,1 +1,49 @@
-{"status": "FAIL", "executedAt": "20261030052327", "why": "真云 ECS 归零验证未等待异步删除完成——DeleteServers 提交即返回，poll 窗口内 ECS 仍 ACTIVE，归零验证 FAIL(7/8)；VPC+子网 delete 亦异步未落地(cleanOk 仅提交)。已人工补删 ECS→subnet→VPC 归零"}
+{
+  "case": "D3-C1",
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "CreateServers(返回 job_id/serverIds)",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "验证 ACTIVE",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "删除含磁盘",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "归零验证(ECS 不含本次资源)",
+      "pass": true,
+      "detail": "[object Object]"
+    },
+    {
+      "name": "清理 VPC+子网",
+      "pass": true,
+      "detail": "{\"vpcId\":\"810401d9-e9de-492a-afe5-8ffcd56f9bb2\",\"subnetId\":\"3a0bba38-81df-495b-bd2c-a30aec8c9e79\",\"cleanOk\":true}"
+    }
+  ],
+  "executedAt": "20261030211318"
+}
