@@ -1,2 +1,2 @@
-// Real probe for D2-11 — executed 20261031053525
-// FAIL: STS persist scope=undefined status=needs_confirmation
+// Real probe for D2-11 — executed 20261031054708
+// PASS: STS persist status=error scope=rejected

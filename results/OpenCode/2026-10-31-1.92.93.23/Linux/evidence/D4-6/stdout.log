@@ -1,11 +1,11 @@
 {
   "caseId": "D4-6",
-  "status": "PASS",
-  "why": "adminPass decision=deny findings=[]",
-  "executedAt": "20261031053920",
+  "status": "FAIL",
+  "why": "admin_pass evaluateCommandRisk decision=allow findings=[]",
+  "executedAt": "20261031055021",
   "detail": {
-    "decision": "deny",
+    "decision": "allow",
     "findings": [],
-    "rootCause": null
+    "rootCause": "hwc-command-adminpass-exposure stages 仅 artifact/deploy_plan，未覆盖 command；hwc-command-secret-in-arg 只匹配 --adminPass 忽略 hcloud 的 --admin_pass"
   }
 }

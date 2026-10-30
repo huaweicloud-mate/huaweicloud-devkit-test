@@ -1,12 +1,13 @@
 {
   "caseId": "D3-S7",
   "status": "FAIL",
-  "why": "复合意图 rdsHit=true deployHit=false rdsReadOk=false",
-  "executedAt": "20261031053920",
+  "why": "复合意图 rdsHit=true deployHit=false rdsReadOk=true services=[\"RDS\"]",
+  "executedAt": "20261031054716",
   "detail": {
     "services": [
       "RDS"
     ],
-    "rdsReadOk": false
+    "rdsReadOk": true,
+    "rootCause": "复合意图仅命中 RDS，未命中部署目标(sandbox/ECS)，前端托管缺失"
   }
 }

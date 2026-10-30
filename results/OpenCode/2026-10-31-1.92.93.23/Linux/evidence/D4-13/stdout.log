@@ -1,11 +1,49 @@
 {
   "caseId": "D4-13",
-  "status": "FAIL",
-  "why": "只读子账号: 只读 5/6(83%) 写VPC拒绝=true 归零=true",
-  "executedAt": "20261031053925",
+  "status": "PASS",
+  "why": "只读子账号: 只读 6/6(100%) 写VPC拒绝=true 归零=true",
+  "executedAt": "20261031054713",
   "detail": {
-    "readOk": "5/6",
+    "readOk": "6/6",
     "writeDenied": true,
-    "residualZero": true
+    "residualZero": true,
+    "detail": [
+      {
+        "svc": "ECS",
+        "op": "ListServersDetails",
+        "ok": true,
+        "code": 0
+      },
+      {
+        "svc": "VPC",
+        "op": "ListVpcs",
+        "ok": true,
+        "code": 0
+      },
+      {
+        "svc": "EVS",
+        "op": "ListVolumes",
+        "ok": true,
+        "code": 0
+      },
+      {
+        "svc": "IMS",
+        "op": "ListImages",
+        "ok": true,
+        "code": 0
+      },
+      {
+        "svc": "CES",
+        "op": "ListMetrics",
+        "ok": true,
+        "code": 0
+      },
+      {
+        "svc": "EIP",
+        "op": "ListPublicips",
+        "ok": true,
+        "code": 0
+      }
+    ]
   }
 }

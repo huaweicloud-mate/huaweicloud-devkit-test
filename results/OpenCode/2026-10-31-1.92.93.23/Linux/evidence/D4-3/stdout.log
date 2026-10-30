@@ -1,9 +1,22 @@
 {
   "caseId": "D4-3",
-  "status": "FAIL",
-  "why": "KMS DecryptData decision=allow",
-  "executedAt": "20261031053920",
+  "status": "PASS",
+  "why": "secret API decisions=[\"deny\",\"deny\",\"deny\"]",
+  "executedAt": "20261031054708",
   "detail": {
-    "decision": "allow"
+    "rs": [
+      {
+        "c": "hcloud CSMS ShowSecretVersion --secret_name=x",
+        "d": "deny"
+      },
+      {
+        "c": "hcloud DEW ShowSecret --secret_name=x",
+        "d": "deny"
+      },
+      {
+        "c": "hcloud KMS GetSecretValue --secret_name=x",
+        "d": "deny"
+      }
+    ]
   }
 }

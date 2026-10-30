@@ -1,12 +1,16 @@
 {
   "caseId": "D10-4",
-  "status": "PASS",
-  "why": "rules=null sev=null deny=deny allow=allow",
-  "executedAt": "20261031054004",
+  "status": "SPEC-MISMATCH",
+  "why": "rules=19(deny=9 warn=10) deny=deny allow=allow",
+  "executedAt": "20261031054918",
   "detail": {
-    "ruleCount": null,
-    "sev": null,
+    "ruleCount": 19,
+    "sev": {
+      "deny": 9,
+      "warn": 10
+    },
     "denyCmd": "deny",
-    "allowCmd": "allow"
+    "allowCmd": "allow",
+    "rootCause": "cloud-risk-rules.json 规则数 16→19（9 deny + 10 warn），用例断言(9 deny/7 warn)滞后"
   }
 }

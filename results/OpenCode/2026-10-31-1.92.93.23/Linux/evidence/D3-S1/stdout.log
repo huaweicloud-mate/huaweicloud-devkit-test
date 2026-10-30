@@ -1,12 +1,13 @@
 {
   "caseId": "D3-S1",
   "status": "FAIL",
-  "why": "route hit ECS=false readonly=false",
-  "executedAt": "20261031053912",
+  "why": "route hit ECS=false readonly=true services=[\"Run hcloud --help to list available services.\"]",
+  "executedAt": "20261031054715",
   "detail": {
     "services": [
       "Run hcloud --help to list available services."
     ],
-    "roOk": false
+    "roOk": true,
+    "rootCause": "serviceCatalog tokenizer 未按 CJK 边界切分，英文服务码 ecs 黏在中文「的」后无法命中 routeMap"
   }
 }
