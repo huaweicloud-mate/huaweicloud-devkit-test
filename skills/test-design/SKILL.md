@@ -86,7 +86,7 @@ tags: [testing, test-design, huaweicloud, devkit, coverage]
 ### Step 2 评审闭环（维护者统一执行，非维护者 agent 到此停下）
 
 - 初稿 `HERMES_DRAFT_READY` 后，**非维护者 agent 停在这里**，把迭代目录交给维护者。
-- 维护者按 `docs/06-Hermes-Codex测试设计评审闭环.md` 往复评审（Hermes 生成 → Codex 复评 → 整改 → 再评），直到 `TEST_DESIGN_READY` 或 `REVIEW_CHANGES_REQUESTED`。
+- 维护者按 `docs/06-Hermes-OpenCode测试设计评审闭环.md` 往复评审（Hermes 生成 → 外部评审者 OpenCode 复评 → 整改 → 再评），直到 `TEST_DESIGN_READY` 或 `REVIEW_CHANGES_REQUESTED`。
 - 结论仅二选一：`REVIEW_CHANGES_REQUESTED`（退回整改）/ `TEST_DESIGN_READY`（进入 Step 3）。
 
 ### Step 3 用例输出（`TEST_DESIGN_READY` 后才能做）

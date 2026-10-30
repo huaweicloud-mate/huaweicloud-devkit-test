@@ -191,7 +191,7 @@ clientOrOSScope | requiredEvidence | design_status | owner | gap
    - `test-cases/README.md` 的数量描述。
 5. **daily 子集受影响** → `cd test-cases; python gen_daily.py`；**版本冻结** → 复制 CSV 到 `versions/<版本>/` + 补 `迭代测试设计.md`。
 6. **同步文档**：`python test-cases/check_docs.py` / `python test-cases/check_readme_consistency.py`（保证「文档提及 = 原子记录」，不漏列不虚标）。
-7. **放行纪律**：设计者只产出候选设计；放行态由维护者按 `docs/06-Hermes-Codex测试设计评审闭环.md` 统一评审（见 `skills/test-design/SKILL.md` §三）。
+7. **放行纪律**：设计者只产出候选设计；放行态由维护者按 `docs/06-Hermes-OpenCode测试设计评审闭环.md` 统一评审（见 `skills/test-design/SKILL.md` §三）。
 
 ## 六、UX / D11 体验用例（独立分区）
 
@@ -261,5 +261,5 @@ clientOrOSScope | requiredEvidence | design_status | owner | gap
 - `skills/source-coverage/SKILL.md` — 源码能力↔用例覆盖核对四步（含源码文件地图）
 - `skills/test-execution/SKILL.md` — 执行侧回填约定（`evidence/<case-id>/` + `verify_no_fake_pass.py`）
 - `test-cases/README.md` / `test-cases/ux/README.md` / `test-cases/daily/README.md` — 用例体系与分区说明
-- `docs/06-Hermes-Codex测试设计评审闭环.md` — 评审闭环（放行状态 `TEST_DESIGN_READY`）
+- `docs/06-Hermes-OpenCode测试设计评审闭环.md` — 评审闭环（放行状态 `TEST_DESIGN_READY`）
 - `docs/upstream-designs/<编号>-<slug>/方案.md` — 上游方案归档（设计输入）

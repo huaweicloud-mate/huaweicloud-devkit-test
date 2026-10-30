@@ -12,10 +12,10 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 
 | 路径 | 内容 |
 |---|---|
-| [docs/](docs/) | 测试规划 v1.3 / 评审报告 / 执行准备清单 / 目录结构规划 / Hermes-Codex 闭环规范 / 团队评审稿 / [upstream-designs/](docs/upstream-designs/) 开发设计方案存档 |
+| [docs/](docs/) | 测试规划 v1.3 / 评审报告 / 执行准备清单 / 目录结构规划 / Hermes-OpenCode 闭环规范 / 团队评审稿 / [upstream-designs/](docs/upstream-designs/) 开发设计方案存档 |
 | [test-cases/](test-cases/) | 用例体系母版：设计级 212 + 展开级 137 = 349 条（CSV 真源，gen_matrix.py 可复现生成；设计级 27 列 / 展开级 24 列，**纯设计定义、无执行态**，执行状态/结果落 `results/Summary/`；追踪表 tracing/需求-设计-证据追踪表.csv 10 列纯设计追踪；门禁 verify_new.py（exit 码）；2026-09-13 覆盖缺口落 16 用例 D1-59~64/D2-22~25/D3-C10~12/D4-25/26/D9-10） |
-| [templates/](templates/) | 12 个模板：每日 agent 报告 / 缺陷清单(FINDINGS) / 回归验证 / 真云 E2E / 版本报告 / 每晚报告 / 客户端矩阵 / 安全审计 / 缺口表 / 仪表盘 / Hermes-Codex 交接状态 / 多终端矩阵 |
-| [reviews/](reviews/) | 测试设计评审归档（Hermes/Codex 轮次、决策、放行状态和多终端矩阵） |
+| [templates/](templates/) | 12 个模板：每日 agent 报告 / 缺陷清单(FINDINGS) / 回归验证 / 真云 E2E / 版本报告 / 每晚报告 / 客户端矩阵 / 安全审计 / 缺口表 / 仪表盘 / Hermes-OpenCode 交接状态 / 多终端矩阵 |
+| [reviews/](reviews/) | 测试设计评审归档（Hermes/OpenCode 轮次、决策、放行状态和多终端矩阵） |
 | [results/](results/) | 测试执行结果归档：`<客户端>/<日期>-<IP>/<OS>/`（每日执行包，含执行态回填 + 证据链）+ `Summary/`（每日聚合）+ `Regression/`（按日回归）+ `version/`（按版本归档）+ `history/`（历史迭代 ITER-001~009） |
 | [metrics/](metrics/) | 跨迭代执行率 / 通过率 / 缺陷趋势 / 质量仪表盘 |
 | [eval/](eval/) | D10 Agent 行为评测：评测集 / harness / 结果 / 趋势（纪律见 eval/README.md） |
@@ -32,13 +32,13 @@ HuaweiCloud DevKit 插件**测试体系归档仓库**：规划 / 用例 / 模板
 | [02-测试规划评审报告.md](docs/02-测试规划评审报告.md) | 测试经理评审（84 → 93 分演进） |
 | [03-执行准备清单.md](docs/03-执行准备清单.md) | 8 组可勾选准备清单（是否就绪） |
 | [05-归档仓库目录结构.md](docs/05-归档仓库目录结构.md) | 本仓库目录结构设计原则与命名规则 |
-| [06-Hermes-Codex测试设计评审闭环.md](docs/06-Hermes-Codex测试设计评审闭环.md) | Hermes 生成、Codex 评审、反复修订直到 `TEST_DESIGN_READY` 的固定流程 |
+| [06-Hermes-OpenCode测试设计评审闭环.md](docs/06-Hermes-OpenCode测试设计评审闭环.md) | Hermes 生成、OpenCode 评审、反复修订直到 `TEST_DESIGN_READY` 的固定流程 |
 | [测试体系-评审稿.html](docs/测试体系-评审稿.html) | **团队评审用单文件**（固定导航 / 349 用例全量表 / 6 个评审决策点） |
 
 ## 快速开始（跑一轮测试）
 
 1. 完成 [docs/03-执行准备清单.md](docs/03-执行准备清单.md) —— 8 组全部 ✅
-2. 新需求先按 [Hermes-Codex 测试设计评审闭环](docs/06-Hermes-Codex测试设计评审闭环.md) 往复评审，评审产物归档到 `reviews/ITER-<NNN>-<YYYYMMDDHHmmss>/`
+2. 新需求先按 [Hermes-OpenCode 测试设计评审闭环](docs/06-Hermes-OpenCode测试设计评审闭环.md) 往复评审，评审产物归档到 `reviews/ITER-<NNN>-<YYYYMMDDHHmmss>/`
 3. 只有出现 `TEST_DESIGN_READY` 后才执行测试；执行包用 `scripts/init_day.py <客户端> <OS>` 生成到 `results/<客户端>/<日期>-<IP>/<OS>/`，执行态回填 + 证据链落同目录
 4. 每轮执行结束，按 [results/README.md](results/README.md) 的结构归档（`Summary/` 由维护者 `build_summary.py` 聚合；版本归档进 `version/`；历史迭代进 `history/`）
 5. 每迭代末更新 [templates/dashboard.md](templates/dashboard.md) 质量仪表盘（复制到 metrics/dashboard.md 填写）；缺陷按 [templates/findings.md](templates/findings.md) 记录，全量测完统一合并单提交上游（`scripts/file_issue.py`）

@@ -1,0 +1,1709 @@
+[0m
+> build · deepseek-v4-pro-0813
+[0m
+[0m→ [0mRead reviews/ITER-006-20261029171721/hermes/test-design.md
+[0m→ [0mRead reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv
+[0m→ [0mRead reviews/ITER-006-20261029171721/hermes/decision-log.md
+[0m→ [0mRead reviews/ITER-006-20261029171721/hermes/v2-契约漂移-用例影响清单.md
+[0m→ [0mRead reviews/ITER-006-20261029171721/hermes/status.md
+[0m→ [0mRead reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv[90m [offset=36][0m
+[0m→ [0mRead reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv[90m [offset=69][0m
+[0m
+[0m$ [0mls "C:/Users/Administrator/devkit-test" 2>/dev/null; echo "---hdk---"; ls "C:/Users/Administrator/devkit-test/hdk" 2>/dev/null | head -50
+__pycache__
+_append_exec.py
+_check_result.py
+_commitmsg_a.txt
+_commitmsg_bcd.txt
+_commitmsg_e.txt
+_commitmsg_f.txt
+_commitmsg_push.txt
+_commitmsg_uxv2.txt
+_commitmsg_uxv2verify.txt
+_defect_rows.json
+_defects_scan1.py
+_defects_scan2.py
+_diag_clusters.py
+_diag_clusters2.py
+_diag_opencode_runs.py
+_diag_opencode_today.py
+_diag_testbot2.py
+_diag_thr.py
+_dump_machines.py
+_e_dryrun.py
+_e_issue.py
+_entries.json
+_fetch_issues.py
+_findings_items.json
+_fix_loop.py
+_gen_defects.py
+_gen_rfe_report.py
+_gh_issues.json
+_hdk_main
+_hdk_v2
+_issue_body.md
+_neg_test_ledger.py
+_oc_linux_quality.py
+_oc_win_diag.py
+_oc_win_quality.py
+_oc_win_redispatch2.py
+_oc_win_runs.py
+_oc_win_watch.py
+_opencode_step1_multica.py
+_opencode_step1_zhangshuang.py
+_opencode_step2_multica.py
+_opencode_step2_zhangshuang.py
+_opencode_watch.py
+_panorama_verify.py
+_probe_gateway.py
+_probe_grape.txt
+_probe_zs.py
+_pull_ide
+_repro_a.py
+_ssh_testbot4.py
+_ssh_testbot4b.py
+_ssh_testbot4c.py
+_ssh_testbot4d.py
+_ssh_testbot4e.py
+_ssh_testbot4f.py
+_ssh_testbot4g.py
+_ssh_zhangshuang.py
+_ssh_zhangshuang2.py
+_ssh_zhangshuang3.py
+_ssh_zhangshuang4.py
+_ssh_zhangshuang5.py
+_ssh_zhangshuang6.py
+_sum_grape.py
+_sut
+_sut_119
+_tmp_toolcnt.py
+_ux_3s
+_uxdump
+_uxdump.py
+_verify_a.py
+_verify_defects.py
+_ws_before_repro
+_wt_900
+_wt_dash
+_wt_dash3
+_wt_dashboard2
+_wt_doc
+_wt_fix
+_wt_fix2
+_wt_live
+_wt_p26
+_wt_r1
+_wt_r2
+_wt_r4
+_wt_r5
+_wt_r6
+_wt_r8
+_wt_skillbench
+_wt_skillbench_docsync
+_wt_skillbench2
+_wt_special
+_wt_strategy
+_wt_triage
+_wt_ux
+_wt_uxgate
+_wt_uxgate3
+_zs_out.txt
+ca_qs.html
+codearts_deep.py
+CodeArtsWork-GLM-5.2-测试报告.md
+Codex
+docs
+dsh_bundle.py
+dsh_rt_readme.md
+feishu-sync
+fixtures
+hdk
+hdk-linux-test.tar.gz
+huaweicloud-devkit-test
+huaweicloud-devkit-测试规划-v1.3.md
+huaweicloud-devkit-测试规划-评估报告.md
+install.ps1
+install.sh
+install_hermes_v4py
+logs
+mcp_probe_check_update.py
+multica-src
+multica-src2
+obs-verify-download.html
+pack.json
+package.json
+plans
+providers.mdx
+reports
+results
+rt_pkg.json
+rt_readme.md
+scenarios
+scripts
+skill-bench
+ssh_agents.py
+ssh_explore.py
+ssh_explore2.py
+ssh_runs.py
+ssh_runs2.py
+test manage
+testbot3-Hermes
+test-cases
+UX专项-43条重新分桶.md
+verify-542-scanstate.mjs
+verinfo.json
+测试归档仓库-目录结构规划.md
+---hdk---
+AGENTS.md
+bin
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+cordis.patch.yml
+dev-report.md
+docs
+eslint.config.mjs
+INSTALL.md
+integrations
+LICENSE
+mcp.json
+node_modules
+NOTICE
+OWNERS
+package.json
+package-lock.json
+plugin.json
+plugins
+README.md
+README.zh-CN.md
+release-please-config.json
+rules
+scripts
+SECURITY.md
+skills
+SUPPORT.md
+tasks
+test
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && git log --oneline -5 2>/dev/null; echo "---branch---"; git branch -a 2>/dev/null | head -20
+f80f68f69f test: ITER-006 候选设计自查整改 — 修正 dispatch/DEBUG/ws 指引来源
+595cb82c0d chore: 自动刷新看板 2026-10-30_09:55
+36ecfe7752 test: v2.0.0 测试设计 ITER-006 候选设计（HERMES_DRAFT_READY）
+41d5128869 chore: 自动刷新看板 2026-10-30_08:10
+c4418e77a6 chore: 自动汇总 2026-10-30
+---branch---
+  dev-archived
++ feat/dashboard-l2-readonly
++ feat/dashboard-ux-special
++ feat/skill-bench-anchor-gate
+  feat/skill-bench-b-deployment-and-cleanup
++ feat/skill-bench-bare-align
++ feat/skill-bench-c-horizontal-sandbox-capabilities
++ feat/skill-bench-l2-readonly
++ feat/skill-bench-safety-metric
++ feat/skill-bench-strategy
++ feat/skill-bench-token-filter
++ feat/skill-bench-upstream-filing
++ feat/ux-batch2
++ feat/ux-rfe-filed
+  fix/d11-42-encoding-contract
+* main
++ review/p26
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/agent/testbot4-win-workbuddy/a256598c335c
+  remotes/origin/dev-archived
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && git branch -a 2>/dev/null | grep -i v2; echo "---current---"; git rev-parse --abbrev-ref HEAD 2>/dev/null; git log --oneline -3 2>/dev/null; echo "---fcfe047f exists?---"; git cat-file -t fcfe047f 2>/dev/null
+remotes/origin/v2
+---current---
+HEAD
+4ed07801 Merge pull request #1013 from huaweicloud/release-1.1.12
+89b038e9 chore(release): 1.1.12
+a93ef6de chore: merge dev into main for 1.1.12 release (#1012)
+---fcfe047f exists?---
+commit
+[0m
+[0m$ [0mls "C:/Users/Administrator/devkit-test/_hdk_v2" 2>/dev/null; echo "===plugins==="; ls "C:/Users/Administrator/devkit-test/hdk/plugins/huaweicloud-core/src" 2>/dev/null | head -80
+AGENTS.md
+bin
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+cordis.patch.yml
+docs
+eslint.config.mjs
+INSTALL.md
+integrations
+LICENSE
+mcp.json
+node_modules
+NOTICE
+OWNERS
+package.json
+package-lock.json
+plugin.json
+plugins
+README.md
+README.zh-CN.md
+release-please-config.json
+REPORT-detfw.md
+REPORT-devbridge.md
+REPORT-e2erun.md
+REPORT-hcloud.md
+REPORT-hwlink.md
+REPORT-payload.md
+REPORT-prxcfg.md
+REPORT-sbx.md
+REPORT-session.md
+REPORT-tmtr.md
+REPORT-upchk.md
+rules
+scripts
+SECURITY.md
+skills
+SUPPORT.md
+test
+===plugins===
+account-type.mjs
+auth
+data
+detect-framework.mjs
+hcloud-cli.mjs
+hcloud-probe.mjs
+icon-library.mjs
+koocli-version.mjs
+mcp-config-backup.mjs
+mcp-config-merge.mjs
+mcp-protocol.mjs
+mcp-server.mjs
+mcp-server-remote.mjs
+officeace-paths.mjs
+preflight.mjs
+proxy
+risk-rule-engine.mjs
+safety-policy.mjs
+sandbox
+search-market.mjs
+setup-cli.mjs
+telemetry
+tools.mjs
+update-check.mjs
+ws-exec
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && git ls-tree -r --name-only fcfe047f 2>/dev/null | grep -E "(tool-definitions|vendor-gate|mcp-protocol|tools\.ts|cloud-risk-rules|mcp-server-remote)" | head -60
+plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json
+plugins/huaweicloud-core/src/mcp-protocol.ts
+plugins/huaweicloud-core/src/mcp-server-remote.ts
+plugins/huaweicloud-core/src/packs/auth/tools.ts
+plugins/huaweicloud-core/src/packs/discovery/tools.ts
+plugins/huaweicloud-core/src/packs/huaweicloud-cli/tools.ts
+plugins/huaweicloud-core/src/packs/huaweicloud-open-mcp/tools.ts
+plugins/huaweicloud-core/src/packs/obs/tools.ts
+plugins/huaweicloud-core/src/packs/sandbox/tools.ts
+plugins/huaweicloud-core/src/packs/secrets/tools.ts
+plugins/huaweicloud-core/src/packs/update/tools.ts
+plugins/huaweicloud-core/src/packs/voucher/tools.ts
+plugins/huaweicloud-core/src/tool-definitions.ts
+plugins/huaweicloud-core/src/tools.ts
+plugins/huaweicloud-core/src/vendor-gate.ts
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && git show fcfe047f:plugins/huaweicloud-core/src/vendor-gate.ts 2>/dev/null
+// The vendorConfirmed gate and the first-assertion challenge above it —
+// cross-cutting dispatch policy, split out of tools.ts (the dispatch shell
+// calls enforceVendorGate from the top of dispatchTool; the gated roster and
+// the once-per-session challenge state live here).
+import type { ToolName } from './tool-definitions.ts';
+import type { ToolArgs, CallToolOptions } from './tools.ts';
+
+// The vendor gate enforces the VENDOR_BOUNDARY_RULE teaching at the tool
+// face. Measured failure (live probe 2026-10-23, twice-stable; post-fix
+// e2e blade red): with teaching landed and disclosed, a vendor-neutral
+// prompt still drove check_cli → auth_status → show_profile →
+// run_readonly_command and even auth_switch persist — instructions alone
+// did not change the first move. The mechanism composes two
+// repo-measured consent patterns: the approvedByUser attestation (models
+// are notably reluctant to falsely assert a user-context boolean —
+// core-approval-negative green) and the gateway refusal teaching (the
+// rejection reason itself names the two honest exits — the
+// openmcp-execute-refusal-consent precedent). The gate throws instead of
+// returning a structured result so the refusal rides the same channel
+// the approval chain already established (callTool errors reach the model
+// with their message, and the trace records ok:false — the e2e negative
+// case's zero-assertion pin reads exactly that shape). Statelessness is
+// deliberate: every call re-asserts, no session or cross-request state,
+// so the stateless remote face is covered by construction.
+//
+// Scope: the MEASURED entry set (the probe/execution chain above) plus
+// the sibling claim face — not every cloud-facing tool. Deliberately
+// ungated, extend on measurement (never silently): gateway_call (its own
+// policy engine is its consent plane — devkit does not double-gate it);
+// the sandbox exec/upload/deploy faces (they take a workspace_id
+// directly — NOT only behind connect — but every e2e flow reaches them
+// through gated connect or a user-supplied id); the obs faces
+// (setup_obs_config, obs_set_website_config), auth_sync/auth_confirm,
+// sandbox check_user/sign_agreement/credentials/expose_tunnel, and
+// voucher_status (account-state probes and writers that no measured
+// vendor-neutral first move has landed on); and the devkit meta tools
+// (check_update, list_skills, ...) the rule exempts.
+export const VENDOR_GATED_TOOLS: ReadonlySet<ToolName> = new Set<ToolName>([
+  'huaweicloud_auth_status',
+  'huaweicloud_auth_init',
+  'huaweicloud_auth_switch',
+  'huaweicloud_check_cli',
+  'huaweicloud_show_profile_redacted',
+  'huaweicloud_list_operations',
+  'huaweicloud_list_regions',
+  'huaweicloud_run_readonly_command',
+  'huaweicloud_plan_cli_command',
+  'huaweicloud_run_approved_command',
+  'huaweicloud_service_catalog',
+  'huaweicloud_sandbox_connect',
+  'huaweicloud_voucher_claim',
+  'huaweicloud_competition_voucher_claim',
+]);
+
+// Both messages exceed call-trace's 300-char error cap, so the trace copy
+// in devkit-trace.jsonl truncates them; the message the model receives on
+// the wire is the full teaching (both honest exits), untruncated.
+const VENDOR_GATE_MESSAGE =
+  "Vendor gate: this tool operates on Huawei Cloud. Pass vendorConfirmed with the user's establishing words — the quote where they named Huawei Cloud, an hcloud artifact, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed is NOT confirmation. If you cannot quote the user, ask which cloud they mean, then retry once established.";
+
+// First-assertion challenge, the rung above the gate. Measured basis: the
+// A/B rig (2026-10-23, glm-5.2, n=5/arm, prompt 查询ECS列表) — teaching-only
+// never asked (0/5, every run presumed Huawei Cloud); the gate asked 4/5,
+// and the residual failure shape was a COLD fabricated assertion (1/5:
+// vendorConfirmed:true with zero prior turns, live-corroborated on
+// glm-5.3). The boolean is a checkbox the server cannot verify (MCP never
+// sees the conversation), so the one shape left to challenge is the
+// session's FIRST asserted call: it bounces once with this message — the
+// decision-time interrupt the approval chain's plan→run dance measured
+// models complete honestly. Granularity follows the _updateInfo precedent
+// (consumedBySession): keyed on opts.sessionId, so stdio scopes it to the
+// server process's session and the stateless remote to the request (every
+// request's first asserted call is challenged — consistent, documented).
+// HUAWEICLOUD_VENDOR_CHALLENGE=off disables the bounce for the
+// deterministic test tiers (the installer-seam override pattern); the
+// real-model e2e tier never sets it, and the gate itself has no off.
+const VENDOR_CHALLENGE_MESSAGE =
+  "Vendor challenge: first Huawei Cloud tool call this session — is the vendorConfirmed quote the user's actual words, or invented? An invented quote is a fabricated user statement. If invented, or the vendor was only assumed, ask which cloud they mean now. Retry the same call to proceed; this challenge appears once per session.";
+
+const vendorChallengeConsumed = new Map<string, boolean>();
+
+function vendorChallengeEnabled(): boolean {
+  return process.env.HUAWEICLOUD_VENDOR_CHALLENGE !== 'off';
+}
+
+// Quote-form attestation: a non-empty quote of the user's establishing
+// words (boolean true no longer passes — a quote is the lie the A/B
+// residual showed models will not fabricate lightly; an empty or
+// whitespace-only quote is no quote). An ASSERTED first call clears the
+// gate but hits the once-per-session challenge above it — the bounce is
+// consumed whether the model turns to the user or retries; either way it
+// happened at the decision moment, not after the operation.
+export function enforceVendorGate(args: ToolArgs, opts: CallToolOptions): void {
+  const quote = args.vendorConfirmed;
+  if (typeof quote !== 'string' || quote.trim().length === 0) {
+    throw new Error(VENDOR_GATE_MESSAGE);
+  }
+  const challengeKey = opts.sessionId || 'default';
+  if (vendorChallengeEnabled() && !vendorChallengeConsumed.get(challengeKey)) {
+    vendorChallengeConsumed.set(challengeKey, true);
+    throw new Error(VENDOR_CHALLENGE_MESSAGE);
+  }
+}
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && git show fcfe047f:plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json 2>/dev/null
+{
+  "version": "0.1.0",
+  "rules": [
+    {
+      "id": "hwc-command-credential-file",
+      "title": "Credential file read",
+      "category": "credential",
+      "severity": "deny",
+      "stages": ["command"],
+      "match": {
+        "any": [
+          {
+            "field": "text",
+            "regex": "(^|\\s)(cat|type|Get-Content|gc|less|more)\\s+[^\\n]*(\\.hcloud|\\.huaweicloud)"
+          },
+          {
+            "field": "text",
+            "regex": "(hcloud|huaweicloud)[/\\\\](config|credentials)"
+          }
+        ]
+      },
+      "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+      "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files."
+    },
+    {
+      "id": "hwc-command-env-dump",
+      "title": "Cloud credential environment dump",
+      "category": "credential",
+      "severity": "deny",
+      "stages": ["command"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "(^|\\s)(env|printenv|export\\s+-p|declare|typeset|set|Get-ChildItem\\s+Env:|gci\\s+Env:|dir\\s+Env:)(?![A-Za-z0-9_-])"
+          },
+          {
+            "field": "text",
+            "regex": "(HUAWEICLOUD(?!-devkit)|HWC_|HCLOUD_|OS_|HW_(?:ACCESS_KEY|SECRET_KEY|SECRET_ACCESS_KEY|SECURITY_TOKEN|API_KEY|VAULT_MASTER_KEY))"
+          }
+        ]
+      },
+      "message": "The command may print cloud credential environment variables.",
+      "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output."
+    },
+    {
+      "id": "hwc-command-secret-value-read",
+      "title": "Plaintext secret read",
+      "category": "secret",
+      "severity": "deny",
+      "stages": ["command"],
+      "match": {
+        "any": [
+          {
+            "field": "text",
+            "regex": "(ShowSecretVersion|(?<![A-Za-z0-9._/-])ShowSecret(?![A-Za-z0-9._/-])|DownloadSecret|GetSecretValue|(?<![A-Za-z0-9._/-])DecryptData(?![A-Za-z0-9._/-])|DecryptDatakey|DownloadAccessPointPrivateKey|DeriveSharedSecret|CreateRsaDatakeyPair|CreateEcDatakeyPair)"
+          },
+          {
+            "field": "text",
+            "regex": "(secret_string|secret_binary|secretString|secretBinary)"
+          }
+        ]
+      },
+      "message": "The command appears to retrieve plaintext secret values.",
+      "remediation": "Use runtime secret references, user-side inspection, or redacted metadata checks instead of returning secret values to the agent."
+    },
+    {
+      "id": "hwc-command-adminpass-exposure",
+      "title": "Plaintext adminPass exposure",
+      "category": "secret",
+      "severity": "warn",
+      "stages": ["artifact", "deploy_plan"],
+      "match": {
+        "any": [
+          {
+            "field": "text",
+            "regex": "(adminPass|admin_pass|admin-password)"
+          }
+        ]
+      },
+      "message": "The artifact or plan contains a plaintext adminPass parameter. The password may be exposed in version control, logs, or agent context.",
+      "remediation": "Use userData cloud-init, KMS/CSMS secret references, or encrypted password injection instead of embedding adminPass as plaintext in deployment files."
+    },
+    {
+      "id": "hwc-command-sts-credential",
+      "title": "Temporary credential exposure",
+      "category": "credential",
+      "severity": "warn",
+      "stages": ["command"],
+      "match": {
+        "any": [
+          {
+            "field": "text",
+            "regex": "hcloud\\s+STS\\s+(AssumeAgency|GetTemporaryCredential)\\b"
+          }
+        ]
+      },
+      "message": "\u6b64\u64cd\u4f5c\u5c06\u8fd4\u56de\u4e34\u65f6 AK/SK \u548c SecurityToken\u3002\u6ce8\u610f\u654f\u611f\u6570\u636e\u4fdd\u5bc6\uff0c\u4e0d\u8981\u5c06\u51ed\u8bc1\u8f93\u51fa\u5230\u65e5\u5fd7\u6216\u5206\u4eab\u7ed9\u7b2c\u4e09\u65b9\u3002",
+      "remediation": "\u4e34\u65f6\u51ed\u8bc1\u4ec5\u7528\u4e8e\u5f53\u524d\u4f1a\u8bdd\uff0c\u4f7f\u7528\u5b8c\u6bd5\u540e\u53ca\u65f6\u9500\u6bc1\uff0c\u4e0d\u8981\u6301\u4e45\u5316\u5b58\u50a8\u3002"
+    },
+    {
+      "id": "hwc-command-encoded-shell-exec",
+      "title": "Encoded payload piped to shell",
+      "category": "execution",
+      "severity": "deny",
+      "stages": ["command"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "(base64\\s+(-d|--decode)|xxd\\s+-r|certutil\\s+-decode|FromBase64String|hex\\s*decode)"
+          },
+          {
+            "field": "text",
+            "regex": "(\\||;|&&)"
+          },
+          {
+            "field": "text",
+            "regex": "\\b(bash|sh|zsh|powershell|pwsh|cmd|python|node)\\b"
+          }
+        ]
+      },
+      "message": "The command decodes an encoded payload and pipes it into an interpreter.",
+      "remediation": "Decode payloads into a reviewable file first, inspect the content, then execute only explicit reviewed commands."
+    },
+    {
+      "id": "hwc-network-public-admin-port",
+      "title": "Public admin port exposure",
+      "category": "public_exposure",
+      "severity": "deny",
+      "stages": ["command", "artifact", "deploy_plan"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "(0\\.0\\.0\\.0\\s*/\\s*0|::\\s*/\\s*0|remote_ip_prefix\\s*[=:]\\s*0\\.0\\.0\\.0\\s*/\\s*0|cidr\\s*[=:]\\s*0\\.0\\.0\\.0\\s*/\\s*0)"
+          },
+          {
+            "field": "text",
+            "regex": "\\b(22|3389|3306|5432|6379|9200|27017|1433|2375|2376|5900|11211|8080|8443)\\b"
+          }
+        ]
+      },
+      "message": "The change appears to expose an administrative or database port to the public internet. Web ports (80/443) are allowed - this rule only covers admin/database ports.",
+      "remediation": "Restrict the source CIDR to a trusted range, use a bastion or VPN, and keep public preview endpoints behind authenticated HTTP services. For SSH troubleshooting, do NOT widen to 0.0.0.0/0: open a /32 rule for your real direct egress IP instead (detect it with Invoke-RestMethod -Uri https://api.ipify.org -NoProxy on Windows pwsh 7+ / curl --noproxy '*' on Linux — a proxy egress is NOT the direct egress; see huawei-ecs references/windows-ssh.md §0.1), or skip SSH entirely via cloud-init user_data deployment (references/create-instance.md §Bootstrap). Full SSH failure diagnosis chain: huawei-ecs references/troubleshooting.md."
+    },
+    {
+      "id": "hwc-obs-anonymous-write",
+      "title": "OBS anonymous write",
+      "category": "public_exposure",
+      "severity": "deny",
+      "stages": ["command", "artifact", "deploy_plan"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "(OBS|obs://|bucket|object|Statement|Principal)"
+          }
+        ],
+        "any": [
+          {
+            "field": "text",
+            "regex": "((Anonymous|Everyone|\\\"Principal\\\"\\s*:\\s*\\\"\\*\\\"|AllUsers).*(PutObject|DeleteObject|PutBucketPolicy|FULL_CONTROL|WRITE|obs:object:PutObject|obs:bucket:PutBucketPolicy)|(PutObject|DeleteObject|PutBucketPolicy|FULL_CONTROL|WRITE|obs:object:PutObject|obs:bucket:PutBucketPolicy).*(Anonymous|Everyone|\\\"Principal\\\"\\s*:\\s*\\\"\\*\\\"|AllUsers))"
+          },
+          {
+            "field": "text",
+            "regex": "(-acl\\s*=?\\s*public-read-write|acl\\s*[=:]\\s*[\\\"']?public-read-write|public-write)"
+          }
+        ]
+      },
+      "message": "The change may grant anonymous write or full-control access to OBS data.",
+      "remediation": "Use private buckets by default. Grant object read only when required, and avoid anonymous write permissions."
+    },
+    {
+      "id": "hwc-functiongraph-public-no-auth",
+      "title": "Public FunctionGraph trigger without auth",
+      "category": "public_exposure",
+      "severity": "warn",
+      "stages": ["command", "artifact", "deploy_plan"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "(FunctionGraph|APIG|CreateTrigger|CreateApi|DEDICATEDGATEWAY|API Gateway)"
+          },
+          {
+            "field": "text",
+            "regex": "(public|PUBLIC|0\\.0\\.0\\.0\\s*/\\s*0|auth[\\\"']?\\s*[=:]\\s*[\\\"']?(NONE|none|false)|security_authentication[\\\"']?\\s*[=:]\\s*[\\\"']?(NONE|none))"
+          }
+        ]
+      },
+      "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+      "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints."
+    },
+    {
+      "id": "hwc-iam-admin-policy",
+      "title": "Broad IAM administrator grant",
+      "category": "iam",
+      "severity": "deny",
+      "stages": ["command", "artifact", "deploy_plan"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "(IAM|policy|role|agency|Statement|Action)"
+          },
+          {
+            "field": "text",
+            "regex": "(\\\"Action\\\"\\s*:\\s*(\\\"(\\*|\\*:\\*)\\\"|\\[\\s*\\\"(\\*|\\*:\\*)\\\")|Action\\s*[=:]\\s*(\\*|\\*:\\*)|AdministratorAccess|FullAccess)"
+          },
+          {
+            "field": "text",
+            "regex": "(\\\"Effect\\\"\\s*:\\s*\\\"Allow\\\"|Effect\\s*[=:]\\s*Allow)"
+          }
+        ]
+      },
+      "message": "The change appears to grant broad administrator permissions.",
+      "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows."
+    },
+    {
+      "id": "hwc-iam-highrisk-write",
+      "title": "High-risk IAM write operation",
+      "category": "iam",
+      "severity": "warn",
+      "stages": ["command"],
+      "match": {
+        "any": [
+          {
+            "field": "text",
+            "regex": "hcloud(?:\\.exe)?\\s+IAM\\s+(?:Keystone)?(?:Create|Update|Attach|Detach|Delete|Associate|Disassociate)\\w*(?:User|Group|Policy|Role|Agency|Token)\\w*"
+          }
+        ]
+      },
+      "message": "This hcloud command creates or modifies IAM principals (users, policies, roles, or agencies). These operations can grant elevated privileges.",
+      "remediation": "Confirm the principal name, scope, and attached permissions with the user before creating IAM users, policies, roles, or agencies."
+    },
+    {
+      "id": "hwc-destructive-delete-force",
+      "title": "Forced destructive operation",
+      "category": "destructive",
+      "severity": "deny",
+      "stages": ["command"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "(Delete|BatchDelete|Remove|\\brm\\b|delete)"
+          },
+          {
+            "field": "text",
+            "regex": "(\\s--force|\\s-f\\s|\\s--recursive|\\s-r\\s)"
+          }
+        ]
+      },
+      "message": "The command combines deletion with force, recursive, or cascading deletion behavior.",
+      "remediation": "Show the exact resources to be deleted, confirm backups or recovery path, and require explicit user approval for the exact command."
+    },
+    {
+      "id": "hwc-destructive-delete-operation",
+      "title": "Destructive cloud resource operation",
+      "category": "destructive",
+      "severity": "warn",
+      "stages": ["command"],
+      "match": {
+        "any": [
+          {
+            "field": "text",
+            "regex": "hcloud\\s+\\w+\\s+(\\w*Delete\\w*|\\w*Detach\\w*|\\w*Remove\\w*|Dissociate\\w*|Unassign\\w*|Revoke\\w*)\\b"
+          },
+          {
+            "field": "text",
+            "regex": "hcloud\\s+\\w+\\s+(\\w*BatchDelete\\w*|\\w*BatchRemove\\w*)\\b"
+          }
+        ],
+        "none": [
+          {
+            "field": "text",
+            "regex": "DeleteProtection"
+          }
+        ]
+      },
+      "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+      "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation."
+    },
+    {
+      "id": "hwc-destructive-reset-operation",
+      "title": "Destructive resource reset operation",
+      "category": "destructive",
+      "severity": "warn",
+      "stages": ["command"],
+      "match": {
+        "any": [
+          {
+            "field": "text",
+            "regex": "hcloud\\s+\\w+\\s+(Batch)?Reset\\w*\\b"
+          }
+        ]
+      },
+      "message": "This hcloud command resets a cloud resource (password, metadata, or instance state). This may disrupt access or mutate the resource.",
+      "remediation": "Confirm the reset target with the user and require explicit approval before executing."
+    },
+    {
+      "id": "hwc-destructive-delete-cascade",
+      "title": "Cascading cloud resource deletion",
+      "category": "destructive",
+      "severity": "warn",
+      "stages": ["command"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "(Delete|BatchDelete|Remove|\\brm\\b|delete)"
+          },
+          {
+            "field": "text",
+            "regex": "(delete_publicip\\s*[=:]\\s*true|delete_volume\\s*[=:]\\s*true)"
+          }
+        ]
+      },
+      "message": "This delete command will also remove associated resources (EIP, volume). Check that these should be deleted together.",
+      "remediation": "Confirm with the user whether to delete the associated resources, or set delete_publicip/delete_volume to false to keep them."
+    },
+    {
+      "id": "hwc-sandbox-missing-ttl",
+      "title": "Sandbox deployment missing cleanup metadata",
+      "category": "sandbox",
+      "severity": "warn",
+      "stages": ["artifact", "deploy_plan"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "(sandbox|preview|temporary|ephemeral|dev environment|FunctionGraph|ECS|CCE|APIG)"
+          },
+          {
+            "field": "text",
+            "regex": "(Create|Deploy|Provision|resource|stack|environment)"
+          }
+        ],
+        "none": [
+          {
+            "field": "text",
+            "regex": "(ttl|expires_at|expire_at|cleanup|owner|cost_center|auto_delete|auto-delete)"
+          }
+        ]
+      },
+      "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+      "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources."
+    },
+    {
+      "id": "hwc-cost-unbounded-scale",
+      "title": "Unbounded scale or high-cost resource",
+      "category": "cost",
+      "severity": "warn",
+      "stages": ["command", "artifact", "deploy_plan"],
+      "match": {
+        "any": [
+          {
+            "field": "text",
+            "regex": "(max_instances|max_node_count|max_replica|desired\\s*[=:]\\s*[5-9][0-9]|replicas\\s*[=:]\\s*[5-9][0-9])"
+          },
+          {
+            "field": "text",
+            "regex": "(GPU|gpu|large|xlarge|charging_mode\\s*[=:]\\s*prePaid|period_type|period_num)"
+          }
+        ]
+      },
+      "message": "The generated plan may create high-cost or unbounded capacity.",
+      "remediation": "Use small preview defaults, explicit quotas, budget labels, and user approval before creating high-cost resources."
+    },
+    {
+      "id": "hwc-command-secret-in-arg",
+      "title": "Plaintext secret in command argument",
+      "category": "secret",
+      "severity": "warn",
+      "stages": ["command"],
+      "match": {
+        "all": [
+          {
+            "field": "text",
+            "regex": "\\bhcloud\\b"
+          },
+          {
+            "field": "text",
+            "regex": "--(?:[A-Za-z0-9_.-]*[._-])?(?:admin(?:Pass|[_-]pass)|passwd|password|secret(?:[_-]?key)?|access[_-]?key|token|ak|sk)\\b\\s*[=:]\\s*[^\\s<][^\\s<>\"']"
+          }
+        ]
+      },
+      "message": "The command passes a plaintext password or secret as a direct CLI argument, which may leak into shell history, logs, or process listings.",
+      "remediation": "Use environment variables, DEW secret references, or interactive prompts instead of passing secrets as command-line arguments."
+    },
+    {
+      "id": "hwc-sandbox-destructive-command",
+      "title": "Destructive command in sandbox terminal",
+      "category": "destructive",
+      "severity": "deny",
+      "stages": ["command"],
+      "match": {
+        "any": [
+          {
+            "field": "text",
+            "regex": "rm\\s+-rf\\s+/"
+          },
+          {
+            "field": "text",
+            "regex": "mkfs"
+          },
+          {
+            "field": "text",
+            "regex": "dd\\s+if="
+          },
+          {
+            "field": "text",
+            "regex": ":\\s*\\(\\s*\\)\\s*\\{[^}|]{0,64}\\|[^}|&]{0,64}&[^}|]{0,64}\\}[^;]{0,64};\\s*:"
+          },
+          {
+            "field": "text",
+            "regex": "\\bshutdown\\b"
+          },
+          {
+            "field": "text",
+            "regex": "\\breboot\\b"
+          },
+          {
+            "field": "text",
+            "regex": "\\binit\\s+[06]\\b"
+          },
+          {
+            "field": "text",
+            "regex": "\\bfdisk\\b"
+          }
+        ]
+      },
+      "message": "The sandbox terminal command is destructively dangerous and could destroy the workspace.",
+      "remediation": "Use targeted deletions instead of recursive root removal. Avoid disk format, fork bombs, and system shutdown commands in sandbox terminals."
+    }
+  ]
+}
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && git show fcfe047f:plugins/huaweicloud-core/src/tool-definitions.ts 2>/dev/null | grep -cE "^\s*name:"; echo "=== names ==="; git show fcfe047f:plugins/huaweicloud-core/src/tool-definitions.ts 2>/dev/null | grep -oE "name:\s*'[^']+'" | sed "s/name:\s*//" | sort | uniq | wc -l
+57
+=== names ===
+56
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && git show fcfe047f:plugins/huaweicloud-core/src/tool-definitions.ts 2>/dev/null | grep -nE "TOOL_DEFINITIONS|name:" | head -80
+2:// shell keeps the face; this module owns the literals). TOOL_DEFINITIONS_LITERALS
+45:function packDescription(name: string): string {
+51:export const TOOL_DEFINITIONS_LITERALS = [
+53:    name: 'huaweicloud_check_cli',
+57:    name: 'huaweicloud_plan_cli_command',
+61:    name: 'huaweicloud_run_readonly_command',
+65:    name: 'huaweicloud_list_operations',
+69:    name: 'huaweicloud_run_approved_command',
+73:    name: 'huaweicloud_show_profile_redacted',
+77:    name: 'huaweicloud_hook_check_command',
+81:    name: 'huaweicloud_hook_check_artifacts',
+85:    name: 'huaweicloud_hook_check_deploy_plan',
+90:    name: 'huaweicloud_service_catalog',
+95:    name: 'huaweicloud_explain_error',
+99:    name: 'huaweicloud_search_docs',
+104:    name: 'huaweicloud_retrieve_skill',
+109:    name: 'huaweicloud_list_regions',
+113:    name: 'huaweicloud_get_regional_availability',
+118:    name: 'huaweicloud_search_marketplace',
+122:    name: 'huaweicloud_get_service_icon',
+126:    name: 'huaweicloud_detect_framework',
+130:    name: 'huaweicloud_setup_obs_config',
+134:    name: 'huaweicloud_auth_status',
+138:    name: 'huaweicloud_auth_sync',
+142:    name: 'huaweicloud_auth_init',
+146:    name: 'huaweicloud_auth_switch',
+150:    name: 'huaweicloud_auth_confirm',
+154:    name: 'huaweicloud_sandbox_exec_with_session',
+158:    name: 'huaweicloud_sandbox_exec_one_shot',
+162:    name: 'huaweicloud_sandbox_close_session',
+166:    name: 'huaweicloud_sandbox_upload_file',
+170:    name: 'huaweicloud_sandbox_upload_project',
+174:    name: 'huaweicloud_sandbox_deploy_nginx',
+178:    name: 'huaweicloud_sandbox_deploy_check',
+182:    name: 'huaweicloud_sandbox_expose_tunnel',
+186:    name: 'huaweicloud_sandbox_check_user',
+190:    name: 'huaweicloud_sandbox_sign_agreement',
+194:    name: 'huaweicloud_sandbox_connect',
+198:    name: 'huaweicloud_sandbox_credentials',
+202:    name: 'huaweicloud_voucher_status',
+206:    name: 'huaweicloud_voucher_claim',
+210:    name: 'huaweicloud_competition_voucher_claim',
+214:    name: 'huaweicloud_check_update',
+218:    name: 'huaweicloud_upgrade',
+222:    name: 'huaweicloud_obs_set_website_config',
+226:    name: 'huaweicloud_obs_set_cors',
+230:    name: 'huaweicloud_check_account_type',
+234:    name: 'huaweicloud_sandbox_renew_tunnel',
+238:    name: 'huaweicloud_sandbox_keepalive_watchdog',
+242:    name: 'huaweicloud_list_packs',
+247:    name: 'huaweicloud_pack_info',
+252:    name: 'huaweicloud_list_skills',
+257:    name: 'huaweicloud_packs_configure',
+262:    name: 'huaweicloud_gateway_list_tools',
+266:    name: 'huaweicloud_gateway_call',
+270:    name: 'huaweicloud_gateway_restart',
+274:    name: 'huaweicloud_secret_set',
+278:    name: 'huaweicloud_secret_list',
+282:    name: 'huaweicloud_secret_delete',
+287:export type ToolName = (typeof TOOL_DEFINITIONS_LITERALS)[number]['name'];
+290:  name: ToolName;
+294:export const TOOL_DEFINITIONS: readonly ToolDefinition[] = TOOL_DEFINITIONS_LITERALS;
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && echo "=== tools.ts: dispatchTool & callTool ==="; git show fcfe047f:plugins/huaweicloud-core/src/tools.ts 2>/dev/null | grep -nE "dispatchTool|export function callTool|export async function callTool|function callTool|applyUpdateHint|export.*Tool" | head -40
+=== tools.ts: dispatchTool & callTool ===
+40:// importers (structure-load-path, e2e/cases/core) and dispatchTool calls
+45:// helpers) lives in capability-catalog.ts; dispatchTool switches into it.
+60:export type { ToolDefinition, ToolName } from './tool-definitions.ts';
+76:export type ToolArgs = {
+175:export interface CallToolOptions {
+207:export async function callTool(name: ToolName, rawArgs: ToolArgs = {}, opts: CallToolOptions = {}): Promise<unknown> {
+215:  if (!traceEnabled()) return dispatchTool(name, args, opts);
+217:    const result = await dispatchTool(name, args, opts);
+226:async function dispatchTool(name: ToolName, args: ToolArgs, opts: CallToolOptions): Promise<unknown> {
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && echo "=== mcp-protocol.ts factory funcs & _decorateResult & initialize ==="; git show fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts 2>/dev/null | grep -nE "createDevkitMcpServer|createLinkedDevkitServers|runInitializeSideEffects|normalizeToolCallParams|_decorateResult|dispatch|initialize|updatePrewarm|prewarm" | head -60
+=== mcp-protocol.ts factory funcs & _decorateResult & initialize ===
+24:// Server-level instructions ride the initialize handshake result — the one
+85:// (the initialize handshake).
+180:export function _decorateResult(sessionId: string | undefined | null, name: string, result: unknown): unknown {
+202:// Initialize side effects (user-hash prewarm for telemetry, agent detection)
+203:// shared by both transports. The SDK offers no pre-initialize hook, so each
+204:// transport invokes this from its JSON boundary after decoding an initialize
+205:// request and before/while forwarding it. Awaited: the legacy dispatch held
+206:// the initialize response for up to 3s on the hash race, and that ordering
+209:// Both call sites hand over the full initialize params; the client identity
+220:export async function runInitializeSideEffects(params: unknown): Promise<void> {
+228:    // best-effort: hash prewarm failure (offline or timeout) must not block initialize
+240:export function normalizeToolCallParams(message: JSONRPCMessage): JSONRPCMessage {
+259:export function createDevkitMcpServer({
+336:          const decorated = _decorateResult(sessionId, tool.name, result);
+378:export async function createLinkedDevkitServers(
+381:  const server = createDevkitMcpServer(options);
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && echo "=== update-cache / update-registry / update-check files ==="; git ls-tree -r --name-only fcfe047f 2>/dev/null | grep -E "update|cache|registry|telemetry" | grep -v node_modules; echo "=== applyUpdateHint ==="; git grep -n "applyUpdateHint" fcfe047f -- 'plugins/huaweicloud-core/src' 2>/dev/null
+=== update-cache / update-registry / update-check files ===
+integrations/atomcode/hooks/huaweicloud-telemetry.js
+integrations/hermes/hooks/huaweicloud-telemetry.py
+integrations/workbuddy/hooks/telemetry-tracker.py
+plugins/huaweicloud-core/src/agents/officeace-registry.ts
+plugins/huaweicloud-core/src/packs/registry.ts
+plugins/huaweicloud-core/src/packs/update/pack.ts
+plugins/huaweicloud-core/src/packs/update/tools.ts
+plugins/huaweicloud-core/src/telemetry/agent-detect.ts
+plugins/huaweicloud-core/src/telemetry/agent-registry.ts
+plugins/huaweicloud-core/src/telemetry/agent-versions-desktop.ts
+plugins/huaweicloud-core/src/telemetry/agent-versions.ts
+plugins/huaweicloud-core/src/telemetry/event-pipeline.ts
+plugins/huaweicloud-core/src/telemetry/hook-ingest.ts
+plugins/huaweicloud-core/src/telemetry/identity-stamps.ts
+plugins/huaweicloud-core/src/telemetry/invoke-value.ts
+plugins/huaweicloud-core/src/telemetry/telemetry-fs.ts
+plugins/huaweicloud-core/src/telemetry/telemetry-types.ts
+plugins/huaweicloud-core/src/telemetry/telemetry-values.ts
+plugins/huaweicloud-core/src/telemetry/telemetry.ts
+plugins/huaweicloud-core/src/update-cache.ts
+plugins/huaweicloud-core/src/update-check.ts
+plugins/huaweicloud-core/src/update-hint.ts
+plugins/huaweicloud-core/src/update-installed.ts
+plugins/huaweicloud-core/src/update-registry.ts
+plugins/huaweicloud-core/src/update-semver.ts
+plugins/huaweicloud-core/src/update-skip.ts
+plugins/huaweicloud-core/src/update-upgrade.ts
+scripts/extract-legacy-registry.mjs
+scripts/registry-snapshot-diff.mjs
+scripts/update-icons-manifest.mjs
+test/e2e/cases/update.ts
+test/fixtures/legacy-registry-snapshot.json
+test/packs-registry.test.ts
+test/structure-telemetry.test.ts
+test/telemetry-hook.test.ts
+test/telemetry-plugin-dir.test.ts
+test/telemetry.test.ts
+test/update-check-registry.test.ts
+test/update-check-upgrade.test.ts
+test/update-check.test.ts
+=== applyUpdateHint ===
+fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts:17:import { peekCachedUpdateInfo, applyUpdateHint, readInstalledVersion } from './update-check.ts';
+fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts:186:    const decorated = applyUpdateHint(result, name, hint);
+fcfe047f:plugins/huaweicloud-core/src/update-cache.ts:87:export function applyUpdateHint(result: unknown, name: string, hint: UpdateHintLike | null): unknown {
+fcfe047f:plugins/huaweicloud-core/src/update-check.ts:46:  applyUpdateHint,
+fcfe047f:plugins/huaweicloud-core/src/update-hint.ts:21:// Structural view of the fields applyUpdateHint reads; partial so callers with
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && echo "=== ws-exec files ==="; git ls-tree -r --name-only fcfe047f 2>/dev/null | grep -E "ws-exec|tunnel|hwlink" | grep -v node_modules; echo "=== DEBUG in update-registry/telemetry ==="; git grep -nE "HUAWEICLOUD_DEVKIT_DEBUG|DEBUG" fcfe047f -- 'plugins/huaweicloud-core/src' 2>/dev/null | grep -iE "debug" | head -20
+=== ws-exec files ===
+REPORT-hwlink.md
+plugins/huaweicloud-core/src/lib/hdkit/hwlink-api.ts
+plugins/huaweicloud-core/src/packs/sandbox/handlers-tunnel.ts
+plugins/huaweicloud-core/src/packs/sandbox/skills/huawei-sandbox/references/tunnel-persistence.md
+plugins/huaweicloud-core/src/sandbox/devbridge-tunnel.ts
+plugins/huaweicloud-core/src/sandbox/hwlink-connection.ts
+plugins/huaweicloud-core/src/sandbox/tunnel-http.ts
+plugins/huaweicloud-core/src/sandbox/ws-exec-loader.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-exec-client.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-exec-pending.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-exec-session.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-fair-queue.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-interactive-terminal.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-multiplexer.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-normalize.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-packet.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-terminal-channel.ts
+plugins/huaweicloud-core/src/ws-exec/hwlink-tunnel-channel.ts
+plugins/huaweicloud-core/src/ws-exec/index.ts
+plugins/huaweicloud-core/src/ws-exec/ws-exec-client.ts
+test/devbridge-tunnel.test.ts
+test/e2e/ws-fake/hwlink-server.ts
+test/e2e/ws-fake/tunnel-relay.ts
+test/hwlink-api.test.ts
+test/structure-ws-exec.test.ts
+test/ws-exec-protocol.test.ts
+=== DEBUG in update-registry/telemetry ===
+fcfe047f:plugins/huaweicloud-core/src/telemetry/telemetry.ts:143:const DEBUG = process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true';
+fcfe047f:plugins/huaweicloud-core/src/telemetry/telemetry.ts:145:  if (!DEBUG) return;
+fcfe047f:plugins/huaweicloud-core/src/update-registry.ts:44:  if (process.env.HUAWEICLOUD_DEVKIT_DEBUG === '1' || process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true') {
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && ls test-cases/ 2>/dev/null; echo "=== design ==="; ls test-cases/design 2>/dev/null; echo "=== find CSV ==="; find test-cases -name "*.csv" 2>/dev/null | head -40
+__pycache__
+check_docs.py
+check_readme_consistency.py
+coverage-gaps.md
+d1-cleanup-test.mjs
+daily
+design
+expanded
+gen_daily.py
+gen_review_html.py
+issues
+merge-codex-config.py
+missions
+panorama-case-status-iter004.py
+panorama-fix-residual.py
+panorama-refresh-latest.py
+panorama-update-iter003.py
+panorama-update-iter004.py
+panorama-xlsx-iter004.py
+README.md
+tools-enum.py
+tracing
+ux
+verify_review_html.py
+versions
+xlsx-update-iter003.py
+=== design ===
+__pycache__
+gen_matrix.py
+gen_tracing.py
+render_iter005.py
+scan_gaps.py
+verify_new.py
+verify_r10.py
+用例矩阵-设计级.csv
+=== find CSV ===
+test-cases/daily/用例矩阵-展开级.csv
+test-cases/daily/用例矩阵-设计级.csv
+test-cases/design/用例矩阵-设计级.csv
+test-cases/expanded/用例矩阵-展开级.csv
+test-cases/tracing/需求-设计-证据追踪表.csv
+test-cases/ux/用例矩阵-体验级.csv
+test-cases/versions/v1.1.3/用例矩阵-展开级-v1.1.3.csv
+test-cases/versions/v1.1.3/用例矩阵-设计级-v1.1.3.csv
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && echo "=== master design header ==="; head -1 test-cases/design/用例矩阵-设计级.csv 2>/dev/null | tr ',' '\n' | nl; echo "=== master design row count (total lines minus header) ==="; wc -l < test-cases/design/用例矩阵-设计级.csv
+=== master design header ===
+     1	﻿ID
+     2	维度
+     3	标题
+     4	优先级
+     5	前置条件
+     6	测试数据
+     7	操作步骤
+     8	预期结果
+     9	指引来源
+    10	关联工具
+    11	自动化建议
+    12	展开规则
+    13	生成时间
+    14	设计状态
+    15	终端覆盖类型
+    16	terminal
+    17	agent
+    18	OS
+    19	Node/npm
+    20	shell
+    21	TTY
+    22	installLayout
+    23	mcpTransport
+    24	hookSupport
+    25	requiredEvidence
+    26	owner
+    27	依赖
+=== master design row count (total lines minus header) ===
+213
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv, sys
+def read_ids(path):
+    ids=[]
+    with open(path, encoding='utf-8-sig') as f:
+        r=csv.reader(f)
+        header=next(r)
+        for row in r:
+            if row and row[0].strip():
+                ids.append(row[0].strip())
+    return ids, header
+
+master_ids, mh = read_ids('test-cases/design/用例矩阵-设计级.csv')
+cand_ids, ch = read_ids('reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv')
+print('master rows:', len(master_ids))
+print('master unique:', len(set(master_ids)))
+print('cand rows:', len(cand_ids))
+print('cand unique:', len(set(cand_ids)))
+print('master header cols:', len(mh))
+print('cand header cols:', len(ch))
+print('cand header == master header:', mh==ch)
+dup = [x for x in set(cand_ids) if cand_ids.count(x)>1]
+print('dup in cand:', dup)
+notin = [x for x in cand_ids if x not in set(master_ids)]
+print('cand IDs NOT in master:', notin)
+"
+master rows: 212
+master unique: 212
+cand rows: 69
+cand unique: 69
+master header cols: 27
+cand header cols: 27
+cand header == master header: True
+dup in cand: []
+cand IDs NOT in master: []
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+gated = {'auth_status','auth_init','auth_switch','check_cli','show_profile_redacted','list_operations','list_regions','run_readonly_command','plan_cli_command','run_approved_command','service_catalog','sandbox_connect','voucher_claim','competition_voucher_claim'}
+path='reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv'
+rows=list(csv.reader(open(path,encoding='utf-8-sig')))
+h=rows[0]
+col={'ID':0,'关联工具':h.index('关联工具'),'依赖':h.index('依赖'),'前置条件':h.index('前置条件')}
+vg=[]; nonvg=[]
+for r in rows[1:]:
+    dep=r[col['依赖']]
+    if 'vendorConfirmed' in dep:
+        vg.append(r)
+    else:
+        nonvg.append(r)
+print('vendor_gate rows:', len(vg), '| non-vendor:', len(nonvg))
+print('non-vendor IDs:', [r[0] for r in nonvg])
+print()
+print('=== vendor_gate rows whose 关联工具 has NO gated tool (false positive) ===')
+def to_names(t):
+    return [x.strip() for x in str(t).replace('/',' ').split() if x.strip()]
+for r in vg:
+    tools=to_names(r[col['关联工具']])
+    hit=[t for t in tools if t in gated]
+    if not hit:
+        print(r[0], '->', tools)
+"
+vendor_gate rows: 59 | non-vendor: 10
+non-vendor IDs: ['D1-36', 'D1-45', 'D1-65', 'D1-66', 'D10-4', 'D5-1', 'D9-1', 'D9-10', 'D9-11', 'D9-12']
+
+=== vendor_gate rows whose 关联工具 has NO gated tool (false positive) ===
+D2-24 -> ['auth_sync']
+D2-26 -> ['huaweicloud_auth_sync']
+D2-3 -> ['auth_sync']
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+gated = {'auth_status','auth_init','auth_switch','check_cli','show_profile_redacted','list_operations','list_regions','run_readonly_command','plan_cli_command','run_approved_command','service_catalog','sandbox_connect','voucher_claim','competition_voucher_claim'}
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+def colidx(name): return mh.index(name)
+candids=set(r[0].strip() for r in csv.reader(open('reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv',encoding='utf-8-sig')) if False)
+cand=set()
+for r in list(csv.reader(open('reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv',encoding='utf-8-sig')))[1:]:
+    cand.add(r[0].strip())
+
+def to_names(t):
+    return [x.strip().lstrip('huaweicloud_') for x in str(t).replace('/',' ').replace(',',' ').split() if x.strip()]
+idx_id=colidx('ID'); idx_t=colidx('关联工具')
+print('=== master cases NOT in candidate but 关联工具 hits a gated tool (candidate 漏判) ===')
+for r in master[1:]:
+    cid=r[idx_id].strip()
+    if cid in cand: continue
+    tools=[t for t in to_names(r[idx_t]) if t in gated]
+    if tools:
+        print(cid, '->', tools)
+"
+=== master cases NOT in candidate but 关联工具 hits a gated tool (candidate 漏判) ===
+D3-A3 -> ['service_catalog']
+D3-C9 -> ['run_readonly_command']
+D4-24 -> ['plan_cli_command']
+D6-8 -> ['run_readonly_command', 'plan_cli_command']
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+cand_csv=list(csv.reader(open('reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv',encoding='utf-8-sig')))
+cand=[r[0].strip() for r in cand_csv[1:]]
+print('candidate 69 IDs:')
+print(cand)
+print()
+# explicitly named affected in influence list section 1 (vendor gate)
+named=['D10-3','D3-S1','D3-S5','D5-8','D2-7','D4-5','D4-4','D4-18','D4-24','D3-B2','D3-B7','D3-C1','D3-C4','D3-C5','D3-C7','D3-C8','D3-S2','D3-S6','D3-S7','D6-6','D6-8','D1-74','D4-20']
+print('explicitly named in influence-list 8100 but MISSING from candidate:')
+print([x for x in named if x not in cand])
+"
+candidate 69 IDs:
+['D1-36', 'D1-45', 'D1-65', 'D1-66', 'D1-68', 'D1-72', 'D1-74', 'D10-4', 'D2-10', 'D2-11', 'D2-12', 'D2-13', 'D2-14', 'D2-15', 'D2-16', 'D2-18', 'D2-19', 'D2-2', 'D2-20', 'D2-21', 'D2-22', 'D2-24', 'D2-25', 'D2-26', 'D2-3', 'D2-4', 'D2-5', 'D2-7', 'D2-8', 'D2-9', 'D3-A5', 'D3-B1', 'D3-B2', 'D3-B3', 'D3-B7', 'D3-B8', 'D3-C1', 'D3-C11', 'D3-C14', 'D3-C3', 'D3-C4', 'D3-C5', 'D3-C7', 'D3-C8', 'D3-S1', 'D3-S2', 'D3-S3', 'D3-S4', 'D3-S5', 'D3-S6', 'D3-S7', 'D3-S8', 'D4-13', 'D4-14', 'D4-18', 'D4-20', 'D4-27', 'D4-4', 'D4-5', 'D5-1', 'D5-5', 'D5-8', 'D6-2', 'D6-6', 'D8-3', 'D9-1', 'D9-10', 'D9-11', 'D9-12']
+
+explicitly named in influence-list 8100 but MISSING from candidate:
+['D10-3', 'D4-24', 'D6-8']
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+idx={n:i for i,n in enumerate(mh)}
+want=['D10-3','D4-24','D6-8','D3-A3','D3-C9']
+for n in ['ID','维度','标题','优先级','关联工具','操作步骤','预期结果','指引来源']:
+    pass
+for r in master[1:]:
+    cid=r[idx['ID']].strip()
+    if cid in want:
+        print('='*80)
+        print('ID:', cid, '| 维度:', r[idx['维度']], '| 优先级:', r[idx['优先级']])
+        print('标题:', r[idx['标题']])
+        print('关联工具:', r[idx['关联工具']])
+        print('操作步骤:', r[idx['操作步骤']])
+        print('预期结果:', r[idx['预期结果']])
+"
+================================================================================
+ID: D3-A3 | 维度: D3功能 | 优先级: P1
+标题: 沙箱vs生产路由
+关联工具: service_catalog
+操作步骤: ①'免费/快速/预览'意图 ②生产部署意图 ③对比路由
+预期结果: demo→sandbox，生产→ECS/FG/CCE
+================================================================================
+ID: D3-C9 | 维度: D3功能 | 优先级: P1
+标题: 资源不存在/已删除/冻结状态操作引导（资源状态维度）
+关联工具: explain_error/run_readonly_command
+操作步骤: ①查询不存在 ID→断言 code=APIGW.0101 ②创建 EVS→删除→立即查询→断言竞态（code=APIGW.0101 唯一断言） ③fixture 注入冻结响应（schema={error:{code:'EVS.5400',message:'volume status is frozen'}}）→断言 code=EVS.5400+指引 ④对照组：正常 EVS 查询 code=200
+预期结果: 错误码精确命中（APIGW.0101 / EVS.5400 唯一断言），message 字段=固定 schema 文本；explain_error 对 EVS.5400 返回解除冻结指引文本（固定含 'unfreeze'）；对照组 200 正常；错误码不含 403/权限字样
+================================================================================
+ID: D4-24 | 维度: D4安全 | 优先级: P1
+标题: 确认令牌过期与重复确认边界（审批流健壮性）
+关联工具: auth_confirm/plan_cli_command
+操作步骤: ①写操作（创建最小规格 ECS）进入确认流，记录 confirmToken ②注入时钟推进 >60s 后提交确认→断言 {code:'CONFIRM_TOKEN_EXPIRED', status:'rejected'} 且资源计数=0 ③重新发起写操作（新 confirmToken）连续提交两次→断言第二次 {outcome:'already_processed'} ④查询资源断言计数=1 ⑤释放→归零
+预期结果: 过期令牌返回精确 {code:'CONFIRM_TOKEN_EXPIRED'}（无资源创建，计数=0）；重复确认第二次返回 {outcome:'already_processed'}（计数不+1，仍=1）；错误/结果 JSON 字段可机器断言；释放后 tctest- 计数=0
+================================================================================
+ID: D6-8 | 维度: D6性能 | 优先级: P1
+标题: MCP 工具调用超时（网络/后端挂起）
+关联工具: run_readonly_command/plan_cli_command
+操作步骤: ①记录基线内存 ②注入 60s 挂起发起 run_readonly_command ③记录实际耗时 T ④断言 25s≤T≤35s（≈30s 阈值） ⑤断言 isError=true + content 含 'timeout' + code=ETIMEDOUT ⑥立即再发起正常调用（无挂起）→断言成功（isError=false）⑦断言内存增量 <50MB
+预期结果: 超时在 25~35s 内返回（不无限挂起/不提前误报）；isError=true 且 error.code=ETIMEDOUT + content 含 'timeout'；后续调用恢复成功（无 ECONNRESET 残留）；heapUsed 增量 <50MB
+================================================================================
+ID: D10-3 | 维度: D10评测 | 优先级: P1
+标题: 路由准确率+混淆矩阵
+关联工具: harness
+操作步骤: ①源码级: 直调 serviceCatalog(intent) 核对中/英文意图→服务路由映射(无需LLM) ②评测集: 逐任务记录路由 ③生成混淆矩阵 ④定位错路由去向
+预期结果: 源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && echo "=== _resetHintConsumption / _isHintConsumed / runVersionCheck / listSkillDirs / findSkillsRoot ==="; git grep -nE "_resetHintConsumption|_isHintConsumed|runVersionCheck|listSkillDirs|findSkillsRoot" fcfe047f -- 'plugins/huaweicloud-core/src' 2>/dev/null | head -30
+=== _resetHintConsumption / _isHintConsumed / runVersionCheck / listSkillDirs / findSkillsRoot ===
+fcfe047f:plugins/huaweicloud-core/src/lib/skill-tree.ts:16:export function listSkillDirs(root: string): string[] {
+fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts:194:export function _resetHintConsumption(): void {
+fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts:198:export function _isHintConsumed(sessionId: string): boolean {
+fcfe047f:plugins/huaweicloud-core/src/packs/huaweicloud-cli/tools.ts:24:export async function runVersionCheck(options: ProbeHcloudOptions = {}) {
+fcfe047f:plugins/huaweicloud-core/src/packs/huaweicloud-cli/tools.ts:302:  return runVersionCheck();
+fcfe047f:plugins/huaweicloud-core/src/packs/huaweicloud-open-mcp/sidecar.ts:547:// Test hooks, same convention as _resetHintConsumption in mcp-protocol.ts.
+fcfe047f:plugins/huaweicloud-core/src/payload-status.ts:4:import { listSkillDirs } from './lib/skill-tree.ts';
+fcfe047f:plugins/huaweicloud-core/src/payload-status.ts:18:  return listSkillDirs(join(pluginDir, 'skills'));
+fcfe047f:plugins/huaweicloud-core/src/search-docs.ts:10:import { listSkillDirs } from './lib/skill-tree.ts';
+fcfe047f:plugins/huaweicloud-core/src/search-docs.ts:24:      const dirs = listSkillDirs(SKILLS_ROOT);
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:22:import { listSkillDirs } from './lib/skill-tree.ts';
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:56:  const present = new Set(listSkillDirs(root));
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:186:    const dirs = listSkillDirs(SKILLS_ROOT).filter((dir) => {
+fcfe047f:plugins/huaweicloud-core/src/tools.ts:30:import { listSkillDirs } from './lib/skill-tree.ts';
+fcfe047f:plugins/huaweicloud-core/src/tools.ts:68:export { listSkillDirs };
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && echo "=== mcp-server-remote WebStandardStreamableHTTPServerTransport / DEFAULT_PORT ==="; git show fcfe047f:plugins/huaweicloud-core/src/mcp-server-remote.ts 2>/dev/null | grep -nE "WebStandardStreamableHTTPServerTransport|DEFAULT_PORT|StreamableHTTP|Accept|Mcp-Session-Id|startRemoteServer" | head -30
+=== mcp-server-remote WebStandardStreamableHTTPServerTransport / DEFAULT_PORT ===
+3:import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
+9:export const DEFAULT_PORT = 9528;
+23:export async function startRemoteServer({
+24:  port = DEFAULT_PORT,
+57:    'Content-Type, MCP-Protocol-Version, Mcp-Session-Id, Accept, Authorization',
+59:  res.setHeader('Access-Control-Expose-Headers', 'MCP-Protocol-Version, Mcp-Session-Id');
+118:  // responses as JSON bodies for dual-Accept clients; Accept headers
+138:  const transport = new WebStandardStreamableHTTPServerTransport({
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && git grep -nE "findSkillsRoot" fcfe047f -- 'plugins/huaweicloud-core/src' 2>/dev/null; echo "=== exit code: $? ==="; echo "--- skills root related ---"; git grep -nE "SKILLS_ROOT|skillsRoot|skills-root" fcfe047f -- 'plugins/huaweicloud-core/src' 2>/dev/null | head -20
+=== exit code: 1 ===
+--- skills root related ---
+fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts:9:  SKILLS_ROOT,
+fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts:33://   absolute location (SKILLS_ROOT, resolved at runtime — never baked at
+fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts:138:    `Skill loading: the skills tree lives at ${SKILLS_ROOT} (stdio session). ` +
+fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts:141:    `To load a skill, attempt the direct read first: read ${SKILLS_ROOT}/<name>/SKILL.md and the references/ files you need with your file tools — untruncated and selective. ` +
+fcfe047f:plugins/huaweicloud-core/src/search-docs.ts:3:// generated tree (SKILLS_ROOT from skill-disclosure.ts) and filters the
+fcfe047f:plugins/huaweicloud-core/src/search-docs.ts:13:import { SKILLS_ROOT } from './skill-disclosure.ts';
+fcfe047f:plugins/huaweicloud-core/src/search-docs.ts:23:    if (existsSync(SKILLS_ROOT)) {
+fcfe047f:plugins/huaweicloud-core/src/search-docs.ts:24:      const dirs = listSkillDirs(SKILLS_ROOT);
+fcfe047f:plugins/huaweicloud-core/src/search-docs.ts:28:        const skillPath = join(SKILLS_ROOT, dir, 'SKILL.md');
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:2:// (SKILLS_ROOT), the reference listing, the reference-body cap, and the
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:11:// dist/ for every module; SKILLS_ROOT's one-level climb resolves to the
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:44:export const SKILLS_ROOT = join(__dirname, '..', 'skills');
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:55:export function verifySkillTree(root: string = SKILLS_ROOT): void {
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:77:  const refDir = join(SKILLS_ROOT, skillName, 'references');
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:137:      const fm = parseSkillFrontmatter(readFileSync(join(SKILLS_ROOT, skillName, 'SKILL.md'), 'utf8'));
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:158:    ...(stdioSession ? { skillRoot: SKILLS_ROOT } : {}),
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:181:  const skillPath = join(SKILLS_ROOT, skillName, 'SKILL.md');
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:186:    const dirs = listSkillDirs(SKILLS_ROOT).filter((dir) => {
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:208:    const refPath = join(SKILLS_ROOT, skillName, 'references', filename);
+fcfe047f:plugins/huaweicloud-core/src/skill-disclosure.ts:240:    ...(stdioSession ? { skillRoot: SKILLS_ROOT } : {}),
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && git show fcfe047f:plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json 2>/dev/null | python -c "
+import json,sys
+d=json.load(sys.stdin)
+rules=d['rules']
+print('total rules:', len(rules))
+from collections import Counter
+c=Counter(r['severity'] for r in rules)
+print('severity counts:', dict(c))
+"
+total rules: 19
+severity counts: {'deny': 9, 'warn': 10}
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && echo "=== any 'dispatch' function/method in mcp-protocol.ts? ==="; git show fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts 2>/dev/null | grep -nE "dispatch" | head -20; echo "=== exported functions ==="; git show fcfe047f:plugins/huaweicloud-core/src/mcp-protocol.ts 2>/dev/null | grep -nE "^export (async )?function" | head -40
+=== any 'dispatch' function/method in mcp-protocol.ts? ===
+205:// request and before/while forwarding it. Awaited: the legacy dispatch held
+=== exported functions ===
+116:export function instructionsFor(remote: boolean, runtimePacks = false): string {
+180:export function _decorateResult(sessionId: string | undefined | null, name: string, result: unknown): unknown {
+194:export function _resetHintConsumption(): void {
+198:export function _isHintConsumed(sessionId: string): boolean {
+212:export function toClientInfo(params: unknown): { name: string | null; version: string | null } {
+220:export async function runInitializeSideEffects(params: unknown): Promise<void> {
+240:export function normalizeToolCallParams(message: JSONRPCMessage): JSONRPCMessage {
+259:export function createDevkitMcpServer({
+378:export async function createLinkedDevkitServers(
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+gated = {'auth_status','auth_init','auth_switch','check_cli','show_profile_redacted','list_operations','list_regions','run_readonly_command','plan_cli_command','run_approved_command','service_catalog','sandbox_connect','voucher_claim','competition_voucher_claim'}
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+idx={n:i for i,n in enumerate(mh)}
+def to_names(t):
+    return [x.strip().lstrip('huaweicloud_') for x in str(t).replace('/',' ').replace(',',' ').split() if x.strip()]
+d2=[r for r in master[1:] if r[idx['ID']].strip().startswith('D2')]
+print('total D2 cases in master:', len(d2))
+g=[]
+for r in d2:
+    tools=[t for t in to_names(r[idx['关联工具']]) if t in gated]
+    if tools: g.append((r[idx['ID']].strip(), tools))
+print('D2 cases touching a gated tool:', len(g))
+for cid,t in g: print('  ', cid, t)
+"
+total D2 cases in master: 27
+D2 cases touching a gated tool: 2
+   D2-4 ['show_profile_redacted']
+   D2-7 ['service_catalog']
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+idx={n:i for i,n in enumerate(mh)}
+d2=[r for r in master[1:] if r[idx['ID']].strip().startswith('D2')]
+for r in sorted(d2, key=lambda x:x[idx['ID']]):
+    print(r[idx['ID']].strip(), '|', r[idx['关联工具']])
+"
+D2-1 | huaweicloud_auth_init
+D2-10 | auth_status
+D2-11 | auth_switch
+D2-12 | huaweicloud_auth_init/auth_status/auth_sync
+D2-13 | auth_status
+D2-14 | auth_switch/auth_confirm
+D2-15 | auth_switch/auth_status
+D2-16 | auth_switch
+D2-17 | auth reconcile
+D2-18 | auth_status
+D2-19 | auth_status
+D2-2 | auth_status
+D2-20 | auth_status
+D2-21 | huaweicloud_auth_init/auth_status/auth_sync
+D2-22 | auth_status
+D2-23 | auth_status
+D2-24 | auth_sync
+D2-25 | auth_status
+D2-26 | huaweicloud_auth_sync
+D2-27 | auth_status
+D2-3 | auth_sync
+D2-4 | show_profile_redacted
+D2-5 | huaweicloud_auth_init/auth_status
+D2-6 | setup_obs_config
+D2-7 | search_docs/service_catalog/list_regions/retrieve_skill
+D2-8 | huaweicloud_auth_init/auth_status
+D2-9 | auth_status
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+gated = {'auth_status','auth_init','auth_switch','check_cli','show_profile_redacted','list_operations','list_regions','run_readonly_command','plan_cli_command','run_approved_command','service_catalog','sandbox_connect','voucher_claim','competition_voucher_claim'}
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+idx={n:i for i,n in enumerate(mh)}
+cand=set(r[0].strip() for r in list(csv.reader(open('reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv',encoding='utf-8-sig')))[1:])
+def to_names(t):
+    out=[]
+    for x in str(t).replace('/',' ').replace(',',' ').split():
+        x=x.strip()
+        if x.startswith('huaweicloud_'): x=x[len('huaweicloud_'):]
+        out.append(x)
+    return out
+missing=[]
+for r in master[1:]:
+    cid=r[idx['ID']].strip()
+    if cid in cand: continue
+    tools=[t for t in to_names(r[idx['关联工具']]) if t in gated]
+    if tools:
+        missing.append((cid, tools, r[idx['优先级']]))
+print('LOST (master gated-tool cases NOT in candidate):', len(missing))
+for cid,t,p in missing: print('  ', cid, t, 'P='+p)
+"
+LOST (master gated-tool cases NOT in candidate): 8
+   D2-1 ['auth_init'] P=P1
+   D2-23 ['auth_status'] P=P2
+   D2-27 ['auth_status'] P=P2
+   D3-A3 ['service_catalog'] P=P1
+   D3-A4 ['list_regions'] P=P2
+   D3-C9 ['run_readonly_command'] P=P1
+   D4-24 ['plan_cli_command'] P=P1
+   D6-8 ['run_readonly_command', 'plan_cli_command'] P=P1
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+idx={n:i for i,n in enumerate(mh)}
+want=['D2-1','D2-23','D2-27','D3-A4','D10-3']
+for r in master[1:]:
+    cid=r[idx['ID']].strip()
+    if cid in want:
+        print('ID:',cid,'| P:',r[idx['优先级']],'| 关联工具:',r[idx['关联工具']])
+        print('  步骤:',r[idx['操作步骤']][:200])
+        print('  预期:',r[idx['预期结果']][:160])
+        print()
+"
+ID: D2-1 | P: P1 | 关联工具: huaweicloud_auth_init
+  步骤: ①源码级: 隔离HOME+假凭证执行auth init ②核对KooCLI/OBS/沙箱三端配置文件落位(路径+格式) ③真云E2E: 真实凭证下核对三端API实际可用
+  预期: 源码级断言: 三端配置文件均落位(路径+格式,任一端缺失即缺陷); 真云E2E断言: 三端API实际可用
+
+ID: D2-23 | P: P2 | 关联工具: auth_status
+  步骤: ①查询 agent 注册状态 ②核对 SUPPORTED_AGENT_TARGETS 全列 ③对照实际安装
+  预期: 返回 11 安装目标各自的注册状态；未安装目标如实标记
+
+ID: D2-27 | P: P2 | 关联工具: auth_status
+  步骤: ①getKooCliVersion ②parseHcloudVersion('hcloud 7.2.12 ...') ③compareVersion(7.2.12,7.2.9) ④kooCliDownloadBase
+  预期: getKooCliVersion 读 kooCliVersion；parseHcloudVersion 正则提取首个 x.y.z；compareVersion 正确比较；downloadBase=KOO_CLI_BASE/<version或latest>
+
+ID: D3-A4 | P: P2 | 关联工具: list_regions
+  步骤: ①中文地名(如'北京四'/'贵阳') ②核对region映射 ③确认不盲扫
+  预期: 正确映射且不盲扫无关区域
+
+ID: D10-3 | P: P1 | 关联工具: harness
+  步骤: ①源码级: 直调 serviceCatalog(intent) 核对中/英文意图→服务路由映射(无需LLM) ②评测集: 逐任务记录路由 ③生成混淆矩阵 ④定位错路由去向
+  预期: 源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/hdk" && git show fcfe047f:plugins/huaweicloud-core/src/vendor-gate.ts 2>/dev/null | grep -nE "VENDOR_GATED_TOOLS|enforceVendorGate|huaweicloud_auth_sync|auth_sync" | head; echo "=== total tools in tool-definitions ==="; git show fcfe047f:plugins/huaweicloud-core/src/tool-definitions.ts 2>/dev/null | grep -cE "^    name: 'huaweicloud_"
+3:// calls enforceVendorGate from the top of dispatchTool; the gated roster and
+33:// (setup_obs_config, obs_set_website_config), auth_sync/auth_confirm,
+38:export const VENDOR_GATED_TOOLS: ReadonlySet<ToolName> = new Set<ToolName>([
+93:export function enforceVendorGate(args: ToolArgs, opts: CallToolOptions): void {
+=== total tools in tool-definitions ===
+56
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && ls -la reviews/ITER-006-20261029171721/ 2>/dev/null; echo "=== codex dir? ==="; ls -la reviews/ITER-006-20261029171721/codex/ 2>/dev/null || echo "codex dir NOT exists"; echo "=== git status ==="; git status --short 2>/dev/null | head -30
+total 12
+drwxr-xr-x 1 Administrator 197121 0 10月 30 11:26 .
+drwxr-xr-x 1 Administrator 197121 0 10月 29 17:22 ..
+drwxr-xr-x 1 Administrator 197121 0 10月 30 14:42 codex
+drwxr-xr-x 1 Administrator 197121 0 10月 30 11:26 hermes
+=== codex dir? ===
+total 156
+drwxr-xr-x 1 Administrator 197121     0 10月 30 14:42 .
+drwxr-xr-x 1 Administrator 197121     0 10月 30 11:26 ..
+-rw-r--r-- 1 Administrator 197121 69059 10月 30 14:45 opencode-run-20261030143147.log
+-rw-r--r-- 1 Administrator 197121  3929 10月 30 11:26 prompt-round01.txt
+-rw-r--r-- 1 Administrator 197121 18574 10月 30 14:43 review-round-01-契约迁移复审.md
+=== git status ===
+ M README.md
+RM "docs/06-Hermes-Codex\346\265\213\350\257\225\350\256\276\350\256\241\350\257\204\345\256\241\351\227\255\347\216\257.md" -> "docs/06-Hermes-OpenCode\346\265\213\350\257\225\350\256\276\350\256\241\350\257\204\345\256\241\351\227\255\347\216\257.md"
+ M "docs/\346\265\213\350\257\225\344\275\223\347\263\273\345\205\250\350\262\214\344\270\216\346\265\213\350\257\225\347\255\226\347\225\245.html"
+ M "docs/\346\265\213\350\257\225\344\275\223\347\263\273\345\205\250\350\262\214\344\270\216\346\265\213\350\257\225\347\255\226\347\225\245.md"
+ M skills/README.md
+ M skills/case-design/SKILL.md
+ M skills/test-design/SKILL.md
+ M templates/hermes-codex-test-design-status.md
+?? reviews/ITER-006-20261029171721/codex/opencode-run-20261030143147.log
+?? "reviews/ITER-006-20261029171721/codex/review-round-01-\345\245\221\347\272\246\350\277\201\347\247\273\345\244\215\345\256\241.md"
+?? scripts/migrate_reviewer_role.py
+?? scripts/run_opencode_review.sh
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && head -40 "reviews/ITER-006-20261029171721/codex/review-round-01-契约迁移复审.md" 2>/dev/null; echo "..."; tail -5 "reviews/ITER-006-20261029171721/codex/review-round-01-契约迁移复审.md" 2>/dev/null
+# ITER-006（v2.0.0 契约迁移）候选设计复审 — Round 01
+
+- 评审角色：外部评审者（Codex 位）
+- 评审时间：2026-10-30（北京时间）
+- 评审目录：`reviews/ITER-006-20261029171721/`
+- 评审输入：`hermes/test-design.md`、`hermes/candidate-matrix.csv`、`hermes/decision-log.md`、`hermes/v2-契约漂移-用例影响清单.md`、`hermes/status.md`
+- SUT 基线：`huaweicloud-devkit` 仓 `v2` 分支 `fcfe047f`（package.json `2.0.0`）
+- 评审方式：静态核对（矩阵/文档/源码逐行），未执行测试、未跑真云、未修改 `hermes/` 或任何 CSV 真源
+
+## 结论
+
+`REVIEW_CHANGES_REQUESTED`
+
+存在 5 条用例级 P0 缺口（`D10-3 / D4-24 / D6-8 / D1-56 / D5-3`）与 7 组 P1 整改项；其中受影响范围（漏判/多判）与数字断言/工具面漂移的遗漏会直接导致 v2 回归误判，不能放行到 Step 3。
+
+---
+
+## 一、逐项核验
+
+### 1. 矩阵结构（69 行 × 27 列、ID 唯一、母版子集）— 结构层已核验通过
+
+证据：
+
+- `candidate-matrix.csv`：`69` 数据行、`27` 列，列名与母版 `test-cases/design/用例矩阵-设计级.csv` 完全一致。
+- ID 唯一：重复 ID `0`。
+- 母版 `212` 条设计级中，候选 `69` 个 ID 全部存在（`69/69` 命中），无非法 ID。
+- 未发现越权改列：69 行的改动仅落在 `前置条件 / 操作步骤 / 预期结果 / 指引来源 / 依赖` 五列（`D1-66` 例外，见第 5 项）；`ID / 维度 / 标题 / 优先级 / 测试数据 / 关联工具 / 展开规则` 等均未被改动。
+
+结论：**结构校验通过；但“69 条是否为正确受影响集合”不通过，见第 5 项。**
+
+### 2. vendor gate 59 条迁移动作 — 必须整改
+
+已通过部分：
+
+- 59 条 gate 标记行全部满足三要素：`前置条件` 含「已建立 vendor 确认」、`操作步骤` 以 `⓪建立 vendor 确认…` 开头、`预期结果` 以「（gate 放行后）」开头。
+- 断言唯一性未破坏：59 条去掉「（gate 放行后）」前缀后，与母版 `预期结果` **逐字一致**（脚本比对 0 差异）。
+- `指引来源` 均追加 `vendor-gate.ts enforceVendorGate/VENDOR_GATED_TOOLS`，`依赖` 均追加 vendorConfirmed 裁决说明。
+
+必须整改：
+
+...
+- 候选：`reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv`（69 行 × 27 列）
+- gate 工具归一：去掉 `huaweicloud_` 前缀后与 `VENDOR_GATED_TOOLS` 14 项比对
+- 断言唯一性：候选 `预期结果` 去掉「（gate 放行后）」后与母版逐字比对（59/59 一致）
+
+【评审完成】
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+idx={n:i for i,n in enumerate(mh)}
+want=['D1-56','D5-3']
+for r in master[1:]:
+    cid=r[idx['ID']].strip()
+    if cid in want:
+        print('='*70)
+        print('ID:',cid,'| P:',r[idx['优先级']],'| 维度:',r[idx['维度']])
+        print('标题:',r[idx['标题']])
+        print('关联工具:',r[idx['关联工具']])
+        print('操作步骤:',r[idx['操作步骤']])
+        print('预期结果:',r[idx['预期结果']])
+"
+======================================================================
+ID: D1-56 | P: P1 | 维度: D1安装
+标题: 安装中断恢复（网络/进程中断后半装补全）
+关联工具: install/doctor
+操作步骤: ①install 中途断网或 kill ②断言半装态（按损坏判定清单 ①②③ 逐项核对并记录文件路径） ③恢复网络重跑 install ④断言全量文件（tools/list 返回 40 工具、config 落点齐全、无 *.lock 残留） ⑤再次运行 install 断言幂等（文件 mtime/size 与上轮一致）
+预期结果: 半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 40 工具（数量=40 且无重复）；无 *.lock 残留；二次运行后关键文件（bin/oc-entry、config.json）mtime/size 字节级一致
+======================================================================
+ID: D5-3 | P: P1 | 维度: D5客户端
+标题: 工具全量枚举
+关联工具: mcp-server
+操作步骤: ①枚举40工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺
+预期结果: 40 工具全量可达(=tools.mjs 注册源数量),schema完整
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv,re
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+idx={n:i for i,n in enumerate(mh)}
+cand=set(r[0].strip() for r in list(csv.reader(open('reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv',encoding='utf-8-sig')))[1:])
+pat=re.compile(r'(40\s*个?工具|43\s*个?工具|40\s*工具|43\s*工具|TOOL_DEFINITIONS|工具[数面]\s*(40|43|43→56)|注册源数量|全量枚举|40 tools|43 tools)', re.I)
+print('=== master cases (NOT in candidate) with stale tool-count assertions (40/43) ===')
+for r in master[1:]:
+    cid=r[idx['ID']].strip()
+    if cid in cand: continue
+    text=r[idx['操作步骤']]+' || '+r[idx['预期结果']]+' || '+r[idx['标题']]
+    if re.search(r'40\s*个?工具|43\s*个?工具|恰好\s*40|返回\s*40|全量枚举|枚举\s*40', text, re.I):
+        print(cid, '|', r[idx['标题']], '| 关联:', r[idx['关联工具']])
+        print('   预期:', r[idx['预期结果']][:120])
+"
+=== master cases (NOT in candidate) with stale tool-count assertions (40/43) ===
+D1-56 | 安装中断恢复（网络/进程中断后半装补全） | 关联: install/doctor
+   预期: 半装态可逐项识别（①②③ 每项留痕：缺失文件路径或存在性）；重跑后 tools/list 恰好 40 工具（数量=40 且无重复）；无 *.lock 残留；二次运行后关键文件（bin/oc-entry、config.json）mtime/s
+D5-3 | 工具全量枚举 | 关联: mcp-server
+   预期: 40 工具全量可达(=tools.mjs 注册源数量),schema完整
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv,re
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+idx={n:i for i,n in enumerate(mh)}
+cand=set(r[0].strip() for r in list(csv.reader(open('reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv',encoding='utf-8-sig')))[1:])
+sigs={
+ 'tool-count(40/43)': r'40\s*个?工具|43\s*个?工具|恰好\s*40|返回\s*40|枚举\s*40',
+ 'rule-count(16/9+7)': r'16\s*条|9\s*deny\s*\+\s*7\s*warn|9\s*deny',
+ 'dispatch(遗留)': r'dispatch',
+ 'remote/旧路径': r'mcp-server-remote\.mjs|update-check\.mjs|telemetry\.mjs|startRemoteServer',
+}
+for r in master[1:]:
+    cid=r[idx['ID']].strip()
+    if cid in cand: continue
+    text=r[idx['操作步骤']]+' || '+r[idx['预期结果']]+' || '+r[idx['指引来源']]+' || '+r[idx['标题']]
+    for k,p in sigs.items():
+        if re.search(p, text, re.I):
+            print(cid, '|', k, '|', r[idx['标题']][:40])
+"
+D1-26 | remote/旧路径 | 升级提醒工具注册与协议暴露
+D1-30 | remote/旧路径 | semver 比对正确性
+D1-35 | remote/旧路径 | 缓存 TTL 与失败节流
+D1-56 | tool-count(40/43) | 安装中断恢复（网络/进程中断后半装补全）
+D1-70 | dispatch(遗留) | 代理配置与 WebSocket 代理
+D5-3 | tool-count(40/43) | 工具全量枚举
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && python -c "
+import csv
+master=list(csv.reader(open('test-cases/design/用例矩阵-设计级.csv',encoding='utf-8-sig')))
+mh=master[0]
+idx={n:i for i,n in enumerate(mh)}
+want=['D1-26','D1-30','D1-35','D1-70']
+for r in master[1:]:
+    cid=r[idx['ID']].strip()
+    if cid in want:
+        print('='*70)
+        print('ID:',cid,'| P:',r[idx['优先级']],'| 标题:',r[idx['标题']])
+        print('关联工具:',r[idx['关联工具']])
+        print('指引来源:',r[idx['指引来源']][:200])
+        print('操作步骤:',r[idx['操作步骤']][:250])
+        print('预期结果:',r[idx['预期结果']][:250])
+"
+======================================================================
+ID: D1-26 | P: P1 | 标题: 升级提醒工具注册与协议暴露
+关联工具: check_update/upgrade
+指引来源: 设: 设计文档 §MCP Tool 定义; 实: update-check.mjs
+操作步骤: ①spawn mcp-server.mjs ②initialize ③tools/list ④检查 huaweicloud_check_update / huaweicloud_upgrade
+预期结果: 两工具均注册且 schema 含 description/inputSchema
+======================================================================
+ID: D1-30 | P: P2 | 标题: semver 比对正确性
+关联工具: check_update
+指引来源: 实: update-check.mjs semverParse/Compare
+操作步骤: ①直调 semverCompare 多组输入 ②核对大小关系
+预期结果: 1.1.2>1.1.1、1.1.0 > 1.1.0-next.9、相等=0、无效串按字典序
+======================================================================
+ID: D1-35 | P: P2 | 标题: 缓存 TTL 与失败节流
+关联工具: check_update
+指引来源: 实: update-check.mjs TTL/FAIL_THROTTLE
+操作步骤: ①getCachedUpdateInfo 第二次调用 ②检查是否复用缓存 ③失败后 5min 内不再查询
+预期结果: 1h 内复用探测结果；失败后 5min 节流
+======================================================================
+ID: D1-70 | P: P1 | 标题: 代理配置与 WebSocket 代理
+关联工具: install
+指引来源: 实: proxy-config.getProxySettings(60)/writeProxyConfig(23)/clearProxyConfig(35); proxy-agent.createProxyWebSocket(52)/getWebSocketImpl(73)/getProxyDispatcher(26)
+操作步骤: ①writeProxyConfig ②readProxyConfig 核对 ③getProxySettings(targetUrl) ④no_proxy 绕过 ⑤createProxyWebSocket 走代理
+预期结果: proxy.json 读写/clear 正确；getProxySettings 拼 env+file 且 no_proxy 命中返回 null；有代理时 WebSocket 走 undici ProxyAgent、无代理回退 globalThis.WebSocket
+[0m
+[0m$ [0mdate '+%Y-%m-%d %H:%M:%S %Z' 2>/dev/null; echo "---"; TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S CST' 2>/dev/null
+2026-10-30 14:48:46    
+---
+2026-10-30 06:48:46 CST
+[0m
+[0m← [0mWrite reviews/ITER-006-20261029171721/codex/review-round-01-契约迁移复审.md
+Wrote file successfully.
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test" && ls -la "reviews/ITER-006-20261029171721/codex/review-round-01-契约迁移复审.md"; echo "--- tail ---"; tail -c 40 "reviews/ITER-006-20261029171721/codex/review-round-01-契约迁移复审.md"
+-rw-r--r-- 1 Administrator 197121 11992 10月 30 14:50 reviews/ITER-006-20261029171721/codex/review-round-01-契约迁移复审.md
+--- tail ---
+Root` 0 命中）。
+
+【评审完成】
+[0m
+评审完成。结论 `REVIEW_CHANGES_REQUESTED`，已写入 `codex/review-round-01-契约迁移复审.md`（UTF-8，仅改 codex/ 目录）。
+
+核心发现：
+- **通过**：矩阵结构（69×27、ID 唯一、⊆212）、vendor gate 动作机械可执行、数字断言（56 工具/19 规则/14 gate 工具）、状态纪律、A/B/C 三表。
+- **整改**：漏判 11 条（vendor gate 9：D10-3/D4-24/D6-8/D2-1/D3-A3/D3-A4/D3-C9/D2-23/D2-27；tool-count 2：D1-56/D5-3）+ 多判 3 条（D2-24/D2-26/D2-3，因 `auth_sync` 不在 `VENDOR_GATED_TOOLS`）+ D9-12 引用不存在的 `findSkillsRoot`（[P2]）。全部为机器可闭合，无外部依赖。
+
+【评审完成】

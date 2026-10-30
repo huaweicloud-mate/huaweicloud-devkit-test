@@ -1,4 +1,4 @@
-# Hermes-Codex 测试设计交接状态
+# Hermes-OpenCode 测试设计交接状态
 
 > 需求主题：`<topic>`  
 > 设计文档：`<absolute path>`  
@@ -10,7 +10,7 @@
 
 `INIT`
 
-可选状态：`HERMES_DRAFT_READY` / `CODEX_REVIEWING` / `REVIEW_CHANGES_REQUESTED` / `HERMES_REVISION_READY` / `USER_DECISION_REQUIRED` / `BLOCKED` / `TEST_DESIGN_READY`
+可选状态：`HERMES_DRAFT_READY` / `REVIEWER_REVIEWING` / `REVIEW_CHANGES_REQUESTED` / `HERMES_REVISION_READY` / `USER_DECISION_REQUIRED` / `BLOCKED` / `TEST_DESIGN_READY`
 
 ## 基线
 
@@ -36,7 +36,7 @@
 | 项目 | 值 |
 |---|---|
 | Hermes 设计版本 | `<draft or revision>` |
-| Codex 评审轮次 | `<round>` |
+| OpenCode 评审轮次 | `<round>` |
 | 设计级用例数 | `<count>` |
 | 展开级用例数 | `<count>` |
 | P0/P1 未解决数 | `<count>` |
@@ -52,10 +52,10 @@
 - 新增证据或脚本：
 - 多终端影响范围：
 - COMMON / CLIENT_MATRIX / OS_MATRIX / AGENT_E2E / CROSS_PROCESS 分类：
-- 仍待 Codex 复核：
+- 仍待 OpenCode 复核：
 - 是否需要用户决策：
 
-## Codex 本轮评审
+## OpenCode 本轮评审
 
 - 结论：`REVIEW_CHANGES_REQUESTED` / `TEST_DESIGN_READY`
 - 必须修改项：
@@ -84,4 +84,4 @@
 
 ## 最终状态说明
 
-`<只有 Codex 确认所有放行检查后，才能填写 TEST_DESIGN_READY。>`
+`<只有 OpenCode 确认所有放行检查后，才能填写 TEST_DESIGN_READY。>`

@@ -1,8 +1,8 @@
-# Hermes-Codex 测试设计评审闭环
+# Hermes-OpenCode 测试设计评审闭环
 
 > 适用范围：基于设计文档新增或修改测试用例，直到达到可执行状态。  
 > 默认项目目录：`C:\Users\Administrator\devkit-test`  
-> 协作角色：Hermes 负责测试设计，Codex 负责编排与评审，用户只处理需要产品决策或外部授权的事项。
+> 协作角色：Hermes 负责测试设计，OpenCode 负责编排与评审，用户只处理需要产品决策或外部授权的事项。
 >
 > 时间格式：文档正文使用北京时间时间戳 `YYYY-MM-DD HH:mm:ss`；Windows 文件名和目录使用紧凑时间戳 `YYYYMMDDHHmmss`。历史归档若只有日期，保留原始事实，不补造时分秒。
 
@@ -35,17 +35,17 @@ Hermes 负责：
 
 1. 阅读需求设计文档、被测项目源码、既有单测、历史矩阵和历史执行结果；
 2. 生成初版测试用例；
-3. 根据 Codex 评审意见修改用例、脚本和交接状态；
+3. 根据 OpenCode 评审意见修改用例、脚本和交接状态；
 4. 为每条用例标注优先级、测试层、自动化方式和所需环境；
 5. 对每条受影响用例标注多终端范围：Agent/宿主、操作系统、Node/npm、TTY/非 TTY、安装布局和 MCP 传输；
 6. 说明无法执行的原因，不得把 `BLOCKED` 或 mock 结果写成 `PASS`；
-7. 每轮修改后写出变更摘要和待 Codex 复核的项目。
+7. 每轮修改后写出变更摘要和待 OpenCode 复核的项目。
 
 Hermes 不负责最终放行，不得自行宣布 `TEST_DESIGN_READY`。
 
-### 2.2 Codex：编排者与评审者
+### 2.2 OpenCode：编排者与评审者
 
-Codex 负责：
+OpenCode 负责：
 
 1. 接收 Hermes 的初版或修订版；
 2. 独立阅读设计文档、源码、既有单测、测试矩阵和执行证据；
@@ -56,7 +56,7 @@ Codex 负责：
 7. 将未解决的规格冲突、权限问题或外部环境缺口升级给用户决策；
 8. 检查多终端覆盖是否充分，不能用一个终端的 MCP 结果替代客户端、OS、TTY 或安装布局差异验证。
 
-Codex 不能因为“用例数量足够”就放行，必须确认关键用户链路和失败路径有足够证据。
+OpenCode 不能因为“用例数量足够”就放行，必须确认关键用户链路和失败路径有足够证据。
 
 ### 2.3 用户：启动者与决策者
 
@@ -67,7 +67,7 @@ Codex 不能因为“用例数量足够”就放行，必须确认关键用户�
 3. 对产品策略冲突、真实升级、真实云资源、凭证或付费操作作最终决策；
 4. 在收到 `TEST_DESIGN_READY` 后决定是否开始执行。
 
-在没有需要用户决策的阻塞项时，Codex 与 Hermes 应自行完成往返，不能每轮都要求用户转发意见。
+在没有需要用户决策的阻塞项时，OpenCode 与 Hermes 应自行完成往返，不能每轮都要求用户转发意见。
 
 ## 3. 固定状态机
 
@@ -78,10 +78,10 @@ INIT
   ↓
 HERMES_DRAFT_READY
   ↓
-CODEX_REVIEWING
+REVIEWER_REVIEWING
   ├── REVIEW_CHANGES_REQUESTED → HERMES_REVISION_READY
   │                                  ↓
-  │                           CODEX_REVIEWING
+  │                           REVIEWER_REVIEWING
   ├── USER_DECISION_REQUIRED → BLOCKED
   └── TEST_DESIGN_READY
 ```
@@ -92,8 +92,8 @@ CODEX_REVIEWING
 |---|---|---|
 | `INIT` | 已启动，尚未收到 Hermes 设计 | 否 |
 | `HERMES_DRAFT_READY` | Hermes 已提交初版 | 否 |
-| `CODEX_REVIEWING` | Codex 正在检查 | 否 |
-| `REVIEW_CHANGES_REQUESTED` | Codex 发现必须修改的问题 | 否 |
+| `REVIEWER_REVIEWING` | OpenCode 正在检查 | 否 |
+| `REVIEW_CHANGES_REQUESTED` | OpenCode 发现必须修改的问题 | 否 |
 | `HERMES_REVISION_READY` | Hermes 已按意见提交修订版 | 否 |
 | `USER_DECISION_REQUIRED` | 存在产品策略或外部操作决策 | 否 |
 | `BLOCKED` | 因外部条件暂时无法继续 | 否 |
@@ -112,8 +112,8 @@ reviews/ITER-NNN-YYYYMMDDHHmmss/
 │   ├── candidate-matrix.csv  # 当前候选用例
 │   ├── status.md             # Hermes 当前状态、变更摘要、待复核项
 │   └── evidence/             # 设计验证证据，禁止放凭证
-├── codex/
-│   ├── review-round-01.md    # Codex 第 1 轮评审
+├── reviewer/
+│   ├── review-round-01.md    # OpenCode 第 1 轮评审
 │   ├── review-round-02.md    # 后续评审按轮次递增
 │   └── decision-log.md       # 规格决策和用户决策记录
 ├── terminal-matrix.csv       # 评审确认后的多终端矩阵
@@ -123,7 +123,7 @@ reviews/ITER-NNN-YYYYMMDDHHmmss/
 实际落盘时，优先使用测试归档仓库的唯一真源：
 
 - Hermes 测试设计：`reviews/ITER-NNN-YYYYMMDDHHmmss/hermes/`
-- Codex 评审记录：`reviews/ITER-NNN-YYYYMMDDHHmmss/codex/`
+- OpenCode 评审记录：`reviews/ITER-NNN-YYYYMMDDHHmmss/reviewer/`
 - 评审确认后的正式用例：`test-cases/design/`、`test-cases/expanded/`
 - 设计评审：`reviews/ITER-NNN-YYYYMMDDHHmmss/`
 - 测试执行结果：`results/<客户端>/<日期>-<IP>/<OS>/`
@@ -131,15 +131,21 @@ reviews/ITER-NNN-YYYYMMDDHHmmss/
 - 多终端矩阵模板：`templates/multi-terminal-matrix.csv`
 - 多终端矩阵实例：`reviews/ITER-NNN-YYYYMMDDHHmmss/terminal-matrix.csv`
 
-Hermes 和 Codex 不得同时改同一个文件。Hermes 修改本轮 `hermes/` 目录和候选矩阵；Codex 修改 `codex/`、`FINAL_STATUS.md` 及必要的归档说明。只有 Codex 确认 `TEST_DESIGN_READY` 后，候选矩阵才能同步为 `test-cases/` 下的正式真源。
+Hermes 和 OpenCode 不得同时改同一个文件。Hermes 修改本轮 `hermes/` 目录和候选矩阵；OpenCode 修改 `reviewer/`、`FINAL_STATUS.md` 及必要的归档说明。只有 OpenCode 确认 `TEST_DESIGN_READY` 后，候选矩阵才能同步为 `test-cases/` 下的正式真源。
 
 评审记录和执行结果必须分离：评审阶段不得把 `review-round-*.md`、`decision-log.md` 或 `FINAL_STATUS.md` 写入 `results/`；只有进入执行阶段后，才在 `results/<客户端>/<日期>-<IP>/<OS>/` 保存基线、日志、证据和执行报告。
+
+### 目录命名兼容（评审者从 Codex 切到 OpenCode 之后）
+
+- 历史迭代（`ITER-004` / `ITER-005` / `REV-20260911004604`）的评审产物目录仍叫 `codex/`，**不改名**——那是当时真实评审者的归档事实，改名等于篡改溯源。
+- 自 `ITER-006` 起统一使用中性目录 `reviewer/`，评审者写在文件头（哪个 CLI + 哪个模型）。
+- 引用旧迭代时按原路径写 `codex/`，引用新迭代时写 `reviewer/`；两者并存不是错误，文档里不要「统一」掉历史目录。
 
 ## 5. 每轮评审步骤
 
 ### 第 0 步：固定范围
 
-Codex 先记录：
+OpenCode 先记录：
 
 - 设计文档绝对路径；
 - 被测项目绝对路径；
@@ -165,9 +171,9 @@ Hermes 必须提交：
 - 已知阻塞和未决规格问题；
 - `status.md` 中的 `HERMES_DRAFT_READY`。
 
-### 第 2 步：Codex 独立评审
+### 第 2 步：OpenCode 独立评审
 
-Codex 至少检查以下九类内容：
+OpenCode 至少检查以下九类内容：
 
 1. **需求覆盖**：设计文档每个功能、状态、分支、风险都有对应测试；
 2. **测试层次**：函数、单测、mock、MCP 协议、真实客户端和真实升级明确区分；
@@ -249,13 +255,13 @@ Hermes 逐条回应评审意见，不能只回复“已补充”。至少要说�
 - 哪些问题仍未解决及其状态；
 - 本轮是否需要用户决策。
 
-### 第 4 步：Codex 复审
+### 第 4 步：OpenCode 复审
 
-Codex 只接受有证据的修订。若仍有 P0/P1 缺口、关键路径弱断言、版本不可追溯或规格冲突未标明，则继续回到第 3 步。
+OpenCode 只接受有证据的修订。若仍有 P0/P1 缺口、关键路径弱断言、版本不可追溯或规格冲突未标明，则继续回到第 3 步。
 
 ## 6. 放行门槛
 
-满足以下条件后，Codex 才能给出 `TEST_DESIGN_READY`：
+满足以下条件后，OpenCode 才能给出 `TEST_DESIGN_READY`：
 
 - 需求到用例追踪率为 100%；
 - 所有 P0/P1 需求都有至少一条可执行用例；
@@ -286,17 +292,17 @@ Codex 只接受有证据的修订。若仍有 P0/P1 缺口、关键路径弱断�
 - 真实升级会修改用户安装或 npm cache；
 - 真实云操作可能产生费用、资源变更或凭证风险；
 - 需要用户提供不可自动获取的权限、账号或客户端；
-- Hermes 与 Codex 的结论冲突，且源码和证据无法消解；
+- Hermes 与 OpenCode 的结论冲突，且源码和证据无法消解；
 - 外部任务或共享目录不可访问。
 
-普通的用例缺口、断言不足、矩阵遗漏、脚本补充和报告修正，由 Codex 直接发回 Hermes 继续处理。
+普通的用例缺口、断言不足、矩阵遗漏、脚本补充和报告修正，由 OpenCode 直接发回 Hermes 继续处理。
 
 ## 8. 标准启动提示词
 
 下次启动时，直接发送以下内容即可：
 
 ```text
-启动 Hermes-Codex 测试设计评审闭环。
+启动 Hermes-OpenCode 测试设计评审闭环。
 
 项目目录：C:\Users\Administrator\devkit-test
 被测项目：C:\Users\Administrator\devkit-test\hdk
@@ -307,8 +313,8 @@ Codex 只接受有证据的修订。若仍有 P0/P1 缺口、关键路径弱断�
 
 要求：
 1. Hermes 负责生成和修改测试用例；
-2. Codex 负责读取设计文档、源码、既有单测、矩阵和历史证据并进行独立评审；
-3. Codex 将评审意见直接交给 Hermes，Hermes 修改后再次提交；
+2. OpenCode 负责读取设计文档、源码、既有单测、矩阵和历史证据并进行独立评审；
+3. OpenCode 将评审意见直接交给 Hermes，Hermes 修改后再次提交；
 4. 持续往复，直到所有放行门槛满足；
 5. 未达到放行门槛前，不得宣布测试设计完成，也不得开始正式执行；
 6. 严格区分 PASS、FAIL、BLOCKED、SPEC-MISMATCH、PARTIAL；
@@ -322,7 +328,7 @@ Codex 只接受有证据的修订。若仍有 P0/P1 缺口、关键路径弱断�
 
 ## 9. 最终交付格式
 
-完成时，Codex 输出：
+完成时，OpenCode 输出：
 
 ```text
 TEST_DESIGN_READY
@@ -347,3 +353,50 @@ REVIEW_CHANGES_REQUESTED
 ```
 
 并按优先级列出必须修改项，不用模糊的“建议再看看”。
+
+## 10. 评审者 CLI 顶替与归因
+
+OpenCode 是默认评审者，但不是唯一合法评审者。评审角色与 CLI 解耦：**prompt 与判据不变，只换执行者**。任一 CLI 不可用时按下表归因，再决定顶替还是修。
+
+### 10.1 先归因，别直接换
+
+```bash
+codex exec --skip-git-repo-check -C "C:/Users/Administrator/devkit-test" "只回答两个字：ok"
+opencode run "只回答两个字：ok"
+```
+
+| 现象 | 归因 | 动作 |
+|---|---|---|
+| `ERROR: exceeded retry limit, last status: 429 Too Many Requests` | 账号额度/网关限流，不是配置坏 | 换 CLI 顶替，或换 provider/model |
+| `401` / login / auth 类 | 凭证失效 | `codex login` / `opencode auth login` |
+| 无输出 + 异常退出码（Windows `0xC0000142`） | 宿主/PTY 问题 | 非 PTY 后台跑，prompt 走文件 |
+| 正常回 ok | CLI 可用 | 查任务侧：prompt 路径、写权限、产物落盘 |
+
+**退出码不可信**：Codex 429 时仍 `EXIT=0`，但一份产物都没有。判「评审有没有跑」只看 `reviews/<iter>/reviewer/review-round-NN*.md` 是否真实落盘（文件存在 + 有内容 + 末行完成标记），不看进程输出和退出码。
+
+### 10.2 OpenCode 执行配方
+
+```bash
+cd C:/Users/Administrator/devkit-test/huaweicloud-devkit-test
+opencode run --auto --model deepseek-gw/deepseek-v4-pro-0813 \
+  --title "ITER-NNN 第N轮评审(OpenCode)" \
+  "$(cat reviews/ITER-NNN-YYYYMMDDHHmmss/reviewer/prompt-roundNN.txt)$EXTRA" \
+  2>&1 | tee reviews/ITER-NNN-YYYYMMDDHHmmss/reviewer/opencode-run-$(date +%Y%m%d%H%M%S).log
+```
+
+四条必守：
+
+1. `--auto`：非交互 `opencode run` 无人点权限审批，不加会「跑完了但文件没落盘」；
+2. prompt 用 `"$(cat <文件>)"` 喂，长中文 prompt 不被 shell 转义吃掉；
+3. 尾部追加执行方补充说明：写到指定评审文件 + **写不进去就打印全文到 stdout** + 末行固定完成标记；
+4. 日志 `tee` 落到 `reviewer/`，过程可追溯。
+
+耗时预期：走自建网关连一句 `ok` 都要约 80 秒（session/模型初始化），真评审 10 分钟以上 → 一律 `background=true, notify_on_complete=true`，不要用前台短 timeout，也不要 60 秒没输出就判死。
+
+现成脚本：`scripts/run_opencode_review.sh [ITER目录]`（默认 `reviews/ITER-006-20261029171721`，模型可用 `OPENCODE_MODEL` 覆盖）。
+
+### 10.3 顶替产物纪律
+
+- 评审文件头部必须注明：**评审者 = 哪个 CLI + 哪个模型、北京时间、替代原因**，不冒充原评审者；
+- 放行标准不因换人而放宽：`TEST_DESIGN_READY` / `REVIEW_CHANGES_REQUESTED` 判据、九类检查项、放行门槛全部照旧；
+- 只写 `reviewer/`（或历史迭代的 `codex/`），不碰 `hermes/`、候选矩阵和任何 CSV 真源。

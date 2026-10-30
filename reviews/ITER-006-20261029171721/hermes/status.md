@@ -1,7 +1,8 @@
 # Hermes ITER-006 交接状态
 
-- 状态：`HERMES_DRAFT_READY`（候选设计完成，待 Codex 评审；**不得标记 TEST_DESIGN_READY**）
+- 状态：`HERMES_DRAFT_READY`（Round 02 整改完成，待 OpenCode Round 03 复审，**不得标记 TEST_DESIGN_READY**）
 - 评审目录：`reviews/ITER-006-20261029171721/`
+- 评审者：OpenCode（`deepseek-gw/deepseek-v4-pro-0813`），替代 Codex（Codex 侧 429 限流不可用）
 - 本轮纪律：只产出设计文档 + 候选矩阵 + 决策记录；**未执行测试、真实探针、真云操作、真实升级**。
 
 ## SUT 基线（被测项目，P1 可复现）
@@ -10,33 +11,44 @@
 - 工具注册源：`plugins/huaweicloud-core/src/tool-definitions.ts` → **56 个**
 - 设计输入：`results/version/v2.0.0/`（FINDINGS.md 8 条漂移 + 产品反馈已裁决）
 
-## 本轮产出
+## 本轮产出（Round 03 提交版）
 
-1. `v2-契约漂移-用例影响清单.md` — 8 条漂移 → 用例映射（已更新为精确 69 条口径）
+1. `v2-契约漂移-用例影响清单.md` — 8 条漂移 → 用例映射（76 条）
 2. `decision-log.md` — 3 条 P0/P1 漂移产品侧裁决结论
-3. `test-design.md` — 候选设计（基线/范围/放行检查 A/B/C 对照/待复审项）
-4. `candidate-matrix.csv` — 69 条受影响设计级用例的迁移后 27 列全文
-
-## 裁决结论（已落 decision-log）
-
-| 漂移 | 裁决 |
-|---|---|
-| vendor gate | 安全增强，不放宽；测试侧带暗号 + challenge retry 适配 |
-| dispatch 删除 | breaking change，不做 shim（v2 未发布无老用户） |
-| remote Streamable HTTP | 规范升级非缺陷；发版文档明示 Accept 头 + Mcp-Session-Id |
+3. `test-design.md` — 候选设计（76 条受影响）
+4. `candidate-matrix.csv` — **76 条**受影响设计级用例的迁移后 27 列全文
 
 ## 统计
 
-- 受影响用例：**69 条设计级**（vendor_gate 59 / dispatch 3 / fake-move 3 / toolcount 2 / rule 1 / remote 1）
-- 不受影响：143 条设计级保持原样
-- 展开级迁移：评审放行后 Step 3 随生成器处理（继承自 69 条的展开行）
+- 受影响用例：**76 条设计级**（vendor_gate 64 / dispatch 3 / remote 1 / fake-move 3 / rule 1 / toolcount 4）
+- 不受影响：**136 条设计级**保持 1.x 原样（212 − 76）
+- 展开级迁移：评审放行后 Step 3 随生成器处理（继承自 76 条的展开行）
 
-## 待 Codex 复审
+## Round 01 整改记录（全部落实，Round 02 已核验）
 
-- vendor gate「⓪建立 vendor 确认」步骤机械可执行性
-- dispatch 3 条 `dispatchTool`/工厂命名与 v2 源码一致性
-- 59 条 vendor_gate 影响范围复验（是否漏判/多判）
-- D10-4「9 deny + 10 warn」数值核对
+| # | 整改项 | 结果 |
+|---|---|---|
+| 1 | 多判 3 条 `D2-24/D2-26/D2-3`（auth_sync 未 gate）移出 | ✅ |
+| 2 | 漏判 vendor gate 7 条 `D10-3/D4-24/D6-8/D2-1/D3-A3/D3-A4/D3-C9` 纳入 | ✅ |
+| 3 | 漏判 tool-count 2 条 `D1-56/D5-3` 纳入（40→56 工具） | ✅ |
+| 4 | `D9-12` 的 `findSkillsRoot` → `SKILLS_ROOT` | ✅ |
+| 5 | 影响清单 §4 假漂移表去掉 `D9-10` | ✅ |
+| 6 | `D2-23/D2-27` 关联工具归因复核 → 书面排除 | ✅（排除论证成立） |
+
+## Round 02 评审结论与整改（OpenCode 2026-10-30 15:23 → Hermes 整改）
+
+结论：`REVIEW_CHANGES_REQUESTED`（3 项，已闭合）
+
+| # | 严重度 | 整改项 | 完成情况 |
+|---|---|---|---|
+| 1 | P1 | 新漏判 `D1-71`（sandbox_expose_tunnel，步骤①触及 gated `sandbox_connect`）纳入 | ✅ 确认纳入（三件套已完整）；关联工具列补 `sandbox_connect` |
+| 2 | P1 | 工作区矩阵与文档计数不一致 + 错误包含已排除的 `D2-23/D2-27` | ✅ 从候选矩阵移除 `D2-23/D2-27`，收敛为 76 行 / 64 vendor gate；文档同步 76 |
+| 3 | P2 | `D5-3`/`D1-56` 残留「40 工具」注记 | ✅ 核查后已无「40 工具」残留（均已为 56） |
+
+### D2-23/D2-27 书面排除理由（Round 02 复核成立）
+
+- `D2-23`：关联工具列写 `auth_status`，但操作步骤实为「查询 agent 注册状态」，指引来源 `agent-registration.getAgentRegistrationStatuses` 为内部函数直调，不经 MCP 工具层、不触发 vendor gate → 排除。
+- `D2-27`：关联工具列写 `auth_status`，但操作步骤为 KooCLI 版本解析（`koocli-version.*`），与 `auth_status` 无关 → 排除。
 
 ## 仍未解决
 

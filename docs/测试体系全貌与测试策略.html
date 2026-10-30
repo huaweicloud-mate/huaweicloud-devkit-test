@@ -147,7 +147,7 @@ li::marker{color:var(--blue)}
 <tbody>
 <tr>
 <td>分层架构 L1–L5</td>
-<td>插件清单 manifest → ~30 个 Skills（路由工作流）→ 39 个 MCP 工具（Node <code>mcp-server.mjs</code>）→ Python Hook（<code>huaweicloud-safety.py</code> 高危拦截）→ 共享安全策略（<code>safety-policy.mjs</code> + <code>policy.json</code>）</td>
+<td>插件清单 manifest → ~30 个 Skills（路由工作流）→ 40 个 MCP 工具（Node <code>mcp-server.mjs</code>）→ Python Hook（<code>huaweicloud-safety.py</code> 高危拦截）→ 共享安全策略（<code>safety-policy.mjs</code> + <code>policy.json</code>）</td>
 </tr>
 <tr>
 <td>能力载体</td>
@@ -222,8 +222,8 @@ li::marker{color:var(--blue)}
 <td>本仓库目录设计原则与命名规则</td>
 </tr>
 <tr>
-<td><code>06-Hermes-Codex测试设计评审闭环.md</code></td>
-<td>Hermes 生成、Codex 评审、往复修订至 <code>TEST_DESIGN_READY</code> 的固定流程</td>
+<td><code>06-Hermes-OpenCode测试设计评审闭环.md</code></td>
+<td>Hermes 生成、OpenCode 评审、往复修订至 <code>TEST_DESIGN_READY</code> 的固定流程</td>
 </tr>
 <tr>
 <td><code>测试体系-评审稿.html</code></td>
@@ -262,8 +262,8 @@ li::marker{color:var(--blue)}
 </tr>
 <tr>
 <td><code>daily/</code></td>
-<td>每日精选子集（执行最小集）</td>
-<td>81 + 71 条</td>
+<td>每日精选子集（执行最小集，已排除 DAILY_EXCLUDE 环境依赖项）</td>
+<td>107 + 66 条</td>
 </tr>
 <tr>
 <td><code>issues/&lt;编号&gt;-&lt;slug&gt;/</code></td>
@@ -331,10 +331,10 @@ li::marker{color:var(--blue)}
 </thead>
 <tbody>
 <tr>
-<td><code>ITER-004</code>（NR3 版本升级提醒，Codex 评审 8 轮）、<code>ITER-005</code>（正式测试设计复审 4 轮）、<code>REV-20260911004604</code>（全量测试设计整改 16 轮 prompt/review）</td>
+<td><code>ITER-004</code>（NR3 版本升级提醒，OpenCode 评审 8 轮）、<code>ITER-005</code>（正式测试设计复审 4 轮）、<code>REV-20260911004604</code>（全量测试设计整改 16 轮 prompt/review）</td>
 </tr>
 <tr>
-<td>每迭代含 <code>hermes/</code>（test-design.md + candidate-matrix.csv + status.md 状态机）、<code>codex/</code>（逐轮评审稿）、<code>terminal-matrix.csv</code>（多终端矩阵）、<code>FINAL_STATUS.md</code></td>
+<td>每迭代含 <code>hermes/</code>（test-design.md + candidate-matrix.csv + status.md 状态机）、<code>reviewer/</code>（逐轮评审稿）、<code>terminal-matrix.csv</code>（多终端矩阵）、<code>FINAL_STATUS.md</code></td>
 </tr>
 </tbody>
 </table>
@@ -431,7 +431,7 @@ li::marker{color:var(--blue)}
 </tr>
 <tr>
 <td><code>hermes-codex-test-design-status</code></td>
-<td>Hermes-Codex 评审状态</td>
+<td>Hermes-OpenCode 评审状态</td>
 </tr>
 <tr>
 <td><code>multi-terminal-matrix.csv</code></td>
@@ -458,7 +458,7 @@ li::marker{color:var(--blue)}
 </tr>
 <tr>
 <td>安全/同步</td>
-<td><code>hdk-secrets.ps1</code>（DPAPI 凭证加密）<br><code>sync-to-remote.ps1</code>（每日 20:00 自动同步）</td>
+<td><code>run-as-readonly.py</code>（只读子账号动态切换）<br><code>sync-to-remote.ps1</code>（每日 20:00 自动同步）</td>
 </tr>
 </tbody>
 </table>
@@ -470,7 +470,7 @@ li::marker{color:var(--blue)}
 <h3 id="31">3.1 总体策略：四层金字塔 + 铁律纪律</h3>
 <pre><code>        ┌ E2E 真云回归 ┐        ← 每晚/迭代门禁，真实凭证，昂贵少量
       ┌─┴ 客户端矩阵集成 ┴─┐      ← 安装/发现/适配 × 10 客户端
-    ┌─┴── 功能测试(逐工具) ──┴─┐    ← 39 工具 + 30 skill 原子用例
+    ┌─┴── 功能测试(逐工具) ──┴─┐    ← 40 工具 + 30 skill 原子用例
   ┌─┴── 单元/静态/安全扫描 ────┴─┐  ← test/*.mjs + npm audit + gitleaks
 </code></pre>
 <ul>
@@ -514,7 +514,7 @@ li::marker{color:var(--blue)}
 </tr>
 <tr>
 <td>D3 功能覆盖</td>
-<td>39 工具 + skills + 命令规划执行 + 真云 E2E 场景 A/B/C</td>
+<td>40 工具 + skills + 命令规划执行 + 真云 E2E 场景 A/B/C</td>
 <td><span class="badge b-repo">仓库事实</span> / <span class="badge b-bench">行业对标</span></td>
 <td>26 / 22</td>
 <td>全</td>
@@ -574,7 +574,7 @@ li::marker{color:var(--blue)}
 <p><strong>用例数口径</strong>：设计级 179 条按 D1~D10 分维；展开级 137 条只展开 4 个维度——D5 客户端矩阵 70、D1 安装终端 30（NR3 升级提醒 25 + 白名单 5）、D3 服务矩阵 22、D10 评测集 15（D2/D4/D6/D7/D8/D9 无展开级用例）。合计 316 条。</p>
 </blockquote>
 <p><strong>双口径消除了"抽查=可操作"的矛盾</strong>：
-- <strong>定义覆盖率 100%</strong>——39 工具、30 skill、20+ 服务均有对应用例（可静态评审确认）；
+- <strong>定义覆盖率 100%</strong>——40 工具、30 skill、20+ 服务均有对应用例（可静态评审确认）；
 - <strong>执行覆盖率分层</strong>——核心工具/高危服务 100% 执行，长尾服务按风险抽测 ≥ 60%。</p>
 <p><strong>禁止剪枝集</strong>（任何回归范围裁剪不得触碰）：D4 全量、D1-1/3/5、D9 全量、D10 核心评测集。</p>
 <h3 id="33">3.3 设计策略：六要素 + 列语义 + 源码反推 + 评审闭环</h3>
@@ -588,15 +588,15 @@ li::marker{color:var(--blue)}
 <li><strong>关联工具填真实 MCP 工具全名</strong>——函数名归"指引来源 <span class="badge b-src">源码函数</span>:xxx"。</li>
 </ol>
 <p>依据：<span class="badge b-spec">规范要求</span> + <span class="badge b-gen">通用测试实践</span>。</p>
-<p><strong>列语义映射</strong>：矩阵每列有唯一语义，内容不得串列（如"关联工具"只填 39 工具/CLI/框架组件，函数名归"指引来源 <span class="badge b-src">源码函数</span>:xxx"）。</p>
+<p><strong>列语义映射</strong>：矩阵每列有唯一语义，内容不得串列（如"关联工具"只填 40 工具/CLI/框架组件，函数名归"指引来源 <span class="badge b-src">源码函数</span>:xxx"）。</p>
 <p><strong>源码能力反推覆盖</strong>（全面性的第二重证据）：不是"想到什么测什么"，而是从 <code>src/*.mjs</code> 反向提取 export 函数/CLI 子命令/环境变量/返回字段，与用例逐一比对。结果：<strong>全维度核对出 17 个源码缺口（如 <code>HUAWEICLOUD_DEVKIT_SKIP_UPDATE</code> 环境变量、远程 transport、沙箱分块上传参数、CodeArts 上下文凭证等），已全部落成 16 个新用例</strong>（D1-59~64、D2-22~25、D3-C10~12、D4-25/26、D9-10），并同步修正 3 处"设计 vs 实现"漂移（指纹算法 <code>sha256(ak+sk)</code> 无冒号、<code>detect_framework</code> 13 框架非 11 等）。依据：<span class="badge b-src">源码函数</span>。</p>
-<p><strong>Hermes-Codex 评审闭环</strong>：设计稿不"自签合格"——Hermes 产出初版 → Codex 多轮复评（机器可闭合项整改、外部依赖项如实列 status）→ 只有 <code>TEST_DESIGN_READY</code> 才进入执行。归档显示真实走过多轮：ITER-004 评审 8 轮、全量整改 16 轮 prompt。</p>
+<p><strong>Hermes-OpenCode 评审闭环</strong>：设计稿不"自签合格"——Hermes 产出初版 → OpenCode 多轮复评（机器可闭合项整改、外部依赖项如实列 status）→ 只有 <code>TEST_DESIGN_READY</code> 才进入执行。归档显示真实走过多轮：ITER-004 评审 8 轮、全量整改 16 轮 prompt。</p>
 <h3 id="34">3.4 执行策略：变更驱动 + 分层 + 双门禁</h3>
 <p><strong>变更驱动（控制回归成本的核心杠杆）</strong>——T0.5 变更影响分析，而非每次全量：</p>
 <pre><code>git diff → 受影响用例集映射 → 本轮只跑&quot;受影响集 + 固定安全基线 + 冒烟&quot;
 全量回归仅 Release 前
 </code></pre>
-<p><strong>执行分层（防矩阵爆炸）</strong>：39 个工具是<strong>同一个 Node 进程</strong>，不同 Agent 只是不同 MCP 客户端壳，因此按"客户端相关性"分层——工具/协议/性能/兼容/文档层单代表客户端全量；安装+适配层 10 客户端全跑；Agent 行为层代表 3~4 个跨厂商模型。执行量级从 1990 压到 ~360。依据：<span class="badge b-repo">仓库事实</span> + <span class="badge b-bench">行业对标</span>。</p>
+<p><strong>执行分层（防矩阵爆炸）</strong>：40 个工具是<strong>同一个 Node 进程</strong>，不同 Agent 只是不同 MCP 客户端壳，因此按"客户端相关性"分层——工具/协议/性能/兼容/文档层单代表客户端全量；安装+适配层 10 客户端全跑；Agent 行为层代表 3~4 个跨厂商模型。执行量级从 1990 压到 ~360。依据：<span class="badge b-repo">仓库事实</span> + <span class="badge b-bench">行业对标</span>。</p>
 <p><strong>每日流水线 6 步</strong>（每个客户端 agent 按 AGENTS.md 自主完成）：</p>
 <pre><code>自识别身份 → init_day 建包 → P0→P1→P2 执行+证据落盘
 → 回填状态+时间 → 出八节报告 → 每10分钟提报 → 全量测完统一提单

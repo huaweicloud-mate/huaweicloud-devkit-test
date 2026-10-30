@@ -1,0 +1,46 @@
+你是 huaweicloud-devkit 测试设计的外部评审者（OpenCode）。请对 ITER-006（v2.0.0 契约迁移）Hermes 候选设计的 **Round 02 复审**（即核查 Round 01 整改是否落实到位）做正式复审。
+
+## 评审目录
+
+reviews/ITER-006-20261029171721/
+
+## 输入文件（请逐份完整阅读）
+
+1. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/test-design.md
+2. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv（**75 条**受影响设计级用例的迁移后 27 列）
+3. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/decision-log.md
+4. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/v2-契约漂移-用例影响清单.md
+5. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/status.md
+6. 上一轮你的评审结论：C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/review-round-01-契约迁移复审.md
+
+## 本轮背景
+
+v2.0.0（源码仓 v2 分支 fcfe047f）相对 1.x 有 8 条契约漂移，产品侧已裁决 3 条。Hermes 已按你 Round 01 的评审意见完成整改（73+2=75 条），本轮是**复审整改落实情况**。
+
+## Round 01 评审要求 Hermes 整改的 6 项（请逐项复核是否落实）
+
+1. [P1] 多判 3 条移出：D2-24/D2-26/D2-3（关联工具 auth_sync 未 gate）——请核对这些是否已从 candidate-matrix.csv 移除、不再带 vendor gate 三件套。
+2. [P1] 漏判 vendor gate 7 条纳入：D10-3/D4-24/D6-8/D2-1/D3-A3/D3-A4/D3-C9——请核对这些是否已加入 candidate-matrix.csv 并带正确三件套（前置「已建立 vendor 确认」/步骤⓪/「gate 放行后」前缀/依赖契约标注）。
+3. [P1] 漏判 tool-count 2 条纳入：D1-56/D5-3——请核对断言是否已从「40 工具」改为「56 工具」、指引来源是否指向 tool-definitions.ts TOOL_DEFINITIONS(=56)。
+4. [P2] D9-12 的 findSkillsRoot → SKILLS_ROOT（skill-disclosure.ts:44）——请核对预期结果/操作步骤/指引来源三处是否已改、无 findSkillsRoot 残留。
+5. [P2] 影响清单 §4 假漂移表去掉 D9-10——请核对已删、假漂移仅剩 D1-65/D1-66/D9-11。
+6. D2-23/D2-27 归因复核——Hermes 已书面排除（status.md 有理由），请复核该排除是否成立（即这两条的关联工具列归因是否确属有误）。
+
+## 常规核验（同 Round 01，逐项给证据）
+
+7. candidate-matrix.csv 是否 75 行且 27 列齐全？ID 唯一？与母版 212 条设计级子集对得上？
+8. vendor gate 类 63 条：三件套机械可执行、断言唯一性未破坏（「gate 放行后」前缀去掉后与母版逐字一致）？
+9. dispatch 3 条改写命名与 v2 源码一致；数字断言（56 工具 / 19 规则=9 deny+10 warn / 14 gate 工具）仍正确。
+10. 是否还有新的漏判/多判（63 条 vendor_gate 之外还有关联 gated 工具未纳入？纳入的 63 条是否有一条工具不在 VENDOR_GATED_TOOLS）？
+11. 状态纪律：status.md 是否 HERMES_DRAFT_READY（非 TEST_DESIGN_READY）、是否声明未执行测试/真云。
+
+（可读本地 v2 源码核对：C:/Users/Administrator/devkit-test/_hdk_v2/ 的 plugins/huaweicloud-core/src/ 下 vendor-gate.ts / tool-definitions.ts / mcp-protocol.ts / tools.ts 等，或 devkit-test/hdk 的 origin/v2 分支。）
+
+## 输出要求
+
+1. 结论只写一个（二选一）：`REVIEW_CHANGES_REQUESTED`（仍需整改）或 `TEST_DESIGN_READY`（可放行）。仅当上述全部核验通过、无机器可闭合整改项残留时才写 TEST_DESIGN_READY。
+2. 逐项「已核验通过 / 必须整改」，整改项标 [P0]/[P1]/[P2] + 证据 + 具体修改指令，分「🟢 机器可闭合」与「🔴 外部依赖」。
+3. 把你完整评审结论写入（UTF-8）：
+   C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/review-round-02-契约迁移复审.md
+4. 只写 reviewer/ 目录下的评审文件，不得修改 hermes/ 目录、candidate-matrix.csv 或任何 CSV 真源。
+5. 完成后最后一行输出固定标记：【评审完成】

@@ -46,8 +46,8 @@
 
 ## 既有归档的去向
 
-曾保留的 `huaweicloud-devkit-full-pipeline/`（Hermes「全链路编排」技能归档副本，含 Codex 评审闭环等 Hermes 专属工具）已**移除**：
+曾保留的 `huaweicloud-devkit-full-pipeline/`（Hermes「全链路编排」技能归档副本，含外部评审闭环等 Hermes 专属工具）已**移除**：
 
 - 其「流水线 A（版本需求设计）」→ 由 `test-design/` 承载（去 Hermes 化）
 - 其「流水线 B（问题回归）」→ 由 `test-regression/` 承载
-- 其「编排层 / Codex 评审闭环」→ 仍是 Hermes 维护者专属，真源保留在 `hermes-home/skills/`（不丢）
+- 其「编排层 / 外部评审闭环（默认 OpenCode）」→ 仍是 Hermes 维护者专属，真源保留在 `hermes-home/skills/`（不丢）
