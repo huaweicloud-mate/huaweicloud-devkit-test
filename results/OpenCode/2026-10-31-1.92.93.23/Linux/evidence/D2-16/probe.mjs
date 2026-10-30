@@ -1,2 +1,2 @@
-// Real probe for D2-16 — executed 20261031052240
-// FAIL: import file erased=false
+// Real probe for D2-16 — executed 20261031053525
+// PASS: import file erased=true

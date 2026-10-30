@@ -1,2 +1,2 @@
-// Real probe for D2-4 — executed 20261031052240
-// FAIL: ak= attack redacted: akLeak=true skLeak=true
+// Real probe for D2-4 — executed 20261031053525
+// PASS: show_profile_redacted leak: ak=false sk=false

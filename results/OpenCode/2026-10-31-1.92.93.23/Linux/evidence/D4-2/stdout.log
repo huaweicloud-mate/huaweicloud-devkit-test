@@ -1,0 +1,31 @@
+{
+  "caseId": "D4-2",
+  "status": "FAIL",
+  "why": "env print => [{\"c\":\"env | grep HW_ACCESS_KEY\",\"d\":\"deny\"},{\"c\":\"printenv HW_SECRET_KEY\",\"d\":\"deny\"},{\"c\":\"env | grep -i access_key\",\"d\":\"allow\"},{\"c\":\"env | grep HUAWEICLOUD_SDK_AK\",\"d\":\"deny\"},{\"c\":\"env | grep HCLOUD_AK\",\"d\":\"deny\"}]",
+  "executedAt": "20261031053920",
+  "detail": {
+    "rs": [
+      {
+        "c": "env | grep HW_ACCESS_KEY",
+        "d": "deny"
+      },
+      {
+        "c": "printenv HW_SECRET_KEY",
+        "d": "deny"
+      },
+      {
+        "c": "env | grep -i access_key",
+        "d": "allow"
+      },
+      {
+        "c": "env | grep HUAWEICLOUD_SDK_AK",
+        "d": "deny"
+      },
+      {
+        "c": "env | grep HCLOUD_AK",
+        "d": "deny"
+      }
+    ],
+    "rootCause": "env-dump 门 regex 未覆盖裸 access_key 词根"
+  }
+}
