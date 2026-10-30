@@ -1,0 +1,37 @@
+[ECS 启动失败/APIGW.0301]
+    {
+  "service": "ECS",
+  "errorCode": "APIGW.0301",
+  "requestId": "req-123",
+  "suggestions": [
+    "Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.",
+    "APIGW.0301: API Gateway layer error. Incorrect IAM authentication information — verify AK/SK (SK typos are the usual cause), security token expiry, and that project_id is configured (auth init auto-sets i
+[OBS InvalidAccessKeyId]
+    {
+  "service": "OBS",
+  "errorCode": "InvalidAccessKeyId",
+  "requestId": "",
+  "suggestions": [
+    "OBS uses AK/SK directly (not IAM tokens). Verify AK/SK validity, OBS endpoint, and OBS permissions.",
+    "OBS uses AK/SK directly, not IAM tokens. Verify AK/SK validity and OBS bucket permissions via hcloud configure list or the Huawei Cloud console."
+  ]
+}
+[未知服务兜底]
+    {
+  "service": "UNKNOWN",
+  "errorCode": "X.Y",
+  "requestId": "",
+  "suggestions": [
+    "No known error-code pattern matched. Re-run the failing command with --debug to capture X-Request-Id from the response headers, then re-call explain_error with service, operation, region, the full redacted message, and requestId.",
+    "Search the error code \"X.Y\" in the Huawei Cloud error center (support.
+[E08 serviceCatalog 对照] = {
+  "intent": "我的ECS启动失败了 帮我分析原因",
+  "recommendedSkills": [
+    "Use huaweicloud-core to route intent."
+  ],
+  "recommendedServices": [
+    "Run hcloud --help to list available services."
+  ],
+  "capa
+
+=== EXP-E08 诊断能力结论: ALL PASS ===
