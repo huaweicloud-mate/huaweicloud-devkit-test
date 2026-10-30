@@ -1,0 +1,12 @@
+{
+  "caseId": "D1-39",
+  "status": "FAIL",
+  "executedAt": "20261031210617",
+  "why": "queryDistTagsSync/queryDistTags 返回 null，根因: hdk/plugins/huaweicloud-core/src/update-check.mjs:86 parseDistTagsOutput 拒绝数组格式，但 npm view 在 Windows 上返回数组 [{latest,next}]",
+  "evidence": {
+    "syncSuccess": false,
+    "asyncSuccess": false,
+    "npmViewOutput": "[{\"latest\":\"1.1.12\",\"next\":\"1.1.13-next.0\"}]",
+    "rootCause": "update-check.mjs:86 Array.isArray(parsed) 检查导致数组被拒绝"
+  }
+}
