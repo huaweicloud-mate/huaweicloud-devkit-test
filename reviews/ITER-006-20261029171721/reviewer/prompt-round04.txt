@@ -1,0 +1,19 @@
+你是 huaweicloud-devkit 测试设计的外部评审者（OpenCode）。对 ITER-006（v2.0.0 契约迁移）做 **Round 04 复审（终审）**。
+
+【首要铁律】你的唯一交付物是写这个文件，先写文件（写失败就把结论打印到 stdout）：
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/review-round-04-契约迁移复审.md
+
+本轮只剩 **1 处**需要核验（Round 03 的整改项）：
+- D1-71 的「关联工具」列是否已从 `sandbox_expose_tunnel` 改为 `sandbox_expose_tunnel/sandbox_connect`。
+
+用 grep 或读候选矩阵 D1-71 这一行确认即可：
+hermes/candidate-matrix.csv（reviews/ITER-006-20261029171721/ 下，仓库 C:/Users/Administrator/devkit-test/huaweicloud-devkit-test）
+
+其余项前几轮已核验通过（D2-23/D2-27 已移除、无「40 工具」残留、76 行/27 列/64 vendor gate、文档计数一致、三件套完备），无需重复核验。
+
+## 输出（结论文件里）
+1. 结论只写一个：`TEST_DESIGN_READY` 或 `REVIEW_CHANGES_REQUESTED`。
+2. D1-71 关联工具列核验结果（1 行证据）。若已改为 `sandbox_expose_tunnel/sandbox_connect` 且无其他残留 → 写 `TEST_DESIGN_READY`。
+3. 最后一行：【评审完成】
+
+只写 reviewer/ 目录，不改 hermes/ 或任何 CSV 真源。

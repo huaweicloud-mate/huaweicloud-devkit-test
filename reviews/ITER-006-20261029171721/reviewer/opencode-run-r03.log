@@ -1,0 +1,303 @@
+[0m
+> build · deepseek-v4-pro-0813
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && ls -la && echo "---HERMES---" && ls -la hermes/ && echo "---REVIEWER---" && ls -la reviewer/
+total 12
+drwxr-xr-x 1 Administrator 197121 0 10月 30 16:01 .
+drwxr-xr-x 1 Administrator 197121 0 10月 29 17:22 ..
+drwxr-xr-x 1 Administrator 197121 0 10月 30 16:01 hermes
+drwxr-xr-x 1 Administrator 197121 0 10月 30 16:04 reviewer
+---HERMES---
+total 144
+drwxr-xr-x 1 Administrator 197121      0 10月 30 16:01 .
+drwxr-xr-x 1 Administrator 197121      0 10月 30 16:01 ..
+-rw-r--r-- 1 Administrator 197121 117715 10月 30 16:01 candidate-matrix.csv
+-rw-r--r-- 1 Administrator 197121   1521 10月 30 09:42 decision-log.md
+-rw-r--r-- 1 Administrator 197121   3332 10月 30 16:01 status.md
+-rw-r--r-- 1 Administrator 197121   6595 10月 30 16:01 test-design.md
+-rw-r--r-- 1 Administrator 197121   7816 10月 30 16:01 v2-契约漂移-用例影响清单.md
+---REVIEWER---
+total 249
+drwxr-xr-x 1 Administrator 197121      0 10月 30 16:04 .
+drwxr-xr-x 1 Administrator 197121      0 10月 30 16:01 ..
+-rw-r--r-- 1 Administrator 197121  84199 10月 30 16:01 opencode-run-20261030143147.log
+-rw-r--r-- 1 Administrator 197121 118400 10月 30 16:01 opencode-run-r02.log
+-rw-r--r-- 1 Administrator 197121     45 10月 30 16:04 opencode-run-r03.log
+-rw-r--r-- 1 Administrator 197121   3929 10月 30 16:01 prompt-round01.txt
+-rw-r--r-- 1 Administrator 197121   4371 10月 30 16:01 prompt-round02.txt
+-rw-r--r-- 1 Administrator 197121   2385 10月 30 16:04 prompt-round03.txt
+-rw-r--r-- 1 Administrator 197121   1280 10月 30 16:01 README.md
+-rw-r--r-- 1 Administrator 197121  12146 10月 30 16:01 review-round-01-契约迁移复审.md
+-rw-r--r-- 1 Administrator 197121  11229 10月 30 16:01 review-round-02-契约迁移复审.md
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && echo "=== D1-71 ===" && grep -n "^D1-71" hermes/candidate-matrix.csv && echo "=== D2-23 ===" && grep -nc "D2-23" hermes/candidate-matrix.csv && echo "=== D2-27 ===" && grep -nc "D2-27" hermes/candidate-matrix.csv
+=== D1-71 ===
+8:D1-71,D3功能,sandbox_expose_tunnel 沙箱隧道暴露,P1,已连接沙箱+已部署nginx(有port返回值)；已建立 vendor 确认（vendorConfirmed=用户确立华为云的原文引用）,"sandbox_expose_tunnel(port=<nginx实际port>, workspace_id=<connect返回值>)",⓪建立 vendor 确认：带 vendorConfirmed（用户确立华为云的原文引用）调用；首次触发 vendor challenge 后原样 retry 一次放行 ①sandbox_connect 获取 workspace_id ②sandbox_deploy_nginx 获取实际 port ③sandbox_expose_tunnel 传入 port+workspace_id ④核对返回 publicUrl/tunnelId/port ⑤curl publicUrl 核对 HTTP 可达 ⑥close_session 清理,（gate 放行后）返回 ok=true + publicUrl(https://<id>-<port>.devbridge-s2.hwtunnel.com) + tunnelId + port；publicUrl 可 HTTP 200 访问；无 stale tunnel 残留；缺 port 或 workspace_id 时抛 Error,实: sandbox/session-manager.mjs(1307) exposeTunnel; tools.mjs(741) huaweicloud_sandbox_expose_tunnel；实: vendor-gate.ts VENDOR_GATED_TOOLS/enforceVendorGate,sandbox_expose_tunnel,半自动,COMMON|<代表: Hermes+沙箱>|<证据: publicUrl可访问+tunnelId>|<阻塞: 需沙箱配额+DevBridge>,2026-10-13,DESIGN_COVERED,COMMON,<代表: Hermes+沙箱>,Hermes 代表终端; fake/fixture,Windows/Linux 代表环境；macOS 若声明支持则单独举证,Node >=22；npm/npx 按 OS 记录,PowerShell（Windows）/bash（Linux）/zsh（macOS）,non-TTY；需要交互时必须提供 PTY,隔离 HOME + plugin 目录 + npm cache + HUAWEICLOUD_HOME fixture,stdio（适用时）；函数/fixture 层否则,按用例需要；未涉及则 n/a,强断言：<证据: publicUrl可访问+tunnelId>；保留脱敏日志、manifest、前后快照,测试负责人,"需求来源与前置条件；独立 manifest；finally 清理；契约依赖: vendorConfirmed 语义 已裁决(不放宽,测试侧带暗号+retry适配)"
+=== D2-23 ===
+0
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && echo "=== 40 tool notes ===" && grep -n "40工具\|40 工具\|40 工具\|恰好40\|恰好 40\|40个工具" hermes/candidate-matrix.csv ; echo "exit=$?"
+=== 40 tool notes ===
+exit=1
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && echo "=== D2-27 count ===" && grep -c "D2-27" hermes/candidate-matrix.csv ; echo "=== any '40' tool keyword ===" && grep -nE "40[ ]*工具|恰好[ ]*40|40[ ]*tool|exactly 40" hermes/candidate-matrix.csv ; echo "exit=$?" ; echo "=== ID column uniqueness/rows ===" && awk -F',' 'NR>1{print $1}' hermes/candidate-matrix.csv | sort | uniq -d | head ; echo "rows:" && awk 'END{print NR-1}' hermes/candidate-matrix.csv ; echo "cols:" && head -1 hermes/candidate-matrix.csv | awk -F',' '{print NF}'
+=== D2-27 count ===
+0
+=== any '40' tool keyword ===
+exit=1
+=== ID column uniqueness/rows ===
+rows:
+76
+cols:
+27
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && echo "=== counts in docs ===" && grep -nE "76|64|vendor_gate|vendor gate" hermes/test-design.md hermes/status.md hermes/v2-契约漂移-用例影响清单.md
+=== counts in docs ===
+hermes/test-design.md:13:- 关键变更：TS 化重构（`.mjs`→`.ts`）、tools 拆 `packs/*/tools.ts`、vendor gate 新增、mcp-protocol 工厂化、remote 升级 Streamable HTTP
+hermes/test-design.md:20:**受影响用例 = 76 条设计级**（`candidate-matrix.csv` 全量 27 列迁移后版本）：
+hermes/test-design.md:24:| #1 vendor gate 14 工具需 vendorConfirmed | 安全增强，不放宽；测试侧带暗号+retry | **64** | 前置条件加「建立 vendor 确认」；操作步骤加「⓪带 vendorConfirmed+challenge retry 放行」；预期结果补「gate 放行后」前缀 |
+hermes/test-design.md:31:> 口径演进记录：首版「约 40 条」→ 69 条 → Round 01 订正 75 → Round 02 订正 **76**（纳入 Round 02 新漏判 `D1-71`）。已按「关联工具列 + 正文直调 gated 工具（含驼峰 serviceCatalog）」机械扫描 + D2-23/D2-27 书面排除（母版误归因，内部函数直调不经 MCP 工具层）。
+hermes/test-design.md:37:- 等价类/边界值：v2 迁移不改维度覆盖结构，76 条均为既有用例的断言适配，无新增维度。
+hermes/test-design.md:38:- 状态转换：vendor gate 引入「未确认→challenge→retry→放行」新状态，已在 vendor_gate 类步骤⓪ 覆盖。
+hermes/test-design.md:45:- 断言仍唯一可判定：vendor_gate 类加「gate 放行后」前缀，不改原断言唯一性；D10-4 精确到「9 deny + 10 warn」；D9-1 精确到「56 工具」。
+hermes/test-design.md:52:| v2 vendor-gate.ts `VENDOR_GATED_TOOLS` 14 工具 | ✅ 与 64 条受影响用例「关联工具」逐一对应 |
+hermes/test-design.md:62:3. 3 条漂移裁决后不再标「契约依赖待冻结」，改为「测试侧适配」——但 vendor gate 类用例执行前仍须真机验证 challenge+retry 流程。
+hermes/test-design.md:66:- 不受 8 条漂移影响的其余 **136 条设计级**（212−76）保持 1.x 断言原样。
+hermes/test-design.md:67:- 展开级 137 条：多数是设计级展开（D5 客户端矩阵等），受影响的是继承自 76 条的展开行，**展开级迁移在候选设计评审通过后、用例输出（Step 3）阶段随生成器一并处理**，本候选矩阵只覆盖设计级 76 条。
+hermes/test-design.md:72:1. vendor gate 类「⓪建立 vendor 确认」步骤是否足够机械可执行（暗号来源、challenge retry 次数）。
+hermes/test-design.md:74:3. 64 条 vendor_gate 影响范围是否漏判/多判（尤其 auth 系列是否确属 gate 管辖——已按 `VENDOR_GATED_TOOLS` 名单核对，请复验）。
+hermes/status.md:16:1. `v2-契约漂移-用例影响清单.md` — 8 条漂移 → 用例映射（76 条）
+hermes/status.md:18:3. `test-design.md` — 候选设计（76 条受影响）
+hermes/status.md:19:4. `candidate-matrix.csv` — **76 条**受影响设计级用例的迁移后 27 列全文
+hermes/status.md:23:- 受影响用例：**76 条设计级**（vendor_gate 64 / dispatch 3 / remote 1 / fake-move 3 / rule 1 / toolcount 4）
+hermes/status.md:24:- 不受影响：**136 条设计级**保持 1.x 原样（212 − 76）
+hermes/status.md:25:- 展开级迁移：评审放行后 Step 3 随生成器处理（继承自 76 条的展开行）
+hermes/status.md:32:| 2 | 漏判 vendor gate 7 条 `D10-3/D4-24/D6-8/D2-1/D3-A3/D3-A4/D3-C9` 纳入 | ✅ |
+hermes/status.md:45:| 2 | P1 | 工作区矩阵与文档计数不一致 + 错误包含已排除的 `D2-23/D2-27` | ✅ 从候选矩阵移除 `D2-23/D2-27`，收敛为 76 行 / 64 vendor gate；文档同步 76 |
+hermes/status.md:50:- `D2-23`：关联工具列写 `auth_status`，但操作步骤实为「查询 agent 注册状态」，指引来源 `agent-registration.getAgentRegistrationStatuses` 为内部函数直调，不经 MCP 工具层、不触发 vendor gate → 排除。
+hermes/v2-契约漂移-用例影响清单.md:14:| **受影响用例合计** | **76 条设计级**（vendor_gate 64 + dispatch 3 + remote 1 + fake-move 3 + rule 1 + toolcount 4） | 见下逐条映射（Round-02 复审后订正：D1-71 纳入 + D2-23/27 书面排除） |
+hermes/v2-契约漂移-用例影响清单.md:18:### #1【P0】vendor gate：14 个云端工具需 `vendorConfirmed`，否则 throw
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && echo "=== D1-71 sandbox_connect occurrences ===" && grep -o "sandbox_connect" hermes/candidate-matrix.csv | head; echo "--- D1-71 full cell split ---" && python -c "
+import csv
+with open('hermes/candidate-matrix.csv', encoding='utf-8') as f:
+    rows = list(csv.DictReader(f))
+print('header count:', len(rows[0]))
+print('headers:', list(rows[0].keys()))
+for r in rows:
+    if r['ID']=='D1-71':
+        for k,v in r.items():
+            print(f'[{k}] = {v}')
+"
+=== D1-71 sandbox_connect occurrences ===
+sandbox_connect
+sandbox_connect
+sandbox_connect
+sandbox_connect
+sandbox_connect
+sandbox_connect
+sandbox_connect
+sandbox_connect
+--- D1-71 full cell split ---
+header count: 27
+headers:Traceback (most recent call last):
+  File "<string>", line 8, in <module>
+KeyError: 'ID'
+ ['\ufeffID', '维度', '标题', '优先级', '前置条件', '测试数据', '操作步骤', '预期结果', '指引来源', '关联工具', '自动化建议', '展开规则', '生成时间', '设计状态', '终端覆盖类型', 'terminal', 'agent', 'OS', 'Node/npm', 'shell', 'TTY', 'installLayout', 'mcpTransport', 'hookSupport', 'requiredEvidence', 'owner', '依赖']
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && python -c "
+import csv
+with open('hermes/candidate-matrix.csv', encoding='utf-8-sig') as f:
+    rows = list(csv.DictReader(f))
+for r in rows:
+    if r['ID']=='D1-71':
+        print('关联工具 =', repr(r['关联工具']))
+        print('前置条件 =', repr(r['前置条件']))
+        print('操作步骤 =', repr(r['操作步骤']))
+        print('预期结果 =', repr(r['预期结果']))
+        print('指引来源 =', repr(r['指引来源']))
+"
+关联工具 = 'sandbox_expose_tunnel'
+前置条件 = '已连接沙箱+已部署nginx(有port返回值)；已建立 vendor 确认（vendorConfirmed=用户确立华为云的原文引用）'
+操作步骤 = '⓪建立 vendor 确认：带 vendorConfirmed（用户确立华为云的原文引用）调用；首次触发 vendor challenge 后原样 retry 一次放行 ①sandbox_connect 获取 workspace_id ②sandbox_deploy_nginx 获取实际 port ③sandbox_expose_tunnel 传入 port+workspace_id ④核对返回 publicUrl/tunnelId/port ⑤curl publicUrl 核对 HTTP 可达 ⑥close_session 清理'
+预期结果 = '（gate 放行后）返回 ok=true + publicUrl(https://<id>-<port>.devbridge-s2.hwtunnel.com) + tunnelId + port；publicUrl 可 HTTP 200 访问；无 stale tunnel 残留；缺 port 或 workspace_id 时抛 Error'
+指引来源 = '实: sandbox/session-manager.mjs(1307) exposeTunnel; tools.mjs(741) huaweicloud_sandbox_expose_tunnel；实: vendor-gate.ts VENDOR_GATED_TOOLS/enforceVendorGate'
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && grep -nE "D1-71|sandbox_connect|关联工具|vendor gate 三件套|三件套" reviewer/review-round-02-契约迁移复审.md
+14:Round 01 六项整改（多判 3 移出、漏判 7 纳入、tool-count 2 纳入、D9-12 符号修正、影响清单 §4 订正、D2-23/D2-27 书面排除）均已落实到位，数字断言（56 工具 / 19 规则=9 deny+10 warn / 14 gate 工具）与 v2 源码逐项吻合，D2-23/D2-27 的排除论证成立。但存在 **1 处新漏判（D1-71）** 与 **候选矩阵工作区与文档声明不一致** 两项机器可闭合整改项，须闭合后方可放行。
+22:证据：按 ID 检索候选矩阵，`D2-24`、`D2-26`、`D2-3` 均不存在（.bak-round01 备份中仍在，整改后工作区已移除）。`vendor-gate.ts:33` 明示 `auth_sync/auth_confirm` deliberately ungated，`VENDOR_GATED_TOOLS`（vendor-gate.ts:38-53，14 项）不含 `auth_sync`，故这三条（关联工具 auth_sync）移出 gate 集合正确。
+26:证据：`D10-3 / D4-24 / D6-8 / D2-1 / D3-A3 / D3-A4 / D3-C9` 全部在候选矩阵中，且三件套完整（前置「已建立 vendor 确认（vendorConfirmed=用户确立华为云的原文引用）」 + 步骤 `⓪建立 vendor 确认…` + 预期结果「（gate 放行后）」前缀 + 依赖列「契约依赖: vendorConfirmed 语义 已裁决…」）。机械校验：63 条 vendor gate 类三件套完整率 100%、无残缺。
+46:- `D2-23`（agent 注册状态）：关联工具列写 `auth_status`，但操作步骤为「查询 agent 注册状态」、指引来源 `agent-registration.getAgentRegistrationStatuses(223)/SUPPORTED_AGENT_TARGETS(7)` —— 走**内部函数直调**，不经 `huaweicloud_auth_status` MCP 工具层，不触发 vendor gate。关联工具列 `auth_status` 属母版误归因。
+47:- `D2-27`（KooCLI 版本管理）：关联工具列写 `auth_status`，但操作步骤为 `getKooCliVersion/parseHcloudVersion/compareVersion/kooCliDownloadBase`、指引来源 `koocli-version.*`（源码 `koocli-version.ts:14/25/32/50` 逐一命中）——与 `auth_status` 无关。排除成立。
+60:- **行数不一致**：`test-design.md:20` / `status.md:41` 声明「受影响 75 条（vendor_gate 63 / dispatch 3 / remote 1 / fake-move 3 / rule 1 / toolcount 4）」；但评审时工作区 `candidate-matrix.csv` 实测 **78 数据行 / 66 条 vendor gate**——多出的 3 条（含 `D1-71`、`D2-23`、`D2-27`）与文档计数及 status.md 第 6 项「已书面排除 D2-23/D2-27」直接冲突。该项属 [P1] 数据完整性整改（见整改项 1、2）。
+62:### 8. vendor gate 类三件套机械可执行 + 断言唯一性 — ✅ 已核验通过
+64:证据：逐条机械校验 63（文档口径）vendor gate 用例：三件套完整率 100%；`预期结果` 去掉「（gate 放行后）」前缀后与母版逐字 diff = **0 差异**（断言唯一性未破坏）。三件套措辞与 `vendor-gate.ts:93-102` 语义吻合（`vendorConfirmed` 须非空字符串 quote；once-per-session challenge 首次 bounce 一次 retry 放行）。
+89:**新漏判：`D1-71`（sandbox_expose_tunnel 沙箱隧道暴露）**
+91:- 母版 D1-71 关联工具列 = `sandbox_expose_tunnel`（**ungated**，vendor-gate.ts:34 明示 expose_tunnel deliberately ungated），故机械按「关联工具」扫描未命中。
+92:- 但其**操作步骤① = `sandbox_connect 获取 workspace_id`**，而 `huaweicloud_sandbox_connect` ∈ `VENDOR_GATED_TOOLS`（vendor-gate.ts:50，**gated**）。
+93:- 依据与 Round 01 对 D10-3「直调 serviceCatalog（关联工具列误标 harness）仍判受影响」完全一致的 oracle（操作步骤触及 gated 工具即受影响），`D1-71` 的执行路径在 v2 首步即被 vendor gate 拦截，必须施加「已建立 vendor 确认 / ⓪ / gate 放行后」三件套。
+94:- 对照同级用例 D3-C3、D3-S3（关联工具列均列 `sandbox_connect` 且已 gated）印证：凡步骤调用 `sandbox_connect` 者均须 gated。D1-71 属漏判。
+98:- 工作区候选矩阵含 `D2-23`（auth_status）、`D2-27`（auth_status）且带 vendor gate 三件套，与 status.md 第 6 项「已书面排除」及第 1~6 项复核结论（排除成立）直接矛盾。这两条关联工具 `auth_status` 系母版误归因，实际内容不触 `huaweicloud_auth_status` MCP 工具，**不应 gated**。
+112:| 1 | [P1] | 新漏判 `D1-71`（sandbox_expose_tunnel 用例，步骤①触及 gated `sandbox_connect`） | 纳入 vendor gate 受影响集合，施加完整三件套（前置「已建立 vendor 确认（vendorConfirmed=用户确立华为云的原文引用）」+ 步骤⓪ + 预期结果「（gate 放行后）」前缀 + 依赖「契约依赖: vendorConfirmed 语义 已裁决」）；同步更正关联工具列补充 `sandbox_connect`（可选：指引来源已含 `vendor-gate.ts`）。受影响总数由 75 → 76。 |
+113:| 2 | [P1] | 工作区矩阵与文档计数不一致（78 行/66 vendor gate vs 声明 75/63），且错误包含已书面排除的 `D2-23`/`D2-27` | 从候选矩阵移除 `D2-23`/`D2-27`（恢复母版 1.x 原样，不带 gate 三件套）；重新核对矩阵行数并统一 `test-design.md`/`status.md`/`v2-契约漂移-用例影响清单.md` 的受影响计数（应 = 63 vendor + D1-71 回归后 64 vendor，总 76）。 |
+126:- 结构/子集/唯一/三件套/断言唯一性：python csv 逐列比对候选与母版；`预期结果` 去「（gate 放行后）」前缀后逐字 diff。
+127:- 漏判/多判：以 `vendor-gate.ts VENDOR_GATED_TOOLS`（14 工具）与 `tool-definitions.ts TOOL_DEFINITIONS`（56）为 oracle，扫描母版 212 条「关联工具/操作步骤/预期结果/测试数据/前置条件」中 gated 工具引用，与候选 ID 集合求差集（命中 D1-71）。
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && echo "=== status.md full ===" && cat hermes/status.md && echo "=== decision-log.md ===" && cat hermes/decision-log.md
+=== status.md full ===
+# Hermes ITER-006 交接状态
+
+- 状态：`HERMES_DRAFT_READY`（Round 02 整改完成，待 OpenCode Round 03 复审，**不得标记 TEST_DESIGN_READY**）
+- 评审目录：`reviews/ITER-006-20261029171721/`
+- 评审者：OpenCode（`deepseek-gw/deepseek-v4-pro-0813`），替代 Codex（Codex 侧 429 限流不可用）
+- 本轮纪律：只产出设计文档 + 候选矩阵 + 决策记录；**未执行测试、真实探针、真云操作、真实升级**。
+
+## SUT 基线（被测项目，P1 可复现）
+
+- SUT：源码仓 v2 分支 `fcfe047f`（2.0.0，npm 未发布）
+- 工具注册源：`plugins/huaweicloud-core/src/tool-definitions.ts` → **56 个**
+- 设计输入：`results/version/v2.0.0/`（FINDINGS.md 8 条漂移 + 产品反馈已裁决）
+
+## 本轮产出（Round 03 提交版）
+
+1. `v2-契约漂移-用例影响清单.md` — 8 条漂移 → 用例映射（76 条）
+2. `decision-log.md` — 3 条 P0/P1 漂移产品侧裁决结论
+3. `test-design.md` — 候选设计（76 条受影响）
+4. `candidate-matrix.csv` — **76 条**受影响设计级用例的迁移后 27 列全文
+
+## 统计
+
+- 受影响用例：**76 条设计级**（vendor_gate 64 / dispatch 3 / remote 1 / fake-move 3 / rule 1 / toolcount 4）
+- 不受影响：**136 条设计级**保持 1.x 原样（212 − 76）
+- 展开级迁移：评审放行后 Step 3 随生成器处理（继承自 76 条的展开行）
+
+## Round 01 整改记录（全部落实，Round 02 已核验）
+
+| # | 整改项 | 结果 |
+|---|---|---|
+| 1 | 多判 3 条 `D2-24/D2-26/D2-3`（auth_sync 未 gate）移出 | ✅ |
+| 2 | 漏判 vendor gate 7 条 `D10-3/D4-24/D6-8/D2-1/D3-A3/D3-A4/D3-C9` 纳入 | ✅ |
+| 3 | 漏判 tool-count 2 条 `D1-56/D5-3` 纳入（40→56 工具） | ✅ |
+| 4 | `D9-12` 的 `findSkillsRoot` → `SKILLS_ROOT` | ✅ |
+| 5 | 影响清单 §4 假漂移表去掉 `D9-10` | ✅ |
+| 6 | `D2-23/D2-27` 关联工具归因复核 → 书面排除 | ✅（排除论证成立） |
+
+## Round 02 评审结论与整改（OpenCode 2026-10-30 15:23 → Hermes 整改）
+
+结论：`REVIEW_CHANGES_REQUESTED`（3 项，已闭合）
+
+| # | 严重度 | 整改项 | 完成情况 |
+|---|---|---|---|
+| 1 | P1 | 新漏判 `D1-71`（sandbox_expose_tunnel，步骤①触及 gated `sandbox_connect`）纳入 | ✅ 确认纳入（三件套已完整）；关联工具列补 `sandbox_connect` |
+| 2 | P1 | 工作区矩阵与文档计数不一致 + 错误包含已排除的 `D2-23/D2-27` | ✅ 从候选矩阵移除 `D2-23/D2-27`，收敛为 76 行 / 64 vendor gate；文档同步 76 |
+| 3 | P2 | `D5-3`/`D1-56` 残留「40 工具」注记 | ✅ 核查后已无「40 工具」残留（均已为 56） |
+
+### D2-23/D2-27 书面排除理由（Round 02 复核成立）
+
+- `D2-23`：关联工具列写 `auth_status`，但操作步骤实为「查询 agent 注册状态」，指引来源 `agent-registration.getAgentRegistrationStatuses` 为内部函数直调，不经 MCP 工具层、不触发 vendor gate → 排除。
+- `D2-27`：关联工具列写 `auth_status`，但操作步骤为 KooCLI 版本解析（`koocli-version.*`），与 `auth_status` 无关 → 排除。
+
+## 仍未解决
+
+- 唯一外部项：v2 发版文档明示 remote Accept 头 + Mcp-Session-Id（产品侧动作，不阻塞本设计放行）。
+=== decision-log.md ===
+# 决策记录 — ITER-006（v2.0.0）3 条漂移产品侧裁决
+
+> 记录：2026-10-29 17:xx（北京时间）｜ 来源：产品侧回复，测试经理转述
+
+## 裁决结论（3 条 P0/P1，方向已定）
+
+| # | 漂移 | 产品侧裁决 | 测试侧落点 |
+|---|---|---|---|
+| 1 | vendor gate 路由 0% | **安全增强，不放宽**；测试侧适配即可恢复 | 用例断言改为「带 `vendorConfirmed`（用户确立华为云的原文引用）+ 首次 challenge 后 retry 一次」→ 路由/工具返回正常 |
+| 2 | dispatch 删除 | **breaking change，不做 shim**（v2 未发布，无真实老用户） | 用例断言改为按 v2 工厂函数（`createDevkitMcpServer` / `createLinkedDevkitServers` / `runInitializeSideEffects` / `normalizeToolCallParams`）语义 |
+| 3 | remote Streamable HTTP | **规范升级，非缺陷**；仅要求发版文档明示 | 用例断言改双 Accept 头（`application/json, text/event-stream`）返回 200；单 Accept 头 406 属契约内行为；须核查发版文档已明示 Accept 头 + `Mcp-Session-Id` 要求 |
+
+## 对候选设计的影响
+
+- 3 条漂移从「契约依赖待冻结」转为「**按 v2 行为冻结契约，测试侧改断言适配**」。
+- 唯一产品侧遗留动作：#3 remote 的「发版文档明示」需在发版时落地（测试侧可先以「文档应明示」作断言项）。
+- 其余 5 条（假漂移 / 规则集 19 / 工具 56 / 真云时序 / 沙箱）维持「测试侧更新断言/指引来源」不变。
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && python -c "
+import csv
+with open('hermes/candidate-matrix.csv', encoding='utf-8-sig') as f:
+    rows = list(csv.DictReader(f))
+print('=== 关联工具 col: D1-71 vs sandbox siblings ===')
+for r in rows:
+    if r['ID'] in ('D1-71','D3-C3','D3-S3','D1-70','D1-72'):
+        print(r['ID'], '| 关联工具=', repr(r['关联工具']), '| 标题=', r['标题'][:30])
+print()
+print('=== rows where 关联工具 col contains sandbox_connect ===')
+for r in rows:
+    if 'sandbox_connect' in r['关联工具']:
+        print(r['ID'], repr(r['关联工具']))
+"
+=== 关联工具 col: D1-71 vs sandbox siblings ===
+D1-71 | 关联工具= 'sandbox_expose_tunnel' | 标题= sandbox_expose_tunnel 沙箱隧道暴露
+D1-72 | 关联工具= 'competition_voucher_claim' | 标题= competition_voucher_claim 激励代金
+D3-C3 | 关联工具= 'sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_close_session/sandbox_upload_file/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_check_user/sandbox_sign_agreement/sandbox_connect/sandbox_credentials' | 标题= 沙箱部署E2E
+D3-S3 | 关联工具= 'sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_close_session' | 标题= 场景-沙箱预览出URL
+
+=== rows where 关联工具 col contains sandbox_connect ===
+D3-C11 'sandbox_connect'
+D3-C14 'sandbox_connect/sandbox_credentials'
+D3-C3 'sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_close_session/sandbox_upload_file/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_check_user/sandbox_sign_agreement/sandbox_connect/sandbox_credentials'
+D3-S3 'sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_close_session'
+D3-S7 'sandbox_connect/sandbox_deploy_nginx/plan_cli_command/run_approved_command'
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && python -c "
+import csv
+with open('hermes/candidate-matrix.csv', encoding='utf-8-sig') as f:
+    rows = list(csv.DictReader(f))
+for r in rows:
+    if r['ID']=='D1-71':
+        col = r['关联工具']
+        print('关联工具列原值:', col)
+        print('含 sandbox_connect ?', 'sandbox_connect' in col)
+        print('含 sandbox_expose_tunnel ?', 'sandbox_expose_tunnel' in col)
+        # also check 指引来源
+        print('指引来源:', r['指引来源'])
+        print('依赖:', r['依赖'])
+"
+关联工具列原值: sandbox_expose_tunnel
+含 sandbox_connect ? False
+含 sandbox_expose_tunnel ? True
+指引来源: 实: sandbox/session-manager.mjs(1307) exposeTunnel; tools.mjs(741) huaweicloud_sandbox_expose_tunnel；实: vendor-gate.ts VENDOR_GATED_TOOLS/enforceVendorGate
+依赖: 需求来源与前置条件；独立 manifest；finally 清理；契约依赖: vendorConfirmed 语义 已裁决(不放宽,测试侧带暗号+retry适配)
+[0m
+[0m$ [0mcd "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" && python -c "
+import csv
+with open('hermes/candidate-matrix.csv', encoding='utf-8-sig') as f:
+    rows = list(csv.DictReader(f))
+gate = [r for r in rows if ('gate 放行' in r['预期结果']) or ('vendor 确认' in r['前置条件']) or ('vendorConfirmed' in r['前置条件'])]
+print('vendor_gate rows (含gate放行/vendor确认前缀):', len(gate))
+print('total data rows:', len(rows))
+# 三件套完备性 for gate rows
+incomplete=[]
+for r in gate:
+    ok_pre = 'vendor 确认' in r['前置条件'] or 'vendorConfirmed' in r['前置条件']
+    ok_step = '⓪' in r['操作步骤'] or '0建立 vendor' in r['操作步骤']
+    ok_exp = r['预期结果'].strip().startswith('（gate 放行后）') or 'gate 放行后' in r['预期结果']
+    ok_dep = 'vendorConfirmed' in r['依赖']
+    if not(ok_pre and ok_step and ok_exp and ok_dep):
+        incomplete.append(r['ID'])
+print('三件套残缺 rows:', incomplete)
+"
+vendor_gate rows (含gate放行/vendor确认前缀): 64
+total data rows: 76
+三件套残缺 rows: []
+[0m
+[0m← [0mWrite reviews/ITER-006-20261029171721/reviewer/review-round-03-契约迁移复审.md
+Wrote file successfully.
+[0m
+复审完成，结论文件已写入。
+
+**结论：REVIEW_CHANGES_REQUESTED**
+
+- ✅ Item 2：D2-23/D2-27 已移除（grep 计数均 0）
+- ✅ Item 3：全 CSV 无「40 工具」注记（grep 无匹配）
+- ✅ 计数一致：76 行 / 27 列 / vendor_gate 64，test-design.md、status.md、影响清单均写 76/64
+- ❌ Item 1：D1-71 三件套完整，但**关联工具列仍是 `sandbox_expose_tunnel`，未补 `sandbox_connect`**（sandbox_connect 只在操作步骤①出现，未进关联工具列）——一处机器可闭合残留。
+
+整改指令：D1-71 关联工具列改为 `sandbox_expose_tunnel/sandbox_connect`。

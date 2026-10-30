@@ -1,0 +1,76 @@
+[0m
+> build · deepseek-v4-pro-0813
+[0m
+[0m$ [0mfind "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721" -maxdepth 3 -type f | head -100
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/decision-log.md
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/status.md
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/test-design.md
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/v2-契约漂移-用例影响清单.md
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/opencode-run-20261030143147.log
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/opencode-run-r02.log
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/opencode-run-r03.log
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/opencode-run-r04.log
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/prompt-round01.txt
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/prompt-round02.txt
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/prompt-round03.txt
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/prompt-round04.txt
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/README.md
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/review-round-01-契约迁移复审.md
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/review-round-02-契约迁移复审.md
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/review-round-03-契约迁移复审.md
+[0m
+[0m$ [0mgrep -n "^D1-71\b\|^D1-71," "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv"
+8:D1-71,D3功能,sandbox_expose_tunnel 沙箱隧道暴露,P1,已连接沙箱+已部署nginx(有port返回值)；已建立 vendor 确认（vendorConfirmed=用户确立华为云的原文引用）,"sandbox_expose_tunnel(port=<nginx实际port>, workspace_id=<connect返回值>)",⓪建立 vendor 确认：带 vendorConfirmed（用户确立华为云的原文引用）调用；首次触发 vendor challenge 后原样 retry 一次放行 ①sandbox_connect 获取 workspace_id ②sandbox_deploy_nginx 获取实际 port ③sandbox_expose_tunnel 传入 port+workspace_id ④核对返回 publicUrl/tunnelId/port ⑤curl publicUrl 核对 HTTP 可达 ⑥close_session 清理,（gate 放行后）返回 ok=true + publicUrl(https://<id>-<port>.devbridge-s2.hwtunnel.com) + tunnelId + port；publicUrl 可 HTTP 200 访问；无 stale tunnel 残留；缺 port 或 workspace_id 时抛 Error,实: sandbox/session-manager.mjs(1307) exposeTunnel; tools.mjs(741) huaweicloud_sandbox_expose_tunnel；实: vendor-gate.ts VENDOR_GATED_TOOLS/enforceVendorGate,sandbox_expose_tunnel/sandbox_connect,半自动,COMMON|<代表: Hermes+沙箱>|<证据: publicUrl可访问+tunnelId>|<阻塞: 需沙箱配额+DevBridge>,2026-10-13,DESIGN_COVERED,COMMON,<代表: Hermes+沙箱>,Hermes 代表终端; fake/fixture,Windows/Linux 代表环境；macOS 若声明支持则单独举证,Node >=22；npm/npx 按 OS 记录,PowerShell（Windows）/bash（Linux）/zsh（macOS）,non-TTY；需要交互时必须提供 PTY,隔离 HOME + plugin 目录 + npm cache + HUAWEICLOUD_HOME fixture,stdio（适用时）；函数/fixture 层否则,按用例需要；未涉及则 n/a,强断言：<证据: publicUrl可访问+tunnelId>；保留脱敏日志、manifest、前后快照,测试负责人,"需求来源与前置条件；独立 manifest；finally 清理；契约依赖: vendorConfirmed 语义 已裁决(不放宽,测试侧带暗号+retry适配)"
+[0m
+[0m$ [0mhead -1 "C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv" | tr ',' '\n' | cat -n
+1	﻿ID
+     2	维度
+     3	标题
+     4	优先级
+     5	前置条件
+     6	测试数据
+     7	操作步骤
+     8	预期结果
+     9	指引来源
+    10	关联工具
+    11	自动化建议
+    12	展开规则
+    13	生成时间
+    14	设计状态
+    15	终端覆盖类型
+    16	terminal
+    17	agent
+    18	OS
+    19	Node/npm
+    20	shell
+    21	TTY
+    22	installLayout
+    23	mcpTransport
+    24	hookSupport
+    25	requiredEvidence
+    26	owner
+    27	依赖
+[0m
+[0m$ [0mpython -c "
+import csv
+p='C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv'
+with open(p,encoding='utf-8-sig',newline='') as f:
+    r=csv.reader(f)
+    hdr=next(r)
+    for row in r:
+        if row[0]=='D1-71':
+            idx_a=hdr.index('关联工具')
+            idx_b=hdr.index('指引来源')
+            print('指引来源 =', repr(row[idx_b]))
+            print('关联工具 =', repr(row[idx_a]))
+"
+指引来源 = '实: sandbox/session-manager.mjs(1307) exposeTunnel; tools.mjs(741) huaweicloud_sandbox_expose_tunnel；实: vendor-gate.ts VENDOR_GATED_TOOLS/enforceVendorGate'
+关联工具 = 'sandbox_expose_tunnel/sandbox_connect'
+[0m
+[0m← [0mWrite reviews/ITER-006-20261029171721/reviewer/review-round-04-契约迁移复审.md
+Wrote file successfully.
+[0m
+`TEST_DESIGN_READY`
+
+D1-71 关联工具列 = `sandbox_expose_tunnel/sandbox_connect`（CSV 解析确认），无 `sandbox_expose_tunnel` 单独残留。评审文件已写入。

@@ -1,0 +1,26 @@
+你是 huaweicloud-devkit 测试设计的外部评审者（OpenCode）。对 ITER-006（v2.0.0 契约迁移）Hermes 候选设计做 **Round 03 复审**。
+
+【首要铁律】你的**唯一交付物**是下面这个文件，必须**第一时间写出来**，写文件是你完成任务的唯一标志——不要把所有轮次都花在跑验证脚本上，先写结论文件、再补证据：
+C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/reviewer/review-round-03-契约迁移复审.md
+（若你的写文件工具失败，就把结论全文打印到 stdout，否则等于没做。）
+
+## 输入文件（读完即可，不必逐字节比对）
+1. hermes/candidate-matrix.csv（**76 条**受影响设计级用例，27 列，维护者已核实：76 行/27 列/ID 无重复/header 与母版一致/无母版外 ID，你可抽查 1-2 个点确认即可，不必全量重跑验证）
+2. hermes/test-design.md、hermes/status.md、hermes/decision-log.md、hermes/v2-契约漂移-用例影响清单.md
+3. 前两轮结论：reviewer/review-round-01-契约迁移复审.md、reviewer/review-round-02-契约迁移复审.md
+
+以上都在 reviews/ITER-006-20261029171721/ 目录下（测试仓库 C:/Users/Administrator/devkit-test/huaweicloud-devkit-test）。
+
+## 本轮要核验的 3 项（Round 02 要求的整改）
+1. [P1] D1-71 已纳入 candidate-matrix.csv，带完整 vendor gate 三件套，关联工具列补了 sandbox_connect。（grep candidate-matrix.csv 里 D1-71 这一行即可）
+2. [P1] D2-23 / D2-27 已从 candidate-matrix.csv 移除（书面排除）。
+3. [P2] 全 CSV 已无「40 工具/40工具/恰好 40」注记。
+
+再加一句核验：文档计数一致（test-design.md / status.md / 影响清单 均写受影响 76 条、vendor_gate 64）。
+
+## 输出要求（结论文件结构）
+1. 第一行结论，二选一：`TEST_DESIGN_READY`（可放行）或 `REVIEW_CHANGES_REQUESTED`（需整改）。仅当上面 3 项 + 计数一致全部核验通过、无机器可闭合整改项残留时才写 TEST_DESIGN_READY。
+2. 逐项一句「已核验通过」（附 1 行证据）或「必须整改」（附修改指令）。
+3. 文件末尾最后一行固定标记：【评审完成】
+
+只写 reviewer/ 目录下的评审文件，不得改 hermes/ 目录、candidate-matrix.csv 或任何 CSV 真源。

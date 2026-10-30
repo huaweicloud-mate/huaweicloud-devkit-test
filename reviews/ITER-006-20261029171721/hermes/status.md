@@ -1,6 +1,6 @@
 # Hermes ITER-006 交接状态
 
-- 状态：`HERMES_DRAFT_READY`（Round 02 整改完成，待 OpenCode Round 03 复审，**不得标记 TEST_DESIGN_READY**）
+- 状态：**`TEST_DESIGN_READY`**（OpenCode Round 04 终审通过，设计可放行）
 - 评审目录：`reviews/ITER-006-20261029171721/`
 - 评审者：OpenCode（`deepseek-gw/deepseek-v4-pro-0813`），替代 Codex（Codex 侧 429 限流不可用）
 - 本轮纪律：只产出设计文档 + 候选矩阵 + 决策记录；**未执行测试、真实探针、真云操作、真实升级**。
@@ -53,3 +53,24 @@
 ## 仍未解决
 
 - 唯一外部项：v2 发版文档明示 remote Accept 头 + Mcp-Session-Id（产品侧动作，不阻塞本设计放行）。
+
+
+## Round 03 评审结论与整改（OpenCode 2026-10-30）
+
+结论：`REVIEW_CHANGES_REQUESTED`（仅剩 1 处残留）
+
+- ✅ D2-23/D2-27 已移除、无「40 工具」残留、计数一致（76/64）、D1-71 三件套完整
+- ❌ D1-71 关联工具列未补 `sandbox_connect` → 已补为 `sandbox_expose_tunnel/sandbox_connect`（磁盘读回确认）
+
+## Round 04 终审结论（OpenCode 2026-10-30 16:15）
+
+结论：**`TEST_DESIGN_READY`**（可放行）
+
+- D1-71 关联工具列 = `sandbox_expose_tunnel/sandbox_connect`，无残留；前几轮整改项全部落实，无机器可闭合整改项残留。
+- 文件：`reviewer/review-round-04-契约迁移复审.md`
+
+## 最终统计（放行口径）
+
+- 受影响用例：**76 条设计级**（vendor_gate 64 / dispatch 3 / remote 1 / fake-move 3 / rule 1 / toolcount 4）
+- 不受影响：**136 条**（212 − 76）
+- 外部依赖：仅 v2 发版文档明示 remote Accept 头 + Mcp-Session-Id（产品侧动作，不阻塞放行）
