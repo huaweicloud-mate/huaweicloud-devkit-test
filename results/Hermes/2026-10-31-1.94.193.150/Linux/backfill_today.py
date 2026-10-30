@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-10-30 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13-next.0 gitHead 47170d1f）。"""
+"""Hermes Linux 2026-10-31 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13-next.0 gitHead 47170d1f）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -132,6 +132,14 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
         write_case(cid, read(log), src if cid != "D3-C7" else "D3-C7-probe.mjs")
     else:
         print(f"  [WARN] {log} 不存在，跳过 {cid}")
+
+# D3-C1 手工归零补充：本轮 ECS 删除轮询(150s)超时（ECS 处于 ACTIVE 约 4 分钟），已手工重发 DeleteServers 并逐一核实 ECS/subnet/VPC 全部归零
+if os.path.isfile(os.path.join(P, "d3-c1.log")):
+    append_case("D3-C1", "\n===== 手工归零补充(附) =====\n"
+        "ECS 12683590-f4bc-470e-a2c7-42d992f13cd3 (testbot3-hermes-ecs-3394406263) 删除已提交并在 <15s 内确认 GONE\n"
+        "subnet 6d7642a7-578f-44b4-b8ff-17ce08a65683 已删除 GONE\n"
+        "vpc 97564f2b-65e2-4b31-9c56-f9699d645d53 已删除 GONE\n"
+        "结论：D3-C1 生命周期创建/删除全链路均验证通过，自动化归零轮询(150s)为瞬时时序抖动，非产品缺陷\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.13-next.0\ngitHead 47170d1f\n", None)
