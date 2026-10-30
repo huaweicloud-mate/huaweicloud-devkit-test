@@ -134,7 +134,7 @@
 | ECS（D3-C1） | 否（billing 拒绝 Ecs.0707） | N/A | 未创建实例，无残留 |
 | EIP | 否 | N/A | `ListPublicips total_count=0` |
 
-> 残留核对（2026-10-31 实测）：ECS `ListServersDetails count=0`；EIP `total_count=0`；本次建桶均已删除。真云只删本次创建资源，未删既有/他人资源。
+> 残留核对（2026-10-31 实测）：本次未创建 ECS（D3-C1 被 billing 拒绝 Ecs.0707）；现存 1 台为 2026-10-29 他人创建的 `tctest-tmr-u1yrtd-srv`（非本次残留，未动）；EIP `total_count=0`；本次建桶均已删除。真云只删本次创建资源，未删既有/他人资源。
 
 ---
 
