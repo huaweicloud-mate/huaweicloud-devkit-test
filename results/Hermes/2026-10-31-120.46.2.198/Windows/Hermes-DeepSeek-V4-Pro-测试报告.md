@@ -46,14 +46,12 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | 96 | 有证据且通过 PASS 门禁 |
+| PASS | 93 | 有证据且通过 PASS 门禁 |
 | FAIL | 8 | D2-4 / D9-12 / D4-4 / D3-S1 / D3-C2 / D3-S5 / D4-25 / D4-26 |
 | BLOCKED | 3 | D3-C1（VPC 配额）/ D3-C3 / D3-C6（沙箱维护） |
-| SPEC-MISMATCH | 0 | 设计级 SPEC 见下方（D1-65/D1-68/D8-9 记 SPEC） |
+| SPEC-MISMATCH | 3 | D1-65 / D1-68 / D8-9（契约漂移） |
 | NOT_RUN | 0 | |
 | **合计** | **107** | |
-
-> 注：D1-65 / D1-68 / D8-9 三条 SPEC-MISMATCH 属设计级，状态列记为 SPEC-MISMATCH（见 3.4）。
 
 ### 3.2 展开级（43）
 
