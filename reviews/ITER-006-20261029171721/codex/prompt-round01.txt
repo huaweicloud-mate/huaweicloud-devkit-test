@@ -1,0 +1,45 @@
+你是 huaweicloud-devkit 测试设计的外部评审者（Codex）。请对 ITER-006（v2.0.0 契约迁移）的 Hermes 候选设计做正式复审。
+
+## 评审目录
+
+reviews/ITER-006-20261029171721/
+
+## 输入文件（请逐份完整阅读）
+
+1. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/test-design.md
+2. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/candidate-matrix.csv（69 条受影响设计级用例的迁移后 27 列）
+3. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/decision-log.md
+4. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/v2-契约漂移-用例影响清单.md
+5. C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/hermes/status.md
+
+## 本轮背景
+
+v2.0.0（源码仓 v2 分支 fcfe047f）相对 1.x 有 8 条契约漂移，产品侧已裁决 3 条：
+- vendor gate（14 工具需 vendorConfirmed）→ 安全增强不放宽，测试侧带暗号+challenge retry 适配
+- dispatch 删除 → breaking change 不做 shim，测试侧按工厂函数改
+- remote Streamable HTTP → 规范升级非缺陷，发版文档明示 Accept 头+Mcp-Session-Id
+
+Hermes 本轮只做「契约迁移」：改 69 条受影响设计级用例的断言/前置/指引来源，不新增维度、不跑测试、不跑真云、不碰生成器（生成器/展开级迁移在放行后 Step 3 随生成器处理）。
+
+## 评审要求（逐项核验，给出证据）
+
+1. candidate-matrix.csv 是否 69 行且 27 列齐全？ID 是否唯一？与母版 212 条设计级的子集是否对得上？
+2. vendor gate 类 59 条：迁移动作（前置加「建立 vendor 确认」、步骤⓪「带 vendorConfirmed+challenge retry」、预期结果「gate 放行后」前缀）是否机械可执行、断言唯一性是否未破坏？
+3. dispatch 3 条（D1-36/D1-45/D9-12）：改写后的 dispatchTool/工厂函数命名是否与 v2 源码精确一致？（可读 C:/Users/Administrator/devkit-test/hdk 的 v2 分支源码 tools.ts / mcp-protocol.ts / tool-definitions.ts 核对）
+4. 数字断言核对（可读 hdk v2 源码）：
+   - tool-definitions.ts 的 TOOL_DEFINITIONS 是否 = 56 个？（D9-1/D5-1 断言值）
+   - safety/rules/cloud-risk-rules.json 是否 = 19 条（9 deny + 10 warn）？（D10-4 断言值）
+   - vendor-gate.ts 的 VENDOR_GATED_TOOLS 是否确为 14 工具、含 auth 系列（据此判 D2 认证域 25 条是否真受影响）？
+5. 受影响范围是否漏判/多判：69 条之外的用例是否还有受这 8 条漂移影响但未被纳入的？反之，纳入的 59 条 vendor_gate 是否有一条工具实际不在 VENDOR_GATED_TOOLS 里？
+6. 状态纪律：status.md 是否写 HERMES_DRAFT_READY（而非 TEST_DESIGN_READY）？是否声明未执行测试/真云？
+7. test-design.md 放行检查 A/B/C 三张表是否都有明确结论？
+
+## 输出要求
+
+1. 结论只写一个（二选一）：`REVIEW_CHANGES_REQUESTED`（需整改）或 `TEST_DESIGN_READY`（可放行）。只有上述 7 项全部核验通过、且无机器可闭合的整改项残留时，才可写 TEST_DESIGN_READY。
+2. 逐项给「已核验通过 / 必须整改」，整改项用 [P0]/[P1]/[P2] 标严重度，每条给证据 + 具体修改指令。
+3. 整改项按「🟢 机器可闭合」与「🔴 外部依赖」分类。
+4. 把你的完整评审结论写入下面这个文件（UTF-8）：
+   C:/Users/Administrator/devkit-test/huaweicloud-devkit-test/reviews/ITER-006-20261029171721/codex/review-round-01-契约迁移复审.md
+5. 只写 codex/ 目录下的评审文件，不得修改 hermes/ 目录、candidate-matrix.csv 或任何 CSV 真源。
+6. 完成后在最后一行输出固定标记：【评审完成】

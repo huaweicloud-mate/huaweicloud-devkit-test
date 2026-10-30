@@ -74,6 +74,8 @@ v2 相对 1.x 的 8 条契约漂移中，经产品侧裁决后，按「测试侧
 3. 59 条 vendor_gate 影响范围是否漏判/多判（尤其 auth 系列是否确属 gate 管辖——已按 `VENDOR_GATED_TOOLS` 名单核对，请复验）。
 4. D10-4 规则集「9 deny + 10 warn」数值与 `cloud-risk-rules.json` 是否一致。
 
+> 已自查修正（2026-10-30，源码逐行核对后回填 candidate-matrix.csv）：`dispatchTool`→`tools.ts:226`；`_decorateResult`→`mcp-protocol.ts:180`（非 tools.ts 内，D9-12 曾误写掉下划线）；DEBUG→`update-registry.ts:44` + `telemetry/telemetry.ts:143`（D1-65 原写 update-check.ts）；applyUpdateHint→`update-cache.ts:87`（D1-36）；updatePrewarm 已并入 `mcp-protocol.ts` initialize side effects（D1-45）；ws 隧道→`ws-exec/hwlink-tunnel-channel.ts`（D9-11）；`tools.mjs.callTool`→`tools.ts.callTool`（D9-12）。
+
 ## 七、仍未解决
 
 - 唯一外部依赖：产品侧 #3 的「发版文档明示 Accept 头 + Mcp-Session-Id 要求」须在 v2 发版时落地（测试侧可先作断言项，不阻塞设计放行）。
