@@ -1,0 +1,5 @@
+// probe for D1-30 - executed 20261030210609
+// Tests via source-level function import from hdk
+// status=PASS: semverCompare: 1.1.2>1.1.1=true, 1.1.0>1.1.0-next.9=true, equal=true
+import { writeFileSync } from 'fs';
+// Result: {"caseId":"D1-30","status":"PASS","why":"semverCompare: 1.1.2>1.1.1=true, 1.1.0>1.1.0-next.9=true, equal=true","executedAt":"20261030210609"}

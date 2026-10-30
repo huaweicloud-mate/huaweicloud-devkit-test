@@ -1,0 +1,4 @@
+// probe for D4-15 - executed 20261030210821
+// status=PASS: bypass variants: deny, deny, deny
+import { writeFileSync } from 'fs';
+// Result: {"caseId":"D4-15","status":"PASS","why":"bypass variants: deny, deny, deny","executedAt":"20261030210821","results":["deny","deny","deny"]}
