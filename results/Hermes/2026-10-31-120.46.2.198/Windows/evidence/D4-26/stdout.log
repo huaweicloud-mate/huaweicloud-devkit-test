@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-26",
+  "why": "findings.evidence 中空格分隔密码（--password Secret）不被 redactEvidence 的 [:＝] 分隔匹配 → 明文残留",
+  "rootCause": "risk-rule-engine.mjs:19-22 redactEvidence 分隔符仅 [:＝]，不含空格",
+  "tests": [
+    "redactEvidence 分隔符正则: /((?:access[_-]?key|secret[_-]?key|secret|security[_-]?token|x[_-]?auth[_-]?token|token|authorization|password|passwd|admin[_-]?pass|credential)\\s*[:=]\\s*)(\"[^\"",
+    "仅 [:＝] 分隔（不含空格）: true"
+  ],
+  "executedAt": "20261031055500"
+}

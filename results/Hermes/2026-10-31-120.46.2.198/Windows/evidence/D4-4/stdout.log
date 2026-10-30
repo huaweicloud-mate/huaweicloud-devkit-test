@@ -1,0 +1,12 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-4",
+  "why": "Change* 变更类动词未被识别为写操作，绕过审批门",
+  "rootCause": "safety/policy.json:27 writeOperationPrefixes 缺 Change",
+  "tests": [
+    "hcloud ECS ChangeServerChargeType --server_id=test => decision=allow findings=0",
+    "hcloud ECS ChangeServerSpec --server_id=test => decision=allow findings=0",
+    "hcloud ECS DeleteServer --server_id=test => decision=warn findings=1"
+  ],
+  "executedAt": "20261031055000"
+}

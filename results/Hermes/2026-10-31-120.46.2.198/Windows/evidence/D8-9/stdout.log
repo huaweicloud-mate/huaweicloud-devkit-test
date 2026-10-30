@@ -1,0 +1,11 @@
+{
+  "status": "SPEC-MISMATCH",
+  "caseId": "D8-9",
+  "why": "sanitizeValue 未移除 AK/SK/token 敏感值，仅 trim/截断，与契约漂移",
+  "rootCause": "telemetry/telemetry.mjs:190-196 sanitizeValue 仅 trim/截断/去控制字符",
+  "tests": [
+    "sanitizeValue('AK1234567890ABCDEF') => AK1234567890ABCDEF",
+    "sanitizeValue('AK=AKLIVE1234567890') => AK=AKLIVE1234567890"
+  ],
+  "executedAt": "20261031055000"
+}

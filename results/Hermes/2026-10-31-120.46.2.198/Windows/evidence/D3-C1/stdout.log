@@ -1,0 +1,7 @@
+{
+  "status": "BLOCKED",
+  "caseId": "D3-C1",
+  "blockedReason": "VPC 配额超限（VPC.0114 Quota exceeded for resources: vpc）。实测 2026-10-31 真机执行：huaweicloud_run_approved_command 调 CreateVpc 返回 VPC.0114 配额超限，CreateSubnet 随之 VPC.0201 无效。账号现有 5 个 VPC（均为其他客户端/historical 遗留，非本机 testbot3-hermes-*，按红线只删本次创建故不可删），配额已满，ECS 生命周期无法建资源；finally 归零确认「无资源需清理」（未创建任何资源）。解除条件：其他客户端清理 VPC 释放配额后复测",
+  "executedAt": "20261031054500",
+  "realcloud_raw": "{\n  \"case\": \"D3-C1\",\n  \"status\": \"FAIL\",\n  \"total\": 3,\n  \"passed\": 1,\n  \"failed\": 2,\n  \"results\": [\n    {\n      \"name\": \"CreateVpc\",\n      \"pass\": false,\n      \"detail\": \"{\\n  \\\"code\\\": \\\"VPC.0114\\\",\\n  \\\"message\\\": \\\"{\\\\\\\"NeutronError\\\\\\\":{\\\\\\\"message\\\\\\\":\\\\\\\"Quota exceeded for resources:\"\n    },\n    {\n      \"name\": \"CreateSubnet\",\n      \"pass\": false,\n      \"detail\": \"{\\n  \\\"code\\\": \\\"VPC.0201\\\",\\n  \\\"message\\\": \\\"VPC ID is invalid.\\\"\\n}\\n\\u001b[1;93m获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽\"\n    },\n    {\n      \"name\": \"finally归零(校验真实删除)\",\n      \"pass\": true,\n      \"detail\": \"无资源需清理\"\n    }\n  ]\n}"
+}

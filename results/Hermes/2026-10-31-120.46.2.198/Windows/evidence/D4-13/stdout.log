@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "caseId": "D4-13",
+  "why": "只读子账号读可用、写被 IAM 拒绝(最小权限生效)",
+  "tests": [
+    "READ ECS ListServersDetails: status=0 (JSON ok)",
+    "READ VPC ListVpcs: status=0 (JSON ok)",
+    "WRITE VPC CreateVpc: status=0, denied=true",
+    "WRITE detail: {\n  \"code\": \"VPC.0010\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Rules on create_router by *** disallowed by policy\\\",\\\"type\\\":\\\"PolicyNotAuthorized\\\",\\\"detail\\\":\\\"\\\"}}\"\n}\n\u001b[1;93m获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度\u001b[0m\n\u001b[1;93m请求诊断请参考以下内容:\u001b[0m\n\u001b[1;93m+---+--------+--------+--------------------------------+------------------------+--------------------------------+\n|No.|产品名称| 错误码 |            错误"
+  ],
+  "executedAt": "20261031053000"
+}

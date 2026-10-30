@@ -1,0 +1,12 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-25",
+  "why": "前置字符类 (^|[A-Za-z0-9]) 致空格前置的写动词（CLI 常规形态 'hcloud ECS DeleteServer'）不命中 WRITE_OPERATION_RE，写操作被误分类为 cli:invoke",
+  "rootCause": "hooks/huaweicloud-safety.py:46 WRITE_OPERATION_RE 前置字符类(^|[A-Za-z0-9])；另 :24 parents[2] 目录错位",
+  "tests": [
+    "WRITE_OPERATION_RE = (^|[A-Za-z0-9])(Create|Delete|...)\\w* [re.I]",
+    "空格前置写动词 'hcloud ECS DeleteServer...' 命中: False （CLI常规形态，应为写操作）",
+    "行首写动词 'DeleteServer' 命中: True"
+  ],
+  "executedAt": "20261031055500"
+}

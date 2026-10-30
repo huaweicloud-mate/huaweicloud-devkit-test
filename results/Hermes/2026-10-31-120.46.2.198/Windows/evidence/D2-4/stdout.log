@@ -1,0 +1,14 @@
+{
+  "status": "FAIL",
+  "caseId": "D2-4",
+  "why": "lowercase ak=/sk= 与 JSON 带引号 key 明文残留，未脱敏",
+  "rootCause": "safety-policy.mjs:45 (AK|SK) 无 /i、:20 isSecretKeyName 未含裸 ak/sk",
+  "tests": [
+    "redactSecrets(--cli-access-key=AK1234567890) => --cli-access-key=<redacted>",
+    "redactSecrets(ak=ABC123) => ak=ABC123",
+    "redactSecrets(sk=XYZ789) => sk=XYZ789",
+    "redactSecrets(--cli-secret-key=SK1234567890) => --cli-secret-key=<redacted>",
+    "JSON redact => {\"ACCESS_KEY_ID\":\"AKJSON123456\",\"SECRET_ACCESS_KEY\":\"SKJSON987654\"}"
+  ],
+  "executedAt": "20261031055000"
+}

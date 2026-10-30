@@ -1,0 +1,11 @@
+{
+  "status": "SPEC-MISMATCH",
+  "caseId": "D1-65",
+  "why": "DEBUG=1 不生效：仅接受字面量 \"true\"，与「DEBUG===1/true 开启」契约漂移",
+  "rootCause": "telemetry/telemetry.mjs:82 DEBUG === \"true\"（未接受 1）",
+  "tests": [
+    "DEBUG 判定行: const DEBUG = process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true';",
+    "仅接受字面量 'true': true"
+  ],
+  "executedAt": "20261031055000"
+}
