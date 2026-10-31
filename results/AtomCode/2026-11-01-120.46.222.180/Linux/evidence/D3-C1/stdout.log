@@ -1,24 +1,34 @@
 {
   "case": "D3-C1",
   "status": "FAIL",
-  "total": 3,
-  "passed": 1,
-  "failed": 2,
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
   "results": [
     {
       "name": "CreateVpc",
-      "pass": false,
-      "detail": "[OPENAPI_ERROR]proxyconnect tcp: dial tcp: lookup proxy.example on *.*.*.*:53: no such host\n"
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"6cc9c14f-c01e-4af4-94e3-335b19c7a2b6\",\n    \"name\": \"testbot3-hermes-e2e-3480"
     },
     {
       "name": "CreateSubnet",
-      "pass": false,
-      "detail": "[OPENAPI_ERROR]proxyconnect tcp: dial tcp: lookup proxy.example on *.*.*.*:53: no such host\n"
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"e8c326bd-a82f-42cb-8a91-8e6a7cd890e1\",\n    \"name\": \"testbot3-hermes-e2e-3"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed1f4501a193cb2a874c00\",\n  \"serverIds\": [\n    \"2fc240a6-0680-483e-892b-10bb2c6f09f7\"\n  ]\n}"
     },
     {
       "name": "finally归零(校验真实删除)",
-      "pass": true,
-      "detail": "无资源需清理"
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
     }
   ]
 }
