@@ -1,24 +1,7 @@
 {
   "caseId": "D3-C6",
-  "status": "PASS",
-  "why": "sandbox tools=14",
-  "executedAt": "20261101052045",
-  "result": {
-    "sandboxTools": [
-      "huaweicloud_sandbox_exec_with_session",
-      "huaweicloud_sandbox_exec_one_shot",
-      "huaweicloud_sandbox_close_session",
-      "huaweicloud_sandbox_upload_file",
-      "huaweicloud_sandbox_upload_project",
-      "huaweicloud_sandbox_deploy_nginx",
-      "huaweicloud_sandbox_deploy_check",
-      "huaweicloud_sandbox_expose_tunnel",
-      "huaweicloud_sandbox_renew_tunnel",
-      "huaweicloud_sandbox_keepalive_watchdog",
-      "huaweicloud_sandbox_check_user",
-      "huaweicloud_sandbox_sign_agreement",
-      "huaweicloud_sandbox_connect",
-      "huaweicloud_sandbox_credentials"
-    ]
-  }
+  "status": "BLOCKED",
+  "why": "沙箱 7 隐式工具冒烟需真实 DevStation 沙箱，实测 huaweicloud_sandbox_check_user 返回 HDKIT_SANDBOX_MAINTENANCE（沙箱升级优化中），5 项子步全阻塞",
+  "executedAt": "20261101053523",
+  "result": { "error": "HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用 [trace: 16b1f35d7c154c8b9b034ff82dc7ec55]" }
 }

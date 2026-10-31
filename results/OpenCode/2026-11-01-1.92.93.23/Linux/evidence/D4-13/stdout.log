@@ -1,11 +1,58 @@
 {
   "caseId": "D4-13",
   "status": "PASS",
-  "why": "readonly cred exists with valid AK=true prefix=HPUA3X",
-  "executedAt": "20261101052046",
+  "why": "只读子账号: 只读 6/6 写VPC拒绝=true 归零=true",
+  "executedAt": "20261101053446",
   "result": {
-    "credExists": true,
-    "hasAk": true,
-    "akPrefix": "HPUA3X"
+    "readDetail": [
+      {
+        "svc": "ECS",
+        "op": "ListServersDetails",
+        "ok": true,
+        "code": 0,
+        "sample": "{\n  \"count\": 1,\n  \"servers\": [\n    {\n      \"flavor\": {\n        \"disk\": \"0\",\n        \"vcpus\": \"2\",\n        \"ram\": \"4096\","
+      },
+      {
+        "svc": "VPC",
+        "op": "ListVpcs",
+        "ok": true,
+        "code": 0,
+        "sample": "ListVpcs is a multi-version API, where the version (v3) is default. To specify another version, change the API name to '"
+      },
+      {
+        "svc": "EVS",
+        "op": "ListVolumes",
+        "ok": true,
+        "code": 0,
+        "sample": "{\n  \"count\": 1,\n  \"volumes\": [\n    {\n      \"id\": \"fb02693a-6a90-4ca9-be7d-f46d266d6fc6\",\n      \"links\": [\n        {\n    "
+      },
+      {
+        "svc": "IMS",
+        "op": "ListImages",
+        "ok": true,
+        "code": 0,
+        "sample": "{\n  \"images\": [\n    {\n      \"schema\": \"/v2/schemas/image\",\n      \"min_disk\": 150,\n      \"created_at\": \"2026-10-22T03:30:"
+      },
+      {
+        "svc": "CES",
+        "op": "ListMetrics",
+        "ok": true,
+        "code": 0,
+        "sample": "{\n  \"metrics\": [\n    {\n      \"namespace\": \"SYS.OBS\",\n      \"dimensions\": [\n        {\n          \"name\": \"tenant_id\",\n    "
+      },
+      {
+        "svc": "IAM",
+        "op": "ListPermanentAccessKeys",
+        "ok": true,
+        "code": 0,
+        "sample": "{\n  \"credentials\": [\n    {\n      \"access\": \"HPUA3XUKSZCVI4GSG4MI\",\n      \"create_time\": \"2026-09-15T08:45:26.108000Z\",\n "
+      }
+    ],
+    "writeDenied": true,
+    "permMsg": "",
+    "vpcId": null,
+    "residualZero": true,
+    "readPass": 6,
+    "total": 6
   }
 }

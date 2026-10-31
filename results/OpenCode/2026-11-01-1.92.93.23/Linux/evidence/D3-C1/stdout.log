@@ -1,9 +1,34 @@
 {
-  "caseId": "D3-C1",
-  "status": "PASS",
-  "why": "ECS ListServers plan returned classification.decision=true",
-  "executedAt": "20261101052043",
-  "result": {
-    "planResult": "{\n  \"executable\": \"hcloud\",\n  \"args\": [\n    \"ECS\",\n    \"ListServers\"\n  ],\n  \"command\": \"hcloud ECS ListServers\",\n  \"executableBlock\": \"hcloud ECS ListServers\",\n  \"warnings\": [],\n  \"classification\": {\n"
-  }
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"cd5ec176-d2b3-45b4-8ebf-514c1fe0d8d5\",\n    \"name\": \"opencode-devkit-e2e-3481"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"1a2922dc-6352-4e63-a75c-75de3bfab83a\",\n    \"name\": \"opencode-devkit-e2e-3"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed143a01a193da6eb47e62\",\n  \"serverIds\": [\n    \"a7692436-3ea7-4ac1-a658-8300e064af56\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(校验真实删除)",
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+    }
+  ]
 }
