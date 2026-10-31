@@ -1,0 +1,53 @@
+[PASS] 新建令牌 inspect=valid | state=valid
+[PASS] 首次 consume 返回 entry | entry=true
+[PASS] 消费后 inspect=already_consumed | state=already_consumed
+[PASS] 重复 consume 返回 null（单次消费） | c2=null
+[PASS] 未知令牌 inspect=not_found | state=not_found
+[PASS] 回拨 createdAt 后 inspect=expired | state=expired
+[PASS] 过期令牌 consume 返回 null（不执行） | c3=null
+
+=====SUMMARY JSON=====
+{
+  "caseId": "D4-24",
+  "verdict": "PASS",
+  "pass": 7,
+  "fail": 0,
+  "total": 7,
+  "results": [
+    {
+      "name": "新建令牌 inspect=valid",
+      "ok": true,
+      "detail": "state=valid"
+    },
+    {
+      "name": "首次 consume 返回 entry",
+      "ok": true,
+      "detail": "entry=true"
+    },
+    {
+      "name": "消费后 inspect=already_consumed",
+      "ok": true,
+      "detail": "state=already_consumed"
+    },
+    {
+      "name": "重复 consume 返回 null（单次消费）",
+      "ok": true,
+      "detail": "c2=null"
+    },
+    {
+      "name": "未知令牌 inspect=not_found",
+      "ok": true,
+      "detail": "state=not_found"
+    },
+    {
+      "name": "回拨 createdAt 后 inspect=expired",
+      "ok": true,
+      "detail": "state=expired"
+    },
+    {
+      "name": "过期令牌 consume 返回 null（不执行）",
+      "ok": true,
+      "detail": "c3=null"
+    }
+  ]
+}
