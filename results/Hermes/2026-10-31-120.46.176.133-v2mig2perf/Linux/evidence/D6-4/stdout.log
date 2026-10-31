@@ -1,0 +1,65 @@
+{
+  "caseId": "D6-4",
+  "title": "并发调度正确性 (并发 30 请求, 无死锁无消息错乱, 核对 session-manager)",
+  "threshold": "30 并发全部正确返回; 无死锁; 消息/响应 id 无错序",
+  "env": {
+    "HDK_SRC": "/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/dist",
+    "node": "v22.13.0"
+  },
+  "startedAt": "2026-10-31T06:47:39.826Z",
+  "layers": {
+    "A": {
+      "name": "A. MCP JSON-RPC 30 并发 (tools/list × 30)",
+      "pass": true,
+      "elapsedMs": 339.6,
+      "returned": 30,
+      "idAligned": true,
+      "toolCountsUnique": [
+        56
+      ],
+      "toolsConsistent": true,
+      "detail": "返回 30/30, id 1:1=true, tools 数集合=56 (无死锁: 全部在 20s 内返回)"
+    },
+    "B": {
+      "name": "B. hwlink-fair-queue 30 通道并发投递",
+      "pass": true,
+      "elapsedMs": 14.13,
+      "delivered": 600,
+      "allDelivered": true,
+      "perChannelFifo": true,
+      "channelsSeen": 30,
+      "detail": "送达 600/600, 通道数=30/30, 通道内 FIFO=true"
+    },
+    "C": {
+      "name": "C. session-manager 30 路并发 execWithSession",
+      "pass": true,
+      "distinctMs": 7.26,
+      "distinctSessions": 30,
+      "sharedSessionsCreated": 0,
+      "warmOk": true,
+      "distinctIsolated": true,
+      "sharedReuse": true,
+      "sharedResultsIntact": true,
+      "execCallsTotal": 61,
+      "baselineTest": {
+        "exit": 0,
+        "pass": "36",
+        "fail": "0",
+        "tail": [
+          "# pass 36",
+          "# fail 0",
+          "# cancelled 0",
+          "# skipped 0",
+          "# todo 0",
+          "# duration_ms 526.424961",
+          "(node:943029) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time",
+          "(Use `node --trace-warnings ...` to show where the warning was created)"
+        ]
+      },
+      "detail": "独立 ws 会话数=30, 结果隔离=true; 共享 ws 复用会话(新建=0), 结果完整=true; 基线测试 exit=0 pass=36/fail=0"
+    }
+  },
+  "verdict": "PASS",
+  "assertion": "A=OK B=OK C=OK",
+  "finishedAt": "2026-10-31T06:47:41.313Z"
+}

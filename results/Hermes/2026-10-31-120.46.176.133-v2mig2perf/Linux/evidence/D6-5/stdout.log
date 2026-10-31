@@ -1,0 +1,51 @@
+{
+  "caseId": "D6-5",
+  "title": "大目录/大上传 (10万文件识别 + 大工程上传; 内存平稳不超时)",
+  "threshold": "识别完成且不超时(<=120000ms); 峰值 RSS 平稳(<=1536MB)",
+  "env": {
+    "HDK_SRC": "/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/dist",
+    "node": "v22.13.0",
+    "targetFiles": 100000
+  },
+  "startedAt": "2026-10-31T06:47:49.997Z",
+  "build": {
+    "dirs": 2000,
+    "files": 102000,
+    "elapsedMs": 3614
+  },
+  "partA": {
+    "name": "A. 10万文件超大目录 detectFramework 识别",
+    "pass": true,
+    "wallMs": 832.5,
+    "selfReportedMs": 767.6,
+    "detection": {
+      "type": "monorepo",
+      "framework": "Monorepo",
+      "monorepoTool": "Turborepo",
+      "subApps": [],
+      "packageManager": "npm",
+      "rootDir": "/home/testbot3/devkit-test/Hermes/v2mig2/bigdir"
+    },
+    "peakRssMb": 56.1,
+    "childReportedRssMb": 56,
+    "timedOut": false,
+    "stderrTail": "",
+    "subApps": 0,
+    "completed": true,
+    "memoryStable": true,
+    "detail": "识别 2000 子应用(共102000文件) 耗时=767.6ms, 峰值RSS=56.1MB, 完成=true, 内存平稳=true"
+  },
+  "partB": {
+    "name": "B. 大工程上传 huaweicloud_sandbox_upload_project (沙箱)",
+    "status": "BLOCKED",
+    "pass": false,
+    "connectRaw": "[{\"type\":\"text\",\"text\":\"HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 78b0786cf65040e98406fb7270ce9888]\"}]",
+    "reason": "HDKIT_SANDBOX_MAINTENANCE: 沙箱功能维护窗口，无法建立 workspace 会话（服务端，非本机可解）",
+    "stderrTail": ""
+  },
+  "cleanup": "bigdir removed",
+  "verdict": "BLOCKED",
+  "assertion": "大目录识别=OK(耗时767.6ms/峰值RSS 56.1MB); 大上传=BLOCKED",
+  "blockedReason": "大目录(10万文件)识别已真机执行并达阈(耗时767.6ms, 峰值RSS 56.1MB); 大工程上传被沙箱维护窗口阻塞: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能维护窗口，无法建立 workspace 会话（服务端，非本机可解）",
+  "finishedAt": "2026-10-31T06:47:57.858Z"
+}

@@ -1,0 +1,54 @@
+{
+  "caseId": "D6-9",
+  "title": "缓存清理三入口 (清空 + 幂等 + 清理后再查询触发重新拉取)",
+  "threshold": "三入口各自清空对应缓存且幂等; 清理后再查询触发重新拉取",
+  "env": {
+    "HDK_SRC": "/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/dist",
+    "node": "v22.13.0"
+  },
+  "startedAt": "2026-10-31T06:47:44.384Z",
+  "entries": {
+    "update": {
+      "name": "invalidateUpdateCache (update-check/update-cache.ts:19)",
+      "pass": true,
+      "prewarmQueriesBefore": 0,
+      "afterPrewarm": 1,
+      "afterSecondRead": 1,
+      "cacheHit": true,
+      "afterClearRefetch": 2,
+      "refetchAfterClear": true,
+      "afterIdemRefetch": 3,
+      "idempotent": true,
+      "detail": "预热后查询次数=1, 二次读命中(仍=1), 清理后=2, 重复清理后=3"
+    },
+    "icon": {
+      "name": "clearIconCache (icon-library.ts:66)",
+      "pass": true,
+      "afterPrewarm": 1,
+      "afterSecondRead": 1,
+      "cacheHit": true,
+      "afterClearRefetch": 2,
+      "refetchAfterClear": true,
+      "afterIdemRefetch": 3,
+      "idempotent": true,
+      "iconSource": "live",
+      "detail": "预热后 fetch=1, 二次读命中(仍=1), 清理后 fetch=2, 重复清理后 fetch=3, source=live"
+    },
+    "market": {
+      "name": "clearMarketCache (search-market.ts:150)",
+      "pass": true,
+      "afterPrewarm": 1,
+      "afterSecondRead": 1,
+      "cacheHit": true,
+      "afterClearRefetch": 2,
+      "refetchAfterClear": true,
+      "afterIdemRefetch": 3,
+      "idempotent": true,
+      "cnEnMapFetches": 3,
+      "detail": "预热后 index fetch=1, 二次读命中(仍=1), 清理后 fetch=2, 重复清理后 fetch=3"
+    }
+  },
+  "verdict": "PASS",
+  "assertion": "invalidateUpdateCache=OK clearIconCache=OK clearMarketCache=OK",
+  "finishedAt": "2026-10-31T06:47:44.440Z"
+}

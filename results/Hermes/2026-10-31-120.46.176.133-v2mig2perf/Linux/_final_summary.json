@@ -1,0 +1,37 @@
+{
+  "run": "v2mig2perf-BLOCKED-retest",
+  "client": "testbot3-Hermes",
+  "os": "Linux",
+  "host": "120.46.176.133",
+  "sut": "huaweicloud-devkit 2.0.0 (源码 v2 分支 fcfe047f)",
+  "scope": "v2.0.0 迁移 BLOCKED 补测 —— D6 性能基准 6 条",
+  "retest_cases": 6,
+  "results": {
+    "D6-1": "PASS",
+    "D6-3": "PASS",
+    "D6-4": "PASS",
+    "D6-5": "BLOCKED",
+    "D6-7": "PASS",
+    "D6-9": "PASS"
+  },
+  "summary": "PASS=5 FAIL=0 BLOCKED=1",
+  "metrics": {
+    "D6-1_search_docs_p95_ms": 13.18,
+    "D6-1_threshold": "p95<2000ms",
+    "D6-3_cold_start_p95_ms": 542.19,
+    "D6-3_threshold": "p95<5000ms",
+    "D6-4_concurrency": "30/30 id-aligned, 600/600 fair-queue FIFO, 30 sessions isolated, baseline 36/36",
+    "D6-5_detect_framework_100k_files_ms": 767.6,
+    "D6-5_peak_rss_mb": 56.1,
+    "D6-7_long_session_calls": 400,
+    "D6-7_errors": 0,
+    "D6-7_rss_growth_mb": 22.9,
+    "D6-7_rss_peak_mb": 121.5,
+    "D6-7_hook_checks": "6/6 readonly allow + 6/6 write deny",
+    "D6-9_cache_entries": "invalidateUpdateCache=OK clearIconCache=OK clearMarketCache=OK"
+  },
+  "blocked": {
+    "D6-5": "大工程上传 sandbox_upload_project 被沙箱维护窗口阻塞 (HDKIT_SANDBOX_MAINTENANCE，服务端维护，非本机可解)；大目录(10万文件)识别已真机执行并达阈"
+  },
+  "evidence_dir": "evidence/<case-id>/ (probe.mjs + mcp-client.mjs + stdout.log)"
+}

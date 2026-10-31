@@ -1,0 +1,129 @@
+{
+  "caseId": "D6-7",
+  "title": "长会话稳定性 (单会话 400 次持续调用, 无内存泄漏无 hook 失效)",
+  "threshold": "单会话 400 次调用零错误/无挂起; RSS 增长<=64MB 且峰值<=700MB; hook 全程有效",
+  "env": {
+    "HDK_SRC": "/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/dist",
+    "node": "v22.13.0",
+    "iters": 400,
+    "warmup": 60
+  },
+  "startedAt": "2026-10-31T06:50:19.293Z",
+  "serverInfo": {
+    "name": "huaweicloud-devkit",
+    "version": "2.0.0"
+  },
+  "partA": {
+    "name": "A. MCP 长会话 400 次持续调用 (内存/可服务性)",
+    "pass": true,
+    "iterations": 400,
+    "wallMs": 8872.3,
+    "latency": {
+      "n": 400,
+      "min": 0.65,
+      "max": 161.59,
+      "mean": 19.33,
+      "p50": 2.38,
+      "p95": 114.97
+    },
+    "warmupErrors": [],
+    "errors": 0,
+    "errorNames": [],
+    "hangs": 0,
+    "baseRssMb": 98.9609375,
+    "finalRssMb": 121.84375,
+    "peakRssMb": 121.5,
+    "growthMb": 22.9,
+    "steadyDriftMb": 18.5,
+    "rssSamples": [
+      99.3,
+      102.4,
+      101.3,
+      102.5,
+      102.4,
+      102.2,
+      103.4,
+      104.1,
+      111.3,
+      117.4,
+      118.9,
+      119.3,
+      120.4,
+      120,
+      120.7,
+      121,
+      120.8,
+      120.9,
+      121.5,
+      121.1
+    ],
+    "memoryStable": true,
+    "zeroError": true,
+    "toolCountStart": 56,
+    "toolCountEnd": 56,
+    "toolStable": true,
+    "detail": "400 次调用 零错误=true(err=0,hang=0); RSS 基线=98.9609375MB→末=121.84375MB 增长=22.9MB(<=64), 峰值=121.5MB(<=700), 稳态漂移=18.5MB(<=24); tool 数 56→56 稳定=true"
+  },
+  "partB": {
+    "name": "B. PreToolUse 安全 hook 长会话全程有效",
+    "pass": true,
+    "checkpoints": [
+      {
+        "iter": 0,
+        "readonlyDenied": false,
+        "writeDenied": true,
+        "writeRaw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the"
+      },
+      {
+        "iter": 80,
+        "readonlyDenied": false,
+        "writeDenied": true,
+        "writeRaw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the"
+      },
+      {
+        "iter": 160,
+        "readonlyDenied": false,
+        "writeDenied": true,
+        "writeRaw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the"
+      },
+      {
+        "iter": 240,
+        "readonlyDenied": false,
+        "writeDenied": true,
+        "writeRaw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the"
+      },
+      {
+        "iter": 320,
+        "readonlyDenied": false,
+        "writeDenied": true,
+        "writeRaw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the"
+      },
+      {
+        "iter": 399,
+        "readonlyDenied": false,
+        "writeDenied": true,
+        "writeRaw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the"
+      }
+    ],
+    "hookChecksPass": true,
+    "inSessionReadDecisions": [
+      "allow"
+    ],
+    "inSessionWriteDecisions": [
+      "warn"
+    ],
+    "inSessionHookConsistent": true,
+    "detail": "跨会话 6 检查点: 只读放行=6/6, 写拦截=6/6; 会话内 hook_check_command 只读决策=allow, 写决策=warn"
+  },
+  "partC": {
+    "name": "C. 真沙箱长会话 sandbox_exec_with_session (补充)",
+    "status": "BLOCKED",
+    "pass": false,
+    "connectRaw": "[{\"type\":\"text\",\"text\":\"HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: bba4f2fc4aea41ca870006fe11fde334]\"}]",
+    "reason": "HDKIT_SANDBOX_MAINTENANCE: 沙箱维护窗口, 无法建立长会话(服务端, 非本机可解)"
+  },
+  "verdict": "PASS",
+  "assertion": "长会话内存平稳=true(增长22.9MB/峰值121.5MB), 零错误=true, hook 全程有效=true",
+  "stderrTail": "",
+  "finishedAt": "2026-10-31T06:50:30.470Z"
+}
