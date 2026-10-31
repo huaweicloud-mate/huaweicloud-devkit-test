@@ -1,34 +1,22 @@
 {
-  "case": "D3-C1",
+  "caseId": "D3-C1",
   "status": "FAIL",
-  "total": 5,
-  "passed": 4,
-  "failed": 1,
-  "results": [
-    {
-      "name": "CreateVpc",
-      "pass": true,
-      "detail": "{\n  \"vpc\": {\n    \"id\": \"cd5ec176-d2b3-45b4-8ebf-514c1fe0d8d5\",\n    \"name\": \"opencode-devkit-e2e-3481"
-    },
-    {
-      "name": "CreateSubnet",
-      "pass": true,
-      "detail": "{\n  \"subnet\": {\n    \"id\": \"1a2922dc-6352-4e63-a75c-75de3bfab83a\",\n    \"name\": \"opencode-devkit-e2e-3"
-    },
-    {
-      "name": "CreateServers(审批分类)",
-      "pass": "allow",
-      "detail": "allow"
-    },
-    {
-      "name": "CreateServers(返回serverIds)",
-      "pass": true,
-      "detail": "{\n  \"job_id\": \"ff808081a0ed143a01a193da6eb47e62\",\n  \"serverIds\": [\n    \"a7692436-3ea7-4ac1-a658-8300e064af56\"\n  ]\n}"
-    },
-    {
-      "name": "finally归零(校验真实删除)",
-      "pass": false,
-      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
-    }
-  ]
+  "why": "CreateVpc:ok | CreateSubnet:ok | CreateServers:ok | WaitActive:ACTIVE | DeleteServers:submitted | DeleteZero:仍在9f6812ae-334a-4ae8-9198-9183b26cfec4 | DeleteSubnet:ok | DeleteVpc:ok | 归零=false",
+  "executedAt": "20261101054901",
+  "result": {
+    "vpcId": "61aea3c1-3375-4218-944b-6d923501b3d9",
+    "subnetId": "9fbce4a8-26e6-49ef-aa86-5c509801ce74",
+    "serverId": "9f6812ae-334a-4ae8-9198-9183b26cfec4",
+    "steps": [
+      "CreateVpc:ok",
+      "CreateSubnet:ok",
+      "CreateServers:ok",
+      "WaitActive:ACTIVE",
+      "DeleteServers:submitted",
+      "DeleteZero:仍在9f6812ae-334a-4ae8-9198-9183b26cfec4",
+      "DeleteSubnet:ok",
+      "DeleteVpc:ok"
+    ],
+    "zero": false
+  }
 }
