@@ -137,8 +137,9 @@
 | ECS `opencode-devkit-ecs-3481923037` | 真机创建（serverIds 返回） | `DeleteServers` 提交 + 人工二次提交 | 已核实消失 |
 | OBS bucket `opencode-devkit-obs-3481923037` | 真机创建 | `OBS rm` | 已核实删除 |
 | 只读子账号 D4-13 写 VPC 尝试 | 被 IAM 拒绝（未创建） | — | 归零（无残余资源） |
+| D3-C1 二次复测 VPC `opencode-d3c1-…` / 子网 / ECS `9f6812ae…` | 真机创建（WaitActive 后） | DeleteServers 提交 + 人工二次删除 | 已核实消失（VPC/子网/ECS 均 0 remaining） |
 
-> 真云 E2E 全部资源已归零；仅「归零自证」环节（D3-C1）暴露异步删除窗口问题，已人工补齐归零并核实。
+> 真云 E2E 全部资源已归零（两次 D3-C1 复现均人工补齐归零并核实）；D3-C1「删除自证」暴露 KooCLI 异步删除 exit0 但资源残留的问题，见 §四 #3。
 
 ---
 
