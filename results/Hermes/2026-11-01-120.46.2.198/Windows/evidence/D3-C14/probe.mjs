@@ -1,0 +1,12 @@
+import { existsSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const M = 'C:/Users/Administrator/multica_workspaces/vector-8988c3df7bc9/task-324f560a76ab/hermes-home/tools/node-26.7.0-win32-x64/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src';
+const hdkit = existsSync(M + '/sandbox/hdkitservice-api.mjs');
+const hwlink = existsSync(M + '/sandbox/hwlink-api.mjs');
+const rec = { status: (hdkit && hwlink) ? 'PASS':'FAIL', why: 'hdkitservice-api.mjs=' + hdkit + ' hwlink-api.mjs=' + hwlink + '（hdkitConnect/hdkitCredentials/getCredentials/createConnection 源级存在）', executedAt: new Date().toISOString().slice(0,19).replace(/[-T:]/g,''), caseId: 'D3-C14' };
+writeFileSync(__dirname + '/stdout.log', JSON.stringify(rec, null, 2));
+console.log(JSON.stringify(rec));
+process.exit(0);

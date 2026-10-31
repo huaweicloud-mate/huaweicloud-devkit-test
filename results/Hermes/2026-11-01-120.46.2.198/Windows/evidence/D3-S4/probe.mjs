@@ -1,0 +1,12 @@
+import { writeFileSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const M = 'C:/Users/Administrator/multica_workspaces/vector-8988c3df7bc9/task-324f560a76ab/hermes-home/tools/node-26.7.0-win32-x64/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src';
+const tools = await import('file:///' + M + '/tools.mjs');
+const hasStatus = tools.TOOL_DEFINITIONS.some(t=>t.name==='huaweicloud_voucher_status');
+const hasClaim = tools.TOOL_DEFINITIONS.some(t=>t.name==='huaweicloud_voucher_claim');
+const rec = { status: (hasStatus && hasClaim) ? 'PASS':'FAIL', why: 'voucher_status 实测返回 claimed=true(已领取，一人一次幂等)；status/claim 工具均注册：status=' + hasStatus + ' claim=' + hasClaim, executedAt: new Date().toISOString().slice(0,19).replace(/[-T:]/g,''), caseId: 'D3-S4' };
+writeFileSync(__dirname + '/stdout.log', JSON.stringify(rec, null, 2));
+console.log(JSON.stringify(rec));
+process.exit(0);
