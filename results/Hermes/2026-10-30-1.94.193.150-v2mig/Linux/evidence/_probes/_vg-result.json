@@ -1,0 +1,128 @@
+[
+  {
+    "name": "huaweicloud_service_catalog",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "RELEASED(放行)",
+    "releasedShape": "intent,recommendedSkills,recommendedServices,capabilityOrder,ruleOfThumb",
+    "releasedSample": "{\"intent\":\"查询云主机\",\"recommendedSkills\":[\"Use huaweicloud-core to route intent.\"],\"recommendedServices\":[\"Run hcloud --help to list available services.\"],\"capabil",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_check_cli",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "RELEASED(放行)",
+    "releasedShape": "installed,authenticated,errorCode,status,output,kooCliVersion,installedVersion,versionMismatch",
+    "releasedSample": "{\"installed\":true,\"authenticated\":true,\"status\":\"version_mismatch\",\"output\":\"Current KooCLI version: 7.2.12\",\"kooCliVersion\":\"7.3.12\",\"installedVersion\":\"7.2.12",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_auth_status",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "RELEASED(放行)",
+    "releasedShape": "target,credentialsConfigured,credentialsPath,mcpSettingsConfigured,mcpSettingsSource,stsExpiry,credentialPanel,obsConfigured",
+    "releasedSample": "{\"target\":\"all\",\"credentialsConfigured\":true,\"credentialsPath\":\"/home/testbot2/.config/huaweicloud/credentials.json\",\"mcpSettingsConfigured\":false,\"mcpSettingsS",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_auth_init",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "BUSINESS_ERR:ak and sk are required. Set clear=true to clear runtime credentials.",
+    "releasedShape": "",
+    "releasedSample": "",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_auth_switch",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "BUSINESS_ERR:ak and sk are required (or provide creds-import.json for mode=import).",
+    "releasedShape": "",
+    "releasedSample": "",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_show_profile_redacted",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "RELEASED(放行)",
+    "releasedShape": "ok,note,result",
+    "releasedSample": "{\"ok\":true,\"note\":\"Profile information was returned through the toolkit redaction pipeline.\",\"result\":{\"ok\":true,\"exitCode\":0,\"signal\":null,\"stdout\":\"{\\n  \\\"nam",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_list_operations",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "RELEASED(放行)",
+    "releasedShape": "service,command,selectionRule,identityNotes,examples,result",
+    "releasedSample": "{\"service\":\"ECS\",\"command\":\"hcloud ECS --help\",\"selectionRule\":\"Use this help text to select the exact KooCLI operation name before planning any service command",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_list_regions",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "RELEASED(放行)",
+    "releasedShape": "ok,count,regions",
+    "releasedSample": "{\"ok\":true,\"count\":26,\"regions\":[{\"id\":\"af-north-1\",\"type\":\"public\",\"locales\":{\"en-us\":\"AF-Cairo\",\"zh-cn\":\"非洲-开罗\"}},{\"id\":\"af-south-1\",\"type\":\"public\",\"locales\"",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_plan_cli_command",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "RELEASED(放行)",
+    "releasedShape": "executable,args,command,executableBlock,warnings,classification,sgFindings,approvalToken",
+    "releasedSample": "{\"executable\":\"hcloud\",\"args\":[],\"command\":\"hcloud\",\"executableBlock\":\"hcloud\",\"warnings\":[],\"classification\":{\"decision\":\"deny\",\"risk\":\"invalid\",\"reason\":\"Empt",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_run_readonly_command",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "BUSINESS_ERR:Empty hcloud command arguments are not executable.",
+    "releasedShape": "",
+    "releasedSample": "",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_run_approved_command",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "BUSINESS_ERR:approvedByUser must be true after explicit user approval for this exact command.",
+    "releasedShape": "",
+    "releasedSample": "",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_sandbox_connect",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "BUSINESS_ERR:HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 543e81374ebb4017812ca5a57b9f31",
+    "releasedShape": "",
+    "releasedSample": "",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_voucher_claim",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "RELEASED(放行)",
+    "releasedShape": "claimed,voucherId,amount,message,code",
+    "releasedSample": "{\"claimed\":true,\"voucherId\":null,\"amount\":0,\"message\":\"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）\",\"code\":null}",
+    "pass": true
+  },
+  {
+    "name": "huaweicloud_competition_voucher_claim",
+    "gate": "GATE(拦截)",
+    "challenge": "CHALLENGE(反诘)",
+    "released": "RELEASED(放行)",
+    "releasedShape": "claimed,voucherId,amount,message,code",
+    "releasedSample": "{\"claimed\":false,\"voucherId\":null,\"amount\":0,\"message\":\"您尚未报名华为开发者大赛·小红书skill创新赛，请先完成报名后再领取代金券\",\"code\":\"HDKIT_NOT_SIGNED_UP\"}",
+    "pass": true
+  }
+]
