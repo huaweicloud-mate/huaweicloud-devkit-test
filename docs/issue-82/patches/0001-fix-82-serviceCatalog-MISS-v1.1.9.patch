@@ -1,0 +1,383 @@
+From 29ec129375a6ba599182e9b9dfef34bd138aa1ff Mon Sep 17 00:00:00 2001
+From: grapedev-bot <grapedev-bot@noreply.git.com>
+Date: Tue, 20 Oct 2026 05:45:59 +0800
+Subject: [PATCH 1/2] =?UTF-8?q?fix:=20#82=20serviceCatalog=20=E4=B8=AD?=
+ =?UTF-8?q?=E6=96=87=E6=84=8F=E5=9B=BE=E8=B7=AF=E7=94=B1=20MISS=EF=BC=88?=
+ =?UTF-8?q?=E8=B7=AF=E7=94=B1=E8=A1=A8=E5=AF=B9=E9=BD=90=20v1.1.9=20+=20?=
+ =?UTF-8?q?=E4=BA=91=E4=B8=BB=E6=9C=BA=E5=88=AB=E5=90=8D=20+=20=E7=B2=98?=
+ =?UTF-8?q?=E8=BF=9E=E8=8B=B1=E6=96=87=E7=89=87=E6=AE=B5=E6=8F=90=E5=8F=96?=
+ =?UTF-8?q?=EF=BC=89?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ plugins/huaweicloud-core/src/tools.mjs | 273 ++++++++++++++++++++++---
+ test/service-catalog.test.mjs          |  60 ++++++
+ 2 files changed, 310 insertions(+), 23 deletions(-)
+ create mode 100644 test/service-catalog.test.mjs
+
+diff --git a/plugins/huaweicloud-core/src/tools.mjs b/plugins/huaweicloud-core/src/tools.mjs
+index 70eebdd..ee083fa 100644
+--- a/plugins/huaweicloud-core/src/tools.mjs
++++ b/plugins/huaweicloud-core/src/tools.mjs
+@@ -531,40 +531,267 @@ async function runApprovedCommand(args = {}) {
+ function serviceCatalog(intent = '') {
+   const it = String(intent).toLowerCase();
+   const routeMap = [
+-    { keywords: ['ecs', 'server', 'vm', 'instance', 'compute', 'flavor', 'image'], skills: ['huawei-ecs'], services: ['ECS'] },
+-    { keywords: ['vpc', 'subnet', 'network', 'security group', 'eip', 'nat', 'vpn', 'bandwidth'], skills: ['huawei-vpc'], services: ['VPC', 'EIP'] },
+-    { keywords: ['obs', 'bucket', 'storage', 'object', 'static website', 'static site', 'hosting'], skills: ['huawei-obs'], services: ['OBS'] },
+-    { keywords: ['functiongraph', 'serverless', 'function', 'lambda', 'trigger', 'faas'], skills: ['huawei-functiongraph'], services: ['FunctionGraph'] },
+-    { keywords: ['cce', 'kubernetes', 'k8s', 'container', 'cluster', 'node pool', 'swr', 'docker', 'image registry'], skills: ['huawei-cce'], services: ['CCE', 'SWR'] },
+-    { keywords: ['apig', 'api gateway', 'publish', 'throttle'], skills: ['huawei-apig'], services: ['APIG'] },
+-    { keywords: ['rds', 'mysql', 'postgresql', 'database', 'db'], skills: ['huawei-rds'], services: ['RDS'] },
+-    { keywords: ['gaussdb', 'distributed', 'sharding', 'opengauss'], skills: ['huawei-gaussdb'], services: ['GaussDB'] },
+-    { keywords: ['iam', 'permission', 'policy', 'role', 'user', 'ak/sk', 'access key', 'agency'], skills: ['huawei-iam'], services: ['IAM'] },
+-    { keywords: ['dew', 'secret', 'kms', 'encrypt', 'decrypt', 'certificate', 'csms'], skills: ['huawei-dew'], services: ['CSMS', 'KMS'] },
+-    { keywords: ['modelarts', 'ai', 'model', 'training', 'inference', 'machine learning'], skills: ['huawei-modelarts'], services: ['ModelArts'] },
+-    { keywords: ['billing', 'cost', 'bill', 'budget', 'expense', 'bss'], skills: ['huawei-billing'], services: ['BSS'] },
+-    { keywords: ['waf', 'aad', 'ddos', 'firewall', 'web protection'], skills: ['huawei-waf-aad'], services: ['WAF', 'AAD'] },
+-    { keywords: ['smn', 'dms', 'notification', 'message', 'kafka', 'rabbitmq'], skills: ['huawei-smn-dms'], services: ['SMN', 'DMS'] },
+-    { keywords: ['ces', 'monitor', 'alarm', 'metric', 'dashboard', 'cloud eye'], skills: ['huawei-cloud-eye'], services: ['CES'] },
+-    { keywords: ['cts', 'audit', 'trace', 'tracker'], skills: ['huawei-cts'], services: ['CTS'] },
+-    { keywords: ['cbr', 'backup', 'restore', 'vault', 'snapshot'], skills: ['huawei-cbr'], services: ['CBR'] },
+-    { keywords: ['deployment', 'deploy', 'ci/cd', 'pipeline', 'release'], skills: ['huawei-deployment'], services: ['CloudDeploy'] },
+-    { keywords: ['dds', 'dcs', 'mongodb', 'redis', 'memcached', 'cache', 'document db'], skills: ['huawei-dds-dcs'], services: ['DDS', 'DCS'] },
+-];
++    {
++      keywords: [
++        'ecs',
++        'server',
++        'vm',
++        'instance',
++        'compute',
++        'flavor',
++        'image',
++        '弹性云服务器',
++        '云服务器',
++        '云主机',
++        '服务器',
++        '虚拟机',
++        '镜像',
++      ],
++      skills: ['huawei-ecs'],
++      services: ['ECS'],
++    },
++    {
++      keywords: [
++        'vpc',
++        'subnet',
++        'network',
++        'security group',
++        'eip',
++        'nat',
++        'vpn',
++        'bandwidth',
++        '虚拟私有云',
++        '子网',
++        '网络',
++        '安全组',
++        '弹性公网IP',
++        'NAT网关',
++        'VPN网关',
++        '带宽',
++      ],
++      skills: ['huawei-vpc'],
++      services: ['VPC', 'EIP'],
++    },
++    {
++      keywords: [
++        'obs',
++        'bucket',
++        'storage',
++        'object',
++        'static website',
++        'static site',
++        'hosting',
++        '对象存储',
++        '存储桶',
++        '桶',
++        '存储',
++        '对象',
++        '静态网站',
++        '静态托管',
++      ],
++      skills: ['huawei-obs'],
++      services: ['OBS'],
++    },
++    {
++      keywords: [
++        'functiongraph',
++        'serverless',
++        'function',
++        'lambda',
++        'trigger',
++        'faas',
++        '函数工作流',
++        '函数',
++        '触发器',
++        '无服务器',
++        '函数计算',
++      ],
++      skills: ['huawei-functiongraph'],
++      services: ['FunctionGraph'],
++    },
++    {
++      keywords: ['cce', 'kubernetes', 'k8s', 'container', 'cluster', 'node pool', 'swr', 'docker', 'image registry'],
++      skills: ['huawei-cce'],
++      services: ['CCE', 'SWR'],
++    },
++    {
++      keywords: ['apig', 'api gateway', 'publish', 'throttle', 'API网关', '限流'],
++      skills: ['huawei-apig'],
++      services: ['APIG'],
++    },
++    {
++      keywords: ['rds', 'mysql', 'postgresql', 'database', 'db', '关系型数据库', '数据库'],
++      skills: ['huawei-rds'],
++      services: ['RDS'],
++    },
++    {
++      keywords: ['gaussdb', 'distributed', 'sharding', 'opengauss', '高斯数据库', '分布式数据库'],
++      skills: ['huawei-gaussdb'],
++      services: ['GaussDB'],
++    },
++    {
++      keywords: [
++        'iam',
++        'permission',
++        'policy',
++        'role',
++        'user',
++        'ak/sk',
++        'access key',
++        'agency',
++        '身份认证',
++        '身份管理',
++        '权限',
++        '策略',
++        '角色',
++        '用户',
++        '访问密钥',
++        '委托',
++      ],
++      skills: ['huawei-iam'],
++      services: ['IAM'],
++    },
++    {
++      keywords: [
++        'dew',
++        'secret',
++        'kms',
++        'encrypt',
++        'decrypt',
++        'certificate',
++        'csms',
++        '数据加密服务',
++        '密钥管理',
++        '密钥',
++        '加密',
++        '解密',
++        '证书',
++        '凭据管理',
++      ],
++      skills: ['huawei-dew'],
++      services: ['CSMS', 'KMS'],
++    },
++    {
++      keywords: ['modelarts', 'ai', 'model', 'training', 'inference', 'machine learning'],
++      skills: ['huawei-modelarts'],
++      services: ['ModelArts'],
++    },
++    {
++      keywords: ['billing', 'cost', 'bill', 'budget', 'expense', 'bss', '计费', '费用', '账单', '预算', '开销'],
++      skills: ['huawei-billing'],
++      services: ['BSS'],
++    },
++    {
++      keywords: ['waf', 'aad', 'ddos', 'firewall', 'web protection'],
++      skills: ['huawei-waf-aad'],
++      services: ['WAF', 'AAD'],
++    },
++    {
++      keywords: ['smn', 'dms', 'notification', 'message', 'kafka', 'rabbitmq'],
++      skills: ['huawei-smn-dms'],
++      services: ['SMN', 'DMS'],
++    },
++    {
++      keywords: ['ces', 'monitor', 'alarm', 'metric', 'dashboard', 'cloud eye', '监控', '告警', '云监控'],
++      skills: ['huawei-cloud-eye'],
++      services: ['CES'],
++    },
++    {
++      keywords: ['cts', 'audit', 'trace', 'tracker', '审计', '追踪'],
++      skills: ['huawei-cts'],
++      services: ['CTS'],
++    },
++    {
++      keywords: ['cbr', 'backup', 'restore', 'vault', 'snapshot', '备份', '恢复', '快照', '存储库'],
++      skills: ['huawei-cbr'],
++      services: ['CBR'],
++    },
++    {
++      keywords: ['deployment', 'deploy', 'ci/cd', 'pipeline', 'release'],
++      skills: ['huawei-deployment'],
++      services: ['CloudDeploy'],
++    },
++    {
++      keywords: [
++        'sandbox',
++        'devstation',
++        'workspace',
++        'terminal',
++        'preview',
++        'hwlink',
++        'website',
++        'web app',
++        'webapp',
++        'hosting',
++        '网站',
++        '网页',
++        '静态',
++      ],
++      skills: ['huawei-sandbox'],
++      services: ['Sandbox', 'DevStation'],
++    },
++    {
++      keywords: [
++        'dds',
++        'dcs',
++        'mongodb',
++        'redis',
++        'memcached',
++        'cache',
++        'document db',
++        '文档数据库',
++        '缓存',
++        '内存数据库',
++      ],
++      skills: ['huawei-dds-dcs'],
++      services: ['DDS', 'DCS'],
++    },
++    {
++      keywords: ['elb', 'load balancer', '负载均衡', '弹性负载均衡', '监听器', '证书'],
++      skills: ['huawei-vpc'],
++      services: ['ELB'],
++    },
++    {
++      keywords: ['voucher', 'coupon', 'incentive', 'credit', '领券', '代金券', '优惠券', '激励金', '领取'],
++      skills: ['huawei-voucher'],
++      services: ['Incentive Voucher'],
++    },
++  ];
+   const matched = [];
+-  const tokens = it.split(/[\s,./-]+/).filter((t) => t.length > 0);
++  const tokens = new Set(it.split(/[\s,./-]+/).filter((t) => t.length > 0));
++  // #82: intent such as 查看ECS has no whitespace, so the ASCII abbreviation never
++  // becomes a standalone token. Extract alphanumeric runs and merge them into the
++  // token set so whole-word keywords (ecs, obs, ak/sk, ...) still match.
++  const asciiRuns = it.match(/[a-z0-9][a-z0-9/-]*/g) || [];
++  for (const run of asciiRuns) {
++    tokens.add(run);
++  }
++  const cjk = /[\u4e00-\u9fff]/;
+   for (const route of routeMap) {
+-    if (route.keywords.some((kw) => tokens.includes(kw))) {
++    if (
++      route.keywords.some((kw) => (kw.includes(' ') || cjk.test(kw) ? it.includes(kw.toLowerCase()) : tokens.has(kw)))
++    ) {
+       matched.push(route);
+     }
+   }
+   const recommendedSkills = [...new Set(matched.flatMap((r) => r.skills))];
+   const recommendedServices = [...new Set(matched.flatMap((r) => r.services))].slice(0, 5);
+ 
++  // Deployment intent (deploy/host/publish a web app or static website) must never
++  // default to a storage/other service — recommend the sandbox first.
++  const deploymentIntent = /deploy|host|hosting|publish|website|web app|preview|部署|托管|发布|网站|网页/.test(it);
++  if (deploymentIntent && recommendedSkills.includes('huawei-sandbox')) {
++    const idx = recommendedSkills.indexOf('huawei-sandbox');
++    recommendedSkills.splice(idx, 1);
++    recommendedSkills.unshift('huawei-sandbox');
++  }
++
+   return {
+     intent,
+     recommendedSkills: recommendedSkills.length ? recommendedSkills : ['Use huaweicloud-core to route intent.'],
+-    recommendedServices: recommendedServices.length ? recommendedServices : ['Run hcloud --help to list available services.'],
++    recommendedServices: recommendedServices.length
++      ? recommendedServices
++      : ['Run hcloud --help to list available services.'],
+     capabilityOrder: [
+       'Huawei Cloud Skills for task-specific workflows and examples',
+       'KooCLI hcloud for local authenticated operations and quick inspection',
+diff --git a/test/service-catalog.test.mjs b/test/service-catalog.test.mjs
+new file mode 100644
+index 0000000..fa66c64
+--- /dev/null
++++ b/test/service-catalog.test.mjs
+@@ -0,0 +1,60 @@
++import assert from 'node:assert/strict';
++import test from 'node:test';
++import { callTool } from '../plugins/huaweicloud-core/src/tools.mjs';
++
++async function catalog(intent) {
++  return callTool('huaweicloud_service_catalog', { intent });
++}
++
++// Regression guards for Issue #82: routing must survive whitespace tokenization.
++test('service_catalog keeps whitespace-separated English token matching', async () => {
++  const result = await catalog('list all ecs instances');
++  assert.ok(result.recommendedServices.includes('ECS'),
++    `expected ECS in ${JSON.stringify(result.recommendedServices)}`);
++});
++
++test('service_catalog keeps fallback when nothing matches', async () => {
++  const result = await catalog('讲个笑话');
++  assert.deepEqual(result.recommendedServices, ['Run hcloud --help to list available services.']);
++});
++
++// Issue #82 case 1: Chinese-only intent uses the colloquial alias 云主机 (cloud host = ECS).
++test('service_catalog routes Chinese intent with 云主机 to ECS (#82)', async () => {
++  const result = await catalog('帮我查一下我账号在华北北京四有哪些云主机');
++  assert.ok(result.recommendedServices.includes('ECS'),
++    `expected ECS in ${JSON.stringify(result.recommendedServices)}`);
++});
++
++// Issue #82 case 2: ASCII service abbreviation glued to Chinese text must still match.
++test('service_catalog extracts ASCII abbreviation glued to Chinese text (#82)', async () => {
++  const ecs = await catalog('查看ECS');
++  assert.ok(ecs.recommendedServices.includes('ECS'),
++    `expected ECS in ${JSON.stringify(ecs.recommendedServices)}`);
++  const obs = await catalog('创建OBS桶');
++  assert.ok(obs.recommendedServices.includes('OBS'),
++    `expected OBS in ${JSON.stringify(obs.recommendedServices)}`);
++});
++
++// Eval-set-v1 (eval/prompts/eval-set-v1.csv) routing expectations, EXP-E02..EXP-E15.
++test('service_catalog covers eval-set-v1 routing expectations', async () => {
++  const cases = [
++    ['创建一台 2C4G 的 Ubuntu 云服务器 规格通用型', 'ECS'],
++    ['把本地 dist 目录部署成一个公网静态网站', 'OBS'],
++    ['给这台服务器绑定一个弹性公网IP', 'EIP'],
++    ['看一下我的云数据库MySQL实例的状态', 'RDS'],
++    ['创建一个 Redis 缓存实例用于会话存储', 'DCS'],
++    ['给生产环境的服务器配置一个每日备份策略', 'CBR'],
++    ['开设一个 Kubernetes 集群用于微服务部署', 'CCE'],
++    ['部署一个函数处理图片自动压缩', 'FunctionGraph'],
++    ['查一下我账号这个月的费用情况', 'BSS'],
++    ['把应用日志指标推送到云监控告警', 'CES'],
++    ['申请HTTPS证书并配置到我的域名', 'ELB'],
++    ['我账号下的用户都有哪些权限 帮我审计一下', 'IAM'],
++    ['帮我领一下华为云的代金券', 'Incentive Voucher'],
++  ];
++  for (const [intent, expected] of cases) {
++    const result = await catalog(intent);
++    assert.ok(result.recommendedServices.includes(expected),
++      `${intent} -> expected ${expected} in ${JSON.stringify(result.recommendedServices)}`);
++  }
++});
+-- 
+2.43.0
+
