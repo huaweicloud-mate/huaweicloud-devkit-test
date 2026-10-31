@@ -1,0 +1,17 @@
+=====CASE D8-8 =====
+executedAt=2026-10-31T07:02:39.229Z
+status=PASS
+PASS: run_approved 上报值仅 svc+op（不含 --flag/资源ID） | "hcloud ECS DeleteServers"
+PASS: secret_set 上报值仅 ref（不含 value/channel） | "prod/db"
+PASS: hook_check_command 上报值仅 svc+op | "hcloud ECS DeleteServers"
+PASS: hook_check_command 上报值剥离资源ID（SECRETID123 不入遥测） | "hcloud ECS DeleteServers"
+PASS: sanitizeValue 长度截断 ≤255 且无换行 | len=255
+PASS: hook 事件 JSON 收窄：合法对象通过、非法输入返回 null | {"key":"cli:write","value":"hcloud ECS DeleteServers","capability":"cli"}
+PASS: HUAWEICLOUD_DEVKIT_TELEMETRY=off → isTelemetryEnabled=false | isTelemetryEnabled=false
+PASS: flush POST 含 trackTool/trackSkill/trackSandbox/hook(cli:write) 事件 | posted_batches=1
+PASS: flush POST 不含明文凭证/资源ID（上报脱敏） | 无泄漏
+PASS: hook 事件携带 capability=cli 分类 | 
+端到端 mock 端点捕获 POST batch 数=1
+POST 摘要: [{"key":"dau:active_today","value":"1","installId":"542a2e4c0c8732b47e2b231837602cb63680484dd4155ee17b4168a95db9203e","userHash":"73290d7b43d8926826a8403cb955a24ffc65d62a60bada5076448739681b025c","version":"0.0.0","harness":"hermes","agentVersion":"2.0.0","os":"Linux","osVersion":"6.8.0-106-generic"
+why=trackToolInvoke/trackSkillRetrieve/trackSandboxConnect/trackSandboxDisconnect 与 hook 事件均进入事件队列并经 flush POST 上报；invoke-value 只取审计相关值（svc+op/ref），sanitizeValue 截断防长值泄密，上报体不含明文凭证；HUAWEICLOUD_DEVKIT_TELEMETRY=off 正确关闭收集。
+=====CASE D8-8 RESULT: PASS =====

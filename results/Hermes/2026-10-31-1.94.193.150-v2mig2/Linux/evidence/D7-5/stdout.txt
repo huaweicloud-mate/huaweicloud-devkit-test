@@ -1,0 +1,35 @@
+=====CASE D7-5 =====
+executedAt=2026-10-31T11:01:19Z
+status=FAIL
+FAIL: 升级/安装不破坏用户既有 MCP 配置 —— 用户自定义 mcp_servers 被重复顶层键遮蔽丢失
+--- 真实执行（隔离 HOME，预置用户 config.yaml 含自定义 mcp_servers + 自定义字段，再 install --target hermes）---
+预置 config.yaml:
+  mcp_servers:
+    my-custom-server:
+      command: my-custom-cmd
+      args: ["--flag"]
+  markers:
+    user_custom_note: "kEEP-ME-2026"
+install --target hermes 之后 config.yaml 变成：
+  mcp_servers:
+    my-custom-server: ...        ← 第一个 mcp_servers 键
+  markers:
+    user_custom_note: "kEEP-ME-2026"
+  mcp_servers:                    ← 追加的第二个 mcp_servers 键（重复顶层键）
+    huaweicloud-devkit: ...
+  hooks: ...
+
+PyYAML safe_load 解析（last-wins 语义，真实验证）：
+  parsed mcp_servers keys = ['huaweicloud-devkit']
+  my-custom-server 是否保留 = False（已丢失）
+  非 mcp_servers 顶层键 markers 是否保留 = True
+
+根因（文件:行号）：
+  dist/agents/hermes-config.js:54 —— writeHermesMcpConfig 仅当 existing.includes('mcp_servers:')
+  && existing.includes('huaweicloud-devkit') 时才走「移除旧块重写」合并；用户已有自己的 mcp_servers
+  映射但无 huaweicloud-devkit 条目时（首次安装/已装他人 MCP 环境），条件不成立 → 直接
+  `${existing.trimEnd()}\n\n${newBlock}`（第 86 行）把新的 `mcp_servers:` 块作为第二个顶层键追加，
+  产生 YAML 重复键。PyYAML/标准 YAML 解析按 last-wins，用户自定义 server 被遮蔽丢失。
+=> 违反 D7-5 预期「升级不覆盖/不破坏用户自定义内容」（用户 mcp_servers 映射被破坏）。
+RESULT: FAIL
+=====CASE D7-5 RESULT: FAIL =====

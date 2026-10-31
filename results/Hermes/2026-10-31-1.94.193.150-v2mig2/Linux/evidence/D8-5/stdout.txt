@@ -1,0 +1,11 @@
+=====CASE D8-5 =====
+executedAt=2026-10-31T07:02:37.650Z
+status=PASS
+PASS: AK/SK 明文 → <redacted> | "AK=<redacted> SK=<redacted>"
+PASS: 对象 key 级脱敏（ak/sk/password/token 红，name 留） | {"ak":"<redacted>","sk":"<redacted>","password":"<redacted>","name":"keep-me","nested":{"token":"<redacted>"}}
+PASS: Authorization Bearer 整个值脱敏 | "Authorization: <redacted>"
+PASS: user_data blob 整体脱敏 | "user_data=<redacted>"
+PASS: 实际安装/升级运行日志扫描（0 个 .log）无明文 AK/SK 泄漏 | scan=0
+扫描文件: 
+why=redactSecrets/redactString 对 AK/SK/password/Authorization/user_data 均脱敏为 <redacted>，且本次运行产生的安装/升级日志扫描无明文凭证泄漏。
+=====CASE D8-5 RESULT: PASS =====

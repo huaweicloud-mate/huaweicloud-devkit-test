@@ -1,0 +1,13 @@
+=====CASE D2-24 =====
+executedAt=2026-10-31T02:55:00Z
+status=PASS
+PASS: auth 同步 projectId 自动解析——真云 IAM KeystoneListProjects 解析成功
+--- 真实执行 syncAuth('all')（真实云凭证）---
+ok: true
+profile: default
+projectId: 46c1fd48bd1248c7b75afc3780de7132   ← resolveAndApplyProjectId 从 IAM KeystoneListProjects(cn-north-4) 解析并写回 hcloud profile
+hcloud.message: KooCLI config synced to profile=default
+obs.configured: true (path: /home/testbot2/.obsutilconfig)
+=> region/profile 可解析时 syncAuth 返回 projectId 字段，符合预期；IAM 列表 + `hcloud configure set --cli-project-id` 全链路真实执行。
+RESULT: PASS
+=====CASE D2-24 RESULT: PASS =====

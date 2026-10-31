@@ -1,0 +1,15 @@
+=====CASE D2-6 =====
+executedAt=2026-10-31T02:56:00Z
+status=PASS
+PASS: OBS 独立配置引导——setup_obs_config 落盘 + obsutil ls 真实可用
+--- 真实执行（真实云凭证 ~/.config/huaweicloud/credentials.json）---
+① 调用 huaweicloud_setup_obs_config 工具 handler（obs pack）:
+   { ok:true, created:true, path:"/home/testbot2/.obsutilconfig", region:"cn-north-4", endpoint:"https://obs.cn-north-4.myhuaweicloud.com", source:"global-credentials" }
+   => ~/.obsutilconfig 从全局凭证库（writeObsConfig seam）写入成功，无人值守、无 AK/SK 进 shell history。
+② hcloud OBS ls（真实 OBS API 验证）→ 成功返回 4 个桶：
+   obs://hdk-daily-obs-202610250528 / obs://hermes-v2r-3256682351-wb / obs://huaweicloud-open-capability-home / obs://wb-obs-5134
+   "Bucket number: 4"（exit 0）
+=> OBS 配置落盘且无人值守可用。
+（说明：本用例仅 setup + 只读 ls，不建桶，无归零义务。）
+RESULT: PASS
+=====CASE D2-6 RESULT: PASS =====

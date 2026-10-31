@@ -1,0 +1,9 @@
+=====CASE D3-C10 =====
+executedAt=2026-10-31T06:59:05.712Z
+status=FAIL
+getMarketplaceCategories -> {"ok":true,"categories":[]}
+上游索引 total_skills=0 categories.length=0 deprecated=true
+上游 migrate_message=本索引已停止维护，请升级 huawei-cloud-find-skills 到最新版。
+searchMarketplace('') 空查 -> ok=true count=1 结果=["请更新最新的 huawei-cloud-find-skills"]
+why=getMarketplaceCategories 机制正常(ok:true)，但返回 categories=[] —— 上游 gitcode skills-for-index 索引已弃用(deprecated=true, total_skills=0, migrate_message="本索引已停止维护，请升级 huawei-cloud-find-skills")。search-market.js INDEX_URL 仍指向旧弃用索引(文件:行号 plugins/huaweicloud-core/dist/search-market.js:3)，未迁移到新索引源(huaweicloud/huaweicloud-skills)。属数据源/契约漂移，非 v2 代码回归。
+=====CASE D3-C10 RESULT: FAIL =====

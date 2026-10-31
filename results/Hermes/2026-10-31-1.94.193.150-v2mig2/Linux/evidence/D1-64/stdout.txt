@@ -1,0 +1,12 @@
+=====CASE D1-64 =====
+executedAt=2026-10-31T02:51:19.832Z
+status=PASS
+PASS: D1-64 AGENTS 注册表含 officeace/hermes | AGENTS 总数=23
+PASS: D1-64 matchAgent(officeace, clientName) → true | clientNames 匹配
+PASS: D1-64 matchAgent(hermes, name=hermes) → true | id 小写匹配
+PASS: D1-64 matchAgent 未知 clientInfo（无 path/env/clientName 命中）→ false | github-copilot 无 pathPatterns/env 命中
+PASS: D1-64 detectVersion(null) → null | got=null
+PASS: D1-64 detectVersion(hermes) 返回字符串或 null（无环境则 null 兜底） | got=null
+PASS: D1-64 detectAgent(hermes) → harness=hermes | {"harness":"hermes","version":"0.0.0"}
+PASS: D1-64 detectAgent 未知 → 兜底 clientInfo.name + version 0.0.0（净化 env + 中性路径） | {"harness":"unknown-agent-xyz","version":"0.0.0"}
+=====CASE D1-64 RESULT: PASS =====

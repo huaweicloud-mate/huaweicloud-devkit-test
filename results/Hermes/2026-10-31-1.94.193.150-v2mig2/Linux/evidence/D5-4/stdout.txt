@@ -1,0 +1,8 @@
+=====CASE D5-4 =====
+executedAt=2026-10-31T07:04:57.962Z
+status=PASS
+PASS: hook 拦截路径：Python hook 对写命令 block（hook 客户端） | HOOK_BLOCK_OK
+PASS: Node 策略：DeleteServers 写命令 → deny/warn（非 allow，非 hook 客户端兜底） | decision=warn findings=2
+PASS: Node 策略：ListServersDetails 只读 → allow | decision=allow
+why=两条降级路径均有效：hook 客户端走 Python 安全 hook 对写命令 block；非 hook 客户端走 Node risk-rule-engine.evaluateCommandRisk 兜底（写命令 deny/warn、只读 allow）。
+=====CASE D5-4 RESULT: PASS =====

@@ -1,0 +1,12 @@
+=====CASE D2-17 =====
+executedAt=2026-10-31T02:53:00Z
+status=PASS
+PASS: 非 TTY 守卫——快速退出不 hang + stderr 明确告警
+--- 真实 CLI 执行（非 TTY 管道）---
+$ huaweicloud-devkit auth reconcile   （stdin 非 TTY，耗时 1s，未 hang）
+HuaweiCloud DevKit Credential Reconciliation
+Non-interactive session. Cannot run interactive reconciliation. Use "npx huaweicloud-devkit auth sync" or run reconciliation in a real terminal.
+=> 与用例预期「stderr 明确告警（Non-interactive session...）」完全一致；process.exitCode=1 快速退出，未进入 readLineQuestion 交互阻塞。
+（说明：当前 ~/.obsutilconfig / ~/.hcloud profile 与 S1 凭证存在指纹漂移，故扫描进入 inconsistencies>0 分支，触发非 TTY 守卫——正是该守卫的覆盖场景。）
+RESULT: PASS
+=====CASE D2-17 RESULT: PASS =====

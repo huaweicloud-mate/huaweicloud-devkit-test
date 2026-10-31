@@ -1,0 +1,20 @@
+=====CASE D1-62 =====
+executedAt=2026-10-31T02:50:00Z
+status=PASS
+PASS: 三命令均实现非 TODO 且无静默失败（version / proxy / reinstall 真实执行）
+--- version（真实 CLI 输出）---
+HuaweiCloud DevKit CLI: 2.0.0
+Installed agent plugins: CodeArts: 1.1.12 / DSH: 1.1.12
+=> version 子命令已实现，输出 2.0.0 版本号 + 各 agent 插件版本，无静默失败。
+--- proxy show（真实 CLI 输出）---
+Config file: /home/testbot2/.config/huaweicloud/proxy.json ; File exists: no
+Effective (env > file): (no proxy configured)
+=> proxy 子命令已实现（show 输出配置与 env 合并视图；init 在非 TTY 下给出明确的 env 配置指引；clear 可删配置）。
+--- reinstall（真实 CLI 执行）---
+① 非 TTY 下：confirm() 守卫输出 "Non-interactive shell: skipping confirmation (declined)." + "Cancelled."（退出 0，无 TODO 静默失败）
+② PTY + 隔离 HOME（HERMES_HOME=$ISO/.hermes）真实执行 reinstall --target hermes，先答 'y'：
+   Uninstall: "Hooks config removed / MCP config removed / Uninstall complete."
+   Install: "Installing HuaweiCloud DevKit for hermes..." → 部署 Agent Rules / MCP Server(dist) / Safety Policy / Skills / Hooks / config.yaml / shell-hooks-allowlist.json / 运行时依赖，MCP Python SDK installed，packs 10 个二进制已就位
+=> reinstall = 真实 uninstall + install 全链路，非 TODO。
+RESULT: PASS
+=====CASE D1-62 RESULT: PASS =====

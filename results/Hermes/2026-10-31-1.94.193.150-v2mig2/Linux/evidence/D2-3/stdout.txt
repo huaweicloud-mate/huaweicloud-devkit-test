@@ -1,0 +1,11 @@
+=====CASE D2-3 =====
+executedAt=2026-10-31T02:54:00Z
+status=PASS
+PASS: auth sync 幂等——重复执行无副作用、profile 无损坏
+--- 真实 CLI 执行（连续两次 auth sync）---
+第1次: "Synchronizing Huawei Cloud authentication..." → "KooCLI config synced to profile=default"（exit 0）
+第2次: "Synchronizing Huawei Cloud authentication..." → "KooCLI config synced to profile=default"（exit 0）
+.last_sync 状态: {"kooCliProfile":"default","s1Fingerprint":"caae65f2"}
+=> 两次 sync 结果一致；hcloud profile 未损坏；无写冲突；凭证指纹稳定。syncAuth 内部 fan-out（writeObsConfig + runHcloudConfigure + resolveAndApplyProjectId）重复调用幂等。
+RESULT: PASS
+=====CASE D2-3 RESULT: PASS =====
