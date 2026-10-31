@@ -1,29 +1,6 @@
 {
-  "case": "D3-C2",
   "status": "FAIL",
-  "total": 4,
-  "passed": 1,
-  "failed": 3,
-  "results": [
-    {
-      "name": "OBS建桶",
-      "pass": false,
-      "detail": "Start at 2026-10-31 21:59:40.4686409 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-3483980256] successfully, request id [000001A193F9BEC94418885405A341D4]\nNotice: If the configured"
-    },
-    {
-      "name": "set静态站",
-      "pass": false,
-      "detail": "{\"ok\":false,\"status\":400,\"websiteUrl\":\"http://testbot3-hermes-obs-3483980256.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 400\"}"
-    },
-    {
-      "name": "get静态站",
-      "pass": false,
-      "detail": "{\"ok\":false,\"status\":400,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidArgument</Code><Message>Request has x-amz-security-token header but signed headers not"
-    },
-    {
-      "name": "删桶归零",
-      "pass": true,
-      "detail": "Start at 2026-10-31 21:59:41.5657555 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-3483980256] successfully!"
-    }
-  ]
+  "why": "OBS 建桶/删桶成功；set/get 静态站 HTTP 400「Request has x-amz-security-token header but signed headers not included」——tools.mjs obsSignedRequest L3078 加 x-amz-security-token 头但 L3041 signedHeaders 未含该头(STS 临时凭证场景)",
+  "executedAt": "20261101061000",
+  "caseId": "D3-C2"
 }

@@ -1,32 +1,23 @@
-import { execFileSync } from 'node:child_process';
+const M = 'C:/Users/Administrator/multica_workspaces/vector-8988c3df7bc9/task-324f560a76ab/hermes-home/tools/node-26.7.0-win32-x64/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src';
+const hc = await import('file:///' + M + '/hcloud-cli.mjs');
 import { writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// D4-13 最小权限：只读子账号(test001)下 —— 只读命令应成功，写命令应被 IAM 拒绝
-// 运行方式: python scripts/run-as-readonly.py node this-probe.mjs
-// (run-as-readonly 注入 HW_ACCESS_KEY/HW_SECRET_KEY = 只读子账号，无 token)
-let roOk = false, roDetail = '';
-try {
-  const out = execFileSync('hcloud', ['ECS','ListServersDetails','--cli-region=cn-north-4'], { encoding:'utf8', timeout:60000 }).toString();
-  roOk = out.includes('servers') && !out.includes('[USE_ERROR]');
-  roDetail = roOk ? '成功返回实例清单' : out.slice(0,120);
-} catch (e) { roDetail = (e.stdout||'')+(e.stderr||''); roOk = /servers/i.test(roDetail); }
+// D4-13 最小权限：经 devkit runHcloud（resolveCredentials 读 HW_* env = 只读子账号 test001，无 token）
+const ro = await hc.runHcloud(['ECS','ListServersDetails','--cli-region=cn-north-4'], {});
+const roText = (ro?.stdout || '') + (ro?.stderr || '');
+const roOk = roText.includes('servers') && (ro?.exitCode === 0 || ro?.ok === true || roText.includes('count'));
 
-let wrDenied = false, wrDetail = '';
-try {
-  const out = execFileSync('hcloud', ['VPC','CreateVpc','--vpc.name=testbot3-ro-deny-test','--vpc.cidr=10.99.0.0/16','--cli-region=cn-north-4'], { encoding:'utf8', timeout:60000 }).toString();
-  wrDetail = out.slice(0,150);
-  wrDenied = /403|denied|permission|forbidden|insufficient|permission_denied|CAM|EFN|unauthorized/i.test(out);
-} catch (e) {
-  const t = (e.stdout||'')+(e.stderr||'');
-  wrDetail = t.slice(0,200);
-  wrDenied = /403|denied|permission|forbidden|insufficient|unauthorized|not.*permission/i.test(t);
-}
+const wr = await hc.runHcloud(['VPC','CreateVpc','--vpc.name=testbot3-ro-verify','--vpc.cidr=10.99.0.0/16','--cli-region=cn-north-4'], { allowWrites: true });
+const wrText = (wr?.stdout || '') + (wr?.stderr || '');
+const wrDenied = /403|denied|permission|forbidden|insufficient|unauthorized|not.*permission|CAP.01|EFN/i.test(wrText);
+const vidMatch = wrText.match(/"id"\s*:\s*"([0-9a-f-]{36})"/);
+if (vidMatch) { await hc.runHcloud(['VPC','DeleteVpc','--vpc_id='+vidMatch[1],'--cli-region=cn-north-4'], {}); }
 
 const status = (roOk && wrDenied) ? 'PASS' : 'FAIL';
-const rec = { status, why: `只读子账号: 只读命令成功=${roOk} (${roDetail.slice(0,80)})；写命令被拒=${wrDenied} (${wrDetail.slice(0,100)})`, executedAt: new Date().toISOString().slice(0,19).replace(/[-T:]/g,''), caseId: 'D4-13' };
+const rec = { status, why: 'devkit runHcloud 只读子账号: 只读命令成功=' + roOk + '；写命令(CreateVpc)被 IAM 拒=' + wrDenied + ' (写结果片段: ' + wrText.slice(0,90).replace(/\n/g,' ') + ')', executedAt: new Date().toISOString().slice(0,19).replace(/[-T:]/g,''), caseId: 'D4-13' };
 writeFileSync(__dirname + '/stdout.log', JSON.stringify(rec, null, 2));
 console.log(JSON.stringify(rec));
 process.exit(0);
