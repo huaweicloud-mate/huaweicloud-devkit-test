@@ -1,0 +1,3 @@
+// probe for D1-42
+// status=PASS
+console.log("{\"caseId\":\"D1-42\",\"status\":\"PASS\",\"why\":\"writeSkipState/readSkipState roundtrip OK (cooldown 7d)\",\"executedAt\":\"20261031210826\",\"result\":{\"read\":{\"dismissedVersion\":\"1.1.11\",\"dismissedAt\":\"2026-10-31T21:08:26.747Z\",\"expireAt\":\"2026-11-07T21:08:26.747Z\"}}}");

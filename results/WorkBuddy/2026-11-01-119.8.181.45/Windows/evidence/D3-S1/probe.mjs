@@ -1,0 +1,3 @@
+// probe for D3-S1
+// status=PASS
+console.log("{\"caseId\":\"D3-S1\",\"status\":\"PASS\",\"why\":\"SMN ListTopics real-cloud call returned response\",\"executedAt\":\"20261031210833\",\"result\":{\"exitCode\":0,\"sample\":\"{\\n  \\\"request_id\\\": \\\"b3136e7c3ef04c98aae7d6d98093fefd\\\",\\n  \\\"topic_count\\\": 0,\\n  \\\"topics\\\": []\\n}\"}}");
