@@ -12,7 +12,8 @@ const rec = (status, why) => {
 import { readFileSync } from 'node:fs';
 const s = readFileSync(PKG + '/plugins/huaweicloud-core/src/setup-cli.mjs', 'utf8');
 const mc = readFileSync(PKG + '/plugins/huaweicloud-core/src/mcp-config-merge.mjs', 'utf8');
-const envOk = /HCLOUD_BIN/.test(s) && /REQUIRED_ENV_KEYS/.test(s);
+const hcl = /HCLOUD_BIN/.test(s);
+const envOk = /REQUIRED_ENV_KEYS/.test(mc) && /HUAWEICLOUD_AGENT_TOOLKIT_MODE/.test(mc);
 const skipOk = /SKIP_DSH/.test(s) || /SKIP_DSH/.test(mc);
-rec((envOk && skipOk) ? 'PASS':'FAIL', 'HCLOUD_BIN/REQUIRED_ENV_KEYS=' + envOk + ' SKIP_DSH=' + skipOk);
+rec((hcl && envOk && skipOk) ? 'PASS':'FAIL', 'HCLOUD_BIN(setup-cli)=' + hcl + ' REQUIRED_ENV_KEYS/TOOLKIT_MODE(mcp-merge)=' + envOk + ' SKIP_DSH=' + skipOk);
 process.exit(0);
