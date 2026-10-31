@@ -133,13 +133,8 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
     else:
         print(f"  [WARN] {log} 不存在，跳过 {cid}")
 
-# D3-C1 手工归零补充：本轮 ECS 删除轮询(150s)超时（ECS 处于 ACTIVE 约 4 分钟），已手工重发 DeleteServers 并逐一核实 ECS/subnet/VPC 全部归零
-if os.path.isfile(os.path.join(P, "d3-c1.log")):
-    append_case("D3-C1", "\n===== 手工归零补充(附) =====\n"
-        "ECS 12683590-f4bc-470e-a2c7-42d992f13cd3 (testbot3-hermes-ecs-3394406263) 删除已提交并在 <15s 内确认 GONE\n"
-        "subnet 6d7642a7-578f-44b4-b8ff-17ce08a65683 已删除 GONE\n"
-        "vpc 97564f2b-65e2-4b31-9c56-f9699d645d53 已删除 GONE\n"
-        "结论：D3-C1 生命周期创建/删除全链路均验证通过，自动化归零轮询(150s)为瞬时时序抖动，非产品缺陷\n")
+# D3-C1 本轮归零自动完成：ECS 删除轮询内已归零（ECS:提交删除 ECS轮询:已归零 subnet:OK vpc:OK），
+# 并已手工复核云端 ECS 516e8a7c/VPC ff54ab52/subnet 56f03a61 全部 GONE，无需手工补充删除。
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.13-next.0\ngitHead 47170d1f\n", None)
@@ -148,7 +143,7 @@ print("  _baseline: v1.1.13-next.0 (gitHead 47170d1f)")
 # ===== 2. 回填 CSV（状态映射：已按本轮 v1.1.10 实际探针结果校准） =====
 PASS_D = [
     "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
-    "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69","D1-70",
+    "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69",
     "D2-1","D2-2","D2-4","D2-5","D2-11","D2-12","D2-16","D2-26","D2-27",
     "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C2","D3-C4","D3-C5","D3-C7","D3-C13","D3-C14",
     "D3-S1","D3-S2","D3-S4","D3-S8",
@@ -171,6 +166,7 @@ FAIL_D = {
     "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.password）",
     "D9-12": "initialize 版本检查缺失 + 非法时序 tools/list 未拒 -32600",
     "D10-3": "serviceCatalog 中文意图 EXP-E01「云主机」未命中（92.9% 未达 100%）",
+    "D1-70": "proxy-agent getWebSocketImpl 崩溃：bundled undici@8.12.2 decompress.js 解构 node:zlib.createZstdDecompress(node22.13 无)→undefined.bind TypeError",
 }
 
 SPEC_D = {
