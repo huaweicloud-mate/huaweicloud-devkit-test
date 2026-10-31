@@ -1,0 +1,202 @@
+MISS | 期望=ECS            | skills=Use huaweicloud-core to route intent. | svcs=Run hcloud --help to list available services. | 帮我查一下华北北京四有哪些云主机
+HIT  | 期望=ECS            | skills=huawei-ecs | svcs=ECS | 创建一台 2C4G 的 Ubuntu 云服务
+HIT  | 期望=ECS            | skills=huawei-ecs | svcs=ECS | 删除一台不再使用的云服务器
+HIT  | 期望=OBS            | skills=huawei-sandbox|huawei-obs | svcs=OBS|Sandbox|DevStation | 把本地 dist 目录部署成一个公网静态网站
+HIT  | 期望=OBS            | skills=huawei-obs | svcs=OBS | 创建一个对象存储桶并设为公共读
+HIT  | 期望=OBS            | skills=huawei-obs | svcs=OBS | 往 OBS 桶里上传一个图片文件
+HIT  | 期望=EIP            | skills=huawei-ecs|huawei-vpc | svcs=ECS|VPC|EIP | 给这台服务器绑定一个弹性公网IP
+HIT  | 期望=VPC            | skills=huawei-vpc | svcs=VPC|EIP | 创建一个虚拟私有网络 VPC
+HIT  | 期望=VPC            | skills=huawei-vpc | svcs=VPC|EIP | 创建一个子网并关联到 VPC
+HIT  | 期望=VPC            | skills=huawei-vpc | svcs=VPC|EIP | 创建一个安全组并开放 22 端口
+HIT  | 期望=RDS            | skills=huawei-rds | svcs=RDS | 看一下我的云数据库MySQL实例的状态
+HIT  | 期望=RDS            | skills=huawei-rds | svcs=RDS | 创建一台云数据库 RDS MySQL 实例
+HIT  | 期望=DCS            | skills=huawei-obs|huawei-cloud-dds-dcs-instance-management | svcs=OBS|DDS|DCS | 创建一个 Redis 缓存实例用于会话存储
+HIT  | 期望=CBR            | skills=huawei-ecs|huawei-iam|huawei-cbr | svcs=ECS|IAM|CBR | 给生产环境的服务器配置一个每日备份策略
+MISS | 期望=EVS            | skills=huawei-ecs | svcs=ECS | 把云硬盘挂载到云服务器上
+HIT  | 期望=CCE            | skills=huawei-cce | svcs=CCE|SWR | 开设一个 Kubernetes 集群用于微服
+HIT  | 期望=FunctionGraph  | skills=huawei-functiongraph | svcs=FunctionGraph | 部署一个函数处理图片自动压缩
+HIT  | 期望=BSS            | skills=huawei-billing | svcs=BSS | 查一下我账号这个月的费用情况
+HIT  | 期望=IAM            | skills=huawei-iam|huawei-cloud-cts-trace-management | svcs=IAM|CTS | 我账号下的用户都有哪些权限 帮我审计一下
+MISS | 期望=SCM            | skills=huawei-cloud-dew-key-management|huawei-vpc | svcs=CSMS|KMS|ELB | 申请HTTPS证书并配置到我的域名
+HIT  | 期望=CES            | skills=huawei-cloud-eye | svcs=CES | 把应用日志指标推送到云监控告警
+MISS | 期望=SMN            | skills=huawei-cloud-eye | svcs=CES | 创建一个消息通知主题用于告警推送
+HIT  | 期望=Voucher        | skills=huawei-voucher | svcs=Incentive Voucher | 帮我领一下华为云的代金券
+MISS | 期望=Terraform      | skills=Use huaweicloud-core to route intent. | svcs=Run hcloud --help to list available services. | 用 Terraform 管理我的云资源
+
+D3-A2 触发词路由准确率: HIT=19 MISS=5 准确率=79.2% (N=24)
+{
+  "case": "D3-A2",
+  "hit": 19,
+  "miss": 5,
+  "accuracy": "79.2",
+  "rows": [
+    {
+      "intent": "帮我查一下华北北京四有哪些云主机",
+      "exp": "ECS",
+      "ok": false,
+      "skills": "Use huaweicloud-core to route intent.",
+      "svcs": "Run hcloud --help to list available services."
+    },
+    {
+      "intent": "创建一台 2C4G 的 Ubuntu 云服务器 规格通用型",
+      "exp": "ECS",
+      "ok": true,
+      "skills": "huawei-ecs",
+      "svcs": "ECS"
+    },
+    {
+      "intent": "删除一台不再使用的云服务器",
+      "exp": "ECS",
+      "ok": true,
+      "skills": "huawei-ecs",
+      "svcs": "ECS"
+    },
+    {
+      "intent": "把本地 dist 目录部署成一个公网静态网站",
+      "exp": "OBS",
+      "ok": true,
+      "skills": "huawei-sandbox|huawei-obs",
+      "svcs": "OBS|Sandbox|DevStation"
+    },
+    {
+      "intent": "创建一个对象存储桶并设为公共读",
+      "exp": "OBS",
+      "ok": true,
+      "skills": "huawei-obs",
+      "svcs": "OBS"
+    },
+    {
+      "intent": "往 OBS 桶里上传一个图片文件",
+      "exp": "OBS",
+      "ok": true,
+      "skills": "huawei-obs",
+      "svcs": "OBS"
+    },
+    {
+      "intent": "给这台服务器绑定一个弹性公网IP",
+      "exp": "EIP",
+      "ok": true,
+      "skills": "huawei-ecs|huawei-vpc",
+      "svcs": "ECS|VPC|EIP"
+    },
+    {
+      "intent": "创建一个虚拟私有网络 VPC",
+      "exp": "VPC",
+      "ok": true,
+      "skills": "huawei-vpc",
+      "svcs": "VPC|EIP"
+    },
+    {
+      "intent": "创建一个子网并关联到 VPC",
+      "exp": "VPC",
+      "ok": true,
+      "skills": "huawei-vpc",
+      "svcs": "VPC|EIP"
+    },
+    {
+      "intent": "创建一个安全组并开放 22 端口",
+      "exp": "VPC",
+      "ok": true,
+      "skills": "huawei-vpc",
+      "svcs": "VPC|EIP"
+    },
+    {
+      "intent": "看一下我的云数据库MySQL实例的状态",
+      "exp": "RDS",
+      "ok": true,
+      "skills": "huawei-rds",
+      "svcs": "RDS"
+    },
+    {
+      "intent": "创建一台云数据库 RDS MySQL 实例",
+      "exp": "RDS",
+      "ok": true,
+      "skills": "huawei-rds",
+      "svcs": "RDS"
+    },
+    {
+      "intent": "创建一个 Redis 缓存实例用于会话存储",
+      "exp": "DCS",
+      "ok": true,
+      "skills": "huawei-obs|huawei-cloud-dds-dcs-instance-management",
+      "svcs": "OBS|DDS|DCS"
+    },
+    {
+      "intent": "给生产环境的服务器配置一个每日备份策略",
+      "exp": "CBR",
+      "ok": true,
+      "skills": "huawei-ecs|huawei-iam|huawei-cbr",
+      "svcs": "ECS|IAM|CBR"
+    },
+    {
+      "intent": "把云硬盘挂载到云服务器上",
+      "exp": "EVS",
+      "ok": false,
+      "skills": "huawei-ecs",
+      "svcs": "ECS"
+    },
+    {
+      "intent": "开设一个 Kubernetes 集群用于微服务部署",
+      "exp": "CCE",
+      "ok": true,
+      "skills": "huawei-cce",
+      "svcs": "CCE|SWR"
+    },
+    {
+      "intent": "部署一个函数处理图片自动压缩",
+      "exp": "FunctionGraph",
+      "ok": true,
+      "skills": "huawei-functiongraph",
+      "svcs": "FunctionGraph"
+    },
+    {
+      "intent": "查一下我账号这个月的费用情况",
+      "exp": "BSS",
+      "ok": true,
+      "skills": "huawei-billing",
+      "svcs": "BSS"
+    },
+    {
+      "intent": "我账号下的用户都有哪些权限 帮我审计一下",
+      "exp": "IAM",
+      "ok": true,
+      "skills": "huawei-iam|huawei-cloud-cts-trace-management",
+      "svcs": "IAM|CTS"
+    },
+    {
+      "intent": "申请HTTPS证书并配置到我的域名",
+      "exp": "SCM",
+      "ok": false,
+      "skills": "huawei-cloud-dew-key-management|huawei-vpc",
+      "svcs": "CSMS|KMS|ELB"
+    },
+    {
+      "intent": "把应用日志指标推送到云监控告警",
+      "exp": "CES",
+      "ok": true,
+      "skills": "huawei-cloud-eye",
+      "svcs": "CES"
+    },
+    {
+      "intent": "创建一个消息通知主题用于告警推送",
+      "exp": "SMN",
+      "ok": false,
+      "skills": "huawei-cloud-eye",
+      "svcs": "CES"
+    },
+    {
+      "intent": "帮我领一下华为云的代金券",
+      "exp": "Voucher",
+      "ok": true,
+      "skills": "huawei-voucher",
+      "svcs": "Incentive Voucher"
+    },
+    {
+      "intent": "用 Terraform 管理我的云资源",
+      "exp": "Terraform",
+      "ok": false,
+      "skills": "Use huaweicloud-core to route intent.",
+      "svcs": "Run hcloud --help to list available services."
+    }
+  ]
+}

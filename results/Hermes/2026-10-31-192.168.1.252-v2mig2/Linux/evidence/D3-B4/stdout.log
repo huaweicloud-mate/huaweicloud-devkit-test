@@ -1,0 +1,45 @@
+EXEC | Ecs.0019: The flavor has been taken offline (Ecs.0019). Run `hcloud ECS ListFlavors --cli-region=<region>` to query currently on-sale flavors and switch to a replacement 
+EXEC | Ecs.0707: The flavor + image-type combination does not exist ("the product does not exist") — the error does not say which side is wrong, so check BOTH (#922): (1) the fl
+EXEC | Ecs.0067: Order submission rejected for balance reasons (Ecs.0067). Check the cash balance with `hcloud BSS ShowCustomerAccountBalances --cli-region=cn-north-1` and top u
+EXEC | Ecs.0319: The requested flavor has insufficient capacity in the selected availability zone (Ecs.0319). Fix: retry in a different availability zone, or switch to a replace
+EXEC | APIGW.0301: Incorrect IAM authentication information. The AK/SK is invalid (check the SK for typos), the security token is missing or expired, or the profile lacks project_
+EXEC | 403: OBS uses AK/SK directly, not IAM tokens. Verify AK/SK validity and OBS bucket permissions via hcloud configure list or the Huawei Cloud console.
+
+D3-B4 explain_error 可执行=6/6
+{
+  "case": "D3-B4",
+  "executable": 6,
+  "total": 6,
+  "rows": [
+    {
+      "code": "Ecs.0019",
+      "ok": true,
+      "suggestions": "The flavor has been taken offline (Ecs.0019). Run `hcloud ECS ListFlavors --cli-region=<region>` to query currently on-sale flavors and switch to a replacement flavor (see the huawei-ecs skill references/flavors.md for t"
+    },
+    {
+      "code": "Ecs.0707",
+      "ok": true,
+      "suggestions": "The flavor + image-type combination does not exist (\"the product does not exist\") — the error does not say which side is wrong, so check BOTH (#922): (1) the flavor is abandoned/sellout in this region/AZ (check os_extra_"
+    },
+    {
+      "code": "Ecs.0067",
+      "ok": true,
+      "suggestions": "Order submission rejected for balance reasons (Ecs.0067). Check the cash balance with `hcloud BSS ShowCustomerAccountBalances --cli-region=cn-north-1` and top up if needed — pay-per-use order risk control checks the CASH"
+    },
+    {
+      "code": "Ecs.0319",
+      "ok": true,
+      "suggestions": "The requested flavor has insufficient capacity in the selected availability zone (Ecs.0319). Fix: retry in a different availability zone, or switch to a replacement flavor (list on-sale flavors with `hcloud ECS ListFlavo"
+    },
+    {
+      "code": "APIGW.0301",
+      "ok": true,
+      "suggestions": "Incorrect IAM authentication information. The AK/SK is invalid (check the SK for typos), the security token is missing or expired, or the profile lacks project_id. Fix: re-run \"npx huaweicloud-devkit auth init\" (it auto-"
+    },
+    {
+      "code": "403",
+      "ok": true,
+      "suggestions": "OBS uses AK/SK directly, not IAM tokens. Verify AK/SK validity and OBS bucket permissions via hcloud configure list or the Huawei Cloud console."
+    }
+  ]
+}
