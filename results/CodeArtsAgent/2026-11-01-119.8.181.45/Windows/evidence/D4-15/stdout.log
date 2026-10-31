@@ -1,0 +1,22 @@
+
+=== P0 安全核心探针结果 ===
+PASS  D4-1  credentials.json 读取拦截  => "deny" (expected "deny")
+PASS  D4-1  .huaweicloud 配置读取拦截  => "deny" (expected "deny")
+PASS  D4-2  env dump HUAWEICLOUD_* 拦截  => "deny" (expected "deny")
+PASS  D4-2  printenv HW_ACCESS_KEY 拦截(HW_ 前缀)  => "deny" (expected "deny")
+PASS  D4-2  env dump HW_SECRET_KEY 拦截(HW_ 前缀)  => "deny" (expected "deny")
+PASS  D4-5  hcloud 破坏性写操作识别 (decision)  => true (expected true)
+PASS  D4-15  base64 -d | sh 管道拦截  => "deny" (expected "deny")
+PASS  D4-16  sh -c 包裹 env dump 拦截  => "deny" (expected "deny")
+PASS  D4-16  bash -c 包裹凭证文件读取拦截  => "deny" (expected "deny")
+PASS  D4-7  制品预检返回 findings 数组  => true (expected true)
+FAIL  D4-7  broad IAM policy (actions=["*"]) 检出  => false (expected true)
+PASS  D4-25  ak 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D4-25  sk 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D4-25  access_key 脱敏  => "<redacted>" (expected "<redacted>")
+PASS  D4-25  username 保留明文  => "admin" (expected "admin")
+
+TOTAL pass=14 fail=1 blocked=0
+
+=== JSON OUTPUT ===
+{"status":"FAIL","pass":14,"fail":1,"blocked":0,"results":["PASS  D4-1  credentials.json 读取拦截  => \"deny\" (expected \"deny\")","PASS  D4-1  .huaweicloud 配置读取拦截  => \"deny\" (expected \"deny\")","PASS  D4-2  env dump HUAWEICLOUD_* 拦截  => \"deny\" (expected \"deny\")","PASS  D4-2  printenv HW_ACCESS_KEY 拦截(HW_ 前缀)  => \"deny\" (expected \"deny\")","PASS  D4-2  env dump HW_SECRET_KEY 拦截(HW_ 前缀)  => \"deny\" (expected \"deny\")","PASS  D4-5  hcloud 破坏性写操作识别 (decision)  => true (expected true)","PASS  D4-15  base64 -d | sh 管道拦截  => \"deny\" (expected \"deny\")","PASS  D4-16  sh -c 包裹 env dump 拦截  => \"deny\" (expected \"deny\")","PASS  D4-16  bash -c 包裹凭证文件读取拦截  => \"deny\" (expected \"deny\")","PASS  D4-7  制品预检返回 findings 数组  => true (expected true)","FAIL  D4-7  broad IAM policy (actions=[\"*\"]) 检出  => false (expected true)","PASS  D4-25  ak 脱敏  => \"<redacted>\" (expected \"<redacted>\")","PASS  D4-25  sk 脱敏  => \"<redacted>\" (expected \"<redacted>\")","PASS  D4-25  access_key 脱敏  => \"<redacted>\" (expected \"<redacted>\")","PASS  D4-25  username 保留明文  => \"admin\" (expected \"admin\")"],"executedAt":"20261031210654"}
