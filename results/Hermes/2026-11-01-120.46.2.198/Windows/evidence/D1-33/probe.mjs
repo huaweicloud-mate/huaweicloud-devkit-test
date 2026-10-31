@@ -10,8 +10,8 @@ const rec = (status, why) => {
   writeFileSync(__dirname + '/stdout.log', JSON.stringify(out, null, 2));
   console.log(JSON.stringify(out));
 };
-import {{ join }} from 'node:path';
-import {{ unlinkSync, existsSync }} from 'node:fs';
+import { join } from 'node:path';
+import { unlinkSync, existsSync } from 'node:fs';
 const f = join(__dirname, '.skip-t2.json');
 uc.writeSkipState(f, '1.1.13', {days:1});
 const s = uc.readSkipState(f);

@@ -10,12 +10,12 @@ const rec = (status, why) => {
   writeFileSync(__dirname + '/stdout.log', JSON.stringify(out, null, 2));
   console.log(JSON.stringify(out));
 };
-import {{ join }} from 'node:path';
+import { join } from 'node:path';
 const dir = __dirname;
 const f = join(dir, '.skip-t.json');
 uc.writeSkipState(f, '1.1.13', {days:3});
 const s = uc.readSkipState(f);
 const r = uc.judgeUpdate('1.1.12', {latest:'1.1.13', next:null}, s);
-import {{ unlinkSync, existsSync }} from 'node:fs'; if (existsSync(f)) unlinkSync(f);
+import { unlinkSync, existsSync } from 'node:fs'; if (existsSync(f)) unlinkSync(f);
 rec(r.result === 'dismissed' ? 'PASS':'FAIL', 'skip-state result=' + r.result);
 process.exit(0);
