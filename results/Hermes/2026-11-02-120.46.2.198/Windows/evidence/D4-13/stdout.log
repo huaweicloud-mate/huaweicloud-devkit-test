@@ -1,0 +1,6 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-13",
+  "why": "只读子账号 test001 实测可执行写操作：CreateVpc 返回新 VPC(id=f6c0b77e...) 成功创建（已删除归零）。最小权限未强制——只读凭证具备写权限，违背「只读」语义",
+  "rootCause": "readonly 子账号 IAM 策略过宽（或凭证归属标定错误），test001 具备 VPC 写权限"
+}

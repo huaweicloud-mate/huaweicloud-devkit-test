@@ -1,0 +1,14 @@
+import { execSync } from 'node:child_process';
+import { writeFileSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const run = () => { try { return execSync('npx --yes huaweicloud-devkit status --target hermes', { encoding:'utf8', timeout:120000, shell:true }).toString(); } catch(e) { return (e.stdout||'')+(e.stderr||''); } };
+const a = run().replace(/\r/g,''); const b = run().replace(/\r/g,'');
+const idem = (a === b);
+const hasHermes = a.includes('Hermes Agent');
+const status = (idem && hasHermes) ? 'PASS' : 'FAIL';
+const rec = { status, why: 'status 可执行(含 Hermes Agent)=' + hasHermes + '; 重复执行幂等=' + idem, executedAt: new Date().toISOString().slice(0,19).replace(/[-T:]/g,''), caseId: 'D1-4' };
+writeFileSync(__dirname + '/stdout.log', JSON.stringify(rec, null, 2));
+console.log(JSON.stringify(rec));
+process.exit(0);

@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "caseId": "D3-C2",
+  "why": "OBS 建桶成功 → obs_set_website_config(set) HTTP 400 → (get) HTTP 400 → 删桶归零成功。根因：tools.mjs obsSignedRequest 的 signedHeaders 未含 x-amz-security-token（:3040-3041），但 :3078 又向请求追加该 header，STS 凭证下签名不匹配，OBS 拒绝 \"Request has x-amz-security-token header but signed headers not [included]\"",
+  "executedAt": "20261102050000",
+  "rootCause": "plugins/huaweicloud-core/src/tools.mjs:3040-3041 (signedHeaders 缺 x-amz-security-token) 与 :3078 (追加该 header)"
+}

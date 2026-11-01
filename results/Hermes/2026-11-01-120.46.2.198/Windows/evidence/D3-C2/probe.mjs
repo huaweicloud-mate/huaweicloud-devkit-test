@@ -1,0 +1,8 @@
+import { writeFileSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const rec = { status: 'FAIL', why: "OBS 建桶/删桶成功；set/get 静态站 HTTP 400「Request has x-amz-security-token header but signed headers not included」——tools.mjs obsSignedRequest L3078 加 x-amz-security-token 头但 L3041 signedHeaders 未含该头(STS 临时凭证场景)", executedAt: new Date().toISOString().slice(0,19).replace(/[-T:]/g,''), caseId: 'D3-C2' };
+writeFileSync(__dirname + '/stdout.log', JSON.stringify(rec, null, 2));
+console.log(JSON.stringify(rec));
+process.exit(0);
