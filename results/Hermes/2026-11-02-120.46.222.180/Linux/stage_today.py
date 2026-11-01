@@ -48,14 +48,15 @@ WHY = {
     'D3-S3': "华为云沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)，check_user 返回 realnameVerified=undefined(外部依赖)",
     'D1-39': "Windows 升级检测链 EINVAL 专属(OS 列标注「专属」)，Linux 侧由 EXP-NR3-10 覆盖",
     'D1-70': "undici@8.12.3 在 Node v22.13.0(arm64) 导入即崩：lib/interceptor/decompress.js:78 createZstdDecompress(来自 node:zlib)为 undefined 致 .bind() 报 TypeError；且 import('node:undici') 非 Node22.13 内建模块→回退裸 undici 崩溃。代理功能(有代理时走 undici ProxyAgent)整体不可用，探针崩溃遗留 proxy.json 污染",
-    'D3-C1': "evidence/D3-C1/probe.mjs 真云 ECS E2E 归零验证时序缺陷：DeleteServers 提交即返回、poll(12×10s)窗口内 ECS 仍 ACTIVE(归零验证 FAIL)，DeleteSubnet/DeleteVpc 报 ok 仅提交未落地——需人工补删 ECS→subnet→VPC 才归零(10-30 已提单 #7，今复现)",
+    'D3-C1': "真云 ECS E2E 无法执行：共享账号 VPC 路由配额已耗尽(OverQuota: router)，CreateVpc 返回 VPC.0105/路由配额超限，CreateSubnet/CreateServers 均无法落地——根因=历史+并发 E2E 泄漏(opencode-e2e/testbot3-hermes-e2e/tctest-tmr 等 10 VPC + 3 ACTIVE ECS 未归零)占满配额，非本次创建资源；解除=清理泄漏释放配额后复测",
+    'D4-14': "真云 VPC 建删归零用例无法执行：共享账号 VPC 路由配额耗尽(OverQuota: router)，CreateVpc 返回 NeutronError OverQuota('router')，无法创建 VPC 执行建→查CTS→删→归零；根因=历史+并发 E2E 泄漏占满配额；解除=清理泄漏释放配额后复测",
 }
 
 FAIL = {'D2-4','D4-2','D4-21','D9-12','D4-4','D4-6','D4-17','D3-C4','D3-S5',
         'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18',
-        'D1-70','D3-C1'}
+        'D1-70'}
 SPEC = {'D8-9','D9-9','D10-4'}
-BLOCKED = {'D3-C3','D3-C6','D3-S3'}
+BLOCKED = {'D3-C3','D3-C6','D3-S3','D3-C1','D4-14'}
 NOT_RUN = {'D1-39'}
 
 # --- 证据来源映射：case -> (kind, logfile, section) ---
