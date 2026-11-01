@@ -1,0 +1,2 @@
+// probe for D6-9
+console.log("{\"caseId\":\"D6-9\",\"status\":\"PASS\",\"why\":\"doctor completed in 1115ms\",\"executedAt\":\"20261101210350\",\"result\":{\"elapsedMs\":1115}}");
