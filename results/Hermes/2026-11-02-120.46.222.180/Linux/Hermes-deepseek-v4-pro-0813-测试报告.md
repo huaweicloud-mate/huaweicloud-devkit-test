@@ -62,30 +62,33 @@
 
 ## 四、缺陷清单
 
+> 21 项产品缺陷（FAIL 18 + SPEC-MISMATCH 3）经 `file_issue.py` 历史查重**全部命中上游仓已有 issue，均为 v1.1.12 历史在案缺陷复现**（源码未变）。完整根因（文件:行号）+ 证据见 `FINDINGS.md`，历史单号关联见 `HISTORY_LINKS.md`。本次不重复提单。
+
 | # | 级别 | 用例ID | 维度 | 标题 | 根因（文件:行号） | 状态 |
 |---|---|---|---|---|---|---|
-| 1 | P1 | `D1-70` | D1安装 | 代理配置与 WebSocket 代理 | TODO: 待补根因 | 待提单 |
-| 2 | P0 | `D2-4` | D2认证 | 凭证脱敏正确性 | TODO: 待补根因 | 待提单 |
-| 3 | P1 | `D3-C4` | D3功能 | 服务创建类回归 | TODO: 待补根因 | 待提单 |
-| 4 | P2 | `D3-S5` | D3功能 | 场景-复合意图分层路由 | TODO: 待补根因 | 待提单 |
-| 5 | P2 | `D3-S6` | D3功能 | 场景-FunctionGraph定时任务 | TODO: 待补根因 | 待提单 |
-| 6 | P1 | `D3-S7` | D3功能 | 场景-跨服务交付(Web应用+RDS)并归零 | TODO: 待补根因 | 待提单 |
-| 7 | P0 | `D4-2` | D4安全 | 凭证env打印拦截 | TODO: 待补根因 | 待提单 |
-| 8 | P1 | `D4-4` | D4安全 | 写操作审批门 | TODO: 待补根因 | 待提单 |
-| 9 | P1 | `D4-6` | D4安全 | adminPass回显警告 | TODO: 待补根因 | 待提单 |
-| 10 | P1 | `D4-17` | D4安全 | hook模糊fail-closed | TODO: 待补根因 | 待提单 |
-| 11 | P0 | `D4-21` | D4安全 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检） | TODO: 待补根因 | 待提单 |
-| 12 | P2 | `D4-25` | D4安全 | Python hook 事件遥测分类 | TODO: 待补根因 | 待提单 |
-| 13 | P2 | `D4-26` | D4安全 | findings 证据脱敏 | TODO: 待补根因 | 待提单 |
-| 14 | P0 | `D9-12` | D9协议 | initialize 握手协议安全基线 | TODO: 待补根因 | 待提单 |
-| 15 | P1 | `D10-3` | D10评测 | 路由准确率+混淆矩阵 | TODO: 待补根因 | 待提单 |
-| 16 | P1 | `EXP-C4-14` |  |  | TODO: 待补根因 | 待提单 |
-| 17 | P1 | `EXP-C4-18` |  |  | TODO: 待补根因 | 待提单 |
-| 18 | P1 | `EXP-E01` |  |  | TODO: 待补根因 | 待提单 |
+| 1 | P0 | `D2-4` | D2认证 | 凭证脱敏正确性（小写 ak=/sk= 与 JSON key 漏脱敏） | `safety-policy.mjs:45` 正则大小写敏感 / `:20` 键名不匹配裸 ak/sk | 历史在案 |
+| 2 | P0 | `D4-2` | D4安全 | 凭证env打印拦截（裸 access_key/HW_ 前缀漏拦截） | `safety-policy.mjs` env-dump 正则未覆盖裸 key | 历史在案 |
+| 3 | P0 | `D4-21` | D4安全 | hook_check_artifacts 具名回归（HCL/托管策略漏拦截） | `cloud-risk-rules.json` 仅匹配 JSON `Action:*` | 历史在案 |
+| 4 | P0 | `D9-12` | D9协议 | initialize 握手协议安全基线（非法时序未拒绝） | `mcp-protocol.mjs` dispatch 无 initialize 前置状态机 | 历史在案 |
+| 5 | P1 | `D1-70` | D1安装 | 代理配置与 WebSocket 代理（undici 导入即崩） | `undici` dep `decompress.js:78` createZstdDecompress undefined | 历史在案 |
+| 6 | P1 | `D3-C4` | D3功能 | 服务创建类回归（DMS/DEW 无路由） | `tools.mjs` list_operations(DMS/DEW) 无 command/result | 历史在案 |
+| 7 | P1 | `D3-S7` | D3功能 | 跨服务交付(Web+RDS)并归零（db.password 缺） | `tools.mjs` RDS CreateInstance 最小参数集缺 db.password | 历史在案 |
+| 8 | P1 | `D4-4` | D4安全 | 写操作审批门（Change* 漏拦截） | `safety/policy.json:27` writeOperationPrefixes 缺 Change | 历史在案 |
+| 9 | P1 | `D4-6` | D4安全 | adminPass回显警告（command 阶段未覆盖） | `cloud-risk-rules.json` stages 仅 artifact/deploy_plan | 历史在案 |
+| 10 | P1 | `D4-17` | D4安全 | hook模糊 fail-closed（空/破坏性输入 fail-open） | `risk-rule-engine.mjs` 无规则命中默认 allow | 历史在案 |
+| 11 | P1 | `D10-3` | D10评测 | 路由准确率+混淆矩阵（1 条 MISS） | `tools.mjs` routeMap 缺「云主机」 | 历史在案 |
+| 12 | P1 | `EXP-C4-14` | 展开级 | DMS 服务矩阵 list_operations 无路由 | `tools.mjs` list_operations(DMS) 无 command/result | 历史在案 |
+| 13 | P1 | `EXP-C4-18` | 展开级 | DEW 服务矩阵 list_operations 无路由 | `tools.mjs` list_operations(DEW) 无 command/result | 历史在案 |
+| 14 | P1 | `EXP-E01` | 展开级 | 「云主机」中文意图路由 MISS | `tools.mjs` ECS routeMap 缺「云主机」 | 历史在案 |
+| 15 | P2 | `D3-S5` | D3功能 | 场景-复合意图分层路由（多路命中失败） | `tools.mjs` routeMap 单意图匹配未分解 | 历史在案 |
+| 16 | P2 | `D3-S6` | D3功能 | 场景-FunctionGraph定时任务（缺函数代码） | `tools.mjs` CreateFunction 缺 code | 历史在案 |
+| 17 | P2 | `D4-25` | D4安全 | Python hook 事件遥测分类（写判 cli:invoke） | `huaweicloud-safety.py` WRITE_OPERATION_RE 前置捕获组 | 历史在案 |
+| 18 | P2 | `D4-26` | D4安全 | findings 证据脱敏（JSON key 明文残留） | `risk-rule-engine.mjs` redactEvidence 不匹配 JSON key | 历史在案 |
+| 19 | SPEC | `D10-4` | D10评测 | 安全干预-静态规则层（规则计数 16→19 契约滞后） | `cloud-risk-rules.json` 规则增量未同步用例断言 | 历史在案 |
+| 20 | SPEC | `D9-9` | D9协议 | tools/call 超时语义与取消（cancellation 未声明） | `mcp-protocol.mjs` capabilities 仅 `{tools:{}}` | 历史在案 |
+| 21 | SPEC | `D8-9` | D8文档 | 安装 ID 与遥测值脱敏（sanitizeValue 未脱敏敏感值） | `telemetry.mjs` sanitizeValue 无 AK/SK/token 脱敏 | 历史在案 |
 
-### 根因详情
-
-> TODO: 每个 FAIL 用例的「期望 / 实际 / 根因（文件:行号）/ 证据」需由 agent 依据 evidence/<case-id>/stdout.log 补充。
+> 逐条「期望 / 实际 / 根因（文件:行号）/ 证据」详见 `FINDINGS.md`（`file_issue.py` 解析输入，格式已严格遵循）。
 
 ---
 
@@ -95,7 +98,7 @@
 
 | 用例ID | 维度 | 标题 | 原因 |
 |---|---|---|---|
-| `D1-39` | D1安装 | Windows 升级检测链可用性 | TODO: 待补原因 |
+| `D1-39` | D1安装 | Windows 升级检测链可用性 | Windows 升级检测链 EINVAL 专属（OS 列标注「专属」），Linux 侧由展开级 EXP-NR3-10 代表覆盖 |
 
 ### BLOCKED
 
@@ -111,10 +114,10 @@
 
 ## 六、安全与红线合规
 
-- [ ] 凭证泄漏事件：`TODO: 待填`
-- [ ] 写操作误判 read-only：`TODO: 待填`
-- [ ] 红线（I 类）违规：`TODO: 待填`
-- [ ] 脱敏复核：`TODO: 待填`
+- [x] 凭证泄漏事件：无（本次未发现新凭证明文泄漏；已有 D2-4/D4-2/D4-26 脱敏缺陷均为历史在案复现）
+- [x] 写操作误判 read-only：无新增（D4-4 Change* / D4-17 fail-open / D4-25 遥测分类均为历史在案）
+- [x] 红线（I 类）违规：0
+- [x] 脱敏复核：探针输出已按 AK/SK 前缀脱敏后再落盘，无明文 SK 写入 evidence
 
 ---
 
@@ -122,12 +125,18 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| TODO | TODO | TODO | TODO |
+| OBS 桶（D3-C2） | `tctest-hermes-obs-*` | 已删 | 归零 OK（7/7 PASS） |
+| EIP（D3-C7） | `tctest-*` 临时 EIP | 已删 | 归零 OK（7/7 PASS） |
+| VPC（D4-14） | 未能创建（配额耗尽） | N/A | quota 阻塞（未创建，无残留） |
+| ECS/VPC/子网（D3-C1） | 未能创建（配额耗尽） | N/A | quota 阻塞（未创建，无残留） |
 
-> TODO: 真云用例的资源创建/销毁/归零情况由 agent 依据执行过程补充。
+> **共享账号历史泄漏（非本次创建，需维护者统一清理）**：cn-north-4 残留 10 个 VPC（`opencode-e2e-*`、`testbot3-hermes-e2e-*`、`tctest-tmr-*` 等）+ 3 台 ACTIVE ECS（`testbot3-hermes-ecs-3567878055`、`opencode-e2e-3567729921`、`tctest-tmr-u1yrtd-srv`）+ 5 子网未归零，已占满 VPC 路由配额（OverQuota: router），是今日 D4-14/D3-C1 标 BLOCKED 的直接原因。建议维护者按 ECS→subnet→VPC 顺序清理。
 
 ---
 
 ## 八、遗留与建议
 
-- TODO: 待裁决 SPEC / 未覆盖项 / 修复建议由 agent 补充。
+- **真云配额治理（紧急）**：共享账号 VPC 路由配额已耗尽（3 ACTIVE ECS + 10 VPC 泄漏），需维护者统一清理归零，否则后续所有 agent 的真云 E2E 建删用例将持续 BLOCKED。
+- **D1-70 探针污染链**：undici 崩溃遗留 `~/.config/huaweicloud/proxy.json` 占位（proxy.example），会级联破坏后续真云 hcloud/obsutil 调用（今日首轮 realcloud-probe 已中招，清理后复跑恢复）。建议探针 finally 清理 proxy.json，或 fix undici 依赖崩溃（历史缺陷）。
+- **SPEC-MISMATCH 待裁决**：D10-4（规则计数 16→19）、D9-9（cancellation 未声明）、D8-9（sanitizeValue 未脱敏敏感值）3 项契约漂移，需维护者裁决「改用例」或「改实现」。
+- **历史缺陷修复跟踪**：18 FAIL + 3 SPEC 均为 v1.1.12 历史在案缺陷（见 HISTORY_LINKS.md 关联清单），建议维护者按 P0 优先级推进修复（D2-4/D4-2/D4-21/D9-12 四项 P0 安全缺陷优先）。
