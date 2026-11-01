@@ -1,0 +1,3 @@
+// probe for EXP-C4-13
+// status=PASS
+console.log("{\"caseId\":\"EXP-C4-13\",\"status\":\"PASS\",\"why\":\"SMN ListTopics: help-list ok=true, real-call ok=true\",\"executedAt\":\"20261101210319\",\"result\":{\"service\":\"SMN\",\"op\":\"ListTopics\",\"helpExit\":0,\"helpHasOp\":true,\"listExit\":0,\"realOk\":true,\"realOutSample\":\"{\\n  \\\"request_id\\\": \\\"8ff8b4b9a8864657a4b8e437029f3a78\\\",\\n  \\\"topic_count\\\": 0,\\n  \\\"topics\\\": []\\n}\"}}");

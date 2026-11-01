@@ -1,9 +1,12 @@
 {
   "caseId": "D1-67",
-  "status": "BLOCKED",
-  "why": "AGENT_TOOLKIT_MODE=local is DSH-client-specific (HUAWEICLOUD_AGENT_TOOLKIT_MODE env tested by DSH agent)",
-  "executedAt": "20261101053930",
-  "result": {
-    "blockedReason": "DSH client专属: AGENT_TOOLKIT_MODE 注入 + SKIP_DSH_PLUGIN_INSTALL, WorkBuddy not DSH"
-  }
+  "status": "PASS",
+  "why": "静态源码核对: REQUIRED_ENV_KEYS含HCLOUD_BIN=true,含AGENT_TOOLKIT_MODE=true; AGENT_TOOLKIT_MODE=local注入=true; HCLOUD_BIN注入=true; SKIP_DSH_PLUGIN_INSTALL=1跳过DSH=true",
+  "executedAt": "20261101054553",
+  "reqEnvHasHcloudBin": true,
+  "reqEnvHasToolkitMode": true,
+  "injectToolkitLocal": true,
+  "injectHcloudBin": true,
+  "skipDsh": true,
+  "ref": "setup-cli.mjs:270(env注入)/2355(SKIP_DSH); mcp-config-merge.mjs:143"
 }

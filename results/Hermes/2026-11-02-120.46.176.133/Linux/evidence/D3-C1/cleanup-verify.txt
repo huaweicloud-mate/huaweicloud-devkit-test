@@ -1,0 +1,24 @@
+D3-C1 真云 ECS 生命周期 —— 归零复核（测后手工删除 + 只读 inventory）
+时间: 2026-11-02 05:10:54 (北京时间)
+
+探针内 auto-zero 轮询（scripts/realcloud_e2e.mjs:111-119，150s）超时未确认 ECS 删除，
+故本轮在探测结束后手工执行 ECS DeleteServers + VPC DeleteSubnet/DeleteVpc，并只读复核归零：
+
+本次创建资源（唯一时间戳前缀 testbot3-hermes-e2e-3566980438 / testbot3-hermes-ecs-3566980438）：
+  ECS  ff6ac4d1-152d-4462-9dce-fc0e26acbd8f  -> 已删除
+  VPC  6764bd4a-d543-45ab-a3f1-fedfc5b1403c  -> 已删除
+  subnet 295f1920-9e0e-4b4f-9961-f30454788316 -> 已删除
+  EVS volume (随 ECS 删除)                    -> 已随实例释放
+
+=== 只读 inventory 复核（cn-north-4） ===
+ECS list_field=['count', 'servers'] count=1
+  servers: [('tctest-tmr-u1yrtd-srv', '3e46b335-3e53-4345-a574-9f991fc441c7')]
+VPC total=1
+SUBNET total=2
+   - testbot3-hermes-e2e-3308444841-subnet 4cdf1dce-5acf-4da8-9629-db3cc66312ca
+SG total=1
+EIP total=0
+EVS total=1
+OBS buckets=0
+
+结论：本次创建资源已全部归零（仅余他人 tctest-* 资源 + 2026-10-29 历史孤儿子网，均非本次创建）。
