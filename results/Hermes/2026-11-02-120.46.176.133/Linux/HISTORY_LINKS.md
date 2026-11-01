@@ -118,8 +118,8 @@
   - [#915](https://github.com/huaweicloud/huaweicloud-devkit/issues/915)（open）**[测试报告] huaweicloud-devkit v1.1.9-next.0 每日测试缺陷合并单（1 项）**
     - 历史单内容：## 测试概览 - 被测版本：v1.1.9-next.0 - 缺陷：1 项 ## 缺陷清单 ### 15. [P1] D1-70 代理配置后 ProxyAgent/WebSocket 代理崩溃（undici 浮点依赖与 engines 声明不一致） - **描述**：v1.1.9-next.0 实测——`getProxyDispatcher`/`getWebSocketImpl` 在有代理时经 `
 
-## D4-6 hook_check_command 对 `--admin-pass` 不告警 + JSON 带引号 key adminPass 未脱敏
-- 今日证据：`evidence/D4-6/stdout.txt`（supplement-probe MCP hook 层 + d4-6-probe 源码层）
+## D4-6 hook_check_command 对 `--admin-pass` 不告警 + 形态脱敏缺口
+- 今日证据：`evidence/D4-6/stdout.txt`（d4-6-probe 源码层 + supplement-probe MCP hook 层）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#980](https://github.com/huaweicloud/huaweicloud-devkit/issues/980)（open）**[安全][P1] telemetry sanitizeValue 未脱敏 AK/SK/token —— 安装 ID 遥测存在敏感值泄漏（D8-9，连续 3 个版本复现）**
     - 历史单内容：## 目标 修复 `huaweicloud-core` 安装 ID 遥测链路的敏感值脱敏缺失：`sanitizeValue` 仅做控制字符清理与超长截断，AK/SK/token 等敏感值可原样进入遥测负载。 ## 现状 - 每日测试连续 3 次复核复现（v1.1.9 → v1.1.10），无任何缓解： - 2026-10-18（v1.1.9）：D8-9 安装 ID 遥测 sanitizeValue
@@ -417,18 +417,8 @@
 ## D10-4 风险规则库条目数漂移（SPEC）
 - 今日证据：`evidence/D10-4/stdout.txt`（new-safety-probe）
 - **关联历史单（已作为缺陷提过，本次为复核）**：
-  - [#1055](https://github.com/huaweicloud/huaweicloud-devkit/issues/1055)（open）**[测试报告] huaweicloud-devkit v1.1.13-next.0 每日测试缺陷合并单（12 项）**
-    - 历史单内容：## 测试概览 - 被测版本：v1.1.13-next.0 - 缺陷：12 项 ## 缺陷清单 ### 1. [P0] D4-16 sh -c 命令包裹穿透（凭证 env 打印绕过） - **描述**：`evaluateCommandRisk('sh -c "env | grep HUAWEICLOUD_ACCESS_KEY"')` 返回 `decision=allow, findings=[]`
   - [#978](https://github.com/huaweicloud/huaweicloud-devkit/issues/978)（open）**子任务：D10-4 安全干预静态规则层规则数与设计契约对齐（P0）**
     - 历史单内容：## 父任务 [Issue #976](https://github.com/huaweicloud/huaweicloud-devkit/issues/976) ## 目标 修复 1.1.10 测试缺陷 D10-4：`plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json` 当前规则数 19 条（9 deny + 10 warn）与
   - [#976](https://github.com/huaweicloud/huaweicloud-devkit/issues/976)（open）**[测试报告] huaweicloud-devkit 1.1.10 每日测试缺陷合并单（2 项）**
     - 历史单内容：## 测试概览 - 被测版本：1.1.10 - 缺陷：2 项 ## 缺陷清单 ### 5. [P0] D10-4 安全干预静态规则层规则数与设计契约漂移 - **描述**：规则库 19 条(9 deny+10 warn) 与设计契约 16 条不匹配 - **预期（精确断言）**：规则数与设计契约一致（16 条 = 9 deny + 7 warn） - **根因**：`cloud-risk-rule
-  - [#845](https://github.com/huaweicloud/huaweicloud-devkit/issues/845)（open）**[daily-test] safety-policy 安全检测覆盖不足 + serviceCatalog 中文路由缺失 (8 FAIL: P0x4 P1x4)**
-    - 历史单内容：## 每日测试缺陷汇总 — CodeArtsSpace / Windows / 2026-10-02 **被测版本**：huaweicloud-devkit@1.1.8-next.1 **测试客户端**：CodeArtsSpace (GLM-5.2) **执行环境**：Windows / 120.46.40.202 **测试结果**：133 PASS / 8 FAIL / 0 BLOCKED (通
-  - [#841](https://github.com/huaweicloud/huaweicloud-devkit/issues/841)（open）**[测试报告] huaweicloud-devkit 1.1.8-next.1 每日测试缺陷合并单（8 项历史，CodeArtsSpace Windows 2026-10-01）**
-    - 历史单内容：## 测试报告: CodeArtsSpace Windows 2026-10-01 每日测试 - **客户端**: CodeArtsSpace (GLM-5.2) - **OS**: Windows - **被测版本**: 1.1.8-next.1 - **执行时间**: 2026-10-01 05:15 BJT - **用例数**: 141 (设计级 102 + 展开级 39) - **结果**
-  - [#683](https://github.com/huaweicloud/huaweicloud-devkit/issues/683)（open）**[测试报告] huaweicloud-devkit v1.1.4 全量测试缺陷合并单（10 项）**
-    - 历史单内容：## 测试概览 - 被测版本：v1.1.4 - 缺陷：10 项 ## 缺陷清单 ### 1. [P0] 凭证脱敏漏小写 ak=/sk=（obsutilconfig 格式） - **描述**：`redactSecrets('ak=AK123456 sk=SKsecret')` 返回原文未脱敏；而 `access_key=`/`secret_key=` 大写键与对象路径 `{AK,SK}` 均正常脱敏
-  - [#677](https://github.com/huaweicloud/huaweicloud-devkit/issues/677)（open）**[test] Hermes Windows P0 缺陷汇总 (v1.1.4-next.6, 2026-09-14): D1-39/D4-2/D4-3/D4-15/D4-16**
-    - 历史单内容：## 测试信息 - **客户端**: Hermes (GLM-5.2) - **OS**: Windows 10 - **被测版本**: v1.1.4-next.6 - **测试日期**: 2026-09-14 - **P0 结果**: PASS 13 / FAIL 5 - **测试报告**: [Hermes-GLM-5.2-测试报告.md](https://github.com/huaweicl
-- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#852, #797, #761, #651
+- **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#852, #761

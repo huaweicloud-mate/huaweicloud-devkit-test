@@ -29,7 +29,7 @@
 | 已执行 | `146` |
 | PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `122 / 13 / 8 / 3 / 4` |
 | 通过率（分母 = PASS+FAIL = 135） | `90.4%` |
-| P0 / P1 / P2 新增缺陷 | `3 / 6 / 4` |
+| P0 / P1 / P2 缺陷 | `3 / 6 / 4`（FAIL，均历史复核，无新增） |
 | 红线（I 类）违规 | `0` |
 | 资源释放 | `本次创建真云资源已全部归零（ECS/VPC/subnet/OBS/EIP/EVS）` |
 
