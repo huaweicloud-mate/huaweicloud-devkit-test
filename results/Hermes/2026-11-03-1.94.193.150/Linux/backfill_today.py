@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-11-02 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13-next.0 gitHead 47170d1f）。"""
+"""Hermes Linux 2026-11-03 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13-next.0 gitHead 47170d1f）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -162,8 +162,8 @@ FAIL_D = {
     "D4-25": "Python hook 写操作遥测误分类 cli:invoke（应 cli:write）",
     "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 泄漏",
     "D3-S5": "serviceCatalog 复合意图未命中多 service（回退 help）",
-    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.filename，未生成 URN/触发器",
-    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.password）",
+    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: function_name，未生成 URN/触发器",
+    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.port）",
     "D9-12": "initialize 版本检查缺失 + 非法时序 tools/list 未拒 -32600",
     "D10-3": "serviceCatalog 中文意图 EXP-E01「云主机」未命中（92.9% 未达 100%）",
     "D1-70": "proxy-agent getWebSocketImpl 崩溃：bundled undici@8.12.2 decompress.js 解构 node:zlib.createZstdDecompress(node22.13 无)→undefined.bind TypeError",
