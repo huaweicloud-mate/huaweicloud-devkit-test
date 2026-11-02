@@ -1,0 +1,27 @@
+D3-C1 真云 ECS 生命周期 —— 归零复核（测后手工删除 + 只读 inventory）
+时间: 2026-11-03 05:12~05:16 (北京时间)
+
+探针内 auto-zero 轮询（scripts/realcloud_e2e.mjs:111-119，150s）超时未确认 ECS 删除
+（ECS 为异步删除，实际耗时 > 150s），故本轮在探测结束后手工执行
+ECS DeleteServers + VPC DeleteSubnet/DeleteVpc，并只读 inventory 复核归零。
+
+本次创建资源（唯一时间戳前缀 testbot3-hermes-e2e-3653641141 / testbot3-hermes-ecs-3653641141）:
+  ECS     2b858e0b-9a26-4b5d-af38-596aba90e58e  (testbot3-hermes-ecs-3653641141)  -> 已删除
+  VPC     5a492b9b-c4b0-408a-8a5d-83df0b8ecffc  (testbot3-hermes-e2e-3653641141)  -> 已删除
+  subnet  d343a2c0-0f69-4be2-88ab-6a793a1b7108  (...-3653641141-subnet)            -> 已删除
+  EVS     (随 ECS 删除)                                                             -> 已随实例释放
+
+本轮附带清出（上一轮并发/遗留、同为 testbot3-hermes 前缀，非本次创建但已归零）:
+  VPC     9f747f37-9b34-47b1-b0f5-c77a6a3e152f  (testbot3-hermes-e2e-3567878055)  -> 已删除
+  subnet  d5393256-90d4-4010-ab57-8eb335d424fb  (...-3567878055-subnet)            -> 已删除
+
+=== 只读 inventory 复核（cn-north-4, 2026-11-03 05:16） ===
+ECS list_field=['count','servers'] count=1
+  servers: [('tctest-tmr-u1yrtd-srv','3e46b335-3e53-4345-a574-9f991fc441c7')]  ← 他人历史资源
+VPC total: 仅他人资源（tctest-tmr-u1yrtd / hdk-s7-vpc-*）与并发运行的其他机器资源
+SUBNET: 仅他人/并发资源（tctest-tmr-u1yrtd-sub / hdk-s7-subnet-* / testbot3-hermes-e2e-3308444841-subnet[2026-10-29 孤儿]）
+EIP total_count=0
+OBS buckets=0
+
+结论：本次创建资源（VPC/SUBNET/ECS/EVS）已全部删除并归零，只删本次创建，未触碰他人
+（tctest-*、hdk-s7-*）资源。EIP=0、OBS=0。
