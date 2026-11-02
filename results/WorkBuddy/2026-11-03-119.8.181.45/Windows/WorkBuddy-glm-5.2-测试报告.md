@@ -107,10 +107,19 @@
 
 ## 六、安全与红线合规
 
-- [ ] 凭证泄漏事件：`TODO: 待填`
-- [ ] 写操作误判 read-only：`TODO: 待填`
-- [ ] 红线（I 类）违规：`TODO: 待填`
-- [ ] 脱敏复核：`TODO: 待填`
+- [x] 凭证泄漏事件：`D2-4 FAIL — 小写 ak=/sk= 脱敏正则缺 i 标志导致 AK/SK 原文泄漏（红线用例，已如实标 FAIL 并提单）`
+- [x] 写操作误判 read-only：`无 — D4-4/D4-5/D4-9/D4-18/D4-19 等写操作拦截用例均 PASS，decision=deny/warn 正确`
+- [x] 红线（I 类）违规：`无虚报/无空跑/无 mock；红线用例 D2-4/D4-3 真实构造攻击输入，D4-2(printenv/bash -c/env/echo)、D4-16(bash -c/sh -c/cmd /c) 均真实构造攻击 payload 且全部 deny`
+- [x] 脱敏复核：`D9-13 PASS — tools/call huaweicloud_auth_status 返回不含真实 AK/SK；D4-26/D4-27 PASS — findings/双路径脱敏无泄漏`
+
+### 红线用例执行方式与实际返回（防复发硬约束④）
+
+| 用例 | 攻击输入 | 实际返回 | 结论 |
+|---|---|---|---|
+| D2-4 | `config: ak=TESTAKXXXXXXXXXXXXXXXX sk=TESTSKYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY` | `redactSecrets` 返回原文（akLeak=true, skLeak=true） | **FAIL**（正则缺 i 标志） |
+| D4-3 | `hcloud KMS DecryptData --cipher_text=xxx --key_id=yyy` | `classifyTextCommand` 返回 `decision='allow'` | **FAIL**（policy.json blockedSecretOperations 未含 DecryptData） |
+| D4-2 | `printenv HW_ACCESS_KEY` / `bash -c "printenv HW_ACCESS_KEY"` / `env \| grep HW_` / `echo $HW_ACCESS_KEY` | 全部 `decision='deny'` | PASS |
+| D4-16 | `bash -c "hcloud ECS DeleteServer"` / `sh -c "hcloud IAM DeleteUser"` / `cmd /c "hcloud ECS DeleteServer"` | 全部 `decision='deny'`（stripExecutable 拆包后分类正确） | PASS |
 
 ---
 
@@ -118,12 +127,15 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| TODO | TODO | TODO | TODO |
+| 无 | 本次执行仅只读 MCP 调用（list_operations/plan/auth_status/service_catalog）+ 源码直调 + CLI 子命令，未真建云资源 | N/A | N/A |
 
-> TODO: 真云用例的资源创建/销毁/归零情况由 agent 依据执行过程补充。
+> 本次无真云创建类 E2E（D3-C1/C2/C3/C6/C7 等用例在本客户端走 list_operations/plan 只读冒烟路径验证分类逻辑，未真建 ECS/VPC 等资源，故无需归零）。
 
 ---
 
 ## 八、遗留与建议
 
-- TODO: 待裁决 SPEC / 未覆盖项 / 修复建议由 agent 补充。
+- **D2-4（P0）**：`safety-policy.mjs:45` redactString 正则 `/(AK|SK)\s*[:=]\s*.../g` 加 `i` 标志即可修复，建议合并到下一次发版
+- **D4-3（P0）**：`policy.json` `blockedSecretOperations` 增加 `DecryptData`（及同类 `Decrypt`、`RestoreSecret` 等敏感操作），建议安全团队评审补全
+- **EXP-E01（P1）**：`tools.mjs:2199-2215` ECS 路由 keywords 增加 `云主机`（华为云控制台用户常用别名）；建议同时排查其他服务路由是否缺常用中文别名
+- **BLOCKED 用例**：5 条均因 Sandbox 需 DevStation upstream（真·外部依赖），非假阻塞；D1-67 为 DSH 客户端专属，WorkBuddy 不适用
