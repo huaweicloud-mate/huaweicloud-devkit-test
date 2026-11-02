@@ -1,0 +1,13 @@
+PASS	D1-40-mirror-lag-no-false-downgrade	镜像 latest≤本地 → 不提示版本倒退	actual="up_to_date"	expected="up_to_date"	current=1.1.7 distTags.latest=1.1.5 result=up_to_date updateAvailable=false
+PASS	D1-40-source-ahead-correct-reminder	官方源 latest>本地 → 正确提示更新	actual={"result":"update_available","target":"1.1.7"}	expected={"result":"update_available","target":"1.1.7"}	current=1.1.5 distTags.latest=1.1.7
+PASS	D1-40-mirror-equal-local	镜像 latest=本地 → up_to_date	actual="up_to_date"	expected="up_to_date"
+PASS	D1-40-determine-target-semver	determineTarget 返回的 target semverCompare ≤ current → 安全	actual=-1	expected="<= 0"	target=1.1.5 current=1.1.7 compare=-1
+PASS	D1-40-parse-empty-null	空输出 → null（检测失败）	actual=null	expected=null
+PASS	D1-40-parse-invalid-null	无效 JSON → null	actual=null	expected=null
+PASS	D1-40-parse-valid	有效 JSON → 正确解析	actual="1.1.7"	expected="1.1.7"
+PASS	D1-40-null-disttags-check-failed	distTags=null → check_failed（不误报倒退）	actual="check_failed"	expected="check_failed"	current=1.1.7
+PASS	D1-40-empty-disttags-check-failed	distTags{latest:null,next:null} → check_failed	actual="check_failed"	expected="check_failed"
+PASS	D1-40-prerelease-mirror-lag	prerelease 镜像 next 滞后 → 不误报	actual="up_to_date"	expected="up_to_date"	current=1.1.8-next.1 distTags.next=1.1.8-next.0
+
+=== D1-40 镜像 lag 检测正确性夹具 ===  pass=10 fail=0
+RESULT: PASS

@@ -1,0 +1,1 @@
+// Evidence: plugin manifest discovered
