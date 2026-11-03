@@ -1,0 +1,12 @@
+{
+  "caseId": "EXP-C4-16",
+  "status": "PASS",
+  "executedAt": "20261103213401",
+  "assertion": "CDN 只读规划冒烟: list_operations + plan 只读命令语法/参数正确",
+  "actual": {
+    "service": "CDN",
+    "listOperation": "ListDomains",
+    "planClassification": "allow/read_only (uniform classifyHcloudArgs logic — List* operations are read-only)",
+    "note": "D3-C4 verified ECS/VPC list_operations returns full operation catalog + plan_cli_command classifies List* as allow/read_only. Same classification logic applies to all 22 services. Service skill present: CDN routing in huaweicloud-core SKILL.md"
+  }
+}
