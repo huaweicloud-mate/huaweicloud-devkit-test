@@ -1,0 +1,15 @@
+=== D4-4 写操作审批门（含 Change* 漏拦截检测）===
+  [OK] hcloud ecs CreateServers --server.name x -> deny (exp deny)
+  [OK] hcloud vpc DeleteVpc --vpc_id x -> deny (exp deny)
+  [<<< 漏拦截] hcloud ecs ChangeServerOsWithoutCloudInit --server_id x -> allow (exp deny)
+  [<<< 漏拦截] hcloud ecs ChangeServerOsWithCloudInit --server_id x -> allow (exp deny)
+  [<<< 漏拦截] hcloud vpc ChangeVpc --vpc_id x -> allow (exp deny)
+  [<<< 漏拦截] hcloud rds ChangeInstanceConfiguration --instance_id x -> allow (exp deny)
+  [<<< 漏拦截] hcloud evs ChangeVolumeType --volume_id x -> allow (exp deny)
+  [<<< 误判] hcloud ecs ChangeServerOsWithoutCloudInit -> decision=allow risk=unknown_read (exp deny/write)
+  [<<< 误判] hcloud vpc ChangeVpc -> decision=allow risk=unknown_read (exp deny/write)
+  [<<< 误判] hcloud rds ChangeInstanceConfiguration -> decision=allow risk=unknown_read (exp deny/write)
+RESULT: FAIL  Change* 拦截 0/8; 基线 Create/Delete deny
+根因: safety/policy.json:27 writeOperationPrefixes 缺 Change 前缀 -> Change* 判 allow(risk=unknown_read)
+
+[D4-4] status=FAIL changeBlocked=0/8
