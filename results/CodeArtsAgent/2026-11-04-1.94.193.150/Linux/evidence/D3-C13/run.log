@@ -1,8 +1,6 @@
-$ /home/testbot2/.local/bin/node /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/huaweicloud-devkit-test/results/CodeArtsAgent/2026-11-04-1.94.193.150/Linux/evidence/D3-C13/probe.mjs
----- STDOUT ----
 
 =====CASE D3-S2=====
-创建测试VPC tctest-codeartsagent-s2-mw16r45s -> id=4a075577-f95d-457b-9dcf-c7c5bacb339e
+创建测试VPC tctest-codeartsagent-s2-mw180ok0 -> id=a6d13f5c-5f59-47d3-8212-a61e67cc99e1
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
@@ -16,20 +14,16 @@ hook_check_command DeleteVpc -> decision=warn risk=undefined
 =====END D3-S2=====
 
 =====CASE D3-C13=====
-OBS mb -> Start at 2026-11-03 21:14:15.74932966 +0000 UTC
-
-Create bucket [tctest-codeartsagent-obs-mw16r45s] failed, status [403],
+OBS mb -> success
 set 无 indexDocument -> __error=Error: indexDocument is required for action=set ok=undefined
-set indexDocument -> ok=false status=404
-get -> ok=false status=404
-OBS rm -f -> Start at 2026-11-03 21:14:16.29537496 +0000 UTC
-
-Delete bucket [tctest-codeartsagent-obs-mw16r45s] f
-[FAIL] OBS 建桶成功
+set indexDocument -> ok=true status=200
+get -> ok=true status=200
+OBS rm -f -> success
+[OK] OBS 建桶成功
 [OK] set 缺失 indexDocument 报错(拒绝)
-[FAIL] set 成功
-[FAIL] get 返回配置与 set 一致
-[FAIL] 删除归零
+[OK] set 成功
+[OK] get 返回配置与 set 一致
+[OK] 删除归零
 =====END D3-C13=====
 
 =====CASE D3-C14=====
@@ -58,7 +52,7 @@ voucher_status(领取后) -> {"claimed":true,"message":"已领取过（代金券
 =====END D3-S4=====
 
 =====CASE D3-S3=====
-check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 7e907c6fa6d7412892a1767762a3b537]
+check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 8df422f46def44cda06ea4ef8d14332a]
 [FAIL] 沙箱 check_user 通过
 → 沙箱账号未实名/未签协议，标记 BLOCKED（外部依赖）
 =====END D3-S3=====
@@ -66,12 +60,12 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
 =====SUMMARY=====
 {
   "total": 18,
-  "passed": 13,
+  "passed": 17,
   "results": [
     {
       "name": "测试 VPC 创建成功",
       "ok": true,
-      "detail": "vpcId=4a075577-f95"
+      "detail": "vpcId=a6d13f5c-5f5"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -95,8 +89,8 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     },
     {
       "name": "OBS 建桶成功",
-      "ok": false,
-      "detail": "bucket=tctest-codeartsagent-obs-mw16r45s"
+      "ok": true,
+      "detail": "bucket=tctest-codeartsagent-obs-mw180ok0"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -105,18 +99,18 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     },
     {
       "name": "set 成功",
-      "ok": false,
-      "detail": "{\"ok\":false,\"status\":404}"
+      "ok": true,
+      "detail": "{\"ok\":true,\"status\":200}"
     },
     {
       "name": "get 返回配置与 set 一致",
-      "ok": false,
-      "detail": "{\"ok\":false,\"status\":404}"
+      "ok": true,
+      "detail": "{\"ok\":true,\"status\":200}"
     },
     {
       "name": "删除归零",
-      "ok": false,
-      "detail": "bucket removed=tctest-codeartsagent-obs-mw16r45s"
+      "ok": true,
+      "detail": "bucket removed=tctest-codeartsagent-obs-mw180ok0"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
@@ -156,11 +150,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "沙箱 check_user 通过",
       "ok": false,
-      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 7e907c6fa6d7412892a1767762a3b537]\"}"
+      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 8df422f46def44cda06ea4ef8d14332a]\"}"
     }
   ]
 }
-
----- STDERR ----
-
----- EXIT 0 ----
