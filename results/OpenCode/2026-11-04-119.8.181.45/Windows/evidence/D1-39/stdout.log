@@ -1,0 +1,22 @@
+{
+  "caseId": "D1-39",
+  "status": "FAIL",
+  "executedAt": "20261103211455",
+  "assertion": "Windows下 queryDistTagsSync 真实可用，不得 EINVAL 静默失败",
+  "actual": {
+    "syncResult": null,
+    "syncReturnedNull": true,
+    "rawNpmOutput": "[\n  {\n    \"latest\": \"1.1.12\",\n    \"next\": \"1.1.13-next.3\"\n  }\n]\n",
+    "rawNpmOutputIsArray": true,
+    "parseDistTagsOutput_arrayInput": null,
+    "parseDistTagsOutput_objectInput": {
+      "latest": "1.1.12",
+      "next": "1.1.13-next.3"
+    },
+    "mcpCheckUpdateResult": "latestStable=null, latestNext=null, result=check_failed (verified via huaweicloud_check_update MCP tool)"
+  },
+  "rootCause": "update-check.mjs:86 parseDistTagsOutput rejects Array.isArray(parsed) → returns null. npm 12.1.0 `npm view huaweicloud-devkit dist-tags --json` returns array `[{latest,next}]` (npm wraps single-package results in array). queryDistTagsSync -> parseDistTagsOutput -> null. getCachedUpdateInfo -> judgeUpdate(current,null) -> result=check_failed. Upgrade detection silently broken.",
+  "file": "plugins/huaweicloud-core/src/update-check.mjs:86",
+  "line": 86,
+  "fix": "parseDistTagsOutput should accept array: if Array.isArray(parsed) && parsed.length>0 && parsed[0] && typeof parsed[0]===\"object\", use parsed[0]."
+}

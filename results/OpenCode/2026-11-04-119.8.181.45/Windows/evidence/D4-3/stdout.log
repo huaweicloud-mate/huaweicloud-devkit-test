@@ -1,0 +1,18 @@
+{
+  "caseId": "D4-3",
+  "status": "PASS",
+  "executedAt": "20261103211002",
+  "assertion": "plaintext-secret API (CSMS ShowSecretVersion) denied; secret-in-arg (--adminPass=) caught",
+  "actual": {
+    "secretApiDecision": "deny",
+    "secretApiFindings": [
+      "hwc-command-secret-value-read"
+    ],
+    "listSecretsDecision": "allow",
+    "secretInArgDecision": "warn",
+    "secretInArgFindings": [
+      "hwc-command-secret-in-arg"
+    ]
+  },
+  "note": "CSMS ShowSecretVersion denied (hwc-command-secret-value-read); --adminPass=value warned (hwc-command-secret-in-arg). ListSecrets allow (lists metadata, no plaintext)."
+}

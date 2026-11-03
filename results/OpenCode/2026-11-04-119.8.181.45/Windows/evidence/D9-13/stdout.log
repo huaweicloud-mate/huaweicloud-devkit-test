@@ -1,0 +1,21 @@
+{
+  "caseId": "D9-13",
+  "status": "PASS",
+  "executedAt": "20261103211313",
+  "assertion": "tools/call returns no AK/SK/token plaintext; setRuntimeCredentials/clearRuntimeCredentials/hasRuntimeCredentials lifecycle works (set->true, clear->false); isPlaceholder present",
+  "actual": {
+    "noCredLeak": true,
+    "hasAkLeak": false,
+    "hasSkLeak": false,
+    "hasTokenLeak": false,
+    "hasSetRuntime": true,
+    "hasClearRuntime": true,
+    "hasHasRuntime": true,
+    "hasIsPlaceholder": true,
+    "runtimeLifecycle": {
+      "afterSet": true,
+      "afterClear": false
+    },
+    "note": "permission 3-state (deny/warn/allow) + approvalToken lifecycle verified via MCP plan_cli_command (D4-18 evidence); readGlobalCredentials/writeGlobalCredentials persistence verified in credentials.mjs source"
+  }
+}

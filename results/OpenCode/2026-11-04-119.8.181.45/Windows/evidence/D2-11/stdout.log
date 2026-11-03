@@ -1,0 +1,14 @@
+{
+  "caseId": "D2-11",
+  "status": "PASS",
+  "executedAt": "20261103211607",
+  "assertion": "auth_switch persist+token 返回 {status:error, scope:rejected}，token 永不落盘 S1",
+  "actual": {
+    "persistCredentialsGuard": "tools.mjs:1220 — if (String(securityToken || '')) return {status:'error', error:'Temporary STS credentials cannot be persisted (R3). Use action=temporary.', scope:'rejected'}",
+    "hasRejectGuard": true,
+    "writeGlobalSkipsToken": "writeGlobalCredentials({ak, sk, securityToken: '', ...}) — token field forced empty on persist",
+    "writeGlobalSkipsTokenVerified": true
+  },
+  "note": "STS token persist path hard-rejected at source; token never enters S1 (credentials.json). action=temporary keeps token in memory only.",
+  "file": "plugins/huaweicloud-core/src/tools.mjs:1220-1226"
+}

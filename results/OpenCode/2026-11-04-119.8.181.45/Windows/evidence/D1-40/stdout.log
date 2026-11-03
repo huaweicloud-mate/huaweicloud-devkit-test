@@ -1,0 +1,16 @@
+{
+  "caseId": "D1-40",
+  "status": "FAIL",
+  "executedAt": "20261103211512",
+  "assertion": "镜像 lag 下检测正确性 — queryDistTags 返回真实 tags，不得版本倒退(远端<=本地不提示)",
+  "actual": {
+    "defaultRegistryResult": null,
+    "officialRegistryResult": null,
+    "bothReturnedNull": true,
+    "mcpCheckUpdateResult": "latestStable=null, latestNext=null, result=check_failed — version comparison never runs (judgeUpdate gets null distTags)"
+  },
+  "rootCause": "Same as D1-39: parseDistTagsOutput (update-check.mjs:86) rejects Array.isArray. npm 12 returns array for `npm view ... dist-tags --json`. queryDistTagsSync returns null under both default and official registry. judgeUpdate(current, null, ...) short-circuits to check_failed without comparing versions → mirror-lag / version倒退 detection impossible.",
+  "file": "plugins/huaweicloud-core/src/update-check.mjs:86",
+  "line": 86,
+  "fix": "parseDistTagsOutput: accept array form — if Array.isArray(parsed) && parsed[0]?.latest, use parsed[0]."
+}
