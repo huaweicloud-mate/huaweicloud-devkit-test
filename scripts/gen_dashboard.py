@@ -885,6 +885,47 @@ def render_ux_block(ux, design):
     return ''.join(parts)
 
 
+def self_artifacts_html(vdate):
+    """自主产物统计：使命自展用例（autocases/）与候选用例骨架（candidates/）。
+
+    口径独立 —— 这些用例**不计入母版通过率**（母版=纯设计定义），只反映 agent 的自主生成能力。
+    统计失败一律降级为一行说明，绝不拖垮看板生成。
+    """
+    import csv as _csv
+    import glob as _glob
+    try:
+        base = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results")
+        ac_dirs = _glob.glob(os.path.join(base, "*", "%s-*" % vdate, "*", "autocases"))
+        n_ac, n_ac_cases = len(ac_dirs), 0
+        for d in ac_dirs:
+            for f in _glob.glob(os.path.join(d, "*.csv")):
+                try:
+                    with open(f, encoding="utf-8-sig", newline="") as fh:
+                        n_ac_cases += max(0, len(list(_csv.reader(fh))) - 1)
+                except Exception:
+                    continue
+        cand_dir = os.path.join(os.path.dirname(base), "test-cases", "design", "candidates")
+        cands = _glob.glob(os.path.join(cand_dir, "候选用例-*.csv"))
+        rows = [
+            ("使命自主展开（autocases/）", "%d 个执行包含该目录 / 共 %d 条自主用例" % (n_ac, n_ac_cases)),
+            ("候选用例骨架（candidates/）", "%d 个文件（须走评审才可固化入母版）" % len(cands)),
+        ]
+        # 注意：这里**必须用字符串拼接**，不能用 % 格式化 —— CSS 里的 `width:100%;` 会被当成格式符 `%;`
+        td = '<td style="padding:6px 8px;border:1px solid #ddd;">'
+        body = "".join("<tr>" + td + a + "</td>" + td + b + "</td></tr>" for a, b in rows)
+        return ('<h2>自主产物（Agent 自主生成）</h2>\n'
+                '<p style="color:#7f8c8d;font-size:12px;">口径独立：不计入母版通过率，只反映 agent 自主生成能力；'
+                '产物落点见 <code>results/&lt;客户端&gt;/&lt;日期&gt;-&lt;IP&gt;/&lt;OS&gt;/autocases/</code>。</p>\n'
+                '<table style="border-collapse:collapse;width:100%;font-size:13px;margin-top:8px;">'
+                '<thead><tr style="background:#f2f2f2;">'
+                '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">产物</th>'
+                '<th style="padding:6px 8px;border:1px solid #ddd;text-align:left;">' + vdate + ' 当日统计</th>'
+                '</tr></thead><tbody>' + body + '</tbody></table>')
+    except Exception as e:  # noqa: BLE001
+        return ('<h2>自主产物（Agent 自主生成）</h2>\n'
+                '<p style="color:#c0392b;font-size:12px;">统计失败：' + str(e)[:80] + '</p>')
+
+
 def render(days, version, vdate, gen_ts, links, notes, versions):
     latest_date = days[-1]["date"]
     latest_sum = days[-1]["summary"]
@@ -1563,6 +1604,8 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 <table style="border-collapse:collapse;width:100%;font-size:12px;">
 <thead><tr style="background:#f2f2f2;"><th style="padding:5px 8px;border:1px solid #ddd;">状态</th><th style="padding:5px 8px;border:1px solid #ddd;">ID</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">维度</th><th style="padding:5px 8px;border:1px solid #ddd;">P</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">客户端（10 智能体）</th><th style="padding:5px 8px;border:1px solid #ddd;text-align:left;">历史单号</th></tr></thead>
 <tbody>{case_rows}</tbody></table>
+
+{self_artifacts_html(vdate)}
 
 </div>
 

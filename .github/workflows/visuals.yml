@@ -1,0 +1,58 @@
+name: visuals
+
+# 生成测试总览（HTML + xlsx）与静态素材（SVG）并回写仓库。
+# 为什么需要：panorama/ 全景图此前不自动更新（最新快照停在 2026-10-20），
+# assets/ 素材长期为空 —— 本 workflow 让两类可视化产物随数据自动刷新。
+#
+# 注意：本 workflow 只写 "huaweicloud-devkit-测试总览-*"（自动生成的数据视图）；
+# 前缀为 "huaweicloud-devkit-测试全景图-*" 的 11-sheet 母版由 feishu-sync 流程维护，此处不碰。
+
+on:
+  schedule:
+    - cron: "0 13 * * *"        # 每日 21:00 (UTC+8)
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/gen_visuals.py"
+      - "scripts/trend_metrics.py"
+
+permissions:
+  contents: write
+
+jobs:
+  visuals:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装依赖（xlsx 需要 openpyxl）
+        run: pip install openpyxl
+
+      - name: 生成总览与素材
+        run: python scripts/gen_visuals.py
+
+      - name: 上传产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: visuals
+          path: |
+            panorama/huaweicloud-devkit-测试总览-*
+            assets/*.svg
+
+      - name: Commit & push 可视化产物
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add panorama assets
+          if git diff --cached --quiet; then
+            echo "可视化产物无变动，跳过提交"
+          else
+            git commit -m "chore: 刷新测试总览与可视化素材 $(date +%Y-%m-%d)"
+            git push https://shuangheaven:${{ secrets.HDK_GH_TOKEN }}@github.com/huaweicloud-mate/huaweicloud-devkit-test.git HEAD:main
+          fi

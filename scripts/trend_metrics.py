@@ -28,6 +28,8 @@ SUMMARY_DIR = os.path.join(REPO, "results", "Summary")
 DEFAULT_OUT = os.path.join(REPO, "metrics")
 
 STATUS_KEYS = ("PASS", "FAIL", "BLOCKED", "NOT_RUN", "SPEC-MISMATCH")
+CLIENT_RE = re.compile(r"^(?P<client>.+?)-(?P<ip>\d+\.\d+\.\d+\.\d+)-(?P<os>Linux|Windows)$")
+LEDGER_FIELDS = ["date", "case_id", "dim", "priority", "client", "machine", "status"]
 
 
 def _cell_status(val):
@@ -91,6 +93,93 @@ def compute_metrics(counts):
         "exec_rate": round(exec_rate, 1),
         "pass_rate": round(pass_rate, 1),
     }
+
+
+def machine_cols(hdr):
+    """矩阵列头 → 机位列 [(原始列名, 客户端, 机位标识)]。
+
+    列名形如 `Hermes-1.92.93.23-Linux` / `CodeArtsAgent-119.8.181.45-Windows`。
+    用正则精确匹配（而非 split），避免客户端名自身含 `-` 时被切错。
+    """
+    out = []
+    for c in hdr:
+        m = CLIENT_RE.match((c or "").strip())
+        if m:
+            out.append((c, m.group("client"), "%s-%s" % (m.group("ip"), m.group("os"))))
+    return out
+
+
+def build_ledger(summary_dir, date_from=None):
+    """逐行原子执行台账（日期 × 用例 × 机位 → 状态）。
+
+    只记**有状态**的单元格；NOT_RUN / 空单元格不记（它们可由矩阵本身还原）。
+    这补上 ITER 收官后「原子执行记录」的断档 —— 此前只有跨日聚合的 trend.csv。
+    """
+    files = sorted(glob.glob(os.path.join(summary_dir, "用例矩阵-设计级-总执行结果-*.csv")))
+    recs = []
+    for path in files:
+        m = re.search(r"(\d{4}-\d{2}-\d{2})\.csv$", path)
+        if not m:
+            continue
+        date = m.group(1)
+        if date_from and date < date_from:
+            continue
+        with open(path, encoding="utf-8-sig") as f:
+            rows = list(csv.DictReader(f))
+        if not rows:
+            continue
+        cols = machine_cols(list(rows[0].keys()))
+        for r in rows:
+            cid = (r.get("ID") or "").strip()
+            if not cid:
+                continue
+            for raw, client, machine in cols:
+                s = _cell_status(r.get(raw))
+                if not s or s == "NOT_RUN":
+                    continue
+                recs.append({
+                    "date": date, "case_id": cid,
+                    "dim": (r.get("维度") or "").strip(),
+                    "priority": (r.get("优先级") or "").strip(),
+                    "client": client, "machine": machine, "status": s,
+                })
+    return recs
+
+
+def write_ledger_dir(out_dir, ledger):
+    """按天分文件写台账：`<out>/execution-daily/<date>.csv`。
+
+    为什么按天分文件：单文件全量台账 50+ 天即 3.5 MB，若每日 CI 全量重写提交，
+    git 会累积同一文件的历史版本，一年把仓库撑到 GB 级；按天分文件后
+    **每天最多新增/更新一个 ~70 KB 的小文件**，历史文件不产生 diff。
+
+    幂等：内容与磁盘一致则不重写（保证重复运行不产生空提交）。
+    返回 (总天数, 实际写入文件数)。
+    """
+    import io
+    d = os.path.join(out_dir, "execution-daily")
+    os.makedirs(d, exist_ok=True)
+    by_day = {}
+    for r in ledger:
+        by_day.setdefault(r["date"], []).append(r)
+    written = 0
+    for date in sorted(by_day):
+        buf = io.StringIO()
+        w = csv.DictWriter(buf, fieldnames=LEDGER_FIELDS)
+        w.writeheader()
+        for r in sorted(by_day[date], key=lambda x: (x["case_id"], x["client"], x["machine"])):
+            w.writerow(r)
+        text = buf.getvalue()
+        path = os.path.join(d, "%s.csv" % date)
+        if os.path.isfile(path):
+            # 必须用 newline="" 读回：否则通用换行模式会把 \r\n 转成 \n，与写入文本不等 → 每次都重写
+            with open(path, encoding="utf-8-sig", newline="") as f:
+                if f.read() == text:
+                    continue
+        with open(path, "w", encoding="utf-8-sig", newline="") as f:
+            f.write(text)
+        written += 1
+    return len(by_day), written
 
 
 def collect_trends(summary_dir, date_from=None):
@@ -182,8 +271,14 @@ def main():
             w.writerow(r)
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(render_md(rows))
+
+    # 原子执行台账（补 ITER 收官后的断档）：按天分文件，避免每次 CI 重写大文件
+    ledger = build_ledger(SUMMARY_DIR, date_from)
+    days, written = write_ledger_dir(out_dir, ledger)
+
     print(f"趋势: {csv_path}（{len(rows)} 天）")
     print(f"报告: {md_path}")
+    print(f"原子台账: {os.path.join(out_dir, 'execution-daily')}（{days} 天 / {len(ledger)} 条记录，本次写入 {written} 个文件）")
     latest = rows[-1]
     print(f"最新 {latest['date']}: 执行率 {latest['exec_rate']:.1f}% · 通过率 {latest['pass_rate']:.1f}%")
 
