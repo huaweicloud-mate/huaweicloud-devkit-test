@@ -1,0 +1,60 @@
+$ /home/testbot2/.local/bin/node /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/huaweicloud-devkit-test/results/CodeArtsAgent/2026-11-04-1.94.193.150/Linux/evidence/D3-C2/probe.mjs
+---- STDOUT ----
+[OK] setup_obs_config 同步 OBS 凭证
+[FAIL] 创建 OBS 桶 tctest-c2-16r3jf
+[FAIL] 上传 index.html
+[OK] obs_set_website_config set
+[FAIL] obs_set_website_config get 验证
+[OK] 删除 OBS 桶归零
+[OK] 归零验证(ls 不含本次桶)
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C2",
+  "bucket": "tctest-c2-16r3jf",
+  "total": 7,
+  "passed": 4,
+  "results": [
+    {
+      "n": "setup_obs_config 同步 OBS 凭证",
+      "ok": true,
+      "out": "{\"ok\":true,\"existed\":false,\"created\":true,\"path\":\"/home/testbot2/.obsutilconfig\",\"region\":\"cn-north-4\",\"endpoint\":\"https"
+    },
+    {
+      "n": "创建 OBS 桶 tctest-c2-16r3jf",
+      "ok": false,
+      "out": "Error: Configuration file [/home/testbot2/.obsutilconfig] is not well-formed\n"
+    },
+    {
+      "n": "上传 index.html",
+      "ok": false,
+      "out": "r records.], request id [000001A1A3433788440CE8A3EE9FCD66]\n[------------------------------------------------------------------------] 100.00% ?/s 44B/44B 116ms\r"
+    },
+    {
+      "n": "obs_set_website_config set",
+      "ok": "http://tctest-c2-16r3jf.obs-website.cn-north-4.myhuaweicloud.com",
+      "out": "{\"ok\":false,\"status\":404,\"websiteUrl\":\"http://tctest-c2-16r3jf.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 404\"}"
+    },
+    {
+      "n": "obs_set_website_config get 验证",
+      "ok": false,
+      "out": "{\"ok\":false,\"status\":404,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>NoSuchBucket</Code><Message>The specified bucket does not exist</Message><RequestId>000001A1A"
+    },
+    {
+      "n": "删除 OBS 桶归零",
+      "ok": true,
+      "out": " error code [InvalidAccessKeyId], error message [The  Access Key Id you provided does not exist in our records.], request id [000001A1A3433A2844C6B5069FC5AC26]\n"
+    },
+    {
+      "n": "归零验证(ls 不含本次桶)",
+      "ok": true,
+      "out": "{\"containsOwn\":false}"
+    }
+  ]
+}
+
+---- STDERR ----
+[------------------------------------------------------------------------] 100.00% ?/s 44B/44B 116ms
+[_____________________________________________________________________________] ?% tps:0.00 0/0 17ms
+
+---- EXIT 0 ----
