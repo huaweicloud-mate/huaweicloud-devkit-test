@@ -86,3 +86,22 @@ test('planTestRun: 一站式输出策略+使命，空变更产生空影响但策
   assert.equal(strategy.risk, 'low');
   assert.equal(missions.length, 0);
 });
+
+test('generateStrategy: 支持注入 affectedDimensions（LLM 影响域路径）', () => {
+  const injected = [{ dim: 'D4', label: 'D4 安全与风险护栏', risk: 'high', reason: 'LLM 判定', modules: [], cases: [], note: 'LLM' }];
+  const s = generateStrategy({ version: 'ut', affectedDimensions: injected, risk: 'high' });
+  assert.equal(s.risk, 'high');
+  assert.equal(s.affectedDimensions[0].dim, 'D4');
+  const missions = generateMissions({ strategy: s });
+  assert.equal(missions.length, 1);
+  assert.equal(missions[0].priority, 'P0');
+});
+
+test('generateMissions: 维度缺 modules/cases 时不崩（LLM 判定维度）', () => {
+  const missions = generateMissions({
+    strategy: { affectedDimensions: [{ dim: 'D7', label: 'D7 兼容性', risk: 'medium', reason: 'r' }] },
+  });
+  assert.equal(missions.length, 1);
+  assert.deepEqual(missions[0].affectedCases, []);
+  assert.equal(missions[0].priority, 'P1');
+});

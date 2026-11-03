@@ -1,8 +1,9 @@
 // run-plan.mjs — ai Test Manager 决策引擎 CLI
 //
 // 用法:
-//   node test-manager/run-plan.mjs [--version v1.2.0] [--diff <git-diff-range>] [--out <dir>]
+//   node test-manager/run-plan.mjs [--version v1.2.0] [--diff <git-diff-range>] [--out <dir>] [--analyzer rules|auto]
 //   node test-manager/run-plan.mjs --diff main..HEAD        # 默认用该范围改的文件
+//   node test-manager/run-plan.mjs --analyzer auto          # 优先 LLM 影响域，不可用自动回退映射表
 //
 // 输出（对齐 test-ai-orchestration-architecture.md）:
 //   <out>/test-strategy.md     # 策略：risk / affectedDimensions / recommended
@@ -11,7 +12,8 @@ import { execSync } from 'node:child_process';
 import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { planTestRun } from './tm-plan.mjs';
+import { planTestRun, generateStrategy, generateMissions } from './tm-plan.mjs';
+import { analyzeImpactAuto, ANALYZER } from './tm-impact-llm.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -92,7 +94,20 @@ const defaultOut = join(__dirname, '..', 'test-cases');
 const outDir = argv('--out', defaultOut);
 
 const changeScope = { changedFiles: diff ? diffChangedFiles(diff) : [], changedTools: [] };
-const { strategy, missions } = planTestRun({ version, changeScope });
+
+// 影响域分析器：rules（默认，确定性 module-map）｜auto（优先 LLM，不可用自动回退）
+const analyzerMode = argv('--analyzer', 'rules');
+let strategy;
+let missions;
+let analyzerSource = ANALYZER.RULES;
+if (analyzerMode === 'rules') {
+  ({ strategy, missions } = planTestRun({ version, changeScope }));
+} else {
+  const impact = await analyzeImpactAuto(changeScope, { analyzer: ANALYZER.AUTO });
+  analyzerSource = impact.source + (impact.fallbackReason ? `（回退：${impact.fallbackReason}）` : '');
+  strategy = generateStrategy({ version, affectedDimensions: impact.affectedDimensions, risk: impact.risk });
+  missions = generateMissions({ strategy });
+}
 
 if (changeScope.changedFiles.length === 0) {
   console.log('[WARN] 未解析到变更文件（--diff 范围为空或非 git 仓库），输出空策略');
@@ -103,7 +118,7 @@ mkdirSync(join(outDir, 'missions'), { recursive: true });
 
 const strategyPath = join(outDir, 'test-strategy.md');
 writeFileSync(strategyPath, renderStrategy(strategy), 'utf-8');
-console.log(`策略: ${strategyPath} (risk=${strategy.risk}, dims=${strategy.affectedDimensions.length})`);
+console.log(`策略: ${strategyPath} (risk=${strategy.risk}, dims=${strategy.affectedDimensions.length}, analyzer=${analyzerSource})`);
 
 for (const m of missions) {
   const p = join(outDir, 'missions', `${m.missionId}.yaml`);

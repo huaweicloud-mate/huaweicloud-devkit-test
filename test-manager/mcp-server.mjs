@@ -23,6 +23,10 @@ import {
   generateMissions,
   planTestRun,
 } from './tm-plan.mjs';
+import { analyzeResult } from './tm-analyze.mjs';
+import { generateReport } from './tm-report.mjs';
+import { updateBaseline } from './tm-baseline.mjs';
+import { analyzeImpactAuto, ANALYZER } from './tm-impact-llm.mjs';
 
 const PROTOCOL_VERSION = '2024-11-05'; // 与 SUT 侧 MCP 基线一致（见 D9-4 用例）
 const SERVER_INFO = { name: 'devkit-test-manager', version: '1.0.0' };
@@ -45,15 +49,26 @@ function normScope(changeScope) {
   return { changedFiles, changedTools };
 }
 
-function impactOf(changeScope) {
+function impactOf(changeScope, { analyzer = ANALYZER.RULES } = {}) {
   const scope = normScope(changeScope);
-  const { affectedDimensions } = analyzeImpact(scope);
-  return {
-    risk: aggregateRisk(affectedDimensions),
-    affectedDimensions,
-    caseCount: affectedDimensions.reduce((a, d) => a + (d.cases?.length ?? 0), 0),
+  const shape = (src) => ({
+    analyzer: src.source,
+    risk: src.risk,
+    affectedDimensions: src.affectedDimensions,
+    caseCount: src.affectedDimensions.reduce((a, d) => a + (d.cases?.length ?? 0), 0),
     changedFileCount: scope.changedFiles.length + scope.changedTools.length,
-  };
+    ...(src.model ? { model: src.model } : {}),
+    ...(src.fallbackReason ? { fallbackReason: src.fallbackReason } : {}),
+    ...(src.notes ? { notes: src.notes } : {}),
+  });
+
+  if (analyzer === ANALYZER.RULES) {
+    // 默认路径：确定性（module-map 驱动），同步返回 —— 保持既有行为与 CI 稳定
+    const { affectedDimensions } = analyzeImpact(scope);
+    return shape({ source: ANALYZER.RULES, risk: aggregateRisk(affectedDimensions), affectedDimensions });
+  }
+  // llm / auto：LLM 分析 + 确定性回退（异步）
+  return analyzeImpactAuto(scope, { analyzer }).then(shape);
 }
 
 const TOOLS = [
@@ -72,9 +87,15 @@ const TOOLS = [
             changedTools: { type: 'array', items: { type: 'string' }, description: '变更的 MCP 工具名' },
           },
         },
+        analyzer: {
+          type: 'string',
+          enum: ['rules', 'auto'],
+          description: '影响域分析器：rules=确定性 module-map（默认）；auto=优先 LLM，失败自动回退 rules',
+        },
       },
     },
-    handler: ({ changeScope }) => impactOf(changeScope),
+    handler: ({ changeScope, analyzer = 'rules' }) =>
+      impactOf(changeScope, { analyzer: analyzer === 'rules' ? ANALYZER.RULES : ANALYZER.AUTO }),
   },
   {
     name: 'tm_generate_strategy',
@@ -115,6 +136,58 @@ const TOOLS = [
     },
     handler: ({ version = 'unspecified', changeScope }) => planTestRun({ version, changeScope: normScope(changeScope) }),
   },
+  {
+    name: 'tm_analyze_result',
+    description:
+      '质量分析（§2.4 语义断言引擎）：把「实际调用序列/输出」与基线比较，输出 decision（PASS/FAIL/NEED_REVIEW）+ 差异分类 + 敏感泄漏检查。',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        taskId: { type: 'string', description: '任务 id' },
+        expectedTools: { type: 'array', items: { type: 'string' }, description: '基线调用序列' },
+        actualTools: { type: 'array', items: { type: 'string' }, description: '实际调用序列' },
+        secretProbe: { type: 'string', description: '用于敏感扫描的文本（缺省回退 actualOutput）' },
+        actualOutput: { type: 'string', description: '实际输出文本' },
+        expectedBehaviors: { type: 'array', items: { type: 'string' }, description: '期望行为（列出未验证项，不参与 pass/fail）' },
+      },
+    },
+    handler: (args) => analyzeResult(args ?? {}),
+  },
+  {
+    name: 'tm_generate_report',
+    description: '生成结构化测试报告（§五 Step 5）：汇总 + 明细 + 失败详情 + 需复核 + 建议（markdown）。',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        runId: { type: 'string', description: '本次运行 id' },
+        version: { type: 'string', description: '被测版本' },
+        tasks: {
+          type: 'array',
+          description: '任务结果列表 [{taskId, decision, verdict, reasons}]',
+          items: { type: 'object' },
+        },
+        startedAt: { type: 'string', description: '开始时间（由调用方给，引擎不自造时间）' },
+        finishedAt: { type: 'string', description: '结束时间' },
+      },
+    },
+    handler: (args) => generateReport(args ?? {}),
+  },
+  {
+    name: 'tm_update_baseline',
+    description:
+      '更新录制基线（§五 Step 6）：**必须 approvedByUser=true**（fail-closed）；支持 dryRun 预演。确认为预期行为变化（而非缺陷）时才可用。',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        scenarioId: { type: 'string', description: '场景 id（决定 baselines/<id>.jsonl）' },
+        newRecording: { description: '录制记录数组（或 JSONL 文本）' },
+        approvedByUser: { type: 'boolean', description: '人工确认（必须为 true，否则拒绝写入）' },
+        dryRun: { type: 'boolean', description: '只回报不落盘' },
+        baselinesDir: { type: 'string', description: '基线目录（缺省 test/baselines）' },
+      },
+    },
+    handler: (args) => updateBaseline(args ?? {}),
+  },
 ];
 
 function send(obj) {
@@ -125,7 +198,7 @@ function send(obj) {
 const reply = (id, result) => send({ jsonrpc: '2.0', id, result });
 const fail = (id, code, message) => send({ jsonrpc: '2.0', id: id ?? null, error: { code, message } });
 
-function handle(msg) {
+async function handle(msg) {
   const { id, method, params } = msg ?? {};
   const notification = id === undefined || id === null; // 通知无 id，不得回包
   try {
@@ -149,7 +222,7 @@ function handle(msg) {
         const tool = TOOLS.find((t) => t.name === name);
         if (!tool) return fail(id, -32602, `Unknown tool: ${name}`);
         try {
-          const out = tool.handler(args ?? {});
+          const out = await tool.handler(args ?? {});
           return reply(id, { content: [{ type: 'text', text: JSON.stringify(out, null, 2) }], isError: false });
         } catch (e) {
           // 工具内部失败 = 业务错误（isError=true），不是协议错误
@@ -173,8 +246,19 @@ function main() {
       changeScope: { changedFiles: ['safety-policy.mjs'] },
     });
     log(`selftest: risk=${impact.risk} dims=${impact.affectedDimensions.map((d) => d.dim).join(',')} missions=${missions.length}`);
-    log(`selftest: tools=${TOOLS.length} 协议=${PROTOCOL_VERSION}`);
-    process.exit(impact.risk === 'high' && missions.length > 0 ? 0 : 1);
+    const analyzed = TOOLS.find((t) => t.name === 'tm_analyze_result').handler({
+      taskId: 'selftest',
+      expectedTools: ['huaweicloud_service_catalog'],
+      actualTools: ['huaweicloud_service_catalog'],
+      secretProbe: 'catalog ok',
+    });
+    const report = TOOLS.find((t) => t.name === 'tm_generate_report').handler({
+      runId: 'selftest',
+      version: 'selftest',
+      tasks: [{ taskId: 'selftest', decision: analyzed.decision, verdict: analyzed.verdict }],
+    });
+    log(`selftest: analyze=${analyzed.decision} reportBytes=${Buffer.byteLength(report.markdown)} tools=${TOOLS.length} 协议=${PROTOCOL_VERSION}`);
+    process.exit(impact.risk === 'high' && missions.length > 0 && analyzed.decision === 'PASS' ? 0 : 1);
   }
 
   let buf = Buffer.alloc(0);
@@ -199,7 +283,7 @@ function main() {
         fail(null, -32700, 'Parse error'); // 不崩，回错误码后继续
         continue;
       }
-      handle(msg);
+      handle(msg).catch((e) => fail(msg?.id ?? null, -32603, `Internal error: ${e.message}`));
     }
   });
   process.stdin.on('end', () => process.exit(0));

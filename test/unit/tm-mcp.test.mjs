@@ -66,21 +66,101 @@ test('initialize 握手：返回协议版本与 serverInfo', async () => {
   }
 });
 
-test('tools/list：4 个工具且 name/description/inputSchema 齐备', async () => {
+test('tools/list：7 个工具且 name/description/inputSchema 齐备', async () => {
   const c = start();
   try {
     const r = await c.call('tools/list');
     const names = r.result.tools.map((t) => t.name);
     assert.deepEqual(names.sort(), [
       'tm_analyze_impact',
+      'tm_analyze_result',
       'tm_generate_missions',
+      'tm_generate_report',
       'tm_generate_strategy',
       'tm_plan_test_run',
+      'tm_update_baseline',
     ]);
     for (const t of r.result.tools) {
       assert.ok(t.name && t.description, `工具 ${t.name} 缺 name/description`);
       assert.equal(t.inputSchema.type, 'object', `工具 ${t.name} 缺 inputSchema`);
     }
+  } finally {
+    c.kill();
+  }
+});
+
+test('tools/call tm_analyze_result：等价→PASS / 缺调用→FAIL / 泄漏→FAIL', async () => {
+  const c = start();
+  try {
+    const ok = await c.call('tools/call', {
+      name: 'tm_analyze_result',
+      arguments: { taskId: 't1', expectedTools: ['huaweicloud_service_catalog'], actualTools: ['huaweicloud_service_catalog'] },
+    });
+    assert.equal(JSON.parse(ok.result.content[0].text).decision, 'PASS');
+
+    const missing = await c.call('tools/call', {
+      name: 'tm_analyze_result',
+      arguments: { taskId: 't2', expectedTools: ['aa', 'bb'], actualTools: ['aa'] },
+    });
+    assert.equal(JSON.parse(missing.result.content[0].text).decision, 'FAIL');
+
+    const leak = await c.call('tools/call', {
+      name: 'tm_analyze_result',
+      arguments: { taskId: 't3', expectedTools: ['aa'], actualTools: ['aa'], secretProbe: 'password=Sup3rSecretValue' },
+    });
+    const leakOut = JSON.parse(leak.result.content[0].text);
+    assert.equal(leakOut.decision, 'FAIL');
+    assert.equal(leakOut.checks.secrets, true);
+  } finally {
+    c.kill();
+  }
+});
+
+test('tools/call tm_generate_report：返回汇总 + markdown（含失败详情节）', async () => {
+  const c = start();
+  try {
+    const r = await c.call('tools/call', {
+      name: 'tm_generate_report',
+      arguments: {
+        runId: 'ut',
+        version: 'v-ut',
+        tasks: [
+          { taskId: 'a', decision: 'PASS', verdict: 'SEMANTIC_EQUIVALENT' },
+          { taskId: 'b', decision: 'FAIL', verdict: 'SECRET_LEAK', reasons: ['泄漏'] },
+        ],
+      },
+    });
+    const out = JSON.parse(r.result.content[0].text);
+    assert.equal(out.summary.PASS, 1);
+    assert.equal(out.summary.FAIL, 1);
+    assert.match(out.markdown, /## 三、失败详情/);
+  } finally {
+    c.kill();
+  }
+});
+
+test('tools/call tm_update_baseline：未人工确认 → 拒绝写入（fail-closed）', async () => {
+  const c = start();
+  try {
+    const r = await c.call('tools/call', {
+      name: 'tm_update_baseline',
+      arguments: { scenarioId: 'ut-scenario', newRecording: [{ tool: 'x' }], approvedByUser: false },
+    });
+    const out = JSON.parse(r.result.content[0].text);
+    assert.equal(out.ok, false);
+    assert.equal(out.wrote, false);
+  } finally {
+    c.kill();
+  }
+});
+
+test('tools/call tm_analyze_impact：analyzer=rules 时回带 analyzer 字段', async () => {
+  const c = start();
+  try {
+    const r = await c.call('tools/call', { name: 'tm_analyze_impact', arguments: { changeScope: scope, analyzer: 'rules' } });
+    const out = JSON.parse(r.result.content[0].text);
+    assert.equal(out.analyzer, 'rules');
+    assert.equal(out.risk, 'high');
   } finally {
     c.kill();
   }

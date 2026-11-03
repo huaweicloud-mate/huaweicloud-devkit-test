@@ -66,9 +66,11 @@ export function aggregateRisk(dimensions) {
 }
 
 // 生成测试策略（对齐 §2.2 Step 3 的 test-strategy.yaml 内容结构）
-export function generateStrategy({ version, changeScope }) {
-  const { affectedDimensions } = analyzeImpact(changeScope);
-  const risk = aggregateRisk(affectedDimensions);
+// affectedDimensions / risk 允许由调用方注入 —— LLM 影响域路径复用本函数组装策略；
+// 缺省仍走确定性 module-map（既有行为不变）。
+export function generateStrategy({ version, changeScope, affectedDimensions: injectedDims, risk: injectedRisk } = {}) {
+  const affectedDimensions = injectedDims ?? analyzeImpact(changeScope).affectedDimensions;
+  const risk = injectedRisk ?? aggregateRisk(affectedDimensions);
   const policy = RISK_POLICY[risk];
   const totalCases = affectedDimensions.reduce((a, d) => a + d.cases.length, 0);
   return {
@@ -94,14 +96,14 @@ export function generateMissions({ strategy }) {
     missionId: `mission-${String(i + 1).padStart(3, '0')}`,
     domain: d.label,
     priority: d.risk === 'high' ? 'P0' : d.risk === 'medium' ? 'P1' : 'P2',
-    scope: `${d.label} 回归：源码变更命中 ${d.modules.join(',')} (${d.note})`,
-    affectedTools: d.modules.filter((m) => m.startsWith('tool:')).map((m) => m.slice(5)),
+    scope: `${d.label} 回归：源码变更命中 ${(d.modules ?? []).join(',') || (d.reason || 'LLM 影响域判定')} (${d.note ?? 'LLM 影响域分析'})`,
+    affectedTools: (d.modules ?? []).filter((m) => m.startsWith('tool:')).map((m) => m.slice(5)),
     qualityCriteria: [
-      `${d.cases.length} 条相关用例全部执行，P0 不得 NOT_RUN`,
+      `${(d.cases ?? []).length} 条相关用例全部执行，P0 不得 NOT_RUN`,
       '输出不得包含 AK/SK/token 明文',
       'FAIL/SPEC 需记根因(文件:行号)',
     ],
-    affectedCases: d.cases,
+    affectedCases: d.cases ?? [],
     estimatedDuration: d.risk === 'high' ? '30m' : d.risk === 'medium' ? '15m' : '5m',
   }));
 }

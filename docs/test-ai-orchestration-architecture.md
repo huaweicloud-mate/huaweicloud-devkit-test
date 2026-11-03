@@ -732,15 +732,15 @@ jobs:
 | 架构节 | 规划内容 | 落地情况 | 落点 |
 |---|---|---|---|
 | §2.1 Manager Agent | 决策引擎：策略 + 使命，不写用例细节 | ✅ 落地 | `test-manager/tm-plan.mjs`（analyzeImpact/generateStrategy/generateMissions）|
-| §2.1 MCP Tool 定义 | `tm_plan_test_run` / `tm_analyze_result` / `tm_generate_report` | 🔶 部分：规划引擎已实现为 CLI+库，未注册为 MCP Server | `test-manager/run-plan.mjs` |
-| §2.2 决策引擎 | LLM-based 影响域/风险/策略 | ✅ 确定性版落地（模块映射表驱动，非 LLM） | `test-manager/module-map.mjs` + `tm-plan.mjs` |
+| §2.1 MCP Tool 定义 | `tm_plan_test_run` / `tm_analyze_result` / `tm_generate_report` | ✅ 落地（**7 工具**：决策 4 + 本次补齐的 `tm_analyze_result` / `tm_generate_report` / `tm_update_baseline`） | `test-manager/mcp-server.mjs` + `tm-analyze.mjs` / `tm-report.mjs` / `tm-baseline.mjs` |
+| §2.2 决策引擎 | LLM-based 影响域/风险/策略 | ✅ 双路：确定性 module-map（默认）+ **LLM 影响域**（`--analyzer auto`；输出校验不通过即自动回退，绝不阻断） | `test-manager/module-map.mjs` + `tm-plan.mjs` + `tm-impact-llm.mjs` |
 | §2.3 使命调度器 | Mission 分发 → Worker | ✅ Layer2 使命已落到仓库可分发 | `test-cases/missions/*.yaml` + `publish-missions.mjs` |
-| §2.4 质量分析器 | 语义断言 + 差异分类 | ✅ 落地 | `eval/replay/compare.mjs`（SEMANTIC_EQUIVALENT / SECRET_LEAK 等 7 分类）|
-| §3 Worker Agent | Scene/Security/Regression/Unit 自展用例 | ⭕ 未落地（路径 B headless 驱动待建） | — |
+| §2.4 质量分析器 | 语义断言 + 差异分类 | ✅ 落地 + **已 MCP 化**（verdict → PASS/FAIL/NEED_REVIEW 三态决策） | `eval/replay/compare.mjs` + `test-manager/tm-analyze.mjs` |
+| §3 Worker Agent | Scene/Security/Regression/Unit 自展用例 | 🔶 能力层已落地（`skills/mission-expand`，走机群广播链路）；引擎侧 headless driver 待建 | `skills/mission-expand/SKILL.md` + `scripts/verify_mission_expansion.py` |
 | §三 使命定义格式 | `missions/*.yaml` 结构 | ✅ 落地（含 affectedTools/qualityCriteria） | `test-cases/missions/*.yaml` |
-| §六 部署架构 | Test Manager 进程 + MCP | ✅ 已落地（CLI + MCP 双入口，MCP 为 2026-10-20 补齐） | `test-manager/mcp-server.mjs`（4 工具） |
+| §六 部署架构 | Test Manager 进程 + MCP | ✅ 已落地（CLI + MCP 双入口；MCP 于 2026-10-20 补齐，**2026-11-03 扩到 7 工具**） | `test-manager/mcp-server.mjs`（7 工具） |
 | §七 CI 集成 | `test-orchestration.yml` | ✅ 落地（策略产物 + 单测 + 回放 + Python 测试） | `.github/workflows/contract-unit-tests.yml` 4 job |
-| §八 三层生成对比 | Worker 自主性 | ⭕ Worker 自主展开待建 | — |
+| §八 三层生成对比 | Worker 自主性 | 🔶 能力层已落地（见 §3 行）；引擎侧驱动待建 | `skills/mission-expand/SKILL.md` |
 
 **机群广播链路（已打通）**：
 ```

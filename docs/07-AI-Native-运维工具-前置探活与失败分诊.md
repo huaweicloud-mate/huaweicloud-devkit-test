@@ -241,7 +241,39 @@ python scripts/link_rootcause_case_issue.py --date 2026-11-03 --write   # 落 re
 
 ---
 
-## 十、接入方式与尚未接入项
+## 十、LLM 影响域分析 `test-manager/tm-impact-llm.mjs`
+
+把「源码变更 → 受影响维度」从确定性映射表升级为 LLM 分析（架构 §2.2 目标态），**且永远有回退**。
+
+```bash
+# 配置（不硬编码）：TM_LLM_ENDPOINT / TM_LLM_API_KEY / TM_LLM_MODEL（默认 deepseek-v4-flash）
+node test-manager/run-plan.mjs --diff main..HEAD --analyzer auto --out ./out
+```
+
+**纪律**：
+- LLM 输出必须通过「维度 ∈ D1~D10 + 风险 ∈ low/medium/high」校验，任一不合法即**整体判不可信 → 回退**（结果带 `fallbackReason`）。
+- **数据真源不变**：LLM 只决定「哪些维度受影响」，模块与用例仍取 `module-map`（映射表没有的维度标注来源）。
+- 无凭证 / 超时 / HTTP 错 → 自动回退，**流水线不中断**；默认路径（`--analyzer rules`）始终是确定性的，CI 不依赖外部服务。
+
+**实测**：无配置时 `auto` 正确回退 —— `analyzer=rules（回退：缺 LLM 配置（TM_LLM_ENDPOINT / TM_LLM_API_KEY））`；mock 场景测试覆盖「合法采纳 / 编造维度拒绝 / HTTP 500 / 无配置回退」四类。
+
+---
+
+## 十一、MCP 工具补齐（4 → 7）`test-manager/mcp-server.mjs`
+
+| 新工具 | 作用 | 关键纪律 |
+|---|---|---|
+| `tm_analyze_result` | 质量分析（§2.4）：verdict → **三态决策** `PASS/FAIL/NEED_REVIEW` + 敏感泄漏检查 | 空基线 fail-closed（BASELINE_INVALID） |
+| `tm_generate_report` | 结构化报告（§五 Step 5）：汇总 / 明细 / 失败详情 / 需复核 / 建议 | 未标注 decision 记 UNKNOWN，**不误算 PASS** |
+| `tm_update_baseline` | 基线更新（§五 Step 6） | **`approvedByUser=true` 才写**（fail-closed）；`dryRun` 预演；`scenarioId` 防路径穿越 |
+
+- 原 4 工具（`tm_analyze_impact` / `tm_generate_strategy` / `tm_generate_missions` / `tm_plan_test_run`）不变；`tm_analyze_impact` 新增可选 `analyzer: rules|auto`（默认 rules，保持兼容）。
+- MCP handler 已支持 async（LLM 路径）；同步工具行为不变。
+- 自检：`node test-manager/mcp-server.mjs --selftest` → `tools=7`。
+
+---
+
+## 十二、接入方式与尚未接入项
 
 **已接入**：
 - 七条快捷命令：`npm run preflight` / `classify` / `clusters` / `remediate` / `candidates` / `consistency` / `links`。
