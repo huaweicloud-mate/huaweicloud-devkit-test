@@ -1,0 +1,42 @@
+
+### D3-C6 ###
+{
+  "case": "D3-C6",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 0,
+  "failed": 5,
+  "results": [
+    {
+      "name": "check_user",
+      "pass": false,
+      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 3a9861e7208d4e4481c8e17afcff5c8c]\"}"
+    },
+    {
+      "name": "connect",
+      "pass": false,
+      "detail": "undefined ws="
+    },
+    {
+      "name": "credentials",
+      "pass": false,
+      "detail": "undefined"
+    },
+    {
+      "name": "exec_one_shot",
+      "pass": false,
+      "detail": ""
+    },
+    {
+      "name": "close_session",
+      "pass": false,
+      "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox conn"
+    }
+  ]
+}
+
+===== 说明（BLOCKED） =====
+- 7 个隐式工具（check_user/connect/credentials/exec_one_shot/upload_file/close_session/deploy_check）
+  均失败：`workspace_id is required. No sandbox connected`；同轮 D3-S3 明示
+  `HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化` → 沙箱服务维护中（外部依赖），非产品缺陷。
+- 未创建任何资源，无残留。解除条件=华为云沙箱维护完成。

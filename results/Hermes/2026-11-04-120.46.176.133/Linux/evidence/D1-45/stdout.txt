@@ -1,0 +1,20 @@
+applyUpdateHint(check_update) = {"data":1}
+applyUpdateHint(upgrade)      = {"data":1}
+applyUpdateHint(other tool)   = {"data":1,"_updateInfo":{"currentVersion":"1.1.0","latestVersion":"1.2.0"}}
+[PASS] ①check_update 不附加: 检查工具不复读升级提示
+[PASS] ①upgrade 不附加: 升级工具不复读升级提示
+[PASS] ①非检查工具附加: 首个普通工具附加 _updateInfo
+预热未完成 _decorateResult = {"r":1}
+[PASS] ④预热未完成不阻塞: 无缓存 hint 原样返回
+peekCachedUpdateInfo = {"currentVersion":"1.1.0","latestStable":"1.2.0","latestNext":null,"targetVersion":"1.2.0","updateAvailable":true,"dismissed":false,"dismissExpiresAt":null,"result":"update_available"}
+[PASS] 预热就绪: 注入后 lastHint 就绪
+A 首工具 = {"r":2,"_updateInfo":{"currentVersion":"1.1.0","latestVersion":"1.2.0"}}
+A 次工具 = {"r":3}
+B 首工具 = {"r":4,"_updateInfo":{"currentVersion":"1.1.0","latestVersion":"1.2.0"}}
+[PASS] ②会话内一次性: A 会话首个工具附加、后续不重复
+[PASS] ②消费标记: A 会话已标记 consumed
+[PASS] ③会话隔离: B 会话独立首次提示
+C 首工具=check_update = {"r":5} | consumed= false
+[PASS] ①首工具为检查类不消费: check_update 不附加也不消费兜底提示
+
+=== D1-45 探针结论: ALL PASS ===
