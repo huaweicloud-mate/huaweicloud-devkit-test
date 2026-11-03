@@ -276,6 +276,7 @@ def ensure_node_path():
 def main():
     setup = "--setup" in sys.argv
     update = "--update" in sys.argv
+    preflight = "--preflight" in sys.argv
     ensure_node_path()
     tools_ok = check_tools()
     print("=== 仓库 ===")
@@ -293,10 +294,18 @@ def main():
         install_pkg()
         sync_agent_plugin()
     print("=== 汇总 ===")
-    if tools_ok and repo_ok and src_ok and pkg_ok and cred_ok:
+    ready = tools_ok and repo_ok and src_ok and pkg_ok and cred_ok
+    if preflight:
+        print("=== 前置探活（--preflight：凭证文件 / 云端身份 / 账户余额） ===")
+        probe = os.path.join(os.path.dirname(os.path.abspath(__file__)), "preflight_probe.py")
+        rc = subprocess.call([sys.executable, "-X", "utf8", probe])
+        if rc != 0:
+            print("前置探活未通过（exit %d）：FAIL 项未解除前不要开始本轮执行（避免空跑一轮）。" % rc)
+            ready = False
+    if ready:
         print("环境就绪，可开始测试执行。")
         sys.exit(0)
-    print("环境不完整：--setup 自动 clone/安装，--update 拉取+更新最新包。")
+    print("环境不完整：--setup 自动 clone/安装，--update 拉取+更新最新包，--preflight 追加前置探活。")
     sys.exit(1)
 
 

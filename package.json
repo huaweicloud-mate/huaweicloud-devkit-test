@@ -17,6 +17,13 @@
     "tm:mcp": "node test-manager/mcp-server.mjs",
     "test:python": "python -m unittest discover -s test/python -p \"test_*.py\"",
     "test:trend": "python scripts/trend_metrics.py",
-    "test:trend-chart": "python scripts/gen_trend_chart.py"
+    "test:trend-chart": "python scripts/gen_trend_chart.py",
+    "preflight": "python scripts/preflight_probe.py",
+    "classify": "python scripts/classify_failure.py --scan --limit 2",
+    "clusters": "python scripts/cluster_rootcauses.py",
+    "remediate": "python scripts/auto_remediator.py --scan --limit 2",
+    "candidates": "python scripts/gen_candidate_cases.py --diff origin/main..HEAD",
+    "consistency": "python scripts/cross_client_consistency.py",
+    "links": "python scripts/link_rootcause_case_issue.py"
   }
 }

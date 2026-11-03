@@ -21,6 +21,7 @@
 | 4 | 源码覆盖核对 | `skills/source-coverage/SKILL.md` | `覆盖核对` | 设计者 agent | ✅ 已落地 |
 | 5 | 版本全量测试 | `skills/test-version/SKILL.md` | `版本全量测试 <版本>` | 执行 agent | ✅ 已落地 |
 | 6 | 用例结构与规范 | `skills/case-design/SKILL.md` | `用例规范` | 设计者 agent | ✅ 已落地 |
+| 7 | 使命自主展开（Layer 3） | `skills/mission-expand/SKILL.md` | `展开使命 <mission-id>` | 执行 agent | ✅ 已落地 |
 
 > 维护者专属（HTML 汇总 / GitHub Actions 自动汇总 / 邮件派发 / 资产治理与结构门禁联动）不纳入本库，保留在 Hermes 本机技能；本库只收录**需要跨 agent 分发**的能力（设计者 + 执行者 agent 都能干的活）。
 
