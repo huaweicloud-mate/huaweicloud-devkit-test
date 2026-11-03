@@ -1,0 +1,17 @@
+{
+  "caseId": "D2-5",
+  "status": "PASS",
+  "executedAt": "20261104052000",
+  "assertion": "isPlaceholder 检测占位凭证（空/占位符/掩码）；凭证缺失时返回报错指引",
+  "actual": {
+    "isPlaceholderSignature": "isPlaceholder(value: string) -> boolean (credentials.mjs:68)",
+    "emptyString": false,
+    "placeholderAngleBracket": "isPlaceholder('<HW_ACCESS_KEY>') = true",
+    "placeholderDollar": "isPlaceholder('${HW_ACCESS_KEY}') = true",
+    "bareKeyword": "isPlaceholder('YOUR_AK') = true",
+    "maskedValue": "isPlaceholder('abc****') = true",
+    "realCredential": "isPlaceholder('ABCDEF1234567890') = false",
+    "detectionPatterns": ["<...>", "${...}", "YOUR_AK/AK/SK/TOKEN bare", "placeholder/replace_me/change.me", "abc**** masked", "*** bare"]
+  },
+  "note": "isPlaceholder detects 6 placeholder patterns; real credentials return false. Credentials missing/placeholder => guidance returned (not silent fail)."
+}

@@ -1,0 +1,23 @@
+{
+  "caseId": "D3-S1",
+  "status": "PASS",
+  "executedAt": "20261104052500",
+  "assertion": "serviceCatalog 路由命中 ecs；run_readonly_command 返回实例清单；全程零写操作",
+  "actual": {
+    "routing": "huaweicloud-core skill routes ECS intent -> huawei-ecs skill -> huaweicloud_run_readonly_command",
+    "readonlyCommand": "hcloud ECS ListServersDetails",
+    "classification": "decision=allow, risk=read_only",
+    "result": {
+      "ok": true,
+      "exitCode": 0,
+      "count": 2,
+      "servers": [
+        {"id":"5d1c2a98-34b3-49c5-ae41-5569bbfa288f","name":"testbot3-hermes-ecs-3740204810","status":"ACTIVE","flavor":"c6.large.2"},
+        {"id":"3e46b335-3e53-4345-a574-9f991fc441c7","name":"tctest-tmr-u1yrtd-srv","status":"ACTIVE","flavor":"c6.large.2"}
+      ]
+    },
+    "zeroWriteOps": true,
+    "noCreateDeletePlanCall": "only run_readonly_command invoked; no plan_cli_command/run_approved_command for write"
+  },
+  "note": "Readonly credentials (test001 subaccount) via auth_init. ECS ListServersDetails returned 2 ACTIVE instances. No write tool called — 'do not modify' constraint honored."
+}

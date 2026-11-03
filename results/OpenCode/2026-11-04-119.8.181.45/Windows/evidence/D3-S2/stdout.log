@@ -1,0 +1,12 @@
+{
+  "caseId": "D3-S2",
+  "status": "BLOCKED",
+  "executedAt": "20261104053000",
+  "assertion": "场景-删VPC先确认 (plan→hook预检→未确认零执行→确认后执行→归零)",
+  "blockedReason": "【补环境】本机 credentials.json 为占位凭证；plan_cli_command + hook_check_command 预检部分已验证(D4-18/D4-19)，但无法真机执行 DeleteVpc 删除资源。解除条件：配置真实管理员 AK/SK",
+  "actual": {
+    "planDeleteVpc": "deny/write + approvalToken",
+    "hookPreflight": "warn (hwc-destructive-delete-operation)",
+    "cannotExecuteWithoutAdminCreds": true
+  }
+}

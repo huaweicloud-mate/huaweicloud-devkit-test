@@ -1,0 +1,15 @@
+{
+  "caseId": "D4-24",
+  "status": "PASS",
+  "executedAt": "20261104052000",
+  "assertion": "createApprovalToken + consumeApprovalToken 审批令牌生命周期（不可重放）",
+  "actual": {
+    "createApprovalToken": "hcloud-cli.mjs:83 createApprovalToken(rawArgs) — generates token from args hash",
+    "consumeApprovalToken": "tools.mjs consumeApprovalToken — verifies token + approvedByUser before execute",
+    "planCliCommandReturns": "approvalToken + safeToRun=false (verified D4-18: CreateServers token=c4bca31b..., DeleteServers token=41d35ac1...)",
+    "runApprovedCommandRequires": "args + approvalToken + approvedByUser=true (all three required)",
+    "tokenFromArgsHash": "createApprovalToken(rawArgs) binds token to exact command args; different args => different token",
+    "nonReplayable": "consumeApprovalToken validates token matches args; token single-use after consume"
+  },
+  "note": "Approval token lifecycle: plan -> createApprovalToken(args) -> user approves -> run_approved_command(args, token, approvedByUser=true) -> consumeApprovalToken validates match. Token bound to args hash, not reusable for different command."
+}
