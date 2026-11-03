@@ -1,0 +1,12 @@
+{
+  "caseId": "D3-C1",
+  "status": "BLOCKED",
+  "executedAt": "20261104053000",
+  "assertion": "ECS生命周期E2E (购买→验证ACTIVE→删除含磁盘→归零)",
+  "blockedReason": "【补环境】本机 credentials.json 为占位凭证(test_ak/test_sk)，无法执行 ECS CreateServers/DeleteServers 真机创建删除；只读子账号(test001)仅有只读权限，IAM 拒绝写操作。解除条件：配置真实管理员 AK/SK 到 credentials.json",
+  "actual": {
+    "readonlyEcsListOk": true,
+    "writeBlockedAtPlan": "plan_cli_command ECS CreateServers -> deny/write",
+    "writeWouldFailAtIam": "readonly subaccount lacks ECS write permission"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "caseId": "D3-C4",
+  "status": "PASS",
+  "executedAt": "20261104052700",
+  "assertion": "逐服务 list_operations + plan 只读；全部服务有规范路由且可执行",
+  "actual": {
+    "ECS_list_operations": {
+      "ok": true,
+      "operationCount": 130,
+      "sampleCreate": "CreateServers",
+      "sampleList": "ListServersDetails",
+      "sampleDelete": "DeleteServers",
+      "classification": "allow/local_metadata"
+    },
+    "VPC_list_operations": {
+      "ok": true,
+      "operationCount": 175,
+      "sampleCreate": "CreateVpc",
+      "sampleList": "ListVpcs",
+      "sampleDelete": "DeleteVpc",
+      "classification": "allow/local_metadata"
+    },
+    "plan_ECS_CreateServers": "decision=deny risk=write (requires approval)",
+    "plan_ECS_ListServers": "decision=allow risk=read_only",
+    "plan_VPC_CreateVpc": "decision=deny risk=write",
+    "plan_VPC_DeleteVpc": "decision=deny risk=write",
+    "allServicesHaveRouting": true
+  },
+  "note": "list_operations returns规范 operation names for each service; plan_cli_command routes read vs write correctly. Service creation would require admin creds (credentials.json has placeholder); readonly verified."
+}

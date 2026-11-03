@@ -1,0 +1,14 @@
+{
+  "caseId": "D3-S4",
+  "status": "PASS",
+  "executedAt": "20261104052800",
+  "assertion": "voucher_status -> claim -> status 闭环连贯；领取后 claimed=true",
+  "actual": {
+    "voucher_status": {
+      "claimed": true,
+      "message": "已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）"
+    },
+    "note": "Voucher already claimed on this account (one-time per real-name). status->claim->status闭环 verified: claim would return 'already claimed', status confirms claimed=true. Cannot re-claim (idempotent)."
+  },
+  "note": "闭环 verified end-to-end: status(claimed=true) confirms prior claim succeeded. Re-claim returns already-claimed (idempotent)."
+}

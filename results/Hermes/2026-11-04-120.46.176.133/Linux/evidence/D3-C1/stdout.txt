@@ -1,0 +1,29 @@
+
+### D3-C1 ###  （终态：重试轮，v1.1.13-next.3）
+{
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    { "name": "CreateVpc", "pass": true, "detail": "vpc id a87c2537-90e2-4c80-b454-a630bc5dbb19 name testbot3-hermes-e2e-3740289256" },
+    { "name": "CreateSubnet", "pass": true, "detail": "subnet id d0f58db9-b9c9-423d-88a8-39f9a05eca68 name testbot3-hermes-e2e-3740289256-subnet" },
+    { "name": "CreateServers(审批分类)", "pass": "allow", "detail": "allow" },
+    { "name": "CreateServers(返回serverIds)", "pass": true, "detail": "job_id ff808081a0ed1f3901a1a340cbb171c2 serverIds [d1b3448c-cbd4-41c7-96b6-2a10da2cd7ba]" },
+    { "name": "finally归零(校验真实删除)", "pass": false, "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK" }
+  ]
+}
+
+===== 说明（本轮执行过程与归零复核） =====
+- 真云 ECS 生命周期 4 项实质断言全部通过：VPC 创建 / subnet 创建 / CreateServers 审批分类=allow / CreateServers 返回 serverIds。
+- 唯一失败项 `finally归零` 属探针轮询窗口偏短的 harness 观察（realcloud_e2e.mjs 内 ECS 异步删除轮询窗口 150s 短于云端 ECS 异步删除耗时），非产品缺陷；与 2026-11-03 报告「注 1」同类。
+- 首轮（05:07:59，run_all.sh 第 39 步）CreateServers 曾瞬时失败：`Ecs.0005 main port or subnet must in vpc!`；随即重试同参数即成功返回 serverIds，判定为云侧瞬时/最终一致性抖动，非稳定缺陷。
+- 同轮复现环境阻塞：共享账号 hw018619646 的 VPC 配额（5）被并发/遗留资源占满，重试曾报 `VPC.0114 Quota exceeded for resources`；已清理本机本轮遗留 VPC 后配额恢复、ECS 创建成功。
+- 归零复核（本机只删本次创建，前缀 testbot3-hermes + 本次 TS 3740289256 / 3740132597）：
+  * ECS testbot3-hermes-ecs-3740289256 (d1b3448c) → DeleteServers 已删，轮询已消失
+  * subnet testbot3-hermes-e2e-3740289256-subnet (d0f58db9) → DeleteSubnet 已删
+  * VPC testbot3-hermes-e2e-3740289256 (a87c2537) → DeleteVpc 已删
+  * VPC testbot3-hermes-e2e-3740132597 (b95ee181，首轮遗留) → DeleteVpc 已删
+  * 最终 inventory：本机前缀资源 0（剩余 testbot3-hermes-e2e-3740204810 为并发他机同前缀资源，本机 ps/日志无该 TS，未删）；EIP total_count=0；OBS buckets=0
+- 未见本机 R3/R9 之外的越权：写操作均经 plan→approve（deny→allow）流程。

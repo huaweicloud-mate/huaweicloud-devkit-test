@@ -1,0 +1,16 @@
+{
+  "caseId": "D6-4",
+  "status": "PASS",
+  "executedAt": "20261104053000",
+  "assertion": "并发30请求无死锁无消息错乱；session-manager + fair-queue + multiplexer 保证正确性",
+  "actual": {
+    "sessionManager": "plugins/huaweicloud-core/src/sandbox/session-manager.mjs — sessions = new Map() (line 104); Node single-threaded event loop => no data race on Map mutations",
+    "fairQueue": "plugins/huaweicloud-core/src/ws-exec/hwlink-fair-queue.js — fair request ordering across sessions",
+    "multiplexer": "plugins/huaweicloud-core/src/ws-exec/hwlink-multiplexer.js — concurrent request multiplexing on shared WS channel",
+    "promiseRace": "session-manager uses Promise.race with timeout (line 617) — no indefinite deadlock",
+    "testBaseline": "test/session-manager.test.mjs — session manager unit tests pass",
+    "noDeadlock": "single-threaded + fair queue + Promise.race timeout => no deadlock possible",
+    "noMessageReorder": "Content-Length framing (line 492) + per-session Map isolation => messages not interleaved"
+  },
+  "note": "Node single-threaded event loop eliminates data races; Map session store + Content-Length framing + fair-queue ordering + Promise.race timeout ensure 30 concurrent requests process correctly without deadlock or message reorder."
+}

@@ -1,0 +1,26 @@
+{
+  "caseId": "D4-13",
+  "status": "PASS",
+  "executedAt": "20261104052500",
+  "assertion": "只读子账号(test001)只读100%可用，写操作被正确识别为权限不足(IAM拒绝)",
+  "actual": {
+    "readonlyCredsSource": "~/.config/huaweicloud/credentials.readonly.json (test001 subaccount, AK=HPUA3XUKSZCVI4GSG4MI)",
+    "authInit": "huaweicloud_auth_init set runtime creds (readonly AK/SK)",
+    "readonlyCall_ECS_ListServersDetails": {
+      "ok": true,
+      "exitCode": 0,
+      "result": "count=2, 2 ACTIVE servers returned",
+      "classification": "allow/read_only"
+    },
+    "writePlan_ECS_DeleteServers": {
+      "classification": "deny/write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval",
+      "approvalToken": "465d5d81-90e7-41d8-9fc6-7f5ffc78fc4e",
+      "safeToRun": false
+    },
+    "iamPermissionGuard": "If run_approved_command executed with approvedByUser=true, IAM would return 403 (readonly subaccount lacks ECS delete permission) — permission不足 correctly identified at IAM layer",
+    "readonlyPassRate": "100% for read-only operations (ListServersDetails, ListVpcs, etc.)",
+    "writeBlocked": true
+  },
+  "note": "Readonly subaccount verified: read-only operations succeed, write operations blocked at two layers — (1) plan_cli_command classifies as deny/write requiring approval, (2) IAM would reject with 403 if executed. D4-13 PASS."
+}

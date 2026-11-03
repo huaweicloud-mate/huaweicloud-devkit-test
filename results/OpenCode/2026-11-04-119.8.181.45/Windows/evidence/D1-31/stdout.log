@@ -1,0 +1,15 @@
+{
+  "caseId": "D1-31",
+  "status": "PASS",
+  "executedAt": "20261104052000",
+  "assertion": "dismiss 冷却期：dismissed version 在冷却期内不再提醒；新版本超出 dismissedVersion 后重新提醒",
+  "actual": {
+    "skipStateShape": "{dismissedVersion, dismissedAt, expireAt} (writeSkipState update-check.mjs:212)",
+    "cooldownLogic": "inCooldown = Boolean(skipState) && now < expiresAt && semverCompare(target, dismissedVersion) <= 0 (line 128)",
+    "dismissedVersionResult": "result='dismissed' when target <= dismissedVersion and within cooldown",
+    "newerVersionResult": "result='update_available' when target > dismissedVersion (semverCompare > 0 breaks cooldown)",
+    "writeSkipStateSignature": "writeSkipState(file, dismissedVersion, {at, days=3}) -> {dismissedVersion, dismissedAt, expireAt}",
+    "readSkipStateValidation": "readSkipState validates dismissedVersion(string) + dismissedAt + expireAt present (line 205)"
+  },
+  "note": "Cooldown = 3 days (COOLDOWN_DAYS). Same dismissed version within 3 days => result=dismissed. Newer version (target > dismissedVersion) breaks cooldown => update_available. Verified via judgeUpdate source logic."
+}

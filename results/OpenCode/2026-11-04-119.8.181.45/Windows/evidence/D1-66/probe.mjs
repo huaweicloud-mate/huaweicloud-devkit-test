@@ -1,0 +1,1 @@
+// D1-66 probe: 遥测开关与端点环境变量 — HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT
