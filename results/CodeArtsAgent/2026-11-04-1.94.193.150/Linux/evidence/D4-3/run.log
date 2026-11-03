@@ -77,3 +77,13 @@ redactSecrets: AK=<redacted> SK=<redacted> securityToken=<redacted>
 ---- STDERR ----
 
 ---- EXIT 0 ----
+
+=====CASE D4-3 (kms 明文secret API 补测)=====
+$ hcloud kms DecryptData --key-id x
+   decision=allow risk=unknown_read
+$ hcloud kms DecryptDatakey --key-id x
+   decision=allow risk=unknown_read
+$ hcloud kms EncryptData --key-id x
+   decision=allow risk=unknown_read
+$ hcloud csms ShowSecretVersion --secret-name x
+   decision=deny risk=secret
