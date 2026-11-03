@@ -1,16 +1,16 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-hermes-s2-mvzr456c -> id=4dfc6cf2-83e5-4e03-b806-f38633e45769
+创建测试VPC tctest-hermes-s2-mw16lut7 -> id=
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
 确认后 DeleteVpc -> ok=true
-删除后归零 = true
-[OK] 测试 VPC 创建成功
+删除后归零 = false
+[FAIL] 测试 VPC 创建成功
 [OK] plan DeleteVpc 要求确认(confirm-not-deny)
 [OK] hook 预检 DeleteVpc 返回决策
 [OK] 未确认前零执行
-[OK] 确认后删除成功且归零
+[FAIL] 确认后删除成功且归零
 =====END D3-S2=====
 
 =====CASE D3-C13=====
@@ -51,7 +51,7 @@ voucher_status(领取后) -> {"claimed":true,"message":"已领取过（代金券
 =====END D3-S4=====
 
 =====CASE D3-S3=====
-check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: e2d6bf80ec8c4b688755945c4a0ed1cc]
+check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 37131035dcbb4f319355ab2887a550ec]
 [FAIL] 沙箱 check_user 通过
 → 沙箱账号未实名/未签协议，标记 BLOCKED（外部依赖）
 =====END D3-S3=====
@@ -59,12 +59,12 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
 =====SUMMARY=====
 {
   "total": 18,
-  "passed": 17,
+  "passed": 15,
   "results": [
     {
       "name": "测试 VPC 创建成功",
-      "ok": true,
-      "detail": "vpcId=4dfc6cf2-83e"
+      "ok": false,
+      "detail": "vpcId="
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -83,13 +83,13 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     },
     {
       "name": "确认后删除成功且归零",
-      "ok": true,
-      "detail": "ok=true zeroed=true"
+      "ok": false,
+      "detail": "ok=true zeroed=false"
     },
     {
       "name": "OBS 建桶成功",
       "ok": true,
-      "detail": "bucket=tctest-hermes-obs-mvzr456c"
+      "detail": "bucket=tctest-hermes-obs-mw16lut7"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -109,7 +109,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "删除归零",
       "ok": true,
-      "detail": "bucket removed=tctest-hermes-obs-mvzr456c"
+      "detail": "bucket removed=tctest-hermes-obs-mw16lut7"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
@@ -149,7 +149,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "沙箱 check_user 通过",
       "ok": false,
-      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: e2d6bf80ec8c4b688755945c4a0ed1cc]\"}"
+      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 37131035dcbb4f319355ab2887a550ec]\"}"
     }
   ]
 }
