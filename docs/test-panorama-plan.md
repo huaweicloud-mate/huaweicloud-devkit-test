@@ -460,5 +460,5 @@ flowchart LR
 | AI Test Manager（策略+使命） | `test-ai-orchestration-architecture.md` | ✅ Layer1+2 已落地（含 MCP 包装） | `test-manager/`（决策引擎 + CLI + 发布脚本 + MCP 服务端） |
 | 使命摄入→机群广播 | — | ✅ 已落地 | `scripts/mission_ingest.py` + `init_day.py --mission` |
 | 测试环境矩阵（Mock 环境） | §八 8.1 | ⭕ 未落地（真云+沙箱已具备，本地 Mock 缺） | — |
-| AI Test Manager Worker 自主展开 | `test-ai-orchestration-architecture.md` §三 | ⭕ 未落地（路径 B headless 驱动待建） | — |
-| 趋势度量可视化 | §5.1 度量体系 | 🔶 草稿态（`_gen_trend_png.py` / `_inspect_trend.py`） | — |
+| AI Test Manager Worker 自主展开 | `test-ai-orchestration-architecture.md` §三 | 🔶 **能力层已落地**（`skills/mission-expand` 走机群广播链路，含 `verify_mission_expansion.py` 校验）；引擎侧 headless driver 待建 | `skills/mission-expand/SKILL.md` |
+| 趋势度量可视化 | §5.1 度量体系 | ✅ **已落地**（`scripts/trend_metrics.py` + `gen_trend_chart.py`；CI `trend-metrics.yml` 每日刷新 trend.csv/md/svg） | `metrics/trend.*` |
