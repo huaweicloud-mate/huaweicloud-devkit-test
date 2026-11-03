@@ -1,0 +1,21 @@
+{
+  "caseId": "D4-19",
+  "status": "PASS",
+  "executedAt": "20261104051013",
+  "assertion": "hook_check_command preflight fires on risky writes inside confirm flow (warn/deny emitted before approval)",
+  "actual": {
+    "hook_DeleteServers": {
+      "ok": true,
+      "decision": "warn",
+      "findings": ["hwc-destructive-delete-operation"],
+      "nextStep": "Review the warnings with the user before proceeding."
+    },
+    "hook_CSMS_ShowSecretVersion": {
+      "ok": false,
+      "decision": "deny",
+      "findings": ["hwc-command-secret-value-read"],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution."
+    }
+  },
+  "note": "Preflight risk check executes and emits warn/deny findings before any approval token can be consumed; confirm flow does not bypass preflight."
+}

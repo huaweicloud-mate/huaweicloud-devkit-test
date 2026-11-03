@@ -1,0 +1,22 @@
+{
+  "caseId": "D4-16",
+  "status": "PASS",
+  "executedAt": "20261103211002",
+  "assertion": "shell-wrapped inner delete command detected (deny on encoded/pipe; warn on direct delete)",
+  "actual": {
+    "wrappedDecision": "warn",
+    "wrappedFindings": [
+      "hwc-destructive-delete-operation"
+    ],
+    "innerDeleteDecision": "deny",
+    "innerDeleteFindings": [
+      "hwc-sandbox-destructive-command",
+      "hwc-destructive-delete-operation"
+    ],
+    "encodedPipeDecision": "deny",
+    "encodedPipeFindings": [
+      "hwc-command-encoded-shell-exec"
+    ]
+  },
+  "note": "wrapped command inspected as full text; inner Delete caught by regex; encoded-pipe-to-shell caught by hwc-command-encoded-shell-exec deny"
+}

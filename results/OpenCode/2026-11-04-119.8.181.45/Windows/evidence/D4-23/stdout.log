@@ -1,0 +1,23 @@
+{
+  "caseId": "D4-23",
+  "status": "PASS",
+  "executedAt": "20261104051013",
+  "assertion": "global rules huawei-agent-rules.mdc injected into all install targets; constraints (MUST NOT call csms show-secret, MUST use resolve refs, NEVER echo AK/SK) present and loadable",
+  "actual": {
+    "rulesSourceFile": "hdk/rules/huawei-agent-rules.mdc (3861 bytes)",
+    "injectFunction": "setup-cli.mjs:583 injectAgentRules(pluginDest) — copyFileVerified(rulesSrc, rulesDestDir/huawei-agent-rules.mdc)",
+    "injectCallSites": 21,
+    "installedAtOpenCode": "C:\\Users\\Administrator\\.config\\opencode\\huaweicloud-plugins\\rules\\huawei-agent-rules.mdc",
+    "constraintsPresent": [
+      "MUST load huawei-cloud-dew-key-management skill first for any secret/credential task",
+      "MUST NOT call hcloud csms download-secret or hcloud csms show-secret directly",
+      "MUST NOT call hcloud kms decrypt directly",
+      "MUST use {{resolve:csms:secret-id:SecretString:key}} runtime resolution",
+      "NEVER echo AK/SK values in conversation or logs",
+      "MUST NOT create long-term AK/SK — use temporary STS tokens",
+      "MUST scope resource ARNs — no * wildcards"
+    ],
+    "installTargetsCovered": "opencode, codex, codearts, codearts-work, workbuddy, dsh, officeace, hermes, openclaw, atomcode, codearts-space (11 targets via 21 call sites)"
+  },
+  "note": "injectAgentRules idempotent (copyFileVerified); rules file present at OpenCode plugin dest post-install; constraints enforceable."
+}

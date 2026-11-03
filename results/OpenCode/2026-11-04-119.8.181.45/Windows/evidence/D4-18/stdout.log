@@ -1,0 +1,28 @@
+{
+  "caseId": "D4-18",
+  "status": "PASS",
+  "executedAt": "20261104051013",
+  "assertion": "write op via plan_cli_command returns decision=deny risk=write + approvalToken + safeToRun=false (confirm gate, not auto-run, not hard-reject)",
+  "actual": {
+    "plan_ECS_CreateServers": {
+      "classification": { "decision": "deny", "risk": "write", "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval." },
+      "approvalToken": "c4bca31b-d712-4cf0-9aa0-72f18bb693af",
+      "safeToRun": false
+    },
+    "plan_ECS_DeleteServers": {
+      "classification": { "decision": "deny", "risk": "write", "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval." },
+      "approvalToken": "41d35ac1-603e-4d08-9a12-f299ad02b8b9",
+      "safeToRun": false
+    },
+    "plan_VPC_CreateVpc": {
+      "classification": { "decision": "deny", "risk": "write" },
+      "approvalToken": "0ce14477-d3e3-4d9e-b66a-229b0c4bc284",
+      "safeToRun": false
+    },
+    "plan_ECS_ListServers": {
+      "classification": { "decision": "allow", "risk": "read_only" },
+      "safeToRun": true
+    }
+  },
+  "note": "Write ops gate on approvalToken (confirm flow); read-only auto-allow. Neither auto-run (unsafe) nor hard-reject (blocks legit work). = confirm-not-deny."
+}

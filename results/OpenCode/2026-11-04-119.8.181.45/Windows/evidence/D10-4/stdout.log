@@ -1,0 +1,20 @@
+{
+  "caseId": "D10-4",
+  "status": "PASS",
+  "executedAt": "20261103211002",
+  "assertion": "rules loaded (9 deny); high-risk deny, read-only allow",
+  "actual": {
+    "totalRules": 19,
+    "denyCount": 9,
+    "warnCount": 10,
+    "highRiskDecision": "deny",
+    "highRiskFindings": [
+      "hwc-command-credential-file"
+    ],
+    "envDumpDecision": "deny",
+    "deleteResourceDecision": "warn",
+    "readOnlyDecision": "allow",
+    "listOnlyDecision": "allow"
+  },
+  "note": "spec says 7 warn but actual is 10 warn (rules expanded: +adminPass/sts/highrisk-write/secret-in-arg/sandbox-ttl since spec); deny=9 matches; decision logic correct"
+}

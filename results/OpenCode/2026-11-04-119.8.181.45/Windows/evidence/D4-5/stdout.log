@@ -1,0 +1,19 @@
+{
+  "caseId": "D4-5",
+  "status": "PASS",
+  "executedAt": "20261103211002",
+  "assertion": "write operations (delete/batch-delete-force) not misjudged as read-only; read-only stays allow",
+  "actual": {
+    "deleteDecision": "warn",
+    "deleteFindings": [
+      "hwc-destructive-delete-operation"
+    ],
+    "batchDeleteForceDecision": "deny",
+    "batchDeleteForceFindings": [
+      "hwc-destructive-delete-force",
+      "hwc-destructive-delete-operation"
+    ],
+    "readOnlyDecision": "allow"
+  },
+  "note": "plan_cli_command MCP tool separately confirms CreateServers/DeleteServers both classified decision=deny risk=write (not read_only); ListServers=allow/read_only"
+}
