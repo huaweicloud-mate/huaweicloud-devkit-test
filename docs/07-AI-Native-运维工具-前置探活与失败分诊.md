@@ -287,7 +287,11 @@ node test-manager/run-plan.mjs --diff main..HEAD --analyzer auto --out ./out
 2. ~~六个运维件自动进「每日测试汇总」报告~~ → **已接入**（2026-11-03）：新增 `scripts/ops_insights.py` 聚合，
    `report_html.py` 在汇总 md/html 末尾追加「运维视角」一节 —— 离线可算的 4 项（根因簇 / 跨端一致性 / 单号关联 / 自主产物）
    随日报自动生成；失败签名仅本机可算（需 multica），CI 自动跳过并说明。单测：`test/python/test_ops_insights.py`。
-3. **周期化自动处置**：`auto_remediator.py` 已能按分支出计划并支持 `--live` 重发，但「定时自动跑 `--live`」未接入调度（属改变平台状态，需拍板）。
+3. ~~周期化自动处置~~ → **① 定时 dry-run 已接入**（2026-11-03）：维护者本机 Hermes 定时任务「每日失败处置计划（dry-run）」**每天 09:30** 自动跑
+   `scripts/auto_remediator.py --scan --limit 3 --write-report`（agent 模式，workdir=测试仓），简报推送 + 报告落盘 `results/Summary/失败处置-<日期>.md`；
+   **固定不带 `--live`，零平台状态变更**（首次手动触发验证 2026-11-03 14:50，status ok）。
+   > 注：这是**维护者本机的调度**（Hermes cron），不在仓库 CI 内 —— 其他人 clone 仓库不会自动获得。
+   **② 定时 `--live` 自动重发仍未接入**：会真触发机队重跑（消耗算力、真云用例可能创建云资源），且自动发起的运行会混入当日执行数据 —— 待 dry-run 运行一段时间、确认分类器判断可信后再拍板。
 4. 使命展开产物（`autocases/`）与候选用例（`candidates/`）纳入汇总统计与看板（需与维护者侧汇总口径一起改）。
 
-> 口径：以上四项为**未接入**，当前只能手动跑；文档提及 ≠ 已自动执行。
+> 口径：第 1、2 项与第 3 项的 ① 已接入（见上）；第 3 项的 ②（定时 `--live`）与第 4 项仍**未接入**，当前只能手动跑；文档提及 ≠ 已自动执行。
