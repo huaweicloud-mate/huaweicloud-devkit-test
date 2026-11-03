@@ -284,7 +284,9 @@ node test-manager/run-plan.mjs --diff main..HEAD --analyzer auto --out ./out
 
 **尚未接入（需拍板，涉及每日产物格式、平台状态与下游链条）**：
 1. ~~前置探活写进客户端开工流程~~ → **已接入** `prepare_env.py --preflight`（`AGENTS.md` 属受保护文件，仍不直接改）。
-2. **六个运维件自动进「每日测试汇总」报告**（签名分布 / 根因簇 / 跨端一致性 / 单号关联 / 使命展开产物 / 候选用例）—— 需改 `build_summary.py` / `run_daily_report.py`，会影响下游看板与邮件。
+2. ~~六个运维件自动进「每日测试汇总」报告~~ → **已接入**（2026-11-03）：新增 `scripts/ops_insights.py` 聚合，
+   `report_html.py` 在汇总 md/html 末尾追加「运维视角」一节 —— 离线可算的 4 项（根因簇 / 跨端一致性 / 单号关联 / 自主产物）
+   随日报自动生成；失败签名仅本机可算（需 multica），CI 自动跳过并说明。单测：`test/python/test_ops_insights.py`。
 3. **周期化自动处置**：`auto_remediator.py` 已能按分支出计划并支持 `--live` 重发，但「定时自动跑 `--live`」未接入调度（属改变平台状态，需拍板）。
 4. 使命展开产物（`autocases/`）与候选用例（`candidates/`）纳入汇总统计与看板（需与维护者侧汇总口径一起改）。
 

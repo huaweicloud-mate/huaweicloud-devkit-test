@@ -13,8 +13,46 @@
 
 通过率口径（与 daily-agent-report 一致）：分母 = PASS + FAIL + SPEC-MISMATCH（不含 BLOCKED/NOT_RUN）。
 """
-import os, sys, csv, datetime, re
+import os, sys, csv, datetime, re, importlib.util
 from collections import Counter
+
+# ---------------- 运维视角（ops_insights）接入 ----------------
+# 设计：① 任何失败都降级为一行说明（日报不得被它拖垮）② 模块只加载一次
+_OPS_CACHE = {}
+
+
+def _ops_module():
+    if "m" in _OPS_CACHE:
+        return _OPS_CACHE["m"]
+    try:
+        p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ops_insights.py")
+        spec = importlib.util.spec_from_file_location("ops_insights", p)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    except Exception:
+        mod = None
+    _OPS_CACHE["m"] = mod
+    return mod
+
+
+def _ops_md_block(date):
+    try:
+        mod = _ops_module()
+        if mod is None:
+            return "\n## 运维视角（自动生成）\n\n（跳过）ops_insights.py 加载失败\n"
+        return "\n" + mod.build_md(date).rstrip() + "\n"
+    except Exception as e:  # noqa: BLE001
+        return "\n## 运维视角（自动生成）\n\n（生成失败：%s: %s）\n" % (type(e).__name__, str(e)[:80])
+
+
+def _ops_html_block(date):
+    try:
+        mod = _ops_module()
+        if mod is None:
+            return ""
+        return "\n" + mod.build_html(date) + "\n"
+    except Exception as e:  # noqa: BLE001
+        return '\n<section style="margin-top:24px;"><h2 style="color:#2c3e50;">运维视角（自动生成）</h2><p style="color:#c0392b;font-size:12px;">生成失败：%s</p></section>\n' % str(e)[:80]
 
 REPO = os.environ.get("HDK_TEST_REPO") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SKIP_DIRS = {"Summary", "Regression", "version", "history"}
@@ -338,6 +376,7 @@ def render(rows, findings, date, version, create_time, update_time):
 <thead><tr style="background:#f2f2f2;"><th style="padding:6px;border:1px solid #ddd;">客户端</th><th style="padding:6px;border:1px solid #ddd;">级别</th><th style="padding:6px;border:1px solid #ddd;text-align:left;">标题</th><th style="padding:6px;border:1px solid #ddd;text-align:left;">根因</th></tr></thead>
 <tbody>{findings_rows}</tbody></table>
 
+{_ops_html_block(date)}
 <p style="color:#95a5a6;font-size:11px;margin-top:24px;">本报告由 scripts/report_html.py 自动生成，数据源 results/Summary/ 每日总执行结果。执行态与母版用例定义分离，真实结果以本报告为准。</p>
 </body></html>"""
 
@@ -420,7 +459,7 @@ def render_md(rows, findings, date, version, create_time, update_time):
 | 客户端 | 级别 | 标题 | 根因 |
 | --- | --- | --- | --- |
 {chr(10).join(findings_lines)}
-
+{_ops_md_block(date)}
 > 本报告由 scripts/report_html.py 自动生成，数据源 results/Summary/ 每日总执行结果。执行态与母版用例定义分离，真实结果以本报告为准。
 """
 

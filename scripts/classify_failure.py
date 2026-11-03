@@ -71,6 +71,8 @@ SIG_LABEL["SKIPPED"] = "本次跳过"
 SIG_ACTION["SKIPPED"] = "none"
 SIG_LABEL["UNKNOWN_FAILED"] = "未分类失败"
 SIG_ACTION["UNKNOWN_FAILED"] = "manual"
+SIG_LABEL["TIMEOUT_KILLED"] = "疑似超时/看门狗掐断"
+SIG_ACTION["TIMEOUT_KILLED"] = "resend"
 
 
 def RULES_ACTION(sig):
