@@ -101,6 +101,8 @@
 ## D2-4 凭证脱敏漏小写 ak=/sk=
 - 今日证据：`evidence/D2-4/stdout.log`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
+  - [#1090](https://github.com/huaweicloud/huaweicloud-devkit/issues/1090)（open）**[QA 返修单] PR #1088 两轴复审（head 14e03eba）：自愈盲区 + 孤儿守卫边缘 + 优先级口径矛盾 + 新分支零测试（P2 4 项）**
+    - 历史单内容：来源：[QA Agent] 两轴多代理复审报告（PR #1088，head `14e03eba44010ad0e7ec6869a0ba68af123ad7eb`，详见 PR 评论）。第 1 轮两项硬项（AK/SK 移除不彻底 / 失效自愈未接线）修复核实属实；本轮为 P2 需修项落地单（无新增硬项）。返修预算已用 1/3，本单为第 2 轮 A2A 落地单。 ## P2 需修项（4 项） 1. **
   - [#1065](https://github.com/huaweicloud/huaweicloud-devkit/issues/1065)（open）**[测试报告] huaweicloud-devkit v2.0.0（v2 分支 fcfe047f）缺陷合并单（8 项：P0×1 P1×6 P2×1，含 3 项 v1 历史缺陷 V2 复现）**
     - 历史单内容：## 测试概览 - **被测版本**：`v2.0.0`（源仓库 v2 分支 `fcfe047f`，npm 未发布，latest=1.1.12） - **测试类型**：v2 迁移用例预演验证（`init_day --version v2.0.0`，非 `--full` 母版） - **缺陷**：8 项（P0×1 / P1×6 / P2×1），其中 3 项为 v1 历史缺陷的 **V2 版本复现**，
   - [#1055](https://github.com/huaweicloud/huaweicloud-devkit/issues/1055)（open）**[测试报告] huaweicloud-devkit v1.1.13-next.0 每日测试缺陷合并单（12 项）**
@@ -216,7 +218,7 @@
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#762
 
 ## D2-10 KooCLI 报错文案违规
-- 今日证据：`evidence/D2-10/stdout.log`、`evidence/D2-10/detail.log`
+- 今日证据：`evidence/D2-10/stdout.log`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#1055](https://github.com/huaweicloud/huaweicloud-devkit/issues/1055)（open）**[测试报告] huaweicloud-devkit v1.1.13-next.0 每日测试缺陷合并单（12 项）**
     - 历史单内容：## 测试概览 - 被测版本：v1.1.13-next.0 - 缺陷：12 项 ## 缺陷清单 ### 1. [P0] D4-16 sh -c 命令包裹穿透（凭证 env 打印绕过） - **描述**：`evaluateCommandRisk('sh -c "env | grep HUAWEICLOUD_ACCESS_KEY"')` 返回 `decision=allow, findings=[]`
@@ -318,7 +320,7 @@
 - **仅出现过（正文含用例号但非缺陷语义，未据此判历史）**：#1065, #926, #852, #845, #679, #673, #651
 
 ## D3-C14 沙箱无凭证文案违规
-- 今日证据：`evidence/D3-C14/stdout.log`、`evidence/D3-C14/detail.log`
+- 今日证据：`evidence/D3-C14/stdout.log`
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#1065](https://github.com/huaweicloud/huaweicloud-devkit/issues/1065)（open）**[测试报告] huaweicloud-devkit v2.0.0（v2 分支 fcfe047f）缺陷合并单（8 项：P0×1 P1×6 P2×1，含 3 项 v1 历史缺陷 V2 复现）**
     - 历史单内容：## 测试概览 - **被测版本**：`v2.0.0`（源仓库 v2 分支 `fcfe047f`，npm 未发布，latest=1.1.12） - **测试类型**：v2 迁移用例预演验证（`init_day --version v2.0.0`，非 `--full` 母版） - **缺陷**：8 项（P0×1 / P1×6 / P2×1），其中 3 项为 v1 历史缺陷的 **V2 版本复现**，
