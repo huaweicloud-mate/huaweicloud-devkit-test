@@ -1,0 +1,35 @@
+[setup] configure set test001 code=0 Configuration successful. 
+[verify] test001 profile 存在=true；只读AK前缀=HPUA***；default 与 test001 脱敏AK: accessKeyId": "HPU****YXD" | accessKeyId": "HPU****4MI"
+[OK] test001 profile 建立且指向只读子账号
+[FAIL] 只读写动作 CreateSecurityGroup 被拒=false (created=false)
+[OBS] CreateSecurityGroup 输出: CreateSecurityGroup is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'CreateSecurityGroup/versionNumber'. [USE_ERROR]Invalid parameter: security_group.vpc_id  Run `hcloud VPC CreateSecurityGroup --he
+[OBS] DeleteVpc(不存在UUID) 输出: {   "code": "VPC.0105",   "message": "{\"NeutronError\":{\"message\":\"Router 11111111-1111-1111-1111-111111111111 could not be found\",\"type\":\"RouterNotFound\",\"detail\":\"\"}}" } Failed to get t
+[OK] SG 无残留 residual=false
+
+=====SUMMARY=====
+{
+  "generatedAt": "2026-11-04T21:15:31.044Z",
+  "writeDeniedByIam": false,
+  "results": [
+    {
+      "name": "test001 profile 建立且指向只读子账号",
+      "pass": true,
+      "detail": "hasProfile=true readonlyAkPrefix=HPUA***"
+    },
+    {
+      "name": "只读子账号写动作 CreateSecurityGroup",
+      "pass": false,
+      "detail": "CreateSecurityGroup is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'CreateSecurityGroup/versionNumber'.\n[USE_ERROR]Invalid parameter: security_group.vpc_id\n\nRun `hcloud VPC CreateSecurityGroup --help` for details about this API.\n"
+    },
+    {
+      "name": "只读写动作 DeleteVpc(不存在UUID)",
+      "pass": false,
+      "detail": "{\n  \"code\": \"VPC.0105\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Router 11111111-1111-1111-1111-111111111111 could not be found\\\",\\\"type\\\":\\\"RouterNotFound\\\",\\\"detail\\\":\\\"\\\"}}\"\n}\nFailed to get terminal width. The default width will be used. If characters are unreadable, adjust the command wind"
+    },
+    {
+      "name": "SG 无残留",
+      "pass": true,
+      "detail": "residual=false"
+    }
+  ]
+}

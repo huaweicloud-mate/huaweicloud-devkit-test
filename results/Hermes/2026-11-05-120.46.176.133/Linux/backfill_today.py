@@ -137,18 +137,18 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 # 并已手工复核云端 ECS 516e8a7c/VPC ff54ab52/subnet 56f03a61 全部 GONE，无需手工补充删除。
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
-write_case("_baseline", "huaweicloud-devkit v1.1.13-next.3\ngitHead 7ad8a533\n", None)
-print("  _baseline: v1.1.13-next.3 (gitHead 7ad8a533)")
+write_case("_baseline", "huaweicloud-devkit v1.1.13-next.5\ngitHead 4ab34ed2df865e453bd78f3b9a1787ac44dcc36f\n", None)
+print("  _baseline: v1.1.13-next.5 (gitHead 4ab34ed2)")
 
 # ===== 2. 回填 CSV（状态映射：已按本轮 v1.1.10 实际探针结果校准） =====
 PASS_D = [
     "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69",
     "D2-1","D2-2","D2-4","D2-5","D2-11","D2-12","D2-16","D2-26","D2-27",
-    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C2","D3-C4","D3-C5","D3-C7","D3-C13","D3-C14",
+    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C4","D3-C5","D3-C14",
     "D3-S1","D3-S2","D3-S4","D3-S8",
     "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11",
-    "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23",
+    "D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23",
     "D4-27","D4-28","D4-29",
     "D5-1","D5-3","D6-1","D6-3","D6-4","D6-9","D8-7","D8-10",
     "D9-1","D9-2","D9-3","D9-4","D9-5","D9-7","D9-8","D9-10","D9-11","D9-13",
@@ -181,6 +181,11 @@ BLOCKED_D = {
     "D4-12": "【补环境】供应链安装期安全需 npm 安装期抓包/SBOM 审计通道",
     "D4-24": "【补环境】确认令牌过期/重复确认边界需审批流 + 可注入时钟",
     "D9-6":  "【调归属】跨客户端互通需多客户端并存环境（单机仅 Hermes）",
+    "D3-C1": "【补环境】统一账号 hw018619646 被冻结/余额不足：CreateServers 返回 Ecs.0067 Your account is insufficient balance（2026-11-05 05:12 实测）；VPC/子网已建并删除归零（subnet:OK vpc:OK），ECS 无法创建故生命周期后段不可验证；解除条件=账号解冻/充值",
+    "D3-C2": "【补环境】统一账号 OBS 写被拒：Create bucket 返回 403 UserRestricted（2026-11-05 05:12 实测），set/get/删桶均 404，未创建任何桶；解除条件=账号解冻/恢复 OBS 权限",
+    "D3-C7": "【补环境】统一账号 op_restricted：EIP CreatePublicip 返回 VPC.0502 Tenant status is op_restricted（2026-11-05 05:15 手工复核同码），跨区域建 EIP 不可验证；香港区 ListEips 归零=0，无残留；解除条件=账号解冻",
+    "D3-C13": "【补环境】统一账号 OBS 写被拒：Create bucket 返回 403 UserRestricted（2026-11-05 05:11 实测），静态站 set/get 全 404，未创建桶；解除条件=账号解冻/恢复 OBS 权限",
+    "D4-13": "【补环境】router 配额耗尽+账号受限：只读子账号读操作 6/6 可用，但写路径 CreateVpc 返回 VPC.0114 Quota exceeded for resources: ['router']（非 IAM 策略拒绝），无法区分「写被拒」与「配额拒绝」；补充探针 DeleteVpc(不存在UUID) 返回 VPC.0105 RouterNotFound、CreateSecurityGroup 客户端参数校验失败，均无法完成鉴权判定；删除遗留 VPC 与解除配额需非本机资源授权；解除条件=共享账号 router 配额释放且账号解冻后重跑",
     "D3-C3": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化），sandbox_connect/deploy_nginx 全链路不可达；解除条件=华为云沙箱维护完成",
     "D3-C6": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE），check_user/connect/credentials/exec_one_shot/close_session 7 隐式工具均不可用；解除条件=华为云沙箱维护完成",
     "D3-S3": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE），check_user 无法返回 realnameVerified/agreementSigned，沙箱预览 URL 场景不可验证；解除条件=华为云沙箱维护完成",
@@ -204,7 +209,8 @@ for c, br in FAIL_D.items():
 for c, br in SPEC_D.items():
     DESIGN[c] = ("SPEC-MISMATCH", f"evidence/{c}", "")
 for c, br in BLOCKED_D.items():
-    DESIGN[c] = ("BLOCKED", "", br)
+    ev = f"evidence/{c}" if os.path.isdir(os.path.join(EVID, c)) else ""
+    DESIGN[c] = ("BLOCKED", ev, br)
 for c, br in NOTRUN_D.items():
     DESIGN[c] = ("NOT_RUN", "", br)
 

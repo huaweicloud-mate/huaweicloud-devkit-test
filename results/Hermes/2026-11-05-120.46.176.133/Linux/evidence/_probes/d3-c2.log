@@ -4,28 +4,28 @@
   "case": "D3-C2",
   "status": "FAIL",
   "total": 4,
-  "passed": 3,
-  "failed": 1,
+  "passed": 0,
+  "failed": 4,
   "results": [
     {
       "name": "OBS建桶",
       "pass": false,
-      "detail": "Start at 2026-11-03 21:08:58.827338131 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-3740138671] successfully, request id [000001A1A33E695E4413735E84CA2793]\nNotice: If the configur"
+      "detail": "Start at 2026-11-04 21:12:21.810471558 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-3826741655] failed, status [403], error code [UserRestricted], error message [This operation is"
     },
     {
       "name": "set静态站",
-      "pass": true,
-      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-3740138671.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-3740138671.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":404,\"websiteUrl\":\"http://testbot3-hermes-obs-3826741655.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 404\"}"
     },
     {
       "name": "get静态站",
-      "pass": true,
-      "detail": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":404,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>NoSuchBucket</Code><Message>The specified bucket does not exist</Message><RequestId>000001A1A"
     },
     {
       "name": "删桶归零",
-      "pass": true,
-      "detail": "Start at 2026-11-03 21:08:59.6051714 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-3740138671] successfully!"
+      "pass": false,
+      "detail": "Start at 2026-11-04 21:12:22.216532011 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-3826741655] failed, status [404], e"
     }
   ]
 }
