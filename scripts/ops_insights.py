@@ -159,6 +159,28 @@ def signature_section(top_n):
     return out
 
 
+def landing_section(top_n):
+    """⑥ 产物落地校验（**仅本机**：需 multica）—— 抓分类器看不到的「假完成」。
+
+    任务报 completed ≠ 产物落地：2026-11-04 实测 OfficeAce 每天报 completed、
+    自述「已 push commit xxx」，但该 commit 在仓库里不存在、产物滞后 2 天。
+    """
+    if not shutil.which("multica"):
+        return ["（跳过）本机无 multica CLI —— 产物落地校验只在维护者本机可算"]
+    al = _load("artifact_landing")
+    rows = al.build_rows(al.load_autopilots())
+    bad = [r for r in rows if r["verdict"] == "NOT_LANDED"]
+    out = ["例行任务 **%d** 项：产物已落地 **%d** / **未落地 %d**（滞后 ≥ 2 天）。"
+           % (len(rows), len(rows) - len(bad), len(bad)), ""]
+    if bad:
+        out.append("| 机器 | 客户端 | 滞后 | 任务状态 | 性质 |")
+        out.append("| --- | --- | --- | --- | --- |")
+        for r in bad[:top_n]:
+            kind = "显性失败" if r["task_status"] != "completed" else "**隐性假完成**"
+            out.append("| %s | %s | %d 天 | %s | %s |" % (r["machine"], r["client"], r["lag"], r["task_status"], kind))
+    return out
+
+
 SECTIONS = [
     ("根因簇（跨端复现）", rootcause_section),
     ("跨端一致性", consistency_section),
@@ -181,13 +203,15 @@ def build_md(date, top_n=5, include_signature=True):
             lines.append("（生成失败：%s: %s）" % (type(e).__name__, str(e)[:80]))
         lines.append("")
     if include_signature:
-        lines.append("### 失败签名分布（仅维护者本机）")
-        lines.append("")
-        try:
-            lines.extend(signature_section(top_n))
-        except Exception as e:  # noqa: BLE001
-            lines.append("（生成失败：%s: %s）" % (type(e).__name__, str(e)[:80]))
-        lines.append("")
+        for title, fn in (("失败签名分布（仅维护者本机）", signature_section),
+                          ("产物落地校验（仅维护者本机）", landing_section)):
+            lines.append("### %s" % title)
+            lines.append("")
+            try:
+                lines.extend(fn(top_n))
+            except Exception as e:  # noqa: BLE001
+                lines.append("（生成失败：%s: %s）" % (type(e).__name__, str(e)[:80]))
+            lines.append("")
     return "\n".join(lines)
 
 

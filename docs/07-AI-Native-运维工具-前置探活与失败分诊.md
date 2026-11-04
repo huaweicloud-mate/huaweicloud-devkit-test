@@ -273,10 +273,21 @@ node test-manager/run-plan.mjs --diff main..HEAD --analyzer auto --out ./out
 
 ---
 
-## 十二、接入方式与尚未接入项
+## 十二、产物落地校验 `scripts/artifact_landing.py`
+
+补 `classify_failure.py` **抓不到的「假完成」** —— 任务报 `completed` ≠ 产物真落地。
+
+- **判据**：任务最后运行日 − `results/<客户端>/` 最新执行包日 ≥ 2 天 → 判「未落地」
+- **两类分别定性**：**显性失败**（任务状态非 completed，分类器可抓）vs **隐性假完成**（报 completed 却无产物）
+- **实测（2026-11-04）**：例行任务 16 项 → **未落地 5**（Codex 滞后 20 天 / CodeArtsSpace 10 / Codearts IDE 9 / Openclaw 8 / **OfficeAce 2 天且报 completed** ← 假完成样本，其自述的 `commit 597709259` 在仓库中不存在）
+- **命令**：`npm run landing`（= `--scan --write-report`）；`--fail-on-lag N` 可作巡检门禁（退出码 1）
+- 依赖 multica ⇒ **仅维护者本机可算**；已接入每日汇总的运维视角（CI 环境自动跳过并说明）
+- 单测：`test/python/test_artifact_landing.py`（含「completed 但产物缺失必须判 NOT_LANDED」的回归）
+
+## 十三、接入方式与尚未接入项
 
 **已接入**：
-- 七条快捷命令：`npm run preflight` / `classify` / `clusters` / `remediate` / `candidates` / `consistency` / `links`。
+- 八条快捷命令：`npm run preflight` / `classify` / `clusters` / `remediate` / `candidates` / `consistency` / `links` / `landing`。
 - 前置探活联动：`python scripts/prepare_env.py --preflight`（客户端本就会跑的入口）。
 - 技能库索引：`skills/README.md` 能力地图第 7 项（`展开使命 <mission-id>`）。
 - 单测随 `npm run test:python` 跑（CI 覆盖，合计 134 例）：preflight(11) / classify(13) / clusters(9) /
