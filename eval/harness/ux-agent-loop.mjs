@@ -33,7 +33,7 @@ const csvPath = argv.find((a, i) => !a.startsWith('--') && argv[i - 1] !== '--mc
   || join(REPO, 'eval', 'prompts', 'eval-set-ux.csv');
 const MCP_SERVER = argOf('--mcp');
 const LIMIT = Number(argOf('--limit') || 0) || Infinity;
-const MODEL = argOf('--model') || 'deepseek-v4-flash-0731';
+const MODEL = argOf('--model') || 'deepseek-v4.1-flash-1017';
 const MAX_ROUNDS = Number(argOf('--max-rounds') || 8);
 const OUT_CSV = argOf('--out');
 const JSON_OUT = argOf('--json');

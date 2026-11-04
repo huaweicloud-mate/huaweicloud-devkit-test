@@ -54,7 +54,7 @@ node harness/run-bench.mjs t03-config-security-group --runs 3
 node harness/run-bench.mjs --all --runs 3
 
 # 自定义模型 / 指定 MCP
-node harness/run-bench.mjs t01 --runs 1 --model deepseek-v4-flash-0731
+node harness/run-bench.mjs t01 --runs 1 --model deepseek-v4.1-flash-1017
 BENCH_MCP_SERVER=/path/to/mcp-server.mjs node harness/run-bench.mjs t01 --runs 1
 
 # L2 只读真机用例（t21–t33：13 条 / 10 技能，零创建、无归零需求）

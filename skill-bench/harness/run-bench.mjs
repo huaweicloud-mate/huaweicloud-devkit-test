@@ -9,7 +9,7 @@
 // 用法:
 //   node harness/run-bench.mjs [task-id]               # 跑单个任务（默认 3 次采样）
 //   node harness/run-bench.mjs --all                   # 跑全部任务
-//   node harness/run-bench.mjs t01 --runs 5 --model deepseek-v4-flash-0731
+//   node harness/run-bench.mjs t01 --runs 5 --model deepseek-v4.1-flash-1017
 //   node harness/run-bench.mjs t01 --bare              # 裸模型对照（无 devkit）
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
