@@ -49,6 +49,8 @@ WHY = {
     'D4-14': "共享账号 VPC router 配额耗尽(VPC.0114 Quota exceeded for ['router']：并发/历史 E2E 泄漏 5 VPC)，CreateVpc 无法执行；CTS 审计 ListTraces 与审批流(D4-18/19/20)已此轮实测通过(补环境)",
     'D3-C1': "共享账号 VPC router 配额耗尽(VPC.0114)，ECS 生命周期 E2E 的 CreateVpc/CreateSubnet/CreateServers 无法执行，建删归零链路无法跑通；本轮无残留(补环境)",
     'D4-13': "只读 6/6=100% 可用(通过)；写操作 IAM 拒绝验证被 VPC router 配额(VPC.0114 Quota exceeded)预占，只读子账号写 CreateVpc 返回配额错误而非 403 权限拒绝，写权限拒绝无法判定(补环境，解除条件=共享账号 router 配额释放后复测)",
+    'D3-C2': "共享账号 hw018619646 账号被限制(write-only)：OBS 建桶返回 403 UserRestricted，obsutil 上传/ACL/静态站/删桶归零全链路 0/7 无法执行(补环境，账号余额/冻结状态异常，解除条件=维护方恢复账号资源创建权限)",
+    'D3-C7': "共享账号 op_restricted：EIP CreatePublicip 返回 VPC.0502 Tenant status is op_restricted(账号余额不足或冻结)，6/7 只读步骤通过、唯一步写(EIP 建删)被账号限制阻断(补环境，解除条件=维护方恢复账号 EIP 分配权限)",
     'D1-39': "Windows 升级检测链 EINVAL 专属(OS 列标注「专属」)，Linux 侧由 EXP-NR3-10 覆盖",
     'D1-70': "undici@8.12.3 在 Node v22.13.0(arm64) 导入即崩：lib/interceptor/decompress.js:78 createZstdDecompress(来自 node:zlib)为 undefined 致 .bind() 报 TypeError；且 import('node:undici') 非 Node22.13 内建模块→回退裸 undici 崩溃。代理功能(有代理时走 undici ProxyAgent)整体不可用，探针崩溃遗留 proxy.json 污染",
 }
@@ -57,7 +59,7 @@ FAIL = {'D2-4','D4-2','D4-21','D9-12','D4-4','D4-6','D4-17','D3-C4','D3-S5',
         'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18',
         'D1-70'}
 SPEC = {'D8-9','D9-9','D10-4'}
-BLOCKED = {'D3-C3','D3-C6','D3-S3','D4-14','D3-C1','D4-13'}
+BLOCKED = {'D3-C3','D3-C6','D3-S3','D4-14','D3-C1','D4-13','D3-C2','D3-C7'}
 NOT_RUN = {'D1-39'}
 
 # --- 证据来源映射：case -> (kind, logfile, section) ---
