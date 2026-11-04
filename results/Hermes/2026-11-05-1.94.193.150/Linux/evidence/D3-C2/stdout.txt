@@ -1,0 +1,34 @@
+
+### D3-C2 ###
+{
+  "case": "D3-C2",
+  "status": "FAIL",
+  "total": 4,
+  "passed": 0,
+  "failed": 4,
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": false,
+      "detail": "Start at 2026-11-04 21:12:19.468910659 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-3826739315] failed, status [403], error code [UserRestricted], error message [This operation is"
+    },
+    {
+      "name": "set静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":404,\"websiteUrl\":\"http://testbot3-hermes-obs-3826739315.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 404\"}"
+    },
+    {
+      "name": "get静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":404,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>NoSuchBucket</Code><Message>The specified bucket does not exist</Message><RequestId>000001A1A"
+    },
+    {
+      "name": "删桶归零",
+      "pass": false,
+      "detail": "Start at 2026-11-04 21:12:20.083026341 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-3826739315] failed, status [404], e"
+    }
+  ]
+}
+
+===== 本轮分类说明（账户受限，环境阻塞非产品缺陷） =====
+OBS mb 建桶被云端拒绝 403 UserRestricted 'This operation is forbidden for restricted users'，静态站/读/删全链路无法验证。此为账户受限(实名/额度)阻塞，判 BLOCKED(补环境)，非产品缺陷。
