@@ -1,0 +1,25 @@
+// D3-S6 每日测试探针（真实执行，SUT=hdk gitHead 8a6d8be2 (v1.1.13)）
+import { pathToFileURL } from 'node:url';
+import { writeFileSync, readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+const SRC = '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src';
+const CORE = '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
+const HDK = '/home/zhangshuang/devkit-test/Hermes/hdk';
+const OUT = '/home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/results/Hermes/2026-11-06-1.92.93.23/Linux/evidence/D3-S6/stdout.log';
+const _m = async (f) => await import(pathToFileURL(SRC + '/' + f).href);
+const executedAt = new Date().toISOString().replace(/[-:TZ.]/g,'').slice(0,14);
+const META = { case: 'D3-S6', assistant: 'Hermes(deepseek-v4-pro-0813)', os: 'Linux', sut: 'hdk gitHead 8a6d8be2 (v1.1.13)' };
+function finish(r) { const out = { ...META, status: r.status, why: r.why || '', actual: r.actual, executedAt };
+  writeFileSync(OUT, JSON.stringify(out, null, 2), 'utf8');
+  console.log('D3-S6 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
+
+async function run() {
+  const { callTool } = await _m('tools.mjs');
+  const r = await callTool('huaweicloud_service_catalog', { intent: "\u90e8\u7f72Python\u51fd\u6570\uff0c\u6bcf\u5929\u5b9a\u65f6\u6267\u884c" });
+  const svcs = Array.isArray(r?.recommendedServices) ? r.recommendedServices.map(String) : [];
+  const actual = svcs.join(', ');
+  const pass = actual.includes("FunctionGraph");
+  return { status: pass ? 'PASS' : 'FAIL', actual: actual.slice(0,180) };
+}
+
+run().then(finish).catch(e => finish({ status:'BLOCKED', why:String(e).slice(0,200), actual:String(e).slice(0,120) }));
