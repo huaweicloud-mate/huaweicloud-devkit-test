@@ -1,17 +1,10 @@
-OBS mb -> Start at 2026-11-04 21:11:48.039759944 +0000 UTC
-
-Create bucket [tctest-hermes-obs-mw2m3sq6] failed, status [403], error
+OBS mb -> success
 set 无 indexDocument -> __error=Error: indexDocument is required for action=set ok=undefined
-set indexDocument -> ok=false status=404
-get -> ok=false status=404
-OBS rm -f -> Start at 2026-11-04 21:11:48.51475288 +0000 UTC
-
-Delete bucket [tctest-hermes-obs-mw2m3sq6] failed, 
-[FAIL] OBS 建桶成功
+set indexDocument -> ok=true status=200
+get -> ok=true status=200
+OBS rm -f -> success
+[OK] OBS 建桶成功
 [OK] set 缺失 indexDocument 报错(拒绝)
-[FAIL] set 成功
-[FAIL] get 返回配置与 set 一致
-[FAIL] 删除归零
-
-===== 本轮分类说明（账户受限，环境阻塞非产品缺陷） =====
-OBS mb 建桶被云端拒绝 403 UserRestricted（参数校验 set 缺 indexDocument 通过），判 BLOCKED(补环境)。
+[OK] set 成功
+[OK] get 返回配置与 set 一致
+[OK] 删除归零

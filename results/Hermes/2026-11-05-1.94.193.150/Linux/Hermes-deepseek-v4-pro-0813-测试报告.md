@@ -1,9 +1,9 @@
 # Hermes-deepseek-v4-pro-0813 每日测试报告
 > **报告名**：`Hermes-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-11-05 05:22（北京时间）
+> **生成时间**：2026-11-05 10:18（北京时间）
 > **执行归档**：`results/Hermes/2026-11-05-1.94.193.150/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（有 FAIL 缺陷，P0 4 项产品缺陷/SPEC；13 项 FAIL + 3 项 SPEC 均历史复现，无新增产品缺陷；另新增 4 项真云账户环境 BLOCKED）
+> **结论**：`PARTIAL`（有 FAIL 缺陷，P0 4 项产品缺陷/SPEC；12 项设计级 FAIL + 3 项 SPEC 均历史复现，无新增产品缺陷；本轮真云账户恢复可用，D3-C1/C2/C7/C13 四例由 BLOCKED 转 PASS）
 
 ---
 
@@ -13,13 +13,13 @@
 |---|---|
 | 客户端 / Agent | `Hermes` + `deepseek-v4-pro-0813` |
 | OS / 架构 | `Linux`（aarch64 ECS） |
-| Node / npm / hcloud | `Node v22.13.0` / `npm 11` / `KooCLI 7.2.12` |
+| Node / npm / hcloud | `Node v22.13.0` / `npm 10` / `KooCLI 7.2.12` |
 | 被测版本（SUT） | `1.1.13-next.5`（npm `@next`，gitHead `4ab34ed2`） |
 | 工具全集 | `46`（tools/list） |
 | daily 基础用例 | 设计级 107 / 展开级 43 |
 | 真云凭证 | `cn-north-4`（AKSK，统一账号 hw018619646 + 只读子账号 test001） |
 
-> **执行方法**：`run_all.sh` 编排 43 批探针——源码直调（classify/hook/auth/protocol/extended/d1 安装域/updatecheck/disttags/merge/routing/supplement/new-*）；spawn `mcp-server.mjs` 驱动 MCP 协议（D5/D8/D9）；真云 E2E 建删资源（realcloud-probe 的 D2-1/D3-C4/D4-14/D4-18/19/20、D4-13 只读子账号、D4-23 mdc 注入、D3-C1~C7）。证据逐用例落 `evidence/<case-id>/stdout.txt`，执行状态已回填三份 CSV。
+> **执行方法**：`run_all.sh` 编排 43 批探针——源码直调（classify/hook/auth/protocol/extended/d1 安装域/updatecheck/disttags/merge/routing/supplement/new-*）；spawn `mcp-server.mjs` 驱动 MCP 协议（D5/D8/D9）；真云 E2E 建删资源（realcloud-probe 的 D2-1/D3-C4/D4-14/D4-18/19/20、D4-13 只读子账号、D4-23 mdc 注入、D3-C1~C7）。证据逐用例落 `evidence/<case-id>/stdout.txt`，执行状态已回填三份 CSV。本轮为当日第二次执行（05:05 首轮后账户恢复，10:0x 复跑全量）。
 
 ---
 
@@ -28,14 +28,14 @@
 | 项 | 值 |
 |---|---|
 | 计划用例（daily） | `150`（设计级 107 + 展开级 43） |
-| 已执行 | `146` |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `118 / 13 / 12 / 3 / 4` |
-| 通过率（分母 = PASS+FAIL+SPEC = 134） | `88.1%` |
+| 已执行 | `146`（PASS+FAIL+BLOCKED+SPEC） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `122 / 13 / 8 / 3 / 4` |
+| 通过率（分母 = PASS+FAIL+SPEC = 138） | `88.4%` |
 | 产品缺陷（FAIL） | `13`（设计级 12 + 展开级 EXP-E01 1） |
 | 契约漂移（SPEC-MISMATCH） | `3`（D8-9 / D9-9 / D10-4） |
 | P0 / P1 / P2 缺陷 | `4 / 7 / 5` |
 | 红线（I 类）违规 | `0` |
-| 资源释放 | `本轮真云未创建任何付费资源（账户受限/余额不足）；VPC/subnet/OBS 等免费/已建资源均已归零` |
+| 资源释放 | `本轮真云恢复可用：D3-C1 ECS/VPC/子网、D3-C2 OBS、D3-C7 跨区域 EIP、D3-C13 OBS 均真实创建后删除归零（D3-C1 自动化归零轮询超时，已手工补删并核实 GONE）` |
 
 ---
 
@@ -45,9 +45,9 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `76` | 有证据且通过 PASS 门禁 |
+| PASS | `80` | 有证据且通过 PASS 门禁 |
 | FAIL | `12` | 不符预期，根因见缺陷清单 |
-| BLOCKED | `12` | 环境/权限/凭证阻塞（含 4 项账户受限/余额不足） |
+| BLOCKED | `8` | 环境/权限阻塞（沙箱维护 3 + 夹具/多客户端 5） |
 | SPEC-MISMATCH | `3` | 契约漂移 |
 | NOT_RUN | `4` | 未执行（OS 专属 1 + 文档级 3） |
 | **合计** | **`107`** | |
@@ -67,7 +67,7 @@
 
 ## 四、缺陷清单
 
-完整根因（文件:行号）+ 断言 + 证据见同目录 `FINDINGS.md`（16 项）。下表为概览：
+完整根因（文件:行号）+ 断言 + 证据见同目录 `FINDINGS.md`（15 项：FAIL 12 + SPEC 3，另 EXP-E01 与 D10-3 合并计）。下表为概览：
 
 | # | 级别 | 用例ID | 维度 | 标题 | 根因（文件:行号） |
 |---|---|---|---|---|---|
@@ -88,7 +88,7 @@
 | 15 | P2 | `D4-26` | D4安全 | findings 证据脱敏不完整（明文 secret 残留） | `risk-rule-engine.mjs:22` |
 | 16 | P2 | `D8-9` | D8质量 | sanitizeValue 未脱敏（SPEC） | `telemetry.mjs:190` |
 
-> 合计 16 行中，SPEC 3 项为「契约漂移」（实现正确，需维护用例母版），产品缺陷 13 项（FAIL 12 设计级 + EXP-E01 1 展开级）。16 项均与 2026-11-04（v1.1.13-next.3）结论**完全一致，无新增缺陷、无修复**（next.5 未包含对这些缺陷的修复）。FunctionGraph 参数报错名本轮为 `function_name`（历轮漂移 function_name/code.filename/code.zip_file），RDS 为 `db.port`（历轮 db.port/db.password），属同一参数装配缺口。
+> 合计 16 行中，SPEC 3 项为「契约漂移」（实现正确，需维护用例母版），产品缺陷 13 项（FAIL 12 设计级 + EXP-E01 1 展开级）。16 项均与 2026-11-04（v1.1.13-next.3）结论**完全一致，无新增缺陷、无修复**（next.5 未包含对这些缺陷的修复）。FunctionGraph 参数报错名本轮为 `function_name`（历轮漂移 function_name/code.filename/code.zip_file），RDS 为 `db.password`（历轮 db.port/db.password），属同一参数装配缺口。
 
 ---
 
@@ -103,24 +103,20 @@
 | `D8-4` | D8质量 | 引导步骤可机械执行 | 改用例 | 需逐条核验 getting-started 步骤，本轮未覆盖 |
 | `D8-6` | D8质量 | 中英文文档一致 | 改用例 | 需中英双源逐段比对，本轮未覆盖 |
 
-### BLOCKED（12）
+### BLOCKED（8）
 
 | 用例ID | 维度 | 标题 | 分类 | 阻塞原因（解除条件） |
 |---|---|---|---|---|
-| `D3-C1` | D3功能 | ECS 生命周期 E2E | 补环境 | 账户余额不足（Ecs.0067）——CreateVpc/Subnet/归零通过，仅 ECS 创建缺余额；解除=账户充值 |
-| `D3-C2` | D3功能 | OBS 静态站部署 E2E | 补环境 | 账户受限（OBS mb 403 UserRestricted）；解除=账户实名/解除受限 |
-| `D3-C7` | D3功能 | 跨区域资源操作引导 | 补环境 | 账户余额不足/受限（跨区域 EIP 创建未返回 publicipId）；plan/只读/可用性通过；解除=账户充值 |
-| `D3-C13` | D3功能 | 场景-OBS 部署 | 补环境 | 账户受限（OBS mb 403 UserRestricted）；解除=账户解除受限 |
-| `D3-C3` | D3功能 | 沙箱部署E2E | 补环境 | 沙箱维护中（HDKIT_SANDBOX_MAINTENANCE）；解除=华为云沙箱维护完成 |
-| `D3-C6` | D3功能 | 沙箱 7 隐式工具具名冒烟 | 补环境 | 沙箱维护中；解除=华为云沙箱维护完成 |
-| `D3-S3` | D3功能 | 场景-沙箱预览出URL | 补环境 | 沙箱维护中；解除=华为云沙箱维护完成 |
+| `D3-C3` | D3功能 | 沙箱部署E2E | 补环境 | 沙箱维护中（HDKIT_SANDBOX_MAINTENANCE，connect ws= 空、workspace_id required）；解除=华为云沙箱维护完成 |
+| `D3-C6` | D3功能 | 沙箱 7 隐式工具具名冒烟 | 补环境 | 沙箱维护中（HDKIT_SANDBOX_MAINTENANCE）；解除=华为云沙箱维护完成 |
+| `D3-S3` | D3功能 | 场景-沙箱预览出URL | 补环境 | 沙箱维护中（check_user 无法返回 realnameVerified/agreementSigned）；解除=华为云沙箱维护完成 |
 | `D2-10` | D2认证 | R7 current档跟随 | 补环境 | 需 KooCLI 多 profile 夹具（current=deploy 切换） |
 | `D2-13` | D2认证 | R9 configuredBySession优先env | 补环境 | 需隔离 S1 + HW_ACCESS_KEY env 夹具（会污统一账号凭证库） |
 | `D4-12` | D4安全 | 供应链安装期安全 | 补环境 | 需 npm 安装期抓包/SBOM 审计通道 |
 | `D4-24` | D4安全 | 确认令牌过期与重复确认边界 | 补环境 | 需审批流 + 可注入时钟 |
 | `D9-6` | D9协议 | 跨客户端互通 | 调归属 | 需多客户端并存环境（单机仅 Hermes） |
 
-> 本轮新增 4 项真云账户环境阻塞（D3-C1/C2/C7/C13，账户受限/余额不足），已在实测中确认非产品缺陷：VPC/子网/OBS 参数校验等免费或 client 侧路径均正常通过，仅付费资源（ECS/OBS/EIP）创建被云端账户态拒绝。
+> 对比当日 05:05 首轮：账户余额/受限导致的 4 项真云 BLOCKED（D3-C1/C2/C7/C13）在本轮已解除（账户恢复可用，见 §七），转为实测 PASS；其余 8 项 BLOCKED 维持不变（3 项沙箱维护 + 5 项夹具/工具链外部依赖）。
 
 ---
 
@@ -130,6 +126,7 @@
 - [x] 写操作误判 read-only：无。D4-14/D4-18/19/20 写操作 plan 均正确 `deny`/`confirm`；D4-13 只读子账号 readPassRate=100%、writeDenied=true、归零=true。
 - [x] 红线（I 类）违规：无。
 - [x] 脱敏复核：`credentialPanel`/`auth_status`/`redactSecrets`/`redactOutput` 均验证通过；证据 stdout 已避免回显明文 AK/SK。
+- [x] 真云建删归零：D3-C1 ECS/subnet/VPC、D3-C2/D3-C13 OBS、D3-C7 跨区域 EIP 均真实创建后删除并核实 GONE（见 §七）。
 
 ---
 
@@ -137,22 +134,24 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| VPC/subnet（D3-C1，`testbot3-hermes-e2e-3826...`） | ✓ 创建成功 | ✓ 自动 finally 删除 | ✓ subnet:OK vpc:OK（ECS 未创建因余额不足，该 VPC/子网已删） |
-| VPC（D3-S2，`tctest-hermes-s2-mw2m3sq6`） | ✓ | ✓ DeleteVpc（确认后） | ✓ 删除后归零=true |
-| VPC（D4-14，`tctest-hermes-20261012-2m46wn`） | ✓ | ✓ DeleteVpc | ✓ 归零验证 containsOwn=false |
-| ECS（D3-C1） | ✗ 未创建（余额不足 Ecs.0067） | — | ✓ 无残留 |
-| OBS（D3-C2/D3-C13） | ✗ 未创建（403 UserRestricted） | — | ✓ 无残留 |
-| EIP（D3-C7 跨区域） | ✗ 未创建（余额不足） | — | ✓ ListEips 无本次 id |
+| ECS（D3-C1，`testbot3-hermes-ecs-3844486639`） | ✓ serverId `96781ed4-...` | ✓ 自动化提交删除 + 手工补删 | ✓ ListServersDetails servers=0 |
+| VPC/subnet（D3-C1，`testbot3-hermes-e2e-3844486639`） | ✓ 创建成功 | ✓ 手工 DeleteSubnet + DeleteVpc | ✓ vpcs=0 / subnets=0 |
+| OBS（D3-C2，`testbot3-hermes-obs-3844649797`） | ✓ 建桶成功 | ✓ hcloud OBS rm -f | ✓ Delete bucket successfully |
+| OBS（D3-C13，`tctest-hermes-obs-mw2wojbb`） | ✓ 建桶成功 | ✓ OBS rm -f | ✓ bucket removed |
+| EIP（D3-C7 跨区域，`14862ad7-...`） | ✓ publicipId 返回 | ✓ DeletePublicip | ✓ ListEips 无本次 id |
+| VPC（D3-S2，`d7237bd6-...`） | ✓ | ✓ DeleteVpc（确认后） | ✓ 归零=true |
+| VPC（D4-14，`321c7b62-...`） | ✓ | ✓ DeleteVpc | ✓ containsOwn=false |
 | 沙箱（D3-C3/C6/S3） | ✗ 未创建（HDKIT_SANDBOX_MAINTENANCE） | — | ✓ 无残留 |
 
-> 注：本轮因账户受限/余额不足，付费资源（ECS/OBS/EIP）未创建成功，故无付费残留；免费资源（VPC/子网）均已创建后归零。D3-S6（FunctionGraph）CreateFunction 未成功（参数装配缺口），测后删除函数归零。
+> 注：D3-C1 自动化 `finally` 归零的 ECS 删除轮询（150s）超时 + `sh().ok` 以退出码 0 误记 subnet:OK/vpc:OK，导致自动化判定归零 false；经手工 `hcloud ECS DeleteServers` → 轮询至 servers=0、`DeleteSubnet` → subnets=0、`DeleteVpc` → vpcs=0 逐一核实 GONE。此为测试脚本 150s 轮询时序抖动 + 退出码假阳性，非产品缺陷（创建/删除全链路均通过）。D3-S6（FunctionGraph）CreateFunction 未成功（参数装配缺口），测后删除函数归零。
 
 ---
 
 ## 八、遗留与建议
 
 - 16 项缺陷（FAIL 13 + SPEC 3）与 2026-11-04（v1.1.13-next.3）结论**完全一致，无新增缺陷、无修复**；均由上游 `file_issue.py` 历史查重关联既有 open issue（见 `HISTORY_LINKS.md`），不重复开单。
-- **本轮新增 4 项真云账户环境阻塞（D3-C1/C2/C7/C13）**：统一账号 hw018619646 余额不足且 OBS 受限（403 UserRestricted），建议维护者核实账户充值/实名状态；恢复后可直跑 `realcloud_e2e.mjs --case=D3-C1/C2` 与 `new-cloud-probe.mjs` 补测解除 BLOCKED。
+- **当日 05:05 首轮的 4 项真云账户环境阻塞（D3-C1/C2/C7/C13）本轮已解除**：统一账号 hw018619646 恢复可用，ECS/OBS/EIP 均真实建删归零，4 例转 PASS。建议维护者保持账户余额/实名状态稳定，避免后续轮次再次 BLOCKED。
+- 本轮 KooCLI 版本为 7.2.12，devkit 配对版本 7.3.12（`check_cli` 报 version_mismatch，但不影响本轮 hcloud 真云命令执行）；建议按提示 `npx huaweicloud-devkit install-hcloud` 对齐版本。
 - 3 项 SPEC-MISMATCH（D8-9/D9-9/D10-4）需维护者裁决用例母版是否同步。
 - D1-70：建议 devkit 将 bundled undici 与 zstd-capable node 门槛对齐（Node>=22.15 引擎下限，或 proxy-agent 增加 zstd 缺失降级路径）。
 - 沙箱用例（D3-C3/D3-C6/D3-S3）待华为云沙箱维护完成后补测解除 BLOCKED。

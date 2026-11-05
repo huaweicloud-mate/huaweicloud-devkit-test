@@ -1,0 +1,2423 @@
+[
+ {
+  "id": "D1-1",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "全新环境引导安装",
+  "prio": "P1",
+  "tools": "install",
+  "srcRef": "P: README Quick Start+nightly阶段0/1; 通: 生命周期必测全新安装"
+ },
+ {
+  "id": "D1-2",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "多Agent探测",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "P: README 'all of them'承诺"
+ },
+ {
+  "id": "D1-3",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "doctor健康自检",
+  "prio": "P1",
+  "tools": "doctor",
+  "srcRef": "P: README doctor 命令+自曝FAIL场景(权威契约)"
+ },
+ {
+  "id": "D1-4",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "status/update幂等",
+  "prio": "P2",
+  "tools": "status/update",
+  "srcRef": "P: README 'incremental...without touching your config'"
+ },
+ {
+  "id": "D1-5",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "uninstall干净度",
+  "prio": "P1",
+  "tools": "uninstall",
+  "srcRef": "P: README 大段卸载残留警示(官方承认风险)"
+ },
+ {
+  "id": "D1-6",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "install-hcloud",
+  "prio": "P2",
+  "tools": "install-hcloud",
+  "srcRef": "P: README安装命令; 标: AWS CLI版本前置检查惯例"
+ },
+ {
+  "id": "D1-7",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "OpenClaw插件流",
+  "prio": "P2",
+  "tools": "plugins",
+  "srcRef": "P: README双安装通道+特殊确认参数"
+ },
+ {
+  "id": "D1-8",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "通用MCP通道",
+  "prio": "P1",
+  "tools": "mcp-server",
+  "srcRef": "P: README Other Agents节; 标: Azure NPX包测试"
+ },
+ {
+  "id": "D1-9",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "重启生效语义",
+  "prio": "P1",
+  "tools": "install",
+  "srcRef": "P: README 9客户端逐一强调 restart"
+ },
+ {
+  "id": "D1-10",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "卸载全局清理(新flag)",
+  "prio": "P1",
+  "tools": "uninstall",
+  "srcRef": "仓: setup-cli.mjs promptGlobalCleanup+新flag; 通: 卸载完整性"
+ },
+ {
+  "id": "D1-11",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "自定义HCLOUD_BIN保留",
+  "prio": "P2",
+  "tools": "uninstall",
+  "srcRef": "仓: removeKooCli注释明确承诺(只动默认位置)"
+ },
+ {
+  "id": "D1-12",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "清理幂等归零",
+  "prio": "P1",
+  "tools": "uninstall",
+  "srcRef": "通: 幂等性"
+ },
+ {
+  "id": "D1-13",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "Windows文件锁下清理",
+  "prio": "P1",
+  "tools": "uninstall",
+  "srcRef": "仓: README Windows文件锁已知问题; 关联D5-6"
+ },
+ {
+  "id": "D1-14",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "copyFileVerified安装完整性",
+  "prio": "P1",
+  "tools": "install",
+  "srcRef": "仓: setup-cli.mjs copyFileVerified新增; 通: 安装完整性"
+ },
+ {
+  "id": "D1-15",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "checkForUpdate更新提示",
+  "prio": "P2",
+  "tools": "install/doctor",
+  "srcRef": "仓: setup-cli.mjs checkForUpdate新增"
+ },
+ {
+  "id": "D1-26",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "升级提醒工具注册与协议暴露",
+  "prio": "P1",
+  "tools": "check_update/upgrade",
+  "srcRef": "设: 设计文档 §MCP Tool 定义; 实: update-check.mjs"
+ },
+ {
+  "id": "D1-27",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "检测语义-已是最新",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §版本比对规则; 实: judgeUpdate"
+ },
+ {
+  "id": "D1-28",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "检测语义-有新版本",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §检测机制; 实: judgeUpdate"
+ },
+ {
+  "id": "D1-29",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "pre-release 用户提醒策略(文档vs实现差异)",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §版本比对规则 表; 实: determineTarget"
+ },
+ {
+  "id": "D1-30",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "semver 比对正确性",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "实: update-check.mjs semverParse/Compare"
+ },
+ {
+  "id": "D1-31",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "dismiss 冷却期",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §冷却机制; 实: writeSkipState/judgeUpdate"
+ },
+ {
+  "id": "D1-32",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "新版本>dismissedVersion 无视冷却",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §冷却机制; 实: judgeUpdate inCooldown"
+ },
+ {
+  "id": "D1-33",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "skip 文件持久化与多路径",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "实: skipFilePath/fallbackSkipFilePath/resolveSkipFilePath"
+ },
+ {
+  "id": "D1-34",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "check_failed 不阻塞正常调用",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §规避的风险 离线环境; 实: judgeUpdate"
+ },
+ {
+  "id": "D1-35",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "缓存 TTL 与失败节流",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "实: update-check.mjs TTL/FAIL_THROTTLE"
+ },
+ {
+  "id": "D1-36",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "首调用兜底提示（会话首个工具附加更新信息）",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "设: §检测机制 第二层; 实: mcp-protocol.dispatch(内部decorateResult)/update-check.applyUpdateHint"
+ },
+ {
+  "id": "D1-37",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "SKILL.md 会话启动指令存在性",
+  "prio": "P2",
+  "tools": "retrieve_skill",
+  "srcRef": "设: §检测机制 第一层"
+ },
+ {
+  "id": "D1-38",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "huaweicloud_upgrade 语义",
+  "prio": "P1",
+  "tools": "upgrade",
+  "srcRef": "设: §升级流程; 实: upgrade 实现"
+ },
+ {
+  "id": "D1-39",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "Windows 升级检测链可用性",
+  "prio": "P0",
+  "tools": "check_update",
+  "srcRef": "实: queryDistTagsSync; 关联 #554"
+ },
+ {
+  "id": "D1-40",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "镜像 lag 下检测正确性(反向提醒防护)",
+  "prio": "P0",
+  "tools": "check_update",
+  "srcRef": "关联 #518/#566; 实: queryDistTags 默认 registry"
+ },
+ {
+  "id": "D1-41",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "check_update 真实 MCP 返回契约",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §MCP Tool 定义; 实: mcp-protocol/tools.mjs"
+ },
+ {
+  "id": "D1-42",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "dismiss 真实闭环与跨调用持久化",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §冷却机制; 实: handleCheckUpdate/resolveSkipFilePath"
+ },
+ {
+  "id": "D1-43",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "dismiss 参数边界与失败语义",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §离线/冷却; 实: handleCheckUpdate/getUpdateDistTags"
+ },
+ {
+  "id": "D1-44",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "冷却边界与异常 skip 状态",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §冷却机制; 实: judgeUpdate/readSkipState"
+ },
+ {
+  "id": "D1-45",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "兜底提示真实序列与预热竞态",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §检测机制第二层; 实: mcp-protocol.dispatch(内部decorateResult)/mcp-server(内部updatePrewarm)"
+ },
+ {
+  "id": "D1-46",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "缓存 TTL 边界与查询异常恢复",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "实: getCachedUpdateInfo/cacheValid/failedAt/inflightQuery"
+ },
+ {
+  "id": "D1-47",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "缓存与当前版本解耦",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "实: getCachedUpdateInfo/judgeUpdate/lastHint"
+ },
+ {
+  "id": "D1-48",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "多 Agent 路径与多进程隔离",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §风险-多 agent 路径; 实: resolveSkipFilePath/cache/protocol state"
+ },
+ {
+  "id": "D1-49",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "upgrade handler 无更新与参数校验",
+  "prio": "P1",
+  "tools": "upgrade",
+  "srcRef": "设: §升级流程; 实: handleUpgrade/upgradePackage"
+ },
+ {
+  "id": "D1-50",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "upgrade 命令语义与目标选择",
+  "prio": "P1",
+  "tools": "upgrade",
+  "srcRef": "设: §升级流程; 实: upgradePackage"
+ },
+ {
+  "id": "D1-51",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "upgrade 失败恢复与副作用",
+  "prio": "P1",
+  "tools": "upgrade/check_update",
+  "srcRef": "设: §风险-权限/离线; 实: upgradePackage/invalidateUpdateCache"
+ },
+ {
+  "id": "D1-52",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "真实升级安装与重启生效",
+  "prio": "P1",
+  "tools": "upgrade",
+  "srcRef": "设: §升级流程/重启语义; 实: upgradePackage/setup-cli"
+ },
+ {
+  "id": "D1-53",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "镜像滞后确定性夹具",
+  "prio": "P1",
+  "tools": "check_update",
+  "srcRef": "设: §版本比对/风险-镜像; 实: queryDistTags/parseDistTagsOutput"
+ },
+ {
+  "id": "D1-54",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "Hermes 会话级用户闭环",
+  "prio": "P1",
+  "tools": "check_update/upgrade",
+  "srcRef": "设: §第一层 Skills 驱动; 实: SKILL.md + MCP tools"
+ },
+ {
+  "id": "D1-55",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "多会话提示隔离",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "设: §会话级检测; 实: mcp-protocol 模块状态/remote server"
+ },
+ {
+  "id": "D1-56",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "安装中断恢复（网络/进程中断后半装补全）",
+  "prio": "P1",
+  "tools": "install/doctor",
+  "srcRef": "通: 生命周期中断恢复; 关联 D1-5/D1-13 残留族; R11 补强: 判定清单固定3项+40工具枚举断言+幂等mtime/size"
+ },
+ {
+  "id": "D1-57",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "升级坏版本回滚（装坏可退）",
+  "prio": "P1",
+  "tools": "upgrade/check_update",
+  "srcRef": "通: 升级失败回滚标准实践; 关联 D1-51; R11 补强: 错误码EREPO_BAD_TARBALL+回滚锚点+缓存digest断言"
+ },
+ {
+  "id": "D1-58",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "通用 MCP 白名单接入（Claude/Cursor merge 语义）",
+  "prio": "P1",
+  "tools": "install",
+  "srcRef": "ITER-005 P2 系列回填; 关联 D1-8 通用MCP通道; 标: 非目录agent白名单接入"
+ },
+ {
+  "id": "D1-59",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "SKIP_UPDATE 环境变量跳过升级检测",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "实: update-check.judgeUpdate(111)/getCachedUpdateInfo(297)"
+ },
+ {
+  "id": "D1-60",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "HTTP 查询路径与自定义 registry（fetch 版）",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "实: update-check.queryDistTagsFetch(198)/proxy-agent.fetchWithProxy"
+ },
+ {
+  "id": "D1-61",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "升级重启文案 officeace 分支",
+  "prio": "P2",
+  "tools": "upgrade",
+  "srcRef": "实: update-check.restartMessage(353)/upgradePackage"
+ },
+ {
+  "id": "D1-62",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "未覆盖 CLI 子命令 reinstall/proxy/version",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "仓: setup-cli.mjs case reinstall(4966)/proxy(4983)/version(4986)"
+ },
+ {
+  "id": "D1-63",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "安装版本读取双回退",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "实: update-check.readInstalledVersion(134)"
+ },
+ {
+  "id": "D1-64",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "agent 自动检测匹配与版本",
+  "prio": "P2",
+  "tools": "mcp-server",
+  "srcRef": "实: agent-registry.matchAgent(168)/detectVersion(328)/AGENTS(23); agent-detect.detectAgent(15)"
+ },
+ {
+  "id": "D1-65",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "调试模式环境变量",
+  "prio": "P2",
+  "tools": "check_update",
+  "srcRef": "实: update-check.mjs(211)/telemetry.mjs(81) DEBUG 判断"
+ },
+ {
+  "id": "D1-66",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "遥测开关与端点环境变量",
+  "prio": "P2",
+  "tools": "mcp-server",
+  "srcRef": "实: telemetry.isTelemetryEnabled(175)/endpoint(180)/mcp-server(32)"
+ },
+ {
+  "id": "D1-67",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "Agent toolkit 模式与 DSH 跳过安装环境变量",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "实: setup-cli.mjs(249/2193)/mcp-config-merge.mjs(95)"
+ },
+ {
+  "id": "D1-68",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "图标离线与区域环境变量",
+  "prio": "P2",
+  "tools": "get_service_icon/auth_init",
+  "srcRef": "实: icon-library.mjs(52)/credentials.mjs(133/261/284)"
+ },
+ {
+  "id": "D1-69",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "CLI help 子命令",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "实: setup-cli.mjs case 'help'(5062)"
+ },
+ {
+  "id": "D1-70",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "代理配置与 WebSocket 代理",
+  "prio": "P1",
+  "tools": "install",
+  "srcRef": "实: proxy-config.getProxySettings(60)/writeProxyConfig(23)/clearProxyConfig(35); proxy-agent.createProxyWebSocket(52)/getWebSocketImpl(73)/getProxyDispatcher(26)"
+ },
+ {
+  "id": "D1-71",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "sandbox_expose_tunnel 沙箱隧道暴露",
+  "prio": "P1",
+  "tools": "sandbox_expose_tunnel",
+  "srcRef": "实: sandbox/session-manager.mjs(1307) exposeTunnel; tools.mjs(741) huaweicloud_sandbox_expose_tunnel"
+ },
+ {
+  "id": "D1-72",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "competition_voucher_claim 激励代金券领取",
+  "prio": "P1",
+  "tools": "competition_voucher_claim",
+  "srcRef": "实: sandbox/hdkitservice-api.mjs(151) hdkitCompetitionVoucherClaim; tools.mjs(861) huaweicloud_competition_voucher_claim"
+ },
+ {
+  "id": "D1-73",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "HUAWEICLOUD_DEVKIT_SKIP_OFFICEACE_DETECT 跳过 OfficeAce 探测",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "实: setup-cli.mjs(209) officeaceCapabilitiesDir; #654"
+ },
+ {
+  "id": "D1-74",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "HUAWEICLOUD_INJECT_STS_CMD 控制 STS 命令注入",
+  "prio": "P1",
+  "tools": "auth/run_approved_command",
+  "srcRef": "实: hcloud-cli.mjs(307) resolveStsInjectArgs(300)"
+ },
+ {
+  "id": "D1-75",
+  "level": "design",
+  "dim": "D1安装",
+  "title": "HUAWEICLOUD_SKIP_HCLOUD_PREINSTALL 跳过 KooCLI 预装",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "实: preflight.mjs(87) maybePreinstallKooCli(85)/resolvePreinstallCliEntry(72); mcp-server.mjs(60)"
+ },
+ {
+  "id": "D2-8",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "credentials变更后auth回归",
+  "prio": "P1",
+  "tools": "huaweicloud_auth_init/auth_status",
+  "srcRef": "仓: credentials.mjs +29行变更带来回归风险"
+ },
+ {
+  "id": "D2-9",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "reconcile幂等(一致态零写)",
+  "prio": "P1",
+  "tools": "auth_status",
+  "srcRef": "方: 《AK/SK 架构方案v4》reconcile 幂等段; NR2-001"
+ },
+ {
+  "id": "D2-10",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "R7 current档跟随",
+  "prio": "P1",
+  "tools": "auth_status",
+  "srcRef": "方: §五 R7; NR2-002"
+ },
+ {
+  "id": "D2-11",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "R3 STS token拒绝落盘",
+  "prio": "P0",
+  "tools": "auth_switch",
+  "srcRef": "方: §五 R3; NR2-003"
+ },
+ {
+  "id": "D2-12",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "R10 runtime非空禁止落盘",
+  "prio": "P1",
+  "tools": "huaweicloud_auth_init/auth_status/auth_sync",
+  "srcRef": "方: §五 R10; NR2-004"
+ },
+ {
+  "id": "D2-13",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "R9 configuredBySession优先env",
+  "prio": "P1",
+  "tools": "auth_status",
+  "srcRef": "方: §五 R9; NR2-005"
+ },
+ {
+  "id": "D2-14",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "R2 冲突交互仲裁(confirmToken)",
+  "prio": "P1",
+  "tools": "auth_switch/auth_confirm",
+  "srcRef": "方: §五 R2; NR2-006"
+ },
+ {
+  "id": "D2-15",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "auth_switch行为矩阵抽查",
+  "prio": "P1",
+  "tools": "auth_switch/auth_status",
+  "srcRef": "方: 《AK/SK 架构方案v4》行为矩阵; NR2-007"
+ },
+ {
+  "id": "D2-16",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "import文件读取后擦除",
+  "prio": "P1",
+  "tools": "auth_switch",
+  "srcRef": "方: auth_switch import 语义; NR2-008"
+ },
+ {
+  "id": "D2-17",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "cmdAuthReconcile非TTY守卫",
+  "prio": "P1",
+  "tools": "auth reconcile",
+  "srcRef": "方: 方案 T3 非 TTY 守卫; NR2-009"
+ },
+ {
+  "id": "D2-18",
+  "level": "design",
+  "dim": "D2认证",
+  "title": ".last_sync mtime手动改动检测",
+  "prio": "P1",
+  "tools": "auth_status",
+  "srcRef": "方: §五 R2/R4; NR2-010"
+ },
+ {
+  "id": "D2-19",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "命名档只审计不自动动(R5)",
+  "prio": "P1",
+  "tools": "auth_status",
+  "srcRef": "方: §五 R5; NR2-011"
+ },
+ {
+  "id": "D2-20",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "HUAWEICLOUD_HOME重定向(R6)",
+  "prio": "P2",
+  "tools": "auth_status",
+  "srcRef": "方: §九 T1 断言3; NR2-012"
+ },
+ {
+  "id": "D2-21",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "AK/SK 轮换后 auth_status 正确感知（凭证状态维度）",
+  "prio": "P1",
+  "tools": "huaweicloud_auth_init/auth_status/auth_sync",
+  "srcRef": "方: §五 R2/R4; 关联 AK-FP-1; R11 补强: sha256指纹算法+30s轮询+三指纹断言"
+ },
+ {
+  "id": "D4-18",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "confirm-not-deny审批语义",
+  "prio": "P0",
+  "tools": "plan_cli_command",
+  "srcRef": "仓: issue-443修复+fix/issue-443-confirm-not-deny分支+test/issue-443-fix.test.mjs"
+ },
+ {
+  "id": "D4-19",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "确认流下预检仍生效",
+  "prio": "P0",
+  "tools": "hook_check_command/hook_check_artifacts/hook_check_deploy_plan",
+  "srcRef": "仓: fix/issue-443-preflight-b1b2分支(双修复)"
+ },
+ {
+  "id": "D4-20",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "拒绝后零操作",
+  "prio": "P1",
+  "tools": "run_approved_command",
+  "srcRef": "通: 负向路径; 仓: confirm杜绝误执行意图"
+ },
+ {
+  "id": "D2-1",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "auth init三端同步",
+  "prio": "P1",
+  "tools": "huaweicloud_auth_init",
+  "srcRef": "P: README 'Synchronizes AK/SK to KooCLI, OBS, and sandbox APIs in one step'"
+ },
+ {
+  "id": "D2-2",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "auth status判定准确性",
+  "prio": "P2",
+  "tools": "auth_status",
+  "srcRef": "P: tools.mjs注册; 通: 组合枚举"
+ },
+ {
+  "id": "D2-3",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "auth sync幂等",
+  "prio": "P2",
+  "tools": "auth_sync",
+  "srcRef": "通: 凭证同步幂等经典风险"
+ },
+ {
+  "id": "D2-4",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "凭证脱敏正确性",
+  "prio": "P0",
+  "tools": "show_profile_redacted",
+  "srcRef": "P: safety-model自动脱敏; nightly铁律3"
+ },
+ {
+  "id": "D2-5",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "凭证缺失报错指引",
+  "prio": "P1",
+  "tools": "huaweicloud_auth_init/auth_status",
+  "srcRef": "通: 负向路径; nightly铁律2 缺口即记录"
+ },
+ {
+  "id": "D2-6",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "OBS独立配置引导",
+  "prio": "P1",
+  "tools": "setup_obs_config",
+  "srcRef": "仓: nightly G14历史缺口(必须回归)"
+ },
+ {
+  "id": "D2-7",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "无凭证降级",
+  "prio": "P2",
+  "tools": "search_docs/service_catalog/list_regions/retrieve_skill",
+  "srcRef": "标: AWS无凭证docs检索承诺"
+ },
+ {
+  "id": "D2-22",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "CodeArts 上下文凭证读取",
+  "prio": "P2",
+  "tools": "auth_status",
+  "srcRef": "实: credentials.readCodeArtsCredentials(182)/resolveCredentials(107)"
+ },
+ {
+  "id": "D2-23",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "agent 注册状态",
+  "prio": "P2",
+  "tools": "auth_status",
+  "srcRef": "实: agent-registration.getAgentRegistrationStatuses(223)/SUPPORTED_AGENT_TARGETS(7)"
+ },
+ {
+  "id": "D2-24",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "auth 同步 projectId 自动解析",
+  "prio": "P2",
+  "tools": "auth_sync",
+  "srcRef": "实: project-id.resolveAndApplyProjectId(33); service.syncAuth(105)"
+ },
+ {
+  "id": "D2-25",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "KooCLI 探测状态分类",
+  "prio": "P2",
+  "tools": "auth_status",
+  "srcRef": "实: hcloud-probe.classifyHcloudProbe(55)/findHcloudBin(11)/hcloudProbeNextStep(138)"
+ },
+ {
+  "id": "D2-26",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "凭证备份与恢复",
+  "prio": "P1",
+  "tools": "huaweicloud_auth_sync",
+  "srcRef": "实: credentials.backupGlobalCredentials(350)/restoreGlobalCredentialsBackup(363)"
+ },
+ {
+  "id": "D2-27",
+  "level": "design",
+  "dim": "D2认证",
+  "title": "KooCLI 版本管理",
+  "prio": "P2",
+  "tools": "auth_status",
+  "srcRef": "实: koocli-version.getKooCliVersion(12)/parseHcloudVersion(21)/compareVersion(27)/kooCliDownloadBase(45)/KOO_CLI_BASE(8)"
+ },
+ {
+  "id": "D3-A1",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "skill检索完整性",
+  "prio": "P1",
+  "tools": "retrieve_skill/search_docs",
+  "srcRef": "P: 工具描述'complete skill content'; 源码SKILL.md清单"
+ },
+ {
+  "id": "D3-A2",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "触发词路由准确",
+  "prio": "P1",
+  "tools": "retrieve_skill",
+  "srcRef": "标: Microsoft 描述即选择依据; 仓: description/triggers"
+ },
+ {
+  "id": "D3-A3",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "沙箱vs生产路由",
+  "prio": "P1",
+  "tools": "service_catalog",
+  "srcRef": "P: capability-discovery Scenario Routing表"
+ },
+ {
+  "id": "D3-A4",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "区域意图提取",
+  "prio": "P2",
+  "tools": "list_regions",
+  "srcRef": "P: Region Intent规则; nightly铁律1"
+ },
+ {
+  "id": "D3-A5",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "元数据正确性",
+  "prio": "P2",
+  "tools": "service_catalog/list_regions/get_regional_availability",
+  "srcRef": "标: Azure Live tests元数据验证"
+ },
+ {
+  "id": "D3-A6",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "市场/图标检索质量",
+  "prio": "P2",
+  "tools": "search_marketplace/get_service_icon",
+  "srcRef": "P: icons-manifest.v1.json数据源"
+ },
+ {
+  "id": "D3-B1",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "list_operations规范名",
+  "prio": "P2",
+  "tools": "list_operations",
+  "srcRef": "P: capability-discovery规则5"
+ },
+ {
+  "id": "D3-B2",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "plan命令质量",
+  "prio": "P1",
+  "tools": "plan_cli_command",
+  "srcRef": "P: safety-model默认写路径(命令质量=审批可行性)"
+ },
+ {
+  "id": "D3-B3",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "run_readonly脱敏执行",
+  "prio": "P1",
+  "tools": "run_readonly_command",
+  "srcRef": "P: tools.mjs描述redact承诺"
+ },
+ {
+  "id": "D3-B4",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "explain_error可执行",
+  "prio": "P2",
+  "tools": "explain_error",
+  "srcRef": "标: Microsoft 恢复路径要求; 仓: nightly场景C冒烟项"
+ },
+ {
+  "id": "D3-B5",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "detect_framework识别",
+  "prio": "P2",
+  "tools": "detect_framework",
+  "srcRef": "P: 工具描述枚举; 注:工具描述列11框架,源码FRAMEWORKS实为13框架+monorepo(漏Static Site) + 既有单测契约"
+ },
+ {
+  "id": "D3-B6",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "search_docs命中率",
+  "prio": "P2",
+  "tools": "search_docs",
+  "srcRef": "标: AWS docs检索定位; 仓: 工具描述覆盖API参数/配额/限制"
+ },
+ {
+  "id": "D3-C1",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "ECS生命周期E2E",
+  "prio": "P1",
+  "tools": "plan_cli_command/run_approved_command",
+  "srcRef": "P: nightly场景A原样复用"
+ },
+ {
+  "id": "D3-C2",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "OBS静态站部署E2E",
+  "prio": "P1",
+  "tools": "obs_set_website_config/setup_obs_config",
+  "srcRef": "P: nightly场景B原样复用(含踩坑点)"
+ },
+ {
+  "id": "D3-C3",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "沙箱部署E2E",
+  "prio": "P1",
+  "tools": "sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_close_session/sandbox_upload_file/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_check_user/sandbox_sign_agreement/sandbox_connect/sandbox_credentials",
+  "srcRef": "P: README ~8h承诺; 沙箱11工具最大域"
+ },
+ {
+  "id": "D3-C4",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "服务创建类回归",
+  "prio": "P1",
+  "tools": "plan_cli_command/run_approved_command",
+  "srcRef": "P: 20+服务承诺; 标: Azure按service分域"
+ },
+ {
+  "id": "D3-C5",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "工具冒烟",
+  "prio": "P1",
+  "tools": "check_cli/list_operations/plan_cli_command/explain_error",
+  "srcRef": "P: nightly场景C原样复用"
+ },
+ {
+  "id": "D3-B7",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "run_approved_command 审批后执行闭环",
+  "prio": "P1",
+  "tools": "plan_cli_command/run_approved_command",
+  "srcRef": "safety-model 默认写路径（补自 G1）"
+ },
+ {
+  "id": "D3-B8",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "voucher_status 状态查询（领券状态读取）",
+  "prio": "P1",
+  "tools": "voucher_status/voucher_claim",
+  "srcRef": "voucher skill 契约（补自 G1）"
+ },
+ {
+  "id": "D3-C6",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/upload_file/close_session/deploy_check）",
+  "prio": "P1",
+  "tools": "sandbox_check_user/sandbox_credentials/sandbox_sign_agreement/sandbox_upload_file/sandbox_exec_one_shot/sandbox_deploy_check/sandbox_close_session",
+  "srcRef": "沙箱 11 工具最大域（补自 G1）"
+ },
+ {
+  "id": "D3-C7",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "跨区域资源操作引导（区域维度）",
+  "prio": "P1",
+  "tools": "plan_cli_command/list_regions/get_regional_availability",
+  "srcRef": "标: Azure 按 region 分域; 关联 D3-A5; R11 补强: 错误码精确枚举Ecs.0021/0200+清理归零"
+ },
+ {
+  "id": "D3-C8",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "企业项目（enterprise_project_id）参数支持（项目维度）",
+  "prio": "P1",
+  "tools": "plan_cli_command/list_operations",
+  "srcRef": "标: Azure resource group 分域; 通: 项目级隔离参数必测; R11 补强: 命令+查询双字段精确断言"
+ },
+ {
+  "id": "D3-C9",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "资源不存在/已删除/冻结状态操作引导（资源状态维度）",
+  "prio": "P1",
+  "tools": "explain_error/run_readonly_command",
+  "srcRef": "通: 资源状态矩阵(found/deleted/frozen)负向路径; 关联 D3-B4; R11 补强: 错误码固定APIGW.0101/EVS.5400+fixture schema"
+ },
+ {
+  "id": "D3-C10",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "市场分类列表",
+  "prio": "P2",
+  "tools": "search_marketplace",
+  "srcRef": "实: search-market.getMarketplaceCategories(206)/searchMarketplace(155)"
+ },
+ {
+  "id": "D3-C11",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "沙箱凭证注入前 IAM 验证",
+  "prio": "P2",
+  "tools": "sandbox_connect",
+  "srcRef": "实: credential-validator.validateIamCredentials(90); tools sandbox 注入(1400)"
+ },
+ {
+  "id": "D3-C12",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "沙箱批量关闭与分块上传参数",
+  "prio": "P2",
+  "tools": "sandbox_close_session/sandbox_upload_project",
+  "srcRef": "实: session-manager.closeAllSessions(1054)/splitBase64Chunks(175)/UPLOAD_CHUNK_SIZE(169)"
+ },
+ {
+  "id": "D3-C13",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "OBS 静态网站托管配置",
+  "prio": "P1",
+  "tools": "huaweicloud_obs_set_website_config",
+  "srcRef": "实: tools.handleObsWebsiteConfig(2303)/obsSignedRequest"
+ },
+ {
+  "id": "D3-C14",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "沙箱 HDKit 服务参数与 hwlink 凭证",
+  "prio": "P2",
+  "tools": "sandbox_connect/sandbox_credentials",
+  "srcRef": "实: hdkitservice-api.hdkitConnect(90)/hdkitCredentials(101); hwlink-api.getCredentials(80)/createConnection(122)"
+ },
+ {
+  "id": "D3-S1",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "场景-只读查ECS(带不改约束)",
+  "prio": "P1",
+  "tools": "service_catalog/run_readonly_command",
+  "srcRef": "实: tools.serviceCatalog(1776) routeMap ecs; run_readonly_command"
+ },
+ {
+  "id": "D3-S2",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "场景-删VPC先确认",
+  "prio": "P1",
+  "tools": "plan_cli_command/hook_check_command/run_approved_command",
+  "srcRef": "实: plan_cli_command/hook_check_command/run_approved_command; serviceCatalog vpc 路由"
+ },
+ {
+  "id": "D3-S3",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "场景-沙箱预览出URL",
+  "prio": "P1",
+  "tools": "sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_close_session",
+  "srcRef": "实: sandbox 工具链; capability-discovery Scenario Routing 沙箱优先"
+ },
+ {
+  "id": "D3-S4",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "场景-领券闭环",
+  "prio": "P1",
+  "tools": "voucher_status/voucher_claim",
+  "srcRef": "实: tools hdkitVoucherStatus/hdkitVoucherClaim"
+ },
+ {
+  "id": "D3-S5",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "场景-复合意图分层路由",
+  "prio": "P2",
+  "tools": "service_catalog",
+  "srcRef": "实: serviceCatalog routeMap + capability-discovery Scenario Routing"
+ },
+ {
+  "id": "D3-S6",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "场景-FunctionGraph定时任务",
+  "prio": "P2",
+  "tools": "plan_cli_command/run_approved_command",
+  "srcRef": "实: serviceCatalog functiongraph 路由; hcloud-cli FunctionGraph CreateFunction"
+ },
+ {
+  "id": "D3-S7",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "场景-跨服务交付(Web应用+RDS)并归零",
+  "prio": "P1",
+  "tools": "sandbox_connect/sandbox_deploy_nginx/plan_cli_command/run_approved_command",
+  "srcRef": "实: serviceCatalog 多路命中 + capability-discovery Scenario Routing; RDS/sandbox 工具链"
+ },
+ {
+  "id": "D3-S8",
+  "level": "design",
+  "dim": "D3功能",
+  "title": "场景-操作失败后排障指引",
+  "prio": "P1",
+  "tools": "explain_error/run_readonly_command",
+  "srcRef": "实: tools.explain_error(363)/extractApiError(559); huaweicloud-troubleshooting workflow"
+ },
+ {
+  "id": "D4-1",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "凭证文件读取拦截",
+  "prio": "P0",
+  "tools": "hook_check_command",
+  "srcRef": "P: safety-model Blocked#1"
+ },
+ {
+  "id": "D4-2",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "凭证env打印拦截",
+  "prio": "P0",
+  "tools": "hook_check_command",
+  "srcRef": "P: safety-model Blocked#2"
+ },
+ {
+  "id": "D4-3",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "明文secret API拦截",
+  "prio": "P0",
+  "tools": "hook_check_command",
+  "srcRef": "P: safety-model Blocked#3"
+ },
+ {
+  "id": "D4-4",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "写操作审批门",
+  "prio": "P1",
+  "tools": "plan_cli_command",
+  "srcRef": "P: safety-model写动词清单(测试oracle)"
+ },
+ {
+  "id": "D4-5",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "写操作误判检测",
+  "prio": "P0",
+  "tools": "plan_cli_command",
+  "srcRef": "P: nightly铁律4; 标: AWS IAM condition防线穿透"
+ },
+ {
+  "id": "D4-6",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "adminPass回显警告",
+  "prio": "P1",
+  "tools": "hook_check_command",
+  "srcRef": "P: safety-model#5"
+ },
+ {
+  "id": "D4-7",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "hook三工具有效性",
+  "prio": "P1",
+  "tools": "hook_check_command/hook_check_artifacts/hook_check_deploy_plan",
+  "srcRef": "P: safety-model Enforcement节"
+ },
+ {
+  "id": "D4-8",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "Python/Node策略一致",
+  "prio": "P1",
+  "tools": "hook_check_command/hook_check_artifacts/hook_check_deploy_plan",
+  "srcRef": "P: architecture L5 aligned承诺"
+ },
+ {
+  "id": "D4-9",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "公开暴露/破坏性预检",
+  "prio": "P0",
+  "tools": "hook_check_command/hook_check_artifacts/hook_check_deploy_plan",
+  "srcRef": "P: safety-model pre-execution checks"
+ },
+ {
+  "id": "D4-10",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "规则库新增回归",
+  "prio": "P2",
+  "tools": "hook_check_command/hook_check_artifacts/hook_check_deploy_plan",
+  "srcRef": "通: 规则引擎回归标准实践"
+ },
+ {
+  "id": "D4-11",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "提示注入防护",
+  "prio": "P1",
+  "tools": "search_docs/retrieve_skill/search_marketplace/get_service_icon",
+  "srcRef": "标: Microsoft MCP安全指南; 通: OWASP LLM Top1"
+ },
+ {
+  "id": "D4-12",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "供应链安装期安全",
+  "prio": "P2",
+  "tools": "npm",
+  "srcRef": "P: package.json有postinstall; 标: Azure质量门"
+ },
+ {
+  "id": "D4-13",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "最小权限凭证通过率",
+  "prio": "P1",
+  "tools": "run_readonly_command",
+  "srcRef": "标: AWS condition key; 仓: 非目标声明实测"
+ },
+ {
+  "id": "D4-14",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "操作可审计性",
+  "prio": "P2",
+  "tools": "run_readonly_command",
+  "srcRef": "标: AWS CloudTrail审计区分"
+ },
+ {
+  "id": "D4-15",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "hook绕过尝试",
+  "prio": "P0",
+  "tools": "hook_check_command",
+  "srcRef": "通: 对抗性测试; 仓: risk-rule-engine规则盲区"
+ },
+ {
+  "id": "D4-16",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "命令包裹穿透",
+  "prio": "P0",
+  "tools": "hook_check_command",
+  "srcRef": "标: AWS/Azure命令包装绕过用例"
+ },
+ {
+  "id": "D4-17",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "hook模糊fail-closed",
+  "prio": "P1",
+  "tools": "hook_check_command/hook_check_artifacts/hook_check_deploy_plan",
+  "srcRef": "通: 模糊测试+fail-closed"
+ },
+ {
+  "id": "D4-21",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "hook_check_artifacts 具名回归（代码/IaC/策略制品预检）",
+  "prio": "P0",
+  "tools": "hook_check_artifacts",
+  "srcRef": "hook 三工具盲区补齐（补自 G1）"
+ },
+ {
+  "id": "D4-22",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "hook_check_deploy_plan 具名回归（部署计划预检）",
+  "prio": "P0",
+  "tools": "hook_check_deploy_plan",
+  "srcRef": "hook 三工具盲区补齐（补自 G1）"
+ },
+ {
+  "id": "D4-23",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）",
+  "prio": "P0",
+  "tools": "install",
+  "srcRef": "agent-rules 注入契约（补自 G6，关联 P1-2）"
+ },
+ {
+  "id": "D4-24",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "确认令牌过期与重复确认边界（审批流健壮性）",
+  "prio": "P1",
+  "tools": "auth_confirm/plan_cli_command",
+  "srcRef": "通: 令牌过期/重放防护; 关联 D2-14; R11 补强: 精确响应JSON字段CONFIRM_TOKEN_EXPIRED/already_processed"
+ },
+ {
+  "id": "D4-25",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "Python hook 事件遥测分类",
+  "prio": "P2",
+  "tools": "hook_check_command",
+  "srcRef": "实: huaweicloud-safety.py record_cli_event(85)/HOOK_EVENTS_PATH"
+ },
+ {
+  "id": "D4-26",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "findings 证据脱敏",
+  "prio": "P2",
+  "tools": "hook_check_command",
+  "srcRef": "实: risk-rule-engine.redactEvidence(19)"
+ },
+ {
+  "id": "D4-27",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "双路径输出脱敏",
+  "prio": "P1",
+  "tools": "run_readonly_command",
+  "srcRef": "实: safety-policy.redactSecrets(49)/hcloud-cli.redactOutput(587)"
+ },
+ {
+  "id": "D4-28",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "Node 版安全 hook 链路",
+  "prio": "P0",
+  "tools": "hook_check_command",
+  "srcRef": "实: hooks/huaweicloud-safety.mjs commandText/deny; safety-policy.classifyTextCommand(384)"
+ },
+ {
+  "id": "D4-29",
+  "level": "design",
+  "dim": "D4安全",
+  "title": "分类断言与原始命令分类入口",
+  "prio": "P2",
+  "tools": "hook_check_command",
+  "srcRef": "实: safety-policy.classifyRawCommand(=classifyTextCommand 384)/assertAllowed(451)"
+ },
+ {
+  "id": "D5-1",
+  "level": "design",
+  "dim": "D5客户端",
+  "title": "清单发现加载",
+  "prio": "P1",
+  "tools": "install",
+  "srcRef": "P: architecture L1可发现性承诺; 标: AWS first-class setup"
+ },
+ {
+  "id": "D5-2",
+  "level": "design",
+  "dim": "D5客户端",
+  "title": "install落点正确",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "P: README落点契约"
+ },
+ {
+  "id": "D5-3",
+  "level": "design",
+  "dim": "D5客户端",
+  "title": "工具全量枚举",
+  "prio": "P1",
+  "tools": "mcp-server",
+  "srcRef": "标: Azure全MCP协议测试; 仓: tools.mjs基线"
+ },
+ {
+  "id": "D5-4",
+  "level": "design",
+  "dim": "D5客户端",
+  "title": "hook支持差异",
+  "prio": "P2",
+  "tools": "hook_check_command",
+  "srcRef": "P: architecture L4 'on platforms that support them'"
+ },
+ {
+  "id": "D5-5",
+  "level": "design",
+  "dim": "D5客户端",
+  "title": "沙箱/终端模式差异",
+  "prio": "P2",
+  "tools": "check_cli",
+  "srcRef": "P: README CodeArts提示"
+ },
+ {
+  "id": "D5-6",
+  "level": "design",
+  "dim": "D5客户端",
+  "title": "Windows特有问题",
+  "prio": "P1",
+  "tools": "install/doctor",
+  "srcRef": "P: README+docs/hermes-windows.md; CI跳过单测=官方薄弱区"
+ },
+ {
+  "id": "D5-7",
+  "level": "design",
+  "dim": "D5客户端",
+  "title": "重启生效一致性",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "P: README统一restart要求但未逐一说明"
+ },
+ {
+  "id": "D5-8",
+  "level": "design",
+  "dim": "D5客户端",
+  "title": "服务矩阵↔技能目录双向对齐 + codex-desktop 补全",
+  "prio": "P1",
+  "tools": "service_catalog/list_operations",
+  "srcRef": "技能目录 ↔ 服务矩阵对齐（补自 G3/G7）"
+ },
+ {
+  "id": "D6-1",
+  "level": "design",
+  "dim": "D6性能",
+  "title": "检索响应延迟",
+  "prio": "P2",
+  "tools": "search_docs/retrieve_skill",
+  "srcRef": "通: 交互工具响应预算; 标: Azure延迟监控"
+ },
+ {
+  "id": "D6-2",
+  "level": "design",
+  "dim": "D6性能",
+  "title": "只读执行端到端",
+  "prio": "P2",
+  "tools": "run_readonly_command",
+  "srcRef": "通: 复合链路需分段定位"
+ },
+ {
+  "id": "D6-3",
+  "level": "design",
+  "dim": "D6性能",
+  "title": "MCP冷启时间",
+  "prio": "P2",
+  "tools": "mcp-server",
+  "srcRef": "标: Agent会话冷启劣化体验"
+ },
+ {
+  "id": "D6-4",
+  "level": "design",
+  "dim": "D6性能",
+  "title": "并发调度正确性",
+  "prio": "P1",
+  "tools": "mcp-server",
+  "srcRef": "P: hwlink-fair-queue/multiplexer源码事实; session-manager.test.mjs基线"
+ },
+ {
+  "id": "D6-5",
+  "level": "design",
+  "dim": "D6性能",
+  "title": "大目录/大上传",
+  "prio": "P2",
+  "tools": "detect_framework/sandbox_upload_project",
+  "srcRef": "通: 边界值+资源占用"
+ },
+ {
+  "id": "D6-6",
+  "level": "design",
+  "dim": "D6性能",
+  "title": "弱网重试幂等",
+  "prio": "P1",
+  "tools": "plan_cli_command/run_approved_command",
+  "srcRef": "通: 网络恢复; 仓: 与资源释放纪律冲突=成本风险"
+ },
+ {
+  "id": "D6-7",
+  "level": "design",
+  "dim": "D6性能",
+  "title": "长会话稳定性",
+  "prio": "P2",
+  "tools": "sandbox_exec_with_session",
+  "srcRef": "P: 长会话设计; 标: AWS AgentCore长时runtime监控"
+ },
+ {
+  "id": "D6-8",
+  "level": "design",
+  "dim": "D6性能",
+  "title": "MCP 工具调用超时（网络/后端挂起）",
+  "prio": "P1",
+  "tools": "run_readonly_command/plan_cli_command",
+  "srcRef": "通: 超时与恢复标准实践; 关联 D6-6、D9-9; R11 补强: 30s阈值+ETIMEDOUT码+50MB内存上限"
+ },
+ {
+  "id": "D6-9",
+  "level": "design",
+  "dim": "D6性能",
+  "title": "缓存清理三入口",
+  "prio": "P2",
+  "tools": "check_update/get_service_icon/search_marketplace",
+  "srcRef": "实: update-check.invalidateUpdateCache(302)/icon-library.clearIconCache(16)/search-market.clearMarketCache(82)"
+ },
+ {
+  "id": "D9-9",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "tools/call 超时协议语义与取消",
+  "prio": "P1",
+  "tools": "inspector",
+  "srcRef": "规: JSON-RPC 2.0 错误语义; 标: MCP 客户端超时实践; R11 补强: 精确-32000+capabilities探测+2s取消窗口"
+ },
+ {
+  "id": "D7-1",
+  "level": "design",
+  "dim": "D7兼容",
+  "title": "OS矩阵",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "P: CI矩阵映射(macOS/arm为CI缺口)"
+ },
+ {
+  "id": "D7-2",
+  "level": "design",
+  "dim": "D7兼容",
+  "title": "Node版本矩阵",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "P: engines契约+CI双版本"
+ },
+ {
+  "id": "D7-3",
+  "level": "design",
+  "dim": "D7兼容",
+  "title": "Windows better-sqlite3缺口",
+  "prio": "P1",
+  "tools": "npm",
+  "srcRef": "P: ci.yml注释官方自认空洞(最高优先兼容风险)"
+ },
+ {
+  "id": "D7-4",
+  "level": "design",
+  "dim": "D7兼容",
+  "title": "国内镜像源安装",
+  "prio": "P2",
+  "tools": "npm",
+  "srcRef": "P: README中国镜像专节(官方支持场景)"
+ },
+ {
+  "id": "D7-5",
+  "level": "design",
+  "dim": "D7兼容",
+  "title": "与既有配置共存",
+  "prio": "P1",
+  "tools": "update",
+  "srcRef": "通: 升级类工具标准要求; 仓: D1-4承诺延伸"
+ },
+ {
+  "id": "D7-6",
+  "level": "design",
+  "dim": "D7兼容",
+  "title": "升级兼容",
+  "prio": "P2",
+  "tools": "update",
+  "srcRef": "P: release-please+CHANGELOG; 标: Azure NPX升级测试"
+ },
+ {
+  "id": "D8-1",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "文档与能力一致",
+  "prio": "P2",
+  "tools": "search_docs",
+  "srcRef": "标: AWS文档漂移失效; 仓: 高频演进漂移风险"
+ },
+ {
+  "id": "D8-2",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "错误信息可执行",
+  "prio": "P2",
+  "tools": "explain_error",
+  "srcRef": "标: Microsoft 'recovery info to agent'"
+ },
+ {
+  "id": "D8-3",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "脱敏误报平衡",
+  "prio": "P1",
+  "tools": "run_readonly_command",
+  "srcRef": "P: safety-model必脱敏; 通: 过度脱敏破坏可用性"
+ },
+ {
+  "id": "D8-4",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "引导步骤可机械执行",
+  "prio": "P1",
+  "tools": "retrieve_skill",
+  "srcRef": "仓: I类违规定义源头; nightly铁律2"
+ },
+ {
+  "id": "D8-5",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "运行时日志安全",
+  "prio": "P2",
+  "tools": "mcp-server",
+  "srcRef": "通: 日志安全; 仓: 与D9-5联动(日志入协议=双重故障)"
+ },
+ {
+  "id": "D8-6",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "中英文文档一致",
+  "prio": "P2",
+  "tools": "search_docs",
+  "srcRef": "仓: 双README结构性风险; 中文区主要受众"
+ },
+ {
+  "id": "D8-7",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "7 个 meta/通用技能指引可机械执行验证",
+  "prio": "P0",
+  "tools": "retrieve_skill/search_docs",
+  "srcRef": "meta 技能指引可执行性（补自 G4）"
+ },
+ {
+  "id": "D8-8",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "遥测策略端到端（trackTool/trackSandbox/hook 事件/上报脱敏）",
+  "prio": "P1",
+  "tools": "mcp-server",
+  "srcRef": "遥测策略契约（补自 G5）"
+ },
+ {
+  "id": "D8-9",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "安装 ID 与遥测值脱敏",
+  "prio": "P2",
+  "tools": "mcp-server",
+  "srcRef": "实: telemetry.generateOrRecoverInstallId(150)/sanitizeValue(189)"
+ },
+ {
+  "id": "D8-10",
+  "level": "design",
+  "dim": "D8质量",
+  "title": "MCP 配置备份与合并",
+  "prio": "P2",
+  "tools": "install",
+  "srcRef": "实: mcp-config-merge.mergeCommandStyle(36)/mergeArgsStyle(58)/mergeMcpServersFile(85)/extractUserDelta(98)/applyUserDelta(118); mcp-config-backup.takeAgentDelta(47)/saveAgentDelta(33)/purgeBackup(62)"
+ },
+ {
+  "id": "D9-1",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "tools/list合规",
+  "prio": "P1",
+  "tools": "inspector",
+  "srcRef": "规: MCP规范inputSchema; 标: Azure全协议测试"
+ },
+ {
+  "id": "D9-2",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "JSON-RPC错误码",
+  "prio": "P1",
+  "tools": "inspector",
+  "srcRef": "规: JSON-RPC 2.0标准"
+ },
+ {
+  "id": "D9-3",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "tools/call响应格式",
+  "prio": "P1",
+  "tools": "inspector",
+  "srcRef": "规: MCP规范content/isError"
+ },
+ {
+  "id": "D9-4",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "协议生命周期",
+  "prio": "P1",
+  "tools": "inspector",
+  "srcRef": "规: MCP initialize握手"
+ },
+ {
+  "id": "D9-5",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "stdio传输健壮",
+  "prio": "P1",
+  "tools": "mcp-server",
+  "srcRef": "规: stdio stdout纯协议; 仓: console误入stdout高发"
+ },
+ {
+  "id": "D9-6",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "跨客户端互通",
+  "prio": "P1",
+  "tools": "inspector",
+  "srcRef": "标: Azure真实客户端套件; 官方Inspector标准校验"
+ },
+ {
+  "id": "D9-7",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "协议版本协商降级",
+  "prio": "P2",
+  "tools": "mcp-server",
+  "srcRef": "规: protocolVersion协商"
+ },
+ {
+  "id": "D9-8",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "inputSchema版本合规",
+  "prio": "P2",
+  "tools": "inspector",
+  "srcRef": "规: MCP限定合法JSON Schema"
+ },
+ {
+  "id": "D9-10",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "MCP remote transport（HTTP/WS 远程服务）",
+  "prio": "P1",
+  "tools": "mcp-server",
+  "srcRef": "实: mcp-server-remote.startRemoteServer(11)/DEFAULT_PORT(8); mcp-server.mjs transport 分支(56)"
+ },
+ {
+  "id": "D9-11",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "WebSocket 隧道通道生命周期",
+  "prio": "P1",
+  "tools": "mcp-server",
+  "srcRef": "实: ws-exec/hwlink-tunnel-channel.HwlinkTunnelChannel"
+ },
+ {
+  "id": "D9-12",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "initialize 握手协议安全基线",
+  "prio": "P0",
+  "tools": "inspector",
+  "srcRef": "规: MCP initialize 握手规范; 实: mcp-protocol._decorateResult/_resetHintConsumption/_isHintConsumed; tools.mjs.callTool/runVersionCheck/listSkillDirs/findSkillsRoot"
+ },
+ {
+  "id": "D9-13",
+  "level": "design",
+  "dim": "D9协议",
+  "title": "tools/call 凭证不泄露与权限校验",
+  "prio": "P0",
+  "tools": "inspector",
+  "srcRef": "规: MCP 安全基线（凭证不泄露）; 实: auth/credentials.setRuntimeCredentials/clearRuntimeCredentials/hasRuntimeCredentials/resolveCredentialsWithRuntime/readGlobalCredentials/writeGlobalCredentials/isPlaceholder/globalCredentialsPath/obsConfigPath/writeObsConfig; safety-policy.loadPolicy/classifyHcloudArgs; risk-rule-engine.evaluateArtifacts/evaluateDeployPlan/mergeRiskDecision; hcloud-cli.hashArgs/createApprovalToken/consumeApprovalToken/readServiceCatalogs/classifyUnsupported/planHcloudCommand"
+ },
+ {
+  "id": "D10-1",
+  "level": "design",
+  "dim": "D10评测",
+  "title": "工具描述可选择性",
+  "prio": "P1",
+  "tools": "harness",
+  "srcRef": "标: Azure ToolDescriptionEvaluator"
+ },
+ {
+  "id": "D10-2",
+  "level": "design",
+  "dim": "D10评测",
+  "title": "skill激活率",
+  "prio": "P1",
+  "tools": "harness",
+  "srcRef": "标: AWS实证skill静默失效"
+ },
+ {
+  "id": "D10-3",
+  "level": "design",
+  "dim": "D10评测",
+  "title": "路由准确率+混淆矩阵",
+  "prio": "P1",
+  "tools": "harness",
+  "srcRef": "标: Azure e2eTestPrompts; 混淆矩阵方法论"
+ },
+ {
+  "id": "D10-4",
+  "level": "design",
+  "dim": "D10评测",
+  "title": "安全干预-静态规则层",
+  "prio": "P0",
+  "tools": "harness",
+  "srcRef": "实: risk-rule-engine.mjs; 仓: safety/rules/cloud-risk-rules.json"
+ },
+ {
+  "id": "D10-9",
+  "level": "design",
+  "dim": "D10评测",
+  "title": "安全干预-LLM会话层",
+  "prio": "P1",
+  "tools": "harness",
+  "srcRef": "标: AWS 'audit S3 buckets'用例"
+ },
+ {
+  "id": "D10-5",
+  "level": "design",
+  "dim": "D10评测",
+  "title": "多轮任务完成率",
+  "prio": "P1",
+  "tools": "harness",
+  "srcRef": "标: Microsoft Agent tests; 仓: nightly任务库"
+ },
+ {
+  "id": "D10-6",
+  "level": "design",
+  "dim": "D10评测",
+  "title": "评测基建",
+  "prio": "P2",
+  "tools": "harness",
+  "srcRef": "通: LLM评测可重复性; 标: Azure工具化入质量门"
+ },
+ {
+  "id": "D10-7",
+  "level": "design",
+  "dim": "D10评测",
+  "title": "评测失败分级",
+  "prio": "P2",
+  "tools": "harness",
+  "srcRef": "标: Azure ToolDescriptionEvaluator分级"
+ },
+ {
+  "id": "D10-8",
+  "level": "design",
+  "dim": "D10评测",
+  "title": "评测成本预算",
+  "prio": "P2",
+  "tools": "harness",
+  "srcRef": "通: LLM评测成本管理"
+ },
+ {
+  "id": "EXP-D5-8-1",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D5-8-2",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P2",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D5-8-3",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D5-8-4",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P2",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D5-8-5",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P2",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D5-8-6",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D5-8-7",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P2",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-01",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-02",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-03",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-04",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-05",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-06",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-07",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-08",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-09",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-10",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-11",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-12",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-13",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-14",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-15",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-16",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-17",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-18",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-19",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-20",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-21",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-C4-22",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E01",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E02",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E03",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E04",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E05",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E06",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E07",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E08",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E09",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E10",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E11",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E12",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E13",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E14",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-E15",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-NR3-02",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-NR3-04",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-NR3-06",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-NR3-08",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-NR3-10",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P0",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-NR3-13",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-NR3-22",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-NR3-24",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D1-58-01",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D1-58-02",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D1-58-03",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D1-58-04",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ },
+ {
+  "id": "EXP-D1-58-05",
+  "level": "expanded",
+  "dim": "",
+  "title": "",
+  "prio": "P1",
+  "tools": "",
+  "srcRef": ""
+ }
+]

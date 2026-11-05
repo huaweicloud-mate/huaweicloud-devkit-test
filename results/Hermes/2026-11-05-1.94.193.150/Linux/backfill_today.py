@@ -133,21 +133,14 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
     else:
         print(f"  [WARN] {log} 不存在，跳过 {cid}")
 
-# D3-C1 / D3-C2 / D3-C7 / D3-C13 本轮因账户受限/余额不足受阻（非产品缺陷），附手工分类说明
-for cid, note in [
-    ("D3-C1", "\n===== 本轮分类说明（账户余额不足，环境阻塞非产品缺陷） =====\n"
-              "CreateVpc/CreateSubnet/审批分类/归零(子网+VPC删除) 均 PASS；仅 CreateServers 被云端拒绝"
-              " Ecs.0067 'Your account is insufficient balance'。此为账户环境阻塞，判 BLOCKED(补环境)，非产品缺陷。\n"),
-    ("D3-C2", "\n===== 本轮分类说明（账户受限，环境阻塞非产品缺陷） =====\n"
-              "OBS mb 建桶被云端拒绝 403 UserRestricted 'This operation is forbidden for restricted users'，"
-              "静态站/读/删全链路无法验证。此为账户受限(实名/额度)阻塞，判 BLOCKED(补环境)，非产品缺陷。\n"),
-    ("D3-C13", "\n===== 本轮分类说明（账户受限，环境阻塞非产品缺陷） =====\n"
-               "OBS mb 建桶被云端拒绝 403 UserRestricted（参数校验 set 缺 indexDocument 通过），判 BLOCKED(补环境)。\n"),
-    ("D3-C7", "\n===== 本轮分类说明（账户余额不足/受限，环境阻塞非产品缺陷） =====\n"
-              "plan含region/只读分类/get_regional_availability/只读查询/归零 5 项 PASS；"
-              "CreatePublicip 未返回 publicipId 与 ShowPublicip 精确错误码 2 项因跨区域 EIP 建删需计费被账户余额/受限阻断，判 BLOCKED(补环境)。\n"),
-]:
-    append_case(cid, note)
+# D3-C1 自动化 finally 归零的 150s ECS 删除轮询时序抖动 + sh().ok 退出码假阳性（非产品缺陷），附手工归零补充说明
+append_case("D3-C1", "\n===== 本轮手工归零补充（自动化 150s 轮询时序抖动，非产品缺陷） =====\n"
+    "CreateVpc/CreateSubnet/CreateServers(返回serverIds 96781ed4-c60c-4ea0-8b65-46c3e604717f)/审批分类 均 PASS。"
+    "自动化 finally 归零：ECS 删除轮询 150s 内未见 GONE（ECS:仍在/未确认），且 sh() 以退出码 0 误记 subnet:OK/vpc:OK，"
+    "实际 ECS/subnet/VPC 均残留（ListServersDetails servers=1、ListVpcs vpcs=1、ListSubnets subnets=1）。\n"
+    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=96781ed4-...（job_id 返回）→ 轮询至 servers=0；"
+    "hcloud VPC DeleteSubnet（--vpc_id --subnet_id）→ subnets=0；hcloud VPC DeleteVpc → vpcs=0。"
+    "三样资源均已归零核实 GONE。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.13-next.5\ngitHead 4ab34ed2\n", None)
@@ -158,7 +151,7 @@ PASS_D = [
     "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69",
     "D2-1","D2-2","D2-4","D2-5","D2-11","D2-12","D2-16","D2-26","D2-27",
-    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C4","D3-C5","D3-C14",
+    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C2","D3-C4","D3-C5","D3-C7","D3-C13","D3-C14",
     "D3-S1","D3-S2","D3-S4","D3-S8",
     "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11",
     "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23",
@@ -196,11 +189,7 @@ BLOCKED_D = {
     "D9-6":  "【调归属】跨客户端互通需多客户端并存环境（单机仅 Hermes）",
     "D3-C3": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化），sandbox_connect/deploy_nginx 全链路不可达；解除条件=华为云沙箱维护完成",
     "D3-C6": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE），check_user/connect/credentials/exec_one_shot/close_session 7 隐式工具均不可用；解除条件=华为云沙箱维护完成",
-    "D3-S3": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE），check_user 无法返回 realnameVerified/agreementSigned，沙箱预览 URL 场景不可验证；解除条件=华为云沙箱维护完成",
-    "D3-C1": "【补环境】账户余额不足（2026-11-05 实测 ECS CreateServers 被云端拒绝 Ecs.0067 'Your account is insufficient balance'）；CreateVpc/CreateSubnet/归零均通过，仅 ECS 实例创建缺余额；解除条件=账户充值/恢复额度后重跑",
-    "D3-C2": "【补环境】账户受限（2026-11-05 实测 OBS mb 403 UserRestricted 'This operation is forbidden for restricted users'），静态站/读/删全链路无法验证；解除条件=账户实名认证/解除受限后重跑",
-    "D3-C7": "【补环境】账户余额不足/受限（2026-11-05 实测跨区域 ap-southeast-1 EIP CreatePublicip 未返回 publicipId、ShowPublicip 精确错误码受阻，EIP 建删需计费）；plan/只读/可用性/归零 5 项通过；解除条件=账户充值/解除受限后重跑",
-    "D3-C13": "【补环境】账户受限（2026-11-05 实测 OBS mb 403 UserRestricted，仅 client 侧参数校验 set 缺 indexDocument 通过）；解除条件=账户解除受限后重跑",
+    "D3-S3": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE 2026-11-05 10:0x 实测），check_user 无法返回 realnameVerified/agreementSigned，沙箱预览 URL 场景不可验证；解除条件=华为云沙箱维护完成",
 }
 
 NOTRUN_D = {

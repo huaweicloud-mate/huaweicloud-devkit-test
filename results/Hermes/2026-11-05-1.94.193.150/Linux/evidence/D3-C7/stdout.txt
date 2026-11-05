@@ -8,19 +8,20 @@
   "note": "ecs is available in ap-southeast-1.",
   "sourcedFrom": "static
 [OK] D3-C7 ListPublicips只读查询(香港) | ListPublicips is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListPublicips/versionNumber'.
-[USE_
-[FAIL] D3-C7 不存在→精确错误码(香港) | ShowPublicip is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ShowPublicip/versionNumber'.
-[USE_ER
-[FAIL] D3-C7 CreatePublicip(最小规格+--cli-region) | 未取到 publicipId
-[OK] D3-C7 归零验证(ListEips无本次id) | 未创建出 EIP，无资源需清理
+{
+  "
+[OK] D3-C7 不存在→精确错误码(香港) | code=EIP.7904
+[OK] D3-C7 CreatePublicip(最小规格+--cli-region) | publicipId=14862ad7-012b-41a3-9602-9dc12f9489cd 命令带 cn-north-4
+[OK] D3-C7 DeletePublicip释放
+[OK] D3-C7 归零验证(ListEips无本次id) | 无残留
 
 === D3-C7 SUMMARY ===
 {
   "case": "D3-C7",
-  "status": "FAIL",
-  "total": 7,
-  "passed": 5,
-  "failed": 2,
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
   "results": [
     {
       "name": "D3-C7 plan含--cli-region(香港)",
@@ -40,25 +41,27 @@
     {
       "name": "D3-C7 ListPublicips只读查询(香港)",
       "pass": true,
-      "detail": "ListPublicips is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListPublicips/versionNumber'.\n[USE_"
+      "detail": "ListPublicips is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListPublicips/versionNumber'.\n{\n  \""
     },
     {
       "name": "D3-C7 不存在→精确错误码(香港)",
-      "pass": false,
-      "detail": "ShowPublicip is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ShowPublicip/versionNumber'.\n[USE_ER"
+      "pass": true,
+      "detail": "code=EIP.7904"
     },
     {
       "name": "D3-C7 CreatePublicip(最小规格+--cli-region)",
-      "pass": false,
-      "detail": "未取到 publicipId"
+      "pass": true,
+      "detail": "publicipId=14862ad7-012b-41a3-9602-9dc12f9489cd 命令带 cn-north-4"
+    },
+    {
+      "name": "D3-C7 DeletePublicip释放",
+      "pass": true,
+      "detail": ""
     },
     {
       "name": "D3-C7 归零验证(ListEips无本次id)",
       "pass": true,
-      "detail": "未创建出 EIP，无资源需清理"
+      "detail": "无残留"
     }
   ]
 }
-
-===== 本轮分类说明（账户余额不足/受限，环境阻塞非产品缺陷） =====
-plan含region/只读分类/get_regional_availability/只读查询/归零 5 项 PASS；CreatePublicip 未返回 publicipId 与 ShowPublicip 精确错误码 2 项因跨区域 EIP 建删需计费被账户余额/受限阻断，判 BLOCKED(补环境)。
