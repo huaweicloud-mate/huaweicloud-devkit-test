@@ -1,0 +1,24 @@
+=== D3-C1 测后定向清理与归零复核（2026-11-05 05:38 CST） ===
+问题：D3-C1 探针 finally 日志报 `subnet:OK vpc:OK`，但云端仍存在 VPC testbot3-hermes-e2e-3826732778 (19f995ea-c827-471e-9805-10faa60b1fa2)（05:12:13 创建）。
+根因（harness）：scripts/realcloud_e2e.mjs 的 sh() 以 hcloud 进程 exit code 判定删除成功；KooCLI 在 API 返回错误时仍以 exit 0 退出（同轮 D4-13 VPC.0114 即为 exit 0），故 DeleteVpc 失败被误报为 OK。
+处置：用 clean_1105.py 只按本次 VPC id 定向删除（不触碰其他机器 testbot3-hermes-e2e-3826731365 / -3826589128 / -3740204810 及他方 tctest-*）。
+
+$ python3 clean_1105.py
+del VPC testbot3-hermes-e2e-3826732778 19f995ea-c827-471e-9805-10faa60b1fa2
+   code= - |                                       <- 删除成功（KooCLI 成功路径无输出）
+round 1: target VPC already absent
+target present: False
+
+=== 清理后云端 inventory（cn-north-4） ===
+VPC      : testbot3-hermes-e2e-3826731365（非本机，并存其他机器）
+           tctest-tmr-u1yrtd（他方）
+           testbot3-hermes-e2e-3826589128（非本机）
+           testbot3-hermes-e2e-3740204810（非本机）
+SUBNET   : testbot3-hermes-e2e-3740204810-subnet / testbot3-hermes-e2e-3308444841-subnet / hc-activity-subnet / tctest-tmr-u1yrtd-sub（均非本机创建）
+ECS      : tctest-tmr-u1yrtd-srv（他方）
+EIP      : total_count=0
+EVS      : tctest-tmr-u1yrtd-srv-volume-0000（他方，in-use）
+OBS      : buckets=0
+ap-southeast-1 EIP：total_count=0
+
+结论：本机本轮（TS 3826732778）创建的真云资源已全部归零（VPC/subnet 已删；ECS 因 Ecs.0067 未创建；OBS/EIP 因账号受限未创建）。
