@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "why": "OBS 静态站部署 E2E 真机执行：OBS mb 建桶返回 403 UserRestricted（账号级 OBS 写限制），仅保留既有桶 hdk-daily-obs-202610250528 供工具链验证；obs_set_website_config 工具本身已验证（对不存在桶 set/get 返回精确 NoSuchBucket 404，非裸 500），但建桶归零链路被账号写限制阻断。",
+  "executedAt": "20261105054328",
+  "assistant": "OpenClaw(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "huaweicloud-devkit@1.1.13-next.5 (npm @next; hdk gitHead 4ab34ed2)",
+  "blockedReason": "真·外部依赖：账号 OBS 写限制（403 UserRestricted）；解除条件=账号 OBS 写权限恢复后重跑完整建站 E2E"
+}

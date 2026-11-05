@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "why": "ECS 生命周期 E2E 真机执行：CreateVpc+CreateSubnet 成功、CreateServers plan 分类 allow 正确；CreateServers 返回 Ecs.0067 'Your account is insufficient balance'（账号欠费/计费限制），无法创建 ECS 实例。VPC/子网系本次创建资源，已手工 DeleteSubnet+DeleteVpc 归零核实（ListVpcs 不含 8d2cbd19，quota 回 4/5）。",
+  "executedAt": "20261105054328",
+  "assistant": "OpenClaw(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "huaweicloud-devkit@1.1.13-next.5 (npm @next; hdk gitHead 4ab34ed2)",
+  "blockedReason": "真·外部依赖：账号计费状态受限（Ecs.0067 insufficient balance），ECS 创建被云端计费系统拒绝；解除条件=账号余额/计费状态恢复后重跑建删归零"
+}
