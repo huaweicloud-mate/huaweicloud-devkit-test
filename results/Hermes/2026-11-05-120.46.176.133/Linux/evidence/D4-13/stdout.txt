@@ -4,32 +4,32 @@
 [OK] 只读 IMS ListImages
 [OK] 只读 CES ListMetrics
 [OK] 只读 EIP ListPublicips
-[DENY/FAIL] 写 VPC CreateVpc (最小规格)
+[OK] 写 VPC CreateVpc (最小规格)
 [OK] 归零核实: 未创建任何 VPC
 
 =====SUMMARY=====
 {
-  "generatedAt": "2026-11-04T21:12:12.663Z",
+  "generatedAt": "2026-11-05T02:01:54.852Z",
   "readAvailable": "6/6",
   "readPassRate": "100%",
-  "writeDenied": false,
+  "writeDenied": true,
   "residualZero": true,
-  "conclusion": "只读可用 6/6（期望 100%），写操作 IAM 拒绝=false（期望 true），归零=true",
+  "conclusion": "只读可用 6/6（期望 100%），写操作 IAM 拒绝=true（期望 true），归零=true",
   "results": [
     {
       "name": "只读 ECS NovaListServers",
       "ok": true,
-      "detail": "{\"code\":0,\"denied\":false,\"out\":\"{\\n  \\\"servers\\\": [\\n    {\\n      \\\"name\\\": \\\"tctest-tmr-u1yrtd-srv\\\",\\n      \\\"links\\\": [\\n        {\\n          \\\"rel\\\": \\\"self\\\",\\n          \\\"href\\\": \\\"https://ecs.cn-north-4.myhuaweicloud.com/v2.1/46c1fd48bd1248c7b75afc3780de7132/servers/\"}"
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"{\\n  \\\"servers\\\": []\\n}\\n\"}"
     },
     {
       "name": "只读 VPC ListVpcs",
       "ok": true,
-      "detail": "{\"code\":0,\"denied\":false,\"out\":\"ListVpcs is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListVpcs/versionNumber'.\\n{\\n  \\\"request_id\\\": \\\"6eb1cdd4d00fdc0b13031e9a4130ce67\\\",\\n  \\\"vpcs\\\": [\\n    {\\n   \"}"
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"ListVpcs is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListVpcs/versionNumber'.\\n{\\n  \\\"request_id\\\": \\\"ae6eb5e496dfa19659274bf262050d01\\\",\\n  \\\"vpcs\\\": [],\\n  \\\"page\"}"
     },
     {
       "name": "只读 EVS ListVolumes",
       "ok": true,
-      "detail": "{\"code\":0,\"denied\":false,\"out\":\"{\\n  \\\"count\\\": 1,\\n  \\\"volumes\\\": [\\n    {\\n      \\\"id\\\": \\\"fb02693a-6a90-4ca9-be7d-f46d266d6fc6\\\",\\n      \\\"links\\\": [\\n        {\\n          \\\"href\\\": \\\"https://evs.cn-north-4.myhuaweicloud.com/v2/46c1fd48bd1248c7b75afc3780de7132/os-vendo\"}"
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"{\\n  \\\"count\\\": 0,\\n  \\\"volumes\\\": []\\n}\\n\"}"
     },
     {
       "name": "只读 IMS ListImages",
@@ -44,12 +44,12 @@
     {
       "name": "只读 EIP ListPublicips",
       "ok": true,
-      "detail": "{\"code\":0,\"denied\":false,\"out\":\"ListPublicips is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListPublicips/versionNumber'.\\n{\\n  \\\"request_id\\\": \\\"d695ee0e45e967c20396af6ef826546c\\\",\\n  \\\"publicip\"}"
+      "detail": "{\"code\":0,\"denied\":false,\"out\":\"ListPublicips is a multi-version API, where the version (v3) is default. To specify another version, change the API name to 'ListPublicips/versionNumber'.\\n{\\n  \\\"request_id\\\": \\\"abd74208e0dfc64e2650516740e52d9e\\\",\\n  \\\"publicip\"}"
     },
     {
       "name": "写 VPC CreateVpc (最小规格)",
-      "ok": false,
-      "detail": "{\"code\":0,\"out\":\"{\\n  \\\"code\\\": \\\"VPC.0114\\\",\\n  \\\"message\\\": \\\"{\\\\\\\"NeutronError\\\\\\\":{\\\\\\\"message\\\\\\\":\\\\\\\"Quota exceeded for resources: ['router'] \\\\\\\",\\\\\\\"type\\\\\\\":\\\\\\\"OverQuota\\\\\\\",\\\\\\\"detail\\\\\\\":\\\\\\\"\\\\\\\"}}\\\"\\n}\\nFailed to get terminal width. The default width will be used. If characters are unreadable, adjust th\"}"
+      "ok": true,
+      "detail": "{\"code\":0,\"out\":\"{\\n  \\\"code\\\": \\\"VPC.0010\\\",\\n  \\\"message\\\": \\\"{\\\\\\\"NeutronError\\\\\\\":{\\\\\\\"message\\\\\\\":\\\\\\\"Rules on create_router by *** disallowed by policy\\\\\\\",\\\\\\\"type\\\\\\\":\\\\\\\"PolicyNotAuthorized\\\\\\\",\\\\\\\"detail\\\\\\\":\\\\\\\"\\\\\\\"}}\\\"\\n}\\nFailed to get terminal width. The default width will be used. If characters are un\"}"
     },
     {
       "name": "归零核实: 未创建任何 VPC",

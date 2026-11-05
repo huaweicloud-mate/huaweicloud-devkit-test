@@ -1,4 +1,4 @@
-===== [0] 包版本基线 ===== (2026-11-05 05:11:20)
+===== [0] 包版本基线 ===== (2026-11-05 10:01:07)
 └── huaweicloud-devkit@1.1.13-next.5
 node v22.13.0
 4ab34ed2df865e453bd78f3b9a1787ac44dcc36f
@@ -114,7 +114,7 @@ exit=0
 
 === 路由准确率基线 ===
 HIT=13 MISS=1 N/A=1 | 准确率=92.9% (分母=HIT+MISS=14)
-结果落盘: /home/testbot3/devkit-test/Hermes/huaweicloud-devkit-test/eval/results/eval-run-20261104211152.csv
+结果落盘: /home/testbot3/devkit-test/Hermes/huaweicloud-devkit-test/eval/results/eval-run-20261105020141.csv
 ===== [33] exp-e08 诊断路由 ===== 
 exit=0
 
@@ -139,16 +139,16 @@ exit=0
 ===== [39] D3-C1 ECS 生命周期真云 E2E ===== 
 exit=0
       "name": "finally归零(校验真实删除)",
-      "pass": true,
-      "detail": "subnet:OK vpc:OK"
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
     }
   ]
 }
 ===== [40] D3-C2 OBS 静态站部署真云 E2E ===== 
 exit=0
       "name": "删桶归零",
-      "pass": false,
-      "detail": "Start at 2026-11-04 21:12:22.216532011 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-3826741655] failed, status [404], e"
+      "pass": true,
+      "detail": "Start at 2026-11-05 02:04:39.137011808 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-3844278262] successfully!"
     }
   ]
 }
@@ -174,9 +174,9 @@ exit=0
     {
       "name": "D3-C7 归零验证(ListEips无本次id)",
       "pass": true,
-      "detail": "未创建出 EIP，无资源需清理"
+      "detail": "无残留"
     }
   ]
 }
-===== ALL DONE (source + realcloud probes) ===== 2026-11-05 05:12:25
+===== ALL DONE (source + realcloud probes) ===== 2026-11-05 10:04:43
 EXIT=0

@@ -11,16 +11,17 @@
 {
   "
 [OK] D3-C7 不存在→精确错误码(香港) | code=EIP.7904
-[FAIL] D3-C7 CreatePublicip(最小规格+--cli-region) | 未取到 publicipId
-[OK] D3-C7 归零验证(ListEips无本次id) | 未创建出 EIP，无资源需清理
+[OK] D3-C7 CreatePublicip(最小规格+--cli-region) | publicipId=5d7ada35-cf36-4440-9d27-e500fb3c92a8 命令带 cn-north-4
+[OK] D3-C7 DeletePublicip释放
+[OK] D3-C7 归零验证(ListEips无本次id) | 无残留
 
 === D3-C7 SUMMARY ===
 {
   "case": "D3-C7",
-  "status": "FAIL",
-  "total": 7,
-  "passed": 6,
-  "failed": 1,
+  "status": "PASS",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
   "results": [
     {
       "name": "D3-C7 plan含--cli-region(香港)",
@@ -49,13 +50,18 @@
     },
     {
       "name": "D3-C7 CreatePublicip(最小规格+--cli-region)",
-      "pass": false,
-      "detail": "未取到 publicipId"
+      "pass": true,
+      "detail": "publicipId=5d7ada35-cf36-4440-9d27-e500fb3c92a8 命令带 cn-north-4"
+    },
+    {
+      "name": "D3-C7 DeletePublicip释放",
+      "pass": true,
+      "detail": ""
     },
     {
       "name": "D3-C7 归零验证(ListEips无本次id)",
       "pass": true,
-      "detail": "未创建出 EIP，无资源需清理"
+      "detail": "无残留"
     }
   ]
 }

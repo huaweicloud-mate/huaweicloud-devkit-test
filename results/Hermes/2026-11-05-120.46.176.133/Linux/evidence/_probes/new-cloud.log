@@ -1,6 +1,6 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-hermes-s2-mw2m3ttf -> id=dec1abc9-1b1d-4d3d-8654-3bc3dfb853c5
+创建测试VPC tctest-hermes-s2-mw2wgif5 -> id=e72797b9-8675-4658-9594-50efb5f703b4
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
@@ -14,20 +14,16 @@ hook_check_command DeleteVpc -> decision=warn risk=undefined
 =====END D3-S2=====
 
 =====CASE D3-C13=====
-OBS mb -> Start at 2026-11-04 21:11:49.374898616 +0000 UTC
-
-Create bucket [tctest-hermes-obs-mw2m3ttf] failed, status [403], error
+OBS mb -> success
 set 无 indexDocument -> __error=Error: indexDocument is required for action=set ok=undefined
-set indexDocument -> ok=false status=404
-get -> ok=false status=404
-OBS rm -f -> Start at 2026-11-04 21:11:50.083095347 +0000 UTC
-
-Delete bucket [tctest-hermes-obs-mw2m3ttf] failed,
-[FAIL] OBS 建桶成功
+set indexDocument -> ok=true status=200
+get -> ok=true status=200
+OBS rm -f -> success
+[OK] OBS 建桶成功
 [OK] set 缺失 indexDocument 报错(拒绝)
-[FAIL] set 成功
-[FAIL] get 返回配置与 set 一致
-[FAIL] 删除归零
+[OK] set 成功
+[OK] get 返回配置与 set 一致
+[OK] 删除归零
 =====END D3-C13=====
 
 =====CASE D3-C14=====
@@ -56,7 +52,7 @@ voucher_status(领取后) -> {"claimed":true,"message":"已领取过（代金券
 =====END D3-S4=====
 
 =====CASE D3-S3=====
-check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: ecc18204f34b43029c995144b28039f3]
+check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 3490da9ae9f743e18eae98692185a813]
 [FAIL] 沙箱 check_user 通过
 → 沙箱账号未实名/未签协议，标记 BLOCKED（外部依赖）
 =====END D3-S3=====
@@ -64,12 +60,12 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
 =====SUMMARY=====
 {
   "total": 18,
-  "passed": 13,
+  "passed": 17,
   "results": [
     {
       "name": "测试 VPC 创建成功",
       "ok": true,
-      "detail": "vpcId=dec1abc9-1b1"
+      "detail": "vpcId=e72797b9-867"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -93,8 +89,8 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     },
     {
       "name": "OBS 建桶成功",
-      "ok": false,
-      "detail": "bucket=tctest-hermes-obs-mw2m3ttf"
+      "ok": true,
+      "detail": "bucket=tctest-hermes-obs-mw2wgif5"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -103,18 +99,18 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     },
     {
       "name": "set 成功",
-      "ok": false,
-      "detail": "{\"ok\":false,\"status\":404}"
+      "ok": true,
+      "detail": "{\"ok\":true,\"status\":200}"
     },
     {
       "name": "get 返回配置与 set 一致",
-      "ok": false,
-      "detail": "{\"ok\":false,\"status\":404}"
+      "ok": true,
+      "detail": "{\"ok\":true,\"status\":200}"
     },
     {
       "name": "删除归零",
-      "ok": false,
-      "detail": "bucket removed=tctest-hermes-obs-mw2m3ttf"
+      "ok": true,
+      "detail": "bucket removed=tctest-hermes-obs-mw2wgif5"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
@@ -154,7 +150,7 @@ check_user -> realnameVerified=undefined agreementSigned=undefined err=Error: HD
     {
       "name": "沙箱 check_user 通过",
       "ok": false,
-      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: ecc18204f34b43029c995144b28039f3]\"}"
+      "detail": "{\"__error\":\"Error: HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化，暂时无法使用，敬请期待～ 感谢您的理解与支持！ [trace: 3490da9ae9f743e18eae98692185a813]\"}"
     }
   ]
 }

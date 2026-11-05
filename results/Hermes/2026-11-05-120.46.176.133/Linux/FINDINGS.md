@@ -1,11 +1,11 @@
 # FINDINGS — 缺陷发现清单（Hermes-deepseek-v4.1-flash）
 
 > **落盘路径**：`results/Hermes/2026-11-05-120.46.176.133/Linux/FINDINGS.md`
-> **生成时间**：2026-11-05 05:20（北京时间，每日定时全量测试）
+> **生成时间**：2026-11-05 10:08（北京时间，每日测试 10:0x 重跑轮次；探针 10:01:07–10:04:43 实跑）
 > **被测对象**：huaweicloud-devkit v1.1.13-next.5（npm，gitHead `4ab34ed2`）
 > **测试客户端**：Hermes (deepseek-v4.1-flash) / Linux / 120.46.176.133
-> **测试类型**：每日测试（daily 精选：设计级 107 + 展开级 43）
-> **汇总**：产品缺陷 15 项（FAIL 12 + SPEC-MISMATCH 3）。与上一轮（2026-11-04，gitHead `7ad8a533`）结论一致，无新增、无修复回归；15 项均在上游仓已有历史 issue（提单前 `file_issue.py` 查重，命中即复核不重复开单，见 `HISTORY_LINKS.md`）。
+> **测试类型**：每日测试（daily 精选：设计级 107 + 展开级 43；本轮 PASS 122 / FAIL 13 / BLOCKED 8 / SPEC 3 / NOT_RUN 4）
+> **汇总**：产品缺陷 15 项（FAIL 12 + SPEC-MISMATCH 3）。本轮全部复现，无新增、无修复回归；15 项均在上游仓已有历史 issue（提单前 `file_issue.py` 查重，命中即复核不重复开单，见 `HISTORY_LINKS.md`）。真云账号能力本轮已恢复：D3-C1/C2/C7/C13/D4-13 由 BLOCKED 转 PASS（实测建删资源并归零），仅沙箱 D3-C3/C6/S3 因服务维护仍 BLOCKED。
 
 ---
 
