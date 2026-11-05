@@ -1,0 +1,38 @@
+{
+  "caseId": "D3-S7",
+  "status": "FAIL",
+  "why": "P:serviceCatalog 复合意图命中 RDS+部署目标 P:CreateVpc P:CreateSubnet P:CreateSecurityGroup F:RDS CreateInstance 返回 instanceId F:测后资源归零(只删本次创建)",
+  "executedAt": "20261105212040",
+  "checks": [
+    {
+      "name": "serviceCatalog 复合意图命中 RDS+部署目标",
+      "ok": true,
+      "detail": "services=[\"RDS\"] rds=true deploy=false"
+    },
+    {
+      "name": "CreateVpc",
+      "ok": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"e66a57d4-64cb-479a-8103-80a3d2818570\",\n    \"name\": \"hdk-s7-vpc-13631181\",\n    \"description\": \"\","
+    },
+    {
+      "name": "CreateSubnet",
+      "ok": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"74e995ee-2280-4bfa-ac21-a822484bc87a\",\n    \"name\": \"hdk-s7-vpc-13631181-subnet\",\n    \"descrip"
+    },
+    {
+      "name": "CreateSecurityGroup",
+      "ok": true,
+      "detail": "CreateSecurityGroup is a multi-version API, where the version (v3) is default. To specify another version, change the AP"
+    },
+    {
+      "name": "RDS CreateInstance 返回 instanceId",
+      "ok": false,
+      "detail": "The target API contains a parameter with the same name as the KooCLI system parameter password (unknown location --password). Confirm whether this parameter is a KooCLI system para"
+    },
+    {
+      "name": "测后资源归零(只删本次创建)",
+      "ok": false,
+      "detail": "SG删:OK 子网删:OK VPC删:FAIL:{\n  \"code\": \"VPC.0104\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"m"
+    }
+  ]
+}
