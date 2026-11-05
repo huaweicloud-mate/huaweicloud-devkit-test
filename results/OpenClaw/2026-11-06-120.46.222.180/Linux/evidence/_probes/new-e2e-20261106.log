@@ -6,8 +6,12 @@ get_regional_availability = {"ok":true,"service":"ecs","region":"ap-southeast-3"
 [OK] get_regional_availability ecs@ap-southeast-3 可用
 ECS 跨区域只读 stdout = {
   "error": {
-    "message": "User: iam::842591186fa245929e1b5c186a4cf784:user:test001 is not authorized to perform: ecs:cloudServers:listServersDetails on resource: * because no identity-based polic
-[FAIL] 跨区域只读返回精确错误码（Ecs.0200/Common.0013/APIGW.0802，非裸 404）
+    "message": "the current region is [ap-southeast-3] and does not match with the project name [cn-north-4] in tk.",
+    "code": "Common.0013"
+  }
+}
+Failed to get terminal width. The d
+[OK] 跨区域只读返回精确错误码（Ecs.0200/Common.0013/APIGW.0802，非裸 404）
 plan CreatePublicip = hcloud EIP CreatePublicip --cli-region=ap-southeast-3 --publicip.type=EIP --bandwidth.size=1 --bandwidth.share_type=PER --bandwidth.charge_mode=traffic decision=allow
 [OK] 创建 EIP 命令含 --cli-region=ap-southeast-3
 CreatePublicip 结果 ok=true out={
@@ -24,9 +28,9 @@ obsutil -dryRun 键名核对 = Error: bucket [__dry__] in cloud_url [obs://__dry
 
 OBS mb = success
 OBS cp 上传 = ok(status 200)
-set 静态站 = ok=true status=200 url=http://tctest-openclaw-c2-mw41ifll.obs-website.cn-north-4.myhuaweicloud.com
+set 静态站 = ok=true status=200 url=http://tctest-openclaw-c2-mw41wxw5.obs-website.cn-north-4.myhuaweicloud.com
 chattri public-read 桶+对象 = ok
-curl http://tctest-openclaw-c2-mw41ifll.obs-website.cn-north-4.myhuaweicloud.com -> HTTP 200 (retry)
+curl http://tctest-openclaw-c2-mw41wxw5.obs-website.cn-north-4.myhuaweicloud.com -> HTTP 200 (retry)
 OBS rm 归零 = ok(删桶)
 [OK] build 静态站 + obsutil 上传（-dryRun 键名/目录语义 + cp）
 [OK] public-read + set 静态站 200
@@ -37,7 +41,7 @@ OBS rm 归零 = ok(删桶)
 =====SUMMARY=====
 {
   "total": 9,
-  "passed": 8,
+  "passed": 9,
   "results": [
     {
       "name": "命令含目标 --cli-region=ap-southeast-3（参数级断言）",
@@ -51,8 +55,8 @@ OBS rm 归零 = ok(删桶)
     },
     {
       "name": "跨区域只读返回精确错误码（Ecs.0200/Common.0013/APIGW.0802，非裸 404）",
-      "ok": false,
-      "detail": "{\n  \"error\": {\n    \"message\": \"User: iam::842591186fa245929e1b5c186a4cf784:user:test001 is not authorized to perform: ecs:cloudServers:listServersDetails on res"
+      "ok": true,
+      "detail": "{\n  \"error\": {\n    \"message\": \"the current region is [ap-southeast-3] and does not match with the project name [cn-north-4] in tk.\",\n    \"code\": \"Common.0013\"\n "
     },
     {
       "name": "创建 EIP 命令含 --cli-region=ap-southeast-3",

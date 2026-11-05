@@ -1,18 +1,27 @@
 
 =====CASE D3-S6 (v5)=====
 路由 -> {"services":["FunctionGraph"]}
-run CreateFunction -> ok=false urn=
+run CreateFunction -> ok=true urn=urn:fss:cn-north-4:46c1fd48bd1248c7b75afc3780de7
+CreateFunctionTrigger -> ok=true stdout={
+  "trigger_id": "21d9d39b-54ba-49f2-a91f-364a1f3ffe46",
+  "trigger_type_code": "TIMER",
+  "trigger_status": "ACTIVE",
+  "event_data": {
+    "name": "hdk-s6-timer-mw41ww6t",
+    "schedule": "1m",
+    "schedule_type": "R
+DeleteFunction 归零 -> ok=true
 [OK] serviceCatalog 路由 FunctionGraph
-[FAIL] 创建 Python 函数返回 URN
-[FAIL] 定时触发器绑定成功
+[OK] 创建 Python 函数返回 URN
+[OK] 定时触发器绑定成功
 [OK] 测后删除函数归零
 
 =====SUMMARY JSON=====
 {
-  "generatedAt": "2026-11-05T21:10:49.684Z",
+  "generatedAt": "2026-11-05T21:22:05.994Z",
   "total": 4,
-  "passed": 2,
-  "failed": 2,
+  "passed": 4,
+  "failed": 0,
   "results": [
     {
       "name": "serviceCatalog 路由 FunctionGraph",
@@ -21,18 +30,18 @@ run CreateFunction -> ok=false urn=
     },
     {
       "name": "创建 Python 函数返回 URN",
-      "ok": false,
-      "detail": "urn= ok=false"
+      "ok": true,
+      "detail": "urn=urn:fss:cn-north-4:46c1fd48bd1248c7b75af ok=true"
     },
     {
       "name": "定时触发器绑定成功",
-      "ok": false,
-      "detail": "triggerOk=false triggerId= out="
+      "ok": true,
+      "detail": "triggerOk=true triggerId=21d9d39b-54ba-49f2-a91f-364a1f3ffe46 out={\n  \"trigger_id\": \"21d9d39b-54ba-49f2-a91f-364a1f3ffe46\",\n  \"trigger_type_code\": \"TIMER\",\n  \"trigger_status\": \"ACTIVE\",\n"
     },
     {
       "name": "测后删除函数归零",
       "ok": true,
-      "detail": "cleanup=false created=false"
+      "detail": "cleanup=true created=true"
     }
   ]
 }

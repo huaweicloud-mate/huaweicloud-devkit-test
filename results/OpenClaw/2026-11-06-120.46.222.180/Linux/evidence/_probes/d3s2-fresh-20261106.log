@@ -1,5 +1,5 @@
-创建测试VPC tctest-openclaw-s2-3913049127 -> id=
-[FAIL] 测试 VPC 创建成功  vpcId=
+创建测试VPC tctest-openclaw-s2-3913721955 -> id=d00ed97d-142
+[OK] 测试 VPC 创建成功  vpcId=d00ed97d-142
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 [OK] plan DeleteVpc 要求确认(confirm-not-deny)  {"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and rec
 hook_check_command DeleteVpc -> decision=warn risk=undefined
@@ -7,20 +7,20 @@ hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
 [OK] 未确认前零执行  stillThere=true
 确认后 DeleteVpc -> ok=true
-删除后归零 = false
-[FAIL] 确认后删除成功且归零  ok=true zeroed=false
+删除后归零 = true
+[OK] 确认后删除成功且归零  ok=true zeroed=true
 
 =====SUMMARY=====
 {
   "case": "D3-S2",
-  "status": "FAIL",
+  "status": "PASS",
   "total": 5,
-  "passed": 3,
+  "passed": 5,
   "results": [
     {
       "name": "测试 VPC 创建成功",
-      "ok": false,
-      "detail": "vpcId="
+      "ok": true,
+      "detail": "vpcId=d00ed97d-142"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -39,8 +39,8 @@ hook_check_command DeleteVpc -> decision=warn risk=undefined
     },
     {
       "name": "确认后删除成功且归零",
-      "ok": false,
-      "detail": "ok=true zeroed=false"
+      "ok": true,
+      "detail": "ok=true zeroed=true"
     }
   ]
 }
