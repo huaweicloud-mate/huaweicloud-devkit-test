@@ -135,24 +135,24 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 
 # D3-C1 自动化 finally 归零的 150s ECS 删除轮询时序抖动 + sh().ok 退出码假阳性（非产品缺陷），附手工归零补充说明
 append_case("D3-C1", "\n===== 本轮手工归零补充（自动化 150s 轮询时序抖动，非产品缺陷） =====\n"
-    "CreateVpc/CreateSubnet/CreateServers(返回serverIds 96781ed4-c60c-4ea0-8b65-46c3e604717f)/审批分类 均 PASS。"
+    "CreateVpc(6fb5263f)/CreateSubnet(3d204942)/CreateServers(返回serverIds bdbad749-fad2-40fd-a38e-1668434a81f9)/审批分类(allow) 均 PASS。"
     "自动化 finally 归零：ECS 删除轮询 150s 内未见 GONE（ECS:仍在/未确认），且 sh() 以退出码 0 误记 subnet:OK/vpc:OK，"
     "实际 ECS/subnet/VPC 均残留（ListServersDetails servers=1、ListVpcs vpcs=1、ListSubnets subnets=1）。\n"
-    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=96781ed4-...（job_id 返回）→ 轮询至 servers=0；"
-    "hcloud VPC DeleteSubnet（--vpc_id --subnet_id）→ subnets=0；hcloud VPC DeleteVpc → vpcs=0。"
+    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=bdbad749-fad2-40fd-a38e-1668434a81f9 --delete_publicip=true（job_id 返回）→ 轮询至 servers=0；"
+    "hcloud VPC DeleteSubnet（--vpc_id 6fb5263f --subnet_id 3d204942）→ subnets=0；hcloud VPC DeleteVpc → vpcs=0。"
     "三样资源均已归零核实 GONE。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.13\ngitHead 8a6d8be2\n", None)
 print("  _baseline: v1.1.13 (gitHead 8a6d8be2)")
 
-# ===== 2. 回填 CSV（状态映射：本轮 v1.1.13-next.5 实际探针结果校准） =====
+# ===== 2. 回填 CSV（状态映射：本轮 v1.1.13 实际探针结果校准） =====
 PASS_D = [
     "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69",
     "D2-1","D2-2","D2-4","D2-5","D2-11","D2-12","D2-16","D2-26","D2-27",
-    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C2","D3-C4","D3-C5","D3-C7","D3-C13","D3-C14",
-    "D3-S1","D3-S2","D3-S4","D3-S8",
+    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C2","D3-C3","D3-C4","D3-C5","D3-C6","D3-C7","D3-C13","D3-C14",
+    "D3-S1","D3-S2","D3-S3","D3-S4","D3-S8",
     "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11",
     "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23",
     "D4-27","D4-28","D4-29",
@@ -187,9 +187,6 @@ BLOCKED_D = {
     "D4-12": "【补环境】供应链安装期安全需 npm 安装期抓包/SBOM 审计通道",
     "D4-24": "【补环境】确认令牌过期/重复确认边界需审批流 + 可注入时钟",
     "D9-6":  "【调归属】跨客户端互通需多客户端并存环境（单机仅 Hermes）",
-    "D3-C3": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE: 沙箱功能正在升级优化），sandbox_connect/deploy_nginx 全链路不可达；解除条件=华为云沙箱维护完成",
-    "D3-C6": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE），check_user/connect/credentials/exec_one_shot/close_session 7 隐式工具均不可用；解除条件=华为云沙箱维护完成",
-    "D3-S3": "【补环境】沙箱服务维护中（HDKIT_SANDBOX_MAINTENANCE 2026-11-05 10:0x 实测），check_user 无法返回 realnameVerified/agreementSigned，沙箱预览 URL 场景不可验证；解除条件=华为云沙箱维护完成",
 }
 
 NOTRUN_D = {
