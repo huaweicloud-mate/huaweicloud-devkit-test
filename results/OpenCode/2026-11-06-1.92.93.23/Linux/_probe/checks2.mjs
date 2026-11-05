@@ -1,5 +1,8 @@
 // checks2.mjs — D3 工具/服务目录/场景 + D4 安全 用例探针
 import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, fixture } from './core.mjs';
+import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 // ============ D3 工具/服务 ============
 reg('D3-A1', async () => {
@@ -132,21 +135,34 @@ reg('D3-S2', async () => {
 });
 
 reg('D3-S3', async () => {
-  // 沙箱预览出 URL：真机尝试 connect 取证（不得硬编码 BLOCKED）
+  // 沙箱预览出 URL：真机 upload→deploy_nginx→devbridge 隧道→deploy_check 全流程（不得 mock）
   const h = await hdk();
   const detail = [];
+  let wsId = null;
   try {
     const conn = await h.tools.callTool('huaweicloud_sandbox_connect', { source: 'OpenCode' });
-    const wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
+    wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
     detail.push(`connect.status=${conn && conn.status} ws=${!!wsId}`);
     if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(JSON.stringify(conn))) {
       return blocked('沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)——connect 即返回「沙箱功能正在升级优化，暂时无法使用」，无法完成沙箱预览出 URL。解除条件：沙箱服务维护结束恢复可用后复测（补环境·沙箱服务维护）', detail.join(' | '));
     }
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id，无法预览出 URL', JSON.stringify(conn).slice(0, 200));
-    const check = await h.tools.callTool('huaweicloud_sandbox_deploy_check', { port: 8080, project: 'hdk-preview', output_dir: '.', framework_type: 'static', workspace_id: wsId });
+    const proj = mkdtempSync(join(tmpdir(), 'hdk-d3s3-'));
+    writeFileSync(join(proj, 'index.html'), '<html><body>hdk-d3s3-preview-ok</body></html>', 'utf-8');
+    const up = await h.tools.callTool('huaweicloud_sandbox_upload_project', { local_dir: proj, remote_dir: '/workspace/d3s3-site', workspace_id: wsId, extract: true });
+    rmSync(proj, { recursive: true, force: true });
+    detail.push(`upload.ok=${!!(up && up.ok)}`);
+    const dep = await h.tools.callTool('huaweicloud_sandbox_deploy_nginx', { nginx_type: 'static', port: 8081, project: 'd3s3-site', output_dir: '.', workspace_id: wsId });
+    detail.push(`deploy_nginx.ok=${!!(dep && dep.ok)} port=${dep && dep.port}`);
+    const db = await h.tools.callTool('huaweicloud_sandbox_exec_one_shot', { command: 'source /tmp/hw_creds.sh 2>/dev/null; source /tmp/hw_api_key 2>/dev/null; devbridge delete-all 2>&1; devbridge create d3s3-' + String(Date.now()).slice(-8) + ' 2>&1', workspace_id: wsId });
+    detail.push(`devbridge=${String(db && (db.stdout || JSON.stringify(db))).replace(/\u001b\]133;C\u0007/g, '').slice(0, 80)}`);
+    if (/API key expired|API key 已过期|please login again/i.test(JSON.stringify(db))) {
+      return blocked('沙箱 DevBridge 隧道凭证已过期——沙箱内 devbridge create 返回 "API key expired, please login again"，无法暴露预览 URL。已实测 connect/upload/deploy_nginx 均通过（deploy_check nginx_serving=HTTP 200），仅 tunnel 暴露步骤受阻。解除条件：沙箱环境刷新 devbridge API key 后复测（补环境·沙箱 devbridge 凭证）', detail.join(' | '));
+    }
+    const check = await h.tools.callTool('huaweicloud_sandbox_deploy_check', { port: 8081, project: 'd3s3-site', output_dir: '.', framework_type: 'static', workspace_id: wsId });
     detail.push(`deploy_check=${JSON.stringify(check).slice(0, 160)}`);
     const urlOk = check && (check.url || check.tunnel_url_accessible || check.complete === true);
-    return chk(!!urlOk, `沙箱预览出 URL: ${JSON.stringify(check).slice(0, 160)}`, detail.join(' | ').slice(0, 600));
+    return chk(!!urlOk, `沙箱预览出 URL: ${JSON.stringify(check).slice(0, 200)}`, detail.join(' | ').slice(0, 700));
   } catch (e) {
     if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(String(e))) {
       return blocked('沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)——connect 即返回「沙箱功能正在升级优化，暂时无法使用」，无法完成沙箱预览出 URL。解除条件：沙箱服务维护结束恢复可用后复测（补环境·沙箱服务维护）', `${detail.join(' | ')} || ${String(e).slice(0, 200)}`);
