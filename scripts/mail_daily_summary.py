@@ -237,17 +237,15 @@ def _keep_latest_month(seg):
 
 
 def _open_issue_trend(seg, cid):
-    """「每日 open issue 趋势」SVG 折线 -> 内嵌 PNG 折线图（保留 <p> 文本数据点兜底）。"""
-    m = re.search(r'<p[^>]*>((?:\d{2}-\d{2}:\s*\d+[\s·]*)+)</p>', seg)
-    if not m:
+    """「每日 open issue 趋势」SVG 折线 -> 内嵌 PNG 折线图（日期取 circle title）。"""
+    svg_m = re.search(r'<svg\b.*?</svg>', seg, re.S)
+    if not svg_m:
         return seg, None
-    pts = re.findall(r'(\d{2}-\d{2}):\s*(\d+)', m.group(1))
+    pts = re.findall(r'<title>(\d{2}-\d{2}):\s*(\d+)</title>', svg_m.group(0))
     if not pts:
         return seg, None
     png = _render_trend_png(pts, "#27ae60", unit="")
-    svg_m = re.search(r'<svg\b.*?</svg>', seg, re.S)
-    if svg_m:
-        seg = seg.replace(svg_m.group(0), _IMG_TPL.format(cid=cid, alt="open issue 趋势"))
+    seg = seg.replace(svg_m.group(0), _IMG_TPL.format(cid=cid, alt="open issue 趋势"))
     return seg, (cid, png)
 
 

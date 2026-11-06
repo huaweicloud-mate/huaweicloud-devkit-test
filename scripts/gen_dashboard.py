@@ -992,7 +992,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             f'<thead>{daily_head}</thead><tbody>{mrows}</tbody></table></details>')
 
     # ---- 通过率折线 SVG ----
-    def sparkline(values, color="#3498db", height=140, width=560, pct=True):
+    def sparkline(values, color="#3498db", height=140, width=560, pct=True, titles=None):
         if len(values) < 2:
             return ""
         w_pad, h_pad = 12, 18
@@ -1012,7 +1012,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
             f = float(v)
             return str(int(f)) if f == int(f) else str(v)
 
-        dots = "".join(f'<circle cx="{x}" cy="{y}" r="3" fill="{color}"><title>{fv(values[i])}{suffix}</title></circle>'
+        dots = "".join(f'<circle cx="{x}" cy="{y}" r="3" fill="{color}"><title>{(titles[i] if titles else fv(values[i]) + suffix)}</title></circle>'
                        for i, (x, y) in enumerate(pts))
         labels = "".join(f'<text x="{x}" y="{y-6}" font-size="11" font-weight="bold" text-anchor="middle" fill="#34495e">{fv(values[i])}{suffix}</text>'
                          for i, (x, y) in enumerate(pts))
@@ -1025,7 +1025,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
     # ---- 每日 open issue 趋势 ----
     issue_trend = load_issue_trend([d["date"] for d in days])
     it_vals = [x["open"] for x in issue_trend]
-    it_label = " · ".join(f'{x["date"][5:]}: {x["open"]}' for x in issue_trend if x["open"] or x["closed"])
+    it_titles = [f'{x["date"][5:]}: {x["open"]}' for x in issue_trend]
 
     # ---- 客户端概览（最新日，仅智能体聚合行） ----
     client_head = ('<tr style="background:#f2f2f2;">'
@@ -1570,8 +1570,7 @@ def render(days, version, vdate, gen_ts, links, notes, versions):
 
 <h2>每日 open issue 趋势</h2>
 <div style="color:#7f8c8d;font-size:12px;margin-bottom:4px;">关联历史单中 open 状态数量（每日快照、issue 号去重）</div>
-{sparkline(it_vals, color="#27ae60", pct=False)}
-<p style="color:#95a5a6;font-size:11px;">{it_label}</p>
+{sparkline(it_vals, color="#27ae60", pct=False, titles=it_titles)}
 
 <h2>客户端执行概览（{vdate}）</h2>
 <p style="color:#7f8c8d;">{client_overview}</p>
