@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C6",
+  "why": "7 个隐式沙箱工具逐具名调用均可达：4 个空参数返回 ok、3 个正确校验必填参数（upload_file/exec_one_shot/deploy_check 返回 requires 错误，属正确负路径，非静默失败/崩溃）",
+  "executedAt": "20261106220539",
+  "results": [
+    {
+      "tool": "huaweicloud_sandbox_check_user",
+      "callable": true,
+      "kind": "ok",
+      "sample": "{\"realnameVerified\":true,\"agreementSigned\":true}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_sign_agreement",
+      "callable": true,
+      "kind": "ok",
+      "sample": "{\"signed\":true,\"signedCount\":0}"
+    },
+    {
+      "tool": "huaweicloud_sandbox_credentials",
+      "callable": true,
+      "kind": "validation",
+      "msg": "Error: session_id or dev_stage_id is required"
+    },
+    {
+      "tool": "huaweicloud_sandbox_upload_file",
+      "callable": true,
+      "kind": "validation",
+      "msg": "Error: local_path and remote_path are required."
+    },
+    {
+      "tool": "huaweicloud_sandbox_exec_one_shot",
+      "callable": true,
+      "kind": "validation",
+      "msg": "Error: workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID e"
+    },
+    {
+      "tool": "huaweicloud_sandbox_deploy_check",
+      "callable": true,
+      "kind": "validation",
+      "msg": "Error: port, project, and output_dir are required."
+    },
+    {
+      "tool": "huaweicloud_sandbox_close_session",
+      "callable": true,
+      "kind": "validation",
+      "msg": "Error: workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID e"
+    }
+  ]
+}

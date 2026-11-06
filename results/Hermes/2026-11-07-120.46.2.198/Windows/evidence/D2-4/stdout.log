@@ -1,0 +1,12 @@
+{
+  "status": "FAIL",
+  "caseId": "D2-4",
+  "why": "redactSecrets 字符串形态脱敏失效：小写 ak=/sk= 与 JSON 带引号 key 明文残留（r1=\"ak=AK123456 sk=SKsecret\" r2=\"{\\\"ak\\\":\\\"AK123456\\\",\\\"sk\\\":\\\"SKsecret\\\"}\"），仅大写 AK=/SK= 正常脱敏（r3=\"AK=<redacted> SK=<redacted>\"）",
+  "executedAt": "20261106220247",
+  "rootCause": "plugins/huaweicloud-core/src/safety-policy.mjs redactString 正则大小写敏感 + isSecretKeyName 未匹配裸 ak/sk 的 JSON 带引号 key",
+  "tests": {
+    "lowercase_eq": "ak=AK123456 sk=SKsecret",
+    "json_quoted": "{\"ak\":\"AK123456\",\"sk\":\"SKsecret\"}",
+    "uppercase_eq": "AK=<redacted> SK=<redacted>"
+  }
+}

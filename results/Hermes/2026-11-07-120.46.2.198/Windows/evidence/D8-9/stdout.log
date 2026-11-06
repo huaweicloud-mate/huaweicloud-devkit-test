@@ -1,0 +1,7 @@
+{
+  "status": "SPEC-MISMATCH",
+  "caseId": "D8-9",
+  "why": "sanitizeValue 未移除 AK/SK/token 敏感值：输入 'access_key=AKIA123 secret_key=SECRET token=T0K3N_SECRET' 原样保留为 'access_key=AKIA123 secret_key=SECRET token=T0K3N_SECRET'（契约要求移除敏感值）",
+  "executedAt": "20261106220817",
+  "rootCause": "plugins/huaweicloud-core/src/telemetry/telemetry.mjs sanitizeValue 仅去控制字符+超长截断，无 AK/SK/token 脱敏"
+}

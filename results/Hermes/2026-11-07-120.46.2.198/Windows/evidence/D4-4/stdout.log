@@ -1,0 +1,29 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-4",
+  "why": "写操作审批门漏 Change* 变更类动词：0/5 判 allow/unknown_read（未拦截 5 个）",
+  "executedAt": "20261106220247",
+  "rootCause": "plugins/huaweicloud-core/safety/policy.json writeOperationPrefixes 缺 Change 前缀",
+  "tests": {
+    "ChangeServerOsWithoutCloudInit": {
+      "decision": "allow",
+      "risk": "unknown_read"
+    },
+    "ChangeServerOsWithCloudInit": {
+      "decision": "allow",
+      "risk": "unknown_read"
+    },
+    "ChangeVpc": {
+      "decision": "allow",
+      "risk": "unknown_read"
+    },
+    "ChangeInstanceConfiguration": {
+      "decision": "allow",
+      "risk": "unknown_read"
+    },
+    "ChangeVolumeType": {
+      "decision": "allow",
+      "risk": "unknown_read"
+    }
+  }
+}

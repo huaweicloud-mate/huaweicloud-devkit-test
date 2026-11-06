@@ -1,0 +1,1 @@
+const M='C:/Users/Administrator/multica_workspaces/vector-8988c3df7bc9/task-b66d7232b525/hermes-home/tools/node-26.7.0-win32-x64/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src'; const hc = await import('file:///'+M+'/hcloud-cli.mjs'); const c = hc.readServiceCatalogs(); console.log(JSON.stringify(Object.keys(c||{})).slice(0,500)); process.exit(0);

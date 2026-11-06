@@ -1,0 +1,16 @@
+{
+  "status": "FAIL",
+  "caseId": "D3-C1",
+  "why": "ECS 生命周期 E2E 真机部分失败/未归零：vpcId=true subnetId=true serverId=true cleanupOk=false allZero=false",
+  "executedAt": "20261106215342",
+  "steps": [
+    "CreateVpc testbot5-hermes-e2e-4002022239 -> ok=true id=549643b2 | {\n  \"vpc\": {\n    \"id\": \"549643b2-d1b6-47f8-bbba-9eb5595ea839\",\n    \"name\": \"test",
+    "CreateSubnet testbot5-hermes-e2e-4002022239-subnet -> ok=true id=9b5bbb77 | {\n  \"subnet\": {\n    \"id\": \"9b5bbb77-2e88-4660-bf10-2246179e4f14\",\n    \"name\": \"t",
+    "CreateServers testbot5-hermes-e2e-4002022239-srv -> ok=true serverId=e0b21cd4-8dd | {\n  \"job_id\": \"ff808081a0ed1f3901a1b2db73794f70\",\n  \"serverIds\": [\n    \"e0b21cd4",
+    "DeleteServers e0b21cd4-8dd -> ok=true | {\n  \"error\": {\n    \"message\": \"could not get server infos.\",\n    \"code\": \"Ecs.0614\"\n  }\n}\n\u001b[1;93m获取终",
+    "ECS 轮询归零: 未确认",
+    "DeleteSubnet -> ok=true | {\n  \"code\": \"VPC.0209\",\n  \"message\": \"subnet is still used ,such as computer,LB.",
+    "DeleteVpc -> ok=true | {\n  \"code\": \"VPC.0104\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Router co",
+    "归零验证: VPC含prefix=true subnet含prefix=true ECS含prefix=true"
+  ]
+}

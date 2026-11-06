@@ -1,0 +1,1 @@
+import { execSync } from 'node:child_process'; const o = execSync('hcloud --help',{encoding:'utf8',timeout:60000,shell:true}).toString(); console.log(o.slice(0,300)); process.exit(0);
