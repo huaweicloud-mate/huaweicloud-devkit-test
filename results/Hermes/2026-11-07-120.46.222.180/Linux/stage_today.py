@@ -32,7 +32,7 @@ WHY = {
     'D4-17': "src/risk-rule-engine.mjs 无规则命中默认 decision=allow(fail-open)：空串/空白/&&rm -rf/*/$(curl)/控制字符垃圾 均判 ok",
     'D3-C4': "src/tools.mjs huaweicloud_list_operations 对 DMS、DEW 两服务未返回 command/result（list_operations+plan 失败，22 服务中 2 个无规范路由）",
     'D3-S5': "src/tools.mjs serviceCatalog routeMap 单意图匹配，复合意图(存储+托管)未分解，多路命中=false",
-    'D3-S6': "src/tools.mjs FunctionGraph CreateFunction 最小参数集缺 code(函数代码)，[USE_ERROR]Invalid parameter: code.zip_file，URN 未返回、触发器未绑定",
+    'D3-S6': "src/tools.mjs FunctionGraph CreateFunction 最小参数集缺 code(函数代码)，[USE_ERROR]Invalid parameter: code.filename，URN 未返回、触发器未绑定",
     'D3-S7': "src/tools.mjs RDS CreateInstance 最小参数集缺 db.password([USE_ERROR])；routeMap 无 Web 部署目标分解(部署目标命中=false)",
     'D4-25': "hooks/huaweicloud-safety.py WRITE_OPERATION_RE 前置捕获组致 hcloud vpc CreateVpc 遥测分类 cli:invoke(应 cli:write)",
     'D4-26': "src/risk-rule-engine.mjs redactEvidence 正则不匹配 JSON 带引号 key，secret_key/adminPass 明文残留(finding evidence 泄露)",
