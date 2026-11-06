@@ -1,0 +1,92 @@
+########## [1] realcloud-probe (D2-1/D3-C4/D4-14/18/19/20 + EXP-C4-01..22) ########## 2026-11-07 05:04:12
+realcloud-probe exit=0 2026-11-07 05:04:17
+    }
+  ]
+}
+
+########## [2] heavy E2E (D3-C7/C2/C3/C6/C1) ########## 2026-11-07 05:04:17
+########## D3-C7 ########## 2026-11-07 05:04:17
+[OK] list_regions 返回区域 -> {"ok":true,"count":26,"regions":[{"id":"af-north-1","type":"public","locales":{"en-us":"AF-Cairo","zh-cn":"非洲-开罗"}},{"id":"af-south-1","type":"public"
+[OK] get_regional_availability -> {"ok":true,"service":"vpc","region":"cn-north-4","available":true,"note":"vpc is available in cn-north-4.","sourcedFrom":"static cache, update via npm
+[OK] plan 只读含 --cli-region(参数级断言) -> ["VPC","ListVpcs","--cli-region=cn-north-4","--cli-output=json"]
+[OK] 执行只读查询 -> {
+  "request_id": "adb74d3e88927c9f58e25c73b9e0e39e",
+  "vpcs": [],
+  "page_info": {
+    "current_count": 0
+  }
+}
+[OK] EIP 建删命令含 region -> hasRegion=true
+[OK] CreatePublicip 返回 id -> [object Object]
+[OK] DeletePublicip 释放 -> {"ok":true,"exitCode":0,"signal":null,"stdout":"","stderr":"","plan":{"executable":"hcloud","args":[
+
+=== D3-C7 PASS 7/7 ===
+########## D3-C7 done exit=0 ########## 2026-11-07 05:04:19
+########## D3-C2 ########## 2026-11-07 05:04:19
+[OK] OBS建桶 -> Start at 2026-11-06 21:04:20.030059354 +0000 UTC
+
+Create bucket [tctest-hermes-obs-5gpxvh] successfully, request id [000001A1B2AD3C5044C6B50605B172D8]
+[OK] obsutil上传 -> Start at 2026-11-06 21:04:20.71251142 +0000 UTC
+
+
+Parallel:      5                   Jobs:          5                   
+Threshold:     50.00MB       
+[OK] public-read(ACL) -> 桶+对象 chattri -acl=public-read 已执行
+[OK] set静态站(website) -> {"ok":true,"status":200,"websiteUrl":"http://tctest-hermes-obs-5gpxvh.obs-website.cn-north-4.myhuaweicloud.com","message":"Static website hosting configured. Website URL: http://tctest-hermes-obs-5gpx
+[OK] get静态站 -> {"ok":true,"status":200,"body":"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><WebsiteConfiguration xmlns=\"http://obs.myhwclouds.com/doc/2015-06-30/\"><IndexDocument><Suffix>index.html
+[OK] curl200 -> code=200 url=http://tctest-hermes-obs-5gpxvh.obs-website.cn-north-4.myhuaweicloud.com
+[OK] 删桶归零 -> rm -r -f 清对象 + rm obs://bucket -f 删桶
+
+=== D3-C2 PASS 7/7 ===
+########## D3-C2 done exit=0 ########## 2026-11-07 05:04:32
+########## D3-C3 ########## 2026-11-07 05:04:32
+[FAIL] connect -> HDKIT_NOT_AGREEMENT: 用户未签署最新版协议，签署需由用户本人确认后完成 [trace: 5c1f0d5dbd24498c8899220c8f3bbd14]
+[FAIL] upload_project -> workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent.
+[FAIL] deploy_nginx -> workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent.
+[FAIL] deploy_check -> port, project, and output_dir are required.
+[FAIL] close_session -> workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent.
+
+=== D3-C3 FAIL 0/5 ===
+########## D3-C3 done exit=0 ########## 2026-11-07 05:04:32
+########## D3-C6 ########## 2026-11-07 05:04:32
+[FAIL] check_user -> HDKIT_NOT_AGREEMENT: 用户未签署最新版协议，签署需由用户本人确认后完成 [trace: 8a15dac420e14ba2a4dcd5caba622994]
+[FAIL] connect -> HDKIT_NOT_AGREEMENT: 用户未签署最新版协议，签署需由用户本人确认后完成 [trace: 763d715cb02d45a8a357825e22d97c0e]
+[FAIL] credentials -> session_id or dev_stage_id is required
+[FAIL] sign_agreement -> HDKIT_INTERNAL: 服务内部错误 [trace: 3570f8e4cef84d8aba956733d0146435]
+[FAIL] upload_file -> workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent.
+[FAIL] exec_one_shot -> workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent.
+[FAIL] deploy_check -> workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent.
+[FAIL] close_session -> workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent.
+
+=== D3-C6 FAIL 0/8 ===
+########## D3-C6 done exit=0 ########## 2026-11-07 05:04:34
+########## D3-C1 ########## 2026-11-07 05:04:34
+[OK] CreateVpc -> [object Object]
+[OK] CreateSubnet -> [object Object]
+[OK] CreateServers(审批分类) -> [object Object]
+[OK] CreateServers(返回 job_id/serverIds) -> [object Object]
+[OK] 验证 ACTIVE -> [object Object]
+[OK] 删除含磁盘 -> [object Object]
+[OK] 归零验证(ECS 不含本次资源) -> [object Object]
+[OK] 清理 VPC+子网 -> {"vpcId":"07de92fd-9d0d-4381-bb58-0782f4a8b4e9","subnetId":"61195e0e-8af1-40fd-959c-c615f1911c48","cleanOk":true}
+
+=== D3-C1 PASS 8/8 ===
+########## D3-C1 done exit=0 ########## 2026-11-07 05:05:37
+ALL HEAVY DONE 2026-11-07 05:05:37
+
+########## [3] aux (D4-13/23/24, D1-70) ########## 2026-11-07 05:05:37
+########## D4-13 只读子账号 ########## 2026-11-07 05:05:37
+exit=0
+parse err Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+########## D4-23 全局规则 ########## 2026-11-07 05:05:41
+exit=0
+tail: }
+########## D4-24 确认令牌边界 ########## 2026-11-07 05:05:41
+exit=0
+tail: }
+########## D1-70 代理配置 ########## 2026-11-07 05:05:41
+exit=1
+tail: Node.js v22.13.0
+AUX DONE 2026-11-07 05:05:41
+
+ALL REALCLOUD DONE 2026-11-07 05:05:41
