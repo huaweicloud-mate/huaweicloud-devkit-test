@@ -28,7 +28,7 @@ reg('D3-C2', async () => {
     detail.push(`curl=${curl.text}`);
   } finally {
     rmSync(dir, { recursive: true, force: true });
-    sh(['OBS', 'rm', `obs://${bucket}`, '-r', '-f']);
+    sh(['OBS', 'rm', `obs://${bucket}/index.html`, '-f']);
     const d = sh(['OBS', 'rm', `obs://${bucket}`, '-f']);
     del = d.ok || /success|delete|remove/i.test(d.text);
     detail.push(`rm(${del})=${d.text.slice(0, 70)}`);
