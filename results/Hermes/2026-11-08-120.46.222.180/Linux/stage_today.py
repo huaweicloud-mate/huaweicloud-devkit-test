@@ -45,11 +45,11 @@ WHY = {
     'D10-4': "safety/rules/cloud-risk-rules.json 规则 16->19 条(9 deny+10 warn)，用例断言计数滞后(SPEC 契约漂移)",
     'D1-39': "Windows 升级检测链 EINVAL 专属(OS 列标注「专属」)，Linux 侧由 EXP-NR3-10 覆盖",
     'D1-70': "undici@8.12.3 在 Node v22.13.0(arm64) 导入即崩：lib/interceptor/decompress.js:78 createZstdDecompress(来自 node:zlib)为 undefined 致 .bind() 报 TypeError；且 import('node:undici') 非 Node22.13 内建模块→回退裸 undici 崩溃。代理功能(有代理时走 undici ProxyAgent)整体不可用，探针崩溃遗留 proxy.json 污染",
+    'D3-C1': "src/tools.mjs:2241 runApprovedCommand 对 DeleteServers(含磁盘)/DeleteVpc/DeleteSubnet 仅返回提交结果(ok=true)无异步删除完成确认；ECS 含磁盘删除 >120s 仍 ACTIVE，探针归零窗口 120s(evidence/D3-C1/probe.mjs:98)不足，VPC/子网删除判 ds.ok/dv.ok(submit 成功)非真实归零 → ECS/VPC/子网均遗留，需人工二次清理",
 }
 
-FAIL = {'D2-4','D4-2','D4-21','D9-12','D4-4','D4-6','D4-17','D3-C4','D3-S5',
-        'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18',
-        'D1-70'}
+FAIL = {'D2-4','D4-2','D4-21','D9-12','D4-4','D4-6','D4-17','D3-C4','D3-S5',\n        'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18',
+        'D1-70','D3-C1'}
 SPEC = {'D8-9','D9-9','D10-4'}
 BLOCKED = set()
 NOT_RUN = {'D1-39'}
