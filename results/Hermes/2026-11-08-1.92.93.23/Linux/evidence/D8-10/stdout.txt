@@ -11,7 +11,7 @@ downloadBase=https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/
 =====END D2-27=====
 
 =====CASE D1-70=====
-writeProxyConfig path=/tmp/hdk-probe-1794085798599/.config/huaweicloud/proxy.json
+writeProxyConfig path=/tmp/hdk-probe-1794086510407/.config/huaweicloud/proxy.json
 readProxyConfig={"https_proxy":"http://proxy.example:8080","http_proxy":"http://proxy.example:8080","no_proxy":"internal.corp.com"}
 [OK] write/read proxy.json 正确
 getProxySettings(https)={"proxyUrl":"http://proxy.example:8080","noProxyList":["internal.corp.com"],"targetProtocol":"https:"}
@@ -19,11 +19,8 @@ getProxySettings(no_proxy 命中)=null
 [OK] getProxySettings 拼 file + no_proxy 命中返回 null
 getProxySettings(env 优先)={"proxyUrl":"http://env-proxy:9999","noProxyList":["internal.corp.com"],"targetProtocol":"https:"}
 [OK] env 优先于 file
-getWebSocketImpl(有代理)=ProxyWebSocket
-getWebSocketImpl(no_proxy)=globalThis.WebSocket
-[OK] 有代理返回 undici ProxyWebSocket
-[OK] 无代理回退 globalThis.WebSocket
-[OK] clearProxyConfig 清空
+EXC: Cannot read properties of undefined (reading 'bind')
+[FAIL] D1-70::exception
 =====END D1-70=====
 
 =====CASE D8-9=====
@@ -64,8 +61,8 @@ clearMarketCache x2 OK
 
 =====SUMMARY=====
 {
-  "total": 23,
-  "passed": 22,
+  "total": 21,
+  "passed": 19,
   "results": [
     {
       "name": "getKooCliVersion 读 package.json",
@@ -103,19 +100,9 @@ clearMarketCache x2 OK
       "detail": "{\"proxyUrl\":\"http://env-proxy:9999\",\"noProxyList\":[\"internal.corp.com\"],\"targetProtocol\":\"https:\"}"
     },
     {
-      "name": "有代理返回 undici ProxyWebSocket",
-      "ok": true,
-      "detail": "ProxyWebSocket"
-    },
-    {
-      "name": "无代理回退 globalThis.WebSocket",
-      "ok": true,
-      "detail": "globalThis.WebSocket"
-    },
-    {
-      "name": "clearProxyConfig 清空",
-      "ok": true,
-      "detail": "null"
+      "name": "D1-70::exception",
+      "ok": false,
+      "detail": "TypeError: Cannot read properties of undefined (reading 'bind')\n    at Object.<anonymous> (/home/zhangshuang/devkit-test/Hermes/hdk/node_modules/undici/lib/interceptor/decompress.js:78:30)\n    at Module._compile (node:internal/modules/cjs/loader:1562:14)\n    at Object..js (node:internal/modules/cjs/loader:1699:10)\n    at Module.load (node:internal/modules/cjs/loader:1313:32)\n    at Function._load "
     },
     {
       "name": "installId 稳定持久",
@@ -160,7 +147,7 @@ clearMarketCache x2 OK
     {
       "name": "save→take→readBackup 闭环",
       "ok": true,
-      "detail": "{\"taken\":{\"argsExtra\":[\"--x\"],\"env\":{\"MY\":\"1\"},\"savedAt\":\"2026-11-07T21:09:58.880Z\"},\"afterTake\":null}"
+      "detail": "{\"taken\":{\"argsExtra\":[\"--x\"],\"env\":{\"MY\":\"1\"},\"savedAt\":\"2026-11-07T21:21:50.518Z\"},\"afterTake\":null}"
     },
     {
       "name": "purgeBackup 幂等",
