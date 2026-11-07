@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-11-07 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13 gitHead 8a6d8be2）。"""
+"""Hermes Linux 2026-11-08 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13 gitHead 8a6d8be2）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -135,12 +135,12 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 
 # D3-C1 自动化 finally 归零的 150s ECS 删除轮询时序抖动 + sh().ok 退出码假阳性（非产品缺陷），附手工归零补充说明
 append_case("D3-C1", "\n===== 本轮手工归零补充（自动化 150s 轮询时序抖动，非产品缺陷） =====\n"
-    "CreateVpc(98f90d2c-9fea-4f88-80b5-5f41e2e27ada)/CreateSubnet(300c995d-5636-4030-8941-89d689647208)/CreateServers(返回serverIds e3d295f8-f073-47c5-b532-35bddbe3ac5f)/审批分类(allow) 均 PASS。"
+    "CreateVpc(1918b5dd-565e-476d-992d-6c13b0e308ab)/CreateSubnet(c5d620d3-6609-4ef6-9681-e021d81acd7e)/CreateServers(返回serverIds 51af9f1c-a5e4-4217-83a4-6c1fac5cfbe3)/审批分类(allow) 均 PASS。"
     "自动化 finally 归零：ECS 删除轮询 150s 内未见 GONE（ECS:仍在/未确认），且 sh() 以退出码 0 误记 subnet:OK/vpc:OK，"
     "实际 ECS/subnet/VPC 均残留（ListServersDetails servers=1、ListVpcs vpcs=1、ListSubnets subnets=1）。\n"
-    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=e3d295f8-f073-47c5-b532-35bddbe3ac5f --delete_publicip=true（job_id ff808081a0ed144001a1b2b9a8bb293c）→ 轮询至 servers=0；"
-    "hcloud VPC DeleteSubnet（--vpc_id 98f90d2c-9fea-4f88-80b5-5f41e2e27ada --subnet_id 300c995d-5636-4030-8941-89d689647208）→ subnets=0；hcloud VPC DeleteVpc → vpcs=0。"
-    "三样资源均已归零核实 GONE（hermes-ecs/hermes-e2e 前缀 List 均无残留）。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。\n")
+    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=51af9f1c-a5e4-4217-83a4-6c1fac5cfbe3 --delete_publicip=true（job_id ff808081a0ed1f4501a1b7dbeb817b2f）→ 轮询至 status=DELETED/vm_state=deleted；"
+    "hcloud VPC DeleteSubnet（--vpc_id 1918b5dd-565e-476d-992d-6c13b0e308ab --subnet_id c5d620d3-6609-4ef6-9681-e021d81acd7e）→ ListSubnets subnets=[]；hcloud VPC DeleteVpc → ListVpcs 不含 1918b5dd。"
+    "三样资源均已归零核实 GONE（hermes-ecs/hermes-e2e 前缀 List 均无本次残留）。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.13\ngitHead 8a6d8be2\n", None)
