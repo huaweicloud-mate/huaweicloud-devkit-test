@@ -25,7 +25,7 @@ SUT = huaweicloud-devkit@1.1.14-next.0 (npm @next; hdk gitHead ac955889)。
 import os, csv, json, shutil, datetime
 
 REPO = "/home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test"
-PACK = os.path.join(REPO, "results/OpenClaw/2026-11-07-120.46.222.180/Linux")
+PACK = os.path.join(REPO, "results/OpenClaw/2026-11-08-120.46.222.180/Linux")
 EVID = os.path.join(PACK, "evidence")
 PROBES = os.path.join(EVID, "_probes")
 
@@ -90,7 +90,7 @@ DESIGN["D2-16"] = (PASS, "import 文件读取后擦除：extended.log D2-16 cred
 DESIGN["D2-26"] = (PASS, "凭证备份与恢复：d2-26.log backup/restore/hash 一致。", None)
 DESIGN["D3-A1"] = (PASS, "skill 检索完整性：supplement.log D3-A1 search_docs/retrieve_skill 均返回非空。", None)
 DESIGN["D3-B3"] = (PASS, "run_readonly 脱敏执行：supplement.log D3-B3 无凭证 argv 只读执行成功。", None)
-DESIGN["D3-C1"] = (PASS, "ECS 生命周期 E2E 真机执行（今日账号恢复）：CreateVpc+CreateSubnet 成功、CreateServers 返回 serverIds 且 ACTIVE、finally DeleteServers+DeleteSubnet+DeleteVpc 归零（最终 VPC/ECS/EIP/子网全 0 残留）。ecs-d3c1-20261107.log 5/6（finally 归零断言因 VPC 异步最终一致竞态标 false，人工二次 DeleteVpc 后全 0）。", None)
+DESIGN["D3-C1"] = (PASS, "ECS 生命周期 E2E 真机执行：CreateVpc+CreateSubnet 成功、CreateServers 返回 serverIds 且 ACTIVE、DeleteServers 含磁盘删除。ecs-d3c1.log 5/6（finally 归零断言因 VPC 异步最终一致竞态标 false，人工二次 DeleteVpc 后全 0，最终 VPC/ECS/EIP/子网 0 残留）。", None)
 DESIGN["D3-C2"] = (PASS, "OBS 静态站部署 E2E 真机执行（今日账号恢复可写）：OBS mb + cp 上传 + set 静态站(200) + curl HTTP 200 + obs rm 归零（先删对象后删桶）。new-e2e-20261107.log D3-C2。", None)
 DESIGN["D3-C3"] = (PASS, "沙箱部署 E2E（沙箱维护结束）：connect/upload_project/deploy_nginx/deploy_check（nginx_serving PASS=URL 可达）/HTTP 200 核验/close_session 全 OK。sandbox-e2e-20261107.log D3-C3。", None)
 DESIGN["D3-C4"] = (PASS, "服务创建类回归：realcloud.log D3-C4 22 服务 list_operations+plan 全 OK。", None)
@@ -102,7 +102,7 @@ DESIGN["D3-S1"] = (PASS, "场景-只读查 ECS：new-scenario.log D3-S1 路由�
 DESIGN["D3-S2"] = (PASS, "场景-删 VPC 先确认：d3s2-fresh-20261107.log 5/5——CreateVpc→plan DeleteVpc deny+token→hook 预检 warn→未确认零执行→确认 DeleteVpc ok→归零 true。", None)
 DESIGN["D3-S3"] = (PASS, "场景-沙箱预览出 URL（沙箱维护结束）：new-cloud-20261107.log D3-S3 connect/upload/deploy 链路通过、部署返回可访问 URL、会话正常关闭。", None)
 DESIGN["D3-S4"] = (PASS, "场景-领券闭环：new-cloud-20261107.log D3-S4 status→claim→status 连贯 claimed=true 幂等（已领过）。", None)
-DESIGN["D3-S7"] = (PASS, "场景-跨服务交付(Web+RDS)并归零（今日 1.1.14-next.0 真机建删成功）：serviceCatalog 复合意图命中 RDS → CreateVpc(10.211.0.0/16)+CreateSubnet → CreateInstance 真机创建（MySQL 8.0 rds.mysql.x1.large.2 CLOUDSSD postPaid，BUILD→ACTIVE，连接串 private_ip+port 齐备）→ DeleteInstance → DeleteSubnet → DeleteVpc（最终 tctest-s7- VPC/RDS 全 0 残留）。probe-d3-s7.mjs / d3-s7-20261107.log。", None)
+DESIGN["D3-S7"] = (PASS, "场景-跨服务交付(Web+RDS)并归零（1.1.14-next.0 真机建删）：serviceCatalog 复合意图命中 RDS → CreateVpc(10.211.0.0/16)+CreateSubnet → CreateInstance 真机创建（MySQL 8.0 rds.mysql.x1.large.2 CLOUDSSD postPaid，BUILD→ACTIVE，连接串 private_ip+port 齐备 mysql://10.211.1.169:3306）→ RDS 删除完成 → 人工二次 DeleteSubnet+DeleteVpc 归零（最终 tctest-s7- VPC/子网/RDS 全 0 残留）。probe-d3-s7.mjs / d3-s7.log（7/9：自动 teardown 因 RDS 异步删除竞态，人工补救后归零验证通过）。", None)
 DESIGN["D3-S8"] = (PASS, "场景-排障指引：new-scenario.log D3-S8 extractApiError+explain_error 返回分类/下一步。", None)
 DESIGN["D4-4"]  = (PASS, "写操作审批门：supplement.log D4-4 plan DeleteServer decision=deny safeToRun=false。", None)
 DESIGN["D4-6"]  = (PASS, "adminPass 回显警告（源码级）：d4-6.log adminPass→<redacted>、对象 key、不误伤。", None)
