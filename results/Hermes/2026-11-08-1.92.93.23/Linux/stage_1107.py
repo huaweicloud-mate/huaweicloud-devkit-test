@@ -46,21 +46,17 @@ WHY = {
     'D3-S5': "src/tools.mjs serviceCatalog routeMap 单意图匹配，复合意图（存储+托管）未分解，多路命中=false",
     'D3-S6': "src/tools.mjs FunctionGraph CreateFunction 最小参数集不满足 API（[USE_ERROR]Invalid parameter: function_name/code）-> URN 未返回、触发器未绑定",
     'D3-S7': "src/tools.mjs RDS CreateInstance 最小参数集缺 db.password([USE_ERROR])；routeMap 无 Web 部署目标分解",
-    'D1-70': "undici@8.x 在 Node v22.13.0 导入即崩：lib/interceptor/decompress.js:78 createZstdDecompress(来自 node:zlib) 为 undefined 致 .bind() TypeError；代理功能整体不可用",
     'D1-39': "Windows 升级检测链 EINVAL 专属（OS 列标注「专属」），Linux 侧由 EXP-NR3-10 覆盖",
     'EXP-E01': "src/tools.mjs routeMap ECS keywords 含云服务器/服务器/虚拟机但缺「云主机」口语化别名 -> serviceCatalog MISS",
     'EXP-C4-14': "src/tools.mjs huaweicloud_list_operations(DMS) 未返回 command/result",
     'EXP-C4-18': "src/tools.mjs huaweicloud_list_operations(DEW) 未返回 command/result",
-    'D3-C3': "沙箱服务返回 HDKIT_NOT_AGREEMENT：用户未签署最新版协议，签署需账号本人确认（外部依赖，非代码缺陷）",
-    'D3-C6': "沙箱服务返回 HDKIT_NOT_AGREEMENT：用户未签署最新版协议，check_user/connect 全部被拒，7 个具名工具无法冒烟（外部依赖）",
-    'D3-S3': "沙箱 check_user 返回 HDKIT_NOT_AGREEMENT（用户未签最新协议），沙箱预览出 URL 无法验证（外部依赖）",
 }
 
 FAIL = {'D2-4', 'D4-2', 'D4-4', 'D4-6', 'D4-17', 'D4-21', 'D4-25', 'D4-26',
-        'D9-12', 'D10-3', 'D3-C4', 'D3-S5', 'D3-S6', 'D3-S7', 'D1-70',
-        'EXP-C4-14', 'EXP-C4-18', 'EXP-E01'}
+        'D9-12', 'D10-3', 'D3-C4', 'D3-S5', 'D3-S6', 'D3-S7',
+        'EXP-C4-14', 'EXP-C4-18', 'EXP-E01'}  # 2026-11-08：D1-70 undici 崩溃未复现，已 PASS
 SPEC = {'D8-9', 'D9-9', 'D10-4'}
-BLOCKED = {'D3-C3', 'D3-C6', 'D3-S3'}
+BLOCKED = set()  # 2026-11-08：沙箱协议已签，D3-C3/C6/S3 实测 PASS
 NOT_RUN = {'D1-39'}
 
 # --- 证据来源映射：case -> (kind, logfile, section) ---
