@@ -48,7 +48,8 @@ WHY = {
     'D3-C1': "src/tools.mjs:2241 runApprovedCommand 对 DeleteServers(含磁盘)/DeleteVpc/DeleteSubnet 仅返回提交结果(ok=true)无异步删除完成确认；ECS 含磁盘删除 >120s 仍 ACTIVE，探针归零窗口 120s(evidence/D3-C1/probe.mjs:98)不足，VPC/子网删除判 ds.ok/dv.ok(submit 成功)非真实归零 → ECS/VPC/子网均遗留，需人工二次清理",
 }
 
-FAIL = {'D2-4','D4-2','D4-21','D9-12','D4-4','D4-6','D4-17','D3-C4','D3-S5',\n        'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18',
+FAIL = {'D2-4','D4-2','D4-21','D9-12','D4-4','D4-6','D4-17','D3-C4','D3-S5',
+        'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18',
         'D1-70','D3-C1'}
 SPEC = {'D8-9','D9-9','D10-4'}
 BLOCKED = set()
