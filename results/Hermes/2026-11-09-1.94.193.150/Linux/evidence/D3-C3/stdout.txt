@@ -1,0 +1,91 @@
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+[2026-11-08T21:13:03.179Z] uploadProject: /tmp/d3c3-proj -> /workspace/d3c3-proj.tar.gz (archive=216 bytes, md5=d362545f57402eac2ea741391e2a3b2b)
+[2026-11-08T21:13:03.226Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-381611820/sandbox-upload-1794172383167/d3c3-proj.tar.gz, size=216, remotePath=/workspace/d3c3-proj.tar.gz)
+[2026-11-08T21:13:03.227Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-08T21:13:03.227Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-08T21:13:03.274Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-08T21:13:03.326Z] deployFileServer: starting server on port 8888
+[2026-11-08T21:13:03.371Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 5901\r\n\u001b]133;C\u0007\r\n"
+[2026-11-08T21:13:03.372Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+[2026-11-08T21:13:04.251Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-08T21:13:04.253Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-08T21:13:04.254Z] uploadViaHttpTunnel: tunnel ready, localPort=44195
+[2026-11-08T21:13:04.254Z] uploadViaHttpTunnel: waiting for server health on localhost:44195
+[2026-11-08T21:13:04.255Z] waitForServerReady: attempt 1, checking http://localhost:44195/health
+[2026-11-08T21:13:04.304Z] waitForServerReady: server ready on port 44195 after 0 retries
+[2026-11-08T21:13:04.304Z] uploadViaHttpTunnel: sending POST with 216 bytes
+[2026-11-08T21:13:04.354Z] uploadViaHttpTunnel: upload complete (bytes=216, md5=d362545f57402eac2ea741391e2a3b2b)
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+### D3-C3 ###
+{
+  "case": "D3-C3",
+  "status": "PASS",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "name": "connect",
+      "pass": true,
+      "detail": "ws=71a94ace36"
+    },
+    {
+      "name": "upload_project",
+      "pass": true,
+      "detail": "{\"ok\":true,\"localDir\":\"/tmp/d3c3-proj\",\"remotePath\":\"/workspace/d3c3-proj\",\"bytes\":216,\"md5\":\"d362545f57402eac2ea741391e"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": true,
+      "detail": "static:8083"
+    },
+    {
+      "name": "deploy_check",
+      "pass": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "close_session",
+      "pass": true,
+      "detail": "\"ok\""
+    }
+  ]
+}
