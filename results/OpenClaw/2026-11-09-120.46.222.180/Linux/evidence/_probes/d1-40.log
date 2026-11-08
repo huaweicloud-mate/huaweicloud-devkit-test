@@ -1,0 +1,12 @@
+远端 1.1.0 < 本地 1.2.0 = {"currentVersion":"1.2.0","latestStable":"1.1.0","latestNext":null,"targetVersion":"1.1.0","updateAvailable":false,"dismissed":false,"dismissExpiresAt":null,"result":"up_to_date"}
+[PASS] 远端<本地不倒退: 远端更低时不 give update_available（不提示倒退）
+远端 1.1.0 == 本地 1.1.0 = {"currentVersion":"1.1.0","latestStable":"1.1.0","latestNext":null,"targetVersion":"1.1.0","updateAvailable":false,"dismissed":false,"dismissExpiresAt":null,"result":"up_to_date"}
+[PASS] 相等不提示: 远端==本地不提示更新
+determineTarget(正式版, latest<next) = 1.1.0
+[PASS] 不受 lag 的 next 蛊惑: 正式版目标=latest（1.1.0），不因 next 领先而越级
+distTags=null = {"currentVersion":"1.1.0","latestStable":null,"latestNext":null,"targetVersion":null,"updateAvailable":false,"dismissed":false,"dismissExpiresAt":null,"result":"check_failed","note":"检测失败，不影响使用"}
+[PASS] 无 distTags 不误判: 查询失败返回 check_failed，不误报 update_available
+远端 1.2.0 > 本地 1.1.0 = {"currentVersion":"1.1.0","latestStable":"1.2.0","latestNext":null,"targetVersion":"1.2.0","updateAvailable":true,"dismissed":false,"dismissExpiresAt":null,"result":"update_available"}
+[PASS] 正常升级仍提示: 远端更高时正常 update_available（对照不误伤）
+
+=== D1-40 反向下发防护结论: ALL PASS ===
