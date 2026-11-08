@@ -25,7 +25,7 @@ SUT = huaweicloud-devkit@1.1.14-next.0 (npm @next; hdk gitHead ac955889)。
 import os, csv, json, shutil, datetime
 
 REPO = "/home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test"
-PACK = os.path.join(REPO, "results/OpenClaw/2026-11-08-120.46.222.180/Linux")
+PACK = os.path.join(REPO, "results/OpenClaw/2026-11-09-120.46.222.180/Linux")
 EVID = os.path.join(PACK, "evidence")
 PROBES = os.path.join(EVID, "_probes")
 
