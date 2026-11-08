@@ -1,0 +1,17 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-2",
+  "why": "裸小写 access_key 漏拦截（decide=allow/not_huaweicloud），大写 HW_ACCESS_KEY 才 deny（deny）",
+  "executedAt": "20261108214503",
+  "rootCause": "safety-policy.mjs env-dump 正则未覆盖裸 access_key 小写形态",
+  "bare": {
+    "decision": "allow",
+    "risk": "not_huaweicloud",
+    "reason": "No Huawei Cloud safety rule matched."
+  },
+  "upper": {
+    "decision": "deny",
+    "risk": "credential",
+    "reason": "Dumping cloud credential environment variables is blocked."
+  }
+}

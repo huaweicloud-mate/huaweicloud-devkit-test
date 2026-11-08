@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "caseId": "D3-C6",
+  "why": "7 沙箱隐式工具逐具名最小调用均返回规范结果（成功对象或明确的参数缺失/会话缺失错误），无静默失败、无空返回、无崩溃",
+  "executedAt": "20261108214600",
+  "smoke": [
+    {
+      "name": "huaweicloud_sandbox_check_user",
+      "hasResult": true,
+      "error": null
+    },
+    {
+      "name": "huaweicloud_sandbox_credentials",
+      "hasResult": false,
+      "error": "Error: session_id or dev_stage_id is required"
+    },
+    {
+      "name": "huaweicloud_sandbox_sign_agreement",
+      "hasResult": true,
+      "error": null
+    },
+    {
+      "name": "huaweicloud_sandbox_upload_file",
+      "hasResult": false,
+      "error": "Error: local_path and remote_path are required."
+    },
+    {
+      "name": "huaweicloud_sandbox_exec_one_shot",
+      "hasResult": false,
+      "error": "Error: workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent."
+    },
+    {
+      "name": "huaweicloud_sandbox_deploy_check",
+      "hasResult": false,
+      "error": "Error: port, project, and output_dir are required."
+    },
+    {
+      "name": "huaweicloud_sandbox_close_session",
+      "hasResult": false,
+      "error": "Error: workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WORKSPACE_ID environment variable before starting the agent."
+    }
+  ]
+}

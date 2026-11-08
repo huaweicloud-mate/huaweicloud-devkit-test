@@ -1,0 +1,13 @@
+{
+  "status": "FAIL",
+  "caseId": "D3-C2",
+  "why": "OBS 建桶 testbot5-hermes-obs-4173803097 -> obs_set_website_config set 状态=400 ok=false -> 删桶归零",
+  "executedAt": "20261108213643",
+  "steps": [
+    "hcloud obs mb obs://testbot5-hermes-obs-4173803097 -location=cn-north-4 -> ok=false | Start at 2026-11-08 21:36:43.3196792 +0000 UTC\n\nCreate bucket [testbot5-hermes-obs-4173803097] successfully, request id [000001A1BD179B4C44D13E0374126",
+    "obs_set_website_config(set) -> {\"ok\":false,\"status\":400,\"websiteUrl\":\"http://testbot5-hermes-obs-4173803097.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: HTTP 400\"}",
+    "obs_set_website_config(get) -> {\"ok\":false,\"status\":400,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidArgument</Code><Message>Request has x-amz-security-token header but signed headers not include it.</Message><RequestId>000001A1BD179E7C4417701C103EE304</RequestId><HostId>76xevGDgsKlTdkg",
+    "hcloud obs rm -r -f obs://testbot5-hermes-obs-4173803097 -> ok=true | Start at 2026-11-08 21:36:44.2634828 +0000 UTC\n\nWarn: No task to run\n[_____________________________________________________________________________] ?"
+  ],
+  "rootCause": "plugins/huaweicloud-core/src/tools.mjs:3183 (signedHeaders='host;x-amz-content-sha256;x-amz-date' 缺 x-amz-security-token) 与 :3220 (签名后 if(creds.securityToken) headers[\"x-amz-security-token\"] 追加该 header，导致 OBS 拒绝 \"Request has x-amz-security-token header but signed headers not include it\")"
+}

@@ -1,0 +1,18 @@
+{
+  "status": "FAIL",
+  "caseId": "D3-S3",
+  "why": "沙箱部署 E2E：connect=connected(workspace 71a94ace) → upload_project 因 tar 命令 Windows 盘符路径未转义而失败（tar -czf C:\\... 被解析为远程 host \"C:\"，报 \"Cannot connect to C: resolve failed\"）→ 站点内容未上传 → deploy_nginx(port=8083) 成功但公网 URL 返回 HTTP 404(应为 200) → close_session ok。沙箱后端已恢复在线（check_user 返回 realnameVerified=true），此为非维护阻塞，属 upload_project Windows 路径 tar 打包缺陷。",
+  "publicUrl": "https://67grkqdx-8083.devbridge-s2.hwtunnel.com",
+  "port": 8083,
+  "executedAt": "20261108214615",
+  "steps": [
+    "connect -> ws=71a94ace36b4 status=connected",
+    "upload_project -> {\"__error\":\"Error: Command failed: tar -czf C:\\\\Users\\\\ADMINI~1\\\\AppData\\\\Local\\\\Temp\\\\multica-task-4052513221\\\\sandbox-",
+    "deploy_nginx -> {\"ok\":true,\"nginxType\":\"static\",\"port\":8083,\"outputPath\":\"/workspace/hdk-sandbox-site/.\",\"projectPath\":\"/workspace/hdk-sandbox-site\",\"configPath\":\"/etc/nginx/co",
+    "expose_tunnel -> {\"ok\":true,\"publicUrl\":\"https://67grkqdx-8083.devbridge-s2.hwtunnel.com\",\"port\":8083,\"sandboxLifetime\":{\"poolType\":\"ephemeral\",\"idleShutdownMinutes\":30,\"idleDeleteMinutes\":60},\"urlLifetimeHint\":\"该公网地址",
+    "curl https://67grkqdx-8083.devbridge-s2.hwtunnel.com -> HTTP 404",
+    "close_session -> \"ok\""
+  ],
+  "rootCause": "sandbox/session-manager.mjs:413-414 createTarGz 用 execFileAsync(\"tar\",[\"-czf\",archivePath,...]) 传 Windows 盘符路径(含反斜杠)，tar 将 C:\\ 解析为远程 host→\"Cannot connect to C: resolve failed\"",
+  "httpCode": 404
+}
