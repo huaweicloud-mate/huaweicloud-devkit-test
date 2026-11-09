@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "caseId": "D2-4",
+  "why": "小写 ak=/sk= 与 JSON 带引号 key 明文残留（r1=\"ak=AK123456 sk=SKsecret\" r2=\"{\\\"ak\\\":\\\"AK123456\\\",\\\"sk\\\":\\\"SKsecret\\\"}\"），仅大写 AK= 正常（r3=\"AK=<redacted> SK=<redacted>\"）",
+  "executedAt": "20261109212746",
+  "rootCause": "safety-policy.mjs:45 (AK|SK) 正则无 /i；:20 isSecretKeyName 未含裸 ak/sk",
+  "lower": "ak=AK123456 sk=SKsecret",
+  "json": "{\"ak\":\"AK123456\",\"sk\":\"SKsecret\"}",
+  "upper": "AK=<redacted> SK=<redacted>"
+}

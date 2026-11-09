@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "why": "7 隐式沙箱工具逐具名最小调用均返回规范结果、无静默失败：check_user(realnameVerified=true)/sign_agreement(signed=true) 成功；credentials/upload_file/exec_one_shot/deploy_check/close_session 各返回明确的 'required 参数' 校验错误（结构化报错，非静默失败）；且 sandbox-deploy E2E 实测 connect/deploy_nginx/expose_tunnel/close_session 均可响应。",
+  "smoke": {
+    "check_user": "OK realnameVerified=true agreementSigned=true",
+    "credentials": "ERR session_id or dev_stage_id is required",
+    "sign_agreement": "OK signed=true",
+    "upload_file": "ERR local_path and remote_path are required",
+    "exec_one_shot": "ERR workspace_id is required",
+    "deploy_check": "ERR port, project, and output_dir are required",
+    "close_session": "ERR workspace_id is required"
+  },
+  "caseId": "D3-C6",
+  "executedAt": "20261110053131"
+}

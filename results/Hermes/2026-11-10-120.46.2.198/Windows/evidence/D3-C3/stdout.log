@@ -1,0 +1,15 @@
+{
+  "status": "FAIL",
+  "why": "沙箱部署 E2E 真机：connect=connected → upload_project 失败（tar -czf 传 Windows 盘符路径 C:\\...，被 tar 解析为远程 host C:，报 Command failed）→ deploy_nginx 空站点成功(8084) → expose_tunnel 取公网 URL → curl 返回 HTTP 404（应为 200）→ close_session ok。",
+  "rootCause": "plugins/huaweicloud-core/src/sandbox/session-manager.mjs:413-414 createTarGz 用 execFileAsync('tar', ['-czf', archivePath, '-C', dirname, basename]) 传 Windows 盘符路径，GNU/msys tar 将 C:\\ 解析为远程宿主，打包失败",
+  "steps": [
+    "connect -> ws=71a94ace36b4 status=connected",
+    "upload_project -> ERROR: Command failed: tar -czf C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\multica-task-234150775\\sandbox-... (Windows 盘符路径被 tar 解析为远程 host C:)",
+    "deploy_nginx -> ok:true port=8084 (空站点：内容未上传成功)",
+    "expose_tunnel -> ok:true publicUrl=https://qggwse45-8084.devbridge-s2.hwtunnel.com port=8084",
+    "curl publicUrl -> HTTP 404 (应为 200)",
+    "close_session -> ok"
+  ],
+  "caseId": "D3-C3",
+  "executedAt": "20261110053131"
+}

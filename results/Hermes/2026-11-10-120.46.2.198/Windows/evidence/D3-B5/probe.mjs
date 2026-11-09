@@ -1,0 +1,1 @@
+const M='C:/Users/Administrator/multica_workspaces/vector-8988c3df7bc9/task-4eb50f70acb9/hermes-home/tools/node-26.7.0-win32-x64/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src'; const df = await import('file:///'+M+'/detect-framework.mjs'); console.log(Object.keys(df).join(',')); process.exit(0);

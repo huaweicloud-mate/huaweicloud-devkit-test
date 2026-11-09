@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "caseId": "D4-13",
+  "why": "只读子账号 test001 实测 CreateVpc 成功创建 VPC(id=d161648b-e920-4a90-9bcd-7c10aba93505, name=testbot5-hermes-ro-4260260964)——只读凭证具备写权限，最小权限未强制；已删除归零(del.rc=0)",
+  "rootCause": "只读子账号 IAM 策略过宽（test001 具备 VPC 写权限，非产品代码缺陷，属账号侧 IAM 配置）",
+  "executedAt": "20261109213740",
+  "raw": "{\n  \"vpc\": {\n    \"id\": \"d161648b-e920-4a90-9bcd-7c10aba93505\",\n    \"name\": \"testbot5-hermes-ro-4260260964\",\n    \"description\": \"\",\n    \"cidr\": \"192.168.93.0/24\",\n    \"status\": \"CREATING\",\n    \"routes\": [],\n    \"enterprise_project_id\": \"0\",\n    \"enable_network_address_usage_metrics\": false,\n    \"tenant_id\": \"46c1fd48bd1248c7b75afc3780de7132\",\n    \"created_at\": \"2026-11-09T21:37:41\",\n    \"updated_at\": \"2026-11-09T21:37:41\"\n  }\n}"
+}

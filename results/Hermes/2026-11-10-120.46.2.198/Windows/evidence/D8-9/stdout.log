@@ -1,0 +1,9 @@
+{
+  "status": "SPEC-MISMATCH",
+  "caseId": "D8-9",
+  "why": "sanitizeValue 未移除敏感值(AK=>null, token=>\"token=SECRET_TOKEN_XYZ\")",
+  "executedAt": "20261109212746",
+  "rootCause": "telemetry/telemetry.mjs sanitizeValue 仅去控制字符+截断，无 AK/SK/token 脱敏",
+  "ak": null,
+  "token": "token=SECRET_TOKEN_XYZ"
+}

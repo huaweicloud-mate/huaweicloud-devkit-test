@@ -1,0 +1,3 @@
+const M='C:/Users/Administrator/multica_workspaces/vector-8988c3df7bc9/task-4eb50f70acb9/hermes-home/tools/node-26.7.0-win32-x64/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src'; const hc = await import('file:///'+M+'/hcloud-cli.mjs');
+const r = hc.planHcloudCommand(['VPC','ListVpcs']);
+console.log(JSON.stringify({decision:r.classification?.decision, risk:r.classification?.risk})); process.exit(0);
