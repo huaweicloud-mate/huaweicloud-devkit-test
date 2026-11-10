@@ -1,0 +1,218 @@
+=== huaweicloud-devkit --help ===
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.9                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+Usage: npx huaweicloud-devkit <command> [--target <opencode|codex|codearts|codearts-work|workbuddy|dsh|officeace|hermes|openclaw|atomcode|all>]
+
+Commands:
+  install      Install skills, MCP server, safety policy
+  uninstall    Remove installed files
+  update       Update to latest version
+  reinstall    Full clean reinstall
+  status       Show installation status
+  doctor       Self-check: hcloud, MCP, skills, auth
+  install-hcloud  Show KooCLI install commands for your OS
+  auth         Manage unified auth: init | sync | status | reconcile
+  proxy        Manage proxy config: init | show | clear
+  version      Print CLI version and installed plugin version per agent
+  help         Show this help
+
+Options:
+  --target     Target agent: opencode (default), codex, codearts, codearts-work, workbuddy, dsh, officeace, hermes, openclaw, atomcode, all
+  --version    Print CLI version and installed plugin version per agent
+  --opencode-mcp-era v1|v2   Force OpenCode MCP config form (v1 legacy flat, v2 native mcp.servers)
+  --clean-kocli   (with: uninstall --target all) also remove KooCLI
+  --clean-obs     (with: uninstall --target all) also remove OBS config
+  --clean-global  (with: uninstall --target all) also remove KooCLI + OBS config
+
+Examples:
+  npx huaweicloud-devkit install
+  npx huaweicloud-devkit install --target codex
+  npx huaweicloud-devkit install --target codearts
+  npx huaweicloud-devkit install --target codearts-work
+  npx huaweicloud-devkit install --target workbuddy
+  npx huaweicloud-devkit install --target dsh
+  npx huaweicloud-devkit install --target officeace
+  npx huaweicloud-devkit install --target hermes
+  npx huaweicloud-devkit install --target atomcode
+  npx huaweicloud-devkit install --target all
+  npx huaweicloud-devkit auth init
+  npx huaweicloud-devkit auth sync --target all
+  npx huaweicloud-devkit auth status --target all
+  npx huaweicloud-devkit proxy init
+  npx huaweicloud-devkit proxy show
+(node:11788) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+help_rc=0
+=== update --help ===
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.9                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+(node:11092) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[33mℹ️ 检测到新版本：1.1.13（当前 1.1.9，latest 频道）。建议运行 `npx --yes huaweicloud-devkit@latest update` 更新。[0m
+[OpenCode]
+  Skills updated -> C:\Users\Administrator\.config\opencode\skills
+  Commands updated -> C:\Users\Administrator\.config\opencode\commands
+  MCP Server updated -> C:\Users\Administrator\.config\opencode\huaweicloud-plugins\src
+  Safety Policy updated -> C:\Users\Administrator\.config\opencode\huaweicloud-plugins\safety
+  Agent Rules -> C:\Users\Administrator\.config\opencode\huaweicloud-plugins\rules\huawei-agent-rules.mdc
+  Plugin updated -> C:\Users\Administrator\.config\opencode\plugins
+  OpenCode MCP config unchanged: C:\Users\Administrator\.config\opencode\opencode.jsonc
+  Runtime deps installed -> C:\Users\Administrator\.config\opencode\huaweicloud-plugins\node_modules
+
+[Codex Desktop]
+  Skills updated -> C:\Users\Administrator\plugins\huaweicloud-devkit\skills
+  Commands updated -> C:\Users\Administrator\plugins\huaweicloud-devkit\commands
+  MCP Server updated -> C:\Users\Administrator\plugins\huaweicloud-devkit\src
+  Safety Policy updated -> C:\Users\Administrator\plugins\huaweicloud-devkit\safety
+  Agent Rules -> C:\Users\Administrator\plugins\huaweicloud-devkit\rules\huawei-agent-rules.mdc
+  Assets updated -> C:\Users\Administrator\plugins\huaweicloud-devkit\assets
+  MCP Config unchanged: C:\Users\Administrator\plugins\huaweicloud-devkit\.mcp.json
+  Plugin Manifest updated -> C:\Users\Administrator\plugins\huaweicloud-devkit\.codex-plugin
+  Marketplace unchanged: C:\Users\Administrator\.agents\plugins\marketplace.json
+  Runtime deps installed -> C:\Users\Administrator\plugins\huaweicloud-devkit\node_modules
+
+[CodeArts]
+  Skills updated -> C:\Users\Administrator\.codeartsdoer\skills
+  Skills updated -> C:\Users\Administrator\devkit-test\OfficeAce\huaweicloud-devkit-test\results\OfficeAce\2026-11-11-119.8.181.45\Windows\evidence\D1-4\.codeartsdoer\skills
+  MCP Server updated -> C:\Users\Administrator\.codeartsdoer\huaweicloud-plugins\src
+  Safety Policy updated -> C:\Users\Administrator\.codeartsdoer\huaweicloud-plugins\safety
+  Agent Rules -> C:\Users\Administrator\.codeartsdoer\huaweicloud-plugins\rules\huawei-agent-rules.mdc
+  Plugin updated -> C:\Users\Administrator\.codeartsdoer\plugins
+  MCP config unchanged: C:\Users\Administrator\.codeartsdoer\mcp\mcp_settings.json
+  MCP config updated: C:\Users\Administrator\devkit-test\OfficeAce\huaweicloud-devkit-test\results\OfficeAce\2026-11-11-119.8.181.45\Windows\evidence\D1-4\.codeartsdoer\mcp\mcp_settings.json
+  Runtime deps installed -> C:\Users\Administrator\.codeartsdoer\huaweicloud-plugins\node_modules
+
+[CodeArts Work]
+  Skills updated -> C:\Users\Administrator\.codeartswork\skills
+  MCP Server updated -> C:\Users\Administrator\.codeartswork\huaweicloud-plugins\src
+  Safety Policy updated -> C:\Users\Administrator\.codeartswork\huaweicloud-plugins\safety
+  Agent Rules -> C:\Users\Administrator\.codeartswork\huaweicloud-plugins\rules\huawei-agent-rules.mdc
+  MCP config unchanged: C:\Users\Administrator\.codearts\mcp\mcp_settings.json
+  Runtime deps installed -> C:\Users\Administrator\.codeartswork\huaweicloud-plugins\node_modules
+
+[WorkBuddy]
+  Skills updated -> C:\Users\Administrator\.workbuddy\skills
+  MCP Server updated -> C:\Users\Administrator\.workbuddy\huaweicloud-plugins\src
+  Safety Policy updated -> C:\Users\Administrator\.workbuddy\huaweicloud-plugins\safety
+  Agent Rules -> C:\Users\Administrator\.workbuddy\huaweicloud-plugins\rules\huawei-agent-rules.mdc
+  MCP config unchanged: C:\Users\Administrator\.workbuddy\mcp.json
+  Runtime deps installed -> C:\Users\Administrator\.workbuddy\huaweicloud-plugins\node_modules
+  Hook tracker -> C:\Users\Administrator\.codebuddy\hooks\telemetry-tracker.py
+  Plugin hooks -> C:\Users\Administrator\.workbuddy\huaweicloud-plugins\hooks
+  PostToolUse hook -> C:\Users\Administrator\.workbuddy\settings.json
+
+[DSH]
+  Skills updated -> C:\Users\Administrator\.dsh\skills
+  MCP Server updated -> C:\Users\Administrator\.dsh\huaweicloud-plugins\src
+  Safety Policy updated -> C:\Users\Administrator\.dsh\huaweicloud-plugins\safety
+  Agent Rules -> C:\Users\Administrator\.dsh\huaweicloud-plugins\rules\huawei-agent-rules.mdc
+  Hook Plugin updated -> C:\Users\Administrator\.dsh\huaweicloud-plugins\hook-plugin.mjs
+  DSH patch legacy block cleaned: C:\Users\Administrator\.dsh\profiles\web\cordis.patch.yml
+  DSH patch updated: C:\Users\Administrator\.dsh\profiles\web\cordis.patch.yml
+  [33m[WARN][0m DSH MCP client package not detected.
+  Manual: npx @deepseek-ai/dsh plugin --profile web add @deepseek-ai/dsh-mcp-client
+  If pnpm is missing, run: corepack enable pnpm
+  Runtime deps installed -> C:\Users\Administrator\.dsh\huaweicloud-plugins\node_modules
+
+[OfficeAce]
+  Skills updated -> C:\Users\Administrator\AppData\Local\Programs\OfficeAce\.office-claw\skills
+  MCP Server updated -> C:\Users\Administrator\AppData\Local\Programs\OfficeAce\.office-claw\huaweicloud-plugins\src
+  Safety Policy updated -> C:\Users\Administrator\AppData\Local\Programs\OfficeAce\.office-claw\huaweicloud-plugins\safety
+  Agent Rules -> C:\Users\Administrator\AppData\Local\Programs\OfficeAce\.office-claw\huaweicloud-plugins\rules\huawei-agent-rules.mdc
+  Runtime deps installed -> C:\Users\Administrator\AppData\Local\Programs\OfficeAce\.office-claw\huaweicloud-plugins\node_modules
+  MCP config merged (user fields preserved): C:\Users\Administrator\AppData\Local\Programs\OfficeAce\data\mcp-connectors.sqlite
+
+[Hermes Agent]
+  Skills updated -> C:\Users\Administrator\.hermes\skills
+  MCP Server updated -> C:\Users\Administrator\.hermes\huaweicloud-plugins\src
+  Safety Policy updated -> C:\Users\Administrator\.hermes\huaweicloud-plugins\safety
+  Agent Rules -> C:\Users\Administrator\.hermes\huaweicloud-plugins\rules\huawei-agent-rules.mdc
+  Safety Hooks updated -> C:\Users\Administrator\.hermes\huaweicloud-plugins\hooks
+  MCP config unchanged: C:\Users\Administrator\.hermes\config.yaml
+  Hooks config unchanged: C:\Users\Administrator\.hermes\config.yaml
+  Hook allowlist unchanged: C:\Users\Administrator\.hermes\shell-hooks-allowlist.json
+  Hook plugin unchanged: C:\Users\Administrator\.hermes\plugins\huaweicloud-safety
+  MCP Python SDK: [32mAlready installed[0m
+  Runtime deps installed -> C:\Users\Administrator\.hermes\huaweicloud-plugins\node_modules
+
+[OpenClaw]
+  Skills updated -> C:\Users\Administrator\.agents\skills
+  Commands updated -> C:\Users\Administrator\.agents\commands
+  MCP Server updated -> C:\Users\Administrator\.agents\huaweicloud-plugins\src
+  Safety Policy updated -> C:\Users\Administrator\.agents\huaweicloud-plugins\safety
+  Agent Rules -> C:\Users\Administrator\.agents\huaweicloud-plugins\rules\huawei-agent-rules.mdc
+  MCP Config unchanged: C:\Users\Administrator\.agents\huaweicloud-plugins\.mcp.json
+  Plugin Manifest updated -> C:\Users\Administrator\.agents\huaweicloud-plugins\.codex-plugin
+  Runtime deps installed -> C:\Users\Administrator\.agents\huaweicloud-plugins\node_modules
+
+[AtomCode]
+  Skills updated -> C:\Users\Administrator\.atomcode\skills
+  MCP Server updated -> C:\Users\Administrator\.atomcode\huaweicloud-plugins\src
+  Safety Policy updated -> C:\Users\Administrator\.atomcode\huaweicloud-plugins\safety
+  Agent Rules -> C:\Users\Administrator\.atomcode\huaweicloud-plugins\rules\huawei-agent-rules.mdc
+  MCP config unchanged: C:\Users\Administrator\.atomcode\mcp.json
+  Hook -> C:\Users\Administrator\.atomcode\huaweicloud-plugins\hooks\huaweicloud-telemetry.js
+  Hook config -> C:\Users\Administrator\.atomcode\hooks.json
+  Runtime deps installed -> C:\Users\Administrator\.atomcode\huaweicloud-plugins\node_modules
+
+[32mUpdate complete.[0m
+[33mMCP 工具在重启各 agent 会话后才生效。[0m
+update_help_rc=0
+=== check-update ===
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v1.1.9                 ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+Usage: npx huaweicloud-devkit <command> [--target <opencode|codex|codearts|codearts-work|workbuddy|dsh|officeace|hermes|openclaw|atomcode|all>]
+
+Commands:
+  install      Install skills, MCP server, safety policy
+  uninstall    Remove installed files
+  update       Update to latest version
+  reinstall    Full clean reinstall
+  status       Show installation status
+  doctor       Self-check: hcloud, MCP, skills, auth
+  install-hcloud  Show KooCLI install commands for your OS
+  auth         Manage unified auth: init | sync | status | reconcile
+  proxy        Manage proxy config: init | show | clear
+  version      Print CLI version and installed plugin version per agent
+  help         Show this help
+
+Options:
+  --target     Target agent: opencode (default), codex, codearts, codearts-work, workbuddy, dsh, officeace, hermes, openclaw, atomcode, all
+  --version    Print CLI version and installed plugin version per agent
+  --opencode-mcp-era v1|v2   Force OpenCode MCP config form (v1 legacy flat, v2 native mcp.servers)
+  --clean-kocli   (with: uninstall --target all) also remove KooCLI
+  --clean-obs     (with: uninstall --target all) also remove OBS config
+  --clean-global  (with: uninstall --target all) also remove KooCLI + OBS config
+
+Examples:
+  npx huaweicloud-devkit install
+  npx huaweicloud-devkit install --target codex
+  npx huaweicloud-devkit install --target codearts
+  npx huaweicloud-devkit install --target codearts-work
+  npx huaweicloud-devkit install --target workbuddy
+  npx huaweicloud-devkit install --target dsh
+  npx huaweicloud-devkit install --target officeace
+  npx huaweicloud-devkit install --target hermes
+  npx huaweicloud-devkit install --target atomcode
+  npx huaweicloud-devkit install --target all
+  npx huaweicloud-devkit auth init
+  npx huaweicloud-devkit auth sync --target all
+  npx huaweicloud-devkit auth status --target all
+  npx huaweicloud-devkit proxy init
+  npx huaweicloud-devkit proxy show
+(node:10728) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+checkupdate_rc=0
