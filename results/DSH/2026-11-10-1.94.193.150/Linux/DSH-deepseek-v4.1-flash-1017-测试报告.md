@@ -1,10 +1,10 @@
-# DSH-deepseek-v4-pro-0813 每日测试报告
+# DSH-deepseek-v4.1-flash-1017 每日测试报告
 
-> **报告名**：`DSH-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-11-10 05:21（北京时间）
+> **报告名**：`DSH-deepseek-v4.1-flash-1017-测试报告.md`
+> **生成时间**：2026-11-10 10:40（北京时间）
 > **执行归档**：`results/DSH/2026-11-10-1.94.193.150/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
-> **结论**：`PARTIAL`（有 FAIL 缺陷，P0 5 项；12 项缺陷均为历史遗留，归入既有单 #1055）
+> **结论**：`PARTIAL`（有 FAIL 缺陷，P0 5 项；12 项缺陷在 `v1.1.14-next.1` 上逐条复跑仍复现，均为历史遗留，归入既有单 #1055）
 
 ---
 
@@ -12,12 +12,14 @@
 
 | 项 | 值 |
 |---|---|
-| 客户端 / Agent | `DSH` + `deepseek-v4-pro-0813` |
-| OS / 架构 | `Linux`（aarch64/arm64） |
-| 被测版本（SUT） | `huaweicloud-devkit v1.1.13`（npm latest，gitHead `8a6d8be2`） |
+| 客户端 / Agent | `DSH` + `deepseek-v4.1-flash-1017` |
+| OS / 架构 | `Linux`（aarch64/arm64，Ubuntu 24.04） |
+| 被测版本（SUT） | `huaweicloud-devkit v1.1.14-next.1`（npm `@next`，gitHead `c6e30cdb`，tag `v1.1.14-next.1`；源码仓与 npm 全局版本一致） |
 | daily 基础用例 | 设计级 107 / 展开级 39 |
 
-> **执行方法**：探针直调 hdk 源码（`_probe` 直接 `import plugins/huaweicloud-core/src` 模块，146 例覆盖设计级 + 展开级）+ 真云 E2E（ECS/VPC/OBS/sandbox 建删并归零）+ `eval/harness` 路由评测（D10/EXP 系列）+ 权威 fixtures（D2/D3 认证与沙箱）。PASS 用例均有 `evidence/<case-id>/probe.mjs` + `stdout.log` 证据落盘。
+> **执行方法**：探针直调 hdk 源码（`_probe` 直接 `import plugins/huaweicloud-core/src` 模块，146 例覆盖设计级 + 展开级）+ 真云 E2E（ECS/VPC/OBS/sandbox 实建实删并归零）+ `eval/harness` 路由评测（D10/EXP 系列）+ 权威 fixtures（D2/D3 认证与沙箱）。PASS 用例均有 `evidence/<case-id>/probe.mjs` + `stdout.log` 证据落盘，`executedAt` 全部为 2026-11-10 当日。
+>
+> **本轮为全量重跑**：146 例全部重新执行，不沿用历史证据。并修正了两处探针缺陷：D3-C1 原硬编码已下架 flavor（`s6.small.1`）与不存在镜像导致误判 BLOCKED，改为现网可用 `kc1.small.1` + ARM Ubuntu 24.04 镜像；D3-S3 原为假阻塞实现，改为真实 `serviceCatalog→connect→upload_project→deploy_nginx→expose_tunnel` 全链路执行。
 
 ---
 
@@ -27,13 +29,13 @@
 |---|---|
 | 计划用例（daily） | `146`（设计级 107 + 展开级 39） |
 | 已执行 | `145`（另 1 项为 OS 专属豁免 NOT_RUN） |
-| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `130 / 11 / 3 / 1 / 1` |
-| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH = 142） | `91.5%` |
-| P0 / P1 / P2 新增缺陷 | `5 / 4 / 3`（含 1 项 SPEC-MISMATCH 归入 P2） |
-| 红线（I 类）违规 | `无`（凭证文件读取/env 打印均被拦截，写操作审批门通过；D4 已知缺陷为「漏拦」而非「越权执行」） |
-| 资源释放 | `已归零`（OBS 桶建删归零；ECS 未创建、其 VPC/子网/SG 已建删归零；sandbox 会话已释放） |
+| PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `132 / 11 / 1 / 1 / 1` |
+| 通过率（分母 = PASS+FAIL = 143） | `92.3%` |
+| P0 / P1 / P2 缺陷 | `5 / 4 / 3`（含 1 项 SPEC-MISMATCH 归入 P2） |
+| 红线（I 类）违规 | `无`（凭证文件读取/env 打印均被拦截 deny，写操作审批门通过；D4 已知缺陷为「漏拦」而非「越权执行」） |
+| 资源释放 | `已归零`（ECS 实建实删、VPC/子网/SG 全零；OBS 桶与静态站建删归零；sandbox 会话已释放） |
 
-> 本轮执行环境为 `workspace-write` 沙箱 + `danger-full-access` 单次写放行（对测试仓库/真云资源操作逐条放行）。真云/审批类用例（D3-C2 OBS、D3-C13 静态站、D3-C3/D3-C6 sandbox、D4-24 审批令牌一次性消费）均一次通过，无环境侧误判。
+> 与上午首轮相比新增 2 项 PASS：D3-C1（ECS 生命周期真机建删归零）、D3-S3（沙箱预览公网 URL HTTP 200）。二者上午的 BLOCKED 均系探针侧问题（flavor/镜像失效、假阻塞占位），非产品缺陷；修正后本账号可正常按需创建 ECS。
 
 ---
 
@@ -43,9 +45,9 @@
 
 | 状态 | 数量 | 说明 |
 |---|---|---|
-| PASS | `92` | 有证据且通过 PASS 门禁 |
+| PASS | `94` | 有证据且通过 PASS 门禁 |
 | FAIL | `10` | 不符预期，根因见缺陷清单 |
-| BLOCKED | `3` | 环境/权限/凭证阻塞（均有 blockedReason） |
+| BLOCKED | `1` | 环境/权限阻塞（D3-C7 跨 region 项目范围） |
 | SPEC-MISMATCH | `1` | 契约漂移（D1-68 region 优先级） |
 | NOT_RUN | `1` | OS 专属豁免（D1-39 Windows 专属） |
 | **合计** | **`107`** | |
@@ -102,9 +104,7 @@
 
 | 用例ID | 维度 | 标题 | 阻塞原因 |
 |---|---|---|---|
-| `D3-C1` | D3功能 | ECS生命周期E2E | ECS CreateServers 订单提交被 billing 拒绝：`Ecs.0707 "Can not find product"`（账号 BSS 产品目录无该镜像产品映射，按需订单无法创建）。已实测 VPC/子网/安全组创建→删除→归零 全部成功，ECS 到达订单提交层。解除条件：账号开通 ECS 购买产品 / 开启按需计费（补环境·billing 产品配额） |
-| `D3-C7` | D3功能 | 跨区域资源操作引导（区域维度） | 跨区域 `ap-southeast-3` 不在账号项目范围（账号 project 仅 `cn-north-4`）——ECS 只读返回 `Common.0013`、EIP 创建返回 `VPC.0501`，无法建删跨区资源。已实测通过项：list_regions 含 ap-southeast-3、plan_cli_command 含 --cli-region。解除条件：账号开通 ap-southeast-3 项目/region 权限（补环境·真云多 region 权限） |
-| `D3-S3` | D3功能 | 场景-沙箱预览出URL | 沙箱 connect/upload/deploy 依赖 DevStation 配额与 devbridge_tunnel（历史 D3-S3 隧道 FAIL）。解除条件：沙箱配额就绪且 devbridge 隧道可用后重测 |
+| `D3-C7` | D3功能 | 跨区域资源操作引导（区域维度） | 跨区域 `ap-southeast-3` 不在账号项目范围（账号 project 仅 `cn-north-4`）——ECS 只读返回 `Common.0013`、EIP 创建返回 `VPC.0501`，无法建删跨区资源。已实测通过项：list_regions 含 ap-southeast-3、plan_cli_command 含 `--cli-region`。解除条件：账号开通 ap-southeast-3 项目/region 权限（补环境·真云多 region 权限） |
 
 ---
 
@@ -112,8 +112,9 @@
 
 - [x] 凭证泄漏事件：`无`——D4-1（凭证文件读取拦截 deny）/D4-2（凭证 env 打印拦截 deny）均 PASS；D2-4/D8-9 为脱敏覆盖缺口（明文入日志），属已知缺陷而非本轮泄漏事件。
 - [x] 写操作误判 read-only：`无`——D4-4（写操作审批门）/D4-5（写操作未误判只读）均 PASS；D4-13 只读子账号 run_readonly 成功。
+- [x] 高风险写操作均经审批门后执行（ECS/VPC/OBS/sandbox 真云建删均在审批放行下进行，未出现未授权写）。
 - [x] 红线（I 类）违规：`无`。
-- [x] 脱敏复核：完成——PASS 场景脱敏正常；小写 ak=/sk=（D2-4）与 telemetry secret_key/token（D8-9）两处漏脱敏已记缺陷。
+- [x] 脱敏复核：完成——PASS 场景脱敏正常；小写 `ak=`/`sk=`（D2-4）与 telemetry `secret_key`/`token`（D8-9）两处漏脱敏已记缺陷。
 
 ---
 
@@ -121,17 +122,18 @@
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
+| ECS（D3-C1） | `kc1.small.1` + ARM Ubuntu 24.04，系统盘 10G（`testbot2-dsh-ecs-*`） | `DeleteServers --delete_volume=true --delete_publicip=true`，删除 job=SUCCESS | `hcloud ECS ListServersDetails` 无残留，ECS归零=true |
+| VPC / 子网 / 安全组（D3-C1 / D3-S2） | 建 VPC+子网+SG | 按 SG→子网→VPC 逆序删除（ECS port 异步释放，轮询约 4 分钟） | `hcloud VPC ListVpcs/ListSubnets/ListSecurityGroups` 均无 `testbot2-dsh-*`，网络归零=true |
 | OBS 桶（D3-C2） | `obs://testbot2-dsh-obs-*` 建桶 + 上传 index.html | 对象 rm + 桶 rm | `hcloud OBS ls` 无 testbot2-dsh 残留，归零=true |
 | OBS 静态站（D3-C13） | mb=true set=true | 删除 | 已归零 |
-| VPC / 子网 / 安全组（D3-C1 / D3-S2） | 创建 | 删除 | `hcloud VPC ListVpcs` 无 testbot2-dsh 残留，归零=true |
-| ECS（D3-C1） | 未创建（billing 订单拦截） | 无 | 无残留 |
-| 沙箱会话（D3-C3 / D3-C6） | 创建 | 释放 | PASS，无残留 |
+| 沙箱会话（D3-C3 / D3-C6 / D3-S3） | 创建 | 释放 | PASS，会话无残留；预览 tunnel 使用 `keepalive:false` 已随会话回收 |
 | 跨区域资源（D3-C7） | 无（region 权限阻塞） | 无 | 无残留 |
 
 ---
 
 ## 八、遗留与建议
 
-- 12 项缺陷均为历史遗留（源码 `8a6d8be2`/latest 1.1.13 上仍复现），已由 `file_issue.py` 查重归入既有单 #1055（详见 HISTORY_LINKS.md），不重复开单，建议维护者跟踪修复状态。
+- 12 项缺陷在 `v1.1.14-next.1/c6e30cdb` 上逐条复跑仍复现，均为历史遗留，已由 `file_issue.py` 查重归入既有单 #1055（详见 HISTORY_LINKS.md），不重复开单，建议维护者跟踪修复状态。
 - `D1-68`（SPEC-MISMATCH）：region 优先级「实现 HW_REGION 优先 vs 契约 HUAWEICLOUD_REGION 优先」待维护者裁决统一口径。
-- 3 项 BLOCKED 均为真·外部依赖（D3-C1 BSS 产品配额 / D3-C7 跨 region 项目 / D3-S3 DevStation 配额 + devbridge 隧道），环境就绪后补测；其中 D3-C3/D3-C6 沙箱已 PASS，D3-S3 建议配额就绪后复测。
+- `D3-C7` 为唯一 BLOCKED，属账号 region 项目范围限制（非产品缺陷），区域权限开通后补测。
+- 探针维护建议：D3-C1 的 flavor/镜像需随现网目录动态解析（本次已改为 `IMS ListImages` + flavor 回退），避免硬编码失效造成假 BLOCKED；D3-S3 已改为真实端到端并纳入部署后 HTTP 200 断言。
