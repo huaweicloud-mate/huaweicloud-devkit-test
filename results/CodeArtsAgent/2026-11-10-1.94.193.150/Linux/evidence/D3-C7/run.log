@@ -1,0 +1,45 @@
+$ /home/testbot2/nodejs/bin/node /home/testbot2/devkit-test/testbot2-Linux-CodeArts CLI/huaweicloud-devkit-test/results/CodeArtsAgent/2026-11-10-1.94.193.150/Linux/evidence/D3-C7/probe.mjs
+---- STDOUT ----
+[OK] plan 香港区 EIP 只读查询
+[OK] get_regional_availability 预查
+[OK] 创建最小 EIP(cn-north-4)
+[OK] 释放 EIP
+[OK] 归零验证(不含本次 EIP)
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C7",
+  "total": 5,
+  "passed": 5,
+  "results": [
+    {
+      "n": "plan 香港区 EIP 只读查询",
+      "ok": true,
+      "out": "{\"decision\":\"allow\",\"risk\":\"read_only\",\"service\":\"EIP\"}"
+    },
+    {
+      "n": "get_regional_availability 预查",
+      "ok": true,
+      "out": "{\"ok\":false,\"service\":\"eip\",\"region\":\"ap-southeast-1\",\"available\":false,\"note\":\"Service eip is not in the regional availability cache. Run hcloud EIP --help to verify, or check https://developer.huawe"
+    },
+    {
+      "n": "创建最小 EIP(cn-north-4)",
+      "ok": true,
+      "out": "{\"eipId\":\"78eeac06-8cbe-405d-84dd-dac5cce48810\",\"ip\":\"120.46.35.57\"}"
+    },
+    {
+      "n": "释放 EIP",
+      "ok": true,
+      "out": "{\"eipId\":\"78eeac06-8cbe-405d-84dd-dac5cce48810\"}"
+    },
+    {
+      "n": "归零验证(不含本次 EIP)",
+      "ok": true,
+      "out": "{\"containsOwn\":false}"
+    }
+  ]
+}
+
+---- STDERR ----
+
+---- EXIT 0 ----
