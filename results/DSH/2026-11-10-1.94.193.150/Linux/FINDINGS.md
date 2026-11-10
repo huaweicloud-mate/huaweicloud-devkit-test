@@ -1,4 +1,4 @@
-# FINDINGS — 缺陷发现清单（DSH-deepseek-v4-pro-0813）
+# FINDINGS — 缺陷发现清单（DSH-deepseek-v4.1-flash-1017）
 
 > **落盘路径**：`results/DSH/2026-11-10-1.94.193.150/Linux/FINDINGS.md`
 > **生成时间**：2026-11-10 10:30（北京时间）
