@@ -109,11 +109,13 @@ reg('D3-C1', async () => {
   const detail = [];
   let vpcId = null, subnetId = null, sgId = null, serverId = null;
   const wait = (ms) => new Promise(r => setTimeout(r, ms));
+  // 单次尝试式清理：ECS 删除后 port/子网异步释放可能需数分钟，由外层轮询反复调用
+  let vpcErr = '';
   const cleanup = async () => {
-    if (serverId) sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]);
-    for (let i = 0; i < 4 && sgId; i++) { const d = sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]); if (d.ok) { sgId = null; break; } await wait(4000); }
-    for (let i = 0; i < 6 && subnetId && vpcId; i++) { const d = sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); if (d.ok) { subnetId = null; break; } await wait(6000); }
-    for (let i = 0; i < 6 && vpcId; i++) { const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]); if (d.ok) { vpcId = null; break; } await wait(6000); }
+    if (serverId) { sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]); serverId = null; }
+    if (sgId) { const d = sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]); if (d.ok) sgId = null; else vpcErr = d.text.slice(0, 160); }
+    if (subnetId && vpcId) { const d = sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); if (d.ok) subnetId = null; else vpcErr = d.text.slice(0, 160); }
+    if (vpcId && !subnetId && !sgId) { const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]); if (d.ok) vpcId = null; else vpcErr = d.text.slice(0, 160); }
   };
   let created = false, active = false, delOk = false, zero = false;
   try {
@@ -210,11 +212,9 @@ reg('D3-C1', async () => {
       const lg = sh(['VPC', 'ListSecurityGroups', `--cli-region=${REGION}`]);
       const netZero = !lv.text.includes(vpcName) && !ls.text.includes(subnetName) && !lg.text.includes(sgName);
       if (netZero) { detail.push(`netZero=true try=${i}`); break; }
-      if (i % 6 === 0) {
-        detail.push(`netZero=false try=${i} vpcLeft=${lv.text.includes(vpcName)} subLeft=${ls.text.includes(subnetName)} sgLeft=${lg.text.includes(sgName)}`);
-        await cleanup();
-      }
-      await wait(5000);
+      if (i % 6 === 0) detail.push(`netZero=false try=${i} vpcLeft=${lv.text.includes(vpcName)} subLeft=${ls.text.includes(subnetName)} sgLeft=${lg.text.includes(sgName)} err=${vpcErr.slice(0, 60)}`);
+      await cleanup();
+      await wait(10000);
     }
     const lv = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`]);
     const ls = sh(['VPC', 'ListSubnets', `--cli-region=${REGION}`]);
