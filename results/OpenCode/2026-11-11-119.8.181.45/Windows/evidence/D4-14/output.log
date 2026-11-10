@@ -1,0 +1,74 @@
+{
+  "traces": [
+    {
+      "api_version": "2.0",
+      "code": "403",
+      "domain_id": "842591186fa245929e1b5c186a4cf784",
+      "event_type": "system",
+      "operation_id": "CreateVpc",
+      "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "read_only": false,
+      "resource_account_id": "842591186fa245929e1b5c186a4cf784",
+      "resource_name": "hdk-denied-probe",
+      "resource_type": "vpc",
+      "service_type": "VPC",
+      "source_ip": "119.8.181.45",
+      "trace_id": "4c09c3ec-dd4b-11f1-a9c3-df2db55c8da4",
+      "trace_name": "createVpc",
+      "trace_rating": "warning",
+      "trace_type": "ApiCall",
+      "tracker_name": "system",
+      "user_agent": "HCloud-CLI/7.3.12",
+      "user": {
+        "access_key_id": "HPUA3XUKSZCVI4GSG4MI",
+        "account_id": "842591186fa245929e1b5c186a4cf784",
+        "domain": {
+          "id": "842591186fa245929e1b5c186a4cf784",
+          "name": "hw018619646"
+        },
+        "id": "01a0a43e102b7009bd2a5db83271e95b",
+        "name": "test001",
+        "principal_id": "01a0a43e102b7009bd2a5db83271e95b",
+        "principal_is_root_user": "false",
+        "principal_urn": "iam::842591186fa245929e1b5c186a4cf784:user:test001",
+        "type": "User",
+        "user_name": "test001"
+      },
+      "request": "{\"vpc\":{\"cidr\":\"192.168.99.0/24\",\"name\":\"hdk-denied-probe\"}}",
+      "response": "{\"code\":\"VPC.0010\",\"message\":\"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Rules on create_router by *** disallowed by policy\\\",\\\"type\\\":\\\"PolicyNotAuthorized\\\",\\\"detail\\\":\\\"\\\"}}\"}",
+      "time": 1794345089315,
+      "record_time": 1794345089315
+    },
+    {
+      "api_version": "v2.0",
+      "code": "403",
+      "domain_id": "842591186fa245929e1b5c186a4cf784",
+      "event_type": "system",
+      "message": "",
+      "project_id": "46c1fd48bd1248c7b75afc3780de7132",
+      "read_only": false,
+      "request_id": "aa79f73c-1c31-4f59-b38c-5e1163491f27",
+      "resource_account_id": "842591186fa245929e1b5c186a4cf784",
+      "resource_type": "routers",
+      "service_type": "VPC",
+      "source_ip": "119.8.181.45",
+      "trace_id": "4c0863f1-dd4b-11f1-abe3-7fec10b67ee5",
+      "trace_name": "createRouter",
+      "trace_rating": "warning",
+      "trace_type": "ApiCall",
+      "tracker_name": "system",
+      "user": {
+        "name": "test001",
+        "id": "01a0a43e102b7009bd2a5db83271e95b",
+        "domain": {
+          "name": "hw018619646",
+          "id": "842591186fa245929e1b5c186a4cf784"
+        }
+      },
+      "request": "{\"router\":{\"name\":\"hdk-denied-probe$$192.168.99.0/24\",\"distributed\":true,\"admin_state_up\":true,\"external_gateway_info\":{\"network_id\":\"69a29dc8-937a-4049-a164-c1cfbf42962a\",\"enable_snat\":false}}}",
+      "response": "{\"NeutronError\":{\"message\":\"Rules on create_router by *** disallowed by policy\",\"type\":\"PolicyNotAuthorized\",\"detail\":\"\"}}",
+      "time": 1794345089308,
+      "record_time": 1794345089308
+    },
+    {
+      "
