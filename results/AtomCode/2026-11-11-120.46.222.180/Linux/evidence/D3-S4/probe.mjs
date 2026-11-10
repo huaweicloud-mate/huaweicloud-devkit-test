@@ -7,7 +7,7 @@ const CORE = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk/plugins/hua
 const HDK = '/home/testbot1/devkit-test/testbot1-linux-atomcode/hdk';
 const OUT = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devkit-test/results/AtomCode/2026-11-11-120.46.222.180/Linux/evidence/D3-S4/stdout.log';
 const _m = async (f) => await import(pathToFileURL(SRC + '/' + f).href);
-const executedAt = '20261108050439';
+const executedAt = '20261111054636';
 const META = { case: 'D3-S4', assistant: 'AtomCode(deepseek-v4-pro-0813)', os: 'Linux', sut: 'hdk gitHead 5c9478d3a (v1.1.14-next.2)' };
 function finish(r) { const out = { ...META, status: r.status, why: r.why || '', actual: r.actual, executedAt };
   writeFileSync(OUT, JSON.stringify(out, null, 2), 'utf8');
