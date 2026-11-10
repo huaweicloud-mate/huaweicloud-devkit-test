@@ -1,0 +1,52 @@
+[OK] setup_obs_config 同步 OBS 凭证
+[OK] 创建 OBS 桶 tctest-c2-b6yilj
+[-------------------------------------------------------------------------] 100.00% ?/s 44B/44B 89ms[OK] 上传 index.html
+[OK] obs_set_website_config set
+[OK] obs_set_website_config get 验证
+[------------------------------------------------------------------------] 100.00% tps:0.00 1/1 38ms[OK] 删除 OBS 桶归零
+[OK] 归零验证(ls 不含本次桶)
+
+=====SUMMARY=====
+{
+  "caseId": "D3-C2",
+  "bucket": "tctest-c2-b6yilj",
+  "total": 7,
+  "passed": 7,
+  "results": [
+    {
+      "n": "setup_obs_config 同步 OBS 凭证",
+      "ok": true,
+      "out": "{\"ok\":true,\"existed\":false,\"created\":true,\"path\":\"/home/testbot2/.obsutilconfig\",\"region\":\"cn-north-4\",\"endpoint\":\"https"
+    },
+    {
+      "n": "创建 OBS 桶 tctest-c2-b6yilj",
+      "ok": true,
+      "out": "Start at 2026-11-10 21:17:41.089221938 +0000 UTC\n\nCreate bucket [tctest-c2-b6yilj] successfully, request id [000001A1C752E59344188A51DBEFC84A]\nNotice: If the configured endpoint is a global domain nam"
+    },
+    {
+      "n": "上传 index.html",
+      "ok": true,
+      "out": "0-16-1.94.193.150/Linux/evidence/D3-C2/index.html --> obs://tctest-c2-b6yilj/index.html, cost [90], status [200], request id [000001A1C752E749440FE50759EDC2D8]\n"
+    },
+    {
+      "n": "obs_set_website_config set",
+      "ok": true,
+      "out": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://tctest-c2-b6yilj.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://tctest-c2-b6yilj.obs-website.c"
+    },
+    {
+      "n": "obs_set_website_config get 验证",
+      "ok": true,
+      "out": "{\"ok\":true,\"status\":200,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><WebsiteConfiguration xmlns=\\\"http://obs.myhwclouds.com/doc/2015-06-30/\\\"><IndexDocument><Suffix>index.html"
+    },
+    {
+      "n": "删除 OBS 桶归零",
+      "ok": true,
+      "out": "Start at 2026-11-10 21:17:42.243024188 +0000 UTC\n\nDelete bucket [tctest-c2-b6yilj] successfully!\n"
+    },
+    {
+      "n": "归零验证(ls 不含本次桶)",
+      "ok": true,
+      "out": "{\"containsOwn\":false}"
+    }
+  ]
+}
