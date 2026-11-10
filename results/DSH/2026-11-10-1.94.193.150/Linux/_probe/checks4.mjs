@@ -1,6 +1,6 @@
 // checks4.mjs — 新增真云 E2E 用例：D3-C1(ECS生命周期) / D3-C2(OBS静态站) / D3-C7(跨区域) / D3-C3(沙箱部署) / D3-C6(沙箱7工具)
 import { reg, ok, fail, spec, blocked, chk, hdk, run, sh } from './core.mjs';
-import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { writeFileSync, mkdtempSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -111,9 +111,9 @@ reg('D3-C1', async () => {
   const wait = (ms) => new Promise(r => setTimeout(r, ms));
   const cleanup = async () => {
     if (serverId) sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]);
-    if (sgId) sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]);
-    if (subnetId && vpcId) { sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); await wait(6000); }
-    if (vpcId) sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+    for (let i = 0; i < 4 && sgId; i++) { const d = sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]); if (d.ok) { sgId = null; break; } await wait(4000); }
+    for (let i = 0; i < 6 && subnetId && vpcId; i++) { const d = sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); if (d.ok) { subnetId = null; break; } await wait(6000); }
+    for (let i = 0; i < 6 && vpcId; i++) { const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]); if (d.ok) { vpcId = null; break; } await wait(6000); }
   };
   let created = false, active = false, delOk = false, zero = false;
   try {
@@ -183,16 +183,45 @@ reg('D3-C1', async () => {
     if (serverId) {
       const dd = sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]);
       delOk = dd.ok;
-      detail.push(`delete=${delOk} ${dd.text.slice(0, 70)}`);
+      const dJob = (/"job_id"\s*:\s*"([0-9a-f-]+)"/.exec(dd.text) || [])[1] || null;
+      detail.push(`delete=${delOk} job=${dJob} ${dd.text.slice(0, 60)}`);
+      if (dJob) {
+        for (let i = 0; i < 60; i++) {
+          const j = sh(['ECS', 'ShowJob', `--job_id=${dJob}`, `--cli-region=${REGION}`]);
+          const js = (/"status"\s*:\s*"([A-Z_]+)"/.exec(j.text) || [])[1] || '';
+          if (js === 'SUCCESS' || js === 'FAIL') { detail.push(`deljob=${js}`); break; }
+          await wait(5000);
+        }
+      }
       serverId = null;
+    }
+    for (let i = 0; i < 24; i++) {
+      const lsa = sh(['ECS', 'ListServersDetails', `--cli-region=${REGION}`]);
+      zero = !lsa.text.includes(ecsName);
+      if (zero) break;
       await wait(5000);
     }
-    const lsa = sh(['ECS', 'ListServersDetails', `--cli-region=${REGION}`]);
-    zero = !lsa.text.includes(ecsName);
     detail.push(`zero=${zero}`);
-    return chk(created && active && delOk && zero,
-      `ECS 生命周期 E2E: 创建=${created} ACTIVE=${active} 删除=${delOk} 归零=${zero}`,
-      `ECS 生命周期未通过: ${detail.join(' | ')}`.slice(0, 900));
+    // 网络资源归零：安全组 → 子网 → VPC（异步删除需轮询）
+    await cleanup();
+    for (let i = 0; i < 6; i++) {
+      const lv = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`]);
+      const ls = sh(['VPC', 'ListSubnets', `--cli-region=${REGION}`]);
+      const lg = sh(['VPC', 'ListSecurityGroups', `--cli-region=${REGION}`]);
+      const netZero = !lv.text.includes(vpcName) && !ls.text.includes(subnetName) && !lg.text.includes(sgName);
+      if (netZero) { detail.push('netZero=true'); break; }
+      detail.push(`netZero=false try=${i}`);
+      await cleanup();
+      await wait(6000);
+    }
+    const lv = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`]);
+    const ls = sh(['VPC', 'ListSubnets', `--cli-region=${REGION}`]);
+    const lg = sh(['VPC', 'ListSecurityGroups', `--cli-region=${REGION}`]);
+    const netZero = !lv.text.includes(vpcName) && !ls.text.includes(subnetName) && !lg.text.includes(sgName);
+    if (netZero) { sgId = subnetId = vpcId = null; }
+    return chk(created && active && delOk && zero && netZero,
+      `ECS 生命周期 E2E: 创建=${created} ACTIVE=${active} 删除=${delOk} ECS归零=${zero} 网络归零=${netZero}`,
+      `ECS 生命周期未通过: 创建=${created} ACTIVE=${active} 删除=${delOk} ECS归零=${zero} 网络归零=${netZero} | ${detail.join(' | ')}`.slice(0, 900));
   } finally {
     await cleanup();
     const lsv = sh(['ECS', 'ListServersDetails', `--cli-region=${REGION}`]);
@@ -248,20 +277,29 @@ reg('D3-C3', async () => {
     const wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
     detail.push(`connect.ws=${!!wsId} status=${conn && conn.status}`);
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id', JSON.stringify(conn).slice(0, 200));
-    const proj = mkdtempSync(join(tmpdir(), 'hdk-sbx-'));
+    // upload_project 以 basename(localDir) 作远端项目名 → 本地目录按项目名命名，上传到 /workspace
+    const projName = `hdk-e2e-${String(Date.now()).slice(-6)}`;
+    const base = mkdtempSync(join(tmpdir(), 'hdk-sbx-'));
+    const proj = join(base, projName);
+    mkdirSync(proj, { recursive: true });
     writeFileSync(join(proj, 'index.html'), '<html><body>hdk sandbox e2e ok</body></html>', 'utf-8');
-    const upload = await h.tools.callTool('huaweicloud_sandbox_upload_project', { local_dir: proj, remote_dir: '/workspace/hdk-e2e', workspace_id: wsId, extract: true });
+    const upload = await h.tools.callTool('huaweicloud_sandbox_upload_project', { local_dir: proj, remote_dir: '/workspace', workspace_id: wsId, extract: true });
     detail.push(`upload=${JSON.stringify(upload).slice(0, 110)}`);
-    rmSync(proj, { recursive: true, force: true });
-    const deploy = await h.tools.callTool('huaweicloud_sandbox_deploy_nginx', { nginx_type: 'static', port: 8080, project: 'hdk-e2e', output_dir: '.', workspace_id: wsId });
-    detail.push(`deploy=${JSON.stringify(deploy).slice(0, 130)}`);
-    const check = await h.tools.callTool('huaweicloud_sandbox_deploy_check', { port: 8080, project: 'hdk-e2e', output_dir: '.', framework_type: 'static', workspace_id: wsId });
+    rmSync(base, { recursive: true, force: true });
+    const deploy = await h.tools.callTool('huaweicloud_sandbox_deploy_nginx', { nginx_type: 'static', port: 8080, project: projName, output_dir: '.', workspace_id: wsId });
+    const port = (deploy && (deploy.port || deploy.actualPort)) || 8080;
+    detail.push(`deploy.port=${port} ${JSON.stringify(deploy).slice(0, 130)}`);
+    const check = await h.tools.callTool('huaweicloud_sandbox_deploy_check', { port, project: projName, output_dir: '.', framework_type: 'static', workspace_id: wsId });
     detail.push(`deploy_check=${JSON.stringify(check).slice(0, 170)}`);
+    const curl = await h.tools.callTool('huaweicloud_sandbox_exec_one_shot', { command: `curl -s -o /dev/null -w "%{http_code}" http://localhost:${port}/`, workspace_id: wsId });
+    const localCode = String((curl && curl.stdout) || '').trim();
+    detail.push(`curl.local=${localCode}`);
     const close = await h.tools.callTool('huaweicloud_sandbox_close_session', { workspace_id: wsId });
     detail.push(`close=${JSON.stringify(close).slice(0, 70)}`);
-    const attested = !!(check && (check.complete === true || check.tunnel_url_accessible === true || check.nginx_serving === true || check.url || check.score !== undefined));
+    const nginxOk = !!(check && check.checks && check.checks.nginx_serving && check.checks.nginx_serving.status === 'PASS');
+    const attested = !!(localCode === '200' && nginxOk);
     return chk(attested,
-      `沙箱部署 E2E: 上传/nginx/deploy_check 已执行, check=${JSON.stringify(check).slice(0, 140)}`,
+      `沙箱部署 E2E: 上传/nginx 部署实测, 沙箱内 localhost:${port} HTTP=${localCode}, deploy_check.nginx_serving=${nginxOk}`,
       detail.join(' | ').slice(0, 900));
   } catch (e) {
     const msg = String(e);

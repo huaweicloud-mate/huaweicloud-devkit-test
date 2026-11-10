@@ -1,6 +1,6 @@
 // checks2.mjs — D3 工具/服务目录/场景 + D4 安全 用例探针
 import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, fixture } from './core.mjs';
-import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { writeFileSync, mkdtempSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -154,11 +154,14 @@ reg('D3-S3', async () => {
     wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id || conn.session_id);
     detail.push(`connect.ws=${!!wsId} status=${conn && conn.status}`);
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id，预览链路无法建立', `${detail.join(' | ')} || ${JSON.stringify(conn).slice(0, 200)}`.slice(0, 900));
-    const proj = 'hdk-preview-e2e';
-    const dir = mkdtempSync(join(tmpdir(), 'hdk-s3-'));
+    // upload_project 会以 basename(localDir) 作为远端项目目录名，故本地目录必须按项目名命名并上传到 /workspace
+    const proj = `hdk-preview-${String(Date.now()).slice(-6)}`;
+    const base = mkdtempSync(join(tmpdir(), 'hdk-s3-'));
+    const dir = join(base, proj);
+    mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, 'index.html'), '<html><body>hdk-d3s3-preview-ok</body></html>', 'utf-8');
-    const up = await h.tools.callTool('huaweicloud_sandbox_upload_project', { local_dir: dir, remote_dir: `/workspace/${proj}`, workspace_id: wsId, extract: true });
-    rmSync(dir, { recursive: true, force: true });
+    const up = await h.tools.callTool('huaweicloud_sandbox_upload_project', { local_dir: dir, remote_dir: '/workspace', workspace_id: wsId, extract: true });
+    rmSync(base, { recursive: true, force: true });
     detail.push(`upload=${JSON.stringify(up).slice(0, 120)}`);
     const ng = await h.tools.callTool('huaweicloud_sandbox_deploy_nginx', { nginx_type: 'static', port: 8080, project: proj, output_dir: '.', workspace_id: wsId });
     const port = (ng && (ng.port || ng.actualPort)) || 8080;
@@ -171,6 +174,12 @@ reg('D3-S3', async () => {
     let httpCode = '';
     if (url) httpCode = String(run(`curl -s -o /dev/null -w "%{http_code}" --max-time 30 "${url}"`).text).trim();
     detail.push(`curl(${url || '-'})=${httpCode}`);
+    let localCode = '';
+    if (httpCode !== '200') {
+      const lc = await h.tools.callTool('huaweicloud_sandbox_exec_one_shot', { command: `curl -s -o /dev/null -w "%{http_code}" http://localhost:${port}/`, workspace_id: wsId });
+      localCode = String((lc && lc.stdout) || '').trim();
+      detail.push(`curl.local=${localCode}`);
+    }
     const close = await h.tools.callTool('huaweicloud_sandbox_close_session', { workspace_id: wsId });
     wsId = null;
     detail.push(`close=${JSON.stringify(close).slice(0, 80)}`);
@@ -179,7 +188,7 @@ reg('D3-S3', async () => {
     }
     return chk(routeHit && httpCode === '200',
       `沙箱预览 URL 可访问: route=${routeHit} url=${url} HTTP=${httpCode}`,
-      `沙箱预览 URL 未通过: route=${routeHit} HTTP=${httpCode} | ${detail.join(' | ')}`.slice(0, 900));
+      `沙箱预览 URL 未通过: route=${routeHit} 公网 HTTP=${httpCode} 沙箱内 localhost HTTP=${localCode} url=${url} | ${detail.join(' | ')}`.slice(0, 900));
   } catch (e) {
     const msg = String(e);
     if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(msg)) {
