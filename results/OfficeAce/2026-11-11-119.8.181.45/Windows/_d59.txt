@@ -1,0 +1,75 @@
+D5-1 | P1 | 清单发现加载
+  steps: ①安装后重启 ②核对客户端发现并加载插件清单
+  expect: 全部客户端可发现
+D5-3 | P1 | 工具全量枚举
+  steps: ①枚举40工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺
+  expect: 40 工具全量可达(=tools.mjs 注册源数量),schema完整
+D6-1 | P2 | 检索响应延迟
+  steps: ①连续调用采样 ②计算p95
+  expect: p95<2s
+D6-3 | P2 | MCP冷启时间
+  steps: ①冷启MCP server ②计时到可服务
+  expect: 冷启<5s
+D6-4 | P1 | 并发调度正确性
+  steps: ①并发30请求 ②观察消息错序/死锁 ③核对session-manager
+  expect: 无死锁无消息错乱
+D6-9 | P2 | 缓存清理三入口
+  steps: ①预热更新/图标/市场缓存 ②分别调三个清理函数 ③核对缓存文件/内存态清空 ④重复清理幂等
+  expect: 三缓存清理入口各自清空对应缓存且幂等；清理后再查询触发重新拉取
+D9-9 | P1 | tools/call 超时协议语义与取消
+  steps: ①夹具: node eval/harness/fixtures/d9-9-delay-timeout.mjs <hdk src> --evid <dir>（可注入延迟 30s 挂起）②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）
+  expect: 超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MISMATCH 标注而非假定）；取消通知后服务端 2s 内中止（in-flight 清零）；重建连接后 initialize/tools/list 正常响应；无悬挂请求（pending map 空）
+D8-1 | P2 | 文档与能力一致
+  steps: ①链接有效性扫描 ②命令与实际对比 ③CHANGELOG与行为对比
+  expect: 无失效链接无过时命令
+D8-4 | P1 | 引导步骤可机械执行
+  steps: ①逐skill评审步骤 ②标记含糊/矛盾/歧义步骤
+  expect: 无含糊步骤(Agent可机械执行)
+D8-6 | P2 | 中英文文档一致
+  steps: ①逐节对比README↔README.zh-CN ②核对命令/路径/承诺一致
+  expect: 双源无漂移
+D8-7 | P0 | 7 个 meta/通用技能指引可机械执行验证
+  steps: 逐技能：retrieve_skill 加载→按指引执行最小路径→核对无外部猜测
+  expect: 7 技能指引均可机械执行，无断链/幻觉步骤
+D8-9 | P2 | 安装 ID 与遥测值脱敏
+  steps: ①generateOrRecoverInstallId ②核对 ID 落盘且二次调用稳定 ③sanitizeValue 输入凭证/非法字符 ④核对脱敏
+  expect: installId 生成/恢复稳定持久；sanitizeValue 移除 AK/SK/token 等敏感值与非法字符，不改变合法值
+D8-10 | P2 | MCP 配置备份与合并
+  steps: ①mergeCommandStyle ②mergeArgsStyle ③mergeMcpServersFile ④extractUserDelta/applyUserDelta ⑤takeAgentDelta/saveAgentDelta/purgeBackup
+  expect: 命令/参数/文件三风格合并正确；用户 delta 提取再应用幂等；agent delta 持久化与 purgeBackup 清空
+D9-1 | P1 | tools/list合规
+  steps: ①tools/list ②逐工具schema校验合法JSON Schema ③核对无残留/重复工具
+  expect: 40 工具 schema 均合法(=tools.mjs 注册源数量)
+D9-2 | P1 | JSON-RPC错误码
+  steps: ①源码级: node eval/harness/protocol-probe.mjs 自动发未知方法/非法参数核对错误码 ②构造 -32700/-32600/-32601/-32602/-32603 各类错误 ③核对错误码与 error 对象结构（code/message）
+  expect: 错误码规范,客户端可处理
+D9-3 | P1 | tools/call响应格式
+  steps: ①成功调用核对content结构 ②失败调用核对isError语义
+  expect: content数组+isError语义正确
+D9-4 | P1 | 协议生命周期
+  steps: ①initialize→tools/list→tools/call标准序 ②非法时序被拒 ③capabilities协商
+  expect: 强制时序被遵守
+D9-5 | P1 | stdio传输健壮
+  steps: ①大payload ②超长输出 ③并发 ④断连恢复 ⑤核对stdout纯协议无日志污染
+  expect: 通传输不崩不污染协议通道
+D9-6 | P1 | 跨客户端互通
+  steps: ①夹具: node eval/harness/fixtures/d9-6-cross-client.mjs <hdk src> --evid <dir>（≥2 客户端 initialize/tools/list/call + resources 互证）②Inspector全通过 ③多客户端互通冒烟
+  expect: 全客户端协议互通
+D9-7 | P2 | 协议版本协商降级
+  steps: ①模拟老客户端initialize ②核对协商或明确报错
+  expect: 不挂死且正确降级
+D9-8 | P2 | inputSchema版本合规
+  steps: ①逐schema核对JSON Schema版本 ②核对无混用(draft-07/2020-12)
+  expect: 版本统一且明确
+D9-10 | P1 | MCP remote transport（HTTP/WS 远程服务）
+  steps: ①夹具: node eval/harness/fixtures/d9-10-remote-transport.mjs <hdk src> --evid <dir>（9528 端口启动+initialize/tools/list+stdio 对照）②--transport remote 启动 ③核对 port=9528/host=127.0.0.1 ④initialize/tools/list ⑤对照 stdio 路径
+  expect: remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 port/host 用默认值
+D9-11 | P1 | WebSocket 隧道通道生命周期
+  steps: ①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localServer/readyPromise/subConnections 清理 ⑥夹具: node eval/harness/fixtures/d9-11-ws-tunnel.mjs <hdk src> --evid <dir>
+  expect: 通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 localServer 关闭、subConnections 清空、onClose 回调触发
+D9-12 | P0 | initialize 握手协议安全基线
+  steps: ①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/capabilities/serverInfo ②核对 callTool 路由到 tools.mjs callTool 函数 ③核对 runVersionCheck 在 initialize 阶段触发版本检查 ④核对 _decorateResult 包装响应（_resetHintConsumption/_isHintConsumed 消费提示标记） ⑤核对 listSkillDirs/findSkillsRoot 返回有效技能目录 ⑥非法时序（未 initialize 先 tools/list）被拒返回 -32600
+  expect: initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorateResult 包装无副作用；listSkillDirs/findSkillsRoot 返回有效目录；非法时序返回 JSON-RPC -32600 错误
+D9-13 | P0 | tools/call 凭证不泄露与权限校验
+  steps: ①setRuntimeCredentials 注入运行时凭证，hasRuntimeCredentials 校验存在 ②resolveCredentialsWithRuntime 解析运行时凭证 ③loadPolicy 加载安全策略，classifyHcloudArgs 分类命令参数 ④evaluateArtifacts/evaluateDeployPlan 评估风险，mergeRiskDecision 合并决策 ⑤hashArgs 生成参数哈希，createApprovalToken/consumeApprovalToken 审批令牌生命周期 ⑥readServiceCatalogs/classifyUnsupported/planHcloudCommand 命令分类 ⑦tools/call 返回核对无 AK/SK/token 明文 ⑧clearRuntimeCredentials 清理运行时凭证 ⑨readGlobalCredentials/writeGlobalCredentials 持久化核对，isPlaceholder 校验占位 ⑩globalCredentialsPath/obsConfigPath/writeObsConfig 路径与配置核对
+  expect: tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprovalToken 后失效）；运行时凭证 clearRuntimeCredentials 清理后不留盘；readGlobalCredentials/writeGlobalCredentials 持久化一致；isPlaceholder 正确识别占位凭证
