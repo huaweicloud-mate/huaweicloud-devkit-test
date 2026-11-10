@@ -1,0 +1,272 @@
+### D4-23 | D4安全 | P=P0
+标题: 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）
+前置: 11 个 Agent 安装目标
+步骤: 逐目标安装后：①核对 rules 注入系统提示/规则 ②构造禁直连 csms/kms 场景 ③核对 MUST 约束生效
+预期: 全部目标注入且约束可执行，无孤儿文件
+工具: install | 建议: 自动 | requiredEvidence: 强断言：<证据: agent-rules 注入生效>；保留脱敏日志、manifest、前后快照
+
+
+### D4-24 | D4安全 | P=P1
+标题: 确认令牌过期与重复确认边界（审批流健壮性）
+前置: 真云+标准客户端+可注入时钟（令牌 TTL=60s，注入 5s 加速）
+步骤: ①写操作（创建最小规格 ECS）进入确认流，记录 confirmToken ②注入时钟推进 >60s 后提交确认→断言 {code:'CONFIRM_TOKEN_EXPIRED', status:'rejected'} 且资源计数=0 ③重新发起写操作（新 confirmToken）连续提交两次→断言第二次 {outcome:'already_processed'} ④查询资源断言计数=1 ⑤释放→归零
+预期: 过期令牌返回精确 {code:'CONFIRM_TOKEN_EXPIRED'}（无资源创建，计数=0）；重复确认第二次返回 {outcome:'already_processed'}（计数不+1，仍=1）；错误/结果 JSON 字段可机器断言；释放后 tctest- 计数=0
+工具: auth_confirm/plan_cli_command | 建议: 半自动 | requiredEvidence: 强断言：<证据: 响应JSON+计数+归零>；保留脱敏日志、manifest、前后快照
+
+
+### D4-25 | D4安全 | P=P2
+标题: Python hook 事件遥测分类
+前置: hook-capable 客户端 + 遥测开关
+步骤: ①执行只读 hcloud 命令 ②执行写命令 ③执行非 hcloud 命令 ④核对 hook-events.jsonl 三键分类
+预期: 只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capability
+工具: hook_check_command | 建议: 脚本 | requiredEvidence: 强断言：<证据: hook-events.jsonl>；保留脱敏日志、manifest、前后快照
+
+
+### D4-26 | D4安全 | P=P2
+标题: findings 证据脱敏
+前置: hook 环境 + 含凭证的触发命令
+步骤: ①触发含凭证的命令规则 ②核对 findings.evidence 已脱敏 ③对照原命令
+预期: findings.evidence 中 AK/SK/token/password 均被 <redacted> 替换，不泄露明文
+工具: hook_check_command | 建议: 脚本 | requiredEvidence: 强断言：<证据: findings.evidence 脱敏前后>；保留脱敏日志、manifest、前后快照
+
+
+### D4-27 | D4安全 | P=P1
+标题: 双路径输出脱敏
+前置: 含凭证的输出文本
+步骤: ①redactSecrets(text) ②redactOutput(text) ③核对两路径均脱敏 ④对照未脱敏点
+预期: redactSecrets(策略正则)与 redactOutput(CLI输出)双路径均替换明文凭证为占位符；不对非敏感字段误伤
+工具: run_readonly_command | 建议: 脚本 | requiredEvidence: 强断言：<证据: 脱敏前后对照>；保留脱敏日志、manifest、前后快照
+
+
+### D4-28 | D4安全 | P=P0
+标题: Node 版安全 hook 链路
+前置: hook-capable 客户端 + hooks.json 注册
+步骤: ①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs ③核对 commandText 提取 ④classifyTextCommand=deny 时输出 permissionDecision:deny
+预期: hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出
+工具: hook_check_command | 建议: 脚本 | requiredEvidence: 强断言：<证据: deny 决策+reason>；保留脱敏日志、manifest、前后快照
+
+
+### D4-29 | D4安全 | P=P2
+标题: 分类断言与原始命令分类入口
+前置: 含各类命令样本
+步骤: ①classifyRawCommand(cmd) ②对照 classifyTextCommand ③assertAllowed(result) allow/deny 分支
+预期: classifyRawCommand=classifyTextCommand 包装；DENY 决策 assertAllowed 抛拒绝、allow 通过；分类结果含 decision/reason
+工具: hook_check_command | 建议: 脚本 | requiredEvidence: 强断言：<证据: 分类+断言分支>；保留脱敏日志、manifest、前后快照
+
+
+### D5-1 | D5客户端 | P=P1
+标题: 清单发现加载
+前置: 各客户端环境
+步骤: ①安装后重启 ②核对客户端发现并加载插件清单
+预期: 全部客户端可发现
+工具: install | 建议: 手动 | requiredEvidence: 强断言：<证据: 清单发现加载>；保留脱敏日志、manifest、前后快照
+
+
+### D5-3 | D5客户端 | P=P1
+标题: 工具全量枚举
+前置: 各客户端环境
+步骤: ①枚举40工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺
+预期: 40 工具全量可达(=tools.mjs 注册源数量),schema完整
+工具: mcp-server | 建议: 脚本 | requiredEvidence: 强断言：<证据: tools/list 40 工具枚举>；保留脱敏日志、manifest、前后快照
+
+
+### D6-1 | D6性能 | P=P2
+标题: 检索响应延迟
+前置: 标准环境
+步骤: ①连续调用采样 ②计算p95
+预期: p95<2s
+工具: search_docs/retrieve_skill | 建议: 脚本 | requiredEvidence: 强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+
+
+### D6-3 | D6性能 | P=P2
+标题: MCP冷启时间
+前置: 标准环境
+步骤: ①冷启MCP server ②计时到可服务
+预期: 冷启<5s
+工具: mcp-server | 建议: 脚本 | requiredEvidence: 强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+
+
+### D6-4 | D6性能 | P=P1
+标题: 并发调度正确性
+前置: 标准环境
+步骤: ①并发30请求 ②观察消息错序/死锁 ③核对session-manager
+预期: 无死锁无消息错乱
+工具: mcp-server | 建议: 脚本 | requiredEvidence: 强断言：<证据: 无死锁无消息错乱>；保留脱敏日志、manifest、前后快照
+
+
+### D6-9 | D6性能 | P=P2
+标题: 缓存清理三入口
+前置: 已产生缓存的进程环境
+步骤: ①预热更新/图标/市场缓存 ②分别调三个清理函数 ③核对缓存文件/内存态清空 ④重复清理幂等
+预期: 三缓存清理入口各自清空对应缓存且幂等；清理后再查询触发重新拉取
+工具: check_update/get_service_icon/search_marketplace | 建议: 脚本 | requiredEvidence: 强断言：<证据: 缓存清空+幂等>；保留脱敏日志、manifest、前后快照
+
+
+### D9-9 | D9协议 | P=P1
+标题: tools/call 超时协议语义与取消
+前置: 可注入延迟的 MCP 客户端/夹具（支持读取 initialize 返回的 capabilities）
+步骤: ①夹具: node eval/harness/fixtures/d9-9-delay-timeout.mjs <hdk src> --evid <dir>（可注入延迟 30s 挂起）②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）
+预期: 超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MISMATCH 标注而非假定）；取消通知后服务端 2s 内中止（in-flight 清零）；重建连接后 initialize/tools/list 正常响应；无悬挂请求（pending map 空）
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: JSON-RPC错误对象+capabilities+取消时序>；保留脱敏日志、manifest、前后快照
+
+
+### D8-1 | D8质量 | P=P2
+标题: 文档与能力一致
+前置: 仓库文档快照
+步骤: ①链接有效性扫描 ②命令与实际对比 ③CHANGELOG与行为对比
+预期: 无失效链接无过时命令
+工具: search_docs | 建议: 半自动 | requiredEvidence: 强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+
+
+### D8-4 | D8质量 | P=P1
+标题: 引导步骤可机械执行
+前置: 各SKILL.md
+步骤: ①逐skill评审步骤 ②标记含糊/矛盾/歧义步骤
+预期: 无含糊步骤(Agent可机械执行)
+工具: retrieve_skill | 建议: 手动 | requiredEvidence: 强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+
+
+### D8-6 | D8质量 | P=P2
+标题: 中英文文档一致
+前置: README.zh-CN
+步骤: ①逐节对比README↔README.zh-CN ②核对命令/路径/承诺一致
+预期: 双源无漂移
+工具: search_docs | 建议: 手动 | requiredEvidence: 强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+
+
+### D8-7 | D8质量 | P=P0
+标题: 7 个 meta/通用技能指引可机械执行验证
+前置: 标准环境
+步骤: 逐技能：retrieve_skill 加载→按指引执行最小路径→核对无外部猜测
+预期: 7 技能指引均可机械执行，无断链/幻觉步骤
+工具: retrieve_skill/search_docs | 建议: 半自动 | requiredEvidence: 强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+
+
+### D8-9 | D8质量 | P=P2
+标题: 安装 ID 与遥测值脱敏
+前置: 无遥测 ID 的环境
+步骤: ①generateOrRecoverInstallId ②核对 ID 落盘且二次调用稳定 ③sanitizeValue 输入凭证/非法字符 ④核对脱敏
+预期: installId 生成/恢复稳定持久；sanitizeValue 移除 AK/SK/token 等敏感值与非法字符，不改变合法值
+工具: mcp-server | 建议: 脚本 | requiredEvidence: 强断言：<证据: ID稳定+脱敏>；保留脱敏日志、manifest、前后快照
+
+
+### D8-10 | D8质量 | P=P2
+标题: MCP 配置备份与合并
+前置: 带 MCP 配置的隔离 HOME
+步骤: ①mergeCommandStyle ②mergeArgsStyle ③mergeMcpServersFile ④extractUserDelta/applyUserDelta ⑤takeAgentDelta/saveAgentDelta/purgeBackup
+预期: 命令/参数/文件三风格合并正确；用户 delta 提取再应用幂等；agent delta 持久化与 purgeBackup 清空
+工具: install | 建议: 脚本 | requiredEvidence: 强断言：<证据: 合并结果+delta回放>；保留脱敏日志、manifest、前后快照
+
+
+### D9-1 | D9协议 | P=P1
+标题: tools/list合规
+前置: MCP Inspector/客户端
+步骤: ①tools/list ②逐工具schema校验合法JSON Schema ③核对无残留/重复工具
+预期: 40 工具 schema 均合法(=tools.mjs 注册源数量)
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+
+
+### D9-2 | D9协议 | P=P1
+标题: JSON-RPC错误码
+前置: MCP客户端
+步骤: ①源码级: node eval/harness/protocol-probe.mjs 自动发未知方法/非法参数核对错误码 ②构造 -32700/-32600/-32601/-32602/-32603 各类错误 ③核对错误码与 error 对象结构（code/message）
+预期: 错误码规范,客户端可处理
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+
+
+### D9-3 | D9协议 | P=P1
+标题: tools/call响应格式
+前置: MCP客户端
+步骤: ①成功调用核对content结构 ②失败调用核对isError语义
+预期: content数组+isError语义正确
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+
+
+### D9-4 | D9协议 | P=P1
+标题: 协议生命周期
+前置: MCP客户端
+步骤: ①initialize→tools/list→tools/call标准序 ②非法时序被拒 ③capabilities协商
+预期: 强制时序被遵守
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+
+
+### D9-5 | D9协议 | P=P1
+标题: stdio传输健壮
+前置: stdio通道
+步骤: ①大payload ②超长输出 ③并发 ④断连恢复 ⑤核对stdout纯协议无日志污染
+预期: 通传输不崩不污染协议通道
+工具: mcp-server | 建议: 脚本 | requiredEvidence: 强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+
+
+### D9-6 | D9协议 | P=P1
+标题: 跨客户端互通
+前置: Inspector+≥3真实客户端
+步骤: ①夹具: node eval/harness/fixtures/d9-6-cross-client.mjs <hdk src> --evid <dir>（≥2 客户端 initialize/tools/list/call + resources 互证）②Inspector全通过 ③多客户端互通冒烟
+预期: 全客户端协议互通
+工具: inspector | 建议: 脚本（eval/harness/fixtures/d9-6-cross-client.mjs） | requiredEvidence: 强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+
+
+### D9-7 | D9协议 | P=P2
+标题: 协议版本协商降级
+前置: 老版本客户端模拟
+步骤: ①模拟老客户端initialize ②核对协商或明确报错
+预期: 不挂死且正确降级
+工具: mcp-server | 建议: 脚本 | requiredEvidence: 强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+
+
+### D9-8 | D9协议 | P=P2
+标题: inputSchema版本合规
+前置: tools/list返回
+步骤: ①逐schema核对JSON Schema版本 ②核对无混用(draft-07/2020-12)
+预期: 版本统一且明确
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+
+
+### D9-10 | D9协议 | P=P1
+标题: MCP remote transport（HTTP/WS 远程服务）
+前置: remote transport 启动环境
+步骤: ①夹具: node eval/harness/fixtures/d9-10-remote-transport.mjs <hdk src> --evid <dir>（9528 端口启动+initialize/tools/list+stdio 对照）②--transport remote 启动 ③核对 port=9528/host=127.0.0.1 ④initialize/tools/list ⑤对照 stdio 路径
+预期: remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 port/host 用默认值
+工具: mcp-server | 建议: 脚本（eval/harness/fixtures/d9-10-remote-transport.mjs） | requiredEvidence: 强断言：<证据: 端口监听+协议响应>；保留脱敏日志、manifest、前后快照
+
+
+### D9-11 | D9协议 | P=P1
+标题: WebSocket 隧道通道生命周期
+前置: hwlink mux 环境
+步骤: ①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localServer/readyPromise/subConnections 清理 ⑥夹具: node eval/harness/fixtures/d9-11-ws-tunnel.mjs <hdk src> --evid <dir>
+预期: 通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 localServer 关闭、subConnections 清空、onClose 回调触发
+工具: mcp-server | 建议: 脚本（eval/harness/fixtures/d9-11-ws-tunnel.mjs） | requiredEvidence: 强断言：<证据: ready/close 生命周期>；保留脱敏日志、manifest、前后快照
+
+
+### D9-12 | D9协议 | P=P0
+标题: initialize 握手协议安全基线
+前置: MCP Inspector + 源码级 protocol-probe.mjs
+步骤: ①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/capabilities/serverInfo ②核对 callTool 路由到 tools.mjs callTool 函数 ③核对 runVersionCheck 在 initialize 阶段触发版本检查 ④核对 _decorateResult 包装响应（_resetHintConsumption/_isHintConsumed 消费提示标记） ⑤核对 listSkillDirs/findSkillsRoot 返回有效技能目录 ⑥非法时序（未 initialize 先 tools/list）被拒返回 -32600
+预期: initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorateResult 包装无副作用；listSkillDirs/findSkillsRoot 返回有效目录；非法时序返回 JSON-RPC -32600 错误
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: 协议报文+源码探针>；保留脱敏日志、manifest、前后快照
+
+
+### D9-13 | D9协议 | P=P0
+标题: tools/call 凭证不泄露与权限校验
+前置: MCP 客户端 + 隔离 HOME + 源码级探针
+步骤: ①setRuntimeCredentials 注入运行时凭证，hasRuntimeCredentials 校验存在 ②resolveCredentialsWithRuntime 解析运行时凭证 ③loadPolicy 加载安全策略，classifyHcloudArgs 分类命令参数 ④evaluateArtifacts/evaluateDeployPlan 评估风险，mergeRiskDecision 合并决策 ⑤hashArgs 生成参数哈希，createApprovalToken/consumeApprovalToken 审批令牌生命周期 ⑥readServiceCatalogs/classifyUnsupported/planHcloudCommand 命令分类 ⑦tools/call 返回核对无 AK/SK/token 明文 ⑧clearRuntimeCredentials 清理运行时凭证 ⑨readGlobalCredentials/writeGlobalCredentials 持久化核对，isPlaceholder 校验占位 ⑩globalCredentialsPath/obsConfigPath/writeObsConfig 路径与配置核对
+预期: tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprovalToken 后失效）；运行时凭证 clearRuntimeCredentials 清理后不留盘；readGlobalCredentials/writeGlobalCredentials 持久化一致；isPlaceholder 正确识别占位凭证
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: 凭证脱敏+权限决策+审批令牌>；保留脱敏日志、manifest、前后快照
+
+
+### D10-3 | D10评测 | P=P1
+标题: 路由准确率+混淆矩阵
+前置: 真实Agent+插件
+步骤: ①源码级: 直调 serviceCatalog(intent) 核对中/英文意图→服务路由映射(无需LLM) ②评测集: 逐任务记录路由 ③生成混淆矩阵 ④定位错路由去向
+预期: 源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位
+工具: harness | 建议: 脚本 | requiredEvidence: 强断言：<证据: 评测集结果+模型参数>；保留脱敏日志、manifest、前后快照
+
+
+### D10-4 | D10评测 | P=P0
+标题: 安全干预-静态规则层
+前置: 源码+已安装插件
+步骤: ①直调 loadRiskRules 核对规则数与 severity 分布 ②evaluateCommandRisk 输入高危命令(cat凭证/env-dump/删资源)与只读命令 ③核对 decision 三态(deny/warn/allow)
+预期: 规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token
+工具: harness | 建议: 脚本 | requiredEvidence: 强断言：<证据: 规则库加载+三态判定>；保留脱敏日志、manifest、前后快照
+
+

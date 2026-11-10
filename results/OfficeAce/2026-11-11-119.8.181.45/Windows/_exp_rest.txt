@@ -1,0 +1,97 @@
+### EXP-C4-11 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: DDS 只读规划冒烟: list_operations + plan 只读命令
+预期: DDS 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-12 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: DCS 只读规划冒烟: list_operations + plan 只读命令
+预期: DCS 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-13 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: SMN 只读规划冒烟: list_operations + plan 只读命令
+预期: SMN 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-14 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: DMS 只读规划冒烟: list_operations + plan 只读命令
+预期: DMS 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-15 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: WAF 只读规划冒烟: list_operations + plan 只读命令
+预期: WAF 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证
+
+
+### EXP-C4-16 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: CDN 只读规划冒烟: list_operations + plan 只读命令
+预期: CDN 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-17 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: ModelArts 只读规划冒烟: list_operations + plan 只读命令
+预期: ModelArts 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-18 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: DEW 只读规划冒烟: list_operations + plan 只读命令
+预期: DEW 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-19 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: CBR 只读规划冒烟: list_operations + plan 只读命令
+预期: CBR 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-20 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: EVS 只读规划冒烟: list_operations + plan 只读命令
+预期: EVS 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-21 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: EIP 只读规划冒烟: list_operations + plan 只读命令
+预期: EIP 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-C4-22 | D3-C4服务矩阵 | P=P1 | agent=Hermes OS=Windows/Linux
+源用例: D3-C4 | 要点: ELB 只读规划冒烟: list_operations + plan 只读命令
+预期: ELB 只读规划冒烟命令语法/参数正确，规范路由可执行
+
+
+### EXP-E01 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: ECS查询→run_readonly)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 ECS查询→run_readonly
+预期: 源码级断言: serviceCatalog 中文意图命中 ECS查询→run_readonly 对应服务(harness 实测基线 21.4% MISS，未命中即判 FA
+### EXP-E02 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: ECS创建→plan/approve)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 ECS创建→plan/approve
+预期: 源码级断言: serviceCatalog 中文意图命中 ECS创建→plan/approve 对应服务(harness 实测基线 21.4% MISS，未命中即判 FA
+### EXP-E03 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: OBS静态站→deploy)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 OBS静态站→deploy
+预期: 源码级断言: serviceCatalog 中文意图命中 OBS静态站→deploy 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: 激
+### EXP-E04 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: EIP→plan)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 EIP→plan
+预期: 源码级断言: serviceCatalog 中文意图命中 EIP→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: 走审批流, 参数完整
+
+
+### EXP-E05 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: RDS查询→read)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 RDS查询→read
+预期: 源码级断言: serviceCatalog 中文意图命中 RDS查询→read 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: 只读查询, 结果正确
+### EXP-E06 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: DCS创建→plan)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 DCS创建→plan
+预期: 源码级断言: serviceCatalog 中文意图命中 DCS创建→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: 激活 DCS ski
+### EXP-E07 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: CBR→plan)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 CBR→plan
+预期: 源码级断言: serviceCatalog 中文意图命中 CBR→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: 激活CBR skill
+
+
+### EXP-E08 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: explain_error→诊断)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 explain_error→诊断
+预期: 源码级断言: serviceCatalog 中文意图命中 explain_error→诊断 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); A
+### EXP-E13 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: 证书/ELB→plan)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 证书/ELB→plan
+预期: 源码级断言: serviceCatalog 中文意图命中 证书/ELB→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: 走审批流，证书
+### EXP-E14 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: IAM审计→read)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 IAM审计→read
+预期: 源码级断言: serviceCatalog 中文意图命中 IAM审计→read 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: 只读审计, 输出脱敏
+### EXP-E15 | D10评测集 | P=P1 | agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode OS=Windows/Linux
+源用例: D10-3 | 要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: voucher_claim→执行)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 voucher_claim→执行
+预期: 源码级断言: serviceCatalog 中文意图命中 voucher_claim→执行 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); A

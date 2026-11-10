@@ -1,0 +1,54 @@
+### D4-1 | P=P0 | mission=mission-001
+标题: 凭证文件读取拦截
+步骤: ①尝试cat/type凭证文件 ②观察拦截
+预期: 被阻断
+工具: hook_check_command | 建议: 脚本
+
+### D4-2 | P=P0 | mission=mission-001
+标题: 凭证env打印拦截
+步骤: ①printenv/echo凭证env ②观察拦截
+预期: 被阻断
+工具: hook_check_command | 建议: 脚本
+
+### D4-4 | P=P1 | mission=mission-001
+标题: 写操作审批门
+步骤: ①逐一触发写语义操作 ②观察是否强制审批
+预期: 无审批不可执行
+工具: plan_cli_command | 建议: 半自动
+
+### D4-5 | P=P0 | mission=mission-001
+标题: 写操作误判检测
+步骤: ①plan删除类命令 ②记录插件判定 ③若判read-only/allow→记P0
+预期: 写操作不被误判为只读
+工具: plan_cli_command | 建议: 半自动
+
+### D4-7 | P=P1 | mission=mission-001
+标题: hook三工具有效性
+步骤: ①构造三类高危输入 ②逐一调用hook工具 ③核对拦截
+预期: 高危输入均被拦截
+工具: hook_check_command/hook_check_artifacts/hook_check_deploy_plan | 建议: 脚本
+
+### D4-15 | P=P0 | mission=mission-001
+标题: hook绕过尝试
+步骤: ①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截
+预期: 无绕过成功
+工具: hook_check_command | 建议: 脚本
+
+### D4-16 | P=P0 | mission=mission-001
+标题: 命令包裹穿透
+步骤: ①构造shell包裹 ②执行 ③核对hook是否检查内层
+预期: 发现内层命令并拦截
+工具: hook_check_command | 建议: 脚本
+
+### D4-25 | P=P2 | mission=mission-001
+标题: Python hook 事件遥测分类
+步骤: ①执行只读 hcloud 命令 ②执行写命令 ③执行非 hcloud 命令 ④核对 hook-events.jsonl 三键分类
+预期: 只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capability
+工具: hook_check_command | 建议: 脚本
+
+### D4-27 | P=P1 | mission=mission-001
+标题: 双路径输出脱敏
+步骤: ①redactSecrets(text) ②redactOutput(text) ③核对两路径均脱敏 ④对照未脱敏点
+预期: redactSecrets(策略正则)与 redactOutput(CLI输出)双路径均替换明文凭证为占位符；不对非敏感字段误伤
+工具: run_readonly_command | 建议: 脚本
+

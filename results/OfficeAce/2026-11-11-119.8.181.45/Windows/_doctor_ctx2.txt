@@ -1,0 +1,105 @@
+=== check('MCP server can start @ -1 ===
+NOT FOUND
+
+=== check('MCP configured @ -1 ===
+NOT FOUND
+
+=== Skills installed @ 161544 ===
+onst missingSkills = [];
+  for (const dir of skillsOptions) {
+    if (!existsSync(dir)) continue;
+    const entries = readdirSync(dir, { withFileTypes: true }).filter(
+      (d) => d.isDirectory() && d.name.startsWith('huawei'),
+    );
+    const count = entries.length;
+    if (count > skillCount) {
+      skillCount = count;
+    }
+    for (const d of entries) {
+      if (!existsSync(join(dir, d.name, 'SKILL.md'))) missingSkills.push(d.name);
+    }
+  }
+  const skillsOk = skillCount >= 6;
+  check(`Skills installed (${skillCount})`, skillsOk, 'Run: npx huaweicloud-devkit install');
+  if (missingSkills.length > 0) {
+    console.log(
+      `  \x1b[33m[WARN]\x1b[0m ${missingSkills.length} skill(s) missing SKILL.md: ${missingSkills.join(', ')} — Run: npx huaweicloud-devkit install`,
+    );
+    warn++;
+  }
+
+  const proxyConfig = readProxyConfig();
+  const proxyEnv =
+    process.env.HTTPS_PROXY || process.env.https_proxy || process.env.HTTP_PROXY || process.env.http_proxy;
+  if (proxyConfig || p
+
+=== hermesMcpSdkOk @ 113680 ===
+', timeout: 60000 });
+    if (pip.status === 0) {
+      console.log('  MCP Python SDK: \x1b[32mInstalled\x1b[0m');
+      return true;
+    }
+    console.log(`  MCP Python SDK: \x1b[33mInstall failed\x1b[0m`);
+    console.log(`  \x1b[33m  Run manually: ${pythonBin} -m pip install mcp\x1b[0m`);
+  } catch (error) {
+    console.log(`  MCP Python SDK: \x1b[33m${error.message}\x1b[0m`);
+    console.log(`  \x1b[33m  Run manually: ${pythonBin} -m pip install mcp\x1b[0m`);
+  }
+  return false;
+}
+
+function hermesMcpSdkOk() {
+  const pythonBin = process.platform === 'win32' ? 'python' : 'python3';
+  try {
+    const r = spawnSync(pythonBin, ['-c', 'import mcp; print("ok")'], { encoding: 'utf8', timeout: 5000 });
+    return r.status === 0 && r.stdout.trim() === 'ok';
+  } catch {
+    return false;
+  }
+}
+
+async function installHermes() {
+  const skillsSrc = join(PLUGIN_ROOT, 'skills');
+  const srcDir = join(PLUGIN_ROOT, 'src');
+  const safetyDir = join(PLUGIN_ROOT, 'safety');
+  const hooksDir = join(PL
+
+=== function check( @ 150624 ===
+ if (summaryParts.length) console.log(`  ${summaryParts.join(' | ')}\n`);
+
+  for (const result of results) {
+    console.log(`[${result.name}]`);
+    for (const line of result.lines) console.log(line);
+    console.log('');
+  }
+
+  console.log('Environment:');
+  console.log(`  Node.js: ${process.version}`);
+  console.log(`  Platform: ${platform()}`);
+}
+
+async function cmdDoctor() {
+  console.log(BANNER);
+  console.log('HuaweiCloud DevKit Doctor\n');
+
+  let pass = 0,
+    warn = 0,
+    fail = 0;
+
+  function check(label, ok, msg) {
+    if (ok) {
+      console.log(`  \x1b[32m[PASS]\x1b[0m ${label}`);
+      pass++;
+    } else {
+      console.log(`  \x1b[31m[FAIL]\x1b[0m ${label} — ${msg}`);
+      fail++;
+    }
+  }
+
+  // Node.js
+  check('Node.js >= 22', process.versions.node.split('.')[0] >= 22, 'Run: nvm install 22 && nvm use 22');
+
+  // MCP server — check OpenCode, Codex Desktop, CodeArts, WorkBuddy, and DSH paths
+  const opencodePluginDir = opencodePluginsDir();
+  const codexPluginDir = cod
+

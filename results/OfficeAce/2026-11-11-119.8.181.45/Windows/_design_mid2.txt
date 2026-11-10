@@ -1,0 +1,36 @@
+### D9-10 | D9协议 | P=P1
+标题: MCP remote transport（HTTP/WS 远程服务）
+前置: remote transport 启动环境
+步骤: ①夹具: node eval/harness/fixtures/d9-10-remote-transport.mjs <hdk src> --evid <dir>（9528 端口启动+initialize/tools/list+stdio 对照）②--transport remote 启动 ③核对 port=9528/host=127.0.0.1 ④initialize/tools/list ⑤对照 stdio 路径
+预期: remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 port/host 用默认值
+工具: mcp-server | 建议: 脚本（eval/harness/fixtures/d9-10-remote-transport.mjs） | requiredEvidence: 强断言：<证据: 端口监听+协议响应>；保留脱敏日志、manifest、前后快照
+
+
+
+### D9-11 | D9协议 | P=P1
+标题: WebSocket 隧道通道生命周期
+前置: hwlink mux 环境
+步骤: ①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localServer/readyPromise/subConnections 清理 ⑥夹具: node eval/harness/fixtures/d9-11-ws-tunnel.mjs <hdk src> --evid <dir>
+预期: 通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 localServer 关闭、subConnections 清空、onClose 回调触发
+工具: mcp-server | 建议: 脚本（eval/harness/fixtures/d9-11-ws-tunnel.mjs） | requiredEvidence: 强断言：<证据: ready/close 生命周期>；保留脱敏日志、manifest、前后快照
+
+
+
+### D9-12 | D9协议 | P=P0
+标题: initialize 握手协议安全基线
+前置: MCP Inspector + 源码级 protocol-probe.mjs
+步骤: ①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/capabilities/serverInfo ②核对 callTool 路由到 tools.mjs callTool 函数 ③核对 runVersionCheck 在 initialize 阶段触发版本检查 ④核对 _decorateResult 包装响应（_resetHintConsumption/_isHintConsumed 消费提示标记） ⑤核对 listSkillDirs/findSkillsRoot 返回有效技能目录 ⑥非法时序（未 initialize 先 tools/list）被拒返回 -32600
+预期: initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorateResult 包装无副作用；listSkillDirs/findSkillsRoot 返回有效目录；非法时序返回 JSON-RPC -32600 错误
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: 协议报文+源码探针>；保留脱敏日志、manifest、前后快照
+
+
+
+### D9-13 | D9协议 | P=P0
+标题: tools/call 凭证不泄露与权限校验
+前置: MCP 客户端 + 隔离 HOME + 源码级探针
+步骤: ①setRuntimeCredentials 注入运行时凭证，hasRuntimeCredentials 校验存在 ②resolveCredentialsWithRuntime 解析运行时凭证 ③loadPolicy 加载安全策略，classifyHcloudArgs 分类命令参数 ④evaluateArtifacts/evaluateDeployPlan 评估风险，mergeRiskDecision 合并决策 ⑤hashArgs 生成参数哈希，createApprovalToken/consumeApprovalToken 审批令牌生命周期 ⑥readServiceCatalogs/classifyUnsupported/planHcloudCommand 命令分类 ⑦tools/call 返回核对无 AK/SK/token 明文 ⑧clearRuntimeCredentials 清理运行时凭证 ⑨readGlobalCredentials/writeGlobalCredentials 持久化核对，isPlaceholder 校验占位 ⑩globalCredentialsPath/obsConfigPath/writeObsConfig 路径与配置核对
+预期: tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprovalToken 后失效）；运行时凭证 clearRuntimeCredentials 清理后不留盘；readGlobalCredentials/writeGlobalCredentials 持久化一致；isPlaceholder 正确识别占位凭证
+工具: inspector | 建议: 脚本 | requiredEvidence: 强断言：<证据: 凭证脱敏+权限决策+审批令牌>；保留脱敏日志、manifest、前后快照
+
+
+

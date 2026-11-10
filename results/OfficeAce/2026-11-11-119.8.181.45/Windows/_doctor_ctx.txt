@@ -1,0 +1,52 @@
+FILE setup-cli.mjs idx 113046
+Sync(join(hermesSafetyPluginDir(), '__init__.py'))
+  );
+}
+
+function removeHermesHooksConfigBlock() {
+  const configPath = hermesConfigFile();
+  if (!existsSync(configPath)) return;
+  const lines = readFileSync(configPath, 'utf8').split(/\r?\n/);
+  let inHooksBlock = false;
+  const out = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed === 'hooks:' && !inHooksBlock) {
+      inHooksBlock = true;
+      continue;
+    }
+    if (inHooksBlock) {
+      if (trimmed === '' || line.startsWith(' ') || line.startsWith('\t')) {
+        continue;
+      }
+      inHooksBlock = false;
+    }
+    out.push(line);
+  }
+  const cleaned = out.join('\n').trimEnd();
+  writeFileSync(configPath, cleaned ? `${cleaned}\n` : '');
+  console.log('  Hooks config cleaned');
+}
+
+function ensureHermesMcpSdk() {
+  const pythonBin = process.platform === 'win32' ? 'python' : 'python3';
+  try {
+    const r = spawnSync(pythonBin, ['-c', 'import mcp; print("ok")'], { encoding: 'utf8', timeout: 5000 });
+    if (r.status === 0 && r.stdout.trim() === 'ok') {
+      console.log('  MCP Python SDK: \x1b[32mAlready installed\x1b[0m');
+      return true;
+    }
+  } catch {}
+  console.log('  Installing Hermes MCP Python SDK...');
+  try {
+    const pip = spawnSync(pythonBin, ['-m', 'pip', 'install', 'mcp', '--quiet'], { encoding: 'utf8', timeout: 60000 });
+    if (pip.status === 0) {
+      console.log('  MCP Python SDK: \x1b[32mInstalled\x1b[0m');
+      return true;
+    }
+    console.log(`  MCP Python SDK: \x1b[33mInstall failed\x1b[0m`);
+    console.log(`  \x1b[33m  Run manually: ${pythonBin} -m pip install mcp\x1b[0m`);
+  } catch (error) {
+    console.log(`  MCP Python SDK: \x1b[33m${error.message}\x1b[0m`);
+    console.log(`  \x1b[33m  Run manually: ${pythonBin} -m pip install mcp\x1b[0m`)
+
