@@ -204,15 +204,17 @@ reg('D3-C1', async () => {
     detail.push(`zero=${zero}`);
     // 网络资源归零：安全组 → 子网 → VPC（异步删除需轮询）
     await cleanup();
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 60; i++) {
       const lv = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`]);
       const ls = sh(['VPC', 'ListSubnets', `--cli-region=${REGION}`]);
       const lg = sh(['VPC', 'ListSecurityGroups', `--cli-region=${REGION}`]);
       const netZero = !lv.text.includes(vpcName) && !ls.text.includes(subnetName) && !lg.text.includes(sgName);
-      if (netZero) { detail.push('netZero=true'); break; }
-      detail.push(`netZero=false try=${i}`);
-      await cleanup();
-      await wait(6000);
+      if (netZero) { detail.push(`netZero=true try=${i}`); break; }
+      if (i % 6 === 0) {
+        detail.push(`netZero=false try=${i} vpcLeft=${lv.text.includes(vpcName)} subLeft=${ls.text.includes(subnetName)} sgLeft=${lg.text.includes(sgName)}`);
+        await cleanup();
+      }
+      await wait(5000);
     }
     const lv = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`]);
     const ls = sh(['VPC', 'ListSubnets', `--cli-region=${REGION}`]);
@@ -292,8 +294,8 @@ reg('D3-C3', async () => {
     const check = await h.tools.callTool('huaweicloud_sandbox_deploy_check', { port, project: projName, output_dir: '.', framework_type: 'static', workspace_id: wsId });
     detail.push(`deploy_check=${JSON.stringify(check).slice(0, 170)}`);
     const curl = await h.tools.callTool('huaweicloud_sandbox_exec_one_shot', { command: `curl -s -o /dev/null -w "%{http_code}" http://localhost:${port}/`, workspace_id: wsId });
-    const localCode = String((curl && curl.stdout) || '').trim();
-    detail.push(`curl.local=${localCode}`);
+    const localCode = String((curl && curl.stdout) || '').replace(/[\u001b]\][^\u0007]*\u0007/g, '').trim();
+    detail.push(`curl.local=${JSON.stringify(localCode)}`);
     const close = await h.tools.callTool('huaweicloud_sandbox_close_session', { workspace_id: wsId });
     detail.push(`close=${JSON.stringify(close).slice(0, 70)}`);
     const nginxOk = !!(check && check.checks && check.checks.nginx_serving && check.checks.nginx_serving.status === 'PASS');

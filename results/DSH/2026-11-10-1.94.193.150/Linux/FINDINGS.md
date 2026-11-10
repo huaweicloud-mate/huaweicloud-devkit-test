@@ -1,9 +1,11 @@
 # FINDINGS — 缺陷发现清单（DSH-deepseek-v4-pro-0813）
 
 > **落盘路径**：`results/DSH/2026-11-10-1.94.193.150/Linux/FINDINGS.md`
-> **生成时间**：2026-11-10 05:21（北京时间）
-> **被测版本**：`v1.1.13`（npm latest，gitHead `8a6d8be2`）
-> **本轮结论**：12 项缺陷（5 P0 / 4 P1 / 3 P2，含 1 项 SPEC-MISMATCH），源码 `8a6d8be2` 上**全部复现**，均为历史遗留，归入既有单，不重复开单（详 HISTORY_LINKS.md）。
+> **生成时间**：2026-11-10 10:30（北京时间）
+> **被测版本**：`huaweicloud-devkit v1.1.14-next.1`（npm @next，gitHead `c6e30cdb`，tag `v1.1.14-next.1`）
+> **本轮结论**：12 项缺陷（5 P0 / 4 P1 / 3 P2，含 1 项 SPEC-MISMATCH），在 `v1.1.14-next.1/c6e30cdb` 上逐条真机复跑**全部复现**，均为历史遗留，归入既有单 #1055，不重复开单（详 HISTORY_LINKS.md）。
+>
+> **本轮复跑说明**：146 例全部重执行（非沿用旧证据）；D3-C1（ECS 生命周期）与 D3-S3（沙箱预览 URL）此前因探针硬编码已下架 ECS flavor 与假阻塞实现而误判 BLOCKED/FAIL，本轮已修正探针并真机执行：D3-C1 用现网可用 `kc1.small.1`+ARM Ubuntu 24.04 创建→ACTIVE→删除→ECS/VPC/子网/SG 全归零通过；D3-S3 走通 serviceCatalog→connect→upload→nginx→expose_tunnel，公网 URL 实测 HTTP 200。
 
 ## #1【P0】D4-16 sh -c 命令包裹穿透
 
@@ -101,4 +103,4 @@
 - **影响**：SPEC-MISMATCH，region 解析契约待裁决。
 - **证据**：`evidence/D1-68/stdout.log`
 
-> 状态：全部 12 项为历史遗留（源码 `8a6d8be2`/latest 1.1.13 上仍复现），由 `file_issue.py` 历史查重归入既有单（#1055 等），不重复开单。
+> 状态：全部 12 项为历史遗留（源码 `v1.1.14-next.1/c6e30cdb` 上逐条复跑仍复现），由 `file_issue.py` 历史查重归入既有单（#1055 等），不重复开单。
