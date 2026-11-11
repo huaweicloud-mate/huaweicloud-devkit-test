@@ -1,0 +1,135 @@
+########## [1] realcloud-probe (D2-1/D3-C4/D4-14/18/19/20 + EXP-C4-01..22) ########## 2026-11-11 05:08:42
+realcloud-probe exit=0 2026-11-11 05:08:47
+    }
+  ]
+}
+
+########## [2] heavy E2E (D3-C7/C2/C3/C6/C1) ########## 2026-11-11 05:08:47
+########## D3-C7 ########## 2026-11-11 05:08:47
+[OK] list_regions 返回区域 -> {"ok":true,"count":26,"regions":[{"id":"af-north-1","type":"public","locales":{"en-us":"AF-Cairo","zh-cn":"非洲-开罗"}},{"id":"af-south-1","type":"public"
+[OK] get_regional_availability -> {"ok":true,"service":"vpc","region":"cn-north-4","available":true,"note":"vpc is available in cn-north-4.","sourcedFrom":"static cache, update via npm
+[OK] plan 只读含 --cli-region(参数级断言) -> ["VPC","ListVpcs","--cli-region=cn-north-4","--cli-output=json"]
+[OK] 执行只读查询 -> {
+  "request_id": "806cb0c73e42dbc3da3590b597e37413",
+  "vpcs": [],
+  "page_info": {
+    "current_count": 0
+  }
+}
+[OK] EIP 建删命令含 region -> hasRegion=true
+[OK] CreatePublicip 返回 id -> [object Object]
+[OK] DeletePublicip 释放 -> {"ok":true,"exitCode":0,"signal":null,"stdout":"","stderr":"","plan":{"executable":"hcloud","args":[
+
+=== D3-C7 PASS 7/7 ===
+########## D3-C7 done exit=0 ########## 2026-11-11 05:08:50
+########## D3-C2 ########## 2026-11-11 05:08:50
+[OK] OBS建桶 -> Start at 2026-11-10 21:08:50.815737528 +0000 UTC
+
+Create bucket [tctest-hermes-obs-b6n5h8] successfully, request id [000001A1C74ACE104416BF2C77BCC57C]
+[OK] obsutil上传 -> Start at 2026-11-10 21:08:51.275873128 +0000 UTC
+
+
+Parallel:      5                   Jobs:          5                   
+Threshold:     50.00MB      
+[OK] public-read(ACL) -> 桶+对象 chattri -acl=public-read 已执行
+[OK] set静态站(website) -> {"ok":true,"status":200,"websiteUrl":"http://tctest-hermes-obs-b6n5h8.obs-website.cn-north-4.myhuaweicloud.com","message":"Static website hosting configured. Website URL: http://tctest-hermes-obs-b6n5
+[OK] get静态站 -> {"ok":true,"status":200,"body":"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><WebsiteConfiguration xmlns=\"http://obs.myhwclouds.com/doc/2015-06-30/\"><IndexDocument><Suffix>index.html
+[OK] curl200 -> code=200 url=http://tctest-hermes-obs-b6n5h8.obs-website.cn-north-4.myhuaweicloud.com
+[OK] 删桶归零 -> rm -r -f 清对象 + rm obs://bucket -f 删桶
+
+=== D3-C2 PASS 7/7 ===
+########## D3-C2 done exit=0 ########## 2026-11-11 05:08:54
+########## D3-C3 ########## 2026-11-11 05:08:54
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+[OK] connect -> ws=71a94ace36b44094a6702b3230fd5a71
+[2026-11-10T21:09:02.627Z] uploadProject: /tmp/multica-task-1242081407/d3c3-proj -> /workspace/d3c3-proj.tar.gz (archive=200 bytes, md5=16a8056885b872cf52d8ce397ff789b9)
+[2026-11-10T21:09:02.677Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-1242081407/sandbox-upload-1794344942612/d3c3-proj.tar.gz, size=200, remotePath=/workspace/d3c3-proj.tar.gz)
+[2026-11-10T21:09:02.678Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-10T21:09:02.678Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-10T21:09:02.725Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-10T21:09:02.778Z] deployFileServer: starting server on port 8888
+[2026-11-10T21:09:02.824Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 155378\r\n\u001b]133;C\u0007\r\n"
+[2026-11-10T21:09:02.824Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+[2026-11-10T21:09:03.764Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-10T21:09:03.766Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-10T21:09:03.768Z] uploadViaHttpTunnel: tunnel ready, localPort=35993
+[2026-11-10T21:09:03.768Z] uploadViaHttpTunnel: waiting for server health on localhost:35993
+[2026-11-10T21:09:03.768Z] waitForServerReady: attempt 1, checking http://localhost:35993/health
+[2026-11-10T21:09:03.818Z] waitForServerReady: server ready on port 35993 after 0 retries
+[2026-11-10T21:09:03.819Z] uploadViaHttpTunnel: sending POST with 200 bytes
+[2026-11-10T21:09:03.869Z] uploadViaHttpTunnel: upload complete (bytes=200, md5=16a8056885b872cf52d8ce397ff789b9)
+[OK] upload_project -> {"ok":true,"localDir":"/tmp/multica-task-1242081407/d3c3-proj","remotePath":"/workspace/d3c3-proj","bytes":200,"md5":"16a8056885b872cf52d8ce397ff789b9
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+[OK] deploy_nginx -> {"ok":true,"nginxType":"static","port":8091,"outputPath":"/workspace/d3c3-proj/.","projectPath":"/workspace/d3c3-proj","
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+[OK] deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8091, HTTP
+[OK] close_session -> "ok"
+
+=== D3-C3 PASS 5/5 ===
+########## D3-C3 done exit=0 ########## 2026-11-11 05:09:33
+########## D3-C6 ########## 2026-11-11 05:09:33
+[OK] check_user -> {"realnameVerified":true,"agreementSigned":true}
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+[OK] connect -> ws=71a94ace36b44094a6702b3230fd5a71
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+[OK] credentials -> {"sessionId":"71a94ace36b44094a6702b3230fd5a71","expiresAt":"2026-11-11T21:09:41.994000Z","credentialValidation":"passed
+[OK] sign_agreement -> {"signed":true,"signedCount":0}
+  upload progress: batch 1/1
+[OK] upload_file -> {"ok":true,"localPath":"/tmp/multica-task-1242081407/d3c6-1794344984417/probe.txt","remotePath":"/workspace/d3c6-probe.t
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+[OK] exec_one_shot -> {"stdout":"\u001b]133;C\u0007hdk-sandbox-ok\r\n\u001b]133;C\u0007\r\n","exitCode":0}
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+[OK] deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8085, HTTP
+[OK] close_session -> "ok"
+
+=== D3-C6 PASS 8/8 ===
+########## D3-C6 done exit=0 ########## 2026-11-11 05:09:47
+########## D3-C1 ########## 2026-11-11 05:09:47
+[OK] CreateVpc -> [object Object]
+[OK] CreateSubnet -> [object Object]
+[OK] CreateServers(审批分类) -> [object Object]
+[OK] CreateServers(返回 job_id/serverIds) -> [object Object]
+[OK] 验证 ACTIVE -> [object Object]
+[OK] 删除含磁盘 -> [object Object]
+[OK] 归零验证(ECS 不含本次资源) -> [object Object]
+[OK] 清理 VPC+子网 -> {"vpcId":"c914c1d4-d752-4153-9db7-d988dd999ac1","subnetId":"7e6a118e-0098-40e1-965a-d6e36561977e","cleanOk":true}
+
+=== D3-C1 PASS 8/8 ===
+########## D3-C1 done exit=0 ########## 2026-11-11 05:10:49
+ALL HEAVY DONE 2026-11-11 05:10:49
+
+########## [3] aux (D4-13/23/24, D1-70) ########## 2026-11-11 05:10:49
+########## D4-13 只读子账号 ########## 2026-11-11 05:10:49
+exit=0
+parse err Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+########## D4-23 全局规则 ########## 2026-11-11 05:10:52
+exit=0
+tail: }
+########## D4-24 确认令牌边界 ########## 2026-11-11 05:10:52
+exit=0
+tail: }
+########## D1-70 代理配置 ########## 2026-11-11 05:10:53
+exit=1
+tail: Node.js v22.13.0
+AUX DONE 2026-11-11 05:10:53
+
+ALL REALCLOUD DONE 2026-11-11 05:10:53
