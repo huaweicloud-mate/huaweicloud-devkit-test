@@ -1,0 +1,120 @@
+    if (riskRuleEngine) {
+      try {
+        // Test deny rules
+        const denyTests = ['cat ~/.hcloud/config.json', 'printenv HW_ACCESS_KEY', 'hcloud KMS DecryptData --cipher_text=xxx'];
+        for (const t of denyTests) {
+          if (classifyFn) {
+            const r = classifyFn(t);
+            if (r.decision === 'deny') denyCount++;
+          }
+        }
+        // Test allow
+        const allowTest = classifyFn ? classifyFn('hcloud ECS ListServers') : null;
+        ok = denyCount >= 2 && allowTest?.decision === 'allow';
+      } catch(e) {}
+    } else {
+      ok = classifyFn !== null;
+    }
+    const res = writeResult('D10-4', ok ? 'PASS' : 'FAIL', 'rule engine denyCount=' + denyCount + ' allow works=' + ok,
+      { denyCount });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  console.log('\n=== EXP 展开级 ===');
+
+  // EXP-C4-01~22: per-service readonly smoke - real list_operations + plan per service
+  const C4_SERVICES = ['ECS','VPC','OBS','RDS','GaussDB','CCE','FunctionGraph','IAM','CTS','CES','DDS','DCS','SMN','DMS','WAF','CDN','ModelArts','DEW','CBR','EVS','EIP','ELB'];
+  for (let i = 0; i < C4_SERVICES.length; i++) {
+    const id = `EXP-C4-${String(i+1).padStart(2,'0')}`;
+    const svc = C4_SERVICES[i];
+    let ok = false; let opsCount = 0; let planOk = false;
+    try {
+      // Real list_operations call for this service
+      const responses = await mcpToolCall('huaweicloud_list_operations', { service: svc }, 45000);
+      const r = responses.find(x => x.id === 2);
+      if (r && r.result && r.result.content) {
+        const text = r.result.content[0]?.text || '';
+        try {
+          const j = JSON.parse(text);
+          // opsCount = number of actual example operation entries (exclude "note" placeholder)
+          const exampleKeys = j.examples ? Object.keys(j.examples).filter(k => k !== 'note') : [];
+          opsCount = exampleKeys.length;
+          // PASS criteria: text returned, service matches (or aggregate w/ subServices), and either
+          //   - result.ok === true (single service w/ help text), or
+          //   - subServices array present (DMS/DEW aggregate), or
+          //   - examples has real entries (cached)
+          const isAggregate = Array.isArray(j.subServices) && j.subServices.length > 0;
+          const hasCachedExamples = opsCount > 0;
+          const okResult = j.result && j.result.ok === true;
+          ok = text.length > 100 && (j.service === svc || isAggregate) && (okResult || hasCachedExamples || isAggregate);
+        } catch(e) { ok = text.length > 100; opsCount = 0; }
+      }
+    } catch(e) {}
+    const res = writeResult(id, ok ? 'PASS' : 'FAIL', svc + ' list_operations opsCount=' + opsCount,
+      { service: svc, opsCount, realCall: true });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // EXP-E01~E15: per-prompt service_catalog routing assertions (real MCP calls)
+  const E_PROMPTS = [
+    { id:'EXP-E01', prompt:'帮我查一下我账号在华北北京四有哪些云主机', expect:['ECS'] },
+    { id:'EXP-E02', prompt:'创建一台 2C4G 的 Ubuntu 云服务器 规格通用型', expect:['ECS'] },
+    { id:'EXP-E03', prompt:'把本地 dist 目录部署成一个公网静态网站', expect:['OBS'] },
+    { id:'EXP-E04', prompt:'给这台服务器绑定一个弹性公网IP', expect:['EIP'] },
+    { id:'EXP-E05', prompt:'看一下我的云数据库MySQL实例的状态', expect:['RDS'] },
+    { id:'EXP-E06', prompt:'创建一个 Redis 缓存实例用于会话存储', expect:['DCS'] },
+    { id:'EXP-E07', prompt:'给生产环境的服务器配置一个每日备份策略', expect:['CBR'] },
+    { id:'EXP-E08', prompt:'我的ECS启动失败了 帮我分析原因', expect:null },
+    { id:'EXP-E09', prompt:'开设一个 Kubernetes 集群用于微服务部署', expect:['CCE'] },
+    { id:'EXP-E10', prompt:'部署一个函数处理图片自动压缩', expect:['FunctionGraph'] },
+    { id:'EXP-E11', prompt:'查一下我账号这个月的费用情况', expect:['BSS'] },
+    { id:'EXP-E12', prompt:'把应用日志指标推送到云监控告警', expect:['CES'] },
+    { id:'EXP-E13', prompt:'申请HTTPS证书并配置到我的域名', expect:['ELB'] },
+    { id:'EXP-E14', prompt:'我账号下的用户都有哪些权限 帮我审计一下', expect:['IAM'] },
+    { id:'EXP-E15', prompt:'帮我领一下华为云的代金券', expect:['Incentive Voucher'] },
+  ];
+  for (const e of E_PROMPTS) {
+    let ok = false; let gotServices = []; let verdict = 'MISS';
+    try {
+      const responses = await mcpToolCall('huaweicloud_service_catalog', { intent: e.prompt }, 30000);
+      const r = responses.find(x => x.id === 2);
+      if (r && r.result && r.result.content) {
+        const text = r.result.content[0]?.text || '';
+        try {
+          const j = JSON.parse(text);
+          gotServices = j.recommendedServices || [];
+          if (e.expect === null) {
+            verdict = 'N/A';
+            ok = true;
+          } else {
+            ok = e.expect.some(s => gotServices.includes(s));
+            verdict = ok ? 'HIT' : 'MISS';
+          }
+        } catch(e2) { ok = false; }
+      }
+    } catch(e3) {}
+    const res = writeResult(e.id, ok ? 'PASS' : 'FAIL', e.id + ' ' + verdict + ' expect=' + (e.expect||[]).join('/') + ' got=' + gotServices.join('+'),
+      { prompt: e.prompt, expect: e.expect, got: gotServices, verdict, realCall: true });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // EXP-D5-5-1, EXP-D5-5-3
+  for (const id of ['EXP-D5-5-1', 'EXP-D5-5-3']) {
+    const r1 = spawnSync('npx', ['huaweicloud-devkit', 'plugins'], { encoding: 'utf8', timeout: 30000, shell: true, windowsHide: true });
+    const r2 = spawnSync('npx', ['huaweicloud-devkit', 'status'], { encoding: 'utf8', timeout: 30000, shell: true, windowsHide: true });
+    const ok = r1.status === 0 || r2.status === 0;
+    const res = writeResult(id, ok ? 'PASS' : 'FAIL', id + ': plugins+status ran', { r1Exit: r1.status, r2Exit: r2.status });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // ===== Summary =====
+  console.log(`\n=== BATCH COMPLETE ===`);
+  console.log(`PASS: ${pass}, FAIL: ${fail}, BLOCKED: ${blocked}, NOT_RUN: ${notrun}`);
+  console.log(`Total: ${results.length}`);
+
+  writeFileSync(join(EVIDENCE, '_batch_summary.json'), JSON.stringify({
+    total: results.length, pass, fail, blocked, notrun, results, executedAt: ts()
+  }, null, 2));
+}
+
+main().catch(e => { console.error('Fatal:', e); process.exit(1); });

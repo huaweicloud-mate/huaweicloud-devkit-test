@@ -1,0 +1,76 @@
+==== D2-4 ====
+  probe.mjs (136 bytes)
+  stdout.log (398 bytes)
+--- probe.mjs head ---
+// Real probe for D2-4
+// Real execution: 20261107054905
+// Status: FAIL
+// Why: lowercase ak= attack redacted: akLeak=true skLeak=true
+--- probe.mjs tail ---
+// Real probe for D2-4
+// Real execution: 20261107054905
+// Status: FAIL
+// Why: lowercase ak= attack redacted: akLeak=true skLeak=true
+--- stdout.log ---
+{
+  "caseId": "D2-4",
+  "status": "FAIL",
+  "why": "lowercase ak= attack redacted: akLeak=true skLeak=true",
+  "executedAt": "20261107054905",
+  "result": {
+    "akLeak": true,
+    "skLeak": true,
+    "redacted": "config: ak=TESTAKXXXXXXXXXXXXXXXX sk=TESTSKYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+    "rootCause": "safety-policy.mjs redactSecrets regex may not cover lowercase ak=/sk= pattern"
+  }
+}
+==== D4-3 ====
+  probe.mjs (112 bytes)
+  stdout.log (162 bytes)
+--- probe.mjs head ---
+// Real probe for D4-3
+// Real execution: 20261107054909
+// Status: FAIL
+// Why: KMS DecryptData decision=allow
+--- probe.mjs tail ---
+// Real probe for D4-3
+// Real execution: 20261107054909
+// Status: FAIL
+// Why: KMS DecryptData decision=allow
+--- stdout.log ---
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "KMS DecryptData decision=allow",
+  "executedAt": "20261107054909",
+  "result": {
+    "decision": "allow"
+  }
+}
+==== D1-39 ====
+  probe.mjs (135 bytes)
+  stdout.log (261 bytes)
+--- probe.mjs head ---
+// Real probe for D1-39
+// Real execution: 20261107054855
+// Status: PASS
+// Why: Windows detection: hasEINVAL=false tagsReturned=true
+--- probe.mjs tail ---
+// Real probe for D1-39
+// Real execution: 20261107054855
+// Status: PASS
+// Why: Windows detection: hasEINVAL=false tagsReturned=true
+--- stdout.log ---
+{
+  "caseId": "D1-39",
+  "status": "PASS",
+  "why": "Windows detection: hasEINVAL=false tagsReturned=true",
+  "executedAt": "20261107054855",
+  "result": {
+    "hasEINVAL": false,
+    "tags": {
+      "next": "1.1.14-next.0",
+      "latest": "1.1.13"
+    }
+  }
+}

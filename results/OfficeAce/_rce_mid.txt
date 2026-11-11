@@ -1,0 +1,87 @@
+        const idRe = /"id"\s*:\s*"([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})"/g;
+        let mm, last = null;
+        while ((mm = idRe.exec(before)) !== null) last = mm[1];
+        if (last) serverId = last;
+      }
+    }
+    if (serverId) {
+      const d = sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', `--cli-region=${REGION}`]);
+      cleanup.push('ECS:' + (d.ok ? '提交删除' : 'FAIL:' + d.text.slice(0, 80)));
+      if (d.ok) {
+        // 异步删除：轮询 ListServersDetails 确认 ECS 真正归零（最多约 150s）
+        let gone = false;
+        for (let i = 0; i < 15; i++) {
+          await new Promise((r) => setTimeout(r, 10000));
+          const list = sh(['ECS', 'ListServersDetails', `--cli-region=${REGION}`]);
+          if (list.ok && !list.text.includes(serverId)) { gone = true; break; }
+        }
+        cleanup.push('ECS轮询:' + (gone ? '已归零' : '仍在/未确认'));
+        if (!gone) cleanupOk = false;
+      } else {
+        cleanupOk = false;
+      }
+    }
+    if (subnetId) {
+      const d = sh(['VPC', 'DeleteSubnet', `--subnet_id=${subnetId}`, `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+      cleanup.push('subnet:' + (d.ok ? 'OK' : 'FAIL:' + d.text.slice(0, 60)));
+      if (!d.ok) cleanupOk = false;
+    }
+    if (vpcId) {
+      const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+      cleanup.push('vpc:' + (d.ok ? 'OK' : 'FAIL:' + d.text.slice(0, 60)));
+      if (!d.ok) cleanupOk = false;
+    }
+    log('finally归零(校验真实删除)', cleanupOk, cleanup.join(' ') || '无资源需清理');
+  }
+}
+
+async function caseD3C6() {
+  const cu = await call('huaweicloud_sandbox_check_user', {});
+  log('check_user', cu?.realnameVerified === true && cu?.agreementSigned === true, JSON.stringify(cu));
+  const conn = await call('huaweicloud_sandbox_connect', { source: 'CLI' });
+  const wsId = conn?.devStageId || conn?.sessionId;
+  log('connect', conn?.status === 'connected' && !!wsId, conn?.status + ' ws=' + (wsId || '').slice(0, 10));
+  const cr = await call('huaweicloud_sandbox_credentials', { session_id: conn?.sessionId });
+  log('credentials', cr?.credentialValidation === 'passed', cr?.credentialValidation);
+  const ex = await call('huaweicloud_sandbox_exec_one_shot', { workspace_id: wsId, command: 'echo hdk-sandbox-ok && uname -a' });
+  log('exec_one_shot', ex?.exitCode === 0, (ex?.stdout || '').slice(0, 100));
+  const cs = await call('huaweicloud_sandbox_close_session', { workspace_id: wsId });
+  log('close_session', !cs.__error, JSON.stringify(cs).slice(0, 60));
+}
+
+async function caseD3C3() {
+  const proj = '/tmp/d3c3-proj';
+  mkdirSync(proj, { recursive: true });
+  writeFileSync(proj + '/index.html', '<!DOCTYPE html><html><body><h1>hdk-d3c3</h1></body></html>');
+  const conn = await call('huaweicloud_sandbox_connect', { source: 'CLI' });
+  const wsId = conn?.devStageId || conn?.sessionId;
+  log('connect', conn?.status === 'connected' && !!wsId, 'ws=' + (wsId || '').slice(0, 10));
+  const up = await call('huaweicloud_sandbox_upload_project', { local_dir: proj, workspace_id: wsId });
+  log('upload_project', up?.ok === true && up?.md5Verified === true, JSON.stringify(up).slice(0, 120));
+  const dn = await call('huaweicloud_sandbox_deploy_nginx', { nginx_type: 'static', port: 8080, project: 'd3c3-proj', output_dir: '.', workspace_id: wsId });
+  log('deploy_nginx', dn?.ok === true, dn?.nginxType + ':' + dn?.port);
+  const dc = await call('huaweicloud_sandbox_deploy_check', { port: 8080, project: 'd3c3-proj', output_dir: '.', workspace_id: wsId });
+  log('deploy_check', dc?.checks?.nginx_serving?.status === 'PASS', dc?.checks?.nginx_serving?.status);
+  const cs = await call('huaweicloud_sandbox_close_session', { workspace_id: wsId });
+  log('close_session', !cs.__error, JSON.stringify(cs).slice(0, 60));
+}
+
+const CASES = { 'D3-B8': caseD3B8, 'D3-B7': caseD3B7, 'D3-C2': caseD3C2, 'D3-C1': caseD3C1, 'D3-C6': caseD3C6, 'D3-C3': caseD3C3 };
+
+async function main() {
+  const caseArg = process.argv.find(a => a.startsWith('--case='))?.split('=')[1] || 'all';
+  const targets = caseArg === 'all' ? Object.keys(CASES) : caseArg.split(',');
+  for (const t of targets) {
+    if (!CASES[t]) { console.error('未知 case:', t, '（合法值:', Object.keys(CASES).join('/'), '/all）'); process.exit(2); }
+    const tid = `case-${t}`;
+    results.length = 0;  // reset per-case
+    await CASES[t]();
+    const failedCount = results.filter(x => !x.pass).length;
+    const out = JSON.stringify({ case: t, status: failedCount === 0 ? 'PASS' : 'FAIL', total: results.length, passed: results.filter(x => x.pass).length, failed: failedCount, results }, null, 2);
+    const ev = process.env.HDK_EVIDENCE ? join(process.env.HDK_EVIDENCE, t) : null;
+    if (ev) { mkdirSync(ev, { recursive: true }); writeFileSync(join(ev, 'stdout.log'), out, 'utf8'); }
+    console.log(`\n### ${t} ###\n` + out);
+  }
+}
+
+main().catch(e => { console.error('FATAL', e); process.exit(1); });
