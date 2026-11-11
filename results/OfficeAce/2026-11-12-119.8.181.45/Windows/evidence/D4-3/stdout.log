@@ -1,9 +1,14 @@
 {
   "caseId": "D4-3",
   "status": "FAIL",
-  "why": "KMS DecryptData decision=allow",
-  "executedAt": "20261112051059",
+  "why": "KMS DecryptData style calls are NOT blocked (decision=allow) though output may contain plaintext secret material",
+  "executedAt": "20261112_recheck",
+  "sut": "huaweicloud-devkit@1.1.14-next.2 gitHead 5c9478d3 (local hdk checkout)",
   "result": {
-    "decision": "allow"
+    "csmsShowSecret": "deny (secret) — correct",
+    "getSecretValueWording": "deny (secret) — correct",
+    "kmsDecrypt": "allow (unknown_read) — NOT blocked, secret material can flow into agent context",
+    "kmsPlainTextArg": "deny (write approval) — blocked but via write gate, not secret rule",
+    "rootCause": "safety-policy.mjs secret-read allowlist covers CSMS verbs (ShowSecret/GetSecretValue/secret_string|secret_binary) but has no KMS DecryptData/decrypt handling; cloud-risk-rules.json hwc-command-secret-value-read likewise does not match KMS decrypt"
   }
 }
