@@ -1,0 +1,75 @@
+[OK] redactSecrets --key=value (等号形态) 
+[FAIL] redactSecrets --key value (空格形态) LEAKS=AK,SK,TOKEN
+[FAIL] redactSecrets key 空格 value LEAKS=AK,SK
+[OK] redactOutput JSON 对象路径 
+[OK] redactOutput 非JSON key=value 
+[FAIL] redactOutput 非JSON 空格形态 LEAKS=AK,SK
+
+=====SUMMARY JSON=====
+{
+  "generatedAt": "2026-11-10T21:21:17.878Z",
+  "total": 6,
+  "passed": 3,
+  "failed": 3,
+  "conclusion": "3/6 通过；空格分隔形态（--key value / key value）脱敏缺口为真实缺陷",
+  "results": [
+    {
+      "name": "redactSecrets --key=value (等号形态)",
+      "ok": true,
+      "mode": "=",
+      "leaks": [],
+      "input": "--access-key=AKIAIOSFODNN7EXAMPLE --secret-key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXA",
+      "output": "--access-key=<redacted> --secret-key=<redacted>"
+    },
+    {
+      "name": "redactSecrets --key value (空格形态)",
+      "ok": false,
+      "mode": "space",
+      "leaks": [
+        "AK",
+        "SK",
+        "TOKEN"
+      ],
+      "input": "--access-key AKIAIOSFODNN7EXAMPLE --secret-key wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXA",
+      "output": "--access-key AKIAIOSFODNN7EXAMPLE --secret-key wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY --security-token T0K3N_SECRET_VA"
+    },
+    {
+      "name": "redactSecrets key 空格 value",
+      "ok": false,
+      "mode": "space",
+      "leaks": [
+        "AK",
+        "SK"
+      ],
+      "input": "access_key AKIAIOSFODNN7EXAMPLE secret_key wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLE",
+      "output": "access_key AKIAIOSFODNN7EXAMPLE secret_key wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    },
+    {
+      "name": "redactOutput JSON 对象路径",
+      "ok": true,
+      "mode": "=",
+      "leaks": [],
+      "input": "{\"access_key\":\"AKIAIOSFODNN7EXAMPLE\",\"secret_key\":\"wJalrXUtnFEMI/K7MDENG/bPxRfiC",
+      "output": "{\n  \"access_key\": \"<redacted>\",\n  \"secret_key\": \"<redacted>\",\n  \"token\": \"<redacted>\"\n}"
+    },
+    {
+      "name": "redactOutput 非JSON key=value",
+      "ok": true,
+      "mode": "=",
+      "leaks": [],
+      "input": "access_key=AKIAIOSFODNN7EXAMPLE secret_key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLE",
+      "output": "access_key=<redacted> secret_key=<redacted> token=<redacted>"
+    },
+    {
+      "name": "redactOutput 非JSON 空格形态",
+      "ok": false,
+      "mode": "space",
+      "leaks": [
+        "AK",
+        "SK"
+      ],
+      "input": "access_key AKIAIOSFODNN7EXAMPLE secret_key wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLE",
+      "output": "access_key AKIAIOSFODNN7EXAMPLE secret_key wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    }
+  ]
+}
