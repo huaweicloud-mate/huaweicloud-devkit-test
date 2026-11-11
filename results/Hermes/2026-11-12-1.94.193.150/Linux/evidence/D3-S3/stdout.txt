@@ -1,0 +1,77 @@
+check_user -> realnameVerified=true agreementSigned=true err=
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+connect -> status=connected wsId=71a94ace36b44094a670
+[2026-11-11T21:10:32.070Z] uploadProject: /home/testbot2/.hdk-s3-mwcm3l96 -> /workspace/.hdk-s3-mwcm3l96.tar.gz (archive=214 bytes, md5=b59a224b8e1ca00bcd3ed286e1534e18)
+[2026-11-11T21:10:32.118Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-563349697/sandbox-upload-1794431432059/.hdk-s3-mwcm3l96.tar.gz, size=214, remotePath=/workspace/.hdk-s3-mwcm3l96.tar.gz)
+[2026-11-11T21:10:32.118Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-11T21:10:32.118Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-11T21:10:32.165Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-11T21:10:32.216Z] deployFileServer: starting server on port 8888
+[2026-11-11T21:10:32.262Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 228621\r\n\u001b]133;C\u0007\r\n"
+[2026-11-11T21:10:32.262Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+[2026-11-11T21:10:33.145Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-11T21:10:33.146Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-11T21:10:33.148Z] uploadViaHttpTunnel: tunnel ready, localPort=45057
+[2026-11-11T21:10:33.148Z] uploadViaHttpTunnel: waiting for server health on localhost:45057
+[2026-11-11T21:10:33.148Z] waitForServerReady: attempt 1, checking http://localhost:45057/health
+[2026-11-11T21:10:33.197Z] waitForServerReady: server ready on port 45057 after 0 retries
+[2026-11-11T21:10:33.198Z] uploadViaHttpTunnel: sending POST with 214 bytes
+[2026-11-11T21:10:33.248Z] uploadViaHttpTunnel: upload complete (bytes=214, md5=b59a224b8e1ca00bcd3ed286e1534e18)
+upload_project -> ok=true md5Verified=true
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+deploy_nginx -> ok=true port=8085 url=
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mwcm3l96/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
+close_session -> ok
+[OK] 沙箱 connect 成功
+[OK] s3-connect/upload/deploy 链路
+[OK] 部署返回可访问 URL 或检查通过
+[OK] 会话正常关闭

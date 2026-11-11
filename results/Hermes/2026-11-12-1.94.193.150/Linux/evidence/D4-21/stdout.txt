@@ -1,0 +1,14 @@
+--- [broad-iam] ok=false decision=deny
+    deny hwc-iam-admin-policy: The change appears to grant broad administrator permissions.
+--- [admin-full] ok=true decision=allow
+--- [scoped-iam] ok=true decision=warn
+    warn hwc-sandbox-missing-ttl: The preview or sandbox deployment does not show cleanup or ownership metadata.
+
+===== hcl-probe 补充 =====
+[json-broad(对照)] decision=deny findings=hwc-iam-admin-policy/deny
+   content={"Statement":[{"Effect":"Allow","Action":"*","Resource":"*"}]}
+[hcl-actions-star] decision=allow findings=
+   content=resource "huaweicloud_iam_policy" "adm" { name="x" statement { effect="Allow" actions = ["*"] resources=["*"] } }
+[tf-admin-full-suffix] decision=allow findings=
+   content=data "huaweicloud_iam_policy" "r" { name = "AdministratorFullAccess" }
+=== DONE ===

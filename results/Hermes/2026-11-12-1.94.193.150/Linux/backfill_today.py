@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-11-11 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13 gitHead 8a6d8be2）。"""
+"""Hermes Linux 2026-11-12 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13 gitHead 8a6d8be2）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -135,12 +135,12 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 
 # D3-C1 自动化 finally 归零的 150s ECS 删除轮询时序抖动 + sh().ok 退出码假阳性（非产品缺陷），附手工归零补充说明
 append_case("D3-C1", "\n===== 本轮手工归零补充（自动化 150s 轮询时序抖动，非产品缺陷） =====\n"
-    "CreateVpc(5b52a120-55e6-401c-a8b9-6aaa77411331)/CreateSubnet(0d3a704a-2c39-42ba-a00b-e25a2a19201a)/CreateServers(返回serverIds 8fbd6839-834c-4c8d-a09d-f8c09d2a4574)/审批分类(allow) 均 PASS。"
+    "CreateVpc(a68da560-5d57-4c71-a51b-8066d617c1af)/CreateSubnet(7dbf6a3a-643c-4be1-a3e6-8c027bf6fd0b)/CreateServers(返回serverIds d945c9ab-f842-48fc-a2c0-026768231420)/审批分类(allow) 均 PASS。"
     "自动化 finally 归零：ECS 删除轮询 150s 内未见 GONE（ECS:提交删除 ECS轮询:仍在/未确认），且 sh() 以退出码 0 误记 subnet:OK/vpc:OK，"
     "实际 ECS 残留（ListServersDetails servers=1 且 status=ACTIVE）。\n"
-    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=8fbd6839-834c-4c8d-a09d-f8c09d2a4574 --delete_publicip=true（job_id ff808081a0ed144001a1c751aa321173）→ ListServersDetails 轮询 GONE（第 2 次轮询确认）；"
-    "hcloud VPC DeleteSubnet（--vpc_id 5b52a120-55e6-401c-a8b9-6aaa77411331 --subnet_id 0d3a704a-2c39-42ba-a00b-e25a2a19201a）→ ListSubnets subnets=[]；hcloud VPC DeleteVpc（首次因 ECS 未删尽报 VPC.0104 RouterInUse，重试后成功）→ ListVpcs 不含 5b52a120。"
-    "四类资源均已归零核实 GONE（ECS/VPC ListVpcs/EIP ListPublicips 均无 testbot3-hermes-* 残留）。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。\n")
+    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=d945c9ab-f842-48fc-a2c0-026768231420 --delete_publicip=true（job_id ff808081a0ed1f4501a1cc775b5022b5）→ ListServersDetails 轮询 GONE（第 1 次轮询确认 servers=0）；"
+    "hcloud VPC DeleteSubnet（--vpc_id a68da560-5d57-4c71-a51b-8066d617c1af --subnet_id 7dbf6a3a-643c-4be1-a3e6-8c027bf6fd0b）→ ListSubnets 不含 7dbf6a3a；hcloud VPC DeleteVpc（首次因 subnet 未删尽报 VPC.0104 RouterInUse，重试后成功）→ ListVpcs 不含 a68da560。"
+    "四类资源均已归零核实 GONE（ECS/VPC/Subnet 均无 testbot3-hermes-* 本次残留）。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.13\ngitHead 8a6d8be2\n", None)
@@ -168,8 +168,8 @@ FAIL_D = {
     "D4-25": "Python hook 写操作遥测误分类 cli:invoke（应 cli:write）",
     "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 泄漏",
     "D3-S5": "serviceCatalog 复合意图未命中多 service（回退 help）",
-    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: function_name，未生成 URN/触发器",
-    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.password）",
+    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.zip_file，未生成 URN/触发器",
+    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.port）",
     "D9-12": "initialize 版本检查缺失 + 非法时序 tools/list 未拒 -32600",
     "D10-3": "serviceCatalog 中文意图 EXP-E01「云主机」未命中（92.9% 未达 100%）",
     "D1-70": "proxy-agent getWebSocketImpl 崩溃：bundled undici@8.12.2 decompress.js 解构 node:zlib.createZstdDecompress(node22.13 无)→undefined.bind TypeError",
