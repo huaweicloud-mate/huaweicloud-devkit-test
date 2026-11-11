@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "why": "场景-跨服务交付(Web+RDS)并归零（真机建删，2026-11-12 fresh）：serviceCatalog 复合意图命中 RDS+Sandbox+DevStation → CreateVpc+CreateSubnet → RDS 真机创建并 ACTIVE（连接串字段齐备 ip/port）→ DeleteInstance 受理 + DeleteSubnet/DeleteVpc 归零。probe 自动归零对 RDS DeleteInstance 受理 rc 未判 0 且 VPC 删除竞态残留 1 个 tctest-s7 VPC，已人工二次删除并核实 RDS=0/VPC=0/子网=0 全归零（d3-s7.log + 人工归零核实）。",
+  "executedAt": "20261112054455",
+  "assistant": "OpenClaw(deepseek-v4-pro-0813)",
+  "os": "Linux",
+  "sut": "huaweicloud-devkit@1.1.14-next.2 (npm @next; hdk gitHead 5c9478d3)"
+}

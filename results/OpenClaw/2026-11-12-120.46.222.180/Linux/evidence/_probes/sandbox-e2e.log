@@ -11,7 +11,7 @@ connect -> status=connected wsId=71a94ace36b44094 err=
 [OK] sandbox_connect 返回 workspace_id
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
-credentials -> {"sessionId":"71a94ace36b44094a6702b3230fd5a71","expiresAt":"2026-11-12T21:23:36.255000Z","credentialValidation":"passed","apiKeyInjected":false,"apiKeyHint":"N
+credentials -> {"sessionId":"71a94ace36b44094a6702b3230fd5a71","expiresAt":"2026-11-12T21:28:27.915000Z","credentialValidation":"passed","apiKeyInjected":false,"apiKeyHint":"N
 [OK] sandbox_credentials 注入临时 AK/SK 无异常
   upload progress: batch 1/1
 upload_file -> ok=true md5Verified=true err=
@@ -20,7 +20,7 @@ upload_file -> ok=true md5Verified=true err=
 exec_one_shot -> {"stdout":"\u001b]133;C\u0007hdk-c6-35\r\n/root\r\n\u001b]133;C\u0007\r\n","exitCode":0}
 [OK] sandbox_exec_one_shot 执行只读命令返回输出
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
-deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8088, HTTP 200)"},"output_dir":{"status":"FAIL","detail":"(/workspace/
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"FAIL","detail":"(port 8088, no HTTP response)"},"output_dir":{"status":"FAIL","detail":"(/wo
 [OK] sandbox_deploy_check 返回规范结果（无静默失败）
 close_session -> "ok"
 [OK] sandbox_close_session 正常关闭
@@ -34,29 +34,33 @@ close_session -> "ok"
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 connect -> status=connected wsId=71a94ace36b44094
 [OK] connect 成功
-[2026-11-11T21:23:48.359Z] uploadProject: /tmp/multica-task-3309906992/hdk-c3-mwcmlsof -> /workspace/hdk-c3-mwcmlsof.tar.gz (archive=206 bytes, md5=bf1d2900c032489929c1861559da1073)
-[2026-11-11T21:23:48.407Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-3309906992/sandbox-upload-1794432228342/hdk-c3-mwcmlsof.tar.gz, size=206, remotePath=/workspace/hdk-c3-mwcmlsof.tar.gz)
-[2026-11-11T21:23:48.407Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
-[2026-11-11T21:23:48.407Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
-[2026-11-11T21:23:48.454Z] deployFileServer: writing script (2456 b64 chars)
-[2026-11-11T21:23:48.507Z] deployFileServer: starting server on port 8888
-[2026-11-11T21:23:48.552Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 233978\r\n\u001b]133;C\u0007\r\n"
-[2026-11-11T21:23:48.553Z] uploadViaHttpTunnel: creating dedicated tunnel session
+[2026-11-11T21:28:40.195Z] uploadProject: /tmp/multica-task-3309906992/hdk-c3-mwcms24z -> /workspace/hdk-c3-mwcms24z.tar.gz (archive=205 bytes, md5=7750b7d082e8a04a53b658c6ea9637cb)
+[2026-11-11T21:28:40.243Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-3309906992/sandbox-upload-1794432520182/hdk-c3-mwcms24z.tar.gz, size=205, remotePath=/workspace/hdk-c3-mwcms24z.tar.gz)
+[2026-11-11T21:28:40.243Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-11T21:28:40.243Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-11T21:28:40.291Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-11T21:28:40.343Z] deployFileServer: starting server on port 8888
+[2026-11-11T21:28:40.389Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 239021\r\n\u001b]133;C\u0007\r\n"
+[2026-11-11T21:28:40.389Z] uploadViaHttpTunnel: creating dedicated tunnel session
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
-[2026-11-11T21:23:49.438Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
-[2026-11-11T21:23:49.440Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
-[2026-11-11T21:23:49.441Z] uploadViaHttpTunnel: tunnel ready, localPort=37065
-[2026-11-11T21:23:49.441Z] uploadViaHttpTunnel: waiting for server health on localhost:37065
-[2026-11-11T21:23:49.442Z] waitForServerReady: attempt 1, checking http://localhost:37065/health
-[2026-11-11T21:23:49.490Z] waitForServerReady: server ready on port 37065 after 0 retries
-[2026-11-11T21:23:49.490Z] uploadViaHttpTunnel: sending POST with 206 bytes
-[2026-11-11T21:23:49.539Z] uploadViaHttpTunnel: upload complete (bytes=206, md5=bf1d2900c032489929c1861559da1073)
+[2026-11-11T21:28:41.293Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-11T21:28:41.294Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-11T21:28:41.296Z] uploadViaHttpTunnel: tunnel ready, localPort=37825
+[2026-11-11T21:28:41.296Z] uploadViaHttpTunnel: waiting for server health on localhost:37825
+[2026-11-11T21:28:41.296Z] waitForServerReady: attempt 1, checking http://localhost:37825/health
+[2026-11-11T21:28:41.344Z] waitForServerReady: server ready on port 37825 after 0 retries
+[2026-11-11T21:28:41.345Z] uploadViaHttpTunnel: sending POST with 205 bytes
+[2026-11-11T21:28:41.393Z] uploadViaHttpTunnel: upload complete (bytes=205, md5=7750b7d082e8a04a53b658c6ea9637cb)
 upload_project -> ok=true md5Verified=true err=
 [OK] upload_project 上传 + md5 校验
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
+deploy_nginx -> ok=true port=8080
+[OK] deploy_nginx 静态站部署
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/hdk-c3-mwcms24z/.)"},"content_verified":{"status":"SKIP","de
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
@@ -64,10 +68,11 @@ upload_project -> ok=true md5Verified=true err=
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
-deploy_nginx -> ok=undefined port=undefined
-[FAIL] deploy_nginx 静态站部署
-[FAIL] deploy_check 通过（nginx_serving PASS=URL 可达）
-[FAIL] URL 可达（沙箱内 HTTP 核验 200）
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+Waiting for connection 938510... (0s)Connection 938510 established (0s).
+expose_tunnel -> ok=true url=https://4cjh52lm-8080.devbridge-s2.hwtunnel.com
+[OK] deploy_check 通过（nginx_serving PASS=URL 可达）
+[OK] URL 可达（沙箱内 HTTP 核验 200）
 close_session -> "ok"
 [OK] 会话关闭
 =====END D3-C3=====
@@ -75,7 +80,7 @@ close_session -> "ok"
 =====SUMMARY=====
 {
   "total": 13,
-  "passed": 10,
+  "passed": 13,
   "results": [
     {
       "name": "sandbox_check_user 返回 realnameVerified+agreementSigned",
@@ -124,18 +129,18 @@ close_session -> "ok"
     },
     {
       "name": "deploy_nginx 静态站部署",
-      "ok": false,
+      "ok": true,
       "detail": "port=8080"
     },
     {
       "name": "deploy_check 通过（nginx_serving PASS=URL 可达）",
-      "ok": false,
-      "detail": "dcOk=false"
+      "ok": true,
+      "detail": "dcOk=true"
     },
     {
       "name": "URL 可达（沙箱内 HTTP 核验 200）",
-      "ok": false,
-      "detail": "urlOk=false"
+      "ok": true,
+      "detail": "urlOk=true"
     },
     {
       "name": "会话关闭",
