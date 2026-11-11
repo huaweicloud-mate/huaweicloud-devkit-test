@@ -22,7 +22,7 @@
 | 测试类型 | 源码级探针 / 真机 CLI / MCP 协议（stdio）/ 真云 E2E（建删资源归零）/ 沙箱 E2E / D10 评测集 harness |
 | daily 基础用例 | 设计级 107 / 展开级 39 |
 
-> **执行方法**：探针脚本（`_probe/main.mjs` + `checks1-4.mjs`）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数（hdk 已 checkout 到被测版本 5c9478d3），决策/结果机器可读落 `evidence/<case-id>/stdout.log`；真云 E2E 用 `hcloud` CLI 真机建删资源并归零验证（D3-C1 VPC/子网/安全组创建→删除→归零通过、ECS 到订单提交层被 billing 拒绝；D3-C2 OBS 建桶被账号权限拒绝；D3-S2 VPC 删确认流通过）；MCP 协议用例用 `mcp-server.mjs` stdio 子进程发包；D10 路由层用 serviceCatalog 逐条实测。证据统一按 `evidence/<case-id>/`（probe.mjs + stdout.log）组织，146 条用例全部落盘。
+> **执行方法**：探针脚本（`_probe/main.mjs` + `checks1-4.mjs`）直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数（hdk 已 checkout 到被测版本 5c9478d3），决策/结果机器可读落 `evidence/<case-id>/stdout.log`；真云 E2E 用 `hcloud` CLI 真机建删资源并归零验证（D3-C2 OBS 静态站 mb→cp→curl200→删→归零全通过、D3-C13 OBS 静态站 get/set 通过；D3-C1 VPC/子网/安全组创建→删除→归零通过、ECS 到订单提交层被 billing 拒绝；D3-S2 VPC 删确认流通过）；MCP 协议用例用 `mcp-server.mjs` stdio 子进程发包；D10 路由层用 serviceCatalog 逐条实测。证据统一按 `evidence/<case-id>/`（probe.mjs + stdout.log）组织，146 条用例全部落盘。
 
 ---
 
@@ -36,7 +36,7 @@
 | 通过率（分母 = PASS+FAIL+SPEC = 143，不含 BLOCKED/NOT_RUN） | `90.9%` |
 | P0 / P1 / P2 新增缺陷 | `5 / 4 / 2`（另有 2 项测试侧断言过严，非产品缺陷） |
 | 红线（I 类）违规 | `0` |
-| 资源释放 | `全部归零`（VPC/子网/安全组均已删，云端复核无本次创建残留；OBS 无创建即无残留；沙箱会话已 close） |
+| 资源释放 | `全部归零`（VPC/子网/安全组与 OBS 桶均已删，云端复核无本次创建残留；沙箱会话已 close） |
 
 ---
 
@@ -119,7 +119,7 @@
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
 | VPC/子网/安全组（D3-C1、D3-S2） | 是 | 已删 | 云端复核无 `testbot2-opencode-*` 残留 |
-| OBS 桶（D3-C2、D3-C13） | 否（账号 OBS 写权限被限制） | — | 无创建即无残留 |
+| OBS 桶（D3-C2、D3-C13） | 是 | 已删 | `hcloud OBS ls` 无 `testbot2-opencode-*` 桶（curl200 后 rm 归零） |
 | ECS（D3-C1） | 否（订单被 billing 拒绝） | — | 无创建即无残留 |
 | EIP（D3-C7 跨区域） | 否（region 无权限） | — | 无创建即无残留 |
 | 沙箱会话（D3-C3/C6/S3） | 是 | 已 close_session | session 关闭 |
@@ -132,5 +132,6 @@
 
 - 待裁决 SPEC：`D1-68`（HUAWEICLOUD_REGION vs HW_REGION 优先级，修契约 or 修实现）。
 - 历史缺陷复核：本轮 11 项产品缺陷与 2026-11-11 FINDINGS 完全一致（SUT 同为 v1.1.14-next.2，未修复），统一定向查重后关联历史单、不重复开新单。
+- 环境变化：昨日的 OBS 建桶权限阻塞（UserRestricted）今日已解除，D3-C2 静态站 E2E（mb→cp→curl200→删→归零）与 D3-C13 静态站 get/set 均已转 PASS；D3-C1 ECS 仍被 billing（Ecs.0707）阻塞、D3-C7 跨区域仍无权限，维持 BLOCKED。
 - 本轮未覆盖：真实 Agent 会话评测执行器（D10-1/2/5/9）非 DSH 客户端不适用；Windows 专属 D1-39。
 - 建议：① `safety-policy.mjs:45` 正则补 `/i` 并收编小写 `ak/sk`；② `cloud-risk-rules.json` 补 KMS `DecryptData`、HCL `actions`、shell 包裹展开；③ `risk-rule-engine.mjs` 默认改 fail-closed；④ mcp-server 维护 initialize 状态机；⑤ serviceCatalog 补「云主机」关键词与中文部署意图、sandbox 端口漂移自动重绑 devbridge 隧道。
