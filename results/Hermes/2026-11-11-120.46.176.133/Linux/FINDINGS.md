@@ -1,9 +1,10 @@
 # FINDINGS — 缺陷发现清单（Hermes-deepseek-v4.1-flash）
 
 > **落盘路径**：`results/Hermes/2026-11-11-120.46.176.133/Linux/FINDINGS.md`
-> **生成时间**：`2026-11-11 05:22:00`（北京时间）
+> **生成时间**：`2026-11-11 09:53:00`（北京时间）
 > **被测版本**：`huaweicloud-devkit@1.1.14-next.2`（npm next），hdk gitHead `5c9478d3a95f20206e1a711861cfdfff68b19224`
 > **结论**：19 FAIL + 3 SPEC-MISMATCH（P0 4 / P1 10 / P2 5 + 契约 3），共 22 项，合并为 1 张缺陷单提交。
+> **本轮说明**：2026-11-11 第二轮全量重跑（09:31–09:46，SUT 同 `1.1.14-next.2` @ 5c9478d3）；22 项结论与当日 05:18 轮次一致，仅 D3-S6 / D3-S7 的 preflight 首个缺参随 API 校验顺序呈现不同（见 #7 / #17）。
 
 ---
 
@@ -57,9 +58,9 @@
 
 ## #7【P1】D3-S7 跨服务交付：RDS CreateInstance 缺 db.password 且复合意图未命中部署目标
 
-- **现象**：`run RDS CreateInstance -> ok=false stdout=[USE_ERROR]Invalid parameter: db.password`；复合意图路由 `services=["RDS"]`（RDS 命中=true，部署目标命中=false）。
+- **现象**：`run RDS CreateInstance -> ok=false stdout=[USE_ERROR]Invalid parameter: db.port`（当日 05:18 轮同用例报 `db.password`，缺项随校验顺序呈现不同）；复合意图路由 `services=["RDS"]`（RDS 命中=true，部署目标命中=false）。
 - **断言**：RDS 最小实例创建成功（返回实例 ID）+ 复合意图同时命中 RDS 与部署目标；实测两项均失败。
-- **根因**：`plugins/huaweicloud-core/src/tools.mjs` RDS `CreateInstance` 最小参数集未注入 `db.password`（API 必需）；`serviceCatalog` routeMap 未分解「Web 应用 + RDS」复合意图。
+- **根因**：`plugins/huaweicloud-core/src/tools.mjs` RDS `CreateInstance` 最小参数集未注入多个 API 必填项（`db.password` / `db.port` 等）；`serviceCatalog` routeMap 未分解「Web 应用 + RDS」复合意图。
 - **影响**：跨服务交付场景无法端到端完成。
 - **证据**：`evidence/D3-S7/stdout.txt`
 
@@ -135,11 +136,11 @@
 - **影响**：一句多诉求的需求被降级为兜底提示。
 - **证据**：`evidence/D3-S5/stdout.txt`
 
-## #17【P2】D3-S6 FunctionGraph CreateFunction 缺 code.filename
+## #17【P2】D3-S6 FunctionGraph CreateFunction 最小参数模板缺项（本轮报 function_name）
 
-- **现象**：`run CreateFunction -> ok=false stdout=[USE_ERROR]Invalid parameter: code.filename`，URN 未返回、定时触发器未绑定（测后删除函数归零 OK）。
+- **现象**：`run CreateFunction -> ok=false stdout=[USE_ERROR]Invalid parameter: function_name`（当日 05:18 轮同用例报 `code.filename`），URN 未返回、定时触发器未绑定。
 - **断言**：最小参数集创建 Python 函数必须返回 URN 且定时触发器绑定成功；实测 2 项失败。
-- **根因**：`plugins/huaweicloud-core/src/tools.mjs` FunctionGraph `CreateFunction` 的最小参数模板缺 `code.filename`。
+- **根因**：`plugins/huaweicloud-core/src/tools.mjs` FunctionGraph `CreateFunction` 的最小参数模板缺项（`function_name` / `code.filename` 等多个必填项未注入，API 按校验顺序报第一个缺失项）。
 - **影响**：函数计算场景无法一键创建。
 - **证据**：`evidence/D3-S6/stdout.txt`
 
