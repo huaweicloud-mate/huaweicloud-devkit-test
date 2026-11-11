@@ -1,8 +1,8 @@
 # Hermes-deepseek-v4-pro-0813 每日测试报告
 
 > **报告名**：`Hermes-deepseek-v4-pro-0813-测试报告.md`
-> **生成时间**：2026-11-11 05:16（北京时间）
-> **执行归档**：`results/Hermes/2026-11-11-120.46.222.180/Linux/`
+> **生成时间**：2026-11-12 05:16（北京时间）
+> **执行归档**：`results/Hermes/2026-11-12-120.46.222.180/Linux/`
 > **被测对象**：huaweicloud-devkit v1.1.13（npm `latest`，gitHead `8a6d8be2`）
 > **测试客户端**：Hermes (deepseek-v4-pro-0813) / Linux (aarch64) / 120.46.222.180
 > **结论**：`PARTIAL`（有 FAIL 缺陷，P0 4 项；21 项缺陷均为历史在案缺陷复现，本日 0 新增）
@@ -90,7 +90,7 @@
 | 20 | P1 | `D9-9` | D9协议 | tools/call 取消能力（SPEC） | initialize capabilities 未声明 cancellation |
 | 21 | P2 | `D8-9` | D8文档 | 安装ID与遥测脱敏（SPEC） | sanitizeValue 无 AK/SK/token 脱敏 |
 
-> 21 项缺陷经 `file_issue.py` 历史查重全部命中上游已有 issue（强关联），本轮不重复开单（详见 `HISTORY_LINKS.md`）。昨日新增的 D3-C1「ECS 异步删除归零泄漏」本日真机重跑 **未复现**（8/8 PASS、资源归零），已不在缺陷清单。
+> 21 项缺陷经 `file_issue.py` 历史查重全部命中上游已有 issue（强关联），本轮不重复开单（详见 `HISTORY_LINKS.md`）。历史 D3-C1「ECS 异步删除归零泄漏」已连续两日真机重跑 **未复现**（8/8 PASS、资源归零），不在缺陷清单。
 
 ---
 
