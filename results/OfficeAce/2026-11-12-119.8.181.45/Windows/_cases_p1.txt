@@ -1,0 +1,108 @@
+== 用例矩阵-设计级.csv total 107
+D1-3|D1安装|P1|doctor健康自检|<代表: Windows/Linux>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|已安装环境(含部分组件异常环境)
+D1-4|D1安装|P2|status/update幂等|<代表: Windows/Linux>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|已安装+存在用户自定义config
+D1-26|D1安装|P1|升级提醒工具注册与协议暴露|<代表: MCP Inspector+进程>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|dev/1.1.2 代码
+D1-27|D1安装|P1|检测语义-已是最新|<代表: Windows/Linux>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|current == latest
+D1-28|D1安装|P1|检测语义-有新版本|<代表: Windows/Linux>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|current < latest
+D1-30|D1安装|P2|semver 比对正确性|<代表: Windows/Linux>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|无
+D1-31|D1安装|P1|dismiss 冷却期|<代表: Windows/Linux>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|已有旧版本提醒
+D1-33|D1安装|P2|skip 文件持久化与多路径|<代表: Windows/Linux>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|可注入路径
+D1-39|D1安装|P0|Windows 升级检测链可用性|<代表: Windows/Linux>|Hermes 代表终端; fake/fixture|Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证）|需求来源与前置条件；独立 manifest；finally 清理|Windows 10 + 1.1.2
+D1-40|D1安装|P0|镜像 lag 下检测正确性(反向提醒防护)|<代表: Windows/Linux>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|默认 registry=镜像且滞后
+D1-41|D1安装|P1|check_update 真实 MCP 返回契约|<代表: 隔离进程>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|隔离 HOME + 可控 registry 响应
+D1-42|D1安装|P1|dismiss 真实闭环与跨调用持久化|<代表: 隔离 HOME+CROSS_PROCESS>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|隔离 HOME + 有可用更新
+D1-45|D1安装|P1|兜底提示真实序列与预热竞态|<代表: 隔离进程+预热竞态>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|隔离 MCP 进程 + 注入 update_available
+D1-65|D1安装|P2|调试模式环境变量|<代表: 隔离进程>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|可设 env 的进程环境
+D1-66|D1安装|P2|遥测开关与端点环境变量|<代表: 隔离进程>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|可设 env 的进程环境
+D1-67|D1安装|P2|Agent toolkit 模式与 DSH 跳过安装环境变量|<代表: DSH 客户端>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|可设 env 的进程环境
+D1-68|D1安装|P2|图标离线与区域环境变量|<代表: 隔离进程>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|可设 env 的进程环境
+D1-69|D1安装|P2|CLI help 子命令|<代表: CLI>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|已安装环境
+D1-70|D1安装|P1|代理配置与 WebSocket 代理|<代表: 隔离进程+proxy夹具>|Hermes 代表终端; fake/fixture|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|可设 proxy env/配置的进程环境
+D2-10|D2认证|P1|R7 current档跟随|<代表: Hermes 或 OpenCode>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|KooCLI 多 profile（current=deploy）
+D2-11|D2认证|P0|R3 STS token拒绝落盘|<代表: Hermes 或 OpenCode>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云 AK/SK + securityToken
+D2-12|D2认证|P1|R10 runtime非空禁止落盘|<代表: Hermes 或 OpenCode>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|runtime 凭据激活（auth_init）
+D2-13|D2认证|P1|R9 configuredBySession优先env|<代表: Hermes 或 OpenCode>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|隔离 HOME + S1 + HW_ACCESS_KEY env
+D2-16|D2认证|P1|import文件读取后擦除|<代表: Hermes 或 OpenCode>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|creds-import.json 存在
+D4-18|D4安全|P0|confirm-not-deny审批语义|<代表: 安全基线 Hermes+OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云+标准客户端
+D4-19|D4安全|P0|确认流下预检仍生效|<代表: 安全基线 Hermes+OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云
+D4-20|D4安全|P1|拒绝后零操作|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云
+D2-1|D2认证|P1|auth init三端同步|<代表: Hermes 或 OpenCode>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|AK/SK+本地凭证文件
+D2-2|D2认证|P2|auth status判定准确性|<代表: Hermes 或 OpenCode>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|三端就绪状态可组合环境
+D2-4|D2认证|P0|凭证脱敏正确性|<代表: Hermes 或 OpenCode>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云凭证
+D2-5|D2认证|P1|凭证缺失报错指引|<代表: Hermes 或 OpenCode>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|无凭证/错误凭证/过期凭证环境
+D2-26|D2认证|P1|凭证备份与恢复|<代表: 隔离 HOME>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|已同步凭证的隔离 HOME
+D2-27|D2认证|P2|KooCLI 版本管理|<代表: 隔离进程>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|package.json 含 kooCliVersion
+D3-A1|D3功能|P1|skill检索完整性|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|本地~30个SKILL.md
+D3-B1|D3功能|P2|list_operations规范名|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hcloud可用
+D3-B3|D3功能|P1|run_readonly脱敏执行|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云账号
+D3-B5|D3功能|P2|detect_framework识别|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|本地项目样本
+D3-C1|D3功能|P1|ECS生命周期E2E|<代表: 真云 ECS 贵资源>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云+参考ECS实例
+D3-C2|D3功能|P1|OBS静态站部署E2E|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|OBS配置就绪
+D3-C3|D3功能|P1|沙箱部署E2E|<代表: 沙箱 DevStation>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|沙箱DevStation配额
+D3-C4|D3功能|P1|服务创建类回归|<代表: 22 服务矩阵>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云+最小权限AK/SK
+D3-C5|D3功能|P1|工具冒烟|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|环境就绪
+D3-C6|D3功能|P1|沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreemen|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|沙箱 DevStation 配额
+D3-C7|D3功能|P1|跨区域资源操作引导（区域维度）|<真云代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云账号（cn-north-4），测试资源带 `tctest-` 前缀标签，owner=测试负责人，
+D3-C13|D3功能|P1|OBS 静态网站托管配置|<代表: 真云 OBS>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云 OBS bucket + AK/SK
+D3-C14|D3功能|P2|沙箱 HDKit 服务参数与 hwlink 凭证|<代表: Hermes 沙箱>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|沙箱 DevStation 配额
+D3-S1|D3功能|P1|场景-只读查ECS(带不改约束)|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云凭证 + 至少1台ECS
+D3-S2|D3功能|P1|场景-删VPC先确认|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云测试VPC
+D3-S3|D3功能|P1|场景-沙箱预览出URL|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|沙箱配额 + 前端项目
+D3-S4|D3功能|P1|场景-领券闭环|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|未领取代金券的IAM账号
+D3-S5|D3功能|P2|场景-复合意图分层路由|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|无(纯路由)
+D3-S6|D3功能|P2|场景-FunctionGraph定时任务|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云 FunctionGraph 配额
+D3-S7|D3功能|P1|场景-跨服务交付(Web应用+RDS)并归零|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云凭证 + 沙箱/RDS 配额
+D3-S8|D3功能|P1|场景-操作失败后排障指引|<代表: Hermes>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云凭证(可注入失效/过期凭证)
+D4-1|D4安全|P0|凭证文件读取拦截|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|含.hcloud/.huaweicloud目录环境
+D4-2|D4安全|P0|凭证env打印拦截|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|凭证env变量已设置
+D4-3|D4安全|P0|明文secret API拦截|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云账号
+D4-4|D4安全|P1|写操作审批门|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云+标准客户端
+D4-5|D4安全|P0|写操作误判检测|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云
+D4-6|D4安全|P1|adminPass回显警告|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云
+D4-7|D4安全|P1|hook三工具有效性|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hook-capable客户端
+D4-8|D4安全|P1|Python/Node策略一致|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|双路径可达环境
+D4-9|D4安全|P0|公开暴露/破坏性预检|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云
+D4-10|D4安全|P2|规则库新增回归|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|本地环境
+D4-11|D4安全|P1|提示注入防护|<代表: 4 注入点>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|标准客户端
+D4-12|D4安全|P2|供应链安装期安全|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|源码包
+D4-13|D4安全|P1|最小权限凭证通过率|<代表: 只读凭证全量>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|只读IAM子账号(test001, credentials.readonly.json)
+D4-14|D4安全|P2|操作可审计性|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云
+D4-15|D4安全|P0|hook绕过尝试|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hook环境
+D4-16|D4安全|P0|命令包裹穿透|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hook环境
+D4-17|D4安全|P1|hook模糊fail-closed|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hook环境
+D4-21|D4安全|P0|hook_check_artifacts 具名回归（代码/IaC/策略制品预检）|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hook-capable 客户端
+D4-22|D4安全|P0|hook_check_deploy_plan 具名回归（部署计划预检）|<代表: hook=Hermes 非hook=OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hook-capable 客户端
+D4-23|D4安全|P0|全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）|<代表: 逐客户端 11 目标>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|11 个 Agent 安装目标
+D4-24|D4安全|P1|确认令牌过期与重复确认边界（审批流健壮性）|<代表2: Hermes+OpenCode>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真云+标准客户端+可注入时钟（令牌 TTL=60s，注入 5s 加速）
+D4-25|D4安全|P2|Python hook 事件遥测分类|<代表: hook客户端>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hook-capable 客户端 + 遥测开关
+D4-26|D4安全|P2|findings 证据脱敏|<代表: hook客户端>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hook 环境 + 含凭证的触发命令
+D4-27|D4安全|P1|双路径输出脱敏|<代表: 隔离进程>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|含凭证的输出文本
+D4-28|D4安全|P0|Node 版安全 hook 链路|<代表: hook客户端>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hook-capable 客户端 + hooks.json 注册
+D4-29|D4安全|P2|分类断言与原始命令分类入口|<代表: 隔离进程>|Hermes（Hook）; OpenCode（非 Hook）|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|含各类命令样本
+D5-1|D5客户端|P1|清单发现加载|<代表: 10 客户端>|Hermes; OpenCode; 声明支持的客户端矩阵|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|各客户端环境
+D5-3|D5客户端|P1|工具全量枚举|<代表: 10 客户端>|Hermes; OpenCode; 声明支持的客户端矩阵|Windows/Linux；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|各客户端环境
+D6-1|D6性能|P2|检索响应延迟|<代表: Windows x64 + Node22>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|标准环境
+D6-3|D6性能|P2|MCP冷启时间|<代表: Windows x64 + Node22>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|标准环境
+D6-4|D6性能|P1|并发调度正确性|<代表: Windows x64 + Node22>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|标准环境
+D6-9|D6性能|P2|缓存清理三入口|<代表: 隔离进程>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|已产生缓存的进程环境
+D9-9|D9协议|P1|tools/call 超时协议语义与取消|<代表: Inspector+夹具>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|可注入延迟的 MCP 客户端/夹具（支持读取 initialize 返回的 capabilities
+D8-1|D8质量|P2|文档与能力一致|<代表: 静态评审人 测试经理>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|仓库文档快照
+D8-4|D8质量|P1|引导步骤可机械执行|<代表: 静态评审人 测试经理>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|各SKILL.md
+D8-6|D8质量|P2|中英文文档一致|<代表: 静态评审人 测试经理>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|README.zh-CN
+D8-7|D8质量|P0|7 个 meta/通用技能指引可机械执行验证|<代表: 静态评审人 测试经理>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|标准环境
+D8-9|D8质量|P2|安装 ID 与遥测值脱敏|<代表: 隔离进程>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|无遥测 ID 的环境
+D8-10|D8质量|P2|MCP 配置备份与合并|<代表: 隔离 HOME>|Hermes 代表终端; fake/fixture|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|带 MCP 配置的隔离 HOME
+D9-1|D9协议|P1|tools/list合规|<代表: MCP Inspector + Hermes>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|MCP Inspector/客户端
+D9-2|D9协议|P1|JSON-RPC错误码|<代表: MCP Inspector + Hermes>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|MCP客户端
+D9-3|D9协议|P1|tools/call响应格式|<代表: MCP Inspector + Hermes>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|MCP客户端
+D9-4|D9协议|P1|协议生命周期|<代表: MCP Inspector + Hermes>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|MCP客户端
+D9-5|D9协议|P1|stdio传输健壮|<代表: MCP Inspector + Hermes>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|stdio通道
+D9-6|D9协议|P1|跨客户端互通|<代表: MCP Inspector + Hermes>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|Inspector+≥3真实客户端
+D9-7|D9协议|P2|协议版本协商降级|<代表: MCP Inspector + Hermes>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|老版本客户端模拟
+D9-8|D9协议|P2|inputSchema版本合规|<代表: MCP Inspector + Hermes>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|tools/list返回
+D9-10|D9协议|P1|MCP remote transport（HTTP/WS 远程服务）|<代表: remote 客户端>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|remote transport 启动环境
+D9-11|D9协议|P1|WebSocket 隧道通道生命周期|<代表: 隧道 mux 夹具>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|hwlink mux 环境
+D9-12|D9协议|P0|initialize 握手协议安全基线|<代表: MCP Inspector + Hermes>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|MCP Inspector + 源码级 protocol-probe.mjs
+D9-13|D9协议|P0|tools/call 凭证不泄露与权限校验|<代表: MCP Inspector + 源码探针>|Hermes; MCP Inspector/标准协议客户端|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|MCP 客户端 + 隔离 HOME + 源码级探针
+D10-3|D10评测|P1|路由准确率+混淆矩阵|<代表: 10 客户端>|OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|真实Agent+插件
+D10-4|D10评测|P0|安全干预-静态规则层|<代表: 源码直调 risk-rule-engine>|OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode|Windows/Linux 代表环境；macOS 若声明支持则单独举证|需求来源与前置条件；独立 manifest；finally 清理|源码+已安装插件
