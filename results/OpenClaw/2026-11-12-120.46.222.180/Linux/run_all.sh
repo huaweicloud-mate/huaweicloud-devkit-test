@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# OpenClaw Linux 2026-11-11 每日测试 (v1.1.14-next.2 gitHead 5c9478d3)
+# OpenClaw Linux 2026-11-12 每日测试 (v1.1.14-next.2 gitHead 5c9478d3)
 set -u
 export PATH="$HOME/nodejs/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
@@ -9,7 +9,7 @@ HDK="/home/testbot1/devkit-test/OpenClaw/hdk"
 SRC="$HDK/plugins/huaweicloud-core/src"
 MCP="$SRC/mcp-server.mjs"
 SAMPLE="$P/sample-react"
-ISO_HOME="$BASE/iso-home-20261111"
+ISO_HOME="$BASE/iso-home-20261112"
 EVAL="/home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test/eval/harness/run-eval.mjs"
 FIX="/home/testbot1/devkit-test/OpenClaw/huaweicloud-devkit-test/eval/harness/fixtures/run-all.mjs"
 
@@ -116,7 +116,7 @@ node "$FIX" "$SRC" --evid "$BASE/evidence/fixtures-out" > fixtures.log 2>&1; ech
 
 echo "===== [32-pre] 备份并移除 proxy.json（D1-70 残留，防污染物真云探针） ===== "
 PROXY_JSON="$HOME/.config/huaweicloud/proxy.json"
-if [ -f "$PROXY_JSON" ]; then cp "$PROXY_JSON" "$PROXY_JSON.bak-20261111"; rm -f "$PROXY_JSON"; echo "proxy.json 已备份移除"; else echo "proxy.json 不存在，无需处理"; fi
+if [ -f "$PROXY_JSON" ]; then cp "$PROXY_JSON" "$PROXY_JSON.bak-20261112"; rm -f "$PROXY_JSON"; echo "proxy.json 已备份移除"; else echo "proxy.json 不存在，无需处理"; fi
 
 echo "===== [32] realcloud (D2-1/D3-C4/D4-14/D4-18/19/20 真云建删归零) ===== "
 node realcloud-probe.mjs > realcloud.log 2>&1; echo "exit=$?"; grep -c "OK\|FAIL" realcloud.log; tail -25 realcloud.log
