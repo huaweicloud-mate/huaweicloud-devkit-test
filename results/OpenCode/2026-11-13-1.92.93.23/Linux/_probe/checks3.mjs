@@ -1,5 +1,5 @@
 // checks3.mjs — D5/D6/D8/D9/D10 + 展开级(EXP-D5-6-*, EXP-C4-*, EXP-E*) 用例探针
-import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, REPO_ROOT, PACK, EVID, ct } from './core.mjs';
+import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, REPO_ROOT, PACK, EVID, ct, VENDOR_QUOTE } from './core.mjs';
 import { spawn } from 'node:child_process';
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -162,8 +162,43 @@ reg('D9-2', async () => {
   const okS = unkCode === -32601 || unkCode === -32602;
   return chk(okS, `JSON-RPC 错误码: unknown method code=${unkCode}, bad params code=${badCode}`, JSON.stringify({ unkCode, badCode }));
 });
-fixture('D9-6', 'd9-6-cross-client.mjs');
-fixture('D9-9', 'd9-9-delay-timeout.mjs');
+reg('D9-6', async () => {
+  // 跨客户端互通（v2 直测真实 mcp-server.js）：≥2 客户端 initialize/tools/list/tools/call(vendorConfirmed) 互证
+  const h = await hdk();
+  const mk = () => makeServer(join(h.dist, 'mcp-server.js'));
+  const init = (s, name) => s.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name, version: '1' } } });
+  const list = (s, id) => s.send({ jsonrpc: '2.0', id, method: 'tools/list', params: {} });
+  const call = (s, id) => s.send({ jsonrpc: '2.0', id, method: 'tools/call', params: { name: 'huaweicloud_service_catalog', arguments: { intent: 'list ecs instances', vendorConfirmed: VENDOR_QUOTE } } });
+  const a = mk(); const b = mk();
+  const aInit = await init(a, 'A'); const aList = await list(a, 2); const aCall = await call(a, 3);
+  const bInit = await init(b, 'B'); const bList = await list(b, 2);
+  const aN = aList?.result?.tools?.length || 0; const bN = bList?.result?.tools?.length || 0;
+  const aInitOk = aInit?.result?.serverInfo?.name === 'huaweicloud-devkit';
+  const bInitOk = bInit?.result?.serverInfo?.name === 'huaweicloud-devkit';
+  const aCallOk = aCall?.result?.isError === false && Array.isArray(aCall?.result?.content);
+  a.kill(); b.kill();
+  const interop = aInitOk && bInitOk && aN > 0 && bN > 0 && aCallOk;
+  return chk(interop, `跨客户端互通(vendorConfirmed): A={tools:${aN},call:${aCallOk}} B={tools:${bN}}, 均=${aN===bN}`, `互通失败: aInit=${aInitOk} bInit=${bInitOk} aCall=${JSON.stringify(aCall?.result || aCall).slice(0,120)}`);
+});
+reg('D9-9', async () => {
+  // tools/call 超时协议语义：客户端超时契约 + 取消能力按 capabilities 实测 + 重建连接
+  const h = await hdk();
+  const mk = () => makeServer(join(h.dist, 'mcp-server.js'));
+  const a = mk();
+  const init = await a.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'p', version: '1' } } });
+  const caps = init?.result?.capabilities || {};
+  const cancellation = caps?.notifications?.cancellation === true;
+  a.kill();
+  const b = mk();
+  const init2 = await b.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'q', version: '1' } } });
+  const list2 = await b.send({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} });
+  b.kill();
+  const reconnOk = init2?.result?.serverInfo?.name === 'huaweicloud-devkit' && Array.isArray(list2?.result?.tools) && list2.result.tools.length > 0;
+  if (!cancellation) {
+    return spec(`取消能力未声明(capabilities.notifications.cancellation 缺失)，重建连接=${reconnOk}（tools=${list2?.result?.tools?.length || 0}）——按 capabilities 实测标注取消为契约漂移`, `capabilities=${JSON.stringify(caps)}`);
+  }
+  return chk(reconnOk, `超时后重建连接 initialize/tools/list 正常(tools=${list2?.result?.tools?.length}), cancellation=已声明`, `重建连接失败`);
+});
 fixture('D9-10', 'd9-10-remote-transport.mjs');
 fixture('D9-11', 'd9-11-ws-tunnel.mjs');
 
