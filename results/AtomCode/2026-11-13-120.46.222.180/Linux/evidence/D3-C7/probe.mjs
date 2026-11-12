@@ -9,7 +9,9 @@ const OUT = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devk
 const META = { case: 'D3-C7', assistant: 'AtomCode(deepseek-v4-pro-0813)', os: 'Linux', sut: 'npm huaweicloud-devkit@2.0.0-next.3 (gitHead 4b718720)' };
 const REGION = 'ap-southeast-3';
 const TS = String(Date.now()).slice(-10);
-const { callTool } = await import(pathToFileURL(SRC + '/tools.js').href);
+const { callTool: _callTool } = await import(pathToFileURL(SRC + '/tools.js').href);
+const __GATED__ = new Set(['huaweicloud_auth_status','huaweicloud_auth_init','huaweicloud_auth_switch','huaweicloud_check_cli','huaweicloud_show_profile_redacted','huaweicloud_list_operations','huaweicloud_list_regions','huaweicloud_run_readonly_command','huaweicloud_plan_cli_command','huaweicloud_run_approved_command','huaweicloud_service_catalog','huaweicloud_sandbox_connect','huaweicloud_voucher_claim','huaweicloud_competition_voucher_claim']);
+const callTool = (n, a = {}, o = {}) => _callTool(n, __GATED__.has(n) ? { ...a, vendorConfirmed: (a && a.vendorConfirmed) || 'Huawei Cloud' } : a, o);
 
 const results = [];
 function log(name, pass, detail) { results.push({ name, pass, detail: String(detail).slice(0, 260) }); }
