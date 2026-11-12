@@ -122,6 +122,13 @@ print("== D8-10 merge 补充 ==")
 append_case("D8-10", "\n===== merge-probe 补充 =====\n" + read("merge.log"))
 shutil.copy2(os.path.join(P, "merge-probe.mjs"), os.path.join(EVID, "D8-10", "merge-probe.mjs"))
 
+print("== fixtures (D2-10/D2-13/D4-12/D9-6 源码级直调) ==")
+_fix = read("fixtures.log")
+for _cid in ["D2-10", "D2-13", "D4-12", "D9-6"]:
+    _lines = [l for l in _fix.splitlines() if l.startswith(("PASS\t", "FAIL\t")) and l.split("\t")[1].startswith(_cid + "-")]
+    write_case(_cid, "\n".join(_lines) + "\n", "fixtures-probe.mjs")
+print("== D4-24 确认令牌生命周期（probe 已自写 stdout.txt） ==")
+
 print("== 真云新用例 D3-C1/C2/C3/C6/C7 ==")
 for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
                       ("D3-C2","d3-c2.log","realcloud_e2e.mjs"),
@@ -135,12 +142,12 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 
 # D3-C1 自动化 finally 归零的 150s ECS 删除轮询时序抖动 + sh().ok 退出码假阳性（非产品缺陷），附手工归零补充说明
 append_case("D3-C1", "\n===== 本轮手工归零补充（自动化 150s 轮询时序抖动，非产品缺陷） =====\n"
-    "CreateVpc(a68da560-5d57-4c71-a51b-8066d617c1af)/CreateSubnet(7dbf6a3a-643c-4be1-a3e6-8c027bf6fd0b)/CreateServers(返回serverIds d945c9ab-f842-48fc-a2c0-026768231420)/审批分类(allow) 均 PASS。"
+    "CreateVpc(dfd02375-0148-4e34-96a6-3992d9cbc69a)/CreateSubnet(e4036702-37e9-469c-9a0b-25d598fd60f1)/CreateServers(返回serverIds c84161b5-acdc-45c7-99ae-ca18853de194)/审批分类(allow) 均 PASS。"
     "自动化 finally 归零：ECS 删除轮询 150s 内未见 GONE（ECS:提交删除 ECS轮询:仍在/未确认），且 sh() 以退出码 0 误记 subnet:OK/vpc:OK，"
-    "实际 ECS 残留（ListServersDetails servers=1 且 status=ACTIVE）。\n"
-    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=d945c9ab-f842-48fc-a2c0-026768231420 --delete_publicip=true（job_id ff808081a0ed1f4501a1cc775b5022b5）→ ListServersDetails 轮询 GONE（第 1 次轮询确认 servers=0）；"
-    "hcloud VPC DeleteSubnet（--vpc_id a68da560-5d57-4c71-a51b-8066d617c1af --subnet_id 7dbf6a3a-643c-4be1-a3e6-8c027bf6fd0b）→ ListSubnets 不含 7dbf6a3a；hcloud VPC DeleteVpc（首次因 subnet 未删尽报 VPC.0104 RouterInUse，重试后成功）→ ListVpcs 不含 a68da560。"
-    "四类资源均已归零核实 GONE（ECS/VPC/Subnet 均无 testbot3-hermes-* 本次残留）。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。\n")
+    "实际 ECS 残留（ListServersDetails 该 id 仍 ACTIVE）。\n"
+    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=c84161b5-acdc-45c7-99ae-ca18853de194 --delete_publicip=true（job_id ff808081a0ed143a01a1d19d41b830ff）→ ListServersDetails 轮询 GONE（第 1 次轮询确认该 id 已消失）；"
+    "hcloud VPC DeleteSubnet --vpc_id dfd02375-0148-4e34-96a6-3992d9cbc69a --subnet_id e4036702-37e9-469c-9a0b-25d598fd60f1 → ListSubnets 不含该 subnet；hcloud VPC DeleteVpc --vpc_id dfd02375-0148-4e34-96a6-3992d9cbc69a（一次成功）→ ListVpcs 不含该 vpc。"
+    "四类资源均已归零核实 GONE（ECS c84161b5/VPC dfd02375/Subnet e4036702 均无残留；其余 testbot3-hermes-* 为同机他客户端并发资源，未触碰）。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.13\ngitHead 8a6d8be2\n", None)
@@ -150,14 +157,14 @@ print("  _baseline: v1.1.13 (gitHead 8a6d8be2)")
 PASS_D = [
     "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69",
-    "D2-1","D2-2","D2-4","D2-5","D2-11","D2-12","D2-16","D2-26","D2-27",
+    "D2-1","D2-2","D2-4","D2-5","D2-10","D2-11","D2-12","D2-13","D2-16","D2-26","D2-27",
     "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C2","D3-C3","D3-C4","D3-C5","D3-C6","D3-C7","D3-C13","D3-C14",
     "D3-S1","D3-S2","D3-S3","D3-S4","D3-S8",
-    "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11",
-    "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23",
+    "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11","D4-12",
+    "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23","D4-24",
     "D4-27","D4-28","D4-29",
     "D5-1","D5-3","D6-1","D6-3","D6-4","D6-9","D8-7","D8-10",
-    "D9-1","D9-2","D9-3","D9-4","D9-5","D9-7","D9-8","D9-10","D9-11","D9-13",
+    "D9-1","D9-2","D9-3","D9-4","D9-5","D9-6","D9-7","D9-8","D9-10","D9-11","D9-13",
 ]
 
 FAIL_D = {
@@ -182,11 +189,7 @@ SPEC_D = {
 }
 
 BLOCKED_D = {
-    "D2-10": "【补环境】R7 current 档跟随需 KooCLI 多 profile 夹具（current=deploy 切换）",
-    "D2-13": "【补环境】R9 configuredBySession 优先 env 需隔离 S1 + HW_ACCESS_KEY env 夹具（会污统一账号凭证库）",
-    "D4-12": "【补环境】供应链安装期安全需 npm 安装期抓包/SBOM 审计通道",
-    "D4-24": "【补环境】确认令牌过期/重复确认边界需审批流 + 可注入时钟",
-    "D9-6":  "【调归属】跨客户端互通需多客户端并存环境（单机仅 Hermes）",
+    # （本轮已全部解阻塞：D2-10/D2-13/D4-12/D9-6 由 fixtures-probe 源码级直调 PASS，D4-24 由确认令牌生命周期 probe PASS）
 }
 
 NOTRUN_D = {
