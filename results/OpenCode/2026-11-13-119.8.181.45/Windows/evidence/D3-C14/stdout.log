@@ -1,0 +1,16 @@
+{
+  "caseId": "D3-C14",
+  "status": "BLOCKED",
+  "why": "沙箱上游不可用：\"Credential validation failed before injection: IAM rejected the credentials (HTTP 401: {\\\"error_msg\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"error_code\\\":\\\"APIGW.0301\\\",\\\"request_id\\\":\\\"b91d509204e81f47743ec8c12700e01f\\\"}\\n). The AK/SK is invalid - check the SK for typos or expired security tokens.\" / \"HDKIT_UPSTREAM_ERROR: 沙箱编排上游调用失败: GET /open-api-public/v1/agreements failed [trace: a7572e4364e94abbbb14a427cba825a2]\"；解除条件：HDKIT 服务恢复",
+  "executedAt": "20261113051735",
+  "result": {
+    "cred": {
+      "ok": false,
+      "error": "Credential validation failed before injection: IAM rejected the credentials (HTTP 401: {\"error_msg\":\"Incorrect IAM authentication information: Unauthorized\",\"error_code\":\"APIGW.0301\",\"request_id\":\"b91d509204e81f47743ec8c12700e01f\"}\n). The AK/SK is invalid - check the SK for typos or expired security tokens.",
+      "hint": "Credentials were NOT injected into the sandbox. Fix AK/SK first: run \"npx huaweicloud-devkit auth init\" or correct HW_ACCESS_KEY/HW_SECRET_KEY, then retry."
+    },
+    "connect": {
+      "error": "HDKIT_UPSTREAM_ERROR: 沙箱编排上游调用失败: GET /open-api-public/v1/agreements failed [trace: a7572e4364e94abbbb14a427cba825a2]"
+    }
+  }
+}

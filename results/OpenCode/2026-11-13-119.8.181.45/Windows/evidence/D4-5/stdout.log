@@ -1,0 +1,28 @@
+{
+  "caseId": "D4-5",
+  "status": "PASS",
+  "why": "E写操作（Create/Delete）均判 deny，无误判只读",
+  "executedAt": "20261113051110",
+  "result": [
+    {
+      "cmd": "VPC CreateVpc --cli-region=cn-north-4",
+      "decision": "deny",
+      "safe": false
+    },
+    {
+      "cmd": "ECS DeleteServers --cli-region=cn-north-4",
+      "decision": "deny",
+      "safe": false
+    },
+    {
+      "cmd": "RDS CreateInstance --cli-region=cn-north-4",
+      "decision": "deny",
+      "safe": false
+    },
+    {
+      "cmd": "EVS DeleteVolume --cli-region=cn-north-4",
+      "decision": "deny",
+      "safe": false
+    }
+  ]
+}

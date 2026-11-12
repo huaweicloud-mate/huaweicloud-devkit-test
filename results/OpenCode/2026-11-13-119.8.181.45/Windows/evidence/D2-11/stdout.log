@@ -1,0 +1,18 @@
+{
+  "caseId": "D2-11",
+  "status": "PASS",
+  "why": "失效 token 被拒（ok=false），凭证文件未被写入（token 不落盘）",
+  "executedAt": "20261113051501",
+  "result": {
+    "bad": {
+      "valid": false,
+      "projectId": null,
+      "error": "IAM rejected the credentials (HTTP 401: {\"error_msg\":\"Incorrect IAM authentication information: Unauthorized\",\"error_code\":\"APIGW.0301\",\"request_id\":\"e4a9a5a9796cbffd3188cf32bbfc1020\"}\n). The AK/SK is invalid - check the SK for typos or expired security tokens.",
+      "code": "HDKIT_CRED_INVALID",
+      "messageZh": "凭证已被华为云拒绝(AK/SK 无效或已过期),请重新生成。(HTTP 401: {\"error_msg\":\"Incorrect IAM authentication information: Unauthorized\",\"error_code\":\"APIGW.0301\",\"request_id\":\"e4a9a5a9796cbffd3188cf32bbfc1020\"}\n)",
+      "action": "npx huaweicloud-devkit auth status",
+      "nextStep": "npx huaweicloud-devkit auth status"
+    },
+    "notPersisted": true
+  }
+}
