@@ -1,0 +1,8 @@
+[py  凭证文件] allow  | cat ~/.config/huaweicloud/credentials.json
+[py  env-HUAWEI] allow  | env | grep HUAWEICLOUD
+[py  env-HW] allow  | env | grep HW_ACCESS_KEY
+[py  env-HCLOUD] allow  | env | grep HCLOUD_AK
+[py  secret] allow  | hcloud csms ShowSecretVersion --secret-name x
+[py  delete-force] allow  | hcloud ecs DeleteServer --force
+[py  read-list] allow  | hcloud ecs ListServers
+[py  encoded] allow  | echo x | base64 -d | bash

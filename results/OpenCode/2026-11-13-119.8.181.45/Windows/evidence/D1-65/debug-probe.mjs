@@ -1,0 +1,1 @@
+const u = await import("file:///C:/Users/Administrator/devkit-test/testbot4-win-Opencode/hdk/plugins/huaweicloud-core/src/update-check.mjs"); u.queryDistTagsSync({timeoutMs:1}); console.log("DEBUG_PROBE_DONE");

@@ -1,0 +1,6 @@
+extractApiError -> {"errorCode":"APIGW.0301","errorMessage":"IAM authentication failed: verify the AK/SK"}
+explain_error -> {"service":"ECS","errorCode":"APIGW.0301","requestId":"","suggestions":["Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.","APIGW.0301: API Gateway layer error. Incorrect IAM authentication information — verify AK/SK (SK typos are the usual cause), security token expiry, and that project_id is configured (auth init auto-sets it)."]}
+explain_error(区域) -> {"service":"VPC","errorCode":"APIGW.0802","requestId":"","suggestions":["APIGW.0802: API Gateway layer error. IAM user has no region permissions — check IAM console → User → Permissions → add target region.","Confirm the service endpoint, region, and project_id match the target resource."]}
+explain_error(配额) -> {"service":"ECS","errorCode":"Ecs.0070","requestId":"","suggestions":["Check quota and resource limits before retrying a create or scale operation. Consider switching accounts or requesting a quota increase."]}
+[OK] extractApiError 提取 error_code
+[OK] explain_error 给出分类/下一步(非裸报错堆栈)

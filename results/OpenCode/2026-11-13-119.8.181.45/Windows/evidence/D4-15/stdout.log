@@ -1,0 +1,28 @@
+{
+  "caseId": "D4-15",
+  "status": "PASS",
+  "why": "5 种绕过变体均被 deny",
+  "executedAt": "20261113051120",
+  "result": [
+    {
+      "s": "hc'loud ECS DeleteServer --server_id=x",
+      "d": "deny"
+    },
+    {
+      "s": "hcloud.exe ECS DeleteServer --server_id=x",
+      "d": "deny"
+    },
+    {
+      "s": "cd /tmp && hcloud ECS DeleteServer --server_id=x",
+      "d": "deny"
+    },
+    {
+      "s": "sudo hcloud ECS DeleteServer --server_id=x",
+      "d": "deny"
+    },
+    {
+      "s": "hcloud ECS De\"leteServer\" --server_id=x",
+      "d": "deny"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "caseId": "D2-4",
+  "status": "PASS",
+  "why": "show_profile_redacted 输出无明文凭证字段 plaintext_leak=false",
+  "executedAt": "20261113051127",
+  "result": {
+    "ok": true,
+    "note": "Profile information was returned through the toolkit redaction pipeline.",
+    "result": {
+      "ok": true,
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "[USE_ERROR]参数default的格式错误,正确格式为:--param=value\n",
+      "stderr": "",
+      "plan": {
+        "executable": "hcloud",
+        "args": [
+          "configure",
+          "show",
+          "--cli-profile",
+          "default"
+        ],
+        "command": "hcloud configure show --cli-profile default",
+        "executableBlock": "hcloud configure show --cli-profile default",
+        "warnings": [],
+        "classification": {
+          "decision": "allow",
+          "risk": "read_only",
+          "reason": "Command appears to be a read-only Huawei Cloud operation.",
+          "service": "configure",
+          "operation": "show",
+          "args": [
+            "configure",
+            "show",
+            "--cli-profile",
+            "default"
+          ]
+        },
+        "sgFindings": [],
+        "approvalToken": "c6380bb7-1705-4329-8c3a-150d66f64a40",
+        "safeToRun": true,
+        "rawArgs": [
+          "configure",
+          "show",
+          "--cli-profile",
+          "default"
+        ]
+      },
+      "retries": 0,
+      "attempts": 1
+    }
+  }
+}

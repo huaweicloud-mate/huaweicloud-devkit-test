@@ -1,0 +1,14 @@
+{
+  "caseId": "D2-4",
+  "status": "FAIL",
+  "why": "lowercase ak=/sk= and JSON \"ak\":\"...\" secrets are NOT redacted by redactSecrets",
+  "executedAt": "20261112_recheck",
+  "sut": "huaweicloud-devkit@1.1.14-next.2 gitHead 5c9478d3 (local hdk checkout)",
+  "result": {
+    "lowercaseInline": "config: ak=TESTAKXXXXXXXXXXXXXXXX sk=TESTSK... -> unchanged (leak)",
+    "uppercaseInline": "AK=/SK= -> AK=<redacted> SK=<redacted> (ok)",
+    "snakeCase": "access_key=/secret_key= -> <redacted> (ok)",
+    "jsonLowercase": "{\"ak\":\"...\",\"sk\":\"...\"} -> unchanged (leak)",
+    "rootCause": "safety-policy.mjs:45 regex uses case-sensitive (AK|SK) only; lowercase/JSON forms uncovered"
+  }
+}
