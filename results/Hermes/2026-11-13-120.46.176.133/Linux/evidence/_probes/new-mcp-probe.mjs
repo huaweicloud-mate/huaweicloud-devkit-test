@@ -1,6 +1,6 @@
 import { pathToFileURL } from 'node:url';
 
-const CORE = '/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
+const CORE = '/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
 const SRC = CORE + '/src';
 const results = [];
 function check(name, ok, detail) {

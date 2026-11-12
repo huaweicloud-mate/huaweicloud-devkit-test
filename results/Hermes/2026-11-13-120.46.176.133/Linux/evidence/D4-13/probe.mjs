@@ -8,7 +8,7 @@
 import fs from 'node:fs';
 import { execSync } from 'node:child_process';
 
-const RO = '/home/testbot2/.config/huaweicloud/credentials.readonly.json';
+const RO = '/home/testbot3/.config/huaweicloud/credentials.readonly.json';
 const creds = JSON.parse(fs.readFileSync(RO, 'utf8'));
 const AK = creds.ak, SK = creds.sk;
 

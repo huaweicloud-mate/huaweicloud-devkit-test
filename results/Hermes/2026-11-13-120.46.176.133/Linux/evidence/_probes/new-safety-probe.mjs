@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
-const CORE = '/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
+const CORE = '/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
 const SRC = CORE + '/src';
 const results = [];
 function check(name, ok, detail) {

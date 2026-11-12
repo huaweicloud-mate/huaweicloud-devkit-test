@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { tmpdir } from 'node:os';
 
-const CORE = '/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
+const CORE = '/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
 const SRC = CORE + '/src';
 const ISO = join(tmpdir(), 'hdk-probe-' + Date.now());
 mkdirSync(ISO, { recursive: true });

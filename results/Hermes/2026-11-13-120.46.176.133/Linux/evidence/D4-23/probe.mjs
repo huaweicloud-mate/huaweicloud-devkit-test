@@ -5,7 +5,7 @@ import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
-const HDK = process.argv[2] || '/home/testbot2/devkit-test/Hermes/hdk';
+const HDK = process.argv[2] || '/home/testbot3/devkit-test/Hermes/hdk';
 const RULES_FILE = join(HDK, 'rules', 'huawei-agent-rules.mdc');
 const SETUP_CLI = join(HDK, 'plugins', 'huaweicloud-core', 'src', 'setup-cli.mjs');
 

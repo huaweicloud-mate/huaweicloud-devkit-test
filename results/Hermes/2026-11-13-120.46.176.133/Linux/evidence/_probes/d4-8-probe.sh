@@ -3,7 +3,7 @@
 # 用同一批命令分别跑 Python hook(huaweicloud-safety.py) 与 Node classifyTextCommand，
 # 对比判定是否一致。Python hook 读取 stdin JSON {"tool_name","tool_input"}。
 set -u
-PY="/home/testbot2/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/hooks/huaweicloud-safety.py"
+PY="/home/testbot3/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/hooks/huaweicloud-safety.py"
 
 py_check() {  # $1=label $2=command
   local label="$1" cmd="$2"

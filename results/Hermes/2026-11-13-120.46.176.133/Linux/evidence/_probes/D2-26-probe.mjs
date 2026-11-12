@@ -13,7 +13,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const SRC = process.env.HDK_SRC || '/home/testbot2/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src';
+const SRC = process.env.HDK_SRC || '/home/testbot3/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src';
 
 // ① 隔离 HOME + HUAWEICLOUD_HOME（baseHome 读取 HUAWEICLOUD_HOME 优先）
 const iso = mkdtempSync(join(tmpdir(), 'hdk-d226-'));

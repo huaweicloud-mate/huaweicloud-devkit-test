@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-const CORE = '/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
+const CORE = '/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
 const SRC = CORE + '/src';
 const read = (f) => readFileSync(f, 'utf8');
 

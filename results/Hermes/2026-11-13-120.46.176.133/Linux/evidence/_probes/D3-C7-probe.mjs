@@ -10,7 +10,7 @@ import { spawnSync } from 'node:child_process';
 const XREGION = process.env.HDK_XREGION || 'ap-southeast-1'; // 香港（跨区域维度）
 const WREGION = process.env.HDK_REGION || 'cn-north-4';        // 授权可写区域
 const TS = String(Date.now()).slice(-10);
-const HDK_SRC = '/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src';
+const HDK_SRC = '/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src';
 const { callTool } = await import(pathToFileURL(HDK_SRC + '/tools.mjs').href);
 
 const results = [];

@@ -6,7 +6,7 @@ function check(name, ok, detail) {
   results.push({ name, ok, detail: String(detail).slice(0, 400) });
   console.log(`[${ok ? 'OK' : 'FAIL'}] ${name}`);
 }
-const CORE = '/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
+const CORE = '/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
 const SRC = CORE + '/src';
 
 console.log('=====CASE D1-69=====');

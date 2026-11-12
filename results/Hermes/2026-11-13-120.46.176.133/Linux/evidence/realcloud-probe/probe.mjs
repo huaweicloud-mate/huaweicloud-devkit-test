@@ -6,7 +6,7 @@
 import { pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-const HDK = '/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/tools.mjs';
+const HDK = '/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/tools.mjs';
 const { callTool } = await import(pathToFileURL(HDK).href);
 
 const REGION = 'cn-north-4';

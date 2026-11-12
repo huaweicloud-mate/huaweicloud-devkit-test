@@ -5,7 +5,7 @@
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 
-const SRC = process.env.HDK_SRC || '/home/testbot2/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src';
+const SRC = process.env.HDK_SRC || '/home/testbot3/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src';
 const { redactSecrets } = await import(pathToFileURL(join(SRC, 'safety-policy.mjs')).href);
 const { redactOutput } = await import(pathToFileURL(join(SRC, 'hcloud-cli.mjs')).href);
 

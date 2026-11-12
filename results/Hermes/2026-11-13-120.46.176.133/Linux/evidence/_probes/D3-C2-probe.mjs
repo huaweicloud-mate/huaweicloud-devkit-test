@@ -10,7 +10,7 @@ import { join } from 'node:path';
 const REGION = process.env.HDK_REGION || 'cn-north-4';
 const TS = String(Date.now()).slice(-10);
 const BUCKET = `testbot2-hermes-obs-${TS}`;
-const HDK_SRC = '/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src';
+const HDK_SRC = '/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src';
 const { callTool } = await import(pathToFileURL(HDK_SRC + '/tools.mjs').href);
 
 const results = [];

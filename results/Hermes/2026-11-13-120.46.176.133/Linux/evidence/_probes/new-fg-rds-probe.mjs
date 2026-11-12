@@ -1,6 +1,6 @@
 import { pathToFileURL } from 'node:url';
 
-const CORE = '/home/testbot2/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
+const CORE = '/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
 const SRC = CORE + '/src';
 const { callTool } = await import(pathToFileURL(SRC + '/tools.mjs').href);
 const { execFileSync } = await import('node:child_process');
