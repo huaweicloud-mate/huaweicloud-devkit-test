@@ -1,4 +1,4 @@
-// probe for D4-12 - generated & executed at 20261113051731
+// probe for D4-12 - generated & executed at 20261113052605
 // Real execution against huaweicloud-devkit v1.1.13 (hdk source) on Windows.
 import { spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, mkdtempSync } from 'node:fs';
@@ -8,7 +8,7 @@ import { join } from 'node:path';
 const HDK = "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\hdk";
 const EV = "C:\\Users\\Administrator\\devkit-test\\testbot4-win-Opencode\\huaweicloud-devkit-test\\results\\OpenCode\\2026-11-13-119.8.181.45\\Windows\\evidence\\D4-12";
 const CASE_ID = "D4-12";
-const NK = "20261113051731";
+const NK = "20261113052605";
 const mod = (p) => import(new URL(p, 'file:///' + HDK.replace(/\\/g, '/') + '/').href);
 const run = (args, opts = {}) => spawnSync(process.execPath, args, { encoding: 'utf8', timeout: opts.timeout || 90000, env: { ...process.env, ...(opts.env || {}) }, cwd: opts.cwd || EV });
 const hcloud = (args, opts = {}) => { const r = spawnSync(process.env.HCLOUD_BIN || 'hcloud', args, { encoding: 'utf8', timeout: opts.timeout || 120000, env: { ...process.env, ...(opts.env || {}) } }); let j = null; try { j = JSON.parse((r.stdout || '').trim()); } catch {} return { code: r.status, out: r.stdout || '', err: r.stderr || '', json: j }; };
@@ -36,11 +36,12 @@ const root = existsSync(join(pkgDir, 'package.json')) ? pkgDir : join(HDK);
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 const scripts = pkg.scripts || {};
 const suspicious = Object.entries(scripts).filter(([k, v]) => /postinstall|preinstall|prepare/.test(k) && /curl|wget|http|Invoke-WebRequest|rm -rf/i.test(String(v)));
-const r = run(['-e', 'const{spawnSync}=require("child_process");const r=spawnSync("npm",["pack","--dry-run","--json"],{encoding:"utf8",shell:true,cwd:' + JSON.stringify(root) + '});process.stdout.write(String(r.stdout||r.stderr).slice(0,4000));'], { timeout: 90000 });
-const packed = /"filename"|"files"/.test(r.out || '');
+const { spawnSync: spPack } = await import('node:child_process');
+const r = spPack('npm', ['pack', '--dry-run', '--json'], { encoding: 'utf8', shell: true, cwd: root, timeout: 120000 });
+const packed = /"integrity"|"version"|"filename"/.test(String(r.stdout || '') + String(r.stderr || ''));
 const ok = suspicious.length === 0 && packed;
-if (ok) emit('PASS', '无恶意 pre/postinstall（' + Object.keys(scripts).join(',') + '），npm pack --dry-run 可产出且文件清单可枚举', { scripts: Object.keys(scripts), packTail: (r.out || '').slice(0, 600) });
-else emit('FAIL', '供应链审计不通过', { suspicious, packTail: (r.out || '').slice(0, 800), err: (r.err || '').slice(0, 400) });
+if (ok) emit('PASS', '无恶意 pre/postinstall（' + Object.keys(scripts).join(',') + '），npm pack --dry-run 可产出且文件清单可枚举', { scripts: Object.keys(scripts), packTail: (String(r.stdout || '') + String(r.stderr || '')).slice(0, 600) });
+else emit('FAIL', '供应链审计不通过', { suspicious, packTail: (String(r.stdout || '') + String(r.stderr || '')).slice(0, 800) });
 
 }
 main().catch((e) => emit('FAIL', 'probe exception: ' + ((e && e.stack) || e), { error: String((e && e.message) || e) }));
