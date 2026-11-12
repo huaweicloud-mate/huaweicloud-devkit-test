@@ -3,6 +3,7 @@ import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, fixture, ct, R
 import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 // ============ D3 工具/服务 ============
 reg('D3-A1', async () => {
@@ -93,7 +94,51 @@ reg('D3-C13', async () => {
   return chk(mbOk && setOk && getOk, `OBS 静态网站 get/set: mb=${mbOk} set=${setOk} get=${getOk}(已归零)`, JSON.stringify({ mbOk, setOk, getOk }));
 });
 
-fixture('D3-C14', 'd3-c14-sandbox-hwlink-cred.mjs');
+reg('D3-C14', async () => {
+  const h = await hdk();
+  const fs = await import('node:fs'); const os = await import('node:os'); const path = await import('node:path');
+  const iso = path.join(os.tmpdir(), `hdk-d3c14-${Date.now()}`);
+  fs.mkdirSync(iso, { recursive: true });
+  const oldHome = process.env.HUAWEICLOUD_HOME;
+  process.env.HUAWEICLOUD_HOME = iso;
+  let ok = true; const detail = [];
+  try {
+    const hwlink = await import(pathToFileURL(join(h.dist, 'lib', 'hdkit', 'hwlink-api.js')).href);
+    const hdkit = await import(pathToFileURL(join(h.dist, 'lib', 'hdkit', 'hdkitservice-api.js')).href);
+    // ① hwlink getCredentials 返回 runtime 凭证
+    h.authCred.setRuntimeCredentials('AKHW', 'SKHW', 'STHW', 'cn-north-4');
+    const cred = hwlink.getCredentials();
+    const credOk = cred.ak === 'AKHW' && cred.sk === 'SKHW' && cred.securitytoken === 'STHW';
+    detail.push(`hwlink.getCredentials=${JSON.stringify(cred)} credOk=${credOk}`);
+    // ② HDKITSERVICE_ENDPOINT 覆盖
+    const customEndpoint = 'https://custom-hdkit.example.com/api/';
+    process.env.HDKITSERVICE_ENDPOINT = customEndpoint;
+    let capturedUrl = '';
+    const origFetch = globalThis.fetch;
+    globalThis.fetch = (url) => { capturedUrl = String(url); return Promise.resolve({ ok: true, status: 200, text: () => Promise.resolve(JSON.stringify({ userHash: 'mock' })) }); };
+    let endpointOk = false; let threwNoCred = false; let noCredMsg = '';
+    try { await hdkit.hdkitCheckUser(); endpointOk = String(capturedUrl).startsWith(customEndpoint); }
+    catch (e) { endpointOk = String(capturedUrl).startsWith(customEndpoint); noCredMsg = String(e && e.message); }
+    globalThis.fetch = origFetch;
+    detail.push(`endpoint=${capturedUrl} ok=${endpointOk}`);
+    // ③ 无凭证 hdkitCheckUser 抛错（消息本地化不敏感）
+    h.authCred.clearRuntimeCredentials();
+    delete process.env.HW_ACCESS_KEY; delete process.env.HW_SECRET_KEY; delete process.env.HW_SECURITY_TOKEN;
+    try { await hdkit.hdkitCheckUser(); } catch (e) { threwNoCred = true; noCredMsg = String(e && e.message); }
+    detail.push(`noCred throws=${threwNoCred} msg=${noCredMsg.slice(0, 40)}`);
+    // ④ hdkitCredentials 无参抛错
+    let threwParam = false;
+    try { await hdkit.hdkitCredentials(); } catch (e) { threwParam = /session_id|dev_stage_id|required/i.test(String(e && e.message)); }
+    detail.push(`hdkitCredentials no-arg throws=${threwParam}`);
+    ok = credOk && endpointOk && threwNoCred && threwParam;
+  } catch (e) { ok = false; detail.push(`EX=${String(e).slice(0, 200)}`); }
+  finally {
+    if (oldHome) process.env.HUAWEICLOUD_HOME = oldHome; else delete process.env.HUAWEICLOUD_HOME;
+    delete process.env.HDKITSERVICE_ENDPOINT;
+    fs.rmSync(iso, { recursive: true, force: true });
+  }
+  return chk(ok, `沙箱 HDKit 服务参数与 hwlink 凭证: ${detail.join(' | ').slice(0, 300)}`, detail.join(' | ').slice(0, 400));
+});
 
 reg('D3-S1', async () => {
   const h = await hdk();
@@ -299,11 +344,30 @@ reg('D4-11', async () => {
 
 reg('D4-12', async () => {
   const h = await hdk();
-  const dir = join(REPO_ROOT, 'eval', 'harness', 'fixtures');
-  const r = run(`node "${join(dir, 'd4-12-supply-chain.mjs')}" "${h.src}" --evid "${join(EVID, 'D4-12')}" 2>&1`);
-  if (r.status === 0) return ok('fixture exit=0', r.text.slice(-800));
-  if (r.status === 2) return blocked('fixture 依赖宿主/环境未满足(exit=2)', r.text.slice(-800));
-  return fail(`fixture exit=${r.status}`, r.text.slice(-1200));
+  const fs = await import('node:fs');
+  const pkgPath = join(h.pkg, 'package.json');
+  let pkg = null;
+  try { pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8')); } catch { return fail('无法读取 package.json', pkgPath); }
+  const post = (pkg.scripts && pkg.scripts.postinstall) || '';
+  const postSelf = post.startsWith('node ./bin/') || post.startsWith('node bin/');
+  const noRemote = !/https?:\/\//.test(post) || !/curl|wget|iex/i.test(post);
+  const noPre = !(pkg.scripts && pkg.scripts.preinstall);
+  // 安装参数安全：--omit=dev --no-audit --no-fund（v2 在 payload-runtime-deps.ts）
+  const depsSrc = fs.readFileSync(join(h.src, 'payload-runtime-deps.ts'), 'utf-8');
+  const installArgs = /installCommand\s*=\s*['"`]([^'"`]+)['"`]/.exec(depsSrc)?.[1] || '';
+  const hasOmitDev = installArgs.includes('--omit=dev');
+  const hasNoAudit = installArgs.includes('--no-audit');
+  const hasNoFund = installArgs.includes('--no-fund');
+  // 依赖无已知高危包 + 版本固定
+  const prodDeps = Object.entries(pkg.dependencies || {}).map(([k, v]) => `${k}@${v}`);
+  const noCve = !prodDeps.some(d => /^(vm2|eval|node-ipc|flatmap-stream|event-stream)\b/.test(d));
+  const allVersioned = prodDeps.every(d => /@(\d|\.|\^|~|v)/.test(d));
+  const bins = Object.values(pkg.bin || {});
+  const binSafe = bins.every(b => /\.(cjs|js|mjs|ts)$/.test(b));
+  const okS = postSelf && noRemote && noPre && hasOmitDev && hasNoAudit && hasNoFund && noCve && allVersioned && binSafe;
+  return chk(okS,
+    `供应链安装期安全: postinstall自托管=${postSelf} 无preinstall=${noPre} install带--omit=dev/--no-audit/--no-fund=${hasOmitDev}/${hasNoAudit}/${hasNoFund} 依赖固定=${allVersioned} bin安全=${binSafe}`,
+    JSON.stringify({ post, installArgs, prodDeps }));
 });
 
 reg('D4-13', async () => {

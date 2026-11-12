@@ -212,7 +212,54 @@ reg('D2-5', async () => {
   return chk(!!s || !!com, '凭证缺失时返回状态+指引结构', JSON.stringify({ s, com }).slice(0, 250));
 });
 
-fixture('D2-10', 'd2-10-koocli-profile.mjs');
+reg('D2-10', async () => {
+  const h = await hdk();
+  const os = await import('node:os'); const fs = await import('node:fs'); const path = await import('node:path');
+  const tmp = path.join(os.tmpdir(), `hdk-d2-10-${Date.now()}`);
+  fs.mkdirSync(tmp, { recursive: true });
+  const configPath = path.join(tmp, 'config.json');
+  const orig = process.env.HCLOUD_CONFIG_PATH;
+  process.env.HCLOUD_CONFIG_PATH = configPath;
+  const writeProfile = (current, profiles) => fs.writeFileSync(configPath, JSON.stringify({ current, profiles }, null, 2), 'utf8');
+  let ok = false; const detail = [];
+  try {
+    // ① current=deploy 解析 + resolveManagedProfile 跟随
+    writeProfile('deploy', [{ name: 'deploy', accessKeyId: 'AKDEPLOY', secretAccessKey: 'SKDEPLOY' }, { name: 'daily', accessKeyId: 'AKDAILY', secretAccessKey: 'SKDAILY' }]);
+    const r1 = h.authRec.readKooCliProfiles();
+    const p1 = r1.current === 'deploy' && r1.profiles.length === 2;
+    const rp1 = h.authRec.resolveManagedProfile() === 'deploy';
+    detail.push(`parse deploy: current=${r1.current} n=${r1.profiles?.length} resolve=${h.authRec.resolveManagedProfile()}`);
+    // ② 切换 current=daily 跟随
+    writeProfile('daily', [{ name: 'deploy', accessKeyId: 'AKDEPLOY', secretAccessKey: 'SKDEPLOY' }, { name: 'daily', accessKeyId: 'AKDAILY', secretAccessKey: 'SKDAILY' }]);
+    const r2 = h.authRec.readKooCliProfiles();
+    const p2 = r2.current === 'daily' && h.authRec.resolveManagedProfile() === 'daily';
+    detail.push(`switch daily: current=${r2.current} resolve=${h.authRec.resolveManagedProfile()}`);
+    // ③ runHcloudConfigure 携带 --cli-profile（假 hcloud 记录实参）
+    const argsLog = path.join(tmp, 'args.log');
+    const fake = path.join(tmp, 'fake-hcloud.mjs');
+    fs.writeFileSync(fake, `import { writeFileSync } from 'node:fs'; writeFileSync(${JSON.stringify(argsLog)}, process.argv.slice(2).join('\\n') + '\\n');`);
+    const binBak = process.env.HCLOUD_BIN, argsBak = process.env.HCLOUD_BIN_ARGS_JSON;
+    process.env.HCLOUD_BIN = process.execPath;
+    process.env.HCLOUD_BIN_ARGS_JSON = JSON.stringify([fake]);
+    const rr = h.authRec.runHcloudConfigure('deploy', 'AKDEPLOY', 'SKDEPLOY', 'cn-north-4');
+    const captured = fs.readFileSync(argsLog, 'utf8');
+    const p3 = captured.includes('--cli-profile=deploy') && captured.includes('--cli-access-key=AKDEPLOY') && captured.includes('--cli-region=cn-north-4');
+    if (binBak === undefined) delete process.env.HCLOUD_BIN; else process.env.HCLOUD_BIN = binBak;
+    if (argsBak === undefined) delete process.env.HCLOUD_BIN_ARGS_JSON; else process.env.HCLOUD_BIN_ARGS_JSON = argsBak;
+    detail.push(`runHcloudConfigure: spawnOk=${rr && rr.ok} profileArg=${captured.includes('--cli-profile=deploy')}`);
+    // ④ 缺失 config → error 语义（v2 #900 error 表：messageZh 含 detail）
+    fs.rmSync(configPath, { force: true });
+    const miss = h.authRec.readKooCliProfiles();
+    const p4 = !!miss.error && /KooCLI config not found/.test(`${miss.error} ${miss.action || ''} ${miss.nextStep || ''}`);
+    detail.push(`missing config: code=${miss.code} msgZh=${String(miss.error).slice(0, 40)}`);
+    ok = p1 && rp1 && p2 && p3 && p4;
+  } catch (e) { detail.push(`EX=${String(e).slice(0, 160)}`); }
+  finally {
+    if (orig) process.env.HCLOUD_CONFIG_PATH = orig; else delete process.env.HCLOUD_CONFIG_PATH;
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+  return chk(ok, `R7 current 档跟随 + runHcloudConfigure --cli-profile 实参: ${detail.join(' | ').slice(0, 200)}`, detail.join(' | ').slice(0, 400));
+});
 
 reg('D2-11', async () => {
   const h = await hdk();
