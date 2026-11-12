@@ -1,0 +1,78 @@
+> node --test test/update-check-registry.test.ts
+
+TAP version 13
+# Subtest: queryDistTagsSync 成功返回 distTags 对象
+ok 1 - queryDistTagsSync 成功返回 distTags 对象
+  ---
+  duration_ms: 1330.3829
+  type: 'test'
+  ...
+# Subtest: queryDistTags 异步非阻塞: 同步调用立即返回 Promise
+ok 2 - queryDistTags 异步非阻塞: 同步调用立即返回 Promise
+  ---
+  duration_ms: 1359.3121
+  type: 'test'
+  ...
+# Subtest: queryDistTagsFetch 直接 fetch registry 返回 distTags
+ok 3 - queryDistTagsFetch 直接 fetch registry 返回 distTags
+  ---
+  duration_ms: 270.2866
+  type: 'test'
+  ...
+# Subtest: queryDistTagsFetch 尊重 HUAWEICLOUD_NPM_REGISTRY 覆盖
+ok 4 - queryDistTagsFetch 尊重 HUAWEICLOUD_NPM_REGISTRY 覆盖
+  ---
+  duration_ms: 1.1314
+  type: 'test'
+  ...
+# Subtest: queryDistTags 在 HUAWEICLOUD_NPM_REGISTRY 设置时委托 fetch 路径(不 spawn npm)
+ok 5 - queryDistTags 在 HUAWEICLOUD_NPM_REGISTRY 设置时委托 fetch 路径(不 spawn npm)
+  ---
+  duration_ms: 10.9158
+  type: 'test'
+  ...
+# Subtest: queryDistTagsSync 失败时在 DEBUG 下输出日志而非静默
+ok 6 - queryDistTagsSync 失败时在 DEBUG 下输出日志而非静默
+  ---
+  duration_ms: 1.2958
+  type: 'test'
+  ...
+# Subtest: getCachedUpdateInfo 单飞: 并发只查一次
+ok 7 - getCachedUpdateInfo 单飞: 并发只查一次
+  ---
+  duration_ms: 22.3731
+  type: 'test'
+  ...
+# Subtest: getCachedUpdateInfo TTL: 未过期不重复查询
+ok 8 - getCachedUpdateInfo TTL: 未过期不重复查询
+  ---
+  duration_ms: 0.5895
+  type: 'test'
+  ...
+# Subtest: getCachedUpdateInfo 失败节流: 失败后短时间不重查
+ok 9 - getCachedUpdateInfo 失败节流: 失败后短时间不重查
+  ---
+  duration_ms: 0.5825
+  type: 'test'
+  ...
+# Subtest: \#607: getUpdateDistTags 在查询失败态(check_failed)应返回 null
+ok 10 - \#607: getUpdateDistTags 在查询失败态(check_failed)应返回 null
+  ---
+  duration_ms: 0.7749
+  type: 'test'
+  ...
+# Subtest: \#607: dismiss + 查询失败 → 折叠为 check_failed（不落伪冷却）
+ok 11 - \#607: dismiss + 查询失败 → 折叠为 check_failed（不落伪冷却）
+  ---
+  duration_ms: 0.8535
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3159.1389
