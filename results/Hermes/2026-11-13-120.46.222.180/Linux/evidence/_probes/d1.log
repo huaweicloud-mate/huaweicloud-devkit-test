@@ -1,0 +1,188 @@
+########## STEP 1: install --target hermes (isolated HOME) ##########
+
+================================================================================
+$ HOME=/home/testbot1/devkit-test/Hermes/iso-home-20261113 huaweicloud-devkit install --target hermes
+================================================================================
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v2.0.0-next.3          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+Installing HuaweiCloud DevKit for hermes...
+
+[31mNode.js >= 22.19 required (current: v22.13.0)[0m
+--- exit=1 ---
+
+########## STEP 2: status --target hermes (should show installed) ##########
+
+================================================================================
+$ HOME=/home/testbot1/devkit-test/Hermes/iso-home-20261113 huaweicloud-devkit status --target hermes
+================================================================================
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v2.0.0-next.3          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+HuaweiCloud DevKit Status
+
+  未安装: Hermes Agent
+
+[Hermes Agent]
+  MCP Server: [31mNot installed[0m
+  Safety Policy: [31mNot installed[0m
+  Safety Hooks: [31mNot installed[0m
+  Telemetry Hook: [31mNot installed[0m
+  Hook allowlist: [31mNot allowlisted[0m
+  Hook plugin: [31mNot installed[0m
+  MCP Python SDK: [31mMissing[0m
+  Skills: [31mNot installed[0m
+  MCP config: [32mConfigured[0m
+  Hooks config: [31mNot configured[0m
+
+Environment:
+  Node.js: v22.13.0
+  Platform: linux
+--- exit=0 ---
+
+########## STEP 3: doctor --target hermes ##########
+
+================================================================================
+$ HOME=/home/testbot1/devkit-test/Hermes/iso-home-20261113 huaweicloud-devkit doctor --target hermes
+================================================================================
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v2.0.0-next.3          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+HuaweiCloud DevKit Doctor
+
+  [31m[FAIL][0m Node.js >= 22.19 — Run: nvm install 22.19 && nvm use 22.19
+  [32m[PASS][0m State directory writable (~/.config/huaweicloud)
+  [31m[FAIL][0m MCP server installed — Run: npx huaweicloud-devkit install
+  [31m[FAIL][0m Runtime deps (undici) installed — Run: npx huaweicloud-devkit install
+  [31m[FAIL][0m Safety policy installed — Run: npx huaweicloud-devkit install
+  [33m[SKIP][0m Secret vault not initialized (optional; run npx huaweicloud-devkit secret set secret://<scope>/<name> --file <path>)
+  [32m[PASS][0m Safety hook runtime (Node)
+  [32m[PASS][0m MCP configured
+  [31m[FAIL][0m Hermes MCP Python SDK — Run: pip3 install mcp
+  [32m[PASS][0m hcloud CLI installed
+  [33m[WARN][0m KooCLI version mismatch: installed 7.2.12, this plugin is paired with 7.3.12.
+        Reinstall the pinned version: curl -LO "https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli/7.3.12/huaweicloud-cli-linux-amd64.tar.gz" (or your platform's package), or run `npx huaweicloud-devkit install-hcloud`.
+    Version: 7.2.12
+  [32m[PASS][0m hcloud credentials configured
+  [31m[FAIL][0m Skills tree (server data; MCP catalog + stdio skillRoot instructions) — Run: npx huaweicloud-devkit install (from a git checkout: npm run build first)
+
+Results: 5 pass, 1 warn, 6 fail
+[33mFix failures above, then restart your session.[0m
+--- exit=0 ---
+
+########## STEP 4: status (2nd) — idempotency check (D1-4) ##########
+
+================================================================================
+$ HOME=/home/testbot1/devkit-test/Hermes/iso-home-20261113 huaweicloud-devkit status --target hermes
+================================================================================
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v2.0.0-next.3          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+HuaweiCloud DevKit Status
+
+  未安装: Hermes Agent
+
+[Hermes Agent]
+  MCP Server: [31mNot installed[0m
+  Safety Policy: [31mNot installed[0m
+  Safety Hooks: [31mNot installed[0m
+  Telemetry Hook: [31mNot installed[0m
+  Hook allowlist: [31mNot allowlisted[0m
+  Hook plugin: [31mNot installed[0m
+  MCP Python SDK: [31mMissing[0m
+  Skills: [31mNot installed[0m
+  MCP config: [32mConfigured[0m
+  Hooks config: [31mNot configured[0m
+
+Environment:
+  Node.js: v22.13.0
+  Platform: linux
+--- exit=0 ---
+
+########## STEP 5: update — idempotency check (D1-4) ##########
+
+================================================================================
+$ HOME=/home/testbot1/devkit-test/Hermes/iso-home-20261113 huaweicloud-devkit update --target hermes
+================================================================================
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v2.0.0-next.3          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+[33mNot installed. Use "install" command first.[0m
+--- exit=0 ---
+
+########## STEP 6: files created under isolated config root ##########
+
+########## STEP 7: uninstall --target hermes ##########
+
+================================================================================
+$ HOME=/home/testbot1/devkit-test/Hermes/iso-home-20261113 huaweicloud-devkit uninstall --target hermes
+================================================================================
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v2.0.0-next.3          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+Uninstalling HuaweiCloud DevKit from hermes...
+
+
+[Hermes Agent]
+  Hooks config cleaned
+  Hooks config removed
+  MCP config cleaned
+  MCP config removed
+
+[32mUninstall complete.[0m
+
+[33m💡 本次仅卸载了 hermes 的插件。如需清理全局配置（凭据库/OBS/KooCLI/open-mcp-gateway），请运行 `npx huaweicloud-devkit uninstall --target all`。[0m
+--- exit=0 ---
+
+########## STEP 8: status after uninstall (should show not installed) ##########
+
+================================================================================
+$ HOME=/home/testbot1/devkit-test/Hermes/iso-home-20261113 huaweicloud-devkit status --target hermes
+================================================================================
+
+╔══════════════════════════════════════════════╗
+║     HuaweiCloud DevKit v2.0.0-next.3          ║
+║     https://github.com/huaweicloud   ║
+╚══════════════════════════════════════════════╝
+
+HuaweiCloud DevKit Status
+
+  未安装: Hermes Agent
+
+[Hermes Agent]
+  MCP Server: [31mNot installed[0m
+  Safety Policy: [31mNot installed[0m
+  Safety Hooks: [31mNot installed[0m
+  Telemetry Hook: [31mNot installed[0m
+  Hook allowlist: [31mNot allowlisted[0m
+  Hook plugin: [31mNot installed[0m
+  MCP Python SDK: [31mMissing[0m
+  Skills: [31mNot installed[0m
+  MCP config: [31mNot configured[0m
+  Hooks config: [31mNot configured[0m
+
+Environment:
+  Node.js: v22.13.0
+  Platform: linux
+--- exit=0 ---
+
+########## STEP 9: residue check after uninstall ##########
+/home/testbot1/devkit-test/Hermes/iso-home-20261113 (residue above; empty or minimal = clean)
