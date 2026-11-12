@@ -1,5 +1,5 @@
 // checks4.mjs — 新增真云 E2E 用例：D3-C1(ECS生命周期) / D3-C2(OBS静态站) / D3-C7(跨区域) / D3-C3(沙箱部署) / D3-C6(沙箱7工具)
-import { reg, ok, fail, spec, blocked, chk, hdk, run, sh } from './core.mjs';
+import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, ct } from './core.mjs';
 import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -47,11 +47,11 @@ reg('D3-C7', async () => {
   const detail = [];
   const h = await hdk();
   // ① 区域枚举含 ap-southeast-3
-  const lr = await h.tools.callTool('huaweicloud_list_regions', {});
+  const lr = await ct(h, 'huaweicloud_list_regions', {});
   const regionListed = !!(lr && lr.regions && lr.regions.some(r => r.id === CROSS));
   detail.push(`list_regions含${CROSS}=${regionListed}`);
   // ② plan 命令必须含 --cli-region=ap-southeast-3（参数级断言）
-  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', {
+  const plan = await ct(h, 'huaweicloud_plan_cli_command', {
     args: ['EIP', 'CreatePublicip', `--publicip.type=5_bgp`, '--bandwidth.name=tctest-opencode-eip-x', '--bandwidth.size=1', '--bandwidth.share_type=PER', `--cli-region=${CROSS}`],
     allowWrites: true,
   });
@@ -189,18 +189,18 @@ reg('D3-C6', async () => {
   const results = {};
   let wsId = null;
   try {
-    results.check_user = await h.tools.callTool('huaweicloud_sandbox_check_user', {});
-    results.sign_agreement = await h.tools.callTool('huaweicloud_sandbox_sign_agreement', {});
-    const conn = await h.tools.callTool('huaweicloud_sandbox_connect', { source: 'OpenCode' });
+    results.check_user = await ct(h, 'huaweicloud_sandbox_check_user', {});
+    results.sign_agreement = await ct(h, 'huaweicloud_sandbox_sign_agreement', {});
+    const conn = await ct(h, 'huaweicloud_sandbox_connect', { source: 'OpenCode' });
     wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id || conn.session_id);
     results.connect = { ok: !!(conn && conn.status === 'connected'), hasWs: !!wsId };
-    results.credentials = await h.tools.callTool('huaweicloud_sandbox_credentials', wsId ? { dev_stage_id: wsId } : {});
+    results.credentials = await ct(h, 'huaweicloud_sandbox_credentials', wsId ? { dev_stage_id: wsId } : {});
     const tmpf = join(tmpdir(), 'hdk-smoke.txt');
     writeFileSync(tmpf, `smoke-${Date.now()}`, 'utf-8');
-    results.upload_file = await h.tools.callTool('huaweicloud_sandbox_upload_file', { local_path: tmpf, remote_path: '/tmp/hdk-smoke.txt', workspace_id: wsId });
-    results.exec_one_shot = await h.tools.callTool('huaweicloud_sandbox_exec_one_shot', { command: 'echo hdk-smoke-ok && cat /tmp/hdk-smoke.txt', workspace_id: wsId });
-    results.deploy_check = await h.tools.callTool('huaweicloud_sandbox_deploy_check', { port: 8080, project: 'none', output_dir: 'none', framework_type: 'static', workspace_id: wsId });
-    results.close_session = await h.tools.callTool('huaweicloud_sandbox_close_session', wsId ? { workspace_id: wsId } : {});
+    results.upload_file = await ct(h, 'huaweicloud_sandbox_upload_file', { local_path: tmpf, remote_path: '/tmp/hdk-smoke.txt', workspace_id: wsId });
+    results.exec_one_shot = await ct(h, 'huaweicloud_sandbox_exec_one_shot', { command: 'echo hdk-smoke-ok && cat /tmp/hdk-smoke.txt', workspace_id: wsId });
+    results.deploy_check = await ct(h, 'huaweicloud_sandbox_deploy_check', { port: 8080, project: 'none', output_dir: 'none', framework_type: 'static', workspace_id: wsId });
+    results.close_session = await ct(h, 'huaweicloud_sandbox_close_session', wsId ? { workspace_id: wsId } : {});
   } catch (e) {
     results.exception = String(e).slice(0, 300);
   }
@@ -221,20 +221,20 @@ reg('D3-C3', async () => {
   const h = await hdk();
   const detail = [];
   try {
-    const conn = await h.tools.callTool('huaweicloud_sandbox_connect', { source: 'OpenCode' });
+    const conn = await ct(h, 'huaweicloud_sandbox_connect', { source: 'OpenCode' });
     const wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
     detail.push(`connect.ws=${!!wsId} status=${conn && conn.status}`);
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id', JSON.stringify(conn).slice(0, 200));
     const proj = mkdtempSync(join(tmpdir(), 'hdk-sbx-'));
     writeFileSync(join(proj, 'index.html'), '<html><body>hdk sandbox e2e ok</body></html>', 'utf-8');
-    const upload = await h.tools.callTool('huaweicloud_sandbox_upload_project', { local_dir: proj, remote_dir: '/workspace/hdk-e2e', workspace_id: wsId, extract: true });
+    const upload = await ct(h, 'huaweicloud_sandbox_upload_project', { local_dir: proj, remote_dir: '/workspace/hdk-e2e', workspace_id: wsId, extract: true });
     detail.push(`upload=${JSON.stringify(upload).slice(0, 110)}`);
     rmSync(proj, { recursive: true, force: true });
-    const deploy = await h.tools.callTool('huaweicloud_sandbox_deploy_nginx', { nginx_type: 'static', port: 8080, project: 'hdk-e2e', output_dir: '.', workspace_id: wsId });
+    const deploy = await ct(h, 'huaweicloud_sandbox_deploy_nginx', { nginx_type: 'static', port: 8080, project: 'hdk-e2e', output_dir: '.', workspace_id: wsId });
     detail.push(`deploy=${JSON.stringify(deploy).slice(0, 130)}`);
-    const check = await h.tools.callTool('huaweicloud_sandbox_deploy_check', { port: 8080, project: 'hdk-e2e', output_dir: '.', framework_type: 'static', workspace_id: wsId });
+    const check = await ct(h, 'huaweicloud_sandbox_deploy_check', { port: 8080, project: 'hdk-e2e', output_dir: '.', framework_type: 'static', workspace_id: wsId });
     detail.push(`deploy_check=${JSON.stringify(check).slice(0, 170)}`);
-    const close = await h.tools.callTool('huaweicloud_sandbox_close_session', { workspace_id: wsId });
+    const close = await ct(h, 'huaweicloud_sandbox_close_session', { workspace_id: wsId });
     detail.push(`close=${JSON.stringify(close).slice(0, 70)}`);
     const attested = !!(check && (check.complete === true || check.tunnel_url_accessible === true || check.nginx_serving === true || check.url || check.score !== undefined));
     return chk(attested,

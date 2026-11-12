@@ -1,5 +1,5 @@
 // checks2.mjs — D3 工具/服务目录/场景 + D4 安全 用例探针
-import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, fixture } from './core.mjs';
+import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, fixture, ct } from './core.mjs';
 import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -7,14 +7,14 @@ import { join } from 'node:path';
 // ============ D3 工具/服务 ============
 reg('D3-A1', async () => {
   const h = await hdk();
-  const list = h.tools.listSkillDirs ? h.tools.listSkillDirs(h.SRC) : [];
+  const list = h.tools.listSkillDirs ? h.tools.listSkillDirs(h.skills) : [];
   let cnt = 0;
   if (h.tools.retrieveSkill || h.tools.callTool) {
     // 通过 callTool retrieve_skill 抽取可达技能（不逐一全量，取前若干）
     const skills = list.length ? list : ['huawei-ecs', 'huawei-obs', 'huawei-rds', 'huawei-vpc', 'huawei-iam'];
     for (const s of skills.slice(0, 30)) {
       try {
-        const r = await h.tools.callTool('huaweicloud_retrieve_skill', { name: s });
+        const r = await ct(h, 'huaweicloud_retrieve_skill', { name: s });
         if (r && (r.content || r.text || r.markdown || r.skill)) cnt++;
       } catch {}
     }
@@ -24,14 +24,14 @@ reg('D3-A1', async () => {
 
 reg('D3-B1', async () => {
   const h = await hdk();
-  const ecs = await h.tools.callTool('huaweicloud_list_operations', { service: 'ECS' });
+  const ecs = await ct(h, 'huaweicloud_list_operations', { service: 'ECS' });
   const okEcs = ecs && !ecs.__error && /List/.test(JSON.stringify(ecs));
   return chk(okEcs, `list_operations(ECS) 返回规范操作名: ${JSON.stringify(ecs).slice(0, 160)}`, JSON.stringify(ecs).slice(0, 200));
 });
 
 reg('D3-B3', async () => {
   const h = await hdk();
-  const r = await h.tools.callTool('huaweicloud_run_readonly_command', { args: ['IAM', 'KeystoneListProjects', `--cli-region=cn-north-4`] });
+  const r = await ct(h, 'huaweicloud_run_readonly_command', { args: ['IAM', 'KeystoneListProjects', `--cli-region=cn-north-4`] });
   const okRun = r && !r.__error;
   return chk(okRun, `run_readonly 执行只读命令成功(脱敏)`, JSON.stringify(r).slice(0, 200));
 });
@@ -54,7 +54,7 @@ reg('D3-C4', async () => {
   let okc = 0, failc = 0; const bad = [];
   for (const s of MATRIX_SERVICES) {
     try {
-      const r = await h.tools.callTool('huaweicloud_list_operations', { service: s });
+      const r = await ct(h, 'huaweicloud_list_operations', { service: s });
       if (r && !r.__error && !/error|unknown/i.test(JSON.stringify(r).slice(0, 60))) okc++; else { failc++; bad.push(s); }
     } catch (e) { failc++; bad.push(s); }
   }
@@ -63,9 +63,9 @@ reg('D3-C4', async () => {
 
 reg('D3-C5', async () => {
   const h = await hdk();
-  const a = await h.tools.callTool('huaweicloud_check_cli', {});
-  const b = await h.tools.callTool('huaweicloud_list_operations', { service: 'ECS' });
-  const c = await h.tools.callTool('huaweicloud_explain_error', { error: 'VPC.0010' });
+  const a = await ct(h, 'huaweicloud_check_cli', {});
+  const b = await ct(h, 'huaweicloud_list_operations', { service: 'ECS' });
+  const c = await ct(h, 'huaweicloud_explain_error', { error: 'VPC.0010' });
   const okS = !a.__error && !b.__error && c !== undefined;
   return chk(okS, '四工具冒烟(check_cli/list_operations/explain_error) 通过', JSON.stringify({ a: a && a.ok, b: !!b, c: JSON.stringify(c).slice(0, 100) }));
 });
@@ -82,9 +82,9 @@ reg('D3-C13', async () => {
     }
     mbOk = mb.ok || /successfully/i.test(mb.text);
     if (mbOk) {
-      const set = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
+      const set = await ct(h, 'huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
       setOk = !set.__error && /200|ok|success|index/i.test(JSON.stringify(set));
-      const get = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'get', bucket, region: REGION });
+      const get = await ct(h, 'huaweicloud_obs_set_website_config', { action: 'get', bucket, region: REGION });
       getOk = !get.__error && /index\.html|indexDocument|Suffix/i.test(JSON.stringify(get));
     }
   } finally {
@@ -97,10 +97,10 @@ fixture('D3-C14', 'd3-c14-sandbox-hwlink-cred.mjs');
 
 reg('D3-S1', async () => {
   const h = await hdk();
-  const route = await h.tools.callTool('huaweicloud_service_catalog', { intent: '帮我查一下我账号在华北北京四有哪些云主机' });
+  const route = await ct(h, 'huaweicloud_service_catalog', { intent: '帮我查一下我账号在华北北京四有哪些云主机' });
   const text = JSON.stringify(route);
   const hitEcs = /ECS|ecs|云主机|弹性云/.test(text);
-  const read = await h.tools.callTool('huaweicloud_run_readonly_command', { args: ['ECS', 'ListServersDetails', `--cli-region=cn-north-4`] });
+  const read = await ct(h, 'huaweicloud_run_readonly_command', { args: ['ECS', 'ListServersDetails', `--cli-region=cn-north-4`] });
   return chk(hitEcs && read && !read.__error, `只读查 ECS: 路由命中ecs=${hitEcs} 命令返回=${!read.__error}`, JSON.stringify({ route: text.slice(0, 150), readOk: !read.__error }));
 });
 
@@ -111,7 +111,7 @@ reg('D3-S2', async () => {
   let created = null;
   let routeHit = false, planWrite = false, deleted = false, zero = false;
   try {
-    const rt = await h.tools.callTool('huaweicloud_service_catalog', { intent: '删除这个 VPC' });
+    const rt = await ct(h, 'huaweicloud_service_catalog', { intent: '删除这个 VPC' });
     routeHit = /VPC|vpc/i.test(JSON.stringify(rt));
     const cr = sh(['VPC', 'CreateVpc', `--vpc.name=${name}`, '--vpc.cidr=10.1.0.0/16', `--cli-region=${REGION}`]);
     const idm = /"id"\s*:\s*"([0-9a-f-]{36})"/.exec(cr.text);
@@ -120,7 +120,7 @@ reg('D3-S2', async () => {
       return blocked(`VPC 创建被配额拒绝（VPC.0114 router quota exceeded）。路由命中=${routeHit}，但 CreateVpc 真机调用被配额层拒绝，未进入删 VPC 确认流。解除条件：清理泄漏 VPC 或提升配额后复测（补环境·真云配额）`, cr.text.slice(0, 300));
     }
     if (created) {
-      const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['VPC', 'DeleteVpc', `--vpc_id=${created}`, `--cli-region=${REGION}`], allowWrites: true });
+      const plan = await ct(h, 'huaweicloud_plan_cli_command', { args: ['VPC', 'DeleteVpc', `--vpc_id=${created}`, `--cli-region=${REGION}`], allowWrites: true });
       planWrite = plan && (plan.classification?.decision !== 'read_only' || plan.needsApproval !== false);
       const del = sh(['VPC', 'DeleteVpc', `--vpc_id=${created}`, `--cli-region=${REGION}`]);
       deleted = del.ok;
@@ -140,7 +140,7 @@ reg('D3-S3', async () => {
   const detail = [];
   let wsId = null;
   try {
-    const conn = await h.tools.callTool('huaweicloud_sandbox_connect', { source: 'OpenCode' });
+    const conn = await ct(h, 'huaweicloud_sandbox_connect', { source: 'OpenCode' });
     wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
     detail.push(`connect.status=${conn && conn.status} ws=${!!wsId}`);
     if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(JSON.stringify(conn))) {
@@ -149,18 +149,18 @@ reg('D3-S3', async () => {
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id，无法预览出 URL', JSON.stringify(conn).slice(0, 200));
     const proj = mkdtempSync(join(tmpdir(), 'hdk-d3s3-'));
     writeFileSync(join(proj, 'index.html'), '<html><body>hdk-d3s3-preview-ok</body></html>', 'utf-8');
-    const up = await h.tools.callTool('huaweicloud_sandbox_upload_project', { local_dir: proj, remote_dir: '/workspace/d3s3-site', workspace_id: wsId, extract: true });
+    const up = await ct(h, 'huaweicloud_sandbox_upload_project', { local_dir: proj, remote_dir: '/workspace/d3s3-site', workspace_id: wsId, extract: true });
     rmSync(proj, { recursive: true, force: true });
     detail.push(`upload.ok=${!!(up && up.ok)}`);
-    const dep = await h.tools.callTool('huaweicloud_sandbox_deploy_nginx', { nginx_type: 'static', port: 8081, project: 'd3s3-site', output_dir: '.', workspace_id: wsId });
+    const dep = await ct(h, 'huaweicloud_sandbox_deploy_nginx', { nginx_type: 'static', port: 8081, project: 'd3s3-site', output_dir: '.', workspace_id: wsId });
     detail.push(`deploy_nginx.ok=${!!(dep && dep.ok)} port=${dep && dep.port}`);
-    const db = await h.tools.callTool('huaweicloud_sandbox_exec_one_shot', { command: 'source /tmp/hw_creds.sh 2>/dev/null; source /tmp/hw_api_key 2>/dev/null; devbridge delete-all 2>&1; devbridge create d3s3-' + String(Date.now()).slice(-8) + ' 2>&1', workspace_id: wsId });
+    const db = await ct(h, 'huaweicloud_sandbox_exec_one_shot', { command: 'source /tmp/hw_creds.sh 2>/dev/null; source /tmp/hw_api_key 2>/dev/null; devbridge delete-all 2>&1; devbridge create d3s3-' + String(Date.now()).slice(-8) + ' 2>&1', workspace_id: wsId });
     detail.push(`devbridge=${String(db && (db.stdout || JSON.stringify(db))).replace(/\u001b\]133;C\u0007/g, '').slice(0, 80)}`);
     if (/API key expired|API key 已过期|please login again/i.test(JSON.stringify(db))) {
       return blocked('沙箱 DevBridge 隧道凭证已过期——沙箱内 devbridge create 返回 "API key expired, please login again"，无法暴露预览 URL。已实测 connect/upload/deploy_nginx 均通过（deploy_check nginx_serving=HTTP 200），仅 tunnel 暴露步骤受阻。解除条件：沙箱环境刷新 devbridge API key 后复测（补环境·沙箱 devbridge 凭证）', detail.join(' | '));
     }
     const actualPort = (dep && dep.port) || 8081;
-    const check = await h.tools.callTool('huaweicloud_sandbox_deploy_check', { port: actualPort, project: 'd3s3-site', output_dir: '.', framework_type: 'static', workspace_id: wsId });
+    const check = await ct(h, 'huaweicloud_sandbox_deploy_check', { port: actualPort, project: 'd3s3-site', output_dir: '.', framework_type: 'static', workspace_id: wsId });
     detail.push(`deploy_check=${JSON.stringify(check).slice(0, 160)}`);
     const urlOk = check && (check.url || check.tunnel_url_accessible || check.complete === true);
     return chk(!!urlOk, `沙箱预览出 URL: ${JSON.stringify(check).slice(0, 200)}`, detail.join(' | ').slice(0, 700));
@@ -174,9 +174,9 @@ reg('D3-S3', async () => {
 
 reg('D3-S4', async () => {
   const h = await hdk();
-  const s = await h.tools.callTool('huaweicloud_voucher_status', {});
+  const s = await ct(h, 'huaweicloud_voucher_status', {});
   let claim = null;
-  if (s && s.claimed === false) claim = await h.tools.callTool('huaweicloud_voucher_claim', {});
+  if (s && s.claimed === false) claim = await ct(h, 'huaweicloud_voucher_claim', {});
   else if (s && s.claimed === true) claim = { alreadyClaimed: true };
   return chk(!s.__error, `voucher status→claim 闭环: status=${s.claimed} claim=${JSON.stringify(claim).slice(0, 80)}`, JSON.stringify({ s, claim }));
 });
@@ -184,7 +184,7 @@ reg('D3-S4', async () => {
 reg('D3-S5', async () => {
   const h = await hdk();
   const intent = '我要存储用户数据并使用托管方式部署一个网站';
-  const r = await h.tools.callTool('huaweicloud_service_catalog', { intent });
+  const r = await ct(h, 'huaweicloud_service_catalog', { intent });
   const svcs = (r && r.recommendedServices) || [];
   const multi = svcs.some(s => /OBS|DDS|GaussDB|RDS|ECS|DCS|存储|对象/i.test(s));
   return chk(multi, `复合意图分层路由命中多服务: ${svcs.join('+')}`, `复合意图仅命中: ${svcs.join('+') || '(空)'}`);
@@ -192,7 +192,7 @@ reg('D3-S5', async () => {
 
 reg('D3-S6', async () => {
   const h = await hdk();
-  const r = await h.tools.callTool('huaweicloud_service_catalog', { intent: '部署一个函数处理图片自动压缩' });
+  const r = await ct(h, 'huaweicloud_service_catalog', { intent: '部署一个函数处理图片自动压缩' });
   const svcs = (r && r.recommendedServices) || [];
   const hit = svcs.some(s => /FunctionGraph/i.test(s));
   return chk(hit, `FunctionGraph 定时任务路由命中: ${svcs.join('+')}`, `FunctionGraph 路由 MISS: ${svcs.join('+') || '(空)'}`);
@@ -200,7 +200,7 @@ reg('D3-S6', async () => {
 
 reg('D3-S7', async () => {
   const h = await hdk();
-  const r = await h.tools.callTool('huaweicloud_service_catalog', { intent: '部署一个 Web 应用并连接 RDS 数据库' });
+  const r = await ct(h, 'huaweicloud_service_catalog', { intent: '部署一个 Web 应用并连接 RDS 数据库' });
   const svcs = (r && r.recommendedServices) || [];
   const multi = svcs.some(s => /RDS/i.test(s)) && svcs.some(s => /sandbox|ECS|SWR|部署|CCE/i.test(s));
   return chk(multi, `跨服务复合意图命中 RDS+部署目标: ${svcs.join('+')}`, `仅部分命中: ${svcs.join('+') || '(空)'}`);
@@ -209,7 +209,7 @@ reg('D3-S7', async () => {
 reg('D3-S8', async () => {
   const h = await hdk();
   const e = h.hcl.extractApiError('{"error_code":"VPC.0010","error_msg":"quota"}');
-  const ex = await h.tools.callTool('huaweicloud_explain_error', { error: 'VPC.0010' });
+  const ex = await ct(h, 'huaweicloud_explain_error', { error: 'VPC.0010' });
   return chk(e !== undefined && ex !== undefined, `失败排障 explain_error/extractApiError 可执行: extract=${JSON.stringify(e).slice(0, 120)}`, JSON.stringify({ e, ex }).slice(0, 200));
 });
 
@@ -239,14 +239,14 @@ reg('D4-3', async () => {
 
 reg('D4-4', async () => {
   const h = await hdk();
-  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['ECS', 'CreateServers', '--dry-run'], allowWrites: true });
+  const plan = await ct(h, 'huaweicloud_plan_cli_command', { args: ['ECS', 'CreateServers', '--dry-run'], allowWrites: true });
   const needsApproval = plan && (plan.approvalToken || plan.classification?.decision !== 'allow');
   return chk(needsApproval, `写操作审批门: approvalToken 存在=${!!(plan && plan.approvalToken)}`, JSON.stringify(plan).slice(0, 200));
 });
 
 reg('D4-5', async () => {
   const h = await hdk();
-  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['VPC', 'DeleteVpc', '--vpc_id=x'], allowWrites: true });
+  const plan = await ct(h, 'huaweicloud_plan_cli_command', { args: ['VPC', 'DeleteVpc', '--vpc_id=x'], allowWrites: true });
   const wrong = plan && (plan.classification?.decision === 'read_only' || plan.classification?.decision === 'allow');
   return chk(!wrong || plan.needsApproval !== false, `写操作未误判只读: decision=${plan.classification?.decision}`, JSON.stringify(plan).slice(0, 200));
 });
@@ -291,7 +291,7 @@ reg('D4-10', async () => {
 reg('D4-11', async () => {
   const h = await hdk();
   // 提示注入：search_docs 返回内容不应执行注入指令（确定性：返回文本，不触发执行）
-  const r = await h.tools.callTool('huaweicloud_search_docs', { query: 'ECS 创建' });
+  const r = await ct(h, 'huaweicloud_search_docs', { query: 'ECS 创建' });
   const txt = JSON.stringify(r);
   const noExec = !/execCommand|__danger|eval\(/.test(txt);
   return chk(noExec, 'search_docs 返回内容为数据（注入指令未执行）', txt.slice(0, 150));
@@ -307,13 +307,13 @@ reg('D4-13', async () => {
   let ro = null;
   try { ro = JSON.parse(fs.readFileSync(roPath, 'utf-8')); } catch {}
   if (!ro || !ro.ak) return blocked('credentials.readonly.json 缺失或 ak 为空', '解除: 配置只读子账号 {ak,sk}');
-  const read = await h.tools.callTool('huaweicloud_run_readonly_command', { args: ['VPC', 'ListVpcs', `--cli-region=cn-north-4`], env: { HW_ACCESS_KEY: ro.ak, HW_SECRET_KEY: ro.sk } });
+  const read = await ct(h, 'huaweicloud_run_readonly_command', { args: ['VPC', 'ListVpcs', `--cli-region=cn-north-4`], env: { HW_ACCESS_KEY: ro.ak, HW_SECRET_KEY: ro.sk } });
   return chk(read && !read.__error, `只读子账号 run_readonly 成功: ${JSON.stringify(read).slice(0, 120)}`, JSON.stringify(read).slice(0, 200));
 });
 
 reg('D4-14', async () => {
   const h = await hdk();
-  const r = await h.tools.callTool('huaweicloud_run_readonly_command', { args: ['IAM', 'KeystoneListProjects', `--cli-region=cn-north-4`] });
+  const r = await ct(h, 'huaweicloud_run_readonly_command', { args: ['IAM', 'KeystoneListProjects', `--cli-region=cn-north-4`] });
   const traceable = /request_id|requestId/.test(JSON.stringify(r));
   return chk(r && !r.__error, `操作可审计(request_id 可追溯): traceable=${traceable}`, JSON.stringify(r).slice(0, 150));
 });
@@ -343,14 +343,14 @@ reg('D4-17', async () => {
 
 reg('D4-18', async () => {
   const h = await hdk();
-  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['VPC', 'CreateVpc', '--vpc.name=t'], allowWrites: true });
+  const plan = await ct(h, 'huaweicloud_plan_cli_command', { args: ['VPC', 'CreateVpc', '--vpc.name=t'], allowWrites: true });
   const confirm = plan && (plan.approvalToken || plan.needsApproval !== false);
   return chk(confirm, `confirm-not-deny 审批语义: approvalToken=${!!(plan && plan.approvalToken)}`, JSON.stringify(plan).slice(0, 160));
 });
 
 reg('D4-19', async () => {
   const h = await hdk();
-  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['ECS', 'CreateServers', '--adminPass=x --count 100'], allowWrites: true });
+  const plan = await ct(h, 'huaweicloud_plan_cli_command', { args: ['ECS', 'CreateServers', '--adminPass=x --count 100'], allowWrites: true });
   const preflight = plan && plan.classification;
   return chk(!!preflight, `确认流下预检生效: classification=${JSON.stringify(preflight)}`, JSON.stringify(plan).slice(0, 160));
 });
@@ -358,11 +358,11 @@ reg('D4-19', async () => {
 reg('D4-20', async () => {
   const h = await hdk();
   // 拒绝后零操作：approvedByUser=false 必须拒绝且不执行（runApprovedCommand 抛拒绝 = 零执行）
-  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['VPC', 'DeleteVpc', '--vpc_id=nonexist'], allowWrites: true });
+  const plan = await ct(h, 'huaweicloud_plan_cli_command', { args: ['VPC', 'DeleteVpc', '--vpc_id=nonexist'], allowWrites: true });
   let rejected = false, reason = '';
   if (plan && plan.approvalToken) {
     try {
-      await h.tools.callTool('huaweicloud_run_approved_command', { args: ['VPC', 'DeleteVpc', '--vpc_id=nonexist'], approvalToken: plan.approvalToken, approvedByUser: false });
+      await ct(h, 'huaweicloud_run_approved_command', { args: ['VPC', 'DeleteVpc', '--vpc_id=nonexist'], approvalToken: plan.approvalToken, approvedByUser: false });
     } catch (e) { rejected = true; reason = String(e).slice(0, 80); }
   }
   return chk(rejected, `拒绝后零操作(未批准 → 抛拒绝, 零执行): ${reason}`, `未拒绝: ${JSON.stringify(plan).slice(0, 120)}`);
@@ -387,7 +387,7 @@ reg('D4-22', async () => {
 reg('D4-23', async () => {
   const h = await hdk();
   const fs = await import('node:fs');
-  const pkgPath = joinUp(h.SRC, 3, 'package.json');
+  const pkgPath = join(h.pkg, 'package.json');
   let rulesInFiles = false, files = null;
   try {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
@@ -410,8 +410,8 @@ reg('D4-25', async () => {
   const h = await hdk();
   // Python hook 事件遥测分类：policy.json 有 writeOperationPrefixes + safety.py cli:write 映射
   const fs = await import('node:fs');
-  const policyPath = joinUp(h.SRC, 1, 'safety', 'policy.json');
-  const pyPath = joinUp(h.SRC, 1, 'hooks', 'huaweicloud-safety.py');
+  const policyPath = join(h.core, 'safety', 'policy.json');
+  const pyPath = join(h.core, 'hooks', 'huaweicloud-safety.py');
   let pfx = false, cliWrite = false;
   try { pfx = /writeOperationPrefixes/.test(fs.readFileSync(policyPath, 'utf-8')); } catch {}
   try { cliWrite = /cli:write/.test(fs.readFileSync(pyPath, 'utf-8')); } catch {}

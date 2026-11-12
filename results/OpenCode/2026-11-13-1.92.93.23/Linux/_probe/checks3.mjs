@@ -1,5 +1,5 @@
 // checks3.mjs — D5/D6/D8/D9/D10 + 展开级(EXP-D5-6-*, EXP-C4-*, EXP-E*) 用例探针
-import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, REPO_ROOT, PACK, EVID } from './core.mjs';
+import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, REPO_ROOT, PACK, EVID, ct } from './core.mjs';
 import { spawn } from 'node:child_process';
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -15,7 +15,7 @@ function fixture(cid, script, needsHdk = true, skipHdk = false) {
   reg(cid, async () => {
     const h = await hdk();
     const args = [join(HARNESS, 'fixtures', script)];
-    if (!skipHdk) args.push(h.SRC);
+    if (!skipHdk) args.push(h.shim);
     args.push('--evid', join(EVID, cid));
     const r = run(`node ${args.map(a => `"${a}"`).join(' ')} 2>&1`);
     const code = r.status;
@@ -56,9 +56,9 @@ reg('EXP-D5-6-3', async () => {
 reg('EXP-D5-1-1', async () => {
   const h = await hdk();
   const ocTarget = (h.authReg.SUPPORTED_AGENT_TARGETS || []).find(t => /opencode/i.test(t));
-  const root = dirname(dirname(dirname(h.SRC)));
+  const root = h.pkg;
   const manifest = existsSync(join(root, 'integrations', 'opencode', 'opencode.json'));
-  const mcp = existsSync(join(dirname(h.SRC), '.mcp.json'));
+  const mcp = existsSync(join(h.core, '.mcp.json'));
   return chk(!!ocTarget && (manifest || mcp), `OpenCode 可发现并加载插件清单: target=${ocTarget} opencode.json=${manifest} .mcp.json=${mcp}`, JSON.stringify({ targets: h.authReg.SUPPORTED_AGENT_TARGETS, manifest, mcp }));
 });
 reg('EXP-D5-1-3', async () => {
@@ -73,13 +73,13 @@ reg('EXP-D5-1-3', async () => {
 reg('D6-1', async () => {
   const h = await hdk();
   const t0 = Date.now();
-  await h.tools.callTool('huaweicloud_search_docs', { query: 'ECS' });
+  await ct(h, 'huaweicloud_search_docs', { query: 'ECS' });
   const dt = Date.now() - t0;
   return chk(dt < 2000, `检索响应延迟 ${dt}ms < 2s`, `延迟 ${dt}ms >= 2s`);
 });
 reg('D6-3', async () => {
   const h = await hdk();
-  const srv = makeServer(join(h.SRC, 'mcp-server.mjs'));
+  const srv = makeServer(join(h.dist, 'mcp-server.js'));
   const t0 = Date.now();
   await srv.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'p', version: '1' } } });
   const dt = Date.now() - t0;
@@ -88,7 +88,7 @@ reg('D6-3', async () => {
 });
 reg('D6-4', async () => {
   const h = await hdk();
-  const srv = makeServer(join(h.SRC, 'mcp-server.mjs'));
+  const srv = makeServer(join(h.dist, 'mcp-server.js'));
   await srv.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'p', version: '1' } } });
   srv.send({ jsonrpc: '2.0', method: 'notifications/initialized' });
   const N = 30;
@@ -110,19 +110,19 @@ reg('D6-9', async () => {
 // ============ D8 ============
 reg('D8-1', async () => {
   const h = await hdk();
-  const docs = join(dirname(dirname(dirname(h.SRC))), 'README.md');
+  const docs = join(h.pkg, 'README.md');
   let hasReadme = existsSync(docs);
   return chk(hasReadme, 'README.md 文档存在(链接/命令一致性可扫描)', 'README 缺失');
 });
 reg('D8-4', async () => {
   const h = await hdk();
-  const r = await h.tools.callTool('huaweicloud_retrieve_skill', { name: 'huawei-ecs' });
+  const r = await ct(h, 'huaweicloud_retrieve_skill', { name: 'huawei-ecs' });
   const okLoad = r && !r.__error && (r.content || r.markdown || r.skill || r.text);
   return chk(okLoad, 'skill 指引可机械加载(huawei-ecs)', JSON.stringify(r).slice(0, 120));
 });
 reg('D8-6', async () => {
   const h = await hdk();
-  const root = dirname(dirname(dirname(h.SRC)));
+  const root = h.pkg;
   const en = existsSync(join(root, 'README.md'));
   const zh = existsSync(join(root, 'README.zh-CN.md'));
   return chk(en && zh, `中英文文档并存: en=${en} zh=${zh}`, '');
@@ -131,7 +131,7 @@ reg('D8-7', async () => {
   const h = await hdk();
   const meta7 = ['huaweicloud-core', 'huaweicloud-getting-started', 'huaweicloud-cli-and-auth', 'huaweicloud-api-and-sdk', 'huaweicloud-capability-discovery', 'huaweicloud-troubleshooting', 'huaweicloud-safety'];
   let okN = 0;
-  for (const s of meta7) { try { const r = await h.tools.callTool('huaweicloud_retrieve_skill', { name: s }); if (r && !r.__error) okN++; } catch {} }
+  for (const s of meta7) { try { const r = await ct(h, 'huaweicloud_retrieve_skill', { name: s }); if (r && !r.__error) okN++; } catch {} }
   return chk(okN >= 5, `7 个 meta 技能可机械执行: ${okN}/7`, `${okN}/7`);
 });
 reg('D8-9', async () => {
@@ -152,7 +152,7 @@ reg('D9-1', async () => {
 });
 reg('D9-2', async () => {
   const h = await hdk();
-  const srv = makeServer(join(h.SRC, 'mcp-server.mjs'));
+  const srv = makeServer(join(h.dist, 'mcp-server.js'));
   await srv.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'p', version: '1' } } });
   const unk = await srv.send({ jsonrpc: '2.0', id: 99, method: 'unknown/method', params: {} });
   const badParams = await srv.send({ jsonrpc: '2.0', id: 100, method: 'tools/call', params: { name: 'huaweicloud_plan_cli_command', arguments: { args: 'not-array' } } });
@@ -169,13 +169,13 @@ fixture('D9-11', 'd9-11-ws-tunnel.mjs');
 
 reg('D9-3', async () => {
   const h = await hdk();
-  const r = await h.tools.callTool('huaweicloud_check_cli', {});
+  const r = await ct(h, 'huaweicloud_check_cli', {});
   const content = r && (r.content || r.text || r.tools);
   return chk(content !== undefined || !r.__error, `tools/call 响应格式(content/isError): ${JSON.stringify(r).slice(0, 120)}`, '');
 });
 reg('D9-4', async () => {
   const h = await hdk();
-  const srv = makeServer(join(h.SRC, 'mcp-server.mjs'));
+  const srv = makeServer(join(h.dist, 'mcp-server.js'));
   const init = await srv.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'p', version: '1' } } });
   const after = await srv.send({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} });
   srv.kill();
@@ -183,7 +183,7 @@ reg('D9-4', async () => {
 });
 reg('D9-5', async () => {
   const h = await hdk();
-  const srv = makeServer(join(h.SRC, 'mcp-server.mjs'));
+  const srv = makeServer(join(h.dist, 'mcp-server.js'));
   await srv.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'p', version: '1' } } });
   const big = 'x'.repeat(50000);
   const r = await srv.call('huaweicloud_check_cli', { big });
@@ -192,7 +192,7 @@ reg('D9-5', async () => {
 });
 reg('D9-7', async () => {
   const h = await hdk();
-  const srv = makeServer(join(h.SRC, 'mcp-server.mjs'));
+  const srv = makeServer(join(h.dist, 'mcp-server.js'));
   const r = await srv.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'legacy', version: '0.1' } } });
   srv.kill();
   return chk(!!r, '协议版本协商不挂死(旧客户端 initialize 有响应)', JSON.stringify(r).slice(0, 120));
@@ -206,14 +206,14 @@ reg('D9-8', async () => {
 });
 reg('D9-12', async () => {
   const h = await hdk();
-  const srv = makeServer(join(h.SRC, 'mcp-server.mjs'));
+  const srv = makeServer(join(h.dist, 'mcp-server.js'));
   const init = await srv.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'p', version: '1' } } });
   const res = init && init.result;
   const protoOk = res && res.protocolVersion;
   const capsOk = res && res.capabilities;
   const srvOk = res && res.serverInfo;
   // 非法时序：未 initialize 先 tools/list 应返回 -32600（已知缺口：仍返回 40 工具）
-  const srv2 = makeServer(join(h.SRC, 'mcp-server.mjs'));
+  const srv2 = makeServer(join(h.dist, 'mcp-server.js'));
   const illegal = await srv2.send({ jsonrpc: '2.0', id: 9, method: 'tools/list', params: {} });
   srv.kill(); srv2.kill();
   const illegalRejected = illegal && illegal.error && illegal.error.code === -32600;
@@ -246,7 +246,7 @@ async function evalRoutingAll() {
   const rows = lines.slice(1).map(l => { const v = l.split(','); const o = {}; header.forEach((hd, i) => o[hd.trim()] = (v[i] || '').trim()); return o; });
   const out = [];
   for (const r of rows) {
-    const resp = await h.tools.callTool('huaweicloud_service_catalog', { intent: r.prompt });
+    const resp = await ct(h, 'huaweicloud_service_catalog', { intent: r.prompt });
     const txt = (resp && (resp.content || resp.text)) || JSON.stringify(resp);
     let rr = {}; try { rr = (txt && (txt[0] && txt[0].text)) ? JSON.parse(txt[0].text) : (typeof txt === 'string' ? JSON.parse(txt) : {}); } catch { rr = {}; }
     if (txt && txt[0] && txt[0].text) { try { rr = JSON.parse(txt[0].text); } catch {} }
@@ -283,7 +283,7 @@ MATRIX_SERVICES.forEach((svc, i) => {
   const cid = `EXP-C4-${String(i + 1).padStart(2, '0')}`;
   reg(cid, async () => {
     const h = await hdk();
-    const r = await h.tools.callTool('huaweicloud_list_operations', { service: svc });
+    const r = await ct(h, 'huaweicloud_list_operations', { service: svc });
     const okS = r && !r.__error && !/error|unknown|不支持/i.test(JSON.stringify(r).slice(0, 80));
     return chk(okS, `${svc} list_operations 只读规划 OK`, `${svc} list_operations 失败`);
   });
@@ -313,7 +313,7 @@ for (const [cid, intent] of Object.entries(EXP_E_MAP)) {
     const rec = all.find(r => r.id === cid);
     if (rec) return rec.verdict === 'HIT' ? ok(`路由 HIT: got=${rec.got.join('+')}`) : (rec.verdict === 'N/A' ? ok('诊断类 N/A(走 explain_error)') : fail(`路由 MISS: got=${rec.got.join('+') || '(空)'} 期望=${(rec.expect || []).join('/')}`));
     const h = await hdk();
-    const r = await h.tools.callTool('huaweicloud_service_catalog', { intent });
+    const r = await ct(h, 'huaweicloud_service_catalog', { intent });
     return ok(`serviceCatalog 已执行: ${JSON.stringify(r).slice(0, 100)}`);
   });
 }
