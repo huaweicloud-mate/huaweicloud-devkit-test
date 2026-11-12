@@ -1,20 +1,54 @@
-node:internal/modules/esm/resolve:275
-    throw new ERR_MODULE_NOT_FOUND(
-          ^
+[OK] backup 返回 .bak 路径且文件生成
+[OK] backup 内容指纹 == 原始指纹
+[OK] 篡改后指纹 != 原始指纹
+[OK] restore 返回 true
+[OK] restore 后凭证文件恢复为 backup 前内容
+[OK] 恢复后内容 == 原始 AK/SK
+[OK] 清理隔离目录
 
-Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/auth/credentials.mjs' imported from /home/testbot1/devkit-test/Hermes/huaweicloud-devkit-test/results/Hermes/2026-11-13-120.46.222.180/Linux/evidence/_probes/D2-26-probe.mjs
-    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
-    at moduleResolve (node:internal/modules/esm/resolve:932:10)
-    at defaultResolve (node:internal/modules/esm/resolve:1056:11)
-    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:654:12)
-    at #cachedDefaultResolve (node:internal/modules/esm/loader:603:25)
-    at ModuleLoader.resolve (node:internal/modules/esm/loader:586:38)
-    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:242:38)
-    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:546:36)
-    at TracingChannel.tracePromise (node:diagnostics_channel:344:14)
-    at ModuleLoader.import (node:internal/modules/esm/loader:545:21) {
-  code: 'ERR_MODULE_NOT_FOUND',
-  url: 'file:///home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/auth/credentials.mjs'
+=====SUMMARY JSON=====
+{
+  "generatedAt": "2026-11-12T21:17:41.158Z",
+  "total": 7,
+  "passed": 7,
+  "backupPathGenerated": true,
+  "restoreOk": true,
+  "hashRestored": true,
+  "results": [
+    {
+      "name": "backup 返回 .bak 路径且文件生成",
+      "ok": true,
+      "detail": "{\"bakPath\":\"<ISO>/.config/huaweicloud/credentials.json.bak\"}"
+    },
+    {
+      "name": "backup 内容指纹 == 原始指纹",
+      "ok": true,
+      "detail": "{\"h0\":\"5e3f49df146136c8\",\"hBak\":\"5e3f49df146136c8\"}"
+    },
+    {
+      "name": "篡改后指纹 != 原始指纹",
+      "ok": true,
+      "detail": "{\"hTamper\":\"3e7be3130b6be1ee\"}"
+    },
+    {
+      "name": "restore 返回 true",
+      "ok": true,
+      "detail": "{\"restored\":true}"
+    },
+    {
+      "name": "restore 后凭证文件恢复为 backup 前内容",
+      "ok": true,
+      "detail": "{\"hRestored\":\"5e3f49df146136c8\",\"h0\":\"5e3f49df146136c8\"}"
+    },
+    {
+      "name": "恢复后内容 == 原始 AK/SK",
+      "ok": true,
+      "detail": "{}"
+    },
+    {
+      "name": "清理隔离目录",
+      "ok": true,
+      "detail": "{\"iso\":\"/tmp/multica-task-3110070391/hdk-d226-RBNDpj\"}"
+    }
+  ]
 }
-
-Node.js v22.13.0
