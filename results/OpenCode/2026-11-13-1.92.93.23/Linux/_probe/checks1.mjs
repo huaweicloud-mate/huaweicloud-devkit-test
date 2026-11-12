@@ -25,8 +25,8 @@ reg('D1-26', async () => {
   const names = h.tools.TOOL_DEFINITIONS.map(t => t.name);
   const cu = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_check_update' || t.name === 'check_update');
   const up = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_upgrade' || t.name === 'upgrade');
-  const cuOk = cu && cu.description && cu.inputSchema;
-  const upOk = up && up.description && up.inputSchema;
+  const cuOk = !!(cu && cu.description && h.schemas.getToolSchema(cu.name));
+  const upOk = !!(up && up.description && h.schemas.getToolSchema(up.name));
   return chk(cuOk && upOk, `check_update/upgrade 均注册且含 description+inputSchema(names=${names.length})`, `缺失或 schema 不完整: check_update=${!!cuOk} upgrade=${!!upOk}`);
 });
 
@@ -122,7 +122,7 @@ reg('D1-45', async () => {
 reg('D1-65', async () => {
   const h = await hdk();
   // 调试模式：更新域 DEBUG 分支
-  const src = (await import('node:fs')).readFileSync(join0(h.src, 'update-check.ts'), 'utf-8');
+  const src = (await import('node:fs')).readFileSync(join0(h.src, 'update-registry.ts'), 'utf-8');
   const support = /HUAWEICLOUD_DEVKIT_DEBUG/.test(src);
   return support ? ok('update-check.mjs 含 HUAWEICLOUD_DEVKIT_DEBUG 调试分支', 'DEBUG 分支存在(更新域)') : fail('调试模式环境变量分支缺失', 'update-check.mjs 无 DEBUG 分支');
 });
@@ -131,23 +131,34 @@ fixture('D1-66', 'd1-66-telemetry-env.mjs');
 
 reg('D1-67', async () => {
   const h = await hdk();
-  const src = (await import('node:fs')).readFileSync(join0(h.src, 'setup-cli.ts'), 'utf-8');
-  const hasAgentTk = /AGENT_TOOLKIT_MODE/.test(src) && /REQUIRED_ENV_KEYS|HCLOUD_BIN/.test(src) && /SKIP_DSH/.test(src);
-  return chk(hasAgentTk, 'AGENT_TOOLKIT_MODE/SKIP_DSH/REQUIRED_ENV_KEYS(HCLOUD_BIN) 均存在', 'DSH 模式环境变量缺失');
+  const fs = await import('node:fs');
+  const setupCli = fs.readFileSync(join0(h.src, 'setup-cli.ts'), 'utf-8');
+  const mcpMerge = fs.readFileSync(join0(h.src, 'mcp-config-merge.ts'), 'utf-8');
+  const dsh = fs.readFileSync(join0(h.src, 'agents', 'dsh.ts'), 'utf-8');
+  const hasAgentTk = /HUAWEICLOUD_AGENT_TOOLKIT_MODE/.test(setupCli + mcpMerge + dsh);
+  const hasRequiredEnv = /REQUIRED_ENV_KEYS[\s\S]{0,80}HCLOUD_BIN|HCLOUD_BIN[\s\S]{0,80}REQUIRED_ENV_KEYS/.test(mcpMerge);
+  const hasSkipDsh = /SKIP_DSH/.test(dsh) || /SKIP_DSH/.test(setupCli);
+  return chk(hasAgentTk && hasRequiredEnv && hasSkipDsh, 'HUAWEICLOUD_AGENT_TOOLKIT_MODE/REQUIRED_ENV_KEYS(HCLOUD_BIN)/SKIP_DSH 均存在', `DSH 模式环境变量缺失: agentTk=${hasAgentTk} requiredEnv=${hasRequiredEnv} skipDsh=${hasSkipDsh}`);
 });
 
 reg('D1-68', async () => {
   const h = await hdk();
-  const cred = (await import('node:fs')).readFileSync(join0(h.src, 'auth', 'credentials.ts'), 'utf-8');
-  // 断言 HUAWEICLOUD_REGION 优先于 HW_REGION（用例契约）
-  const m = /region\s*[:=]\s*[^;]*?HUAWEICLOUD_REGION[^;]*?HW_REGION|HW_REGION[^;]*?HUAWEICLOUD_REGION/.exec(cred.replace(/\s+/g, ' '));
-  if (!m) return blocked('credentials.mjs 未找到 region 优先级逻辑', 'region 优先级链路需人工核对');
-  const hwRegionFirst = /HUAWEICLOUD_REGION[\s\S]{0,120}?HW_REGION/.test(cred.replace(/process\.env/g, '').replace(/HUAWEICLOUD_REGION/g, 'HUAREG').replace(/HW_REGION/g, 'HWREG'));
-  // 简化：直接检查顺序
-  const idxHR = cred.indexOf('HUAWEICLOUD_REGION');
-  const idxHW = cred.indexOf('HW_REGION');
-  const huaFirst = idxHR >= 0 && idxHR < idxHW;
-  return huaFirst ? ok('HUAWEICLOUD_REGION 优先于 HW_REGION') : spec('region 优先级契约漂移：实现 HW_REGION 优先，用例期望 HUAWEICLOUD_REGION 优先', `credentials.mjs region 优先级与契约相反(idxHR=${idxHR},idxHW=${idxHW})`);
+  const fs = await import('node:fs');
+  // ① 图标离线：HUAWEICLOUD_ICONS_OFFLINE（原 ICONS_OFFLINE）走本地 manifest
+  const icon = fs.readFileSync(join0(h.src, 'icon-library.ts'), 'utf-8');
+  const iconOffline = /HUAWEICLOUD_ICONS_OFFLINE|ICONS_OFFLINE/.test(icon);
+  // ② region 优先级契约：用例期望 HUAWEICLOUD_REGION 优先于 HW_REGION；实现为 HW_REGION || HUAWEICLOUD_REGION
+  const resolver = fs.readFileSync(join0(h.src, 'auth', 'credential-resolver.ts'), 'utf-8');
+  const initcli = fs.readFileSync(join0(h.src, 'auth', 'init-cli.ts'), 'utf-8');
+  const idxHR = resolver.indexOf('HUAWEICLOUD_REGION');
+  const idxHW = resolver.indexOf('HW_REGION');
+  const hwFirst = idxHW >= 0 && idxHW < idxHR;
+  const regionDrift = hwFirst;
+  const regionOk = iconOffline && !regionDrift;
+  if (regionDrift) {
+    return spec(`region 优先级契约漂移：实现 HW_REGION 优先于 HUAWEICLOUD_REGION（用例期望 HUAWEICLOUD_REGION 优先）——auth/credential-resolver.ts:32 / auth/init-cli.ts:44 均为 process.env.HW_REGION || process.env.HUAWEICLOUD_REGION`, `iconOffline=${iconOffline} resolver=${resolver.match(/HW_REGION[^']*?HUAWEICLOUD_REGION/)?.[0] || 'HW_REGION||HUAWEICLOUD_REGION'}`);
+  }
+  return chk(iconOffline, `图标离线(HUAWEICLOUD_ICONS_OFFLINE) + region 优先级正常: iconOffline=${iconOffline}`, `图标离线分支缺失`);
 });
 
 fixture('D1-69', 'd1-69-cli-help.mjs');
@@ -228,9 +239,9 @@ fixture('D2-13', 'd2-13-s1-env.mjs');
 
 reg('D2-16', async () => {
   const h = await hdk();
-  const src = (await import('node:fs')).readFileSync(join0(h.src, 'tools.ts'), 'utf-8');
-  const erase = /import[\s\S]{0,200}(unlink|rmSync)[\s\S]{0,100}creds-import|creds-import\.json/.test(src) || /creds-import/.test(src);
-  return chk(erase, 'auth_switch import 后擦除 creds-import.json 逻辑存在', 'import 擦除逻辑缺失');
+  const src = (await import('node:fs')).readFileSync(join0(h.src, 'lib', 'credentials.ts'), 'utf-8');
+  const erase = /clearImportFile[\s\S]{0,200}rmSync|rmSync[\s\S]{0,100}creds-import/.test(src) || /creds-import/.test(src);
+  return chk(erase, 'auth_switch import 后擦除 creds-import.json 逻辑存在(clearImportFile→rmSync)', 'import 擦除逻辑缺失');
 });
 
 reg('D2-26', async () => {

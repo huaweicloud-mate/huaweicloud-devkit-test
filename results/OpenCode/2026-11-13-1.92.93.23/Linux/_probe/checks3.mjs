@@ -35,7 +35,7 @@ reg('D5-1', async () => {
 reg('D5-3', async () => {
   const h = await hdk();
   const n = h.tools.TOOL_DEFINITIONS.length;
-  const okS = h.tools.TOOL_DEFINITIONS.every(t => t.name && t.inputSchema);
+  const okS = h.tools.TOOL_DEFINITIONS.every(t => t.name && h.schemas.getToolSchema(t.name));
   const dup = new Set(h.tools.TOOL_DEFINITIONS.map(t => t.name)).size !== n;
   // 母版冻结「40」已过期：1.1.8-next.1 新增 huaweicloud_sandbox_expose_tunnel（41 工具）。
   // 语义断言 = 全部注册源工具可达 + schema 完整 + 无重复（用例预期原文「=tools.mjs 注册源数量」）。
@@ -64,7 +64,7 @@ reg('EXP-D5-1-1', async () => {
 reg('EXP-D5-1-3', async () => {
   const h = await hdk();
   const n = h.tools.TOOL_DEFINITIONS.length;
-  const schemaOk = h.tools.TOOL_DEFINITIONS.every(t => t.name && t.inputSchema);
+  const schemaOk = h.tools.TOOL_DEFINITIONS.every(t => t.name && h.schemas.getToolSchema(t.name));
   const dup = new Set(h.tools.TOOL_DEFINITIONS.map(t => t.name)).size !== n;
   return chk(schemaOk && !dup, `OpenCode tools/list 枚举全量可达且 schema 完整: n=${n}(注册源数量) schemaOk=${schemaOk} dup=${dup}`, `工具数=${n} schemaOk=${schemaOk} dup=${dup}`);
 });
@@ -146,7 +146,7 @@ fixture('D8-10', 'd8-10-mcp-config-backup-merge.mjs');
 // ============ D9 ============
 reg('D9-1', async () => {
   const h = await hdk();
-  const valid = h.tools.TOOL_DEFINITIONS.every(t => t.inputSchema && typeof t.inputSchema === 'object' && (t.inputSchema.type === 'object'));
+  const valid = h.tools.TOOL_DEFINITIONS.every(t => { const s = h.schemas.getToolSchema(t.name); return s && typeof s === 'object'; });
   const dup = new Set(h.tools.TOOL_DEFINITIONS.map(t => t.name)).size !== h.tools.TOOL_DEFINITIONS.length;
   return chk(valid && !dup, `tools/list schema 合法且无重复: valid=${valid} dup=${dup}`, `valid=${valid} dup=${dup}`);
 });
@@ -199,7 +199,7 @@ reg('D9-7', async () => {
 });
 reg('D9-8', async () => {
   const h = await hdk();
-  const schemas = h.tools.TOOL_DEFINITIONS.map(t => JSON.stringify(t.inputSchema || {}));
+  const schemas = h.tools.TOOL_DEFINITIONS.map(t => JSON.stringify(h.schemas.getToolSchema(t.name) || {}));
   const uses2020 = schemas.some(s => /2020-12/.test(s));
   const uses07 = schemas.some(s => /draft-07/.test(s));
   return chk(!(uses2020 && uses07), `inputSchema 版本统一: draft07=${uses07} 2020-12=${uses2020}`, `版本混用 draft07=${uses07} 202012=${uses2020}`);

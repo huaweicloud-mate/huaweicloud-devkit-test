@@ -1,5 +1,5 @@
 // checks2.mjs — D3 工具/服务目录/场景 + D4 安全 用例探针
-import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, fixture, ct } from './core.mjs';
+import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, fixture, ct, REPO_ROOT, EVID } from './core.mjs';
 import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -297,7 +297,14 @@ reg('D4-11', async () => {
   return chk(noExec, 'search_docs 返回内容为数据（注入指令未执行）', txt.slice(0, 150));
 });
 
-fixture('D4-12', 'd4-12-supply-chain.mjs');
+reg('D4-12', async () => {
+  const h = await hdk();
+  const dir = join(REPO_ROOT, 'eval', 'harness', 'fixtures');
+  const r = run(`node "${join(dir, 'd4-12-supply-chain.mjs')}" "${h.src}" --evid "${join(EVID, 'D4-12')}" 2>&1`);
+  if (r.status === 0) return ok('fixture exit=0', r.text.slice(-800));
+  if (r.status === 2) return blocked('fixture 依赖宿主/环境未满足(exit=2)', r.text.slice(-800));
+  return fail(`fixture exit=${r.status}`, r.text.slice(-1200));
+});
 
 reg('D4-13', async () => {
   const h = await hdk();
@@ -399,11 +406,17 @@ reg('D4-23', async () => {
 
 reg('D4-24', async () => {
   const h = await hdk();
-  // 审批令牌过期/重复确认：consumeApprovalToken 返回结构
-  const tok = h.hcl.createApprovalToken(['VPC', 'DeleteVpc', '--vpc_id=x']);
+  // 审批令牌单次消费 + 重复确认边界：首次 consume=consumed，二次 consume=gone（tombstone，不重复执行）
+  const args = ['VPC', 'DeleteVpc', '--vpc_id=x'];
+  const tok = h.hcl.createApprovalToken(args);
   const c1 = h.hcl.consumeApprovalToken(tok);
   const c2 = h.hcl.consumeApprovalToken(tok);
-  return chk(c1 != null && c2 == null, `审批令牌一次性消费: first=${JSON.stringify(c1)} second=${JSON.stringify(c2)}`, JSON.stringify({ c1, c2 }));
+  const ins = h.hcl.inspectApprovalToken(tok);
+  const singleUse = c1 && c1.status === 'consumed' && c2 && c2.status === 'gone';
+  const alreadyProcessed = ins && (ins.state === 'already_consumed' || ins.state === 'not_found');
+  return chk(singleUse && alreadyProcessed,
+    `审批令牌单次消费(首=consumed 次=gone, inspect=${ins && ins.state})`,
+    `first=${JSON.stringify(c1)} second=${JSON.stringify(c2)} inspect=${JSON.stringify(ins)}`);
 });
 
 reg('D4-25', async () => {

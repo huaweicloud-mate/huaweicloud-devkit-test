@@ -56,6 +56,7 @@ export async function hdk() {
     skills: skillsDir(),
     shim: shimDir(),
     tools: await import(U('tools.js')),
+    schemas: await import(U('tool-schemas.js')),
     uc: await import(U('update-check.js')),
     sp: await import(U('safety-policy.js')),
     rr: await import(U('risk-rule-engine.js')),
