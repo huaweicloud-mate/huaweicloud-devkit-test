@@ -1,24 +1,34 @@
 {
   "case": "D3-C1",
   "status": "FAIL",
-  "total": 3,
-  "passed": 1,
-  "failed": 2,
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
   "results": [
     {
       "name": "CreateVpc",
-      "pass": false,
-      "detail": "undefined"
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"4e1d5a45-0ddf-4d49-b662-cba826f5936c\",\n    \"name\": \"testbot3-hermes-e2e-4521"
     },
     {
       "name": "CreateSubnet",
-      "pass": false,
-      "detail": "undefined"
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"9a1bda63-3753-4fce-8a34-346d7e3bc7a2\",\n    \"name\": \"testbot3-hermes-e2e-4"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed145901a1d1d4427e4b0c\",\n  \"serverIds\": [\n    \"1a36ba8c-9418-4f87-9a94-e812d435f11f\"\n  ]\n}"
     },
     {
       "name": "finally归零(校验真实删除)",
-      "pass": true,
-      "detail": "无资源需清理"
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
     }
   ]
 }
