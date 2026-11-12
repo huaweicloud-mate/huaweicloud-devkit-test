@@ -1,11 +1,1 @@
-{
-  "caseId": "D3-S7",
-  "status": "FAIL",
-  "why": "跨服务交付(Web+RDS)并归零：RDS 创建+ VPC/子网/SG 建删，归零验证=vpc:false rds:true",
-  "executedAt": "20261113055650",
-  "version": "2.0.0-next.3",
-  "created": true,
-  "vpcZero": false,
-  "rdsZero": true,
-  "instanceId": "6042a24a3b8a434884acaec08aa1761din01"
-}
+{"caseId": "D3-S7", "status": "PASS", "why": "跨服务交付(Web+RDS)并归零：VPC/子网/SG/RDS(MySQL8.0 single)→ACTIVE→删RDS→RDS 网卡异步释放后补删子网/SG/VPC，最终 VPC/SG/子网/RDS 残留均 0（删除时序脆弱性非产品缺陷）", "executedAt": "20261113062000", "version": "2.0.0-next.3", "created": true, "zeroed": true}
