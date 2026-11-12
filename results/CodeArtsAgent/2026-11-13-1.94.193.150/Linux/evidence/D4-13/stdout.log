@@ -1,0 +1,28 @@
+{
+  "caseId": "D4-13",
+  "status": "PASS",
+  "why": "最小权限凭证通过率：只读 3/4 可用 + 写 CreateVpc 被 IAM 正确拒绝",
+  "executedAt": "20261113054621",
+  "version": "2.0.0-next.3",
+  "readOk": 3,
+  "total": 4,
+  "writeDenied": true,
+  "readResults": {
+    "ECS": {
+      "ok": false,
+      "out": "Vendor challenge: first Huawei Cloud tool call this session — is the vendorConfirmed quote the user'"
+    },
+    "VPC": {
+      "ok": true,
+      "out": "{\n  \"ok\": true,\n  \"exitCode\": 0,\n  \"signal\": null,\n  \"stdout\": \"{\\n  \\\"request_id\\\": \\\"f7a89a331dbee"
+    },
+    "EVS": {
+      "ok": true,
+      "out": "{\n  \"ok\": true,\n  \"exitCode\": 0,\n  \"signal\": null,\n  \"stdout\": \"{\\n  \\\"count\\\": 0,\\n  \\\"volumes\\\": ["
+    },
+    "EIP": {
+      "ok": true,
+      "out": "{\n  \"ok\": true,\n  \"exitCode\": 0,\n  \"signal\": null,\n  \"stdout\": \"{\\n  \\\"request_id\\\": \\\"e6f491f1377e3"
+    }
+  }
+}
