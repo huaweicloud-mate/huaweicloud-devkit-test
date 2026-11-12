@@ -1,0 +1,148 @@
+P1 D1-3 D1安装 doctor健康自检 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: Windows/Linux>
+P2 D1-4 D1安装 status/update幂等 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: Windows/Linux>
+P1 D1-26 D1安装 升级提醒工具注册与协议暴露 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector+进程>
+P1 D1-27 D1安装 检测语义-已是最新 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: Windows/Linux>
+P1 D1-28 D1安装 检测语义-有新版本 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: Windows/Linux>
+P2 D1-30 D1安装 semver 比对正确性 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: Windows/Linux>
+P1 D1-31 D1安装 dismiss 冷却期 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: Windows/Linux>
+P2 D1-33 D1安装 skip 文件持久化与多路径 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: Windows/Linux>
+P0 D1-39 D1安装 Windows 升级检测链可用性 | agent= Hermes 代表终端; fake/fixture | OS= Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证） | term= <代表: Windows/Linux>
+P0 D1-40 D1安装 镜像 lag 下检测正确性(反向提醒防护) | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: Windows/Linux>
+P1 D1-41 D1安装 check_update 真实 MCP 返回契约 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 隔离进程>
+P1 D1-42 D1安装 dismiss 真实闭环与跨调用持久化 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 隔离 HOME+CROSS_PROCESS>
+P1 D1-45 D1安装 兜底提示真实序列与预热竞态 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 隔离进程+预热竞态>
+P2 D1-65 D1安装 调试模式环境变量 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 隔离进程>
+P2 D1-66 D1安装 遥测开关与端点环境变量 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 隔离进程>
+P2 D1-67 D1安装 Agent toolkit 模式与 DSH 跳过安装环境变量 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: DSH 客户端>
+P2 D1-68 D1安装 图标离线与区域环境变量 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 隔离进程>
+P2 D1-69 D1安装 CLI help 子命令 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: CLI>
+P1 D1-70 D1安装 代理配置与 WebSocket 代理 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 隔离进程+proxy夹具>
+P1 D2-10 D2认证 R7 current档跟随 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 或 OpenCode>
+P0 D2-11 D2认证 R3 STS token拒绝落盘 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 或 OpenCode>
+P1 D2-12 D2认证 R10 runtime非空禁止落盘 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 或 OpenCode>
+P1 D2-13 D2认证 R9 configuredBySession优先env | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 或 OpenCode>
+P1 D2-16 D2认证 import文件读取后擦除 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 或 OpenCode>
+P0 D4-18 D4安全 confirm-not-deny审批语义 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 安全基线 Hermes+OpenCode>
+P0 D4-19 D4安全 确认流下预检仍生效 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 安全基线 Hermes+OpenCode>
+P1 D4-20 D4安全 拒绝后零操作 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P1 D2-1 D2认证 auth init三端同步 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 或 OpenCode>
+P2 D2-2 D2认证 auth status判定准确性 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 或 OpenCode>
+P0 D2-4 D2认证 凭证脱敏正确性 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 或 OpenCode>
+P1 D2-5 D2认证 凭证缺失报错指引 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 或 OpenCode>
+P1 D2-26 D2认证 凭证备份与恢复 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 隔离 HOME>
+P2 D2-27 D2认证 KooCLI 版本管理 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 隔离进程>
+P1 D3-A1 D3功能 skill检索完整性 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P2 D3-B1 D3功能 list_operations规范名 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-B3 D3功能 run_readonly脱敏执行 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P2 D3-B5 D3功能 detect_framework识别 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-C1 D3功能 ECS生命周期E2E | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 真云 ECS 贵资源>
+P1 D3-C2 D3功能 OBS静态站部署E2E | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-C3 D3功能 沙箱部署E2E | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 沙箱 DevStation>
+P1 D3-C4 D3功能 服务创建类回归 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 22 服务矩阵>
+P1 D3-C5 D3功能 工具冒烟 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-C6 D3功能 沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/uplo | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-C7 D3功能 跨区域资源操作引导（区域维度） | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <真云代表: Hermes>
+P1 D3-C13 D3功能 OBS 静态网站托管配置 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 真云 OBS>
+P2 D3-C14 D3功能 沙箱 HDKit 服务参数与 hwlink 凭证 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes 沙箱>
+P1 D3-S1 D3功能 场景-只读查ECS(带不改约束) | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-S2 D3功能 场景-删VPC先确认 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-S3 D3功能 场景-沙箱预览出URL | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-S4 D3功能 场景-领券闭环 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P2 D3-S5 D3功能 场景-复合意图分层路由 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P2 D3-S6 D3功能 场景-FunctionGraph定时任务 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-S7 D3功能 场景-跨服务交付(Web应用+RDS)并归零 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P1 D3-S8 D3功能 场景-操作失败后排障指引 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Hermes>
+P0 D4-1 D4安全 凭证文件读取拦截 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P0 D4-2 D4安全 凭证env打印拦截 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P0 D4-3 D4安全 明文secret API拦截 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P1 D4-4 D4安全 写操作审批门 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P0 D4-5 D4安全 写操作误判检测 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P1 D4-6 D4安全 adminPass回显警告 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P1 D4-7 D4安全 hook三工具有效性 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P1 D4-8 D4安全 Python/Node策略一致 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P0 D4-9 D4安全 公开暴露/破坏性预检 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P2 D4-10 D4安全 规则库新增回归 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P1 D4-11 D4安全 提示注入防护 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 4 注入点>
+P2 D4-12 D4安全 供应链安装期安全 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P1 D4-13 D4安全 最小权限凭证通过率 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 只读凭证全量>
+P2 D4-14 D4安全 操作可审计性 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P0 D4-15 D4安全 hook绕过尝试 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P0 D4-16 D4安全 命令包裹穿透 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P1 D4-17 D4安全 hook模糊fail-closed | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P0 D4-21 D4安全 hook_check_artifacts 具名回归（代码/IaC/策略制品预检） | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P0 D4-22 D4安全 hook_check_deploy_plan 具名回归（部署计划预检） | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook=Hermes 非hook=OpenCode>
+P0 D4-23 D4安全 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标） | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 逐客户端 11 目标>
+P1 D4-24 D4安全 确认令牌过期与重复确认边界（审批流健壮性） | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表2: Hermes+OpenCode>
+P2 D4-25 D4安全 Python hook 事件遥测分类 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook客户端>
+P2 D4-26 D4安全 findings 证据脱敏 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook客户端>
+P1 D4-27 D4安全 双路径输出脱敏 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 隔离进程>
+P0 D4-28 D4安全 Node 版安全 hook 链路 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: hook客户端>
+P2 D4-29 D4安全 分类断言与原始命令分类入口 | agent= Hermes（Hook）; OpenCode（非 Hook） | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 隔离进程>
+P1 D5-1 D5客户端 清单发现加载 | agent= Hermes; OpenCode; 声明支持的客户端矩阵 | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 10 客户端>
+P1 D5-3 D5客户端 工具全量枚举 | agent= Hermes; OpenCode; 声明支持的客户端矩阵 | OS= Windows/Linux；macOS 若声明支持则单独举证 | term= <代表: 10 客户端>
+P2 D6-1 D6性能 检索响应延迟 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Windows x64 + Node22>
+P2 D6-3 D6性能 MCP冷启时间 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Windows x64 + Node22>
+P1 D6-4 D6性能 并发调度正确性 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Windows x64 + Node22>
+P2 D6-9 D6性能 缓存清理三入口 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 隔离进程>
+P1 D9-9 D9协议 tools/call 超时协议语义与取消 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: Inspector+夹具>
+P2 D8-1 D8质量 文档与能力一致 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 静态评审人 测试经理>
+P1 D8-4 D8质量 引导步骤可机械执行 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 静态评审人 测试经理>
+P2 D8-6 D8质量 中英文文档一致 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 静态评审人 测试经理>
+P0 D8-7 D8质量 7 个 meta/通用技能指引可机械执行验证 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 静态评审人 测试经理>
+P2 D8-9 D8质量 安装 ID 与遥测值脱敏 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 隔离进程>
+P2 D8-10 D8质量 MCP 配置备份与合并 | agent= Hermes 代表终端; fake/fixture | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 隔离 HOME>
+P1 D9-1 D9协议 tools/list合规 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + Hermes>
+P1 D9-2 D9协议 JSON-RPC错误码 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + Hermes>
+P1 D9-3 D9协议 tools/call响应格式 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + Hermes>
+P1 D9-4 D9协议 协议生命周期 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + Hermes>
+P1 D9-5 D9协议 stdio传输健壮 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + Hermes>
+P1 D9-6 D9协议 跨客户端互通 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + Hermes>
+P2 D9-7 D9协议 协议版本协商降级 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + Hermes>
+P2 D9-8 D9协议 inputSchema版本合规 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + Hermes>
+P1 D9-10 D9协议 MCP remote transport（HTTP/WS 远程服务） | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: remote 客户端>
+P1 D9-11 D9协议 WebSocket 隧道通道生命周期 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 隧道 mux 夹具>
+P0 D9-12 D9协议 initialize 握手协议安全基线 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + Hermes>
+P0 D9-13 D9协议 tools/call 凭证不泄露与权限校验 | agent= Hermes; MCP Inspector/标准协议客户端 | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: MCP Inspector + 源码探针>
+P1 D10-3 D10评测 路由准确率+混淆矩阵 | agent= OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 10 客户端>
+P0 D10-4 D10评测 安全干预-静态规则层 | agent= OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode | OS= Windows/Linux 代表环境；macOS 若声明支持则单独举证 | term= <代表: 源码直调 risk-rule-engine>
+
+expanded cols: ['ID', '展开类型', '枚举对象', '源用例', '优先级', '执行要点', '预期结果', '生成时间', 'requiredEvidence', 'designCaseId', 'expandedCaseId', 'design_status', 'terminalType', 'terminal', 'agent', 'OS', 'Node/npm', 'shell', 'TTY', 'installLayout', 'mcpTransport', 'hookSupport', 'owner', '依赖', '执行状态', '执行时间', 'evidencePath', 'blockedReason']
+P1 EXP-D5-7-1 None None
+P1 EXP-D5-7-3 None None
+P1 EXP-C4-01 None None
+P1 EXP-C4-02 None None
+P1 EXP-C4-03 None None
+P1 EXP-C4-04 None None
+P1 EXP-C4-05 None None
+P1 EXP-C4-06 None None
+P1 EXP-C4-07 None None
+P1 EXP-C4-08 None None
+P1 EXP-C4-09 None None
+P1 EXP-C4-10 None None
+P1 EXP-C4-11 None None
+P1 EXP-C4-12 None None
+P1 EXP-C4-13 None None
+P1 EXP-C4-14 None None
+P1 EXP-C4-15 None None
+P1 EXP-C4-16 None None
+P1 EXP-C4-17 None None
+P1 EXP-C4-18 None None
+P1 EXP-C4-19 None None
+P1 EXP-C4-20 None None
+P1 EXP-C4-21 None None
+P1 EXP-C4-22 None None
+P1 EXP-E01 None None
+P1 EXP-E02 None None
+P1 EXP-E03 None None
+P1 EXP-E04 None None
+P1 EXP-E05 None None
+P1 EXP-E06 None None
+P1 EXP-E07 None None
+P1 EXP-E08 None None
+P1 EXP-E09 None None
+P1 EXP-E10 None None
+P1 EXP-E11 None None
+P1 EXP-E12 None None
+P1 EXP-E13 None None
+P1 EXP-E14 None None
+P1 EXP-E15 None None
