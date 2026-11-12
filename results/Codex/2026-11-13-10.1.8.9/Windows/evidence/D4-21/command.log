@@ -1,0 +1,24 @@
+> npm run validate
+
+
+> huaweicloud-devkit@2.0.0-next.3 validate
+> node ./scripts/validate-package.mjs && node ./scripts/sync-skills.mjs --check && node ./scripts/sync-readme-badge.mjs
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Missing generated skills tree: C:\Users\Administrator\devkit-test\Codex\hdk\plugins\huaweicloud-core\skills — run: npm run build
+    at file:///C:/Users/Administrator/devkit-test/Codex/hdk/scripts/validate-package.mjs:81:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.2
