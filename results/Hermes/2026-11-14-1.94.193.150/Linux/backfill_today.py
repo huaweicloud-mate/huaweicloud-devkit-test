@@ -140,14 +140,7 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
     else:
         print(f"  [WARN] {log} 不存在，跳过 {cid}")
 
-# D3-C1 自动化 finally 归零的 150s ECS 删除轮询时序抖动 + sh().ok 退出码假阳性（非产品缺陷），附手工归零补充说明
-append_case("D3-C1", "\n===== 本轮手工归零补充（自动化 150s 轮询时序抖动，非产品缺陷） =====\n"
-    "CreateVpc(dfd02375-0148-4e34-96a6-3992d9cbc69a)/CreateSubnet(e4036702-37e9-469c-9a0b-25d598fd60f1)/CreateServers(返回serverIds c84161b5-acdc-45c7-99ae-ca18853de194)/审批分类(allow) 均 PASS。"
-    "自动化 finally 归零：ECS 删除轮询 150s 内未见 GONE（ECS:提交删除 ECS轮询:仍在/未确认），且 sh() 以退出码 0 误记 subnet:OK/vpc:OK，"
-    "实际 ECS 残留（ListServersDetails 该 id 仍 ACTIVE）。\n"
-    "<<agent>> 手工补充归零：hcloud ECS DeleteServers --servers.1.id=c84161b5-acdc-45c7-99ae-ca18853de194 --delete_publicip=true（job_id ff808081a0ed143a01a1d19d41b830ff）→ ListServersDetails 轮询 GONE（第 1 次轮询确认该 id 已消失）；"
-    "hcloud VPC DeleteSubnet --vpc_id dfd02375-0148-4e34-96a6-3992d9cbc69a --subnet_id e4036702-37e9-469c-9a0b-25d598fd60f1 → ListSubnets 不含该 subnet；hcloud VPC DeleteVpc --vpc_id dfd02375-0148-4e34-96a6-3992d9cbc69a（一次成功）→ ListVpcs 不含该 vpc。"
-    "四类资源均已归零核实 GONE（ECS c84161b5/VPC dfd02375/Subnet e4036702 均无残留；其余 testbot3-hermes-* 为同机他客户端并发资源，未触碰）。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。\n")
+# D3-C1 归零说明：本轮实际结果（若有 150s 轮询时序抖动，在 run 后手工核对归零并在 evidence/D3-C1/stdout.txt 追加说明）
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.13\ngitHead 8a6d8be2\n", None)
