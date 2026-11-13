@@ -1,0 +1,23 @@
+{
+  "caseId": "D4-21",
+  "status": "PASS",
+  "why": "broad IAM 制品被拦截 (hwc-iam-admin-policy deny)",
+  "executedAt": "20261114051143",
+  "result": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-iam-admin-policy",
+        "title": "Broad IAM administrator grant",
+        "category": "iam",
+        "severity": "deny",
+        "message": "The change appears to grant broad administrator permissions.",
+        "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+        "source": "iam-policy.json",
+        "evidence": "iam-policy.json {\"Version\":\"1.1\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+      }
+    ],
+    "nextStep": "Revise the command, artifact, or deployment plan before execution."
+  }
+}

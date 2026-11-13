@@ -1,0 +1,32 @@
+{
+  "caseId": "D4-19",
+  "status": "FAIL",
+  "why": "风险预检未在确认流程生效",
+  "executedAt": "20261114051733",
+  "result": {
+    "executable": "hcloud",
+    "args": [
+      "VPC",
+      "CreateSecurityGroupRule",
+      "--cli-region=cn-north-4",
+      "--security_group_rule.direction=ingress",
+      "--security_group_rule.port_range_min=22",
+      "--security_group_rule.port_range_max=22",
+      "--security_group_rule.protocol=tcp",
+      "--security_group_rule.remote_ip_prefix=0.0.0.0/0"
+    ],
+    "command": "hcloud VPC CreateSecurityGroupRule --cli-region=cn-north-4 --security_group_rule.direction=ingress --security_group_rule.port_range_min=22 --security_group_rule.port_range_max=22 --security_group_rule.protocol=tcp --security_group_rule.remote_ip_prefix=0.0.0.0/0",
+    "executableBlock": "hcloud VPC CreateSecurityGroupRule --cli-region=cn-north-4 --security_group_rule.direction=ingress --security_group_rule.port_range_min=22 --security_group_rule.port_range_max=22 --security_group_rule.protocol=tcp --security_group_rule.remote_ip_prefix=0.0.0.0/0",
+    "warnings": [
+      "Missing required parameters: security_group_rule.security_group_id"
+    ],
+    "classification": {
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    "sgFindings": [],
+    "approvalToken": "eb4b08da-6977-4887-b086-b5703aaac7a8",
+    "safeToRun": false
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "caseId": "EXP-C4-04",
+  "status": "BLOCKED",
+  "why": "只读规划通过，但真机建删被 IAM 拒绝（RDS DeleteInstance -> {\n  \"error_msg\": \"Insufficient permissions. User: iam::842591186fa245929e1b5c186a4cf784:user:test001 is not authorized to perform: rds:instance:deleteInstance on resource: rds:cn-north-4:842591186fa24，未创建任何资源，云端零残留）",
+  "executedAt": "20261114051548",
+  "result": {
+    "list": {
+      "service": "RDS"
+    },
+    "plan": {
+      "decision": "allow",
+      "region": [
+        "RDS",
+        "ListInstances",
+        "--cli-region=cn-north-4"
+      ]
+    },
+    "e2e": {
+      "writeAttempt": "RDS DeleteInstance",
+      "apiCode": "{\n  \"error_msg\": \"Insufficient permissions. User: iam::842591186fa245929e1b5c186a4cf784:user:test001 is not authorized to perform: rds:instance:deleteInstance on resource: rds:cn-north-4:842591186fa24",
+      "denied": true
+    }
+  }
+}

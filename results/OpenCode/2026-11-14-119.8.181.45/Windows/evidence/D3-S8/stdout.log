@@ -1,0 +1,19 @@
+{
+  "caseId": "D3-S8",
+  "status": "PASS",
+  "why": "权限/区域/配额三类错误均给出可执行下一步建议",
+  "executedAt": "20261114051731",
+  "result": {
+    "a": [
+      "Check KooCLI profile, region, project_id, and IAM permissions without printing secrets.",
+      "APIGW.0301: API Gateway layer error. Incorrect IAM authentication information — verify AK/SK (SK typos are the usual cause), security token expiry, and that project_id is configured (auth init auto-sets it)."
+    ],
+    "b": [
+      "Confirm the service endpoint, region, and project_id match the target resource.",
+      "List resources in the same region/project and verify the resource identifier."
+    ],
+    "c": [
+      "Check quota and resource limits before retrying a create or scale operation. Consider switching accounts or requesting a quota increase."
+    ]
+  }
+}
