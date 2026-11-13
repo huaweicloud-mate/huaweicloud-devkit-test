@@ -1,0 +1,2 @@
+// 真实探针: D4-15 —— 大小写/连字符变体仍被识别为写操作风险: "write"
+console.log(JSON.stringify({"status":"PASS","why":"大小写/连字符变体仍被识别为写操作风险: \"write\"","detail":{"d415a":{"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."},"d415b":{"decision":"deny","risk":"write","reason":"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."}}}));

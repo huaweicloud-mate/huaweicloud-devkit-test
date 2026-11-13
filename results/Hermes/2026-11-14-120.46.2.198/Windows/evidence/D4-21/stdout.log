@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "why": "宽泛 IAM policy 被 deny",
+  "executedAt": "20261114052559",
+  "detail": {
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-iam-admin-policy",
+        "title": "Broad IAM administrator grant",
+        "category": "iam",
+        "severity": "deny",
+        "message": "The change appears to grant broad administrator permissions.",
+        "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+        "source": "artifact",
+        "evidence": "{\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+      },
+      {
+        "ruleId": "hwc-iam-wildcard-action",
+        "title": "Wildcard IAM action",
+        "category": "iam",
+        "severity": "warn",
+        "message": "The IAM grant uses a wildcard action (* or *:*), which grants every operation on the matched resources.",
+        "remediation": "Replace the wildcard with the least-privilege service actions the workflow actually calls, and constrain the resources.",
+        "source": "artifact",
+        "evidence": "{\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+      }
+    ]
+  }
+}

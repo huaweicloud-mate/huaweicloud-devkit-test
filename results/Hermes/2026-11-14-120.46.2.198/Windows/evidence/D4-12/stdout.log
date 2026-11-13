@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "why": "postinstall=node ./bin/dsh-postinstall.cjs, deps=[undici]",
+  "executedAt": "20261114052632",
+  "detail": {
+    "scripts": {
+      "build": "node ./scripts/build-plugin.mjs",
+      "typecheck": "tsc -p plugins/huaweicloud-core/tsconfig.json --noEmit && tsc -p test/tsconfig.json",
+      "pretest": "npm run build",
+      "prepack": "npm run build && node ./scripts/sync-skills.mjs --check",
+      "skills:sync": "node ./scripts/sync-skills.mjs --write",
+      "test": "node --experimental-test-module-mocks --test \"test/*.test.ts\"",
+      "test:e2e": "node test/e2e/runner.ts",
+      "format": "prettier --write .",
+      "format:check": "prettier --check .",
+      "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#.git\" \"#test/**\" \"#docs/**\" \"#.superpowers/**\" \"#plugins/huaweicloud-core/skills/**\" \"#plugins/huaweicloud-core/skills.new-*/**\"",
+      "lint:js": "eslint .",
+      "lint": "npm run lint:md && npm run lint:js",
+      "lint:dup": "jscpd plugins/huaweicloud-core/src plugins/huaweicloud-core/hooks scripts bin test integrations eslint.config.mjs",
+      "validate": "node ./scripts/validate-package.mjs && node ./scripts/sync-skills.mjs --check && node ./scripts/sync-readme-badge.mjs",
+      "registry:diff": "node ./scripts/registry-snapshot-diff.mjs",
+      "badge:sync": "node ./scripts/sync-readme-badge.mjs --write",
+      "smoke:agents": "node ./scripts/smoke-agents.mjs",
+      "pack:verify": "node ./scripts/pack-verify.mjs",
+      "postinstall": "node ./bin/dsh-postinstall.cjs"
+    },
+    "dependencies": {
+      "undici": "^8.12.3"
+    },
+    "version": "2.0.0-next.3"
+  }
+}

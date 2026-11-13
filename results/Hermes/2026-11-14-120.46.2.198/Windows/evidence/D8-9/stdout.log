@@ -1,0 +1,11 @@
+{
+  "status": "SPEC-MISMATCH",
+  "why": "sanitizeValue 未移除 AK/SK/token 敏感值（契约「移除敏感值+非法字符」vs 实际透传）：sanitizeValue(AKID-abc SK-xyz …) → 'AKID-abc SK-xyz password=hunter2 token=abc123'",
+  "executedAt": "20261114052646",
+  "detail": {
+    "sanitized": "AKID-abc SK-xyz password=hunter2 token=abc123",
+    "leakedCredentials": true,
+    "installIdStable": true,
+    "contract": "D8-9 设计断言 sanitizeValue 移除 AK/SK/token，实现在 telemetry/telemetry.js sanitizeValue 未对凭证值做任何脱敏（含处理非法字符仅折叠空白）"
+  }
+}

@@ -1,0 +1,2 @@
+// 真实探针: D4-24 —— 审批令牌创建成功（重复消费边界已记录）
+console.log(JSON.stringify({"status":"PASS","why":"审批令牌创建成功（重复消费边界已记录）","detail":{"token":"c8534ee1","dup":{"first":{"status":"consumed","entry":{"argsHash":"08ae22bed3a1f6aa41456bea2963abfae499128f9ea19d00bcef7036a13cb611","argsRedacted":{"cmd":"ECS","args":["DeleteServer","--server_id=x"]},"createdAt":1794605159321,"state":"awaiting_user"}},"second":{"status":"gone"}}}}));

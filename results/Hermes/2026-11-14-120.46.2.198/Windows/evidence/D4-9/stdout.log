@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "why": "公开暴露 FG 告警 + 破坏性命令 deny",
+  "executedAt": "20261114052559",
+  "detail": {
+    "d49a": {
+      "decision": "warn",
+      "findings": [
+        {
+          "ruleId": "hwc-functiongraph-public-no-auth",
+          "title": "Public FunctionGraph trigger without auth",
+          "category": "public_exposure",
+          "severity": "warn",
+          "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+          "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+          "source": "deploy_plan",
+          "evidence": "{ \"service\": \"FunctionGraph\", \"publicExposure\": true }"
+        }
+      ]
+    },
+    "d49b": {
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-sandbox-destructive-command",
+          "title": "Destructive command in sandbox terminal",
+          "category": "destructive",
+          "severity": "deny",
+          "message": "The sandbox terminal command is destructively dangerous and could destroy the workspace.",
+          "remediation": "Use targeted deletions instead of recursive root removal. Avoid disk format, fork bombs, and system shutdown commands in sandbox terminals.",
+          "source": "command",
+          "evidence": "rm -rf /"
+        }
+      ]
+    }
+  }
+}
