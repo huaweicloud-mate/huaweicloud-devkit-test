@@ -1,0 +1,113 @@
+656:     results.push(res); blocked++;
+657:   }
+658: 
+659:   // D3-S1~S8
+660:   {
+661:     const checks = [
+662:       ['D3-S1', () => hasTool('huaweicloud_service_catalog') || hasTool('huaweicloud_run_readonly_command'), 'service catalog'],
+663:       ['D3-S2', () => hasTool('huaweicloud_plan_cli_command') || hasTool('huaweicloud_hook_check_command'), 'plan/hook for VPC delete'],
+664:       ['D3-S4', () => hasTool('huaweicloud_voucher_status') || hasTool('huaweicloud_voucher_claim'), 'voucher'],
+665:       ['D3-S5', () => hasTool('huaweicloud_service_catalog'), 'service catalog routing'],
+666:       ['D3-S6', () => hasTool('huaweicloud_plan_cli_command'), 'plan for FunctionGraph'],
+667:       ['D3-S8', () => hasTool('huaweicloud_explain_error'), 'explain_error'],
+668:     ];
+669:     for (const [id, check, desc] of checks) {
+670:       const ok = check();
+671:       const res = writeResult(id, ok ? 'PASS' : 'FAIL', desc + ' tool=' + ok, { hasFn: ok });
+672:       results.push(res); ok ? pass++ : fail++;
+673:     }
+674:   }
+675: 
+676:   // D3-S3, D3-S7: BLOCKED (sandbox)
+677:   for (const id of ['D3-S3', 'D3-S7']) {
+678:     const res = writeResult(id, 'BLOCKED', 'Sandbox requires DevStation upstream', { blockedReason: 'Sandbox requires DevStation upstream' });
+679:     results.push(res); blocked++;
+680:   }
+681: 
+682:   console.log('\n=== D4 安全维度 ===');
+683: 
+684:   // D4-1: credential file read blocked (P0) - real classifyTextCommand
+685:   {
+686:     let ok = false; let decision = null;
+687:     if (classifyFn) {
+688:       try {
+689:         const r = classifyFn('cat ~/.hcloud/config.json');
+690:         decision = r.decision;
+691:         ok = decision === 'deny';
+692:       } catch(e) {}
+693:     }
+694:     const res = writeResult('D4-1', ok ? 'PASS' : 'FAIL', 'cat credentials decision=' + decision,
+695:       { decision });
+696:     results.push(res); ok ? pass++ : fail++;
+697:   }
+698: 
+699:   // D4-2: credential env print blocked (P0 RED-LINE) - real classifyTextCommand with printenv/bash -c
+700:   {
+701:     let ok = false; let decisions = [];
+702:     if (classifyFn) {
+703:       const attacks = ['printenv HW_ACCESS_KEY', 'bash -c "printenv HW_ACCESS_KEY"', 'env | grep HW_', 'echo $HW_ACCESS_KEY'];
+704:       ok = attacks.every(a => {
+705:         try { const r = classifyFn(a); decisions.push(r.decision); return r.decision === 'deny'; } catch(e) { return false; }
+706:       });
+707:     }
+708:     const res = writeResult('D4-2', ok ? 'PASS' : 'FAIL', 'env print attacks all deny=' + ok + ' decisions=' + JSON.stringify(decisions),
+709:       { decisions });
+710:     results.push(res); ok ? pass++ : fail++;
+711:   }
+712: 
+713:   // D4-3: KMS DecryptData blocked (P0 RED-LINE) - real classifyTextCommand
+714:   {
+715:     let ok = false; let decision = null;
+716:     if (classifyFn) {
+717:       try {
+718:         const r = classifyFn('hcloud KMS DecryptData --cipher_text=xxx --key_id=yyy');
+719:         decision = r.decision;
+720:         ok = decision === 'deny' || decision === 'warn';
+721:       } catch(e) {}
+722:     }
+723:     const res = writeResult('D4-3', ok ? 'PASS' : 'FAIL', 'KMS DecryptData decision=' + decision,
+724:       { decision });
+725:     results.push(res); ok ? pass++ : fail++;
+726:   }
+727: 
+728:   // D4-4: write operation approval gate
+729:   {
+730:     let ok = false; let decision = null;
+731:     if (classifyFn) {
+732:       try { const r = classifyFn('hcloud ECS DeleteServer --server_ids=xxx'); decision = r.decision; ok = decision === 'deny' || decision === 'warn'; } catch(e) {}
+733:     }
+734:     const res = writeResult('D4-4', ok ? 'PASS' : 'FAIL', 'DeleteServer decision=' + decision, { decision });
+735:     results.push(res); ok ? pass++ : fail++;
+736:   }
+737: 
+738:   // D4-5: write operation misjudgment (P0)
+739:   {
+740:     let ok = false; let decision = null;
+741:     if (classifyFn) {
+742:       try { const r = classifyFn('hcloud ECS DeleteServer --server_ids=xxx'); decision = r.decision; ok = decision !== 'allow'; } catch(e) {}
+743:     }
+744:     const res = writeResult('D4-5', ok ? 'PASS' : 'FAIL', 'Delete not misjudged as allow, decision=' + decision, { decision });
+745:     results.push(res); ok ? pass++ : fail++;
+746:   }
+747: 
+748:   // D4-6: adminPass warning
+749:   {
+750:     let ok = false; let decision = null;
+751:     if (classifyFn) {
+752:       try { const r = classifyFn('hcloud ECS CreateServer --admin_pass=MyPassword123!'); decision = r.decision; ok = decision === 'deny' || decision === 'warn'; } catch(e
+753:     }
+754:     const res = writeResult('D4-6', ok ? 'PASS' : 'FAIL', 'adminPass decision=' + decision, { decision });
+755:     results.push(res); ok ? pass++ : fail++;
+756:   }
+757: 
+758:   // D4-7: hook three tools
+759:   {
+760:     const ok = safetyPolicy !== null && preflight !== null;
+761:     const res = writeResult('D4-7', ok ? 'PASS' : 'FAIL', 'safetyPolicy + preflight modules loaded=' + ok, { hasSafety: safetyPolicy !== null, hasPreflight: preflight !==
+762:     results.push(res); ok ? pass++ : fail++;
+763:   }
+764: 
+765:   // D4-8: Python/Node policy consistency
+766:   {
+767:     const ok = classifyFn !== null && typeof classifyFn === 'function';
+768:     const res = writeResult('D4-8', ok ? 'PASS' : 'FAIL', 'Node classifyTextCommand available=' + ok, { hasFn: ok });

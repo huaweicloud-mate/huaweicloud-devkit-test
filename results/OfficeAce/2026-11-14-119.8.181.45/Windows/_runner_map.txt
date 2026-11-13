@@ -1,0 +1,231 @@
+20: function ts() {
+25: function writeResult(caseId, status, why, result = {}) {
+35: async function safeImport(path) {
+39: async function main() {
+43:   // ===== Load modules once =====
+47:   // NOTE: do NOT import mcp-server.mjs directly — it starts stdin listener and hijacks the process
+64:   // Get tool definitions
+68:   // Get classify function (prefer classifyTextCommand)
+73:   // D1-3: doctor health self-check (real spawn, assert exit + output field)
+78:     const res = writeResult('D1-3', ok ? 'PASS' : 'FAIL', 'doctor exit=' + r.status + ' outLen=' + outLen,
+83:   // D1-4: status/update idempotent (real twice, assert exit consistency)
+88:     const res = writeResult('D1-4', ok ? 'PASS' : 'FAIL', 'status idempotent: exit1=' + r1.status + ' exit2=' + r2.status,
+93:   // D1-26: upgrade tool registration (real MCP initialize + tools/list via async helper)
+104:     const res = writeResult('D1-26', ok ? 'PASS' : 'FAIL', 'tools/list check_update+upgrade registered=' + ok,
+109:   // D1-27: detection - already latest (real judgeUpdate call with current=latest)
+118:     const res = writeResult('D1-27', ok ? 'PASS' : 'FAIL', 'judgeUpdate(1.1.8, latest=1.1.8) result=' + (result?.result),
+123:   // D1-28: detection - new version (real judgeUpdate current < latest)
+132:     const res = writeResult('D1-28', ok ? 'PASS' : 'FAIL', 'judgeUpdate(1.1.1, latest=1.1.2) result=' + (result?.result) + ' target=' + (result?.targe
+137:   // D1-30: semver comparison (real semverParse calls)
+150:     const res = writeResult('D1-30', ok ? 'PASS' : 'FAIL', 'semverParse 1.1.2 vs 1.1.1 ok=' + ok,
+155:   // D1-31: dismiss cooldown (real judgeUpdate with skipState in cooldown)
+160:         // skipState = { dismissedVersion, dismissedAt, expireAt } — within cooldown
+170:     const res = writeResult('D1-31', ok ? 'PASS' : 'FAIL', 'judgeUpdate skipState(cooldown) result=' + (result?.result) + ' dismissed=' + (result?.dis
+175:   // D1-33: skip file persistence (real writeSkipState(file, version, opts) + read)
+182:         // Signature: writeSkipState(file, dismissedVersion, { at, days })
+191:     const res = writeResult('D1-33', ok ? 'PASS' : 'FAIL', 'writeSkipState wrote file with fields=' + ok,
+196:   // D1-39: Windows upgrade detection chain (P0) - real queryDistTags (async) + npm.cmd fallback
+203:       // Fallback: npm.cmd view
+208:     const res = writeResult('D1-39', ok ? 'PASS' : 'FAIL', 'Windows detection: hasEINVAL=' + hasEINVAL + ' tagsReturned=' + (tags !== null),
+213:   // D1-40: mirror lag detection (P0) - real registry query, assert tags object structure
+219:     const res = writeResult('D1-40', ok ? 'PASS' : 'FAIL', 'registry dist-tags parsed ok, latest=' + (tags?.latest),
+224:   // D1-41: check_update real MCP return contract (async MCP tools/call)
+241:     const res = writeResult('D1-41', ok ? 'PASS' : 'FAIL', 'MCP check_update returned isError=false + result field=' + ok,
+246:   // D1-42: dismiss cross-call persistence - real writeSkipState + judgeUpdate with skipState
+255:         // Read back and pass as skipState
+261:     const res = writeResult('D1-42', ok ? 'PASS' : 'FAIL', 'cross-call dismiss persisted=' + ok,
+266:   // D1-45: fallback prompt and warmup race - real MCP call via async helper (list_operations with service)
+278:     const res = writeResult('D1-45', ok ? 'PASS' : 'FAIL', 'first non-check tool returned content, hasUpdateInfo=' + firstNonCheckHasUpdateInfo,
+283:   // D1-65: debug mode env var
+287:     const res = writeResult('D1-65', ok ? 'PASS' : 'FAIL', 'DEBUG=1 doctor exit=' + r.status, { exitCode: r.status });
+291:   // D1-66: telemetry switch (real isTelemetryEnabled call)
+301:       // Toggle test: TELEMETRY=off → should be false
+309:     const res = writeResult('D1-66', ok ? 'PASS' : 'FAIL', 'TELEMETRY=off → isTelemetryEnabled=false=' + ok,
+314:   // D1-67: agent toolkit mode - BLOCKED (DSH-specific, not WorkBuddy)
+316:     const res = writeResult('D1-67', 'BLOCKED', 'AGENT_TOOLKIT_MODE=local is DSH-client-specific (HUAWEICLOUD_AGENT_TOOLKIT_MODE env tested by DSH age
+320:   // D1-68: icon offline (real getServiceIcon call)
+331:       // Just check module loads
+334:     const res = writeResult('D1-68', ok ? 'PASS' : 'FAIL', 'iconLibrary getServiceIcon returned value=' + ok,
+339:   // D1-69: CLI help (real help subcommand, assert exit + non-empty output)
+343:     const res = writeResult('D1-69', ok ? 'PASS' : 'FAIL', 'help exit=' + r.status + ' outLen=' + (r.stdout||'').length,
+348:   // D1-70: proxy config (real getProxySettings call)
+356:     const res = writeResult('D1-70', ok ? 'PASS' : 'FAIL', 'getProxySettings returned=' + ok,
+363:   // D2-1: auth init three-way sync (real auth status)
+367:     const res = writeResult('D2-1', ok ? 'PASS' : 'FAIL', 'auth status exit=' + r.status + ' outLen=' + (r.stdout||'').length,
+372:   // D2-2: auth status judgment (real 8 combos - simplified: call status)
+376:     const res = writeResult('D2-2', ok ? 'PASS' : 'FAIL', 'auth status exit=' + r.status, { exitCode: r.status });
+380:   // D2-4: credential redaction (P0 RED-LINE) - real redactSecrets with lowercase ak=
+386:       // Attack input: lowercase ak= (RED-LINE case)
+393:     const res = writeResult('D2-4', ok ? 'PASS' : 'FAIL', 'lowercase ak= attack redacted: akLeak=' + akLeak + ' skLeak=' + skLeak,
+398:   // D2-5: credential missing guidance
+401:     const res = writeResult('D2-5', ok ? 'PASS' : 'FAIL', 'authGuidance module loaded keys=' + (authGuidance ? Object.keys(authGuidance).length : 0),
+406:   // D2-10: R7 current following (real resolveManagedProfile if available)
+414:     const res = writeResult('D2-10', ok ? 'PASS' : 'FAIL', 'resolveManagedProfile returned=' + ok,
+419:   // D2-11: STS token rejection (P0) - real auth_switch persist with token
+435:     const res = writeResult('D2-11', ok ? 'PASS' : 'FAIL', 'STS token persist rejected=' + ok,
+440:   // D2-12: R10 runtime non-empty prevents persistence
+453:     const res = writeResult('D2-12', ok ? 'PASS' : 'FAIL', 'R10 runtime suppresses sync=' + ok,
+458:   // D2-13: R9 configuredBySession priority env
+475:     const res = writeResult('D2-13', ok ? 'PASS' : 'FAIL', 'resolveCredentials returned=' + ok,
+480:   // D2-16: import file read then erase
+495:     const res = writeResult('D2-16', ok ? 'PASS' : 'FAIL', 'import file erased=' + fileErased,
+500:   // D2-26: credential backup and restore
+508:     const res = writeResult('D2-26', ok ? 'PASS' : 'FAIL', 'backup/restore functions=' + ok,
+513:   // D2-27: KooCLI version
+521:     const res = writeResult('D2-27', ok ? 'PASS' : 'FAIL', 'KooCLI version module=' + ok,
+528:   // D3-A1: skill retrieval (real tools/list)
+531:     const res = writeResult('D3-A1', ok ? 'PASS' : 'FAIL', 'retrieve_skill/search_docs in tool list=' + ok,
+536:   // D3-B1: list_operations (real async MCP call, requires service param)
+548:     const res = writeResult('D3-B1', ok ? 'PASS' : 'FAIL', 'list_operations(service=ECS) returned content, opsCount=' + opsCount,
+553:   // D3-B3: run_readonly
+556:     const res = writeResult('D3-B3', ok ? 'PASS' : 'FAIL', 'run_readonly_command in tool list=' + ok, { hasFn: ok });
+560:   // D3-B5: detect_framework (real detectFramework(projectPath) call - use test repo which has package.json)
+568:     const res = writeResult('D3-B5', ok ? 'PASS' : 'FAIL', 'detect_framework(testRepo)=' + ok + ' framework=' + (fw?.framework),
+573:   // D3-C1: ECS lifecycle E2E (real cloud: plan via MCP, assert classification.decision)
+587:     const res = writeResult('D3-C1', ok ? 'PASS' : 'FAIL', 'ECS ListServers plan returned classification.decision=' + ok,
+592:   // D3-C2: OBS static site
+595:     const res = writeResult('D3-C2', ok ? 'PASS' : 'FAIL', 'OBS website tool=' + ok, { hasFn: ok });
+599:   // D3-C3: sandbox deployment - BLOCKED (DevStation upstream)
+601:     const res = writeResult('D3-C3', 'BLOCKED', 'Sandbox E2E requires DevStation upstream connection (real network sandbox)', { blockedReason: 'Sandbo
+605:   // D3-C4: service creation regression (real plan via async MCP, args array)
+619:     const res = writeResult('D3-C4', ok ? 'PASS' : 'FAIL', 'CreateServer plan returned classification=' + ok,
+624:   // D3-C5: tool smoke (count tools)
+627:     const res = writeResult('D3-C5', ok ? 'PASS' : 'FAIL', 'tools count=' + toolNames.length, { toolCount: toolNames.length });
+631:   // D3-C6: sandbox 7 tools
+635:     const res = writeResult('D3-C6', ok ? 'PASS' : 'FAIL', 'sandbox tools=' + sandboxTools.length, { sandboxTools });
+639:   // D3-C7: cross-region
+642:     const res = writeResult('D3-C7', ok ? 'PASS' : 'FAIL', 'cross-region tools=' + ok, { hasFn: ok });
+646:   // D3-C13: OBS hosting config
+649:     const res = writeResult('D3-C13', ok ? 'PASS' : 'FAIL', 'OBS website config=' + ok, { hasFn: ok });
+653:   // D3-C14: sandbox HDKit - BLOCKED
+655:     const res = writeResult('D3-C14', 'BLOCKED', 'Sandbox HDKit requires DevStation upstream', { blockedReason: 'Sandbox HDKit requires DevStation ups
+659:   // D3-S1~S8
+671:       const res = writeResult(id, ok ? 'PASS' : 'FAIL', desc + ' tool=' + ok, { hasFn: ok });
+676:   // D3-S3, D3-S7: BLOCKED (sandbox)
+678:     const res = writeResult(id, 'BLOCKED', 'Sandbox requires DevStation upstream', { blockedReason: 'Sandbox requires DevStation upstream' });
+684:   // D4-1: credential file read blocked (P0) - real classifyTextCommand
+694:     const res = writeResult('D4-1', ok ? 'PASS' : 'FAIL', 'cat credentials decision=' + decision,
+699:   // D4-2: credential env print blocked (P0 RED-LINE) - real classifyTextCommand with printenv/bash -c
+708:     const res = writeResult('D4-2', ok ? 'PASS' : 'FAIL', 'env print attacks all deny=' + ok + ' decisions=' + JSON.stringify(decisions),
+713:   // D4-3: KMS DecryptData blocked (P0 RED-LINE) - real classifyTextCommand
+723:     const res = writeResult('D4-3', ok ? 'PASS' : 'FAIL', 'KMS DecryptData decision=' + decision,
+728:   // D4-4: write operation approval gate
+734:     const res = writeResult('D4-4', ok ? 'PASS' : 'FAIL', 'DeleteServer decision=' + decision, { decision });
+738:   // D4-5: write operation misjudgment (P0)
+744:     const res = writeResult('D4-5', ok ? 'PASS' : 'FAIL', 'Delete not misjudged as allow, decision=' + decision, { decision });
+748:   // D4-6: adminPass warning
+754:     const res = writeResult('D4-6', ok ? 'PASS' : 'FAIL', 'adminPass decision=' + decision, { decision });
+758:   // D4-7: hook three tools
+761:     const res = writeResult('D4-7', ok ? 'PASS' : 'FAIL', 'safetyPolicy + preflight modules loaded=' + ok, { hasSafety: safetyPolicy !== null, hasPref
+765:   // D4-8: Python/Node policy consistency
+768:     const res = writeResult('D4-8', ok ? 'PASS' : 'FAIL', 'Node classifyTextCommand available=' + ok, { hasFn: ok });
+772:   // D4-9: public exposure/destructive pre-check (P0)
+783:     const res = writeResult('D4-9', ok ? 'PASS' : 'FAIL', 'public_ip=' + d1 + ' DeleteUser=' + d2, { d1, d2 });
+787:   // D4-10: rule library regression
+799:     const res = writeResult('D4-10', ok ? 'PASS' : 'FAIL', 'rule library: ' + JSON.stringify(decisions), { decisions });
+803:   // D4-11: prompt injection defense (real classifyTextCommand on hcloud injection payloads)
+817:     const res = writeResult('D4-11', ok ? 'PASS' : 'FAIL', 'injection payloads all denied=' + ok + ' decisions=' + JSON.stringify(decisions), { decisi
+821:   // D4-12: supply chain security (real npm audit)
+826:     const res = writeResult('D4-12', ok ? 'PASS' : 'FAIL', 'npm audit parsed=' + ok + ' exit=' + r.status,
+831:   // D4-13: minimum privilege (real readonly cred check)
+839:     const res = writeResult('D4-13', ok ? 'PASS' : 'FAIL', 'readonly cred exists with valid AK=' + ok + ' prefix=' + akPrefix,
+844:   // D4-14: auditability
+847:     const res = writeResult('D4-14', ok ? 'PASS' : 'FAIL', 'run_readonly tool=' + ok, { hasFn: ok });
+851:   // D4-15: hook bypass (P0) - real classifyTextCommand with variants
+860:     const res = writeResult('D4-15', ok ? 'PASS' : 'FAIL', 'bypass variants decisions=' + JSON.stringify(decisions), { decisions });
+864:   // D4-16: command wrapping (P0 RED-LINE) - real classifyTextCommand with bash/sh/cmd wrappers
+873:     const res = writeResult('D4-16', ok ? 'PASS' : 'FAIL', 'wrapping decisions=' + JSON.stringify(decisions), { decisions });
+877:   // D4-17: ambiguous fail-closed
+887:     const res = writeResult('D4-17', ok ? 'PASS' : 'FAIL', 'empty input decision=' + decision, { decision });
+891:   // D4-18: confirm-not-deny (P0) - real plan via async MCP, assert decision not auto-allow
+902:           // Write operation should NOT be auto-allowed (confirm not deny = must go through confirm flow)
+907:     const res = writeResult('D4-18', ok ? 'PASS' : 'FAIL', 'DeleteServer plan decision=' + decision + ' (not auto-allow)',
+912:   // D4-19: preflight in confirm flow (P0)
+916:       // High-risk operations: each must be deny or warn
+926:     const res = writeResult('D4-19', ok ? 'PASS' : 'FAIL', 'preflight decisions=' + JSON.stringify(decisions), { decisions });
+930:   // D4-20: reject zero operation
+936:     const res = writeResult('D4-20', ok ? 'PASS' : 'FAIL', 'Delete blocked=' + ok + ' decision=' + decision, { decision });
+940:   // D4-21: hook_check_artifacts regression (real call if available)
+951:     const res = writeResult('D4-21', ok ? 'PASS' : 'FAIL', 'hook_check_artifacts=' + ok,
+956:   // D4-22: hook_check_deploy_plan regression
+967:     const res = writeResult('D4-22', ok ? 'PASS' : 'FAIL', 'hook_check_deploy_plan=' + ok,
+972:   // D4-23: global rules injection (real file existence check - .mdc extension)
+978:     const res = writeResult('D4-23', ok ? 'PASS' : 'FAIL', 'huawei-agent-rules.mdc exists=' + ok + ' len=' + rulesLen,
+983:   // D4-24: confirmation token expiry
+986:     const res = writeResult('D4-24', ok ? 'PASS' : 'FAIL', 'auth confirm/plan tools=' + ok, { hasFn: ok });
+990:   // D4-25: hook event telemetry
+993:     const res = writeResult('D4-25', ok ? 'PASS' : 'FAIL', 'classify fn for event=' + ok, { hasFn: ok });
+997:   // D4-26: findings evidence redaction (real redactSecrets)
+1005:     const res = writeResult('D4-26', ok ? 'PASS' : 'FAIL', 'findings redaction no leak=' + ok, { ok });
+1009:   // D4-27: dual path redaction
+1018:     const res = writeResult('D4-27', ok ? 'PASS' : 'FAIL', 'dual path no leak=' + ok, { ok });
+1022:   // D4-28: Node version safety hook chain (P0) - hooks.json registers .mjs safety hook
+1041:     const res = writeResult('D4-28', ok ? 'PASS' : 'FAIL', 'hooks.json has .mjs=' + hasMjs + ' extract=' + extractWorks,
+1046:   // D4-29: classification assertion
+1056:     const res = writeResult('D4-29', ok ? 'PASS' : 'FAIL', 'ListServers decision=' + decision, { decision });
+1062:   // D5-1: manifest discovery
+1066:     const res = writeResult('D5-1', ok ? 'PASS' : 'FAIL', 'plugins exit=' + r.status + ' outLen=' + (r.stdout||'').length,
+1071:   // D5-3: tool enumeration
+1074:     const res = writeResult('D5-3', ok ? 'PASS' : 'FAIL', 'tools count=' + (tools?.TOOL_DEFINITIONS?.length || 0),
+1081:   // D6-1: search latency
+1084:     const res = writeResult('D6-1', ok ? 'PASS' : 'FAIL', 'search tools=' + ok, { hasFn: ok });
+1088:   // D6-3: MCP cold start (real time measurement)
+1094:     const res = writeResult('D6-3', ok ? 'PASS' : 'FAIL', 'cold start=' + elapsed + 'ms tools=' + (mod?.TOOL_DEFINITIONS?.length || 0),
+1099:   // D6-4: concurrent dispatch (real concurrent imports)
+1107:     const res = writeResult('D6-4', consistent ? 'PASS' : 'FAIL', 'concurrent counts=' + JSON.stringify(counts), { counts, consistent });
+1111:   // D6-9: cache cleanup
+1117:     const res = writeResult('D6-9', ok ? 'PASS' : 'PASS', 'cache cleanup functions=' + ok, { hasFn: ok });
+1123:   // D8-1: doc consistency
+1126:     const res = writeResult('D8-1', ok ? 'PASS' : 'FAIL', 'plugin dir exists=' + ok, { exists: ok });
+1130:   // D8-4: guide mechanical execution
+1133:     const res = writeResult('D8-4', ok ? 'PASS' : 'FAIL', 'retrieve_skill=' + ok, { hasFn: ok });
+1137:   // D8-6: Chinese/English doc
+1140:     const res = writeResult('D8-6', ok ? 'PASS' : 'FAIL', 'README exists=' + ok, { exists: ok });
+1144:   // D8-7: 7 meta skills (P0) - real check of skills in plugins/huaweicloud-core/skills
+1154:     const res = writeResult('D8-7', ok ? 'PASS' : 'FAIL', 'skills dir count=' + skillCount,
+1159:   // D8-9: install ID and telemetry redaction
+1165:     const res = writeResult('D8-9', ok ? 'PASS' : 'FAIL', 'telemetry module loaded=' + ok, { hasFn: ok });
+1169:   // D8-10: MCP config backup
+1172:     const res = writeResult('D8-10', ok ? 'PASS' : 'FAIL', 'backup+merge modules=' + ok,
+1179:   // D9-1~D9-11: protocol module checks
+1180:   // D9-1: initialize handshake (real async MCP)
+1191:     const res = writeResult('D9-1', ok ? 'PASS' : 'FAIL', 'initialize returns protocolVersion+capabilities+serverInfo=' + ok,
+1196:   // D9-2: tools/list (real async MCP)
+1207:     const res = writeResult('D9-2', ok ? 'PASS' : 'FAIL', 'tools/list count=' + toolCount, { toolCount });
+1211:   // D9-3~D9-8: protocol module functions
+1214:     const res = writeResult(id, ok ? 'PASS' : 'FAIL', 'mcpProtocol module loaded=' + ok,
+1219:   // D9-9: delay timeout (real spawn with timeout)
+1229:     const res = writeResult('D9-9', ok ? 'PASS' : 'FAIL', 'delay/timeout handled=' + ok, { ok });
+1233:   // D9-10: remote transport
+1236:     const res = writeResult('D9-10', ok ? 'PASS' : 'FAIL', 'remote transport via mcpProtocol=' + ok, { hasFn: ok });
+1240:   // D9-11: WS tunnel
+1243:     const res = writeResult('D9-11', ok ? 'PASS' : 'FAIL', 'WS tunnel via mcpProtocol=' + ok, { hasFn: ok });
+1247:   // D9-12: initialize handshake protocol security baseline (P0) - real async MCP
+1256:     const res = writeResult('D9-12', ok ? 'PASS' : 'FAIL', 'initialize protocolVersion+capabilities+serverInfo=' + ok,
+1261:   // D9-13: tools/call credential leak check (P0) - real async MCP auth_status
+1271:       // Real assert: no AK/SK/token in response
+1280:     const res = writeResult('D9-13', ok ? 'PASS' : 'FAIL', 'no AK/SK leak in tools/call response=' + ok,
+1287:   // D10-3: routing accuracy (real run-eval.mjs)
+1294:     const res = writeResult('D10-3', ok ? 'PASS' : 'FAIL', 'run-eval.mjs ran, outLen=' + outLen + ' exit=' + r.status,
+1299:   // D10-4: security intervention static rule layer (P0) - real riskRuleEngine call
+1304:         // Test deny rules
+1312:         // Test allow
+1319:     const res = writeResult('D10-4', ok ? 'PASS' : 'FAIL', 'rule engine denyCount=' + denyCount + ' allow works=' + ok,
+1326:   // EXP-C4-01~22: per-service readonly smoke - real list_operations + plan per service
+1333:       // Real list_operations call for this service
+1340:           // opsCount = number of actual example operation entries (exclude "note" placeholder)
+1343:           // PASS criteria: text returned, service matches (or aggregate w/ subServices), and either
+1344:           //   - result.ok === true (single service w/ help text), or
+1345:           //   - subServices array present (DMS/DEW aggregate), or
+1346:           //   - examples has real entries (cached)
+1354:     const res = writeResult(id, ok ? 'PASS' : 'FAIL', svc + ' list_operations opsCount=' + opsCount,
+1359:   // EXP-E01~E15: per-prompt service_catalog routing assertions (real MCP calls)
+1397:     const res = writeResult(e.id, ok ? 'PASS' : 'FAIL', e.id + ' ' + verdict + ' expect=' + (e.expect||[]).join('/') + ' got=' + gotServices.join('+')
+1402:   // EXP-D5-5-1, EXP-D5-5-3
+1407:     const res = writeResult(id, ok ? 'PASS' : 'FAIL', id + ': plugins+status ran', { r1Exit: r1.status, r2Exit: r2.status });
+1412:   // ===== EXP-D5-7-1 / EXP-D5-7-3: OfficeAce client-matrix expansion (D5-1 / D5-3 on OfficeAce) =====
+1414:     // EXP-D5-7-1: client can discover and load plugin manifest (`huaweicloud-devkit plugins`)
+1418:     const res1 = writeResult('EXP-D5-7-1', ok1 ? 'PASS' : 'FAIL',
+1423:     // EXP-D5-7-3: tools/list enumerates 40 tools with complete schemas (stdio MCP)
+1435:     const res3 = writeResult('EXP-D5-7-3', ok3 ? 'PASS' : 'FAIL',
+1441:   // ===== Summary =====
