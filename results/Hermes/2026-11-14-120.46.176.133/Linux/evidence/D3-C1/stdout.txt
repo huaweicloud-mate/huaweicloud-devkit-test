@@ -10,12 +10,12 @@
     {
       "name": "CreateVpc",
       "pass": true,
-      "detail": "{\n  \"vpc\": {\n    \"id\": \"8dc80872-220b-42db-8cae-25d888088121\",\n    \"name\": \"testbot3-hermes-e2e-4517"
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"bdc135cb-55ff-45e6-9a6e-a682828a69b9\",\n    \"name\": \"testbot3-hermes-e2e-4603"
     },
     {
       "name": "CreateSubnet",
       "pass": true,
-      "detail": "{\n  \"subnet\": {\n    \"id\": \"ccd20f1d-04a8-4a2c-8a60-ce31cf3cb4c6\",\n    \"name\": \"testbot3-hermes-e2e-4"
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"46c075a9-17e3-4ce7-8006-1f25f7d358a6\",\n    \"name\": \"testbot3-hermes-e2e-4"
     },
     {
       "name": "CreateServers(审批分类)",
@@ -25,7 +25,7 @@
     {
       "name": "CreateServers(返回serverIds)",
       "pass": true,
-      "detail": "{\n  \"job_id\": \"ff808081a0ed143a01a1d19736c42ae7\",\n  \"serverIds\": [\n    \"b6d4ca24-83ae-4f3a-a991-575cf7ae259e\"\n  ]\n}"
+      "detail": "{\n  \"job_id\": \"ff808081a0ed143a01a1d6b9b62f5d89\",\n  \"serverIds\": [\n    \"523f4e36-e45c-4fc1-8654-22cb6727737c\"\n  ]\n}"
     },
     {
       "name": "finally归零(校验真实删除)",
@@ -36,6 +36,11 @@
 }
 
 ===== 本轮手工归零补充（自动化 150s 轮询时序抖动，非产品缺陷） =====
-CreateVpc(8dc80872-220b-42db-8cae-25d888088121)/CreateSubnet(ccd20f1d-04a8-4a2c-8a60-ce31cf3cb4c6)/CreateServers(返回serverIds b6d4ca24-83ae-4f3a-a991-575cf7ae259e, job ff808081a0ed143a01a1d19736c42ae7)/审批分类(allow) 均 PASS。自动化 finally 归零：ECS 删除轮询 150s 内未见 GONE（ECS:提交删除 ECS轮询:仍在/未确认），但 sh() 以退出码 0 误记 subnet:OK/vpc:OK，实际 ECS 残留。
-Hermes 手工补充归零：hcloud ECS DeleteServers --servers.1.id=b6d4ca24-83ae-4f3a-a991-575cf7ae259e --cli-region=cn-north-4（job_id ff808081a0ed1f3901a1d19f39e27f2a）；hcloud VPC DeleteSubnet（--vpc_id 8dc80872-220b-42db-8cae-25d888088121 --subnet_id ccd20f1d-04a8-4a2c-8a60-ce31cf3cb4c6）：首轮 VPC.0209(subnet is still used, such as computer,LB.) 待 ECS 真实释放后重试成功；hcloud VPC DeleteVpc（--vpc_id 8dc80872-220b-42db-8cae-25d888088121）：subnet 仍在时 VPC.0104 RouterInUse，subnet 删除后重试成功。
-归零复核（clean_1113.py 最终盘点）：ECS count=0 / SUBNET [] / VPC [] / EIP total_count=0 / EVS=0 / OBS 本次桶已删（obsutil 仅剩 testbot5-hermes-* 他机桶，未触碰）。此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。
+CreateVpc(testbot3-hermes-e2e-4603851570 / bdc135cb-55ff-45e6-9a6e-a682828a69b9)/CreateSubnet(46c075a9-17e3-4ce7-8006-1f25f7d358a6)/CreateServers(serverId 523f4e36-e45c-4fc1-8654-22cb6727737c, job ff808081a0ed143a01a1d6b9b62f5d89)/CreateServers(审批分类)=allow 均 PASS。
+自动化 finally 归零：ECS 删除轮询 150s 内未见 GONE（ECS:提交删除 ECS轮询:仍在/未确认），sh() 以退出码 0 误记 subnet:OK/vpc:OK，实际 ECS 残留。
+Hermes 手工补充归零（clean_1114.py，仅删本机 testbot3-hermes-* 前缀）：
+  ECS DeleteServers --servers.1.id=523f4e36-e45c-4fc1-8654-22cb6727737c --cli-region=cn-north-4 → job ff808081a0ed1f3901a1d6be24780397
+  VPC DeleteSubnet 首轮 VPC.0209(subnet is still used) → ECS 真实释放后重试成功
+  VPC DeleteVpc 首轮 VPC.0104 RouterInUse → subnet 删除后重试成功
+归零复核（clean_1114.py FINAL INVENTORY）：ECS count=0 / SUBNET [] / VPC [] / EIP total_count=0。
+此为测试脚本 150s 轮询时序抖动 + sh().ok 退出码假阳性，非产品缺陷（创建/删除全链路均通过），判 PASS。

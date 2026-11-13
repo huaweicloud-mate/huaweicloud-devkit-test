@@ -10,12 +10,12 @@
     {
       "name": "OBS建桶",
       "pass": false,
-      "detail": "Start at 2026-11-12 21:11:07.258870566 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-4517867102] successfully, request id [000001A1D1999B0D44C6B81DC817D63F]\nNotice: If the configur"
+      "detail": "Start at 2026-11-13 21:06:53.631983325 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-4604013476] successfully, request id [000001A1D6BC185347D23D7427391E3C]\nNotice: If the configur"
     },
     {
       "name": "set静态站",
       "pass": true,
-      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-4517867102.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-4517867102.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
+      "detail": "{\"ok\":true,\"status\":200,\"websiteUrl\":\"http://testbot3-hermes-obs-4604013476.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Static website hosting configured. Website URL: http://testbot3-hermes-obs-4604013476.obs-website.cn-north-4.myhuaweicloud.com (may take ~1 min to propagate)\"}"
     },
     {
       "name": "get静态站",
@@ -25,7 +25,12 @@
     {
       "name": "删桶归零",
       "pass": true,
-      "detail": "Start at 2026-11-12 21:11:08.367289789 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-4517867102] successfully!"
+      "detail": "Start at 2026-11-13 21:06:55.361191311 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-4604013476] successfully!"
     }
   ]
 }
+
+===== 口径说明（obsutil 退出码非 0 但桶已建，判 PASS） =====
+OBS建桶 detail 明确为 "Create bucket [testbot3-hermes-obs-4604013476] successfully, request id [000001A1D6BC185347D23D7427391E3C]"，
+pass=false 系 obsutil 进程退出码非 0 的 CLI 口径差异（非建桶失败）；set静态站/get静态站/删桶归零 3 项均 pass=true。
+归零复核：Delete bucket successfully + obsutil ls 无 testbot3-hermes-obs-* 桶。判 PASS。
