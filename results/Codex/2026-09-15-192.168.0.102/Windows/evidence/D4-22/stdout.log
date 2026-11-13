@@ -1,0 +1,424 @@
+TAP version 13
+# Subtest: node hook file exists
+ok 1 - node hook file exists
+  ---
+  duration_ms: 1.0382
+  type: 'test'
+  ...
+# Subtest: node hook blocks public admin port through shared rules
+ok 2 - node hook blocks public admin port through shared rules
+  ---
+  duration_ms: 76.4861
+  type: 'test'
+  ...
+# Subtest: node hook blocks credential file reads
+ok 3 - node hook blocks credential file reads
+  ---
+  duration_ms: 58.6199
+  type: 'test'
+  ...
+# Subtest: node hook blocks encoded shell payload execution through shared rules
+ok 4 - node hook blocks encoded shell payload execution through shared rules
+  ---
+  duration_ms: 58.5026
+  type: 'test'
+  ...
+# Subtest: node hook allows safe commands with empty stdout
+ok 5 - node hook allows safe commands with empty stdout
+  ---
+  duration_ms: 66.669
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: hcloud version -> cli:invoke
+ok 6 - classifyHcloud: hcloud version -> cli:invoke
+  ---
+  duration_ms: 2.6018
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: hcloud ECS ListServers -> cli:read
+ok 7 - classifyHcloud: hcloud ECS ListServers -> cli:read
+  ---
+  duration_ms: 0.3765
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: hcloud ECS CreateServers -> cli:write
+ok 8 - classifyHcloud: hcloud ECS CreateServers -> cli:write
+  ---
+  duration_ms: 0.3551
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: trailing commands after ; are not captured
+ok 9 - classifyHcloud: trailing commands after ; are not captured
+  ---
+  duration_ms: 0.2786
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: trailing pipe is not captured
+ok 10 - classifyHcloud: trailing pipe is not captured
+  ---
+  duration_ms: 0.1309
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: shell redirection is not captured
+ok 11 - classifyHcloud: shell redirection is not captured
+  ---
+  duration_ms: 0.1136
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: options are trimmed
+ok 12 - classifyHcloud: options are trimmed
+  ---
+  duration_ms: 0.2266
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: hcloud --help returns null
+ok 13 - classifyHcloud: hcloud --help returns null
+  ---
+  duration_ms: 0.1287
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: non-hcloud command returns null
+ok 14 - classifyHcloud: non-hcloud command returns null
+  ---
+  duration_ms: 0.3679
+  type: 'test'
+  ...
+# Subtest: python hook file exists
+ok 15 - python hook file exists
+  ---
+  duration_ms: 2.0257
+  type: 'test'
+  ...
+# Subtest: python hook blocks public admin port through shared rules
+ok 16 - python hook blocks public admin port through shared rules
+  ---
+  duration_ms: 108.0586
+  type: 'test'
+  ...
+# Subtest: python hook still blocks credential files
+ok 17 - python hook still blocks credential files
+  ---
+  duration_ms: 77.1274
+  type: 'test'
+  ...
+# Subtest: python hook blocks encoded shell payload execution through shared rules
+ok 18 - python hook blocks encoded shell payload execution through shared rules
+  ---
+  duration_ms: 80.9941
+  type: 'test'
+  ...
+# Subtest: python hook outputs Hermes format when hook_event_name is present
+ok 19 - python hook outputs Hermes format when hook_event_name is present
+  ---
+  duration_ms: 72.7036
+  type: 'test'
+  ...
+# Subtest: python hook allows safe commands under Hermes context
+ok 20 - python hook allows safe commands under Hermes context
+  ---
+  duration_ms: 71.2475
+  type: 'test'
+  ...
+# Subtest: python hook evaluate() is importable and blocks public admin port
+ok 21 - python hook evaluate() is importable and blocks public admin port
+  ---
+  duration_ms: 72.2906
+  type: 'test'
+  ...
+# Subtest: python hook evaluate() allows safe commands
+ok 22 - python hook evaluate() allows safe commands
+  ---
+  duration_ms: 71.5615
+  type: 'test'
+  ...
+# Subtest: python hook write-gate blocks prefixed destructive ops (NovaDelete*/Reset*)
+ok 23 - python hook write-gate blocks prefixed destructive ops (NovaDelete*/Reset*)
+  ---
+  duration_ms: 218.2335
+  type: 'test'
+  ...
+# Subtest: python hook write-gate still allows read-only Nova ops
+ok 24 - python hook write-gate still allows read-only Nova ops
+  ---
+  duration_ms: 73.4558
+  type: 'test'
+  ...
+# Subtest: loadRiskRules loads the public catalog
+ok 25 - loadRiskRules loads the public catalog
+  ---
+  duration_ms: 1.4567
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk blocks public SSH exposure
+ok 26 - evaluateCommandRisk blocks public SSH exposure
+  ---
+  duration_ms: 3.8836
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk warns on high-cost resource shape
+ok 27 - evaluateCommandRisk warns on high-cost resource shape
+  ---
+  duration_ms: 1.7955
+  type: 'test'
+  ...
+# Subtest: evaluateArtifacts detects broad IAM policy in generated files
+ok 28 - evaluateArtifacts detects broad IAM policy in generated files
+  ---
+  duration_ms: 1.4496
+  type: 'test'
+  ...
+# Subtest: evaluateArtifacts detects broad IAM policy when Action is a JSON array
+ok 29 - evaluateArtifacts detects broad IAM policy when Action is a JSON array
+  ---
+  duration_ms: 2.2626
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk blocks OBS public read-write ACL changes
+ok 30 - evaluateCommandRisk blocks OBS public read-write ACL changes
+  ---
+  duration_ms: 0.5564
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk blocks encoded shell payload execution
+ok 31 - evaluateCommandRisk blocks encoded shell payload execution
+  ---
+  duration_ms: 0.7578
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk treats spaced public CIDR as public exposure
+ok 32 - evaluateCommandRisk treats spaced public CIDR as public exposure
+  ---
+  duration_ms: 0.627
+  type: 'test'
+  ...
+# Subtest: evaluateDeployPlan detects quoted FunctionGraph public no-auth plans
+ok 33 - evaluateDeployPlan detects quoted FunctionGraph public no-auth plans
+  ---
+  duration_ms: 1.5764
+  type: 'test'
+  ...
+# Subtest: evaluateDeployPlan warns when sandbox plan lacks cleanup metadata
+ok 34 - evaluateDeployPlan warns when sandbox plan lacks cleanup metadata
+  ---
+  duration_ms: 1.0364
+  type: 'test'
+  ...
+# Subtest: evaluateDeployPlan allows sandbox plan with cleanup metadata
+ok 35 - evaluateDeployPlan allows sandbox plan with cleanup metadata
+  ---
+  duration_ms: 0.5417
+  type: 'test'
+  ...
+# Subtest: evidence snippets redact secret-shaped values
+ok 36 - evidence snippets redact secret-shaped values
+  ---
+  duration_ms: 0.4651
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk warns on prefixed delete family (Nova*)
+ok 37 - evaluateCommandRisk warns on prefixed delete family (Nova*)
+  ---
+  duration_ms: 1.2398
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk warns on reset family (ResetServerPassword etc.)
+ok 38 - evaluateCommandRisk warns on reset family (ResetServerPassword etc.)
+  ---
+  duration_ms: 1.3791
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk still allows read-only Nova list ops
+ok 39 - evaluateCommandRisk still allows read-only Nova list ops
+  ---
+  duration_ms: 0.3877
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk blocks IAM admin policy creation via CLI flag
+ok 40 - evaluateCommandRisk blocks IAM admin policy creation via CLI flag
+  ---
+  duration_ms: 0.3697
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk warns on batch reset family (BatchReset*)
+ok 41 - evaluateCommandRisk warns on batch reset family (BatchReset*)
+  ---
+  duration_ms: 0.7968
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk does not flag delete-protection toggles as destructive
+ok 42 - evaluateCommandRisk does not flag delete-protection toggles as destructive
+  ---
+  duration_ms: 0.8558
+  type: 'test'
+  ...
+# Subtest: redactSecrets removes credential-shaped values recursively
+ok 43 - redactSecrets removes credential-shaped values recursively
+  ---
+  duration_ms: 2.5516
+  type: 'test'
+  ...
+# Subtest: redactSecrets redacts adminPass and password fields
+ok 44 - redactSecrets redacts adminPass and password fields
+  ---
+  duration_ms: 0.1735
+  type: 'test'
+  ...
+# Subtest: redactSecrets handles array values
+ok 45 - redactSecrets handles array values
+  ---
+  duration_ms: 0.2414
+  type: 'test'
+  ...
+# Subtest: redactSecrets handles string values with key=value patterns
+ok 46 - redactSecrets handles string values with key=value patterns
+  ---
+  duration_ms: 0.2173
+  type: 'test'
+  ...
+# Subtest: redactSecrets masks opaque blob keys (user_data / metadata / private_key) entirely
+ok 47 - redactSecrets masks opaque blob keys (user_data / metadata / private_key) entirely
+  ---
+  duration_ms: 0.3105
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand blocks direct credential file reads
+ok 48 - classifyTextCommand blocks direct credential file reads
+  ---
+  duration_ms: 0.2639
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand blocks env var dumps with HUAWEICLOUD prefix
+ok 49 - classifyTextCommand blocks env var dumps with HUAWEICLOUD prefix
+  ---
+  duration_ms: 0.5723
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks secret value reads
+ok 50 - classifyHcloudArgs blocks secret value reads
+  ---
+  duration_ms: 0.6371
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks unapproved writes
+ok 51 - classifyHcloudArgs blocks unapproved writes
+  ---
+  duration_ms: 2.2296
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks Apply* operations as writes (\#644)
+ok 52 - classifyHcloudArgs blocks Apply* operations as writes (\#644)
+  ---
+  duration_ms: 1.8865
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs keeps read operations containing Apply substring as read-only
+ok 53 - classifyHcloudArgs keeps read operations containing Apply substring as read-only
+  ---
+  duration_ms: 2.8934
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs allows local help for Apply operations
+ok 54 - classifyHcloudArgs allows local help for Apply operations
+  ---
+  duration_ms: 2.2371
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs allows local help for write operations
+ok 55 - classifyHcloudArgs allows local help for write operations
+  ---
+  duration_ms: 0.4962
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs allows read-only list and show operations
+ok 56 - classifyHcloudArgs allows read-only list and show operations
+  ---
+  duration_ms: 2.6299
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks obsutil write commands
+ok 57 - classifyHcloudArgs blocks obsutil write commands
+  ---
+  duration_ms: 0.3333
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs allows obsutil read commands
+ok 58 - classifyHcloudArgs allows obsutil read commands
+  ---
+  duration_ms: 2.6332
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks execution operations (Invoke, Trigger, Deploy)
+ok 59 - classifyHcloudArgs blocks execution operations (Invoke, Trigger, Deploy)
+  ---
+  duration_ms: 0.2661
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks hcloud configure show without allowCredentialRead
+ok 60 - classifyHcloudArgs blocks hcloud configure show without allowCredentialRead
+  ---
+  duration_ms: 0.1083
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs rejects empty args
+ok 61 - classifyHcloudArgs rejects empty args
+  ---
+  duration_ms: 0.0934
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs allows version commands
+ok 62 - classifyHcloudArgs allows version commands
+  ---
+  duration_ms: 0.5664
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand returns not_huaweicloud for non-cloud commands
+ok 63 - classifyTextCommand returns not_huaweicloud for non-cloud commands
+  ---
+  duration_ms: 0.8492
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand detects hcloud write commands in text
+ok 64 - classifyTextCommand detects hcloud write commands in text
+  ---
+  duration_ms: 0.3187
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand blocks secret value patterns in shell commands
+ok 65 - classifyTextCommand blocks secret value patterns in shell commands
+  ---
+  duration_ms: 0.0956
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand blocks approved public admin port exposure
+ok 66 - classifyTextCommand blocks approved public admin port exposure
+  ---
+  duration_ms: 0.8096
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand applies shared risk rules to non-hcloud commands
+ok 67 - classifyTextCommand applies shared risk rules to non-hcloud commands
+  ---
+  duration_ms: 0.5946
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand carries warnings for high-cost shapes
+ok 68 - classifyTextCommand carries warnings for high-cost shapes
+  ---
+  duration_ms: 0.5223
+  type: 'test'
+  ...
+# Subtest: existing credential and secret blocks still win before risk-rule warnings
+ok 69 - existing credential and secret blocks still win before risk-rule warnings
+  ---
+  duration_ms: 0.1533
+  type: 'test'
+  ...
+1..69
+# tests 69
+# suites 0
+# pass 69
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 961.4468

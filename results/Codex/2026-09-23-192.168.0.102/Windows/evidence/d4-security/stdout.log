@@ -1,0 +1,331 @@
+{
+  "total": 36,
+  "passed": 35,
+  "failed": 1,
+  "results": [
+    {
+      "id": "D4-1",
+      "name": "cred-cat",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "cat blocked",
+      "failMsg": "cat not blocked"
+    },
+    {
+      "id": "D4-1",
+      "name": "cred-type",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "type blocked",
+      "failMsg": "type not blocked"
+    },
+    {
+      "id": "D4-1",
+      "name": "cred-getcontent",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "Get-Content blocked",
+      "failMsg": "Get-Content not blocked"
+    },
+    {
+      "id": "D4-2",
+      "name": "env-grep",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "env grep blocked",
+      "failMsg": "env grep not blocked"
+    },
+    {
+      "id": "D4-2",
+      "name": "printenv",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "printenv blocked",
+      "failMsg": "printenv not blocked"
+    },
+    {
+      "id": "D4-2",
+      "name": "echo-hw",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "echo HW_ACCESS_KEY blocked",
+      "failMsg": "echo HW_ACCESS_KEY NOT blocked (defect)"
+    },
+    {
+      "id": "D4-3",
+      "name": "showsecretversion",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "showsecretversion blocked",
+      "failMsg": "showsecretversion not blocked"
+    },
+    {
+      "id": "D4-3",
+      "name": "getsecretvalue",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "getsecretvalue blocked",
+      "failMsg": "getsecretvalue not blocked"
+    },
+    {
+      "id": "D4-5",
+      "name": "delete-not-readonly",
+      "pass": true,
+      "actual": "deny",
+      "expected": "non-allow",
+      "passMsg": "DeleteServers not misclassified",
+      "failMsg": "DeleteServers misclassified as readonly"
+    },
+    {
+      "id": "D4-5",
+      "name": "create-not-readonly",
+      "pass": true,
+      "actual": "deny",
+      "expected": "non-allow",
+      "passMsg": "CreateServers not misclassified",
+      "failMsg": "CreateServers misclassified"
+    },
+    {
+      "id": "D4-9",
+      "name": "public-exposure",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny/confirm",
+      "passMsg": "public exposure detected",
+      "failMsg": "public exposure not detected"
+    },
+    {
+      "id": "D4-9",
+      "name": "destructive",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny/confirm",
+      "passMsg": "destructive detected",
+      "failMsg": "destructive not detected"
+    },
+    {
+      "id": "D4-15",
+      "name": "bypass-chained",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "chained bypass blocked",
+      "failMsg": "chained bypass not blocked"
+    },
+    {
+      "id": "D4-15",
+      "name": "bypass-bash",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "bash wrapper blocked",
+      "failMsg": "bash wrapper not blocked"
+    },
+    {
+      "id": "D4-16",
+      "name": "wrap-powershell",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "powershell wrap blocked",
+      "failMsg": "powershell wrap not blocked"
+    },
+    {
+      "id": "D4-16",
+      "name": "wrap-sh",
+      "pass": false,
+      "actual": "allow",
+      "expected": "deny",
+      "passMsg": "sh wrap blocked",
+      "failMsg": "sh wrap NOT blocked (defect)"
+    },
+    {
+      "id": "D4-21",
+      "name": "artifacts-eval",
+      "pass": true,
+      "actual": "object",
+      "expected": "object",
+      "passMsg": "evaluateArtifacts returns result",
+      "failMsg": "evaluateArtifacts error"
+    },
+    {
+      "id": "D4-21",
+      "name": "artifacts-cred",
+      "pass": true,
+      "actual": "object",
+      "expected": "object",
+      "passMsg": "credential in artifacts detected",
+      "failMsg": "credential in artifacts not detected"
+    },
+    {
+      "id": "D4-22",
+      "name": "deploy-plan-eval",
+      "pass": true,
+      "actual": "object",
+      "expected": "object",
+      "passMsg": "evaluateDeployPlan returns result",
+      "failMsg": "evaluateDeployPlan error"
+    },
+    {
+      "id": "D4-23",
+      "name": "policy-loaded",
+      "pass": true,
+      "actual": "object",
+      "expected": "object",
+      "passMsg": "safety policy loaded",
+      "failMsg": "safety policy not loaded"
+    },
+    {
+      "id": "D4-4",
+      "name": "write-verbs",
+      "pass": true,
+      "actual": "12/12",
+      "expected": ">=10",
+      "passMsg": "write verbs: 12/12",
+      "failMsg": "write verbs insufficient: 12/12"
+    },
+    {
+      "id": "D4-6",
+      "name": "adminpass-redacted",
+      "pass": true,
+      "actual": "adminPass: <redacted>",
+      "expected": "redacted",
+      "passMsg": "adminPass redacted",
+      "failMsg": "adminPass NOT redacted"
+    },
+    {
+      "id": "D4-7",
+      "name": "hook-cmd",
+      "pass": true,
+      "actual": "both",
+      "expected": "true",
+      "passMsg": "hook_check_command effective",
+      "failMsg": "hook_check_command ineffective"
+    },
+    {
+      "id": "D4-7",
+      "name": "hook-art",
+      "pass": true,
+      "actual": "function",
+      "expected": "function",
+      "passMsg": "hook_check_artifacts effective",
+      "failMsg": "hook_check_artifacts ineffective"
+    },
+    {
+      "id": "D4-7",
+      "name": "hook-dep",
+      "pass": true,
+      "actual": "function",
+      "expected": "function",
+      "passMsg": "hook_check_deploy_plan effective",
+      "failMsg": "hook_check_deploy_plan ineffective"
+    },
+    {
+      "id": "D4-8",
+      "name": "policy-shared",
+      "pass": true,
+      "actual": "object",
+      "expected": "object",
+      "passMsg": "policy from shared source",
+      "failMsg": "policy loading error"
+    },
+    {
+      "id": "D4-17",
+      "name": "fail-closed",
+      "pass": true,
+      "actual": "deny",
+      "expected": "non-allow",
+      "passMsg": "ambiguous fail-closed",
+      "failMsg": "ambiguous allowed"
+    },
+    {
+      "id": "D4-11",
+      "name": "injection-mechanism",
+      "pass": true,
+      "actual": "function",
+      "expected": "function",
+      "passMsg": "injection protection mechanism exists",
+      "failMsg": "injection protection missing"
+    },
+    {
+      "id": "D4-12",
+      "name": "postinstall",
+      "pass": true,
+      "actual": "present",
+      "expected": "present",
+      "passMsg": "postinstall: node ./bin/dsh-postinstall.cjs",
+      "failMsg": "no postinstall"
+    },
+    {
+      "id": "D4-13",
+      "name": "readonly-allowed",
+      "pass": true,
+      "actual": "allow",
+      "expected": "allow",
+      "passMsg": "readonly allowed",
+      "failMsg": "readonly denied"
+    },
+    {
+      "id": "D4-14",
+      "name": "audit-metadata",
+      "pass": true,
+      "actual": "allow",
+      "expected": "string",
+      "passMsg": "classify returns decision",
+      "failMsg": "classify missing decision"
+    },
+    {
+      "id": "D4-20",
+      "name": "deny-definitive",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "deny is definitive",
+      "failMsg": "deny not definitive"
+    },
+    {
+      "id": "D4-24",
+      "name": "confirm-write",
+      "pass": true,
+      "actual": "deny/undefined",
+      "expected": "confirm/deny/isWrite",
+      "passMsg": "write returns confirm/deny",
+      "failMsg": "write allowed"
+    },
+    {
+      "id": "D4-10",
+      "name": "rules-loaded",
+      "pass": true,
+      "actual": "object",
+      "expected": "object",
+      "passMsg": "rules loaded",
+      "failMsg": "rules not loaded"
+    },
+    {
+      "id": "D4-18",
+      "name": "confirm-not-deny",
+      "pass": true,
+      "actual": "deny",
+      "expected": "confirm or deny",
+      "passMsg": "write confirm/deny correct",
+      "failMsg": "write semantics error"
+    },
+    {
+      "id": "D4-19",
+      "name": "preflight",
+      "pass": true,
+      "actual": "object",
+      "expected": "object",
+      "passMsg": "preflight in confirm effective",
+      "failMsg": "preflight not effective"
+    }
+  ]
+}

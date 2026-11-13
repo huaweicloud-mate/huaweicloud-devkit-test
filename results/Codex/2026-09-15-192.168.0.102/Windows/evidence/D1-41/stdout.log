@@ -1,0 +1,196 @@
+TAP version 13
+# Subtest: semverParse 解析稳定版与 prerelease
+ok 1 - semverParse 解析稳定版与 prerelease
+  ---
+  duration_ms: 1.6607
+  type: 'test'
+  ...
+# Subtest: semverCompare 完整排序契约
+ok 2 - semverCompare 完整排序契约
+  ---
+  duration_ms: 0.3002
+  type: 'test'
+  ...
+# Subtest: hasPrerelease
+ok 3 - hasPrerelease
+  ---
+  duration_ms: 0.1592
+  type: 'test'
+  ...
+# Subtest: determineTarget 频道选取（§4 矩阵）
+ok 4 - determineTarget 频道选取（§4 矩阵）
+  ---
+  duration_ms: 0.8734
+  type: 'test'
+  ...
+# Subtest: judgeUpdate 四态 + 冷却（§4 全表）
+ok 5 - judgeUpdate 四态 + 冷却（§4 全表）
+  ---
+  duration_ms: 0.5266
+  type: 'test'
+  ...
+# Subtest: judgeUpdate 返回字段完整性
+ok 6 - judgeUpdate 返回字段完整性
+  ---
+  duration_ms: 0.1271
+  type: 'test'
+  ...
+# Subtest: parseDistTagsOutput 解析 npm view --json 输出
+ok 7 - parseDistTagsOutput 解析 npm view --json 输出
+  ---
+  duration_ms: 0.2343
+  type: 'test'
+  ...
+# Subtest: skip state 原子写往返 + 损坏容错
+ok 8 - skip state 原子写往返 + 损坏容错
+  ---
+  duration_ms: 11.2084
+  type: 'test'
+  ...
+# Subtest: writeSkipState 目标不可写时清理临时文件
+ok 9 - writeSkipState 目标不可写时清理临时文件
+  ---
+  duration_ms: 2.2461
+  type: 'test'
+  ...
+# Subtest: queryDistTagsSync 成功返回 distTags 对象
+ok 10 - queryDistTagsSync 成功返回 distTags 对象
+  ---
+  duration_ms: 1.4865
+  type: 'test'
+  ...
+# Subtest: queryDistTags 异步非阻塞: 同步调用立即返回 Promise
+ok 11 - queryDistTags 异步非阻塞: 同步调用立即返回 Promise
+  ---
+  duration_ms: 0.9982
+  type: 'test'
+  ...
+# Subtest: queryDistTagsFetch 直接 fetch registry 返回 distTags
+ok 12 - queryDistTagsFetch 直接 fetch registry 返回 distTags
+  ---
+  duration_ms: 434.346
+  type: 'test'
+  ...
+# Subtest: queryDistTagsFetch 尊重 HUAWEICLOUD_NPM_REGISTRY 覆盖
+ok 13 - queryDistTagsFetch 尊重 HUAWEICLOUD_NPM_REGISTRY 覆盖
+  ---
+  duration_ms: 1.0269
+  type: 'test'
+  ...
+# Subtest: queryDistTagsSync 失败时在 DEBUG 下输出日志而非静默
+ok 14 - queryDistTagsSync 失败时在 DEBUG 下输出日志而非静默
+  ---
+  duration_ms: 0.7483
+  type: 'test'
+  ...
+# Subtest: getCachedUpdateInfo 单飞: 并发只查一次
+ok 15 - getCachedUpdateInfo 单飞: 并发只查一次
+  ---
+  duration_ms: 22.3405
+  type: 'test'
+  ...
+# Subtest: getCachedUpdateInfo TTL: 未过期不重复查询
+ok 16 - getCachedUpdateInfo TTL: 未过期不重复查询
+  ---
+  duration_ms: 0.5981
+  type: 'test'
+  ...
+# Subtest: getCachedUpdateInfo 失败节流: 失败后短时间不重查
+ok 17 - getCachedUpdateInfo 失败节流: 失败后短时间不重查
+  ---
+  duration_ms: 0.5184
+  type: 'test'
+  ...
+# Subtest: must-notify: 节流过期后重查成功 → 立即补提 hint
+ok 18 - must-notify: 节流过期后重查成功 → 立即补提 hint
+  ---
+  duration_ms: 0.6356
+  type: 'test'
+  ...
+# Subtest: peekCachedUpdateInfo 返回已就绪 hint | null
+ok 19 - peekCachedUpdateInfo 返回已就绪 hint | null
+  ---
+  duration_ms: 0.4013
+  type: 'test'
+  ...
+# Subtest: applyUpdateHint 附加/跳过规则
+ok 20 - applyUpdateHint 附加/跳过规则
+  ---
+  duration_ms: 0.1859
+  type: 'test'
+  ...
+# Subtest: upgradePackage 参数校验: version 仅支持 latest
+ok 21 - upgradePackage 参数校验: version 仅支持 latest
+  ---
+  duration_ms: 0.4499
+  type: 'test'
+  ...
+# Subtest: upgradePackage 成功路径: 目标版本/重启/文案/缓存失效
+ok 22 - upgradePackage 成功路径: 目标版本/重启/文案/缓存失效
+  ---
+  duration_ms: 1.002
+  type: 'test'
+  ...
+# Subtest: upgradePackage next 目标: 用 next tag
+ok 23 - upgradePackage next 目标: 用 next tag
+  ---
+  duration_ms: 0.2634
+  type: 'test'
+  ...
+# Subtest: upgradePackage officeace 专属重连文案
+ok 24 - upgradePackage officeace 专属重连文案
+  ---
+  duration_ms: 0.4692
+  type: 'test'
+  ...
+# Subtest: upgradePackage 失败: 返回手动命令
+ok 25 - upgradePackage 失败: 返回手动命令
+  ---
+  duration_ms: 0.4624
+  type: 'test'
+  ...
+# Subtest: upgradePackage 失败: spawn 不存在时报可读错误而非 exit null
+ok 26 - upgradePackage 失败: spawn 不存在时报可读错误而非 exit null
+  ---
+  duration_ms: 0.5037
+  type: 'test'
+  ...
+# Subtest: upgradePackage 无目标版本: distTags 有效但无候选时不 spawn 并返回无需升级
+ok 27 - upgradePackage 无目标版本: distTags 有效但无候选时不 spawn 并返回无需升级
+  ---
+  duration_ms: 0.4431
+  type: 'test'
+  ...
+# Subtest: upgradePackage 查询失败: 不 spawn 并给手动提示
+ok 28 - upgradePackage 查询失败: 不 spawn 并给手动提示
+  ---
+  duration_ms: 0.4939
+  type: 'test'
+  ...
+# Subtest: \#607: judgeUpdate 对 truthy 但空 distTags 也应 check_failed
+ok 29 - \#607: judgeUpdate 对 truthy 但空 distTags 也应 check_failed
+  ---
+  duration_ms: 0.1101
+  type: 'test'
+  ...
+# Subtest: \#607: getUpdateDistTags 在查询失败态(check_failed)应返回 null
+ok 30 - \#607: getUpdateDistTags 在查询失败态(check_failed)应返回 null
+  ---
+  duration_ms: 0.4185
+  type: 'test'
+  ...
+# Subtest: \#607: dismiss + 查询失败 → 折叠为 check_failed（不落伪冷却）
+ok 31 - \#607: dismiss + 查询失败 → 折叠为 check_failed（不落伪冷却）
+  ---
+  duration_ms: 1.8107
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 573.1564

@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "why": "d4-security:delete-not-readonly PASS; d4-security:create-not-readonly PASS; mcp-tools:delete-mcp PASS",
+  "executedAt": "20260927050549",
+  "source": "grouped-probe-fresh-run",
+  "assertions": [
+    {
+      "id": "D4-5",
+      "name": "delete-not-readonly",
+      "pass": true,
+      "actual": "deny",
+      "expected": "non-allow",
+      "passMsg": "DeleteServers not misclassified",
+      "failMsg": "DeleteServers misclassified as readonly",
+      "group": "d4-security"
+    },
+    {
+      "id": "D4-5",
+      "name": "create-not-readonly",
+      "pass": true,
+      "actual": "deny",
+      "expected": "non-allow",
+      "passMsg": "CreateServers not misclassified",
+      "failMsg": "CreateServers misclassified",
+      "group": "d4-security"
+    },
+    {
+      "id": "D4-5",
+      "name": "delete-mcp",
+      "pass": true,
+      "actual": "correct",
+      "expected": "correct",
+      "passMsg": "DeleteServers correct (MCP)",
+      "failMsg": "DeleteServers misclassified (MCP)",
+      "group": "mcp-tools"
+    }
+  ]
+}

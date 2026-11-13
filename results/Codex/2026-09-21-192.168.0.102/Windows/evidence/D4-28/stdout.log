@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260921012544",
+  "results": [
+    {
+      "name": "hooks-json-node-registration",
+      "pass": true,
+      "actual": "{\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Bash\",\"hooks\":[{\"type\":\"command\",\"command\":\"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\\\"\",\"timeout\":5}]},{\"matcher\":\"mcp__.*huaweicloud.*|huaweicloud_.*\",\"hooks\":[{\"type\":\"command\",\"command\":\"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\\\"\",\"timeout\":5}]}]}}",
+      "expected": ".mjs registration"
+    },
+    {
+      "name": "command credential read",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "cmd credential read",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "script credential read",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "args destructive command",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny"
+    },
+    {
+      "name": "safe command",
+      "pass": true,
+      "actual": "none",
+      "expected": "no deny"
+    }
+  ]
+}

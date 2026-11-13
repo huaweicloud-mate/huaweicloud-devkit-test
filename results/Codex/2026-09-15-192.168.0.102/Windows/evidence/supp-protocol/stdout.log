@@ -1,0 +1,178 @@
+TAP version 13
+# Subtest: MCP server initializes, lists tools, and plans CLI commands
+ok 1 - MCP server initializes, lists tools, and plans CLI commands
+  ---
+  duration_ms: 853.3636
+  type: 'test'
+  ...
+# Subtest: MCP server returns JSON-RPC -32601 for unknown methods (\#650 D9-2)
+ok 2 - MCP server returns JSON-RPC -32601 for unknown methods (\#650 D9-2)
+  ---
+  duration_ms: 817.6932
+  type: 'test'
+  ...
+# Subtest: MCP server reports version from plugin package.json in installed layout
+ok 3 - MCP server reports version from plugin package.json in installed layout
+  ---
+  duration_ms: 991.958
+  type: 'test'
+  ...
+# Subtest: MCP server waits for incomplete Content-Length frames instead of spinning
+ok 4 - MCP server waits for incomplete Content-Length frames instead of spinning
+  ---
+  duration_ms: 863.9889
+  type: 'test'
+  ...
+# Subtest: opencode: install copies skills, MCP server, and safety policy
+ok 5 - opencode: install copies skills, MCP server, and safety policy
+  ---
+  duration_ms: 2149.2823
+  type: 'test'
+  ...
+# Subtest: opencode: uninstall removes skills, plugins, and MCP config
+ok 6 - opencode: uninstall removes skills, plugins, and MCP config
+  ---
+  duration_ms: 2081.3532
+  type: 'test'
+  ...
+# Subtest: opencode: MCP server responds to initialize and tools/list
+ok 7 - opencode: MCP server responds to initialize and tools/list
+  ---
+  duration_ms: 2161.5797
+  type: 'test'
+  ...
+# Subtest: codex-desktop: install copies skills, MCP server, and safety policy
+ok 8 - codex-desktop: install copies skills, MCP server, and safety policy
+  ---
+  duration_ms: 1867.7659
+  type: 'test'
+  ...
+# Subtest: codex-desktop: uninstall removes skills, plugins, and MCP config
+ok 9 - codex-desktop: uninstall removes skills, plugins, and MCP config
+  ---
+  duration_ms: 1951.9782
+  type: 'test'
+  ...
+# Subtest: codex-desktop: MCP server responds to initialize and tools/list
+ok 10 - codex-desktop: MCP server responds to initialize and tools/list
+  ---
+  duration_ms: 2210.9725
+  type: 'test'
+  ...
+# Subtest: workbuddy: install copies skills, MCP server, and safety policy
+ok 11 - workbuddy: install copies skills, MCP server, and safety policy
+  ---
+  duration_ms: 1978.2523
+  type: 'test'
+  ...
+# Subtest: workbuddy: uninstall removes skills, plugins, and MCP config
+ok 12 - workbuddy: uninstall removes skills, plugins, and MCP config
+  ---
+  duration_ms: 2163.4263
+  type: 'test'
+  ...
+# Subtest: workbuddy: MCP server responds to initialize and tools/list
+ok 13 - workbuddy: MCP server responds to initialize and tools/list
+  ---
+  duration_ms: 2266.7765
+  type: 'test'
+  ...
+# Subtest: MCP tools/list includes all required core tools with valid schemas
+ok 14 - MCP tools/list includes all required core tools with valid schemas
+  ---
+  duration_ms: 2222.2546
+  type: 'test'
+  ...
+# Subtest: huaweicloud_search_docs returns relevant skill results
+ok 15 - huaweicloud_search_docs returns relevant skill results
+  ---
+  duration_ms: 2737.6764
+  type: 'test'
+  ...
+# Subtest: huaweicloud_service_catalog returns capability recommendations
+ok 16 - huaweicloud_service_catalog returns capability recommendations
+  ---
+  duration_ms: 2587.6761
+  type: 'test'
+  ...
+# Subtest: MCP tools/call with unknown tool name returns error
+ok 17 - MCP tools/call with unknown tool name returns error
+  ---
+  duration_ms: 2172.0325
+  type: 'test'
+  ...
+# Subtest: session-isolation: dispatch 接受 opts.sessionId 且不破坏无参调用
+ok 18 - session-isolation: dispatch 接受 opts.sessionId 且不破坏无参调用
+  ---
+  duration_ms: 682.6174
+  type: 'test'
+  ...
+# Subtest: hint-consumption: A 会话消费后 B 会话仍能拿到提示（隔离）
+ok 19 - hint-consumption: A 会话消费后 B 会话仍能拿到提示（隔离）
+  ---
+  duration_ms: 1.4862
+  type: 'test'
+  ...
+# Subtest: hint-consumption: stdio 固定 session 行为 = 每会话首次提示一次
+ok 20 - hint-consumption: stdio 固定 session 行为 = 每会话首次提示一次
+  ---
+  duration_ms: 0.6612
+  type: 'test'
+  ...
+# Subtest: hint-consumption: 缺省 session 兜底为 default（行为同现版）
+ok 21 - hint-consumption: 缺省 session 兜底为 default（行为同现版）
+  ---
+  duration_ms: 0.6738
+  type: 'test'
+  ...
+# Subtest: skip-path: resolveSkipFilePath() 默认(无 session) 返回原路径
+ok 22 - skip-path: resolveSkipFilePath() 默认(无 session) 返回原路径
+  ---
+  duration_ms: 3.6462
+  type: 'test'
+  ...
+# Subtest: skip-path: resolveSkipFilePath("stdin") 与默认一致(向后兼容)
+ok 23 - skip-path: resolveSkipFilePath("stdin") 与默认一致(向后兼容)
+  ---
+  duration_ms: 1.2734
+  type: 'test'
+  ...
+# Subtest: skip-path: resolveSkipFilePath("default") 与默认一致
+ok 24 - skip-path: resolveSkipFilePath("default") 与默认一致
+  ---
+  duration_ms: 0.9771
+  type: 'test'
+  ...
+# Subtest: skip-path: remote session 生成独立后缀文件
+ok 25 - skip-path: remote session 生成独立后缀文件
+  ---
+  duration_ms: 1.0989
+  type: 'test'
+  ...
+# Subtest: skip-path: 危险 session 值(路径穿越)被过滤为安全名
+ok 26 - skip-path: 危险 session 值(路径穿越)被过滤为安全名
+  ---
+  duration_ms: 2.2703
+  type: 'test'
+  ...
+# Subtest: skip-path: 会话隔离写读 —— A 写 skip 不影响 B
+ok 27 - skip-path: 会话隔离写读 —— A 写 skip 不影响 B
+  ---
+  duration_ms: 5.2021
+  type: 'test'
+  ...
+# Subtest: \#607: callTool dismiss + doQuery 失败 → check_failed 且不写冷却
+ok 28 - \#607: callTool dismiss + doQuery 失败 → check_failed 且不写冷却
+  ---
+  duration_ms: 3.0729
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 28639.7334

@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "why": "d4-security:bypass-chained PASS; d4-security:bypass-bash PASS; mcp-tools:bypass-mcp PASS",
+  "executedAt": "20260927050549",
+  "source": "grouped-probe-fresh-run",
+  "assertions": [
+    {
+      "id": "D4-15",
+      "name": "bypass-chained",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "chained bypass blocked",
+      "failMsg": "chained bypass not blocked",
+      "group": "d4-security"
+    },
+    {
+      "id": "D4-15",
+      "name": "bypass-bash",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "bash wrapper blocked",
+      "failMsg": "bash wrapper not blocked",
+      "group": "d4-security"
+    },
+    {
+      "id": "D4-15",
+      "name": "bypass-mcp",
+      "pass": true,
+      "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-command-credential-file",
+      "expected": "deny",
+      "passMsg": "bypass blocked (MCP)",
+      "failMsg": "bypass not blocked (MCP)",
+      "group": "mcp-tools"
+    }
+  ]
+}

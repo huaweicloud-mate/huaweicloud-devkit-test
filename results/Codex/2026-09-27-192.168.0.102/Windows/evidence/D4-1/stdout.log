@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "why": "d4-security:cred-cat PASS; d4-security:cred-type PASS; d4-security:cred-getcontent PASS; mcp-tools:cred-file-mcp PASS",
+  "executedAt": "20260927050549",
+  "source": "grouped-probe-fresh-run",
+  "assertions": [
+    {
+      "id": "D4-1",
+      "name": "cred-cat",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "cat blocked",
+      "failMsg": "cat not blocked",
+      "group": "d4-security"
+    },
+    {
+      "id": "D4-1",
+      "name": "cred-type",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "type blocked",
+      "failMsg": "type not blocked",
+      "group": "d4-security"
+    },
+    {
+      "id": "D4-1",
+      "name": "cred-getcontent",
+      "pass": true,
+      "actual": "deny",
+      "expected": "deny",
+      "passMsg": "Get-Content blocked",
+      "failMsg": "Get-Content not blocked",
+      "group": "d4-security"
+    },
+    {
+      "id": "D4-1",
+      "name": "cred-file-mcp",
+      "pass": true,
+      "actual": "{\"ok\":false,\"decision\":\"deny\",\"findings\":[{\"ruleId\":\"hwc-command-credential-file",
+      "expected": "deny",
+      "passMsg": "cred file blocked (MCP)",
+      "failMsg": "cred file not blocked (MCP)",
+      "group": "mcp-tools"
+    }
+  ]
+}

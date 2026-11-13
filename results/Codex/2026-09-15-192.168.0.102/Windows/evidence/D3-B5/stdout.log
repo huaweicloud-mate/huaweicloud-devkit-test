@@ -1,0 +1,749 @@
+TAP version 13
+# Subtest: opencode install creates skills, MCP server, and safety policy
+ok 1 - opencode install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 2315.2887
+  type: 'test'
+  ...
+# Subtest: opencode status reports installed
+ok 2 - opencode status reports installed
+  ---
+  duration_ms: 2198.6502
+  type: 'test'
+  ...
+# Subtest: opencode uninstall removes installed files
+ok 3 - opencode uninstall removes installed files
+  ---
+  duration_ms: 2025.2035
+  type: 'test'
+  ...
+# Subtest: opencode install is idempotent
+ok 4 - opencode install is idempotent
+  ---
+  duration_ms: 3122.9038
+  type: 'test'
+  ...
+# Subtest: workbuddy install creates skills, MCP server, and safety policy
+ok 5 - workbuddy install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 2033.2123
+  type: 'test'
+  ...
+# Subtest: workbuddy status reports installed
+ok 6 - workbuddy status reports installed
+  ---
+  duration_ms: 2112.3772
+  type: 'test'
+  ...
+# Subtest: workbuddy uninstall removes installed files
+ok 7 - workbuddy uninstall removes installed files
+  ---
+  duration_ms: 2210.7754
+  type: 'test'
+  ...
+# Subtest: workbuddy install is idempotent
+ok 8 - workbuddy install is idempotent
+  ---
+  duration_ms: 3617.5979
+  type: 'test'
+  ...
+# Subtest: codex-desktop install creates skills, MCP server, and safety policy
+ok 9 - codex-desktop install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 1970.1439
+  type: 'test'
+  ...
+# Subtest: codex-desktop uninstall removes installed files
+ok 10 - codex-desktop uninstall removes installed files
+  ---
+  duration_ms: 2112.1831
+  type: 'test'
+  ...
+# Subtest: cli help lists supported agent targets
+ok 11 - cli help lists supported agent targets
+  ---
+  duration_ms: 73.357
+  type: 'test'
+  ...
+# Subtest: openclaw install creates skills, MCP server, and safety policy in .agents
+ok 12 - openclaw install creates skills, MCP server, and safety policy in .agents
+  ---
+  duration_ms: 1871.3836
+  type: 'test'
+  ...
+# Subtest: openclaw uninstall removes installed files
+ok 13 - openclaw uninstall removes installed files
+  ---
+  duration_ms: 1979.2985
+  type: 'test'
+  ...
+# Subtest: hermes install creates skills, MCP server, and safety policy
+ok 14 - hermes install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 2892.0531
+  type: 'test'
+  ...
+# Subtest: hermes uninstall removes installed files
+ok 15 - hermes uninstall removes installed files
+  ---
+  duration_ms: 2952.0814
+  type: 'test'
+  ...
+# Subtest: atomcode install creates skills, MCP server, and safety policy
+ok 16 - atomcode install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 2112.9781
+  type: 'test'
+  ...
+# Subtest: atomcode status reports installed
+ok 17 - atomcode status reports installed
+  ---
+  duration_ms: 2089.0214
+  type: 'test'
+  ...
+# Subtest: atomcode uninstall removes installed files
+ok 18 - atomcode uninstall removes installed files
+  ---
+  duration_ms: 2123.8635
+  type: 'test'
+  ...
+# Subtest: atomcode install is idempotent
+ok 19 - atomcode install is idempotent
+  ---
+  duration_ms: 3378.6896
+  type: 'test'
+  ...
+# Subtest: codex target does not crash without Codex CLI
+ok 20 - codex target does not crash without Codex CLI
+  ---
+  duration_ms: 424.5423
+  type: 'test'
+  ...
+# Subtest: codex install uses DevKit plugin id and skips OpenCode marker
+ok 21 - codex install uses DevKit plugin id and skips OpenCode marker
+  ---
+  duration_ms: 786.2818
+  type: 'test'
+  ...
+# Subtest: codex install fails fast when plugin add fails
+ok 22 - codex install fails fast when plugin add fails
+  ---
+  duration_ms: 607.3568
+  type: 'test'
+  ...
+# Subtest: codex status parses plugin list JSON (name match, not path substring)
+ok 23 - codex status parses plugin list JSON (name match, not path substring)
+  ---
+  duration_ms: 486.4897
+  type: 'test'
+  ...
+# Subtest: codex uninstall removes current and legacy plugin ids
+ok 24 - codex uninstall removes current and legacy plugin ids
+  ---
+  duration_ms: 498.4506
+  type: 'test'
+  ...
+# Subtest: install auto-detect with multiple agents requires explicit target in non-interactive shells
+not ok 25 - install auto-detect with multiple agents requires explicit target in non-interactive shells
+  ---
+  duration_ms: 103.9045
+  type: 'test'
+  location: 'C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\test\\agent-install.test.mjs:573:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Multiple agents detected \(opencode, workbuddy\)/. Input:
+    
+    'Multiple agents detected (opencode, workbuddy, officeace). Cannot prompt in a non-interactive shell — specify `--target <agent>` or `--target all`.\n' +
+      '(node:32172) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n' +
+      '(Use `node --trace-warnings ...` to show where the warning was created)\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    Multiple agents detected (opencode, workbuddy, officeace). Cannot prompt in a non-interactive shell — specify `--target <agent>` or `--target all`.
+    (node:32172) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Administrator/devkit-test/Codex/hdk/test/agent-install.test.mjs:581:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: install auto-detect multiple agents interactive multi-select picks only chosen ones
+ok 26 - install auto-detect multiple agents interactive multi-select picks only chosen ones # SKIP
+  ---
+  duration_ms: 0.2472
+  type: 'test'
+  ...
+# Subtest: install auto-detect multiple agents interactive multi-select picks all on comma list
+ok 27 - install auto-detect multiple agents interactive multi-select picks all on comma list # SKIP
+  ---
+  duration_ms: 0.0707
+  type: 'test'
+  ...
+# Subtest: install auto-detect multiple agents interactive cancel installs nothing
+ok 28 - install auto-detect multiple agents interactive cancel installs nothing # SKIP
+  ---
+  duration_ms: 0.042
+  type: 'test'
+  ...
+# Subtest: install --target all still installs every supported agent
+not ok 29 - install --target all still installs every supported agent
+  ---
+  duration_ms: 16041.5617
+  type: 'test'
+  location: 'C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\test\\agent-install.test.mjs:684:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    (node:5152) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Administrator/devkit-test/Codex/hdk/test/agent-install.test.mjs:701:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: install auto-detect single agent installs only that agent
+not ok 30 - install auto-detect single agent installs only that agent
+  ---
+  duration_ms: 104.9316
+  type: 'test'
+  location: 'C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\test\\agent-install.test.mjs:713:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Multiple agents detected (opencode, officeace). Cannot prompt in a non-interactive shell — specify `--target <agent>` or `--target all`.
+    (node:40508) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Administrator/devkit-test/Codex/hdk/test/agent-install.test.mjs:719:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: install auto-detect with no agents reports error
+not ok 31 - install auto-detect with no agents reports error
+  ---
+  duration_ms: 1516.3686
+  type: 'test'
+  location: 'C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\test\\agent-install.test.mjs:730:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Administrator/devkit-test/Codex/hdk/test/agent-install.test.mjs:735:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: status auto-detect multiple retains full-range behavior (install-only change)
+ok 32 - status auto-detect multiple retains full-range behavior (install-only change)
+  ---
+  duration_ms: 1221.8177
+  type: 'test'
+  ...
+# Subtest: install auto-detect multiple agents interactive multi-select installs all on "all"
+ok 33 - install auto-detect multiple agents interactive multi-select installs all on "all" # SKIP
+  ---
+  duration_ms: 0.0756
+  type: 'test'
+  ...
+# Subtest: install auto-detect multiple agents invalid input falls back to all detected
+ok 34 - install auto-detect multiple agents invalid input falls back to all detected # SKIP
+  ---
+  duration_ms: 0.0501
+  type: 'test'
+  ...
+# Subtest: install rejects unknown --target
+ok 35 - install rejects unknown --target
+  ---
+  duration_ms: 70.3871
+  type: 'test'
+  ...
+# Subtest: uninstall auto-detect multiple retains full-range behavior (install-only change)
+ok 36 - uninstall auto-detect multiple retains full-range behavior (install-only change)
+  ---
+  duration_ms: 957.6985
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 1 installs to the entered target
+ok 37 - install zero-detect menu option 1 installs to the entered target # SKIP
+  ---
+  duration_ms: 0.0649
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 1 rejects unknown target
+ok 38 - install zero-detect menu option 1 rejects unknown target # SKIP
+  ---
+  duration_ms: 0.0321
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 2 installs to all
+ok 39 - install zero-detect menu option 2 installs to all # SKIP
+  ---
+  duration_ms: 0.0293
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 0 exits without installing
+ok 40 - install zero-detect menu option 0 exits without installing # SKIP
+  ---
+  duration_ms: 0.0299
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 3 writes Claude Code MCP config with backup
+ok 41 - install zero-detect menu option 3 writes Claude Code MCP config with backup # SKIP
+  ---
+  duration_ms: 0.0295
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 3 writes Cursor mcp.json
+ok 42 - install zero-detect menu option 3 writes Cursor mcp.json # SKIP
+  ---
+  duration_ms: 0.0281
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 3 skips already-configured MCP
+ok 43 - install zero-detect menu option 3 skips already-configured MCP # SKIP
+  ---
+  duration_ms: 0.0273
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 3 prints snippet when no MCP agent detected
+ok 44 - install zero-detect menu option 3 prints snippet when no MCP agent detected # SKIP
+  ---
+  duration_ms: 0.0294
+  type: 'test'
+  ...
+# Subtest: install creates opencode config with normalized forward-slash paths
+ok 45 - install creates opencode config with normalized forward-slash paths
+  ---
+  duration_ms: 2341.2237
+  type: 'test'
+  ...
+# Subtest: install creates correct dir structure under homedir
+ok 46 - install creates correct dir structure under homedir
+  ---
+  duration_ms: 2079.1682
+  type: 'test'
+  ...
+# Subtest: install works with home dir containing spaces
+ok 47 - install works with home dir containing spaces
+  ---
+  duration_ms: 1983.6019
+  type: 'test'
+  ...
+# Subtest: handles platform-specific home directory resolution
+ok 48 - handles platform-specific home directory resolution
+  ---
+  duration_ms: 2021.6278
+  type: 'test'
+  ...
+# Subtest: install-hcloud shows platform-specific download instructions
+ok 49 - install-hcloud shows platform-specific download instructions
+  ---
+  duration_ms: 18697.1351
+  type: 'test'
+  ...
+# Subtest: MCP server path is normalized to forward slashes
+ok 50 - MCP server path is normalized to forward slashes
+  ---
+  duration_ms: 1927.6417
+  type: 'test'
+  ...
+# Subtest: uninstall cleans up all platform directories
+ok 51 - uninstall cleans up all platform directories
+  ---
+  duration_ms: 2024.5607
+  type: 'test'
+  ...
+# Subtest: version reports CLI version and installed plugin version per agent
+ok 52 - version reports CLI version and installed plugin version per agent
+  ---
+  duration_ms: 2012.7341
+  type: 'test'
+  ...
+# Subtest: version reports CLI version and install hint when no agent plugin is installed
+ok 53 - version reports CLI version and install hint when no agent plugin is installed
+  ---
+  duration_ms: 109.3156
+  type: 'test'
+  ...
+# Subtest: single-agent uninstall hints about global cleanup
+ok 54 - single-agent uninstall hints about global cleanup
+  ---
+  duration_ms: 2122.5731
+  type: 'test'
+  ...
+# Subtest: uninstall --target all (non-TTY) keeps KooCLI/OBS but removes the vault
+ok 55 - uninstall --target all (non-TTY) keeps KooCLI/OBS but removes the vault
+  ---
+  duration_ms: 2873.3034
+  type: 'test'
+  ...
+# Subtest: auth reconcile dispatches to cmdAuthReconcile (no inconsistencies in clean home)
+ok 56 - auth reconcile dispatches to cmdAuthReconcile (no inconsistencies in clean home)
+  ---
+  duration_ms: 76.5197
+  type: 'test'
+  ...
+# Subtest: uninstall --target all --clean-global removes KooCLI and OBS config
+ok 57 - uninstall --target all --clean-global removes KooCLI and OBS config
+  ---
+  duration_ms: 2864.0249
+  type: 'test'
+  ...
+# Subtest: detectFramework returns null for empty directory
+ok 58 - detectFramework returns null for empty directory
+  ---
+  duration_ms: 5.2965
+  type: 'test'
+  ...
+# Subtest: detectFramework returns null for non-web project
+ok 59 - detectFramework returns null for non-web project
+  ---
+  duration_ms: 11.0377
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Next.js
+ok 60 - detectFramework detects Next.js
+  ---
+  duration_ms: 3.9909
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Nuxt
+ok 61 - detectFramework detects Nuxt
+  ---
+  duration_ms: 9.1354
+  type: 'test'
+  ...
+# Subtest: detectFramework detects VitePress
+ok 62 - detectFramework detects VitePress
+  ---
+  duration_ms: 12.5588
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Docusaurus
+ok 63 - detectFramework detects Docusaurus
+  ---
+  duration_ms: 8.7202
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Hugo
+ok 64 - detectFramework detects Hugo
+  ---
+  duration_ms: 2.4615
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Hexo
+ok 65 - detectFramework detects Hexo
+  ---
+  duration_ms: 9.1582
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Taro
+ok 66 - detectFramework detects Taro
+  ---
+  duration_ms: 9.204
+  type: 'test'
+  ...
+# Subtest: detectFramework detects uni-app
+ok 67 - detectFramework detects uni-app
+  ---
+  duration_ms: 10.0176
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Vite SPA
+ok 68 - detectFramework detects Vite SPA
+  ---
+  duration_ms: 8.7205
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Create React App
+ok 69 - detectFramework detects Create React App
+  ---
+  duration_ms: 7.6139
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Angular
+ok 70 - detectFramework detects Angular
+  ---
+  duration_ms: 8.8173
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Monorepo with sub-apps
+ok 71 - detectFramework detects Monorepo with sub-apps
+  ---
+  duration_ms: 9.0095
+  type: 'test'
+  ...
+# Subtest: detectFramework detects package manager from lock files
+ok 72 - detectFramework detects package manager from lock files
+  ---
+  duration_ms: 9.8436
+  type: 'test'
+  ...
+# Subtest: detectFramework static fallback for project with index.html but no framework
+ok 73 - detectFramework static fallback for project with index.html but no framework
+  ---
+  duration_ms: 1.8348
+  type: 'test'
+  ...
+# Subtest: detectFramework returns projectPath in rootDir
+ok 74 - detectFramework returns projectPath in rootDir
+  ---
+  duration_ms: 8.7289
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Vue CLI before CRA fallback
+ok 75 - detectFramework detects Vue CLI before CRA fallback
+  ---
+  duration_ms: 3.3054
+  type: 'test'
+  ...
+# Subtest: detectFramework patches serveCmd for pnpm projects
+ok 76 - detectFramework patches serveCmd for pnpm projects
+  ---
+  duration_ms: 3.0106
+  type: 'test'
+  ...
+# Subtest: detectFramework handles non-web monorepo sub-apps gracefully
+ok 77 - detectFramework handles non-web monorepo sub-apps gracefully
+  ---
+  duration_ms: 6.7781
+  type: 'test'
+  ...
+# Subtest: mcpBackupFilePath honors HUAWEICLOUD_HOME and default layout
+ok 78 - mcpBackupFilePath honors HUAWEICLOUD_HOME and default layout
+  ---
+  duration_ms: 2.8077
+  type: 'test'
+  ...
+# Subtest: saveAgentDelta writes file, readAgentDelta reads it back
+ok 79 - saveAgentDelta writes file, readAgentDelta reads it back
+  ---
+  duration_ms: 14.4721
+  type: 'test'
+  ...
+# Subtest: saveAgentDelta overwrites prior delta for same agent, keeps others
+ok 80 - saveAgentDelta overwrites prior delta for same agent, keeps others
+  ---
+  duration_ms: 24.6511
+  type: 'test'
+  ...
+# Subtest: takeAgentDelta consumes the entry and removes the file when empty
+ok 81 - takeAgentDelta consumes the entry and removes the file when empty
+  ---
+  duration_ms: 10.2755
+  type: 'test'
+  ...
+# Subtest: takeAgentDelta keeps file when other agents remain
+ok 82 - takeAgentDelta keeps file when other agents remain
+  ---
+  duration_ms: 20.3768
+  type: 'test'
+  ...
+# Subtest: corrupt backup file is treated as empty, not fatal
+ok 83 - corrupt backup file is treated as empty, not fatal
+  ---
+  duration_ms: 9.6837
+  type: 'test'
+  ...
+# Subtest: purgeBackup removes the file; saveAgentDelta rejects invalid input
+ok 84 - purgeBackup removes the file; saveAgentDelta rejects invalid input
+  ---
+  duration_ms: 2.107
+  type: 'test'
+  ...
+# Subtest: CLI update merges drifted entry: corrects path, keeps user args and timeout
+ok 85 - CLI update merges drifted entry: corrects path, keeps user args and timeout
+  ---
+  duration_ms: 1897.8138
+  type: 'test'
+  ...
+# Subtest: CLI uninstall backs up user delta and cleans the config entry
+ok 86 - CLI uninstall backs up user delta and cleans the config entry
+  ---
+  duration_ms: 96.0184
+  type: 'test'
+  ...
+# Subtest: CLI install restores backed-up user fields and consumes the backup
+ok 87 - CLI install restores backed-up user fields and consumes the backup
+  ---
+  duration_ms: 1938.4535
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: identical entry reports unchanged
+ok 88 - mergeCommandStyle: identical entry reports unchanged
+  ---
+  duration_ms: 2.9338
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: preserves user extra args, env, timeout, enabled=false
+ok 89 - mergeCommandStyle: preserves user extra args, env, timeout, enabled=false
+  ---
+  duration_ms: 0.2658
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: path drift rewrites but keeps user extras
+ok 90 - mergeCommandStyle: path drift rewrites but keeps user extras
+  ---
+  duration_ms: 0.1501
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: path drift updates path but keeps user args
+ok 91 - mergeCommandStyle: path drift updates path but keeps user args
+  ---
+  duration_ms: 0.2687
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: fills missing defaults on drifted entry
+ok 92 - mergeCommandStyle: fills missing defaults on drifted entry
+  ---
+  duration_ms: 0.152
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: missing entry produces default
+ok 93 - mergeCommandStyle: missing entry produces default
+  ---
+  duration_ms: 0.1329
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: foreign wrapper keeps overwrite behavior
+ok 94 - mergeCommandStyle: foreign wrapper keeps overwrite behavior
+  ---
+  duration_ms: 0.2042
+  type: 'test'
+  ...
+# Subtest: mergeArgsStyle: identical entry reports unchanged
+ok 95 - mergeArgsStyle: identical entry reports unchanged
+  ---
+  duration_ms: 0.3224
+  type: 'test'
+  ...
+# Subtest: mergeArgsStyle: user values win over required env keys
+ok 96 - mergeArgsStyle: user values win over required env keys
+  ---
+  duration_ms: 0.4668
+  type: 'test'
+  ...
+# Subtest: mergeArgsStyle: adds missing required env keys
+ok 97 - mergeArgsStyle: adds missing required env keys
+  ---
+  duration_ms: 0.5824
+  type: 'test'
+  ...
+# Subtest: mergeArgsStyle: missing entry produces default with env
+ok 98 - mergeArgsStyle: missing entry produces default with env
+  ---
+  duration_ms: 0.3142
+  type: 'test'
+  ...
+# Subtest: mergeMcpServersFile: creates entry in empty config without timeout field
+ok 99 - mergeMcpServersFile: creates entry in empty config without timeout field
+  ---
+  duration_ms: 0.2823
+  type: 'test'
+  ...
+# Subtest: mergeMcpServersFile: preserves other servers and user fields
+ok 100 - mergeMcpServersFile: preserves other servers and user fields
+  ---
+  duration_ms: 0.2249
+  type: 'test'
+  ...
+# Subtest: extractUserDelta + applyUserDelta roundtrip (command style)
+ok 101 - extractUserDelta + applyUserDelta roundtrip (command style)
+  ---
+  duration_ms: 0.4356
+  type: 'test'
+  ...
+# Subtest: extractUserDelta returns null for default entry
+ok 102 - extractUserDelta returns null for default entry
+  ---
+  duration_ms: 0.1526
+  type: 'test'
+  ...
+# Subtest: extractUserDelta keeps non-managed env keys as user assets
+ok 103 - extractUserDelta keeps non-managed env keys as user assets
+  ---
+  duration_ms: 0.1356
+  type: 'test'
+  ...
+# Subtest: applyUserDelta ignores non-object input
+ok 104 - applyUserDelta ignores non-object input
+  ---
+  duration_ms: 0.1061
+  type: 'test'
+  ...
+# Subtest: removeKooCli removes default hcloud binary and config dir
+ok 105 - removeKooCli removes default hcloud binary and config dir
+  ---
+  duration_ms: 8.2159
+  type: 'test'
+  ...
+# Subtest: removeKooCli does not touch an empty non-hcloud install dir
+ok 106 - removeKooCli does not touch an empty non-hcloud install dir
+  ---
+  duration_ms: 1.8645
+  type: 'test'
+  ...
+# Subtest: removeObsConfig removes the OBS config file
+ok 107 - removeObsConfig removes the OBS config file
+  ---
+  duration_ms: 2.5359
+  type: 'test'
+  ...
+# Subtest: removeObsConfig returns empty when no OBS config exists
+ok 108 - removeObsConfig returns empty when no OBS config exists
+  ---
+  duration_ms: 1.069
+  type: 'test'
+  ...
+1..108
+# tests 108
+# suites 0
+# pass 91
+# fail 4
+# cancelled 0
+# skipped 13
+# todo 0
+# duration_ms 66129.4

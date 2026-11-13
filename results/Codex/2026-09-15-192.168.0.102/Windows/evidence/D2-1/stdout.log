@@ -1,0 +1,282 @@
+TAP version 13
+# (node:18772) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: global credentials round-trip with secure file path
+ok 1 - global credentials round-trip with secure file path
+  ---
+  duration_ms: 11.5409
+  type: 'test'
+  ...
+# Subtest: resolveCredentials prefers environment and falls back to vault
+ok 2 - resolveCredentials prefers environment and falls back to vault
+  ---
+  duration_ms: 6.7478
+  type: 'test'
+  ...
+# Subtest: writeObsConfig creates obsutilconfig content from vault
+ok 3 - writeObsConfig creates obsutilconfig content from vault
+  ---
+  duration_ms: 8.1566
+  type: 'test'
+  ...
+# Subtest: auth sync writes OBS and reports all agent registration targets
+ok 4 - auth sync writes OBS and reports all agent registration targets
+  ---
+  duration_ms: 577.3962
+  type: 'test'
+  ...
+# Subtest: agent registration detects OpenCode MCP config
+ok 5 - agent registration detects OpenCode MCP config
+  ---
+  duration_ms: 3.9097
+  type: 'test'
+  ...
+# Subtest: agent registration detects DSH cordis patch config
+ok 6 - agent registration detects DSH cordis patch config
+  ---
+  duration_ms: 3.5242
+  type: 'test'
+  ...
+# Subtest: agent registration detects DSH_HOME cordis patch config
+ok 7 - agent registration detects DSH_HOME cordis patch config
+  ---
+  duration_ms: 3.6506
+  type: 'test'
+  ...
+# Subtest: resolveCredentialsWithRuntime prioritizes runtime > env > vault
+ok 8 - resolveCredentialsWithRuntime prioritizes runtime > env > vault
+  ---
+  duration_ms: 3.7322
+  type: 'test'
+  ...
+# Subtest: resolveCredentialsWithRuntime set and clear workflow
+ok 9 - resolveCredentialsWithRuntime set and clear workflow
+  ---
+  duration_ms: 3.7237
+  type: 'test'
+  ...
+# Subtest: resolveCredentials reads CodeArts project mcp_settings.json
+ok 10 - resolveCredentials reads CodeArts project mcp_settings.json
+  ---
+  duration_ms: 3.0246
+  type: 'test'
+  ...
+# Subtest: resolveCredentials uses env vars over CodeArts mcp_settings.json
+ok 11 - resolveCredentials uses env vars over CodeArts mcp_settings.json
+  ---
+  duration_ms: 2.7824
+  type: 'test'
+  ...
+# Subtest: auth status is redacted and reflects vault/OBS state
+ok 12 - auth status is redacted and reflects vault/OBS state
+  ---
+  duration_ms: 168.6514
+  type: 'test'
+  ...
+# Subtest: getParentCwd returns a string on Linux and does not throw
+ok 13 - getParentCwd returns a string on Linux and does not throw
+  ---
+  duration_ms: 0.1636
+  type: 'test'
+  ...
+# Subtest: resolveCredentials prefers auth-init vault over env STS temporary credentials
+ok 14 - resolveCredentials prefers auth-init vault over env STS temporary credentials
+  ---
+  duration_ms: 3.6409
+  type: 'test'
+  ...
+# Subtest: resolveCredentials keeps env STS when no auth-init vault exists
+ok 15 - resolveCredentials keeps env STS when no auth-init vault exists
+  ---
+  duration_ms: 1.14
+  type: 'test'
+  ...
+# Subtest: resolveCredentials keeps permanent env over vault (no security token)
+ok 16 - resolveCredentials keeps permanent env over vault (no security token)
+  ---
+  duration_ms: 3.1251
+  type: 'test'
+  ...
+# Subtest: resolveCredentials reads CodeArts credentials from CODEARTS_PROJECT_DIR
+ok 17 - resolveCredentials reads CodeArts credentials from CODEARTS_PROJECT_DIR
+  ---
+  duration_ms: 3.3812
+  type: 'test'
+  ...
+# Subtest: last_sync write/read round-trip
+ok 18 - last_sync write/read round-trip
+  ---
+  duration_ms: 7.9326
+  type: 'test'
+  ...
+# Subtest: last_sync old timestamp-only format remains readable
+ok 19 - last_sync old timestamp-only format remains readable
+  ---
+  duration_ms: 3.5335
+  type: 'test'
+  ...
+# Subtest: writeGlobalCredentials persists configuredBySession flag
+ok 20 - writeGlobalCredentials persists configuredBySession flag
+  ---
+  duration_ms: 9.0744
+  type: 'test'
+  ...
+# Subtest: getAuthStatus reports reconciliation inconsistencies
+ok 21 - getAuthStatus reports reconciliation inconsistencies
+  ---
+  duration_ms: 163.5303
+  type: 'test'
+  ...
+# Subtest: backup and restore global credentials
+ok 22 - backup and restore global credentials
+  ---
+  duration_ms: 16.0588
+  type: 'test'
+  ...
+# Subtest: 43 getAuthStatus onboarding scenario1: S1 only, no env → use S1
+ok 23 - 43 getAuthStatus onboarding scenario1: S1 only, no env → use S1
+  ---
+  duration_ms: 162.9323
+  type: 'test'
+  ...
+# Subtest: 44 getAuthStatus onboarding scenario2: conflict S1 vs env
+ok 24 - 44 getAuthStatus onboarding scenario2: conflict S1 vs env
+  ---
+  duration_ms: 158.9925
+  type: 'test'
+  ...
+# Subtest: 45 getAuthStatus onboarding scenario3: nothing configured → auth-init/import steps
+ok 25 - 45 getAuthStatus onboarding scenario3: nothing configured → auth-init/import steps
+  ---
+  duration_ms: 151.4504
+  type: 'test'
+  ...
+# Subtest: 46 getAuthStatus onboarding scenario4: no S1 but env creds present → import
+ok 26 - 46 getAuthStatus onboarding scenario4: no S1 but env creds present → import
+  ---
+  duration_ms: 156.9027
+  type: 'test'
+  ...
+# Subtest: 47 getAuthStatus onboarding: platform triplet + no S1 → needsSetup=false
+ok 27 - 47 getAuthStatus onboarding: platform triplet + no S1 → needsSetup=false
+  ---
+  duration_ms: 153.5238
+  type: 'test'
+  ...
+# Subtest: 48 getAuthStatus onboarding runtime active → needsSetup=false, no leak
+ok 28 - 48 getAuthStatus onboarding runtime active → needsSetup=false, no leak
+  ---
+  duration_ms: 158.2844
+  type: 'test'
+  ...
+# Subtest: 49 huaweicloud_auth_status onboarding does not leak AK (fingerprint only)
+ok 29 - 49 huaweicloud_auth_status onboarding does not leak AK (fingerprint only)
+  ---
+  duration_ms: 157.7631
+  type: 'test'
+  ...
+# Subtest: 50 onboarding scenario1: S1 exists + platform triplet → use S1 (not s1-missing)
+ok 30 - 50 onboarding scenario1: S1 exists + platform triplet → use S1 (not s1-missing)
+  ---
+  duration_ms: 156.6196
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials accepts valid signature and resolves region project
+ok 31 - validateIamCredentials accepts valid signature and resolves region project
+  ---
+  duration_ms: 35.2233
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials falls back to first project without region
+ok 32 - validateIamCredentials falls back to first project without region
+  ---
+  duration_ms: 10.9573
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials rejects invalid SK (HTTP 401)
+ok 33 - validateIamCredentials rejects invalid SK (HTTP 401)
+  ---
+  duration_ms: 6.4199
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials treats 403 as valid credentials without project
+ok 34 - validateIamCredentials treats 403 as valid credentials without project
+  ---
+  duration_ms: 4.9889
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials marks infrastructure errors as skipped
+ok 35 - validateIamCredentials marks infrastructure errors as skipped
+  ---
+  duration_ms: 1.2345
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials fails fast without AK/SK
+ok 36 - validateIamCredentials fails fast without AK/SK
+  ---
+  duration_ms: 0.1905
+  type: 'test'
+  ...
+# Subtest: fingerprint is a stable masked digest
+ok 37 - fingerprint is a stable masked digest
+  ---
+  duration_ms: 1.4331
+  type: 'test'
+  ...
+# Subtest: readKooCliProfiles parses current + profiles with fingerprint/mtime
+ok 38 - readKooCliProfiles parses current + profiles with fingerprint/mtime
+  ---
+  duration_ms: 4.5695
+  type: 'test'
+  ...
+# Subtest: readKooCliProfiles handles missing config
+ok 39 - readKooCliProfiles handles missing config
+  ---
+  duration_ms: 1.1713
+  type: 'test'
+  ...
+# Subtest: scanState detects S1 vs KooCLI current-profile mismatch
+ok 40 - scanState detects S1 vs KooCLI current-profile mismatch
+  ---
+  duration_ms: 6.8183
+  type: 'test'
+  ...
+# Subtest: scanState does not misreport S2 drift when KooCLI authEncrypt=true
+ok 41 - scanState does not misreport S2 drift when KooCLI authEncrypt=true
+  ---
+  duration_ms: 6.1696
+  type: 'test'
+  ...
+# Subtest: isManualModified compares mtime vs .last_sync
+ok 42 - isManualModified compares mtime vs .last_sync
+  ---
+  duration_ms: 10.5315
+  type: 'test'
+  ...
+# Subtest: hasRuntimeCredentials reflects only runtime-injected credentials
+ok 43 - hasRuntimeCredentials reflects only runtime-injected credentials
+  ---
+  duration_ms: 1.0204
+  type: 'test'
+  ...
+# Subtest: scanState reports real runtime-store hasRuntime and runtimeFingerprint
+ok 44 - scanState reports real runtime-store hasRuntime and runtimeFingerprint
+  ---
+  duration_ms: 2.949
+  type: 'test'
+  ...
+# Subtest: kooCliConfigPath honors HCLOUD_CONFIG_PATH then falls back to homedir
+ok 45 - kooCliConfigPath honors HCLOUD_CONFIG_PATH then falls back to homedir
+  ---
+  duration_ms: 0.6069
+  type: 'test'
+  ...
+1..45
+# tests 45
+# suites 0
+# pass 45
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2375.7917

@@ -1,0 +1,430 @@
+TAP version 13
+# Subtest: mcpBackupFilePath honors HUAWEICLOUD_HOME and default layout
+ok 1 - mcpBackupFilePath honors HUAWEICLOUD_HOME and default layout
+  ---
+  duration_ms: 271.8132
+  type: 'test'
+  ...
+# Subtest: saveAgentDelta writes file, readAgentDelta reads it back
+ok 2 - saveAgentDelta writes file, readAgentDelta reads it back
+  ---
+  duration_ms: 21.0996
+  type: 'test'
+  ...
+# Subtest: saveAgentDelta overwrites prior delta for same agent, keeps others
+ok 3 - saveAgentDelta overwrites prior delta for same agent, keeps others
+  ---
+  duration_ms: 26.8415
+  type: 'test'
+  ...
+# Subtest: takeAgentDelta consumes the entry and removes the file when empty
+ok 4 - takeAgentDelta consumes the entry and removes the file when empty
+  ---
+  duration_ms: 9.0367
+  type: 'test'
+  ...
+# Subtest: takeAgentDelta keeps file when other agents remain
+ok 5 - takeAgentDelta keeps file when other agents remain
+  ---
+  duration_ms: 20.8786
+  type: 'test'
+  ...
+# Subtest: corrupt backup file is treated as empty, not fatal
+ok 6 - corrupt backup file is treated as empty, not fatal
+  ---
+  duration_ms: 16.6566
+  type: 'test'
+  ...
+# Subtest: purgeBackup removes the file; saveAgentDelta rejects invalid input
+ok 7 - purgeBackup removes the file; saveAgentDelta rejects invalid input
+  ---
+  duration_ms: 2.418
+  type: 'test'
+  ...
+# Subtest: CLI update merges drifted entry: corrects path, keeps user args and timeout
+ok 8 - CLI update merges drifted entry: corrects path, keeps user args and timeout
+  ---
+  duration_ms: 4354.7967
+  type: 'test'
+  ...
+# Subtest: CLI uninstall backs up user delta and cleans the config entry
+ok 9 - CLI uninstall backs up user delta and cleans the config entry
+  ---
+  duration_ms: 101.1628
+  type: 'test'
+  ...
+# Subtest: CLI install restores backed-up user fields and consumes the backup
+ok 10 - CLI install restores backed-up user fields and consumes the backup
+  ---
+  duration_ms: 1877.3552
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: identical entry reports unchanged
+ok 11 - mergeCommandStyle: identical entry reports unchanged
+  ---
+  duration_ms: 2.6232
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: preserves user extra args, env, timeout, enabled=false
+ok 12 - mergeCommandStyle: preserves user extra args, env, timeout, enabled=false
+  ---
+  duration_ms: 0.2481
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: path drift rewrites but keeps user extras
+ok 13 - mergeCommandStyle: path drift rewrites but keeps user extras
+  ---
+  duration_ms: 0.1333
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: path drift updates path but keeps user args
+ok 14 - mergeCommandStyle: path drift updates path but keeps user args
+  ---
+  duration_ms: 0.195
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: fills missing defaults on drifted entry
+ok 15 - mergeCommandStyle: fills missing defaults on drifted entry
+  ---
+  duration_ms: 0.1365
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: missing entry produces default
+ok 16 - mergeCommandStyle: missing entry produces default
+  ---
+  duration_ms: 0.1371
+  type: 'test'
+  ...
+# Subtest: mergeCommandStyle: foreign wrapper keeps overwrite behavior
+ok 17 - mergeCommandStyle: foreign wrapper keeps overwrite behavior
+  ---
+  duration_ms: 0.1528
+  type: 'test'
+  ...
+# Subtest: mergeArgsStyle: identical entry reports unchanged
+ok 18 - mergeArgsStyle: identical entry reports unchanged
+  ---
+  duration_ms: 0.2541
+  type: 'test'
+  ...
+# Subtest: mergeArgsStyle: user values win over required env keys
+ok 19 - mergeArgsStyle: user values win over required env keys
+  ---
+  duration_ms: 0.3054
+  type: 'test'
+  ...
+# Subtest: mergeArgsStyle: adds missing required env keys
+ok 20 - mergeArgsStyle: adds missing required env keys
+  ---
+  duration_ms: 0.3673
+  type: 'test'
+  ...
+# Subtest: mergeArgsStyle: missing entry produces default with env
+ok 21 - mergeArgsStyle: missing entry produces default with env
+  ---
+  duration_ms: 0.1875
+  type: 'test'
+  ...
+# Subtest: mergeMcpServersFile: creates entry in empty config without timeout field
+ok 22 - mergeMcpServersFile: creates entry in empty config without timeout field
+  ---
+  duration_ms: 0.1505
+  type: 'test'
+  ...
+# Subtest: mergeMcpServersFile: preserves other servers and user fields
+ok 23 - mergeMcpServersFile: preserves other servers and user fields
+  ---
+  duration_ms: 0.1251
+  type: 'test'
+  ...
+# Subtest: extractUserDelta + applyUserDelta roundtrip (command style)
+ok 24 - extractUserDelta + applyUserDelta roundtrip (command style)
+  ---
+  duration_ms: 0.3211
+  type: 'test'
+  ...
+# Subtest: extractUserDelta returns null for default entry
+ok 25 - extractUserDelta returns null for default entry
+  ---
+  duration_ms: 0.0836
+  type: 'test'
+  ...
+# Subtest: extractUserDelta keeps non-managed env keys as user assets
+ok 26 - extractUserDelta keeps non-managed env keys as user assets
+  ---
+  duration_ms: 0.0717
+  type: 'test'
+  ...
+# Subtest: applyUserDelta ignores non-object input
+ok 27 - applyUserDelta ignores non-object input
+  ---
+  duration_ms: 0.0578
+  type: 'test'
+  ...
+# Subtest: Codex plugin manifest and marketplace are installable
+ok 28 - Codex plugin manifest and marketplace are installable
+  ---
+  duration_ms: 11.6014
+  type: 'test'
+  ...
+# Subtest: OpenClaw plugin manifest matches other agent manifests
+ok 29 - OpenClaw plugin manifest matches other agent manifests
+  ---
+  duration_ms: 256.1951
+  type: 'test'
+  ...
+# Subtest: OpenCode integration exposes skills, commands, and MCP config
+ok 30 - OpenCode integration exposes skills, commands, and MCP config
+  ---
+  duration_ms: 1.3804
+  type: 'test'
+  ...
+# Subtest: Hermes MCP Catalog manifest is present and valid
+ok 31 - Hermes MCP Catalog manifest is present and valid
+  ---
+  duration_ms: 1.3152
+  type: 'test'
+  ...
+# Subtest: plugin skills are compact meta-skills instead of service encyclopedia entries
+ok 32 - plugin skills are compact meta-skills instead of service encyclopedia entries
+  ---
+  duration_ms: 9.13
+  type: 'test'
+  ...
+# Subtest: skills document KooCLI installation, operation discovery, region intent, and password safety
+ok 33 - skills document KooCLI installation, operation discovery, region intent, and password safety
+  ---
+  duration_ms: 1.0642
+  type: 'test'
+  ...
+# Subtest: skill SKILL.md files meet minimum content quality bar
+ok 34 - skill SKILL.md files meet minimum content quality bar
+  ---
+  duration_ms: 6.9429
+  type: 'test'
+  ...
+# Subtest: skills with references have non-empty reference files
+ok 35 - skills with references have non-empty reference files
+  ---
+  duration_ms: 7.2367
+  type: 'test'
+  ...
+# Subtest: web/static-site deployment intent offers target options with sandbox first, not OBS default
+ok 36 - web/static-site deployment intent offers target options with sandbox first, not OBS default
+  ---
+  duration_ms: 2.0569
+  type: 'test'
+  ...
+# Subtest: devbridge uses the valid `list` command, not the non-existent `ls`
+ok 37 - devbridge uses the valid `list` command, not the non-existent `ls`
+  ---
+  duration_ms: 1.202
+  type: 'test'
+  ...
+# Subtest: all plugin manifests are valid JSON
+ok 38 - all plugin manifests are valid JSON
+  ---
+  duration_ms: 0.8198
+  type: 'test'
+  ...
+# Subtest: safety policy.json is valid and has required fields
+ok 39 - safety policy.json is valid and has required fields
+  ---
+  duration_ms: 0.4056
+  type: 'test'
+  ...
+# Subtest: cloud risk rules are present and public-safe
+ok 40 - cloud risk rules are present and public-safe
+  ---
+  duration_ms: 1.261
+  type: 'test'
+  ...
+# Subtest: hooks.json uses Node hook and keeps Python hook for Hermes compatibility
+ok 41 - hooks.json uses Node hook and keeps Python hook for Hermes compatibility
+  ---
+  duration_ms: 0.7979
+  type: 'test'
+  ...
+# Subtest: hook rule model documentation exists
+ok 42 - hook rule model documentation exists
+  ---
+  duration_ms: 1.3323
+  type: 'test'
+  ...
+# Subtest: safety skill teaches proactive hook checks
+ok 43 - safety skill teaches proactive hook checks
+  ---
+  duration_ms: 0.3037
+  type: 'test'
+  ...
+# Subtest: .mcp.json is valid and references existing server script
+ok 44 - .mcp.json is valid and references existing server script
+  ---
+  duration_ms: 0.3949
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the codearts target end to end
+ok 45 - setup-cli.mjs supports the codearts target end to end
+  ---
+  duration_ms: 2.2931
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the codearts directory
+ok 46 - tools.mjs resolves skills from the codearts directory
+  ---
+  duration_ms: 1.0302
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs handles KooCLI sandbox blockers and privacy agreement
+ok 47 - setup-cli.mjs handles KooCLI sandbox blockers and privacy agreement
+  ---
+  duration_ms: 1.5712
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs covers hermes restart hints, unix auto-install, and grouped status (\#280)
+ok 48 - setup-cli.mjs covers hermes restart hints, unix auto-install, and grouped status (\#280)
+  ---
+  duration_ms: 1.6318
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the dsh target end to end
+ok 49 - setup-cli.mjs supports the dsh target end to end
+  ---
+  duration_ms: 2.2783
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the dsh directory
+ok 50 - tools.mjs resolves skills from the dsh directory
+  ---
+  duration_ms: 0.9688
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the officeace directory
+ok 51 - tools.mjs resolves skills from the officeace directory
+  ---
+  duration_ms: 1.5435
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the officeace target end to end
+ok 52 - setup-cli.mjs supports the officeace target end to end
+  ---
+  duration_ms: 41.6166
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the hermes target end to end
+ok 53 - setup-cli.mjs supports the hermes target end to end
+  ---
+  duration_ms: 3.0237
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the version command
+ok 54 - setup-cli.mjs supports the version command
+  ---
+  duration_ms: 1.6913
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs wires the auth reconcile subcommand
+ok 55 - setup-cli.mjs wires the auth reconcile subcommand
+  ---
+  duration_ms: 1.5592
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs resolves the active KooCLI profile for configureHcloud
+ok 56 - setup-cli.mjs resolves the active KooCLI profile for configureHcloud
+  ---
+  duration_ms: 2.1374
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs checks for updates on install/update via shared query
+ok 57 - setup-cli.mjs checks for updates on install/update via shared query
+  ---
+  duration_ms: 1.9346
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the hermes directory
+ok 58 - tools.mjs resolves skills from the hermes directory
+  ---
+  duration_ms: 0.8318
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the atomcode directory
+ok 59 - tools.mjs resolves skills from the atomcode directory
+  ---
+  duration_ms: 0.8576
+  type: 'test'
+  ...
+# Subtest: agent-registration reports openclaw registration status
+ok 60 - agent-registration reports openclaw registration status
+  ---
+  duration_ms: 0.3492
+  type: 'test'
+  ...
+# Subtest: official Huawei Cloud Icons library is integrated
+ok 61 - official Huawei Cloud Icons library is integrated
+  ---
+  duration_ms: 2.6282
+  type: 'test'
+  ...
+# Subtest: tools.mjs registers version-update tools
+ok 62 - tools.mjs registers version-update tools
+  ---
+  duration_ms: 0.8988
+  type: 'test'
+  ...
+# Subtest: stdio server warms update cache; shared protocol decorates first tool call
+ok 63 - stdio server warms update cache; shared protocol decorates first tool call
+  ---
+  duration_ms: 0.504
+  type: 'test'
+  ...
+# Subtest: hdkitservice-api sends X-HW-Client-Version; SKILL session-start wording
+ok 64 - hdkitservice-api sends X-HW-Client-Version; SKILL session-start wording
+  ---
+  duration_ms: 0.542
+  type: 'test'
+  ...
+# Subtest: READMEs recommend @latest for updates
+ok 65 - READMEs recommend @latest for updates
+  ---
+  duration_ms: 19.2619
+  type: 'test'
+  ...
+# Subtest: cmdUpdate has no trailing unreachable reinstall; cmdReinstall keeps it
+ok 66 - cmdUpdate has no trailing unreachable reinstall; cmdReinstall keeps it
+  ---
+  duration_ms: 2.2029
+  type: 'test'
+  ...
+# Subtest: removeKooCli removes default hcloud binary and config dir
+ok 67 - removeKooCli removes default hcloud binary and config dir
+  ---
+  duration_ms: 247.2594
+  type: 'test'
+  ...
+# Subtest: removeKooCli does not touch an empty non-hcloud install dir
+ok 68 - removeKooCli does not touch an empty non-hcloud install dir
+  ---
+  duration_ms: 4.4358
+  type: 'test'
+  ...
+# Subtest: removeObsConfig removes the OBS config file
+ok 69 - removeObsConfig removes the OBS config file
+  ---
+  duration_ms: 3.9687
+  type: 'test'
+  ...
+# Subtest: removeObsConfig returns empty when no OBS config exists
+ok 70 - removeObsConfig returns empty when no OBS config exists
+  ---
+  duration_ms: 1.1047
+  type: 'test'
+  ...
+1..70
+# tests 70
+# suites 0
+# pass 70
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6433.0886

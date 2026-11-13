@@ -1,0 +1,135 @@
+{
+  "case": "D9-13",
+  "status": "FAIL",
+  "why": "runtime-credentials-resolve failed; risk-merge-detects-secret failed; approval-token-one-shot failed",
+  "executedAt": "20260924061033",
+  "results": [
+    {
+      "name": "runtime-credentials-resolve",
+      "pass": false,
+      "actual": {
+        "ak": {
+          "ak": "AKP0SECRET123",
+          "sk": "SKP0SECRET456",
+          "securityToken": "TOKENP0SECRET789",
+          "region": "cn-north-4"
+        },
+        "has": true
+      },
+      "expected": "runtime credentials",
+      "detail": ""
+    },
+    {
+      "name": "policy-load",
+      "pass": true,
+      "actual": "0.1.0",
+      "expected": "version",
+      "detail": ""
+    },
+    {
+      "name": "classify-read-allow",
+      "pass": true,
+      "actual": {
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation.",
+        "service": "ECS",
+        "operation": "ListServersDetails",
+        "args": [
+          "ECS",
+          "ListServersDetails"
+        ]
+      },
+      "expected": "allow",
+      "detail": ""
+    },
+    {
+      "name": "classify-write-deny",
+      "pass": true,
+      "actual": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      "expected": "non-allow",
+      "detail": ""
+    },
+    {
+      "name": "risk-merge-detects-secret",
+      "pass": false,
+      "actual": {
+        "decision": "allow"
+      },
+      "expected": "non-allow",
+      "detail": ""
+    },
+    {
+      "name": "approval-token-one-shot",
+      "pass": false,
+      "actual": {
+        "first": false,
+        "second": false,
+        "hash": "9b096c53c1904469137054591d5ce1b8628a84e2dc83fbce348d97d704c90815"
+      },
+      "expected": "one-shot",
+      "detail": ""
+    },
+    {
+      "name": "plan-write-gated",
+      "pass": true,
+      "actual": {
+        "executable": "hcloud",
+        "args": [
+          "ECS",
+          "DeleteServers",
+          "--server-ids",
+          "x"
+        ],
+        "command": "hcloud ECS DeleteServers --server-ids x",
+        "executableBlock": "hcloud ECS DeleteServers --server-ids x",
+        "warnings": [],
+        "classification": {
+          "decision": "deny",
+          "risk": "write",
+          "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+        },
+        "sgFindings": [],
+        "approvalToken": "f0a66a08-652e-420a-a0a4-77cac74f3e63",
+        "safeToRun": false
+      },
+      "expected": "gated",
+      "detail": ""
+    },
+    {
+      "name": "tools-call-no-secret-leak",
+      "pass": true,
+      "actual": "{\"executable\":\"hcloud\",\"args\":[\"ECS\",\"DeleteServers\",\"--server-ids\",\"x\"],\"command\":\"hcloud ECS DeleteServers --server-ids x\",\"executableBlock\":\"hcloud ECS DeleteServers --server-ids x\",\"warnings\":[],\"",
+      "expected": "no secrets",
+      "detail": ""
+    },
+    {
+      "name": "runtime-credentials-clear",
+      "pass": true,
+      "actual": false,
+      "expected": false,
+      "detail": ""
+    },
+    {
+      "name": "placeholder-detect",
+      "pass": true,
+      "actual": true,
+      "expected": true,
+      "detail": ""
+    },
+    {
+      "name": "paths-export",
+      "pass": true,
+      "actual": {
+        "global": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+        "obs": "C:\\Users\\Administrator\\.obsutilconfig"
+      },
+      "expected": "paths",
+      "detail": ""
+    }
+  ]
+}

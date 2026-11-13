@@ -1,0 +1,74 @@
+{
+  "case": "D4-28",
+  "status": "PASS",
+  "why": "",
+  "executedAt": "20260924061033",
+  "results": [
+    {
+      "name": "hooks-json-present",
+      "pass": true,
+      "actual": "C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\plugins\\huaweicloud-core\\hooks\\hooks.json",
+      "expected": "exists",
+      "detail": ""
+    },
+    {
+      "name": "hooks-json-node-mjs",
+      "pass": true,
+      "actual": "{\r\n  \"hooks\": {\r\n    \"PreToolUse\": [\r\n      {\r\n        \"matcher\": \"Bash\",\r\n        \"hooks\": [\r\n          {\r\n            \"type\": \"command\",\r\n            \"command",
+      "expected": "node huaweicloud-safety.mjs",
+      "detail": ""
+    },
+    {
+      "name": "deny-command",
+      "pass": true,
+      "actual": {
+        "hookSpecificOutput": {
+          "hookEventName": "PreToolUse",
+          "permissionDecision": "deny",
+          "permissionDecisionReason": "Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked."
+        }
+      },
+      "expected": "permissionDecision=deny",
+      "detail": ""
+    },
+    {
+      "name": "deny-cmd",
+      "pass": true,
+      "actual": {
+        "hookSpecificOutput": {
+          "hookEventName": "PreToolUse",
+          "permissionDecision": "deny",
+          "permissionDecisionReason": "Huawei Cloud safety hook blocked this action: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+        }
+      },
+      "expected": "permissionDecision=deny",
+      "detail": ""
+    },
+    {
+      "name": "deny-script",
+      "pass": true,
+      "actual": {
+        "hookSpecificOutput": {
+          "hookEventName": "PreToolUse",
+          "permissionDecision": "deny",
+          "permissionDecisionReason": "Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+        }
+      },
+      "expected": "permissionDecision=deny",
+      "detail": ""
+    },
+    {
+      "name": "deny-args",
+      "pass": true,
+      "actual": {
+        "hookSpecificOutput": {
+          "hookEventName": "PreToolUse",
+          "permissionDecision": "deny",
+          "permissionDecisionReason": "Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+        }
+      },
+      "expected": "permissionDecision=deny",
+      "detail": ""
+    }
+  ]
+}

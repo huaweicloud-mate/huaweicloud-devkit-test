@@ -1,0 +1,2781 @@
+
+> huaweicloud-devkit@1.1.4-next.3 test
+> node --test "test/*.test.mjs"
+
+TAP version 13
+# Subtest: opencode install creates skills, MCP server, and safety policy
+ok 1 - opencode install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 7899.8264
+  type: 'test'
+  ...
+# Subtest: opencode status reports installed
+ok 2 - opencode status reports installed
+  ---
+  duration_ms: 3420.6224
+  type: 'test'
+  ...
+# Subtest: opencode uninstall removes installed files
+ok 3 - opencode uninstall removes installed files
+  ---
+  duration_ms: 7797.0515
+  type: 'test'
+  ...
+# Subtest: opencode install is idempotent
+ok 4 - opencode install is idempotent
+  ---
+  duration_ms: 7961.3478
+  type: 'test'
+  ...
+# Subtest: workbuddy install creates skills, MCP server, and safety policy
+ok 5 - workbuddy install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 13452.8672
+  type: 'test'
+  ...
+# Subtest: workbuddy status reports installed
+ok 6 - workbuddy status reports installed
+  ---
+  duration_ms: 6435.5816
+  type: 'test'
+  ...
+# Subtest: workbuddy uninstall removes installed files
+ok 7 - workbuddy uninstall removes installed files
+  ---
+  duration_ms: 3337.5181
+  type: 'test'
+  ...
+# Subtest: workbuddy install is idempotent
+ok 8 - workbuddy install is idempotent
+  ---
+  duration_ms: 7234.8241
+  type: 'test'
+  ...
+# Subtest: codex-desktop install creates skills, MCP server, and safety policy
+ok 9 - codex-desktop install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 3321.3691
+  type: 'test'
+  ...
+# Subtest: codex-desktop uninstall removes installed files
+ok 10 - codex-desktop uninstall removes installed files
+  ---
+  duration_ms: 4328.0983
+  type: 'test'
+  ...
+# Subtest: cli help lists supported agent targets
+ok 11 - cli help lists supported agent targets
+  ---
+  duration_ms: 85.9416
+  type: 'test'
+  ...
+# Subtest: openclaw install creates skills, MCP server, and safety policy in .agents
+ok 12 - openclaw install creates skills, MCP server, and safety policy in .agents
+  ---
+  duration_ms: 3999.7184
+  type: 'test'
+  ...
+# Subtest: openclaw uninstall removes installed files
+ok 13 - openclaw uninstall removes installed files
+  ---
+  duration_ms: 3665.3857
+  type: 'test'
+  ...
+# Subtest: hermes install creates skills, MCP server, and safety policy
+ok 14 - hermes install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 4822.8894
+  type: 'test'
+  ...
+# Subtest: hermes uninstall removes installed files
+ok 15 - hermes uninstall removes installed files
+  ---
+  duration_ms: 3693.0352
+  type: 'test'
+  ...
+# Subtest: atomcode install creates skills, MCP server, and safety policy
+ok 16 - atomcode install creates skills, MCP server, and safety policy
+  ---
+  duration_ms: 2909.3839
+  type: 'test'
+  ...
+# Subtest: atomcode status reports installed
+ok 17 - atomcode status reports installed
+  ---
+  duration_ms: 4158.3618
+  type: 'test'
+  ...
+# Subtest: atomcode uninstall removes installed files
+ok 18 - atomcode uninstall removes installed files
+  ---
+  duration_ms: 2907.4645
+  type: 'test'
+  ...
+# Subtest: atomcode install is idempotent
+ok 19 - atomcode install is idempotent
+  ---
+  duration_ms: 4029.2173
+  type: 'test'
+  ...
+# Subtest: codex target does not crash without Codex CLI
+ok 20 - codex target does not crash without Codex CLI
+  ---
+  duration_ms: 384.9398
+  type: 'test'
+  ...
+# Subtest: codex install uses DevKit plugin id and skips OpenCode marker
+ok 21 - codex install uses DevKit plugin id and skips OpenCode marker
+  ---
+  duration_ms: 734.3484
+  type: 'test'
+  ...
+# Subtest: codex install fails fast when plugin add fails
+ok 22 - codex install fails fast when plugin add fails
+  ---
+  duration_ms: 608.4419
+  type: 'test'
+  ...
+# Subtest: codex status parses plugin list JSON (name match, not path substring)
+ok 23 - codex status parses plugin list JSON (name match, not path substring)
+  ---
+  duration_ms: 501.4838
+  type: 'test'
+  ...
+# Subtest: codex uninstall removes current and legacy plugin ids
+ok 24 - codex uninstall removes current and legacy plugin ids
+  ---
+  duration_ms: 502.2363
+  type: 'test'
+  ...
+# Subtest: install auto-detect with multiple agents requires explicit target in non-interactive shells
+not ok 25 - install auto-detect with multiple agents requires explicit target in non-interactive shells
+  ---
+  duration_ms: 101.8981
+  type: 'test'
+  location: 'C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\test\\agent-install.test.mjs:573:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Multiple agents detected \(opencode, workbuddy\)/. Input:
+    
+    'Multiple agents detected (opencode, workbuddy, officeace). Cannot prompt in a non-interactive shell — specify `--target <agent>` or `--target all`.\n' +
+      '(node:1408) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n' +
+      '(Use `node --trace-warnings ...` to show where the warning was created)\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    Multiple agents detected (opencode, workbuddy, officeace). Cannot prompt in a non-interactive shell — specify `--target <agent>` or `--target all`.
+    (node:1408) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Administrator/devkit-test/Codex/hdk/test/agent-install.test.mjs:581:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: install auto-detect multiple agents interactive multi-select picks only chosen ones
+ok 26 - install auto-detect multiple agents interactive multi-select picks only chosen ones # SKIP
+  ---
+  duration_ms: 0.0897
+  type: 'test'
+  ...
+# Subtest: install auto-detect multiple agents interactive multi-select picks all on comma list
+ok 27 - install auto-detect multiple agents interactive multi-select picks all on comma list # SKIP
+  ---
+  duration_ms: 0.0482
+  type: 'test'
+  ...
+# Subtest: install auto-detect multiple agents interactive cancel installs nothing
+ok 28 - install auto-detect multiple agents interactive cancel installs nothing # SKIP
+  ---
+  duration_ms: 0.0326
+  type: 'test'
+  ...
+# Subtest: install --target all still installs every supported agent
+not ok 29 - install --target all still installs every supported agent
+  ---
+  duration_ms: 25307.5138
+  type: 'test'
+  location: 'C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\test\\agent-install.test.mjs:684:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    (node:25412) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Administrator/devkit-test/Codex/hdk/test/agent-install.test.mjs:701:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: install auto-detect single agent installs only that agent
+not ok 30 - install auto-detect single agent installs only that agent
+  ---
+  duration_ms: 107.4596
+  type: 'test'
+  location: 'C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\test\\agent-install.test.mjs:713:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Multiple agents detected (opencode, officeace). Cannot prompt in a non-interactive shell — specify `--target <agent>` or `--target all`.
+    (node:5000) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Administrator/devkit-test/Codex/hdk/test/agent-install.test.mjs:719:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: install auto-detect with no agents reports error
+not ok 31 - install auto-detect with no agents reports error
+  ---
+  duration_ms: 1465.17
+  type: 'test'
+  location: 'C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\test\\agent-install.test.mjs:730:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Administrator/devkit-test/Codex/hdk/test/agent-install.test.mjs:735:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: status auto-detect multiple retains full-range behavior (install-only change)
+ok 32 - status auto-detect multiple retains full-range behavior (install-only change)
+  ---
+  duration_ms: 1291.541
+  type: 'test'
+  ...
+# Subtest: install auto-detect multiple agents interactive multi-select installs all on "all"
+ok 33 - install auto-detect multiple agents interactive multi-select installs all on "all" # SKIP
+  ---
+  duration_ms: 0.0957
+  type: 'test'
+  ...
+# Subtest: install auto-detect multiple agents invalid input falls back to all detected
+ok 34 - install auto-detect multiple agents invalid input falls back to all detected # SKIP
+  ---
+  duration_ms: 0.053
+  type: 'test'
+  ...
+# Subtest: install rejects unknown --target
+ok 35 - install rejects unknown --target
+  ---
+  duration_ms: 71.9842
+  type: 'test'
+  ...
+# Subtest: uninstall auto-detect multiple retains full-range behavior (install-only change)
+ok 36 - uninstall auto-detect multiple retains full-range behavior (install-only change)
+  ---
+  duration_ms: 984.5845
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 1 installs to the entered target
+ok 37 - install zero-detect menu option 1 installs to the entered target # SKIP
+  ---
+  duration_ms: 0.0807
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 1 rejects unknown target
+ok 38 - install zero-detect menu option 1 rejects unknown target # SKIP
+  ---
+  duration_ms: 0.0382
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 2 installs to all
+ok 39 - install zero-detect menu option 2 installs to all # SKIP
+  ---
+  duration_ms: 0.0332
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 0 exits without installing
+ok 40 - install zero-detect menu option 0 exits without installing # SKIP
+  ---
+  duration_ms: 0.0317
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 3 writes Claude Code MCP config with backup
+ok 41 - install zero-detect menu option 3 writes Claude Code MCP config with backup # SKIP
+  ---
+  duration_ms: 0.0274
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 3 writes Cursor mcp.json
+ok 42 - install zero-detect menu option 3 writes Cursor mcp.json # SKIP
+  ---
+  duration_ms: 0.0343
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 3 skips already-configured MCP
+ok 43 - install zero-detect menu option 3 skips already-configured MCP # SKIP
+  ---
+  duration_ms: 0.0299
+  type: 'test'
+  ...
+# Subtest: install zero-detect menu option 3 prints snippet when no MCP agent detected
+ok 44 - install zero-detect menu option 3 prints snippet when no MCP agent detected # SKIP
+  ---
+  duration_ms: 0.0447
+  type: 'test'
+  ...
+# (node:40256) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: global credentials round-trip with secure file path
+ok 45 - global credentials round-trip with secure file path
+  ---
+  duration_ms: 15.6847
+  type: 'test'
+  ...
+# Subtest: resolveCredentials prefers environment and falls back to vault
+ok 46 - resolveCredentials prefers environment and falls back to vault
+  ---
+  duration_ms: 15.6976
+  type: 'test'
+  ...
+# Subtest: writeObsConfig creates obsutilconfig content from vault
+ok 47 - writeObsConfig creates obsutilconfig content from vault
+  ---
+  duration_ms: 10.3881
+  type: 'test'
+  ...
+# Subtest: auth sync writes OBS and reports all agent registration targets
+ok 48 - auth sync writes OBS and reports all agent registration targets
+  ---
+  duration_ms: 5061.6905
+  type: 'test'
+  ...
+# Subtest: agent registration detects OpenCode MCP config
+ok 49 - agent registration detects OpenCode MCP config
+  ---
+  duration_ms: 11.6905
+  type: 'test'
+  ...
+# Subtest: agent registration detects DSH cordis patch config
+ok 50 - agent registration detects DSH cordis patch config
+  ---
+  duration_ms: 10.0009
+  type: 'test'
+  ...
+# Subtest: agent registration detects DSH_HOME cordis patch config
+ok 51 - agent registration detects DSH_HOME cordis patch config
+  ---
+  duration_ms: 12.9096
+  type: 'test'
+  ...
+# Subtest: resolveCredentialsWithRuntime prioritizes runtime > env > vault
+ok 52 - resolveCredentialsWithRuntime prioritizes runtime > env > vault
+  ---
+  duration_ms: 10.1385
+  type: 'test'
+  ...
+# Subtest: resolveCredentialsWithRuntime set and clear workflow
+ok 53 - resolveCredentialsWithRuntime set and clear workflow
+  ---
+  duration_ms: 11.1753
+  type: 'test'
+  ...
+# Subtest: resolveCredentials reads CodeArts project mcp_settings.json
+ok 54 - resolveCredentials reads CodeArts project mcp_settings.json
+  ---
+  duration_ms: 10.5534
+  type: 'test'
+  ...
+# Subtest: resolveCredentials uses env vars over CodeArts mcp_settings.json
+ok 55 - resolveCredentials uses env vars over CodeArts mcp_settings.json
+  ---
+  duration_ms: 9.5578
+  type: 'test'
+  ...
+# Subtest: auth status is redacted and reflects vault/OBS state
+ok 56 - auth status is redacted and reflects vault/OBS state
+  ---
+  duration_ms: 1730.2965
+  type: 'test'
+  ...
+# Subtest: getParentCwd returns a string on Linux and does not throw
+ok 57 - getParentCwd returns a string on Linux and does not throw
+  ---
+  duration_ms: 0.1816
+  type: 'test'
+  ...
+# Subtest: resolveCredentials prefers auth-init vault over env STS temporary credentials
+ok 58 - resolveCredentials prefers auth-init vault over env STS temporary credentials
+  ---
+  duration_ms: 3.5492
+  type: 'test'
+  ...
+# Subtest: resolveCredentials keeps env STS when no auth-init vault exists
+ok 59 - resolveCredentials keeps env STS when no auth-init vault exists
+  ---
+  duration_ms: 1.409
+  type: 'test'
+  ...
+# Subtest: resolveCredentials keeps permanent env over vault (no security token)
+ok 60 - resolveCredentials keeps permanent env over vault (no security token)
+  ---
+  duration_ms: 3.478
+  type: 'test'
+  ...
+# Subtest: resolveCredentials reads CodeArts credentials from CODEARTS_PROJECT_DIR
+ok 61 - resolveCredentials reads CodeArts credentials from CODEARTS_PROJECT_DIR
+  ---
+  duration_ms: 9.8589
+  type: 'test'
+  ...
+# Subtest: last_sync write/read round-trip
+ok 62 - last_sync write/read round-trip
+  ---
+  duration_ms: 8.92
+  type: 'test'
+  ...
+# Subtest: last_sync old timestamp-only format remains readable
+ok 63 - last_sync old timestamp-only format remains readable
+  ---
+  duration_ms: 7.7815
+  type: 'test'
+  ...
+# Subtest: writeGlobalCredentials persists configuredBySession flag
+ok 64 - writeGlobalCredentials persists configuredBySession flag
+  ---
+  duration_ms: 10.9554
+  type: 'test'
+  ...
+# Subtest: getAuthStatus reports reconciliation inconsistencies
+ok 65 - getAuthStatus reports reconciliation inconsistencies
+  ---
+  duration_ms: 505.2298
+  type: 'test'
+  ...
+# Subtest: backup and restore global credentials
+ok 66 - backup and restore global credentials
+  ---
+  duration_ms: 22.5047
+  type: 'test'
+  ...
+# Subtest: codearts install copies skills, MCP server, and safety policy
+ok 67 - codearts install copies skills, MCP server, and safety policy
+  ---
+  duration_ms: 9366.3816
+  type: 'test'
+  ...
+# Subtest: codearts install writes correct mcp_settings.json at user and project level
+ok 68 - codearts install writes correct mcp_settings.json at user and project level
+  ---
+  duration_ms: 5397.1612
+  type: 'test'
+  ...
+# Subtest: codearts status reports installed skills and configured MCP
+ok 69 - codearts status reports installed skills and configured MCP
+  ---
+  duration_ms: 4690.4894
+  type: 'test'
+  ...
+# Subtest: codearts uninstall removes skills, plugins, and MCP config
+ok 70 - codearts uninstall removes skills, plugins, and MCP config
+  ---
+  duration_ms: 3963.8202
+  type: 'test'
+  ...
+# Subtest: codearts install respects existing unrelated MCP servers on uninstall
+ok 71 - codearts install respects existing unrelated MCP servers on uninstall
+  ---
+  duration_ms: 98.5833
+  type: 'test'
+  ...
+# Subtest: codearts install injects HCLOUD_BIN into MCP env when hcloud exists
+ok 72 - codearts install injects HCLOUD_BIN into MCP env when hcloud exists
+  ---
+  duration_ms: 5974.4279
+  type: 'test'
+  ...
+# Subtest: cli help documents the codearts target
+ok 73 - cli help documents the codearts target
+  ---
+  duration_ms: 80.6758
+  type: 'test'
+  ...
+# Subtest: codearts-work install copies skills, MCP server, and safety policy
+ok 74 - codearts-work install copies skills, MCP server, and safety policy
+  ---
+  duration_ms: 5366.6021
+  type: 'test'
+  ...
+# Subtest: codearts-work install writes correct mcp_settings.json
+ok 75 - codearts-work install writes correct mcp_settings.json
+  ---
+  duration_ms: 5229.4581
+  type: 'test'
+  ...
+# Subtest: codearts-work status reports installed skills and configured MCP
+ok 76 - codearts-work status reports installed skills and configured MCP
+  ---
+  duration_ms: 4865.3507
+  type: 'test'
+  ...
+# Subtest: codearts-work uninstall removes skills, plugins, and MCP config
+ok 77 - codearts-work uninstall removes skills, plugins, and MCP config
+  ---
+  duration_ms: 3786.1733
+  type: 'test'
+  ...
+# Subtest: codearts-work appears in help output
+ok 78 - codearts-work appears in help output
+  ---
+  duration_ms: 91.8112
+  type: 'test'
+  ...
+# (node:9944) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 01 auth init path keeps S1/S2-current/S3 fingerprints equal
+ok 79 - 01 auth init path keeps S1/S2-current/S3 fingerprints equal
+  ---
+  duration_ms: 135.5636
+  type: 'test'
+  ...
+# Subtest: 02 manual edit of KooCLI current profile reports S2-current manualModified
+ok 80 - 02 manual edit of KooCLI current profile reports S2-current manualModified
+  ---
+  duration_ms: 12.7359
+  type: 'test'
+  ...
+# Subtest: 03 manual edit of obsutilconfig reports S3 manualModified
+ok 81 - 03 manual edit of obsutilconfig reports S3 manualModified
+  ---
+  duration_ms: 13.8857
+  type: 'test'
+  ...
+# Subtest: 04 syncAuth is rejected (R10) while runtime credentials are active
+ok 82 - 04 syncAuth is rejected (R10) while runtime credentials are active
+  ---
+  duration_ms: 9.3953
+  type: 'test'
+  ...
+# Subtest: 05 syncAuth propagates S1 into the KooCLI current profile
+ok 83 - 05 syncAuth propagates S1 into the KooCLI current profile
+  ---
+  duration_ms: 4881.427
+  type: 'test'
+  ...
+# Subtest: 06 auth_switch temporary activates runtime; auth_sync is then rejected (R10)
+ok 84 - 06 auth_switch temporary activates runtime; auth_sync is then rejected (R10)
+  ---
+  duration_ms: 54.5785
+  type: 'test'
+  ...
+# Subtest: 07 auth_switch persist first time writes configuredBySession and keeps files consistent
+ok 85 - 07 auth_switch persist first time writes configuredBySession and keeps files consistent
+  ---
+  duration_ms: 102.5275
+  type: 'test'
+  ...
+# Subtest: 08 auth_switch persist with conflicting S1 returns needs_confirmation and leaves S1 intact
+ok 86 - 08 auth_switch persist with conflicting S1 returns needs_confirmation and leaves S1 intact
+  ---
+  duration_ms: 10.4228
+  type: 'test'
+  ...
+# Subtest: 09 auth_confirm decision=newImported applies the new account and backs up S1
+ok 87 - 09 auth_confirm decision=newImported applies the new account and backs up S1
+  ---
+  duration_ms: 121.3356
+  type: 'test'
+  ...
+# Subtest: 10 auth_confirm decision=s1 aborts and leaves S1 unchanged
+ok 88 - 10 auth_confirm decision=s1 aborts and leaves S1 unchanged
+  ---
+  duration_ms: 13.2906
+  type: 'test'
+  ...
+# Subtest: 10b auth_confirm(newImported) from import clears the import file on success
+ok 89 - 10b auth_confirm(newImported) from import clears the import file on success
+  ---
+  duration_ms: 106.7619
+  type: 'test'
+  ...
+# Subtest: 11 auth_switch clear empties runtime and lets syncAuth run again
+ok 90 - 11 auth_switch clear empties runtime and lets syncAuth run again
+  ---
+  duration_ms: 344.4712
+  type: 'test'
+  ...
+# Subtest: 12 auth_switch mode=import reads creds-import.json then wipes it
+ok 91 - 12 auth_switch mode=import reads creds-import.json then wipes it
+  ---
+  duration_ms: 12.6109
+  type: 'test'
+  ...
+# Subtest: 13 without configuredBySession, env credentials win over S1
+ok 92 - 13 without configuredBySession, env credentials win over S1
+  ---
+  duration_ms: 9.0698
+  type: 'test'
+  ...
+# Subtest: 14 with configuredBySession=true, S1 wins over env (R9)
+ok 93 - 14 with configuredBySession=true, S1 wins over env (R9)
+  ---
+  duration_ms: 3.6485
+  type: 'test'
+  ...
+# Subtest: 15 active runtime shows in scanState and suppresses auto-write (R10)
+ok 94 - 15 active runtime shows in scanState and suppresses auto-write (R10)
+  ---
+  duration_ms: 8.0787
+  type: 'test'
+  ...
+# Subtest: 16 restoreGlobalCredentialsBackup restores the previous S1
+ok 95 - 16 restoreGlobalCredentialsBackup restores the previous S1
+  ---
+  duration_ms: 21.4087
+  type: 'test'
+  ...
+# Subtest: 17 persist with securityToken is rejected (R3) and S1 is not written (mode=memory)
+ok 96 - 17 persist with securityToken is rejected (R3) and S1 is not written (mode=memory)
+  ---
+  duration_ms: 2.1793
+  type: 'test'
+  ...
+# Subtest: 18 persist via mcp-config with platform STS token is rejected (R3) and S1 untouched
+ok 97 - 18 persist via mcp-config with platform STS token is rejected (R3) and S1 untouched
+  ---
+  duration_ms: 12.744
+  type: 'test'
+  ...
+# Subtest: 19 malformed creds-import.json is still wiped even though the import is rejected
+ok 98 - 19 malformed creds-import.json is still wiped even though the import is rejected
+  ---
+  duration_ms: 9.6377
+  type: 'test'
+  ...
+# Subtest: 20 syncAuth returns ok:false and skips .last_sync when S2 configure fails
+ok 99 - 20 syncAuth returns ok:false and skips .last_sync when S2 configure fails
+  ---
+  duration_ms: 180.3528
+  type: 'test'
+  ...
+# Subtest: 21 scanState trusts fresh DevKit sync marker when KooCLI stores transformed SK
+ok 100 - 21 scanState trusts fresh DevKit sync marker when KooCLI stores transformed SK
+  ---
+  duration_ms: 13.9249
+  type: 'test'
+  ...
+# Subtest: 22 scanState still reports S2-current mismatch when KooCLI AK differs from S1
+ok 101 - 22 scanState still reports S2-current mismatch when KooCLI AK differs from S1
+  ---
+  duration_ms: 12.1958
+  type: 'test'
+  ...
+# Subtest: 23 scanState reports manualModified when KooCLI config is newer than .last_sync
+ok 102 - 23 scanState reports manualModified when KooCLI config is newer than .last_sync
+  ---
+  duration_ms: 12.6224
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials accepts valid signature and resolves region project
+ok 103 - validateIamCredentials accepts valid signature and resolves region project
+  ---
+  duration_ms: 52.2119
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials falls back to first project without region
+ok 104 - validateIamCredentials falls back to first project without region
+  ---
+  duration_ms: 17.0574
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials rejects invalid SK (HTTP 401)
+ok 105 - validateIamCredentials rejects invalid SK (HTTP 401)
+  ---
+  duration_ms: 6.8373
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials treats 403 as valid credentials without project
+ok 106 - validateIamCredentials treats 403 as valid credentials without project
+  ---
+  duration_ms: 8.6252
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials marks infrastructure errors as skipped
+ok 107 - validateIamCredentials marks infrastructure errors as skipped
+  ---
+  duration_ms: 1.4898
+  type: 'test'
+  ...
+# Subtest: validateIamCredentials fails fast without AK/SK
+ok 108 - validateIamCredentials fails fast without AK/SK
+  ---
+  duration_ms: 0.1872
+  type: 'test'
+  ...
+# Subtest: install creates opencode config with normalized forward-slash paths
+ok 109 - install creates opencode config with normalized forward-slash paths
+  ---
+  duration_ms: 7776.9446
+  type: 'test'
+  ...
+# Subtest: install creates correct dir structure under homedir
+ok 110 - install creates correct dir structure under homedir
+  ---
+  duration_ms: 4873.4942
+  type: 'test'
+  ...
+# Subtest: install works with home dir containing spaces
+ok 111 - install works with home dir containing spaces
+  ---
+  duration_ms: 4956.6664
+  type: 'test'
+  ...
+# Subtest: handles platform-specific home directory resolution
+ok 112 - handles platform-specific home directory resolution
+  ---
+  duration_ms: 3369.4489
+  type: 'test'
+  ...
+# Subtest: install-hcloud shows platform-specific download instructions
+ok 113 - install-hcloud shows platform-specific download instructions
+  ---
+  duration_ms: 22654.6
+  type: 'test'
+  ...
+# Subtest: MCP server path is normalized to forward slashes
+ok 114 - MCP server path is normalized to forward slashes
+  ---
+  duration_ms: 3970.5828
+  type: 'test'
+  ...
+# Subtest: uninstall cleans up all platform directories
+ok 115 - uninstall cleans up all platform directories
+  ---
+  duration_ms: 3851.6485
+  type: 'test'
+  ...
+# Subtest: version reports CLI version and installed plugin version per agent
+ok 116 - version reports CLI version and installed plugin version per agent
+  ---
+  duration_ms: 5695.4265
+  type: 'test'
+  ...
+# Subtest: version reports CLI version and install hint when no agent plugin is installed
+ok 117 - version reports CLI version and install hint when no agent plugin is installed
+  ---
+  duration_ms: 116.1297
+  type: 'test'
+  ...
+# Subtest: single-agent uninstall hints about global cleanup
+ok 118 - single-agent uninstall hints about global cleanup
+  ---
+  duration_ms: 3048.5435
+  type: 'test'
+  ...
+# Subtest: uninstall --target all (non-TTY) keeps KooCLI/OBS but removes the vault
+ok 119 - uninstall --target all (non-TTY) keeps KooCLI/OBS but removes the vault
+  ---
+  duration_ms: 13553.8842
+  type: 'test'
+  ...
+# Subtest: auth reconcile dispatches to cmdAuthReconcile (no inconsistencies in clean home)
+ok 120 - auth reconcile dispatches to cmdAuthReconcile (no inconsistencies in clean home)
+  ---
+  duration_ms: 87.0939
+  type: 'test'
+  ...
+# Subtest: uninstall --target all --clean-global removes KooCLI and OBS config
+ok 121 - uninstall --target all --clean-global removes KooCLI and OBS config
+  ---
+  duration_ms: 9342.9746
+  type: 'test'
+  ...
+# Subtest: detectFramework returns null for empty directory
+ok 122 - detectFramework returns null for empty directory
+  ---
+  duration_ms: 11.0705
+  type: 'test'
+  ...
+# Subtest: detectFramework returns null for non-web project
+ok 123 - detectFramework returns null for non-web project
+  ---
+  duration_ms: 10.9177
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Next.js
+ok 124 - detectFramework detects Next.js
+  ---
+  duration_ms: 10.109
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Nuxt
+ok 125 - detectFramework detects Nuxt
+  ---
+  duration_ms: 8.555
+  type: 'test'
+  ...
+# Subtest: detectFramework detects VitePress
+ok 126 - detectFramework detects VitePress
+  ---
+  duration_ms: 11.0317
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Docusaurus
+ok 127 - detectFramework detects Docusaurus
+  ---
+  duration_ms: 9.647
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Hugo
+ok 128 - detectFramework detects Hugo
+  ---
+  duration_ms: 2.9418
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Hexo
+ok 129 - detectFramework detects Hexo
+  ---
+  duration_ms: 16.6373
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Taro
+ok 130 - detectFramework detects Taro
+  ---
+  duration_ms: 10.3428
+  type: 'test'
+  ...
+# Subtest: detectFramework detects uni-app
+ok 131 - detectFramework detects uni-app
+  ---
+  duration_ms: 11.0994
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Vite SPA
+ok 132 - detectFramework detects Vite SPA
+  ---
+  duration_ms: 9.3532
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Create React App
+ok 133 - detectFramework detects Create React App
+  ---
+  duration_ms: 10.6833
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Angular
+ok 134 - detectFramework detects Angular
+  ---
+  duration_ms: 13.6142
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Monorepo with sub-apps
+ok 135 - detectFramework detects Monorepo with sub-apps
+  ---
+  duration_ms: 15.3489
+  type: 'test'
+  ...
+# Subtest: detectFramework detects package manager from lock files
+ok 136 - detectFramework detects package manager from lock files
+  ---
+  duration_ms: 17.9435
+  type: 'test'
+  ...
+# Subtest: detectFramework static fallback for project with index.html but no framework
+ok 137 - detectFramework static fallback for project with index.html but no framework
+  ---
+  duration_ms: 4.6618
+  type: 'test'
+  ...
+# Subtest: detectFramework returns projectPath in rootDir
+ok 138 - detectFramework returns projectPath in rootDir
+  ---
+  duration_ms: 9.9431
+  type: 'test'
+  ...
+# Subtest: detectFramework detects Vue CLI before CRA fallback
+ok 139 - detectFramework detects Vue CLI before CRA fallback
+  ---
+  duration_ms: 9.3551
+  type: 'test'
+  ...
+# Subtest: detectFramework patches serveCmd for pnpm projects
+ok 140 - detectFramework patches serveCmd for pnpm projects
+  ---
+  duration_ms: 9.9828
+  type: 'test'
+  ...
+# Subtest: detectFramework handles non-web monorepo sub-apps gracefully
+ok 141 - detectFramework handles non-web monorepo sub-apps gracefully
+  ---
+  duration_ms: 16.4296
+  type: 'test'
+  ...
+# Subtest: dsh install copies skills, MCP server, safety policy, and patch row
+ok 142 - dsh install copies skills, MCP server, safety policy, and patch row
+  ---
+  duration_ms: 9273.5561
+  type: 'test'
+  ...
+# Subtest: dsh install writes .installed marker only after runtime deps
+ok 143 - dsh install writes .installed marker only after runtime deps
+  ---
+  duration_ms: 6674.3562
+  type: 'test'
+  ...
+# Subtest: dsh install is idempotent and preserves unrelated patch entries
+ok 144 - dsh install is idempotent and preserves unrelated patch entries
+  ---
+  duration_ms: 7555.9973
+  type: 'test'
+  ...
+# Subtest: dsh update refreshes installed files and keeps one patch row
+ok 145 - dsh update refreshes installed files and keeps one patch row
+  ---
+  duration_ms: 24354.403
+  type: 'test'
+  ...
+# Subtest: dsh status reports installed files and patch configuration
+ok 146 - dsh status reports installed files and patch configuration
+  ---
+  duration_ms: 11921.2445
+  type: 'test'
+  ...
+# Subtest: dsh uninstall removes installed files and only the managed patch row
+ok 147 - dsh uninstall removes installed files and only the managed patch row
+  ---
+  duration_ms: 5709.5573
+  type: 'test'
+  ...
+# Subtest: dsh uninstall preserves non-Huawei skills directory entries
+ok 148 - dsh uninstall preserves non-Huawei skills directory entries
+  ---
+  duration_ms: 3774.7947
+  type: 'test'
+  ...
+# Subtest: bundled cordis.patch.yml has no self loader entry and only the MCP insert
+ok 149 - bundled cordis.patch.yml has no self loader entry and only the MCP insert
+  ---
+  duration_ms: 0.4736
+  type: 'test'
+  ...
+# Subtest: dsh bundle postinstall rewrites relative MCP path to absolute
+ok 150 - dsh bundle postinstall rewrites relative MCP path to absolute
+  ---
+  duration_ms: 71.042
+  type: 'test'
+  ...
+# Subtest: dsh bundle postinstall is idempotent when MCP path is already absolute
+ok 151 - dsh bundle postinstall is idempotent when MCP path is already absolute
+  ---
+  duration_ms: 122.023
+  type: 'test'
+  ...
+# Subtest: cli help documents the dsh target
+ok 152 - cli help documents the dsh target
+  ---
+  duration_ms: 87.0776
+  type: 'test'
+  ...
+# Subtest: planHcloudCommand includes copyable command text and password history warning
+ok 153 - planHcloudCommand includes copyable command text and password history warning
+  ---
+  duration_ms: 13.2012
+  type: 'test'
+  ...
+# Subtest: planHcloudCommand correctly classifies read-only command
+ok 154 - planHcloudCommand correctly classifies read-only command
+  ---
+  duration_ms: 6.3126
+  type: 'test'
+  ...
+# Subtest: planHcloudCommand marks write command as unsafe without approval
+ok 155 - planHcloudCommand marks write command as unsafe without approval
+  ---
+  duration_ms: 10.1708
+  type: 'test'
+  ...
+# Subtest: planHcloudCommand adds resource-manifest hint for OBS write operations
+ok 156 - planHcloudCommand adds resource-manifest hint for OBS write operations
+  ---
+  duration_ms: 7.447
+  type: 'test'
+  ...
+# Subtest: planHcloudCommand adds no manifest hint for OBS read operations
+ok 157 - planHcloudCommand adds no manifest hint for OBS read operations
+  ---
+  duration_ms: 8.7612
+  type: 'test'
+  ...
+# Subtest: createApprovalToken persists hashed/redacted args and never raw secrets
+ok 158 - createApprovalToken persists hashed/redacted args and never raw secrets
+  ---
+  duration_ms: 17.2775
+  type: 'test'
+  ...
+# Subtest: approval token survives a fresh file read (cross-process) and expires by TTL
+ok 159 - approval token survives a fresh file read (cross-process) and expires by TTL
+  ---
+  duration_ms: 33.9668
+  type: 'test'
+  ...
+# Subtest: runHcloud retries transient network errors and reports retry count
+ok 160 - runHcloud retries transient network errors and reports retry count
+  ---
+  duration_ms: 183.6843
+  type: 'test'
+  ...
+# Subtest: runHcloud returns a timeout result instead of hanging
+ok 161 - runHcloud returns a timeout result instead of hanging
+  ---
+  duration_ms: 63.2264
+  type: 'test'
+  ...
+# Subtest: runHcloud respects cwd parameter
+ok 162 - runHcloud respects cwd parameter
+  ---
+  duration_ms: 73.0241
+  type: 'test'
+  ...
+# Subtest: runHcloud captures stderr and returns failed status
+ok 163 - runHcloud captures stderr and returns failed status
+  ---
+  duration_ms: 234.8424
+  type: 'test'
+  ...
+# Subtest: runHcloud redacts passwords in output
+ok 164 - runHcloud redacts passwords in output
+  ---
+  duration_ms: 992.147
+  type: 'test'
+  ...
+# Subtest: runHcloud succeeds with active runtime credentials and no KooCLI config (no-crash, no authWarning)
+ok 165 - runHcloud succeeds with active runtime credentials and no KooCLI config (no-crash, no authWarning)
+  ---
+  duration_ms: 989.6191
+  type: 'test'
+  ...
+# Subtest: runHcloud emits authWarning when runtime differs from current profile
+ok 166 - runHcloud emits authWarning when runtime differs from current profile
+  ---
+  duration_ms: 1006.9518
+  type: 'test'
+  ...
+# Subtest: koocli lang G4: approved plan end-to-end does NOT mutate the approved command
+ok 167 - koocli lang G4: approved plan end-to-end does NOT mutate the approved command # SKIP
+  ---
+  duration_ms: 0.2003
+  type: 'test'
+  ...
+# Subtest: koocli lang G4: approval token still rejects args that differ from the approved plan
+ok 168 - koocli lang G4: approval token still rejects args that differ from the approved plan
+  ---
+  duration_ms: 12.9321
+  type: 'test'
+  ...
+# Subtest: koocli lang: extractApiError keeps JSON keys stable under Chinese KooCLI output
+ok 169 - koocli lang: extractApiError keeps JSON keys stable under Chinese KooCLI output
+  ---
+  duration_ms: 0.1754
+  type: 'test'
+  ...
+# Subtest: runHcloud surfaces Chinese-mode KooCLI JSON error with code and message
+ok 170 - runHcloud surfaces Chinese-mode KooCLI JSON error with code and message
+  ---
+  duration_ms: 98.4425
+  type: 'test'
+  ...
+# Subtest: hcloud probe classifies matching KooCLI version as ok
+ok 171 - hcloud probe classifies matching KooCLI version as ok
+  ---
+  duration_ms: 1.8367
+  type: 'test'
+  ...
+# Subtest: hcloud probe classifies version mismatch separately from not installed
+ok 172 - hcloud probe classifies version mismatch separately from not installed
+  ---
+  duration_ms: 0.5988
+  type: 'test'
+  ...
+# Subtest: hcloud probe classifies privacy agreement pending
+ok 173 - hcloud probe classifies privacy agreement pending
+  ---
+  duration_ms: 0.6184
+  type: 'test'
+  ...
+# Subtest: hcloud probe classifies Codex Windows sandbox home failures
+ok 174 - hcloud probe classifies Codex Windows sandbox home failures
+  ---
+  duration_ms: 0.5119
+  type: 'test'
+  ...
+# Subtest: hcloud probe classifies executable not found
+ok 175 - hcloud probe classifies executable not found
+  ---
+  duration_ms: 0.4373
+  type: 'test'
+  ...
+# Subtest: hdkitservice connect parses backend traceId (camelCase) on error
+ok 176 - hdkitservice connect parses backend traceId (camelCase) on error
+  ---
+  duration_ms: 28.5524
+  type: 'test'
+  ...
+# Subtest: voucher status returns CRED_MISSING when credentials are absent
+ok 177 - voucher status returns CRED_MISSING when credentials are absent
+  ---
+  duration_ms: 2.3913
+  type: 'test'
+  ...
+# Subtest: voucher claim passes through error code and message on non-2xx
+ok 178 - voucher claim passes through error code and message on non-2xx
+  ---
+  duration_ms: 1.8261
+  type: 'test'
+  ...
+# Subtest: node hook file exists
+ok 179 - node hook file exists
+  ---
+  duration_ms: 1.1124
+  type: 'test'
+  ...
+# Subtest: node hook blocks public admin port through shared rules
+ok 180 - node hook blocks public admin port through shared rules
+  ---
+  duration_ms: 70.2474
+  type: 'test'
+  ...
+# Subtest: node hook blocks credential file reads
+ok 181 - node hook blocks credential file reads
+  ---
+  duration_ms: 67.4323
+  type: 'test'
+  ...
+# Subtest: node hook blocks encoded shell payload execution through shared rules
+ok 182 - node hook blocks encoded shell payload execution through shared rules
+  ---
+  duration_ms: 70.9612
+  type: 'test'
+  ...
+# Subtest: node hook allows safe commands with empty stdout
+ok 183 - node hook allows safe commands with empty stdout
+  ---
+  duration_ms: 64.686
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: hcloud version -> cli:invoke
+ok 184 - classifyHcloud: hcloud version -> cli:invoke
+  ---
+  duration_ms: 2.6121
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: hcloud ECS ListServers -> cli:read
+ok 185 - classifyHcloud: hcloud ECS ListServers -> cli:read
+  ---
+  duration_ms: 0.4119
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: hcloud ECS CreateServers -> cli:write
+ok 186 - classifyHcloud: hcloud ECS CreateServers -> cli:write
+  ---
+  duration_ms: 0.4224
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: trailing commands after ; are not captured
+ok 187 - classifyHcloud: trailing commands after ; are not captured
+  ---
+  duration_ms: 0.2849
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: trailing pipe is not captured
+ok 188 - classifyHcloud: trailing pipe is not captured
+  ---
+  duration_ms: 0.1505
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: shell redirection is not captured
+ok 189 - classifyHcloud: shell redirection is not captured
+  ---
+  duration_ms: 0.1258
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: options are trimmed
+ok 190 - classifyHcloud: options are trimmed
+  ---
+  duration_ms: 0.2078
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: hcloud --help returns null
+ok 191 - classifyHcloud: hcloud --help returns null
+  ---
+  duration_ms: 0.1068
+  type: 'test'
+  ...
+# Subtest: classifyHcloud: non-hcloud command returns null
+ok 192 - classifyHcloud: non-hcloud command returns null
+  ---
+  duration_ms: 0.3188
+  type: 'test'
+  ...
+# Subtest: python hook file exists
+ok 193 - python hook file exists
+  ---
+  duration_ms: 2.1081
+  type: 'test'
+  ...
+# Subtest: python hook blocks public admin port through shared rules
+ok 194 - python hook blocks public admin port through shared rules
+  ---
+  duration_ms: 100.5655
+  type: 'test'
+  ...
+# Subtest: python hook still blocks credential files
+ok 195 - python hook still blocks credential files
+  ---
+  duration_ms: 81.1462
+  type: 'test'
+  ...
+# Subtest: python hook blocks encoded shell payload execution through shared rules
+ok 196 - python hook blocks encoded shell payload execution through shared rules
+  ---
+  duration_ms: 90.5041
+  type: 'test'
+  ...
+# Subtest: python hook outputs Hermes format when hook_event_name is present
+ok 197 - python hook outputs Hermes format when hook_event_name is present
+  ---
+  duration_ms: 96.2532
+  type: 'test'
+  ...
+# Subtest: python hook allows safe commands under Hermes context
+ok 198 - python hook allows safe commands under Hermes context
+  ---
+  duration_ms: 95.7202
+  type: 'test'
+  ...
+# Subtest: python hook evaluate() is importable and blocks public admin port
+ok 199 - python hook evaluate() is importable and blocks public admin port
+  ---
+  duration_ms: 101.1225
+  type: 'test'
+  ...
+# Subtest: python hook evaluate() allows safe commands
+ok 200 - python hook evaluate() allows safe commands
+  ---
+  duration_ms: 92.4048
+  type: 'test'
+  ...
+# Subtest: python hook write-gate blocks prefixed destructive ops (NovaDelete*/Reset*)
+ok 201 - python hook write-gate blocks prefixed destructive ops (NovaDelete*/Reset*)
+  ---
+  duration_ms: 273.9165
+  type: 'test'
+  ...
+# Subtest: python hook write-gate still allows read-only Nova ops
+ok 202 - python hook write-gate still allows read-only Nova ops
+  ---
+  duration_ms: 90.5467
+  type: 'test'
+  ...
+# Subtest: icon library resolves english service ids from the bundled snapshot
+ok 203 - icon library resolves english service ids from the bundled snapshot
+  ---
+  duration_ms: 4.7453
+  type: 'test'
+  ...
+# Subtest: icon library resolves chinese service names
+ok 204 - icon library resolves chinese service names
+  ---
+  duration_ms: 0.97
+  type: 'test'
+  ...
+# Subtest: icon library resolves aliases and case-insensitive queries
+ok 205 - icon library resolves aliases and case-insensitive queries
+  ---
+  duration_ms: 1.5885
+  type: 'test'
+  ...
+# Subtest: icon library filters by category
+ok 206 - icon library filters by category
+  ---
+  duration_ms: 0.5355
+  type: 'test'
+  ...
+# Subtest: icon library returns zero results for unknown services
+ok 207 - icon library returns zero results for unknown services
+  ---
+  duration_ms: 3.3637
+  type: 'test'
+  ...
+# Subtest: preflightSecurityGroupCheck catches dangerous SG via --server.security_groups.N.id (B1+B2 fix)
+ok 208 - preflightSecurityGroupCheck catches dangerous SG via --server.security_groups.N.id (B1+B2 fix)
+  ---
+  duration_ms: 101.1723
+  type: 'test'
+  ...
+# Subtest: preflightSecurityGroupCheck passes when SG has only egress rules
+ok 209 - preflightSecurityGroupCheck passes when SG has only egress rules
+  ---
+  duration_ms: 83.9114
+  type: 'test'
+  ...
+# Subtest: preflightSecurityGroupCheck still works with --security_group_id (backward compatible)
+ok 210 - preflightSecurityGroupCheck still works with --security_group_id (backward compatible)
+  ---
+  duration_ms: 83.1655
+  type: 'test'
+  ...
+# Subtest: readServiceCatalogs: maps items[].Service.Text into cn/en sets
+ok 211 - readServiceCatalogs: maps items[].Service.Text into cn/en sets
+  ---
+  duration_ms: 23.5181
+  type: 'test'
+  ...
+# Subtest: classify: full catalogs → lang-missing / other / not-found / unknown
+ok 212 - classify: full catalogs → lang-missing / other / not-found / unknown
+  ---
+  duration_ms: 3.3685
+  type: 'test'
+  ...
+# Subtest: classify: missing catalog file is "unknown", not lang-missing (G-rev)
+ok 213 - classify: missing catalog file is "unknown", not lang-missing (G-rev)
+  ---
+  duration_ms: 2.317
+  type: 'test'
+  ...
+# Subtest: classify: en-only machine (\#597) → unknown, both missing → unknown
+ok 214 - classify: en-only machine (\#597) → unknown, both missing → unknown
+  ---
+  duration_ms: 2.8739
+  type: 'test'
+  ...
+# Subtest: classify: mixed-case catalog entries are normalized (G3)
+ok 215 - classify: mixed-case catalog entries are normalized (G3)
+  ---
+  duration_ms: 7.5454
+  type: 'test'
+  ...
+# Subtest: runHcloud: Unsupported service (lang-missing) → diagnostic with configure-set hint, no arg mutation
+ok 216 - runHcloud: Unsupported service (lang-missing) → diagnostic with configure-set hint, no arg mutation
+  ---
+  duration_ms: 96.1748
+  type: 'test'
+  ...
+# Subtest: runHcloud: Unsupported service (unknown, cn catalog missing) → configure-set hint
+ok 217 - runHcloud: Unsupported service (unknown, cn catalog missing) → configure-set hint
+  ---
+  duration_ms: 83.3888
+  type: 'test'
+  ...
+# Subtest: runHcloud: Unsupported service (not-found, both catalogs) → metadata hint, no lang hint
+ok 218 - runHcloud: Unsupported service (not-found, both catalogs) → metadata hint, no lang hint
+  ---
+  duration_ms: 80.5458
+  type: 'test'
+  ...
+# Subtest: runHcloud: successful command is untouched (no diagnostic artifacts)
+ok 219 - runHcloud: successful command is untouched (no diagnostic artifacts)
+  ---
+  duration_ms: 83.7153
+  type: 'test'
+  ...
+# Subtest: kooCliVersion is declared in package.json and is semver
+ok 220 - kooCliVersion is declared in package.json and is semver
+  ---
+  duration_ms: 1.2928
+  type: 'test'
+  ...
+# Subtest: parseHcloudVersion extracts version from both output formats
+ok 221 - parseHcloudVersion extracts version from both output formats
+  ---
+  duration_ms: 1.0338
+  type: 'test'
+  ...
+# Subtest: compareVersion orders correctly
+ok 222 - compareVersion orders correctly
+  ---
+  duration_ms: 0.3563
+  type: 'test'
+  ...
+# Subtest: kooCliDownloadBase pins to the paired version
+ok 223 - kooCliDownloadBase pins to the paired version
+  ---
+  duration_ms: 0.6385
+  type: 'test'
+  ...
+# Subtest: MCP server initializes, lists tools, and plans CLI commands
+ok 224 - MCP server initializes, lists tools, and plans CLI commands
+  ---
+  duration_ms: 838.8366
+  type: 'test'
+  ...
+# Subtest: MCP server reports version from plugin package.json in installed layout
+ok 225 - MCP server reports version from plugin package.json in installed layout
+  ---
+  duration_ms: 1236.5539
+  type: 'test'
+  ...
+# Subtest: MCP server waits for incomplete Content-Length frames instead of spinning
+ok 226 - MCP server waits for incomplete Content-Length frames instead of spinning
+  ---
+  duration_ms: 951.1573
+  type: 'test'
+  ...
+# Subtest: officeace install copies skills, MCP server, and safety policy
+ok 227 - officeace install copies skills, MCP server, and safety policy
+  ---
+  duration_ms: 15651.9459
+  type: 'test'
+  ...
+# Subtest: officeace uninstall removes installed files
+ok 228 - officeace uninstall removes installed files
+  ---
+  duration_ms: 21559.2718
+  type: 'test'
+  ...
+# Subtest: opencode: install copies skills, MCP server, and safety policy
+ok 229 - opencode: install copies skills, MCP server, and safety policy
+  ---
+  duration_ms: 4872.521
+  type: 'test'
+  ...
+# Subtest: opencode: uninstall removes skills, plugins, and MCP config
+ok 230 - opencode: uninstall removes skills, plugins, and MCP config
+  ---
+  duration_ms: 5139.6207
+  type: 'test'
+  ...
+# Subtest: opencode: MCP server responds to initialize and tools/list
+ok 231 - opencode: MCP server responds to initialize and tools/list
+  ---
+  duration_ms: 18124.2833
+  type: 'test'
+  ...
+# Subtest: codex-desktop: install copies skills, MCP server, and safety policy
+ok 232 - codex-desktop: install copies skills, MCP server, and safety policy
+  ---
+  duration_ms: 12712.4984
+  type: 'test'
+  ...
+# Subtest: codex-desktop: uninstall removes skills, plugins, and MCP config
+ok 233 - codex-desktop: uninstall removes skills, plugins, and MCP config
+  ---
+  duration_ms: 4065.8412
+  type: 'test'
+  ...
+# Subtest: codex-desktop: MCP server responds to initialize and tools/list
+ok 234 - codex-desktop: MCP server responds to initialize and tools/list
+  ---
+  duration_ms: 4425.8861
+  type: 'test'
+  ...
+# Subtest: workbuddy: install copies skills, MCP server, and safety policy
+ok 235 - workbuddy: install copies skills, MCP server, and safety policy
+  ---
+  duration_ms: 5251.7764
+  type: 'test'
+  ...
+# Subtest: workbuddy: uninstall removes skills, plugins, and MCP config
+ok 236 - workbuddy: uninstall removes skills, plugins, and MCP config
+  ---
+  duration_ms: 4690.0276
+  type: 'test'
+  ...
+# Subtest: workbuddy: MCP server responds to initialize and tools/list
+ok 237 - workbuddy: MCP server responds to initialize and tools/list
+  ---
+  duration_ms: 3469.6524
+  type: 'test'
+  ...
+# Subtest: MCP tools/list includes all required core tools with valid schemas
+ok 238 - MCP tools/list includes all required core tools with valid schemas
+  ---
+  duration_ms: 3543.4537
+  type: 'test'
+  ...
+# Subtest: huaweicloud_search_docs returns relevant skill results
+ok 239 - huaweicloud_search_docs returns relevant skill results
+  ---
+  duration_ms: 3692.8808
+  type: 'test'
+  ...
+# Subtest: huaweicloud_service_catalog returns capability recommendations
+ok 240 - huaweicloud_service_catalog returns capability recommendations
+  ---
+  duration_ms: 6338.766
+  type: 'test'
+  ...
+# Subtest: MCP tools/call with unknown tool name returns error
+ok 241 - MCP tools/call with unknown tool name returns error
+  ---
+  duration_ms: 4708.9099
+  type: 'test'
+  ...
+# Subtest: resolveAndApplyProjectId picks the region project and writes cli-project-id
+ok 242 - resolveAndApplyProjectId picks the region project and writes cli-project-id
+  ---
+  duration_ms: 150.3393
+  type: 'test'
+  ...
+# Subtest: resolveAndApplyProjectId works without a profile
+ok 243 - resolveAndApplyProjectId works without a profile
+  ---
+  duration_ms: 136.0212
+  type: 'test'
+  ...
+# Subtest: resolveAndApplyProjectId stays non-fatal on unparseable output
+ok 244 - resolveAndApplyProjectId stays non-fatal on unparseable output
+  ---
+  duration_ms: 73.4202
+  type: 'test'
+  ...
+# Subtest: resolveAndApplyProjectId stays non-fatal when hcloud exits non-zero
+ok 245 - resolveAndApplyProjectId stays non-fatal when hcloud exits non-zero
+  ---
+  duration_ms: 72.3509
+  type: 'test'
+  ...
+# Subtest: resolveAndApplyProjectId requires a region
+ok 246 - resolveAndApplyProjectId requires a region
+  ---
+  duration_ms: 0.1637
+  type: 'test'
+  ...
+# Subtest: fingerprint is a stable masked digest
+ok 247 - fingerprint is a stable masked digest
+  ---
+  duration_ms: 1.3067
+  type: 'test'
+  ...
+# Subtest: readKooCliProfiles parses current + profiles with fingerprint/mtime
+ok 248 - readKooCliProfiles parses current + profiles with fingerprint/mtime
+  ---
+  duration_ms: 9.3774
+  type: 'test'
+  ...
+# Subtest: readKooCliProfiles handles missing config
+ok 249 - readKooCliProfiles handles missing config
+  ---
+  duration_ms: 0.9829
+  type: 'test'
+  ...
+# Subtest: scanState detects S1 vs KooCLI current-profile mismatch
+ok 250 - scanState detects S1 vs KooCLI current-profile mismatch
+  ---
+  duration_ms: 12.3033
+  type: 'test'
+  ...
+# Subtest: scanState does not misreport S2 drift when KooCLI authEncrypt=true
+ok 251 - scanState does not misreport S2 drift when KooCLI authEncrypt=true
+  ---
+  duration_ms: 10.1423
+  type: 'test'
+  ...
+# Subtest: isManualModified compares mtime vs .last_sync
+ok 252 - isManualModified compares mtime vs .last_sync
+  ---
+  duration_ms: 8.5084
+  type: 'test'
+  ...
+# Subtest: hasRuntimeCredentials reflects only runtime-injected credentials
+ok 253 - hasRuntimeCredentials reflects only runtime-injected credentials
+  ---
+  duration_ms: 0.8338
+  type: 'test'
+  ...
+# Subtest: scanState reports real runtime-store hasRuntime and runtimeFingerprint
+ok 254 - scanState reports real runtime-store hasRuntime and runtimeFingerprint
+  ---
+  duration_ms: 2.0395
+  type: 'test'
+  ...
+# Subtest: kooCliConfigPath honors HCLOUD_CONFIG_PATH then falls back to homedir
+ok 255 - kooCliConfigPath honors HCLOUD_CONFIG_PATH then falls back to homedir
+  ---
+  duration_ms: 0.4784
+  type: 'test'
+  ...
+# huaweicloud-devkit MCP server (remote) listening on 127.0.0.1:65156
+# Subtest: remote MCP server initializes, lists tools, and plans CLI commands
+ok 256 - remote MCP server initializes, lists tools, and plans CLI commands
+  ---
+  duration_ms: 1989.0004
+  type: 'test'
+  ...
+# Subtest: remote MCP server returns 202 for notifications/initialized
+ok 257 - remote MCP server returns 202 for notifications/initialized
+  ---
+  duration_ms: 4.2813
+  type: 'test'
+  ...
+# Subtest: remote MCP server returns 400 for invalid JSON body
+ok 258 - remote MCP server returns 400 for invalid JSON body
+  ---
+  duration_ms: 6.5673
+  type: 'test'
+  ...
+# Subtest: remote MCP server answers OPTIONS preflight with CORS headers
+ok 259 - remote MCP server answers OPTIONS preflight with CORS headers
+  ---
+  duration_ms: 4.0528
+  type: 'test'
+  ...
+# Subtest: remote MCP server rejects GET with 405
+ok 260 - remote MCP server rejects GET with 405
+  ---
+  duration_ms: 5.5546
+  type: 'test'
+  ...
+# huaweicloud-devkit MCP server (remote) listening on 127.0.0.1:9528
+# Subtest: remote MCP server falls back to SSE when client only accepts text/event-stream
+ok 261 - remote MCP server falls back to SSE when client only accepts text/event-stream
+  ---
+  duration_ms: 4.7045
+  type: 'test'
+  ...
+# huaweicloud-devkit MCP server (remote) listening on 0.0.0.0:65170
+# Subtest: exports DEFAULT_PORT 9528 to avoid IACMCPServer port 9527 conflict
+ok 262 - exports DEFAULT_PORT 9528 to avoid IACMCPServer port 9527 conflict
+  ---
+  duration_ms: 0.4476
+  type: 'test'
+  ...
+# Subtest: startRemoteServer binds DEFAULT_PORT when no port passed
+ok 263 - startRemoteServer binds DEFAULT_PORT when no port passed
+  ---
+  duration_ms: 2.19
+  type: 'test'
+  ...
+# Subtest: startRemoteServer supports binding non-loopback host via host option
+ok 264 - startRemoteServer supports binding non-loopback host via host option
+  ---
+  duration_ms: 1.8808
+  type: 'test'
+  ...
+# Subtest: mcp-server.mjs --transport remote honors --host and --port flags
+ok 265 - mcp-server.mjs --transport remote honors --host and --port flags
+  ---
+  duration_ms: 1922.097
+  type: 'test'
+  ...
+# Subtest: loadRiskRules loads the public catalog
+ok 266 - loadRiskRules loads the public catalog
+  ---
+  duration_ms: 1.4722
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk blocks public SSH exposure
+ok 267 - evaluateCommandRisk blocks public SSH exposure
+  ---
+  duration_ms: 3.8091
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk warns on high-cost resource shape
+ok 268 - evaluateCommandRisk warns on high-cost resource shape
+  ---
+  duration_ms: 1.5859
+  type: 'test'
+  ...
+# Subtest: evaluateArtifacts detects broad IAM policy in generated files
+ok 269 - evaluateArtifacts detects broad IAM policy in generated files
+  ---
+  duration_ms: 1.5094
+  type: 'test'
+  ...
+# Subtest: evaluateArtifacts detects broad IAM policy when Action is a JSON array
+ok 270 - evaluateArtifacts detects broad IAM policy when Action is a JSON array
+  ---
+  duration_ms: 1.8148
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk blocks OBS public read-write ACL changes
+ok 271 - evaluateCommandRisk blocks OBS public read-write ACL changes
+  ---
+  duration_ms: 0.4078
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk blocks encoded shell payload execution
+ok 272 - evaluateCommandRisk blocks encoded shell payload execution
+  ---
+  duration_ms: 0.6505
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk treats spaced public CIDR as public exposure
+ok 273 - evaluateCommandRisk treats spaced public CIDR as public exposure
+  ---
+  duration_ms: 0.5235
+  type: 'test'
+  ...
+# Subtest: evaluateDeployPlan detects quoted FunctionGraph public no-auth plans
+ok 274 - evaluateDeployPlan detects quoted FunctionGraph public no-auth plans
+  ---
+  duration_ms: 0.9267
+  type: 'test'
+  ...
+# Subtest: evaluateDeployPlan warns when sandbox plan lacks cleanup metadata
+ok 275 - evaluateDeployPlan warns when sandbox plan lacks cleanup metadata
+  ---
+  duration_ms: 0.9016
+  type: 'test'
+  ...
+# Subtest: evaluateDeployPlan allows sandbox plan with cleanup metadata
+ok 276 - evaluateDeployPlan allows sandbox plan with cleanup metadata
+  ---
+  duration_ms: 0.5526
+  type: 'test'
+  ...
+# Subtest: evidence snippets redact secret-shaped values
+ok 277 - evidence snippets redact secret-shaped values
+  ---
+  duration_ms: 0.5069
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk warns on prefixed delete family (Nova*)
+ok 278 - evaluateCommandRisk warns on prefixed delete family (Nova*)
+  ---
+  duration_ms: 1.383
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk warns on reset family (ResetServerPassword etc.)
+ok 279 - evaluateCommandRisk warns on reset family (ResetServerPassword etc.)
+  ---
+  duration_ms: 1.3512
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk still allows read-only Nova list ops
+ok 280 - evaluateCommandRisk still allows read-only Nova list ops
+  ---
+  duration_ms: 0.3433
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk blocks IAM admin policy creation via CLI flag
+ok 281 - evaluateCommandRisk blocks IAM admin policy creation via CLI flag
+  ---
+  duration_ms: 0.3949
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk warns on batch reset family (BatchReset*)
+ok 282 - evaluateCommandRisk warns on batch reset family (BatchReset*)
+  ---
+  duration_ms: 0.8175
+  type: 'test'
+  ...
+# Subtest: evaluateCommandRisk does not flag delete-protection toggles as destructive
+ok 283 - evaluateCommandRisk does not flag delete-protection toggles as destructive
+  ---
+  duration_ms: 0.922
+  type: 'test'
+  ...
+# Subtest: redactSecrets removes credential-shaped values recursively
+ok 284 - redactSecrets removes credential-shaped values recursively
+  ---
+  duration_ms: 2.7465
+  type: 'test'
+  ...
+# Subtest: redactSecrets redacts adminPass and password fields
+ok 285 - redactSecrets redacts adminPass and password fields
+  ---
+  duration_ms: 0.1986
+  type: 'test'
+  ...
+# Subtest: redactSecrets handles array values
+ok 286 - redactSecrets handles array values
+  ---
+  duration_ms: 0.4569
+  type: 'test'
+  ...
+# Subtest: redactSecrets handles string values with key=value patterns
+ok 287 - redactSecrets handles string values with key=value patterns
+  ---
+  duration_ms: 0.3985
+  type: 'test'
+  ...
+# Subtest: redactSecrets masks opaque blob keys (user_data / metadata / private_key) entirely
+ok 288 - redactSecrets masks opaque blob keys (user_data / metadata / private_key) entirely
+  ---
+  duration_ms: 0.5658
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand blocks direct credential file reads
+ok 289 - classifyTextCommand blocks direct credential file reads
+  ---
+  duration_ms: 0.4092
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand blocks env var dumps with HUAWEICLOUD prefix
+ok 290 - classifyTextCommand blocks env var dumps with HUAWEICLOUD prefix
+  ---
+  duration_ms: 0.7563
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks secret value reads
+ok 291 - classifyHcloudArgs blocks secret value reads
+  ---
+  duration_ms: 0.731
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks unapproved writes
+ok 292 - classifyHcloudArgs blocks unapproved writes
+  ---
+  duration_ms: 1.1864
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs allows local help for write operations
+ok 293 - classifyHcloudArgs allows local help for write operations
+  ---
+  duration_ms: 2.9771
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs allows read-only list and show operations
+ok 294 - classifyHcloudArgs allows read-only list and show operations
+  ---
+  duration_ms: 5.529
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks obsutil write commands
+ok 295 - classifyHcloudArgs blocks obsutil write commands
+  ---
+  duration_ms: 0.5989
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs allows obsutil read commands
+ok 296 - classifyHcloudArgs allows obsutil read commands
+  ---
+  duration_ms: 2.2203
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks execution operations (Invoke, Trigger, Deploy)
+ok 297 - classifyHcloudArgs blocks execution operations (Invoke, Trigger, Deploy)
+  ---
+  duration_ms: 0.3664
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs blocks hcloud configure show without allowCredentialRead
+ok 298 - classifyHcloudArgs blocks hcloud configure show without allowCredentialRead
+  ---
+  duration_ms: 0.1413
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs rejects empty args
+ok 299 - classifyHcloudArgs rejects empty args
+  ---
+  duration_ms: 0.1389
+  type: 'test'
+  ...
+# Subtest: classifyHcloudArgs allows version commands
+ok 300 - classifyHcloudArgs allows version commands
+  ---
+  duration_ms: 0.6822
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand returns not_huaweicloud for non-cloud commands
+ok 301 - classifyTextCommand returns not_huaweicloud for non-cloud commands
+  ---
+  duration_ms: 1.0503
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand detects hcloud write commands in text
+ok 302 - classifyTextCommand detects hcloud write commands in text
+  ---
+  duration_ms: 0.4579
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand blocks secret value patterns in shell commands
+ok 303 - classifyTextCommand blocks secret value patterns in shell commands
+  ---
+  duration_ms: 0.1626
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand blocks approved public admin port exposure
+ok 304 - classifyTextCommand blocks approved public admin port exposure
+  ---
+  duration_ms: 0.9676
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand applies shared risk rules to non-hcloud commands
+ok 305 - classifyTextCommand applies shared risk rules to non-hcloud commands
+  ---
+  duration_ms: 0.7125
+  type: 'test'
+  ...
+# Subtest: classifyTextCommand carries warnings for high-cost shapes
+ok 306 - classifyTextCommand carries warnings for high-cost shapes
+  ---
+  duration_ms: 0.6561
+  type: 'test'
+  ...
+# Subtest: existing credential and secret blocks still win before risk-rule warnings
+ok 307 - existing credential and secret blocks still win before risk-rule warnings
+  ---
+  duration_ms: 0.1061
+  type: 'test'
+  ...
+# Subtest: ws-exec dynamic import uses file:// URL (Windows-safe)
+ok 308 - ws-exec dynamic import uses file:// URL (Windows-safe)
+  ---
+  duration_ms: 8.5846
+  type: 'test'
+  ...
+# Subtest: splitBase64Chunks splits into chunks no larger than the limit and reassembles losslessly
+ok 309 - splitBase64Chunks splits into chunks no larger than the limit and reassembles losslessly
+  ---
+  duration_ms: 0.58
+  type: 'test'
+  ...
+# Subtest: splitBase64Chunks returns a single chunk for small inputs
+ok 310 - splitBase64Chunks returns a single chunk for small inputs
+  ---
+  duration_ms: 0.1753
+  type: 'test'
+  ...
+# Subtest: currentWorkspaceId defaults to null without env or setter
+ok 311 - currentWorkspaceId defaults to null without env or setter
+  ---
+  duration_ms: 0.1387
+  type: 'test'
+  ...
+# Subtest: setWorkspaceId caches and updates env var
+ok 312 - setWorkspaceId caches and updates env var
+  ---
+  duration_ms: 0.2737
+  type: 'test'
+  ...
+# Subtest: Codex plugin manifest and marketplace are installable
+ok 313 - Codex plugin manifest and marketplace are installable
+  ---
+  duration_ms: 2.5676
+  type: 'test'
+  ...
+# Subtest: OpenClaw plugin manifest matches other agent manifests
+ok 314 - OpenClaw plugin manifest matches other agent manifests
+  ---
+  duration_ms: 4.4763
+  type: 'test'
+  ...
+# Subtest: OpenCode integration exposes skills, commands, and MCP config
+ok 315 - OpenCode integration exposes skills, commands, and MCP config
+  ---
+  duration_ms: 0.6437
+  type: 'test'
+  ...
+# Subtest: Hermes MCP Catalog manifest is present and valid
+ok 316 - Hermes MCP Catalog manifest is present and valid
+  ---
+  duration_ms: 0.9893
+  type: 'test'
+  ...
+# Subtest: plugin skills are compact meta-skills instead of service encyclopedia entries
+ok 317 - plugin skills are compact meta-skills instead of service encyclopedia entries
+  ---
+  duration_ms: 6.5532
+  type: 'test'
+  ...
+# Subtest: skills document KooCLI installation, operation discovery, region intent, and password safety
+ok 318 - skills document KooCLI installation, operation discovery, region intent, and password safety
+  ---
+  duration_ms: 0.8941
+  type: 'test'
+  ...
+# Subtest: skill SKILL.md files meet minimum content quality bar
+ok 319 - skill SKILL.md files meet minimum content quality bar
+  ---
+  duration_ms: 4.6272
+  type: 'test'
+  ...
+# Subtest: skills with references have non-empty reference files
+ok 320 - skills with references have non-empty reference files
+  ---
+  duration_ms: 6.6909
+  type: 'test'
+  ...
+# Subtest: web/static-site deployment intent offers target options with sandbox first, not OBS default
+ok 321 - web/static-site deployment intent offers target options with sandbox first, not OBS default
+  ---
+  duration_ms: 1.8388
+  type: 'test'
+  ...
+# Subtest: devbridge uses the valid `list` command, not the non-existent `ls`
+ok 322 - devbridge uses the valid `list` command, not the non-existent `ls`
+  ---
+  duration_ms: 1.188
+  type: 'test'
+  ...
+# Subtest: all plugin manifests are valid JSON
+ok 323 - all plugin manifests are valid JSON
+  ---
+  duration_ms: 0.7292
+  type: 'test'
+  ...
+# Subtest: safety policy.json is valid and has required fields
+ok 324 - safety policy.json is valid and has required fields
+  ---
+  duration_ms: 0.407
+  type: 'test'
+  ...
+# Subtest: cloud risk rules are present and public-safe
+ok 325 - cloud risk rules are present and public-safe
+  ---
+  duration_ms: 1.166
+  type: 'test'
+  ...
+# Subtest: hooks.json uses Node hook and keeps Python hook for Hermes compatibility
+ok 326 - hooks.json uses Node hook and keeps Python hook for Hermes compatibility
+  ---
+  duration_ms: 0.7549
+  type: 'test'
+  ...
+# Subtest: hook rule model documentation exists
+ok 327 - hook rule model documentation exists
+  ---
+  duration_ms: 1.5518
+  type: 'test'
+  ...
+# Subtest: safety skill teaches proactive hook checks
+ok 328 - safety skill teaches proactive hook checks
+  ---
+  duration_ms: 0.2935
+  type: 'test'
+  ...
+# Subtest: .mcp.json is valid and references existing server script
+ok 329 - .mcp.json is valid and references existing server script
+  ---
+  duration_ms: 0.3144
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the codearts target end to end
+ok 330 - setup-cli.mjs supports the codearts target end to end
+  ---
+  duration_ms: 1.8049
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the codearts directory
+ok 331 - tools.mjs resolves skills from the codearts directory
+  ---
+  duration_ms: 0.7082
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs handles KooCLI sandbox blockers and privacy agreement
+ok 332 - setup-cli.mjs handles KooCLI sandbox blockers and privacy agreement
+  ---
+  duration_ms: 1.2266
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs covers hermes restart hints, unix auto-install, and grouped status (\#280)
+ok 333 - setup-cli.mjs covers hermes restart hints, unix auto-install, and grouped status (\#280)
+  ---
+  duration_ms: 1.2103
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the dsh target end to end
+ok 334 - setup-cli.mjs supports the dsh target end to end
+  ---
+  duration_ms: 1.9324
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the dsh directory
+ok 335 - tools.mjs resolves skills from the dsh directory
+  ---
+  duration_ms: 0.7118
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the officeace directory
+ok 336 - tools.mjs resolves skills from the officeace directory
+  ---
+  duration_ms: 0.4846
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the officeace target end to end
+ok 337 - setup-cli.mjs supports the officeace target end to end
+  ---
+  duration_ms: 29.4445
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the hermes target end to end
+ok 338 - setup-cli.mjs supports the hermes target end to end
+  ---
+  duration_ms: 2.525
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs supports the version command
+ok 339 - setup-cli.mjs supports the version command
+  ---
+  duration_ms: 1.275
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs wires the auth reconcile subcommand
+ok 340 - setup-cli.mjs wires the auth reconcile subcommand
+  ---
+  duration_ms: 1.2609
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs resolves the active KooCLI profile for configureHcloud
+ok 341 - setup-cli.mjs resolves the active KooCLI profile for configureHcloud
+  ---
+  duration_ms: 1.3206
+  type: 'test'
+  ...
+# Subtest: setup-cli.mjs checks for updates on install/update via shared query
+ok 342 - setup-cli.mjs checks for updates on install/update via shared query
+  ---
+  duration_ms: 1.9787
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the hermes directory
+ok 343 - tools.mjs resolves skills from the hermes directory
+  ---
+  duration_ms: 0.6225
+  type: 'test'
+  ...
+# Subtest: tools.mjs resolves skills from the atomcode directory
+ok 344 - tools.mjs resolves skills from the atomcode directory
+  ---
+  duration_ms: 0.5738
+  type: 'test'
+  ...
+# Subtest: agent-registration reports openclaw registration status
+ok 345 - agent-registration reports openclaw registration status
+  ---
+  duration_ms: 0.2399
+  type: 'test'
+  ...
+# Subtest: official Huawei Cloud Icons library is integrated
+ok 346 - official Huawei Cloud Icons library is integrated
+  ---
+  duration_ms: 1.8568
+  type: 'test'
+  ...
+# Subtest: tools.mjs registers version-update tools
+ok 347 - tools.mjs registers version-update tools
+  ---
+  duration_ms: 0.6469
+  type: 'test'
+  ...
+# Subtest: stdio server warms update cache; shared protocol decorates first tool call
+ok 348 - stdio server warms update cache; shared protocol decorates first tool call
+  ---
+  duration_ms: 0.3658
+  type: 'test'
+  ...
+# Subtest: hdkitservice-api sends X-HW-Client-Version; SKILL session-start wording
+ok 349 - hdkitservice-api sends X-HW-Client-Version; SKILL session-start wording
+  ---
+  duration_ms: 0.409
+  type: 'test'
+  ...
+# Subtest: READMEs recommend @latest for updates
+ok 350 - READMEs recommend @latest for updates
+  ---
+  duration_ms: 2.0707
+  type: 'test'
+  ...
+# Subtest: cmdUpdate has no trailing unreachable reinstall; cmdReinstall keeps it
+ok 351 - cmdUpdate has no trailing unreachable reinstall; cmdReinstall keeps it
+  ---
+  duration_ms: 1.095
+  type: 'test'
+  ...
+# Subtest: telemetry hook file exists
+ok 352 - telemetry hook file exists
+  ---
+  duration_ms: 2.2267
+  type: 'test'
+  ...
+# Subtest: telemetry hook always exits 0 (never blocks)
+ok 353 - telemetry hook always exits 0 (never blocks)
+  ---
+  duration_ms: 92.3615
+  type: 'test'
+  ...
+# Subtest: telemetry hook captures hcloud read commands
+ok 354 - telemetry hook captures hcloud read commands
+  ---
+  duration_ms: 84.1639
+  type: 'test'
+  ...
+# Subtest: telemetry hook captures hcloud write commands
+ok 355 - telemetry hook captures hcloud write commands
+  ---
+  duration_ms: 82.9973
+  type: 'test'
+  ...
+# Subtest: telemetry hook captures skill_view for huawei skills
+ok 356 - telemetry hook captures skill_view for huawei skills
+  ---
+  duration_ms: 83.9695
+  type: 'test'
+  ...
+# Subtest: telemetry hook ignores non-huawei skills
+ok 357 - telemetry hook ignores non-huawei skills
+  ---
+  duration_ms: 76.2117
+  type: 'test'
+  ...
+# Subtest: telemetry hook captures MCP huaweicloud tool invocations
+ok 358 - telemetry hook captures MCP huaweicloud tool invocations
+  ---
+  duration_ms: 81.2189
+  type: 'test'
+  ...
+# Subtest: telemetry hook ignores non-hcloud commands
+ok 359 - telemetry hook ignores non-hcloud commands
+  ---
+  duration_ms: 77.8397
+  type: 'test'
+  ...
+# Subtest: telemetry hook handles Hermes format (hook_event_name present)
+ok 360 - telemetry hook handles Hermes format (hook_event_name present)
+  ---
+  duration_ms: 87.376
+  type: 'test'
+  ...
+# Subtest: cleanup temp telemetry dir
+ok 361 - cleanup temp telemetry dir
+  ---
+  duration_ms: 1.1516
+  type: 'test'
+  ...
+# Subtest: detectAgentHarness returns known when no env set
+ok 362 - detectAgentHarness returns known when no env set
+  ---
+  duration_ms: 1.1077
+  type: 'test'
+  ...
+# Subtest: detectAgentHarness respects AGENT_HARNESS env
+ok 363 - detectAgentHarness respects AGENT_HARNESS env
+  ---
+  duration_ms: 0.2067
+  type: 'test'
+  ...
+# Subtest: detectAgentHarness detects opencode from env
+ok 364 - detectAgentHarness detects opencode from env
+  ---
+  duration_ms: 0.1969
+  type: 'test'
+  ...
+# Subtest: detectAgentHarness returns null when nothing matches
+ok 365 - detectAgentHarness returns null when nothing matches
+  ---
+  duration_ms: 0.924
+  type: 'test'
+  ...
+# Subtest: detectAgentHarness classifies MCP client names to canonical harness
+ok 366 - detectAgentHarness classifies MCP client names to canonical harness
+  ---
+  duration_ms: 1.8873
+  type: 'test'
+  ...
+# Subtest: detectAgentHarness prefers real host env over clientInfo.name
+ok 367 - detectAgentHarness prefers real host env over clientInfo.name
+  ---
+  duration_ms: 4.7401
+  type: 'test'
+  ...
+# Subtest: generateOrRecoverInstallId returns consistent string
+ok 368 - generateOrRecoverInstallId returns consistent string
+  ---
+  duration_ms: 26.7724
+  type: 'test'
+  ...
+# Subtest: isTelemetryEnabled defaults to true
+ok 369 - isTelemetryEnabled defaults to true
+  ---
+  duration_ms: 2.261
+  type: 'test'
+  ...
+# Subtest: isTelemetryEnabled returns false when env set to off
+ok 370 - isTelemetryEnabled returns false when env set to off
+  ---
+  duration_ms: 0.6023
+  type: 'test'
+  ...
+# Subtest: initTelemetry and trackToolInvoke do not throw
+ok 371 - initTelemetry and trackToolInvoke do not throw
+  ---
+  duration_ms: 10.2283
+  type: 'test'
+  ...
+# Subtest: trackSandboxConnect and trackSandboxDisconnect do not throw
+ok 372 - trackSandboxConnect and trackSandboxDisconnect do not throw
+  ---
+  duration_ms: 7.7019
+  type: 'test'
+  ...
+# Subtest: sanitizeValue truncates long values to 255
+ok 373 - sanitizeValue truncates long values to 255
+  ---
+  duration_ms: 0.409
+  type: 'test'
+  ...
+# Subtest: sanitizeValue replaces newlines and tabs with spaces
+ok 374 - sanitizeValue replaces newlines and tabs with spaces
+  ---
+  duration_ms: 0.3184
+  type: 'test'
+  ...
+# Subtest: sanitizeValue keeps short values intact
+ok 375 - sanitizeValue keeps short values intact
+  ---
+  duration_ms: 0.2222
+  type: 'test'
+  ...
+# Subtest: sanitizeValue coerces non-strings and nulls safely
+ok 376 - sanitizeValue coerces non-strings and nulls safely
+  ---
+  duration_ms: 0.1758
+  type: 'test'
+  ...
+# Subtest: cacheUserHash writes to filesystem
+ok 377 - cacheUserHash writes to filesystem
+  ---
+  duration_ms: 4.8918
+  type: 'test'
+  ...
+# Subtest: ingestHookEvents handles empty or missing file
+ok 378 - ingestHookEvents handles empty or missing file
+  ---
+  duration_ms: 7.7814
+  type: 'test'
+  ...
+# Subtest: runVersionCheck uses hcloud version instead of --version
+ok 379 - runVersionCheck uses hcloud version instead of --version
+  ---
+  duration_ms: 89.5156
+  type: 'test'
+  ...
+# Subtest: runVersionCheck returns installed:false and errorCode on ENOENT
+ok 380 - runVersionCheck returns installed:false and errorCode on ENOENT
+  ---
+  duration_ms: 2.5382
+  type: 'test'
+  ...
+# Subtest: runVersionCheck reports versionMismatch when installed version differs from kooCliVersion
+ok 381 - runVersionCheck reports versionMismatch when installed version differs from kooCliVersion
+  ---
+  duration_ms: 79.3259
+  type: 'test'
+  ...
+# Subtest: runVersionCheck reports no versionMismatch when installed version matches kooCliVersion
+ok 382 - runVersionCheck reports no versionMismatch when installed version matches kooCliVersion
+  ---
+  duration_ms: 81.3351
+  type: 'test'
+  ...
+# Subtest: TOOL_DEFINITIONS includes all required tools including sandbox
+ok 383 - TOOL_DEFINITIONS includes all required tools including sandbox
+  ---
+  duration_ms: 0.3915
+  type: 'test'
+  ...
+# Subtest: TOOL_DEFINITIONS expose cwd parameter on run tools
+ok 384 - TOOL_DEFINITIONS expose cwd parameter on run tools
+  ---
+  duration_ms: 0.1406
+  type: 'test'
+  ...
+# Subtest: TOOL_DEFINITIONS includes proactive hook check tools
+ok 385 - TOOL_DEFINITIONS includes proactive hook check tools
+  ---
+  duration_ms: 0.1486
+  type: 'test'
+  ...
+# Subtest: huaweicloud_hook_check_command returns deny finding
+ok 386 - huaweicloud_hook_check_command returns deny finding
+  ---
+  duration_ms: 3.885
+  type: 'test'
+  ...
+# Subtest: huaweicloud_explain_error maps APIGW.0301 to credential/project_id guidance
+ok 387 - huaweicloud_explain_error maps APIGW.0301 to credential/project_id guidance
+  ---
+  duration_ms: 0.8372
+  type: 'test'
+  ...
+# Subtest: callTool rejects invalid numeric timeoutMs instead of silently ignoring it
+ok 388 - callTool rejects invalid numeric timeoutMs instead of silently ignoring it
+  ---
+  duration_ms: 0.7843
+  type: 'test'
+  ...
+# Subtest: callTool accepts maxRetries 0 and integer timeoutMs (no false rejection)
+ok 389 - callTool accepts maxRetries 0 and integer timeoutMs (no false rejection)
+  ---
+  duration_ms: 6.08
+  type: 'test'
+  ...
+# Subtest: huaweicloud_hook_check_artifacts detects broad IAM policy
+ok 390 - huaweicloud_hook_check_artifacts detects broad IAM policy
+  ---
+  duration_ms: 1.8177
+  type: 'test'
+  ...
+# Subtest: huaweicloud_hook_check_deploy_plan warns on sandbox without ttl
+ok 391 - huaweicloud_hook_check_deploy_plan warns on sandbox without ttl
+  ---
+  duration_ms: 0.9061
+  type: 'test'
+  ...
+# Subtest: service_catalog recommends sandbox first for static website deployment intent
+ok 392 - service_catalog recommends sandbox first for static website deployment intent
+  ---
+  duration_ms: 0.7878
+  type: 'test'
+  ...
+# Subtest: service_catalog keeps storage routing for pure storage intent
+ok 393 - service_catalog keeps storage routing for pure storage intent
+  ---
+  duration_ms: 0.2397
+  type: 'test'
+  ...
+# Subtest: findSkillsRoot skips stale dirs without SKILL.md and picks the first real skills root
+ok 394 - findSkillsRoot skips stale dirs without SKILL.md and picks the first real skills root
+  ---
+  duration_ms: 6.6423
+  type: 'test'
+  ...
+# Subtest: listSkillDirs ignores files, subdirs without SKILL.md, and counts symlinked skill dirs
+ok 395 - listSkillDirs ignores files, subdirs without SKILL.md, and counts symlinked skill dirs
+  ---
+  duration_ms: 8.333
+  type: 'test'
+  ...
+# Subtest: auth_switch temporary sets runtime credentials for api path
+ok 396 - auth_switch temporary sets runtime credentials for api path
+  ---
+  duration_ms: 36.7678
+  type: 'test'
+  ...
+# Subtest: auth_switch clear resets runtime
+ok 397 - auth_switch clear resets runtime
+  ---
+  duration_ms: 8.178
+  type: 'test'
+  ...
+# Subtest: auth_switch persist(mode=import) rejects missing region and keeps import file (\#502)
+ok 398 - auth_switch persist(mode=import) rejects missing region and keeps import file (\#502)
+  ---
+  duration_ms: 8.659
+  type: 'test'
+  ...
+# Subtest: auth_switch temporary(mode=import) clears import file on success
+ok 399 - auth_switch temporary(mode=import) clears import file on success
+  ---
+  duration_ms: 12.3043
+  type: 'test'
+  ...
+# Subtest: auth_switch persist(mode=import) with STS token is rejected and clears import file
+ok 400 - auth_switch persist(mode=import) with STS token is rejected and clears import file
+  ---
+  duration_ms: 14.765
+  type: 'test'
+  ...
+# Subtest: removeKooCli removes default hcloud binary and config dir
+ok 401 - removeKooCli removes default hcloud binary and config dir
+  ---
+  duration_ms: 7.957
+  type: 'test'
+  ...
+# Subtest: removeKooCli does not touch an empty non-hcloud install dir
+ok 402 - removeKooCli does not touch an empty non-hcloud install dir
+  ---
+  duration_ms: 1.7286
+  type: 'test'
+  ...
+# Subtest: removeObsConfig removes the OBS config file
+ok 403 - removeObsConfig removes the OBS config file
+  ---
+  duration_ms: 1.6111
+  type: 'test'
+  ...
+# Subtest: removeObsConfig returns empty when no OBS config exists
+ok 404 - removeObsConfig returns empty when no OBS config exists
+  ---
+  duration_ms: 0.9385
+  type: 'test'
+  ...
+# Subtest: semverParse 解析稳定版与 prerelease
+ok 405 - semverParse 解析稳定版与 prerelease
+  ---
+  duration_ms: 2.4858
+  type: 'test'
+  ...
+# Subtest: semverCompare 完整排序契约
+ok 406 - semverCompare 完整排序契约
+  ---
+  duration_ms: 0.4935
+  type: 'test'
+  ...
+# Subtest: hasPrerelease
+ok 407 - hasPrerelease
+  ---
+  duration_ms: 0.2107
+  type: 'test'
+  ...
+# Subtest: determineTarget 频道选取（§4 矩阵）
+ok 408 - determineTarget 频道选取（§4 矩阵）
+  ---
+  duration_ms: 0.23
+  type: 'test'
+  ...
+# Subtest: judgeUpdate 四态 + 冷却（§4 全表）
+ok 409 - judgeUpdate 四态 + 冷却（§4 全表）
+  ---
+  duration_ms: 1.8525
+  type: 'test'
+  ...
+# Subtest: judgeUpdate 返回字段完整性
+ok 410 - judgeUpdate 返回字段完整性
+  ---
+  duration_ms: 0.3252
+  type: 'test'
+  ...
+# Subtest: parseDistTagsOutput 解析 npm view --json 输出
+ok 411 - parseDistTagsOutput 解析 npm view --json 输出
+  ---
+  duration_ms: 0.2465
+  type: 'test'
+  ...
+# Subtest: skip state 原子写往返 + 损坏容错
+ok 412 - skip state 原子写往返 + 损坏容错
+  ---
+  duration_ms: 17.6643
+  type: 'test'
+  ...
+# Subtest: writeSkipState 目标不可写时清理临时文件
+ok 413 - writeSkipState 目标不可写时清理临时文件
+  ---
+  duration_ms: 3.5912
+  type: 'test'
+  ...
+# Subtest: queryDistTagsSync 成功返回 distTags 对象
+ok 414 - queryDistTagsSync 成功返回 distTags 对象
+  ---
+  duration_ms: 2.173
+  type: 'test'
+  ...
+# Subtest: queryDistTags 异步非阻塞: 同步调用立即返回 Promise
+ok 415 - queryDistTags 异步非阻塞: 同步调用立即返回 Promise
+  ---
+  duration_ms: 1.3046
+  type: 'test'
+  ...
+# Subtest: queryDistTagsFetch 直接 fetch registry 返回 distTags
+ok 416 - queryDistTagsFetch 直接 fetch registry 返回 distTags
+  ---
+  duration_ms: 294.1048
+  type: 'test'
+  ...
+# Subtest: queryDistTagsFetch 尊重 HUAWEICLOUD_NPM_REGISTRY 覆盖
+ok 417 - queryDistTagsFetch 尊重 HUAWEICLOUD_NPM_REGISTRY 覆盖
+  ---
+  duration_ms: 1.5051
+  type: 'test'
+  ...
+# Subtest: queryDistTagsSync 失败时在 DEBUG 下输出日志而非静默
+ok 418 - queryDistTagsSync 失败时在 DEBUG 下输出日志而非静默
+  ---
+  duration_ms: 1.2578
+  type: 'test'
+  ...
+# Subtest: getCachedUpdateInfo 单飞: 并发只查一次
+ok 419 - getCachedUpdateInfo 单飞: 并发只查一次
+  ---
+  duration_ms: 21.1871
+  type: 'test'
+  ...
+# Subtest: getCachedUpdateInfo TTL: 未过期不重复查询
+ok 420 - getCachedUpdateInfo TTL: 未过期不重复查询
+  ---
+  duration_ms: 0.7502
+  type: 'test'
+  ...
+# Subtest: getCachedUpdateInfo 失败节流: 失败后短时间不重查
+ok 421 - getCachedUpdateInfo 失败节流: 失败后短时间不重查
+  ---
+  duration_ms: 0.7707
+  type: 'test'
+  ...
+# Subtest: must-notify: 节流过期后重查成功 → 立即补提 hint
+ok 422 - must-notify: 节流过期后重查成功 → 立即补提 hint
+  ---
+  duration_ms: 0.8594
+  type: 'test'
+  ...
+# Subtest: peekCachedUpdateInfo 返回已就绪 hint | null
+ok 423 - peekCachedUpdateInfo 返回已就绪 hint | null
+  ---
+  duration_ms: 0.6595
+  type: 'test'
+  ...
+# Subtest: applyUpdateHint 附加/跳过规则
+ok 424 - applyUpdateHint 附加/跳过规则
+  ---
+  duration_ms: 0.2654
+  type: 'test'
+  ...
+# Subtest: upgradePackage 参数校验: version 仅支持 latest
+ok 425 - upgradePackage 参数校验: version 仅支持 latest
+  ---
+  duration_ms: 0.6584
+  type: 'test'
+  ...
+# Subtest: upgradePackage 成功路径: 目标版本/重启/文案/缓存失效
+ok 426 - upgradePackage 成功路径: 目标版本/重启/文案/缓存失效
+  ---
+  duration_ms: 1.1164
+  type: 'test'
+  ...
+# Subtest: upgradePackage next 目标: 用 next tag
+ok 427 - upgradePackage next 目标: 用 next tag
+  ---
+  duration_ms: 0.3386
+  type: 'test'
+  ...
+# Subtest: upgradePackage officeace 专属重连文案
+ok 428 - upgradePackage officeace 专属重连文案
+  ---
+  duration_ms: 0.5056
+  type: 'test'
+  ...
+# Subtest: upgradePackage 失败: 返回手动命令
+ok 429 - upgradePackage 失败: 返回手动命令
+  ---
+  duration_ms: 0.463
+  type: 'test'
+  ...
+# Subtest: upgradePackage 失败: spawn 不存在时报可读错误而非 exit null
+ok 430 - upgradePackage 失败: spawn 不存在时报可读错误而非 exit null
+  ---
+  duration_ms: 0.4472
+  type: 'test'
+  ...
+# Subtest: upgradePackage 无目标版本: distTags 有效但无候选时不 spawn 并返回无需升级
+ok 431 - upgradePackage 无目标版本: distTags 有效但无候选时不 spawn 并返回无需升级
+  ---
+  duration_ms: 0.4263
+  type: 'test'
+  ...
+# Subtest: upgradePackage 查询失败: 不 spawn 并给手动提示
+ok 432 - upgradePackage 查询失败: 不 spawn 并给手动提示
+  ---
+  duration_ms: 0.4791
+  type: 'test'
+  ...
+# Subtest: session-isolation: dispatch 接受 opts.sessionId 且不破坏无参调用
+ok 433 - session-isolation: dispatch 接受 opts.sessionId 且不破坏无参调用
+  ---
+  duration_ms: 2799.341
+  type: 'test'
+  ...
+# Subtest: hint-consumption: A 会话消费后 B 会话仍能拿到提示（隔离）
+ok 434 - hint-consumption: A 会话消费后 B 会话仍能拿到提示（隔离）
+  ---
+  duration_ms: 1.4998
+  type: 'test'
+  ...
+# Subtest: hint-consumption: stdio 固定 session 行为 = 每会话首次提示一次
+ok 435 - hint-consumption: stdio 固定 session 行为 = 每会话首次提示一次
+  ---
+  duration_ms: 0.533
+  type: 'test'
+  ...
+# Subtest: hint-consumption: 缺省 session 兜底为 default（行为同现版）
+ok 436 - hint-consumption: 缺省 session 兜底为 default（行为同现版）
+  ---
+  duration_ms: 0.6116
+  type: 'test'
+  ...
+# Subtest: skip-path: resolveSkipFilePath() 默认(无 session) 返回原路径
+ok 437 - skip-path: resolveSkipFilePath() 默认(无 session) 返回原路径
+  ---
+  duration_ms: 3.606
+  type: 'test'
+  ...
+# Subtest: skip-path: resolveSkipFilePath("stdin") 与默认一致(向后兼容)
+ok 438 - skip-path: resolveSkipFilePath("stdin") 与默认一致(向后兼容)
+  ---
+  duration_ms: 1.0824
+  type: 'test'
+  ...
+# Subtest: skip-path: resolveSkipFilePath("default") 与默认一致
+ok 439 - skip-path: resolveSkipFilePath("default") 与默认一致
+  ---
+  duration_ms: 1.6031
+  type: 'test'
+  ...
+# Subtest: skip-path: remote session 生成独立后缀文件
+ok 440 - skip-path: remote session 生成独立后缀文件
+  ---
+  duration_ms: 1.1788
+  type: 'test'
+  ...
+# Subtest: skip-path: 危险 session 值(路径穿越)被过滤为安全名
+not ok 441 - skip-path: 危险 session 值(路径穿越)被过滤为安全名
+  ---
+  duration_ms: 3.7697
+  type: 'test'
+  location: 'C:\\Users\\Administrator\\devkit-test\\Codex\\hdk\\test\\upgrade-session.test.mjs:134:1'
+  failureType: 'testCodeFailure'
+  error: '应有会话后缀, got C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\hwdk-uc-session-6Y0rTh\\.config\\huaweicloud\\devkit-skip.json.___evil___id'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Administrator/devkit-test/Codex/hdk/test/upgrade-session.test.mjs:140:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: skip-path: 会话隔离写读 —— A 写 skip 不影响 B
+ok 442 - skip-path: 会话隔离写读 —— A 写 skip 不影响 B
+  ---
+  duration_ms: 7.2071
+  type: 'test'
+  ...
+1..442
+# tests 442
+# suites 0
+# pass 423
+# fail 5
+# cancelled 0
+# skipped 14
+# todo 0
+# duration_ms 127661.8479

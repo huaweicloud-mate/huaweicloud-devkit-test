@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "why": "d4-security:adminpass-redacted PASS; mcp-tools:adminpass-mcp PASS",
+  "executedAt": "20260927050549",
+  "source": "grouped-probe-fresh-run",
+  "assertions": [
+    {
+      "id": "D4-6",
+      "name": "adminpass-redacted",
+      "pass": true,
+      "actual": "adminPass: <redacted>",
+      "expected": "redacted",
+      "passMsg": "adminPass redacted",
+      "failMsg": "adminPass NOT redacted",
+      "group": "d4-security"
+    },
+    {
+      "id": "D4-6",
+      "name": "adminpass-mcp",
+      "pass": true,
+      "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"nextStep\":\"No Huawei Cloud hook ris",
+      "expected": "redacted",
+      "passMsg": "adminPass redacted (MCP)",
+      "failMsg": "adminPass NOT redacted (MCP)",
+      "group": "mcp-tools"
+    }
+  ]
+}
