@@ -5,6 +5,7 @@ import './checks2.mjs';
 import './checks3.mjs';
 import './checks4.mjs';
 import './checks5.mjs';
+import './checks6.mjs';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
