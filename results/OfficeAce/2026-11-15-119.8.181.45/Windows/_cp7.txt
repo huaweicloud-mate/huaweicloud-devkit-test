@@ -1,0 +1,16 @@
+D1-30 | P2 | D1安装 | semver 比对正确性 | steps:①直调 semverCompare 多组输入 ②核对大小关系 | expect:1.1.2>1.1.1、1.1.0 > 1.1.0-next.9、相等=0、无效串按字典序 | ev:强断言：<证据: semverCompare 多组大小关系>；保留脱敏日志、manifest、前后快照
+D1-67 | P2 | D1安装 | Agent toolkit 模式与 DSH 跳过安装环境变量 | steps:①设 AGENT_TOOLKIT_MODE=local 装 DSH ②核对 env 注入 ③设 SKIP_DSH=1 重 | expect:AGENT_TOOLKIT_MODE 注入 agent env(REQUIRED_ENV_KEYS 含 HCLOUD_BIN)；SKIP_DSH=1 时跳过 D | ev:强断言：<证据: env 注入+跳过安装>；保留脱敏日志、manifest、前后快照
+D4-19 | P0 | D4安全 | 确认流下预检仍生效 | steps:①高危写操作 ②确认流程中观察preflight检查 ③验证拦截 | expect:确认流程中风险预检仍生效拦截 | ev:强断言：<证据: 确认流预检拦截>；保留脱敏日志、manifest、前后快照
+D3-B3 | P1 | D3功能 | run_readonly脱敏执行 | steps:①run_readonly_command执行只读命令 ②检查输出脱敏 ③核对无写入 | expect:执行成功+输出脱敏 | ev:强断言：<证据: 执行成功+输出脱敏+无写入>；保留脱敏日志、manifest、前后快照
+D3-C14 | P2 | D3功能 | 沙箱 HDKit 服务参数与 hwlink 凭证 | steps:①hdkitConnect 带 source/env ②hdkitCredentials 缺 sessionId+dev | expect:hdkitConnect 透传可选参数到 body；hdkitCredentials 缺 sessionId 且缺 devStageId 时报错；hwlink  | ev:强断言：<证据: 参数透传+凭证结构>；保留脱敏日志、manifest、前后快照
+D4-2 | P0 | D4安全 | 凭证env打印拦截 | steps:①printenv/echo凭证env ②观察拦截 | expect:被阻断 | ev:强断言：<证据: printenv/echo 凭证被阻断>；保留脱敏日志、manifest、前后快照
+D4-12 | P2 | D4安全 | 供应链安装期安全 | steps:①审计postinstall行为 ②核对依赖锁定 ③验证pack与源码一致 ④尝试产出SBOM | expect:无恶意行为+pack一致+SBOM可产 | ev:强断言：<证据: 无恶意行为+pack一致+SBOM>；保留脱敏日志、manifest、前后快照
+D4-25 | P2 | D4安全 | Python hook 事件遥测分类 | steps:①执行只读 hcloud 命令 ②执行写命令 ③执行非 hcloud 命令 ④核对 hook-events.jsonl  | expect:只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capability | ev:强断言：<证据: hook-events.jsonl>；保留脱敏日志、manifest、前后快照
+D6-9 | P2 | D6性能 | 缓存清理三入口 | steps:①预热更新/图标/市场缓存 ②分别调三个清理函数 ③核对缓存文件/内存态清空 ④重复清理幂等 | expect:三缓存清理入口各自清空对应缓存且幂等；清理后再查询触发重新拉取 | ev:强断言：<证据: 缓存清空+幂等>；保留脱敏日志、manifest、前后快照
+D9-3 | P1 | D9协议 | tools/call响应格式 | steps:①成功调用核对content结构 ②失败调用核对isError语义 | expect:content数组+isError语义正确 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D10-3 | P1 | D10评测 | 路由准确率+混淆矩阵 | steps:①源码级: 直调 serviceCatalog(intent) 核对中/英文意图→服务路由映射(无需LLM) ②评测集: | expect:源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位 | ev:强断言：<证据: 评测集结果+模型参数>；保留脱敏日志、manifest、前后快照
+EXP-C4-06 | P1 |  |  | steps:CCE 只读规划冒烟: list_operations + plan 只读命令 | expect:CCE 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-16 | P1 |  |  | steps:CDN 只读规划冒烟: list_operations + plan 只读命令 | expect:CDN 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E04 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 EIP→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL);  | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E14 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 IAM审计→read 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL) | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+D4-25 | P2 | D4安全 | Python hook 事件遥测分类 | steps:①执行只读 hcloud 命令 ②执行写命令 ③执行非 hcloud 命令 ④核对 hook-events.jsonl  | expect:只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capability | ev:强断言：<证据: hook-events.jsonl>；保留脱敏日志、manifest、前后快照

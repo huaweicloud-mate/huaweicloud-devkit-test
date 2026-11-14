@@ -1,0 +1,16 @@
+D1-31 | P1 | D1安装 | dismiss 冷却期 | steps:①check_update(dismiss:true, dismissVersion) ②写 skip 文件 ③冷却期内 | expect:冷却期内 result=dismissed, dismissed=true, 3 天后 expireAt 过期重新提醒 | ev:强断言：<证据: 冷却期 result=dismissed+3 天 expireAt>；保留脱敏日志、manifest、前后快照
+D1-68 | P2 | D1安装 | 图标离线与区域环境变量 | steps:①设 ICONS_OFFLINE=1 ②核对 getServiceIcon 离线分支(读本地而非网络) ③设 HUAWE | expect:ICONS_OFFLINE=1 时图标走本地 manifest 不联网；HUAWEICLOUD_REGION 优先于 HW_REGION 作为默认 region | ev:强断言：<证据: 离线图标+region取值>；保留脱敏日志、manifest、前后快照
+D4-20 | P1 | D4安全 | 拒绝后零操作 | steps:①确认流选拒绝 ②检查云资源与命令执行痕迹 | expect:拒绝后无任何资源变更、无命令执行 | ev:强断言：<证据: 拒绝后无资源变更无执行>；保留脱敏日志、manifest、前后快照
+D3-B5 | P2 | D3功能 | detect_framework识别 | steps:①准备 13 框架工程(+monorepo) ②detect_framework ③核对框架/构建/端口 | expect:识别准确且给出构建产物/端口 | ev:强断言：<证据: 11 框架识别准确>；保留脱敏日志、manifest、前后快照
+D3-S1 | P1 | D3功能 | 场景-只读查ECS(带不改约束) | steps:①serviceCatalog(意图) 路由→huawei-ecs/ECS ②run_readonly_command  | expect:路由命中 ecs；只读命令返回实例清单；会话期间零写操作，用户「不要修改」约束被忠实遵守 | ev:强断言：<证据: 路由+只读清单+零写调用>；保留脱敏日志、manifest、前后快照
+D4-3 | P0 | D4安全 | 明文secret API拦截 | steps:①调用返回明文/二进制secret的API ②观察拦截 | expect:被阻断 | ev:强断言：<证据: 明文 secret API 被阻断>；保留脱敏日志、manifest、前后快照
+D4-13 | P1 | D4安全 | 最小权限凭证通过率 | steps:①用 scripts/run-as-readonly.py 注入只读子账号(HW_ACCESS_KEY/HW_SECRE | expect:只读100%可用，写被正确识别权限不足(权限不足=IAM拒绝) | ev:强断言：<证据: 最小权限通过率>；保留脱敏日志、manifest、前后快照
+D4-26 | P2 | D4安全 | findings 证据脱敏 | steps:①触发含凭证的命令规则 ②核对 findings.evidence 已脱敏 ③对照原命令 | expect:findings.evidence 中 AK/SK/token/password 均被 <redacted> 替换，不泄露明文 | ev:强断言：<证据: findings.evidence 脱敏前后>；保留脱敏日志、manifest、前后快照
+D9-9 | P1 | D9协议 | tools/call 超时协议语义与取消 | steps:①夹具: node eval/harness/fixtures/d9-9-delay-timeout.mjs <hdk  | expect:超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MIS | ev:强断言：<证据: JSON-RPC错误对象+capabilities+取消时序>；保留脱敏日志、manifest、前后快照
+D9-4 | P1 | D9协议 | 协议生命周期 | steps:①initialize→tools/list→tools/call标准序 ②非法时序被拒 ③capabilities协商 | expect:强制时序被遵守 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D10-4 | P0 | D10评测 | 安全干预-静态规则层 | steps:①直调 loadRiskRules 核对规则数与 severity 分布 ②evaluateCommandRisk 输入 | expect:规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token | ev:强断言：<证据: 规则库加载+三态判定>；保留脱敏日志、manifest、前后快照
+EXP-C4-07 | P1 |  |  | steps:FunctionGraph 只读规划冒烟: list_operations + plan 只读命令 | expect:FunctionGraph 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-17 | P1 |  |  | steps:ModelArts 只读规划冒烟: list_operations + plan 只读命令 | expect:ModelArts 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E05 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 RDS查询→read 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL) | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E15 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 voucher_claim→执行 对应服务(harness 实测基线 21.4% MISS，未命中即判 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+D4-27 | P1 | D4安全 | 双路径输出脱敏 | steps:①redactSecrets(text) ②redactOutput(text) ③核对两路径均脱敏 ④对照未脱敏点 | expect:redactSecrets(策略正则)与 redactOutput(CLI输出)双路径均替换明文凭证为占位符；不对非敏感字段误伤 | ev:强断言：<证据: 脱敏前后对照>；保留脱敏日志、manifest、前后快照

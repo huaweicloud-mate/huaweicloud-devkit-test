@@ -1,0 +1,78 @@
+D4-29 | P2 | D4安全 | 分类断言与原始命令分类入口 | steps:①classifyRawCommand(cmd) ②对照 classifyTextCommand ③assertAllo | expect:classifyRawCommand=classifyTextCommand 包装；DENY 决策 assertAllowed 抛拒绝、allow 通过；分类结 | ev:强断言：<证据: 分类+断言分支>；保留脱敏日志、manifest、前后快照
+D5-1 | P1 | D5客户端 | 清单发现加载 | steps:①安装后重启 ②核对客户端发现并加载插件清单 | expect:全部客户端可发现 | ev:强断言：<证据: 清单发现加载>；保留脱敏日志、manifest、前后快照
+D5-3 | P1 | D5客户端 | 工具全量枚举 | steps:①枚举40工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺 | expect:40 工具全量可达(=tools.mjs 注册源数量),schema完整 | ev:强断言：<证据: tools/list 40 工具枚举>；保留脱敏日志、manifest、前后快照
+D6-1 | P2 | D6性能 | 检索响应延迟 | steps:①连续调用采样 ②计算p95 | expect:p95<2s | ev:强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+D6-3 | P2 | D6性能 | MCP冷启时间 | steps:①冷启MCP server ②计时到可服务 | expect:冷启<5s | ev:强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+D6-4 | P1 | D6性能 | 并发调度正确性 | steps:①并发30请求 ②观察消息错序/死锁 ③核对session-manager | expect:无死锁无消息错乱 | ev:强断言：<证据: 无死锁无消息错乱>；保留脱敏日志、manifest、前后快照
+D6-9 | P2 | D6性能 | 缓存清理三入口 | steps:①预热更新/图标/市场缓存 ②分别调三个清理函数 ③核对缓存文件/内存态清空 ④重复清理幂等 | expect:三缓存清理入口各自清空对应缓存且幂等；清理后再查询触发重新拉取 | ev:强断言：<证据: 缓存清空+幂等>；保留脱敏日志、manifest、前后快照
+D9-9 | P1 | D9协议 | tools/call 超时协议语义与取消 | steps:①夹具: node eval/harness/fixtures/d9-9-delay-timeout.mjs <hdk  | expect:超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MIS | ev:强断言：<证据: JSON-RPC错误对象+capabilities+取消时序>；保留脱敏日志、manifest、前后快照
+D8-1 | P2 | D8质量 | 文档与能力一致 | steps:①链接有效性扫描 ②命令与实际对比 ③CHANGELOG与行为对比 | expect:无失效链接无过时命令 | ev:强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D8-4 | P1 | D8质量 | 引导步骤可机械执行 | steps:①逐skill评审步骤 ②标记含糊/矛盾/歧义步骤 | expect:无含糊步骤(Agent可机械执行) | ev:强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D8-6 | P2 | D8质量 | 中英文文档一致 | steps:①逐节对比README↔README.zh-CN ②核对命令/路径/承诺一致 | expect:双源无漂移 | ev:强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D8-7 | P0 | D8质量 | 7 个 meta/通用技能指引可机械执行验证 | steps:逐技能：retrieve_skill 加载→按指引执行最小路径→核对无外部猜测 | expect:7 技能指引均可机械执行，无断链/幻觉步骤 | ev:强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D8-9 | P2 | D8质量 | 安装 ID 与遥测值脱敏 | steps:①generateOrRecoverInstallId ②核对 ID 落盘且二次调用稳定 ③sanitizeValue  | expect:installId 生成/恢复稳定持久；sanitizeValue 移除 AK/SK/token 等敏感值与非法字符，不改变合法值 | ev:强断言：<证据: ID稳定+脱敏>；保留脱敏日志、manifest、前后快照
+D8-10 | P2 | D8质量 | MCP 配置备份与合并 | steps:①mergeCommandStyle ②mergeArgsStyle ③mergeMcpServersFile ④ext | expect:命令/参数/文件三风格合并正确；用户 delta 提取再应用幂等；agent delta 持久化与 purgeBackup 清空 | ev:强断言：<证据: 合并结果+delta回放>；保留脱敏日志、manifest、前后快照
+D9-1 | P1 | D9协议 | tools/list合规 | steps:①tools/list ②逐工具schema校验合法JSON Schema ③核对无残留/重复工具 | expect:40 工具 schema 均合法(=tools.mjs 注册源数量) | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-2 | P1 | D9协议 | JSON-RPC错误码 | steps:①源码级: node eval/harness/protocol-probe.mjs 自动发未知方法/非法参数核对错误码 | expect:错误码规范,客户端可处理 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-3 | P1 | D9协议 | tools/call响应格式 | steps:①成功调用核对content结构 ②失败调用核对isError语义 | expect:content数组+isError语义正确 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-4 | P1 | D9协议 | 协议生命周期 | steps:①initialize→tools/list→tools/call标准序 ②非法时序被拒 ③capabilities协商 | expect:强制时序被遵守 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-5 | P1 | D9协议 | stdio传输健壮 | steps:①大payload ②超长输出 ③并发 ④断连恢复 ⑤核对stdout纯协议无日志污染 | expect:通传输不崩不污染协议通道 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-6 | P1 | D9协议 | 跨客户端互通 | steps:①夹具: node eval/harness/fixtures/d9-6-cross-client.mjs <hdk s | expect:全客户端协议互通 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-7 | P2 | D9协议 | 协议版本协商降级 | steps:①模拟老客户端initialize ②核对协商或明确报错 | expect:不挂死且正确降级 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-8 | P2 | D9协议 | inputSchema版本合规 | steps:①逐schema核对JSON Schema版本 ②核对无混用(draft-07/2020-12) | expect:版本统一且明确 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-10 | P1 | D9协议 | MCP remote transport（HTTP/WS 远程服务） | steps:①夹具: node eval/harness/fixtures/d9-10-remote-transport.mjs < | expect:remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 port/host 用默认值 | ev:强断言：<证据: 端口监听+协议响应>；保留脱敏日志、manifest、前后快照
+D9-11 | P1 | D9协议 | WebSocket 隧道通道生命周期 | steps:①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localS | expect:通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 localServer 关闭、subConne | ev:强断言：<证据: ready/close 生命周期>；保留脱敏日志、manifest、前后快照
+D9-12 | P0 | D9协议 | initialize 握手协议安全基线 | steps:①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/ca | expect:initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorat | ev:强断言：<证据: 协议报文+源码探针>；保留脱敏日志、manifest、前后快照
+D9-13 | P0 | D9协议 | tools/call 凭证不泄露与权限校验 | steps:①setRuntimeCredentials 注入运行时凭证，hasRuntimeCredentials 校验存在 ②r | expect:tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprova | ev:强断言：<证据: 凭证脱敏+权限决策+审批令牌>；保留脱敏日志、manifest、前后快照
+D10-3 | P1 | D10评测 | 路由准确率+混淆矩阵 | steps:①源码级: 直调 serviceCatalog(intent) 核对中/英文意图→服务路由映射(无需LLM) ②评测集: | expect:源码级路由断言: serviceCatalog 中/英文意图均命中对应服务; 评测级: 路由准确率≥90%,错路由可定位 | ev:强断言：<证据: 评测集结果+模型参数>；保留脱敏日志、manifest、前后快照
+D10-4 | P0 | D10评测 | 安全干预-静态规则层 | steps:①直调 loadRiskRules 核对规则数与 severity 分布 ②evaluateCommandRisk 输入 | expect:规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token | ev:强断言：<证据: 规则库加载+三态判定>；保留脱敏日志、manifest、前后快照
+##### 用例矩阵-展开级.csv
+EXP-D5-7-1 | P1 |  |  | steps:在 OfficeAce 上执行 D5-1 用例 | expect:OfficeAce：客户端可发现并加载插件清单 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-D5-7-3 | P1 |  |  | steps:在 OfficeAce 上执行 D5-3 用例 | expect:OfficeAce：tools/list 枚举 40 工具全量可达，schema 完整 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-01 | P1 |  |  | steps:ECS 只读规划冒烟: list_operations + plan 只读命令 | expect:ECS 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-02 | P1 |  |  | steps:VPC 只读规划冒烟: list_operations + plan 只读命令 | expect:VPC 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-03 | P1 |  |  | steps:OBS 只读规划冒烟: list_operations + plan 只读命令 | expect:OBS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-04 | P1 |  |  | steps:RDS 只读规划冒烟: list_operations + plan 只读命令 | expect:RDS 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-05 | P1 |  |  | steps:GaussDB 只读规划冒烟: list_operations + plan 只读命令 | expect:GaussDB 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-06 | P1 |  |  | steps:CCE 只读规划冒烟: list_operations + plan 只读命令 | expect:CCE 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-07 | P1 |  |  | steps:FunctionGraph 只读规划冒烟: list_operations + plan 只读命令 | expect:FunctionGraph 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-08 | P1 |  |  | steps:IAM 只读规划冒烟: list_operations + plan 只读命令 | expect:IAM 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-09 | P1 |  |  | steps:CTS 只读规划冒烟: list_operations + plan 只读命令 | expect:CTS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-10 | P1 |  |  | steps:CES 只读规划冒烟: list_operations + plan 只读命令 | expect:CES 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-11 | P1 |  |  | steps:DDS 只读规划冒烟: list_operations + plan 只读命令 | expect:DDS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-12 | P1 |  |  | steps:DCS 只读规划冒烟: list_operations + plan 只读命令 | expect:DCS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-13 | P1 |  |  | steps:SMN 只读规划冒烟: list_operations + plan 只读命令 | expect:SMN 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-14 | P1 |  |  | steps:DMS 只读规划冒烟: list_operations + plan 只读命令 | expect:DMS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-15 | P1 |  |  | steps:WAF 只读规划冒烟: list_operations + plan 只读命令 | expect:WAF 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-16 | P1 |  |  | steps:CDN 只读规划冒烟: list_operations + plan 只读命令 | expect:CDN 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-17 | P1 |  |  | steps:ModelArts 只读规划冒烟: list_operations + plan 只读命令 | expect:ModelArts 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-18 | P1 |  |  | steps:DEW 只读规划冒烟: list_operations + plan 只读命令 | expect:DEW 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-19 | P1 |  |  | steps:CBR 只读规划冒烟: list_operations + plan 只读命令 | expect:CBR 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-20 | P1 |  |  | steps:EVS 只读规划冒烟: list_operations + plan 只读命令 | expect:EVS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-21 | P1 |  |  | steps:EIP 只读规划冒烟: list_operations + plan 只读命令 | expect:EIP 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-22 | P1 |  |  | steps:ELB 只读规划冒烟: list_operations + plan 只读命令 | expect:ELB 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E01 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 ECS查询→run_readonly 对应服务(harness 实测基线 21.4% MISS，未命中 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E02 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 ECS创建→plan/approve 对应服务(harness 实测基线 21.4% MISS，未命中 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E03 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 OBS静态站→deploy 对应服务(harness 实测基线 21.4% MISS，未命中即判 FA | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E04 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 EIP→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL);  | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E05 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 RDS查询→read 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL) | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E06 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 DCS创建→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL) | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E07 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 CBR→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL);  | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E08 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 explain_error→诊断 对应服务(harness 实测基线 21.4% MISS，未命中即判 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E09 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 CCE创建→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL) | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E10 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 FunctionGraph→plan 对应服务(harness 实测基线 21.4% MISS，未命中 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E11 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 费用查询→read 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E12 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 CES→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL);  | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E13 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 证书/ELB→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E14 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 IAM审计→read 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL) | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E15 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 voucher_claim→执行 对应服务(harness 实测基线 21.4% MISS，未命中即判 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+##### 使命-mission-001.csv
+D4-1 | P0 | D4安全 | 凭证文件读取拦截 | steps:①尝试cat/type凭证文件 ②观察拦截 | expect:被阻断 | ev:强断言：<证据: cat/type 凭证文件被阻断>；保留脱敏日志、manifest、前后快照
+D4-2 | P0 | D4安全 | 凭证env打印拦截 | steps:①printenv/echo凭证env ②观察拦截 | expect:被阻断 | ev:强断言：<证据: printenv/echo 凭证被阻断>；保留脱敏日志、manifest、前后快照
+D4-4 | P1 | D4安全 | 写操作审批门 | steps:①逐一触发写语义操作 ②观察是否强制审批 | expect:无审批不可执行 | ev:强断言：<证据: 12 类写动词强制审批>；保留脱敏日志、manifest、前后快照
+D4-5 | P0 | D4安全 | 写操作误判检测 | steps:①plan删除类命令 ②记录插件判定 ③若判read-only/allow→记P0 | expect:写操作不被误判为只读 | ev:强断言：<证据: 写命令不被误判只读>；保留脱敏日志、manifest、前后快照
+D4-7 | P1 | D4安全 | hook三工具有效性 | steps:①构造三类高危输入 ②逐一调用hook工具 ③核对拦截 | expect:高危输入均被拦截 | ev:强断言：<证据: 三类高危输入均拦截>；保留脱敏日志、manifest、前后快照
+D4-15 | P0 | D4安全 | hook绕过尝试 | steps:①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截 | expect:无绕过成功 | ev:强断言：<证据: 变体无绕过成功>；保留脱敏日志、manifest、前后快照
+D4-16 | P0 | D4安全 | 命令包裹穿透 | steps:①构造shell包裹 ②执行 ③核对hook是否检查内层 | expect:发现内层命令并拦截 | ev:强断言：<证据: 发现内层命令并拦截>；保留脱敏日志、manifest、前后快照
+D4-25 | P2 | D4安全 | Python hook 事件遥测分类 | steps:①执行只读 hcloud 命令 ②执行写命令 ③执行非 hcloud 命令 ④核对 hook-events.jsonl  | expect:只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capability | ev:强断言：<证据: hook-events.jsonl>；保留脱敏日志、manifest、前后快照
+D4-27 | P1 | D4安全 | 双路径输出脱敏 | steps:①redactSecrets(text) ②redactOutput(text) ③核对两路径均脱敏 ④对照未脱敏点 | expect:redactSecrets(策略正则)与 redactOutput(CLI输出)双路径均替换明文凭证为占位符；不对非敏感字段误伤 | ev:强断言：<证据: 脱敏前后对照>；保留脱敏日志、manifest、前后快照

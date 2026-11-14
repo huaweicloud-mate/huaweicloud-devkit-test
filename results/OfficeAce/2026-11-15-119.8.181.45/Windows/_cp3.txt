@@ -1,0 +1,16 @@
+D1-4 | P2 | D1安装 | status/update幂等 | steps:①status核对输出 ②update ③核对用户config未被触碰 ④重复update幂等 | expect:增量刷新，不碰用户config | ev:强断言：<证据: 增量刷新不碰 config+重复 update 幂等>；保留脱敏日志、manifest、前后快照
+D1-42 | P1 | D1安装 | dismiss 真实闭环与跨调用持久化 | steps:①首次 check_update 确认 update_available ②调用 dismiss ③检查实际 skip  | expect:拒绝调用写入正确 agent/plugin 路径；文件字段完整且 expireAt= dismissedAt+3天；同版本冷却内返回 dismissed；进程重 | ev:强断言：<证据: skip 文件字段+重启复查>；保留脱敏日志、manifest、前后快照
+D2-12 | P1 | D2认证 | R10 runtime非空禁止落盘 | steps:①auth_init 置 runtime ②auth_status 确认 runtimeActive ③auth_syn | expect:sync 返回 ok:false + auto-sync suppressed (R10)，不写 S1 | ev:强断言：<证据: R10 suppressed 不写 S1>；保留脱敏日志、manifest、前后快照
+D2-26 | P1 | D2认证 | 凭证备份与恢复 | steps:①backupGlobalCredentials ②核对备份文件写入 ③破坏主凭证 ④restoreGlobalCred | expect:备份/恢复闭环：备份写入独立文件、恢复后凭证与备份一致、恢复幂等不报错 | ev:强断言：<证据: 备份文件+恢复比对>；保留脱敏日志、manifest、前后快照
+D3-C5 | P1 | D3功能 | 工具冒烟 | steps:①四工具快速调用 ②全部通过 | expect:冒烟快速全通 | ev:强断言：<证据: 四工具冒烟全通>；保留脱敏日志、manifest、前后快照
+D3-S6 | P2 | D3功能 | 场景-FunctionGraph定时任务 | steps:①serviceCatalog 路由→huawei-functiongraph/FunctionGraph ②hclou | expect:函数创建成功+定时触发器绑定，返回可调用标识 | ev:强断言：<证据: 函数URN+触发器>；保留脱敏日志、manifest、前后快照
+D4-8 | P1 | D4安全 | Python/Node策略一致 | steps:①Python hook路径判定 ②Node MCP路径判定 ③对比 | expect:判定一致 | ev:强断言：<证据: Python/Node 双路径判定一致>；保留脱敏日志、manifest、前后快照
+D4-21 | P0 | D4安全 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检） | steps:①构造宽泛 IAM policy JSON ②hook_check_artifacts ③核对 deny | expect:broad IAM 制品被拦截 | ev:强断言：<证据: broad IAM 制品拦截>；保留脱敏日志、manifest、前后快照
+D5-3 | P1 | D5客户端 | 工具全量枚举 | steps:①枚举40工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺 | expect:40 工具全量可达(=tools.mjs 注册源数量),schema完整 | ev:强断言：<证据: tools/list 40 工具枚举>；保留脱敏日志、manifest、前后快照
+D8-9 | P2 | D8质量 | 安装 ID 与遥测值脱敏 | steps:①generateOrRecoverInstallId ②核对 ID 落盘且二次调用稳定 ③sanitizeValue  | expect:installId 生成/恢复稳定持久；sanitizeValue 移除 AK/SK/token 等敏感值与非法字符，不改变合法值 | ev:强断言：<证据: ID稳定+脱敏>；保留脱敏日志、manifest、前后快照
+D9-10 | P1 | D9协议 | MCP remote transport（HTTP/WS 远程服务） | steps:①夹具: node eval/harness/fixtures/d9-10-remote-transport.mjs < | expect:remote 服务在 9528 端口监听，initialize/tools/list 与 stdio 路径一致；未指定 port/host 用默认值 | ev:强断言：<证据: 端口监听+协议响应>；保留脱敏日志、manifest、前后快照
+EXP-C4-02 | P1 |  |  | steps:VPC 只读规划冒烟: list_operations + plan 只读命令 | expect:VPC 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-12 | P1 |  |  | steps:DCS 只读规划冒烟: list_operations + plan 只读命令 | expect:DCS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-22 | P1 |  |  | steps:ELB 只读规划冒烟: list_operations + plan 只读命令 | expect:ELB 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E10 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 FunctionGraph→plan 对应服务(harness 实测基线 21.4% MISS，未命中 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+D4-5 | P0 | D4安全 | 写操作误判检测 | steps:①plan删除类命令 ②记录插件判定 ③若判read-only/allow→记P0 | expect:写操作不被误判为只读 | ev:强断言：<证据: 写命令不被误判只读>；保留脱敏日志、manifest、前后快照

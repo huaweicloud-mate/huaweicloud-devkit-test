@@ -1,0 +1,15 @@
+D1-33 | P2 | D1安装 | skip 文件持久化与多路径 | steps:①writeSkipState 正常写 ②resolveSkipFilePath 插件目录/回退路径 ③检查结构与原子性 | expect:文件{ dismissedVersion/dismissedAt/expireAt }, 插件目录无副本时回退共享路径 | ev:强断言：<证据: skip 文件字段+回退路径+原子写>；保留脱敏日志、manifest、前后快照
+D1-69 | P2 | D1安装 | CLI help 子命令 | steps:①执行 help 子命令 ②核对输出帮助文本(命令列表/用法) | expect:help 子命令输出帮助且有退出码 0，非 TODO/空输出 | ev:强断言：<证据: help 输出>；保留脱敏日志、manifest、前后快照
+D2-1 | P1 | D2认证 | auth init三端同步 | steps:①源码级: 隔离HOME+假凭证执行auth init ②核对KooCLI/OBS/沙箱三端配置文件落位(路径+格式)  | expect:源码级断言: 三端配置文件均落位(路径+格式,任一端缺失即缺陷); 真云E2E断言: 三端API实际可用 | ev:强断言：<证据: 三端落位(KooCLI/OBS/沙箱)>；保留脱敏日志、manifest、前后快照
+D3-C1 | P1 | D3功能 | ECS生命周期E2E | steps:①购买(参考实例) ②ShowJob/ListServersDetails验证ACTIVE ③删除含磁盘 ④只读验证归零 | expect:插件引导全程完成，无残留 | ev:强断言：<证据: 生命周期 E2E+归零>；保留脱敏日志、manifest、前后快照
+D3-S2 | P1 | D3功能 | 场景-删VPC先确认 | steps:①serviceCatalog 路由→huawei-vpc/VPC ②plan_cli_command 生成 Delet | expect:先出命令块等待确认，未确认时零执行；确认后删除成功且归零 | ev:强断言：<证据: 命令块+确认前后执行态>；保留脱敏日志、manifest、前后快照
+D4-4 | P1 | D4安全 | 写操作审批门 | steps:①逐一触发写语义操作 ②观察是否强制审批 | expect:无审批不可执行 | ev:强断言：<证据: 12 类写动词强制审批>；保留脱敏日志、manifest、前后快照
+D4-14 | P2 | D4安全 | 操作可审计性 | steps:①执行若干命令 ②查CTS/运行日志 ③核对可追溯+可区分agent/人工 | expect:每次命令可追溯 | ev:强断言：<证据: CTS 可追溯+区分 agent/人工>；保留脱敏日志、manifest、前后快照
+D4-27 | P1 | D4安全 | 双路径输出脱敏 | steps:①redactSecrets(text) ②redactOutput(text) ③核对两路径均脱敏 ④对照未脱敏点 | expect:redactSecrets(策略正则)与 redactOutput(CLI输出)双路径均替换明文凭证为占位符；不对非敏感字段误伤 | ev:强断言：<证据: 脱敏前后对照>；保留脱敏日志、manifest、前后快照
+D8-1 | P2 | D8质量 | 文档与能力一致 | steps:①链接有效性扫描 ②命令与实际对比 ③CHANGELOG与行为对比 | expect:无失效链接无过时命令 | ev:强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D9-5 | P1 | D9协议 | stdio传输健壮 | steps:①大payload ②超长输出 ③并发 ④断连恢复 ⑤核对stdout纯协议无日志污染 | expect:通传输不崩不污染协议通道 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+##### 用例矩阵-展开级.csv
+EXP-C4-08 | P1 |  |  | steps:IAM 只读规划冒烟: list_operations + plan 只读命令 | expect:IAM 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-18 | P1 |  |  | steps:DEW 只读规划冒烟: list_operations + plan 只读命令 | expect:DEW 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E06 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 DCS创建→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL) | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+##### 使命-mission-001.csv

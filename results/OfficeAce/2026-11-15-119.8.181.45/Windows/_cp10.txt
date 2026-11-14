@@ -1,0 +1,15 @@
+D1-39 | P0 | D1安装 | Windows 升级检测链可用性 | steps:①本机直调 queryDistTagsSync/queryDistTags ②观察 EINVAL/结果 ③对照加 she | expect:Windows 下检测链真实可用，不得 EINVAL 静默失败 | ev:强断言：<证据: Windows 检测链无 EINVAL 静默失败>；保留脱敏日志、manifest、前后快照
+D1-70 | P1 | D1安装 | 代理配置与 WebSocket 代理 | steps:①writeProxyConfig ②readProxyConfig 核对 ③getProxySettings(targ | expect:proxy.json 读写/clear 正确；getProxySettings 拼 env+file 且 no_proxy 命中返回 null；有代理时 Web | ev:强断言：<证据: 配置读写+WS代理选择>；保留脱敏日志、manifest、前后快照
+D2-2 | P2 | D2认证 | auth status判定准确性 | steps:①构造三端×就绪/未就绪8种组合 ②逐一核对status判定 | expect:组合枚举判定准确，部分就绪场景明确标识 | ev:强断言：<证据: 三端就绪组合枚举判定>；保留脱敏日志、manifest、前后快照
+D3-C2 | P1 | D3功能 | OBS静态站部署E2E | steps:①构建静态站 ②obsutil上传(核对目录语义/-dryRun键名) ③public-read ④curl200 ⑤清 | expect:部署成功+资源归零 | ev:强断言：<证据: 部署成功+资源归零>；保留脱敏日志、manifest、前后快照
+D3-S3 | P1 | D3功能 | 场景-沙箱预览出URL | steps:①serviceCatalog 路由→sandbox ②check_user→sign_agreement→connec | expect:终点必返回可访问公网URL；会话可正常关闭；无计费资源残留 | ev:强断言：<证据: 预览URL可访问>；保留脱敏日志、manifest、前后快照
+D4-5 | P0 | D4安全 | 写操作误判检测 | steps:①plan删除类命令 ②记录插件判定 ③若判read-only/allow→记P0 | expect:写操作不被误判为只读 | ev:强断言：<证据: 写命令不被误判只读>；保留脱敏日志、manifest、前后快照
+D4-15 | P0 | D4安全 | hook绕过尝试 | steps:①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截 | expect:无绕过成功 | ev:强断言：<证据: 变体无绕过成功>；保留脱敏日志、manifest、前后快照
+D4-28 | P0 | D4安全 | Node 版安全 hook 链路 | steps:①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs  | expect:hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 den | ev:强断言：<证据: deny 决策+reason>；保留脱敏日志、manifest、前后快照
+D8-4 | P1 | D8质量 | 引导步骤可机械执行 | steps:①逐skill评审步骤 ②标记含糊/矛盾/歧义步骤 | expect:无含糊步骤(Agent可机械执行) | ev:强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D9-6 | P1 | D9协议 | 跨客户端互通 | steps:①夹具: node eval/harness/fixtures/d9-6-cross-client.mjs <hdk s | expect:全客户端协议互通 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+EXP-D5-7-1 | P1 |  |  | steps:在 OfficeAce 上执行 D5-1 用例 | expect:OfficeAce：客户端可发现并加载插件清单 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-09 | P1 |  |  | steps:CTS 只读规划冒烟: list_operations + plan 只读命令 | expect:CTS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-19 | P1 |  |  | steps:CBR 只读规划冒烟: list_operations + plan 只读命令 | expect:CBR 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E07 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 CBR→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL);  | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+D4-1 | P0 | D4安全 | 凭证文件读取拦截 | steps:①尝试cat/type凭证文件 ②观察拦截 | expect:被阻断 | ev:强断言：<证据: cat/type 凭证文件被阻断>；保留脱敏日志、manifest、前后快照

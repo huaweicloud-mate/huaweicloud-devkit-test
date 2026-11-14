@@ -1,0 +1,16 @@
+D1-3 | P1 | D1安装 | doctor健康自检 | steps:①干净环境跑doctor ②人为制造组件缺失(如删MCP Python SDK)跑doctor | expect:检测项准确，失败场景如实报告且给出修复指引 | ev:强断言：<证据: doctor 检测项准确+失败场景报告>；保留脱敏日志、manifest、前后快照
+D1-41 | P1 | D1安装 | check_update 真实 MCP 返回契约 | steps:①启动真实 mcp-server ②initialize→tools/call(check_update) ③分别注入四 | expect:tools/call isError=false；四态、currentVersion/latestStable/updateAvailable/dismisse | ev:强断言：<证据: MCP 四态返回契约>；保留脱敏日志、manifest、前后快照
+D2-11 | P0 | D2认证 | R3 STS token拒绝落盘 | steps:①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token | expect:返回 {status:error, scope:rejected}，token 永不落盘 | ev:强断言：<证据: scope=rejected+token 不落盘>；保留脱敏日志、manifest、前后快照
+D2-5 | P1 | D2认证 | 凭证缺失报错指引 | steps:①无凭证调用 ②错误AK ③过期AK ④记录报错与指引 | expect:明确报错+可执行指引(非裸堆栈) | ev:强断言：<证据: 报错+可执行指引(非裸堆栈)>；保留脱敏日志、manifest、前后快照
+D3-C4 | P1 | D3功能 | 服务创建类回归 | steps:①逐服务list_operations+plan只读 ②高危服务轻量创建(最小规格) ③立即释放 | expect:全部服务有规范路由且可执行 | ev:强断言：<证据: 逐服务只读规划>；保留脱敏日志、manifest、前后快照
+D3-S5 | P2 | D3功能 | 场景-复合意图分层路由 | steps:①serviceCatalog(复合中文意图) ②核对命中多个 service(存储 DDS/GaussDB + 托管  | expect:复合意图正确拆分并命中多个对应 service；分层推荐按预览/生产分流，不盲选单一服务 | ev:强断言：<证据: 多路命中+分层推荐>；保留脱敏日志、manifest、前后快照
+D4-7 | P1 | D4安全 | hook三工具有效性 | steps:①构造三类高危输入 ②逐一调用hook工具 ③核对拦截 | expect:高危输入均被拦截 | ev:强断言：<证据: 三类高危输入均拦截>；保留脱敏日志、manifest、前后快照
+D4-17 | P1 | D4安全 | hook模糊fail-closed | steps:①构造畸形输入 ②调用hook三工具 ③核对不崩溃不误放行 | expect:异常输入默认拒绝 | ev:强断言：<证据: 异常输入默认拒绝>；保留脱敏日志、manifest、前后快照
+D5-1 | P1 | D5客户端 | 清单发现加载 | steps:①安装后重启 ②核对客户端发现并加载插件清单 | expect:全部客户端可发现 | ev:强断言：<证据: 清单发现加载>；保留脱敏日志、manifest、前后快照
+D8-7 | P0 | D8质量 | 7 个 meta/通用技能指引可机械执行验证 | steps:逐技能：retrieve_skill 加载→按指引执行最小路径→核对无外部猜测 | expect:7 技能指引均可机械执行，无断链/幻觉步骤 | ev:强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D9-8 | P2 | D9协议 | inputSchema版本合规 | steps:①逐schema核对JSON Schema版本 ②核对无混用(draft-07/2020-12) | expect:版本统一且明确 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+EXP-C4-01 | P1 |  |  | steps:ECS 只读规划冒烟: list_operations + plan 只读命令 | expect:ECS 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-11 | P1 |  |  | steps:DDS 只读规划冒烟: list_operations + plan 只读命令 | expect:DDS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-21 | P1 |  |  | steps:EIP 只读规划冒烟: list_operations + plan 只读命令 | expect:EIP 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E09 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 CCE创建→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL) | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+D4-4 | P1 | D4安全 | 写操作审批门 | steps:①逐一触发写语义操作 ②观察是否强制审批 | expect:无审批不可执行 | ev:强断言：<证据: 12 类写动词强制审批>；保留脱敏日志、manifest、前后快照

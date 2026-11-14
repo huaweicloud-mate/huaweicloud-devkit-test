@@ -1,0 +1,16 @@
+D1-27 | P1 | D1安装 | 检测语义-已是最新 | steps:①直调 judgeUpdate(current, distTags, null) ②检查 result | expect:result=up_to_date, updateAvailable=false | ev:强断言：<证据: result=up_to_date/updateAvailable=false>；保留脱敏日志、manifest、前后快照
+D1-65 | P2 | D1安装 | 调试模式环境变量 | steps:①设 HUAWEICLOUD_DEVKIT_DEBUG=1 跑 queryDistTags ②核对 DEBUG 分支生效 | expect:DEBUG===1/true 时开启调试日志；未设/其他值不开启；不影响正常返回 | ev:强断言：<证据: 调试日志开关>；保留脱敏日志、manifest、前后快照
+D2-16 | P1 | D2认证 | import文件读取后擦除 | steps:①放置 creds-import.json ②auth_switch mode=import ③检查文件存在性 | expect:读后无条件擦除（exists=False），密钥不留盘 | ev:强断言：<证据: 读后 exists=False 密钥不留盘>；保留脱敏日志、manifest、前后快照
+D3-A1 | P1 | D3功能 | skill检索完整性 | steps:①用retrieve_skill/search_docs逐一检索30个skill ②核对返回完整内容 | expect:全部可检索且完整拉取，索引无缺口 | ev:强断言：<证据: 全量 skill 可检索完整拉取>；保留脱敏日志、manifest、前后快照
+D3-C7 | P1 | D3功能 | 跨区域资源操作引导（区域维度） | steps:①请求查香港区资源 ②断言 plan 命令含 --cli-region ③get_regional_availabili | expect:命令含目标 --cli-region（参数级断言）；不可用→code=Ecs.0021 精确命中；不存在→code=Ecs.0200 精确命中（均为唯一断言）； | ev:强断言：<证据: 命令参数+错误码+释放归零>；保留脱敏日志、manifest、前后快照
+D3-S8 | P1 | D3功能 | 场景-操作失败后排障指引 | steps:①注入凭证过期/权限不足场景 ②触发一次失败命令 ③核对 AI 走 troubleshooting 分类(权限 vs 区 | expect:失败被正确分类(权限/区域/配额)；给出可执行的下一步检查命令，非裸报错或空堆栈 | ev:强断言：<证据: 失败分类+可执行下一步>；保留脱敏日志、manifest、前后快照
+D4-10 | P2 | D4安全 | 规则库新增回归 | steps:①新增规则入库 ②重跑D4基线用例 ③核对无误杀 | expect:新规则不误杀既有正常操作 | ev:强断言：<证据: 新规则不误杀既有操作>；保留脱敏日志、manifest、前后快照
+D4-23 | P0 | D4安全 | 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标 | steps:逐目标安装后：①核对 rules 注入系统提示/规则 ②构造禁直连 csms/kms 场景 ③核对 MUST 约束生效 | expect:全部目标注入且约束可执行，无孤儿文件 | ev:强断言：<证据: agent-rules 注入生效>；保留脱敏日志、manifest、前后快照
+D6-3 | P2 | D6性能 | MCP冷启时间 | steps:①冷启MCP server ②计时到可服务 | expect:冷启<5s | ev:强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+D9-1 | P1 | D9协议 | tools/list合规 | steps:①tools/list ②逐工具schema校验合法JSON Schema ③核对无残留/重复工具 | expect:40 工具 schema 均合法(=tools.mjs 注册源数量) | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+D9-12 | P0 | D9协议 | initialize 握手协议安全基线 | steps:①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/ca | expect:initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorat | ev:强断言：<证据: 协议报文+源码探针>；保留脱敏日志、manifest、前后快照
+EXP-C4-04 | P1 |  |  | steps:RDS 只读规划冒烟: list_operations + plan 只读命令 | expect:RDS 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-14 | P1 |  |  | steps:DMS 只读规划冒烟: list_operations + plan 只读命令 | expect:DMS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E02 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 ECS创建→plan/approve 对应服务(harness 实测基线 21.4% MISS，未命中 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E12 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 CES→plan 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL);  | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+D4-15 | P0 | D4安全 | hook绕过尝试 | steps:①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截 | expect:无绕过成功 | ev:强断言：<证据: 变体无绕过成功>；保留脱敏日志、manifest、前后快照

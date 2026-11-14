@@ -1,0 +1,16 @@
+##### 用例矩阵-设计级.csv
+D1-40 | P0 | D1安装 | 镜像 lag 下检测正确性(反向提醒防护) | steps:①设置 npm_config_registry=镜像 ②queryDistTags ③判定结果与官方源对照 | expect:不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验 | ev:强断言：<证据: 镜像 lag 不提示版本倒退>；保留脱敏日志、manifest、前后快照
+D2-10 | P1 | D2认证 | R7 current档跟随 | steps:①构造 current=deploy ②readKooCliProfiles 解析 ③切换 current 再解析 ④夹 | expect:resolveManagedProfile 返回 current 档；runHcloudConfigure 带 --cli-profile= | ev:强断言：<证据: current 档解析+--cli-profile>；保留脱敏日志、manifest、前后快照
+D2-4 | P0 | D2认证 | 凭证脱敏正确性 | steps:①执行脱敏展示 ②检查输出: AK中段、SK永不完整 | expect:输出无明文凭证字段 | ev:强断言：<证据: 输出无明文 AK/SK>；保留脱敏日志、manifest、前后快照
+D3-C3 | P1 | D3功能 | 沙箱部署E2E | steps:①sandbox_connect ②upload_project ③deploy_nginx+deploy_check  | expect:URL可访问+会话关闭 | ev:强断言：<证据: 部署 URL+会话关闭>；保留脱敏日志、manifest、前后快照
+D3-S4 | P1 | D3功能 | 场景-领券闭环 | steps:①voucher_status 查状态=claimed=false ②voucher_claim 领取 ③再 vouch | expect:status→claim→status 闭环连贯，领取后状态翻转为 claimed=true | ev:强断言：<证据: 状态翻转闭环>；保留脱敏日志、manifest、前后快照
+D4-6 | P1 | D4安全 | adminPass回显警告 | steps:①源码级: 直调 redactString()/classifyTextCommand() 对 adminPass=xx | expect:源码级脱敏断言: adminPass=xxx→<redacted> 可函数级直调核验(无需真云); 真云E2E断言: 回显含警告且不裸回显密码(需真云写场景) | ev:强断言：<证据: 警告且不裸回显密码>；保留脱敏日志、manifest、前后快照
+D4-16 | P0 | D4安全 | 命令包裹穿透 | steps:①构造shell包裹 ②执行 ③核对hook是否检查内层 | expect:发现内层命令并拦截 | ev:强断言：<证据: 发现内层命令并拦截>；保留脱敏日志、manifest、前后快照
+D4-29 | P2 | D4安全 | 分类断言与原始命令分类入口 | steps:①classifyRawCommand(cmd) ②对照 classifyTextCommand ③assertAllo | expect:classifyRawCommand=classifyTextCommand 包装；DENY 决策 assertAllowed 抛拒绝、allow 通过；分类结 | ev:强断言：<证据: 分类+断言分支>；保留脱敏日志、manifest、前后快照
+D8-6 | P2 | D8质量 | 中英文文档一致 | steps:①逐节对比README↔README.zh-CN ②核对命令/路径/承诺一致 | expect:双源无漂移 | ev:强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+D9-7 | P2 | D9协议 | 协议版本协商降级 | steps:①模拟老客户端initialize ②核对协商或明确报错 | expect:不挂死且正确降级 | ev:强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照
+EXP-D5-7-3 | P1 |  |  | steps:在 OfficeAce 上执行 D5-3 用例 | expect:OfficeAce：tools/list 枚举 40 工具全量可达，schema 完整 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-10 | P1 |  |  | steps:CES 只读规划冒烟: list_operations + plan 只读命令 | expect:CES 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-20 | P1 |  |  | steps:EVS 只读规划冒烟: list_operations + plan 只读命令 | expect:EVS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E08 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 explain_error→诊断 对应服务(harness 实测基线 21.4% MISS，未命中即判 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+D4-2 | P0 | D4安全 | 凭证env打印拦截 | steps:①printenv/echo凭证env ②观察拦截 | expect:被阻断 | ev:强断言：<证据: printenv/echo 凭证被阻断>；保留脱敏日志、manifest、前后快照

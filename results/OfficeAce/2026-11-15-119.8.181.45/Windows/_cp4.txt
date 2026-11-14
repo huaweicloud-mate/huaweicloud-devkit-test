@@ -1,0 +1,16 @@
+D1-26 | P1 | D1安装 | 升级提醒工具注册与协议暴露 | steps:①spawn mcp-server.mjs ②initialize ③tools/list ④检查 huaweiclou | expect:两工具均注册且 schema 含 description/inputSchema | ev:强断言：<证据: tools/list 两工具注册+schema>；保留脱敏日志、manifest、前后快照
+D1-45 | P1 | D1安装 | 兜底提示真实序列与预热竞态 | steps:①启动两种时序 ②检查 check_update 与 upgrade 不附加 ③检查首个非检查工具是否附加 ④再次调用确 | expect:仅会话首个非检查工具携带 _updateInfo；检查/升级工具不携带；预热未完成时不阻塞正常工具，结果就绪后仍按既定一次性规则处理 | ev:强断言：<证据: 兜底一次性消费时序>；保留脱敏日志、manifest、前后快照
+D2-13 | P1 | D2认证 | R9 configuredBySession优先env | steps:①写 S1+标记 ②注入 env ③resolveCredentials ④清除标记复查 ⑤夹具: node eval/ | expect:标记时 S1 胜出；清除后 env 兜底恢复 | ev:强断言：<证据: S1 胜出/清除后 env 兜底>；保留脱敏日志、manifest、前后快照
+D2-27 | P2 | D2认证 | KooCLI 版本管理 | steps:①getKooCliVersion ②parseHcloudVersion('hcloud 7.2.12 ...') ③ | expect:getKooCliVersion 读 kooCliVersion；parseHcloudVersion 正则提取首个 x.y.z；compareVersion  | ev:强断言：<证据: 版本解析/比较/下载基址>；保留脱敏日志、manifest、前后快照
+D3-C6 | P1 | D3功能 | 沙箱 7 隐式工具具名冒烟（check_user/credentials/sig | steps:逐工具最小调用：check_user→credentials→sign_agreement→upload_file→ex | expect:7 工具均返回规范结果，无静默失败 | ev:强断言：<证据: 7 工具规范结果无静默失败>；保留脱敏日志、manifest、前后快照
+D3-S7 | P1 | D3功能 | 场景-跨服务交付(Web应用+RDS)并归零 | steps:①serviceCatalog 复合意图→命中 RDS + 部署目标(sandbox/ECS) ②建 RDS 实例 ③建 | expect:多服务编排顺序正确(先建库后部署)；连接串正确注入；应用可访问且读写库正常；测后仅本次创建的 RDS/沙箱被清理归零，零残留 | ev:强断言：<证据: 编排顺序+连接串注入+归零>；保留脱敏日志、manifest、前后快照
+D4-9 | P0 | D4安全 | 公开暴露/破坏性预检 | steps:①规划公网暴露操作 ②规划破坏性操作 ③验证执行前拦截 | expect:执行前被拦 | ev:强断言：<证据: 公开暴露/破坏性执行前拦截>；保留脱敏日志、manifest、前后快照
+D4-22 | P0 | D4安全 | hook_check_deploy_plan 具名回归（部署计划预检） | steps:①构造高危 deploy plan ②hook_check_deploy_plan ③核对 warn/deny | expect:公网暴露 FunctionGraph 等被拦截/告警 | ev:强断言：<证据: 公网暴露 deploy 计划拦截/告警>；保留脱敏日志、manifest、前后快照
+D6-1 | P2 | D6性能 | 检索响应延迟 | steps:①连续调用采样 ②计算p95 | expect:p95<2s | ev:强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+D8-10 | P2 | D8质量 | MCP 配置备份与合并 | steps:①mergeCommandStyle ②mergeArgsStyle ③mergeMcpServersFile ④ext | expect:命令/参数/文件三风格合并正确；用户 delta 提取再应用幂等；agent delta 持久化与 purgeBackup 清空 | ev:强断言：<证据: 合并结果+delta回放>；保留脱敏日志、manifest、前后快照
+D9-11 | P1 | D9协议 | WebSocket 隧道通道生命周期 | steps:①new HwlinkTunnelChannel ②attach(mux) ③onopen ④关闭 ⑤核对 localS | expect:通道 attach 注册到 mux；ready Promise 在 open 时 resolve；close 后 localServer 关闭、subConne | ev:强断言：<证据: ready/close 生命周期>；保留脱敏日志、manifest、前后快照
+EXP-C4-03 | P1 |  |  | steps:OBS 只读规划冒烟: list_operations + plan 只读命令 | expect:OBS 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-C4-13 | P1 |  |  | steps:SMN 只读规划冒烟: list_operations + plan 只读命令 | expect:SMN 只读规划冒烟命令语法/参数正确，规范路由可执行 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E01 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 ECS查询→run_readonly 对应服务(harness 实测基线 21.4% MISS，未命中 | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+EXP-E11 | P1 |  |  | steps:①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent | expect:源码级断言: serviceCatalog 中文意图命中 费用查询→read 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); | ev:强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+D4-7 | P1 | D4安全 | hook三工具有效性 | steps:①构造三类高危输入 ②逐一调用hook工具 ③核对拦截 | expect:高危输入均被拦截 | ev:强断言：<证据: 三类高危输入均拦截>；保留脱敏日志、manifest、前后快照
