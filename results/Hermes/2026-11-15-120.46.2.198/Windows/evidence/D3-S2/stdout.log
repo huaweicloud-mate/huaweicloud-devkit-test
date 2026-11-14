@@ -1,8 +1,12 @@
 {
-  "status": "PASS",
-  "why": "删 VPC 先确认(deny+token)",
-  "executedAt": "20261115054114",
+  "status": "FAIL",
+  "why": "真实 VPC 删除成功并归零（审批确认流由 planHcloudCommand deny+token 承载）",
+  "executedAt": "20261115055026",
   "detail": {
-    "decision": "deny"
+    "vpcGone": false,
+    "cleanup": [
+      "DeleteSubnet(0)",
+      "DeleteVpc(0)"
+    ]
   }
 }

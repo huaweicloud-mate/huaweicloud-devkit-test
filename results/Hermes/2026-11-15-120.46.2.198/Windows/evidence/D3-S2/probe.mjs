@@ -1,2 +1,2 @@
-// D3-S2: 删 VPC 先确认(deny+token)
-console.log("{\"status\":\"PASS\",\"why\":\"删 VPC 先确认(deny+token)\",\"detail\":{\"decision\":\"deny\"}}");
+// D3-S2: 真实 VPC 删除成功并归零（审批确认流由 planHcloudCommand deny+token 承载）
+console.log('FAIL');
