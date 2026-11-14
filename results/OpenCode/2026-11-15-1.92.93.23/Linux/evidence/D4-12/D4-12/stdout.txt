@@ -1,0 +1,12 @@
+PASS	D4-12-postinstall-self	postinstall 指向自有 bin（非远程脚本）	actual="node ./bin/dsh-postinstall.cjs"	expected="node ./bin/*"	script=node ./bin/dsh-postinstall.cjs
+PASS	D4-12-install-omit-dev	npm install --omit=dev（不拉 dev 依赖）	actual=true	expected=true	args snippet=spawnSync('npm', ['install', '--omit=dev', '--no-audit', '--no-fund']
+PASS	D4-12-install-no-audit	npm install --no-audit（不外传审计）	actual=true	expected=true
+PASS	D4-12-install-no-fund	npm install --no-fund（不拉资助信息）	actual=true	expected=true
+PASS	D4-12-no-known-cve-deps	依赖无已知高危包（vm2/eval）	actual=[]	expected=[]	deps=1个: undici...
+PASS	D4-12-sbom-all-versioned	SBOM: 全部依赖版本固定	actual=true	expected=true	deps=1 allVersioned=true
+PASS	D4-12-sbom-enumerable	SBOM: 依赖可枚举（≥1 条）	actual=1	expected="≥1"
+PASS	D4-12-no-preinstall	无 preinstall 脚本（供应链攻击高发点）	actual=false	expected=false	none
+PASS	D4-12-bin-safe-extensions	bin 入口均为 .cjs/.js/.mjs	actual=["./bin/setup.cjs","./plugins/huaweicloud-core/src/mcp-server.mjs"]	expected="all .cjs/.js/.mjs"	bins=["./bin/setup.cjs","./plugins/huaweicloud-core/src/mcp-server.mjs"]
+
+=== D4-12 供应链安装期安全夹具 ===  pass=9 fail=0
+RESULT: PASS
