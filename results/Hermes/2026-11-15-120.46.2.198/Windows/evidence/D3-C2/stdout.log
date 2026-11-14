@@ -1,0 +1,14 @@
+{
+  "status": "FAIL",
+  "why": "OBS 静态站 E2E 未闭环：obs_set_website_config set 返回 400 InvalidArgument(根因 tools.mjs:3204 signedHeaders 未纳入 x-amz-security-token，而 tools.mjs:3241 在有 STS token 时仍添加该 header)；且空桶无法经 hcloud obs rm 删除(无 rb 命令)",
+  "executedAt": "20261115055240",
+  "detail": {
+    "bucket": "testbot5-hermes-obs-4693157834",
+    "steps": [
+      "mb(6) SUCCESS: Start at 2026-11-14 21:52:39.0569683 +0000 UTC\n\nCreate bucket [testbot5-hermes-obs-4693157834] successfully, request id [000001A1DC0C590045C",
+      "setWebsite: {\"ok\":false,\"status\":400,\"websiteUrl\":\"http://testbot5-hermes-obs-4693157834.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to configure website: H",
+      "getWebsite: {\"ok\":false,\"status\":400,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidArgument</Code><Message>Request has x-amz-secu",
+      "rm(0) FAIL: Start at 2026-11-14 21:52:39.8824102 +0000 UTC\n\nWarn: No task to run\n[__________________________________________________"
+    ]
+  }
+}

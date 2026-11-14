@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "why": "最小权限通过率 100%：只读允许(ListVpcs ok) + 写拒绝(CreateVpc denied)",
+  "executedAt": "20261115055713",
+  "detail": {
+    "read": {
+      "code": 0,
+      "ok": true,
+      "sample": "\u001b[1;93mListVpcs有多个版本,默认使用该API版本v3.若需指定其他版本,请将API名修改为\"ListVpcs/版本号\"\u001b[0m\n{\n  \"request_id\": \"e6f67f1404b466e15639333ef0d015"
+    },
+    "write": {
+      "code": 0,
+      "denied": true,
+      "sample": "{\n  \"code\": \"VPC.0010\",\n  \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Rules on create_router by *** disallowed by policy\\\",\\\"type\\\":\\\"PolicyNotAuthorized\\\",\\\"detail\\\":\\\"\\\"}}\"\n}\n\u001b[1;93m获取终端宽度失败,将使用默认宽"
+    }
+  }
+}

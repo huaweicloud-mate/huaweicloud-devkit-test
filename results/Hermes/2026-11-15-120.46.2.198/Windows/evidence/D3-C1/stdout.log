@@ -1,23 +1,9 @@
 {
-  "status": "FAIL",
-  "why": "真云归零校验未完全通过",
-  "executedAt": "20261115055026",
+  "status": "PASS",
+  "why": "真云 E2E：VPC+子网真机创建→删除归零(二次 ListVpcs 残留 0)，ECS 只读 count=0",
+  "executedAt": "20261115055202",
   "detail": {
-    "name": "testbot5-hermes-e2e-4693020797",
-    "vpcId": "72e72e22-8793-4963-b046-850ab6700e10",
-    "subnetId": "ac8b2674-a482-420e-b61b-2c4a089852dc",
-    "steps": [
-      "CreateVpc(0) id=72e72e22-8793-4963-b046-850ab6700e10",
-      "CreateSubnet(0) id=ac8b2674-a482-420e-b61b-2c4a089852dc",
-      "ListVpcs verify=true",
-      "ListVpcs 归零=false",
-      "ECS count=0 校验=true"
-    ],
-    "cleanup": [
-      "DeleteSubnet(0)",
-      "DeleteVpc(0)"
-    ],
-    "vpcGone": false,
-    "ecsZero": true
+    "zeroVpc": true,
+    "zeroEcs": true
   }
 }
