@@ -1,0 +1,20 @@
+{
+  "status": "FAIL",
+  "why": "OBS 静态站 E2E 未闭环：set/get website 403 InvalidAccessKeyId（AWS4 签名 STS 头未纳入 signedHeaders），建桶+删桶归零成功但 website 配置失败",
+  "executedAt": "20261116052155",
+  "detail": {
+    "bucket": "testbot5-hermes-obs-4777635360",
+    "mbOk": true,
+    "setOk": false,
+    "getOk": false,
+    "obsZero": true,
+    "steps": [
+      "mb(6)=SUCCESS",
+      "setWebsite: {\"ok\":false,\"status\":403,\"websiteUrl\":\"http://testbot5-hermes-obs-4777635360.obs-website.cn-north-4.myhuaweicloud.com\",\"message\":\"Failed to ",
+      "getWebsite: {\"ok\":false,\"status\":403,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>InvalidAccess",
+      "rm(0)=partial",
+      "signedDelete: 204"
+    ]
+  },
+  "root": "obsSignedRequest(tools.mjs:3204) signedHeaders 未纳入 x-amz-security-token；:3241 当 creds.securityToken 存在时仍发送该 header → OBS 拒签 403 InvalidAccessKeyId 'The security token is invalid'"
+}

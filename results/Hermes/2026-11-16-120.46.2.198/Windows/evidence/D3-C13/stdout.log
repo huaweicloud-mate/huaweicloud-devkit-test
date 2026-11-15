@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "why": "OBS 静态站配置 get 失败：AWS4 签名的 signedHeaders 未含 x-amz-security-token，STS token 场景被拒签(403 InvalidAccessKeyId)",
+  "executedAt": "20261116052155",
+  "detail": {
+    "endpoint": "get ?website",
+    "response": "<Error><Code>InvalidAccessKeyId</Code><Message>The security token is invalid.</Message>",
+    "root": "obsSignedRequest(tools.mjs:3204) signedHeaders 未纳入 x-amz-security-token；:3241 当 creds.securityToken 存在时仍发送该 header → OBS 拒签 403 InvalidAccessKeyId 'The security token is invalid'"
+  }
+}
