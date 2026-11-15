@@ -1,4 +1,4 @@
-// probe for D4-1 - generated & executed at 20261116050500
+// probe for D4-1 - generated & executed at 20261116051127
 // Real execution against huaweicloud-devkit v1.1.13 (hdk source) on Windows.
 import { spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, mkdtempSync } from 'node:fs';
@@ -8,7 +8,7 @@ import { join } from 'node:path';
 const HDK = "C:\\Users\\Administrator\\devkit-test\\OpenCode\\hdk";
 const EV = "C:\\Users\\Administrator\\devkit-test\\OpenCode\\huaweicloud-devkit-test\\results\\OpenCode\\2026-11-16-119.8.181.45\\Windows\\evidence\\D4-1";
 const CASE_ID = "D4-1";
-const NK = "20261116050500";
+const NK = "20261116051127";
 const mod = (p) => import(new URL(p, 'file:///' + HDK.replace(/\\/g, '/') + '/').href);
 const run = (args, opts = {}) => spawnSync(process.execPath, args, { encoding: 'utf8', timeout: opts.timeout || 90000, env: { ...process.env, ...(opts.env || {}) }, cwd: opts.cwd || EV });
 const hcloud = (args, opts = {}) => { const r = spawnSync(process.env.HCLOUD_BIN || 'hcloud', args, { encoding: 'utf8', timeout: opts.timeout || 120000, env: { ...process.env, ...(opts.env || {}) } }); let j = null; try { j = JSON.parse((r.stdout || '').trim()); } catch {} return { code: r.status, out: r.stdout || '', err: r.stderr || '', json: j }; };

@@ -1,0 +1,17 @@
+{
+  "caseId": "D3-C1",
+  "status": "BLOCKED",
+  "why": "真云 ECS 生命周期无法闭环：唯一可用凭证（KooCLI default = IAM 用户 test001）创建被 IAM 拒绝（Pdp.0001 ecs:cloudServers:createServers），仅支持只读；按名复检 0 台，云端零残留。解除条件：下发具备 ECS 写权限的管理员 AK/SK",
+  "executedAt": "20261115051657",
+  "result": {
+    "preList": null,
+    "create": {
+      "code": 0,
+      "apiError": null,
+      "out": "{\n  \"error\": {\n    \"message\": \"User: iam::842591186fa245929e1b5c186a4cf784:user:test001 is not authorized to perform: ecs:cloudServers:createServers on resource: ECS:cn-north-4:842591186fa245929e1b5c186a4cf784:instance:* because no identity-based policy allows the ecs:cloudServers:createServers action.\",\n    \"code\": \"Pdp.0001\",\n    \"encoded_authorization_message\": \"Egpjbi1ub3J0aC00GiA4NDI1OTExODZm"
+    },
+    "postList": null,
+    "zeroResidue": true,
+    "denied": true
+  }
+}
