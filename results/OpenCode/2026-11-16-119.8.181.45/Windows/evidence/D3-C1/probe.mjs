@@ -6,7 +6,7 @@ import { join } from 'node:path';
 
 const EV = String.raw`C:\Users\Administrator\devkit-test\OpenCode\huaweicloud-devkit-test\results\OpenCode\2026-11-16-119.8.181.45\Windows\evidence\D3-C1`;
 const CASE_ID = 'D3-C1';
-const NK = '20261115051657';
+const NK = "20261116051600";
 const NAME = 'tctest-c1-' + NK.slice(4);
 const IMAGE = '9c2f377e-7f49-4fdf-b0be-c6c8d3b96fde';
 const FLAVOR = 'as7.medium.2';
@@ -20,7 +20,12 @@ const hcloud = (args, timeout = 60000) => {
   try { j = JSON.parse((r.stdout || '').trim()); } catch { j = null; }
   return { code: r.status, out: (r.stdout || '').trim(), err: (r.stderr || '').trim(), json: j };
 };
-const listMine = () => hcloud(['ECS', 'ListServersDetails', '--cli-region=cn-north-4', '--cli-query=servers[?name==`' + NAME + '`].name']);
+const listMine = () => {
+  const r = hcloud(['ECS', 'ListServersDetails', '--cli-region=cn-north-4']);
+  let all = [];
+  try { all = (JSON.parse((r.stdout || '').trim()).servers) || []; } catch { all = []; }
+  return { ...r, allNames: all.map((s) => s.name).filter(Boolean), mine: all.map((s) => s.name).filter((n) => n === NAME) };
+};
 
 async function main() {
   const pre = listMine();
@@ -32,8 +37,7 @@ async function main() {
   const post = listMine();
   const text = JSON.stringify(create.json || {}) + create.out;
   const denied = /Pdp\.0001|not authorized|PolicyNotAuthorized|denied by policy|Unauthorized|APIGW\.0301/i.test(text);
-  const postText = post.out;
-  const zero = /"count"\s*:\s*0/.test(postText) || /^\s*\[\s*\]\s*$/.test(postText) || (Array.isArray(post.json) && post.json.length === 0);
+const zero = post.mine.length === 0;
   const out = {
     caseId: CASE_ID,
     status: denied && zero ? 'BLOCKED' : 'FAIL',
@@ -43,7 +47,7 @@ async function main() {
     executedAt: NK,
     result: {
       preList: pre.json, create: { code: create.code, apiError: create.json, out: create.out.slice(0, 400) },
-      postList: post.json, zeroResidue: zero, denied,
+      postAllNames: post.allNames, postMine: post.mine, zeroResidue: zero, denied,
     },
   };
   writeFileSync(join(EV, 'stdout.log'), JSON.stringify(out, null, 2), 'utf8');

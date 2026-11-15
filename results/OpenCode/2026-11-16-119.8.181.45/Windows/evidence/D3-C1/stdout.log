@@ -2,15 +2,149 @@
   "caseId": "D3-C1",
   "status": "BLOCKED",
   "why": "真云 ECS 生命周期无法闭环：唯一可用凭证（KooCLI default = IAM 用户 test001）创建被 IAM 拒绝（Pdp.0001 ecs:cloudServers:createServers），仅支持只读；按名复检 0 台，云端零残留。解除条件：下发具备 ECS 写权限的管理员 AK/SK",
-  "executedAt": "20261115051657",
+  "executedAt": "20261116051600",
   "result": {
-    "preList": null,
+    "preList": {
+      "count": 1,
+      "servers": [
+        {
+          "flavor": {
+            "disk": "0",
+            "vcpus": "2",
+            "ram": "4096",
+            "id": "c6.large.2",
+            "name": "c6.large.2",
+            "gpus": [],
+            "asic_accelerators": []
+          },
+          "fault": null,
+          "id": "0bfa26b2-e1a3-4027-ae96-98da7805295c",
+          "name": "testbot3-hermes-ecs-4777284599",
+          "addresses": {
+            "796bf788-6f7e-411e-8325-84001e952aa1": [
+              {
+                "version": "4",
+                "addr": "10.98.0.205",
+                "primary": true,
+                "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:03:a1:6e",
+                "OS-EXT-IPS:type": "fixed",
+                "OS-EXT-IPS:port_id": "abd1b001-c06e-402a-993b-3a205d9146f5"
+              }
+            ]
+          },
+          "accessIPv4": "",
+          "accessIPv6": "",
+          "updated": "2026-11-15T21:15:48Z",
+          "created": "2026-11-15T21:14:54Z",
+          "metadata": {
+            "image_name": "Huawei Cloud EulerOS 3.0 Standard 64 bit",
+            "metering.resourcespeccode": "c6.large.2.linux",
+            "charging_mode": "0",
+            "vpc_id": "796bf788-6f7e-411e-8325-84001e952aa1",
+            "os_type": "Linux",
+            "metering.resourcetype": "1",
+            "metering.image_id": "9c2f377e-7f49-4fdf-b0be-c6c8d3b96fde",
+            "os_bit": "64",
+            "cascaded.instance_extrainfo": "virtio_bus_count:16,pcibridge:1",
+            "metering.imagetype": "gold"
+          },
+          "progress": 0,
+          "status": "ACTIVE",
+          "hostId": "0eae2bdb071b47e6c8d121e3e897ae2ebe7d7d3a2a65bac2aa7268c8",
+          "tags": [],
+          "description": "",
+          "locked": false,
+          "tenant_id": "46c1fd48bd1248c7b75afc3780de7132",
+          "user_id": "8dfee1afe76244c1b128a02cbb59b058",
+          "key_name": null,
+          "os-extended-volumes:volumes_attached": [
+            {
+              "id": "e5ab9d61-89ad-48ce-8a63-63dbf9b64ada",
+              "delete_on_termination": "true",
+              "device": "/dev/vda",
+              "bootIndex": "0"
+            }
+          ],
+          "config_drive": "",
+          "OS-EXT-STS:task_state": null,
+          "OS-EXT-STS:power_state": 1,
+          "OS-EXT-STS:vm_state": "active",
+          "OS-EXT-SRV-ATTR:instance_name": "instance-070f07ce",
+          "OS-DCF:diskConfig": "MANUAL",
+          "os:scheduler_hints": {},
+          "OS-EXT-SRV-ATTR:host": "5deca011b830a2976a3ec52c148b82d069584fbfcc09b942c34704ce",
+          "OS-EXT-SRV-ATTR:root_device_name": "/dev/vda",
+          "OS-EXT-SRV-ATTR:hypervisor_hostname": "cc381e2e7633eb4255c524644c6c13fbb3cfc58faa98740406e4373e",
+          "OS-EXT-AZ:availability_zone": "cn-north-4a",
+          "OS-EXT-SRV-ATTR:ramdisk_id": "",
+          "enterprise_project_id": "0",
+          "OS-EXT-SRV-ATTR:user_data": "IyEvYmluL2Jhc2gKZWNobyAncm9vdDokNiRWVU9hb0lLdDlpM1dHbnBlJGNUVXhod0piRGQyNHA0MERQbE13cVhXblE1QWpTamhhaVA3SnRZcEhGTm1qTXRnN0k3VWRIaUJpQVlBbXdOL080UUF2dVk5TkxaRTRyWklSTjA3ci4wJyB8IGNocGFzc3dkIC1lIDs=",
+          "OS-SRV-USG:launched_at": "2026-11-15T21:15:23.000000",
+          "OS-EXT-SRV-ATTR:kernel_id": "",
+          "OS-EXT-SRV-ATTR:launch_index": 0,
+          "disabled_actions": null,
+          "host_status": "UP",
+          "OS-EXT-SRV-ATTR:reservation_id": "r-cnu26mrt",
+          "OS-EXT-SRV-ATTR:hostname": "testbot3-hermes-ecs-4777284599",
+          "OS-SRV-USG:terminated_at": null,
+          "sys_tags": [
+            {
+              "key": "_sys_enterprise_project_id",
+              "value": "0"
+            }
+          ],
+          "security_groups": [
+            {
+              "id": "28e6d9fd-e3d6-4395-b5bf-ba91c85182f4",
+              "name": "default"
+            }
+          ],
+          "image": {
+            "id": "9c2f377e-7f49-4fdf-b0be-c6c8d3b96fde"
+          },
+          "hypervisor": null,
+          "auto_terminate_time": "",
+          "cpu_options": {
+            "hw:cpu_threads": null
+          },
+          "enclave_options": {
+            "enabled": false
+          },
+          "capacity_reservation_id": null,
+          "capacity_reservation_specification": {
+            "id": null,
+            "preference": null
+          },
+          "security_options": {
+            "secure_boot_enabled": null,
+            "tpm_enabled": null
+          },
+          "spod_id": null,
+          "serial_console_options": {
+            "enabled": false
+          },
+          "network_interfaces": [
+            {
+              "primary": true,
+              "association": null,
+              "port_id": "abd1b001-c06e-402a-993b-3a205d9146f5",
+              "ip_addresses": [
+                "10.98.0.205"
+              ],
+              "ipv6_addresses": null,
+              "subnet_id": "1620c2d8-4a08-449f-af12-ad3fd605313b"
+            }
+          ]
+        }
+      ]
+    },
     "create": {
       "code": 0,
       "apiError": null,
       "out": "{\n  \"error\": {\n    \"message\": \"User: iam::842591186fa245929e1b5c186a4cf784:user:test001 is not authorized to perform: ecs:cloudServers:createServers on resource: ECS:cn-north-4:842591186fa245929e1b5c186a4cf784:instance:* because no identity-based policy allows the ecs:cloudServers:createServers action.\",\n    \"code\": \"Pdp.0001\",\n    \"encoded_authorization_message\": \"Egpjbi1ub3J0aC00GiA4NDI1OTExODZm"
     },
-    "postList": null,
+    "postAllNames": [],
+    "postMine": [],
     "zeroResidue": true,
     "denied": true
   }

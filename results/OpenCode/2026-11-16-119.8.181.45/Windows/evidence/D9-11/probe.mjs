@@ -7,7 +7,7 @@ const EV = String.raw`C:\Users\Administrator\devkit-test\OpenCode\huaweicloud-de
 const REPO = String.raw`C:\Users\Administrator\devkit-test\OpenCode\huaweicloud-devkit-test`;
 const HDKSRC = String.raw`C:\Users\Administrator\devkit-test\OpenCode\hdk\plugins\huaweicloud-core\src`;
 const CASE_ID = 'D9-11';
-const NK = '20261115051716';
+const NK = "20261116051603";
 
 const r = spawnSync(process.execPath, [join(REPO, 'eval', 'harness', 'fixtures', 'd9-11-ws-tunnel.mjs'), HDKSRC, '--evid', EV], {
   encoding: 'utf8', timeout: 120000, cwd: REPO,

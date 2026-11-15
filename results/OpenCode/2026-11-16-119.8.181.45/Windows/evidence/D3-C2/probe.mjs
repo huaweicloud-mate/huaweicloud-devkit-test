@@ -6,7 +6,7 @@ import { join } from 'node:path';
 const EV = String.raw`C:\Users\Administrator\devkit-test\OpenCode\huaweicloud-devkit-test\results\OpenCode\2026-11-16-119.8.181.45\Windows\evidence\D3-C2`;
 const HDK = String.raw`C:\Users\Administrator\devkit-test\OpenCode\hdk`;
 const CASE_ID = 'D3-C2';
-const NK = '20261115051732';
+const NK = "20261116051603";
 const hcloud = (args, timeout = 90000) => {
   const r = spawnSync(process.env.HCLOUD_BIN || 'hcloud', args, { encoding: 'utf8', timeout });
   return { code: r.status, out: (r.stdout || '').trim(), err: (r.stderr || '').trim() };
