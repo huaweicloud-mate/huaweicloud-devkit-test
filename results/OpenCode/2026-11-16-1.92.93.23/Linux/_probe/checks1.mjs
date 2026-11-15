@@ -201,7 +201,38 @@ reg('D2-5', async () => {
   return chk(!!s || !!com, '凭证缺失时返回状态+指引结构', JSON.stringify({ s, com }).slice(0, 250));
 });
 
-fixture('D2-10', 'd2-10-koocli-profile.mjs');
+// D2-10 KooCLI 多 profile：夹具 d2-10-koocli-profile.mjs 末项断言仍用 #900 前的英文裸串
+// ('KooCLI config not found')，实测 SUT 已按 #900 返回本地化错误契约（code=HDKIT_KOOCLI_NOT_READY，
+// error=messageZh 含中文本地化）。此处直调 readKooCliProfiles/resolveManagedProfile 校验正确契约。
+reg('D2-10', async () => {
+  const h = await hdk();
+  const os = await import('node:os'); const fs = await import('node:fs'); const path = await import('node:path');
+  const tmp = path.join(os.tmpdir(), `hdk-d210-${Date.now()}`);
+  fs.mkdirSync(tmp, { recursive: true });
+  const configPath = path.join(tmp, 'config.json');
+  const old = process.env.HCLOUD_CONFIG_PATH;
+  process.env.HCLOUD_CONFIG_PATH = configPath;
+  try {
+    const write = (current, profiles) => fs.writeFileSync(configPath, JSON.stringify({ current, profiles }, null, 2), 'utf-8');
+    write('deploy', [{ name: 'deploy', accessKeyId: 'AKDEPLOY', secretAccessKey: 'SKDEPLOY' }, { name: 'daily', accessKeyId: 'AKDAILY', secretAccessKey: 'SKDAILY' }]);
+    let res = h.authRec.readKooCliProfiles();
+    const parseOk = res.current === 'deploy' && res.profiles.length === 2;
+    const resolveDeploy = h.authRec.resolveManagedProfile() === 'deploy';
+    write('daily', [{ name: 'deploy', accessKeyId: 'AKDEPLOY', secretAccessKey: 'SKDEPLOY' }, { name: 'daily', accessKeyId: 'AKDAILY', secretAccessKey: 'SKDAILY' }]);
+    res = h.authRec.readKooCliProfiles();
+    const switchOk = res.current === 'daily' && h.authRec.resolveManagedProfile() === 'daily';
+    fs.rmSync(configPath, { force: true });
+    const missing = h.authRec.readKooCliProfiles();
+    const errOk = missing && missing.code === 'HDKIT_KOOCLI_NOT_READY' && !!missing.error;
+    const okS = parseOk && resolveDeploy && switchOk && errOk;
+    return chk(okS, `profile 解析/切换/缺失config错误契约 全部正确: parse=${parseOk} resolve=${resolveDeploy} switch=${switchOk} missing.code=${missing && missing.code}`, JSON.stringify({ parseOk, resolveDeploy, switchOk, errOk, missing }));
+  } catch (e) {
+    return fail(`D2-10 直调异常: ${String(e).slice(0, 160)}`);
+  } finally {
+    if (old === undefined) delete process.env.HCLOUD_CONFIG_PATH; else process.env.HCLOUD_CONFIG_PATH = old;
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
 
 reg('D2-11', async () => {
   const h = await hdk();

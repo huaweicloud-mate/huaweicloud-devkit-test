@@ -93,7 +93,37 @@ reg('D3-C13', async () => {
   return chk(mbOk && setOk && getOk, `OBS 静态网站 get/set: mb=${mbOk} set=${setOk} get=${getOk}(已归零)`, JSON.stringify({ mbOk, setOk, getOk }));
 });
 
-fixture('D3-C14', 'd3-c14-sandbox-hwlink-cred.mjs');
+// D3-C14 沙箱 HDKit 凭证：夹具 d3-c14-sandbox-hwlink-cred.mjs 的 hdkit-no-cred-throws 子项
+// 仍断言 #900 前英文裸串 ('credentials not configured')，实测 SUT 已按 #900 抛 HDKIT_CRED_MISSING
+// (messageZh 中文本地化)。此处直调 hwlink.getCredentials / hdkitCheckUser / hdkitCredentials 校验正确契约。
+reg('D3-C14', async () => {
+  const h = await hdk();
+  const detail = [];
+  h.authCred.setRuntimeCredentials('AKHW', 'SKHW', 'STHW', 'cn-north-4');
+  const gc = h.hwlink.getCredentials();
+  const gcOk = gc && gc.ak === 'AKHW' && gc.sk === 'SKHW' && gc.securitytoken === 'STHW';
+  detail.push(`getCredentials=${gcOk}` + (gcOk ? '' : `(${JSON.stringify(gc)})`));
+  h.authCred.clearRuntimeCredentials();
+  // 无凭证(隔离 HOME + 清 runtime + 清 env) → hdkitCheckUser 抛 HDKIT_CRED_MISSING(#900 本地化)
+  const os = await import('node:os'); const fs = await import('node:fs'); const path = await import('node:path');
+  const isoHome = fs.mkdtempSync(path.join(os.tmpdir(), 'hdk-d3c14-'));
+  const envBackup = { HOME: process.env.HOME, HW_ACCESS_KEY: process.env.HW_ACCESS_KEY, HW_SECRET_KEY: process.env.HW_SECRET_KEY, HW_SECURITY_TOKEN: process.env.HW_SECURITY_TOKEN, HUAWEICLOUD_HOME: process.env.HUAWEICLOUD_HOME };
+  process.env.HOME = isoHome;
+  process.env.HUAWEICLOUD_HOME = isoHome;
+  delete process.env.HW_ACCESS_KEY; delete process.env.HW_SECRET_KEY; delete process.env.HW_SECURITY_TOKEN;
+  let ccOk = false, ccCode = '';
+  try { await h.sandboxApi.hdkitCheckUser(); } catch (e) { ccOk = true; ccCode = e.code || ''; }
+  detail.push(`no-cred throws code=${ccCode}`);
+  const cpOk0 = ccOk && ccCode === 'HDKIT_CRED_MISSING';
+  for (const k of Object.keys(envBackup)) { if (envBackup[k] === undefined) delete process.env[k]; else process.env[k] = envBackup[k]; }
+  fs.rmSync(isoHome, { recursive: true, force: true });
+  // hdkitCredentials 缺 sessionId+devStageId 报错
+  let cpOk = false, cpMsg = '';
+  try { await h.sandboxApi.hdkitCredentials(); } catch (e) { cpOk = true; cpMsg = String(e.message || e).slice(0, 70); }
+  detail.push(`hdkitCredentials(无参) threw=${cpOk} (${cpMsg})`);
+  const okS = gcOk && cpOk0 && cpOk;
+  return chk(okS, `沙箱 HDKit 凭证契约: getCredentials=${gcOk} 无凭证抛HDKIT_CRED_MISSING=${cpOk0} 缺参抛错=${cpOk}`, detail.join(' | ').slice(0, 800));
+});
 
 reg('D3-S1', async () => {
   const h = await hdk();
