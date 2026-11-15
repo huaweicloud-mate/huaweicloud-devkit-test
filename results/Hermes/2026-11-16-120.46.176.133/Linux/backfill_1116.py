@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-11-15 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13 gitHead 8a6d8be2）。"""
+"""Hermes Linux 2026-11-16 每日测试：证据分发（stdout.txt）+ 回填三 CSV（v1.1.13 gitHead 8a6d8be2）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta

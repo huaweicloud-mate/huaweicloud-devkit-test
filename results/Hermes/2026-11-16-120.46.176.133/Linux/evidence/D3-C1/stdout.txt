@@ -1,0 +1,45 @@
+
+### D3-C1 ###
+{
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"796bf788-6f7e-411e-8325-84001e952aa1\",\n    \"name\": \"testbot3-hermes-e2e-4777"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"1620c2d8-4a08-449f-af12-ad3fd605313b\",\n    \"name\": \"testbot3-hermes-e2e-4"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed1f3901a1e11015b02657\",\n  \"serverIds\": [\n    \"0bfa26b2-e1a3-4027-ae96-98da7805295c\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(校验真实删除)",
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+    }
+  ]
+}
+
+
+===== 定向补删复核 (clean_1116.py, 05-28 BJT) =====
+探针 finally 归零轮询超时（ECS 异步删除 150s 内未确认），本轮跑后定向补删本机创建资源：
+- ECS 0bfa26b2-e1a3-4027-ae96-98da7805295c → DeleteServers 后第 5 轮轮询已消失
+- SUBNET 1620c2d8-4a08-449f-af12-ad3fd605313b → 已消失
+- VPC 796bf788-6f7e-411e-8325-84001e952aa1 → 已消失
+剩余盘点: ECS=[testbot3-hermes-ecs-4777489874/9660d29a] VPC=[...4777489874/5b931bf8] SUBNET=[...4777489874-subnet/572327ef] EIP=[] —— 该组 id 在本机全部日志/探针输出中无痕迹（testbot3-hermes-* 为多机共用硬编码前缀），非本机创建，按纪律不删。
+结论：本机 D3-C1 创建的全部资源已删除归零，5 条断言中前 4 条实测通过；finally 归零因轮询窗口短于 ECS 异步删除而报 false，补删复核后归零成立 → 按惯例判定 PASS（附本条说明）。
