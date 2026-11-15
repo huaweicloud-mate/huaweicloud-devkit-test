@@ -1,0 +1,6 @@
+update-check.mjs DEBUG 判断: if (process.env.HUAWEICLOUD_DEVKIT_DEBUG === '1' || process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true') {
+telemetry.mjs DEBUG 判断: const DEBUG = process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true';
+断言: update-check '1'=true 'true'=true; telemetry 'true'=true '1'=false
+[OK] D1-65 调试开关(更新检查域支持 1/true)
+[OK] D1-65 调试开关(遥测域支持 true)
+备注: 未设/其他值不开启 — 源码为 === 'true' / '1'||'true' 严格比较，未设或 off/其他值均不开启

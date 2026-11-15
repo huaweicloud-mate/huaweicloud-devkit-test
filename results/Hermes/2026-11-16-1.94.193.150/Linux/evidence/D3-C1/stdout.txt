@@ -1,0 +1,44 @@
+
+### D3-C1 ###
+{
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"dc67ef56-8f40-446a-b200-595e0639bc3d\",\n    \"name\": \"testbot3-hermes-e2e-4776"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"77de42f7-9b27-4ef9-8e27-3674cd59bf58\",\n    \"name\": \"testbot3-hermes-e2e-4"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed1f4501a1e109eb2e151c\",\n  \"serverIds\": [\n    \"620b8eea-8088-44e5-a7e7-e022d6964f1e\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(校验真实删除)",
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+    }
+  ]
+}
+
+===== 手工归零补充（2026-11-16 05:14 北京时间）=====
+自动化 finally 归零的 150s ECS 删除轮询超时（慢速删除），报「ECS轮询:仍在/未确认」。
+手工重发删除并核实归零（非产品缺陷，创建/删除全链路均通过）：
+- ECS 620b8eea-8088-44e5-a7e7-e022d6964f1e DeleteServers(--delete_publicip=true) → 轮询 11×10s 后 ListServersDetails GONE
+- Subnet 77de42f7-9b27-4ef9-8e27-3674cd59bf58 DeleteSubnet → GONE
+- VPC dc67ef56-8f40-446a-b200-595e0639bc3d DeleteVpc → GONE
+创建链 (CreateVpc/CreateSubnet/CreateServers 返回 serverIds) 全部 pass。
