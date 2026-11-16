@@ -1,6 +1,6 @@
 
 =====CASE D3-S2=====
-创建测试VPC tctest-hermes-s2-mwic0h36 -> id=999cfcc8-bb7b-42fc-8b71-96ca15f2ed80
+创建测试VPC tctest-hermes-s2-mwjr9s9l -> id=6db77de2-f86f-475c-a7b3-928d17737ccb
 plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
 hook_check_command DeleteVpc -> decision=warn risk=undefined
 未确认前 ListVpcs 仍含该 VPC = true
@@ -31,12 +31,10 @@ hdkitConnect 参数透传行:
   if (options.source) body.source = options.source;
   if (options.env) body.env = options.env;
   if (options.git) body.git = options.git;
-  if (options.template_id) body.template_id = options.template_id;
   if (options.flavor_id) body.flavor_id = options.flavor_id;
-  if (pinned && !body.template_id) body.template_id = pinned;
 hdkitCredentials() 缺参 -> session_id or dev_stage_id is required
 hwlink getCredentials 结构: ak=*** sk=*** securitytoken="" (已脱敏)
-[OK] hdkitConnect 透传可选参数到 body
+[FAIL] hdkitConnect 透传可选参数到 body
 [OK] hdkitCredentials 缺 sessionId+devStageId 报错
 [OK] hwlink getCredentials 返回 {ak,sk,securitytoken}
 [OK] createConnection 走 x-security-token 签名头
@@ -60,23 +58,23 @@ check_user -> realnameVerified=true agreementSigned=true err=
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 connect -> status=connected wsId=71a94ace36b44094a670
-[2026-11-15T21:13:48.726Z] uploadProject: /home/testbot3/.hdk-s3-mwic0h36 -> /workspace/.hdk-s3-mwic0h36.tar.gz (archive=211 bytes, md5=e9d70fa98d16bf6d96eb0df21cbad979)
-[2026-11-15T21:13:48.774Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-2857467266/sandbox-upload-1794777228714/.hdk-s3-mwic0h36.tar.gz, size=211, remotePath=/workspace/.hdk-s3-mwic0h36.tar.gz)
-[2026-11-15T21:13:48.774Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
-[2026-11-15T21:13:48.774Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
-[2026-11-15T21:13:48.820Z] deployFileServer: writing script (2456 b64 chars)
-[2026-11-15T21:13:48.873Z] deployFileServer: starting server on port 8888
-[2026-11-15T21:13:48.918Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 521598\r\n\u001b]133;C\u0007\r\n"
-[2026-11-15T21:13:48.918Z] uploadViaHttpTunnel: creating dedicated tunnel session
+[2026-11-16T21:08:43.897Z] uploadProject: /home/testbot3/.hdk-s3-mwjr9s9l -> /workspace/.hdk-s3-mwjr9s9l.tar.gz (archive=212 bytes, md5=182a88710b82aaf49279693a91c939bc)
+[2026-11-16T21:08:43.943Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-3374627595/sandbox-upload-1794863323885/.hdk-s3-mwjr9s9l.tar.gz, size=212, remotePath=/workspace/.hdk-s3-mwjr9s9l.tar.gz)
+[2026-11-16T21:08:43.944Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-16T21:08:43.944Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-16T21:08:43.989Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-16T21:08:44.040Z] deployFileServer: starting server on port 8888
+[2026-11-16T21:08:44.084Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 589046\r\n\u001b]133;C\u0007\r\n"
+[2026-11-16T21:08:44.084Z] uploadViaHttpTunnel: creating dedicated tunnel session
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
-[2026-11-15T21:13:49.894Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
-[2026-11-15T21:13:49.895Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
-[2026-11-15T21:13:49.897Z] uploadViaHttpTunnel: tunnel ready, localPort=44163
-[2026-11-15T21:13:49.897Z] uploadViaHttpTunnel: waiting for server health on localhost:44163
-[2026-11-15T21:13:49.897Z] waitForServerReady: attempt 1, checking http://localhost:44163/health
-[2026-11-15T21:13:49.946Z] waitForServerReady: server ready on port 44163 after 0 retries
-[2026-11-15T21:13:49.947Z] uploadViaHttpTunnel: sending POST with 211 bytes
-[2026-11-15T21:13:49.996Z] uploadViaHttpTunnel: upload complete (bytes=211, md5=e9d70fa98d16bf6d96eb0df21cbad979)
+[2026-11-16T21:08:45.024Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-16T21:08:45.025Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-16T21:08:45.027Z] uploadViaHttpTunnel: tunnel ready, localPort=35969
+[2026-11-16T21:08:45.027Z] uploadViaHttpTunnel: waiting for server health on localhost:35969
+[2026-11-16T21:08:45.027Z] waitForServerReady: attempt 1, checking http://localhost:35969/health
+[2026-11-16T21:08:45.074Z] waitForServerReady: server ready on port 35969 after 0 retries
+[2026-11-16T21:08:45.074Z] uploadViaHttpTunnel: sending POST with 212 bytes
+[2026-11-16T21:08:45.121Z] uploadViaHttpTunnel: upload complete (bytes=212, md5=182a88710b82aaf49279693a91c939bc)
 upload_project -> ok=true md5Verified=true
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
@@ -86,14 +84,9 @@ upload_project -> ok=true md5Verified=true
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
+deploy_nginx -> ok=true port=8084 url=
 Waiting for connection 938510... (0s)Connection 938510 established (0s).
-Waiting for connection 938510... (0s)Connection 938510 established (0s).
-Waiting for connection 938510... (0s)Connection 938510 established (0s).
-Waiting for connection 938510... (0s)Connection 938510 established (0s).
-Waiting for connection 938510... (0s)Connection 938510 established (0s).
-deploy_nginx -> ok=true port=8089 url=
-Waiting for connection 938510... (0s)Connection 938510 established (0s).
-deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mwic0h36/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"PASS","detail":"(port 8080, HTTP 200)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mwjr9s9l/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""}
 close_session -> ok
 [OK] 沙箱 connect 成功
 [OK] s3-connect/upload/deploy 链路
@@ -104,12 +97,12 @@ close_session -> ok
 =====SUMMARY=====
 {
   "total": 21,
-  "passed": 21,
+  "passed": 20,
   "results": [
     {
       "name": "测试 VPC 创建成功",
       "ok": true,
-      "detail": "vpcId=999cfcc8-bb7"
+      "detail": "vpcId=6db77de2-f86"
     },
     {
       "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
@@ -134,7 +127,7 @@ close_session -> ok
     {
       "name": "OBS 建桶成功",
       "ok": true,
-      "detail": "bucket=tctest-hermes-obs-mwic0h36"
+      "detail": "bucket=tctest-hermes-obs-mwjr9s9l"
     },
     {
       "name": "set 缺失 indexDocument 报错(拒绝)",
@@ -154,12 +147,12 @@ close_session -> ok
     {
       "name": "删除归零",
       "ok": true,
-      "detail": "bucket removed=tctest-hermes-obs-mwic0h36"
+      "detail": "bucket removed=tctest-hermes-obs-mwjr9s9l"
     },
     {
       "name": "hdkitConnect 透传可选参数到 body",
-      "ok": true,
-      "detail": "if (options.source) body.source = options.source;; if (options.env) body.env = options.env;; if (options.git) body.git = options.git;; if (options.template_id) body.template_id = options.template_id;; if (options.flavor_id) body.flavor_id = options.flavor_id;; if (pinned && !body.template_id) body.template_id = pinned;"
+      "ok": false,
+      "detail": "if (options.source) body.source = options.source;; if (options.env) body.env = options.env;; if (options.git) body.git = options.git;; if (options.flavor_id) body.flavor_id = options.flavor_id;"
     },
     {
       "name": "hdkitCredentials 缺 sessionId+devStageId 报错",

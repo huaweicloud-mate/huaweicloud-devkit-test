@@ -3,12 +3,12 @@
 路由 -> {"skills":["huawei-functiongraph"],"services":["FunctionGraph"]}
 plan CreateFunction -> decision=allow safeToRun=true
 run CreateFunction -> ok=true stdout={
-  "func_id": "7301a84e-adb0-4645-beb1-290a87a77e3a",
-  "func_urn": "urn:fss:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:function:default:hdk-s6-mwic1gxb:latest",
-  "func_name": "hdk-s6-mwic1gxb",
+  "func_id": "d63f6f00-47e9-47a3-ad5b-ee8e69e62db7",
+  "func_urn": "urn:fss:cn-north-4:46c1fd48bd1248c7b75afc3780de7132:function:default:hdk-s6-mwjrasd5:latest",
+  "func_name": "hdk-s6-mwjrasd5",
   
 CreateFunctionTrigger -> ok=true stdout={
-  "trigger_id": "2869ea37-d408-493d-bea8-7c92689eb42a",
+  "trigger_id": "2f8cccc4-adc3-4037-8a96-475f361f45b0",
   "trigger_type_code": "TIMER",
   "trigger_status": "ACTIVE",
   "event_data": {
@@ -24,7 +24,7 @@ DeleteFunction 归零 -> ok=true
 复合意图路由 -> services=["RDS"] (RDS命中=true 部署目标命中=false)
 RDS ListInstances -> ok=true (基线)
 plan RDS CreateInstance -> decision=allow
-run RDS CreateInstance -> ok=false stdout=[USE_ERROR]Invalid parameter: db.password
+run RDS CreateInstance -> ok=false stdout=[USE_ERROR]Invalid parameter: db.port
 
 Run `hcloud RDS CreateInstance --help` for details about this API.
 
@@ -72,7 +72,7 @@ Run `hcloud RDS CreateInstance --help` for details about this API.
     {
       "name": "最小 RDS 实例创建(真·外部依赖: 需 vpc/subnet/sg 前置环境)",
       "ok": false,
-      "detail": "RDS 实例创建未成功(preflight 缺 vpc/subnet/sg 前置或配额): [USE_ERROR]Invalid parameter: db.password\n\nRun `hcloud RDS CreateInstance --help` for details about this API.\n"
+      "detail": "RDS 实例创建未成功(preflight 缺 vpc/subnet/sg 前置或配额): [USE_ERROR]Invalid parameter: db.port\n\nRun `hcloud RDS CreateInstance --help` for details about this API.\n"
     }
   ]
 }
