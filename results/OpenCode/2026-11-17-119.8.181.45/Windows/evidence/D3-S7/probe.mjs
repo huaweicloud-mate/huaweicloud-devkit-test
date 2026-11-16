@@ -36,7 +36,7 @@ const plan = await tm.callTool('huaweicloud_plan_cli_command', { args: ['RDS', '
 const ro = JSON.parse(readFileSync(join(process.env.USERPROFILE || process.env.HOME, '.config', 'huaweicloud', 'credentials.readonly.json'), 'utf8'));
 const w = hcloud(['RDS', 'ListInstances', '--cli-region=cn-north-4'], { env: { HW_ACCESS_KEY: ro.ak, HW_SECRET_KEY: ro.sk } });
 let sb = null;
-try { sb = await tm.callTool('huaweicloud_sandbox_connect', {}, {}); } catch (e) { sb = { error: String(e && e.message || e) }; }
+try { sb = await Promise.race([tm.callTool('huaweicloud_sandbox_connect', {}, {}), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout-25s: sandbox_connect 无响应')), 25000))]); } catch (e) { sb = { error: String(e && e.message || e) }; }
 if ((sb && sb.error) || plan.classification.decision === 'deny') emit('BLOCKED', '多服务编排前置阻塞：沙箱上游不可用 + test001 无 RDS 写权限（Pdp.0001），无法完成建库+部署+清理闭环', { rdsRead: String(w.out || '').slice(0, 300), sandbox: sb && (sb.error || sb.code) });
 else emit('PASS', '多服务编排链路可用', { plan: plan.classification, sb });
 

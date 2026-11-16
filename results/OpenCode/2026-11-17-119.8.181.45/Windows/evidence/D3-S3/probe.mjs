@@ -33,7 +33,7 @@ async function main() {
 
 const tm = await mod('plugins/huaweicloud-core/src/tools.mjs');
 let t = null;
-try { t = await tm.callTool('huaweicloud_sandbox_connect', {}, {}); } catch (e) { t = { error: String(e && e.message || e) }; }
+try { t = await Promise.race([tm.callTool('huaweicloud_sandbox_connect', {}, {}), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout-25s: sandbox_connect 无响应')), 25000))]); } catch (e) { t = { error: String(e && e.message || e) }; }
 if (t && (t.error || t.code === 'HDKIT_UPSTREAM_ERROR')) emit('BLOCKED', '沙箱不可用，无法产出公网 URL：' + JSON.stringify(t.error || t.code) + '；解除条件：HDKIT 服务恢复', t);
 else emit('PASS', '沙箱连接成功，可进入部署', t);
 

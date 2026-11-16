@@ -34,7 +34,7 @@ async function main() {
 const tm = await mod('plugins/huaweicloud-core/src/tools.mjs');
 const a = await tm.callTool('huaweicloud_sandbox_credentials', { region: 'cn-north-4' }, {});
 let t = null;
-try { t = await tm.callTool('huaweicloud_sandbox_connect', {}, {}); } catch (e) { t = { error: String(e && e.message || e) }; }
+try { t = await Promise.race([tm.callTool('huaweicloud_sandbox_connect', {}, {}), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout-25s: sandbox_connect 无响应')), 25000))]); } catch (e) { t = { error: String(e && e.message || e) }; }
 if ((a && (a.error || a.code)) || (t && (t.error || t.code))) emit('BLOCKED', '沙箱上游不可用：' + JSON.stringify(a && (a.error || a.code)) + ' / ' + JSON.stringify(t && (t.error || t.code)) + '；解除条件：HDKIT 服务恢复', { cred: a, connect: t });
 else emit('PASS', 'sandbox_credentials/connect 参数透传正常', { cred: a, connect: t });
 

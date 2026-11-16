@@ -1,10 +1,10 @@
-﻿// D3-C1 ECS lifecycle E2E — real cloud attempt with the only usable credential on this host
+// D3-C1 ECS lifecycle E2E — real cloud attempt with the only usable credential on this host
 // (KooCLI default profile = IAM user test001). Records the actual API refusal + zero-residue check.
 import { spawnSync } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const EV = String.raw`C:\Users\Administrator\devkit-test\OpenCode\huaweicloud-devkit-test\results\OpenCode\2026-11-17-119.8.181.45\Windows\evidence\D3-C1`;
+const EV = String.raw`C:\Users\Administrator\devkit-test\testbot4-win-Opencode\huaweicloud-devkit-test\results\OpenCode\2026-11-17-119.8.181.45\Windows\evidence\D3-C1`;
 const CASE_ID = 'D3-C1';
 const NK = "20261117050642";
 const NAME = 'tctest-c1-' + NK.slice(4);
