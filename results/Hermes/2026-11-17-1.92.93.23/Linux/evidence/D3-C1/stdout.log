@@ -1,34 +1,6 @@
 {
-  "case": "D3-C1",
+  "caseId": "D3-C1",
   "status": "FAIL",
-  "total": 5,
-  "passed": 4,
-  "failed": 1,
-  "results": [
-    {
-      "name": "CreateVpc",
-      "pass": true,
-      "detail": "{\n  \"vpc\": {\n    \"id\": \"ed81b239-b493-48f1-abcd-dc0ecd84cf9f\",\n    \"name\": \"testbot3-hermes-e2e-4863"
-    },
-    {
-      "name": "CreateSubnet",
-      "pass": true,
-      "detail": "{\n  \"subnet\": {\n    \"id\": \"6e24b1eb-4a5f-4993-bcfd-5b9401927571\",\n    \"name\": \"testbot3-hermes-e2e-4"
-    },
-    {
-      "name": "CreateServers(审批分类)",
-      "pass": "allow",
-      "detail": "allow"
-    },
-    {
-      "name": "CreateServers(返回serverIds)",
-      "pass": true,
-      "detail": "{\n  \"job_id\": \"ff808081a0ed143a01a1e63af19456a7\",\n  \"serverIds\": [\n    \"659551c6-82f5-4541-8af8-ca07834ad500\"\n  ]\n}"
-    },
-    {
-      "name": "finally归零(校验真实删除)",
-      "pass": false,
-      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
-    }
-  ]
+  "why": "ECS E2E 创建成功但 finally 归零失败：ECS 残留 ACTIVE、subnet/vpc 误报 OK 未删(已人工清理归零)",
+  "executedAt": "20261117054200"
 }
