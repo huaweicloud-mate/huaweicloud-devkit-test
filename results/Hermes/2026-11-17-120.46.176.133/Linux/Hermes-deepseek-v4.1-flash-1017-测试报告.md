@@ -77,6 +77,10 @@
 | 11 | P1 | `EXP-E01` |  |  | 同 D10-3（`src/tools.mjs:2197`），合并缺陷单 | 历史复核（见 HISTORY_LINKS） |
 | 12 | P2 | `D3-C14` | D3功能 | 沙箱 HDKit 参数透传（SPEC，v1.1.14 新增） | `sandbox/hdkitservice-api.mjs:189-193` | 待提单 |
 
+> **提单结论**：`file_issue.py` 查重（上游 open issues 391 条）判定 14 项均命中历史缺陷单 → 按纪律**不重复开单**，关联清单见 `HISTORY_LINKS.md`。
+> 其中 D3-C14（template_id 停传）为 v1.1.14 **新增语义**：上游无任何 issue 正文提及 `template_id`（全量检索 0 命中），命中 #883/#1055/#1065 仅因「同用例号」且描述的是 D3-C14 的**其它**缺陷（凭证回退 / 错误文案 / createConnection 签名头）。
+> 建议维护者在既有 D3-C14 历史单复核时纳入本条，或按需单开；本次按「命中即历史问题」纪律未新开单、未评论 issue（AGENTS.md：不自行评论 GitHub issue）。
+
 ### 根因详情
 
 | 用例ID | 期望（唯一断言） | 实际 | 根因（文件:行号） | 证据 |
