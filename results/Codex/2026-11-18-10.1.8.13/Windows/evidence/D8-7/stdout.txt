@@ -1,0 +1,36 @@
+PASS	D8-7-skill-1-ok	huawei-ecs retrieve_skill → ok=true	actual=true	expected=true	content_len=13957
+PASS	D8-7-skill-1-name	huawei-ecs retrieve_skill → name 匹配	actual="huawei-ecs"	expected="huawei-ecs"
+PASS	D8-7-skill-1-content	huawei-ecs content 非空 + 含 frontmatter	actual={"contentLen":13957,"hasFrontmatter":true}	expected={"contentLen":">0","hasFrontmatter":true}
+PASS	D8-7-skill-1-version	huawei-ecs version 字段存在	actual="1"	expected="non-empty"
+PASS	D8-7-skill-2-ok	huawei-vpc retrieve_skill → ok=true	actual=true	expected=true	content_len=17999
+PASS	D8-7-skill-2-name	huawei-vpc retrieve_skill → name 匹配	actual="huawei-vpc"	expected="huawei-vpc"
+PASS	D8-7-skill-2-content	huawei-vpc content 非空 + 含 frontmatter	actual={"contentLen":17999,"hasFrontmatter":true}	expected={"contentLen":">0","hasFrontmatter":true}
+PASS	D8-7-skill-2-version	huawei-vpc version 字段存在	actual="1"	expected="non-empty"
+PASS	D8-7-skill-3-ok	huawei-obs retrieve_skill → ok=true	actual=true	expected=true	content_len=10984
+PASS	D8-7-skill-3-name	huawei-obs retrieve_skill → name 匹配	actual="huawei-obs"	expected="huawei-obs"
+PASS	D8-7-skill-3-content	huawei-obs content 非空 + 含 frontmatter	actual={"contentLen":10984,"hasFrontmatter":true}	expected={"contentLen":">0","hasFrontmatter":true}
+PASS	D8-7-skill-3-version	huawei-obs version 字段存在	actual="1"	expected="non-empty"
+PASS	D8-7-skill-4-ok	huawei-rds retrieve_skill → ok=true	actual=true	expected=true	content_len=13815
+PASS	D8-7-skill-4-name	huawei-rds retrieve_skill → name 匹配	actual="huawei-rds"	expected="huawei-rds"
+PASS	D8-7-skill-4-content	huawei-rds content 非空 + 含 frontmatter	actual={"contentLen":13815,"hasFrontmatter":true}	expected={"contentLen":">0","hasFrontmatter":true}
+PASS	D8-7-skill-4-version	huawei-rds version 字段存在	actual="1"	expected="non-empty"
+PASS	D8-7-skill-5-ok	huawei-iam retrieve_skill → ok=true	actual=true	expected=true	content_len=7387
+PASS	D8-7-skill-5-name	huawei-iam retrieve_skill → name 匹配	actual="huawei-iam"	expected="huawei-iam"
+PASS	D8-7-skill-5-content	huawei-iam content 非空 + 含 frontmatter	actual={"contentLen":7387,"hasFrontmatter":true}	expected={"contentLen":">0","hasFrontmatter":true}
+PASS	D8-7-skill-5-version	huawei-iam version 字段存在	actual="1"	expected="non-empty"
+PASS	D8-7-skill-6-ok	huawei-cce retrieve_skill → ok=true	actual=true	expected=true	content_len=11927
+PASS	D8-7-skill-6-name	huawei-cce retrieve_skill → name 匹配	actual="huawei-cce"	expected="huawei-cce"
+PASS	D8-7-skill-6-content	huawei-cce content 非空 + 含 frontmatter	actual={"contentLen":11927,"hasFrontmatter":true}	expected={"contentLen":">0","hasFrontmatter":true}
+PASS	D8-7-skill-6-version	huawei-cce version 字段存在	actual="1"	expected="non-empty"
+PASS	D8-7-skill-7-ok	huawei-functiongraph retrieve_skill → ok=true	actual=true	expected=true	content_len=10445
+PASS	D8-7-skill-7-name	huawei-functiongraph retrieve_skill → name 匹配	actual="huawei-functiongraph"	expected="huawei-functiongraph"
+PASS	D8-7-skill-7-content	huawei-functiongraph content 非空 + 含 frontmatter	actual={"contentLen":10445,"hasFrontmatter":true}	expected={"contentLen":">0","hasFrontmatter":true}
+PASS	D8-7-skill-7-version	huawei-functiongraph version 字段存在	actual="1"	expected="non-empty"
+PASS	D8-7-nonexistent-skill	不存在技能 → ok=false + error 含可用列表	actual={"ok":false,"errorHasNotFound":true}	expected={"ok":false,"errorContains":"not found"}
+PASS	D8-7-nonexistent-lists-available	不存在技能 → error 列出可用技能	actual=true	expected=true
+PASS	D8-7-empty-name	空技能名 → ok=false	actual=false	expected=false	error=Skill name is required.
+PASS	D8-7-references-loaded	huawei-ecs references 目录被加载	actual={"refsCount":5}	expected={"refsCount":">0"}
+PASS	D8-7-references-structure	references 每项有 filename + content	actual=true	expected=true
+
+=== D8-7 7 个 meta/通用技能 retrieve_skill 验证夹具 ===  pass=33 fail=0
+RESULT: PASS

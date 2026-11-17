@@ -1,0 +1,12 @@
+PASS	D4-19-write-deny-in-confirm	高危写操作确认流中 -> deny -> assertAllowed 拦截	actual={"decision":"deny","blocked":true}	expected={"decision":"deny","blocked":true}
+PASS	D4-19-write-allow-with-approval	高危写操作 allowWrites=true -> allow -> 放行	actual={"decision":"allow","blocked":false}	expected={"decision":"allow","blocked":false}
+PASS	D4-19-readonly-not-affected	只读命令 -> 不受确认流影响	actual={"noAllow":"allow","allow":"allow","blockedNoAllow":false,"blockedAllow":false}	expected={"noAllow":"allow","allow":"allow","blockedNoAllow":false,"blockedAllow":false}
+PASS	D4-19-hook-check-dangerous	hook_check_command rm -rf / -> deny -> ok=false	actual={"decision":"deny","ok":false}	expected={"decision":"deny","ok":false}
+PASS	D4-19-hook-check-hcloud-warn	hook_check_command DeleteServers -> warn -> ok=true	actual={"decision":"warn","ok":true}	expected={"decision":"warn","ok":true}
+PASS	D4-19-hook-check-safe	hook_check_command ListServers -> allow -> ok=true	actual={"decision":"allow","ok":true}	expected={"decision":"allow","ok":true}
+PASS	D4-19-approved-but-bad-token-blocked	approvedByUser=true 但 token 无效 -> 拦截	actual={"threw":true,"errMsg":"Invalid or expired approval token. Please re-plan the command."}	expected={"threw":true,"errMsgContains":"Invalid or expired approval token"}
+PASS	D4-19-plan-then-approve-passes-gates	plan->approvedByUser=true+有效token -> 通过审批+token 门禁 + 执行成功	actual={"threw":false,"errMsg":"","resultOk":true}	expected={"threw":false,"resultOk":true}	approval + token gates passed, execution succeeded
+PASS	D4-19-plan-includes-preflight	plan 结果包含 sgFindings（preflight 已运行）	actual={"hasSgFindings":true,"len":0}	expected={"hasSgFindings":true}
+
+=== D4-19 确认流下预检仍生效夹具 ===  pass=9 fail=0
+RESULT: PASS
