@@ -198,7 +198,11 @@ await section('D6-4', async () => {
   const ps = ids.map((id) => srv.send({ jsonrpc: '2.0', id, method: 'tools/list', params: {} }));
   const results = await Promise.all(ps);
   const counts = results.map((r) => (r?.result?.tools || []).length);
-  console.log('并发15 tools/list 工具数集合:', [...new Set(counts)].join(','), '| 无死锁/消息错乱(全部返回40):', counts.every((c) => c === 40));
+  // 断言口径：15 路并发返回的工具数必须完全一致且非空（无死锁/消息错乱），不硬编码工具总数
+  // （v1.1.14 起 tools/list 为 47 个，原硬编码 40 已随版本漂移）
+  const uniq = [...new Set(counts)];
+  const ok = uniq.length === 1 && uniq[0] > 0;
+  console.log('并发15 tools/list 工具数集合:', uniq.join(','), '| 无死锁/消息错乱(15路一致且非空):', ok);
 });
 
 function join2(...p) { return p.join('/'); }

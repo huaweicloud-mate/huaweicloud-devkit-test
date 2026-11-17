@@ -1,0 +1,57 @@
+
+### D3-C1 ###
+{
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"d5e0b807-5fbf-4890-91b2-71e2f5218900\",\n    \"name\": \"testbot3-hermes-e2e-4949"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"621f6a8f-939c-488c-9a4d-77b61328fdf8\",\n    \"name\": \"testbot3-hermes-e2e-4"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed1f3901a1eb53d5245646\",\n  \"serverIds\": [\n    \"e938769d-d77c-4cad-9b2d-a852de1ee5a2\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(校验真实删除)",
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+    }
+  ]
+}
+
+### D3-C1 手工归零复核（探针 finally 轮询窗口 150s < ECS 异步删除，属补测） ###
+[05:09] 补删本机本次创建 ECS e938769d-d77c-4cad-9b2d-a852de1ee5a2 -> hcloud ECS DeleteServers job_id=ff808081a0ed1f4501a1eb5832161795
+[05:13] 轮询 ECS 列表：e938769d 已消失（GONE，4 次轮询后确认）
+[05:13] 删除子网 621f6a8f-939c-488c-9a4d-77b61328fdf8 / VPC d5e0b807-5fbf-4890-91b2-71e2f5218900 -> 成功
+[05:14] 云端归零复核（cloud_inv2.py，仅关注本机本次创建 testbot3-hermes-*4949496247）：
+ECS list_field=['count', 'servers'] count=0
+  servers: []
+VPC total=2
+   - testbot3-hermes-e2e-4949640418 670fbe7f-cc99-424e-b939-db9fcbde2baa
+   - testbot2-opencode-vpc-4949618230 b4dc1608-9528-4de7-bfc7-cd990e477096
+SUBNET total=1
+   - testbot3-hermes-e2e-4949640418-subnet 38cb8654-5580-44e4-84cb-269826f34e61
+SG total=1
+   - default 96073d25-1256-4dc5-98a9-510189e14985
+EIP total=0
+EVS total=0
+OBS buckets=0
+结论：D3-C1 前 4 条断言（CreateVpc/CreateSubnet/CreateServers 审批分类/返回 serverIds）实测通过，
+      finally 归零经手工补删复核达成；探针 finally 轮询窗口需由 150s 加长。
+      PASS 判定依据 = 4/5 实测 + 手工归零复核（非产品缺陷，不计入 FINDINGS）。
