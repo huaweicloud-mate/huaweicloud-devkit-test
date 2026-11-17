@@ -1,0 +1,18 @@
+D4-14 plan可追溯: classification=true approvalToken=true
+{
+  "executable": "hcloud",
+  "args": [
+    "VPC",
+    "CreateVpc",
+    "--vpc.name=audit-test",
+    "--vpc.cidr=10.99.0.0/16",
+    "--cli-region=cn-north-4"
+  ],
+  "command": "hcloud VPC CreateVpc --vpc.name=audit-test --vpc.cidr=10.99.0.0/16 --cli-region=cn-north-4",
+  "executableBlock": "hcloud V
+D4-20 拒绝零操作: rejected=true
+{"code":-32603,"message":"approvedbyuser must be true after explicit user approval for this exact command."}
+[OK] D4-14 auditability=true
+[OK] D4-20 reject-zero-op=true
+{"d4_14":true,"d4_20":true}
+
