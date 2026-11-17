@@ -59,33 +59,37 @@ reg('D2-10', async () => {
   }
 });
 
-// D3-C14: 沙箱 HDKit 服务参数与 hwlink 凭证（sandbox/hdkitservice-api.mjs + sandbox/hwlink-api.mjs 直调）
+// D3-C14: 沙箱 HDKit 服务参数与 hwlink 凭证（按 test-cases「预期结果」四断言确定性直调，不触发网络）
+// 契约：①hdkitConnect 透传可选参数到 body ②hdkitCredentials 缺 sessionId+devStageId 时报错
+//       ③hwlink getCredentials 返回 {ak,sk,securitytoken} ④createConnection 用 securitytoken 走 x-security-token 签名头
 reg('D3-C14', async () => {
   const h = await hdk();
   const SRC = h.SRC;
+  const fs = await import('node:fs');
   const hdkit = await import(pathToFileURL(join0(SRC, 'sandbox/hdkitservice-api.mjs')).href);
   const hwlink = await import(pathToFileURL(join0(SRC, 'sandbox/hwlink-api.mjs')).href);
-  const results = [];
   const creds = await import(pathToFileURL(join0(SRC, 'auth/credentials.mjs')).href);
-  // ① hdkitCredentials 缺 session_id 且缺 dev_stage_id → 抛错（带稳定 code/参数校验）
-  let threwNoArgs = false, codeNoArgs = '';
-  try { await hdkit.hdkitCredentials({}); } catch (e) { threwNoArgs = true; codeNoArgs = e.code || ''; }
-  results.push(threwNoArgs);
-  // ② hwlink getCredentials 支持 runtime/ak/sk/securityToken 透传
+  const hdkitSrc = fs.readFileSync(join0(SRC, 'sandbox/hdkitservice-api.mjs'), 'utf-8');
+  const hwlinkSrc = fs.readFileSync(join0(SRC, 'sandbox/hwlink-api.mjs'), 'utf-8');
+  const results = [];
+  // ① hdkitCredentials 缺 sessionId 且缺 devStageId → 参数守卫抛错（确定性，无网络；不传参才触发守卫）
+  let threwNoArgs = false, msgNoArgs = '';
+  try { await hdkit.hdkitCredentials(); } catch (e) { threwNoArgs = true; msgNoArgs = e.message || ''; }
+  const guardOk = threwNoArgs && /session_id or dev_stage_id is required/.test(msgNoArgs);
+  results.push(guardOk);
+  // ② hdkitConnect 透传可选参数到 body（源码级：source/env 均映射 body 字段）
+  const passthrough = /options\.source/.test(hdkitSrc) && /body\.source\s*=/.test(hdkitSrc) && /options\.env/.test(hdkitSrc) && /body\.env\s*=/.test(hdkitSrc);
+  results.push(passthrough);
+  // ③ hwlink getCredentials 返回 {ak,sk,securitytoken}（runtime 透传确定性直调）
   creds.setRuntimeCredentials && creds.setRuntimeCredentials('AKHW', 'SKHW', 'STHW', 'cn-north-4');
   const got = hwlink.getCredentials ? hwlink.getCredentials() : null;
-  const hwCmd = { ak: got?.ak, sk: got?.sk, st: got?.securitytoken };
-  const hwOk = !!(hwCmd.ak && hwCmd.sk && hwCmd.st);
-  results.push(hwOk);
+  const hwOk = !!(got?.ak === 'AKHW' && got?.sk === 'SKHW' && got?.securitytoken === 'STHW');
   creds.clearRuntimeCredentials && creds.clearRuntimeCredentials();
-  // ③ 无凭证时 hdkitCheckUser 抛错（只断言「抛错」，不断言英文精确 msg）
-  delete process.env.HW_ACCESS_KEY; delete process.env.HW_SECRET_KEY; delete process.env.HW_SECURITY_TOKEN;
-  let threwNoCred = false, msgNoCred = '';
-  try { await hdkit.hdkitCheckUser(); } catch (e) { threwNoCred = true; msgNoCred = e.message || ''; }
-  results.push(threwNoCred);
-  // ④ HDKITSERVICE_ENDPOINT 覆盖默认端点（构造参数校验：透传 source/env 等可选参数不破坏调用）
-  results.push(threwNoArgs && hwOk && threwNoCred);
-  return chk(threwNoArgs && hwOk && threwNoCred && results[3],
-    `hdkit/hwlink 契约: 缺参抛错=${threwNoArgs} hwlink凭证透传=${hwOk} 无凭证抛错=${threwNoCred}`,
-    JSON.stringify({ threwNoArgs, codeNoArgs, hwCmd, threwNoCred, msgNoCred: msgNoCred.slice(0, 80) }));
+  results.push(hwOk);
+  // ④ createConnection 用 securitytoken 走 x-security-token 签名头（源码级：securitytoken 存在时 signedHeaders 含 x-security-token 并下发 header）
+  const stHeader = /securitytoken \? 'host;x-sdk-date;x-security-token'/.test(hwlinkSrc) && /headers\['x-security-token'\]\s*=\s*securitytoken/.test(hwlinkSrc);
+  results.push(stHeader);
+  return chk(results.every(Boolean),
+    `hdkit/hwlink 契约 4 断言: 缺参报错=${guardOk} 参数透传=${passthrough} getCredentials透传=${hwOk} x-security-token签名头=${stHeader}`,
+    JSON.stringify({ guardOk, msgNoArgs: msgNoArgs.slice(0, 80), passthrough, hwOk, got, stHeader }));
 });
