@@ -2,7 +2,7 @@
 // SUT 由 .mjs 平铺重写为 TypeScript（packs 架构 + vendor-gate）。Node v22 原生
 // type-stripping 支持直接 import .ts；本 harness 直调 hdk src/*.ts 源码导出。
 import { pathToFileURL } from 'node:url';
-import { join, dirname } from 'node:path';
+import { join, dirname, relative } from 'node:path';
 import { spawnSync, spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

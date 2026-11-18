@@ -1,5 +1,5 @@
 // checks4.mjs — 新增真云 E2E 用例：D3-C1(ECS生命周期) / D3-C2(OBS静态站) / D3-C7(跨区域) / D3-C3(沙箱部署) / D3-C6(沙箱7工具)
-import { reg, ok, fail, spec, blocked, chk, hdk, run, sh } from './core.mjs';
+import { reg, ok, fail, spec, blocked, chk, hdk, run, sh, callVendor } from './core.mjs';
 import { writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -47,11 +47,11 @@ reg('D3-C7', async () => {
   const detail = [];
   const h = await hdk();
   // ① 区域枚举含 ap-southeast-3
-  const lr = await h.tools.callTool('huaweicloud_list_regions', {});
+  const lr = await callVendor('huaweicloud_list_regions', {});
   const regionListed = !!(lr && lr.regions && lr.regions.some(r => r.id === CROSS));
   detail.push(`list_regions含${CROSS}=${regionListed}`);
   // ② plan 命令必须含 --cli-region=ap-southeast-3（参数级断言）
-  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', {
+  const plan = await callVendor('huaweicloud_plan_cli_command', {
     args: ['EIP', 'CreatePublicip', `--publicip.type=5_bgp`, '--bandwidth.name=tctest-opencode-eip-x', '--bandwidth.size=1', '--bandwidth.share_type=PER', `--cli-region=${CROSS}`],
     allowWrites: true,
   });
@@ -191,7 +191,7 @@ reg('D3-C6', async () => {
   try {
     results.check_user = await h.tools.callTool('huaweicloud_sandbox_check_user', {});
     results.sign_agreement = await h.tools.callTool('huaweicloud_sandbox_sign_agreement', {});
-    const conn = await h.tools.callTool('huaweicloud_sandbox_connect', { source: 'OpenCode' });
+    const conn = await callVendor('huaweicloud_sandbox_connect', { source: 'OpenClaw' });
     wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id || conn.session_id);
     results.connect = { ok: !!(conn && conn.status === 'connected'), hasWs: !!wsId };
     results.credentials = await h.tools.callTool('huaweicloud_sandbox_credentials', wsId ? { dev_stage_id: wsId } : {});
@@ -221,7 +221,7 @@ reg('D3-C3', async () => {
   const h = await hdk();
   const detail = [];
   try {
-    const conn = await h.tools.callTool('huaweicloud_sandbox_connect', { source: 'OpenCode' });
+    const conn = await callVendor('huaweicloud_sandbox_connect', { source: 'OpenClaw' });
     const wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
     detail.push(`connect.ws=${!!wsId} status=${conn && conn.status}`);
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id', JSON.stringify(conn).slice(0, 200));

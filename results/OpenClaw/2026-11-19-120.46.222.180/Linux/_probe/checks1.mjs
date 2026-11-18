@@ -151,6 +151,7 @@ reg('D1-68', async () => {
 });
 
 reg('D1-69', async () => {
+  const h = await hdk();
   const r = run(`node ${join(h.SRC, 'setup-cli.ts')} help 2>&1`);
   const helpOk = r.ok && r.text.length > 0 && !/TODO/.test(r.text) && /Usage|Commands|command/i.test(r.text);
   return chk(helpOk, `help 子命令输出帮助且退出码 0: exit=${r.status} len=${r.text.length}`, `help 失败: exit=${r.status} ${r.text.slice(0, 160)}`);

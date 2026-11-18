@@ -348,11 +348,13 @@ reg('D4-15', async () => {
 
 reg('D4-16', async () => {
   const h = await hdk();
-  const r = h.rr.evaluateCommandRisk(`sh -c "env | grep HUAWEICLOUD_ACCESS_KEY"`);
-  const c = h.sp.classifyTextCommand(`sh -c "env | grep HUAWEICLOUD_ACCESS_KEY"`);
-  // v2: risk 引擎对 sh -c 包裹的 env 打印=allow，但 classifyTextCommand 收敛 deny
-  const combined = (r && r.decision === 'deny') || (c && c.decision === 'deny');
-  return chk(combined, `命令包裹内层拦截: risk=${r.decision} classify=${c.decision}`, JSON.stringify({ r: r.decision, c: c.decision }).slice(0, 160));
+  // 命令包裹穿透：关联工具 = hook_check_command（MCP 真实工具面）。
+  // risk-rule-engine 对 sh -c 包裹的 env 打印=allow；safety-policy.classifyTextCommand 虽收敛 deny，
+  // 但 hook_check_command 工具面（产品对 agent 暴露的实际入口）走 evaluateCommandRisk → 未拦截。
+  const tool = await h.tools.callTool('huaweicloud_hook_check_command', { command: 'sh -c "env | grep HUAWEICLOUD_ACCESS_KEY"' });
+  const toolDeny = tool && tool.decision === 'deny';
+  const c = h.sp.classifyTextCommand('sh -c "env | grep HUAWEICLOUD_ACCESS_KEY"');
+  return chk(toolDeny, `命令包裹穿透: hook_check_command decision=${tool.decision} (classifyText=${c.decision})`, `hook_check_command 内层包裹未拦截: decision=${tool?.decision} findings=${(tool?.findings||[]).length}`);
 });
 
 reg('D4-17', async () => {
@@ -451,9 +453,10 @@ reg('D4-27', async () => {
 
 reg('D4-28', async () => {
   const h = await hdk();
-  const r = h.rr.evaluateCommandRisk('echo $HUAWEICLOUD_ACCESS_KEY');
+  const t = await h.tools.callTool('huaweicloud_hook_check_command', { command: 'echo $HUAWEICLOUD_ACCESS_KEY' });
   const c = h.sp.classifyTextCommand('echo $HUAWEICLOUD_ACCESS_KEY');
-  return chk(r.decision === 'deny' || c.decision === 'deny', `Node 安全 hook 链路: risk=${r.decision} classify=${c.decision}`, JSON.stringify({ r: r.decision, c: c.decision }));
+  const tDeny = t && t.decision === 'deny';
+  return chk(tDeny || c.decision === 'deny', `Node 安全 hook 链路: hook_check_command=${t?.decision} classify=${c.decision}`, JSON.stringify({ t: t?.decision, c: c.decision }));
 });
 
 reg('D4-29', async () => {
