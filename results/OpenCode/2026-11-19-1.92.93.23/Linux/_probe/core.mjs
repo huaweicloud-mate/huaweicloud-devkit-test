@@ -1,19 +1,37 @@
-// core.mjs — 每日测试探针共享核心：hdk 导入 + 注册表 + 证据落盘 + probe.mjs 生成。
+// core.mjs — 每日测试探针共享核心 v2 适配
+// SUT = huaweicloud-devkit 2.0.0-next.4 (TypeScript 重写)。本 harness 直调 src/*.ts（Node 原生 strip-types），
+// 经 `node --experimental-strip-types` 运行；vendor gate 通过统一注入 vendorConfirmed + HUAWEICLOUD_VENDOR_CHALLENGE=off 关闭一次性挑战。
 import { pathToFileURL } from 'node:url';
 import { join, dirname, relative } from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
+process.env.HUAWEICLOUD_VENDOR_CHALLENGE = 'off';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// _probe/ 位于结果包 Linux/ 目录下
 export const PACK = dirname(__dirname);
 export const EVID = join(PACK, 'evidence');
 export const REPO_ROOT = dirname(dirname(dirname(dirname(PACK))));
 
+export const VENDOR_CONFIRMED = '用户运营维护华为云账号资源（每日测试机队 OpenCode 客户端）';
+
+// 源码根（.ts），供 strip-types 直接 import
 export function hdkSrc() {
   if (process.env.HDK_SRC) return process.env.HDK_SRC;
   return join(dirname(REPO_ROOT), 'hdk', 'plugins', 'huaweicloud-core', 'src');
+}
+
+// 已编译 bundle 的 mcp-server 入口（自包含，可直接 spawn）
+export function mcpServerDist() {
+  for (const c of [
+    process.env.HDK_MCP_SERVER,
+    join(process.env.HOME || '/root', 'nodejs', 'lib', 'node_modules', 'huaweicloud-devkit', 'plugins', 'huaweicloud-core', 'dist', 'mcp-server.js'),
+    '/usr/local/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/dist/mcp-server.js',
+  ]) {
+    if (c && existsSync(c)) return c;
+  }
+  return null;
 }
 
 let _h = null;
@@ -21,34 +39,40 @@ export async function hdk() {
   if (_h) return _h;
   const SRC = hdkSrc();
   const U = (p) => pathToFileURL(join(SRC, p)).href;
-  const authCred = await import(U('auth/credentials.mjs'));
-  const authSvc = await import(U('auth/service.mjs'));
-  const authRec = await import(U('auth/reconcile.mjs'));
-  const authVal = await import(U('auth/credential-validator.mjs'));
-  const authProj = await import(U('auth/project-id.mjs'));
-  const authReg = await import(U('auth/agent-registration.mjs'));
+  const toolsRaw = await import(U('tools.ts'));
+  const tools = {
+    ...toolsRaw,
+    // vendor gate 统一注入：所有 callTool 自动带 vendorConfirmed 引用（真实测试机场景已确认华为云）
+    callTool: (name, rawArgs = {}, opts = {}) =>
+      toolsRaw.callTool(name, { vendorConfirmed: VENDOR_CONFIRMED, ...(rawArgs || {}) }, opts),
+  };
   _h = {
     SRC,
-    tools: await import(U('tools.mjs')),
-    uc: await import(U('update-check.mjs')),
-    sp: await import(U('safety-policy.mjs')),
-    rr: await import(U('risk-rule-engine.mjs')),
-    hcl: await import(U('hcloud-cli.mjs')),
-    hcp: await import(U('hcloud-probe.mjs')),
-    kv: await import(U('koocli-version.mjs')),
-    mcbm: await import(U('mcp-config-backup.mjs')),
-    mcmg: await import(U('mcp-config-merge.mjs')),
-    icon: await import(U('icon-library.mjs')),
-    market: await import(U('search-market.mjs')),
-    detect: await import(U('detect-framework.mjs')),
-    proto: await import(U('mcp-protocol.mjs')),
-    remote: await import(U('mcp-server-remote.mjs')),
-    telemetry: await import(U('telemetry/telemetry.mjs')),
-    proxyCfg: await import(U('proxy/proxy-config.mjs')),
-    proxyAg: await import(U('proxy/proxy-agent.mjs')),
-    sandboxApi: await import(U('sandbox/hdkitservice-api.mjs')),
-    hwlink: await import(U('sandbox/hwlink-api.mjs')),
-    authCred, authSvc, authRec, authVal, authProj, authReg,
+    tools,
+    uc: await import(U('update-check.ts')),
+    sp: await import(U('safety-policy.ts')),
+    rr: await import(U('risk-rule-engine.ts')),
+    hcl: await import(U('hcloud-cli.ts')),
+    hcp: await import(U('hcloud-probe.ts')),
+    kv: await import(U('koocli-version.ts')),
+    mcbm: await import(U('mcp-config-backup.ts')),
+    mcmg: await import(U('mcp-config-merge.ts')),
+    icon: await import(U('icon-library.ts')),
+    market: await import(U('search-market.ts')),
+    detect: await import(U('detect-framework.ts')),
+    proto: await import(U('mcp-protocol.ts')),
+    remote: await import(U('mcp-server-remote.ts')),
+    telemetry: await import(U('telemetry/telemetry.ts')),
+    proxyCfg: await import(U('proxy/proxy-config.ts')),
+    proxyAg: await import(U('proxy/proxy-agent.ts')),
+    sandboxApi: await import(U('lib/hdkit/hdkitservice-api.ts')),
+    hwlink: await import(U('lib/hdkit/hwlink-api.ts')),
+    authCred: await import(U('auth/credentials.ts')),
+    authSvc: await import(U('auth/service.ts')),
+    authRec: await import(U('auth/reconcile.ts')),
+    authVal: await import(U('auth/credential-validator.ts')),
+    authProj: await import(U('auth/project-id.ts')),
+    authReg: await import(U('auth/agent-registration.ts')),
   };
   return _h;
 }
@@ -56,46 +80,26 @@ export async function hdk() {
 export const CHECKS = new Map();
 export function reg(id, fn) { CHECKS.set(id, fn); }
 
-// 运行 eval/harness/fixtures 下已有探针（权威探针），输出新鲜证据
-export function fixture(cid, script, opts = {}) {
-  const { noHdk = false } = opts;
-  reg(cid, async () => {
-    const h = await hdk();
-    const dir = join(REPO_ROOT, 'eval', 'harness', 'fixtures');
-    const args = [join(dir, script)];
-    if (!noHdk) args.push(h.SRC);
-    args.push('--evid', join(EVID, cid));
-    const r = run(`node ${args.map(a => `"${a}"`).join(' ')} 2>&1`);
-    if (r.status === 0) return ok('fixture exit=0', r.text.slice(-900));
-    if (r.status === 2) return blocked('fixture 依赖宿主/环境未满足(exit=2)', r.text.slice(-900));
-    return fail(`fixture exit=${r.status}`, r.text.slice(-1400));
-  });
-}
-
 export const ok = (why = '', detail = '', data) => ({ status: 'PASS', why, detail, data });
 export const fail = (why = '', detail = '', data) => ({ status: 'FAIL', why, detail, data });
 export const spec = (why = '', detail = '', data) => ({ status: 'SPEC-MISMATCH', why, detail, data });
 export const blocked = (why = '', detail = '') => ({ status: 'BLOCKED', why, detail });
 export const notrun = (why = '', detail = '') => ({ status: 'NOT_RUN', why, detail });
 
-// 简单断言：cond 为真 PASS，否则 FAIL
 export function chk(cond, whyPass = '', whyFail = '') {
   return cond ? ok(whyPass) : fail(whyFail);
 }
 
-// 执行 hcloud 命令（真云）
 export function sh(args, env = {}) {
-  const r = spawnSync('hcloud', args, { encoding: 'utf8', env: { ...process.env, ...env }, timeout: 120000 });
-  return { ok: r.status === 0, status: r.status, text: ((r.stdout || '') + (r.stderr || '')).trim() };
+  const r = spawnSync('hcloud', args, { encoding: 'utf8', env: { ...process.env, PATH: process.env.PATH, ...env }, timeout: 180000 });
+  return { ok: r.status === 0, status: r.status, text: ((r.stdout || '') + '\n' + (r.stderr || '')).trim() };
 }
 
-// 执行任意命令
 export function run(cmd, opts = {}) {
-  const r = spawnSync('bash', ['-c', cmd], { encoding: 'utf8', timeout: 120000, ...opts });
-  return { ok: r.status === 0, status: r.status, text: ((r.stdout || '') + (r.stderr || '')).trim() };
+  const r = spawnSync('bash', ['-c', cmd], { encoding: 'utf8', timeout: 180000, ...opts });
+  return { ok: r.status === 0, status: r.status, text: ((r.stdout || '') + '\n' + (r.stderr || '')).trim() };
 }
 
-// 北京时间 14 位紧凑时间戳 YYYYMMDDHHmmss（UTC+8）
 export function tsBeijing() {
   return new Date(Date.now() + 8 * 3600 * 1000).toISOString().replace(/[-:TZ]/g, '').slice(0, 14);
 }
@@ -103,8 +107,7 @@ export function tsBeijing() {
 export function writeEvidence(id, res) {
   const dir = join(EVID, id);
   mkdirSync(dir, { recursive: true });
-  const ts = tsBeijing();
-  const payload = { status: res.status, why: res.why || '', executedAt: ts };
+  const payload = { status: res.status, why: res.why || '', executedAt: tsBeijing() };
   if (res.detail) payload.detail = res.detail;
   if (res.data !== undefined) payload.data = res.data;
   writeFileSync(join(dir, 'stdout.log'), JSON.stringify(payload) + '\n', 'utf-8');
@@ -112,12 +115,11 @@ export function writeEvidence(id, res) {
   return dir;
 }
 
-// 生成每个用例的 probe.mjs（真实可重跑入口 → 委托 main.mjs 的 runOne）
 export function genProbe(id) {
   const dir = join(EVID, id);
   mkdirSync(dir, { recursive: true });
   const relMain = relative(dir, join(PACK, '_probe', 'main.mjs')).replace(/\\/g, '/');
-  const script = `// 探针: ${id} —— 每日测试执行（委托 _probe/main.mjs 真实执行逻辑）
+  const script = `// 探针: ${id} —— 每日测试执行（委托 _probe/main.mjs 真实执行逻辑，SUT=2.0.0-next.4）
 import { runOne } from '${relMain}';
 import { writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -140,4 +142,39 @@ export async function runOne(id) {
   } catch (e) {
     return fail(`探针异常: ${e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e}`, String(e));
   }
+}
+
+// —— MCP 客户端封装（spawn 已编译 dist/mcp-server.js，Content-Length 帧）——
+export function makeServer(serverPath) {
+  const sp = serverPath || mcpServerDist();
+  const child = spawn(process.execPath, [sp], {
+    stdio: ['pipe', 'pipe', 'pipe'],
+    env: { ...process.env, HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local', HUAWEICLOUD_VENDOR_CHALLENGE: 'off' },
+  });
+  let buf = Buffer.alloc(0);
+  const pending = new Map();
+  let _id = 1;
+  function send(o) {
+    const b = JSON.stringify(o);
+    child.stdin.write(Buffer.from(`Content-Length: ${Buffer.byteLength(b)}\r\n\r\n${b}`));
+    return new Promise((r) => pending.set(o.id, r));
+  }
+  child.stdout.on('data', (d) => {
+    buf = Buffer.concat([buf, d]);
+    while (true) {
+      const h = buf.indexOf('\r\n\r\n');
+      if (h < 0) break;
+      const m = /Content-Length:\s*(\d+)/i.exec(buf.slice(0, h).toString());
+      if (!m) { buf = buf.slice(h + 4); continue; }
+      const n = +m[1];
+      if (buf.length < h + 4 + n) break;
+      const body = buf.slice(h + 4, h + 4 + n).toString();
+      buf = buf.slice(h + 4 + n);
+      try { const msg = JSON.parse(body); if (msg.id != null && pending.has(msg.id)) { pending.get(msg.id)(msg); pending.delete(msg.id); } } catch {}
+    }
+  });
+  function call(name, args) {
+    return send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name, arguments: { vendorConfirmed: VENDOR_CONFIRMED, ...(args || {}) } } });
+  }
+  return { child, send, call, kill: () => { try { child.kill(); } catch {} } };
 }

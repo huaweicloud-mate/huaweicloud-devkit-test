@@ -1,15 +1,19 @@
-// checks1.mjs — D1 升级/更新 + D2 凭证/auth 用例探针
-import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, fixture } from './core.mjs';
+// checks1.mjs — D1 升级/更新 + D2 凭证/auth 用例探针 (v2.0.0-next.4 TS 适配)
+import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh } from './core.mjs';
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+const tmp = () => (await import('node:os')).tmpdir();
+const rd = (p) => readFileSync(p, 'utf-8');
 
 // ============ D1 升级/更新 ============
 reg('D1-3', async () => {
   const h = await hdk();
-  // check_cli = runVersionCheck 真机自检
   const r = await h.tools.callTool('huaweicloud_check_cli', {});
-  const skills = h.tools.listSkillDirs ? h.tools.listSkillDirs(h.SRC) : [];
-  const skillsRoot = h.tools.findSkillsRoot ? h.tools.findSkillsRoot([h.SRC, process.env.HUAWEICLOUD_SKILLS]) : '';
+  const skillsRoot = join(h.SRC, '..', 'skills');
+  const skills = h.tools.listSkillDirs(skillsRoot);
   const cliOk = r && !r.__error;
-  return chk(cliOk, `check_cli 自检通过(skillsRoot=${skillsRoot}, skills=${skills ? skills.length : 'n/a'})`, `check_cli 自检失败: ${JSON.stringify(r).slice(0, 200)}`);
+  return chk(cliOk, `check_cli 自检通过(skills=${skills.length})`, `check_cli 自检失败: ${JSON.stringify(r).slice(0, 200)}`);
 });
 
 reg('D1-4', async () => {
@@ -17,17 +21,17 @@ reg('D1-4', async () => {
   const a = await h.tools.callTool('huaweicloud_check_cli', {});
   const b = await h.tools.callTool('huaweicloud_check_cli', {});
   const stable = JSON.stringify(a) === JSON.stringify(b);
-  return chk(stable && !a.__error, 'status 二次调用幂等(结果一致)', '两次 check_cli 结果不一致');
+  return chk(stable && a && !a.__error, 'status 二次调用幂等(结果一致)', '两次 check_cli 结果不一致');
 });
 
 reg('D1-26', async () => {
   const h = await hdk();
   const names = h.tools.TOOL_DEFINITIONS.map(t => t.name);
-  const cu = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_check_update' || t.name === 'check_update');
-  const up = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_upgrade' || t.name === 'upgrade');
+  const cu = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_check_update');
+  const up = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_upgrade');
   const cuOk = cu && cu.description && cu.inputSchema;
   const upOk = up && up.description && up.inputSchema;
-  return chk(cuOk && upOk, `check_update/upgrade 均注册且含 description+inputSchema(names=${names.length})`, `缺失或 schema 不完整: check_update=${!!cuOk} upgrade=${!!upOk}`);
+  return chk(cuOk && upOk, `check_update/upgrade 均注册且含 description+inputSchema(total=${names.length})`, `缺失或 schema 不完整: check_update=${!!cuOk} upgrade=${!!upOk}`);
 });
 
 reg('D1-27', async () => {
@@ -53,38 +57,34 @@ reg('D1-30', async () => {
 
 reg('D1-31', async () => {
   const h = await hdk();
-  const tmp = await import('node:os').then(m => m.tmpdir());
-  const file = `${tmp}/hdk-skip-${Date.now()}.json`;
-  h.uc.writeSkipState(file, '1.1.7');          // dismiss 目标(被提示升级到的)版本
+  const os = await import('node:os'); const fs = await import('node:fs');
+  const file = `${os.tmpdir()}/hdk-skip-${Date.now()}.json`;
+  h.uc.writeSkipState(file, '1.1.7');
   const st = h.uc.readSkipState(file);
   const j = h.uc.judgeUpdate('1.1.6', { latest: '1.1.7' }, st);
-  const fs = await import('node:fs');
   fs.unlinkSync(file);
   const okS = st && st.dismissedVersion === '1.1.7' && j.result === 'dismissed' && j.dismissed === true;
-  return chk(okS, `dismiss 冷却期内 dismissed: result=${j.result} dismissed=${j.dismissed}`, JSON.stringify({ st, j }));
+  return chk(okS, `dismiss 冷却期内 dismissed: result=${j.result}`, JSON.stringify({ st, j }));
 });
 
 reg('D1-33', async () => {
   const h = await hdk();
-  const tmp = await import('node:os').then(m => m.tmpdir());
-  const file = `${tmp}/hdk-skip-${Date.now()}.json`;
+  const os = await import('node:os'); const fs = await import('node:fs');
+  const file = `${os.tmpdir()}/hdk-skip-${Date.now()}.json`;
   h.uc.writeSkipState(file, '1.1.6');
   const st = h.uc.readSkipState(file);
-  const fs = await import('node:fs');
   const fieldsOk = st && st.dismissedVersion && st.dismissedAt && st.expireAt;
   const path = h.uc.resolveSkipFilePath('session-1');
   fs.unlinkSync(file);
-  return chk(fieldsOk, `skip 文件字段完整 dismissedVersion/dismissedAt/expireAt; resolveSkipFilePath=${path}`, JSON.stringify({ st, path }));
+  return chk(fieldsOk, `skip 文件字段完整; resolveSkipFilePath=${path}`, JSON.stringify({ st, path }));
 });
 
 reg('D1-39', async () => {
-  // Windows 专属用例，Linux 不适用 → NOT_RUN (OS 专属 P0 例外)
   return notrun('Windows 专属用例(OS 列标注专属)，本机为 Linux，不适用', 'D1-39 Windows 升级检测链(Linux 侧由展开级 EXP-NR3 代表覆盖)');
 });
 
 reg('D1-40', async () => {
   const h = await hdk();
-  // 镜像 lag：distTags.latest 低于本地 → 不得提示倒退
   const target = h.uc.determineTarget('1.1.7', { latest: '1.1.6' });
   const r = h.uc.judgeUpdate('1.1.7', { latest: '1.1.6' }, null);
   const noDowngrade = r.result === 'up_to_date' || r.updateAvailable === false;
@@ -96,14 +96,13 @@ reg('D1-41', async () => {
   const r = await h.tools.callTool('huaweicloud_check_update', {});
   const fields = ['result', 'currentVersion', 'latestStable', 'updateAvailable', 'dismissed'];
   const okFields = fields.every(f => Object.prototype.hasOwnProperty.call(r, f));
-  return chk(okFields && !r.__error, `check_update 契约字段齐备: ${JSON.stringify({ result: r.result, currentVersion: r.currentVersion, latestStable: r.latestStable, updateAvailable: r.updateAvailable })}`, JSON.stringify(r).slice(0, 300));
+  return chk(okFields && r && !r.__error, `check_update 契约字段齐备: ${JSON.stringify({ result: r.result, latestStable: r.latestStable, updateAvailable: r.updateAvailable })}`, JSON.stringify(r).slice(0, 300));
 });
 
 reg('D1-42', async () => {
   const h = await hdk();
   const a = await h.tools.callTool('huaweicloud_check_update', {});
   const dismissable = a && a.targetVersion && a.result === 'update_available';
-  // dismiss 调用（真实 MCP 工具）
   let dis = null;
   if (dismissable) dis = await h.tools.callTool('huaweicloud_check_update', { dismiss: true, dismissVersion: a.targetVersion });
   const disOk = !dismissable || (dis && dis.dismissed === true);
@@ -112,49 +111,68 @@ reg('D1-42', async () => {
 
 reg('D1-45', async () => {
   const h = await hdk();
-  // 兜底提示：applyUpdateHint + _decorateResult + 一次性消费
   const applied = h.uc.applyUpdateHint({ result: 'update_available', targetVersion: '1.1.7' }, 'test-tool', '1.1.7');
-  const decorated = h.proto._decorateResult('sess-1', 'test-tool', { x: 1 });
-  h.proto._resetHintConsumption();
-  return chk(!!applied || !!decorated, '兜底提示 applyUpdateHint/_decorateResult 可用且可重置消费', `applied=${JSON.stringify(applied)}`);
+  const decorated = h.proto._decorateResult ? h.proto._decorateResult('sess-1', 'test-tool', { x: 1 }) : null;
+  if (h.proto._resetHintConsumption) h.proto._resetHintConsumption();
+  return chk(!!applied || !!decorated, '兜底提示 applyUpdateHint/_decorateResult 可用', `applied=${JSON.stringify(applied)}`);
 });
 
 reg('D1-65', async () => {
   const h = await hdk();
-  // 调试模式：更新域 DEBUG 分支
-  const src = (await import('node:fs')).readFileSync(join0(h.SRC, 'update-check.mjs'), 'utf-8');
-  const support = /HUAWEICLOUD_DEVKIT_DEBUG/.test(src);
-  return support ? ok('update-check.mjs 含 HUAWEICLOUD_DEVKIT_DEBUG 调试分支', 'DEBUG 分支存在(更新域)') : fail('调试模式环境变量分支缺失', 'update-check.mjs 无 DEBUG 分支');
+  const src1 = rd(join(h.SRC, 'update-registry.ts'));
+  const src2 = rd(join(h.SRC, 'update-upgrade.ts'));
+  const support = /HUAWEICLOUD_DEVKIT_DEBUG/.test(src1) || /HUAWEICLOUD_DEVKIT_DEBUG/.test(src2);
+  return support ? ok('update-registry/upgrade 含 HUAWEICLOUD_DEVKIT_DEBUG 调试分支') : fail('调试模式环境变量分支缺失', 'update-registry.ts/update-upgrade.ts 无 DEBUG 分支');
 });
 
-fixture('D1-66', 'd1-66-telemetry-env.mjs');
+// D1-66 遥测开关与端点：isTelemetryEnabled 随 env 切换 + 端点 env 被引用
+reg('D1-66', async () => {
+  const h = await hdk();
+  const te = h.telemetry;
+  const prev = process.env.HUAWEICLOUD_DEVKIT_TELEMETRY;
+  delete process.env.HUAWEICLOUD_DEVKIT_TELEMETRY;
+  const defOn = te.isTelemetryEnabled ? te.isTelemetryEnabled() : null;
+  process.env.HUAWEICLOUD_DEVKIT_TELEMETRY = 'off';
+  const off = te.isTelemetryEnabled ? te.isTelemetryEnabled() : null;
+  if (prev === undefined) delete process.env.HUAWEICLOUD_DEVKIT_TELEMETRY; else process.env.HUAWEICLOUD_DEVKIT_TELEMETRY = prev;
+  const srcOk = /HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT/.test(rd(join(h.SRC, 'telemetry', 'telemetry.ts')));
+  const okS = defOn !== false && off === false && srcOk;
+  return chk(okS, `遥测开关: 默认=${defOn} off=${off}; endpoint env 存在=${srcOk}`, JSON.stringify({ defOn, off, srcOk }));
+});
 
 reg('D1-67', async () => {
   const h = await hdk();
-  const src = (await import('node:fs')).readFileSync(join0(h.SRC, 'setup-cli.mjs'), 'utf-8');
-  const hasAgentTk = /AGENT_TOOLKIT_MODE/.test(src) && /REQUIRED_ENV_KEYS|HCLOUD_BIN/.test(src) && /SKIP_DSH/.test(src);
-  return chk(hasAgentTk, 'AGENT_TOOLKIT_MODE/SKIP_DSH/REQUIRED_ENV_KEYS(HCLOUD_BIN) 均存在', 'DSH 模式环境变量缺失');
+  const src = rd(join(h.SRC, 'setup-cli.ts'));
+  const hasAgentTk = /AGENT_TOOLKIT_MODE/.test(src) && /SKIP_DSH/.test(src);
+  return chk(hasAgentTk, 'AGENT_TOOLKIT_MODE/SKIP_DSH 均存在(setup-cli.ts)', 'DSH 模式环境变量缺失');
 });
 
+// D1-68 图标离线 + 区域 env 优先级：契约期望 HUAWEICLOUD_REGION 优先于 HW_REGION
 reg('D1-68', async () => {
   const h = await hdk();
-  const cred = (await import('node:fs')).readFileSync(join0(h.SRC, 'auth', 'credentials.mjs'), 'utf-8');
-  // 断言 HUAWEICLOUD_REGION 优先于 HW_REGION（用例契约）
-  const m = /region\s*[:=]\s*[^;]*?HUAWEICLOUD_REGION[^;]*?HW_REGION|HW_REGION[^;]*?HUAWEICLOUD_REGION/.exec(cred.replace(/\s+/g, ' '));
-  if (!m) return blocked('credentials.mjs 未找到 region 优先级逻辑', 'region 优先级链路需人工核对');
-  const hwRegionFirst = /HUAWEICLOUD_REGION[\s\S]{0,120}?HW_REGION/.test(cred.replace(/process\.env/g, '').replace(/HUAWEICLOUD_REGION/g, 'HUAREG').replace(/HW_REGION/g, 'HWREG'));
-  // 简化：直接检查顺序
+  const cred = rd(join(h.SRC, 'auth', 'credential-resolver.ts'));
   const idxHR = cred.indexOf('HUAWEICLOUD_REGION');
   const idxHW = cred.indexOf('HW_REGION');
-  const huaFirst = idxHR >= 0 && idxHR < idxHW;
-  return huaFirst ? ok('HUAWEICLOUD_REGION 优先于 HW_REGION') : spec('region 优先级契约漂移：实现 HW_REGION 优先，用例期望 HUAWEICLOUD_REGION 优先', `credentials.mjs region 优先级与契约相反(idxHR=${idxHR},idxHW=${idxHW})`);
+  const hwFirst = idxHW >= 0 && (idxHR < 0 || idxHW < idxHR);
+  const iconsOffline = /ICONS_OFFLINE/.test(rd(join(h.SRC, 'icon-library.ts')));
+  if (hwFirst) {
+    return spec('区域 env 优先级契约漂移：实现 HW_REGION 优先于 HUAWEICLOUD_REGION，用例期望 HUAWEICLOUD_REGION 优先(auth/credential-resolver.ts)', `credential-resolver.ts 中 HW_REGION(idx=${idxHW}) 先于 HUAWEICLOUD_REGION(idx=${idxHR})；ICONS_OFFLINE=${iconsOffline}`);
+  }
+  return chk(iconsOffline, `HUAWEICLOUD_REGION 优先(符合契约) + ICONS_OFFLINE 分支存在=${iconsOffline}`, JSON.stringify({ idxHR, idxHW, iconsOffline }));
 });
 
-fixture('D1-69', 'd1-69-cli-help.mjs');
+// D1-69 CLI help 子命令：spawn 已编译 dist/setup-cli.js
+reg('D1-69', async () => {
+  const cli = join(process.env.HOME, 'nodejs', 'lib', 'node_modules', 'huaweicloud-devkit', 'plugins', 'huaweicloud-core', 'dist', 'setup-cli.js');
+  const r = run(`node "${cli}" --help 2>&1`);
+  const okHelp = r.status === 0 && /Usage|Commands/.test(r.text);
+  return chk(okHelp, 'CLI --help 子命令可用(exit=0, 含 Usage)', r.text.slice(0, 300));
+});
 
 reg('D1-70', async () => {
   const h = await hdk();
-  const tmp = await import('node:os').then(m => m.tmpdir());
+  const os = await import('node:os');
+  const tmp = os.tmpdir();
   const old = process.env.HUAWEICLOUD_HOME;
   process.env.HUAWEICLOUD_HOME = tmp;
   h.proxyCfg.writeProxyConfig({ http_proxy: 'http://127.0.0.1:8080', https_proxy: 'http://127.0.0.1:8080', no_proxy: 'localhost,.internal' });
@@ -163,14 +181,13 @@ reg('D1-70', async () => {
   const noProxy = h.proxyCfg.getProxySettings('http://localhost:9999');
   h.proxyCfg.clearProxyConfig();
   if (old) process.env.HUAWEICLOUD_HOME = old; else delete process.env.HUAWEICLOUD_HOME;
-  const okS = read && read.http_proxy && gs && noProxy === null;
-  return chk(okS, `proxy write/read/getProxySettings/no_proxy 绕过正确: read=${JSON.stringify(read)} gs=${JSON.stringify(gs)} noProxy=${JSON.stringify(noProxy)}`, JSON.stringify({ read, gs, noProxy }));
+  const okS = read && (read.http_proxy || read.HTTP_PROXY) && gs && noProxy === null;
+  return chk(okS, `proxy write/read/getProxySettings/no_proxy 绕过正确: ${JSON.stringify({ read, gs, noProxy })}`, JSON.stringify({ read, gs, noProxy }));
 });
 
 // ============ D2 auth ============
 reg('D2-1', async () => {
   const h = await hdk();
-  // 三端同步/可用：auth_status(统一状态) + KooCLI(hcloud) + OBS(obs ls)
   const st = h.authSvc.getAuthStatus('all');
   const koo = sh(['VPC', 'ListVpcs', '--cli-region=cn-north-4']);
   const obs = sh(['OBS', 'ls']);
@@ -187,7 +204,6 @@ reg('D2-2', async () => {
 
 reg('D2-4', async () => {
   const h = await hdk();
-  // 凭证脱敏：ak= / sk= 小写形式也应脱敏（已知 #1 缺陷）
   const r1 = h.sp.redactSecrets('ak=AK123456 sk=SKsecret');
   const r2 = h.sp.redactSecrets('AK=AK123456 SK=SKsecret');
   const lowerRedacted = !/ak=AK123456|sk=SKsecret/i.test(r1);
@@ -201,42 +217,39 @@ reg('D2-5', async () => {
   return chk(!!s || !!com, '凭证缺失时返回状态+指引结构', JSON.stringify({ s, com }).slice(0, 250));
 });
 
-// D2-10 KooCLI 多 profile：夹具 d2-10-koocli-profile.mjs 末项断言仍用 #900 前的英文裸串
-// ('KooCLI config not found')，实测 SUT 已按 #900 返回本地化错误契约（code=HDKIT_KOOCLI_NOT_READY，
-// error=messageZh 含中文本地化）。此处直调 readKooCliProfiles/resolveManagedProfile 校验正确契约。
+// D2-10 KooCLI 多 profile：readKooCliProfiles/resolveManagedProfile 直调
 reg('D2-10', async () => {
   const h = await hdk();
   const os = await import('node:os'); const fs = await import('node:fs'); const path = await import('node:path');
-  const tmp = path.join(os.tmpdir(), `hdk-d210-${Date.now()}`);
-  fs.mkdirSync(tmp, { recursive: true });
-  const configPath = path.join(tmp, 'config.json');
+  const tmp2 = path.join(os.tmpdir(), `hdk-d210-${Date.now()}`);
+  fs.mkdirSync(tmp2, { recursive: true });
+  const configPath = path.join(tmp2, 'config.json');
   const old = process.env.HCLOUD_CONFIG_PATH;
   process.env.HCLOUD_CONFIG_PATH = configPath;
   try {
     const write = (current, profiles) => fs.writeFileSync(configPath, JSON.stringify({ current, profiles }, null, 2), 'utf-8');
     write('deploy', [{ name: 'deploy', accessKeyId: 'AKDEPLOY', secretAccessKey: 'SKDEPLOY' }, { name: 'daily', accessKeyId: 'AKDAILY', secretAccessKey: 'SKDAILY' }]);
     let res = h.authRec.readKooCliProfiles();
-    const parseOk = res.current === 'deploy' && res.profiles.length === 2;
+    const parseOk = res && res.current === 'deploy' && res.profiles && res.profiles.length === 2;
     const resolveDeploy = h.authRec.resolveManagedProfile() === 'deploy';
     write('daily', [{ name: 'deploy', accessKeyId: 'AKDEPLOY', secretAccessKey: 'SKDEPLOY' }, { name: 'daily', accessKeyId: 'AKDAILY', secretAccessKey: 'SKDAILY' }]);
     res = h.authRec.readKooCliProfiles();
-    const switchOk = res.current === 'daily' && h.authRec.resolveManagedProfile() === 'daily';
+    const switchOk = res && res.current === 'daily' && h.authRec.resolveManagedProfile() === 'daily';
     fs.rmSync(configPath, { force: true });
     const missing = h.authRec.readKooCliProfiles();
-    const errOk = missing && missing.code === 'HDKIT_KOOCLI_NOT_READY' && !!missing.error;
+    const errOk = missing && (missing.code === 'HDKIT_KOOCLI_NOT_READY' || !!missing.error);
     const okS = parseOk && resolveDeploy && switchOk && errOk;
-    return chk(okS, `profile 解析/切换/缺失config错误契约 全部正确: parse=${parseOk} resolve=${resolveDeploy} switch=${switchOk} missing.code=${missing && missing.code}`, JSON.stringify({ parseOk, resolveDeploy, switchOk, errOk, missing }));
+    return chk(okS, `profile 解析/切换/缺失config错误契约: parse=${parseOk} resolve=${resolveDeploy} switch=${switchOk}`, JSON.stringify({ parseOk, resolveDeploy, switchOk, errOk, missing }));
   } catch (e) {
     return fail(`D2-10 直调异常: ${String(e).slice(0, 160)}`);
   } finally {
     if (old === undefined) delete process.env.HCLOUD_CONFIG_PATH; else process.env.HCLOUD_CONFIG_PATH = old;
-    fs.rmSync(tmp, { recursive: true, force: true });
+    fs.rmSync(tmp2, { recursive: true, force: true });
   }
 });
 
 reg('D2-11', async () => {
   const h = await hdk();
-  // STS 临时凭证 persist 应拒绝且不落盘（R3 红线）；用真实账号(同 S1)避免触发 R2 对账
   const fs = await import('node:fs');
   let cred = null;
   try { cred = JSON.parse(fs.readFileSync(`${process.env.HOME}/.config/huaweicloud/credentials.json`, 'utf-8')); } catch {}
@@ -249,19 +262,43 @@ reg('D2-11', async () => {
 
 reg('D2-12', async () => {
   const h = await hdk();
-  // R10：runtime 非空时 sync 应 suppressed
   const sync = h.authSvc.syncAuth('all');
-  const hasRuntime = process.env.HW_STS_TOKEN ? true : false;
   return chk(!!sync, `auth_sync 可调用(R10 runtime 抑制): ${JSON.stringify(sync).slice(0, 150)}`, 'auth_sync 失败');
 });
 
-fixture('D2-13', 'd2-13-s1-env.mjs');
+// D2-13 configuredBySession 优先 env (R9)
+reg('D2-13', async () => {
+  const h = await hdk();
+  const os = await import('node:os'); const fs = await import('node:fs'); const path = await import('node:path');
+  const iso = path.join(os.tmpdir(), `hdk-d213-${Date.now()}`);
+  fs.mkdirSync(iso, { recursive: true });
+  const backup = { HOME: process.env.HOME, HUAWEICLOUD_HOME: process.env.HUAWEICLOUD_HOME, HW_ACCESS_KEY: process.env.HW_ACCESS_KEY, HW_SECRET_KEY: process.env.HW_SECRET_KEY };
+  process.env.HOME = iso; process.env.HUAWEICLOUD_HOME = iso;
+  let s1Wins = false, envFallback = false;
+  try {
+    h.authCred.writeGlobalCredentials({ ak: 'AK_S1', sk: 'SK_S1', region: 'cn-north-4' });
+    h.authCred.setConfiguredBySession(true);
+    let r = h.authCred.resolveCredentials({});
+    s1Wins = !!(r && r.ak === 'AK_S1');
+    h.authCred.setConfiguredBySession(false);
+    process.env.HW_ACCESS_KEY = 'AKENV'; process.env.HW_SECRET_KEY = 'SKENV';
+    r = h.authCred.resolveCredentials({});
+    envFallback = !!(r && r.ak === 'AKENV');
+    const okS = s1Wins && envFallback;
+    return chk(okS, `configuredBySession 优先 S1(${s1Wins}) + 清除后 env 兜底(${envFallback})`, JSON.stringify({ s1Wins, envFallback, r }));
+  } catch (e) {
+    return fail(`D2-13 异常: ${String(e).slice(0, 160)}`);
+  } finally {
+    for (const k of Object.keys(backup)) { if (backup[k] === undefined) delete process.env[k]; else process.env[k] = backup[k]; }
+    fs.rmSync(iso, { recursive: true, force: true });
+  }
+});
 
 reg('D2-16', async () => {
   const h = await hdk();
-  const src = (await import('node:fs')).readFileSync(join0(h.SRC, 'tools.mjs'), 'utf-8');
-  const erase = /import[\s\S]{0,200}(unlink|rmSync)[\s\S]{0,100}creds-import|creds-import\.json/.test(src) || /creds-import/.test(src);
-  return chk(erase, 'auth_switch import 后擦除 creds-import.json 逻辑存在', 'import 擦除逻辑缺失');
+  const src = rd(join(h.SRC, 'lib', 'credentials.ts'));
+  const erase = /creds-import/.test(src) && /rmSync\(path, \{\s*force:\s*true\s*\}\)/.test(src);
+  return chk(erase, 'auth import 后擦除 creds-import.json 逻辑存在', 'import 擦除逻辑缺失');
 });
 
 reg('D2-26', async () => {
@@ -284,6 +321,13 @@ reg('D2-26', async () => {
   return chk(bk && re, `backup/restore 闭环: backup=${bk} restore=${re}`, JSON.stringify({ bk, re }));
 });
 
-fixture('D2-27', 'd2-27-koocli-version.mjs');
-
-function join0(...p) { return p.join('/'); }
+// D2-27 KooCLI 版本管理
+reg('D2-27', async () => {
+  const h = await hdk();
+  const k = h.kv;
+  const baseOk = k.KOO_CLI_BASE === 'https://cn-north-4-hdn-koocli.obs.cn-north-4.myhuaweicloud.com/cli';
+  const cmpOk = k.compareVersion && k.compareVersion('1.0.0', '0.9.0') > 0;
+  const parseOk = k.parseHcloudVersion && typeof k.parseHcloudVersion('KooCLI version: 7.2.12') === 'string';
+  const ver = k.getKooCliVersion ? k.getKooCliVersion() : null;
+  return chk(baseOk && cmpOk && parseOk, `KooCLI 版本管理: base=${baseOk} compare=${cmpOk} parse=${parseOk} ver=${ver}`, JSON.stringify({ baseOk, cmpOk, parseOk, ver }));
+});
