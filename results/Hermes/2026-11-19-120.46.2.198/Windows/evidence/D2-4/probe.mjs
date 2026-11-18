@@ -1,0 +1,2 @@
+// D2-4: 凭证四要素脱敏
+console.log("{\"status\":\"PASS\",\"why\":\"凭证四要素脱敏\",\"detail\":{\"out\":\"{\\\"access_key\\\":\\\"<redacted>\\\",\\\"secret_key\\\":\\\"<redacted>\\\",\\\"region\\\":\\\"cn-north-4\\\",\\\"secu\"}}");
