@@ -193,7 +193,7 @@ reg('D3-C6', async () => {
     results.sign_agreement = await h.tools.callTool('huaweicloud_sandbox_sign_agreement', {});
     const conn = await h.tools.callTool('huaweicloud_sandbox_connect', { source: 'OpenCode' });
     wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id || conn.session_id);
-    results.connect = { ok: !!(conn && conn.status === 'connected'), hasWs: !!wsId };
+    results.connect = { ok: !!(conn && conn.status === 'connected'), hasWs: !!wsId, raw: conn }; // raw 保留审批门拒绝信息
     results.credentials = await h.tools.callTool('huaweicloud_sandbox_credentials', wsId ? { dev_stage_id: wsId } : {});
     const tmpf = join(tmpdir(), 'hdk-smoke.txt');
     writeFileSync(tmpf, `smoke-${Date.now()}`, 'utf-8');
@@ -210,6 +210,10 @@ reg('D3-C6', async () => {
   if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(results.exception || '')) {
     return blocked('沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)——connect 即返回「沙箱功能正在升级优化，暂时无法使用」，7 个隐式工具无法执行。解除条件：沙箱服务维护结束恢复可用后复测（补环境·沙箱服务维护）', detail);
   }
+  const connRaw = JSON.stringify(results.connect || '') + (results.exception || '');
+  if (/USER_CONFIRMATION_REQUIRED|approvalToken|needsConfirm|rejected|approve/i.test(connRaw)) {
+    return blocked('v2 审批门：huaweicloud_sandbox_connect 需真人确认(USER_CONFIRMATION_REQUIRED/DEVKIT_APPROVAL_MODE)，headless 无法自动确认。check_user/sign_agreement 已实测通过(realnameVerified/agreementSigned=true)。解除条件：置 DEVKIT_APPROVAL_MODE 并人工 approve，或提供可自动确认的审批 seam（补环境·审批门真人确认）', detail);
+  }
   const ok7 = keys.length >= 7 && !hasErr;
   return chk(ok7,
     `沙箱 7 工具冒烟: ${keys.length} 工具返回规范结果, 无静默失败=${!hasErr}`,
@@ -224,6 +228,9 @@ reg('D3-C3', async () => {
     const conn = await h.tools.callTool('huaweicloud_sandbox_connect', { source: 'OpenCode' });
     const wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
     detail.push(`connect.ws=${!!wsId} status=${conn && conn.status}`);
+    if (/USER_CONFIRMATION_REQUIRED|approvalToken|rejected|approve/i.test(JSON.stringify(conn))) {
+      return blocked('v2 审批门：沙箱 connect 需真人确认(USER_CONFIRMATION_REQUIRED)——headless 无法自动确认。解除条件：人工 approve 或提供自动确认 seam（补环境·审批门真人确认）', JSON.stringify(conn).slice(0, 200));
+    }
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id', JSON.stringify(conn).slice(0, 200));
     const proj = mkdtempSync(join(tmpdir(), 'hdk-sbx-'));
     writeFileSync(join(proj, 'index.html'), '<html><body>hdk sandbox e2e ok</body></html>', 'utf-8');

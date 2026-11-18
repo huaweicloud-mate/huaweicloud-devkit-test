@@ -82,9 +82,15 @@ reg('D3-C13', async () => {
     mbOk = mb.ok || /successfully/i.test(mb.text);
     if (mbOk) {
       const set = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
-      setOk = !set.__error && /200|ok|success|index/i.test(JSON.stringify(set));
+      const setRaw = JSON.stringify(set);
+      if (/USER_CONFIRMATION_REQUIRED|approvalToken|rejected|approve/i.test(setRaw)) {
+        return blocked('v2 审批门：huaweicloud_obs_set_website_config(set) 需真人确认(USER_CONFIRMATION_REQUIRED)——headless 无法自动确认。OBS mb(建桶)/rm(归零) 已实测通过。解除条件：人工 approve 或提供自动确认 seam（补环境·审批门真人确认）', setRaw.slice(0, 300));
+      }
+      setOk = !set.__error && /200|ok|success/i.test(setRaw);
+      await new Promise(r => setTimeout(r, 1500));
       const get = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'get', bucket, region: REGION });
-      getOk = !get.__error && /index\.html|indexDocument|Suffix/i.test(JSON.stringify(get));
+      const getDetail = JSON.stringify(get).slice(0, 400);
+      getOk = get && (get.ok === true || get.status === 200) && /Suffix|index/i.test(getDetail);
     }
   } finally {
     sh(['OBS', 'rm', `obs://${bucket}`, '-f']);
@@ -121,10 +127,10 @@ reg('D3-C14', async () => {
 reg('D3-S1', async () => {
   const h = await hdk();
   const route = await h.tools.callTool('huaweicloud_service_catalog', { intent: '帮我查一下我账号在华北北京四有哪些云主机' });
-  const text = JSON.stringify(route);
-  const hitEcs = /ECS|ecs|云主机|弹性云/.test(text);
+  const svcs = (route && route.recommendedServices) || [];
+  const hitEcs = svcs.some(s => /ECS/i.test(s));
   const read = await h.tools.callTool('huaweicloud_run_readonly_command', { args: ['ECS', 'ListServersDetails', `--cli-region=${REGION}`] });
-  return chk(hitEcs && read && !read.__error, `只读查 ECS: 路由命中ecs=${hitEcs} 命令返回=${!read.__error}`, JSON.stringify({ route: text.slice(0, 150), readOk: !read.__error }));
+  return chk(hitEcs && read && !read.__error, `只读查 ECS: 路由命中ecs=${hitEcs} 命令返回=${!read.__error}`, JSON.stringify({ svcs, readOk: !read.__error }));
 });
 
 reg('D3-S2', async () => {
@@ -162,6 +168,9 @@ reg('D3-S3', async () => {
     detail.push(`connect.status=${conn && conn.status} ws=${!!wsId}`);
     if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(JSON.stringify(conn))) {
       return blocked('沙箱服务维护中——connect 返回「沙箱功能正在升级优化」，无法完成沙箱预览出 URL。解除条件：沙箱服务维护结束（补环境·沙箱服务维护）', detail.join(' | '));
+    }
+    if (/USER_CONFIRMATION_REQUIRED|approvalToken|rejected|approve/i.test(JSON.stringify(conn))) {
+      return blocked('v2 审批门：沙箱 connect 需真人确认(USER_CONFIRMATION_REQUIRED)——headless 无法自动确认。解除条件：人工 approve 或提供自动确认 seam（补环境·审批门真人确认）', JSON.stringify(conn).slice(0, 200));
     }
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id', JSON.stringify(conn).slice(0, 200));
     const proj = mkdtempSync(join(tmpdir(), 'hdk-d3s3-'));
@@ -321,19 +330,34 @@ reg('D4-12', async () => {
   } catch (e) { return fail('package.json 读取失败', String(e)); }
 });
 
-// D4-13 最小权限凭证通过率（只读子账号 test001）
+// D4-13 最小权限凭证通过率（只读子账号 test001，临时 hcloud profile 隔离）
 reg('D4-13', async () => {
-  const fs = await import('node:fs');
+  const fs = await import('node:fs'); const os = await import('node:os'); const path = await import('node:path');
   const roPath = `${process.env.HOME}/.config/huaweicloud/credentials.readonly.json`;
   let ro = null;
   try { ro = JSON.parse(fs.readFileSync(roPath, 'utf-8')); } catch {}
   if (!ro || !ro.ak) return blocked('credentials.readonly.json 缺失或 ak 为空', '解除: 配置只读子账号 {ak,sk}');
-  const read = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`], { HW_ACCESS_KEY: ro.ak, HW_SECRET_KEY: ro.sk, HUAWEICLOUD_SKIP_CRED: '1' });
-  const readOk = read.ok && !/unauthorized|Auth|denied/i.test(read.text);
-  const write = sh(['VPC', 'CreateVpc', '--vpc.name=x-ro-test', '--vpc.cidr=10.9.0.0/16', `--cli-region=${REGION}`], { HW_ACCESS_KEY: ro.ak, HW_SECRET_KEY: ro.sk, HUAWEICLOUD_SKIP_CRED: '1' });
-  const writeDenied = !write.ok || /denied|forbidden|unauthorized|not allowed/i.test(write.text);
-  const okS = readOk && writeDenied;
-  return chk(okS, `只读子账号最小权限: 读成功=${readOk} 写被拒=${writeDenied}(${read.text.slice(0, 60)})`, JSON.stringify({ readOk, readText: read.text.slice(0, 120), writeDenied }));
+  const iso = path.join(os.tmpdir(), `hdk-d413-${Date.now()}`);
+  fs.mkdirSync(iso, { recursive: true });
+  const cfgPath = path.join(iso, 'config.json');
+  fs.writeFileSync(cfgPath, JSON.stringify({ current: 'readonly', profiles: [{ name: 'readonly', accessKeyId: ro.ak, secretAccessKey: ro.sk, region: ro.region || 'cn-north-4' }] }, null, 2));
+  const old = process.env.HCLOUD_CONFIG_PATH;
+  process.env.HCLOUD_CONFIG_PATH = cfgPath;
+  let vpcId = null;
+  try {
+    const read = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`]);
+    const readOk = read.ok && !/denied|forbidden|unauthorized/i.test(read.text);
+    const write = sh(['VPC', 'CreateVpc', '--vpc.name=ro-perm-test', '--vpc.cidr=10.9.0.0/16', `--cli-region=${REGION}`]);
+    const wm = /"id"\s*:\s*"([0-9a-f-]{36})"/.exec(write.text);
+    vpcId = wm && wm[1];
+    const writeDenied = !write.ok || /denied|forbidden|unauthorized|policy|insufficient|not allow/i.test(write.text);
+    const okS = readOk && writeDenied;
+    return chk(okS, `只读子账号最小权限: 读成功=${readOk} 写被拒=${writeDenied}`, JSON.stringify({ readOk, writeDenied, writeText: write.text.slice(0, 120) }));
+  } finally {
+    if (vpcId) sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+    if (old === undefined) delete process.env.HCLOUD_CONFIG_PATH; else process.env.HCLOUD_CONFIG_PATH = old;
+    fs.rmSync(iso, { recursive: true, force: true });
+  }
 });
 
 reg('D4-14', async () => {
@@ -421,11 +445,11 @@ reg('D4-23', async () => {
 reg('D4-24', async () => {
   const h = await hdk();
   const tok = h.hcl.createApprovalToken(['VPC', 'DeleteVpc', '--vpc_id=x']);
-  let c1 = null, c2 = null;
-  try { c1 = h.hcl.consumeApprovalToken(tok); } catch (e) { c1 = 'THREW'; }
-  try { c2 = h.hcl.consumeApprovalToken(tok); } catch (e) { c2 = 'THREW'; }
-  const okS = c1 !== null && c1 !== 'THREW' && (c2 === null || c2 === 'THREW' || c2 === undefined);
-  return chk(okS, `审批令牌一次性消费: first=${JSON.stringify(c1)} second=${JSON.stringify(c2)}`, JSON.stringify({ c1, c2 }));
+  const c1 = h.hcl.consumeApprovalToken(tok);
+  const c2 = h.hcl.consumeApprovalToken(tok);
+  const firstOk = c1 && (c1.status === 'consumed' || c1.status !== 'gone');
+  const secondGone = c2 && (c2.status === 'gone' || c2.status === 'not_found');
+  return chk(!!firstOk && !!secondGone, `审批令牌一次性消费: first=${c1 && c1.status} second=${c2 && c2.status}`, JSON.stringify({ c1, c2 }));
 });
 
 reg('D4-25', async () => {

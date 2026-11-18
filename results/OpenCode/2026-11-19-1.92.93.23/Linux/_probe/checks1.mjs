@@ -135,16 +135,21 @@ reg('D1-66', async () => {
   process.env.HUAWEICLOUD_DEVKIT_TELEMETRY = 'off';
   const off = te.isTelemetryEnabled ? te.isTelemetryEnabled() : null;
   if (prev === undefined) delete process.env.HUAWEICLOUD_DEVKIT_TELEMETRY; else process.env.HUAWEICLOUD_DEVKIT_TELEMETRY = prev;
-  const srcOk = /HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT/.test(rd(join(h.SRC, 'telemetry', 'telemetry.ts')));
+  const epPath = join(h.SRC, 'telemetry', 'event-pipeline.ts');
+  const srcOk = existsSync(epPath) && /HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT/.test(rd(epPath));
   const okS = defOn !== false && off === false && srcOk;
   return chk(okS, `遥测开关: 默认=${defOn} off=${off}; endpoint env 存在=${srcOk}`, JSON.stringify({ defOn, off, srcOk }));
 });
 
 reg('D1-67', async () => {
   const h = await hdk();
-  const src = rd(join(h.SRC, 'setup-cli.ts'));
-  const hasAgentTk = /AGENT_TOOLKIT_MODE/.test(src) && /SKIP_DSH/.test(src);
-  return chk(hasAgentTk, 'AGENT_TOOLKIT_MODE/SKIP_DSH 均存在(setup-cli.ts)', 'DSH 模式环境变量缺失');
+  const dshPatch = rd(join(h.SRC, 'agents', 'dsh-patch.ts'));
+  const dsh = rd(join(h.SRC, 'agents', 'dsh.ts'));
+  const mcmg = rd(join(h.SRC, 'mcp-config-merge.ts'));
+  const hasAgentTk = /HUAWEICLOUD_AGENT_TOOLKIT_MODE/.test(dshPatch);
+  const hasSkipDsh = /HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL/.test(dsh) && /SKIP_DSH_PLUGIN_INSTALL\s*===\s*'1'/.test(dsh);
+  const reqEnvKeys = /REQUIRED_ENV_KEYS/.test(mcmg) && /HCLOUD_BIN/.test(mcmg);
+  return chk(hasAgentTk && hasSkipDsh && reqEnvKeys, `Agent toolkit 模式/DSH 跳过安装环境变量: HUAWEICLOUD_AGENT_TOOLKIT_MODE=${hasAgentTk} SKIP_DSH_PLUGIN_INSTALL=${hasSkipDsh} REQUIRED_ENV_KEYS含HCLOUD_BIN=${reqEnvKeys}`, `缺失: agentTk=${hasAgentTk} skipDsh=${hasSkipDsh} reqKeys=${reqEnvKeys}`);
 });
 
 // D1-68 图标离线 + 区域 env 优先级：契约期望 HUAWEICLOUD_REGION 优先于 HW_REGION
@@ -254,9 +259,14 @@ reg('D2-11', async () => {
   let cred = null;
   try { cred = JSON.parse(fs.readFileSync(`${process.env.HOME}/.config/huaweicloud/credentials.json`, 'utf-8')); } catch {}
   if (!cred || !cred.ak) return blocked('credentials.json 缺失', '解除: 配置真云凭证');
-  const r = await h.tools.callTool('huaweicloud_auth_switch', { action: 'persist', ak: cred.ak, sk: cred.sk, securityToken: 'STS_TOKEN_TEST_XYZ', region: cred.region || 'cn-north-4' });
-  const txt = JSON.stringify(r);
-  const rejected = /rejected|error|Temporary STS|cannot be persisted/i.test(txt);
+  let rejected = false, txt = '';
+  try {
+    await h.tools.callTool('huaweicloud_auth_switch', { action: 'persist', ak: cred.ak, sk: cred.sk, securityToken: 'STS_TOKEN_TEST_XYZ', region: cred.region || 'cn-north-4' });
+  } catch (e) {
+    txt = String(e.message || e);
+    rejected = /Temporary STS|STS|cannot be persisted|cannot be stored/i.test(txt);
+  }
+  // v2 行为：STS 持久化直接抛错拒绝（R3 红线），拒绝即符合预期
   return chk(rejected, `STS persist 拒绝落盘(R3): ${txt.slice(0, 140)}`, txt.slice(0, 240));
 });
 
