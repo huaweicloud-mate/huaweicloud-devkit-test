@@ -31,6 +31,7 @@ async function mcpProbe(reqs, timeoutMs = 8000) {
   });
 }
 const findMsg = (arr, id) => arr.find((x) => x?.id === id);
+process.stderr.write('DEBUG: script loaded, starting D9 probes...\n');
 
 const RAW_TOOLS = [];
 { const r = await mcpProbe([{ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'p', version: '1' } } }, { jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} }]); const tl = findMsg(r, 2); RAW_TOOLS.push(...(tl?.result?.tools || [])); }
@@ -58,6 +59,7 @@ const RAW_TOOLS = [];
 { const services = ['ECS', 'VPC', 'OBS', 'RDS', 'GaussDB', 'CCE', 'FunctionGraph', 'IAM', 'CTS', 'CES', 'DDS', 'DCS', 'SMN', 'DMS', 'WAF', 'CDN', 'ModelArts', 'DEW', 'CBR', 'EVS', 'EIP', 'ELB']; for (let i = 0; i < services.length; i++) { const s = services[i]; const cid = 'EXP-C4-' + String(i + 1).padStart(2, '0'); try { const lo = await call('huaweicloud_list_operations', { service: s }); const pl = await call('huaweicloud_plan_cli_command', { args: [s, 'ListUnknownProbe', '--cli-region=cn-north-4'] }); const loOk = !!lo?.command || !!lo?.service || lo?.aggregate === true; const plOk = pl?.classification?.decision != null || pl?.command != null || pl?.ok === false; R(cid, loOk && plOk, s + ' 只读规划冒烟: list_operations=' + (loOk ? 'ok' : 'FAIL') + ' plan=' + (plOk ? 'ok' : 'FAIL')); } catch (e) { R(cid, false, s + ' 只读规划冒烟异常: ' + e.message.slice(0, 100)); } } }
 { const expect = { 'E01': ['ECS'], 'E02': ['ECS'], 'E03': ['OBS'], 'E04': ['EIP'], 'E05': ['RDS'], 'E06': ['DCS'], 'E07': ['CBR'], 'E08': null, 'E09': ['CCE'], 'E10': ['FunctionGraph'], 'E11': ['BSS'], 'E12': ['CES'], 'E13': ['CSMS', 'ELB'], 'E14': ['IAM'], 'E15': ['Incentive Voucher'] }; const prompts = { 'E01': '帮我查一下我账号在华北北京四有哪些云主机', 'E02': '创建一台 2C4G 的 Ubuntu 云服务器 规格通用型', 'E03': '把本地 dist 目录部署成一个公网静态网站', 'E04': '给这台服务器绑定一个弹性公网IP', 'E05': '看一下我的云数据库MySQL实例的状态', 'E06': '创建一个 Redis 缓存实例用于会话存储', 'E07': '给生产环境的服务器配置一个每日备份策略', 'E08': '我的ECS启动失败了 帮我分析原因', 'E09': '开设一个 Kubernetes 集群用于微服务部署', 'E10': '部署一个函数处理图片自动压缩', 'E11': '查一下我账号这个月的费用情况', 'E12': '把应用日志指标推送到云监控告警', 'E13': '申请HTTPS证书并配置到我的域名', 'E14': '我账号下的用户都有哪些权限 帮我审计一下', 'E15': '帮我领一下华为云的代金券' }; for (const [id, intent] of Object.entries(prompts)) { const cid = 'EXP-' + id; const sc = await call('huaweicloud_service_catalog', { intent }); const svcs = sc.recommendedServices || []; const exp = expect[id]; if (exp === null) { R(cid, true, id + ' 诊断类 N/A（走 explain_error）: got=' + JSON.stringify(svcs)); continue; } const ok = exp.some((e) => svcs.some((s) => s === e || (e === 'Incentive Voucher' && /oucher/i.test(s)))); R(cid, ok, id + ' 路由: ' + (ok ? 'HIT' : 'MISS') + '(exp=' + exp.join('/') + ', got=' + svcs.join('+') + ') intent="' + intent + '"'); } }
 
+process.stderr.write('DEBUG: before flush, results count would be flushed\n');
 flush();
 summary('D9D10EXP');
 process.exit(0);

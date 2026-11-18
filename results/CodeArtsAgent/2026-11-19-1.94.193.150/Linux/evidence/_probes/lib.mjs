@@ -54,15 +54,15 @@ export function summary(tag) {
 }
 
 export const U = (f) => import('file://' + join(SRC, f));
-export const sp = await U('safety-policy.mjs');
-export const rre = await U('risk-rule-engine.mjs');
-export const tools = await U('tools.mjs');
-export const uc = await U('update-check.mjs');
-export const tele = await U('telemetry/telemetry.mjs');
-export const koocli = await U('koocli-version.mjs');
-export const icon = await U('icon-library.mjs');
-export const authCreds = await U('auth/credentials.mjs');
-export const hcloudCli = await U('hcloud-cli.mjs');
+export const sp = await U('safety-policy.js');
+export const rre = await U('risk-rule-engine.js');
+export const tools = await U('tools.js');
+export const uc = await U('update-check.js');
+export const tele = await U('telemetry/telemetry.js');
+export const koocli = await U('koocli-version.js');
+export const icon = await U('icon-library.js');
+export const authCreds = await U('auth/credentials.js');
+export const hcloudCli = await U('hcloud-cli.js');
 
 export const VC = { vendorConfirmed: '用户说：帮我用华为云 hcloud 完成操作' };
 export async function call(name, args = {}) {
