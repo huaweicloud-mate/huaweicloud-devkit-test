@@ -14,10 +14,10 @@ function finish(r) { const out = { ...META, status: r.status, why: r.why || '', 
   console.log('D1-67 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
 
 async function run() {
-  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/dist/setup-cli.mjs';
+  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/dist/mcp-config-merge.js';
   let src = ''; if (existsSync(p)) { try { src = readFileSync(p, 'utf8'); } catch(e){} }
   const ok = src.length > 0 && src.includes('AGENT_TOOLKIT');
-  return { status: ok ? 'PASS' : 'FAIL', actual: 'AGENT_TOOLKIT ' + (ok ? '存在' : '缺失') + ' @ setup-cli.mjs ' };
+  return { status: ok ? 'PASS' : 'FAIL', actual: 'AGENT_TOOLKIT ' + (ok ? '存在' : '缺失') + ' @ mcp-config-merge.js ' };
 }
 
 run().then(finish).catch(e => finish({ status:'BLOCKED', why:String(e).slice(0,200), actual:String(e).slice(0,120) }));

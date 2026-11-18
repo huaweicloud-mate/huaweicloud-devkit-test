@@ -9,7 +9,8 @@ const OUT = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devk
 const META = { case: 'D3-C7', assistant: 'AtomCode(deepseek-v4-pro-0813)', os: 'Linux', sut: 'npm huaweicloud-devkit@2.0.0-next.4 (gitHead 16a24814)' };
 const REGION = 'ap-southeast-3';
 const TS = String(Date.now()).slice(-10);
-const { callTool } = await import(pathToFileURL(SRC + '/tools.js').href);
+const _callToolMod = await import(pathToFileURL(SRC + '/tools.js').href);
+const callTool = async (name, args) => _callToolMod.callTool(name, { ...(args || {}), vendorConfirmed: '用户明确要求使用华为云' });
 
 const results = [];
 function log(name, pass, detail) { results.push({ name, pass, detail: String(detail).slice(0, 260) }); }

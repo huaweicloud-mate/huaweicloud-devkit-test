@@ -14,10 +14,10 @@ function finish(r) { const out = { ...META, status: r.status, why: r.why || '', 
   console.log('D3-C14 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
 
 async function run() {
-  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/dist/sandbox/hdkitservice-api.mjs';
+  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/dist/lib/hdkit/hdkitservice-api.js';
   let src = ''; if (existsSync(p)) { try { src = readFileSync(p, 'utf8'); } catch(e){} }
   const ok = src.length > 0 && src.includes('hdkitConnect');
-  return { status: ok ? 'PASS' : 'FAIL', actual: 'hdkitConnect ' + (ok ? '存在' : '缺失') + ' @ sandbox/hdkitservice-api.mjs ' };
+  return { status: ok ? 'PASS' : 'FAIL', actual: 'hdkitConnect ' + (ok ? '存在' : '缺失') + ' @ lib/hdkit/hdkitservice-api.js ' };
 }
 
 run().then(finish).catch(e => finish({ status:'BLOCKED', why:String(e).slice(0,200), actual:String(e).slice(0,120) }));

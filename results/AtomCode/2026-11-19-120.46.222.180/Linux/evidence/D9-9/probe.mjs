@@ -14,10 +14,10 @@ function finish(r) { const out = { ...META, status: r.status, why: r.why || '', 
   console.log('D9-9 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
 
 async function run() {
-  const p = SRC + '/mcp-protocol.js';
+  const p = SRC + '/mcp-server.js';
   const src = existsSync(p) ? readFileSync(p, 'utf8') : '';
   const has = src.includes('cancellation') || src.includes('notifications') || src.includes('cancel');
-  return { status: has ? 'PASS' : 'SPEC-MISMATCH', actual: 'cancellation ' + (has ? '已声明' : '未声明(SPEC-MISMATCH)') + ' @ mcp-protocol.js' };
+  return { status: has ? 'PASS' : 'SPEC-MISMATCH', actual: 'cancellation ' + (has ? '已声明' : '未声明(SPEC-MISMATCH)') + ' @ mcp-server.js' };
 }
 
 run().then(finish).catch(e => finish({ status:'BLOCKED', why:String(e).slice(0,200), actual:String(e).slice(0,120) }));

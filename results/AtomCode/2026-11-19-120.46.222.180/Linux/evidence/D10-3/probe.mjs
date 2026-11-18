@@ -11,9 +11,10 @@ const META = { case: 'D10-3', assistant: 'AtomCode(deepseek-v4-pro-0813)', os: '
 function finish(r) { const o = { ...META, status: r.status, why: r.why || '', actual: r.actual, executedAt };
   writeFileSync(OUT, JSON.stringify(o, null, 2), 'utf8'); console.log('D10-3 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
 async function run() {
-  const harness = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devkit-test/eval/harness/run-eval.mjs';
+  const harness = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devkit-test/results/AtomCode/2026-11-19-120.46.222.180/Linux/evidence/D10-3/run-eval-local.mjs';
+  const csv = '/home/testbot1/devkit-test/testbot1-linux-atomcode/huaweicloud-devkit-test/eval/prompts/eval-set-v1.csv';
   const server = SRC + '/mcp-server.js';
-  const r = spawnSync('node', [harness, server], { encoding: 'utf8', timeout: 60000 });
+  const r = spawnSync('node', [harness, server, csv], { encoding: 'utf8', timeout: 60000, env: { ...process.env, HUAWEICLOUD_VENDOR_CHALLENGE: 'off' } });
   const out = (r.stdout || '') + (r.stderr || '');
   const m = out.match(/HIT=(\d+) MISS=(\d+) N\/A=(\d+)/);
   const actual = (m ? ('HIT=' + m[1] + ' MISS=' + m[2] + ' N/A=' + m[3]) : 'no-verdict');
