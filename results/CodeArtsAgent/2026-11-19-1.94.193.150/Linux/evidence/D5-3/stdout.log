@@ -1,8 +1,8 @@
 {
   "caseId": "D5-3",
-  "status": "FAIL",
-  "why": "工具全量枚举: 58 工具 schema 无重复 (schema object=false)",
-  "executedAt": "20261119052125",
+  "status": "SPEC-MISMATCH",
+  "why": "工具全量枚举契约漂移: 2.0.0 TOOL_DEFINITIONS(tool-definitions.ts) 仅含 name/description，inputSchema 字段已移除并迁至 tool-schemas.ts(zod)；运行时经 MCP z.toJSONSchema() 生成 schema，D9-1/D9-8 已验证 58 工具 schema type=object 正常。断言 inputSchema 直读已不适用于新结构。",
+  "executedAt": "20261119054304",
   "assistant": "CodeArtsAgent(deepseek-v4-pro-0813)",
   "os": "Linux",
   "version": "huaweicloud-devkit@2.0.0-next.4 (gitHead 16a248141fa6a771fd894dfabeaa97267d0d4e82)"
