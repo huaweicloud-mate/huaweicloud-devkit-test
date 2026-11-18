@@ -1,0 +1,89 @@
+
+=====CASE D1-65=====
+update-check.mjs DEBUG 判断: undefined
+telemetry.mjs DEBUG 判断: const DEBUG = process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true';
+断言: update-check '1'=false 'true'=false; telemetry 'true'=true '1'=false
+[FAIL] D1-65 调试开关(更新检查域支持 1/true)
+[OK] D1-65 调试开关(遥测域支持 true)
+备注: 未设/其他值不开启 — 源码为 === 'true' / '1'||'true' 严格比较，未设或 off/其他值均不开启
+=====END D1-65=====
+
+=====CASE D1-66=====
+DEFAULT_ENDPOINT: undefined
+getEndpoint(): undefined
+  TELEMETRY="off" -> false (期望 false) OK
+  TELEMETRY="on" -> true (期望 true) OK
+  TELEMETRY="" -> true (期望 true) OK
+[OK] isTelemetryEnabled 三态 off/on/未设
+[FAIL] getEndpoint 未设回退 DEFAULT_ENDPOINT
+=====END D1-66=====
+
+=====CASE D1-67=====
+setup-cli AGENT_TOOLKIT_MODE 注入点(前3):
+setup-cli SKIP_DSH 分支:
+mcp-config-merge REQUIRED_ENV_KEYS: const REQUIRED_ENV_KEYS = new Set(['HUAWEICLOUD_AGENT_TOOLKIT_MODE', 'HCLOUD_BIN']);
+[FAIL] AGENT_TOOLKIT_MODE 注入 agent env(local)
+[FAIL] SKIP_DSH=1 跳过 DSH 插件安装
+[OK] REQUIRED_ENV_KEYS 含 HCLOUD_BIN
+=====END D1-67=====
+
+=====CASE D1-68=====
+ICONS_OFFLINE=1 -> getServiceIcon source=snapshot ok=true count=2
+[OK] ICONS_OFFLINE=1 走本地 snapshot 不联网
+credentials.mjs region 相关行:
+[FAIL] HUAWEICLOUD_REGION/HW_REGION 均在默认 region 逻辑中
+优先级行: (分散在多行，见上)
+=====END D1-68=====
+
+=====SUMMARY=====
+{
+  "total": 9,
+  "passed": 4,
+  "results": [
+    {
+      "name": "D1-65 调试开关(更新检查域支持 1/true)",
+      "ok": false,
+      "detail": "undefined"
+    },
+    {
+      "name": "D1-65 调试开关(遥测域支持 true)",
+      "ok": true,
+      "detail": "const DEBUG = process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true';"
+    },
+    {
+      "name": "isTelemetryEnabled 三态 off/on/未设",
+      "ok": true,
+      "detail": "off->false,on->true,未设->true"
+    },
+    {
+      "name": "getEndpoint 未设回退 DEFAULT_ENDPOINT",
+      "ok": false,
+      "detail": "undefined"
+    },
+    {
+      "name": "AGENT_TOOLKIT_MODE 注入 agent env(local)",
+      "ok": false,
+      "detail": ""
+    },
+    {
+      "name": "SKIP_DSH=1 跳过 DSH 插件安装",
+      "ok": false,
+      "detail": ""
+    },
+    {
+      "name": "REQUIRED_ENV_KEYS 含 HCLOUD_BIN",
+      "ok": true,
+      "detail": "const REQUIRED_ENV_KEYS = new Set(['HUAWEICLOUD_AGENT_TOOLKIT_MODE', 'HCLOUD_BIN']);"
+    },
+    {
+      "name": "ICONS_OFFLINE=1 走本地 snapshot 不联网",
+      "ok": true,
+      "detail": "source=snapshot"
+    },
+    {
+      "name": "HUAWEICLOUD_REGION/HW_REGION 均在默认 region 逻辑中",
+      "ok": false,
+      "detail": ""
+    }
+  ]
+}

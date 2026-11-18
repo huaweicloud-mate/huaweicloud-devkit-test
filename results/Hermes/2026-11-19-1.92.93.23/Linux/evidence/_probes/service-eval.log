@@ -1,0 +1,45 @@
+## INIT_OK
+[SVCOPS ECS] ok=true "hcloud ECS --help"
+[SVCOPS VPC] ok=true "hcloud VPC --help"
+[SVCOPS OBS] ok=true "hcloud obs help"
+[SVCOPS RDS] ok=true "hcloud RDS --help"
+[SVCOPS GaussDB] ok=true "hcloud GaussDB --help"
+[SVCOPS CCE] ok=true "hcloud CCE --help"
+[SVCOPS FunctionGraph] ok=true "hcloud FunctionGraph --help"
+[SVCOPS IAM] ok=true "hcloud IAM --help"
+[SVCOPS CTS] ok=true "hcloud CTS --help"
+[SVCOPS CES] ok=true "hcloud CES --help"
+[SVCOPS DDS] ok=true "hcloud DDS --help"
+[SVCOPS DCS] ok=true "hcloud DCS --help"
+[SVCOPS SMN] ok=true "hcloud SMN --help"
+[SVCOPS DMS] ok=true ""
+[SVCOPS WAF] ok=true "hcloud WAF --help"
+[SVCOPS CDN] ok=true "hcloud CDN --help"
+[SVCOPS ModelArts] ok=true "hcloud ModelArts --help"
+[SVCOPS DEW] ok=true ""
+[SVCOPS CBR] ok=true "hcloud CBR --help"
+[SVCOPS EVS] ok=true "hcloud EVS --help"
+[SVCOPS EIP] ok=true "hcloud EIP --help"
+[SVCOPS ELB] ok=true "hcloud ELB --help"
+[ROUTE EXP-E01] expect=ECS got=Run hcloud --help to list available services. hit=false
+[ROUTE EXP-E02] expect=ECS got=ECS hit=true
+[ROUTE EXP-E03] expect=OBS got=OBS|Sandbox|DevStation|ECS hit=true
+[ROUTE EXP-E04] expect=EIP got=ECS|VPC|EIP hit=true
+[ROUTE EXP-E05] expect=RDS got=RDS hit=true
+[ROUTE EXP-E06] expect=DCS got=OBS|DDS|DCS hit=true
+[ROUTE EXP-E07] expect=CBR got=ECS|IAM|CBR hit=true
+[ROUTE EXP-E09] expect=CCE got=CCE|SWR|Sandbox|ECS hit=true
+[ROUTE EXP-E10] expect=FunctionGraph got=FunctionGraph|Sandbox|ECS hit=true
+[ROUTE EXP-E11] expect=Billing got=BSS hit=false
+[ROUTE EXP-E12] expect=CES got=CES hit=true
+[ROUTE EXP-E13] expect=ELB got=CSMS|KMS|ELB hit=true
+[ROUTE EXP-E14] expect=IAM got=IAM|CTS hit=true
+[ROUTE EXP-E15] expect=Voucher got=Incentive Voucher hit=true
+[AUTH_INIT] {
+  "status": "rejected",
+  "code": "USER_CONFIRMATION_REQUIRED",
+  "approvalToken": "41e04dfa-a203-406a-9fb8-6da58525a5ec",
+  "userConfirmation": {
+    "needed": true,
+    "summary": "huaweicloud_auth_init: switch this session's runtime credentials 
+=== DONE ===
