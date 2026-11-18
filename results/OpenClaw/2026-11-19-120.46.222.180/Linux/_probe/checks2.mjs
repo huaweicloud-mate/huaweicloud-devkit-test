@@ -78,6 +78,7 @@ reg('D3-C13', async () => {
   const REGION = 'cn-north-4';
   const bucket = `testbot1-openclaw-obs-${String(Date.now()).slice(-10)}`;
   const detail = [];
+  let set = null;
   let mbOk = false, setPrecond = false, getOk = false, setGated = false;
   try {
     const mb = sh(['OBS', 'mb', `obs://${bucket}`, `-location=${REGION}`]);
@@ -175,9 +176,12 @@ reg('D3-S3', async () => {
   try {
     const conn = await callVendor('huaweicloud_sandbox_connect', { source: 'OpenClaw' });
     wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id || conn.session_id);
-    detail.push(`connect.status=${conn && conn.status} ws=${!!wsId}`);
+    detail.push(`connect.code=${conn && (conn.code || conn.status)} ws=${!!wsId}`);
     if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(JSON.stringify(conn))) {
       return blocked('沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)——connect 返回维护。解除条件：沙箱服务维护结束（补环境·沙箱服务维护）', detail.join(' | '));
+    }
+    if (conn && (conn.code === 'USER_CONFIRMATION_REQUIRED' || conn.status === 'rejected')) {
+      return blocked('v2 审批门（PR-3c）将 sandbox_connect 计入 ALWAYS gated，需用户终端 approve + PIN 人工确认，无人值守无法完成沙箱预览出 URL。解除条件：人工 approve+复位 PIN（补环境·v2 审批门人工确认）', `${detail.join(' | ')} || ${JSON.stringify(conn).slice(0, 200)}`);
     }
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id', JSON.stringify(conn).slice(0, 200));
     const proj = mkdtempSync(join(tmpdir(), 'hdk-d3s3-'));

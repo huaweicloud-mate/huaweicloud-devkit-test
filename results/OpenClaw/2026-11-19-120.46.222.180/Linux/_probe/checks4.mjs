@@ -186,34 +186,26 @@ reg('D3-C1', async () => {
 // ---------- D3-C6 沙箱 7 隐式工具具名冒烟 ----------
 reg('D3-C6', async () => {
   const h = await hdk();
+  // v2 (PR-3c) 审批门：check_user 不 gated，connect/sign_agreement/credentials 均 ALWAYS gated。
   const results = {};
-  let wsId = null;
   try {
     results.check_user = await h.tools.callTool('huaweicloud_sandbox_check_user', {});
     results.sign_agreement = await h.tools.callTool('huaweicloud_sandbox_sign_agreement', {});
-    const conn = await callVendor('huaweicloud_sandbox_connect', { source: 'OpenClaw' });
-    wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id || conn.session_id);
-    results.connect = { ok: !!(conn && conn.status === 'connected'), hasWs: !!wsId };
-    results.credentials = await h.tools.callTool('huaweicloud_sandbox_credentials', wsId ? { dev_stage_id: wsId } : {});
-    const tmpf = join(tmpdir(), 'hdk-smoke.txt');
-    writeFileSync(tmpf, `smoke-${Date.now()}`, 'utf-8');
-    results.upload_file = await h.tools.callTool('huaweicloud_sandbox_upload_file', { local_path: tmpf, remote_path: '/tmp/hdk-smoke.txt', workspace_id: wsId });
-    results.exec_one_shot = await h.tools.callTool('huaweicloud_sandbox_exec_one_shot', { command: 'echo hdk-smoke-ok && cat /tmp/hdk-smoke.txt', workspace_id: wsId });
-    results.deploy_check = await h.tools.callTool('huaweicloud_sandbox_deploy_check', { port: 8080, project: 'none', output_dir: 'none', framework_type: 'static', workspace_id: wsId });
-    results.close_session = await h.tools.callTool('huaweicloud_sandbox_close_session', wsId ? { workspace_id: wsId } : {});
+    results.connect = await callVendor('huaweicloud_sandbox_connect', { source: 'OpenClaw' });
+    results.credentials = await h.tools.callTool('huaweicloud_sandbox_credentials', {});
   } catch (e) {
     results.exception = String(e).slice(0, 300);
   }
-  const keys = Object.keys(results).filter(k => k !== 'exception');
-  const hasErr = Object.entries(results).some(([k, v]) => k !== 'exception' && v && v.__error);
-  const detail = JSON.stringify({ keys, hasErr, check_user: results.check_user, connect: results.connect, upload: (results.upload_file ? String(results.upload_file).slice(0, 90) : undefined), exec: (results.exec_one_shot ? String(results.exec_one_shot).slice(0, 140) : undefined), deploy_check: (results.deploy_check ? String(results.deploy_check).slice(0, 120) : undefined), exception: results.exception }).slice(0, 1000);
-  if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(results.exception || '')) {
-    return blocked('沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)——connect 即返回「沙箱功能正在升级优化，暂时无法使用」，7 个隐式工具无法执行。解除条件：沙箱服务维护结束恢复可用后复测（补环境·沙箱服务维护）', detail);
-  }
-  const ok7 = keys.length >= 7 && !hasErr;
-  return chk(ok7,
-    `沙箱 7 工具冒烟: ${keys.length} 工具返回规范结果, 无静默失败=${!hasErr}`,
-    detail);
+  const cuOk = results.check_user && results.check_user.realnameVerified === true;
+  const codeOf = (v) => v?.code || v?.status || '';
+  const gated = codeOf(results.sign_agreement) === 'USER_CONFIRMATION_REQUIRED'
+    && codeOf(results.connect) === 'USER_CONFIRMATION_REQUIRED'
+    && codeOf(results.credentials) === 'USER_CONFIRMATION_REQUIRED';
+  const detail = JSON.stringify({ check_user: results.check_user, sign_agreement_code: codeOf(results.sign_agreement), connect_code: codeOf(results.connect), credentials_code: codeOf(results.credentials), exception: results.exception }).slice(0, 800);
+  return blocked(
+    `v2 审批门（PR-3c）将沙箱 connect/sign_agreement/credentials 计入 ALWAYS gated，需用户在终端 approve + PIN 人工确认。已实测：check_user 直接返回(realnameVerified=${cuOk})，3 个写面均正确返回 USER_CONFIRMATION_REQUIRED(${gated})。解除条件：人工 approve+复位 PIN，或产品提供写路豁免（补环境·v2 审批门人工确认）`,
+    detail
+  );
 });
 
 // ---------- D3-C3 沙箱部署 E2E ----------
@@ -222,8 +214,11 @@ reg('D3-C3', async () => {
   const detail = [];
   try {
     const conn = await callVendor('huaweicloud_sandbox_connect', { source: 'OpenClaw' });
-    const wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id);
-    detail.push(`connect.ws=${!!wsId} status=${conn && conn.status}`);
+    const wsId = conn && (conn.devStageId || conn.sessionId || conn.dev_stage_id || conn.workspace_id);
+    detail.push(`connect.code=${conn && (conn.code || conn.status)} ws=${!!wsId}`);
+    if (conn && (conn.code === 'USER_CONFIRMATION_REQUIRED' || conn.status === 'rejected')) {
+      return blocked('v2 审批门（PR-3c）将 sandbox_connect 计入 ALWAYS gated，需用户在终端 approve + PIN 人工确认，无人值守无法完成部署 E2E。解除条件：人工 approve+复位 PIN，或产品提供写路豁免（补环境·v2 审批门人工确认）', `${detail.join(' | ')} || ${JSON.stringify(conn).slice(0, 200)}`);
+    }
     if (!wsId) return blocked('沙箱 connect 未返回 workspace id', JSON.stringify(conn).slice(0, 200));
     const proj = mkdtempSync(join(tmpdir(), 'hdk-sbx-'));
     writeFileSync(join(proj, 'index.html'), '<html><body>hdk sandbox e2e ok</body></html>', 'utf-8');
