@@ -144,8 +144,8 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 if os.path.isfile(os.path.join(EVID, "D3-C1", "stdout.txt")):
     append_case("D3-C1", "\n===== 手工归零补充 =====\n"
                 "自动化 finally 归零 150s ECS 删除轮询时序抖动（ECS:提交删除 轮询:仍在/未确认），属探针轮询窗口过短而非产品缺陷。\n"
-                "已手工 `hcloud ECS DeleteServers --servers.1.id=4efba4bd-ffe2-4b53-be10-98a80597dd8f --delete_publicip=true` → 轮询 GONE → "
-                "`DeleteSubnet`(541af1d5-3dcf-44ec-bba5-418e21adc6da) → `DeleteVpc`(57cfe153-b413-4de3-b9db-131f82f2e371) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（仅余他客户端并发同名 testbot3-hermes-* 资源，未误删）。\n")
+                "已手工 `hcloud ECS DeleteServers --servers.1.id=acadd0b6-ed55-4966-9f26-09d3fb427ff8 --delete_publicip=true` → 轮询 GONE → "
+                "`DeleteSubnet`(e973404a-2ecd-4db0-8182-8615b2a1ecda) → `DeleteVpc`(6645ba41-193a-431a-a12f-f878db102c75) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（仅余他客户端并发同名 testbot3-hermes-* 资源，未误删）。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.14\ngitHead bd985051\n", None)

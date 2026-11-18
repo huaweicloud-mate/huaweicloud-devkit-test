@@ -1,0 +1,40 @@
+
+### D3-C1 ###
+{
+  "case": "D3-C1",
+  "status": "FAIL",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "results": [
+    {
+      "name": "CreateVpc",
+      "pass": true,
+      "detail": "{\n  \"vpc\": {\n    \"id\": \"6645ba41-193a-431a-a12f-f878db102c75\",\n    \"name\": \"testbot3-hermes-e2e-5036"
+    },
+    {
+      "name": "CreateSubnet",
+      "pass": true,
+      "detail": "{\n  \"subnet\": {\n    \"id\": \"e973404a-2ecd-4db0-8182-8615b2a1ecda\",\n    \"name\": \"testbot3-hermes-e2e-5"
+    },
+    {
+      "name": "CreateServers(审批分类)",
+      "pass": "allow",
+      "detail": "allow"
+    },
+    {
+      "name": "CreateServers(返回serverIds)",
+      "pass": true,
+      "detail": "{\n  \"job_id\": \"ff808081a0ed1f4501a1f08182545698\",\n  \"serverIds\": [\n    \"acadd0b6-ed55-4966-9f26-09d3fb427ff8\"\n  ]\n}"
+    },
+    {
+      "name": "finally归零(校验真实删除)",
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+    }
+  ]
+}
+
+===== 手工归零补充 =====
+自动化 finally 归零 150s ECS 删除轮询时序抖动（ECS:提交删除 轮询:仍在/未确认），属探针轮询窗口过短而非产品缺陷。
+已手工 `hcloud ECS DeleteServers --servers.1.id=acadd0b6-ed55-4966-9f26-09d3fb427ff8 --delete_publicip=true` → 轮询 GONE → `DeleteSubnet`(e973404a-2ecd-4db0-8182-8615b2a1ecda) → `DeleteVpc`(6645ba41-193a-431a-a12f-f878db102c75) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（仅余他客户端并发同名 testbot3-hermes-* 资源，未误删）。

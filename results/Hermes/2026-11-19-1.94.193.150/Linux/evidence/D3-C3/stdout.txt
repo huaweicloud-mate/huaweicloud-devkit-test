@@ -1,0 +1,88 @@
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+[2026-11-18T21:15:58.455Z] uploadProject: /tmp/d3c3-proj -> /workspace/d3c3-proj.tar.gz (archive=214 bytes, md5=e93b4dc97811abb03a038c97babb689d)
+[2026-11-18T21:15:58.503Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-1790105515/sandbox-upload-1795036558443/d3c3-proj.tar.gz, size=214, remotePath=/workspace/d3c3-proj.tar.gz)
+[2026-11-18T21:15:58.503Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-18T21:15:58.503Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-18T21:15:58.550Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-18T21:15:58.602Z] deployFileServer: starting server on port 8888
+[2026-11-18T21:15:58.647Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 731682\r\n\u001b]133;C\u0007\r\n"
+[2026-11-18T21:15:58.647Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+[2026-11-18T21:15:59.624Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-18T21:15:59.625Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-18T21:15:59.627Z] uploadViaHttpTunnel: tunnel ready, localPort=34757
+[2026-11-18T21:15:59.627Z] uploadViaHttpTunnel: waiting for server health on localhost:34757
+[2026-11-18T21:15:59.627Z] waitForServerReady: attempt 1, checking http://localhost:34757/health
+[2026-11-18T21:15:59.675Z] waitForServerReady: server ready on port 34757 after 0 retries
+[2026-11-18T21:15:59.675Z] uploadViaHttpTunnel: sending POST with 214 bytes
+[2026-11-18T21:15:59.722Z] uploadViaHttpTunnel: upload complete (bytes=214, md5=e93b4dc97811abb03a038c97babb689d)
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+Waiting for connection 938510... (0s)
+Connection 938510 established (0s).
+
+### D3-C3 ###
+{
+  "case": "D3-C3",
+  "status": "PASS",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "name": "connect",
+      "pass": true,
+      "detail": "ws=71a94ace36"
+    },
+    {
+      "name": "upload_project",
+      "pass": true,
+      "detail": "{\"ok\":true,\"localDir\":\"/tmp/d3c3-proj\",\"remotePath\":\"/workspace/d3c3-proj\",\"bytes\":214,\"md5\":\"e93b4dc97811abb03a038c97ba"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": true,
+      "detail": "static:8081"
+    },
+    {
+      "name": "deploy_check",
+      "pass": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "close_session",
+      "pass": true,
+      "detail": "\"ok\""
+    }
+  ]
+}
