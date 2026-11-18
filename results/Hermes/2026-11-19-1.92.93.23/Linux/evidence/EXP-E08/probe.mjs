@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
-const SERVER = '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/mcp-server.mjs';
+const SERVER = '/tmp/hdkbridge_20261119/mcp-server.mjs';
 const HERE = new URL('.', import.meta.url).pathname;
 function finish(status, why) { const ts = new Date(Date.now()+8*3600*1000).toISOString().replace(/[-:TZ]/g,'').slice(0,14); writeFileSync(HERE+'stdout.log', JSON.stringify({caseId:'EXP-E08',status,why,executedAt:ts}, null, 1)); }
 const child = spawn(process.execPath, [SERVER], { stdio:['pipe','pipe','pipe'], env:{...process.env, HUAWEICLOUD_AGENT_TOOLKIT_MODE:'local'} });

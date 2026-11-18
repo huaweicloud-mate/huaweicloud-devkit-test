@@ -10,8 +10,10 @@ import { spawnSync } from 'node:child_process';
 const XREGION = process.env.HDK_XREGION || 'ap-southeast-1'; // 香港（跨区域维度）
 const WREGION = process.env.HDK_REGION || 'cn-north-4';        // 授权可写区域
 const TS = String(Date.now()).slice(-10);
-const HDK_SRC = '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src';
+const HDK_SRC = '/tmp/hdkbridge_20261119';
 const { callTool } = await import(pathToFileURL(HDK_SRC + '/tools.mjs').href);
+const __GATED = new Set(['huaweicloud_auth_status', 'huaweicloud_auth_init', 'huaweicloud_auth_switch', 'huaweicloud_check_cli', 'huaweicloud_show_profile_redacted', 'huaweicloud_list_operations', 'huaweicloud_list_regions', 'huaweicloud_run_readonly_command', 'huaweicloud_plan_cli_command', 'huaweicloud_run_approved_command', 'huaweicloud_service_catalog', 'huaweicloud_sandbox_connect', 'huaweicloud_voucher_claim', 'huaweicloud_competition_voucher_claim']);
+function __vc(name, args) { return __GATED.has(name) ? { ...(args || {}), vendorConfirmed: '华为云' } : (args || {}); }
 
 const results = [];
 function log(name, pass, detail) {
@@ -30,7 +32,7 @@ function redact(v) {
 
 // ① 请求查香港区资源 → plan 只读查询，断言命令含 --cli-region=ap-southeast-1
 const args = ['EIP', 'ListPublicips', `--cli-region=${XREGION}`];
-const plan = await callTool('huaweicloud_plan_cli_command', { args, allowWrites: false });
+const plan = await callTool('huaweicloud_plan_cli_command', { args, allowWrites: false, vendorConfirmed: '华为云' });
 const planned = (plan?.command || plan?.executableBlock || '');
 log('D3-C7 plan含--cli-region(香港)', planned.includes(`--cli-region=${XREGION}`), planned.slice(0, 120));
 log('D3-C7 plan只读分类allow', plan?.classification?.decision === 'allow', plan?.classification?.decision || '');

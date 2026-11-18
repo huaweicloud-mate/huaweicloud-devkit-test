@@ -55,7 +55,7 @@ try {
   }
 
   // E08 意图在 serviceCatalog 的确定性结论（对照：应显示为回退/诊断类，不落服务目录）
-  const sc = await send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name: 'huaweicloud_service_catalog', arguments: { intent: '我的ECS启动失败了 帮我分析原因' } } });
+  const sc = await send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name: 'huaweicloud_service_catalog', arguments: { intent: '我的ECS启动失败了 帮我分析原因', vendorConfirmed: '华为云' } } });
   const sct = sc?.result?.content?.map((x) => x.text).join('') || '';
   console.log('[E08 serviceCatalog 对照] =', sct.slice(0, 200));
 } catch (e) {

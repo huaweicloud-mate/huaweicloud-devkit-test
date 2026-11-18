@@ -39,7 +39,7 @@ child.stdout.on('data', (d) => {
   }
 });
 async function call(name, args) {
-  const r = await send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name, arguments: args } });
+  const r = await send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name, arguments: { ...args, vendorConfirmed: '华为云' } } });
   return r?.result?.content?.[0]?.text || JSON.stringify(r?.error || '');
 }
 function section(id, run) {

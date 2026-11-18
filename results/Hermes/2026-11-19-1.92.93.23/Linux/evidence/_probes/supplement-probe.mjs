@@ -37,7 +37,7 @@ function makeServer(envExtra = {}) {
       try { const msg = JSON.parse(body); if (msg.id && pending.has(msg.id)) { pending.get(msg.id)(msg); pending.delete(msg.id); } } catch {}
     }
   });
-  function call(name, arguments_) { return send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name, arguments: arguments_ || {} } }); }
+  function call(name, arguments_) { return send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name, arguments: { ...(arguments_ || {}), vendorConfirmed: '华为云' } } }); }
   return { child, send, call, _id: () => _id++, stderr: () => stderrBuf };
 }
 

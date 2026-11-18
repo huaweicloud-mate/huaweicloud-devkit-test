@@ -108,7 +108,7 @@ function section(id, run) {
 
   // D9-3: tools/call 响应格式
   await section('D9-3', async () => {
-    const r = await send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name: 'huaweicloud_check_cli', arguments: {} } });
+    const r = await send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name: 'huaweicloud_check_cli', arguments: { vendorConfirmed: '华为云' } } });
     const res = r?.result;
     console.log('result.content 是数组:', Array.isArray(res?.content));
     console.log('result.isError:', res?.isError);

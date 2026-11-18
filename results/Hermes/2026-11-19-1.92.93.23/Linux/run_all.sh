@@ -6,14 +6,16 @@ export PATH="/home/zhangshuang/nodejs/bin:/home/zhangshuang/bin:/home/zhangshuan
 BASE="$(cd "$(dirname "$0")" && pwd)"
 P="$BASE/evidence/_probes"
 HDK="/home/zhangshuang/devkit-test/Hermes/hdk"
-SRC="$HDK/plugins/huaweicloud-core/src"
-MCP="$SRC/mcp-server.mjs"
-PKGROOT="$HDK"
+BRIDGE="/tmp/hdkbridge_20261119"
+CORE="/home/zhangshuang/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core"
+SRC="$BRIDGE"
+MCP="$CORE/dist/mcp-server.js"
+PKGROOT="$CORE"
 SAMPLE="$P/sample-react"
 ISO_HOME="/home/zhangshuang/devkit-test/Hermes/iso-home-20261119"
 EVAL="/home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/harness/run-eval.mjs"
 RL_E2E="/home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/scripts/realcloud_e2e.mjs"
-export HDK_SRC="$SRC" HDK_REGION="cn-north-4"
+export HDK_SRC="$BRIDGE" HDK_REGION="cn-north-4" HUAWEICLOUD_VENDOR_CHALLENGE=off
 
 echo "===== [0] 包版本基线 ===== ($(date '+%F %T'))"
 npm ls -g huaweicloud-devkit --depth=0 2>/dev/null | grep huaweicloud-devkit

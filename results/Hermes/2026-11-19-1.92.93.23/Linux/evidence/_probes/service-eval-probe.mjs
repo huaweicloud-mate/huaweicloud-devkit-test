@@ -36,7 +36,7 @@ child.stdout.on('data', (d) => {
   }
 });
 async function callText(name, args, ms = 20000) {
-  const p = send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name, arguments: args } });
+  const p = send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name, arguments: { ...args, vendorConfirmed: '华为云' } } });
   const r = await Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('call-timeout')), ms))]);
   const txt = r?.result?.content?.map((c) => c.text).join('') || JSON.stringify(r?.result || r?.error || (r instanceof Error ? r.message : ''));
   return txt;

@@ -40,7 +40,7 @@ function server(envExtra = {}) {
 }
 
 async function callText(srv, name, args) {
-  const r = await srv.send({ jsonrpc: '2.0', id: srv.nextId(), method: 'tools/call', params: { name, arguments: args } });
+  const r = await srv.send({ jsonrpc: '2.0', id: srv.nextId(), method: 'tools/call', params: { name, arguments: { ...args, vendorConfirmed: '华为云' } } });
   return r?.result?.content?.[0]?.text || JSON.stringify(r?.error || '');
 }
 

@@ -6,8 +6,8 @@ function check(name, ok, detail) {
   results.push({ name, ok, detail: String(detail).slice(0, 400) });
   console.log(`[${ok ? 'OK' : 'FAIL'}] ${name}`);
 }
-const CORE = '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
-const SRC = CORE + '/src';
+const CORE = '/home/zhangshuang/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core';
+const SRC = '/tmp/hdkbridge_20261119';
 
 console.log('=====CASE D1-69=====');
 {

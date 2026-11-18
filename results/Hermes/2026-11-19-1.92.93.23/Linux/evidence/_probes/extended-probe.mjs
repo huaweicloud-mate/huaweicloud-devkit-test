@@ -77,7 +77,7 @@ function section(id, run) {
     const srv = server({ HUAWEICLOUD_HOME: isoHome });
     await srv.send({ jsonrpc: '2.0', id: srv.nextId(), method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'probe', version: '1' } } });
     srv.send({ jsonrpc: '2.0', method: 'notifications/initialized' });
-    const r = await srv.send({ jsonrpc: '2.0', id: srv.nextId(), method: 'tools/call', params: { name: 'huaweicloud_auth_switch', arguments: { mode: 'import' } } });
+    const r = await srv.send({ jsonrpc: '2.0', id: srv.nextId(), method: 'tools/call', params: { name: 'huaweicloud_auth_switch', arguments: { mode: 'import', vendorConfirmed: '华为云' } } });
     const txt = r?.result?.content?.[0]?.text || JSON.stringify(r?.error || '');
     console.log('auth_switch mode=import =>', txt.slice(0, 400));
     console.log('读取后 creds-import.json 存在?', existsSync(importPath), '(期望 false=无条件擦除)');

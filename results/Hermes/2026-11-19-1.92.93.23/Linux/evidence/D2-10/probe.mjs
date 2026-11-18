@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawn } from 'node:child_process';
 
-const SRC = '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src';
+const SRC = '/tmp/hdkbridge_20261119';
 const S = (f) => join(SRC, f);
 const out = [];
 function rec(id, name, ok, detail) {
@@ -36,7 +36,7 @@ const { isPlaceholder } = await import(pathToFileURL(S('auth/credentials.mjs')).
 
 // ---- D4-12: 供应链（postinstall 指向自有 bin / 依赖固定 / 无高危 deps） ----
 {
-  const pkgPath = '/home/zhangshuang/devkit-test/Hermes/hdk/package.json';
+  const pkgPath = '/home/zhangshuang/nodejs/lib/node_modules/huaweicloud-devkit/package.json';
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
   const post = (pkg.scripts && pkg.scripts.postinstall) || '';
   rec('D4-12', 'postinstall 指向自有 bin（非远程脚本）', /node\s+(\.\/)?bin\//.test(post), `script=${post}`);

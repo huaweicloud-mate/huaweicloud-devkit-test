@@ -40,7 +40,7 @@ console.log('=====CASE D9-12=====');
   let routed = false, detail = 'no such tool';
   try {
     // 用真实存在的工具触发 callTool 路由（dispatch 内部 callTools）
-    const r = await mp.dispatch('tools/call', { name: 'huaweicloud_service_catalog', arguments: { intent: '创建一台云服务器' } }, { sessionId: 'd912' });
+    const r = await mp.dispatch('tools/call', { name: 'huaweicloud_service_catalog', arguments: { intent: '创建一台云服务器', vendorConfirmed: '华为云' } }, { sessionId: 'd912' });
     routed = Array.isArray(r.content) && r.content.length > 0 && r.isError === false;
     detail = `tools/call 返回 content[${r.content?.length}] isError=${r.isError}`;
   } catch (e) { detail = 'EXCEPTION ' + e.message; }

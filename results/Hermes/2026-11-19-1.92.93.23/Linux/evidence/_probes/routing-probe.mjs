@@ -50,7 +50,7 @@ child.stdout.on('data', (d) => {
   ];
 
   for (const [label, intent] of cases) {
-    const r = await send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name: 'huaweicloud_service_catalog', arguments: { intent } } });
+    const r = await send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name: 'huaweicloud_service_catalog', arguments: { intent, vendorConfirmed: '华为云' } } });
     const txt = r?.result?.content?.map((c) => c.text).join('') || JSON.stringify(r?.result || r?.error);
     let svc = '', sk = '';
     try {

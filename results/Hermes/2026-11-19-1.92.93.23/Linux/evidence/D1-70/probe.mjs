@@ -3,8 +3,8 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { tmpdir } from 'node:os';
 
-const CORE = '/home/zhangshuang/devkit-test/Hermes/hdk/plugins/huaweicloud-core';
-const SRC = CORE + '/src';
+const CORE = '/home/zhangshuang/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core';
+const SRC = '/tmp/hdkbridge_20261119';
 const ISO = join(tmpdir(), 'hdk-probe-' + Date.now());
 mkdirSync(ISO, { recursive: true });
 process.env.HUAWEICLOUD_HOME = ISO;
