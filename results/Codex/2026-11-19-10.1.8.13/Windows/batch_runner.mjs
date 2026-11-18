@@ -13,7 +13,7 @@
 import { writeFileSync, mkdirSync, existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { mcpInitialize, mcpToolsList, mcpToolCall } from 'file:///C:/Users/Administrator/multica_workspaces/vector-8988c3df7bc9/task-f1133c2dab62/workdir/huaweicloud-devkit-test/scripts/mcp_helper.mjs';
+import { mcpInitialize, mcpToolsList, mcpToolCall } from './mcp_helper.mjs';
 
 const EVIDENCE = 'C:/Users/Administrator/multica_workspaces/vector-8988c3df7bc9/task-f1133c2dab62/workdir/huaweicloud-devkit-test/results/Codex/2026-11-19-10.1.8.13/Windows/evidence';
 const SRC = 'C:/Users/Administrator/multica_workspaces/vector-8988c3df7bc9/task-f1133c2dab62/workdir/hdk/plugins/huaweicloud-core/src';
