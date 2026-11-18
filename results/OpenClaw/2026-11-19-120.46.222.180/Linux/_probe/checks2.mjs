@@ -104,6 +104,7 @@ reg('D3-C14', async () => {
   const creds = await import('node:url').then(({ pathToFileURL }) => import(pathToFileURL(join(h.SRC, 'auth/credentials.ts')).href));
   const hdkitSrc = fs.readFileSync(join(h.SRC, 'lib/hdkit/hdkitservice-api.ts'), 'utf-8');
   const hwlinkSrc = fs.readFileSync(join(h.SRC, 'lib/hdkit/hwlink-api.ts'), 'utf-8');
+  const signingSrc = fs.readFileSync(join(h.SRC, 'lib/hw-request-signing.ts'), 'utf-8');
   const results = [];
   let threwNoArgs = false, msgNoArgs = '';
   try { await hdkit.hdkitCredentials(); } catch (e) { threwNoArgs = true; msgNoArgs = String(e.message || e); }
@@ -115,7 +116,7 @@ reg('D3-C14', async () => {
   const hwOk = !!(got?.ak === 'AKHW' && got?.sk === 'SKHW' && got?.securitytoken === 'STHW');
   creds.clearRuntimeCredentials();
   results.push(hwOk);
-  const stHeader = /x-security-token/.test(hwlinkSrc) && /securitytoken/.test(hwlinkSrc);
+  const stHeader = /x-security-token/.test(signingSrc) && /securityToken \? 'host;x-sdk-date;x-security-token'/.test(signingSrc) && /headers\['x-security-token'\]\s*=\s*securityToken/.test(signingSrc);
   results.push(stHeader);
   return chk(results.every(Boolean), `hdkit/hwlink 契约 4 断言: 缺参报错=${results[0]} 参数透传=${results[1]} getCredentials透传=${results[2]} x-security-token=${results[3]}`, JSON.stringify({ results, msgNoArgs: msgNoArgs.slice(0, 100) }));
 });
