@@ -77,23 +77,33 @@ reg('D3-C13', async () => {
   const h = await hdk();
   const REGION = 'cn-north-4';
   const bucket = `testbot1-openclaw-obs-${String(Date.now()).slice(-10)}`;
-  let setOk = false, getOk = false, mbOk = false;
+  const detail = [];
+  let mbOk = false, setPrecond = false, getOk = false, setGated = false;
   try {
     const mb = sh(['OBS', 'mb', `obs://${bucket}`, `-location=${REGION}`]);
     if (/UserRestricted|forbidden for restricted users/i.test(mb.text)) {
-      return blocked('OBS 建桶被账号权限拒绝(UserRestricted)——账号 OBS 写权限被限制，无法建 OBS 静态网站。解除条件：账号恢复 OBS 建桶/写权限（补环境·真云 OBS 权限）', mb.text.slice(0, 300));
+      return blocked('OBS 建桶被账号权限拒绝(UserRestricted)。解除条件：账号恢复 OBS 建桶/写权限（补环境·真云 OBS 权限）', mb.text.slice(0, 300));
     }
     mbOk = mb.ok || /successfully/i.test(mb.text);
-    if (mbOk) {
-      const set = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
-      setOk = !set.__error && /200|ok|success|index/i.test(JSON.stringify(set));
-      const get = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'get', bucket, region: REGION });
-      getOk = !get.__error && /index\.html|indexDocument|Suffix/i.test(JSON.stringify(get));
-    }
+    // set 缺 indexDocument 必须在发请求前报错（NoDoomedToken 前置门槛）
+    try { await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION }); }
+    catch (e) { setPrecond = /indexDocument/.test(String(e.message || e)); }
+    // get 是 AWS4 签名只读，从不批准直接执行
+    const get = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'get', bucket, region: REGION });
+    getOk = !get.__error && get.status === 404 && /NoSuchWebsiteConfiguration/.test(get.body || '');
+    detail.push(`get(status=${get.status}, NoSuchXML=${/NoSuchWebsiteConfiguration/.test(get.body || '')})`);
+    // set 是签名 PUT（写）→ 审批门：无人值守无法发人工确认，返回 USER_CONFIRMATION_REQUIRED 才是正确门槛
+    const set = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
+    setGated = set && (set.code === 'USER_CONFIRMATION_REQUIRED' || set.status === 'rejected');
+    detail.push(`set(${set.code || set.status}, 审批门需要人工确认)`);
   } finally {
     sh(['OBS', 'rm', `obs://${bucket}`, '-f']);
   }
-  return chk(mbOk && setOk && getOk, `OBS 静态网站 get/set: mb=${mbOk} set=${setOk} get=${getOk}(已归零)`, JSON.stringify({ mbOk, setOk, getOk }));
+  // 写循环（set 实际 200 + delete）需人工在终端 approve + PIN，自动化测试机无人值守无法完成 → BLOCKED
+  if (mbOk && setPrecond && getOk && setGated) {
+    return blocked('v2 审批门（PR-3c approval gate）将 obs_set_website_config 的 set/delete（AWS4 签名写）改为需用户在终端 `npx huaweicloud-devkit approve <token>` + PIN 人工确认，自动化测试机无人值守/无 PIN 无法完成 set 真机写循环与 delete 归零的完整 E2E。已实测通过项：建桶成功、set 缺 indexDocument 前置报错、get 只读 AWS4 路径返回 404 NoSuchWebsiteConfiguration XML、set 正确返回 USER_CONFIRMATION_REQUIRED 审批门槛。解除条件：由人在终端 approve 重置 PIN 后完成 set/delete 写循环，或产品为自动化测试提供写路豁免（补环境·v2 审批门人工确认）', `${detail.join(' | ')} || ${set ? JSON.stringify(set).slice(0, 200) : ''}`);
+  }
+  return chk(mbOk && setPrecond && getOk, `OBS 静态网站: mb=${mbOk} setPrecond=${setPrecond} get读=${getOk} set审批门=${setGated}`, JSON.stringify({ mbOk, setPrecond, getOk, setGated }));
 });
 
 reg('D3-C14', async () => {
