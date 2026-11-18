@@ -1,9 +1,8 @@
 // checks1.mjs — D1 升级/更新 + D2 凭证/auth 用例探针 (v2.0.0-next.4 TS 适配)
-import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh } from './core.mjs';
+import { reg, ok, fail, spec, blocked, notrun, chk, hdk, run, sh, toolsList } from './core.mjs';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const tmp = () => (await import('node:os')).tmpdir();
 const rd = (p) => readFileSync(p, 'utf-8');
 
 // ============ D1 升级/更新 ============
@@ -26,9 +25,10 @@ reg('D1-4', async () => {
 
 reg('D1-26', async () => {
   const h = await hdk();
-  const names = h.tools.TOOL_DEFINITIONS.map(t => t.name);
-  const cu = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_check_update');
-  const up = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_upgrade');
+  const tools = await toolsList();
+  const names = tools.map(t => t.name);
+  const cu = tools.find(t => t.name === 'huaweicloud_check_update');
+  const up = tools.find(t => t.name === 'huaweicloud_upgrade');
   const cuOk = cu && cu.description && cu.inputSchema;
   const upOk = up && up.description && up.inputSchema;
   return chk(cuOk && upOk, `check_update/upgrade 均注册且含 description+inputSchema(total=${names.length})`, `缺失或 schema 不完整: check_update=${!!cuOk} upgrade=${!!upOk}`);

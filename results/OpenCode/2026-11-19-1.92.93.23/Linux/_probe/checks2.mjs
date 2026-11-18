@@ -460,18 +460,20 @@ reg('D4-28', async () => {
   return chk(r.decision === 'deny' || c.decision === 'deny', `Node 安全 hook 链路: risk=${r.decision} classify=${c.decision}`, JSON.stringify({ r: r.decision, c: c.decision }));
 });
 
-// D4-29 分类断言与原始命令分类入口
+// D4-29 分类断言与原始命令分类入口（v2 assertAllowed 接收 RiskDecision）
 reg('D4-29', async () => {
   const h = await hdk();
   const ok1 = typeof h.tools.classifyRawCommand === 'function';
   const r1 = ok1 ? h.tools.classifyRawCommand('ls -la') : null;
-  const n2 = h.sp.classifyTextCommand('cat ~/.hcloud/credentials').decision;
+  const denyRes = h.rr.evaluateCommandRisk('cat ~/.hcloud/credentials');
+  const allowRes = h.rr.evaluateCommandRisk('hcloud ECS ListServers');
   let assertDenyThrows = false;
-  try { h.sp.assertAllowed('cat ~/.hcloud/credentials'); } catch (e) { assertDenyThrows = true; }
+  try { h.sp.assertAllowed(denyRes); } catch (e) { assertDenyThrows = true; }
   let assertAllowOk = false;
-  try { assertAllowOk = h.sp.assertAllowed('ls -la') !== undefined; } catch (e) { assertAllowOk = false; }
-  const okS = ok1 && r1 != null && n2 === 'deny' && assertDenyThrows;
-  return chk(okS, `分类断言: classifyRawCommand=${!!r1} classifyText=${n2} deny 抛=${assertDenyThrows}`, JSON.stringify({ ok1, n2, assertDenyThrows, assertAllowOk }));
+  try { assertAllowOk = h.sp.assertAllowed(allowRes) && h.sp.assertAllowed(allowRes).decision === 'allow'; } catch (e) { assertAllowOk = false; }
+  const n2 = denyRes.decision;
+  const okS = ok1 && r1 != null && n2 === 'deny' && assertDenyThrows && assertAllowOk;
+  return chk(okS, `分类断言: classifyRawCommand=${!!r1} deny=${n2} deny抛=${assertDenyThrows} allow过=${assertAllowOk}`, JSON.stringify({ ok1, n2, assertDenyThrows, assertAllowOk }));
 });
 
 // 工具函数

@@ -178,3 +178,19 @@ export function makeServer(serverPath) {
   }
   return { child, send, call, kill: () => { try { child.kill(); } catch {} } };
 }
+
+// 缓存的 tools/list 结果（MCP 协议真实契约，含 inputSchema）
+let _toolsList = null;
+export async function toolsList() {
+  if (_toolsList) return _toolsList;
+  const srv = makeServer();
+  try {
+    await srv.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'p', version: '1' } } });
+    srv.send({ jsonrpc: '2.0', method: 'notifications/initialized' });
+    const tl = await srv.send({ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} });
+    _toolsList = (tl && tl.result && tl.result.tools) || [];
+  } finally {
+    srv.kill();
+  }
+  return _toolsList;
+}
