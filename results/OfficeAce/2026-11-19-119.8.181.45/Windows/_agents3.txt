@@ -1,0 +1,29 @@
+ke_pass.py` 按本约定机械校验：evidencePath 存在 + 有非空执行输出 + 探针非空壳，违规 `exit 1` 作废重跑。
+
+## 关联工具白名单（回填「关联工具」列只能填这些）
+
+- 40 个 MCP 工具（`huaweicloud_*` 全名/简称）+ CLI 命令（install/uninstall/doctor/status/update/install-hcloud/plugins/npx/npm/auth/reconcile）+ 框架组件（mcp-server/inspector/harness）。
+- 函数名/组件/脚本/概念（如 decorateResult/safety-model/风险规则）归入「指引来源 实:xxx」，**不得填关联工具列**。
+
+## 唯一断言与根因（FAIL/SPEC 纪律）
+
+- 预期结果写成**唯一可判定断言**（精确错误码/字段/返回值），避免「正常/合理/符合预期」等模糊词。
+- 标 FAIL 或 SPEC-MISMATCH 时，必须落「根因 = 文件 + 行号」（源码层定位，方法见 [skills/source-coverage/SKILL.md](skills/source-coverage/SKILL.md)：源码文件地图 + 核对四步）。
+
+## 状态口径
+
+| 状态 | 含义 | 使用约束 |
+|---|---|---|
+| PASS | 通过，有证据 | 必须①实测②证据落盘③evidencePath 回填 |
+| FAIL | 不符预期 | 记根因(文件:行号) |
+| BLOCKED | 环境/权限阻塞 | 必须写 blockedReason；「环境不满足」用 BLOCKED 而非 NOT_RUN |
+| SPEC-MISMATCH | 实现与设计契约漂移 | 记漂移点 |
+| NOT_RUN | 未执行 | **仅限明确不适用本客户端/OS（含 OS 专属用例在非对应 OS，如 D1-39 Windows 专属在 Linux）；P0 一律不得 NOT_RUN，唯一例外=OS 专属 P0 用例在非对应 OS（OS 列标注「专属」）**；每条必须写原因 |
+
+> **展开级已按客户端+OS 预筛（2026-09-15 起）**：`init_day.py` 复制展开级时已按 `agent`（执行客户端）+ `OS`（执行系统）两列预筛，只下发「归你执行 + 匹配你 OS」的展开级；「别的客户端 / 别的 OS」的展开级不再下发，无需再判 NOT_RUN 归属。`NOT_RUN` 只保留「归你但你明确没跑」；`BLOCKED` 只用于「归你但被环境/权限/凭证阻塞」。详见 [skills/test-execution/SKILL.md §2.5](skills/test-execution/SKILL.md)。
+
+## 脚本清单（本仓库 scripts/）
+
+**agent 用**：`init_agent.py` 初始化 · `prepare_env.py` 环境准备 · `init_day.py` 建包 · `backfill_daily.py` 批量回填（读 `evidence/<case-id>/stdout.log` 一次写回 CSV，防工具调用上限）· `gen_report.py` 报告自动生成（读回填 CSV 统计状态 + 出测试报告骨架，模型只补根因）· `verify_no_fake_pass.py` PASS 门禁 · `verify_coverage.py` 覆盖率门禁 · `hourly_sync.py` 每 10 分钟提报 · `file_issue.py` 统一提单
+
+**维护者用**：`build_summary.py` 汇总生成 Summary（agent 不跑，统一由维护者汇总，避免共享冲突）· `report_html.py` 生成 HTML 汇总报告 · `send_email.py` SMTP 邮件发送 · `run_daily_report.py` 每日汇总流水线（收集→HTML→邮件，配合 Windows 计划任务定时跑）

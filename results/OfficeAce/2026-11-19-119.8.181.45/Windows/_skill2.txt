@@ -1,0 +1,62 @@
+oud/huaweicloud-devkit 1 个合并 issue，附报告）
+python scripts/file_issue.py results/<客户端>/<日期>-<IP>/<OS>/FINDINGS.md <版本> --type=daily
+# ②③ 提交 push（token 来自 HDK_GH_TOKEN 或 ~/.hdk_token，不依赖 gh CLI）
+git add results/<客户端> && git commit -m "test: <客户端> <OS> 执行回填"
+T=$(cat ~/.hdk_token 2>/dev/null || echo "$HDK_GH_TOKEN"); git -c credential.helper= push "https://x-access-token:$T@github.com/huaweicloud-mate/huaweicloud-devkit-test.git" main
+```
+**只 push results 不提单 = 未完成**；有 FAIL/SPEC 缺陷必须提单。
+
+> **中文编码红线（Windows 必读）**：提单标题/正文**禁止** `gh issue create/edit --title "中文" --body "中文"` 内联中文——Windows 控制台代码页会把中文吞成 `?`（如 #732 乱码）。必须走 `python scripts/file_issue.py`（自带 UTF-8 安全）或 `gh ... --body-file <UTF-8 文件>` / `--title-file`；开完单务必读回核对标题与正文中文无 `?`。
+
+### 7. BLOCKED 补测收尾（全部 BLOCKED 用例必须追一轮，能解必解）
+第 6 步 push 前，对所有标 `BLOCKED` 的用例逐条深挖是否「假阻塞」，不得以「需环境」搪塞：
+- **D10 评测集（EXP-E01~E15）确定性路由层**：跑 `node eval/harness/run-eval.mjs <hdk>/plugins/huaweicloud-core/src/mcp-server.mjs`（harness 已建成，eval/prompts 含 15 条评测集，基线 21.4% MISS），得 serviceCatalog 路由结论，未命中判 FAIL。所有客户端可用（不依赖 dsh）。
+- **D10 真实 Agent 会话评测（D10-1/2/5/9 执行器）**：`node eval/harness/run-agent-eval.mjs [--only read|诊断|执行|plan] [--limit N]`，驱动 `dsh --profile headless`（真实 LLM + 已接 devkit MCP 插件）逐条喂评测集、从 stdout 抽 hcloud 命令取证动作类型与安全期望。**仅 DSH 客户端/装了 dsh 的机器可用**；非 DSH 客户端走 CDP 会话自动化（见 gui-cdp-automation 技能，ITER-005 扩展）。**⚠️ `--only plan`/`deploy` 类会让真实 LLM 把资源真建到云端（ECS/VPC/子网/安全组/系统盘，按需计费）——跑完必须逐一核查云端归零（ECS count=0、VPC/安全组无本次创建的、EIP total_count=0），只清本地密钥文件 = 假清理**。详见 `eval/README.md`。
+- **已有探针的用例**（如 D6 压测 `supplement-probe.mjs`）：必须跑完探针回填。
+- **可源码级直调的用例**（`serviceCatalog`/`redactString`/`judgeUpdate` 等）：必须直调回填结果。
+- **真云用例**：真云已具备执行条件（AK/SK + 只读子账号 + 保证金已就绪），必须真机执行（最低配置创建 → 测后删除归零 → 只删本次创建），不得以「无 AK/SK / 需保证金」标 BLOCKED、禁止 mock 假跑。
+只有真·外部依赖（如非 DSH 客户端跑真实会话评测需 CDP 自动化环境、或需真实 LLM harness 但客户端无 dsh）才保留 BLOCKED，且 blockedReason 必须写四要素（实测时间 + 缺什么 + 影响 + 解除条件）。
+补测回填后重跑 `verify_coverage.py` + `verify_no_fake_pass.py` 双门禁，通过再 push。
+
+## 门禁（机械校验，虚报作废重跑）
+
+- `python scripts/verify_no_fake_pass.py <客户端> <OS>`：标 PASS 必有 evidencePath 证据。
+- `python scripts/verify_coverage.py <客户端> <OS>`：P0 无 NOT_RUN/空 + NOT_RUN+空占比 ≤ 15%。
+
+## 红线
+
+1. **真云（已具备条件，必须执行）**：最低配置创建 → 测后删除并归零验证 → 只删本次创建资源；不得以「无 AK/SK / 需保证金」标 BLOCKED，禁止 mock 假跑。
+2. **缺陷**：先记根因（文件+行号），全量测完统一提单（合并 1 单），勿拆单/勿未测完就提/勿只 push 不提单。
+3. **PASS 门禁**：标 PASS 必须①实测②证据落盘③evidencePath 回填，未执行禁标 PASS。
+4. **环境阻塞**：标 BLOCKED + blockedReason，不得假装 PASS。
+5. **目录权限**：只改 `results/<你的客户端>/`，不碰 Summary / 其他客户端 / test-cases 母版。
+6. **完成门禁**：完成 = 测试报告 + 3 CSV（已回填）+ PASS 证据 + 已 push + 有缺陷时已提单；即使环境阻塞也必须回填 BLOCKED + 最小报告 + push，不得零产出。**全量长任务中途须按步骤 5 后台增量提报，不得攒到最后统一 push 顶替。**
+
+## 状态口径
+
+| 状态 | 含义 | 约束 |
+|---|---|---|
+| PASS | 通过，有证据 | ①实测②证据落盘③evidencePath 回填 |
+| FAIL | 不符预期 | 记根因(文件:行号) |
+| BLOCKED | 环境/权限阻塞 | 必须写 blockedReason；「环境不满足」用 BLOCKED 而非 NOT_RUN |
+| SPEC-MISMATCH | 实现与设计契约漂移 | 记漂移点 |
+| NOT_RUN | 未执行 | 仅限明确不适用本客户端/OS；P0 一律不得 NOT_RUN；每条写原因 |
+
+## 命令速查
+
+| 用途 | 命令 |
+|---|---|
+| 初始化 agent | `python scripts/init_agent.py <客户端>` |
+| 环境准备+拉最新 | `python scripts/prepare_env.py --update` |
+| 建执行包 | `python scripts/init_day.py <客户端> <OS>` |
+| PASS 门禁 | `python scripts/verify_no_fake_pass.py <客户端> <OS>` |
+| 覆盖率门禁 | `python scripts/verify_coverage.py <客户端> <OS>` |
+| 每 10 分钟增量提报（后台，硬步骤） | `nohup python scripts/hourly_sync.py <客户端> <OS> --interval 600 >/tmp/hourly_sync.log 2>&1 &` |
+| 统一提单 | `python scripts/file_issue.py <FINDINGS.md> <版本> --type=daily` |
+
+## 陷阱
+
+- `platform.system()` 判断 OS；客户端名要真实，别冒充（脚本有 CLIENTS 白名单，冒充会被挡）。
+- 报告标题含 `Agent+模型名`；逐用例结果已回填 CSV，报告不重复逐用例。
+- PowerShell `>` 产 UTF-16，探针用 `Out-String`；`Get-Content` 中文用 `-Encoding UTF8`。
+- push 前 `git fetch origin main && git rebase origin/main`（多 agent 并发 push 会推进 main）；核验用「commit 是否入 main 历史」，勿用 `main==<sha>` 硬断言。

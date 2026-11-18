@@ -1,0 +1,118 @@
+LEN 66324
+ 安装维度 ===');
+
+  // D1-3: doctor health self-check (real spawn, assert exit + output field)
+  {
+    const r = spawnSync('npx', ['huaweicloud-devkit', 'doctor'], { encoding: 'utf8', timeout: 60000, shell: true, windowsHide: true });
+    const outLen = (r.stdout || '').length;
+    const ok = r.status === 0 && outLen > 10; // real output produced
+    const res = writeResult('D1-3', ok ? 'PASS' : 'FAIL', 'doctor exit=' + r.status + ' outLen=' + outLen,
+      { exitCode: r.status, stdoutLen: outLen, stdoutSample: (r.stdout||'').slice(0,200) });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D1-4: status/update idempotent (real twice, assert exit consistency)
+  {
+    const r1 = spawnSync('npx', ['huaweicloud-devkit', 'status'], { encoding: 'utf8', timeout: 60000, shell: true, windowsHide: true });
+    const r2 = spawnSync('npx', ['huaweicloud-devkit', 'status'], { encoding: 'utf8', timeout: 60000, shell: true, windowsHide: true });
+    const ok = r1.status === r2.status && r1.status === 0;
+    const res = writeResult('D1-4', ok ? 'PASS' : 'FAIL', 'status idempotent: exit1=' + r1.status + ' exit2=' + r2.status,
+      { firstExit: r1.status, secondExit: r2.status });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D1-26: upgrade tool registration (real MCP initialize + tools/list via async helper)
+  {
+    let ok = false; let toolList = [];
+    try {
+      const responses = await mcpToolsList();
+      const tl = responses.find(r => r.id === 2);
+      if (tl && tl.result && tl.result.tools) {
+        toolList = tl.result.tools.map(t => t.name);
+        ok = toolList.includes('huaweicloud_check_update') && toolList.includes('huaweicloud_upgrade');
+      }
+    } catch(e) {}
+    const res = writeResult('D1-26', ok ? 'PASS' : 'FAIL', 'tools/list check_update+upgrade registered=' + ok,
+      { toolList: toolList.slice(0,20), hasCheckUpdate: toolList.includes('huaweicloud_check_update'), hasUpgrade: toolList.includes('huaweicloud_upgrade') });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D1-27: detection - already latest (real judgeUpdate call with current=latest)
+  {
+    let ok = false; let result = null;
+    if (updateCheck && typeof updateCheck.judgeUpdate === 'function') {
+      try {
+        result = updateCheck.judgeUpdate('1.1.8', { latest: '1.1.8' }, null);
+        ok = result && result.result === 'up_to_date' && result.updateAvailable === false;
+      } catch(e) { result = { error: e.message }; }
+    }
+    const res = writeResult('D1-27', ok ? 'PASS' : 'FAIL', 'judgeUpdate(1.1.8, latest=1.1.8) result=' + (result?.result),
+      { result });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D1-28: detection - new version (real judgeUpdate current < latest)
+  {
+    let ok = false; let result = null;
+    if (updateCheck && typeof updateCheck.judgeUpdate === 'function') {
+      try {
+        result = updateCheck.judgeUpdate('1.1.1', { latest: '1.1.2' }, null);
+        ok = result && result.result === 'update_available' && result.updateAvailable === true && result.targetVersion === '1.1.2';
+      } catch(e) { result = { error: e.message }; }
+    }
+    const res = writeResult('D1-28', ok ? 'PASS' : 'FAIL', 'judgeUpdate(1.1.1, latest=1.1.2) result=' + (result?.result) + ' target=' + (result?.targetVersion),
+      { result });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D1-30: semver comparison (real semverParse calls)
+  {
+    let ok = false; const results30 = {};
+    if (updateCheck && typeof updateCheck.semverParse === 'function') {
+      try {
+        const p1 = updateCheck.semverParse('1.1.2');
+        const p2 = updateCheck.semverParse('1.1.1');
+        results30.p1 = p1;
+        results30.p2 = p2;
+        ok = p1 && p2 && p1.major === 1 && p1.minor === 1 && p1.patch === 2 &&
+             p2.major === 1 && p2.minor === 1 && p2.patch === 1;
+      } catch(e) { results30.error = e.message; }
+    }
+    const res = writeResult('D1-30', ok ? 'PASS' : 'FAIL', 'semverParse 1.1.2 vs 1.1.1 ok=' + ok,
+      { results30 });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D1-31: dismiss cooldown (real judgeUpdate with skipState in cooldown)
+  {
+    let ok = false; let result = null;
+    if (updateCheck && typeof updateCheck.judgeUpdate === 'function') {
+      try {
+        // skipState = { dismissedVersion, dismissedAt, expireAt } — within cooldown
+        const skipState = {
+          dismissedVersion: '1.1.2',
+          dismissedAt: new Date(Date.now() - 1000).toISOString(),
+          expireAt: new Date(Date.now() + 3*86400000).toISOString()
+        };
+        result = updateCheck.judgeUpdate('1.1.1', { latest: '1.1.2' }, skipState);
+        ok = result && result.result === 'dismissed' && result.dismissed === true;
+      } catch(e) { result = { error: e.message }; }
+    }
+    const res = writeResult('D1-31', ok ? 'PASS' : 'FAIL', 'judgeUpdate skipState(cooldown) result=' + (result?.result) + ' dismissed=' + (result?.dismissed),
+      { result });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D1-33: skip file persistence (real writeSkipState(file, version, opts) + read)
+  {
+    let ok = false; const tmpDir = join(EVIDENCE, 'D1-33-tmp');
+    mkdirSync(tmpDir, { recursive: true });
+    const skipFile = join(tmpDir, 'skip-state.json');
+    if (updateCheck && typeof updateCheck.writeSkipState === 'function') {
+      try {
+        // Signature: writeSkipState(file, dismissedVersion, { at, days })
+        const state = updateCheck.writeSkipState(skipFile, '1.1.2', { at: Date.now(), days: 3 });
+        ok = existsSync(skipFile);
+        if (ok) {
+          const data = JSON.parse(readFileSync(skipFile, 'utf8'));
+          ok = data.dismissedVersion === '1.1.2' && typ

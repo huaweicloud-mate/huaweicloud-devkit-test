@@ -1,0 +1,58 @@
+design total: 107 runner: 95 missing from runner: 14
+['D3-S1', 'D3-S2', 'D3-S3', 'D3-S4', 'D3-S5', 'D3-S6', 'D3-S7', 'D3-S8', 'D9-3', 'D9-4', 'D9-5', 'D9-6', 'D9-7', 'D9-8']
+--- D3-S1 | D3功能 | 场景-只读查ECS(带不改约束) | P1
+  预期: 路由命中 ecs；只读命令返回实例清单；会话期间零写操作，用户「不要修改」约束被忠实遵守
+  步骤: ①serviceCatalog(意图) 路由→huawei-ecs/ECS ②run_readonly_command 执行 ListServersDetails ③核对输出含实例清单 ④断言全程无任何写工具(create/delete/plan_cli)调用
+  工具: service_catalog/run_readonly_command | 前置: 真云凭证 + 至少1台ECS
+--- D3-S2 | D3功能 | 场景-删VPC先确认 | P1
+  预期: 先出命令块等待确认，未确认时零执行；确认后删除成功且归零
+  步骤: ①serviceCatalog 路由→huawei-vpc/VPC ②plan_cli_command 生成 DeleteVpc 命令块 ③hook_check_command 预检 ④未确认前断言零执行 ⑤确认后 run_approved_command 执行 ⑥核对 VPC 已删且资源归零
+  工具: plan_cli_command/hook_check_command/run_approved_command | 前置: 真云测试VPC
+--- D3-S3 | D3功能 | 场景-沙箱预览出URL | P1
+  预期: 终点必返回可访问公网URL；会话可正常关闭；无计费资源残留
+  步骤: ①serviceCatalog 路由→sandbox ②check_user→sign_agreement→connect ③upload_project ④deploy_nginx+deploy_check ⑤核对返回公网URL可访问(HTTP 200) ⑥close_session
+  工具: sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_close_session | 前置: 沙箱配额 + 前端项目
+--- D3-S4 | D3功能 | 场景-领券闭环 | P1
+  预期: status→claim→status 闭环连贯，领取后状态翻转为 claimed=true
+  步骤: ①voucher_status 查状态=claimed=false ②voucher_claim 领取 ③再 voucher_status 核对 claimed=true
+  工具: voucher_status/voucher_claim | 前置: 未领取代金券的IAM账号
+--- D3-S5 | D3功能 | 场景-复合意图分层路由 | P2
+  预期: 复合意图正确拆分并命中多个对应 service；分层推荐按预览/生产分流，不盲选单一服务
+  步骤: ①serviceCatalog(复合中文意图) ②核对命中多个 service(存储 DDS/GaussDB + 托管 OBS/ECS) ③核对分层推荐(预览→沙箱/生产→ECS)
+  工具: service_catalog | 前置: 无(纯路由)
+--- D3-S6 | D3功能 | 场景-FunctionGraph定时任务 | P2
+  预期: 函数创建成功+定时触发器绑定，返回可调用标识
+  步骤: ①serviceCatalog 路由→huawei-functiongraph/FunctionGraph ②hcloud FunctionGraph CreateFunction ③配置定时触发器 ④核对返回函数URN/触发器绑定
+  工具: plan_cli_command/run_approved_command | 前置: 真云 FunctionGraph 配额
+--- D3-S7 | D3功能 | 场景-跨服务交付(Web应用+RDS)并归零 | P1
+  预期: 多服务编排顺序正确(先建库后部署)；连接串正确注入；应用可访问且读写库正常；测后仅本次创建的 RDS/沙箱被清理归零，零残留
+  步骤: ①serviceCatalog 复合意图→命中 RDS + 部署目标(sandbox/ECS) ②建 RDS 实例 ③建沙箱/部署 Web ④配连接串(数据库地址注入应用) ⑤验证应用可访问且读写库正常 ⑥测后 close_session + 删除本次创建的 RDS/资源
+  工具: sandbox_connect/sandbox_deploy_nginx/plan_cli_command/run_approved_command | 前置: 真云凭证 + 沙箱/RDS 配额
+--- D3-S8 | D3功能 | 场景-操作失败后排障指引 | P1
+  预期: 失败被正确分类(权限/区域/配额)；给出可执行的下一步检查命令，非裸报错或空堆栈
+  步骤: ①注入凭证过期/权限不足场景 ②触发一次失败命令 ③核对 AI 走 troubleshooting 分类(权限 vs 区域 vs 配额) ④断言给出可执行下一步(如「用 IAM KeystoneListProjects 查project_id」而非裸报错堆栈)
+  工具: explain_error/run_readonly_command | 前置: 真云凭证(可注入失效/过期凭证)
+--- D9-3 | D9协议 | tools/call响应格式 | P1
+  预期: content数组+isError语义正确
+  步骤: ①成功调用核对content结构 ②失败调用核对isError语义
+  工具: inspector | 前置: MCP客户端
+--- D9-4 | D9协议 | 协议生命周期 | P1
+  预期: 强制时序被遵守
+  步骤: ①initialize→tools/list→tools/call标准序 ②非法时序被拒 ③capabilities协商
+  工具: inspector | 前置: MCP客户端
+--- D9-5 | D9协议 | stdio传输健壮 | P1
+  预期: 通传输不崩不污染协议通道
+  步骤: ①大payload ②超长输出 ③并发 ④断连恢复 ⑤核对stdout纯协议无日志污染
+  工具: mcp-server | 前置: stdio通道
+--- D9-6 | D9协议 | 跨客户端互通 | P1
+  预期: 全客户端协议互通
+  步骤: ①夹具: node eval/harness/fixtures/d9-6-cross-client.mjs <hdk src> --evid <dir>（≥2 客户端 initialize/tools/list/call + resources 互证）②Inspector全通过 ③多客户端互通冒烟
+  工具: inspector | 前置: Inspector+≥3真实客户端
+--- D9-7 | D9协议 | 协议版本协商降级 | P2
+  预期: 不挂死且正确降级
+  步骤: ①模拟老客户端initialize ②核对协商或明确报错
+  工具: mcp-server | 前置: 老版本客户端模拟
+--- D9-8 | D9协议 | inputSchema版本合规 | P2
+  预期: 版本统一且明确
+  步骤: ①逐schema核对JSON Schema版本 ②核对无混用(draft-07/2020-12)
+  工具: inspector | 前置: tools/list返回

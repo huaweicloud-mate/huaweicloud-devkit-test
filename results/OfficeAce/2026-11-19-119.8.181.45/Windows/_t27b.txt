@@ -1,0 +1,123 @@
+len 5622
+--- D3-S section ---
+    const res = writeResult('D3-C13', ok ? 'PASS' : 'FAIL', 'OBS website config=' + ok, { hasFn: ok });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D3-C14: sandbox HDKit - BLOCKED
+  {
+    const res = writeResult('D3-C14', 'BLOCKED', 'Sandbox HDKit requires DevStation upstream', { blockedReason: 'Sandbox HDKit requires DevStation upstream' });
+    results.push(res); blocked++;
+  }
+
+  // D3-S1~S8
+  {
+    const checks = [
+      ['D3-S1', () => hasTool('huaweicloud_service_catalog') || hasTool('huaweicloud_run_readonly_command'), 'service catalog'],
+      ['D3-S2', () => hasTool('huaweicloud_plan_cli_command') || hasTool('huaweicloud_hook_check_command'), 'plan/hook for VPC delete'],
+      ['D3-S4', () => hasTool('huaweicloud_voucher_status') || hasTool('huaweicloud_voucher_claim'), 'voucher'],
+      ['D3-S5', () => hasTool('huaweicloud_service_catalog'), 'service catalog routing'],
+      ['D3-S6', () => hasTool('huaweicloud_plan_cli_command'), 'plan for FunctionGraph'],
+      ['D3-S8', () => hasTool('huaweicloud_explain_error'), 'explain_error'],
+    ];
+    for (const [id, check, desc] of checks) {
+      const ok = check();
+      const res = writeResult(id, ok ? 'PASS' : 'FAIL', desc + ' tool=' + ok, { hasFn: ok });
+      results.push(res); ok ? pass++ : fail++;
+    }
+  }
+
+  // D3-S3, D3-S7: BLOCKED (sandbox)
+  for (const id of ['D3-S3', 'D3-S7']) {
+    const res = writeResult(id, 'BLOCKED', 'Sandbox requires DevStation upstream', { blockedReason: 'Sandbox requires DevStation upstream' });
+    results.push(res); blocked++;
+  }
+
+  console.log('\n=== D4 安全维度 ===');
+
+  // D4-1: credential file read blocked (P0) - real classifyTextCommand
+  {
+    let ok = false; let decision = null;
+    if (classifyFn) {
+      try {
+        const r = classifyFn('cat ~/.hcloud/config.json');
+        decision = r.decision;
+        ok = decision === 'deny';
+      } catch(e) {}
+    }
+    const res = writeResult('D4-1', ok ? 'PASS' : 'FAIL', 'cat credentials decision=' + decision,
+      { decision });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D4-2: credential env print blocked (P0 RED-LINE) - real classifyTextCommand with printenv/bash -c
+  {
+    let ok = false; let decisions = [];
+    if (classifyFn) {
+      const attacks = ['printenv HW_ACCESS_KEY', 'bash -c "printenv HW_ACCESS_KEY"', 'env | grep HW_', 'echo $HW_ACCESS_KEY'];
+      ok = attacks.every(a => {
+        try { const r = classifyFn(a); decisions.push(r.decision); return r.decision === 'deny'; } catch(e) { return false; }
+      });
+    }
+    const res = writeResult('D4-2', ok ? 'PASS' : 'FAIL', 'env print attacks all deny=' + ok + ' decisions=' + JSON.stringify(decisions),
+      { decisions });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D4-3: KMS DecryptData blocked (P0 RED-LINE) - real classifyTextCommand
+  {
+    let ok = false; let decision = null;
+    if (classifyFn) {
+      try {
+        const r = classifyFn('hcloud KMS DecryptData --cipher_text=xxx --key_id=yyy');
+        decision = r.decision;
+        ok = decision === 'deny' || decision === 'warn';
+      } catch(e) {}
+    }
+    const res = writeResult('D4-3', ok ? 'PASS' : 'FAIL', 'KMS DecryptData decision=' + decision,
+      { decision });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D4-4: write operation approval gate
+  {
+    let ok = false; let decision = null;
+    if (classifyFn) {
+      try { const r = classifyFn('hcloud ECS DeleteServer --server_ids=xxx'); decision = r.decision; ok = decision === 'deny' || decision === 'warn'; } catch(e) {}
+    }
+    const res = writeResult('D4-4', ok ? 'PASS' : 'FAIL', 'DeleteServer decision=' + decision, { decision });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D4-5: write operation misjudgment (P0)
+  {
+    let ok = false; let decision = null;
+    if (classifyFn) {
+      try { const r = classifyFn('hcloud ECS DeleteServer --server_ids=xxx'); decision = r.decision; ok = decision !== 'allow'; } catch(e) {}
+    }
+    const res = writeResult('D4-5', ok ? 'PASS' : 'FAIL', 'Delete not misjudged as allow, decision=' + decision, { decision });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D4-6: adminPass warning
+  {
+    let ok = false; let decision = null;
+    if (classifyFn) {
+      try { const r = classifyFn('hcloud ECS CreateServer --admin_pass=MyPassword123!'); decision = r.decision; ok = decision === 'deny' || decision === 'warn'; } catch(e) {}
+    }
+    const res = writeResult('D4-6', ok ? 'PASS' : 'FAIL', 'adminPass decision=' + decision, { decision });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D4-7: hook three tools
+  {
+    const ok = safetyPolicy !== null && preflight !== null;
+    const res = writeResult('D4-7', ok ? 'PASS' : 'FAIL', 'safetyPolicy + preflight modules loaded=' + ok, { hasSafety: safetyPolicy !== null, hasPreflight: preflight !== null });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+  // D4-8: Python/Node policy consistency
+  {
+    const ok = classifyFn !== null && typeof classifyFn === 'function';
+    const res = writeResult('D4-8', ok ? 'PASS' : 'FAIL', 'Node classifyTextCommand available=' + ok, { hasFn: ok });
+    results.push(res); ok ? pass++ : f

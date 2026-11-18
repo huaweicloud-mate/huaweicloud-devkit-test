@@ -1,0 +1,54 @@
+cases in runner: 95
+['D1-3', 'D1-4', 'D1-26', 'D1-27', 'D1-28', 'D1-30', 'D1-31', 'D1-33', 'D1-39', 'D1-40', 'D1-41', 'D1-42', 'D1-45', 'D1-65', 'D1-66', 'D1-67', 'D1-68', 'D1-69', 'D1-70', 'D2-1', 'D2-2', 'D2-4', 'D2-5', 'D2-10', 'D2-11', 'D2-12', 'D2-13', 'D2-16', 'D2-26', 'D2-27', 'D3-A1', 'D3-B1', 'D3-B3', 'D3-B5', 'D3-C1', 'D3-C2', 'D3-C3', 'D3-C4', 'D3-C5', 'D3-C6', 'D3-C7', 'D3-C13', 'D3-C14', 'D4-1', 'D4-2', 'D4-3', 'D4-4', 'D4-5', 'D4-6', 'D4-7', 'D4-8', 'D4-9', 'D4-10', 'D4-11', 'D4-12', 'D4-13', 'D4-14', 'D4-15', 'D4-16', 'D4-17', 'D4-18', 'D4-19', 'D4-20', 'D4-21', 'D4-22', 'D4-23', 'D4-24', 'D4-25', 'D4-26', 'D4-27', 'D4-28', 'D4-29', 'D5-1', 'D5-3', 'D6-1', 'D6-3', 'D6-4', 'D6-9', 'D8-1', 'D8-4', 'D8-6', 'D8-7', 'D8-9', 'D8-10', 'D9-1', 'D9-2', 'D9-9', 'D9-10', 'D9-11', 'D9-12', 'D9-13', 'D10-3', 'D10-4', 'EXP-D5-7-1', 'EXP-D5-7-3']
+['Load modules once =====', 'EXP-D5-7-1 / EXP-D5-7-3: OfficeAce client-matrix expansion (D5-1 / D5-3 on OfficeAce) =====', 'Summary =====']
+tail:
+-D5-5-1', 'EXP-D5-5-3']) {
+    const r1 = spawnSync('npx', ['huaweicloud-devkit', 'plugins'], { encoding: 'utf8', timeout: 30000, shell: true, windowsHide: true });
+    const r2 = spawnSync('npx', ['huaweicloud-devkit', 'status'], { encoding: 'utf8', timeout: 30000, shell: true, windowsHide: true });
+    const ok = r1.status === 0 || r2.status === 0;
+    const res = writeResult(id, ok ? 'PASS' : 'FAIL', id + ': plugins+status ran', { r1Exit: r1.status, r2Exit: r2.status });
+    results.push(res); ok ? pass++ : fail++;
+  }
+
+
+  // ===== EXP-D5-7-1 / EXP-D5-7-3: OfficeAce client-matrix expansion (D5-1 / D5-3 on OfficeAce) =====
+  {
+    // EXP-D5-7-1: client can discover and load plugin manifest (`huaweicloud-devkit plugins`)
+    const r1 = spawnSync('npx', ['huaweicloud-devkit', 'plugins'], { encoding: 'utf8', timeout: 60000, shell: true, windowsHide: true });
+    const out1 = (r1.stdout || '') + (r1.stderr || '');
+    let ok1 = r1.status === 0 && out1.trim().length > 5;
+    const res1 = writeResult('EXP-D5-7-1', ok1 ? 'PASS' : 'FAIL',
+      'plugins manifest discovery exit=' + r1.status + ' outLen=' + out1.trim().length,
+      { exitCode: r1.status, stdoutSample: out1.trim().slice(0, 400) });
+    results.push(res1); ok1 ? pass++ : fail++;
+
+    // EXP-D5-7-3: tools/list enumerates 40 tools with complete schemas (stdio MCP)
+    let ok3 = false; let toolCount = 0; let schemaOk = 0;
+    try {
+      const responses = await mcpToolsList();
+      const tl = responses.find(r => r.id === 2);
+      if (tl && tl.result && tl.result.tools) {
+        const tools3 = tl.result.tools;
+        toolCount = tools3.length;
+        schemaOk = tools3.filter(t3 => t3.name && t3.description && t3.inputSchema && typeof t3.inputSchema === 'object').length;
+        ok3 = toolCount === 40 && schemaOk === toolCount;
+      }
+    } catch(e) {}
+    const res3 = writeResult('EXP-D5-7-3', ok3 ? 'PASS' : 'FAIL',
+      'tools/list count=' + toolCount + ' schemaOk=' + schemaOk,
+      { toolCount, schemaOk });
+    results.push(res3); ok3 ? pass++ : fail++;
+  }
+
+  // ===== Summary =====
+  console.log(`\n=== BATCH COMPLETE ===`);
+  console.log(`PASS: ${pass}, FAIL: ${fail}, BLOCKED: ${blocked}, NOT_RUN: ${notrun}`);
+  console.log(`Total: ${results.length}`);
+
+  writeFileSync(join(EVIDENCE, '_batch_summary.json'), JSON.stringify({
+    total: results.length, pass, fail, blocked, notrun, results, executedAt: ts()
+  }, null, 2));
+}
+
+main().catch(e => { console.error('Fatal:', e); process.exit(1); });
+
