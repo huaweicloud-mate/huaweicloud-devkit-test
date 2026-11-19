@@ -1,0 +1,1 @@
+/home/testbot2/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/dist/dep/installers/table.js
