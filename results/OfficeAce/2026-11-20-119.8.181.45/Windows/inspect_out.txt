@@ -1,0 +1,20 @@
+== 用例矩阵-设计级.csv rows 108
+HDR: ['ID', '维度', '标题', '优先级', '前置条件', '测试数据', '操作步骤', '预期结果', '指引来源', '关联工具', '自动化建议', '展开规则', '生成时间', '设计状态', '终端覆盖类型', 'terminal', 'agent', 'OS', 'Node/npm', 'shell', 'TTY', 'installLayout', 'mcpTransport', 'hookSupport', 'requiredEvidence', 'owner', '依赖', '执行状态', '执行时间', 'evidencePath', 'blockedReason', 'mission', 'missionPriority']
+ROW: ['D1-3', 'D1安装', 'doctor健康自检', 'P1', '已安装环境(含部分组件异常环境)', 'doctor 命令', '①干净环境跑doctor ②人为制造组件缺失(如删MCP Python SDK)跑doctor', '检测项准确，失败场景如实报告且给出修复指引', 'P: README doctor 命令+自曝FAIL场景(权威契约)']
+ROW: ['D1-4', 'D1安装', 'status/update幂等', 'P2', '已安装+存在用户自定义config', 'status、update 命令', '①status核对输出 ②update ③核对用户config未被触碰 ④重复update幂等', '增量刷新，不碰用户config', "P: README 'incremental...without touching your config'"]
+ROW: ['D1-26', 'D1安装', '升级提醒工具注册与协议暴露', 'P1', 'dev/1.1.2 代码', 'tools/list 输出工具清单', '①spawn mcp-server.mjs ②initialize ③tools/list ④检查 huaweicloud_check_update / huaweicloud_upgrade', '两工具均注册且 schema 含 description/inputSchema', '设: 设计文档 §MCP Tool 定义; 实: update-check.mjs']
+== 用例矩阵-展开级.csv rows 40
+HDR: ['ID', '展开类型', '枚举对象', '源用例', '优先级', '执行要点', '预期结果', '生成时间', 'requiredEvidence', 'designCaseId', 'expandedCaseId', 'design_status', 'terminalType', 'terminal', 'agent', 'OS', 'Node/npm', 'shell', 'TTY', 'installLayout', 'mcpTransport', 'hookSupport', 'owner', '依赖', '执行状态', '执行时间', 'evidencePath', 'blockedReason']
+ROW: ['EXP-D5-7-1', 'D5客户端矩阵', 'OfficeAce', 'D5-1', 'P1', '在 OfficeAce 上执行 D5-1 用例', 'OfficeAce：客户端可发现并加载插件清单', '2026-09-05', '强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录']
+ROW: ['EXP-D5-7-3', 'D5客户端矩阵', 'OfficeAce', 'D5-3', 'P1', '在 OfficeAce 上执行 D5-3 用例', 'OfficeAce：tools/list 枚举 40 工具全量可达，schema 完整', '2026-09-05', '强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录']
+ROW: ['EXP-C4-01', 'D3-C4服务矩阵', 'ECS', 'D3-C4', 'P1', 'ECS 只读规划冒烟: list_operations + plan 只读命令', 'ECS 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证', '2026-09-05', '强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录']
+== 使命-mission-001.csv rows 10
+HDR: ['ID', 'Node/npm', 'OS', 'TTY', 'agent', 'blockedReason', 'evidencePath', 'hookSupport', 'installLayout', 'mcpTransport', 'mission', 'missionPriority', 'owner', 'requiredEvidence', 'shell', 'terminal', '优先级', '依赖', '关联工具', '前置条件', '展开规则', '执行时间', '执行状态', '指引来源', '操作步骤', '标题', '测试数据', '生成时间', '终端覆盖类型', '维度', '自动化建议', '设计状态', '预期结果']
+ROW: ['D4-1', 'Node >=22；npm/npx 按 OS 记录', 'Windows/Linux；macOS 若声明支持则单独举证', 'non-TTY；需要交互时必须提供 PTY', 'Hermes（Hook）; OpenCode（非 Hook）', '', '', 'Hermes=Hook; OpenCode=非Hook', '隔离 HOME + plugin 目录 + npm cache + HUAWEICLOUD_HOME fixture']
+ROW: ['D4-2', 'Node >=22；npm/npx 按 OS 记录', 'Windows/Linux；macOS 若声明支持则单独举证', 'non-TTY；需要交互时必须提供 PTY', 'Hermes（Hook）; OpenCode（非 Hook）', '', '', 'Hermes=Hook; OpenCode=非Hook', '隔离 HOME + plugin 目录 + npm cache + HUAWEICLOUD_HOME fixture']
+ROW: ['D4-4', 'Node >=22；npm/npx 按 OS 记录', 'Windows/Linux；macOS 若声明支持则单独举证', 'non-TTY；需要交互时必须提供 PTY', 'Hermes（Hook）; OpenCode（非 Hook）', '', '', 'Hermes=Hook; OpenCode=非Hook', '隔离 HOME + plugin 目录 + npm cache + HUAWEICLOUD_HOME fixture']
+== 需求-设计-证据追踪表.csv rows 217
+HDR: ['sourceAsset', 'requirementOrRisk', 'designCaseId', 'expandedCaseId', 'testLayer', 'clientOrOSScope', 'requiredEvidence', 'design_status', 'owner', 'gap', '执行时间']
+ROW: ['v1.5规划(v1.3基线)', '全新环境引导安装', 'D1-1', '由EXP-D5客户端矩阵覆盖(D5-1~7逐客户端)', '安装/生命周期', '<代表: 逐客户端 10+>', '未安装→指引→装好闭环，插件引导完成全流程', 'DESIGN_COVERED', '测试负责人']
+ROW: ['v1.5规划(v1.3基线)', '多Agent探测', 'D1-2', '由EXP-D7 OS矩阵覆盖(OS×Node)', '安装/生命周期', '<代表: Windows/Linux>', 'auto-detect 覆盖全部共存客户端', 'DESIGN_COVERED', '测试负责人']
+ROW: ['v1.5规划(v1.3基线)', 'doctor健康自检', 'D1-3', '由EXP-D7 OS矩阵覆盖(OS×Node)', '安装/生命周期', '<代表: Windows/Linux>', '检测项准确，失败场景如实报告且给出修复指引', 'DESIGN_COVERED', '测试负责人']

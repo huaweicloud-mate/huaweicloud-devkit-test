@@ -1,0 +1,148 @@
+--- design ALL ---
+D1-3 | P1 | D1安装 | doctor健康自检 |  | doctor
+D1-4 | P2 | D1安装 | status/update幂等 |  | status/update
+D1-26 | P1 | D1安装 | 升级提醒工具注册与协议暴露 |  | check_update/upgrade
+D1-27 | P1 | D1安装 | 检测语义-已是最新 |  | check_update
+D1-28 | P1 | D1安装 | 检测语义-有新版本 |  | check_update
+D1-30 | P2 | D1安装 | semver 比对正确性 |  | check_update
+D1-31 | P1 | D1安装 | dismiss 冷却期 |  | check_update
+D1-33 | P2 | D1安装 | skip 文件持久化与多路径 |  | check_update
+D1-39 | P0 | D1安装 | Windows 升级检测链可用性 |  | check_update
+D1-40 | P0 | D1安装 | 镜像 lag 下检测正确性(反向提醒防护) |  | check_update
+D1-41 | P1 | D1安装 | check_update 真实 MCP 返回契约 |  | check_update
+D1-42 | P1 | D1安装 | dismiss 真实闭环与跨调用持久化 |  | check_update
+D1-45 | P1 | D1安装 | 兜底提示真实序列与预热竞态 |  | check_update
+D1-65 | P2 | D1安装 | 调试模式环境变量 |  | check_update
+D1-66 | P2 | D1安装 | 遥测开关与端点环境变量 |  | mcp-server
+D1-67 | P2 | D1安装 | Agent toolkit 模式与 DSH 跳过安装环境变量 |  | install
+D1-68 | P2 | D1安装 | 图标离线与区域环境变量 |  | get_service_icon/auth_init
+D1-69 | P2 | D1安装 | CLI help 子命令 |  | install
+D1-70 | P1 | D1安装 | 代理配置与 WebSocket 代理 |  | install
+D2-10 | P1 | D2认证 | R7 current档跟随 |  | auth_status
+D2-11 | P0 | D2认证 | R3 STS token拒绝落盘 |  | auth_switch
+D2-12 | P1 | D2认证 | R10 runtime非空禁止落盘 |  | huaweicloud_auth_init/auth_status/auth_sync
+D2-13 | P1 | D2认证 | R9 configuredBySession优先env |  | auth_status
+D2-16 | P1 | D2认证 | import文件读取后擦除 |  | auth_switch
+D4-18 | P0 | D4安全 | confirm-not-deny审批语义 |  | plan_cli_command
+D4-19 | P0 | D4安全 | 确认流下预检仍生效 |  | hook_check_command/hook_check_artifacts/hook_check_deploy_pl
+D4-20 | P1 | D4安全 | 拒绝后零操作 |  | run_approved_command
+D2-1 | P1 | D2认证 | auth init三端同步 |  | huaweicloud_auth_init
+D2-2 | P2 | D2认证 | auth status判定准确性 |  | auth_status
+D2-4 | P0 | D2认证 | 凭证脱敏正确性 |  | show_profile_redacted
+D2-5 | P1 | D2认证 | 凭证缺失报错指引 |  | huaweicloud_auth_init/auth_status
+D2-26 | P1 | D2认证 | 凭证备份与恢复 |  | huaweicloud_auth_sync
+D2-27 | P2 | D2认证 | KooCLI 版本管理 |  | auth_status
+D3-A1 | P1 | D3功能 | skill检索完整性 |  | retrieve_skill/search_docs
+D3-B1 | P2 | D3功能 | list_operations规范名 |  | list_operations
+D3-B3 | P1 | D3功能 | run_readonly脱敏执行 |  | run_readonly_command
+D3-B5 | P2 | D3功能 | detect_framework识别 |  | detect_framework
+D3-C1 | P1 | D3功能 | ECS生命周期E2E |  | plan_cli_command/run_approved_command
+D3-C2 | P1 | D3功能 | OBS静态站部署E2E |  | obs_set_website_config/setup_obs_config
+D3-C3 | P1 | D3功能 | 沙箱部署E2E |  | sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_clos
+D3-C4 | P1 | D3功能 | 服务创建类回归 |  | plan_cli_command/run_approved_command
+D3-C5 | P1 | D3功能 | 工具冒烟 |  | check_cli/list_operations/plan_cli_command/explain_error
+D3-C6 | P1 | D3功能 | 沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/upload_file/close_session/deploy_check） |  | sandbox_check_user/sandbox_credentials/sandbox_sign_agreemen
+D3-C7 | P1 | D3功能 | 跨区域资源操作引导（区域维度） |  | plan_cli_command/list_regions/get_regional_availability
+D3-C13 | P1 | D3功能 | OBS 静态网站托管配置 |  | huaweicloud_obs_set_website_config
+D3-C14 | P2 | D3功能 | 沙箱 HDKit 服务参数与 hwlink 凭证 |  | sandbox_connect/sandbox_credentials
+D3-S1 | P1 | D3功能 | 场景-只读查ECS(带不改约束) |  | service_catalog/run_readonly_command
+D3-S2 | P1 | D3功能 | 场景-删VPC先确认 |  | plan_cli_command/hook_check_command/run_approved_command
+D3-S3 | P1 | D3功能 | 场景-沙箱预览出URL |  | sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/
+D3-S4 | P1 | D3功能 | 场景-领券闭环 |  | voucher_status/voucher_claim
+D3-S5 | P2 | D3功能 | 场景-复合意图分层路由 |  | service_catalog
+D3-S6 | P2 | D3功能 | 场景-FunctionGraph定时任务 |  | plan_cli_command/run_approved_command
+D3-S7 | P1 | D3功能 | 场景-跨服务交付(Web应用+RDS)并归零 |  | sandbox_connect/sandbox_deploy_nginx/plan_cli_command/run_ap
+D3-S8 | P1 | D3功能 | 场景-操作失败后排障指引 |  | explain_error/run_readonly_command
+D4-1 | P0 | D4安全 | 凭证文件读取拦截 |  | hook_check_command
+D4-2 | P0 | D4安全 | 凭证env打印拦截 |  | hook_check_command
+D4-3 | P0 | D4安全 | 明文secret API拦截 |  | hook_check_command
+D4-4 | P1 | D4安全 | 写操作审批门 |  | plan_cli_command
+D4-5 | P0 | D4安全 | 写操作误判检测 |  | plan_cli_command
+D4-6 | P1 | D4安全 | adminPass回显警告 |  | hook_check_command
+D4-7 | P1 | D4安全 | hook三工具有效性 |  | hook_check_command/hook_check_artifacts/hook_check_deploy_pl
+D4-8 | P1 | D4安全 | Python/Node策略一致 |  | hook_check_command/hook_check_artifacts/hook_check_deploy_pl
+D4-9 | P0 | D4安全 | 公开暴露/破坏性预检 |  | hook_check_command/hook_check_artifacts/hook_check_deploy_pl
+D4-10 | P2 | D4安全 | 规则库新增回归 |  | hook_check_command/hook_check_artifacts/hook_check_deploy_pl
+D4-11 | P1 | D4安全 | 提示注入防护 |  | search_docs/retrieve_skill/search_marketplace/get_service_ic
+D4-12 | P2 | D4安全 | 供应链安装期安全 |  | npm
+D4-13 | P1 | D4安全 | 最小权限凭证通过率 |  | run_readonly_command
+D4-14 | P2 | D4安全 | 操作可审计性 |  | run_readonly_command
+D4-15 | P0 | D4安全 | hook绕过尝试 |  | hook_check_command
+D4-16 | P0 | D4安全 | 命令包裹穿透 |  | hook_check_command
+D4-17 | P1 | D4安全 | hook模糊fail-closed |  | hook_check_command/hook_check_artifacts/hook_check_deploy_pl
+D4-21 | P0 | D4安全 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检） |  | hook_check_artifacts
+D4-22 | P0 | D4安全 | hook_check_deploy_plan 具名回归（部署计划预检） |  | hook_check_deploy_plan
+D4-23 | P0 | D4安全 | 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标） |  | install
+D4-24 | P1 | D4安全 | 确认令牌过期与重复确认边界（审批流健壮性） |  | auth_confirm/plan_cli_command
+D4-25 | P2 | D4安全 | Python hook 事件遥测分类 |  | hook_check_command
+D4-26 | P2 | D4安全 | findings 证据脱敏 |  | hook_check_command
+D4-27 | P1 | D4安全 | 双路径输出脱敏 |  | run_readonly_command
+D4-28 | P0 | D4安全 | Node 版安全 hook 链路 |  | hook_check_command
+D4-29 | P2 | D4安全 | 分类断言与原始命令分类入口 |  | hook_check_command
+D5-1 | P1 | D5客户端 | 清单发现加载 |  | install
+D5-3 | P1 | D5客户端 | 工具全量枚举 |  | mcp-server
+D6-1 | P2 | D6性能 | 检索响应延迟 |  | search_docs/retrieve_skill
+D6-3 | P2 | D6性能 | MCP冷启时间 |  | mcp-server
+D6-4 | P1 | D6性能 | 并发调度正确性 |  | mcp-server
+D6-9 | P2 | D6性能 | 缓存清理三入口 |  | check_update/get_service_icon/search_marketplace
+D9-9 | P1 | D9协议 | tools/call 超时协议语义与取消 |  | inspector
+D8-1 | P2 | D8质量 | 文档与能力一致 |  | search_docs
+D8-4 | P1 | D8质量 | 引导步骤可机械执行 |  | retrieve_skill
+D8-6 | P2 | D8质量 | 中英文文档一致 |  | search_docs
+D8-7 | P0 | D8质量 | 7 个 meta/通用技能指引可机械执行验证 |  | retrieve_skill/search_docs
+D8-9 | P2 | D8质量 | 安装 ID 与遥测值脱敏 |  | mcp-server
+D8-10 | P2 | D8质量 | MCP 配置备份与合并 |  | install
+D9-1 | P1 | D9协议 | tools/list合规 |  | inspector
+D9-2 | P1 | D9协议 | JSON-RPC错误码 |  | inspector
+D9-3 | P1 | D9协议 | tools/call响应格式 |  | inspector
+D9-4 | P1 | D9协议 | 协议生命周期 |  | inspector
+D9-5 | P1 | D9协议 | stdio传输健壮 |  | mcp-server
+D9-6 | P1 | D9协议 | 跨客户端互通 |  | inspector
+D9-7 | P2 | D9协议 | 协议版本协商降级 |  | mcp-server
+D9-8 | P2 | D9协议 | inputSchema版本合规 |  | inspector
+D9-10 | P1 | D9协议 | MCP remote transport（HTTP/WS 远程服务） |  | mcp-server
+D9-11 | P1 | D9协议 | WebSocket 隧道通道生命周期 |  | mcp-server
+D9-12 | P0 | D9协议 | initialize 握手协议安全基线 |  | inspector
+D9-13 | P0 | D9协议 | tools/call 凭证不泄露与权限校验 |  | inspector
+D10-3 | P1 | D10评测 | 路由准确率+混淆矩阵 |  | harness
+D10-4 | P0 | D10评测 | 安全干预-静态规则层 |  | harness
+--- expanded ALL ---
+EXP-D5-7-1 | P1 | D5客户端矩阵 | D5-1 | 在 OfficeAce 上执行 D5-1 用例 | OfficeAce：客户端可发现并加载插件清单
+EXP-D5-7-3 | P1 | D5客户端矩阵 | D5-3 | 在 OfficeAce 上执行 D5-3 用例 | OfficeAce：tools/list 枚举 40 工具全量可达，schema 完整
+EXP-C4-01 | P1 | D3-C4服务矩阵 | D3-C4 | ECS 只读规划冒烟: list_operations + plan 只读命令 | ECS 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证
+EXP-C4-02 | P1 | D3-C4服务矩阵 | D3-C4 | VPC 只读规划冒烟: list_operations + plan 只读命令 | VPC 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-03 | P1 | D3-C4服务矩阵 | D3-C4 | OBS 只读规划冒烟: list_operations + plan 只读命令 | OBS 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-04 | P1 | D3-C4服务矩阵 | D3-C4 | RDS 只读规划冒烟: list_operations + plan 只读命令 | RDS 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证
+EXP-C4-05 | P1 | D3-C4服务矩阵 | D3-C4 | GaussDB 只读规划冒烟: list_operations + plan 只读命令 | GaussDB 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-06 | P1 | D3-C4服务矩阵 | D3-C4 | CCE 只读规划冒烟: list_operations + plan 只读命令 | CCE 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证
+EXP-C4-07 | P1 | D3-C4服务矩阵 | D3-C4 | FunctionGraph 只读规划冒烟: list_operations + plan 只读命令 | FunctionGraph 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-08 | P1 | D3-C4服务矩阵 | D3-C4 | IAM 只读规划冒烟: list_operations + plan 只读命令 | IAM 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-09 | P1 | D3-C4服务矩阵 | D3-C4 | CTS 只读规划冒烟: list_operations + plan 只读命令 | CTS 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-10 | P1 | D3-C4服务矩阵 | D3-C4 | CES 只读规划冒烟: list_operations + plan 只读命令 | CES 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-11 | P1 | D3-C4服务矩阵 | D3-C4 | DDS 只读规划冒烟: list_operations + plan 只读命令 | DDS 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-12 | P1 | D3-C4服务矩阵 | D3-C4 | DCS 只读规划冒烟: list_operations + plan 只读命令 | DCS 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-13 | P1 | D3-C4服务矩阵 | D3-C4 | SMN 只读规划冒烟: list_operations + plan 只读命令 | SMN 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-14 | P1 | D3-C4服务矩阵 | D3-C4 | DMS 只读规划冒烟: list_operations + plan 只读命令 | DMS 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-15 | P1 | D3-C4服务矩阵 | D3-C4 | WAF 只读规划冒烟: list_operations + plan 只读命令 | WAF 只读规划冒烟命令语法/参数正确；轻量创建→立即释放→归零验证
+EXP-C4-16 | P1 | D3-C4服务矩阵 | D3-C4 | CDN 只读规划冒烟: list_operations + plan 只读命令 | CDN 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-17 | P1 | D3-C4服务矩阵 | D3-C4 | ModelArts 只读规划冒烟: list_operations + plan 只读命令 | ModelArts 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-18 | P1 | D3-C4服务矩阵 | D3-C4 | DEW 只读规划冒烟: list_operations + plan 只读命令 | DEW 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-19 | P1 | D3-C4服务矩阵 | D3-C4 | CBR 只读规划冒烟: list_operations + plan 只读命令 | CBR 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-20 | P1 | D3-C4服务矩阵 | D3-C4 | EVS 只读规划冒烟: list_operations + plan 只读命令 | EVS 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-21 | P1 | D3-C4服务矩阵 | D3-C4 | EIP 只读规划冒烟: list_operations + plan 只读命令 | EIP 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-C4-22 | P1 | D3-C4服务矩阵 | D3-C4 | ELB 只读规划冒烟: list_operations + plan 只读命令 | ELB 只读规划冒烟命令语法/参数正确，规范路由可执行
+EXP-E01 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 ECS查询→run_readonly 对应服务(harness 实测基线 21.4
+EXP-E02 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 ECS创建→plan/approve 对应服务(harness 实测基线 21.4
+EXP-E03 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 OBS静态站→deploy 对应服务(harness 实测基线 21.4% MIS
+EXP-E04 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 EIP→plan 对应服务(harness 实测基线 21.4% MISS，未命中
+EXP-E05 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 RDS查询→read 对应服务(harness 实测基线 21.4% MISS，未
+EXP-E06 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 DCS创建→plan 对应服务(harness 实测基线 21.4% MISS，未
+EXP-E07 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 CBR→plan 对应服务(harness 实测基线 21.4% MISS，未命中
+EXP-E08 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 explain_error→诊断 对应服务(harness 实测基线 21.4% 
+EXP-E09 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 CCE创建→plan 对应服务(harness 实测基线 21.4% MISS，未
+EXP-E10 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 FunctionGraph→plan 对应服务(harness 实测基线 21.4
+EXP-E11 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 费用查询→read 对应服务(harness 实测基线 21.4% MISS，未命
+EXP-E12 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 CES→plan 对应服务(harness 实测基线 21.4% MISS，未命中
+EXP-E13 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 证书/ELB→plan 对应服务(harness 实测基线 21.4% MISS，
+EXP-E14 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 IAM审计→read 对应服务(harness 实测基线 21.4% MISS，未
+EXP-E15 | P1 | D10评测集 | D10-3 | ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核 | 源码级断言: serviceCatalog 中文意图命中 voucher_claim→执行 对应服务(harness 实测基线 21.4% 
