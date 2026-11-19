@@ -44,10 +44,11 @@ WHY = {
     'D9-9':  "src/mcp-protocol.mjs initialize capabilities 仅 {tools:{}}，未声明 cancellation(SPEC)",
     'D10-4': "safety/rules/cloud-risk-rules.json 规则 16->19 条(9 deny+10 warn)，用例断言计数滞后(SPEC 契约漂移)",
     'D1-39': "Windows 升级检测链 EINVAL 专属(OS 列标注「专属」)，Linux 侧由 EXP-NR3-10 覆盖",
+    'D3-C1':  "真云 E2E 删除为异步、未校验删除完成：DeleteServers 返回 job_id 后 ECS 仍 ACTIVE(>120s 归零轮询超时残留)，DeleteSubnet/DeleteVpc 返回 ok=true 仅代表提交、资源实际未删净(本日复现后已人工 ECS→subnet→VPC 清理归零)",
 }
 
 FAIL = {'D2-4','D4-2','D4-21','D9-12','D4-4','D4-6','D4-17','D3-C4','D3-S5',
-        'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18'}
+        'D3-S6','D3-S7','D4-25','D4-26','D10-3','EXP-E01','EXP-C4-14','EXP-C4-18','D3-C1'}
 SPEC = {'D8-9','D9-9','D10-4'}
 BLOCKED = set()
 NOT_RUN = {'D1-39'}

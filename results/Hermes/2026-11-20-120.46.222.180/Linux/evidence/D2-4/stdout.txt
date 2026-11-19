@@ -1,0 +1,7 @@
+=== D2-4 凭证脱敏正确性（redactSecrets 函数级）===
+  [OK] redactSecrets("AK=AK123456 SK=SKsecret") -> "AK=<redacted> SK=<redacted>"
+  [<<< 未脱敏] redactSecrets("ak=AK123456 sk=SKsecret") -> "ak=AK123456 sk=SKsecret"
+  [<<< 未脱敏] redactSecrets('{"ak":"AK123456","sk":"SKsecret"}') -> "{\"ak\":\"AK123456\",\"sk\":\"SKsecret\"}"
+  [OK] 对象键脱敏 -> {"accessKeyId":"<redacted>","secretAccessKey":"<redacted>","region":"cn-north-4"}
+RESULT: FAIL  大写=OK 小写=未脱敏 JSON引号key=未脱敏 对象键=OK
+根因: safety-policy.mjs redactString (AK|SK) 正则大小写敏感 + isSecretKeyName 不匹配裸 ak/sk 键名
