@@ -1,17 +1,23 @@
 {
  "caseId": "D2-16",
- "status": "FAIL",
- "why": "import 文件未消费: peeked=false planted=null stillThere=false after=\"ERR=m.peekImportFile is not a function\" resp=\"the account switch has no resolvable target account: pass ak/sk (mode=memory), a valid creds-import.json (mode=import), or an injected mcp_settings.json (mode=mcp-config).\"",
- "executedAt": "20261120073834",
- "executedAtIso": "2026-11-19T23:38:34.966Z",
+ "status": "PASS",
+ "why": "真实投放 creds-import.json 后 peekImportFile() 可检出；auth_switch mode=import 走 vendor(true) → ask(true) → 批准执行，返回 status=ok / scope=temporary（runtime 凭证仅在本 MCP 进程生效，落盘需 action=persist）；随后导入文件已删除、peekImportFile()=null —— 导入文件被消费，密钥无需进入对话",
+ "executedAt": "20261120074629",
+ "executedAtIso": "2026-11-19T23:46:29.085Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
- "beforePeek": "ERR=m.peekImportFile is not a function",
- "planted": null,
+ "importPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-307192655\\iso-d2-16-1795131986732-etlpd\\.config\\huaweicloud/creds-import.json",
+ "beforePeek": "PEEK=has",
  "stillThere": false,
- "afterPeek": "ERR=m.peekImportFile is not a function",
- "response": "the account switch has no resolvable target account: pass ak/sk (mode=memory), a valid creds-import.json (mode=import), or an injected mcp_settings.json (mode=mcp-config).",
- "parsed": null,
- "explicitSignal": true
+ "afterPeek": "PEEK=none",
+ "importOk": true,
+ "gated": true,
+ "askRequired": true,
+ "response": "{\n  \"status\": \"ok\",\n  \"scope\": \"temporary\",\n  \"note\": \"Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files.\"\n}",
+ "parsed": {
+  "status": "ok",
+  "scope": "temporary",
+  "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files."
+ }
 }

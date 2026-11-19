@@ -1,17 +1,29 @@
 {
  "caseId": "D2-1",
- "status": "FAIL",
- "why": "auth init 写入不完整: code=1 s1=false marker=false s2Current= s2Found=no obs=C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-307192655\\iso-d2-1-1795131514968-df4h9\\.obsutilconfig",
- "executedAt": "20261120073835",
- "executedAtIso": "2026-11-19T23:38:35.337Z",
+ "status": "PASS",
+ "why": "auth init（非 TTY + env 传入凭证）退出 0，三处存储全部实际落位：S1 credentials.json ak=AKAUTHINIT0000000005；S2 实发命令序列含 configure delete(#920 无 token 先清 profile) → configure set --cli-access-key=AKAUTH…，并以 STS GetCallerIdentity 复验通过；S3 OBS 镜像写到 C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-307192655\\iso-d2-1-1795131798258-bxput/.obsutilconfig，含 endpoint=https://obs.<region>… 与 ak= 且值一致",
+ "executedAt": "20261120074318",
+ "executedAtIso": "2026-11-19T23:43:18.678Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
- "initCode": 1,
- "s1": null,
- "lastSync": null,
- "s2Current": "",
- "s2Found": "no",
- "obsPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-307192655\\iso-d2-1-1795131514968-df4h9\\.obsutilconfig",
- "initOut": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v2.0.0-next.4          ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nHuaweiCloud DevKit Unified Authentication Setup\n\n\u001b[1m获取 AK/SK（如果还没有）：\u001b[0m\n  1. 打开华为云\"访问密钥\"页签：\n     https://console.huaweicloud.com/iam/?region=cn-north-4#/mine/accessKey\n  2. 点击\"新增访问密钥\"，完成身份验证\n  3. 下载凭证文件（内含 AK 和 SK）。\n     注意：SK 只在创建密钥时显示一次，请妥善保存该文件。\n\n\u001b[31mNon-interactive session detected. Provide credentials via environment variables instead:\u001b[0m\n  export HW_ACCESS_KEY=<ak> HW_SECRET_KEY=<sk>   then re-run \"npx huaweicloud-devkit auth init\" to continue\n  (Agents: prefer huaweicloud_auth_switch mode=import — reads ~/.config/huaweicloud/creds-import.json and wipes it, so the SK never enters the conversation.)\n  (Or run \"npx huaweicloud-devkit auth init\" in a real terminal.)\n"
+ "initCode": 0,
+ "s1": {
+  "ak": "AKAUTHINIT0000000005",
+  "sk": "SKAUTHINIT00000000000000000000005",
+  "securityToken": "",
+  "region": "cn-north-4"
+ },
+ "argvs": [
+  "configure delete --cli-profile=default",
+  "configure set --cli-profile=default --cli-access-key=AKAUTHINIT0000000005 --cli-secret-key=SKAUTHINIT00000000000000000000005 --cli-region=cn-north-4",
+  "IAM KeystoneListProjects --cli-region=cn-north-4 --name=cn-north-4",
+  "STS GetCallerIdentity --cli-region=cn-north-4"
+ ],
+ "didConfigure": true,
+ "didDeleteFirst": true,
+ "didVerify": true,
+ "obsPath": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-307192655\\iso-d2-1-1795131798258-bxput/.obsutilconfig",
+ "obsBody": "endpoint=https://obs.cn-north-4.myhuaweicloud.com\nak=AKAUTHINIT0000000005\nsk=SKAUTHINIT00000000000000000000005\n",
+ "initOut": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v2.0.0-next.4          ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nHuaweiCloud DevKit Unified Authentication Setup\n\n\u001b[1m获取 AK/SK（如果还没有）：\u001b[0m\n  1. 打开华为云\"访问密钥\"页签：\n     https://console.huaweicloud.com/iam/?region=cn-north-4#/mine/accessKey\n  2. 点击\"新增访问密钥\"，完成身份验证\n  3. 下载凭证文件（内含 AK 和 SK）。\n     注意：SK 只在创建密钥时显示一次，请妥善保存该文件。\n\n\nCredentials synchronized.\n\nNext steps:\n  npx huaweicloud-devkit install --target all\n  Restart your agent sessions.\n\u001b[31m  ERROR: Project ID not auto-set (could not parse KeystoneListProjects output). hcloud API calls (ECS/VPC/OBS API paths, sandbox exec) will fail with APIGW.0301 Incorrect IAM authentication information until it is configured. Recover with:\u001b[0m\n    hcloud IAM KeystoneListProjects --cli-region=cn-north-4 --name=cn-north-4\n    hcloud configure set --cli-project-id=<project_id>\n    (or re-run \"npx huaweicloud-devkit auth init\", which auto-sets it)\n"
 }

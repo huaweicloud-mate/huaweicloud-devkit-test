@@ -1,9 +1,9 @@
 {
  "caseId": "D2-10",
- "status": "FAIL",
- "why": "profile 解析/下发异常: current=deploy n=2 managed=deploy managed2=default argv=\"\"",
- "executedAt": "20261120073833",
- "executedAtIso": "2026-11-19T23:38:33.107Z",
+ "status": "PASS",
+ "why": "current=deploy 时 resolveManagedProfile()=\"deploy\"，改 current=default 后立即返回 \"default\"（不缓存，2 个 profile 均解析）；configureHcloud 实际 spawn 的 argv 含 --cli-profile=deploy（实测命令行：configure set --cli-profile=deploy --cli-access-key=AKTESTWRITE00000001 --cli-secret-key=SKTESTWRITE0000000000000001 --cli-region=cn-north-4）",
+ "executedAt": "20261120074109",
+ "executedAtIso": "2026-11-19T23:41:09.898Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
@@ -11,8 +11,15 @@
  "n": "2",
  "managed": "deploy",
  "managed2": "default",
- "argv": null,
- "hasProfile": false,
- "cfgOut": "OK=false",
+ "argv": [
+  "configure",
+  "set",
+  "--cli-profile=deploy",
+  "--cli-access-key=AKTESTWRITE00000001",
+  "--cli-secret-key=SKTESTWRITE0000000000000001",
+  "--cli-region=cn-north-4"
+ ],
+ "hasProfile": true,
+ "cfgOut": "OK=true",
  "raw": "CURRENT=deploy\nNPROFILES=2\nMANAGED=deploy\nMANAGED2=default"
 }
