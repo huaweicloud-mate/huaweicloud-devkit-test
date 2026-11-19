@@ -1,0 +1,97 @@
+{
+ "caseId": "D3-B1",
+ "status": "FAIL",
+ "why": "list_operations 覆盖不足: [{\"svc\":\"ECS\",\"count\":132,\"ok\":true,\"exit\":0,\"missing\":[]},{\"svc\":\"VPC\",\"count\":192,\"ok\":true,\"exit\":0,\"missing\":[\"ListVpcs\"]},{\"svc\":\"OBS\",\"count\":0,\"ok\":true,\"exit\":0,\"missing\":[\"ListBuckets\"]}]",
+ "executedAt": "20261120075810",
+ "executedAtIso": "2026-11-19T23:58:10.155Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "rows": [
+  {
+   "svc": "ECS",
+   "count": 132,
+   "ok": true,
+   "exit": 0,
+   "found": [
+    {
+     "o": "ListServersDetails",
+     "present": true
+    },
+    {
+     "o": "CreateServers",
+     "present": true
+    },
+    {
+     "o": "DeleteServers",
+     "present": true
+    }
+   ],
+   "sample": [
+    "AcceptScheduledEvent",
+    "AddServerGroupMember",
+    "AssociateServerVirtualIp",
+    "AttachServerVolume",
+    "BatchAddServerGroupMember",
+    "BatchAddServerNics",
+    "BatchAttachSharableVolumes",
+    "BatchCreateServerTags",
+    "BatchDeleteServerGroupMember",
+    "BatchDeleteServerNics",
+    "BatchDeleteServerTags",
+    "BatchDetachVolumes",
+    "BatchRebootServers",
+    "BatchResetServersPassword"
+   ]
+  },
+  {
+   "svc": "VPC",
+   "count": 192,
+   "ok": true,
+   "exit": 0,
+   "found": [
+    {
+     "o": "ListVpcs",
+     "present": false
+    },
+    {
+     "o": "CreateVpc",
+     "present": true
+    },
+    {
+     "o": "DeleteVpc",
+     "present": true
+    }
+   ],
+   "sample": [
+    "AcceptVpcPeering",
+    "AddFirewallRules",
+    "AddSecurityGroups",
+    "AddSourcesToTrafficMirrorSession",
+    "AddVpcExtendCidr",
+    "AssociateRouteTable",
+    "AssociateSubnetFirewall",
+    "AttachSubNetworkInterface",
+    "BatchCreateFirewallTags",
+    "BatchCreatePortTags",
+    "BatchCreateSecurityGroupRules",
+    "BatchCreateSecurityGroupTags",
+    "BatchCreateSubNetworkInterface",
+    "BatchCreateSubNetworkInterfaceTags"
+   ]
+  },
+  {
+   "svc": "OBS",
+   "count": 0,
+   "ok": true,
+   "exit": 0,
+   "found": [
+    {
+     "o": "ListBuckets",
+     "present": false
+    }
+   ],
+   "sample": []
+  }
+ ]
+}

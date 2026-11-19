@@ -1,0 +1,15 @@
+{
+ "caseId": "D1-70",
+ "status": "PASS",
+ "why": "proxy.json 写入→读回→clear→再读为 null 全链路正确；getProxySettings 在无 env/无文件时返回 null，有 HTTPS_PROXY+NO_PROXY 时非绕行主机返回 proxyUrl 而 internal.corp.example 命中 no_proxy 返回 null；getWebSocketImpl 在有代理时返回 undici ProxyAgent 包装的构造器，无代理时严格等于 globalThis.WebSocket",
+ "executedAt": "20261120075010",
+ "executedAtIso": "2026-11-19T23:50:10.461Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "writeRead": "WROTE=C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\multica-task-307192655\\d2-d1-70-1795132210086-5gyqg\\.config\\huaweicloud\\proxy.json\nREAD={\"https_proxy\":\"http://p1:8080\",\"http_proxy\":\"http://p2:8080\",\"no_proxy\":\"localhost,127.0.0.1\"}\nCLEARED=true AFTER=null",
+ "noSet": "NOSET=null",
+ "compose": "VIA_PROXY={\"proxyUrl\":\"http://proxy:3128\",\"noProxyList\":[\"internal.corp.example\"],\"targetProtocol\":\"https:\"}\nBYPASS_CORP=null\nHTTPS_PICK={\"proxyUrl\":\"http://proxy:3128\",\"noProxyList\":[\"internal.corp.example\"],\"targetProtocol\":\"https:\"}",
+ "wsProxied": "PROXIED=function:WebSocket",
+ "wsDirect": "DIRECT_SAME_GLOBAL=true TYPE=function"
+}

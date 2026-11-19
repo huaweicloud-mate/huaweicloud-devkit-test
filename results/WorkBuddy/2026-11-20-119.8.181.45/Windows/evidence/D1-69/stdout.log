@@ -1,0 +1,54 @@
+{
+ "caseId": "D1-69",
+ "status": "PASS",
+ "why": "help/--help/无参三条路径退出码均为 0 且输出一致；含 Usage 行、9 个命令（install/uninstall/update/status/doctor/auth/proxy/version/help）、--target 与 --packs 选项；无 TODO/FIXME/undefined 泄漏",
+ "executedAt": "20261120074930",
+ "executedAtIso": "2026-11-19T23:49:30.824Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "code": 0,
+ "len": 2925,
+ "wantCmds": [
+  {
+   "w": "install",
+   "present": true
+  },
+  {
+   "w": "uninstall",
+   "present": true
+  },
+  {
+   "w": "update",
+   "present": true
+  },
+  {
+   "w": "status",
+   "present": true
+  },
+  {
+   "w": "doctor",
+   "present": true
+  },
+  {
+   "w": "auth",
+   "present": true
+  },
+  {
+   "w": "proxy",
+   "present": true
+  },
+  {
+   "w": "version",
+   "present": true
+  },
+  {
+   "w": "help",
+   "present": true
+  }
+ ],
+ "hasUsage": true,
+ "hasOpts": true,
+ "noTodo": true,
+ "head": "\n╔══════════════════════════════════════════════╗\n║     HuaweiCloud DevKit v2.0.0-next.4          ║\n║     https://github.com/huaweicloud   ║\n╚══════════════════════════════════════════════╝\n\nUsage: npx huaweicloud-devkit <command> [--target <opencode|codex|codearts|codearts-work|workbuddy|dsh|officeace|hermes|openclaw|atomcode|all>]\n\nCommands:\n  install      Install skills, MCP server, safety policy\n  uninstall    Remove installed files\n  update       Update to latest version\n  reinstall    Full clean reinstall\n  status       Show installation status\n  doctor       Self-check: hcloud, MCP, skills, auth\n  install-hcloud  Show KooCLI install commands for your OS\n  dep          Dependency tooling: status | install <id> | uninstall <id>\n  packs        Post-install pack surface: status | enable <ids> | disable <ids> | all\n  auth         Manage unified auth: init | sync | status | reconcile\n  secret       Encrypted secret vault: set | get | list | rm | exec\n  proxy        Manage proxy config: init | show | clear\n  version      Print CLI version and installed plugin version per agent\n  help         Show this help\n\nOptions:\n  --target     Target agent: opencode (default), codex, codearts, codearts-work, workbuddy, dsh, officeace, hermes, openclaw, atomcode, all\n  --packs      Install-time pack selection: <id,id,...> or \"all\" (full surface). Writes DEVKIT_PACKS into the agent MCP config env; existing user values are kept\n  --skip-binaries   (with: install/update) skip provisioning host binaries for enabled packs\n  --version    Print CLI version and installed plugin version per agent"
+}

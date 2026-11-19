@@ -1,0 +1,103 @@
+{
+ "caseId": "D3-A1",
+ "status": "PASS",
+ "why": "技能树磁盘实测 30 个 skill（含 SKILL.md）；huaweicloud_list_skills 返回 24 条；抽样 5 个（huaweicloud-core/huawei-ecs/huawei-vpc/huawei-obs/huawei-rds）经 huaweicloud_retrieve_skill 全部取回正文，字节数 27192/35077/27870/30689/15420，均非空且 isError=false —— 可发现且可检索，无缺失",
+ "executedAt": "20261120075246",
+ "executedAtIso": "2026-11-19T23:52:46.822Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "diskCount": 30,
+ "listedCount": 24,
+ "listed": [
+  "huawei-cloud-apig-instance-management",
+  "huawei-billing",
+  "huawei-cbr",
+  "huawei-cce",
+  "huawei-cloud-eye",
+  "huawei-cloud-cts-trace-management",
+  "huawei-cloud-dds-dcs-instance-management",
+  "huawei-cloud-deployment-task-management",
+  "huawei-cloud-dew-key-management",
+  "huawei-ecs",
+  "huawei-functiongraph",
+  "huawei-cloud-gaussdb-instance-management",
+  "huawei-getting-started",
+  "huawei-iac",
+  "huawei-iam",
+  "huawei-modelarts",
+  "huawei-rds",
+  "huawei-cloud-smn-dms-message",
+  "huawei-vpc",
+  "huawei-cloud-waf-aad-rule-management",
+  "huawei-sandbox",
+  "huawei-obs",
+  "huawei-voucher",
+  "huawei-openapi"
+ ],
+ "retrieved": [
+  {
+   "name": "huaweicloud-core",
+   "bytes": 27192,
+   "isErr": false,
+   "head": "{   \"ok\": true,   \"name\": \"huaweicloud-core\",   \"version\": \"1\",   \"des"
+  },
+  {
+   "name": "huawei-ecs",
+   "bytes": 35077,
+   "isErr": false,
+   "head": "{   \"ok\": true,   \"name\": \"huawei-ecs\",   \"version\": \"1\",   \"descripti"
+  },
+  {
+   "name": "huawei-vpc",
+   "bytes": 27870,
+   "isErr": false,
+   "head": "{   \"ok\": true,   \"name\": \"huawei-vpc\",   \"version\": \"1\",   \"descripti"
+  },
+  {
+   "name": "huawei-obs",
+   "bytes": 30689,
+   "isErr": false,
+   "head": "{   \"ok\": true,   \"name\": \"huawei-obs\",   \"version\": \"1\",   \"descripti"
+  },
+  {
+   "name": "huawei-rds",
+   "bytes": 15420,
+   "isErr": false,
+   "head": "{   \"ok\": true,   \"name\": \"huawei-rds\",   \"version\": \"1\",   \"descripti"
+  }
+ ],
+ "diskNames": [
+  "huawei-billing",
+  "huawei-cbr",
+  "huawei-cce",
+  "huawei-cloud-apig-instance-management",
+  "huawei-cloud-cts-trace-management",
+  "huawei-cloud-dds-dcs-instance-management",
+  "huawei-cloud-deployment-task-management",
+  "huawei-cloud-dew-key-management",
+  "huawei-cloud-eye",
+  "huawei-cloud-gaussdb-instance-management",
+  "huawei-cloud-smn-dms-message",
+  "huawei-cloud-waf-aad-rule-management",
+  "huawei-ecs",
+  "huawei-functiongraph",
+  "huawei-getting-started",
+  "huawei-iac",
+  "huawei-iam",
+  "huawei-modelarts",
+  "huawei-obs",
+  "huawei-openapi",
+  "huawei-rds",
+  "huawei-sandbox",
+  "huawei-voucher",
+  "huawei-vpc",
+  "huaweicloud-api-and-sdk",
+  "huaweicloud-capability-discovery",
+  "huaweicloud-cli-and-auth",
+  "huaweicloud-core",
+  "huaweicloud-safety",
+  "huaweicloud-troubleshooting"
+ ],
+ "listRaw": "{\n  \"ok\": true,\n  \"count\": 24,\n  \"skills\": [\n    {\n      \"name\": \"huawei-cloud-apig-instance-management\",\n      \"description\": \"Manage Huawei Cloud APIG (API Gateway, dedicated instances) via hcloud CLI: instance lifecycle (create/list/delete), API groups, API create/update/delete, publish/offline, request throttling policies, signature keys, access control (ACL) policies, and public ingress EIP binding, plus read-only diagnosis of public access (eip_address vs sl_domain), the instance -> group -> API -> publish chain, and policy effectiveness. Delete operations require explicit user confirmation; instance creation is a 5-15 minute async operation that must be polled until status == Running."
+}

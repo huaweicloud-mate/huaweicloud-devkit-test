@@ -1,0 +1,34 @@
+{
+ "caseId": "D1-68",
+ "status": "PASS",
+ "why": "ICONS_OFFLINE=1 时 getServiceIcon('ecs') 返回 source=snapshot（把 live 主机用死代理封死仍成功，证明完全离线走内置 manifest）；无该变量且网络不可达时同样回落 snapshot。region 取值：仅 HW_REGION→cn-east-3；仅 HUAWEICLOUD_REGION→cn-south-1；两者同时设置→HW_REGION 优先 cn-east-3",
+ "executedAt": "20261120074931",
+ "executedAtIso": "2026-11-19T23:49:31.351Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "iconsOffline": "SRC=snapshot COUNT=2 FIRST=ecs",
+ "iconsLiveFallback": "SRC=snapshot COUNT=2 FIRST=ecs",
+ "regions": [
+  {
+   "set": "HW_REGION=cn-east-3",
+   "env": {
+    "HW_REGION": "cn-east-3"
+   },
+   "got": "cn-east-3"
+  },
+  {
+   "set": "HUAWEICLOUD_REGION=cn-south-1",
+   "env": {
+    "HUAWEICLOUD_REGION": "cn-south-1"
+   },
+   "got": "cn-south-1"
+  },
+  {
+   "set": "both(HW_REGION=cn-east-3, HUAWEICLOUD_REGION=cn-south-1)",
+   "got": "cn-east-3"
+  }
+ ],
+ "iconOk": true,
+ "regionOk": true
+}

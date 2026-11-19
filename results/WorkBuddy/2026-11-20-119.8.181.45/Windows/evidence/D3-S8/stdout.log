@@ -1,0 +1,44 @@
+{
+ "caseId": "D3-S8",
+ "status": "PASS",
+ "why": "explain_error 对三类真实失败全部命中已知错误码并给出针对性归类（3/3）：APIGW.0301→鉴权类、Ecs.0021→参数/区域类、Ecs.0044→库存/配额类，均非\"未知错误\"兜底；鉴权类附可执行下一步（Incorrect IAM authentication information. The AK/SK is invalid (check the SK for typos), t），可直接照做",
+ "executedAt": "20261120075820",
+ "executedAtIso": "2026-11-19T23:58:20.944Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "rows": [
+  {
+   "code": "APIGW.0301",
+   "known": true,
+   "matched": true,
+   "len": 815,
+   "service": "APIGW",
+   "suggestions": [
+    "Incorrect IAM authentication information. The AK/SK is invalid (check the SK for typos), the security token is",
+    "Check KooCLI profile, region, project_id, and IAM permissions without printing secrets."
+   ]
+  },
+  {
+   "code": "Ecs.0021",
+   "known": true,
+   "matched": true,
+   "len": 178,
+   "service": "ECS",
+   "suggestions": [
+    "Confirm the service endpoint, region, and project_id match the target resource."
+   ]
+  },
+  {
+   "code": "Ecs.0044",
+   "known": true,
+   "matched": true,
+   "len": 659,
+   "service": "ECS",
+   "suggestions": [
+    "The requested volume type is sold out in the selected availability zone (Ecs.0044, e.g. \"the volumeType [SATA]"
+   ]
+  }
+ ],
+ "actionable": true
+}
