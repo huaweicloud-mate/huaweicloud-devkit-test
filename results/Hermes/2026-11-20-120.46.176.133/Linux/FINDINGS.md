@@ -1,9 +1,9 @@
-# FINDINGS — 缺陷发现清单（Hermes-deepseek-v4-pro-0813）
+# FINDINGS — 缺陷发现清单（Hermes-deepseek-v4.1-flash-1017）
 
 > **落盘路径**：`results/Hermes/2026-11-20-120.46.176.133/Linux/FINDINGS.md`
 > **生成时间**：2026-11-20 05:25（北京时间，每日定时全量测试·当日首轮）
 > **被测对象**：huaweicloud-devkit v1.1.14（npm `latest` 正式版，gitHead `bd985051`）
-> **测试客户端**：Hermes (deepseek-v4-pro-0813) / Linux (aarch64) / 120.46.176.133
+> **测试客户端**：Hermes (deepseek-v4.1-flash-1017) / Linux (aarch64) / 120.46.176.133
 > **测试类型**：每日测试（daily 精选：设计级 107 + 展开级 43）
 > **汇总**：产品缺陷 16 项（FAIL 13 = 设计级 12 + 展开级 EXP-E01 1，EXP-E01 与 D10-3 同根因合并为 1 条；SPEC-MISMATCH 4）。较上一日（2026-11-19，同 v1.1.14 gitHead `bd985051`）：**15 项全部历史复现，新增 1 项**（D3-C2：OBS 建桶成功但 `hcloud OBS mb` 退出码 6，破坏基于退出码的自动化判定，3/3 可复现）。本轮 5 项（D2-10/D2-13/D4-12/D4-24/D9-6）继续由源码级夹具/直调探针补测，均 PASS，无 BLOCKED。
 

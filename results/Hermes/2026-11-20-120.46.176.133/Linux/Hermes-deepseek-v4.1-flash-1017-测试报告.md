@@ -1,5 +1,5 @@
-# Hermes-deepseek-v4-pro-0813 每日测试报告
-> **报告名**：`Hermes-deepseek-v4-pro-0813-测试报告.md`
+# Hermes-deepseek-v4.1-flash-1017 每日测试报告
+> **报告名**：`Hermes-deepseek-v4.1-flash-1017-测试报告.md`
 > **生成时间**：2026-11-20 05:25（北京时间）
 > **执行归档**：`results/Hermes/2026-11-20-120.46.176.133/Linux/`
 > **被测对象**：huaweicloud-devkit（GitHub `huaweicloud/huaweicloud-devkit`）
@@ -11,7 +11,7 @@
 
 | 项 | 值 |
 |---|---|
-| 客户端 / Agent | `Hermes` + `deepseek-v4-pro-0813` |
+| 客户端 / Agent | `Hermes` + `deepseek-v4.1-flash-1017` |
 | OS / 架构 | `Linux` (aarch64) |
 | 被测版本（SUT） | `v1.1.14`（npm latest 正式版，gitHead `bd985051`） |
 | Node 运行时 | `v22.23.2`（满足 1.1.14 引擎要求 `^22.19.0`） |
