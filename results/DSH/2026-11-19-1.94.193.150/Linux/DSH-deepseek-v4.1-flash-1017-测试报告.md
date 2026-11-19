@@ -76,6 +76,8 @@ P2 30：PASS 26 / SPEC 2 / FAIL 1（D8-9）/ BLOCKED 1
 
 ## 四、缺陷清单
 
+> 缺陷级别按实际影响定级，与用例优先级解耦（例：D8-9 用例为 P2，但遥测明文凭证影响定 P1；D2-10 用例 P1，影响面窄定 P2）。
+
 | # | 级别 | 用例ID | 缺陷描述 | 期望结果 | 实际结果 | 根因（文件:行号） | 状态 |
 |---|---|---|---|---|---|---|---|
 | 1 | P0 | `D4-16` | `sh -c` 包裹的凭证 env dump 绕过命令风险引擎 | `deny` | `{"decision":"allow","findings":[]}` | `plugins/huaweicloud-core/safety/rules/cloud-risk-rules.json:27-39`（边界 `(^|\s)` 不匹配引号内 `env`；`src/safety/classify-text.ts:997-1007` 能拦，两条链路不一致） | #1158 |
