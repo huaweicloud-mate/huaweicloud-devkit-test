@@ -1,0 +1,28 @@
+{
+ "caseId": "D2-13",
+ "status": "PASS",
+ "why": "隔离 HOME 下写入 S1 后：注入 env(AKFROMENVVAR000000002) 时普通 S1 让位于 env → AKFROMENVVAR000000002；env 清空后回落 S1 → AKFROMVAULT00000000001(=S1)；setConfiguredBySession(true) 后 R9 生效、S1 压过 env → AKFROMVAULT00000000001(=S1)；清除该标记后 env 重新生效 → AKFROMENVVAR000000002(=env)。证明 S1 优先可切换且 env 清除后稳定恢复",
+ "executedAt": "20261120073828",
+ "executedAtIso": "2026-11-19T23:38:28.104Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "plainWithEnv": {
+  "ak": "AKFROMENVVAR000000002",
+  "raw": "AK=AKFROMENVVAR000000002"
+ },
+ "envCleared": {
+  "ak": "AKFROMVAULT00000000001",
+  "raw": "AK=AKFROMVAULT00000000001"
+ },
+ "sessionOn": {
+  "ak": "AKFROMVAULT00000000001",
+  "raw": "AK=AKFROMVAULT00000000001"
+ },
+ "sessionOff": {
+  "ak": "AKFROMENVVAR000000002",
+  "raw": "AK=AKFROMENVVAR000000002"
+ },
+ "s1ak": "AKFROMVAULT00000000001",
+ "envak": "AKFROMENVVAR000000002"
+}

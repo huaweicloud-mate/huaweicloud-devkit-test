@@ -1,23 +1,116 @@
 {
  "caseId": "D1-41",
  "status": "PASS",
- "why": "真实 MCP check_update: isError=false, content JSON 含 currentVersion=2.0.0-next.4 / result=check_failed",
- "executedAt": "20261120072134",
- "executedAtIso": "2026-11-19T23:21:34.576Z",
+ "why": "真实 MCP check_update 四态全部命中（可控 registry + 隔离 HOME）：up_to_date / update_available(updateAvailable=true,targetVersion=9.9.9) / check_failed(registry 500) / dismissed(dismissExpiresAt 有值)；八字段契约 currentVersion/latestStable/latestNext/targetVersion/updateAvailable/dismissed/dismissExpiresAt/result 全部存在且类型正确",
+ "executedAt": "20261120073245",
+ "executedAtIso": "2026-11-19T23:32:45.603Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
- "isError": false,
- "parsed": {
-  "currentVersion": "2.0.0-next.4",
-  "latestStable": null,
-  "latestNext": null,
-  "targetVersion": null,
-  "updateAvailable": false,
-  "dismissed": false,
-  "dismissExpiresAt": null,
-  "result": "check_failed",
-  "note": "检测失败，不影响使用"
- },
- "raw": "{\n  \"currentVersion\": \"2.0.0-next.4\",\n  \"latestStable\": null,\n  \"latestNext\": null,\n  \"targetVersion\": null,\n  \"updateAvailable\": false,\n  \"dismissed\": false,\n  \"dismissExpiresAt\": null,\n  \"result\": \"check_failed\",\n  \"note\": \"检测失败，不影响使用\"\n}"
+ "rows": [
+  {
+   "scenario": "up_to_date",
+   "got": "up_to_date",
+   "expect": "up_to_date",
+   "j": {
+    "currentVersion": "2.0.0-next.4",
+    "latestStable": "2.0.0-next.4",
+    "latestNext": "2.0.0-next.4",
+    "targetVersion": "2.0.0-next.4",
+    "updateAvailable": false,
+    "dismissed": false,
+    "dismissExpiresAt": null,
+    "result": "up_to_date"
+   }
+  },
+  {
+   "scenario": "update_available",
+   "got": "update_available",
+   "expect": "update_available",
+   "j": {
+    "currentVersion": "2.0.0-next.4",
+    "latestStable": "9.9.9",
+    "latestNext": "9.9.9",
+    "targetVersion": "9.9.9",
+    "updateAvailable": true,
+    "dismissed": false,
+    "dismissExpiresAt": null,
+    "result": "update_available"
+   }
+  },
+  {
+   "scenario": "check_failed",
+   "got": "check_failed",
+   "expect": "check_failed",
+   "j": {
+    "currentVersion": "2.0.0-next.4",
+    "latestStable": null,
+    "latestNext": null,
+    "targetVersion": null,
+    "updateAvailable": false,
+    "dismissed": false,
+    "dismissExpiresAt": null,
+    "result": "check_failed",
+    "note": "检测失败，不影响使用"
+   }
+  },
+  {
+   "scenario": "dismissed",
+   "got": "dismissed",
+   "expect": "dismissed",
+   "j": {
+    "currentVersion": "2.0.0-next.4",
+    "latestStable": "9.9.9",
+    "latestNext": "9.9.9",
+    "targetVersion": "9.9.9",
+    "updateAvailable": false,
+    "dismissed": true,
+    "dismissExpiresAt": "2026-11-22T23:32:44.082Z",
+    "result": "dismissed"
+   }
+  }
+ ],
+ "contract": [
+  {
+   "ok": true,
+   "missing": [],
+   "types": {
+    "currentVersion": "string",
+    "updateAvailable": "boolean",
+    "dismissed": "boolean",
+    "result": "string"
+   }
+  },
+  {
+   "ok": true,
+   "missing": [],
+   "types": {
+    "currentVersion": "string",
+    "updateAvailable": "boolean",
+    "dismissed": "boolean",
+    "result": "string"
+   }
+  },
+  {
+   "ok": true,
+   "missing": [],
+   "types": {
+    "currentVersion": "string",
+    "updateAvailable": "boolean",
+    "dismissed": "boolean",
+    "result": "string"
+   }
+  },
+  {
+   "ok": true,
+   "missing": [],
+   "types": {
+    "currentVersion": "string",
+    "updateAvailable": "boolean",
+    "dismissed": "boolean",
+    "result": "string"
+   }
+  }
+ ],
+ "reg": "http://127.0.0.1:58719"
 }

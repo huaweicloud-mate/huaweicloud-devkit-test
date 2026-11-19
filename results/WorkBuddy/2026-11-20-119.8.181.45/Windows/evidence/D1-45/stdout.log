@@ -1,15 +1,16 @@
 {
  "caseId": "D1-45",
- "status": "FAIL",
- "why": "提示消费时序异常: check=false 1stNonCheck=false 2ndNonCheck=false",
- "executedAt": "20261120072141",
- "executedAtIso": "2026-11-19T23:21:41.562Z",
+ "status": "PASS",
+ "why": "一次性提示时序正确：check_update 自身不携带 _updateInfo（result=update_available）；会话首个非检查工具 list_skills 携带 _updateInfo=true；同会话第二次 list_skills 不再携带（只消费一次）",
+ "executedAt": "20261120073252",
+ "executedAtIso": "2026-11-19T23:32:52.147Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
  "check": false,
- "firstNonCheck": false,
+ "firstNonCheck": true,
  "secondNonCheck": false,
- "head3": "Vendor challenge: first Huawei Cloud tool call this session — is the vendorConfirmed quote the user's actual words, or invented? An invented quote is a fabricated user statement. If invented, or the vendor was only assumed, ask which cloud they mean now. Retry",
- "head4": "{\n  \"ok\": false,\n  \"error\": \"Failed to list regions.\",\n  \"fallback\": \"Check https://developer.huaweicloud.com/endpoint for available regions.\",\n  \"staticRegions\": [\n    {\n      \"id\": \"cn-north-1\",\n   "
+ "checkResult": "update_available",
+ "head3": "{\n  \"ok\": true,\n  \"count\": 24,\n  \"skills\": [\n    {\n      \"name\": \"huawei-cloud-apig-instance-management\",\n      \"description\": \"Manage Huawei Cloud APIG (API Gateway, dedicated instances) via hcloud CLI: instance lifecycle (create/list/delete), API groups, API create/update/delete, publish/offline, ",
+ "head4": "{\n  \"ok\": true,\n  \"count\": 24,\n  \"skills\": [\n    {\n      \"name\": \"huawei-cloud-apig-instance-management\",\n      \"description\": \"Manage Huawei Cloud APIG (API Gateway, dedicated instances) via hcloud CLI: instance lifecyc"
 }

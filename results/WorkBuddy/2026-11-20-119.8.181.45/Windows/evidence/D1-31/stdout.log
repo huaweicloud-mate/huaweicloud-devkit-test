@@ -1,16 +1,42 @@
 {
  "caseId": "D1-31",
- "status": "FAIL",
- "why": "冷却逻辑错误: inCool=dismissed after=update_available days=NaN",
- "executedAt": "20261120072133",
- "executedAtIso": "2026-11-19T23:21:33.050Z",
+ "status": "PASS",
+ "why": "writeSkipState 落盘 {dismissedVersion,dismissedAt,expireAt}；+1 天判 dismissed(dismissExpiresAt=2026-11-22T23:30:08.113Z)；+4 天恢复 update_available；实测冷却 3 天（expireAt−dismissedAt）",
+ "executedAt": "20261120073008",
+ "executedAtIso": "2026-11-19T23:30:08.121Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
+ "written": {
+  "dismissedVersion": "1.1.2",
+  "dismissedAt": "2026-11-19T23:30:08.113Z",
+  "expireAt": "2026-11-22T23:30:08.113Z"
+ },
  "state": {
   "dismissedVersion": "1.1.2",
-  "dismissedAt": "2026-11-19T23:21:33.043Z",
-  "expireAt": "2026-11-22T23:21:33.043Z"
+  "dismissedAt": "2026-11-19T23:30:08.113Z",
+  "expireAt": "2026-11-22T23:30:08.113Z"
  },
- "days": null
+ "inCool": {
+  "currentVersion": "1.1.0",
+  "latestStable": "1.1.2",
+  "latestNext": null,
+  "targetVersion": "1.1.2",
+  "updateAvailable": false,
+  "dismissed": true,
+  "dismissExpiresAt": "2026-11-22T23:30:08.113Z",
+  "result": "dismissed"
+ },
+ "after": {
+  "currentVersion": "1.1.0",
+  "latestStable": "1.1.2",
+  "latestNext": null,
+  "targetVersion": "1.1.2",
+  "updateAvailable": true,
+  "dismissed": false,
+  "dismissExpiresAt": null,
+  "result": "update_available"
+ },
+ "days": 3,
+ "raw": "{\n  \"dismissedVersion\": \"1.1.2\",\n  \"dismissedAt\": \"2026-11-19T23:30:08.113Z\",\n  \"expireAt\": \"2026-11-22T23:30:08.113Z\"\n}"
 }

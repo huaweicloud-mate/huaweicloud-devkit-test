@@ -1,14 +1,14 @@
 {
  "caseId": "D1-65",
- "status": "FAIL",
- "why": "调试开关未生效: onHasDebug=false offHasDebug=false",
- "executedAt": "20261120072142",
- "executedAtIso": "2026-11-19T23:21:42.915Z",
+ "status": "PASS",
+ "why": "HUAWEICLOUD_DEVKIT_DEBUG=1 时 queryDistTagsSync 失败分支输出 \"[debug] queryDistTagsSync: npm view exited with status …\" 到 stderr；未设置时零调试输出，返回值仍为 null 不受影响",
+ "executedAt": "20261120073224",
+ "executedAtIso": "2026-11-19T23:32:24.622Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
- "on": "IS_NULL=true\n",
+ "on": "IS_NULL=true\n[debug] queryDistTagsSync: npm view exited with status null\n",
  "off": "IS_NULL=true\n",
- "onDbg": false,
+ "onDbg": true,
  "offDbg": false
 }
