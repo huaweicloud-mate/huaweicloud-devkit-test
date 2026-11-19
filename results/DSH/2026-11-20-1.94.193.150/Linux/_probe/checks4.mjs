@@ -115,7 +115,23 @@ reg('D3-C1', async () => {
     if (serverId) { sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]); serverId = null; }
     if (sgId) { const d = sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]); if (d.ok) sgId = null; else vpcErr = d.text.slice(0, 160); }
     if (subnetId && vpcId) { const d = sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); if (d.ok) subnetId = null; else vpcErr = d.text.slice(0, 160); }
-    if (vpcId && !subnetId && !sgId) { const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]); if (d.ok) vpcId = null; else vpcErr = d.text.slice(0, 160); }
+    if (vpcId && !sgId) {
+      // VPC 内残留子网/安全组必须先清空（默认安全组随 VPC 创建），否则 DeleteVpc 会因残留而失败
+      try {
+        const lst = sh(['VPC', 'ListSubnets', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+        const j = JSON.parse(lst.text.slice(lst.text.indexOf('{')));
+        for (const s of (j.subnets || [])) sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${s.id}`, `--cli-region=${REGION}`]);
+      } catch {}
+      try {
+        const lgs = sh(['VPC', 'ListSecurityGroups', `--cli-region=${REGION}`]);
+        const j = JSON.parse(lgs.text.slice(lgs.text.indexOf('{')));
+        for (const g of (j.security_groups || [])) {
+          if (g.vpc_id === vpcId && g.id !== sgId) sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${g.id}`, `--cli-region=${REGION}`]);
+        }
+      } catch {}
+      const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]);
+      if (d.ok && !/error|Error/i.test(d.text)) vpcId = null; else vpcErr = d.text.slice(0, 160);
+    }
   };
   let created = false, active = false, delOk = false, zero = false;
   try {

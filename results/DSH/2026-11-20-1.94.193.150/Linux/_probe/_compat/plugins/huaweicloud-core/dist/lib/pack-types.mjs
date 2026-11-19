@@ -1,0 +1,1 @@
+/home/testbot2/devkit-test/DSH/sut/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/dist/lib/pack-types.js
