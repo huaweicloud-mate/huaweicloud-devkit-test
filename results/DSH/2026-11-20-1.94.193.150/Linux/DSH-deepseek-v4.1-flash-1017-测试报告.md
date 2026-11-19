@@ -179,6 +179,9 @@
 
 ## 八、遗留与建议
 
+> **缺陷单**：合并单 #1158 复核评论 https://github.com/huaweicloud/huaweicloud-devkit/issues/1158#issuecomment-7022796533（历史 9 项复现 + 新增 P0 发布包漏依赖；未重复开单）
+
+
 1. **P0 发布阻断**：修复 `package.json` 依赖声明（zod / @modelcontextprotocol/sdk / ajv / ajv-formats），并在 CI 增加「全新前缀 `npm i` 后 import dist 入口 + 启动 MCP server」冒烟，避免再次发布不可用包。
 2. **P0 安全**：D4-16 `sh -c` 包裹穿透、D4-21 HCL broad IAM、D9-12 未握手放行，建议同一 PR 内修复并补回归。
 3. **SPEC 裁决（2 项）**：D1-68 region 优先级（实现 HW_REGION 优先 vs 用例 HUAWEICLOUD_REGION 优先）、D4-12 安装器基线（v2 已无 npm install），需产品/用例 owner 二选一后更新用例或实现。

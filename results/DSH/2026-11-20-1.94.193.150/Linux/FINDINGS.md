@@ -6,6 +6,8 @@
 > **本轮结论**：10 项缺陷（4 P0 / 3 P1 / 3 P2，其中 2 项 SPEC-MISMATCH 待裁决）。146 例全部本轮实跑（未沿用旧证据），PASS 129 / FAIL 7 / BLOCKED 7 / SPEC 2 / NOT_RUN 1。
 > **隔离执行说明**：本机全局 npm 包在 05:02 被并行客户端（CodeArtsAgent `prepare_env.py --update`）覆盖为 v1.1.13，因此本轮在 `~/devkit-test/DSH/sut` 私有前缀重装 `2.0.0-next.4` 作为 SUT，并补齐其**未声明**的运行时依赖（见 #1）；全部探针 import 该私有前缀 `plugins/huaweicloud-core/dist`，hdk 源码仓（`16a24814`）仅用于根因定位。
 
+> **缺陷单**：合并单 #1158 复核评论 https://github.com/huaweicloud/huaweicloud-devkit/issues/1158#issuecomment-7022796533（历史 9 项复现 + 新增 P0 依赖漏声明，未重复开单）
+
 ## 汇总
 
 | # | 级别 | 用例ID | 标题 | 状态 |
