@@ -1,0 +1,63 @@
+{
+ "caseId": "D1-30",
+ "status": "PASS",
+ "why": "7 组 semverCompare 全部符合预期（含 1.1.0 > 1.1.0-next.9）；hasPrerelease(2.0.0-next.4)=true、(1.1.2)=false",
+ "executedAt": "20261120072133",
+ "executedAtIso": "2026-11-19T23:21:33.042Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "rows": [
+  {
+   "a": "1.1.2",
+   "b": "1.1.1",
+   "want": 1,
+   "got": 1,
+   "ok": true
+  },
+  {
+   "a": "1.1.1",
+   "b": "1.1.2",
+   "want": -1,
+   "got": -1,
+   "ok": true
+  },
+  {
+   "a": "1.1.2",
+   "b": "1.1.2",
+   "want": 0,
+   "got": 0,
+   "ok": true
+  },
+  {
+   "a": "1.1.0",
+   "b": "1.1.0-next.9",
+   "want": 1,
+   "got": 1,
+   "ok": true
+  },
+  {
+   "a": "1.1.0-next.9",
+   "b": "1.1.0",
+   "want": -1,
+   "got": -1,
+   "ok": true
+  },
+  {
+   "a": "2.0.0",
+   "b": "1.9.9",
+   "want": 1,
+   "got": 1,
+   "ok": true
+  },
+  {
+   "a": "1.0.0",
+   "b": "1.0.0-next.0",
+   "want": 1,
+   "got": 1,
+   "ok": true
+  }
+ ],
+ "pre": true,
+ "stable": false
+}
