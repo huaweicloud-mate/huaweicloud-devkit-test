@@ -1,29 +1,34 @@
 {
  "caseId": "D3-C1",
  "status": "FAIL",
- "why": "ECS 创建失败: {\n  \"error\": {\n    \"message\": \"The flavor does not match the image.\",\n    \"code\": \"Ecs.0005\"\n  }\n}\n获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度\n请求诊断请参考以下内容:\n+---+--------+--------+-------------------------+------------+----------------------------------------------------+\n|No.|产品名称| 错误码 |        错误信息         ",
- "executedAt": "20261120065103",
- "executedAtIso": "2026-11-19T22:51:03.302Z",
+ "why": "插件无法驱动生命周期（真云鉴权失败）：plan 正确判 deny 并签发 approvalToken（审批链路正常），但 run_approved_command 执行返回 APIGW.0301「Incorrect IAM authentication information: Unauthorized」。根因：插件解析到的凭证从未下发给 hcloud —— resolveStsInjectArgs 仅注入 STS 三元组（hcloud-sts.js:70 要求 creds.securityToken 非空），本机常驻 AK/SK 无 securityToken，KooCLI 自身又不读 HW_* 环境变量（实测 HCLOUD_ACCESS_KEY_ID/HW_ACCESS_KEY 均无效），最终回落到 profile「test」的失效凭证。对照组：同一时刻直连 KooCLI 带 --cli-access-key/--cli-secret-key 完整跑通 VPC→子网→ECS（kc1.small.1，4 次轮询达 ACTIVE）→ 删除 → 四项归零=true，证明云侧正常、缺陷在插件凭证下发链路。",
+ "executedAt": "20261120070720",
+ "executedAtIso": "2026-11-19T23:07:20.848Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
- "plugin": {
-  "planGated": true,
-  "executed": false,
-  "errorCode": null,
-  "errorMessage": null
+ "spec": {
+  "flavor": "kc1.small.1",
+  "vcpu": 1,
+  "ramMB": 1024,
+  "image": "7914787c-cc26-45e2-8697-2c938e030251",
+  "rootVolume": "GPSSD 40GB"
  },
- "after": {
-  "ecsCount": 0,
-  "ecsNames": [],
-  "eipCount": 0,
-  "eipIds": [],
-  "vpcCount": 0,
-  "vpcNames": [],
-  "subnetCount": 0,
-  "subnetNames": [],
-  "taggedTctest": [],
+ "pluginPath": {
+  "planGated": false,
+  "askSurfaced": true,
+  "executed": false,
+  "errorCode": "APIGW.0301",
+  "errorMessage": "Incorrect IAM authentication information: Unauthorized"
+ },
+ "cloudPath": {
+  "vpc": true,
+  "subnet": true,
+  "server": true,
+  "active": "ACTIVE",
+  "activeSamples": 4,
+  "deleted": true,
   "zero": true
  },
- "allZero": true
+ "serverId": "27e6352d-6d91-4e2d-b92c-11b0001d37a5"
 }
