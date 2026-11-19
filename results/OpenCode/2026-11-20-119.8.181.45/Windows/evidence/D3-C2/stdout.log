@@ -1,0 +1,18 @@
+{
+  "caseId": "D3-C2",
+  "status": "BLOCKED",
+  "why": "OBS 凭证同步成功，但静态站部署闭环无法执行：KooCLI 无 OBS 建桶命令（OBS 非 KooCLI 服务，需 obsutil） + 本机无 obsutil 可执行文件（where obsutil 未找到，OBS 桶创建/上传/public-read/curl 200/清理无法真实执行） + 现有唯一可用凭证为只读 IAM 用户 test001（写操作 Pdp.0001），未创建任何桶、云端零残留。解除条件：安装 obsutil 并下发具备 OBS 写权限的 AK/SK",
+  "executedAt": "20261120050823",
+  "result": {
+    "setupObsConfig": {
+      "ok": true,
+      "path": "C:\\Users\\Administrator\\.obsutilconfig"
+    },
+    "hasObsutil": false,
+    "createAttempt": {
+      "code": 3,
+      "out": "\"Error: No such command: \\\"CreateBucket\\\", please try \\\"help\\\" for more information!\""
+    },
+    "residue": "no bucket created"
+  }
+}

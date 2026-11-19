@@ -1,0 +1,17 @@
+{
+  "caseId": "D3-B3",
+  "status": "BLOCKED",
+  "why": "工具与直连 hcloud 均认证失败（APIGW.0301 Unauthorized，本机 KooCLI profile 与只读子账号凭证均已失效），无有效基线无法判定凭证来源选择缺陷；解除条件：恢复有效 AK/SK 后重跑对照",
+  "executedAt": "20261120051516",
+  "result": {
+    "tool": {
+      "ok": false,
+      "errorCode": "APIGW.0301"
+    },
+    "direct": {
+      "code": 0,
+      "out": "获取项目ID失败:API response body: {\"error_msg\":\"Incorrect IAM authentication information: Unauthorized\",\"error_code\":\"APIGW.0301\",\"request_id\":\"07f42a7fb1491e9ebcf1eb44ed900e18\"}\n[USE_ERROR]缺少必填参数:project_id\n{}"
+    },
+    "leak": false
+  }
+}

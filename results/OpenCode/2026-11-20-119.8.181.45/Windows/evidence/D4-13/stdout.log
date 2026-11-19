@@ -1,0 +1,17 @@
+{
+  "caseId": "D4-13",
+  "status": "BLOCKED",
+  "why": "只读子账号 test001 认证失败（APIGW.0301 Unauthorized + 缺 project_id），只读成功前提不成立，最小权限通过率无法测量；解除条件：下发有效只读 AK/SK",
+  "executedAt": "20261120051519",
+  "result": {
+    "read": {
+      "code": 0,
+      "out": "获取项目ID失败:API response body: {\"error_msg\":\"Incorrect IAM authentication information: AK AKIDtest failed to reach the limit, forbidden.\",\"error_code\":\"APIGW.0301\",\"request_id\":\"7c9aa4718cc2047fbd8b1a64b22c51cf\"}\n[USE_ERROR]缺少必填参数:project_id\n{}"
+    },
+    "write": {
+      "code": 0,
+      "out": "{}获取项目ID失败:API response body: {\"error_msg\":\"Incorrect IAM authentication information: AK AKIDtest failed to reach the limit, forbidden.\",\"error_code\":\"APIGW.0301\",\"request_id\":\"8fcd686e94b2aa0bbf6bc28c3c4765c1\"}\n[USE_ERROR]缺少必填参数:project_id\n"
+    },
+    "writeDenied": true
+  }
+}
