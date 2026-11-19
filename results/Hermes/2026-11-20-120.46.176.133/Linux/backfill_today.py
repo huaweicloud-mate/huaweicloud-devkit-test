@@ -145,7 +145,7 @@ if os.path.isfile(os.path.join(EVID, "D3-C1", "stdout.txt")):
     append_case("D3-C1", "\n===== 手工归零补充 =====\n"
                 "自动化 finally 归零 150s ECS 删除轮询时序抖动（ECS:提交删除 轮询:仍在/未确认），属探针轮询窗口过短而非产品缺陷。\n"
                 "已手工 `hcloud ECS DeleteServers --servers.1.id=06479986-7a86-4a18-9ef5-4087de4dd670 --delete_publicip=true` → 轮询 GONE → "
-                "`DeleteSubnet`(1c32ff9a-635c-47cd-b273-dac41f11296a) → `DeleteVpc`(d8639dba-05c1-4c03-bff4-294e644d8662) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（仅余他客户端并发同名 testbot3-hermes-* 资源，未误删）。\n")
+                "`DeleteSubnet`(1c32ff9a-635c-47cd-b273-dac41f11296a) → `DeleteVpc`(d8639dba-05c1-4c03-bff4-294e644d8662) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（仅余他客户端既有 testbot2-dsh-* 资源（VPC/SG）与本轮 default SG，未误删）。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.14\ngitHead bd985051\n", None)
