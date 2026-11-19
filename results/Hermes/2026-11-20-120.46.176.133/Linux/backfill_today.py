@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-11-19 每日测试：证据分发（stdout.txt）+ 回填三 CSV + 使命清单（v1.1.14 gitHead bd985051）。"""
+"""Hermes Linux 2026-11-20 每日测试：证据分发（stdout.txt）+ 回填三 CSV + 使命清单（v1.1.14 gitHead bd985051）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -144,8 +144,8 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 if os.path.isfile(os.path.join(EVID, "D3-C1", "stdout.txt")):
     append_case("D3-C1", "\n===== 手工归零补充 =====\n"
                 "自动化 finally 归零 150s ECS 删除轮询时序抖动（ECS:提交删除 轮询:仍在/未确认），属探针轮询窗口过短而非产品缺陷。\n"
-                "已手工 `hcloud ECS DeleteServers --servers.1.id=acadd0b6-ed55-4966-9f26-09d3fb427ff8 --delete_publicip=true` → 轮询 GONE → "
-                "`DeleteSubnet`(e973404a-2ecd-4db0-8182-8615b2a1ecda) → `DeleteVpc`(6645ba41-193a-431a-a12f-f878db102c75) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（仅余他客户端并发同名 testbot3-hermes-* 资源，未误删）。\n")
+                "已手工 `hcloud ECS DeleteServers --servers.1.id=06479986-7a86-4a18-9ef5-4087de4dd670 --delete_publicip=true` → 轮询 GONE → "
+                "`DeleteSubnet`(1c32ff9a-635c-47cd-b273-dac41f11296a) → `DeleteVpc`(d8639dba-05c1-4c03-bff4-294e644d8662) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（仅余他客户端并发同名 testbot3-hermes-* 资源，未误删）。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.14\ngitHead bd985051\n", None)
@@ -156,7 +156,7 @@ PASS_D = [
     "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69","D1-70",
     "D2-1","D2-2","D2-4","D2-5","D2-10","D2-11","D2-12","D2-13","D2-16","D2-26","D2-27",
-    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C2","D3-C3","D3-C4","D3-C5","D3-C6","D3-C7","D3-C13",
+    "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C3","D3-C4","D3-C5","D3-C6","D3-C7","D3-C13",
     "D3-S1","D3-S2","D3-S3","D3-S4","D3-S8",
     "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11","D4-12",
     "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23","D4-24",
@@ -172,6 +172,7 @@ FAIL_D = {
     "D4-21": "hook_check_artifacts 未拦截 HCL actions=[*] / AdministratorFullAccess",
     "D4-25": "Python hook 写操作遥测误分类 cli:invoke（应 cli:write）",
     "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 泄漏",
+    "D3-C2": "OBS 建桶/静态站/删桶 3 步实测成功，但 hcloud OBS mb 创建成功仍返回退出码 6（--cli-secure-verify=false 时返回 3），步骤1「退出码=0」断言失败",
     "D3-S5": "serviceCatalog 复合意图未命中多 service（回退 help）",
     "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.filename，未生成 URN/触发器",
     "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.password）",
