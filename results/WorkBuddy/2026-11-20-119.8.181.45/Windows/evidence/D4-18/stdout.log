@@ -1,0 +1,49 @@
+{
+ "caseId": "D4-18",
+ "status": "PASS",
+ "why": "写操作判 deny/write 且 needsUserConfirmation=true（走确认流而非直接放行）；只读不需确认；secret 类不可通过确认解锁；写操作 plan 生成 approvalToken",
+ "executedAt": "20261120053922",
+ "executedAtIso": "2026-11-19T21:39:22.859Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "write classified write (not silent permit)",
+   "ok": true,
+   "actual": "deny/write"
+  },
+  {
+   "name": "write needs confirmation",
+   "ok": true,
+   "actual": "true"
+  },
+  {
+   "name": "read needs no confirmation",
+   "ok": true,
+   "actual": "false"
+  },
+  {
+   "name": "secret never unlockable by confirm",
+   "ok": true,
+   "actual": "false"
+  },
+  {
+   "name": "approvalToken minted for write plan",
+   "ok": true,
+   "actual": "1c17d604-990"
+  }
+ ],
+ "failures": [],
+ "plan": {
+  "classification": {
+   "decision": "deny",
+   "risk": "write",
+   "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+  },
+  "userConfirmation": {
+   "needed": true,
+   "command": "npx huaweicloud-devkit approve 1c17d604-990d-4f63-a61b-332b25b4e624"
+  }
+ }
+}

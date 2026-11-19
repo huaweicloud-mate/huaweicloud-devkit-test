@@ -1,0 +1,20 @@
+{
+ "caseId": "D1-39",
+ "status": "FAIL",
+ "why": "Windows 升级检测链不可用：npm view 本身成功（rc=0，返回数组包裹的 dist-tags），但 queryDistTagsSync 返回 null。根因 update-registry.js:419-441 → parseDistTagsOutput → toDistTags 对 npm 实际输出的 [{...}] 数组形态直接 return null（Array.isArray 即判空），同步检测链路在本机恒为 null，升级提醒静默失效。",
+ "executedAt": "20261120060745",
+ "executedAtIso": "2026-11-19T22:07:45.623Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "npmRc": 0,
+ "npmErrCode": null,
+ "npmTextHead": "[\n  {\n    \"latest\": \"1.1.14\",\n    \"next\": \"2.0.0-next.4\"\n  }\n]",
+ "sync": null,
+ "ms": 813,
+ "parseArrayForm": null,
+ "parseObjectForm": {
+  "latest": "1.1.14",
+  "next": "2.0.0-next.4"
+ }
+}

@@ -1,0 +1,110 @@
+{
+ "caseId": "D2-4",
+ "status": "PASS",
+ "why": "7 类凭证攻击串 + 对象键路径 + MCP show_profile_redacted 均无明文泄露（AK/SK/Token/password 全部 <redacted>）",
+ "executedAt": "20261120053918",
+ "executedAtIso": "2026-11-19T21:39:18.213Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "redact lowercase ak=/sk=",
+   "ok": true,
+   "actual": "config: ak=<redacted> sk=<redacted>"
+  },
+  {
+   "name": "redact env KEY=value",
+   "ok": true,
+   "actual": "AWS_ACCESS_KEY_ID=<redacted>"
+  },
+  {
+   "name": "redact json quoted keys",
+   "ok": true,
+   "actual": "{\"accessKeyId\":<redacted>,\"secretAccessKey\":<redacted>}"
+  },
+  {
+   "name": "redact Authorization Bearer",
+   "ok": true,
+   "actual": "Authorization: <redacted>"
+  },
+  {
+   "name": "redact uppercase AK/SK",
+   "ok": true,
+   "actual": "AK=<redacted> SK=<redacted>"
+  },
+  {
+   "name": "redact password=",
+   "ok": true,
+   "actual": "password=<redacted>"
+  },
+  {
+   "name": "redact X-Auth-Token",
+   "ok": true,
+   "actual": "X-Auth-Token: <redacted>"
+  },
+  {
+   "name": "object-path redaction",
+   "ok": true,
+   "actual": "{\"ak\":\"<redacted>\",\"sk\":\"<redacted>\",\"nested\":{\"securityToken\":\"<redacted>\"}}"
+  },
+  {
+   "name": "show_profile_redacted no plaintext AK",
+   "ok": true,
+   "actual": "{\n  \"ok\": true,\n  \"note\": \"Profile information was returned through the toolkit redaction pipeline.\",\n  \"result\": {\n    \"ok\": true,\n    \"exitCode\": 0,\n    \"signal\": null,\n    \"stdout\": \"{\\n  \\\"name\\\": \\\"test\\\",\\n  \\\"mode\\\": \\\"AKSK\\\",\\n  \\\"accessKeyId\\\": <redacted>,\\n  \\\"secretAccessKey\\\": <redacted>"
+  }
+ ],
+ "failures": [],
+ "attacks": [
+  {
+   "name": "lowercase ak=/sk=",
+   "input": "config: ak=TESTAKXXXXXXXXXXXXXXXX sk=TESTSKYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+   "output": "config: ak=<redacted> sk=<redacted>",
+   "leaked": false
+  },
+  {
+   "name": "env KEY=value",
+   "input": "AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE",
+   "output": "AWS_ACCESS_KEY_ID=<redacted>",
+   "leaked": false
+  },
+  {
+   "name": "json quoted keys",
+   "input": "{\"accessKeyId\":\"ABCDEFGH12345678\",\"secretAccessKey\":\"SECRETSECRETSECRETXYZ\"}",
+   "output": "{\"accessKeyId\":<redacted>,\"secretAccessKey\":<redacted>}",
+   "leaked": false
+  },
+  {
+   "name": "Authorization Bearer",
+   "input": "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ4In0.sig",
+   "output": "Authorization: <redacted>",
+   "leaked": false
+  },
+  {
+   "name": "uppercase AK/SK",
+   "input": "AK=QWAERTYUIOPASDFGHJK SK=ZXCVBNMASDFGHJKLQWERTYUIOPASDFGHJKLZXCVBN",
+   "output": "AK=<redacted> SK=<redacted>",
+   "leaked": false
+  },
+  {
+   "name": "password=",
+   "input": "password=Sup3rS3cretP@ss",
+   "output": "password=<redacted>",
+   "leaked": false
+  },
+  {
+   "name": "X-Auth-Token",
+   "input": "X-Auth-Token: gAAAAABmZtokenvalue1234567890",
+   "output": "X-Auth-Token: <redacted>",
+   "leaked": false
+  }
+ ],
+ "objectPath": {
+  "ak": "<redacted>",
+  "sk": "<redacted>",
+  "nested": {
+   "securityToken": "<redacted>"
+  }
+ },
+ "showProfile": "{\n  \"ok\": true,\n  \"note\": \"Profile information was returned through the toolkit redaction pipeline.\",\n  \"result\": {\n    \"ok\": true,\n    \"exitCode\": 0,\n    \"signal\": null,\n    \"stdout\": \"{\\n  \\\"name\\\": \\\"test\\\",\\n  \\\"mode\\\": \\\"AKSK\\\",\\n  \\\"accessKeyId\\\": <redacted>,\\n  \\\"secretAccessKey\\\": <redacted>,\\n  \\\"securityToken\\\": <redacted>,\\n  \\\"region\\\": \\\"cn-north-4\\\",\\n  \\\"projectId\\\": \\\"\\\",\\n  \\\"domainId\\\": \\\"\\\",\\n  \\\"skipSecureVerify\\\": \\\"false\\\",\\n  \\\"readTimeout\\\": 10,\\n  \\\"connectTimeout\\\": 5,\\"
+}

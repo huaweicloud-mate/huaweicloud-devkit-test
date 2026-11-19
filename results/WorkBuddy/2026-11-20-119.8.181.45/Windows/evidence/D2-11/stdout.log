@@ -1,0 +1,14 @@
+{
+ "caseId": "D2-11",
+ "status": "SPEC-MISMATCH",
+ "why": "安全语义正确（STS token 未落盘、S1 字节未变、返回 R3 拒绝），但响应形状与设计契约漂移：设计预期 {status:'error', scope:'rejected'} 结构化 JSON，实现返回 MCP isError=true + 纯文本 \"Temporary STS credentials cannot be persisted (R3). Use action=temporary.\"（lib/credentials.js:93-100 的内部对象在 tools 层被转成抛出文本），机器无法按字段断言。",
+ "executedAt": "20261120060747",
+ "executedAtIso": "2026-11-19T22:07:47.149Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "isError": true,
+ "text": "Temporary STS credentials cannot be persisted (R3). Use action=temporary.",
+ "s1Path": "C:\\Users\\Administrator\\.config\\huaweicloud\\credentials.json",
+ "unchanged": true
+}

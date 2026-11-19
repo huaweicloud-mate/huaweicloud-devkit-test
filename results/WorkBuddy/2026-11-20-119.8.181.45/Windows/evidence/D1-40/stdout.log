@@ -1,0 +1,63 @@
+{
+ "caseId": "D1-40",
+ "status": "PASS",
+ "why": "镜像滞后场景（远端 1.1.9 < 本地 1.2.0）judgeUpdate 返回 up_to_date/updateAvailable=false，不提示版本倒退；真实新版本仍正确提示",
+ "executedAt": "20261120054718",
+ "executedAtIso": "2026-11-19T21:47:18.240Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "lagging mirror => no backwards hint",
+   "ok": true,
+   "actual": "up_to_date/false target=1.1.9"
+  },
+  {
+   "name": "equal versions => up_to_date",
+   "ok": true,
+   "actual": "up_to_date"
+  },
+  {
+   "name": "genuine newer => update_available",
+   "ok": true,
+   "actual": "update_available/1.1.2"
+  },
+  {
+   "name": "targetVersion never older than current",
+   "ok": true,
+   "actual": "target=1.1.9 current=1.2.0"
+  }
+ ],
+ "failures": [],
+ "lag": {
+  "currentVersion": "1.2.0",
+  "latestStable": "1.1.9",
+  "latestNext": null,
+  "targetVersion": "1.1.9",
+  "updateAvailable": false,
+  "dismissed": false,
+  "dismissExpiresAt": null,
+  "result": "up_to_date"
+ },
+ "eq": {
+  "currentVersion": "1.1.2",
+  "latestStable": "1.1.2",
+  "latestNext": null,
+  "targetVersion": "1.1.2",
+  "updateAvailable": false,
+  "dismissed": false,
+  "dismissExpiresAt": null,
+  "result": "up_to_date"
+ },
+ "ahead": {
+  "currentVersion": "1.1.1",
+  "latestStable": "1.1.2",
+  "latestNext": null,
+  "targetVersion": "1.1.2",
+  "updateAvailable": true,
+  "dismissed": false,
+  "dismissExpiresAt": null,
+  "result": "update_available"
+ }
+}

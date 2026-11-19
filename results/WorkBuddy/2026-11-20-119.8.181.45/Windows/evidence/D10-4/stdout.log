@@ -1,0 +1,134 @@
+{
+ "caseId": "D10-4",
+ "status": "PASS",
+ "why": "规则库 v0.1.0 加载 29 条（deny=15 / warn=14）；凭证读取、env dump、printenv、公网管理端口、宽泛 IAM 判 deny，删除判 warn/deny，只读判 allow",
+ "executedAt": "20261120060115",
+ "executedAtIso": "2026-11-19T22:01:15.048Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "rule catalog loads (more than 10 rules)",
+   "ok": true,
+   "actual": "29 rules v0.1.0"
+  },
+  {
+   "name": "catalog has deny and warn severities",
+   "ok": true,
+   "actual": "deny=15 warn=14"
+  },
+  {
+   "name": "cat credential file => deny",
+   "ok": true,
+   "actual": "deny [hwc-command-credential-file]"
+  },
+  {
+   "name": "env dump with cred name => deny",
+   "ok": true,
+   "actual": "deny [hwc-command-env-dump]"
+  },
+  {
+   "name": "printenv cred name => deny",
+   "ok": true,
+   "actual": "deny [hwc-command-env-dump]"
+  },
+  {
+   "name": "delete resource => warn|deny",
+   "ok": true,
+   "actual": "warn [hwc-destructive-delete-operation]"
+  },
+  {
+   "name": "readonly list => allow",
+   "ok": true,
+   "actual": "allow []"
+  },
+  {
+   "name": "public admin port => deny",
+   "ok": true,
+   "actual": "deny [hwc-network-public-admin-port]"
+  },
+  {
+   "name": "broad IAM artifact-shaped text => deny",
+   "ok": true,
+   "actual": "deny [hwc-iam-admin-policy,hwc-iam-wildcard-action]"
+  }
+ ],
+ "failures": [],
+ "total": 29,
+ "deny": 15,
+ "warn": 14,
+ "rows": [
+  {
+   "name": "cat credential file",
+   "cmd": "cat ~/.hcloud/config.json",
+   "want": "deny",
+   "got": "deny",
+   "ok": true,
+   "rules": [
+    "hwc-command-credential-file"
+   ]
+  },
+  {
+   "name": "env dump with cred name",
+   "cmd": "env | grep HW_ACCESS_KEY",
+   "want": "deny",
+   "got": "deny",
+   "ok": true,
+   "rules": [
+    "hwc-command-env-dump"
+   ]
+  },
+  {
+   "name": "printenv cred name",
+   "cmd": "printenv HW_SECRET_KEY",
+   "want": "deny",
+   "got": "deny",
+   "ok": true,
+   "rules": [
+    "hwc-command-env-dump"
+   ]
+  },
+  {
+   "name": "delete resource",
+   "cmd": "hcloud ECS DeleteServers --server_ids=[\"i-1\"]",
+   "want": "warn|deny",
+   "got": "warn",
+   "ok": true,
+   "rules": [
+    "hwc-destructive-delete-operation"
+   ]
+  },
+  {
+   "name": "readonly list",
+   "cmd": "hcloud ECS NovaListServersDetails --cli-region=cn-north-4",
+   "want": "allow",
+   "got": "allow",
+   "ok": true,
+   "rules": []
+  },
+  {
+   "name": "public admin port",
+   "cmd": "hcloud VPC CreateSecurityGroupRule --cidr=0.0.0.0/0 --port=22",
+   "want": "deny",
+   "got": "deny",
+   "ok": true,
+   "rules": [
+    "hwc-network-public-admin-port"
+   ]
+  },
+  {
+   "name": "broad IAM artifact-shaped text",
+   "cmd": "{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}",
+   "want": "deny",
+   "got": "deny",
+   "ok": true,
+   "rules": [
+    "hwc-iam-admin-policy",
+    "hwc-iam-wildcard-action"
+   ]
+  }
+ ],
+ "version": "0.1.0",
+ "catalogNote": "设计文档称 16 条（9 deny + 7 warn），实际 29 条（15 deny + 14 warn）"
+}

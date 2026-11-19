@@ -1,0 +1,46 @@
+{
+ "caseId": "D8-9",
+ "status": "PASS",
+ "why": "recoverInstallId 生成 64 位 sha256 安装 ID 并落盘、二次调用稳定；sanitizeValue 去除 CR/LF/Tab 并截断 >255 字符",
+ "executedAt": "20261120060112",
+ "executedAtIso": "2026-11-19T22:01:12.063Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "installId is 64-hex sha256",
+   "ok": true,
+   "actual": "fe980277aa314a8558ad"
+  },
+  {
+   "name": "installId stable across calls",
+   "ok": true,
+   "actual": "fe980277 vs fe980277"
+  },
+  {
+   "name": "installId persisted to disk",
+   "ok": true,
+   "actual": "yes"
+  },
+  {
+   "name": "machine fingerprint cached separately from installId",
+   "ok": true,
+   "actual": "distinct file"
+  },
+  {
+   "name": "sanitizeValue strips CR/LF injection",
+   "ok": true,
+   "actual": "\"a b c\""
+  },
+  {
+   "name": "sanitizeValue truncates >255",
+   "ok": true,
+   "actual": 255
+  }
+ ],
+ "failures": [],
+ "idPrefix": "fe980277aa314a85",
+ "err": null,
+ "sanitizeAk": "unchanged"
+}

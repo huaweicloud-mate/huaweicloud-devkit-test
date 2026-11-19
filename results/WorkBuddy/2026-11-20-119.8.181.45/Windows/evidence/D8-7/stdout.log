@@ -1,0 +1,120 @@
+{
+ "caseId": "D8-7",
+ "status": "PASS",
+ "why": "7 个 meta 技能全部存在（含 frontmatter 与可执行步骤，均 >500 字节）；MCP retrieve_skill 实测可拉取技能正文（huawei-ecs=35077, huaweicloud-troubleshooting=15028, huaweicloud-safety=17750）",
+ "executedAt": "20261120054717",
+ "executedAtIso": "2026-11-19T21:47:17.325Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "huaweicloud-core present with steps",
+   "ok": true,
+   "actual": "len=23007 steps=true"
+  },
+  {
+   "name": "huaweicloud-safety present with steps",
+   "ok": true,
+   "actual": "len=8940 steps=true"
+  },
+  {
+   "name": "huaweicloud-api-and-sdk present with steps",
+   "ok": true,
+   "actual": "len=4106 steps=true"
+  },
+  {
+   "name": "huaweicloud-capability-discovery present with steps",
+   "ok": true,
+   "actual": "len=9179 steps=true"
+  },
+  {
+   "name": "huaweicloud-cli-and-auth present with steps",
+   "ok": true,
+   "actual": "len=14172 steps=true"
+  },
+  {
+   "name": "huaweicloud-troubleshooting present with steps",
+   "ok": true,
+   "actual": "len=14423 steps=true"
+  },
+  {
+   "name": "huawei-getting-started present with steps",
+   "ok": true,
+   "actual": "len=5215 steps=true"
+  },
+  {
+   "name": "retrieve_skill huawei-ecs",
+   "ok": true,
+   "actual": 35077
+  },
+  {
+   "name": "retrieve_skill huaweicloud-troubleshooting",
+   "ok": true,
+   "actual": 15028
+  },
+  {
+   "name": "retrieve_skill huaweicloud-safety",
+   "ok": true,
+   "actual": 17750
+  }
+ ],
+ "failures": [],
+ "rows": [
+  {
+   "skill": "huaweicloud-core",
+   "exists": true,
+   "len": 23007,
+   "hasSteps": true,
+   "hasFront": true
+  },
+  {
+   "skill": "huaweicloud-safety",
+   "exists": true,
+   "len": 8940,
+   "hasSteps": true,
+   "hasFront": true
+  },
+  {
+   "skill": "huaweicloud-api-and-sdk",
+   "exists": true,
+   "len": 4106,
+   "hasSteps": true,
+   "hasFront": true
+  },
+  {
+   "skill": "huaweicloud-capability-discovery",
+   "exists": true,
+   "len": 9179,
+   "hasSteps": true,
+   "hasFront": true
+  },
+  {
+   "skill": "huaweicloud-cli-and-auth",
+   "exists": true,
+   "len": 14172,
+   "hasSteps": true,
+   "hasFront": true
+  },
+  {
+   "skill": "huaweicloud-troubleshooting",
+   "exists": true,
+   "len": 14423,
+   "hasSteps": true,
+   "hasFront": true
+  },
+  {
+   "skill": "huawei-getting-started",
+   "exists": true,
+   "len": 5215,
+   "hasSteps": true,
+   "hasFront": true
+  }
+ ],
+ "got": {
+  "huawei-ecs": 35077,
+  "huaweicloud-troubleshooting": 15028,
+  "huaweicloud-safety": 17750
+ },
+ "totalSkillDirs": 30
+}

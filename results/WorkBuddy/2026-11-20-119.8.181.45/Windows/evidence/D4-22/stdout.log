@@ -1,0 +1,69 @@
+{
+ "caseId": "D4-22",
+ "status": "PASS",
+ "why": "公网无鉴权 FunctionGraph 与无清理元数据部署计划均被 warn/deny；带 cleanup+ttl 的计划不被 deny",
+ "executedAt": "20261120053933",
+ "executedAtIso": "2026-11-19T21:39:33.510Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "public FunctionGraph warned/denied",
+   "ok": true,
+   "actual": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-functiongraph-public-no-auth\",\"title\":\"Public FunctionGraph trigger without auth\",\"category\":\"public_exposure\",\"severity\":\"warn\",\"message\":\"The generated FunctionGraph or API Gateway path may be"
+  },
+  {
+   "name": "plan without cleanup warned/denied",
+   "ok": true,
+   "actual": "{\"ok\":true,\"decision\":\"warn\",\"findings\":[{\"ruleId\":\"hwc-sandbox-missing-ttl\",\"title\":\"Sandbox deployment missing cleanup metadata\",\"category\":\"sandbox\",\"severity\":\"warn\",\"message\":\"The preview or sandbox deployment does not show cleanup or ownership "
+  },
+  {
+   "name": "plan with cleanup not denied",
+   "ok": true,
+   "actual": "{\"ok\":true,\"decision\":\"allow\",\"findings\":[],\"unmatched\":true,\"nextStep\":\"No Huawei Cloud hook risk rule matched. This is not a safety verdict or an approval.\"}"
+  }
+ ],
+ "failures": [],
+ "publicFn": {
+  "ok": true,
+  "decision": "warn",
+  "findings": [
+   {
+    "ruleId": "hwc-functiongraph-public-no-auth",
+    "title": "Public FunctionGraph trigger without auth",
+    "category": "public_exposure",
+    "severity": "warn",
+    "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+    "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+    "source": "deploy_plan",
+    "evidence": "{ \"service\": \"FunctionGraph\", \"function\": { \"name\": \"img\", \"auth\": \"NONE\", \"public\": true }, \"region\": \"cn-north-4\" }"
+   }
+  ],
+  "nextStep": "Review the warnings with the user before proceeding."
+ },
+ "noCleanup": {
+  "ok": true,
+  "decision": "warn",
+  "findings": [
+   {
+    "ruleId": "hwc-sandbox-missing-ttl",
+    "title": "Sandbox deployment missing cleanup metadata",
+    "category": "sandbox",
+    "severity": "warn",
+    "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+    "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+    "source": "deploy_plan",
+    "evidence": "{ \"resources\": [ { \"type\": \"ECS\", \"count\": 3 } ] }"
+   }
+  ],
+  "nextStep": "Review the warnings with the user before proceeding."
+ },
+ "okPlan": {
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "unmatched": true,
+  "nextStep": "No Huawei Cloud hook risk rule matched. This is not a safety verdict or an approval."
+ }
+}

@@ -1,0 +1,41 @@
+{
+ "caseId": "D4-28",
+ "status": "PASS",
+ "why": "hooks.json 注册 Node .mjs；PreToolUse 下 echo $HW_ACCESS_KEY 输出 permissionDecision=deny，只读命令无 deny 输出",
+ "executedAt": "20261120053933",
+ "executedAtIso": "2026-11-19T21:39:33.728Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "Node hook script exists",
+   "ok": true,
+   "actual": "C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/hooks/huaweicloud-safety.mjs"
+  },
+  {
+   "name": "hooks.json registered",
+   "ok": true,
+   "actual": "C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/hooks/hooks.json"
+  },
+  {
+   "name": "hooks.json points at Node .mjs",
+   "ok": true,
+   "actual": "{\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Bash\",\"hooks\":[{\"type\":\"command\",\"command\":\"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\\\"\",\"timeout\":5}]},{\"matcher\":\"mcp__.*huaweicloud.*|huaweicloud_.*\",\"hooks\":[{\"type\":\"command\",\"command\":\"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs"
+  },
+  {
+   "name": "env-print command -> permissionDecision deny",
+   "ok": true,
+   "actual": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked.\"}}\n"
+  },
+  {
+   "name": "readonly command -> no deny",
+   "ok": true,
+   "actual": ""
+  }
+ ],
+ "failures": [],
+ "hookOut": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked.\"}}\n",
+ "okOut": "",
+ "hookErr": ""
+}

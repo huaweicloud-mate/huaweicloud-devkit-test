@@ -1,0 +1,101 @@
+{
+ "caseId": "D4-21",
+ "status": "PASS",
+ "why": "宽泛 IAM（Action:*）与 ecs:* 通配均触发；最小权限 obs:ListBucket 不误拦；IaC 中硬编码 access_key/secret_key 判 deny",
+ "executedAt": "20261120054712",
+ "executedAtIso": "2026-11-19T21:47:12.766Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "broad IAM Action:* denies",
+   "ok": true,
+   "actual": "[\"hwc-iam-admin-policy\",\"hwc-iam-wildcard-action\"]"
+  },
+  {
+   "name": "wildcard ecs:* warns/denies",
+   "ok": true,
+   "actual": "warn"
+  },
+  {
+   "name": "least-privilege obs:ListBucket allowed",
+   "ok": true,
+   "actual": "allow"
+  },
+  {
+   "name": "IaC hardcoded access_key/secret_key denies",
+   "ok": true,
+   "actual": "[\"hwc-artifact-hardcoded-credential\"]"
+  }
+ ],
+ "failures": [],
+ "broad": {
+  "ok": false,
+  "decision": "deny",
+  "findings": [
+   {
+    "ruleId": "hwc-iam-admin-policy",
+    "title": "Broad IAM administrator grant",
+    "category": "iam",
+    "severity": "deny",
+    "message": "The change appears to grant broad administrator permissions.",
+    "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+    "source": "policy.json",
+    "evidence": "policy.json { \"Version\": \"1.1\", \"Statement\": [ { \"Effect\": \"Allow\", \"Action\": \"*\", \"Resource\": \"*\" } ] }"
+   },
+   {
+    "ruleId": "hwc-iam-wildcard-action",
+    "title": "Wildcard IAM action",
+    "category": "iam",
+    "severity": "warn",
+    "message": "The IAM grant uses a wildcard action (* or *:*), which grants every operation on the matched resources.",
+    "remediation": "Replace the wildcard with the least-privilege service actions the workflow actually calls, and constrain the resources.",
+    "source": "policy.json",
+    "evidence": "policy.json { \"Version\": \"1.1\", \"Statement\": [ { \"Effect\": \"Allow\", \"Action\": \"*\", \"Resource\": \"*\" } ] }"
+   }
+  ],
+  "nextStep": "Revise the command, artifact, or deployment plan before execution."
+ },
+ "wildcard": {
+  "ok": true,
+  "decision": "warn",
+  "findings": [
+   {
+    "ruleId": "hwc-sandbox-missing-ttl",
+    "title": "Sandbox deployment missing cleanup metadata",
+    "category": "sandbox",
+    "severity": "warn",
+    "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+    "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+    "source": "policy2.json",
+    "evidence": "policy2.json {\"Version\":\"1.1\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"ecs:*\",\"Resource\":\"*\"}]}"
+   }
+  ],
+  "nextStep": "Review the warnings with the user before proceeding."
+ },
+ "least": {
+  "ok": true,
+  "decision": "allow",
+  "findings": [],
+  "unmatched": true,
+  "nextStep": "No Huawei Cloud hook risk rule matched. This is not a safety verdict or an approval."
+ },
+ "hardcodedTf": {
+  "ok": false,
+  "decision": "deny",
+  "findings": [
+   {
+    "ruleId": "hwc-artifact-hardcoded-credential",
+    "title": "Hardcoded cloud credential in artifact",
+    "category": "secret",
+    "severity": "deny",
+    "message": "The artifact contains a literal access key, secret key, or security token. Credentials committed to IaC, config, or code leak through git history, logs, and state files.",
+    "remediation": "Remove the literal credential: reference it from environment variables, a DEW CSMS secret reference, or the platform credential vault (huaweicloud_secret_set), and rotate the exposed key immediately.",
+    "source": "main.tf",
+    "evidence": "main.tf access_key = \"<redacted> secret_key = \"<redacted>"
+   }
+  ],
+  "nextStep": "Revise the command, artifact, or deployment plan before execution."
+ }
+}

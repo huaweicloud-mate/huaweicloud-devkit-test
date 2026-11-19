@@ -1,0 +1,58 @@
+{
+ "caseId": "D4-5",
+ "status": "PASS",
+ "why": "5 个写操作（ECS/VPC/RDS/EVS 删除与创建）均未被误判为 allow，2 个只读命令正确 allow，plan 层删除需确认",
+ "executedAt": "20261120053922",
+ "executedAtIso": "2026-11-19T21:39:22.852Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "write not allow: ECS DeleteServer",
+   "ok": true,
+   "actual": "deny/write"
+  },
+  {
+   "name": "write not allow: VPC DeleteVpc",
+   "ok": true,
+   "actual": "deny/write"
+  },
+  {
+   "name": "write not allow: ECS CreateServers",
+   "ok": true,
+   "actual": "deny/write"
+  },
+  {
+   "name": "write not allow: RDS DeleteInstance",
+   "ok": true,
+   "actual": "deny/write"
+  },
+  {
+   "name": "write not allow: EVS DeleteVolume",
+   "ok": true,
+   "actual": "deny/write"
+  },
+  {
+   "name": "read allow: ECS NovaListServersDetails",
+   "ok": true,
+   "actual": "allow/read_only"
+  },
+  {
+   "name": "read allow: VPC ListVpcs",
+   "ok": true,
+   "actual": "allow/read_only"
+  },
+  {
+   "name": "plan DeleteServer needs confirmation",
+   "ok": true,
+   "actual": "deny/write needed=true"
+  }
+ ],
+ "failures": [],
+ "planClassification": {
+  "decision": "deny",
+  "risk": "write",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ }
+}

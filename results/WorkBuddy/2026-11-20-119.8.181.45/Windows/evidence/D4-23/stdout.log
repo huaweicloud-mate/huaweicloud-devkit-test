@@ -1,0 +1,160 @@
+{
+ "caseId": "D4-23",
+ "status": "FAIL",
+ "why": "规则注入不完整：8 个已部署目标的 rules/huawei-agent-rules.mdc 均含 MUST/MUST NOT 约束（csms download-secret / csms show-secret / kms decrypt 三条禁令在文件内），运行时 classify 对 KMS DecryptData 实判 deny；但 (a) 已部署插件目录缺规则文件: 无；(b) 规则文件为旧版（与包内 4753 字节不一致）: workbuddy(3861b≠4753b),atomcode(3861b≠4753b),dsh(3861b≠4753b),codearts(3840b≠4753b),codearts-work(3861b≠4753b),codeartsdoer(3861b≠4753b),opencode(3861b≠4753b)。根因：payload-placement.js:injectAgentRules 仅在 install/update 时 copy，已装实例不随包升级刷新 rules/，且 4 个 agent 目录根本没有 huaweicloud-plugins 部署。",
+ "executedAt": "20261120060751",
+ "executedAtIso": "2026-11-19T22:07:51.794Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "rows": [
+  {
+   "n": "claude",
+   "plugin": false,
+   "has": false,
+   "len": 0,
+   "csms": false,
+   "kms": false,
+   "must": 0,
+   "current": false
+  },
+  {
+   "n": "codex",
+   "plugin": false,
+   "has": false,
+   "len": 0,
+   "csms": false,
+   "kms": false,
+   "must": 0,
+   "current": false
+  },
+  {
+   "n": "cursor",
+   "plugin": false,
+   "has": false,
+   "len": 0,
+   "csms": false,
+   "kms": false,
+   "must": 0,
+   "current": false
+  },
+  {
+   "n": "hermes",
+   "plugin": true,
+   "has": true,
+   "len": 4753,
+   "csms": true,
+   "kms": true,
+   "must": 11,
+   "current": true
+  },
+  {
+   "n": "workbuddy",
+   "plugin": true,
+   "has": true,
+   "len": 3861,
+   "csms": true,
+   "kms": true,
+   "must": 11,
+   "current": false
+  },
+  {
+   "n": "openclaw",
+   "plugin": false,
+   "has": false,
+   "len": 0,
+   "csms": false,
+   "kms": false,
+   "must": 0,
+   "current": false
+  },
+  {
+   "n": "atomcode",
+   "plugin": true,
+   "has": true,
+   "len": 3861,
+   "csms": true,
+   "kms": true,
+   "must": 11,
+   "current": false
+  },
+  {
+   "n": "dsh",
+   "plugin": true,
+   "has": true,
+   "len": 3861,
+   "csms": true,
+   "kms": true,
+   "must": 11,
+   "current": false
+  },
+  {
+   "n": "officeace",
+   "plugin": false,
+   "has": false,
+   "len": 0,
+   "csms": false,
+   "kms": false,
+   "must": 0,
+   "current": false
+  },
+  {
+   "n": "codearts",
+   "plugin": true,
+   "has": true,
+   "len": 3840,
+   "csms": true,
+   "kms": true,
+   "must": 11,
+   "current": false
+  },
+  {
+   "n": "codearts-work",
+   "plugin": true,
+   "has": true,
+   "len": 3861,
+   "csms": true,
+   "kms": true,
+   "must": 11,
+   "current": false
+  },
+  {
+   "n": "codeartsdoer",
+   "plugin": true,
+   "has": true,
+   "len": 3861,
+   "csms": true,
+   "kms": true,
+   "must": 11,
+   "current": false
+  },
+  {
+   "n": "opencode",
+   "plugin": true,
+   "has": true,
+   "len": 3861,
+   "csms": true,
+   "kms": true,
+   "must": 11,
+   "current": false
+  }
+ ],
+ "srcLen": 4753,
+ "missing": [],
+ "stale": [
+  "workbuddy(3861b≠4753b)",
+  "atomcode(3861b≠4753b)",
+  "dsh(3861b≠4753b)",
+  "codearts(3840b≠4753b)",
+  "codearts-work(3861b≠4753b)",
+  "codeartsdoer(3861b≠4753b)",
+  "opencode(3861b≠4753b)"
+ ],
+ "notInstalled": [
+  "claude",
+  "codex",
+  "cursor",
+  "openclaw",
+  "officeace"
+ ]
+}

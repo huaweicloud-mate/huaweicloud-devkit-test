@@ -1,0 +1,89 @@
+{
+ "caseId": "D9-13",
+ "status": "FAIL",
+ "why": "核心安全语义全部通过（运行时凭证 set/resolve/clear 正确、审批令牌单次消费 consumed→gone 不可重放、hashArgs 为 64 位哈希不含原参数、KMS DecryptData 被拒、只读 plan 判 allow、写 plan 不全放行、tools/call 返回无 AK 明文），但唯一失败项：\"isPlaceholder 未识别本机实际落盘的占位凭证 AK_BK_00000000000000\"。根因：auth/credential-placeholder.js:10-33 的 7 条占位判定（尖括号模板 / 美元花括号模板 / 裸关键词 / placeholder|replace_me / 前缀+星号 / 纯星号）均不覆盖 AK_BK_0…0 / SK_BK_0…0 形态，导致占位凭证被 present() 当作真实凭证，越过了 R11「占位即未配置」的拦截。",
+ "executedAt": "20261120060751",
+ "executedAtIso": "2026-11-19T22:07:51.771Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "assertions": [
+  {
+   "name": "hasRuntimeCredentials after set",
+   "ok": true,
+   "actual": "true"
+  },
+  {
+   "name": "resolve returns runtime ak",
+   "ok": true,
+   "actual": "AKRUNTIME0"
+  },
+  {
+   "name": "clearRuntimeCredentials removes",
+   "ok": true,
+   "actual": "false"
+  },
+  {
+   "name": "approval token consumed once",
+   "ok": true,
+   "actual": "{\"status\":\"consumed\",\"entry\":{\"argsHash\":\"0bc8e3ba1210e7f534c349ace79788777b5748f338d83879fd5a71e549"
+  },
+  {
+   "name": "approval token replay rejected",
+   "ok": true,
+   "actual": "{\"status\":\"gone\"}"
+  },
+  {
+   "name": "hashArgs 64-hex, args not embedded",
+   "ok": true,
+   "actual": "0bc8e3ba1210e7f5"
+  },
+  {
+   "name": "deny state: KMS DecryptData blocked",
+   "ok": true,
+   "actual": "Direct secret value reads are blocked so plaintext secrets do not enter the agent context."
+  },
+  {
+   "name": "allow state: readonly plan classification=allow",
+   "ok": true,
+   "actual": "allow"
+  },
+  {
+   "name": "write plan not silently allowed",
+   "ok": true,
+   "actual": "deny"
+  },
+  {
+   "name": "no plaintext AK in tools/call output",
+   "ok": true,
+   "actual": "leaks=0"
+  },
+  {
+   "name": "isPlaceholder true for <HW_ACCESS_KEY>",
+   "ok": true,
+   "actual": "true"
+  },
+  {
+   "name": "isPlaceholder false for a real AK",
+   "ok": true,
+   "actual": "false"
+  }
+ ],
+ "shippedDetected": false,
+ "tokenFirst": {
+  "status": "consumed",
+  "entry": {
+   "argsHash": "0bc8e3ba1210e7f534c349ace79788777b5748f338d83879fd5a71e549be6196",
+   "argsRedacted": [
+    "ECS",
+    "DeleteServer",
+    "--server_id=i-1"
+   ],
+   "createdAt": 1795126067158,
+   "state": "awaiting_user"
+  }
+ },
+ "tokenSecond": {
+  "status": "gone"
+ }
+}
