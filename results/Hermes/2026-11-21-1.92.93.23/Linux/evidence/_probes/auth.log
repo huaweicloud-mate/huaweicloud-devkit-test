@@ -7,7 +7,7 @@
     "ok": true,
     "exitCode": 0,
     "signal": null,
-    "stdout": "{\n  \"name\": \"default\",\n  \"mode\": \"AKSK\",\n  \"accessKeyId\": <redacted>,\n  \"secretAccessKey\": <redacted>,\n  \"securityToken\": <redacted>,\n  \"region\": \"cn-north-4\",\n  \"projectId\": \"46c1fd48bd1248c7b75afc3780de7132\",\n  \"domainId\": \"\",\n  \"skipSecureVerify\": \"false\",\n  \"readTimeout\": 10,\n  \"connectTimeout\": 5,\n  \"retryCount\": 0\n}",
+    "stdout": "{\n  \"name\": \"default\",\n  \"mode\": \"AKSK\",\n  \"accessKeyId\": \"<redacted>\",\n  \"secretAccessKey\": \"<redacted>\",\n  \"securityToken\": \"<redacted>\",\n  \"region\": \"cn-north-4\",\n  \"projectId\": \"46c1fd48bd1248c7b75afc3780de7132\",\n  \"domainId\": \"\",\n  \"skipSecureVerify\": \"false\",\n  \"readTimeout\": 10,\n  \"connectTimeout\": 5,\n  \"retryCount\": 0\n}",
     "stderr": "",
     "plan": {
       "executable": "hcloud",
@@ -30,9 +30,7 @@
         ]
       },
       "sgFindings": [],
-      "userConfirmation": {
-        "needed": false
-      },
+      "approvalToken": "111deecf-109a-435d-bce7-50706b075599",
       "safeToRun": true,
       "rawArgs": [
         "configure",
@@ -72,18 +70,17 @@
       "s1Fingerprint": "caae65f2",
       "envFingerprint": "",
       "currentFingerprint": "",
-      "s3Fingerprint": "c911b8ce",
+      "s3Fingerprint": "3e087889",
       "runtimeFingerprint": null
     },
     "kooCliCurrent": "default",
     "envIsPlaceholder": false,
     "s2Encrypted": true,
-    "s1RefError": null,
     "inconsistencies": [
       {
         "store": "S3",
         "source": "obsutilconfig",
-        "fingerprint": "c911b8ce",
+        "fingerprint": "3e087889",
         "manualModified": true
       }
     ],
@@ -96,63 +93,35 @@
     "needsSetup": true,
     "scenario": 1,
     "reason": "s1-only",
-    "message": "已保存
+    "message": "已保存账号(指纹 caae65f2)可直接使用。",
+
 >>> 疑似密钥泄露? false
 =====END D2-4=====
 =====CASE D2-11=====
-Temporary STS credentials cannot be persisted (R3). Use action=temporary.
+{
+  "status": "error",
+  "error": "Temporary STS credentials cannot be persisted (R3). Use action=temporary.",
+  "scope": "rejected"
+}
 >>> R3 拒绝判定: true
 >>> 隔离S1凭证文件是否被写入: false
->>> ISOLATED_HOME=/tmp/hdk-r3-ZLlLDq
+>>> ISOLATED_HOME=/tmp/hdk-r3-axhVhu
 =====END D2-11=====
 =====CASE D2-12=====
 auth_switch temporary => {
-  "status": "rejected",
-  "code": "USER_CONFIRMATION_REQUIRED",
-  "approvalToken": "8727ab25-a90d-4735-802f-9834f119bf99",
-  "userConfirmation": {
-    "needed": true,
-    "summary": "huaweicloud_auth_switch: switch to account 56a23b46 from session arguments (temporary: this MCP process only)",
-    "argsHash": "4549da3df0a8800ba103daeaa650d9292adb5c1b36cd8ccd09bffc8c255b47bd",
-    "pinView": {
-  
+  "status": "ok",
+  "scope": "temporary",
+  "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files."
+}
 
 auth_sync => {
-  "ok": true,
-  "profile": "default",
-  "obs": {
-    "configured": true,
-    "path": "/home/zhangshuang/.obsutilconfig",
-    "endpoint": "https://obs.cn-north-4.myhuaweicloud.com"
-  },
-  "hcloud": {
-    "ok": true,
-    "message": "KooCLI config synced to profile=default"
-  },
-  "credentialsConfigured": true,
-  "agents": {
-    "opencode": {
-      "configured": false
-    },
-    "codex": {
-      "configured": false
-    },
-    "codex-desktop": {
-      "configured": false
-    },
-    "codearts": {
-      "configured": false
-    },
-    "codearts-work": {
-      "configured": false
-    },
-    "workbuddy": {
-      "configured": false
-    },
-    "dsh": {
-      "configured": false
-    },
-    "officeace
+  "ok": false,
+  "error": "运行时凭证生效,自动同步已跳过。",
+  "code": "HDKIT_SYNC_SKIPPED_RUNTIME",
+  "messageZh": "运行时凭证生效,自动同步已跳过。",
+  "action": "huaweicloud_auth_switch action=clear",
+  "nextStep": "huaweicloud_auth_switch action=clear"
+}
 >>> R10 拒绝判定: false
 =====END D2-12=====
 === DONE ===

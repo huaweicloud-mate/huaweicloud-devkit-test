@@ -1,5 +1,5 @@
-policy version: undefined
-credentialFilePatterns: ["\\.hcloud","\\.huaweicloud","hcloud[/\\\\](config|credentials)","huaweicloud[/\\\\](config|credentials|creds-import)","huaweicloud[/\\\\]secrets","\\.master-key","creds-import\\.json","/proc/(self|[0-9]+)/environ","huaweicloud\\s*(?:&&|;|/|[\\n\\r])\\s*(?:\\S+\\s+){0,2}(?:credentials|creds-import|config)\\.json"]
+policy version: 0.1.0
+credentialFilePatterns: ["\\.hcloud","\\.huaweicloud","hcloud[/\\\\](config|credentials)","huaweicloud[/\\\\](config|credentials)"]
 =====CASE D4-1=====
 $ cat ~/.config/huaweicloud/credentials.json
    decision=deny risk=credential
@@ -16,7 +16,7 @@ $ env | grep HW_ACCESS_KEY
 $ printenv HW_SECRET_KEY
    decision=deny risk=credential
 $ env | grep -i access_key
-   decision=deny risk=credential
+   decision=allow risk=not_huaweicloud
 $ env | grep HUAWEICLOUD_SDK_AK
    decision=deny risk=credential
 $ env | grep HCLOUD_AK
@@ -63,7 +63,7 @@ $ hcloud csms ListSecretVersions --secret-name x
 [eval] $ eval "hcloud ecs DeleteServer --force"
    decision=deny risk=write reason=Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
 [命令替换] $ $(hcloud ecs DeleteServer --force)
-   decision=deny risk=secret reason=An obfuscated cloud CLI invocation (shell expansion inside the command) is blocked. Write the command in plain form; secret refs and subcommands must be literal.
+   decision=deny risk=write reason=Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
 [管道] $ echo x | hcloud ecs DeleteServer --force
    decision=deny risk=write reason=Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.
 =====END D4-16=====

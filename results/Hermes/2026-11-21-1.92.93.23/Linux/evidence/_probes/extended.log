@@ -1,30 +1,27 @@
 =====CASE D9-9=====
-capabilities = {"tools":{"listChanged":true}}
+capabilities = {"tools":{}}
 capabilities.cancellation 存在? false
-取消通知后 tools/list 工具数 = 58
+取消通知后 tools/list 工具数 = 49
 重建后 initialize ok? true
-重建后 tools/list 工具数 = 58
+重建后 tools/list 工具数 = 49
 =====END D9-9=====
 =====CASE D2-16=====
-放置 creds-import.json: /tmp/hdk-import-pHIxsP/.config/huaweicloud/creds-import.json 存在= true
+放置 creds-import.json: /tmp/hdk-import-R62xpp/.config/huaweicloud/creds-import.json 存在= true
 auth_switch mode=import => {
-  "status": "rejected",
-  "code": "USER_CONFIRMATION_REQUIRED",
-  "approvalToken": "3ea006d6-9828-45b3-9a19-fc800a9b93cf",
-  "userConfirmation": {
-    "needed": true,
-    "summary": "huaweicloud_auth_switch: switch to account 112b08d4 from the devkit credentials import file (creds-import.json), region cn-north-4 (temporary: this MCP process only)",
-    "argsHash": "867716a83ab0886b640b532d43cbae
-读取后 creds-import.json 存在? true (期望 false=无条件擦除)
+  "status": "ok",
+  "scope": "temporary",
+  "note": "Runtime credentials active for this MCP process. hcloud commands still use the KooCLI current profile; use action=persist to align files."
+}
+读取后 creds-import.json 存在? false (期望 false=无条件擦除)
 =====END D2-16=====
 =====CASE D1-41=====
 check_update isError = false
 check_update 返回(前1200):
 {
-  "currentVersion": "2.0.0-next.4",
-  "latestStable": "1.1.14",
-  "latestNext": "2.0.0-next.4",
-  "targetVersion": "2.0.0-next.4",
+  "currentVersion": "1.1.15",
+  "latestStable": "1.1.15",
+  "latestNext": "1.1.15-next.2",
+  "targetVersion": "1.1.15",
   "updateAvailable": false,
   "dismissed": false,
   "dismissExpiresAt": null,

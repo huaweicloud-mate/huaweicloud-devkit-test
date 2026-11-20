@@ -7,7 +7,7 @@
 [eval-env] $ eval "env | grep HUAWEICLOUD_ACCESS_KEY"
    decision=deny risk=credential reason=Dumping cloud credential environment variables is blocked.
 [sh-c-secret] $ sh -c "hcloud csms ShowSecretVersion --secret-name x"
-   decision=deny risk=secret reason=Direct secret value retrieval patterns are blocked.
+   decision=deny risk=secret reason=Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
 [sh-c-cred-file] $ sh -c "cat ~/.config/huaweicloud/credentials.json"
    decision=deny risk=credential reason=Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.
 [sh-c-delete] $ sh -c "hcloud ecs DeleteServer --force"
@@ -15,5 +15,5 @@
 [ctrl-env-naked] $ env | grep HUAWEICLOUD_ACCESS_KEY
    decision=deny risk=credential reason=Dumping cloud credential environment variables is blocked.
 [ctrl-secret-naked] $ hcloud csms ShowSecretVersion --secret-name x
-   decision=deny risk=secret reason=Direct secret value retrieval patterns are blocked.
+   decision=deny risk=secret reason=Direct secret value reads are blocked so plaintext secrets do not enter the agent context.
 === DONE ===

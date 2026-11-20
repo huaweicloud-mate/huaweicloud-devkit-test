@@ -1,36 +1,64 @@
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+[2026-11-20T21:39:43.199Z] uploadProject: /tmp/d3c3-proj -> /workspace/d3c3-proj.tar.gz (archive=219 bytes, md5=b8c546b0db739a0702b6ce718120d2c1)
+[2026-11-20T21:39:43.248Z] uploadViaHttpTunnel: start (archive=/tmp/sandbox-upload-1795210783186/d3c3-proj.tar.gz, size=219, remotePath=/workspace/d3c3-proj.tar.gz)
+[2026-11-20T21:39:43.249Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-20T21:39:43.249Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-20T21:39:43.298Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-20T21:39:43.352Z] deployFileServer: starting server on port 8888
+[2026-11-20T21:39:43.399Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 14110\r\n\u001b]133;C\u0007\r\n"
+[2026-11-20T21:39:43.399Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+[2026-11-20T21:39:44.296Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-20T21:39:44.298Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-20T21:39:44.300Z] uploadViaHttpTunnel: tunnel ready, localPort=42109
+[2026-11-20T21:39:44.300Z] uploadViaHttpTunnel: waiting for server health on localhost:42109
+[2026-11-20T21:39:44.300Z] waitForServerReady: attempt 1, checking http://localhost:42109/health
+[2026-11-20T21:39:44.349Z] waitForServerReady: server ready on port 42109 after 0 retries
+[2026-11-20T21:39:44.349Z] uploadViaHttpTunnel: sending POST with 219 bytes
+[2026-11-20T21:39:44.399Z] uploadViaHttpTunnel: upload complete (bytes=219, md5=b8c546b0db739a0702b6ce718120d2c1)
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
+Waiting for connection 1021821... (0s)Connection 1021821 established (0s).
 
 ### D3-C3 ###
 {
   "case": "D3-C3",
-  "status": "FAIL",
+  "status": "PASS",
   "total": 5,
-  "passed": 0,
-  "failed": 5,
+  "passed": 5,
+  "failed": 0,
   "results": [
     {
       "name": "connect",
-      "pass": false,
-      "detail": "ws="
+      "pass": true,
+      "detail": "ws=78c4c8057e"
     },
     {
       "name": "upload_project",
-      "pass": false,
-      "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox connected — call huaweicloud_sandbox_connect first, or set HW_WO"
+      "pass": true,
+      "detail": "{\"ok\":true,\"localDir\":\"/tmp/d3c3-proj\",\"remotePath\":\"/workspace/d3c3-proj\",\"bytes\":219,\"md5\":\"b8c546b0db739a0702b6ce7181"
     },
     {
       "name": "deploy_nginx",
-      "pass": false,
-      "detail": "undefined:undefined"
+      "pass": true,
+      "detail": "static:8082"
     },
     {
       "name": "deploy_check",
-      "pass": false,
-      "detail": "undefined"
+      "pass": true,
+      "detail": "PASS"
     },
     {
       "name": "close_session",
-      "pass": false,
-      "detail": "{\"__error\":\"Error: workspace_id is required. No sandbox conn"
+      "pass": true,
+      "detail": "\"ok\""
     }
   ]
 }

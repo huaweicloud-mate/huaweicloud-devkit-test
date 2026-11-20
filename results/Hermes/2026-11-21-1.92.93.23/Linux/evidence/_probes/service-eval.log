@@ -23,23 +23,20 @@
 [SVCOPS ELB] ok=true "hcloud ELB --help"
 [ROUTE EXP-E01] expect=ECS got=Run hcloud --help to list available services. hit=false
 [ROUTE EXP-E02] expect=ECS got=ECS hit=true
-[ROUTE EXP-E03] expect=OBS got=OBS|Sandbox|DevStation|ECS hit=true
+[ROUTE EXP-E03] expect=OBS got=OBS|Sandbox|DevStation hit=true
 [ROUTE EXP-E04] expect=EIP got=ECS|VPC|EIP hit=true
 [ROUTE EXP-E05] expect=RDS got=RDS hit=true
 [ROUTE EXP-E06] expect=DCS got=OBS|DDS|DCS hit=true
 [ROUTE EXP-E07] expect=CBR got=ECS|IAM|CBR hit=true
-[ROUTE EXP-E09] expect=CCE got=CCE|SWR|Sandbox|ECS hit=true
-[ROUTE EXP-E10] expect=FunctionGraph got=FunctionGraph|Sandbox|ECS hit=true
+[ROUTE EXP-E09] expect=CCE got=CCE|SWR hit=true
+[ROUTE EXP-E10] expect=FunctionGraph got=FunctionGraph hit=true
 [ROUTE EXP-E11] expect=Billing got=BSS hit=false
 [ROUTE EXP-E12] expect=CES got=CES hit=true
 [ROUTE EXP-E13] expect=ELB got=CSMS|KMS|ELB hit=true
 [ROUTE EXP-E14] expect=IAM got=IAM|CTS hit=true
 [ROUTE EXP-E15] expect=Voucher got=Incentive Voucher hit=true
 [AUTH_INIT] {
-  "status": "rejected",
-  "code": "USER_CONFIRMATION_REQUIRED",
-  "approvalToken": "3f46e46b-03fb-46fb-84f6-bb23101fd057",
-  "userConfirmation": {
-    "needed": true,
-    "summary": "huaweicloud_auth_init: switch this session's runtime credentials 
+  "status": "ok",
+  "message": "Runtime credentials set for this MCP session."
+}
 === DONE ===
