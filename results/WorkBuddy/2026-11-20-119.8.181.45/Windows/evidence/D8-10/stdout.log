@@ -1,9 +1,9 @@
 {
  "caseId": "D8-10",
- "status": "FAIL",
- "why": "MCP 配置合并不完整: hasMerge=true hasBackup=true hasDelta=true both=true preservedEnv=true userEnvKept=true userTimeoutKept=true deltaRoundTrip=false",
- "executedAt": "20261120102855",
- "executedAtIso": "2026-11-20T02:28:55.355Z",
+ "status": "PASS",
+ "why": "MCP 配置备份与合并成立：mcp-config-merge.js 导出 6 个（mergeCommandStyle/mergeArgsStyle/mergeMcpServersFile + extractUserDelta/applyUserDelta）、mcp-config-backup.js 导出 5 个（readAgentDelta/saveAgentDelta/takeAgentDelta/mcpBackupFilePath/purgeBackup）、mcp-config-io.js 导出 8 个，备份/合并/用户增量三类入口齐备；实跑 mergeMcpServersFile 后用户已有 server（mine，env KEEP=1）与顶层 otherKey 均保留（true / true），新 server 正确生成；mergeArgsStyle 对已有 node 风格 entry 保留用户 env（USER=u1）与自定义 timeout=12345（true / true）；extractUserDelta→applyUserDelta 往返后 env 与原始一致（true）",
+ "executedAt": "20261120103011",
+ "executedAtIso": "2026-11-20T02:30:11.748Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
@@ -36,5 +36,5 @@
  "preservedEnv": true,
  "userEnvKept": true,
  "userTimeoutKept": true,
- "deltaRoundTrip": false
+ "deltaRoundTrip": true
 }
