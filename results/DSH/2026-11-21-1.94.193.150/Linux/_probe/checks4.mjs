@@ -113,9 +113,9 @@ reg('D3-C1', async () => {
   let vpcErr = '';
   const cleanup = async () => {
     if (serverId) { sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]); serverId = null; }
-    if (sgId) { const d = sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]); if (d.ok) sgId = null; else vpcErr = d.text.slice(0, 160); }
-    if (subnetId && vpcId) { const d = sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); if (d.ok) subnetId = null; else vpcErr = d.text.slice(0, 160); }
-    if (vpcId && !subnetId && !sgId) { const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]); if (d.ok) vpcId = null; else vpcErr = d.text.slice(0, 160); }
+    if (sgId) { const d = sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]); if (d.ok) sgId = null; else vpcErr = 'sg:' + d.text.slice(0, 140); }
+    if (subnetId && vpcId) { const d = sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); if (d.ok) subnetId = null; else vpcErr = 'sub:' + d.text.slice(0, 140); }
+    if (vpcId && !subnetId && !sgId) { const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]); if (d.ok) { vpcId = null; vpcErr = ''; } else vpcErr = 'vpc:' + d.text.slice(0, 140); }
   };
   let created = false, active = false, delOk = false, zero = false;
   try {
@@ -204,7 +204,8 @@ reg('D3-C1', async () => {
       await wait(5000);
     }
     detail.push(`zero=${zero}`);
-    // 网络资源归零：安全组 → 子网 → VPC（异步删除需轮询）
+    // 网络资源归零：安全组 → 子网 → VPC（异步删除需轮询；ECS 端口异步释放，先等 30s 再删网络，避免误判泄漏）
+    await wait(30000);
     await cleanup();
     for (let i = 0; i < 60; i++) {
       const lv = sh(['VPC', 'ListVpcs', `--cli-region=${REGION}`]);
@@ -212,7 +213,7 @@ reg('D3-C1', async () => {
       const lg = sh(['VPC', 'ListSecurityGroups', `--cli-region=${REGION}`]);
       const netZero = !lv.text.includes(vpcName) && !ls.text.includes(subnetName) && !lg.text.includes(sgName);
       if (netZero) { detail.push(`netZero=true try=${i}`); break; }
-      if (i % 6 === 0) detail.push(`netZero=false try=${i} vpcLeft=${lv.text.includes(vpcName)} subLeft=${ls.text.includes(subnetName)} sgLeft=${lg.text.includes(sgName)} err=${vpcErr.slice(0, 60)}`);
+      if (i % 3 === 0) detail.push(`netZero=false try=${i} vpcLeft=${lv.text.includes(vpcName)} subLeft=${ls.text.includes(subnetName)} sgLeft=${lg.text.includes(sgName)} err=${vpcErr.slice(0, 90)}`);
       await cleanup();
       await wait(10000);
     }
