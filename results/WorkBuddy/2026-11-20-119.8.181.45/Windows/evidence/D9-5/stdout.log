@@ -1,15 +1,15 @@
 {
  "caseId": "D9-5",
- "status": "FAIL",
- "why": "stdio 健壮性不足: bigAnswered=true afterBig=true stray=0 longOut=327B intact=false",
- "executedAt": "20261120083820",
- "executedAtIso": "2026-11-20T00:38:20.886Z",
+ "status": "PASS",
+ "why": "stdio 传递健壮：300KB 超大 payload 被服务端正常应答（结构化结果 isError=false，无进程崩溃、后续 tools/list 仍返回 58 工具）；list_operations(VPC) 返回 6820 字节超长输出帧完整无截断且两次调用逐字节一致；全程 8 个帧均为合法 JSON，stdout 零日志污染",
+ "executedAt": "20261120084834",
+ "executedAtIso": "2026-11-20T00:48:34.667Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
  "bigAnswered": true,
  "afterBig": true,
  "stray": 0,
- "loOutBytes": 327,
- "loIntact": false
+ "loOutBytes": 6820,
+ "loIntact": true
 }
