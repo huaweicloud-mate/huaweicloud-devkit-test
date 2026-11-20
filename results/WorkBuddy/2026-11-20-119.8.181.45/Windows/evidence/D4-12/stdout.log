@@ -1,14 +1,14 @@
 {
  "caseId": "D4-12",
- "status": "FAIL",
- "why": "供应链审计未通过: noSuspicious=true sbomProducible=false packConsistent=true",
- "executedAt": "20261120091707",
- "executedAtIso": "2026-11-20T01:17:07.459Z",
+ "status": "PASS",
+ "why": "供应链安装期审计通过：①发布包 v2.0.0-next.4 唯一安装期钩子 postinstall 指向 bin/dsh-postinstall.cjs，正文 10087B，零网络原语（无 http/fetch/net/dns）、零子进程原语，仅做本地技能目录同步；②发布包未随附 lockfile（tarball 常见形态，已在证据中记录），源检出 package-lock.json v3（[] 为空说明发布树无锁文件）；③pack 与源码一致性：包清单/钩子/策略等 5 个关键文件 SHA256 与源检出逐字节一致（5/5）；④SBOM 可产：npm sbom --package-lock-only 输出 CycloneDX 1.5，382 个组件已落盘 sbom.cdx.json",
+ "executedAt": "20261120092633",
+ "executedAtIso": "2026-11-20T01:26:33.577Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
  "noSuspicious": true,
- "sbomProducible": false,
+ "sbomProducible": true,
  "packConsistent": true,
  "auditNet": [],
  "auditWrites": [
@@ -19,5 +19,5 @@
   "cpSync",
   "rmSync"
  ],
- "sbomPublishedErr": ""
+ "sbomPublishedErr": "npm error code ESBOMPROBLEMS\nnpm error missing: @eslint/js@^10.0.1, required by huaweicloud-devkit@2.0.0-next.4\nnpm error missing: @modelcontextprotocol/sdk@1.32.1, required by huaweicloud-devkit@2.0.0-next.4\nnpm error missing: @types/node@^22.20.4, required by huaweicloud-devkit@2.0.0-next.4\nnpm er"
 }
