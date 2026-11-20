@@ -1,0 +1,18 @@
+import { spawn } from 'node:child_process';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+const HOME=process.env.HOME||'/tmp', MCP='/home/testbot3/devkit-test/Hermes/hdk/plugins/huaweicloud-core/src/mcp-server.mjs';
+const p=spawn('node',[MCP],{stdio:['pipe','pipe','pipe']});let buf='',id=0;const pend=new Map();
+p.stdout.on('data',d=>{buf+=d.toString();let i;while((i=buf.indexOf('\n'))>=0){const l=buf.slice(0,i);buf=buf.slice(i+1);if(!l.trim())continue;try{const m=JSON.parse(l);if(m.id&&pend.has(m.id)){pend.get(m.id)(m);pend.delete(m.id);}}catch{}}});
+p.stderr.on('data',()=>{});
+const rpc=(m,q)=>{const i=++id;return new Promise(r=>{pend.set(i,r);p.stdin.write(JSON.stringify({jsonrpc:'2.0',id:i,method:m,params:q})+'\n');});};
+const call=(n,a)=>rpc('tools/call',{name:n,arguments:a});
+const un=r=>{const c=r?.result?.content?.[0]?.text;try{return JSON.parse(c);}catch{return{__raw:c};}};
+await rpc('initialize',{protocolVersion:'2024-11-05',capabilities:{},clientInfo:{name:'dbg',version:'1'}});
+p.stdin.write(JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'})+'\n');
+const conn=un(await call('huaweicloud_sandbox_connect',{source:'CLI'}));
+const ws=conn.devStageId||conn.sessionId;
+console.log('ws',ws,conn.status);
+const sh=await call('huaweicloud_sandbox_exec_one_shot',{command:'ss -ltnp 2>/dev/null | head -30; echo ---; ls -l /etc/nginx/conf.d 2>/dev/null; echo ---; curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/ ; echo " 8080"; curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8083/; echo " 8083"',workspace_id:ws});
+console.log('EXEC', JSON.stringify(un(sh)).slice(0,1200));
+await call('huaweicloud_sandbox_close_session',{workspace_id:ws});

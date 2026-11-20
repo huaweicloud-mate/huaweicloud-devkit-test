@@ -1,0 +1,8 @@
+check_user realname=true
+connect status=connected ws=78c4c8057e72 sessionId=78c4c8057e72 devStageId=78c4c8057e72
+upload ok=true md5=true
+deploy ok=true returnedPort=8083 url="" keys=ok,nginxType,port,outputPath,projectPath,configPath,verification,exitCode,stdout,nextStep,warning
+deploy_check(port=8083)={"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"FAIL","detail":"(port 8083, no HTTP response)"},"output_dir":{"status":"PASS","detail":"(/workspace/.d3s3-retry-1795209180073/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""},"tunnel_url_accessible":{"status":"FAIL","detail":"(no tunnel)
+close="ok"
+VERDICT url=EMPTY nginx=FAIL tunnel=FAIL
+RESULT=FAIL
