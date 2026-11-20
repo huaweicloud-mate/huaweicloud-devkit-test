@@ -1,0 +1,105 @@
+{
+ "version": "2.0.0-next.4",
+ "scripts": {
+  "build": "node ./scripts/build-plugin.mjs",
+  "typecheck": "tsc -p plugins/huaweicloud-core/tsconfig.json --noEmit && tsc -p test/tsconfig.json",
+  "pretest": "npm run build",
+  "prepack": "npm run build && node ./scripts/sync-skills.mjs --check",
+  "skills:sync": "node ./scripts/sync-skills.mjs --write",
+  "test": "node --experimental-test-module-mocks --test \"test/*.test.ts\"",
+  "pretest:quick": "npm run build",
+  "test:quick": "node scripts/test-quick.mjs",
+  "test:e2e": "node test/e2e/runner.ts",
+  "format": "prettier --write .",
+  "format:check": "prettier --check .",
+  "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#.git\" \"#test/**\" \"#docs/**\" \"#.superpowers/**\" \"#plugins/huaweicloud-core/skills/**\" \"#plugins/huaweicloud-core/skills.new-*/**\"",
+  "lint:js": "eslint .",
+  "lint": "npm run lint:md && npm run lint:js",
+  "lint:dup": "jscpd plugins/huaweicloud-core/src plugins/huaweicloud-core/hooks scripts bin test integrations eslint.config.mjs",
+  "validate": "node ./scripts/validate-package.mjs && node ./scripts/sync-skills.mjs --check && node ./scripts/sync-readme-badge.mjs",
+  "registry:diff": "node ./scripts/registry-snapshot-diff.mjs",
+  "badge:sync": "node ./scripts/sync-readme-badge.mjs --write",
+  "smoke:agents": "node ./scripts/smoke-agents.mjs",
+  "pack:verify": "node ./scripts/pack-verify.mjs",
+  "postinstall": "node ./bin/dsh-postinstall.cjs"
+ },
+ "postinstallLike": [
+  {
+   "k": "postinstall",
+   "v": "node ./bin/dsh-postinstall.cjs"
+  }
+ ],
+ "audit": [
+  {
+   "script": "postinstall",
+   "command": "node ./bin/dsh-postinstall.cjs",
+   "file": "./bin/dsh-postinstall.cjs",
+   "fileExists": true,
+   "bytes": 10087,
+   "networkPrimitives": [],
+   "writePrimitives": [
+    "writeFileSync",
+    "cpSync",
+    "mkdirSync",
+    "rmSync",
+    "cpSync",
+    "rmSync"
+   ]
+  }
+ ],
+ "auditNet": [],
+ "auditWrites": [
+  "writeFileSync",
+  "cpSync",
+  "mkdirSync",
+  "rmSync",
+  "cpSync",
+  "rmSync"
+ ],
+ "hasLock": [],
+ "dependencies": {
+  "undici": "^8.12.3"
+ },
+ "devDependencies": 18,
+ "sbom": {
+  "publishedOk": false,
+  "publishedErr": "",
+  "publishedComponents": null,
+  "sourceOk": false,
+  "sourceComponents": null
+ },
+ "packConsistency": [
+  {
+   "rel": "package.json",
+   "published": "036d9b9474b3",
+   "source": "036d9b9474b3",
+   "same": true
+  },
+  {
+   "rel": "plugins/huaweicloud-core/.mcp.json",
+   "published": "e1277342efdd",
+   "source": "e1277342efdd",
+   "same": true
+  },
+  {
+   "rel": "plugins/huaweicloud-core/hooks/huaweicloud-safety.mjs",
+   "published": "b87eede920dd",
+   "source": "b87eede920dd",
+   "same": true
+  },
+  {
+   "rel": "plugins/huaweicloud-core/hooks/huaweicloud-safety.py",
+   "published": "7e1162ece4f7",
+   "source": "7e1162ece4f7",
+   "same": true
+  },
+  {
+   "rel": "plugins/huaweicloud-core/safety/policy.json",
+   "published": "c70c05b185b2",
+   "source": "c70c05b185b2",
+   "same": true
+  }
+ ],
+ "shippedFiles": 706,
+ "shippedBytes": 14081051
+}
