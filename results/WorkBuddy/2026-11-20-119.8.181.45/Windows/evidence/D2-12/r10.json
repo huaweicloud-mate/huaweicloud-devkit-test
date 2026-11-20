@@ -1,17 +1,34 @@
 {
  "init": {
-  "status": "rejected",
-  "code": "USER_CONFIRMATION_REQUIRED",
+  "steps": [
+   "challenge",
+   "rejected",
+   "ok"
+  ],
+  "executed": {
+   "status": "ok",
+   "message": "Runtime credentials set for this MCP session."
+  },
+  "envelope": {
+   "status": "rejected",
+   "code": "ASK_CONFIRMATION_REQUIRED",
+   "userConfirmation": {
+    "needed": true,
+    "mode": "chat",
+    "command": "huaweicloud_auth_init (switch the session's runtime credentials to account f98ed1e1)",
+    "summary": "huaweicloud_auth_init: switch this session's runtime credentials to account f98ed1e1 (region cn-north-4) (source: session arguments)",
+    "instruction": "Show this exact command to the user in chat and wait for their answer. If they approve, retry the same call with approvedByUser: true. That retry is model-relayed posture trust: it is the user's word as you report it, not a mechanically verified answer."
+   },
+   "argsHash": "f91a6c9280ef0587aed31a8b9b819cc538fec5d6689a34a06c16d1a523443577",
+   "nextStep": "Retry with approvedByUser: true only after the user explicitly approves the request above."
+  },
   "keys": [
    "status",
-   "code",
-   "approvalToken",
-   "userConfirmation",
-   "nextStep"
+   "message"
   ]
  },
  "authStatus": {
-  "runtimeActive": true,
+  "runtimeActive": false,
   "panel": {
    "sts": {
     "status": "unknown",
@@ -30,8 +47,6 @@
  },
  "sync": {
   "ok": true,
-  "reason": "OBS credentials were synced from the global credential vault. Agent MCP registration is managed by \"npx huaweicloud-devkit install --target <agent>\".",
-  "textHead": "{\n  \"ok\": true,\n  \"profile\": \"test\",\n  \"obs\": {\n    \"configured\": true,\n    \"path\": \"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\n    \"endpoint\": \"https://obs.cn-north-4.myhuaweicloud.com\"\n  },\n  \"hcloud\": {\n    \"ok\": true,\n    \"message\": \"KooCLI config synced to profile=test (project-id not restored ",
   "keys": [
    "ok",
    "profile",
@@ -40,9 +55,11 @@
    "credentialsConfigured",
    "agents",
    "note"
-  ]
+  ],
+  "note": "OBS credentials were synced from the global credential vault. Agent MCP registration is managed by \"npx huaweicloud-devkit install --target <agent>\".",
+  "textHead": "{\n  \"ok\": true,\n  \"profile\": \"test\",\n  \"obs\": {\n    \"configured\": true,\n    \"path\": \"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\n    \"endpoint\": \"https://obs.cn-north-4.myhuaweicloud.com\"\n  },\n  \"hcloud\": {\n    \"ok\": true,\n    \"message\": \"KooCLI config synced to profile=test (project-id not restored "
  },
  "suppressed": false,
  "leakedToDisk": false,
- "mtimeChanged": false
+ "s1Unchanged": true
 }
