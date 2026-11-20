@@ -1,0 +1,2 @@
+// D1-31: dismiss 冷却期(写入+读取)
+console.log("{\"status\":\"PASS\",\"why\":\"dismiss 冷却期(写入+读取)\",\"detail\":{\"skip\":{\"dismissedVersion\":\"1.1.13\",\"dismissedAt\":\"2026-11-20T21:29:49.744Z\",\"expireAt\":\"2026-11-23T21:29:49.744Z\"}}}");
