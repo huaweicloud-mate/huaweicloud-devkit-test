@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-11-20 每日测试：证据分发（stdout.txt）+ 回填三 CSV + 使命清单（v1.1.14 gitHead bd985051）。"""
+"""Hermes Linux 2026-11-21 每日测试：证据分发（stdout.txt）+ 回填三 CSV + 使命清单（v1.1.15 latest, hdk bf79b643）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -144,12 +144,14 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 if os.path.isfile(os.path.join(EVID, "D3-C1", "stdout.txt")):
     append_case("D3-C1", "\n===== 手工归零补充 =====\n"
                 "自动化 finally 归零 150s ECS 删除轮询时序抖动（ECS:提交删除 轮询:仍在/未确认），属探针轮询窗口过短而非产品缺陷。\n"
-                "已手工 `hcloud ECS DeleteServers --servers.1.id=06479986-7a86-4a18-9ef5-4087de4dd670 --delete_publicip=true` → 轮询 GONE → "
-                "`DeleteSubnet`(1c32ff9a-635c-47cd-b273-dac41f11296a) → `DeleteVpc`(d8639dba-05c1-4c03-bff4-294e644d8662) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（仅余他客户端既有 testbot2-dsh-* 资源（VPC/SG）与本轮 default SG，未误删）。\n")
+                "已手工 `hcloud ECS DeleteServers --servers.1.id=fd65de44-10be-4d1e-8ff8-8aef1ef304c7 --delete_publicip=true --delete_volume=true` → 轮询 GONE（round 3）→ "
+                "`VPC DeleteSubnet --vpc_id=7bc24bcf-68bb-4f80-9945-90358c9a707b --subnet_id=82f1344a-ed76-454e-bf68-763ba77dcfa4` → GONE → "
+                "`VPC DeleteVpc --vpc_id=7bc24bcf-68bb-4f80-9945-90358c9a707b` → GONE；ListServersDetails/ListVpcs/ListSubnets 核实归零"
+                "（ECS=[]，仅余他客户端既有 testbot2-dsh-* / tctest-* 资源，未误删）。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
-write_case("_baseline", "huaweicloud-devkit v1.1.14\ngitHead bd985051\n", None)
-print("  _baseline: v1.1.14 (gitHead bd985051)")
+write_case("_baseline", "huaweicloud-devkit v1.1.15\nhdk HEAD bf79b643\n", None)
+print("  _baseline: v1.1.15 (hdk bf79b643)")
 
 # ===== 2. 回填 CSV（状态映射：本轮 v1.1.14 实际探针结果校准） =====
 PASS_D = [
@@ -157,7 +159,7 @@ PASS_D = [
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69","D1-70",
     "D2-1","D2-2","D2-4","D2-5","D2-10","D2-11","D2-12","D2-13","D2-16","D2-26","D2-27",
     "D3-A1","D3-B1","D3-B3","D3-B5","D3-C1","D3-C3","D3-C4","D3-C5","D3-C6","D3-C7","D3-C13",
-    "D3-S1","D3-S2","D3-S3","D3-S4","D3-S8",
+    "D3-S1","D3-S2","D3-S4","D3-S8",
     "D4-1","D4-3","D4-4","D4-5","D4-7","D4-8","D4-9","D4-10","D4-11","D4-12",
     "D4-13","D4-14","D4-15","D4-16","D4-18","D4-19","D4-20","D4-22","D4-23","D4-24",
     "D4-27","D4-28","D4-29",
@@ -166,6 +168,7 @@ PASS_D = [
 ]
 
 FAIL_D = {
+    "D3-S3": "沙箱预览未返回公网URL：workspace 内 nginx 残留配置占用 8080/8081/8082/8084（/etc/nginx/conf.d/{d3c3-proj,sample-react,hdk-e2e,d3s3-site}.conf），deploy_nginx 自动改绑 8083/8086 后 nginx 无 HTTP 响应、devbridge_tunnel+tunnel_url_accessible 均 FAIL、url 为空；3 次实测（含新会话补测）均无公网 URL",
     "D4-2":  "env | grep -i access_key 未拦截（generic access_key 无云前缀）",
     "D4-6":  "hook_check_command(--admin-pass) 返回 allow 未告警",
     "D4-17": "hook 模糊输入 fail-open（&& rm -rf /、$(curl|sh) 放行）",
@@ -174,8 +177,8 @@ FAIL_D = {
     "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 泄漏",
     "D3-C2": "OBS 建桶/静态站/删桶 3 步实测成功，但 hcloud OBS mb 创建成功仍返回退出码 6（--cli-secure-verify=false 时返回 3），步骤1「退出码=0」断言失败",
     "D3-S5": "serviceCatalog 复合意图未命中多 service（回退 help）",
-    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.filename，未生成 URN/触发器",
-    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.password）",
+    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.zip_file，未生成 URN/触发器",
+    "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.port）",
     "D9-12": "initialize 版本检查缺失 + 非法时序 tools/list 未拒 -32600",
     "D10-3": "serviceCatalog 中文意图 EXP-E01「云主机」未命中（92.9% 未达 100%）",
 }

@@ -1,8 +1,56 @@
-check_user realname=true
-connect status=connected ws=78c4c8057e72 sessionId=78c4c8057e72 devStageId=78c4c8057e72
-upload ok=true md5=true
-deploy ok=true returnedPort=8083 url="" keys=ok,nginxType,port,outputPath,projectPath,configPath,verification,exitCode,stdout,nextStep,warning
-deploy_check(port=8083)={"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"FAIL","detail":"(port 8083, no HTTP response)"},"output_dir":{"status":"PASS","detail":"(/workspace/.d3s3-retry-1795209180073/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","detail":""},"tunnel_url_accessible":{"status":"FAIL","detail":"(no tunnel)
-close="ok"
-VERDICT url=EMPTY nginx=FAIL tunnel=FAIL
-RESULT=FAIL
+check_user -> realnameVerified=true agreementSigned=true err=
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+connect -> status=connected wsId=78c4c8057e7243acadba
+[2026-11-20T21:04:13.588Z] uploadProject: /home/testbot3/.hdk-s3-mwpgudl7 -> /workspace/.hdk-s3-mwpgudl7.tar.gz (archive=211 bytes, md5=bc5f07b4896a6f7f58b5aca4f5453167)
+[2026-11-20T21:04:13.633Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-1121465762/sandbox-upload-1795208653576/.hdk-s3-mwpgudl7.tar.gz, size=211, remotePath=/workspace/.hdk-s3-mwpgudl7.tar.gz)
+[2026-11-20T21:04:13.633Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-20T21:04:13.634Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-20T21:04:13.677Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-20T21:04:13.727Z] deployFileServer: starting server on port 8888
+[2026-11-20T21:04:13.769Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 255\r\n\u001b]133;C\u0007\r\n"
+[2026-11-20T21:04:13.769Z] uploadViaHttpTunnel: creating dedicated tunnel session
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+[2026-11-20T21:04:14.719Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-20T21:04:14.720Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-20T21:04:14.722Z] uploadViaHttpTunnel: tunnel ready, localPort=33933
+[2026-11-20T21:04:14.722Z] uploadViaHttpTunnel: waiting for server health on localhost:33933
+[2026-11-20T21:04:14.723Z] waitForServerReady: attempt 1, checking http://localhost:33933/health
+[2026-11-20T21:04:14.784Z] waitForServerReady: server ready on port 33933 after 0 retries
+[2026-11-20T21:04:14.784Z] uploadViaHttpTunnel: sending POST with 211 bytes
+[2026-11-20T21:04:14.829Z] uploadViaHttpTunnel: upload complete (bytes=211, md5=bc5f07b4896a6f7f58b5aca4f5453167)
+upload_project -> ok=true md5Verified=true
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+deploy_nginx -> ok=true port=8080 url=
+
+Waiting for connection 1021821... (0s)
+Connection 1021821 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"FAIL","detail":"(port 8080, no HTTP response)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mwpgudl7/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","det
+close_session -> ok
+[OK] 沙箱 connect 成功
+[OK] s3-connect/upload/deploy 链路
+[OK] 部署返回可访问 URL 或检查通过
+[OK] 会话正常关闭
