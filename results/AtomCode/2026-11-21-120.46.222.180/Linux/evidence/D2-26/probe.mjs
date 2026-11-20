@@ -14,7 +14,7 @@ function finish(r) { const out = { ...META, status: r.status, why: r.why || '', 
   console.log('D2-26 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
 
 async function run() {
-  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-config-backup.js';
+  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/mcp-config-backup.mjs';
   let src = ''; if (existsSync(p)) { try { src = readFileSync(p, 'utf8'); } catch(e){} }
   const ok = src.length > 0 && src.includes('saveAgentDelta');
   return { status: ok ? 'PASS' : 'FAIL', actual: 'saveAgentDelta ' + (ok ? '存在' : '缺失') + ' @ mcp-config-backup.js ' };

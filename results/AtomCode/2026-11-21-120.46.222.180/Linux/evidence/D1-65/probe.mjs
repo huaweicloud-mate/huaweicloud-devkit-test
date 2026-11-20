@@ -14,7 +14,7 @@ function finish(r) { const out = { ...META, status: r.status, why: r.why || '', 
   console.log('D1-65 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
 
 async function run() {
-  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/update-upgrade.js';
+  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/update-check.mjs';
   let src = ''; if (existsSync(p)) { try { src = readFileSync(p, 'utf8'); } catch(e){} }
   const ok = src.length > 0 && src.includes('HUAWEICLOUD_DEVKIT_DEBUG');
   return { status: ok ? 'PASS' : 'FAIL', actual: 'HUAWEICLOUD_DEVKIT_DEBUG ' + (ok ? '存在' : '缺失') + ' @ update-check.mjs ' };

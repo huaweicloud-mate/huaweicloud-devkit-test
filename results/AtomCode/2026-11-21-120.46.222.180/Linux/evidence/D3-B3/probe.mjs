@@ -14,7 +14,7 @@ function finish(r) { const out = { ...META, status: r.status, why: r.why || '', 
   console.log('D3-B3 ' + r.status + ' ' + (r.actual||'').slice(0,80)); }
 
 async function run() {
-  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/packs/huaweicloud-cli/tools.mjs';
+  const p = '/home/testbot1/nodejs/lib/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/tools.mjs';
   let src = ''; if (existsSync(p)) { try { src = readFileSync(p, 'utf8'); } catch(e){} }
   const ok = src.length > 0 && src.includes('huaweicloud_run_readonly_command');
   return { status: ok ? 'PASS' : 'FAIL', actual: 'huaweicloud_run_readonly_command ' + (ok ? '存在' : '缺失') + ' @ tools.mjs ' };
