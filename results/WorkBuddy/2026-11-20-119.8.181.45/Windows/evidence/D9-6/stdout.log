@@ -1,0 +1,33 @@
+{
+ "0": {
+  "client": "inspector-like",
+  "init": true,
+  "tools": 58
+ },
+ "1": {
+  "client": "minimal",
+  "init": true,
+  "proto": "2024-10-07",
+  "tools": 58
+ },
+ "2": {
+  "client": "workbuddy-agent",
+  "init": true,
+  "proto": "2025-03-26",
+  "tools": 58,
+  "callOk": true
+ },
+ "3": {
+  "client": "resources-probe",
+  "error": -32601,
+  "hasResources": false
+ },
+ "caseId": "D9-6",
+ "status": "PASS",
+ "why": "三客户端（inspector 全能力 / minimal 空能力低版本 / workbuddy-agent）initialize+tools/list 全部互通，均返回 40+ 工具；minimal 客户端协议版本协商为 2024-10-07；workbuddy-agent 真实 tools/call 成功；resources/list 返回 明确的 JSON-RPC error -32601（未声明 resources 能力）",
+ "executedAt": "20261120083507",
+ "executedAtIso": "2026-11-20T00:35:07.392Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy"
+}

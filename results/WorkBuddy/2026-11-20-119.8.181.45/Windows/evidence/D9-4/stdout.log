@@ -1,0 +1,14 @@
+{
+ "caseId": "D9-4",
+ "status": "FAIL",
+ "why": "协议生命周期无状态机：initialize 之前直接 tools/list 仍照常返回 58 个工具（未按 MCP 规范以 -32600 拒绝），且 initialize 前 tools/call 未被拒绝而是进入 Vendor gate（isError=true）。标准时序本身正常（capabilities=tools），但服务端不校验会话状态",
+ "executedAt": "20261120083815",
+ "executedAtIso": "2026-11-20T00:38:15.144Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "rejectsPreInit": false,
+ "standardOk": "2024-11-05",
+ "preInitListCount": 58,
+ "preInitCallIsError": true
+}
