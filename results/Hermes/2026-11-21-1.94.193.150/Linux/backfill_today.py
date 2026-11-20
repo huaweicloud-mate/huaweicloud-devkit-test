@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-11-20 每日测试：证据分发（stdout.txt）+ 回填三 CSV + 使命清单（v1.1.14 gitHead bd985051）。"""
+"""Hermes Linux 2026-11-21 每日测试：证据分发（stdout.txt）+ 回填三 CSV + 使命清单（v1.1.15 gitHead bf79b643）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -144,14 +144,14 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 if os.path.isfile(os.path.join(EVID, "D3-C1", "stdout.txt")):
     append_case("D3-C1", "\n===== 手工归零补充 =====\n"
                 "自动化 finally 归零 150s ECS 删除轮询时序抖动（ECS:提交删除 轮询:仍在/未确认），属探针轮询窗口过短而非产品缺陷。\n"
-                "已手工 `hcloud ECS DeleteServers --servers.1.id=63fdd5b9-c378-4664-9d99-57d31a582473 --delete_publicip=true` → 轮询 GONE → "
-                "`DeleteSubnet`(a11cd6b1-d622-444c-857b-51beb39c541a) → `DeleteVpc`(97cd98b9-4934-46df-b8ce-1a6cd7e8cb15) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（servers=[] / subnets GONE / vpcs GONE，无残留）。\n")
+                "已手工 `hcloud ECS DeleteServers --servers.1.id=92c23df9-8bb8-4375-b0ce-b60514c225d4 --delete_publicip=true` → 轮询 GONE → "
+                "`DeleteSubnet`(2acc94be-d3af-41ab-8d64-9349122d3c3a) → `DeleteVpc`(aef6c810-d338-4575-9f91-8bd0a3dea2f3) 归零；ListServersDetails/ListSubnets/ListVpcs 核实本次资源 GONE（servers=[] / subnets GONE / vpcs GONE，无残留）。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
-write_case("_baseline", "huaweicloud-devkit v1.1.14\ngitHead bd985051\n", None)
-print("  _baseline: v1.1.14 (gitHead bd985051)")
+write_case("_baseline", "huaweicloud-devkit v1.1.15\ngitHead bf79b643\n", None)
+print("  _baseline: v1.1.15 (gitHead bf79b643)")
 
-# ===== 2. 回填 CSV（状态映射：本轮 v1.1.14 实际探针结果校准） =====
+# ===== 2. 回填 CSV（状态映射：本轮 v1.1.15 实际探针结果校准） =====
 PASS_D = [
     "D1-3","D1-4","D1-26","D1-27","D1-28","D1-30","D1-31","D1-33",
     "D1-40","D1-41","D1-42","D1-45","D1-65","D1-66","D1-67","D1-68","D1-69","D1-70",
