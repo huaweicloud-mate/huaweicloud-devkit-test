@@ -113,9 +113,12 @@ reg('D3-C1', async () => {
   let vpcErr = '';
   const cleanup = async () => {
     if (serverId) { sh(['ECS', 'DeleteServers', `--servers.1.id=${serverId}`, '--delete_publicip=true', '--delete_volume=true', `--cli-region=${REGION}`]); serverId = null; }
-    if (sgId) { const d = sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]); if (d.ok) sgId = null; else vpcErr = 'sg:' + d.text.slice(0, 140); }
-    if (subnetId && vpcId) { const d = sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); if (d.ok) subnetId = null; else vpcErr = 'sub:' + d.text.slice(0, 140); }
-    if (vpcId && !subnetId && !sgId) { const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]); if (d.ok) { vpcId = null; vpcErr = ''; } else vpcErr = 'vpc:' + d.text.slice(0, 140); }
+    // 注意：hcloud 对 API 错误（如 VPC.0105 ConcurrentUpdateConflict）仍返回 exit=0，错误在 stdout JSON 的 code 字段，
+    // 因此成功判定必须同时看 exit 码与响应体是否含错误 code，否则会误判删除成功而停止重试（导致资源泄漏）。
+    const okOf = (d) => d.ok && !/"code"\s*:\s*"[A-Za-z]/.test(d.text);
+    if (sgId) { const d = sh(['VPC', 'DeleteSecurityGroup', `--security_group_id=${sgId}`, `--cli-region=${REGION}`]); if (okOf(d)) sgId = null; else vpcErr = 'sg:' + d.text.slice(0, 140); }
+    if (subnetId && vpcId) { const d = sh(['VPC', 'DeleteSubnet', `--vpc_id=${vpcId}`, `--subnet_id=${subnetId}`, `--cli-region=${REGION}`]); if (okOf(d)) subnetId = null; else vpcErr = 'sub:' + d.text.slice(0, 140); }
+    if (vpcId && !subnetId && !sgId) { const d = sh(['VPC', 'DeleteVpc', `--vpc_id=${vpcId}`, `--cli-region=${REGION}`]); if (okOf(d)) { vpcId = null; vpcErr = ''; } else vpcErr = 'vpc:' + d.text.slice(0, 140); }
   };
   let created = false, active = false, delOk = false, zero = false;
   try {
