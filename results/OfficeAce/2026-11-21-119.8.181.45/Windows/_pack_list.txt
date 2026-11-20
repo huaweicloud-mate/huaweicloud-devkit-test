@@ -1,0 +1,155 @@
+P1|D1-3|D1安装|doctor健康自检|term=OS_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: doctor 检测项准确+失败场景报告>；保留脱敏日志、manifest、前后快照|tool=doctor
+P2|D1-4|D1安装|status/update幂等|term=OS_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 增量刷新不碰 config+重复 update 幂等>；保留脱敏日志、manifest、前后快照|tool=status/update
+P1|D1-26|D1安装|升级提醒工具注册与协议暴露|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: tools/list 两工具注册+schema>；保留脱敏日志、manifest、前后快照|tool=check_update/upgrade
+P1|D1-27|D1安装|检测语义-已是最新|term=OS_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: result=up_to_date/updateAvailable=false>；保留脱敏日志、manifest、前后快照|tool=check_update
+P1|D1-28|D1安装|检测语义-有新版本|term=OS_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: update_available+targetVersion=1.1.2>；保留脱敏日志、manifest、前后快照|tool=check_update
+P2|D1-30|D1安装|semver 比对正确性|term=OS_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: semverCompare 多组大小关系>；保留脱敏日志、manifest、前后快照|tool=check_update
+P1|D1-31|D1安装|dismiss 冷却期|term=OS_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 冷却期 result=dismissed+3 天 expireAt>；保留脱敏日志、manifest、前后快照|tool=check_update
+P2|D1-33|D1安装|skip 文件持久化与多路径|term=OS_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: skip 文件字段+回退路径+原子写>；保留脱敏日志、manifest、前后快照|tool=check_update
+P0|D1-39|D1安装|Windows 升级检测链可用性|term=OS_MATRIX|os=Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证）|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: Windows 检测链无 EINVAL 静默失败>；保留脱敏日志、manifest、前后快照|tool=check_update
+P0|D1-40|D1安装|镜像 lag 下检测正确性(反向提醒防护)|term=OS_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 镜像 lag 不提示版本倒退>；保留脱敏日志、manifest、前后快照|tool=check_update
+P1|D1-41|D1安装|check_update 真实 MCP 返回契约|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: MCP 四态返回契约>；保留脱敏日志、manifest、前后快照|tool=check_update
+P1|D1-42|D1安装|dismiss 真实闭环与跨调用持久化|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: skip 文件字段+重启复查>；保留脱敏日志、manifest、前后快照|tool=check_update
+P1|D1-45|D1安装|兜底提示真实序列与预热竞态|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 兜底一次性消费时序>；保留脱敏日志、manifest、前后快照|tool=check_update
+P2|D1-65|D1安装|调试模式环境变量|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 调试日志开关>；保留脱敏日志、manifest、前后快照|tool=check_update
+P2|D1-66|D1安装|遥测开关与端点环境变量|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 开关+端点取值>；保留脱敏日志、manifest、前后快照|tool=mcp-server
+P2|D1-67|D1安装|Agent toolkit 模式与 DSH 跳过安装环境变量|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: env 注入+跳过安装>；保留脱敏日志、manifest、前后快照|tool=install
+P2|D1-68|D1安装|图标离线与区域环境变量|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 离线图标+region取值>；保留脱敏日志、manifest、前后快照|tool=get_service_icon/auth_init
+P2|D1-69|D1安装|CLI help 子命令|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: help 输出>；保留脱敏日志、manifest、前后快照|tool=install
+P1|D1-70|D1安装|代理配置与 WebSocket 代理|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 配置读写+WS代理选择>；保留脱敏日志、manifest、前后快照|tool=install
+P1|D2-10|D2认证|R7 current档跟随|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: current 档解析+--cli-profile>；保留脱敏日志、manifest、前后快照|tool=auth_status
+P0|D2-11|D2认证|R3 STS token拒绝落盘|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: scope=rejected+token 不落盘>；保留脱敏日志、manifest、前后快照|tool=auth_switch
+P1|D2-12|D2认证|R10 runtime非空禁止落盘|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: R10 suppressed 不写 S1>；保留脱敏日志、manifest、前后快照|tool=huaweicloud_auth_init/auth_status/auth_sync
+P1|D2-13|D2认证|R9 configuredBySession优先env|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: S1 胜出/清除后 env 兜底>；保留脱敏日志、manifest、前后快照|tool=auth_status
+P1|D2-16|D2认证|import文件读取后擦除|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 读后 exists=False 密钥不留盘>；保留脱敏日志、manifest、前后快照|tool=auth_switch
+P0|D4-18|D4安全|confirm-not-deny审批语义|term=CLIENT_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 确认/拒绝路径>；保留脱敏日志、manifest、前后快照|tool=plan_cli_command
+P0|D4-19|D4安全|确认流下预检仍生效|term=CLIENT_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 确认流预检拦截>；保留脱敏日志、manifest、前后快照|tool=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+P1|D4-20|D4安全|拒绝后零操作|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 拒绝后无资源变更无执行>；保留脱敏日志、manifest、前后快照|tool=run_approved_command
+P1|D2-1|D2认证|auth init三端同步|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 三端落位(KooCLI/OBS/沙箱)>；保留脱敏日志、manifest、前后快照|tool=huaweicloud_auth_init
+P2|D2-2|D2认证|auth status判定准确性|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 三端就绪组合枚举判定>；保留脱敏日志、manifest、前后快照|tool=auth_status
+P0|D2-4|D2认证|凭证脱敏正确性|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 输出无明文 AK/SK>；保留脱敏日志、manifest、前后快照|tool=show_profile_redacted
+P1|D2-5|D2认证|凭证缺失报错指引|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 报错+可执行指引(非裸堆栈)>；保留脱敏日志、manifest、前后快照|tool=huaweicloud_auth_init/auth_status
+P1|D2-26|D2认证|凭证备份与恢复|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 备份文件+恢复比对>；保留脱敏日志、manifest、前后快照|tool=huaweicloud_auth_sync
+P2|D2-27|D2认证|KooCLI 版本管理|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 版本解析/比较/下载基址>；保留脱敏日志、manifest、前后快照|tool=auth_status
+P1|D3-A1|D3功能|skill检索完整性|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 全量 skill 可检索完整拉取>；保留脱敏日志、manifest、前后快照|tool=retrieve_skill/search_docs
+P2|D3-B1|D3功能|list_operations规范名|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 规范操作名与官方一致>；保留脱敏日志、manifest、前后快照|tool=list_operations
+P1|D3-B3|D3功能|run_readonly脱敏执行|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 执行成功+输出脱敏+无写入>；保留脱敏日志、manifest、前后快照|tool=run_readonly_command
+P2|D3-B5|D3功能|detect_framework识别|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 11 框架识别准确>；保留脱敏日志、manifest、前后快照|tool=detect_framework
+P1|D3-C1|D3功能|ECS生命周期E2E|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 生命周期 E2E+归零>；保留脱敏日志、manifest、前后快照|tool=plan_cli_command/run_approved_command
+P1|D3-C2|D3功能|OBS静态站部署E2E|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 部署成功+资源归零>；保留脱敏日志、manifest、前后快照|tool=obs_set_website_config/setup_obs_config
+P1|D3-C3|D3功能|沙箱部署E2E|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 部署 URL+会话关闭>；保留脱敏日志、manifest、前后快照|tool=sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_close_session/sandbox_upload_file/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_check_user/sandbox_sign_agreement/sandbox_connect/sandbox_credentials
+P1|D3-C4|D3功能|服务创建类回归|term=CLIENT_MATRIX|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 逐服务只读规划>；保留脱敏日志、manifest、前后快照|tool=plan_cli_command/run_approved_command
+P1|D3-C5|D3功能|工具冒烟|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 四工具冒烟全通>；保留脱敏日志、manifest、前后快照|tool=check_cli/list_operations/plan_cli_command/explain_error
+P1|D3-C6|D3功能|沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/upload_file/close_session/deploy_check）|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 7 工具规范结果无静默失败>；保留脱敏日志、manifest、前后快照|tool=sandbox_check_user/sandbox_credentials/sandbox_sign_agreement/sandbox_upload_file/sandbox_exec_one_shot/sandbox_deploy_check/sandbox_close_session
+P1|D3-C7|D3功能|跨区域资源操作引导（区域维度）|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 命令参数+错误码+释放归零>；保留脱敏日志、manifest、前后快照|tool=plan_cli_command/list_regions/get_regional_availability
+P1|D3-C13|D3功能|OBS 静态网站托管配置|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 配置 XML+状态码>；保留脱敏日志、manifest、前后快照|tool=huaweicloud_obs_set_website_config
+P2|D3-C14|D3功能|沙箱 HDKit 服务参数与 hwlink 凭证|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 参数透传+凭证结构>；保留脱敏日志、manifest、前后快照|tool=sandbox_connect/sandbox_credentials
+P1|D3-S1|D3功能|场景-只读查ECS(带不改约束)|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 路由+只读清单+零写调用>；保留脱敏日志、manifest、前后快照|tool=service_catalog/run_readonly_command
+P1|D3-S2|D3功能|场景-删VPC先确认|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 命令块+确认前后执行态>；保留脱敏日志、manifest、前后快照|tool=plan_cli_command/hook_check_command/run_approved_command
+P1|D3-S3|D3功能|场景-沙箱预览出URL|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 预览URL可访问>；保留脱敏日志、manifest、前后快照|tool=sandbox_connect/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_close_session
+P1|D3-S4|D3功能|场景-领券闭环|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 状态翻转闭环>；保留脱敏日志、manifest、前后快照|tool=voucher_status/voucher_claim
+P2|D3-S5|D3功能|场景-复合意图分层路由|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 多路命中+分层推荐>；保留脱敏日志、manifest、前后快照|tool=service_catalog
+P2|D3-S6|D3功能|场景-FunctionGraph定时任务|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 函数URN+触发器>；保留脱敏日志、manifest、前后快照|tool=plan_cli_command/run_approved_command
+P1|D3-S7|D3功能|场景-跨服务交付(Web应用+RDS)并归零|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 编排顺序+连接串注入+归零>；保留脱敏日志、manifest、前后快照|tool=sandbox_connect/sandbox_deploy_nginx/plan_cli_command/run_approved_command
+P1|D3-S8|D3功能|场景-操作失败后排障指引|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 失败分类+可执行下一步>；保留脱敏日志、manifest、前后快照|tool=explain_error/run_readonly_command
+P0|D4-1|D4安全|凭证文件读取拦截|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: cat/type 凭证文件被阻断>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P0|D4-2|D4安全|凭证env打印拦截|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: printenv/echo 凭证被阻断>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P0|D4-3|D4安全|明文secret API拦截|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 明文 secret API 被阻断>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P1|D4-4|D4安全|写操作审批门|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 12 类写动词强制审批>；保留脱敏日志、manifest、前后快照|tool=plan_cli_command
+P0|D4-5|D4安全|写操作误判检测|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 写命令不被误判只读>；保留脱敏日志、manifest、前后快照|tool=plan_cli_command
+P1|D4-6|D4安全|adminPass回显警告|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 警告且不裸回显密码>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P1|D4-7|D4安全|hook三工具有效性|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 三类高危输入均拦截>；保留脱敏日志、manifest、前后快照|tool=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+P1|D4-8|D4安全|Python/Node策略一致|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: Python/Node 双路径判定一致>；保留脱敏日志、manifest、前后快照|tool=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+P0|D4-9|D4安全|公开暴露/破坏性预检|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 公开暴露/破坏性执行前拦截>；保留脱敏日志、manifest、前后快照|tool=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+P2|D4-10|D4安全|规则库新增回归|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 新规则不误杀既有操作>；保留脱敏日志、manifest、前后快照|tool=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+P1|D4-11|D4安全|提示注入防护|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 注入 payload 拒绝>；保留脱敏日志、manifest、前后快照|tool=search_docs/retrieve_skill/search_marketplace/get_service_icon
+P2|D4-12|D4安全|供应链安装期安全|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 无恶意行为+pack一致+SBOM>；保留脱敏日志、manifest、前后快照|tool=npm
+P1|D4-13|D4安全|最小权限凭证通过率|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 最小权限通过率>；保留脱敏日志、manifest、前后快照|tool=run_readonly_command
+P2|D4-14|D4安全|操作可审计性|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: CTS 可追溯+区分 agent/人工>；保留脱敏日志、manifest、前后快照|tool=run_readonly_command
+P0|D4-15|D4安全|hook绕过尝试|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 变体无绕过成功>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P0|D4-16|D4安全|命令包裹穿透|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 发现内层命令并拦截>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P1|D4-17|D4安全|hook模糊fail-closed|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 异常输入默认拒绝>；保留脱敏日志、manifest、前后快照|tool=hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+P0|D4-21|D4安全|hook_check_artifacts 具名回归（代码/IaC/策略制品预检）|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: broad IAM 制品拦截>；保留脱敏日志、manifest、前后快照|tool=hook_check_artifacts
+P0|D4-22|D4安全|hook_check_deploy_plan 具名回归（部署计划预检）|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 公网暴露 deploy 计划拦截/告警>；保留脱敏日志、manifest、前后快照|tool=hook_check_deploy_plan
+P0|D4-23|D4安全|全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）|term=CLIENT_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: agent-rules 注入生效>；保留脱敏日志、manifest、前后快照|tool=install
+P1|D4-24|D4安全|确认令牌过期与重复确认边界（审批流健壮性）|term=CLIENT_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 响应JSON+计数+归零>；保留脱敏日志、manifest、前后快照|tool=auth_confirm/plan_cli_command
+P2|D4-25|D4安全|Python hook 事件遥测分类|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: hook-events.jsonl>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P2|D4-26|D4安全|findings 证据脱敏|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: findings.evidence 脱敏前后>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P1|D4-27|D4安全|双路径输出脱敏|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 脱敏前后对照>；保留脱敏日志、manifest、前后快照|tool=run_readonly_command
+P0|D4-28|D4安全|Node 版安全 hook 链路|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: deny 决策+reason>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P2|D4-29|D4安全|分类断言与原始命令分类入口|term=COMMON|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes（Hook）; OpenCode（非 Hook）|need=强断言：<证据: 分类+断言分支>；保留脱敏日志、manifest、前后快照|tool=hook_check_command
+P1|D5-1|D5客户端|清单发现加载|term=CLIENT_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes; OpenCode; 声明支持的客户端矩阵|need=强断言：<证据: 清单发现加载>；保留脱敏日志、manifest、前后快照|tool=install
+P1|D5-3|D5客户端|工具全量枚举|term=CLIENT_MATRIX|os=Windows/Linux；macOS 若声明支持则单独举证|agent=Hermes; OpenCode; 声明支持的客户端矩阵|need=强断言：<证据: tools/list 40 工具枚举>；保留脱敏日志、manifest、前后快照|tool=mcp-server
+P2|D6-1|D6性能|检索响应延迟|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照|tool=search_docs/retrieve_skill
+P2|D6-3|D6性能|MCP冷启时间|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照|tool=mcp-server
+P1|D6-4|D6性能|并发调度正确性|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 无死锁无消息错乱>；保留脱敏日志、manifest、前后快照|tool=mcp-server
+P2|D6-9|D6性能|缓存清理三入口|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 缓存清空+幂等>；保留脱敏日志、manifest、前后快照|tool=check_update/get_service_icon/search_marketplace
+P1|D9-9|D9协议|tools/call 超时协议语义与取消|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: JSON-RPC错误对象+capabilities+取消时序>；保留脱敏日志、manifest、前后快照|tool=inspector
+P2|D8-1|D8质量|文档与能力一致|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照|tool=search_docs
+P1|D8-4|D8质量|引导步骤可机械执行|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照|tool=retrieve_skill
+P2|D8-6|D8质量|中英文文档一致|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照|tool=search_docs
+P0|D8-7|D8质量|7 个 meta/通用技能指引可机械执行验证|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照|tool=retrieve_skill/search_docs
+P2|D8-9|D8质量|安装 ID 与遥测值脱敏|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: ID稳定+脱敏>；保留脱敏日志、manifest、前后快照|tool=mcp-server
+P2|D8-10|D8质量|MCP 配置备份与合并|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes 代表终端; fake/fixture|need=强断言：<证据: 合并结果+delta回放>；保留脱敏日志、manifest、前后快照|tool=install
+P1|D9-1|D9协议|tools/list合规|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照|tool=inspector
+P1|D9-2|D9协议|JSON-RPC错误码|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照|tool=inspector
+P1|D9-3|D9协议|tools/call响应格式|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照|tool=inspector
+P1|D9-4|D9协议|协议生命周期|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照|tool=inspector
+P1|D9-5|D9协议|stdio传输健壮|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照|tool=mcp-server
+P1|D9-6|D9协议|跨客户端互通|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照|tool=inspector
+P2|D9-7|D9协议|协议版本协商降级|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照|tool=mcp-server
+P2|D9-8|D9协议|inputSchema版本合规|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 协议报文>；保留脱敏日志、manifest、前后快照|tool=inspector
+P1|D9-10|D9协议|MCP remote transport（HTTP/WS 远程服务）|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 端口监听+协议响应>；保留脱敏日志、manifest、前后快照|tool=mcp-server
+P1|D9-11|D9协议|WebSocket 隧道通道生命周期|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: ready/close 生命周期>；保留脱敏日志、manifest、前后快照|tool=mcp-server
+P0|D9-12|D9协议|initialize 握手协议安全基线|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 协议报文+源码探针>；保留脱敏日志、manifest、前后快照|tool=inspector
+P0|D9-13|D9协议|tools/call 凭证不泄露与权限校验|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=Hermes; MCP Inspector/标准协议客户端|need=强断言：<证据: 凭证脱敏+权限决策+审批令牌>；保留脱敏日志、manifest、前后快照|tool=inspector
+P1|D10-3|D10评测|路由准确率+混淆矩阵|term=CLIENT_MATRIX|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode|need=强断言：<证据: 评测集结果+模型参数>；保留脱敏日志、manifest、前后快照|tool=harness
+P0|D10-4|D10评测|安全干预-静态规则层|term=COMMON|os=Windows/Linux 代表环境；macOS 若声明支持则单独举证|agent=OpenCode; Codex; CodeArtsAgent; CodeArtsSpace; WorkBuddy; DSH; OfficeAce; Hermes; OpenClaw; AtomCode|need=强断言：<证据: 规则库加载+三态判定>；保留脱敏日志、manifest、前后快照|tool=harness
+EXP|P1|EXP-D5-7-1|src=D5-1|在 OfficeAce 上执行 D5-1 用例|agent=OfficeAce|os=Windows/Linux|term=10客户端矩阵
+EXP|P1|EXP-D5-7-3|src=D5-3|在 OfficeAce 上执行 D5-3 用例|agent=OfficeAce|os=Windows/Linux|term=10客户端矩阵
+EXP|P1|EXP-C4-01|src=D3-C4|ECS 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-02|src=D3-C4|VPC 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-03|src=D3-C4|OBS 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-04|src=D3-C4|RDS 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-05|src=D3-C4|GaussDB 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-06|src=D3-C4|CCE 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-07|src=D3-C4|FunctionGraph 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-08|src=D3-C4|IAM 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-09|src=D3-C4|CTS 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-10|src=D3-C4|CES 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-11|src=D3-C4|DDS 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-12|src=D3-C4|DCS 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-13|src=D3-C4|SMN 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-14|src=D3-C4|DMS 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-15|src=D3-C4|WAF 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-16|src=D3-C4|CDN 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-17|src=D3-C4|ModelArts 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-18|src=D3-C4|DEW 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-19|src=D3-C4|CBR 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-20|src=D3-C4|EVS 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-21|src=D3-C4|EIP 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-C4-22|src=D3-C4|ELB 只读规划冒烟: list_operations + plan 只读命令|agent=Hermes|os=Windows/Linux|term=展开22服务矩阵
+EXP|P1|EXP-E01|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E02|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E03|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E04|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E05|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E06|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E07|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E08|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E09|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E10|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E11|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E12|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E13|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E14|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+EXP|P1|EXP-E15|src=D10-3|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent|agent=OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode|os=Windows/Linux|term=COMMON
+MISSION|P0|D4-1|凭证文件读取拦截
+MISSION|P0|D4-2|凭证env打印拦截
+MISSION|P1|D4-4|写操作审批门
+MISSION|P0|D4-5|写操作误判检测
+MISSION|P1|D4-7|hook三工具有效性
+MISSION|P0|D4-15|hook绕过尝试
+MISSION|P0|D4-16|命令包裹穿透
+MISSION|P2|D4-25|Python hook 事件遥测分类
+MISSION|P1|D4-27|双路径输出脱敏
