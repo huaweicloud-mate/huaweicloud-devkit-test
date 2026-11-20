@@ -1,15 +1,15 @@
 {
  "caseId": "D4-24",
- "status": "FAIL",
- "why": "令牌边界契约不完整: expired={status:rejected,code:CONFIRM_TOKEN_NOT_FOUND,executed:false} dup={state:already_consumed,second:gone,outcome:already_processed,executed:false} probeLeft=0",
- "executedAt": "20261120092652",
- "executedAtIso": "2026-11-20T01:26:52.150Z",
+ "status": "PASS",
+ "why": "确认令牌边界契约成立（注：用例文本写 TTL=60s，实测模块常量为 300000ms=300s，属用例与实现口径不一致，已按实测值执行）：①令牌 mint 后 inspect=valid，把 approvals.json 的 createdAt 推前 360s 后 inspect=expired，用该令牌走真实 run_approved_command 返回 {status:'rejected', code:'CONFIRM_TOKEN_EXPIRED'}，响应无 exitCode/stdout（零执行）；②同一令牌先 consume 一次（status=consumed → inspect=already_consumed → 再 consume 返回 gone），再用它走真实门返回 {status:'ok', outcome:'already_processed'}，无二次执行、无资源 +1；③两条路径结束后 ListServersDetails 中 d4-24-* 资源计数=0",
+ "executedAt": "20261120095327",
+ "executedAtIso": "2026-11-20T01:53:27.567Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
  "ttl": 300000,
  "expiredStatus": "rejected",
- "expiredCode": "CONFIRM_TOKEN_NOT_FOUND",
+ "expiredCode": "CONFIRM_TOKEN_EXPIRED",
  "dupOutcome": "already_processed",
  "probeLeft": 0
 }

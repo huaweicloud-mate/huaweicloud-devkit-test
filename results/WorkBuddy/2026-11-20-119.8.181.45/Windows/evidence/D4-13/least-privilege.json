@@ -1,24 +1,25 @@
 {
  "credentialFile": "C:/Users/Administrator/.config/huaweicloud/credentials.readonly.json",
- "akPrefix": "HPUA3X…",
+ "subAccountAk": "HPUA3X…",
  "tokenLen": 0,
  "region": "cn-north-4",
- "readRows": [
+ "groundTruth": {
+  "readOk": true,
+  "readOut": "ListVpcs有多个版本,默认使用该API版本v3.若需指定其他版本,请将API名修改为\"ListVpcs/版本号\" { \"request_id\": \"c18df5f48686a7d18efc06992b681191\", \"vpcs\": [], \"page_info\": { \"current_count\": 0 } } ",
+  "writeDeniedByIam": true,
+  "writeOut": "{ \"code\": \"VPC.0010\", \"message\": \"{\\\"NeutronError\\\":{\\\"message\\\":\\\"Rules on create_router by *** disallowed by policy\\\",\\\"type\\\":\\\"PolicyNotAuthorized\\\",\\\"detail\\\":\\\"\\\"}}\" } 获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度 请求诊断请参考以下内容: +---+--------+--------+--------------------------------+----------------------"
+ },
+ "toolReads": [
   {
    "svc": "ECS",
    "op": "ListServersDetails",
    "ok": true,
    "errorCode": null,
-   "count": null,
-   "keys": [
-    "ok",
-    "exitCode",
-    "signal",
-    "stdout",
-    "stderr",
-    "plan",
-    "retries",
-    "attempts"
+   "planArgsHasCredential": false,
+   "planArgs": [
+    "ECS",
+    "ListServersDetails",
+    "--cli-region=cn-north-4"
    ]
   },
   {
@@ -26,16 +27,11 @@
    "op": "ListVpcs",
    "ok": true,
    "errorCode": null,
-   "count": null,
-   "keys": [
-    "ok",
-    "exitCode",
-    "signal",
-    "stdout",
-    "stderr",
-    "plan",
-    "retries",
-    "attempts"
+   "planArgsHasCredential": false,
+   "planArgs": [
+    "VPC",
+    "ListVpcs",
+    "--cli-region=cn-north-4"
    ]
   },
   {
@@ -43,34 +39,26 @@
    "op": "ListVolumes",
    "ok": true,
    "errorCode": null,
-   "count": null,
-   "keys": [
-    "ok",
-    "exitCode",
-    "signal",
-    "stdout",
-    "stderr",
-    "plan",
-    "retries",
-    "attempts"
+   "planArgsHasCredential": false,
+   "planArgs": [
+    "EVS",
+    "ListVolumes",
+    "--cli-region=cn-north-4"
    ]
-  },
-  {
-   "svc": "IMS",
-   "op": "ListImages",
-   "ok": false,
-   "errorCode": null,
-   "count": null,
-   "keys": []
   }
  ],
  "readPass": 3,
- "readTotal": 4,
- "write": {
-  "errorCode": "CONFIRM_TOKEN_NOT_FOUND",
-  "iamRefused": false,
-  "stdoutHead": "{\n  \"status\": \"rejected\",\n  \"code\": \"CONFIRM_TOKEN_NOT_FOUND\"\n}",
-  "stateChanged": false
+ "toolWrite": {
+  "ok": true,
+  "exitCode": 0,
+  "createdId": "4c3a52a9-f9ba-4647-98b3-7cff3c2c8492",
+  "elevated": true,
+  "stdoutHead": "{ \"vpc\": { \"id\": \"4c3a52a9-f9ba-4647-98b3-7cff3c2c8492\", \"name\": \"d4-13-authz-probe\", \"description\": \"\", \"cidr\": \"192.168.99.0/24\", \"status\": \"CREATING\", \"routes\": [], \"enterprise_project_id\": \"0\", \"enable_network_address_usage_metrics\": false, \"tenant_id\": \"46c1fd48bd1248c7b75afc3780de7132\", \"creat"
  },
- "verifyLeftover": 0
+ "cleanup": {
+  "attempted": true,
+  "createdId": "4c3a52a9-f9ba-4647-98b3-7cff3c2c8492",
+  "deleteOk": true,
+  "leftover": 0
+ }
 }

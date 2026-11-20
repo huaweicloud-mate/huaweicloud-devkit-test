@@ -1,15 +1,16 @@
 {
  "caseId": "D4-13",
  "status": "FAIL",
- "why": "最小权限对照未成立: 只读 3/4 通过，写拒绝=false(CONFIRM_TOKEN_NOT_FOUND)，残留=0",
- "executedAt": "20261120092646",
- "executedAtIso": "2026-11-20T01:26:46.786Z",
+ "why": "最小权限凭证被工具忽略（真实缺陷）：同一只读子账号 credentials.readonly.json（HPUA3X…，无 token）直连 hcloud 时只读正常、写被 IAM 策略拒绝（VPC.0010 PolicyNotAuthorized）；但经 huaweicloud_run_readonly_command 执行 3 个只读用例时，plan.args 里 0/3 不含任何 --cli-access-key/--cli-secret-key —— 说明调用方解析出的永久 AK/SK 根本没有下发给 hcloud，实际以 KooCLI profile 账号身份执行。行为证据：同一份只读凭证下通过 huaweicloud_run_approved_command 发起 VPC CreateVpc，工具返回 ok=true 并真实创建出 VPC 4c3a52a9-f9ba-4647-98b3-7cff3c2c8492，而该写操作直连时被 IAM 明确拒绝 —— 即工具把只读凭证的写请求用主账号权限执行了（越权）。已用主账号删除该 VPC，ListVpcs 复核残留=0",
+ "executedAt": "20261120095322",
+ "executedAtIso": "2026-11-20T01:53:22.227Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
+ "canHonour": false,
  "readPass": 3,
- "readTotal": 4,
- "iamRefused": false,
- "leftover": 0,
- "writeCode": "CONFIRM_TOKEN_NOT_FOUND"
+ "directWriteDenied": true,
+ "writeElevated": true,
+ "createdId": "4c3a52a9-f9ba-4647-98b3-7cff3c2c8492",
+ "leftover": 0
 }
