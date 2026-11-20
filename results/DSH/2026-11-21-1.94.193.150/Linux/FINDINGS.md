@@ -23,7 +23,7 @@
 | 11 | P2 | `D3-C14` | 沙箱无凭证抛中文文案，与英文契约断言不符 | 待提单（契约方向待确认） |
 | 12 | P2 | `D1-68` | region 环境变量优先级与用例契约相反（`HW_REGION` 优先） | 待裁决 SPEC |
 
-> 缺陷单：本轮 12 项经 `scripts/file_issue.py` 查重后统一归入上游合并单（不重复开单、不处理/关闭任何 GitHub issue），关联结果见报告第八节与提交记录。
+> 缺陷单：本轮 12 项经 `scripts/file_issue.py` 查重，全部命中 v1 稳定线历史合并单 [#1055](https://github.com/huaweicloud/huaweicloud-devkit/issues/1055)，已在该单追加 v1.1.15 复核评论（https://github.com/huaweicloud/huaweicloud-devkit/issues/1055#issuecomment-7051329430），不重复开单、不处理/关闭任何 GitHub issue；关联清单见同目录 `HISTORY_LINKS.md`。
 
 ---
 
