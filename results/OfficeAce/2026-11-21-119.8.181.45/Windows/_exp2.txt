@@ -1,0 +1,49 @@
+ent行为: 真实 Agent 会话逐任务验证期望路由 证书/ELB→plan|Windows/Linux|OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode
+EXP-E14|D10-3|P1|我账号下的用户都有哪些权限, 帮我审计一下|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: IAM审计→read)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 IAM审计→read|Windows/Linux|OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode
+EXP-E15|D10-3|P1|帮我领一下华为云的代金券|①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: voucher_claim→执行)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 voucher_claim→执行|Windows/Linux|OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode
+===DESIGN===
+DES 107
+DFIELDS: ['ID', '维度', '标题', '优先级', '前置条件', '测试数据', '操作步骤', '预期结果', '指引来源', '关联工具', '自动化建议', '展开规则', '生成时间', '设计状态', '终端覆盖类型', 'terminal', 'agent', 'OS', 'Node/npm', 'shell', 'TTY', 'installLayout', 'mcpTransport', 'hookSupport', 'requiredEvidence', 'owner', '依赖', '执行状态', '执行时间', 'evidencePath', 'blockedReason', 'mission', 'missionPriority']
+|D1-3|D1安装|P1|doctor|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-4|D1安装|P2|status/update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-26|D1安装|P1|check_update/upgrade|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-27|D1安装|P1|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-28|D1安装|P1|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-30|D1安装|P2|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-31|D1安装|P1|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-33|D1安装|P2|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-39|D1安装|P0|check_update|Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证）|
+|D1-40|D1安装|P0|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-41|D1安装|P1|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-42|D1安装|P1|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-45|D1安装|P1|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-65|D1安装|P2|check_update|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-66|D1安装|P2|mcp-server|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-67|D1安装|P2|install|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-68|D1安装|P2|get_service_icon/auth_init|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-69|D1安装|P2|install|Windows/Linux；macOS 若声明支持则单独举证|
+|D1-70|D1安装|P1|install|Windows/Linux；macOS 若声明支持则单独举证|
+|D2-10|D2认证|P1|auth_status|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D2-11|D2认证|P0|auth_switch|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D2-12|D2认证|P1|huaweicloud_auth_init/auth_status/auth_sync|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D2-13|D2认证|P1|auth_status|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D2-16|D2认证|P1|auth_switch|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D4-18|D4安全|P0|plan_cli_command|Windows/Linux；macOS 若声明支持则单独举证|
+|D4-19|D4安全|P0|hook_check_command/hook_check_artifacts/hook_check_deploy_plan|Windows/Linux；macOS 若声明支持则单独举证|
+|D4-20|D4安全|P1|run_approved_command|Windows/Linux；macOS 若声明支持则单独举证|
+|D2-1|D2认证|P1|huaweicloud_auth_init|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D2-2|D2认证|P2|auth_status|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D2-4|D2认证|P0|show_profile_redacted|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D2-5|D2认证|P1|huaweicloud_auth_init/auth_status|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D2-26|D2认证|P1|huaweicloud_auth_sync|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D2-27|D2认证|P2|auth_status|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-A1|D3功能|P1|retrieve_skill/search_docs|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-B1|D3功能|P2|list_operations|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-B3|D3功能|P1|run_readonly_command|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-B5|D3功能|P2|detect_framework|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-C1|D3功能|P1|plan_cli_command/run_approved_command|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-C2|D3功能|P1|obs_set_website_config/setup_obs_config|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-C3|D3功能|P1|sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_close_session/sandbox_upload_file/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_check_user/sandbox_sign_agreement/sandbox_connect/sandbox_credentials|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-C4|D3功能|P1|plan_cli_command/run_approved_command|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-C5|D3功能|P1|check_cli/list_operations/plan_cli_command/explain_error|Windows/Linux 代表环境；macOS 若声明支持则单独举证|
+|D3-C6|D3功能|P1|sandbox_check_user/sandbox_credentials/sandbox_sign_agreement/sandbox_upload_file/sandbox_exec_one_shot/sandbox_deploy_check/sandbox_close_session|Windows/Linux 代表环
