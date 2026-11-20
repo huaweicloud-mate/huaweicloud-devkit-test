@@ -1,0 +1,31 @@
+
+### D3-C2 ###
+{
+  "case": "D3-C2",
+  "status": "FAIL",
+  "total": 4,
+  "passed": 1,
+  "failed": 3,
+  "results": [
+    {
+      "name": "OBS建桶",
+      "pass": false,
+      "detail": "Start at 2026-11-19 21:28:50.182083584 +0000 UTC\n\nCreate bucket [testbot3-hermes-obs-5123729748] successfully, request id [000001A1F5B65717440CE30B94D04BA7]\nNotice: If the configur"
+    },
+    {
+      "name": "set静态站",
+      "pass": false,
+      "detail": "{\"status\":\"rejected\",\"code\":\"USER_CONFIRMATION_REQUIRED\",\"approvalToken\":\"6e481de8-6860-497d-8808-d53dff259ff7\",\"userConfirmation\":{\"needed\":true,\"summary\":\"huaweicloud_obs_set_website_config: set website config on bucket testbot3-hermes-obs-5123729748 (region cn-north-4), index index.html\",\"argsHas"
+    },
+    {
+      "name": "get静态站",
+      "pass": false,
+      "detail": "{\"ok\":false,\"status\":404,\"body\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\" standalone=\\\"yes\\\"?><Error><Code>NoSuchWebsiteConfiguration</Code><Message>The specified bucket does not have a website config"
+    },
+    {
+      "name": "删桶归零",
+      "pass": true,
+      "detail": "Start at 2026-11-19 21:28:52.597030956 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-5123729748] successfully!"
+    }
+  ]
+}
