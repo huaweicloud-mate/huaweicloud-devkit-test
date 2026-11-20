@@ -1,0 +1,53 @@
+{
+  "caseId": "EXP-D5-5-3",
+  "status": "PASS",
+  "executedAt": "20261120113520",
+  "sut": "",
+  "os": "win32",
+  "agent": "WorkBuddy",
+  "assertions": [
+    {
+      "name": "tools/list enumerates >=40 tools",
+      "ok": true,
+      "actual": "toolCount=42"
+    },
+    {
+      "name": "every tool exposes inputSchema.type=object",
+      "ok": true,
+      "actual": "badSchema=0 []"
+    },
+    {
+      "name": "every tool has non-empty description",
+      "ok": true,
+      "actual": "missingDescription=0"
+    },
+    {
+      "name": "huaweicloud_* tools fully reachable (>=40 baseline)",
+      "ok": true,
+      "actual": "huaweicloudToolCount=42"
+    }
+  ],
+  "failures": [],
+  "manifestPath": "C:\\Users\\Administrator\\.workbuddy\\huaweicloud-plugins\\package.json",
+  "manifestName": "huaweicloud-devkit",
+  "manifestVersion": "2.0.0-next.4",
+  "mcpServerPresent": true,
+  "srcFileCount": 25,
+  "serverInfo": {
+    "name": "huaweicloud-devkit",
+    "version": "2.0.0-next.4"
+  },
+  "protocolVersion": "2024-11-05",
+  "toolCount": 42,
+  "huaweicloudToolCount": 42,
+  "badSchemaTools": [],
+  "toolsWithoutDescription": [],
+  "sampleTools": [
+    "huaweicloud_check_cli",
+    "huaweicloud_plan_cli_command",
+    "huaweicloud_run_readonly_command",
+    "huaweicloud_list_operations",
+    "huaweicloud_run_approved_command"
+  ],
+  "why": "live tools/list returned 42 tools (42 huaweicloud_*), all with object inputSchema and description"
+}
