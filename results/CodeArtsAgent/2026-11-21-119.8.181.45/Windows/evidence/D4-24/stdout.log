@@ -1,0 +1,17 @@
+{
+  "caseId": "D4-24",
+  "status": "SPEC-MISMATCH",
+  "why": "令牌跨会话返回 CONFIRM_TOKEN_NOT_FOUND，非用例预期 CONFIRM_TOKEN_EXPIRED；重复确认/无效令牌均被拒绝（安全语义成立），仅错误码命名漂移",
+  "executedAt": "20261121053304",
+  "result": {
+    "planToken": true,
+    "acrossSession": {
+      "status": "rejected",
+      "code": "CONFIRM_TOKEN_NOT_FOUND"
+    },
+    "badToken": {
+      "status": "rejected",
+      "code": "CONFIRM_TOKEN_NOT_FOUND"
+    }
+  }
+}

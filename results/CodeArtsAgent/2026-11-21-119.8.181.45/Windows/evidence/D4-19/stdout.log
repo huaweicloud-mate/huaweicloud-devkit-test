@@ -1,0 +1,61 @@
+{
+  "caseId": "D4-19",
+  "status": "FAIL",
+  "why": "preflight-in-confirm 夹具 8/9 PASS，1 FAIL：approvedByUser=true 但无效 token 未被拦截（Invalid or expired approval token 未抛出）",
+  "executedAt": "20261121050703",
+  "result": {
+    "plan": {
+      "executable": "hcloud",
+      "args": [
+        "VPC",
+        "DeleteVpc",
+        "--vpc_id=abc"
+      ],
+      "command": "hcloud VPC DeleteVpc --vpc_id=abc",
+      "executableBlock": "hcloud VPC DeleteVpc --vpc_id=abc",
+      "warnings": [],
+      "classification": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      "sgFindings": [],
+      "approvalToken": "4f2a61d9-7f44-4f1f-bfa2-6503fb71da0e",
+      "safeToRun": false
+    },
+    "hook": {
+      "ok": true,
+      "decision": "warn",
+      "findings": [
+        {
+          "ruleId": "hwc-destructive-delete-operation",
+          "title": "Destructive cloud resource operation",
+          "category": "destructive",
+          "severity": "warn",
+          "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+          "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+          "source": "command",
+          "evidence": "hcloud VPC DeleteVpc --vpc_id=abc"
+        }
+      ],
+      "nextStep": "Review the warnings with the user before proceeding."
+    },
+    "art": {
+      "ok": false,
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-iam-admin-policy",
+          "title": "Broad IAM administrator grant",
+          "category": "iam",
+          "severity": "deny",
+          "message": "The change appears to grant broad administrator permissions.",
+          "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+          "source": "policy.json",
+          "evidence": "policy.json {\"Version\":\"1.1\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+        }
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution."
+    }
+  }
+}
