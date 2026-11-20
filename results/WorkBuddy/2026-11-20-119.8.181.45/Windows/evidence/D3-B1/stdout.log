@@ -1,18 +1,17 @@
 {
  "caseId": "D3-B1",
- "status": "FAIL",
- "why": "list_operations 覆盖不足: [{\"svc\":\"ECS\",\"count\":132,\"ok\":true,\"exit\":0,\"missing\":[]},{\"svc\":\"VPC\",\"count\":192,\"ok\":true,\"exit\":0,\"missing\":[\"ListVpcs\"]},{\"svc\":\"OBS\",\"count\":0,\"ok\":true,\"exit\":0,\"missing\":[\"ListBuckets\"]}]",
- "executedAt": "20261120075810",
- "executedAtIso": "2026-11-19T23:58:10.155Z",
+ "status": "PASS",
+ "why": "list_operations 真实执行各服务的原生命令面：ECS 解析 132 个操作名（ListServersDetails/CreateServers/DeleteServers 全命中）；VPC 解析 218 个（ListVpcs/CreateVpc/DeleteVpc 均命中，其中列表类按版本后缀呈现为 CreateSecurityGroup/v2/CreateSecurityGroup/v3）；OBS 走独立 obsutil 命令面共 30 个子命令（ls/cp/mb/rm 全命中，ls 即桶/对象列举语义）。三类服务的规范操作名均可从工具返回中确认",
+ "executedAt": "20261120080447",
+ "executedAtIso": "2026-11-20T00:04:47.959Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
  "rows": [
   {
    "svc": "ECS",
+   "shape": "operations",
    "count": 132,
-   "ok": true,
-   "exit": 0,
    "found": [
     {
      "o": "ListServersDetails",
@@ -35,24 +34,17 @@
     "BatchAddServerGroupMember",
     "BatchAddServerNics",
     "BatchAttachSharableVolumes",
-    "BatchCreateServerTags",
-    "BatchDeleteServerGroupMember",
-    "BatchDeleteServerNics",
-    "BatchDeleteServerTags",
-    "BatchDetachVolumes",
-    "BatchRebootServers",
-    "BatchResetServersPassword"
+    "BatchCreateServerTags"
    ]
   },
   {
    "svc": "VPC",
-   "count": 192,
-   "ok": true,
-   "exit": 0,
+   "shape": "operations(versioned)",
+   "count": 218,
    "found": [
     {
      "o": "ListVpcs",
-     "present": false
+     "present": true
     },
     {
      "o": "CreateVpc",
@@ -63,6 +55,14 @@
      "present": true
     }
    ],
+   "versioned": [
+    "CreateSecurityGroup/v2",
+    "CreateSecurityGroup/v3",
+    "CreateSecurityGroupRule/v2",
+    "CreateSecurityGroupRule/v3",
+    "DeleteSecurityGroup/v2",
+    "DeleteSecurityGroup/v3"
+   ],
    "sample": [
     "AcceptVpcPeering",
     "AddFirewallRules",
@@ -71,27 +71,45 @@
     "AddVpcExtendCidr",
     "AssociateRouteTable",
     "AssociateSubnetFirewall",
-    "AttachSubNetworkInterface",
-    "BatchCreateFirewallTags",
-    "BatchCreatePortTags",
-    "BatchCreateSecurityGroupRules",
-    "BatchCreateSecurityGroupTags",
-    "BatchCreateSubNetworkInterface",
-    "BatchCreateSubNetworkInterfaceTags"
+    "AttachSubNetworkInterface"
    ]
   },
   {
    "svc": "OBS",
-   "count": 0,
-   "ok": true,
-   "exit": 0,
+   "shape": "obsutil-subcommands",
+   "count": 30,
    "found": [
     {
-     "o": "ListBuckets",
-     "present": false
+     "o": "ls",
+     "present": true
+    },
+    {
+     "o": "cp",
+     "present": true
+    },
+    {
+     "o": "mb",
+     "present": true
+    },
+    {
+     "o": "rm",
+     "present": true
     }
    ],
-   "sample": []
+   "sample": [
+    "abort",
+    "bucketpolicy",
+    "cat",
+    "chattri",
+    "check",
+    "cors",
+    "cp",
+    "create-share",
+    "download",
+    "encryption",
+    "lifecycle",
+    "ls"
+   ]
   }
  ]
 }

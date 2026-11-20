@@ -1,0 +1,38 @@
+{
+ "caseId": "D3-B3",
+ "status": "FAIL",
+ "why": "只读执行异常: realData=true authErr=true isError=false noChange=true",
+ "executedAt": "20261120080457",
+ "executedAtIso": "2026-11-20T00:04:57.510Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "isError": false,
+ "realData": true,
+ "authError": true,
+ "before": {
+  "ecsCount": 0,
+  "ecsNames": [],
+  "eipCount": 0,
+  "eipIds": [],
+  "vpcCount": 0,
+  "vpcNames": [],
+  "subnetCount": 0,
+  "subnetNames": [],
+  "taggedTctest": [],
+  "zero": true
+ },
+ "after": {
+  "ecsCount": 0,
+  "ecsNames": [],
+  "eipCount": 0,
+  "eipIds": [],
+  "vpcCount": 0,
+  "vpcNames": [],
+  "subnetCount": 0,
+  "subnetNames": [],
+  "taggedTctest": [],
+  "zero": true
+ },
+ "preview": "{\n  \"ok\": false,\n  \"exitCode\": 0,\n  \"signal\": null,\n  \"errorCode\": \"APIGW.0301\",\n  \"errorMessage\": \"Incorrect IAM authentication information: Unauthorized\",\n  \"stdout\": \"{\\\"error_msg\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"error_code\\\":\\\"APIGW.0301\\\",\\\"request_id\\\":\\\"fe6b13ef08ade5178ba7e864e98291a0\\\"}\\n[USE_ERROR]缺少必填参数:project_id\\n\",\n  \"stderr\": \"\",\n  \"plan\": {\n    \"executable\": \"hcloud\",\n    \"args\": [\n      \"ECS\",\n      \"ListServersDetails\",\n      \"--cli-region=cn-north-4\"\n    ],\n    \"command\": \"hcloud ECS ListServersDetails --cli-region=cn-north-4\",\n    \"executableBlock\": \"hcloud ECS ListServersDetails --cli-region=cn-north-4\",\n    \"warnings\": [],\n    \"classification\": {\n      \"decision\": \"allow\",\n      \"risk\": \"read_only\",\n      \"reason\": \"Command appears to be a read-only Huawei Cloud operation.\",\n      \"service\": \"ECS\",\n      \"operation\": \"ListServersDetails"
+}
