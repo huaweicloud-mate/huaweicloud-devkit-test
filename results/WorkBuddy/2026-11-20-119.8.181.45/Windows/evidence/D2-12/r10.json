@@ -1,65 +1,46 @@
 {
- "init": {
-  "steps": [
-   "challenge",
-   "rejected",
-   "ok"
-  ],
-  "executed": {
-   "status": "ok",
-   "message": "Runtime credentials set for this MCP session."
-  },
-  "envelope": {
-   "status": "rejected",
-   "code": "ASK_CONFIRMATION_REQUIRED",
-   "userConfirmation": {
-    "needed": true,
-    "mode": "chat",
-    "command": "huaweicloud_auth_init (switch the session's runtime credentials to account f98ed1e1)",
-    "summary": "huaweicloud_auth_init: switch this session's runtime credentials to account f98ed1e1 (region cn-north-4) (source: session arguments)",
-    "instruction": "Show this exact command to the user in chat and wait for their answer. If they approve, retry the same call with approvedByUser: true. That retry is model-relayed posture trust: it is the user's word as you report it, not a mechanically verified answer."
-   },
-   "argsHash": "f91a6c9280ef0587aed31a8b9b819cc538fec5d6689a34a06c16d1a523443577",
-   "nextStep": "Retry with approvedByUser: true only after the user explicitly approves the request above."
-  },
-  "keys": [
-   "status",
-   "message"
-  ]
+ "set": {
+  "status": "ok",
+  "message": "Runtime credentials set for this MCP session."
  },
- "authStatus": {
-  "runtimeActive": false,
+ "status": {
+  "activeSource": "s1-persistent",
   "panel": {
-   "sts": {
-    "status": "unknown",
-    "expiresAt": null,
-    "expiresAtUtc": null,
-    "expiresAtLocal": null,
-    "remainingMs": null
-   },
+   "sts": null,
    "s1": {
     "configured": true,
     "fingerprint": "aa93fdcb",
     "persistent": true
    },
-   "activeSource": "temporary-sts"
+   "activeSource": "s1-persistent"
   }
  },
  "sync": {
-  "ok": true,
+  "ok": false,
+  "code": "HDKIT_SYNC_SKIPPED_RUNTIME",
+  "messageZh": "运行时凭证生效,自动同步已跳过。",
+  "action": "huaweicloud_auth_switch action=clear",
+  "nextStep": "huaweicloud_auth_switch action=clear",
+  "error": "运行时凭证生效,自动同步已跳过。",
   "keys": [
    "ok",
-   "profile",
-   "obs",
-   "hcloud",
-   "credentialsConfigured",
-   "agents",
-   "note"
-  ],
-  "note": "OBS credentials were synced from the global credential vault. Agent MCP registration is managed by \"npx huaweicloud-devkit install --target <agent>\".",
-  "textHead": "{\n  \"ok\": true,\n  \"profile\": \"test\",\n  \"obs\": {\n    \"configured\": true,\n    \"path\": \"C:\\\\Users\\\\Administrator\\\\.obsutilconfig\",\n    \"endpoint\": \"https://obs.cn-north-4.myhuaweicloud.com\"\n  },\n  \"hcloud\": {\n    \"ok\": true,\n    \"message\": \"KooCLI config synced to profile=test (project-id not restored "
+   "error",
+   "code",
+   "messageZh",
+   "action",
+   "nextStep"
+  ]
  },
- "suppressed": false,
+ "r10Code": true,
+ "suppressed": true,
  "leakedToDisk": false,
- "s1Unchanged": true
+ "s1Unchanged": true,
+ "panelBlindToRuntime": true,
+ "sequence": [
+  "id2 challenge",
+  "id3 envelope",
+  "id4 execute",
+  "id5 status",
+  "id6 sync"
+ ]
 }

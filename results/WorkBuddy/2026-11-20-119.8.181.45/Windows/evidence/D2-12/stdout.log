@@ -1,28 +1,18 @@
 {
  "caseId": "D2-12",
- "status": "FAIL",
- "why": "R10 未生效: suppressed=false leakedToDisk=false s1Unchanged=true sync.ok=true syncKeys=[\"ok\",\"profile\",\"obs\",\"hcloud\",\"credentialsConfigured\",\"agents\",\"note\"] active=temporary-sts initSteps=[\"challenge\",\"rejected\",\"ok\"]",
- "executedAt": "20261120104621",
- "executedAtIso": "2026-11-20T02:46:21.226Z",
+ "status": "PASS",
+ "why": "R10 成立：同一 MCP 会话内 ①auth_init 置入 runtime 凭据（AK AKRUNT…）返回 \"Runtime credentials set for this MCP session.\"；②auth_sync 被明确抑制，返回 ok=false code=HDKIT_SYNC_SKIPPED_RUNTIME（HDKIT_SYNC_SKIPPED_RUNTIME），并给出 messageZh/action/nextStep 处置指引；③关键行为断言：credentials.json 磁盘内容中 runtime AK 命中=false、文件与置入前逐字节相同=true —— runtime 非空期间 S1 确实未被写入。附带发现（另立缺陷）：auth_status 的 credentialPanel.activeSource=s1-persistent，未把 runtime 层计入来源判定（运行时实际按 resolveCredentialsWithRuntime 优先使用 runtime），状态面板对当前生效凭证来源的呈现与实际不符",
+ "executedAt": "20261120105713",
+ "executedAtIso": "2026-11-20T02:57:13.107Z",
  "sut": "2.0.0-next.4",
  "os": "win32",
  "agent": "WorkBuddy",
- "suppressed": false,
+ "r10Code": true,
+ "suppressed": true,
  "leakedToDisk": false,
  "s1Unchanged": true,
- "syncKeys": [
-  "ok",
-  "profile",
-  "obs",
-  "hcloud",
-  "credentialsConfigured",
-  "agents",
-  "note"
- ],
- "activeSource": "temporary-sts",
- "initSteps": [
-  "challenge",
-  "rejected",
-  "ok"
- ]
+ "panelBlindToRuntime": true,
+ "activeSource": "s1-persistent",
+ "syncCode": "HDKIT_SYNC_SKIPPED_RUNTIME",
+ "setStatus": "ok"
 }
