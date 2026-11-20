@@ -1,0 +1,79 @@
+{
+ "caseId": "D4-10",
+ "status": "PASS",
+ "why": "规则库扩展回归成立：policy vundefined（凭据文件规则 9 条）新增一条 deny 规则后，该规则对自身目标真实生效（cat d4-10-synthetic-never-matches-xyz.txt → deny，未加规则时 allow），同时 7 条既有正常操作基线（ECS/VPC 只读、OBS ls、devkit --help、node -v、git status、npm run build）判定与扩展前逐条一致、零误杀",
+ "executedAt": "20261120085648",
+ "executedAtIso": "2026-11-20T00:56:48.513Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "rows": [
+  {
+   "cmd": "hcloud ECS ListServersDetails",
+   "decision": "allow",
+   "risk": "read_only"
+  },
+  {
+   "cmd": "hcloud VPC ListVpcs",
+   "decision": "allow",
+   "risk": "read_only"
+  },
+  {
+   "cmd": "hcloud OBS ls",
+   "decision": "allow",
+   "risk": "read_only"
+  },
+  {
+   "cmd": "npx huaweicloud-devkit --help",
+   "decision": "allow",
+   "risk": "not_huaweicloud"
+  },
+  {
+   "cmd": "node --version",
+   "decision": "allow",
+   "risk": "not_huaweicloud"
+  },
+  {
+   "cmd": "git status",
+   "decision": "allow",
+   "risk": "not_huaweicloud"
+  },
+  {
+   "cmd": "npm run build",
+   "decision": "allow",
+   "risk": "not_huaweicloud"
+  }
+ ],
+ "rows2": [
+  {
+   "cmd": "hcloud ECS ListServersDetails",
+   "decision": "allow"
+  },
+  {
+   "cmd": "hcloud VPC ListVpcs",
+   "decision": "allow"
+  },
+  {
+   "cmd": "hcloud OBS ls",
+   "decision": "allow"
+  },
+  {
+   "cmd": "npx huaweicloud-devkit --help",
+   "decision": "allow"
+  },
+  {
+   "cmd": "node --version",
+   "decision": "allow"
+  },
+  {
+   "cmd": "git status",
+   "decision": "allow"
+  },
+  {
+   "cmd": "npm run build",
+   "decision": "allow"
+  }
+ ],
+ "newRuleFires": "deny",
+ "oldVsNew": "allow"
+}

@@ -1,0 +1,34 @@
+[
+ {
+  "cmd": "hcloud ECS ListServersDetails",
+  "rawDecision": "allow",
+  "txtDecision": "allow",
+  "same": true,
+  "assertThrew": false,
+  "hasReason": true
+ },
+ {
+  "cmd": "hcloud ECS DeleteServers --servers.1.id=x",
+  "rawDecision": "deny",
+  "txtDecision": "deny",
+  "same": true,
+  "assertThrew": true,
+  "hasReason": true
+ },
+ {
+  "cmd": "cat ~/.config/huaweicloud/credentials.json",
+  "rawDecision": "deny",
+  "txtDecision": "deny",
+  "same": true,
+  "assertThrew": true,
+  "hasReason": true
+ },
+ {
+  "cmd": "ls -la",
+  "rawDecision": "allow",
+  "txtDecision": "allow",
+  "same": true,
+  "assertThrew": false,
+  "hasReason": true
+ }
+]

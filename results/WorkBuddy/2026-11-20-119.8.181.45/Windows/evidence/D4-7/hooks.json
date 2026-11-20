@@ -1,0 +1,42 @@
+{
+ "cmdRows": [
+  {
+   "input": "cat ~/.config/huaweicloud/credentials.json",
+   "decision": "deny",
+   "risk": "credential",
+   "reason": "Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead."
+  },
+  {
+   "input": "echo $HW_SECRET_KEY",
+   "decision": "deny",
+   "risk": "credential",
+   "reason": "Printing cloud credential environment variables is blocked."
+  },
+  {
+   "input": "hcloud KMS DecryptData --cipher_text=xxx",
+   "decision": "deny",
+   "risk": "secret",
+   "reason": "Direct secret value retrieval patterns are blocked."
+  }
+ ],
+ "artRows": [
+  {
+   "name": "Dockerfile-cred",
+   "leaked": false,
+   "redactedHasPlaceholder": true,
+   "redacted": "FROM node:20\nENV HW_SECRET_KEY=<redacted>\nCOPY . .\n"
+  },
+  {
+   "name": "env-file",
+   "leaked": false,
+   "redactedHasPlaceholder": true,
+   "redacted": "HW_ACCESS_KEY=<redacted>\nHW_SECRET_KEY=<redacted>\n"
+  },
+  {
+   "name": "nginx-with-token",
+   "leaked": true,
+   "redactedHasPlaceholder": false,
+   "redacted": "server { listen 80; proxy_set_header X-Token \"hQpjbi1ub3J0aC00AQA\"; }"
+  }
+ ]
+}

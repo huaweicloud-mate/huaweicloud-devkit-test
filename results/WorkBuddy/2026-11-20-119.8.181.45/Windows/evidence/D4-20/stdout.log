@@ -1,0 +1,21 @@
+{
+ "caseId": "D4-20",
+ "status": "PASS",
+ "why": "拒绝后零操作：在 ask 审批模式下发起写操作（ECS DeleteServers）而不提交 approvedByUser，服务端返回 rejected/ASK_CONFIRMATION_REQUIRED 的拒绝信封，响应中无 exitCode、无 stdout、无任何命令执行痕迹，云端零变更",
+ "executedAt": "20261120085735",
+ "executedAtIso": "2026-11-20T00:57:35.430Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "wj": {
+  "status": "rejected",
+  "code": "ASK_CONFIRMATION_REQUIRED",
+  "keys": [
+   "status",
+   "code",
+   "userConfirmation",
+   "argsHash",
+   "nextStep"
+  ]
+ }
+}

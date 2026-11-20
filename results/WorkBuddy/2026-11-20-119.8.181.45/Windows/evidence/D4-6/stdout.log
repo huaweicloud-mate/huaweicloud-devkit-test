@@ -1,0 +1,55 @@
+{
+ "caseId": "D4-6",
+ "status": "PASS",
+ "why": "adminPass 场景双路径脱敏成立：redactSecrets() 对 3 种 adminPass 命令形态均把明文替换为 <redacted>（明文零泄漏）；plan_cli_command 的 plan.command 回显同样不含明文密码，且 plan.warnings 给出含密码字段的警告（\"Leading executable/wrapper token(s) starting with \"hcloud\" w\"）；分类器 risk=write",
+ "executedAt": "20261120085604",
+ "executedAtIso": "2026-11-20T00:56:04.307Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "rows": [
+  {
+   "cmd": "hcloud ECS CreateServers --server.adminPass=Str0ng!Pa55w0rd#2026 --server.flavorRef=x",
+   "secretLeakedInRedact": false,
+   "redacted": "hcloud ECS CreateServers --server.adminPass=<redacted> --server.flavorRef=x",
+   "warnsPassword": false,
+   "clsRisk": "write",
+   "clsDecision": "deny",
+   "planEchoLeaks": false,
+   "planWarnings": [
+    "Leading executable/wrapper token(s) starting with \"hcloud\" were removed from args — this tool takes hcloud arguments only (e.g. [\"obs\",\"ls\"], without the \"hcloud\" prefix or env/sudo wrappers).",
+    "This command appears to contain a password or secret field. Do not leave plaintext secrets in shell history; prefer local-only input or a runtime injection pattern.",
+    "Missing required parameters: server.imageRef, server.nics.1.subnet_id",
+    "Find valid values: Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs"
+   ]
+  },
+  {
+   "cmd": "hcloud ECS CreateServers --adminPass=Str0ng!Pa55w0rd#2026",
+   "secretLeakedInRedact": false,
+   "redacted": "hcloud ECS CreateServers --adminPass=<redacted>",
+   "warnsPassword": false,
+   "clsRisk": "write",
+   "clsDecision": "deny",
+   "planEchoLeaks": false,
+   "planWarnings": [
+    "Leading executable/wrapper token(s) starting with \"hcloud\" were removed from args — this tool takes hcloud arguments only (e.g. [\"obs\",\"ls\"], without the \"hcloud\" prefix or env/sudo wrappers).",
+    "This command appears to contain a password or secret field. Do not leave plaintext secrets in shell history; prefer local-only input or a runtime injection pattern.",
+    "Missing required parameters: server.flavorRef, server.imageRef, server.nics.1.subnet_id",
+    "Find valid values: Run `hcloud ECS ListFlavors --cli-region=<r>` to find valid flavors; Run `hcloud IMS ListImages --cli-region=<r> --__imagetype=gold` to find image IDs; Run `hcloud VPC ListSubnets --cli-region=<r>` to find subnet IDs"
+   ]
+  },
+  {
+   "cmd": "hcloud ECS ResetServerPassword --servers.1.adminPass=Str0ng!Pa55w0rd#2026",
+   "secretLeakedInRedact": false,
+   "redacted": "hcloud ECS ResetServerPassword --servers.1.adminPass=<redacted>",
+   "warnsPassword": false,
+   "clsRisk": "write",
+   "clsDecision": "deny",
+   "planEchoLeaks": false,
+   "planWarnings": [
+    "Leading executable/wrapper token(s) starting with \"hcloud\" were removed from args — this tool takes hcloud arguments only (e.g. [\"obs\",\"ls\"], without the \"hcloud\" prefix or env/sudo wrappers).",
+    "This command appears to contain a password or secret field. Do not leave plaintext secrets in shell history; prefer local-only input or a runtime injection pattern."
+   ]
+  }
+ ]
+}

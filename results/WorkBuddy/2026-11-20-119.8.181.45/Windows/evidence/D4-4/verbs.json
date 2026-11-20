@@ -1,0 +1,110 @@
+[
+ {
+  "verb": "create",
+  "cmd": "hcloud ECS CreateServers --server.flavorRef=x --server.imageRef=y --server.nics.1.subnet_id=z",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ },
+ {
+  "verb": "delete",
+  "cmd": "hcloud ECS DeleteServers --servers.1.id=abc",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ },
+ {
+  "verb": "update",
+  "cmd": "hcloud ECS UpdateServer --server_id=abc",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ },
+ {
+  "verb": "resize",
+  "cmd": "hcloud ECS ResizeServer --server_id=abc",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ },
+ {
+  "verb": "start",
+  "cmd": "hcloud ECS StartServer --server_id=abc",
+  "strictDecision": "deny",
+  "risk": "execution",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud execution/trigger operation blocked until approved."
+ },
+ {
+  "verb": "stop",
+  "cmd": "hcloud ECS StopServer --server_id=abc",
+  "strictDecision": "deny",
+  "risk": "execution",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud execution/trigger operation blocked until approved."
+ },
+ {
+  "verb": "authorize",
+  "cmd": "hcloud VPC CreateSecurityGroupRule --security_group_rule.direction=ingress",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ },
+ {
+  "verb": "revoke",
+  "cmd": "hcloud VPC DeleteSecurityGroupRule --security_group_rule.id=abc",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ },
+ {
+  "verb": "attach",
+  "cmd": "hcloud EVS AttachVolume --volume_id=v --server_id=s",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ },
+ {
+  "verb": "detach",
+  "cmd": "hcloud EVS DetachVolume --volume_id=v",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ },
+ {
+  "verb": "enable",
+  "cmd": "hcloud IAM EnableUser --user_id=u",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ },
+ {
+  "verb": "disable",
+  "cmd": "hcloud IAM DisableUser --user_id=u",
+  "strictDecision": "deny",
+  "risk": "write",
+  "gated": true,
+  "permissiveDecision": "allow",
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+ }
+]

@@ -1,0 +1,44 @@
+{
+ "caseId": "D4-29",
+ "status": "PASS",
+ "why": "分类入口一致性成立：classifyRawCommand(cmd) 是 classifyTextCommand(cmd) 的纯包装，4 条样本判定完全一致；assertAllowed() 对 deny 决策（Delete 与凭据文件读取）抛错、对 allow 决策放行；所有结果均带 decision+reason 字段可供机器断言",
+ "executedAt": "20261120085604",
+ "executedAtIso": "2026-11-20T00:56:04.508Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "rows": [
+  {
+   "cmd": "hcloud ECS ListServersDetails",
+   "rawDecision": "allow",
+   "txtDecision": "allow",
+   "same": true,
+   "assertThrew": false,
+   "hasReason": true
+  },
+  {
+   "cmd": "hcloud ECS DeleteServers --servers.1.id=x",
+   "rawDecision": "deny",
+   "txtDecision": "deny",
+   "same": true,
+   "assertThrew": true,
+   "hasReason": true
+  },
+  {
+   "cmd": "cat ~/.config/huaweicloud/credentials.json",
+   "rawDecision": "deny",
+   "txtDecision": "deny",
+   "same": true,
+   "assertThrew": true,
+   "hasReason": true
+  },
+  {
+   "cmd": "ls -la",
+   "rawDecision": "allow",
+   "txtDecision": "allow",
+   "same": true,
+   "assertThrew": false,
+   "hasReason": true
+  }
+ ]
+}

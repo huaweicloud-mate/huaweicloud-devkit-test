@@ -1,0 +1,57 @@
+{
+ "caseId": "D4-14",
+ "status": "PASS",
+ "why": "操作可审计性成立：每次 command 执行都返回可追溯结构 —— plan.executable=hcloud、plan.command=hcloud ECS ListServersDetails --cli-region=cn-north-4、classification.decision=allow、attempts=1、retries=0、exitCode=0，配合本任务落盘的 evidence 时间戳与执行者标记（agent=WorkBuddy）可与人工操作区分",
+ "executedAt": "20261120085732",
+ "executedAtIso": "2026-11-20T00:57:32.336Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "j": {
+  "ok": false,
+  "exitCode": 0,
+  "signal": null,
+  "errorCode": "APIGW.0301",
+  "errorMessage": "Incorrect IAM authentication information: Unauthorized",
+  "stdout": "{\"error_msg\":\"Incorrect IAM authentication information: Unauthorized\",\"error_code\":\"APIGW.0301\",\"request_id\":\"27ad39d189261413152edb13f9797298\"}\n[USE_ERROR]缺少必填参数:project_id\n",
+  "stderr": "",
+  "plan": {
+   "executable": "hcloud",
+   "args": [
+    "ECS",
+    "ListServersDetails",
+    "--cli-region=cn-north-4"
+   ],
+   "command": "hcloud ECS ListServersDetails --cli-region=cn-north-4",
+   "executableBlock": "hcloud ECS ListServersDetails --cli-region=cn-north-4",
+   "warnings": [],
+   "classification": {
+    "decision": "allow",
+    "risk": "read_only",
+    "reason": "Command appears to be a read-only Huawei Cloud operation.",
+    "service": "ECS",
+    "operation": "ListServersDetails",
+    "args": [
+     "ECS",
+     "ListServersDetails",
+     "--cli-region=cn-north-4"
+    ]
+   },
+   "sgFindings": [],
+   "userConfirmation": {
+    "needed": false
+   },
+   "safeToRun": true,
+   "rawArgs": [
+    "ECS",
+    "ListServersDetails",
+    "--cli-region=cn-north-4",
+    "--cli-access-key=<redacted>",
+    "--cli-secret-key=<redacted>",
+    "--cli-security-token=<redacted>"
+   ]
+  },
+  "retries": 0,
+  "attempts": 1
+ }
+}

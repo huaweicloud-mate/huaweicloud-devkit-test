@@ -1,0 +1,75 @@
+{
+ "ruleCounts": {
+  "credentialFilePatterns": 9,
+  "secretKeyNamePatterns": 14
+ },
+ "baselineBefore": [
+  {
+   "cmd": "hcloud ECS ListServersDetails",
+   "decision": "allow",
+   "risk": "read_only"
+  },
+  {
+   "cmd": "hcloud VPC ListVpcs",
+   "decision": "allow",
+   "risk": "read_only"
+  },
+  {
+   "cmd": "hcloud OBS ls",
+   "decision": "allow",
+   "risk": "read_only"
+  },
+  {
+   "cmd": "npx huaweicloud-devkit --help",
+   "decision": "allow",
+   "risk": "not_huaweicloud"
+  },
+  {
+   "cmd": "node --version",
+   "decision": "allow",
+   "risk": "not_huaweicloud"
+  },
+  {
+   "cmd": "git status",
+   "decision": "allow",
+   "risk": "not_huaweicloud"
+  },
+  {
+   "cmd": "npm run build",
+   "decision": "allow",
+   "risk": "not_huaweicloud"
+  }
+ ],
+ "baselineAfter": [
+  {
+   "cmd": "hcloud ECS ListServersDetails",
+   "decision": "allow"
+  },
+  {
+   "cmd": "hcloud VPC ListVpcs",
+   "decision": "allow"
+  },
+  {
+   "cmd": "hcloud OBS ls",
+   "decision": "allow"
+  },
+  {
+   "cmd": "npx huaweicloud-devkit --help",
+   "decision": "allow"
+  },
+  {
+   "cmd": "node --version",
+   "decision": "allow"
+  },
+  {
+   "cmd": "git status",
+   "decision": "allow"
+  },
+  {
+   "cmd": "npm run build",
+   "decision": "allow"
+  }
+ ],
+ "newRuleFires": "deny",
+ "withoutRule": "allow"
+}

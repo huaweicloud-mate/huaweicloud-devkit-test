@@ -1,0 +1,38 @@
+[
+ {
+  "cmd": "hcloud ECS ListServersDetails --cli-access-key=AKABCDEFGHIJKLMNOP1234 --cli-secret-key=abcdefghijklmnopqrstuvwxyz0123456789ABCD",
+  "decision": "allow",
+  "leakedAk": false,
+  "leakedSk": false,
+  "leakedTok": false,
+  "hasPlaceholder": true,
+  "evidence": "{\"command\":\"hcloud ECS ListServersDetails --cli-access-key=<redacted> --cli-secret-key=<redacted>,\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\"}"
+ },
+ {
+  "cmd": "hcloud ECS ListServersDetails --cli-security-token=hQpjbi1ub3J0aC00AQAABXBIU1RBRDVNMTNWRVRDUzRFNlNCMw",
+  "decision": "allow",
+  "leakedAk": false,
+  "leakedSk": false,
+  "leakedTok": false,
+  "hasPlaceholder": true,
+  "evidence": "{\"command\":\"hcloud ECS ListServersDetails --cli-security-token=<redacted>,\"reason\":\"Command appears to be a read-only Huawei Cloud operation.\"}"
+ },
+ {
+  "cmd": "mysql --password=abcdefghijklmnopqrstuvwxyz0123456789ABCD -h db.example.com",
+  "decision": "allow",
+  "leakedAk": false,
+  "leakedSk": false,
+  "leakedTok": false,
+  "hasPlaceholder": true,
+  "evidence": "{\"command\":\"mysql --password=<redacted> -h db.example.com\",\"reason\":\"No Huawei Cloud safety rule matched.\"}"
+ },
+ {
+  "cmd": "echo 'ak=AKABCDEFGHIJKLMNOP1234&sk=abcdefghijklmnopqrstuvwxyz0123456789ABCD' > /tmp/x",
+  "decision": "allow",
+  "leakedAk": false,
+  "leakedSk": false,
+  "leakedTok": false,
+  "hasPlaceholder": true,
+  "evidence": "{\"command\":\"echo 'ak=<redacted> > /tmp/x\",\"reason\":\"No Huawei Cloud safety rule matched.\"}"
+ }
+]

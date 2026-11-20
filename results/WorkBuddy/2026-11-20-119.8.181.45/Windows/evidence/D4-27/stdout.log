@@ -1,0 +1,15 @@
+{
+ "caseId": "D4-27",
+ "status": "PASS",
+ "why": "双路径输出脱敏一致：redactSecrets()（策略正则）与 redactOutput()（hcloud-api-error CLI 输出路径）对同一段含 AK/SK/securityToken/password 的多行文本均把 4 类明文替换为占位符（0 泄漏），同时 region=cn-north-4、serverId=abc-123 等非敏感字段完整保留，无误伤",
+ "executedAt": "20261120085604",
+ "executedAtIso": "2026-11-20T00:56:04.510Z",
+ "sut": "2.0.0-next.4",
+ "os": "win32",
+ "agent": "WorkBuddy",
+ "aOk": true,
+ "bOk": true,
+ "noOverRedact": true,
+ "a": "AccessKeyId=<redacted>\nSecretAccessKey=<redacted>\nx-amz-security-token: <redacted>\npassword=<redacted>\nregion=cn-north-4\nserverId=abc-123",
+ "b": "AccessKeyId=<redacted>\nSecretAccessKey=<redacted>\nx-amz-security-token: <redacted>\npassword=<redacted>\nregion=cn-north-4\nserverId=abc-123"
+}

@@ -1,0 +1,90 @@
+{
+ "nodeRows": [
+  {
+   "s": "hcloud ECS ListServersDetails",
+   "hook": null,
+   "cls": "allow",
+   "raw": "",
+   "code": 0
+  },
+  {
+   "s": "hcloud ECS DeleteServers --servers.1.id=abc",
+   "hook": "deny",
+   "cls": "deny",
+   "raw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a pl",
+   "code": 0
+  },
+  {
+   "s": "cat ~/.config/huaweicloud/credentials.json",
+   "hook": "deny",
+   "cls": "deny",
+   "raw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Reading Huawei Cloud credential or profile files is blocked. Use r",
+   "code": 0
+  },
+  {
+   "s": "echo $HW_SECRET_KEY",
+   "hook": "deny",
+   "cls": "deny",
+   "raw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Printing cloud credential environment variables is blocked.\"}}",
+   "code": 0
+  },
+  {
+   "s": "ls -la",
+   "hook": null,
+   "cls": "allow",
+   "raw": "",
+   "code": 0
+  },
+  {
+   "s": "bash -c 'hcloud VPC DeleteVpc --vpc_id=x'",
+   "hook": "deny",
+   "cls": "deny",
+   "raw": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a pl",
+   "code": 0
+  }
+ ],
+ "pyRows": [
+  {
+   "s": "hcloud ECS ListServersDetails",
+   "hook": null,
+   "raw": "",
+   "code": 0,
+   "err": ""
+  },
+  {
+   "s": "hcloud ECS DeleteServers --servers.1.id=abc",
+   "hook": "deny",
+   "raw": "{\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"deny\", \"permissionDecisionReason\": \"Huawei Cloud safety hook blocked this action: unapproved Huawei Cloud write operations must be planned fir",
+   "code": 0,
+   "err": ""
+  },
+  {
+   "s": "cat ~/.config/huaweicloud/credentials.json",
+   "hook": "deny",
+   "raw": "{\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"deny\", \"permissionDecisionReason\": \"Huawei Cloud safety hook blocked this action: reading Huawei Cloud credential/profile files can expose AK/",
+   "code": 0,
+   "err": ""
+  },
+  {
+   "s": "echo $HW_SECRET_KEY",
+   "hook": "deny",
+   "raw": "{\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"deny\", \"permissionDecisionReason\": \"Huawei Cloud safety hook blocked this action: printing cloud credential environment variables is not allow",
+   "code": 0,
+   "err": ""
+  },
+  {
+   "s": "ls -la",
+   "hook": null,
+   "raw": "",
+   "code": 0,
+   "err": ""
+  },
+  {
+   "s": "bash -c 'hcloud VPC DeleteVpc --vpc_id=x'",
+   "hook": "deny",
+   "raw": "{\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"deny\", \"permissionDecisionReason\": \"Huawei Cloud safety hook blocked this action: unapproved Huawei Cloud write operations must be planned fir",
+   "code": 0,
+   "err": ""
+  }
+ ]
+}

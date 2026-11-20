@@ -1,0 +1,66 @@
+[
+ {
+  "k": "empty",
+  "ms": 0,
+  "decision": "deny",
+  "risk": "invalid",
+  "threw": null,
+  "reason": "command must be a non-empty string. Remediation: Provide a valid, non-empty input before re-running "
+ },
+ {
+  "k": "whitespace",
+  "ms": 0,
+  "decision": "deny",
+  "risk": "invalid",
+  "threw": null,
+  "reason": "command must be a non-empty string. Remediation: Provide a valid, non-empty input before re-running "
+ },
+ {
+  "k": "vlong",
+  "ms": 1,
+  "decision": "deny",
+  "risk": "invalid",
+  "threw": null,
+  "reason": "Command payload too large to classify safely; denied fail-closed."
+ },
+ {
+  "k": "deepNest",
+  "ms": 37,
+  "decision": "allow",
+  "risk": "not_huaweicloud",
+  "threw": null,
+  "reason": "No Huawei Cloud safety rule matched."
+ },
+ {
+  "k": "malformedJsonish",
+  "ms": 10,
+  "decision": "allow",
+  "risk": "not_huaweicloud",
+  "threw": null,
+  "reason": "No Huawei Cloud safety rule matched."
+ },
+ {
+  "k": "unicodeNull",
+  "ms": 0,
+  "decision": "allow",
+  "risk": "not_huaweicloud",
+  "threw": null,
+  "reason": "No Huawei Cloud safety rule matched."
+ },
+ {
+  "k": "newlineInject",
+  "ms": 1,
+  "decision": "deny",
+  "risk": "write",
+  "threw": null,
+  "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user appr"
+ },
+ {
+  "k": "htmlEntity",
+  "ms": 3,
+  "decision": "allow",
+  "risk": "unknown_read",
+  "threw": null,
+  "reason": "Command does not match a known write or secret operation; treat output as untrusted and redact it."
+ }
+]
