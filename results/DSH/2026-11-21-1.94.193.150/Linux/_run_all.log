@@ -1,0 +1,42 @@
+[main] hdkSrc = /home/testbot2/multica_workspaces/vector-8988c3df7bc9/task-4de8ed74e75d/workdir/devkit/hdk/plugins/huaweicloud-core/src
+[main] 共 146 个用例待执行
+D1-3 => PASS | check_cli 自检通过(skillsRoot=null, skills=0)
+D1-4 => PASS | status 二次调用幂等(结果一致)
+D1-26 => PASS | check_update/upgrade 均注册且含 description+inputSchema(names=49)
+D1-27 => PASS | {"currentVersion":"1.1.7","latestStable":"1.1.7","latestNext
+D1-28 => PASS | {"currentVersion":"1.1.5","latestStable":"1.1.7","latestNext
+D1-30 => PASS | semver 多组比对正确(升>0/正式>预发布/相等=0)
+D1-31 => PASS | dismiss 冷却期内 dismissed: result=dismissed dismissed=true
+D1-33 => PASS | skip 文件字段完整 dismissedVersion/dismissedAt/expireAt; resolveSk
+D1-39 => NOT_RUN | Windows 专属用例(OS 列标注专属)，本机为 Linux，不适用
+D1-40 => PASS | 镜像 lag 下不提示倒退: judgeUpdate=up_to_date
+(node:3369213) [DEP0187] DeprecationWarning: Passing invalid argument types to fs.existsSync is deprecated
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:3369213) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+D1-41 => PASS | check_update 契约字段齐备: {"result":"check_failed","currentVersio
+D1-42 => PASS | dismiss 闭环: first=check_failed dismissed=null
+D1-45 => PASS | 兜底提示 applyUpdateHint/_decorateResult 可用且可重置消费
+D1-65 => PASS | update-check.mjs 含 HUAWEICLOUD_DEVKIT_DEBUG 调试分支
+D1-66 => PASS | fixture exit=0
+D1-67 => PASS | AGENT_TOOLKIT_MODE/SKIP_DSH/REQUIRED_ENV_KEYS(HCLOUD_BIN) 均存
+D1-68 => SPEC-MISMATCH | region 优先级契约漂移：实现 HW_REGION 优先，用例期望 HUAWEICLOUD_REGION 优先
+D1-69 => PASS | fixture exit=0
+D1-70 => PASS | proxy write/read/getProxySettings/no_proxy 绕过正确: read={"http
+D2-10 => FAIL | fixture exit=1
+D2-11 => PASS | STS persist 拒绝落盘(R3): {"status":"error","error":"Temporary S
+D2-12 => PASS | auth_sync 可调用(R10 runtime 抑制): {"ok":false,"error":"EACCES: 
+D2-13 => PASS | fixture exit=0
+D2-16 => PASS | auth_switch import 后擦除 creds-import.json 逻辑存在
+D4-18 => PASS | confirm-not-deny 审批语义: approvalToken=true
+D4-19 => PASS | 确认流下预检生效: classification={"decision":"allow","risk":"write",
+D4-20 => PASS | 拒绝后零操作(未批准 → 抛拒绝, 零执行): Error: approvedByUser must be true a
+D2-1 => PASS | auth 三端可用: auth_status={"target":"all","credentialsConfigure
+D2-2 => PASS | auth_status 判定可执行: {"target":"all","credentialsConfigured":t
+D2-4 => FAIL | 凭证脱敏漏小写 ak=/sk=（明文残留）
+D2-5 => PASS | 凭证缺失时返回状态+指引结构
+D2-26 => PASS | backup/restore 闭环: backup=true restore=true
+D2-27 => PASS | fixture exit=0
+D3-A1 => PASS | skill 检索 reachable: listSkillDirs=0 retrieve_skill 命中=5
+D3-B1 => PASS | list_operations(ECS) 返回规范操作名: {"service":"ECS","command":"hc
+D3-B3 => PASS | run_readonly 执行只读命令成功(脱敏)
+D3-B5 => PASS | detect_framework 识别: {"type":"spa","framework":"Vite (React/
