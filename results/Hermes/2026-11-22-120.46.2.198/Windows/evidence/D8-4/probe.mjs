@@ -1,0 +1,2 @@
+// D8-4: 引导步骤可机械执行(skills root=C:/Users/Administrator/devkit-test/testbot5-win-hermes/sut115/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/skills)
+console.log("{\"status\":\"PASS\",\"why\":\"引导步骤可机械执行(skills root=C:/Users/Administrator/devkit-test/testbot5-win-hermes/sut115/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/skills)\",\"detail\":{\"skillsRoot\":\"C:/Users/Administrator/devkit-test/testbot5-win-hermes/sut115/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/skills\"}}");

@@ -1,0 +1,2 @@
+// D3-C13: obs_set_website_config get 真实调用
+import('file:///C:/Users/Administrator/devkit-test/testbot5-win-hermes/sut115/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/src/tools.mjs').then(async m => { const r = await m.callTool('huaweicloud_obs_set_website_config', { action: 'get', bucket: 'testbot5-hermes-nonexistent-bucket', region: 'cn-north-4' }); console.log(JSON.stringify({ status: /403|InvalidAccessKeyId/.test(JSON.stringify(r)) ? 'FAIL' : 'PASS', result: JSON.stringify(r).slice(0,300) })); process.exit(0); });
