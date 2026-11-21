@@ -1,0 +1,96 @@
+
+=====CASE D1-65=====
+update-check.mjs DEBUG 判断: if (process.env.HUAWEICLOUD_DEVKIT_DEBUG === '1' || process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true') {
+telemetry.mjs DEBUG 判断: const DEBUG = process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true';
+断言: update-check '1'=true 'true'=true; telemetry 'true'=true '1'=false
+[OK] D1-65 调试开关(更新检查域支持 1/true)
+[OK] D1-65 调试开关(遥测域支持 true)
+备注: 未设/其他值不开启 — 源码为 === 'true' / '1'||'true' 严格比较，未设或 off/其他值均不开启
+=====END D1-65=====
+
+=====CASE D1-66=====
+DEFAULT_ENDPOINT: const DEFAULT_ENDPOINT = 'https://devkit.huaweicloud.com/rest/developer/server/hdkitservice/telemetry/events';
+getEndpoint(): return process.env.HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT || DEFAULT_ENDPOINT;
+  TELEMETRY="off" -> false (期望 false) OK
+  TELEMETRY="on" -> true (期望 true) OK
+  TELEMETRY="" -> true (期望 true) OK
+[OK] isTelemetryEnabled 三态 off/on/未设
+[OK] getEndpoint 未设回退 DEFAULT_ENDPOINT
+=====END D1-66=====
+
+=====CASE D1-67=====
+setup-cli AGENT_TOOLKIT_MODE 注入点(前3):
+  const env = [{ key: 'HUAWEICLOUD_AGENT_TOOLKIT_MODE', value: 'local', sensitive: false }];
+  env: { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local' },
+  const env = { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local' };
+setup-cli SKIP_DSH 分支:
+  if (process.env.HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL === '1') {
+mcp-config-merge REQUIRED_ENV_KEYS: const REQUIRED_ENV_KEYS = new Set(['HUAWEICLOUD_AGENT_TOOLKIT_MODE', 'HCLOUD_BIN']);
+[OK] AGENT_TOOLKIT_MODE 注入 agent env(local)
+[OK] SKIP_DSH=1 跳过 DSH 插件安装
+[OK] REQUIRED_ENV_KEYS 含 HCLOUD_BIN
+=====END D1-67=====
+
+=====CASE D1-68=====
+ICONS_OFFLINE=1 -> getServiceIcon source=snapshot ok=true count=2
+[OK] ICONS_OFFLINE=1 走本地 snapshot 不联网
+credentials.mjs region 相关行:
+  region: server.environment.HW_REGION || server.environment.HUAWEICLOUD_REGION || '',
+  let region = process.env.HW_REGION || process.env.HUAWEICLOUD_REGION || '';
+  region: server.env.HW_REGION || server.env.HUAWEICLOUD_REGION || '',
+[OK] HUAWEICLOUD_REGION/HW_REGION 均在默认 region 逻辑中
+优先级行: region: server.environment.HW_REGION || server.environment.HUAWEICLOUD_REGION || '',
+=====END D1-68=====
+
+=====SUMMARY=====
+{
+  "total": 9,
+  "passed": 9,
+  "results": [
+    {
+      "name": "D1-65 调试开关(更新检查域支持 1/true)",
+      "ok": true,
+      "detail": "if (process.env.HUAWEICLOUD_DEVKIT_DEBUG === '1' || process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true') {"
+    },
+    {
+      "name": "D1-65 调试开关(遥测域支持 true)",
+      "ok": true,
+      "detail": "const DEBUG = process.env.HUAWEICLOUD_DEVKIT_DEBUG === 'true';"
+    },
+    {
+      "name": "isTelemetryEnabled 三态 off/on/未设",
+      "ok": true,
+      "detail": "off->false,on->true,未设->true"
+    },
+    {
+      "name": "getEndpoint 未设回退 DEFAULT_ENDPOINT",
+      "ok": true,
+      "detail": "return process.env.HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT || DEFAULT_ENDPOINT;"
+    },
+    {
+      "name": "AGENT_TOOLKIT_MODE 注入 agent env(local)",
+      "ok": true,
+      "detail": "const env = [{ key: 'HUAWEICLOUD_AGENT_TOOLKIT_MODE', value: 'local', sensitive: false }];"
+    },
+    {
+      "name": "SKIP_DSH=1 跳过 DSH 插件安装",
+      "ok": true,
+      "detail": "if (process.env.HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL === '1') {"
+    },
+    {
+      "name": "REQUIRED_ENV_KEYS 含 HCLOUD_BIN",
+      "ok": true,
+      "detail": "const REQUIRED_ENV_KEYS = new Set(['HUAWEICLOUD_AGENT_TOOLKIT_MODE', 'HCLOUD_BIN']);"
+    },
+    {
+      "name": "ICONS_OFFLINE=1 走本地 snapshot 不联网",
+      "ok": true,
+      "detail": "source=snapshot"
+    },
+    {
+      "name": "HUAWEICLOUD_REGION/HW_REGION 均在默认 region 逻辑中",
+      "ok": true,
+      "detail": "region: server.environment.HW_REGION || server.environment.HUAWEICLOUD_REGION || '', | let region = process.env.HW_REGION || process.env.HUAWEICLOUD_REGION || ''; | region: server.env.HW_REGION || server.env.HUAWEICLOUD_REGION || '',"
+    }
+  ]
+}
