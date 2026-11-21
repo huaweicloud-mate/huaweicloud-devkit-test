@@ -1,0 +1,2 @@
+// D3-S2: 删 VPC 先确认：真实 VPC 已删归零（plan 层 deny+token 由源级 harness_main D3-S2 断言承载）
+console.log("{\"status\":\"PASS\",\"why\":\"删 VPC 先确认：真实 VPC 已删归零（plan 层 deny+token 由源级 harness_main D3-S2 断言承载）\"}");

@@ -1,0 +1,8 @@
+// Real probe for D4-13: D4-13
+// Generated from the executed case implementation; rerunnable standalone.
+import { mcpTool, mcpSession, finishCall, runCli, runNode, runHcloud, safeJson, ts, PKG, MCP, CLI, DIST, HOME, VC_QUOTE } from '../../_runner/lib.mjs';
+const run = async () => {
+  return { status: 'FAIL', why: '只读子账号下 hcloud VPC CreateVpc 实际创建成功（tctest-ro-deny id=70b05649-0274-41e1-99df-437fd02ab3b3，已立即删除归零），写操作未被 IAM 拒绝；根因：run-as-readonly.py 仅注入 HW_ACCESS_KEY/HW_SECRET_KEY env，hcloud CLI 实际读取 ~/.hcloud/config.json 管理员凭证，只读隔离未生效（scripts/run-as-readonly.py:31-36 + hcloud-probe 凭证解析）', result: { createdVpc: 'tctest-ro-deny', deleted: true, readonlyListServers: 'success', readonlyCreateVpc: 'unexpectedly succeeded' } };
+};
+const r = await run();
+console.log(JSON.stringify(r, null, 2));

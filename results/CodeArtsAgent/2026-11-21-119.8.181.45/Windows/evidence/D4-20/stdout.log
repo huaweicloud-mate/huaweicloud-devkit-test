@@ -1,0 +1,31 @@
+{
+  "caseId": "D4-20",
+  "status": "PASS",
+  "why": "plan 未批准 safeToRun=false=true；拒绝路径返回={\"status\":\"rejected\",\"code\":\"CONFIRM_TOKEN_NOT_FOUND\"}",
+  "executedAt": "20261121053253",
+  "result": {
+    "plan": {
+      "executable": "hcloud",
+      "args": [
+        "VPC",
+        "DeleteVpc",
+        "--vpc_id=abc"
+      ],
+      "command": "hcloud VPC DeleteVpc --vpc_id=abc",
+      "executableBlock": "hcloud VPC DeleteVpc --vpc_id=abc",
+      "warnings": [],
+      "classification": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      "sgFindings": [],
+      "approvalToken": "9691b4e4-d5cf-4c2b-af33-e98b0a303ea1",
+      "safeToRun": false
+    },
+    "reject": {
+      "status": "rejected",
+      "code": "CONFIRM_TOKEN_NOT_FOUND"
+    }
+  }
+}
