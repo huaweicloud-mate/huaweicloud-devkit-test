@@ -1,0 +1,105 @@
+D1-39 | D1安装 | Windows 升级检测链可用性 | check_update
+    前置: Windows 10 + 1.1.2
+    步骤: ①本机直调 queryDistTagsSync/queryDistTags ②观察 EINVAL/结果 ③对照加 shell:true 版本
+    预期: Windows 下检测链真实可用，不得 EINVAL 静默失败
+    工具: check_update | 证据: 强断言：<证据: Windows 检测链无 EINVAL 静默失败>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D1-40 | D1安装 | 镜像 lag 下检测正确性(反向提醒防护) | check_update
+    前置: 默认 registry=镜像且滞后
+    步骤: ①设置 npm_config_registry=镜像 ②queryDistTags ③判定结果与官方源对照
+    预期: 不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验
+    工具: check_update | 证据: 强断言：<证据: 镜像 lag 不提示版本倒退>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D2-11 | D2认证 | R3 STS token拒绝落盘 | auth_switch
+    前置: 真云 AK/SK + securityToken
+    步骤: ①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token
+    预期: 返回 {status:error, scope:rejected}，token 永不落盘
+    工具: auth_switch | 证据: 强断言：<证据: scope=rejected+token 不落盘>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-18 | D4安全 | confirm-not-deny审批语义 | plan_cli_command
+    前置: 真云+标准客户端
+    步骤: ①发起写操作 ②观察确认对话框 ③分别确认/拒绝
+    预期: 写操作需显式确认，不被直接拒绝也不被直接放行
+    工具: plan_cli_command | 证据: 强断言：<证据: 确认/拒绝路径>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-19 | D4安全 | 确认流下预检仍生效 | hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+    前置: 真云
+    步骤: ①高危写操作 ②确认流程中观察preflight检查 ③验证拦截
+    预期: 确认流程中风险预检仍生效拦截
+    工具: hook_check_command/hook_check_artifacts/hook_check_deploy_plan | 证据: 强断言：<证据: 确认流预检拦截>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D2-4 | D2认证 | 凭证脱敏正确性 | show_profile_redacted
+    前置: 真云凭证
+    步骤: ①执行脱敏展示 ②检查输出: AK中段、SK永不完整
+    预期: 输出无明文凭证字段
+    工具: show_profile_redacted | 证据: 强断言：<证据: 输出无明文 AK/SK>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-1 | D4安全 | 凭证文件读取拦截 | hook_check_command
+    前置: 含.hcloud/.huaweicloud目录环境
+    步骤: ①尝试cat/type凭证文件 ②观察拦截
+    预期: 被阻断
+    工具: hook_check_command | 证据: 强断言：<证据: cat/type 凭证文件被阻断>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-2 | D4安全 | 凭证env打印拦截 | hook_check_command
+    前置: 凭证env变量已设置
+    步骤: ①printenv/echo凭证env ②观察拦截
+    预期: 被阻断
+    工具: hook_check_command | 证据: 强断言：<证据: printenv/echo 凭证被阻断>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-3 | D4安全 | 明文secret API拦截 | hook_check_command
+    前置: 真云账号
+    步骤: ①调用返回明文/二进制secret的API ②观察拦截
+    预期: 被阻断
+    工具: hook_check_command | 证据: 强断言：<证据: 明文 secret API 被阻断>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-5 | D4安全 | 写操作误判检测 | plan_cli_command
+    前置: 真云
+    步骤: ①plan删除类命令 ②记录插件判定 ③若判read-only/allow→记P0
+    预期: 写操作不被误判为只读
+    工具: plan_cli_command | 证据: 强断言：<证据: 写命令不被误判只读>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-9 | D4安全 | 公开暴露/破坏性预检 | hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+    前置: 真云
+    步骤: ①规划公网暴露操作 ②规划破坏性操作 ③验证执行前拦截
+    预期: 执行前被拦
+    工具: hook_check_command/hook_check_artifacts/hook_check_deploy_plan | 证据: 强断言：<证据: 公开暴露/破坏性执行前拦截>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-15 | D4安全 | hook绕过尝试 | hook_check_command
+    前置: hook环境
+    步骤: ①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截
+    预期: 无绕过成功
+    工具: hook_check_command | 证据: 强断言：<证据: 变体无绕过成功>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-16 | D4安全 | 命令包裹穿透 | hook_check_command
+    前置: hook环境
+    步骤: ①构造shell包裹 ②执行 ③核对hook是否检查内层
+    预期: 发现内层命令并拦截
+    工具: hook_check_command | 证据: 强断言：<证据: 发现内层命令并拦截>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-21 | D4安全 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检） | hook_check_artifacts
+    前置: hook-capable 客户端
+    步骤: ①构造宽泛 IAM policy JSON ②hook_check_artifacts ③核对 deny
+    预期: broad IAM 制品被拦截
+    工具: hook_check_artifacts | 证据: 强断言：<证据: broad IAM 制品拦截>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-22 | D4安全 | hook_check_deploy_plan 具名回归（部署计划预检） | hook_check_deploy_plan
+    前置: hook-capable 客户端
+    步骤: ①构造高危 deploy plan ②hook_check_deploy_plan ③核对 warn/deny
+    预期: 公网暴露 FunctionGraph 等被拦截/告警
+    工具: hook_check_deploy_plan | 证据: 强断言：<证据: 公网暴露 deploy 计划拦截/告警>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-23 | D4安全 | 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标） | install
+    前置: 11 个 Agent 安装目标
+    步骤: 逐目标安装后：①核对 rules 注入系统提示/规则 ②构造禁直连 csms/kms 场景 ③核对 MUST 约束生效
+    预期: 全部目标注入且约束可执行，无孤儿文件
+    工具: install | 证据: 强断言：<证据: agent-rules 注入生效>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D4-28 | D4安全 | Node 版安全 hook 链路 | hook_check_command
+    前置: hook-capable 客户端 + hooks.json 注册
+    步骤: ①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs ③核对 commandText 提取 ④classifyTextCommand=deny 时输出 permissionDecision:deny
+    预期: hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出
+    工具: hook_check_command | 证据: 强断言：<证据: deny 决策+reason>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D8-7 | D8质量 | 7 个 meta/通用技能指引可机械执行验证 | retrieve_skill/search_docs
+    前置: 标准环境
+    步骤: 逐技能：retrieve_skill 加载→按指引执行最小路径→核对无外部猜测
+    预期: 7 技能指引均可机械执行，无断链/幻觉步骤
+    工具: retrieve_skill/search_docs | 证据: 强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D9-12 | D9协议 | initialize 握手协议安全基线 | inspector
+    前置: MCP Inspector + 源码级 protocol-probe.mjs
+    步骤: ①源码级: protocol-probe.mjs 发送 initialize 核对 protocolVersion/capabilities/serverInfo ②核对 callTool 路由到 tools.mjs callTool 函数 ③核对 runVersionCheck 在 initial
+    预期: initialize 返回 protocolVersion + capabilities + serverInfo；callTool 路由正确；_decorateResult 包装无副作用；listSkillDirs/findSkillsRoot 返回有效目录；非法时序返回 JSON-RPC -32
+    工具: inspector | 证据: 强断言：<证据: 协议报文+源码探针>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D9-13 | D9协议 | tools/call 凭证不泄露与权限校验 | inspector
+    前置: MCP 客户端 + 隔离 HOME + 源码级探针
+    步骤: ①setRuntimeCredentials 注入运行时凭证，hasRuntimeCredentials 校验存在 ②resolveCredentialsWithRuntime 解析运行时凭证 ③loadPolicy 加载安全策略，classifyHcloudArgs 分类命令参数 ④evaluat
+    预期: tools/call 返回不含 AK/SK/token 明文；权限校验 deny/warn/allow 三态正确；审批令牌不可重放（consumeApprovalToken 后失效）；运行时凭证 clearRuntimeCredentials 清理后不留盘；readGlobalCredentials
+    工具: inspector | 证据: 强断言：<证据: 凭证脱敏+权限决策+审批令牌>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
+D10-4 | D10评测 | 安全干预-静态规则层 | harness
+    前置: 源码+已安装插件
+    步骤: ①直调 loadRiskRules 核对规则数与 severity 分布 ②evaluateCommandRisk 输入高危命令(cat凭证/env-dump/删资源)与只读命令 ③核对 decision 三态(deny/warn/allow)
+    预期: 规则库完整加载(9 deny + 7 warn);高危命令判 deny、只读命令判 allow,不带 token
+    工具: harness | 证据: 强断言：<证据: 规则库加载+三态判定>；保留脱敏日志、manifest、前后快照 | 依赖: 需求来源与前置条件；独立 manifest；finally 清理
