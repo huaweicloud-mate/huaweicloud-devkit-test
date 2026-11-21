@@ -1,0 +1,18 @@
+{
+  "caseId": "D3-C2",
+  "status": "PASS",
+  "why": "真机 OBS 静态站：建桶 tctest-obs-20261122054636-6388→上传 index.html(status=200)→public-read(status=204)→curl 200→删对象/桶→headBucket=404 归零=True",
+  "executedAt": "20261122054636",
+  "result": {
+    "create": 200,
+    "put": 200,
+    "acl": 204,
+    "curl": {
+      "code": 200,
+      "body": "<html><body><h1>tctest daily</h1></body></html>"
+    },
+    "delObj": 204,
+    "delBucket": 204,
+    "headAfter": 404
+  }
+}

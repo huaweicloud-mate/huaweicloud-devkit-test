@@ -1,0 +1,15 @@
+PASS	D9-13-redact-args-no-leak	redactSecrets: args 中 AK/SK/STK 被 <redacted>	actual={"noLeak":true,"allRedacted":true}	expected={"noLeak":true,"allRedacted":true}
+PASS	D9-13-redact-obj-no-leak	redactSecrets: 对象 AK/SK/STK 字段 <redacted>	actual={"noLeak":true,"ak":"<redacted>","sk":"<redacted>","securityToken":"<redacted>"}	expected={"noLeak":true,"ak":"<redacted>","sk":"<redacted>","securityToken":"<redacted>"}
+PASS	D9-13-plan-no-leak	planHcloudCommand: plan 结果不含明文 AK/SK	actual={"noLeak":true,"argsHasRedacted":true}	expected={"noLeak":true,"argsHasRedacted":true}
+PASS	D9-13-classify-deny	classifyHcloudArgs: 写操作无审批 → deny	actual="deny"	expected="deny"
+PASS	D9-13-classify-allow	classifyHcloudArgs: 只读操作 → allow	actual="allow"	expected="allow"
+PASS	D9-13-assert-deny-throws	assertAllowed: deny → throw	actual=true	expected=true
+PASS	D9-13-assert-allow-passes	assertAllowed: allow → 不 throw	actual=false	expected=false
+PASS	D9-13-clear-before-set	clearRuntimeCredentials 后 hasRuntimeCredentials=false	actual=false	expected=false
+PASS	D9-13-set-runtime-creds	setRuntimeCredentials 后 hasRuntimeCredentials=true	actual=true	expected=true
+PASS	D9-13-resolve-runtime-creds	resolveCredentialsWithRuntime 返回 runtime 凭证	actual={"ak":"AKTESTLEAK123456789ABC","sk":"SKTESTLEAK987654321DEF","securityToken":"STKTESTLEAK555555555GHI"}	expected={"ak":"AKTESTLEAK123456789ABC","sk":"SKTESTLEAK987654321DEF","securityToken":"STKTESTLEAK555555555GHI"}
+PASS	D9-13-clear-runtime-creds	clearRuntimeCredentials 后 hasRuntimeCredentials=false	actual=false	expected=false
+PASS	D9-13-token-no-leak	approvalToken + stored.argsRedacted 不含明文 AK/SK	actual={"tokenSafe":true,"storedSafe":true,"argsRedacted":["ECS","CreateServers","--cli-access-key=<redacted>","--cli-secret-key=<redacted>","--cli-region=cn-north-4"]}	expected={"tokenSafe":true,"storedSafe":true}
+
+=== D9-13 tools/call 凭证不泄露与权限校验夹具 ===  pass=12 fail=0
+RESULT: PASS

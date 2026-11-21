@@ -1,0 +1,34 @@
+{
+  "caseId": "D4-16",
+  "status": "FAIL",
+  "why": "??????????",
+  "executedAt": "20261122050405",
+  "result": [
+    {
+      "v": "cmd /c hcloud ECS DeleteServers --server_id=x",
+      "decision": "warn",
+      "rules": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "v": "sh -c \"hcloud ECS DeleteServers --server_id=x\"",
+      "decision": "warn",
+      "rules": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "v": "powershell -Command \"hcloud KMS DecryptData --cipher_text=abc\"",
+      "decision": "allow",
+      "rules": []
+    },
+    {
+      "v": "echo $(hcloud CSMS ShowSecretVersion --secret_name=x)",
+      "decision": "deny",
+      "rules": [
+        "hwc-command-secret-value-read"
+      ]
+    }
+  ]
+}

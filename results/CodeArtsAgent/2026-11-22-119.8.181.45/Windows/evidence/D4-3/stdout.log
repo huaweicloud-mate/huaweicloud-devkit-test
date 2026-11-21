@@ -1,0 +1,31 @@
+{
+  "caseId": "D4-3",
+  "status": "FAIL",
+  "why": "KMS=allow CSMS=deny",
+  "executedAt": "20261122050352",
+  "result": {
+    "kms": {
+      "ok": true,
+      "decision": "allow",
+      "findings": [],
+      "nextStep": "No Huawei Cloud hook risk rule matched."
+    },
+    "csms": {
+      "ok": false,
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-command-secret-value-read",
+          "title": "Plaintext secret read",
+          "category": "secret",
+          "severity": "deny",
+          "message": "The command appears to retrieve plaintext secret values.",
+          "remediation": "Use runtime secret references, user-side inspection, or redacted metadata checks instead of returning secret values to the agent.",
+          "source": "command",
+          "evidence": "hcloud CSMS ShowSecretVersion --secret_name=x"
+        }
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution."
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "caseId": "D4-7",
+  "status": "PASS",
+  "why": "command=deny artifacts=deny deploy=warn",
+  "executedAt": "20261122051154",
+  "result": {
+    "a": {
+      "ok": false,
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-command-credential-file",
+          "title": "Credential file read",
+          "category": "credential",
+          "severity": "deny",
+          "message": "The command may read local Huawei Cloud credential or profile files into the agent context.",
+          "remediation": "Use huaweicloud_show_profile_redacted or user-side credential configuration instead of reading credential files.",
+          "source": "command",
+          "evidence": "type C://Users//Administrator//.hcloud//config.json"
+        }
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution."
+    },
+    "b": {
+      "ok": false,
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-iam-admin-policy",
+          "title": "Broad IAM administrator grant",
+          "category": "iam",
+          "severity": "deny",
+          "message": "The change appears to grant broad administrator permissions.",
+          "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+          "source": "p.json",
+          "evidence": "p.json {\"Version\":\"1.1\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+        }
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution."
+    },
+    "c": {
+      "ok": true,
+      "decision": "warn",
+      "findings": [
+        {
+          "ruleId": "hwc-functiongraph-public-no-auth",
+          "title": "Public FunctionGraph trigger without auth",
+          "category": "public_exposure",
+          "severity": "warn",
+          "message": "The generated FunctionGraph or API Gateway path may be publicly reachable without authentication.",
+          "remediation": "Require IAM, app authentication, JWT, or another explicit auth layer before exposing generated application endpoints.",
+          "source": "deploy_plan",
+          "evidence": "{ \"service\": \"FunctionGraph\", \"exposure\": \"public\", \"auth\": \"none\", \"resources\": [ { \"type\": \"FunctionGraph\", \"name\": \"f\" } ] }"
+        },
+        {
+          "ruleId": "hwc-sandbox-missing-ttl",
+          "title": "Sandbox deployment missing cleanup metadata",
+          "category": "sandbox",
+          "severity": "warn",
+          "message": "The preview or sandbox deployment does not show cleanup or ownership metadata.",
+          "remediation": "Add owner, purpose, expiration time, and cleanup command before creating preview cloud resources.",
+          "source": "deploy_plan",
+          "evidence": "{ \"service\": \"FunctionGraph\", \"exposure\": \"public\", \"auth\": \"none\", \"resources\": [ { \"type\": \"FunctionGraph\", \"name\": \"f\" } ] }"
+        }
+      ],
+      "nextStep": "Review the warnings with the user before proceeding."
+    }
+  }
+}

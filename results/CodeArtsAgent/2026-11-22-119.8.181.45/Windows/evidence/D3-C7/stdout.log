@@ -1,0 +1,19 @@
+{
+  "caseId": "D3-C7",
+  "status": "PASS",
+  "why": "plan 含 --cli-region=true 区域可用性=true 只读查询=true",
+  "executedAt": "20261122052702",
+  "result": {
+    "command": "hcloud ECS ListServersDetails --cli-region=cn-south-1",
+    "availability": {
+      "ok": true,
+      "service": "ecs",
+      "region": "cn-south-1",
+      "available": true,
+      "note": "ecs is available in cn-south-1.",
+      "sourcedFrom": "static cache, update via npm package upgrade",
+      "disclaimer": "This result reflects service-level availability only. It does NOT guarantee that your IAM user has permissions in this region. Account-level restrictions (e.g., APIGW.0802) may block actual API calls even when the service is available."
+    },
+    "readonly": "{\n  \"ok\": false,\n  \"exitCode\": 0,\n  \"signal\": null,\n  \"errorCode\": \"APIGW.0301\",\n  \"errorMessage\": \"Incorrect IAM authentication information: Unauthorized\",\n  \"stdout\": \"{\\\"error_msg\\\":\\\"Incorrect IAM authentication information: Unauthorized\\\",\\\"error_code\\\":\\\"APIGW.0301\\\",\\\"request_id\\\":\\\"0e41b368b65255d9dd97a5c96415cc35\\\"}\\n[USE_ERROR]缺少必填参数:project_id\\n\",\n  \"stderr\": \"\",\n  \"plan\": {\n    \"execut"
+  }
+}

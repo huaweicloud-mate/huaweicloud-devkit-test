@@ -1,0 +1,61 @@
+{
+  "caseId": "D4-19",
+  "status": "FAIL",
+  "why": "?????",
+  "executedAt": "20261122050408",
+  "result": {
+    "plan": {
+      "executable": "hcloud",
+      "args": [
+        "VPC",
+        "DeleteVpc",
+        "--vpc_id=abc"
+      ],
+      "command": "hcloud VPC DeleteVpc --vpc_id=abc",
+      "executableBlock": "hcloud VPC DeleteVpc --vpc_id=abc",
+      "warnings": [],
+      "classification": {
+        "decision": "deny",
+        "risk": "write",
+        "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+      },
+      "sgFindings": [],
+      "approvalToken": "313d96c1-5a08-492b-bb0b-67a1ad8c4843",
+      "safeToRun": false
+    },
+    "hook": {
+      "ok": true,
+      "decision": "warn",
+      "findings": [
+        {
+          "ruleId": "hwc-destructive-delete-operation",
+          "title": "Destructive cloud resource operation",
+          "category": "destructive",
+          "severity": "warn",
+          "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+          "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+          "source": "command",
+          "evidence": "hcloud VPC DeleteVpc --vpc_id=abc"
+        }
+      ],
+      "nextStep": "Review the warnings with the user before proceeding."
+    },
+    "art": {
+      "ok": false,
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-iam-admin-policy",
+          "title": "Broad IAM administrator grant",
+          "category": "iam",
+          "severity": "deny",
+          "message": "The change appears to grant broad administrator permissions.",
+          "remediation": "Use least-privilege service actions, resource constraints, and short-lived credentials for generated application workflows.",
+          "source": "policy.json",
+          "evidence": "policy.json {\"Version\":\"1.1\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+        }
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution."
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "caseId": "D4-4",
+  "status": "PASS",
+  "why": "四类写操作均 deny+safeToRun=false+approvalToken：ECS CreateServers=deny, VPC DeleteVpc --vpc_id=abc=deny, RDS DeleteInstance --instance_id=abc=deny, EIP DeletePublicip --publicip_id=abc=deny",
+  "executedAt": "20261122054956",
+  "result": [
+    {
+      "cmd": "ECS CreateServers",
+      "decision": "deny",
+      "safeToRun": false,
+      "token": true
+    },
+    {
+      "cmd": "VPC DeleteVpc --vpc_id=abc",
+      "decision": "deny",
+      "safeToRun": false,
+      "token": true
+    },
+    {
+      "cmd": "RDS DeleteInstance --instance_id=abc",
+      "decision": "deny",
+      "safeToRun": false,
+      "token": true
+    },
+    {
+      "cmd": "EIP DeletePublicip --publicip_id=abc",
+      "decision": "deny",
+      "safeToRun": false,
+      "token": true
+    }
+  ]
+}

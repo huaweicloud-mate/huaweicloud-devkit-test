@@ -1,0 +1,29 @@
+{
+  "caseId": "D3-C13",
+  "status": "PASS",
+  "why": "OBS 网站托管：未配置get=404→set indexDocument(index.html/error.html)=200→get核对=200→delete=204→删后get=404→缺indexDocument set={'status': 400, 'code': 'InvalidRequest'}→桶删除归零=True",
+  "executedAt": "20261122054708",
+  "result": {
+    "create": 200,
+    "getUnset": {
+      "status": 404,
+      "code": "NoSuchWebsiteConfiguration"
+    },
+    "set": 200,
+    "getAfter": {
+      "status": 200,
+      "indexDocument": "index.html"
+    },
+    "delete": 204,
+    "getAfterDelete": {
+      "status": 404,
+      "code": "NoSuchWebsiteConfiguration"
+    },
+    "missingIndex": {
+      "status": 400,
+      "code": "InvalidRequest"
+    },
+    "delBucket": 204,
+    "head": 404
+  }
+}
