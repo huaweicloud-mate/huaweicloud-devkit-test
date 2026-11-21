@@ -54,3 +54,12 @@ close_session -> ok
 [OK] s3-connect/upload/deploy 链路
 [OK] 部署返回可访问 URL 或检查通过
 [OK] 会话正常关闭
+
+===== 断言判定（依据上述实测输出）=====
+断言1 deploy_nginx.url 非空（应返回公网预览 URL）-> FAIL：url=""（ok=true, port=8080）
+断言2 deploy_check.checks.devbridge_tunnel == PASS -> FAIL：status=FAIL, detail="(no tunnel)"
+断言3 deploy_check.checks.nginx_serving == PASS -> FAIL：status=FAIL, detail="(port 8080, no HTTP response)"
+补充：deploy_check.complete=false；output_dir=PASS、content_verified=SKIP(no fingerprint file)
+说明：本轮为全新 workspace/会话（未发生端口冲突、未改绑端口），url 仍为空 -> 端口残留非充分条件。
+备注：第二次严格断言复跑在 deploy_nginx 阶段 WS 无响应导致 node 事件循环空转退出（EXIT=0，日志截断），故采用首轮完整实测输出判定；首轮与复跑在 url/nginx/tunnel 三项结论一致。
+VERDICT: FAIL

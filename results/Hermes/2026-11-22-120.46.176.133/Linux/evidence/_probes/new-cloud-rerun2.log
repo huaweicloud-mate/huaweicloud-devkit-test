@@ -1,0 +1,77 @@
+
+=====CASE D3-S2=====
+创建测试VPC tctest-hermes-s2-mwqwn2p5 -> id=b128a79e-f6ee-461d-a063-e7ee9034f1d9
+plan DeleteVpc -> decision=deny hasToken=true safeToRun=false
+hook_check_command DeleteVpc -> decision=warn risk=undefined
+未确认前 ListVpcs 仍含该 VPC = true
+确认后 DeleteVpc -> ok=true
+删除后归零 = true
+[OK] 测试 VPC 创建成功
+[OK] plan DeleteVpc 要求确认(confirm-not-deny)
+[OK] hook 预检 DeleteVpc 返回决策
+[OK] 未确认前零执行
+[OK] 确认后删除成功且归零
+=====END D3-S2=====
+
+=====CASE D3-C13=====
+OBS mb -> success
+set 无 indexDocument -> __error=Error: indexDocument is required for action=set ok=undefined
+set indexDocument -> ok=true status=200
+get -> ok=true status=200
+OBS rm -f -> success
+[OK] OBS 建桶成功
+[OK] set 缺失 indexDocument 报错(拒绝)
+[OK] set 成功
+[OK] get 返回配置与 set 一致
+[OK] 删除归零
+=====END D3-C13=====
+
+=====CASE D3-C14=====
+hdkitConnect 参数透传行:
+  if (options.source) body.source = options.source;
+  if (options.env) body.env = options.env;
+  if (options.git) body.git = options.git;
+  if (options.flavor_id) body.flavor_id = options.flavor_id;
+hdkitCredentials() 缺参 -> session_id or dev_stage_id is required
+hwlink getCredentials 结构: ak=*** sk=*** securitytoken="" (已脱敏)
+[FAIL] hdkitConnect 透传可选参数到 body
+[OK] hdkitCredentials 缺 sessionId+devStageId 报错
+[OK] hwlink getCredentials 返回 {ak,sk,securitytoken}
+[OK] createConnection 走 x-security-token 签名头
+=====END D3-C14=====
+
+=====CASE D3-S4=====
+voucher_status(领取前) -> {"claimed":true,"message":"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）","code":null}
+voucher_claim -> {"claimed":true,"voucherId":null,"amount":0,"message":"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）","code":null}
+voucher_status(领取后) -> {"claimed":true,"message":"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）","code":null}
+[OK] voucher_status 返回状态字段
+[OK] claim 调用返回
+[OK] status→claim→status 闭环连贯
+=====END D3-S4=====
+
+=====CASE D3-S3=====
+check_user -> realnameVerified=true agreementSigned=true err=
+Waiting for connection 1025687... (0s)Connection 1025687 established (0s).
+Waiting for connection 1025687... (0s)Connection 1025687 established (0s).
+Waiting for connection 1025687... (0s)Connection 1025687 established (0s).
+Waiting for connection 1025687... (0s)Connection 1025687 established (0s).
+Waiting for connection 1025687... (0s)Connection 1025687 established (0s).
+connect -> status=connected wsId=f47a753a11024c1c988f
+[2026-11-21T21:13:21.919Z] uploadProject: /home/testbot3/.hdk-s3-mwqwn2p5 -> /workspace/.hdk-s3-mwqwn2p5.tar.gz (archive=211 bytes, md5=050bb4146ce9963a591f0df9d1a67a00)
+[2026-11-21T21:13:21.965Z] uploadViaHttpTunnel: start (archive=/tmp/multica-task-307124687/sandbox-upload-1795295601908/.hdk-s3-mwqwn2p5.tar.gz, size=211, remotePath=/workspace/.hdk-s3-mwqwn2p5.tar.gz)
+[2026-11-21T21:13:21.965Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-21T21:13:21.965Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-21T21:13:22.010Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-21T21:13:22.061Z] deployFileServer: starting server on port 8888
+[2026-11-21T21:13:22.105Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 9047\r\n\u001b]133;C\u0007\r\n"
+[2026-11-21T21:13:22.105Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 1025687... (0s)Connection 1025687 established (0s).
+[2026-11-21T21:13:23.032Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-21T21:13:23.033Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-21T21:13:23.035Z] uploadViaHttpTunnel: tunnel ready, localPort=32771
+[2026-11-21T21:13:23.035Z] uploadViaHttpTunnel: waiting for server health on localhost:32771
+[2026-11-21T21:13:23.035Z] waitForServerReady: attempt 1, checking http://localhost:32771/health
+[2026-11-21T21:13:23.079Z] waitForServerReady: server ready on port 32771 after 0 retries
+[2026-11-21T21:13:23.079Z] uploadViaHttpTunnel: sending POST with 211 bytes
+[2026-11-21T21:13:23.124Z] uploadViaHttpTunnel: upload complete (bytes=211, md5=050bb4146ce9963a591f0df9d1a67a00)
+upload_project -> ok=true md5Verified=true

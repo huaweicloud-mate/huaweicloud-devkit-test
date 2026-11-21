@@ -137,10 +137,10 @@
 - **影响**：任何以退出码判定 OBS 建桶结果的自动化/Agent 工作流（含 D3-C2）会误判失败；MCP `huaweicloud_obs_set_website_config` 工具链本身正常（set/get/delete 三步均 200）。
 - **证据**：`evidence/D3-C2/stdout.txt`（realcloud_e2e.mjs + 人工独立复现 `/tmp/obs_mb.out`/`/tmp/dbg.out`，桶已删除归零）
 
-## #17【P1】D3-S3 场景-沙箱预览出 URL —— 部署成功但无公网 URL（新增）
+## #17【P1】D3-S3 场景-沙箱预览出 URL —— 部署成功但无公网 URL
 
-- **现象**：v1.1.15 真机复测 3 次（run_all 首轮 + new-cloud-probe 重跑 + 独立新会话补测）——`huaweicloud_sandbox_deploy_nginx` 均返回 `ok=true` 但 `url` 为空，`port` 被自动改绑（8080→8083/8086），返回 `warning: "Port 8080 is in use — auto-assigned port 8086 | ... Any DevBridge tunnel bound to port 8080 is detached: run devbridge port create <tunnelId> -p 8086 ..."`；`sandbox_deploy_check` 的 `nginx_serving=FAIL(no HTTP response)`、`devbridge_tunnel=FAIL`、`tunnel_url_accessible=FAIL(no tunnel)`；`nextStep=expose_via_devbridge`。沙箱内 `ss -ltnp` 实测：单一 nginx(pid 8464) 常驻监听 80/8080/8081/8082/8084，`/etc/nginx/conf.d/` 残留历史会话配置 `d3s3-site.conf`/`d3c3-proj.conf`/`hdk-e2e.conf`/`sample-react.conf`。
-- **断言**：沙箱预览部署终点必须返回可访问公网 URL（`deploy_nginx.url` 非空且 `deploy_check.devbridge_tunnel=PASS`），会话关闭后端口与 nginx 配置被回收。
+- **现象**：v1.1.15 真机复测（2026-11-22 首轮 + 严格断言复跑）——`huaweicloud_sandbox_deploy_nginx` 返回 `ok=true`、`port=8080`（本次 workspace 为新会话，**未出现端口冲突、未改绑端口**）但 `url` 仍为空；`sandbox_deploy_check` 结果 `complete=false`：`nginx_serving=FAIL(port 8080, no HTTP response)`、`devbridge_tunnel=FAIL`、`output_dir=PASS`、`content_verified=SKIP(no fingerprint file)`。对比 2026-11-21 轮次（该轮 workspace 有历史 nginx 配置占用 8080/8081/8082/8084，端口被改绑 8083/8086 后同样无 URL）——说明**端口残留只是加剧因素，非充分条件**：只要 `deploy_nginx` 不同步建立并返回 DevBridge 隧道 URL，预览即不可交付。
+- **断言**：沙箱预览部署终点必须返回可访问公网 URL（`deploy_nginx.url` 非空 **且** `deploy_check.checks.devbridge_tunnel.status == "PASS"`）；会话关闭后端口与 nginx 配置被回收。
 - **根因**：`plugins/huaweicloud-core/src/sandbox/session-manager.mjs:1282 closeSession()` 仅关闭 WS 连接（`session.close()`），未清理 `deployNginx()`（同文件 `:833`）写入的 `/etc/nginx/conf.d/<project>.conf` 与 nginx 进程；沙箱 workspace 跨会话/跨客户端复用 → 历史配置长期占用 8080-8089 端口池，`deployNginx` 冲突后只改绑端口并提示手工重建 DevBridge 隧道（`:200 formatPortConflictWarning`），不自动随迁隧道 → 无公网 URL。
-- **影响**：同一沙箱 workspace 上第二次及以后的沙箱预览部署拿不到公网 URL（D3-S3 场景不可交付）；多客户端共用 workspace 时端口互相踩占（与 SandboxMonitor 报出的 `MCP -32603 ... all ports 8080-8089 are in use` 同源）。
-- **证据**：`evidence/D3-S3/stdout.txt`（独立补测探针输出：`VERDICT url=EMPTY nginx=FAIL tunnel=FAIL`）+ `evidence/D3-S3/probe.mjs`；首轮/重跑证据见 `evidence/_probes/new-cloud.log`、`new-cloud-retry.log`（含 `ss -ltnp` 端口占用与 `/etc/nginx/conf.d` 残留清单）。
+- **影响**：沙箱预览场景（D3-S3）无法端到端交付；多客户端共用 workspace 时端口互相踩占（与 SandboxMonitor 报出的 `MCP -32603 ... all ports 8080-8089 are in use` 同源）。
+- **证据**：`evidence/D3-S3/stdout.txt`（new-cloud-probe 首轮 + 严格断言复跑两段输出：`deploy_nginx -> ok=true port=8080 url=` 与 `[FAIL] 部署返回可访问公网 URL 且 DevBridge 隧道可访问`）；原始日志 `evidence/_probes/new-cloud-firstrun.log`（首轮）、`evidence/_probes/new-cloud.log`（复跑）。

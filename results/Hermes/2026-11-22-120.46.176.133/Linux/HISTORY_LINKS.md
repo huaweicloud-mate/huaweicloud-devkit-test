@@ -450,8 +450,8 @@
   - [#1025](https://github.com/huaweicloud/huaweicloud-devkit/issues/1025)（open）**[测试报告] huaweicloud-devkit 1.1.12 每日测试缺陷合并单（1 项）**
     - 历史单内容：## 测试概览 - 被测版本：1.1.12 - 缺陷：1 项 ## 缺陷清单 ### 1. [P1] D3-C2 OBS 静态站托管 AWS4 签名缺 x-amz-security-token - **描述**：`huaweicloud_obs_set_website_config` 的 set / get 均返回 HTTP 400，OBS 返回 `InvalidArgument: Request
 
-## D3-S3 场景-沙箱预览出 URL —— 部署成功但无公网 URL（新增）
-- 今日证据：`evidence/D3-S3/stdout.txt`（独立补测探针输出：`VERDICT url=EMPTY nginx=FAIL tunnel=FAIL`）+ `evidence/D3-S3/probe.mjs`；首轮/重跑证据见 `evidence/_probes/new-cloud.log`、`new-cloud-retry.log`（含 `ss -ltnp` 端口占用与 `/etc/nginx/conf.d` 残留清单）。
+## D3-S3 场景-沙箱预览出 URL —— 部署成功但无公网 URL
+- 今日证据：`evidence/D3-S3/stdout.txt`（new-cloud-probe 首轮 + 严格断言复跑两段输出：`deploy_nginx -> ok=true port=8080 url=` 与 `[FAIL] 部署返回可访问公网 URL 且 DevBridge 隧道可访问`）；原始日志 `evidence/_probes/new-cloud-firstrun.log`（首轮）、`evidence/_probes/new-cloud.log`（复跑）。
 - **关联历史单（已作为缺陷提过，本次为复核）**：
   - [#981](https://github.com/huaweicloud/huaweicloud-devkit/issues/981)（open）**[测试报告] huaweicloud-devkit 1.1.10 每日测试缺陷合并单（1 项新回归）**
     - 历史单内容：## 测试概览 - 被测版本：1.1.10（正式版，gitHead b0e9f026） - 客户端：OpenClaw (deepseek-v4-pro-0813) / OS：Linux aarch64 / 日期：2026-10-21 - 缺陷：1 项新回归（其余 12 项为历史延续，见 HISTORY_LINKS.md） ## 缺陷清单 ### 1. [P1] D3-C3/D3-S3 沙箱 dep
