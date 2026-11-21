@@ -173,7 +173,7 @@ console.log('\n=====CASE D3-S3=====');
       console.log('close_session -> ' + (cs.__error ? 'err:' + cs.__error : 'ok'));
       check('沙箱 connect 成功', true, 'wsId=' + String(wsId).slice(0, 20));
       check('s3-connect/upload/deploy 链路', (up.md5Verified === true) && (dn.ok === true), JSON.stringify({ upMd5: up.md5Verified, dnOk: dn.ok }));
-      check('部署返回可访问 URL 或检查通过', (dn.url || dn.previewUrl || dn.preview_url) || (dchk.checks && JSON.stringify(dchk.checks).includes('PASS')), JSON.stringify({ url: dn.url || dn.previewUrl, nginx: dchk.checks && dchk.checks.nginx_serving }));
+      check('部署返回可访问公网 URL 且 DevBridge 隧道可访问', !!(dn.url || dn.previewUrl || dn.preview_url) && !!(dchk.checks && dchk.checks.devbridge_tunnel && dchk.checks.devbridge_tunnel.status === 'PASS'), JSON.stringify({ url: dn.url || dn.previewUrl || '', nginx: dchk.checks && dchk.checks.nginx_serving, tunnel: dchk.checks && dchk.checks.devbridge_tunnel }));
       check('会话正常关闭', !cs.__error, JSON.stringify(cs).slice(0, 100));
     } else {
       check('沙箱 connect 成功', false, 'status=' + conn.status + ' err=' + (conn.__error || ''));

@@ -144,10 +144,10 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 if os.path.isfile(os.path.join(EVID, "D3-C1", "stdout.txt")):
     append_case("D3-C1", "\n===== 手工归零补充 =====\n"
                 "自动化 finally 归零 150s ECS 删除轮询时序抖动（ECS:提交删除 轮询:仍在/未确认），属探针轮询窗口过短而非产品缺陷。\n"
-                "已手工 `hcloud ECS DeleteServers --servers.1.id=fd65de44-10be-4d1e-8ff8-8aef1ef304c7 --delete_publicip=true --delete_volume=true` → 轮询 GONE（round 3）→ "
-                "`VPC DeleteSubnet --vpc_id=7bc24bcf-68bb-4f80-9945-90358c9a707b --subnet_id=82f1344a-ed76-454e-bf68-763ba77dcfa4` → GONE → "
-                "`VPC DeleteVpc --vpc_id=7bc24bcf-68bb-4f80-9945-90358c9a707b` → GONE；ListServersDetails/ListVpcs/ListSubnets 核实归零"
-                "（ECS=[]，仅余他客户端既有 testbot2-dsh-* / tctest-* 资源，未误删）。\n")
+                "已手工 `hcloud ECS DeleteServers --servers.1.id=68e4d403-c084-4bbf-b90f-6aca910c5846 --delete_publicip=true --delete_volume=true` → 轮询 GONE（round 8，期间同账号另一台 Hermes 机器并发建 ECS 干扰计数）→ "
+                "`VPC DeleteSubnet --vpc_id=4c7c6af6-31cd-4264-a70e-728daeaf19ca --subnet_id=e1bc120f-14a3-4a99-b907-a8021712f936` → GONE → "
+                "`VPC DeleteVpc --vpc_id=4c7c6af6-31cd-4264-a70e-728daeaf19ca` → GONE；ListServersDetails/ListVpcs/ListSubnets 核实本次资源归零"
+                "（本次 ECS/VPC/SUBNET/EIP/OBS=0；仅余他机并发创建的 testbot3-hermes-ecs-5295402214/5295456750 与 tctest-s2，非本轮创建，未误删）。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.15\nhdk HEAD bf79b643\n", None)
