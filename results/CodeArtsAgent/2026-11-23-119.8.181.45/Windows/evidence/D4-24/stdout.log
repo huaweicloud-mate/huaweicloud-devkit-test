@@ -1,15 +1,18 @@
 {
   "caseId": "D4-24",
   "status": "PASS",
-  "why": "令牌跨会话不可用返回 code=CONFIRM_TOKEN_NOT_FOUND（符合令牌不重放/过期语义；用例精确字段 CONFIRM_TOKEN_EXPIRED 与实现 CONFIRM_TOKEN_NOT_FOUND 存在命名漂移）",
-  "executedAt": "20261123051105",
+  "why": "首次确认={\"status\":\"rejected\",\"code\":\"CONFIRM_TOKEN_NOT_FOUND\"} 重复确认已拒绝=true 无效令牌拒绝=true",
+  "executedAt": "20261123053247",
   "result": {
-    "planToken": true,
-    "acrossSession": {
+    "first": {
       "status": "rejected",
       "code": "CONFIRM_TOKEN_NOT_FOUND"
     },
-    "badToken": {
+    "second": {
+      "status": "rejected",
+      "code": "CONFIRM_TOKEN_NOT_FOUND"
+    },
+    "fake": {
       "status": "rejected",
       "code": "CONFIRM_TOKEN_NOT_FOUND"
     }

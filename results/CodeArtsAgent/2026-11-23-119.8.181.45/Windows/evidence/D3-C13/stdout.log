@@ -1,0 +1,17 @@
+{
+  "caseId": "D3-C13",
+  "status": "PASS",
+  "why": "OBS 网站托管：未配置get=404→set=200→get核对=200→delete=204→删后get=404→桶删除=204 head=404",
+  "executedAt": "20261123052859",
+  "result": {
+    "create": 200,
+    "getUnset": 404,
+    "set": 200,
+    "getAfter": 200,
+    "getAfterBody": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><WebsiteConfiguration xmlns=\"http://obs.myhwclouds.com/doc/2015-06-30/\"><IndexDocument><Suffix>index.html</Suffix><Type>0</Type></IndexDocument><ErrorDocument><Key>error.html</Key><HttpStatus>404</HttpStatus></ErrorDocument><SignatureVerificatio",
+    "delete": 204,
+    "getAfterDelete": 404,
+    "delBucket": 204,
+    "headAfter": 404
+  }
+}

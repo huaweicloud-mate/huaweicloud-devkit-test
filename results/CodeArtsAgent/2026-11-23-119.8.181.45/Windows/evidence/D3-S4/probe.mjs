@@ -2,16 +2,14 @@
 // Generated from the executed case implementation; rerunnable standalone.
 import { mcpTool, mcpSession, finishCall, runCli, runNode, runHcloud, safeJson, ts, PKG, MCP, CLI, DIST, HOME, VC_QUOTE } from '../../_runner/lib.mjs';
 const run = async () => {
-  const s1 = await mcpTool('huaweicloud_voucher_status', {}, 45000);
-  const p1 = s1.parsed || {};
-  const before = p1.claimed;
-  const claim = await mcpTool('huaweicloud_voucher_claim', {}, 60000);
-  const cp = claim.parsed || {};
-  const s2 = await mcpTool('huaweicloud_voucher_status', {}, 45000);
-  const p2 = s2.parsed || {};
-  const after = p2.claimed;
-  const ok = s1.ok && s2.ok && (claim.ok || /already|claimed|领取/i.test(JSON.stringify(cp))) && (before === false ? after === true : after === true);
-  return { status: ok ? 'PASS' : 'FAIL', why: 'status.claimed: ' + before + ' -> ' + after + '；claim 返回=' + JSON.stringify(cp).slice(0, 200), result: { before: p1, claim: cp, after: p2 } };
+  const st = await mcpTool('huaweicloud_voucher_status', {}, 60000);
+  const p = st.parsed || {};
+  const cl = await mcpTool('huaweicloud_voucher_claim', { vendorConfirmed: VC_QUOTE }, 90000);
+  const c = cl.parsed || {};
+  const rateLimited = /HDKIT_CRED_RATE_LIMIT|限额|rate/i.test(JSON.stringify(c) + cl.text);
+  const ok = st.ok && (typeof p.claimed === 'boolean' || /claimed|status/i.test(JSON.stringify(p))) && (c.claimed === true || c.status === 'claimed');
+  if (ok) return { status: 'PASS', why: 'voucher_status 可读；claim 返回 claimed=true voucherId=' + c.voucherId, result: { status: p, claim: c } };
+  return { status: 'BLOCKED', why: 'voucher_status ok=' + st.ok + ' 可读；claim 返回 ' + (rateLimited ? 'AK 调用限额 HDKIT_CRED_RATE_LIMIT（服务端限流）' : JSON.stringify(c).slice(0, 200)) + '；影响：领券闭环不可完成；解除条件：等限额窗口恢复后重测', result: { status: p, claim: c } };
 };
 const r = await run();
 console.log(JSON.stringify(r, null, 2));

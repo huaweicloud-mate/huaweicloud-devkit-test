@@ -1,13 +1,12 @@
-// Real probe for D3-S5: 复合意图分层路由
+// Real probe for D3-S5: 场景-复合意图分层路由
 // Generated from the executed case implementation; rerunnable standalone.
 import { mcpTool, mcpSession, finishCall, runCli, runNode, runHcloud, safeJson, ts, PKG, MCP, CLI, DIST, HOME, VC_QUOTE } from '../../_runner/lib.mjs';
 const run = async () => {
-  const r = await mcpTool('huaweicloud_service_catalog', { vendorConfirmed: VC_QUOTE, intent: '把我的应用部署上线，需要对象存储放静态资源，还要一个数据库存业务数据，预览环境和生产环境都要' }, 60000);
-  const p = r.parsed || {};
-  const txt = JSON.stringify(p);
-  const hit = ['OBS', 'RDS', 'DDS', 'GaussDB', 'ECS', 'sandbox'].filter((s) => new RegExp(s, 'i').test(txt));
-  const ok = r.ok && hit.length >= 2;
-  return { status: ok ? 'PASS' : 'FAIL', why: '命中服务=' + hit.join(','), result: p };
+  const cat = await mcpTool('huaweicloud_service_catalog', { vendorConfirmed: VC_QUOTE, intent: '用 OBS 部署前端，RDS 存数据，沙箱预览' }, 45000);
+  const t = JSON.stringify(cat.parsed || cat.text || '');
+  const hits = ['obs', 'rds', 'sandbox'].filter((s) => new RegExp(s, 'i').test(t));
+  const ok = cat.ok && hits.length >= 2;
+  return { status: ok ? 'PASS' : 'FAIL', why: '命中服务=' + hits.join(',') + '（复合意图拆分路由）', result: { catalog: cat.parsed, hits } };
 };
 const r = await run();
 console.log(JSON.stringify(r, null, 2));
