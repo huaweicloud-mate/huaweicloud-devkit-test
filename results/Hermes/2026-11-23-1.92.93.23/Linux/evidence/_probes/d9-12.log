@@ -1,0 +1,35 @@
+=====CASE D9-12=====
+[FAIL] ① createDevkitMcpServer 可构造（server 对象） | mp.createDevkitMcpServer is not a function
+[FAIL] ② toClientInfo/instructionsFor/runInitializeSideEffects 无凭证泄露 | EXCEPTION mp.toClientInfo is not a function
+[OK] ③ _decorateResult/_resetHintConsumption/_isHintConsumed 契约保留 | after reset _isHintConsumed(旧会话)=false; _decorateResult object=true
+[OK] ④ TOOL_DEFINITIONS 含审批链（plan/run_approved） | tools=49 plan_cli=true run_approved=true secret_set=false; secret_set(vault写)=无
+=====END D9-12=====
+
+=====SUMMARY=====
+{
+  "caseId": "D9-12",
+  "okCount": 2,
+  "total": 4,
+  "results": [
+    {
+      "name": "① createDevkitMcpServer 可构造（server 对象）",
+      "ok": false,
+      "detail": "mp.createDevkitMcpServer is not a function"
+    },
+    {
+      "name": "② toClientInfo/instructionsFor/runInitializeSideEffects 无凭证泄露",
+      "ok": false,
+      "detail": "EXCEPTION mp.toClientInfo is not a function"
+    },
+    {
+      "name": "③ _decorateResult/_resetHintConsumption/_isHintConsumed 契约保留",
+      "ok": true,
+      "detail": "after reset _isHintConsumed(旧会话)=false; _decorateResult object=true"
+    },
+    {
+      "name": "④ TOOL_DEFINITIONS 含审批链（plan/run_approved）",
+      "ok": true,
+      "detail": "tools=49 plan_cli=true run_approved=true secret_set=false; secret_set(vault写)=无"
+    }
+  ]
+}
