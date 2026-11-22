@@ -42,7 +42,7 @@ cases.push({ id: 'D3-C4', title: '服务创建类回归', fn: async () => {
   return { status: ok ? 'PASS' : 'FAIL', why: '20+ 服务规范路由：' + arr.filter((x) => x.status === 'PASS').length + '/22 通过（list_operations + plan 只读分类）', result: arr.map((x) => ({ id: x.id, status: x.status })) };
 } });
 
-const evalCsv = 'C:/Users/Administrator/devkit-test/testbot4-codearts1/huaweicloud-devkit-test/eval/results/eval-run-20261121212012.csv';
+const evalCsv = 'C:/Users/Administrator/devkit-test/testbot4-codearts1/huaweicloud-devkit-test/eval/results/eval-run-20261122211938.csv';
 const rows = readFileSync(evalCsv, 'utf8').trim().split('\n').slice(1).map((l) => { const m = l.match(/^"([^"]+)","([^"]*)","([^"]*)","([^"]*)",(\w+)/); return m ? { id: m[1], prompt: m[2], expected: m[3], actual: m[4], verdict: m[5] } : null; }).filter(Boolean);
 for (const r of rows) {
   if (r.verdict === 'N/A') {

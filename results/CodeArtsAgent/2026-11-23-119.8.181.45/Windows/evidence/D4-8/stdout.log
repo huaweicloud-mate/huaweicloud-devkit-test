@@ -1,26 +1,9 @@
 {
   "caseId": "D4-8",
-  "status": "PASS",
-  "why": "三条命令双路径判定：deny/deny, allow/allow, deny/deny",
-  "executedAt": "20261123051043",
-  "result": [
-    {
-      "cmd": "hcloud ECS DeleteServers --server_id=x",
-      "node": "deny",
-      "python": "deny",
-      "same": true
-    },
-    {
-      "cmd": "hcloud ECS ListServersDetails",
-      "node": "allow",
-      "python": "allow",
-      "same": true
-    },
-    {
-      "cmd": "type C://Users//Administrator//.hcloud//config.json",
-      "node": "deny",
-      "python": "deny",
-      "same": true
-    }
-  ]
+  "status": "FAIL",
+  "why": "probe exception: require is not defined",
+  "executedAt": "20261123051346",
+  "result": {
+    "stack": "ReferenceError: require is not defined\n    at spawnSyncPy (file:///C:/Users/Administrator/devkit-test/testbot4-codearts1/huaweicloud-devkit-test/results/CodeArtsAgent/2026-11-23-119.8.181.45/Windows/_runner/run_batch2.mjs:72:25)\n    at Object.fn (file:///C:/Users/Administrator/devkit-test/testbot4-codearts1/huaweicloud-devkit-test/results/CodeArtsAgent/2026-11-23-119.8.181.45/Windows/_runner/run_batch2.mjs:62:15)\n    at file:///C:/Users/Administrator/devkit-test/testbot4-codearts1/huaweicloud-devkit-test/results/CodeArtsAgent/2026-11-23-119.8.181.45/Windows/_runner/run_batch2.mjs:254:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+  }
 }

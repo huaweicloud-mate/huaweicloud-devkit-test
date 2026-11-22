@@ -1,0 +1,118 @@
+{
+  "caseId": "D10-3",
+  "status": "PASS",
+  "why": "serviceCatalog 路由准确率=92.9%（HIT=13 MISS=1 分母=14，阈值90%）",
+  "executedAt": "20261123052039",
+  "result": {
+    "rate": 92.9,
+    "hits": 13,
+    "misses": 1,
+    "rows": [
+      {
+        "id": "EXP-E01",
+        "prompt": "帮我查一下我账号在华北北京四有哪些云主机",
+        "expected": "ECS",
+        "actual": "Run hcloud --help to list available services.",
+        "verdict": "MISS"
+      },
+      {
+        "id": "EXP-E02",
+        "prompt": "创建一台 2C4G 的 Ubuntu 云服务器 规格通用型",
+        "expected": "ECS",
+        "actual": "ECS",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E03",
+        "prompt": "把本地 dist 目录部署成一个公网静态网站",
+        "expected": "OBS",
+        "actual": "OBS+Sandbox+DevStation",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E04",
+        "prompt": "给这台服务器绑定一个弹性公网IP",
+        "expected": "EIP",
+        "actual": "ECS+VPC+EIP",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E05",
+        "prompt": "看一下我的云数据库MySQL实例的状态",
+        "expected": "RDS",
+        "actual": "RDS",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E06",
+        "prompt": "创建一个 Redis 缓存实例用于会话存储",
+        "expected": "DCS",
+        "actual": "OBS+DDS+DCS",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E07",
+        "prompt": "给生产环境的服务器配置一个每日备份策略",
+        "expected": "CBR",
+        "actual": "ECS+IAM+CBR",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E08",
+        "prompt": "我的ECS启动失败了 帮我分析原因",
+        "expected": "(诊断)",
+        "actual": "Run hcloud --help to list available services.",
+        "verdict": "N"
+      },
+      {
+        "id": "EXP-E09",
+        "prompt": "开设一个 Kubernetes 集群用于微服务部署",
+        "expected": "CCE",
+        "actual": "CCE+SWR",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E10",
+        "prompt": "部署一个函数处理图片自动压缩",
+        "expected": "FunctionGraph",
+        "actual": "FunctionGraph",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E11",
+        "prompt": "查一下我账号这个月的费用情况",
+        "expected": "BSS",
+        "actual": "BSS",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E12",
+        "prompt": "把应用日志指标推送到云监控告警",
+        "expected": "CES",
+        "actual": "CES",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E13",
+        "prompt": "申请HTTPS证书并配置到我的域名",
+        "expected": "ELB",
+        "actual": "CSMS+KMS+ELB",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E14",
+        "prompt": "我账号下的用户都有哪些权限 帮我审计一下",
+        "expected": "IAM",
+        "actual": "IAM+CTS",
+        "verdict": "HIT"
+      },
+      {
+        "id": "EXP-E15",
+        "prompt": "帮我领一下华为云的代金券",
+        "expected": "Incentive Voucher",
+        "actual": "Incentive Voucher",
+        "verdict": "HIT"
+      }
+    ]
+  }
+}

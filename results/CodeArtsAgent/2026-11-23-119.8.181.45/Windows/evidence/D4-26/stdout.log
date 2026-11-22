@@ -1,0 +1,23 @@
+{
+  "caseId": "D4-26",
+  "status": "FAIL",
+  "why": "findings 含明文=true 含redacted占位=true",
+  "executedAt": "20261123051356",
+  "result": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-secret-value-read",
+        "title": "Plaintext secret read",
+        "category": "secret",
+        "severity": "deny",
+        "message": "The command appears to retrieve plaintext secret values.",
+        "remediation": "Use runtime secret references, user-side inspection, or redacted metadata checks instead of returning secret values to the agent.",
+        "source": "command",
+        "evidence": "hcloud CSMS ShowSecretVersion --secret_name=x --secret_string=SK_TEST_PLACEHOLDER_LEAK_VALUE"
+      }
+    ],
+    "nextStep": "Revise the command, artifact, or deployment plan before execution."
+  }
+}

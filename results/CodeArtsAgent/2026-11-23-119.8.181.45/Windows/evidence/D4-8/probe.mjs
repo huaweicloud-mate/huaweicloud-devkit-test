@@ -2,12 +2,14 @@
 // Generated from the executed case implementation; rerunnable standalone.
 import { mcpTool, mcpSession, finishCall, runCli, runNode, runHcloud, safeJson, ts, PKG, MCP, CLI, DIST, HOME, VC_QUOTE } from '../../_runner/lib.mjs';
 const run = async () => {
+  const py = HOME + '/.workbuddy/huaweicloud-plugins/hooks/huaweicloud-safety.py';
+  const mjs = HOME + '/.workbuddy/huaweicloud-plugins/hooks/huaweicloud-safety.mjs';
   const cmds = ['hcloud ECS DeleteServers --server_id=x', 'hcloud ECS ListServersDetails', 'type C://Users//Administrator//.hcloud//config.json'];
   const out = [];
   for (const c of cmds) {
     const input = JSON.stringify({ tool_name: 'Bash', tool_input: { command: c } });
-    const n = runNode(mjsHook, [], 30000, null, input);
-    const p = runPy(input);
+    const n = runNode(mjs, [], 30000, null, input);
+    const p = spawnSyncPy(py, input);
     const nd = /permissionDecision"\s*:\s*"deny"/.test(n.stdout) ? 'deny' : 'allow';
     const pd = /permissionDecision"\s*:\s*"deny"/.test(p) ? 'deny' : 'allow';
     out.push({ cmd: c, node: nd, python: pd, same: nd === pd });

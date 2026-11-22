@@ -50,7 +50,7 @@ for (const [id, kind] of [['EXP-D5-3-1', 'manifest'], ['EXP-D5-3-3', 'tools']]) 
   console.log(id.padEnd(12), r.status, '|', r.why);
 }
 
-const evalCsv = 'C:/Users/Administrator/devkit-test/testbot4-codearts1/huaweicloud-devkit-test/eval/results/eval-run-20261121212012.csv';
+const evalCsv = 'C:/Users/Administrator/devkit-test/testbot4-codearts1/huaweicloud-devkit-test/eval/results/eval-run-20261122211938.csv';
 const lines = readFileSync(evalCsv, 'utf8').trim().split('\n').slice(1);
 const parsed = lines.map((l) => { const m = l.match(/^"([^"]+)","([^"]*)","([^"]*)","([^"]*)",(\w+)/); return m ? { id: m[1], prompt: m[2], expected: m[3], actual: m[4], verdict: m[5] } : null; }).filter(Boolean);
 const hits = parsed.filter((p) => p.verdict === 'HIT').length;
