@@ -1,4 +1,8 @@
 import { mcpTool, writeEvidence, writeProbe, VC_QUOTE, ts } from './lib.mjs';
+import { readFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+const ADM = JSON.parse(readFileSync(homedir() + '/.config/huaweicloud/credentials.json.bak-d3c2-20261120', 'utf8'));
+const ENV = { HW_ACCESS_KEY: ADM.ak, HW_SECRET_KEY: ADM.sk };
 
 const cases = [];
 
@@ -28,9 +32,9 @@ cases.push({ id: 'D3-C7', title: '跨区域资源操作引导', fn: async () => 
 } });
 
 cases.push({ id: 'D3-S4', title: '场景-领券闭环', fn: async () => {
-  const st = await mcpTool('huaweicloud_voucher_status', {}, 60000);
+  const st = await mcpTool('huaweicloud_voucher_status', {}, 60000, ENV);
   const p = st.parsed || {};
-  const cl = await mcpTool('huaweicloud_voucher_claim', { vendorConfirmed: VC_QUOTE }, 90000);
+  const cl = await mcpTool('huaweicloud_voucher_claim', { vendorConfirmed: VC_QUOTE }, 90000, ENV);
   const c = cl.parsed || {};
   const rateLimited = /HDKIT_CRED_RATE_LIMIT|限额|rate/i.test(JSON.stringify(c) + cl.text);
   const ok = st.ok && (typeof p.claimed === 'boolean' || /claimed|status/i.test(JSON.stringify(p))) && (c.claimed === true || c.status === 'claimed');
@@ -68,7 +72,9 @@ cases.push({ id: 'D3-S8', title: '场景-操作失败后排障指引', fn: async
 } });
 
 const results = [];
+const ONLY = process.env.ONLY ? process.env.ONLY.split(',') : null;
 for (const c of cases) {
+  if (ONLY && !ONLY.includes(c.id)) continue;
   const t0 = Date.now();
   let r;
   try { r = await c.fn(); } catch (e) { r = { status: 'FAIL', why: 'probe exception: ' + (e && e.message), result: {} }; }

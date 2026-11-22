@@ -1,0 +1,17 @@
+{
+  "caseId": "D3-S7",
+  "status": "BLOCKED",
+  "why": "实测 20261123054140 RDS CreateInstance 失败：\u001b[1;93mcli-jsonInput中各位置(如path、query、body、formData、header、cookie)传入的API参数优先于命令传入\u001b[0m\n{\n  \"instance\": {\n    \"id\": \"ff0294c41d2849709bbe7d65f9d7c514in01\",\n    \"name\": \"tctest-codearts1-s7261123054128\",\n    \"status\": \"BUILD\",\n    \"datastore\": {\n      \"type\": \"MyS（KooCLI 参数校验/权限）；已清理自建 VPC/子网/SG=[{\"subnet\":0},{\"vpc\":0}]；影响：Web+RDS 跨服务端到端未完成；解除条件：RDS 创建权限/参数可用并预留 25 分钟建删窗口",
+  "executedAt": "20261123054140",
+  "result": {
+    "create": "\u001b[1;93mcli-jsonInput中各位置(如path、query、body、formData、header、cookie)传入的API参数优先于命令传入\u001b[0m\n{\n  \"instance\": {\n    \"id\": \"ff0294c41d2849709bbe7d65f9d7c514in01\",\n    \"name\": \"tctest-codearts1-s7261123054128\",\n    \"status\": \"BUILD\",\n    \"datastore\": {\n      \"type\": \"MySQL\",\n      \"version\": \"8.0.45\"\n    },\n    \"port\": \"3306\",\n    \"volume\": {\n      \"type\": \"CLOUDSSD\",\n      \"size\": 40\n    },\n    \"region\": \"cn-north-4\",\n    \"backup_strategy\": {\n      \"start_time\": \"02:00-03:00\",\n      \"keep_days\": 7\n    },\n    \"flavor_ref\": \"rds.mysql.x1.large.2\",\n    \"availability_zone\": \"cn-north-4a\",\n    \"vpc_id\": \"d37",
+    "cleanup": [
+      {
+        "subnet": 0
+      },
+      {
+        "vpc": 0
+      }
+    ]
+  }
+}

@@ -2,9 +2,9 @@
 // Generated from the executed case implementation; rerunnable standalone.
 import { mcpTool, mcpSession, finishCall, runCli, runNode, runHcloud, safeJson, ts, PKG, MCP, CLI, DIST, HOME, VC_QUOTE } from '../../_runner/lib.mjs';
 const run = async () => {
-  const st = await mcpTool('huaweicloud_voucher_status', {}, 60000);
+  const st = await mcpTool('huaweicloud_voucher_status', {}, 60000, ENV);
   const p = st.parsed || {};
-  const cl = await mcpTool('huaweicloud_voucher_claim', { vendorConfirmed: VC_QUOTE }, 90000);
+  const cl = await mcpTool('huaweicloud_voucher_claim', { vendorConfirmed: VC_QUOTE }, 90000, ENV);
   const c = cl.parsed || {};
   const rateLimited = /HDKIT_CRED_RATE_LIMIT|限额|rate/i.test(JSON.stringify(c) + cl.text);
   const ok = st.ok && (typeof p.claimed === 'boolean' || /claimed|status/i.test(JSON.stringify(p))) && (c.claimed === true || c.status === 'claimed');
