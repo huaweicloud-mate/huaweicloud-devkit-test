@@ -1,0 +1,21 @@
+{
+  "caseId": "D3-C2",
+  "status": "BLOCKED",
+  "why": "OBS 静态站 E2E 无法执行：管理 AK 被 OBS 拒为 InvalidAccessKeyId（该 AK 未被 OBS 识别）；只读子账号 test001 返回 AccessDenied（无 OBS 写权限）；本机无 obsutil、KooCLI 无 OBS 服务。未创建任何桶，云端零残留。解除条件：下发对 OBS 有效的可写 AK/SK 或安装 obsutil",
+  "executedAt": "20261124051922",
+  "result": {
+    "bucket": "tctest-obs-1124051922",
+    "adminCreate": {
+      "status": 403,
+      "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Error><Code>InvalidAccessKeyId</Code><Message>The AWS Access Key Id you provided does not exist in our records.</Message><RequestId>000001A20A471DC247CE8EC6ACA92F94</RequestId><HostId>Z9v+cC1sRnaWw6x0vi8pxxYA0YVnKxbYHUPAFpnxkX8sLV44u5b02Z+ailn2"
+    },
+    "roList": {
+      "status": 403,
+      "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Error><Code>AccessDenied</Code><Message>Access Denied</Message><RequestId>000001A20A471EEA47CF1F0F97606B9F</RequestId><HostId>AFEV4hkda1JOrzqUarKjxSt/1uDCaHsKOlDikulumk6ZsN6dXUmE8bDd3CVvAXsK</HostId></Error>"
+    },
+    "invalidAk": true,
+    "roDenied": true,
+    "hasObsutil": false,
+    "kooCliObs": "no OBS service"
+  }
+}
