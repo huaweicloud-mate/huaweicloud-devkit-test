@@ -1,0 +1,12 @@
+import { signedRequest } from './obs_lib.mjs';
+const b = 'tctest-codearts1-' + Date.now().toString().slice(-10);
+const xml = '<CreateBucketConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><LocationConstraint>cn-north-4</LocationConstraint></CreateBucketConfiguration>';
+let r = await signedRequest('PUT', '/' + b, { body: xml, contentType: 'application/xml', headers: { 'x-obs-acl': 'public-read' } });
+console.log('create-public', r.status, (await r.text()).slice(0,150));
+r = await signedRequest('PUT', '/ok.txt', { bucket: b, body: '<html>hi</html>', contentType: 'text/html' });
+console.log('put', r.status);
+r = await fetch('https://' + b + '.obs.cn-north-4.myhuaweicloud.com/ok.txt');
+console.log('public', r.status, (await r.text()).slice(0, 100));
+r = await signedRequest('DELETE', '/ok.txt', { bucket: b });
+r = await signedRequest('DELETE', '/', { bucket: b });
+console.log('cleaned', r.status);

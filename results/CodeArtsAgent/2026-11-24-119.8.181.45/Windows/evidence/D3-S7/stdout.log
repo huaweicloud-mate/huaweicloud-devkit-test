@@ -1,0 +1,17 @@
+{
+  "caseId": "D3-S7",
+  "status": "BLOCKED",
+  "why": "实测 20261124054438 RDS CreateInstance 失败：\u001b[1;93mcli-jsonInput中各位置(如path、query、body、formData、header、cookie)传入的API参数优先于命令传入\u001b[0m\n{\n  \"error_msg\": \"Invalid security group ID.\",\n  \"error_code\": \"DBS.200050\"\n}\n\u001b[1;93m获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度\u001b[0m\n\u001b[1;93m请求诊断请参考以下内容:\u001b[0m\n\u001b[1;93m+---+--------+------（KooCLI 参数校验/权限）；已清理自建 VPC/子网/SG=[{\"subnet\":0},{\"vpc\":0}]；影响：Web+RDS 跨服务端到端未完成；解除条件：RDS 创建权限/参数可用并预留 25 分钟建删窗口",
+  "executedAt": "20261124054438",
+  "result": {
+    "create": "\u001b[1;93mcli-jsonInput中各位置(如path、query、body、formData、header、cookie)传入的API参数优先于命令传入\u001b[0m\n{\n  \"error_msg\": \"Invalid security group ID.\",\n  \"error_code\": \"DBS.200050\"\n}\n\u001b[1;93m获取终端宽度失败,将使用默认宽度.若打印信息出现错乱,请调整终端宽度\u001b[0m\n\u001b[1;93m请求诊断请参考以下内容:\u001b[0m\n\u001b[1;93m+---+--------+----------+----------------------------------------+----------------------------------------+--------+\n|No.|产品名称|  错误码  |                错误信息                |                  描述                  |处理措施|\n+---+--------+----------+----------------------------------------+----------------------------------------+--------+\n| 1 |  RDS   |DBS.200050|T",
+    "cleanup": [
+      {
+        "subnet": 0
+      },
+      {
+        "vpc": 0
+      }
+    ]
+  }
+}
