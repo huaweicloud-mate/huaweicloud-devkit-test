@@ -198,6 +198,9 @@ reg('D3-S3', async () => {
     if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(String(e))) {
       return blocked('沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)——connect 即返回「沙箱功能正在升级优化，暂时无法使用」，无法完成沙箱预览出 URL。解除条件：沙箱服务维护结束恢复可用后复测（补环境·沙箱服务维护）', `${detail.join(' | ')} || ${String(e).slice(0, 200)}`);
     }
+    if (/HDKIT_UPSTREAM_ERROR|上游调用失败|upstream error/i.test(String(e))) {
+      return blocked(`沙箱编排上游服务异常(HDKIT_UPSTREAM_ERROR)——connect 调用沙箱编排 POST /open-api-public/v2/devenvs 返回 upstream error（parameter invalid），无法完成沙箱预览出 URL。解除条件：沙箱编排上游服务恢复可用后复测（补环境·沙箱编排上游），${detail.join(' | ')} || ${String(e).slice(0, 200)}`);
+    }
     return fail(`沙箱预览出 URL 异常: ${String(e).slice(0, 200)}`, detail.join(' | '));
   }
 });

@@ -215,6 +215,9 @@ reg('D3-C6', async () => {
   if (/HDKIT_SANDBOX_MAINTENANCE|沙箱功能正在升级|维护|maintenance/i.test(results.exception || '')) {
     return blocked('沙箱服务维护中(HDKIT_SANDBOX_MAINTENANCE)——connect 即返回「沙箱功能正在升级优化，暂时无法使用」，7 个隐式工具无法执行。解除条件：沙箱服务维护结束恢复可用后复测（补环境·沙箱服务维护）', detail);
   }
+  if (/HDKIT_UPSTREAM_ERROR|上游调用失败|upstream error/i.test(results.exception || '')) {
+    return blocked(`沙箱编排上游服务异常(HDKIT_UPSTREAM_ERROR)——connect 调用沙箱编排 POST /open-api-public/v2/devenvs 返回 upstream error（parameter invalid），7 个隐式工具中依赖 workspace 的 credentials/upload_file/exec_one_shot/deploy_check/close_session 无法执行。已实测 check_user=${JSON.stringify(results.check_user)} / sign_agreement=${JSON.stringify(results.sign_agreement)} 通过。解除条件：沙箱编排上游服务恢复可用后复测（补环境·沙箱编排上游），${detail}`);
+  }
   const ok7 = keys.length >= 7 && !hasErr;
   return chk(ok7,
     `沙箱 7 工具冒烟: ${keys.length} 工具返回规范结果, 无静默失败=${!hasErr}`,
@@ -252,6 +255,9 @@ reg('D3-C3', async () => {
     }
     if (/all ports .* are in use|端口.*被占|port.*in use/i.test(msg)) {
       return blocked('沙箱 8080-8089 端口被占满（历史多客户端 nginx 残留）：sandbox_deploy_nginx 报 "all ports 8080-8089 are in use"。connect 与 upload_project 已实测成功，仅 nginx 部署取不到空闲端口。解除条件：清理沙箱 8080-8089 端口残留 nginx 进程后复测（补环境·沙箱端口）', `${detail.join(' | ')} || ${msg.slice(0, 300)}`);
+    }
+    if (/HDKIT_UPSTREAM_ERROR|上游调用失败|upstream error/i.test(msg)) {
+      return blocked(`沙箱编排上游服务异常(HDKIT_UPSTREAM_ERROR)——connect 调用沙箱编排 POST /open-api-public/v2/devenvs 返回 upstream error（parameter invalid），无法完成部署 E2E。解除条件：沙箱编排上游服务恢复可用后复测（补环境·沙箱编排上游），${detail.join(' | ')} || ${msg.slice(0, 300)}`);
     }
     return fail(`沙箱部署 E2E 异常`, `${detail.join(' | ')} || ${msg.slice(0, 300)}`);
   }
