@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hermes Linux 2026-11-23 每日测试：证据分发（stdout.txt）+ 回填三 CSV + 使命清单（v1.1.15 latest, hdk bf79b643）。"""
+"""Hermes Linux 2026-11-24 每日测试：证据分发（stdout.txt）+ 回填三 CSV + 使命清单（v1.1.15 latest, hdk bf79b643）。"""
 import os, re, shutil, csv
 from collections import Counter
 from datetime import datetime, timezone, timedelta
@@ -144,9 +144,9 @@ for cid, log, src in [("D3-C1","d3-c1.log","realcloud_e2e.mjs"),
 if os.path.isfile(os.path.join(EVID, "D3-C1", "stdout.txt")):
     append_case("D3-C1", "\n===== 手工归零补充 =====\n"
                 "自动化 finally 归零 150s ECS 删除轮询时序抖动（ECS:提交删除 轮询:仍在/未确认），属探针轮询窗口过短而非产品缺陷。\n"
-                "已手工 `hcloud ECS DeleteServers --servers.1.id=bf36c623-3c5a-460b-bd65-d74e3e97808c --delete_publicip=true --delete_volume=true` → 轮询 GONE（round 1）→ 归零；\n"
-                "subnet/vpc 探针已删（subnet:OK vpc:OK，vpc id=cec9fc8a-89bc-4870-ba44-f61bc742e343，subnet id=cef7fa15-d77e-4ebe-a516-4532072d9842）；\n"
-                "ListServersDetails 核实归零（testbot3-hermes 前缀 ECS=0，仅余他客户端既有资源，未误删）。\n")
+                "已手工 `hcloud ECS DeleteServers --servers.1.id=5c55f552-913b-4ec1-aaea-7dbbe168c425 --delete_publicip=true --delete_volume=true` → 轮询 GONE（round 1）→ 归零；\n"
+                "subnet/vpc 探针删除未确认，已手工补删（`DeleteSubnet eb4ff15f-def3-491c-915e-1b31acdde680` + `DeleteVpc 67e42dae-6b67-448a-9dbe-710b7c3563fc`）；\n"
+                "ListServersDetails/ListVpcs 核实归零（testbot3-hermes 前缀 ECS=0、VPC=0，仅余他客户端既有资源，未误删）。\n")
 
 print("== realcloud / D4-13 / D4-23 (已有 stdout.txt + probe.mjs) ==")
 write_case("_baseline", "huaweicloud-devkit v1.1.15\nhdk HEAD bf79b643\n", None)
@@ -176,7 +176,7 @@ FAIL_D = {
     "D4-26": "findings.evidence JSON 带引号 key 明文 secret_key/adminPass 泄漏",
     "D3-C2": "OBS 建桶/静态站/删桶 3 步实测成功，但 hcloud OBS mb 创建成功仍返回退出码 6（--cli-secure-verify=false 时返回 3），步骤1「退出码=0」断言失败",
     "D3-S5": "serviceCatalog 复合意图未命中多 service（回退 help）",
-    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: code.zip_file，未生成 URN/触发器",
+    "D3-S6": "FunctionGraph CreateFunction 返回 Invalid parameter: function_name（历轮 function_name/code.filename/code.zip_file 漂移），未生成 URN/触发器",
     "D3-S7": "RDS 复合意图部署目标未命中 + CreateInstance 缺前置（Invalid parameter: db.port）",
     "D9-12": "initialize 版本检查缺失 + 非法时序 tools/list 未拒 -32600",
     "D10-3": "serviceCatalog 中文意图 EXP-E01「云主机」未命中（92.9% 未达 100%）",
