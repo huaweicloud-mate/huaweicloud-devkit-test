@@ -104,3 +104,97 @@ exit=0
 exit=0
 3
 ===== [30] new-cloud (D3-S2/C13/C14/S4/S3) ===== 
+exit=0
+5
+===== [31] new-fg-rds (D3-S6/S7) ===== 
+exit=0
+2
+===== [32] service-eval (D3-C4 22服务 + D10-3 + D2-1) ===== 
+exit=0
+  "status": "ok",
+  "message": "Runtime credentials set for this MCP session."
+}
+=== DONE ===
+===== [33] eval-harness run-eval (D10-3 15条) ===== 
+exit=0
+
+=== 路由准确率基线 ===
+HIT=13 MISS=1 N/A=1 | 准确率=92.9% (分母=HIT+MISS=14)
+结果落盘: /home/zhangshuang/devkit-test/Hermes/huaweicloud-devkit-test/eval/results/eval-run-20261123211213.csv
+===== [34] EXP-E08 诊断路由 ===== 
+exit=0
+
+=== EXP-E08 诊断能力结论: ALL PASS ===
+===== [35] D9-12 initialize 握手协议安全基线 (P0) ===== 
+exit=0
+5
+===== [36] D9-13 tools/call 凭证不泄露 (P0) ===== 
+exit=0
+10
+===== [37] fixtures (D2-10/D2-13/D4-12/D9-6 源码级直调) ===== 
+exit=0
+10
+===== [38] D4-13 只读子账号 ===== 
+exit=0
+    }
+  ]
+}
+===== [39] D4-23 全局规则注入 (P0) ===== 
+exit=0
+    }
+  ]
+}
+===== [40] D4-24 确认令牌生命周期 ===== 
+exit=0
+    }
+  ]
+}
+===== [41] realcloud-probe (D2-1/D3-C4/D4-14/18/19/20) ===== 
+exit=0
+      "detail": "{\n  \"decision\": \"deny\",\n  \"hasToken\": true,\n  \"notCreated\": true\n}"
+    }
+  ]
+}
+===== [42] D3-C1 ECS 真云 E2E ===== 
+exit=0
+      "name": "finally归零(校验真实删除)",
+      "pass": false,
+      "detail": "ECS:提交删除 ECS轮询:仍在/未确认 subnet:OK vpc:OK"
+    }
+  ]
+}
+===== [43] D3-C2 OBS 真云 E2E ===== 
+exit=0
+      "name": "删桶归零",
+      "pass": true,
+      "detail": "Start at 2026-11-23 21:15:07.953396446 +0000 UTC\n\nDelete bucket [testbot3-hermes-obs-5468504800] successfully!"
+    }
+  ]
+}
+===== [44] D3-C6 沙箱工具真云 ===== 
+exit=0
+      "name": "close_session",
+      "pass": true,
+      "detail": "\"ok\""
+    }
+  ]
+}
+===== [45] D3-C3 沙箱部署真云 ===== 
+exit=0
+      "name": "close_session",
+      "pass": true,
+      "detail": "\"ok\""
+    }
+  ]
+}
+===== [46] D3-C7 跨区域引导真云 ===== 
+exit=0
+    },
+    {
+      "name": "D3-C7 归零验证(ListEips无本次id)",
+      "pass": true,
+      "detail": "无残留"
+    }
+  ]
+}
+===== ALL DONE ===== 2026-11-24 05:15:59

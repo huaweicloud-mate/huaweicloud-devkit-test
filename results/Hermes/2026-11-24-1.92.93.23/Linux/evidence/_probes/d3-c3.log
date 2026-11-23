@@ -1,0 +1,64 @@
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+[2026-11-23T21:15:25.341Z] uploadProject: /tmp/d3c3-proj -> /workspace/d3c3-proj.tar.gz (archive=221 bytes, md5=4809e71fb0321c36871311e56b721076)
+[2026-11-23T21:15:25.387Z] uploadViaHttpTunnel: start (archive=/tmp/sandbox-upload-1795468525328/d3c3-proj.tar.gz, size=221, remotePath=/workspace/d3c3-proj.tar.gz)
+[2026-11-23T21:15:25.387Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-23T21:15:25.388Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-23T21:15:25.433Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-23T21:15:25.482Z] deployFileServer: starting server on port 8888
+[2026-11-23T21:15:25.527Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 2390\r\n\u001b]133;C\u0007\r\n"
+[2026-11-23T21:15:25.527Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+[2026-11-23T21:15:26.430Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-23T21:15:26.432Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-23T21:15:26.434Z] uploadViaHttpTunnel: tunnel ready, localPort=37569
+[2026-11-23T21:15:26.434Z] uploadViaHttpTunnel: waiting for server health on localhost:37569
+[2026-11-23T21:15:26.434Z] waitForServerReady: attempt 1, checking http://localhost:37569/health
+[2026-11-23T21:15:26.481Z] waitForServerReady: server ready on port 37569 after 0 retries
+[2026-11-23T21:15:26.481Z] uploadViaHttpTunnel: sending POST with 221 bytes
+[2026-11-23T21:15:26.528Z] uploadViaHttpTunnel: upload complete (bytes=221, md5=4809e71fb0321c36871311e56b721076)
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+
+### D3-C3 ###
+{
+  "case": "D3-C3",
+  "status": "PASS",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "name": "connect",
+      "pass": true,
+      "detail": "ws=e4d6352ed5"
+    },
+    {
+      "name": "upload_project",
+      "pass": true,
+      "detail": "{\"ok\":true,\"localDir\":\"/tmp/d3c3-proj\",\"remotePath\":\"/workspace/d3c3-proj\",\"bytes\":221,\"md5\":\"4809e71fb0321c36871311e56b"
+    },
+    {
+      "name": "deploy_nginx",
+      "pass": true,
+      "detail": "static:8082"
+    },
+    {
+      "name": "deploy_check",
+      "pass": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "close_session",
+      "pass": true,
+      "detail": "\"ok\""
+    }
+  ]
+}

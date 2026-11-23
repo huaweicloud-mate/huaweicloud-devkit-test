@@ -51,3 +51,152 @@ voucher_status(领取后) -> {"claimed":true,"message":"已领取过（代金券
 
 =====CASE D3-S3=====
 check_user -> realnameVerified=true agreementSigned=true err=
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+connect -> status=connected wsId=e4d6352ed53c492197a8
+[2026-11-23T21:11:40.891Z] uploadProject: /home/zhangshuang/.hdk-s3-mwtrfigw -> /workspace/.hdk-s3-mwtrfigw.tar.gz (archive=214 bytes, md5=3ea55655e9cd138bee284dd07c7dfbb4)
+[2026-11-23T21:11:40.940Z] uploadViaHttpTunnel: start (archive=/tmp/sandbox-upload-1795468300878/.hdk-s3-mwtrfigw.tar.gz, size=214, remotePath=/workspace/.hdk-s3-mwtrfigw.tar.gz)
+[2026-11-23T21:11:40.940Z] uploadViaHttpTunnel: deploying file server on sandbox port 8888
+[2026-11-23T21:11:40.941Z] deployFileServer: killing old server (pidFile=/tmp/sandbox-file-server.pid)
+[2026-11-23T21:11:40.989Z] deployFileServer: writing script (2456 b64 chars)
+[2026-11-23T21:11:41.043Z] deployFileServer: starting server on port 8888
+[2026-11-23T21:11:41.090Z] deployFileServer: start result exitCode=0 stdout="\u001b]133;C\u0007[1] 259\r\n\u001b]133;C\u0007\r\n"
+[2026-11-23T21:11:41.090Z] uploadViaHttpTunnel: creating dedicated tunnel session
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+[2026-11-23T21:11:42.049Z] uploadViaHttpTunnel: creating tunnel channel (localPort=0, remotePort=8888)
+[2026-11-23T21:11:42.050Z] uploadViaHttpTunnel: waiting for tunnel ready (timeout=30000ms)
+[2026-11-23T21:11:42.052Z] uploadViaHttpTunnel: tunnel ready, localPort=35889
+[2026-11-23T21:11:42.052Z] uploadViaHttpTunnel: waiting for server health on localhost:35889
+[2026-11-23T21:11:42.052Z] waitForServerReady: attempt 1, checking http://localhost:35889/health
+[2026-11-23T21:11:42.100Z] waitForServerReady: server ready on port 35889 after 0 retries
+[2026-11-23T21:11:42.100Z] uploadViaHttpTunnel: sending POST with 214 bytes
+[2026-11-23T21:11:42.148Z] uploadViaHttpTunnel: upload complete (bytes=214, md5=3ea55655e9cd138bee284dd07c7dfbb4)
+upload_project -> ok=true md5Verified=true
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+deploy_nginx -> ok=true port=8080 url=
+Waiting for connection 1035961... (0s)Connection 1035961 established (0s).
+deploy_check -> {"ok":true,"complete":false,"checkType":"standard","checks":{"nginx_serving":{"status":"FAIL","detail":"(port 8080, no HTTP response)"},"output_dir":{"status":"PASS","detail":"(/workspace/.hdk-s3-mwtrfigw/.)"},"content_verified":{"status":"SKIP","detail":"(no fingerprint file)"},"devbridge_tunnel":{"status":"FAIL","det
+close_session -> ok
+[OK] 沙箱 connect 成功
+[OK] s3-connect/upload/deploy 链路
+[OK] 部署返回可访问 URL 或检查通过
+[OK] 会话正常关闭
+=====END D3-S3=====
+
+=====SUMMARY=====
+{
+  "total": 21,
+  "passed": 20,
+  "results": [
+    {
+      "name": "测试 VPC 创建成功",
+      "ok": true,
+      "detail": "vpcId=7d085746-ef0"
+    },
+    {
+      "name": "plan DeleteVpc 要求确认(confirm-not-deny)",
+      "ok": true,
+      "detail": "{\"decision\":\"deny\",\"risk\":\"write\",\"reason\":\"Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}"
+    },
+    {
+      "name": "hook 预检 DeleteVpc 返回决策",
+      "ok": true,
+      "detail": "decision=warn"
+    },
+    {
+      "name": "未确认前零执行",
+      "ok": true,
+      "detail": "stillThere=true"
+    },
+    {
+      "name": "确认后删除成功且归零",
+      "ok": true,
+      "detail": "ok=true zeroed=true"
+    },
+    {
+      "name": "OBS 建桶成功",
+      "ok": true,
+      "detail": "bucket=tctest-hermes-obs-mwtrfigw"
+    },
+    {
+      "name": "set 缺失 indexDocument 报错(拒绝)",
+      "ok": true,
+      "detail": "\"Error: indexDocument is required for action=set\""
+    },
+    {
+      "name": "set 成功",
+      "ok": true,
+      "detail": "{\"ok\":true,\"status\":200}"
+    },
+    {
+      "name": "get 返回配置与 set 一致",
+      "ok": true,
+      "detail": "{\"ok\":true,\"status\":200}"
+    },
+    {
+      "name": "删除归零",
+      "ok": true,
+      "detail": "bucket removed=tctest-hermes-obs-mwtrfigw"
+    },
+    {
+      "name": "hdkitConnect 透传可选参数到 body",
+      "ok": false,
+      "detail": "if (options.source) body.source = options.source;; if (options.env) body.env = options.env;; if (options.git) body.git = options.git;; if (options.flavor_id) body.flavor_id = options.flavor_id;"
+    },
+    {
+      "name": "hdkitCredentials 缺 sessionId+devStageId 报错",
+      "ok": true,
+      "detail": "session_id or dev_stage_id is required"
+    },
+    {
+      "name": "hwlink getCredentials 返回 {ak,sk,securitytoken}",
+      "ok": true,
+      "detail": "keys present"
+    },
+    {
+      "name": "createConnection 走 x-security-token 签名头",
+      "ok": true,
+      "detail": "securitytoken header present"
+    },
+    {
+      "name": "voucher_status 返回状态字段",
+      "ok": true,
+      "detail": "{\"claimed\":true,\"message\":\"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）\",\"code\":null}"
+    },
+    {
+      "name": "claim 调用返回",
+      "ok": true,
+      "detail": "{\"claimed\":true,\"voucherId\":null,\"amount\":0,\"message\":\"已领取过（代金券按实名认证信息限领一次，同一实名认证下的账号共享额度，可能已发放至您实名下的其他账号）\",\"code\":null}"
+    },
+    {
+      "name": "status→claim→status 闭环连贯",
+      "ok": true,
+      "detail": "{\"before\":true,\"claim\":true,\"after\":true}"
+    },
+    {
+      "name": "沙箱 connect 成功",
+      "ok": true,
+      "detail": "wsId=e4d6352ed53c492197a8"
+    },
+    {
+      "name": "s3-connect/upload/deploy 链路",
+      "ok": true,
+      "detail": "{\"upMd5\":true,\"dnOk\":true}"
+    },
+    {
+      "name": "部署返回可访问 URL 或检查通过",
+      "ok": true,
+      "detail": "{\"nginx\":{\"status\":\"FAIL\",\"detail\":\"(port 8080, no HTTP response)\"}}"
+    },
+    {
+      "name": "会话正常关闭",
+      "ok": true,
+      "detail": "\"ok\""
+    }
+  ]
+}
