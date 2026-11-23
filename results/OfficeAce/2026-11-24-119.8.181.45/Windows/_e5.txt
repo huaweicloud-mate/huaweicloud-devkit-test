@@ -1,0 +1,8 @@
+=== EXP-E15 | P=P1 | 
+预期: 源码级断言: serviceCatalog 中文意图命中 voucher_claim→执行 对应服务(harness 实测基线 21.4% MISS，未命中即判 FAIL); Agent断言: 激活voucher skill, 成功或明确提示已领取
+证据: 强断言：逐行执行要点与预期结果；保留日志、manifest、前后快照和清理记录
+OS: Windows/Linux
+agent: OpenCode/Codex/CodeArtsAgent/CodeArtsSpace/WorkBuddy/DSH/OfficeAce/Hermes/OpenClaw/AtomCode
+展开类型: D10评测集 | 枚举对象: 帮我领一下华为云的代金券 | 源: D10-3
+要点: ①源码级: node eval/harness/run-eval.mjs 跑 serviceCatalog(intent=中文意图) 路由核对(期望: voucher_claim→执行)，无需 LLM ②Agent行为: 真实 Agent 会话逐任务验证期望路由 voucher_claim→执行
+

@@ -1,0 +1,257 @@
+=== D1-3 | P=P1 | doctor健康自检
+维度: D1安装
+前置: 已安装环境(含部分组件异常环境)
+数据: doctor 命令
+步骤: ①干净环境跑doctor ②人为制造组件缺失(如删MCP Python SDK)跑doctor
+预期: 检测项准确，失败场景如实报告且给出修复指引
+工具: doctor
+证据: 强断言：<证据: doctor 检测项准确+失败场景报告>；保留脱敏日志、manifest、前后快照
+终端覆盖: OS_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-4 | P=P2 | status/update幂等
+维度: D1安装
+前置: 已安装+存在用户自定义config
+数据: status、update 命令
+步骤: ①status核对输出 ②update ③核对用户config未被触碰 ④重复update幂等
+预期: 增量刷新，不碰用户config
+工具: status/update
+证据: 强断言：<证据: 增量刷新不碰 config+重复 update 幂等>；保留脱敏日志、manifest、前后快照
+终端覆盖: OS_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-26 | P=P1 | 升级提醒工具注册与协议暴露
+维度: D1安装
+前置: dev/1.1.2 代码
+数据: tools/list 输出工具清单
+步骤: ①spawn mcp-server.mjs ②initialize ③tools/list ④检查 huaweicloud_check_update / huaweicloud_upgrade
+预期: 两工具均注册且 schema 含 description/inputSchema
+工具: check_update/upgrade
+证据: 强断言：<证据: tools/list 两工具注册+schema>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-27 | P=P1 | 检测语义-已是最新
+维度: D1安装
+前置: current == latest
+数据: current=1.1.2, distTags={latest:1.1.2}
+步骤: ①直调 judgeUpdate(current, distTags, null) ②检查 result
+预期: result=up_to_date, updateAvailable=false
+工具: check_update
+证据: 强断言：<证据: result=up_to_date/updateAvailable=false>；保留脱敏日志、manifest、前后快照
+终端覆盖: OS_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-28 | P=P1 | 检测语义-有新版本
+维度: D1安装
+前置: current < latest
+数据: current=1.1.1, distTags={latest:1.1.2}
+步骤: ①直调 judgeUpdate ②检查 result/targetVersion
+预期: result=update_available, updateAvailable=true, targetVersion=1.1.2
+工具: check_update
+证据: 强断言：<证据: update_available+targetVersion=1.1.2>；保留脱敏日志、manifest、前后快照
+终端覆盖: OS_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-30 | P=P2 | semver 比对正确性
+维度: D1安装
+前置: 无
+数据: 相等/反向/正式版>pre/乱串
+步骤: ①直调 semverCompare 多组输入 ②核对大小关系
+预期: 1.1.2>1.1.1、1.1.0 > 1.1.0-next.9、相等=0、无效串按字典序
+工具: check_update
+证据: 强断言：<证据: semverCompare 多组大小关系>；保留脱敏日志、manifest、前后快照
+终端覆盖: OS_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-31 | P=P1 | dismiss 冷却期
+维度: D1安装
+前置: 已有旧版本提醒
+数据: dismiss=true + dismissVersion 拒绝
+步骤: ①check_update(dismiss:true, dismissVersion) ②写 skip 文件 ③冷却期内再查
+预期: 冷却期内 result=dismissed, dismissed=true, 3 天后 expireAt 过期重新提醒
+工具: check_update
+证据: 强断言：<证据: 冷却期 result=dismissed+3 天 expireAt>；保留脱敏日志、manifest、前后快照
+终端覆盖: OS_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-33 | P=P2 | skip 文件持久化与多路径
+维度: D1安装
+前置: 可注入路径
+数据: 插件目录无 package.json / HUAWEICLOUD_HOME 设置
+步骤: ①writeSkipState 正常写 ②resolveSkipFilePath 插件目录/回退路径 ③检查结构与原子性
+预期: 文件{ dismissedVersion/dismissedAt/expireAt }, 插件目录无副本时回退共享路径
+工具: check_update
+证据: 强断言：<证据: skip 文件字段+回退路径+原子写>；保留脱敏日志、manifest、前后快照
+终端覆盖: OS_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-39 | P=P0 | Windows 升级检测链可用性
+维度: D1安装
+前置: Windows 10 + 1.1.2
+数据: npm.cmd spawnSync 无 shell:true
+步骤: ①本机直调 queryDistTagsSync/queryDistTags ②观察 EINVAL/结果 ③对照加 shell:true 版本
+预期: Windows 下检测链真实可用，不得 EINVAL 静默失败
+工具: check_update
+证据: 强断言：<证据: Windows 检测链无 EINVAL 静默失败>；保留脱敏日志、manifest、前后快照
+终端覆盖: OS_MATRIX
+OS: Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证）
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-40 | P=P0 | 镜像 lag 下检测正确性(反向提醒防护)
+维度: D1安装
+前置: 默认 registry=镜像且滞后
+数据: 镜像 latest 滞后于官方
+步骤: ①设置 npm_config_registry=镜像 ②queryDistTags ③判定结果与官方源对照
+预期: 不得提示版本倒退(远端<=本地不提示); 建议固定官方源/校验
+工具: check_update
+证据: 强断言：<证据: 镜像 lag 不提示版本倒退>；保留脱敏日志、manifest、前后快照
+终端覆盖: OS_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-41 | P=P1 | check_update 真实 MCP 返回契约
+维度: D1安装
+前置: 隔离 HOME + 可控 registry 响应
+数据: up_to_date/update_available/dismissed/check_failed 四种响应
+步骤: ①启动真实 mcp-server ②initialize→tools/call(check_update) ③分别注入四种结果 ④解析 content JSON
+预期: tools/call isError=false；四态、currentVersion/latestStable/updateAvailable/dismissed/dismissExpiresAt/result 字段语义一致；失败不抛协议错误
+工具: check_update
+证据: 强断言：<证据: MCP 四态返回契约>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-42 | P=P1 | dismiss 真实闭环与跨调用持久化
+维度: D1安装
+前置: 隔离 HOME + 有可用更新
+数据: check_update(dismiss=true,dismissVersion=target)
+步骤: ①首次 check_update 确认 update_available ②调用 dismiss ③检查实际 skip 文件 ④再次 check_update ⑤重启新 MCP 进程复查
+预期: 拒绝调用写入正确 agent/plugin 路径；文件字段完整且 expireAt= dismissedAt+3天；同版本冷却内返回 dismissed；进程重启后仍生效
+工具: check_update
+证据: 强断言：<证据: skip 文件字段+重启复查>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-45 | P=P1 | 兜底提示真实序列与预热竞态
+维度: D1安装
+前置: 隔离 MCP 进程 + 注入 update_available
+数据: initialize→check_update→首个非检查工具→第二个非检查工具；预热已完成/未完成
+步骤: ①启动两种时序 ②检查 check_update 与 upgrade 不附加 ③检查首个非检查工具是否附加 ④再次调用确认不重复
+预期: 仅会话首个非检查工具携带 _updateInfo；检查/升级工具不携带；预热未完成时不阻塞正常工具，结果就绪后仍按既定一次性规则处理
+工具: check_update
+证据: 强断言：<证据: 兜底一次性消费时序>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-65 | P=P2 | 调试模式环境变量
+维度: D1安装
+前置: 可设 env 的进程环境
+数据: HUAWEICLOUD_DEVKIT_DEBUG=1/true/off
+步骤: ①设 HUAWEICLOUD_DEVKIT_DEBUG=1 跑 queryDistTags ②核对 DEBUG 分支生效(打印调试日志) ③off 则无调试输出
+预期: DEBUG===1/true 时开启调试日志；未设/其他值不开启；不影响正常返回
+工具: check_update
+证据: 强断言：<证据: 调试日志开关>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-66 | P=P2 | 遥测开关与端点环境变量
+维度: D1安装
+前置: 可设 env 的进程环境
+数据: HUAWEICLOUD_DEVKIT_TELEMETRY=off + HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT
+步骤: ①设 TELEMETRY=off ②核对 isTelemetryEnabled()=false ③设自定义 ENDPOINT ④核对 endpoint 取值
+预期: TELEMETRY!=off 时开遥测、=off 关闭；ENDPOINT 未设回退 DEFAULT_ENDPOINT、设了取自定义
+工具: mcp-server
+证据: 强断言：<证据: 开关+端点取值>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-67 | P=P2 | Agent toolkit 模式与 DSH 跳过安装环境变量
+维度: D1安装
+前置: 可设 env 的进程环境
+数据: HUAWEICLOUD_AGENT_TOOLKIT_MODE=local + HUAWEICLOUD_DEVKIT_SKIP_DSH_PLUGIN_INSTALL=1
+步骤: ①设 AGENT_TOOLKIT_MODE=local 装 DSH ②核对 env 注入 ③设 SKIP_DSH=1 重装 ④核对跳过 DSH 插件安装
+预期: AGENT_TOOLKIT_MODE 注入 agent env(REQUIRED_ENV_KEYS 含 HCLOUD_BIN)；SKIP_DSH=1 时跳过 DSH 插件安装
+工具: install
+证据: 强断言：<证据: env 注入+跳过安装>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-68 | P=P2 | 图标离线与区域环境变量
+维度: D1安装
+前置: 可设 env 的进程环境
+数据: HUAWEICLOUD_ICONS_OFFLINE=1 + HUAWEICLOUD_REGION/HW_REGION
+步骤: ①设 ICONS_OFFLINE=1 ②核对 getServiceIcon 离线分支(读本地而非网络) ③设 HUAWEICLOUD_REGION ④核对凭据 region 取值
+预期: ICONS_OFFLINE=1 时图标走本地 manifest 不联网；HUAWEICLOUD_REGION 优先于 HW_REGION 作为默认 region
+工具: get_service_icon/auth_init
+证据: 强断言：<证据: 离线图标+region取值>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-69 | P=P2 | CLI help 子命令
+维度: D1安装
+前置: 已安装环境
+数据: hcloud-cli help 命令
+步骤: ①执行 help 子命令 ②核对输出帮助文本(命令列表/用法)
+预期: help 子命令输出帮助且有退出码 0，非 TODO/空输出
+工具: install
+证据: 强断言：<证据: help 输出>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D1-70 | P=P1 | 代理配置与 WebSocket 代理
+维度: D1安装
+前置: 可设 proxy env/配置的进程环境
+数据: HTTP_PROXY/HTTPS_PROXY/NO_PROXY + proxy.json
+步骤: ①writeProxyConfig ②readProxyConfig 核对 ③getProxySettings(targetUrl) ④no_proxy 绕过 ⑤createProxyWebSocket 走代理
+预期: proxy.json 读写/clear 正确；getProxySettings 拼 env+file 且 no_proxy 命中返回 null；有代理时 WebSocket 走 undici ProxyAgent、无代理回退 globalThis.WebSocket
+工具: install
+证据: 强断言：<证据: 配置读写+WS代理选择>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-10 | P=P1 | R7 current档跟随
+维度: D2认证
+前置: KooCLI 多 profile（current=deploy）
+数据: ~/.hcloud/config.json current=deploy
+步骤: ①构造 current=deploy ②readKooCliProfiles 解析 ③切换 current 再解析 ④夹具: node eval/harness/fixtures/d2-10-koocli-profile.mjs <hdk src> --evid <dir> ⑤核对 runHcloudConfigure --cli-profile= 实参
+预期: resolveManagedProfile 返回 current 档；runHcloudConfigure 带 --cli-profile=
+工具: auth_status
+证据: 强断言：<证据: current 档解析+--cli-profile>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-11 | P=P0 | R3 STS token拒绝落盘
+维度: D2认证
+前置: 真云 AK/SK + securityToken
+数据: auth_switch persist + securityToken
+步骤: ①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token
+预期: 返回 {status:error, scope:rejected}，token 永不落盘
+工具: auth_switch
+证据: 强断言：<证据: scope=rejected+token 不落盘>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-12 | P=P1 | R10 runtime非空禁止落盘
+维度: D2认证
+前置: runtime 凭据激活（auth_init）
+数据: runtimeActive 状态下 auth_sync
+步骤: ①auth_init 置 runtime ②auth_status 确认 runtimeActive ③auth_

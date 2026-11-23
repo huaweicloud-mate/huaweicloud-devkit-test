@@ -1,0 +1,48 @@
+=== D2-10 | P=P1 | R7 current档跟随
+维度: D2认证
+前置: KooCLI 多 profile（current=deploy）
+数据: ~/.hcloud/config.json current=deploy
+步骤: ①构造 current=deploy ②readKooCliProfiles 解析 ③切换 current 再解析 ④夹具: node eval/harness/fixtures/d2-10-koocli-profile.mjs <hdk src> --evid <dir> ⑤核对 runHcloudConfigure --cli-profile= 实参
+预期: resolveManagedProfile 返回 current 档；runHcloudConfigure 带 --cli-profile=
+工具: auth_status
+证据: 强断言：<证据: current 档解析+--cli-profile>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-11 | P=P0 | R3 STS token拒绝落盘
+维度: D2认证
+前置: 真云 AK/SK + securityToken
+数据: auth_switch persist + securityToken
+步骤: ①auth_switch persist+token ②观察返回 ③核对 S1 未写入 token
+预期: 返回 {status:error, scope:rejected}，token 永不落盘
+工具: auth_switch
+证据: 强断言：<证据: scope=rejected+token 不落盘>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-12 | P=P1 | R10 runtime非空禁止落盘
+维度: D2认证
+前置: runtime 凭据激活（auth_init）
+数据: runtimeActive 状态下 auth_sync
+步骤: ①auth_init 置 runtime ②auth_status 确认 runtimeActive ③auth_sync 观察
+预期: sync 返回 ok:false + auto-sync suppressed (R10)，不写 S1
+工具: huaweicloud_auth_init/auth_status/auth_sync
+证据: 强断言：<证据: R10 suppressed 不写 S1>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-13 | P=P1 | R9 configuredBySession优先env
+维度: D2认证
+前置: 隔离 HOME + S1 + HW_ACCESS_KEY env
+数据: setConfiguredBySession(true) + env 注入（HW_ACCESS_KEY/HW_SECRET_KEY/HUAWEICLOUD_SECRET_ACCESS_KEY 别名语义）
+步骤: ①写 S1+标记 ②注入 env ③resolveCredentials ④清除标记复查 ⑤夹具: node eval/harness/fixtures/d2-13-s1-env.mjs <hdk src> --evid <dir>
+预期: 标记时 S1 胜出；清除后 env 兜底恢复
+工具: auth_status
+证据: 强断言：<证据: S1 胜出/清除后 env 兜底>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+

@@ -1,0 +1,270 @@
+eadonly.py 注入只读子账号(HW_ACCESS_KEY/HW_SECRET_KEY env,不带token) ②只读凭证下跑D3只读用例 ③写用例观察权限识别
+预期: 只读100%可用，写被正确识别权限不足(权限不足=IAM拒绝)
+工具: run_readonly_command
+证据: 强断言：<证据: 最小权限通过率>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-14 | P=P2 | 操作可审计性
+维度: D4安全
+前置: 真云
+数据: 执行命令后查CTS/日志
+步骤: ①执行若干命令 ②查CTS/运行日志 ③核对可追溯+可区分agent/人工
+预期: 每次命令可追溯
+工具: run_readonly_command
+证据: 强断言：<证据: CTS 可追溯+区分 agent/人工>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-15 | P=P0 | hook绕过尝试
+维度: D4安全
+前置: hook环境
+数据: 大小写/编码/拼接变体
+步骤: ①Deleteserver变体大小写 ②URL编码/转义混淆 ③参数拼接拆分 ④核对拦截
+预期: 无绕过成功
+工具: hook_check_command
+证据: 强断言：<证据: 变体无绕过成功>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-16 | P=P0 | 命令包裹穿透
+维度: D4安全
+前置: hook环境
+数据: sh -c/bash -c/eval/$()包裹写命令
+步骤: ①构造shell包裹 ②执行 ③核对hook是否检查内层
+预期: 发现内层命令并拦截
+工具: hook_check_command
+证据: 强断言：<证据: 发现内层命令并拦截>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-17 | P=P1 | hook模糊fail-closed
+维度: D4安全
+前置: hook环境
+数据: 畸形/超长/嵌套JSON
+步骤: ①构造畸形输入 ②调用hook三工具 ③核对不崩溃不误放行
+预期: 异常输入默认拒绝
+工具: hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+证据: 强断言：<证据: 异常输入默认拒绝>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-21 | P=P0 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检）
+维度: D4安全
+前置: hook-capable 客户端
+数据: 宽泛 IAM 策略制品
+步骤: ①构造宽泛 IAM policy JSON ②hook_check_artifacts ③核对 deny
+预期: broad IAM 制品被拦截
+工具: hook_check_artifacts
+证据: 强断言：<证据: broad IAM 制品拦截>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-22 | P=P0 | hook_check_deploy_plan 具名回归（部署计划预检）
+维度: D4安全
+前置: hook-capable 客户端
+数据: 公网暴露/无清理元数据部署计划
+步骤: ①构造高危 deploy plan ②hook_check_deploy_plan ③核对 warn/deny
+预期: 公网暴露 FunctionGraph 等被拦截/告警
+工具: hook_check_deploy_plan
+证据: 强断言：<证据: 公网暴露 deploy 计划拦截/告警>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-23 | P=P0 | 全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）
+维度: D4安全
+前置: 11 个 Agent 安装目标
+数据: agent-rules.md 全文
+步骤: 逐目标安装后：①核对 rules 注入系统提示/规则 ②构造禁直连 csms/kms 场景 ③核对 MUST 约束生效
+预期: 全部目标注入且约束可执行，无孤儿文件
+工具: install
+证据: 强断言：<证据: agent-rules 注入生效>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-24 | P=P1 | 确认令牌过期与重复确认边界（审批流健壮性）
+维度: D4安全
+前置: 真云+标准客户端+可注入时钟（令牌 TTL=60s，注入 5s 加速）
+数据: 断言契约（响应 JSON 字段精确）：①过期提交→{status:'rejected', code:'CONFIRM_TOKEN_EXPIRED'} ②同 token 重复→第二次 {status:'ok', outcome:'already_processed'} ③资源计数=ListServers(tctest- 前缀).count
+步骤: ①写操作（创建最小规格 ECS）进入确认流，记录 confirmToken ②注入时钟推进 >60s 后提交确认→断言 {code:'CONFIRM_TOKEN_EXPIRED', status:'rejected'} 且资源计数=0 ③重新发起写操作（新 confirmToken）连续提交两次→断言第二次 {outcome:'already_processed'} ④查询资源断言计数=1 ⑤释放→归零
+预期: 过期令牌返回精确 {code:'CONFIRM_TOKEN_EXPIRED'}（无资源创建，计数=0）；重复确认第二次返回 {outcome:'already_processed'}（计数不+1，仍=1）；错误/结果 JSON 字段可机器断言；释放后 tctest- 计数=0
+工具: auth_confirm/plan_cli_command
+证据: 强断言：<证据: 响应JSON+计数+归零>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-25 | P=P2 | Python hook 事件遥测分类
+维度: D4安全
+前置: hook-capable 客户端 + 遥测开关
+数据: cli:read/write/invoke 三类命令
+步骤: ①执行只读 hcloud 命令 ②执行写命令 ③执行非 hcloud 命令 ④核对 hook-events.jsonl 三键分类
+预期: 只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capability
+工具: hook_check_command
+证据: 强断言：<证据: hook-events.jsonl>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-26 | P=P2 | findings 证据脱敏
+维度: D4安全
+前置: hook 环境 + 含凭证的触发命令
+数据: 含 AK/SK/token/password 的规则触发
+步骤: ①触发含凭证的命令规则 ②核对 findings.evidence 已脱敏 ③对照原命令
+预期: findings.evidence 中 AK/SK/token/password 均被 <redacted> 替换，不泄露明文
+工具: hook_check_command
+证据: 强断言：<证据: findings.evidence 脱敏前后>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-27 | P=P1 | 双路径输出脱敏
+维度: D4安全
+前置: 含凭证的输出文本
+数据: 包含 AK/SK/securityToken/password 的多行输出
+步骤: ①redactSecrets(text) ②redactOutput(text) ③核对两路径均脱敏 ④对照未脱敏点
+预期: redactSecrets(策略正则)与 redactOutput(CLI输出)双路径均替换明文凭证为占位符；不对非敏感字段误伤
+工具: run_readonly_command
+证据: 强断言：<证据: 脱敏前后对照>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-28 | P=P0 | Node 版安全 hook 链路
+维度: D4安全
+前置: hook-capable 客户端 + hooks.json 注册
+数据: 高危命令经 PreToolUse hook
+步骤: ①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs ③核对 commandText 提取 ④classifyTextCommand=deny 时输出 permissionDecision:deny
+预期: hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出
+工具: hook_check_command
+证据: 强断言：<证据: deny 决策+reason>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-29 | P=P2 | 分类断言与原始命令分类入口
+维度: D4安全
+前置: 含各类命令样本
+数据: 只读/写/危险命令集合
+步骤: ①classifyRawCommand(cmd) ②对照 classifyTextCommand ③assertAllowed(result) allow/deny 分支
+预期: classifyRawCommand=classifyTextCommand 包装；DENY 决策 assertAllowed 抛拒绝、allow 通过；分类结果含 decision/reason
+工具: hook_check_command
+证据: 强断言：<证据: 分类+断言分支>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D5-1 | P=P1 | 清单发现加载
+维度: D5客户端
+前置: 各客户端环境
+数据: 插件清单注册
+步骤: ①安装后重启 ②核对客户端发现并加载插件清单
+预期: 全部客户端可发现
+工具: install
+证据: 强断言：<证据: 清单发现加载>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes; OpenCode; 声明支持的客户端矩阵
+
+=== D5-3 | P=P1 | 工具全量枚举
+维度: D5客户端
+前置: 各客户端环境
+数据: tools/list枚举
+步骤: ①枚举40工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺
+预期: 40 工具全量可达(=tools.mjs 注册源数量),schema完整
+工具: mcp-server
+证据: 强断言：<证据: tools/list 40 工具枚举>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes; OpenCode; 声明支持的客户端矩阵
+
+=== D6-1 | P=P2 | 检索响应延迟
+维度: D6性能
+前置: 标准环境
+数据: search_docs/retrieve_skill 100次采样
+步骤: ①连续调用采样 ②计算p95
+预期: p95<2s
+工具: search_docs/retrieve_skill
+证据: 强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D6-3 | P=P2 | MCP冷启时间
+维度: D6性能
+前置: 标准环境
+数据: MCP server冷启动
+步骤: ①冷启MCP server ②计时到可服务
+预期: 冷启<5s
+工具: mcp-server
+证据: 强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D6-4 | P=P1 | 并发调度正确性
+维度: D6性能
+前置: 标准环境
+数据: 并发工具调用压力
+步骤: ①并发30请求 ②观察消息错序/死锁 ③核对session-manager
+预期: 无死锁无消息错乱
+工具: mcp-server
+证据: 强断言：<证据: 无死锁无消息错乱>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D6-9 | P=P2 | 缓存清理三入口
+维度: D6性能
+前置: 已产生缓存的进程环境
+数据: invalidateUpdateCache/clearIconCache/clearMarketCache
+步骤: ①预热更新/图标/市场缓存 ②分别调三个清理函数 ③核对缓存文件/内存态清空 ④重复清理幂等
+预期: 三缓存清理入口各自清空对应缓存且幂等；清理后再查询触发重新拉取
+工具: check_update/get_service_icon/search_marketplace
+证据: 强断言：<证据: 缓存清空+幂等>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D9-9 | P=P1 | tools/call 超时协议语义与取消
+维度: D9协议
+前置: 可注入延迟的 MCP 客户端/夹具（支持读取 initialize 返回的 capabilities）
+数据: 断言契约：①能力探测=读 initialize.result.capabilities.notifications/cancellation 是否存在——不存在→标记 SPEC-MISMATCH 不假定支持 ②超时错误=JSON-RPC error 对象 {code:-32000, message:含 'timeout'}（精确值）③取消通知=notifications/cancelled 请求（含 requestId）
+步骤: ①夹具: node eval/harness/fixtures/d9-9-delay-timeout.mjs <hdk src> --evid <dir>（可注入延迟 30s 挂起）②发起 tools/call 注入 30s 挂起 ③客户端超时→断言 error.code===-32000 且 message 含 'timeout' ④若 capabilities.cancellation 存在→发送 notifications/cancelled(requestId=X)→断言服务端 2s 内停止处理（记录 in-flight 标记消失）⑤超时后重新 initialize→tools/list→断言正常（无错乱）
+预期: 超时返回 {code:-32000, message 含 'timeout'}（精确断言）；取消能力按 capabilities 实测（不存在→SPEC-MISMATCH 标注而非假定）；取消通知后服务端 2s 内中止（in-flight 清零）；重建连接后 initialize/tools/list 正常响应；无悬挂请求（pending map 空）
+工具: inspector
+证据: 强断言：<证据: JSON-RPC错误对象+capabilities+取消时序>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes; MCP Inspector/标准协议客户端
+
+=== D8-1 | P=P2 | 文档与能力一致
+维度: D8质量
+前置: 仓库文档快照
+数据: SKILL.md/README全量链接
+步骤: ①链接有效性扫描 ②命令与实际对比 ③CHANGELOG与行为对比
+预期: 无失效链接无过时命令
+工具: search_docs
+证据: 强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D8-4 | P=P1 | 引导步骤可机械执行
+维度: D8质量
+前置: 各SKILL.md
+数据: SKILL.md步骤评审
+步骤: ①逐skill评审步骤 ②标记含糊/矛盾/歧义步骤
+预期: 无含糊步骤(Agent可机械执行)
+工具: retrieve_skill
+证据: 强断言：<证据: 评审记录+链接>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Lin

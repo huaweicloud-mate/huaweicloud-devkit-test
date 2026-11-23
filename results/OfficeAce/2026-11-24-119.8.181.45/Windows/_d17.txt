@@ -1,0 +1,24 @@
+=== D5-1 | P=P1 | 清单发现加载
+维度: D5客户端
+前置: 各客户端环境
+数据: 插件清单注册
+步骤: ①安装后重启 ②核对客户端发现并加载插件清单
+预期: 全部客户端可发现
+工具: install
+证据: 强断言：<证据: 清单发现加载>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes; OpenCode; 声明支持的客户端矩阵
+
+=== D5-3 | P=P1 | 工具全量枚举
+维度: D5客户端
+前置: 各客户端环境
+数据: tools/list枚举
+步骤: ①枚举40工具 ②与TOOL_DEFINITIONS diff ③核对schema无残缺
+预期: 40 工具全量可达(=tools.mjs 注册源数量),schema完整
+工具: mcp-server
+证据: 强断言：<证据: tools/list 40 工具枚举>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes; OpenCode; 声明支持的客户端矩阵
+

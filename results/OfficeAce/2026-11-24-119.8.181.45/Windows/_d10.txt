@@ -1,0 +1,12 @@
+=== D2-16 | P=P1 | import文件读取后擦除
+维度: D2认证
+前置: creds-import.json 存在
+数据: auth_switch mode=import
+步骤: ①放置 creds-import.json ②auth_switch mode=import ③检查文件存在性
+预期: 读后无条件擦除（exists=False），密钥不留盘
+工具: auth_switch
+证据: 强断言：<证据: 读后 exists=False 密钥不留盘>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+

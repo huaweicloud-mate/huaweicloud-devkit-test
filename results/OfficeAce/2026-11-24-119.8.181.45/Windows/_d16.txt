@@ -1,0 +1,72 @@
+=== D4-24 | P=P1 | 确认令牌过期与重复确认边界（审批流健壮性）
+维度: D4安全
+前置: 真云+标准客户端+可注入时钟（令牌 TTL=60s，注入 5s 加速）
+数据: 断言契约（响应 JSON 字段精确）：①过期提交→{status:'rejected', code:'CONFIRM_TOKEN_EXPIRED'} ②同 token 重复→第二次 {status:'ok', outcome:'already_processed'} ③资源计数=ListServers(tctest- 前缀).count
+步骤: ①写操作（创建最小规格 ECS）进入确认流，记录 confirmToken ②注入时钟推进 >60s 后提交确认→断言 {code:'CONFIRM_TOKEN_EXPIRED', status:'rejected'} 且资源计数=0 ③重新发起写操作（新 confirmToken）连续提交两次→断言第二次 {outcome:'already_processed'} ④查询资源断言计数=1 ⑤释放→归零
+预期: 过期令牌返回精确 {code:'CONFIRM_TOKEN_EXPIRED'}（无资源创建，计数=0）；重复确认第二次返回 {outcome:'already_processed'}（计数不+1，仍=1）；错误/结果 JSON 字段可机器断言；释放后 tctest- 计数=0
+工具: auth_confirm/plan_cli_command
+证据: 强断言：<证据: 响应JSON+计数+归零>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-25 | P=P2 | Python hook 事件遥测分类
+维度: D4安全
+前置: hook-capable 客户端 + 遥测开关
+数据: cli:read/write/invoke 三类命令
+步骤: ①执行只读 hcloud 命令 ②执行写命令 ③执行非 hcloud 命令 ④核对 hook-events.jsonl 三键分类
+预期: 只读→cli:read、写→cli:write、其他→cli:invoke；事件含 key/value/capability
+工具: hook_check_command
+证据: 强断言：<证据: hook-events.jsonl>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-26 | P=P2 | findings 证据脱敏
+维度: D4安全
+前置: hook 环境 + 含凭证的触发命令
+数据: 含 AK/SK/token/password 的规则触发
+步骤: ①触发含凭证的命令规则 ②核对 findings.evidence 已脱敏 ③对照原命令
+预期: findings.evidence 中 AK/SK/token/password 均被 <redacted> 替换，不泄露明文
+工具: hook_check_command
+证据: 强断言：<证据: findings.evidence 脱敏前后>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-27 | P=P1 | 双路径输出脱敏
+维度: D4安全
+前置: 含凭证的输出文本
+数据: 包含 AK/SK/securityToken/password 的多行输出
+步骤: ①redactSecrets(text) ②redactOutput(text) ③核对两路径均脱敏 ④对照未脱敏点
+预期: redactSecrets(策略正则)与 redactOutput(CLI输出)双路径均替换明文凭证为占位符；不对非敏感字段误伤
+工具: run_readonly_command
+证据: 强断言：<证据: 脱敏前后对照>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-28 | P=P0 | Node 版安全 hook 链路
+维度: D4安全
+前置: hook-capable 客户端 + hooks.json 注册
+数据: 高危命令经 PreToolUse hook
+步骤: ①echo 凭证/高危写命令 ②核对 hooks.json 走 node huaweicloud-safety.mjs ③核对 commandText 提取 ④classifyTextCommand=deny 时输出 permissionDecision:deny
+预期: hooks.json 注册 .mjs(Node 实现)；tool_input 内 command/cmd/script/args 均被提取；高危命令决策 deny 且输出 hookSpecificOutput.permissionDecision=deny；非高危无 deny 输出
+工具: hook_check_command
+证据: 强断言：<证据: deny 决策+reason>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-29 | P=P2 | 分类断言与原始命令分类入口
+维度: D4安全
+前置: 含各类命令样本
+数据: 只读/写/危险命令集合
+步骤: ①classifyRawCommand(cmd) ②对照 classifyTextCommand ③assertAllowed(result) allow/deny 分支
+预期: classifyRawCommand=classifyTextCommand 包装；DENY 决策 assertAllowed 抛拒绝、allow 通过；分类结果含 decision/reason
+工具: hook_check_command
+证据: 强断言：<证据: 分类+断言分支>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+

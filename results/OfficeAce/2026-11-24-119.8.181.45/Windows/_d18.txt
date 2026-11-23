@@ -1,0 +1,48 @@
+=== D6-1 | P=P2 | 检索响应延迟
+维度: D6性能
+前置: 标准环境
+数据: search_docs/retrieve_skill 100次采样
+步骤: ①连续调用采样 ②计算p95
+预期: p95<2s
+工具: search_docs/retrieve_skill
+证据: 强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D6-3 | P=P2 | MCP冷启时间
+维度: D6性能
+前置: 标准环境
+数据: MCP server冷启动
+步骤: ①冷启MCP server ②计时到可服务
+预期: 冷启<5s
+工具: mcp-server
+证据: 强断言：<证据: 采样统计 p95>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D6-4 | P=P1 | 并发调度正确性
+维度: D6性能
+前置: 标准环境
+数据: 并发工具调用压力
+步骤: ①并发30请求 ②观察消息错序/死锁 ③核对session-manager
+预期: 无死锁无消息错乱
+工具: mcp-server
+证据: 强断言：<证据: 无死锁无消息错乱>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D6-9 | P=P2 | 缓存清理三入口
+维度: D6性能
+前置: 已产生缓存的进程环境
+数据: invalidateUpdateCache/clearIconCache/clearMarketCache
+步骤: ①预热更新/图标/市场缓存 ②分别调三个清理函数 ③核对缓存文件/内存态清空 ④重复清理幂等
+预期: 三缓存清理入口各自清空对应缓存且幂等；清理后再查询触发重新拉取
+工具: check_update/get_service_icon/search_marketplace
+证据: 强断言：<证据: 缓存清空+幂等>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+

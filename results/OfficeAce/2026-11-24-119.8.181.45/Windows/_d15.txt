@@ -1,0 +1,12 @@
+=== D4-13 | P=P1 | 最小权限凭证通过率
+维度: D4安全
+前置: 只读IAM子账号(test001, credentials.readonly.json)
+数据: 全量D3只读用例
+步骤: ①用 scripts/run-as-readonly.py 注入只读子账号(HW_ACCESS_KEY/HW_SECRET_KEY env,不带token) ②只读凭证下跑D3只读用例 ③写用例观察权限识别
+预期: 只读100%可用，写被正确识别权限不足(权限不足=IAM拒绝)
+工具: run_readonly_command
+证据: 强断言：<证据: 最小权限通过率>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+

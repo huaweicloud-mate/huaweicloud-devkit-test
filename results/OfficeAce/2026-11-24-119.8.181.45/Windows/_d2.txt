@@ -1,0 +1,275 @@
+sync 观察
+预期: sync 返回 ok:false + auto-sync suppressed (R10)，不写 S1
+工具: huaweicloud_auth_init/auth_status/auth_sync
+证据: 强断言：<证据: R10 suppressed 不写 S1>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-13 | P=P1 | R9 configuredBySession优先env
+维度: D2认证
+前置: 隔离 HOME + S1 + HW_ACCESS_KEY env
+数据: setConfiguredBySession(true) + env 注入（HW_ACCESS_KEY/HW_SECRET_KEY/HUAWEICLOUD_SECRET_ACCESS_KEY 别名语义）
+步骤: ①写 S1+标记 ②注入 env ③resolveCredentials ④清除标记复查 ⑤夹具: node eval/harness/fixtures/d2-13-s1-env.mjs <hdk src> --evid <dir>
+预期: 标记时 S1 胜出；清除后 env 兜底恢复
+工具: auth_status
+证据: 强断言：<证据: S1 胜出/清除后 env 兜底>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-16 | P=P1 | import文件读取后擦除
+维度: D2认证
+前置: creds-import.json 存在
+数据: auth_switch mode=import
+步骤: ①放置 creds-import.json ②auth_switch mode=import ③检查文件存在性
+预期: 读后无条件擦除（exists=False），密钥不留盘
+工具: auth_switch
+证据: 强断言：<证据: 读后 exists=False 密钥不留盘>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D4-18 | P=P0 | confirm-not-deny审批语义
+维度: D4安全
+前置: 真云+标准客户端
+数据: 写操作触发确认流程
+步骤: ①发起写操作 ②观察确认对话框 ③分别确认/拒绝
+预期: 写操作需显式确认，不被直接拒绝也不被直接放行
+工具: plan_cli_command
+证据: 强断言：<证据: 确认/拒绝路径>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-19 | P=P0 | 确认流下预检仍生效
+维度: D4安全
+前置: 真云
+数据: 高危操作进入确认流
+步骤: ①高危写操作 ②确认流程中观察preflight检查 ③验证拦截
+预期: 确认流程中风险预检仍生效拦截
+工具: hook_check_command/hook_check_artifacts/hook_check_deploy_plan
+证据: 强断言：<证据: 确认流预检拦截>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D4-20 | P=P1 | 拒绝后零操作
+维度: D4安全
+前置: 真云
+数据: 确认流选择拒绝
+步骤: ①确认流选拒绝 ②检查云资源与命令执行痕迹
+预期: 拒绝后无任何资源变更、无命令执行
+工具: run_approved_command
+证据: 强断言：<证据: 拒绝后无资源变更无执行>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux；macOS 若声明支持则单独举证
+agent: Hermes（Hook）; OpenCode（非 Hook）
+
+=== D2-1 | P=P1 | auth init三端同步
+维度: D2认证
+前置: AK/SK+本地凭证文件
+数据: auth init
+步骤: ①源码级: 隔离HOME+假凭证执行auth init ②核对KooCLI/OBS/沙箱三端配置文件落位(路径+格式) ③真云E2E: 真实凭证下核对三端API实际可用
+预期: 源码级断言: 三端配置文件均落位(路径+格式,任一端缺失即缺陷); 真云E2E断言: 三端API实际可用
+工具: huaweicloud_auth_init
+证据: 强断言：<证据: 三端落位(KooCLI/OBS/沙箱)>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-2 | P=P2 | auth status判定准确性
+维度: D2认证
+前置: 三端就绪状态可组合环境
+数据: auth status
+步骤: ①构造三端×就绪/未就绪8种组合 ②逐一核对status判定
+预期: 组合枚举判定准确，部分就绪场景明确标识
+工具: auth_status
+证据: 强断言：<证据: 三端就绪组合枚举判定>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-4 | P=P0 | 凭证脱敏正确性
+维度: D2认证
+前置: 真云凭证
+数据: show_profile_redacted
+步骤: ①执行脱敏展示 ②检查输出: AK中段、SK永不完整
+预期: 输出无明文凭证字段
+工具: show_profile_redacted
+证据: 强断言：<证据: 输出无明文 AK/SK>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-5 | P=P1 | 凭证缺失报错指引
+维度: D2认证
+前置: 无凭证/错误凭证/过期凭证环境
+数据: 缺失/错误/过期凭证调用
+步骤: ①无凭证调用 ②错误AK ③过期AK ④记录报错与指引
+预期: 明确报错+可执行指引(非裸堆栈)
+工具: huaweicloud_auth_init/auth_status
+证据: 强断言：<证据: 报错+可执行指引(非裸堆栈)>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-26 | P=P1 | 凭证备份与恢复
+维度: D2认证
+前置: 已同步凭证的隔离 HOME
+数据: backupGlobalCredentials/restoreGlobalCredentialsBackup
+步骤: ①backupGlobalCredentials ②核对备份文件写入 ③破坏主凭证 ④restoreGlobalCredentialsBackup ⑤核对还原
+预期: 备份/恢复闭环：备份写入独立文件、恢复后凭证与备份一致、恢复幂等不报错
+工具: huaweicloud_auth_sync
+证据: 强断言：<证据: 备份文件+恢复比对>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D2-27 | P=P2 | KooCLI 版本管理
+维度: D2认证
+前置: package.json 含 kooCliVersion
+数据: 7.2.12/7.2.9 等版本串
+步骤: ①getKooCliVersion ②parseHcloudVersion('hcloud 7.2.12 ...') ③compareVersion(7.2.12,7.2.9) ④kooCliDownloadBase
+预期: getKooCliVersion 读 kooCliVersion；parseHcloudVersion 正则提取首个 x.y.z；compareVersion 正确比较；downloadBase=KOO_CLI_BASE/<version或latest>
+工具: auth_status
+证据: 强断言：<证据: 版本解析/比较/下载基址>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-A1 | P=P1 | skill检索完整性
+维度: D3功能
+前置: 本地~30个SKILL.md
+数据: 各skill名称关键词
+步骤: ①用retrieve_skill/search_docs逐一检索30个skill ②核对返回完整内容
+预期: 全部可检索且完整拉取，索引无缺口
+工具: retrieve_skill/search_docs
+证据: 强断言：<证据: 全量 skill 可检索完整拉取>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-B1 | P=P2 | list_operations规范名
+维度: D3功能
+前置: hcloud可用
+数据: 代表服务操作查询
+步骤: ①list_operations ECS/VPC/OBS ②核对操作名与官方一致
+预期: 返回规范操作名，不依赖猜测
+工具: list_operations
+证据: 强断言：<证据: 规范操作名与官方一致>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-B3 | P=P1 | run_readonly脱敏执行
+维度: D3功能
+前置: 真云账号
+数据: 只读命令执行
+步骤: ①run_readonly_command执行只读命令 ②检查输出脱敏 ③核对无写入
+预期: 执行成功+输出脱敏
+工具: run_readonly_command
+证据: 强断言：<证据: 执行成功+输出脱敏+无写入>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-B5 | P=P2 | detect_framework识别
+维度: D3功能
+前置: 本地项目样本
+数据: 13 种框架样例工程(+monorepo)
+步骤: ①准备 13 框架工程(+monorepo) ②detect_framework ③核对框架/构建/端口
+预期: 识别准确且给出构建产物/端口
+工具: detect_framework
+证据: 强断言：<证据: 11 框架识别准确>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-C1 | P=P1 | ECS生命周期E2E
+维度: D3功能
+前置: 真云+参考ECS实例
+数据: 购买→ACTIVE→删除含磁盘→验证归零
+步骤: ①购买(参考实例) ②ShowJob/ListServersDetails验证ACTIVE ③删除含磁盘 ④只读验证归零
+预期: 插件引导全程完成，无残留
+工具: plan_cli_command/run_approved_command
+证据: 强断言：<证据: 生命周期 E2E+归零>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-C2 | P=P1 | OBS静态站部署E2E
+维度: D3功能
+前置: OBS配置就绪
+数据: build→上传→public-read→curl200→清理
+步骤: ①构建静态站 ②obsutil上传(核对目录语义/-dryRun键名) ③public-read ④curl200 ⑤清理归零
+预期: 部署成功+资源归零
+工具: obs_set_website_config/setup_obs_config
+证据: 强断言：<证据: 部署成功+资源归零>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-C3 | P=P1 | 沙箱部署E2E
+维度: D3功能
+前置: 沙箱DevStation配额
+数据: connect→upload→deploy→URL可达→close
+步骤: ①sandbox_connect ②upload_project ③deploy_nginx+deploy_check ④URL验证(≤8h) ⑤close
+预期: URL可访问+会话关闭
+工具: sandbox_exec_with_session/sandbox_exec_one_shot/sandbox_close_session/sandbox_upload_file/sandbox_upload_project/sandbox_deploy_nginx/sandbox_deploy_check/sandbox_check_user/sandbox_sign_agreement/sandbox_connect/sandbox_credentials
+证据: 强断言：<证据: 部署 URL+会话关闭>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-C4 | P=P1 | 服务创建类回归
+维度: D3功能
+前置: 真云+最小权限AK/SK
+数据: 22服务只读规划+高危轻量创建释放
+步骤: ①逐服务list_operations+plan只读 ②高危服务轻量创建(最小规格) ③立即释放
+预期: 全部服务有规范路由且可执行
+工具: plan_cli_command/run_approved_command
+证据: 强断言：<证据: 逐服务只读规划>；保留脱敏日志、manifest、前后快照
+终端覆盖: CLIENT_MATRIX
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-C5 | P=P1 | 工具冒烟
+维度: D3功能
+前置: 环境就绪
+数据: check_cli/list_operations/plan/explain_error
+步骤: ①四工具快速调用 ②全部通过
+预期: 冒烟快速全通
+工具: check_cli/list_operations/plan_cli_command/explain_error
+证据: 强断言：<证据: 四工具冒烟全通>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-C6 | P=P1 | 沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one_shot/upload_file/close_session/deploy_check）
+维度: D3功能
+前置: 沙箱 DevStation 配额
+数据: 沙箱专项
+步骤: 逐工具最小调用：check_user→credentials→sign_agreement→upload_file→exec_one_shot→deploy_check→close_session
+预期: 7 工具均返回规范结果，无静默失败
+工具: sandbox_check_user/sandbox_credentials/sandbox_sign_agreement/sandbox_upload_file/sandbox_exec_one_shot/sandbox_deploy_check/sandbox_close_session
+证据: 强断言：<证据: 7 工具规范结果无静默失败>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-C7 | P=P1 | 跨区域资源操作引导（区域维度）
+维度: D3功能
+前置: 真云账号（cn-north-4），测试资源带 `tctest-` 前缀标签，owner=测试负责人，清理=用例结束立即释放并只读验证归零
+数据: 非默认 region（ap-southeast-3）查询/创建；断言契约（唯一）：①命令必须含 `--cli-region=ap-southeast-3` ②区域不可用→错误 code=Ecs.0021（唯一断言，不采用 message 替代） ③资源不存在→错误 code=Ecs.0200（唯一断言）
+步骤: ①请求查香港区资源 ②断言 plan 命令含 --cli-region ③get_regional_availability 预查 ④执行只读查询 ⑤若资源不存在→断言 code=Ecs.0200（非裸 404） ⑥创建弹性 IP（最小规格）→断言命令带 region→立即释放→只读验证归零（tctest- 清单空）
+预期: 命令含目标 --cli-region（参数级断言）；不可用→code=Ecs.0021 精确命中；不存在→code=Ecs.0200 精确命中（均为唯一断言）；创建资源 100% 释放（tctest- 前缀清单归零，ListEips 返回空）
+工具: plan_cli_command/list_regions/get_regional_availability
+证据: 强断言：<证据: 命令参数+错误码+释放归零>；保留脱敏日志、manifest、前后快照
+终端覆盖: COMMON
+OS: Windows/Linux 代表环境；macOS 若声明支持则单独举证
+agent: Hermes 代表终端; fake/fixture
+
+=== D3-C13 | P=P1 | OBS 静态网站托管配置
+维度: D3功能
+前置: 真云 OBS bucket + AK/SK
