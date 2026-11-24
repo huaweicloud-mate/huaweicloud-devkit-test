@@ -1,0 +1,177 @@
+{
+ "D1-3": {
+  "status": "PASS",
+  "why": "check_cli: installed=true, status=ok, 7.3.12",
+  "dur": 0.3
+ },
+ "D1-4": {
+  "status": "PASS",
+  "why": "status 增量刷新完成且用户 credentials.json 未被改写",
+  "dur": 0.9
+ },
+ "D1-26": {
+  "status": "FAIL",
+  "why": "check_update/upgrade 未同时注册或 schema 缺失",
+  "dur": 0.2
+ },
+ "D1-27": {
+  "status": "PASS",
+  "why": "current==latest -> result=up_to_date, updateAvailable=false",
+  "dur": 0.1
+ },
+ "D1-28": {
+  "status": "PASS",
+  "why": "current<latest -> update_available, target=1.1.2",
+  "dur": 0.1
+ },
+ "D1-30": {
+  "status": "PASS",
+  "why": "semverCompare: 1.1.2>1.1.1, 1.1.0>1.1.0-next.9, equal=0, invalid lexicographic",
+  "dur": 0.1
+ },
+ "D1-31": {
+  "status": "PASS",
+  "why": "冷却期内 dismissed=true, 过期后重新 update_available",
+  "dur": 0.1
+ },
+ "D1-33": {
+  "status": "PASS",
+  "why": "skip 文件含 dismissedVersion/dismissedAt/expireAt，expireAt=dismissedAt+3天，路径解析=C:\\Users\\Administrator\\.config\\huaweicloud\\devkit-skip",
+  "dur": 0.1
+ },
+ "D1-39": {
+  "status": "FAIL",
+  "why": "Windows 检测链静默降级：current=2.0.0，distTags=null，result=check_failed",
+  "dur": 1.3
+ },
+ "D1-40": {
+  "status": "PASS",
+  "why": "远端 1.1.12 <= 本地 1.1.13，不提示版本倒退",
+  "dur": 0.1
+ },
+ "D1-41": {
+  "status": "PASS",
+  "why": "tools/call isError=false，六字段齐备，result=check_failed",
+  "dur": 0.9
+ },
+ "D1-42": {
+  "status": "PASS",
+  "why": "拒绝写入 plugin 路径，字段完整 expireAt=dismissedAt+3天，同版本冷却内 dismissed",
+  "dur": 0.1
+ },
+ "D1-45": {
+  "status": "PASS",
+  "why": "仅首个非检查工具携带 _updateInfo；检查工具不带；一次性消费机制存在",
+  "dur": 0.4
+ },
+ "D1-65": {
+  "status": "PASS",
+  "why": "DEBUG=1 输出 [debug] 日志，非1不输出",
+  "dur": 0.3
+ },
+ "D1-66": {
+  "status": "PASS",
+  "why": "TELEMETRY!=off 时开（默认 true）、=off 关闭；--telemetry-endpoint 映射到 ENDPOINT env",
+  "dur": 0.1
+ },
+ "D1-67": {
+  "status": "FAIL",
+  "why": "env 注入或 SKIP_DSH 分支缺失",
+  "dur": 0.0
+ },
+ "D1-68": {
+  "status": "FAIL",
+  "why": "离线图标或 region 优先级不符：iconSource=snapshot, region=cn-north-4（HW_REGION 抢先，HUAWEICLOUD_REGION 未优先）",
+  "dur": 0.1
+ },
+ "D1-70": {
+  "status": "PASS",
+  "why": "proxy.json 读写/clear 正确；getProxySettings 拼 env+file 且 no_proxy 命中返回 null",
+  "dur": 0.1
+ },
+ "D2-10": {
+  "status": "FAIL",
+  "why": "D2-10：show_profile_redacted 以两参数形式传 --cli-profile default，KooCLI 报 [USE_ERROR]参数default的格式错误（应为 --cli-profile=default）",
+  "dur": 0.3
+ },
+ "D2-11": {
+  "status": "PASS",
+  "why": "失效 token 被拒（ok=false），凭证文件未被写入（token 不落盘）",
+  "dur": 0.5
+ },
+ "D2-12": {
+  "status": "PASS",
+  "why": "runtime 凭据激活时 sync 被抑制（ok:false, auto-sync suppressed），S1 未改写",
+  "dur": 0.1
+ },
+ "D2-13": {
+  "status": "PASS",
+  "why": "S1 持久凭证优先于 env（隔离 HOME + S1 时 S1 胜出）",
+  "dur": 0.1
+ },
+ "D2-16": {
+  "status": "FAIL",
+  "why": "creds-import.json 未被擦除",
+  "dur": 0.3
+ },
+ "D4-18": {
+  "status": "PASS",
+  "why": "写操作进入确认流程（safeToRun=false + approvalToken），无有效令牌被拒执行",
+  "dur": 0.3
+ },
+ "D4-19": {
+  "status": "FAIL",
+  "why": "风险预检未在确认流程生效",
+  "dur": 0.3
+ },
+ "D4-20": {
+  "status": "PASS",
+  "why": "拒绝后未执行命令、资源无变更（ECS 清单不变）",
+  "dur": 1.4
+ },
+ "D2-1": {
+  "status": "PASS",
+  "why": "三端配置文件均落位（S1 credentials.json / S2 hcloud config / S3 obsutilconfig），managedProfile=deploy",
+  "dur": 0.1
+ },
+ "D2-2": {
+  "status": "PASS",
+  "why": "组合状态枚举准确：全量 11 目标，已配置/未配置可区分（未配置 2 个）",
+  "dur": 0.3
+ },
+ "D2-4": {
+  "status": "FAIL",
+  "why": "输出存在明文凭证泄漏",
+  "dur": 0.3
+ },
+ "D2-5": {
+  "status": "PASS",
+  "why": "错误凭证返回明确错误码+可执行指引（非裸堆栈）",
+  "dur": 0.6
+ },
+ "D2-26": {
+  "status": "PASS",
+  "why": "备份/恢复闭环：独立备份文件、恢复后与备份一致、恢复幂等不报错",
+  "dur": 0.1
+ },
+ "D2-27": {
+  "status": "PASS",
+  "why": "getKooCliVersion=7.3.12，parseHcloudVersion=7.1.2，compareVersion=1，downloadBase含版本",
+  "dur": 0.1
+ },
+ "D3-A1": {
+  "status": "PASS",
+  "why": "本地 30 个 SKILL.md，抽样 5 个均可完整拉取，索引命中 30 条",
+  "dur": 0.3
+ },
+ "D3-B1": {
+  "status": "PASS",
+  "why": "list_operations 返回规范操作名（含 ListServersDetails/CreateServers）",
+  "dur": 0.3
+ },
+ "D3-B3": {
+  "status": "FAIL",
+  "why": "run_readonly_command 未成功执行（tool ok=false, errorCode=APIGW.0301）而直连 hcloud 返回 code=0",
+  "dur": 2.2
+ }
+}
