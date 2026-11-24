@@ -1,0 +1,32 @@
+{
+  "status": "FAIL",
+  "why": "路由命中ECS=true 只读返回清单=false 全程仅 service_catalog/run_readonly",
+  "result": {
+    "catalog": {
+      "intent": "帮我查一下我的ECS云主机，不要修改任何资源",
+      "recommendedSkills": [
+        "Use huaweicloud-core to route intent."
+      ],
+      "recommendedServices": [
+        "Run hcloud --help to list available services."
+      ],
+      "capabilityOrder": [
+        "Huawei Cloud Skills for task-specific workflows and examples",
+        "KooCLI hcloud for local authenticated operations and quick inspection",
+        "Huawei Cloud API documentation for exact request and response contracts",
+        "Huawei Cloud SDKs for application code integration",
+        "Huawei Cloud MCP when an official or approved server is available",
+        "Terraform Provider only when IaC reviewability and repeatability are important"
+      ],
+      "ruleOfThumb": {
+        "skills": "Start here when the task (already a Huawei Cloud one) is scenario-shaped or needs a guided workflow.",
+        "cli": "Use for local diagnostics, read-only inspection, and commands the user can review.",
+        "api": "Use for exact service contract, region endpoint, project_id, pagination, and error codes.",
+        "sdk": "Use when writing application code that calls Huawei Cloud services.",
+        "mcp": "Prefer approved MCP tools when available because tools can carry structured schemas.",
+        "terraform": "Keep low priority in V1; suggest it for reviewed infrastructure changes, not quick diagnosis."
+      }
+    },
+    "readonly": "Vendor gate: this tool operates on Huawei Cloud. Pass vendorConfirmed with the user's establishing words — the quote where they named Huawei Cloud, an hcloud artifact, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed is NOT confirmation. If you cannot quote the user, ask which cloud they mean, then retry once established."
+  }
+}

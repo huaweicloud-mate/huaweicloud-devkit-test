@@ -1,0 +1,42 @@
+{
+  "status": "FAIL",
+  "why": "check_cli/ list_operations/ plan/ explain_error=false/false/true/true",
+  "result": {
+    "check_cli": "Vendor gate: this tool operates on Huawei Cloud. Pass vendorConfirmed with the user's establishing words — the quote where they named Huawei Cloud, an hcloud artifact, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed is NOT confirmation. If you cannot quote the user, ask which cloud they mean, then retry once established.",
+    "plan": {
+      "executable": "hcloud",
+      "args": [
+        "ECS",
+        "ListServersDetails"
+      ],
+      "command": "hcloud ECS ListServersDetails",
+      "executableBlock": "hcloud ECS ListServersDetails",
+      "warnings": [],
+      "classification": {
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation.",
+        "service": "ECS",
+        "operation": "ListServersDetails",
+        "args": [
+          "ECS",
+          "ListServersDetails"
+        ]
+      },
+      "sgFindings": [],
+      "approvalToken": "14592a7e-3eec-4d9b-b2ab-bdbc48b99ac0",
+      "userConfirmation": {
+        "needed": false
+      },
+      "safeToRun": true
+    },
+    "error": {
+      "service": "ECS",
+      "errorCode": "Ecs.0200",
+      "requestId": "",
+      "suggestions": [
+        "List resources in the same region/project and verify the resource identifier."
+      ]
+    }
+  }
+}
