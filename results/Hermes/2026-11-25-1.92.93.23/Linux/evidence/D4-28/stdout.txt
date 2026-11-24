@@ -1,0 +1,10 @@
+hooks/hooks.json 注册（Node .mjs 实现）:
+{
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Bash", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"", "timeout": 5 }] },
+      { "matcher": "mcp__.*huaweicloud.*|huaweicloud_.*", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\"", "timeout": 5 }] }
+    ]
+  }
+}
+结论: hooks.json 注册 Node 实现 huaweicloud-safety.mjs（Bash matcher + mcp 工具 matcher），tool_input 提取由 .mjs 内 command/cmd/script 字段逻辑完成。

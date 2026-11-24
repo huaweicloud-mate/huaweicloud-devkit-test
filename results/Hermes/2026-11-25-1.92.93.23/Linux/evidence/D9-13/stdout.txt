@@ -1,0 +1,4 @@
+hook_check_command(凭证 env 打印) -> decision=deny findings=[hwc-command-env-dump severity=deny]（evidence 仅含命令文本，不含 AK/SK 明文值）
+写命令 hcloud ecs DeleteServer --force -> decision=deny risk=write
+只读命令 hcloud ecs ListServersDetails -> decision=allow risk=read_only
+结论: tools/call 返回不含 AK/SK/token 明文；权限校验 deny/write 与 allow/read_only 三态正确。

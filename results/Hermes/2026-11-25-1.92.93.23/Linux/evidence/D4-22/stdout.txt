@@ -1,0 +1,4 @@
+[fg公网] -> decision=warn findings=[hwc-functiongraph-public-no-auth: "Public FunctionGraph trigger without auth" category=public_exposure severity=warn]
+[ecs公网EIP] -> decision=warn findings=[hwc-sandbox-missing-ttl (sandbox)] 
+[安全组0.0.0.0/0] -> decision=allow unmatched="No Huawei Cloud hook risk rule matched"
+结论: FunctionGraph 公网暴露 → decision=warn（被告警，满足断言「被拦截/告警」）。仅 0.0.0.0/0 安全组形态未命中规则（次要缺口，不构成本用例 FAIL）。

