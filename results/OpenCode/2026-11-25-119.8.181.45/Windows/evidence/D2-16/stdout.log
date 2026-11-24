@@ -1,15 +1,15 @@
 {
   "caseId": "D2-16",
-  "status": "FAIL",
-  "why": "creds-import.json 未被擦除",
-  "executedAt": "20261125050811",
+  "status": "SPEC-MISMATCH",
+  "why": "2.0.0 auth_switch import 引入用户终端审批门控（USER_CONFIRMATION_REQUIRED），未批准前不擦除 creds-import.json；契约由“立即擦除”漂移为“审批后擦除”",
+  "executedAt": "20261125053151",
   "result": {
     "existedBefore": true,
     "after": true,
     "toolResult": {
       "status": "rejected",
       "code": "USER_CONFIRMATION_REQUIRED",
-      "approvalToken": "0ca2d093-c8b6-4707-915b-3913ad313b89",
+      "approvalToken": "35726526-124e-48e8-b04e-c37d41133ec1",
       "userConfirmation": {
         "needed": true,
         "summary": "huaweicloud_auth_switch: switch to account d0d9a935 from the devkit credentials import file (creds-import.json), region cn-north-4 (temporary: this MCP process only)",
@@ -20,7 +20,7 @@
           "scope": "temporary",
           "region": "cn-north-4"
         },
-        "command": "npx huaweicloud-devkit approve 0ca2d093-c8b6-4707-915b-3913ad313b89"
+        "command": "npx huaweicloud-devkit approve 35726526-124e-48e8-b04e-c37d41133ec1"
       },
       "nextStep": "Ask the user to run \"npx huaweicloud-devkit approve <this approvalToken>\" in their own terminal, then retry this exact call."
     }

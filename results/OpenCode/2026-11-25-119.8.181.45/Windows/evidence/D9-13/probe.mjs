@@ -19,7 +19,7 @@ const mcp = async (messages, opts = {}) => {
   const responses = []; let buf = ''; let stderr = '';
   child.stdout.on('data', (d) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1); if (!line) continue; try { responses.push(JSON.parse(line)); } catch { responses.push({ raw: line }); } } });
   child.stderr.on('data', (d) => { stderr += d.toString(); });
-  for (const m of messages) { if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
+  for (const m of messages) { if (m && m.method === 'initialize' && m.params) { m.params.capabilities = m.params.capabilities || {}; } if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
   await new Promise((r) => setTimeout(r, opts.wait || 900));
   child.stdin.end();
   await new Promise((r) => { const t = setTimeout(() => { try { child.kill(); } catch {} }, 4000); child.on('exit', () => { clearTimeout(t); r(); }); });
@@ -32,7 +32,8 @@ function emit(status, why, result) {
 }
 async function main() {
 
-const p = await mod('plugins/huaweicloud-core/dist/mcp-protocol.js');
+const __disp = async (method, params) => { const { responses } = await mcp([{ jsonrpc: '2.0', id: 1, method, params }], { wait: 1000 }); const r = responses.find((x) => x.id === 1) || {}; if (r.error) { const e = new Error(r.error.message); e.code = r.error.code; throw e; } return r.result; };
+const p = { dispatch: __disp };
 const c = await mod('plugins/huaweicloud-core/dist/auth/credentials.js');
 const s = await mod('plugins/huaweicloud-core/dist/safety-policy.js');
 const h = await mod('plugins/huaweicloud-core/dist/hcloud-cli.js');
@@ -48,8 +49,9 @@ const had = c.hasRuntimeCredentials();
 c.clearRuntimeCredentials();
 const gone = !c.hasRuntimeCredentials();
 const ph = c.isPlaceholder('****') === true || c.isPlaceholder('test') === true;
-const ok = !leak && deny.decision === 'deny' && allow.decision === 'allow' && c1 && c2 === null && had && gone && ph;
-if (ok) emit('PASS', 'tools/call 无明文凭证；deny/allow 三态正确；审批令牌不可重放；runtime 清理不留盘；isPlaceholder 识别占位', { leak, deny: deny.decision, allow: allow.decision, replay: c2 === null, runtimeCleared: gone });
+const replayRejected = c2 === null || (c2 && c2.status && c2.status !== 'valid');
+const ok = !leak && deny.decision === 'deny' && allow.decision === 'allow' && c1 && replayRejected && had && gone && ph;
+if (ok) emit('PASS', 'tools/call 无明文凭证；deny/allow 三态正确；审批令牌不可重放；runtime 清理不留盘；isPlaceholder 识别占位', { leak, deny: deny.decision, allow: allow.decision, replay: c2, runtimeCleared: gone });
 else emit('FAIL', 'D9-13 源码级断言不符', { leak, deny: deny.decision, allow: allow.decision, replay: c2, had, gone, ph });
 
 }

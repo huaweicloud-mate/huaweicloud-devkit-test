@@ -70,10 +70,10 @@ async function main() {
   const createOk = reached === 'ACTIVE';
   const createErr = (ce.json && ce.json.error && (ce.json.error.message || ce.json.error.code)) || null;
 
-  if (serverId) hc(['ECS', 'DeleteServers', '--cli-region=' + REG, '--servers.1.id=' + serverId, '--delete_publicip=true', '--delete_volume=true'], 90000);
-  let ecsGone = false; for (let i = 0; i < 30; i++) { if (listEcs().length === 0) { ecsGone = true; break; } await sleep(3000); }
-  let subGone = false; for (let i = 0; i < 15; i++) { if (gone(['VPC', 'ShowSubnet', '--cli-region=' + REG, '--subnet_id=' + subId, '--cli-output=json'])) { subGone = true; break; } hc(['VPC', 'DeleteSubnet', '--cli-region=' + REG, '--vpc_id=' + vpcId, '--subnet_id=' + subId], 60000); await sleep(2000); }
-  let vpcGone = false; for (let i = 0; i < 15; i++) { if (gone(['VPC', 'ShowVpc', '--cli-region=' + REG, '--vpc_id=' + vpcId, '--cli-output=json'])) { vpcGone = true; break; } hc(['VPC', 'DeleteVpc', '--cli-region=' + REG, '--vpc_id=' + vpcId], 60000); await sleep(2000); }
+  if (serverId) { await sleep(6000); for (let k = 0; k < 6; k++) { hc(['ECS', 'DeleteServers', '--cli-region=' + REG, '--servers.1.id=' + serverId, '--delete_publicip=true', '--delete_volume=true'], 120000); await sleep(5000); if (listEcs().length === 0) break; } }
+  let ecsGone = false; for (let i = 0; i < 60; i++) { if (listEcs().length === 0) { ecsGone = true; break; } await sleep(4000); }
+  let subGone = false; for (let i = 0; i < 25; i++) { if (gone(['VPC', 'ShowSubnet', '--cli-region=' + REG, '--subnet_id=' + subId, '--cli-output=json'])) { subGone = true; break; } hc(['VPC', 'DeleteSubnet', '--cli-region=' + REG, '--vpc_id=' + vpcId, '--subnet_id=' + subId], 60000); await sleep(2000); }
+  let vpcGone = false; for (let i = 0; i < 25; i++) { if (gone(['VPC', 'ShowVpc', '--cli-region=' + REG, '--vpc_id=' + vpcId, '--cli-output=json'])) { vpcGone = true; break; } hc(['VPC', 'DeleteVpc', '--cli-region=' + REG, '--vpc_id=' + vpcId], 60000); await sleep(2000); }
   const post = { ecs: listEcs().length, subGone, vpcGone };
   const zero = post.ecs === 0 && subGone && vpcGone;
   const result = { pre, vpcId, subId, serverId, create: { reached, error: createErr }, cleanup: { ecsGone, subGone, vpcGone }, post, zeroResidue: zero };

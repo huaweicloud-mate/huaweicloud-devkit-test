@@ -19,7 +19,7 @@ const mcp = async (messages, opts = {}) => {
   const responses = []; let buf = ''; let stderr = '';
   child.stdout.on('data', (d) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1); if (!line) continue; try { responses.push(JSON.parse(line)); } catch { responses.push({ raw: line }); } } });
   child.stderr.on('data', (d) => { stderr += d.toString(); });
-  for (const m of messages) { if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
+  for (const m of messages) { if (m && m.method === 'initialize' && m.params) { m.params.capabilities = m.params.capabilities || {}; } if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
   await new Promise((r) => setTimeout(r, opts.wait || 900));
   child.stdin.end();
   await new Promise((r) => { const t = setTimeout(() => { try { child.kill(); } catch {} }, 4000); child.on('exit', () => { clearTimeout(t); r(); }); });
@@ -31,14 +31,15 @@ function emit(status, why, result) {
   console.log(JSON.stringify({ caseId: CASE_ID, status, why: o.why }));
 }
 async function main() {
-
-const tm = await mod('plugins/huaweicloud-core/dist/tools.js');
-const pick = (n) => tm.TOOL_DEFINITIONS.find((t) => t.name === n);
+const { responses } = await mcp([{ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} }]);
+const listed = (responses.find((x) => x.id === 1) || {}).result || {};
+const tools = listed.tools || [];
+const pick = (n) => tools.find((t) => t.name === n);
 const a = pick('huaweicloud_check_update');
 const b = pick('huaweicloud_upgrade');
 const ok = a && b && a.description && a.inputSchema && b.description && b.inputSchema;
-if (ok) emit('PASS', 'check_update/upgrade 均注册且 schema 含 description/inputSchema', { check_update: !!a, upgrade: !!b });
-else emit('FAIL', 'check_update/upgrade 未同时注册或 schema 缺失', { a: !!a, b: !!b });
-
+if (ok) emit('PASS', 'check_update/upgrade 已注册且有 schema + description（tools/list）', { check_update: !!a, upgrade: !!b, total: tools.length });
+else emit('FAIL', 'check_update/upgrade 未同时注册或 schema 缺失', { a: !!a, b: !!b, total: tools.length });
 }
+
 main().catch((e) => emit('FAIL', 'probe exception: ' + ((e && e.stack) || e), { error: String((e && e.message) || e) }));

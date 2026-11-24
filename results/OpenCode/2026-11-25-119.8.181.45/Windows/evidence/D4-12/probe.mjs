@@ -19,7 +19,7 @@ const mcp = async (messages, opts = {}) => {
   const responses = []; let buf = ''; let stderr = '';
   child.stdout.on('data', (d) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1); if (!line) continue; try { responses.push(JSON.parse(line)); } catch { responses.push({ raw: line }); } } });
   child.stderr.on('data', (d) => { stderr += d.toString(); });
-  for (const m of messages) { if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
+  for (const m of messages) { if (m && m.method === 'initialize' && m.params) { m.params.capabilities = m.params.capabilities || {}; } if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
   await new Promise((r) => setTimeout(r, opts.wait || 900));
   child.stdin.end();
   await new Promise((r) => { const t = setTimeout(() => { try { child.kill(); } catch {} }, 4000); child.on('exit', () => { clearTimeout(t); r(); }); });
@@ -38,7 +38,7 @@ const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 const scripts = pkg.scripts || {};
 const suspicious = Object.entries(scripts).filter(([k, v]) => /postinstall|preinstall|prepare/.test(k) && /curl|wget|http|Invoke-WebRequest|rm -rf/i.test(String(v)));
 const { spawnSync: spPack } = await import('node:child_process');
-const r = spPack('npm', ['pack', '--dry-run', '--json'], { encoding: 'utf8', shell: true, cwd: root, timeout: 120000 });
+const r = spPack('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { encoding: 'utf8', shell: true, cwd: root, timeout: 120000 });
 const packed = /"integrity"|"version"|"filename"/.test(String(r.stdout || '') + String(r.stderr || ''));
 const ok = suspicious.length === 0 && packed;
 if (ok) emit('PASS', '无恶意 pre/postinstall（' + Object.keys(scripts).join(',') + '），npm pack --dry-run 可产出且文件清单可枚举', { scripts: Object.keys(scripts), packTail: (String(r.stdout || '') + String(r.stderr || '')).slice(0, 600) });

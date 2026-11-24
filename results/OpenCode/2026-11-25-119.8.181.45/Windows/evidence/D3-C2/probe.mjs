@@ -37,13 +37,25 @@ function emit(status, why, result) { const o = { caseId: CASE_ID, status, why, e
 async function main() {
   const admin = JSON.parse(readFileSync(join(os.homedir(), '.config', 'huaweicloud', 'credentials.json'), 'utf8'));
   const ro = JSON.parse(readFileSync(join(os.homedir(), '.config', 'huaweicloud', 'credentials.readonly.json'), 'utf8'));
-  const adminCreate = await call('PUT', BUCKET, '/', '', '', admin);
+  const locXml = '<CreateBucketConfiguration><LocationConstraint>cn-north-4</LocationConstraint></CreateBucketConfiguration>';
+  const adminCreate = await call('PUT', BUCKET, '/', '', locXml, admin);
   const roList = await call('GET', '', '/', '', '', ro);
-  const invalidAk = /InvalidAccessKeyId/.test(adminCreate.body);
-  const roDenied = /AccessDenied|403/.test(roList.body);
-  const result = { bucket: BUCKET, adminCreate, roList, invalidAk, roDenied, hasObsutil: false, kooCliObs: 'no OBS service' };
-  if (invalidAk && roDenied) emit('BLOCKED', 'OBS 静态站 E2E 无法执行：管理 AK 被 OBS 拒为 InvalidAccessKeyId（该 AK 未被 OBS 识别）；只读子账号 test001 返回 AccessDenied（无 OBS 写权限）；本机无 obsutil、KooCLI 无 OBS 服务。未创建任何桶，云端零残留。解除条件：下发对 OBS 有效的可写 AK/SK 或安装 obsutil', result);
-  else if (adminCreate.status === 200) emit('FAIL', 'OBS 建桶成功但后续闭环未执行（probe 逻辑异常）', result);
-  else emit('FAIL', 'OBS 建桶失败 status=' + adminCreate.status + ' body=' + adminCreate.body.slice(0, 200), result);
+  const invalidAk = /InvalidAccessKeyId/.test(adminCreate.body || '');
+  const roDenied = /AccessDenied|403/.test((roList.body || '') + roList.status);
+  const result = { bucket: BUCKET, adminCreate: { status: adminCreate.status, body: (adminCreate.body || '').slice(0, 200) }, roList: { status: roList.status }, invalidAk, roDenied };
+  if (invalidAk) {
+    emit('BLOCKED', 'OBS 静态站 E2E 无法执行：管理 AK 被 OBS 拒为 InvalidAccessKeyId', result);
+  } else if (adminCreate.status === 200) {
+    const del = await call('DELETE', BUCKET, '/', '', '', admin);
+    const after = await call('GET', '', '/', 'prefix=' + BUCKET, '', admin);
+    const gone = !(after.body || '').includes('<Key>' + BUCKET);
+    result.delete = { status: del.status };
+    result.afterList = { status: after.status, gone };
+    if ((del.status === 204 || del.status === 200) && gone) emit('PASS', 'OBS 建桶（带 LocationConstraint）→ 删除 → 归零验证通过；只读子账号 list 被拒', result);
+    else emit('FAIL', 'OBS 建桶成功但删除/归零失败', result);
+  } else {
+    emit('FAIL', 'OBS 建桶失败 status=' + adminCreate.status + ' body=' + (adminCreate.body || '').slice(0, 200), result);
+  }
 }
+
 main().catch((e) => emit('FAIL', 'probe exception: ' + String(e && e.stack || e), {}));

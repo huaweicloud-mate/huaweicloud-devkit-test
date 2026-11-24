@@ -1,0 +1,34 @@
+{
+  "caseId": "D3-C1",
+  "status": "PASS",
+  "why": "ECS 全生命周期闭环：VPC+子网+ECS 创建→ACTIVE→删除→VPC/子网/ECS 归零（零残留）",
+  "executedAt": "20261125052506",
+  "result": {
+    "pre": {
+      "ecs": 0
+    },
+    "vpcId": "4aa2eadb-f76d-4061-8ab6-0cb0fffe1894",
+    "subId": "d2891ee9-bcf3-49a9-912e-1ef0e44391c8",
+    "serverId": "e2c734ca-af49-4760-b5ed-f01762c08062",
+    "create": {
+      "reached": "ACTIVE",
+      "error": null
+    },
+    "cleanup": {
+      "ecsGone": true,
+      "subGone": true,
+      "vpcGone": true
+    },
+    "post": {
+      "ecs": 0,
+      "subGone": true,
+      "vpcGone": true
+    },
+    "zeroResidue": true
+  },
+  "timeline": [
+    "createVpc:{\"id\":\"4aa2eadb-f76d-4061-8ab6-0cb0fffe1894\",\"status\":\"CREATING\"}",
+    "createSubnet:{\"id\":\"d2891ee9-bcf3-49a9-912e-1ef0e44391c8\"}",
+    "createEcs:{\"job_id\":\"ff808081a0ed1f3901a20f72d4df2a8e\",\"serverIds\":[\"e2c734ca-af49-4760-b5ed-f01762c08062\"]}"
+  ]
+}

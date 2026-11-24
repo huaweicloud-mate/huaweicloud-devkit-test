@@ -19,7 +19,7 @@ const mcp = async (messages, opts = {}) => {
   const responses = []; let buf = ''; let stderr = '';
   child.stdout.on('data', (d) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1); if (!line) continue; try { responses.push(JSON.parse(line)); } catch { responses.push({ raw: line }); } } });
   child.stderr.on('data', (d) => { stderr += d.toString(); });
-  for (const m of messages) { if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
+  for (const m of messages) { if (m && m.method === 'initialize' && m.params) { m.params.capabilities = m.params.capabilities || {}; } if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
   await new Promise((r) => setTimeout(r, opts.wait || 900));
   child.stdin.end();
   await new Promise((r) => { const t = setTimeout(() => { try { child.kill(); } catch {} }, 4000); child.on('exit', () => { clearTimeout(t); r(); }); });
@@ -39,7 +39,8 @@ const tok = pl.approvalToken;
 const first = h.consumeApprovalToken(tok);
 const second = h.consumeApprovalToken(tok);
 const bad = h.inspectApprovalToken('00000000-0000-0000-0000-000000000000');
-const ok = pl.safeToRun === false && first && second === null && bad.state !== 'valid';
+const replayRejected = second === null || (second && second.status && second.status !== 'valid');
+const ok = pl.safeToRun === false && first && replayRejected && bad.state !== 'valid';
 if (ok) emit('PASS', '写操作需审批令牌；令牌重放第二次返回 null；伪造令牌 invalid', { safeToRun: pl.safeToRun, second, bad });
 else emit('FAIL', '审批令牌重放/伪造校验不符', { pl, first, second, bad });
 

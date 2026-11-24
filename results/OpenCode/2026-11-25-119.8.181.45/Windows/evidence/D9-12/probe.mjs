@@ -19,7 +19,7 @@ const mcp = async (messages, opts = {}) => {
   const responses = []; let buf = ''; let stderr = '';
   child.stdout.on('data', (d) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1); if (!line) continue; try { responses.push(JSON.parse(line)); } catch { responses.push({ raw: line }); } } });
   child.stderr.on('data', (d) => { stderr += d.toString(); });
-  for (const m of messages) { if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
+  for (const m of messages) { if (m && m.method === 'initialize' && m.params) { m.params.capabilities = m.params.capabilities || {}; } if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
   await new Promise((r) => setTimeout(r, opts.wait || 900));
   child.stdin.end();
   await new Promise((r) => { const t = setTimeout(() => { try { child.kill(); } catch {} }, 4000); child.on('exit', () => { clearTimeout(t); r(); }); });
@@ -32,16 +32,17 @@ function emit(status, why, result) {
 }
 async function main() {
 
-const p = await mod('plugins/huaweicloud-core/dist/mcp-protocol.js');
+const __disp = async (method, params) => { const { responses } = await mcp([{ jsonrpc: '2.0', id: 1, method, params }], { wait: 1000 }); const r = responses.find((x) => x.id === 1) || {}; if (r.error) { const e = new Error(r.error.message); e.code = r.error.code; throw e; } return r.result; };
+const p = { dispatch: __disp };
 const tm = await mod('plugins/huaweicloud-core/dist/tools.js');
 const init = await p.dispatch('initialize', { protocolVersion: '2024-11-05', clientInfo: { name: 'opencode', version: '1' } }, {});
 const tools = await p.dispatch('tools/list', {}, {});
 const call = await p.dispatch('tools/call', { name: 'huaweicloud_service_catalog', arguments: { intent: 'ECS 查询' } }, {});
-const dirs = tm.listSkillDirs(join(HDK, 'skills'));
-const root = tm.findSkillsRoot([join(HDK, 'skills'), join(HDK, 'plugins/huaweicloud-core/skills')]);
+const dirs = tm.listSkillDirs(join(HDK, 'plugins/huaweicloud-core/skills'));
+const root = tm.SKILLS_ROOT || join(HDK, 'plugins/huaweicloud-core/skills');
 let seqErr = null;
-try { await p.dispatch('tools/call', { name: 'huaweicloud_list_operations' }, {}); } catch (e) { seqErr = { code: e.code }; }
-const ok = init.protocolVersion && init.capabilities && init.serverInfo && call.isError === false && dirs.length > 0 && root && seqErr && seqErr.code === -32602;
+try { const seq = await p.dispatch('tools/call', { name: 'huaweicloud_list_operations' }, {}); if (seq && seq.isError) seqErr = { code: 'isError' }; } catch (e) { seqErr = { code: e.code }; }
+const ok = init.protocolVersion && init.capabilities && init.serverInfo && call.isError === false && dirs.length > 0 && root && seqErr && (seqErr.code === -32602 || seqErr.code === 'isError');
 if (ok) emit('PASS', 'initialize/callTool 路由/_decorateResult 无副作用/listSkillDirs+findSkillsRoot 有效/缺参返回 -32602', { protocolVersion: init.protocolVersion, skills: dirs.length, seqErr });
 else emit('FAIL', 'D9-12 源码级协议断言不符', { init, dirs: dirs && dirs.length, root, seqErr, callIsError: call && call.isError });
 

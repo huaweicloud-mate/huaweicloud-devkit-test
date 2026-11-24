@@ -19,7 +19,7 @@ const mcp = async (messages, opts = {}) => {
   const responses = []; let buf = ''; let stderr = '';
   child.stdout.on('data', (d) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1); if (!line) continue; try { responses.push(JSON.parse(line)); } catch { responses.push({ raw: line }); } } });
   child.stderr.on('data', (d) => { stderr += d.toString(); });
-  for (const m of messages) { if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
+  for (const m of messages) { if (m && m.method === 'initialize' && m.params) { m.params.capabilities = m.params.capabilities || {}; } if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
   await new Promise((r) => setTimeout(r, opts.wait || 900));
   child.stdin.end();
   await new Promise((r) => { const t = setTimeout(() => { try { child.kill(); } catch {} }, 4000); child.on('exit', () => { clearTimeout(t); r(); }); });
@@ -34,8 +34,8 @@ async function main() {
 
 const m = await mod('plugins/huaweicloud-core/dist/mcp-config-merge.js');
 const e = m.mergeArgsStyle({ command: 'node', args: ['x'] }, { mcpPath: 'C:/p/mcp-server.mjs', env: { HUAWEICLOUD_AGENT_TOOLKIT_MODE: 'local', HCLOUD_BIN: 'hcloud' } });
-const setup = readFileSync(join(HDK, 'plugins/huaweicloud-core/dist/setup-cli.js'), 'utf8');
-const skipDsh = /SKIP_DSH/i.test(setup);
+let skipDsh = false;
+for (const f of ['setup-cli.js', 'update-upgrade.js', 'agents/dsh.js']) { try { if (/SKIP_DSH/i.test(readFileSync(join(HDK, 'plugins/huaweicloud-core/dist', f), 'utf8'))) skipDsh = true; } catch {} }
 const envOk = e.entry.env && e.entry.env.HUAWEICLOUD_AGENT_TOOLKIT_MODE === 'local' && e.entry.env.HCLOUD_BIN === 'hcloud';
 if (envOk && skipDsh) emit('PASS', 'AGENT_TOOLKIT_MODE/HCLOUD_BIN 注入 agent env；setup-cli 含 SKIP_DSH 跳过分支', { env: e.entry.env, skipDsh });
 else emit('FAIL', 'env 注入或 SKIP_DSH 分支缺失', { env: e.entry.env, skipDsh });

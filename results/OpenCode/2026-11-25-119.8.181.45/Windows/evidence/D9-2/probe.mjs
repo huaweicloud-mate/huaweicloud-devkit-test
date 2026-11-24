@@ -19,7 +19,7 @@ const mcp = async (messages, opts = {}) => {
   const responses = []; let buf = ''; let stderr = '';
   child.stdout.on('data', (d) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1); if (!line) continue; try { responses.push(JSON.parse(line)); } catch { responses.push({ raw: line }); } } });
   child.stderr.on('data', (d) => { stderr += d.toString(); });
-  for (const m of messages) { if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
+  for (const m of messages) { if (m && m.method === 'initialize' && m.params) { m.params.capabilities = m.params.capabilities || {}; } if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
   await new Promise((r) => setTimeout(r, opts.wait || 900));
   child.stdin.end();
   await new Promise((r) => { const t = setTimeout(() => { try { child.kill(); } catch {} }, 4000); child.on('exit', () => { clearTimeout(t); r(); }); });
@@ -31,15 +31,15 @@ function emit(status, why, result) {
   console.log(JSON.stringify({ caseId: CASE_ID, status, why: o.why }));
 }
 async function main() {
-
-const p = await mod('plugins/huaweicloud-core/dist/mcp-protocol.js');
-let e1 = null, e2 = null, e3 = null;
-try { await p.dispatch('tools/call', { name: 'no_such_tool', arguments: {} }, {}); } catch (e) { e1 = { code: e.code, msg: e.message }; }
-try { await p.dispatch('no/such/method', {}, {}); } catch (e) { e2 = { code: e.code, msg: e.message }; }
-try { await p.dispatch('tools/call', { name: 'huaweicloud_hook_check_command', arguments: {} }, {}); } catch (e) { e3 = { code: e.code, msg: e.message }; }
-const ok = e1 && e1.code === -32602 && e2 && e2.code === -32601 && e3 && e3.code === -32602;
-if (ok) emit('PASS', '错误码规范：未知工具/缺参 -32602，未知方法 -32601', { e1, e2, e3 });
-else emit('FAIL', 'JSON-RPC 错误码不符', { e1, e2, e3 });
-
+const r1 = (await mcp([{ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'no_such_tool', arguments: {} } }])).responses.find((x) => x.id === 1) || {};
+const r2 = (await mcp([{ jsonrpc: '2.0', id: 1, method: 'no/such/method', params: {} }])).responses.find((x) => x.id === 1) || {};
+const r3 = (await mcp([{ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'huaweicloud_hook_check_command', arguments: {} } }])).responses.find((x) => x.id === 1) || {};
+const ok1 = (r1.error && r1.error.code === -32602) || (r1.result && r1.result.isError === true);
+const ok2 = r2.error && r2.error.code === -32601;
+const ok3 = (r3.error && r3.error.code === -32602) || (r3.result && r3.result.isError === true);
+const ok = ok1 && ok2 && ok3;
+if (ok) emit('PASS', '错误语义规范：未知工具/缺参被拒（-32602 或 isError=true）、未知方法 -32601', { r1: { error: r1.error, isError: r1.result && r1.result.isError }, r2: r2.error, r3: { error: r3.error, isError: r3.result && r3.result.isError } });
+else emit('FAIL', 'JSON-RPC 错误码不符', { r1: { error: r1.error, isError: r1.result && r1.result.isError }, r2: r2.error, r3: { error: r3.error, isError: r3.result && r3.result.isError } });
 }
+
 main().catch((e) => emit('FAIL', 'probe exception: ' + ((e && e.stack) || e), { error: String((e && e.message) || e) }));

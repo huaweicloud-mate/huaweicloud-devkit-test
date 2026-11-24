@@ -19,7 +19,7 @@ const mcp = async (messages, opts = {}) => {
   const responses = []; let buf = ''; let stderr = '';
   child.stdout.on('data', (d) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1); if (!line) continue; try { responses.push(JSON.parse(line)); } catch { responses.push({ raw: line }); } } });
   child.stderr.on('data', (d) => { stderr += d.toString(); });
-  for (const m of messages) { if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
+  for (const m of messages) { if (m && m.method === 'initialize' && m.params) { m.params.capabilities = m.params.capabilities || {}; } if (m && m.method === 'tools/call' && m.params) { m.params.arguments = { ...(m.params.arguments || {}), vendorConfirmed: (m.params.arguments && m.params.arguments.vendorConfirmed) || '用户明确要求测试华为云' }; } child.stdin.write(JSON.stringify(m) + '\n'); await new Promise((r) => setTimeout(r, opts.gap || 200)); }
   await new Promise((r) => setTimeout(r, opts.wait || 900));
   child.stdin.end();
   await new Promise((r) => { const t = setTimeout(() => { try { child.kill(); } catch {} }, 4000); child.on('exit', () => { clearTimeout(t); r(); }); });
@@ -37,8 +37,9 @@ const pl = h.planHcloudCommand(['ECS', 'ListServersDetails', '--cli-region=cn-no
 const tok = h.createApprovalToken(pl.args);
 const ins = h.inspectApprovalToken(tok);
 const cons = h.consumeApprovalToken(tok);
-const ok = pl.approvalToken && ins.state === 'valid' && ins.entry && ins.entry.argsHash && cons && cons.argsHash === ins.entry.argsHash;
-if (ok) emit('PASS', '每次执行均有 approvalToken+argsHash 可追溯，消费一次后失效', { approvalToken: pl.approvalToken, argsHash: ins.entry.argsHash, consumedTwice: h.consumeApprovalToken(tok) });
+const consHash = cons && (cons.argsHash || (cons.entry && cons.entry.argsHash));
+const ok = pl.approvalToken && ins.state === 'valid' && ins.entry && ins.entry.argsHash && cons && consHash === ins.entry.argsHash;
+if (ok) emit('PASS', '每次执行均有 approvalToken+argsHash 可追溯，消费一次后失效', { approvalToken: pl.approvalToken, argsHash: ins.entry.argsHash, consumedHash: consHash, consumedTwice: h.consumeApprovalToken(tok) });
 else emit('FAIL', '命令追溯链不完整', { pl, ins, cons });
 
 }

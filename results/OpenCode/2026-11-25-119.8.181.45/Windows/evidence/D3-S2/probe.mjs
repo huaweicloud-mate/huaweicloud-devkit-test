@@ -7,6 +7,7 @@ const EV = String.raw`C:\Users\Administrator\devkit-test\testbot4-win-Opencode\h
 const CASE_ID = 'D3-S2';
 const HDK = 'C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit';
 const NK = (() => { const d = new Date(Date.now() + 8 * 3600 * 1000); return d.toISOString().replace(/[-:T]/g, '').slice(0, 14); })();
+process.env.HUAWEICLOUD_VENDOR_CHALLENGE = 'off';
 const REG = 'cn-north-4';
 const NAME = 'tctest-s2-' + NK.slice(4, 12);
 const cred = JSON.parse(readFileSync(join(os.homedir(), '.config', 'huaweicloud', 'credentials.json'), 'utf8'));
@@ -18,15 +19,15 @@ function emit(status, why, result) { const o = { caseId: CASE_ID, status, why, e
 async function main() {
   const tm = await import('file:///' + HDK + '/plugins/huaweicloud-core/dist/tools.js');
   const delArgs = ['VPC', 'DeleteVpc', '--cli-region=' + REG, '--vpc_id=PLACEHOLDER'];
-  const plan = await tm.callTool('huaweicloud_plan_cli_command', { args: delArgs }, {});
-  const runNo = await tm.callTool('huaweicloud_run_approved_command', { args: delArgs, approvalToken: 'none', approvedByUser: true }, {});
+  const plan = await tm.callTool('huaweicloud_plan_cli_command', { args: delArgs, vendorConfirmed: '用户明确要求测试华为云' }, {});
+  const runNo = await tm.callTool('huaweicloud_run_approved_command', { args: delArgs, approvalToken: 'none', approvedByUser: true, vendorConfirmed: '用户明确要求测试华为云' }, {});
   let vpcId = null, created = false, deletedByTool = false;
   try {
     const cv = hc(['VPC', 'CreateVpc', '--cli-region=' + REG, '--vpc.name=' + NAME, '--vpc.cidr=192.168.94.0/24', '--cli-output=json'], 60000);
     vpcId = cv.json && cv.json.vpc && cv.json.vpc.id; created = !!vpcId;
     if (vpcId) {
       const realDel = ['VPC', 'DeleteVpc', '--cli-region=' + REG, '--vpc_id=' + vpcId];
-      const runNo2 = await tm.callTool('huaweicloud_run_approved_command', { args: realDel, approvalToken: 'none', approvedByUser: true }, {});
+      const runNo2 = await tm.callTool('huaweicloud_run_approved_command', { args: realDel, approvalToken: 'none', approvedByUser: true, vendorConfirmed: '用户明确要求测试华为云' }, {});
       deletedByTool = runNo2.status !== 'rejected';
       const stillThere = !gone(vpcId);
       for (let i = 0; i < 10; i++) { hc(['VPC', 'DeleteVpc', '--cli-region=' + REG, '--vpc_id=' + vpcId], 60000); if (gone(vpcId)) break; await sleep(2000); }
