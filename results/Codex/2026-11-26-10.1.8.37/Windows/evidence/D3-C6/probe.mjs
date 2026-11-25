@@ -1,0 +1,1 @@
+console.log('case=D3-C6 status=BLOCKED');
