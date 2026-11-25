@@ -1,0 +1,21 @@
+{
+  "status": "FAIL",
+  "why": "旧版本客户端协商返回 protocolVersion=2025-11-25 或明确错误=false",
+  "result": {
+    "result": {
+      "protocolVersion": "2025-11-25",
+      "capabilities": {
+        "tools": {
+          "listChanged": true
+        }
+      },
+      "serverInfo": {
+        "name": "huaweicloud-devkit",
+        "version": "2.0.0"
+      },
+      "instructions": "Skill loading: the skills tree lives at C:\\Users\\Administrator\\.workbuddy\\binaries\\node\\versions\\22.22.2-3\\node_modules\\huaweicloud-devkit\\plugins\\huaweicloud-core\\skills (stdio session). Which skills are ENABLED is pack-gated and can change at runtime — call huaweicloud_list_skills for the effective catalog; a huawei-* service skill absent from that catalog belongs to a trimmed pack, so treat it as unavailable and confirm with the user before huaweicloud_packs_configure (the six huaweicloud-* meta-skills never appear in the catalog and are always available). That unavailability is about the capability, not just the skill text or the MCP tools: a trimmed pack's services are unavailable through every execution path, including hcloud commands run directly from your shell — never silently proceed that way; confirm with the user instead. To load a skill, attempt the direct read first: read C:\\Users\\Administrator\\.workbuddy\\binaries\\node\\versions\\22.22.2-3\\node_modules\\huaweicloud-devkit\\plugins\\huaweicloud-core\\skills/<name>/SKILL.md and the references/ files you need with your file tools — untruncated and selective. Do not pre-check reachability and do not call huaweicloud_retrieve_skill before attempting — the attempt itself is the check. If a direct read of the tree fails or is denied, load the skill with huaweicloud_retrieve_skill instead — it needs no file access. Root disambiguation: huawei-* pack-owned service skills live only in this tree — on directory-loading agents, the native skills directory carrying the six huaweicloud-* meta-skill copies in your context is a different root, so never guess a service skill's path by analogy to it; the tree location stated above (skillRoot, the field a huaweicloud_list_skills payload carries) must be in hand before the first service-skill read, never fetched in parallel with a guessed one. Vendor boundary: tools or skills being available in this session is not evidence of which cloud the user means. For a request that involves cloud resources but names no vendor, infer the vendor only from an explicit mention, hcloud/KooCLI artifacts, myhuaweicloud endpoints, Huawei region IDs, or earlier turns of this conversation — generic service vocabulary (ECS, VPC, RDS, serverless) and the devkit's own presence do not infer it. When the vendor is still unknown, ask the user which cloud they mean before operating on cloud resources through any tool or hcloud command, and before probing Huawei Cloud tooling, credential, or account state (CLI install checks, profile reads, auth status). Cloud-facing tools enforce this with a vendorConfirmed parameter — pass the user's establishing words as its value, never an invented quote. Requests that are not cloud tasks are outside this rule; tasks for other clouds remain answerable from general knowledge — the devkit's tools themselves only operate on Huawei Cloud. Tool-routing note: a reply \"unsupported call: <tool>\" naming a huaweicloud tool comes from your harness client, not from the devkit or Huawei Cloud — the call never reached this server, so retrying the identical call cannot succeed; report it to the user once and stop. Route Huawei Cloud tasks through the huaweicloud-core skill; browse packs with huaweicloud_list_packs."
+    },
+    "jsonrpc": "2.0",
+    "id": 1
+  }
+}

@@ -1,0 +1,2153 @@
+{
+  "status": "FAIL",
+  "why": "initialize protocolVersion=2024-11-05 serverInfo={\"name\":\"huaweicloud-devkit\",\"version\":\"2.0.0\"}????? error.code=undefined",
+  "result": {
+    "initRes": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {
+        "tools": {
+          "listChanged": true
+        }
+      },
+      "serverInfo": {
+        "name": "huaweicloud-devkit",
+        "version": "2.0.0"
+      },
+      "instructions": "Skill loading: the skills tree lives at C:\\Users\\Administrator\\.workbuddy\\binaries\\node\\versions\\22.22.2-3\\node_modules\\huaweicloud-devkit\\plugins\\huaweicloud-core\\skills (stdio session). Which skills are ENABLED is pack-gated and can change at runtime — call huaweicloud_list_skills for the effective catalog; a huawei-* service skill absent from that catalog belongs to a trimmed pack, so treat it as unavailable and confirm with the user before huaweicloud_packs_configure (the six huaweicloud-* meta-skills never appear in the catalog and are always available). That unavailability is about the capability, not just the skill text or the MCP tools: a trimmed pack's services are unavailable through every execution path, including hcloud commands run directly from your shell — never silently proceed that way; confirm with the user instead. To load a skill, attempt the direct read first: read C:\\Users\\Administrator\\.workbuddy\\binaries\\node\\versions\\22.22.2-3\\node_modules\\huaweicloud-devkit\\plugins\\huaweicloud-core\\skills/<name>/SKILL.md and the references/ files you need with your file tools — untruncated and selective. Do not pre-check reachability and do not call huaweicloud_retrieve_skill before attempting — the attempt itself is the check. If a direct read of the tree fails or is denied, load the skill with huaweicloud_retrieve_skill instead — it needs no file access. Root disambiguation: huawei-* pack-owned service skills live only in this tree — on directory-loading agents, the native skills directory carrying the six huaweicloud-* meta-skill copies in your context is a different root, so never guess a service skill's path by analogy to it; the tree location stated above (skillRoot, the field a huaweicloud_list_skills payload carries) must be in hand before the first service-skill read, never fetched in parallel with a guessed one. Vendor boundary: tools or skills being available in this session is not evidence of which cloud the user means. For a request that involves cloud resources but names no vendor, infer the vendor only from an explicit mention, hcloud/KooCLI artifacts, myhuaweicloud endpoints, Huawei region IDs, or earlier turns of this conversation — generic service vocabulary (ECS, VPC, RDS, serverless) and the devkit's own presence do not infer it. When the vendor is still unknown, ask the user which cloud they mean before operating on cloud resources through any tool or hcloud command, and before probing Huawei Cloud tooling, credential, or account state (CLI install checks, profile reads, auth status). Cloud-facing tools enforce this with a vendorConfirmed parameter — pass the user's establishing words as its value, never an invented quote. Requests that are not cloud tasks are outside this rule; tasks for other clouds remain answerable from general knowledge — the devkit's tools themselves only operate on Huawei Cloud. Tool-routing note: a reply \"unsupported call: <tool>\" naming a huaweicloud tool comes from your harness client, not from the devkit or Huawei Cloud — the call never reached this server, so retrying the identical call cannot succeed; report it to the user once and stop. Route Huawei Cloud tasks through the huaweicloud-core skill; browse packs with huaweicloud_list_packs."
+    },
+    "badResp": {
+      "result": {
+        "tools": [
+          {
+            "name": "huaweicloud_check_cli",
+            "description": "Check whether Huawei Cloud KooCLI hcloud is installed and whether its version matches the plugin paired version. Returns redacted output. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_plan_cli_command",
+            "description": "Classify and plan a Huawei Cloud hcloud command without executing it. When the result's userConfirmation.needed is true, the command waits on user confirmation before huaweicloud_run_approved_command will accept it: in the default token mode the USER runs the userConfirmation.command line (npx huaweicloud-devkit approve <approvalToken>) in their own terminal, and under DEVKIT_APPROVAL_MODE=ask the server raises the confirmation itself on the run call (an elicitation form, or an ASK_CONFIRMATION_REQUIRED chat round-trip) — no token is needed. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "args": {
+                  "description": "hcloud arguments, excluding the hcloud executable.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "allowWrites": {
+                  "description": "Only true after explicit user approval for this exact operation.",
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "args"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_run_readonly_command",
+            "description": "Run a read-only hcloud command through the toolkit safety policy and redact output. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "args": {
+                  "description": "hcloud arguments, excluding the hcloud executable.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "timeoutMs": {
+                  "description": "Optional timeout in milliseconds. Defaults to 60000.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "maxRetries": {
+                  "description": "Optional retry count for transient network errors. Defaults to 1.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "cwd": {
+                  "description": "Optional working directory for the hcloud process.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "args"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_list_operations",
+            "description": "List KooCLI operations for a Huawei Cloud service by running local/read-only hcloud <Service> --help. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string",
+                  "description": "KooCLI service name, such as ECS, VPC, IMS, OBS, RDS, or CDN."
+                },
+                "timeoutMs": {
+                  "description": "Optional timeout in milliseconds. Defaults to 60000.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "service"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_run_approved_command",
+            "description": "Run a write-capable hcloud command only after the exact command has been shown and explicitly approved by the user. In the default token mode the user must also confirm the plan token in their own terminal (npx huaweicloud-devkit approve <token>) — a non-read command without that terminal confirmation is rejected with USER_CONFIRMATION_REQUIRED and the token stays usable. Under DEVKIT_APPROVAL_MODE=ask the confirmation runs on the server: on a client that supports MCP elicitation the devkit raises a form during this call (approve runs it once; dismiss, decline, or the timeout cancels it), and on any other client the call returns ASK_CONFIRMATION_REQUIRED, whose envelope carries the command line — show it to the user in chat, then retry the same call with approvedByUser: true, which is model-relayed posture trust. In both modes always send command: it is the line the user reads, and the server rejects a line that does not match args (COMMAND_ARGS_MISMATCH). Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "command": {
+                  "description": "Always send this: the exact full hcloud command line this call executes, for example \"hcloud ECS DeleteServer --server_id=i-123\". The plan result's command field (huaweicloud_plan_cli_command) is the display line: copy it and substitute the real values wherever it shows <redacted>, or send the args array spelled out as one line. The confirmation body shows it as the first thing the user reads, and the server checks it equals the line the args array spells: a mismatch is rejected without executing anything. Only a legacy caller that predates this field omits it, and the field is optional in the schema so such a call still reaches the gate instead of dying in validation.",
+                  "type": "string"
+                },
+                "args": {
+                  "description": "hcloud arguments, excluding the hcloud executable.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from huaweicloud_plan_cli_command); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "timeoutMs": {
+                  "description": "Optional timeout in milliseconds. Defaults to 60000.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "maxRetries": {
+                  "description": "Optional retry count for transient network errors. Defaults to 1.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "cwd": {
+                  "description": "Optional working directory for the hcloud process.",
+                  "type": "string"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "args"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_show_profile_redacted",
+            "description": "Inspect a KooCLI profile through hcloud configure show and return only redacted output. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "profile": {
+                  "description": "Optional KooCLI profile name.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_hook_check_command",
+            "description": "Check a planned shell or hcloud command against Huawei Cloud hook risk rules without executing it.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "command": {
+                  "type": "string",
+                  "description": "The exact command text to inspect."
+                }
+              },
+              "required": [
+                "command"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_hook_check_artifacts",
+            "description": "Check generated code, IaC, policy, or config artifacts against Huawei Cloud hook risk rules.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "artifacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "path": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "path",
+                      "content"
+                    ],
+                    "additionalProperties": {}
+                  },
+                  "description": "Artifacts to inspect, each with a path and its full text content."
+                }
+              },
+              "required": [
+                "artifacts"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_hook_check_deploy_plan",
+            "description": "Check a structured or textual deployment plan for Huawei Cloud sandbox, exposure, IAM, and cost risks.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "plan": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "description": "Deployment plan as an object, array, or string."
+                }
+              },
+              "required": [
+                "plan"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_service_catalog",
+            "description": "Route a Huawei Cloud task intent to capability sources. Takes intent (plain-language task such as \"create an ECS instance\", \"static website on OBS\", \"bind an EIP\", \"troubleshoot an RDS failover\") and returns recommended skill names to load with huaweicloud_retrieve_skill, the Huawei Cloud services involved, and the capability order (Skills, KooCLI, API, SDK, MCP, Terraform). Start here when the user's task is a Huawei Cloud one and mentions any of its services or scenarios: ECS, VPC, OBS, RDS, CCE, IAM, security groups, EIP, serverless, Kubernetes, database, monitoring, billing, backup, and twenty more domains. If no vendor is named or inferable (explicit mention, hcloud/KooCLI artifacts, myhuaweicloud endpoints, Huawei region IDs, earlier turns), ask which cloud the user means before calling this tool — the vocabulary above is common to several clouds and is not vendor evidence. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "intent": {
+                  "description": "Developer intent to route, such as deploy app, use API, debug error, or inspect resources.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_explain_error",
+            "description": "Explain a Huawei Cloud CLI, API, SDK, or agent workflow error and suggest next diagnostic steps.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "service": {
+                  "description": "Optional service name (e.g., ECS, VPC, APIG) to route the lookup.",
+                  "type": "string"
+                },
+                "errorCode": {
+                  "description": "The error code to explain, such as APIGW.0301 or Ecs.0038. Extracted from message when omitted.",
+                  "type": "string"
+                },
+                "code": {
+                  "description": "Alias of errorCode, accepted for compatibility. Prefer errorCode.",
+                  "type": "string"
+                },
+                "message": {
+                  "description": "Optional raw error message; the error code is extracted from it when errorCode is not provided.",
+                  "type": "string"
+                },
+                "requestId": {
+                  "description": "Optional request ID from the failed response, for support escalation.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_search_docs",
+            "description": "Search across Huawei Cloud SKILL.md files and local documentation. Returns top 10 relevant results with source, name, snippet, and relevance score. Use when the agent needs to discover which skill covers a topic, or is uncertain about API parameters, quotas, or limitations.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "description": "Search query across skill descriptions and documentation."
+                },
+                "topic": {
+                  "description": "Optional filter: all | ecs | obs | vpc | iam | rds | cce | modelarts | dew. Defaults to all.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "query"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_retrieve_skill",
+            "description": "Retrieve one Huawei Cloud skill by exact name (e.g. huawei-ecs, huawei-vpc, huawei-obs, huawei-sandbox) — the fallback loader, not the default: attempt the direct read first. When the skills tree location is known (stdio server instructions state it at initialize; huaweicloud_list_skills and this tool's own stdio payloads carry it as skillRoot), read <skillRoot>/<name>/SKILL.md and only the references/ files you need with your file tools — untruncated, and do not call this tool before the read is attempted (the attempt itself is the reachability check). Call it only after a direct read attempt fails or is denied, or when the tree location is unknown — it needs no file access. Returns the full SKILL.md content plus its reference files (each reference body capped at 4000 characters; when a reference is cut, a [truncated] marker names the <skillRoot> direct-read path for the rest) and, on stdio sessions, skillRoot so the next skill can be a direct read. Service skills are server data — never installed into an agent's own skill directory — and this is the owner-pack-gated (a trimmed pack's skills are refused with remediation), telemetry-bearing path remote sessions rely on. The six core meta-skills (huaweicloud-*) are additionally disclosed as native skill copies on directory-loading agents; this tool serves them identically everywhere, so it stays the portable fallback. Browse the catalog first with huaweicloud_list_skills; candidates also come from huaweicloud_service_catalog, huaweicloud_search_docs, or huaweicloud_list_packs.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9-]+$",
+                  "description": "Skill name, e.g., huawei-ecs, huawei-vpc, huawei-obs. Lowercase letters, digits, dashes only."
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_list_regions",
+            "description": "List available Huawei Cloud regions. Returns region IDs, display names, and endpoints. Use when the agent needs to discover available regions before creating resources. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_get_regional_availability",
+            "description": "Check if a specific Huawei Cloud service is available in a target region. Use before creating resources to prevent failures from regional unavailability.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "service": {
+                  "type": "string",
+                  "description": "Service name: ecs, obs, rds, gaussdb, cce, modelarts, functiongraph, etc."
+                },
+                "region": {
+                  "type": "string",
+                  "description": "Region ID: cn-south-1, cn-north-4, ap-southeast-3, etc."
+                }
+              },
+              "required": [
+                "service",
+                "region"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_search_marketplace",
+            "description": "Search the Huawei Cloud agent skill marketplace for available skills. Returns scored results with names, categories, and descriptions. Use when built-in skills are insufficient or the user asks what skills exist.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "query": {
+                  "description": "Search query across skill name, description, triggers, and service.",
+                  "type": "string"
+                },
+                "category": {
+                  "description": "Optional category filter: computing, storage, network, security, devtools, monitoring, etc.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_get_service_icon",
+            "description": "Find the official Huawei Cloud service logo from the Huawei Cloud Icons library (open.huaweicloud.com/openplatform/icons.html). Returns top 5 matches with CDN logo URLs, local paths, category, aliases, and product page links. Provide service (e.g. ecs, obs, modelarts, 对象存储) or category (e.g. 计算, 存储, 人工智能) to browse. Use when generating PPT, architecture diagrams (draw.io), or frontend pages that need official Huawei Cloud service logos.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "service": {
+                  "description": "Service name, alias, or Chinese name, e.g. ecs, obs, modelarts, 对象存储, 虚拟私有云. Omit to browse by category only.",
+                  "type": "string"
+                },
+                "category": {
+                  "description": "Optional category filter, e.g. 计算, 存储, 网络, 人工智能, 数据库, 安全, 企业应用.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_detect_framework",
+            "description": "Scan a local project directory to identify the web framework (React/Vue/Angular/Next.js/Nuxt/VitePress/Docusaurus/Hugo/Hexo/Taro/uni-app), package manager, and monorepo tool. Returns framework type, build commands, output directory, and port. Use before deploying a web application to determine the correct build pipeline.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "projectPath": {
+                  "type": "string",
+                  "description": "Absolute path to the local project directory to scan."
+                }
+              },
+              "required": [
+                "projectPath"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_setup_obs_config",
+            "description": "Synchronize KooCLI credentials to OBS config (~/.obsutilconfig). KooCLI and OBS use separate credential stores — hcloud commands work fine but OBS commands fail with \"Please set ak, sk\" unless this sync is done. Run this once to enable OBS operations; re-run after changing hcloud credentials.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "profile": {
+                  "description": "Optional KooCLI profile name. Uses the active profile by default.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_auth_status",
+            "description": "Check unified Huawei Cloud authentication status across the global credential vault, OBS, KooCLI, and all supported agent MCP registrations. Returns only redacted/status information, never credentials. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "target": {
+                  "description": "Agent target to check: opencode, codex, codex-desktop, codearts, codearts-work, workbuddy, dsh, officeace, hermes, openclaw, atomcode, or all (default).",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_auth_sync",
+            "description": "Synchronize credentials from the global Huawei Cloud credential vault to OBS and report agent registration status. Does not write secrets into any agent config.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "target": {
+                  "description": "Agent target to report after sync: opencode, codex, codex-desktop, codearts, codearts-work, workbuddy, dsh, officeace, hermes, or all (default).",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_auth_init",
+            "description": "Set or clear runtime Huawei Cloud credentials (AK/SK) for this MCP session. Runtime credentials take highest priority over environment variables and config files for all subsequent API calls. Use when switching accounts within the same Agent session — call with AK/SK to switch, or with clear=true to fall back to env/file credentials. Approval-gated: the account switch requires the user’s explicit confirmation, and the confirmation view names the target account fingerprint — in the default token mode the first call returns USER_CONFIRMATION_REQUIRED with an approvalToken the user confirms in their own terminal (npx huaweicloud-devkit approve <token>); under DEVKIT_APPROVAL_MODE=ask the server raises the confirmation itself (an elicitation form, or the ASK_CONFIRMATION_REQUIRED chat round-trip). Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "ak": {
+                  "description": "Huawei Cloud Access Key (required unless clear=true)",
+                  "type": "string"
+                },
+                "sk": {
+                  "description": "Huawei Cloud Secret Key (required unless clear=true)",
+                  "type": "string"
+                },
+                "region": {
+                  "description": "Default region (optional)",
+                  "type": "string"
+                },
+                "clear": {
+                  "description": "Set to true to clear runtime credentials and revert to env/file",
+                  "type": "boolean"
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the USER_CONFIRMATION_REQUIRED envelope this gate returns); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_auth_switch",
+            "description": "Switch Huawei Cloud credentials within the current session. action=temporary keeps AK/SK in memory only (restart loses them; hcloud commands are unaffected and an A+C warning will be raised). action=persist writes S1 (single source of truth) with configuredBySession flag and propagates to S2 (KooCLI current profile) and S3 (OBS). action=clear resets runtime credentials. mode=import reads AK/SK from ~/.config/huaweicloud/creds-import.json then wipes it (SK never enters conversation). mode=memory passes AK/SK as tool arguments (SK is visible to model - prefer import). mode=mcp-config reads the injected mcp_settings environment. Approval-gated: the switch requires the user’s explicit confirmation, and the confirmation view names the target account fingerprint and the credential source — in the default token mode the first call returns USER_CONFIRMATION_REQUIRED with an approvalToken the user confirms in their own terminal (npx huaweicloud-devkit approve <token>); under DEVKIT_APPROVAL_MODE=ask the server raises the confirmation itself (an elicitation form, or the ASK_CONFIRMATION_REQUIRED chat round-trip). Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "mode": {
+                  "description": "Credential source channel",
+                  "type": "string",
+                  "enum": [
+                    "import",
+                    "memory",
+                    "mcp-config"
+                  ]
+                },
+                "action": {
+                  "description": "Apply scope",
+                  "type": "string",
+                  "enum": [
+                    "persist",
+                    "temporary",
+                    "clear"
+                  ]
+                },
+                "ak": {
+                  "description": "Huawei Cloud Access Key to switch this session to.",
+                  "type": "string"
+                },
+                "sk": {
+                  "description": "Huawei Cloud Secret Key to switch this session to.",
+                  "type": "string"
+                },
+                "securityToken": {
+                  "description": "Security (STS) token when the new credentials are session-scoped.",
+                  "type": "string"
+                },
+                "region": {
+                  "description": "Optional default region applied with the switched credentials.",
+                  "type": "string"
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the USER_CONFIRMATION_REQUIRED envelope this gate returns); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_auth_confirm",
+            "description": "Confirm a pending credential reconciliation choice returned by auth_switch persist when S1 already holds a different account (R2). decision=s1 keeps S1 as source of truth and propagates it; decision=newImported propagates the newly imported account into S1 and mirrors. Tokens are process-scoped: they live only in the MCP server process that minted them and die with it — confirm in the same session that ran auth_switch, or re-run auth_switch after a restart.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "token": {
+                  "description": "confirmation token from the needs_confirmation response",
+                  "type": "string"
+                },
+                "decision": {
+                  "description": "Reconciliation choice: s1 keeps the existing S1 vault credentials; newImported adopts the newly imported ones.",
+                  "type": "string",
+                  "enum": [
+                    "s1",
+                    "newImported"
+                  ]
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_exec_with_session",
+            "description": "Execute a command on a workspace terminal with session reuse (state persists across calls). Shell state (cd, env vars, aliases) carries over between calls. Use for interactive work and command sequences that need shared state. NOT for long-running commands (>30s) — prefer exec_one_shot for those.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "command": {
+                  "type": "string",
+                  "description": "The shell command to execute on the remote workspace"
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (default: 120000)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "command"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_exec_one_shot",
+            "description": "Execute a command on a workspace terminal with a fresh connection per call (no session state carries over). Each invocation opens a new WebSocket connection, executes one command, then disconnects. Use for long-running build/deploy/install commands (>30s) that do not need shell state persistence between calls. More stable than session-based execution for heavy workloads. Commands that can outlive the sync timeout (default 120s) must run in mode: \"async\" instead: the tool claims a per-task directory with an atomic O_EXCL claim, spawns the command detached (setsid/nohup/disown — it survives the exec session), and returns immediately with {started, taskId, taskDir}; poll the verdict with huaweicloud_sandbox_exec_poll — that async + poll pair is the >30s long-command doctrine, and the same-task_id retry after started:\"uncertain\" is structurally double-spawn-safe. started:\"dup\" + verdict \"never\" → start over with a NEW task_id.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "command": {
+                  "type": "string",
+                  "description": "The shell command to execute on the remote workspace"
+                },
+                "mode": {
+                  "description": "sync (default): this exec waits for the command and returns its output. async: claim a per-task directory and spawn the command detached (it survives the exec session), return {started, taskId, taskDir} immediately, then poll with huaweicloud_sandbox_exec_poll. Use async for build/install-class commands that can outlive the sync timeout. Retry ladder: started:\"uncertain\" (start exec timed out, the claim may be placed) → retry the SAME task_id — the claim file blocks a second spawn; started:\"dup\" + verdict \"never\" → start over with a NEW task_id.",
+                  "type": "string",
+                  "enum": [
+                    "sync",
+                    "async"
+                  ]
+                },
+                "task_id": {
+                  "description": "async mode: the task id to claim, ^[a-z0-9][a-z0-9-]{0,63}$ (path- and pgrep-safe). Defaults to a generated id. Reuse the SAME task_id when retrying an uncertain start — the claim file blocks a second copy.",
+                  "type": "string"
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (sync default: 120000; async bounds only the start exec, default 30000 — the async command itself is unbounded and outlives the exec)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "command"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_exec_poll",
+            "description": "Poll an async sandbox task started by huaweicloud_sandbox_exec_one_shot with mode: \"async\". One call runs a bounded server-side wait (wait_ms 0-60000: sleep-2 intervals checking the task's status file; the exec timeout auto-folds to wait_ms + 15s so the wait always fits), then returns the task's verdict as a discriminated union — done (exitCode + logTail: the command finished), running (logTail: keep polling), lost (the wrapper died without an exit status, or the task directory vanished — a sandbox reboot — while this process remembered the task; restart with a new task_id if needed), never (the task was claimed but never launched — the start exec died between claim and spawn; start a NEW task_id, a same-id retry can never spawn), unknown (no task directory and no memory of the task_id — it never started here, or both the sandbox and this agent restarted). logTail is the last tail_bytes (default 4096) of the task's captured stdout+stderr. The retry ladder: started:\"uncertain\" → retry the SAME task_id (the claim file blocks a second copy); started:\"dup\" + verdict \"never\" → new task_id.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "type": "string",
+                  "description": "The task id from huaweicloud_sandbox_exec_one_shot async mode, ^[a-z0-9][a-z0-9-]{0,63}$."
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "wait_ms": {
+                  "description": "Bounded in-poll wait: sleep-2 intervals checking the task status file, 0-60000 (default 0 — snapshot only). The exec timeout auto-raises to wait_ms + 15000 so the wait always fits.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "tail_bytes": {
+                  "description": "Log tail size in bytes, 1-65536 (default: 4096).",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (default: 30000; auto-raised to wait_ms + 15000 headroom, never below the default)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "task_id"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_close_session",
+            "description": "Close the persistent terminal session for a workspace. This closes the agent-side terminal session only — it does NOT delete the sandbox instance. Resource-pool sandbox deletion is developer-initiated (always ask for a second confirmation before guiding a delete) or handled by the platform resource-group idle-reclaim policy within the 7-day cap (v3 caliber); devkit never defers or performs deletion on the user behalf.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_upload_file",
+            "description": "Upload a local file into the sandbox workspace. Base64-encodes the file, writes it in small chunks through the terminal session (the exec channel is fragile for large single commands), then decodes and verifies the md5 checksum. The remote parent directory is created automatically if absent. Use this instead of embedding large file content directly in a command. local_path must be readable from the machine running the DevKit MCP server — if the file lives elsewhere, copy it to the local temp directory first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "local_path": {
+                  "type": "string",
+                  "description": "Absolute path to the local file, readable from the machine running the DevKit MCP server (copy to the local temp dir first if not)."
+                },
+                "remote_path": {
+                  "type": "string",
+                  "description": "Target path in the sandbox, e.g. /workspace/<repo>/index.html. The remote parent directory is created automatically if absent."
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (default: 120000)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "local_path",
+                "remote_path"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_upload_project",
+            "description": "Package a local project directory and upload it to a sandbox workspace via HTTP tunnel. Creates a tar.gz archive, uploads it, and extracts it on the sandbox by default. local_dir must be readable from the machine running the DevKit MCP server — if the project lives elsewhere, copy it to the local temp directory first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "local_dir": {
+                  "type": "string",
+                  "description": "Local project directory, readable from the machine running the DevKit MCP server (copy to the local temp dir first if not)."
+                },
+                "remote_dir": {
+                  "description": "Remote parent directory where project will be extracted (default: /workspace). Final layout: <remote_dir>/<dirname>/",
+                  "type": "string"
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "exclude": {
+                  "description": "Patterns to exclude from archive (default: .git, node_modules, __pycache__, .venv)",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "extract": {
+                  "description": "Extract tar.gz on sandbox after upload (default: true)",
+                  "type": "boolean"
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (default: 120000)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "local_dir"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_deploy_nginx",
+            "description": "Deploy an nginx configuration on the sandbox and reload. Takes nginxType, port, project, outputDir from framework detection and writes the correct template (SPA try_files, SSR reverse proxy, or static). Also fixes directory traverse permissions on the project path. Use this instead of manually constructing nginx config — it handles permissions, template selection, and reload in one call. If the requested port is already in use, the actual port is auto-incremented and returned in \"port\" alongside a warning.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "nginx_type": {
+                  "type": "string",
+                  "enum": [
+                    "spa",
+                    "proxy",
+                    "static"
+                  ],
+                  "description": "Nginx config type from framework detection: spa (try_files fallback for SPA/SSG/cross-platform), proxy (reverse proxy for SSR), or static (plain root for Hugo/Hexo)."
+                },
+                "port": {
+                  "description": "Listen port (from framework detection).",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "project": {
+                  "type": "string",
+                  "description": "Project directory name under /workspace, e.g. movie-ticket."
+                },
+                "output_dir": {
+                  "type": "string",
+                  "description": "Build output directory relative to /workspace/<project>, e.g. dist/build/h5."
+                },
+                "node_port": {
+                  "description": "Node.js app port for SSR proxy. Defaults to the resolved nginx listen port plus one (targetPort + 1) when omitted; the result carries nodePort so you know which port to bind the Node process to.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "public_port": {
+                  "description": "Public listen port for SSR proxy (optional, defaults to port).",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "config_name": {
+                  "description": "Config file name (without .conf suffix). Defaults to the project name, ensuring each project gets its own config. Override with distinct names (e.g. admin, docs) for sub-app deployments.",
+                  "type": "string"
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (default: 60000)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "nginx_type",
+                "port",
+                "project",
+                "output_dir"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_deploy_check",
+            "description": "Run a deployment completeness check on the sandbox. Verifies nginx is serving, output directory exists, DevBridge tunnel is active and accessible, and QR code exists (cross-platform). Returns a score, nextStep, and (when the DevBridge tunnel is missing) an executable \"remediation\" command string. Call this at the end of a deployment workflow to confirm everything is working before reporting success.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "port": {
+                  "description": "App listen port (from framework detection).",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "project": {
+                  "type": "string",
+                  "description": "Project directory name under /workspace."
+                },
+                "output_dir": {
+                  "type": "string",
+                  "description": "Build output directory relative to /workspace/<project>, e.g. dist/build/h5."
+                },
+                "framework_type": {
+                  "description": "Framework type from detect_framework. Set to cross-platform for QR code check.",
+                  "type": "string",
+                  "enum": [
+                    "spa",
+                    "ssr",
+                    "ssg",
+                    "cross-platform",
+                    "monorepo",
+                    "static"
+                  ]
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (default: 60000)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "port",
+                "project",
+                "output_dir"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_expose_tunnel",
+            "description": "Expose a port on the sandbox to a public DevBridge tunnel URL (devbridge 0.2.x). Authenticates automatically (DevBridge auth is fixed to API Key — AK/SK login removed: the waterfall reads the sandbox keyring, then the /tmp/hw_api_key file channel; when both are empty it auto-creates the per-account × per-pool key (devkit-ephemeral/devkit-persistent) via the DevStation relay API and injects it, reporting authMode API_KEY_AUTO), selectively cleans only same-port/orphan tunnels before exposing (cleanup_mode=stale default — other ports, other sessions and keepalive-protected tunnels are preserved, except a tunnel bound to THIS port, which is always replaced; on 10006 quota it removes orphans first, then the oldest non-keepalive tunnel one at a time), starts the host detached from the exec session (setsid/nohup/disown so it survives session teardown), extracts the public URL (https://<id>-<port>.devbridge-s2.hwtunnel.com), and health-checks it before returning. Use the ACTUAL port reported by huaweicloud_sandbox_deploy_nginx (its \"port\" field auto-increments on conflict) — never the originally requested port. This automates the manual \"Expose the deployed app\" flow (huawei-sandbox skill). Returns ok, publicUrl, port, tunnelId, authMode, expiresAt (expiry_hours lifetime, default 72h; 1-720), keepalive.enrolled/tunnelCount/watchdogPid, warnings, sandboxLifetime and urlLifetimeHint. The urlLifetimeHint MUST be relayed to the developer together with the URL: the tunnel expiry is NOT the sandbox lifetime — an idle sandbox shuts down (ephemeral also auto-deletes), which kills the URL. AUTO-ENROLLS the tunnel into the keepalive watchdog (unattended renewal + host re-attach + health check; pass keepalive:false to opt out). The URL is re-verified from a second independent exec session: persistent/verifyHttpCode distinguish a session-surviving URL from one that dies with the deploying session, and a non-persistent URL carries a 请勿分享 warning. Gateway-level tunnel errors (404 \"tunnel not found\" / \"port not configured\", 502 \"bad gateway\") are classified by exact body — an app's own 404/502 page is never mistaken for them. When no usable URL is reachable after retries it returns ok:false instead of a dead URL; when the tunnel quota (10006) stays full after the selective cleanup it returns ok:false with error_code devbridge_tunnel_quota_exceeded (keepalive-protected tunnels are preserved — remove unused tunnels or retry with cleanup_mode=all for a full reset). When auto-creation hits the 20-key quota it returns ok:false with error_code HDKIT_DEVBRIDGE_KEY_QUOTA_EXCEEDED, the currentKeys list, and the console cleanup URL; a failed key invalidation self-heals by clearing the cache and recreating before the next probe. The auto-create relay goes through hdkitservice and inherits its 409 HDKIT_VERSION_TOO_OLD version gate: an outdated plugin fails auto-create the same way it fails connect, and the expose failure carries error_code HDKIT_VERSION_TOO_OLD with the upgrade remediation under gateRemediation, and clientVersion and minVersion when the service sends them — upgrade the plugin instead of creating a key by hand.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "port": {
+                  "description": "Port nginx actually serves on — use the \"port\" value returned by huaweicloud_sandbox_deploy_nginx, not the originally requested port.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "expiry_hours": {
+                  "description": "Tunnel lifetime in hours, 1-720 (default 72). 720 = the devbridge 30-day maximum; the keepalive watchdog renews to 720h daily.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "keepalive": {
+                  "description": "Enroll the tunnel into the keepalive watchdog (default true — pass false to opt out). Returns keepalive.enrolled/tunnelCount/watchdogPid.",
+                  "type": "boolean"
+                },
+                "cleanup_mode": {
+                  "description": "Tunnel cleanup before exposing. stale (default): delete same-port tunnels + orphan records/hosts; preserve other ports, other sessions and keepalive-protected tunnels — except a tunnel bound to THIS port, which is always replaced. all: wipe every tunnel/host (manual full reset only — a shared sandbox loses every session's tunnels). none: no cleanup (a stale same-port host can then conflict).",
+                  "type": "string",
+                  "enum": [
+                    "stale",
+                    "all",
+                    "none"
+                  ]
+                },
+                "mode": {
+                  "description": "sync (default): run the whole expose chain and return its result. async: start the chain in the background and return {started:true, taskId, hint} immediately — use it on MCP hosts whose per-request timeout is shorter than the expose chain (auth + selective cleanup + up to four ~63s expose attempts + re-verify + keepalive enrollment), then poll huaweicloud_sandbox_expose_poll with taskId. The task receipt lives in this MCP server process (30 min).",
+                  "type": "string",
+                  "enum": [
+                    "sync",
+                    "async"
+                  ]
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (default: 90000)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "port"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_expose_poll",
+            "description": "Poll an async expose task started by huaweicloud_sandbox_expose_tunnel with mode: \"async\". Returns state: running (the chain is still working — call again), done (result carries the full expose envelope: ok, publicUrl, port, tunnelId, expiresAt, urlLifetimeHint, keepalive, warnings), failed (an unexpected throw escaped the chain, with error), or unknown (no receipt in this MCP server process — it never started here, the session restarted, or the 30-minute receipt expired; the tunnel may already exist, so check huaweicloud_sandbox_deploy_check or re-expose — never assume success without a URL). The urlLifetimeHint MUST be relayed with the URL: the tunnel expiry is not the sandbox lifetime.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "type": "string",
+                  "pattern": "^exp-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                  "description": "The taskId returned by huaweicloud_sandbox_expose_tunnel with mode:\"async\"."
+                }
+              },
+              "required": [
+                "task_id"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_check_user",
+            "description": "Check if the current user has completed real-name verification and signed the required agreements. Returns 200 {realnameVerified, agreementSigned} when all good; throws 403 HDKIT_NOT_REALNAME / HDKIT_NOT_AGREEMENT / HDKIT_NOT_REALNAME_AND_AGREEMENT to indicate what is missing. Never signs anything itself.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {},
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_sign_agreement",
+            "description": "Sign all unsigned or outdated agreements for the current user. Required before huaweicloud_sandbox_connect if check-user returns agreementSigned=false. CRITICAL: only call after the user explicitly consents to signing — never sign agreements on the user's behalf without their explicit request.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_connect",
+            "description": "Connect to a sandbox via hdkitservice. One instance per user per pool — reuses the same-pool sandbox if available, otherwise creates a new one. Quota: 1 instance per pool type (a user may hold 1 ephemeral AND 1 persistent simultaneously; same-type requests reuse the existing instance). On quota exhaustion the API returns HTTP 429 with one of three codes: HDKIT_QUOTA_EXCEEDED (retry useless — release or reuse the existing instance; Retry-After 60), HDKIT_TEMPLATE_QUOTA_EXCEEDED (the running instances of this account for this sandbox type are at the limit — shut down or release an instance of the same type and retry; no Retry-After), or HDKIT_CAPACITY_INSUFFICIENT (pool capacity; retry later / off-peak; Retry-After 60). Gateway 502/504 timeouts during orchestration return a pending receipt (ok:false, pending:true, retryAfter, hint) instead of holding the call through the backoff — the server may already have created the instance; re-call this tool with the SAME parameters after retryAfter and a created instance is reused. An outdated plugin version is rejected by the 409 HDKIT_VERSION_TOO_OLD version gate, surfaced by the sandbox tools (connect/check_user/sign_agreement/credentials) as ok:false and by the voucher trio as claimed:false, always carrying code, message, and remediation naming the upgrade act (npx --yes huaweicloud-devkit@latest update --target <agent>, restart the agent session, or huaweicloud_upgrade), with clientVersion and minVersion present when the service sends them. Returns session_id, dev_stage_id, connection_id, connection_address, expiresAt (STS credential expiry), pool_type/resolved template_id echo, server-configured lifecycle numbers (pool_idle_shutdown_minutes / pool_idle_delete_minutes / pool_reclaim_minutes) and started (true when a reused instance was woken from shutdown). Lifecycle hints are announced only on the first connect of a session or when started=true. Ephemeral pool (default): idle auto-shutdown after 30min, auto-delete after 1h — do not keep important data there. Persistent pool: data disk retained (EVS 32G), idle shutdown after 1h, idle reclaim capped at 7 days. Numbers are configured by hdkitservice; the text follows the server echo and falls back to these defaults. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "source": {
+                  "description": "Source identifier (default: WEB). Options: VSCODE, CLI, WEB, WEBVNC, WEBPTY, WEBIDE, CURSOR, etc.",
+                  "type": "string"
+                },
+                "pool_type": {
+                  "description": "Sandbox pool type (default ephemeral). ephemeral = non-persistent: idle auto-shutdown 30min + auto-delete 1h (platform scheduled task, verified) — save important data elsewhere; persistent = data disk retained, idle reclaim within 7 days. Each user may hold one instance per pool type (1+1); same-type requests reuse the existing instance. Custom templates are no longer supported.",
+                  "type": "string",
+                  "enum": [
+                    "ephemeral",
+                    "persistent"
+                  ]
+                },
+                "flavor_id": {
+                  "description": "Flavor ID; overrides server default (only for new sandbox)",
+                  "type": "string"
+                },
+                "env": {
+                  "description": "Environment variables to set in the sandbox (only for new sandbox)",
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "git": {
+                  "description": "Git repo config (only for new sandbox)",
+                  "type": "object",
+                  "properties": {
+                    "repo_url": {
+                      "type": "string"
+                    },
+                    "repo_branch": {
+                      "type": "string"
+                    },
+                    "repo_name": {
+                      "type": "string"
+                    },
+                    "target_path": {
+                      "type": "string"
+                    },
+                    "open_type": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": {}
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_credentials",
+            "description": "Configure temporary AK/SK for a sandbox via hdkitservice. Validates the current AK/SK against IAM before injecting (invalid SK is rejected here instead of failing later with APIGW.0301 during exec), then injects temporary credentials into the sandbox. Also injects an optional DevBridge API Key — required for devbridge 0.2.x tunnel exposure because 0.2.x removed AK/SK login. The API Key is a long-lived account-level credential, so it is stored in a separate file (/tmp/hw_api_key, 0600) from the temporary AK/SK (/tmp/hw_creds.sh). Source of truth: local HW_API_KEY env first, then the api_key param. The sandbox must be in RUNNING state.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "session_id": {
+                  "description": "Session ID from huaweicloud_sandbox_connect",
+                  "type": "string"
+                },
+                "dev_stage_id": {
+                  "description": "DevStation environment ID (alternative to session_id)",
+                  "type": "string"
+                },
+                "enable_sts": {
+                  "description": "Whether to enable STS temporary AK/SK (default: true)",
+                  "type": "boolean"
+                },
+                "region": {
+                  "description": "Region used for IAM credential validation and project_id resolution (defaults to the configured region)",
+                  "type": "string"
+                },
+                "api_key": {
+                  "description": "DevBridge API Key (devbridge_...), injected into the sandbox as HW_API_KEY for devbridge 0.2.x auth. Also accepts a vault ref (secret://<scope>/<name>), resolved locally so the key never enters the conversation. The local HW_API_KEY environment variable takes precedence over this param (preferred delivery — keeps the long-lived key out of the conversation). Users create one at https://devstation.connect.huaweicloud.com/space/devbridge/apikey (full value shown once at creation). Required for exposing web apps via devbridge 0.2.x; if missing, guide the user through creating one.",
+                  "type": "string"
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_shutdown",
+            "description": "Shut down a running sandbox via hdkitservice to stop core-hour consumption. This calls DevStation close, NOT delete: the instance is retained; for persistent sandboxes the EVS data disk is also retained. A later huaweicloud_sandbox_connect wakes it. Works for both ephemeral and persistent sandboxes. Only call when the developer explicitly asks to shut down; never auto-shutdown. Returns devStageId, status (stopped/shutting_down/already_stopped/close_requested) and message.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "session_id": {
+                  "description": "Session ID from huaweicloud_sandbox_connect (optional)",
+                  "type": "string"
+                },
+                "dev_stage_id": {
+                  "description": "DevStation environment ID (alternative to session_id)",
+                  "type": "string"
+                },
+                "workspace_id": {
+                  "description": "Workspace ID; defaults to the current workspace (an alternative to session_id/dev_stage_id)",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_voucher_status",
+            "description": "查询代金券领取状态。当会话已处于华为云任务上下文（用户已指明华为云，或先前轮次已确认）且用户首次使用或询问插件能力时，主动调用本工具检查：未领取（claimed=false）则主动提示可领取一张代金券；已领取（claimed=true）则不提示、不打扰；claimed=false 且 code=HDKIT_VERSION_TOO_OLD 表示客户端版本过旧——转述 remediation 升级引导，绝不提示领券。厂商未定（用户未指明、上下文无法推断）时不要调用——先问用户用的是哪家云。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "domain_id": {
+                  "description": "Optional. Leave empty in production — account is resolved from IAM automatically.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_voucher_claim",
+            "description": "领取代金券（一人一次）。重复领取会返回已领取。Vendor-gated (vendorConfirmed)：仅在厂商已确立时调用（见参数规则）；厂商未定时先问用户用的是哪家云。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "domain_id": {
+                  "description": "Optional. Leave empty in production — account is resolved from IAM automatically.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_competition_voucher_claim",
+            "description": "领取华为开发者大赛·小红书skill创新赛专属华为云代金券。前置条件：用户已完成该赛事报名（后端自动校验，未报名返回 code=HDKIT_NOT_SIGNED_UP）。仅当用户明确要求领取该赛事代金券时调用，不要主动提示。重复领取会返回已领取。Vendor-gated (vendorConfirmed)：仅在厂商已确立时调用（见参数规则）；厂商未定时先问用户用的是哪家云。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "vendorConfirmed": {
+                  "description": "Vendor gate: quote the user's words that establish Huawei Cloud — the sentence or turn where they named it, their hcloud/KooCLI artifacts, a myhuaweicloud endpoint, a Huawei region ID, or an earlier confirmation. The devkit being installed or this tool being available is NOT confirmation, and neither is service vocabulary: a quote you invented is a fabricated user statement. If you cannot quote the user, the vendor is not established — ask which cloud they mean instead of calling.",
+                  "type": "string"
+                },
+                "domain_id": {
+                  "description": "Optional. Leave empty in production — account is resolved from IAM automatically.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_check_update",
+            "description": "检查 huaweicloud-devkit 插件是否有新版本。结果含 currentVersion / latestStable / latestNext / targetVersion / updateAvailable / dismissExpiresAt / result。支持 dismiss:true 记录用户拒绝（3 天冷却，新版本会重新提醒）。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "dismiss": {
+                  "description": "用户拒绝升级时传 true，记录冷却状态。",
+                  "type": "boolean"
+                },
+                "dismissVersion": {
+                  "description": "与 dismiss:true 搭配，用户拒绝的版本号。缺省时用当前检测到的 targetVersion。",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_upgrade",
+            "description": "升级 huaweicloud-devkit 到最新版本。升级会改写磁盘上的插件本体，因此由审批门机械把关：默认 token 模式下，无 token 调用会返回 USER_CONFIRMATION_REQUIRED 与 approve 命令行，用户在自己的终端确认后才可重试；DEVKIT_APPROVAL_MODE=ask 时由服务器在调用内弹出确认（表单或聊天往返）。version 仅支持 \"latest\"。完成后需重启会话生效。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "version": {
+                  "description": "仅支持 \"latest\"（默认）。",
+                  "type": "string"
+                },
+                "target": {
+                  "description": "agent 目标（opencode/codex/codearts/.../all）。缺省时用 all（仅更新已安装的）。",
+                  "type": "string"
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_obs_set_website_config",
+            "description": "配置 OBS 桶的静态网站托管（推荐路径：无需手写 XML，此工具内部实现 AWS4 签名调用 OBS REST API，屏蔽签名细节）。支持 set（配置）、get（查询）、delete（删除）三种操作。审批门把关（PR-3c）：set 与 delete 是对线上桶的签名 PUT/DELETE，无 token 调用返回 USER_CONFIRMATION_REQUIRED 供用户在终端确认，DEVKIT_APPROVAL_MODE=ask 时由服务器弹出确认；get 是签名只读，从不确认、直接执行。KooCLI 7.3.12+ 另有 `hcloud OBS website -method=put -localfile=<xml>`（XML 文件方式；7.2.x 无此 CLI 命令）。操作前需确保桶已创建且已设置 public-read ACL。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "set",
+                    "get",
+                    "delete"
+                  ],
+                  "description": "操作类型：set=配置静态网站托管，get=查询当前配置，delete=删除配置"
+                },
+                "bucket": {
+                  "type": "string",
+                  "description": "OBS 桶名称"
+                },
+                "region": {
+                  "type": "string",
+                  "description": "OBS 桶所在区域，如 cn-north-4"
+                },
+                "indexDocument": {
+                  "description": "首页文件名（action=set 时必填），如 index.html",
+                  "type": "string"
+                },
+                "errorDocument": {
+                  "description": "错误页面文件名（action=set 时可选），如 404.html 或 error.html",
+                  "type": "string"
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "action",
+                "bucket",
+                "region"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_obs_set_cors",
+            "description": "配置 OBS 桶的 CORS 规则（浏览器直传前置条件；推荐路径：此工具内部实现 AWS4 签名调用 OBS REST API（PUT/GET/DELETE /?cors），无需手写 XML，屏蔽签名细节）。支持 set（配置）、get（查询）、delete（删除）三种操作。审批门把关（PR-3c）：set 与 delete 是对线上桶的签名 PUT/DELETE，无 token 调用返回 USER_CONFIRMATION_REQUIRED 供用户在终端确认，DEVKIT_APPROVAL_MODE=ask 时由服务器弹出确认；get 是签名只读，从不确认、直接执行。allowedMethod 必须含 HEAD（BrowserJS SDK 每次操作前发 HEAD ?apiversion 探测，缺 HEAD 时浏览器吞掉探测请求报 Network Error）。KooCLI 7.3.12+ 另有 `hcloud OBS cors obs://<bucket> -method=put -localfile=<xml>`（XML 文件方式；7.2.x 无此 CLI 命令）。配置成功后用返回体中的 verify 命令做 OPTIONS 预检验证（200 + Access-Control-Allow-Origin 才算成功）。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "set",
+                    "get",
+                    "delete"
+                  ],
+                  "description": "操作类型：set=配置 CORS 规则，get=查询当前规则，delete=删除规则"
+                },
+                "bucket": {
+                  "type": "string",
+                  "description": "OBS 桶名称"
+                },
+                "region": {
+                  "type": "string",
+                  "description": "OBS 桶所在区域，如 cn-north-4"
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "rules": {
+                  "description": "CORS 规则数组（action=set 时必填）；allowedMethod 必须含 HEAD",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "allowedOrigin": {
+                        "type": "string",
+                        "description": "允许的来源，如 https://your-app.example.com 或 *"
+                      },
+                      "allowedMethod": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "允许的 HTTP 方法（GET/PUT/POST/DELETE/HEAD，必须含 HEAD — BrowserJS SDK 探测依赖）"
+                      },
+                      "allowedHeader": {
+                        "description": "允许的请求头，默认 [\"*\"]",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "maxAgeSeconds": {
+                        "description": "预检结果缓存秒数，默认 3000",
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "allowedOrigin",
+                      "allowedMethod"
+                    ],
+                    "additionalProperties": {}
+                  }
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "action",
+                "bucket",
+                "region"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_check_account_type",
+            "description": "Check whether the current credentials belong to the primary account or an IAM sub-user. Runs STS GetCallerIdentity + IAM KeystoneListAuthDomains (both read-only, no identity-policy permission required) and applies the validated rule: username == domainName -> primary account, otherwise IAM sub-user. Use before sandbox deployment (primary-account prechecks), account confirmation, or any task that needs to know who the current AK/SK belongs to. Returns isPrimaryAccount, applicable, domainId, domainName, userId, username, principalUrn, and an evidence string. Agency-session credentials are detected and reported as applicable:false.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "region": {
+                  "description": "Optional region ID for the region-level GetCallerIdentity endpoint (e.g., cn-north-4). Defaults to the configured cli-region.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_renew_tunnel",
+            "description": "Renew a DevBridge tunnel's lifetime (devbridge update <id> -e <hours>) — a ROLLING window: expiration = now + hours regardless of remaining time, so renewing before expiry keeps the SAME public URL alive indefinitely (the URL is bound to the tunnel ID and never changes). Default 720h = the 30-day maximum. Returns ok, tunnelId, expiresAt (absolute ISO timestamp read back via show -v — a management-plane loss (10002 tunnel not found) is NOT misread as success), renewedForHours. Use the tunnelId from huaweicloud_sandbox_expose_tunnel or extract it from the URL. The keepalive watchdog renews automatically; this tool is the manual/one-off path.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "tunnel_id": {
+                  "type": "string",
+                  "description": "DevBridge tunnel ID to renew (from expose_tunnel's tunnelId field, or extract from the URL https://<tunnel_id>-<port>.devbridge-s2.hwtunnel.com)."
+                },
+                "expiry_hours": {
+                  "description": "New lifetime in hours, 1-720 (default 720 = the 30-day maximum). Renewal is a rolling window — the same URL stays alive.",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (default: 60000)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tunnel_id"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_sandbox_keepalive_watchdog",
+            "description": "Install or replace the 3-layer keepalive watchdog for a set of tunnels (the tunnel-persistence pattern): (1) host re-attach — restarts `devbridge host <id>` when the host process dies (URL unchanged); (2) daily renewal — `update <id> -e 720` (29-day failure tolerance); (3) health check — curls each URL every 5 minutes and logs WARN on non-200/304. URLs are hardcoded per tunnel (never derived from port-list output — OSC escapes make those greps fail silently). Replaces the current watchdog (expose_tunnel MERGES into it; this tool SETS the list). Returns ok, scriptPath, logPath, watchdogPid, tunnels. The watchdog lives at /tmp/tunnel-keepalive.sh — cleared on reboot (the tunnel LIST dies with it): re-run this tool with the full list after a reboot (a re-expose enrolls only its own NEW tunnel).",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "tunnels": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "tunnel_id": {
+                        "type": "string",
+                        "description": "DevBridge tunnel ID (from expose_tunnel or the URL); a camelCase tunnelId key is also accepted."
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "The tunnel's public URL (from expose_tunnel's publicUrl)."
+                      }
+                    },
+                    "required": [
+                      "tunnel_id",
+                      "url"
+                    ],
+                    "additionalProperties": {}
+                  },
+                  "description": "Tunnels for the watchdog to protect: {tunnel_id, url}. Replaces the current list (expose_tunnel MERGES; this tool sets)."
+                },
+                "workspace_id": {
+                  "description": "Workspace ID from huaweicloud_sandbox_connect return value. Required - must be passed explicitly when HW_WORKSPACE_ID is not set.",
+                  "type": "string"
+                },
+                "username": {
+                  "description": "Login username (default: root)",
+                  "type": "string"
+                },
+                "timeout_ms": {
+                  "description": "Execution timeout in milliseconds (default: 60000)",
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tunnels"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_list_packs",
+            "description": "List the devkit capability packs — the complete skill and tool inventory of this server. Returns each pack with id, title, description, the skill names it owns (browse their metadata with huaweicloud_list_skills, load them with huaweicloud_retrieve_skill), its tool names, and the enabled flag. The \"huaweicloud-cli\" pack carries the twenty Huawei Cloud service skills (ecs, vpc, obs, iam, rds, ...) with per-service CLI workflows plus the seven KooCLI execution tools (check_cli, plan_cli_command, run_readonly_command, list_operations, run_approved_command, show_profile_redacted, list_regions); the huaweicloud-cli-and-auth skill covers KooCLI installation and credentials. Use this to discover what the devkit knows before picking a skill or pack.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {},
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_pack_info",
+            "description": "Inspect one capability pack. Takes pack (a pack id from huaweicloud_list_packs) and returns the pack title, description, claimed skills, enabled flag, and every tool in the pack with name, description, and JSON Schema. Use to decide which pack covers a task before loading a skill with huaweicloud_retrieve_skill.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "pack": {
+                  "type": "string",
+                  "description": "Pack id from huaweicloud_list_packs, such as core, huaweicloud-cli, sandbox, auth, obs, voucher, update, discovery, huaweicloud-open-mcp."
+                }
+              },
+              "required": [
+                "pack"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_list_skills",
+            "description": "List the metadata of every pack-owned skill in one call — name, description, version, owning pack, and reference filenames — the effective catalog: which skills are ENABLED is pack-gated (the operator’s DEVKIT_PACKS posture — a stdio agent session can toggle packs at runtime, see the server instructions), so a huawei-* service skill absent from this list belongs to a trimmed pack; treat it as unavailable and confirm with the user before enabling anything (the six huaweicloud-* meta-skills never appear in the list and are always available — see the exclusion note below). Browse it to pick a skill before paying for huaweicloud_retrieve_skill (which returns the full SKILL.md plus every reference body). On stdio sessions the payload also carries skillRoot, the absolute location of the skills tree — the same location the server instructions state at initialize — and the ONLY root for pack-owned service skills (on directory-loading agents, the native skills directory holding the huaweicloud-* meta-skill copies is a different root; never guess a service skill’s path by analogy to it) — for direct reads: <skillRoot>/<name>/SKILL.md and the references/ files with your own file tools, untruncated and only the file you need (attempt the direct read first — when the attempted read fails or is denied, load via huaweicloud_retrieve_skill instead; the root uses host-native separators; a huaweicloud_search_docs source’s skills/ prefix is this same root). Remote sessions omit skillRoot (the path lives on the server host) — load skills with huaweicloud_retrieve_skill there. Covers the huawei-* service/domain skills of enabled non-core packs, and the six core meta-skills (huaweicloud-*) are excluded by design: directory-loading agents disclose them natively in the system prompt, and huaweicloud_retrieve_skill serves them everywhere. Optional pack filter takes a pack id from huaweicloud_list_packs.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "pack": {
+                  "description": "Optional pack id filter from huaweicloud_list_packs. Skill-owning packs (huaweicloud-cli, sandbox, obs, voucher, huaweicloud-open-mcp) list their skills; a valid zero-skill pack (auth, update, discovery, secrets) returns an empty list; the core pack is refused with an explanation (its six meta-skills are excluded by design). Omit to list every enabled pack’s skills.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_packs_configure",
+            "description": "Enable or disable capability packs for THIS session, or reset to the operator posture. Session-scoped: the change lives in this server process only and the next session restart restores the DEVKIT_PACKS posture the operator configured. Takes enable (pack ids to add), disable (pack ids to remove; core cannot be disabled), and reset (drop the session override). The refreshed tool list is pushed to the agent immediately. Approval-gated in every mode because widening the disclosure face is the consequence: the no-token call returns USER_CONFIRMATION_REQUIRED naming the pack ids with the approve line for the user’s own terminal (token mode), and under DEVKIT_APPROVAL_MODE=ask the server raises the confirmation itself (a form on a capable client, else an ASK_CONFIRMATION_REQUIRED chat round-trip). Stdio agent sessions only — surfaces with no session state are refused outright. The persistent equivalent is the operator CLI (npx huaweicloud-devkit packs enable <ids> --target <agent>); ask the operator to run it and restart the agent.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "enable": {
+                  "description": "Pack ids to enable for this session, e.g. [\"obs\", \"sandbox\"]. Ignored when the surface is already full.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "core",
+                      "huaweicloud-cli",
+                      "sandbox",
+                      "auth",
+                      "obs",
+                      "voucher",
+                      "update",
+                      "discovery",
+                      "huaweicloud-open-mcp",
+                      "secrets"
+                    ]
+                  }
+                },
+                "disable": {
+                  "description": "Pack ids to disable for this session. core cannot be disabled.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "core",
+                      "huaweicloud-cli",
+                      "sandbox",
+                      "auth",
+                      "obs",
+                      "voucher",
+                      "update",
+                      "discovery",
+                      "huaweicloud-open-mcp",
+                      "secrets"
+                    ]
+                  }
+                },
+                "reset": {
+                  "description": "Drop the session override and return to the operator DEVKIT_PACKS posture.",
+                  "type": "boolean"
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_gateway_list_tools",
+            "description": "List the open-mcp gateway child's live tool surface (names, descriptions, input schemas) as its tools/list reports. Use it to check gateway capabilities and drift from the devkit projection before generic calls. Read-only; needs no credentials.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {},
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_gateway_call",
+            "description": "Call one open-mcp gateway tool generically with tool and toolArgs — the single face for every gateway tool. Read-only discovery (no credentials): search_apis (query; optional limit/category) finds products by entity keywords when none is named; list_products (optional category/keyword) and get_product (product; optional include_sops) cover the product dimension (category, is_global — include_sops adds full SOP texts); list_apis (product; optional tag/search/limit/offset/include_sops) lists one product's API catalog with tag_groups; get_api (product, api; optional region) returns full API documentation — parameter types/enums, x-constraint preconditions, response schema, region endpoint — a must-read before any call; get_api_examples (product, api; optional region) returns official request examples. Discovery chain: search_apis → list_apis → get_api → get_api_examples. execute_api, manage_policy, query_data, and transform_data are delegated to the gateway's own policy engine: the first call forwards immediately, and when the engine refuses, its reason names the grant options — confirm the grant with the user in conversation after the refusal (a standing go-ahead for the task is not consent for a policy write), grant with manage_policy add using an ephemeral scope (once/session/temporary), then retry the call. Permanent grants are an operator policy-file edit (hot-reload). Denied outright, no grant path: secret operations, file targets inside devkit state, non-canonical manage_policy action/scope spellings, permanent-scope add, ttl_seconds on add or remove, remove with scope, and tool names outside the devkit's static vocabulary.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "tool": {
+                  "type": "string",
+                  "description": "Gateway tool name, e.g. execute_api, query_data (see huaweicloud_gateway_list_tools)."
+                },
+                "toolArgs": {
+                  "description": "Arguments object for the gateway tool.",
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "tool"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_gateway_restart",
+            "description": "Recycle the open-mcp gateway child of this MCP server process, e.g. after upgrading the gateway on the host (npx huaweicloud-devkit dep install open-mcp-gateway) while the session was live. In-flight gateway calls are interrupted when the old child stops. No arguments. In-process lifecycle only; needs no credentials.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {},
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_secret_set",
+            "description": "Store or rotate a secret in the local encrypted vault under a secret://<scope>/<name> ref and get back the ref, version, and keyed fingerprint — never the value. Storing identical content is a no-op; changed content rotates (version increments, previous value gone). Delivery channels: value (plaintext as a tool argument — it enters the conversation, use only when the user deliberately pastes the secret), file (a path the MCP server reads), envVar (a variable from the MCP server environment).",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "pattern": "^secret:\\/\\/([a-z0-9][a-z0-9-]{0,63})\\/([a-z0-9][a-z0-9-]{0,63})$",
+                  "description": "Vault ref to store or rotate, e.g. secret://user/hw-sk."
+                },
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "value",
+                    "file",
+                    "envVar"
+                  ],
+                  "description": "How the plaintext arrives. value passes it as a tool argument (it enters the conversation — only use when the user deliberately pastes the secret). file reads a path on the MCP server host (one trailing newline is stripped). envVar reads a variable from the MCP server environment."
+                },
+                "value": {
+                  "description": "Plaintext for channel=value. Visible in the conversation; prefer file/envVar.",
+                  "type": "string"
+                },
+                "file": {
+                  "description": "File path for channel=file, read by the MCP server process.",
+                  "type": "string"
+                },
+                "envVar": {
+                  "description": "Variable name for channel=envVar, read from the MCP server environment.",
+                  "type": "string"
+                },
+                "note": {
+                  "description": "Free-form note surfaced by secret list.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "ref",
+                "channel"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_secret_list",
+            "description": "List stored secret refs, optionally within one scope, with version, update time, note, and keyed fingerprint. Reads only the encrypted envelopes; never decrypts and never returns secret values.",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "description": "Restrict to one scope; omit to list all scopes.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "huaweicloud_secret_delete",
+            "description": "Delete one secret from the local vault by ref. Destructive with no version history, so the approval gate mediates every call: in the default token mode a no-token call returns USER_CONFIRMATION_REQUIRED with the approve command line for the user’s own terminal, and under DEVKIT_APPROVAL_MODE=ask the server raises the confirmation itself (form, or an ASK_CONFIRMATION_REQUIRED chat round-trip). Deleting a ref that S1 credentials.json points at breaks those credential reads until the operator re-stores it (the strict vault seam fails closed on the unresolvable ref). Idempotent: removed=1 when a secret was deleted, removed=0 when the ref was not stored (usually a typo in the ref — check with huaweicloud_secret_list).",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "pattern": "^secret:\\/\\/([a-z0-9][a-z0-9-]{0,63})\\/([a-z0-9][a-z0-9-]{0,63})$",
+                  "description": "Vault ref to delete."
+                },
+                "approvalToken": {
+                  "description": "Required in token-approval mode (from the minting face — the plan tool, or the approval gate's USER_CONFIRMATION_REQUIRED envelope); omit in ask mode, where the server-run gate confirms at run time.",
+                  "type": "string"
+                },
+                "approvedByUser": {
+                  "description": "Must be true only after the user explicitly approves this exact call. In token mode the gate requires it; in ask mode the server-run confirmation asks the user itself, and this flag is the chat round-trip retry marker (posture trust) when the client cannot render a form.",
+                  "type": "boolean"
+                },
+                "confirmLanguage": {
+                  "description": "Optional: the user's conversation language, 'zh' (Chinese) or 'en' — the approval confirmation form renders its display text in that language.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "ref"
+              ],
+              "additionalProperties": {}
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          }
+        ]
+      },
+      "jsonrpc": "2.0",
+      "id": 2
+    },
+    "badRaw": "Content-Length: 97208\r\n\r\n{\"result\":{\"tools\":[{\"name\":\"huaweicloud_check_cli\",\"description\":\"Check whether Huawei Cloud KooCLI hcloud is installed and whether its version matches the plugin paired version. Returns redacted output. Vendor-gated (vendorConfirmed): call only when the vendor is established — see the vendorConfirmed parameter description; when unknown, ask which cloud the user means first.\",\"inputSchema\":{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"vendorConfirmed\":{\"description\":\"Vendor gate: quote the user's words that establish Huawei Cloud "
+  }
+}

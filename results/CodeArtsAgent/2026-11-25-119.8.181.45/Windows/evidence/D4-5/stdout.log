@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "why": "DeleteServers?write(deny)?ListServersDetails?read_only(allow)",
+  "result": {
+    "write": {
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.",
+      "findings": [
+        {
+          "ruleId": "hwc-destructive-delete-operation",
+          "title": "Destructive cloud resource operation",
+          "category": "destructive",
+          "severity": "warn",
+          "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+          "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+          "source": "command",
+          "evidence": "hcloud ECS DeleteServers --server_id=abc"
+        }
+      ],
+      "warnings": [
+        {
+          "ruleId": "hwc-destructive-delete-operation",
+          "title": "Destructive cloud resource operation",
+          "category": "destructive",
+          "severity": "warn",
+          "message": "This hcloud command will delete, detach, or remove cloud resources. The operation may be irreversible.",
+          "remediation": "List the resources to be affected first, confirm with the user, and require explicit approval before executing any destructive operation.",
+          "source": "command",
+          "evidence": "hcloud ECS DeleteServers --server_id=abc"
+        }
+      ]
+    },
+    "read": {
+      "decision": "allow",
+      "risk": "read_only",
+      "reason": "Command appears to be a read-only Huawei Cloud operation.",
+      "service": "ECS",
+      "operation": "ListServersDetails",
+      "args": [
+        "ECS",
+        "ListServersDetails"
+      ]
+    }
+  }
+}
