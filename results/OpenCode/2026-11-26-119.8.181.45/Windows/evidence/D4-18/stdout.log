@@ -1,0 +1,15 @@
+{
+  "caseId": "D4-18",
+  "status": "PASS",
+  "why": "写操作进入确认流程（safeToRun=false + approvalToken），无有效令牌被拒执行",
+  "executedAt": "20261126050317",
+  "result": {
+    "classification": "deny",
+    "safeToRun": false,
+    "reject": {
+      "status": "rejected",
+      "code": "CONFIRM_TOKEN_NOT_FOUND",
+      "nextStep": "This approvalToken was never minted in this process — malformed, or dropped by a server restart (tokens are process-scoped and never persisted). Re-run the plan call to mint a fresh approvalToken, then retry this call with it."
+    }
+  }
+}
