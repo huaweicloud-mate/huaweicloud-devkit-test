@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "why": "check_cli/ list_operations/ plan/ explain_error=true/true/true/true",
+  "result": {
+    "check_cli": {
+      "installed": true,
+      "authenticated": true,
+      "status": "ok",
+      "output": "\u001b[1;92m当前KooCLI版本:7.3.12\u001b[0m",
+      "kooCliVersion": "7.3.12",
+      "installedVersion": "7.3.12",
+      "versionMismatch": false,
+      "nextStep": "huaweicloud_show_profile_redacted",
+      "raw": "Use huaweicloud_show_profile_redacted to inspect the active KooCLI profile safely.",
+      "authHint": "If hcloud is installed but commands fail with \"配置文件中不存在配置项\", run `npx huaweicloud-devkit auth init` outside agent chat to configure credentials."
+    },
+    "plan": {
+      "executable": "hcloud",
+      "args": [
+        "ECS",
+        "ListServersDetails"
+      ],
+      "command": "hcloud ECS ListServersDetails",
+      "executableBlock": "hcloud ECS ListServersDetails",
+      "warnings": [],
+      "classification": {
+        "decision": "allow",
+        "risk": "read_only",
+        "reason": "Command appears to be a read-only Huawei Cloud operation.",
+        "service": "ECS",
+        "operation": "ListServersDetails",
+        "args": [
+          "ECS",
+          "ListServersDetails"
+        ]
+      },
+      "sgFindings": [],
+      "approvalToken": "3d026531-1aa6-4840-a262-a38f86918056",
+      "safeToRun": true
+    },
+    "error": {
+      "service": "ECS",
+      "errorCode": "Ecs.0200",
+      "requestId": "",
+      "suggestions": [
+        "List resources in the same region/project and verify the resource identifier."
+      ]
+    }
+  }
+}
