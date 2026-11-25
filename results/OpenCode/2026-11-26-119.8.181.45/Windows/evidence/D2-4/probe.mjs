@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSy
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const HDK = "C:\\Users\\Administrator\\.workbuddy\\binaries\\node\\versions\\22.22.2-3\\node_modules\\huaweicloud-devkit";
+const HDK = "C:\\Users\\Administrator\\devkit-test\\OpenCode\\toolchain-next6\\node_modules\\huaweicloud-devkit";
 const EV = "C:\\Users\\Administrator\\devkit-test\\OpenCode\\huaweicloud-devkit-test\\results\\OpenCode\\2026-11-26-119.8.181.45\\Windows\\evidence\\D2-4";
 const CASE_ID = "D2-4";
 const NK = (() => { const d = new Date(Date.now() + 8 * 3600 * 1000); return d.toISOString().replace(/[-:T]/g, '').slice(0, 14); })();
@@ -37,7 +37,7 @@ const r = await tm.callTool('huaweicloud_show_profile_redacted', { profile: 'def
 const s = JSON.stringify(r);
 const leak = /(HPUA[A-Z0-9]{6,}|secretAccessKey\s*:\s*"[^"<]|accessKeyId\s*:\s*"[A-Z0-9]{10,})/.test(s);
 if (r && r.ok === true && !leak) emit('PASS', 'show_profile_redacted 输出无明文凭证字段 plaintext_leak=false', r);
-else emit('FAIL', '输出存在明文凭证泄漏', { leak, r });
+else emit('FAIL', leak ? '输出存在明文凭证泄漏' : ('show_profile_redacted 执行失败，无法验证脱敏: ok=' + (r && r.ok) + ' errorCode=' + (r && r.result && r.result.errorCode) + '（同 D2-10 --cli-profile 空格分隔缺陷）'), { leak, ok: r && r.ok, errorCode: r && r.result && r.result.errorCode, r });
 
 }
 main().catch((e) => emit('FAIL', 'probe exception: ' + ((e && e.stack) || e), { error: String((e && e.message) || e) }));

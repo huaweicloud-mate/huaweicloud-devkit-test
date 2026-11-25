@@ -1,10 +1,21 @@
 {
   "caseId": "D3-S2",
-  "status": "FAIL",
-  "why": "probe produced no stdout.log (exit=0)",
-  "executedAt": "20261126050506",
+  "status": "PASS",
+  "why": "删 VPC 先确认：plan=deny、未确认 run 被拒（CONFIRM_TOKEN_NOT_FOUND）、真机创建后未确认删除不生效、清理归零",
+  "executedAt": "20261126050918",
   "result": {
-    "stdout": "{\"caseId\":\"D3-S2\",\"status\":\"PASS\",\"why\":\"删 VPC 先确认：plan=deny、未确认 run 被拒（CONFIRM_TOKEN_NOT_FOUND）、真机创建后未确认删除不生效、清理归零\"}\n",
-    "stderr": ""
+    "plan": "deny",
+    "runNo": {
+      "status": "rejected",
+      "code": "CONFIRM_TOKEN_NOT_FOUND"
+    },
+    "runNo2": {
+      "status": "rejected",
+      "code": "CONFIRM_TOKEN_NOT_FOUND"
+    },
+    "created": true,
+    "deletedByTool": false,
+    "stillThere": true,
+    "zeroResidue": true
   }
 }

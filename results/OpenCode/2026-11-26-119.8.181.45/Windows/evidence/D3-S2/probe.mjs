@@ -3,7 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import os from 'node:os';
-const EV = String.raw`C:\Users\Administrator\devkit-test\testbot4-win-Opencode\huaweicloud-devkit-test\results\OpenCode\2026-11-25-119.8.181.45\Windows\evidence\D3-S2`;
+const EV = String.raw`C:\Users\Administrator\devkit-test\OpenCode\huaweicloud-devkit-test\results\OpenCode\2026-11-26-119.8.181.45\Windows\evidence\D3-S2`;
 const CASE_ID = 'D3-S2';
 const HDK = 'C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit';
 const NK = (() => { const d = new Date(Date.now() + 8 * 3600 * 1000); return d.toISOString().replace(/[-:T]/g, '').slice(0, 14); })();

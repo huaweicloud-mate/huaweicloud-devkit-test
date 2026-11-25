@@ -1,10 +1,25 @@
 {
   "caseId": "D3-C2",
-  "status": "FAIL",
-  "why": "probe produced no stdout.log (exit=0)",
-  "executedAt": "20261126050428",
+  "status": "PASS",
+  "why": "OBS 建桶（带 LocationConstraint）→ 删除 → 归零验证通过；只读子账号 list 被拒",
+  "executedAt": "20261126050916",
   "result": {
-    "stdout": "{\"caseId\":\"D3-C2\",\"status\":\"PASS\",\"why\":\"OBS 建桶（带 LocationConstraint）→ 删除 → 归零验证通过；只读子账号 list 被拒\"}\n",
-    "stderr": ""
+    "bucket": "tctest-obs-1126050916",
+    "adminCreate": {
+      "status": 200,
+      "body": ""
+    },
+    "roList": {
+      "status": 403
+    },
+    "invalidAk": false,
+    "roDenied": true,
+    "delete": {
+      "status": 204
+    },
+    "afterList": {
+      "status": 403,
+      "gone": true
+    }
   }
 }

@@ -1,0 +1,1 @@
+const u = await import("file:///C:/Users/Administrator/.workbuddy/binaries/node/versions/22.22.2-3/node_modules/huaweicloud-devkit/plugins/huaweicloud-core/dist/update-check.js"); u.queryDistTagsSync({timeoutMs:1}); console.log("DEBUG_PROBE_DONE");

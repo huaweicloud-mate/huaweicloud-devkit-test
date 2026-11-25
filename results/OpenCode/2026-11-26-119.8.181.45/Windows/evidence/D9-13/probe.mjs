@@ -32,7 +32,7 @@ function emit(status, why, result) {
 }
 async function main() {
 
-const __disp = async (method, params) => { const { responses } = await mcp([{ jsonrpc: '2.0', id: 1, method, params }], { wait: 1000 }); const r = responses.find((x) => x.id === 1) || {}; if (r.error) { const e = new Error(r.error.message); e.code = r.error.code; throw e; } return r.result; };
+const __disp = async (method, params) => { const seq = [{ jsonrpc: '2.0', id: 0, method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'probe', version: '1' } } }, { jsonrpc: '2.0', method: 'notifications/initialized' }, { jsonrpc: '2.0', id: 1, method, params }]; const { responses } = await mcp(seq, { wait: 3000, gap: 300 }); const r = responses.find((x) => x.id === 1) || {}; if (r.error) { const e = new Error(r.error.message); e.code = r.error.code; throw e; } return r.result; };
 const p = { dispatch: __disp };
 const c = await mod('plugins/huaweicloud-core/dist/auth/credentials.js');
 const s = await mod('plugins/huaweicloud-core/dist/safety-policy.js');
