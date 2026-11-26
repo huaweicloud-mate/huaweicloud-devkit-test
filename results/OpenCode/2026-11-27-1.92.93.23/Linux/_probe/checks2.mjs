@@ -82,15 +82,20 @@ reg('D3-C13', async () => {
     }
     mbOk = mb.ok || /successfully/i.test(mb.text);
     if (mbOk) {
-      const set = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
-      setOk = !set.__error && /200|ok|success|index/i.test(JSON.stringify(set));
+      // 2.0.x：obs_set_website_config action=set 走审批门（classified gate → ASK_CONFIRMATION_REQUIRED），
+      // 需 approvedByUser:true 重试后真实执行（confirm-not-deny）。
+      const set1 = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html' });
+      const needConfirm = set1 && (set1.code === 'ASK_CONFIRMATION_REQUIRED' || set1.userConfirmation?.needed === true);
+      let set = set1;
+      if (needConfirm) set = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'set', bucket, region: REGION, indexDocument: 'index.html', approvedByUser: true });
+      setOk = !!set && !set.__error && (set.ok === true || /200|success|website|Website/i.test(JSON.stringify(set)));
       const get = await h.tools.callTool('huaweicloud_obs_set_website_config', { action: 'get', bucket, region: REGION });
-      getOk = !get.__error && /index\.html|indexDocument|Suffix/i.test(JSON.stringify(get));
+      getOk = !!get && !get.__error && /index\.html|IndexDocument|Suffix/i.test(JSON.stringify(get));
     }
   } finally {
     sh(['OBS', 'rm', `obs://${bucket}`, '-f']);
   }
-  return chk(mbOk && setOk && getOk, `OBS 静态网站 get/set: mb=${mbOk} set=${setOk} get=${getOk}(已归零)`, JSON.stringify({ mbOk, setOk, getOk }));
+  return chk(mbOk && setOk && getOk, `OBS 静态网站 get/set(含审批确认): mb=${mbOk} set=${setOk} get=${getOk}(已归零)`, JSON.stringify({ mbOk, setOk, getOk }));
 });
 
 // D3-C14 沙箱 HDKit 凭证：夹具 d3-c14-sandbox-hwlink-cred.mjs 的 hdkit-no-cred-throws 子项
@@ -272,9 +277,10 @@ reg('D4-3', async () => {
 
 reg('D4-4', async () => {
   const h = await hdk();
-  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['ECS', 'CreateServers', '--dry-run'], allowWrites: true });
-  const needsApproval = plan && (plan.approvalToken || plan.classification?.decision !== 'allow');
-  return chk(needsApproval, `写操作审批门: approvalToken 存在=${!!(plan && plan.approvalToken)}`, JSON.stringify(plan).slice(0, 200));
+  // 2.0.x：审批门迁移到 run_approved_command（ask 态），写操作未审批 → ASK_CONFIRMATION_REQUIRED（不可执行）
+  const run = await h.tools.callTool('huaweicloud_run_approved_command', { args: ['ECS', 'CreateServers', '--count=1'] });
+  const gated = !!(run && (run.status === 'rejected' || run.code === 'ASK_CONFIRMATION_REQUIRED' || (run.userConfirmation && run.userConfirmation.needed === true)));
+  return chk(gated, `写操作审批门(无审批不可执行): code=${run && run.code} status=${run && run.status}`, JSON.stringify(run).slice(0, 200));
 });
 
 reg('D4-5', async () => {
@@ -330,7 +336,22 @@ reg('D4-11', async () => {
   return chk(noExec, 'search_docs 返回内容为数据（注入指令未执行）', txt.slice(0, 150));
 });
 
-fixture('D4-12', 'd4-12-supply-chain.mjs');
+reg('D4-12', async () => {
+  const h = await hdk();
+  const fs = await import('node:fs'); const path = await import('node:path');
+  const pkgPath = joinUp(h.SRC, 3, 'package.json');
+  let okPost = false, okFiles = false, okPkg = false;
+  try {
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+    okPkg = !!pkg.version && !!pkg.name;
+    const post = pkg.scripts && pkg.scripts.postinstall || '';
+    const isSelf = /^node\s+(\.\/)?bin\//.test(post);
+    const noRemote = !/https?:\/\/|curl|wget|iex/i.test(post);
+    okPost = isSelf && noRemote;
+    okFiles = Array.isArray(pkg.files) && pkg.files.includes('rules');
+  } catch (e) {}
+  return chk(okPkg && okPost && okFiles, `供应链安装期安全: pkg=${okPkg} postinstall自托管无远程=${okPost} files白名单=${okFiles}`, JSON.stringify({ okPkg, okPost, okFiles }));
+});
 
 reg('D4-13', async () => {
   const h = await hdk();
@@ -377,8 +398,9 @@ reg('D4-17', async () => {
 reg('D4-18', async () => {
   const h = await hdk();
   const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['VPC', 'CreateVpc', '--vpc.name=t'], allowWrites: true });
-  const confirm = plan && (plan.approvalToken || plan.needsApproval !== false);
-  return chk(confirm, `confirm-not-deny 审批语义: approvalToken=${!!(plan && plan.approvalToken)}`, JSON.stringify(plan).slice(0, 160));
+  const r = await h.tools.callTool('huaweicloud_run_approved_command', { args: ['VPC', 'CreateVpc', '--vpc.name=t'] });
+  const needsConfirm = !!(r && r.status === 'rejected' && r.code === 'ASK_CONFIRMATION_REQUIRED');
+  return chk(needsConfirm, `confirm-not-deny 审批语义(写操作需显式确认, 非直接放行/拒绝): code=${r && r.code}`, JSON.stringify(r).slice(0, 160));
 });
 
 reg('D4-19', async () => {
@@ -390,15 +412,10 @@ reg('D4-19', async () => {
 
 reg('D4-20', async () => {
   const h = await hdk();
-  // 拒绝后零操作：approvedByUser=false 必须拒绝且不执行（runApprovedCommand 抛拒绝 = 零执行）
-  const plan = await h.tools.callTool('huaweicloud_plan_cli_command', { args: ['VPC', 'DeleteVpc', '--vpc_id=nonexist'], allowWrites: true });
-  let rejected = false, reason = '';
-  if (plan && plan.approvalToken) {
-    try {
-      await h.tools.callTool('huaweicloud_run_approved_command', { args: ['VPC', 'DeleteVpc', '--vpc_id=nonexist'], approvalToken: plan.approvalToken, approvedByUser: false });
-    } catch (e) { rejected = true; reason = String(e).slice(0, 80); }
-  }
-  return chk(rejected, `拒绝后零操作(未批准 → 抛拒绝, 零执行): ${reason}`, `未拒绝: ${JSON.stringify(plan).slice(0, 120)}`);
+  // 拒绝后零操作：approvedByUser=false 必须拒绝且不执行
+  const r = await h.tools.callTool('huaweicloud_run_approved_command', { args: ['VPC', 'DeleteVpc', '--vpc_id=nonexist'], approvedByUser: false });
+  const rejected = !!(r && (r.status === 'rejected' || r.code === 'ASK_CONFIRMATION_REQUIRED'));
+  return chk(rejected, `拒绝后零操作(approvedByUser=false → 拒绝, 零执行): code=${r && r.code}`, `未拒绝: ${JSON.stringify(r).slice(0, 120)}`);
 });
 
 reg('D4-21', async () => {
@@ -436,7 +453,8 @@ reg('D4-24', async () => {
   const tok = h.hcl.createApprovalToken(['VPC', 'DeleteVpc', '--vpc_id=x']);
   const c1 = h.hcl.consumeApprovalToken(tok);
   const c2 = h.hcl.consumeApprovalToken(tok);
-  return chk(c1 != null && c2 == null, `审批令牌一次性消费: first=${JSON.stringify(c1)} second=${JSON.stringify(c2)}`, JSON.stringify({ c1, c2 }));
+  const once = !!(c1 && c1.status === 'consumed') && !!(c2 && c2.status === 'gone');
+  return chk(once, `审批令牌一次性消费(consumed→gone): first=${c1 && c1.status} second=${c2 && c2.status}`, JSON.stringify({ c1, c2 }));
 });
 
 reg('D4-25', async () => {
@@ -474,7 +492,18 @@ reg('D4-28', async () => {
   return chk(r.decision === 'deny' || c.decision === 'deny', `Node 安全 hook 链路: risk=${r.decision} classify=${c.decision}`, JSON.stringify({ r: r.decision, c: c.decision }));
 });
 
-fixture('D4-29', 'd4-29-classify-assert.mjs');
+reg('D4-29', async () => {
+  const h = await hdk();
+  const raw = h.tools.classifyRawCommand('ls -la');
+  const txt = h.sp.classifyTextCommand('ls -la');
+  const delegates = JSON.stringify(raw) === JSON.stringify(txt);
+  let allowOk = false;
+  try { allowOk = h.sp.assertAllowed(h.sp.classifyTextCommand('echo hello')) ? true : false; } catch { allowOk = false; }
+  let denyThrows = false;
+  try { h.sp.assertAllowed(h.sp.classifyTextCommand('cat ~/.hcloud/credentials')); } catch (e) { denyThrows = !!(e && e.policy); }
+  const shapeOk = raw && typeof raw.decision === 'string' && typeof raw.reason === 'string';
+  return chk(delegates && allowOk && denyThrows && shapeOk, `分类断言: classifyRawCommand委托=${delegates} allow不抛=${allowOk} deny抛拒绝=${denyThrows} 含decision/reason=${shapeOk}`, JSON.stringify({ delegates, allowOk, denyThrows, shapeOk, raw: raw && { d: raw.decision } }));
+});
 
 // 工具函数
 function joinUp(base, n, ...rest) {

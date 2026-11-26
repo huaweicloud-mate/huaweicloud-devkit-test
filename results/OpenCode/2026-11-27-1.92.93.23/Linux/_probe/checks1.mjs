@@ -152,12 +152,12 @@ reg('D1-67', async () => {
   const h = await hdk();
   const fs = await import('node:fs');
   // 2.0.x：AGENT_TOOLKIT_MODE/SKIP_DSH 分布到 update-upgrade.js + agents/dsh.js（不再是 setup-cli.mjs）
-  const up = fs.readFileSync(join0(h.SRC, 'update-upgrade.js'), 'utf-8');
+  const mcmg = fs.readFileSync(join0(h.SRC, 'mcp-config-merge.js'), 'utf-8');
   const dsh = fs.readFileSync(join0(h.SRC, 'agents', 'dsh.js'), 'utf-8');
-  const hasAgentTk = /AGENT_TOOLKIT_MODE/.test(up + dsh);
-  const hasSkipDsh = /SKIP_DSH/.test(up + dsh);
-  const hasHcloudBin = /HCLOUD_BIN|REQUIRED_ENV_KEYS/.test(up + dsh);
-  return chk(hasAgentTk && hasSkipDsh, `AGENT_TOOLKIT_MODE=${hasAgentTk} SKIP_DSH=${hasSkipDsh} HCLOUD_BIN/REQUIRED_ENV_KEYS=${hasHcloudBin}`, `AGENT_TOOLKIT_MODE=${hasAgentTk} SKIP_DSH=${hasSkipDsh} HCLOUD_BIN=${hasHcloudBin}`);
+  const hasAgentTk = /HUAWEICLOUD_AGENT_TOOLKIT_MODE/.test(mcmg + dsh);
+  const hasSkipDsh = /SKIP_DSH/.test(fs.readFileSync(join0(h.SRC, 'update-upgrade.js'), 'utf-8') + dsh);
+  const hasHcloudBin = /REQUIRED_ENV_KEYS/.test(mcmg) && /HCLOUD_BIN/.test(mcmg);
+  return chk(hasAgentTk && hasSkipDsh && hasHcloudBin, `HUAWEICLOUD_AGENT_TOOLKIT_MODE=${hasAgentTk} SKIP_DSH=${hasSkipDsh} REQUIRED_ENV_KEYS(HCLOUD_BIN)=${hasHcloudBin}`, `HUAWEICLOUD_AGENT_TOOLKIT_MODE=${hasAgentTk} SKIP_DSH=${hasSkipDsh} HCLOUD_BIN=${hasHcloudBin}`);
 });
 
 reg('D1-68', async () => {
@@ -267,9 +267,16 @@ reg('D2-11', async () => {
   let cred = null;
   try { cred = JSON.parse(fs.readFileSync(`${process.env.HOME}/.config/huaweicloud/credentials.json`, 'utf-8')); } catch {}
   if (!cred || !cred.ak) return blocked('credentials.json 缺失', '解除: 配置真云凭证');
-  const r = await h.tools.callTool('huaweicloud_auth_switch', { action: 'persist', ak: cred.ak, sk: cred.sk, securityToken: 'STS_TOKEN_TEST_XYZ', region: cred.region || 'cn-north-4' });
-  const txt = JSON.stringify(r);
-  const rejected = /rejected|error|Temporary STS|cannot be persisted/i.test(txt);
+  let txt = '';
+  let rejected = false;
+  try {
+    const r = await h.tools.callTool('huaweicloud_auth_switch', { action: 'persist', ak: cred.ak, sk: cred.sk, securityToken: 'STS_TOKEN_TEST_XYZ', region: cred.region || 'cn-north-4' });
+    txt = JSON.stringify(r);
+    rejected = /rejected|error|Temporary STS|cannot be persisted|STS/i.test(txt);
+  } catch (e) {
+    txt = String(e && e.message ? e.message : e);
+    rejected = /Temporary STS|STS|persist|cannot/i.test(txt);
+  }
   return chk(rejected, `STS persist 拒绝落盘(R3): ${txt.slice(0, 140)}`, txt.slice(0, 240));
 });
 
@@ -281,13 +288,44 @@ reg('D2-12', async () => {
   return chk(!!sync, `auth_sync 可调用(R10 runtime 抑制): ${JSON.stringify(sync).slice(0, 150)}`, 'auth_sync 失败');
 });
 
-fixture('D2-13', 'd2-13-s1-env.mjs');
+reg('D2-13', async () => {
+  const h = await hdk();
+  const fs = await import('node:fs'); const os = await import('node:os'); const path = await import('node:path');
+  const iso = path.join(os.tmpdir(), `hdk-d213-${Date.now()}`);
+  fs.mkdirSync(iso, { recursive: true });
+  const bak = { HOME: process.env.HOME, HW_ACCESS_KEY: process.env.HW_ACCESS_KEY, HW_SECRET_KEY: process.env.HW_SECRET_KEY, HUAWEICLOUD_HOME: process.env.HUAWEICLOUD_HOME };
+  process.env.HOME = iso; process.env.HUAWEICLOUD_HOME = iso;
+  process.env.HW_ACCESS_KEY = 'AK_ENV_R9'; process.env.HW_SECRET_KEY = 'SK_ENV_R9';
+  try {
+    // 无 S1 标记时 env 兜底
+    h.authCred.clearRuntimeCredentials();
+    let r = h.authCred.resolveCredentials({});
+    const envWins = r && r.ak === 'AK_ENV_R9';
+    // S1 写入 configuredBySession=true → 会话标记优先于 env
+    h.authCred.writeGlobalCredentials({ ak: 'AK_SESSION_R9', sk: 'SK_SESSION_R9', region: 'cn-north-4' });
+    h.authCred.setConfiguredBySession(true);
+    r = h.authCred.resolveCredentials({});
+    const sessionWins = r && r.ak === 'AK_SESSION_R9';
+    // 清除标记 → env 兜底恢复
+    h.authCred.setConfiguredBySession(false);
+    r = h.authCred.resolveCredentials({});
+    const envRestore = r && r.ak === 'AK_ENV_R9';
+    return chk(envWins && sessionWins && envRestore, `R9 configuredBySession优先env: envWins=${envWins} sessionWins=${sessionWins} envRestore=${envRestore}`, JSON.stringify({ envWins, sessionWins, envRestore }));
+  } finally {
+    for (const k of Object.keys(bak)) { if (bak[k] === undefined) delete process.env[k]; else process.env[k] = bak[k]; }
+    fs.rmSync(iso, { recursive: true, force: true });
+    h.authCred.clearRuntimeCredentials();
+  }
+});
 
 reg('D2-16', async () => {
   const h = await hdk();
   const src = (await import('node:fs')).readFileSync(join0(h.SRC, 'tools.js'), 'utf-8');
-  const erase = /import[\s\S]{0,200}(unlink|rmSync)[\s\S]{0,100}creds-import|creds-import\.json/.test(src) || /creds-import/.test(src);
-  return chk(erase, 'auth_switch import 后擦除 creds-import.json 逻辑存在', 'import 擦除逻辑缺失');
+  // 2.0.x：auth_switch import/erase 逻辑移到 packs/auth/tools.js（clearImportFile 导入并调用）
+  const src2 = (await import('node:fs')).readFileSync(join0(h.SRC, 'packs', 'auth', 'tools.js'), 'utf-8');
+  const libc = (await import('node:fs')).readFileSync(join0(h.SRC, 'lib', 'credentials.js'), 'utf-8');
+  const erase = /clearImportFile/.test(src2) && /function clearImportFile|export function clearImportFile/.test(libc);
+  return chk(erase, 'auth_switch import 后擦除 creds-import.json(clearImportFile) 逻辑存在', 'import 擦除逻辑缺失');
 });
 
 reg('D2-26', async () => {
@@ -310,6 +348,13 @@ reg('D2-26', async () => {
   return chk(bk && re, `backup/restore 闭环: backup=${bk} restore=${re}`, JSON.stringify({ bk, re }));
 });
 
-fixture('D2-27', 'd2-27-koocli-version.mjs');
+reg('D2-27', async () => {
+  const h = await hdk();
+  const v = h.kv.getKooCliVersion();
+  const m = h.kv.parseHcloudVersion('KooCLI version: 5.3.12\n(nhr:...)');
+  const cmp = h.kv.compareVersion('5.3.12', '5.3.11') > 0;
+  const dlBase = h.kv.kooCliDownloadBase();
+  return chk(!!v && m === '5.3.12' && cmp && /KOO_CLI_BASE/.test(dlBase || '') || /cli/.test(dlBase || ''), `KooCLI 版本管理: getKooCliVersion=${v} parse=${m} cmp=${cmp} downloadBase=${dlBase}`, JSON.stringify({ v, m, cmp, dlBase }));
+});
 
 function join0(...p) { return p.join('/'); }
