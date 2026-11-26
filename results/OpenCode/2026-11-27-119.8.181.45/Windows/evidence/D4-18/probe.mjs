@@ -36,9 +36,9 @@ const tm = await mod('plugins/huaweicloud-core/dist/tools.js');
 const args = ['VPC', 'CreateVpc', '--cli-region=cn-north-4', '--vpc.name=tctest-18', '--vpc.cidr=192.168.94.0/24'];
 const a = await tm.callTool('huaweicloud_plan_cli_command', { args }, {});
 const b = await tm.callTool('huaweicloud_run_approved_command', { args, approvalToken: 'fake-token', approvedByUser: true }, {});
-const needApproval = a.safeToRun === false && a.approvalToken && a.classification.decision === 'deny';
-const notExecuted = b.status === 'rejected' || b.code === 'CONFIRM_TOKEN_NOT_FOUND';
-if (needApproval && notExecuted) emit('PASS', '写操作进入确认流程（safeToRun=false + approvalToken），无有效令牌被拒执行', { classification: a.classification.decision, safeToRun: a.safeToRun, reject: b });
+const needApproval = a.safeToRun === false && !!(a.userConfirmation && a.userConfirmation.needed === true);
+const notExecuted = b.status === 'rejected' || b.code === 'CONFIRM_TOKEN_NOT_FOUND' || b.code === 'ASK_CONFIRMATION_REQUIRED';
+if (needApproval && notExecuted) emit('PASS', '写操作进入显式确认流程（safeToRun=false + userConfirmation.needed=true），伪造令牌被拒执行（' + b.code + '）', { classification: a.classification.decision, safeToRun: a.safeToRun, userConfirmation: a.userConfirmation, reject: b });
 else emit('FAIL', '写操作确认流程不符', { a, b });
 
 }

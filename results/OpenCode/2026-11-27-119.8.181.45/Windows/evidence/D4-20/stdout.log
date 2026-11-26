@@ -1,0 +1,23 @@
+{
+  "caseId": "D4-20",
+  "status": "PASS",
+  "why": "拒绝后未执行命令、资源无变更（ECS 清单不变）",
+  "executedAt": "20261127050650",
+  "result": {
+    "reject": {
+      "status": "rejected",
+      "code": "ASK_CONFIRMATION_REQUIRED",
+      "userConfirmation": {
+        "needed": true,
+        "mode": "chat",
+        "command": "hcloud ECS DeleteServers --cli-region=cn-north-4 \"--server_ids=[\\\"nonexistent-20\\\"]\"",
+        "summary": "huaweicloud_run_approved_command: hcloud ECS DeleteServers --cli-region=cn-north-4 \"--server_ids=[\\\"nonexistent-20\\\"]\"",
+        "instruction": "Show this exact command to the user in chat and wait for their answer. If they approve, retry the same call with approvedByUser: true. That retry is model-relayed posture trust: it is the user's word as you report it, not a mechanically verified answer."
+      },
+      "argsHash": "c25cebd213f5248419329c7fd1460e5d40566c7505b09b8922a6f5bb1338c4ab",
+      "nextStep": "Retry with approvedByUser: true only after the user explicitly approves the request above."
+    },
+    "before": 0,
+    "after": 0
+  }
+}

@@ -51,7 +51,7 @@ if (r && r.status === 'rejected' && r.approvalToken) {
 const after = existsSync(imp);
 if (prior === undefined) delete process.env.HUAWEICLOUD_HOME; else process.env.HUAWEICLOUD_HOME = prior;
 if (existedBefore && after === false) emit('PASS', 'creds-import.json 读取后立即擦除（exists=False）', { existedBefore, after, toolResult: r });
-else if (r && r.code === 'USER_CONFIRMATION_REQUIRED') emit('SPEC-MISMATCH', '2.0.0 auth_switch import 引入用户终端审批门控（USER_CONFIRMATION_REQUIRED），未批准前不擦除 creds-import.json；契约由“立即擦除”漂移为“审批后擦除”', { existedBefore, after, toolResult: r });
+else if (r && (r.code === 'USER_CONFIRMATION_REQUIRED' || r.code === 'ASK_CONFIRMATION_REQUIRED')) emit('SPEC-MISMATCH', 'auth_switch import 引入用户终端审批门控（USER_CONFIRMATION_REQUIRED），未批准前不擦除 creds-import.json；契约由“立即擦除”漂移为“审批后擦除”', { existedBefore, after, toolResult: r });
 else emit('FAIL', 'creds-import.json 未被擦除', { existedBefore, after, toolResult: r });
 
 }

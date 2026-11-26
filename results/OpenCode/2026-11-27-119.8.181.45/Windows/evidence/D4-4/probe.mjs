@@ -36,8 +36,9 @@ const tm = await mod('plugins/huaweicloud-core/dist/tools.js');
 const args = ['ECS', 'CreateServers', '--cli-region=cn-north-4', '--server.name=tctest-d44'];
 const a = await tm.callTool('huaweicloud_plan_cli_command', { args }, {});
 const b = await tm.callTool('huaweicloud_run_approved_command', { args, approvalToken: 'none', approvedByUser: true }, {});
-const notExec = b.status === 'rejected' || b.code === 'CONFIRM_TOKEN_NOT_FOUND';
-if (a.safeToRun === false && a.approvalToken && notExec) emit('PASS', '写操作无审批不可执行：plan 返回 safeToRun=false + approvalToken，无有效令牌被拒', { classification: a.classification.decision, safeToRun: a.safeToRun, reject: b });
+const notExec = b.status === 'rejected' || b.code === 'CONFIRM_TOKEN_NOT_FOUND' || b.code === 'ASK_CONFIRMATION_REQUIRED';
+const confirmRequired = !!(a.userConfirmation && a.userConfirmation.needed === true);
+if (a.safeToRun === false && confirmRequired && notExec) emit('PASS', '写操作无审批不可执行：plan 返回 safeToRun=false + userConfirmation.needed=true，伪造令牌被拒（' + b.code + '）', { classification: a.classification.decision, safeToRun: a.safeToRun, userConfirmation: a.userConfirmation, reject: b });
 else emit('FAIL', '无审批仍可执行或 plan 未要求确认', { a, b });
 
 }
