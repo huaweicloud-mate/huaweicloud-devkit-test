@@ -35,11 +35,10 @@ reg('D5-1', async () => {
 reg('D5-3', async () => {
   const h = await hdk();
   const n = h.tools.TOOL_DEFINITIONS.length;
-  const okS = h.tools.TOOL_DEFINITIONS.every(t => t.name && t.inputSchema);
   const dup = new Set(h.tools.TOOL_DEFINITIONS.map(t => t.name)).size !== n;
-  // 母版冻结「40」已过期：1.1.8-next.1 新增 huaweicloud_sandbox_expose_tunnel（41 工具）。
-  // 语义断言 = 全部注册源工具可达 + schema 完整 + 无重复（用例预期原文「=tools.mjs 注册源数量」）。
-  return chk(n === h.tools.TOOL_DEFINITIONS.length && okS && !dup, `工具全量可达且 schema 完整: n=${n}(注册源数量) schemaOk=${okS} dup=${dup}`, `工具数=${n} schemaOk=${okS}`);
+  const names = h.tools.TOOL_DEFINITIONS.map(t => t.name);
+  const missingSchema = names.filter(nm => !h.tools.getToolSchema(nm));
+  return chk(!dup && missingSchema.length === 0, `工具全量可达且 schema 完整: n=${n}(=tools.mjs 注册源数量) dup=${dup} 缺schema=${missingSchema.length}`, `工具数=${n} dup=${dup} 缺schema=${missingSchema.join(',')}`);
 });
 reg('EXP-D5-6-1', async () => {
   const h = await hdk();
@@ -64,9 +63,10 @@ reg('EXP-D5-1-1', async () => {
 reg('EXP-D5-1-3', async () => {
   const h = await hdk();
   const n = h.tools.TOOL_DEFINITIONS.length;
-  const schemaOk = h.tools.TOOL_DEFINITIONS.every(t => t.name && t.inputSchema);
   const dup = new Set(h.tools.TOOL_DEFINITIONS.map(t => t.name)).size !== n;
-  return chk(schemaOk && !dup, `OpenCode tools/list 枚举全量可达且 schema 完整: n=${n}(注册源数量) schemaOk=${schemaOk} dup=${dup}`, `工具数=${n} schemaOk=${schemaOk} dup=${dup}`);
+  const names = h.tools.TOOL_DEFINITIONS.map(t => t.name);
+  const missingSchema = names.filter(nm => !h.tools.getToolSchema(nm));
+  return chk(!dup && missingSchema.length === 0, `OpenCode tools/list 枚举全量可达且 schema 完整: n=${n} dup=${dup} 缺schema=${missingSchema.length}`, `工具数=${n} dup=${dup} 缺schema=${missingSchema.join(',')}`);
 });
 
 // ============ D6 ============
@@ -146,9 +146,10 @@ fixture('D8-10', 'd8-10-mcp-config-backup-merge.mjs');
 // ============ D9 ============
 reg('D9-1', async () => {
   const h = await hdk();
-  const valid = h.tools.TOOL_DEFINITIONS.every(t => t.inputSchema && typeof t.inputSchema === 'object' && (t.inputSchema.type === 'object'));
-  const dup = new Set(h.tools.TOOL_DEFINITIONS.map(t => t.name)).size !== h.tools.TOOL_DEFINITIONS.length;
-  return chk(valid && !dup, `tools/list schema 合法且无重复: valid=${valid} dup=${dup}`, `valid=${valid} dup=${dup}`);
+  const names = h.tools.TOOL_DEFINITIONS.map(t => t.name);
+  const invalid = names.filter(nm => { const s = h.tools.getToolSchema(nm); return !s || s.type !== 'object'; });
+  const dup = new Set(names).size !== names.length;
+  return chk(invalid.length === 0 && !dup, `tools/list schema 合法且无重复: 工具=${names.length} invalid=${invalid.length} dup=${dup}`, `n=${names.length} invalid=${invalid.join(',')} dup=${dup}`);
 });
 reg('D9-2', async () => {
   const h = await hdk();
@@ -199,10 +200,11 @@ reg('D9-7', async () => {
 });
 reg('D9-8', async () => {
   const h = await hdk();
-  const schemas = h.tools.TOOL_DEFINITIONS.map(t => JSON.stringify(t.inputSchema || {}));
-  const uses2020 = schemas.some(s => /2020-12/.test(s));
-  const uses07 = schemas.some(s => /draft-07/.test(s));
-  return chk(!(uses2020 && uses07), `inputSchema 版本统一: draft07=${uses07} 2020-12=${uses2020}`, `版本混用 draft07=${uses07} 202012=${uses2020}`);
+  const names = h.tools.TOOL_DEFINITIONS.map(t => t.name);
+  const schemas = names.map(nm => String(h.tools.getToolSchema(nm) && h.tools.getToolSchema(nm).type) || '');
+  const uniform = schemas.every(t => t === 'object');
+  const hasDraft = names.map(nm => JSON.stringify(h.tools.getToolSchema(nm))).some(s => /2020-12|draft-07|\$schema/i.test(s));
+  return chk(uniform && !hasDraft, `inputSchema 结构统一(全部 type=object, 无 $schema/draft 混用): uniform=${uniform} draft混用=${hasDraft}`, `uniform=${uniform} draft混用=${hasDraft}`);
 });
 reg('D9-12', async () => {
   const h = await hdk();
@@ -327,7 +329,11 @@ function makeServer(serverPath) {
   function send(o) {
     const b = JSON.stringify(o);
     child.stdin.write(Buffer.from(`Content-Length: ${Buffer.byteLength(b)}\r\n\r\n${b}`));
-    return new Promise((r) => pending.set(o.id, r));
+    const pid = o.id;
+    return new Promise((r) => {
+      pending.set(pid, r);
+      setTimeout(() => { if (pending.has(pid)) { pending.delete(pid); r({ __timeout: true, id: pid }); } }, 45000);
+    });
   }
   child.stdout.on('data', (d) => {
     buf = Buffer.concat([buf, d]);
@@ -343,6 +349,6 @@ function makeServer(serverPath) {
       try { const msg = JSON.parse(body); if (msg.id && pending.has(msg.id)) { pending.get(msg.id)(msg); pending.delete(msg.id); } } catch {}
     }
   });
-  function call(name, args) { return send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name, arguments: args || {} } }); }
+  function call(name, args) { const a = { ...(args || {}) }; if (!a.vendorConfirmed) a.vendorConfirmed = '华为云(测试机队每日测试)'; return send({ jsonrpc: '2.0', id: _id++, method: 'tools/call', params: { name, arguments: a } }); }
   return { child, send, call, kill: () => child.kill() };
 }

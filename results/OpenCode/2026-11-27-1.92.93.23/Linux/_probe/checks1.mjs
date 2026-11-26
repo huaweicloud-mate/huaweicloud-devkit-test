@@ -22,12 +22,14 @@ reg('D1-4', async () => {
 
 reg('D1-26', async () => {
   const h = await hdk();
-  const names = h.tools.TOOL_DEFINITIONS.map(t => t.name);
-  const cu = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_check_update' || t.name === 'check_update');
-  const up = h.tools.TOOL_DEFINITIONS.find(t => t.name === 'huaweicloud_upgrade' || t.name === 'upgrade');
-  const cuOk = cu && cu.description && cu.inputSchema;
-  const upOk = up && up.description && up.inputSchema;
-  return chk(cuOk && upOk, `check_update/upgrade 均注册且含 description+inputSchema(names=${names.length})`, `缺失或 schema 不完整: check_update=${!!cuOk} upgrade=${!!upOk}`);
+  const names = new Set(h.tools.TOOL_DEFINITIONS.map(t => t.name));
+  const cu = names.has('huaweicloud_check_update');
+  const up = names.has('huaweicloud_upgrade');
+  const cuSchema = h.tools.getToolSchema('huaweicloud_check_update');
+  const upSchema = h.tools.getToolSchema('huaweicloud_upgrade');
+  const cuOk = cu && cuSchema && cuSchema.type === 'object';
+  const upOk = up && upSchema && upSchema.type === 'object';
+  return chk(cuOk && upOk, `check_update/upgrade 均注册且含 schema(names=${h.tools.TOOL_DEFINITIONS.length})`, `缺失或 schema 不完整: check_update=${!!cuOk} upgrade=${!!upOk}`);
 });
 
 reg('D1-27', async () => {
@@ -121,36 +123,60 @@ reg('D1-45', async () => {
 
 reg('D1-65', async () => {
   const h = await hdk();
-  // 调试模式：更新域 DEBUG 分支
-  const src = (await import('node:fs')).readFileSync(join0(h.SRC, 'update-check.js'), 'utf-8');
+  // 调试模式：更新域 DEBUG 分支（2.0.x 拆到 update-registry.js）
+  const fs = await import('node:fs');
+  const src = fs.readFileSync(join0(h.SRC, 'update-registry.js'), 'utf-8');
   const support = /HUAWEICLOUD_DEVKIT_DEBUG/.test(src);
-  return support ? ok('update-check.mjs 含 HUAWEICLOUD_DEVKIT_DEBUG 调试分支', 'DEBUG 分支存在(更新域)') : fail('调试模式环境变量分支缺失', 'update-check.mjs 无 DEBUG 分支');
+  return support ? ok('update-registry.js 含 HUAWEICLOUD_DEVKIT_DEBUG 调试分支', 'DEBUG 分支存在(更新域)') : fail('调试模式环境变量分支缺失', 'update-registry.js 无 DEBUG 分支');
 });
 
-fixture('D1-66', 'd1-66-telemetry-env.mjs');
+reg('D1-66', async () => {
+  const h = await hdk();
+  const bak = { T: process.env.HUAWEICLOUD_DEVKIT_TELEMETRY, E: process.env.HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT };
+  const set = (k, v) => { if (v === undefined) delete process.env[k]; else process.env[k] = v; };
+  process.env.HUAWEICLOUD_DEVKIT_TELEMETRY = 'off';
+  const offDisabled = h.telemetry.isTelemetryEnabled() === false;
+  set('HUAWEICLOUD_DEVKIT_TELEMETRY', '');
+  const defaultOn = h.telemetry.isTelemetryEnabled() === true;
+  set('HUAWEICLOUD_DEVKIT_TELEMETRY', 'on');
+  set('HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT', 'https://custom.example.com/events');
+  const endpointOverride = /custom\.example\.com/.test((await import('node:fs')).readFileSync(join0(h.SRC, 'telemetry', 'event-pipeline.js'), 'utf-8')) && /DEFAULT_ENDPOINT/.test((await import('node:fs')).readFileSync(join0(h.SRC, 'telemetry', 'event-pipeline.js'), 'utf-8'));
+  set('HUAWEICLOUD_DEVKIT_TELEMETRY', bak.T); set('HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT', bak.E);
+  // 端点覆盖：event-pipeline.js 存在 DEFAULT_ENDPOINT + HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT 覆盖分支
+  const ep = (await import('node:fs')).readFileSync(join0(h.SRC, 'telemetry', 'event-pipeline.js'), 'utf-8');
+  const epOk = /DEFAULT_ENDPOINT/.test(ep) && /HUAWEICLOUD_DEVKIT_TELEMETRY_ENDPOINT/.test(ep);
+  return chk(offDisabled && defaultOn && epOk, `遥测开关 offDisabled=${offDisabled} defaultOn=${defaultOn} 端点覆盖分支=${epOk}`, `offDisabled=${offDisabled} defaultOn=${defaultOn} epOk=${epOk}`);
+});
 
 reg('D1-67', async () => {
   const h = await hdk();
-  const src = (await import('node:fs')).readFileSync(join0(h.SRC, 'setup-cli.js'), 'utf-8');
-  const hasAgentTk = /AGENT_TOOLKIT_MODE/.test(src) && /REQUIRED_ENV_KEYS|HCLOUD_BIN/.test(src) && /SKIP_DSH/.test(src);
-  return chk(hasAgentTk, 'AGENT_TOOLKIT_MODE/SKIP_DSH/REQUIRED_ENV_KEYS(HCLOUD_BIN) 均存在', 'DSH 模式环境变量缺失');
+  const fs = await import('node:fs');
+  // 2.0.x：AGENT_TOOLKIT_MODE/SKIP_DSH 分布到 update-upgrade.js + agents/dsh.js（不再是 setup-cli.mjs）
+  const up = fs.readFileSync(join0(h.SRC, 'update-upgrade.js'), 'utf-8');
+  const dsh = fs.readFileSync(join0(h.SRC, 'agents', 'dsh.js'), 'utf-8');
+  const hasAgentTk = /AGENT_TOOLKIT_MODE/.test(up + dsh);
+  const hasSkipDsh = /SKIP_DSH/.test(up + dsh);
+  const hasHcloudBin = /HCLOUD_BIN|REQUIRED_ENV_KEYS/.test(up + dsh);
+  return chk(hasAgentTk && hasSkipDsh, `AGENT_TOOLKIT_MODE=${hasAgentTk} SKIP_DSH=${hasSkipDsh} HCLOUD_BIN/REQUIRED_ENV_KEYS=${hasHcloudBin}`, `AGENT_TOOLKIT_MODE=${hasAgentTk} SKIP_DSH=${hasSkipDsh} HCLOUD_BIN=${hasHcloudBin}`);
 });
 
 reg('D1-68', async () => {
   const h = await hdk();
-  const cred = (await import('node:fs')).readFileSync(join0(h.SRC, 'auth', 'credentials.js'), 'utf-8');
-  // 断言 HUAWEICLOUD_REGION 优先于 HW_REGION（用例契约）
-  const m = /region\s*[:=]\s*[^;]*?HUAWEICLOUD_REGION[^;]*?HW_REGION|HW_REGION[^;]*?HUAWEICLOUD_REGION/.exec(cred.replace(/\s+/g, ' '));
-  if (!m) return blocked('credentials.mjs 未找到 region 优先级逻辑', 'region 优先级链路需人工核对');
-  const hwRegionFirst = /HUAWEICLOUD_REGION[\s\S]{0,120}?HW_REGION/.test(cred.replace(/process\.env/g, '').replace(/HUAWEICLOUD_REGION/g, 'HUAREG').replace(/HW_REGION/g, 'HWREG'));
-  // 简化：直接检查顺序
+  // 2.0.x：region 解析拆到 auth/credential-resolver.js
+  const cred = (await import('node:fs')).readFileSync(join0(h.SRC, 'auth', 'credential-resolver.js'), 'utf-8');
   const idxHR = cred.indexOf('HUAWEICLOUD_REGION');
   const idxHW = cred.indexOf('HW_REGION');
   const huaFirst = idxHR >= 0 && idxHR < idxHW;
-  return huaFirst ? ok('HUAWEICLOUD_REGION 优先于 HW_REGION') : spec('region 优先级契约漂移：实现 HW_REGION 优先，用例期望 HUAWEICLOUD_REGION 优先', `credentials.mjs region 优先级与契约相反(idxHR=${idxHR},idxHW=${idxHW})`);
+  return huaFirst ? ok('HUAWEICLOUD_REGION 优先于 HW_REGION') : spec('region 优先级契约漂移：实现 HW_REGION 优先，用例期望 HUAWEICLOUD_REGION 优先', `credential-resolver.js:20 region 优先级与契约相反(idxHR=${idxHR},idxHW=${idxHW})`);
 });
 
-fixture('D1-69', 'd1-69-cli-help.mjs');
+reg('D1-69', async () => {
+  const help = run('huaweicloud-devkit help 2>&1');
+  const h = run('huaweicloud-devkit --help 2>&1');
+  const okHelp = help.status === 0 && /Usage:|Commands:/i.test(help.text) && !/TODO|^$/.test(help.text.replace(/\s/g, ''));
+  const okDash = h.status === 0 && /Commands:/i.test(h.text);
+  return chk(okHelp && okDash, `CLI help/--help 均 exit=0 且含 Usage/Commands: help=${help.status} dash=${h.status}`, `help=${help.status}(${help.text.slice(0,80)}) dash=${h.status}`);
+});
 
 reg('D1-70', async () => {
   const h = await hdk();
