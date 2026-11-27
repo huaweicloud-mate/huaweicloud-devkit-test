@@ -1,0 +1,12 @@
+{
+  "caseId": "D4-28",
+  "status": "PASS",
+  "why": "deny=true goodNoDeny=true argsExtracted=true hooksRegistered=true",
+  "executedAt": "20261119051902",
+  "result": {
+    "badStdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Reading Huawei Cloud credential or profile files is blocked. Use redacted profile inspection tools instead.\"}}\n",
+    "goodStdout": "",
+    "argsStdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Huawei Cloud safety hook blocked this action: Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval.\"}}\n",
+    "hooks": "{\n  \"hooks\": {\n    \"PreToolUse\": [\n      {\n        \"matcher\": \"Bash\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\\\"\",\n            \"timeout\": 5\n          }\n        ]\n      },\n      {\n        \"matcher\": \"mcp__.*huaweicloud.*|huaweicloud_.*\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node \\\"${CLAUDE_PLUGIN_ROOT}/hooks/huaweicloud-safety.mjs\\\"\",\n            "
+  }
+}

@@ -1,0 +1,158 @@
+=== DESIGN 107 ===
+D1-3|D1安装|P1|doctor健康自检|OS_MATRIX|Hermes 代表终端; fake/fi|Windows/|doctor|OS_MATRIX|<代表: Windo
+D1-4|D1安装|P2|status/update幂等|OS_MATRIX|Hermes 代表终端; fake/fi|Windows/|status/update|OS_MATRIX|<代表: Windo
+D1-26|D1安装|P1|升级提醒工具注册与协议暴露|COMMON|Hermes 代表终端; fake/fi|Windows/|check_update/upgrade|COMMON|<代表: MCP Insp
+D1-27|D1安装|P1|检测语义-已是最新|OS_MATRIX|Hermes 代表终端; fake/fi|Windows/|check_update|OS_MATRIX|<代表: Windo
+D1-28|D1安装|P1|检测语义-有新版本|OS_MATRIX|Hermes 代表终端; fake/fi|Windows/|check_update|OS_MATRIX|<代表: Windo
+D1-30|D1安装|P2|semver 比对正确性|OS_MATRIX|Hermes 代表终端; fake/fi|Windows/|check_update|OS_MATRIX|<代表: Windo
+D1-31|D1安装|P1|dismiss 冷却期|OS_MATRIX|Hermes 代表终端; fake/fi|Windows/|check_update|OS_MATRIX|<代表: Windo
+D1-33|D1安装|P2|skip 文件持久化与多路径|OS_MATRIX|Hermes 代表终端; fake/fi|Windows/|check_update|OS_MATRIX|<代表: Windo
+D1-39|D1安装|P0|Windows 升级检测链可用性|OS_MATRIX|Hermes 代表终端; fake/fi|Windows（|check_update|OS_MATRIX|<代表: Windo
+D1-40|D1安装|P0|镜像 lag 下检测正确性(反向提醒防护)|OS_MATRIX|Hermes 代表终端; fake/fi|Windows/|check_update|OS_MATRIX|<代表: Windo
+D1-41|D1安装|P1|check_update 真实 MCP 返回契约|COMMON|Hermes 代表终端; fake/fi|Windows/|check_update|COMMON|<代表: 隔离进程>|<证
+D1-42|D1安装|P1|dismiss 真实闭环与跨调用持久化|COMMON|Hermes 代表终端; fake/fi|Windows/|check_update|COMMON|<代表: 隔离 HOME+
+D1-45|D1安装|P1|兜底提示真实序列与预热竞态|COMMON|Hermes 代表终端; fake/fi|Windows/|check_update|COMMON|<代表: 隔离进程+预热竞
+D1-65|D1安装|P2|调试模式环境变量|COMMON|Hermes 代表终端; fake/fi|Windows/|check_update|COMMON|<代表: 隔离进程>|<证
+D1-66|D1安装|P2|遥测开关与端点环境变量|COMMON|Hermes 代表终端; fake/fi|Windows/|mcp-server|COMMON|<代表: 隔离进程>|<证
+D1-67|D1安装|P2|Agent toolkit 模式与 DSH 跳过安装环境变量|COMMON|Hermes 代表终端; fake/fi|Windows/|install|COMMON|<代表: DSH 客户端>
+D1-68|D1安装|P2|图标离线与区域环境变量|COMMON|Hermes 代表终端; fake/fi|Windows/|get_service_icon/auth_in|COMMON|<代表: 隔离进程>|<证
+D1-69|D1安装|P2|CLI help 子命令|COMMON|Hermes 代表终端; fake/fi|Windows/|install|COMMON|<代表: CLI>|<证据
+D1-70|D1安装|P1|代理配置与 WebSocket 代理|COMMON|Hermes 代表终端; fake/fi|Windows/|install|COMMON|<代表: 隔离进程+pro
+D2-10|D2认证|P1|R7 current档跟随|COMMON|Hermes 代表终端; fake/fi|Windows/|auth_status|COMMON|<代表: Hermes 或
+D2-11|D2认证|P0|R3 STS token拒绝落盘|COMMON|Hermes 代表终端; fake/fi|Windows/|auth_switch|COMMON|<代表: Hermes 或
+D2-12|D2认证|P1|R10 runtime非空禁止落盘|COMMON|Hermes 代表终端; fake/fi|Windows/|huaweicloud_auth_init/au|COMMON|<代表: Hermes 或
+D2-13|D2认证|P1|R9 configuredBySession优先env|COMMON|Hermes 代表终端; fake/fi|Windows/|auth_status|COMMON|<代表: Hermes 或
+D2-16|D2认证|P1|import文件读取后擦除|COMMON|Hermes 代表终端; fake/fi|Windows/|auth_switch|COMMON|<代表: Hermes 或
+D4-18|D4安全|P0|confirm-not-deny审批语义|CLIENT_MATRIX|Hermes（Hook）; OpenCo|Windows/|plan_cli_command|CLIENT_MATRIX|<代表: 安
+D4-19|D4安全|P0|确认流下预检仍生效|CLIENT_MATRIX|Hermes（Hook）; OpenCo|Windows/|hook_check_command/hook_|CLIENT_MATRIX|<代表: 安
+D4-20|D4安全|P1|拒绝后零操作|COMMON|Hermes（Hook）; OpenCo|Windows/|run_approved_command|COMMON|<代表: hook=Her
+D2-1|D2认证|P1|auth init三端同步|COMMON|Hermes 代表终端; fake/fi|Windows/|huaweicloud_auth_init|COMMON|<代表: Hermes 或
+D2-2|D2认证|P2|auth status判定准确性|COMMON|Hermes 代表终端; fake/fi|Windows/|auth_status|COMMON|<代表: Hermes 或
+D2-4|D2认证|P0|凭证脱敏正确性|COMMON|Hermes 代表终端; fake/fi|Windows/|show_profile_redacted|COMMON|<代表: Hermes 或
+D2-5|D2认证|P1|凭证缺失报错指引|COMMON|Hermes 代表终端; fake/fi|Windows/|huaweicloud_auth_init/au|COMMON|<代表: Hermes 或
+D2-26|D2认证|P1|凭证备份与恢复|COMMON|Hermes 代表终端; fake/fi|Windows/|huaweicloud_auth_sync|COMMON|<代表: 隔离 HOME>
+D2-27|D2认证|P2|KooCLI 版本管理|COMMON|Hermes 代表终端; fake/fi|Windows/|auth_status|COMMON|<代表: 隔离进程>|<证
+D3-A1|D3功能|P1|skill检索完整性|COMMON|Hermes 代表终端; fake/fi|Windows/|retrieve_skill/search_do|COMMON|<代表: Hermes>|
+D3-B1|D3功能|P2|list_operations规范名|COMMON|Hermes 代表终端; fake/fi|Windows/|list_operations|COMMON|<代表: Hermes>|
+D3-B3|D3功能|P1|run_readonly脱敏执行|COMMON|Hermes 代表终端; fake/fi|Windows/|run_readonly_command|COMMON|<代表: Hermes>|
+D3-B5|D3功能|P2|detect_framework识别|COMMON|Hermes 代表终端; fake/fi|Windows/|detect_framework|COMMON|<代表: Hermes>|
+D3-C1|D3功能|P1|ECS生命周期E2E|COMMON|Hermes 代表终端; fake/fi|Windows/|plan_cli_command/run_app|COMMON|<代表: 真云 ECS 贵
+D3-C2|D3功能|P1|OBS静态站部署E2E|COMMON|Hermes 代表终端; fake/fi|Windows/|obs_set_website_config/s|COMMON|<代表: Hermes>|
+D3-C3|D3功能|P1|沙箱部署E2E|COMMON|Hermes 代表终端; fake/fi|Windows/|sandbox_exec_with_sessio|COMMON|<代表: 沙箱 DevSt
+D3-C4|D3功能|P1|服务创建类回归|CLIENT_MATRIX|Hermes 代表终端; fake/fi|Windows/|plan_cli_command/run_app|CLIENT_MATRIX|<代表: 2
+D3-C5|D3功能|P1|工具冒烟|COMMON|Hermes 代表终端; fake/fi|Windows/|check_cli/list_operation|COMMON|<代表: Hermes>|
+D3-C6|D3功能|P1|沙箱 7 隐式工具具名冒烟（check_user/credentials/sign_agreement/exec_one|COMMON|Hermes 代表终端; fake/fi|Windows/|sandbox_check_user/sandb|COMMON|<代表: Hermes>|
+D3-C7|D3功能|P1|跨区域资源操作引导（区域维度）|COMMON|Hermes 代表终端; fake/fi|Windows/|plan_cli_command/list_re|COMMON|<真云代表: Hermes
+D3-C13|D3功能|P1|OBS 静态网站托管配置|COMMON|Hermes 代表终端; fake/fi|Windows/|huaweicloud_obs_set_webs|COMMON|<代表: 真云 OBS>|
+D3-C14|D3功能|P2|沙箱 HDKit 服务参数与 hwlink 凭证|COMMON|Hermes 代表终端; fake/fi|Windows/|sandbox_connect/sandbox_|COMMON|<代表: Hermes 沙
+D3-S1|D3功能|P1|场景-只读查ECS(带不改约束)|COMMON|Hermes 代表终端; fake/fi|Windows/|service_catalog/run_read|COMMON|<代表: Hermes>|
+D3-S2|D3功能|P1|场景-删VPC先确认|COMMON|Hermes 代表终端; fake/fi|Windows/|plan_cli_command/hook_ch|COMMON|<代表: Hermes>|
+D3-S3|D3功能|P1|场景-沙箱预览出URL|COMMON|Hermes 代表终端; fake/fi|Windows/|sandbox_connect/sandbox_|COMMON|<代表: Hermes>|
+D3-S4|D3功能|P1|场景-领券闭环|COMMON|Hermes 代表终端; fake/fi|Windows/|voucher_status/voucher_c|COMMON|<代表: Hermes>|
+D3-S5|D3功能|P2|场景-复合意图分层路由|COMMON|Hermes 代表终端; fake/fi|Windows/|service_catalog|COMMON|<代表: Hermes>|
+D3-S6|D3功能|P2|场景-FunctionGraph定时任务|COMMON|Hermes 代表终端; fake/fi|Windows/|plan_cli_command/run_app|COMMON|<代表: Hermes>|
+D3-S7|D3功能|P1|场景-跨服务交付(Web应用+RDS)并归零|COMMON|Hermes 代表终端; fake/fi|Windows/|sandbox_connect/sandbox_|COMMON|<代表: Hermes>|
+D3-S8|D3功能|P1|场景-操作失败后排障指引|COMMON|Hermes 代表终端; fake/fi|Windows/|explain_error/run_readon|COMMON|<代表: Hermes>|
+D4-1|D4安全|P0|凭证文件读取拦截|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: hook=Her
+D4-2|D4安全|P0|凭证env打印拦截|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: hook=Her
+D4-3|D4安全|P0|明文secret API拦截|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: hook=Her
+D4-4|D4安全|P1|写操作审批门|COMMON|Hermes（Hook）; OpenCo|Windows/|plan_cli_command|COMMON|<代表: hook=Her
+D4-5|D4安全|P0|写操作误判检测|COMMON|Hermes（Hook）; OpenCo|Windows/|plan_cli_command|COMMON|<代表: hook=Her
+D4-6|D4安全|P1|adminPass回显警告|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: hook=Her
+D4-7|D4安全|P1|hook三工具有效性|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command/hook_|COMMON|<代表: hook=Her
+D4-8|D4安全|P1|Python/Node策略一致|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command/hook_|COMMON|<代表: hook=Her
+D4-9|D4安全|P0|公开暴露/破坏性预检|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command/hook_|COMMON|<代表: hook=Her
+D4-10|D4安全|P2|规则库新增回归|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command/hook_|COMMON|<代表: hook=Her
+D4-11|D4安全|P1|提示注入防护|COMMON|Hermes（Hook）; OpenCo|Windows/|search_docs/retrieve_ski|COMMON|<代表: 4 注入点>|<
+D4-12|D4安全|P2|供应链安装期安全|COMMON|Hermes（Hook）; OpenCo|Windows/|npm|COMMON|<代表: hook=Her
+D4-13|D4安全|P1|最小权限凭证通过率|COMMON|Hermes（Hook）; OpenCo|Windows/|run_readonly_command|COMMON|<代表: 只读凭证全量>|
+D4-14|D4安全|P2|操作可审计性|COMMON|Hermes（Hook）; OpenCo|Windows/|run_readonly_command|COMMON|<代表: hook=Her
+D4-15|D4安全|P0|hook绕过尝试|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: hook=Her
+D4-16|D4安全|P0|命令包裹穿透|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: hook=Her
+D4-17|D4安全|P1|hook模糊fail-closed|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command/hook_|COMMON|<代表: hook=Her
+D4-21|D4安全|P0|hook_check_artifacts 具名回归（代码/IaC/策略制品预检）|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_artifacts|COMMON|<代表: hook=Her
+D4-22|D4安全|P0|hook_check_deploy_plan 具名回归（部署计划预检）|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_deploy_plan|COMMON|<代表: hook=Her
+D4-23|D4安全|P0|全局规则 huawei-agent-rules.md 注入生效性（11 安装目标）|CLIENT_MATRIX|Hermes（Hook）; OpenCo|Windows/|install|CLIENT_MATRIX|<代表: 逐
+D4-24|D4安全|P1|确认令牌过期与重复确认边界（审批流健壮性）|CLIENT_MATRIX|Hermes（Hook）; OpenCo|Windows/|auth_confirm/plan_cli_co|CLIENT_MATRIX|<代表2: 
+D4-25|D4安全|P2|Python hook 事件遥测分类|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: hook客户端>
+D4-26|D4安全|P2|findings 证据脱敏|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: hook客户端>
+D4-27|D4安全|P1|双路径输出脱敏|COMMON|Hermes（Hook）; OpenCo|Windows/|run_readonly_command|COMMON|<代表: 隔离进程>|<证
+D4-28|D4安全|P0|Node 版安全 hook 链路|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: hook客户端>
+D4-29|D4安全|P2|分类断言与原始命令分类入口|COMMON|Hermes（Hook）; OpenCo|Windows/|hook_check_command|COMMON|<代表: 隔离进程>|<证
+D5-1|D5客户端|P1|清单发现加载|CLIENT_MATRIX|Hermes; OpenCode; 声明|Windows/|install|CLIENT_MATRIX|<代表: 1
+D5-3|D5客户端|P1|工具全量枚举|CLIENT_MATRIX|Hermes; OpenCode; 声明|Windows/|mcp-server|CLIENT_MATRIX|<代表: 1
+D6-1|D6性能|P2|检索响应延迟|COMMON|Hermes 代表终端; fake/fi|Windows/|search_docs/retrieve_ski|COMMON|<代表: Windows 
+D6-3|D6性能|P2|MCP冷启时间|COMMON|Hermes 代表终端; fake/fi|Windows/|mcp-server|COMMON|<代表: Windows 
+D6-4|D6性能|P1|并发调度正确性|COMMON|Hermes 代表终端; fake/fi|Windows/|mcp-server|COMMON|<代表: Windows 
+D6-9|D6性能|P2|缓存清理三入口|COMMON|Hermes 代表终端; fake/fi|Windows/|check_update/get_service|COMMON|<代表: 隔离进程>|<证
+D9-9|D9协议|P1|tools/call 超时协议语义与取消|COMMON|Hermes; MCP Inspecto|Windows/|inspector|COMMON|<代表: Inspecto
+D8-1|D8质量|P2|文档与能力一致|COMMON|Hermes 代表终端; fake/fi|Windows/|search_docs|COMMON|<代表: 静态评审人 测试
+D8-4|D8质量|P1|引导步骤可机械执行|COMMON|Hermes 代表终端; fake/fi|Windows/|retrieve_skill|COMMON|<代表: 静态评审人 测试
+D8-6|D8质量|P2|中英文文档一致|COMMON|Hermes 代表终端; fake/fi|Windows/|search_docs|COMMON|<代表: 静态评审人 测试
+D8-7|D8质量|P0|7 个 meta/通用技能指引可机械执行验证|COMMON|Hermes 代表终端; fake/fi|Windows/|retrieve_skill/search_do|COMMON|<代表: 静态评审人 测试
+D8-9|D8质量|P2|安装 ID 与遥测值脱敏|COMMON|Hermes 代表终端; fake/fi|Windows/|mcp-server|COMMON|<代表: 隔离进程>|<证
+D8-10|D8质量|P2|MCP 配置备份与合并|COMMON|Hermes 代表终端; fake/fi|Windows/|install|COMMON|<代表: 隔离 HOME>
+D9-1|D9协议|P1|tools/list合规|COMMON|Hermes; MCP Inspecto|Windows/|inspector|COMMON|<代表: MCP Insp
+D9-2|D9协议|P1|JSON-RPC错误码|COMMON|Hermes; MCP Inspecto|Windows/|inspector|COMMON|<代表: MCP Insp
+D9-3|D9协议|P1|tools/call响应格式|COMMON|Hermes; MCP Inspecto|Windows/|inspector|COMMON|<代表: MCP Insp
+D9-4|D9协议|P1|协议生命周期|COMMON|Hermes; MCP Inspecto|Windows/|inspector|COMMON|<代表: MCP Insp
+D9-5|D9协议|P1|stdio传输健壮|COMMON|Hermes; MCP Inspecto|Windows/|mcp-server|COMMON|<代表: MCP Insp
+D9-6|D9协议|P1|跨客户端互通|COMMON|Hermes; MCP Inspecto|Windows/|inspector|COMMON|<代表: MCP Insp
+D9-7|D9协议|P2|协议版本协商降级|COMMON|Hermes; MCP Inspecto|Windows/|mcp-server|COMMON|<代表: MCP Insp
+D9-8|D9协议|P2|inputSchema版本合规|COMMON|Hermes; MCP Inspecto|Windows/|inspector|COMMON|<代表: MCP Insp
+D9-10|D9协议|P1|MCP remote transport（HTTP/WS 远程服务）|COMMON|Hermes; MCP Inspecto|Windows/|mcp-server|COMMON|<代表: remote 客
+D9-11|D9协议|P1|WebSocket 隧道通道生命周期|COMMON|Hermes; MCP Inspecto|Windows/|mcp-server|COMMON|<代表: 隧道 mux 夹
+D9-12|D9协议|P0|initialize 握手协议安全基线|COMMON|Hermes; MCP Inspecto|Windows/|inspector|COMMON|<代表: MCP Insp
+D9-13|D9协议|P0|tools/call 凭证不泄露与权限校验|COMMON|Hermes; MCP Inspecto|Windows/|inspector|COMMON|<代表: MCP Insp
+D10-3|D10评测|P1|路由准确率+混淆矩阵|CLIENT_MATRIX|OpenCode; Codex; Cod|Windows/|harness|CLIENT_MATRIX|<代表: 1
+D10-4|D10评测|P0|安全干预-静态规则层|COMMON|OpenCode; Codex; Cod|Windows/|harness|COMMON|<代表: 源码直调 ris
+=== EXPANDED 39 ===
+EXP-D5-3-1||P1||CodeArtsAgent|Windows/Linux|D5客户端矩阵|
+EXP-D5-3-3||P1||CodeArtsAgent|Windows/Linux|D5客户端矩阵|
+EXP-C4-01||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-02||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-03||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-04||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-05||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-06||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-07||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-08||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-09||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-10||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-11||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-12||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-13||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-14||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-15||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-16||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-17||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-18||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-19||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-20||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-21||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-C4-22||P1||Hermes|Windows/Linux|D3-C4服务矩阵|
+EXP-E01||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E02||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E03||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E04||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E05||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E06||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E07||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E08||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E09||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E10||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E11||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E12||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E13||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E14||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+EXP-E15||P1||OpenCode/Codex/C|Windows/Linux|D10评测集|
+=== MISSION 9 ===
+D4-1|P0|凭证文件读取拦截|
+D4-2|P0|凭证env打印拦截|
+D4-4|P1|写操作审批门|
+D4-5|P0|写操作误判检测|
+D4-7|P1|hook三工具有效性|
+D4-15|P0|hook绕过尝试|
+D4-16|P0|命令包裹穿透|
+D4-25|P2|Python hook 事件遥测分类|
+D4-27|P1|双路径输出脱敏|

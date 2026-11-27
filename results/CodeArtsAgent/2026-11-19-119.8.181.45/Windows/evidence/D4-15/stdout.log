@@ -1,0 +1,37 @@
+{
+  "caseId": "D4-15",
+  "status": "PASS",
+  "why": "????????????",
+  "executedAt": "20261119051852",
+  "result": [
+    {
+      "v": "hcloud ECS DELETESERVERS --server_id=x",
+      "decision": "warn",
+      "rules": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "v": "hcloud ECS DeleteServers%20--server_id=x",
+      "decision": "warn",
+      "rules": [
+        "hwc-destructive-delete-operation"
+      ]
+    },
+    {
+      "v": "hcloud ECS \"Delete\"\"Servers\" --server_id=x",
+      "decision": "warn",
+      "rules": [
+        "hwc-write-operation"
+      ]
+    },
+    {
+      "v": "hcloud ECS DeleteServers --server_id=x; hcloud KMS DecryptData --cipher_text=abc",
+      "decision": "deny",
+      "rules": [
+        "hwc-command-secret-value-read",
+        "hwc-destructive-delete-operation"
+      ]
+    }
+  ]
+}

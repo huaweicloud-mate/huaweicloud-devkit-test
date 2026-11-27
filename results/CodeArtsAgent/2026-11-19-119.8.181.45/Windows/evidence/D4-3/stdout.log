@@ -1,0 +1,42 @@
+{
+  "caseId": "D4-3",
+  "status": "PASS",
+  "why": "KMS=deny CSMS=deny",
+  "executedAt": "20261119051843",
+  "result": {
+    "kms": {
+      "ok": false,
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-command-secret-value-read",
+          "title": "Plaintext secret read",
+          "category": "secret",
+          "severity": "deny",
+          "message": "The command appears to retrieve plaintext secret values.",
+          "remediation": "Use runtime secret references, user-side inspection, or redacted metadata checks instead of returning secret values to the agent.",
+          "source": "command",
+          "evidence": "hcloud KMS DecryptData --cipher_text=abc"
+        }
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution."
+    },
+    "csms": {
+      "ok": false,
+      "decision": "deny",
+      "findings": [
+        {
+          "ruleId": "hwc-command-secret-value-read",
+          "title": "Plaintext secret read",
+          "category": "secret",
+          "severity": "deny",
+          "message": "The command appears to retrieve plaintext secret values.",
+          "remediation": "Use runtime secret references, user-side inspection, or redacted metadata checks instead of returning secret values to the agent.",
+          "source": "command",
+          "evidence": "hcloud CSMS ShowSecretVersion --secret_name=x"
+        }
+      ],
+      "nextStep": "Revise the command, artifact, or deployment plan before execution."
+    }
+  }
+}

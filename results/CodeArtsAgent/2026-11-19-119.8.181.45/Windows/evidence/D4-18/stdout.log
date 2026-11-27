@@ -1,0 +1,29 @@
+{
+  "caseId": "D4-18",
+  "status": "PASS",
+  "why": "????? deny+approvalToken+userConfirmation.needed=true????????????/?????",
+  "executedAt": "20261119051857",
+  "result": {
+    "executable": "hcloud",
+    "args": [
+      "VPC",
+      "DeleteVpc",
+      "--vpc_id=abc"
+    ],
+    "command": "hcloud VPC DeleteVpc --vpc_id=abc",
+    "executableBlock": "hcloud VPC DeleteVpc --vpc_id=abc",
+    "warnings": [],
+    "classification": {
+      "decision": "deny",
+      "risk": "write",
+      "reason": "Huawei Cloud write operation blocked until the agent presents a plan and receives explicit user approval."
+    },
+    "sgFindings": [],
+    "approvalToken": "5eea6e8d-a2fb-40f7-8136-57cac1b818a7",
+    "userConfirmation": {
+      "needed": true,
+      "command": "npx huaweicloud-devkit approve 5eea6e8d-a2fb-40f7-8136-57cac1b818a7"
+    },
+    "safeToRun": false
+  }
+}

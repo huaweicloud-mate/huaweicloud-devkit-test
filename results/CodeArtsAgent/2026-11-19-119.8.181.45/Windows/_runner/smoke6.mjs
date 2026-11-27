@@ -1,0 +1,10 @@
+import { mcpTool, VC_QUOTE, PATHS } from './lib.mjs';
+import { existsSync, readFileSync } from 'node:fs';
+const r1 = await mcpTool('huaweicloud_plan_cli_command', { vendorConfirmed: VC_QUOTE, args: ['ECS', 'DeleteServers', '--server_id=abc'], allowWrites: false }, 60000);
+console.log('PLAN WRITE:', JSON.stringify(r1.parsed).slice(0, 1200));
+const r2 = await mcpTool('huaweicloud_plan_cli_command', { vendorConfirmed: VC_QUOTE, args: ['ECS', 'ListServersDetails'], allowWrites: false }, 60000);
+console.log('PLAN READ:', JSON.stringify(r2.parsed).slice(0, 700));
+const r3 = await mcpTool('huaweicloud_show_profile_redacted', { vendorConfirmed: VC_QUOTE }, 60000);
+console.log('PROFILE:', JSON.stringify(r3.parsed).slice(0, 900));
+console.log('hooks exists:', existsSync(PATHS.hooksJson), existsSync(PATHS.hookScript));
+if (existsSync(PATHS.hooksJson)) console.log('hooks.json:', readFileSync(PATHS.hooksJson, 'utf8').slice(0, 800));

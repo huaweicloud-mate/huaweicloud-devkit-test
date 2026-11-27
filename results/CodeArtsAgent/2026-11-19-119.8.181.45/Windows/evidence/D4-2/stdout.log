@@ -1,0 +1,23 @@
+{
+  "caseId": "D4-2",
+  "status": "PASS",
+  "why": "decision=deny findings=hwc-command-env-dump",
+  "executedAt": "20261119051841",
+  "result": {
+    "ok": false,
+    "decision": "deny",
+    "findings": [
+      {
+        "ruleId": "hwc-command-env-dump",
+        "title": "Cloud credential environment dump",
+        "category": "credential",
+        "severity": "deny",
+        "message": "The command may print cloud credential environment variables.",
+        "remediation": "Inspect only required non-secret settings and redact secret-like values before returning output.",
+        "source": "command",
+        "evidence": "set HW_SECRET_KEY"
+      }
+    ],
+    "nextStep": "Revise the command, artifact, or deployment plan before execution."
+  }
+}
