@@ -1,0 +1,23 @@
+{
+  "caseId": "D2-16",
+  "status": "SPEC-MISMATCH",
+  "why": "auth_switch import 引入用户终端审批门控（USER_CONFIRMATION_REQUIRED），未批准前不擦除 creds-import.json；契约由“立即擦除”漂移为“审批后擦除”",
+  "executedAt": "20261128050423",
+  "result": {
+    "existedBefore": true,
+    "after": true,
+    "toolResult": {
+      "status": "rejected",
+      "code": "ASK_CONFIRMATION_REQUIRED",
+      "userConfirmation": {
+        "needed": true,
+        "mode": "chat",
+        "command": "huaweicloud_auth_switch (switch the account to d0d9a935, source import, region cn-north-4, temporary)",
+        "summary": "huaweicloud_auth_switch: switch to account d0d9a935 from the devkit credentials import file (creds-import.json), region cn-north-4 (temporary: this MCP process only)",
+        "instruction": "Show this exact command to the user in chat and wait for their answer. If they approve, retry the same call with approvedByUser: true. That retry is model-relayed posture trust: it is the user's word as you report it, not a mechanically verified answer."
+      },
+      "argsHash": "10aaefed844abe1493c5e2ed7de7704d8c2c65d2c570421f987e4bef1bbf2461",
+      "nextStep": "Retry with approvedByUser: true only after the user explicitly approves the request above."
+    }
+  }
+}

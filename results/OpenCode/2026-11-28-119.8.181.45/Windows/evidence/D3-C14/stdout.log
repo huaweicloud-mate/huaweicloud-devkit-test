@@ -1,0 +1,32 @@
+{
+  "caseId": "D3-C14",
+  "status": "BLOCKED",
+  "why": "沙箱上游不可用：\"ASK_CONFIRMATION_REQUIRED\" / \"ASK_CONFIRMATION_REQUIRED\"；解除条件：HDKIT 服务恢复",
+  "executedAt": "20261128050427",
+  "result": {
+    "cred": {
+      "status": "rejected",
+      "code": "ASK_CONFIRMATION_REQUIRED",
+      "userConfirmation": {
+        "needed": true,
+        "mode": "chat",
+        "summary": "huaweicloud_sandbox_credentials: validate and inject temporary credentials into the sandbox",
+        "instruction": "Show this exact request to the user in chat and wait for their answer. If they approve, retry the same call with approvedByUser: true. That retry is model-relayed posture trust: it is the user's word as you report it, not a mechanically verified answer."
+      },
+      "argsHash": "08cb6e88328e7bb111d32b74a105cc47b7617cc05905a12cd94647c232374dc2",
+      "nextStep": "Retry with approvedByUser: true only after the user explicitly approves the request above."
+    },
+    "connect": {
+      "status": "rejected",
+      "code": "ASK_CONFIRMATION_REQUIRED",
+      "userConfirmation": {
+        "needed": true,
+        "mode": "chat",
+        "summary": "huaweicloud_sandbox_connect: connect a sandbox",
+        "instruction": "Show this exact request to the user in chat and wait for their answer. If they approve, retry the same call with approvedByUser: true. That retry is model-relayed posture trust: it is the user's word as you report it, not a mechanically verified answer."
+      },
+      "argsHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "nextStep": "Retry with approvedByUser: true only after the user explicitly approves the request above."
+    }
+  }
+}

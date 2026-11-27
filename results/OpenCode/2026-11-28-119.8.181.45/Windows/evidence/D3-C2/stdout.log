@@ -1,0 +1,25 @@
+{
+  "caseId": "D3-C2",
+  "status": "PASS",
+  "why": "OBS 建桶（带 LocationConstraint）→ 删除 → 归零验证通过；只读子账号 list 被拒",
+  "executedAt": "20261128050427",
+  "result": {
+    "bucket": "tctest-obs-1128050427",
+    "adminCreate": {
+      "status": 200,
+      "body": ""
+    },
+    "roList": {
+      "status": 403
+    },
+    "invalidAk": false,
+    "roDenied": true,
+    "delete": {
+      "status": 204
+    },
+    "afterList": {
+      "status": 403,
+      "gone": true
+    }
+  }
+}
